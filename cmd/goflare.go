@@ -152,6 +152,7 @@ func zoneRecords(c *cli.Context) {
 			r.Content = strings.Replace(r.Content, "\t", " ", -1)
 		}
 		output = append(output, table{
+			"ID":      r.ID,
 			"Type":    r.Type,
 			"Name":    r.Name,
 			"Content": r.Content,
@@ -159,7 +160,7 @@ func zoneRecords(c *cli.Context) {
 			"TTL":     fmt.Sprintf("%d", r.TTL),
 		})
 	}
-	makeTable(output, "Type", "Name", "Content", "Proxied", "TTL")
+	makeTable(output, "ID", "Type", "Name", "Content", "Proxied", "TTL")
 }
 
 func dnsCreate(c *cli.Context) {
@@ -333,7 +334,7 @@ func main() {
 					Name:    "list",
 					Aliases: []string{"l"},
 					Action:  zoneRecords,
-					Usage:   "List DNS records for a zones",
+					Usage:   "List DNS records for a zone",
 					Flags: []cli.Flag{
 						cli.StringFlag{
 							Name:  "zone",
@@ -345,7 +346,7 @@ func main() {
 					Name:    "create",
 					Aliases: []string{"c"},
 					Action:  dnsCreate,
-					Usage:   "List DNS records for a zones",
+					Usage:   "Create a DNS record",
 					Flags: []cli.Flag{
 						cli.StringFlag{
 							Name:  "zone",
@@ -358,6 +359,26 @@ func main() {
 						cli.StringFlag{
 							Name:  "type",
 							Usage: "record type",
+						},
+						cli.StringFlag{
+							Name:  "content",
+							Usage: "record content",
+						},
+					},
+				},
+				{
+					Name:    "update",
+					Aliases: []string{"u"},
+					Action:  dnsUpdate,
+					Usage:   "Update a DNS record",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+						cli.StringFlag{
+							Name:  "name",
+							Usage: "record name",
 						},
 						cli.StringFlag{
 							Name:  "content",

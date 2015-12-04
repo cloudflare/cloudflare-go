@@ -73,7 +73,8 @@ API reference:
   https://api.cloudflare.com/#dns-records-for-a-zone-update-dns-record
   PUT /zones/:zone_identifier/dns_records/:identifier
 */
-func (api *API) UpdateDNSRecord() {
+func (api *API) UpdateDNSRecord(zone, id string) error {
+	return nil
 }
 
 /*
