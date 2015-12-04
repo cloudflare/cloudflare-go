@@ -184,7 +184,7 @@ func dnsCreate(c *cli.Context) {
 		return
 	}
 
-	record := cloudflare.NewDNSRecord{
+	record := cloudflare.DNSRecord{
 		Name:    name,
 		Type:    strings.ToUpper(rtype),
 		Content: content,

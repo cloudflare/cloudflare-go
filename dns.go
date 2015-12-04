@@ -12,7 +12,7 @@ API reference:
   https://api.cloudflare.com/#dns-records-for-a-zone-create-dns-record
   POST /zones/:zone_identifier/dns_records
 */
-func (api *API) CreateDNSRecord(zone string, rr NewDNSRecord) error {
+func (api *API) CreateDNSRecord(zone string, rr DNSRecord) error {
 	z, err := api.ListZones(zone)
 	if err != nil {
 		return err
@@ -53,7 +53,7 @@ func (api *API) DNSRecords(zone string) ([]DNSRecord, error) {
 	if err != nil {
 		return []DNSRecord{}, err
 	}
-	var r DNSRecordResponse
+	var r DNSListResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return []DNSRecord{}, err

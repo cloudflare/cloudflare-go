@@ -217,42 +217,35 @@ type ZoneSettingResponse struct {
 	Result   []ZoneSetting `json:"result"`
 }
 
-// Need to split this out from DNSRecord because the API barfs if we try to
-// send it data from the DNSRecord struct.
-type NewDNSRecord struct {
-	Type     string `json:"type"`
-	Name     string `json:"name"`
-	Content  string `json:"content"`
-	Proxied  bool   `json:"proxied"`
-	TTL      uint64 `json:"ttl"`
-	Priority uint64 `json:"priority"`
-}
-
 // Describes a DNS record for a zone.
-// Might as well just suck in the NewDNSRecord struct to re-use the fields.
 type DNSRecord struct {
-	ID string `json:"id"`
-	// Type       string      `json:"type"`
-	// Name       string      `json:"name"`
-	// Content    string      `json:"content"`
-	Proxiable bool `json:"proxiable"`
-	// Proxied    bool        `json:"proxied"`
-	// TTL        uint64      `json:"ttl"`
-	Locked     bool        `json:"locked"`
-	ZoneID     string      `json:"zone_id"`
-	ZoneName   string      `json:"zone_name"`
-	CreatedOn  string      `json:"created_on"`
-	ModifiedOn string      `json:"modified_on"`
-	Data       interface{} `json:"data"` // data returned by: SRV, LOC
-	Meta       interface{} `json:"meta"`
-	// Priority   uint64      `json:"priority"`
-	NewDNSRecord
+	ID         string      `json:"id,omitempty"`
+	Type       string      `json:"type"`
+	Name       string      `json:"name"`
+	Content    string      `json:"content"`
+	Proxiable  bool        `json:"proxiable,omitempty"`
+	Proxied    bool        `json:"proxied"`
+	TTL        uint64      `json:"ttl"`
+	Locked     bool        `json:"locked,omitempty"`
+	ZoneID     string      `json:"zone_id,omitempty"`
+	ZoneName   string      `json:"zone_name,omitempty"`
+	CreatedOn  string      `json:"created_on,omitempty"`
+	ModifiedOn string      `json:"modified_on,omitempty"`
+	Data       interface{} `json:"data,omitempty"` // data returned by: SRV, LOC
+	Meta       interface{} `json:"meta,omitempty"`
+	Priority   uint64      `json:"priority"`
 }
 
-// Listing records returns an object containing an array.
-// Creating records returns an object, no array.
-// Fucking stupid API.
+// The response for creating or updating a DNS record.
 type DNSRecordResponse struct {
+	Success  bool          `json:"success"`
+	Errors   []interface{} `json:"errors"`
+	Messages []string      `json:"messages"`
+	Result   DNSRecord     `json:"result"`
+}
+
+// The response for listing DNS records.
+type DNSListResponse struct {
 	Success  bool          `json:"success"`
 	Errors   []interface{} `json:"errors"`
 	Messages []string      `json:"messages"`
