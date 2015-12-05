@@ -184,12 +184,15 @@ func dnsCreate(c *cli.Context) {
 		fmt.Println("content not specified")
 		return
 	}
+	ttl := c.Int("ttl")
+	proxy := c.Bool("proxy")
 
 	record := cloudflare.DNSRecord{
 		Name:    name,
 		Type:    strings.ToUpper(rtype),
 		Content: content,
-		TTL:     300,
+		TTL:     ttl,
+		Proxied: proxy,
 	}
 	err := api.CreateDNSRecord(zone, record)
 	if err != nil {
@@ -377,6 +380,15 @@ func main() {
 						cli.StringFlag{
 							Name:  "content",
 							Usage: "record content",
+						},
+						cli.IntFlag{
+							Name:  "ttl",
+							Usage: "TTL (1 = automatic)",
+							Value: 1,
+						},
+						cli.BoolFlag{
+							Name:  "proxy",
+							Usage: "proxy through CloudFlare (orange cloud)",
 						},
 					},
 				},
