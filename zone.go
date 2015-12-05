@@ -26,8 +26,8 @@ func (api *API) ListZones(z ...string) ([]Zone, error) {
 	var zones []Zone
 	var err error
 	if len(z) > 0 {
-		for i := 0; i < len(z); i++ {
-			v.Set("name", z[i])
+		for _, zone := range z {
+			v.Set("name", zone)
 			res, err = api.makeRequest("GET", "/zones?"+v.Encode(), nil)
 			if err != nil {
 				return []Zone{}, err
