@@ -50,6 +50,17 @@ func makeTable(zones []table, cols ...string) {
 
 }
 
+// Utility function to check if CLI flags were given.
+func checkFlags(c *cli.Context, flags ...string) error {
+	for _, flag := range flags {
+		if c.String(flag) == "" {
+			fmt.Println(flag, "not specified")
+			return fmt.Errorf("%s not specified", flag)
+		}
+	}
+	return nil
+}
+
 func userInfo(*cli.Context) {
 	user, err := api.UserDetails()
 	if err != nil {
