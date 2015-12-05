@@ -80,10 +80,10 @@ type Response struct {
 }
 
 type ResultInfo struct {
-	Page    uint64 `json:"page"`
-	PerPage uint64 `json:"per_page"`
-	Count   uint64 `json:"count"`
-	Total   uint64 `json:"total_count"`
+	Page    int `json:"page"`
+	PerPage int `json:"per_page"`
+	Count   int `json:"count"`
+	Total   int `json:"total_count"`
 }
 
 // An Organization describes a multi-user organization. (Enterprise only.)
@@ -130,7 +130,7 @@ type Owner struct {
 type Zone struct {
 	ID                string   `json:"id"`
 	Name              string   `json:"name"`
-	DevMode           uint64   `json:"development_mode"`
+	DevMode           int      `json:"development_mode"`
 	OriginalNS        []string `json:"original_name_servers"`
 	OriginalRegistrar string   `json:"original_registrar"`
 	OriginalDNSHost   string   `json:"original_dnshost"`
@@ -166,7 +166,7 @@ type ZoneMeta struct {
 type ZonePlan struct {
 	ID           string `json:"id"`
 	Name         string `json:"name"`
-	Price        uint64 `json:"price"`
+	Price        int    `json:"price"`
 	Currency     string `json:"currency"`
 	Frequency    string `json:"frequency"`
 	LegacyID     string `json:"legacy_id"`
@@ -207,7 +207,7 @@ type ZoneSetting struct {
 	Editable      bool        `json:"editable"`
 	ModifiedOn    string      `json:"modified_on"`
 	Value         interface{} `json:"value""`
-	TimeRemaining uint64      `json:"time_remaining""`
+	TimeRemaining int         `json:"time_remaining""`
 }
 
 type ZoneSettingResponse struct {
@@ -225,7 +225,7 @@ type DNSRecord struct {
 	Content    string      `json:"content"`
 	Proxiable  bool        `json:"proxiable,omitempty"`
 	Proxied    bool        `json:"proxied"`
-	TTL        uint64      `json:"ttl"`
+	TTL        int         `json:"ttl"`
 	Locked     bool        `json:"locked,omitempty"`
 	ZoneID     string      `json:"zone_id,omitempty"`
 	ZoneName   string      `json:"zone_name,omitempty"`
@@ -233,7 +233,7 @@ type DNSRecord struct {
 	ModifiedOn string      `json:"modified_on,omitempty"`
 	Data       interface{} `json:"data,omitempty"` // data returned by: SRV, LOC
 	Meta       interface{} `json:"meta,omitempty"`
-	Priority   uint64      `json:"priority"`
+	Priority   int         `json:"priority"`
 }
 
 // The response for creating or updating a DNS record.
@@ -272,7 +272,7 @@ type ZoneCustomSSL struct {
 	ID            string     `json:"id"`
 	Hosts         []string   `json:"hosts"`
 	Issuer        string     `json:"issuer"`
-	Priority      uint64     `json:"priority"`
+	Priority      int        `json:"priority"`
 	Status        string     `json:"success"`
 	BundleMethod  string     `json:"bundle_method"`
 	ZoneID        string     `json:"zone_id"`
@@ -294,7 +294,7 @@ type KeylessSSL struct {
 	ID          string   `json:"id"`
 	Name        string   `json:"name"`
 	Host        string   `json:"host"`
-	Port        uint64   `json:"port"`
+	Port        int      `json:"port"`
 	Status      string   `json:"success"`
 	Enabled     bool     `json:"enabled"`
 	Permissions []string `json:"permissions"`
@@ -314,7 +314,7 @@ type Railgun struct {
 	Name           string `json:"name"`
 	Status         string `json:"success"`
 	Enabled        bool   `json:"enabled"`
-	ZonesConnected uint64 `json:"zones_connected"`
+	ZonesConnected int    `json:"zones_connected"`
 	Build          string `json:"build"`
 	Version        string `json:"version"`
 	Revision       string `json:"revision"`
