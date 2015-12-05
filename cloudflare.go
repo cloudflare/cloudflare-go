@@ -40,7 +40,7 @@ func (api *API) makeRequest(method, uri string, params interface{}) ([]byte, err
 	// Replace nil with a JSON object if needed
 	var reqBody io.Reader
 	switch method {
-	case "GET":
+	case "GET", "DELETE":
 		reqBody = nil
 	default:
 		json, err := json.Marshal(params)

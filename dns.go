@@ -84,5 +84,24 @@ API reference:
   https://api.cloudflare.com/#dns-records-for-a-zone-delete-dns-record
   DELETE /zones/:zone_identifier/dns_records/:identifier
 */
-func (api *API) DeleteDNSRecord() {
+func (api *API) DeleteDNSRecord(zone, id string) error {
+	z, err := api.ListZones(zone)
+	if err != nil {
+		return err
+	}
+	// TODO(jamesog): This is brittle, fix it
+	zid := z[0].ID
+	uri := "/zones/" + zid + "/dns_records/" + id
+	res, err := api.makeRequest("DELETE", uri, nil)
+	if err != nil {
+		fmt.Println("Error with makeRequest")
+		return err
+	}
+	var r DNSRecordResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		fmt.Println("Error with unmarshal")
+		return err
+	}
+	return nil
 }

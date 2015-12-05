@@ -200,7 +200,21 @@ func dnsCreate(c *cli.Context) {
 func dnsUpdate(*cli.Context) {
 }
 
-func dnsDelete(*cli.Context) {
+func dnsDelete(c *cli.Context) {
+	zone := c.String("zone")
+	if zone == "" {
+		fmt.Println("zone not specified")
+		return
+	}
+	name := c.String("id")
+	if name == "" {
+		fmt.Println("name not specified")
+		return
+	}
+	err := api.DeleteDNSRecord(zone, name)
+	if err != nil {
+		fmt.Println("Error deleting DNS record:", err)
+	}
 }
 
 func zoneCerts(*cli.Context) {
@@ -383,6 +397,22 @@ func main() {
 						cli.StringFlag{
 							Name:  "content",
 							Usage: "record content",
+						},
+					},
+				},
+				{
+					Name:    "delete",
+					Aliases: []string{"d"},
+					Action:  dnsDelete,
+					Usage:   "Delete a DNS record",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+						cli.StringFlag{
+							Name:  "id",
+							Usage: "record id",
 						},
 					},
 				},
