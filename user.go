@@ -1,9 +1,6 @@
 package cloudflare
 
-import (
-	"encoding/json"
-	"fmt"
-)
+import "encoding/json"
 
 /*
 Information about the logged-in user.
@@ -16,7 +13,6 @@ func (api API) UserDetails() (User, error) {
 	if err != nil {
 		return User{}, err
 	}
-	fmt.Printf("%s\n", res)
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return User{}, err
