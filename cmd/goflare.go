@@ -217,6 +217,57 @@ func dnsCreate(c *cli.Context) {
 	}
 }
 
+func dnsCreateOrUpdate(c *cli.Context) {
+	if err := checkFlags(c, "zone", "name", "type", "content"); err != nil {
+		return
+	}
+	zone := c.String("zone")
+	name := c.String("name")
+	rtype := strings.ToUpper(c.String("type"))
+	content := c.String("content")
+	ttl := c.Int("ttl")
+	proxy := c.Bool("proxy")
+
+	// Look for an existing record
+	rr := cloudflare.DNSRecord{
+		Name: name + "." + zone,
+	}
+	records, err := api.DNSRecords(zone, rr)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	if len(records) > 0 {
+		// Record exists - find the ID and update it.
+		// This is imprecise without knowing the original content; if a label
+		// has multiple RRs we'll just update the first one.
+		for _, r := range records {
+			if r.Type == rtype {
+				rr.ID = r.ID
+				rr.Type = r.Type
+				rr.Content = content
+				rr.TTL = ttl
+				rr.Proxied = proxy
+				err := api.UpdateDNSRecord(zone, r.ID, rr)
+				if err != nil {
+					fmt.Println("Error updating DNS record:", err)
+				}
+			}
+		}
+	} else {
+		// Record doesn't exist - create it
+		rr.Type = rtype
+		rr.Content = content
+		rr.TTL = ttl
+		rr.Proxied = proxy
+		err := api.CreateDNSRecord(zone, rr)
+		if err != nil {
+			fmt.Println("Error creating DNS record:", err)
+		}
+	}
+}
+
 func dnsUpdate(c *cli.Context) {
 	if err := checkFlags(c, "zone", "id"); err != nil {
 		return
@@ -453,6 +504,39 @@ func main() {
 						cli.StringFlag{
 							Name:  "content",
 							Usage: "record content",
+						},
+						cli.IntFlag{
+							Name:  "ttl",
+							Usage: "TTL (1 = automatic)",
+							Value: 1,
+						},
+						cli.BoolFlag{
+							Name:  "proxy",
+							Usage: "proxy through CloudFlare (orange cloud)",
+						},
+					},
+				},
+				{
+					Name:    "create-or-update",
+					Aliases: []string{"o"},
+					Action:  dnsCreateOrUpdate,
+					Usage:   "Create a DNS record, or update if it exists",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+						cli.StringFlag{
+							Name:  "name",
+							Usage: "record name",
+						},
+						cli.StringFlag{
+							Name:  "content",
+							Usage: "record content",
+						},
+						cli.StringFlag{
+							Name:  "type",
+							Usage: "record type",
 						},
 						cli.IntFlag{
 							Name:  "ttl",
