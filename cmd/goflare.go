@@ -144,10 +144,29 @@ func zoneRecords(c *cli.Context) {
 		fmt.Println("No zone specified")
 		return
 	}
-	records, err := api.DNSRecords(zone)
-	if err != nil {
-		fmt.Println(err)
-		return
+	// Create a an empty record for searching for records
+	rr := cloudflare.DNSRecord{}
+	var records []cloudflare.DNSRecord
+	if c.String("id") != "" {
+		rec, err := api.DNSRecord(zone, c.String("id"))
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		records = append(records, rec)
+	} else {
+		if c.String("name") != "" {
+			rr.Name = c.String("name")
+		}
+		if c.String("content") != "" {
+			rr.Name = c.String("content")
+		}
+		var err error
+		records, err = api.DNSRecords(zone, rr)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 	}
 	var output []table
 	for _, r := range records {
@@ -348,8 +367,20 @@ func main() {
 					Usage:   "List DNS records for a zone",
 					Flags: []cli.Flag{
 						cli.StringFlag{
+							Name:  "id",
+							Usage: "record id",
+						},
+						cli.StringFlag{
 							Name:  "zone",
 							Usage: "zone name",
+						},
+						cli.StringFlag{
+							Name:  "name",
+							Usage: "record name",
+						},
+						cli.StringFlag{
+							Name:  "content",
+							Usage: "record content",
 						},
 					},
 				},
