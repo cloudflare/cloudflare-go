@@ -78,9 +78,31 @@ func (api *API) DNSRecords(zone string, rr DNSRecord) ([]DNSRecord, error) {
 	return r.Result, nil
 }
 
-// https://api.cloudflare.com/#dns-records-for-a-zone-dns-record-details
-// GET /zones/:zone_identifier/dns_records/:identifier
-func (api *API) DNSRecord() {
+/*
+Fetches a single DNS record.
+
+API reference:
+  https://api.cloudflare.com/#dns-records-for-a-zone-dns-record-details
+  GET /zones/:zone_identifier/dns_records/:identifier
+*/
+func (api *API) DNSRecord(zone, id string) (DNSRecord, error) {
+	z, err := api.ListZones(zone)
+	if err != nil {
+		return DNSRecord{}, err
+	}
+	// TODO(jamesog): This is brittle, fix it
+	zid := z[0].ID
+	uri := "/zones/" + zid + "/dns_records/" + id
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return DNSRecord{}, err
+	}
+	var r DNSRecordResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return DNSRecord{}, err
+	}
+	return r.Result, nil
 }
 
 /*
