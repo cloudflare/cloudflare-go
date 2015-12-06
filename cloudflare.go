@@ -48,7 +48,6 @@ func (api *API) makeRequest(method, uri string, params interface{}) ([]byte, err
 			fmt.Println("Error marshalling params to JSON:", err)
 			return nil, err
 		}
-		// fmt.Printf("json: %s\n", json)
 		reqBody = bytes.NewReader(json)
 	}
 	req, err := http.NewRequest(method, apiURL+uri, reqBody)
@@ -66,7 +65,6 @@ func (api *API) makeRequest(method, uri string, params interface{}) ([]byte, err
 	// if resp.StatusCode != http.StatusOK
 	defer resp.Body.Close()
 	resBody, err := ioutil.ReadAll(resp.Body)
-	fmt.Printf("makeRequest: %s\n", resBody)
 	return resBody, nil
 }
 
