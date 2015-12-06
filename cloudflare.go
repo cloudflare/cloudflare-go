@@ -220,12 +220,12 @@ type ZoneSettingResponse struct {
 // Describes a DNS record for a zone.
 type DNSRecord struct {
 	ID         string      `json:"id,omitempty"`
-	Type       string      `json:"type"`
-	Name       string      `json:"name"`
-	Content    string      `json:"content"`
+	Type       string      `json:"type,omitempty"`
+	Name       string      `json:"name,omitempty"`
+	Content    string      `json:"content,omitempty"`
 	Proxiable  bool        `json:"proxiable,omitempty"`
-	Proxied    bool        `json:"proxied"`
-	TTL        int         `json:"ttl"`
+	Proxied    bool        `json:"proxied,omitempty"`
+	TTL        int         `json:"ttl,omitempty"`
 	Locked     bool        `json:"locked,omitempty"`
 	ZoneID     string      `json:"zone_id,omitempty"`
 	ZoneName   string      `json:"zone_name,omitempty"`
@@ -233,7 +233,7 @@ type DNSRecord struct {
 	ModifiedOn string      `json:"modified_on,omitempty"`
 	Data       interface{} `json:"data,omitempty"` // data returned by: SRV, LOC
 	Meta       interface{} `json:"meta,omitempty"`
-	Priority   int         `json:"priority"`
+	Priority   int         `json:"priority,omitempty"`
 }
 
 // The response for creating or updating a DNS record.
