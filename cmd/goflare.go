@@ -217,7 +217,26 @@ func dnsCreate(c *cli.Context) {
 	}
 }
 
-func dnsUpdate(*cli.Context) {
+func dnsUpdate(c *cli.Context) {
+	if err := checkFlags(c, "zone", "id"); err != nil {
+		return
+	}
+	zone := c.String("zone")
+	id := c.String("id")
+	content := c.String("content")
+	ttl := c.Int("ttl")
+	proxy := c.Bool("proxy")
+
+	record := cloudflare.DNSRecord{
+		ID:      id,
+		Content: content,
+		TTL:     ttl,
+		Proxied: proxy,
+	}
+	err := api.UpdateDNSRecord(zone, id, record)
+	if err != nil {
+		fmt.Println("Error updating DNS record:", err)
+	}
 }
 
 func dnsDelete(c *cli.Context) {
