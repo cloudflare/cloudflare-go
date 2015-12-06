@@ -317,11 +317,6 @@ func railgun(*cli.Context) {
 }
 
 func main() {
-	// zone := cloudflare.Zone{Name: "example.com"}
-	// zone.CreateZone()
-
-	// apiKey := os.Getenv("CF_API_KEY")
-	// apiEmail := os.Getenv("CF_API_EMAIL")
 	api = cloudflare.New(os.Getenv("CF_API_KEY"), os.Getenv("CF_API_EMAIL"))
 
 	if api.APIKey == "" {
@@ -333,10 +328,10 @@ func main() {
 		return
 	}
 
-	// userCommand := cli.Command{
-	// railgunCommand := cli.Command{
 	app := cli.NewApp()
-	app.Name = "cloudflare"
+	app.Name = "flarectl"
+	app.Usage = "CloudFlare CLI"
+	app.Version = "2015.12.0"
 	app.Commands = []cli.Command{
 		{
 			Name:    "user",
