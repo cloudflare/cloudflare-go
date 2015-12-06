@@ -175,26 +175,13 @@ func zoneRecords(c *cli.Context) {
 }
 
 func dnsCreate(c *cli.Context) {
+	if err := checkFlags(c, "zone", "name", "type", "content"); err != nil {
+		return
+	}
 	zone := c.String("zone")
-	if zone == "" {
-		fmt.Println("zone not specified")
-		return
-	}
 	name := c.String("name")
-	if name == "" {
-		fmt.Println("name not specified")
-		return
-	}
 	rtype := c.String("type")
-	if rtype == "" {
-		fmt.Println("type not specified")
-		return
-	}
 	content := c.String("content")
-	if content == "" {
-		fmt.Println("content not specified")
-		return
-	}
 	ttl := c.Int("ttl")
 	proxy := c.Bool("proxy")
 
@@ -215,17 +202,13 @@ func dnsUpdate(*cli.Context) {
 }
 
 func dnsDelete(c *cli.Context) {
+	if err := checkFlags(c, "zone", "id"); err != nil {
+		return
+	}
 	zone := c.String("zone")
-	if zone == "" {
-		fmt.Println("zone not specified")
-		return
-	}
-	name := c.String("id")
-	if name == "" {
-		fmt.Println("name not specified")
-		return
-	}
-	err := api.DeleteDNSRecord(zone, name)
+	id := c.String("id")
+
+	err := api.DeleteDNSRecord(zone, id)
 	if err != nil {
 		fmt.Println("Error deleting DNS record:", err)
 	}
