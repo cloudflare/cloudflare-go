@@ -112,8 +112,32 @@ API reference:
   https://api.cloudflare.com/#dns-records-for-a-zone-update-dns-record
   PUT /zones/:zone_identifier/dns_records/:identifier
 */
-func (api *API) UpdateDNSRecord(zone, id string) error {
-	return nil
+func (api *API) UpdateDNSRecord(zone, id string, rr DNSRecord) error {
+	z, err := api.ListZones(zone)
+	if err != nil {
+		return err
+	}
+	// TODO(jamesog): This is brittle, fix it
+	zid := z[0].ID
+	rec, err := api.DNSRecord(zone, id)
+	if err != nil {
+		return err
+	}
+	rr.Name = rec.Name
+	rr.Type = rec.Type
+	uri := "/zones/" + zid + "/dns_records/" + id
+	res, err := api.makeRequest("PUT", uri, rr)
+	if err != nil {
+		fmt.Println("Error with makeRequest")
+		return err
+	}
+	var r DNSRecordResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		fmt.Println("Error with unmarshal")
+		return err
+	}
+	return err
 }
 
 /*
