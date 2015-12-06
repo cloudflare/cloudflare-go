@@ -54,7 +54,7 @@ func makeTable(zones []table, cols ...string) {
 func checkFlags(c *cli.Context, flags ...string) error {
 	for _, flag := range flags {
 		if c.String(flag) == "" {
-			fmt.Println(flag, "not specified")
+			cli.ShowSubcommandHelp(c)
 			return fmt.Errorf("%s not specified", flag)
 		}
 	}
@@ -103,8 +103,10 @@ func zoneInfo(c *cli.Context) {
 	var zone string
 	if len(c.Args()) > 0 {
 		zone = c.Args()[0]
+	} else if c.String("zone") != "" {
+		zone = c.String("zone")
 	} else {
-		fmt.Println("No zone specified")
+		cli.ShowSubcommandHelp(c)
 		return
 	}
 	zones, err := api.ListZones(zone)
@@ -140,7 +142,7 @@ func zoneRecords(c *cli.Context) {
 	} else if c.String("zone") != "" {
 		zone = c.String("zone")
 	} else {
-		fmt.Println("No zone specified")
+		cli.ShowSubcommandHelp(c)
 		return
 	}
 	// Create a an empty record for searching for records
