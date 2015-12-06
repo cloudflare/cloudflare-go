@@ -397,12 +397,21 @@ func main() {
 							Usage: "zone name",
 						},
 						cli.StringFlag{
-							Name:  "name",
-							Usage: "record name",
+							Name:  "id",
+							Usage: "record id",
 						},
 						cli.StringFlag{
 							Name:  "content",
 							Usage: "record content",
+						},
+						cli.IntFlag{
+							Name:  "ttl",
+							Usage: "TTL (1 = automatic)",
+							Value: 1,
+						},
+						cli.BoolFlag{
+							Name:  "proxy",
+							Usage: "proxy through CloudFlare (orange cloud)",
 						},
 					},
 				},
