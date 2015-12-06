@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"encoding/json"
 	"fmt"
+	"net/url"
 )
 
 /*
@@ -41,14 +42,30 @@ API reference:
   https://api.cloudflare.com/#dns-records-for-a-zone-list-dns-records
   GET /zones/:zone_identifier/dns_records
 */
-func (api *API) DNSRecords(zone string) ([]DNSRecord, error) {
+func (api *API) DNSRecords(zone string, rr DNSRecord) ([]DNSRecord, error) {
 	z, err := api.ListZones(zone)
 	if err != nil {
 		return []DNSRecord{}, err
 	}
 	// TODO(jamesog): This is brittle, fix it
 	zid := z[0].ID
-	uri := "/zones/" + zid + "/dns_records"
+
+	// Construct a query string
+	v := url.Values{}
+	if rr.Name != "" {
+		v.Set("name", rr.Name)
+	}
+	if rr.Type != "" {
+		v.Set("type", rr.Type)
+	}
+	if rr.Content != "" {
+		v.Set("content", rr.Content)
+	}
+	var query string
+	if len(v) > 0 {
+		query = "?" + v.Encode()
+	}
+	uri := "/zones/" + zid + "/dns_records" + query
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
 		return []DNSRecord{}, err
