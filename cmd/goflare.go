@@ -67,7 +67,6 @@ func userInfo(*cli.Context) {
 		fmt.Println(err)
 		return
 	}
-	fmt.Printf("%+v\n", user)
 	var output []table
 	output = append(output, table{
 		"ID":       user.ID,
