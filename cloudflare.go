@@ -103,7 +103,7 @@ type User struct {
 	Telephone     string         `json:"telephone"`
 	Country       string         `json:"country"`
 	Zipcode       string         `json:"zipcode"`
-	CreatedOn     string         `json:"created_on` // Should this be a time.Date?
+	CreatedOn     string         `json:"created_on"` // Should this be a time.Date?
 	ModifiedOn    string         `json:"modified_on"`
 	APIKey        string         `json:"api_key"`
 	TwoFA         bool           `json:"two_factor_authentication_enabled"`
@@ -204,8 +204,8 @@ type ZoneSetting struct {
 	ID            string      `json:"id"`
 	Editable      bool        `json:"editable"`
 	ModifiedOn    string      `json:"modified_on"`
-	Value         interface{} `json:"value""`
-	TimeRemaining int         `json:"time_remaining""`
+	Value         interface{} `json:"value"`
+	TimeRemaining int         `json:"time_remaining"`
 }
 
 type ZoneSettingResponse struct {
