@@ -6,12 +6,12 @@ import (
 
 var api *API
 
-func (api *API) ListWafPackages(zoneId string) ([]WafPackage, error) {
+func (api *API) ListWafPackages(zoneID string) ([]WafPackage, error) {
 	var p WafPackagesResponse
 	var packages []WafPackage
 	var res []byte
 	var err error
-	res, err = api.makeRequest("GET", "/zones/"+zoneId+"/firewall/waf/packages", nil)
+	res, err = api.makeRequest("GET", "/zones/"+zoneID+"/firewall/waf/packages", nil)
 	if err != nil {
 		return []WafPackage{}, err
 	}
@@ -26,4 +26,26 @@ func (api *API) ListWafPackages(zoneId string) ([]WafPackage, error) {
 		packages = append(packages, p.Result[pi])
 	}
 	return packages, err
+}
+
+func (api *API) ListWafRules(zoneID string, packageID string) ([]WafRule, error) {
+	var r WafRulesResponse
+	var rules []WafRule
+	var res []byte
+	var err error
+	res, err = api.makeRequest("GET", "/zones/"+zoneID+"/firewall/waf/packages/"+packageID+"/rules", nil)
+	if err != nil {
+		return []WafRule{}, err
+	}
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return []WafRule{}, err
+	}
+	if !r.Success {
+		return []WafRule{}, err
+	}
+	for ri, _ := range r.Result {
+		rules = append(rules, r.Result[ri])
+	}
+	return rules, err
 }

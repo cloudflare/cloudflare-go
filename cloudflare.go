@@ -353,10 +353,10 @@ type CustomPageResponse struct {
 
 // WAF packages
 type WafPackage struct {
-	Id            string `json:"id"`
+	ID            string `json:"id"`
 	Name          string `json:"name"`
 	Description   string `json:"description"`
-	ZoneId        string `json:"zone_id"`
+	ZoneID        string `json:"zone_id"`
 	DetectionMode string `json:"detection_mode"`
 	Sensitivity   string `json:"sensitivity"`
 	ActionMode    string `json:"action_mode"`
@@ -365,6 +365,31 @@ type WafPackage struct {
 type WafPackagesResponse struct {
 	Result     []WafPackage `json:"result"`
 	Success    bool         `json:"success"`
+	ResultInfo struct {
+		Page       uint `json:"page"`
+		PerPage    uint `json:"per_page"`
+		Count      uint `json:"count"`
+		TotalCount uint `json:"total_count"`
+	} `json:"result_info"`
+}
+
+type WafRule struct {
+	ID          string `json:"id"`
+	Description string `json:"description"`
+	Priority    string `json:"priority"`
+	PackageID   string `json:"package_id"`
+	Group       struct {
+		ID   string `json:"id"`
+		Name string `json:"name"`
+	} `json:"group"`
+	Mode         string   `json:"mode"`
+	DefaultMode  string   `json:"default_mode"`
+	AllowedModes []string `json:"allowed_modes"`
+}
+
+type WafRulesResponse struct {
+	Result     []WafRule `json:"result"`
+	Success    bool      `json:"success"`
 	ResultInfo struct {
 		Page       uint `json:"page"`
 		PerPage    uint `json:"per_page"`
