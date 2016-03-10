@@ -352,7 +352,7 @@ type CustomPageResponse struct {
 }
 
 // WAF packages
-type WafPackage struct {
+type WAFPackage struct {
 	ID            string `json:"id"`
 	Name          string `json:"name"`
 	Description   string `json:"description"`
@@ -362,8 +362,8 @@ type WafPackage struct {
 	ActionMode    string `json:"action_mode"`
 }
 
-type WafPackagesResponse struct {
-	Result     []WafPackage `json:"result"`
+type WAFPackagesResponse struct {
+	Result     []WAFPackage `json:"result"`
 	Success    bool         `json:"success"`
 	ResultInfo struct {
 		Page       uint `json:"page"`
@@ -373,7 +373,7 @@ type WafPackagesResponse struct {
 	} `json:"result_info"`
 }
 
-type WafRule struct {
+type WAFRule struct {
 	ID          string `json:"id"`
 	Description string `json:"description"`
 	Priority    string `json:"priority"`
@@ -387,8 +387,8 @@ type WafRule struct {
 	AllowedModes []string `json:"allowed_modes"`
 }
 
-type WafRulesResponse struct {
-	Result     []WafRule `json:"result"`
+type WAFRulesResponse struct {
+	Result     []WAFRule `json:"result"`
 	Success    bool      `json:"success"`
 	ResultInfo struct {
 		Page       uint `json:"page"`
