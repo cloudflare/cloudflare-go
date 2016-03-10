@@ -350,3 +350,25 @@ type CustomPageResponse struct {
 	Messages []string     `json:"messages"`
 	Result   []CustomPage `json:"result"`
 }
+
+// WAF packages
+type WafPackage struct {
+	Id            string `json:"id"`
+	Name          string `json:"name"`
+	Description   string `json:"description"`
+	ZoneId        string `json:"zone_id"`
+	DetectionMode string `json:"detection_mode"`
+	Sensitivity   string `json:"sensitivity"`
+	ActionMode    string `json:"action_mode"`
+}
+
+type WafPackagesResponse struct {
+	Result     []WafPackage `json:"result"`
+	Success    bool         `json:"success"`
+	ResultInfo struct {
+		Page       uint `json:"page"`
+		PerPage    uint `json:"per_page"`
+		Count      uint `json:"count"`
+		TotalCount uint `json:"total_count"`
+	} `json:"result_info"`
+}
