@@ -1,0 +1,3 @@
+language: go
+before_script:
+  - go vet ./...
