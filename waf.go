@@ -2,6 +2,8 @@ package cloudflare
 
 import (
 	"encoding/json"
+	"errors"
+	"net/url"
 )
 
 func (api *API) ListWAFPackages(zoneID string) ([]WAFPackage, error) {
@@ -26,12 +28,20 @@ func (api *API) ListWAFPackages(zoneID string) ([]WAFPackage, error) {
 	return packages, err
 }
 
-func (api *API) ListWAFRules(zoneID string, packageID string) ([]WAFRule, error) {
+func (api *API) ListWAFRules(zoneID string, packageID string, v ...url.Values) ([]WAFRule, error) {
+	var query url.Values
 	var r WAFRulesResponse
 	var rules []WAFRule
 	var res []byte
 	var err error
-	res, err = api.makeRequest("GET", "/zones/"+zoneID+"/firewall/waf/packages/"+packageID+"/rules", nil)
+	if len(v) > 1 {
+		return []WAFRule{}, errors.New("Too many arguments")
+	} else if len(v) == 0 {
+		query = url.Values{}
+	} else {
+		query = v[0]
+	}
+	res, err = api.makeRequest("GET", "/zones/"+zoneID+"/firewall/waf/packages/"+packageID+"/rules?"+query.Encode(), nil)
 	if err != nil {
 		return []WAFRule{}, err
 	}
