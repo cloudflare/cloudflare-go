@@ -350,3 +350,50 @@ type CustomPageResponse struct {
 	Messages []string     `json:"messages"`
 	Result   []CustomPage `json:"result"`
 }
+
+// WAF packages
+type WAFPackage struct {
+	ID            string `json:"id"`
+	Name          string `json:"name"`
+	Description   string `json:"description"`
+	ZoneID        string `json:"zone_id"`
+	DetectionMode string `json:"detection_mode"`
+	Sensitivity   string `json:"sensitivity"`
+	ActionMode    string `json:"action_mode"`
+}
+
+type WAFPackagesResponse struct {
+	Result     []WAFPackage `json:"result"`
+	Success    bool         `json:"success"`
+	ResultInfo struct {
+		Page       uint `json:"page"`
+		PerPage    uint `json:"per_page"`
+		Count      uint `json:"count"`
+		TotalCount uint `json:"total_count"`
+	} `json:"result_info"`
+}
+
+type WAFRule struct {
+	ID          string `json:"id"`
+	Description string `json:"description"`
+	Priority    string `json:"priority"`
+	PackageID   string `json:"package_id"`
+	Group       struct {
+		ID   string `json:"id"`
+		Name string `json:"name"`
+	} `json:"group"`
+	Mode         string   `json:"mode"`
+	DefaultMode  string   `json:"default_mode"`
+	AllowedModes []string `json:"allowed_modes"`
+}
+
+type WAFRulesResponse struct {
+	Result     []WAFRule `json:"result"`
+	Success    bool      `json:"success"`
+	ResultInfo struct {
+		Page       uint `json:"page"`
+		PerPage    uint `json:"per_page"`
+		Count      uint `json:"count"`
+		TotalCount uint `json:"total_count"`
+	} `json:"result_info"`
+}
