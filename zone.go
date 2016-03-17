@@ -95,13 +95,33 @@ func EditZone() {
 }
 
 // https://api.cloudflare.com/#zone-purge-all-files
-// DELETE /zones/:id/purge_all
-func PurgeAll() {
+// DELETE /zones/:id/purge_cache
+func (api *API) PurgeEverything(z Zone) (PurgeCacheResponse, error) {
+	res, err := api.makeRequest("DELETE", "/zones/"+z.ID+"/purge_cache", PurgeCacheRequest{true, nil, nil})
+	if err != nil {
+		return PurgeCacheResponse{}, err
+	}
+	var r PurgeCacheResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return PurgeCacheResponse{}, err
+	}
+	return r, nil
 }
 
-// https://api.cloudflare.com/#zone-purge-individual-files
+// https://api.cloudflare.com/#zone-purge-individual-files-by-url-and-cache-tags
 // DELETE /zones/:id/purge_cache
-func PurgeFile() {
+func (api *API) PurgeCache(z Zone, pcr PurgeCacheRequest) (PurgeCacheResponse, error) {
+	res, err := api.makeRequest("DELETE", "/zones/"+z.ID+"/purge_cache", pcr)
+	if err != nil {
+		return PurgeCacheResponse{}, err
+	}
+	var r PurgeCacheResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return PurgeCacheResponse{}, err
+	}
+	return r, nil
 }
 
 // https://api.cloudflare.com/#zone-delete-a-zone

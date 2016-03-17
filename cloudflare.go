@@ -39,16 +39,15 @@ func NewZone() *Zone {
 func (api *API) makeRequest(method, uri string, params interface{}) ([]byte, error) {
 	// Replace nil with a JSON object if needed
 	var reqBody io.Reader
-	switch method {
-	case "GET", "DELETE":
-		reqBody = nil
-	default:
+	if params != nil {
 		json, err := json.Marshal(params)
 		if err != nil {
 			fmt.Println("Error marshalling params to JSON:", err)
 			return nil, err
 		}
 		reqBody = bytes.NewReader(json)
+	} else {
+		reqBody = nil
 	}
 	req, err := http.NewRequest(method, apiURL+uri, reqBody)
 	if err != nil {
@@ -396,4 +395,16 @@ type WAFRulesResponse struct {
 		Count      uint `json:"count"`
 		TotalCount uint `json:"total_count"`
 	} `json:"result_info"`
+}
+
+type PurgeCacheRequest struct {
+	Everything bool     `json:"purge_everything,omitempty"`
+	Files      []string `json:"files,omitempty"`
+	Tags       []string `json:"tags,omitempty"`
+}
+
+type PurgeCacheResponse struct {
+	Success  bool     `json:"success"`
+	Errors   []string `json:"errors"`
+	Messages []string `json:"messages"`
 }
