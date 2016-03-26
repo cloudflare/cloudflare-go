@@ -1,11 +1,4 @@
-/*
-Package cloudflare implements the CloudFlare v4 API.
-
-New API requests created like:
-
-    api := cloudflare.New(apikey, apiemail)
-
-*/
+// Package cloudflare implements the CloudFlare v4 API.
 package cloudflare
 
 import (
@@ -24,15 +17,39 @@ const apiURL = "https://api.cloudflare.com/client/v4"
 const errMakeRequestError = "Error from makeRequest"
 const errUnmarshalError = "Error unmarshalling JSON"
 
+// API holds the configuration for the current API client. A client should not
+// be modified concurrently.
 type API struct {
-	APIKey   string
-	APIEmail string
-	BaseURL  string
+	APIKey     string
+	APIEmail   string
+	BaseURL    string
+	headers    http.Header
+	httpClient *http.Client
 }
 
-// Initializes the API configuration.
-func New(key, email string) *API {
-	return &API{key, email, apiURL}
+// New creates a new CloudFlare v4 API client.
+func New(key, email string, opts ...Option) (*API, error) {
+	if key == "" || email == "" {
+		return nil, UserError{errEmptyCredentials}
+	}
+
+	api := &API{
+		APIKey:   key,
+		APIEmail: email,
+	}
+
+	err := api.parseOptions(opts...)
+	if err != nil {
+		return nil, UserError{err}
+	}
+
+	// Fall back to http.DefaultClient if the package user does not provide
+	// their own.
+	if api.httpClient == nil {
+		api.httpClient = http.DefaultClient
+	}
+
+	return api, nil
 }
 
 // Initializes a new zone.
@@ -72,8 +89,13 @@ func (api *API) makeRequest(method, uri string, params interface{}) ([]byte, err
 	if err != nil {
 		return nil, errors.Wrap(err, "HTTP request creation failed")
 	}
-	req.Header.Add("X-Auth-Key", api.APIKey)
-	req.Header.Add("X-Auth-Email", api.APIEmail)
+
+	// Apply any user-defined headers first.
+	req.Header = api.headers
+
+	req.Header.Set("X-Auth-Key", api.APIKey)
+	req.Header.Set("X-Auth-Email", api.APIEmail)
+
 	// Could be application/json or multipart/form-data
 	// req.Header.Add("Content-Type", "application/json")
 	client := &http.Client{}
@@ -92,18 +114,19 @@ func (api *API) makeRequest(method, uri string, params interface{}) ([]byte, err
 			return nil, errors.New(resp.Status)
 		}
 	}
+
 	return resBody, nil
 }
 
-// The Response struct is a template.  There will also be a result struct.
-// There will be a unique response type for each response, which will include
-// this type.
+// Response is a template.  There will also be a result struct.  There will be a
+// unique response type for each response, which will include this type.
 type Response struct {
 	Success  bool     `json:"success"`
 	Errors   []string `json:"errors"`
 	Messages []string `json:"messages"`
 }
 
+// ResultInfo contains metadata about the Response.
 type ResultInfo struct {
 	Page    int `json:"page"`
 	PerPage int `json:"per_page"`
@@ -111,7 +134,7 @@ type ResultInfo struct {
 	Total   int `json:"total_count"`
 }
 
-// A User describes a user account.
+// User describes a user account.
 type User struct {
 	ID            string         `json:"id"`
 	Email         string         `json:"email"`
@@ -129,18 +152,20 @@ type User struct {
 	Organizations []Organization `json:"organizations"`
 }
 
+// UserResponse wraps a response containing User accounts.
 type UserResponse struct {
 	Response
 	Result User `json:"result"`
 }
 
+// Owner describes the resource owner.
 type Owner struct {
 	ID        string `json:"id"`
 	Email     string `json:"email"`
 	OwnerType string `json:"owner_type"`
 }
 
-// A Zone describes a CloudFlare zone.
+// Zone describes a CloudFlare zone.
 type Zone struct {
 	ID                string   `json:"id"`
 	Name              string   `json:"name"`
@@ -167,7 +192,7 @@ type Zone struct {
 	Meta        ZoneMeta `json:"meta"`
 }
 
-// Contains metadata about a zone.
+// ZoneMeta metadata about a zone.
 type ZoneMeta struct {
 	// custom_certificate_quota is broken - sometimes it's a string, sometimes a number!
 	// CustCertQuota     int    `json:"custom_certificate_quota"`
@@ -176,7 +201,7 @@ type ZoneMeta struct {
 	PhishingDetected  bool `json:"phishing_detected"`
 }
 
-// Contains the plan information for a zone.
+// ZonePlan contains the plan information for a zone.
 type ZonePlan struct {
 	ID           string `json:"id"`
 	Name         string `json:"name"`
