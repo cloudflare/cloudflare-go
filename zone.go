@@ -7,20 +7,19 @@ import (
 	"github.com/pkg/errors"
 )
 
-/*
-Creates a zone on an account.
-
-API reference: https://api.cloudflare.com/#zone-create-a-zone
-*/
+// CreateZone creates a zone on an account.
+// API reference:
+// 	https://api.cloudflare.com/#zone-create-a-zone
+//	POST /zones
 func (api *API) CreateZone(z Zone) {
 	// res, err := api.makeRequest("POST", "/zones", z)
 }
 
-/*
-List zones on an account. Optionally takes a list of zones to filter results.
-
-API reference: https://api.cloudflare.com/#zone-list-zones
-*/
+// ListZones liist zones on an account. Optionally takes a list of zone names
+// to filter against.
+// API reference:
+//	https://api.cloudflare.com/#zone-list-zones
+//	GET /zones
 func (api *API) ListZones(z ...string) ([]Zone, error) {
 	v := url.Values{}
 	var res []byte
@@ -42,11 +41,14 @@ func (api *API) ListZones(z ...string) ([]Zone, error) {
 				// TODO: Provide an actual error message instead of always returning nil
 				return []Zone{}, err
 			}
-			for zi, _ := range r.Result {
+			for zi := range r.Result {
 				zones = append(zones, r.Result[zi])
 			}
 		}
 	} else {
+		// TODO: Paginate here. We only grab the first page of results.
+		// Could do this concurrently after the first request by creating a
+		// sync.WaitGroup or just a channel + workers.
 		res, err = api.makeRequest("GET", "/zones", nil)
 		if err != nil {
 			return []Zone{}, errors.Wrap(err, errMakeRequestError)
@@ -61,14 +63,14 @@ func (api *API) ListZones(z ...string) ([]Zone, error) {
 	return zones, nil
 }
 
-/*
-Fetches information about a zone.
-
-
-  https://api.cloudflare.com/#zone-zone-details
-  GET /zones/:id
-*/
+// ZoneDetails fetches information about a zone.
+// API reference:
+// 	https://api.cloudflare.com/#zone-zone-details
+// 	GET /zones/:id
 func (api *API) ZoneDetails(z Zone) {
+	// TODO: This should either accept a *Zone (and update it), or return a
+	// (Zone, error).
+
 	// XXX: Should we make the user get the zone ID themselves with ListZones, or do the hard work here?
 	// ListZones gives the same information as this endpoint anyway so perhaps this is of limited use?
 	// Maybe for users who already know the ID or fetched it in another call.
@@ -92,11 +94,17 @@ func (api *API) ZoneDetails(z Zone) {
 	}
 }
 
-// https://api.cloudflare.com/#zone-edit-zone-properties
-// PATCH /zones/:id
+// EditZone edits the given zone.
+// API reference:
+// 	https://api.cloudflare.com/#zone-edit-zone-properties
+// 	PATCH /zones/:id
 func EditZone() {
 }
 
+// PurgeEverything purges the cache for the given zone.
+// Note: this will substantially increase load on the origin server for that
+// zone if there is a high cached vs. uncached request ratio.
+// API reference:
 // https://api.cloudflare.com/#zone-purge-all-files
 // DELETE /zones/:id/purge_cache
 func (api *API) PurgeEverything(zoneID string) (PurgeCacheResponse, error) {
@@ -113,8 +121,10 @@ func (api *API) PurgeEverything(zoneID string) (PurgeCacheResponse, error) {
 	return r, nil
 }
 
-// https://api.cloudflare.com/#zone-purge-individual-files-by-url-and-cache-tags
-// DELETE /zones/:id/purge_cache
+// PurgeCache purges the cache using the given PurgeCacheRequest (zone/url/tag).
+// API reference:
+// 	https://api.cloudflare.com/#zone-purge-individual-files-by-url-and-cache-tags
+// 	DELETE /zones/:id/purge_cache
 func (api *API) PurgeCache(zoneID string, pcr PurgeCacheRequest) (PurgeCacheResponse, error) {
 	uri := "/zones/" + zoneID + "/purge_cache"
 	res, err := api.makeRequest("DELETE", uri, pcr)
@@ -129,6 +139,8 @@ func (api *API) PurgeCache(zoneID string, pcr PurgeCacheRequest) (PurgeCacheResp
 	return r, nil
 }
 
+// DeleteZone deletes the given zone.
+// API reference:
 // https://api.cloudflare.com/#zone-delete-a-zone
 // DELETE /zones/:id
 func DeleteZone() {

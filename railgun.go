@@ -1,37 +1,47 @@
 package cloudflare
 
-// Railgun
-
-// https://api.cloudflare.com/#railgun-create-railgun
-// POST /railguns
+// CreateRailgun creates a new Railgun.
+// API reference:
+// 	https://api.cloudflare.com/#railgun-create-railgun
+// 	POST /railguns
 func (c *API) CreateRailgun() {
 }
 
-// https://api.cloudflare.com/#railgun-railgun-details
-// GET /railguns/:identifier
+// API reference:
+// 	https://api.cloudflare.com/#railgun-railgun-details
+// 	GET /railguns/:identifier
 
-// https://api.cloudflare.com/#railgun-get-zones-connected-to-a-railgun
-// GET /railguns/:identifier/zones
+// API reference:
+// 	https://api.cloudflare.com/#railgun-get-zones-connected-to-a-railgun
+// 	GET /railguns/:identifier/zones
 
-// https://api.cloudflare.com/#railgun-enable-or-disable-a-railgun
-// PATCH /railguns/:identifier
+// API reference:
+// 	https://api.cloudflare.com/#railgun-enable-or-disable-a-railgun
+// 	PATCH /railguns/:identifier
 
-// https://api.cloudflare.com/#railgun-delete-railgun
-// DELETE /railguns/:identifier
+// API reference:
+// 	https://api.cloudflare.com/#railgun-delete-railgun
+// 	DELETE /railguns/:identifier
 
-// Zone railgun info
+// 	Zone railgun info
 
-// https://api.cloudflare.com/#railguns-for-a-zone-get-available-railguns
-// GET /zones/:zone_identifier/railguns
+// Railguns returns the available Railguns for a zone.
+// API reference:
+// 	https://api.cloudflare.com/#railguns-for-a-zone-get-available-railguns
+// 	GET /zones/:zone_identifier/railguns
 func (c *API) Railguns() {
 }
 
-// https://api.cloudflare.com/#railguns-for-a-zone-get-railgun-details
-// GET /zones/:zone_identifier/railguns/:identifier
+// Railgun returns the configuration for a given Railgun.
+// API reference:
+// 	https://api.cloudflare.com/#railguns-for-a-zone-get-railgun-details
+// 	GET /zones/:zone_identifier/railguns/:identifier
 func (c *API) Railgun() {
 }
 
-// https://api.cloudflare.com/#railguns-for-a-zone-connect-or-disconnect-a-railgun
-// PATCH /zones/:zone_identifier/railguns/:identifier
+// ZoneRailgun connects (true) or disconnects (false) a Railgun for a given zone.
+// API reference:
+// 	https://api.cloudflare.com/#railguns-for-a-zone-connect-or-disconnect-a-railgun
+// 	PATCH /zones/:zone_identifier/railguns/:identifier
 func (c *API) ZoneRailgun(connected bool) {
 }
