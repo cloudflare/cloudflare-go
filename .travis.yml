@@ -7,12 +7,17 @@ matrix:
     - go: 1.5
     - go: 1.6
     - go: tip
-
-install:
-  - go get golang.org/x/tools/cmd/vet
+  allow_failures:
+    - go: tip
 
 script:
   - go get -t -v $(go list ./... | grep -v '/vendor/')
   - diff -u <(echo -n) <(gofmt -d .)
   - go vet $(go list ./... | grep -v '/vendor/')
-  - go test -v -race $(go list ./... | grep -v '/vendor/')
+  - go test -v -race ./...
+
+notifications:
+  email:
+    recipients:
+      - jamesog@cloudflare.com
+      - msilverlock@cloudflare.com
