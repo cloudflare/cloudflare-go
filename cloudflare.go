@@ -408,3 +408,17 @@ type PurgeCacheResponse struct {
 	Errors   []string `json:"errors"`
 	Messages []string `json:"messages"`
 }
+
+// IPs contains a list of IPv4 and IPv6 CIDRs
+type IPRanges struct {
+	IPv4CIDRs []string `json:"ipv4_cidrs"`
+	IPv6CIDRs []string `json:"ipv6_cidrs"`
+}
+
+// IPsResponse is the API response containing a list of IPs
+type IPsResponse struct {
+	Success  bool     `json:"success"`
+	Errors   []string `json:"errors"`
+	Messages []string `json:"messages"`
+	Result   IPRanges `json:"result"`
+}
