@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"reflect"
@@ -50,6 +51,16 @@ func makeTable(zones []table, cols ...string) {
 
 }
 
+func checkEnv() error {
+	if api.APIKey == "" {
+		return errors.New("API key not defined")
+	}
+	if api.APIEmail == "" {
+		return errors.New("API email not defined")
+	}
+	return nil
+}
+
 // Utility function to check if CLI flags were given.
 func checkFlags(c *cli.Context, flags ...string) error {
 	for _, flag := range flags {
@@ -62,6 +73,10 @@ func checkFlags(c *cli.Context, flags ...string) error {
 }
 
 func userInfo(*cli.Context) {
+	if err := checkEnv(); err != nil {
+		fmt.Println(err)
+		return
+	}
 	user, err := api.UserDetails()
 	if err != nil {
 		fmt.Println(err)
@@ -82,6 +97,10 @@ func userUpdate(*cli.Context) {
 }
 
 func zoneList(c *cli.Context) {
+	if err := checkEnv(); err != nil {
+		fmt.Println(err)
+		return
+	}
 	zones, err := api.ListZones()
 	if err != nil {
 		fmt.Println(err)
@@ -100,6 +119,10 @@ func zoneList(c *cli.Context) {
 }
 
 func zoneInfo(c *cli.Context) {
+	if err := checkEnv(); err != nil {
+		fmt.Println(err)
+		return
+	}
 	var zone string
 	if len(c.Args()) > 0 {
 		zone = c.Args()[0]
@@ -136,6 +159,10 @@ func zoneSettings(*cli.Context) {
 }
 
 func zoneRecords(c *cli.Context) {
+	if err := checkEnv(); err != nil {
+		fmt.Println(err)
+		return
+	}
 	var zone string
 	if len(c.Args()) > 0 {
 		zone = c.Args()[0]
@@ -195,6 +222,10 @@ func zoneRecords(c *cli.Context) {
 }
 
 func dnsCreate(c *cli.Context) {
+	if err := checkEnv(); err != nil {
+		fmt.Println(err)
+		return
+	}
 	if err := checkFlags(c, "zone", "name", "type", "content"); err != nil {
 		return
 	}
@@ -219,6 +250,10 @@ func dnsCreate(c *cli.Context) {
 }
 
 func dnsCreateOrUpdate(c *cli.Context) {
+	if err := checkEnv(); err != nil {
+		fmt.Println(err)
+		return
+	}
 	if err := checkFlags(c, "zone", "name", "type", "content"); err != nil {
 		return
 	}
@@ -270,6 +305,10 @@ func dnsCreateOrUpdate(c *cli.Context) {
 }
 
 func dnsUpdate(c *cli.Context) {
+	if err := checkEnv(); err != nil {
+		fmt.Println(err)
+		return
+	}
 	if err := checkFlags(c, "zone", "id"); err != nil {
 		return
 	}
@@ -292,6 +331,10 @@ func dnsUpdate(c *cli.Context) {
 }
 
 func dnsDelete(c *cli.Context) {
+	if err := checkEnv(); err != nil {
+		fmt.Println(err)
+		return
+	}
 	if err := checkFlags(c, "zone", "id"); err != nil {
 		return
 	}
@@ -318,15 +361,6 @@ func railgun(*cli.Context) {
 
 func main() {
 	api = cloudflare.New(os.Getenv("CF_API_KEY"), os.Getenv("CF_API_EMAIL"))
-
-	if api.APIKey == "" {
-		fmt.Println("API key not defined")
-		return
-	}
-	if api.APIEmail == "" {
-		fmt.Println("API email not defined")
-		return
-	}
 
 	app := cli.NewApp()
 	app.Name = "flarectl"
