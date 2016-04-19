@@ -7,8 +7,8 @@ import (
 	"reflect"
 	"strings"
 
+	"github.com/cloudflare/cloudflare-go"
 	"github.com/codegangsta/cli"
-	"github.com/jamesog/cloudflare-go"
 )
 
 var api *cloudflare.API
