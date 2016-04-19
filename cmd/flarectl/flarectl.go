@@ -72,6 +72,19 @@ func checkFlags(c *cli.Context, flags ...string) error {
 	return nil
 }
 
+func ips(*cli.Context) {
+	ips, _ := cloudflare.IPs()
+	fmt.Println("IPv4 ranges:")
+	for _, r := range ips.IPv4CIDRs {
+		fmt.Println(" ", r)
+	}
+	fmt.Println()
+	fmt.Println("IPv6 ranges:")
+	for _, r := range ips.IPv6CIDRs {
+		fmt.Println(" ", r)
+	}
+}
+
 func userInfo(*cli.Context) {
 	if err := checkEnv(); err != nil {
 		fmt.Println(err)
@@ -367,6 +380,12 @@ func main() {
 	app.Usage = "CloudFlare CLI"
 	app.Version = "2015.12.0"
 	app.Commands = []cli.Command{
+		{
+			Name:    "ips",
+			Aliases: []string{"i"},
+			Action:  ips,
+			Usage:   "List of CloudFlare IP ranges",
+		},
 		{
 			Name:    "user",
 			Aliases: []string{"u"},
