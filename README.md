@@ -1,4 +1,4 @@
-[![GoDoc](https://godoc.org/github.com/jamesog/cloudflare-go?status.svg)](https://godoc.org/github.com/jamesog/cloudflare-go)
+[![GoDoc](https://godoc.org/github.com/cloudflare/cloudflare-go?status.svg)](https://godoc.org/github.com/cloudflare/cloudflare-go)
 
 # cloudflare
 
@@ -9,7 +9,7 @@ A Go library for interacting with [CloudFlare's API v4](https://api.cloudflare.c
 You need a working Go environment.
 
 ```
-go get github.com/jamesog/cloudflare-go
+go get github.com/cloudflare/cloudflare-go
 ```
 
 # Getting Started
@@ -20,7 +20,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/jamesog/cloudflare-go"
+	"github.com/cloudflare/cloudflare-go"
 )
 
 var api *cloudflare.API
