@@ -11,6 +11,7 @@ package cloudflare
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -60,10 +61,17 @@ func (api *API) makeRequest(method, uri string, params interface{}) ([]byte, err
 	// req.Header.Add("Content-Type", "application/json")
 	client := &http.Client{}
 	resp, err := client.Do(req)
-	// TODO(jamesog): Check resp.StatusCode != http.StatusOK
-	// if resp.StatusCode != http.StatusOK
 	defer resp.Body.Close()
 	resBody, err := ioutil.ReadAll(resp.Body)
+	if resp.StatusCode != http.StatusOK {
+		if err != nil {
+			return nil, err
+		} else if resBody != nil {
+			return nil, errors.New(string(resBody))
+		} else {
+			return nil, errors.New(resp.Status)
+		}
+	}
 	return resBody, nil
 }
 
