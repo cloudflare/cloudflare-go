@@ -384,7 +384,7 @@ func main() {
 			Name:    "ips",
 			Aliases: []string{"i"},
 			Action:  ips,
-			Usage:   "List of CloudFlare IP ranges",
+			Usage:   "Print CloudFlare IP ranges",
 		},
 		{
 			Name:    "user",
