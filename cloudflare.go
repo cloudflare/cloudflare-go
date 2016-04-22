@@ -154,9 +154,9 @@ type Zone struct {
 type ZoneMeta struct {
 	// custom_certificate_quota is broken - sometimes it's a string, sometimes a number!
 	// CustCertQuota     int    `json:"custom_certificate_quota"`
-	PageRuleQuota     string `json:"page_rule_quota"`
-	WildcardProxiable bool   `json:"wildcard_proxiable"`
-	PhishingDetected  bool   `json:"phishing_detected"`
+	PageRuleQuota     int  `json:"page_rule_quota"`
+	WildcardProxiable bool `json:"wildcard_proxiable"`
+	PhishingDetected  bool `json:"phishing_detected"`
 }
 
 // Contains the plan information for a zone.
