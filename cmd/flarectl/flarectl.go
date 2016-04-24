@@ -369,6 +369,55 @@ func zoneKeyless(*cli.Context) {
 func zoneRailgun(*cli.Context) {
 }
 
+func pageRules(c *cli.Context) {
+	if err := checkEnv(); err != nil {
+		fmt.Println(err)
+		return
+	}
+	if err := checkFlags(c, "zone"); err != nil {
+		return
+	}
+	zone := c.String("zone")
+
+	z, err := api.ListZones(zone)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	zid := z[0].ID
+
+	rules, err := api.ListPageRules(zid)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("%3s %-32s %-8s %s\n", "Pri", "ID", "Status", "URL")
+	for _, r := range rules {
+		var settings []string
+		fmt.Printf("%3d %s %-8s %s\n", r.Priority, r.ID, r.Status, r.Targets[0].Constraint.Value)
+		for _, a := range r.Actions {
+			v := reflect.ValueOf(a.Value)
+			var s string
+			switch a.Value.(type) {
+			default:
+				s = fmt.Sprintf("%s: %s", cloudflare.PageRuleActions[a.ID], strings.Title(strings.Replace(v.String(), "_", " ", -1)))
+			case int:
+				s = fmt.Sprintf("%s: %d", cloudflare.PageRuleActions[a.ID], v.Int())
+			case float64:
+				s = fmt.Sprintf("%s: %.f", cloudflare.PageRuleActions[a.ID], v.Float())
+			case map[string]interface{}:
+				vmap := a.Value.(map[string]interface{})
+				s = fmt.Sprintf("%s: %.f - %s", cloudflare.PageRuleActions[a.ID], vmap["status_code"], vmap["url"])
+			case nil:
+				s = fmt.Sprintf("%s", cloudflare.PageRuleActions[a.ID])
+			}
+			settings = append(settings, s)
+		}
+		fmt.Println("   ", strings.Join(settings, ", "))
+	}
+}
+
 func railgun(*cli.Context) {
 }
 
@@ -378,7 +427,7 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "flarectl"
 	app.Usage = "CloudFlare CLI"
-	app.Version = "2015.12.0"
+	app.Version = "2016.4.0"
 	app.Commands = []cli.Command{
 		{
 			Name:    "ips",
@@ -611,6 +660,26 @@ func main() {
 						cli.StringFlag{
 							Name:  "id",
 							Usage: "record id",
+						},
+					},
+				},
+			},
+		},
+
+		{
+			Name:    "pagerules",
+			Aliases: []string{"p"},
+			Usage:   "Page Rules",
+			Subcommands: []cli.Command{
+				{
+					Name:    "list",
+					Aliases: []string{"l"},
+					Action:  pageRules,
+					Usage:   "List DNS records for a zone",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
 						},
 					},
 				},
