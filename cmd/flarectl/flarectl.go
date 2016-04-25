@@ -675,7 +675,7 @@ func main() {
 					Name:    "list",
 					Aliases: []string{"l"},
 					Action:  pageRules,
-					Usage:   "List DNS records for a zone",
+					Usage:   "List Page Rules for a zone",
 					Flags: []cli.Flag{
 						cli.StringFlag{
 							Name:  "zone",
