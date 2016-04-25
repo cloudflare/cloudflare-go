@@ -9,7 +9,8 @@ func (api *API) ListWAFPackages(zoneID string) ([]WAFPackage, error) {
 	var packages []WAFPackage
 	var res []byte
 	var err error
-	res, err = api.makeRequest("GET", "/zones/"+zoneID+"/firewall/waf/packages", nil)
+	uri := "/zones/" + zoneID + "/firewall/waf/packages"
+	res, err = api.makeRequest("GET", uri, nil)
 	if err != nil {
 		return []WAFPackage{}, err
 	}
@@ -26,12 +27,13 @@ func (api *API) ListWAFPackages(zoneID string) ([]WAFPackage, error) {
 	return packages, err
 }
 
-func (api *API) ListWAFRules(zoneID string, packageID string) ([]WAFRule, error) {
+func (api *API) ListWAFRules(zoneID, packageID string) ([]WAFRule, error) {
 	var r WAFRulesResponse
 	var rules []WAFRule
 	var res []byte
 	var err error
-	res, err = api.makeRequest("GET", "/zones/"+zoneID+"/firewall/waf/packages/"+packageID+"/rules", nil)
+	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID + "/rules"
+	res, err = api.makeRequest("GET", uri, nil)
 	if err != nil {
 		return []WAFRule{}, err
 	}

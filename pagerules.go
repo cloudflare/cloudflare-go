@@ -105,8 +105,8 @@ API reference:
   https://api.cloudflare.com/#page-rules-for-a-zone-create-a-page-rule
   POST /zones/:zone_identifier/pagerules
 */
-func (api *API) CreatePageRule(zid string, rule PageRule) error {
-	uri := "/zones/" + zid + "/pagerules"
+func (api *API) CreatePageRule(zoneID string, rule PageRule) error {
+	uri := "/zones/" + zoneID + "/pagerules"
 	res, err := api.makeRequest("POST", uri, rule)
 	if err != nil {
 		return err
@@ -126,8 +126,8 @@ API reference:
   https://api.cloudflare.com/#page-rules-for-a-zone-list-page-rules
   GET /zones/:zone_identifier/pagerules
 */
-func (api *API) ListPageRules(zid string) ([]PageRule, error) {
-	uri := "/zones/" + zid + "/pagerules"
+func (api *API) ListPageRules(zoneID string) ([]PageRule, error) {
+	uri := "/zones/" + zoneID + "/pagerules"
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
 		return []PageRule{}, err
@@ -147,8 +147,8 @@ API reference:
   https://api.cloudflare.com/#page-rules-for-a-zone-page-rule-details
   GET /zones/:zone_identifier/pagerules/:identifier
 */
-func (api *API) PageRule(zid, id string) (PageRule, error) {
-	uri := "/zones/" + zid + "/pagerules/" + id
+func (api *API) PageRule(zoneID, ruleID string) (PageRule, error) {
+	uri := "/zones/" + zoneID + "/pagerules/" + ruleID
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
 		return PageRule{}, err
@@ -169,8 +169,8 @@ API reference:
   https://api.cloudflare.com/#page-rules-for-a-zone-change-a-page-rule
   PATCH /zones/:zone_identifier/pagerules/:identifier
 */
-func (api *API) ChangePageRule(zid, id string, rule PageRule) error {
-	uri := "/zones/" + zid + "/pagerules/" + id
+func (api *API) ChangePageRule(zoneID, ruleID string, rule PageRule) error {
+	uri := "/zones/" + zoneID + "/pagerules/" + ruleID
 	res, err := api.makeRequest("PATCH", uri, rule)
 	if err != nil {
 		return err
@@ -191,8 +191,8 @@ API reference:
   https://api.cloudflare.com/#page-rules-for-a-zone-update-a-page-rule
   PUT /zones/:zone_identifier/pagerules/:identifier
 */
-func (api *API) UpdatePageRule(zid, id string, rule PageRule) error {
-	uri := "/zones/" + zid + "/pagerules/" + id
+func (api *API) UpdatePageRule(zoneID, ruleID string, rule PageRule) error {
+	uri := "/zones/" + zoneID + "/pagerules/" + ruleID
 	res, err := api.makeRequest("PUT", uri, nil)
 	if err != nil {
 		return err
@@ -212,8 +212,8 @@ API reference:
   https://api.cloudflare.com/#page-rules-for-a-zone-delete-a-page-rule
   DELETE /zones/:zone_identifier/pagerules/:identifier
 */
-func (api *API) DeletePageRule(zid, id string) error {
-	uri := "/zones/" + zid + "/pagerules/" + id
+func (api *API) DeletePageRule(zoneID, ruleID string) error {
+	uri := "/zones/" + zoneID + "/pagerules/" + ruleID
 	res, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
 		return err
