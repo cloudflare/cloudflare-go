@@ -96,8 +96,8 @@ func EditZone() {
 
 // https://api.cloudflare.com/#zone-purge-all-files
 // DELETE /zones/:id/purge_cache
-func (api *API) PurgeEverything(zid string) (PurgeCacheResponse, error) {
-	uri := "/zones/" + zid + "/purge_cache"
+func (api *API) PurgeEverything(zoneID string) (PurgeCacheResponse, error) {
+	uri := "/zones/" + zoneID + "/purge_cache"
 	res, err := api.makeRequest("DELETE", uri, PurgeCacheRequest{true, nil, nil})
 	if err != nil {
 		return PurgeCacheResponse{}, err
@@ -112,8 +112,8 @@ func (api *API) PurgeEverything(zid string) (PurgeCacheResponse, error) {
 
 // https://api.cloudflare.com/#zone-purge-individual-files-by-url-and-cache-tags
 // DELETE /zones/:id/purge_cache
-func (api *API) PurgeCache(zid string, pcr PurgeCacheRequest) (PurgeCacheResponse, error) {
-	uri := "/zones/" + zid + "/purge_cache"
+func (api *API) PurgeCache(zoneID string, pcr PurgeCacheRequest) (PurgeCacheResponse, error) {
+	uri := "/zones/" + zoneID + "/purge_cache"
 	res, err := api.makeRequest("DELETE", uri, pcr)
 	if err != nil {
 		return PurgeCacheResponse{}, err

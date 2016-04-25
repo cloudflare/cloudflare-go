@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 )
 
-func (api *API) ListWAFPackages(zid string) ([]WAFPackage, error) {
+func (api *API) ListWAFPackages(zoneID string) ([]WAFPackage, error) {
 	var p WAFPackagesResponse
 	var packages []WAFPackage
 	var res []byte
 	var err error
-	uri := "/zones/" + zid + "/firewall/waf/packages"
+	uri := "/zones/" + zoneID + "/firewall/waf/packages"
 	res, err = api.makeRequest("GET", uri, nil)
 	if err != nil {
 		return []WAFPackage{}, err
@@ -27,12 +27,12 @@ func (api *API) ListWAFPackages(zid string) ([]WAFPackage, error) {
 	return packages, err
 }
 
-func (api *API) ListWAFRules(zid, pid string) ([]WAFRule, error) {
+func (api *API) ListWAFRules(zoneID, packageID string) ([]WAFRule, error) {
 	var r WAFRulesResponse
 	var rules []WAFRule
 	var res []byte
 	var err error
-	uri := "/zones/" + zid + "/firewall/waf/packages/" + pid + "/rules"
+	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID + "/rules"
 	res, err = api.makeRequest("GET", uri, nil)
 	if err != nil {
 		return []WAFRule{}, err
