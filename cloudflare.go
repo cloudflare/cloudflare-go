@@ -35,6 +35,20 @@ func NewZone() *Zone {
 	return &Zone{}
 }
 
+// ZoneIDByName retrieves a zone's ID from the name.
+func (api *API) ZoneIDByName(zoneName string) (string, error) {
+	res, err := api.ListZones(zoneName)
+	if err != nil {
+		return "", err
+	}
+	for _, zone := range res {
+		if zone.Name == zoneName {
+			return zone.ID, nil
+		}
+	}
+	return "", errors.New("Zone could not be found")
+}
+
 // Params can be turned into a URL query string or a body
 // TODO: Give this func a better name
 func (api *API) makeRequest(method, uri string, params interface{}) ([]byte, error) {
