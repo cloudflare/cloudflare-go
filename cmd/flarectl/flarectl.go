@@ -400,8 +400,6 @@ func pageRules(c *cli.Context) {
 			v := reflect.ValueOf(a.Value)
 			var s string
 			switch a.Value.(type) {
-			default:
-				s = fmt.Sprintf("%s: %s", cloudflare.PageRuleActions[a.ID], strings.Title(strings.Replace(v.String(), "_", " ", -1)))
 			case int:
 				s = fmt.Sprintf("%s: %d", cloudflare.PageRuleActions[a.ID], v.Int())
 			case float64:
@@ -411,6 +409,8 @@ func pageRules(c *cli.Context) {
 				s = fmt.Sprintf("%s: %.f - %s", cloudflare.PageRuleActions[a.ID], vmap["status_code"], vmap["url"])
 			case nil:
 				s = fmt.Sprintf("%s", cloudflare.PageRuleActions[a.ID])
+			default:
+				s = fmt.Sprintf("%s: %s", cloudflare.PageRuleActions[a.ID], strings.Title(strings.Replace(v.String(), "_", " ", -1)))
 			}
 			settings = append(settings, s)
 		}
