@@ -145,7 +145,7 @@ type Zone struct {
 	Owner             Owner    `json:"owner"`
 	Permissions       []string `json:"permissions"`
 	Plan              ZonePlan `json:"plan"`
-	Status            string   `json:"success"`
+	Status            string   `json:"status"`
 	Paused            bool     `json:"paused"`
 	Type              string   `json:"type"`
 	Host              struct {
