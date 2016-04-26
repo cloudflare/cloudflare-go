@@ -2,6 +2,8 @@ package cloudflare
 
 import (
 	"encoding/json"
+
+	pkgErrors "github.com/pkg/errors"
 )
 
 func (api *API) ListWAFPackages(zoneID string) ([]WAFPackage, error) {
@@ -12,19 +14,20 @@ func (api *API) ListWAFPackages(zoneID string) ([]WAFPackage, error) {
 	uri := "/zones/" + zoneID + "/firewall/waf/packages"
 	res, err = api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []WAFPackage{}, err
+		return []WAFPackage{}, pkgErrors.Wrap(err, "Error from makeRequest")
 	}
 	err = json.Unmarshal(res, &p)
 	if err != nil {
-		return []WAFPackage{}, err
+		return []WAFPackage{}, pkgErrors.Wrap(err, "Error from unmarshal")
 	}
 	if !p.Success {
+		// TODO: Provide an actual error message instead of always returning nil
 		return []WAFPackage{}, err
 	}
 	for pi, _ := range p.Result {
 		packages = append(packages, p.Result[pi])
 	}
-	return packages, err
+	return packages, nil
 }
 
 func (api *API) ListWAFRules(zoneID, packageID string) ([]WAFRule, error) {
@@ -35,17 +38,18 @@ func (api *API) ListWAFRules(zoneID, packageID string) ([]WAFRule, error) {
 	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID + "/rules"
 	res, err = api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []WAFRule{}, err
+		return []WAFRule{}, pkgErrors.Wrap(err, "Error from makeRequest")
 	}
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return []WAFRule{}, err
+		return []WAFRule{}, pkgErrors.Wrap(err, "Error from unmarshal")
 	}
 	if !r.Success {
+		// TODO: Provide an actual error message instead of always returning nil
 		return []WAFRule{}, err
 	}
 	for ri, _ := range r.Result {
 		rules = append(rules, r.Result[ri])
 	}
-	return rules, err
+	return rules, nil
 }

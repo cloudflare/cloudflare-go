@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+
+	pkgErrors "github.com/pkg/errors"
 )
 
 /*
@@ -18,14 +20,17 @@ API reference:
 func IPs() (IPRanges, error) {
 	resp, err := http.Get(apiURL + "/ips")
 	if err != nil {
-		return IPRanges{}, err
+		return IPRanges{}, pkgErrors.Wrap(err, "HTTP request failed")
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return IPRanges{}, pkgErrors.Wrap(err, "Response body could not be read")
+	}
 	var r IPsResponse
 	err = json.Unmarshal(body, &r)
 	if err != nil {
-		return IPRanges{}, err
+		return IPRanges{}, pkgErrors.Wrap(err, "Error from unmarshal")
 	}
 	return r.Result, nil
 }

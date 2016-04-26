@@ -12,10 +12,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
+
+	pkgErrors "github.com/pkg/errors"
 )
 
 const apiURL = "https://api.cloudflare.com/client/v4"
@@ -39,7 +40,7 @@ func NewZone() *Zone {
 func (api *API) ZoneIDByName(zoneName string) (string, error) {
 	res, err := api.ListZones(zoneName)
 	if err != nil {
-		return "", err
+		return "", pkgErrors.Wrap(err, "ListZones command failed")
 	}
 	for _, zone := range res {
 		if zone.Name == zoneName {
@@ -57,8 +58,7 @@ func (api *API) makeRequest(method, uri string, params interface{}) ([]byte, err
 	if params != nil {
 		json, err := json.Marshal(params)
 		if err != nil {
-			fmt.Println("Error marshalling params to JSON:", err)
-			return nil, err
+			return nil, pkgErrors.Wrap(err, "Error marshalling params to JSON")
 		}
 		reqBody = bytes.NewReader(json)
 	} else {
@@ -66,8 +66,7 @@ func (api *API) makeRequest(method, uri string, params interface{}) ([]byte, err
 	}
 	req, err := http.NewRequest(method, apiURL+uri, reqBody)
 	if err != nil {
-		fmt.Println("Herp derp making request:", err)
-		return nil, err
+		return nil, pkgErrors.Wrap(err, "HTTP request creation failed")
 	}
 	req.Header.Add("X-Auth-Key", api.APIKey)
 	req.Header.Add("X-Auth-Email", api.APIEmail)
@@ -75,11 +74,14 @@ func (api *API) makeRequest(method, uri string, params interface{}) ([]byte, err
 	// req.Header.Add("Content-Type", "application/json")
 	client := &http.Client{}
 	resp, err := client.Do(req)
+	if err != nil {
+		return nil, pkgErrors.Wrap(err, "HTTP request failed")
+	}
 	defer resp.Body.Close()
 	resBody, err := ioutil.ReadAll(resp.Body)
 	if resp.StatusCode != http.StatusOK {
 		if err != nil {
-			return nil, err
+			return nil, pkgErrors.Wrap(err, "Error returned from API")
 		} else if resBody != nil {
 			return nil, errors.New(string(resBody))
 		} else {

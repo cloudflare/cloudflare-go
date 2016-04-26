@@ -3,6 +3,8 @@ package cloudflare
 import (
 	"encoding/json"
 	"net/url"
+
+	pkgErrors "github.com/pkg/errors"
 )
 
 /*
@@ -30,14 +32,15 @@ func (api *API) ListZones(z ...string) ([]Zone, error) {
 			v.Set("name", zone)
 			res, err = api.makeRequest("GET", "/zones?"+v.Encode(), nil)
 			if err != nil {
-				return []Zone{}, err
+				return []Zone{}, pkgErrors.Wrap(err, "Error from makeRequest")
 			}
 			err = json.Unmarshal(res, &r)
 			if err != nil {
-				return []Zone{}, err
+				return []Zone{}, pkgErrors.Wrap(err, "Error from unmarshal")
 			}
 			if !r.Success {
-				return []Zone{}, err //errors.New(r.Messages)
+				// TODO: Provide an actual error message instead of always returning nil
+				return []Zone{}, err
 			}
 			for zi, _ := range r.Result {
 				zones = append(zones, r.Result[zi])
@@ -46,11 +49,11 @@ func (api *API) ListZones(z ...string) ([]Zone, error) {
 	} else {
 		res, err = api.makeRequest("GET", "/zones", nil)
 		if err != nil {
-			return []Zone{}, err
+			return []Zone{}, pkgErrors.Wrap(err, "Error from makeRequest")
 		}
 		err = json.Unmarshal(res, &r)
 		if err != nil {
-			return []Zone{}, err
+			return []Zone{}, pkgErrors.Wrap(err, "Error from unmarshal")
 		}
 		zones = r.Result
 	}
@@ -100,12 +103,12 @@ func (api *API) PurgeEverything(zoneID string) (PurgeCacheResponse, error) {
 	uri := "/zones/" + zoneID + "/purge_cache"
 	res, err := api.makeRequest("DELETE", uri, PurgeCacheRequest{true, nil, nil})
 	if err != nil {
-		return PurgeCacheResponse{}, err
+		return PurgeCacheResponse{}, pkgErrors.Wrap(err, "Error from makeRequest")
 	}
 	var r PurgeCacheResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return PurgeCacheResponse{}, err
+		return PurgeCacheResponse{}, pkgErrors.Wrap(err, "Error from unmarshal")
 	}
 	return r, nil
 }
@@ -116,12 +119,12 @@ func (api *API) PurgeCache(zoneID string, pcr PurgeCacheRequest) (PurgeCacheResp
 	uri := "/zones/" + zoneID + "/purge_cache"
 	res, err := api.makeRequest("DELETE", uri, pcr)
 	if err != nil {
-		return PurgeCacheResponse{}, err
+		return PurgeCacheResponse{}, pkgErrors.Wrap(err, "Error from makeRequest")
 	}
 	var r PurgeCacheResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return PurgeCacheResponse{}, err
+		return PurgeCacheResponse{}, pkgErrors.Wrap(err, "Error from unmarshal")
 	}
 	return r, nil
 }
