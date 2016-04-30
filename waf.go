@@ -14,11 +14,11 @@ func (api *API) ListWAFPackages(zoneID string) ([]WAFPackage, error) {
 	uri := "/zones/" + zoneID + "/firewall/waf/packages"
 	res, err = api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []WAFPackage{}, pkgErrors.Wrap(err, "Error from makeRequest")
+		return []WAFPackage{}, pkgErrors.Wrap(err, errMakeRequestError)
 	}
 	err = json.Unmarshal(res, &p)
 	if err != nil {
-		return []WAFPackage{}, pkgErrors.Wrap(err, "Error from unmarshal")
+		return []WAFPackage{}, pkgErrors.Wrap(err, errUnmarshalError)
 	}
 	if !p.Success {
 		// TODO: Provide an actual error message instead of always returning nil
@@ -38,11 +38,11 @@ func (api *API) ListWAFRules(zoneID, packageID string) ([]WAFRule, error) {
 	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID + "/rules"
 	res, err = api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []WAFRule{}, pkgErrors.Wrap(err, "Error from makeRequest")
+		return []WAFRule{}, pkgErrors.Wrap(err, errMakeRequestError)
 	}
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return []WAFRule{}, pkgErrors.Wrap(err, "Error from unmarshal")
+		return []WAFRule{}, pkgErrors.Wrap(err, errUnmarshalError)
 	}
 	if !r.Success {
 		// TODO: Provide an actual error message instead of always returning nil

@@ -30,7 +30,7 @@ func IPs() (IPRanges, error) {
 	var r IPsResponse
 	err = json.Unmarshal(body, &r)
 	if err != nil {
-		return IPRanges{}, pkgErrors.Wrap(err, "Error from unmarshal")
+		return IPRanges{}, pkgErrors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
 }

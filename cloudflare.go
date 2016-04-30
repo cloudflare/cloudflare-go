@@ -21,6 +21,10 @@ import (
 
 const apiURL = "https://api.cloudflare.com/client/v4"
 
+// Error messages
+const errMakeRequestError = "Error from makeRequest"
+const errUnmarshalError = "Error unmarshalling JSON"
+
 type API struct {
 	APIKey   string
 	APIEmail string
