@@ -3,7 +3,7 @@ package cloudflare
 import (
 	"encoding/json"
 
-	pkgErrors "github.com/pkg/errors"
+	"github.com/pkg/errors"
 )
 
 /*
@@ -15,11 +15,11 @@ func (api API) UserDetails() (User, error) {
 	var r UserResponse
 	res, err := api.makeRequest("GET", "/user", nil)
 	if err != nil {
-		return User{}, pkgErrors.Wrap(err, errMakeRequestError)
+		return User{}, errors.Wrap(err, errMakeRequestError)
 	}
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return User{}, pkgErrors.Wrap(err, errUnmarshalError)
+		return User{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
 }
