@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/url"
 
-	pkgErrors "github.com/pkg/errors"
+	"github.com/pkg/errors"
 )
 
 /*
@@ -18,12 +18,12 @@ func (api *API) CreateDNSRecord(zoneID string, rr DNSRecord) error {
 	uri := "/zones/" + zoneID + "/dns_records"
 	res, err := api.makeRequest("POST", uri, rr)
 	if err != nil {
-		return pkgErrors.Wrap(err, errMakeRequestError)
+		return errors.Wrap(err, errMakeRequestError)
 	}
 	var r DNSRecordResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return pkgErrors.Wrap(err, errUnmarshalError)
+		return errors.Wrap(err, errUnmarshalError)
 	}
 	return nil
 }
@@ -54,12 +54,12 @@ func (api *API) DNSRecords(zoneID string, rr DNSRecord) ([]DNSRecord, error) {
 	uri := "/zones/" + zoneID + "/dns_records" + query
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []DNSRecord{}, pkgErrors.Wrap(err, errMakeRequestError)
+		return []DNSRecord{}, errors.Wrap(err, errMakeRequestError)
 	}
 	var r DNSListResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return []DNSRecord{}, pkgErrors.Wrap(err, errUnmarshalError)
+		return []DNSRecord{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
 }
@@ -75,12 +75,12 @@ func (api *API) DNSRecord(zoneID, recordID string) (DNSRecord, error) {
 	uri := "/zones/" + zoneID + "/dns_records/" + recordID
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return DNSRecord{}, pkgErrors.Wrap(err, errMakeRequestError)
+		return DNSRecord{}, errors.Wrap(err, errMakeRequestError)
 	}
 	var r DNSRecordResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return DNSRecord{}, pkgErrors.Wrap(err, errUnmarshalError)
+		return DNSRecord{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
 }
@@ -102,12 +102,12 @@ func (api *API) UpdateDNSRecord(zoneID, recordID string, rr DNSRecord) error {
 	uri := "/zones/" + zoneID + "/dns_records/" + recordID
 	res, err := api.makeRequest("PUT", uri, rr)
 	if err != nil {
-		return pkgErrors.Wrap(err, errMakeRequestError)
+		return errors.Wrap(err, errMakeRequestError)
 	}
 	var r DNSRecordResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return pkgErrors.Wrap(err, errUnmarshalError)
+		return errors.Wrap(err, errUnmarshalError)
 	}
 	return nil
 }
@@ -123,12 +123,12 @@ func (api *API) DeleteDNSRecord(zoneID, recordID string) error {
 	uri := "/zones/" + zoneID + "/dns_records/" + recordID
 	res, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return pkgErrors.Wrap(err, errMakeRequestError)
+		return errors.Wrap(err, errMakeRequestError)
 	}
 	var r DNSRecordResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return pkgErrors.Wrap(err, errUnmarshalError)
+		return errors.Wrap(err, errUnmarshalError)
 	}
 	return nil
 }

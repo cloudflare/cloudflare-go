@@ -3,7 +3,7 @@ package cloudflare
 import (
 	"encoding/json"
 
-	pkgErrors "github.com/pkg/errors"
+	"github.com/pkg/errors"
 )
 
 func (api *API) ListWAFPackages(zoneID string) ([]WAFPackage, error) {
@@ -14,11 +14,11 @@ func (api *API) ListWAFPackages(zoneID string) ([]WAFPackage, error) {
 	uri := "/zones/" + zoneID + "/firewall/waf/packages"
 	res, err = api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []WAFPackage{}, pkgErrors.Wrap(err, errMakeRequestError)
+		return []WAFPackage{}, errors.Wrap(err, errMakeRequestError)
 	}
 	err = json.Unmarshal(res, &p)
 	if err != nil {
-		return []WAFPackage{}, pkgErrors.Wrap(err, errUnmarshalError)
+		return []WAFPackage{}, errors.Wrap(err, errUnmarshalError)
 	}
 	if !p.Success {
 		// TODO: Provide an actual error message instead of always returning nil
@@ -38,11 +38,11 @@ func (api *API) ListWAFRules(zoneID, packageID string) ([]WAFRule, error) {
 	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID + "/rules"
 	res, err = api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []WAFRule{}, pkgErrors.Wrap(err, errMakeRequestError)
+		return []WAFRule{}, errors.Wrap(err, errMakeRequestError)
 	}
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return []WAFRule{}, pkgErrors.Wrap(err, errUnmarshalError)
+		return []WAFRule{}, errors.Wrap(err, errUnmarshalError)
 	}
 	if !r.Success {
 		// TODO: Provide an actual error message instead of always returning nil
