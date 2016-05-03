@@ -269,7 +269,8 @@ func dnsCreate(c *cli.Context) {
 		TTL:     ttl,
 		Proxied: proxy,
 	}
-	err = api.CreateDNSRecord(zoneID, record)
+	// TODO: Print the result.
+	_, err = api.CreateDNSRecord(zoneID, record)
 	if err != nil {
 		fmt.Println("Error creating DNS record:", err)
 	}
@@ -329,7 +330,8 @@ func dnsCreateOrUpdate(c *cli.Context) {
 		rr.Content = content
 		rr.TTL = ttl
 		rr.Proxied = proxy
-		err := api.CreateDNSRecord(zoneID, rr)
+		// TODO: Print the response.
+		_, err := api.CreateDNSRecord(zoneID, rr)
 		if err != nil {
 			fmt.Println("Error creating DNS record:", err)
 		}

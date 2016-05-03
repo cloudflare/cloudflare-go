@@ -8,24 +8,26 @@ import (
 )
 
 /*
-Create a DNS record.
+Create a DNS record and return the response (created ID & metadata).
 
 API reference:
   https://api.cloudflare.com/#dns-records-for-a-zone-create-dns-record
   POST /zones/:zone_identifier/dns_records
 */
-func (api *API) CreateDNSRecord(zoneID string, rr DNSRecord) error {
+func (api *API) CreateDNSRecord(zoneID string, rr DNSRecord) (*DNSRecordResponse, error) {
 	uri := "/zones/" + zoneID + "/dns_records"
 	res, err := api.makeRequest("POST", uri, rr)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return nil, errors.Wrap(err, errMakeRequestError)
 	}
-	var r DNSRecordResponse
-	err = json.Unmarshal(res, &r)
+
+	var recordResp *DNSRecordResponse
+	err = json.Unmarshal(res, recordResp)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return nil, errors.Wrap(err, errUnmarshalError)
 	}
-	return nil
+
+	return recordResp, nil
 }
 
 /*
