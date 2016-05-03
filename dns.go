@@ -14,18 +14,18 @@ API reference:
   https://api.cloudflare.com/#dns-records-for-a-zone-create-dns-record
   POST /zones/:zone_identifier/dns_records
 */
-func (api *API) CreateDNSRecord(zoneID string, rr DNSRecord) error {
+func (api *API) CreateDNSRecord(zoneID string, rr DNSRecord) (DNSRecord, error) {
 	uri := "/zones/" + zoneID + "/dns_records"
 	res, err := api.makeRequest("POST", uri, rr)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return DNSRecord{}, errors.Wrap(err, errMakeRequestError)
 	}
 	var r DNSRecordResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return DNSRecord{}, errors.Wrap(err, errUnmarshalError)
 	}
-	return nil
+	return r.Result, nil
 }
 
 /*
