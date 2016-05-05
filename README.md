@@ -10,8 +10,8 @@ allows you to:
 * Manage and automate changes to your DNS records within CloudFlare
 * Manage and automate changes to your zones (domains) on CloudFlare, including adding new zones to
   your account
-* List and modify the status of WAF (Web Application Firewall) rules for your zones.
-* Fetch CloudFlare's IP ranges for automating your firewall whitelisting.
+* List and modify the status of WAF (Web Application Firewall) rules for your zones
+* Fetch CloudFlare's IP ranges for automating your firewall whitelisting
 
 A command-line client, [flarectl](cmd/flarectl), is also available as part of this project.
 
@@ -22,7 +22,6 @@ The current feature list includes:
 - [x] DNS Records
 - [x] Zones
 - [x] Web Application Firewall (WAF)
-- [x] CloudFlare IPs
 - [x] CloudFlare IPs
 - [x] User Administration (partial)
 - [ ] Organization Administration
@@ -75,4 +74,4 @@ to use this package in-depth.
 
 # License
 
-BSD licensed. See the LICENSE file for details.
+BSD licensed. See the [LICENSE](LICENSE) file for details.
