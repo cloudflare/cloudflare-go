@@ -132,17 +132,22 @@ func zoneList(c *cli.Context) {
 	makeTable(output, "ID", "Name", "Plan", "Status")
 }
 
+func getZone(c *cli.Context) (zone string) {
+	if len(c.Args()) > 0 {
+		zone = c.Args()[0]
+	} else if c.String("zone") != "" {
+		zone = c.String("zone")
+	}
+	return zone
+}
+
 func zoneInfo(c *cli.Context) {
 	if err := checkEnv(); err != nil {
 		fmt.Println(err)
 		return
 	}
-	var zone string
-	if len(c.Args()) > 0 {
-		zone = c.Args()[0]
-	} else if c.String("zone") != "" {
-		zone = c.String("zone")
-	} else {
+	zone := getZone(c)
+	if "" == zone {
 		cli.ShowSubcommandHelp(c)
 		return
 	}
@@ -394,6 +399,44 @@ func dnsDelete(c *cli.Context) {
 	}
 }
 
+func zoneSSLValidation(c *cli.Context) {
+	if err := checkEnv(); err != nil {
+		fmt.Println(err)
+		return
+	}
+	zone := getZone(c)
+	if "" == zone {
+		cli.ShowSubcommandHelp(c)
+		return
+	}
+	zoneID, err := api.ZoneIDByName(zone)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	sslVerification, err := api.SSLVerification(zoneID)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	if len(sslVerification.Result) == 0 {
+		fmt.Println("No results")
+		return
+	}
+
+	var output []table
+	for _, v := range sslVerification.Result {
+		output = append(output, table{
+			"Signature":     v.Signature,
+			"Status":        v.CertificateStatus,
+			"Verification":  v.VerificationType,
+			"Record Name":   v.VerificationInfo.RecordName,
+			"Record Target": v.VerificationInfo.RecordTarget,
+		})
+	}
+	makeTable(output, "Signature", "Status", "Verification", "Record Name", "Record Target")
+}
+
 func zoneCerts(*cli.Context) {
 }
 
@@ -550,6 +593,18 @@ func main() {
 					Aliases: []string{"c"},
 					Action:  zoneCerts,
 					Usage:   "Custom SSL certificates for a zone",
+				},
+				{
+					Name:    "dcv",
+					Aliases: []string{"dcv"},
+					Action:  zoneSSLValidation,
+					Usage:   "Domain Control Validation info for a zone's Universal SSL certificates",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+					},
 				},
 				{
 					Name:    "keyless",

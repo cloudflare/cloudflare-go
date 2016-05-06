@@ -444,3 +444,20 @@ type IPsResponse struct {
 	Response
 	Result IPRanges `json:"result"`
 }
+
+type SSLVerification struct {
+	CertificateStatus string               `json:"certificate_status"`
+	Signature         string               `json:"signature"`
+	VerificationType  string               `json:"verification_type"`
+	VerificationInfo  SSLVerificationInfo `json:"verification_info,omitempty"`
+}
+
+type SSLVerificationInfo struct {
+	RecordName   string `json:"record_name"`
+	RecordTarget string `json:"record_target"`
+}
+
+type SSLVerificationResponse struct {
+	Response
+	Result []SSLVerification `json:"result"`
+}
