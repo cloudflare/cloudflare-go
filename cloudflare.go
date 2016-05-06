@@ -27,11 +27,12 @@ const errUnmarshalError = "Error unmarshalling JSON"
 type API struct {
 	APIKey   string
 	APIEmail string
+	BaseURL  string
 }
 
 // Initializes the API configuration.
 func New(key, email string) *API {
-	return &API{key, email}
+	return &API{key, email, apiURL}
 }
 
 // Initializes a new zone.
@@ -67,7 +68,7 @@ func (api *API) makeRequest(method, uri string, params interface{}) ([]byte, err
 	} else {
 		reqBody = nil
 	}
-	req, err := http.NewRequest(method, apiURL+uri, reqBody)
+	req, err := http.NewRequest(method, api.BaseURL+uri, reqBody)
 	if err != nil {
 		return nil, errors.Wrap(err, "HTTP request creation failed")
 	}
