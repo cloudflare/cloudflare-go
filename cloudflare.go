@@ -110,15 +110,6 @@ type ResultInfo struct {
 	Total   int `json:"total_count"`
 }
 
-// An Organization describes a multi-user organization. (Enterprise only.)
-type Organization struct {
-	ID          string
-	Name        string
-	Status      string
-	Permissions []string
-	Roles       []string
-}
-
 // A User describes a user account.
 type User struct {
 	ID            string         `json:"id"`
@@ -138,10 +129,8 @@ type User struct {
 }
 
 type UserResponse struct {
-	Success  bool     `json:"success"`
-	Errors   []string `json:"errors"`
-	Messages []string `json:"messages"`
-	Result   User     `json:"result"`
+	Response
+	Result User `json:"result"`
 }
 
 type Owner struct {
@@ -199,17 +188,13 @@ type ZonePlan struct {
 }
 
 type ZoneResponse struct {
-	Success  bool     `json:"success"`
-	Errors   []string `json:"errors"`
-	Messages []string `json:"messages"`
-	Result   []Zone   `json:"result"`
+	Response
+	Result []Zone `json:"result"`
 }
 
 type ZonePlanResponse struct {
-	Success  bool       `json:"success"`
-	Errors   []string   `json:"errors"`
-	Messages []string   `json:"messages"`
-	Result   []ZonePlan `json:"result"`
+	Response
+	Result []ZonePlan `json:"result"`
 }
 
 // type zoneSetting struct {
@@ -235,10 +220,8 @@ type ZoneSetting struct {
 }
 
 type ZoneSettingResponse struct {
-	Success  bool          `json:"success"`
-	Errors   []string      `json:"errors"`
-	Messages []string      `json:"messages"`
-	Result   []ZoneSetting `json:"result"`
+	Response
+	Result []ZoneSetting `json:"result"`
 }
 
 // Describes a DNS record for a zone.
@@ -262,18 +245,14 @@ type DNSRecord struct {
 
 // The response for creating or updating a DNS record.
 type DNSRecordResponse struct {
-	Success  bool          `json:"success"`
-	Errors   []interface{} `json:"errors"`
-	Messages []string      `json:"messages"`
-	Result   DNSRecord     `json:"result"`
+	Response
+	Result DNSRecord `json:"result"`
 }
 
 // The response for listing DNS records.
 type DNSListResponse struct {
-	Success  bool          `json:"success"`
-	Errors   []interface{} `json:"errors"`
-	Messages []string      `json:"messages"`
-	Result   []DNSRecord   `json:"result"`
+	Response
+	Result []DNSRecord `json:"result"`
 }
 
 // Railgun status for a zone.
@@ -285,10 +264,8 @@ type ZoneRailgun struct {
 }
 
 type ZoneRailgunResponse struct {
-	Success  bool          `json:"success"`
-	Errors   []string      `json:"errors"`
-	Messages []string      `json:"messages"`
-	Result   []ZoneRailgun `json:"result"`
+	Response
+	Result []ZoneRailgun `json:"result"`
 }
 
 // Custom SSL certificates for a zone.
@@ -308,10 +285,8 @@ type ZoneCustomSSL struct {
 }
 
 type ZoneCustomSSLResponse struct {
-	Success  bool            `json:"success"`
-	Errors   []string        `json:"errors"`
-	Messages []string        `json:"messages"`
-	Result   []ZoneCustomSSL `json:"result"`
+	Response
+	Result []ZoneCustomSSL `json:"result"`
 }
 
 type KeylessSSL struct {
@@ -327,10 +302,8 @@ type KeylessSSL struct {
 }
 
 type KeylessSSLResponse struct {
-	Success  bool         `json:"success"`
-	Errors   []string     `json:"errors"`
-	Messages []string     `json:"messages"`
-	Result   []KeylessSSL `json:"result"`
+	Response
+	Result []KeylessSSL `json:"result"`
 }
 
 type Railgun struct {
@@ -353,10 +326,8 @@ type Railgun struct {
 }
 
 type RailgunResponse struct {
-	Success  bool      `json:"success"`
-	Errors   []string  `json:"errors"`
-	Messages []string  `json:"messages"`
-	Result   []Railgun `json:"result"`
+	Response
+	Result []Railgun `json:"result"`
 }
 
 // Custom error pages.
@@ -371,10 +342,8 @@ type CustomPage struct {
 }
 
 type CustomPageResponse struct {
-	Success  bool         `json:"success"`
-	Errors   []string     `json:"errors"`
-	Messages []string     `json:"messages"`
-	Result   []CustomPage `json:"result"`
+	Response
+	Result []CustomPage `json:"result"`
 }
 
 // WAF packages
@@ -389,14 +358,9 @@ type WAFPackage struct {
 }
 
 type WAFPackagesResponse struct {
+	Response
 	Result     []WAFPackage `json:"result"`
-	Success    bool         `json:"success"`
-	ResultInfo struct {
-		Page       uint `json:"page"`
-		PerPage    uint `json:"per_page"`
-		Count      uint `json:"count"`
-		TotalCount uint `json:"total_count"`
-	} `json:"result_info"`
+	ResultInfo ResultInfo   `json:"result_info"`
 }
 
 type WAFRule struct {
@@ -414,14 +378,9 @@ type WAFRule struct {
 }
 
 type WAFRulesResponse struct {
-	Result     []WAFRule `json:"result"`
-	Success    bool      `json:"success"`
-	ResultInfo struct {
-		Page       uint `json:"page"`
-		PerPage    uint `json:"per_page"`
-		Count      uint `json:"count"`
-		TotalCount uint `json:"total_count"`
-	} `json:"result_info"`
+	Response
+	Result     []WAFRule  `json:"result"`
+	ResultInfo ResultInfo `json:"result_info"`
 }
 
 type PurgeCacheRequest struct {
@@ -431,9 +390,7 @@ type PurgeCacheRequest struct {
 }
 
 type PurgeCacheResponse struct {
-	Success  bool     `json:"success"`
-	Errors   []string `json:"errors"`
-	Messages []string `json:"messages"`
+	Response
 }
 
 // IPs contains a list of IPv4 and IPv6 CIDRs
@@ -444,8 +401,6 @@ type IPRanges struct {
 
 // IPsResponse is the API response containing a list of IPs
 type IPsResponse struct {
-	Success  bool     `json:"success"`
-	Errors   []string `json:"errors"`
-	Messages []string `json:"messages"`
-	Result   IPRanges `json:"result"`
+	Response
+	Result IPRanges `json:"result"`
 }
