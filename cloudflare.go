@@ -13,10 +13,6 @@ import (
 
 const apiURL = "https://api.cloudflare.com/client/v4"
 
-// Error messages
-const errMakeRequestError = "Error from makeRequest"
-const errUnmarshalError = "Error unmarshalling JSON"
-
 // API holds the configuration for the current API client. A client should not
 // be modified concurrently.
 type API struct {
@@ -30,7 +26,7 @@ type API struct {
 // New creates a new CloudFlare v4 API client.
 func New(key, email string, opts ...Option) (*API, error) {
 	if key == "" || email == "" {
-		return nil, UserError{errEmptyCredentials}
+		return nil, errors.New(errEmptyCredentials)
 	}
 
 	api := &API{
@@ -40,7 +36,7 @@ func New(key, email string, opts ...Option) (*API, error) {
 
 	err := api.parseOptions(opts...)
 	if err != nil {
-		return nil, UserError{err}
+		return nil, errors.Wrap(err, "options parsing failed")
 	}
 
 	// Fall back to http.DefaultClient if the package user does not provide
