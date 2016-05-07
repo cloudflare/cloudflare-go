@@ -14,6 +14,7 @@ func TestUser_UserDetails(t *testing.T) {
 
 	mux.HandleFunc("/user", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 "success": true,

@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"log"
 	"os"
 	"reflect"
 	"strings"
@@ -423,6 +424,7 @@ func pageRules(c *cli.Context) {
 		fmt.Println(err)
 		return
 	}
+
 	fmt.Printf("%3s %-32s %-8s %s\n", "Pri", "ID", "Status", "URL")
 	for _, r := range rules {
 		var settings []string
@@ -453,7 +455,11 @@ func railgun(*cli.Context) {
 }
 
 func main() {
-	api = cloudflare.New(os.Getenv("CF_API_KEY"), os.Getenv("CF_API_EMAIL"))
+	var err error
+	api, err = cloudflare.New(os.Getenv("CF_API_KEY"), os.Getenv("CF_API_EMAIL"))
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	app := cli.NewApp()
 	app.Name = "flarectl"

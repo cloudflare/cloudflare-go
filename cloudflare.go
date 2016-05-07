@@ -1,11 +1,4 @@
-/*
-Package cloudflare implements the CloudFlare v4 API.
-
-New API requests created like:
-
-    api := cloudflare.New(apikey, apiemail)
-
-*/
+// Package cloudflare implements the CloudFlare v4 API.
 package cloudflare
 
 import (
@@ -20,22 +13,43 @@ import (
 
 const apiURL = "https://api.cloudflare.com/client/v4"
 
-// Error messages
-const errMakeRequestError = "Error from makeRequest"
-const errUnmarshalError = "Error unmarshalling JSON"
-
+// API holds the configuration for the current API client. A client should not
+// be modified concurrently.
 type API struct {
-	APIKey   string
-	APIEmail string
-	BaseURL  string
+	APIKey     string
+	APIEmail   string
+	BaseURL    string
+	headers    http.Header
+	httpClient *http.Client
 }
 
-// Initializes the API configuration.
-func New(key, email string) *API {
-	return &API{key, email, apiURL}
+// New creates a new CloudFlare v4 API client.
+func New(key, email string, opts ...Option) (*API, error) {
+	if key == "" || email == "" {
+		return nil, errors.New(errEmptyCredentials)
+	}
+
+	api := &API{
+		APIKey:   key,
+		APIEmail: email,
+		headers:  make(http.Header),
+	}
+
+	err := api.parseOptions(opts...)
+	if err != nil {
+		return nil, errors.Wrap(err, "options parsing failed")
+	}
+
+	// Fall back to http.DefaultClient if the package user does not provide
+	// their own.
+	if api.httpClient == nil {
+		api.httpClient = http.DefaultClient
+	}
+
+	return api, nil
 }
 
-// Initializes a new zone.
+// NewZone initializes Zone.
 func NewZone() *Zone {
 	return &Zone{}
 }
@@ -72,8 +86,13 @@ func (api *API) makeRequest(method, uri string, params interface{}) ([]byte, err
 	if err != nil {
 		return nil, errors.Wrap(err, "HTTP request creation failed")
 	}
-	req.Header.Add("X-Auth-Key", api.APIKey)
-	req.Header.Add("X-Auth-Email", api.APIEmail)
+
+	// Apply any user-defined headers first.
+	req.Header = api.headers
+
+	req.Header.Set("X-Auth-Key", api.APIKey)
+	req.Header.Set("X-Auth-Email", api.APIEmail)
+
 	// Could be application/json or multipart/form-data
 	// req.Header.Add("Content-Type", "application/json")
 	client := &http.Client{}
@@ -92,18 +111,19 @@ func (api *API) makeRequest(method, uri string, params interface{}) ([]byte, err
 			return nil, errors.New(resp.Status)
 		}
 	}
+
 	return resBody, nil
 }
 
-// The Response struct is a template.  There will also be a result struct.
-// There will be a unique response type for each response, which will include
-// this type.
+// Response is a template.  There will also be a result struct.  There will be a
+// unique response type for each response, which will include this type.
 type Response struct {
 	Success  bool     `json:"success"`
 	Errors   []string `json:"errors"`
 	Messages []string `json:"messages"`
 }
 
+// ResultInfo contains metadata about the Response.
 type ResultInfo struct {
 	Page    int `json:"page"`
 	PerPage int `json:"per_page"`
@@ -111,7 +131,7 @@ type ResultInfo struct {
 	Total   int `json:"total_count"`
 }
 
-// A User describes a user account.
+// User describes a user account.
 type User struct {
 	ID            string         `json:"id"`
 	Email         string         `json:"email"`
@@ -129,18 +149,20 @@ type User struct {
 	Organizations []Organization `json:"organizations"`
 }
 
+// UserResponse wraps a response containing User accounts.
 type UserResponse struct {
 	Response
 	Result User `json:"result"`
 }
 
+// Owner describes the resource owner.
 type Owner struct {
 	ID        string `json:"id"`
 	Email     string `json:"email"`
 	OwnerType string `json:"owner_type"`
 }
 
-// A Zone describes a CloudFlare zone.
+// Zone describes a CloudFlare zone.
 type Zone struct {
 	ID                string   `json:"id"`
 	Name              string   `json:"name"`
@@ -167,7 +189,7 @@ type Zone struct {
 	Meta        ZoneMeta `json:"meta"`
 }
 
-// Contains metadata about a zone.
+// ZoneMeta metadata about a zone.
 type ZoneMeta struct {
 	// custom_certificate_quota is broken - sometimes it's a string, sometimes a number!
 	// CustCertQuota     int    `json:"custom_certificate_quota"`
@@ -176,7 +198,7 @@ type ZoneMeta struct {
 	PhishingDetected  bool `json:"phishing_detected"`
 }
 
-// Contains the plan information for a zone.
+// ZonePlan contains the plan information for a zone.
 type ZonePlan struct {
 	ID           string `json:"id"`
 	Name         string `json:"name"`
@@ -188,11 +210,13 @@ type ZonePlan struct {
 	CanSubscribe bool   `json:"can_subscribe"`
 }
 
+// ZoneResponse represents the response from the Zone endpoint.
 type ZoneResponse struct {
 	Response
 	Result []Zone `json:"result"`
 }
 
+// ZonePlanResponse represents the response from the Zone Plan endpoint.
 type ZonePlanResponse struct {
 	Response
 	Result []ZonePlan `json:"result"`
@@ -212,6 +236,7 @@ type ZonePlanResponse struct {
 // 	Value int64 `json:"value"`
 // }
 
+// ZoneSetting contains settings for a zone.
 type ZoneSetting struct {
 	ID            string      `json:"id"`
 	Editable      bool        `json:"editable"`
@@ -220,12 +245,13 @@ type ZoneSetting struct {
 	TimeRemaining int         `json:"time_remaining"`
 }
 
+// ZoneSettingResponse represents the response from the Zone Setting endpoint.
 type ZoneSettingResponse struct {
 	Response
 	Result []ZoneSetting `json:"result"`
 }
 
-// Describes a DNS record for a zone.
+// DNSRecord represents a DNS record in a zone.
 type DNSRecord struct {
 	ID         string      `json:"id,omitempty"`
 	Type       string      `json:"type,omitempty"`
@@ -244,19 +270,19 @@ type DNSRecord struct {
 	Priority   int         `json:"priority,omitempty"`
 }
 
-// The response for creating or updating a DNS record.
+// DNSRecordResponse represents the response from the DNS endpoint.
 type DNSRecordResponse struct {
 	Response
 	Result DNSRecord `json:"result"`
 }
 
-// The response for listing DNS records.
+// DNSListResponse represents the response from the list DNS records endpoint.
 type DNSListResponse struct {
 	Response
 	Result []DNSRecord `json:"result"`
 }
 
-// Railgun status for a zone.
+// ZoneRailgun represents the status of a Railgun on a zone.
 type ZoneRailgun struct {
 	ID        string `json:"id"`
 	Name      string `json:"string"`
@@ -264,12 +290,13 @@ type ZoneRailgun struct {
 	Connected bool   `json:"connected"`
 }
 
+// ZoneRailgunResponse represents the response from the zone Railgun endpoint.
 type ZoneRailgunResponse struct {
 	Response
 	Result []ZoneRailgun `json:"result"`
 }
 
-// Custom SSL certificates for a zone.
+// ZoneCustomSSL represents custom SSL certificate metadata.
 type ZoneCustomSSL struct {
 	ID            string     `json:"id"`
 	Hosts         []string   `json:"hosts"`
@@ -285,11 +312,13 @@ type ZoneCustomSSL struct {
 	KeylessServer KeylessSSL `json:"keyless_server"`
 }
 
+// ZoneCustomSSLResponse represents the response from the zone SSL endpoint.
 type ZoneCustomSSLResponse struct {
 	Response
 	Result []ZoneCustomSSL `json:"result"`
 }
 
+// KeylessSSL represents Keyless SSL configuration.
 type KeylessSSL struct {
 	ID          string   `json:"id"`
 	Name        string   `json:"name"`
@@ -302,11 +331,13 @@ type KeylessSSL struct {
 	ModifiedOn  string   `json:"modifed_on"`
 }
 
+// KeylessSSLResponse represents the response from the Keyless SSL endpoint.
 type KeylessSSLResponse struct {
 	Response
 	Result []KeylessSSL `json:"result"`
 }
 
+// Railgun represents a Railgun configuration.
 type Railgun struct {
 	ID             string `json:"id"`
 	Name           string `json:"name"`
@@ -326,12 +357,13 @@ type Railgun struct {
 	// } `json:"upgrade_info"`
 }
 
+// RailgunResponse represents the response from the Railgun endpoint.
 type RailgunResponse struct {
 	Response
 	Result []Railgun `json:"result"`
 }
 
-// Custom error pages.
+// CustomPage represents a custom page configuration.
 type CustomPage struct {
 	CreatedOn      string   `json:"created_on"`
 	ModifiedOn     string   `json:"modified_on"`
@@ -342,12 +374,13 @@ type CustomPage struct {
 	Description    string   `json:"description"`
 }
 
+// CustomPageResponse represents the response from the custom pages endpoint.
 type CustomPageResponse struct {
 	Response
 	Result []CustomPage `json:"result"`
 }
 
-// WAF packages
+// WAFPackage represents a WAF package configuration.
 type WAFPackage struct {
 	ID            string `json:"id"`
 	Name          string `json:"name"`
@@ -358,12 +391,14 @@ type WAFPackage struct {
 	ActionMode    string `json:"action_mode"`
 }
 
+// WAFPackagesResponse represents the response from the WAF packages endpoint.
 type WAFPackagesResponse struct {
 	Response
 	Result     []WAFPackage `json:"result"`
 	ResultInfo ResultInfo   `json:"result_info"`
 }
 
+// WAFRule represents a WAF rule.
 type WAFRule struct {
 	ID          string `json:"id"`
 	Description string `json:"description"`
@@ -378,18 +413,21 @@ type WAFRule struct {
 	AllowedModes []string `json:"allowed_modes"`
 }
 
+// WAFRulesResponse represents the response from the WAF rule endpoint.
 type WAFRulesResponse struct {
 	Response
 	Result     []WAFRule  `json:"result"`
 	ResultInfo ResultInfo `json:"result_info"`
 }
 
+// PurgeCacheRequest represents the request format made to the purge endpoint.
 type PurgeCacheRequest struct {
 	Everything bool     `json:"purge_everything,omitempty"`
 	Files      []string `json:"files,omitempty"`
 	Tags       []string `json:"tags,omitempty"`
 }
 
+// PurgeCacheResponse represents the response from the purge endpoint.
 type PurgeCacheResponse struct {
 	Response
 }
