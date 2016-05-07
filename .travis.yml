@@ -10,10 +10,14 @@ matrix:
   allow_failures:
     - go: tip
 
+install:
+  - if [[ $TRAVIS_GO_VERSION == 1.6* ]]; then go get github.com/golang/lint/golint; fi
+
 script:
   - go get -t -v $(go list ./... | grep -v '/vendor/')
-  - diff -u <(echo -n) <(gofmt -d .)
-  - go vet $(go list ./... | grep -v '/vendor/')
+  - if [[ $TRAVIS_GO_VERSION == 1.6* ]]; then diff -u <(echo -n) <(gofmt -d .); fi
+  - if [[ $TRAVIS_GO_VERSION == 1.6* ]]; then go vet $(go list ./... | grep -v '/vendor/'); fi
+  - if [[ $TRAVIS_GO_VERSION == 1.6* ]]; then for package in $(go list ./... | grep -v '/vendor/'); do golint -set_exit_status $package; done; fi
   - go test -v -race $(go list ./... | grep -v '/vendor/')
 
 notifications:
