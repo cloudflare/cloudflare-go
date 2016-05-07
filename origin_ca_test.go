@@ -47,6 +47,6 @@ func TestOriginCA_CreateOriginCertificate(t *testing.T) {
 	createdCertificate, err := client.CreateOriginCertificate(testCertificate)
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, createdCertificate, testCertificate)
+		assert.Equal(t, createdCertificate, &testCertificate)
 	}
 }
