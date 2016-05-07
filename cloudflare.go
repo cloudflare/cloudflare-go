@@ -32,6 +32,7 @@ func New(key, email string, opts ...Option) (*API, error) {
 	api := &API{
 		APIKey:   key,
 		APIEmail: email,
+		BaseURL:  apiURL,
 		headers:  make(http.Header),
 	}
 
