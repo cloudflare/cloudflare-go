@@ -446,9 +446,9 @@ type IPsResponse struct {
 }
 
 type SSLVerification struct {
-	CertificateStatus string               `json:"certificate_status"`
-	Signature         string               `json:"signature"`
-	VerificationType  string               `json:"verification_type"`
+	CertificateStatus string              `json:"certificate_status"`
+	Signature         string              `json:"signature"`
+	VerificationType  string              `json:"verification_type"`
 	VerificationInfo  SSLVerificationInfo `json:"verification_info,omitempty"`
 }
 

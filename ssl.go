@@ -1,8 +1,8 @@
 package cloudflare
 
 import (
-	"github.com/pkg/errors"
 	"encoding/json"
+	"github.com/pkg/errors"
 )
 
 // CreateSSL allows you to add a custom SSL certificate to the given zone.
