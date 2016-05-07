@@ -75,3 +75,79 @@ func (api *API) CreateOriginCertificate(certificate OriginCA) (*OriginCA, error)
 
 	return &createdCert, nil
 }
+
+// OriginCertificates will list all certificates owned by the users
+// API reference: https://api.cloudflare.com/#origin-ca-list-certificates
+func (api *API) OriginCertificates() ([]OriginCA, error) {
+	uri := "/certificates"
+	res, err := api.makeRequest("GET", uri, nil)
+
+	if err != nil {
+		return nil, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var originResponse *OriginCAResponseList
+
+	err = json.Unmarshal(res, &originResponse)
+
+	if err != nil {
+		return nil, errors.Wrap(err, errUnmarshalError)
+	}
+
+	if !originResponse.Success {
+		return nil, errors.New(errRequestNotSuccessfull)
+	}
+
+	return originResponse.Result, nil
+}
+
+// OriginCertificate will get the details for a given certificate
+// API reference: https://api.cloudflare.com/#origin-ca-certificate-details
+func (api *API) OriginCertificate(certificateID string) (*OriginCA, error) {
+	uri := "/certificates/" + certificateID
+	res, err := api.makeRequest("GET", uri, nil)
+
+	if err != nil {
+		return nil, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var originResponse *OriginCAResponse
+
+	err = json.Unmarshal(res, &originResponse)
+
+	if err != nil {
+		return nil, errors.Wrap(err, errUnmarshalError)
+	}
+
+	if !originResponse.Success {
+		return nil, errors.New(errRequestNotSuccessfull)
+	}
+
+	return &originResponse.Result, nil
+}
+
+// RevokeOriginCertificate will revoke a given certificate
+// API reference: https://api.cloudflare.com/#origin-ca-revoke-certificate
+func (api *API) RevokeOriginCertificate(certificateID string) (*OriginCertificateID, error) {
+	uri := "/certificates/" + certificateID
+	res, err := api.makeRequest("DELETE", uri, nil)
+
+	if err != nil {
+		return nil, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var originResponse *OriginCAResponseRevoke
+
+	err = json.Unmarshal(res, &originResponse)
+
+	if err != nil {
+		return nil, errors.Wrap(err, errUnmarshalError)
+	}
+
+	if !originResponse.Success {
+		return nil, errors.New(errRequestNotSuccessfull)
+	}
+
+	return &originResponse.Result, nil
+
+}
