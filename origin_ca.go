@@ -15,7 +15,7 @@ type OriginCA struct {
 	Hostnames       []string `json:"hostnames"`
 	ExpiresOn       string   `json:"expires_on"`
 	RequestType     string   `json:"request_type"`
-	RequestValidity string   `json:"request_validity"`
+	RequestValidity string   `json:"requested_validity"`
 	Csr             string   `json:"csr"`
 }
 
