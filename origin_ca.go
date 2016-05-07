@@ -26,27 +26,21 @@ type OriginCertificateID struct {
 
 // OriginCAResponse is the APIv4 response envelop containing the OriginCA result
 type OriginCAResponse struct {
-	Success  bool     `json:"success"`
-	Errors   []string `json:"errors"`
-	Messages []string `json:"messages"`
-	Result   OriginCA `json:"result"`
+	Response
+	Result OriginCA `json:"result"`
 }
 
 // OriginCAResponseList is the APIv4 response envelop containing a listof OriginCA result
 type OriginCAResponseList struct {
-	Success    bool       `json:"success"`
-	Errors     []string   `json:"errors"`
-	Messages   []string   `json:"messages"`
+	Response
 	Result     []OriginCA `json:"result"`
 	ResultInfo ResultInfo `json:"result_info"`
 }
 
 // OriginCAResponseRevoke is the APIv4 response envelop containing a revoked cert id
 type OriginCAResponseRevoke struct {
-	Success  bool                `json:"success"`
-	Errors   []string            `json:"errors"`
-	Messages []string            `json:"messages"`
-	Result   OriginCertificateID `json:"result"`
+	Response
+	Result OriginCertificateID `json:"result"`
 }
 
 // CreateOriginCertificate will create an origin certificate for a User
