@@ -7,6 +7,81 @@ import (
 	"github.com/pkg/errors"
 )
 
+// Zone describes a CloudFlare zone.
+type Zone struct {
+	ID                string   `json:"id"`
+	Name              string   `json:"name"`
+	DevMode           int      `json:"development_mode"`
+	OriginalNS        []string `json:"original_name_servers"`
+	OriginalRegistrar string   `json:"original_registrar"`
+	OriginalDNSHost   string   `json:"original_dnshost"`
+	CreatedOn         string   `json:"created_on"`
+	ModifiedOn        string   `json:"modified_on"`
+	NameServers       []string `json:"name_servers"`
+	Owner             Owner    `json:"owner"`
+	Permissions       []string `json:"permissions"`
+	Plan              ZonePlan `json:"plan"`
+	Status            string   `json:"status"`
+	Paused            bool     `json:"paused"`
+	Type              string   `json:"type"`
+	Host              struct {
+		Name    string
+		Website string
+	} `json:"host"`
+	VanityNS    []string `json:"vanity_name_servers"`
+	Betas       []string `json:"betas"`
+	DeactReason string   `json:"deactivation_reason"`
+	Meta        ZoneMeta `json:"meta"`
+}
+
+// ZoneMeta metadata about a zone.
+type ZoneMeta struct {
+	// custom_certificate_quota is broken - sometimes it's a string, sometimes a number!
+	// CustCertQuota     int    `json:"custom_certificate_quota"`
+	PageRuleQuota     int  `json:"page_rule_quota"`
+	WildcardProxiable bool `json:"wildcard_proxiable"`
+	PhishingDetected  bool `json:"phishing_detected"`
+}
+
+// ZonePlan contains the plan information for a zone.
+type ZonePlan struct {
+	ID           string `json:"id"`
+	Name         string `json:"name"`
+	Price        int    `json:"price"`
+	Currency     string `json:"currency"`
+	Frequency    string `json:"frequency"`
+	LegacyID     string `json:"legacy_id"`
+	IsSubscribed bool   `json:"is_subscribed"`
+	CanSubscribe bool   `json:"can_subscribe"`
+}
+
+// ZoneResponse represents the response from the Zone endpoint.
+type ZoneResponse struct {
+	Response
+	Result []Zone `json:"result"`
+}
+
+// ZonePlanResponse represents the response from the Zone Plan endpoint.
+type ZonePlanResponse struct {
+	Response
+	Result []ZonePlan `json:"result"`
+}
+
+// ZoneSetting contains settings for a zone.
+type ZoneSetting struct {
+	ID            string      `json:"id"`
+	Editable      bool        `json:"editable"`
+	ModifiedOn    string      `json:"modified_on"`
+	Value         interface{} `json:"value"`
+	TimeRemaining int         `json:"time_remaining"`
+}
+
+// ZoneSettingResponse represents the response from the Zone Setting endpoint.
+type ZoneSettingResponse struct {
+	Response
+	Result []ZoneSetting `json:"result"`
+}
+
 // CreateZone creates a zone on an account.
 // API reference:
 // 	https://api.cloudflare.com/#zone-create-a-zone
