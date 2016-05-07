@@ -153,12 +153,18 @@ func zoneInfo(c *cli.Context) {
 	}
 	var output []table
 	for _, z := range zones {
+		var nameservers []string
+		if len(z.VanityNS) > 0 {
+			nameservers = z.VanityNS
+		} else {
+			nameservers = z.NameServers
+		}
 		output = append(output, table{
 			"ID":           z.ID,
 			"Zone":         z.Name,
 			"Plan":         z.Plan.LegacyID,
 			"Status":       z.Status,
-			"Name Servers": strings.Join(z.NameServers, ", "),
+			"Name Servers": strings.Join(nameservers, ", "),
 			"Paused":       fmt.Sprintf("%t", z.Paused),
 			"Type":         z.Type,
 		})
