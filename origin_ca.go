@@ -19,6 +19,14 @@ type OriginCA struct {
 	Csr             string   `json:"csr"`
 }
 
+// OriginCAResponse is the APIv4 response envelop containing the OriginCA result
+type OriginCAResponse struct {
+	Success  bool     `json:"success"`
+	Errors   []string `json:"errors"`
+	Messages []string `json:"messages"`
+	Result   OriginCA `json:"result"`
+}
+
 // CreateOriginCertificate will create an origin certificate for a User
 // API reference: https://api.cloudflare.com/#origin-ca-create-certificate
 func (api *API) CreateOriginCertificate(certificate OriginCA) (*OriginCA, error) {
@@ -29,13 +37,19 @@ func (api *API) CreateOriginCertificate(certificate OriginCA) (*OriginCA, error)
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
 
-	var createdCert *OriginCA
+	var originResponse *OriginCAResponse
 
-	err = json.Unmarshal(res, &createdCert)
+	err = json.Unmarshal(res, &originResponse)
 
 	if err != nil {
 		return nil, errors.Wrap(err, errUnmarshalError)
 	}
 
-	return createdCert, nil
+	if !originResponse.Success {
+		return nil, errors.New(errRequestNotSuccessfull)
+	}
+
+	createdCert := originResponse.Result
+
+	return &createdCert, nil
 }
