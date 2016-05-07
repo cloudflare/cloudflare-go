@@ -432,7 +432,7 @@ type PurgeCacheResponse struct {
 	Response
 }
 
-// IPs contains a list of IPv4 and IPv6 CIDRs
+// IPRanges contains lists of IPv4 and IPv6 CIDRs
 type IPRanges struct {
 	IPv4CIDRs []string `json:"ipv4_cidrs"`
 	IPv6CIDRs []string `json:"ipv6_cidrs"`
