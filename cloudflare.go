@@ -16,6 +16,7 @@ const apiURL = "https://api.cloudflare.com/client/v4"
 
 // API holds the configuration for the current API client. A client should not
 // be modified concurrently.
+const errRequestNotSuccessfull = "Error reported by API"
 type API struct {
 	APIKey     string
 	APIEmail   string
