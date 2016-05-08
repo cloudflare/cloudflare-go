@@ -227,9 +227,19 @@ func (api *API) PurgeCache(zoneID string, pcr PurgeCacheRequest) (PurgeCacheResp
 
 // DeleteZone deletes the given zone.
 // API reference:
-// https://api.cloudflare.com/#zone-delete-a-zone
-// DELETE /zones/:id
-func DeleteZone() {
+//   https://api.cloudflare.com/#zone-delete-a-zone
+//   DELETE /zones/:id
+func (api *API) DeleteZone(zoneID string) (ZoneID, error) {
+	res, err := api.makeRequest("DELETE", "/zones"+zoneID, nil)
+	if err != nil {
+		return ZoneID{}, errors.Wrap(err, errMakeRequestError)
+	}
+	var r ZoneIDResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return ZoneID{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
 }
 
 // Zone Plan
