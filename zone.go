@@ -156,31 +156,17 @@ func (api *API) ListZones(z ...string) ([]Zone, error) {
 // API reference:
 // 	https://api.cloudflare.com/#zone-zone-details
 // 	GET /zones/:id
-func (api *API) ZoneDetails(z Zone) {
-	// TODO: This should either accept a *Zone (and update it), or return a
-	// (Zone, error).
-
-	// XXX: Should we make the user get the zone ID themselves with ListZones, or do the hard work here?
-	// ListZones gives the same information as this endpoint anyway so perhaps this is of limited use?
-	// Maybe for users who already know the ID or fetched it in another call.
-	type result struct {
-		Response
-		Result Zone `json:"result"`
+func (api *API) ZoneDetails(zoneID string) ([]Zone, error) {
+	res, err := api.makeRequest("GET", "/zones"+zoneID, nil)
+	if err != nil {
+		return []Zone{}, errors.Wrap(err, errMakeRequestError)
 	}
-	// If z has an ID then query for that directly, else call ListZones to
-	// fetch by name.
-	// var zone Zone
-	if z.ID != "" {
-		// res, _ := makeRequest(c, "GET", "/zones/"+z.ID, nil)
-		// zone = res.Result
-	} else {
-		// zones, err := ListZones(c, z.Name)
-		// if err != nil {
-		// return
-		// }
-		// Only one zone should have been returned
-		// zone := zones[0]
+	var r ZoneResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return []Zone{}, errors.Wrap(err, errUnmarshalError)
 	}
+	return r.Result, nil
 }
 
 // EditZone edits the given zone.
