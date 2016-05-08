@@ -136,12 +136,17 @@ func (api *API) request(method, uri string, reqBody io.Reader) (*http.Response, 
 	return resp, nil
 }
 
+type ResponseInfo struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+}
+
 // Response is a template.  There will also be a result struct.  There will be a
 // unique response type for each response, which will include this type.
 type Response struct {
-	Success  bool     `json:"success"`
-	Errors   []string `json:"errors"`
-	Messages []string `json:"messages"`
+	Success  bool           `json:"success"`
+	Errors   []ResponseInfo `json:"errors"`
+	Messages []ResponseInfo `json:"messages"`
 }
 
 // ResultInfo contains metadata about the Response.
