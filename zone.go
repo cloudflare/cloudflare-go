@@ -72,10 +72,17 @@ type ZoneIDResponse struct {
 	Result ZoneID `json:"result"`
 }
 
-// ZonePlanResponse represents the response from the Zone Plan endpoint.
-type ZonePlanResponse struct {
+// AvailableZonePlansResponse represents the response from the Available Plans endpoint.
+type AvailableZonePlansResponse struct {
 	Response
 	Result []ZonePlan `json:"result"`
+	ResultInfo
+}
+
+// ZonePlanResponse represents the response from the Plan Details endpoint.
+type ZonePlanResponse struct {
+	Response
+	Result ZonePlan `json:"result"`
 }
 
 // ZoneSetting contains settings for a zone.
@@ -242,9 +249,41 @@ func (api *API) DeleteZone(zoneID string) (ZoneID, error) {
 	return r.Result, nil
 }
 
-// Zone Plan
-// https://api.cloudflare.com/#zone-plan-available-plans
-// https://api.cloudflare.com/#zone-plan-plan-details
+// AvailableZonePlans returns information about all plans available to the specified zone.
+// API reference:
+//  https://api.cloudflare.com/#zone-plan-available-plans
+//  GET /zones/:zone_identifier/available_plans
+func (api *API) AvailableZonePlans(zoneID string) ([]ZonePlan, error) {
+	uri := "/zones/" + zoneID + "/available_plans"
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return []ZonePlan{}, errors.Wrap(err, errMakeRequestError)
+	}
+	var r AvailableZonePlansResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return []ZonePlan{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
+
+// ZonePlanDetails returns information about a zone plan.
+// API reference:
+//  https://api.cloudflare.com/#zone-plan-plan-details
+//  GET /zones/:zone_identifier/available_plans/:identifier
+func (api *API) ZonePlanDetails(zoneID, planID string) (ZonePlan, error) {
+	uri := "/zones/" + zoneID + "/available_plans/" + planID
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return ZonePlan{}, errors.Wrap(err, errMakeRequestError)
+	}
+	var r ZonePlanResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return ZonePlan{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
 
 // Zone Settings
 // https://api.cloudflare.com/#zone-settings-for-a-zone-get-all-zone-settings
