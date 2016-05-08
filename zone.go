@@ -90,7 +90,21 @@ func (api *API) CreateZone(z Zone) {
 	// res, err := api.makeRequest("POST", "/zones", z)
 }
 
-// ListZones liist zones on an account. Optionally takes a list of zone names
+// ZoneActivationCheck initiates another zone activation check for newly-created zones.
+// API reference:
+//   https://api.cloudflare.com/#zone-initiate-another-zone-activation-check
+//   PUT /zones/:identifier/activation_check
+func (api *API) ZoneActivationCheck(zoneID string) (Response, error) {
+	res, err := api.makeRequest("PUT", "/zones/"+zoneID+"/activation_check", nil)
+	if err != nil {
+		return Response{}, errors.Wrap(err, errMakeRequestError)
+	}
+	var r Response
+	err = json.Unmarshal(res, &r)
+	return r, nil
+}
+
+// ListZones lists zones on an account. Optionally takes a list of zone names
 // to filter against.
 // API reference:
 //	https://api.cloudflare.com/#zone-list-zones

@@ -110,6 +110,30 @@ func userInfo(*cli.Context) {
 func userUpdate(*cli.Context) {
 }
 
+func zoneCheck(c *cli.Context) {
+	if err := checkEnv(); err != nil {
+		fmt.Println(err)
+		return
+	}
+	if err := checkFlags(c, "zone"); err != nil {
+		return
+	}
+	zone := c.String("zone")
+
+	zoneID, err := api.ZoneIDByName(zone)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	res, err := api.ZoneActivationCheck(zoneID)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("%s\n", res.Messages[0].Message)
+}
+
 func zoneList(c *cli.Context) {
 	if err := checkEnv(); err != nil {
 		fmt.Println(err)
@@ -508,6 +532,17 @@ func main() {
 					Aliases: []string{"l"},
 					Action:  zoneList,
 					Usage:   "List all zones on an account",
+				},
+				{
+					Name:   "check",
+					Action: zoneCheck,
+					Usage:  "Initiate a zone activation check",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+					},
 				},
 				{
 					Name:    "info",
