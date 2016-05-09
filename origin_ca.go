@@ -62,7 +62,7 @@ func (api *API) CreateOriginCertificate(certificate OriginCA) (*OriginCA, error)
 	}
 
 	if !originResponse.Success {
-		return nil, errors.New(errRequestNotSuccessfull)
+		return nil, errors.New(errRequestNotSuccessful)
 	}
 
 	createdCert := originResponse.Result
@@ -89,7 +89,7 @@ func (api *API) OriginCertificates() ([]OriginCA, error) {
 	}
 
 	if !originResponse.Success {
-		return nil, errors.New(errRequestNotSuccessfull)
+		return nil, errors.New(errRequestNotSuccessful)
 	}
 
 	return originResponse.Result, nil
@@ -114,7 +114,7 @@ func (api *API) OriginCertificate(certificateID string) (*OriginCA, error) {
 	}
 
 	if !originResponse.Success {
-		return nil, errors.New(errRequestNotSuccessfull)
+		return nil, errors.New(errRequestNotSuccessful)
 	}
 
 	return &originResponse.Result, nil
@@ -139,7 +139,7 @@ func (api *API) RevokeOriginCertificate(certificateID string) (*OriginCertificat
 	}
 
 	if !originResponse.Success {
-		return nil, errors.New(errRequestNotSuccessfull)
+		return nil, errors.New(errRequestNotSuccessful)
 	}
 
 	return &originResponse.Result, nil
