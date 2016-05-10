@@ -69,20 +69,54 @@ func (api *API) ZoneIDByName(zoneName string) (string, error) {
 	return "", errors.New("Zone could not be found")
 }
 
-// Params can be turned into a URL query string or a body
-// TODO: Give this func a better name
+// makeRequest makes a HTTP request and returns the body as a byte slice,
+// closing it before returnng. params will be serialized to JSON.
 func (api *API) makeRequest(method, uri string, params interface{}) ([]byte, error) {
 	// Replace nil with a JSON object if needed
 	var reqBody io.Reader
 	if params != nil {
 		json, err := json.Marshal(params)
 		if err != nil {
-			return nil, errors.Wrap(err, "Error marshalling params to JSON")
+			return nil, errors.Wrap(err, "error marshalling params to JSON")
 		}
 		reqBody = bytes.NewReader(json)
 	} else {
 		reqBody = nil
 	}
+
+	resp, err := api.request(method, uri, reqBody)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "could not read response body")
+	}
+
+	switch resp.StatusCode {
+	case http.StatusOK:
+		break
+	case http.StatusUnauthorized:
+		return nil, errors.Errorf("HTTP status %d: invalid credentials", resp.StatusCode)
+	case http.StatusForbidden:
+		return nil, errors.Errorf("HTTP status %d: insufficient permissions", resp.StatusCode)
+	default:
+		var s string
+		if body != nil {
+			s = string(body)
+		}
+		return nil, errors.Errorf("HTTP status %d: content %q", resp.StatusCode, s)
+	}
+
+	return body, nil
+}
+
+// request makes a HTTP request to the given API endpoint, returning the raw
+// *http.Response, or an error if one occurred. The caller is responsible for
+// closing the response body.
+func (api *API) request(method, uri string, reqBody io.Reader) (*http.Response, error) {
 	req, err := http.NewRequest(method, api.BaseURL+uri, reqBody)
 	if err != nil {
 		return nil, errors.Wrap(err, "HTTP request creation failed")
@@ -90,30 +124,15 @@ func (api *API) makeRequest(method, uri string, params interface{}) ([]byte, err
 
 	// Apply any user-defined headers first.
 	req.Header = api.headers
-
 	req.Header.Set("X-Auth-Key", api.APIKey)
 	req.Header.Set("X-Auth-Email", api.APIEmail)
 
-	// Could be application/json or multipart/form-data
-	// req.Header.Add("Content-Type", "application/json")
-	client := &http.Client{}
-	resp, err := client.Do(req)
+	resp, err := api.httpClient.Do(req)
 	if err != nil {
 		return nil, errors.Wrap(err, "HTTP request failed")
 	}
-	defer resp.Body.Close()
-	resBody, err := ioutil.ReadAll(resp.Body)
-	if resp.StatusCode != http.StatusOK {
-		if err != nil {
-			return nil, errors.Wrap(err, "Error returned from API")
-		} else if resBody != nil {
-			return nil, errors.New(string(resBody))
-		} else {
-			return nil, errors.New(resp.Status)
-		}
-	}
 
-	return resBody, nil
+	return resp, nil
 }
 
 // Response is a template.  There will also be a result struct.  There will be a
