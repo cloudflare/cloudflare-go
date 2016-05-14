@@ -131,6 +131,8 @@ func (api *API) request(method, uri string, reqBody io.Reader) (*http.Response, 
 	return resp, nil
 }
 
+// ResponseInfo contains a code and message returned by the API as errors or
+// informational messages inside the response.
 type ResponseInfo struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`
