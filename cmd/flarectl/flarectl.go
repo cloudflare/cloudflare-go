@@ -110,6 +110,24 @@ func userInfo(*cli.Context) {
 func userUpdate(*cli.Context) {
 }
 
+func zoneCreate(c *cli.Context) {
+	if err := checkEnv(); err != nil {
+		fmt.Println(err)
+		return
+	}
+	if err := checkFlags(c, "zone"); err != nil {
+		return
+	}
+	zone := c.String("zone")
+	jumpstart := c.Bool("jumpstart")
+	orgID := c.String("org-id")
+	var org cloudflare.Organization
+	if orgID != "" {
+		org.ID = orgID
+	}
+	api.CreateZone(zone, jumpstart, org)
+}
+
 func zoneCheck(c *cli.Context) {
 	if err := checkEnv(); err != nil {
 		fmt.Println(err)
@@ -532,6 +550,26 @@ func main() {
 					Aliases: []string{"l"},
 					Action:  zoneList,
 					Usage:   "List all zones on an account",
+				},
+				{
+					Name:    "create",
+					Aliases: []string{"c"},
+					Action:  zoneCreate,
+					Usage:   "List all zones on an account",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+						cli.BoolFlag{
+							Name:  "jumpstart",
+							Usage: "automatically fetch DNS records",
+						},
+						cli.StringFlag{
+							Name:  "org-id",
+							Usage: "organization ID",
+						},
+					},
 				},
 				{
 					Name:   "check",

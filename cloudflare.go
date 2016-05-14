@@ -51,11 +51,6 @@ func New(key, email string, opts ...Option) (*API, error) {
 	return api, nil
 }
 
-// NewZone initializes Zone.
-func NewZone() *Zone {
-	return &Zone{}
-}
-
 // ZoneIDByName retrieves a zone's ID from the name.
 func (api *API) ZoneIDByName(zoneName string) (string, error) {
 	res, err := api.ListZones(zoneName)

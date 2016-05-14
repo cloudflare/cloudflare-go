@@ -100,12 +100,34 @@ type ZoneSettingResponse struct {
 	Result []ZoneSetting `json:"result"`
 }
 
+// newZone describes a new zone.
+type newZone struct {
+	Name      string `json:"name"`
+	JumpStart bool   `json:"jump_start"`
+	// We use a pointer to get a nil type when the field is empty.
+	// This allows us to completely omit this with json.Marshal().
+	Organization *Organization `json:"organization,omitempty"`
+}
+
 // CreateZone creates a zone on an account.
-// API reference:
-// 	https://api.cloudflare.com/#zone-create-a-zone
-//	POST /zones
-func (api *API) CreateZone(z Zone) {
-	// res, err := api.makeRequest("POST", "/zones", z)
+//
+// API reference: https://api.cloudflare.com/#zone-create-a-zone
+func (api *API) CreateZone(name string, jumpstart bool, org Organization) ([]Zone, error) {
+	var newzone newZone
+	newzone.Name = name
+	newzone.JumpStart = jumpstart
+	if org.ID != "" {
+		newzone.Organization = &org
+	}
+
+	res, err := api.makeRequest("POST", "/zones", newzone)
+	if err != nil {
+		return []Zone{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var r ZoneResponse
+	err = json.Unmarshal(res, &r)
+	return r.Result, nil
 }
 
 // ZoneActivationCheck initiates another zone activation check for newly-created zones.
