@@ -1,4 +1,6 @@
 # cloudflare-go
+
+[![Join the chat at https://gitter.im/cloudflare/cloudflare-go](https://badges.gitter.im/cloudflare/cloudflare-go.svg)](https://gitter.im/cloudflare/cloudflare-go?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![GoDoc](https://godoc.org/github.com/cloudflare/cloudflare-go?status.svg)](https://godoc.org/github.com/cloudflare/cloudflare-go)
 
 > **Note**: This library is under active development as we expand it to cover our (expanding!) API.
