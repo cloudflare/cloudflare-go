@@ -109,9 +109,8 @@ func (api *API) CreateZone(z Zone) {
 }
 
 // ZoneActivationCheck initiates another zone activation check for newly-created zones.
-// API reference:
-//   https://api.cloudflare.com/#zone-initiate-another-zone-activation-check
-//   PUT /zones/:identifier/activation_check
+//
+// API reference: https://api.cloudflare.com/#zone-initiate-another-zone-activation-check
 func (api *API) ZoneActivationCheck(zoneID string) (Response, error) {
 	res, err := api.makeRequest("PUT", "/zones/"+zoneID+"/activation_check", nil)
 	if err != nil {
@@ -124,9 +123,8 @@ func (api *API) ZoneActivationCheck(zoneID string) (Response, error) {
 
 // ListZones lists zones on an account. Optionally takes a list of zone names
 // to filter against.
-// API reference:
-//	https://api.cloudflare.com/#zone-list-zones
-//	GET /zones
+//
+// API reference: https://api.cloudflare.com/#zone-list-zones
 func (api *API) ListZones(z ...string) ([]Zone, error) {
 	v := url.Values{}
 	var res []byte
@@ -171,9 +169,8 @@ func (api *API) ListZones(z ...string) ([]Zone, error) {
 }
 
 // ZoneDetails fetches information about a zone.
-// API reference:
-// 	https://api.cloudflare.com/#zone-zone-details
-// 	GET /zones/:id
+//
+// API reference: https://api.cloudflare.com/#zone-zone-details
 func (api *API) ZoneDetails(zoneID string) ([]Zone, error) {
 	res, err := api.makeRequest("GET", "/zones"+zoneID, nil)
 	if err != nil {
@@ -188,18 +185,17 @@ func (api *API) ZoneDetails(zoneID string) ([]Zone, error) {
 }
 
 // EditZone edits the given zone.
-// API reference:
-// 	https://api.cloudflare.com/#zone-edit-zone-properties
-// 	PATCH /zones/:id
-func EditZone() {
+//
+// API reference: https://api.cloudflare.com/#zone-edit-zone-properties
+func (api *API) EditZone(zoneID string) (Zone, error) {
+	return Zone{}, nil
 }
 
 // PurgeEverything purges the cache for the given zone.
 // Note: this will substantially increase load on the origin server for that
 // zone if there is a high cached vs. uncached request ratio.
-// API reference:
-// https://api.cloudflare.com/#zone-purge-all-files
-// DELETE /zones/:id/purge_cache
+//
+// API reference: https://api.cloudflare.com/#zone-purge-all-files
 func (api *API) PurgeEverything(zoneID string) (PurgeCacheResponse, error) {
 	uri := "/zones/" + zoneID + "/purge_cache"
 	res, err := api.makeRequest("DELETE", uri, PurgeCacheRequest{true, nil, nil})
@@ -215,9 +211,8 @@ func (api *API) PurgeEverything(zoneID string) (PurgeCacheResponse, error) {
 }
 
 // PurgeCache purges the cache using the given PurgeCacheRequest (zone/url/tag).
-// API reference:
-// 	https://api.cloudflare.com/#zone-purge-individual-files-by-url-and-cache-tags
-// 	DELETE /zones/:id/purge_cache
+//
+// API reference: https://api.cloudflare.com/#zone-purge-individual-files-by-url-and-cache-tags
 func (api *API) PurgeCache(zoneID string, pcr PurgeCacheRequest) (PurgeCacheResponse, error) {
 	uri := "/zones/" + zoneID + "/purge_cache"
 	res, err := api.makeRequest("DELETE", uri, pcr)
@@ -233,9 +228,8 @@ func (api *API) PurgeCache(zoneID string, pcr PurgeCacheRequest) (PurgeCacheResp
 }
 
 // DeleteZone deletes the given zone.
-// API reference:
-//   https://api.cloudflare.com/#zone-delete-a-zone
-//   DELETE /zones/:id
+//
+// API reference: https://api.cloudflare.com/#zone-delete-a-zone
 func (api *API) DeleteZone(zoneID string) (ZoneID, error) {
 	res, err := api.makeRequest("DELETE", "/zones"+zoneID, nil)
 	if err != nil {
@@ -250,9 +244,8 @@ func (api *API) DeleteZone(zoneID string) (ZoneID, error) {
 }
 
 // AvailableZonePlans returns information about all plans available to the specified zone.
-// API reference:
-//  https://api.cloudflare.com/#zone-plan-available-plans
-//  GET /zones/:zone_identifier/available_plans
+//
+// API reference: https://api.cloudflare.com/#zone-plan-available-plans
 func (api *API) AvailableZonePlans(zoneID string) ([]ZonePlan, error) {
 	uri := "/zones/" + zoneID + "/available_plans"
 	res, err := api.makeRequest("GET", uri, nil)
@@ -268,9 +261,8 @@ func (api *API) AvailableZonePlans(zoneID string) ([]ZonePlan, error) {
 }
 
 // ZonePlanDetails returns information about a zone plan.
-// API reference:
-//  https://api.cloudflare.com/#zone-plan-plan-details
-//  GET /zones/:zone_identifier/available_plans/:identifier
+//
+// API reference: https://api.cloudflare.com/#zone-plan-plan-details
 func (api *API) ZonePlanDetails(zoneID, planID string) (ZonePlan, error) {
 	uri := "/zones/" + zoneID + "/available_plans/" + planID
 	res, err := api.makeRequest("GET", uri, nil)
