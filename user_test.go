@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -39,6 +40,9 @@ func TestUser_UserDetails(t *testing.T) {
 
 	user, err := client.UserDetails()
 
+	createdOn, _ := time.Parse(time.RFC3339, "2009-07-01T00:00:00Z")
+	modifiedOn, _ := time.Parse(time.RFC3339, "2016-05-06T20:32:00Z")
+
 	want := User{
 		ID:         "1",
 		Email:      "cloudflare@example.com",
@@ -48,8 +52,8 @@ func TestUser_UserDetails(t *testing.T) {
 		Telephone:  "+1 (650) 319 8930",
 		Country:    "US",
 		Zipcode:    "94107",
-		CreatedOn:  "2009-07-01T00:00:00Z",
-		ModifiedOn: "2016-05-06T20:32:00Z",
+		CreatedOn:  createdOn,
+		ModifiedOn: modifiedOn,
 		TwoFA:      true,
 		Betas:      []string{"mirage_forever"},
 	}

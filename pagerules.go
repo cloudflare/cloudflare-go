@@ -2,6 +2,7 @@ package cloudflare
 
 import (
 	"encoding/json"
+	"time"
 
 	"github.com/pkg/errors"
 )
@@ -82,8 +83,8 @@ type PageRule struct {
 	Actions    []PageRuleAction `json:"actions"`
 	Priority   int              `json:"priority"`
 	Status     string           `json:"status"` // can be: active, paused
-	ModifiedOn string           `json:"modified_on,omitempty"`
-	CreatedOn  string           `json:"created_on,omitempty"`
+	ModifiedOn time.Time        `json:"modified_on,omitempty"`
+	CreatedOn  time.Time        `json:"created_on,omitempty"`
 }
 
 // PageRuleDetailResponse is the API response, containing a single PageRule.
