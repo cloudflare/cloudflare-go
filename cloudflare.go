@@ -224,20 +224,6 @@ type ZonePlanResponse struct {
 	Result []ZonePlan `json:"result"`
 }
 
-// type zoneSetting struct {
-// 	ID         string `json:"id"`
-// 	Editable   bool   `json:"editable"`
-// 	ModifiedOn string `json:"modified_on"`
-// }
-// type zoneSettingStringVal struct {
-// 	zoneSetting
-// 	Value string `json:"value"`
-// }
-// type zoneSettingIntVal struct {
-// 	zoneSetting
-// 	Value int64 `json:"value"`
-// }
-
 // ZoneSetting contains settings for a zone.
 type ZoneSetting struct {
 	ID            string      `json:"id"`
