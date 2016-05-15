@@ -60,8 +60,14 @@ type ZoneID struct {
 	ID string `json:"id"`
 }
 
-// ZoneResponse represents the response from the Zone endpoint containing an array of zones.
+// ZoneResponse represents the response from the Zone endpoint containing a single zone.
 type ZoneResponse struct {
+	Response
+	Result Zone `json:"result"`
+}
+
+// ZonesResponse represents the response from the Zone endpoint containing an array of zones.
+type ZonesResponse struct {
 	Response
 	Result []Zone `json:"result"`
 }
@@ -112,7 +118,7 @@ type newZone struct {
 // CreateZone creates a zone on an account.
 //
 // API reference: https://api.cloudflare.com/#zone-create-a-zone
-func (api *API) CreateZone(name string, jumpstart bool, org Organization) ([]Zone, error) {
+func (api *API) CreateZone(name string, jumpstart bool, org Organization) (Zone, error) {
 	var newzone newZone
 	newzone.Name = name
 	newzone.JumpStart = jumpstart
@@ -122,7 +128,7 @@ func (api *API) CreateZone(name string, jumpstart bool, org Organization) ([]Zon
 
 	res, err := api.makeRequest("POST", "/zones", newzone)
 	if err != nil {
-		return []Zone{}, errors.Wrap(err, errMakeRequestError)
+		return Zone{}, errors.Wrap(err, errMakeRequestError)
 	}
 
 	var r ZoneResponse
@@ -150,7 +156,7 @@ func (api *API) ZoneActivationCheck(zoneID string) (Response, error) {
 func (api *API) ListZones(z ...string) ([]Zone, error) {
 	v := url.Values{}
 	var res []byte
-	var r ZoneResponse
+	var r ZonesResponse
 	var zones []Zone
 	var err error
 	if len(z) > 0 {
@@ -193,15 +199,15 @@ func (api *API) ListZones(z ...string) ([]Zone, error) {
 // ZoneDetails fetches information about a zone.
 //
 // API reference: https://api.cloudflare.com/#zone-zone-details
-func (api *API) ZoneDetails(zoneID string) ([]Zone, error) {
+func (api *API) ZoneDetails(zoneID string) (Zone, error) {
 	res, err := api.makeRequest("GET", "/zones"+zoneID, nil)
 	if err != nil {
-		return []Zone{}, errors.Wrap(err, errMakeRequestError)
+		return Zone{}, errors.Wrap(err, errMakeRequestError)
 	}
 	var r ZoneResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return []Zone{}, errors.Wrap(err, errUnmarshalError)
+		return Zone{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
 }
