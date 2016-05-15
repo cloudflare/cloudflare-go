@@ -555,7 +555,7 @@ func main() {
 					Name:    "create",
 					Aliases: []string{"c"},
 					Action:  zoneCreate,
-					Usage:   "List all zones on an account",
+					Usage:   "Create a new zone",
 					Flags: []cli.Flag{
 						cli.StringFlag{
 							Name:  "zone",
