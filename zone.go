@@ -2,6 +2,7 @@ package cloudflare
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/url"
 
 	"github.com/pkg/errors"
@@ -63,35 +64,43 @@ func (api *API) ListZones(z ...string) ([]Zone, error) {
 	return zones, nil
 }
 
-// ZoneDetails fetches information about a zone.
+// ZoneDetails fetches information about zone z. z should have either the the ID or
+// Name field set.
 // API reference:
 // 	https://api.cloudflare.com/#zone-zone-details
 // 	GET /zones/:id
-func (api *API) ZoneDetails(z Zone) {
-	// TODO: This should either accept a *Zone (and update it), or return a
-	// (Zone, error).
-
+func (api *API) ZoneDetails(z Zone) (Zone, error) {
 	// XXX: Should we make the user get the zone ID themselves with ListZones, or do the hard work here?
 	// ListZones gives the same information as this endpoint anyway so perhaps this is of limited use?
 	// Maybe for users who already know the ID or fetched it in another call.
-	type result struct {
-		Response
-		Result Zone `json:"result"`
-	}
+	var r ZoneSingleResponse
+	var zone Zone
+
 	// If z has an ID then query for that directly, else call ListZones to
 	// fetch by name.
-	// var zone Zone
 	if z.ID != "" {
-		// res, _ := makeRequest(c, "GET", "/zones/"+z.ID, nil)
-		// zone = res.Result
+		res, err := api.makeRequest("GET", "/zones/"+z.ID, nil)
+		if err != nil {
+			return Zone{}, errors.Wrap(err, errMakeRequestError)
+		}
+		err = json.Unmarshal(res, &r)
+		if err != nil {
+			return Zone{}, errors.Wrap(err, errUnmarshalError)
+		}
+		zone = r.Result
 	} else {
-		// zones, err := ListZones(c, z.Name)
-		// if err != nil {
-		// return
-		// }
-		// Only one zone should have been returned
-		// zone := zones[0]
+		zones, err := api.ListZones(z.Name)
+		if err != nil {
+			return Zone{}, err
+		}
+		if len(zones) == 0 {
+			return Zone{}, fmt.Errorf("Zone with name %s not found", z.Name)
+		}
+		// only one zone should have been returned
+		zone = zones[0]
 	}
+
+	return zone, nil
 }
 
 // EditZone edits the given zone.

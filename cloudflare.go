@@ -211,10 +211,18 @@ type ZonePlan struct {
 	CanSubscribe bool   `json:"can_subscribe"`
 }
 
-// ZoneResponse represents the response from the Zone endpoint.
+// ZoneResponse represents the response from the Zone endpoint
+// when a list of zones is returned as the result.
 type ZoneResponse struct {
 	Response
 	Result []Zone `json:"result"`
+}
+
+// ZoneSingleResponse represents the response from the Zone endpoint
+// when a single zone is returned as the result.
+type ZoneSingleResponse struct {
+	Response
+	Result Zone `json:"result"`
 }
 
 // ZonePlanResponse represents the response from the Zone Plan endpoint.
