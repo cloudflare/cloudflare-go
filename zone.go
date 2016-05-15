@@ -21,6 +21,7 @@ type Zone struct {
 	Owner             Owner    `json:"owner"`
 	Permissions       []string `json:"permissions"`
 	Plan              ZonePlan `json:"plan"`
+	PlanPending       ZonePlan `json:"plan_pending,omitempty"`
 	Status            string   `json:"status"`
 	Paused            bool     `json:"paused"`
 	Type              string   `json:"type"`
@@ -46,13 +47,13 @@ type ZoneMeta struct {
 // ZonePlan contains the plan information for a zone.
 type ZonePlan struct {
 	ID           string `json:"id"`
-	Name         string `json:"name"`
-	Price        int    `json:"price"`
-	Currency     string `json:"currency"`
-	Frequency    string `json:"frequency"`
-	LegacyID     string `json:"legacy_id"`
-	IsSubscribed bool   `json:"is_subscribed"`
-	CanSubscribe bool   `json:"can_subscribe"`
+	Name         string `json:"name,omitempty"`
+	Price        int    `json:"price,omitempty"`
+	Currency     string `json:"currency,omitempty"`
+	Frequency    string `json:"frequency,omitempty"`
+	LegacyID     string `json:"legacy_id,omitempty"`
+	IsSubscribed bool   `json:"is_subscribed,omitempty"`
+	CanSubscribe bool   `json:"can_subscribe,omitempty"`
 }
 
 // ZoneID contains only the zone ID.
@@ -212,11 +213,66 @@ func (api *API) ZoneDetails(zoneID string) (Zone, error) {
 	return r.Result, nil
 }
 
+// ZoneOptions is a subset of Zone, for editable options.
+type ZoneOptions struct {
+	// FIXME(jamesog): Using omitempty here means we can't disable Paused.
+	// Currently unsure how to work around this.
+	Paused   bool      `json:"paused,omitempty"`
+	VanityNS []string  `json:"vanity_name_servers,omitempty"`
+	Plan     *ZonePlan `json:"plan,omitempty"`
+}
+
+// ZoneSetPaused pauses CloudFlare service for the entire zone, sending all
+// traffic direct to the origin.
+func (api *API) ZoneSetPaused(zoneID string, paused bool) (Zone, error) {
+	zoneopts := ZoneOptions{Paused: paused}
+	zone, err := api.EditZone(zoneID, zoneopts)
+	if err != nil {
+		return Zone{}, err
+	}
+
+	return zone, nil
+}
+
+// ZoneSetVanityNS sets custom nameservers for the zone.
+// These names must be within the same zone.
+func (api *API) ZoneSetVanityNS(zoneID string, ns []string) (Zone, error) {
+	zoneopts := ZoneOptions{VanityNS: ns}
+	zone, err := api.EditZone(zoneID, zoneopts)
+	if err != nil {
+		return Zone{}, err
+	}
+
+	return zone, nil
+}
+
+// ZoneSetPlan changes the zone plan.
+func (api *API) ZoneSetPlan(zoneID string, plan ZonePlan) (Zone, error) {
+	zoneopts := ZoneOptions{Plan: &plan}
+	zone, err := api.EditZone(zoneID, zoneopts)
+	if err != nil {
+		return Zone{}, err
+	}
+
+	return zone, nil
+}
+
 // EditZone edits the given zone.
+// This is usually called by ZoneSetPaused, ZoneSetVanityNS or ZoneSetPlan.
 //
 // API reference: https://api.cloudflare.com/#zone-edit-zone-properties
-func (api *API) EditZone(zoneID string) (Zone, error) {
-	return Zone{}, nil
+func (api *API) EditZone(zoneID string, zoneOpts ZoneOptions) (Zone, error) {
+	res, err := api.makeRequest("PATCH", "/zones/"+zoneID, zoneOpts)
+	if err != nil {
+		return Zone{}, errors.Wrap(err, errMakeRequestError)
+	}
+	var r ZoneResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return Zone{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return r.Result, nil
 }
 
 // PurgeEverything purges the cache for the given zone.
