@@ -81,20 +81,20 @@ func (api *API) ZoneDetails(z Zone) (Zone, error) {
 	if z.ID != "" {
 		res, err := api.makeRequest("GET", "/zones/"+z.ID, nil)
 		if err != nil {
-			return Zone{}, errors.Wrap(err, errMakeRequestError)
+			return zone, errors.Wrap(err, errMakeRequestError)
 		}
 		err = json.Unmarshal(res, &r)
 		if err != nil {
-			return Zone{}, errors.Wrap(err, errUnmarshalError)
+			return zone, errors.Wrap(err, errUnmarshalError)
 		}
 		zone = r.Result
 	} else {
 		zones, err := api.ListZones(z.Name)
 		if err != nil {
-			return Zone{}, err
+			return zone, err
 		}
 		if len(zones) == 0 {
-			return Zone{}, fmt.Errorf("Zone with name %s not found", z.Name)
+			return zone, fmt.Errorf("Zone with name %s not found", z.Name)
 		}
 		// only one zone should have been returned
 		zone = zones[0]
