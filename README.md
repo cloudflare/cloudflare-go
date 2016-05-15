@@ -67,9 +67,18 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	// Print user details
 	fmt.Println(u)
+
+	// Fetch the list of zones on the account
+	zones, err := api.ListZones()
+	if err != nil {
+		log.Fatal(err)
+	}
+	// Print the zone names
+	for _, z := range zones {
+		fmt.Println(z.Name)
+	}
 }
 ```
 
