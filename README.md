@@ -77,7 +77,7 @@ func main() {
 	}
 
 	// Fetch zone details
-	zone, err := api.ZoneDetails(cloudflare.Zone{ID: id})
+	zone, err := api.ZoneDetails(id)
 	if err != nil {
 		log.Fatal(err)
 	}
