@@ -70,15 +70,19 @@ func main() {
 	// Print user details
 	fmt.Println(u)
 
-	// Fetch the list of zones on the account
-	zones, err := api.ListZones()
+	// Fetch the zone ID
+	id, err := api.ZoneIDByName("example.com") // Assuming example.com exists in your CloudFlare account already
 	if err != nil {
 		log.Fatal(err)
 	}
-	// Print the zone names
-	for _, z := range zones {
-		fmt.Println(z.Name)
+
+	// Fetch zone details
+	zone, err := api.ZoneDetails(cloudflare.Zone{ID: id})
+	if err != nil {
+		log.Fatal(err)
 	}
+	// Print zone details
+	fmt.Println(zone)
 }
 ```
 
