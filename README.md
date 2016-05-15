@@ -42,7 +42,7 @@ go get github.com/cloudflare/cloudflare-go
 
 ## Getting Started
 
-```
+```go
 package main
 
 import (
