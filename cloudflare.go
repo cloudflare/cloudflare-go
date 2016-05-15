@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"time"
 
 	"github.com/pkg/errors"
 )
@@ -161,8 +162,8 @@ type User struct {
 	Telephone     string         `json:"telephone"`
 	Country       string         `json:"country"`
 	Zipcode       string         `json:"zipcode"`
-	CreatedOn     string         `json:"created_on"` // Should this be a time.Date?
-	ModifiedOn    string         `json:"modified_on"`
+	CreatedOn     time.Time      `json:"created_on"`
+	ModifiedOn    time.Time      `json:"modified_on"`
 	APIKey        string         `json:"api_key"`
 	TwoFA         bool           `json:"two_factor_authentication_enabled"`
 	Betas         []string       `json:"betas"`
@@ -184,21 +185,21 @@ type Owner struct {
 
 // Zone describes a CloudFlare zone.
 type Zone struct {
-	ID                string   `json:"id"`
-	Name              string   `json:"name"`
-	DevMode           int      `json:"development_mode"`
-	OriginalNS        []string `json:"original_name_servers"`
-	OriginalRegistrar string   `json:"original_registrar"`
-	OriginalDNSHost   string   `json:"original_dnshost"`
-	CreatedOn         string   `json:"created_on"`
-	ModifiedOn        string   `json:"modified_on"`
-	NameServers       []string `json:"name_servers"`
-	Owner             Owner    `json:"owner"`
-	Permissions       []string `json:"permissions"`
-	Plan              ZonePlan `json:"plan"`
-	Status            string   `json:"status"`
-	Paused            bool     `json:"paused"`
-	Type              string   `json:"type"`
+	ID                string    `json:"id"`
+	Name              string    `json:"name"`
+	DevMode           int       `json:"development_mode"`
+	OriginalNS        []string  `json:"original_name_servers"`
+	OriginalRegistrar string    `json:"original_registrar"`
+	OriginalDNSHost   string    `json:"original_dnshost"`
+	CreatedOn         time.Time `json:"created_on"`
+	ModifiedOn        time.Time `json:"modified_on"`
+	NameServers       []string  `json:"name_servers"`
+	Owner             Owner     `json:"owner"`
+	Permissions       []string  `json:"permissions"`
+	Plan              ZonePlan  `json:"plan"`
+	Status            string    `json:"status"`
+	Paused            bool      `json:"paused"`
+	Type              string    `json:"type"`
 	Host              struct {
 		Name    string
 		Website string
@@ -242,25 +243,11 @@ type ZonePlanResponse struct {
 	Result []ZonePlan `json:"result"`
 }
 
-// type zoneSetting struct {
-// 	ID         string `json:"id"`
-// 	Editable   bool   `json:"editable"`
-// 	ModifiedOn string `json:"modified_on"`
-// }
-// type zoneSettingStringVal struct {
-// 	zoneSetting
-// 	Value string `json:"value"`
-// }
-// type zoneSettingIntVal struct {
-// 	zoneSetting
-// 	Value int64 `json:"value"`
-// }
-
 // ZoneSetting contains settings for a zone.
 type ZoneSetting struct {
 	ID            string      `json:"id"`
 	Editable      bool        `json:"editable"`
-	ModifiedOn    string      `json:"modified_on"`
+	ModifiedOn    time.Time   `json:"modified_on"`
 	Value         interface{} `json:"value"`
 	TimeRemaining int         `json:"time_remaining"`
 }
@@ -283,8 +270,8 @@ type DNSRecord struct {
 	Locked     bool        `json:"locked,omitempty"`
 	ZoneID     string      `json:"zone_id,omitempty"`
 	ZoneName   string      `json:"zone_name,omitempty"`
-	CreatedOn  string      `json:"created_on,omitempty"`
-	ModifiedOn string      `json:"modified_on,omitempty"`
+	CreatedOn  time.Time   `json:"created_on,omitempty"`
+	ModifiedOn time.Time   `json:"modified_on,omitempty"`
 	Data       interface{} `json:"data,omitempty"` // data returned by: SRV, LOC
 	Meta       interface{} `json:"meta,omitempty"`
 	Priority   int         `json:"priority,omitempty"`
@@ -326,9 +313,9 @@ type ZoneCustomSSL struct {
 	BundleMethod  string     `json:"bundle_method"`
 	ZoneID        string     `json:"zone_id"`
 	Permissions   []string   `json:"permissions"`
-	UploadedOn    string     `json:"uploaded_on"`
-	ModifiedOn    string     `json:"modified_on"`
-	ExpiresOn     string     `json:"expires_on"`
+	UploadedOn    time.Time  `json:"uploaded_on"`
+	ModifiedOn    time.Time  `json:"modified_on"`
+	ExpiresOn     time.Time  `json:"expires_on"`
 	KeylessServer KeylessSSL `json:"keyless_server"`
 }
 
@@ -340,15 +327,15 @@ type ZoneCustomSSLResponse struct {
 
 // KeylessSSL represents Keyless SSL configuration.
 type KeylessSSL struct {
-	ID          string   `json:"id"`
-	Name        string   `json:"name"`
-	Host        string   `json:"host"`
-	Port        int      `json:"port"`
-	Status      string   `json:"success"`
-	Enabled     bool     `json:"enabled"`
-	Permissions []string `json:"permissions"`
-	CreatedOn   string   `json:"created_on"`
-	ModifiedOn  string   `json:"modifed_on"`
+	ID          string    `json:"id"`
+	Name        string    `json:"name"`
+	Host        string    `json:"host"`
+	Port        int       `json:"port"`
+	Status      string    `json:"success"`
+	Enabled     bool      `json:"enabled"`
+	Permissions []string  `json:"permissions"`
+	CreatedOn   time.Time `json:"created_on"`
+	ModifiedOn  time.Time `json:"modifed_on"`
 }
 
 // KeylessSSLResponse represents the response from the Keyless SSL endpoint.
@@ -359,18 +346,18 @@ type KeylessSSLResponse struct {
 
 // Railgun represents a Railgun configuration.
 type Railgun struct {
-	ID             string `json:"id"`
-	Name           string `json:"name"`
-	Status         string `json:"success"`
-	Enabled        bool   `json:"enabled"`
-	ZonesConnected int    `json:"zones_connected"`
-	Build          string `json:"build"`
-	Version        string `json:"version"`
-	Revision       string `json:"revision"`
-	ActivationKey  string `json:"activation_key"`
-	ActivatedOn    string `json:"activated_on"`
-	CreatedOn      string `json:"created_on"`
-	ModifiedOn     string `json:"modified_on"`
+	ID             string    `json:"id"`
+	Name           string    `json:"name"`
+	Status         string    `json:"success"`
+	Enabled        bool      `json:"enabled"`
+	ZonesConnected int       `json:"zones_connected"`
+	Build          string    `json:"build"`
+	Version        string    `json:"version"`
+	Revision       string    `json:"revision"`
+	ActivationKey  string    `json:"activation_key"`
+	ActivatedOn    time.Time `json:"activated_on"`
+	CreatedOn      time.Time `json:"created_on"`
+	ModifiedOn     time.Time `json:"modified_on"`
 	// XXX: UpgradeInfo struct {
 	// version string
 	// url string
@@ -385,13 +372,13 @@ type RailgunResponse struct {
 
 // CustomPage represents a custom page configuration.
 type CustomPage struct {
-	CreatedOn      string   `json:"created_on"`
-	ModifiedOn     string   `json:"modified_on"`
-	URL            string   `json:"url"`
-	State          string   `json:"state"`
-	RequiredTokens []string `json:"required_tokens"`
-	PreviewTarget  string   `json:"preview_target"`
-	Description    string   `json:"description"`
+	CreatedOn      string    `json:"created_on"`
+	ModifiedOn     time.Time `json:"modified_on"`
+	URL            string    `json:"url"`
+	State          string    `json:"state"`
+	RequiredTokens []string  `json:"required_tokens"`
+	PreviewTarget  string    `json:"preview_target"`
+	Description    string    `json:"description"`
 }
 
 // CustomPageResponse represents the response from the custom pages endpoint.
