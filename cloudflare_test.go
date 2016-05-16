@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	// mux is the HTTP request mulitplexer used with the test server.
+	// mux is the HTTP request multiplexer used with the test server.
 	mux *http.ServeMux
 
 	// client is the API client being tested
