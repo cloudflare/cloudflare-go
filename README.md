@@ -42,30 +42,45 @@ go get github.com/cloudflare/cloudflare-go
 
 ## Getting Started
 
-```
+```go
 package main
 
 import (
 	"fmt"
+	"log"
+	"os"
 
 	"github.com/cloudflare/cloudflare-go"
 )
 
-var api *cloudflare.API
-
 func main() {
 	// Construct a new API object
-	api = cloudflare.New(os.Getenv("CF_API_KEY"), os.Getenv("CF_API_EMAIL"))
-
-	// Fetch the list of zones on the account
-	zones, err := api.ListZones()
+	api, err := cloudflare.New(os.Getenv("CF_API_KEY"), os.Getenv("CF_API_EMAIL"))
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
-	// Print the zone names
-	for _, z := range zones {
-		fmt.Println(z.Name)
+
+	// Fetch user details on the account
+	u, err := api.UserDetails()
+	if err != nil {
+		log.Fatal(err)
 	}
+	// Print user details
+	fmt.Println(u)
+
+	// Fetch the zone ID
+	id, err := api.ZoneIDByName("example.com") // Assuming example.com exists in your CloudFlare account already
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Fetch zone details
+	zone, err := api.ZoneDetails(id)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// Print zone details
+	fmt.Println(zone)
 }
 ```
 
