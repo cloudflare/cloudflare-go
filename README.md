@@ -1,5 +1,5 @@
 # cloudflare-go
-[![GoDoc](https://godoc.org/github.com/cloudflare/cloudflare-go?status.svg)](https://godoc.org/github.com/cloudflare/cloudflare-go)
+[![GoDoc](https://godoc.org/github.com/cloudflare/cloudflare-go?status.svg)](https://godoc.org/github.com/cloudflare/cloudflare-go) [![Build Status](https://travis-ci.org/cloudflare/cloudflare-go.svg?branch=master)](https://travis-ci.org/cloudflare/cloudflare-go) [![Go Report Card](https://goreportcard.com/badge/github.com/cloudflare/cloudflare-go)](https://goreportcard.com/report/github.com/cloudflare/cloudflare-go)
 
 > **Note**: This library is under active development as we expand it to cover our (expanding!) API.
 Consider the public API of this package a little unstable as we work towards a v1.0.
