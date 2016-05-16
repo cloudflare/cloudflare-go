@@ -53,8 +53,6 @@ import (
 	"github.com/cloudflare/cloudflare-go"
 )
 
-var api *cloudflare.API
-
 func main() {
 	// Construct a new API object
 	api, err := cloudflare.New(os.Getenv("CF_API_KEY"), os.Getenv("CF_API_EMAIL"))
