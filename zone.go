@@ -134,6 +134,9 @@ func (api *API) CreateZone(name string, jumpstart bool, org Organization) (Zone,
 
 	var r ZoneResponse
 	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return Zone{}, errors.Wrap(err, errUnmarshalError)
+	}
 	return r.Result, nil
 }
 
@@ -147,6 +150,9 @@ func (api *API) ZoneActivationCheck(zoneID string) (Response, error) {
 	}
 	var r Response
 	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return Response{}, errors.Wrap(err, errUnmarshalError)
+	}
 	return r, nil
 }
 
