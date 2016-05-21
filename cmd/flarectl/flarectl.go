@@ -53,12 +53,21 @@ func makeTable(zones []table, cols ...string) {
 }
 
 func checkEnv() error {
+	if api == nil {
+		var err error
+		api, err = cloudflare.New(os.Getenv("CF_API_KEY"), os.Getenv("CF_API_EMAIL"))
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
 	if api.APIKey == "" {
 		return errors.New("API key not defined")
 	}
 	if api.APIEmail == "" {
 		return errors.New("API email not defined")
 	}
+
 	return nil
 }
 
@@ -455,12 +464,6 @@ func railgun(*cli.Context) {
 }
 
 func main() {
-	var err error
-	api, err = cloudflare.New(os.Getenv("CF_API_KEY"), os.Getenv("CF_API_EMAIL"))
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	app := cli.NewApp()
 	app.Name = "flarectl"
 	app.Usage = "CloudFlare CLI"
