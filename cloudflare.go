@@ -450,28 +450,3 @@ type IPsResponse struct {
 	Response
 	Result IPRanges `json:"result"`
 }
-
-type VirtualDNS struct {
-    ID                   string   `json:"id"`
-    Name                 string   `json:"name"`
-    OriginIPs            []string `json:"origin_ips"`
-    VirtualDNSIPs        []string `json:"virtual_dns_ips"`
-    MinimumCacheTTL      uint     `json:"minimum_cache_ttl"`
-    MaximumCacheTTL      uint     `json:"maximum_cache_ttl"`
-    DeprecateAnyRequests bool     `json:"deprecate_any_requests"`
-    ModifiedOn           string   `json:"modified_on"`
-}
-
-type VirtualDNSResponse struct {
-    Success  bool         `json:"success"`
-    Errors   []string     `json:"errors"`
-    Messages []string     `json:"messages"`
-    Result   VirtualDNS `json:"result"`
-}
-
-type VirtualDNSListResponse struct {
-    Success  bool         `json:"success"`
-    Errors   []string     `json:"errors"`
-    Messages []string     `json:"messages"`
-    Result   []VirtualDNS `json:"result"`
-}
