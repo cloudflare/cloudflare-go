@@ -119,6 +119,48 @@ func userInfo(*cli.Context) {
 func userUpdate(*cli.Context) {
 }
 
+func zoneCreate(c *cli.Context) {
+	if err := checkEnv(); err != nil {
+		fmt.Println(err)
+		return
+	}
+	if err := checkFlags(c, "zone"); err != nil {
+		return
+	}
+	zone := c.String("zone")
+	jumpstart := c.Bool("jumpstart")
+	orgID := c.String("org-id")
+	var org cloudflare.Organization
+	if orgID != "" {
+		org.ID = orgID
+	}
+	api.CreateZone(zone, jumpstart, org)
+}
+
+func zoneCheck(c *cli.Context) {
+	if err := checkEnv(); err != nil {
+		fmt.Println(err)
+		return
+	}
+	if err := checkFlags(c, "zone"); err != nil {
+		return
+	}
+	zone := c.String("zone")
+
+	zoneID, err := api.ZoneIDByName(zone)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	res, err := api.ZoneActivationCheck(zoneID)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("%s\n", res.Messages[0].Message)
+}
+
 func zoneList(c *cli.Context) {
 	if err := checkEnv(); err != nil {
 		fmt.Println(err)
@@ -162,12 +204,18 @@ func zoneInfo(c *cli.Context) {
 	}
 	var output []table
 	for _, z := range zones {
+		var nameservers []string
+		if len(z.VanityNS) > 0 {
+			nameservers = z.VanityNS
+		} else {
+			nameservers = z.NameServers
+		}
 		output = append(output, table{
 			"ID":           z.ID,
 			"Zone":         z.Name,
 			"Plan":         z.Plan.LegacyID,
 			"Status":       z.Status,
-			"Name Servers": strings.Join(z.NameServers, ", "),
+			"Name Servers": strings.Join(nameservers, ", "),
 			"Paused":       fmt.Sprintf("%t", z.Paused),
 			"Type":         z.Type,
 		})
@@ -505,6 +553,37 @@ func main() {
 					Aliases: []string{"l"},
 					Action:  zoneList,
 					Usage:   "List all zones on an account",
+				},
+				{
+					Name:    "create",
+					Aliases: []string{"c"},
+					Action:  zoneCreate,
+					Usage:   "Create a new zone",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+						cli.BoolFlag{
+							Name:  "jumpstart",
+							Usage: "automatically fetch DNS records",
+						},
+						cli.StringFlag{
+							Name:  "org-id",
+							Usage: "organization ID",
+						},
+					},
+				},
+				{
+					Name:   "check",
+					Action: zoneCheck,
+					Usage:  "Initiate a zone activation check",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+					},
 				},
 				{
 					Name:    "info",
