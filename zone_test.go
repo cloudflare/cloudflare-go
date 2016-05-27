@@ -322,7 +322,6 @@ func TestZoneAnalyticsDashboard(t *testing.T) {
 
 	_, err = client.ZoneAnalyticsDashboard("bar")
 	assert.Error(t, err)
-	// mux.HandleFunc("/zones/bar/analytics/colos", h4)
 }
 
 func TestZoneAnalyticsByColocation(t *testing.T) {
