@@ -114,8 +114,8 @@ type ZoneAnalyticsData struct {
 	Timeseries []ZoneAnalytics `json:"timeseries"`
 }
 
-// ZoneAnalyticsDataResponse represents the response from the Zone Analytics Dashboard endpoint.
-type ZoneAnalyticsDataResponse struct {
+// zoneAnalyticsDataResponse represents the response from the Zone Analytics Dashboard endpoint.
+type zoneAnalyticsDataResponse struct {
 	Response
 	Result ZoneAnalyticsData `json:"result"`
 }
@@ -126,8 +126,8 @@ type ZoneAnalyticsColocation struct {
 	Timeseries   []ZoneAnalytics `json:"timeseries"`
 }
 
-// ZoneAnalyticsColocationResponse represents the response from the Zone Analytics By Co-location endpoint.
-type ZoneAnalyticsColocationResponse struct {
+// zoneAnalyticsColocationResponse represents the response from the Zone Analytics By Co-location endpoint.
+type zoneAnalyticsColocationResponse struct {
 	Response
 	Result []ZoneAnalyticsColocation `json:"result"`
 }
@@ -445,7 +445,7 @@ func (api *API) ZoneAnalyticsDashboard(zoneID string) (ZoneAnalyticsData, error)
 	if err != nil {
 		return ZoneAnalyticsData{}, errors.Wrap(err, errMakeRequestError)
 	}
-	var r ZoneAnalyticsDataResponse
+	var r zoneAnalyticsDataResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return ZoneAnalyticsData{}, errors.Wrap(err, errUnmarshalError)
@@ -465,7 +465,7 @@ func (api *API) ZoneAnalyticsByColocation(zoneID string) ([]ZoneAnalyticsColocat
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
-	var r ZoneAnalyticsColocationResponse
+	var r zoneAnalyticsColocationResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return nil, errors.Wrap(err, errUnmarshalError)
