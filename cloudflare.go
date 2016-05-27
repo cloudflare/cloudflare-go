@@ -246,10 +246,31 @@ type ZoneCustomSSL struct {
 	KeylessServer KeylessSSL `json:"keyless_server"`
 }
 
-// ZoneCustomSSLResponse represents the response from the zone SSL endpoint.
+// ZoneCustomSSLResponse represents the response from the zone SSL details endpoint.
 type ZoneCustomSSLResponse struct {
 	Response
+	Result ZoneCustomSSL `json:"result"`
+}
+
+// ZoneCustomSSLsResponse represents the response from the zone SSL list endpoint.
+type ZoneCustomSSLsResponse struct {
+	Response
 	Result []ZoneCustomSSL `json:"result"`
+}
+
+// ZoneCustomSSLOptions represents the parameters to create or update an existing
+// custom SSL configuration.
+type ZoneCustomSSLOptions struct {
+	Certificate  string `json:"certificate"`
+	PrivateKey   string `json:"private_key"`
+	BundleMethod string `json:"bundle_method,omitempty"`
+}
+
+// ZoneCustomSSLPriority represents a certificate's ID and priority. It is a
+// subset of ZoneCustomSSL used for patch requests.
+type ZoneCustomSSLPriority struct {
+	ID       string `json:"id"`
+	Priority int    `json:"priority"`
 }
 
 // KeylessSSL represents Keyless SSL configuration.
