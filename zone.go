@@ -129,7 +129,7 @@ type ZoneAnalyticsColocation struct {
 // ZoneAnalyticsColocationResponse represents the response from the Zone Analytics By Co-location endpoint.
 type ZoneAnalyticsColocationResponse struct {
 	Response
-	Result ZoneAnalyticsColocation `json:"result"`
+	Result []ZoneAnalyticsColocation `json:"result"`
 }
 
 // ZoneAnalytics contains analytics data for a zone.
@@ -458,17 +458,17 @@ func (api *API) ZoneAnalyticsDashboard(zoneID string) (ZoneAnalyticsData, error)
 // API reference:
 //  https://api.cloudflare.com/#zone-analytics-analytics-by-co-locations
 //  GET /zones/:zone_identifier/analytics/colos
-func (api *API) ZoneAnalyticsByColocation(zoneID string) (ZoneAnalyticsColocation, error) {
+func (api *API) ZoneAnalyticsByColocation(zoneID string) ([]ZoneAnalyticsColocation, error) {
 	// TODO: support optional parameters
 	uri := "/zones/" + zoneID + "/analytics/colos"
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return ZoneAnalyticsColocation{}, errors.Wrap(err, errMakeRequestError)
+		return nil, errors.Wrap(err, errMakeRequestError)
 	}
 	var r ZoneAnalyticsColocationResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return ZoneAnalyticsColocation{}, errors.Wrap(err, errUnmarshalError)
+		return nil, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
 }
