@@ -23,14 +23,14 @@ type ZoneCustomSSL struct {
 	KeylessServer KeylessSSL `json:"keyless_server"`
 }
 
-// ZoneCustomSSLResponse represents the response from the zone SSL details endpoint.
-type ZoneCustomSSLResponse struct {
+// zoneCustomSSLResponse represents the response from the zone SSL details endpoint.
+type zoneCustomSSLResponse struct {
 	Response
 	Result ZoneCustomSSL `json:"result"`
 }
 
-// ZoneCustomSSLsResponse represents the response from the zone SSL list endpoint.
-type ZoneCustomSSLsResponse struct {
+// zoneCustomSSLsResponse represents the response from the zone SSL list endpoint.
+type zoneCustomSSLsResponse struct {
 	Response
 	Result []ZoneCustomSSL `json:"result"`
 }
@@ -60,7 +60,7 @@ func (api *API) CreateSSL(zoneID string, options ZoneCustomSSLOptions) (ZoneCust
 	if err != nil {
 		return ZoneCustomSSL{}, errors.Wrap(err, errMakeRequestError)
 	}
-	var r ZoneCustomSSLResponse
+	var r zoneCustomSSLResponse
 	if err := json.Unmarshal(res, &r); err != nil {
 		return ZoneCustomSSL{}, errors.Wrap(err, errUnmarshalError)
 	}
@@ -77,7 +77,7 @@ func (api *API) ListSSL(zoneID string) ([]ZoneCustomSSL, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
-	var r ZoneCustomSSLsResponse
+	var r zoneCustomSSLsResponse
 	if err := json.Unmarshal(res, &r); err != nil {
 		return nil, errors.Wrap(err, errUnmarshalError)
 	}
@@ -94,7 +94,7 @@ func (api *API) SSLDetails(zoneID, certificateID string) (ZoneCustomSSL, error) 
 	if err != nil {
 		return ZoneCustomSSL{}, errors.Wrap(err, errMakeRequestError)
 	}
-	var r ZoneCustomSSLResponse
+	var r zoneCustomSSLResponse
 	if err := json.Unmarshal(res, &r); err != nil {
 		return ZoneCustomSSL{}, errors.Wrap(err, errUnmarshalError)
 	}
@@ -111,7 +111,7 @@ func (api *API) UpdateSSL(zoneID, certificateID string, options ZoneCustomSSLOpt
 	if err != nil {
 		return ZoneCustomSSL{}, errors.Wrap(err, errMakeRequestError)
 	}
-	var r ZoneCustomSSLResponse
+	var r zoneCustomSSLResponse
 	if err := json.Unmarshal(res, &r); err != nil {
 		return ZoneCustomSSL{}, errors.Wrap(err, errUnmarshalError)
 	}
@@ -134,7 +134,7 @@ func (api *API) ReprioritizeSSL(zoneID string, p []ZoneCustomSSLPriority) ([]Zon
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
-	var r ZoneCustomSSLsResponse
+	var r zoneCustomSSLsResponse
 	if err := json.Unmarshal(res, &r); err != nil {
 		return nil, errors.Wrap(err, errUnmarshalError)
 	}
