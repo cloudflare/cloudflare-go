@@ -46,7 +46,7 @@ type ZoneCustomSSLOptions struct {
 // ZoneCustomSSLPriority represents a certificate's ID and priority. It is a
 // subset of ZoneCustomSSL used for patch requests.
 type ZoneCustomSSLPriority struct {
-	ID       string `json:"id"`
+	ID       string `json:"ID"`
 	Priority int    `json:"priority"`
 }
 
@@ -130,7 +130,7 @@ func (api *API) ReprioritizeSSL(zoneID string, p []ZoneCustomSSLPriority) ([]Zon
 	}{
 		Certificates: p,
 	}
-	res, err := api.makeRequest("PATCH", uri, params)
+	res, err := api.makeRequest("PUT", uri, params)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
