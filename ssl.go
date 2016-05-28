@@ -12,14 +12,14 @@ type ZoneCustomSSL struct {
 	ID            string     `json:"id"`
 	Hosts         []string   `json:"hosts"`
 	Issuer        string     `json:"issuer"`
-	Priority      int        `json:"priority"`
-	Status        string     `json:"success"`
+	Signature     string     `json:"signature"`
+	Status        string     `json:"status"`
 	BundleMethod  string     `json:"bundle_method"`
 	ZoneID        string     `json:"zone_id"`
-	Permissions   []string   `json:"permissions"`
 	UploadedOn    time.Time  `json:"uploaded_on"`
 	ModifiedOn    time.Time  `json:"modified_on"`
 	ExpiresOn     time.Time  `json:"expires_on"`
+	Priority      int        `json:"priority"`
 	KeylessServer KeylessSSL `json:"keyless_server"`
 }
 
