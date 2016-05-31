@@ -15,6 +15,10 @@ func TestZoneAnalyticsDashboard(t *testing.T) {
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, "2015-01-01T12:23:00Z", r.URL.Query().Get("since"))
+		assert.Equal(t, "2015-01-02T12:23:00Z", r.URL.Query().Get("until"))
+		assert.Equal(t, "true", r.URL.Query().Get("continuous"))
+
 		w.Header().Set("content-type", "application/json")
 		// JSON data from: https://api.cloudflare.com/#zone-analytics-properties
 		fmt.Fprintf(w, `{
@@ -315,12 +319,17 @@ func TestZoneAnalyticsDashboard(t *testing.T) {
 		Timeseries: []ZoneAnalytics{data},
 	}
 
-	d, err := client.ZoneAnalyticsDashboard("foo")
+	continuous := true
+	d, err := client.ZoneAnalyticsDashboard("foo", ZoneAnalyticsOptions{
+		Since:      &since,
+		Until:      &until,
+		Continuous: &continuous,
+	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, d)
 	}
 
-	_, err = client.ZoneAnalyticsDashboard("bar")
+	_, err = client.ZoneAnalyticsDashboard("bar", ZoneAnalyticsOptions{})
 	assert.Error(t, err)
 }
 
@@ -330,6 +339,10 @@ func TestZoneAnalyticsByColocation(t *testing.T) {
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, "2015-01-01T12:23:00Z", r.URL.Query().Get("since"))
+		assert.Equal(t, "2015-01-02T12:23:00Z", r.URL.Query().Get("until"))
+		assert.Equal(t, "true", r.URL.Query().Get("continuous"))
+
 		w.Header().Set("content-type", "application/json")
 		// JSON data from: https://api.cloudflare.com/#zone-analytics-analytics-by-co-locations
 		fmt.Fprintf(w, `{
@@ -556,11 +569,16 @@ func TestZoneAnalyticsByColocation(t *testing.T) {
 		},
 	}
 
-	d, err := client.ZoneAnalyticsByColocation("foo")
+	continuous := true
+	d, err := client.ZoneAnalyticsByColocation("foo", ZoneAnalyticsOptions{
+		Since:      &since,
+		Until:      &until,
+		Continuous: &continuous,
+	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, d)
 	}
 
-	_, err = client.ZoneAnalyticsDashboard("bar")
+	_, err = client.ZoneAnalyticsDashboard("bar", ZoneAnalyticsOptions{})
 	assert.Error(t, err)
 }

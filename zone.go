@@ -2,6 +2,7 @@ package cloudflare
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/url"
 	"time"
 
@@ -171,6 +172,14 @@ type ZoneAnalytics struct {
 	Uniques struct {
 		All int `json:"all"`
 	}
+}
+
+// ZoneAnalyticsOptions represents the optional parameters in Zone Analytics
+// endpoint requests.
+type ZoneAnalyticsOptions struct {
+	Since      *time.Time
+	Until      *time.Time
+	Continuous *bool
 }
 
 // newZone describes a new zone.
@@ -433,14 +442,28 @@ func (api *API) ZonePlanDetails(zoneID, planID string) (ZonePlan, error) {
 	return r.Result, nil
 }
 
+// encode encodes non-nil fields into URL encoded form.
+func (o ZoneAnalyticsOptions) encode() string {
+	v := url.Values{}
+	if o.Since != nil {
+		v.Set("since", (*o.Since).Format(time.RFC3339))
+	}
+	if o.Until != nil {
+		v.Set("until", (*o.Until).Format(time.RFC3339))
+	}
+	if o.Continuous != nil {
+		v.Set("continuous", fmt.Sprintf("%t", *o.Continuous))
+	}
+	return v.Encode()
+}
+
 // ZoneAnalyticsDashboard returns zone analytics information.
 //
 // API reference:
 //  https://api.cloudflare.com/#zone-analytics-dashboard
 //  GET /zones/:zone_identifier/analytics/dashboard
-func (api *API) ZoneAnalyticsDashboard(zoneID string) (ZoneAnalyticsData, error) {
-	// TODO: support optional parameters
-	uri := "/zones/" + zoneID + "/analytics/dashboard"
+func (api *API) ZoneAnalyticsDashboard(zoneID string, options ZoneAnalyticsOptions) (ZoneAnalyticsData, error) {
+	uri := "/zones/" + zoneID + "/analytics/dashboard" + "?" + options.encode()
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
 		return ZoneAnalyticsData{}, errors.Wrap(err, errMakeRequestError)
@@ -458,9 +481,8 @@ func (api *API) ZoneAnalyticsDashboard(zoneID string) (ZoneAnalyticsData, error)
 // API reference:
 //  https://api.cloudflare.com/#zone-analytics-analytics-by-co-locations
 //  GET /zones/:zone_identifier/analytics/colos
-func (api *API) ZoneAnalyticsByColocation(zoneID string) ([]ZoneAnalyticsColocation, error) {
-	// TODO: support optional parameters
-	uri := "/zones/" + zoneID + "/analytics/colos"
+func (api *API) ZoneAnalyticsByColocation(zoneID string, options ZoneAnalyticsOptions) ([]ZoneAnalyticsColocation, error) {
+	uri := "/zones/" + zoneID + "/analytics/colos" + "?" + options.encode()
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
