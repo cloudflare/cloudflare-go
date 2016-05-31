@@ -136,11 +136,7 @@ func (api *API) RailgunZones(railgunID string) ([]Zone, error) {
 	return r.Result, nil
 }
 
-// EnableRailgun enables or disables a Railgun for all zones connected to it.
-// API reference:
-// 	https://api.cloudflare.com/#railgun-enable-or-disable-a-railgun
-// 	PATCH /railguns/:identifier
-func (api *API) EnableRailgun(railgunID string, enable bool) (Railgun, error) {
+func (api *API) enableRailgun(railgunID string, enable bool) (Railgun, error) {
 	uri := "/railguns/" + railgunID
 	params := struct {
 		Enabled bool `json:"enabled"`
@@ -156,6 +152,22 @@ func (api *API) EnableRailgun(railgunID string, enable bool) (Railgun, error) {
 		return Railgun{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
+}
+
+// EnableRailgun enables a Railgun for all zones connected to it.
+// API reference:
+//  https://api.cloudflare.com/#railgun-enable-or-disable-a-railgun
+//  PATCH /railguns/:identifier
+func (api *API) EnableRailgun(railgunID string) (Railgun, error) {
+	return api.enableRailgun(railgunID, true)
+}
+
+// DisableRailgun enables a Railgun for all zones connected to it.
+// API reference:
+//  https://api.cloudflare.com/#railgun-enable-or-disable-a-railgun
+//  PATCH /railguns/:identifier
+func (api *API) DisableRailgun(railgunID string) (Railgun, error) {
+	return api.enableRailgun(railgunID, false)
 }
 
 // DeleteRailgun disables and deletes a Railgun.

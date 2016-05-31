@@ -297,12 +297,73 @@ func TestEnableRailgun(t *testing.T) {
 		ModifiedOn:     modifiedOn,
 	}
 
-	actual, err := client.EnableRailgun("e928d310693a83094309acf9ead50448", true)
+	actual, err := client.EnableRailgun("e928d310693a83094309acf9ead50448")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	_, err = client.EnableRailgun("bar", true)
+	_, err = client.EnableRailgun("bar")
+	assert.Error(t, err)
+}
+
+func TestDisbleRailgun(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "PATCH", "Expected method 'PATCH', got %s", r.Method)
+		b, err := ioutil.ReadAll(r.Body)
+		defer r.Body.Close()
+		if assert.NoError(t, err) {
+			assert.JSONEq(t, `{"enabled":false}`, string(b))
+		}
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+            "success": true,
+            "errors": [],
+            "messages": [],
+            "result": {
+                "id": "e928d310693a83094309acf9ead50448",
+                "name": "My Railgun",
+                "status": "active",
+                "enabled": false,
+                "zones_connected": 2,
+                "build": "b1234",
+                "version": "2.1",
+                "revision": "123",
+                "activation_key": "e4edc00281cb56ebac22c81be9bac8f3",
+                "activated_on": "2014-01-02T02:20:00Z",
+                "created_on": "2014-01-01T05:20:00Z",
+                "modified_on": "2014-01-01T05:20:00Z"
+            }
+        }`)
+	}
+
+	mux.HandleFunc("/railguns/e928d310693a83094309acf9ead50448", handler)
+	activatedOn, _ := time.Parse(time.RFC3339, "2014-01-02T02:20:00Z")
+	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
+	modifiedOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
+	want := Railgun{
+		ID:             "e928d310693a83094309acf9ead50448",
+		Name:           "My Railgun",
+		Status:         "active",
+		Enabled:        false,
+		ZonesConnected: 2,
+		Build:          "b1234",
+		Version:        "2.1",
+		Revision:       "123",
+		ActivationKey:  "e4edc00281cb56ebac22c81be9bac8f3",
+		ActivatedOn:    activatedOn,
+		CreatedOn:      createdOn,
+		ModifiedOn:     modifiedOn,
+	}
+
+	actual, err := client.DisableRailgun("e928d310693a83094309acf9ead50448")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+
+	_, err = client.DisableRailgun("bar")
 	assert.Error(t, err)
 }
 
