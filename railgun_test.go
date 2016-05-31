@@ -388,3 +388,232 @@ func TestDeleteRailgun(t *testing.T) {
 	assert.NoError(t, client.DeleteRailgun("e928d310693a83094309acf9ead50448"))
 	assert.Error(t, client.DeleteRailgun("bar"))
 }
+
+func TestZoneRailguns(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+            "success": true,
+            "errors": [],
+            "messages": [],
+            "result": [
+                {
+                    "id": "e928d310693a83094309acf9ead50448",
+                    "name": "My Railgun",
+                    "enabled": true,
+                    "connected": true
+                }
+            ],
+            "result_info": {
+                "page": 1,
+                "per_page": 20,
+                "count": 1,
+                "total_count": 2000
+            }
+        }`)
+	}
+
+	mux.HandleFunc("/zones/023e105f4ecef8ad9ca31a8372d0c353/railguns", handler)
+	want := []ZoneRailgun{
+		{
+			ID:        "e928d310693a83094309acf9ead50448",
+			Name:      "My Railgun",
+			Enabled:   true,
+			Connected: true,
+		},
+	}
+
+	actual, err := client.ZoneRailguns("023e105f4ecef8ad9ca31a8372d0c353")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+
+	_, err = client.ZoneRailguns("bar")
+	assert.Error(t, err)
+}
+
+func TestZoneRailgunDetails(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+            "success": true,
+            "errors": [],
+            "messages": [],
+            "result": {
+                "id": "e928d310693a83094309acf9ead50448",
+                "name": "My Railgun",
+                "enabled": true,
+                "connected": true
+            }
+        }`)
+	}
+
+	mux.HandleFunc("/zones/023e105f4ecef8ad9ca31a8372d0c353/railguns/e928d310693a83094309acf9ead50448", handler)
+	want := ZoneRailgun{
+		ID:        "e928d310693a83094309acf9ead50448",
+		Name:      "My Railgun",
+		Enabled:   true,
+		Connected: true,
+	}
+
+	actual, err := client.ZoneRailgunDetails("023e105f4ecef8ad9ca31a8372d0c353", "e928d310693a83094309acf9ead50448")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+
+	_, err = client.ZoneRailgunDetails("bar", "baz")
+	assert.Error(t, err)
+}
+
+func TestTestRailgunConnection(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+            "success": true,
+            "errors": [],
+            "messages": [],
+            "result": {
+                "method": "GET",
+                "host_name": "www.example.com",
+                "http_status": 200,
+                "railgun": "on",
+                "url": "https://www.cloudflare.com",
+                "response_status": "200 OK",
+                "protocol": "HTTP/1.1",
+                "elapsed_time": "0.239013s",
+                "body_size": "63910 bytes",
+                "body_hash": "be27f2429421e12f200cab1da43ba301bdc70e1d",
+                "missing_headers": "No Content-Length or Transfer-Encoding",
+                "connection_close": false,
+                "cloudflare": "on",
+                "cf-ray": "1ddd7570575207d9-LAX",
+                "cf-wan-error": null,
+                "cf-cache-status": null
+            }
+        }`)
+	}
+
+	mux.HandleFunc("/zones/023e105f4ecef8ad9ca31a8372d0c353/railguns/e928d310693a83094309acf9ead50448/diagnose", handler)
+	want := RailgunDiagnosis{
+		Method:          "GET",
+		HostName:        "www.example.com",
+		HTTPStatus:      200,
+		Railgun:         "on",
+		URL:             "https://www.cloudflare.com",
+		ResponseStatus:  "200 OK",
+		Protocol:        "HTTP/1.1",
+		ElapsedTime:     "0.239013s",
+		BodySize:        "63910 bytes",
+		BodyHash:        "be27f2429421e12f200cab1da43ba301bdc70e1d",
+		MissingHeaders:  "No Content-Length or Transfer-Encoding",
+		ConnectionClose: false,
+		Cloudflare:      "on",
+		CFRay:           "1ddd7570575207d9-LAX",
+		CFWANError:      nil,
+		CFCacheStatus:   nil,
+	}
+
+	actual, err := client.TestRailgunConnection("023e105f4ecef8ad9ca31a8372d0c353", "e928d310693a83094309acf9ead50448")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+
+	_, err = client.TestRailgunConnection("bar", "baz")
+	assert.Error(t, err)
+}
+
+func TestConnectRailgun(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "PATCH", "Expected method 'PATCH', got %s", r.Method)
+		b, err := ioutil.ReadAll(r.Body)
+		defer r.Body.Close()
+		if assert.NoError(t, err) {
+			assert.JSONEq(t, `{"connected":true}`, string(b))
+		}
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+            "success": true,
+            "errors": [],
+            "messages": [],
+            "result": {
+                "id": "e928d310693a83094309acf9ead50448",
+                "name": "My Railgun",
+                "enabled": true,
+                "connected": true
+            }
+        }`)
+	}
+
+	mux.HandleFunc("/zones/023e105f4ecef8ad9ca31a8372d0c353/railguns/e928d310693a83094309acf9ead50448", handler)
+	want := ZoneRailgun{
+		ID:        "e928d310693a83094309acf9ead50448",
+		Name:      "My Railgun",
+		Enabled:   true,
+		Connected: true,
+	}
+
+	actual, err := client.ConnectZoneRailgun("023e105f4ecef8ad9ca31a8372d0c353", "e928d310693a83094309acf9ead50448")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+
+	_, err = client.ConnectZoneRailgun("bar", "baz")
+	assert.Error(t, err)
+}
+
+func TestDisconnectRailgun(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "PATCH", "Expected method 'PATCH', got %s", r.Method)
+		b, err := ioutil.ReadAll(r.Body)
+		defer r.Body.Close()
+		if assert.NoError(t, err) {
+			assert.JSONEq(t, `{"connected":false}`, string(b))
+		}
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+            "success": true,
+            "errors": [],
+            "messages": [],
+            "result": {
+                "id": "e928d310693a83094309acf9ead50448",
+                "name": "My Railgun",
+                "enabled": true,
+                "connected": false
+            }
+        }`)
+	}
+
+	mux.HandleFunc("/zones/023e105f4ecef8ad9ca31a8372d0c353/railguns/e928d310693a83094309acf9ead50448", handler)
+	want := ZoneRailgun{
+		ID:        "e928d310693a83094309acf9ead50448",
+		Name:      "My Railgun",
+		Enabled:   true,
+		Connected: false,
+	}
+
+	actual, err := client.DisconnectZoneRailgun("023e105f4ecef8ad9ca31a8372d0c353", "e928d310693a83094309acf9ead50448")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+
+	_, err = client.DisconnectZoneRailgun("bar", "baz")
+	assert.Error(t, err)
+}
