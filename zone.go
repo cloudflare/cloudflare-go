@@ -2,7 +2,9 @@ package cloudflare
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/url"
+	"time"
 
 	"github.com/pkg/errors"
 )
@@ -105,6 +107,79 @@ type ZoneSetting struct {
 type ZoneSettingResponse struct {
 	Response
 	Result []ZoneSetting `json:"result"`
+}
+
+// ZoneAnalyticsData contains totals and timeseries analytics data for a zone.
+type ZoneAnalyticsData struct {
+	Totals     ZoneAnalytics   `json:"totals"`
+	Timeseries []ZoneAnalytics `json:"timeseries"`
+}
+
+// zoneAnalyticsDataResponse represents the response from the Zone Analytics Dashboard endpoint.
+type zoneAnalyticsDataResponse struct {
+	Response
+	Result ZoneAnalyticsData `json:"result"`
+}
+
+// ZoneAnalyticsColocation contains analytics data by datacenter.
+type ZoneAnalyticsColocation struct {
+	ColocationID string          `json:"colo_id"`
+	Timeseries   []ZoneAnalytics `json:"timeseries"`
+}
+
+// zoneAnalyticsColocationResponse represents the response from the Zone Analytics By Co-location endpoint.
+type zoneAnalyticsColocationResponse struct {
+	Response
+	Result []ZoneAnalyticsColocation `json:"result"`
+}
+
+// ZoneAnalytics contains analytics data for a zone.
+type ZoneAnalytics struct {
+	Since    time.Time `json:"since"`
+	Until    time.Time `json:"until"`
+	Requests struct {
+		All         int            `json:"all"`
+		Cached      int            `json:"cached"`
+		Uncached    int            `json:"uncached"`
+		ContentType map[string]int `json:"content_type"`
+		Country     map[string]int `json:"country"`
+		SSL         struct {
+			Encrypted   int `json:"encrypted"`
+			Unencrypted int `json:"unencrypted"`
+		} `json:"ssl"`
+		HTTPStatus map[string]int `json:"http_status"`
+	} `json:"requests"`
+	Bandwidth struct {
+		All         int            `json:"all"`
+		Cached      int            `json:"cached"`
+		Uncached    int            `json:"uncached"`
+		ContentType map[string]int `json:"content_type"`
+		Country     map[string]int `json:"country"`
+		SSL         struct {
+			Encrypted   int `json:"encrypted"`
+			Unencrypted int `json:"unencrypted"`
+		} `json:"ssl"`
+	} `json:"bandwidth"`
+	Threats struct {
+		All     int            `json:"all"`
+		Country map[string]int `json:"country"`
+		Type    map[string]int `json:"type"`
+	} `json:"threats"`
+	Pageviews struct {
+		All           int            `json:"all"`
+		SearchEngines map[string]int `json:"search_engines"`
+	} `json:"pageviews"`
+	Uniques struct {
+		All int `json:"all"`
+	}
+}
+
+// ZoneAnalyticsOptions represents the optional parameters in Zone Analytics
+// endpoint requests.
+type ZoneAnalyticsOptions struct {
+	Since      *time.Time
+	Until      *time.Time
+	Continuous *bool
 }
 
 // newZone describes a new zone.
@@ -363,6 +438,59 @@ func (api *API) ZonePlanDetails(zoneID, planID string) (ZonePlan, error) {
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return ZonePlan{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
+
+// encode encodes non-nil fields into URL encoded form.
+func (o ZoneAnalyticsOptions) encode() string {
+	v := url.Values{}
+	if o.Since != nil {
+		v.Set("since", (*o.Since).Format(time.RFC3339))
+	}
+	if o.Until != nil {
+		v.Set("until", (*o.Until).Format(time.RFC3339))
+	}
+	if o.Continuous != nil {
+		v.Set("continuous", fmt.Sprintf("%t", *o.Continuous))
+	}
+	return v.Encode()
+}
+
+// ZoneAnalyticsDashboard returns zone analytics information.
+//
+// API reference:
+//  https://api.cloudflare.com/#zone-analytics-dashboard
+//  GET /zones/:zone_identifier/analytics/dashboard
+func (api *API) ZoneAnalyticsDashboard(zoneID string, options ZoneAnalyticsOptions) (ZoneAnalyticsData, error) {
+	uri := "/zones/" + zoneID + "/analytics/dashboard" + "?" + options.encode()
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return ZoneAnalyticsData{}, errors.Wrap(err, errMakeRequestError)
+	}
+	var r zoneAnalyticsDataResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return ZoneAnalyticsData{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
+
+// ZoneAnalyticsByColocation returns zone analytics information by datacenter.
+//
+// API reference:
+//  https://api.cloudflare.com/#zone-analytics-analytics-by-co-locations
+//  GET /zones/:zone_identifier/analytics/colos
+func (api *API) ZoneAnalyticsByColocation(zoneID string, options ZoneAnalyticsOptions) ([]ZoneAnalyticsColocation, error) {
+	uri := "/zones/" + zoneID + "/analytics/colos" + "?" + options.encode()
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return nil, errors.Wrap(err, errMakeRequestError)
+	}
+	var r zoneAnalyticsColocationResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return nil, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
 }
