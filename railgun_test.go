@@ -521,8 +521,8 @@ func TestTestRailgunConnection(t *testing.T) {
 		ConnectionClose: false,
 		Cloudflare:      "on",
 		CFRay:           "1ddd7570575207d9-LAX",
-		CFWANError:      nil,
-		CFCacheStatus:   nil,
+		CFWANError:      "",
+		CFCacheStatus:   "",
 	}
 
 	actual, err := client.TestRailgunConnection("023e105f4ecef8ad9ca31a8372d0c353", "e928d310693a83094309acf9ead50448")

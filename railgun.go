@@ -209,10 +209,10 @@ type RailgunDiagnosis struct {
 	ConnectionClose bool   `json:"connection_close"`
 	Cloudflare      string `json:"cloudflare"`
 	CFRay           string `json:"cf-ray"`
-	// XXX: CloudFlare's online API documentation does not yet have definitions
+	// NOTE: CloudFlare's online API documentation does not yet have definitions
 	// for the following fields. See: https://api.cloudflare.com/#railgun-connections-for-a-zone-test-railgun-connection/
-	CFWANError    interface{} `json:"cf-wan-error"`
-	CFCacheStatus interface{} `json:"cf-cache-status"`
+	CFWANError    string `json:"cf-wan-error"`
+	CFCacheStatus string `json:"cf-cache-status"`
 }
 
 // railgunDiagnosisResponse represents the response from the Test Railgun Connection enpoint.
