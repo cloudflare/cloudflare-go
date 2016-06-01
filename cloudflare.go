@@ -216,20 +216,6 @@ type DNSListResponse struct {
 	Result []DNSRecord `json:"result"`
 }
 
-// ZoneRailgun represents the status of a Railgun on a zone.
-type ZoneRailgun struct {
-	ID        string `json:"id"`
-	Name      string `json:"string"`
-	Enabled   bool   `json:"enabled"`
-	Connected bool   `json:"connected"`
-}
-
-// ZoneRailgunResponse represents the response from the zone Railgun endpoint.
-type ZoneRailgunResponse struct {
-	Response
-	Result []ZoneRailgun `json:"result"`
-}
-
 // KeylessSSL represents Keyless SSL configuration.
 type KeylessSSL struct {
 	ID          string    `json:"id"`
@@ -247,32 +233,6 @@ type KeylessSSL struct {
 type KeylessSSLResponse struct {
 	Response
 	Result []KeylessSSL `json:"result"`
-}
-
-// Railgun represents a Railgun configuration.
-type Railgun struct {
-	ID             string    `json:"id"`
-	Name           string    `json:"name"`
-	Status         string    `json:"success"`
-	Enabled        bool      `json:"enabled"`
-	ZonesConnected int       `json:"zones_connected"`
-	Build          string    `json:"build"`
-	Version        string    `json:"version"`
-	Revision       string    `json:"revision"`
-	ActivationKey  string    `json:"activation_key"`
-	ActivatedOn    time.Time `json:"activated_on"`
-	CreatedOn      time.Time `json:"created_on"`
-	ModifiedOn     time.Time `json:"modified_on"`
-	// XXX: UpgradeInfo struct {
-	// version string
-	// url string
-	// } `json:"upgrade_info"`
-}
-
-// RailgunResponse represents the response from the Railgun endpoint.
-type RailgunResponse struct {
-	Response
-	Result []Railgun `json:"result"`
 }
 
 // CustomPage represents a custom page configuration.
