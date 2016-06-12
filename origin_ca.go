@@ -8,7 +8,7 @@ import (
 
 // OriginCA resource
 // This is the origin_ca resource definition (as defined here:
-// https://api.cloudflare.com/#origin-ca || https://api.cloudflare.com/#cloudflare-ca
+// https://api.cloudflare.com/#cloudflare-ca
 type OriginCA struct {
 	ID              string   `json:"id"`
 	Certificate     string   `json:"certificate"`
@@ -44,7 +44,7 @@ type OriginCAResponseRevoke struct {
 }
 
 // CreateOriginCertificate will create an origin certificate for a User
-// API reference: https://api.cloudflare.com/#origin-ca-create-certificate
+// API reference: https://api.cloudflare.com/#cloudflare-ca-create-certificate
 func (api *API) CreateOriginCertificate(certificate OriginCA) (*OriginCA, error) {
 	uri := "/certificates"
 	res, err := api.makeRequest("POST", uri, certificate)
@@ -71,7 +71,7 @@ func (api *API) CreateOriginCertificate(certificate OriginCA) (*OriginCA, error)
 }
 
 // OriginCertificates will list all certificates owned by the users
-// API reference: https://api.cloudflare.com/#origin-ca-list-certificates
+// API reference: https://api.cloudflare.com/#cloudflare-ca-list-certificates
 func (api *API) OriginCertificates() ([]OriginCA, error) {
 	uri := "/certificates"
 	res, err := api.makeRequest("GET", uri, nil)
@@ -96,7 +96,7 @@ func (api *API) OriginCertificates() ([]OriginCA, error) {
 }
 
 // OriginCertificate will get the details for a given certificate
-// API reference: https://api.cloudflare.com/#origin-ca-certificate-details
+// API reference: https://api.cloudflare.com/#cloudflare-ca-certificate-details
 func (api *API) OriginCertificate(certificateID string) (*OriginCA, error) {
 	uri := "/certificates/" + certificateID
 	res, err := api.makeRequest("GET", uri, nil)
@@ -121,7 +121,7 @@ func (api *API) OriginCertificate(certificateID string) (*OriginCA, error) {
 }
 
 // RevokeOriginCertificate will revoke a given certificate
-// API reference: https://api.cloudflare.com/#origin-ca-revoke-certificate
+// API reference: https://api.cloudflare.com/#cloudflare-ca-revoke-certificate
 func (api *API) RevokeOriginCertificate(certificateID string) (*OriginCertificateID, error) {
 	uri := "/certificates/" + certificateID
 	res, err := api.makeRequest("DELETE", uri, nil)
