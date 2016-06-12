@@ -5,7 +5,7 @@ const (
 	errEmptyCredentials     = "invalid credentials: key & email must not be empty"
 	errMakeRequestError     = "error from makeRequest"
 	errUnmarshalError       = "error unmarshalling the JSON response"
-	errRequestNotSuccessful = "Error reported by API"
+	errRequestNotSuccessful = "error reported by API"
 )
 
 var _ Error = &UserError{}
