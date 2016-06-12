@@ -7,7 +7,7 @@ import (
 )
 
 // OriginCA resource
-// This is the origin_ca resource definition (as defined here:
+// This is the origin_ca resource definition as defined here:
 // https://api.cloudflare.com/#cloudflare-ca
 type OriginCA struct {
 	ID              string   `json:"id"`
