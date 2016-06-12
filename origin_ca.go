@@ -2,6 +2,7 @@ package cloudflare
 
 import (
 	"encoding/json"
+	"time"
 
 	"github.com/pkg/errors"
 )
@@ -10,13 +11,13 @@ import (
 // This is the origin_ca resource definition as defined here:
 // https://api.cloudflare.com/#cloudflare-ca
 type OriginCA struct {
-	ID              string   `json:"id"`
-	Certificate     string   `json:"certificate"`
-	Hostnames       []string `json:"hostnames"`
-	ExpiresOn       string   `json:"expires_on"`
-	RequestType     string   `json:"request_type"`
-	RequestValidity string   `json:"requested_validity"`
-	Csr             string   `json:"csr"`
+	ID              string    `json:"id"`
+	Certificate     string    `json:"certificate"`
+	Hostnames       []string  `json:"hostnames"`
+	ExpiresOn       time.Time `json:"expires_on"`
+	RequestType     string    `json:"request_type"`
+	RequestValidity string    `json:"requested_validity"`
+	Csr             string    `json:"csr"`
 }
 
 // OriginCertificateID is the resource sent back for a revoke action
