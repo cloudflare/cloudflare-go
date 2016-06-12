@@ -66,9 +66,7 @@ func (api *API) CreateOriginCertificate(certificate OriginCA) (*OriginCA, error)
 		return nil, errors.New(errRequestNotSuccessful)
 	}
 
-	createdCert := originResponse.Result
-
-	return &createdCert, nil
+	return &originResponse.Result, nil
 }
 
 // OriginCertificates will list all certificates owned by the users
