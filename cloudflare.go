@@ -98,6 +98,9 @@ func (api *API) makeRequest(method, uri string, params interface{}) ([]byte, err
 		return nil, errors.Errorf("HTTP status %d: invalid credentials", resp.StatusCode)
 	case http.StatusForbidden:
 		return nil, errors.Errorf("HTTP status %d: insufficient permissions", resp.StatusCode)
+	case http.StatusServiceUnavailable, http.StatusBadGateway, http.StatusGatewayTimeout,
+		522, 523, 524:
+		return nil, errors.Errorf("HTTP status %d: service failure", resp.StatusCode)
 	default:
 		var s string
 		if body != nil {
