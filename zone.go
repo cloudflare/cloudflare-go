@@ -11,22 +11,22 @@ import (
 
 // Zone describes a CloudFlare zone.
 type Zone struct {
-	ID                string   `json:"id"`
-	Name              string   `json:"name"`
-	DevMode           int      `json:"development_mode"`
-	OriginalNS        []string `json:"original_name_servers"`
-	OriginalRegistrar string   `json:"original_registrar"`
-	OriginalDNSHost   string   `json:"original_dnshost"`
-	CreatedOn         string   `json:"created_on"`
-	ModifiedOn        string   `json:"modified_on"`
-	NameServers       []string `json:"name_servers"`
-	Owner             Owner    `json:"owner"`
-	Permissions       []string `json:"permissions"`
-	Plan              ZonePlan `json:"plan"`
-	PlanPending       ZonePlan `json:"plan_pending,omitempty"`
-	Status            string   `json:"status"`
-	Paused            bool     `json:"paused"`
-	Type              string   `json:"type"`
+	ID                string    `json:"id"`
+	Name              string    `json:"name"`
+	DevMode           int       `json:"development_mode"`
+	OriginalNS        []string  `json:"original_name_servers"`
+	OriginalRegistrar string    `json:"original_registrar"`
+	OriginalDNSHost   string    `json:"original_dnshost"`
+	CreatedOn         time.Time `json:"created_on"`
+	ModifiedOn        time.Time `json:"modified_on"`
+	NameServers       []string  `json:"name_servers"`
+	Owner             Owner     `json:"owner"`
+	Permissions       []string  `json:"permissions"`
+	Plan              ZonePlan  `json:"plan"`
+	PlanPending       ZonePlan  `json:"plan_pending,omitempty"`
+	Status            string    `json:"status"`
+	Paused            bool      `json:"paused"`
+	Type              string    `json:"type"`
 	Host              struct {
 		Name    string
 		Website string

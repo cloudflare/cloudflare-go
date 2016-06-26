@@ -223,6 +223,8 @@ func TestRailgunZones(t *testing.T) {
 	}
 
 	mux.HandleFunc("/railguns/e928d310693a83094309acf9ead50448/zones", handler)
+	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+	modifiedOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	want := []Zone{
 		{
 			ID:                "023e105f4ecef8ad9ca31a8372d0c353",
@@ -231,8 +233,8 @@ func TestRailgunZones(t *testing.T) {
 			OriginalNS:        []string{"ns1.originaldnshost.com", "ns2.originaldnshost.com"},
 			OriginalRegistrar: "GoDaddy",
 			OriginalDNSHost:   "NameCheap",
-			CreatedOn:         "2014-01-01T05:20:00.12345Z",
-			ModifiedOn:        "2014-01-01T05:20:00.12345Z",
+			CreatedOn:         createdOn,
+			ModifiedOn:        modifiedOn,
 		},
 	}
 
