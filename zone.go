@@ -109,6 +109,11 @@ type ZoneSettingResponse struct {
 	Result []ZoneSetting `json:"result"`
 }
 
+// zoneSettingRequest represents a request to edit Zone settings
+type zoneSettingRequest struct {
+	Items []ZoneSetting `json:"items"`
+}
+
 // ZoneAnalyticsData contains totals and timeseries analytics data for a zone.
 type ZoneAnalyticsData struct {
 	Totals     ZoneAnalytics   `json:"totals"`
@@ -497,6 +502,34 @@ func (api *API) ZoneAnalyticsByColocation(zoneID string, options ZoneAnalyticsOp
 
 // Zone Settings
 // https://api.cloudflare.com/#zone-settings-for-a-zone-get-all-zone-settings
+func (api *API) GetZoneSettings(zoneID string) ([]ZoneSetting, error) {
+	uri := "/zones/" + zoneID + "/settings"
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return nil, errors.Wrap(err, errMakeRequestError)
+	}
+	var r ZoneSettingResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return nil, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
+
 // e.g.
 // https://api.cloudflare.com/#zone-settings-for-a-zone-get-always-online-setting
 // https://api.cloudflare.com/#zone-settings-for-a-zone-change-always-online-setting
+func (api *API) EditZoneSettings(zoneID string, settings []ZoneSetting) ([]ZoneSetting, error) {
+	uri := "/zones/" + zoneID + "/settings"
+	s := zoneSettingRequest{Items: settings}
+	res, err := api.makeRequest("PATCH", uri, s)
+	if err != nil {
+		return nil, errors.Wrap(err, errMakeRequestError)
+	}
+	var r ZoneSettingResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return nil, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}

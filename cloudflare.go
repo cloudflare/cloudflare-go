@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"time"
 
@@ -72,6 +73,7 @@ func (api *API) makeRequest(method, uri string, params interface{}) ([]byte, err
 	var reqBody io.Reader
 	if params != nil {
 		json, err := json.Marshal(params)
+		log.Printf("[DEBUG] Request is %s", string(json))
 		if err != nil {
 			return nil, errors.Wrap(err, "error marshalling params to JSON")
 		}
@@ -108,6 +110,7 @@ func (api *API) makeRequest(method, uri string, params interface{}) ([]byte, err
 		}
 		return nil, errors.Errorf("HTTP status %d: content %q", resp.StatusCode, s)
 	}
+	log.Printf("[DEBUG] Response is: %s", string(body))
 
 	return body, nil
 }

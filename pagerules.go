@@ -2,6 +2,7 @@ package cloudflare
 
 import (
 	"encoding/json"
+	"strconv"
 	"time"
 
 	"github.com/pkg/errors"
@@ -76,12 +77,14 @@ var PageRuleActions = map[string]string{
 	"waf":                 "Web Application Firewall", // Value of type string
 }
 
+type MaybeInt int
+
 // PageRule describes a Page Rule.
 type PageRule struct {
 	ID         string           `json:"id,omitempty"`
 	Targets    []PageRuleTarget `json:"targets"`
 	Actions    []PageRuleAction `json:"actions"`
-	Priority   int              `json:"priority"`
+	Priority   MaybeInt         `json:"priority"`
 	Status     string           `json:"status"` // can be: active, paused
 	ModifiedOn time.Time        `json:"modified_on,omitempty"`
 	CreatedOn  time.Time        `json:"created_on,omitempty"`
@@ -104,24 +107,47 @@ type PageRulesResponse struct {
 }
 
 /*
+Since the CF API switches between quoted and unquoted ints depending on the
+request, this attempts to figure out which form it is in
+*/
+func (f *MaybeInt) UnmarshalJSON(rawData []byte) (err error) {
+	var v int
+
+	data := string(rawData)
+
+	// If the value is quoted, remove quotes
+	var js string
+	if json.Unmarshal(rawData, &js) == nil {
+		data, err = strconv.Unquote(string(rawData))
+		if err != nil {
+			return err
+		}
+	}
+
+	err = json.Unmarshal([]byte(data), &v)
+	*f = MaybeInt(v)
+	return err
+}
+
+/*
 CreatePageRule creates a new Page Rule for a zone.
 
 API reference:
   https://api.cloudflare.com/#page-rules-for-a-zone-create-a-page-rule
   POST /zones/:zone_identifier/pagerules
 */
-func (api *API) CreatePageRule(zoneID string, rule PageRule) error {
+func (api *API) CreatePageRule(zoneID string, rule PageRule) (PageRule, error) {
 	uri := "/zones/" + zoneID + "/pagerules"
 	res, err := api.makeRequest("POST", uri, rule)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return PageRule{}, errors.Wrap(err, errMakeRequestError)
 	}
 	var r PageRuleDetailResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return PageRule{}, errors.Wrap(err, errUnmarshalError)
 	}
-	return nil
+	return r.Result, nil
 }
 
 /*
@@ -174,18 +200,18 @@ API reference:
   https://api.cloudflare.com/#page-rules-for-a-zone-change-a-page-rule
   PATCH /zones/:zone_identifier/pagerules/:identifier
 */
-func (api *API) ChangePageRule(zoneID, ruleID string, rule PageRule) error {
+func (api *API) ChangePageRule(zoneID, ruleID string, rule PageRule) (PageRule, error) {
 	uri := "/zones/" + zoneID + "/pagerules/" + ruleID
 	res, err := api.makeRequest("PATCH", uri, rule)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return PageRule{}, errors.Wrap(err, errMakeRequestError)
 	}
 	var r PageRuleDetailResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return PageRule{}, errors.Wrap(err, errUnmarshalError)
 	}
-	return nil
+	return r.Result, nil
 }
 
 /*
@@ -196,18 +222,18 @@ API reference:
   https://api.cloudflare.com/#page-rules-for-a-zone-update-a-page-rule
   PUT /zones/:zone_identifier/pagerules/:identifier
 */
-func (api *API) UpdatePageRule(zoneID, ruleID string, rule PageRule) error {
+func (api *API) UpdatePageRule(zoneID, ruleID string, rule PageRule) (PageRule, error) {
 	uri := "/zones/" + zoneID + "/pagerules/" + ruleID
-	res, err := api.makeRequest("PUT", uri, nil)
+	res, err := api.makeRequest("PUT", uri, rule)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return PageRule{}, errors.Wrap(err, errMakeRequestError)
 	}
 	var r PageRuleDetailResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return PageRule{}, errors.Wrap(err, errUnmarshalError)
 	}
-	return nil
+	return r.Result, nil
 }
 
 /*

@@ -2,7 +2,6 @@ package cloudflare
 
 import (
 	"encoding/json"
-	"time"
 
 	"github.com/pkg/errors"
 )
@@ -16,9 +15,9 @@ type ZoneCustomSSL struct {
 	Status        string     `json:"status"`
 	BundleMethod  string     `json:"bundle_method"`
 	ZoneID        string     `json:"zone_id"`
-	UploadedOn    time.Time  `json:"uploaded_on"`
-	ModifiedOn    time.Time  `json:"modified_on"`
-	ExpiresOn     time.Time  `json:"expires_on"`
+	UploadedOn    string     `json:"uploaded_on"`
+	ModifiedOn    string     `json:"modified_on"`
+	ExpiresOn     string     `json:"expires_on"`
 	Priority      int        `json:"priority"`
 	KeylessServer KeylessSSL `json:"keyless_server"`
 }
