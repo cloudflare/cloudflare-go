@@ -122,7 +122,7 @@ func (api *API) request(method, uri string, reqBody io.Reader) (*http.Response, 
 	}
 
 	// Apply any user-defined headers first.
-	req.Header = api.headers
+	req.Header = cloneHeader(api.headers)
 	req.Header.Set("X-Auth-Key", api.APIKey)
 	req.Header.Set("X-Auth-Email", api.APIEmail)
 
@@ -132,6 +132,16 @@ func (api *API) request(method, uri string, reqBody io.Reader) (*http.Response, 
 	}
 
 	return resp, nil
+}
+
+// cloneHeader returns a shallow copy of the header.
+// copied from https://godoc.org/github.com/golang/gddo/httputil/header#Copy
+func cloneHeader(header http.Header) http.Header {
+	h := make(http.Header)
+	for k, vs := range header {
+		h[k] = vs
+	}
+	return h
 }
 
 // ResponseInfo contains a code and message returned by the API as errors or
