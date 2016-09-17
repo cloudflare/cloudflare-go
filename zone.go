@@ -9,6 +9,13 @@ import (
 	"github.com/pkg/errors"
 )
 
+// Owner describes the resource owner.
+type Owner struct {
+	ID        string `json:"id"`
+	Email     string `json:"email"`
+	OwnerType string `json:"owner_type"`
+}
+
 // Zone describes a CloudFlare zone.
 type Zone struct {
 	ID                string    `json:"id"`
@@ -180,6 +187,18 @@ type ZoneAnalyticsOptions struct {
 	Since      *time.Time
 	Until      *time.Time
 	Continuous *bool
+}
+
+// PurgeCacheRequest represents the request format made to the purge endpoint.
+type PurgeCacheRequest struct {
+	Everything bool     `json:"purge_everything,omitempty"`
+	Files      []string `json:"files,omitempty"`
+	Tags       []string `json:"tags,omitempty"`
+}
+
+// PurgeCacheResponse represents the response from the purge endpoint.
+type PurgeCacheResponse struct {
+	Response
 }
 
 // newZone describes a new zone.
