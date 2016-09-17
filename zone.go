@@ -182,6 +182,18 @@ type ZoneAnalyticsOptions struct {
 	Continuous *bool
 }
 
+// PurgeCacheRequest represents the request format made to the purge endpoint.
+type PurgeCacheRequest struct {
+	Everything bool     `json:"purge_everything,omitempty"`
+	Files      []string `json:"files,omitempty"`
+	Tags       []string `json:"tags,omitempty"`
+}
+
+// PurgeCacheResponse represents the response from the purge endpoint.
+type PurgeCacheResponse struct {
+	Response
+}
+
 // newZone describes a new zone.
 type newZone struct {
 	Name      string `json:"name"`

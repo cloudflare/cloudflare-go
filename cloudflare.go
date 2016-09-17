@@ -172,15 +172,3 @@ type Owner struct {
 	Email     string `json:"email"`
 	OwnerType string `json:"owner_type"`
 }
-
-// PurgeCacheRequest represents the request format made to the purge endpoint.
-type PurgeCacheRequest struct {
-	Everything bool     `json:"purge_everything,omitempty"`
-	Files      []string `json:"files,omitempty"`
-	Tags       []string `json:"tags,omitempty"`
-}
-
-// PurgeCacheResponse represents the response from the purge endpoint.
-type PurgeCacheResponse struct {
-	Response
-}
