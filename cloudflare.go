@@ -7,7 +7,6 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
-	"time"
 
 	"github.com/pkg/errors"
 )
@@ -172,23 +171,6 @@ type Owner struct {
 	ID        string `json:"id"`
 	Email     string `json:"email"`
 	OwnerType string `json:"owner_type"`
-}
-
-// CustomPage represents a custom page configuration.
-type CustomPage struct {
-	CreatedOn      string    `json:"created_on"`
-	ModifiedOn     time.Time `json:"modified_on"`
-	URL            string    `json:"url"`
-	State          string    `json:"state"`
-	RequiredTokens []string  `json:"required_tokens"`
-	PreviewTarget  string    `json:"preview_target"`
-	Description    string    `json:"description"`
-}
-
-// CustomPageResponse represents the response from the custom pages endpoint.
-type CustomPageResponse struct {
-	Response
-	Result []CustomPage `json:"result"`
 }
 
 // PurgeCacheRequest represents the request format made to the purge endpoint.
