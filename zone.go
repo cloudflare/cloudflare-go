@@ -9,6 +9,13 @@ import (
 	"github.com/pkg/errors"
 )
 
+// Owner describes the resource owner.
+type Owner struct {
+	ID        string `json:"id"`
+	Email     string `json:"email"`
+	OwnerType string `json:"owner_type"`
+}
+
 // Zone describes a CloudFlare zone.
 type Zone struct {
 	ID                string    `json:"id"`

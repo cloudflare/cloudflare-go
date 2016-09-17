@@ -165,10 +165,3 @@ type ResultInfo struct {
 	Count   int `json:"count"`
 	Total   int `json:"total_count"`
 }
-
-// Owner describes the resource owner.
-type Owner struct {
-	ID        string `json:"id"`
-	Email     string `json:"email"`
-	OwnerType string `json:"owner_type"`
-}
