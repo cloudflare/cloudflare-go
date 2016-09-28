@@ -301,7 +301,7 @@ func (api *API) ListZones(z ...string) ([]Zone, error) {
 //
 // API reference: https://api.cloudflare.com/#zone-zone-details
 func (api *API) ZoneDetails(zoneID string) (Zone, error) {
-	res, err := api.makeRequest("GET", "/zones"+zoneID, nil)
+	res, err := api.makeRequest("GET", "/zones/"+zoneID, nil)
 	if err != nil {
 		return Zone{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -415,7 +415,7 @@ func (api *API) PurgeCache(zoneID string, pcr PurgeCacheRequest) (PurgeCacheResp
 //
 // API reference: https://api.cloudflare.com/#zone-delete-a-zone
 func (api *API) DeleteZone(zoneID string) (ZoneID, error) {
-	res, err := api.makeRequest("DELETE", "/zones"+zoneID, nil)
+	res, err := api.makeRequest("DELETE", "/zones/"+zoneID, nil)
 	if err != nil {
 		return ZoneID{}, errors.Wrap(err, errMakeRequestError)
 	}
