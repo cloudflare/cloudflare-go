@@ -282,7 +282,7 @@ func zoneRecords(c *cli.Context) {
 		case "SRV":
 			dp := reflect.ValueOf(r.Data).Interface().(map[string]interface{})
 			r.Content = fmt.Sprintf("%.f %s", dp["priority"], r.Content)
-			// CloudFlare's API, annoyingly, automatically prepends the weight
+			// Cloudflare's API, annoyingly, automatically prepends the weight
 			// and port into content, separated by tabs.
 			// XXX: File this as a bug. LOC doesn't do this.
 			r.Content = strings.Replace(r.Content, "\t", " ", -1)
@@ -514,14 +514,14 @@ func railgun(*cli.Context) {
 func main() {
 	app := cli.NewApp()
 	app.Name = "flarectl"
-	app.Usage = "CloudFlare CLI"
+	app.Usage = "Cloudflare CLI"
 	app.Version = "2016.4.0"
 	app.Commands = []cli.Command{
 		{
 			Name:    "ips",
 			Aliases: []string{"i"},
 			Action:  ips,
-			Usage:   "Print CloudFlare IP ranges",
+			Usage:   "Print Cloudflare IP ranges",
 		},
 		{
 			Name:    "user",
@@ -700,7 +700,7 @@ func main() {
 						},
 						cli.BoolFlag{
 							Name:  "proxy",
-							Usage: "proxy through CloudFlare (orange cloud)",
+							Usage: "proxy through Cloudflare (orange cloud)",
 						},
 					},
 				},
@@ -729,7 +729,7 @@ func main() {
 						},
 						cli.BoolFlag{
 							Name:  "proxy",
-							Usage: "proxy through CloudFlare (orange cloud)",
+							Usage: "proxy through Cloudflare (orange cloud)",
 						},
 					},
 				},
@@ -762,7 +762,7 @@ func main() {
 						},
 						cli.BoolFlag{
 							Name:  "proxy",
-							Usage: "proxy through CloudFlare (orange cloud)",
+							Usage: "proxy through Cloudflare (orange cloud)",
 						},
 					},
 				},

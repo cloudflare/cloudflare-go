@@ -25,7 +25,7 @@ func setup() {
 	mux = http.NewServeMux()
 	server = httptest.NewServer(mux)
 
-	// CloudFlare client configured to use test server
+	// Cloudflare client configured to use test server
 	client, _ = New("cloudflare@example.org", "deadbeef")
 	client.BaseURL = server.URL
 }
