@@ -1,6 +1,6 @@
 # flarectl
 
-A CLI application for interacting with a CloudFlare account.
+A CLI application for interacting with a Cloudflare account.
 
 # Usage
 
@@ -11,7 +11,7 @@ $ export CF_API_KEY=abcdef1234567890
 $ export CF_API_EMAIL=someone@example.com
 $ flarectl
 NAME:
-   flarectl - CloudFlare CLI
+   flarectl - Cloudflare CLI
 
 USAGE:
    flarectl [global options] command [command options] [arguments...]

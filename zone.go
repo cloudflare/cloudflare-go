@@ -16,7 +16,7 @@ type Owner struct {
 	OwnerType string `json:"owner_type"`
 }
 
-// Zone describes a CloudFlare zone.
+// Zone describes a Cloudflare zone.
 type Zone struct {
 	ID                string    `json:"id"`
 	Name              string    `json:"name"`
@@ -322,7 +322,7 @@ type ZoneOptions struct {
 	Plan     *ZonePlan `json:"plan,omitempty"`
 }
 
-// ZoneSetPaused pauses CloudFlare service for the entire zone, sending all
+// ZoneSetPaused pauses Cloudflare service for the entire zone, sending all
 // traffic direct to the origin.
 func (api *API) ZoneSetPaused(zoneID string, paused bool) (Zone, error) {
 	zoneopts := ZoneOptions{Paused: paused}

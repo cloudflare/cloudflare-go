@@ -1,4 +1,4 @@
-// Package cloudflare implements the CloudFlare v4 API.
+// Package cloudflare implements the Cloudflare v4 API.
 package cloudflare
 
 import (
@@ -23,7 +23,7 @@ type API struct {
 	httpClient *http.Client
 }
 
-// New creates a new CloudFlare v4 API client.
+// New creates a new Cloudflare v4 API client.
 func New(key, email string, opts ...Option) (*API, error) {
 	if key == "" || email == "" {
 		return nil, errors.New(errEmptyCredentials)

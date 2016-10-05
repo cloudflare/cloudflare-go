@@ -21,7 +21,7 @@ type IPsResponse struct {
 }
 
 /*
-IPs gets a list of CloudFlare's IP ranges
+IPs gets a list of Cloudflare's IP ranges
 
 This does not require logging in to the API.
 
