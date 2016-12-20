@@ -406,6 +406,7 @@ func dnsUpdate(c *cli.Context) {
 	}
 	zone := c.String("zone")
 	recordID := c.String("id")
+	name := c.String("name")
 	content := c.String("content")
 	ttl := c.Int("ttl")
 	proxy := c.Bool("proxy")
@@ -418,6 +419,7 @@ func dnsUpdate(c *cli.Context) {
 
 	record := cloudflare.DNSRecord{
 		ID:      recordID,
+		Name:    name,
 		Content: content,
 		TTL:     ttl,
 		Proxied: proxy,
@@ -717,6 +719,10 @@ func main() {
 						cli.StringFlag{
 							Name:  "id",
 							Usage: "record id",
+						},
+						cli.StringFlag{
+							Name:  "name",
+							Usage: "record name",
 						},
 						cli.StringFlag{
 							Name:  "content",
