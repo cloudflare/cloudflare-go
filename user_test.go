@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
+	"io/ioutil"
 )
 
 func TestUser_UserDetails(t *testing.T) {
@@ -52,13 +53,81 @@ func TestUser_UserDetails(t *testing.T) {
 		Telephone:  "+1 (650) 319 8930",
 		Country:    "US",
 		Zipcode:    "94107",
-		CreatedOn:  createdOn,
-		ModifiedOn: modifiedOn,
+		CreatedOn:  &createdOn,
+		ModifiedOn: &modifiedOn,
 		TwoFA:      true,
 		Betas:      []string{"mirage_forever"},
 	}
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, user, want)
+	}
+}
+
+func TestUser_UpdateUser(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/user", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "PATCH", r.Method, "Expected method 'PATCH', got %s", r.Method)
+		b, err := ioutil.ReadAll(r.Body)
+		defer r.Body.Close()
+		if assert.NoError(t, err) {
+			assert.JSONEq(t, `{"country":"US","first_name":"John","username":"cfuser12345","email":"user@example.com",
+                       "last_name": "Appleseed","telephone": "+1 123-123-1234","zipcode": "12345"}`, string(b), "JSON not equal")
+		}
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+  "success": true,
+  "errors": [],
+  "messages": [],
+  "result": {
+    "id": "7c5dae5552338874e5053f2534d2767a",
+    "email": "user@example.com",
+    "first_name": "John",
+    "last_name": "Appleseed",
+    "username": "cfuser12345",
+    "telephone": "+1 123-123-1234",
+    "country": "US",
+    "zipcode": "12345",
+    "created_on": "2014-01-01T05:20:00Z",
+    "modified_on": "2014-01-01T05:20:00Z",
+    "two_factor_authentication_enabled": false
+  }
+}`)
+	})
+
+	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
+	modifiedOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
+
+	userIn := User{
+		Email:     "user@example.com",
+		FirstName: "John",
+		LastName:  "Appleseed",
+		Username:  "cfuser12345",
+		Telephone: "+1 123-123-1234",
+		Country:   "US",
+		Zipcode:   "12345",
+		TwoFA:     false,
+	}
+
+	userOut, err := client.UpdateUser(&userIn)
+
+	want := User{
+		ID:         "7c5dae5552338874e5053f2534d2767a",
+		Email:      "user@example.com",
+		FirstName:  "John",
+		LastName:   "Appleseed",
+		Username:   "cfuser12345",
+		Telephone:  "+1 123-123-1234",
+		Country:    "US",
+		Zipcode:    "12345",
+		CreatedOn:  &createdOn,
+		ModifiedOn: &modifiedOn,
+		TwoFA:      false,
+	}
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, userOut, want, "structs not equal")
 	}
 }
