@@ -131,3 +131,66 @@ func TestUser_UpdateUser(t *testing.T) {
 		assert.Equal(t, userOut, want, "structs not equal")
 	}
 }
+
+func TestUser_UserBillingProfile(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/user/billing/profile", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+  "success": true,
+  "errors": [],
+  "messages": [],
+  "result": {
+    "id": "0020c268dbf54e975e7fe8563df49d52",
+    "first_name": "Bob",
+    "last_name": "Smith",
+    "address": "123 3rd St.",
+    "address2": "Apt 123",
+    "company": "Cloudflare",
+    "city": "San Francisco",
+    "state": "CA",
+    "zipcode": "12345",
+    "country": "US",
+    "telephone": "+1 111-867-5309",
+    "card_number": "xxxx-xxxx-xxxx-1234",
+    "card_expiry_year": 2015,
+    "card_expiry_month": 4,
+    "vat": "aaa-123-987",
+    "edited_on": "2014-04-01T12:21:02.0000Z",
+    "created_on": "2014-03-01T12:21:02.0000Z"
+  }
+}`)
+	})
+
+	createdOn, _ := time.Parse(time.RFC3339, "2014-03-01T12:21:02.0000Z")
+	editedOn, _ := time.Parse(time.RFC3339, "2014-04-01T12:21:02.0000Z")
+
+	userBillingProfile, err := client.UserBillingProfile()
+
+	want := UserBillingProfile{
+		ID:              "0020c268dbf54e975e7fe8563df49d52",
+		FirstName:       "Bob",
+		LastName:        "Smith",
+		Address:         "123 3rd St.",
+		Address2:        "Apt 123",
+		Company:         "Cloudflare",
+		City:            "San Francisco",
+		State:           "CA",
+		ZipCode:         "12345",
+		Country:         "US",
+		Telephone:       "+1 111-867-5309",
+		CardNumber:      "xxxx-xxxx-xxxx-1234",
+		CardExpiryYear:  2015,
+		CardExpiryMonth: 4,
+		VAT:             "aaa-123-987",
+		CreatedOn:       &createdOn,
+		EditedOn:        &editedOn,
+	}
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, userBillingProfile, want, "structs not equal")
+	}
+}
