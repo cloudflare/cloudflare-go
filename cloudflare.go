@@ -160,8 +160,9 @@ type Response struct {
 
 // ResultInfo contains metadata about the Response.
 type ResultInfo struct {
-	Page    int `json:"page"`
-	PerPage int `json:"per_page"`
-	Count   int `json:"count"`
-	Total   int `json:"total_count"`
+	Page       int `json:"page"`
+	PerPage    int `json:"per_page"`
+	TotalPages int `json:"total_pages"`
+	Count      int `json:"count"`
+	Total      int `json:"total_count"`
 }
