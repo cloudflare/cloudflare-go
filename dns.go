@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"encoding/json"
 	"net/url"
+	"strconv"
 	"time"
 
 	"github.com/pkg/errors"
@@ -29,14 +30,16 @@ type DNSRecord struct {
 
 // DNSRecordResponse represents the response from the DNS endpoint.
 type DNSRecordResponse struct {
-	Response
 	Result DNSRecord `json:"result"`
+	Response
+	ResultInfo `json:"result_info"`
 }
 
 // DNSListResponse represents the response from the list DNS records endpoint.
 type DNSListResponse struct {
-	Response
 	Result []DNSRecord `json:"result"`
+	Response
+	ResultInfo `json:"result_info"`
 }
 
 // CreateDNSRecord creates a DNS record for the zone identifier.
@@ -66,6 +69,8 @@ func (api *API) CreateDNSRecord(zoneID string, rr DNSRecord) (*DNSRecordResponse
 func (api *API) DNSRecords(zoneID string, rr DNSRecord) ([]DNSRecord, error) {
 	// Construct a query string
 	v := url.Values{}
+	// Request as many records as possible per page - API max is 50
+	v.Set("per_page", "50")
 	if rr.Name != "" {
 		v.Set("name", rr.Name)
 	}
@@ -75,21 +80,33 @@ func (api *API) DNSRecords(zoneID string, rr DNSRecord) ([]DNSRecord, error) {
 	if rr.Content != "" {
 		v.Set("content", rr.Content)
 	}
+
 	var query string
-	if len(v) > 0 {
+	var records []DNSRecord
+	page := 1
+
+	// Loop over makeRequest until what we've fetched all records
+	for {
+		v.Set("page", strconv.Itoa(page))
 		query = "?" + v.Encode()
+		uri := "/zones/" + zoneID + "/dns_records" + query
+		res, err := api.makeRequest("GET", uri, nil)
+		if err != nil {
+			return []DNSRecord{}, errors.Wrap(err, errMakeRequestError)
+		}
+		var r DNSListResponse
+		err = json.Unmarshal(res, &r)
+		if err != nil {
+			return []DNSRecord{}, errors.Wrap(err, errUnmarshalError)
+		}
+		records = append(records, r.Result...)
+		if r.ResultInfo.Page >= r.ResultInfo.TotalPages {
+			break
+		}
+		// Loop around and fetch the next page
+		page++
 	}
-	uri := "/zones/" + zoneID + "/dns_records" + query
-	res, err := api.makeRequest("GET", uri, nil)
-	if err != nil {
-		return []DNSRecord{}, errors.Wrap(err, errMakeRequestError)
-	}
-	var r DNSListResponse
-	err = json.Unmarshal(res, &r)
-	if err != nil {
-		return []DNSRecord{}, errors.Wrap(err, errUnmarshalError)
-	}
-	return r.Result, nil
+	return records, nil
 }
 
 // DNSRecord returns a single DNS record for the given zone & record
