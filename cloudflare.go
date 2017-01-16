@@ -12,15 +12,23 @@ import (
 )
 
 const apiURL = "https://api.cloudflare.com/client/v4"
+const (
+	// AuthKeyEmail specifies that we should authenticate with API key and email address
+	AuthKeyEmail = 1 << iota
+	// AuthUserService specifies that we should authenticate with a User-Service key
+	AuthUserService
+)
 
 // API holds the configuration for the current API client. A client should not
 // be modified concurrently.
 type API struct {
-	APIKey     string
-	APIEmail   string
-	BaseURL    string
-	headers    http.Header
-	httpClient *http.Client
+	APIKey            string
+	APIEmail          string
+	APIUserServiceKey string
+	BaseURL           string
+	headers           http.Header
+	httpClient        *http.Client
+	authType          int
 }
 
 // New creates a new Cloudflare v4 API client.
@@ -34,6 +42,7 @@ func New(key, email string, opts ...Option) (*API, error) {
 		APIEmail: email,
 		BaseURL:  apiURL,
 		headers:  make(http.Header),
+		authType: AuthKeyEmail,
 	}
 
 	err := api.parseOptions(opts...)
@@ -48,6 +57,11 @@ func New(key, email string, opts ...Option) (*API, error) {
 	}
 
 	return api, nil
+}
+
+// SetAuthType sets the authentication method (AuthyKeyEmail or AuthUserService)
+func (api *API) SetAuthType(authType int) {
+	api.authType = authType
 }
 
 // ZoneIDByName retrieves a zone's ID from the name.
@@ -122,8 +136,13 @@ func (api *API) request(method, uri string, reqBody io.Reader) (*http.Response, 
 
 	// Apply any user-defined headers first.
 	req.Header = cloneHeader(api.headers)
-	req.Header.Set("X-Auth-Key", api.APIKey)
-	req.Header.Set("X-Auth-Email", api.APIEmail)
+	if api.authType&AuthKeyEmail != 0 {
+		req.Header.Set("X-Auth-Key", api.APIKey)
+		req.Header.Set("X-Auth-Email", api.APIEmail)
+	}
+	if api.authType&AuthUserService != 0 {
+		req.Header.Set("X-Auth-User-Service-Key", api.APIUserServiceKey)
+	}
 
 	resp, err := api.httpClient.Do(req)
 	if err != nil {
