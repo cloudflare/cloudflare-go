@@ -1,8 +1,10 @@
-package lb
+package loadbalancer
 
 import (
 	"net/http"
 	"time"
+
+	cloudflare "github.com/cloudflare/cloudflare-go"
 )
 
 // Monitor represents a 'health check' configuration. A Monitor will only
@@ -27,15 +29,15 @@ type Monitor struct {
 // MonitorResponse represents a response from the Monitors endpoint.
 type MonitorResponse struct {
 	Result []Monitor `json:"result"`
-	Response
-	ResultInfo `json:"result_info"`
+	cloudflare.Response
+	cloudflare.ResultInfo `json:"result_info"`
 }
 
 // MonitorListResponse repsents a list response from the Monitors endpoint.
 type MonitorListResponse struct {
 	Result []Monitor `json:"result"`
-	Response
-	ResultInfo `json:"result_info"`
+	cloudflare.Response
+	cloudflare.ResultInfo `json:"result_info"`
 }
 
 // Pool represents a 'pool' (group) of origin servers, each identified by their
