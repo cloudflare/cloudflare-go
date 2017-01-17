@@ -2,6 +2,7 @@ package cloudflare
 
 import (
 	"encoding/json"
+	"time"
 
 	"github.com/pkg/errors"
 )
@@ -22,6 +23,52 @@ type organizationResponse struct {
 	ResultInfo `json:"result_info"`
 }
 
+// OrganizationMember has details on a member
+type OrganizationMember struct {
+	ID     string             `json:"id,omitempty"`
+	Name   string             `json:"name,omitempty"`
+	Email  string             `json:"email,omitempty"`
+	Status string             `json:"status,omitempty"`
+	Roles  []OrganizationRole `json:"roles,omitempty"`
+}
+
+// OrganizationInvite has details on an invite
+type OrganizationInvite struct {
+	ID                 string             `json:"id,omitempty"`
+	InvitedMemberID    string             `json:"invited_member_id,omitempty"`
+	InvitedMemberEmail string             `json:"invited_member_email,omitempty"`
+	OrganizationID     string             `json:"organization_id,omitempty"`
+	OrganizationName   string             `json:"organization_name,omitempty"`
+	Roles              []OrganizationRole `json:"roles,omitempty"`
+	InvitedBy          string             `json:"invited_by,omitempty"`
+	InvitedOn          *time.Time         `json:"invited_on,omitempty"`
+	ExpiresOn          *time.Time         `json:"expires_on,omitempty"`
+	Status             string             `json:"status,omitempty"`
+}
+
+// OrganizationRole has details on an role
+type OrganizationRole struct {
+	ID          string   `json:"id,omitempty"`
+	Name        string   `json:"name,omitempty"`
+	Description string   `json:"description,omitempty"`
+	Permissions []string `json:"permissions,omitempty"`
+}
+
+// OrganizationDetails represents details of an organization
+type OrganizationDetails struct {
+	ID      string               `json:"id,omitempty"`
+	Name    string               `json:"name,omitempty"`
+	Members []OrganizationMember `json:"members"`
+	Invites []OrganizationInvite `json:"invites"`
+	Roles   []OrganizationRole   `json:"roles,omitempty"`
+}
+
+// organizationDetailsResponse represents the response from the OrganizationDetails endpoint.
+type organizationDetailsResponse struct {
+	Response
+	Result OrganizationDetails `json:"result"`
+}
+
 // ListOrganizations lists organizations of the logged-in user.
 // API reference:
 // 	https://api.cloudflare.com/#user-s-organizations-list-organizations
@@ -39,4 +86,24 @@ func (api *API) ListOrganizations() ([]Organization, ResultInfo, error) {
 	}
 
 	return r.Result, r.ResultInfo, nil
+}
+
+// OrganizationDetails returns details for the specified organization of the logged-in user.
+// API reference:
+// 	https://api.cloudflare.com/#organizations-organization-details
+//	GET /organizations/:identifier
+func (api *API) OrganizationDetails(organizationID string) (OrganizationDetails, error) {
+	var r organizationDetailsResponse
+	uri := "/organizations/" + organizationID
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return OrganizationDetails{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return OrganizationDetails{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return r.Result, nil
 }
