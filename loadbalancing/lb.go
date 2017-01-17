@@ -1,6 +1,6 @@
-// Package lb provides an interface for configuring Cloudflare's Load Balancing
+// Package loadbalancer provides an interface for configuring Cloudflare's Load Balancing
 // API endpoints: https://www.cloudflare.com/load-balancing/
-package lb
+package loadbalanacer
 
 import cloudflare "github.com/cloudflare/cloudflare-go"
 
