@@ -25,21 +25,21 @@ type OriginCACertificateID struct {
 	ID string `json:"id"`
 }
 
-// OriginCACertificateResponse is the APIv4 response envelop containing the OriginCA result
-type OriginCACertificateResponse struct {
+// originCACertificateResponse is the APIv4 response envelop containing the OriginCA result
+type originCACertificateResponse struct {
 	Response
 	Result OriginCACertificate `json:"result"`
 }
 
-// OriginCACertificateResponseList is the APIv4 response envelop containing a listof OriginCA result
-type OriginCACertificateResponseList struct {
+// originCACertificateResponseList is the APIv4 response envelop containing a listof OriginCA result
+type originCACertificateResponseList struct {
 	Response
 	Result     []OriginCACertificate `json:"result"`
 	ResultInfo ResultInfo            `json:"result_info"`
 }
 
-// OriginCACertificateResponseRevoke is the APIv4 response envelop containing a revoked cert id
-type OriginCACertificateResponseRevoke struct {
+// originCACertificateResponseRevoke is the APIv4 response envelop containing a revoked cert id
+type originCACertificateResponseRevoke struct {
 	Response
 	Result OriginCACertificateID `json:"result"`
 }
@@ -54,7 +54,7 @@ func (api *API) CreateOriginCertificate(certificate OriginCACertificate) (*Origi
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
 
-	var originResponse *OriginCACertificateResponse
+	var originResponse *originCACertificateResponse
 
 	err = json.Unmarshal(res, &originResponse)
 
@@ -79,7 +79,7 @@ func (api *API) OriginCertificates() ([]OriginCACertificate, error) {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
 
-	var originResponse *OriginCACertificateResponseList
+	var originResponse *originCACertificateResponseList
 
 	err = json.Unmarshal(res, &originResponse)
 
@@ -104,7 +104,7 @@ func (api *API) OriginCertificate(certificateID string) (*OriginCACertificate, e
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
 
-	var originResponse *OriginCACertificateResponse
+	var originResponse *originCACertificateResponse
 
 	err = json.Unmarshal(res, &originResponse)
 
@@ -129,7 +129,7 @@ func (api *API) RevokeOriginCertificate(certificateID string) (*OriginCACertific
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
 
-	var originResponse *OriginCACertificateResponseRevoke
+	var originResponse *originCACertificateResponseRevoke
 
 	err = json.Unmarshal(res, &originResponse)
 
