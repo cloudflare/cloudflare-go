@@ -7,10 +7,10 @@ import (
 	"github.com/pkg/errors"
 )
 
-// OriginCA resource
+// OriginCACertificate resource
 // This is the origin_ca resource definition as defined here:
 // https://api.cloudflare.com/#cloudflare-ca
-type OriginCA struct {
+type OriginCACertificate struct {
 	ID              string    `json:"id"`
 	Certificate     string    `json:"certificate"`
 	Hostnames       []string  `json:"hostnames"`
@@ -20,33 +20,33 @@ type OriginCA struct {
 	Csr             string    `json:"csr"`
 }
 
-// OriginCertificateID is the resource sent back for a revoke action
-type OriginCertificateID struct {
+// OriginCACertificateID is the resource sent back for a revoke action
+type OriginCACertificateID struct {
 	ID string `json:"id"`
 }
 
-// OriginCAResponse is the APIv4 response envelop containing the OriginCA result
-type OriginCAResponse struct {
+// OriginCACertificateResponse is the APIv4 response envelop containing the OriginCA result
+type OriginCACertificateResponse struct {
 	Response
-	Result OriginCA `json:"result"`
+	Result OriginCACertificate `json:"result"`
 }
 
-// OriginCAResponseList is the APIv4 response envelop containing a listof OriginCA result
-type OriginCAResponseList struct {
+// OriginCACertificateResponseList is the APIv4 response envelop containing a listof OriginCA result
+type OriginCACertificateResponseList struct {
 	Response
-	Result     []OriginCA `json:"result"`
-	ResultInfo ResultInfo `json:"result_info"`
+	Result     []OriginCACertificate `json:"result"`
+	ResultInfo ResultInfo            `json:"result_info"`
 }
 
-// OriginCAResponseRevoke is the APIv4 response envelop containing a revoked cert id
-type OriginCAResponseRevoke struct {
+// OriginCACertificateResponseRevoke is the APIv4 response envelop containing a revoked cert id
+type OriginCACertificateResponseRevoke struct {
 	Response
-	Result OriginCertificateID `json:"result"`
+	Result OriginCACertificateID `json:"result"`
 }
 
 // CreateOriginCertificate will create an origin certificate for a User
 // API reference: https://api.cloudflare.com/#cloudflare-ca-create-certificate
-func (api *API) CreateOriginCertificate(certificate OriginCA) (*OriginCA, error) {
+func (api *API) CreateOriginCertificate(certificate OriginCACertificate) (*OriginCACertificate, error) {
 	uri := "/certificates"
 	res, err := api.makeRequest("POST", uri, certificate)
 
@@ -54,7 +54,7 @@ func (api *API) CreateOriginCertificate(certificate OriginCA) (*OriginCA, error)
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
 
-	var originResponse *OriginCAResponse
+	var originResponse *OriginCACertificateResponse
 
 	err = json.Unmarshal(res, &originResponse)
 
@@ -71,7 +71,7 @@ func (api *API) CreateOriginCertificate(certificate OriginCA) (*OriginCA, error)
 
 // OriginCertificates will list all certificates owned by the users
 // API reference: https://api.cloudflare.com/#cloudflare-ca-list-certificates
-func (api *API) OriginCertificates() ([]OriginCA, error) {
+func (api *API) OriginCertificates() ([]OriginCACertificate, error) {
 	uri := "/certificates"
 	res, err := api.makeRequest("GET", uri, nil)
 
@@ -79,7 +79,7 @@ func (api *API) OriginCertificates() ([]OriginCA, error) {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
 
-	var originResponse *OriginCAResponseList
+	var originResponse *OriginCACertificateResponseList
 
 	err = json.Unmarshal(res, &originResponse)
 
@@ -96,7 +96,7 @@ func (api *API) OriginCertificates() ([]OriginCA, error) {
 
 // OriginCertificate will get the details for a given certificate
 // API reference: https://api.cloudflare.com/#cloudflare-ca-certificate-details
-func (api *API) OriginCertificate(certificateID string) (*OriginCA, error) {
+func (api *API) OriginCertificate(certificateID string) (*OriginCACertificate, error) {
 	uri := "/certificates/" + certificateID
 	res, err := api.makeRequest("GET", uri, nil)
 
@@ -104,7 +104,7 @@ func (api *API) OriginCertificate(certificateID string) (*OriginCA, error) {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
 
-	var originResponse *OriginCAResponse
+	var originResponse *OriginCACertificateResponse
 
 	err = json.Unmarshal(res, &originResponse)
 
@@ -121,7 +121,7 @@ func (api *API) OriginCertificate(certificateID string) (*OriginCA, error) {
 
 // RevokeOriginCertificate will revoke a given certificate
 // API reference: https://api.cloudflare.com/#cloudflare-ca-revoke-certificate
-func (api *API) RevokeOriginCertificate(certificateID string) (*OriginCertificateID, error) {
+func (api *API) RevokeOriginCertificate(certificateID string) (*OriginCACertificateID, error) {
 	uri := "/certificates/" + certificateID
 	res, err := api.makeRequest("DELETE", uri, nil)
 
@@ -129,7 +129,7 @@ func (api *API) RevokeOriginCertificate(certificateID string) (*OriginCertificat
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
 
-	var originResponse *OriginCAResponseRevoke
+	var originResponse *OriginCACertificateResponseRevoke
 
 	err = json.Unmarshal(res, &originResponse)
 
