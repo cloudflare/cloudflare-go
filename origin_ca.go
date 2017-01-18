@@ -17,7 +17,7 @@ type OriginCACertificate struct {
 	ExpiresOn       time.Time `json:"expires_on"`
 	RequestType     string    `json:"request_type"`
 	RequestValidity string    `json:"requested_validity"`
-	Csr             string    `json:"csr"`
+	CSR             string    `json:"csr"`
 }
 
 // OriginCACertificateID is the resource sent back for a revoke action
