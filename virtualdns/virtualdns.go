@@ -2,7 +2,12 @@
 // (https://www.cloudflare.com/dns/virtual-dns/).
 package virtualdns
 
-import cloudflare "github.com/cloudflare/cloudflare-go"
+import (
+	"encoding/json"
+
+	cloudflare "github.com/cloudflare/cloudflare-go"
+	"github.com/pkg/errors"
+)
 
 type Client struct {
 	client *cloudflare.API
@@ -14,11 +19,15 @@ func NewClient(client *cloudflare.API) (*Client, error) {
 	return nil, nil
 }
 
+func (*Client) SetOrg(organizationID string) error {
+
+}
+
 // GetClusters gets a list of the currently configured Virtual DNS clusters.
 // API reference:
 //   https://api.cloudflare.com/#...
 //   GET /...
-func GetClusters() ([]Cluster, error) {
+func (c *Client) GetClusters() ([]Cluster, error) {
 
 	return []Cluster{}, nil
 }
@@ -27,7 +36,7 @@ func GetClusters() ([]Cluster, error) {
 // API reference:
 //   https://api.cloudflare.com/#...
 //   GET /...
-func GetClusterByID(id string) (Cluster, error) {
+func (c *Client) GetClusterByID(id string) (Cluster, error) {
 
 	return Cluster{}, nil
 }
@@ -36,16 +45,30 @@ func GetClusterByID(id string) (Cluster, error) {
 // API reference:
 //   https://api.cloudflare.com/#...
 //   POST /...
-func CreateCluster(cluster Cluster) (Cluster, error) {
+func (c *Client) CreateCluster(cluster Cluster) (Cluster, error) {
+	// TODO(matt): provide an makePath(user) helper that constructs an
+	// /organization/:org_id/... or /user/... path as appropriate.
+	// 'user' and 'org' are enums that make it clearer than passing a boolean.
+	// TODO(matt): Expose makeRequest -or- move it to cloudflare-go/internal/ - ?
+	res, err := api.makeRequest("POST", makePath(c.orgID), cluster)
+	if err != nil {
+		return nil, errors.Wrap(err, errMakeRequestError)
+	}
 
-	return Cluster{}, nil
+	response := &VirtualDNSResponse{}
+	err = json.Unmarshal(res, &response)
+	if err != nil {
+		return nil, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return response.Result, nil
 }
 
 // ModifyCluster modifies an existing Virtual DNS cluster.
 // API reference:
 //   https://api.cloudflare.com/#...
 //   PATCH /...
-func ModifyCluster(cluster Cluster) (Cluster, error) {
+func (c *Client) ModifyCluster(cluster Cluster) (Cluster, error) {
 
 	return Cluster{}, nil
 }
@@ -56,7 +79,7 @@ func ModifyCluster(cluster Cluster) (Cluster, error) {
 // API reference:
 //   https://api.cloudflare.com/#...
 //   DELETE /...
-func DeleteCluster(cluster Cluster) (Cluster, error) {
+func (c *Client) DeleteCluster(cluster Cluster) (Cluster, error) {
 
 	return Cluster{}, nil
 }
