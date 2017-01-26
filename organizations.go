@@ -107,3 +107,30 @@ func (api *API) OrganizationDetails(organizationID string) (OrganizationDetails,
 
 	return r.Result, nil
 }
+
+// organizationMembersResponse represents the response from the Organization members endpoint.
+type organizationMembersResponse struct {
+	Response
+	Result     []OrganizationMember `json:"result"`
+	ResultInfo `json:"result_info"`
+}
+
+// OrganizationMembers returns list of members for specified organization of the logged-in user.
+// API reference:
+// 	https://api.cloudflare.com/#organization-members-list-members
+//	GET /organizations/:identifier/members
+func (api *API) OrganizationMembers(organizationID string) ([]OrganizationMember, ResultInfo, error) {
+	var r organizationMembersResponse
+	uri := "/organizations/" + organizationID + "/members"
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return []OrganizationMember{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return []OrganizationMember{}, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return r.Result, r.ResultInfo, nil
+}
