@@ -22,7 +22,7 @@ script:
   - rm -f coverage.txt; code=0; for pkg in $(go list ./... | grep -v '/vendor/'); do go test -covermode=atomic -coverprofile=coverage.tmp -v -race $pkg || code=$?; (([ -f coverage.tmp ] && cat coverage.tmp >> coverage.txt && rm -f coverage.tmp) || true); done; (exit $code)
 
 after_success:
-  - curl -X POST --data-binary @coverage.txt "https://codecov.io/upload/v2?commit=$TRAVIS_COMMIT&pr=$TRAVIS_PULL_REQUEST&slug=$TRAVIS_REPO_SLUG&job=$TRAVIS_JOB_ID&build=$TRAVIS_JOB_NUMBER&branch=$TRAVIS_BRANCH"
+  - bash codecov.sh
 
 notifications:
   email:
