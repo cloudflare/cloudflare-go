@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"reflect"
 	"strings"
 
 	"github.com/cloudflare/cloudflare-go"
@@ -280,7 +279,7 @@ func zoneRecords(c *cli.Context) {
 		case "MX":
 			r.Content = fmt.Sprintf("%d %s", r.Priority, r.Content)
 		case "SRV":
-			dp := reflect.ValueOf(r.Data).Interface().(map[string]interface{})
+			dp := r.Data.(map[string]interface{})
 			r.Content = fmt.Sprintf("%.f %s", dp["priority"], r.Content)
 			// Cloudflare's API, annoyingly, automatically prepends the weight
 			// and port into content, separated by tabs.
@@ -489,20 +488,19 @@ func pageRules(c *cli.Context) {
 		var settings []string
 		fmt.Printf("%3d %s %-8s %s\n", r.Priority, r.ID, r.Status, r.Targets[0].Constraint.Value)
 		for _, a := range r.Actions {
-			v := reflect.ValueOf(a.Value)
 			var s string
-			switch a.Value.(type) {
+			switch v := a.Value.(type) {
 			case int:
-				s = fmt.Sprintf("%s: %d", cloudflare.PageRuleActions[a.ID], v.Int())
+				s = fmt.Sprintf("%s: %d", cloudflare.PageRuleActions[a.ID], v)
 			case float64:
-				s = fmt.Sprintf("%s: %.f", cloudflare.PageRuleActions[a.ID], v.Float())
+				s = fmt.Sprintf("%s: %.f", cloudflare.PageRuleActions[a.ID], v)
 			case map[string]interface{}:
-				vmap := a.Value.(map[string]interface{})
-				s = fmt.Sprintf("%s: %.f - %s", cloudflare.PageRuleActions[a.ID], vmap["status_code"], vmap["url"])
+				s = fmt.Sprintf("%s: %.f - %s", cloudflare.PageRuleActions[a.ID], v["status_code"], v["url"])
 			case nil:
 				s = fmt.Sprintf("%s", cloudflare.PageRuleActions[a.ID])
 			default:
-				s = fmt.Sprintf("%s: %s", cloudflare.PageRuleActions[a.ID], strings.Title(strings.Replace(v.String(), "_", " ", -1)))
+				vs := fmt.Sprintf("%s", v)
+				s = fmt.Sprintf("%s: %s", cloudflare.PageRuleActions[a.ID], strings.Title(strings.Replace(vs, "_", " ", -1)))
 			}
 			settings = append(settings, s)
 		}
