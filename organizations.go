@@ -131,3 +131,29 @@ func (api *API) OrganizationMembers(organizationID string) ([]OrganizationMember
 
 	return r.Result, r.ResultInfo, nil
 }
+
+// organizationInvitesResponse represents the response from the Organization invites endpoint.
+type organizationInvitesResponse struct {
+	Response
+	Result     []OrganizationInvite `json:"result"`
+	ResultInfo `json:"result_info"`
+}
+
+// OrganizationMembers returns list of invites for specified organization of the logged-in user.
+//
+// API reference: https://api.cloudflare.com/#organization-invites
+func (api *API) OrganizationInvites(organizationID string) ([]OrganizationInvite, ResultInfo, error) {
+	var r organizationInvitesResponse
+	uri := "/organizations/" + organizationID + "/invites"
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return []OrganizationInvite{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return []OrganizationInvite{}, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return r.Result, r.ResultInfo, nil
+}
