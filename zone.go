@@ -44,7 +44,7 @@ type Zone struct {
 	Meta        ZoneMeta `json:"meta"`
 }
 
-// ZoneMeta metadata about a zone.
+// ZoneMeta describes metadata about a zone.
 type ZoneMeta struct {
 	// custom_certificate_quota is broken - sometimes it's a string, sometimes a number!
 	// CustCertQuota     int    `json:"custom_certificate_quota"`
@@ -212,6 +212,12 @@ type newZone struct {
 
 // CreateZone creates a zone on an account.
 //
+// Setting jumpstart to true will attempt to automatically scan for existing
+// DNS records. Setting this to false will create the zone with no DNS records.
+//
+// If Organization is non-empty, it must have at least the ID field populated.
+// This will add the new zone to the specified multi-user organization.
+//
 // API reference: https://api.cloudflare.com/#zone-create-a-zone
 func (api *API) CreateZone(name string, jumpstart bool, org Organization) (Zone, error) {
 	var newzone newZone
@@ -358,6 +364,7 @@ func (api *API) ZoneSetPlan(zoneID string, plan ZonePlan) (Zone, error) {
 }
 
 // EditZone edits the given zone.
+//
 // This is usually called by ZoneSetPaused, ZoneSetVanityNS or ZoneSetPlan.
 //
 // API reference: https://api.cloudflare.com/#zone-edit-zone-properties
@@ -376,6 +383,7 @@ func (api *API) EditZone(zoneID string, zoneOpts ZoneOptions) (Zone, error) {
 }
 
 // PurgeEverything purges the cache for the given zone.
+//
 // Note: this will substantially increase load on the origin server for that
 // zone if there is a high cached vs. uncached request ratio.
 //
@@ -478,9 +486,7 @@ func (o ZoneAnalyticsOptions) encode() string {
 
 // ZoneAnalyticsDashboard returns zone analytics information.
 //
-// API reference:
-//  https://api.cloudflare.com/#zone-analytics-dashboard
-//  GET /zones/:zone_identifier/analytics/dashboard
+// API reference: https://api.cloudflare.com/#zone-analytics-dashboard
 func (api *API) ZoneAnalyticsDashboard(zoneID string, options ZoneAnalyticsOptions) (ZoneAnalyticsData, error) {
 	uri := "/zones/" + zoneID + "/analytics/dashboard" + "?" + options.encode()
 	res, err := api.makeRequest("GET", uri, nil)
@@ -497,9 +503,7 @@ func (api *API) ZoneAnalyticsDashboard(zoneID string, options ZoneAnalyticsOptio
 
 // ZoneAnalyticsByColocation returns zone analytics information by datacenter.
 //
-// API reference:
-//  https://api.cloudflare.com/#zone-analytics-analytics-by-co-locations
-//  GET /zones/:zone_identifier/analytics/colos
+// API reference: https://api.cloudflare.com/#zone-analytics-analytics-by-co-locations
 func (api *API) ZoneAnalyticsByColocation(zoneID string, options ZoneAnalyticsOptions) ([]ZoneAnalyticsColocation, error) {
 	uri := "/zones/" + zoneID + "/analytics/colos" + "?" + options.encode()
 	res, err := api.makeRequest("GET", uri, nil)
@@ -513,9 +517,3 @@ func (api *API) ZoneAnalyticsByColocation(zoneID string, options ZoneAnalyticsOp
 	}
 	return r.Result, nil
 }
-
-// Zone Settings
-// https://api.cloudflare.com/#zone-settings-for-a-zone-get-all-zone-settings
-// e.g.
-// https://api.cloudflare.com/#zone-settings-for-a-zone-get-always-online-setting
-// https://api.cloudflare.com/#zone-settings-for-a-zone-change-always-online-setting

@@ -23,7 +23,7 @@ type organizationResponse struct {
 	ResultInfo `json:"result_info"`
 }
 
-// OrganizationMember has details on a member
+// OrganizationMember has details on a member.
 type OrganizationMember struct {
 	ID     string             `json:"id,omitempty"`
 	Name   string             `json:"name,omitempty"`
@@ -32,7 +32,7 @@ type OrganizationMember struct {
 	Roles  []OrganizationRole `json:"roles,omitempty"`
 }
 
-// OrganizationInvite has details on an invite
+// OrganizationInvite has details on an invite.
 type OrganizationInvite struct {
 	ID                 string             `json:"id,omitempty"`
 	InvitedMemberID    string             `json:"invited_member_id,omitempty"`
@@ -46,7 +46,7 @@ type OrganizationInvite struct {
 	Status             string             `json:"status,omitempty"`
 }
 
-// OrganizationRole has details on an role
+// OrganizationRole has details on a role.
 type OrganizationRole struct {
 	ID          string   `json:"id,omitempty"`
 	Name        string   `json:"name,omitempty"`
@@ -54,7 +54,7 @@ type OrganizationRole struct {
 	Permissions []string `json:"permissions,omitempty"`
 }
 
-// OrganizationDetails represents details of an organization
+// OrganizationDetails represents details of an organization.
 type OrganizationDetails struct {
 	ID      string               `json:"id,omitempty"`
 	Name    string               `json:"name,omitempty"`
@@ -70,9 +70,8 @@ type organizationDetailsResponse struct {
 }
 
 // ListOrganizations lists organizations of the logged-in user.
-// API reference:
-// 	https://api.cloudflare.com/#user-s-organizations-list-organizations
-//	GET /user/organizations
+//
+// API reference: https://api.cloudflare.com/#user-s-organizations-list-organizations
 func (api *API) ListOrganizations() ([]Organization, ResultInfo, error) {
 	var r organizationResponse
 	res, err := api.makeRequest("GET", "/user/organizations", nil)
@@ -89,9 +88,8 @@ func (api *API) ListOrganizations() ([]Organization, ResultInfo, error) {
 }
 
 // OrganizationDetails returns details for the specified organization of the logged-in user.
-// API reference:
-// 	https://api.cloudflare.com/#organizations-organization-details
-//	GET /organizations/:identifier
+//
+// API reference: https://api.cloudflare.com/#organizations-organization-details
 func (api *API) OrganizationDetails(organizationID string) (OrganizationDetails, error) {
 	var r organizationDetailsResponse
 	uri := "/organizations/" + organizationID
@@ -116,9 +114,8 @@ type organizationMembersResponse struct {
 }
 
 // OrganizationMembers returns list of members for specified organization of the logged-in user.
-// API reference:
-// 	https://api.cloudflare.com/#organization-members-list-members
-//	GET /organizations/:identifier/members
+//
+// API reference: https://api.cloudflare.com/#organization-members-list-members
 func (api *API) OrganizationMembers(organizationID string) ([]OrganizationMember, ResultInfo, error) {
 	var r organizationMembersResponse
 	uri := "/organizations/" + organizationID + "/members"

@@ -59,7 +59,7 @@ func New(key, email string, opts ...Option) (*API, error) {
 	return api, nil
 }
 
-// SetAuthType sets the authentication method (AuthyKeyEmail or AuthUserService)
+// SetAuthType sets the authentication method (AuthyKeyEmail or AuthUserService).
 func (api *API) SetAuthType(authType int) {
 	api.authType = authType
 }
