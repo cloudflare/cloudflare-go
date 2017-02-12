@@ -176,7 +176,7 @@ func zoneList(c *cli.Context) {
 		output = append(output, table{
 			"ID":     z.ID,
 			"Name":   z.Name,
-			"Plan":   z.Plan.LegacyID,
+			"Plan":   z.Plan.Name,
 			"Status": z.Status,
 		})
 	}
@@ -213,7 +213,7 @@ func zoneInfo(c *cli.Context) {
 		output = append(output, table{
 			"ID":           z.ID,
 			"Zone":         z.Name,
-			"Plan":         z.Plan.LegacyID,
+			"Plan":         z.Plan.Name,
 			"Status":       z.Status,
 			"Name Servers": strings.Join(nameservers, ", "),
 			"Paused":       fmt.Sprintf("%t", z.Paused),
