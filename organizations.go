@@ -157,3 +157,29 @@ func (api *API) OrganizationInvites(organizationID string) ([]OrganizationInvite
 
 	return r.Result, r.ResultInfo, nil
 }
+
+// organizationRolesResponse represents the response from the Organization roles endpoint.
+type organizationRolesResponse struct {
+	Response
+	Result     []OrganizationRole `json:"result"`
+	ResultInfo `json:"result_info"`
+}
+
+// OrganizationRoles returns list of roles for specified organization of the logged-in user.
+//
+// API reference: https://api.cloudflare.com/#organization-roles-list-roles
+func (api *API) OrganizationRoles(organizationID string) ([]OrganizationRole, ResultInfo, error) {
+	var r organizationRolesResponse
+	uri := "/organizations/" + organizationID + "/roles"
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return []OrganizationRole{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return []OrganizationRole{}, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return r.Result, r.ResultInfo, nil
+}
