@@ -328,9 +328,7 @@ func (api *API) ZoneDetails(zoneID string) (Zone, error) {
 
 // ZoneOptions is a subset of Zone, for editable options.
 type ZoneOptions struct {
-	// FIXME(jamesog): Using omitempty here means we can't disable Paused.
-	// Currently unsure how to work around this.
-	Paused   bool          `json:"paused,omitempty"`
+	Paused   *bool         `json:"paused,omitempty"`
 	VanityNS []string      `json:"vanity_name_servers,omitempty"`
 	Plan     *ZoneRatePlan `json:"plan,omitempty"`
 }
@@ -338,7 +336,7 @@ type ZoneOptions struct {
 // ZoneSetPaused pauses Cloudflare service for the entire zone, sending all
 // traffic direct to the origin.
 func (api *API) ZoneSetPaused(zoneID string, paused bool) (Zone, error) {
-	zoneopts := ZoneOptions{Paused: paused}
+	zoneopts := ZoneOptions{Paused: &paused}
 	zone, err := api.EditZone(zoneID, zoneopts)
 	if err != nil {
 		return Zone{}, err
