@@ -315,7 +315,6 @@ func TestOrganizations_OrganizationInvites(t *testing.T) {
 		OrganizationID:     "5a7805061c76ada191ed06f989cc3dac",
 		OrganizationName:   "Cloudflare, Inc.",
 		Roles: []OrganizationRole{{
-
 			ID:          "3536bcfad5faccb999b47003c79917fb",
 			Name:        "Organization Admin",
 			Description: "Administrative access to the entire Organization",
@@ -327,6 +326,60 @@ func TestOrganizations_OrganizationInvites(t *testing.T) {
 		ExpiresOn: &expiresOn,
 		Status:    "accepted",
 	}}
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, members, want)
+	}
+
+	wantPagination := ResultInfo{
+		Page:    1,
+		PerPage: 20,
+		Count:   1,
+		Total:   2000,
+	}
+	assert.Equal(t, paginator, wantPagination)
+}
+
+func TestOrganizations_OrganizationRoles(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/organizations/01a7362d577a6c3019a474fd6f485823/roles", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+  "success": true,
+  "errors": [],
+  "messages": [],
+  "result": [
+    {
+      "id": "3536bcfad5faccb999b47003c79917fb",
+      "name": "Organization Admin",
+      "description": "Administrative access to the entire Organization",
+      "permissions": [
+        "#zones:read"
+      ]
+    }
+  ],
+  "result_info": {
+    "page": 1,
+    "per_page": 20,
+    "count": 1,
+    "total_count": 2000
+  }
+}`)
+	})
+
+	members, paginator, err := client.OrganizationRoles("01a7362d577a6c3019a474fd6f485823")
+
+	want := []OrganizationRole{{
+		ID:          "3536bcfad5faccb999b47003c79917fb",
+		Name:        "Organization Admin",
+		Description: "Administrative access to the entire Organization",
+		Permissions: []string{
+			"#zones:read",
+		}}}
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, members, want)
