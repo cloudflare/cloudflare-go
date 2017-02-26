@@ -9,6 +9,7 @@ import (
 
 // OriginCACertificate resource
 // This is the origin_ca resource definition as defined here:
+//
 // https://api.cloudflare.com/#cloudflare-ca
 type OriginCACertificate struct {
 	ID              string    `json:"id"`
@@ -45,6 +46,7 @@ type originCACertificateResponseRevoke struct {
 }
 
 // CreateOriginCertificate will create an origin certificate for a User
+//
 // API reference: https://api.cloudflare.com/#cloudflare-ca-create-certificate
 func (api *API) CreateOriginCertificate(certificate OriginCACertificate) (*OriginCACertificate, error) {
 	uri := "/certificates"
@@ -70,6 +72,7 @@ func (api *API) CreateOriginCertificate(certificate OriginCACertificate) (*Origi
 }
 
 // OriginCertificates will list all certificates owned by the users
+//
 // API reference: https://api.cloudflare.com/#cloudflare-ca-list-certificates
 func (api *API) OriginCertificates() ([]OriginCACertificate, error) {
 	uri := "/certificates"
@@ -95,6 +98,7 @@ func (api *API) OriginCertificates() ([]OriginCACertificate, error) {
 }
 
 // OriginCertificate will get the details for a given certificate
+//
 // API reference: https://api.cloudflare.com/#cloudflare-ca-certificate-details
 func (api *API) OriginCertificate(certificateID string) (*OriginCACertificate, error) {
 	uri := "/certificates/" + certificateID
@@ -120,6 +124,7 @@ func (api *API) OriginCertificate(certificateID string) (*OriginCACertificate, e
 }
 
 // RevokeOriginCertificate will revoke a given certificate
+//
 // API reference: https://api.cloudflare.com/#cloudflare-ca-revoke-certificate
 func (api *API) RevokeOriginCertificate(certificateID string) (*OriginCACertificateID, error) {
 	uri := "/certificates/" + certificateID
