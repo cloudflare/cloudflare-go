@@ -123,6 +123,21 @@ type ZoneSettingResponse struct {
 	Result []ZoneSetting `json:"result"`
 }
 
+// ZoneSSLSetting contains ssl setting for a zone.
+type ZoneSSLSetting struct {
+	ID                string `json:"id"`
+	Editable          bool   `json:"editable"`
+	ModifiedOn        string `json:"modified_on"`
+	Value             string `json:"value"`
+	CertificateStatus string `json:"certificate_status"`
+}
+
+// ZoneSettingResponse represents the response from the Zone SSL Setting endpoint.
+type ZoneSSLSettingResponse struct {
+	Response
+	Result ZoneSSLSetting `json:"result"`
+}
+
 // ZoneAnalyticsData contains totals and timeseries analytics data for a zone.
 type ZoneAnalyticsData struct {
 	Totals     ZoneAnalytics   `json:"totals"`
@@ -502,6 +517,23 @@ func (api *API) ZoneAnalyticsByColocation(zoneID string, options ZoneAnalyticsOp
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return nil, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
+
+// ZoneSSLSetting returns information about ssl setting to the specified zone.
+//
+// API reference: https://api.cloudflare.com/#zone-settings-get-ssl-setting
+func (api *API) ZoneSSLSettings(zoneID string) (ZoneSSLSetting, error) {
+	uri := "/zones/" + zoneID + "/settings/ssl"
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return ZoneSSLSetting{}, errors.Wrap(err, errMakeRequestError)
+	}
+	var r ZoneSSLSettingResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return ZoneSSLSetting{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
 }
