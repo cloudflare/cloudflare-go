@@ -28,6 +28,7 @@ The current feature list includes:
 - [x] Cloudflare IPs
 - [x] User Administration (partial)
 - [x] Virtual DNS Management
+- [x] Custom hostnames
 - [ ] Organization Administration
 - [ ] [Railgun](https://www.cloudflare.com/railgun/) administration
 - [ ] [Keyless SSL](https://blog.cloudflare.com/keyless-ssl-the-nitty-gritty-technical-details/)
