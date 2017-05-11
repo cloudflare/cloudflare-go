@@ -55,7 +55,19 @@ func (api *API) CreateCustomHostname(zoneID string, ch CustomHostname) (*CustomH
 }
 
 func (api *API) CustomHostnames(zoneID string) ([]CustomHostname, error) {
-	return nil, nil
+	uri := "/zones/" + zoneID + "/custom_hostnames"
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return []CustomHostname{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var response CustomHostnameListResponse
+	err = json.Unmarshal(res, &response)
+	if err != nil {
+		return []CustomHostname{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return response.Result, nil
 }
 
 func (api *API) CustomHostname(zoneID string, customHostnameID string) (CustomHostname, error) {
@@ -66,7 +78,7 @@ func (api *API) CustomHostname(zoneID string, customHostnameID string) (CustomHo
 	}
 
 	var response CustomHostnameResponse
-	err = json.Unmarshal(res, response)
+	err = json.Unmarshal(res, &response)
 	if err != nil {
 		return CustomHostname{}, errors.Wrap(err, errUnmarshalError)
 	}
