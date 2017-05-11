@@ -85,3 +85,17 @@ func (api *API) CustomHostname(zoneID string, customHostnameID string) (CustomHo
 
 	return response.Result, nil
 }
+
+// CustomHostnameIDByName retrieves a custom hostname's ID from the hostname.
+func (api *API) CustomHostnameIDByName(zoneID string, hostname string) (string, error) {
+	res, err := api.CustomHostnames(zoneID)
+	if err != nil {
+		return "", errors.Wrap(err, "CustomHostnames command failed")
+	}
+	for _, ch := range res {
+		if ch.Hostname == hostname {
+			return ch.ID, nil
+		}
+	}
+	return "", errors.New("Zone could not be found")
+}
