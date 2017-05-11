@@ -19,7 +19,6 @@ type CustomHostnameSSL struct {
 type CustomHostname struct {
 	ID       string            `json:"id,omitempty"`
 	Hostname string            `json:"hostname,omitempty"`
-	Name     string            `json:"name,omitempty"`
 	SSL      CustomHostnameSSL `json:"ssl,omitempty"`
 }
 
@@ -54,6 +53,9 @@ func (api *API) CreateCustomHostname(zoneID string, ch CustomHostname) (*CustomH
 	return response, nil
 }
 
+// CreateCustomHostnames lists custom hostnames for a given zone.
+//
+// API reference: https://api.cloudflare.com/#custom-hostname-for-a-zone-list-custom-hostnames
 func (api *API) CustomHostnames(zoneID string) ([]CustomHostname, error) {
 	uri := "/zones/" + zoneID + "/custom_hostnames"
 	res, err := api.makeRequest("GET", uri, nil)
@@ -70,6 +72,9 @@ func (api *API) CustomHostnames(zoneID string) ([]CustomHostname, error) {
 	return response.Result, nil
 }
 
+// CreateCustomHostname inspects a given custom hostname in a given zone
+//
+// API reference: https://api.cloudflare.com/#custom-hostname-for-a-zone-custom-hostname-configuration-details
 func (api *API) CustomHostname(zoneID string, customHostnameID string) (CustomHostname, error) {
 	uri := "/zones/" + zoneID + "/custom_hostnames/" + customHostnameID
 	res, err := api.makeRequest("GET", uri, nil)
