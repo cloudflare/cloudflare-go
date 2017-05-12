@@ -17,6 +17,7 @@ type CustomHostnameSSL struct {
 	CnameName   string `json:"cname_name,omitempty"`
 }
 
+// CustomMetadata defines custom metadata for the hostname. This requires logic to be implemented by Cloudflare to act on the data provided.
 type CustomMetadata map[string]interface{}
 
 // CustomHostname represents a custom hostname in a zone.
@@ -27,18 +28,20 @@ type CustomHostname struct {
 	CustomMetadata CustomMetadata    `json:"custom_metadata,omitempty"`
 }
 
+// CustomHostNameResponse represents a response from the Custom Hostnames endpoints.
 type CustomHostnameResponse struct {
 	Result CustomHostname `json:"result"`
 	Response
 }
 
+// CustomHostnameListResponse represents a response from the Custom Hostnames endpoints.
 type CustomHostnameListResponse struct {
 	Result []CustomHostname `json:"result"`
 	Response
 	ResultInfo `json:"result_info"`
 }
 
-// Modify SSL configuration for a custom hostname
+// Modify SSL configuration for the given custom hostname in the given zone.
 //
 // API reference: https://api.cloudflare.com/#custom-hostname-for-a-zone-update-custom-hostname-configuration
 func (api *API) UpdateCustomHostnameSSL(zoneID string, customHostnameID string, ssl CustomHostnameSSL) (CustomHostname, error) {
@@ -83,7 +86,10 @@ func (api *API) CreateCustomHostname(zoneID string, ch CustomHostname) (*CustomH
 	return response, nil
 }
 
-// CustomHostnames lists custom hostnames for a given zone.
+// CustomHostnames fetches custom hostnames for the given zone,
+// by applying filter.Hostname if not empty and scoping the result to page'th 50 items.
+//
+// The returned ResultInfo can be used to implement pagination.
 //
 // API reference: https://api.cloudflare.com/#custom-hostname-for-a-zone-list-custom-hostnames
 func (api *API) CustomHostnames(zoneID string, page int, filter CustomHostname) ([]CustomHostname, ResultInfo, error) {
@@ -109,7 +115,7 @@ func (api *API) CustomHostnames(zoneID string, page int, filter CustomHostname) 
 	return customHostnameListResponse.Result, customHostnameListResponse.ResultInfo, nil
 }
 
-// CustomHostname inspects a given custom hostname in a given zone
+// CustomHostname inspects the given custom hostname in the given zone.
 //
 // API reference: https://api.cloudflare.com/#custom-hostname-for-a-zone-custom-hostname-configuration-details
 func (api *API) CustomHostname(zoneID string, customHostnameID string) (CustomHostname, error) {
@@ -128,7 +134,7 @@ func (api *API) CustomHostname(zoneID string, customHostnameID string) (CustomHo
 	return response.Result, nil
 }
 
-// CustomHostnameIDByName retrieves a custom hostname's ID from the hostname.
+// CustomHostnameIDByName retrieves the ID for the given hostname in the given zone.
 func (api *API) CustomHostnameIDByName(zoneID string, hostname string) (string, error) {
 	customHostnames, _, err := api.CustomHostnames(zoneID, 1, CustomHostname{Hostname: hostname})
 	if err != nil {
