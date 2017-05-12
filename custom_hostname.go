@@ -38,6 +38,13 @@ type CustomHostnameListResponse struct {
 	ResultInfo `json:"result_info"`
 }
 
+// Modify SSL configuration for a custom hostname
+//
+// API reference: https://api.cloudflare.com/#custom-hostname-for-a-zone-update-custom-hostname-configuration
+func (api *API) UpdateCustomHostnameSSL(zoneID string, customHostnameID string, ssl CustomHostnameSSL) (CustomHostname, error) {
+	return CustomHostname{}, errors.New("Not implemented")
+}
+
 // Delete a custom hostname (and any issued SSL certificates)
 //
 // API reference: https://api.cloudflare.com/#custom-hostname-for-a-zone-delete-a-custom-hostname-and-any-issued-ssl-certificates-
