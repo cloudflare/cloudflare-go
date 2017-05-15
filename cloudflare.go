@@ -144,6 +144,10 @@ func (api *API) request(method, uri string, reqBody io.Reader) (*http.Response, 
 		req.Header.Set("X-Auth-User-Service-Key", api.APIUserServiceKey)
 	}
 
+	if req.Header.Get("Content-Type") == "" {
+		req.Header.Set("Content-Type", "application/json")
+	}
+
 	resp, err := api.httpClient.Do(req)
 	if err != nil {
 		return nil, errors.Wrap(err, "HTTP request failed")
