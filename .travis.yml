@@ -19,7 +19,10 @@ script:
   - if [[ $TRAVIS_GO_VERSION == 1.7* ]]; then diff -u <(echo -n) <(gofmt -d .); fi
   - if [[ $TRAVIS_GO_VERSION == 1.7* ]]; then go vet $(go list ./... | grep -v '/vendor/'); fi
   - if [[ $TRAVIS_GO_VERSION == 1.7* ]]; then for package in $(go list ./... | grep -v '/vendor/'); do golint -set_exit_status $package; done; fi
-  - go test -v -race $(go list ./... | grep -v '/vendor/')
+  - rm -f coverage.txt; code=0; for pkg in $(go list ./... | grep -v '/vendor/'); do go test -covermode=atomic -coverprofile=coverage.tmp -v -race $pkg || code=$?; (([ -f coverage.tmp ] && cat coverage.tmp >> coverage.txt && rm -f coverage.tmp) || true); done; (exit $code)
+
+after_success:
+  - bash codecov.sh
 
 notifications:
   email:
