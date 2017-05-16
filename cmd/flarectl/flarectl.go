@@ -156,6 +156,81 @@ func main() {
 					},
 				},
 				{
+					Name:    "customhostname",
+					Aliases: []string{"ch"},
+					Usage:   "Custom hostname information",
+					Subcommands: []cli.Command{
+						{
+							Name:    "list",
+							Aliases: []string{"l"},
+							Action:  zoneCustHostList,
+							Usage:   "List all the custom hostname on an account",
+							Flags: []cli.Flag{
+								cli.StringFlag{
+									Name:  "zone",
+									Usage: "zone name",
+								},
+							},
+						},
+						{
+							Name:    "info",
+							Aliases: []string{"i"},
+							Action:  zoneCustHostInfo,
+							Usage:   "Information on one custom hostname",
+							Flags: []cli.Flag{
+								cli.StringFlag{
+									Name:  "zone",
+									Usage: "zone name",
+								},
+								cli.StringFlag{
+									Name:  "hostname",
+									Usage: "host name",
+								},
+							},
+						},
+						{
+							Name:    "create",
+							Aliases: []string{"c"},
+							Action:  zoneCustHostCreate,
+							Usage:   "Create a custom hostname",
+							Flags: []cli.Flag{
+								cli.StringFlag{
+									Name:  "zone",
+									Usage: "zone name",
+								},
+								cli.StringFlag{
+									Name:  "hostname",
+									Usage: "host name",
+								},
+								cli.StringFlag{
+									Name:  "ssl-method",
+									Usage: "ssl method",
+								},
+								cli.StringFlag{
+									Name:  "ssl-type",
+									Usage: "ssl type",
+								},
+							},
+						},
+						{
+							Name:    "delete",
+							Aliases: []string{"d"},
+							Action:  zoneCustHostDelete,
+							Usage:   "Delete a custom hostname",
+							Flags: []cli.Flag{
+								cli.StringFlag{
+									Name:  "zone",
+									Usage: "zone name",
+								},
+								cli.StringFlag{
+									Name:  "hostname",
+									Usage: "host name",
+								},
+							},
+						},
+					},
+				},
+				{
 					Name:    "info",
 					Aliases: []string{"i"},
 					Action:  zoneInfo,

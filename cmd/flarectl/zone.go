@@ -196,3 +196,194 @@ func zoneRecords(c *cli.Context) {
 	}
 	makeTable(output, "ID", "Type", "Name", "Content", "Proxied", "TTL")
 }
+
+func zoneCustHostList(c *cli.Context) {
+	if err := checkEnv(); err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	var zone string
+	if c.String("zone") != "" {
+		zone = c.String("zone")
+	} else {
+		cli.ShowSubcommandHelp(c)
+		return
+	}
+	zoneID, err := api.ZoneIDByName(zone)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	customhostnamesResult, _, err := api.CustomHostnames(zoneID, 0, cloudflare.CustomHostname{})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	var output []table
+	for _, z := range customhostnamesResult {
+		output = append(output, table{
+			"Hostname": z.Hostname,
+			"ID":       z.ID,
+		})
+	}
+	makeTable(output, "Hostname", "ID")
+}
+
+func zoneCustHostInfo(c *cli.Context) {
+	if err := checkEnv(); err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	var zone string
+	if c.String("zone") != "" {
+		zone = c.String("zone")
+	} else {
+		cli.ShowSubcommandHelp(c)
+		return
+	}
+	zoneID, err := api.ZoneIDByName(zone)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	var hostname string
+	if c.String("hostname") != "" {
+		hostname = c.String("hostname")
+	} else {
+		cli.ShowSubcommandHelp(c)
+		return
+	}
+	hostnameID, err := api.CustomHostnameIDByName(zoneID, hostname)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	customname, err := api.CustomHostname(zoneID, hostnameID)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	var output []table
+	output = append(output, table{
+		"Hostname":   customname.Hostname,
+		"ID":         customname.ID,
+		"SSL Status": customname.SSL.Status,
+		"SSL Method": customname.SSL.Method,
+		"SSL Type":   customname.SSL.Type,
+	})
+	makeTable(output, "Hostname", "ID", "SSL Status", "SSL Method", "SSL Type")
+}
+
+func zoneCustHostCreate(c *cli.Context) {
+	if err := checkEnv(); err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	var zone string
+	if c.String("zone") != "" {
+		zone = c.String("zone")
+	} else {
+		cli.ShowSubcommandHelp(c)
+		return
+	}
+	zoneID, err := api.ZoneIDByName(zone)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	var hostname string
+	if c.String("hostname") != "" {
+		hostname = c.String("hostname")
+	} else {
+		cli.ShowSubcommandHelp(c)
+		return
+	}
+
+	var sslMethod string
+	if c.String("ssl-method") != "" {
+		sslMethod = c.String("ssl-method")
+	} else {
+		cli.ShowSubcommandHelp(c)
+		return
+	}
+
+	var sslType string
+	if c.String("ssl-type") != "" {
+		sslType = c.String("ssl-type")
+	} else {
+		cli.ShowSubcommandHelp(c)
+		return
+	}
+
+	newCustHost := cloudflare.CustomHostname{Hostname: hostname, SSL: cloudflare.CustomHostnameSSL{Method: sslMethod, Type: sslType}}
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	res, err := api.CreateCustomHostname(zoneID, newCustHost)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	var output []table
+	output = append(output, table{
+		"Created":    fmt.Sprintf("%t", res.Response.Success),
+		"Hostname":   res.Result.Hostname,
+		"ID":         res.Result.ID,
+		"SSL Status": res.Result.SSL.Status,
+		"SSL Method": res.Result.SSL.Method,
+		"SSL Type":   res.Result.SSL.Type,
+	})
+	makeTable(output, "Created", "Hostname", "ID", "SSL Status", "SSL Method", "SSL Type")
+}
+
+func zoneCustHostDelete(c *cli.Context) {
+	if err := checkEnv(); err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	var zone string
+	if c.String("zone") != "" {
+		zone = c.String("zone")
+	} else {
+		cli.ShowSubcommandHelp(c)
+		return
+	}
+	zoneID, err := api.ZoneIDByName(zone)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	var hostname string
+	if c.String("hostname") != "" {
+		hostname = c.String("hostname")
+	} else {
+		cli.ShowSubcommandHelp(c)
+		return
+	}
+	hostnameID, err := api.CustomHostnameIDByName(zoneID, hostname)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	_ = api.DeleteCustomHostname(zoneID, hostnameID)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+}
