@@ -64,8 +64,8 @@ func TestCustomHostname_CreateCustomHostname(t *testing.T) {
 				Type:        "dv",
 				Method:      "cname",
 				Status:      "pending_validation",
-				CnameTarget: "dcv.digicert.com",
-				CnameName:   "810b7d5f01154524b961ba0cd578acc2.app.example.com",
+				CNAMETarget: "dcv.digicert.com",
+				CNAMEName:   "810b7d5f01154524b961ba0cd578acc2.app.example.com",
 			},
 		},
 		Response: Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}},
@@ -90,7 +90,7 @@ func TestCustomHostname_CustomHostnames(t *testing.T) {
     {
       "id": "custom_host_1",
       "hostname": "custom.host.one",
-			"ssl": {
+      "ssl": {
         "type": "dv",
         "method": "cname",
         "status": "pending_validation",
@@ -98,12 +98,12 @@ func TestCustomHostname_CustomHostnames(t *testing.T) {
         "cname_name": "810b7d5f01154524b961ba0cd578acc2.app.example.com"
       },
       "custom_metadata": {
-				"a_random_field": "random field value"
+        "a_random_field": "random field value"
       }
     }
 ],
 "result_info": {
-	  "page": 1,
+    "page": 1,
     "per_page": 20,
     "count": 5,
     "total_count": 5
@@ -111,7 +111,7 @@ func TestCustomHostname_CustomHostnames(t *testing.T) {
 }`)
 	})
 
-	customHostnames, _, err := client.CustomHostnames("foo", 1, CustomHostname{})
+	customHostnames, _, err := client.ListCustomHostnames("foo", 1)
 
 	want := []CustomHostname{
 		{
@@ -121,8 +121,8 @@ func TestCustomHostname_CustomHostnames(t *testing.T) {
 				Type:        "dv",
 				Method:      "cname",
 				Status:      "pending_validation",
-				CnameTarget: "dcv.digicert.com",
-				CnameName:   "810b7d5f01154524b961ba0cd578acc2.app.example.com",
+				CNAMETarget: "dcv.digicert.com",
+				CNAMEName:   "810b7d5f01154524b961ba0cd578acc2.app.example.com",
 			},
 			CustomMetadata: CustomMetadata{"a_random_field": "random field value"},
 		},

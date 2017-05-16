@@ -13,8 +13,8 @@ type CustomHostnameSSL struct {
 	Status      string `json:"status,omitempty"`
 	Method      string `json:"method,omitempty"`
 	Type        string `json:"type,omitempty"`
-	CnameTarget string `json:"cname_target,omitempty"`
-	CnameName   string `json:"cname_name,omitempty"`
+	CNAMETarget string `json:"cname_target,omitempty"`
+	CNAMEName   string `json:"cname_name,omitempty"`
 }
 
 // CustomMetadata defines custom metadata for the hostname. This requires logic to be implemented by Cloudflare to act on the data provided.
@@ -22,13 +22,16 @@ type CustomMetadata map[string]interface{}
 
 // CustomHostname represents a custom hostname in a zone.
 type CustomHostname struct {
-	ID             string            `json:"id,omitempty"`
-	Hostname       string            `json:"hostname,omitempty"`
-	SSL            CustomHostnameSSL `json:"ssl,omitempty"`
-	CustomMetadata CustomMetadata    `json:"custom_metadata,omitempty"`
+	ID       string `json:"id,omitempty"`
+	Hostname string `json:"hostname,omitempty"`
+	// CustomOriginServer allows you to override the backend server on a per-hostname basis. This is a optional, added feature.
+	CustomOriginServer string            `json:"custom_origin_server,omitempty"`
+	SSL                CustomHostnameSSL `json:"ssl,omitempty"`
+	CustomMetadata     CustomMetadata    `json:"custom_metadata,omitempty"`
 }
 
-// CustomHostNameResponse represents a response from the Custom Hostnames endpoints.
+// CustomHostnameResponse represents a response from the Custom Hostnames
+// endpoints.
 type CustomHostnameResponse struct {
 	Result CustomHostname `json:"result"`
 	Response
@@ -41,14 +44,16 @@ type CustomHostnameListResponse struct {
 	ResultInfo `json:"result_info"`
 }
 
-// Modify SSL configuration for the given custom hostname in the given zone.
+// UpdateCustomHostnameSSL modifies SSL configuration for the given custom
+// hostname in the zone.
 //
 // API reference: https://api.cloudflare.com/#custom-hostname-for-a-zone-update-custom-hostname-configuration
 func (api *API) UpdateCustomHostnameSSL(zoneID string, customHostnameID string, ssl CustomHostnameSSL) (CustomHostname, error) {
 	return CustomHostname{}, errors.New("Not implemented")
 }
 
-// Delete a custom hostname (and any issued SSL certificates)
+// DeleteCustomHostname deletes a custom hostname (and any issued SSL
+// certificates)
 //
 // API reference: https://api.cloudflare.com/#custom-hostname-for-a-zone-delete-a-custom-hostname-and-any-issued-ssl-certificates-
 func (api *API) DeleteCustomHostname(zoneID string, customHostnameID string) error {
@@ -86,13 +91,18 @@ func (api *API) CreateCustomHostname(zoneID string, ch CustomHostname) (*CustomH
 	return response, nil
 }
 
-// CustomHostnames fetches custom hostnames for the given zone,
-// by applying filter.Hostname if not empty and scoping the result to page'th 50 items.
-//
-// The returned ResultInfo can be used to implement pagination.
+// ListCustomHostnames fetches custom hostnames for the given zone by page.
 //
 // API reference: https://api.cloudflare.com/#custom-hostname-for-a-zone-list-custom-hostnames
-func (api *API) CustomHostnames(zoneID string, page int, filter CustomHostname) ([]CustomHostname, ResultInfo, error) {
+func (api *API) ListCustomHostnames(zoneID string, page int) ([]CustomHostname, ResultInfo, error) {
+	return api.FilterCustomHostnames(zoneID, page, CustomHostname{})
+}
+
+// FilterCustomHostnames fetches custom hostnames for the given zone,
+// by applying a filter.
+//
+// API reference: https://api.cloudflare.com/#custom-hostname-for-a-zone-list-custom-hostnames
+func (api *API) FilterCustomHostnames(zoneID string, page int, filter CustomHostname) ([]CustomHostname, ResultInfo, error) {
 	v := url.Values{}
 	v.Set("per_page", "50")
 	v.Set("page", strconv.Itoa(page))
@@ -136,14 +146,14 @@ func (api *API) CustomHostname(zoneID string, customHostnameID string) (CustomHo
 
 // CustomHostnameIDByName retrieves the ID for the given hostname in the given zone.
 func (api *API) CustomHostnameIDByName(zoneID string, hostname string) (string, error) {
-	customHostnames, _, err := api.CustomHostnames(zoneID, 1, CustomHostname{Hostname: hostname})
+	customHostnames, _, err := api.FilterCustomHostnames(zoneID, 1, CustomHostname{Hostname: hostname})
 	if err != nil {
-		return "", errors.Wrap(err, "CustomHostnames command failed")
+		return "", errors.Wrap(err, "failed to fetch CustomHostnameIDByName")
 	}
 	for _, ch := range customHostnames {
 		if ch.Hostname == hostname {
 			return ch.ID, nil
 		}
 	}
-	return "", errors.New("CustomHostname could not be found")
+	return "", errors.New("the custom hostname could not be found")
 }
