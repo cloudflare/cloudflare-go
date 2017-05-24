@@ -94,7 +94,7 @@ func (api *API) CreateCustomHostname(zoneID string, ch CustomHostname) (*CustomH
 // API reference: https://api.cloudflare.com/#custom-hostname-for-a-zone-list-custom-hostnames
 func (api *API) CustomHostnames(zoneID string, page int, filter CustomHostname) ([]CustomHostname, ResultInfo, error) {
 	v := url.Values{}
-	v.Set("per_page", "50")
+	v.Set("per_page", "1000")
 	v.Set("page", strconv.Itoa(page))
 	if filter.Hostname != "" {
 		v.Set("hostname", filter.Hostname)
