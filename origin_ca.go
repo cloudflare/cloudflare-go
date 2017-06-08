@@ -7,10 +7,9 @@ import (
 	"github.com/pkg/errors"
 )
 
-// OriginCACertificate resource
-// This is the origin_ca resource definition as defined here:
+// OriginCACertificate represents a Cloudflare-issued certificate.
 //
-// https://api.cloudflare.com/#cloudflare-ca
+// API reference: https://api.cloudflare.com/#cloudflare-ca
 type OriginCACertificate struct {
 	ID              string    `json:"id"`
 	Certificate     string    `json:"certificate"`
@@ -21,31 +20,33 @@ type OriginCACertificate struct {
 	CSR             string    `json:"csr"`
 }
 
-// OriginCACertificateID is the resource sent back for a revoke action
+// OriginCACertificateID represents the ID of the revoked certificate from the Revoke Certificate endpoint.
 type OriginCACertificateID struct {
 	ID string `json:"id"`
 }
 
-// originCACertificateResponse is the APIv4 response envelop containing the OriginCA result
+// originCACertificateResponse represents the response from the Create Certificate and the Certificate Details endpoints.
 type originCACertificateResponse struct {
 	Response
 	Result OriginCACertificate `json:"result"`
 }
 
-// originCACertificateResponseList is the APIv4 response envelop containing a listof OriginCA result
+// originCACertificateResponseList represents the response from the List Certificates endpoint.
 type originCACertificateResponseList struct {
 	Response
 	Result     []OriginCACertificate `json:"result"`
 	ResultInfo ResultInfo            `json:"result_info"`
 }
 
-// originCACertificateResponseRevoke is the APIv4 response envelop containing a revoked cert id
+// originCACertificateResponseRevoke represents the response from the Revoke Certificate endpoint.
 type originCACertificateResponseRevoke struct {
 	Response
 	Result OriginCACertificateID `json:"result"`
 }
 
-// CreateOriginCertificate will create an origin certificate for a User
+// CreateOriginCertificate creates a Cloudflare-signed certificate.
+//
+// This function requires api.APIUserServiceKey be set to your Certificates API key.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-ca-create-certificate
 func (api *API) CreateOriginCertificate(certificate OriginCACertificate) (*OriginCACertificate, error) {
@@ -71,7 +72,9 @@ func (api *API) CreateOriginCertificate(certificate OriginCACertificate) (*Origi
 	return &originResponse.Result, nil
 }
 
-// OriginCertificates will list all certificates owned by the users
+// OriginCertificates lists all Cloudflare-issued certificates.
+//
+// This function requires api.APIUserServiceKey be set to your Certificates API key.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-ca-list-certificates
 func (api *API) OriginCertificates() ([]OriginCACertificate, error) {
@@ -97,7 +100,9 @@ func (api *API) OriginCertificates() ([]OriginCACertificate, error) {
 	return originResponse.Result, nil
 }
 
-// OriginCertificate will get the details for a given certificate
+// OriginCertificate returns the details for a Cloudflare-issued certificate.
+//
+// This function requires api.APIUserServiceKey be set to your Certificates API key.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-ca-certificate-details
 func (api *API) OriginCertificate(certificateID string) (*OriginCACertificate, error) {
@@ -123,7 +128,9 @@ func (api *API) OriginCertificate(certificateID string) (*OriginCACertificate, e
 	return &originResponse.Result, nil
 }
 
-// RevokeOriginCertificate will revoke a given certificate
+// RevokeOriginCertificate revokes a created certificate for a zone.
+//
+// This function requires api.APIUserServiceKey be set to your Certificates API key.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-ca-revoke-certificate
 func (api *API) RevokeOriginCertificate(certificateID string) (*OriginCACertificateID, error) {
