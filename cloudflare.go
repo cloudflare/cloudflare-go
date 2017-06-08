@@ -81,6 +81,10 @@ func (api *API) ZoneIDByName(zoneName string) (string, error) {
 // makeRequest makes a HTTP request and returns the body as a byte slice,
 // closing it before returnng. params will be serialized to JSON.
 func (api *API) makeRequest(method, uri string, params interface{}) ([]byte, error) {
+	return api.makeRequestWithAuthType(method, uri, params, api.authType)
+}
+
+func (api *API) makeRequestWithAuthType(method, uri string, params interface{}, authType int) ([]byte, error) {
 	// Replace nil with a JSON object if needed
 	var reqBody io.Reader
 	if params != nil {
@@ -93,7 +97,7 @@ func (api *API) makeRequest(method, uri string, params interface{}) ([]byte, err
 		reqBody = nil
 	}
 
-	resp, err := api.request(method, uri, reqBody)
+	resp, err := api.request(method, uri, reqBody, authType)
 	if err != nil {
 		return nil, err
 	}
@@ -128,7 +132,7 @@ func (api *API) makeRequest(method, uri string, params interface{}) ([]byte, err
 // request makes a HTTP request to the given API endpoint, returning the raw
 // *http.Response, or an error if one occurred. The caller is responsible for
 // closing the response body.
-func (api *API) request(method, uri string, reqBody io.Reader) (*http.Response, error) {
+func (api *API) request(method, uri string, reqBody io.Reader, authType int) (*http.Response, error) {
 	req, err := http.NewRequest(method, api.BaseURL+uri, reqBody)
 	if err != nil {
 		return nil, errors.Wrap(err, "HTTP request creation failed")
@@ -136,11 +140,11 @@ func (api *API) request(method, uri string, reqBody io.Reader) (*http.Response, 
 
 	// Apply any user-defined headers first.
 	req.Header = cloneHeader(api.headers)
-	if api.authType&AuthKeyEmail != 0 {
+	if authType&AuthKeyEmail != 0 {
 		req.Header.Set("X-Auth-Key", api.APIKey)
 		req.Header.Set("X-Auth-Email", api.APIEmail)
 	}
-	if api.authType&AuthUserService != 0 {
+	if authType&AuthUserService != 0 {
 		req.Header.Set("X-Auth-User-Service-Key", api.APIUserServiceKey)
 	}
 
