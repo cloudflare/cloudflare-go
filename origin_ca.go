@@ -2,6 +2,7 @@ package cloudflare
 
 import (
 	"encoding/json"
+	"net/url"
 	"time"
 
 	"github.com/pkg/errors"
@@ -18,6 +19,11 @@ type OriginCACertificate struct {
 	RequestType     string    `json:"request_type"`
 	RequestValidity string    `json:"requested_validity"`
 	CSR             string    `json:"csr"`
+}
+
+// OriginCACertificateListOptions represents the parameters used to list Cloudflare-issued certificates.
+type OriginCACertificateListOptions struct {
+	ZoneID string
 }
 
 // OriginCACertificateID represents the ID of the revoked certificate from the Revoke Certificate endpoint.
@@ -77,8 +83,12 @@ func (api *API) CreateOriginCertificate(certificate OriginCACertificate) (*Origi
 // This function requires api.APIUserServiceKey be set to your Certificates API key.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-ca-list-certificates
-func (api *API) OriginCertificates() ([]OriginCACertificate, error) {
-	uri := "/certificates"
+func (api *API) OriginCertificates(options OriginCACertificateListOptions) ([]OriginCACertificate, error) {
+	v := url.Values{}
+	if options.ZoneID != "" {
+		v.Set("zone_id", options.ZoneID)
+	}
+	uri := "/certificates" + "?" + v.Encode()
 	res, err := api.makeRequestWithAuthType("GET", uri, nil, AuthUserService)
 
 	if err != nil {
