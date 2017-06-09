@@ -17,7 +17,7 @@ type OriginCACertificate struct {
 	Hostnames       []string  `json:"hostnames"`
 	ExpiresOn       time.Time `json:"expires_on"`
 	RequestType     string    `json:"request_type"`
-	RequestValidity string    `json:"requested_validity"`
+	RequestValidity int       `json:"requested_validity"`
 	CSR             string    `json:"csr"`
 }
 
