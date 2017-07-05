@@ -193,3 +193,24 @@ type ResultInfo struct {
 	Count      int `json:"count"`
 	Total      int `json:"total_count"`
 }
+
+// RawResponse keeps the result as JSON form
+type RawResponse struct {
+	Response
+	Result json.RawMessage `json:"result"`
+}
+
+// Raw makes a HTTP request with user provided params and returns the
+// result as untouched JSON.
+func (api *API) Raw(method, endpoint string, data interface{}) (json.RawMessage, error) {
+	res, err := api.makeRequest(method, endpoint, data)
+	if err != nil {
+		return nil, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var r RawResponse
+	if err := json.Unmarshal(res, &r); err != nil {
+		return nil, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
