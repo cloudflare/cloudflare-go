@@ -34,6 +34,7 @@ The current feature list includes:
 - [ ] [Railgun](https://www.cloudflare.com/railgun/) administration
 - [ ] [Keyless SSL](https://blog.cloudflare.com/keyless-ssl-the-nitty-gritty-technical-details/)
 - [x] [Origin CA](https://blog.cloudflare.com/universal-ssl-encryption-all-the-way-to-the-origin-for-free/)
+- [x] Load Balancing (user pools and monitors only)
 
 Pull Requests are welcome, but please open an issue (or comment in an existing issue) to discuss any
 non-trivial changes before submitting code.
