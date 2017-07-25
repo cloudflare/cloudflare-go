@@ -22,6 +22,15 @@ func Headers(headers http.Header) Option {
 	}
 }
 
+// Organization allows you to apply account-level changes (Load Balancing, Railguns)
+// to an organization instead.
+func UsingOrganization(orgID string) Option {
+	return func(api *API) error {
+		api.organizationID = orgID
+		return nil
+	}
+}
+
 // parseOptions parses the supplied options functions and returns a configured
 // *API instance.
 func (api *API) parseOptions(opts ...Option) error {
