@@ -26,6 +26,7 @@ type API struct {
 	APIEmail          string
 	APIUserServiceKey string
 	BaseURL           string
+	organizationID    string
 	headers           http.Header
 	httpClient        *http.Client
 	authType          int
@@ -158,6 +159,15 @@ func (api *API) request(method, uri string, reqBody io.Reader, authType int) (*h
 	}
 
 	return resp, nil
+}
+
+// Returns the base URL to use for API endpoints that exist for both accounts and organizations.
+// If an Organization option was used when creating the API instance, returns the org URL.
+func (api *API) userBaseURL() string {
+	if api.organizationID != "" {
+		return "/organizations/" + api.organizationID
+	}
+	return "/user"
 }
 
 // cloneHeader returns a shallow copy of the header.

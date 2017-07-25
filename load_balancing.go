@@ -101,7 +101,7 @@ type loadBalancerListResponse struct {
 //
 // API reference: https://api.cloudflare.com/#load-balancer-pools-create-a-pool
 func (api *API) CreateLoadBalancerPool(pool LoadBalancerPool) (LoadBalancerPool, error) {
-	uri := "/user/load_balancers/pools"
+	uri := api.userBaseURL() + "/load_balancers/pools"
 	res, err := api.makeRequest("POST", uri, pool)
 	if err != nil {
 		return LoadBalancerPool{}, errors.Wrap(err, errMakeRequestError)
@@ -117,7 +117,7 @@ func (api *API) CreateLoadBalancerPool(pool LoadBalancerPool) (LoadBalancerPool,
 //
 // API reference: https://api.cloudflare.com/#load-balancer-pools-list-pools
 func (api *API) ListLoadBalancerPools() ([]LoadBalancerPool, error) {
-	uri := "/user/load_balancers/pools"
+	uri := api.userBaseURL() + "/load_balancers/pools"
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
@@ -133,7 +133,7 @@ func (api *API) ListLoadBalancerPools() ([]LoadBalancerPool, error) {
 //
 // API reference: https://api.cloudflare.com/#load-balancer-pools-pool-details
 func (api *API) LoadBalancerPoolDetails(poolID string) (LoadBalancerPool, error) {
-	uri := "/user/load_balancers/pools/" + poolID
+	uri := api.userBaseURL() + "/load_balancers/pools/" + poolID
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
 		return LoadBalancerPool{}, errors.Wrap(err, errMakeRequestError)
@@ -149,7 +149,7 @@ func (api *API) LoadBalancerPoolDetails(poolID string) (LoadBalancerPool, error)
 //
 // API reference: https://api.cloudflare.com/#load-balancer-pools-delete-a-pool
 func (api *API) DeleteLoadBalancerPool(poolID string) error {
-	uri := "/user/load_balancers/pools/" + poolID
+	uri := api.userBaseURL() + "/load_balancers/pools/" + poolID
 	if _, err := api.makeRequest("DELETE", uri, nil); err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}
@@ -160,7 +160,7 @@ func (api *API) DeleteLoadBalancerPool(poolID string) error {
 //
 // API reference: https://api.cloudflare.com/#load-balancer-pools-modify-a-pool
 func (api *API) ModifyLoadBalancerPool(pool LoadBalancerPool) (LoadBalancerPool, error) {
-	uri := "/user/load_balancers/pools/" + pool.ID
+	uri := api.userBaseURL() + "/load_balancers/pools/" + pool.ID
 	res, err := api.makeRequest("PUT", uri, pool)
 	if err != nil {
 		return LoadBalancerPool{}, errors.Wrap(err, errMakeRequestError)
@@ -176,7 +176,7 @@ func (api *API) ModifyLoadBalancerPool(pool LoadBalancerPool) (LoadBalancerPool,
 //
 // API reference: https://api.cloudflare.com/#load-balancer-monitors-create-a-monitor
 func (api *API) CreateLoadBalancerMonitor(monitor LoadBalancerMonitor) (LoadBalancerMonitor, error) {
-	uri := "/user/load_balancers/monitors"
+	uri := api.userBaseURL() + "/load_balancers/monitors"
 	res, err := api.makeRequest("POST", uri, monitor)
 	if err != nil {
 		return LoadBalancerMonitor{}, errors.Wrap(err, errMakeRequestError)
@@ -192,7 +192,7 @@ func (api *API) CreateLoadBalancerMonitor(monitor LoadBalancerMonitor) (LoadBala
 //
 // API reference: https://api.cloudflare.com/#load-balancer-monitors-list-monitors
 func (api *API) ListLoadBalancerMonitors() ([]LoadBalancerMonitor, error) {
-	uri := "/user/load_balancers/monitors"
+	uri := api.userBaseURL() + "/load_balancers/monitors"
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
@@ -208,7 +208,7 @@ func (api *API) ListLoadBalancerMonitors() ([]LoadBalancerMonitor, error) {
 //
 // API reference: https://api.cloudflare.com/#load-balancer-monitors-monitor-details
 func (api *API) LoadBalancerMonitorDetails(monitorID string) (LoadBalancerMonitor, error) {
-	uri := "/user/load_balancers/monitors/" + monitorID
+	uri := api.userBaseURL() + "/load_balancers/monitors/" + monitorID
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
 		return LoadBalancerMonitor{}, errors.Wrap(err, errMakeRequestError)
@@ -224,7 +224,7 @@ func (api *API) LoadBalancerMonitorDetails(monitorID string) (LoadBalancerMonito
 //
 // API reference: https://api.cloudflare.com/#load-balancer-monitors-delete-a-monitor
 func (api *API) DeleteLoadBalancerMonitor(monitorID string) error {
-	uri := "/user/load_balancers/monitors/" + monitorID
+	uri := api.userBaseURL() + "/load_balancers/monitors/" + monitorID
 	if _, err := api.makeRequest("DELETE", uri, nil); err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}
@@ -235,7 +235,7 @@ func (api *API) DeleteLoadBalancerMonitor(monitorID string) error {
 //
 // API reference: https://api.cloudflare.com/#load-balancer-monitors-modify-a-monitor
 func (api *API) ModifyLoadBalancerMonitor(monitor LoadBalancerMonitor) (LoadBalancerMonitor, error) {
-	uri := "/user/load_balancers/monitors/" + monitor.ID
+	uri := api.userBaseURL() + "/load_balancers/monitors/" + monitor.ID
 	res, err := api.makeRequest("PUT", uri, monitor)
 	if err != nil {
 		return LoadBalancerMonitor{}, errors.Wrap(err, errMakeRequestError)
