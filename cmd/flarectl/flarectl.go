@@ -378,12 +378,117 @@ func main() {
 				},
 			},
 		},
-
 		{
 			Name:    "railgun",
 			Aliases: []string{"r"},
 			Usage:   "Railgun information",
 			Action:  railgun,
+		},
+		{
+			Name:    "zone-lockdown",
+			Aliases: []string{"zl"},
+			Usage:   "Zone Lockdowns",
+			Subcommands: []cli.Command{
+				{
+					Name:    "list",
+					Aliases: []string{"l"},
+					Action:  zoneLockdownList,
+					Usage:   "List Zone Lockdown rules for a zone",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+						cli.IntFlag{
+							Name:  "page",
+							Usage: "result page",
+						},
+					},
+				},
+				{
+					Name:   "details",
+					Action: zoneLockdown,
+					Usage:  "List a single Zone Lockdown rule",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+						cli.StringFlag{
+							Name:  "id",
+							Usage: "The Zone Lockdown rule ID",
+						},
+					},
+				},
+				{
+					Name:    "create",
+					Aliases: []string{"c"},
+					Action:  dnsCreate,
+					Usage:   "Create a Zone Lockdown rule",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+						cli.StringSliceFlag{
+							Name:  "url",
+							Usage: "URL patterns",
+						},
+						cli.StringSliceFlag{
+							Name:  "ip",
+							Usage: "A list of IP addresses (/32 only; no mask)",
+						},
+						cli.StringSliceFlag{
+							Name:  "ip-range",
+							Usage: "A list of IP+masks - e.g. 8.8.8.0/24",
+						},
+					},
+				},
+				{
+					Name:    "update",
+					Aliases: []string{"u"},
+					Action:  dnsCreate,
+					Usage:   "Update a Zone Lockdown rule",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+						cli.StringFlag{
+							Name:  "rule-id",
+							Usage: "ID of the Zone Lockdown rule to update",
+						},
+						cli.StringSliceFlag{
+							Name:  "url",
+							Usage: "URL patterns",
+						},
+						cli.StringSliceFlag{
+							Name:  "ip",
+							Usage: "A list of IP addresses (/32 only; no mask)",
+						},
+						cli.StringSliceFlag{
+							Name:  "ip-range",
+							Usage: "A list of IP+masks - e.g. 8.8.8.0/24",
+						},
+					},
+				},
+				{
+					Name:    "delete",
+					Aliases: []string{"d"},
+					Action:  dnsDelete,
+					Usage:   "Delete a Zone Lockdown rule",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+						cli.StringFlag{
+							Name:  "rule-id",
+							Usage: "ID of the Zone Lockdown rule to delete",
+						},
+					},
+				},
+			},
 		},
 	}
 	app.Run(os.Args)
