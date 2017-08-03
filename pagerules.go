@@ -112,7 +112,7 @@ func (api *API) CreatePageRule(zoneID string, rule PageRule) (*PageRuleDetailRes
 	}
 
 	var pageRuleResp *PageRuleDetailResponse
-	err = json.Unmarshal(res, &pageRuleResp)
+	err = json.Unmarshal(res, pageRuleResp)
 	if err != nil {
 		return nil, errors.Wrap(err, errUnmarshalError)
 	}

@@ -53,7 +53,7 @@ func (api *API) CreateDNSRecord(zoneID string, rr DNSRecord) (*DNSRecordResponse
 	}
 
 	var recordResp *DNSRecordResponse
-	err = json.Unmarshal(res, &recordResp)
+	err = json.Unmarshal(res, recordResp)
 	if err != nil {
 		return nil, errors.Wrap(err, errUnmarshalError)
 	}

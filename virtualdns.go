@@ -40,7 +40,7 @@ func (api *API) CreateVirtualDNS(v *VirtualDNS) (*VirtualDNS, error) {
 	}
 
 	response := &VirtualDNSResponse{}
-	err = json.Unmarshal(res, &response)
+	err = json.Unmarshal(res, response)
 	if err != nil {
 		return nil, errors.Wrap(err, errUnmarshalError)
 	}
@@ -59,7 +59,7 @@ func (api *API) VirtualDNS(virtualDNSID string) (*VirtualDNS, error) {
 	}
 
 	response := &VirtualDNSResponse{}
-	err = json.Unmarshal(res, &response)
+	err = json.Unmarshal(res, response)
 	if err != nil {
 		return nil, errors.Wrap(err, errUnmarshalError)
 	}
@@ -77,7 +77,7 @@ func (api *API) ListVirtualDNS() ([]*VirtualDNS, error) {
 	}
 
 	response := &VirtualDNSListResponse{}
-	err = json.Unmarshal(res, &response)
+	err = json.Unmarshal(res, response)
 	if err != nil {
 		return nil, errors.Wrap(err, errUnmarshalError)
 	}
@@ -96,7 +96,7 @@ func (api *API) UpdateVirtualDNS(virtualDNSID string, vv VirtualDNS) error {
 	}
 
 	response := &VirtualDNSResponse{}
-	err = json.Unmarshal(res, &response)
+	err = json.Unmarshal(res, response)
 	if err != nil {
 		return errors.Wrap(err, errUnmarshalError)
 	}
@@ -116,7 +116,7 @@ func (api *API) DeleteVirtualDNS(virtualDNSID string) error {
 	}
 
 	response := &VirtualDNSResponse{}
-	err = json.Unmarshal(res, &response)
+	err = json.Unmarshal(res, response)
 	if err != nil {
 		return errors.Wrap(err, errUnmarshalError)
 	}

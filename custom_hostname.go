@@ -59,7 +59,7 @@ func (api *API) DeleteCustomHostname(zoneID string, customHostnameID string) err
 	}
 
 	var response *CustomHostnameResponse
-	err = json.Unmarshal(res, &response)
+	err = json.Unmarshal(res, response)
 	if err != nil {
 		return errors.Wrap(err, errUnmarshalError)
 	}
@@ -78,7 +78,7 @@ func (api *API) CreateCustomHostname(zoneID string, ch CustomHostname) (*CustomH
 	}
 
 	var response *CustomHostnameResponse
-	err = json.Unmarshal(res, &response)
+	err = json.Unmarshal(res, response)
 	if err != nil {
 		return nil, errors.Wrap(err, errUnmarshalError)
 	}
