@@ -2,6 +2,8 @@ package cloudflare
 
 import (
 	"encoding/json"
+	"net/url"
+	"strconv"
 	"time"
 
 	"github.com/pkg/errors"
@@ -29,8 +31,8 @@ type zoneCustomSSLResponse struct {
 	Result ZoneCustomSSL `json:"result"`
 }
 
-// zoneCustomSSLsResponse represents the response from the zone SSL list endpoint.
-type zoneCustomSSLsResponse struct {
+// ZoneCustomSSLListResponse represents the response from the zone SSL list endpoint.
+type ZoneCustomSSLListResponse struct {
 	Response
 	Result []ZoneCustomSSL `json:"result"`
 }
@@ -69,17 +71,28 @@ func (api *API) CreateSSL(zoneID string, options ZoneCustomSSLOptions) (ZoneCust
 // ListSSL lists the custom certificates for the given zone.
 //
 // API reference: https://api.cloudflare.com/#custom-ssl-for-a-zone-list-ssl-configurations
-func (api *API) ListSSL(zoneID string) ([]ZoneCustomSSL, error) {
-	uri := "/zones/" + zoneID + "/custom_certificates"
+func (api *API) ListZoneCustomSSLs(zoneID string, page int) (*ZoneCustomSSLListResponse, error) {
+	v := url.Values{}
+	if page <= 0 {
+		page = 1
+	}
+
+	v.Set("page", strconv.Itoa(page))
+	v.Set("per_page", strconv.Itoa(100))
+	query := "?" + v.Encode()
+
+	uri := "/zones/" + zoneID + "/custom_certificates" + query
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
-	var r zoneCustomSSLsResponse
-	if err := json.Unmarshal(res, &r); err != nil {
+
+	response := &ZoneCustomSSLListResponse{}
+	if err := json.Unmarshal(res, &response); err != nil {
 		return nil, errors.Wrap(err, errUnmarshalError)
 	}
-	return r.Result, nil
+
+	return response, nil
 }
 
 // SSLDetails returns the configuration details for a custom SSL certificate.
@@ -118,7 +131,7 @@ func (api *API) UpdateSSL(zoneID, certificateID string, options ZoneCustomSSLOpt
 // request) of custom SSL certificates associated with the given zone.
 //
 // API reference: https://api.cloudflare.com/#custom-ssl-for-a-zone-re-prioritize-ssl-certificates
-func (api *API) ReprioritizeSSL(zoneID string, p []ZoneCustomSSLPriority) ([]ZoneCustomSSL, error) {
+func (api *API) ReprioritizeSSL(zoneID string, p []ZoneCustomSSLPriority) (*ZoneCustomSSLListResponse, error) {
 	uri := "/zones/" + zoneID + "/custom_certificates/prioritize"
 	params := struct {
 		Certificates []ZoneCustomSSLPriority `json:"certificates"`
@@ -129,11 +142,12 @@ func (api *API) ReprioritizeSSL(zoneID string, p []ZoneCustomSSLPriority) ([]Zon
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
-	var r zoneCustomSSLsResponse
-	if err := json.Unmarshal(res, &r); err != nil {
+
+	response := &ZoneCustomSSLListResponse{}
+	if err := json.Unmarshal(res, &response); err != nil {
 		return nil, errors.Wrap(err, errUnmarshalError)
 	}
-	return r.Result, nil
+	return response, nil
 }
 
 // DeleteSSL deletes a custom SSL certificate from the given zone.

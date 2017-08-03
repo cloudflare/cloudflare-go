@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"encoding/json"
 	"net/url"
+	"strconv"
 	"time"
 
 	"github.com/pkg/errors"
@@ -28,8 +29,8 @@ type Railgun struct {
 	} `json:"upgrade_info"`
 }
 
-// RailgunListOptions represents the parameters used to list railguns.
-type RailgunListOptions struct {
+// RailgunFilter represents the parameters used to filter railguns.
+type RailgunFilter struct {
 	Direction string
 }
 
@@ -39,10 +40,16 @@ type railgunResponse struct {
 	Result Railgun `json:"result"`
 }
 
-// railgunsResponse represents the response from the List Railguns endpoint.
-type railgunsResponse struct {
+// RailgunListResponse represents the response from the List Railguns endpoint.
+type RailgunListResponse struct {
 	Response
 	Result []Railgun `json:"result"`
+}
+
+// RailginZoneListResponse represensts the response from the List Railgun Zones endpoint.
+type RailgunZoneListResponse struct {
+	Response
+	Result []Zone `json:"result"`
 }
 
 // CreateRailgun creates a new Railgun.
@@ -69,21 +76,38 @@ func (api *API) CreateRailgun(name string) (Railgun, error) {
 // ListRailguns lists Railguns connected to an account.
 //
 // API reference: https://api.cloudflare.com/#railgun-list-railguns
-func (api *API) ListRailguns(options RailgunListOptions) ([]Railgun, error) {
+func (api *API) ListRailguns(page int) (*RailgunListResponse, error) {
+	return api.FilterRailguns(page, RailgunFilter{})
+}
+
+// FilterRailguns lists Railguns connected to an account.
+//
+// API reference: https://api.cloudflare.com/#railgun-list-railguns
+func (api *API) FilterRailguns(page int, filter RailgunFilter) (*RailgunListResponse, error) {
 	v := url.Values{}
-	if options.Direction != "" {
-		v.Set("direction", options.Direction)
+	if page <= 0 {
+		page = 1
 	}
-	uri := "/railguns" + "?" + v.Encode()
+
+	v.Set("page", strconv.Itoa(page))
+	v.Set("per_page", strconv.Itoa(100))
+	if filter.Direction != "" {
+		v.Set("direction", filter.Direction)
+	}
+	query := "?" + v.Encode()
+
+	uri := "/railguns" + query
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
-	var r railgunsResponse
-	if err := json.Unmarshal(res, &r); err != nil {
+
+	response := &RailgunListResponse{}
+	if err := json.Unmarshal(res, &response); err != nil {
 		return nil, errors.Wrap(err, errUnmarshalError)
 	}
-	return r.Result, nil
+
+	return response, nil
 }
 
 // RailgunDetails returns the details for a Railgun.
@@ -105,17 +129,27 @@ func (api *API) RailgunDetails(railgunID string) (Railgun, error) {
 // RailgunZones returns the zones that are currently using a Railgun.
 //
 // API reference: https://api.cloudflare.com/#railgun-get-zones-connected-to-a-railgun
-func (api *API) RailgunZones(railgunID string) ([]Zone, error) {
-	uri := "/railguns/" + railgunID + "/zones"
+func (api *API) ListRailgunZones(railgunID string, page int) (*RailgunZoneListResponse, error) {
+	v := url.Values{}
+	if page <= 0 {
+		page = 1
+	}
+
+	v.Set("page", strconv.Itoa(page))
+	v.Set("per_page", strconv.Itoa(100))
+	query := "?" + v.Encode()
+
+	uri := "/railguns/" + railgunID + "/zones" + query
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
-	var r ZonesResponse
-	if err := json.Unmarshal(res, &r); err != nil {
+
+	response := &RailgunZoneListResponse{}
+	if err := json.Unmarshal(res, &response); err != nil {
 		return nil, errors.Wrap(err, errUnmarshalError)
 	}
-	return r.Result, nil
+	return response, nil
 }
 
 // enableRailgun enables (true) or disables (false) a Railgun for all zones connected to it.

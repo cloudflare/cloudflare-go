@@ -2,6 +2,8 @@ package cloudflare
 
 import (
 	"encoding/json"
+	"net/url"
+	"strconv"
 	"time"
 
 	"github.com/pkg/errors"
@@ -93,8 +95,8 @@ type PageRuleDetailResponse struct {
 	Result   PageRule `json:"result"`
 }
 
-// PageRulesResponse is the API response, containing an array of PageRules.
-type PageRulesResponse struct {
+// PageRuleListResponse is the API response, containing an array of PageRules.
+type PageRuleListResponse struct {
 	Success  bool       `json:"success"`
 	Errors   []string   `json:"errors"`
 	Messages []string   `json:"messages"`
@@ -123,18 +125,28 @@ func (api *API) CreatePageRule(zoneID string, rule PageRule) (*PageRuleDetailRes
 // ListPageRules returns all Page Rules for a zone.
 //
 // API reference: https://api.cloudflare.com/#page-rules-for-a-zone-list-page-rules
-func (api *API) ListPageRules(zoneID string) ([]PageRule, error) {
-	uri := "/zones/" + zoneID + "/pagerules"
+func (api *API) ListPageRules(zoneID string, page int) (*PageRuleListResponse, error) {
+	v := url.Values{}
+	if page <= 0 {
+		page = 1
+	}
+
+	v.Set("page", strconv.Itoa(page))
+	v.Set("per_page", strconv.Itoa(100))
+	query := "?" + v.Encode()
+
+	uri := "/zones/" + zoneID + "/pagerules" + query
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []PageRule{}, errors.Wrap(err, errMakeRequestError)
+		return nil, errors.Wrap(err, errMakeRequestError)
 	}
-	var r PageRulesResponse
-	err = json.Unmarshal(res, &r)
-	if err != nil {
-		return []PageRule{}, errors.Wrap(err, errUnmarshalError)
+
+	response := &PageRuleListResponse{}
+	if err = json.Unmarshal(res, &response); err != nil {
+		return nil, errors.Wrap(err, errUnmarshalError)
 	}
-	return r.Result, nil
+
+	return response, nil
 }
 
 // PageRule fetches detail about one Page Rule for a zone.

@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"encoding/json"
 	"net/url"
+	"strconv"
 	"time"
 
 	"github.com/pkg/errors"
@@ -21,11 +22,6 @@ type OriginCACertificate struct {
 	CSR             string    `json:"csr"`
 }
 
-// OriginCACertificateListOptions represents the parameters used to list Cloudflare-issued certificates.
-type OriginCACertificateListOptions struct {
-	ZoneID string
-}
-
 // OriginCACertificateID represents the ID of the revoked certificate from the Revoke Certificate endpoint.
 type OriginCACertificateID struct {
 	ID string `json:"id"`
@@ -37,8 +33,13 @@ type originCACertificateResponse struct {
 	Result OriginCACertificate `json:"result"`
 }
 
-// originCACertificateResponseList represents the response from the List Certificates endpoint.
-type originCACertificateResponseList struct {
+// OriginCACertificateFilter represents the object used to filter results.
+type OriginCACertificateFilter struct {
+	ZoneID string
+}
+
+// OriginCACertificateListResponse represents the response from the List Certificates endpoint.
+type OriginCACertificateListResponse struct {
 	Response
 	Result     []OriginCACertificate `json:"result"`
 	ResultInfo ResultInfo            `json:"result_info"`
@@ -78,36 +79,46 @@ func (api *API) CreateOriginCertificate(certificate OriginCACertificate) (*Origi
 	return &originResponse.Result, nil
 }
 
-// OriginCertificates lists all Cloudflare-issued certificates.
+// ListOriginCACertificates lists all Cloudflare-issued certificates.
 //
 // This function requires api.APIUserServiceKey be set to your Certificates API key.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-ca-list-certificates
-func (api *API) OriginCertificates(options OriginCACertificateListOptions) ([]OriginCACertificate, error) {
-	v := url.Values{}
-	if options.ZoneID != "" {
-		v.Set("zone_id", options.ZoneID)
-	}
-	uri := "/certificates" + "?" + v.Encode()
-	res, err := api.makeRequestWithAuthType("GET", uri, nil, AuthUserService)
+func (api *API) ListOriginCACertificates(page int) (*OriginCACertificateListResponse, error) {
+	return api.FilterOriginCACertificates(page, OriginCACertificateFilter{})
+}
 
+// FilterOriginCACertificates lists all Cloudflare-issued certificates, filtered by zone.
+//
+// This function requires api.APIUserServiceKey be set to your Certificates API key.
+//
+// API reference: https://api.cloudflare.com/#cloudflare-ca-list-certificates
+func (api *API) FilterOriginCACertificates(page int, filter OriginCACertificateFilter) (*OriginCACertificateListResponse, error) {
+	v := url.Values{}
+	if page <= 0 {
+		page = 1
+	}
+
+	v.Set("page", strconv.Itoa(page))
+	v.Set("per_page", strconv.Itoa(100))
+	if filter.ZoneID != "" {
+		v.Set("zone_id", filter.ZoneID)
+	}
+	query := "?" + v.Encode()
+
+	uri := "/certificates" + query
+	res, err := api.makeRequestWithAuthType("GET", uri, nil, AuthUserService)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
 
-	var originResponse *originCACertificateResponseList
-
-	err = json.Unmarshal(res, originResponse)
-
+	response := &OriginCACertificateListResponse{}
+	err = json.Unmarshal(res, &response)
 	if err != nil {
 		return nil, errors.Wrap(err, errUnmarshalError)
 	}
 
-	if !originResponse.Success {
-		return nil, errors.New(errRequestNotSuccessful)
-	}
-
-	return originResponse.Result, nil
+	return response, nil
 }
 
 // OriginCertificate returns the details for a Cloudflare-issued certificate.

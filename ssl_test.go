@@ -79,7 +79,7 @@ func TestCreateSSL(t *testing.T) {
 	assert.Error(t, err)
 }
 
-func TestListSSL(t *testing.T) {
+func TestListZoneCustomSSLs(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -139,12 +139,14 @@ func TestListSSL(t *testing.T) {
 		Priority:     1,
 	}
 
-	actual, err := client.ListSSL("023e105f4ecef8ad9ca31a8372d0c353")
+	response, err := client.ListZoneCustomSSLs("023e105f4ecef8ad9ca31a8372d0c353", 1)
+	actual := response.Result
+
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	_, err = client.ListSSL("bar")
+	_, err = client.ListZoneCustomSSLs("bar", 1)
 	assert.Error(t, err)
 }
 

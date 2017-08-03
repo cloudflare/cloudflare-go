@@ -42,7 +42,7 @@ func TestOrganizations_ListOrganizations(t *testing.T) {
 }`)
 	})
 
-	user, paginator, err := client.ListOrganizations()
+	response, err := client.ListOrganizations(1)
 
 	want := []Organization{{
 		ID:          "01a7362d577a6c3019a474fd6f485823",
@@ -53,7 +53,7 @@ func TestOrganizations_ListOrganizations(t *testing.T) {
 	}}
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, user, want)
+		assert.Equal(t, response.Result, want)
 	}
 
 	wantPagination := ResultInfo{
@@ -62,7 +62,7 @@ func TestOrganizations_ListOrganizations(t *testing.T) {
 		Count:   1,
 		Total:   2000,
 	}
-	assert.Equal(t, paginator, wantPagination)
+	assert.Equal(t, response.ResultInfo, wantPagination)
 }
 
 func TestOrganizations_OrganizationDetails(t *testing.T) {

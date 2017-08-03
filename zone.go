@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"strconv"
 	"time"
 
 	"github.com/pkg/errors"
@@ -83,8 +84,8 @@ type ZoneResponse struct {
 	Result Zone `json:"result"`
 }
 
-// ZonesResponse represents the response from the Zone endpoint containing an array of zones.
-type ZonesResponse struct {
+// ZoneListResponse represents the response from the Zone endpoint containing an array of zones.
+type ZoneListResponse struct {
 	Response
 	Result []Zone `json:"result"`
 }
@@ -278,51 +279,48 @@ func (api *API) ZoneActivationCheck(zoneID string) (Response, error) {
 	return r, nil
 }
 
-// ListZones lists zones on an account. Optionally takes a list of zone names
-// to filter against.
+// ListZones lists zones on an account.
 //
 // API reference: https://api.cloudflare.com/#zone-list-zones
-func (api *API) ListZones(z ...string) ([]Zone, error) {
+func (api *API) ListZones(page int) (*ZoneListResponse, error) {
+	return api.FilterZones(page)
+}
+
+// FilterZones lists zones on an account, filtered by the supplied names.
+//
+// API reference: https://api.cloudflare.com/#zone-list-zones
+func (api *API) FilterZones(page int, filters ...string) (*ZoneListResponse, error) {
 	v := url.Values{}
-	var res []byte
-	var r ZonesResponse
-	var zones []Zone
-	var err error
-	if len(z) > 0 {
-		for _, zone := range z {
-			v.Set("name", zone)
-			res, err = api.makeRequest("GET", "/zones?"+v.Encode(), nil)
-			if err != nil {
-				return []Zone{}, errors.Wrap(err, errMakeRequestError)
-			}
-			err = json.Unmarshal(res, &r)
-			if err != nil {
-				return []Zone{}, errors.Wrap(err, errUnmarshalError)
-			}
-			if !r.Success {
-				// TODO: Provide an actual error message instead of always returning nil
-				return []Zone{}, err
-			}
-			for zi := range r.Result {
-				zones = append(zones, r.Result[zi])
-			}
-		}
-	} else {
-		// TODO: Paginate here. We only grab the first page of results.
-		// Could do this concurrently after the first request by creating a
-		// sync.WaitGroup or just a channel + workers.
-		res, err = api.makeRequest("GET", "/zones", nil)
-		if err != nil {
-			return []Zone{}, errors.Wrap(err, errMakeRequestError)
-		}
-		err = json.Unmarshal(res, &r)
-		if err != nil {
-			return []Zone{}, errors.Wrap(err, errUnmarshalError)
-		}
-		zones = r.Result
+	if page <= 0 {
+		page = 1
 	}
 
-	return zones, nil
+	v.Set("page", strconv.Itoa(page))
+	v.Set("per_page", strconv.Itoa(100))
+	query := "?" + v.Encode()
+
+	uri := "/zones" + query
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return nil, errors.Wrap(err, errMakeRequestError)
+	}
+
+	response := &ZoneListResponse{}
+	if err := json.Unmarshal(res, &response); err != nil {
+		return nil, errors.Wrap(err, errUnmarshalError)
+	}
+
+	var result []Zone
+	for _, zone := range response.Result {
+		for _, filter := range filters {
+			if zone.Name == filter {
+				result = append(result, zone)
+			}
+		}
+	}
+	response.Result = result
+
+	return response, nil
 }
 
 // ZoneDetails fetches information about a zone.

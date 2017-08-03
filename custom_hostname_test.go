@@ -76,7 +76,7 @@ func TestCustomHostname_CreateCustomHostname(t *testing.T) {
 	}
 }
 
-func TestCustomHostname_CustomHostnames(t *testing.T) {
+func TestCustomHostname_ListCustomHostnames(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -111,7 +111,7 @@ func TestCustomHostname_CustomHostnames(t *testing.T) {
 }`)
 	})
 
-	customHostnames, _, err := client.CustomHostnames("foo", 1, CustomHostname{})
+	response, err := client.ListCustomHostnames("foo", 1)
 
 	want := []CustomHostname{
 		{
@@ -129,7 +129,7 @@ func TestCustomHostname_CustomHostnames(t *testing.T) {
 	}
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, want, customHostnames)
+		assert.Equal(t, want, response.Result)
 	}
 }
 

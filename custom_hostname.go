@@ -86,16 +86,26 @@ func (api *API) CreateCustomHostname(zoneID string, ch CustomHostname) (*CustomH
 	return response, nil
 }
 
-// CustomHostnames fetches custom hostnames for the given zone,
-// by applying filter.Hostname if not empty and scoping the result to page'th 50 items.
-//
-// The returned ResultInfo can be used to implement pagination.
+// ListCustomHostnames fetches custom hostnames for the given zone.
 //
 // API reference: https://api.cloudflare.com/#custom-hostname-for-a-zone-list-custom-hostnames
-func (api *API) CustomHostnames(zoneID string, page int, filter CustomHostname) ([]CustomHostname, ResultInfo, error) {
+func (api *API) ListCustomHostnames(zoneID string, page int) (*CustomHostnameListResponse, error) {
+	return api.FilterCustomHostnames(zoneID, page, CustomHostname{})
+}
+
+
+// FilterCustomHostnames fetches custom hostnames for the given zone,
+// by applying filter.Hostname if not empty and scoping the result to page'th 50 items.
+//
+// API reference: https://api.cloudflare.com/#custom-hostname-for-a-zone-list-custom-hostnames
+func (api *API) FilterCustomHostnames(zoneID string, page int, filter CustomHostname) (*CustomHostnameListResponse, error) {
 	v := url.Values{}
-	v.Set("per_page", "50")
+	if page <= 0 {
+		page = 1
+	}
+
 	v.Set("page", strconv.Itoa(page))
+	v.Set("per_page", "50")
 	if filter.Hostname != "" {
 		v.Set("hostname", filter.Hostname)
 	}
@@ -104,15 +114,16 @@ func (api *API) CustomHostnames(zoneID string, page int, filter CustomHostname) 
 	uri := "/zones/" + zoneID + "/custom_hostnames" + query
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []CustomHostname{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
-	}
-	var customHostnameListResponse CustomHostnameListResponse
-	err = json.Unmarshal(res, &customHostnameListResponse)
-	if err != nil {
-		return []CustomHostname{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+		return nil, errors.Wrap(err, errMakeRequestError)
 	}
 
-	return customHostnameListResponse.Result, customHostnameListResponse.ResultInfo, nil
+	response := &CustomHostnameListResponse{}
+	err = json.Unmarshal(res, &response)
+	if err != nil {
+		return nil, errors.Wrap(err, errMakeRequestError)
+	}
+
+	return response, nil
 }
 
 // CustomHostname inspects the given custom hostname in the given zone.
@@ -136,11 +147,13 @@ func (api *API) CustomHostname(zoneID string, customHostnameID string) (CustomHo
 
 // CustomHostnameIDByName retrieves the ID for the given hostname in the given zone.
 func (api *API) CustomHostnameIDByName(zoneID string, hostname string) (string, error) {
-	customHostnames, _, err := api.CustomHostnames(zoneID, 1, CustomHostname{Hostname: hostname})
+	//TODO: paginate
+	response, err := api.FilterCustomHostnames(zoneID, 1, CustomHostname{Hostname: hostname})
 	if err != nil {
 		return "", errors.Wrap(err, "CustomHostnames command failed")
 	}
-	for _, ch := range customHostnames {
+
+	for _, ch := range response.Result {
 		if ch.Hostname == hostname {
 			return ch.ID, nil
 		}

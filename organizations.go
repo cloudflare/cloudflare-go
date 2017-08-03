@@ -2,6 +2,8 @@ package cloudflare
 
 import (
 	"encoding/json"
+	"net/url"
+	"strconv"
 	"time"
 
 	"github.com/pkg/errors"
@@ -16,10 +18,17 @@ type Organization struct {
 	Roles       []string `json:"roles,omitempty"`
 }
 
-// organizationResponse represents the response from the Organization endpoint.
-type organizationResponse struct {
+// OrganizationResponse represents the response from the Organization endpoint.
+type OrganizationResponse struct {
 	Response
-	Result     []Organization `json:"result"`
+	Result     Organization `json:"result"`
+	ResultInfo `json:"result_info"`
+}
+
+// OrganizationResponse represents the response from the list of Organizations endpoint.
+type OrganizationListResponse struct {
+	Response
+	Result []Organization `json:"result"`
 	ResultInfo `json:"result_info"`
 }
 
@@ -72,19 +81,29 @@ type organizationDetailsResponse struct {
 // ListOrganizations lists organizations of the logged-in user.
 //
 // API reference: https://api.cloudflare.com/#user-s-organizations-list-organizations
-func (api *API) ListOrganizations() ([]Organization, ResultInfo, error) {
-	var r organizationResponse
-	res, err := api.makeRequest("GET", "/user/organizations", nil)
-	if err != nil {
-		return []Organization{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+func (api *API) ListOrganizations(page int) (*OrganizationListResponse, error) {
+	v := url.Values{}
+	if page <= 0 {
+		page = 1
 	}
 
-	err = json.Unmarshal(res, &r)
+	v.Set("page", strconv.Itoa(page))
+	v.Set("per_page", strconv.Itoa(20))
+	query := "?" + v.Encode()
+
+	uri := "/user/organizations" + query
+	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []Organization{}, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
+		return nil, errors.Wrap(err, errMakeRequestError)
 	}
 
-	return r.Result, r.ResultInfo, nil
+	response := &OrganizationListResponse{}
+	err = json.Unmarshal(res, &response)
+	if err != nil {
+		return nil, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return response, nil
 }
 
 // OrganizationDetails returns details for the specified organization of the logged-in user.
