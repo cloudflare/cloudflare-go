@@ -50,7 +50,7 @@ type LoadBalancer struct {
 	ModifiedOn   *time.Time          `json:"modified_on,omitempty"`
 	Description  string              `json:"description"`
 	Name         string              `json:"name"`
-	TTL          int                 `json:"ttl"`
+	TTL          int                 `json:"ttl,omitempty"`
 	FallbackPool string              `json:"fallback_pool"`
 	DefaultPools []string            `json:"default_pools"`
 	RegionPools  map[string][]string `json:"region_pools"`
