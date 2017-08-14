@@ -3,7 +3,6 @@ package cloudflare
 import (
 	"encoding/json"
 	"net/url"
-	"time"
 
 	"github.com/pkg/errors"
 )
@@ -12,13 +11,13 @@ import (
 //
 // API reference: https://api.cloudflare.com/#cloudflare-ca
 type OriginCACertificate struct {
-	ID              string    `json:"id"`
-	Certificate     string    `json:"certificate"`
-	Hostnames       []string  `json:"hostnames"`
-	ExpiresOn       time.Time `json:"expires_on"`
-	RequestType     string    `json:"request_type"`
-	RequestValidity int       `json:"requested_validity"`
-	CSR             string    `json:"csr"`
+	ID              string   `json:"id"`
+	Certificate     string   `json:"certificate"`
+	Hostnames       []string `json:"hostnames"`
+	ExpiresOn       string   `json:"expires_on"`
+	RequestType     string   `json:"request_type"`
+	RequestValidity int      `json:"requested_validity"`
+	CSR             string   `json:"csr"`
 }
 
 // OriginCACertificateListOptions represents the parameters used to list Cloudflare-issued certificates.
