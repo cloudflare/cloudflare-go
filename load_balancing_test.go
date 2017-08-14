@@ -339,6 +339,74 @@ func TestModifyLoadBalancerPool(t *testing.T) {
 	}
 }
 
+func TestAddLoadBalancerOrigin(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		b, err := ioutil.ReadAll(r.Body)
+		defer r.Body.Close()
+		if assert.NoError(t, err) {
+			assert.JSONEq(t, `{
+              "name": "app-server-1",
+              "address": "0.0.0.0",
+              "enabled": true
+						}`, string(b))
+		}
+		fmt.Fprint(w, `{
+            "success": true,
+            "errors": [],
+            "messages": [],
+            "result": {
+              "name": "app-server-1",
+              "address": "0.0.0.0",
+              "enabled": true
+            }
+        }`)
+	}
+
+	poolID := "17b5962d775c646f3f9725cbc7a53df4"
+	mux.HandleFunc("/user/load_balancers/pools/"+poolID, handler)
+	err := client.AddLoadBalancerOrigin(poolID,
+		LoadBalancerOrigin{
+			Name:    "app-server-1",
+			Address: "0.0.0.0",
+			Enabled: true,
+		})
+	assert.NoError(t, err)
+}
+
+func TestDeleteLoadBalancerOrigin(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "DELETE", "Expected method 'DELETE', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		b, err := ioutil.ReadAll(r.Body)
+		defer r.Body.Close()
+		if assert.NoError(t, err) {
+			assert.Equal(t, 0, len(b))
+		}
+		fmt.Fprint(w, `{
+            "success": true,
+            "errors": [],
+            "messages": [],
+            "result": {
+              "id": "17b5962d775c646f3f9725cbc7a53df4"
+            }
+        }`)
+	}
+
+	poolID := "17b5962d775c646f3f9725cbc7a53df4"
+	originName := "app-server-1"
+	mux.HandleFunc("/user/load_balancers/pools/"+poolID+"/"+originName, handler)
+	err := client.DeleteLoadBalancerOrigin(poolID, originName)
+	assert.NoError(t, err)
+}
+
 func TestCreateLoadBalancerMonitor(t *testing.T) {
 	setup()
 	defer teardown()

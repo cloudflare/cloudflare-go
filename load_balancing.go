@@ -71,6 +71,12 @@ type loadBalancerPoolListResponse struct {
 	ResultInfo ResultInfo         `json:"result_info"`
 }
 
+// loadBalancerOriginResponse represents the response from the load balancer pool origin endpoints.
+type loadBalancerOriginResponse struct {
+	Response
+	Result LoadBalancerOrigin `json:"result"`
+}
+
 // loadBalancerMonitorResponse represents the response from the load balancer monitor endpoints.
 type loadBalancerMonitorResponse struct {
 	Response
@@ -170,6 +176,38 @@ func (api *API) ModifyLoadBalancerPool(pool LoadBalancerPool) (LoadBalancerPool,
 		return LoadBalancerPool{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
+}
+
+// AddLoadBalancerOrigin adds an origin to a load balancer pool.
+//
+// API reference: TBC
+func (api *API) AddLoadBalancerOrigin(poolID string, origin LoadBalancerOrigin) error {
+	uri := api.userBaseURL("/user") + "/load_balancers/pools/" + poolID
+	res, err := api.makeRequest("POST", uri, origin)
+	if err != nil {
+		return errors.Wrap(err, errMakeRequestError)
+	}
+	var r loadBalancerOriginResponse
+	if err := json.Unmarshal(res, &r); err != nil {
+		return errors.Wrap(err, errUnmarshalError)
+	}
+	return nil
+}
+
+// DeleteLoadBalancerOrigin deletes an origin from a load balancer pool.
+//
+// API reference: TBC
+func (api *API) DeleteLoadBalancerOrigin(poolID string, originName string) error {
+	uri := api.userBaseURL("/user") + "/load_balancers/pools/" + poolID + "/" + originName
+	res, err := api.makeRequest("DELETE", uri, nil)
+	if err != nil {
+		return errors.Wrap(err, errMakeRequestError)
+	}
+	var r loadBalancerPoolResponse
+	if err := json.Unmarshal(res, &r); err != nil {
+		return errors.Wrap(err, errUnmarshalError)
+	}
+	return nil
 }
 
 // CreateLoadBalancerMonitor creates a new load balancer monitor.
