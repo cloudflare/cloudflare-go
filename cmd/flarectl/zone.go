@@ -69,7 +69,7 @@ func zoneList(c *cli.Context) {
 		fmt.Println(err)
 		return
 	}
-	var output []table
+	output := make([]table, 0, len(zones))
 	for _, z := range zones {
 		output = append(output, table{
 			"ID":     z.ID,
@@ -100,7 +100,7 @@ func zoneInfo(c *cli.Context) {
 		fmt.Println(err)
 		return
 	}
-	var output []table
+	output := make([]table, 0, len(zones))
 	for _, z := range zones {
 		var nameservers []string
 		if len(z.VanityNS) > 0 {
@@ -172,7 +172,7 @@ func zoneRecords(c *cli.Context) {
 			return
 		}
 	}
-	var output []table
+	output := make([]table, 0, len(records))
 	for _, r := range records {
 		switch r.Type {
 		case "MX":

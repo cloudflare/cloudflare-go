@@ -385,6 +385,158 @@ func main() {
 			Usage:   "Railgun information",
 			Action:  railgun,
 		},
+
+		{
+			Name:    "firewall",
+			Aliases: []string{"f"},
+			Usage:   "Firewall",
+			Subcommands: []cli.Command{
+				{
+					Name:    "rules",
+					Aliases: []string{"r"},
+					Usage:   "Access Rules",
+					Subcommands: []cli.Command{
+						{
+							Name:    "list",
+							Aliases: []string{"l"},
+							Action:  firewallAccessRules,
+							Usage:   "List firewall access rules",
+							Flags: []cli.Flag{
+								cli.StringFlag{
+									Name:  "zone",
+									Usage: "zone name",
+								},
+								cli.StringFlag{
+									Name:  "organization",
+									Usage: "organization name",
+								},
+								cli.StringFlag{
+									Name:  "value",
+									Usage: "rule value",
+								},
+								cli.StringFlag{
+									Name:  "scope-type",
+									Usage: "rule scope",
+								},
+
+								cli.StringFlag{
+									Name:  "mode",
+									Usage: "rule mode",
+								},
+								cli.StringFlag{
+									Name:  "notes",
+									Usage: "rule notes",
+								},
+							},
+						},
+						{
+							Name:    "create",
+							Aliases: []string{"c"},
+							Action:  firewallAccessRuleCreate,
+							Usage:   "Create a firewall access rule",
+							Flags: []cli.Flag{
+								cli.StringFlag{
+									Name:  "zone",
+									Usage: "zone name",
+								},
+								cli.StringFlag{
+									Name:  "organization",
+									Usage: "organization name",
+								},
+								cli.StringFlag{
+									Name:  "value",
+									Usage: "rule value",
+								},
+								cli.StringFlag{
+									Name:  "mode",
+									Usage: "rule mode",
+								},
+								cli.StringFlag{
+									Name:  "notes",
+									Usage: "rule notes",
+								},
+							},
+						},
+						{
+							Name:    "update",
+							Aliases: []string{"u"},
+							Action:  firewallAccessRuleUpdate,
+							Usage:   "Update a firewall access rule",
+							Flags: []cli.Flag{
+								cli.StringFlag{
+									Name:  "id",
+									Usage: "rule id",
+								},
+								cli.StringFlag{
+									Name:  "zone",
+									Usage: "zone name",
+								},
+								cli.StringFlag{
+									Name:  "organization",
+									Usage: "organization name",
+								},
+								cli.StringFlag{
+									Name:  "mode",
+									Usage: "rule mode",
+								},
+								cli.StringFlag{
+									Name:  "notes",
+									Usage: "rule notes",
+								},
+							},
+						},
+						{
+							Name:    "create-or-update",
+							Aliases: []string{"o"},
+							Action:  firewallAccessRuleCreateOrUpdate,
+							Usage:   "Creatae a firewall access rule, or update it if it exists",
+							Flags: []cli.Flag{
+								cli.StringFlag{
+									Name:  "zone",
+									Usage: "zone name",
+								},
+								cli.StringFlag{
+									Name:  "organization",
+									Usage: "organization name",
+								},
+								cli.StringFlag{
+									Name:  "value",
+									Usage: "rule value",
+								},
+								cli.StringFlag{
+									Name:  "mode",
+									Usage: "rule mode",
+								},
+								cli.StringFlag{
+									Name:  "notes",
+									Usage: "rule notes",
+								},
+							},
+						},
+						{
+							Name:    "delete",
+							Aliases: []string{"d"},
+							Action:  firewallAccessRuleDelete,
+							Usage:   "Delete a firewall access rule",
+							Flags: []cli.Flag{
+								cli.StringFlag{
+									Name:  "id",
+									Usage: "rule id",
+								},
+								cli.StringFlag{
+									Name:  "zone",
+									Usage: "zone name",
+								},
+								cli.StringFlag{
+									Name:  "organization",
+									Usage: "organization name",
+								},
+							},
+						},
+					},
+				},
+			},
+		},
 	}
 	app.Run(os.Args)
 }
