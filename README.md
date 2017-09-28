@@ -35,6 +35,7 @@ The current feature list includes:
 - [ ] [Keyless SSL](https://blog.cloudflare.com/keyless-ssl-the-nitty-gritty-technical-details/)
 - [x] [Origin CA](https://blog.cloudflare.com/universal-ssl-encryption-all-the-way-to-the-origin-for-free/)
 - [x] [Load Balancing](https://blog.cloudflare.com/introducing-load-balancing-intelligent-failover-with-cloudflare/)
+- [x] Firewall (partial)
 
 Pull Requests are welcome, but please open an issue (or comment in an existing issue) to discuss any
 non-trivial changes before submitting code.
