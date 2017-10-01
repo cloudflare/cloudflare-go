@@ -49,6 +49,7 @@ func dnsCreateOrUpdate(c *cli.Context) {
 		return
 	}
 	if err := checkFlags(c, "zone", "name", "type", "content"); err != nil {
+		fmt.Println(err)
 		return
 	}
 	zone := c.String("zone")
@@ -111,6 +112,7 @@ func dnsUpdate(c *cli.Context) {
 		return
 	}
 	if err := checkFlags(c, "zone", "id"); err != nil {
+		fmt.Println(err)
 		return
 	}
 	zone := c.String("zone")
@@ -145,6 +147,7 @@ func dnsDelete(c *cli.Context) {
 		return
 	}
 	if err := checkFlags(c, "zone", "id"); err != nil {
+		fmt.Println(err)
 		return
 	}
 	zone := c.String("zone")
