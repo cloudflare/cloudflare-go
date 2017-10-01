@@ -3,24 +3,18 @@ sudo: false
 
 matrix:
   include:
-    - go: 1.4
-    - go: 1.5
-    - go: 1.6
-    - go: 1.7
-    - go: 1.8
-    - go: 1.9
+    - go: 1.4.x
+    - go: 1.5.x
+    - go: 1.6.x
+    - go: 1.7.x
+    - go: 1.8.x
+    - go: 1.9.x
     - go: tip
   allow_failures:
     - go: tip
 
-install:
-  - if [[ $TRAVIS_GO_VERSION == 1.7* ]]; then go get github.com/golang/lint/golint; fi
-
 script:
   - go get -t -v $(go list ./... | grep -v '/vendor/')
-  - if [[ $TRAVIS_GO_VERSION == 1.7* ]]; then diff -u <(echo -n) <(gofmt -d .); fi
-  - if [[ $TRAVIS_GO_VERSION == 1.7* ]]; then go vet $(go list ./... | grep -v '/vendor/'); fi
-  - if [[ $TRAVIS_GO_VERSION == 1.7* ]]; then for package in $(go list ./... | grep -v '/vendor/'); do golint -set_exit_status $package; done; fi
   - go test -v -race $(go list ./... | grep -v '/vendor/')
 
 notifications:
