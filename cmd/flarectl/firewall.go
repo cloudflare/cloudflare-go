@@ -1,14 +1,25 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"net"
 	"strconv"
 
+	"github.com/pkg/errors"
+
 	"github.com/cloudflare/cloudflare-go"
 	"github.com/codegangsta/cli"
 )
+
+func formatAccessRule(rule cloudflare.AccessRule) table {
+	return table{
+		"ID":    rule.ID,
+		"Value": rule.Configuration.Value,
+		"Scope": rule.Scope.Type,
+		"Mode":  rule.Mode,
+		"Notes": rule.Notes,
+	}
+}
 
 func firewallAccessRules(c *cli.Context) {
 	if err := checkEnv(); err != nil {
@@ -70,14 +81,8 @@ func firewallAccessRules(c *cli.Context) {
 	}
 
 	output := make([]table, 0, len(rules))
-	for _, r := range rules {
-		output = append(output, table{
-			"ID":    r.ID,
-			"Value": r.Configuration.Value,
-			"Scope": r.Scope.Type,
-			"Mode":  r.Mode,
-			"Notes": r.Notes,
-		})
+	for _, rule := range rules {
+		output = append(output, formatAccessRule(rule))
 	}
 	makeTable(output, "ID", "Value", "Scope", "Mode", "Notes")
 }
@@ -105,18 +110,38 @@ func firewallAccessRuleCreate(c *cli.Context) {
 		Notes:         notes,
 	}
 
-	// TODO: Print the result.
+	var (
+		rules       []cloudflare.AccessRule
+		errCreating = "error creating firewall access rule"
+	)
+
 	switch {
 	case organizationID != "":
-		_, err = api.CreateOrganizationAccessRule(organizationID, rule)
+		resp, err := api.CreateOrganizationAccessRule(organizationID, rule)
+		if err != nil {
+			errors.Wrap(err, errCreating)
+		}
+		rules = append(rules, resp.Result)
 	case zoneID != "":
-		_, err = api.CreateZoneAccessRule(zoneID, rule)
+		resp, err := api.CreateZoneAccessRule(zoneID, rule)
+		if err != nil {
+			errors.Wrap(err, errCreating)
+		}
+		rules = append(rules, resp.Result)
 	default:
-		_, err = api.CreateUserAccessRule(rule)
+		resp, err := api.CreateUserAccessRule(rule)
+		if err != nil {
+			errors.Wrap(err, errCreating)
+		}
+		rules = append(rules, resp.Result)
+
 	}
-	if err != nil {
-		fmt.Println("Error creating firewall access rule:", err)
+
+	output := make([]table, 0, len(rules))
+	for _, rule := range rules {
+		output = append(output, formatAccessRule(rule))
 	}
+	makeTable(output, "ID", "Value", "Scope", "Mode", "Notes")
 }
 
 func firewallAccessRuleUpdate(c *cli.Context) {
@@ -141,18 +166,37 @@ func firewallAccessRuleUpdate(c *cli.Context) {
 		Notes: notes,
 	}
 
-	// TODO: Print the result.
+	var (
+		rules       []cloudflare.AccessRule
+		errUpdating = "error updating firewall access rule"
+	)
 	switch {
 	case organizationID != "":
-		_, err = api.UpdateOrganizationAccessRule(organizationID, id, rule)
+		resp, err := api.UpdateOrganizationAccessRule(organizationID, id, rule)
+		if err != nil {
+			errors.Wrap(err, errUpdating)
+		}
+		rules = append(rules, resp.Result)
 	case zoneID != "":
-		_, err = api.UpdateZoneAccessRule(zoneID, id, rule)
+		resp, err := api.UpdateZoneAccessRule(zoneID, id, rule)
+		if err != nil {
+			errors.Wrap(err, errUpdating)
+		}
+		rules = append(rules, resp.Result)
 	default:
-		_, err = api.UpdateUserAccessRule(id, rule)
+		resp, err := api.UpdateUserAccessRule(id, rule)
+		if err != nil {
+			errors.Wrap(err, errUpdating)
+		}
+		rules = append(rules, resp.Result)
 	}
-	if err != nil {
-		fmt.Println("Error updating firewall access rule:", err)
+
+	output := make([]table, 0, len(rules))
+	for _, rule := range rules {
+		output = append(output, formatAccessRule(rule))
 	}
+	makeTable(output, "ID", "Value", "Scope", "Mode", "Notes")
+
 }
 
 func firewallAccessRuleCreateOrUpdate(c *cli.Context) {
@@ -243,13 +287,29 @@ func firewallAccessRuleDelete(c *cli.Context) {
 		return
 	}
 
+	var (
+		rules       []cloudflare.AccessRule
+		errDeleting = "error deleting firewall access rule"
+	)
 	switch {
 	case organizationID != "":
-		_, err = api.DeleteOrganizationAccessRule(organizationID, ruleID)
+		resp, err := api.DeleteOrganizationAccessRule(organizationID, ruleID)
+		if err != nil {
+			errors.Wrap(err, errDeleting)
+		}
+		rules = append(rules, resp.Result)
 	case zoneID != "":
-		_, err = api.DeleteZoneAccessRule(zoneID, ruleID)
+		resp, err := api.DeleteZoneAccessRule(zoneID, ruleID)
+		if err != nil {
+			errors.Wrap(err, errDeleting)
+		}
+		rules = append(rules, resp.Result)
 	default:
-		_, err = api.DeleteUserAccessRule(ruleID)
+		resp, err := api.DeleteUserAccessRule(ruleID)
+		if err != nil {
+			errors.Wrap(err, errDeleting)
+		}
+		rules = append(rules, resp.Result)
 	}
 	if err != nil {
 		fmt.Println("Error deleting firewall access rule:", err)
