@@ -1,11 +1,12 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"os"
 	"strings"
+
+	"github.com/pkg/errors"
 
 	"github.com/cloudflare/cloudflare-go"
 	"github.com/codegangsta/cli"
@@ -75,9 +76,12 @@ func checkFlags(c *cli.Context, flags ...string) error {
 	for _, flag := range flags {
 		if c.String(flag) == "" {
 			cli.ShowSubcommandHelp(c)
-			return fmt.Errorf("%s not specified", flag)
+			err := errors.Errorf("error: the required flag %q was empty or not provided", flag)
+			fmt.Fprintln(os.Stderr, err)
+			return err
 		}
 	}
+
 	return nil
 }
 
@@ -358,7 +362,105 @@ func main() {
 				},
 			},
 		},
-
+		{
+			Name:    "user-agents",
+			Aliases: []string{"ua"},
+			Usage:   "User-Agent blocking",
+			Subcommands: []cli.Command{
+				{
+					Name:    "list",
+					Aliases: []string{"l"},
+					Action:  userAgentList,
+					Usage:   "List User-Agent blocks for a zone",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+						cli.IntFlag{
+							Name:  "page",
+							Usage: "result page to return",
+						},
+					},
+				},
+				{
+					Name:    "create",
+					Aliases: []string{"c"},
+					Action:  userAgentCreate,
+					Usage:   "Create a User-Agent blocking rule",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+						cli.StringFlag{
+							Name:  "mode",
+							Usage: "the blocking mode: block, challenge, js_challenge, whitelist",
+						},
+						cli.StringFlag{
+							Name:  "value",
+							Usage: "the exact User-Agent to block",
+						},
+						cli.BoolFlag{
+							Name:  "paused",
+							Usage: "whether the rule should be paused (default: false)",
+						},
+						cli.StringFlag{
+							Name:  "description",
+							Usage: "a description for the rule",
+						},
+					},
+				},
+				{
+					Name:    "update",
+					Aliases: []string{"u"},
+					Action:  userAgentUpdate,
+					Usage:   "Update an existing User-Agent block",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+						cli.StringFlag{
+							Name:  "id",
+							Usage: "User-Agent blocking rule ID",
+						},
+						cli.StringFlag{
+							Name:  "mode",
+							Usage: "the blocking mode: block, challenge, js_challenge, whitelist",
+						},
+						cli.StringFlag{
+							Name:  "value",
+							Usage: "the exact User-Agent to block",
+						},
+						cli.BoolFlag{
+							Name:  "paused",
+							Usage: "whether the rule should be paused (default: false)",
+						},
+						cli.StringFlag{
+							Name:  "description",
+							Usage: "a description for the rule",
+						},
+					},
+				},
+				{
+					Name:    "delete",
+					Aliases: []string{"d"},
+					Action:  userAgentDelete,
+					Usage:   "Delete a User-Agent block",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+						cli.StringFlag{
+							Name:  "id",
+							Usage: "User-Agent blocking rule ID",
+						},
+					},
+				},
+			},
+		},
 		{
 			Name:    "pagerules",
 			Aliases: []string{"p"},

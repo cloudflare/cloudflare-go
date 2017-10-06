@@ -67,7 +67,7 @@ func (api *API) CreateUserAgentRule(zoneID string, ld UserAgentRule) (*UserAgent
 //
 // API reference: https://api.cloudflare.com/#user-agent-blocking-rules-update-useragent-rule
 func (api *API) UpdateUserAgentRule(zoneID string, id string, ld UserAgentRule) (*UserAgentRuleResponse, error) {
-	uri := "/zones/" + zoneID + "/firewall/ua_rules"
+	uri := "/zones/" + zoneID + "/firewall/ua_rules/" + id
 	res, err := api.makeRequest("PUT", uri, ld)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
