@@ -2,11 +2,26 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/cloudflare/cloudflare-go"
 	"github.com/codegangsta/cli"
+	"github.com/pkg/errors"
 )
+
+func formatDNSRecord(record cloudflare.DNSRecord) table {
+	return table{
+		"ID":        record.ID,
+		"Name":      record.Name,
+		"Type":      record.Type,
+		"Content":   record.Content,
+		"TTL":       strconv.FormatInt(int64(record.TTL), 10),
+		"Proxiable": strconv.FormatBool(record.Proxiable),
+		"Proxy":     strconv.FormatBool(record.Proxied),
+		"Locked":    strconv.FormatBool(record.Locked),
+	}
+}
 
 func dnsCreate(c *cli.Context) {
 	if err := checkEnv(); err != nil {
@@ -36,11 +51,16 @@ func dnsCreate(c *cli.Context) {
 		TTL:     ttl,
 		Proxied: proxy,
 	}
-	// TODO: Print the result.
-	_, err = api.CreateDNSRecord(zoneID, record)
+	resp, err := api.CreateDNSRecord(zoneID, record)
 	if err != nil {
-		fmt.Println("Error creating DNS record:", err)
+		errors.Wrap(err, "error creating DNS record")
 	}
+
+	output := []table{
+		formatDNSRecord(resp.Result),
+	}
+
+	makeTable(output, "ID", "Name", "Type", "Content", "TTL", "Proxiable", "Proxy", "Locked")
 }
 
 func dnsCreateOrUpdate(c *cli.Context) {
@@ -75,6 +95,7 @@ func dnsCreateOrUpdate(c *cli.Context) {
 		return
 	}
 
+	var resp *cloudflare.DNSRecordResponse
 	if len(records) > 0 {
 		// Record exists - find the ID and update it.
 		// This is imprecise without knowing the original content; if a label
@@ -99,11 +120,18 @@ func dnsCreateOrUpdate(c *cli.Context) {
 		rr.TTL = ttl
 		rr.Proxied = proxy
 		// TODO: Print the response.
-		_, err := api.CreateDNSRecord(zoneID, rr)
+		resp, err = api.CreateDNSRecord(zoneID, rr)
 		if err != nil {
 			fmt.Println("Error creating DNS record:", err)
 		}
+
 	}
+
+	output := []table{
+		formatDNSRecord(resp.Result),
+	}
+
+	makeTable(output, "ID", "Name", "Type", "Content", "TTL", "Proxiable", "Proxy", "Locked")
 }
 
 func dnsUpdate(c *cli.Context) {

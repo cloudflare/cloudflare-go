@@ -89,7 +89,7 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "flarectl"
 	app.Usage = "Cloudflare CLI"
-	app.Version = "2016.4.0"
+	app.Version = "2017.10.0"
 	app.Commands = []cli.Command{
 		{
 			Name:    "ips",
