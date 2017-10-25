@@ -6,6 +6,8 @@ import (
 	"os"
 	"strings"
 
+	"github.com/olekukonko/tablewriter"
+
 	"github.com/pkg/errors"
 
 	"github.com/cloudflare/cloudflare-go"
@@ -16,6 +18,15 @@ var api *cloudflare.API
 
 // Map type used for printing a table
 type table map[string]string
+
+func writeTable(data [][]string, cols ...string) {
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader(cols)
+	table.SetBorder(false)
+	table.AppendBulk(data)
+
+	table.Render()
+}
 
 // Print a nicely-formatted table
 func makeTable(zones []table, cols ...string) {
