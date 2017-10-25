@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 
 	"github.com/cloudflare/cloudflare-go"
 	"github.com/codegangsta/cli"
-	"github.com/pkg/errors"
 )
 
 func formatDNSRecord(record cloudflare.DNSRecord) table {
@@ -53,7 +53,8 @@ func dnsCreate(c *cli.Context) {
 	}
 	resp, err := api.CreateDNSRecord(zoneID, record)
 	if err != nil {
-		errors.Wrap(err, "error creating DNS record")
+		fmt.Fprintln(os.Stderr, "Error creating DNS record: ", err)
+		return
 	}
 
 	output := []table{
@@ -81,7 +82,7 @@ func dnsCreateOrUpdate(c *cli.Context) {
 
 	zoneID, err := api.ZoneIDByName(zone)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(os.Stderr, "Error updating DNS record: ", err)
 		return
 	}
 
@@ -91,7 +92,7 @@ func dnsCreateOrUpdate(c *cli.Context) {
 	}
 	records, err := api.DNSRecords(zoneID, rr)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(os.Stderr, "Error fetching DNS records: ", err)
 		return
 	}
 
@@ -165,7 +166,8 @@ func dnsUpdate(c *cli.Context) {
 	}
 	err = api.UpdateDNSRecord(zoneID, recordID, record)
 	if err != nil {
-		fmt.Println("Error updating DNS record:", err)
+		fmt.Fprintln(os.Stderr, "Error updating DNS record: ", err)
+		return
 	}
 }
 
@@ -189,6 +191,7 @@ func dnsDelete(c *cli.Context) {
 
 	err = api.DeleteDNSRecord(zoneID, recordID)
 	if err != nil {
-		fmt.Println("Error deleting DNS record:", err)
+		fmt.Fprintln(os.Stderr, "Error deleting DNS record: ", err)
+		return
 	}
 }
