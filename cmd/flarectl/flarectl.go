@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strings"
 
 	"github.com/olekukonko/tablewriter"
 
@@ -16,9 +15,7 @@ import (
 
 var api *cloudflare.API
 
-// Map type used for printing a table
-type table map[string]string
-
+// writeTable outputs tabular data to stdout.
 func writeTable(data [][]string, cols ...string) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader(cols)
@@ -26,41 +23,6 @@ func writeTable(data [][]string, cols ...string) {
 	table.AppendBulk(data)
 
 	table.Render()
-}
-
-// Print a nicely-formatted table
-func makeTable(zones []table, cols ...string) {
-	// Store the maximum length of all columns
-	// The default is the length of the title
-	lens := make(map[string]int)
-	for _, col := range cols {
-		lens[col] = len(col)
-	}
-	// Increase the size of the column if it is larger than the current value
-	for _, z := range zones {
-		for col, val := range z {
-			if _, ok := lens[col]; ok && len(val) > lens[col] {
-				lens[col] = len(val)
-			}
-		}
-	}
-	// Print the headings and an underline for each heading
-	for _, col := range cols {
-		fmt.Printf("%s%s ", strings.Title(col), strings.Repeat(" ", lens[col]-len(col)))
-	}
-	fmt.Println()
-	for _, col := range cols {
-		fmt.Printf("%s ", strings.Repeat("-", lens[col]))
-	}
-	fmt.Println()
-	// And finally print the table data
-	for _, z := range zones {
-		for _, col := range cols {
-			fmt.Printf("%s%s ", z[col], strings.Repeat(" ", lens[col]-len(z[col])))
-		}
-		fmt.Println()
-	}
-
 }
 
 func checkEnv() error {

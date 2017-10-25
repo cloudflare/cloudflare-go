@@ -31,15 +31,15 @@ func userInfo(*cli.Context) {
 		fmt.Println(err)
 		return
 	}
-	var output []table
-	output = append(output, table{
-		"ID":       user.ID,
-		"Email":    user.Email,
-		"Username": user.Username,
-		"Name":     user.FirstName + " " + user.LastName,
-		"2FA":      fmt.Sprintf("%t", user.TwoFA),
+	var output [][]string
+	output = append(output, []string{
+		user.ID,
+		user.Email,
+		user.Username,
+		user.FirstName + " " + user.LastName,
+		fmt.Sprintf("%t", user.TwoFA),
 	})
-	makeTable(output, "ID", "Email", "Username", "Name", "2FA")
+	writeTable(output, "ID", "Email", "Username", "Name", "2FA")
 }
 
 func userUpdate(*cli.Context) {

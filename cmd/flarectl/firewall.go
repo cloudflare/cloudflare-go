@@ -11,13 +11,13 @@ import (
 	"github.com/codegangsta/cli"
 )
 
-func formatAccessRule(rule cloudflare.AccessRule) table {
-	return table{
-		"ID":    rule.ID,
-		"Value": rule.Configuration.Value,
-		"Scope": rule.Scope.Type,
-		"Mode":  rule.Mode,
-		"Notes": rule.Notes,
+func formatAccessRule(rule cloudflare.AccessRule) []string {
+	return []string{
+		rule.ID,
+		rule.Configuration.Value,
+		rule.Scope.Type,
+		rule.Mode,
+		rule.Notes,
 	}
 }
 
@@ -80,11 +80,11 @@ func firewallAccessRules(c *cli.Context) {
 		}
 	}
 
-	output := make([]table, 0, len(rules))
+	output := make([][]string, 0, len(rules))
 	for _, rule := range rules {
 		output = append(output, formatAccessRule(rule))
 	}
-	makeTable(output, "ID", "Value", "Scope", "Mode", "Notes")
+	writeTable(output, "ID", "Value", "Scope", "Mode", "Notes")
 }
 
 func firewallAccessRuleCreate(c *cli.Context) {
@@ -137,11 +137,11 @@ func firewallAccessRuleCreate(c *cli.Context) {
 
 	}
 
-	output := make([]table, 0, len(rules))
+	output := make([][]string, 0, len(rules))
 	for _, rule := range rules {
 		output = append(output, formatAccessRule(rule))
 	}
-	makeTable(output, "ID", "Value", "Scope", "Mode", "Notes")
+	writeTable(output, "ID", "Value", "Scope", "Mode", "Notes")
 }
 
 func firewallAccessRuleUpdate(c *cli.Context) {
@@ -191,11 +191,11 @@ func firewallAccessRuleUpdate(c *cli.Context) {
 		rules = append(rules, resp.Result)
 	}
 
-	output := make([]table, 0, len(rules))
+	output := make([][]string, 0, len(rules))
 	for _, rule := range rules {
 		output = append(output, formatAccessRule(rule))
 	}
-	makeTable(output, "ID", "Value", "Scope", "Mode", "Notes")
+	writeTable(output, "ID", "Value", "Scope", "Mode", "Notes")
 
 }
 

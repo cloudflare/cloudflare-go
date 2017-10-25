@@ -10,16 +10,16 @@ import (
 	"github.com/codegangsta/cli"
 )
 
-func formatDNSRecord(record cloudflare.DNSRecord) table {
-	return table{
-		"ID":        record.ID,
-		"Name":      record.Name,
-		"Type":      record.Type,
-		"Content":   record.Content,
-		"TTL":       strconv.FormatInt(int64(record.TTL), 10),
-		"Proxiable": strconv.FormatBool(record.Proxiable),
-		"Proxy":     strconv.FormatBool(record.Proxied),
-		"Locked":    strconv.FormatBool(record.Locked),
+func formatDNSRecord(record cloudflare.DNSRecord) []string {
+	return []string{
+		record.ID,
+		record.Name,
+		record.Type,
+		record.Content,
+		strconv.FormatInt(int64(record.TTL), 10),
+		strconv.FormatBool(record.Proxiable),
+		strconv.FormatBool(record.Proxied),
+		strconv.FormatBool(record.Locked),
 	}
 }
 
@@ -57,11 +57,11 @@ func dnsCreate(c *cli.Context) {
 		return
 	}
 
-	output := []table{
+	output := [][]string{
 		formatDNSRecord(resp.Result),
 	}
 
-	makeTable(output, "ID", "Name", "Type", "Content", "TTL", "Proxiable", "Proxy", "Locked")
+	writeTable(output, "ID", "Name", "Type", "Content", "TTL", "Proxiable", "Proxy", "Locked")
 }
 
 func dnsCreateOrUpdate(c *cli.Context) {
@@ -128,11 +128,11 @@ func dnsCreateOrUpdate(c *cli.Context) {
 
 	}
 
-	output := []table{
+	output := [][]string{
 		formatDNSRecord(resp.Result),
 	}
 
-	makeTable(output, "ID", "Name", "Type", "Content", "TTL", "Proxiable", "Proxy", "Locked")
+	writeTable(output, "ID", "Name", "Type", "Content", "TTL", "Proxiable", "Proxy", "Locked")
 }
 
 func dnsUpdate(c *cli.Context) {
