@@ -9,13 +9,13 @@ import (
 	"github.com/codegangsta/cli"
 )
 
-func formatUserAgentRule(rule cloudflare.UserAgentRule) table {
-	return table{
-		"ID":          rule.ID,
-		"Description": rule.Description,
-		"Mode":        rule.Mode,
-		"Value":       rule.Configuration.Value,
-		"Paused":      strconv.FormatBool(rule.Paused),
+func formatUserAgentRule(rule cloudflare.UserAgentRule) []string {
+	return []string{
+		rule.ID,
+		rule.Description,
+		rule.Mode,
+		rule.Configuration.Value,
+		strconv.FormatBool(rule.Paused),
 	}
 }
 
@@ -52,11 +52,11 @@ func userAgentCreate(c *cli.Context) {
 		return
 	}
 
-	output := []table{
+	output := [][]string{
 		formatUserAgentRule(resp.Result),
 	}
 
-	makeTable(output, "ID", "Description", "Mode", "Value", "Paused")
+	writeTable(output, "ID", "Description", "Mode", "Value", "Paused")
 }
 
 func userAgentUpdate(c *cli.Context) {
@@ -91,11 +91,11 @@ func userAgentUpdate(c *cli.Context) {
 		return
 	}
 
-	output := []table{
+	output := [][]string{
 		formatUserAgentRule(resp.Result),
 	}
 
-	makeTable(output, "ID", "Description", "Mode", "Value", "Paused")
+	writeTable(output, "ID", "Description", "Mode", "Value", "Paused")
 }
 
 func userAgentDelete(c *cli.Context) {
@@ -120,11 +120,11 @@ func userAgentDelete(c *cli.Context) {
 		return
 	}
 
-	output := []table{
+	output := [][]string{
 		formatUserAgentRule(resp.Result),
 	}
 
-	makeTable(output, "ID", "Description", "Mode", "Value", "Paused")
+	writeTable(output, "ID", "Description", "Mode", "Value", "Paused")
 }
 
 func userAgentList(c *cli.Context) {
@@ -149,10 +149,10 @@ func userAgentList(c *cli.Context) {
 		return
 	}
 
-	output := make([]table, 0, len(resp.Result))
+	output := make([][]string, 0, len(resp.Result))
 	for _, rule := range resp.Result {
 		output = append(output, formatUserAgentRule(rule))
 	}
 
-	makeTable(output, "ID", "Description", "Mode", "Value", "Paused")
+	writeTable(output, "ID", "Description", "Mode", "Value", "Paused")
 }
