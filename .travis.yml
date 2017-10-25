@@ -1,11 +1,9 @@
 language: go
 sudo: false
-
 matrix:
   include:
-    - go: 1.4.x
-    - go: 1.5.x
-    - go: 1.6.x
+    - go: 1.x
+      env: LATEST=true
     - go: 1.7.x
     - go: 1.8.x
     - go: 1.9.x
@@ -13,13 +11,36 @@ matrix:
   allow_failures:
     - go: tip
 
+before_install:
+  - go get github.com/mitchellh/gox
+
+install:
+  - # skip
+
 script:
-  - go get -t -v $(go list ./... | grep -v '/vendor/')
-  - go test -v -race $(go list ./... | grep -v '/vendor/')
+  - go get -t -v ./...
+  - diff -u <(echo -n) <(gofmt -d .)
+  - go vet $(go list ./... | grep -v /vendor/)
+  - go test -v -race ./...
+  # Only build binaries from the latest Go release.
+  - if [ "${LATEST}" = "true" ]; then gox -os="linux darwin windows" -arch="amd64" -output="flarectl.{{.OS}}.{{.Arch}}" -ldflags "-X main.Rev=`git rev-parse --short HEAD`" -verbose ./...; fi
 
 notifications:
   email:
     recipients:
       - jamesog@cloudflare.com
       - msilverlock@cloudflare.com
-      - salvatore@cloudflare.com
+
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key:
+    secure: wHqq6Em56Dhkq4GHqdTXfNWB1NU2ixD0/z88Hu31MFXc+Huz5p6np0PUNBOvO9jSFpSzrSGFpsD5lkExAU9rBOI9owSRiEHpR1krIFbMmCboNqNr1uXxzxam9NWLgH8ltL2LNX3hp5teYnNpE4EhIDsGqORR4BrgXfH4eK7mvj/93kDRF2Wxt1slRh9VlxPSQEUxJ1iQNy3lbZ6U2+wouD8TaaJFgzPtueMyyIj2ASQdSlWMRyCVXJPKKgbRd5jLo2XHAWmmDb9mC8u8RS5QlB1klJjGCOl7gNC0KHYknHk6sUVpgIdnmszQBdVMlrZ6yToFDSFI28pj0PDmpb3KFfLauatyQ/bOfDoJFQQWgxyy30du89PawLmqeMoIXUQoA8IWF3nl/YhD+xsLCL1UH3kZdVZStwS/EhMcKqXBPn/AFi1Vbh7m+OMJAVvZp3xnFDe/H8tymczOWy4vDnyfXZQagLMsTouS/SosCFjjeL/Rdz6AEcQRq5bYAiQBhjVwlobNxZSMXWatNSaGz3z78dPEx9qfHnKixmBTacrJd6NlBhWH1kvg1c7TT2zlPxt6XTtsq7Ts/oKNF2iXXhw8HuzZv1idCiWfxobdajZE3EY+8akR060ktT4KEgRmCC/0h6ncPVT0Vaba1XZvbjlraol/p3tswXgGodPsKL87AgM=
+  file:
+  - flarectl.windows.amd64.exe
+  - flarectl.darwin.amd64
+  - flarectl.linux.amd64
+  on:
+    repo: cloudflare/cloudflare-go
+    tags: true
+    condition: $LATEST = true
