@@ -56,7 +56,7 @@ type RailgunZoneListResponse struct {
 //
 // API reference: https://api.cloudflare.com/#railgun-create-railgun
 func (api *API) CreateRailgun(name string) (Railgun, error) {
-	uri := "/railguns"
+	uri := api.userBaseURL("") + "/railguns"
 	params := struct {
 		Name string `json:"name"`
 	}{
@@ -94,9 +94,8 @@ func (api *API) FilterRailguns(page int, filter RailgunFilter) (*RailgunListResp
 	if filter.Direction != "" {
 		v.Set("direction", filter.Direction)
 	}
-	query := "?" + v.Encode()
 
-	uri := "/railguns" + query
+	uri := api.userBaseURL("") + "/railguns" + "?" + v.Encode()
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
@@ -114,7 +113,7 @@ func (api *API) FilterRailguns(page int, filter RailgunFilter) (*RailgunListResp
 //
 // API reference: https://api.cloudflare.com/#railgun-railgun-details
 func (api *API) RailgunDetails(railgunID string) (Railgun, error) {
-	uri := "/railguns/" + railgunID
+	uri := api.userBaseURL("") + "/railguns/" + railgunID
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
 		return Railgun{}, errors.Wrap(err, errMakeRequestError)
@@ -137,10 +136,9 @@ func (api *API) ListRailgunZones(railgunID string, page int) (*RailgunZoneListRe
 
 	v.Set("page", strconv.Itoa(page))
 	v.Set("per_page", strconv.Itoa(100))
-	query := "?" + v.Encode()
-
-	uri := "/railguns/" + railgunID + "/zones" + query
-	res, err := api.makeRequest("GET", uri, nil)
+	uri := api.userBaseURL("") + "/railguns/" + railgunID + "/zones" + "?" + v.Encode()
+  
+  res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
@@ -152,11 +150,25 @@ func (api *API) ListRailgunZones(railgunID string, page int) (*RailgunZoneListRe
 	return response, nil
 }
 
+func (api *API) RailgunZones(railgunID string) ([]Zone, error) {
+	uri := api.userBaseURL("") + "/railguns/" + railgunID + "/zones"
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return nil, errors.Wrap(err, errMakeRequestError)
+	}
+
+	response := &RailgunZoneListResponse{}
+	if err := json.Unmarshal(res, &response); err != nil {
+		return nil, errors.Wrap(err, errUnmarshalError)
+	}
+	return response.Result, nil
+}
+
 // enableRailgun enables (true) or disables (false) a Railgun for all zones connected to it.
 //
 // API reference: https://api.cloudflare.com/#railgun-enable-or-disable-a-railgun
 func (api *API) enableRailgun(railgunID string, enable bool) (Railgun, error) {
-	uri := "/railguns/" + railgunID
+	uri := api.userBaseURL("") + "/railguns/" + railgunID
 	params := struct {
 		Enabled bool `json:"enabled"`
 	}{
@@ -191,7 +203,7 @@ func (api *API) DisableRailgun(railgunID string) (Railgun, error) {
 //
 // API reference: https://api.cloudflare.com/#railgun-delete-railgun
 func (api *API) DeleteRailgun(railgunID string) error {
-	uri := "/railguns/" + railgunID
+	uri := api.userBaseURL("") + "/railguns/" + railgunID
 	if _, err := api.makeRequest("DELETE", uri, nil); err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}

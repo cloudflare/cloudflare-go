@@ -69,16 +69,16 @@ func zoneList(c *cli.Context) {
 		fmt.Println(err)
 		return
 	}
-	var output []table
+	output := make([][]string, 0, len(zones))
 	for _, z := range zones {
-		output = append(output, table{
-			"ID":     z.ID,
-			"Name":   z.Name,
-			"Plan":   z.Plan.Name,
-			"Status": z.Status,
+		output = append(output, []string{
+			z.ID,
+			z.Name,
+			z.Plan.Name,
+			z.Status,
 		})
 	}
-	makeTable(output, "ID", "Name", "Plan", "Status")
+	writeTable(output, "ID", "Name", "Plan", "Status")
 }
 
 func zoneInfo(c *cli.Context) {
@@ -100,7 +100,7 @@ func zoneInfo(c *cli.Context) {
 		fmt.Println(err)
 		return
 	}
-	var output []table
+	output := make([][]string, 0, len(zones))
 	for _, z := range zones {
 		var nameservers []string
 		if len(z.VanityNS) > 0 {
@@ -108,17 +108,17 @@ func zoneInfo(c *cli.Context) {
 		} else {
 			nameservers = z.NameServers
 		}
-		output = append(output, table{
-			"ID":           z.ID,
-			"Zone":         z.Name,
-			"Plan":         z.Plan.Name,
-			"Status":       z.Status,
-			"Name Servers": strings.Join(nameservers, ", "),
-			"Paused":       fmt.Sprintf("%t", z.Paused),
-			"Type":         z.Type,
+		output = append(output, []string{
+			z.ID,
+			z.Name,
+			z.Plan.Name,
+			z.Status,
+			strings.Join(nameservers, ", "),
+			fmt.Sprintf("%t", z.Paused),
+			z.Type,
 		})
 	}
-	makeTable(output, "ID", "Zone", "Plan", "Status", "Name Servers", "Paused", "Type")
+	writeTable(output, "ID", "Zone", "Plan", "Status", "Name Servers", "Paused", "Type")
 }
 
 func zonePlan(*cli.Context) {
@@ -172,7 +172,7 @@ func zoneRecords(c *cli.Context) {
 			return
 		}
 	}
-	var output []table
+	output := make([][]string, 0, len(records))
 	for _, r := range records {
 		switch r.Type {
 		case "MX":
@@ -185,14 +185,14 @@ func zoneRecords(c *cli.Context) {
 			// XXX: File this as a bug. LOC doesn't do this.
 			r.Content = strings.Replace(r.Content, "\t", " ", -1)
 		}
-		output = append(output, table{
-			"ID":      r.ID,
-			"Type":    r.Type,
-			"Name":    r.Name,
-			"Content": r.Content,
-			"Proxied": fmt.Sprintf("%t", r.Proxied),
-			"TTL":     fmt.Sprintf("%d", r.TTL),
+		output = append(output, []string{
+			r.ID,
+			r.Type,
+			r.Name,
+			r.Content,
+			fmt.Sprintf("%t", r.Proxied),
+			fmt.Sprintf("%d", r.TTL),
 		})
 	}
-	makeTable(output, "ID", "Type", "Name", "Content", "Proxied", "TTL")
+	writeTable(output, "ID", "Type", "Name", "Content", "Proxied", "TTL")
 }
