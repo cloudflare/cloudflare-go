@@ -636,7 +636,9 @@ func TestModifyLoadBalancerMonitor(t *testing.T) {
                 "retries": 0,
                 "interval": 90,
                 "expected_body": "kicking",
-                "expected_codes": "200"
+                "expected_codes": "200",
+                "follow_redirects": false,
+                "allow_insecure": false
 						}`, string(b))
 		}
 		fmt.Fprint(w, `{
@@ -663,7 +665,9 @@ func TestModifyLoadBalancerMonitor(t *testing.T) {
                 "retries": 0,
                 "interval": 90,
                 "expected_body": "kicking",
-                "expected_codes": "200"
+                "expected_codes": "200",
+                "follow_redirects": false,
+                "allow_insecure": false
             }
         }`)
 	}
