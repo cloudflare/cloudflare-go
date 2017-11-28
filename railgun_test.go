@@ -125,11 +125,16 @@ func TestFilterRailguns(t *testing.T) {
 				ModifiedOn:     modifiedOn,
 			},
 		},
+		Response: Response{
+			Success: true,
+			Errors: []ResponseInfo{},
+			Messages: []ResponseInfo{},
+		},
 	}
 
 	actual, err := client.FilterRailguns(1, RailgunFilter{Direction: "desc"})
 	if assert.NoError(t, err) {
-		assert.Equal(t, want, actual)
+		assert.Equal(t, want, *actual)
 	}
 }
 
