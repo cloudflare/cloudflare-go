@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/cloudflare/cloudflare-go"
@@ -127,6 +128,66 @@ func zonePlan(*cli.Context) {
 func zoneSettings(*cli.Context) {
 }
 
+func zoneCachePurge(c *cli.Context) {
+	if err := checkEnv(); err != nil {
+		fmt.Println(err)
+		cli.ShowSubcommandHelp(c)
+		return
+	}
+
+	if err := checkFlags(c, "zone"); err != nil {
+		cli.ShowSubcommandHelp(c)
+		return
+	}
+
+	zoneName := c.String("zone")
+	zoneID, err := api.ZoneIDByName(c.String("zone"))
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return
+	}
+
+	var resp cloudflare.PurgeCacheResponse
+
+	// Purge everything
+	if c.Bool("everything") {
+		resp, err = api.PurgeEverything(zoneID)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error purging all from zone %q: %s\n", zoneName, err)
+			return
+		}
+	} else {
+		var (
+			files = c.StringSlice("files")
+			tags  = c.StringSlice("tags")
+			hosts = c.StringSlice("hosts")
+		)
+
+		if len(files) == 0 && len(tags) == 0 && len(hosts) == 0 {
+			fmt.Fprintln(os.Stderr, "You must provide at least one of the --files, --tags or --hosts flags")
+			return
+		}
+
+		// Purge selectively
+		purgeReq := cloudflare.PurgeCacheRequest{
+			Files: c.StringSlice("files"),
+			Tags:  c.StringSlice("tags"),
+			Hosts: c.StringSlice("hosts"),
+		}
+
+		resp, err = api.PurgeCache(zoneID, purgeReq)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error purging the cache from zone %q: %s\n", zoneName, err)
+			return
+		}
+	}
+
+	output := make([][]string, 0, 1)
+	output = append(output, formatCacheResponse(resp))
+
+	writeTable(output, "ID")
+}
+
 func zoneRecords(c *cli.Context) {
 	if err := checkEnv(); err != nil {
 		fmt.Println(err)
@@ -195,4 +256,10 @@ func zoneRecords(c *cli.Context) {
 		})
 	}
 	writeTable(output, "ID", "Type", "Name", "Content", "Proxied", "TTL")
+}
+
+func formatCacheResponse(resp cloudflare.PurgeCacheResponse) []string {
+	return []string{
+		resp.Result.ID,
+	}
 }

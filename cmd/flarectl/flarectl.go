@@ -157,6 +157,33 @@ func main() {
 					Usage:   "Settings for one zone",
 				},
 				{
+					Name:   "purge",
+					Action: zoneCachePurge,
+					Usage:  "(Selectively) Purge the cache for a zone",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+						cli.BoolFlag{
+							Name:  "everything",
+							Usage: "purge everything from cache for the zone",
+						},
+						cli.StringSliceFlag{
+							Name:  "hosts",
+							Usage: "a list of hostnames to purge the cache for",
+						},
+						cli.StringSliceFlag{
+							Name:  "tags",
+							Usage: "the cache tags to purge (Enterprise only)",
+						},
+						cli.StringSliceFlag{
+							Name:  "files",
+							Usage: "a list of [exact] URLs to purge",
+						},
+					},
+				},
+				{
 					Name:    "dns",
 					Aliases: []string{"d"},
 					Action:  zoneRecords,

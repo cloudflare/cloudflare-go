@@ -213,14 +213,22 @@ type ZoneAnalyticsOptions struct {
 
 // PurgeCacheRequest represents the request format made to the purge endpoint.
 type PurgeCacheRequest struct {
-	Everything bool     `json:"purge_everything,omitempty"`
-	Files      []string `json:"files,omitempty"`
-	Tags       []string `json:"tags,omitempty"`
+	Everything bool `json:"purge_everything,omitempty"`
+	// Purge by filepath (exact match). Limit of 30
+	Files []string `json:"files,omitempty"`
+	// Purge by Tag (Enterprise only):
+	// https://support.cloudflare.com/hc/en-us/articles/206596608-How-to-Purge-Cache-Using-Cache-Tags-Enterprise-only-
+	Tags []string `json:"tags,omitempty"`
+	// Purge by hostname - e.g. "assets.example.com"
+	Hosts []string `json:"hosts,omitempty"`
 }
 
 // PurgeCacheResponse represents the response from the purge endpoint.
 type PurgeCacheResponse struct {
 	Response
+	Result struct {
+		ID string `json:"id"`
+	} `json:"result"`
 }
 
 // newZone describes a new zone.
@@ -410,7 +418,7 @@ func (api *API) EditZone(zoneID string, zoneOpts ZoneOptions) (Zone, error) {
 // API reference: https://api.cloudflare.com/#zone-purge-all-files
 func (api *API) PurgeEverything(zoneID string) (PurgeCacheResponse, error) {
 	uri := "/zones/" + zoneID + "/purge_cache"
-	res, err := api.makeRequest("DELETE", uri, PurgeCacheRequest{true, nil, nil})
+	res, err := api.makeRequest("DELETE", uri, PurgeCacheRequest{true, nil, nil, nil})
 	if err != nil {
 		return PurgeCacheResponse{}, errors.Wrap(err, errMakeRequestError)
 	}
