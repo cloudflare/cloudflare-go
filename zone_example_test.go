@@ -19,7 +19,7 @@ func ExampleAPI_ListZones_all() {
 		log.Fatal(err)
 	}
 
-	for _, z := range zones {
+	for _, z := range zones.Result {
 		fmt.Println(z.Name)
 	}
 }
@@ -36,7 +36,7 @@ func ExampleAPI_ListZones_filter() {
 		log.Fatal(err)
 	}
 
-	for _, z := range zones {
+	for _, z := range zones.Result {
 		fmt.Println(z.Name)
 	}
 }

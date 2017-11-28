@@ -27,7 +27,7 @@ func Example() {
 		return
 	}
 
-	for _, r := range records {
+	for _, r := range records.Result {
 		fmt.Printf("%s: %s\n", r.Name, r.Content)
 	}
 }

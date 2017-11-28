@@ -24,7 +24,7 @@ func ExampleAPI_DNSRecords_all() {
 		log.Fatal(err)
 	}
 
-	for _, r := range recs {
+	for _, r := range recs.Result {
 		fmt.Printf("%s: %s\n", r.Name, r.Content)
 	}
 }
@@ -47,7 +47,7 @@ func ExampleAPI_DNSRecords_filterByContent() {
 		log.Fatal(err)
 	}
 
-	for _, r := range recs {
+	for _, r := range recs.Result {
 		fmt.Printf("%s: %s\n", r.Name, r.Content)
 	}
 }
@@ -71,7 +71,7 @@ func ExampleAPI_DNSRecords_filterByName() {
 		log.Fatal(err)
 	}
 
-	for _, r := range recs {
+	for _, r := range recs.Result {
 		fmt.Printf("%s: %s\n", r.Name, r.Content)
 	}
 }
@@ -94,7 +94,7 @@ func ExampleAPI_DNSRecords_filterByType() {
 		log.Fatal(err)
 	}
 
-	for _, r := range recs {
+	for _, r := range recs.Result {
 		fmt.Printf("%s: %s\n", r.Name, r.Content)
 	}
 }
