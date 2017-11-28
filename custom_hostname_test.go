@@ -11,14 +11,15 @@ import (
 func TestCustomHostname_DeleteCustomHostname(t *testing.T) {
 	setup()
 	defer teardown()
-
 	mux.HandleFunc("/zones/foo/custom_hostnames/bar", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "DELETE", r.Method, "Expected method 'DELETE', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `
 {
-  "id": "bar"
+  "result": {
+		"id": "bar"
+  }
 }`)
 	})
 
