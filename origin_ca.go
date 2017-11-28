@@ -64,9 +64,9 @@ func (api *API) CreateOriginCertificate(certificate OriginCACertificate) (*Origi
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
 
-	var originResponse *originCACertificateResponse
+	var originResponse originCACertificateResponse
 
-	err = json.Unmarshal(res, originResponse)
+	err = json.Unmarshal(res, &originResponse)
 
 	if err != nil {
 		return nil, errors.Wrap(err, errUnmarshalError)
@@ -134,9 +134,9 @@ func (api *API) OriginCertificate(certificateID string) (*OriginCACertificate, e
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
 
-	var originResponse *originCACertificateResponse
+	var originResponse originCACertificateResponse
 
-	err = json.Unmarshal(res, originResponse)
+	err = json.Unmarshal(res, &originResponse)
 
 	if err != nil {
 		return nil, errors.Wrap(err, errUnmarshalError)
@@ -162,9 +162,9 @@ func (api *API) RevokeOriginCertificate(certificateID string) (*OriginCACertific
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
 
-	var originResponse *originCACertificateResponseRevoke
+	var originResponse originCACertificateResponseRevoke
 
-	err = json.Unmarshal(res, originResponse)
+	err = json.Unmarshal(res, &originResponse)
 
 	if err != nil {
 		return nil, errors.Wrap(err, errUnmarshalError)

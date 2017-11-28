@@ -58,8 +58,8 @@ func (api *API) DeleteCustomHostname(zoneID string, customHostnameID string) err
 		return errors.Wrap(err, errMakeRequestError)
 	}
 
-	var response *CustomHostnameResponse
-	err = json.Unmarshal(res, response)
+	var response CustomHostnameResponse
+	err = json.Unmarshal(res, &response)
 	if err != nil {
 		return errors.Wrap(err, errUnmarshalError)
 	}
@@ -77,13 +77,13 @@ func (api *API) CreateCustomHostname(zoneID string, ch CustomHostname) (*CustomH
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
 
-	var response *CustomHostnameResponse
-	err = json.Unmarshal(res, response)
+	var response CustomHostnameResponse
+	err = json.Unmarshal(res, &response)
 	if err != nil {
 		return nil, errors.Wrap(err, errUnmarshalError)
 	}
 
-	return response, nil
+	return &response, nil
 }
 
 // ListCustomHostnames fetches custom hostnames for the given zone.
