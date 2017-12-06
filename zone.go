@@ -529,7 +529,45 @@ func (api *API) ZoneAnalyticsByColocation(zoneID string, options ZoneAnalyticsOp
 	return r.Result, nil
 }
 
-// ZoneSSLSetting returns information about ssl setting to the specified zone.
+// ZoneSettings returns all of the settings for a given zone.
+//
+// API reference: https://api.cloudflare.com/#zone-settings-get-all-zone-settings
+func (api *API) ZoneSettings(zoneID string) (*ZoneSettingResponse, error) {
+	uri := "/zones/" + zoneID + "/settings"
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return nil, errors.Wrap(err, errMakeRequestError)
+	}
+
+	response := &ZoneSettingResponse{}
+	err = json.Unmarshal(res, &response)
+	if err != nil {
+		return nil, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return response, nil
+}
+
+// UpdateZoneSettings updates the settings for a given zone.
+//
+// API reference: https://api.cloudflare.com/#zone-settings-edit-zone-settings-info
+func (api *API) UpdateZoneSettings(zoneID string, settings []ZoneSetting) (*ZoneSettingResponse, error) {
+	uri := "/zones/" + zoneID + "/settings"
+	res, err := api.makeRequest("PATCH", uri, settings)
+	if err != nil {
+		return nil, errors.Wrap(err, errMakeRequestError)
+	}
+
+	response := &ZoneSettingResponse{}
+	err = json.Unmarshal(res, &response)
+	if err != nil {
+		return nil, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return response, nil
+}
+
+// ZoneSSLSettings returns information about SSL setting to the specified zone.
 //
 // API reference: https://api.cloudflare.com/#zone-settings-get-ssl-setting
 func (api *API) ZoneSSLSettings(zoneID string) (ZoneSSLSetting, error) {
