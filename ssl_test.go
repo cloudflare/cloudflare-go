@@ -353,7 +353,7 @@ func TestReprioritizeSSL(t *testing.T) {
 	})
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, want, actual)
+		assert.Equal(t, want, actual.Result)
 	}
 }
 
