@@ -320,12 +320,12 @@ func getScope(c *cli.Context) (string, string, error) {
 	var organization, organizationID string
 	if c.String("organization") != "" {
 		organization = c.String("organization")
-		organizations, _, err := api.ListOrganizations()
+		organizations, err := api.ListOrganizations(1)
 		if err != nil {
 			fmt.Println(err)
 			return "", "", err
 		}
-		for _, org := range organizations {
+		for _, org := range organizations.Result {
 			if org.Name == organization {
 				organizationID = org.ID
 				break

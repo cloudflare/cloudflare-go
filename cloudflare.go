@@ -67,7 +67,6 @@ func (api *API) SetAuthType(authType int) {
 
 // ZoneIDByName retrieves a zone's ID from the name.
 func (api *API) ZoneIDByName(zoneName string) (string, error) {
-	//TODO: paginate
 	response, err := api.FilterZones(1, zoneName)
 	if err != nil {
 		return "", errors.Wrap(err, "ListZones command failed")

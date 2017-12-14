@@ -90,18 +90,18 @@ func dnsCreateOrUpdate(c *cli.Context) {
 	rr := cloudflare.DNSRecord{
 		Name: name + "." + zone,
 	}
-	records, err := api.DNSRecords(zoneID, rr)
+	records, err := api.FilterDNSRecords(zoneID, 1, rr)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error fetching DNS records: ", err)
 		return
 	}
 
 	var resp *cloudflare.DNSRecordResponse
-	if len(records) > 0 {
+	if len(records.Result) > 0 {
 		// Record exists - find the ID and update it.
 		// This is imprecise without knowing the original content; if a label
 		// has multiple RRs we'll just update the first one.
-		for _, r := range records {
+		for _, r := range records.Result {
 			if r.Type == rtype {
 				rr.ID = r.ID
 				rr.Type = r.Type

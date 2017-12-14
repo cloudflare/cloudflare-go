@@ -64,13 +64,13 @@ func zoneList(c *cli.Context) {
 		fmt.Println(err)
 		return
 	}
-	zones, err := api.ListZones()
+	zones, err := api.ListZones(1)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	output := make([][]string, 0, len(zones))
-	for _, z := range zones {
+	output := make([][]string, 0, len(zones.Result))
+	for _, z := range zones.Result {
 		output = append(output, []string{
 			z.ID,
 			z.Name,
@@ -86,6 +86,7 @@ func zoneInfo(c *cli.Context) {
 		fmt.Println(err)
 		return
 	}
+
 	var zone string
 	if len(c.Args()) > 0 {
 		zone = c.Args()[0]
@@ -95,13 +96,13 @@ func zoneInfo(c *cli.Context) {
 		cli.ShowSubcommandHelp(c)
 		return
 	}
-	zones, err := api.ListZones(zone)
+	zones, err := api.ListZones(1, []string{zone}...)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	output := make([][]string, 0, len(zones))
-	for _, z := range zones {
+	output := make([][]string, 0, len(zones.Result))
+	for _, z := range zones.Result {
 		var nameservers []string
 		if len(z.VanityNS) > 0 {
 			nameservers = z.VanityNS
@@ -150,14 +151,14 @@ func zoneRecords(c *cli.Context) {
 
 	// Create a an empty record for searching for records
 	rr := cloudflare.DNSRecord{}
-	var records []cloudflare.DNSRecord
+	var records cloudflare.DNSRecordListResponse
 	if c.String("id") != "" {
 		rec, err := api.DNSRecord(zoneID, c.String("id"))
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		records = append(records, rec)
+		records.Result = append(records.Result, rec)
 	} else {
 		if c.String("name") != "" {
 			rr.Name = c.String("name")
@@ -166,14 +167,15 @@ func zoneRecords(c *cli.Context) {
 			rr.Name = c.String("content")
 		}
 		var err error
-		records, err = api.DNSRecords(zoneID, rr)
+		response, err := api.FilterDNSRecords(zoneID, 1, rr)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
+		records.Result = response.Result
 	}
-	output := make([][]string, 0, len(records))
-	for _, r := range records {
+	output := make([][]string, 0, len(records.Result))
+	for _, r := range records.Result {
 		switch r.Type {
 		case "MX":
 			r.Content = fmt.Sprintf("%d %s", r.Priority, r.Content)

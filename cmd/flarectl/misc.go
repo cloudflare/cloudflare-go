@@ -61,14 +61,14 @@ func pageRules(c *cli.Context) {
 		return
 	}
 
-	rules, err := api.ListPageRules(zoneID)
+	rules, err := api.ListPageRules(zoneID, 1)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
 	fmt.Printf("%3s %-32s %-8s %s\n", "Pri", "ID", "Status", "URL")
-	for _, r := range rules {
+	for _, r := range rules.Result {
 		var settings []string
 		fmt.Printf("%3d %s %-8s %s\n", r.Priority, r.ID, r.Status, r.Targets[0].Constraint.Value)
 		for _, a := range r.Actions {
