@@ -31,14 +31,14 @@ type DNSRecord struct {
 // DNSRecordResponse represents the response from the DNS endpoint.
 type DNSRecordResponse struct {
 	Response
-	Result DNSRecord `json:"result"`
+	Result     DNSRecord `json:"result"`
 	ResultInfo `json:"result_info"`
 }
 
 // DNSRecordListResponse represents the response from the list DNS records endpoint.
 type DNSRecordListResponse struct {
 	Response
-	Result []DNSRecord `json:"result"`
+	Result     []DNSRecord `json:"result"`
 	ResultInfo `json:"result_info"`
 }
 

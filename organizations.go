@@ -28,7 +28,7 @@ type OrganizationResponse struct {
 // OrganizationResponse represents the response from the list of Organizations endpoint.
 type OrganizationListResponse struct {
 	Response
-	Result []Organization `json:"result"`
+	Result     []Organization `json:"result"`
 	ResultInfo `json:"result_info"`
 }
 

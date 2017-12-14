@@ -126,8 +126,8 @@ func TestFilterRailguns(t *testing.T) {
 			},
 		},
 		Response: Response{
-			Success: true,
-			Errors: []ResponseInfo{},
+			Success:  true,
+			Errors:   []ResponseInfo{},
 			Messages: []ResponseInfo{},
 		},
 	}

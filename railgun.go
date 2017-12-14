@@ -137,8 +137,8 @@ func (api *API) ListRailgunZones(railgunID string, page int) (*RailgunZoneListRe
 	v.Set("page", strconv.Itoa(page))
 	v.Set("per_page", strconv.Itoa(100))
 	uri := api.userBaseURL("") + "/railguns/" + railgunID + "/zones" + "?" + v.Encode()
-  
-  res, err := api.makeRequest("GET", uri, nil)
+
+	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}

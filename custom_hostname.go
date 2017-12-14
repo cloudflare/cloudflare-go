@@ -93,7 +93,6 @@ func (api *API) ListCustomHostnames(zoneID string, page int) (*CustomHostnameLis
 	return api.FilterCustomHostnames(zoneID, page, CustomHostname{})
 }
 
-
 // FilterCustomHostnames fetches custom hostnames for the given zone,
 // by applying filter.Hostname if not empty and scoping the result to page'th 50 items.
 //
