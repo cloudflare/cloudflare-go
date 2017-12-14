@@ -146,7 +146,6 @@ func (api *API) CustomHostname(zoneID string, customHostnameID string) (CustomHo
 
 // CustomHostnameIDByName retrieves the ID for the given hostname in the given zone.
 func (api *API) CustomHostnameIDByName(zoneID string, hostname string) (string, error) {
-	//TODO: paginate
 	response, err := api.FilterCustomHostnames(zoneID, 1, CustomHostname{Hostname: hostname})
 	if err != nil {
 		return "", errors.Wrap(err, "CustomHostnames command failed")

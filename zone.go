@@ -282,8 +282,8 @@ func (api *API) ZoneActivationCheck(zoneID string) (Response, error) {
 // ListZones lists zones on an account.
 //
 // API reference: https://api.cloudflare.com/#zone-list-zones
-func (api *API) ListZones(page int) (*ZoneListResponse, error) {
-	return api.FilterZones(page)
+func (api *API) ListZones(page int, filters ...string) (*ZoneListResponse, error) {
+	return api.FilterZones(page, filters...)
 }
 
 // FilterZones lists zones on an account, filtered by the supplied names.
