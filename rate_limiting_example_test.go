@@ -46,7 +46,7 @@ func ExampleAPI_CreateRateLimit() {
 	fmt.Printf("%+v\n", rateLimit)
 }
 
-func ExampleAPI_ListRateLimitsAll() {
+func ExampleAPI_ListRateLimits() {
 	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
@@ -57,7 +57,11 @@ func ExampleAPI_ListRateLimitsAll() {
 		log.Fatal(err)
 	}
 
-	rateLimits, err := api.ListRateLimits(zoneID)
+	pageOpts := cloudflare.PaginationOptions{
+		PerPage: 5,
+		Page:    1,
+	}
+	rateLimits, _, err := api.ListRateLimits(zoneID, pageOpts)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -3,6 +3,8 @@ package cloudflare
 import (
 	"encoding/json"
 	"github.com/pkg/errors"
+	"net/url"
+	"strconv"
 )
 
 // RateLimit is a policy than can be applied to limit traffic within a customer domain
@@ -82,21 +84,63 @@ func (api *API) CreateRateLimit(zoneID string, limit RateLimit) (RateLimit, erro
 	return r.Result, nil
 }
 
-// ListRateLimits returns all Rate Limits for a zone.
+// ListRateLimits returns Rate Limits for a zone, paginated according to the provided options
 //
 // API reference: https://api.cloudflare.com/#rate-limits-for-a-zone-list-rate-limits
-func (api *API) ListRateLimits(zoneID string) ([]RateLimit, error) {
+func (api *API) ListRateLimits(zoneID string, pageOpts PaginationOptions) ([]RateLimit, ResultInfo, error) {
+	v := url.Values{}
+	if pageOpts.PerPage > 0 {
+		v.Set("per_page", strconv.Itoa(pageOpts.PerPage))
+	}
+	if pageOpts.Page > 0 {
+		v.Set("page", strconv.Itoa(pageOpts.Page))
+	}
+
 	uri := "/zones/" + zoneID + "/rate_limits"
+	if len(v) > 0 {
+		uri = uri + "?" + v.Encode()
+	}
+
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []RateLimit{}, errors.Wrap(err, errMakeRequestError)
+		return []RateLimit{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
 	}
+
 	var r rateLimitListResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return []RateLimit{}, errors.Wrap(err, errUnmarshalError)
+		return []RateLimit{}, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
 	}
-	return r.Result, nil
+	return r.Result, r.ResultInfo, nil
+}
+
+// ListAllRateLimits returns all Rate Limits for a zone.
+//
+// API reference: https://api.cloudflare.com/#rate-limits-for-a-zone-list-rate-limits
+func (api *API) ListAllRateLimits(zoneID string) ([]RateLimit, error) {
+	pageOpts := PaginationOptions{
+		PerPage: 100, // this is the max page size allowed
+		Page:    1,
+	}
+
+	allRateLimits := make([]RateLimit, 0)
+	for {
+		rateLimits, resultInfo, err := api.ListRateLimits(zoneID, pageOpts)
+		if err != nil {
+			return []RateLimit{}, err
+		}
+		allRateLimits = append(allRateLimits, rateLimits...)
+		// total pages is not returned on this call
+		// if number of records is less than the max, this must be the last page
+		// in case TotalCount % PerPage = 0, the last request will return an empty list
+		if resultInfo.Count < resultInfo.PerPage {
+			break
+		}
+		// continue with the next page
+		pageOpts.Page = pageOpts.Page + 1
+	}
+
+	return allRateLimits, nil
 }
 
 // RateLimit fetches detail about one Rate Limit for a zone.
