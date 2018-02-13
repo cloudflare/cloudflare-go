@@ -8,7 +8,10 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"time"
+
 	"github.com/pkg/errors"
+	"golang.org/x/time/rate"
 )
 
 const apiURL = "https://api.cloudflare.com/client/v4"
@@ -30,6 +33,9 @@ type API struct {
 	headers           http.Header
 	httpClient        *http.Client
 	authType          int
+	rateLimitRPS      int
+	rateLimitBurst    int
+	maxRetries        int
 }
 
 // New creates a new Cloudflare v4 API client.
@@ -39,11 +45,14 @@ func New(key, email string, opts ...Option) (*API, error) {
 	}
 
 	api := &API{
-		APIKey:   key,
-		APIEmail: email,
-		BaseURL:  apiURL,
-		headers:  make(http.Header),
-		authType: AuthKeyEmail,
+		APIKey:         key,
+		APIEmail:       email,
+		BaseURL:        apiURL,
+		headers:        make(http.Header),
+		authType:       AuthKeyEmail,
+		rateLimitRPS:   20,
+		rateLimitBurst: 1200,
+		maxRetries:     3,
 	}
 
 	err := api.parseOptions(opts...)
@@ -87,21 +96,47 @@ func (api *API) makeRequest(method, uri string, params interface{}) ([]byte, err
 
 func (api *API) makeRequestWithAuthType(method, uri string, params interface{}, authType int) ([]byte, error) {
 	// Replace nil with a JSON object if needed
-	var reqBody io.Reader
+	var jsonBody []byte
+	var err error
 	if params != nil {
-		json, err := json.Marshal(params)
+		jsonBody, err = json.Marshal(params)
 		if err != nil {
 			return nil, errors.Wrap(err, "error marshalling params to JSON")
 		}
-		reqBody = bytes.NewReader(json)
 	} else {
-		reqBody = nil
+		jsonBody = nil
 	}
 
-	resp, err := api.request(method, uri, reqBody, authType)
-	if err != nil {
-		return nil, err
+	var resp *http.Response
+	var respErr error
+	var reqBody io.Reader
+	l := rate.NewLimiter(rate.Limit(api.rateLimitRPS), api.rateLimitBurst)
+	for i := 0; i < api.maxRetries; i++ {
+		if jsonBody != nil {
+			reqBody = bytes.NewReader(jsonBody)
+		}
+
+		reservation := l.Reserve()
+		if !reservation.OK() {
+			return nil, errors.New("Not able to make any request due to the current rate limit settings")
+		}
+		time.Sleep(reservation.Delay())
+		resp, respErr = api.request(method, uri, reqBody, authType)
+		// retry if the server is rate limiting us or if it failed
+		// assumes server operations are rolled back on failure (!)
+		if respErr != nil || resp.StatusCode == http.StatusTooManyRequests || resp.StatusCode >= 500 {
+			// TODO: exponential backoff on errors with retry delay much larger than rate limit delay
+			// TODO: read body to reuse connection if http is in error
+			// see https://github.com/hashicorp/go-retryablehttp/blob/master/client.go#L226
+			continue
+		} else {
+			break
+		}
 	}
+	if respErr != nil {
+		return nil, respErr
+	}
+
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
