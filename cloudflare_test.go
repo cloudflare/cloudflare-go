@@ -6,8 +6,6 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"time"
-
 	"github.com/stretchr/testify/assert"
 )
 
@@ -27,8 +25,8 @@ func setup(opts ...Option) {
 	mux = http.NewServeMux()
 	server = httptest.NewServer(mux)
 
-	// disable rate limits in testing - prepended so any provided value overrides this
-	opts = append([]Option{RateLimit(100000)}, opts...)
+	// disable rate limits and retries in testing - prepended so any provided value overrides this
+	opts = append([]Option{RateLimit(100000), UsingRetryPolicy(0, 0, 0)}, opts...)
 
 	// Cloudflare client configured to use test server
 	client, _ = New("deadbeef", "cloudflare@example.org", opts...)
@@ -106,19 +104,42 @@ func TestClient_Auth(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-func TestClient_RateLimiting(t *testing.T) {
-	// trading off accuracy against test time
-	opt := RateLimit(1000)
-	numSamples := 30
-
-	setup(opt)
+func TestClient_RetryCanSucceedAfterErrors(t *testing.T) {
+	setup(UsingRetryPolicy(3, 0, 1))
 	defer teardown()
 
+	requestsReceived := 0
 	// could test any function, using ListLoadBalancerPools
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, `{
+
+		// we are doing three *retries*
+		if requestsReceived == 0 {
+			// return error causing client to retry
+			w.WriteHeader(500)
+			fmt.Fprint(w, `{
+				"success": false,
+				"errors": [ "server created some error"],
+				"messages": [],
+				"result": []
+			}`)
+		} else if requestsReceived == 1 {
+			// return error causing client to retry
+			w.WriteHeader(429)
+			fmt.Fprint(w, `{
+				"success": false,
+				"errors": [ "this is a rate limiting error"],
+				"messages": [],
+				"result": []
+			}`)
+		} else if requestsReceived == 2 {
+			requestsReceived += 1
+			// TODO clean this up as panics end up in the test output
+			panic("this panic is meant to occur, it simulatesthe api client receiving no response")
+		} else {
+			// return success response
+			fmt.Fprint(w, `{
             "success": true,
             "errors": [],
             "messages": [],
@@ -148,25 +169,39 @@ func TestClient_RateLimiting(t *testing.T) {
                 "total_count": 2000
             }
         }`)
+		}
+		requestsReceived++
+
 	}
 
 	mux.HandleFunc("/user/load_balancers/pools", handler)
 
-	// bucket starts full so empty it since this test has a small sample size
-	client.ListLoadBalancerPools()
+	_, err := client.ListLoadBalancerPools()
+	assert.NoError(t, err)
+}
 
-	// start timing requests
-	startAll := time.Now()
-	for i := 0; i < numSamples; i++ {
-		client.ListLoadBalancerPools()
-	}
-	totalTime := time.Since(startAll)
+func TestClient_RetryReturnsPersistentErrorResponse(t *testing.T) {
+	setup(UsingRetryPolicy(2, 0, 1))
+	defer teardown()
 
-	// rate limit of 1000 rps, we made 30 requests in the time period ( req/time = rate (rps) )
-	// => 30/tmin = 1000 => tmin = 30/1000 = 0.03 sec  is the minimum amount of time the client requests should take
-	// this is a relatively small sample size, seems that rps limit is only enforced in aggregate
-	// so give a 5% margin of error
-	if totalTime < time.Duration(28500)*time.Microsecond {
-		t.Errorf("List calls took less than minimum allowed time (47.5ms): %s\n", time.Since(startAll).String())
+	// could test any function, using ListLoadBalancerPools
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+
+		// return error causing client to retry
+		w.WriteHeader(500)
+		fmt.Fprint(w, `{
+			"success": false,
+			"errors": [ "server created some error"],
+			"messages": [],
+			"result": []
+		}`)
+
 	}
+
+	mux.HandleFunc("/user/load_balancers/pools", handler)
+
+	_, err := client.ListLoadBalancerPools()
+	assert.Error(t, err)
 }

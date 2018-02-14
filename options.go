@@ -3,6 +3,8 @@ package cloudflare
 import (
 	"net/http"
 
+	"time"
+
 	"golang.org/x/time/rate"
 )
 
@@ -43,6 +45,18 @@ func RateLimit(rps float64) Option {
 		// so setting it equal to 1 this effectively disables bursting
 		// TODO validate this value in some allowed range
 		api.rateLimiter = rate.NewLimiter(rate.Limit(rps), 1)
+		return nil
+	}
+}
+
+func UsingRetryPolicy(maxRetries int, minRetryDelaySecs int, maxRetryDelaySecs int) Option {
+	// seconds is very granular for a minimum delay - but this is only in case of failure
+	return func(api *API) error {
+		api.retryPolicy = RetryPolicy{
+			MaxRetries:    maxRetries,
+			MinRetryDelay: time.Duration(minRetryDelaySecs) * time.Second,
+			MaxRetryDelay: time.Duration(maxRetryDelaySecs) * time.Second,
+		}
 		return nil
 	}
 }

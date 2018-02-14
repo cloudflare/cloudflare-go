@@ -116,6 +116,7 @@ func (api *API) makeRequestWithAuthType(method, uri string, params interface{}, 
 	var resp *http.Response
 	var respErr error
 	var reqBody io.Reader
+	var respBody []byte
 	for i := 0; i <= api.retryPolicy.MaxRetries; i++ {
 		if jsonBody != nil {
 			reqBody = bytes.NewReader(jsonBody)
@@ -123,6 +124,7 @@ func (api *API) makeRequestWithAuthType(method, uri string, params interface{}, 
 
 		if i > 0 {
 			// expect the backoff introduced here on errored requests to dominate the effect of rate limiting
+			// dont need a random component here as the rate limiter should do something similar
 			sleepDuration := time.Duration(math.Pow(2, float64(i-1)) * float64(api.retryPolicy.MinRetryDelay))
 			// TODO why does hashicorp lib have this: float64(sleep) != [time.Duration input]
 			if sleepDuration > api.retryPolicy.MaxRetryDelay {
@@ -143,24 +145,22 @@ func (api *API) makeRequestWithAuthType(method, uri string, params interface{}, 
 			// see https://golang.org/pkg/net/http/#Client.Do
 			if respErr == nil {
 				// have to read the body before closing, but set a limit of how much to read
-				io.Copy(ioutil.Discard, io.LimitReader(resp.Body, int64(4096)))
+				respBody, err = ioutil.ReadAll(resp.Body)
+				respErr = errors.Wrap(err, "could not read response body")
 				resp.Body.Close()
 			}
 			// TODO log the failed request
 			continue
 		} else {
+			respBody, err = ioutil.ReadAll(resp.Body)
+			if err != nil {
+				return nil, errors.Wrap(err, "could not read response body")
+			}
 			break
 		}
 	}
 	if respErr != nil {
 		return nil, respErr
-	}
-
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return nil, errors.Wrap(err, "could not read response body")
 	}
 
 	switch resp.StatusCode {
@@ -175,13 +175,13 @@ func (api *API) makeRequestWithAuthType(method, uri string, params interface{}, 
 		return nil, errors.Errorf("HTTP status %d: service failure", resp.StatusCode)
 	default:
 		var s string
-		if body != nil {
-			s = string(body)
+		if respBody != nil {
+			s = string(respBody)
 		}
 		return nil, errors.Errorf("HTTP status %d: content %q", resp.StatusCode, s)
 	}
 
-	return body, nil
+	return respBody, nil
 }
 
 // request makes a HTTP request to the given API endpoint, returning the raw
