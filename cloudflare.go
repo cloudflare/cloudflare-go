@@ -8,7 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"time"
+	"context"
 
 	"github.com/pkg/errors"
 	"golang.org/x/time/rate"
@@ -33,8 +33,7 @@ type API struct {
 	headers           http.Header
 	httpClient        *http.Client
 	authType          int
-	rateLimitRPS      int
-	rateLimitBurst    int
+	rateLimiter       *rate.Limiter
 	maxRetries        int
 }
 
@@ -45,14 +44,13 @@ func New(key, email string, opts ...Option) (*API, error) {
 	}
 
 	api := &API{
-		APIKey:         key,
-		APIEmail:       email,
-		BaseURL:        apiURL,
-		headers:        make(http.Header),
-		authType:       AuthKeyEmail,
-		rateLimitRPS:   20,
-		rateLimitBurst: 1200,
-		maxRetries:     3,
+		APIKey:      key,
+		APIEmail:    email,
+		BaseURL:     apiURL,
+		headers:     make(http.Header),
+		authType:    AuthKeyEmail,
+		rateLimiter: rate.NewLimiter(rate.Limit(4), 1), // 4rps equates to default api limit (1200 req/5 min)
+		maxRetries:  3,
 	}
 
 	err := api.parseOptions(opts...)
@@ -110,17 +108,15 @@ func (api *API) makeRequestWithAuthType(method, uri string, params interface{}, 
 	var resp *http.Response
 	var respErr error
 	var reqBody io.Reader
-	l := rate.NewLimiter(rate.Limit(api.rateLimitRPS), api.rateLimitBurst)
 	for i := 0; i < api.maxRetries; i++ {
 		if jsonBody != nil {
 			reqBody = bytes.NewReader(jsonBody)
 		}
 
-		reservation := l.Reserve()
-		if !reservation.OK() {
-			return nil, errors.New("Not able to make any request due to the current rate limit settings")
+		api.rateLimiter.Wait(context.TODO())
+		if err != nil {
+			return nil, errors.Wrap(err, "Error caused by request rate limiting")
 		}
-		time.Sleep(reservation.Delay())
 		resp, respErr = api.request(method, uri, reqBody, authType)
 		// retry if the server is rate limiting us or if it failed
 		// assumes server operations are rolled back on failure (!)

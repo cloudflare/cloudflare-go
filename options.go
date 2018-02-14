@@ -1,6 +1,10 @@
 package cloudflare
 
-import "net/http"
+import (
+	"net/http"
+
+	"golang.org/x/time/rate"
+)
 
 // Option is a functional option for configuring the API client.
 type Option func(*API) error
@@ -27,6 +31,17 @@ func Headers(headers http.Header) Option {
 func UsingOrganization(orgID string) Option {
 	return func(api *API) error {
 		api.organizationID = orgID
+		return nil
+	}
+}
+
+// RateLimited applies a non-default rate limit to client API requests
+func RateLimited(rps float64) Option {
+	return func(api *API) error {
+		// because ratelimiter doesnt do any windowing
+		// setting burst makes it difficult to enforce a fixed rate
+		// so setting it equal to 1 this effectively disables bursting
+		api.rateLimiter = rate.NewLimiter(rate.Limit(rps), 1)
 		return nil
 	}
 }
