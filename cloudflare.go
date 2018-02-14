@@ -10,6 +10,10 @@ import (
 
 	"context"
 
+	"time"
+
+	"math"
+
 	"github.com/pkg/errors"
 	"golang.org/x/time/rate"
 )
@@ -34,7 +38,7 @@ type API struct {
 	httpClient        *http.Client
 	authType          int
 	rateLimiter       *rate.Limiter
-	maxRetries        int
+	retryPolicy       RetryPolicy
 }
 
 // New creates a new Cloudflare v4 API client.
@@ -50,7 +54,11 @@ func New(key, email string, opts ...Option) (*API, error) {
 		headers:     make(http.Header),
 		authType:    AuthKeyEmail,
 		rateLimiter: rate.NewLimiter(rate.Limit(4), 1), // 4rps equates to default api limit (1200 req/5 min)
-		maxRetries:  3,
+		retryPolicy: RetryPolicy{
+			MaxRetries:    3,
+			MinRetryDelay: time.Duration(1) * time.Second,
+			MaxRetryDelay: time.Duration(30) * time.Second,
+		},
 	}
 
 	err := api.parseOptions(opts...)
@@ -108,22 +116,37 @@ func (api *API) makeRequestWithAuthType(method, uri string, params interface{}, 
 	var resp *http.Response
 	var respErr error
 	var reqBody io.Reader
-	for i := 0; i < api.maxRetries; i++ {
+	for i := 0; i <= api.retryPolicy.MaxRetries; i++ {
 		if jsonBody != nil {
 			reqBody = bytes.NewReader(jsonBody)
 		}
 
+		if i > 0 {
+			// expect the backoff introduced here on errored requests to dominate the effect of rate limiting
+			sleepDuration := time.Duration(math.Pow(2, float64(i-1)) * float64(api.retryPolicy.MinRetryDelay))
+			// TODO why does hashicorp lib have this: float64(sleep) != [time.Duration input]
+			if sleepDuration > api.retryPolicy.MaxRetryDelay {
+				sleepDuration = api.retryPolicy.MaxRetryDelay
+			}
+			time.Sleep(sleepDuration)
+		}
 		api.rateLimiter.Wait(context.TODO())
 		if err != nil {
 			return nil, errors.Wrap(err, "Error caused by request rate limiting")
 		}
 		resp, respErr = api.request(method, uri, reqBody, authType)
+
 		// retry if the server is rate limiting us or if it failed
-		// assumes server operations are rolled back on failure (!)
+		// assumes server operations are rolled back on failure
 		if respErr != nil || resp.StatusCode == http.StatusTooManyRequests || resp.StatusCode >= 500 {
-			// TODO: exponential backoff on errors with retry delay much larger than rate limit delay
-			// TODO: read body to reuse connection if http is in error
-			// see https://github.com/hashicorp/go-retryablehttp/blob/master/client.go#L226
+			// if we got a valid http response, try to read body so we can reuse the connection
+			// see https://golang.org/pkg/net/http/#Client.Do
+			if respErr == nil {
+				// have to read the body before closing, but set a limit of how much to read
+				io.Copy(ioutil.Discard, io.LimitReader(resp.Body, int64(4096)))
+				resp.Body.Close()
+			}
+			// TODO log the failed request
 			continue
 		} else {
 			break
@@ -264,4 +287,10 @@ func (api *API) Raw(method, endpoint string, data interface{}) (json.RawMessage,
 type PaginationOptions struct {
 	Page    int `json:"page,omitempty"`
 	PerPage int `json:"per_page,omitempty"`
+}
+
+type RetryPolicy struct {
+	MaxRetries    int
+	MinRetryDelay time.Duration
+	MaxRetryDelay time.Duration
 }

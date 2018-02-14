@@ -27,6 +27,9 @@ func setup(opts ...Option) {
 	mux = http.NewServeMux()
 	server = httptest.NewServer(mux)
 
+	// disable rate limits in testing - prepended so any provided value overrides this
+	opts = append([]Option{RateLimit(100000)}, opts...)
+
 	// Cloudflare client configured to use test server
 	client, _ = New("deadbeef", "cloudflare@example.org", opts...)
 	client.BaseURL = server.URL
@@ -105,7 +108,7 @@ func TestClient_Auth(t *testing.T) {
 
 func TestClient_RateLimiting(t *testing.T) {
 	// trading off accuracy against test time
-	opt := RateLimited(1000)
+	opt := RateLimit(1000)
 	numSamples := 30
 
 	setup(opt)
