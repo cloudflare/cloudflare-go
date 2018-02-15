@@ -285,7 +285,10 @@ func TestModifyLoadBalancerPool(t *testing.T) {
                   "enabled": false
                 }
               ],
-              "notification_email": "nobody@example.com"
+              "notification_email": "nobody@example.com",
+              "check_regions": [
+                "WEU"
+              ]
 						}`, string(b))
 		}
 		fmt.Fprint(w, `{
@@ -306,7 +309,10 @@ func TestModifyLoadBalancerPool(t *testing.T) {
                   "enabled": false
                 }
               ],
-              "notification_email": "nobody@example.com"
+              "notification_email": "nobody@example.com",
+              "check_regions": [
+                "WEU"
+              ]
             }
         }`)
 	}
@@ -329,6 +335,9 @@ func TestModifyLoadBalancerPool(t *testing.T) {
 			},
 		},
 		NotificationEmail: "nobody@example.com",
+		CheckRegions: []string{
+			"WEU",
+		},
 	}
 	request := LoadBalancerPool{
 		ID:          "17b5962d775c646f3f9725cbc7a53df4",
@@ -343,6 +352,9 @@ func TestModifyLoadBalancerPool(t *testing.T) {
 			},
 		},
 		NotificationEmail: "nobody@example.com",
+		CheckRegions: []string{
+			"WEU",
+		},
 	}
 
 	actual, err := client.ModifyLoadBalancerPool(request)
