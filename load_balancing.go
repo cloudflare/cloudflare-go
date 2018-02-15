@@ -18,6 +18,7 @@ type LoadBalancerPool struct {
 	Monitor           string               `json:"monitor,omitempty"`
 	Origins           []LoadBalancerOrigin `json:"origins"`
 	NotificationEmail string               `json:"notification_email,omitempty"`
+	CheckRegions      []string             `json:"check_regions"`
 }
 
 type LoadBalancerOrigin struct {
