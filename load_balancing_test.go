@@ -32,7 +32,10 @@ func TestCreateLoadBalancerPool(t *testing.T) {
                   "enabled": true
                 }
               ],
-              "notification_email": "someone@example.com"
+              "notification_email": "someone@example.com",
+              "check_regions": [
+                "WEU"
+              ]
 						}`, string(b))
 		}
 		fmt.Fprint(w, `{
@@ -54,7 +57,10 @@ func TestCreateLoadBalancerPool(t *testing.T) {
                   "enabled": true
                 }
               ],
-              "notification_email": "someone@example.com"
+              "notification_email": "someone@example.com",
+              "check_regions": [
+                "WEU"
+              ]
             }
         }`)
 	}
@@ -78,6 +84,9 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 			},
 		},
 		NotificationEmail: "someone@example.com",
+		CheckRegions: []string{
+			"WEU",
+		},
 	}
 	request := LoadBalancerPool{
 		Description: "Primary data center - Provider XYZ",
@@ -92,6 +101,9 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 			},
 		},
 		NotificationEmail: "someone@example.com",
+		CheckRegions: []string{
+			"WEU",
+		},
 	}
 
 	actual, err := client.CreateLoadBalancerPool(request)
