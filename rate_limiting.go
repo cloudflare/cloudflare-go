@@ -2,16 +2,17 @@ package cloudflare
 
 import (
 	"encoding/json"
-	"github.com/pkg/errors"
 	"net/url"
 	"strconv"
+
+	"github.com/pkg/errors"
 )
 
 // RateLimit is a policy than can be applied to limit traffic within a customer domain
 type RateLimit struct {
 	ID          string                  `json:"id,omitempty"`
-	Disabled    bool                    `json:"disabled,omitempty"` // api defaults to false
-	Description string                  `json:"description"`
+	Disabled    bool                    `json:"disabled,omitempty"`
+	Description string                  `json:"description,omitempty"`
 	Match       RateLimitTrafficMatcher `json:"match"`
 	Bypass      []RateLimitKeyValue     `json:"bypass,omitempty"`
 	Threshold   int                     `json:"threshold"`
@@ -21,8 +22,8 @@ type RateLimit struct {
 
 // RateLimitTrafficMatcher contains the rules that will be used to apply a rate limit to traffic
 type RateLimitTrafficMatcher struct {
-	Request  RateLimitRequestMatcher  `json:"request,omitempty"`
-	Response RateLimitResponseMatcher `json:"response,omitempty"`
+	Request  RateLimitRequestMatcher  `json:"request"`
+	Response RateLimitResponseMatcher `json:"response"`
 }
 
 // RateLimitRequestMatcher contains the matching rules pertaining to requests
@@ -35,7 +36,7 @@ type RateLimitRequestMatcher struct {
 // RateLimitResponseMatcher contains the matching rules pertaining to responses
 type RateLimitResponseMatcher struct {
 	Statuses      []int `json:"status,omitempty"`
-	OriginTraffic bool  `json:"origin_traffic,omitempty"`
+	OriginTraffic *bool `json:"origin_traffic,omitempty"` // api defaults to true so we need an explicit empty value
 }
 
 // RateLimitKeyValue is k-v formatted as expected in the rate limit description
@@ -46,9 +47,9 @@ type RateLimitKeyValue struct {
 
 // RateLimitAction is the action that will be taken when the rate limit threshold is reached
 type RateLimitAction struct {
-	Mode     string                  `json:"mode"`
-	Timeout  int                     `json:"timeout"`
-	Response RateLimitActionResponse `json:"response"`
+	Mode     string                   `json:"mode"`
+	Timeout  int                      `json:"timeout"`
+	Response *RateLimitActionResponse `json:"response"`
 }
 
 // RateLimitActionResponse is the response that will be returned when rate limit action is triggered

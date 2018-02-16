@@ -2,8 +2,9 @@ package cloudflare_test
 
 import (
 	"fmt"
-	cloudflare "github.com/cloudflare/cloudflare-go"
 	"log"
+
+	cloudflare "github.com/cloudflare/cloudflare-go"
 )
 
 const (

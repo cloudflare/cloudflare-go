@@ -2,10 +2,11 @@ package cloudflare
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 const (
@@ -40,6 +41,7 @@ const (
 `
 )
 
+var expectedOriginTraffic = true
 var expectedRateLimitStruct = RateLimit{
 	ID:          "72dae2fc158942f2adb1dd2a3d4143bc",
 	Disabled:    false,
@@ -51,7 +53,7 @@ var expectedRateLimitStruct = RateLimit{
 			URLPattern: "exampledomain.com/test-rate-limit",
 		},
 		Response: RateLimitResponseMatcher{
-			OriginTraffic: true,
+			OriginTraffic: &expectedOriginTraffic,
 		},
 	},
 	Threshold: 50,
@@ -72,7 +74,7 @@ var expectedRateLimitStructUpdated = RateLimit{
 			URLPattern: "exampledomain.com/test-rate-limit",
 		},
 		Response: RateLimitResponseMatcher{
-			OriginTraffic: true,
+			OriginTraffic: &expectedOriginTraffic,
 		},
 	},
 	Threshold: 50,
