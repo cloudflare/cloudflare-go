@@ -18,6 +18,10 @@ type LoadBalancerPool struct {
 	Monitor           string               `json:"monitor,omitempty"`
 	Origins           []LoadBalancerOrigin `json:"origins"`
 	NotificationEmail string               `json:"notification_email,omitempty"`
+
+	// CheckRegions defines the geographic region(s) from where to run health-checks from - e.g. "WNAM", "WEU", "SAF", "SAM".
+	// Providing a null/empty value means "all regions", which may not be available to all plan types.
+	CheckRegions []string `json:"check_regions"`
 }
 
 type LoadBalancerOrigin struct {
