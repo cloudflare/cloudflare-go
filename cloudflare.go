@@ -227,3 +227,10 @@ func (api *API) Raw(method, endpoint string, data interface{}) (json.RawMessage,
 	}
 	return r.Result, nil
 }
+
+// PaginationOptions can be passed to a list request to configure paging
+// These values will be defaulted if omitted, and PerPage has min/max limits set by resource
+type PaginationOptions struct {
+	Page    int `json:"page,omitempty"`
+	PerPage int `json:"per_page,omitempty"`
+}
