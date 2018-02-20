@@ -105,7 +105,7 @@ func TestClient_Auth(t *testing.T) {
 }
 
 func TestClient_RetryCanSucceedAfterErrors(t *testing.T) {
-	setup(UsingRetryPolicy(3, 0, 1))
+	setup(UsingRetryPolicy(2, 0, 1))
 	defer teardown()
 
 	requestsReceived := 0
@@ -133,10 +133,6 @@ func TestClient_RetryCanSucceedAfterErrors(t *testing.T) {
 				"messages": [],
 				"result": []
 			}`)
-		} else if requestsReceived == 2 {
-			requestsReceived += 1
-			// TODO clean this up as panics end up in the test output
-			panic("this panic is meant to occur, it simulatesthe api client receiving no response")
 		} else {
 			// return success response
 			fmt.Fprint(w, `{

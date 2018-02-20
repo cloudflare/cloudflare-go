@@ -3,16 +3,15 @@ package cloudflare
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"io"
 	"io/ioutil"
-	"net/http"
-
-	"context"
-
-	"time"
-
+	"log"
 	"math"
+	"net/http"
+	"strings"
+	"time"
 
 	"github.com/pkg/errors"
 	"golang.org/x/time/rate"
@@ -125,11 +124,14 @@ func (api *API) makeRequestWithAuthType(method, uri string, params interface{}, 
 		if i > 0 {
 			// expect the backoff introduced here on errored requests to dominate the effect of rate limiting
 			// dont need a random component here as the rate limiter should do something similar
+			// nb time duration could truncate an arbitrary float. Since our inputs are all ints, we should be ok
 			sleepDuration := time.Duration(math.Pow(2, float64(i-1)) * float64(api.retryPolicy.MinRetryDelay))
-			// TODO why does hashicorp lib have this: float64(sleep) != [time.Duration input]
+
 			if sleepDuration > api.retryPolicy.MaxRetryDelay {
 				sleepDuration = api.retryPolicy.MaxRetryDelay
 			}
+			// useful to do some simple logging here, maybe introduce levels later
+			log.Printf("Sleeping %s before retry attempt number %d for request %s %s", sleepDuration.String(), i, method, uri)
 			time.Sleep(sleepDuration)
 		}
 		api.rateLimiter.Wait(context.TODO())
@@ -148,8 +150,12 @@ func (api *API) makeRequestWithAuthType(method, uri string, params interface{}, 
 				respBody, err = ioutil.ReadAll(resp.Body)
 				respErr = errors.Wrap(err, "could not read response body")
 				resp.Body.Close()
+
+				log.Printf("Request: %s %s got an error response %d: %s\n", method, uri, resp.StatusCode,
+					strings.Replace(strings.Replace(string(respBody), "\n", "", -1), "\t", "", -1))
+			} else {
+				log.Printf("Error performing request: %s %s : %s \n", method, uri, respErr.Error())
 			}
-			// TODO log the failed request
 			continue
 		} else {
 			respBody, err = ioutil.ReadAll(resp.Body)
@@ -289,6 +295,8 @@ type PaginationOptions struct {
 	PerPage int `json:"per_page,omitempty"`
 }
 
+// RetryPolicy specifies number of retrys and min/max retry delays
+// This config is used when the client exponentially backs off after errored requests
 type RetryPolicy struct {
 	MaxRetries    int
 	MinRetryDelay time.Duration

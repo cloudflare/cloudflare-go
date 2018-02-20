@@ -38,17 +38,20 @@ func UsingOrganization(orgID string) Option {
 }
 
 // RateLimit applies a non-default rate limit to client API requests
+// If not specified the default of 4rps will be applied
 func RateLimit(rps float64) Option {
 	return func(api *API) error {
 		// because ratelimiter doesnt do any windowing
 		// setting burst makes it difficult to enforce a fixed rate
 		// so setting it equal to 1 this effectively disables bursting
-		// TODO validate this value in some allowed range
+		// this doesn't check for sensible values, ultimately the api will enforce that the value is ok
 		api.rateLimiter = rate.NewLimiter(rate.Limit(rps), 1)
 		return nil
 	}
 }
 
+// UsingRetry policy applies a non-default number of retrys and min/max retry delays
+// This will be used when the client exponentially backs off after errored requests
 func UsingRetryPolicy(maxRetries int, minRetryDelaySecs int, maxRetryDelaySecs int) Option {
 	// seconds is very granular for a minimum delay - but this is only in case of failure
 	return func(api *API) error {
