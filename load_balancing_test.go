@@ -49,6 +49,7 @@ func TestCreateLoadBalancerPool(t *testing.T) {
               "description": "Primary data center - Provider XYZ",
               "name": "primary-dc-1",
               "enabled": true,
+              "minimum_origins": 1,
               "monitor": "f1aba936b94213e5b8dca0c0dbf1f9cc",
               "origins": [
                 {
@@ -69,13 +70,14 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2014-02-01T05:20:00.12345Z")
 	want := LoadBalancerPool{
-		ID:          "17b5962d775c646f3f9725cbc7a53df4",
-		CreatedOn:   &createdOn,
-		ModifiedOn:  &modifiedOn,
-		Description: "Primary data center - Provider XYZ",
-		Name:        "primary-dc-1",
-		Enabled:     true,
-		Monitor:     "f1aba936b94213e5b8dca0c0dbf1f9cc",
+		ID:             "17b5962d775c646f3f9725cbc7a53df4",
+		CreatedOn:      &createdOn,
+		ModifiedOn:     &modifiedOn,
+		Description:    "Primary data center - Provider XYZ",
+		Name:           "primary-dc-1",
+		Enabled:        true,
+		MinimumOrigins: 1,
+		Monitor:        "f1aba936b94213e5b8dca0c0dbf1f9cc",
 		Origins: []LoadBalancerOrigin{
 			{
 				Name:    "app-server-1",
