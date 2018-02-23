@@ -73,7 +73,7 @@ func ExampleAPI_ListRateLimits() {
 	}
 }
 
-func ExampleAPI_GetRateLimit() {
+func ExampleAPI_RateLimit() {
 	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
