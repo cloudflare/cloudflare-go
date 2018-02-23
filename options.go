@@ -39,7 +39,7 @@ func UsingOrganization(orgID string) Option {
 
 // RateLimit applies a non-default rate limit to client API requests
 // If not specified the default of 4rps will be applied
-func RateLimit(rps float64) Option {
+func UsingRateLimit(rps float64) Option {
 	return func(api *API) error {
 		// because ratelimiter doesnt do any windowing
 		// setting burst makes it difficult to enforce a fixed rate

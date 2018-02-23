@@ -26,7 +26,7 @@ func setup(opts ...Option) {
 	server = httptest.NewServer(mux)
 
 	// disable rate limits and retries in testing - prepended so any provided value overrides this
-	opts = append([]Option{RateLimit(100000), UsingRetryPolicy(0, 0, 0)}, opts...)
+	opts = append([]Option{UsingRateLimit(100000), UsingRetryPolicy(0, 0, 0)}, opts...)
 
 	// Cloudflare client configured to use test server
 	client, _ = New("deadbeef", "cloudflare@example.org", opts...)
