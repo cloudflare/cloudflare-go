@@ -69,6 +69,13 @@ func main() {
 			Aliases: []string{"i"},
 			Action:  ips,
 			Usage:   "Print Cloudflare IP ranges",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "type",
+					Usage: "type of IPs ( ipv4 | ipv6 | all )",
+					Value: "all",
+				},
+			},
 		},
 		{
 			Name:    "user",
