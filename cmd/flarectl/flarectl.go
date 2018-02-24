@@ -22,9 +22,13 @@ func main() {
 			Usage:   "Print Cloudflare IP ranges",
 			Flags: []cli.Flag{
 				cli.StringFlag{
-					Name:  "type",
+					Name:  "ip-type",
 					Usage: "type of IPs ( ipv4 | ipv6 | all )",
 					Value: "all",
+				},
+				cli.BoolFlag{
+					Name:  "ip-only",
+					Usage: "show only addresses",
 				},
 			},
 		},

@@ -55,16 +55,37 @@ func checkFlags(c *cli.Context, flags ...string) error {
 	return nil
 }
 
-func ips(*cli.Context) {
-	ips, _ := cloudflare.IPs()
-	fmt.Println("IPv4 ranges:")
-	for _, r := range ips.IPv4CIDRs {
-		fmt.Println(" ", r)
+func ips(c *cli.Context) {
+
+	if c.String("ip-type") == "all" {
+		_getIps("ipv4", c.Bool("ip-only"))
+		_getIps("ipv6", c.Bool("ip-only"))
+	} else {
+		_getIps(c.String("ip-type"), c.Bool("ip-only"))
 	}
-	fmt.Println()
-	fmt.Println("IPv6 ranges:")
-	for _, r := range ips.IPv6CIDRs {
-		fmt.Println(" ", r)
+}
+
+//
+// gets type of IPs to retrieve and returns results
+//
+func _getIps(ipType string, showMsgType bool) {
+	ips, _ := cloudflare.IPs()
+
+	switch ipType {
+	case "ipv4":
+		if showMsgType != true {
+			fmt.Println("IPv4 ranges:")
+		}
+		for _, r := range ips.IPv4CIDRs {
+			fmt.Println(" ", r)
+		}
+	case "ipv6":
+		if showMsgType != true {
+			fmt.Println("IPv6 ranges:")
+		}
+		for _, r := range ips.IPv6CIDRs {
+			fmt.Println(" ", r)
+		}
 	}
 }
 
