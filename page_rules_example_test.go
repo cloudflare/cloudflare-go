@@ -7,22 +7,31 @@ import (
 	cloudflare "github.com/cloudflare/cloudflare-go"
 )
 
-var exampleNewRateLimit = cloudflare.RateLimit{
-	Description: "test",
-	Match: cloudflare.RateLimitTrafficMatcher{
-		Request: cloudflare.RateLimitRequestMatcher{
-			URLPattern: "exampledomain.com/test-rate-limit",
+var exampleNewPageRule = cloudflare.PageRule{
+	Actions: []cloudflare.PageRuleAction{
+		{
+			ID:    "always_online",
+			Value: "on",
+		},
+		{
+			ID:    "ssl",
+			Value: "flexible",
 		},
 	},
-	Threshold: 0,
-	Period:    0,
-	Action: cloudflare.RateLimitAction{
-		Mode:    "ban",
-		Timeout: 60,
+	Targets: []cloudflare.PageRuleTarget{
+		{
+			Target: "url",
+			Constraint: struct {
+				Operator string "json:\"operator\""
+				Value    string "json:\"value\""
+			}{Operator: "matches", Value: fmt.Sprintf("example.%s", domain)},
+		},
 	},
+	Priority: 1,
+	Status:   "active",
 }
 
-func ExampleAPI_CreateRateLimit() {
+func ExampleAPI_CreatePageRule() {
 	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
@@ -33,15 +42,15 @@ func ExampleAPI_CreateRateLimit() {
 		log.Fatal(err)
 	}
 
-	rateLimit, err := api.CreateRateLimit(zoneID, exampleNewRateLimit)
+	pageRule, err := api.CreatePageRule(zoneID, exampleNewPageRule)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("%+v\n", rateLimit)
+	fmt.Printf("%+v\n", pageRule)
 }
 
-func ExampleAPI_ListRateLimits() {
+func ExampleAPI_ListPageRules() {
 	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
@@ -52,22 +61,18 @@ func ExampleAPI_ListRateLimits() {
 		log.Fatal(err)
 	}
 
-	pageOpts := cloudflare.PaginationOptions{
-		PerPage: 5,
-		Page:    1,
-	}
-	rateLimits, _, err := api.ListRateLimits(zoneID, pageOpts)
+	pageRules, err := api.ListPageRules(zoneID)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("%+v\n", rateLimits)
-	for _, r := range rateLimits {
+	fmt.Printf("%+v\n", pageRules)
+	for _, r := range pageRules {
 		fmt.Printf("%+v\n", r)
 	}
 }
 
-func ExampleAPI_RateLimit() {
+func ExampleAPI_PageRule() {
 	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
@@ -78,15 +83,15 @@ func ExampleAPI_RateLimit() {
 		log.Fatal(err)
 	}
 
-	rateLimits, err := api.RateLimit(zoneID, "my_rate_limit_id")
+	pageRules, err := api.PageRule(zoneID, "my_page_rule_id")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("%+v\n", rateLimits)
+	fmt.Printf("%+v\n", pageRules)
 }
 
-func ExampleAPI_DeleteRateLimit() {
+func ExampleAPI_DeletePageRule() {
 	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
@@ -97,7 +102,7 @@ func ExampleAPI_DeleteRateLimit() {
 		log.Fatal(err)
 	}
 
-	err = api.DeleteRateLimit(zoneID, "my_rate_limit_id")
+	err = api.DeletePageRule(zoneID, "my_page_rule_id")
 	if err != nil {
 		log.Fatal(err)
 	}

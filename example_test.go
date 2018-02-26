@@ -6,6 +6,12 @@ import (
 	cloudflare "github.com/cloudflare/cloudflare-go"
 )
 
+const (
+	user   = "cloudflare@example.org"
+	domain = "example.com"
+	apiKey = "deadbeef"
+)
+
 func Example() {
 	api, err := cloudflare.New("deadbeef", "cloudflare@example.org")
 	if err != nil {
