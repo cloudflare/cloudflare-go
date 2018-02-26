@@ -624,3 +624,162 @@ func TestZoneAnalyticsByColocation(t *testing.T) {
 	_, err = client.ZoneAnalyticsDashboard("bar", ZoneAnalyticsOptions{})
 	assert.Error(t, err)
 }
+
+func TestZoneDNSAnalytics(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, "2018-02-26T02:53:07Z", r.URL.Query().Get("since"))
+		assert.Equal(t, "2018-02-26T02:54:07Z", r.URL.Query().Get("until"))
+		assert.Equal(t, "queryCount,uncachedCount,staleCount,responseTimeAvg", r.URL.Query().Get("metrics"))
+		assert.Equal(t, "queryName,responseCode,origin,tcp,ipVersion,coloName,queryType", r.URL.Query().Get("dimensions"))
+		assert.Equal(t, "", r.URL.Query().Get("filters"))
+		assert.Equal(t, "", r.URL.Query().Get("sort"))
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+        "result": {
+          "rows": 52,
+          "data": [
+            {
+              "dimensions": [
+                "mydomain.com",
+                "NOERROR",
+                "::",
+                "0",
+                "4",
+                "ATL",
+                "AAAA"
+              ],
+              "metrics": [
+                6,
+                6,
+                0,
+                1.0
+              ]
+            },
+            {
+              "dimensions": [
+                "mydomain.com",
+                "NOERROR",
+                "::",
+                "0",
+                "4",
+                "LAX",
+                "A"
+              ],
+              "metrics": [
+                2,
+                2,
+                0,
+                1.0
+              ]
+            }
+          ],
+          "data_lag": 60,
+          "min": {
+            "queryCount": 1,
+            "staleCount": 0,
+            "uncachedCount": 1,
+            "responseTimeAvg": 1.0
+          },
+          "max": {
+            "queryCount": 15,
+            "staleCount": 0,
+            "uncachedCount": 15,
+            "responseTimeAvg": 1.0
+          },
+          "totals": {
+            "queryCount": 147,
+            "staleCount": 0,
+            "uncachedCount": 147,
+            "responseTimeAvg": 2.0
+          },
+          "query": {
+            "dimensions": [
+              "queryName",
+              "responseCode",
+              "origin",
+              "tcp",
+              "ipVersion",
+              "coloName",
+              "queryType"
+            ],
+            "metrics": [
+              "queryCount",
+              "uncachedCount",
+              "staleCount",
+              "responseTimeAvg"
+            ],
+            "since": "2018-02-26T02:53:07Z",
+            "until": "2018-02-26T02:54:07Z",
+            "limit": 10000
+          }
+        },
+        "success": true,
+        "errors": [],
+        "messages": []
+      }`)
+	}
+
+	mux.HandleFunc("/zones/foo/dns_analytics/report", handler)
+
+	since, _ := time.Parse(time.RFC3339, "2018-02-26T02:53:07Z")
+	until, _ := time.Parse(time.RFC3339, "2018-02-26T02:54:07Z")
+	limit := 10000
+	rows := []ZoneDNSAnalyticsRow{
+		ZoneDNSAnalyticsRow{
+			Dimensions: []string{"mydomain.com", "NOERROR", "::", "0", "4", "ATL", "AAAA"},
+			Metrics:    []float64{6, 6, 0, 1.0},
+		},
+		ZoneDNSAnalyticsRow{
+			Dimensions: []string{"mydomain.com", "NOERROR", "::", "0", "4", "LAX", "A"},
+			Metrics:    []float64{2, 2, 0, 1.0},
+		},
+	}
+	want := ZoneDNSAnalyticsData{
+		Rows:    rows,
+		DataLag: 60,
+		Max: ZoneDNSAnalyticsDataContainer{
+			QueryCount:      15,
+			StaleCount:      0,
+			UncachedCount:   15,
+			ResponseTimeAvg: 1.0,
+		},
+		Min: ZoneDNSAnalyticsDataContainer{
+			QueryCount:      1,
+			StaleCount:      0,
+			UncachedCount:   1,
+			ResponseTimeAvg: 1.0,
+		},
+		Query: ZoneDNSAnalyticsOptions{
+			Dimensions: []string{"queryName", "responseCode", "origin", "tcp", "ipVersion", "coloName", "queryType"},
+			Metrics:    []string{"queryCount", "uncachedCount", "staleCount", "responseTimeAvg"},
+			Since:      &since,
+			Until:      &until,
+			Limit:      &limit,
+		},
+		RowCount: 52,
+		Totals: ZoneDNSAnalyticsDataContainer{
+			QueryCount:      147,
+			StaleCount:      0,
+			UncachedCount:   147,
+			ResponseTimeAvg: 2.0,
+		},
+	}
+
+	d, err := client.ZoneDNSAnalytics("foo", ZoneDNSAnalyticsOptions{
+		Since:      &since,
+		Until:      &until,
+		Metrics:    []string{"queryCount", "uncachedCount", "staleCount", "responseTimeAvg"},
+		Dimensions: []string{"queryName", "responseCode", "origin", "tcp", "ipVersion", "coloName", "queryType"},
+	})
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, d)
+	}
+
+	_, err = client.ZoneDNSAnalytics("bar", ZoneDNSAnalyticsOptions{})
+	assert.Error(t, err)
+}
