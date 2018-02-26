@@ -104,18 +104,18 @@ type PageRulesResponse struct {
 // CreatePageRule creates a new Page Rule for a zone.
 //
 // API reference: https://api.cloudflare.com/#page-rules-for-a-zone-create-a-page-rule
-func (api *API) CreatePageRule(zoneID string, rule PageRule) error {
+func (api *API) CreatePageRule(zoneID string, rule PageRule) (*PageRule, error) {
 	uri := "/zones/" + zoneID + "/pagerules"
 	res, err := api.makeRequest("POST", uri, rule)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return nil, errors.Wrap(err, errMakeRequestError)
 	}
 	var r PageRuleDetailResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return nil, errors.Wrap(err, errUnmarshalError)
 	}
-	return nil
+	return &r.Result, nil
 }
 
 // ListPageRules returns all Page Rules for a zone.
