@@ -55,6 +55,14 @@ func TestZoneAnalyticsDashboard(t *testing.T) {
                   "400": 187936,
                   "402": 1828,
                   "404": 1293
+                },
+                "ip_class": {
+                  "badHost": 675,
+                  "monitoringService": 7,
+                  "noRecord": 4946167,
+                  "searchEngine": 33098,
+                  "tor": 10,
+                  "whitelist": 109418
                 }
               },
               "bandwidth": {
@@ -94,7 +102,7 @@ func TestZoneAnalyticsDashboard(t *testing.T) {
               },
               "pageviews": {
                 "all": 5724723,
-                "search_engines": {
+                "search_engine": {
                   "googlebot": 35272,
                   "pingdom": 13435,
                   "bingbot": 5372,
@@ -135,6 +143,14 @@ func TestZoneAnalyticsDashboard(t *testing.T) {
                     "400": 187936,
                     "402": 1828,
                     "404": 1293
+                  },
+                  "ip_class": {
+                    "badHost": 675,
+                    "monitoringService": 7,
+                    "noRecord": 4946167,
+                    "searchEngine": 33098,
+                    "tor": 10,
+                    "whitelist": 109418
                   }
                 },
                 "bandwidth": {
@@ -174,7 +190,7 @@ func TestZoneAnalyticsDashboard(t *testing.T) {
                 },
                 "pageviews": {
                   "all": 5724723,
-                  "search_engines": {
+                  "search_engine": {
                     "googlebot": 35272,
                     "pingdom": 13435,
                     "bingbot": 5372,
@@ -213,6 +229,7 @@ func TestZoneAnalyticsDashboard(t *testing.T) {
 				Unencrypted int `json:"unencrypted"`
 			} `json:"ssl"`
 			HTTPStatus map[string]int `json:"http_status"`
+			IPClass    map[string]int `json:"ip_class"`
 		}{
 			All:      1234085328,
 			Cached:   1234085328,
@@ -242,6 +259,14 @@ func TestZoneAnalyticsDashboard(t *testing.T) {
 				"400": 187936,
 				"402": 1828,
 				"404": 1293,
+			},
+			IPClass: map[string]int{
+				"badHost":           675,
+				"monitoringService": 7,
+				"noRecord":          4946167,
+				"searchEngine":      33098,
+				"tor":               10,
+				"whitelist":         109418,
 			},
 		},
 		Bandwidth: struct {
@@ -298,7 +323,7 @@ func TestZoneAnalyticsDashboard(t *testing.T) {
 		},
 		Pageviews: struct {
 			All           int            `json:"all"`
-			SearchEngines map[string]int `json:"search_engines"`
+			SearchEngines map[string]int `json:"search_engine"`
 		}{
 			All: 5724723,
 			SearchEngines: map[string]int{
@@ -382,6 +407,14 @@ func TestZoneAnalyticsByColocation(t *testing.T) {
                       "400": 187936,
                       "402": 1828,
                       "404": 1293
+                    },
+                    "ip_class": {
+                      "badHost": 675,
+                      "monitoringService": 7,
+                      "noRecord": 4946167,
+                      "searchEngine": 33098,
+                      "tor": 10,
+                      "whitelist": 109418
                     }
                   },
                   "bandwidth": {
@@ -421,7 +454,7 @@ func TestZoneAnalyticsByColocation(t *testing.T) {
                   },
                   "pageviews": {
                     "all": 5724723,
-                    "search_engines": {
+                    "search_engine": {
                       "googlebot": 35272,
                       "pingdom": 13435,
                       "bingbot": 5372,
@@ -461,6 +494,7 @@ func TestZoneAnalyticsByColocation(t *testing.T) {
 				Unencrypted int `json:"unencrypted"`
 			} `json:"ssl"`
 			HTTPStatus map[string]int `json:"http_status"`
+			IPClass    map[string]int `json:"ip_class"`
 		}{
 			All:      1234085328,
 			Cached:   1234085328,
@@ -490,6 +524,14 @@ func TestZoneAnalyticsByColocation(t *testing.T) {
 				"400": 187936,
 				"402": 1828,
 				"404": 1293,
+			},
+			IPClass: map[string]int{
+				"badHost":           675,
+				"monitoringService": 7,
+				"noRecord":          4946167,
+				"searchEngine":      33098,
+				"tor":               10,
+				"whitelist":         109418,
 			},
 		},
 		Bandwidth: struct {
@@ -546,7 +588,7 @@ func TestZoneAnalyticsByColocation(t *testing.T) {
 		},
 		Pageviews: struct {
 			All           int            `json:"all"`
-			SearchEngines map[string]int `json:"search_engines"`
+			SearchEngines map[string]int `json:"search_engine"`
 		}{
 			All: 5724723,
 			SearchEngines: map[string]int{
