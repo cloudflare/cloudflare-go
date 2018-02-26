@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"strings"
 	"time"
 
 	"github.com/pkg/errors"
@@ -138,7 +139,7 @@ type ZoneSSLSettingResponse struct {
 	Result ZoneSSLSetting `json:"result"`
 }
 
-// ZoneAnalyticsData contains totals and timeseries analytics data for a zone.
+// ZoneAnalyticsData contains totals and timeseries dashboard analytics data for a zone.
 type ZoneAnalyticsData struct {
 	Totals     ZoneAnalytics   `json:"totals"`
 	Timeseries []ZoneAnalytics `json:"timeseries"`
@@ -162,6 +163,39 @@ type zoneAnalyticsColocationResponse struct {
 	Result []ZoneAnalyticsColocation `json:"result"`
 }
 
+type ZoneDNSAnalyticsDataContainer struct {
+	QueryCount         int     `json:"queryCount"`
+	ResponseTime90th   float64 `json:"responseTime90th"`
+	ResponseTime99th   float64 `json:"responseTime99th"`
+	ResponseTimeAvg    float64 `json:"responseTimeAvg"`
+	ResponseTimeMedian float64 `json:"responseTimeMedian"`
+	StaleCount         int     `json:"staleCount"`
+	UncachedCount      int     `json:"uncachedCount"`
+}
+
+// ZoneDNSAnalyticsRow represents a single row in the DNS analytics response data.
+type ZoneDNSAnalyticsRow struct {
+	Dimensions []string  `json:"dimensions"`
+	Metrics    []float64 `json:"metrics"`
+}
+
+// ZoneDNSAnalyticsData contains totals and timeseries analytics data for a zone.
+type ZoneDNSAnalyticsData struct {
+	Rows     []ZoneDNSAnalyticsRow         `json:"data"`
+	DataLag  int                           `json:"data_lag"`
+	Max      ZoneDNSAnalyticsDataContainer `json:"max"`
+	Min      ZoneDNSAnalyticsDataContainer `json:"min"`
+	Query    ZoneDNSAnalyticsOptions       `json:"query"`
+	RowCount int                           `json:"rows"`
+	Totals   ZoneDNSAnalyticsDataContainer `json:"totals"`
+}
+
+// zoneDNSAnalyticsDataResponse represents the response from the Zone DNS Analytics endpoint.
+type zoneDNSAnalyticsDataResponse struct {
+	Response
+	Result ZoneDNSAnalyticsData `json:"result"`
+}
+
 // ZoneAnalytics contains analytics data for a zone.
 type ZoneAnalytics struct {
 	Since    time.Time `json:"since"`
@@ -177,6 +211,7 @@ type ZoneAnalytics struct {
 			Unencrypted int `json:"unencrypted"`
 		} `json:"ssl"`
 		HTTPStatus map[string]int `json:"http_status"`
+		IPClass    map[string]int `json:"ip_class"`
 	} `json:"requests"`
 	Bandwidth struct {
 		All         int            `json:"all"`
@@ -196,6 +231,7 @@ type ZoneAnalytics struct {
 	} `json:"threats"`
 	Pageviews struct {
 		All           int            `json:"all"`
+		SearchEngine  map[string]int `json:"search_engine"`
 		SearchEngines map[string]int `json:"search_engines"`
 	} `json:"pageviews"`
 	Uniques struct {
@@ -203,12 +239,24 @@ type ZoneAnalytics struct {
 	}
 }
 
-// ZoneAnalyticsOptions represents the optional parameters in Zone Analytics
+// ZoneAnalyticsOptions represents the optional parameters in Zone Dashboard Analytics
 // endpoint requests.
 type ZoneAnalyticsOptions struct {
 	Since      *time.Time
 	Until      *time.Time
 	Continuous *bool
+}
+
+// ZoneDNSAnalyticsOptions represents the optional parameters in Zone DNS Analytics
+// endpoint requests.
+type ZoneDNSAnalyticsOptions struct {
+	Since      *time.Time
+	Until      *time.Time
+	Dimensions []string
+	Metrics    []string
+	Sort       []string
+	Filters    []string
+	Limit      *int
 }
 
 // PurgeCacheRequest represents the request format made to the purge endpoint.
@@ -495,7 +543,26 @@ func (o ZoneAnalyticsOptions) encode() string {
 	return v.Encode()
 }
 
-// ZoneAnalyticsDashboard returns zone analytics information.
+// encode encodes non-nil fields into URL encoded form.
+func (o ZoneDNSAnalyticsOptions) encode() string {
+	v := url.Values{}
+	if o.Since != nil {
+		v.Set("since", (*o.Since).Format(time.RFC3339))
+	}
+	if o.Until != nil {
+		v.Set("until", (*o.Until).Format(time.RFC3339))
+	}
+	v.Set("dimensions", strings.Join(o.Dimensions, ","))
+	v.Set("metrics", strings.Join(o.Metrics, ","))
+	v.Set("sort", strings.Join(o.Sort, ","))
+	v.Set("filters", strings.Join(o.Filters, ","))
+	if o.Limit != nil {
+		v.Set("limit", string(*o.Limit))
+	}
+	return v.Encode()
+}
+
+// ZoneAnalyticsDashboard returns zone dashboard analytics information.
 //
 // API reference: https://api.cloudflare.com/#zone-analytics-dashboard
 func (api *API) ZoneAnalyticsDashboard(zoneID string, options ZoneAnalyticsOptions) (ZoneAnalyticsData, error) {
@@ -525,6 +592,23 @@ func (api *API) ZoneAnalyticsByColocation(zoneID string, options ZoneAnalyticsOp
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return nil, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
+
+// ZoneDNSAnalytics returns zone DNS analytics information.
+//
+// API reference: https://api.cloudflare.com/#dns-analytics-table
+func (api *API) ZoneDNSAnalytics(zoneID string, options ZoneDNSAnalyticsOptions) (ZoneDNSAnalyticsData, error) {
+	uri := "/zones/" + zoneID + "/dns_analytics/report" + "?" + options.encode()
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return ZoneDNSAnalyticsData{}, errors.Wrap(err, errMakeRequestError)
+	}
+	var r zoneDNSAnalyticsDataResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return ZoneDNSAnalyticsData{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
 }
