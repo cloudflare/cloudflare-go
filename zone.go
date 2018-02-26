@@ -231,8 +231,7 @@ type ZoneAnalytics struct {
 	} `json:"threats"`
 	Pageviews struct {
 		All           int            `json:"all"`
-		SearchEngine  map[string]int `json:"search_engine"`
-		SearchEngines map[string]int `json:"search_engines"`
+		SearchEngines map[string]int `json:"search_engine"`
 	} `json:"pageviews"`
 	Uniques struct {
 		All int `json:"all"`
