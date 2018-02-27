@@ -133,7 +133,7 @@ type ZoneSSLSetting struct {
 	CertificateStatus string `json:"certificate_status"`
 }
 
-// ZoneSettingResponse represents the response from the Zone SSL Setting endpoint.
+// ZoneSSLSettingResponse represents the response from the Zone SSL Setting endpoint.
 type ZoneSSLSettingResponse struct {
 	Response
 	Result ZoneSSLSetting `json:"result"`
@@ -141,8 +141,9 @@ type ZoneSSLSettingResponse struct {
 
 // ZoneAnalyticsData contains totals and timeseries dashboard analytics data for a zone.
 type ZoneAnalyticsData struct {
-	Totals     ZoneAnalytics   `json:"totals"`
-	Timeseries []ZoneAnalytics `json:"timeseries"`
+	Totals       ZoneAnalytics   `json:"totals"`
+	Timeseries   []ZoneAnalytics `json:"timeseries"`
+	ColocationID string          `json:"colo_id"`
 }
 
 // zoneAnalyticsDataResponse represents the response from the Zone Analytics Dashboard endpoint.
@@ -151,16 +152,10 @@ type zoneAnalyticsDataResponse struct {
 	Result ZoneAnalyticsData `json:"result"`
 }
 
-// ZoneAnalyticsColocation contains analytics data by datacenter.
-type ZoneAnalyticsColocation struct {
-	ColocationID string          `json:"colo_id"`
-	Timeseries   []ZoneAnalytics `json:"timeseries"`
-}
-
 // zoneAnalyticsColocationResponse represents the response from the Zone Analytics By Co-location endpoint.
 type zoneAnalyticsColocationResponse struct {
 	Response
-	Result []ZoneAnalyticsColocation `json:"result"`
+	Result []ZoneAnalyticsData `json:"result"`
 }
 
 type ZoneDNSAnalyticsDataContainer struct {
@@ -581,7 +576,7 @@ func (api *API) ZoneAnalyticsDashboard(zoneID string, options ZoneAnalyticsOptio
 // ZoneAnalyticsByColocation returns zone analytics information by datacenter.
 //
 // API reference: https://api.cloudflare.com/#zone-analytics-analytics-by-co-locations
-func (api *API) ZoneAnalyticsByColocation(zoneID string, options ZoneAnalyticsOptions) ([]ZoneAnalyticsColocation, error) {
+func (api *API) ZoneAnalyticsByColocation(zoneID string, options ZoneAnalyticsOptions) ([]ZoneAnalyticsData, error) {
 	uri := "/zones/" + zoneID + "/analytics/colos" + "?" + options.encode()
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {

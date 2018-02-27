@@ -604,7 +604,7 @@ func TestZoneAnalyticsByColocation(t *testing.T) {
 			All: 12343,
 		},
 	}
-	want := []ZoneAnalyticsColocation{
+	want := []ZoneAnalyticsData{
 		{
 			ColocationID: "SFO",
 			Timeseries:   []ZoneAnalytics{data},
