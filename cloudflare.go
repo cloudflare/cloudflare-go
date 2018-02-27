@@ -38,6 +38,7 @@ type API struct {
 	authType          int
 	rateLimiter       *rate.Limiter
 	retryPolicy       RetryPolicy
+	logger            Logger
 }
 
 // New creates a new Cloudflare v4 API client.
@@ -45,6 +46,8 @@ func New(key, email string, opts ...Option) (*API, error) {
 	if key == "" || email == "" {
 		return nil, errors.New(errEmptyCredentials)
 	}
+
+	silentLogger := log.New(ioutil.Discard, "", log.LstdFlags)
 
 	api := &API{
 		APIKey:      key,
@@ -58,6 +61,7 @@ func New(key, email string, opts ...Option) (*API, error) {
 			MinRetryDelay: time.Duration(1) * time.Second,
 			MaxRetryDelay: time.Duration(30) * time.Second,
 		},
+		logger: silentLogger,
 	}
 
 	err := api.parseOptions(opts...)
@@ -131,7 +135,7 @@ func (api *API) makeRequestWithAuthType(method, uri string, params interface{}, 
 				sleepDuration = api.retryPolicy.MaxRetryDelay
 			}
 			// useful to do some simple logging here, maybe introduce levels later
-			log.Printf("Sleeping %s before retry attempt number %d for request %s %s", sleepDuration.String(), i, method, uri)
+			api.logger.Printf("Sleeping %s before retry attempt number %d for request %s %s", sleepDuration.String(), i, method, uri)
 			time.Sleep(sleepDuration)
 		}
 		api.rateLimiter.Wait(context.TODO())
@@ -146,19 +150,20 @@ func (api *API) makeRequestWithAuthType(method, uri string, params interface{}, 
 			// if we got a valid http response, try to read body so we can reuse the connection
 			// see https://golang.org/pkg/net/http/#Client.Do
 			if respErr == nil {
-				// have to read the body before closing, but set a limit of how much to read
 				respBody, err = ioutil.ReadAll(resp.Body)
-				respErr = errors.Wrap(err, "could not read response body")
 				resp.Body.Close()
 
-				log.Printf("Request: %s %s got an error response %d: %s\n", method, uri, resp.StatusCode,
+				respErr = errors.Wrap(err, "could not read response body")
+
+				api.logger.Printf("Request: %s %s got an error response %d: %s\n", method, uri, resp.StatusCode,
 					strings.Replace(strings.Replace(string(respBody), "\n", "", -1), "\t", "", -1))
 			} else {
-				log.Printf("Error performing request: %s %s : %s \n", method, uri, respErr.Error())
+				api.logger.Printf("Error performing request: %s %s : %s \n", method, uri, respErr.Error())
 			}
 			continue
 		} else {
 			respBody, err = ioutil.ReadAll(resp.Body)
+			defer resp.Body.Close()
 			if err != nil {
 				return nil, errors.Wrap(err, "could not read response body")
 			}
@@ -295,10 +300,16 @@ type PaginationOptions struct {
 	PerPage int `json:"per_page,omitempty"`
 }
 
-// RetryPolicy specifies number of retrys and min/max retry delays
+// RetryPolicy specifies number of retries and min/max retry delays
 // This config is used when the client exponentially backs off after errored requests
 type RetryPolicy struct {
 	MaxRetries    int
 	MinRetryDelay time.Duration
 	MaxRetryDelay time.Duration
+}
+
+// Logger defines the interface this library needs to use logging
+// This is a subset of the methods implemented in the log package
+type Logger interface {
+	Printf(format string, v ...interface{})
 }
