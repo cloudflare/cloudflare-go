@@ -783,3 +783,243 @@ func TestZoneDNSAnalytics(t *testing.T) {
 	_, err = client.ZoneDNSAnalytics("bar", ZoneDNSAnalyticsOptions{})
 	assert.Error(t, err)
 }
+
+func TestZoneDNSAnalyticsByTime(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, "2018-02-28T01:00:58Z", r.URL.Query().Get("since"))
+		assert.Equal(t, "2018-02-28T01:50:00Z", r.URL.Query().Get("until"))
+		assert.Equal(t, "queryCount,uncachedCount,staleCount,responseTimeAvg", r.URL.Query().Get("metrics"))
+		assert.Equal(t, "queryName,responseCode,origin,tcp,ipVersion,coloName,queryType", r.URL.Query().Get("dimensions"))
+		assert.Equal(t, "dekaminute", r.URL.Query().Get("time_delta"))
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+      "result": {
+        "rows": 1853,
+        "data": [
+          {
+            "dimensions": [
+              "www.mydomain.com",
+              "NOERROR",
+              "::",
+              "0",
+              "6",
+              "DFW",
+              "AAAA"
+            ],
+            "metrics": [
+              [
+                3,
+                0,
+                1,
+                1,
+                0,
+                0
+              ],
+              [
+                3,
+                0,
+                1,
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            ]
+          },
+          {
+            "dimensions": [
+              "www.mydomain.com",
+              "NOERROR",
+              "::",
+              "0",
+              "4",
+              "AMS",
+              "AAAA"
+            ],
+            "metrics": [
+              [
+                10,
+                3,
+                4,
+                4,
+                4,
+                0
+              ],
+              [
+                10,
+                3,
+                4,
+                4,
+                4,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            ]
+          }
+        ],
+        "data_lag": 60,
+        "min": {
+          "queryCount": 1,
+          "staleCount": 0,
+          "uncachedCount": 1
+        },
+        "max": {
+          "queryCount": 299,
+          "staleCount": 0,
+          "uncachedCount": 299
+        },
+        "totals": {
+          "queryCount": 15703,
+          "staleCount": 0,
+          "uncachedCount": 15703
+        },
+        "time_intervals": [
+          [
+            "2018-02-28T01:00:00Z",
+            "2018-02-28T01:09:59Z"
+          ],
+          [
+            "2018-02-28T01:10:00Z",
+            "2018-02-28T01:19:59Z"
+          ],
+          [
+            "2018-02-28T01:20:00Z",
+            "2018-02-28T01:29:59Z"
+          ],
+          [
+            "2018-02-28T01:30:00Z",
+            "2018-02-28T01:39:59Z"
+          ],
+          [
+            "2018-02-28T01:40:00Z",
+            "2018-02-28T01:49:59Z"
+          ],
+          [
+            "2018-02-28T01:50:00Z",
+            "2018-02-28T01:50:00Z"
+          ]
+        ],
+        "query": {
+          "dimensions": [
+            "queryName",
+            "responseCode",
+            "origin",
+            "tcp",
+            "ipVersion",
+            "coloName",
+            "queryType"
+          ],
+          "metrics": [
+            "queryCount",
+            "uncachedCount",
+            "staleCount"
+          ],
+          "since": "2018-02-28T01:00:58Z",
+          "until": "2018-02-28T01:50:00Z",
+          "time_delta": "dekaminute",
+          "limit": 10000
+        }
+      },
+      "success": true,
+      "errors": [],
+      "messages": []
+    }`)
+	}
+
+	mux.HandleFunc("/zones/foo/dns_analytics/report/bytime", handler)
+
+	since, _ := time.Parse(time.RFC3339, "2018-02-28T01:00:58Z")
+	until, _ := time.Parse(time.RFC3339, "2018-02-28T01:50:00Z")
+	time1Start, _ := time.Parse(time.RFC3339, "2018-02-28T01:00:00Z")
+	time1End, _ := time.Parse(time.RFC3339, "2018-02-28T01:09:59Z")
+	time1 := []time.Time{time1Start, time1End}
+	time2Start, _ := time.Parse(time.RFC3339, "2018-02-28T01:10:00Z")
+	time2End, _ := time.Parse(time.RFC3339, "2018-02-28T01:19:59Z")
+	time2 := []time.Time{time2Start, time2End}
+	time3Start, _ := time.Parse(time.RFC3339, "2018-02-28T01:20:00Z")
+	time3End, _ := time.Parse(time.RFC3339, "2018-02-28T01:29:59Z")
+	time3 := []time.Time{time3Start, time3End}
+	time4Start, _ := time.Parse(time.RFC3339, "2018-02-28T01:30:00Z")
+	time4End, _ := time.Parse(time.RFC3339, "2018-02-28T01:39:59Z")
+	time4 := []time.Time{time4Start, time4End}
+	time5Start, _ := time.Parse(time.RFC3339, "2018-02-28T01:40:00Z")
+	time5End, _ := time.Parse(time.RFC3339, "2018-02-28T01:49:59Z")
+	time5 := []time.Time{time5Start, time5End}
+	time6Start, _ := time.Parse(time.RFC3339, "2018-02-28T01:50:00Z")
+	time6End, _ := time.Parse(time.RFC3339, "2018-02-28T01:50:00Z")
+	time6 := []time.Time{time6Start, time6End}
+	limit := 10000
+	timeDelta := "dekaminute"
+	rows := []ZoneDNSAnalyticsByTimeRow{
+		{
+			Dimensions: []string{"www.mydomain.com", "NOERROR", "::", "0", "6", "DFW", "AAAA"},
+			Metrics:    [][]float64{{3, 0, 1, 1, 0, 0}, {3, 0, 1, 1, 0, 0}, {0, 0, 0, 0, 0, 0}},
+		},
+		{
+			Dimensions: []string{"www.mydomain.com", "NOERROR", "::", "0", "4", "AMS", "AAAA"},
+			Metrics:    [][]float64{{10, 3, 4, 4, 4, 0}, {10, 3, 4, 4, 4, 0}, {0, 0, 0, 0, 0, 0}},
+		},
+	}
+	want := ZoneDNSAnalyticsByTimeData{
+		Rows:    rows,
+		DataLag: 60,
+		Max: ZoneDNSAnalyticsDataContainer{
+			QueryCount:    299,
+			StaleCount:    0,
+			UncachedCount: 299,
+		},
+		Min: ZoneDNSAnalyticsDataContainer{
+			QueryCount:    1,
+			StaleCount:    0,
+			UncachedCount: 1,
+		},
+		Query: ZoneDNSAnalyticsOptions{
+			Dimensions: []string{"queryName", "responseCode", "origin", "tcp", "ipVersion", "coloName", "queryType"},
+			Metrics:    []string{"queryCount", "uncachedCount", "staleCount"},
+			Since:      &since,
+			Until:      &until,
+			Limit:      &limit,
+			TimeDelta:  &timeDelta,
+		},
+		RowCount: 1853,
+		Totals: ZoneDNSAnalyticsDataContainer{
+			QueryCount:    15703,
+			StaleCount:    0,
+			UncachedCount: 15703,
+		},
+		TimeIntervals: [][]time.Time{time1, time2, time3, time4, time5, time6},
+	}
+
+	d, err := client.ZoneDNSAnalyticsByTime("foo", ZoneDNSAnalyticsOptions{
+		Since:      &since,
+		Until:      &until,
+		Metrics:    []string{"queryCount", "uncachedCount", "staleCount", "responseTimeAvg"},
+		Dimensions: []string{"queryName", "responseCode", "origin", "tcp", "ipVersion", "coloName", "queryType"},
+		TimeDelta:  &timeDelta,
+	})
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, d)
+	}
+
+	_, err = client.ZoneDNSAnalyticsByTime("bar", ZoneDNSAnalyticsOptions{})
+	assert.Error(t, err)
+}

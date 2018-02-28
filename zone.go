@@ -158,6 +158,7 @@ type zoneAnalyticsColocationResponse struct {
 	Result []ZoneAnalyticsData `json:"result"`
 }
 
+// ZoneDNSAnalyticsDataContainer contains information about the DNS Analytics query response.
 type ZoneDNSAnalyticsDataContainer struct {
 	QueryCount         int     `json:"queryCount"`
 	ResponseTime90th   float64 `json:"responseTime90th"`
@@ -189,6 +190,30 @@ type ZoneDNSAnalyticsData struct {
 type zoneDNSAnalyticsDataResponse struct {
 	Response
 	Result ZoneDNSAnalyticsData `json:"result"`
+}
+
+// ZoneDNSAnalyticsByTimeRow represents a single row in the DNS Analytics By Time response data.
+type ZoneDNSAnalyticsByTimeRow struct {
+	Dimensions []string    `json:"dimensions"`
+	Metrics    [][]float64 `json:"metrics"`
+}
+
+// ZoneDNSAnalyticsByTimeData contains totals and timeseries DNS analytics data for a zone.
+type ZoneDNSAnalyticsByTimeData struct {
+	Rows          []ZoneDNSAnalyticsByTimeRow   `json:"data"`
+	DataLag       int                           `json:"data_lag"`
+	Max           ZoneDNSAnalyticsDataContainer `json:"max"`
+	Min           ZoneDNSAnalyticsDataContainer `json:"min"`
+	Query         ZoneDNSAnalyticsOptions       `json:"query"`
+	RowCount      int                           `json:"rows"`
+	Totals        ZoneDNSAnalyticsDataContainer `json:"totals"`
+	TimeIntervals [][]time.Time                 `json:"time_intervals"`
+}
+
+// zoneDNSAnalyticsByTimeResponse represents the response from the Zone DNS Analytics By Time endpoint.
+type zoneDNSAnalyticsByTimeResponse struct {
+	Response
+	Result ZoneDNSAnalyticsByTimeData `json:"result"`
 }
 
 // ZoneAnalytics contains analytics data for a zone.
@@ -244,13 +269,14 @@ type ZoneAnalyticsOptions struct {
 // ZoneDNSAnalyticsOptions represents the optional parameters in Zone DNS Analytics
 // endpoint requests.
 type ZoneDNSAnalyticsOptions struct {
-	Since      *time.Time
-	Until      *time.Time
-	Dimensions []string
-	Metrics    []string
-	Sort       []string
-	Filters    []string
-	Limit      *int
+	Since      *time.Time `json:"since"`
+	Until      *time.Time `json:"until"`
+	Dimensions []string   `json:"dimensions"`
+	Metrics    []string   `json:"metrics"`
+	Sort       []string   `json:"sort"`
+	Filters    []string   `json:"filters"`
+	Limit      *int       `json:"limit"`
+	TimeDelta  *string    `json:"time_delta"` // Only used for DNSAnalyticsByTime.
 }
 
 // PurgeCacheRequest represents the request format made to the purge endpoint.
@@ -548,10 +574,17 @@ func (o ZoneDNSAnalyticsOptions) encode() string {
 	}
 	v.Set("dimensions", strings.Join(o.Dimensions, ","))
 	v.Set("metrics", strings.Join(o.Metrics, ","))
-	v.Set("sort", strings.Join(o.Sort, ","))
-	v.Set("filters", strings.Join(o.Filters, ","))
+	if len(o.Sort) > 0 {
+		v.Set("sort", strings.Join(o.Sort, ","))
+	}
+	if len(o.Filters) > 0 {
+		v.Set("filters", strings.Join(o.Filters, ","))
+	}
 	if o.Limit != nil {
 		v.Set("limit", string(*o.Limit))
+	}
+	if o.TimeDelta != nil {
+		v.Set("time_delta", string(*o.TimeDelta))
 	}
 	return v.Encode()
 }
@@ -590,7 +623,7 @@ func (api *API) ZoneAnalyticsByColocation(zoneID string, options ZoneAnalyticsOp
 	return r.Result, nil
 }
 
-// ZoneDNSAnalytics returns zone DNS analytics information.
+// ZoneDNSAnalytics retrieves a list of summarised aggregate zone DNS analytics metrics over a given time period.
 //
 // API reference: https://api.cloudflare.com/#dns-analytics-table
 func (api *API) ZoneDNSAnalytics(zoneID string, options ZoneDNSAnalyticsOptions) (ZoneDNSAnalyticsData, error) {
@@ -603,6 +636,23 @@ func (api *API) ZoneDNSAnalytics(zoneID string, options ZoneDNSAnalyticsOptions)
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return ZoneDNSAnalyticsData{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
+
+// ZoneDNSAnalyticsByTime retrieves a list of summarised aggregate zone DNS analytics metrics grouped by time interval.
+//
+// API reference: https://api.cloudflare.com/#dns-analytics-by-time
+func (api *API) ZoneDNSAnalyticsByTime(zoneID string, options ZoneDNSAnalyticsOptions) (ZoneDNSAnalyticsByTimeData, error) {
+	uri := "/zones/" + zoneID + "/dns_analytics/report/bytime" + "?" + options.encode()
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return ZoneDNSAnalyticsByTimeData{}, errors.Wrap(err, errMakeRequestError)
+	}
+	var r zoneDNSAnalyticsByTimeResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return ZoneDNSAnalyticsByTimeData{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
 }
