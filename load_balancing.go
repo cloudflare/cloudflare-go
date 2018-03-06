@@ -4,6 +4,9 @@ import (
 	"encoding/json"
 	"time"
 
+	"net/url"
+	"strconv"
+
 	"github.com/pkg/errors"
 )
 
@@ -118,20 +121,63 @@ func (api *API) CreateLoadBalancerPool(pool LoadBalancerPool) (LoadBalancerPool,
 	return r.Result, nil
 }
 
+// ListLoadBalancerPoolsInPage lists a single page of load balancer pools connected to an account.
+//
+// API reference: https://api.cloudflare.com/#load-balancer-pools-list-pools
+func (api *API) ListLoadBalancerPoolsInPage(pageOpts PaginationOptions) ([]LoadBalancerPool, ResultInfo, error) {
+	v := url.Values{}
+	if pageOpts.PerPage > 0 {
+		v.Set("per_page", strconv.Itoa(pageOpts.PerPage))
+	}
+	if pageOpts.Page > 0 {
+		v.Set("page", strconv.Itoa(pageOpts.Page))
+	}
+
+	uri := api.userBaseURL("/user") + "/load_balancers/pools"
+	if len(v) > 0 {
+		uri = uri + "?" + v.Encode()
+	}
+
+	var res []byte
+	var r loadBalancerPoolListResponse
+	var err error
+	res, err = api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return nil, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+	}
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return nil, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, r.ResultInfo, nil
+}
+
 // ListLoadBalancerPools lists load balancer pools connected to an account.
 //
 // API reference: https://api.cloudflare.com/#load-balancer-pools-list-pools
 func (api *API) ListLoadBalancerPools() ([]LoadBalancerPool, error) {
-	uri := api.userBaseURL("/user") + "/load_balancers/pools"
-	res, err := api.makeRequest("GET", uri, nil)
-	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+	pageOpts := PaginationOptions{
+		PerPage: 100, // this is the max page size allowed
+		Page:    1,
 	}
-	var r loadBalancerPoolListResponse
-	if err := json.Unmarshal(res, &r); err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+
+	allPools := make([]LoadBalancerPool, 0)
+	for {
+		pools, resultInfo, err := api.ListLoadBalancerPoolsInPage(pageOpts)
+		if err != nil {
+			return nil, err
+		}
+		allPools = append(allPools, pools...)
+		// total pages is not returned on this call
+		// if number of records is less than the max, this must be the last page
+		// in case TotalCount % PerPage = 0, the last request will return an empty list
+		if resultInfo.Count < resultInfo.PerPage {
+			break
+		}
+		// continue with the next page
+		pageOpts.Page = pageOpts.Page + 1
 	}
-	return r.Result, nil
+	return allPools, nil
 }
 
 // LoadBalancerPoolDetails returns the details for a load balancer pool.
@@ -193,20 +239,63 @@ func (api *API) CreateLoadBalancerMonitor(monitor LoadBalancerMonitor) (LoadBala
 	return r.Result, nil
 }
 
+// ListLoadBalancerMonitorsInPage lists a single page of load balancer monitors connected to an account.
+//
+// API reference: https://api.cloudflare.com/#load-balancer-monitors-list-monitors
+func (api *API) ListLoadBalancerMonitorsInPage(pageOpts PaginationOptions) ([]LoadBalancerMonitor, ResultInfo, error) {
+	v := url.Values{}
+	if pageOpts.PerPage > 0 {
+		v.Set("per_page", strconv.Itoa(pageOpts.PerPage))
+	}
+	if pageOpts.Page > 0 {
+		v.Set("page", strconv.Itoa(pageOpts.Page))
+	}
+
+	uri := api.userBaseURL("/user") + "/load_balancers/monitors"
+	if len(v) > 0 {
+		uri = uri + "?" + v.Encode()
+	}
+
+	var res []byte
+	var r loadBalancerMonitorListResponse
+	var err error
+	res, err = api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return nil, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+	}
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return nil, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, r.ResultInfo, nil
+}
+
 // ListLoadBalancerMonitors lists load balancer monitors connected to an account.
 //
 // API reference: https://api.cloudflare.com/#load-balancer-monitors-list-monitors
 func (api *API) ListLoadBalancerMonitors() ([]LoadBalancerMonitor, error) {
-	uri := api.userBaseURL("/user") + "/load_balancers/monitors"
-	res, err := api.makeRequest("GET", uri, nil)
-	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+	pageOpts := PaginationOptions{
+		PerPage: 100, // this is the max page size allowed
+		Page:    1,
 	}
-	var r loadBalancerMonitorListResponse
-	if err := json.Unmarshal(res, &r); err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+
+	allMonitors := make([]LoadBalancerMonitor, 0)
+	for {
+		monitors, resultInfo, err := api.ListLoadBalancerMonitorsInPage(pageOpts)
+		if err != nil {
+			return nil, err
+		}
+		allMonitors = append(allMonitors, monitors...)
+		// total pages is not returned on this call
+		// if number of records is less than the max, this must be the last page
+		// in case TotalCount % PerPage = 0, the last request will return an empty list
+		if resultInfo.Count < resultInfo.PerPage {
+			break
+		}
+		// continue with the next page
+		pageOpts.Page = pageOpts.Page + 1
 	}
-	return r.Result, nil
+	return allMonitors, nil
 }
 
 // LoadBalancerMonitorDetails returns the details for a load balancer monitor.
@@ -268,20 +357,63 @@ func (api *API) CreateLoadBalancer(zoneID string, lb LoadBalancer) (LoadBalancer
 	return r.Result, nil
 }
 
+// ListLoadBalancersInPage lists a single page of load balancers configured on a zone.
+//
+// API reference: https://api.cloudflare.com/#load-balancers-list-load-balancers
+func (api *API) ListLoadBalancersInPage(zoneID string, pageOpts PaginationOptions) ([]LoadBalancer, ResultInfo, error) {
+	v := url.Values{}
+	if pageOpts.PerPage > 0 {
+		v.Set("per_page", strconv.Itoa(pageOpts.PerPage))
+	}
+	if pageOpts.Page > 0 {
+		v.Set("page", strconv.Itoa(pageOpts.Page))
+	}
+
+	uri := "/zones/" + zoneID + "/load_balancers"
+	if len(v) > 0 {
+		uri = uri + "?" + v.Encode()
+	}
+
+	var res []byte
+	var r loadBalancerListResponse
+	var err error
+	res, err = api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return nil, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+	}
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return nil, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, r.ResultInfo, nil
+}
+
 // ListLoadBalancers lists load balancers configured on a zone.
 //
 // API reference: https://api.cloudflare.com/#load-balancers-list-load-balancers
 func (api *API) ListLoadBalancers(zoneID string) ([]LoadBalancer, error) {
-	uri := "/zones/" + zoneID + "/load_balancers"
-	res, err := api.makeRequest("GET", uri, nil)
-	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+	pageOpts := PaginationOptions{
+		PerPage: 1, // this is the max page size allowed
+		Page:    1,
 	}
-	var r loadBalancerListResponse
-	if err := json.Unmarshal(res, &r); err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+
+	allBalancers := make([]LoadBalancer, 0)
+	for {
+		balancers, resultInfo, err := api.ListLoadBalancersInPage(zoneID, pageOpts)
+		if err != nil {
+			return nil, err
+		}
+		allBalancers = append(allBalancers, balancers...)
+		// total pages is not returned on this call
+		// if number of records is less than the max, this must be the last page
+		// in case TotalCount % PerPage = 0, the last request will return an empty list
+		if resultInfo.Count < resultInfo.PerPage {
+			break
+		}
+		// continue with the next page
+		pageOpts.Page = pageOpts.Page + 1
 	}
-	return r.Result, nil
+	return allBalancers, nil
 }
 
 // LoadBalancerDetails returns the details for a load balancer.

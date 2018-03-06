@@ -7,8 +7,46 @@ import (
 	"testing"
 	"time"
 
+	"strings"
+
 	"github.com/stretchr/testify/assert"
 )
+
+const serverLoadBalancerPoolDescription = `
+{
+	"id": "17b5962d775c646f3f9725cbc7a53df4",
+	"created_on": "2014-01-01T05:20:00.12345Z",
+	"modified_on": "2014-02-01T05:20:00.12345Z",
+	"description": "Primary data center - Provider XYZ",
+	"name": "primary-dc-1",
+	"enabled": true,
+	"monitor": "f1aba936b94213e5b8dca0c0dbf1f9cc",
+	"origins": [
+	  {
+		"name": "app-server-1",
+		"address": "0.0.0.0",
+		"enabled": true
+	  }
+	],
+	"notification_email": "someone@example.com"
+}
+`
+
+var expectedLoadBalancerPool = LoadBalancerPool{
+	ID:          "17b5962d775c646f3f9725cbc7a53df4",
+	Description: "Primary data center - Provider XYZ",
+	Name:        "primary-dc-1",
+	Enabled:     true,
+	Monitor:     "f1aba936b94213e5b8dca0c0dbf1f9cc",
+	Origins: []LoadBalancerOrigin{
+		{
+			Name:    "app-server-1",
+			Address: "0.0.0.0",
+			Enabled: true,
+		},
+	},
+	NotificationEmail: "someone@example.com",
+}
 
 func TestCreateLoadBalancerPool(t *testing.T) {
 	setup()
@@ -121,28 +159,12 @@ func TestListLoadBalancerPools(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, `{
+		fmt.Fprintf(w, `{
             "success": true,
             "errors": [],
             "messages": [],
             "result": [
-                {
-                    "id": "17b5962d775c646f3f9725cbc7a53df4",
-                    "created_on": "2014-01-01T05:20:00.12345Z",
-                    "modified_on": "2014-02-01T05:20:00.12345Z",
-                    "description": "Primary data center - Provider XYZ",
-                    "name": "primary-dc-1",
-                    "enabled": true,
-                    "monitor": "f1aba936b94213e5b8dca0c0dbf1f9cc",
-                    "origins": [
-                      {
-                        "name": "app-server-1",
-                        "address": "0.0.0.0",
-                        "enabled": true
-                      }
-                    ],
-                    "notification_email": "someone@example.com"
-                }
+                %s
             ],
             "result_info": {
                 "page": 1,
@@ -150,30 +172,114 @@ func TestListLoadBalancerPools(t *testing.T) {
                 "count": 1,
                 "total_count": 2000
             }
-        }`)
+        }`, serverLoadBalancerPoolDescription)
 	}
 
 	mux.HandleFunc("/user/load_balancers/pools", handler)
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2014-02-01T05:20:00.12345Z")
-	want := []LoadBalancerPool{
-		{
-			ID:          "17b5962d775c646f3f9725cbc7a53df4",
-			CreatedOn:   &createdOn,
-			ModifiedOn:  &modifiedOn,
-			Description: "Primary data center - Provider XYZ",
-			Name:        "primary-dc-1",
-			Enabled:     true,
-			Monitor:     "f1aba936b94213e5b8dca0c0dbf1f9cc",
-			Origins: []LoadBalancerOrigin{
-				{
-					Name:    "app-server-1",
-					Address: "0.0.0.0",
-					Enabled: true,
-				},
-			},
-			NotificationEmail: "someone@example.com",
-		},
+	expectedLoadBalancerPool.CreatedOn = &createdOn
+	expectedLoadBalancerPool.ModifiedOn = &modifiedOn
+	want := []LoadBalancerPool{expectedLoadBalancerPool}
+
+	actual, err := client.ListLoadBalancerPools()
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestListLoadBalancerPoolsWithPageOpts(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+		  "result": [
+			%s
+		  ],
+		  "success": true,
+		  "errors": null,
+		  "messages": null,
+		  "result_info": {
+			"page": 1,
+			"per_page": 25,
+			"count": 1,
+			"total_count": 1
+		  }
+		}
+		`, serverLoadBalancerPoolDescription)
+	}
+
+	mux.HandleFunc("/user/load_balancers/pools", handler)
+	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+	modifiedOn, _ := time.Parse(time.RFC3339, "2014-02-01T05:20:00.12345Z")
+	expectedLoadBalancerPool.CreatedOn = &createdOn
+	expectedLoadBalancerPool.ModifiedOn = &modifiedOn
+	want := []LoadBalancerPool{expectedLoadBalancerPool}
+
+	pageOpts := PaginationOptions{
+		PerPage: 25,
+	}
+	actual, _, err := client.ListLoadBalancerPoolsInPage(pageOpts)
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestListLoadBalancerPoolsDoesPagination(t *testing.T) {
+	setup()
+	defer teardown()
+
+	oneHundredLoadBalancerPools := strings.Repeat(serverLoadBalancerPoolDescription+",", 99) + serverLoadBalancerPoolDescription
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		if r.URL.Query().Get("page") == "1" {
+			fmt.Fprintf(w, `{
+		  "result": [
+			%s
+		  ],
+		  "success": true,
+		  "errors": null,
+		  "messages": null,
+		  "result_info": {
+			"page": 1,
+			"per_page": 100,
+			"count": 100,
+			"total_count": 101
+		  }
+		}
+		`, oneHundredLoadBalancerPools)
+		} else if r.URL.Query().Get("page") == "2" {
+			fmt.Fprintf(w, `{
+		  "result": [
+			%s
+		  ],
+		  "success": true,
+		  "errors": null,
+		  "messages": null,
+		  "result_info": {
+			"page": 2,
+			"per_page": 100,
+			"count": 1,
+			"total_count": 101
+		  }
+		}
+		`, serverLoadBalancerPoolDescription)
+		}
+
+	}
+
+	mux.HandleFunc("/user/load_balancers/pools", handler)
+	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+	modifiedOn, _ := time.Parse(time.RFC3339, "2014-02-01T05:20:00.12345Z")
+	expectedLoadBalancerPool.CreatedOn = &createdOn
+	expectedLoadBalancerPool.ModifiedOn = &modifiedOn
+	want := make([]LoadBalancerPool, 101)
+	for i := range want {
+		want[i] = expectedLoadBalancerPool
 	}
 
 	actual, err := client.ListLoadBalancerPools()
@@ -365,6 +471,48 @@ func TestModifyLoadBalancerPool(t *testing.T) {
 	}
 }
 
+const serverLoadBalancerMonitorDescription = `
+{
+	"id": "f1aba936b94213e5b8dca0c0dbf1f9cc",
+	"created_on": "2014-01-01T05:20:00.12345Z",
+	"modified_on": "2014-02-01T05:20:00.12345Z",
+	"type": "https",
+	"description": "Login page monitor",
+	"method": "GET",
+	"path": "/health",
+	"header": {
+	  "Host": [
+		"example.com"
+	  ],
+	  "X-App-ID": [
+		"abc123"
+	  ]
+	},
+	"timeout": 3,
+	"retries": 0,
+	"interval": 90,
+	"expected_body": "alive",
+	"expected_codes": "2xx"
+}
+`
+
+var expectedLoadBalancerMonitor = LoadBalancerMonitor{
+	ID:          "f1aba936b94213e5b8dca0c0dbf1f9cc",
+	Type:        "https",
+	Description: "Login page monitor",
+	Method:      "GET",
+	Path:        "/health",
+	Header: map[string][]string{
+		"Host":     []string{"example.com"},
+		"X-App-ID": []string{"abc123"},
+	},
+	Timeout:       3,
+	Retries:       0,
+	Interval:      90,
+	ExpectedBody:  "alive",
+	ExpectedCodes: "2xx",
+}
+
 func TestCreateLoadBalancerMonitor(t *testing.T) {
 	setup()
 	defer teardown()
@@ -474,33 +622,12 @@ func TestListLoadBalancerMonitors(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, `{
+		fmt.Fprintf(w, `{
             "success": true,
             "errors": [],
             "messages": [],
             "result": [
-                {
-                    "id": "f1aba936b94213e5b8dca0c0dbf1f9cc",
-                    "created_on": "2014-01-01T05:20:00.12345Z",
-                    "modified_on": "2014-02-01T05:20:00.12345Z",
-                    "type": "https",
-                    "description": "Login page monitor",
-                    "method": "GET",
-                    "path": "/health",
-                    "header": {
-                      "Host": [
-                        "example.com"
-                      ],
-                      "X-App-ID": [
-                        "abc123"
-                      ]
-                    },
-                    "timeout": 3,
-                    "retries": 0,
-                    "interval": 90,
-                    "expected_body": "alive",
-                    "expected_codes": "2xx"
-                }
+			  %s
             ],
             "result_info": {
                 "page": 1,
@@ -508,31 +635,114 @@ func TestListLoadBalancerMonitors(t *testing.T) {
                 "count": 1,
                 "total_count": 2000
             }
-        }`)
+        }`, serverLoadBalancerMonitorDescription)
 	}
 
 	mux.HandleFunc("/user/load_balancers/monitors", handler)
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2014-02-01T05:20:00.12345Z")
-	want := []LoadBalancerMonitor{
-		{
-			ID:          "f1aba936b94213e5b8dca0c0dbf1f9cc",
-			CreatedOn:   &createdOn,
-			ModifiedOn:  &modifiedOn,
-			Type:        "https",
-			Description: "Login page monitor",
-			Method:      "GET",
-			Path:        "/health",
-			Header: map[string][]string{
-				"Host":     []string{"example.com"},
-				"X-App-ID": []string{"abc123"},
-			},
-			Timeout:       3,
-			Retries:       0,
-			Interval:      90,
-			ExpectedBody:  "alive",
-			ExpectedCodes: "2xx",
-		},
+	expectedLoadBalancerMonitor.CreatedOn = &createdOn
+	expectedLoadBalancerMonitor.ModifiedOn = &modifiedOn
+	want := []LoadBalancerMonitor{expectedLoadBalancerMonitor}
+
+	actual, err := client.ListLoadBalancerMonitors()
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestListLoadBalancerMonitorsWithPageOpts(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+		  "result": [
+			%s
+		  ],
+		  "success": true,
+		  "errors": null,
+		  "messages": null,
+		  "result_info": {
+			"page": 1,
+			"per_page": 25,
+			"count": 1,
+			"total_count": 1
+		  }
+		}
+		`, serverLoadBalancerMonitorDescription)
+	}
+
+	mux.HandleFunc("/user/load_balancers/monitors", handler)
+	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+	modifiedOn, _ := time.Parse(time.RFC3339, "2014-02-01T05:20:00.12345Z")
+	expectedLoadBalancerMonitor.CreatedOn = &createdOn
+	expectedLoadBalancerMonitor.ModifiedOn = &modifiedOn
+	want := []LoadBalancerMonitor{expectedLoadBalancerMonitor}
+
+	pageOpts := PaginationOptions{
+		PerPage: 25,
+	}
+	actual, _, err := client.ListLoadBalancerMonitorsInPage(pageOpts)
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestListLoadBalancerMonitorsDoesPagination(t *testing.T) {
+	setup()
+	defer teardown()
+
+	oneHundredLoadBalancerMonitors := strings.Repeat(serverLoadBalancerMonitorDescription+",", 99) + serverLoadBalancerMonitorDescription
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		if r.URL.Query().Get("page") == "1" {
+			fmt.Fprintf(w, `{
+		  "result": [
+			%s
+		  ],
+		  "success": true,
+		  "errors": null,
+		  "messages": null,
+		  "result_info": {
+			"page": 1,
+			"per_page": 100,
+			"count": 100,
+			"total_count": 101
+		  }
+		}
+		`, oneHundredLoadBalancerMonitors)
+		} else if r.URL.Query().Get("page") == "2" {
+			fmt.Fprintf(w, `{
+		  "result": [
+			%s
+		  ],
+		  "success": true,
+		  "errors": null,
+		  "messages": null,
+		  "result_info": {
+			"page": 2,
+			"per_page": 100,
+			"count": 1,
+			"total_count": 101
+		  }
+		}
+		`, serverLoadBalancerMonitorDescription)
+		}
+
+	}
+
+	mux.HandleFunc("/user/load_balancers/monitors", handler)
+	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+	modifiedOn, _ := time.Parse(time.RFC3339, "2014-02-01T05:20:00.12345Z")
+	expectedLoadBalancerMonitor.CreatedOn = &createdOn
+	expectedLoadBalancerMonitor.ModifiedOn = &modifiedOn
+	want := make([]LoadBalancerMonitor, 101)
+	for i := range want {
+		want[i] = expectedLoadBalancerMonitor
 	}
 
 	actual, err := client.ListLoadBalancerMonitors()
@@ -734,6 +944,82 @@ func TestModifyLoadBalancerMonitor(t *testing.T) {
 	}
 }
 
+const serverLoadBalancerDescription = `
+{
+	"id": "699d98642c564d2e855e9661899b7252",
+	"created_on": "2014-01-01T05:20:00.12345Z",
+	"modified_on": "2014-02-01T05:20:00.12345Z",
+	"description": "Load Balancer for www.example.com",
+	"name": "www.example.com",
+	"ttl": 30,
+	"fallback_pool": "17b5962d775c646f3f9725cbc7a53df4",
+	"default_pools": [
+	  "de90f38ced07c2e2f4df50b1f61d4194",
+	  "9290f38c5d07c2e2f4df57b1f61d4196",
+	  "00920f38ce07c2e2f4df50b1f61d4194"
+	],
+	"region_pools": {
+	  "WNAM": [
+		"de90f38ced07c2e2f4df50b1f61d4194",
+		"9290f38c5d07c2e2f4df57b1f61d4196"
+	  ],
+	  "ENAM": [
+		"00920f38ce07c2e2f4df50b1f61d4194"
+	  ]
+	},
+	"pop_pools": {
+	  "LAX": [
+		"de90f38ced07c2e2f4df50b1f61d4194",
+		"9290f38c5d07c2e2f4df57b1f61d4196"
+	  ],
+	  "LHR": [
+		"abd90f38ced07c2e2f4df50b1f61d4194",
+		"f9138c5d07c2e2f4df57b1f61d4196"
+	  ],
+	  "SJC": [
+		"00920f38ce07c2e2f4df50b1f61d4194"
+	  ]
+	},
+	"proxied": true
+}
+`
+
+var expectedLoadBalancer = LoadBalancer{
+	ID:           "699d98642c564d2e855e9661899b7252",
+	Description:  "Load Balancer for www.example.com",
+	Name:         "www.example.com",
+	TTL:          30,
+	FallbackPool: "17b5962d775c646f3f9725cbc7a53df4",
+	DefaultPools: []string{
+		"de90f38ced07c2e2f4df50b1f61d4194",
+		"9290f38c5d07c2e2f4df57b1f61d4196",
+		"00920f38ce07c2e2f4df50b1f61d4194",
+	},
+	RegionPools: map[string][]string{
+		"WNAM": []string{
+			"de90f38ced07c2e2f4df50b1f61d4194",
+			"9290f38c5d07c2e2f4df57b1f61d4196",
+		},
+		"ENAM": []string{
+			"00920f38ce07c2e2f4df50b1f61d4194",
+		},
+	},
+	PopPools: map[string][]string{
+		"LAX": []string{
+			"de90f38ced07c2e2f4df50b1f61d4194",
+			"9290f38c5d07c2e2f4df57b1f61d4196",
+		},
+		"LHR": []string{
+			"abd90f38ced07c2e2f4df50b1f61d4194",
+			"f9138c5d07c2e2f4df57b1f61d4196",
+		},
+		"SJC": []string{
+			"00920f38ce07c2e2f4df50b1f61d4194",
+		},
+	},
+	Proxied: true,
+}
+
 func TestCreateLoadBalancer(t *testing.T) {
 	setup()
 	defer teardown()
@@ -911,48 +1197,12 @@ func TestListLoadBalancers(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, `{
+		fmt.Fprintf(w, `{
             "success": true,
             "errors": [],
             "messages": [],
             "result": [
-                {
-                    "id": "699d98642c564d2e855e9661899b7252",
-                    "created_on": "2014-01-01T05:20:00.12345Z",
-                    "modified_on": "2014-02-01T05:20:00.12345Z",
-                    "description": "Load Balancer for www.example.com",
-                    "name": "www.example.com",
-                    "ttl": 30,
-                    "fallback_pool": "17b5962d775c646f3f9725cbc7a53df4",
-                    "default_pools": [
-                      "de90f38ced07c2e2f4df50b1f61d4194",
-                      "9290f38c5d07c2e2f4df57b1f61d4196",
-                      "00920f38ce07c2e2f4df50b1f61d4194"
-                    ],
-                    "region_pools": {
-                      "WNAM": [
-                        "de90f38ced07c2e2f4df50b1f61d4194",
-                        "9290f38c5d07c2e2f4df57b1f61d4196"
-                      ],
-                      "ENAM": [
-                        "00920f38ce07c2e2f4df50b1f61d4194"
-                      ]
-                    },
-                    "pop_pools": {
-                      "LAX": [
-                        "de90f38ced07c2e2f4df50b1f61d4194",
-                        "9290f38c5d07c2e2f4df57b1f61d4196"
-                      ],
-                      "LHR": [
-                        "abd90f38ced07c2e2f4df50b1f61d4194",
-                        "f9138c5d07c2e2f4df57b1f61d4196"
-                      ],
-                      "SJC": [
-                        "00920f38ce07c2e2f4df50b1f61d4194"
-                      ]
-                    },
-                    "proxied": true
-                }
+                %s
             ],
             "result_info": {
                 "page": 1,
@@ -960,50 +1210,114 @@ func TestListLoadBalancers(t *testing.T) {
                 "count": 1,
                 "total_count": 2000
             }
-        }`)
+        }`, serverLoadBalancerDescription)
 	}
 
 	mux.HandleFunc("/zones/199d98642c564d2e855e9661899b7252/load_balancers", handler)
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2014-02-01T05:20:00.12345Z")
-	want := []LoadBalancer{
-		{
-			ID:           "699d98642c564d2e855e9661899b7252",
-			CreatedOn:    &createdOn,
-			ModifiedOn:   &modifiedOn,
-			Description:  "Load Balancer for www.example.com",
-			Name:         "www.example.com",
-			TTL:          30,
-			FallbackPool: "17b5962d775c646f3f9725cbc7a53df4",
-			DefaultPools: []string{
-				"de90f38ced07c2e2f4df50b1f61d4194",
-				"9290f38c5d07c2e2f4df57b1f61d4196",
-				"00920f38ce07c2e2f4df50b1f61d4194",
-			},
-			RegionPools: map[string][]string{
-				"WNAM": []string{
-					"de90f38ced07c2e2f4df50b1f61d4194",
-					"9290f38c5d07c2e2f4df57b1f61d4196",
-				},
-				"ENAM": []string{
-					"00920f38ce07c2e2f4df50b1f61d4194",
-				},
-			},
-			PopPools: map[string][]string{
-				"LAX": []string{
-					"de90f38ced07c2e2f4df50b1f61d4194",
-					"9290f38c5d07c2e2f4df57b1f61d4196",
-				},
-				"LHR": []string{
-					"abd90f38ced07c2e2f4df50b1f61d4194",
-					"f9138c5d07c2e2f4df57b1f61d4196",
-				},
-				"SJC": []string{
-					"00920f38ce07c2e2f4df50b1f61d4194",
-				},
-			},
-			Proxied: true,
-		},
+	expectedLoadBalancer.CreatedOn = &createdOn
+	expectedLoadBalancer.ModifiedOn = &modifiedOn
+	want := []LoadBalancer{expectedLoadBalancer}
+
+	actual, err := client.ListLoadBalancers("199d98642c564d2e855e9661899b7252")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestListLoadBalancersWithPageOpts(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+		  "result": [
+			%s
+		  ],
+		  "success": true,
+		  "errors": null,
+		  "messages": null,
+		  "result_info": {
+			"page": 1,
+			"per_page": 25,
+			"count": 1,
+			"total_count": 1
+		  }
+		}
+		`, serverLoadBalancerDescription)
+	}
+
+	mux.HandleFunc("/zones/199d98642c564d2e855e9661899b7252/load_balancers", handler)
+	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+	modifiedOn, _ := time.Parse(time.RFC3339, "2014-02-01T05:20:00.12345Z")
+	expectedLoadBalancer.CreatedOn = &createdOn
+	expectedLoadBalancer.ModifiedOn = &modifiedOn
+	want := []LoadBalancer{expectedLoadBalancer}
+
+	pageOpts := PaginationOptions{
+		PerPage: 25,
+	}
+	actual, _, err := client.ListLoadBalancersInPage("199d98642c564d2e855e9661899b7252", pageOpts)
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestListLoadBalancersDoesPagination(t *testing.T) {
+	setup()
+	defer teardown()
+
+	oneHundredLoadBalancers := strings.Repeat(serverLoadBalancerDescription+",", 99) + serverLoadBalancerDescription
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		if r.URL.Query().Get("page") == "1" {
+			fmt.Fprintf(w, `{
+		  "result": [
+			%s
+		  ],
+		  "success": true,
+		  "errors": null,
+		  "messages": null,
+		  "result_info": {
+			"page": 1,
+			"per_page": 100,
+			"count": 100,
+			"total_count": 101
+		  }
+		}
+		`, oneHundredLoadBalancers)
+		} else if r.URL.Query().Get("page") == "2" {
+			fmt.Fprintf(w, `{
+		  "result": [
+			%s
+		  ],
+		  "success": true,
+		  "errors": null,
+		  "messages": null,
+		  "result_info": {
+			"page": 2,
+			"per_page": 100,
+			"count": 1,
+			"total_count": 101
+		  }
+		}
+		`, serverLoadBalancerDescription)
+		}
+
+	}
+
+	mux.HandleFunc("/zones/199d98642c564d2e855e9661899b7252/load_balancers", handler)
+	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+	modifiedOn, _ := time.Parse(time.RFC3339, "2014-02-01T05:20:00.12345Z")
+	expectedLoadBalancer.CreatedOn = &createdOn
+	expectedLoadBalancer.ModifiedOn = &modifiedOn
+	want := make([]LoadBalancer, 101)
+	for i := range want {
+		want[i] = expectedLoadBalancer
 	}
 
 	actual, err := client.ListLoadBalancers("199d98642c564d2e855e9661899b7252")
