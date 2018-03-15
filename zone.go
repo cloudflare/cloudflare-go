@@ -58,13 +58,18 @@ type ZoneMeta struct {
 
 // ZoneRatePlan contains the plan information for a zone.
 type ZoneRatePlan struct {
-	ID         string                   `json:"id"`
-	Name       string                   `json:"name,omitempty"`
-	Price      int                      `json:"price,omitempty"`
-	Currency   string                   `json:"currency,omitempty"`
-	Duration   int                      `json:"duration,omitempty"`
-	Frequency  string                   `json:"frequency,omitempty"`
-	Components []zoneRatePlanComponents `json:"components,omitempty"`
+	ID                string                   `json:"id"`
+	Name              string                   `json:"name,omitempty"`
+	Price             int                      `json:"price,omitempty"`
+	Currency          string                   `json:"currency,omitempty"`
+	Duration          int                      `json:"duration,omitempty"`
+	Frequency         string                   `json:"frequency,omitempty"`
+	Components        []zoneRatePlanComponents `json:"components,omitempty"`
+	IsSubscribed      bool                     `json:"is_subscribed"`
+	CanSubscribe      bool                     `json:"can_subscribe"`
+	LegacyID          string                   `json:"legacy_id,omitempty"`
+	LegacyDiscount    bool                     `json:"legacy_discount"`
+	ExternallyManaged bool                     `json:"externally_managed"`
 }
 
 type zoneRatePlanComponents struct {
