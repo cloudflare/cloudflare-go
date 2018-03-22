@@ -109,15 +109,18 @@ func (api *API) makeRequestWithAuthType(method, uri string, params interface{}, 
 		return nil, errors.Wrap(err, "could not read response body")
 	}
 
-	switch resp.StatusCode {
-	case http.StatusOK:
-		break
-	case http.StatusUnauthorized:
+	switch {
+	case resp.StatusCode >= http.StatusOK && resp.StatusCode < http.StatusMultipleChoices:
+	case resp.StatusCode == http.StatusUnauthorized:
 		return nil, errors.Errorf("HTTP status %d: invalid credentials", resp.StatusCode)
-	case http.StatusForbidden:
+	case resp.StatusCode == http.StatusForbidden:
 		return nil, errors.Errorf("HTTP status %d: insufficient permissions", resp.StatusCode)
-	case http.StatusServiceUnavailable, http.StatusBadGateway, http.StatusGatewayTimeout,
-		522, 523, 524:
+	case resp.StatusCode == http.StatusServiceUnavailable,
+		resp.StatusCode == http.StatusBadGateway,
+		resp.StatusCode == http.StatusGatewayTimeout,
+		resp.StatusCode == 522,
+		resp.StatusCode == 523,
+		resp.StatusCode == 524:
 		return nil, errors.Errorf("HTTP status %d: service failure", resp.StatusCode)
 	default:
 		var s string
