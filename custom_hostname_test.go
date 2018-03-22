@@ -35,6 +35,7 @@ func TestCustomHostname_CreateCustomHostname(t *testing.T) {
 		assert.Equal(t, "POST", r.Method, "Expected method 'POST', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
+		w.WriteHeader(http.StatusCreated)
 		fmt.Fprintf(w, `
 {
   "success": true,
