@@ -3,12 +3,18 @@ package cloudflare
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"io"
 	"io/ioutil"
+	"log"
+	"math"
 	"net/http"
+	"strings"
+	"time"
 
 	"github.com/pkg/errors"
+	"golang.org/x/time/rate"
 )
 
 const apiURL = "https://api.cloudflare.com/client/v4"
@@ -30,6 +36,9 @@ type API struct {
 	headers           http.Header
 	httpClient        *http.Client
 	authType          int
+	rateLimiter       *rate.Limiter
+	retryPolicy       RetryPolicy
+	logger            Logger
 }
 
 // New creates a new Cloudflare v4 API client.
@@ -38,12 +47,21 @@ func New(key, email string, opts ...Option) (*API, error) {
 		return nil, errors.New(errEmptyCredentials)
 	}
 
+	silentLogger := log.New(ioutil.Discard, "", log.LstdFlags)
+
 	api := &API{
-		APIKey:   key,
-		APIEmail: email,
-		BaseURL:  apiURL,
-		headers:  make(http.Header),
-		authType: AuthKeyEmail,
+		APIKey:      key,
+		APIEmail:    email,
+		BaseURL:     apiURL,
+		headers:     make(http.Header),
+		authType:    AuthKeyEmail,
+		rateLimiter: rate.NewLimiter(rate.Limit(4), 1), // 4rps equates to default api limit (1200 req/5 min)
+		retryPolicy: RetryPolicy{
+			MaxRetries:    3,
+			MinRetryDelay: time.Duration(1) * time.Second,
+			MaxRetryDelay: time.Duration(30) * time.Second,
+		},
+		logger: silentLogger,
 	}
 
 	err := api.parseOptions(opts...)
@@ -87,26 +105,73 @@ func (api *API) makeRequest(method, uri string, params interface{}) ([]byte, err
 
 func (api *API) makeRequestWithAuthType(method, uri string, params interface{}, authType int) ([]byte, error) {
 	// Replace nil with a JSON object if needed
-	var reqBody io.Reader
+	var jsonBody []byte
+	var err error
 	if params != nil {
-		json, err := json.Marshal(params)
+		jsonBody, err = json.Marshal(params)
 		if err != nil {
 			return nil, errors.Wrap(err, "error marshalling params to JSON")
 		}
-		reqBody = bytes.NewReader(json)
 	} else {
-		reqBody = nil
+		jsonBody = nil
 	}
 
-	resp, err := api.request(method, uri, reqBody, authType)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
+	var resp *http.Response
+	var respErr error
+	var reqBody io.Reader
+	var respBody []byte
+	for i := 0; i <= api.retryPolicy.MaxRetries; i++ {
+		if jsonBody != nil {
+			reqBody = bytes.NewReader(jsonBody)
+		}
 
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return nil, errors.Wrap(err, "could not read response body")
+		if i > 0 {
+			// expect the backoff introduced here on errored requests to dominate the effect of rate limiting
+			// dont need a random component here as the rate limiter should do something similar
+			// nb time duration could truncate an arbitrary float. Since our inputs are all ints, we should be ok
+			sleepDuration := time.Duration(math.Pow(2, float64(i-1)) * float64(api.retryPolicy.MinRetryDelay))
+
+			if sleepDuration > api.retryPolicy.MaxRetryDelay {
+				sleepDuration = api.retryPolicy.MaxRetryDelay
+			}
+			// useful to do some simple logging here, maybe introduce levels later
+			api.logger.Printf("Sleeping %s before retry attempt number %d for request %s %s", sleepDuration.String(), i, method, uri)
+			time.Sleep(sleepDuration)
+		}
+		api.rateLimiter.Wait(context.TODO())
+		if err != nil {
+			return nil, errors.Wrap(err, "Error caused by request rate limiting")
+		}
+		resp, respErr = api.request(method, uri, reqBody, authType)
+
+		// retry if the server is rate limiting us or if it failed
+		// assumes server operations are rolled back on failure
+		if respErr != nil || resp.StatusCode == http.StatusTooManyRequests || resp.StatusCode >= 500 {
+			// if we got a valid http response, try to read body so we can reuse the connection
+			// see https://golang.org/pkg/net/http/#Client.Do
+			if respErr == nil {
+				respBody, err = ioutil.ReadAll(resp.Body)
+				resp.Body.Close()
+
+				respErr = errors.Wrap(err, "could not read response body")
+
+				api.logger.Printf("Request: %s %s got an error response %d: %s\n", method, uri, resp.StatusCode,
+					strings.Replace(strings.Replace(string(respBody), "\n", "", -1), "\t", "", -1))
+			} else {
+				api.logger.Printf("Error performing request: %s %s : %s \n", method, uri, respErr.Error())
+			}
+			continue
+		} else {
+			respBody, err = ioutil.ReadAll(resp.Body)
+			defer resp.Body.Close()
+			if err != nil {
+				return nil, errors.Wrap(err, "could not read response body")
+			}
+			break
+		}
+	}
+	if respErr != nil {
+		return nil, respErr
 	}
 
 	switch {
@@ -124,13 +189,13 @@ func (api *API) makeRequestWithAuthType(method, uri string, params interface{}, 
 		return nil, errors.Errorf("HTTP status %d: service failure", resp.StatusCode)
 	default:
 		var s string
-		if body != nil {
-			s = string(body)
+		if respBody != nil {
+			s = string(respBody)
 		}
 		return nil, errors.Errorf("HTTP status %d: content %q", resp.StatusCode, s)
 	}
 
-	return body, nil
+	return respBody, nil
 }
 
 // request makes a HTTP request to the given API endpoint, returning the raw
@@ -236,4 +301,18 @@ func (api *API) Raw(method, endpoint string, data interface{}) (json.RawMessage,
 type PaginationOptions struct {
 	Page    int `json:"page,omitempty"`
 	PerPage int `json:"per_page,omitempty"`
+}
+
+// RetryPolicy specifies number of retries and min/max retry delays
+// This config is used when the client exponentially backs off after errored requests
+type RetryPolicy struct {
+	MaxRetries    int
+	MinRetryDelay time.Duration
+	MaxRetryDelay time.Duration
+}
+
+// Logger defines the interface this library needs to use logging
+// This is a subset of the methods implemented in the log package
+type Logger interface {
+	Printf(format string, v ...interface{})
 }
