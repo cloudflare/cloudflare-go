@@ -15,6 +15,11 @@ type CustomHostnameSSL struct {
 	Type        string `json:"type,omitempty"`
 	CnameTarget string `json:"cname_target,omitempty"`
 	CnameName   string `json:"cname_name,omitempty"`
+
+	// HttpURL is the url at which http validation will issue requests.
+	HttpURL     string `json:"http_url,omitempty"`
+	// HttpBody is the body that must be returned from HttpURL.
+	HttpBody    string `json:"http_body,omitempty"`
 }
 
 // CustomMetadata defines custom metadata for the hostname. This requires logic to be implemented by Cloudflare to act on the data provided.
