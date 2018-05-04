@@ -62,7 +62,7 @@ type LoadBalancer struct {
 	RegionPools  map[string][]string `json:"region_pools"`
 	PopPools     map[string][]string `json:"pop_pools"`
 	Proxied      bool                `json:"proxied"`
-	Persistence  string              `json:"session_affinity"`
+	Persistence  string              `json:"session_affinity,omitempty"`
 }
 
 // loadBalancerPoolResponse represents the response from the load balancer pool endpoints.
