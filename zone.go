@@ -86,7 +86,8 @@ type ZoneResponse struct {
 // ZonesResponse represents the response from the Zone endpoint containing an array of zones.
 type ZonesResponse struct {
 	Response
-	Result []Zone `json:"result"`
+	Result     []Zone `json:"result"`
+	ResultInfo `json:"result_info"`
 }
 
 // ZoneIDResponse represents the response from the Zone endpoint, containing only a zone ID.
@@ -319,15 +320,27 @@ func (api *API) ListZones(z ...string) ([]Zone, error) {
 		// TODO: Paginate here. We only grab the first page of results.
 		// Could do this concurrently after the first request by creating a
 		// sync.WaitGroup or just a channel + workers.
-		res, err = api.makeRequest("GET", "/zones", nil)
-		if err != nil {
-			return []Zone{}, errors.Wrap(err, errMakeRequestError)
+		page := 1
+		perpage := "50" // API limit
+		remaining := 1  // assume theres something to get to start
+
+		for ; remaining > 0; page++ {
+			v := url.Values{}
+			v.Set("page", fmt.Sprintf("%d", page))
+			v.Set("per_page", perpage)
+			res, err = api.makeRequest("GET", "/zones?"+v.Encode(), nil)
+			if err != nil {
+				return []Zone{}, errors.Wrap(err, errMakeRequestError)
+			}
+			err = json.Unmarshal(res, &r)
+			if err != nil {
+				return []Zone{}, errors.Wrap(err, errUnmarshalError)
+			}
+			zones = append(zones, r.Result...)
+
+			remaining = r.ResultInfo.TotalPages - page
 		}
-		err = json.Unmarshal(res, &r)
-		if err != nil {
-			return []Zone{}, errors.Wrap(err, errUnmarshalError)
-		}
-		zones = r.Result
+
 	}
 
 	return zones, nil
