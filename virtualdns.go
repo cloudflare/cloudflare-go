@@ -162,10 +162,10 @@ func (api *API) DeleteVirtualDNS(virtualDNSID string) error {
 func (o VirtualDNSUserAnalyticsOptions) encode() string {
 	v := url.Values{}
 	if o.Since != nil {
-		v.Set("since", (*o.Since).Format(time.RFC3339))
+		v.Set("since", (*o.Since).UTC().Format(time.RFC3339))
 	}
 	if o.Until != nil {
-		v.Set("until", (*o.Until).Format(time.RFC3339))
+		v.Set("until", (*o.Until).UTC().Format(time.RFC3339))
 	}
 	if o.Metrics != nil {
 		v.Set("metrics", strings.Join(o.Metrics, ","))
