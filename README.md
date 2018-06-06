@@ -25,22 +25,22 @@ this project.
 
 The current feature list includes:
 
-* [x] DNS Records
-* [x] Zones
-* [x] Web Application Firewall (WAF)
+* [x] Cache purging
 * [x] Cloudflare IPs
+* [x] Custom hostnames
+* [x] DNS Records
+* [x] Firewall (partial)
+* [ ] [Keyless SSL](https://blog.cloudflare.com/keyless-ssl-the-nitty-gritty-technical-details/)
+* [x] [Load Balancing](https://blog.cloudflare.com/introducing-load-balancing-intelligent-failover-with-cloudflare/)
+* [ ] Organization Administration
+* [x] [Origin CA](https://blog.cloudflare.com/universal-ssl-encryption-all-the-way-to-the-origin-for-free/)
+* [x] [Railgun](https://www.cloudflare.com/railgun/) administration
+* [x] Rate Limiting
 * [x] User Administration (partial)
 * [x] Virtual DNS Management
-* [x] Custom hostnames
+* [x] Web Application Firewall (WAF)
 * [x] Zone Lockdown and User-Agent Block rules
-* [x] Cache purging
-* [ ] Organization Administration
-* [x] [Railgun](https://www.cloudflare.com/railgun/) administration
-* [ ] [Keyless SSL](https://blog.cloudflare.com/keyless-ssl-the-nitty-gritty-technical-details/)
-* [x] [Origin CA](https://blog.cloudflare.com/universal-ssl-encryption-all-the-way-to-the-origin-for-free/)
-* [x] [Load Balancing](https://blog.cloudflare.com/introducing-load-balancing-intelligent-failover-with-cloudflare/)
-* [x] Firewall (partial)
-* [x] Rate Limiting
+* [x] Zones
 
 Pull Requests are welcome, but please open an issue (or comment in an existing
 issue) to discuss any non-trivial changes before submitting code.
