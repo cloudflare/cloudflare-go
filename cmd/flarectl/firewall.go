@@ -63,7 +63,7 @@ func firewallAccessRules(c *cli.Context) {
 	rules := make([]cloudflare.AccessRule, 0, response.ResultInfo.Total)
 	rules = append(rules, response.Result...)
 	if totalPages > 1 {
-		for page := 2; page < totalPages; page++ {
+		for page := 2; page <= totalPages; page++ {
 			switch {
 			case organizationID != "":
 				response, err = api.ListOrganizationAccessRules(organizationID, rule, page)
