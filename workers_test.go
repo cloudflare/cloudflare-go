@@ -69,7 +69,7 @@ var (
 	deleteWorkerRouteResponseData = createWorkerRouteResponse
 )
 
-func TestDeleteWorker(t *testing.T) {
+func TestWorkers_DeleteWorker(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -87,7 +87,7 @@ func TestDeleteWorker(t *testing.T) {
 	}
 }
 
-func TestDownloadWorker(t *testing.T) {
+func TestWorkers_DownloadWorker(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -107,7 +107,7 @@ func TestDownloadWorker(t *testing.T) {
 	}
 }
 
-func TestUploadWorker(t *testing.T) {
+func TestWorkers_UploadWorker(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -132,7 +132,7 @@ func TestUploadWorker(t *testing.T) {
 
 }
 
-func TestCreateWorkerRoute(t *testing.T) {
+func TestWorkers_CreateWorkerRoute(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -150,7 +150,7 @@ func TestCreateWorkerRoute(t *testing.T) {
 
 }
 
-func TestDeleteWorkerRoute(t *testing.T) {
+func TestWorkers_DeleteWorkerRoute(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -170,7 +170,7 @@ func TestDeleteWorkerRoute(t *testing.T) {
 
 }
 
-func TestListWorkerRoutes(t *testing.T) {
+func TestWorkers_ListWorkerRoutes(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -192,7 +192,7 @@ func TestListWorkerRoutes(t *testing.T) {
 	}
 }
 
-func TestUpdateWorkerRoute(t *testing.T) {
+func TestWorkers_UpdateWorkerRoute(t *testing.T) {
 	setup()
 	defer teardown()
 
