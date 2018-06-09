@@ -1,10 +1,10 @@
 package cloudflare
 
 import (
-	"testing"
-	"net/http"
-	"github.com/stretchr/testify/assert"
 	"fmt"
+	"github.com/stretchr/testify/assert"
+	"net/http"
+	"testing"
 	"time"
 )
 
@@ -64,8 +64,8 @@ const (
 )
 
 var (
-	successResponse = Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}}
-	workerScript    = "addEventListener('fetch', event => {\n    event.passThroughOnException()\nevent.respondWith(handleRequest(event.request))\n})\n\nasync function handleRequest(request) {\n    return fetch(request)\n}"
+	successResponse               = Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}}
+	workerScript                  = "addEventListener('fetch', event => {\n    event.passThroughOnException()\nevent.respondWith(handleRequest(event.request))\n})\n\nasync function handleRequest(request) {\n    return fetch(request)\n}"
 	deleteWorkerRouteResponseData = createWorkerRouteResponse
 )
 
@@ -159,10 +159,10 @@ func TestDeleteWorkerRoute(t *testing.T) {
 		w.Header().Set("content-type", "application-json")
 		fmt.Fprintf(w, deleteWorkerRouteResponseData)
 	})
-	res, err := client.DeleteWorkerRoute("foo","e7a57d8746e74ae49c25994dadb421b1")
+	res, err := client.DeleteWorkerRoute("foo", "e7a57d8746e74ae49c25994dadb421b1")
 	want := WorkerRouteResponse{successResponse,
 		WorkerRoute{
-			ID:      "e7a57d8746e74ae49c25994dadb421b1",
+			ID: "e7a57d8746e74ae49c25994dadb421b1",
 		}}
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
@@ -202,7 +202,7 @@ func TestUpdateWorkerRoute(t *testing.T) {
 		fmt.Fprintf(w, updateWorkerRouteResponse)
 	})
 	route := WorkerRoute{Pattern: "app3.example.com/*", Enabled: true}
-	res, err := client.UpdateWorkerRoute("foo","e7a57d8746e74ae49c25994dadb421b1" ,route)
+	res, err := client.UpdateWorkerRoute("foo", "e7a57d8746e74ae49c25994dadb421b1", route)
 	want := WorkerRouteResponse{successResponse,
 		WorkerRoute{
 			ID:      "e7a57d8746e74ae49c25994dadb421b1",

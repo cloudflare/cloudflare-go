@@ -1,14 +1,13 @@
 package cloudflare_test
 
 import (
-	"log"
-	cloudflare "github.com/cloudflare/cloudflare-go"
 	"fmt"
+	cloudflare "github.com/cloudflare/cloudflare-go"
+	"log"
 )
 
 var (
-	workerScript    = "addEventListener('fetch', event => {\n    event.passThroughOnException()\nevent.respondWith(handleRequest(event.request))\n})\n\nasync function handleRequest(request) {\n    return fetch(request)\n}"
-
+	workerScript = "addEventListener('fetch', event => {\n    event.passThroughOnException()\nevent.respondWith(handleRequest(event.request))\n})\n\nasync function handleRequest(request) {\n    return fetch(request)\n}"
 )
 
 func ExampleAPI_UploadWorker() {
@@ -22,11 +21,11 @@ func ExampleAPI_UploadWorker() {
 		log.Fatal(err)
 	}
 
-	res, err := api.UploadWorker(zoneID,workerScript)
+	res, err := api.UploadWorker(zoneID, workerScript)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("%+v",res)
+	fmt.Printf("%+v", res)
 }
 
 func ExampleAPI_DownloadWorker() {
@@ -44,7 +43,7 @@ func ExampleAPI_DownloadWorker() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("%+v",res)
+	fmt.Printf("%+v", res)
 }
 
 func ExampleAPI_DeleteWorker() {
@@ -61,7 +60,7 @@ func ExampleAPI_DeleteWorker() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("%+v",res)
+	fmt.Printf("%+v", res)
 }
 
 func ExampleAPI_CreateWorkerRoute() {
@@ -75,11 +74,11 @@ func ExampleAPI_CreateWorkerRoute() {
 		log.Fatal(err)
 	}
 	route := cloudflare.WorkerRoute{Pattern: "app1.example.com/*", Enabled: true}
-	res, err := api.CreateWorkerRoute(zoneID,route)
+	res, err := api.CreateWorkerRoute(zoneID, route)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("%+v",res)
+	fmt.Printf("%+v", res)
 }
 
 func ExampleAPI_UpdateWorkerRoute() {
@@ -99,11 +98,11 @@ func ExampleAPI_UpdateWorkerRoute() {
 	}
 	route := cloudflare.WorkerRoute{Pattern: "app2.example.com/*", Enabled: true}
 	//update first route retrieved from the listWorkerRoutes call with details above
-	res, err := api.UpdateWorkerRoute(zoneID,routesResponse.Routes[0].ID,route)
+	res, err := api.UpdateWorkerRoute(zoneID, routesResponse.Routes[0].ID, route)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("%+v",res)
+	fmt.Printf("%+v", res)
 }
 
 func ExampleAPI_ListWorkerRoutes() {
@@ -120,7 +119,7 @@ func ExampleAPI_ListWorkerRoutes() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("%+v",res)
+	fmt.Printf("%+v", res)
 }
 
 func ExampleAPI_DeleteWorkerRoute() {
@@ -139,9 +138,9 @@ func ExampleAPI_DeleteWorkerRoute() {
 		log.Fatal(err)
 	}
 	//delete first route retrieved from the listWorkerRoutes call
-	res, err := api.DeleteWorkerRoute(zoneID,routesResponse.Routes[0].ID)
+	res, err := api.DeleteWorkerRoute(zoneID, routesResponse.Routes[0].ID)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("%+v",res)
+	fmt.Printf("%+v", res)
 }

@@ -1,8 +1,8 @@
 package cloudflare
 
 import (
-	"github.com/pkg/errors"
 	"encoding/json"
+	"github.com/pkg/errors"
 	"time"
 )
 
@@ -45,7 +45,7 @@ type WorkerScriptResponse struct {
 // DeleteWorker deletes worker for a zone.
 //
 // API reference: https://api.cloudflare.com/#worker-script-delete-worker
-func (api *API) DeleteWorker(zoneID string) (WorkerScriptResponse,error) {
+func (api *API) DeleteWorker(zoneID string) (WorkerScriptResponse, error) {
 	uri := "/zones/" + zoneID + "/workers/script"
 	res, err := api.makeRequest("DELETE", uri, nil)
 	var r WorkerScriptResponse
@@ -56,7 +56,7 @@ func (api *API) DeleteWorker(zoneID string) (WorkerScriptResponse,error) {
 	if err != nil {
 		return r, errors.Wrap(err, errUnmarshalError)
 	}
-	return r,nil
+	return r, nil
 }
 
 // DownloadWorker fetch raw script content for your worker returns []byte containing worker code js
@@ -113,7 +113,7 @@ func (api *API) CreateWorkerRoute(zoneID string, route WorkerRoute) (WorkerRoute
 //DeleteWorkerRoute deletes worker route for a zone
 //
 // API reference: https://api.cloudflare.com/#worker-filters-delete-filter
-func (api *API)DeleteWorkerRoute(zoneID string,routeID string)  (WorkerRouteResponse, error) {
+func (api *API) DeleteWorkerRoute(zoneID string, routeID string) (WorkerRouteResponse, error) {
 	uri := "/zones/" + zoneID + "/workers/filters/" + routeID
 	res, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
