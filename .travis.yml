@@ -31,7 +31,6 @@ notifications:
   email:
     recipients:
       - jamesog@cloudflare.com
-      - msilverlock@cloudflare.com
 
 deploy:
   provider: releases
