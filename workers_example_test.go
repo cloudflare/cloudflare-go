@@ -91,13 +91,13 @@ func ExampleAPI_UpdateWorkerRoute() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	//pull from existing list of routes to perform update on
+	// pull from existing list of routes to perform update on
 	routesResponse, err := api.ListWorkerRoutes(zoneID)
 	if err != nil {
 		log.Fatal(err)
 	}
 	route := cloudflare.WorkerRoute{Pattern: "app2.example.com/*", Enabled: true}
-	//update first route retrieved from the listWorkerRoutes call with details above
+	// update first route retrieved from the listWorkerRoutes call with details above
 	res, err := api.UpdateWorkerRoute(zoneID, routesResponse.Routes[0].ID, route)
 	if err != nil {
 		log.Fatal(err)
@@ -132,12 +132,12 @@ func ExampleAPI_DeleteWorkerRoute() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	//pull from existing list of routes to perform delete on
+	// pull from existing list of routes to perform delete on
 	routesResponse, err := api.ListWorkerRoutes(zoneID)
 	if err != nil {
 		log.Fatal(err)
 	}
-	//delete first route retrieved from the listWorkerRoutes call
+	// delete first route retrieved from the listWorkerRoutes call
 	res, err := api.DeleteWorkerRoute(zoneID, routesResponse.Routes[0].ID)
 	if err != nil {
 		log.Fatal(err)
