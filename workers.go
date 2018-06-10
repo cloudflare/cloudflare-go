@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// Filters are basic patterns used to enable or disable workers that match requests.
+// WorkerRoute aka filters are patterns used to enable or disable workers that match requests.
 //
 // API reference: https://api.cloudflare.com/#worker-filters-properties
 type WorkerRoute struct {
@@ -15,21 +15,19 @@ type WorkerRoute struct {
 	Enabled bool   `json:"enabled"`
 }
 
-// Embeds Response struct and slice of WorkerRoutes
+// WorkerRoutesResponse embeds Response struct and slice of WorkerRoutes
 type WorkerRoutesResponse struct {
 	Response
 	Routes []WorkerRoute `json:"result"`
 }
 
-// Embeds Response struct and a single WorkerRoute
+// WorkerRouteResponse embeds Response struct and a single WorkerRoute
 type WorkerRouteResponse struct {
 	Response
 	WorkerRoute `json:"result"`
 }
 
-// Struct alias for simple slice of bytes
-type DownloadWorkerResponse []byte
-
+// WorkerScript Cloudflare Worker struct with metadata
 type WorkerScript struct {
 	Script     string    `json:"script"`
 	ETAG       string    `json:"etag,omitempty"`
@@ -37,6 +35,7 @@ type WorkerScript struct {
 	ModifiedOn time.Time `json:"modified_on,omitempty"`
 }
 
+// WorkerScriptResponse wrapper struct for API response to worker script calls
 type WorkerScriptResponse struct {
 	Response
 	WorkerScript `json:"result"`
@@ -93,7 +92,7 @@ func (api *API) UploadWorker(zoneID string, data string) (WorkerScriptResponse, 
 	return r, nil
 }
 
-//CreateWorkerRoute creates worker route for a zone
+// CreateWorkerRoute creates worker route for a zone
 //
 // API reference: https://api.cloudflare.com/#worker-filters-create-filter
 func (api *API) CreateWorkerRoute(zoneID string, route WorkerRoute) (WorkerRouteResponse, error) {
@@ -110,7 +109,7 @@ func (api *API) CreateWorkerRoute(zoneID string, route WorkerRoute) (WorkerRoute
 	return r, nil
 }
 
-//DeleteWorkerRoute deletes worker route for a zone
+// DeleteWorkerRoute deletes worker route for a zone
 //
 // API reference: https://api.cloudflare.com/#worker-filters-delete-filter
 func (api *API) DeleteWorkerRoute(zoneID string, routeID string) (WorkerRouteResponse, error) {
@@ -144,10 +143,9 @@ func (api *API) ListWorkerRoutes(zoneID string) (WorkerRoutesResponse, error) {
 	return r, nil
 }
 
-//UpdateWorker updates worker route for a zone.
+// UpdateWorkerRoute updates worker route for a zone.
 //
 // API reference: https://api.cloudflare.com/#worker-filters-update-filter
-
 func (api *API) UpdateWorkerRoute(zoneID string, routeID string, route WorkerRoute) (WorkerRouteResponse, error) {
 	uri := "/zones/" + zoneID + "/workers/filters/" + routeID
 	res, err := api.makeRequest("PUT", uri, route)
