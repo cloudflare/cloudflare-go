@@ -72,7 +72,7 @@ func (api *API) DeleteWorker(zoneID string) (WorkerScriptResponse, error) {
 }
 
 // DeleteWorkerWithName deletes worker for a zone.
-// This is an enterprise only feature https://developers.cloudflare.com/workers/api/config-api-for-enterprise/
+// This is an enterprise only feature https://developers.cloudflare.com/workers/api/config-api-for-enterprise
 // organizationID must be specified as api option https://godoc.org/github.com/cloudflare/cloudflare-go#UsingOrganization
 //
 // API reference: https://api.cloudflare.com/#worker-script-delete-worker
@@ -130,7 +130,7 @@ func (api *API) DownloadWorkerWithName(scriptName string) (WorkerScriptResponse,
 }
 
 // ListWorkerScripts returns list of worker scripts for given organization
-// This is an enterprise only feature https://developers.cloudflare.com/workers/api/config-api-for-enterprise/
+// This is an enterprise only feature https://developers.cloudflare.com/workers/api/config-api-for-enterprise
 //
 // API reference: https://developers.cloudflare.com/workers/api/config-api-for-enterprise/
 func (api *API) ListWorkerScripts() (WorkerListResponse, error) {
