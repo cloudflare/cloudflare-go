@@ -132,7 +132,8 @@ type ZoneSSLSetting struct {
 	CertificateStatus string `json:"certificate_status"`
 }
 
-// ZoneSettingResponse represents the response from the Zone SSL Setting endpoint.
+// ZoneSSLSettingResponse represents the response from the Zone SSL Setting
+// endpoint.
 type ZoneSSLSettingResponse struct {
 	Response
 	Result ZoneSSLSetting `json:"result"`

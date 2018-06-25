@@ -25,6 +25,7 @@ type LoadBalancerPool struct {
 	CheckRegions []string `json:"check_regions"`
 }
 
+// LoadBalancerOrigin represents a Load Balancer origin's properties.
 type LoadBalancerOrigin struct {
 	Name    string  `json:"name"`
 	Address string  `json:"address"`
