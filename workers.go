@@ -33,6 +33,7 @@ type WorkerScript struct {
 	Script string `json:"script"`
 }
 
+// WorkerMetaData contains worker script information such as size, creation & modification dates
 type WorkerMetaData struct {
 	ID         string    `json:"id,omitempty"`
 	ETAG       string    `json:"etag,omitempty"`
@@ -41,6 +42,7 @@ type WorkerMetaData struct {
 	ModifiedOn time.Time `json:"modified_on,omitempty"`
 }
 
+// WorkerListResponse wrapper struct for API response to worker script list API call
 type WorkerListResponse struct {
 	Response
 	WorkerList []WorkerMetaData `json:"result"`
