@@ -61,6 +61,25 @@ const (
     "errors": [],
     "messages": []
 }`
+	listWorkersResponseData = `{
+  "result": [
+    {
+      "id": "bar",
+      "created_on": "2018-04-22T17:10:48.938097Z",
+      "modified_on": "2018-04-22T17:10:48.938097Z",
+      "etag": "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a"
+    },
+    {
+      "id": "baz",
+      "created_on": "2018-04-22T17:10:48.938097Z",
+      "modified_on": "2018-04-22T17:10:48.938097Z",
+      "etag": "380dg51e97e80b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43088b"
+    }
+  ],
+  "success": true,
+  "errors": [],
+  "messages": []
+}`
 )
 
 var (
@@ -79,6 +98,24 @@ func TestWorkers_DeleteWorker(t *testing.T) {
 		fmt.Fprintf(w, deleteWorkerResponseData)
 	})
 	res, err := client.DeleteWorker("foo")
+	want := WorkerScriptResponse{
+		successResponse,
+		WorkerScript{}}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want.Response, res.Response)
+	}
+}
+
+func TestWorkers_DeleteWorkerWithName(t *testing.T) {
+	setup(UsingOrganization("foo"))
+	defer teardown()
+
+	mux.HandleFunc("/accounts/foo/workers/scripts/bar", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "DELETE", r.Method, "Expected method 'DELETE', got %s", r.Method)
+		w.Header().Set("content-type", "application/javascript")
+		fmt.Fprintf(w, deleteWorkerResponseData)
+	})
+	res, err := client.DeleteWorkerWithName("bar")
 	want := WorkerScriptResponse{
 		successResponse,
 		WorkerScript{}}
@@ -107,6 +144,58 @@ func TestWorkers_DownloadWorker(t *testing.T) {
 	}
 }
 
+func TestWorkers_DownloadWorkerWithName(t *testing.T) {
+	setup(UsingOrganization("foo"))
+	defer teardown()
+
+	mux.HandleFunc("/accounts/foo/workers/scripts/bar", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/javascript")
+		fmt.Fprintf(w, workerScript)
+	})
+	res, err := client.DownloadWorkerWithName("bar")
+	want := WorkerScriptResponse{
+		successResponse,
+		WorkerScript{
+			Script: workerScript,
+		}}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want.Script, res.Script)
+	}
+}
+
+func TestWorkers_ListWorkerScripts(t *testing.T) {
+	setup(UsingOrganization("foo"))
+	defer teardown()
+
+	mux.HandleFunc("/accounts/foo/workers/scripts", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application-json")
+		fmt.Fprintf(w, listWorkersResponseData)
+	})
+
+	res, err := client.ListWorkerScripts()
+	sampleDate, _ := time.Parse(time.RFC3339Nano, "2018-04-22T17:10:48.938097Z")
+	want := []WorkerMetaData{
+		{
+			ID:         "bar",
+			ETAG:       "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
+			CreatedOn:  sampleDate,
+			ModifiedOn: sampleDate,
+		},
+		{
+			ID:         "baz",
+			ETAG:       "380dg51e97e80b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43088b",
+			CreatedOn:  sampleDate,
+			ModifiedOn: sampleDate,
+		},
+	}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res.WorkerList)
+	}
+
+}
+
 func TestWorkers_UploadWorker(t *testing.T) {
 	setup()
 	defer teardown()
@@ -121,10 +210,39 @@ func TestWorkers_UploadWorker(t *testing.T) {
 	want := WorkerScriptResponse{
 		successResponse,
 		WorkerScript{
-			Script:     workerScript,
-			ETAG:       "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
-			Size:       191,
-			ModifiedOn: formattedTime,
+			Script: workerScript,
+			WorkerMetaData: WorkerMetaData{
+				ETAG:       "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
+				Size:       191,
+				ModifiedOn: formattedTime,
+			},
+		}}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
+
+}
+
+func TestWorkers_UploadWorkerWithName(t *testing.T) {
+	setup(UsingOrganization("foo"))
+	defer teardown()
+
+	mux.HandleFunc("/accounts/foo/workers/scripts/bar", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		w.Header().Set("content-type", "application/javascript")
+		fmt.Fprintf(w, uploadWorkerResponseData)
+	})
+	res, err := client.UploadWorkerWithName("bar", workerScript)
+	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
+	want := WorkerScriptResponse{
+		successResponse,
+		WorkerScript{
+			Script: workerScript,
+			WorkerMetaData: WorkerMetaData{
+				ETAG:       "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
+				Size:       191,
+				ModifiedOn: formattedTime,
+			},
 		}}
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)

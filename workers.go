@@ -29,10 +29,21 @@ type WorkerRouteResponse struct {
 
 // WorkerScript Cloudflare Worker struct with metadata
 type WorkerScript struct {
-	Script     string    `json:"script"`
+	WorkerMetaData
+	Script string `json:"script"`
+}
+
+type WorkerMetaData struct {
+	ID         string    `json:"id,omitempty"`
 	ETAG       string    `json:"etag,omitempty"`
 	Size       int       `json:"size,omitempty"`
+	CreatedOn  time.Time `json:"created_on,omitempty"`
 	ModifiedOn time.Time `json:"modified_on,omitempty"`
+}
+
+type WorkerListResponse struct {
+	Response
+	WorkerList []WorkerMetaData `json:"result"`
 }
 
 // WorkerScriptResponse wrapper struct for API response to worker script calls
@@ -46,6 +57,28 @@ type WorkerScriptResponse struct {
 // API reference: https://api.cloudflare.com/#worker-script-delete-worker
 func (api *API) DeleteWorker(zoneID string) (WorkerScriptResponse, error) {
 	uri := "/zones/" + zoneID + "/workers/script"
+	res, err := api.makeRequest("DELETE", uri, nil)
+	var r WorkerScriptResponse
+	if err != nil {
+		return r, errors.Wrap(err, errMakeRequestError)
+	}
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return r, errors.Wrap(err, errUnmarshalError)
+	}
+	return r, nil
+}
+
+// DeleteWorkerWithName deletes worker for a zone.
+// This is an enterprise only feature https://developers.cloudflare.com/workers/api/config-api-for-enterprise/
+// organizationID must be specified as api option https://godoc.org/github.com/cloudflare/cloudflare-go#UsingOrganization
+//
+// API reference: https://api.cloudflare.com/#worker-script-delete-worker
+func (api *API) DeleteWorkerWithName(scriptName string) (WorkerScriptResponse, error) {
+	if api.organizationID == "" {
+		return WorkerScriptResponse{}, errors.New("organization ID required for enterprise only request")
+	}
+	uri := "/accounts/" + api.organizationID + "/workers/scripts/" + scriptName
 	res, err := api.makeRequest("DELETE", uri, nil)
 	var r WorkerScriptResponse
 	if err != nil {
@@ -74,11 +107,74 @@ func (api *API) DownloadWorker(zoneID string) (WorkerScriptResponse, error) {
 	return r, nil
 }
 
+// DownloadWorkerWithName fetch raw script content for your worker returns string containing worker code js
+// This is an enterprise only feature https://developers.cloudflare.com/workers/api/config-api-for-enterprise/
+//
+// API reference: https://api.cloudflare.com/#worker-script-download-worker
+func (api *API) DownloadWorkerWithName(scriptName string) (WorkerScriptResponse, error) {
+	if api.organizationID == "" {
+		return WorkerScriptResponse{}, errors.New("organization ID required for enterprise only request")
+	}
+	uri := "/accounts/" + api.organizationID + "/workers/scripts/" + scriptName
+	api.headers.Add("Content-Type", "application/javascript")
+	res, err := api.makeRequest("GET", uri, nil)
+	var r WorkerScriptResponse
+	if err != nil {
+		return r, errors.Wrap(err, errMakeRequestError)
+	}
+	r.Script = string(res)
+	r.Success = true
+	return r, nil
+}
+
+// ListWorkerScripts returns list of worker scripts for given organization
+// This is an enterprise only feature https://developers.cloudflare.com/workers/api/config-api-for-enterprise/
+//
+// API reference: https://developers.cloudflare.com/workers/api/config-api-for-enterprise/
+func (api *API) ListWorkerScripts() (WorkerListResponse, error) {
+	if api.organizationID == "" {
+		return WorkerListResponse{}, errors.New("organization ID required for enterprise only request")
+	}
+	uri := "/accounts/" + api.organizationID + "/workers/scripts"
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return WorkerListResponse{}, errors.Wrap(err, errMakeRequestError)
+	}
+	var r WorkerListResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return WorkerListResponse{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r, nil
+}
+
 // UploadWorker push raw script content for your worker
 //
 // API reference: https://api.cloudflare.com/#worker-script-upload-worker
 func (api *API) UploadWorker(zoneID string, data string) (WorkerScriptResponse, error) {
 	uri := "/zones/" + zoneID + "/workers/script"
+	api.headers.Add("Content-Type", "application/javascript")
+	res, err := api.makeRequest("PUT", uri, []byte(data))
+	var r WorkerScriptResponse
+	if err != nil {
+		return r, errors.Wrap(err, errMakeRequestError)
+	}
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return r, errors.Wrap(err, errUnmarshalError)
+	}
+	return r, nil
+}
+
+// UploadWorkerWithName push raw script content for your worker
+// This is an enterprise only feature https://developers.cloudflare.com/workers/api/config-api-for-enterprise/
+//
+// API reference: https://api.cloudflare.com/#worker-script-upload-worker
+func (api *API) UploadWorkerWithName(scriptName string, data string) (WorkerScriptResponse, error) {
+	if api.organizationID == "" {
+		return WorkerScriptResponse{}, errors.New("organization ID required for enterprise only request")
+	}
+	uri := "/accounts/" + api.organizationID + "/workers/scripts/" + scriptName
 	api.headers.Add("Content-Type", "application/javascript")
 	res, err := api.makeRequest("PUT", uri, []byte(data))
 	var r WorkerScriptResponse

@@ -28,6 +28,19 @@ func ExampleAPI_UploadWorker() {
 	fmt.Printf("%+v", res)
 }
 
+func ExampleAPI_UploadWorkerWithName() {
+	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization("foo"))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	res, err := api.UploadWorkerWithName("baz", workerScript)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%+v", res)
+}
+
 func ExampleAPI_DownloadWorker() {
 	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
@@ -40,6 +53,19 @@ func ExampleAPI_DownloadWorker() {
 	}
 
 	res, err := api.DownloadWorker(zoneID)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%+v", res)
+}
+
+func ExampleAPI_DownloadWorkerWithName() {
+	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization("foo"))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	res, err := api.DownloadWorkerWithName("baz")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -61,6 +87,32 @@ func ExampleAPI_DeleteWorker() {
 		log.Fatal(err)
 	}
 	fmt.Printf("%+v", res)
+}
+
+func ExampleAPI_DeleteWorkerWithName() {
+	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization("foo"))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	res, err := api.DeleteWorkerWithName("baz")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%+v", res)
+}
+
+func ExampleAPI_ListWorkerScripts() {
+	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization("foo"))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	res, err := api.ListWorkerScripts()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%+v", res.WorkerList)
 }
 
 func ExampleAPI_CreateWorkerRoute() {
