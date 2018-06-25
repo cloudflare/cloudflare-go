@@ -247,7 +247,6 @@ func TestWorkers_UploadWorkerWithName(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
-
 }
 
 func TestWorkers_CreateWorkerRoute(t *testing.T) {
