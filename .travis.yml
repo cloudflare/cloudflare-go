@@ -13,6 +13,7 @@ matrix:
 
 before_install:
   - go get github.com/mitchellh/gox
+  - go get -u golang.org/x/lint/golint
 
 install:
   - # skip
@@ -20,6 +21,7 @@ install:
 script:
   - go get -t -v ./...
   - diff -u <(echo -n) <(gofmt -d .)
+  - golint -set_exit_status . cmd/flarectl
   - go vet $(go list ./... | grep -v /vendor/)
   - go test -v -race ./...
   # Only build binaries from the latest Go release.
@@ -29,7 +31,6 @@ notifications:
   email:
     recipients:
       - jamesog@cloudflare.com
-      - msilverlock@cloudflare.com
 
 deploy:
   provider: releases

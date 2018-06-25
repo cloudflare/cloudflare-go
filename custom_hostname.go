@@ -28,7 +28,7 @@ type CustomHostname struct {
 	CustomMetadata CustomMetadata    `json:"custom_metadata,omitempty"`
 }
 
-// CustomHostNameResponse represents a response from the Custom Hostnames endpoints.
+// CustomHostnameResponse represents a response from the Custom Hostnames endpoints.
 type CustomHostnameResponse struct {
 	Result CustomHostname `json:"result"`
 	Response
@@ -41,14 +41,16 @@ type CustomHostnameListResponse struct {
 	ResultInfo `json:"result_info"`
 }
 
-// Modify SSL configuration for the given custom hostname in the given zone.
+// UpdateCustomHostnameSSL modifies SSL configuration for the given custom
+// hostname in the given zone.
 //
 // API reference: https://api.cloudflare.com/#custom-hostname-for-a-zone-update-custom-hostname-configuration
 func (api *API) UpdateCustomHostnameSSL(zoneID string, customHostnameID string, ssl CustomHostnameSSL) (CustomHostname, error) {
 	return CustomHostname{}, errors.New("Not implemented")
 }
 
-// Delete a custom hostname (and any issued SSL certificates)
+// DeleteCustomHostname deletes a custom hostname (and any issued SSL
+// certificates).
 //
 // API reference: https://api.cloudflare.com/#custom-hostname-for-a-zone-delete-a-custom-hostname-and-any-issued-ssl-certificates-
 func (api *API) DeleteCustomHostname(zoneID string, customHostnameID string) error {
