@@ -1,0 +1,82 @@
+package cloudflare
+
+import (
+	"encoding/json"
+	"net/url"
+	"strconv"
+
+	"github.com/pkg/errors"
+)
+
+// AccountMember is the definition of a member of an account.
+type AccountMember struct {
+	ID     string                   `json:"id"`
+	Code   string                   `json:"code"`
+	User   AccountMemberUserDetails `json:"user"`
+	Status string                   `json:"status"`
+	Roles  []AccountMemberRoles     `json:"roles"`
+}
+
+// AccountMemberUserDetails outlines all the personal information about
+// a member.
+type AccountMemberUserDetails struct {
+	ID                             string `json:"id"`
+	FirstName                      string `json:"first_name"`
+	LastName                       string `json:"last_name"`
+	Email                          string `json:"email"`
+	TwoFactorAuthenticationEnabled bool
+}
+
+// AccountMemberRoles defines the roles that a member can have attached.
+type AccountMemberRoles struct {
+	ID          string                                  `json:"id"`
+	Name        string                                  `json:"name"`
+	Description string                                  `json:"description"`
+	Permissions map[string]AccountMemberRolePermissions `json:"permissions"`
+}
+
+// AccountMemberRolePermissions is the shared structure for all permissions
+// that can be assigned to a member.
+type AccountMemberRolePermissions struct {
+	Read bool `json:"read"`
+	Edit bool `json:"edit"`
+}
+
+// AccountMembersListResponse represents the response from the list account
+// members endpoint.
+type AccountMembersListResponse struct {
+	Result []AccountMember `json:"result"`
+	Response
+	ResultInfo `json:"result_info"`
+}
+
+// ListAccountMembers returns all members of an account.
+//
+// API reference: https://api.cloudflare.com/#accounts-list-accounts
+func (api *API) ListAccountMembers(accountID string, pageOpts PaginationOptions) ([]AccountMember, ResultInfo, error) {
+	v := url.Values{}
+	if pageOpts.PerPage > 0 {
+		v.Set("per_page", strconv.Itoa(pageOpts.PerPage))
+	}
+	if pageOpts.Page > 0 {
+		v.Set("page", strconv.Itoa(pageOpts.Page))
+	}
+
+	uri := "/accounts/" + accountID + "/members"
+	if len(v) > 0 {
+		uri = uri + "?" + v.Encode()
+	}
+
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return []AccountMember{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var accountMemberListresponse AccountMembersListResponse
+	err = json.Unmarshal(res, &accountMemberListresponse)
+	if err != nil {
+		return []AccountMember{}, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return accountMemberListresponse.Result, accountMemberListresponse.ResultInfo, nil
+}
