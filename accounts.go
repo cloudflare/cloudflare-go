@@ -35,6 +35,14 @@ type AccountListResponse struct {
 	ResultInfo `json:"result_info"`
 }
 
+// AccountDetailResponse is the API response, containing a single Account.
+type AccountDetailResponse struct {
+	Success  bool     `json:"success"`
+	Errors   []string `json:"errors"`
+	Messages []string `json:"messages"`
+	Result   Account  `json:"result"`
+}
+
 // ListAccounts returns all accounts the logged in user has access to.
 //
 // API reference: https://api.cloudflare.com/#accounts-list-accounts
@@ -65,7 +73,7 @@ func (api *API) ListAccounts(pageOpts PaginationOptions) ([]Account, ResultInfo,
 	return accListResponse.Result, accListResponse.ResultInfo, nil
 }
 
-// Account returns a single account based on the ID.Account
+// Account returns a single account based on the ID.
 //
 // API reference: https://api.cloudflare.com/#accounts-account-details
 func (api *API) Account(accountID string) (Account, ResultInfo, error) {
@@ -83,4 +91,24 @@ func (api *API) Account(accountID string) (Account, ResultInfo, error) {
 	}
 
 	return accResponse.Result, accResponse.ResultInfo, nil
+}
+
+// UpdateAccount allows management of an account using the account ID.
+//
+// API reference: https://api.cloudflare.com/#accounts-update-account
+func (api *API) UpdateAccount(accountID string, account Account) (Account, error) {
+	uri := "/accounts/" + accountID
+
+	res, err := api.makeRequest("PUT", uri, account)
+	if err != nil {
+		return Account{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var a AccountDetailResponse
+	err = json.Unmarshal(res, &a)
+	if err != nil {
+		return Account{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return a.Result, nil
 }
