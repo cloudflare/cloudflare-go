@@ -77,7 +77,7 @@ var newUpdatedAccountMemberStruct = AccountMember{
 	},
 }
 
-func TestListAccountMembers(t *testing.T) {
+func TestAccountMembers(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -132,14 +132,14 @@ func TestListAccountMembers(t *testing.T) {
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/members", handler)
 	want := []AccountMember{expectedAccountMemberStruct}
 
-	actual, _, err := client.ListAccountMembers("01a7362d577a6c3019a474fd6f485823", PaginationOptions{})
+	actual, _, err := client.AccountMembers("01a7362d577a6c3019a474fd6f485823", PaginationOptions{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
-func TestAddAccountMember(t *testing.T) {
+func TestCreateAccountMember(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -183,7 +183,7 @@ func TestAddAccountMember(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/members", handler)
 
-	actual, err := client.AddAccountMember(
+	actual, err := client.CreateAccountMember(
 		"01a7362d577a6c3019a474fd6f485823",
 		"user@example.com",
 		[]string{"3536bcfad5faccb999b47003c79917fb"})
@@ -251,5 +251,58 @@ func TestUpdateAccountMember(t *testing.T) {
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, newUpdatedAccountMemberStruct, actual)
+	}
+}
+
+func TestAccountMemberDetails(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "4536bcfad5faccb111b47003c79917fa",
+				"code": "05dd05cce12bbed97c0d87cd78e89bc2fd41a6cee72f27f6fc84af2e45c0fac0",
+				"user": {
+					"id": "7c5dae5552338874e5053f2534d2767a",
+					"first_name": "John",
+					"last_name": "Appleseed",
+					"email": "user@example.com",
+					"two_factor_authentication_enabled": false
+				},
+				"status": "accepted",
+				"roles": [
+					{
+						"id": "3536bcfad5faccb999b47003c79917fb",
+						"name": "Account Administrator",
+						"description": "Administrative access to the entire Account",
+						"permissions": {
+							"analytics": {
+								"read": true,
+								"edit": true
+							},
+							"billing": {
+								"read": true,
+								"edit": false
+							}
+						}
+					}
+				]
+			}
+		}
+		`)
+	}
+
+	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/members/4536bcfad5faccb111b47003c79917fa", handler)
+
+	actual, err := client.AccountMemberDetails("01a7362d577a6c3019a474fd6f485823", "4536bcfad5faccb111b47003c79917fa")
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expectedAccountMemberStruct, actual)
 	}
 }

@@ -67,10 +67,10 @@ type AccountMemberInvitation struct {
 	Roles []string `json:"roles"`
 }
 
-// ListAccountMembers returns all members of an account.
+// AccountMembers returns all members of an account.
 //
 // API reference: https://api.cloudflare.com/#accounts-list-accounts
-func (api *API) ListAccountMembers(accountID string, pageOpts PaginationOptions) ([]AccountMember, ResultInfo, error) {
+func (api *API) AccountMembers(accountID string, pageOpts PaginationOptions) ([]AccountMember, ResultInfo, error) {
 	v := url.Values{}
 	if pageOpts.PerPage > 0 {
 		v.Set("per_page", strconv.Itoa(pageOpts.PerPage))
@@ -98,10 +98,10 @@ func (api *API) ListAccountMembers(accountID string, pageOpts PaginationOptions)
 	return accountMemberListresponse.Result, accountMemberListresponse.ResultInfo, nil
 }
 
-// AddAccountMember invites a new member to join an account.
+// CreateAccountMember invites a new member to join an account.
 //
 // API reference: https://api.cloudflare.com/#account-members-add-member
-func (api *API) AddAccountMember(accountID string, emailAddress string, roles []string) (AccountMember, error) {
+func (api *API) CreateAccountMember(accountID string, emailAddress string, roles []string) (AccountMember, error) {
 	uri := "/accounts/" + accountID + "/members"
 
 	var newMember = AccountMemberInvitation{
@@ -154,4 +154,28 @@ func (api *API) UpdateAccountMember(accountID string, userID string, member Acco
 	}
 
 	return accountMemberListResponse.Result, nil
+}
+
+// AccountMemberDetails returns details of a single account member.
+//
+// API reference: https://api.cloudflare.com/#account-members-member-details
+func (api *API) AccountMemberDetails(accountID string, memberID string) (AccountMember, error) {
+	uri := fmt.Sprintf(
+		"/accounts/%s/members/%s",
+		accountID,
+		memberID,
+	)
+
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return AccountMember{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var accountMemberResponse AccountMemberDetailResponse
+	err = json.Unmarshal(res, &accountMemberResponse)
+	if err != nil {
+		return AccountMember{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return accountMemberResponse.Result, nil
 }
