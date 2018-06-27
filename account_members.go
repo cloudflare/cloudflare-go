@@ -2,6 +2,7 @@ package cloudflare
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/url"
 	"strconv"
 
@@ -108,6 +109,25 @@ func (api *API) AddAccountMember(accountID string, emailAddress string, roles []
 		Roles: roles,
 	}
 	res, err := api.makeRequest("POST", uri, newMember)
+	if err != nil {
+		return AccountMember{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var accountMemberListResponse AccountMemberDetailResponse
+	err = json.Unmarshal(res, &accountMemberListResponse)
+	if err != nil {
+		return AccountMember{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return accountMemberListResponse.Result, nil
+}
+// UpdateAccountMember modifies an existing account member.
+//
+// API reference: https://api.cloudflare.com/#account-members-update-member
+func (api *API) UpdateAccountMember(accountID string, userID string, member AccountMember) (AccountMember, error) {
+	uri := fmt.Sprintf("/accounts/%s/members/%s", accountID, userID)
+
+	res, err := api.makeRequest("PUT", uri, member)
 	if err != nil {
 		return AccountMember{}, errors.Wrap(err, errMakeRequestError)
 	}
