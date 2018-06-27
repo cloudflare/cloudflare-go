@@ -125,7 +125,7 @@ func (api *API) DeleteZoneAccessRule(zoneID, accessRuleID string) (*AccessRuleRe
 //
 // API reference: https://api.cloudflare.com/#organization-level-firewall-access-rule-list-access-rules
 func (api *API) ListOrganizationAccessRules(organizationID string, accessRule AccessRule, page int) (*AccessRuleListResponse, error) {
-	return api.listAccessRules("/organizations/"+organizationID, accessRule, page)
+	return api.listAccessRules("/accounts/"+organizationID, accessRule, page)
 }
 
 // CreateOrganizationAccessRule creates a firewall access rule for the given
@@ -133,7 +133,7 @@ func (api *API) ListOrganizationAccessRules(organizationID string, accessRule Ac
 //
 // API reference: https://api.cloudflare.com/#organization-level-firewall-access-rule-create-access-rule
 func (api *API) CreateOrganizationAccessRule(organizationID string, accessRule AccessRule) (*AccessRuleResponse, error) {
-	return api.createAccessRule("/organizations/"+organizationID, accessRule)
+	return api.createAccessRule("/accounts/"+organizationID, accessRule)
 }
 
 // UpdateOrganizationAccessRule updates a single access rule for the given
@@ -141,7 +141,7 @@ func (api *API) CreateOrganizationAccessRule(organizationID string, accessRule A
 //
 // API reference: https://api.cloudflare.com/#organization-level-firewall-access-rule-update-access-rule
 func (api *API) UpdateOrganizationAccessRule(organizationID, accessRuleID string, accessRule AccessRule) (*AccessRuleResponse, error) {
-	return api.updateAccessRule("/organizations/"+organizationID, accessRuleID, accessRule)
+	return api.updateAccessRule("/accounts/"+organizationID, accessRuleID, accessRule)
 }
 
 // DeleteOrganizationAccessRule deletes a single access rule for the given
@@ -149,7 +149,7 @@ func (api *API) UpdateOrganizationAccessRule(organizationID, accessRuleID string
 //
 // API reference: https://api.cloudflare.com/#organization-level-firewall-access-rule-delete-access-rule
 func (api *API) DeleteOrganizationAccessRule(organizationID, accessRuleID string) (*AccessRuleResponse, error) {
-	return api.deleteAccessRule("/organizations/"+organizationID, accessRuleID)
+	return api.deleteAccessRule("/accounts/"+organizationID, accessRuleID)
 }
 
 func (api *API) listAccessRules(prefix string, accessRule AccessRule, page int) (*AccessRuleListResponse, error) {
