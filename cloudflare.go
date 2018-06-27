@@ -236,7 +236,7 @@ func (api *API) request(method, uri string, reqBody io.Reader, authType int) (*h
 // parameter because it is not consistent across APIs.
 func (api *API) userBaseURL(accountBase string) string {
 	if api.organizationID != "" {
-		return "/organizations/" + api.organizationID
+		return "/accounts/" + api.organizationID
 	}
 	return accountBase
 }
