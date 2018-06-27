@@ -254,7 +254,7 @@ func TestUpdateAccountMember(t *testing.T) {
 	}
 }
 
-func TestAccountMemberDetails(t *testing.T) {
+func TestAccountMember(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -300,7 +300,7 @@ func TestAccountMemberDetails(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/members/4536bcfad5faccb111b47003c79917fa", handler)
 
-	actual, err := client.AccountMemberDetails("01a7362d577a6c3019a474fd6f485823", "4536bcfad5faccb111b47003c79917fa")
+	actual, err := client.AccountMember("01a7362d577a6c3019a474fd6f485823", "4536bcfad5faccb111b47003c79917fa")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccountMemberStruct, actual)

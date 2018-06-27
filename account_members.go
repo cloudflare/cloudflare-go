@@ -156,10 +156,10 @@ func (api *API) UpdateAccountMember(accountID string, userID string, member Acco
 	return accountMemberListResponse.Result, nil
 }
 
-// AccountMemberDetails returns details of a single account member.
+// AccountMember returns details of a single account member.
 //
 // API reference: https://api.cloudflare.com/#account-members-member-details
-func (api *API) AccountMemberDetails(accountID string, memberID string) (AccountMember, error) {
+func (api *API) AccountMember(accountID string, memberID string) (AccountMember, error) {
 	uri := fmt.Sprintf(
 		"/accounts/%s/members/%s",
 		accountID,
