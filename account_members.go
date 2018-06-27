@@ -121,6 +121,21 @@ func (api *API) AddAccountMember(accountID string, emailAddress string, roles []
 
 	return accountMemberListResponse.Result, nil
 }
+
+// DeleteAccountMember removes a member from an account.
+//
+// API reference: https://api.cloudflare.com/#account-members-remove-member
+func (api *API) DeleteAccountMember(accountID string, userID string) error {
+	uri := fmt.Sprintf("/accounts/%s/members/%s", accountID, userID)
+
+	_, err := api.makeRequest("DELETE", uri, nil)
+	if err != nil {
+		return errors.Wrap(err, errMakeRequestError)
+	}
+
+	return nil
+}
+
 // UpdateAccountMember modifies an existing account member.
 //
 // API reference: https://api.cloudflare.com/#account-members-update-member
