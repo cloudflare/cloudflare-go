@@ -32,6 +32,27 @@ var expectedAccountMemberStruct = AccountMember{
 	},
 }
 
+var expectedNewAccountMemberStruct = AccountMember{
+	ID:   "4536bcfad5faccb111b47003c79917fa",
+	Code: "05dd05cce12bbed97c0d87cd78e89bc2fd41a6cee72f27f6fc84af2e45c0fac0",
+	User: AccountMemberUserDetails{
+		Email: "user@example.com",
+		TwoFactorAuthenticationEnabled: false,
+	},
+	Status: "pending",
+	Roles: []AccountMemberRoles{
+		{
+			ID:          "3536bcfad5faccb999b47003c79917fb",
+			Name:        "Account Administrator",
+			Description: "Administrative access to the entire Account",
+			Permissions: map[string]AccountMemberRolePermissions{
+				"analytics": {Read: true, Edit: true},
+				"billing":   {Read: true, Edit: true},
+			},
+		},
+	},
+}
+
 func TestListAccountMembers(t *testing.T) {
 	setup()
 	defer teardown()
@@ -91,5 +112,59 @@ func TestListAccountMembers(t *testing.T) {
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
+	}
+}
+
+func TestAddAccountMember(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "POST", "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "4536bcfad5faccb111b47003c79917fa",
+				"code": "05dd05cce12bbed97c0d87cd78e89bc2fd41a6cee72f27f6fc84af2e45c0fac0",
+				"user": {
+					"id": null,
+					"first_name": null,
+					"last_name": null,
+					"email": "user@example.com",
+					"two_factor_authentication_enabled": false
+				},
+				"status": "pending",
+				"roles": [{
+					"id": "3536bcfad5faccb999b47003c79917fb",
+					"name": "Account Administrator",
+					"description": "Administrative access to the entire Account",
+					"permissions": {
+						"analytics": {
+							"read": true,
+							"edit": true
+						},
+						"billing": {
+							"read": true,
+							"edit": true
+						}
+					}
+				}]
+			}
+		}
+		`)
+	}
+
+	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/members", handler)
+
+	actual, err := client.AddAccountMember(
+		"01a7362d577a6c3019a474fd6f485823",
+		"user@example.com",
+		[]string{"3536bcfad5faccb999b47003c79917fb"})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expectedNewAccountMemberStruct, actual)
 	}
 }

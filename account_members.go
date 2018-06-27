@@ -42,12 +42,28 @@ type AccountMemberRolePermissions struct {
 	Edit bool `json:"edit"`
 }
 
-// AccountMembersListResponse represents the response from the list account
-// members endpoint.
+// AccountMembersListResponse represents the response from the list
+// account members endpoint.
 type AccountMembersListResponse struct {
 	Result []AccountMember `json:"result"`
 	Response
 	ResultInfo `json:"result_info"`
+}
+
+// AccountMemberDetailResponse is the API response, containing a single
+// account member.
+type AccountMemberDetailResponse struct {
+	Success  bool          `json:"success"`
+	Errors   []string      `json:"errors"`
+	Messages []string      `json:"messages"`
+	Result   AccountMember `json:"result"`
+}
+
+// AccountMemberInvitation represents the invitation for a new member to
+// the account.
+type AccountMemberInvitation struct {
+	Email string   `json:"email"`
+	Roles []string `json:"roles"`
 }
 
 // ListAccountMembers returns all members of an account.
@@ -79,4 +95,28 @@ func (api *API) ListAccountMembers(accountID string, pageOpts PaginationOptions)
 	}
 
 	return accountMemberListresponse.Result, accountMemberListresponse.ResultInfo, nil
+}
+
+// AddAccountMember invites a new member to join an account.
+//
+// API reference: https://api.cloudflare.com/#account-members-add-member
+func (api *API) AddAccountMember(accountID string, emailAddress string, roles []string) (AccountMember, error) {
+	uri := "/accounts/" + accountID + "/members"
+
+	var newMember = AccountMemberInvitation{
+		Email: emailAddress,
+		Roles: roles,
+	}
+	res, err := api.makeRequest("POST", uri, newMember)
+	if err != nil {
+		return AccountMember{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var accountMemberListResponse AccountMemberDetailResponse
+	err = json.Unmarshal(res, &accountMemberListResponse)
+	if err != nil {
+		return AccountMember{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return accountMemberListResponse.Result, nil
 }
