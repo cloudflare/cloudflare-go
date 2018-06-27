@@ -43,10 +43,10 @@ type AccountDetailResponse struct {
 	Result   Account  `json:"result"`
 }
 
-// ListAccounts returns all accounts the logged in user has access to.
+// Accounts returns all accounts the logged in user has access to.
 //
 // API reference: https://api.cloudflare.com/#accounts-list-accounts
-func (api *API) ListAccounts(pageOpts PaginationOptions) ([]Account, ResultInfo, error) {
+func (api *API) Accounts(pageOpts PaginationOptions) ([]Account, ResultInfo, error) {
 	v := url.Values{}
 	if pageOpts.PerPage > 0 {
 		v.Set("per_page", strconv.Itoa(pageOpts.PerPage))

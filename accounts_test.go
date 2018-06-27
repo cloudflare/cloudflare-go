@@ -17,7 +17,7 @@ var expectedAccountStruct = Account{
 	},
 }
 
-func TestListAccounts(t *testing.T) {
+func TestAccounts(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -50,7 +50,7 @@ func TestListAccounts(t *testing.T) {
 	mux.HandleFunc("/accounts", handler)
 	want := []Account{expectedAccountStruct}
 
-	actual, _, err := client.ListAccounts(PaginationOptions{})
+	actual, _, err := client.Accounts(PaginationOptions{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
