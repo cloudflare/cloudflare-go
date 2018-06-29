@@ -15,7 +15,7 @@ type AccountMember struct {
 	Code   string                   `json:"code"`
 	User   AccountMemberUserDetails `json:"user"`
 	Status string                   `json:"status"`
-	Roles  []AccountMemberRole      `json:"roles"`
+	Roles  []AccountRole            `json:"roles"`
 }
 
 // AccountMemberUserDetails outlines all the personal information about
@@ -26,21 +26,6 @@ type AccountMemberUserDetails struct {
 	LastName                       string `json:"last_name"`
 	Email                          string `json:"email"`
 	TwoFactorAuthenticationEnabled bool
-}
-
-// AccountMemberRole defines the roles that a member can have attached.
-type AccountMemberRole struct {
-	ID          string                                 `json:"id"`
-	Name        string                                 `json:"name"`
-	Description string                                 `json:"description"`
-	Permissions map[string]AccountMemberRolePermission `json:"permissions"`
-}
-
-// AccountMemberRolePermission is the shared structure for all permissions
-// that can be assigned to a member.
-type AccountMemberRolePermission struct {
-	Read bool `json:"read"`
-	Edit bool `json:"edit"`
 }
 
 // AccountMembersListResponse represents the response from the list

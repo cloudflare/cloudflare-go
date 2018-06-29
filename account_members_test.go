@@ -19,12 +19,12 @@ var expectedAccountMemberStruct = AccountMember{
 		TwoFactorAuthenticationEnabled: false,
 	},
 	Status: "accepted",
-	Roles: []AccountMemberRole{
+	Roles: []AccountRole{
 		{
 			ID:          "3536bcfad5faccb999b47003c79917fb",
 			Name:        "Account Administrator",
 			Description: "Administrative access to the entire Account",
-			Permissions: map[string]AccountMemberRolePermission{
+			Permissions: map[string]AccountRolePermission{
 				"analytics": {Read: true, Edit: true},
 				"billing":   {Read: true, Edit: false},
 			},
@@ -40,12 +40,12 @@ var expectedNewAccountMemberStruct = AccountMember{
 		TwoFactorAuthenticationEnabled: false,
 	},
 	Status: "pending",
-	Roles: []AccountMemberRole{
+	Roles: []AccountRole{
 		{
 			ID:          "3536bcfad5faccb999b47003c79917fb",
 			Name:        "Account Administrator",
 			Description: "Administrative access to the entire Account",
-			Permissions: map[string]AccountMemberRolePermission{
+			Permissions: map[string]AccountRolePermission{
 				"analytics": {Read: true, Edit: true},
 				"billing":   {Read: true, Edit: true},
 			},
@@ -64,12 +64,12 @@ var newUpdatedAccountMemberStruct = AccountMember{
 		TwoFactorAuthenticationEnabled: false,
 	},
 	Status: "accepted",
-	Roles: []AccountMemberRole{
+	Roles: []AccountRole{
 		{
 			ID:          "3536bcfad5faccb999b47003c79917fb",
 			Name:        "Account Administrator",
 			Description: "Administrative access to the entire Account",
-			Permissions: map[string]AccountMemberRolePermission{
+			Permissions: map[string]AccountRolePermission{
 				"analytics": {Read: true, Edit: true},
 				"billing":   {Read: true, Edit: true},
 			},
