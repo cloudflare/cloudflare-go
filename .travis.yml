@@ -21,7 +21,6 @@ install:
 
 script:
   - go get -t -v ./...
-  - diff -u <(echo -n) <(gofmt -d .)
   - golint -set_exit_status . cmd/flarectl
   - go vet $(go list ./... | grep -v /vendor/)
   - go test -v -race ./...
