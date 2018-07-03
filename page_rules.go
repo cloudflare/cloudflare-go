@@ -25,6 +25,7 @@ PageRuleAction is the action to take when the target is matched.
 Valid IDs are:
   always_online
   always_use_https
+  automatic_https_rewrites
   browser_cache_ttl
   browser_check
   bypass_cache_on_cookie
@@ -66,6 +67,7 @@ type PageRuleAction struct {
 var PageRuleActions = map[string]string{
 	"always_online":               "Always Online",               // Value of type string
 	"always_use_https":            "Always Use HTTPS",            // Value of type interface{}
+	"automatic_https_rewrites":    "Automatic HTTPS Rewrites",    // Value of type string
 	"browser_cache_ttl":           "Browser Cache TTL",           // Value of type int
 	"browser_check":               "Browser Integrity Check",     // Value of type string
 	"bypass_cache_on_cookie":      "Bypass Cache on Cookie",      // Value of type string
