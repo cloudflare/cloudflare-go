@@ -20,6 +20,17 @@ type CustomHostnameSSL struct {
 	HttpURL     string `json:"http_url,omitempty"`
 	// HttpBody is the body that must be returned from HttpURL.
 	HttpBody    string `json:"http_body,omitempty"`
+
+	CustomCertificate string `json:"custom_certificate,omitempty"`
+	CustomKey         string `json:"custom_key,omitempty"`
+
+	ID           string   `json:"id,omitempty"`
+	Hosts        []string `json:"hosts,omitempty"`
+	Issuer       string   `json:"issuer,omitempty"`
+	SerialNumber string   `json:"serial_number,omitempty"`
+	Signature    string   `json:"signature,omitempty"`
+	UploadedOn   string   `json:"uploaded_on,omitempty"`
+	ExpiresOn    string   `json:"expires_on,omitempty"`
 }
 
 // CustomMetadata defines custom metadata for the hostname. This requires logic to be implemented by Cloudflare to act on the data provided.
