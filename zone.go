@@ -231,6 +231,31 @@ type PurgeCacheResponse struct {
 	} `json:"result"`
 }
 
+// ZoneSubscriptionDetails represents all the subscription details for the zone.
+type ZoneSubscriptionDetails struct {
+	ID       string `json:"id,omitempty"`
+	State    string `json:"state,omitempty"`
+	Price    int    `json:"price,omitempty"`
+	Currency string `json:"currency,omitempty"`
+	Zone     Zone   `json:"zone,omitempty"`
+	RatePlan struct {
+		ID                string `json:"id,omitempty"`
+		Name              string `json:"public_name,omitempty"`
+		Currency          string `json:"currency,omitempty"`
+		ExternallyManaged bool   `json:"externally_managed,omitempty"`
+		Scope             string `json:"scope,omitempty"`
+	} `json:"rate_plan,omitempty"`
+	Frequency          string    `json:"frequency,omitempty"`
+	CurrentPeriodStart time.Time `json:"current_period_end,omitempty"`
+	CurrentPeriodEnt   time.Time `json:"current_period_start,omitempty"`
+}
+
+// ZoneSubscriptionDetailsResponse represents the response from the zone subscription endpoint.
+type ZoneSubscriptionDetailsResponse struct {
+	Response
+	Result ZoneSubscriptionDetails `json:"result"`
+}
+
 // newZone describes a new zone.
 type newZone struct {
 	Name      string `json:"name"`
@@ -584,4 +609,39 @@ func (api *API) ZoneSSLSettings(zoneID string) (ZoneSSLSetting, error) {
 		return ZoneSSLSetting{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
+}
+
+// ZoneSubscriptionDetails returns information about the zones subscription.
+//
+// API reference: https://api.cloudflare.com/#zone-subscription-zone-subscription-details
+func (api *API) ZoneSubscriptionDetails(zoneID string) (*ZoneSubscriptionDetails, error) {
+	uri := "/zones/" + zoneID + "/subscription"
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return nil, errors.Wrap(err, errMakeRequestError)
+	}
+	var r ZoneSubscriptionDetailsResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return nil, errors.Wrap(err, errUnmarshalError)
+	}
+	return &r.Result, nil
+}
+
+// UpdateZoneSubscription updates the settings for a given zone.
+//
+// API reference: https://api.cloudflare.com/#zone-subscription-update-zone-subscription
+func (api *API) UpdateZoneSubscription(zoneID string, subscription ZoneSubscriptionDetails) (*ZoneSubscriptionDetails, error) {
+	uri := "/zones/" + zoneID + "/subscription"
+	res, err := api.makeRequest("PUT", uri, subscription)
+	if err != nil {
+		return nil, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var r ZoneSubscriptionDetailsResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return nil, errors.Wrap(err, errUnmarshalError)
+	}
+	return &r.Result, nil
 }
