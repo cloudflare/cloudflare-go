@@ -21,7 +21,7 @@ var exampleNewRateLimit = cloudflare.RateLimit{
 		Timeout: 60,
 	},
 	Correlate: cloudflare.RateLimitCorrelate{
-		By: "nat"
+		By: "nat",
 	},
 }
 
