@@ -90,7 +90,7 @@ var expectedRateLimitStructUpdated = RateLimit{
 		Mode:    "ban",
 		Timeout: 60,
 	},
-	Correlate: cloudflare.RateLimitCorrelate{
+	Correlate: RateLimitCorrelate{
 		By: "nat",
 	},
 }
@@ -261,7 +261,7 @@ func TestCreateRateLimit(t *testing.T) {
 			Mode:    "ban",
 			Timeout: 60,
 		},
-		Correlate{
+		Correlate: RateLimitCorrelate{
 			By: "nat",
 		},
 	}
