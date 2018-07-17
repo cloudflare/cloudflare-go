@@ -6,6 +6,7 @@ import (
 	"strings"
 	"testing"
 
+	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -66,7 +67,7 @@ var expectedRateLimitStruct = RateLimit{
 		Timeout: 60,
 	},
 	Correlate: cloudflare.RateLimitCorrelate{
-		By: "nat"
+		By: "nat",
 	},
 }
 var expectedRateLimitStructUpdated = RateLimit{
@@ -90,7 +91,7 @@ var expectedRateLimitStructUpdated = RateLimit{
 		Timeout: 60,
 	},
 	Correlate: cloudflare.RateLimitCorrelate{
-		By: "nat"
+		By: "nat",
 	},
 }
 
@@ -261,7 +262,7 @@ func TestCreateRateLimit(t *testing.T) {
 			Timeout: 60,
 		},
 		Correlate{
-			By: "nat"
+			By: "nat",
 		},
 	}
 
