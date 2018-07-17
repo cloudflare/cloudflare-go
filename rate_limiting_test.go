@@ -6,7 +6,6 @@ import (
 	"strings"
 	"testing"
 
-	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -66,7 +65,7 @@ var expectedRateLimitStruct = RateLimit{
 		Mode:    "ban",
 		Timeout: 60,
 	},
-	Correlate: cloudflare.RateLimitCorrelate{
+	Correlate: RateLimitCorrelate{
 		By: "nat",
 	},
 }
