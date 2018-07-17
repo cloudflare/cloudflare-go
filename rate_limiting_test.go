@@ -36,6 +36,9 @@ const (
 	"action": {
 		"mode": "ban",
 		"timeout": 60
+	},
+	"correlate": {
+		"by": "nat"
 	}
 }
 `
@@ -62,6 +65,9 @@ var expectedRateLimitStruct = RateLimit{
 		Mode:    "ban",
 		Timeout: 60,
 	},
+	Correlate: cloudflare.RateLimitCorrelate{
+		By: "nat"
+	},
 }
 var expectedRateLimitStructUpdated = RateLimit{
 	ID:          "72dae2fc158942f2adb1dd2a3d4143bc",
@@ -82,6 +88,9 @@ var expectedRateLimitStructUpdated = RateLimit{
 	Action: RateLimitAction{
 		Mode:    "ban",
 		Timeout: 60,
+	},
+	Correlate: cloudflare.RateLimitCorrelate{
+		By: "nat"
 	},
 }
 
@@ -250,6 +259,9 @@ func TestCreateRateLimit(t *testing.T) {
 		Action: RateLimitAction{
 			Mode:    "ban",
 			Timeout: 60,
+		},
+		Correlate{
+			By: "nat"
 		},
 	}
 

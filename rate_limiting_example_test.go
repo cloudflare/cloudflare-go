@@ -20,6 +20,9 @@ var exampleNewRateLimit = cloudflare.RateLimit{
 		Mode:    "ban",
 		Timeout: 60,
 	},
+	Correlate: cloudflare.RateLimitCorrelate{
+		By: "nat"
+	},
 }
 
 func ExampleAPI_CreateRateLimit() {
