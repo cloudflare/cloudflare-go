@@ -25,6 +25,11 @@ const (
 	AuthUserService
 )
 
+// HTTPRequester abstracts the http.Client implementation
+type HTTPRequester interface {
+	Do(req *http.Request) (*http.Response, error)
+}
+
 // API holds the configuration for the current API client. A client should not
 // be modified concurrently.
 type API struct {
@@ -34,7 +39,7 @@ type API struct {
 	BaseURL           string
 	organizationID    string
 	headers           http.Header
-	httpClient        *http.Client
+	httpClient        HTTPRequester
 	authType          int
 	rateLimiter       *rate.Limiter
 	retryPolicy       RetryPolicy

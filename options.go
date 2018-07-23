@@ -11,8 +11,8 @@ import (
 // Option is a functional option for configuring the API client.
 type Option func(*API) error
 
-// HTTPClient accepts a custom *http.Client for making API calls.
-func HTTPClient(client *http.Client) Option {
+// HTTPClient accepts a custom HTTPRequester for making API calls.
+func HTTPClient(client HTTPRequester) Option {
 	return func(api *API) error {
 		api.httpClient = client
 		return nil
