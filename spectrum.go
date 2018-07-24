@@ -38,6 +38,21 @@ type SpectrumAppDetailResponse struct {
 	Result   SpectrumApp `json:"result"`
 }
 
+// DeletedSpectrumAppResponse defines the API response when deleting a
+// Spectrum application.
+type DeletedSpectrumAppResponse struct {
+	Success  bool                     `json:"success"`
+	Errors   []string                 `json:"errors"`
+	Messages []string                 `json:"messages"`
+	Result   DeletedSpectrumAppResult `json:"result"`
+}
+
+// DeletedSpectrumAppResult defines the struct for a deleted application
+// result.
+type DeletedSpectrumAppResult struct {
+	ID string `json:"id"`
+}
+
 // SpectrumApp fetches a single Spectrum application based on the ID.
 //
 // API reference: https://developers.cloudflare.com/spectrum/api-reference/#list-spectrum-applications
@@ -60,4 +75,28 @@ func (api *API) SpectrumApp(zoneID string, applicationID string) (SpectrumApp, e
 	}
 
 	return spectrumApp.Result, nil
+}
+
+// DeleteSpectrumApp removes a Spectrum application based on the ID.
+//
+// API reference: https://developers.cloudflare.com/spectrum/api-reference/#delete-a-spectrum-application
+func (api *API) DeleteSpectrumApp(zoneID string, applicationID string) (DeletedSpectrumAppResult, error) {
+	uri := fmt.Sprintf(
+		"/zones/%s/spectrum/apps/%s",
+		zoneID,
+		applicationID,
+	)
+
+	res, err := api.makeRequest("DELETE", uri, nil)
+	if err != nil {
+		return DeletedSpectrumAppResult{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var deletedSpectrumApp DeletedSpectrumAppResponse
+	err = json.Unmarshal(res, &deletedSpectrumApp)
+	if err != nil {
+		return DeletedSpectrumAppResult{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return deletedSpectrumApp.Result, nil
 }

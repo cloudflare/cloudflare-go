@@ -64,3 +64,32 @@ func TestSpectrumApp(t *testing.T) {
 		assert.Equal(t, want, actual)
 	}
 }
+
+func TestDeleteSpectrumApp(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "DELETE", "Expected method 'DELETE', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+			"result": {
+				"id": "40d67c87c6cd4b889a4fd57805225e85"
+			},
+			"success": true,
+			"errors": [],
+			"messages": []
+		}`)
+	}
+
+	mux.HandleFunc("/zones/01a7362d577a6c3019a474fd6f485823/spectrum/apps/f68579455bd947efb65ffa1bcf33b52c", handler)
+
+	want := DeletedSpectrumAppResult{
+		ID: "40d67c87c6cd4b889a4fd57805225e85",
+	}
+
+	actual, err := client.DeleteSpectrumApp("01a7362d577a6c3019a474fd6f485823", "f68579455bd947efb65ffa1bcf33b52c")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
