@@ -7,6 +7,7 @@ matrix:
     - go: 1.7.x
     - go: 1.8.x
     - go: 1.9.x
+    - go: 1.10.x
     - go: tip
   allow_failures:
     - go: tip
@@ -20,7 +21,6 @@ install:
 
 script:
   - go get -t -v ./...
-  - diff -u <(echo -n) <(gofmt -d .)
   - golint -set_exit_status . cmd/flarectl
   - go vet $(go list ./... | grep -v /vendor/)
   - go test -v -race ./...
