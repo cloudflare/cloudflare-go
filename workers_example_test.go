@@ -21,7 +21,7 @@ func ExampleAPI_UploadWorker() {
 		log.Fatal(err)
 	}
 
-	res, err := api.UploadWorker(zoneID, workerScript)
+	res, err := api.UploadWorker(&cloudflare.WorkerRequestParams{ZoneID: zoneID}, workerScript)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -34,7 +34,7 @@ func ExampleAPI_UploadWorkerWithName() {
 		log.Fatal(err)
 	}
 
-	res, err := api.UploadWorkerWithName("baz", workerScript)
+	res, err := api.UploadWorker(&cloudflare.WorkerRequestParams{ScriptName: "baz"}, workerScript)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -52,7 +52,7 @@ func ExampleAPI_DownloadWorker() {
 		log.Fatal(err)
 	}
 
-	res, err := api.DownloadWorker(zoneID)
+	res, err := api.DownloadWorker(&cloudflare.WorkerRequestParams{ZoneID: zoneID})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -65,7 +65,7 @@ func ExampleAPI_DownloadWorkerWithName() {
 		log.Fatal(err)
 	}
 
-	res, err := api.DownloadWorkerWithName("baz")
+	res, err := api.DownloadWorker(&cloudflare.WorkerRequestParams{ScriptName: "baz"})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -82,7 +82,7 @@ func ExampleAPI_DeleteWorker() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	res, err := api.DeleteWorker(zoneID)
+	res, err := api.DeleteWorker(&cloudflare.WorkerRequestParams{ZoneID: zoneID})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -95,7 +95,7 @@ func ExampleAPI_DeleteWorkerWithName() {
 		log.Fatal(err)
 	}
 
-	res, err := api.DeleteWorkerWithName("baz")
+	res, err := api.DeleteWorker(&cloudflare.WorkerRequestParams{ScriptName: "baz"})
 	if err != nil {
 		log.Fatal(err)
 	}

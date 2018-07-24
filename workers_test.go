@@ -97,7 +97,7 @@ func TestWorkers_DeleteWorker(t *testing.T) {
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, deleteWorkerResponseData)
 	})
-	res, err := client.DeleteWorker("foo")
+	res, err := client.DeleteWorker(&WorkerRequestParams{ZoneID: "foo"})
 	want := WorkerScriptResponse{
 		successResponse,
 		WorkerScript{}}
@@ -115,7 +115,7 @@ func TestWorkers_DeleteWorkerWithName(t *testing.T) {
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, deleteWorkerResponseData)
 	})
-	res, err := client.DeleteWorkerWithName("bar")
+	res, err := client.DeleteWorker(&WorkerRequestParams{ScriptName: "bar"})
 	want := WorkerScriptResponse{
 		successResponse,
 		WorkerScript{}}
@@ -133,7 +133,7 @@ func TestWorkers_DownloadWorker(t *testing.T) {
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, workerScript)
 	})
-	res, err := client.DownloadWorker("foo")
+	res, err := client.DownloadWorker(&WorkerRequestParams{ZoneID: "foo"})
 	want := WorkerScriptResponse{
 		successResponse,
 		WorkerScript{
@@ -153,7 +153,7 @@ func TestWorkers_DownloadWorkerWithName(t *testing.T) {
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, workerScript)
 	})
-	res, err := client.DownloadWorkerWithName("bar")
+	res, err := client.DownloadWorker(&WorkerRequestParams{ScriptName: "bar"})
 	want := WorkerScriptResponse{
 		successResponse,
 		WorkerScript{
@@ -205,7 +205,7 @@ func TestWorkers_UploadWorker(t *testing.T) {
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, uploadWorkerResponseData)
 	})
-	res, err := client.UploadWorker("foo", workerScript)
+	res, err := client.UploadWorker(&WorkerRequestParams{ZoneID: "foo"}, workerScript)
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
@@ -232,7 +232,7 @@ func TestWorkers_UploadWorkerWithName(t *testing.T) {
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, uploadWorkerResponseData)
 	})
-	res, err := client.UploadWorkerWithName("bar", workerScript)
+	res, err := client.UploadWorker(&WorkerRequestParams{ScriptName: "bar"}, workerScript)
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,

@@ -6,6 +6,12 @@ import (
 	"time"
 )
 
+// WorkerRequestParams provides parameters for worker requests for both enterprise and standard requests
+type WorkerRequestParams struct {
+	ZoneID     string
+	ScriptName string
+}
+
 // WorkerRoute aka filters are patterns used to enable or disable workers that match requests.
 //
 // API reference: https://api.cloudflare.com/#worker-filters-properties
@@ -13,6 +19,7 @@ type WorkerRoute struct {
 	ID      string `json:"id,omitempty"`
 	Pattern string `json:"pattern"`
 	Enabled bool   `json:"enabled"`
+	Script  string `json:"script"`
 }
 
 // WorkerRoutesResponse embeds Response struct and slice of WorkerRoutes
@@ -57,8 +64,12 @@ type WorkerScriptResponse struct {
 // DeleteWorker deletes worker for a zone.
 //
 // API reference: https://api.cloudflare.com/#worker-script-delete-worker
-func (api *API) DeleteWorker(zoneID string) (WorkerScriptResponse, error) {
-	uri := "/zones/" + zoneID + "/workers/script"
+func (api *API) DeleteWorker(requestParams *WorkerRequestParams) (WorkerScriptResponse, error) {
+	// if organization ID is defined and ScriptName is provided we will treat as org request
+	if api.organizationID != "" && requestParams.ScriptName != "" {
+		return api.deleteWorkerWithName(requestParams.ScriptName)
+	}
+	uri := "/zones/" + requestParams.ZoneID + "/workers/script"
 	res, err := api.makeRequest("DELETE", uri, nil)
 	var r WorkerScriptResponse
 	if err != nil {
@@ -76,7 +87,7 @@ func (api *API) DeleteWorker(zoneID string) (WorkerScriptResponse, error) {
 // organizationID must be specified as api option https://godoc.org/github.com/cloudflare/cloudflare-go#UsingOrganization
 //
 // API reference: https://api.cloudflare.com/#worker-script-delete-worker
-func (api *API) DeleteWorkerWithName(scriptName string) (WorkerScriptResponse, error) {
+func (api *API) deleteWorkerWithName(scriptName string) (WorkerScriptResponse, error) {
 	if api.organizationID == "" {
 		return WorkerScriptResponse{}, errors.New("organization ID required for enterprise only request")
 	}
@@ -96,8 +107,11 @@ func (api *API) DeleteWorkerWithName(scriptName string) (WorkerScriptResponse, e
 // DownloadWorker fetch raw script content for your worker returns []byte containing worker code js
 //
 // API reference: https://api.cloudflare.com/#worker-script-download-worker
-func (api *API) DownloadWorker(zoneID string) (WorkerScriptResponse, error) {
-	uri := "/zones/" + zoneID + "/workers/script"
+func (api *API) DownloadWorker(requestParams *WorkerRequestParams) (WorkerScriptResponse, error) {
+	if api.organizationID != "" && requestParams.ScriptName != "" {
+		return api.downloadWorkerWithName(requestParams.ScriptName)
+	}
+	uri := "/zones/" + requestParams.ZoneID + "/workers/script"
 	api.headers.Add("Content-Type", "application/javascript")
 	res, err := api.makeRequest("GET", uri, nil)
 	var r WorkerScriptResponse
@@ -113,7 +127,7 @@ func (api *API) DownloadWorker(zoneID string) (WorkerScriptResponse, error) {
 // This is an enterprise only feature https://developers.cloudflare.com/workers/api/config-api-for-enterprise/
 //
 // API reference: https://api.cloudflare.com/#worker-script-download-worker
-func (api *API) DownloadWorkerWithName(scriptName string) (WorkerScriptResponse, error) {
+func (api *API) downloadWorkerWithName(scriptName string) (WorkerScriptResponse, error) {
 	if api.organizationID == "" {
 		return WorkerScriptResponse{}, errors.New("organization ID required for enterprise only request")
 	}
@@ -153,8 +167,11 @@ func (api *API) ListWorkerScripts() (WorkerListResponse, error) {
 // UploadWorker push raw script content for your worker
 //
 // API reference: https://api.cloudflare.com/#worker-script-upload-worker
-func (api *API) UploadWorker(zoneID string, data string) (WorkerScriptResponse, error) {
-	uri := "/zones/" + zoneID + "/workers/script"
+func (api *API) UploadWorker(requestParams *WorkerRequestParams, data string) (WorkerScriptResponse, error) {
+	if api.organizationID != "" && requestParams.ScriptName != "" {
+		return api.uploadWorkerWithName(requestParams.ScriptName, data)
+	}
+	uri := "/zones/" + requestParams.ZoneID + "/workers/script"
 	api.headers.Add("Content-Type", "application/javascript")
 	res, err := api.makeRequest("PUT", uri, []byte(data))
 	var r WorkerScriptResponse
@@ -172,7 +189,7 @@ func (api *API) UploadWorker(zoneID string, data string) (WorkerScriptResponse, 
 // This is an enterprise only feature https://developers.cloudflare.com/workers/api/config-api-for-enterprise/
 //
 // API reference: https://api.cloudflare.com/#worker-script-upload-worker
-func (api *API) UploadWorkerWithName(scriptName string, data string) (WorkerScriptResponse, error) {
+func (api *API) uploadWorkerWithName(scriptName string, data string) (WorkerScriptResponse, error) {
 	if api.organizationID == "" {
 		return WorkerScriptResponse{}, errors.New("organization ID required for enterprise only request")
 	}
