@@ -26,9 +26,11 @@ func ExampleAPI_UploadWorker() {
 		log.Fatal(err)
 	}
 	fmt.Printf("%+v", res)
+
+	UploadWorkerWithName()
 }
 
-func ExampleAPI_UploadWorkerWithName() {
+func UploadWorkerWithName() {
 	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization("foo"))
 	if err != nil {
 		log.Fatal(err)
@@ -57,9 +59,11 @@ func ExampleAPI_DownloadWorker() {
 		log.Fatal(err)
 	}
 	fmt.Printf("%+v", res)
+
+	DownloadWorkerWithName()
 }
 
-func ExampleAPI_DownloadWorkerWithName() {
+func DownloadWorkerWithName() {
 	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization("foo"))
 	if err != nil {
 		log.Fatal(err)
@@ -87,9 +91,11 @@ func ExampleAPI_DeleteWorker() {
 		log.Fatal(err)
 	}
 	fmt.Printf("%+v", res)
+
+	DeleteWorkerWithName()
 }
 
-func ExampleAPI_DeleteWorkerWithName() {
+func DeleteWorkerWithName() {
 	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization("foo"))
 	if err != nil {
 		log.Fatal(err)
