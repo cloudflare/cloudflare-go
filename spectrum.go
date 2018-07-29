@@ -15,6 +15,7 @@ type SpectrumApplication struct {
 	IPv4          bool                   `json:"ipv4"`
 	DNS           SpectrumApplicationDNS `json:"dns"`
 	OriginDirect  []string               `json:"origin_direct"`
+	OriginPort    int                    `json:"origin_port"`
 	IPFirewall    bool                   `json:"ip_firewall"`
 	ProxyProtocol bool                   `json:"proxy_protocol"`
 	TLS           string                 `json:"tls"`
@@ -93,6 +94,30 @@ func (api *API) SpectrumApplication(zoneID string, applicationID string) (Spectr
 	)
 
 	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return SpectrumApplication{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var spectrumApplication SpectrumApplicationDetailResponse
+	err = json.Unmarshal(res, &spectrumApplication)
+	if err != nil {
+		return SpectrumApplication{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return spectrumApplication.Result, nil
+}
+
+// UpdateSpectrumApplication fetches a single Spectrum application based on the ID.
+//
+// API reference: https://developers.cloudflare.com/spectrum/api-reference/#update-a-spectrum-application
+func (api *API) UpdateSpectrumApplication(zoneID, appID string, appDetails SpectrumApplication) (SpectrumApplication, error) {
+	uri := fmt.Sprintf(
+		"/zones/%s/spectrum/apps/%s",
+		zoneID,
+		appID,
+	)
+
+	res, err := api.makeRequest("PUT", uri, appDetails)
 	if err != nil {
 		return SpectrumApplication{}, errors.Wrap(err, errMakeRequestError)
 	}
