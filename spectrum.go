@@ -62,6 +62,27 @@ type DeletedSpectrumApplicationResult struct {
 	ID string `json:"id"`
 }
 
+// SpectrumApplications fetches all of the Spectrum applications for a zone.
+//
+// API reference: https://developers.cloudflare.com/spectrum/api-reference/#list-spectrum-applications
+func (api *API) SpectrumApplications(zoneID string) ([]SpectrumApplication, error) {
+	uri := "/zones/" + zoneID + "/spectrum/apps"
+
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return []SpectrumApplication{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var spectrumApplications SpectrumApplicationsDetailResponse
+	err = json.Unmarshal(res, &spectrumApplications)
+	if err != nil {
+		return []SpectrumApplication{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return spectrumApplications.Result, nil
+}
+
+// SpectrumApplication fetches a single Spectrum application based on the ID.
 //
 // API reference: https://developers.cloudflare.com/spectrum/api-reference/#list-spectrum-applications
 func (api *API) SpectrumApplication(zoneID string, applicationID string) (SpectrumApplication, error) {
