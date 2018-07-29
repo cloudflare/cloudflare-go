@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestSpectrumApp(t *testing.T) {
+func TestSpectrumApplication(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -43,13 +43,13 @@ func TestSpectrumApp(t *testing.T) {
 	mux.HandleFunc("/zones/01a7362d577a6c3019a474fd6f485823/spectrum/apps/f68579455bd947efb65ffa1bcf33b52c", handler)
 	createdOn, _ := time.Parse(time.RFC3339, "2018-03-28T21:25:55.643771Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2018-03-28T21:25:55.643771Z")
-	want := SpectrumApp{
+	want := SpectrumApplication{
 		ID:         "f68579455bd947efb65ffa1bcf33b52c",
 		CreatedOn:  &createdOn,
 		ModifiedOn: &modifiedOn,
 		Protocol:   "tcp/22",
 		IPv4:       true,
-		DNS: SpectrumAppDNS{
+		DNS: SpectrumApplicationDNS{
 			Name: "spectrum.example.com",
 			Type: "CNAME",
 		},
@@ -59,13 +59,13 @@ func TestSpectrumApp(t *testing.T) {
 		TLS:           "off",
 	}
 
-	actual, err := client.SpectrumApp("01a7362d577a6c3019a474fd6f485823", "f68579455bd947efb65ffa1bcf33b52c")
+	actual, err := client.SpectrumApplication("01a7362d577a6c3019a474fd6f485823", "f68579455bd947efb65ffa1bcf33b52c")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
-func TestDeleteSpectrumApp(t *testing.T) {
+func TestDeleteSpectrumApplication(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -84,11 +84,11 @@ func TestDeleteSpectrumApp(t *testing.T) {
 
 	mux.HandleFunc("/zones/01a7362d577a6c3019a474fd6f485823/spectrum/apps/f68579455bd947efb65ffa1bcf33b52c", handler)
 
-	want := DeletedSpectrumAppResult{
+	want := DeletedSpectrumApplicationResult{
 		ID: "40d67c87c6cd4b889a4fd57805225e85",
 	}
 
-	actual, err := client.DeleteSpectrumApp("01a7362d577a6c3019a474fd6f485823", "f68579455bd947efb65ffa1bcf33b52c")
+	actual, err := client.DeleteSpectrumApplication("01a7362d577a6c3019a474fd6f485823", "f68579455bd947efb65ffa1bcf33b52c")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
