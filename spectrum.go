@@ -107,7 +107,27 @@ func (api *API) SpectrumApplication(zoneID string, applicationID string) (Spectr
 	return spectrumApplication.Result, nil
 }
 
-// UpdateSpectrumApplication fetches a single Spectrum application based on the ID.
+// CreateSpectrumApplication creates a new Spectrum application.
+//
+// API reference: https://developers.cloudflare.com/spectrum/api-reference/#create-a-spectrum-application
+func (api *API) CreateSpectrumApplication(zoneID string, appDetails SpectrumApplication) (SpectrumApplication, error) {
+	uri := "/zones/" + zoneID + "/spectrum/apps"
+
+	res, err := api.makeRequest("POST", uri, appDetails)
+	if err != nil {
+		return SpectrumApplication{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var spectrumApplication SpectrumApplicationDetailResponse
+	err = json.Unmarshal(res, &spectrumApplication)
+	if err != nil {
+		return SpectrumApplication{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return spectrumApplication.Result, nil
+}
+
+// UpdateSpectrumApplication updates an existing Spectrum application.
 //
 // API reference: https://developers.cloudflare.com/spectrum/api-reference/#update-a-spectrum-application
 func (api *API) UpdateSpectrumApplication(zoneID, appID string, appDetails SpectrumApplication) (SpectrumApplication, error) {
