@@ -10,24 +10,33 @@ import (
 
 // SpectrumApplication defines a single Spectrum Application.
 type SpectrumApplication struct {
-	ID            string                 `json:"id"`
-	Protocol      string                 `json:"protocol"`
-	IPv4          bool                   `json:"ipv4"`
-	DNS           SpectrumApplicationDNS `json:"dns"`
-	OriginDirect  []string               `json:"origin_direct"`
-	OriginPort    int                    `json:"origin_port"`
-	IPFirewall    bool                   `json:"ip_firewall"`
-	ProxyProtocol bool                   `json:"proxy_protocol"`
-	TLS           string                 `json:"tls"`
-	CreatedOn     *time.Time             `json:"created_on"`
-	ModifiedOn    *time.Time             `json:"modified_on"`
+	ID            string                       `json:"id"`
+	Protocol      string                       `json:"protocol"`
+	IPv4          bool                         `json:"ipv4"`
+	DNS           SpectrumApplicationDNS       `json:"dns"`
+	OriginDirect  []string                     `json:"origin_direct"`
+	OriginPort    int                          `json:"origin_port"`
+	OriginDNS     SpectrumApplicationOriginDNS `json:"origin_dns"`
+	IPFirewall    bool                         `json:"ip_firewall"`
+	ProxyProtocol bool                         `json:"proxy_protocol"`
+	TLS           string                       `json:"tls"`
+	CreatedOn     *time.Time                   `json:"created_on"`
+	ModifiedOn    *time.Time                   `json:"modified_on"`
 }
 
-// SpectrumApplicationDNS holds the origin DNS configuration for a Spectrum
+// SpectrumApplicationDNS holds the external DNS configuration for a Spectrum
 // Application.
 type SpectrumApplicationDNS struct {
 	Type string `json:"type"`
 	Name string `json:"name"`
+}
+
+// SpectrumApplicationOriginDNS holds the origin DNS configuration for a Spectrum
+// Application.
+type SpectrumApplicationOriginDNS struct {
+	Type  string   `json:"type"`
+	Names []string `json:"names"`
+	TTL   int      `json:"ttl"`
 }
 
 // SpectrumApplicationDetailResponse is the structure of the detailed response
