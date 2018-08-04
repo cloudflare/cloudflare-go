@@ -108,9 +108,13 @@ func (api *API) makeRequestWithAuthType(method, uri string, params interface{}, 
 	var jsonBody []byte
 	var err error
 	if params != nil {
-		jsonBody, err = json.Marshal(params)
-		if err != nil {
-			return nil, errors.Wrap(err, "error marshalling params to JSON")
+		if paramBytes, ok := params.([]byte); ok {
+			jsonBody = paramBytes
+		} else {
+			jsonBody, err = json.Marshal(params)
+			if err != nil {
+				return nil, errors.Wrap(err, "error marshalling params to JSON")
+			}
 		}
 	} else {
 		jsonBody = nil
