@@ -65,8 +65,8 @@ type WorkerScriptResponse struct {
 //
 // API reference: https://api.cloudflare.com/#worker-script-delete-worker
 func (api *API) DeleteWorker(requestParams *WorkerRequestParams) (WorkerScriptResponse, error) {
-	// if organization ID is defined and ScriptName is provided we will treat as org request
-	if api.organizationID != "" && requestParams.ScriptName != "" {
+	// if ScriptName is provided we will treat as org request
+	if requestParams.ScriptName != "" {
 		return api.deleteWorkerWithName(requestParams.ScriptName)
 	}
 	uri := "/zones/" + requestParams.ZoneID + "/workers/script"
@@ -108,7 +108,7 @@ func (api *API) deleteWorkerWithName(scriptName string) (WorkerScriptResponse, e
 //
 // API reference: https://api.cloudflare.com/#worker-script-download-worker
 func (api *API) DownloadWorker(requestParams *WorkerRequestParams) (WorkerScriptResponse, error) {
-	if api.organizationID != "" && requestParams.ScriptName != "" {
+	if requestParams.ScriptName != "" {
 		return api.downloadWorkerWithName(requestParams.ScriptName)
 	}
 	uri := "/zones/" + requestParams.ZoneID + "/workers/script"
@@ -168,7 +168,7 @@ func (api *API) ListWorkerScripts() (WorkerListResponse, error) {
 //
 // API reference: https://api.cloudflare.com/#worker-script-upload-worker
 func (api *API) UploadWorker(requestParams *WorkerRequestParams, data string) (WorkerScriptResponse, error) {
-	if api.organizationID != "" && requestParams.ScriptName != "" {
+	if requestParams.ScriptName != "" {
 		return api.uploadWorkerWithName(requestParams.ScriptName, data)
 	}
 	uri := "/zones/" + requestParams.ZoneID + "/workers/script"

@@ -124,6 +124,14 @@ func TestWorkers_DeleteWorkerWithName(t *testing.T) {
 	}
 }
 
+func TestWorkers_DeleteWorkerWithNameErrorsWithoutOrgId(t *testing.T) {
+	setup()
+	defer teardown()
+
+	_, err := client.DeleteWorker(&WorkerRequestParams{ScriptName: "bar"})
+	assert.Error(t, err)
+}
+
 func TestWorkers_DownloadWorker(t *testing.T) {
 	setup()
 	defer teardown()
@@ -162,6 +170,14 @@ func TestWorkers_DownloadWorkerWithName(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, want.Script, res.Script)
 	}
+}
+
+func TestWorkers_DownloadWorkerWithNameErrorsWithoutOrgId(t *testing.T) {
+	setup()
+	defer teardown()
+
+	_, err := client.DownloadWorker(&WorkerRequestParams{ScriptName: "bar"})
+	assert.Error(t, err)
 }
 
 func TestWorkers_ListWorkerScripts(t *testing.T) {
@@ -247,6 +263,14 @@ func TestWorkers_UploadWorkerWithName(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
+}
+
+func TestWorkers_UploadWorkerWithNameErrorsWithoutOrgId(t *testing.T) {
+	setup()
+	defer teardown()
+
+	_, err := client.UploadWorker(&WorkerRequestParams{ScriptName: "bar"}, workerScript)
+	assert.Error(t, err)
 }
 
 func TestWorkers_CreateWorkerRoute(t *testing.T) {
