@@ -36,6 +36,16 @@ const (
     "errors": [],
     "messages": []
 }`
+	updateWorkerRouteEntResponse = `{
+    "result": {
+        "id": "e7a57d8746e74ae49c25994dadb421b1",
+        "pattern": "app3.example.com/*",
+        "script": "test_script_1"
+    },
+    "success": true,
+    "errors": [],
+    "messages": []
+}`
 	createWorkerRouteResponse = `{
     "result": {
         "id": "e7a57d8746e74ae49c25994dadb421b1"
@@ -55,6 +65,23 @@ const (
             "id": "f8b68e9857f85bf59c25994dadb421b1",
             "pattern": "app2.example.com/*",
             "enabled": false
+        }
+    ],
+    "success": true,
+    "errors": [],
+    "messages": []
+}`
+	listRouteEntResponseData = `{
+    "result": [
+        {
+            "id": "e7a57d8746e74ae49c25994dadb421b1",
+            "pattern": "app1.example.com/*",
+            "script": "test_script_1"
+        },
+        {
+            "id": "f8b68e9857f85bf59c25994dadb421b1",
+            "pattern": "app2.example.com/*",
+            "script": "test_script_2"
         }
     ],
     "success": true,
@@ -291,11 +318,49 @@ func TestWorkers_CreateWorkerRoute(t *testing.T) {
 
 }
 
+func TestWorkers_CreateWorkerRouteEnt(t *testing.T) {
+	setup(UsingOrganization("foo"))
+	defer teardown()
+
+	mux.HandleFunc("/zones/foo/workers/routes", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "POST", r.Method, "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application-json")
+		fmt.Fprintf(w, createWorkerRouteResponse)
+	})
+	route := WorkerRoute{Pattern: "app1.example.com/*", Enabled: true}
+	res, err := client.CreateWorkerRoute("foo", route)
+	want := WorkerRouteResponse{successResponse, WorkerRoute{ID: "e7a57d8746e74ae49c25994dadb421b1"}}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
+
+}
+
 func TestWorkers_DeleteWorkerRoute(t *testing.T) {
 	setup()
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/workers/filters/e7a57d8746e74ae49c25994dadb421b1", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "DELETE", r.Method, "Expected method 'DELETE', got %s", r.Method)
+		w.Header().Set("content-type", "application-json")
+		fmt.Fprintf(w, deleteWorkerRouteResponseData)
+	})
+	res, err := client.DeleteWorkerRoute("foo", "e7a57d8746e74ae49c25994dadb421b1")
+	want := WorkerRouteResponse{successResponse,
+		WorkerRoute{
+			ID: "e7a57d8746e74ae49c25994dadb421b1",
+		}}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
+
+}
+
+func TestWorkers_DeleteWorkerRouteEnt(t *testing.T) {
+	setup(UsingOrganization("foo"))
+	defer teardown()
+
+	mux.HandleFunc("/zones/foo/workers/routes/e7a57d8746e74ae49c25994dadb421b1", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "DELETE", r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application-json")
 		fmt.Fprintf(w, deleteWorkerRouteResponseData)
@@ -333,6 +398,28 @@ func TestWorkers_ListWorkerRoutes(t *testing.T) {
 	}
 }
 
+func TestWorkers_ListWorkerRoutesEnt(t *testing.T) {
+	setup(UsingOrganization("foo"))
+	defer teardown()
+
+	mux.HandleFunc("/zones/foo/workers/routes", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application-json")
+		fmt.Fprintf(w, listRouteEntResponseData)
+	})
+
+	res, err := client.ListWorkerRoutes("foo")
+	want := WorkerRoutesResponse{successResponse,
+		[]WorkerRoute{
+			{ID: "e7a57d8746e74ae49c25994dadb421b1", Pattern: "app1.example.com/*", Script: "test_script_1"},
+			{ID: "f8b68e9857f85bf59c25994dadb421b1", Pattern: "app2.example.com/*", Script: "test_script_2"},
+		},
+	}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
+}
+
 func TestWorkers_UpdateWorkerRoute(t *testing.T) {
 	setup()
 	defer teardown()
@@ -349,6 +436,29 @@ func TestWorkers_UpdateWorkerRoute(t *testing.T) {
 			ID:      "e7a57d8746e74ae49c25994dadb421b1",
 			Pattern: "app3.example.com/*",
 			Enabled: true,
+		}}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
+
+}
+
+func TestWorkers_UpdateWorkerRouteEnt(t *testing.T) {
+	setup(UsingOrganization("foo"))
+	defer teardown()
+
+	mux.HandleFunc("/zones/foo/workers/routes/e7a57d8746e74ae49c25994dadb421b1", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		w.Header().Set("content-type", "application-json")
+		fmt.Fprintf(w, updateWorkerRouteEntResponse)
+	})
+	route := WorkerRoute{Pattern: "app3.example.com/*", Script: "test_script_1"}
+	res, err := client.UpdateWorkerRoute("foo", "e7a57d8746e74ae49c25994dadb421b1", route)
+	want := WorkerRouteResponse{successResponse,
+		WorkerRoute{
+			ID:      "e7a57d8746e74ae49c25994dadb421b1",
+			Pattern: "app3.example.com/*",
+			Script:  "test_script_1",
 		}}
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)

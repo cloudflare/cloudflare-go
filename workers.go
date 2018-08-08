@@ -207,11 +207,20 @@ func (api *API) uploadWorkerWithName(scriptName string, data string) (WorkerScri
 	return r, nil
 }
 
+func getRoutesPathComponent(api *API) string {
+	if api.organizationID == "" {
+		return "filters"
+	} else {
+		return "routes"
+	}
+}
+
 // CreateWorkerRoute creates worker route for a zone
 //
 // API reference: https://api.cloudflare.com/#worker-filters-create-filter
 func (api *API) CreateWorkerRoute(zoneID string, route WorkerRoute) (WorkerRouteResponse, error) {
-	uri := "/zones/" + zoneID + "/workers/filters"
+	pathComponent := getRoutesPathComponent(api)
+	uri := "/zones/" + zoneID + "/workers/" + pathComponent
 	res, err := api.makeRequest("POST", uri, route)
 	if err != nil {
 		return WorkerRouteResponse{}, errors.Wrap(err, errMakeRequestError)
@@ -228,7 +237,8 @@ func (api *API) CreateWorkerRoute(zoneID string, route WorkerRoute) (WorkerRoute
 //
 // API reference: https://api.cloudflare.com/#worker-filters-delete-filter
 func (api *API) DeleteWorkerRoute(zoneID string, routeID string) (WorkerRouteResponse, error) {
-	uri := "/zones/" + zoneID + "/workers/filters/" + routeID
+	pathComponent := getRoutesPathComponent(api)
+	uri := "/zones/" + zoneID + "/workers/" + pathComponent + "/" + routeID
 	res, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
 		return WorkerRouteResponse{}, errors.Wrap(err, errMakeRequestError)
@@ -245,7 +255,8 @@ func (api *API) DeleteWorkerRoute(zoneID string, routeID string) (WorkerRouteRes
 //
 // API reference: https://api.cloudflare.com/#worker-filters-list-filters
 func (api *API) ListWorkerRoutes(zoneID string) (WorkerRoutesResponse, error) {
-	uri := "/zones/" + zoneID + "/workers/filters"
+	pathComponent := getRoutesPathComponent(api)
+	uri := "/zones/" + zoneID + "/workers/" + pathComponent
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
 		return WorkerRoutesResponse{}, errors.Wrap(err, errMakeRequestError)
@@ -262,7 +273,8 @@ func (api *API) ListWorkerRoutes(zoneID string) (WorkerRoutesResponse, error) {
 //
 // API reference: https://api.cloudflare.com/#worker-filters-update-filter
 func (api *API) UpdateWorkerRoute(zoneID string, routeID string, route WorkerRoute) (WorkerRouteResponse, error) {
-	uri := "/zones/" + zoneID + "/workers/filters/" + routeID
+	pathComponent := getRoutesPathComponent(api)
+	uri := "/zones/" + zoneID + "/workers/" + pathComponent + "/" + routeID
 	res, err := api.makeRequest("PUT", uri, route)
 	if err != nil {
 		return WorkerRouteResponse{}, errors.Wrap(err, errMakeRequestError)
