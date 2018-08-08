@@ -210,9 +210,8 @@ func (api *API) uploadWorkerWithName(scriptName string, data string) (WorkerScri
 func getRoutesPathComponent(api *API) string {
 	if api.organizationID == "" {
 		return "filters"
-	} else {
-		return "routes"
 	}
+	return "routes"
 }
 
 // CreateWorkerRoute creates worker route for a zone
