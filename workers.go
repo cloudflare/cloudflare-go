@@ -65,8 +65,8 @@ type WorkerScriptResponse struct {
 //
 // API reference: https://api.cloudflare.com/#worker-script-delete-worker
 func (api *API) DeleteWorker(requestParams *WorkerRequestParams) (WorkerScriptResponse, error) {
-	// if organization ID is defined and ScriptName is provided we will treat as org request
-	if api.organizationID != "" && requestParams.ScriptName != "" {
+	// if ScriptName is provided we will treat as org request
+	if requestParams.ScriptName != "" {
 		return api.deleteWorkerWithName(requestParams.ScriptName)
 	}
 	uri := "/zones/" + requestParams.ZoneID + "/workers/script"
@@ -108,7 +108,7 @@ func (api *API) deleteWorkerWithName(scriptName string) (WorkerScriptResponse, e
 //
 // API reference: https://api.cloudflare.com/#worker-script-download-worker
 func (api *API) DownloadWorker(requestParams *WorkerRequestParams) (WorkerScriptResponse, error) {
-	if api.organizationID != "" && requestParams.ScriptName != "" {
+	if requestParams.ScriptName != "" {
 		return api.downloadWorkerWithName(requestParams.ScriptName)
 	}
 	uri := "/zones/" + requestParams.ZoneID + "/workers/script"
@@ -168,7 +168,7 @@ func (api *API) ListWorkerScripts() (WorkerListResponse, error) {
 //
 // API reference: https://api.cloudflare.com/#worker-script-upload-worker
 func (api *API) UploadWorker(requestParams *WorkerRequestParams, data string) (WorkerScriptResponse, error) {
-	if api.organizationID != "" && requestParams.ScriptName != "" {
+	if requestParams.ScriptName != "" {
 		return api.uploadWorkerWithName(requestParams.ScriptName, data)
 	}
 	uri := "/zones/" + requestParams.ZoneID + "/workers/script"
@@ -207,11 +207,19 @@ func (api *API) uploadWorkerWithName(scriptName string, data string) (WorkerScri
 	return r, nil
 }
 
+func getRoutesPathComponent(api *API) string {
+	if api.organizationID == "" {
+		return "filters"
+	}
+	return "routes"
+}
+
 // CreateWorkerRoute creates worker route for a zone
 //
 // API reference: https://api.cloudflare.com/#worker-filters-create-filter
 func (api *API) CreateWorkerRoute(zoneID string, route WorkerRoute) (WorkerRouteResponse, error) {
-	uri := "/zones/" + zoneID + "/workers/filters"
+	pathComponent := getRoutesPathComponent(api)
+	uri := "/zones/" + zoneID + "/workers/" + pathComponent
 	res, err := api.makeRequest("POST", uri, route)
 	if err != nil {
 		return WorkerRouteResponse{}, errors.Wrap(err, errMakeRequestError)
@@ -228,7 +236,8 @@ func (api *API) CreateWorkerRoute(zoneID string, route WorkerRoute) (WorkerRoute
 //
 // API reference: https://api.cloudflare.com/#worker-filters-delete-filter
 func (api *API) DeleteWorkerRoute(zoneID string, routeID string) (WorkerRouteResponse, error) {
-	uri := "/zones/" + zoneID + "/workers/filters/" + routeID
+	pathComponent := getRoutesPathComponent(api)
+	uri := "/zones/" + zoneID + "/workers/" + pathComponent + "/" + routeID
 	res, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
 		return WorkerRouteResponse{}, errors.Wrap(err, errMakeRequestError)
@@ -245,7 +254,8 @@ func (api *API) DeleteWorkerRoute(zoneID string, routeID string) (WorkerRouteRes
 //
 // API reference: https://api.cloudflare.com/#worker-filters-list-filters
 func (api *API) ListWorkerRoutes(zoneID string) (WorkerRoutesResponse, error) {
-	uri := "/zones/" + zoneID + "/workers/filters"
+	pathComponent := getRoutesPathComponent(api)
+	uri := "/zones/" + zoneID + "/workers/" + pathComponent
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
 		return WorkerRoutesResponse{}, errors.Wrap(err, errMakeRequestError)
@@ -262,7 +272,8 @@ func (api *API) ListWorkerRoutes(zoneID string) (WorkerRoutesResponse, error) {
 //
 // API reference: https://api.cloudflare.com/#worker-filters-update-filter
 func (api *API) UpdateWorkerRoute(zoneID string, routeID string, route WorkerRoute) (WorkerRouteResponse, error) {
-	uri := "/zones/" + zoneID + "/workers/filters/" + routeID
+	pathComponent := getRoutesPathComponent(api)
+	uri := "/zones/" + zoneID + "/workers/" + pathComponent + "/" + routeID
 	res, err := api.makeRequest("PUT", uri, route)
 	if err != nil {
 		return WorkerRouteResponse{}, errors.Wrap(err, errMakeRequestError)
