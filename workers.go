@@ -2,8 +2,9 @@ package cloudflare
 
 import (
 	"encoding/json"
-	"github.com/pkg/errors"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
 // WorkerRequestParams provides parameters for worker requests for both enterprise and standard requests
