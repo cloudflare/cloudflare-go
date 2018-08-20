@@ -10,18 +10,18 @@ import (
 
 // SpectrumApplication defines a single Spectrum Application.
 type SpectrumApplication struct {
-	ID            string                       `json:"id"`
-	Protocol      string                       `json:"protocol"`
-	IPv4          bool                         `json:"ipv4"`
-	DNS           SpectrumApplicationDNS       `json:"dns"`
-	OriginDirect  []string                     `json:"origin_direct"`
-	OriginPort    int                          `json:"origin_port"`
-	OriginDNS     SpectrumApplicationOriginDNS `json:"origin_dns"`
-	IPFirewall    bool                         `json:"ip_firewall"`
-	ProxyProtocol bool                         `json:"proxy_protocol"`
-	TLS           string                       `json:"tls"`
-	CreatedOn     *time.Time                   `json:"created_on"`
-	ModifiedOn    *time.Time                   `json:"modified_on"`
+	ID            string                        `json:"id,omitempty"`
+	Protocol      string                        `json:"protocol,omitempty"`
+	IPv4          bool                          `json:"ipv4,omitempty"`
+	DNS           SpectrumApplicationDNS        `json:"dns,omitempty"`
+	OriginDirect  []string                      `json:"origin_direct,omitempty"`
+	OriginPort    int                           `json:"origin_port,omitempty"`
+	OriginDNS     *SpectrumApplicationOriginDNS `json:"origin_dns,omitempty"`
+	IPFirewall    bool                          `json:"ip_firewall,omitempty"`
+	ProxyProtocol bool                          `json:"proxy_protocol,omitempty"`
+	TLS           string                        `json:"tls,omitempty"`
+	CreatedOn     *time.Time                    `json:"created_on,omitempty"`
+	ModifiedOn    *time.Time                    `json:"modified_on,omitempty"`
 }
 
 // SpectrumApplicationDNS holds the external DNS configuration for a Spectrum
