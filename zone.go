@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/url"
@@ -87,6 +88,7 @@ type ZoneResponse struct {
 type ZonesResponse struct {
 	Response
 	Result []Zone `json:"result"`
+	ResultInfo
 }
 
 // ZoneIDResponse represents the response from the Zone endpoint, containing only a zone ID.
@@ -332,6 +334,28 @@ func (api *API) ListZones(z ...string) ([]Zone, error) {
 	}
 
 	return zones, nil
+}
+
+// ListZonesContext lists zones on an account. Optionally takes a list of ReqOptions.
+func (api *API) ListZonesContext(ctx context.Context, opts ...ReqOption) (r ZonesResponse, err error) {
+	var res []byte
+	opt := reqOption{
+		params: url.Values{},
+	}
+	for _, of := range opts {
+		of(&opt)
+	}
+
+	res, err = api.makeRequestContext(ctx, "GET", "/zones?"+opt.params.Encode(), nil)
+	if err != nil {
+		return ZonesResponse{}, errors.Wrap(err, errMakeRequestError)
+	}
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return ZonesResponse{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return r, nil
 }
 
 // ZoneDetails fetches information about a zone.
