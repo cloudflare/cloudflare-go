@@ -49,7 +49,10 @@ func TestCustomHostname_CreateCustomHostname(t *testing.T) {
       "method": "cname",
       "type": "dv",
       "cname_target": "dcv.digicert.com",
-      "cname_name": "810b7d5f01154524b961ba0cd578acc2.app.example.com"
+      "cname_name": "810b7d5f01154524b961ba0cd578acc2.app.example.com",
+      "settings": {
+        "http2": "on"
+      }
     }
   }
 }`)
@@ -67,6 +70,9 @@ func TestCustomHostname_CreateCustomHostname(t *testing.T) {
 				Status:      "pending_validation",
 				CnameTarget: "dcv.digicert.com",
 				CnameName:   "810b7d5f01154524b961ba0cd578acc2.app.example.com",
+				Settings: CustomHostnameSSLSettings{
+					HTTP2: "on",
+				},
 			},
 		},
 		Response: Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}},
@@ -150,7 +156,12 @@ func TestCustomHostname_CustomHostname(t *testing.T) {
     "ssl": {
       "type": "dv",
       "method": "http",
-      "status": "active"
+      "status": "active",
+      "settings": {
+        "ciphers": ["ECDHE-RSA-AES128-GCM-SHA256","AES128-SHA"],
+        "http2": "on",
+        "min_tls_version": "1.2"
+      }
     },
     "custom_metadata": {
       "origin": "a.custom.origin"
@@ -168,6 +179,11 @@ func TestCustomHostname_CustomHostname(t *testing.T) {
 			Status: "active",
 			Method: "http",
 			Type:   "dv",
+			Settings: CustomHostnameSSLSettings{
+				HTTP2:         "on",
+				MinTLSVersion: "1.2",
+				Ciphers:       []string{"ECDHE-RSA-AES128-GCM-SHA256", "AES128-SHA"},
+			},
 		},
 		CustomMetadata: CustomMetadata{"origin": "a.custom.origin"},
 	}
