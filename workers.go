@@ -113,7 +113,6 @@ func (api *API) DownloadWorker(requestParams *WorkerRequestParams) (WorkerScript
 		return api.downloadWorkerWithName(requestParams.ScriptName)
 	}
 	uri := "/zones/" + requestParams.ZoneID + "/workers/script"
-	api.headers.Add("Content-Type", "application/javascript")
 	res, err := api.makeRequest("GET", uri, nil)
 	var r WorkerScriptResponse
 	if err != nil {
@@ -133,7 +132,6 @@ func (api *API) downloadWorkerWithName(scriptName string) (WorkerScriptResponse,
 		return WorkerScriptResponse{}, errors.New("organization ID required for enterprise only request")
 	}
 	uri := "/accounts/" + api.organizationID + "/workers/scripts/" + scriptName
-	api.headers.Add("Content-Type", "application/javascript")
 	res, err := api.makeRequest("GET", uri, nil)
 	var r WorkerScriptResponse
 	if err != nil {
