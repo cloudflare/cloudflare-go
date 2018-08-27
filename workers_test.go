@@ -246,6 +246,8 @@ func TestWorkers_UploadWorker(t *testing.T) {
 
 	mux.HandleFunc("/zones/foo/workers/script", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		contentTypeHeader := r.Header.Get("content-type")
+		assert.Equal(t, "application/javascript", contentTypeHeader, "Expected content-type request header to be 'application/javascript', got %s", contentTypeHeader)
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, uploadWorkerResponseData)
 	})
@@ -273,6 +275,8 @@ func TestWorkers_UploadWorkerWithName(t *testing.T) {
 
 	mux.HandleFunc("/accounts/foo/workers/scripts/bar", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		contentTypeHeader := r.Header.Get("content-type")
+		assert.Equal(t, "application/javascript", contentTypeHeader, "Expected content-type request header to be 'application/javascript', got %s", contentTypeHeader)
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, uploadWorkerResponseData)
 	})

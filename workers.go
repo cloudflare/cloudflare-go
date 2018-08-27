@@ -2,6 +2,7 @@ package cloudflare
 
 import (
 	"encoding/json"
+	"net/http"
 	"time"
 
 	"github.com/pkg/errors"
@@ -171,8 +172,9 @@ func (api *API) UploadWorker(requestParams *WorkerRequestParams, data string) (W
 		return api.uploadWorkerWithName(requestParams.ScriptName, data)
 	}
 	uri := "/zones/" + requestParams.ZoneID + "/workers/script"
-	api.headers.Add("Content-Type", "application/javascript")
-	res, err := api.makeRequest("PUT", uri, []byte(data))
+	headers := make(http.Header)
+	headers.Set("Content-Type", "application/javascript")
+	res, err := api.makeRequestWithHeaders("PUT", uri, []byte(data), headers)
 	var r WorkerScriptResponse
 	if err != nil {
 		return r, errors.Wrap(err, errMakeRequestError)
@@ -193,8 +195,9 @@ func (api *API) uploadWorkerWithName(scriptName string, data string) (WorkerScri
 		return WorkerScriptResponse{}, errors.New("organization ID required for enterprise only request")
 	}
 	uri := "/accounts/" + api.OrganizationID + "/workers/scripts/" + scriptName
-	api.headers.Add("Content-Type", "application/javascript")
-	res, err := api.makeRequest("PUT", uri, []byte(data))
+	headers := make(http.Header)
+	headers.Set("Content-Type", "application/javascript")
+	res, err := api.makeRequestWithHeaders("PUT", uri, []byte(data), headers)
 	var r WorkerScriptResponse
 	if err != nil {
 		return r, errors.Wrap(err, errMakeRequestError)
