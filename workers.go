@@ -20,7 +20,7 @@ type WorkerRoute struct {
 	ID      string `json:"id,omitempty"`
 	Pattern string `json:"pattern"`
 	Enabled bool   `json:"enabled"`
-	Script  string `json:"script"`
+	Script  string `json:"script,omitempty"`
 }
 
 // WorkerRoutesResponse embeds Response struct and slice of WorkerRoutes
