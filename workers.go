@@ -267,6 +267,15 @@ func (api *API) ListWorkerRoutes(zoneID string) (WorkerRoutesResponse, error) {
 	if err != nil {
 		return WorkerRoutesResponse{}, errors.Wrap(err, errUnmarshalError)
 	}
+	for i := range r.Routes {
+		route := &r.Routes[i]
+		// The Enabled flag will not be set in the multi-script API response
+		// so we manually set it to true if the script name is not empty
+		// in case any multi-script customers rely on the Enabled field
+		if route.Script != "" {
+			route.Enabled = true
+		}
+	}
 	return r, nil
 }
 
