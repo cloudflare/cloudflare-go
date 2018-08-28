@@ -89,10 +89,10 @@ func (api *API) DeleteWorker(requestParams *WorkerRequestParams) (WorkerScriptRe
 //
 // API reference: https://api.cloudflare.com/#worker-script-delete-worker
 func (api *API) deleteWorkerWithName(scriptName string) (WorkerScriptResponse, error) {
-	if api.organizationID == "" {
+	if api.OrganizationID == "" {
 		return WorkerScriptResponse{}, errors.New("organization ID required for enterprise only request")
 	}
-	uri := "/accounts/" + api.organizationID + "/workers/scripts/" + scriptName
+	uri := "/accounts/" + api.OrganizationID + "/workers/scripts/" + scriptName
 	res, err := api.makeRequest("DELETE", uri, nil)
 	var r WorkerScriptResponse
 	if err != nil {
@@ -128,10 +128,10 @@ func (api *API) DownloadWorker(requestParams *WorkerRequestParams) (WorkerScript
 //
 // API reference: https://api.cloudflare.com/#worker-script-download-worker
 func (api *API) downloadWorkerWithName(scriptName string) (WorkerScriptResponse, error) {
-	if api.organizationID == "" {
+	if api.OrganizationID == "" {
 		return WorkerScriptResponse{}, errors.New("organization ID required for enterprise only request")
 	}
-	uri := "/accounts/" + api.organizationID + "/workers/scripts/" + scriptName
+	uri := "/accounts/" + api.OrganizationID + "/workers/scripts/" + scriptName
 	res, err := api.makeRequest("GET", uri, nil)
 	var r WorkerScriptResponse
 	if err != nil {
@@ -147,10 +147,10 @@ func (api *API) downloadWorkerWithName(scriptName string) (WorkerScriptResponse,
 //
 // API reference: https://developers.cloudflare.com/workers/api/config-api-for-enterprise/
 func (api *API) ListWorkerScripts() (WorkerListResponse, error) {
-	if api.organizationID == "" {
+	if api.OrganizationID == "" {
 		return WorkerListResponse{}, errors.New("organization ID required for enterprise only request")
 	}
-	uri := "/accounts/" + api.organizationID + "/workers/scripts"
+	uri := "/accounts/" + api.OrganizationID + "/workers/scripts"
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
 		return WorkerListResponse{}, errors.Wrap(err, errMakeRequestError)
@@ -189,10 +189,10 @@ func (api *API) UploadWorker(requestParams *WorkerRequestParams, data string) (W
 //
 // API reference: https://api.cloudflare.com/#worker-script-upload-worker
 func (api *API) uploadWorkerWithName(scriptName string, data string) (WorkerScriptResponse, error) {
-	if api.organizationID == "" {
+	if api.OrganizationID == "" {
 		return WorkerScriptResponse{}, errors.New("organization ID required for enterprise only request")
 	}
-	uri := "/accounts/" + api.organizationID + "/workers/scripts/" + scriptName
+	uri := "/accounts/" + api.OrganizationID + "/workers/scripts/" + scriptName
 	api.headers.Add("Content-Type", "application/javascript")
 	res, err := api.makeRequest("PUT", uri, []byte(data))
 	var r WorkerScriptResponse
@@ -207,7 +207,7 @@ func (api *API) uploadWorkerWithName(scriptName string, data string) (WorkerScri
 }
 
 func getRoutesPathComponent(api *API) string {
-	if api.organizationID == "" {
+	if api.OrganizationID == "" {
 		return "filters"
 	}
 	return "routes"

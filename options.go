@@ -32,7 +32,7 @@ func Headers(headers http.Header) Option {
 // Railguns) to an organization instead.
 func UsingOrganization(orgID string) Option {
 	return func(api *API) error {
-		api.organizationID = orgID
+		api.OrganizationID = orgID
 		return nil
 	}
 }

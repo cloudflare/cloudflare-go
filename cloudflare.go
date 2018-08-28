@@ -32,7 +32,7 @@ type API struct {
 	APIEmail          string
 	APIUserServiceKey string
 	BaseURL           string
-	organizationID    string
+	OrganizationID    string
 	headers           http.Header
 	httpClient        *http.Client
 	authType          int
@@ -239,8 +239,8 @@ func (api *API) request(method, uri string, reqBody io.Reader, authType int) (*h
 // accountBase is the base URL for endpoints referring to the current user. It exists as a
 // parameter because it is not consistent across APIs.
 func (api *API) userBaseURL(accountBase string) string {
-	if api.organizationID != "" {
-		return "/accounts/" + api.organizationID
+	if api.OrganizationID != "" {
+		return "/accounts/" + api.OrganizationID
 	}
 	return accountBase
 }
