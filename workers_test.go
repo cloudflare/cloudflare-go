@@ -86,7 +86,7 @@ const (
         },
         {
             "id": "2b5bf4240cd34c77852fac70b1bf745a",
-            "pattern": "app2.example.com/*"
+            "pattern": "app3.example.com/*"
         }
     ],
     "success": true,
@@ -422,7 +422,7 @@ func TestWorkers_ListWorkerRoutesEnt(t *testing.T) {
 		[]WorkerRoute{
 			{ID: "e7a57d8746e74ae49c25994dadb421b1", Pattern: "app1.example.com/*", Script: "test_script_1", Enabled: true},
 			{ID: "f8b68e9857f85bf59c25994dadb421b1", Pattern: "app2.example.com/*", Script: "test_script_2", Enabled: true},
-			{ID: "2b5bf4240cd34c77852fac70b1bf745a", Pattern: "app2.example.com/*", Script: "", Enabled: false},
+			{ID: "2b5bf4240cd34c77852fac70b1bf745a", Pattern: "app3.example.com/*", Script: "", Enabled: false},
 		},
 	}
 	if assert.NoError(t, err) {
