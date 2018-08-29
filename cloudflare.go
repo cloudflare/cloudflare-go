@@ -255,8 +255,8 @@ func (api *API) userBaseURL(accountBase string) string {
 	return accountBase
 }
 
-// cloneHeader returns a shallow copy of the header.
-// copied from https://godoc.org/github.com/golang/gddo/httputil/header#Copy
+// copyHeader copies all headers for `source` and sets them on `target`.
+// based on https://godoc.org/github.com/golang/gddo/httputil/header#Copy
 func copyHeader(target, source http.Header) {
 	for k, vs := range source {
 		target[k] = vs
