@@ -83,6 +83,10 @@ const (
             "id": "f8b68e9857f85bf59c25994dadb421b1",
             "pattern": "app2.example.com/*",
             "script": "test_script_2"
+        },
+        {
+            "id": "2b5bf4240cd34c77852fac70b1bf745a",
+            "pattern": "app3.example.com/*"
         }
     ],
     "success": true,
@@ -246,6 +250,8 @@ func TestWorkers_UploadWorker(t *testing.T) {
 
 	mux.HandleFunc("/zones/foo/workers/script", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		contentTypeHeader := r.Header.Get("content-type")
+		assert.Equal(t, "application/javascript", contentTypeHeader, "Expected content-type request header to be 'application/javascript', got %s", contentTypeHeader)
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, uploadWorkerResponseData)
 	})
@@ -273,6 +279,8 @@ func TestWorkers_UploadWorkerWithName(t *testing.T) {
 
 	mux.HandleFunc("/accounts/foo/workers/scripts/bar", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		contentTypeHeader := r.Header.Get("content-type")
+		assert.Equal(t, "application/javascript", contentTypeHeader, "Expected content-type request header to be 'application/javascript', got %s", contentTypeHeader)
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, uploadWorkerResponseData)
 	})
@@ -412,8 +420,9 @@ func TestWorkers_ListWorkerRoutesEnt(t *testing.T) {
 	res, err := client.ListWorkerRoutes("foo")
 	want := WorkerRoutesResponse{successResponse,
 		[]WorkerRoute{
-			{ID: "e7a57d8746e74ae49c25994dadb421b1", Pattern: "app1.example.com/*", Script: "test_script_1"},
-			{ID: "f8b68e9857f85bf59c25994dadb421b1", Pattern: "app2.example.com/*", Script: "test_script_2"},
+			{ID: "e7a57d8746e74ae49c25994dadb421b1", Pattern: "app1.example.com/*", Script: "test_script_1", Enabled: true},
+			{ID: "f8b68e9857f85bf59c25994dadb421b1", Pattern: "app2.example.com/*", Script: "test_script_2", Enabled: true},
+			{ID: "2b5bf4240cd34c77852fac70b1bf745a", Pattern: "app3.example.com/*", Script: "", Enabled: false},
 		},
 	}
 	if assert.NoError(t, err) {

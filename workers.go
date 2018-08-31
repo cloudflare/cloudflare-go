@@ -2,6 +2,7 @@ package cloudflare
 
 import (
 	"encoding/json"
+	"net/http"
 	"time"
 
 	"github.com/pkg/errors"
@@ -20,7 +21,7 @@ type WorkerRoute struct {
 	ID      string `json:"id,omitempty"`
 	Pattern string `json:"pattern"`
 	Enabled bool   `json:"enabled"`
-	Script  string `json:"script"`
+	Script  string `json:"script,omitempty"`
 }
 
 // WorkerRoutesResponse embeds Response struct and slice of WorkerRoutes
@@ -171,8 +172,9 @@ func (api *API) UploadWorker(requestParams *WorkerRequestParams, data string) (W
 		return api.uploadWorkerWithName(requestParams.ScriptName, data)
 	}
 	uri := "/zones/" + requestParams.ZoneID + "/workers/script"
-	api.headers.Add("Content-Type", "application/javascript")
-	res, err := api.makeRequest("PUT", uri, []byte(data))
+	headers := make(http.Header)
+	headers.Set("Content-Type", "application/javascript")
+	res, err := api.makeRequestWithHeaders("PUT", uri, []byte(data), headers)
 	var r WorkerScriptResponse
 	if err != nil {
 		return r, errors.Wrap(err, errMakeRequestError)
@@ -193,8 +195,9 @@ func (api *API) uploadWorkerWithName(scriptName string, data string) (WorkerScri
 		return WorkerScriptResponse{}, errors.New("organization ID required for enterprise only request")
 	}
 	uri := "/accounts/" + api.OrganizationID + "/workers/scripts/" + scriptName
-	api.headers.Add("Content-Type", "application/javascript")
-	res, err := api.makeRequest("PUT", uri, []byte(data))
+	headers := make(http.Header)
+	headers.Set("Content-Type", "application/javascript")
+	res, err := api.makeRequestWithHeaders("PUT", uri, []byte(data), headers)
 	var r WorkerScriptResponse
 	if err != nil {
 		return r, errors.Wrap(err, errMakeRequestError)
@@ -263,6 +266,15 @@ func (api *API) ListWorkerRoutes(zoneID string) (WorkerRoutesResponse, error) {
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return WorkerRoutesResponse{}, errors.Wrap(err, errUnmarshalError)
+	}
+	for i := range r.Routes {
+		route := &r.Routes[i]
+		// The Enabled flag will not be set in the multi-script API response
+		// so we manually set it to true if the script name is not empty
+		// in case any multi-script customers rely on the Enabled field
+		if route.Script != "" {
+			route.Enabled = true
+		}
 	}
 	return r, nil
 }
