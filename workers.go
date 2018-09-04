@@ -209,18 +209,20 @@ func (api *API) uploadWorkerWithName(scriptName string, data string) (WorkerScri
 	return r, nil
 }
 
-func getRoutesPathComponent(api *API) string {
-	if api.OrganizationID == "" {
-		return "filters"
-	}
-	return "routes"
-}
-
 // CreateWorkerRoute creates worker route for a zone
 //
 // API reference: https://api.cloudflare.com/#worker-filters-create-filter
 func (api *API) CreateWorkerRoute(zoneID string, route WorkerRoute) (WorkerRouteResponse, error) {
-	pathComponent := getRoutesPathComponent(api)
+	// Check whether a script name is defined in order to determine whether
+	// to use the single-script or multi-script endpoint.
+	pathComponent := "filters"
+	if route.Script != "" {
+		if api.OrganizationID == "" {
+			return WorkerRouteResponse{}, errors.New("organization ID required for enterprise only request")
+		}
+		pathComponent = "routes"
+	}
+
 	uri := "/zones/" + zoneID + "/workers/" + pathComponent
 	res, err := api.makeRequest("POST", uri, route)
 	if err != nil {
@@ -238,8 +240,9 @@ func (api *API) CreateWorkerRoute(zoneID string, route WorkerRoute) (WorkerRoute
 //
 // API reference: https://api.cloudflare.com/#worker-filters-delete-filter
 func (api *API) DeleteWorkerRoute(zoneID string, routeID string) (WorkerRouteResponse, error) {
-	pathComponent := getRoutesPathComponent(api)
-	uri := "/zones/" + zoneID + "/workers/" + pathComponent + "/" + routeID
+	// For deleting a route, it doesn't matter whether we use the
+	// single-script or multi-script endpoint
+	uri := "/zones/" + zoneID + "/workers/filters/" + routeID
 	res, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
 		return WorkerRouteResponse{}, errors.Wrap(err, errMakeRequestError)
@@ -256,7 +259,10 @@ func (api *API) DeleteWorkerRoute(zoneID string, routeID string) (WorkerRouteRes
 //
 // API reference: https://api.cloudflare.com/#worker-filters-list-filters
 func (api *API) ListWorkerRoutes(zoneID string) (WorkerRoutesResponse, error) {
-	pathComponent := getRoutesPathComponent(api)
+	pathComponent := "filters"
+	if api.OrganizationID != "" {
+		pathComponent = "routes"
+	}
 	uri := "/zones/" + zoneID + "/workers/" + pathComponent
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
@@ -283,7 +289,15 @@ func (api *API) ListWorkerRoutes(zoneID string) (WorkerRoutesResponse, error) {
 //
 // API reference: https://api.cloudflare.com/#worker-filters-update-filter
 func (api *API) UpdateWorkerRoute(zoneID string, routeID string, route WorkerRoute) (WorkerRouteResponse, error) {
-	pathComponent := getRoutesPathComponent(api)
+	// Check whether a script name is defined in order to determine whether
+	// to use the single-script or multi-script endpoint.
+	pathComponent := "filters"
+	if route.Script != "" {
+		if api.OrganizationID == "" {
+			return WorkerRouteResponse{}, errors.New("organization ID required for enterprise only request")
+		}
+		pathComponent = "routes"
+	}
 	uri := "/zones/" + zoneID + "/workers/" + pathComponent + "/" + routeID
 	res, err := api.makeRequest("PUT", uri, route)
 	if err != nil {
