@@ -1,0 +1,74 @@
+package cloudflare
+
+import (
+	"encoding/json"
+	"fmt"
+	"net/url"
+	"strconv"
+	"strings"
+	"time"
+
+	"github.com/pkg/errors"
+)
+
+// FirewallRule is the struct of the firewall rule.
+type FirewallRule struct {
+	ID          string      `json:"id,omitempty"`
+	Paused      bool        `json:"paused"`
+	Description string      `json:"description"`
+	Action      string      `json:"action"`
+	Priority    interface{} `json:"priority"`
+	Filter      Filter      `json:"filter"`
+	CreatedOn   time.Time   `json:"created_on,omitempty"`
+	ModifiedOn  time.Time   `json:"modified_on,omitempty"`
+}
+
+// FirewallRulesDetailResponse is the API response for the firewall
+// rules.
+type FirewallRulesDetailResponse struct {
+	Result     []FirewallRule `json:"result"`
+	ResultInfo `json:"result_info"`
+	Response
+}
+
+// FirewallRuleResponse is the API response that is returned
+// for requesting a single firewall rule on a zone.
+type FirewallRuleResponse struct {
+	Result     FirewallRule `json:"result"`
+	ResultInfo `json:"result_info"`
+	Response
+}
+
+// FirewallRules returns all firewall rules.
+//
+// API reference: TBC
+func (api *API) FirewallRules(zoneID string, pageOpts PaginationOptions) ([]FirewallRule, error) {
+	uri := fmt.Sprintf("/zones/%s/firewall/rules", zoneID)
+	v := url.Values{}
+
+	if pageOpts.PerPage > 0 {
+		v.Set("per_page", strconv.Itoa(pageOpts.PerPage))
+	}
+
+	if pageOpts.Page > 0 {
+		v.Set("page", strconv.Itoa(pageOpts.Page))
+	}
+
+	if len(v) > 0 {
+		uri = uri + "?" + v.Encode()
+	}
+
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return []FirewallRule{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var firewallDetailResponse FirewallRulesDetailResponse
+	err = json.Unmarshal(res, &firewallDetailResponse)
+	if err != nil {
+		return []FirewallRule{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return firewallDetailResponse.Result, nil
+}
+
