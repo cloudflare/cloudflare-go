@@ -76,3 +76,37 @@ func (api *API) Filter(zoneID, filterID string) (Filter, error) {
 
 	return filterResponse.Result, nil
 }
+
+// Filters returns all filters for a zone.
+//
+// API reference: TBC
+func (api *API) Filters(zoneID string, pageOpts PaginationOptions) ([]Filter, error) {
+	uri := "/zones/" + zoneID + "/filters"
+	v := url.Values{}
+
+	if pageOpts.PerPage > 0 {
+		v.Set("per_page", strconv.Itoa(pageOpts.PerPage))
+	}
+
+	if pageOpts.Page > 0 {
+		v.Set("page", strconv.Itoa(pageOpts.Page))
+	}
+
+	if len(v) > 0 {
+		uri = uri + "?" + v.Encode()
+	}
+
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return []Filter{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var filtersResponse FiltersDetailResponse
+	err = json.Unmarshal(res, &filtersResponse)
+	if err != nil {
+		return []Filter{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return filtersResponse.Result, nil
+}
+
