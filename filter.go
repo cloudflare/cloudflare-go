@@ -213,3 +213,28 @@ func (api *API) DeleteFilters(zoneID string, filterIDs []string) error {
 	return nil
 }
 
+// ValidateFilterExpression checks correctness of a filter expression.
+//
+// API reference: TBC
+func (api *API) ValidateFilterExpression(expression string) error {
+	uri := fmt.Sprintf("/filters/validate-expr")
+	expressionPayload := FilterValidateExpression{Expression: expression}
+
+	_, err := api.makeRequest("POST", uri, expressionPayload)
+	if err != nil {
+		var filterValidationResponse FilterValidateExpressionResponse
+
+		jsonErr := json.Unmarshal([]byte(err.Error()), &filterValidationResponse)
+		if jsonErr != nil {
+			return errors.Wrap(jsonErr, errUnmarshalError)
+		}
+
+		if filterValidationResponse.Success != true {
+			// Unsure why but the API returns `errors` as an array but it only
+			// ever shows the issue with one problem at a time ¯\_(ツ)_/¯
+			return errors.Errorf(filterValidationResponse.Errors[0].Message)
+		}
+	}
+
+	return nil
+}
