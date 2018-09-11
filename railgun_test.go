@@ -227,14 +227,14 @@ func TestRailgunZones(t *testing.T) {
 	modifiedOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	want := []Zone{
 		{
-			ID:                "023e105f4ecef8ad9ca31a8372d0c353",
-			Name:              "example.com",
-			DevMode:           7200,
-			OriginalNS:        []string{"ns1.originaldnshost.com", "ns2.originaldnshost.com"},
-			OriginalRegistrar: "GoDaddy",
-			OriginalDNSHost:   "NameCheap",
-			CreatedOn:         createdOn,
-			ModifiedOn:        modifiedOn,
+			ID:                  "023e105f4ecef8ad9ca31a8372d0c353",
+			Name:                "example.com",
+			DevMode:             7200,
+			OriginalNameServers: []string{"ns1.originaldnshost.com", "ns2.originaldnshost.com"},
+			OriginalRegistrar:   "GoDaddy",
+			OriginalDNSHost:     "NameCheap",
+			CreatedOn:           createdOn,
+			ModifiedOn:          modifiedOn,
 		},
 	}
 
