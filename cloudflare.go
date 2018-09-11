@@ -202,7 +202,7 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(method, uri string, params int
 		return nil, errors.Errorf("HTTP status %d: service failure", resp.StatusCode)
 	// This isn't a great solution due to the way the `default` case is
 	// a catch all and that the `filters/validate-expr` returns a HTTP 400
-	// yet the clients need to use the HTTP body.
+	// yet the clients need to use the HTTP body as a JSON string.
 	case resp.StatusCode == 400 && strings.HasSuffix(resp.Request.URL.Path, "/filters/validate-expr"):
 		return nil, errors.Errorf("%s", respBody)
 	default:
