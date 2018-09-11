@@ -162,3 +162,35 @@ func (api *API) UpdateFirewallRules(zoneID string, firewallRules []FirewallRule)
 	return firewallRulesDetailResponse.Result, nil
 }
 
+// DeleteFirewallRule updates a single firewall rule.
+//
+// API reference: TBC
+func (api *API) DeleteFirewallRule(zoneID, firewallRuleID string) error {
+	if firewallRuleID == "" {
+		return errors.Errorf("firewall rule ID cannot be empty")
+	}
+
+	uri := fmt.Sprintf("/zones/%s/firewall/rules/%s", zoneID, firewallRuleID)
+
+	_, err := api.makeRequest("DELETE", uri, nil)
+	if err != nil {
+		return errors.Wrap(err, errMakeRequestError)
+	}
+
+	return nil
+}
+
+// DeleteFirewallRules updates a single firewall rule.
+//
+// API reference: TBC
+func (api *API) DeleteFirewallRules(zoneID string, firewallRuleIDs []string) error {
+	ids := strings.Join(firewallRuleIDs, ",")
+	uri := fmt.Sprintf("/zones/%s/firewall/rules?id=%s", zoneID, ids)
+
+	_, err := api.makeRequest("DELETE", uri, nil)
+	if err != nil {
+		return errors.Wrap(err, errMakeRequestError)
+	}
+
+	return nil
+}
