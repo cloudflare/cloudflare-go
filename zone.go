@@ -12,48 +12,54 @@ import (
 
 // Owner describes the resource owner.
 type Owner struct {
-	ID        string `json:"id"`
-	Email     string `json:"email"`
-	OwnerType string `json:"owner_type"`
+	Email string `json:"email"`
+	ID    string `json:"id"`
+	Name  string `json:"name"`
+	Type  string `json:"type"`
+}
+
+// Host describes the host of the website.
+type Host struct {
+	Name    string
+	Website string
 }
 
 // Zone describes a Cloudflare zone.
 type Zone struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-	// DevMode contains the time in seconds until development expires (if
-	// positive) or since it expired (if negative). It will be 0 if never used.
-	DevMode           int          `json:"development_mode"`
-	OriginalNS        []string     `json:"original_name_servers"`
-	OriginalRegistrar string       `json:"original_registrar"`
-	OriginalDNSHost   string       `json:"original_dnshost"`
-	CreatedOn         time.Time    `json:"created_on"`
-	ModifiedOn        time.Time    `json:"modified_on"`
-	NameServers       []string     `json:"name_servers"`
-	Owner             Owner        `json:"owner"`
-	Permissions       []string     `json:"permissions"`
-	Plan              ZoneRatePlan `json:"plan"`
-	PlanPending       ZoneRatePlan `json:"plan_pending,omitempty"`
-	Status            string       `json:"status"`
-	Paused            bool         `json:"paused"`
-	Type              string       `json:"type"`
-	Host              struct {
-		Name    string
-		Website string
-	} `json:"host"`
-	VanityNS    []string `json:"vanity_name_servers"`
-	Betas       []string `json:"betas"`
-	DeactReason string   `json:"deactivation_reason"`
-	Meta        ZoneMeta `json:"meta"`
+	Account             Account      `json:"account"`
+	Betas               []string     `json:"betas"`
+	CreatedOn           time.Time    `json:"created_on"`
+	DeactivationReason  string       `json:"deactivation_reason"`
+	DevelopmentMode     int          `json:"development_mode"`
+	DevMode             int          `json:"development_mode"`
+	Host                Host         `json:"host"`
+	ID                  string       `json:"id"`
+	Meta                ZoneMeta     `json:"meta"`
+	ModifiedOn          time.Time    `json:"modified_on"`
+	Name                string       `json:"name"`
+	NameServers         []string     `json:"name_servers"`
+	OriginalDNSHost     string       `json:"original_dnshost"`
+	OriginalNameServers []string     `json:"original_name_servers"`
+	OriginalRegistrar   string       `json:"original_registrar"`
+	Owner               Owner        `json:"owner"`
+	Paused              bool         `json:"paused"`
+	Permissions         []string     `json:"permissions"`
+	Plan                ZoneRatePlan `json:"plan"`
+	PlanPending         ZoneRatePlan `json:"plan_pending,omitempty"`
+	Status              string       `json:"status"`
+	Type                string       `json:"type"`
+	VanityNameservers   []string     `json:"vanity_name_servers"`
+	VanityNameserverIPs []string     `json:"vanity_name_servers_ips"`
 }
 
 // ZoneMeta describes metadata about a zone.
 type ZoneMeta struct {
-	// custom_certificate_quota is broken - sometimes it's a string, sometimes a number!
-	// CustCertQuota     int    `json:"custom_certificate_quota"`
-	PageRuleQuota     int  `json:"page_rule_quota"`
-	WildcardProxiable bool `json:"wildcard_proxiable"`
-	PhishingDetected  bool `json:"phishing_detected"`
+	CustomCertificateQuota  int  `json:"custom_certificate_quota"`
+	MultipleRailgunsAllowed bool `json:"multiple_railguns_allowed"`
+	PageRuleQuota           int  `json:"page_rule_quota"`
+	PhishingDetected        bool `json:"phishing_detected"`
+	Step                    int  `json:"step"`
+	WildcardProxiable       bool `json:"wildcard_proxiable"`
 }
 
 // ZoneRatePlan contains the plan information for a zone.
