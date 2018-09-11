@@ -229,3 +229,91 @@ func TestCreateMultipleFilters(t *testing.T) {
 	}
 }
 
+func TestUpdateSingleFilter(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "PUT", "Expected method 'PUT', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"result": {
+					"id": "60ee852f9cbb4802978d15600c7f3110",
+					"paused": false,
+					"description": "IP of example.org",
+					"expression": "ip.src eq 93.184.216.0"
+			},
+			"success": true,
+			"errors": null,
+			"messages": null
+		}
+		`)
+	}
+
+	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/filters/60ee852f9cbb4802978d15600c7f3110", handler)
+	want := Filter{
+		ID:          "60ee852f9cbb4802978d15600c7f3110",
+		Paused:      false,
+		Description: "IP of example.org",
+		Expression:  "ip.src eq 93.184.216.0",
+	}
+
+	actual, err := client.UpdateFilter("d56084adb405e0b7e32c52321bf07be6", want)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestUpdateMultipleFilters(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "PUT", "Expected method 'PUT', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"result": [
+				{
+					"id": "60ee852f9cbb4802978d15600c7f3110",
+					"paused": false,
+					"description": "IP of example.org",
+					"expression": "ip.src eq 93.184.216.0"
+				},
+				{
+					"id": "c218c536b2bd406f958f278cf0fa8c0f",
+					"paused": false,
+					"description": "IP of example.com",
+					"expression": "ip.src ne 127.0.0.1"
+				}
+			],
+			"success": true,
+			"errors": null,
+			"messages": null
+		}
+		`)
+	}
+
+	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/filters", handler)
+	want := []Filter{
+		Filter{
+			ID:          "60ee852f9cbb4802978d15600c7f3110",
+			Paused:      false,
+			Description: "IP of example.org",
+			Expression:  "ip.src eq 93.184.216.0",
+		},
+		Filter{
+			ID:          "c218c536b2bd406f958f278cf0fa8c0f",
+			Paused:      false,
+			Description: "IP of example.com",
+			Expression:  "ip.src ne 127.0.0.1",
+		},
+	}
+
+	actual, err := client.UpdateFilters("d56084adb405e0b7e32c52321bf07be6", want)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+

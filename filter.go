@@ -154,3 +154,29 @@ func (api *API) UpdateFilter(zoneID string, filter Filter) (Filter, error) {
 	return filterResponse.Result, nil
 }
 
+// UpdateFilters updates many filters at once.
+//
+// API reference: TBC
+func (api *API) UpdateFilters(zoneID string, filters []Filter) ([]Filter, error) {
+	for _, filter := range filters {
+		if filter.ID == "" {
+			return []Filter{}, errors.Errorf("filter ID cannot be empty")
+		}
+	}
+
+	uri := "/zones/" + zoneID + "/filters"
+
+	res, err := api.makeRequest("PUT", uri, filters)
+	if err != nil {
+		return []Filter{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var filtersResponse FiltersDetailResponse
+	err = json.Unmarshal(res, &filtersResponse)
+	if err != nil {
+		return []Filter{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return filtersResponse.Result, nil
+}
+
