@@ -180,3 +180,36 @@ func (api *API) UpdateFilters(zoneID string, filters []Filter) ([]Filter, error)
 	return filtersResponse.Result, nil
 }
 
+// DeleteFilter deletes a single filter.
+//
+// API reference: TBC
+func (api *API) DeleteFilter(zoneID, filterID string) error {
+	if filterID == "" {
+		return errors.Errorf("filter ID cannot be empty")
+	}
+
+	uri := fmt.Sprintf("/zones/%s/filters/%s", zoneID, filterID)
+
+	_, err := api.makeRequest("DELETE", uri, nil)
+	if err != nil {
+		return errors.Wrap(err, errMakeRequestError)
+	}
+
+	return nil
+}
+
+// DeleteFilters deletes multiple filters.
+//
+// API reference: TBC
+func (api *API) DeleteFilters(zoneID string, filterIDs []string) error {
+	ids := strings.Join(filterIDs, ",")
+	uri := fmt.Sprintf("/zones/%s/filters?id=%s", zoneID, ids)
+
+	_, err := api.makeRequest("DELETE", uri, nil)
+	if err != nil {
+		return errors.Wrap(err, errMakeRequestError)
+	}
+
+	return nil
+}
+
