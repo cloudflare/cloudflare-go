@@ -201,3 +201,137 @@ func TestFirewallRule(t *testing.T) {
 	}
 }
 
+func TestCreateSingleFirewallRule(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"result":[
+				{
+					"id":"f2d427378e7542acb295380d352e2ebd",
+					"paused":false,
+					"description":"do not challenge login from office",
+					"action":"allow",
+					"priority":null,
+					"filter":{
+						"id":"b7ff25282d394be7b945e23c7106ce8a",
+						"expression":"ip.src in {127.0.0.0/24}",
+						"paused":false,
+						"description":"Login from office"
+					}
+				}
+			],
+			"success":true,
+			"errors":null,
+			"messages":null
+		}
+		`)
+	}
+
+	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/firewall/rules", handler)
+	want := []FirewallRule{
+		FirewallRule{
+			ID:          "f2d427378e7542acb295380d352e2ebd",
+			Paused:      false,
+			Description: "do not challenge login from office",
+			Action:      "allow",
+			Priority:    nil,
+			Filter: Filter{
+				ID:          "b7ff25282d394be7b945e23c7106ce8a",
+				Expression:  "ip.src in {127.0.0.0/24}",
+				Paused:      false,
+				Description: "Login from office",
+			},
+		},
+	}
+
+	actual, err := client.CreateFirewallRules("d56084adb405e0b7e32c52321bf07be6", want)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestCreateMultipleFirewallRules(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"result":[
+				{
+					"id":"f2d427378e7542acb295380d352e2ebd",
+					"paused":false,
+					"description":"do not challenge login from office",
+					"action":"allow",
+					"priority":null,
+					"filter":{
+						"id":"b7ff25282d394be7b945e23c7106ce8a",
+						"expression":"ip.src in {127.0.0.0/24}",
+						"paused":false,
+						"description":"Login from office"
+					}
+				},
+				{
+					"id":"cbf4b7a5a2a24e59a03044d6d44ceb09",
+					"paused":false,
+					"description":"challenge login",
+					"action":"challenge",
+					"priority":null,
+					"filter":{
+						"id":"c218c536b2bd406f958f278cf0fa8c0f",
+						"expression":"(http.request.uri.path ~ \"^.*/wp-login.php$\")",
+						"paused":false,
+						"description":"Login"
+					}
+				}
+			],
+			"success":true,
+			"errors":null,
+			"messages":null
+		}
+		`)
+	}
+
+	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/firewall/rules", handler)
+	want := []FirewallRule{
+		FirewallRule{
+			ID:          "f2d427378e7542acb295380d352e2ebd",
+			Paused:      false,
+			Description: "do not challenge login from office",
+			Action:      "allow",
+			Priority:    nil,
+			Filter: Filter{
+				ID:          "b7ff25282d394be7b945e23c7106ce8a",
+				Expression:  "ip.src in {127.0.0.0/24}",
+				Paused:      false,
+				Description: "Login from office",
+			},
+		},
+		FirewallRule{
+			ID:          "cbf4b7a5a2a24e59a03044d6d44ceb09",
+			Paused:      false,
+			Description: "challenge login",
+			Action:      "challenge",
+			Priority:    nil,
+			Filter: Filter{
+				ID:          "c218c536b2bd406f958f278cf0fa8c0f",
+				Expression:  "(http.request.uri.path ~ \"^.*/wp-login.php$\")",
+				Paused:      false,
+				Description: "Login",
+			},
+		},
+	}
+
+	actual, err := client.CreateFirewallRules("d56084adb405e0b7e32c52321bf07be6", want)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+

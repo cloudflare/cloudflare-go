@@ -92,3 +92,23 @@ func (api *API) FirewallRule(zoneID, firewallRuleID string) (FirewallRule, error
 	return firewallRuleResponse.Result, nil
 }
 
+// CreateFirewallRules creates new firewall rules.
+//
+// API reference: TBC
+func (api *API) CreateFirewallRules(zoneID string, firewallRules []FirewallRule) ([]FirewallRule, error) {
+	uri := fmt.Sprintf("/zones/%s/firewall/rules", zoneID)
+
+	res, err := api.makeRequest("POST", uri, firewallRules)
+	if err != nil {
+		return []FirewallRule{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var firewallRulesDetailResponse FirewallRulesDetailResponse
+	err = json.Unmarshal(res, &firewallRulesDetailResponse)
+	if err != nil {
+		return []FirewallRule{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return firewallRulesDetailResponse.Result, nil
+}
+
