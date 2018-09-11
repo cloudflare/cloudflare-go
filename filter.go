@@ -110,3 +110,47 @@ func (api *API) Filters(zoneID string, pageOpts PaginationOptions) ([]Filter, er
 	return filtersResponse.Result, nil
 }
 
+// CreateFilters creates new filters.
+//
+// API reference: TBC
+func (api *API) CreateFilters(zoneID string, filters []Filter) ([]Filter, error) {
+	uri := "/zones/" + zoneID + "/filters"
+
+	res, err := api.makeRequest("POST", uri, filters)
+	if err != nil {
+		return []Filter{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var filtersResponse FiltersDetailResponse
+	err = json.Unmarshal(res, &filtersResponse)
+	if err != nil {
+		return []Filter{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return filtersResponse.Result, nil
+}
+
+// UpdateFilter updates a single filter.
+//
+// API reference: TBC
+func (api *API) UpdateFilter(zoneID string, filter Filter) (Filter, error) {
+	if filter.ID == "" {
+		return Filter{}, errors.Errorf("filter ID cannot be empty")
+	}
+
+	uri := fmt.Sprintf("/zones/%s/filters/%s", zoneID, filter.ID)
+
+	res, err := api.makeRequest("PUT", uri, filter)
+	if err != nil {
+		return Filter{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var filterResponse FilterDetailResponse
+	err = json.Unmarshal(res, &filterResponse)
+	if err != nil {
+		return Filter{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return filterResponse.Result, nil
+}
+

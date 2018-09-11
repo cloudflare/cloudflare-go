@@ -137,3 +137,95 @@ func TestFilters(t *testing.T) {
 	}
 }
 
+func TestCreateSingleFilter(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"result": [
+				{
+					"id": "b7ff25282d394be7b945e23c7106ce8a",
+					"paused": false,
+					"description": "Login from office",
+					"expression": "ip.src eq 127.0.0.1"
+				}
+			],
+			"success": true,
+			"errors": null,
+			"messages": null
+		}
+		`)
+	}
+
+	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/filters", handler)
+	want := []Filter{
+		Filter{
+			ID:          "b7ff25282d394be7b945e23c7106ce8a",
+			Paused:      false,
+			Description: "Login from office",
+			Expression:  "ip.src eq 127.0.0.1",
+		},
+	}
+
+	actual, err := client.CreateFilters("d56084adb405e0b7e32c52321bf07be6", want)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestCreateMultipleFilters(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"result": [
+				{
+					"id": "b7ff25282d394be7b945e23c7106ce8a",
+					"paused": false,
+					"description": "Login from office",
+					"expression": "ip.src eq 127.0.0.1"
+				},
+				{
+					"id": "b7ff25282d394be7b945e23c7106ce8a",
+					"paused": false,
+					"description": "Login from second office",
+					"expression": "ip.src eq 10.0.0.1"
+				}
+			],
+			"success": true,
+			"errors": null,
+			"messages": null
+		}
+		`)
+	}
+
+	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/filters", handler)
+	want := []Filter{
+		Filter{
+			ID:          "b7ff25282d394be7b945e23c7106ce8a",
+			Paused:      false,
+			Description: "Login from office",
+			Expression:  "ip.src eq 127.0.0.1",
+		},
+		Filter{
+			ID:          "b7ff25282d394be7b945e23c7106ce8a",
+			Paused:      false,
+			Description: "Login from second office",
+			Expression:  "ip.src eq 10.0.0.1",
+		},
+	}
+
+	actual, err := client.CreateFilters("d56084adb405e0b7e32c52321bf07be6", want)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
