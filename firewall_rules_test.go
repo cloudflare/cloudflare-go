@@ -487,3 +487,32 @@ func TestUpdateMultipleFirewallRules(t *testing.T) {
 	}
 }
 
+func TestDeleteSingleFirewallRule(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "DELETE", "Expected method 'DELETE', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"result": [],
+			"success": true,
+			"errors": null,
+			"messages": null
+		}
+		`)
+	}
+
+	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/firewall/rules/f2d427378e7542acb295380d352e2ebd", handler)
+
+	err := client.DeleteFirewallRule("d56084adb405e0b7e32c52321bf07be6", "f2d427378e7542acb295380d352e2ebd")
+	assert.NoError(t, err)
+}
+
+func TestDeleteFirewallRuleWithMissingID(t *testing.T) {
+	setup()
+	defer teardown()
+
+	err := client.DeleteFirewallRule("d56084adb405e0b7e32c52321bf07be6", "")
+	assert.EqualError(t, err, "firewall rule ID cannot be empty")
+}
