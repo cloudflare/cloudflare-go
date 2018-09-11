@@ -112,3 +112,53 @@ func (api *API) CreateFirewallRules(zoneID string, firewallRules []FirewallRule)
 	return firewallRulesDetailResponse.Result, nil
 }
 
+// UpdateFirewallRule updates a single firewall rule.
+//
+// API reference: TBC
+func (api *API) UpdateFirewallRule(zoneID string, firewallRule FirewallRule) (FirewallRule, error) {
+	if firewallRule.ID == "" {
+		return FirewallRule{}, errors.Errorf("firewall rule ID cannot be empty")
+	}
+
+	uri := fmt.Sprintf("/zones/%s/firewall/rules/%s", zoneID, firewallRule.ID)
+
+	res, err := api.makeRequest("POST", uri, firewallRule)
+	if err != nil {
+		return FirewallRule{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var firewallRuleResponse FirewallRuleResponse
+	err = json.Unmarshal(res, &firewallRuleResponse)
+	if err != nil {
+		return FirewallRule{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return firewallRuleResponse.Result, nil
+}
+
+// UpdateFirewallRules updates a single firewall rule.
+//
+// API reference: TBC
+func (api *API) UpdateFirewallRules(zoneID string, firewallRules []FirewallRule) ([]FirewallRule, error) {
+	for _, firewallRule := range firewallRules {
+		if firewallRule.ID == "" {
+			return []FirewallRule{}, errors.Errorf("firewall ID cannot be empty")
+		}
+	}
+
+	uri := fmt.Sprintf("/zones/%s/firewall/rules", zoneID)
+
+	res, err := api.makeRequest("POST", uri, firewallRules)
+	if err != nil {
+		return []FirewallRule{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var firewallRulesDetailResponse FirewallRulesDetailResponse
+	err = json.Unmarshal(res, &firewallRulesDetailResponse)
+	if err != nil {
+		return []FirewallRule{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return firewallRulesDetailResponse.Result, nil
+}
+
