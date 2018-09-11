@@ -31,7 +31,6 @@ type Zone struct {
 	CreatedOn           time.Time    `json:"created_on"`
 	DeactivationReason  string       `json:"deactivation_reason"`
 	DevelopmentMode     int          `json:"development_mode"`
-	DevMode             int          `json:"development_mode"`
 	Host                Host         `json:"host"`
 	ID                  string       `json:"id"`
 	Meta                ZoneMeta     `json:"meta"`
@@ -48,8 +47,8 @@ type Zone struct {
 	PlanPending         ZoneRatePlan `json:"plan_pending,omitempty"`
 	Status              string       `json:"status"`
 	Type                string       `json:"type"`
-	VanityNameservers   []string     `json:"vanity_name_servers"`
-	VanityNameserverIPs []string     `json:"vanity_name_servers_ips"`
+	VanityNameServers   []string     `json:"vanity_name_servers"`
+	VanityNameServerIPs []string     `json:"vanity_name_servers_ips"`
 }
 
 // ZoneMeta describes metadata about a zone.

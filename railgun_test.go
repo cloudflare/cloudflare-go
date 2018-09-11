@@ -229,7 +229,7 @@ func TestRailgunZones(t *testing.T) {
 		{
 			ID:                  "023e105f4ecef8ad9ca31a8372d0c353",
 			Name:                "example.com",
-			DevMode:             7200,
+			DevelopmentMode:     7200,
 			OriginalNameServers: []string{"ns1.originaldnshost.com", "ns2.originaldnshost.com"},
 			OriginalRegistrar:   "GoDaddy",
 			OriginalDNSHost:     "NameCheap",

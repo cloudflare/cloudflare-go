@@ -104,8 +104,8 @@ func zoneInfo(c *cli.Context) {
 	output := make([][]string, 0, len(zones))
 	for _, z := range zones {
 		var nameservers []string
-		if len(z.VanityNS) > 0 {
-			nameservers = z.VanityNS
+		if len(z.VanityNameServers) > 0 {
+			nameservers = z.VanityNameServers
 		} else {
 			nameservers = z.NameServers
 		}
