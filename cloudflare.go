@@ -33,6 +33,7 @@ type API struct {
 	APIUserServiceKey string
 	BaseURL           string
 	OrganizationID    string
+	UserAgent         string
 	headers           http.Header
 	httpClient        *http.Client
 	authType          int
@@ -229,6 +230,9 @@ func (api *API) request(method, uri string, reqBody io.Reader, authType int, hea
 	}
 	if authType&AuthUserService != 0 {
 		req.Header.Set("X-Auth-User-Service-Key", api.APIUserServiceKey)
+	}
+	if api.UserAgent != "" {
+		req.Header.Set("User-Agent", api.UserAgent)
 	}
 
 	if req.Header.Get("Content-Type") == "" {

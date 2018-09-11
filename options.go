@@ -73,6 +73,17 @@ func UsingLogger(logger Logger) Option {
 	}
 }
 
+// UserAgent can be set if you want to send a software name and version for HTTP access logs.
+// It is recommended to set it in order to help future Customer Support diagnostics
+// and prevent collateral damage by sharing generic User-Agent string with abusive users.
+// E.g. "my-software/1.2.3". By default generic Go User-Agent is used.
+func UserAgent(userAgent string) Option {
+	return func(api *API) error {
+		api.UserAgent = userAgent
+		return nil
+	}
+}
+
 // parseOptions parses the supplied options functions and returns a configured
 // *API instance.
 func (api *API) parseOptions(opts ...Option) error {
