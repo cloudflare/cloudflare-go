@@ -72,3 +72,23 @@ func (api *API) FirewallRules(zoneID string, pageOpts PaginationOptions) ([]Fire
 	return firewallDetailResponse.Result, nil
 }
 
+// FirewallRule returns a single firewall rule based on the ID.
+//
+// API reference: TBC
+func (api *API) FirewallRule(zoneID, firewallRuleID string) (FirewallRule, error) {
+	uri := fmt.Sprintf("/zones/%s/firewall/rules/%s", zoneID, firewallRuleID)
+
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return FirewallRule{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var firewallRuleResponse FirewallRuleResponse
+	err = json.Unmarshal(res, &firewallRuleResponse)
+	if err != nil {
+		return FirewallRule{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return firewallRuleResponse.Result, nil
+}
+
