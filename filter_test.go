@@ -317,3 +317,47 @@ func TestUpdateMultipleFilters(t *testing.T) {
 	}
 }
 
+func TestDeleteFilter(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "DELETE", "Expected method 'DELETE', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"result": [],
+			"success": true,
+			"errors": null,
+			"messages": null
+		}
+		`)
+	}
+
+	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/filters/60ee852f9cbb4802978d15600c7f3110", handler)
+
+	err := client.DeleteFilter("d56084adb405e0b7e32c52321bf07be6", "60ee852f9cbb4802978d15600c7f3110")
+	assert.Nil(t, err)
+	assert.NoError(t, err)
+}
+
+func TestDeleteFilterWithMissingID(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "DELETE", "Expected method 'DELETE', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"result": [],
+			"success": true,
+			"errors": null,
+			"messages": null
+		}
+		`)
+	}
+
+	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/filters/60ee852f9cbb4802978d15600c7f3110", handler)
+
+	err := client.DeleteFilter("d56084adb405e0b7e32c52321bf07be6", "")
+	assert.EqualError(t, err, "filter ID cannot be empty")
+}
