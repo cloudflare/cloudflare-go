@@ -1,25 +1,28 @@
 language: go
 sudo: false
 matrix:
+  fast_finish: true
   include:
-    - go: 1.x
-      env: LATEST=true
-    - go: 1.7.x
     - go: 1.8.x
     - go: 1.9.x
+    - go: 1.10.x
+    - go: 1.11.x
+    - go: 1.x
+      env: LATEST=true
     - go: tip
   allow_failures:
     - go: tip
 
 before_install:
   - go get github.com/mitchellh/gox
+  - go get -u golang.org/x/lint/golint
 
 install:
   - # skip
 
 script:
   - go get -t -v ./...
-  - diff -u <(echo -n) <(gofmt -d .)
+  - golint -set_exit_status . cmd/flarectl
   - go vet $(go list ./... | grep -v /vendor/)
   - go test -v -race ./...
   # Only build binaries from the latest Go release.
@@ -29,7 +32,6 @@ notifications:
   email:
     recipients:
       - jamesog@cloudflare.com
-      - msilverlock@cloudflare.com
 
 deploy:
   provider: releases

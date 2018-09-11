@@ -25,6 +25,9 @@ func setup(opts ...Option) {
 	mux = http.NewServeMux()
 	server = httptest.NewServer(mux)
 
+	// disable rate limits and retries in testing - prepended so any provided value overrides this
+	opts = append([]Option{UsingRateLimit(100000), UsingRetryPolicy(0, 0, 0)}, opts...)
+
 	// Cloudflare client configured to use test server
 	client, _ = New("deadbeef", "cloudflare@example.org", opts...)
 	client.BaseURL = server.URL
@@ -99,4 +102,102 @@ func TestClient_Auth(t *testing.T) {
 	_, err := IPs()
 
 	assert.NoError(t, err)
+}
+
+func TestClient_RetryCanSucceedAfterErrors(t *testing.T) {
+	setup(UsingRetryPolicy(2, 0, 1))
+	defer teardown()
+
+	requestsReceived := 0
+	// could test any function, using ListLoadBalancerPools
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+
+		// we are doing three *retries*
+		if requestsReceived == 0 {
+			// return error causing client to retry
+			w.WriteHeader(500)
+			fmt.Fprint(w, `{
+				"success": false,
+				"errors": [ "server created some error"],
+				"messages": [],
+				"result": []
+			}`)
+		} else if requestsReceived == 1 {
+			// return error causing client to retry
+			w.WriteHeader(429)
+			fmt.Fprint(w, `{
+				"success": false,
+				"errors": [ "this is a rate limiting error"],
+				"messages": [],
+				"result": []
+			}`)
+		} else {
+			// return success response
+			fmt.Fprint(w, `{
+            "success": true,
+            "errors": [],
+            "messages": [],
+            "result": [
+                {
+                    "id": "17b5962d775c646f3f9725cbc7a53df4",
+                    "created_on": "2014-01-01T05:20:00.12345Z",
+                    "modified_on": "2014-02-01T05:20:00.12345Z",
+                    "description": "Primary data center - Provider XYZ",
+                    "name": "primary-dc-1",
+                    "enabled": true,
+                    "monitor": "f1aba936b94213e5b8dca0c0dbf1f9cc",
+                    "origins": [
+                      {
+                        "name": "app-server-1",
+                        "address": "0.0.0.0",
+                        "enabled": true
+                      }
+                    ],
+                    "notification_email": "someone@example.com"
+                }
+            ],
+            "result_info": {
+                "page": 1,
+                "per_page": 20,
+                "count": 1,
+                "total_count": 2000
+            }
+        }`)
+		}
+		requestsReceived++
+
+	}
+
+	mux.HandleFunc("/user/load_balancers/pools", handler)
+
+	_, err := client.ListLoadBalancerPools()
+	assert.NoError(t, err)
+}
+
+func TestClient_RetryReturnsPersistentErrorResponse(t *testing.T) {
+	setup(UsingRetryPolicy(2, 0, 1))
+	defer teardown()
+
+	// could test any function, using ListLoadBalancerPools
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+
+		// return error causing client to retry
+		w.WriteHeader(500)
+		fmt.Fprint(w, `{
+			"success": false,
+			"errors": [ "server created some error"],
+			"messages": [],
+			"result": []
+		}`)
+
+	}
+
+	mux.HandleFunc("/user/load_balancers/pools", handler)
+
+	_, err := client.ListLoadBalancerPools()
+	assert.Error(t, err)
 }

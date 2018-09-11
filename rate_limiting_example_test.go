@@ -7,12 +7,6 @@ import (
 	cloudflare "github.com/cloudflare/cloudflare-go"
 )
 
-const (
-	apiKey = "deadbeef"
-	user   = "test@example.org"
-	domain = "example.com"
-)
-
 var exampleNewRateLimit = cloudflare.RateLimit{
 	Description: "test",
 	Match: cloudflare.RateLimitTrafficMatcher{
@@ -25,6 +19,9 @@ var exampleNewRateLimit = cloudflare.RateLimit{
 	Action: cloudflare.RateLimitAction{
 		Mode:    "ban",
 		Timeout: 60,
+	},
+	Correlate: cloudflare.RateLimitCorrelate{
+		By: "nat",
 	},
 }
 

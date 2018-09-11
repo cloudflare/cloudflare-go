@@ -29,7 +29,8 @@ func TestCreateLoadBalancerPool(t *testing.T) {
                 {
                   "name": "app-server-1",
                   "address": "0.0.0.0",
-                  "enabled": true
+                  "enabled": true,
+                  "weight": 1
                 }
               ],
               "notification_email": "someone@example.com",
@@ -55,7 +56,8 @@ func TestCreateLoadBalancerPool(t *testing.T) {
                 {
                   "name": "app-server-1",
                   "address": "0.0.0.0",
-                  "enabled": true
+                  "enabled": true,
+                  "weight": 1
                 }
               ],
               "notification_email": "someone@example.com",
@@ -83,6 +85,7 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 				Name:    "app-server-1",
 				Address: "0.0.0.0",
 				Enabled: true,
+				Weight:  1,
 			},
 		},
 		NotificationEmail: "someone@example.com",
@@ -100,6 +103,7 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 				Name:    "app-server-1",
 				Address: "0.0.0.0",
 				Enabled: true,
+				Weight:  1,
 			},
 		},
 		NotificationEmail: "someone@example.com",
@@ -138,7 +142,8 @@ func TestListLoadBalancerPools(t *testing.T) {
                       {
                         "name": "app-server-1",
                         "address": "0.0.0.0",
-                        "enabled": true
+                        "enabled": true,
+                        "weight": 1
                       }
                     ],
                     "notification_email": "someone@example.com"
@@ -170,6 +175,7 @@ func TestListLoadBalancerPools(t *testing.T) {
 					Name:    "app-server-1",
 					Address: "0.0.0.0",
 					Enabled: true,
+					Weight:  1,
 				},
 			},
 			NotificationEmail: "someone@example.com",
@@ -205,7 +211,8 @@ func TestLoadBalancerPoolDetails(t *testing.T) {
                 {
                   "name": "app-server-1",
                   "address": "0.0.0.0",
-                  "enabled": true
+                  "enabled": true,
+                  "weight": 1
                 }
               ],
               "notification_email": "someone@example.com"
@@ -229,6 +236,7 @@ func TestLoadBalancerPoolDetails(t *testing.T) {
 				Name:    "app-server-1",
 				Address: "0.0.0.0",
 				Enabled: true,
+				Weight:  1,
 			},
 		},
 		NotificationEmail: "someone@example.com",
@@ -284,7 +292,8 @@ func TestModifyLoadBalancerPool(t *testing.T) {
                 {
                   "name": "app-server-2",
                   "address": "0.0.0.1",
-                  "enabled": false
+                  "enabled": false,
+                  "weight": 1
                 }
               ],
               "notification_email": "nobody@example.com",
@@ -308,7 +317,8 @@ func TestModifyLoadBalancerPool(t *testing.T) {
                 {
                   "name": "app-server-2",
                   "address": "0.0.0.1",
-                  "enabled": false
+                  "enabled": false,
+                  "weight": 1
                 }
               ],
               "notification_email": "nobody@example.com",
@@ -334,6 +344,7 @@ func TestModifyLoadBalancerPool(t *testing.T) {
 				Name:    "app-server-2",
 				Address: "0.0.0.1",
 				Enabled: false,
+				Weight:  1,
 			},
 		},
 		NotificationEmail: "nobody@example.com",
@@ -351,6 +362,7 @@ func TestModifyLoadBalancerPool(t *testing.T) {
 				Name:    "app-server-2",
 				Address: "0.0.0.1",
 				Enabled: false,
+				Weight:  1,
 			},
 		},
 		NotificationEmail: "nobody@example.com",
@@ -776,7 +788,8 @@ func TestCreateLoadBalancer(t *testing.T) {
                   "00920f38ce07c2e2f4df50b1f61d4194"
                 ]
               },
-              "proxied": true
+              "proxied": true,
+              "session_affinity": "cookie"
 						}`, string(b))
 		}
 		fmt.Fprint(w, `{
@@ -818,7 +831,8 @@ func TestCreateLoadBalancer(t *testing.T) {
                     "00920f38ce07c2e2f4df50b1f61d4194"
                   ]
                 },
-                "proxied": true
+                "proxied": true,
+                "session_affinity": "cookie"
             }
         }`)
 	}
@@ -861,7 +875,8 @@ func TestCreateLoadBalancer(t *testing.T) {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
-		Proxied: true,
+		Proxied:     true,
+		Persistence: "cookie",
 	}
 	request := LoadBalancer{
 		Description:  "Load Balancer for www.example.com",
@@ -895,7 +910,8 @@ func TestCreateLoadBalancer(t *testing.T) {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
-		Proxied: true,
+		Proxied:     true,
+		Persistence: "cookie",
 	}
 
 	actual, err := client.CreateLoadBalancer("199d98642c564d2e855e9661899b7252", request)
@@ -1173,7 +1189,8 @@ func TestModifyLoadBalancer(t *testing.T) {
                     "00920f38ce07c2e2f4df50b1f61d4194"
                   ]
                 },
-                "proxied": true
+                "proxied": true,
+                "session_affinity": "none"
 						}`, string(b))
 		}
 		fmt.Fprint(w, `{
@@ -1210,7 +1227,8 @@ func TestModifyLoadBalancer(t *testing.T) {
                     "00920f38ce07c2e2f4df50b1f61d4194"
                   ]
                 },
-                "proxied": true
+                "proxied": true,
+                "session_affinity": "none"
             }
         }`)
 	}
@@ -1248,7 +1266,8 @@ func TestModifyLoadBalancer(t *testing.T) {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
-		Proxied: true,
+		Proxied:     true,
+		Persistence: "none",
 	}
 	request := LoadBalancer{
 		ID:           "699d98642c564d2e855e9661899b7252",
@@ -1278,7 +1297,8 @@ func TestModifyLoadBalancer(t *testing.T) {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
-		Proxied: true,
+		Proxied:     true,
+		Persistence: "none",
 	}
 
 	actual, err := client.ModifyLoadBalancer("199d98642c564d2e855e9661899b7252", request)
