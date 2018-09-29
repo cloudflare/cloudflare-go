@@ -233,30 +233,8 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 		return nil, respErr
 	}
 
-	switch {
-	case resp.StatusCode >= http.StatusOK && resp.StatusCode < http.StatusMultipleChoices:
-	case resp.StatusCode == http.StatusUnauthorized:
-		return nil, errors.Errorf("HTTP status %d: invalid credentials", resp.StatusCode)
-	case resp.StatusCode == http.StatusForbidden:
-		return nil, errors.Errorf("HTTP status %d: insufficient permissions", resp.StatusCode)
-	case resp.StatusCode == http.StatusServiceUnavailable,
-		resp.StatusCode == http.StatusBadGateway,
-		resp.StatusCode == http.StatusGatewayTimeout,
-		resp.StatusCode == 522,
-		resp.StatusCode == 523,
-		resp.StatusCode == 524:
-		return nil, errors.Errorf("HTTP status %d: service failure", resp.StatusCode)
-	// This isn't a great solution due to the way the `default` case is
-	// a catch all and that the `filters/validate-expr` returns a HTTP 400
-	// yet the clients need to use the HTTP body as a JSON string.
-	case resp.StatusCode == 400 && strings.HasSuffix(resp.Request.URL.Path, "/filters/validate-expr"):
-		return nil, errors.Errorf("%s", respBody)
-	default:
-		var s string
-		if respBody != nil {
-			s = string(respBody)
-		}
-		return nil, errors.Errorf("HTTP status %d: content %q", resp.StatusCode, s)
+	if !(resp.StatusCode >= http.StatusOK && resp.StatusCode < http.StatusMultipleChoices) {
+		return nil, NewAPIError(resp.StatusCode, respBody)
 	}
 
 	return respBody, nil
