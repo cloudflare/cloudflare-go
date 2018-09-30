@@ -6,7 +6,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 var (
@@ -466,4 +468,41 @@ func TestZoneIDByNameWithNonUniqueZonesWithOrgId(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, actual, "7c5dae5552338874e5053f2534d2767a")
 	}
+}
+
+func TestClient_APIError(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("content-type", "application/json")
+		w.WriteHeader(400)
+		fmt.Fprint(w, `{
+			"result": null,
+			"success": false,
+			"errors": [{"code":81057,"message":"The record already exists."}],
+			"messages": []
+		}`)
+	}
+	mux.HandleFunc("/zones/test-zone-id/dns_records", handler)
+
+	zoneID := "test-zone-id"
+	dnsRecord := DNSRecord{Type: "TXT", Name: "foo", Content: "bar"}
+	_, err := client.CreateDNSRecord(zoneID, dnsRecord)
+
+	// assert error type
+	err = errors.Cause(err)
+	require.IsType(t, &APIError{}, err)
+
+	// check content of APIError
+	apiErr, _ := err.(*APIError)
+	assert.Equal(t, apiErr.StatusCode, 400)
+
+	require.NotEmpty(t, apiErr.Errors)
+	assert.Equal(t, 81057, apiErr.Errors[0].Code)
+	assert.Equal(t, "The record already exists.", apiErr.Errors[0].Message)
+
+	// check HasErrorCode function
+	assert.True(t, apiErr.HasErrorCode(81057))
+	assert.False(t, apiErr.HasErrorCode(10000))
 }
