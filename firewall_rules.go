@@ -122,7 +122,7 @@ func (api *API) UpdateFirewallRule(zoneID string, firewallRule FirewallRule) (Fi
 
 	uri := fmt.Sprintf("/zones/%s/firewall/rules/%s", zoneID, firewallRule.ID)
 
-	res, err := api.makeRequest("POST", uri, firewallRule)
+	res, err := api.makeRequest("PUT", uri, firewallRule)
 	if err != nil {
 		return FirewallRule{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -148,7 +148,7 @@ func (api *API) UpdateFirewallRules(zoneID string, firewallRules []FirewallRule)
 
 	uri := fmt.Sprintf("/zones/%s/firewall/rules", zoneID)
 
-	res, err := api.makeRequest("POST", uri, firewallRules)
+	res, err := api.makeRequest("PUT", uri, firewallRules)
 	if err != nil {
 		return []FirewallRule{}, errors.Wrap(err, errMakeRequestError)
 	}
