@@ -59,7 +59,7 @@ type FilterValidationExpressionMessage struct {
 
 // Filter returns a single filter in a zone based on the filter ID.
 //
-// API reference: TBC
+// API reference: https://developers.cloudflare.com/firewall/api/cf-filters/get/#get-by-filter-id
 func (api *API) Filter(zoneID, filterID string) (Filter, error) {
 	uri := fmt.Sprintf("/zones/%s/filters/%s", zoneID, filterID)
 
@@ -79,7 +79,7 @@ func (api *API) Filter(zoneID, filterID string) (Filter, error) {
 
 // Filters returns all filters for a zone.
 //
-// API reference: TBC
+// API reference: https://developers.cloudflare.com/firewall/api/cf-filters/get/#get-all-filters
 func (api *API) Filters(zoneID string, pageOpts PaginationOptions) ([]Filter, error) {
 	uri := "/zones/" + zoneID + "/filters"
 	v := url.Values{}
@@ -112,7 +112,7 @@ func (api *API) Filters(zoneID string, pageOpts PaginationOptions) ([]Filter, er
 
 // CreateFilters creates new filters.
 //
-// API reference: TBC
+// API reference: https://developers.cloudflare.com/firewall/api/cf-filters/post/
 func (api *API) CreateFilters(zoneID string, filters []Filter) ([]Filter, error) {
 	uri := "/zones/" + zoneID + "/filters"
 
@@ -132,7 +132,7 @@ func (api *API) CreateFilters(zoneID string, filters []Filter) ([]Filter, error)
 
 // UpdateFilter updates a single filter.
 //
-// API reference: TBC
+// API reference: https://developers.cloudflare.com/firewall/api/cf-filters/put/#update-a-single-filter
 func (api *API) UpdateFilter(zoneID string, filter Filter) (Filter, error) {
 	if filter.ID == "" {
 		return Filter{}, errors.Errorf("filter ID cannot be empty")
@@ -156,7 +156,7 @@ func (api *API) UpdateFilter(zoneID string, filter Filter) (Filter, error) {
 
 // UpdateFilters updates many filters at once.
 //
-// API reference: TBC
+// API reference: https://developers.cloudflare.com/firewall/api/cf-filters/put/#update-multiple-filters
 func (api *API) UpdateFilters(zoneID string, filters []Filter) ([]Filter, error) {
 	for _, filter := range filters {
 		if filter.ID == "" {
@@ -182,7 +182,7 @@ func (api *API) UpdateFilters(zoneID string, filters []Filter) ([]Filter, error)
 
 // DeleteFilter deletes a single filter.
 //
-// API reference: TBC
+// API reference: https://developers.cloudflare.com/firewall/api/cf-filters/delete/#delete-a-single-filter
 func (api *API) DeleteFilter(zoneID, filterID string) error {
 	if filterID == "" {
 		return errors.Errorf("filter ID cannot be empty")
@@ -200,7 +200,7 @@ func (api *API) DeleteFilter(zoneID, filterID string) error {
 
 // DeleteFilters deletes multiple filters.
 //
-// API reference: TBC
+// API reference: https://developers.cloudflare.com/firewall/api/cf-filters/delete/#delete-multiple-filters
 func (api *API) DeleteFilters(zoneID string, filterIDs []string) error {
 	ids := strings.Join(filterIDs, ",")
 	uri := fmt.Sprintf("/zones/%s/filters?id=%s", zoneID, ids)
@@ -215,7 +215,7 @@ func (api *API) DeleteFilters(zoneID string, filterIDs []string) error {
 
 // ValidateFilterExpression checks correctness of a filter expression.
 //
-// API reference: TBC
+// API reference: https://developers.cloudflare.com/firewall/api/cf-filters/validation/
 func (api *API) ValidateFilterExpression(expression string) error {
 	uri := fmt.Sprintf("/filters/validate-expr")
 	expressionPayload := FilterValidateExpression{Expression: expression}

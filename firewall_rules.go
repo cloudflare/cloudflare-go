@@ -41,7 +41,7 @@ type FirewallRuleResponse struct {
 
 // FirewallRules returns all firewall rules.
 //
-// API reference: TBC
+// API reference: https://developers.cloudflare.com/firewall/api/cf-firewall-rules/get/#get-all-rules
 func (api *API) FirewallRules(zoneID string, pageOpts PaginationOptions) ([]FirewallRule, error) {
 	uri := fmt.Sprintf("/zones/%s/firewall/rules", zoneID)
 	v := url.Values{}
@@ -74,7 +74,7 @@ func (api *API) FirewallRules(zoneID string, pageOpts PaginationOptions) ([]Fire
 
 // FirewallRule returns a single firewall rule based on the ID.
 //
-// API reference: TBC
+// API reference: https://developers.cloudflare.com/firewall/api/cf-firewall-rules/get/#get-by-rule-id
 func (api *API) FirewallRule(zoneID, firewallRuleID string) (FirewallRule, error) {
 	uri := fmt.Sprintf("/zones/%s/firewall/rules/%s", zoneID, firewallRuleID)
 
@@ -94,7 +94,7 @@ func (api *API) FirewallRule(zoneID, firewallRuleID string) (FirewallRule, error
 
 // CreateFirewallRules creates new firewall rules.
 //
-// API reference: TBC
+// API reference: https://developers.cloudflare.com/firewall/api/cf-firewall-rules/post/
 func (api *API) CreateFirewallRules(zoneID string, firewallRules []FirewallRule) ([]FirewallRule, error) {
 	uri := fmt.Sprintf("/zones/%s/firewall/rules", zoneID)
 
@@ -114,7 +114,7 @@ func (api *API) CreateFirewallRules(zoneID string, firewallRules []FirewallRule)
 
 // UpdateFirewallRule updates a single firewall rule.
 //
-// API reference: TBC
+// API reference: https://developers.cloudflare.com/firewall/api/cf-firewall-rules/put/#update-a-single-rule
 func (api *API) UpdateFirewallRule(zoneID string, firewallRule FirewallRule) (FirewallRule, error) {
 	if firewallRule.ID == "" {
 		return FirewallRule{}, errors.Errorf("firewall rule ID cannot be empty")
@@ -138,7 +138,7 @@ func (api *API) UpdateFirewallRule(zoneID string, firewallRule FirewallRule) (Fi
 
 // UpdateFirewallRules updates a single firewall rule.
 //
-// API reference: TBC
+// API reference: https://developers.cloudflare.com/firewall/api/cf-firewall-rules/put/#update-multiple-rules
 func (api *API) UpdateFirewallRules(zoneID string, firewallRules []FirewallRule) ([]FirewallRule, error) {
 	for _, firewallRule := range firewallRules {
 		if firewallRule.ID == "" {
@@ -164,7 +164,7 @@ func (api *API) UpdateFirewallRules(zoneID string, firewallRules []FirewallRule)
 
 // DeleteFirewallRule updates a single firewall rule.
 //
-// API reference: TBC
+// API reference: https://developers.cloudflare.com/firewall/api/cf-firewall-rules/delete/#delete-a-single-rule
 func (api *API) DeleteFirewallRule(zoneID, firewallRuleID string) error {
 	if firewallRuleID == "" {
 		return errors.Errorf("firewall rule ID cannot be empty")
@@ -182,7 +182,7 @@ func (api *API) DeleteFirewallRule(zoneID, firewallRuleID string) error {
 
 // DeleteFirewallRules updates a single firewall rule.
 //
-// API reference: TBC
+// API reference: https://developers.cloudflare.com/firewall/api/cf-firewall-rules/delete/#delete-multiple-rules
 func (api *API) DeleteFirewallRules(zoneID string, firewallRuleIDs []string) error {
 	ids := strings.Join(firewallRuleIDs, ",")
 	uri := fmt.Sprintf("/zones/%s/firewall/rules?id=%s", zoneID, ids)
