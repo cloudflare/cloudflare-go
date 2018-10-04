@@ -216,3 +216,27 @@ func TestUpdateAccessApplicationWithMissingID(t *testing.T) {
 	assert.EqualError(t, err, "filter ID cannot be empty")
 }
 
+func TestDeleteAccessApplication(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "DELETE", "Expected method 'DELETE', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "699d98642c564d2e855e9661899b7252"
+			}
+		}
+		`)
+	}
+
+	mux.HandleFunc("/zones/01a7362d577a6c3019a474fd6f485823/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+	err := client.DeleteAccessApplication("01a7362d577a6c3019a474fd6f485823", "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+
+	assert.NoError(t, err)
+}
+

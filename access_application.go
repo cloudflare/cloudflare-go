@@ -142,3 +142,21 @@ func (api *API) UpdateAccessApplication(zoneID string, accessApplication AccessA
 	return accessApplicationDetailResponse.Result, nil
 }
 
+// DeleteAccessApplication deletes an access application.
+//
+// API reference: https://api.cloudflare.com/#access-applications-delete-access-application
+func (api *API) DeleteAccessApplication(zoneID, applicationID string) error {
+	uri := fmt.Sprintf(
+		"/zones/%s/access/apps/%s",
+		zoneID,
+		applicationID,
+	)
+
+	_, err := api.makeRequest("DELETE", uri, nil)
+	if err != nil {
+		return errors.Wrap(err, errMakeRequestError)
+	}
+
+	return nil
+}
+
