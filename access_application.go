@@ -114,3 +114,31 @@ func (api *API) CreateAccessApplication(zoneID string, accessApplication AccessA
 	return accessApplicationDetailResponse.Result, nil
 }
 
+// UpdateAccessApplication updates an existing access application.
+//
+// API reference: https://api.cloudflare.com/#access-applications-update-access-application
+func (api *API) UpdateAccessApplication(zoneID string, accessApplication AccessApplication) (AccessApplication, error) {
+	if accessApplication.ID == "" {
+		return AccessApplication{}, errors.Errorf("filter ID cannot be empty")
+	}
+
+	uri := fmt.Sprintf(
+		"/zones/%s/access/apps/%s",
+		zoneID,
+		accessApplication.ID,
+	)
+
+	res, err := api.makeRequest("PUT", uri, accessApplication)
+	if err != nil {
+		return AccessApplication{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var accessApplicationDetailResponse AccessApplicationDetailResponse
+	err = json.Unmarshal(res, &accessApplicationDetailResponse)
+	if err != nil {
+		return AccessApplication{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return accessApplicationDetailResponse.Result, nil
+}
+
