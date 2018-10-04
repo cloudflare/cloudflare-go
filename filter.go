@@ -53,6 +53,7 @@ type FilterValidateExpressionResponse struct {
 	Errors  []FilterValidationExpressionMessage `json:"errors"`
 }
 
+// FilterValidationExpressionMessage represents the API error message.
 type FilterValidationExpressionMessage struct {
 	Message string `json:"message"`
 }
