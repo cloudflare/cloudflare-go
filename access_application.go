@@ -160,3 +160,21 @@ func (api *API) DeleteAccessApplication(zoneID, applicationID string) error {
 	return nil
 }
 
+// RevokeAccessApplicationTokens revokes tokens associated with an
+// access application.
+//
+// API reference: https://api.cloudflare.com/#access-applications-revoke-access-tokens
+func (api *API) RevokeAccessApplicationTokens(zoneID, applicationID string) error {
+	uri := fmt.Sprintf(
+		"/zones/%s/access/apps/%s/revoke-tokens",
+		zoneID,
+		applicationID,
+	)
+
+	_, err := api.makeRequest("POST", uri, nil)
+	if err != nil {
+		return errors.Wrap(err, errMakeRequestError)
+	}
+
+	return nil
+}
