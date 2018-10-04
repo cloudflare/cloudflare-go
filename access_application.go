@@ -94,3 +94,23 @@ func (api *API) AccessApplication(zoneID, applicationID string) (AccessApplicati
 	return accessApplicationDetailResponse.Result, nil
 }
 
+// CreateAccessApplication creates a new access application.
+//
+// API reference: https://api.cloudflare.com/#access-applications-create-access-application
+func (api *API) CreateAccessApplication(zoneID string, accessApplication AccessApplication) (AccessApplication, error) {
+	uri := "/zones/" + zoneID + "/access/apps"
+
+	res, err := api.makeRequest("POST", uri, accessApplication)
+	if err != nil {
+		return AccessApplication{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var accessApplicationDetailResponse AccessApplicationDetailResponse
+	err = json.Unmarshal(res, &accessApplicationDetailResponse)
+	if err != nil {
+		return AccessApplication{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return accessApplicationDetailResponse.Result, nil
+}
+
