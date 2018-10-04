@@ -362,7 +362,7 @@ func TestUpdateSingleFirewallRule(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, "PUT", "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"result":{
@@ -412,7 +412,7 @@ func TestUpdateMultipleFirewallRules(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, "PUT", "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"result":[
