@@ -29,6 +29,14 @@ type AccessApplicationListResponse struct {
 	ResultInfo `json:"result_info"`
 }
 
+// AccessApplicationDetailResponse is the API response, containing a single
+// access application.
+type AccessApplicationDetailResponse struct {
+	Success  bool              `json:"success"`
+	Errors   []string          `json:"errors"`
+	Messages []string          `json:"messages"`
+	Result   AccessApplication `json:"result"`
+}
 
 // AccessApplications returns all applications within a zone.
 //
@@ -60,3 +68,29 @@ func (api *API) AccessApplications(zoneID string, pageOpts PaginationOptions) ([
 
 	return accessApplicationListResponse.Result, accessApplicationListResponse.ResultInfo, nil
 }
+
+// AccessApplication returns a single application based on the
+// application ID.
+//
+// API reference: https://api.cloudflare.com/#access-applications-access-applications-details
+func (api *API) AccessApplication(zoneID, applicationID string) (AccessApplication, error) {
+	uri := fmt.Sprintf(
+		"/zones/%s/access/apps/%s",
+		zoneID,
+		applicationID,
+	)
+
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return AccessApplication{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var accessApplicationDetailResponse AccessApplicationDetailResponse
+	err = json.Unmarshal(res, &accessApplicationDetailResponse)
+	if err != nil {
+		return AccessApplication{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return accessApplicationDetailResponse.Result, nil
+}
+
