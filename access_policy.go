@@ -116,3 +116,28 @@ func (api *API) AccessPolicies(zoneID, applicationID string, pageOpts Pagination
 	return accessPolicyListResponse.Result, accessPolicyListResponse.ResultInfo, nil
 }
 
+// AccessPolicy returns a single policy based on the policy ID.
+//
+// API reference: https://api.cloudflare.com/#access-policy-access-policy-details
+func (api *API) AccessPolicy(zoneID, applicationID, policyID string) (AccessPolicy, error) {
+	uri := fmt.Sprintf(
+		"/zones/%s/access/apps/%s/policies/%s",
+		zoneID,
+		applicationID,
+		policyID,
+	)
+
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return AccessPolicy{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var accessPolicyDetailResponse AccessPolicyDetailResponse
+	err = json.Unmarshal(res, &accessPolicyDetailResponse)
+	if err != nil {
+		return AccessPolicy{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return accessPolicyDetailResponse.Result, nil
+}
+
