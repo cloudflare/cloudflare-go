@@ -193,3 +193,21 @@ func (api *API) UpdateAccessPolicy(zoneID, applicationID string, accessPolicy Ac
 	return accessPolicyDetailResponse.Result, nil
 }
 
+// DeleteAccessPolicy deletes an access policy.
+//
+// API reference: https://api.cloudflare.com/#access-policy-update-access-policy
+func (api *API) DeleteAccessPolicy(zoneID, applicationID, accessPolicyID string) error {
+	uri := fmt.Sprintf(
+		"/zones/%s/access/apps/%s/policies/%s",
+		zoneID,
+		applicationID,
+		accessPolicyID,
+	)
+
+	_, err := api.makeRequest("DELETE", uri, nil)
+	if err != nil {
+		return errors.Wrap(err, errMakeRequestError)
+	}
+
+	return nil
+}

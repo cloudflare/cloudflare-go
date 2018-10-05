@@ -286,3 +286,26 @@ func TestUpdateAccessPolicyWithMissingID(t *testing.T) {
 	assert.EqualError(t, err, "access policy ID cannot be empty")
 }
 
+func TestDeleteAccessPolicy(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "DELETE", "Expected method 'DELETE', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "699d98642c564d2e855e9661899b7252"
+			}
+		}
+		`)
+	}
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/apps/"+accessApplicationID+"/policies/"+accessPolicyID, handler)
+	err := client.DeleteAccessPolicy(zoneID, accessApplicationID, accessPolicyID)
+
+	assert.NoError(t, err)
+}
