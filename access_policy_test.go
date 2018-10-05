@@ -151,3 +151,78 @@ func TestAccessPolicy(t *testing.T) {
 	}
 }
 
+func TestCreateAccessPolicy(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "699d98642c564d2e855e9661899b7252",
+				"precedence": 1,
+				"decision": "allow",
+				"created_at": "2014-01-01T05:20:00.12345Z",
+				"updated_at": "2014-01-01T05:20:00.12345Z",
+				"name": "Allow devs",
+				"include": [
+					{
+						"email": {
+							"email": "test@example.com"
+						}
+					}
+				],
+				"exclude": [
+					{
+						"email": {
+							"email": "test@example.com"
+						}
+					}
+				],
+				"require": [
+					{
+						"email": {
+							"email": "test@example.com"
+						}
+					}
+				]
+			}
+		}
+		`)
+	}
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/apps/"+accessApplicationID+"/policies", handler)
+
+	actual, err := client.CreateAccessPolicy(
+		zoneID,
+		accessApplicationID,
+		AccessPolicy{
+			Name: "Allow devs",
+			Include: []interface{}{
+				AccessPolicyEmail{struct {
+					Email string `json:"email"`
+				}{Email: "test@example.com"}},
+			},
+			Exclude: []interface{}{
+				AccessPolicyEmail{struct {
+					Email string `json:"email"`
+				}{Email: "test@example.com"}},
+			},
+			Require: []interface{}{
+				AccessPolicyEmail{struct {
+					Email string `json:"email"`
+				}{Email: "test@example.com"}},
+			},
+			Decision: "allow",
+		},
+	)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expectedAccessPolicy, actual)
+	}
+}
+

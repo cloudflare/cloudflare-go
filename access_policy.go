@@ -141,3 +141,27 @@ func (api *API) AccessPolicy(zoneID, applicationID, policyID string) (AccessPoli
 	return accessPolicyDetailResponse.Result, nil
 }
 
+// CreateAccessPolicy creates a new access policy.
+//
+// API reference: https://api.cloudflare.com/#access-policy-create-access-policy
+func (api *API) CreateAccessPolicy(zoneID, applicationID string, accessPolicy AccessPolicy) (AccessPolicy, error) {
+	uri := fmt.Sprintf(
+		"/zones/%s/access/apps/%s/policies",
+		zoneID,
+		applicationID,
+	)
+
+	res, err := api.makeRequest("POST", uri, accessPolicy)
+	if err != nil {
+		return AccessPolicy{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var accessPolicyDetailResponse AccessPolicyDetailResponse
+	err = json.Unmarshal(res, &accessPolicyDetailResponse)
+	if err != nil {
+		return AccessPolicy{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return accessPolicyDetailResponse.Result, nil
+}
+
