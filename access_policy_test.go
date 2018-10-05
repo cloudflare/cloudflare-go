@@ -226,3 +226,63 @@ func TestCreateAccessPolicy(t *testing.T) {
 	}
 }
 
+func TestUpdateAccessPolicy(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "PUT", "Expected method 'PUT', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "699d98642c564d2e855e9661899b7252",
+				"precedence": 1,
+				"decision": "allow",
+				"created_at": "2014-01-01T05:20:00.12345Z",
+				"updated_at": "2014-01-01T05:20:00.12345Z",
+				"name": "Allow devs",
+				"include": [
+					{
+						"email": {
+							"email": "test@example.com"
+						}
+					}
+				],
+				"exclude": [
+					{
+						"email": {
+							"email": "test@example.com"
+						}
+					}
+				],
+				"require": [
+					{
+						"email": {
+							"email": "test@example.com"
+						}
+					}
+				]
+			}
+		}
+		`)
+	}
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/apps/"+accessApplicationID+"/policies/"+accessPolicyID, handler)
+	actual, err := client.UpdateAccessPolicy(zoneID, accessApplicationID, expectedAccessPolicy)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expectedAccessPolicy, actual)
+	}
+}
+
+func TestUpdateAccessPolicyWithMissingID(t *testing.T) {
+	setup()
+	defer teardown()
+
+	_, err := client.UpdateAccessPolicy(zoneID, accessApplicationID, AccessPolicy{})
+	assert.EqualError(t, err, "access policy ID cannot be empty")
+}
+

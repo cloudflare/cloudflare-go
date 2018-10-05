@@ -165,3 +165,31 @@ func (api *API) CreateAccessPolicy(zoneID, applicationID string, accessPolicy Ac
 	return accessPolicyDetailResponse.Result, nil
 }
 
+// UpdateAccessPolicy updates an existing access policy.
+//
+// API reference: https://api.cloudflare.com/#access-policy-update-access-policy
+func (api *API) UpdateAccessPolicy(zoneID, applicationID string, accessPolicy AccessPolicy) (AccessPolicy, error) {
+	if accessPolicy.ID == "" {
+		return AccessPolicy{}, errors.Errorf("access policy ID cannot be empty")
+	}
+	uri := fmt.Sprintf(
+		"/zones/%s/access/apps/%s/policies/%s",
+		zoneID,
+		applicationID,
+		accessPolicy.ID,
+	)
+
+	res, err := api.makeRequest("PUT", uri, accessPolicy)
+	if err != nil {
+		return AccessPolicy{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var accessPolicyDetailResponse AccessPolicyDetailResponse
+	err = json.Unmarshal(res, &accessPolicyDetailResponse)
+	if err != nil {
+		return AccessPolicy{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return accessPolicyDetailResponse.Result, nil
+}
+
