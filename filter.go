@@ -45,19 +45,6 @@ type FilterValidateExpression struct {
 	Expression string `json:"expression"`
 }
 
-// FilterValidateExpressionResponse represents the API response for
-// checking the expression. It conforms to the JSON API approach however
-// we don't need all of the fields exposed.
-type FilterValidateExpressionResponse struct {
-	Success bool                                `json:"success"`
-	Errors  []FilterValidationExpressionMessage `json:"errors"`
-}
-
-// FilterValidationExpressionMessage represents the API error message.
-type FilterValidationExpressionMessage struct {
-	Message string `json:"message"`
-}
-
 // Filter returns a single filter in a zone based on the filter ID.
 //
 // API reference: https://developers.cloudflare.com/firewall/api/cf-filters/get/#get-by-filter-id
@@ -223,18 +210,7 @@ func (api *API) ValidateFilterExpression(expression string) error {
 
 	_, err := api.makeRequest("POST", uri, expressionPayload)
 	if err != nil {
-		var filterValidationResponse FilterValidateExpressionResponse
-
-		jsonErr := json.Unmarshal([]byte(err.Error()), &filterValidationResponse)
-		if jsonErr != nil {
-			return errors.Wrap(jsonErr, errUnmarshalError)
-		}
-
-		if filterValidationResponse.Success != true {
-			// Unsure why but the API returns `errors` as an array but it only
-			// ever shows the issue with one problem at a time ¯\_(ツ)_/¯
-			return errors.Errorf(filterValidationResponse.Errors[0].Message)
-		}
+		return errors.Wrap(err, errMakeRequestError)
 	}
 
 	return nil
