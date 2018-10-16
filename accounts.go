@@ -15,9 +15,9 @@ type AccountSettings struct {
 
 // Account represents the root object that owns resources.
 type Account struct {
-	ID       string          `json:"id,omitempty"`
-	Name     string          `json:"name,omitempty"`
-	Settings AccountSettings `json:"settings"`
+	ID       string           `json:"id,omitempty"`
+	Name     string           `json:"name,omitempty"`
+	Settings *AccountSettings `json:"settings"`
 }
 
 // AccountResponse represents the response from the accounts endpoint for a

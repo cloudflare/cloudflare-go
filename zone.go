@@ -44,6 +44,7 @@ type Zone struct {
 	Betas       []string `json:"betas"`
 	DeactReason string   `json:"deactivation_reason"`
 	Meta        ZoneMeta `json:"meta"`
+	Account     Account  `json:"account"`
 }
 
 // ZoneMeta describes metadata about a zone.
