@@ -100,30 +100,30 @@ func TestFilters(t *testing.T) {
 
 	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/filters", handler)
 	want := []Filter{
-		Filter{
+		{
 			ID:          "b7ff25282d394be7b945e23c7106ce8a",
 			Paused:      false,
 			Description: "Login from office",
 			Expression:  "ip.src eq 93.184.216.0 and (http.request.uri.path ~ \"^.*/wp-login.php$\" or http.request.uri.path ~ \"^.*/xmlrpc.php$\")",
 		},
-		Filter{
+		{
 			ID:          "c218c536b2bd406f958f278cf0fa8c0f",
 			Paused:      false,
 			Description: "Login",
 			Expression:  "(http.request.uri.path ~ \"^.*/wp-login.php$\" or http.request.uri.path ~ \"^.*/xmlrpc.php$\")",
 		},
-		Filter{
+		{
 			ID:          "f2a64520581a4209aab12187a0081364",
 			Paused:      false,
 			Description: "not /api",
 			Expression:  "not http.request.uri.path matches \"^/api/.*$\"",
 		},
-		Filter{
+		{
 			ID:          "14217d7bd5ab435e84b1bd468bf4fb9f",
 			Paused:      false,
 			Description: "/api",
 			Expression:  "http.request.uri.path matches \"^/api/.*$\"",
-		}, Filter{
+		}, {
 			ID:         "60ee852f9cbb4802978d15600c7f3110",
 			Paused:     false,
 			Expression: "ip.src eq 93.184.216.0",
@@ -162,7 +162,7 @@ func TestCreateSingleFilter(t *testing.T) {
 
 	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/filters", handler)
 	want := []Filter{
-		Filter{
+		{
 			ID:          "b7ff25282d394be7b945e23c7106ce8a",
 			Paused:      false,
 			Description: "Login from office",
@@ -208,13 +208,13 @@ func TestCreateMultipleFilters(t *testing.T) {
 
 	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/filters", handler)
 	want := []Filter{
-		Filter{
+		{
 			ID:          "b7ff25282d394be7b945e23c7106ce8a",
 			Paused:      false,
 			Description: "Login from office",
 			Expression:  "ip.src eq 127.0.0.1",
 		},
-		Filter{
+		{
 			ID:          "b7ff25282d394be7b945e23c7106ce8a",
 			Paused:      false,
 			Description: "Login from second office",
@@ -296,13 +296,13 @@ func TestUpdateMultipleFilters(t *testing.T) {
 
 	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/filters", handler)
 	want := []Filter{
-		Filter{
+		{
 			ID:          "60ee852f9cbb4802978d15600c7f3110",
 			Paused:      false,
 			Description: "IP of example.org",
 			Expression:  "ip.src eq 93.184.216.0",
 		},
-		Filter{
+		{
 			ID:          "c218c536b2bd406f958f278cf0fa8c0f",
 			Paused:      false,
 			Description: "IP of example.com",

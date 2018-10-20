@@ -90,7 +90,7 @@ func TestFirewallRules(t *testing.T) {
 
 	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/firewall/rules", handler)
 	want := []FirewallRule{
-		FirewallRule{
+		{
 			ID:          "4ae338944d6143378c3cf05a7c77d983",
 			Paused:      false,
 			Description: "allow API traffic without challenge",
@@ -103,7 +103,7 @@ func TestFirewallRules(t *testing.T) {
 				Description: "/api",
 			},
 		},
-		FirewallRule{
+		{
 			ID:          "f2d427378e7542acb295380d352e2ebd",
 			Paused:      false,
 			Description: "do not challenge login from office",
@@ -116,7 +116,7 @@ func TestFirewallRules(t *testing.T) {
 				Description: "wordpress xmlrpc",
 			},
 		},
-		FirewallRule{
+		{
 			ID:          "cbf4b7a5a2a24e59a03044d6d44ceb09",
 			Paused:      false,
 			Description: "challenge login",
@@ -129,7 +129,7 @@ func TestFirewallRules(t *testing.T) {
 				Description: "Login",
 			},
 		},
-		FirewallRule{
+		{
 			ID:          "52161eb6af4241bb9d4b32394be72fdf",
 			Paused:      false,
 			Description: "JS challenge site",
@@ -233,7 +233,7 @@ func TestCreateSingleFirewallRule(t *testing.T) {
 
 	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/firewall/rules", handler)
 	want := []FirewallRule{
-		FirewallRule{
+		{
 			ID:          "f2d427378e7542acb295380d352e2ebd",
 			Paused:      false,
 			Description: "do not challenge login from office",
@@ -300,7 +300,7 @@ func TestCreateMultipleFirewallRules(t *testing.T) {
 
 	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/firewall/rules", handler)
 	want := []FirewallRule{
-		FirewallRule{
+		{
 			ID:          "f2d427378e7542acb295380d352e2ebd",
 			Paused:      false,
 			Description: "do not challenge login from office",
@@ -313,7 +313,7 @@ func TestCreateMultipleFirewallRules(t *testing.T) {
 				Description: "Login from office",
 			},
 		},
-		FirewallRule{
+		{
 			ID:          "cbf4b7a5a2a24e59a03044d6d44ceb09",
 			Paused:      false,
 			Description: "challenge login",
@@ -452,7 +452,7 @@ func TestUpdateMultipleFirewallRules(t *testing.T) {
 
 	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/firewall/rules", handler)
 	want := []FirewallRule{
-		FirewallRule{
+		{
 			ID:          "f2d427378e7542acb295380d352e2ebd",
 			Paused:      false,
 			Description: "do not challenge login from office",
@@ -465,7 +465,7 @@ func TestUpdateMultipleFirewallRules(t *testing.T) {
 				Description: "Login from office",
 			},
 		},
-		FirewallRule{
+		{
 			ID:          "cbf4b7a5a2a24e59a03044d6d44ceb09",
 			Paused:      false,
 			Description: "challenge login",

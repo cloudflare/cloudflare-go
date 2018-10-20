@@ -46,7 +46,7 @@ func TestListWAFPackages(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/firewall/waf/packages", handler)
 
 	want := []WAFPackage{
-		WAFPackage{
+		{
 			ID:            "a25a9a7e9c00afc1fb2e0245519d725b",
 			Name:          "WordPress rules",
 			Description:   "Common WordPress exploit protections",
@@ -111,7 +111,7 @@ func TestListWAFRules(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/firewall/waf/packages/a25a9a7e9c00afc1fb2e0245519d725b/rules", handler)
 
 	want := []WAFRule{
-		WAFRule{
+		{
 			ID:          "f939de3be84e66e757adcdcb87908023",
 			Description: "SQL injection prevention for SELECT statements",
 			Priority:    "5",
