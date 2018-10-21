@@ -26,6 +26,12 @@ type CustomPageResponse struct {
 	Result []CustomPage `json:"result"`
 }
 
+// CustomPageDetailResponse represents the response from the custom page endpoint.
+type CustomPageDetailResponse struct {
+	Response
+	Result CustomPage `json:"result"`
+}
+
 // CustomPageOptions is used to determine whether or not the operation
 // should take place on an account or zone level based on which is
 // provided to the function.
@@ -84,6 +90,49 @@ func (api *API) CustomPages(options *CustomPageOptions) ([]CustomPage, error) {
 
 	return customPageResponse.Result, nil
 }
+
+// CustomPage lists a single custom page based on the ID.
+//
+// Zone API reference: https://api.cloudflare.com/#custom-pages-for-a-zone-custom-page-details
+// Account API reference: https://api.cloudflare.com/#custom-pages-account--custom-page-details
+func (api *API) CustomPage(options *CustomPageOptions, customPageID string) (CustomPage, error) {
+	var (
+		pageType, identifier string
+	)
+
+	if options.AccountID == "" && options.ZoneID == "" {
+		return CustomPage{}, errors.New("either account ID or zone ID must be provided")
+	}
+
+	if options.AccountID != "" && options.ZoneID != "" {
+		return CustomPage{}, errors.New("account ID and zone ID are mutually exclusive")
+	}
+
+	// Should the account ID be defined, treat this as an account level operation.
+	if options.AccountID != "" {
+		pageType = "accounts"
+		identifier = options.AccountID
+	} else {
+		pageType = "zones"
+		identifier = options.ZoneID
+	}
+
+	uri := fmt.Sprintf("/%s/%s/custom_pages/%s", pageType, identifier, customPageID)
+
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return CustomPage{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var customPageResponse CustomPageDetailResponse
+	err = json.Unmarshal(res, &customPageResponse)
+	if err != nil {
+		return CustomPage{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return customPageResponse.Result, nil
+}
+
 // UpdateCustomPage updates a single custom page setting.
 //
 // Zone API reference: https://api.cloudflare.com/#custom-pages-for-a-zone-update-custom-page-url
@@ -113,3 +162,15 @@ func (api *API) UpdateCustomPage(options *CustomPageOptions, customPageID string
 	uri := fmt.Sprintf("/%s/%s/custom_pages/%s", pageType, identifier, customPageID)
 
 	res, err := api.makeRequest("PUT", uri, pageParameters)
+	if err != nil {
+		return CustomPage{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var customPageResponse CustomPageDetailResponse
+	err = json.Unmarshal(res, &customPageResponse)
+	if err != nil {
+		return CustomPage{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return customPageResponse.Result, nil
+}
