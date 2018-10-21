@@ -36,6 +36,13 @@ type CustomPageOptions struct {
 	ZoneID    string
 }
 
+// CustomPageParameters is used to update a particular custom page with
+// the values provided.
+type CustomPageParameters struct {
+	URL   string `json:"url"`
+	State string `json:"state"`
+}
+
 // CustomPages lists custom pages for a zone or account.
 //
 // Zone API reference: https://api.cloudflare.com/#custom-pages-for-a-zone-list-available-custom-pages
@@ -77,3 +84,32 @@ func (api *API) CustomPages(options *CustomPageOptions) ([]CustomPage, error) {
 
 	return customPageResponse.Result, nil
 }
+// UpdateCustomPage updates a single custom page setting.
+//
+// Zone API reference: https://api.cloudflare.com/#custom-pages-for-a-zone-update-custom-page-url
+// Account API reference: https://api.cloudflare.com/#custom-pages-account--update-custom-page
+func (api *API) UpdateCustomPage(options *CustomPageOptions, customPageID string, pageParameters CustomPageParameters) (CustomPage, error) {
+	var (
+		pageType, identifier string
+	)
+
+	if options.AccountID == "" && options.ZoneID == "" {
+		return CustomPage{}, errors.New("either account ID or zone ID must be provided")
+	}
+
+	if options.AccountID != "" && options.ZoneID != "" {
+		return CustomPage{}, errors.New("account ID and zone ID are mutually exclusive")
+	}
+
+	// Should the account ID be defined, treat this as an account level operation.
+	if options.AccountID != "" {
+		pageType = "accounts"
+		identifier = options.AccountID
+	} else {
+		pageType = "zones"
+		identifier = options.ZoneID
+	}
+
+	uri := fmt.Sprintf("/%s/%s/custom_pages/%s", pageType, identifier, customPageID)
+
+	res, err := api.makeRequest("PUT", uri, pageParameters)
