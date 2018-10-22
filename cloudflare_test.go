@@ -77,6 +77,21 @@ func TestClient_Headers(t *testing.T) {
 	})
 	client.UserDetails()
 	teardown()
+
+	// it should set X-Auth-User-Service-Key and omit X-Auth-Email and X-Auth-Key when using NewWithUserServiceKey
+	setup()
+	client, err := NewWithUserServiceKey("userservicekey")
+	assert.NoError(t, err)
+	client.BaseURL = server.URL
+	mux.HandleFunc("/user", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Empty(t, r.Header.Get("X-Auth-Email"))
+		assert.Empty(t, r.Header.Get("X-Auth-Key"))
+		assert.Equal(t, "userservicekey", r.Header.Get("X-Auth-User-Service-Key"))
+		assert.Equal(t, "application/json", r.Header.Get("Content-Type"))
+	})
+	client.UserDetails()
+	teardown()
 }
 
 func TestClient_Auth(t *testing.T) {
