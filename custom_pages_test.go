@@ -30,6 +30,16 @@ var updatedCustomPage = CustomPage{
 	PreviewTarget:  "preview:target",
 	Description:    "Basic challenge",
 }
+var defaultCustomPage = CustomPage{
+	ID:             "basic_challenge",
+	CreatedOn:      timestamp,
+	ModifiedOn:     timestamp,
+	URL:            nil,
+	State:          "default",
+	RequiredTokens: []string{"::CAPTCHA_BOX::"},
+	PreviewTarget:  "preview:target",
+	Description:    "Basic challenge",
+}
 
 func TestCustomPagesWithoutZoneIDOrAccountID(t *testing.T) {
 	_, err := client.CustomPages(&CustomPageOptions{})
@@ -308,5 +318,45 @@ func TestUpdateCustomPagesForZone(t *testing.T) {
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, updatedCustomPage, actual)
+	}
+}
+
+func TestUpdateCustomPagesToDefault(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "PUT", "Expected method 'PUT', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `
+		{
+			"result":{
+				"id":"basic_challenge",
+				"description":"Basic challenge",
+				"required_tokens":[
+					"::CAPTCHA_BOX::"
+				],
+				"preview_target":"preview:target",
+				"created_on": "2014-01-01T05:20:00.12345Z",
+				"modified_on": "2014-01-01T05:20:00.12345Z",
+				"url":null,
+				"state":"default"
+			},
+			"success":true,
+			"errors":[],
+			"messages":[]
+		}
+		`)
+	}
+
+	mux.HandleFunc("/zones/d992d6de698eaf2d8cf8fd53b89b18a4/custom_pages/basic_challenge", handler)
+	actual, err := client.UpdateCustomPage(
+		&CustomPageOptions{ZoneID: "d992d6de698eaf2d8cf8fd53b89b18a4"},
+		"basic_challenge",
+		CustomPageParameters{URL: nil, State: "default"},
+	)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, defaultCustomPage, actual)
 	}
 }

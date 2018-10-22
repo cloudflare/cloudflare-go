@@ -10,14 +10,14 @@ import (
 
 // CustomPage represents a custom page configuration.
 type CustomPage struct {
-	CreatedOn      time.Time `json:"created_on"`
-	ModifiedOn     time.Time `json:"modified_on"`
-	URL            string    `json:"url"`
-	State          string    `json:"state"`
-	RequiredTokens []string  `json:"required_tokens"`
-	PreviewTarget  string    `json:"preview_target"`
-	Description    string    `json:"description"`
-	ID             string    `json:"id"`
+	CreatedOn      time.Time   `json:"created_on"`
+	ModifiedOn     time.Time   `json:"modified_on"`
+	URL            interface{} `json:"url"`
+	State          string      `json:"state"`
+	RequiredTokens []string    `json:"required_tokens"`
+	PreviewTarget  string      `json:"preview_target"`
+	Description    string      `json:"description"`
+	ID             string      `json:"id"`
 }
 
 // CustomPageResponse represents the response from the custom pages endpoint.
@@ -45,8 +45,8 @@ type CustomPageOptions struct {
 // CustomPageParameters is used to update a particular custom page with
 // the values provided.
 type CustomPageParameters struct {
-	URL   string `json:"url"`
-	State string `json:"state"`
+	URL   interface{} `json:"url"`
+	State string      `json:"state"`
 }
 
 // CustomPages lists custom pages for a zone or account.
