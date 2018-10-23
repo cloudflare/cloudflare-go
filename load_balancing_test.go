@@ -448,8 +448,8 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
 		Method:      "GET",
 		Path:        "/health",
 		Header: map[string][]string{
-			"Host":     []string{"example.com"},
-			"X-App-ID": []string{"abc123"},
+			"Host":     {"example.com"},
+			"X-App-ID": {"abc123"},
 		},
 		Timeout:       3,
 		Retries:       0,
@@ -463,8 +463,8 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
 		Method:      "GET",
 		Path:        "/health",
 		Header: map[string][]string{
-			"Host":     []string{"example.com"},
-			"X-App-ID": []string{"abc123"},
+			"Host":     {"example.com"},
+			"X-App-ID": {"abc123"},
 		},
 		Timeout:       3,
 		Retries:       0,
@@ -536,8 +536,8 @@ func TestListLoadBalancerMonitors(t *testing.T) {
 			Method:      "GET",
 			Path:        "/health",
 			Header: map[string][]string{
-				"Host":     []string{"example.com"},
-				"X-App-ID": []string{"abc123"},
+				"Host":     {"example.com"},
+				"X-App-ID": {"abc123"},
 			},
 			Timeout:       3,
 			Retries:       0,
@@ -601,8 +601,8 @@ func TestLoadBalancerMonitorDetails(t *testing.T) {
 		Method:      "GET",
 		Path:        "/health",
 		Header: map[string][]string{
-			"Host":     []string{"example.com"},
-			"X-App-ID": []string{"abc123"},
+			"Host":     {"example.com"},
+			"X-App-ID": {"abc123"},
 		},
 		Timeout:       3,
 		Retries:       0,
@@ -714,8 +714,8 @@ func TestModifyLoadBalancerMonitor(t *testing.T) {
 		Method:      "GET",
 		Path:        "/status",
 		Header: map[string][]string{
-			"Host":     []string{"example.com"},
-			"X-App-ID": []string{"easy"},
+			"Host":     {"example.com"},
+			"X-App-ID": {"easy"},
 		},
 		Timeout:       3,
 		Retries:       0,
@@ -730,8 +730,8 @@ func TestModifyLoadBalancerMonitor(t *testing.T) {
 		Method:      "GET",
 		Path:        "/status",
 		Header: map[string][]string{
-			"Host":     []string{"example.com"},
-			"X-App-ID": []string{"easy"},
+			"Host":     {"example.com"},
+			"X-App-ID": {"easy"},
 		},
 		Timeout:       3,
 		Retries:       0,
@@ -854,24 +854,24 @@ func TestCreateLoadBalancer(t *testing.T) {
 			"00920f38ce07c2e2f4df50b1f61d4194",
 		},
 		RegionPools: map[string][]string{
-			"WNAM": []string{
+			"WNAM": {
 				"de90f38ced07c2e2f4df50b1f61d4194",
 				"9290f38c5d07c2e2f4df57b1f61d4196",
 			},
-			"ENAM": []string{
+			"ENAM": {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
 		PopPools: map[string][]string{
-			"LAX": []string{
+			"LAX": {
 				"de90f38ced07c2e2f4df50b1f61d4194",
 				"9290f38c5d07c2e2f4df57b1f61d4196",
 			},
-			"LHR": []string{
+			"LHR": {
 				"abd90f38ced07c2e2f4df50b1f61d4194",
 				"f9138c5d07c2e2f4df57b1f61d4196",
 			},
-			"SJC": []string{
+			"SJC": {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
@@ -889,24 +889,24 @@ func TestCreateLoadBalancer(t *testing.T) {
 			"00920f38ce07c2e2f4df50b1f61d4194",
 		},
 		RegionPools: map[string][]string{
-			"WNAM": []string{
+			"WNAM": {
 				"de90f38ced07c2e2f4df50b1f61d4194",
 				"9290f38c5d07c2e2f4df57b1f61d4196",
 			},
-			"ENAM": []string{
+			"ENAM": {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
 		PopPools: map[string][]string{
-			"LAX": []string{
+			"LAX": {
 				"de90f38ced07c2e2f4df50b1f61d4194",
 				"9290f38c5d07c2e2f4df57b1f61d4196",
 			},
-			"LHR": []string{
+			"LHR": {
 				"abd90f38ced07c2e2f4df50b1f61d4194",
 				"f9138c5d07c2e2f4df57b1f61d4196",
 			},
-			"SJC": []string{
+			"SJC": {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
@@ -997,24 +997,24 @@ func TestListLoadBalancers(t *testing.T) {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 			RegionPools: map[string][]string{
-				"WNAM": []string{
+				"WNAM": {
 					"de90f38ced07c2e2f4df50b1f61d4194",
 					"9290f38c5d07c2e2f4df57b1f61d4196",
 				},
-				"ENAM": []string{
+				"ENAM": {
 					"00920f38ce07c2e2f4df50b1f61d4194",
 				},
 			},
 			PopPools: map[string][]string{
-				"LAX": []string{
+				"LAX": {
 					"de90f38ced07c2e2f4df50b1f61d4194",
 					"9290f38c5d07c2e2f4df57b1f61d4196",
 				},
-				"LHR": []string{
+				"LHR": {
 					"abd90f38ced07c2e2f4df50b1f61d4194",
 					"f9138c5d07c2e2f4df57b1f61d4196",
 				},
-				"SJC": []string{
+				"SJC": {
 					"00920f38ce07c2e2f4df50b1f61d4194",
 				},
 			},
@@ -1096,24 +1096,24 @@ func TestLoadBalancerDetails(t *testing.T) {
 			"00920f38ce07c2e2f4df50b1f61d4194",
 		},
 		RegionPools: map[string][]string{
-			"WNAM": []string{
+			"WNAM": {
 				"de90f38ced07c2e2f4df50b1f61d4194",
 				"9290f38c5d07c2e2f4df57b1f61d4196",
 			},
-			"ENAM": []string{
+			"ENAM": {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
 		PopPools: map[string][]string{
-			"LAX": []string{
+			"LAX": {
 				"de90f38ced07c2e2f4df50b1f61d4194",
 				"9290f38c5d07c2e2f4df57b1f61d4196",
 			},
-			"LHR": []string{
+			"LHR": {
 				"abd90f38ced07c2e2f4df50b1f61d4194",
 				"f9138c5d07c2e2f4df57b1f61d4196",
 			},
-			"SJC": []string{
+			"SJC": {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
@@ -1248,21 +1248,21 @@ func TestModifyLoadBalancer(t *testing.T) {
 			"00920f38ce07c2e2f4df50b1f61d4194",
 		},
 		RegionPools: map[string][]string{
-			"WNAM": []string{
+			"WNAM": {
 				"9290f38c5d07c2e2f4df57b1f61d4196",
 			},
-			"ENAM": []string{
+			"ENAM": {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
 		PopPools: map[string][]string{
-			"LAX": []string{
+			"LAX": {
 				"9290f38c5d07c2e2f4df57b1f61d4196",
 			},
-			"LHR": []string{
+			"LHR": {
 				"f9138c5d07c2e2f4df57b1f61d4196",
 			},
-			"SJC": []string{
+			"SJC": {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
@@ -1279,21 +1279,21 @@ func TestModifyLoadBalancer(t *testing.T) {
 			"00920f38ce07c2e2f4df50b1f61d4194",
 		},
 		RegionPools: map[string][]string{
-			"WNAM": []string{
+			"WNAM": {
 				"9290f38c5d07c2e2f4df57b1f61d4196",
 			},
-			"ENAM": []string{
+			"ENAM": {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
 		PopPools: map[string][]string{
-			"LAX": []string{
+			"LAX": {
 				"9290f38c5d07c2e2f4df57b1f61d4196",
 			},
-			"LHR": []string{
+			"LHR": {
 				"f9138c5d07c2e2f4df57b1f61d4196",
 			},
-			"SJC": []string{
+			"SJC": {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
