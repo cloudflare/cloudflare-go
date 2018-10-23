@@ -42,20 +42,13 @@ type API struct {
 	logger            Logger
 }
 
-// New creates a new Cloudflare v4 API client.
-func New(key, email string, opts ...Option) (*API, error) {
-	if key == "" || email == "" {
-		return nil, errors.New(errEmptyCredentials)
-	}
-
+// newClient provides shared logic for New and NewWithUserServiceKey
+func newClient(opts ...Option) (*API, error) {
 	silentLogger := log.New(ioutil.Discard, "", log.LstdFlags)
 
 	api := &API{
-		APIKey:      key,
-		APIEmail:    email,
 		BaseURL:     apiURL,
 		headers:     make(http.Header),
-		authType:    AuthKeyEmail,
 		rateLimiter: rate.NewLimiter(rate.Limit(4), 1), // 4rps equates to default api limit (1200 req/5 min)
 		retryPolicy: RetryPolicy{
 			MaxRetries:    3,
@@ -75,6 +68,41 @@ func New(key, email string, opts ...Option) (*API, error) {
 	if api.httpClient == nil {
 		api.httpClient = http.DefaultClient
 	}
+
+	return api, nil
+}
+
+// New creates a new Cloudflare v4 API client.
+func New(key, email string, opts ...Option) (*API, error) {
+	if key == "" || email == "" {
+		return nil, errors.New(errEmptyCredentials)
+	}
+
+	api, err := newClient(opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	api.APIKey = key
+	api.APIEmail = email
+	api.authType = AuthKeyEmail
+
+	return api, nil
+}
+
+// NewWithUserServiceKey creates a new Cloudflare v4 API client using service key authentication.
+func NewWithUserServiceKey(key string, opts ...Option) (*API, error) {
+	if key == "" {
+		return nil, errors.New(errEmptyCredentials)
+	}
+
+	api, err := newClient(opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	api.APIUserServiceKey = key
+	api.authType = AuthUserService
 
 	return api, nil
 }
