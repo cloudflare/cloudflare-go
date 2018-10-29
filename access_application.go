@@ -119,7 +119,7 @@ func (api *API) CreateAccessApplication(zoneID string, accessApplication AccessA
 // API reference: https://api.cloudflare.com/#access-applications-update-access-application
 func (api *API) UpdateAccessApplication(zoneID string, accessApplication AccessApplication) (AccessApplication, error) {
 	if accessApplication.ID == "" {
-		return AccessApplication{}, errors.Errorf("filter ID cannot be empty")
+		return AccessApplication{}, errors.Errorf("access application ID cannot be empty")
 	}
 
 	uri := fmt.Sprintf(
