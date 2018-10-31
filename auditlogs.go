@@ -7,11 +7,13 @@ import (
 	"time"
 )
 
+// Action is a member of AuditLog, the action that was taken.
 type Action struct {
 	Result bool   `json:"result"`
 	Type   string `json:"type"`
 }
 
+// Actor is a member of AuditLog, who performed the action.
 type Actor struct {
 	Email string `json:"email"`
 	ID    string `json:"id"`
@@ -19,15 +21,18 @@ type Actor struct {
 	Type  string `json:"type"`
 }
 
+// AuditLogOwner is a member of AuditLog, who owns this audit log.
 type AuditLogOwner struct {
 	ID string `json:"id"`
 }
 
+// Resource is a member of AuditLog, what was the action performed on.
 type Resource struct {
 	ID   string `json:"id"`
 	Type string `json:"type"`
 }
 
+// AuditLog is an resource that represents an update in the cloudflare dash
 type AuditLog struct {
 	Action   Action                 `json:"action"`
 	Actor    Actor                  `json:"actor"`
@@ -39,12 +44,15 @@ type AuditLog struct {
 	Resource Resource               `json:"resource"`
 	When     time.Time              `json:"when"`
 }
+
+// AuditLogResponse is the response returned from the cloudflare v4 api
 type AuditLogResponse struct {
 	Response   Response
 	Result     []AuditLog `json:"result"`
 	ResultInfo `json:"result_info"`
 }
 
+// AuditLogFilter is an object for filtering the audit log response from the api.
 type AuditLogFilter struct {
 	ID         string
 	ActorIP    string
