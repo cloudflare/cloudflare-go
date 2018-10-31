@@ -103,6 +103,8 @@ func (a AuditLogFilter) String() string {
 // GetOrganizationAuditLogs will return the audit logs of a specific
 // organization, based on the ID passed in. The audit logs can be
 // filtered based on any argument in the AuditLogFilter
+//
+// API Reference: https://api.cloudflare.com/#audit-logs-list-organization-audit-logs
 func (api *API) GetOrganizationAuditLogs(organizationID string, a AuditLogFilter) (AuditLogResponse, error) {
 	uri := "/organizations/" + organizationID + "/audit_logs" + fmt.Sprintf("%s", a)
 
@@ -129,6 +131,8 @@ func unmarshalReturn(res []byte) (AuditLogResponse, error) {
 
 // GetUserAuditLogs will return your user's audit logs. The audit logs can be
 // filtered based on any argument in the AuditLogFilter
+//
+// API Reference: https://api.cloudflare.com/#audit-logs-list-user-audit-logs
 func (api *API) GetUserAuditLogs(a AuditLogFilter) (AuditLogResponse, error) {
 	uri := "/user/audit_logs" + fmt.Sprintf("%s", a)
 	res, err := api.makeRequest("GET", uri, nil)
