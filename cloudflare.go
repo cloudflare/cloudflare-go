@@ -118,11 +118,23 @@ func (api *API) ZoneIDByName(zoneName string) (string, error) {
 	if err != nil {
 		return "", errors.Wrap(err, "ListZones command failed")
 	}
+
+	if len(res) > 1 && api.OrganizationID == "" {
+		return "", errors.New("ambiguous zone name used without an account ID")
+	}
+
 	for _, zone := range res {
-		if zone.Name == zoneName {
-			return zone.ID, nil
+		if api.OrganizationID != "" {
+			if zone.Name == zoneName && api.OrganizationID == zone.Account.ID {
+				return zone.ID, nil
+			}
+		} else {
+			if zone.Name == zoneName {
+				return zone.ID, nil
+			}
 		}
 	}
+
 	return "", errors.New("Zone could not be found")
 }
 

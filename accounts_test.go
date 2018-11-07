@@ -12,7 +12,7 @@ import (
 var expectedAccountStruct = Account{
 	ID:   "01a7362d577a6c3019a474fd6f485823",
 	Name: "Cloudflare Demo",
-	Settings: AccountSettings{
+	Settings: &AccountSettings{
 		EnforceTwoFactor: false,
 	},
 }
@@ -132,7 +132,7 @@ func TestUpdateAccount(t *testing.T) {
 	oldAccountDetails := Account{
 		ID:   "01a7362d577a6c3019a474fd6f485823",
 		Name: "Cloudflare Demo - Old",
-		Settings: AccountSettings{
+		Settings: &AccountSettings{
 			EnforceTwoFactor: false,
 		},
 	}
@@ -140,7 +140,7 @@ func TestUpdateAccount(t *testing.T) {
 	newAccountDetails := Account{
 		ID:   "01a7362d577a6c3019a474fd6f485823",
 		Name: "Cloudflare Demo - New",
-		Settings: AccountSettings{
+		Settings: &AccountSettings{
 			EnforceTwoFactor: false,
 		},
 	}
