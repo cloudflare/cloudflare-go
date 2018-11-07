@@ -213,7 +213,7 @@ func TestUpdateAccessApplicationWithMissingID(t *testing.T) {
 	defer teardown()
 
 	_, err := client.UpdateAccessApplication("d56084adb405e0b7e32c52321bf07be6", AccessApplication{})
-	assert.EqualError(t, err, "filter ID cannot be empty")
+	assert.EqualError(t, err, "access application ID cannot be empty")
 }
 
 func TestDeleteAccessApplication(t *testing.T) {

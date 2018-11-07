@@ -13,7 +13,7 @@ import (
 // AccessPolicy defines a policy for allowing or disallowing access to
 // one or more Access applications.
 type AccessPolicy struct {
-	ID         string     `json:"id"`
+	ID         string     `json:"id,omitempty"`
 	Precedence int        `json:"precedence"`
 	Decision   string     `json:"decision"`
 	CreatedAt  *time.Time `json:"created_at"`
@@ -40,6 +40,14 @@ type AccessPolicyEmail struct {
 	Email struct {
 		Email string `json:"email"`
 	} `json:"email"`
+}
+
+// AccessPolicyEmailDomain is used for managing access based on an email
+// domain domain such as `example.com` instead of individual addresses.
+type AccessPolicyEmailDomain struct {
+	EmailDomain struct {
+		Domain string `json:"domain"`
+	} `json:"email_domain"`
 }
 
 // AccessPolicyIP is used for managing access based in the IP. It
