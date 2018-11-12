@@ -8,13 +8,13 @@ import (
 )
 
 // Action is a member of AuditLog, the action that was taken.
-type Action struct {
+type AuditLogAction struct {
 	Result bool   `json:"result"`
 	Type   string `json:"type"`
 }
 
 // Actor is a member of AuditLog, who performed the action.
-type Actor struct {
+type AuditLogActor struct {
 	Email string `json:"email"`
 	ID    string `json:"id"`
 	IP    string `json:"ip"`
@@ -27,21 +27,21 @@ type AuditLogOwner struct {
 }
 
 // Resource is a member of AuditLog, what was the action performed on.
-type Resource struct {
+type AuditLogResource struct {
 	ID   string `json:"id"`
 	Type string `json:"type"`
 }
 
 // AuditLog is an resource that represents an update in the cloudflare dash
 type AuditLog struct {
-	Action   Action                 `json:"action"`
-	Actor    Actor                  `json:"actor"`
+	Action   AuditLogAction         `json:"action"`
+	Actor    AuditLogActor          `json:"actor"`
 	ID       string                 `json:"id"`
 	Metadata map[string]interface{} `json:"metadata"`
 	NewValue string                 `json:"newValue"`
 	OldValue string                 `json:"oldValue"`
 	Owner    AuditLogOwner          `json:"owner"`
-	Resource Resource               `json:"resource"`
+	Resource AuditLogResource       `json:"resource"`
 	When     time.Time              `json:"when"`
 }
 
