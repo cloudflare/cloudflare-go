@@ -7,13 +7,13 @@ import (
 	"time"
 )
 
-// Action is a member of AuditLog, the action that was taken.
+// AuditLogAction is a member of AuditLog, the action that was taken.
 type AuditLogAction struct {
 	Result bool   `json:"result"`
 	Type   string `json:"type"`
 }
 
-// Actor is a member of AuditLog, who performed the action.
+// AuditLogActor is a member of AuditLog, who performed the action.
 type AuditLogActor struct {
 	Email string `json:"email"`
 	ID    string `json:"id"`
@@ -26,7 +26,7 @@ type AuditLogOwner struct {
 	ID string `json:"id"`
 }
 
-// Resource is a member of AuditLog, what was the action performed on.
+// AuditLogResource is a member of AuditLog, what was the action performed on.
 type AuditLogResource struct {
 	ID   string `json:"id"`
 	Type string `json:"type"`
