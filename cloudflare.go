@@ -10,6 +10,8 @@ import (
 	"log"
 	"math"
 	"net/http"
+	"net/url"
+	"strconv"
 	"strings"
 	"time"
 
@@ -114,16 +116,16 @@ func (api *API) SetAuthType(authType int) {
 
 // ZoneIDByName retrieves a zone's ID from the name.
 func (api *API) ZoneIDByName(zoneName string) (string, error) {
-	res, err := api.ListZones(zoneName)
+	res, err := api.ListZonesContext(context.TODO(), WithZoneFilter(zoneName))
 	if err != nil {
-		return "", errors.Wrap(err, "ListZones command failed")
+		return "", errors.Wrap(err, "ListZonesContext command failed")
 	}
 
-	if len(res) > 1 && api.OrganizationID == "" {
+	if len(res.Result) > 1 && api.OrganizationID == "" {
 		return "", errors.New("ambiguous zone name used without an account ID")
 	}
 
-	for _, zone := range res {
+	for _, zone := range res.Result {
 		if api.OrganizationID != "" {
 			if zone.Name == zoneName && api.OrganizationID == zone.Account.ID {
 				return zone.ID, nil
@@ -381,4 +383,25 @@ type RetryPolicy struct {
 // This is a subset of the methods implemented in the log package
 type Logger interface {
 	Printf(format string, v ...interface{})
+}
+
+// ReqOption is a functional option for configuring API requests
+type ReqOption func(opt *reqOption)
+type reqOption struct {
+	params url.Values
+}
+
+// WithZoneFilter applies a filter based on zone name.
+func WithZoneFilter(zone string) ReqOption {
+	return func(opt *reqOption) {
+		opt.params.Set("name", zone)
+	}
+}
+
+// WithPagination configures the pagination for a response.
+func WithPagination(opts PaginationOptions) ReqOption {
+	return func(opt *reqOption) {
+		opt.params.Set("page", strconv.Itoa(opts.Page))
+		opt.params.Set("per_page", strconv.Itoa(opts.PerPage))
+	}
 }
