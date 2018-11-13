@@ -64,7 +64,7 @@ type LoadBalancer struct {
 	PopPools     map[string][]string `json:"pop_pools"`
 	Proxied      bool                `json:"proxied"`
 	Persistence  string              `json:"session_affinity,omitempty"`
-	
+
 	// SteeringPolicy controls pool selection logic.
 	// "off" select pools in DefaultPools order
 	// "geo" select pools based on RegionPools/PopPools

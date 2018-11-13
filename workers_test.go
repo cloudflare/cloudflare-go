@@ -83,6 +83,10 @@ const (
             "id": "f8b68e9857f85bf59c25994dadb421b1",
             "pattern": "app2.example.com/*",
             "script": "test_script_2"
+        },
+        {
+            "id": "2b5bf4240cd34c77852fac70b1bf745a",
+            "pattern": "app3.example.com/*"
         }
     ],
     "success": true,
@@ -246,6 +250,8 @@ func TestWorkers_UploadWorker(t *testing.T) {
 
 	mux.HandleFunc("/zones/foo/workers/script", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		contentTypeHeader := r.Header.Get("content-type")
+		assert.Equal(t, "application/javascript", contentTypeHeader, "Expected content-type request header to be 'application/javascript', got %s", contentTypeHeader)
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, uploadWorkerResponseData)
 	})
@@ -273,10 +279,40 @@ func TestWorkers_UploadWorkerWithName(t *testing.T) {
 
 	mux.HandleFunc("/accounts/foo/workers/scripts/bar", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		contentTypeHeader := r.Header.Get("content-type")
+		assert.Equal(t, "application/javascript", contentTypeHeader, "Expected content-type request header to be 'application/javascript', got %s", contentTypeHeader)
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, uploadWorkerResponseData)
 	})
 	res, err := client.UploadWorker(&WorkerRequestParams{ScriptName: "bar"}, workerScript)
+	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
+	want := WorkerScriptResponse{
+		successResponse,
+		WorkerScript{
+			Script: workerScript,
+			WorkerMetaData: WorkerMetaData{
+				ETAG:       "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
+				Size:       191,
+				ModifiedOn: formattedTime,
+			},
+		}}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
+}
+
+func TestWorkers_UploadWorkerSingleScriptWithOrg(t *testing.T) {
+	setup(UsingOrganization("foo"))
+	defer teardown()
+
+	mux.HandleFunc("/zones/foo/workers/script", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		contentTypeHeader := r.Header.Get("content-type")
+		assert.Equal(t, "application/javascript", contentTypeHeader, "Expected content-type request header to be 'application/javascript', got %s", contentTypeHeader)
+		w.Header().Set("content-type", "application/javascript")
+		fmt.Fprintf(w, uploadWorkerResponseData)
+	})
+	res, err := client.UploadWorker(&WorkerRequestParams{ZoneID: "foo"}, workerScript)
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
@@ -328,6 +364,24 @@ func TestWorkers_CreateWorkerRouteEnt(t *testing.T) {
 		w.Header().Set("content-type", "application-json")
 		fmt.Fprintf(w, createWorkerRouteResponse)
 	})
+	route := WorkerRoute{Pattern: "app1.example.com/*", Script: "test_script"}
+	res, err := client.CreateWorkerRoute("foo", route)
+	want := WorkerRouteResponse{successResponse, WorkerRoute{ID: "e7a57d8746e74ae49c25994dadb421b1"}}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
+
+}
+
+func TestWorkers_CreateWorkerRouteSingleScriptWithOrg(t *testing.T) {
+	setup(UsingOrganization("foo"))
+	defer teardown()
+
+	mux.HandleFunc("/zones/foo/workers/filters", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "POST", r.Method, "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application-json")
+		fmt.Fprintf(w, createWorkerRouteResponse)
+	})
 	route := WorkerRoute{Pattern: "app1.example.com/*", Enabled: true}
 	res, err := client.CreateWorkerRoute("foo", route)
 	want := WorkerRouteResponse{successResponse, WorkerRoute{ID: "e7a57d8746e74ae49c25994dadb421b1"}}
@@ -361,7 +415,7 @@ func TestWorkers_DeleteWorkerRouteEnt(t *testing.T) {
 	setup(UsingOrganization("foo"))
 	defer teardown()
 
-	mux.HandleFunc("/zones/foo/workers/routes/e7a57d8746e74ae49c25994dadb421b1", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/zones/foo/workers/filters/e7a57d8746e74ae49c25994dadb421b1", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "DELETE", r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application-json")
 		fmt.Fprintf(w, deleteWorkerRouteResponseData)
@@ -412,8 +466,9 @@ func TestWorkers_ListWorkerRoutesEnt(t *testing.T) {
 	res, err := client.ListWorkerRoutes("foo")
 	want := WorkerRoutesResponse{successResponse,
 		[]WorkerRoute{
-			{ID: "e7a57d8746e74ae49c25994dadb421b1", Pattern: "app1.example.com/*", Script: "test_script_1"},
-			{ID: "f8b68e9857f85bf59c25994dadb421b1", Pattern: "app2.example.com/*", Script: "test_script_2"},
+			{ID: "e7a57d8746e74ae49c25994dadb421b1", Pattern: "app1.example.com/*", Script: "test_script_1", Enabled: true},
+			{ID: "f8b68e9857f85bf59c25994dadb421b1", Pattern: "app2.example.com/*", Script: "test_script_2", Enabled: true},
+			{ID: "2b5bf4240cd34c77852fac70b1bf745a", Pattern: "app3.example.com/*", Script: "", Enabled: false},
 		},
 	}
 	if assert.NoError(t, err) {
@@ -454,6 +509,29 @@ func TestWorkers_UpdateWorkerRouteEnt(t *testing.T) {
 		fmt.Fprintf(w, updateWorkerRouteEntResponse)
 	})
 	route := WorkerRoute{Pattern: "app3.example.com/*", Script: "test_script_1"}
+	res, err := client.UpdateWorkerRoute("foo", "e7a57d8746e74ae49c25994dadb421b1", route)
+	want := WorkerRouteResponse{successResponse,
+		WorkerRoute{
+			ID:      "e7a57d8746e74ae49c25994dadb421b1",
+			Pattern: "app3.example.com/*",
+			Script:  "test_script_1",
+		}}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
+
+}
+
+func TestWorkers_UpdateWorkerRouteSingleScriptWithOrg(t *testing.T) {
+	setup(UsingOrganization("foo"))
+	defer teardown()
+
+	mux.HandleFunc("/zones/foo/workers/filters/e7a57d8746e74ae49c25994dadb421b1", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		w.Header().Set("content-type", "application-json")
+		fmt.Fprintf(w, updateWorkerRouteEntResponse)
+	})
+	route := WorkerRoute{Pattern: "app3.example.com/*", Enabled: true}
 	res, err := client.UpdateWorkerRoute("foo", "e7a57d8746e74ae49c25994dadb421b1", route)
 	want := WorkerRouteResponse{successResponse,
 		WorkerRoute{

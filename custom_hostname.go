@@ -8,13 +8,22 @@ import (
 	"github.com/pkg/errors"
 )
 
+// CustomHostnameSSLSettings represents the SSL settings for a custom hostname.
+type CustomHostnameSSLSettings struct {
+	HTTP2         string   `json:"http2,omitempty"`
+	TLS13         string   `json:"tls_1_3,omitempty"`
+	MinTLSVersion string   `json:"min_tls_version,omitempty"`
+	Ciphers       []string `json:"ciphers,omitempty"`
+}
+
 // CustomHostnameSSL represents the SSL section in a given custom hostname.
 type CustomHostnameSSL struct {
-	Status      string `json:"status,omitempty"`
-	Method      string `json:"method,omitempty"`
-	Type        string `json:"type,omitempty"`
-	CnameTarget string `json:"cname_target,omitempty"`
-	CnameName   string `json:"cname_name,omitempty"`
+	Status      string                    `json:"status,omitempty"`
+	Method      string                    `json:"method,omitempty"`
+	Type        string                    `json:"type,omitempty"`
+	CnameTarget string                    `json:"cname_target,omitempty"`
+	CnameName   string                    `json:"cname_name,omitempty"`
+	Settings    CustomHostnameSSLSettings `json:"settings,omitempty"`
 }
 
 // CustomMetadata defines custom metadata for the hostname. This requires logic to be implemented by Cloudflare to act on the data provided.

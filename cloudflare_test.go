@@ -77,31 +77,21 @@ func TestClient_Headers(t *testing.T) {
 	})
 	client.UserDetails()
 	teardown()
-}
 
-func TestClient_Auth(t *testing.T) {
+	// it should set X-Auth-User-Service-Key and omit X-Auth-Email and X-Auth-Key when using NewWithUserServiceKey
 	setup()
-	defer teardown()
-
-	mux.HandleFunc("/ips", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
-		assert.Equal(t, "cloudflare@example.com", r.Header.Get("X-Auth-Email"))
-		assert.Equal(t, "deadbeef", r.Header.Get("X-Auth-Token"))
-		w.Header().Set("Content-Type", "application/json")
-		fmt.Fprintf(w, `{
-  "success": true,
-  "errors": [],
-  "messages": [],
-  "response": {
-    "ipv4_cidrs": ["199.27.128.0/21"],
-    "ipv6_cidrs": ["199.27.128.0/21"]
-  }
-}`)
-	})
-
-	_, err := IPs()
-
+	client, err := NewWithUserServiceKey("userservicekey")
 	assert.NoError(t, err)
+	client.BaseURL = server.URL
+	mux.HandleFunc("/user", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Empty(t, r.Header.Get("X-Auth-Email"))
+		assert.Empty(t, r.Header.Get("X-Auth-Key"))
+		assert.Equal(t, "userservicekey", r.Header.Get("X-Auth-User-Service-Key"))
+		assert.Equal(t, "application/json", r.Header.Get("Content-Type"))
+	})
+	client.UserDetails()
+	teardown()
 }
 
 func TestClient_RetryCanSucceedAfterErrors(t *testing.T) {
@@ -200,4 +190,280 @@ func TestClient_RetryReturnsPersistentErrorResponse(t *testing.T) {
 
 	_, err := client.ListLoadBalancerPools()
 	assert.Error(t, err)
+}
+
+func TestZoneIDByNameWithNonUniqueZonesWithoutOrgID(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": [
+				{
+					"id": "023e105f4ecef8ad9ca31a8372d0c353",
+					"name": "example.com",
+					"development_mode": 7200,
+					"original_name_servers": [
+						"ns1.originaldnshost.com",
+						"ns2.originaldnshost.com"
+					],
+					"original_registrar": "GoDaddy",
+					"original_dnshost": "NameCheap",
+					"created_on": "2014-01-01T05:20:00.12345Z",
+					"modified_on": "2014-01-01T05:20:00.12345Z",
+					"owner": {
+						"id": "7c5dae5552338874e5053f2534d2767a",
+						"email": "user@example.com",
+						"owner_type": "user"
+					},
+					"account": {
+						"id": "01a7362d577a6c3019a474fd6f485823",
+						"name": "Demo Account"
+					},
+					"permissions": [
+						"#zone:read",
+						"#zone:edit"
+					],
+					"plan": {
+						"id": "e592fd9519420ba7405e1307bff33214",
+						"name": "Pro Plan",
+						"price": 20,
+						"currency": "USD",
+						"frequency": "monthly",
+						"legacy_id": "pro",
+						"is_subscribed": true,
+						"can_subscribe": true
+					},
+					"plan_pending": {
+						"id": "e592fd9519420ba7405e1307bff33214",
+						"name": "Pro Plan",
+						"price": 20,
+						"currency": "USD",
+						"frequency": "monthly",
+						"legacy_id": "pro",
+						"is_subscribed": true,
+						"can_subscribe": true
+					},
+					"status": "active",
+					"paused": false,
+					"type": "full",
+					"name_servers": [
+						"tony.ns.cloudflare.com",
+						"woz.ns.cloudflare.com"
+					]
+				},
+				{
+					"id": "023e105f4ecef8ad9ca31a8372d0c353",
+					"name": "example.com",
+					"development_mode": 7200,
+					"original_name_servers": [
+						"ns1.originaldnshost.com",
+						"ns2.originaldnshost.com"
+					],
+					"original_registrar": "GoDaddy",
+					"original_dnshost": "NameCheap",
+					"created_on": "2014-01-01T05:20:00.12345Z",
+					"modified_on": "2014-01-01T05:20:00.12345Z",
+					"owner": {
+						"id": "7c5dae5552338874e5053f2534d2767a",
+						"email": "user@example.com",
+						"owner_type": "user"
+					},
+					"account": {
+						"id": "01a7362d577a6c3019a474fd6f485823",
+						"name": "Demo Account"
+					},
+					"permissions": [
+						"#zone:read",
+						"#zone:edit"
+					],
+					"plan": {
+						"id": "e592fd9519420ba7405e1307bff33214",
+						"name": "Pro Plan",
+						"price": 20,
+						"currency": "USD",
+						"frequency": "monthly",
+						"legacy_id": "pro",
+						"is_subscribed": true,
+						"can_subscribe": true
+					},
+					"plan_pending": {
+						"id": "e592fd9519420ba7405e1307bff33214",
+						"name": "Pro Plan",
+						"price": 20,
+						"currency": "USD",
+						"frequency": "monthly",
+						"legacy_id": "pro",
+						"is_subscribed": true,
+						"can_subscribe": true
+					},
+					"status": "active",
+					"paused": false,
+					"type": "full",
+					"name_servers": [
+						"tony.ns.cloudflare.com",
+						"woz.ns.cloudflare.com"
+					]
+				}
+			],
+			"result_info": {
+				"page": 1,
+				"per_page": 20,
+				"count": 1,
+				"total_count": 2000
+			}
+		}
+		`)
+	}
+
+	// `HandleFunc` doesn't handle query parameters so we just need to
+	// handle the `/zones` endpoint instead.
+	mux.HandleFunc("/zones", handler)
+
+	_, err := client.ZoneIDByName("example.com")
+	assert.EqualError(t, err, "ambiguous zone name used without an account ID")
+}
+
+func TestZoneIDByNameWithNonUniqueZonesWithOrgId(t *testing.T) {
+	setup(UsingOrganization("01a7362d577a6c3019a474fd6f485823"))
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": [
+				{
+					"id": "023e105f4ecef8ad9ca31a8372d0c353",
+					"name": "example.com",
+					"development_mode": 7200,
+					"original_name_servers": [
+						"ns1.originaldnshost.com",
+						"ns2.originaldnshost.com"
+					],
+					"original_registrar": "GoDaddy",
+					"original_dnshost": "NameCheap",
+					"created_on": "2014-01-01T05:20:00.12345Z",
+					"modified_on": "2014-01-01T05:20:00.12345Z",
+					"owner": {
+						"id": "7c5dae5552338874e5053f2534d2767a",
+						"email": "user@example.com",
+						"owner_type": "user"
+					},
+					"account": {
+						"id": "e592fd9519420ba7405e1307bff33214",
+						"name": "Another Demo Account"
+					},
+					"permissions": [
+						"#zone:read",
+						"#zone:edit"
+					],
+					"plan": {
+						"id": "e592fd9519420ba7405e1307bff33214",
+						"name": "Pro Plan",
+						"price": 20,
+						"currency": "USD",
+						"frequency": "monthly",
+						"legacy_id": "pro",
+						"is_subscribed": true,
+						"can_subscribe": true
+					},
+					"plan_pending": {
+						"id": "e592fd9519420ba7405e1307bff33214",
+						"name": "Pro Plan",
+						"price": 20,
+						"currency": "USD",
+						"frequency": "monthly",
+						"legacy_id": "pro",
+						"is_subscribed": true,
+						"can_subscribe": true
+					},
+					"status": "active",
+					"paused": false,
+					"type": "full",
+					"name_servers": [
+						"tony.ns.cloudflare.com",
+						"woz.ns.cloudflare.com"
+					]
+				},
+				{
+					"id": "7c5dae5552338874e5053f2534d2767a",
+					"name": "example.com",
+					"development_mode": 7200,
+					"original_name_servers": [
+						"ns1.originaldnshost.com",
+						"ns2.originaldnshost.com"
+					],
+					"original_registrar": "GoDaddy",
+					"original_dnshost": "NameCheap",
+					"created_on": "2014-01-01T05:20:00.12345Z",
+					"modified_on": "2014-01-01T05:20:00.12345Z",
+					"owner": {
+						"id": "7c5dae5552338874e5053f2534d2767a",
+						"email": "user@example.com",
+						"owner_type": "user"
+					},
+					"account": {
+						"id": "01a7362d577a6c3019a474fd6f485823",
+						"name": "Demo Account"
+					},
+					"permissions": [
+						"#zone:read",
+						"#zone:edit"
+					],
+					"plan": {
+						"id": "e592fd9519420ba7405e1307bff33214",
+						"name": "Pro Plan",
+						"price": 20,
+						"currency": "USD",
+						"frequency": "monthly",
+						"legacy_id": "pro",
+						"is_subscribed": true,
+						"can_subscribe": true
+					},
+					"plan_pending": {
+						"id": "e592fd9519420ba7405e1307bff33214",
+						"name": "Pro Plan",
+						"price": 20,
+						"currency": "USD",
+						"frequency": "monthly",
+						"legacy_id": "pro",
+						"is_subscribed": true,
+						"can_subscribe": true
+					},
+					"status": "active",
+					"paused": false,
+					"type": "full",
+					"name_servers": [
+						"tony.ns.cloudflare.com",
+						"woz.ns.cloudflare.com"
+					]
+				}
+			],
+			"result_info": {
+				"page": 1,
+				"per_page": 20,
+				"count": 1,
+				"total_count": 2000
+			}
+		}
+		`)
+	}
+
+	// `HandleFunc` doesn't handle query parameters so we just need to
+	// handle the `/zones` endpoint instead.
+	mux.HandleFunc("/zones", handler)
+
+	actual, err := client.ZoneIDByName("example.com")
+	if assert.NoError(t, err) {
+		assert.Equal(t, actual, "7c5dae5552338874e5053f2534d2767a")
+	}
 }

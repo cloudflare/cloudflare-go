@@ -314,6 +314,12 @@ func firewallAccessRuleDelete(c *cli.Context) {
 	if err != nil {
 		fmt.Println("Error deleting firewall access rule:", err)
 	}
+
+	output := make([][]string, 0, len(rules))
+	for _, rule := range rules {
+		output = append(output, formatAccessRule(rule))
+	}
+	writeTable(output, "ID", "Value", "Scope", "Mode", "Notes")
 }
 
 func getScope(c *cli.Context) (string, string, error) {

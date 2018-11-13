@@ -1,14 +1,28 @@
 language: go
 sudo: false
+
+env:
+  global:
+    - MOD_VENDOR=""
+
 matrix:
+  fast_finish: true
   include:
-    - go: 1.x
-      env: LATEST=true
-    - go: 1.7.x
-    - go: 1.8.x
     - go: 1.9.x
     - go: 1.10.x
+    - go: 1.11.x
+      env:
+        - GO111MODULE=on
+        - MOD_VENDOR="-mod=vendor"
+    - go: 1.x
+      env:
+        - LATEST=true
+        - GO111MODULE=on
+        - MOD_VENDOR="-mod=vendor"
     - go: tip
+      env:
+        - GO111MODULE=on
+        - MOD_VENDOR="-mod=vendor"
   allow_failures:
     - go: tip
 
@@ -20,10 +34,10 @@ install:
   - # skip
 
 script:
-  - go get -t -v ./...
+  - if [ "$GO111MODULE" != "on" ]; then go get -t -v ./... ; else true; fi
   - golint -set_exit_status . cmd/flarectl
-  - go vet $(go list ./... | grep -v /vendor/)
-  - go test -v -race ./...
+  - go vet $MOD_VENDOR $(go list $MOD_VENDOR ./... | grep -v /vendor/)
+  - go test -v -race $MOD_VENDOR ./...
   # Only build binaries from the latest Go release.
   - if [ "${LATEST}" = "true" ]; then gox -os="linux darwin windows" -arch="amd64" -output="flarectl.{{.OS}}.{{.Arch}}" -ldflags "-X main.Rev=`git rev-parse --short HEAD`" -verbose ./...; fi
 
