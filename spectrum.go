@@ -163,23 +163,17 @@ func (api *API) UpdateSpectrumApplication(zoneID, appID string, appDetails Spect
 // DeleteSpectrumApplication removes a Spectrum application based on the ID.
 //
 // API reference: https://developers.cloudflare.com/spectrum/api-reference/#delete-a-spectrum-application
-func (api *API) DeleteSpectrumApplication(zoneID string, applicationID string) (DeletedSpectrumApplicationResult, error) {
+func (api *API) DeleteSpectrumApplication(zoneID string, applicationID string) error {
 	uri := fmt.Sprintf(
 		"/zones/%s/spectrum/apps/%s",
 		zoneID,
 		applicationID,
 	)
 
-	res, err := api.makeRequest("DELETE", uri, nil)
+	_, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return DeletedSpectrumApplicationResult{}, errors.Wrap(err, errMakeRequestError)
+		return errors.Wrap(err, errMakeRequestError)
 	}
 
-	var deletedSpectrumApplication DeletedSpectrumApplicationResponse
-	err = json.Unmarshal(res, &deletedSpectrumApplication)
-	if err != nil {
-		return DeletedSpectrumApplicationResult{}, errors.Wrap(err, errUnmarshalError)
-	}
-
-	return deletedSpectrumApplication.Result, nil
+	return nil
 }

@@ -257,12 +257,6 @@ func TestDeleteSpectrumApplication(t *testing.T) {
 
 	mux.HandleFunc("/zones/01a7362d577a6c3019a474fd6f485823/spectrum/apps/f68579455bd947efb65ffa1bcf33b52c", handler)
 
-	want := DeletedSpectrumApplicationResult{
-		ID: "40d67c87c6cd4b889a4fd57805225e85",
-	}
-
-	actual, err := client.DeleteSpectrumApplication("01a7362d577a6c3019a474fd6f485823", "f68579455bd947efb65ffa1bcf33b52c")
-	if assert.NoError(t, err) {
-		assert.Equal(t, want, actual)
-	}
+	err := client.DeleteSpectrumApplication("01a7362d577a6c3019a474fd6f485823", "f68579455bd947efb65ffa1bcf33b52c")
+	assert.NoError(t, err)
 }
