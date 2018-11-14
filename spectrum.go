@@ -42,34 +42,15 @@ type SpectrumApplicationOriginDNS struct {
 // SpectrumApplicationDetailResponse is the structure of the detailed response
 // from the API.
 type SpectrumApplicationDetailResponse struct {
-	Success  bool                `json:"success"`
-	Errors   []string            `json:"errors"`
-	Messages []string            `json:"messages"`
-	Result   SpectrumApplication `json:"result"`
+	Response
+	Result SpectrumApplication `json:"result"`
 }
 
 // SpectrumApplicationsDetailResponse is the structure of the detailed response
 // from the API.
 type SpectrumApplicationsDetailResponse struct {
-	Success  bool                  `json:"success"`
-	Errors   []string              `json:"errors"`
-	Messages []string              `json:"messages"`
-	Result   []SpectrumApplication `json:"result"`
-}
-
-// DeletedSpectrumApplicationResponse defines the API response when deleting a
-// Spectrum application.
-type DeletedSpectrumApplicationResponse struct {
-	Success  bool                             `json:"success"`
-	Errors   []string                         `json:"errors"`
-	Messages []string                         `json:"messages"`
-	Result   DeletedSpectrumApplicationResult `json:"result"`
-}
-
-// DeletedSpectrumApplicationResult defines the struct for a deleted application
-// result.
-type DeletedSpectrumApplicationResult struct {
-	ID string `json:"id"`
+	Response
+	Result []SpectrumApplication `json:"result"`
 }
 
 // SpectrumApplications fetches all of the Spectrum applications for a zone.
