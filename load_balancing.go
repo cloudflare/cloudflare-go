@@ -35,19 +35,21 @@ type LoadBalancerOrigin struct {
 
 // LoadBalancerMonitor represents a load balancer monitor's properties.
 type LoadBalancerMonitor struct {
-	ID            string              `json:"id,omitempty"`
-	CreatedOn     *time.Time          `json:"created_on,omitempty"`
-	ModifiedOn    *time.Time          `json:"modified_on,omitempty"`
-	Type          string              `json:"type"`
-	Description   string              `json:"description"`
-	Method        string              `json:"method"`
-	Path          string              `json:"path"`
-	Header        map[string][]string `json:"header"`
-	Timeout       int                 `json:"timeout"`
-	Retries       int                 `json:"retries"`
-	Interval      int                 `json:"interval"`
-	ExpectedBody  string              `json:"expected_body"`
-	ExpectedCodes string              `json:"expected_codes"`
+	ID              string              `json:"id,omitempty"`
+	CreatedOn       *time.Time          `json:"created_on,omitempty"`
+	ModifiedOn      *time.Time          `json:"modified_on,omitempty"`
+	Type            string              `json:"type"`
+	Description     string              `json:"description"`
+	Method          string              `json:"method"`
+	Path            string              `json:"path"`
+	Header          map[string][]string `json:"header"`
+	Timeout         int                 `json:"timeout"`
+	Retries         int                 `json:"retries"`
+	Interval        int                 `json:"interval"`
+	ExpectedBody    string              `json:"expected_body"`
+	ExpectedCodes   string              `json:"expected_codes"`
+	FollowRedirects bool                `json:"follow_redirects"`
+	AllowInsecure   bool                `json:"allow_insecure"`
 }
 
 // LoadBalancer represents a load balancer's properties.

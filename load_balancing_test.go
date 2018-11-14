@@ -404,7 +404,9 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
               "retries": 0,
               "interval": 90,
               "expected_body": "alive",
-              "expected_codes": "2xx"
+              "expected_codes": "2xx",
+              "follow_redirects": true,
+              "allow_insecure": true
 						}`, string(b))
 		}
 		fmt.Fprint(w, `{
@@ -431,7 +433,9 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
                 "retries": 0,
                 "interval": 90,
                 "expected_body": "alive",
-                "expected_codes": "2xx"
+                "expected_codes": "2xx",
+                "follow_redirects": true,
+                "allow_insecure": true
             }
         }`)
 	}
@@ -456,6 +460,9 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
 		Interval:      90,
 		ExpectedBody:  "alive",
 		ExpectedCodes: "2xx",
+
+		FollowRedirects: true,
+		AllowInsecure:   true,
 	}
 	request := LoadBalancerMonitor{
 		Type:        "https",
@@ -471,6 +478,9 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
 		Interval:      90,
 		ExpectedBody:  "alive",
 		ExpectedCodes: "2xx",
+
+		FollowRedirects: true,
+		AllowInsecure:   true,
 	}
 
 	actual, err := client.CreateLoadBalancerMonitor(request)
@@ -584,7 +594,9 @@ func TestLoadBalancerMonitorDetails(t *testing.T) {
                 "retries": 0,
                 "interval": 90,
                 "expected_body": "alive",
-                "expected_codes": "2xx"
+                "expected_codes": "2xx",
+                "follow_redirects": true,
+                "allow_insecure": true
             }
         }`)
 	}
@@ -609,6 +621,9 @@ func TestLoadBalancerMonitorDetails(t *testing.T) {
 		Interval:      90,
 		ExpectedBody:  "alive",
 		ExpectedCodes: "2xx",
+
+		FollowRedirects: true,
+		AllowInsecure:   true,
 	}
 
 	actual, err := client.LoadBalancerMonitorDetails("f1aba936b94213e5b8dca0c0dbf1f9cc")
@@ -670,7 +685,9 @@ func TestModifyLoadBalancerMonitor(t *testing.T) {
                 "retries": 0,
                 "interval": 90,
                 "expected_body": "kicking",
-                "expected_codes": "200"
+                "expected_codes": "200",
+                "follow_redirects": true,
+                "allow_insecure": true
 						}`, string(b))
 		}
 		fmt.Fprint(w, `{
@@ -697,7 +714,9 @@ func TestModifyLoadBalancerMonitor(t *testing.T) {
                 "retries": 0,
                 "interval": 90,
                 "expected_body": "kicking",
-                "expected_codes": "200"
+                "expected_codes": "200",
+                "follow_redirects": true,
+                "allow_insecure": true
             }
         }`)
 	}
@@ -722,6 +741,9 @@ func TestModifyLoadBalancerMonitor(t *testing.T) {
 		Interval:      90,
 		ExpectedBody:  "kicking",
 		ExpectedCodes: "200",
+
+		FollowRedirects: true,
+		AllowInsecure:   true,
 	}
 	request := LoadBalancerMonitor{
 		ID:          "f1aba936b94213e5b8dca0c0dbf1f9cc",
@@ -738,6 +760,9 @@ func TestModifyLoadBalancerMonitor(t *testing.T) {
 		Interval:      90,
 		ExpectedBody:  "kicking",
 		ExpectedCodes: "200",
+
+		FollowRedirects: true,
+		AllowInsecure:   true,
 	}
 
 	actual, err := client.ModifyLoadBalancerMonitor(request)
