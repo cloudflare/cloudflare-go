@@ -40,6 +40,7 @@ type VirtualDNSAnalytics struct {
 	Max    VirtualDNSAnalyticsMetrics `json:"max"`
 }
 
+// VirtualDNSUserAnalyticsOptions represents range and dimension selection on analytics endpoint
 type VirtualDNSUserAnalyticsOptions struct {
 	Metrics []string
 	Since   *time.Time
@@ -173,6 +174,7 @@ func (o VirtualDNSUserAnalyticsOptions) encode() string {
 	return v.Encode()
 }
 
+// VirtualDNSUserAnalytics retrieves analytics report for a specified dimension and time range
 func (api *API) VirtualDNSUserAnalytics(virtualDNSID string, o VirtualDNSUserAnalyticsOptions) (VirtualDNSAnalytics, error) {
 	uri := "/user/virtual_dns/" + virtualDNSID + "/dns_analytics/report?" + o.encode()
 	res, err := api.makeRequest("GET", uri, nil)
