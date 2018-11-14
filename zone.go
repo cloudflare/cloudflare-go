@@ -14,7 +14,8 @@ import (
 type Owner struct {
 	ID        string `json:"id"`
 	Email     string `json:"email"`
-	OwnerType string `json:"owner_type"`
+	Name      string `json:"name"`
+	OwnerType string `json:"type"`
 }
 
 // Zone describes a Cloudflare zone.
