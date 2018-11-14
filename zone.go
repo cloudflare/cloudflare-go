@@ -11,10 +11,10 @@ import (
 
 // Owner describes the resource owner.
 type Owner struct {
-	ID    string `json:"id"`
-	Email string `json:"email"`
-	Name  string `json:"name"`
-	Type  string `json:"type"`
+	ID        string `json:"id"`
+	Email     string `json:"email"`
+	Name      string `json:"name"`
+	OwnerType string `json:"type"`
 }
 
 // Zone describes a Cloudflare zone.
