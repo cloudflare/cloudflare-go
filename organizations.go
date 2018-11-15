@@ -159,6 +159,39 @@ func (api *API) OrganizationInvites(organizationID string) ([]OrganizationInvite
 	return r.Result, r.ResultInfo, nil
 }
 
+type createOrganizationInviteParams struct {
+	Email string `json:"invited_member_email"`
+	Roles []OrganizationRole `json:"roles"`
+	AutoAccept bool `json:"auto_accept,omitempty"`
+}
+
+// CreateOrganizationInvite returns list of invites for specified organization of
+// the logged-in user.
+//
+// API reference: https://api.cloudflare.com/#organization-invites
+func (api *API) CreateOrganizationInvite(organizationID, email string, roles []string, autoAccept bool) ([]OrganizationInvite, ResultInfo, error) {
+	params := createOrganizationInviteParams{
+		Email: email,
+		AutoAccept: autoAccept,
+	}
+	for _, role := range roles {
+		params.Roles = append(params.Roles, OrganizationRole{ID: role})
+	}
+	var r organizationInvitesResponse
+	uri := "/organizations/" + organizationID + "/invites"
+	res, err := api.makeRequest("POST", uri, params)
+	if err != nil {
+		return []OrganizationInvite{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return []OrganizationInvite{}, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return r.Result, r.ResultInfo, nil
+}
+
 // organizationRolesResponse represents the response from the Organization roles endpoint.
 type organizationRolesResponse struct {
 	Response
