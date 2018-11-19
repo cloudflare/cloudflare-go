@@ -34,9 +34,7 @@ type SpectrumApplicationDNS struct {
 // SpectrumApplicationOriginDNS holds the origin DNS configuration for a Spectrum
 // Application.
 type SpectrumApplicationOriginDNS struct {
-	Type  string   `json:"type"`
-	Names []string `json:"names"`
-	TTL   int      `json:"ttl"`
+	Name string `json:"name"`
 }
 
 // SpectrumApplicationDetailResponse is the structure of the detailed response
