@@ -6,11 +6,28 @@ import (
 	"os"
 	"strings"
 
+	"io/ioutil"
+
 	"github.com/cloudflare/cloudflare-go"
 	"github.com/codegangsta/cli"
+	homedir "github.com/mitchellh/go-homedir"
 	"github.com/olekukonko/tablewriter"
+	"gopkg.in/yaml.v2"
+
 	"github.com/pkg/errors"
 )
+
+type conf struct {
+	Credentials       []credential `yaml:"credentials"`
+	CurrentCredential struct {
+		Email string `yaml:"email"`
+	} `yaml:"current-credential"`
+}
+
+type credential struct {
+	Email string `yaml:"email"`
+	Key   string `yaml:"key"`
+}
 
 // writeTable outputs tabular data to stdout.
 func writeTable(data [][]string, cols ...string) {
@@ -23,19 +40,48 @@ func writeTable(data [][]string, cols ...string) {
 }
 
 func checkEnv() error {
-	if api == nil {
-		var err error
-		api, err = cloudflare.New(os.Getenv("CF_API_KEY"), os.Getenv("CF_API_EMAIL"))
+	home, _ := homedir.Dir()
+	cfgFile := home + "/.flarectl"
+
+	var APIKey string
+	var APIEmail string
+
+	if _, err := os.Stat(cfgFile); os.IsNotExist(err) {
+		APIKey = os.Getenv("CF_API_KEY")
+		APIEmail = os.Getenv("CF_API_EMAIL")
+		if APIKey == "" {
+			return errors.New("API key not defined")
+		}
+		if APIEmail == "" {
+			return errors.New("API email not defined")
+		}
+
+	} else {
+		var fContext conf
+		yamlFile, err := ioutil.ReadFile(cfgFile)
 		if err != nil {
-			log.Fatal(err)
+			log.Printf("yamlFile.Get err   #%v ", err)
+		}
+
+		err = yaml.Unmarshal(yamlFile, &fContext)
+		if err != nil {
+			log.Fatalf("Unmarshal: %v", err)
+		}
+
+		for _, cred := range fContext.Credentials {
+			if cred.Email == fContext.CurrentCredential.Email {
+				APIEmail = cred.Email
+				APIKey = cred.Key
+			}
 		}
 	}
 
-	if api.APIKey == "" {
-		return errors.New("API key not defined")
-	}
-	if api.APIEmail == "" {
-		return errors.New("API email not defined")
+	if api == nil {
+		var err error
+		api, err = cloudflare.New(APIKey, APIEmail)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	return nil

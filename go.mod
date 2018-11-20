@@ -8,6 +8,6 @@ require (
 	github.com/pkg/errors v0.8.0
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/stretchr/testify v1.2.2
-	golang.org/x/net v0.0.0-20181029044818-c44066c5c816 // indirect
-	golang.org/x/time v0.0.0-20180412165947-fbb02b2291d2
+	golang.org/x/net v0.0.0-20181114220301-adae6a3d119a // indirect
+	golang.org/x/time v0.0.0-20181108054448-85acf8d2951c
 )
