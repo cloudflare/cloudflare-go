@@ -16,6 +16,47 @@ func main() {
 	app.Version = "2017.10.0"
 	app.Commands = []cli.Command{
 		{
+			Name:    "config",
+			Aliases: []string{"c"},
+			Usage:   "Configure your local credentials",
+			Subcommands: []cli.Command{
+				{
+					Name:    "list",
+					Aliases: []string{"l"},
+					Action:  showConf,
+					Usage:   "Show all your credentials",
+				},
+				{
+					Name:    "create",
+					Aliases: []string{"i", "c"},
+					Action:  initConf,
+					Usage:   "Create a new credentials configuration",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "email",
+							Usage: "your email address that you use to login Cloudflare",
+						},
+						cli.StringFlag{
+							Name:  "key",
+							Usage: "your Cloudflare account's api key",
+						},
+					},
+				},
+				{
+					Name:    "set-current-cred",
+					Aliases: []string{"s", "u"},
+					Action:  setCurrentCredential,
+					Usage:   "Active credential for default",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "email",
+							Usage: "your email address that you use to login Cloudflare",
+						},
+					},
+				},
+			},
+		},
+		{
 			Name:    "ips",
 			Aliases: []string{"i"},
 			Action:  ips,

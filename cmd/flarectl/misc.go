@@ -39,6 +39,122 @@ func writeTable(data [][]string, cols ...string) {
 	table.Render()
 }
 
+func showConf(*cli.Context) {
+	home, _ := homedir.Dir()
+	cfgFile := home + "/.flarectl"
+
+	var fContext conf
+	yamlFile, err := ioutil.ReadFile(cfgFile)
+	if err != nil {
+		log.Printf("yamlFile.Get err   #%v ", err)
+	}
+
+	err = yaml.Unmarshal(yamlFile, &fContext)
+	if err != nil {
+		log.Fatalf("Unmarshal: %v", err)
+	}
+
+	var output [][]string
+	var active string
+	for _, cred := range fContext.Credentials {
+		if cred.Email == fContext.CurrentCredential.Email {
+			active = "x"
+		} else {
+			active = ""
+		}
+		output = append(output, []string{
+			cred.Email,
+			cred.Key,
+			active,
+		})
+	}
+	writeTable(output, "Email", "Key", "Current")
+}
+
+func initConf(c *cli.Context) {
+	home, _ := homedir.Dir()
+	cfgFile := home + "/.flarectl"
+
+	if err := checkFlags(c, "email", "key"); err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	email := c.String("email")
+	key := c.String("key")
+
+	var fContext conf
+	if _, err := os.Stat(cfgFile); os.IsNotExist(err) {
+		fContext.Credentials[0].Email = email
+		fContext.Credentials[0].Key = key
+		fContext.CurrentCredential.Email = email
+	} else {
+		yamlFile, err := ioutil.ReadFile(cfgFile)
+		if err != nil {
+			log.Printf("yamlFile.Get err   #%v ", err)
+		}
+
+		err = yaml.Unmarshal(yamlFile, &fContext)
+		if err != nil {
+			log.Fatalf("Unmarshal: %v", err)
+		}
+
+		fContext.Credentials = append(fContext.Credentials, credential{
+			Email: email,
+			Key:   key,
+		})
+	}
+
+	data, e := yaml.Marshal(&fContext)
+	if e != nil {
+		log.Fatalf("error: %v", e)
+	}
+
+	e = ioutil.WriteFile(cfgFile, data, 0644)
+	if e != nil {
+		log.Fatalf("err: %v", e)
+	}
+
+	fmt.Println("Everything is set successfully, enjoy!!!")
+}
+
+func setCurrentCredential(c *cli.Context) {
+	home, _ := homedir.Dir()
+	cfgFile := home + "/.flarectl"
+
+	if err := checkFlags(c, "email"); err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	email := c.String("email")
+
+	var fContext conf
+	yamlFile, err := ioutil.ReadFile(cfgFile)
+	if err != nil {
+		log.Printf("yamlFile.Get err   #%v ", err)
+	}
+
+	err = yaml.Unmarshal(yamlFile, &fContext)
+	if err != nil {
+		log.Fatalf("Unmarshal: %v", err)
+	}
+
+	fContext.CurrentCredential.Email = email
+
+	data, e := yaml.Marshal(&fContext)
+	if e != nil {
+		log.Fatalf("error: %v", e)
+	}
+
+	e = ioutil.WriteFile(cfgFile, data, 0644)
+	if e != nil {
+		log.Fatalf("err: %v", e)
+	}
+
+	fmt.Println("Everything is set successfully, enjoy!!!")
+}
+
 func checkEnv() error {
 	home, _ := homedir.Dir()
 	cfgFile := home + "/.flarectl"
