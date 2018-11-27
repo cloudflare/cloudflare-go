@@ -17,9 +17,9 @@ type CustomHostnameSSL struct {
 	CnameName   string `json:"cname_name,omitempty"`
 
 	// HttpURL is the url at which http validation will issue requests.
-	HttpURL     string `json:"http_url,omitempty"`
+	HttpURL string `json:"http_url,omitempty"`
 	// HttpBody is the body that must be returned from HttpURL.
-	HttpBody    string `json:"http_body,omitempty"`
+	HttpBody string `json:"http_body,omitempty"`
 
 	CustomCertificate string `json:"custom_certificate,omitempty"`
 	CustomKey         string `json:"custom_key,omitempty"`
@@ -91,6 +91,25 @@ func (api *API) DeleteCustomHostname(zoneID string, customHostnameID string) err
 func (api *API) CreateCustomHostname(zoneID string, ch CustomHostname) (*CustomHostnameResponse, error) {
 	uri := "/zones/" + zoneID + "/custom_hostnames"
 	res, err := api.makeRequest("POST", uri, ch)
+	if err != nil {
+		return nil, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var response *CustomHostnameResponse
+	err = json.Unmarshal(res, &response)
+	if err != nil {
+		return nil, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return response, nil
+}
+
+// UpdateCustomHostname updates an existing custom hostname.
+//
+// UpdateCustomHostname uses the same API as CreateCustomHostname, but requires an id, and uses a PATCH requests
+func (api *API) UpdateCustomHostname(zoneID, customHostnameId string, ch CustomHostname) (*CustomHostnameResponse, error) {
+	uri := "/zones/" + zoneID + "/custom_hostnames/" + customHostnameId
+	res, err := api.makeRequest("PATCH", uri, ch)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
