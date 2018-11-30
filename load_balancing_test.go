@@ -814,7 +814,8 @@ func TestCreateLoadBalancer(t *testing.T) {
                 ]
               },
               "proxied": true,
-              "session_affinity": "cookie"
+              "session_affinity": "cookie",
+              "session_affinity_ttl": 5000
 						}`, string(b))
 		}
 		fmt.Fprint(w, `{
@@ -857,7 +858,8 @@ func TestCreateLoadBalancer(t *testing.T) {
                   ]
                 },
                 "proxied": true,
-                "session_affinity": "cookie"
+                "session_affinity": "cookie",
+                "session_affinity_ttl": 5000
             }
         }`)
 	}
@@ -900,8 +902,9 @@ func TestCreateLoadBalancer(t *testing.T) {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
-		Proxied:     true,
-		Persistence: "cookie",
+		Proxied:        true,
+		Persistence:    "cookie",
+		PersistenceTTL: 5000,
 	}
 	request := LoadBalancer{
 		Description:  "Load Balancer for www.example.com",
@@ -935,8 +938,9 @@ func TestCreateLoadBalancer(t *testing.T) {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
-		Proxied:     true,
-		Persistence: "cookie",
+		Proxied:        true,
+		Persistence:    "cookie",
+		PersistenceTTL: 5000,
 	}
 
 	actual, err := client.CreateLoadBalancer("199d98642c564d2e855e9661899b7252", request)
