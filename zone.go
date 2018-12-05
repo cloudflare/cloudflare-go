@@ -89,8 +89,8 @@ type ZoneResponse struct {
 // ZonesResponse represents the response from the Zone endpoint containing an array of zones.
 type ZonesResponse struct {
 	Response
-	Result []Zone `json:"result"`
-	ResultInfo
+	Result     []Zone `json:"result"`
+	ResultInfo `json:"result_info"`
 }
 
 // ZoneIDResponse represents the response from the Zone endpoint, containing only a zone ID.
@@ -102,8 +102,8 @@ type ZoneIDResponse struct {
 // AvailableZoneRatePlansResponse represents the response from the Available Rate Plans endpoint.
 type AvailableZoneRatePlansResponse struct {
 	Response
-	Result []ZoneRatePlan `json:"result"`
-	ResultInfo
+	Result     []ZoneRatePlan `json:"result"`
+	ResultInfo `json:"result_info"`
 }
 
 // ZoneRatePlanResponse represents the response from the Plan Details endpoint.
