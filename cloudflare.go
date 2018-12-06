@@ -160,29 +160,28 @@ func (api *API) makeRequestWithAuthType(ctx context.Context, method, uri string,
 
 func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, uri string, params interface{}, authType int, headers http.Header) ([]byte, error) {
 	// Replace nil with a JSON object if needed
-	var jsonBody []byte
+	var reqBody io.Reader
 	var err error
+
 	if params != nil {
-		if paramBytes, ok := params.([]byte); ok {
-			jsonBody = paramBytes
-		} else {
-			jsonBody, err = json.Marshal(params)
+		switch p := params.(type) {
+		case []byte:
+			reqBody = bytes.NewReader(p)
+		case io.Reader:
+			reqBody = p
+		default:
+			jsonBody, err := json.Marshal(p)
 			if err != nil {
 				return nil, errors.Wrap(err, "error marshalling params to JSON")
 			}
+			reqBody = bytes.NewReader(jsonBody)
 		}
-	} else {
-		jsonBody = nil
 	}
 
 	var resp *http.Response
 	var respErr error
-	var reqBody io.Reader
 	var respBody []byte
 	for i := 0; i <= api.retryPolicy.MaxRetries; i++ {
-		if jsonBody != nil {
-			reqBody = bytes.NewReader(jsonBody)
-		}
 
 		if i > 0 {
 			// expect the backoff introduced here on errored requests to dominate the effect of rate limiting

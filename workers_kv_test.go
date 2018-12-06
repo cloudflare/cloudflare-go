@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"net/http"
@@ -24,7 +25,7 @@ func TestWorkersKV_CreateStorageNamespace(t *testing.T) {
 		"messages": []
 	}`
 
-	mux.HandleFunc("/accounts/foo/workers/namespaces", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/accounts/foo/storage/kv/namespaces", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "POST", r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, response)
@@ -54,7 +55,7 @@ func TestWorkersKV_DeleteStorageNamespace(t *testing.T) {
 		"messages": []
 	}`
 
-	mux.HandleFunc(fmt.Sprintf("/accounts/foo/workers/namespaces/%s", namespace), func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(fmt.Sprintf("/accounts/foo/storage/kv/namespaces/%s", namespace), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "DELETE", r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, response)
@@ -93,7 +94,7 @@ func TestWorkersKV_ListStorageNamespaces(t *testing.T) {
 		}
 	}`
 
-	mux.HandleFunc(fmt.Sprintf("/accounts/foo/workers/namespaces"), func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(fmt.Sprintf("/accounts/foo/storage/kv/namespaces"), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, response)
@@ -147,13 +148,41 @@ func TestWorkersKV_UpdateStorageNamespace(t *testing.T) {
 		"messages": []
 	}`
 
-	mux.HandleFunc(fmt.Sprintf("/accounts/foo/workers/namespaces/%s", namespace), func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(fmt.Sprintf("/accounts/foo/storage/kv/namespaces/%s", namespace), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "PUT", r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, response)
 	})
 
 	res, err := client.UpdateStorageNamespace(context.Background(), namespace, &StorageNamespaceRequest{Title: "Namespace"})
+	want := successResponse
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
+}
+
+func TestWorkersKV_CreateStorageKV(t *testing.T) {
+	setup(UsingOrganization("foo"))
+	defer teardown()
+
+	key := "test_key"
+	value := []byte("test_value")
+	namespace := "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+	response := `{
+		"result": null,
+		"success": true,
+		"errors": [],
+		"messages": []
+	}`
+
+	mux.HandleFunc(fmt.Sprintf("/accounts/foo/storage/kv/namespaces/%s/values/%s", namespace, key), func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "PUT", r.Method, "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/octet-stream")
+		fmt.Fprintf(w, response)
+	})
+
+	res, err := client.CreateStorageKV(context.Background(), namespace, key, bytes.NewReader(value))
 	want := successResponse
 
 	if assert.NoError(t, err) {
