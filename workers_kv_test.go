@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"sort"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -65,4 +66,70 @@ func TestWorkersKV_DeleteStorageNamespace(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
+}
+
+func TestWorkersKV_ListStorageNamespaces(t *testing.T) {
+	setup(UsingOrganization("foo"))
+	defer teardown()
+
+	response := `{
+		"result": [
+			{"id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+			"title": "test_namespace_1"
+			},
+			{"id": "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
+			"title": "test_namespace_2"
+			}
+		],
+		"success": true,
+		"errors": [],
+		"messages": [],
+		"result_info": {
+			"page": 1,
+			"per_page": 20,
+			"count": 2,
+			"total_count": 2,
+			"total_pages": 1
+		}
+	}`
+
+	mux.HandleFunc(fmt.Sprintf("/accounts/foo/workers/namespaces"), func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/javascript")
+		fmt.Fprintf(w, response)
+	})
+
+	res, err := client.ListStorageNamespaces(context.Background())
+	want := ListStorageNamespacesResponse{
+		successResponse,
+		[]StorageNamespace{
+			{
+				ID:    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+				Title: "test_namespace_1",
+			},
+			{
+				ID:    "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
+				Title: "test_namespace_2",
+			},
+		},
+		ResultInfo{
+			Page:       1,
+			PerPage:    20,
+			Count:      2,
+			TotalPages: 1,
+			Total:      2,
+		},
+	}
+
+	assert.NoError(t, err)
+	assert.Equal(t, want.Response, res.Response)
+	assert.Equal(t, want.ResultInfo, res.ResultInfo)
+
+	sort.Slice(res.Result, func(i, j int) bool {
+		return res.Result[i].ID < res.Result[j].ID
+	})
+	sort.Slice(want.Result, func(i, j int) bool {
+		return want.Result[i].ID < want.Result[j].ID
+	})
+	assert.Equal(t, res.Result, want.Result)
 }
