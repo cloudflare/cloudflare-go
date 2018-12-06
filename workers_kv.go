@@ -77,8 +77,19 @@ func (api *API) DeleteStorageNamespace(ctx context.Context, namespace string) (R
 	return result, err
 }
 
-func (api *API) UpdateStorageNamespace() {
+func (api *API) UpdateStorageNamespace(ctx context.Context, namespace string, req *StorageNamespaceRequest) (Response, error) {
+	uri := fmt.Sprintf("/accounts/%s/workers/namespaces/%s", api.OrganizationID, namespace)
+	res, err := api.makeRequestContext(ctx, "PUT", uri, req)
+	if err != nil {
+		return Response{}, errors.Wrap(err, errMakeRequestError)
+	}
 
+	result := Response{}
+	if err := json.Unmarshal(res, &result); err != nil {
+		return result, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return result, err
 }
 
 func (api *API) CreateStorageKV() {

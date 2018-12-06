@@ -121,15 +121,42 @@ func TestWorkersKV_ListStorageNamespaces(t *testing.T) {
 		},
 	}
 
-	assert.NoError(t, err)
-	assert.Equal(t, want.Response, res.Response)
-	assert.Equal(t, want.ResultInfo, res.ResultInfo)
+	if assert.NoError(t, err) {
+		assert.Equal(t, want.Response, res.Response)
+		assert.Equal(t, want.ResultInfo, res.ResultInfo)
 
-	sort.Slice(res.Result, func(i, j int) bool {
-		return res.Result[i].ID < res.Result[j].ID
+		sort.Slice(res.Result, func(i, j int) bool {
+			return res.Result[i].ID < res.Result[j].ID
+		})
+		sort.Slice(want.Result, func(i, j int) bool {
+			return want.Result[i].ID < want.Result[j].ID
+		})
+		assert.Equal(t, res.Result, want.Result)
+	}
+}
+
+func TestWorkersKV_UpdateStorageNamespace(t *testing.T) {
+	setup(UsingOrganization("foo"))
+	defer teardown()
+
+	namespace := "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+	response := `{
+		"result": null,
+		"success": true,
+		"errors": [],
+		"messages": []
+	}`
+
+	mux.HandleFunc(fmt.Sprintf("/accounts/foo/workers/namespaces/%s", namespace), func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "PUT", r.Method, "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/javascript")
+		fmt.Fprintf(w, response)
 	})
-	sort.Slice(want.Result, func(i, j int) bool {
-		return want.Result[i].ID < want.Result[j].ID
-	})
-	assert.Equal(t, res.Result, want.Result)
+
+	res, err := client.UpdateStorageNamespace(context.Background(), namespace, &StorageNamespaceRequest{Title: "Namespace"})
+	want := successResponse
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
 }
