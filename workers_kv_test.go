@@ -189,3 +189,24 @@ func TestWorkersKV_CreateStorageKV(t *testing.T) {
 		assert.Equal(t, want, res)
 	}
 }
+
+func TestWorkersKV_ReadStorageKV(t *testing.T) {
+	setup(UsingOrganization("foo"))
+	defer teardown()
+
+	key := "test_key"
+	namespace := "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+	mux.HandleFunc(fmt.Sprintf("/accounts/foo/storage/kv/namespaces/%s/values/%s", namespace, key), func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "text/plain")
+		fmt.Fprintf(w, "test_value")
+	})
+
+	res, err := client.ReadStorageValue(context.Background(), namespace, key)
+	want := []byte("test_value")
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
+}

@@ -96,9 +96,6 @@ func (api *API) UpdateStorageNamespace(ctx context.Context, namespace string, re
 
 // TODO: support multiple content types?
 func (api *API) CreateStorageKV(ctx context.Context, namespace, key string, value io.Reader) (Response, error) {
-	// PUT /storage/kv/namespaces/:namespace_id/values/:key
-	// application/octet-stream
-
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/values/%s", api.OrganizationID, namespace, key)
 	res, err := api.makeRequestWithAuthTypeAndHeaders(
 		ctx, "PUT", uri, value, api.authType, http.Header{"Content-Type": []string{"application/octet-stream"}},
@@ -115,7 +112,13 @@ func (api *API) CreateStorageKV(ctx context.Context, namespace, key string, valu
 	return result, err
 }
 
-func (api API) ReadStorageValue() {
+func (api API) ReadStorageValue(ctx context.Context, namespace, key string) ([]byte, error) {
+	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/values/%s", api.OrganizationID, namespace, key)
+	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	if err != nil {
+		return nil, errors.Wrap(err, errMakeRequestError)
+	}
+	return res, nil
 }
 
 func (api API) DeleteStorageKV() {
