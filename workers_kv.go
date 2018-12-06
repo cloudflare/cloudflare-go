@@ -33,6 +33,16 @@ type ListStorageNamespacesResponse struct {
 	ResultInfo `json:"result_info"`
 }
 
+type StorageKey struct {
+	Name string `json:"name"`
+}
+
+type ListStorageKeysResponse struct {
+	Response
+	Result     []StorageKey `json:"result"`
+	ResultInfo `json:"result_info"`
+}
+
 func (api *API) CreateStorageNamespace(ctx context.Context, req *StorageNamespaceRequest) (StorageNamespaceResponse, error) {
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces", api.OrganizationID)
 	res, err := api.makeRequestContext(ctx, "POST", uri, req)
@@ -65,7 +75,6 @@ func (api *API) ListStorageNamespaces(ctx context.Context) (ListStorageNamespace
 
 func (api *API) DeleteStorageNamespace(ctx context.Context, namespace string) (Response, error) {
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s", api.OrganizationID, namespace)
-	fmt.Println(uri)
 	res, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
 	if err != nil {
 		return Response{}, errors.Wrap(err, errMakeRequestError)
@@ -98,7 +107,7 @@ func (api *API) UpdateStorageNamespace(ctx context.Context, namespace string, re
 func (api *API) CreateStorageKV(ctx context.Context, namespace, key string, value io.Reader) (Response, error) {
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/values/%s", api.OrganizationID, namespace, key)
 	res, err := api.makeRequestWithAuthTypeAndHeaders(
-		ctx, "PUT", uri, value, api.authType, http.Header{"Content-Type": []string{"application/octet-stream"}},
+		ctx, "PUT", uri, value, api.authType, http.Header{"Content-Type": []string{"binary/octet-stream"}},
 	)
 	if err != nil {
 		return Response{}, errors.Wrap(err, errMakeRequestError)
@@ -112,7 +121,7 @@ func (api *API) CreateStorageKV(ctx context.Context, namespace, key string, valu
 	return result, err
 }
 
-func (api API) ReadStorageValue(ctx context.Context, namespace, key string) ([]byte, error) {
+func (api API) ReadStorageKV(ctx context.Context, namespace, key string) ([]byte, error) {
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/values/%s", api.OrganizationID, namespace, key)
 	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
 	if err != nil {
@@ -121,9 +130,30 @@ func (api API) ReadStorageValue(ctx context.Context, namespace, key string) ([]b
 	return res, nil
 }
 
-func (api API) DeleteStorageKV() {
+func (api API) DeleteStorageKV(ctx context.Context, namespace, key string) (Response, error) {
+	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/values/%s", api.OrganizationID, namespace, key)
+	res, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	if err != nil {
+		return Response{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	result := Response{}
+	if err := json.Unmarshal(res, &result); err != nil {
+		return result, errors.Wrap(err, errUnmarshalError)
+	}
+	return result, err
 }
 
-func (api API) ListStorageKeys() {
+func (api API) ListStorageKeys(ctx context.Context, namespace string) (ListStorageKeysResponse, error) {
+	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/keys", api.OrganizationID, namespace)
+	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	if err != nil {
+		return ListStorageKeysResponse{}, errors.Wrap(err, errMakeRequestError)
+	}
 
+	result := ListStorageKeysResponse{}
+	if err := json.Unmarshal(res, &result); err != nil {
+		return result, errors.Wrap(err, errUnmarshalError)
+	}
+	return result, err
 }

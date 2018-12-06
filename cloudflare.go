@@ -163,19 +163,19 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 	var reqBody io.Reader
 	var err error
 
-	if params != nil {
-		switch p := params.(type) {
-		case []byte:
-			reqBody = bytes.NewReader(p)
-		case io.Reader:
-			reqBody = p
-		default:
-			jsonBody, err := json.Marshal(p)
-			if err != nil {
-				return nil, errors.Wrap(err, "error marshalling params to JSON")
-			}
-			reqBody = bytes.NewReader(jsonBody)
+	switch p := params.(type) {
+	case []byte:
+		reqBody = bytes.NewReader(p)
+	case io.Reader:
+		reqBody = p
+	case nil:
+		// empty request body
+	default:
+		jsonBody, err := json.Marshal(p)
+		if err != nil {
+			return nil, errors.Wrap(err, "error marshalling params to JSON")
 		}
+		reqBody = bytes.NewReader(jsonBody)
 	}
 
 	var resp *http.Response
