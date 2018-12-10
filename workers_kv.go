@@ -53,7 +53,7 @@ type ListStorageKeysResponse struct {
 //
 // API reference: https://api.cloudflare.com/#workers-kv-namespace-create-a-namespace
 func (api *API) CreateStorageNamespace(ctx context.Context, req *StorageNamespaceRequest) (StorageNamespaceResponse, error) {
-	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces", api.OrganizationID)
+	uri := path.Join("/accounts", api.OrganizationID, "storage/kv/namespaces")
 	res, err := api.makeRequestContext(ctx, "POST", uri, req)
 	if err != nil {
 		return StorageNamespaceResponse{}, errors.Wrap(err, errMakeRequestError)
