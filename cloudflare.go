@@ -195,6 +195,17 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 			// useful to do some simple logging here, maybe introduce levels later
 			api.logger.Printf("Sleeping %s before retry attempt number %d for request %s %s", sleepDuration.String(), i, method, uri)
 			time.Sleep(sleepDuration)
+
+			// seek to the beginning of the request body if supported because a previous attempt may have
+			// left it in a partially drained state
+			seeker, ok := reqBody.(io.Seeker)
+			if ok {
+				if _, err := seeker.Seek(0, io.SeekStart); err != nil {
+					return nil, errors.Wrap(err, "Error seeking to the beginning of the request body")
+				}
+			} else if reqBody != nil {
+				return nil, errors.New("Request body does not support io.Seek and can't be retried")
+			}
 		}
 		api.rateLimiter.Wait(context.TODO())
 		if err != nil {

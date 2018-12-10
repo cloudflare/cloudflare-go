@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"io"
+	"io/ioutil"
 	"net/http"
 	"sort"
 	"testing"
@@ -188,6 +190,74 @@ func TestWorkersKV_CreateStorageKV(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
+}
+
+func TestWorkersKV_CreateStorageKVRetryResetsBody(t *testing.T) {
+	setup(UsingOrganization("foo"), UsingRetryPolicy(1, 0, 0))
+	defer teardown()
+
+	key := "test_key"
+	value := []byte("test_value")
+	namespace := "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+	response := `{
+		"result": null,
+		"success": true,
+		"errors": [],
+		"messages": []
+	}`
+
+	try := 0
+	mux.HandleFunc(fmt.Sprintf("/accounts/foo/storage/kv/namespaces/%s/values/%s", namespace, key), func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+
+		res, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			t.Fatal(err)
+		}
+		assert.Equal(t, value, res)
+
+		// Fail the first time after reading the request payload
+		if try < 1 {
+			w.WriteHeader(http.StatusInternalServerError)
+			try++
+		}
+
+		w.Header().Set("content-type", "binary/octet-stream")
+		fmt.Fprintf(w, response)
+	})
+
+	reader := bytes.NewReader(value)
+	totalLen := reader.Len()
+	assert.True(t, totalLen > 0)
+
+	res, err := client.CreateStorageKV(context.Background(), namespace, key, reader)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, successResponse, res)
+	}
+}
+
+type noopReader struct {
+}
+
+func (noopReader) Read(p []byte) (n int, err error) {
+	return 0, io.EOF
+}
+
+func TestWorkersKV_CreateStorageKVRetryUnsupportedSeek(t *testing.T) {
+	setup(UsingOrganization("foo"), UsingRetryPolicy(1, 0, 0))
+	defer teardown()
+
+	key := "test_key"
+	namespace := "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+	mux.HandleFunc(fmt.Sprintf("/accounts/foo/storage/kv/namespaces/%s/values/%s", namespace, key), func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusInternalServerError)
+	})
+
+	_, err := client.CreateStorageKV(context.Background(), namespace, key, noopReader{})
+
+	assert.Error(t, err, "Request body does not support io.Seek and can't be retried")
 }
 
 func TestWorkersKV_ReadStorageKV(t *testing.T) {

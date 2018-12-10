@@ -14,7 +14,7 @@ const (
 	org       = "xxxxxx10ee002e8xxxxxx665354c0410"
 )
 
-func ExampleCreateStorageNamespace() {
+func ExampleAPI_CreateStorageNamespace() {
 	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization(org))
 	if err != nil {
 		log.Fatal(err)
@@ -29,7 +29,7 @@ func ExampleCreateStorageNamespace() {
 	fmt.Println(snr)
 }
 
-func ExampleListStorageNamespace() {
+func ExampleAPI_ListStorageNamespaces() {
 	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization(org))
 	if err != nil {
 		log.Fatal(err)
@@ -87,7 +87,6 @@ func ExampleAPI_CreateStorageKV() {
 
 	if payload.Len() > 0 {
 		log.Fatalf("Reader was not drained, remaining bytes: %d", payload.Len())
-
 	}
 
 	fmt.Println(resp)
