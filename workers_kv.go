@@ -23,7 +23,8 @@ type StorageNamespaceResponse struct {
 
 // StorageNamespace contains the unique identifier and title of a storage namespace
 type StorageNamespace struct {
-	ID, Title string
+	ID string `json:"id"`
+	Title string `json:"title"`
 }
 
 // ListStorageNamespacesResponse contains a slice of storage namespaces associated with an
