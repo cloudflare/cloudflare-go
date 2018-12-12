@@ -20,7 +20,7 @@ func ExampleAPI_CreateStorageNamespace() {
 		log.Fatal(err)
 	}
 
-	req := &cloudflare.StorageNamespaceRequest{Title: "test_namespace2"}
+	req := &cloudflare.StorageNamespaceRequest{Title: "test_namespace"}
 	snr, err := api.CreateStorageNamespace(context.Background(), req)
 	if err != nil {
 		log.Fatal(err)
@@ -114,12 +114,12 @@ func ExampleAPI_DeleteStorageKV() {
 	}
 
 	key := "test_key"
-	resp, err := api.ReadStorageKV(context.Background(), namespace, key)
+	resp, err := api.DeleteStorageKV(context.Background(), namespace, key)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("%s\n", resp)
+	fmt.Printf("%+v\n", resp)
 }
 
 func ExampleAPI_ListStorageKeys() {

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"path"
 
 	"github.com/pkg/errors"
 )
@@ -18,12 +19,12 @@ type StorageNamespaceRequest struct {
 // StorageNamespaceResponse is the response received when creating storage namespaces
 type StorageNamespaceResponse struct {
 	Response
-	ID, Title string
+	Result StorageNamespace `json:"result"`
 }
 
 // StorageNamespace contains the unique identifier and title of a storage namespace
 type StorageNamespace struct {
-	ID string `json:"id"`
+	ID    string `json:"id"`
 	Title string `json:"title"`
 }
 
@@ -41,7 +42,7 @@ type StorageKey struct {
 }
 
 // ListStorageKeysResponse contains a slice of keys belonging to a storage namespace,
-// paginatiion information, and an embedded response struct
+// pagination information, and an embedded response struct
 type ListStorageKeysResponse struct {
 	Response
 	Result     []StorageKey `json:"result"`

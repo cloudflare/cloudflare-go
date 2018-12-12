@@ -36,12 +36,14 @@ func TestWorkersKV_CreateStorageNamespace(t *testing.T) {
 	res, err := client.CreateStorageNamespace(context.Background(), &StorageNamespaceRequest{Title: "Namespace"})
 	want := StorageNamespaceResponse{
 		successResponse,
-		"3aeaxxxxee014exxxx4cf66xxxxc0448",
-		"test_namespace",
+		StorageNamespace{
+			ID:    "3aeaxxxxee014exxxx4cf66xxxxc0448",
+			Title: "test_namespace",
+		},
 	}
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, want.Response, res.Response)
+		assert.Equal(t, want, res)
 	}
 }
 
@@ -51,7 +53,6 @@ func TestWorkersKV_DeleteStorageNamespace(t *testing.T) {
 
 	namespace := "3aeaxxxxee014exxxx4cf66xxxxc0448"
 	response := `{
-		"result": null,
 		"success": true,
 		"errors": [],
 		"messages": []
@@ -64,10 +65,9 @@ func TestWorkersKV_DeleteStorageNamespace(t *testing.T) {
 	})
 
 	res, err := client.DeleteStorageNamespace(context.Background(), namespace)
-	want := successResponse
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, want, res)
+		assert.Equal(t, successResponse, res)
 	}
 }
 
@@ -184,8 +184,8 @@ func TestWorkersKV_CreateStorageKV(t *testing.T) {
 		fmt.Fprintf(w, response)
 	})
 
-	res, err := client.CreateStorageKV(context.Background(), namespace, key, bytes.NewReader(value))
 	want := successResponse
+	res, err := client.CreateStorageKV(context.Background(), namespace, key, bytes.NewReader(value))
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
@@ -227,8 +227,6 @@ func TestWorkersKV_CreateStorageKVRetryResetsBody(t *testing.T) {
 	})
 
 	reader := bytes.NewReader(value)
-	totalLen := reader.Len()
-	assert.True(t, totalLen > 0)
 
 	res, err := client.CreateStorageKV(context.Background(), namespace, key, reader)
 
@@ -257,7 +255,7 @@ func TestWorkersKV_CreateStorageKVRetryUnsupportedSeek(t *testing.T) {
 
 	_, err := client.CreateStorageKV(context.Background(), namespace, key, noopReader{})
 
-	assert.Error(t, err, "Request body does not support io.Seek and can't be retried")
+	assert.EqualError(t, err, "error from makeRequest: Request body does not support io.Seek and can't be retried")
 }
 
 func TestWorkersKV_ReadStorageKV(t *testing.T) {
@@ -364,6 +362,6 @@ func TestWorkersKV_ListStorageKeys(t *testing.T) {
 		sort.Slice(want.Result, func(i, j int) bool {
 			return want.Result[i].Name < want.Result[j].Name
 		})
-		assert.Equal(t, want.Result, res.Result)
+		assert.Equal(t, want, res)
 	}
 }
