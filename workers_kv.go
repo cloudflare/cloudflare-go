@@ -56,7 +56,7 @@ type ListStorageKeysResponse struct {
 // API reference: https://api.cloudflare.com/#workers-kv-namespace-create-a-namespace
 func (api *API) CreateStorageNamespace(ctx context.Context, req *StorageNamespaceRequest) (StorageNamespaceResponse, error) {
 	uri := path.Join("/accounts", api.OrganizationID, "storage/kv/namespaces")
-	res, err := api.makeRequestContext(ctx, "POST", uri, req)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, req)
 	if err != nil {
 		return StorageNamespaceResponse{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -74,7 +74,7 @@ func (api *API) CreateStorageNamespace(ctx context.Context, req *StorageNamespac
 // API reference: https://api.cloudflare.com/#workers-kv-namespace-list-namespaces
 func (api *API) ListStorageNamespaces(ctx context.Context) (ListStorageNamespacesResponse, error) {
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces", api.OrganizationID)
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return ListStorageNamespacesResponse{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -92,7 +92,7 @@ func (api *API) ListStorageNamespaces(ctx context.Context) (ListStorageNamespace
 // API reference: https://api.cloudflare.com/#workers-kv-namespace-remove-a-namespace
 func (api *API) DeleteStorageNamespace(ctx context.Context, namespace string) (Response, error) {
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s", api.OrganizationID, namespace)
-	res, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return Response{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -110,7 +110,7 @@ func (api *API) DeleteStorageNamespace(ctx context.Context, namespace string) (R
 // API reference: https://api.cloudflare.com/#workers-kv-namespace-rename-a-namespace
 func (api *API) UpdateStorageNamespace(ctx context.Context, namespace string, req *StorageNamespaceRequest) (Response, error) {
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s", api.OrganizationID, namespace)
-	res, err := api.makeRequestContext(ctx, "PUT", uri, req)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, req)
 	if err != nil {
 		return Response{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -130,7 +130,7 @@ func (api *API) UpdateStorageNamespace(ctx context.Context, namespace string, re
 func (api *API) CreateStorageKV(ctx context.Context, namespace, key string, value io.Reader) (Response, error) {
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/values/%s", api.OrganizationID, namespace, key)
 	res, err := api.makeRequestWithAuthTypeAndHeaders(
-		ctx, "PUT", uri, value, api.authType, http.Header{"Content-Type": []string{"binary/octet-stream"}},
+		ctx, http.MethodPut, uri, value, api.authType, http.Header{"Content-Type": []string{"binary/octet-stream"}},
 	)
 	if err != nil {
 		return Response{}, errors.Wrap(err, errMakeRequestError)
@@ -149,7 +149,7 @@ func (api *API) CreateStorageKV(ctx context.Context, namespace, key string, valu
 // API reference: https://api.cloudflare.com/#workers-kv-namespace-read-key-value-pair
 func (api API) ReadStorageKV(ctx context.Context, namespace, key string) ([]byte, error) {
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/values/%s", api.OrganizationID, namespace, key)
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
@@ -161,7 +161,7 @@ func (api API) ReadStorageKV(ctx context.Context, namespace, key string) ([]byte
 // API reference: https://api.cloudflare.com/#workers-kv-namespace-delete-key-value-pair
 func (api API) DeleteStorageKV(ctx context.Context, namespace, key string) (Response, error) {
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/values/%s", api.OrganizationID, namespace, key)
-	res, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return Response{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -178,7 +178,7 @@ func (api API) DeleteStorageKV(ctx context.Context, namespace, key string) (Resp
 // API Reference: https://api.cloudflare.com/#workers-kv-namespace-list-a-namespace-s-keys
 func (api API) ListStorageKeys(ctx context.Context, namespace string) (ListStorageKeysResponse, error) {
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/keys", api.OrganizationID, namespace)
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return ListStorageKeysResponse{}, errors.Wrap(err, errMakeRequestError)
 	}
