@@ -22,7 +22,7 @@ type CustomHostnameSSL struct {
 	Method      string                    `json:"method,omitempty"`
 	Type        string                    `json:"type,omitempty"`
 	CnameTarget string                    `json:"cname_target,omitempty"`
-	CnameName   string                    `json:"cname_name,omitempty"`
+	CnameName   string                    `json:"cname,omitempty"`
 	Settings    CustomHostnameSSLSettings `json:"settings,omitempty"`
 }
 
