@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"strings"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
 )
@@ -14,42 +13,14 @@ const (
 	org       = "xxxxxx10ee002e8xxxxxx665354c0410"
 )
 
-func ExampleAPI_CreateStorageNamespace() {
+func ExampleAPI_CreateWorkersKVNamespace() {
 	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization(org))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	req := &cloudflare.StorageNamespaceRequest{Title: "test_namespace"}
-	snr, err := api.CreateStorageNamespace(context.Background(), req)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println(snr)
-}
-
-func ExampleAPI_ListStorageNamespaces() {
-	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization(org))
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	lsr, err := api.ListStorageNamespaces(context.Background())
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println(lsr)
-}
-
-func ExampleAPI_DeleteStorageNamespace() {
-	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization(org))
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	response, err := api.DeleteStorageNamespace(context.Background(), namespace)
+	req := &cloudflare.WorkersKVNamespaceRequest{Title: "test_namespace2"}
+	response, err := api.CreateWorkersKVNamespace(context.Background(), req)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -57,13 +28,41 @@ func ExampleAPI_DeleteStorageNamespace() {
 	fmt.Println(response)
 }
 
-func ExampleAPI_UpdateStorageNamespace() {
+func ExampleAPI_ListWorkersKVNamespaces() {
 	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization(org))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	resp, err := api.UpdateStorageNamespace(context.Background(), namespace, &cloudflare.StorageNamespaceRequest{Title: "test_title"})
+	lsr, err := api.ListWorkersKVNamespaces(context.Background())
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(lsr)
+}
+
+func ExampleAPI_DeleteWorkersKVNamespace() {
+	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization(org))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	response, err := api.DeleteWorkersKVNamespace(context.Background(), namespace)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(response)
+}
+
+func ExampleAPI_UpdateWorkersKVNamespace() {
+	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization(org))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	resp, err := api.UpdateWorkersKVNamespace(context.Background(), namespace, &cloudflare.WorkersKVNamespaceRequest{Title: "test_title"})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -71,35 +70,31 @@ func ExampleAPI_UpdateStorageNamespace() {
 	fmt.Println(resp)
 }
 
-func ExampleAPI_CreateStorageKV() {
+func ExampleAPI_CreateWorkersKV() {
 	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization(org))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	payload := strings.NewReader("test payload")
+	payload := []byte("test payload")
 	key := "test_key"
 
-	resp, err := api.CreateStorageKV(context.Background(), namespace, key, payload)
+	resp, err := api.CreateWorkersKV(context.Background(), namespace, key, payload)
 	if err != nil {
 		log.Fatal(err)
-	}
-
-	if payload.Len() > 0 {
-		log.Fatalf("Reader was not drained, remaining bytes: %d", payload.Len())
 	}
 
 	fmt.Println(resp)
 }
 
-func ExampleAPI_ReadStorageKV() {
+func ExampleAPI_ReadWorkersKV() {
 	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization(org))
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	key := "test_key"
-	resp, err := api.ReadStorageKV(context.Background(), namespace, key)
+	resp, err := api.ReadWorkersKV(context.Background(), namespace, key)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -107,14 +102,14 @@ func ExampleAPI_ReadStorageKV() {
 	fmt.Printf("%s\n", resp)
 }
 
-func ExampleAPI_DeleteStorageKV() {
+func ExampleAPI_DeleteWorkersKV() {
 	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization(org))
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	key := "test_key"
-	resp, err := api.DeleteStorageKV(context.Background(), namespace, key)
+	resp, err := api.DeleteWorkersKV(context.Background(), namespace, key)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -122,13 +117,13 @@ func ExampleAPI_DeleteStorageKV() {
 	fmt.Printf("%+v\n", resp)
 }
 
-func ExampleAPI_ListStorageKeys() {
+func ExampleAPI_ListWorkersKVs() {
 	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization(org))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	resp, err := api.ListStorageKeys(context.Background(), namespace)
+	resp, err := api.ListWorkersKVs(context.Background(), namespace)
 	if err != nil {
 		log.Fatal(err)
 	}

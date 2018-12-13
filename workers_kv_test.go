@@ -1,11 +1,8 @@
 package cloudflare
 
 import (
-	"bytes"
 	"context"
 	"fmt"
-	"io"
-	"io/ioutil"
 	"net/http"
 	"sort"
 	"testing"
@@ -13,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestWorkersKV_CreateStorageNamespace(t *testing.T) {
+func TestWorkersKV_CreateWorkersKVNamespace(t *testing.T) {
 	setup(UsingOrganization("foo"))
 	defer teardown()
 
@@ -33,21 +30,21 @@ func TestWorkersKV_CreateStorageNamespace(t *testing.T) {
 		fmt.Fprintf(w, response)
 	})
 
-	res, err := client.CreateStorageNamespace(context.Background(), &StorageNamespaceRequest{Title: "Namespace"})
-	want := StorageNamespaceResponse{
+	res, err := client.CreateWorkersKVNamespace(context.Background(), &WorkersKVNamespaceRequest{Title: "Namespace"})
+	want := WorkersKVNamespaceResponse{
 		successResponse,
-		StorageNamespace{
+		WorkersKVNamespace{
 			ID:    "3aeaxxxxee014exxxx4cf66xxxxc0448",
 			Title: "test_namespace",
 		},
 	}
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, want, res)
+		assert.Equal(t, want.Response, res.Response)
 	}
 }
 
-func TestWorkersKV_DeleteStorageNamespace(t *testing.T) {
+func TestWorkersKV_DeleteWorkersKVNamespace(t *testing.T) {
 	setup(UsingOrganization("foo"))
 	defer teardown()
 
@@ -64,14 +61,15 @@ func TestWorkersKV_DeleteStorageNamespace(t *testing.T) {
 		fmt.Fprintf(w, response)
 	})
 
-	res, err := client.DeleteStorageNamespace(context.Background(), namespace)
+	res, err := client.DeleteWorkersKVNamespace(context.Background(), namespace)
+	want := successResponse
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, successResponse, res)
+		assert.Equal(t, want, res)
 	}
 }
 
-func TestWorkersKV_ListStorageNamespace(t *testing.T) {
+func TestWorkersKV_ListWorkersKVNamespace(t *testing.T) {
 	setup(UsingOrganization("foo"))
 	defer teardown()
 
@@ -102,10 +100,10 @@ func TestWorkersKV_ListStorageNamespace(t *testing.T) {
 		fmt.Fprintf(w, response)
 	})
 
-	res, err := client.ListStorageNamespaces(context.Background())
-	want := ListStorageNamespacesResponse{
+	res, err := client.ListWorkersKVNamespaces(context.Background())
+	want := ListWorkersKVNamespacesResponse{
 		successResponse,
-		[]StorageNamespace{
+		[]WorkersKVNamespace{
 			{
 				ID:    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 				Title: "test_namespace_1",
@@ -138,7 +136,7 @@ func TestWorkersKV_ListStorageNamespace(t *testing.T) {
 	}
 }
 
-func TestWorkersKV_UpdateStorageNamespace(t *testing.T) {
+func TestWorkersKV_UpdateWorkersKVNamespace(t *testing.T) {
 	setup(UsingOrganization("foo"))
 	defer teardown()
 
@@ -156,7 +154,7 @@ func TestWorkersKV_UpdateStorageNamespace(t *testing.T) {
 		fmt.Fprintf(w, response)
 	})
 
-	res, err := client.UpdateStorageNamespace(context.Background(), namespace, &StorageNamespaceRequest{Title: "Namespace"})
+	res, err := client.UpdateWorkersKVNamespace(context.Background(), namespace, &WorkersKVNamespaceRequest{Title: "Namespace"})
 	want := successResponse
 
 	if assert.NoError(t, err) {
@@ -164,7 +162,7 @@ func TestWorkersKV_UpdateStorageNamespace(t *testing.T) {
 	}
 }
 
-func TestWorkersKV_CreateStorageKV(t *testing.T) {
+func TestWorkersKV_CreateWorkersKV(t *testing.T) {
 	setup(UsingOrganization("foo"))
 	defer teardown()
 
@@ -185,80 +183,14 @@ func TestWorkersKV_CreateStorageKV(t *testing.T) {
 	})
 
 	want := successResponse
-	res, err := client.CreateStorageKV(context.Background(), namespace, key, bytes.NewReader(value))
+	res, err := client.CreateWorkersKV(context.Background(), namespace, key, value)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
 }
 
-func TestWorkersKV_CreateStorageKVRetryResetsBody(t *testing.T) {
-	setup(UsingOrganization("foo"), UsingRetryPolicy(1, 0, 0))
-	defer teardown()
-
-	key := "test_key"
-	value := []byte("test_value")
-	namespace := "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-	response := `{
-		"result": null,
-		"success": true,
-		"errors": [],
-		"messages": []
-	}`
-
-	try := 0
-	mux.HandleFunc(fmt.Sprintf("/accounts/foo/storage/kv/namespaces/%s/values/%s", namespace, key), func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
-
-		res, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			t.Fatal(err)
-		}
-		assert.Equal(t, value, res)
-
-		// Fail the first time after reading the request payload
-		if try < 1 {
-			w.WriteHeader(http.StatusInternalServerError)
-			try++
-		}
-
-		w.Header().Set("content-type", "binary/octet-stream")
-		fmt.Fprintf(w, response)
-	})
-
-	reader := bytes.NewReader(value)
-
-	res, err := client.CreateStorageKV(context.Background(), namespace, key, reader)
-
-	if assert.NoError(t, err) {
-		assert.Equal(t, successResponse, res)
-	}
-}
-
-type noopReader struct {
-}
-
-func (noopReader) Read(p []byte) (n int, err error) {
-	return 0, io.EOF
-}
-
-func TestWorkersKV_CreateStorageKVRetryUnsupportedSeek(t *testing.T) {
-	setup(UsingOrganization("foo"), UsingRetryPolicy(1, 0, 0))
-	defer teardown()
-
-	key := "test_key"
-	namespace := "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-
-	mux.HandleFunc(fmt.Sprintf("/accounts/foo/storage/kv/namespaces/%s/values/%s", namespace, key), func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusInternalServerError)
-	})
-
-	_, err := client.CreateStorageKV(context.Background(), namespace, key, noopReader{})
-
-	assert.EqualError(t, err, "error from makeRequest: Request body does not support io.Seek and can't be retried")
-}
-
-func TestWorkersKV_ReadStorageKV(t *testing.T) {
+func TestWorkersKV_ReadWorkersKV(t *testing.T) {
 	setup(UsingOrganization("foo"))
 	defer teardown()
 
@@ -271,7 +203,7 @@ func TestWorkersKV_ReadStorageKV(t *testing.T) {
 		fmt.Fprintf(w, "test_value")
 	})
 
-	res, err := client.ReadStorageKV(context.Background(), namespace, key)
+	res, err := client.ReadWorkersKV(context.Background(), namespace, key)
 	want := []byte("test_value")
 
 	if assert.NoError(t, err) {
@@ -279,7 +211,7 @@ func TestWorkersKV_ReadStorageKV(t *testing.T) {
 	}
 }
 
-func TestWorkersKV_DeleteStorageKV(t *testing.T) {
+func TestWorkersKV_DeleteWorkersKV(t *testing.T) {
 	setup(UsingOrganization("foo"))
 	defer teardown()
 
@@ -298,7 +230,7 @@ func TestWorkersKV_DeleteStorageKV(t *testing.T) {
 		fmt.Fprintf(w, response)
 	})
 
-	res, err := client.DeleteStorageKV(context.Background(), namespace, key)
+	res, err := client.DeleteWorkersKV(context.Background(), namespace, key)
 	want := successResponse
 
 	if assert.NoError(t, err) {
@@ -334,7 +266,7 @@ func TestWorkersKV_ListStorageKeys(t *testing.T) {
 		fmt.Fprintf(w, response)
 	})
 
-	res, err := client.ListStorageKeys(context.Background(), namespace)
+	res, err := client.ListWorkersKVs(context.Background(), namespace)
 
 	want := ListStorageKeysResponse{
 		successResponse,
@@ -362,6 +294,6 @@ func TestWorkersKV_ListStorageKeys(t *testing.T) {
 		sort.Slice(want.Result, func(i, j int) bool {
 			return want.Result[i].Name < want.Result[j].Name
 		})
-		assert.Equal(t, want, res)
+		assert.Equal(t, want.Result, res.Result)
 	}
 }

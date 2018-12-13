@@ -160,29 +160,30 @@ func (api *API) makeRequestWithAuthType(ctx context.Context, method, uri string,
 
 func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, uri string, params interface{}, authType int, headers http.Header) ([]byte, error) {
 	// Replace nil with a JSON object if needed
-	var reqBody io.Reader
+	var jsonBody []byte
 	var err error
 
-	switch p := params.(type) {
-	case []byte:
-		reqBody = bytes.NewReader(p)
-	case io.Reader:
-		reqBody = p
-	case nil:
-		// empty request body
-	default:
-		jsonBody, err := json.Marshal(p)
-		if err != nil {
-			return nil, errors.Wrap(err, "error marshalling params to JSON")
+	if params != nil {
+		if paramBytes, ok := params.([]byte); ok {
+			jsonBody = paramBytes
+		} else {
+			jsonBody, err = json.Marshal(params)
+			if err != nil {
+				return nil, errors.Wrap(err, "error marshalling params to JSON")
+			}
 		}
-		reqBody = bytes.NewReader(jsonBody)
+	} else {
+		jsonBody = nil
 	}
 
 	var resp *http.Response
 	var respErr error
+	var reqBody io.Reader
 	var respBody []byte
 	for i := 0; i <= api.retryPolicy.MaxRetries; i++ {
-
+		if jsonBody != nil {
+			reqBody = bytes.NewReader(jsonBody)
+		}
 		if i > 0 {
 			// expect the backoff introduced here on errored requests to dominate the effect of rate limiting
 			// dont need a random component here as the rate limiter should do something similar
@@ -196,16 +197,6 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 			api.logger.Printf("Sleeping %s before retry attempt number %d for request %s %s", sleepDuration.String(), i, method, uri)
 			time.Sleep(sleepDuration)
 
-			// seek to the beginning of the request body if supported because a previous attempt may have
-			// left it in a partially drained state
-			seeker, ok := reqBody.(io.Seeker)
-			if ok {
-				if _, err := seeker.Seek(0, io.SeekStart); err != nil {
-					return nil, errors.Wrap(err, "Error seeking to the beginning of the request body")
-				}
-			} else if reqBody != nil {
-				return nil, errors.New("Request body does not support io.Seek and can't be retried")
-			}
 		}
 		api.rateLimiter.Wait(context.TODO())
 		if err != nil {
