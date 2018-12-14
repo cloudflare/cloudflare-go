@@ -49,7 +49,7 @@ func TestCustomHostname_CreateCustomHostname(t *testing.T) {
       "method": "cname",
       "type": "dv",
       "cname_target": "dcv.digicert.com",
-      "cname_name": "810b7d5f01154524b961ba0cd578acc2.app.example.com",
+      "cname": "810b7d5f01154524b961ba0cd578acc2.app.example.com",
       "settings": {
         "http2": "on"
       }
@@ -102,7 +102,7 @@ func TestCustomHostname_CustomHostnames(t *testing.T) {
         "method": "cname",
         "status": "pending_validation",
         "cname_target": "dcv.digicert.com",
-        "cname_name": "810b7d5f01154524b961ba0cd578acc2.app.example.com"
+        "cname": "810b7d5f01154524b961ba0cd578acc2.app.example.com"
       },
       "custom_metadata": {
 				"a_random_field": "random field value"
