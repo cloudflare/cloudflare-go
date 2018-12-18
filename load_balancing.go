@@ -55,18 +55,19 @@ type LoadBalancerMonitor struct {
 
 // LoadBalancer represents a load balancer's properties.
 type LoadBalancer struct {
-	ID           string              `json:"id,omitempty"`
-	CreatedOn    *time.Time          `json:"created_on,omitempty"`
-	ModifiedOn   *time.Time          `json:"modified_on,omitempty"`
-	Description  string              `json:"description"`
-	Name         string              `json:"name"`
-	TTL          int                 `json:"ttl,omitempty"`
-	FallbackPool string              `json:"fallback_pool"`
-	DefaultPools []string            `json:"default_pools"`
-	RegionPools  map[string][]string `json:"region_pools"`
-	PopPools     map[string][]string `json:"pop_pools"`
-	Proxied      bool                `json:"proxied"`
-	Persistence  string              `json:"session_affinity,omitempty"`
+	ID             string              `json:"id,omitempty"`
+	CreatedOn      *time.Time          `json:"created_on,omitempty"`
+	ModifiedOn     *time.Time          `json:"modified_on,omitempty"`
+	Description    string              `json:"description"`
+	Name           string              `json:"name"`
+	TTL            int                 `json:"ttl,omitempty"`
+	FallbackPool   string              `json:"fallback_pool"`
+	DefaultPools   []string            `json:"default_pools"`
+	RegionPools    map[string][]string `json:"region_pools"`
+	PopPools       map[string][]string `json:"pop_pools"`
+	Proxied        bool                `json:"proxied"`
+	Persistence    string              `json:"session_affinity,omitempty"`
+	PersistenceTTL int                 `json:"session_affinity_ttl,omitempty"`
 
 	// SteeringPolicy controls pool selection logic.
 	// "off" select pools in DefaultPools order
