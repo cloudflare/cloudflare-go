@@ -178,7 +178,7 @@ func TestWorkersKV_WriteWorkersKV(t *testing.T) {
 
 	mux.HandleFunc(fmt.Sprintf("/accounts/foo/storage/kv/namespaces/%s/values/%s", namespace, key), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
-		w.Header().Set("content-type", "binary/octet-stream")
+		w.Header().Set("content-type", "application/octet-stream")
 		fmt.Fprintf(w, response)
 	})
 
