@@ -162,6 +162,7 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 	// Replace nil with a JSON object if needed
 	var jsonBody []byte
 	var err error
+
 	if params != nil {
 		if paramBytes, ok := params.([]byte); ok {
 			jsonBody = paramBytes
@@ -183,7 +184,6 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 		if jsonBody != nil {
 			reqBody = bytes.NewReader(jsonBody)
 		}
-
 		if i > 0 {
 			// expect the backoff introduced here on errored requests to dominate the effect of rate limiting
 			// dont need a random component here as the rate limiter should do something similar
@@ -196,6 +196,7 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 			// useful to do some simple logging here, maybe introduce levels later
 			api.logger.Printf("Sleeping %s before retry attempt number %d for request %s %s", sleepDuration.String(), i, method, uri)
 			time.Sleep(sleepDuration)
+
 		}
 		api.rateLimiter.Wait(context.TODO())
 		if err != nil {
