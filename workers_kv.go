@@ -124,7 +124,7 @@ func (api *API) UpdateWorkersKVNamespace(ctx context.Context, namespaceID string
 // CreateWorkersKV writes a value identified by a key.
 //
 // API reference: https://api.cloudflare.com/#workers-kv-namespace-write-key-value-pair
-func (api *API) CreateWorkersKV(ctx context.Context, namespaceID, key string, value []byte) (Response, error) {
+func (api *API) WriteWorkersKV(ctx context.Context, namespaceID, key string, value []byte) (Response, error) {
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/values/%s", api.OrganizationID, namespaceID, key)
 	res, err := api.makeRequestWithAuthTypeAndHeaders(
 		ctx, http.MethodPut, uri, value, api.authType, http.Header{"Content-Type": []string{"binary/octet-stream"}},

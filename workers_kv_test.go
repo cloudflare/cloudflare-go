@@ -162,7 +162,7 @@ func TestWorkersKV_UpdateWorkersKVNamespace(t *testing.T) {
 	}
 }
 
-func TestWorkersKV_CreateWorkersKV(t *testing.T) {
+func TestWorkersKV_WriteWorkersKV(t *testing.T) {
 	setup(UsingOrganization("foo"))
 	defer teardown()
 
@@ -183,7 +183,7 @@ func TestWorkersKV_CreateWorkersKV(t *testing.T) {
 	})
 
 	want := successResponse
-	res, err := client.CreateWorkersKV(context.Background(), namespace, key, value)
+	res, err := client.WriteWorkersKV(context.Background(), namespace, key, value)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)

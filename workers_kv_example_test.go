@@ -70,7 +70,7 @@ func ExampleAPI_UpdateWorkersKVNamespace() {
 	fmt.Println(resp)
 }
 
-func ExampleAPI_CreateWorkersKV() {
+func ExampleAPI_WriteWorkersKV() {
 	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization(org))
 	if err != nil {
 		log.Fatal(err)
@@ -79,7 +79,7 @@ func ExampleAPI_CreateWorkersKV() {
 	payload := []byte("test payload")
 	key := "test_key"
 
-	resp, err := api.CreateWorkersKV(context.Background(), namespace, key, payload)
+	resp, err := api.WriteWorkersKV(context.Background(), namespace, key, payload)
 	if err != nil {
 		log.Fatal(err)
 	}
