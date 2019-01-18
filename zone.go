@@ -24,20 +24,20 @@ type Zone struct {
 	Name string `json:"name"`
 	// DevMode contains the time in seconds until development expires (if
 	// positive) or since it expired (if negative). It will be 0 if never used.
-	DevMode           int          `json:"development_mode"`
-	OriginalNS        []string     `json:"original_name_servers"`
-	OriginalRegistrar string       `json:"original_registrar"`
-	OriginalDNSHost   string       `json:"original_dnshost"`
-	CreatedOn         time.Time    `json:"created_on"`
-	ModifiedOn        time.Time    `json:"modified_on"`
-	NameServers       []string     `json:"name_servers"`
-	Owner             Owner        `json:"owner"`
-	Permissions       []string     `json:"permissions"`
-	Plan              ZoneRatePlan `json:"plan"`
-	PlanPending       ZoneRatePlan `json:"plan_pending,omitempty"`
-	Status            string       `json:"status"`
-	Paused            bool         `json:"paused"`
-	Type              string       `json:"type"`
+	DevMode           int       `json:"development_mode"`
+	OriginalNS        []string  `json:"original_name_servers"`
+	OriginalRegistrar string    `json:"original_registrar"`
+	OriginalDNSHost   string    `json:"original_dnshost"`
+	CreatedOn         time.Time `json:"created_on"`
+	ModifiedOn        time.Time `json:"modified_on"`
+	NameServers       []string  `json:"name_servers"`
+	Owner             Owner     `json:"owner"`
+	Permissions       []string  `json:"permissions"`
+	Plan              ZonePlan  `json:"plan"`
+	PlanPending       ZonePlan  `json:"plan_pending,omitempty"`
+	Status            string    `json:"status"`
+	Paused            bool      `json:"paused"`
+	Type              string    `json:"type"`
 	Host              struct {
 		Name    string
 		Website string
@@ -58,15 +58,29 @@ type ZoneMeta struct {
 	PhishingDetected  bool `json:"phishing_detected"`
 }
 
+// ZonePlan contains the plan information for a zone.
+type ZonePlan struct {
+	ZonePlanCommon
+	IsSubscribed      bool   `json:"is_subscribed"`
+	CanSubscribe      bool   `json:"can_subscribe"`
+	LegacyID          string `json:"legacy_id"`
+	LegacyDiscount    bool   `json:"legacy_discount"`
+	ExternallyManaged bool   `json:"externally_managed"`
+}
+
 // ZoneRatePlan contains the plan information for a zone.
 type ZoneRatePlan struct {
-	ID         string                   `json:"id"`
-	Name       string                   `json:"name,omitempty"`
-	Price      int                      `json:"price,omitempty"`
-	Currency   string                   `json:"currency,omitempty"`
-	Duration   int                      `json:"duration,omitempty"`
-	Frequency  string                   `json:"frequency,omitempty"`
+	ZonePlanCommon
 	Components []zoneRatePlanComponents `json:"components,omitempty"`
+}
+
+// ZonePlanCommon contains fields used by various Plan endpoints
+type ZonePlanCommon struct {
+	ID        string `json:"id"`
+	Name      string `json:"name,omitempty"`
+	Price     int    `json:"price,omitempty"`
+	Currency  string `json:"currency,omitempty"`
+	Frequency string `json:"frequency,omitempty"`
 }
 
 type zoneRatePlanComponents struct {
@@ -104,6 +118,13 @@ type AvailableZoneRatePlansResponse struct {
 	Response
 	Result     []ZoneRatePlan `json:"result"`
 	ResultInfo `json:"result_info"`
+}
+
+// AvailableZonePlansResponse represents the response from the Available Plans endpoint.
+type AvailableZonePlansResponse struct {
+	Response
+	Result []ZonePlan `json:"result"`
+	ResultInfo
 }
 
 // ZoneRatePlanResponse represents the response from the Plan Details endpoint.
@@ -503,6 +524,23 @@ func (api *API) AvailableZoneRatePlans(zoneID string) ([]ZoneRatePlan, error) {
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return []ZoneRatePlan{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
+
+// AvailableZonePlans returns information about all plans available to the specified zone.
+//
+// API reference: https://api.cloudflare.com/#zone-rate-plan-list-available-plans
+func (api *API) AvailableZonePlans(zoneID string) ([]ZonePlan, error) {
+	uri := "/zones/" + zoneID + "/available_plans"
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return []ZonePlan{}, errors.Wrap(err, errMakeRequestError)
+	}
+	var r AvailableZonePlansResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return []ZonePlan{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
 }
