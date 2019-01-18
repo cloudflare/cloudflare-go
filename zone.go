@@ -399,9 +399,9 @@ func (api *API) ZoneDetails(zoneID string) (Zone, error) {
 
 // ZoneOptions is a subset of Zone, for editable options.
 type ZoneOptions struct {
-	Paused   *bool         `json:"paused,omitempty"`
-	VanityNS []string      `json:"vanity_name_servers,omitempty"`
-	Plan     *ZoneRatePlan `json:"plan,omitempty"`
+	Paused   *bool     `json:"paused,omitempty"`
+	VanityNS []string  `json:"vanity_name_servers,omitempty"`
+	Plan     *ZonePlan `json:"plan,omitempty"`
 }
 
 // ZoneSetPaused pauses Cloudflare service for the entire zone, sending all
@@ -428,8 +428,8 @@ func (api *API) ZoneSetVanityNS(zoneID string, ns []string) (Zone, error) {
 	return zone, nil
 }
 
-// ZoneSetRatePlan changes the zone plan.
-func (api *API) ZoneSetRatePlan(zoneID string, plan ZoneRatePlan) (Zone, error) {
+// ZoneSetPlan changes the zone plan.
+func (api *API) ZoneSetPlan(zoneID string, plan ZonePlan) (Zone, error) {
 	zoneopts := ZoneOptions{Plan: &plan}
 	zone, err := api.EditZone(zoneID, zoneopts)
 	if err != nil {
