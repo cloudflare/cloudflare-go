@@ -90,10 +90,27 @@ func dnsCreateOrUpdate(c *cli.Context) {
 	rr := cloudflare.DNSRecord{
 		Name: name,
 	}
-	records, err := api.DNSRecords(zoneID, rr)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, "Error fetching DNS records: ", err)
-		return
+	var records []cloudflare.DNSRecord
+	for {
+		records, err = api.DNSRecords(zoneID, rr)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "Error fetching DNS records: ", err)
+			return
+		}
+
+		// break out when records found
+		if len(records) > 0 {
+			break
+		}
+
+		// break out if already searched w/ zone appended
+		if rr.Name != name {
+			rr.Name = name
+			break
+		}
+
+		// append the zone before searching again
+		rr.Name = name + "." + zone
 	}
 
 	var resp *cloudflare.DNSRecordResponse
