@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/cloudflare/cloudflare-go"
+	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/codegangsta/cli"
 )
 
@@ -88,7 +88,7 @@ func dnsCreateOrUpdate(c *cli.Context) {
 
 	// Look for an existing record
 	rr := cloudflare.DNSRecord{
-		Name: name + "." + zone,
+		Name: name,
 	}
 	records, err := api.DNSRecords(zoneID, rr)
 	if err != nil {
