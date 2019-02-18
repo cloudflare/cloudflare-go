@@ -90,3 +90,60 @@ func ExampleAPI_DeleteLogpushJob() {
 		log.Fatal(err)
 	}
 }
+
+func ExampleAPI_GetLogpushOwnershipChallenge() {
+	api, err := cloudflare.New(apiKey, user)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	zoneID, err := api.ZoneIDByName(domain)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	ownershipChallenge, err := api.GetLogpushOwnershipChallenge(zoneID, "destination_conf")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("%+v\n", ownershipChallenge)
+}
+
+func ExampleAPI_ValidateLogpushOwnershipChallenge() {
+	api, err := cloudflare.New(apiKey, user)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	zoneID, err := api.ZoneIDByName(domain)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	isValid, err := api.ValidateLogpushOwnershipChallenge(zoneID, "destination_conf", "ownership_challenge")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("%+v\n", isValid)
+}
+
+func ExampleAPI_CheckLogpushDestinationExists() {
+	api, err := cloudflare.New(apiKey, user)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	zoneID, err := api.ZoneIDByName(domain)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	exists, err := api.CheckLogpushDestinationExists(zoneID, "destination_conf")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("%+v\n", exists)
+}

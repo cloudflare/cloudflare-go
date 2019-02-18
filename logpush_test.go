@@ -24,19 +24,32 @@ const (
 	"error_message": "test"
   }
 `
+	serverLogpushGetOwnershipChallengeDescription = `{
+    "filename": "logs/challenge-filename.txt",
+	"valid": true,
+	"message": ""
+  }
+`
 )
 
-var testLogpushTimestamp = time.Now().UTC()
-var expectedLogpushJobStruct = LogpushJob{
-	ID:              jobID,
-	Enabled:         false,
-	Name:            "example.com",
-	LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
-	DestinationConf: "s3://mybucket/logs?region=us-west-2",
-	LastComplete:    &testLogpushTimestamp,
-	LastError:       &testLogpushTimestamp,
-	ErrorMessage:    "test",
-}
+var (
+	testLogpushTimestamp     = time.Now().UTC()
+	expectedLogpushJobStruct = LogpushJob{
+		ID:              jobID,
+		Enabled:         false,
+		Name:            "example.com",
+		LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
+		DestinationConf: "s3://mybucket/logs?region=us-west-2",
+		LastComplete:    &testLogpushTimestamp,
+		LastError:       &testLogpushTimestamp,
+		ErrorMessage:    "test",
+	}
+	expectedLogpushGetOwnershipChallengeStruct = LogpushGetOwnershipChallenge{
+		Filename: "logs/challenge-filename.txt",
+		Valid:    true,
+		Message:  "",
+	}
+)
 
 func TestLogpushJobs(t *testing.T) {
 	setup()
@@ -147,4 +160,112 @@ func TestDeleteLogpushJob(t *testing.T) {
 
 	err := client.DeleteLogpushJob(testZoneID, jobID)
 	assert.NoError(t, err)
+}
+
+func TestGetLogpushOwnershipChallenge(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+		  "result": %s,
+		  "success": true,
+		  "errors": null,
+		  "messages": null
+		}
+		`, serverLogpushGetOwnershipChallengeDescription)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/logpush/ownership", handler)
+
+	want := &expectedLogpushGetOwnershipChallengeStruct
+
+	actual, err := client.GetLogpushOwnershipChallenge(testZoneID, "destination_conf")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestValidateLogpushOwnershipChallenge(t *testing.T) {
+	testCases := map[string]struct {
+		isValid bool
+	}{
+		"ownership is valid": {
+			isValid: true,
+		},
+		"ownership is not valid": {
+			isValid: false,
+		},
+	}
+
+	for name, tc := range testCases {
+		t.Run(name, func(t *testing.T) {
+			setup()
+			defer teardown()
+
+			handler := func(w http.ResponseWriter, r *http.Request) {
+				assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+				w.Header().Set("content-type", "application/json")
+				fmt.Fprintf(w, `{
+				  "result": {
+					"valid": %v
+				  },
+				  "success": true,
+				  "errors": null,
+				  "messages": null
+				}
+				`, tc.isValid)
+			}
+
+			mux.HandleFunc("/zones/"+testZoneID+"/logpush/ownership/validate", handler)
+
+			actual, err := client.ValidateLogpushOwnershipChallenge(testZoneID, "destination_conf", "ownership_challenge")
+			if assert.NoError(t, err) {
+				assert.Equal(t, tc.isValid, actual)
+			}
+		})
+	}
+}
+
+func TestCheckLogpushDestiantionExists(t *testing.T) {
+	testCases := map[string]struct {
+		exists bool
+	}{
+		"destination exists": {
+			exists: true,
+		},
+		"destination does not exists": {
+			exists: false,
+		},
+	}
+
+	for name, tc := range testCases {
+		t.Run(name, func(t *testing.T) {
+			setup()
+			defer teardown()
+
+			handler := func(w http.ResponseWriter, r *http.Request) {
+				assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+				w.Header().Set("content-type", "application/json")
+				fmt.Fprintf(w, `{
+				  "result": {
+					"exists": %v
+				  },
+				  "success": true,
+				  "errors": null,
+				  "messages": null
+				}
+				`, tc.exists)
+			}
+
+			mux.HandleFunc("/zones/"+testZoneID+"/logpush/validate/destination/exists", handler)
+
+			actual, err := client.CheckLogpushDestinationExists(testZoneID, "destination_conf")
+			if assert.NoError(t, err) {
+				assert.Equal(t, tc.exists, actual)
+			}
+		})
+	}
 }

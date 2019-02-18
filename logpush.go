@@ -32,6 +32,53 @@ type LogpushJobDetailsResponse struct {
 	Result LogpushJob `json:"result"`
 }
 
+// LogpushGetOwnershipChallenge describes a ownership validation
+type LogpushGetOwnershipChallenge struct {
+	Filename string `json:"filename"`
+	Valid    bool   `json:"valid"`
+	Message  string `json:"message"`
+}
+
+// LogpushGetOwnershipChallengeResponse is the API response, containing a ownership challenge.
+type LogpushGetOwnershipChallengeResponse struct {
+	Response
+	Result LogpushGetOwnershipChallenge `json:"result"`
+}
+
+// LogpushGetOwnershipChallengeRequest is the API request for get ownership challenge
+type LogpushGetOwnershipChallengeRequest struct {
+	DestinationConf string `json:"destination_conf"`
+}
+
+// LogpushOwnershipChallangeValidationResponse is the API response,
+// containing a ownership challenge validation result
+type LogpushOwnershipChallangeValidationResponse struct {
+	Response
+	Result struct {
+		Valid bool `json:"valid"`
+	}
+}
+
+// LogpushValidateOwnershipChallengeRequest is the API request for validate ownership challenge
+type LogpushValidateOwnershipChallengeRequest struct {
+	DestinationConf    string `json:"destination_conf"`
+	OwnershipChallenge string `json:"ownership_challenge"`
+}
+
+// LogpushDestinationExistsResponse is the API response,
+// containing a destination exists check result
+type LogpushDestinationExistsResponse struct {
+	Response
+	Result struct {
+		Exists bool `json:"exists"`
+	}
+}
+
+// LogpushDestinationExistsRequest is the API request for check destiantion exists
+type LogpushDestinationExistsRequest struct {
+	DestinationConf string `json:"destination_conf"`
+}
+
 // CreateLogpushJob creates a new LogpushJob for a zone.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-create-logpush-job
@@ -115,4 +162,62 @@ func (api *API) DeleteLogpushJob(zoneID string, jobID int) error {
 		return errors.Wrap(err, errUnmarshalError)
 	}
 	return nil
+}
+
+// GetLogpushOwnershipChallenge returns ownership challenge
+//
+// API reference: https://api.cloudflare.com/#logpush-jobs-get-ownership-challenge
+func (api *API) GetLogpushOwnershipChallenge(zoneID, destinationConf string) (*LogpushGetOwnershipChallenge, error) {
+	uri := "/zones/" + zoneID + "/logpush/ownership"
+	res, err := api.makeRequest("POST", uri, LogpushGetOwnershipChallengeRequest{
+		DestinationConf: destinationConf,
+	})
+	if err != nil {
+		return nil, errors.Wrap(err, errMakeRequestError)
+	}
+	var r LogpushGetOwnershipChallengeResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return nil, errors.Wrap(err, errUnmarshalError)
+	}
+	return &r.Result, nil
+}
+
+// ValidateLogpushOwnershipChallenge returns ownership challenge validation result
+//
+// API reference: https://api.cloudflare.com/#logpush-jobs-validate-ownership-challenge
+func (api *API) ValidateLogpushOwnershipChallenge(zoneID, destinationConf, ownershipChallenge string) (bool, error) {
+	uri := "/zones/" + zoneID + "/logpush/ownership/validate"
+	res, err := api.makeRequest("POST", uri, LogpushValidateOwnershipChallengeRequest{
+		DestinationConf:    destinationConf,
+		OwnershipChallenge: ownershipChallenge,
+	})
+	if err != nil {
+		return false, errors.Wrap(err, errMakeRequestError)
+	}
+	var r LogpushGetOwnershipChallengeResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return false, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result.Valid, nil
+}
+
+// CheckLogpushDestinationExists returns destination exists check result
+//
+// API reference: https://api.cloudflare.com/#logpush-jobs-check-destination-exists
+func (api *API) CheckLogpushDestinationExists(zoneID, destinationConf string) (bool, error) {
+	uri := "/zones/" + zoneID + "/logpush/validate/destination/exists"
+	res, err := api.makeRequest("POST", uri, LogpushDestinationExistsRequest{
+		DestinationConf: destinationConf,
+	})
+	if err != nil {
+		return false, errors.Wrap(err, errMakeRequestError)
+	}
+	var r LogpushDestinationExistsResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return false, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result.Exists, nil
 }
