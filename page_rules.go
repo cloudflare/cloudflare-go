@@ -43,6 +43,7 @@ Valid IDs are:
   forwarding_url
   host_header_override
   ip_geolocation
+  minify
   mirage
   opportunistic_encryption
   origin_error_page_pass_thru
@@ -85,6 +86,7 @@ var PageRuleActions = map[string]string{
 	"forwarding_url":              "Forwarding URL",              // Value of type map[string]interface
 	"host_header_override":        "Host Header Override",        // Value of type string
 	"ip_geolocation":              "IP Geolocation Header",       // Value of type string
+	"minify":                      "Minify",                      // Value of type map[string]interface
 	"mirage":                      "Mirage",                      // Value of type string
 	"opportunistic_encryption":    "Opportunistic Encryption",    // Value of type string
 	"origin_error_page_pass_thru": "Origin Error Page Pass-thru", // Value of type string

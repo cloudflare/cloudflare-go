@@ -147,7 +147,11 @@ func pageRules(c *cli.Context) {
 			case float64:
 				s = fmt.Sprintf("%s: %.f", cloudflare.PageRuleActions[a.ID], v)
 			case map[string]interface{}:
-				s = fmt.Sprintf("%s: %.f - %s", cloudflare.PageRuleActions[a.ID], v["status_code"], v["url"])
+				if a.ID == "minify" {
+					s = fmt.Sprintf("%s: [js:%s html:%s css:%s]", cloudflare.PageRuleActions[a.ID], v["js"], v["html"], v["css"])
+				} else {
+					s = fmt.Sprintf("%s: %.f - %s", cloudflare.PageRuleActions[a.ID], v["status_code"], v["url"])
+				}
 			case nil:
 				s = fmt.Sprintf("%s", cloudflare.PageRuleActions[a.ID])
 			default:
