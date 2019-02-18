@@ -33,7 +33,7 @@ func ExampleAPI_CreateLogpushJob() {
 	fmt.Printf("%+v\n", job)
 }
 
-func ExampleAPI_ListLogpushJobs() {
+func ExampleAPI_LogpushJobs() {
 	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
@@ -44,7 +44,7 @@ func ExampleAPI_ListLogpushJobs() {
 		log.Fatal(err)
 	}
 
-	jobs, err := api.ListLogpushJobs(zoneID)
+	jobs, err := api.LogpushJobs(zoneID)
 	if err != nil {
 		log.Fatal(err)
 	}

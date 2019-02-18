@@ -38,7 +38,7 @@ var expectedLogpushJobStruct = LogpushJob{
 	ErrorMessage:    "test",
 }
 
-func TestListLogpushJobs(t *testing.T) {
+func TestLogpushJobs(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -65,7 +65,7 @@ func TestListLogpushJobs(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/logpush/jobs", handler)
 	want := []LogpushJob{expectedLogpushJobStruct}
 
-	actual, err := client.ListLogpushJobs(testZoneID)
+	actual, err := client.LogpushJobs(testZoneID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}

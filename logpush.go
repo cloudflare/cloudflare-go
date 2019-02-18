@@ -22,18 +22,14 @@ type LogpushJob struct {
 
 // LogpushJobsResponse is the API response, containing an array of Logpush Jobs.
 type LogpushJobsResponse struct {
-	Success  bool         `json:"success"`
-	Errors   []string     `json:"errors"`
-	Messages []string     `json:"messages"`
-	Result   []LogpushJob `json:"result"`
+	Response
+	Result []LogpushJob `json:"result"`
 }
 
 // LogpushJobDetailsResponse is the API response, containing a single Logpush Job.
 type LogpushJobDetailsResponse struct {
-	Success  bool       `json:"success"`
-	Errors   []string   `json:"errors"`
-	Messages []string   `json:"messages"`
-	Result   LogpushJob `json:"result"`
+	Response
+	Result LogpushJob `json:"result"`
 }
 
 // CreateLogpushJob creates a new LogpushJob for a zone.
@@ -53,10 +49,10 @@ func (api *API) CreateLogpushJob(zoneID string, job LogpushJob) (*LogpushJob, er
 	return &r.Result, nil
 }
 
-// ListLogpushJobs returns all Logpush Jobs for a zone.
+// LogpushJobs returns all Logpush Jobs for a zone.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-list-logpush-jobs
-func (api *API) ListLogpushJobs(zoneID string) ([]LogpushJob, error) {
+func (api *API) LogpushJobs(zoneID string) ([]LogpushJob, error) {
 	uri := "/zones/" + zoneID + "/logpush/jobs"
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
