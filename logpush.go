@@ -8,7 +8,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-// LogpushJob describes a Logpush job
+// LogpushJob describes a Logpush job.
 type LogpushJob struct {
 	ID              int        `json:"id,omitempty"`
 	Enabled         bool       `json:"enabled"`
@@ -32,7 +32,7 @@ type LogpushJobDetailsResponse struct {
 	Result LogpushJob `json:"result"`
 }
 
-// LogpushGetOwnershipChallenge describes a ownership validation
+// LogpushGetOwnershipChallenge describes a ownership validation.
 type LogpushGetOwnershipChallenge struct {
 	Filename string `json:"filename"`
 	Valid    bool   `json:"valid"`
@@ -45,13 +45,13 @@ type LogpushGetOwnershipChallengeResponse struct {
 	Result LogpushGetOwnershipChallenge `json:"result"`
 }
 
-// LogpushGetOwnershipChallengeRequest is the API request for get ownership challenge
+// LogpushGetOwnershipChallengeRequest is the API request for get ownership challenge.
 type LogpushGetOwnershipChallengeRequest struct {
 	DestinationConf string `json:"destination_conf"`
 }
 
 // LogpushOwnershipChallangeValidationResponse is the API response,
-// containing a ownership challenge validation result
+// containing a ownership challenge validation result.
 type LogpushOwnershipChallangeValidationResponse struct {
 	Response
 	Result struct {
@@ -59,14 +59,14 @@ type LogpushOwnershipChallangeValidationResponse struct {
 	}
 }
 
-// LogpushValidateOwnershipChallengeRequest is the API request for validate ownership challenge
+// LogpushValidateOwnershipChallengeRequest is the API request for validate ownership challenge.
 type LogpushValidateOwnershipChallengeRequest struct {
 	DestinationConf    string `json:"destination_conf"`
 	OwnershipChallenge string `json:"ownership_challenge"`
 }
 
 // LogpushDestinationExistsResponse is the API response,
-// containing a destination exists check result
+// containing a destination exists check result.
 type LogpushDestinationExistsResponse struct {
 	Response
 	Result struct {
@@ -74,7 +74,7 @@ type LogpushDestinationExistsResponse struct {
 	}
 }
 
-// LogpushDestinationExistsRequest is the API request for check destiantion exists
+// LogpushDestinationExistsRequest is the API request for check destination exists.
 type LogpushDestinationExistsRequest struct {
 	DestinationConf string `json:"destination_conf"`
 }
@@ -164,7 +164,7 @@ func (api *API) DeleteLogpushJob(zoneID string, jobID int) error {
 	return nil
 }
 
-// GetLogpushOwnershipChallenge returns ownership challenge
+// GetLogpushOwnershipChallenge returns ownership challenge.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-get-ownership-challenge
 func (api *API) GetLogpushOwnershipChallenge(zoneID, destinationConf string) (*LogpushGetOwnershipChallenge, error) {
@@ -183,7 +183,7 @@ func (api *API) GetLogpushOwnershipChallenge(zoneID, destinationConf string) (*L
 	return &r.Result, nil
 }
 
-// ValidateLogpushOwnershipChallenge returns ownership challenge validation result
+// ValidateLogpushOwnershipChallenge returns ownership challenge validation result.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-validate-ownership-challenge
 func (api *API) ValidateLogpushOwnershipChallenge(zoneID, destinationConf, ownershipChallenge string) (bool, error) {
@@ -203,7 +203,7 @@ func (api *API) ValidateLogpushOwnershipChallenge(zoneID, destinationConf, owner
 	return r.Result.Valid, nil
 }
 
-// CheckLogpushDestinationExists returns destination exists check result
+// CheckLogpushDestinationExists returns destination exists check result.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-check-destination-exists
 func (api *API) CheckLogpushDestinationExists(zoneID, destinationConf string) (bool, error) {
