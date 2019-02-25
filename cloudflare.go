@@ -10,12 +10,14 @@ import (
 	"log"
 	"math"
 	"net/http"
+	"net/http/httputil"
 	"net/url"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/pkg/errors"
+	"github.com/yext/glog"
 	"golang.org/x/time/rate"
 )
 
@@ -293,6 +295,14 @@ func (api *API) request(ctx context.Context, method, uri string, reqBody io.Read
 	if err != nil {
 		return nil, errors.Wrap(err, "HTTP request creation failed")
 	}
+	// Temporarily log all purge requests
+	if req.Method == http.MethodDelete {
+		r, err := httputil.DumpRequest(req, true)
+		glog.ErrorIf(err, "Failed to dump purge request")
+		if err == nil && r != nil {
+			glog.Info(string(r))
+		}
+	}
 
 	combinedHeaders := make(http.Header)
 	copyHeader(combinedHeaders, api.headers)
@@ -321,6 +331,14 @@ func (api *API) request(ctx context.Context, method, uri string, reqBody io.Read
 	resp, err := api.httpClient.Do(req)
 	if err != nil {
 		return nil, errors.Wrap(err, "HTTP request failed")
+	}
+	// Temporarily log all purge responses
+	if req.Method == http.MethodDelete {
+		r, err := httputil.DumpResponse(resp, true)
+		glog.ErrorIf(err, "Failed to dump purge response")
+		if err == nil && r != nil {
+			glog.Info(string(r))
+		}
 	}
 
 	return resp, nil
