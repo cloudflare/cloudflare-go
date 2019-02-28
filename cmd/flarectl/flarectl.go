@@ -14,6 +14,14 @@ func main() {
 	app.Name = "flarectl"
 	app.Usage = "Cloudflare CLI"
 	app.Version = "2017.10.0"
+	app.Flags = []cli.Flag{
+		cli.StringFlag{
+			Name:   "org-id",
+			Usage:  "Optional organization ID",
+			Value:  "",
+			EnvVar: "CF_ORG_ID",
+		},
+	}
 	app.Commands = []cli.Command{
 		{
 			Name:    "ips",
@@ -36,6 +44,7 @@ func main() {
 			Name:    "user",
 			Aliases: []string{"u"},
 			Usage:   "User information",
+			Before:  initializeAPI,
 			Subcommands: []cli.Command{
 				{
 					Name:    "info",
@@ -56,6 +65,7 @@ func main() {
 			Name:    "zone",
 			Aliases: []string{"z"},
 			Usage:   "Zone information",
+			Before:  initializeAPI,
 			Subcommands: []cli.Command{
 				{
 					Name:    "list",
@@ -182,6 +192,7 @@ func main() {
 			Name:    "dns",
 			Aliases: []string{"d"},
 			Usage:   "DNS records",
+			Before:  initializeAPI,
 			Subcommands: []cli.Command{
 				{
 					Name:    "list",
@@ -328,6 +339,7 @@ func main() {
 			Name:    "user-agents",
 			Aliases: []string{"ua"},
 			Usage:   "User-Agent blocking",
+			Before:  initializeAPI,
 			Subcommands: []cli.Command{
 				{
 					Name:    "list",
@@ -427,6 +439,7 @@ func main() {
 			Name:    "pagerules",
 			Aliases: []string{"p"},
 			Usage:   "Page Rules",
+			Before:  initializeAPI,
 			Subcommands: []cli.Command{
 				{
 					Name:    "list",
@@ -447,6 +460,7 @@ func main() {
 			Name:    "railgun",
 			Aliases: []string{"r"},
 			Usage:   "Railgun information",
+			Before:  initializeAPI,
 			Action:  railgun,
 		},
 
@@ -454,6 +468,7 @@ func main() {
 			Name:    "firewall",
 			Aliases: []string{"f"},
 			Usage:   "Firewall",
+			Before:  initializeAPI,
 			Subcommands: []cli.Command{
 				{
 					Name:    "rules",

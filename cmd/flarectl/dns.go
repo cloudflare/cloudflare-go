@@ -24,10 +24,6 @@ func formatDNSRecord(record cloudflare.DNSRecord) []string {
 }
 
 func dnsCreate(c *cli.Context) {
-	if err := checkEnv(); err != nil {
-		fmt.Println(err)
-		return
-	}
 	if err := checkFlags(c, "zone", "name", "type", "content"); err != nil {
 		return
 	}
@@ -65,10 +61,6 @@ func dnsCreate(c *cli.Context) {
 }
 
 func dnsCreateOrUpdate(c *cli.Context) {
-	if err := checkEnv(); err != nil {
-		fmt.Println(err)
-		return
-	}
 	if err := checkFlags(c, "zone", "name", "type", "content"); err != nil {
 		fmt.Println(err)
 		return
@@ -136,10 +128,6 @@ func dnsCreateOrUpdate(c *cli.Context) {
 }
 
 func dnsUpdate(c *cli.Context) {
-	if err := checkEnv(); err != nil {
-		fmt.Println(err)
-		return
-	}
 	if err := checkFlags(c, "zone", "id"); err != nil {
 		fmt.Println(err)
 		return
@@ -172,10 +160,6 @@ func dnsUpdate(c *cli.Context) {
 }
 
 func dnsDelete(c *cli.Context) {
-	if err := checkEnv(); err != nil {
-		fmt.Println(err)
-		return
-	}
 	if err := checkFlags(c, "zone", "id"); err != nil {
 		fmt.Println(err)
 		return
