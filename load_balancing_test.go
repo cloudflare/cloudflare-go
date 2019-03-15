@@ -1335,3 +1335,57 @@ func TestModifyLoadBalancer(t *testing.T) {
 		assert.Equal(t, want, actual)
 	}
 }
+
+func TestLoadBalancerPoolHealthDetails(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+            "success": true,
+            "errors": [],
+            "messages": [],
+            "result": {
+                "pool_id": "699d98642c564d2e855e9661899b7252",
+                "pop_health": {
+                    "Amsterdam, NL": {
+                        "healthy": true,
+                        "origins": {
+                            "2001:DB8::5": {
+                                "healthy": true,
+                                "rtt": 10,
+                                "failure_reason": 0,
+                                "response_code": 200
+                            }
+                        }
+                    }
+                }
+            }
+        }`)
+	}
+
+	mux.HandleFunc("/user/load_balancers/pools/699d98642c564d2e855e9661899b7252/health", handler)
+	want := LoadBalancerPoolHealth{
+		ID: "699d98642c564d2e855e9661899b7252",
+		PopHealth: map[string]LoadBalancerPoolPopHealth{
+			"Amsterdam, NL": {
+				Healthy: true,
+				Origins: map[string]LoadBalancerOriginHealth{
+					"2001:DB8::5": {
+						Healthy:       true,
+						RTT:           10,
+						FailureReason: 0,
+						ResponseCode:  200,
+					},
+				},
+			},
+		},
+	}
+
+	actual, err := client.PoolHealthDetails("699d98642c564d2e855e9661899b7252")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
