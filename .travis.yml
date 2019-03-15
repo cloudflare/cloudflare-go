@@ -3,25 +3,16 @@ sudo: false
 
 env:
   global:
-    - MOD_VENDOR=""
+    - MOD_VENDOR="-mod=vendor"
+    - GO111MODULE=on
 
 matrix:
   fast_finish: true
   include:
-    - go: 1.10.x
     - go: 1.11.x
-      env:
-        - GO111MODULE=on
-        - MOD_VENDOR="-mod=vendor"
+    - go: 1.12.x
     - go: 1.x
-      env:
-        - LATEST=true
-        - GO111MODULE=on
-        - MOD_VENDOR="-mod=vendor"
     - go: tip
-      env:
-        - GO111MODULE=on
-        - MOD_VENDOR="-mod=vendor"
   allow_failures:
     - go: tip
 
