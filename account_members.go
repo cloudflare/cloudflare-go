@@ -56,6 +56,10 @@ type AccountMemberInvitation struct {
 //
 // API reference: https://api.cloudflare.com/#accounts-list-accounts
 func (api *API) AccountMembers(accountID string, pageOpts PaginationOptions) ([]AccountMember, ResultInfo, error) {
+	if accountID == "" {
+		return []AccountMember{}, ResultInfo{}, errors.New(errMissingAccountID)
+	}
+
 	v := url.Values{}
 	if pageOpts.PerPage > 0 {
 		v.Set("per_page", strconv.Itoa(pageOpts.PerPage))
@@ -87,6 +91,10 @@ func (api *API) AccountMembers(accountID string, pageOpts PaginationOptions) ([]
 //
 // API reference: https://api.cloudflare.com/#account-members-add-member
 func (api *API) CreateAccountMember(accountID string, emailAddress string, roles []string) (AccountMember, error) {
+	if accountID == "" {
+		return AccountMember{}, errors.New(errMissingAccountID)
+	}
+
 	uri := "/accounts/" + accountID + "/members"
 
 	var newMember = AccountMemberInvitation{
@@ -111,6 +119,10 @@ func (api *API) CreateAccountMember(accountID string, emailAddress string, roles
 //
 // API reference: https://api.cloudflare.com/#account-members-remove-member
 func (api *API) DeleteAccountMember(accountID string, userID string) error {
+	if accountID == "" {
+		return errors.New(errMissingAccountID)
+	}
+
 	uri := fmt.Sprintf("/accounts/%s/members/%s", accountID, userID)
 
 	_, err := api.makeRequest("DELETE", uri, nil)
@@ -125,6 +137,10 @@ func (api *API) DeleteAccountMember(accountID string, userID string) error {
 //
 // API reference: https://api.cloudflare.com/#account-members-update-member
 func (api *API) UpdateAccountMember(accountID string, userID string, member AccountMember) (AccountMember, error) {
+	if accountID == "" {
+		return AccountMember{}, errors.New(errMissingAccountID)
+	}
+
 	uri := fmt.Sprintf("/accounts/%s/members/%s", accountID, userID)
 
 	res, err := api.makeRequest("PUT", uri, member)
@@ -145,6 +161,10 @@ func (api *API) UpdateAccountMember(accountID string, userID string, member Acco
 //
 // API reference: https://api.cloudflare.com/#account-members-member-details
 func (api *API) AccountMember(accountID string, memberID string) (AccountMember, error) {
+	if accountID == "" {
+		return AccountMember{}, errors.New(errMissingAccountID)
+	}
+
 	uri := fmt.Sprintf(
 		"/accounts/%s/members/%s",
 		accountID,
