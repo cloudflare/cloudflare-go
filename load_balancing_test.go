@@ -404,7 +404,9 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
               "retries": 0,
               "interval": 90,
               "expected_body": "alive",
-              "expected_codes": "2xx"
+              "expected_codes": "2xx",
+              "follow_redirects": true,
+              "allow_insecure": true
 						}`, string(b))
 		}
 		fmt.Fprint(w, `{
@@ -431,7 +433,9 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
                 "retries": 0,
                 "interval": 90,
                 "expected_body": "alive",
-                "expected_codes": "2xx"
+                "expected_codes": "2xx",
+                "follow_redirects": true,
+                "allow_insecure": true
             }
         }`)
 	}
@@ -448,14 +452,17 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
 		Method:      "GET",
 		Path:        "/health",
 		Header: map[string][]string{
-			"Host":     []string{"example.com"},
-			"X-App-ID": []string{"abc123"},
+			"Host":     {"example.com"},
+			"X-App-ID": {"abc123"},
 		},
 		Timeout:       3,
 		Retries:       0,
 		Interval:      90,
 		ExpectedBody:  "alive",
 		ExpectedCodes: "2xx",
+
+		FollowRedirects: true,
+		AllowInsecure:   true,
 	}
 	request := LoadBalancerMonitor{
 		Type:        "https",
@@ -463,14 +470,17 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
 		Method:      "GET",
 		Path:        "/health",
 		Header: map[string][]string{
-			"Host":     []string{"example.com"},
-			"X-App-ID": []string{"abc123"},
+			"Host":     {"example.com"},
+			"X-App-ID": {"abc123"},
 		},
 		Timeout:       3,
 		Retries:       0,
 		Interval:      90,
 		ExpectedBody:  "alive",
 		ExpectedCodes: "2xx",
+
+		FollowRedirects: true,
+		AllowInsecure:   true,
 	}
 
 	actual, err := client.CreateLoadBalancerMonitor(request)
@@ -536,8 +546,8 @@ func TestListLoadBalancerMonitors(t *testing.T) {
 			Method:      "GET",
 			Path:        "/health",
 			Header: map[string][]string{
-				"Host":     []string{"example.com"},
-				"X-App-ID": []string{"abc123"},
+				"Host":     {"example.com"},
+				"X-App-ID": {"abc123"},
 			},
 			Timeout:       3,
 			Retries:       0,
@@ -584,7 +594,9 @@ func TestLoadBalancerMonitorDetails(t *testing.T) {
                 "retries": 0,
                 "interval": 90,
                 "expected_body": "alive",
-                "expected_codes": "2xx"
+                "expected_codes": "2xx",
+                "follow_redirects": true,
+                "allow_insecure": true
             }
         }`)
 	}
@@ -601,14 +613,17 @@ func TestLoadBalancerMonitorDetails(t *testing.T) {
 		Method:      "GET",
 		Path:        "/health",
 		Header: map[string][]string{
-			"Host":     []string{"example.com"},
-			"X-App-ID": []string{"abc123"},
+			"Host":     {"example.com"},
+			"X-App-ID": {"abc123"},
 		},
 		Timeout:       3,
 		Retries:       0,
 		Interval:      90,
 		ExpectedBody:  "alive",
 		ExpectedCodes: "2xx",
+
+		FollowRedirects: true,
+		AllowInsecure:   true,
 	}
 
 	actual, err := client.LoadBalancerMonitorDetails("f1aba936b94213e5b8dca0c0dbf1f9cc")
@@ -670,7 +685,9 @@ func TestModifyLoadBalancerMonitor(t *testing.T) {
                 "retries": 0,
                 "interval": 90,
                 "expected_body": "kicking",
-                "expected_codes": "200"
+                "expected_codes": "200",
+                "follow_redirects": true,
+                "allow_insecure": true
 						}`, string(b))
 		}
 		fmt.Fprint(w, `{
@@ -697,7 +714,9 @@ func TestModifyLoadBalancerMonitor(t *testing.T) {
                 "retries": 0,
                 "interval": 90,
                 "expected_body": "kicking",
-                "expected_codes": "200"
+                "expected_codes": "200",
+                "follow_redirects": true,
+                "allow_insecure": true
             }
         }`)
 	}
@@ -714,14 +733,17 @@ func TestModifyLoadBalancerMonitor(t *testing.T) {
 		Method:      "GET",
 		Path:        "/status",
 		Header: map[string][]string{
-			"Host":     []string{"example.com"},
-			"X-App-ID": []string{"easy"},
+			"Host":     {"example.com"},
+			"X-App-ID": {"easy"},
 		},
 		Timeout:       3,
 		Retries:       0,
 		Interval:      90,
 		ExpectedBody:  "kicking",
 		ExpectedCodes: "200",
+
+		FollowRedirects: true,
+		AllowInsecure:   true,
 	}
 	request := LoadBalancerMonitor{
 		ID:          "f1aba936b94213e5b8dca0c0dbf1f9cc",
@@ -730,14 +752,17 @@ func TestModifyLoadBalancerMonitor(t *testing.T) {
 		Method:      "GET",
 		Path:        "/status",
 		Header: map[string][]string{
-			"Host":     []string{"example.com"},
-			"X-App-ID": []string{"easy"},
+			"Host":     {"example.com"},
+			"X-App-ID": {"easy"},
 		},
 		Timeout:       3,
 		Retries:       0,
 		Interval:      90,
 		ExpectedBody:  "kicking",
 		ExpectedCodes: "200",
+
+		FollowRedirects: true,
+		AllowInsecure:   true,
 	}
 
 	actual, err := client.ModifyLoadBalancerMonitor(request)
@@ -789,7 +814,8 @@ func TestCreateLoadBalancer(t *testing.T) {
                 ]
               },
               "proxied": true,
-              "session_affinity": "cookie"
+              "session_affinity": "cookie",
+              "session_affinity_ttl": 5000
 						}`, string(b))
 		}
 		fmt.Fprint(w, `{
@@ -832,7 +858,8 @@ func TestCreateLoadBalancer(t *testing.T) {
                   ]
                 },
                 "proxied": true,
-                "session_affinity": "cookie"
+                "session_affinity": "cookie",
+                "session_affinity_ttl": 5000
             }
         }`)
 	}
@@ -854,29 +881,30 @@ func TestCreateLoadBalancer(t *testing.T) {
 			"00920f38ce07c2e2f4df50b1f61d4194",
 		},
 		RegionPools: map[string][]string{
-			"WNAM": []string{
+			"WNAM": {
 				"de90f38ced07c2e2f4df50b1f61d4194",
 				"9290f38c5d07c2e2f4df57b1f61d4196",
 			},
-			"ENAM": []string{
+			"ENAM": {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
 		PopPools: map[string][]string{
-			"LAX": []string{
+			"LAX": {
 				"de90f38ced07c2e2f4df50b1f61d4194",
 				"9290f38c5d07c2e2f4df57b1f61d4196",
 			},
-			"LHR": []string{
+			"LHR": {
 				"abd90f38ced07c2e2f4df50b1f61d4194",
 				"f9138c5d07c2e2f4df57b1f61d4196",
 			},
-			"SJC": []string{
+			"SJC": {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
-		Proxied:     true,
-		Persistence: "cookie",
+		Proxied:        true,
+		Persistence:    "cookie",
+		PersistenceTTL: 5000,
 	}
 	request := LoadBalancer{
 		Description:  "Load Balancer for www.example.com",
@@ -889,29 +917,30 @@ func TestCreateLoadBalancer(t *testing.T) {
 			"00920f38ce07c2e2f4df50b1f61d4194",
 		},
 		RegionPools: map[string][]string{
-			"WNAM": []string{
+			"WNAM": {
 				"de90f38ced07c2e2f4df50b1f61d4194",
 				"9290f38c5d07c2e2f4df57b1f61d4196",
 			},
-			"ENAM": []string{
+			"ENAM": {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
 		PopPools: map[string][]string{
-			"LAX": []string{
+			"LAX": {
 				"de90f38ced07c2e2f4df50b1f61d4194",
 				"9290f38c5d07c2e2f4df57b1f61d4196",
 			},
-			"LHR": []string{
+			"LHR": {
 				"abd90f38ced07c2e2f4df50b1f61d4194",
 				"f9138c5d07c2e2f4df57b1f61d4196",
 			},
-			"SJC": []string{
+			"SJC": {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
-		Proxied:     true,
-		Persistence: "cookie",
+		Proxied:        true,
+		Persistence:    "cookie",
+		PersistenceTTL: 5000,
 	}
 
 	actual, err := client.CreateLoadBalancer("199d98642c564d2e855e9661899b7252", request)
@@ -997,24 +1026,24 @@ func TestListLoadBalancers(t *testing.T) {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 			RegionPools: map[string][]string{
-				"WNAM": []string{
+				"WNAM": {
 					"de90f38ced07c2e2f4df50b1f61d4194",
 					"9290f38c5d07c2e2f4df57b1f61d4196",
 				},
-				"ENAM": []string{
+				"ENAM": {
 					"00920f38ce07c2e2f4df50b1f61d4194",
 				},
 			},
 			PopPools: map[string][]string{
-				"LAX": []string{
+				"LAX": {
 					"de90f38ced07c2e2f4df50b1f61d4194",
 					"9290f38c5d07c2e2f4df57b1f61d4196",
 				},
-				"LHR": []string{
+				"LHR": {
 					"abd90f38ced07c2e2f4df50b1f61d4194",
 					"f9138c5d07c2e2f4df57b1f61d4196",
 				},
-				"SJC": []string{
+				"SJC": {
 					"00920f38ce07c2e2f4df50b1f61d4194",
 				},
 			},
@@ -1096,24 +1125,24 @@ func TestLoadBalancerDetails(t *testing.T) {
 			"00920f38ce07c2e2f4df50b1f61d4194",
 		},
 		RegionPools: map[string][]string{
-			"WNAM": []string{
+			"WNAM": {
 				"de90f38ced07c2e2f4df50b1f61d4194",
 				"9290f38c5d07c2e2f4df57b1f61d4196",
 			},
-			"ENAM": []string{
+			"ENAM": {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
 		PopPools: map[string][]string{
-			"LAX": []string{
+			"LAX": {
 				"de90f38ced07c2e2f4df50b1f61d4194",
 				"9290f38c5d07c2e2f4df57b1f61d4196",
 			},
-			"LHR": []string{
+			"LHR": {
 				"abd90f38ced07c2e2f4df50b1f61d4194",
 				"f9138c5d07c2e2f4df57b1f61d4196",
 			},
-			"SJC": []string{
+			"SJC": {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
@@ -1248,21 +1277,21 @@ func TestModifyLoadBalancer(t *testing.T) {
 			"00920f38ce07c2e2f4df50b1f61d4194",
 		},
 		RegionPools: map[string][]string{
-			"WNAM": []string{
+			"WNAM": {
 				"9290f38c5d07c2e2f4df57b1f61d4196",
 			},
-			"ENAM": []string{
+			"ENAM": {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
 		PopPools: map[string][]string{
-			"LAX": []string{
+			"LAX": {
 				"9290f38c5d07c2e2f4df57b1f61d4196",
 			},
-			"LHR": []string{
+			"LHR": {
 				"f9138c5d07c2e2f4df57b1f61d4196",
 			},
-			"SJC": []string{
+			"SJC": {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
@@ -1279,21 +1308,21 @@ func TestModifyLoadBalancer(t *testing.T) {
 			"00920f38ce07c2e2f4df50b1f61d4194",
 		},
 		RegionPools: map[string][]string{
-			"WNAM": []string{
+			"WNAM": {
 				"9290f38c5d07c2e2f4df57b1f61d4196",
 			},
-			"ENAM": []string{
+			"ENAM": {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
 		PopPools: map[string][]string{
-			"LAX": []string{
+			"LAX": {
 				"9290f38c5d07c2e2f4df57b1f61d4196",
 			},
-			"LHR": []string{
+			"LHR": {
 				"f9138c5d07c2e2f4df57b1f61d4196",
 			},
-			"SJC": []string{
+			"SJC": {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
@@ -1302,6 +1331,60 @@ func TestModifyLoadBalancer(t *testing.T) {
 	}
 
 	actual, err := client.ModifyLoadBalancer("199d98642c564d2e855e9661899b7252", request)
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestLoadBalancerPoolHealthDetails(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+            "success": true,
+            "errors": [],
+            "messages": [],
+            "result": {
+                "pool_id": "699d98642c564d2e855e9661899b7252",
+                "pop_health": {
+                    "Amsterdam, NL": {
+                        "healthy": true,
+                        "origins": {
+                            "2001:DB8::5": {
+                                "healthy": true,
+                                "rtt": 10,
+                                "failure_reason": 0,
+                                "response_code": 200
+                            }
+                        }
+                    }
+                }
+            }
+        }`)
+	}
+
+	mux.HandleFunc("/user/load_balancers/pools/699d98642c564d2e855e9661899b7252/health", handler)
+	want := LoadBalancerPoolHealth{
+		ID: "699d98642c564d2e855e9661899b7252",
+		PopHealth: map[string]LoadBalancerPoolPopHealth{
+			"Amsterdam, NL": {
+				Healthy: true,
+				Origins: map[string]LoadBalancerOriginHealth{
+					"2001:DB8::5": {
+						Healthy:       true,
+						RTT:           10,
+						FailureReason: 0,
+						ResponseCode:  200,
+					},
+				},
+			},
+		},
+	}
+
+	actual, err := client.PoolHealthDetails("699d98642c564d2e855e9661899b7252")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}

@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"fmt"
 	"net/http"
+	"net/url"
 	"testing"
 	"time"
 
@@ -581,4 +582,42 @@ func TestZoneAnalyticsByColocation(t *testing.T) {
 
 	_, err = client.ZoneAnalyticsDashboard("bar", ZoneAnalyticsOptions{})
 	assert.Error(t, err)
+}
+
+func TestWithPagination(t *testing.T) {
+	opt := reqOption{
+		params: url.Values{},
+	}
+	popts := PaginationOptions{
+		Page:    45,
+		PerPage: 500,
+	}
+	of := WithPagination(popts)
+	of(&opt)
+
+	tests := []struct {
+		name     string
+		expected string
+	}{
+		{"page", "45"},
+		{"per_page", "500"},
+	}
+
+	for _, tt := range tests {
+		if got := opt.params.Get(tt.name); got != tt.expected {
+			t.Errorf("expected param %s to be %s, got %s", tt.name, tt.expected, got)
+		}
+	}
+}
+
+func TestZoneFilter(t *testing.T) {
+	opt := reqOption{
+		params: url.Values{},
+	}
+	of := WithZoneFilter("example.org")
+	of(&opt)
+
+	if got := opt.params.Get("name"); got != "example.org" {
+		t.Errorf("expected param %s to be %s, got %s", "name", "example.org", got)
+	}
 }

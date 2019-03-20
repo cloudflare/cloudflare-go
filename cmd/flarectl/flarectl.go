@@ -1,62 +1,13 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"os"
-
-	"github.com/olekukonko/tablewriter"
-
-	"github.com/pkg/errors"
 
 	"github.com/cloudflare/cloudflare-go"
 	"github.com/codegangsta/cli"
 )
 
 var api *cloudflare.API
-
-// writeTable outputs tabular data to stdout.
-func writeTable(data [][]string, cols ...string) {
-	table := tablewriter.NewWriter(os.Stdout)
-	table.SetHeader(cols)
-	table.SetBorder(false)
-	table.AppendBulk(data)
-
-	table.Render()
-}
-
-func checkEnv() error {
-	if api == nil {
-		var err error
-		api, err = cloudflare.New(os.Getenv("CF_API_KEY"), os.Getenv("CF_API_EMAIL"))
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-
-	if api.APIKey == "" {
-		return errors.New("API key not defined")
-	}
-	if api.APIEmail == "" {
-		return errors.New("API email not defined")
-	}
-
-	return nil
-}
-
-// Utility function to check if CLI flags were given.
-func checkFlags(c *cli.Context, flags ...string) error {
-	for _, flag := range flags {
-		if c.String(flag) == "" {
-			cli.ShowSubcommandHelp(c)
-			err := errors.Errorf("error: the required flag %q was empty or not provided", flag)
-			fmt.Fprintln(os.Stderr, err)
-			return err
-		}
-	}
-
-	return nil
-}
 
 func main() {
 	app := cli.NewApp()
@@ -69,6 +20,17 @@ func main() {
 			Aliases: []string{"i"},
 			Action:  ips,
 			Usage:   "Print Cloudflare IP ranges",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "ip-type",
+					Usage: "type of IPs ( ipv4 | ipv6 | all )",
+					Value: "all",
+				},
+				cli.BoolFlag{
+					Name:  "ip-only",
+					Usage: "show only addresses",
+				},
+			},
 		},
 		{
 			Name:    "user",

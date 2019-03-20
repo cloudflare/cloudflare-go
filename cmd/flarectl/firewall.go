@@ -63,7 +63,7 @@ func firewallAccessRules(c *cli.Context) {
 	rules := make([]cloudflare.AccessRule, 0, response.ResultInfo.Total)
 	rules = append(rules, response.Result...)
 	if totalPages > 1 {
-		for page := 2; page < totalPages; page++ {
+		for page := 2; page <= totalPages; page++ {
 			switch {
 			case organizationID != "":
 				response, err = api.ListOrganizationAccessRules(organizationID, rule, page)
@@ -314,6 +314,12 @@ func firewallAccessRuleDelete(c *cli.Context) {
 	if err != nil {
 		fmt.Println("Error deleting firewall access rule:", err)
 	}
+
+	output := make([][]string, 0, len(rules))
+	for _, rule := range rules {
+		output = append(output, formatAccessRule(rule))
+	}
+	writeTable(output, "ID", "Value", "Scope", "Mode", "Notes")
 }
 
 func getScope(c *cli.Context) (string, string, error) {

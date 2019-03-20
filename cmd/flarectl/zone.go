@@ -33,7 +33,12 @@ func zoneCreate(c *cli.Context) {
 	if orgID != "" {
 		org.ID = orgID
 	}
-	api.CreateZone(zone, jumpstart, org)
+
+	_, err := api.CreateZone(zone, jumpstart, org)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, fmt.Sprintf("%s", err))
+		return
+	}
 }
 
 func zoneCheck(c *cli.Context) {
