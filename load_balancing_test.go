@@ -406,7 +406,8 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
               "expected_body": "alive",
               "expected_codes": "2xx",
               "follow_redirects": true,
-              "allow_insecure": true
+              "allow_insecure": true,
+              "probe_zone": ""
 						}`, string(b))
 		}
 		fmt.Fprint(w, `{
@@ -435,7 +436,8 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
                 "expected_body": "alive",
                 "expected_codes": "2xx",
                 "follow_redirects": true,
-                "allow_insecure": true
+                "allow_insecure": true,
+                "probe_zone": ""
             }
         }`)
 	}
@@ -596,7 +598,8 @@ func TestLoadBalancerMonitorDetails(t *testing.T) {
                 "expected_body": "alive",
                 "expected_codes": "2xx",
                 "follow_redirects": true,
-                "allow_insecure": true
+                "allow_insecure": true,
+                "probe_zone": ""
             }
         }`)
 	}
@@ -687,7 +690,8 @@ func TestModifyLoadBalancerMonitor(t *testing.T) {
                 "expected_body": "kicking",
                 "expected_codes": "200",
                 "follow_redirects": true,
-                "allow_insecure": true
+                "allow_insecure": true,
+                "probe_zone": ""
 						}`, string(b))
 		}
 		fmt.Fprint(w, `{
@@ -716,7 +720,8 @@ func TestModifyLoadBalancerMonitor(t *testing.T) {
                 "expected_body": "kicking",
                 "expected_codes": "200",
                 "follow_redirects": true,
-                "allow_insecure": true
+                "allow_insecure": true,
+                "probe_zone": ""
             }
         }`)
 	}
