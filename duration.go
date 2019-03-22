@@ -11,10 +11,12 @@ type Duration struct {
 	time.Duration
 }
 
+// MarshalJSON encodes a Duration as a JSON string formatted using String.
 func (d Duration) MarshalJSON() ([]byte, error) {
 	return json.Marshal(d.Duration.String())
 }
 
+// UnmarshalJSON decodes a Duration from a JSON string parsed using time.ParseDuration.
 func (d *Duration) UnmarshalJSON(buf []byte) error {
 	var str string
 
