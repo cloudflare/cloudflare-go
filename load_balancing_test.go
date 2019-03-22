@@ -1378,7 +1378,7 @@ func TestLoadBalancerPoolHealthDetails(t *testing.T) {
 					map[string]LoadBalancerOriginHealth{
 						"2001:DB8::5": {
 							Healthy:       true,
-							RTT:           "12.1ms",
+							RTT:           Duration{12*time.Millisecond + 100*time.Microsecond},
 							FailureReason: "No failures",
 							ResponseCode:  401,
 						},

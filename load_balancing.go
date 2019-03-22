@@ -80,10 +80,10 @@ type LoadBalancer struct {
 
 // LoadBalancerOriginHealth represents the health of the origin.
 type LoadBalancerOriginHealth struct {
-	Healthy       bool   `json:"healthy,omitempty"`
-	RTT           string `json:"rtt,omitempty"`
-	FailureReason string `json:"failure_reason,omitempty"`
-	ResponseCode  int    `json:"response_code,omitempty"`
+	Healthy       bool     `json:"healthy,omitempty"`
+	RTT           Duration `json:"rtt,omitempty"`
+	FailureReason string   `json:"failure_reason,omitempty"`
+	ResponseCode  int      `json:"response_code,omitempty"`
 }
 
 // LoadBalancerPoolPopHealth represents the health of the pool for given PoP.
