@@ -1352,14 +1352,16 @@ func TestLoadBalancerPoolHealthDetails(t *testing.T) {
                 "pop_health": {
                     "Amsterdam, NL": {
                         "healthy": true,
-                        "origins": {
+                        "origins": [
+                          {
                             "2001:DB8::5": {
                                 "healthy": true,
-                                "rtt": 10,
-                                "failure_reason": 0,
-                                "response_code": 200
+                                "rtt": "12.1ms",
+                                "failure_reason": "No failures",
+                                "response_code": 401
                             }
-                        }
+                          }
+                        ]
                     }
                 }
             }
@@ -1372,12 +1374,14 @@ func TestLoadBalancerPoolHealthDetails(t *testing.T) {
 		PopHealth: map[string]LoadBalancerPoolPopHealth{
 			"Amsterdam, NL": {
 				Healthy: true,
-				Origins: map[string]LoadBalancerOriginHealth{
-					"2001:DB8::5": {
-						Healthy:       true,
-						RTT:           10,
-						FailureReason: 0,
-						ResponseCode:  200,
+				Origins: []map[string]LoadBalancerOriginHealth{
+					map[string]LoadBalancerOriginHealth{
+						"2001:DB8::5": {
+							Healthy:       true,
+							RTT:           Duration{12*time.Millisecond + 100*time.Microsecond},
+							FailureReason: "No failures",
+							ResponseCode:  401,
+						},
 					},
 				},
 			},
