@@ -82,3 +82,14 @@ func ExampleAPI_TransferRegistrarDomain() {
 
 	fmt.Printf("%+v\n", domain)
 }
+
+func ExampleAPI_CancelRegistrarDomainTransfer() {
+	api, err := cloudflare.New(apiKey, user)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	domains, err := api.CancelRegistrarDomainTransfer("01a7362d577a6c3019a474fd6f485823", "cloudflare.com")
+
+	fmt.Printf("%+v\n", domains)
+}

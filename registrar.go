@@ -126,3 +126,22 @@ func (api *API) TransferRegistrarDomain(accountID, domainName string) ([]Registr
 	}
 	return r.Result, nil
 }
+
+// CancelRegistrarDomainTransfer cancels a pending domain transfer.
+//
+// API reference: https://api.cloudflare.com/#registrar-domains-cancel-transfer
+func (api *API) CancelRegistrarDomainTransfer(accountID, domainName string) ([]RegistrarDomain, error) {
+	uri := fmt.Sprintf("/accounts/%s/registrar/domains/%s/cancel_transfer", accountID, domainName)
+
+	res, err := api.makeRequest("POST", uri, nil)
+	if err != nil {
+		return []RegistrarDomain{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var r RegistrarDomainsDetailResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return []RegistrarDomain{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
