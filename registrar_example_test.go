@@ -60,3 +60,14 @@ func ExampleAPI_RegistrarDomain() {
 
 	fmt.Printf("%+v\n", domain)
 }
+
+func ExampleAPI_RegistrarDomains() {
+	api, err := cloudflare.New(apiKey, user)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	domains, err := api.RegistrarDomains("01a7362d577a6c3019a474fd6f485823")
+
+	fmt.Printf("%+v\n", domains)
+}

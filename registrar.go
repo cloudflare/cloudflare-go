@@ -86,3 +86,24 @@ func (api *API) RegistrarDomain(accountID, domainName string) (RegistrarDomain, 
 	}
 	return r.Result, nil
 }
+
+// RegistrarDomains returns all registrar domains based on the account
+// ID.
+//
+// API reference: https://api.cloudflare.com/#registrar-domains-list-domains
+func (api *API) RegistrarDomains(accountID string) ([]RegistrarDomain, error) {
+	uri := "/accounts/" + accountID + "/registrar/domains"
+
+	res, err := api.makeRequest("POST", uri, nil)
+	if err != nil {
+		return []RegistrarDomain{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var r RegistrarDomainsDetailResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return []RegistrarDomain{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
+
