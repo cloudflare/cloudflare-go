@@ -53,6 +53,15 @@ type RegistrantContact struct {
 	Fax          string `json:"fax"`
 }
 
+// RegistrarDomainConfiguration is the structure for making updates to
+// and existing domain.
+type RegistrarDomainConfiguration struct {
+	NameServers []string `json:"name_servers"`
+	Privacy     bool     `json:"privacy"`
+	Locked      bool     `json:"locked"`
+	AutoRenew   bool     `json:"auto_renew"`
+}
+
 // RegistrarDomainDetailResponse is the structure of the detailed
 // response from the API for a single domain.
 type RegistrarDomainDetailResponse struct {
@@ -142,6 +151,25 @@ func (api *API) CancelRegistrarDomainTransfer(accountID, domainName string) ([]R
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return []RegistrarDomain{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
+
+// UpdateRegistrarDomain updates an existing Registrar Domain configuration.
+//
+// API reference: https://api.cloudflare.com/#registrar-domains-update-domain
+func (api *API) UpdateRegistrarDomain(accountID, domainName string, domainConfiguration RegistrarDomainConfiguration) (RegistrarDomain, error) {
+	uri := fmt.Sprintf("/accounts/%s/registrar/domains/%s", accountID, domainName)
+
+	res, err := api.makeRequest("PUT", uri, domainConfiguration)
+	if err != nil {
+		return RegistrarDomain{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var r RegistrarDomainDetailResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return RegistrarDomain{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
 }
