@@ -107,3 +107,22 @@ func (api *API) RegistrarDomains(accountID string) ([]RegistrarDomain, error) {
 	return r.Result, nil
 }
 
+// TransferRegistrarDomain initiates the transfer from another registrar
+// to Cloudflare Registrar.
+//
+// API reference: https://api.cloudflare.com/#registrar-domains-transfer-domain
+func (api *API) TransferRegistrarDomain(accountID, domainName string) ([]RegistrarDomain, error) {
+	uri := fmt.Sprintf("/accounts/%s/registrar/domains/%s/transfer", accountID, domainName)
+
+	res, err := api.makeRequest("POST", uri, nil)
+	if err != nil {
+		return []RegistrarDomain{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var r RegistrarDomainsDetailResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return []RegistrarDomain{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
