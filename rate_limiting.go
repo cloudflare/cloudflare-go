@@ -18,7 +18,7 @@ type RateLimit struct {
 	Threshold   int                     `json:"threshold"`
 	Period      int                     `json:"period"`
 	Action      RateLimitAction         `json:"action"`
-	Correlate   RateLimitCorrelate      `json:"correlate"`
+	Correlate   *RateLimitCorrelate     `json:"correlate,omitempty"`
 }
 
 // RateLimitTrafficMatcher contains the rules that will be used to apply a rate limit to traffic
