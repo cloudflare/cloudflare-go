@@ -12,10 +12,10 @@ var expectedAccountMemberStruct = AccountMember{
 	ID:   "4536bcfad5faccb111b47003c79917fa",
 	Code: "05dd05cce12bbed97c0d87cd78e89bc2fd41a6cee72f27f6fc84af2e45c0fac0",
 	User: AccountMemberUserDetails{
-		ID:        "7c5dae5552338874e5053f2534d2767a",
-		FirstName: "John",
-		LastName:  "Appleseed",
-		Email:     "user@example.com",
+		ID:                             "7c5dae5552338874e5053f2534d2767a",
+		FirstName:                      "John",
+		LastName:                       "Appleseed",
+		Email:                          "user@example.com",
 		TwoFactorAuthenticationEnabled: false,
 	},
 	Status: "accepted",
@@ -36,7 +36,7 @@ var expectedNewAccountMemberStruct = AccountMember{
 	ID:   "4536bcfad5faccb111b47003c79917fa",
 	Code: "05dd05cce12bbed97c0d87cd78e89bc2fd41a6cee72f27f6fc84af2e45c0fac0",
 	User: AccountMemberUserDetails{
-		Email: "user@example.com",
+		Email:                          "user@example.com",
 		TwoFactorAuthenticationEnabled: false,
 	},
 	Status: "pending",
@@ -57,10 +57,10 @@ var newUpdatedAccountMemberStruct = AccountMember{
 	ID:   "4536bcfad5faccb111b47003c79917fa",
 	Code: "05dd05cce12bbed97c0d87cd78e89bc2fd41a6cee72f27f6fc84af2e45c0fac0",
 	User: AccountMemberUserDetails{
-		ID:        "7c5dae5552338874e5053f2534d2767a",
-		FirstName: "John",
-		LastName:  "Appleseeds",
-		Email:     "new-user@example.com",
+		ID:                             "7c5dae5552338874e5053f2534d2767a",
+		FirstName:                      "John",
+		LastName:                       "Appleseeds",
+		Email:                          "new-user@example.com",
 		TwoFactorAuthenticationEnabled: false,
 	},
 	Status: "accepted",
@@ -139,6 +139,17 @@ func TestAccountMembers(t *testing.T) {
 	}
 }
 
+func TestAccountMembersWithoutAccountID(t *testing.T) {
+	setup()
+	defer teardown()
+
+	_, _, err := client.AccountMembers("", PaginationOptions{})
+
+	if assert.Error(t, err) {
+		assert.Equal(t, err.Error(), errMissingAccountID)
+	}
+}
+
 func TestCreateAccountMember(t *testing.T) {
 	setup()
 	defer teardown()
@@ -190,6 +201,20 @@ func TestCreateAccountMember(t *testing.T) {
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedNewAccountMemberStruct, actual)
+	}
+}
+
+func TestCreateAccountMemberWithoutAccountID(t *testing.T) {
+	setup()
+	defer teardown()
+
+	_, err := client.CreateAccountMember(
+		"",
+		"user@example.com",
+		[]string{"3536bcfad5faccb999b47003c79917fb"})
+
+	if assert.Error(t, err) {
+		assert.Equal(t, err.Error(), errMissingAccountID)
 	}
 }
 
@@ -254,6 +279,21 @@ func TestUpdateAccountMember(t *testing.T) {
 	}
 }
 
+func TestUpdateAccountMemberWithoutAccountID(t *testing.T) {
+	setup()
+	defer teardown()
+
+	_, err := client.UpdateAccountMember(
+		"",
+		"4536bcfad5faccb111b47003c79917fa",
+		newUpdatedAccountMemberStruct,
+	)
+
+	if assert.Error(t, err) {
+		assert.Equal(t, err.Error(), errMissingAccountID)
+	}
+}
+
 func TestAccountMember(t *testing.T) {
 	setup()
 	defer teardown()
@@ -304,5 +344,16 @@ func TestAccountMember(t *testing.T) {
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccountMemberStruct, actual)
+	}
+}
+
+func TestAccountMemberWithoutAccountID(t *testing.T) {
+	setup()
+	defer teardown()
+
+	_, err := client.AccountMember("", "4536bcfad5faccb111b47003c79917fa")
+
+	if assert.Error(t, err) {
+		assert.Equal(t, err.Error(), errMissingAccountID)
 	}
 }
