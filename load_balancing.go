@@ -67,6 +67,7 @@ type LoadBalancer struct {
 	RegionPools    map[string][]string `json:"region_pools"`
 	PopPools       map[string][]string `json:"pop_pools"`
 	Proxied        bool                `json:"proxied"`
+	Enabled        *bool               `json:"enabled,omitempty"`
 	Persistence    string              `json:"session_affinity,omitempty"`
 	PersistenceTTL int                 `json:"session_affinity_ttl,omitempty"`
 
