@@ -343,7 +343,7 @@ func (api *API) ListZones(z ...string) ([]Zone, error) {
 			}
 		}
 	} else {
-		res, err = api.makeRequest("GET", "/zones", nil)
+		res, err = api.makeRequest("GET", "/zones?per_page=50", nil)
 		if err != nil {
 			return []Zone{}, errors.Wrap(err, errMakeRequestError)
 		}
@@ -359,7 +359,7 @@ func (api *API) ListZones(z ...string) ([]Zone, error) {
 
 		for i := 1; i <= totalPageCount; i++ {
 			go func(pageNumber int) error {
-				res, err = api.makeRequest("GET", fmt.Sprintf("/zones?page=%d", pageNumber), nil)
+				res, err = api.makeRequest("GET", fmt.Sprintf("/zones?per_page=50&page=%d", pageNumber), nil)
 				if err != nil {
 					errc <- err
 				}
