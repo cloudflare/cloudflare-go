@@ -32,6 +32,7 @@ The current feature list includes:
 * [x] Firewall (partial)
 * [ ] [Keyless SSL](https://blog.cloudflare.com/keyless-ssl-the-nitty-gritty-technical-details/)
 * [x] [Load Balancing](https://blog.cloudflare.com/introducing-load-balancing-intelligent-failover-with-cloudflare/)
+* [x] [Logpush Jobs](https://developers.cloudflare.com/logs/logpush/)
 * [ ] Organization Administration
 * [x] [Origin CA](https://blog.cloudflare.com/universal-ssl-encryption-all-the-way-to-the-origin-for-free/)
 * [x] [Railgun](https://www.cloudflare.com/railgun/) administration
