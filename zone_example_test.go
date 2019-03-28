@@ -13,7 +13,7 @@ func ExampleAPI_ListZones_all() {
 		log.Fatal(err)
 	}
 
-	// Fetch a slice of all zones available to this account.
+	// Fetch all zones available to this user.
 	zones, err := api.ListZones()
 	if err != nil {
 		log.Fatal(err)
