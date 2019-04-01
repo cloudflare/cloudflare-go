@@ -112,6 +112,9 @@ func dnsCreateOrUpdate(c *cli.Context) {
 				if err != nil {
 					fmt.Println("Error updating DNS record:", err)
 				}
+				resp = &cloudflare.DNSRecordResponse{
+					Result: rr,
+				}
 			}
 		}
 	} else {
