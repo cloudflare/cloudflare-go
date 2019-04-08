@@ -2,6 +2,8 @@ package cloudflare
 
 import (
 	"fmt"
+	"mime"
+	"mime/multipart"
 	"net/http"
 	"testing"
 	"time"
@@ -255,7 +257,7 @@ func TestWorkers_UploadWorker(t *testing.T) {
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, uploadWorkerResponseData)
 	})
-	res, err := client.UploadWorker(&WorkerRequestParams{ZoneID: "foo"}, workerScript)
+	res, err := client.UploadWorker(&WorkerRequestParams{ZoneID: "foo"}, workerScript, nil)
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
@@ -284,7 +286,50 @@ func TestWorkers_UploadWorkerWithName(t *testing.T) {
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, uploadWorkerResponseData)
 	})
-	res, err := client.UploadWorker(&WorkerRequestParams{ScriptName: "bar"}, workerScript)
+	res, err := client.UploadWorker(&WorkerRequestParams{ScriptName: "bar"}, workerScript, nil)
+	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
+	want := WorkerScriptResponse{
+		successResponse,
+		WorkerScript{
+			Script: workerScript,
+			WorkerMetaData: WorkerMetaData{
+				ETAG:       "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
+				Size:       191,
+				ModifiedOn: formattedTime,
+			},
+		}}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
+}
+
+func TestWorkers_uploadMultipartWorker(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/zones/foo/workers/script", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		mediaType, params, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
+		assert.Equal(t, mediaType, "multipart/form-data")
+		mr := multipart.NewReader(r.Body, params["boundary"])
+		p, err := mr.NextPart()
+		assert.Nil(t, err)
+		assert.Equal(t, p.FileName(), "metadata.json")
+		assert.Equal(t, p.FormName(), "metadata")
+		p, err = mr.NextPart()
+		assert.Nil(t, err)
+		assert.Equal(t, p.FileName(), "script.js")
+		assert.Equal(t, p.FormName(), "script")
+		w.Header().Set("content-type", "application/javascript")
+		fmt.Fprintf(w, uploadWorkerResponseData)
+	})
+	res, err := client.UploadWorker(&WorkerRequestParams{ZoneID: "foo"}, workerScript, &WorkerMetadataParams{
+		BodyPart: "script",
+		Bindings: []WorkerResource{{
+			Type:        "kv_namespace",
+			Name:        "EXAMPLE",
+			NamespaceID: "cloudflare",
+		}}})
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
@@ -312,7 +357,7 @@ func TestWorkers_UploadWorkerSingleScriptWithOrg(t *testing.T) {
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, uploadWorkerResponseData)
 	})
-	res, err := client.UploadWorker(&WorkerRequestParams{ZoneID: "foo"}, workerScript)
+	res, err := client.UploadWorker(&WorkerRequestParams{ZoneID: "foo"}, workerScript, nil)
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
@@ -333,7 +378,7 @@ func TestWorkers_UploadWorkerWithNameErrorsWithoutOrgId(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.UploadWorker(&WorkerRequestParams{ScriptName: "bar"}, workerScript)
+	_, err := client.UploadWorker(&WorkerRequestParams{ScriptName: "bar"}, workerScript, nil)
 	assert.Error(t, err)
 }
 

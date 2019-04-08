@@ -1,17 +1,32 @@
 package cloudflare
 
 import (
+	"bytes"
 	"encoding/json"
+	"io"
+	"mime/multipart"
 	"net/http"
 	"time"
 
 	"github.com/pkg/errors"
 )
 
+type WorkerMetadataParams struct {
+	BodyPart string           `json:"body_part"`
+	Bindings []WorkerResource `json:"bindings"`
+}
+
 // WorkerRequestParams provides parameters for worker requests for both enterprise and standard requests
 type WorkerRequestParams struct {
 	ZoneID     string
 	ScriptName string
+}
+
+// WorkerResource binds worker scripts to resources
+type WorkerResource struct {
+	Type        string `json:"type"`
+	Name        string `json:"name"`
+	NamespaceID string `json:"namespace_id"`
 }
 
 // WorkerRoute aka filters are patterns used to enable or disable workers that match requests.
@@ -167,15 +182,41 @@ func (api *API) ListWorkerScripts() (WorkerListResponse, error) {
 // UploadWorker push raw script content for your worker
 //
 // API reference: https://api.cloudflare.com/#worker-script-upload-worker
-func (api *API) UploadWorker(requestParams *WorkerRequestParams, data string) (WorkerScriptResponse, error) {
+func (api *API) UploadWorker(requestParams *WorkerRequestParams, data string, metadataParams *WorkerMetadataParams) (WorkerScriptResponse, error) {
 	if requestParams.ScriptName != "" {
-		return api.uploadWorkerWithName(requestParams.ScriptName, data)
+		return api.uploadNamedWorker(requestParams.ScriptName, data, metadataParams)
 	}
+	return api.uploadWorker(requestParams, data, metadataParams)
+}
+
+func (api *API) uploadWorker(requestParams *WorkerRequestParams, data string, metadataParams *WorkerMetadataParams) (WorkerScriptResponse, error) {
 	uri := "/zones/" + requestParams.ZoneID + "/workers/script"
+	if metadataParams != nil {
+		return api.doMultipartUploadWorker(uri, data, *metadataParams)
+	}
+	return api.doUploadWorker(uri, data)
+}
+
+// UploadNamedWorker push raw script content for your worker
+// This is an enterprise only feature https://developers.cloudflare.com/workers/api/config-api-for-enterprise/
+//
+// API reference: https://api.cloudflare.com/#worker-script-upload-worker
+func (api *API) uploadNamedWorker(scriptName, data string, metadataParams *WorkerMetadataParams) (WorkerScriptResponse, error) {
+	if api.OrganizationID == "" {
+		return WorkerScriptResponse{}, errors.New("organization ID required for enterprise only request")
+	}
+	uri := "/accounts/" + api.OrganizationID + "/workers/scripts/" + scriptName
+	if metadataParams != nil {
+		return api.doMultipartUploadWorker(uri, data, *metadataParams)
+	}
+	return api.doUploadWorker(uri, data)
+}
+
+func (api *API) doUploadWorker(uri, data string) (WorkerScriptResponse, error) {
+	var r WorkerScriptResponse
 	headers := make(http.Header)
 	headers.Set("Content-Type", "application/javascript")
-	res, err := api.makeRequestWithHeaders("PUT", uri, []byte(data), headers)
-	var r WorkerScriptResponse
+	res, err := api.makeRequestWithHeaders(http.MethodPut, uri, []byte(data), headers)
 	if err != nil {
 		return r, errors.Wrap(err, errMakeRequestError)
 	}
@@ -186,19 +227,31 @@ func (api *API) UploadWorker(requestParams *WorkerRequestParams, data string) (W
 	return r, nil
 }
 
-// UploadWorkerWithName push raw script content for your worker
-// This is an enterprise only feature https://developers.cloudflare.com/workers/api/config-api-for-enterprise/
-//
-// API reference: https://api.cloudflare.com/#worker-script-upload-worker
-func (api *API) uploadWorkerWithName(scriptName string, data string) (WorkerScriptResponse, error) {
-	if api.OrganizationID == "" {
-		return WorkerScriptResponse{}, errors.New("organization ID required for enterprise only request")
-	}
-	uri := "/accounts/" + api.OrganizationID + "/workers/scripts/" + scriptName
-	headers := make(http.Header)
-	headers.Set("Content-Type", "application/javascript")
-	res, err := api.makeRequestWithHeaders("PUT", uri, []byte(data), headers)
+func (api *API) doMultipartUploadWorker(uri, data string, metadata WorkerMetadataParams) (WorkerScriptResponse, error) {
 	var r WorkerScriptResponse
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	metadataPart, err := writer.CreateFormFile("metadata", "metadata.json")
+	if err != nil {
+		return r, errors.Wrap(err, errMakeRequestError)
+	}
+	b, err := json.Marshal(metadata)
+	if err != nil {
+		return r, errors.Wrap(err, errMakeRequestError)
+	}
+	io.Copy(metadataPart, bytes.NewReader(b))
+	scriptPart, err := writer.CreateFormFile("script", "script.js")
+	if err != nil {
+		return r, errors.Wrap(err, errMakeRequestError)
+	}
+	io.Copy(scriptPart, bytes.NewReader([]byte(data)))
+	err = writer.Close()
+	if err != nil {
+		return r, errors.Wrap(err, errMakeRequestError)
+	}
+	headers := make(http.Header)
+	headers.Set("Content-Type", writer.FormDataContentType())
+	res, err := api.makeRequestWithHeaders("PUT", uri, body.Bytes(), headers)
 	if err != nil {
 		return r, errors.Wrap(err, errMakeRequestError)
 	}
