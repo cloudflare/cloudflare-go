@@ -14,6 +14,13 @@ var exampleNewLogpushJob = cloudflare.LogpushJob{
 	DestinationConf: "s3://mybucket/logs?region=us-west-2",
 }
 
+var exampleUpdatedLogpushJob = cloudflare.LogpushJob{
+	Enabled: true, 
+	Name: "updated.com", 
+	LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp",
+	DestinationConf: "gs://mybucket/logs",
+}
+
 func ExampleAPI_CreateLogpushJob() {
 	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
@@ -31,6 +38,23 @@ func ExampleAPI_CreateLogpushJob() {
 	}
 
 	fmt.Printf("%+v\n", job)
+}
+
+func ExampleAPI_UpdateLogpushJob() {
+	api, err := cloudflare.New(apiKey, user)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	zoneID, err := api.ZoneIDByName(domain)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = api.UpdateLogpushJob(zoneID, 1, exampleUpdatedLogpushJob)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func ExampleAPI_LogpushJobs() {
