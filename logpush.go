@@ -135,7 +135,7 @@ func (api *API) LogpushJob(zoneID string, jobID int) (LogpushJob, error) {
 // API reference: https://api.cloudflare.com/#logpush-jobs-update-logpush-job
 func (api *API) UpdateLogpushJob(zoneID string, jobID int, job LogpushJob) error {
 	uri := "/zones/" + zoneID + "/logpush/jobs/" + strconv.Itoa(jobID)
-	res, err := api.makeRequest("PUT", uri, nil)
+	res, err := api.makeRequest("PUT", uri, job)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}
