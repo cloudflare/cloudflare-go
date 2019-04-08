@@ -111,6 +111,7 @@ func dnsCreateOrUpdate(c *cli.Context) {
 				err := api.UpdateDNSRecord(zoneID, r.ID, rr)
 				if err != nil {
 					fmt.Println("Error updating DNS record:", err)
+					return
 				}
 				resp = &cloudflare.DNSRecordResponse{
 					Result: rr,
@@ -127,6 +128,7 @@ func dnsCreateOrUpdate(c *cli.Context) {
 		resp, err = api.CreateDNSRecord(zoneID, rr)
 		if err != nil {
 			fmt.Println("Error creating DNS record:", err)
+			return
 		}
 
 	}
