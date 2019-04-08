@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
+
 )
 
 const (
@@ -48,6 +49,16 @@ var (
 		Filename: "logs/challenge-filename.txt",
 		Valid:    true,
 		Message:  "",
+	}
+	expectedUpdatedLogpushJobStruct = LogpushJob{
+		ID: jobID, 
+		Enabled: true, 
+		Name: "updated.com", 
+		LogpullOptions: "fields=RayID,ClientIP,EdgeStartTimestamp", 
+		DestinationConf: "gs://mybucket/logs", 
+		LastComplete: &testLogpushTimestamp, 
+		LastError: &testLogpushTimestamp, 
+		ErrorMessage: "test",
 	}
 )
 
@@ -138,6 +149,34 @@ func TestCreateLogpushJob(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
+}
+
+func TestUpdateLogpushJob(t *testing.T) {
+	setup()
+	defer teardown()
+	updatedJob := LogpushJob{
+		Enabled: true, 
+		Name: "updated.com", 
+		LogpullOptions: "fields=RayID,ClientIP,EdgeStartTimestamp", 
+		DestinationConf: "gs://mybucket/logs",
+	}
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "PUT", "Expected method 'PUT', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+		  "result": %s,
+		  "success": true,
+		  "errors": null,
+		  "messages": null
+		}
+		`, fmt.Sprintf(serverLogpushJobDescription, jobID, testLogpushTimestamp.Format(time.RFC3339Nano)))
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/logpush/jobs/"+strconv.Itoa(jobID), handler)
+
+	err := client.UpdateLogpushJob(testZoneID, jobID, updatedJob)
+	assert.NoError(t, err)
 }
 
 func TestDeleteLogpushJob(t *testing.T) {
