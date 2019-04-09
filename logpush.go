@@ -10,14 +10,15 @@ import (
 
 // LogpushJob describes a Logpush job.
 type LogpushJob struct {
-	ID              int        `json:"id,omitempty"`
-	Enabled         bool       `json:"enabled"`
-	Name            string     `json:"name"`
-	LogpullOptions  string     `json:"logpull_options"`
-	DestinationConf string     `json:"destination_conf"`
-	LastComplete    *time.Time `json:"last_complete,omitempty"`
-	LastError       *time.Time `json:"last_error,omitempty"`
-	ErrorMessage    string     `json:"error_message,omitempty"`
+	ID                 int        `json:"id,omitempty"`
+	Enabled            bool       `json:"enabled"`
+	Name               string     `json:"name"`
+	LogpullOptions     string     `json:"logpull_options"`
+	DestinationConf    string     `json:"destination_conf"`
+	OwnershipChallenge string     `json:"ownership_challenge,omitempty"`
+	LastComplete       *time.Time `json:"last_complete,omitempty"`
+	LastError          *time.Time `json:"last_error,omitempty"`
+	ErrorMessage       string     `json:"error_message,omitempty"`
 }
 
 // LogpushJobsResponse is the API response, containing an array of Logpush Jobs.
