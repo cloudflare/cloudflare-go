@@ -15,7 +15,7 @@ type LogpushJob struct {
 	Name               string     `json:"name"`
 	LogpullOptions     string     `json:"logpull_options"`
 	DestinationConf    string     `json:"destination_conf"`
-	OwnershipChallenge string     `json:"ownership_challenge"`
+	OwnershipChallenge string     `json:"ownership_challenge,omitempty"`
 	LastComplete       *time.Time `json:"last_complete,omitempty"`
 	LastError          *time.Time `json:"last_error,omitempty"`
 	ErrorMessage       string     `json:"error_message,omitempty"`
