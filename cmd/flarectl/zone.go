@@ -29,12 +29,17 @@ func zoneCreate(c *cli.Context) {
 	zone := c.String("zone")
 	jumpstart := c.Bool("jumpstart")
 	orgID := c.String("org-id")
+	zoneType := c.String("type")
 	var org cloudflare.Organization
 	if orgID != "" {
 		org.ID = orgID
 	}
 
-	_, err := api.CreateZone(zone, jumpstart, org)
+	if zoneType != "partial" {
+		zoneType = "full"
+	}
+
+	_, err := api.CreateZone(zone, jumpstart, org, zoneType)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, fmt.Sprintf("%s", err))
 		return
