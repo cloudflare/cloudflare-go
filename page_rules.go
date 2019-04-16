@@ -203,7 +203,7 @@ func (api *API) ChangePageRule(zoneID, ruleID string, rule PageRule) error {
 // API reference: https://api.cloudflare.com/#page-rules-for-a-zone-update-a-page-rule
 func (api *API) UpdatePageRule(zoneID, ruleID string, rule PageRule) error {
 	uri := "/zones/" + zoneID + "/pagerules/" + ruleID
-	res, err := api.makeRequest("PUT", uri, nil)
+	res, err := api.makeRequest("PUT", uri, rule)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}
