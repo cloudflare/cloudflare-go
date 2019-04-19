@@ -621,3 +621,273 @@ func TestZoneFilter(t *testing.T) {
 		t.Errorf("expected param %s to be %s, got %s", "name", "example.org", got)
 	}
 }
+
+var createdAndModifiedOn, _ = time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+var expectedFullZoneSetup = Zone{
+	ID:      "023e105f4ecef8ad9ca31a8372d0c353",
+	Name:    "example.com",
+	DevMode: 7200,
+	OriginalNS: []string{
+		"ns1.originaldnshost.com",
+		"ns2.originaldnshost.com",
+	},
+	OriginalRegistrar: "GoDaddy",
+	OriginalDNSHost:   "NameCheap",
+	CreatedOn:         createdAndModifiedOn,
+	ModifiedOn:        createdAndModifiedOn,
+	Owner: Owner{
+		ID:        "7c5dae5552338874e5053f2534d2767a",
+		Email:     "user@example.com",
+		OwnerType: "user",
+	},
+	Account: Account{
+		ID:   "01a7362d577a6c3019a474fd6f485823",
+		Name: "Demo Account",
+	},
+	Permissions: []string{"#zone:read", "#zone:edit"},
+	Plan: ZonePlan{
+		ZonePlanCommon: ZonePlanCommon{
+			ID:        "e592fd9519420ba7405e1307bff33214",
+			Name:      "Pro Plan",
+			Price:     20,
+			Currency:  "USD",
+			Frequency: "monthly",
+		},
+		LegacyID:     "pro",
+		IsSubscribed: true,
+		CanSubscribe: true,
+	},
+	PlanPending: ZonePlan{
+		ZonePlanCommon: ZonePlanCommon{
+			ID:        "e592fd9519420ba7405e1307bff33214",
+			Name:      "Pro Plan",
+			Price:     20,
+			Currency:  "USD",
+			Frequency: "monthly",
+		},
+		LegacyID:     "pro",
+		IsSubscribed: true,
+		CanSubscribe: true,
+	},
+	Status:      "active",
+	Paused:      false,
+	Type:        "full",
+	NameServers: []string{"tony.ns.cloudflare.com", "woz.ns.cloudflare.com"},
+}
+var expectedPartialZoneSetup = Zone{
+	ID:      "023e105f4ecef8ad9ca31a8372d0c353",
+	Name:    "example.com",
+	DevMode: 7200,
+	OriginalNS: []string{
+		"ns1.originaldnshost.com",
+		"ns2.originaldnshost.com",
+	},
+	OriginalRegistrar: "GoDaddy",
+	OriginalDNSHost:   "NameCheap",
+	CreatedOn:         createdAndModifiedOn,
+	ModifiedOn:        createdAndModifiedOn,
+	Owner: Owner{
+		ID:        "7c5dae5552338874e5053f2534d2767a",
+		Email:     "user@example.com",
+		OwnerType: "user",
+	},
+	Account: Account{
+		ID:   "01a7362d577a6c3019a474fd6f485823",
+		Name: "Demo Account",
+	},
+	Permissions: []string{"#zone:read", "#zone:edit"},
+	Plan: ZonePlan{
+		ZonePlanCommon: ZonePlanCommon{
+			ID:        "e592fd9519420ba7405e1307bff33214",
+			Name:      "Pro Plan",
+			Price:     20,
+			Currency:  "USD",
+			Frequency: "monthly",
+		},
+		LegacyID:     "pro",
+		IsSubscribed: true,
+		CanSubscribe: true,
+	},
+	PlanPending: ZonePlan{
+		ZonePlanCommon: ZonePlanCommon{
+			ID:        "e592fd9519420ba7405e1307bff33214",
+			Name:      "Pro Plan",
+			Price:     20,
+			Currency:  "USD",
+			Frequency: "monthly",
+		},
+		LegacyID:     "pro",
+		IsSubscribed: true,
+		CanSubscribe: true,
+	},
+	Status:      "active",
+	Paused:      false,
+	Type:        "partial",
+	NameServers: []string{"tony.ns.cloudflare.com", "woz.ns.cloudflare.com"},
+}
+
+func TestCreateZoneFullSetup(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "023e105f4ecef8ad9ca31a8372d0c353",
+				"name": "example.com",
+				"development_mode": 7200,
+				"original_name_servers": [
+					"ns1.originaldnshost.com",
+					"ns2.originaldnshost.com"
+				],
+				"original_registrar": "GoDaddy",
+				"original_dnshost": "NameCheap",
+				"created_on": "2014-01-01T05:20:00.12345Z",
+				"modified_on": "2014-01-01T05:20:00.12345Z",
+				"activated_on": "2014-01-02T00:01:00.12345Z",
+				"owner": {
+					"id": "7c5dae5552338874e5053f2534d2767a",
+					"email": "user@example.com",
+					"type": "user"
+				},
+				"account": {
+					"id": "01a7362d577a6c3019a474fd6f485823",
+					"name": "Demo Account"
+				},
+				"permissions": [
+					"#zone:read",
+					"#zone:edit"
+				],
+				"plan": {
+					"id": "e592fd9519420ba7405e1307bff33214",
+					"name": "Pro Plan",
+					"price": 20,
+					"currency": "USD",
+					"frequency": "monthly",
+					"legacy_id": "pro",
+					"is_subscribed": true,
+					"can_subscribe": true
+				},
+				"plan_pending": {
+					"id": "e592fd9519420ba7405e1307bff33214",
+					"name": "Pro Plan",
+					"price": 20,
+					"currency": "USD",
+					"frequency": "monthly",
+					"legacy_id": "pro",
+					"is_subscribed": true,
+					"can_subscribe": true
+				},
+				"status": "active",
+				"paused": false,
+				"type": "full",
+				"name_servers": [
+					"tony.ns.cloudflare.com",
+					"woz.ns.cloudflare.com"
+				]
+			}
+		}
+		`)
+	}
+
+	mux.HandleFunc("/zones", handler)
+
+	actual, err := client.CreateZone(
+		"example.com",
+		false,
+		Organization{ID: "01a7362d577a6c3019a474fd6f485823"},
+		"full",
+	)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expectedFullZoneSetup, actual)
+	}
+}
+
+func TestCreateZonePartialSetup(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "023e105f4ecef8ad9ca31a8372d0c353",
+				"name": "example.com",
+				"development_mode": 7200,
+				"original_name_servers": [
+					"ns1.originaldnshost.com",
+					"ns2.originaldnshost.com"
+				],
+				"original_registrar": "GoDaddy",
+				"original_dnshost": "NameCheap",
+				"created_on": "2014-01-01T05:20:00.12345Z",
+				"modified_on": "2014-01-01T05:20:00.12345Z",
+				"activated_on": "2014-01-02T00:01:00.12345Z",
+				"owner": {
+					"id": "7c5dae5552338874e5053f2534d2767a",
+					"email": "user@example.com",
+					"type": "user"
+				},
+				"account": {
+					"id": "01a7362d577a6c3019a474fd6f485823",
+					"name": "Demo Account"
+				},
+				"permissions": [
+					"#zone:read",
+					"#zone:edit"
+				],
+				"plan": {
+					"id": "e592fd9519420ba7405e1307bff33214",
+					"name": "Pro Plan",
+					"price": 20,
+					"currency": "USD",
+					"frequency": "monthly",
+					"legacy_id": "pro",
+					"is_subscribed": true,
+					"can_subscribe": true
+				},
+				"plan_pending": {
+					"id": "e592fd9519420ba7405e1307bff33214",
+					"name": "Pro Plan",
+					"price": 20,
+					"currency": "USD",
+					"frequency": "monthly",
+					"legacy_id": "pro",
+					"is_subscribed": true,
+					"can_subscribe": true
+				},
+				"status": "active",
+				"paused": false,
+				"type": "partial",
+				"name_servers": [
+					"tony.ns.cloudflare.com",
+					"woz.ns.cloudflare.com"
+				]
+			}
+		}
+		`)
+	}
+
+	mux.HandleFunc("/zones", handler)
+
+	actual, err := client.CreateZone(
+		"example.com",
+		false,
+		Organization{ID: "01a7362d577a6c3019a474fd6f485823"},
+		"partial",
+	)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expectedPartialZoneSetup, actual)
+	}
+}
