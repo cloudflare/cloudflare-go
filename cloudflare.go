@@ -267,6 +267,7 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 // *http.Response, or an error if one occurred. The caller is responsible for
 // closing the response body.
 func (api *API) request(ctx context.Context, method, uri string, reqBody io.Reader, authType int, headers http.Header) (*http.Response, error) {
+	uri = url.PathEscape(uri)
 	req, err := http.NewRequest(method, api.BaseURL+uri, reqBody)
 	if err != nil {
 		return nil, errors.Wrap(err, "HTTP request creation failed")
