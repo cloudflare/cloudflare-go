@@ -16,7 +16,7 @@ type ZoneLockdown struct {
 	URLs           []string             `json:"urls"`
 	Configurations []ZoneLockdownConfig `json:"configurations"`
 	Paused         bool                 `json:"paused"`
-	Priority       int                  `json:"priority"`
+	Priority       int                  `json:"priority,omitempty"`
 }
 
 // ZoneLockdownConfig represents a Zone Lockdown config, which comprises
