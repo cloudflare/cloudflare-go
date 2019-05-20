@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"strings"
-	"testing"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
 )
@@ -31,7 +30,7 @@ func ExampleAPI_ListZoneLockdowns_all() {
 	}
 }
 
-func ExampleAPI_CreateZoneLockdown(t *testing.T) {
+func ExampleAPI_CreateZoneLockdown() {
 	api, err := cloudflare.New("deadbeef", "test@example.org")
 	if err != nil {
 		log.Fatal(err)
