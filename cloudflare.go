@@ -159,6 +159,11 @@ func (api *API) makeRequestWithAuthType(ctx context.Context, method, uri string,
 }
 
 func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, uri string, params interface{}, authType int, headers http.Header) ([]byte, error) {
+	res, _, err := api.makeRequestWithAuthTypeAndHeadersTuple(ctx, method, uri, params, authType, headers)
+	return res, err
+}
+
+func (api *API) makeRequestWithAuthTypeAndHeadersTuple(ctx context.Context, method, uri string, params interface{}, authType int, headers http.Header) ([]byte, http.Header, error) {
 	// Replace nil with a JSON object if needed
 	var jsonBody []byte
 	var err error
@@ -169,7 +174,7 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 		} else {
 			jsonBody, err = json.Marshal(params)
 			if err != nil {
-				return nil, errors.Wrap(err, "error marshalling params to JSON")
+				return nil, nil, errors.Wrap(err, "error marshalling params to JSON")
 			}
 		}
 	} else {
@@ -177,6 +182,7 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 	}
 
 	var resp *http.Response
+	var respHeader http.Header
 	var respErr error
 	var reqBody io.Reader
 	var respBody []byte
@@ -200,9 +206,10 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 		}
 		api.rateLimiter.Wait(context.TODO())
 		if err != nil {
-			return nil, errors.Wrap(err, "Error caused by request rate limiting")
+			return nil, nil, errors.Wrap(err, "Error caused by request rate limiting")
 		}
 		resp, respErr = api.request(ctx, method, uri, reqBody, authType, headers)
+		respHeader = resp.Header
 
 		// retry if the server is rate limiting us or if it failed
 		// assumes server operations are rolled back on failure
@@ -225,42 +232,42 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 			respBody, err = ioutil.ReadAll(resp.Body)
 			defer resp.Body.Close()
 			if err != nil {
-				return nil, errors.Wrap(err, "could not read response body")
+				return nil, nil, errors.Wrap(err, "could not read response body")
 			}
 			break
 		}
 	}
 	if respErr != nil {
-		return nil, respErr
+		return nil, nil, respErr
 	}
 
 	switch {
 	case resp.StatusCode >= http.StatusOK && resp.StatusCode < http.StatusMultipleChoices:
 	case resp.StatusCode == http.StatusUnauthorized:
-		return nil, errors.Errorf("HTTP status %d: invalid credentials", resp.StatusCode)
+		return nil, nil, errors.Errorf("HTTP status %d: invalid credentials", resp.StatusCode)
 	case resp.StatusCode == http.StatusForbidden:
-		return nil, errors.Errorf("HTTP status %d: insufficient permissions", resp.StatusCode)
+		return nil, nil, errors.Errorf("HTTP status %d: insufficient permissions", resp.StatusCode)
 	case resp.StatusCode == http.StatusServiceUnavailable,
 		resp.StatusCode == http.StatusBadGateway,
 		resp.StatusCode == http.StatusGatewayTimeout,
 		resp.StatusCode == 522,
 		resp.StatusCode == 523,
 		resp.StatusCode == 524:
-		return nil, errors.Errorf("HTTP status %d: service failure", resp.StatusCode)
+		return nil, nil, errors.Errorf("HTTP status %d: service failure", resp.StatusCode)
 	// This isn't a great solution due to the way the `default` case is
 	// a catch all and that the `filters/validate-expr` returns a HTTP 400
 	// yet the clients need to use the HTTP body as a JSON string.
 	case resp.StatusCode == 400 && strings.HasSuffix(resp.Request.URL.Path, "/filters/validate-expr"):
-		return nil, errors.Errorf("%s", respBody)
+		return nil, nil, errors.Errorf("%s", respBody)
 	default:
 		var s string
 		if respBody != nil {
 			s = string(respBody)
 		}
-		return nil, errors.Errorf("HTTP status %d: content %q", resp.StatusCode, s)
+		return nil, nil, errors.Errorf("HTTP status %d: content %q", resp.StatusCode, s)
 	}
 
-	return respBody, nil
+	return respBody, respHeader, nil
 }
 
 // request makes a HTTP request to the given API endpoint, returning the raw
