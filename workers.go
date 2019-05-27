@@ -1,8 +1,14 @@
 package cloudflare
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
+	"io"
+	"mime/multipart"
 	"net/http"
+	"net/textproto"
+	"strings"
 	"time"
 
 	"github.com/pkg/errors"
@@ -63,39 +69,61 @@ type WorkerScriptResponse struct {
 	WorkerScript `json:"result"`
 }
 
+// WorkerResource represents a resource that can bind to a WorkerScript.
+//
+// API reference: https://api.cloudflare.com/#worker-binding-properties
+type WorkerResource struct {
+	Type          string `json:"type"`
+	Name          string `json:"name"`
+	KVNamespaceID string `json:"namespace_id,omitempty"`
+	WasmPart      string `json:"part,omitempty"`
+}
+
+// WorkerResourceMetaData provides parameters to bind WorkerResources to a WorkerScript.
+type WorkerResourceMetaData struct {
+	BodyPart string            `json:"body_part"`
+	Bindings []*WorkerResource `json:"bindings"`
+}
+
+// WorkerResourceListResponse is a response when listing WorkerResources of a WorkerScript.
+type WorkerResourceListResponse struct {
+	Result []WorkerResource `json:"result"`
+}
+
+// WorkerUploadRequest provides parameters to upload a WorkerScript and WorkerBinding.
+//
+// Script and MetaData are provided for convience,
+// they are converted into a WorkerUploadPart.
+//
+// If you want to upload additional form-data in the request,
+// use a WorkerUploadPart (eg. use this for uploading Wasm).
+type WorkerUploadRequest struct {
+	Script   string
+	MetaData *WorkerResourceMetaData
+	Parts    []*WorkerUploadPart
+}
+
+// WorkerUploadPart provides parameters for custom data to be bundled with a WorkerScript upload.
+type WorkerUploadPart struct {
+	Name    string
+	File    string
+	Content []byte
+	Type    string
+}
+
 // DeleteWorker deletes worker for a zone.
+//
+// If your account has multiple scripts, you must specify an OrganizationID:
+// https://godoc.org/github.com/cloudflare/cloudflare-go#UsingOrganization
 //
 // API reference: https://api.cloudflare.com/#worker-script-delete-worker
 func (api *API) DeleteWorker(requestParams *WorkerRequestParams) (WorkerScriptResponse, error) {
-	// if ScriptName is provided we will treat as org request
-	if requestParams.ScriptName != "" {
-		return api.deleteWorkerWithName(requestParams.ScriptName)
-	}
-	uri := "/zones/" + requestParams.ZoneID + "/workers/script"
-	res, err := api.makeRequest("DELETE", uri, nil)
+	uri, err := api.uriOfWorkerScript(requestParams)
 	var r WorkerScriptResponse
 	if err != nil {
-		return r, errors.Wrap(err, errMakeRequestError)
+		return r, err
 	}
-	err = json.Unmarshal(res, &r)
-	if err != nil {
-		return r, errors.Wrap(err, errUnmarshalError)
-	}
-	return r, nil
-}
-
-// DeleteWorkerWithName deletes worker for a zone.
-// This is an enterprise only feature https://developers.cloudflare.com/workers/api/config-api-for-enterprise
-// organizationID must be specified as api option https://godoc.org/github.com/cloudflare/cloudflare-go#UsingOrganization
-//
-// API reference: https://api.cloudflare.com/#worker-script-delete-worker
-func (api *API) deleteWorkerWithName(scriptName string) (WorkerScriptResponse, error) {
-	if api.OrganizationID == "" {
-		return WorkerScriptResponse{}, errors.New("organization ID required for enterprise only request")
-	}
-	uri := "/accounts/" + api.OrganizationID + "/workers/scripts/" + scriptName
 	res, err := api.makeRequest("DELETE", uri, nil)
-	var r WorkerScriptResponse
 	if err != nil {
 		return r, errors.Wrap(err, errMakeRequestError)
 	}
@@ -108,33 +136,17 @@ func (api *API) deleteWorkerWithName(scriptName string) (WorkerScriptResponse, e
 
 // DownloadWorker fetch raw script content for your worker returns []byte containing worker code js
 //
-// API reference: https://api.cloudflare.com/#worker-script-download-worker
-func (api *API) DownloadWorker(requestParams *WorkerRequestParams) (WorkerScriptResponse, error) {
-	if requestParams.ScriptName != "" {
-		return api.downloadWorkerWithName(requestParams.ScriptName)
-	}
-	uri := "/zones/" + requestParams.ZoneID + "/workers/script"
-	res, err := api.makeRequest("GET", uri, nil)
-	var r WorkerScriptResponse
-	if err != nil {
-		return r, errors.Wrap(err, errMakeRequestError)
-	}
-	r.Script = string(res)
-	r.Success = true
-	return r, nil
-}
-
-// DownloadWorkerWithName fetch raw script content for your worker returns string containing worker code js
-// This is an enterprise only feature https://developers.cloudflare.com/workers/api/config-api-for-enterprise/
+// If your account has multiple scripts, you must specify an OrganizationID:
+// https://godoc.org/github.com/cloudflare/cloudflare-go#UsingOrganization
 //
 // API reference: https://api.cloudflare.com/#worker-script-download-worker
-func (api *API) downloadWorkerWithName(scriptName string) (WorkerScriptResponse, error) {
-	if api.OrganizationID == "" {
-		return WorkerScriptResponse{}, errors.New("organization ID required for enterprise only request")
-	}
-	uri := "/accounts/" + api.OrganizationID + "/workers/scripts/" + scriptName
-	res, err := api.makeRequest("GET", uri, nil)
+func (api *API) DownloadWorker(requestParams *WorkerRequestParams) (WorkerScriptResponse, error) {
+	uri, err := api.uriOfWorkerScript(requestParams)
 	var r WorkerScriptResponse
+	if err != nil {
+		return r, err
+	}
+	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
 		return r, errors.Wrap(err, errMakeRequestError)
 	}
@@ -144,6 +156,7 @@ func (api *API) downloadWorkerWithName(scriptName string) (WorkerScriptResponse,
 }
 
 // ListWorkerScripts returns list of worker scripts for given organization
+//
 // This is an enterprise only feature https://developers.cloudflare.com/workers/api/config-api-for-enterprise
 //
 // API reference: https://developers.cloudflare.com/workers/api/config-api-for-enterprise/
@@ -166,16 +179,21 @@ func (api *API) ListWorkerScripts() (WorkerListResponse, error) {
 
 // UploadWorker push raw script content for your worker
 //
+// If your account has multiple scripts, you must specify an OrganizationID:
+// https://godoc.org/github.com/cloudflare/cloudflare-go#UsingOrganization
+//
+// If you want to upload metadata like WorkerBinding, use UploadWorkerBundle.
+//
 // API reference: https://api.cloudflare.com/#worker-script-upload-worker
 func (api *API) UploadWorker(requestParams *WorkerRequestParams, data string) (WorkerScriptResponse, error) {
-	if requestParams.ScriptName != "" {
-		return api.uploadWorkerWithName(requestParams.ScriptName, data)
+	uri, err := api.uriOfWorkerScript(requestParams)
+	var r WorkerScriptResponse
+	if err != nil {
+		return r, err
 	}
-	uri := "/zones/" + requestParams.ZoneID + "/workers/script"
 	headers := make(http.Header)
 	headers.Set("Content-Type", "application/javascript")
 	res, err := api.makeRequestWithHeaders("PUT", uri, []byte(data), headers)
-	var r WorkerScriptResponse
 	if err != nil {
 		return r, errors.Wrap(err, errMakeRequestError)
 	}
@@ -186,19 +204,73 @@ func (api *API) UploadWorker(requestParams *WorkerRequestParams, data string) (W
 	return r, nil
 }
 
-// UploadWorkerWithName push raw script content for your worker
-// This is an enterprise only feature https://developers.cloudflare.com/workers/api/config-api-for-enterprise/
-//
-// API reference: https://api.cloudflare.com/#worker-script-upload-worker
-func (api *API) uploadWorkerWithName(scriptName string, data string) (WorkerScriptResponse, error) {
-	if api.OrganizationID == "" {
-		return WorkerScriptResponse{}, errors.New("organization ID required for enterprise only request")
-	}
-	uri := "/accounts/" + api.OrganizationID + "/workers/scripts/" + scriptName
-	headers := make(http.Header)
-	headers.Set("Content-Type", "application/javascript")
-	res, err := api.makeRequestWithHeaders("PUT", uri, []byte(data), headers)
+// UploadWorkerMultiPart uploads a WorkerScript with additional WorkerUploadParts.
+func (api *API) UploadWorkerMultiPart(requestParams *WorkerRequestParams, upload *WorkerUploadRequest) (WorkerScriptResponse, error) {
+	uri, err := api.uriOfWorkerScript(requestParams)
 	var r WorkerScriptResponse
+	if err != nil {
+		return r, err
+	}
+
+	// Conveience logic in this code block.
+	//
+	// If specified, convert Script and MetaData fields into a WorkerUploadPart.
+	// Otherwise, trust the client has added their own custom parts.
+	parts := upload.Parts
+	if upload.MetaData != nil {
+		if upload.MetaData.BodyPart == "" {
+			upload.MetaData.BodyPart = "script"
+		}
+		meta, err := json.Marshal(upload.MetaData)
+		if err != nil {
+			return r, errors.Wrap(err, errMakeRequestError)
+		}
+		parts = append(parts, &WorkerUploadPart{
+			Name:    "metadata",
+			File:    "metadata.json",
+			Content: meta,
+			Type:    "application/json"})
+	}
+	if upload.Script != "" {
+		parts = append(parts, &WorkerUploadPart{
+			Name:    "script",
+			File:    "script.js",
+			Content: []byte(upload.Script),
+			Type:    "application/javascript"})
+	}
+
+	// Encode each of the WorkerUploadParts into a multi part file.
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	for i := 0; i < len(parts); i++ {
+		part := parts[i]
+
+		// Create the MIME header with part name, file name, and content type.
+		header := make(textproto.MIMEHeader)
+		escaper := strings.NewReplacer("\\", "\\\\", `"`, "\\\"")
+		header.Set("Content-Disposition",
+			fmt.Sprintf(`form-data; name="%s"; filename="%s"`,
+				escaper.Replace(part.Name), escaper.Replace(part.File)))
+		header.Set("Content-Type", part.Type)
+
+		// Commit the part to the write buffer and copy over the content.
+		form, err := writer.CreatePart(header)
+		if err != nil {
+			return r, errors.Wrap(err, errMakeRequestError)
+		}
+		io.Copy(form, bytes.NewReader(part.Content))
+	}
+
+	// Close the writer which finalizes the body boundry.
+	err = writer.Close()
+	if err != nil {
+		return r, errors.Wrap(err, errMakeRequestError)
+	}
+	headers := make(http.Header)
+	headers.Set("Content-Type", writer.FormDataContentType())
+
+	// Make a single put request with all of the multi part files.
+	res, err := api.makeRequestWithHeaders(http.MethodPut, uri, body.Bytes(), headers)
 	if err != nil {
 		return r, errors.Wrap(err, errMakeRequestError)
 	}
@@ -215,20 +287,15 @@ func (api *API) uploadWorkerWithName(scriptName string, data string) (WorkerScri
 func (api *API) CreateWorkerRoute(zoneID string, route WorkerRoute) (WorkerRouteResponse, error) {
 	// Check whether a script name is defined in order to determine whether
 	// to use the single-script or multi-script endpoint.
-	pathComponent := "filters"
-	if route.Script != "" {
-		if api.OrganizationID == "" {
-			return WorkerRouteResponse{}, errors.New("organization ID required for enterprise only request")
-		}
-		pathComponent = "routes"
+	uri, err := api.uriOfWorkerRoute(&WorkerRequestParams{ZoneID: zoneID, ScriptName: route.Script})
+	var r WorkerRouteResponse
+	if err != nil {
+		return r, err
 	}
-
-	uri := "/zones/" + zoneID + "/workers/" + pathComponent
 	res, err := api.makeRequest("POST", uri, route)
 	if err != nil {
 		return WorkerRouteResponse{}, errors.Wrap(err, errMakeRequestError)
 	}
-	var r WorkerRouteResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return WorkerRouteResponse{}, errors.Wrap(err, errUnmarshalError)
@@ -291,22 +358,72 @@ func (api *API) ListWorkerRoutes(zoneID string) (WorkerRoutesResponse, error) {
 func (api *API) UpdateWorkerRoute(zoneID string, routeID string, route WorkerRoute) (WorkerRouteResponse, error) {
 	// Check whether a script name is defined in order to determine whether
 	// to use the single-script or multi-script endpoint.
-	pathComponent := "filters"
-	if route.Script != "" {
-		if api.OrganizationID == "" {
-			return WorkerRouteResponse{}, errors.New("organization ID required for enterprise only request")
-		}
-		pathComponent = "routes"
+	uri, err := api.uriOfWorkerRoute(&WorkerRequestParams{ZoneID: zoneID, ScriptName: route.Script})
+	var r WorkerRouteResponse
+	if err != nil {
+		return r, err
 	}
-	uri := "/zones/" + zoneID + "/workers/" + pathComponent + "/" + routeID
-	res, err := api.makeRequest("PUT", uri, route)
+	res, err := api.makeRequest("PUT", uri+"/"+routeID, route)
 	if err != nil {
 		return WorkerRouteResponse{}, errors.Wrap(err, errMakeRequestError)
 	}
-	var r WorkerRouteResponse
+
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return WorkerRouteResponse{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r, nil
+}
+
+// ListWorkerBindings gets the list of WorkerResources bound to the WorkerScript.
+//
+// If your account has multiple scripts, you must specify an OrganizationID:
+// https://godoc.org/github.com/cloudflare/cloudflare-go#UsingOrganization
+//
+// API reference: https://api.cloudflare.com/#worker-binding-list-bindings
+func (api *API) ListWorkerBindings(requestParams *WorkerRequestParams) (WorkerResourceListResponse, error) {
+	uri, err := api.uriOfWorkerScript(requestParams)
+	var r WorkerResourceListResponse
+	if err != nil {
+		return r, err
+	}
+	headers := make(http.Header)
+	headers.Set("Content-Type", "application/javascript")
+	res, err := api.makeRequestWithHeaders("GET", uri+"/bindings", nil, headers)
+	if err != nil {
+		return r, errors.Wrap(err, errMakeRequestError)
+	}
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return r, errors.Wrap(err, errUnmarshalError)
+	}
+	return r, nil
+}
+
+// uriOfWorkerHelper is a helper that determines the API endpoints.
+func (api *API) uriOfWorkerHelper(requestParams *WorkerRequestParams, singletonScript, multiScript string) (string, error) {
+	if requestParams.ScriptName == "" {
+		if requestParams.ZoneID == "" {
+			return "", errors.New("zone or organization ID required for request")
+		}
+		return singletonScript, nil
+	}
+	if api.OrganizationID == "" {
+		return "", errors.New("organization ID required for enterprise only request")
+	}
+	return multiScript, nil
+}
+
+// uriOfWorkerScript is a helper that determines the API endpoint for WorkerScript.
+func (api *API) uriOfWorkerScript(requestParams *WorkerRequestParams) (string, error) {
+	return api.uriOfWorkerHelper(requestParams,
+		"/zones/"+requestParams.ZoneID+"/workers/script",
+		"/accounts/"+api.OrganizationID+"/workers/scripts/"+requestParams.ScriptName)
+}
+
+// uriOfWorkerRoute is a helper that determines the API endpoint for WorkerRoute.
+func (api *API) uriOfWorkerRoute(requestParams *WorkerRequestParams) (string, error) {
+	return api.uriOfWorkerHelper(requestParams,
+		"/zones/"+requestParams.ZoneID+"/workers/filters",
+		"/zones/"+api.OrganizationID+"/workers/routes")
 }

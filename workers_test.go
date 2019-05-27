@@ -2,6 +2,8 @@ package cloudflare
 
 import (
 	"fmt"
+	"mime"
+	"mime/multipart"
 	"net/http"
 	"testing"
 	"time"
@@ -112,6 +114,22 @@ const (
   "errors": [],
   "messages": []
 }`
+	listWorkerBindingsResponseData = `{
+	"result": [
+		{
+			"name": "bar",
+			"type": "kv_namespace",
+			"namespace_id": "0f2ac74b498b48028cb68387c421e279"
+		},
+		{
+			"name": "foo",
+			"type": "wasm_module"
+		}
+	],
+	"success": true,
+	"errors": [],
+	"messages": []
+  }`
 )
 
 var (
@@ -285,6 +303,50 @@ func TestWorkers_UploadWorkerWithName(t *testing.T) {
 		fmt.Fprintf(w, uploadWorkerResponseData)
 	})
 	res, err := client.UploadWorker(&WorkerRequestParams{ScriptName: "bar"}, workerScript)
+	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
+	want := WorkerScriptResponse{
+		successResponse,
+		WorkerScript{
+			Script: workerScript,
+			WorkerMetaData: WorkerMetaData{
+				ETAG:       "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
+				Size:       191,
+				ModifiedOn: formattedTime,
+			},
+		}}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
+}
+
+func TestWorkers_uploadMultipartWorker(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/zones/foo/workers/script", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		mediaType, params, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
+		assert.Equal(t, mediaType, "multipart/form-data")
+		mr := multipart.NewReader(r.Body, params["boundary"])
+		p, err := mr.NextPart()
+		assert.Nil(t, err)
+		assert.Equal(t, p.FileName(), "metadata.json")
+		assert.Equal(t, p.FormName(), "metadata")
+		p, err = mr.NextPart()
+		assert.Nil(t, err)
+		assert.Equal(t, p.FileName(), "script.js")
+		assert.Equal(t, p.FormName(), "script")
+		w.Header().Set("content-type", "application/javascript")
+		fmt.Fprintf(w, uploadWorkerResponseData)
+	})
+	res, err := client.UploadWorkerMultiPart(&WorkerRequestParams{ZoneID: "foo"}, &WorkerUploadRequest{
+		Script: workerScript,
+		MetaData: &WorkerResourceMetaData{
+			Bindings: []*WorkerResource{
+				&WorkerResource{
+					Type:          "kv_namespace",
+					Name:          "EXAMPLE",
+					KVNamespaceID: "cloudflare"}}}})
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
@@ -543,4 +605,26 @@ func TestWorkers_UpdateWorkerRouteSingleScriptWithOrg(t *testing.T) {
 		assert.Equal(t, want, res)
 	}
 
+}
+
+func TestWorkers_ListWorkerBindings(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/zones/foo/workers/script/bindings", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application-json")
+		fmt.Fprintf(w, listWorkerBindingsResponseData)
+	})
+
+	res, err := client.ListWorkerBindings(&WorkerRequestParams{ZoneID: "foo"})
+	want := WorkerResourceListResponse{
+		Result: []WorkerResource{
+			{Type: "kv_namespace", Name: "bar", KVNamespaceID: "0f2ac74b498b48028cb68387c421e279"},
+			{Type: "wasm_module", Name: "foo"},
+		},
+	}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
 }
