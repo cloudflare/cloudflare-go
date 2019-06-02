@@ -392,10 +392,143 @@ func main() {
 					Aliases: []string{"l"},
 					Action:  pageRules,
 					Usage:   "List Page Rules for a zone",
+				},
+			},
+		},
+
+		{
+			Name:    "key-value",
+			Aliases: []string{"kv"},
+			Usage:   "Workers KV",
+			Subcommands: []cli.Command{
+				{
+					Name:    "write",
+					Aliases: []string{"w"},
+					Action:  kvWrite,
+					Usage:   "Write a key-value pair to a namespace",
 					Flags: []cli.Flag{
 						cli.StringFlag{
-							Name:  "zone",
-							Usage: "zone name",
+							Name:  "namespace, n",
+							Usage: "name or ID of the namespace",
+						},
+						cli.StringFlag{
+							Name:  "key, k",
+							Usage: "key name of the pair",
+						},
+						cli.StringFlag{
+							Name:  "value, v",
+							Usage: "value of the pair",
+						},
+						cli.IntFlag{
+							Name:  "expiration, e",
+							Usage: "expiration of the pair",
+						},
+						cli.DurationFlag{
+							Name:  "ttl, t",
+							Usage: "expiration ttl of the pair",
+						},
+					},
+				},
+				{
+					Name:    "upload",
+					Aliases: []string{"u"},
+					Action:  kvUpload,
+					Usage:   "Upload file(s) to a namespace",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "namespace, n",
+							Usage: "name or ID of the namespace",
+						},
+						cli.StringFlag{
+							Name:  "key, k",
+							Usage: "format string to make keys from their path",
+							Value: "%s",
+						},
+						cli.StringFlag{
+							Name:  "filter, f",
+							Usage: "regex expression to filter for paths",
+							Value: ".*",
+						},
+						cli.StringFlag{
+							Name:  "path, p",
+							Usage: "path of the file or directory to upload",
+						},
+						cli.BoolFlag{
+							Name:  "recursive, r",
+							Usage: "whether to search for files recursively",
+						},
+						cli.IntFlag{
+							Name:  "expiration, e",
+							Usage: "expiration of each file",
+						},
+						cli.DurationFlag{
+							Name:  "ttl, t",
+							Usage: "expiration ttl of each file",
+						},
+						cli.BoolFlag{
+							Name:  "unsafe, u",
+							Usage: "whether to NOT check for max upload limits",
+						},
+					},
+				},
+				{
+					Name:    "read",
+					Aliases: []string{"r"},
+					Action:  kvRead,
+					Usage:   "Read key-value pair(s) from a namespace",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "namespace, n",
+							Usage: "name or ID of the namespace",
+						},
+						cli.StringSliceFlag{
+							Name:  "key, k",
+							Usage: "key name of the pair(s)",
+						},
+						cli.BoolFlag{
+							Name:  "raw, r",
+							Usage: "whether to print the raw value",
+						},
+					},
+				},
+				{
+					Name:    "delete",
+					Aliases: []string{"d"},
+					Action:  kvDelete,
+					Usage:   "Delete key-value pair(s) from a namespace",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "namespace, n",
+							Usage: "name or ID of the namespace",
+						},
+						cli.StringSliceFlag{
+							Name:  "key, k",
+							Usage: "key name of the pair(s)",
+						},
+					},
+				}, {
+					Name:    "list",
+					Aliases: []string{"l"},
+					Action:  kvList,
+					Usage:   "List key-value pairs in a namespace",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "namespace, n",
+							Usage: "name or ID of the namespace",
+						},
+						cli.StringFlag{
+							Name:  "cursor, c",
+							Usage: "cursor from the previous list operation",
+							Value: "",
+						},
+						cli.IntFlag{
+							Name:  "limit, l",
+							Usage: "maximum number of pairs to list",
+							Value: 20,
+						},
+						cli.BoolFlag{
+							Name:  "values, v",
+							Usage: "whether to also fetch values",
 						},
 					},
 				},
