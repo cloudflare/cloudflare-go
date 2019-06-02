@@ -101,7 +101,7 @@ func TestWorkersKV_ListWorkersKVNamespace(t *testing.T) {
 	})
 
 	res, err := client.ListWorkersKVNamespaces(context.Background())
-	want := ListWorkersKVNamespacesResponse{
+	want := WorkersKVNamespaceListResponse{
 		successResponse,
 		[]WorkersKVNamespace{
 			{
@@ -162,12 +162,12 @@ func TestWorkersKV_UpdateWorkersKVNamespace(t *testing.T) {
 	}
 }
 
-func TestWorkersKV_WriteWorkersKV(t *testing.T) {
+func TestWorkersKV_WriteWorkersKVPair(t *testing.T) {
 	setup(UsingOrganization("foo"))
 	defer teardown()
 
 	key := "test_key"
-	value := []byte("test_value")
+	value := "test_value"
 	namespace := "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 	response := `{
 		"result": null,
@@ -183,7 +183,36 @@ func TestWorkersKV_WriteWorkersKV(t *testing.T) {
 	})
 
 	want := successResponse
-	res, err := client.WriteWorkersKV(context.Background(), namespace, key, value)
+	res, err := client.WriteWorkersKVPair(context.Background(), namespace, &WorkersKVPair{Name: key, Value: value})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
+}
+
+func TestWorkersKV_WriteWorkersKVPairBulk(t *testing.T) {
+	setup(UsingOrganization("foo"))
+	defer teardown()
+
+	pairs := []*WorkersKVPair{
+		{Name: "/key-1", Value: "value-1"},
+		{Name: "key-2", Value: "value-2"}}
+	namespace := "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+	response := `{
+		"result": null,
+		"success": true,
+		"errors": [],
+		"messages": []
+	}`
+
+	mux.HandleFunc(fmt.Sprintf("/accounts/foo/storage/kv/namespaces/%s/bulk", namespace), func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, response)
+	})
+
+	want := successResponse
+	res, err := client.WriteWorkersKVPairBulk(context.Background(), namespace, pairs)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
@@ -203,8 +232,8 @@ func TestWorkersKV_ReadWorkersKV(t *testing.T) {
 		fmt.Fprintf(w, "test_value")
 	})
 
-	res, err := client.ReadWorkersKV(context.Background(), namespace, key)
-	want := []byte("test_value")
+	res, err := client.ReadWorkersKVPair(context.Background(), namespace, key)
+	want := WorkersKVPair{Name: key, Value: "test_value"}
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
@@ -230,7 +259,7 @@ func TestWorkersKV_DeleteWorkersKV(t *testing.T) {
 		fmt.Fprintf(w, response)
 	})
 
-	res, err := client.DeleteWorkersKV(context.Background(), namespace, key)
+	res, err := client.DeleteWorkersKVPair(context.Background(), namespace, key)
 	want := successResponse
 
 	if assert.NoError(t, err) {
@@ -238,7 +267,7 @@ func TestWorkersKV_DeleteWorkersKV(t *testing.T) {
 	}
 }
 
-func TestWorkersKV_ListStorageKeys(t *testing.T) {
+func TestWorkersKV_ListWorkersKVKeys(t *testing.T) {
 	setup(UsingOrganization("foo"))
 	defer teardown()
 
@@ -246,18 +275,15 @@ func TestWorkersKV_ListStorageKeys(t *testing.T) {
 	response := `{
 		"result": [
 			{"name": "test_key_1"},
-			{"name": "test_key_2"}
+			{"name": "test_key_2", "expiration": 1000}
 		],
 		"success": true,
 		"errors": [],
 		"messages": [],
 		"result_info": {
-			"page": 1,
-			"per_page": 20,
 			"count": 2,
-			"total_count": 2,
-			"total_pages": 1
-		}
+			"cursor": "test_cursor"
+		  }
 	}`
 
 	mux.HandleFunc(fmt.Sprintf("/accounts/foo/storage/kv/namespaces/%s/keys", namespace), func(w http.ResponseWriter, r *http.Request) {
@@ -266,20 +292,17 @@ func TestWorkersKV_ListStorageKeys(t *testing.T) {
 		fmt.Fprintf(w, response)
 	})
 
-	res, err := client.ListWorkersKVs(context.Background(), namespace)
+	res, err := client.ListWorkersKVKeys(context.Background(), namespace, &WorkersKVKeyPagination{Count: 1000})
 
-	want := ListStorageKeysResponse{
+	want := WorkersKVKeyListResponse{
 		successResponse,
-		[]StorageKey{
+		[]WorkersKVKey{
 			{Name: "test_key_1"},
-			{Name: "test_key_2"},
+			{Name: "test_key_2", Expiration: 1000},
 		},
-		ResultInfo{
-			Page:       1,
-			PerPage:    20,
-			Count:      2,
-			TotalPages: 1,
-			Total:      2,
+		WorkersKVKeyPagination{
+			Count:  2,
+			Cursor: "test_cursor",
 		},
 	}
 

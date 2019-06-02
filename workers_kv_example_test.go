@@ -70,16 +70,16 @@ func ExampleAPI_UpdateWorkersKVNamespace() {
 	fmt.Println(resp)
 }
 
-func ExampleAPI_WriteWorkersKV() {
+func ExampleAPI_WriteWorkersKVPair() {
 	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization(org))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	payload := []byte("test payload")
-	key := "test_key"
+	payload := "test payload"
+	key := "/test_key"
 
-	resp, err := api.WriteWorkersKV(context.Background(), namespace, key, payload)
+	resp, err := api.WriteWorkersKVPair(context.Background(), namespace, &cloudflare.WorkersKVPair{Name: key, Value: payload})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -87,29 +87,32 @@ func ExampleAPI_WriteWorkersKV() {
 	fmt.Println(resp)
 }
 
-func ExampleAPI_ReadWorkersKV() {
+func ExampleAPI_WriteWorkersKVPairBulk() {
 	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization(org))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	key := "test_key"
-	resp, err := api.ReadWorkersKV(context.Background(), namespace, key)
+	pairs := []*cloudflare.WorkersKVPair{
+		{Name: "key-1", Value: "value-1"},
+		{Name: "key-2", Value: "value-2"}}
+
+	resp, err := api.WriteWorkersKVPairBulk(context.Background(), namespace, pairs)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("%s\n", resp)
+	fmt.Println(resp)
 }
 
-func ExampleAPI_DeleteWorkersKV() {
+func ExampleAPI_ReadWorkersKVPair() {
 	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization(org))
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	key := "test_key"
-	resp, err := api.DeleteWorkersKV(context.Background(), namespace, key)
+	resp, err := api.ReadWorkersKVPair(context.Background(), namespace, key)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -117,13 +120,28 @@ func ExampleAPI_DeleteWorkersKV() {
 	fmt.Printf("%+v\n", resp)
 }
 
-func ExampleAPI_ListWorkersKVs() {
+func ExampleAPI_DeleteWorkersKVPair() {
 	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization(org))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	resp, err := api.ListWorkersKVs(context.Background(), namespace)
+	key := "test_key"
+	resp, err := api.DeleteWorkersKVPair(context.Background(), namespace, key)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("%+v\n", resp)
+}
+
+func ExampleAPI_ListWorkersKVKeys() {
+	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization(org))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	resp, err := api.ListWorkersKVKeys(context.Background(), namespace, &cloudflare.WorkersKVKeyPagination{Count: 1000})
 	if err != nil {
 		log.Fatal(err)
 	}
