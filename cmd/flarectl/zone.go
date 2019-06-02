@@ -19,10 +19,6 @@ func zoneRailgun(*cli.Context) {
 }
 
 func zoneCreate(c *cli.Context) {
-	if err := checkEnv(); err != nil {
-		fmt.Println(err)
-		return
-	}
 	if err := checkFlags(c, "zone"); err != nil {
 		return
 	}
@@ -47,10 +43,6 @@ func zoneCreate(c *cli.Context) {
 }
 
 func zoneCheck(c *cli.Context) {
-	if err := checkEnv(); err != nil {
-		fmt.Println(err)
-		return
-	}
 	if err := checkFlags(c, "zone"); err != nil {
 		return
 	}
@@ -71,10 +63,6 @@ func zoneCheck(c *cli.Context) {
 }
 
 func zoneList(c *cli.Context) {
-	if err := checkEnv(); err != nil {
-		fmt.Println(err)
-		return
-	}
 	zones, err := api.ListZones()
 	if err != nil {
 		fmt.Println(err)
@@ -93,10 +81,6 @@ func zoneList(c *cli.Context) {
 }
 
 func zoneInfo(c *cli.Context) {
-	if err := checkEnv(); err != nil {
-		fmt.Println(err)
-		return
-	}
 	var zone string
 	if len(c.Args()) > 0 {
 		zone = c.Args()[0]
@@ -139,12 +123,6 @@ func zoneSettings(*cli.Context) {
 }
 
 func zoneCachePurge(c *cli.Context) {
-	if err := checkEnv(); err != nil {
-		fmt.Println(err)
-		cli.ShowSubcommandHelp(c)
-		return
-	}
-
 	if err := checkFlags(c, "zone"); err != nil {
 		cli.ShowSubcommandHelp(c)
 		return
@@ -199,10 +177,6 @@ func zoneCachePurge(c *cli.Context) {
 }
 
 func zoneRecords(c *cli.Context) {
-	if err := checkEnv(); err != nil {
-		fmt.Println(err)
-		return
-	}
 	var zone string
 	if len(c.Args()) > 0 {
 		zone = c.Args()[0]

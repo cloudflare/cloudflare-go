@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"strings"
 
@@ -12,6 +11,26 @@ import (
 	"github.com/pkg/errors"
 )
 
+// authenticate ensures the context has proper permissions.
+func authenticate(c *cli.Context) error {
+	if c.Args().First() == "ips" {
+		return nil
+	}
+
+	if api == nil {
+		var err error
+		api, err = cloudflare.New(c.String("api-key"), c.String("email"))
+		if err != nil {
+			return err
+		}
+		account := c.String("account-id")
+		if account != "" {
+			api.OrganizationID = account
+		}
+	}
+	return nil
+}
+
 // writeTable outputs tabular data to stdout.
 func writeTable(data [][]string, cols ...string) {
 	table := tablewriter.NewWriter(os.Stdout)
@@ -20,25 +39,6 @@ func writeTable(data [][]string, cols ...string) {
 	table.AppendBulk(data)
 
 	table.Render()
-}
-
-func checkEnv() error {
-	if api == nil {
-		var err error
-		api, err = cloudflare.New(os.Getenv("CF_API_KEY"), os.Getenv("CF_API_EMAIL"))
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-
-	if api.APIKey == "" {
-		return errors.New("API key not defined")
-	}
-	if api.APIEmail == "" {
-		return errors.New("API email not defined")
-	}
-
-	return nil
 }
 
 // Utility function to check if CLI flags were given.
@@ -55,22 +55,17 @@ func checkFlags(c *cli.Context, flags ...string) error {
 	return nil
 }
 
-func ips(c *cli.Context) {
-
+func getIps(c *cli.Context) {
 	if c.String("ip-type") == "all" {
-		_getIps("ipv4", c.Bool("ip-only"))
-		_getIps("ipv6", c.Bool("ip-only"))
+		fetchIps("ipv4", c.Bool("ip-only"))
+		fetchIps("ipv6", c.Bool("ip-only"))
 	} else {
-		_getIps(c.String("ip-type"), c.Bool("ip-only"))
+		fetchIps(c.String("ip-type"), c.Bool("ip-only"))
 	}
 }
 
-//
-// gets type of IPs to retrieve and returns results
-//
-func _getIps(ipType string, showMsgType bool) {
+func fetchIps(ipType string, showMsgType bool) {
 	ips, _ := cloudflare.IPs()
-
 	switch ipType {
 	case "ipv4":
 		if showMsgType != true {
@@ -90,10 +85,6 @@ func _getIps(ipType string, showMsgType bool) {
 }
 
 func userInfo(*cli.Context) {
-	if err := checkEnv(); err != nil {
-		fmt.Println(err)
-		return
-	}
 	user, err := api.UserDetails()
 	if err != nil {
 		fmt.Println(err)
@@ -114,10 +105,6 @@ func userUpdate(*cli.Context) {
 }
 
 func pageRules(c *cli.Context) {
-	if err := checkEnv(); err != nil {
-		fmt.Println(err)
-		return
-	}
 	if err := checkFlags(c, "zone"); err != nil {
 		return
 	}

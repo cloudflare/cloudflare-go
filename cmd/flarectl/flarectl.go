@@ -13,12 +13,37 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "flarectl"
 	app.Usage = "Cloudflare CLI"
-	app.Version = "2017.10.0"
+	app.Version = "2019.06.01"
+	app.Before = authenticate
+
+	app.Flags = []cli.Flag{
+		cli.StringFlag{
+			Name:   "api-key, k",
+			Usage:  "api key",
+			EnvVar: "CF_API_KEY",
+		},
+		cli.StringFlag{
+			Name:   "email, e",
+			Usage:  "account email",
+			EnvVar: "CF_ACCOUNT_EMAIL, CF_API_EMAIL",
+		},
+		cli.StringFlag{
+			Name:   "account-id, a",
+			Usage:  "account id (previously: organization id)",
+			EnvVar: "CF_ACCOUNT_ID",
+		},
+		cli.StringFlag{
+			Name:   "zone, z",
+			Usage:  "zone name",
+			EnvVar: "CF_ZONE_NAME",
+		},
+	}
+
 	app.Commands = []cli.Command{
 		{
 			Name:    "ips",
 			Aliases: []string{"i"},
-			Action:  ips,
+			Action:  getIps,
 			Usage:   "Print Cloudflare IP ranges",
 			Flags: []cli.Flag{
 				cli.StringFlag{
@@ -69,17 +94,9 @@ func main() {
 					Action:  zoneCreate,
 					Usage:   "Create a new zone",
 					Flags: []cli.Flag{
-						cli.StringFlag{
-							Name:  "zone",
-							Usage: "zone name",
-						},
 						cli.BoolFlag{
 							Name:  "jumpstart",
 							Usage: "automatically fetch DNS records",
-						},
-						cli.StringFlag{
-							Name:  "org-id",
-							Usage: "organization ID",
 						},
 					},
 				},
@@ -87,24 +104,12 @@ func main() {
 					Name:   "check",
 					Action: zoneCheck,
 					Usage:  "Initiate a zone activation check",
-					Flags: []cli.Flag{
-						cli.StringFlag{
-							Name:  "zone",
-							Usage: "zone name",
-						},
-					},
 				},
 				{
 					Name:    "info",
 					Aliases: []string{"i"},
 					Action:  zoneInfo,
 					Usage:   "Information on one zone",
-					Flags: []cli.Flag{
-						cli.StringFlag{
-							Name:  "zone",
-							Usage: "zone name",
-						},
-					},
 				},
 				{
 					Name:    "plan",
@@ -123,10 +128,6 @@ func main() {
 					Action: zoneCachePurge,
 					Usage:  "(Selectively) Purge the cache for a zone",
 					Flags: []cli.Flag{
-						cli.StringFlag{
-							Name:  "zone",
-							Usage: "zone name",
-						},
 						cli.BoolFlag{
 							Name:  "everything",
 							Usage: "purge everything from cache for the zone",
@@ -150,12 +151,6 @@ func main() {
 					Aliases: []string{"d"},
 					Action:  zoneRecords,
 					Usage:   "DNS records for a zone",
-					Flags: []cli.Flag{
-						cli.StringFlag{
-							Name:  "zone",
-							Usage: "zone name",
-						},
-					},
 				},
 				{
 					Name:    "railgun",
@@ -194,10 +189,6 @@ func main() {
 							Usage: "record id",
 						},
 						cli.StringFlag{
-							Name:  "zone",
-							Usage: "zone name",
-						},
-						cli.StringFlag{
 							Name:  "name",
 							Usage: "record name",
 						},
@@ -213,10 +204,6 @@ func main() {
 					Action:  dnsCreate,
 					Usage:   "Create a DNS record",
 					Flags: []cli.Flag{
-						cli.StringFlag{
-							Name:  "zone",
-							Usage: "zone name",
-						},
 						cli.StringFlag{
 							Name:  "name",
 							Usage: "record name",
@@ -247,10 +234,6 @@ func main() {
 					Usage:   "Update a DNS record",
 					Flags: []cli.Flag{
 						cli.StringFlag{
-							Name:  "zone",
-							Usage: "zone name",
-						},
-						cli.StringFlag{
 							Name:  "id",
 							Usage: "record id",
 						},
@@ -279,10 +262,6 @@ func main() {
 					Action:  dnsCreateOrUpdate,
 					Usage:   "Create a DNS record, or update if it exists",
 					Flags: []cli.Flag{
-						cli.StringFlag{
-							Name:  "zone",
-							Usage: "zone name",
-						},
 						cli.StringFlag{
 							Name:  "name",
 							Usage: "record name",
@@ -313,10 +292,6 @@ func main() {
 					Usage:   "Delete a DNS record",
 					Flags: []cli.Flag{
 						cli.StringFlag{
-							Name:  "zone",
-							Usage: "zone name",
-						},
-						cli.StringFlag{
 							Name:  "id",
 							Usage: "record id",
 						},
@@ -335,10 +310,6 @@ func main() {
 					Action:  userAgentList,
 					Usage:   "List User-Agent blocks for a zone",
 					Flags: []cli.Flag{
-						cli.StringFlag{
-							Name:  "zone",
-							Usage: "zone name",
-						},
 						cli.IntFlag{
 							Name:  "page",
 							Usage: "result page to return",
@@ -351,10 +322,6 @@ func main() {
 					Action:  userAgentCreate,
 					Usage:   "Create a User-Agent blocking rule",
 					Flags: []cli.Flag{
-						cli.StringFlag{
-							Name:  "zone",
-							Usage: "zone name",
-						},
 						cli.StringFlag{
 							Name:  "mode",
 							Usage: "the blocking mode: block, challenge, js_challenge, whitelist",
@@ -379,10 +346,6 @@ func main() {
 					Action:  userAgentUpdate,
 					Usage:   "Update an existing User-Agent block",
 					Flags: []cli.Flag{
-						cli.StringFlag{
-							Name:  "zone",
-							Usage: "zone name",
-						},
 						cli.StringFlag{
 							Name:  "id",
 							Usage: "User-Agent blocking rule ID",
@@ -411,10 +374,6 @@ func main() {
 					Action:  userAgentDelete,
 					Usage:   "Delete a User-Agent block",
 					Flags: []cli.Flag{
-						cli.StringFlag{
-							Name:  "zone",
-							Usage: "zone name",
-						},
 						cli.StringFlag{
 							Name:  "id",
 							Usage: "User-Agent blocking rule ID",
@@ -467,14 +426,6 @@ func main() {
 							Usage:   "List firewall access rules",
 							Flags: []cli.Flag{
 								cli.StringFlag{
-									Name:  "zone",
-									Usage: "zone name",
-								},
-								cli.StringFlag{
-									Name:  "organization",
-									Usage: "organization name",
-								},
-								cli.StringFlag{
 									Name:  "value",
 									Usage: "rule value",
 								},
@@ -482,7 +433,6 @@ func main() {
 									Name:  "scope-type",
 									Usage: "rule scope",
 								},
-
 								cli.StringFlag{
 									Name:  "mode",
 									Usage: "rule mode",
@@ -499,14 +449,6 @@ func main() {
 							Action:  firewallAccessRuleCreate,
 							Usage:   "Create a firewall access rule",
 							Flags: []cli.Flag{
-								cli.StringFlag{
-									Name:  "zone",
-									Usage: "zone name",
-								},
-								cli.StringFlag{
-									Name:  "organization",
-									Usage: "organization name",
-								},
 								cli.StringFlag{
 									Name:  "value",
 									Usage: "rule value",
@@ -532,14 +474,6 @@ func main() {
 									Usage: "rule id",
 								},
 								cli.StringFlag{
-									Name:  "zone",
-									Usage: "zone name",
-								},
-								cli.StringFlag{
-									Name:  "organization",
-									Usage: "organization name",
-								},
-								cli.StringFlag{
 									Name:  "mode",
 									Usage: "rule mode",
 								},
@@ -555,14 +489,6 @@ func main() {
 							Action:  firewallAccessRuleCreateOrUpdate,
 							Usage:   "Creatae a firewall access rule, or update it if it exists",
 							Flags: []cli.Flag{
-								cli.StringFlag{
-									Name:  "zone",
-									Usage: "zone name",
-								},
-								cli.StringFlag{
-									Name:  "organization",
-									Usage: "organization name",
-								},
 								cli.StringFlag{
 									Name:  "value",
 									Usage: "rule value",
@@ -586,14 +512,6 @@ func main() {
 								cli.StringFlag{
 									Name:  "id",
 									Usage: "rule id",
-								},
-								cli.StringFlag{
-									Name:  "zone",
-									Usage: "zone name",
-								},
-								cli.StringFlag{
-									Name:  "organization",
-									Usage: "organization name",
 								},
 							},
 						},
