@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/cloudflare/cloudflare-go"
+	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/codegangsta/cli"
 	"github.com/olekukonko/tablewriter"
 	"github.com/pkg/errors"
@@ -34,8 +34,8 @@ func initializeAPI(c *cli.Context) error {
 		return err
 	}
 
-	if c.IsSet("orgid") {
-		cloudflare.UsingOrganization(c.String("orgid"))(api)
+	if c.IsSet("accountid") {
+		cloudflare.UsingOrganization(c.String("accountid"))(api)
 	}
 
 	return nil

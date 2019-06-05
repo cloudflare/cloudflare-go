@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/cloudflare/cloudflare-go"
+	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/codegangsta/cli"
 )
 
@@ -24,11 +24,11 @@ func zoneCreate(c *cli.Context) {
 	}
 	zone := c.String("zone")
 	jumpstart := c.Bool("jumpstart")
-	orgID := c.String("org-id")
+	accountID := c.String("account-id")
 	zoneType := c.String("type")
 	var org cloudflare.Organization
-	if orgID != "" {
-		org.ID = orgID
+	if accountID != "" {
+		org.ID = accountID
 	}
 
 	if zoneType != "partial" {

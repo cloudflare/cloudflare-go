@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/cloudflare/cloudflare-go"
+	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/codegangsta/cli"
 )
 
@@ -16,10 +16,10 @@ func main() {
 	app.Version = "2017.10.0"
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
-			Name:   "org-id",
-			Usage:  "Optional organization ID",
+			Name:   "account-id",
+			Usage:  "Optional account ID",
 			Value:  "",
-			EnvVar: "CF_ORG_ID",
+			EnvVar: "CF_ACCOUNT_ID",
 		},
 	}
 	app.Commands = []cli.Command{
