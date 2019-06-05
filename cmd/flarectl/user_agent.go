@@ -20,11 +20,6 @@ func formatUserAgentRule(rule cloudflare.UserAgentRule) []string {
 }
 
 func userAgentCreate(c *cli.Context) {
-	if err := checkEnv(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		return
-	}
-
 	if err := checkFlags(c, "zone", "mode", "value"); err != nil {
 		fmt.Println(err)
 		return
@@ -60,11 +55,6 @@ func userAgentCreate(c *cli.Context) {
 }
 
 func userAgentUpdate(c *cli.Context) {
-	if err := checkEnv(); err != nil {
-		fmt.Println(err)
-		return
-	}
-
 	if err := checkFlags(c, "zone", "id", "mode", "value"); err != nil {
 		return
 	}
@@ -99,11 +89,6 @@ func userAgentUpdate(c *cli.Context) {
 }
 
 func userAgentDelete(c *cli.Context) {
-	if err := checkEnv(); err != nil {
-		fmt.Println(err)
-		return
-	}
-
 	if err := checkFlags(c, "zone", "id"); err != nil {
 		return
 	}
@@ -128,11 +113,6 @@ func userAgentDelete(c *cli.Context) {
 }
 
 func userAgentList(c *cli.Context) {
-	if err := checkEnv(); err != nil {
-		fmt.Println(err)
-		return
-	}
-
 	if err := checkFlags(c, "zone", "page"); err != nil {
 		return
 	}

@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"strings"
 
@@ -12,6 +11,36 @@ import (
 	"github.com/pkg/errors"
 )
 
+func initializeAPI(c *cli.Context) error {
+	apiKey := os.Getenv("CF_API_KEY")
+	if apiKey == "" {
+		err := errors.New("No CF_API_KEY environment set")
+		fmt.Fprintln(os.Stderr, err)
+		return err
+	}
+
+	apiEmail := os.Getenv("CF_API_EMAIL")
+	if apiEmail == "" {
+		err := errors.New("No CF_API_KEY environment set")
+		fmt.Fprintln(os.Stderr, err)
+		return err
+	}
+
+	// Be aware the following code sets the global package `api` variable
+	var err error
+	api, err = cloudflare.New(apiKey, apiEmail)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "cloudflare api: %s", err)
+		return err
+	}
+
+	if c.IsSet("orgid") {
+		cloudflare.UsingOrganization(c.String("orgid"))(api)
+	}
+
+	return nil
+}
+
 // writeTable outputs tabular data to stdout.
 func writeTable(data [][]string, cols ...string) {
 	table := tablewriter.NewWriter(os.Stdout)
@@ -20,25 +49,6 @@ func writeTable(data [][]string, cols ...string) {
 	table.AppendBulk(data)
 
 	table.Render()
-}
-
-func checkEnv() error {
-	if api == nil {
-		var err error
-		api, err = cloudflare.New(os.Getenv("CF_API_KEY"), os.Getenv("CF_API_EMAIL"))
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-
-	if api.APIKey == "" {
-		return errors.New("API key not defined")
-	}
-	if api.APIEmail == "" {
-		return errors.New("API email not defined")
-	}
-
-	return nil
 }
 
 // Utility function to check if CLI flags were given.
@@ -90,10 +100,6 @@ func _getIps(ipType string, showMsgType bool) {
 }
 
 func userInfo(*cli.Context) {
-	if err := checkEnv(); err != nil {
-		fmt.Println(err)
-		return
-	}
 	user, err := api.UserDetails()
 	if err != nil {
 		fmt.Println(err)
@@ -114,10 +120,6 @@ func userUpdate(*cli.Context) {
 }
 
 func pageRules(c *cli.Context) {
-	if err := checkEnv(); err != nil {
-		fmt.Println(err)
-		return
-	}
 	if err := checkFlags(c, "zone"); err != nil {
 		return
 	}

@@ -22,11 +22,6 @@ func formatAccessRule(rule cloudflare.AccessRule) []string {
 }
 
 func firewallAccessRules(c *cli.Context) {
-	if err := checkEnv(); err != nil {
-		fmt.Println(err)
-		return
-	}
-
 	organizationID, zoneID, err := getScope(c)
 	if err != nil {
 		return
@@ -88,10 +83,6 @@ func firewallAccessRules(c *cli.Context) {
 }
 
 func firewallAccessRuleCreate(c *cli.Context) {
-	if err := checkEnv(); err != nil {
-		fmt.Println(err)
-		return
-	}
 	if err := checkFlags(c, "mode", "value"); err != nil {
 		fmt.Println(err)
 		return
@@ -145,10 +136,6 @@ func firewallAccessRuleCreate(c *cli.Context) {
 }
 
 func firewallAccessRuleUpdate(c *cli.Context) {
-	if err := checkEnv(); err != nil {
-		fmt.Println(err)
-		return
-	}
 	if err := checkFlags(c, "id"); err != nil {
 		fmt.Println(err)
 		return
@@ -200,10 +187,6 @@ func firewallAccessRuleUpdate(c *cli.Context) {
 }
 
 func firewallAccessRuleCreateOrUpdate(c *cli.Context) {
-	if err := checkEnv(); err != nil {
-		fmt.Println(err)
-		return
-	}
 	if err := checkFlags(c, "mode", "value"); err != nil {
 		fmt.Println(err)
 		return
@@ -272,10 +255,6 @@ func firewallAccessRuleCreateOrUpdate(c *cli.Context) {
 }
 
 func firewallAccessRuleDelete(c *cli.Context) {
-	if err := checkEnv(); err != nil {
-		fmt.Println(err)
-		return
-	}
 	if err := checkFlags(c, "id"); err != nil {
 		fmt.Println(err)
 		return
