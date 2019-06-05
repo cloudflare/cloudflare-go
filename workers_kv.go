@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/pkg/errors"
 )
@@ -125,6 +126,7 @@ func (api *API) UpdateWorkersKVNamespace(ctx context.Context, namespaceID string
 //
 // API reference: https://api.cloudflare.com/#workers-kv-namespace-write-key-value-pair
 func (api *API) WriteWorkersKV(ctx context.Context, namespaceID, key string, value []byte) (Response, error) {
+	key = url.PathEscape(key)
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/values/%s", api.OrganizationID, namespaceID, key)
 	res, err := api.makeRequestWithAuthTypeAndHeaders(
 		ctx, http.MethodPut, uri, value, api.authType, http.Header{"Content-Type": []string{"application/octet-stream"}},
@@ -145,6 +147,7 @@ func (api *API) WriteWorkersKV(ctx context.Context, namespaceID, key string, val
 //
 // API reference: https://api.cloudflare.com/#workers-kv-namespace-read-key-value-pair
 func (api API) ReadWorkersKV(ctx context.Context, namespaceID, key string) ([]byte, error) {
+	key = url.PathEscape(key)
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/values/%s", api.OrganizationID, namespaceID, key)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -157,6 +160,7 @@ func (api API) ReadWorkersKV(ctx context.Context, namespaceID, key string) ([]by
 //
 // API reference: https://api.cloudflare.com/#workers-kv-namespace-delete-key-value-pair
 func (api API) DeleteWorkersKV(ctx context.Context, namespaceID, key string) (Response, error) {
+	key = url.PathEscape(key)
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/values/%s", api.OrganizationID, namespaceID, key)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
