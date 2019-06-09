@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/cloudflare/cloudflare-go"
-	"github.com/codegangsta/cli"
+	"github.com/urfave/cli"
 )
 
 func formatUserAgentRule(rule cloudflare.UserAgentRule) []string {

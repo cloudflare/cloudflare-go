@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/cloudflare/cloudflare-go"
-	"github.com/codegangsta/cli"
+	"github.com/urfave/cli"
 )
 
 func formatDNSRecord(record cloudflare.DNSRecord) []string {
