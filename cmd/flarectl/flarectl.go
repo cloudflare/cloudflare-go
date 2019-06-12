@@ -4,7 +4,7 @@ import (
 	"os"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
-	"github.com/codegangsta/cli"
+	"github.com/urfave/cli"
 )
 
 var api *cloudflare.API

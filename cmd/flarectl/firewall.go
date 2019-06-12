@@ -8,7 +8,7 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/cloudflare/cloudflare-go"
-	"github.com/codegangsta/cli"
+	"github.com/urfave/cli"
 )
 
 func formatAccessRule(rule cloudflare.AccessRule) []string {

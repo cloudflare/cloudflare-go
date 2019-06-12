@@ -1,6 +1,10 @@
 language: go
 sudo: false
 
+cache:
+  directories:
+    - $GOPATH/pkg/mod
+
 env:
   global:
     - MOD_VENDOR="-mod=vendor"
@@ -18,8 +22,8 @@ matrix:
     - go: tip
 
 before_install:
-  - go get github.com/mitchellh/gox
-  - go get -u golang.org/x/lint/golint
+  - cd $(mktemp -d); go mod init tmp; go get -u github.com/mitchellh/gox; cd -
+  - cd $(mktemp -d); go mod init tmp; go get -u golang.org/x/lint/golint; cd -
 
 install:
   - # skip

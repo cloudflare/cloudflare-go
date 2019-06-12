@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
-	"github.com/codegangsta/cli"
+	"github.com/urfave/cli"
 	"github.com/olekukonko/tablewriter"
 	"github.com/pkg/errors"
 )
