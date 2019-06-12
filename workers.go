@@ -1,8 +1,13 @@
 package cloudflare
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
+	"io"
+	"mime/multipart"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/pkg/errors"
@@ -61,6 +66,88 @@ type WorkerListResponse struct {
 type WorkerScriptResponse struct {
 	Response
 	WorkerScript `json:"result"`
+}
+
+// WorkerResourceBindings defines lists of resources to bind to a worker script using the Resource Binding API
+//
+// API reference: https://developers.cloudflare.com/workers/api/resource-bindings/
+type WorkerResourceBindings struct {
+	KVBindings   []*WorkerKVBinding
+	WASMBindings []*WorkerWASMBinding
+}
+
+// MarshalJSON implements Marshaller interface
+// Coerces simplified structure into the correct json format
+func (w *WorkerResourceBindings) MarshalJSON() ([]byte, error) {
+	kv, err := json.Marshal(w.KVBindings)
+	if err != nil {
+		return nil, err
+	}
+	wasm, err := json.Marshal(w.WASMBindings)
+	if err != nil {
+		return nil, err
+	}
+
+	var b []byte
+	switch {
+	case w.KVBindings == nil && w.WASMBindings != nil:
+		b = wasm
+	case w.KVBindings != nil && w.WASMBindings == nil:
+		b = kv
+	case w.KVBindings != nil && w.WASMBindings != nil:
+		// Merge the two json-ified arrays into one
+		b = bytes.Replace(append(kv, wasm...), []byte("]["), []byte(","), 1)
+	default:
+		b = []byte("[]")
+	}
+
+	return json.Marshal(struct {
+		BodyPart string          `json:"body_part"`
+		Bindings json.RawMessage `json:"bindings"`
+	}{"script", b})
+}
+
+// WorkerKVBinding defines the binding between a variable name and a KV namespace
+//
+// API reference: https://developers.cloudflare.com/workers/api/resource-bindings/kv-namespaces/
+type WorkerKVBinding struct {
+	Name        string `json:"name"`
+	NamespaceID string `json:"namespace_id"`
+}
+
+// MarshalJSON implements Marshaller interface
+// Adds a type field when marshalling into json
+func (w *WorkerKVBinding) MarshalJSON() ([]byte, error) {
+	type Copy WorkerKVBinding
+	return json.Marshal(&struct {
+		Type string `json:"type"`
+		*Copy
+	}{
+		Type: "kv_namespace",
+		Copy: (*Copy)(w),
+	})
+}
+
+// WorkerWASMBinding binds WASM modules to worker scripts
+//
+// API reference: https://developers.cloudflare.com/workers/api/resource-bindings/webassembly-modules/
+type WorkerWASMBinding struct {
+	Name   string    `json:"name"`
+	Part   string    `json:"part"`
+	Module io.Reader `json:"-"`
+}
+
+// MarshalJSON implements Marshaller interface
+// Adds a type field when marshalling into json
+func (w *WorkerWASMBinding) MarshalJSON() ([]byte, error) {
+	type Copy WorkerWASMBinding
+	return json.Marshal(&struct {
+		Type string `json:"type"`
+		*Copy
+	}{
+		Type: "wasm_module",
+		Copy: (*Copy)(w),
+	})
 }
 
 // DeleteWorker deletes worker for a zone.
@@ -209,6 +296,82 @@ func (api *API) uploadWorkerWithName(scriptName string, data string) (WorkerScri
 		return r, errors.Wrap(err, errUnmarshalError)
 	}
 	return r, nil
+}
+
+func (api *API) UploadWorkerWithBindings(requestParams *WorkerRequestParams, resourceBindings *WorkerResourceBindings, data string) (WorkerScriptResponse, error) {
+	var r WorkerScriptResponse
+	formData, contentType, err := api.createBindingFormData(resourceBindings, data)
+	if err != nil {
+		return r, errors.Wrap(err, errMakeRequestError)
+	}
+	if requestParams.ScriptName != "" {
+		return api.uploadWorkerWithBindingsAndName(requestParams.ScriptName, formData, contentType)
+	}
+	uri := "/zones/" + requestParams.ZoneID + "/workers/script"
+	headers := make(http.Header)
+	headers.Set("Content-Type", contentType)
+	res, err := api.makeRequestWithHeaders("PUT", uri, formData, headers)
+	if err != nil {
+		return r, errors.Wrap(err, errMakeRequestError)
+	}
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return r, errors.Wrap(err, errUnmarshalError)
+	}
+	return r, nil
+}
+
+func (api *API) uploadWorkerWithBindingsAndName(scriptName string, formData *bytes.Buffer, contentType string) (WorkerScriptResponse, error) {
+	if api.OrganizationID == "" {
+		return WorkerScriptResponse{}, errors.New("organization ID required for enterprise only request")
+	}
+	uri := "/accounts/" + api.OrganizationID + "/workers/scripts/" + scriptName
+	headers := make(http.Header)
+	headers.Set("Content-Type", contentType)
+	var r WorkerScriptResponse
+	res, err := api.makeRequestWithHeaders("PUT", uri, formData, headers)
+	if err != nil {
+		return r, errors.Wrap(err, errMakeRequestError)
+	}
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return r, errors.Wrap(err, errUnmarshalError)
+	}
+	return r, nil
+}
+
+func (api *API) createBindingFormData(resourceBindings *WorkerResourceBindings, data string) (*bytes.Buffer, string, error) {
+	var b bytes.Buffer
+
+	bindJson, err := json.Marshal(resourceBindings)
+	if err != nil {
+		return &b, "", fmt.Errorf("error marshalling bindings to json: %s", err)
+	}
+	parts := map[string]io.Reader{
+		"script":   strings.NewReader(data),
+		"metadata": bytes.NewReader(bindJson),
+	}
+	// Add WASM bytecode
+	for _, wasm := range resourceBindings.WASMBindings {
+		if _, ok := parts[wasm.Part]; ok {
+			return &b, "", fmt.Errorf("attempting to add duplicate form key '%s'", err)
+		}
+		parts[wasm.Part] = wasm.Module
+	}
+	form := multipart.NewWriter(&b)
+	for key, reader := range parts {
+		var fw io.Writer
+		if fw, err = form.CreateFormField(key); err != nil {
+			return &b, "", fmt.Errorf("error creating form field for bindings api: %s", err)
+		}
+		if _, err := io.Copy(fw, reader); err != nil {
+			return &b, "", fmt.Errorf("error copying form-data for bindings api: %s", err)
+		}
+	}
+	if err := form.Close(); err != nil {
+		return &b, "", fmt.Errorf("error closing form-data stream: %s", err)
+	}
+	return &b, form.FormDataContentType(), nil
 }
 
 // CreateWorkerRoute creates worker route for a zone

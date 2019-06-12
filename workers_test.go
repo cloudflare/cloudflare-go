@@ -1,8 +1,10 @@
 package cloudflare
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 	"testing"
 	"time"
 
@@ -271,6 +273,86 @@ func TestWorkers_UploadWorker(t *testing.T) {
 		assert.Equal(t, want, res)
 	}
 
+}
+
+func TestWorkers_UploadWorkerWithKVBindings(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/zones/foo/workers/script", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		assert.Nil(t, r.ParseMultipartForm(1024))
+		assert.Equal(t, workerScript, r.FormValue("script"))
+		assert.Equal(t, `{"body_part":"script","bindings":[{"type":"kv_namespace","name":"myNamespace","namespace_id":"namespace_id"}]}`, r.FormValue("metadata"))
+		w.Header().Set("content-type", "application/javascript")
+
+		fmt.Fprintf(w, uploadWorkerResponseData)
+	})
+	bindings := &WorkerResourceBindings{
+		KVBindings: []*WorkerKVBinding{
+			{
+				Name:        "myNamespace",
+				NamespaceID: "namespace_id",
+			},
+		},
+	}
+	res, err := client.UploadWorkerWithBindings(&WorkerRequestParams{ZoneID: "foo"}, bindings, workerScript)
+	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
+	want := WorkerScriptResponse{
+		successResponse,
+		WorkerScript{
+			Script: workerScript,
+			WorkerMetaData: WorkerMetaData{
+				ETAG:       "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
+				Size:       191,
+				ModifiedOn: formattedTime,
+			},
+		}}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
+}
+
+func TestWorkers_UploadWorkerWithWASMBinding(t *testing.T) {
+	setup()
+	defer teardown()
+
+	bc := "I AM WASM BYTECODE"
+
+	mux.HandleFunc("/zones/foo/workers/script", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		assert.Nil(t, r.ParseMultipartForm(1024))
+		assert.Equal(t, workerScript, r.FormValue("script"))
+		assert.Equal(t, `{"body_part":"script","bindings":[{"type":"wasm_module","name":"isqrt","part":"wasmprogram"}]}`, r.FormValue("metadata"))
+		assert.Equal(t, bc, r.FormValue("wasmprogram"))
+		w.Header().Set("content-type", "application/javascript")
+
+		fmt.Fprintf(w, uploadWorkerResponseData)
+	})
+	bindings := &WorkerResourceBindings{
+		WASMBindings: []*WorkerWASMBinding{
+			{
+				Part:   "wasmprogram",
+				Name:   "isqrt",
+				Module: strings.NewReader(bc),
+			},
+		},
+	}
+	res, err := client.UploadWorkerWithBindings(&WorkerRequestParams{ZoneID: "foo"}, bindings, workerScript)
+	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
+	want := WorkerScriptResponse{
+		successResponse,
+		WorkerScript{
+			Script: workerScript,
+			WorkerMetaData: WorkerMetaData{
+				ETAG:       "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
+				Size:       191,
+				ModifiedOn: formattedTime,
+			},
+		}}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
 }
 
 func TestWorkers_UploadWorkerWithName(t *testing.T) {
@@ -543,4 +625,61 @@ func TestWorkers_UpdateWorkerRouteSingleScriptWithAccount(t *testing.T) {
 		assert.Equal(t, want, res)
 	}
 
+}
+
+func TestWorkerResourceBindings_MarshalJSON_Happy(t *testing.T) {
+	bindings := &WorkerResourceBindings{
+		KVBindings: []*WorkerKVBinding{
+			{
+				Name:        "myNamespace",
+				NamespaceID: "namespace_id",
+			},
+		},
+		WASMBindings: []*WorkerWASMBinding{
+			{
+				Name: "isqrt",
+				Part: "wasmprogram",
+			},
+		},
+	}
+	want := `{"body_part":"script","bindings":[{"type":"kv_namespace","name":"myNamespace","namespace_id":"namespace_id"},{"type":"wasm_module","name":"isqrt","part":"wasmprogram"}]}`
+	res, err := json.Marshal(bindings)
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, string(res))
+	}
+}
+
+func TestWorkerResourceBindings_MarshalJSON_Nils(t *testing.T) {
+	bindings := &WorkerResourceBindings{
+		WASMBindings: []*WorkerWASMBinding{
+			{
+				Name: "isqrt",
+				Part: "wasmprogram",
+			},
+		},
+	}
+	want := `{"body_part":"script","bindings":[{"type":"wasm_module","name":"isqrt","part":"wasmprogram"}]}`
+	res, err := json.Marshal(bindings)
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, string(res))
+	}
+	bindings = &WorkerResourceBindings{
+		KVBindings: []*WorkerKVBinding{
+			{
+				Name:        "myNamespace",
+				NamespaceID: "namespace_id",
+			},
+		},
+	}
+	want = `{"body_part":"script","bindings":[{"type":"kv_namespace","name":"myNamespace","namespace_id":"namespace_id"}]}`
+	res, err = json.Marshal(bindings)
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, string(res))
+	}
+	bindings = &WorkerResourceBindings{}
+	want = `{"body_part":"script","bindings":[]}`
+	res, err = json.Marshal(bindings)
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, string(res))
+	}
 }
