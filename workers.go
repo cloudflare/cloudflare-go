@@ -298,6 +298,9 @@ func (api *API) uploadWorkerWithName(scriptName string, data string) (WorkerScri
 	return r, nil
 }
 
+// UploadWorkerWithBindings push raw script content for your worker with resource bindings
+//
+// API reference: https://api.cloudflare.com/#worker-script-upload-worker and https://developers.cloudflare.com/workers/api/resource-bindings/
 func (api *API) UploadWorkerWithBindings(requestParams *WorkerRequestParams, resourceBindings *WorkerResourceBindings, data string) (WorkerScriptResponse, error) {
 	var r WorkerScriptResponse
 	formData, contentType, err := api.createBindingFormData(resourceBindings, data)
@@ -321,6 +324,10 @@ func (api *API) UploadWorkerWithBindings(requestParams *WorkerRequestParams, res
 	return r, nil
 }
 
+// uploadWorkerWithBindingsAndName push raw script content for your worker with resource bindings
+// This is an enterprise only feature https://developers.cloudflare.com/workers/api/config-api-for-enterprise/
+//
+// API reference: https://api.cloudflare.com/#worker-script-upload-worker and https://developers.cloudflare.com/workers/api/resource-bindings/
 func (api *API) uploadWorkerWithBindingsAndName(scriptName string, formData *bytes.Buffer, contentType string) (WorkerScriptResponse, error) {
 	if api.OrganizationID == "" {
 		return WorkerScriptResponse{}, errors.New("organization ID required for enterprise only request")
@@ -343,13 +350,13 @@ func (api *API) uploadWorkerWithBindingsAndName(scriptName string, formData *byt
 func (api *API) createBindingFormData(resourceBindings *WorkerResourceBindings, data string) (*bytes.Buffer, string, error) {
 	var b bytes.Buffer
 
-	bindJson, err := json.Marshal(resourceBindings)
+	bindJSON, err := json.Marshal(resourceBindings)
 	if err != nil {
 		return &b, "", fmt.Errorf("error marshalling bindings to json: %s", err)
 	}
 	parts := map[string]io.Reader{
 		"script":   strings.NewReader(data),
-		"metadata": bytes.NewReader(bindJson),
+		"metadata": bytes.NewReader(bindJSON),
 	}
 	// Add WASM bytecode
 	for _, wasm := range resourceBindings.WASMBindings {
