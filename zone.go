@@ -265,7 +265,7 @@ type newZone struct {
 	Type      string `json:"type"`
 	// We use a pointer to get a nil type when the field is empty.
 	// This allows us to completely omit this with json.Marshal().
-	Organization *Organization `json:"organization,omitempty"`
+	Account *Account `json:"organization,omitempty"`
 }
 
 // CreateZone creates a zone on an account.
@@ -273,16 +273,16 @@ type newZone struct {
 // Setting jumpstart to true will attempt to automatically scan for existing
 // DNS records. Setting this to false will create the zone with no DNS records.
 //
-// If Organization is non-empty, it must have at least the ID field populated.
-// This will add the new zone to the specified multi-user organization.
+// If account is non-empty, it must have at least the ID field populated.
+// This will add the new zone to the specified multi-user account.
 //
 // API reference: https://api.cloudflare.com/#zone-create-a-zone
-func (api *API) CreateZone(name string, jumpstart bool, org Organization, zoneType string) (Zone, error) {
+func (api *API) CreateZone(name string, jumpstart bool, account Account, zoneType string) (Zone, error) {
 	var newzone newZone
 	newzone.Name = name
 	newzone.JumpStart = jumpstart
-	if org.ID != "" {
-		newzone.Organization = &org
+	if account.ID != "" {
+		newzone.Account = &account
 	}
 
 	if zoneType == "partial" {

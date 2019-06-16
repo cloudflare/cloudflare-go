@@ -10,11 +10,11 @@ import (
 
 const (
 	namespace = "xxxxxx96ee002e8xxxxxx665354c0449"
-	org       = "xxxxxx10ee002e8xxxxxx665354c0410"
+	accountID = "xxxxxx10ee002e8xxxxxx665354c0410"
 )
 
 func ExampleAPI_CreateWorkersKVNamespace() {
-	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization(org))
+	api, err := cloudflare.New(apiKey, user, cloudflare.UsingAccount(accountID))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -29,7 +29,7 @@ func ExampleAPI_CreateWorkersKVNamespace() {
 }
 
 func ExampleAPI_ListWorkersKVNamespaces() {
-	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization(org))
+	api, err := cloudflare.New(apiKey, user, cloudflare.UsingAccount(accountID))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -43,7 +43,7 @@ func ExampleAPI_ListWorkersKVNamespaces() {
 }
 
 func ExampleAPI_DeleteWorkersKVNamespace() {
-	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization(org))
+	api, err := cloudflare.New(apiKey, user, cloudflare.UsingAccount(accountID))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -57,7 +57,7 @@ func ExampleAPI_DeleteWorkersKVNamespace() {
 }
 
 func ExampleAPI_UpdateWorkersKVNamespace() {
-	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization(org))
+	api, err := cloudflare.New(apiKey, user, cloudflare.UsingAccount(accountID))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -71,7 +71,7 @@ func ExampleAPI_UpdateWorkersKVNamespace() {
 }
 
 func ExampleAPI_WriteWorkersKV() {
-	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization(org))
+	api, err := cloudflare.New(apiKey, user, cloudflare.UsingAccount(accountID))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -88,7 +88,7 @@ func ExampleAPI_WriteWorkersKV() {
 }
 
 func ExampleAPI_ReadWorkersKV() {
-	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization(org))
+	api, err := cloudflare.New(apiKey, user, cloudflare.UsingAccount(accountID))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -103,7 +103,7 @@ func ExampleAPI_ReadWorkersKV() {
 }
 
 func ExampleAPI_DeleteWorkersKV() {
-	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization(org))
+	api, err := cloudflare.New(apiKey, user, cloudflare.UsingAccount(accountID))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -118,7 +118,7 @@ func ExampleAPI_DeleteWorkersKV() {
 }
 
 func ExampleAPI_ListWorkersKVs() {
-	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization(org))
+	api, err := cloudflare.New(apiKey, user, cloudflare.UsingAccount(accountID))
 	if err != nil {
 		log.Fatal(err)
 	}

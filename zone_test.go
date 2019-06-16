@@ -800,7 +800,7 @@ func TestCreateZoneFullSetup(t *testing.T) {
 	actual, err := client.CreateZone(
 		"example.com",
 		false,
-		Organization{ID: "01a7362d577a6c3019a474fd6f485823"},
+		Account{ID: "01a7362d577a6c3019a474fd6f485823"},
 		"full",
 	)
 
@@ -883,7 +883,7 @@ func TestCreateZonePartialSetup(t *testing.T) {
 	actual, err := client.CreateZone(
 		"example.com",
 		false,
-		Organization{ID: "01a7362d577a6c3019a474fd6f485823"},
+		Account{ID: "01a7362d577a6c3019a474fd6f485823"},
 		"partial",
 	)
 

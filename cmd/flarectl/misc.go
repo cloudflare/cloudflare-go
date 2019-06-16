@@ -6,9 +6,9 @@ import (
 	"strings"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
-	"github.com/urfave/cli"
 	"github.com/olekukonko/tablewriter"
 	"github.com/pkg/errors"
+	"github.com/urfave/cli"
 )
 
 func initializeAPI(c *cli.Context) error {
@@ -35,7 +35,7 @@ func initializeAPI(c *cli.Context) error {
 	}
 
 	if c.IsSet("accountid") {
-		cloudflare.UsingOrganization(c.String("accountid"))(api)
+		cloudflare.UsingAccount(c.String("accountid"))(api)
 	}
 
 	return nil
