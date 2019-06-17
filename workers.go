@@ -133,7 +133,6 @@ func (w *WorkerKVBinding) MarshalJSON() ([]byte, error) {
 // API reference: https://developers.cloudflare.com/workers/api/resource-bindings/webassembly-modules/
 type WorkerWASMBinding struct {
 	Name   string    `json:"name"`
-	Part   string    `json:"part"`
 	Module io.Reader `json:"-"`
 }
 
@@ -359,11 +358,12 @@ func (api *API) createBindingFormData(resourceBindings *WorkerResourceBindings, 
 		"metadata": bytes.NewReader(bindJSON),
 	}
 	// Add WASM bytecode
-	for _, wasm := range resourceBindings.WASMBindings {
-		if _, ok := parts[wasm.Part]; ok {
+	for i, wasm := range resourceBindings.WASMBindings {
+		key := fmt.Sprintf("wasm_resource%d", i)
+		if _, ok := parts[key]; ok {
 			return &b, "", fmt.Errorf("attempting to add duplicate form key '%s'", err)
 		}
-		parts[wasm.Part] = wasm.Module
+		parts[key] = wasm.Module
 	}
 	form := multipart.NewWriter(&b)
 	for key, reader := range parts {

@@ -323,8 +323,8 @@ func TestWorkers_UploadWorkerWithWASMBinding(t *testing.T) {
 		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
 		assert.Nil(t, r.ParseMultipartForm(1024))
 		assert.Equal(t, workerScript, r.FormValue("script"))
-		assert.Equal(t, `{"body_part":"script","bindings":[{"type":"wasm_module","name":"isqrt","part":"wasmprogram"}]}`, r.FormValue("metadata"))
-		assert.Equal(t, bc, r.FormValue("wasmprogram"))
+		assert.Equal(t, `{"body_part":"script","bindings":[{"type":"wasm_module","name":"isqrt"}]}`, r.FormValue("metadata"))
+		assert.Equal(t, bc, r.FormValue("wasm_resource0"))
 		w.Header().Set("content-type", "application/javascript")
 
 		fmt.Fprintf(w, uploadWorkerResponseData)
@@ -332,7 +332,6 @@ func TestWorkers_UploadWorkerWithWASMBinding(t *testing.T) {
 	bindings := &WorkerResourceBindings{
 		WASMBindings: []*WorkerWASMBinding{
 			{
-				Part:   "wasmprogram",
 				Name:   "isqrt",
 				Module: strings.NewReader(bc),
 			},
@@ -638,11 +637,10 @@ func TestWorkerResourceBindings_MarshalJSON_Happy(t *testing.T) {
 		WASMBindings: []*WorkerWASMBinding{
 			{
 				Name: "isqrt",
-				Part: "wasmprogram",
 			},
 		},
 	}
-	want := `{"body_part":"script","bindings":[{"type":"kv_namespace","name":"myNamespace","namespace_id":"namespace_id"},{"type":"wasm_module","name":"isqrt","part":"wasmprogram"}]}`
+	want := `{"body_part":"script","bindings":[{"type":"kv_namespace","name":"myNamespace","namespace_id":"namespace_id"},{"type":"wasm_module","name":"isqrt"}]}`
 	res, err := json.Marshal(bindings)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, string(res))
@@ -654,11 +652,10 @@ func TestWorkerResourceBindings_MarshalJSON_Nils(t *testing.T) {
 		WASMBindings: []*WorkerWASMBinding{
 			{
 				Name: "isqrt",
-				Part: "wasmprogram",
 			},
 		},
 	}
-	want := `{"body_part":"script","bindings":[{"type":"wasm_module","name":"isqrt","part":"wasmprogram"}]}`
+	want := `{"body_part":"script","bindings":[{"type":"wasm_module","name":"isqrt"}]}`
 	res, err := json.Marshal(bindings)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, string(res))
