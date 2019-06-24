@@ -6,9 +6,9 @@ import (
 	"strings"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
-	"github.com/urfave/cli"
 	"github.com/olekukonko/tablewriter"
 	"github.com/pkg/errors"
+	"github.com/urfave/cli"
 )
 
 func initializeAPI(c *cli.Context) error {
@@ -21,7 +21,7 @@ func initializeAPI(c *cli.Context) error {
 
 	apiEmail := os.Getenv("CF_API_EMAIL")
 	if apiEmail == "" {
-		err := errors.New("No CF_API_KEY environment set")
+		err := errors.New("No CF_API_EMAIL environment set")
 		fmt.Fprintln(os.Stderr, err)
 		return err
 	}
