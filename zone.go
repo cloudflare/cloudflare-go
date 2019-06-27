@@ -504,7 +504,7 @@ func (api *API) EditZone(zoneID string, zoneOpts ZoneOptions) (Zone, error) {
 // API reference: https://api.cloudflare.com/#zone-purge-all-files
 func (api *API) PurgeEverything(zoneID string) (PurgeCacheResponse, error) {
 	uri := "/zones/" + zoneID + "/purge_cache"
-	res, err := api.makeRequest("DELETE", uri, PurgeCacheRequest{true, nil, nil, nil})
+	res, err := api.makeRequest("POST", uri, PurgeCacheRequest{true, nil, nil, nil})
 	if err != nil {
 		return PurgeCacheResponse{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -521,7 +521,7 @@ func (api *API) PurgeEverything(zoneID string) (PurgeCacheResponse, error) {
 // API reference: https://api.cloudflare.com/#zone-purge-individual-files-by-url-and-cache-tags
 func (api *API) PurgeCache(zoneID string, pcr PurgeCacheRequest) (PurgeCacheResponse, error) {
 	uri := "/zones/" + zoneID + "/purge_cache"
-	res, err := api.makeRequest("DELETE", uri, pcr)
+	res, err := api.makeRequest("POST", uri, pcr)
 	if err != nil {
 		return PurgeCacheResponse{}, errors.Wrap(err, errMakeRequestError)
 	}
