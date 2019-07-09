@@ -116,6 +116,60 @@ func TestWAFPackage(t *testing.T) {
 	assert.Error(t, err)
 }
 
+func TestUpdateWAFPackage(t *testing.T) {
+	setup()
+	defer teardown()
+
+	testZoneID := "abcd123"
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "PATCH", r.Method, "Expected method 'PATCH', got %s", r.Method)
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			panic(err)
+		}
+		defer r.Body.Close()
+
+		assert.Equal(t, `{"sensitivity":"high","action_mode":"challenge"}`, string(body), "Expected body '{\"sensitivity\":\"high\",\"action_mode\":\"challenge\"}', got %s", string(body))
+
+		w.Header().Set("content-type", "application/json")
+		// JSON data from: https://api.cloudflare.com/#waf-rules-properties
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "a25a9a7e9c00afc1fb2e0245519d725b",
+				"name": "OWASP ModSecurity Core Rule Set",
+				"description": "Covers OWASP Top 10 vulnerabilities, and more.",
+				"detection_mode": "anomaly",
+				"zone_id": "023e105f4ecef8ad9ca31a8372d0c353",
+				"status": "active",
+				"sensitivity": "high",
+				"action_mode": "challenge"
+			}
+		}`)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/firewall/waf/packages/a25a9a7e9c00afc1fb2e0245519d725b", handler)
+
+	want := WAFPackage{
+		ID:            "a25a9a7e9c00afc1fb2e0245519d725b",
+		Name:          "OWASP ModSecurity Core Rule Set",
+		Description:   "Covers OWASP Top 10 vulnerabilities, and more.",
+		ZoneID:        "023e105f4ecef8ad9ca31a8372d0c353",
+		DetectionMode: "anomaly",
+		Sensitivity:   "high",
+		ActionMode:    "challenge",
+	}
+
+	d, err := client.UpdateWAFPackage(testZoneID, "a25a9a7e9c00afc1fb2e0245519d725b", WAFPackageOptions{Sensitivity: "high", ActionMode: "challenge"})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, d)
+	}
+}
+
 func TestListWAFRules(t *testing.T) {
 	setup()
 	defer teardown()

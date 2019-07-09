@@ -31,6 +31,12 @@ type WAFPackageResponse struct {
 	ResultInfo ResultInfo `json:"result_info"`
 }
 
+// WAFPackageOptions represents options to edit a WAF package.
+type WAFPackageOptions struct {
+	Sensitivity string `json:"sensitivity,omitempty"`
+	ActionMode  string `json:"action_mode,omitempty"`
+}
+
 // WAFRule represents a WAF rule.
 type WAFRule struct {
 	ID          string `json:"id"`
@@ -108,6 +114,24 @@ func (api *API) WAFPackage(zoneID, packageID string) (WAFPackage, error) {
 		return WAFPackage{}, errors.Wrap(err, errUnmarshalError)
 	}
 
+	return r.Result, nil
+}
+
+// UpdateWAFPackage lets you update the a WAF Package.
+//
+// API Reference: https://api.cloudflare.com/#waf-rule-packages-edit-firewall-package
+func (api *API) UpdateWAFPackage(zoneID, packageID string, opts WAFPackageOptions) (WAFPackage, error) {
+	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID
+	res, err := api.makeRequest("PATCH", uri, opts)
+	if err != nil {
+		return WAFPackage{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var r WAFPackageResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return WAFPackage{}, errors.Wrap(err, errUnmarshalError)
+	}
 	return r.Result, nil
 }
 
