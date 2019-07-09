@@ -24,6 +24,13 @@ type WAFPackagesResponse struct {
 	ResultInfo ResultInfo   `json:"result_info"`
 }
 
+// WAFPackageResponse represents the response from the WAF package endpoint.
+type WAFPackageResponse struct {
+	Response
+	Result     WAFPackage `json:"result"`
+	ResultInfo ResultInfo `json:"result_info"`
+}
+
 // WAFRule represents a WAF rule.
 type WAFRule struct {
 	ID          string `json:"id"`
@@ -83,6 +90,25 @@ func (api *API) ListWAFPackages(zoneID string) ([]WAFPackage, error) {
 		packages = append(packages, p.Result[pi])
 	}
 	return packages, nil
+}
+
+// WAFPackage returns a WAF package for the given zone.
+//
+// API Reference: https://api.cloudflare.com/#waf-rule-packages-firewall-package-details
+func (api *API) WAFPackage(zoneID, packageID string) (WAFPackage, error) {
+	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return WAFPackage{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var r WAFPackageResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return WAFPackage{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return r.Result, nil
 }
 
 // ListWAFRules returns a slice of the WAF rules for the given WAF package.

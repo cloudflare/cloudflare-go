@@ -67,6 +67,55 @@ func TestListWAFPackages(t *testing.T) {
 	assert.Error(t, err)
 }
 
+func TestWAFPackage(t *testing.T) {
+	setup()
+	defer teardown()
+
+	testZoneID := "abcd123"
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+
+		w.Header().Set("content-type", "application/json")
+		// JSON data from: https://api.cloudflare.com/#waf-rule-packages-properties
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result":
+			{
+				"id": "a25a9a7e9c00afc1fb2e0245519d725b",
+				"name": "WordPress rules",
+				"description": "Common WordPress exploit protections",
+				"detection_mode": "traditional",
+				"zone_id": "023e105f4ecef8ad9ca31a8372d0c353",
+				"status": "active"
+			}
+		}`)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/firewall/waf/packages/a25a9a7e9c00afc1fb2e0245519d725b", handler)
+
+	want := WAFPackage{
+		ID:            "a25a9a7e9c00afc1fb2e0245519d725b",
+		Name:          "WordPress rules",
+		Description:   "Common WordPress exploit protections",
+		ZoneID:        "023e105f4ecef8ad9ca31a8372d0c353",
+		DetectionMode: "traditional",
+		Sensitivity:   "",
+		ActionMode:    "",
+	}
+
+	d, err := client.WAFPackage(testZoneID, "a25a9a7e9c00afc1fb2e0245519d725b")
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, d)
+	}
+
+	_, err = client.WAFPackage(testZoneID, "123")
+	assert.Error(t, err)
+}
+
 func TestListWAFRules(t *testing.T) {
 	setup()
 	defer teardown()
