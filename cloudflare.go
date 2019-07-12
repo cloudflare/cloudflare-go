@@ -198,7 +198,7 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 			time.Sleep(sleepDuration)
 
 		}
-		api.rateLimiter.Wait(context.TODO())
+		err = api.rateLimiter.Wait(context.TODO())
 		if err != nil {
 			return nil, errors.Wrap(err, "Error caused by request rate limiting")
 		}
