@@ -72,6 +72,7 @@ func TestClient_Headers(t *testing.T) {
 		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
 		assert.Empty(t, r.Header.Get("X-Auth-Email"))
 		assert.Empty(t, r.Header.Get("X-Auth-Key"))
+		assert.Empty(t, r.Header.Get("Authorization"))
 		assert.Equal(t, "userservicekey", r.Header.Get("X-Auth-User-Service-Key"))
 		assert.Equal(t, "application/json", r.Header.Get("Content-Type"))
 	})
@@ -87,7 +88,24 @@ func TestClient_Headers(t *testing.T) {
 		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
 		assert.Empty(t, r.Header.Get("X-Auth-Email"))
 		assert.Empty(t, r.Header.Get("X-Auth-Key"))
+		assert.Empty(t, r.Header.Get("Authorization"))
 		assert.Equal(t, "userservicekey", r.Header.Get("X-Auth-User-Service-Key"))
+		assert.Equal(t, "application/json", r.Header.Get("Content-Type"))
+	})
+	client.UserDetails()
+	teardown()
+
+	// it should set Authorization and omit others credential headers when using NewWithAPIToken
+	setup()
+	client, err = NewWithAPIToken("my-api-token")
+	assert.NoError(t, err)
+	client.BaseURL = server.URL
+	mux.HandleFunc("/zones/123456", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Empty(t, r.Header.Get("X-Auth-Email"))
+		assert.Empty(t, r.Header.Get("X-Auth-Key"))
+		assert.Empty(t, r.Header.Get("X-Auth-User-Service-Key"))
+		assert.Equal(t, "Bearer my-api-token", r.Header.Get("Authorization"))
 		assert.Equal(t, "application/json", r.Header.Get("Content-Type"))
 	})
 	client.UserDetails()

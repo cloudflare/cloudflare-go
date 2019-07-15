@@ -20,11 +20,14 @@ import (
 )
 
 const apiURL = "https://api.cloudflare.com/client/v4"
+
 const (
 	// AuthKeyEmail specifies that we should authenticate with API key and email address
 	AuthKeyEmail = 1 << iota
 	// AuthUserService specifies that we should authenticate with a User-Service key
 	AuthUserService
+	// AuthToken specifies that we should authenticate with an API Token
+	AuthToken
 )
 
 // API holds the configuration for the current API client. A client should not
@@ -33,6 +36,7 @@ type API struct {
 	APIKey            string
 	APIEmail          string
 	APIUserServiceKey string
+	APIToken          string
 	BaseURL           string
 	OrganizationID    string
 	UserAgent         string
@@ -92,6 +96,23 @@ func New(key, email string, opts ...Option) (*API, error) {
 	return api, nil
 }
 
+// NewWithAPIToken creates a new Cloudflare v4 API client using API Tokens
+func NewWithAPIToken(token string, opts ...Option) (*API, error) {
+	if token == "" {
+		return nil, errors.New(errEmptyAPIToken)
+	}
+
+	api, err := newClient(opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	api.APIToken = token
+	api.authType = AuthToken
+
+	return api, nil
+}
+
 // NewWithUserServiceKey creates a new Cloudflare v4 API client using service key authentication.
 func NewWithUserServiceKey(key string, opts ...Option) (*API, error) {
 	if key == "" {
@@ -109,7 +130,7 @@ func NewWithUserServiceKey(key string, opts ...Option) (*API, error) {
 	return api, nil
 }
 
-// SetAuthType sets the authentication method (AuthyKeyEmail or AuthUserService).
+// SetAuthType sets the authentication method (AuthKeyEmail, AuthToken, or AuthUserService).
 func (api *API) SetAuthType(authType int) {
 	api.authType = authType
 }
@@ -141,7 +162,7 @@ func (api *API) ZoneIDByName(zoneName string) (string, error) {
 }
 
 // makeRequest makes a HTTP request and returns the body as a byte slice,
-// closing it before returnng. params will be serialized to JSON.
+// closing it before returning. params will be serialized to JSON.
 func (api *API) makeRequest(method, uri string, params interface{}) ([]byte, error) {
 	return api.makeRequestWithAuthType(context.TODO(), method, uri, params, api.authType)
 }
@@ -186,7 +207,7 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 		}
 		if i > 0 {
 			// expect the backoff introduced here on errored requests to dominate the effect of rate limiting
-			// dont need a random component here as the rate limiter should do something similar
+			// don't need a random component here as the rate limiter should do something similar
 			// nb time duration could truncate an arbitrary float. Since our inputs are all ints, we should be ok
 			sleepDuration := time.Duration(math.Pow(2, float64(i-1)) * float64(api.retryPolicy.MinRetryDelay))
 
@@ -277,6 +298,7 @@ func (api *API) request(ctx context.Context, method, uri string, reqBody io.Read
 	copyHeader(combinedHeaders, api.headers)
 	copyHeader(combinedHeaders, headers)
 	req.Header = combinedHeaders
+
 	if authType&AuthKeyEmail != 0 {
 		req.Header.Set("X-Auth-Key", api.APIKey)
 		req.Header.Set("X-Auth-Email", api.APIEmail)
@@ -284,6 +306,10 @@ func (api *API) request(ctx context.Context, method, uri string, reqBody io.Read
 	if authType&AuthUserService != 0 {
 		req.Header.Set("X-Auth-User-Service-Key", api.APIUserServiceKey)
 	}
+	if authType&AuthToken != 0 {
+		req.Header.Set("Authorization", "Bearer "+api.APIToken)
+	}
+
 	if api.UserAgent != "" {
 		req.Header.Set("User-Agent", api.UserAgent)
 	}
