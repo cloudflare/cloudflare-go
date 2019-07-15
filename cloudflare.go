@@ -206,7 +206,7 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 			reqBody = bytes.NewReader(jsonBody)
 		}
 		if i > 0 {
-			// expect the backoff introduced here on errorred requests to dominate the effect of rate limiting
+			// expect the backoff introduced here on errored requests to dominate the effect of rate limiting
 			// don't need a random component here as the rate limiter should do something similar
 			// nb time duration could truncate an arbitrary float. Since our inputs are all ints, we should be ok
 			sleepDuration := time.Duration(math.Pow(2, float64(i-1)) * float64(api.retryPolicy.MinRetryDelay))
