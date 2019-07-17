@@ -9,18 +9,19 @@ import (
 
 // ZoneCustomSSL represents custom SSL certificate metadata.
 type ZoneCustomSSL struct {
-	ID            string     `json:"id"`
-	Hosts         []string   `json:"hosts"`
-	Issuer        string     `json:"issuer"`
-	Signature     string     `json:"signature"`
-	Status        string     `json:"status"`
-	BundleMethod  string     `json:"bundle_method"`
-	ZoneID        string     `json:"zone_id"`
-	UploadedOn    time.Time  `json:"uploaded_on"`
-	ModifiedOn    time.Time  `json:"modified_on"`
-	ExpiresOn     time.Time  `json:"expires_on"`
-	Priority      int        `json:"priority"`
-	KeylessServer KeylessSSL `json:"keyless_server"`
+	ID              string            `json:"id"`
+	Hosts           []string          `json:"hosts"`
+	Issuer          string            `json:"issuer"`
+	Signature       string            `json:"signature"`
+	Status          string            `json:"status"`
+	BundleMethod    string            `json:"bundle_method"`
+	GeoRestrictions map[string]string `json:"geo_restrictions"`
+	ZoneID          string            `json:"zone_id"`
+	UploadedOn      time.Time         `json:"uploaded_on"`
+	ModifiedOn      time.Time         `json:"modified_on"`
+	ExpiresOn       time.Time         `json:"expires_on"`
+	Priority        int               `json:"priority"`
+	KeylessServer   KeylessSSL        `json:"keyless_server"`
 }
 
 // zoneCustomSSLResponse represents the response from the zone SSL details endpoint.
@@ -38,9 +39,11 @@ type zoneCustomSSLsResponse struct {
 // ZoneCustomSSLOptions represents the parameters to create or update an existing
 // custom SSL configuration.
 type ZoneCustomSSLOptions struct {
-	Certificate  string `json:"certificate"`
-	PrivateKey   string `json:"private_key"`
-	BundleMethod string `json:"bundle_method,omitempty"`
+	Certificate     string            `json:"certificate"`
+	PrivateKey      string            `json:"private_key"`
+	BundleMethod    string            `json:"bundle_method,omitempty"`
+	GeoRestrictions map[string]string `json:"geo_restrictions,omitempty"`
+	Type            string            `json:"type,omitempty"`
 }
 
 // ZoneCustomSSLPriority represents a certificate's ID and priority. It is a
