@@ -24,6 +24,8 @@ type ZoneCustomSSL struct {
 	KeylessServer   KeylessSSL                   `json:"keyless_server"`
 }
 
+// ZoneCustomSSLGeoRestrictions represents the parameter to create or update
+// geographic restrictions on a custom ssl certificate.
 type ZoneCustomSSLGeoRestrictions struct {
 	Label string `json:"label"`
 }
