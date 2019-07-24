@@ -140,6 +140,7 @@ func TestCustomHostname_CreateCustomHostname_CustomOrigin(t *testing.T) {
 		assert.Equal(t, want, response)
 	}
 }
+
 func TestCustomHostname_CustomHostnames(t *testing.T) {
 	setup()
 	defer teardown()
