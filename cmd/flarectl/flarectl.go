@@ -88,8 +88,8 @@ func main() {
 							Usage: "automatically fetch DNS records",
 						},
 						cli.StringFlag{
-							Name:  "org-id",
-							Usage: "organization ID",
+							Name:  "account-id",
+							Usage: "account ID",
 						},
 					},
 				},
@@ -486,8 +486,8 @@ func main() {
 									Usage: "zone name",
 								},
 								cli.StringFlag{
-									Name:  "organization",
-									Usage: "organization name",
+									Name:  "account",
+									Usage: "account name",
 								},
 								cli.StringFlag{
 									Name:  "value",
@@ -519,8 +519,8 @@ func main() {
 									Usage: "zone name",
 								},
 								cli.StringFlag{
-									Name:  "organization",
-									Usage: "organization name",
+									Name:  "account",
+									Usage: "account name",
 								},
 								cli.StringFlag{
 									Name:  "value",
@@ -551,8 +551,8 @@ func main() {
 									Usage: "zone name",
 								},
 								cli.StringFlag{
-									Name:  "organization",
-									Usage: "organization name",
+									Name:  "account",
+									Usage: "account name",
 								},
 								cli.StringFlag{
 									Name:  "mode",
@@ -575,8 +575,8 @@ func main() {
 									Usage: "zone name",
 								},
 								cli.StringFlag{
-									Name:  "organization",
-									Usage: "organization name",
+									Name:  "account",
+									Usage: "account name",
 								},
 								cli.StringFlag{
 									Name:  "value",
@@ -607,8 +607,8 @@ func main() {
 									Usage: "zone name",
 								},
 								cli.StringFlag{
-									Name:  "organization",
-									Usage: "organization name",
+									Name:  "account",
+									Usage: "account name",
 								},
 							},
 						},

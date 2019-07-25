@@ -11,7 +11,7 @@ import (
 )
 
 func TestWorkersKV_CreateWorkersKVNamespace(t *testing.T) {
-	setup(UsingOrganization("foo"))
+	setup(UsingAccount("foo"))
 	defer teardown()
 
 	response := `{
@@ -45,7 +45,7 @@ func TestWorkersKV_CreateWorkersKVNamespace(t *testing.T) {
 }
 
 func TestWorkersKV_DeleteWorkersKVNamespace(t *testing.T) {
-	setup(UsingOrganization("foo"))
+	setup(UsingAccount("foo"))
 	defer teardown()
 
 	namespace := "3aeaxxxxee014exxxx4cf66xxxxc0448"
@@ -70,7 +70,7 @@ func TestWorkersKV_DeleteWorkersKVNamespace(t *testing.T) {
 }
 
 func TestWorkersKV_ListWorkersKVNamespace(t *testing.T) {
-	setup(UsingOrganization("foo"))
+	setup(UsingAccount("foo"))
 	defer teardown()
 
 	response := `{
@@ -137,7 +137,7 @@ func TestWorkersKV_ListWorkersKVNamespace(t *testing.T) {
 }
 
 func TestWorkersKV_UpdateWorkersKVNamespace(t *testing.T) {
-	setup(UsingOrganization("foo"))
+	setup(UsingAccount("foo"))
 	defer teardown()
 
 	namespace := "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
@@ -163,7 +163,7 @@ func TestWorkersKV_UpdateWorkersKVNamespace(t *testing.T) {
 }
 
 func TestWorkersKV_WriteWorkersKV(t *testing.T) {
-	setup(UsingOrganization("foo"))
+	setup(UsingAccount("foo"))
 	defer teardown()
 
 	key := "test_key"
@@ -191,7 +191,7 @@ func TestWorkersKV_WriteWorkersKV(t *testing.T) {
 }
 
 func TestWorkersKV_ReadWorkersKV(t *testing.T) {
-	setup(UsingOrganization("foo"))
+	setup(UsingAccount("foo"))
 	defer teardown()
 
 	key := "test_key"
@@ -212,7 +212,7 @@ func TestWorkersKV_ReadWorkersKV(t *testing.T) {
 }
 
 func TestWorkersKV_DeleteWorkersKV(t *testing.T) {
-	setup(UsingOrganization("foo"))
+	setup(UsingAccount("foo"))
 	defer teardown()
 
 	key := "test_key"
@@ -239,7 +239,7 @@ func TestWorkersKV_DeleteWorkersKV(t *testing.T) {
 }
 
 func TestWorkersKV_ListStorageKeys(t *testing.T) {
-	setup(UsingOrganization("foo"))
+	setup(UsingAccount("foo"))
 	defer teardown()
 
 	namespace := "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"

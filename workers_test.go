@@ -139,7 +139,7 @@ func TestWorkers_DeleteWorker(t *testing.T) {
 }
 
 func TestWorkers_DeleteWorkerWithName(t *testing.T) {
-	setup(UsingOrganization("foo"))
+	setup(UsingAccount("foo"))
 	defer teardown()
 
 	mux.HandleFunc("/accounts/foo/workers/scripts/bar", func(w http.ResponseWriter, r *http.Request) {
@@ -156,7 +156,7 @@ func TestWorkers_DeleteWorkerWithName(t *testing.T) {
 	}
 }
 
-func TestWorkers_DeleteWorkerWithNameErrorsWithoutOrgId(t *testing.T) {
+func TestWorkers_DeleteWorkerWithNameErrorsWithoutAccountId(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -185,7 +185,7 @@ func TestWorkers_DownloadWorker(t *testing.T) {
 }
 
 func TestWorkers_DownloadWorkerWithName(t *testing.T) {
-	setup(UsingOrganization("foo"))
+	setup(UsingAccount("foo"))
 	defer teardown()
 
 	mux.HandleFunc("/accounts/foo/workers/scripts/bar", func(w http.ResponseWriter, r *http.Request) {
@@ -204,7 +204,7 @@ func TestWorkers_DownloadWorkerWithName(t *testing.T) {
 	}
 }
 
-func TestWorkers_DownloadWorkerWithNameErrorsWithoutOrgId(t *testing.T) {
+func TestWorkers_DownloadWorkerWithNameErrorsWithoutAccountId(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -213,7 +213,7 @@ func TestWorkers_DownloadWorkerWithNameErrorsWithoutOrgId(t *testing.T) {
 }
 
 func TestWorkers_ListWorkerScripts(t *testing.T) {
-	setup(UsingOrganization("foo"))
+	setup(UsingAccount("foo"))
 	defer teardown()
 
 	mux.HandleFunc("/accounts/foo/workers/scripts", func(w http.ResponseWriter, r *http.Request) {
@@ -274,7 +274,7 @@ func TestWorkers_UploadWorker(t *testing.T) {
 }
 
 func TestWorkers_UploadWorkerWithName(t *testing.T) {
-	setup(UsingOrganization("foo"))
+	setup(UsingAccount("foo"))
 	defer teardown()
 
 	mux.HandleFunc("/accounts/foo/workers/scripts/bar", func(w http.ResponseWriter, r *http.Request) {
@@ -301,8 +301,8 @@ func TestWorkers_UploadWorkerWithName(t *testing.T) {
 	}
 }
 
-func TestWorkers_UploadWorkerSingleScriptWithOrg(t *testing.T) {
-	setup(UsingOrganization("foo"))
+func TestWorkers_UploadWorkerSingleScriptWithAccount(t *testing.T) {
+	setup(UsingAccount("foo"))
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/workers/script", func(w http.ResponseWriter, r *http.Request) {
@@ -329,7 +329,7 @@ func TestWorkers_UploadWorkerSingleScriptWithOrg(t *testing.T) {
 	}
 }
 
-func TestWorkers_UploadWorkerWithNameErrorsWithoutOrgId(t *testing.T) {
+func TestWorkers_UploadWorkerWithNameErrorsWithoutAccountId(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -356,7 +356,7 @@ func TestWorkers_CreateWorkerRoute(t *testing.T) {
 }
 
 func TestWorkers_CreateWorkerRouteEnt(t *testing.T) {
-	setup(UsingOrganization("foo"))
+	setup(UsingAccount("foo"))
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/workers/routes", func(w http.ResponseWriter, r *http.Request) {
@@ -373,8 +373,8 @@ func TestWorkers_CreateWorkerRouteEnt(t *testing.T) {
 
 }
 
-func TestWorkers_CreateWorkerRouteSingleScriptWithOrg(t *testing.T) {
-	setup(UsingOrganization("foo"))
+func TestWorkers_CreateWorkerRouteSingleScriptWithAccount(t *testing.T) {
+	setup(UsingAccount("foo"))
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/workers/filters", func(w http.ResponseWriter, r *http.Request) {
@@ -412,7 +412,7 @@ func TestWorkers_DeleteWorkerRoute(t *testing.T) {
 }
 
 func TestWorkers_DeleteWorkerRouteEnt(t *testing.T) {
-	setup(UsingOrganization("foo"))
+	setup(UsingAccount("foo"))
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/workers/filters/e7a57d8746e74ae49c25994dadb421b1", func(w http.ResponseWriter, r *http.Request) {
@@ -454,7 +454,7 @@ func TestWorkers_ListWorkerRoutes(t *testing.T) {
 }
 
 func TestWorkers_ListWorkerRoutesEnt(t *testing.T) {
-	setup(UsingOrganization("foo"))
+	setup(UsingAccount("foo"))
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/workers/routes", func(w http.ResponseWriter, r *http.Request) {
@@ -500,7 +500,7 @@ func TestWorkers_UpdateWorkerRoute(t *testing.T) {
 }
 
 func TestWorkers_UpdateWorkerRouteEnt(t *testing.T) {
-	setup(UsingOrganization("foo"))
+	setup(UsingAccount("foo"))
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/workers/routes/e7a57d8746e74ae49c25994dadb421b1", func(w http.ResponseWriter, r *http.Request) {
@@ -522,8 +522,8 @@ func TestWorkers_UpdateWorkerRouteEnt(t *testing.T) {
 
 }
 
-func TestWorkers_UpdateWorkerRouteSingleScriptWithOrg(t *testing.T) {
-	setup(UsingOrganization("foo"))
+func TestWorkers_UpdateWorkerRouteSingleScriptWithAccount(t *testing.T) {
+	setup(UsingAccount("foo"))
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/workers/filters/e7a57d8746e74ae49c25994dadb421b1", func(w http.ResponseWriter, r *http.Request) {

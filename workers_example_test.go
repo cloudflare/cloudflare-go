@@ -2,8 +2,9 @@ package cloudflare_test
 
 import (
 	"fmt"
-	cloudflare "github.com/cloudflare/cloudflare-go"
 	"log"
+
+	cloudflare "github.com/cloudflare/cloudflare-go"
 )
 
 var (
@@ -31,7 +32,7 @@ func ExampleAPI_UploadWorker() {
 }
 
 func UploadWorkerWithName() {
-	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization("foo"))
+	api, err := cloudflare.New(apiKey, user, cloudflare.UsingAccount("foo"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -64,7 +65,7 @@ func ExampleAPI_DownloadWorker() {
 }
 
 func DownloadWorkerWithName() {
-	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization("foo"))
+	api, err := cloudflare.New(apiKey, user, cloudflare.UsingAccount("foo"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -96,7 +97,7 @@ func ExampleAPI_DeleteWorker() {
 }
 
 func DeleteWorkerWithName() {
-	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization("foo"))
+	api, err := cloudflare.New(apiKey, user, cloudflare.UsingAccount("foo"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -109,7 +110,7 @@ func DeleteWorkerWithName() {
 }
 
 func ExampleAPI_ListWorkerScripts() {
-	api, err := cloudflare.New(apiKey, user, cloudflare.UsingOrganization("foo"))
+	api, err := cloudflare.New(apiKey, user, cloudflare.UsingAccount("foo"))
 	if err != nil {
 		log.Fatal(err)
 	}

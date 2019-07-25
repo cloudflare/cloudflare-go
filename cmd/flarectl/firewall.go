@@ -22,7 +22,7 @@ func formatAccessRule(rule cloudflare.AccessRule) []string {
 }
 
 func firewallAccessRules(c *cli.Context) {
-	organizationID, zoneID, err := getScope(c)
+	accountID, zoneID, err := getScope(c)
 	if err != nil {
 		return
 	}
@@ -43,8 +43,8 @@ func firewallAccessRules(c *cli.Context) {
 
 	var response *cloudflare.AccessRuleListResponse
 	switch {
-	case organizationID != "":
-		response, err = api.ListOrganizationAccessRules(organizationID, rule, 1)
+	case accountID != "":
+		response, err = api.ListAccountAccessRules(accountID, rule, 1)
 	case zoneID != "":
 		response, err = api.ListZoneAccessRules(zoneID, rule, 1)
 	default:
@@ -60,8 +60,8 @@ func firewallAccessRules(c *cli.Context) {
 	if totalPages > 1 {
 		for page := 2; page <= totalPages; page++ {
 			switch {
-			case organizationID != "":
-				response, err = api.ListOrganizationAccessRules(organizationID, rule, page)
+			case accountID != "":
+				response, err = api.ListAccountAccessRules(accountID, rule, page)
 			case zoneID != "":
 				response, err = api.ListZoneAccessRules(zoneID, rule, page)
 			default:
@@ -87,7 +87,7 @@ func firewallAccessRuleCreate(c *cli.Context) {
 		fmt.Println(err)
 		return
 	}
-	organizationID, zoneID, err := getScope(c)
+	accountID, zoneID, err := getScope(c)
 	if err != nil {
 		return
 	}
@@ -107,8 +107,8 @@ func firewallAccessRuleCreate(c *cli.Context) {
 	)
 
 	switch {
-	case organizationID != "":
-		resp, err := api.CreateOrganizationAccessRule(organizationID, rule)
+	case accountID != "":
+		resp, err := api.CreateAccountAccessRule(accountID, rule)
 		if err != nil {
 			errors.Wrap(err, errCreating)
 		}
@@ -141,7 +141,7 @@ func firewallAccessRuleUpdate(c *cli.Context) {
 		return
 	}
 	id := c.String("id")
-	organizationID, zoneID, err := getScope(c)
+	accountID, zoneID, err := getScope(c)
 	if err != nil {
 		return
 	}
@@ -158,8 +158,8 @@ func firewallAccessRuleUpdate(c *cli.Context) {
 		errUpdating = "error updating firewall access rule"
 	)
 	switch {
-	case organizationID != "":
-		resp, err := api.UpdateOrganizationAccessRule(organizationID, id, rule)
+	case accountID != "":
+		resp, err := api.UpdateAccountAccessRule(accountID, id, rule)
 		if err != nil {
 			errors.Wrap(err, errUpdating)
 		}
@@ -191,7 +191,7 @@ func firewallAccessRuleCreateOrUpdate(c *cli.Context) {
 		fmt.Println(err)
 		return
 	}
-	organizationID, zoneID, err := getScope(c)
+	accountID, zoneID, err := getScope(c)
 	if err != nil {
 		return
 	}
@@ -205,8 +205,8 @@ func firewallAccessRuleCreateOrUpdate(c *cli.Context) {
 	}
 	var response *cloudflare.AccessRuleListResponse
 	switch {
-	case organizationID != "":
-		response, err = api.ListOrganizationAccessRules(organizationID, rule, 1)
+	case accountID != "":
+		response, err = api.ListAccountAccessRules(accountID, rule, 1)
 	case zoneID != "":
 		response, err = api.ListZoneAccessRules(zoneID, rule, 1)
 	default:
@@ -228,8 +228,8 @@ func firewallAccessRuleCreateOrUpdate(c *cli.Context) {
 				rule.Notes = r.Notes
 			}
 			switch {
-			case organizationID != "":
-				_, err = api.UpdateOrganizationAccessRule(organizationID, r.ID, rule)
+			case accountID != "":
+				_, err = api.UpdateAccountAccessRule(accountID, r.ID, rule)
 			case zoneID != "":
 				_, err = api.UpdateZoneAccessRule(zoneID, r.ID, rule)
 			default:
@@ -241,8 +241,8 @@ func firewallAccessRuleCreateOrUpdate(c *cli.Context) {
 		}
 	} else {
 		switch {
-		case organizationID != "":
-			_, err = api.CreateOrganizationAccessRule(organizationID, rule)
+		case accountID != "":
+			_, err = api.CreateAccountAccessRule(accountID, rule)
 		case zoneID != "":
 			_, err = api.CreateZoneAccessRule(zoneID, rule)
 		default:
@@ -261,7 +261,7 @@ func firewallAccessRuleDelete(c *cli.Context) {
 	}
 	ruleID := c.String("id")
 
-	organizationID, zoneID, err := getScope(c)
+	accountID, zoneID, err := getScope(c)
 	if err != nil {
 		return
 	}
@@ -271,8 +271,8 @@ func firewallAccessRuleDelete(c *cli.Context) {
 		errDeleting = "error deleting firewall access rule"
 	)
 	switch {
-	case organizationID != "":
-		resp, err := api.DeleteOrganizationAccessRule(organizationID, ruleID)
+	case accountID != "":
+		resp, err := api.DeleteAccountAccessRule(accountID, ruleID)
 		if err != nil {
 			errors.Wrap(err, errDeleting)
 		}
@@ -302,22 +302,23 @@ func firewallAccessRuleDelete(c *cli.Context) {
 }
 
 func getScope(c *cli.Context) (string, string, error) {
-	var organization, organizationID string
-	if c.String("organization") != "" {
-		organization = c.String("organization")
-		organizations, _, err := api.ListOrganizations()
+	var account, accountID string
+	if c.String("account") != "" {
+		account = c.String("account")
+		pageOpts := cloudflare.PaginationOptions{}
+		accounts, _, err := api.Accounts(pageOpts)
 		if err != nil {
 			fmt.Println(err)
 			return "", "", err
 		}
-		for _, org := range organizations {
-			if org.Name == organization {
-				organizationID = org.ID
+		for _, acc := range accounts {
+			if acc.Name == account {
+				accountID = acc.ID
 				break
 			}
 		}
-		if organizationID == "" {
-			err := errors.New("Organization could not be found")
+		if accountID == "" {
+			err := errors.New("account could not be found")
 			fmt.Println(err)
 			return "", "", err
 		}
@@ -334,13 +335,13 @@ func getScope(c *cli.Context) (string, string, error) {
 		zoneID = id
 	}
 
-	if zoneID != "" && organizationID != "" {
-		err := errors.New("Cannot specify both --zone and --organization")
+	if zoneID != "" && accountID != "" {
+		err := errors.New("Cannot specify both --zone and --account")
 		fmt.Println(err)
 		return "", "", err
 	}
 
-	return organizationID, zoneID, nil
+	return accountID, zoneID, nil
 }
 
 func getConfiguration(c *cli.Context) cloudflare.AccessRuleConfiguration {

@@ -35,7 +35,7 @@ func initializeAPI(c *cli.Context) error {
 	}
 
 	if c.IsSet("accountid") {
-		cloudflare.UsingOrganization(c.String("accountid"))(api)
+		cloudflare.UsingAccount(c.String("accountid"))(api)
 	}
 
 	return nil
