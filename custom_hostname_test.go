@@ -94,24 +94,24 @@ func TestCustomHostname_CreateCustomHostname_CustomOrigin(t *testing.T) {
 		w.WriteHeader(http.StatusCreated)
 		fmt.Fprintf(w, `
 {
-  "success": true,
-  "errors": [],
-  "messages": [],
-  "result": {
-    "id": "0d89c70d-ad9f-4843-b99f-6cc0252067e9",
-	"hostname": "app.example.com",
-	"custom_origin_server": "example.app.com",
-    "ssl": {
-      "status": "pending_validation",
-      "method": "cname",
-      "type": "dv",
-      "cname_target": "dcv.digicert.com",
-      "cname": "810b7d5f01154524b961ba0cd578acc2.app.example.com",
-      "settings": {
-        "http2": "on"
-      }
-    }
-  }
+	"success": true,
+	"errors": [],
+	"messages": [],
+	"result": {
+		"id": "0d89c70d-ad9f-4843-b99f-6cc0252067e9",
+		"hostname": "app.example.com",
+		"custom_origin_server": "example.app.com",
+		"ssl": {
+			"status": "pending_validation",
+			"method": "cname",
+			"type": "dv",
+			"cname_target": "dcv.digicert.com",
+			"cname": "810b7d5f01154524b961ba0cd578acc2.app.example.com",
+			"settings": {
+			"http2": "on"
+			}
+		}
+  	}
 }`)
 	})
 
@@ -150,29 +150,29 @@ func TestCustomHostname_CustomHostnames(t *testing.T) {
 
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
-"success": true,
-"result": [
-    {
-      "id": "custom_host_1",
-      "hostname": "custom.host.one",
+	"success": true,
+	"result": [
+		{
+			"id": "custom_host_1",
+			"hostname": "custom.host.one",
 			"ssl": {
-        "type": "dv",
-        "method": "cname",
-        "status": "pending_validation",
-        "cname_target": "dcv.digicert.com",
-        "cname": "810b7d5f01154524b961ba0cd578acc2.app.example.com"
-      },
-      "custom_metadata": {
+				"type": "dv",
+				"method": "cname",
+				"status": "pending_validation",
+				"cname_target": "dcv.digicert.com",
+				"cname": "810b7d5f01154524b961ba0cd578acc2.app.example.com"
+			},
+			"custom_metadata": {
 				"a_random_field": "random field value"
-      }
-    }
-],
-"result_info": {
-	  "page": 1,
-    "per_page": 20,
-    "count": 5,
-    "total_count": 5
-}
+			}
+		}
+	],
+	"result_info": {
+		"page": 1,
+		"per_page": 20,
+		"count": 5,
+		"total_count": 5
+	}
 }`)
 	})
 
