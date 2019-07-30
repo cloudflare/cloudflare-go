@@ -170,6 +170,71 @@ func TestUpdateWAFPackage(t *testing.T) {
 	}
 }
 
+func TestListWAFGroups(t *testing.T) {
+	setup()
+	defer teardown()
+
+	testZoneID := "abcd123"
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+
+		w.Header().Set("content-type", "application/json")
+
+		// JSON data from: https://api.cloudflare.com/#waf-rule-groups-properties
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": [
+				{
+					"id": "de677e5818985db1285d0e80225f06e5",
+					"name": "Project Honey Pot",
+					"description": "Group designed to protect against IP addresses that are a threat and typically used to launch DDoS attacks",
+					"rules_count": 10,
+					"modified_rules_count": 2,
+					"package_id": "a25a9a7e9c00afc1fb2e0245519d725b",
+					"mode": "on",
+					"allowed_modes": [
+						"on",
+						"off"
+					]
+				}
+			],
+			"result_info": {
+				"page": 1,
+				"per_page": 20,
+				"count": 1,
+				"total_count": 2000
+			}
+			}`)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/firewall/waf/packages/a25a9a7e9c00afc1fb2e0245519d725b/groups", handler)
+
+	want := []WAFGroup{
+		{
+			ID:                 "de677e5818985db1285d0e80225f06e5",
+			Name:               "Project Honey Pot",
+			Description:        "Group designed to protect against IP addresses that are a threat and typically used to launch DDoS attacks",
+			RulesCount:         10,
+			ModifiedRulesCount: 2,
+			PackageID:          "a25a9a7e9c00afc1fb2e0245519d725b",
+			Mode:               "on",
+			AllowedModes:       []string{"on", "off"},
+		},
+	}
+
+	d, err := client.ListWAFGroups(testZoneID, "a25a9a7e9c00afc1fb2e0245519d725b")
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, d)
+	}
+
+	_, err = client.ListWAFGroups(testZoneID, "123")
+	assert.Error(t, err)
+}
+
 func TestListWAFRules(t *testing.T) {
 	setup()
 	defer teardown()
