@@ -211,6 +211,25 @@ func (api *API) WAFGroup(zoneID, packageID, groupID string) (WAFGroup, error) {
 	return r.Result, nil
 }
 
+// UpdateWAFGroup lets you update the mode of a WAF Group.
+//
+// API Reference: https://api.cloudflare.com/#waf-rule-groups-edit-rule-group
+func (api *API) UpdateWAFGroup(zoneID, packageID, groupID, mode string) (WAFGroup, error) {
+	opts := WAFRuleOptions{Mode: mode}
+	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID + "/groups/" + groupID
+	res, err := api.makeRequest("PATCH", uri, opts)
+	if err != nil {
+		return WAFGroup{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var r WAFGroupResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return WAFGroup{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
+
 // ListWAFRules returns a slice of the WAF rules for the given WAF package.
 //
 // API Reference: https://api.cloudflare.com/#waf-rules-list-rules
