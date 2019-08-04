@@ -10,7 +10,7 @@ github.com/pkg/errors
 github.com/pmezard/go-difflib/difflib
 # github.com/stretchr/testify v1.3.0
 github.com/stretchr/testify/assert
-# github.com/urfave/cli v1.20.0
+# github.com/urfave/cli v1.21.0
 github.com/urfave/cli
 # golang.org/x/time v0.0.0-20190513212739-9d24e82272b4
 golang.org/x/time/rate
