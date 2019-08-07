@@ -80,6 +80,47 @@ func zoneList(c *cli.Context) {
 	writeTable(output, "ID", "Name", "Plan", "Status")
 }
 
+func zoneCreateLockdown(c *cli.Context) {
+	if err := checkFlags(c, "zone", "urls", "targets", "values"); err != nil {
+		return
+	}
+	zoneID, err := api.ZoneIDByName(c.String("zone"))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	targets := c.StringSlice("targets")
+	values := c.StringSlice("values")
+	if len(targets) != len(values) {
+		cli.ShowCommandHelp(c, "targets and values does not match")
+		return
+	}
+	var zonelockdownconfigs = []cloudflare.ZoneLockdownConfig{}
+	for index := 0; index < len(targets); index++ {
+		zonelockdownconfigs = append(zonelockdownconfigs, cloudflare.ZoneLockdownConfig{
+			Target: c.StringSlice("targets")[index],
+			Value:  c.StringSlice("values")[index],
+		})
+	}
+	lockdown := cloudflare.ZoneLockdown{
+		Description:    c.String("description"),
+		URLs:           c.StringSlice("urls"),
+		Configurations: zonelockdownconfigs,
+	}
+
+	var resp *cloudflare.ZoneLockdownResponse
+
+	resp, err = api.CreateZoneLockdown(zoneID, lockdown)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "Error creating ZONE lock down: ", err)
+		return
+	}
+	output := make([][]string, 0, 1)
+	output = append(output, formatLockdownResponse(resp))
+
+	writeTable(output, "ID")
+}
+
 func zoneInfo(c *cli.Context) {
 	var zone string
 	if len(c.Args()) > 0 {
@@ -243,6 +284,12 @@ func zoneRecords(c *cli.Context) {
 }
 
 func formatCacheResponse(resp cloudflare.PurgeCacheResponse) []string {
+	return []string{
+		resp.Result.ID,
+	}
+}
+
+func formatLockdownResponse(resp *cloudflare.ZoneLockdownResponse) []string {
 	return []string{
 		resp.Result.ID,
 	}
