@@ -117,6 +117,30 @@ func main() {
 					},
 				},
 				{
+					Name:    "lockdown",
+					Aliases: []string{"lo"},
+					Action:  zoneCreateLockdown,
+					Usage:   "Lockdown a zone based on config",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+						cli.StringSliceFlag{
+							Name:  "urls",
+							Usage: "a list of [exact] URLs to lockdown",
+						},
+						cli.StringSliceFlag{
+							Name:  "targets",
+							Usage: "a list of targets type",
+						},
+						cli.StringSliceFlag{
+							Name:  "values",
+							Usage: "a list of values such as ip, ip_range etc.",
+						},
+					},
+				},
+				{
 					Name:    "plan",
 					Aliases: []string{"p"},
 					Action:  zonePlan,
