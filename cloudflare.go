@@ -181,30 +181,35 @@ func (api *API) makeRequestWithAuthType(ctx context.Context, method, uri string,
 
 func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, uri string, params interface{}, authType int, headers http.Header) ([]byte, error) {
 	var err error
-	var reqBody io.Reader
-
+	var jsonBody []byte
 	if params != nil {
 		switch v := params.(type) {
 		case []byte:
-			// If params is []byte then pass through to the request body untouched as a io.Reader
-			reqBody = bytes.NewReader(v)
+			// If params is []byte then pass through to the request body untouched
+			jsonBody = v
 		case io.Reader:
-			// If params is already an io.Reader, e.g. from a multipart form then pass through
-			reqBody = v
+			// If params is already an io.Reader, e.g. from a multipart form then consume into bytes
+			jsonBody, err = ioutil.ReadAll(v)
+			if err != nil {
+				return nil, errors.Wrap(err, "error reading request body")
+			}
 		default:
 			// Anything else we try to JSON encode
-			jsonBody, err := json.Marshal(params)
+			jsonBody, err = json.Marshal(params)
 			if err != nil {
 				return nil, errors.Wrap(err, "error marshalling params to JSON")
 			}
-			reqBody = bytes.NewReader(jsonBody)
 		}
 	}
 
 	var resp *http.Response
 	var respErr error
 	var respBody []byte
+	var reqBody io.Reader
 	for i := 0; i <= api.retryPolicy.MaxRetries; i++ {
+		if jsonBody != nil {
+			reqBody = bytes.NewReader(jsonBody)
+		}
 		if i > 0 {
 			// expect the backoff introduced here on errored requests to dominate the effect of rate limiting
 			// don't need a random component here as the rate limiter should do something similar

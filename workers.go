@@ -328,10 +328,10 @@ func (api *API) UploadWorkerWithBindings(requestParams *WorkerRequestParams, res
 //
 // API reference: https://api.cloudflare.com/#worker-script-upload-worker and https://developers.cloudflare.com/workers/api/resource-bindings/
 func (api *API) uploadWorkerWithBindingsAndName(scriptName string, formData *bytes.Buffer, contentType string) (WorkerScriptResponse, error) {
-	if api.OrganizationID == "" {
-		return WorkerScriptResponse{}, errors.New("organization ID required for enterprise only request")
+	if api.AccountID == "" {
+		return WorkerScriptResponse{}, errors.New("account ID required for enterprise only request")
 	}
-	uri := "/accounts/" + api.OrganizationID + "/workers/scripts/" + scriptName
+	uri := "/accounts/" + api.AccountID + "/workers/scripts/" + scriptName
 	headers := make(http.Header)
 	headers.Set("Content-Type", contentType)
 	var r WorkerScriptResponse
