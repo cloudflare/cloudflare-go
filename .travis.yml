@@ -9,6 +9,7 @@ env:
   global:
     - MOD_VENDOR="-mod=vendor"
     - GO111MODULE=on
+    - GOPROXY=https://proxy.golang.org
 
 matrix:
   fast_finish: true
