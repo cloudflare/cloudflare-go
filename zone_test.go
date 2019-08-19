@@ -891,3 +891,74 @@ func TestCreateZonePartialSetup(t *testing.T) {
 		assert.Equal(t, expectedPartialZoneSetup, actual)
 	}
 }
+
+func TestFallbackOrigin_FallbackOrigin(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/zones/foo/fallback_origin", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+"success": true,
+"errors": [],
+"messages": [],
+"result": {
+    "id": "fallback_origin",
+    "value": "app.example.com",
+    "editable": true
+  }
+}`)
+	})
+
+	fallbackOrigin, err := client.FallbackOrigin("foo")
+
+	want := FallbackOrigin{
+		ID:       "fallback_origin",
+		Value:    "app.example.com",
+		Editable: true,
+	}
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, fallbackOrigin)
+	}
+}
+
+func TestFallbackOrigin_UpdateFallbackOrigin(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/zones/foo/fallback_origin", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "PATCH", r.Method, "Expected method 'PATCH', got %s", r.Method)
+
+		w.Header().Set("content-type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		fmt.Fprintf(w, `
+{
+  "success": true,
+  "errors": [],
+  "messages": [],
+  "result": {
+    "id": "fallback_origin",
+    "value": "app.example.com",
+		"editable": true
+  }
+}`)
+	})
+
+	response, err := client.UpdateFallbackOrigin("foo", FallbackOrigin{Value: "app.example.com"})
+
+	want := &FallbackOriginResponse{
+		Result: FallbackOrigin{
+			ID:       "fallback_origin",
+			Value:    "app.example.com",
+			Editable: true,
+		},
+		Response: Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}},
+	}
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, response)
+	}
+}
