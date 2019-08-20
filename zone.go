@@ -270,9 +270,8 @@ type newZone struct {
 
 // FallbackOrigin describes a fallback origin
 type FallbackOrigin struct {
-	Value    string `json:"value"`
-	ID       string `json:"id,omitempty"`
-	Editable bool   `json:"editable,omitempty"`
+	Value string `json:"value"`
+	ID    string `json:"id,omitempty"`
 }
 
 // FallbackOriginResponse represents the response from the fallback_origin endpoint
@@ -704,6 +703,7 @@ func (api *API) ZoneSSLSettings(zoneID string) (ZoneSSLSetting, error) {
 
 // FallbackOrigin returns information about the fallback origin for the specified zone.
 //
+// API reference: https://developers.cloudflare.com/ssl/ssl-for-saas/api-calls/#fallback-origin-configuration
 func (api *API) FallbackOrigin(zoneID string) (FallbackOrigin, error) {
 	uri := "/zones/" + zoneID + "/fallback_origin"
 	res, err := api.makeRequest("GET", uri, nil)
@@ -722,6 +722,7 @@ func (api *API) FallbackOrigin(zoneID string) (FallbackOrigin, error) {
 
 // UpdateFallbackOrigin updates the fallback origin for a given zone.
 //
+// API reference: https://developers.cloudflare.com/ssl/ssl-for-saas/api-calls/#4-example-patch-to-change-fallback-origin
 func (api *API) UpdateFallbackOrigin(zoneID string, fbo FallbackOrigin) (*FallbackOriginResponse, error) {
 	uri := "/zones/" + zoneID + "/fallback_origin"
 	res, err := api.makeRequest("PATCH", uri, fbo)

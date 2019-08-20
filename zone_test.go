@@ -915,9 +915,8 @@ func TestFallbackOrigin_FallbackOrigin(t *testing.T) {
 	fallbackOrigin, err := client.FallbackOrigin("foo")
 
 	want := FallbackOrigin{
-		ID:       "fallback_origin",
-		Value:    "app.example.com",
-		Editable: true,
+		ID:    "fallback_origin",
+		Value: "app.example.com",
 	}
 
 	if assert.NoError(t, err) {
@@ -951,9 +950,8 @@ func TestFallbackOrigin_UpdateFallbackOrigin(t *testing.T) {
 
 	want := &FallbackOriginResponse{
 		Result: FallbackOrigin{
-			ID:       "fallback_origin",
-			Value:    "app.example.com",
-			Editable: true,
+			ID:    "fallback_origin",
+			Value: "app.example.com",
 		},
 		Response: Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}},
 	}
