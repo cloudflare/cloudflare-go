@@ -15,33 +15,33 @@ type AccessIdentityProvider struct {
 	Config interface{} `json:"config"`
 }
 
-// AzureADConfiguration is the representation of the Azure AD identity
+// AccessAzureADConfiguration is the representation of the Azure AD identity
 // provider.
 //
 // API reference: https://developers.cloudflare.com/access/configuring-identity-providers/azuread/
-type AzureADConfiguration struct {
+type AccessAzureADConfiguration struct {
 	ClientID      string `json:"client_id"`
 	ClientSecret  string `json:"client_secret"`
 	DirectoryID   string `json:"directory_id"`
 	SupportGroups bool   `json:"support_groups"`
 }
 
-// CentrifyConfiguration is the representation of the Centrify identity
+// AccessCentrifyConfiguration is the representation of the Centrify identity
 // provider.
 //
 // API reference: https://developers.cloudflare.com/access/configuring-identity-providers/centrify/
-type CentrifyConfiguration struct {
+type AccessCentrifyConfiguration struct {
 	ClientID        string `json:"client_id"`
 	ClientSecret    string `json:"client_secret"`
 	CentrifyAccount string `json:"centrify_account"`
 	CentrifyAppID   string `json:"centrify_app_id"`
 }
 
-// CentrifySAMLConfiguration is the representation of the Centrify
+// AccessCentrifySAMLConfiguration is the representation of the Centrify
 // identity provider using SAML.
 //
 // API reference: https://developers.cloudflare.com/access/configuring-identity-providers/saml-centrify/
-type CentrifySAMLConfiguration struct {
+type AccessCentrifySAMLConfiguration struct {
 	IssuerURL          string   `json:"issuer_url"`
 	SsoTargetURL       string   `json:"sso_target_url"`
 	Attributes         []string `json:"attributes"`
@@ -50,30 +50,30 @@ type CentrifySAMLConfiguration struct {
 	IdpPublicCert      string   `json:"idp_public_cert"`
 }
 
-// FacebookConfiguration is the representation of the Facebook identity
+// AccessFacebookConfiguration is the representation of the Facebook identity
 // provider.
 //
 // API reference: https://developers.cloudflare.com/access/configuring-identity-providers/facebook-login/
-type FacebookConfiguration struct {
+type AccessFacebookConfiguration struct {
 	ClientID     string `json:"client_id"`
 	ClientSecret string `json:"client_secret"`
 }
 
-// GSuiteConfiguration is the representation of the GSuite identity
+// AccessGSuiteConfiguration is the representation of the GSuite identity
 // provider.
 //
 // API reference: https://developers.cloudflare.com/access/configuring-identity-providers/gsuite/
-type GSuiteConfiguration struct {
+type AccessGSuiteConfiguration struct {
 	ClientID     string `json:"client_id"`
 	ClientSecret string `json:"client_secret"`
 	AppsDomain   string `json:"apps_domain"`
 }
 
-// GenericOIDCConfiguration is the representation of the generic OpenID
+// AccessGenericOIDCConfiguration is the representation of the generic OpenID
 // Connect (OIDC) connector.
 //
 // API reference: https://developers.cloudflare.com/access/configuring-identity-providers/generic-oidc/
-type GenericOIDCConfiguration struct {
+type AccessGenericOIDCConfiguration struct {
 	ClientID     string `json:"client_id"`
 	ClientSecret string `json:"client_secret"`
 	AuthURL      string `json:"auth_url"`
@@ -81,29 +81,29 @@ type GenericOIDCConfiguration struct {
 	CertsURL     string `json:"certs_url"`
 }
 
-// GitHubConfiguration is the representation of the GitHub identity
+// AccessGitHubConfiguration is the representation of the GitHub identity
 // provider.
 //
 // API reference: https://developers.cloudflare.com/access/configuring-identity-providers/github/
-type GitHubConfiguration struct {
+type AccessGitHubConfiguration struct {
 	ClientID     string `json:"client_id"`
 	ClientSecret string `json:"client_secret"`
 }
 
-// GoogleConfiguration is the representation of the Google identity
+// AccessGoogleConfiguration is the representation of the Google identity
 // provider.
 //
 // API reference: https://developers.cloudflare.com/access/configuring-identity-providers/google/
-type GoogleConfiguration struct {
+type AccessGoogleConfiguration struct {
 	ClientID     string `json:"client_id"`
 	ClientSecret string `json:"client_secret"`
 }
 
-// JumpCloudSAMLConfiguration is the representation of the Jump Cloud
+// AccessJumpCloudSAMLConfiguration is the representation of the Jump Cloud
 // identity provider using SAML.
 //
 // API reference: https://developers.cloudflare.com/access/configuring-identity-providers/jumpcloud-saml/
-type JumpCloudSAMLConfiguration struct {
+type AccessJumpCloudSAMLConfiguration struct {
 	IssuerURL          string   `json:"issuer_url"`
 	SsoTargetURL       string   `json:"sso_target_url"`
 	Attributes         []string `json:"attributes"`
@@ -112,20 +112,20 @@ type JumpCloudSAMLConfiguration struct {
 	IdpPublicCert      string   `json:"idp_public_cert"`
 }
 
-// OktaConfiguration is the representation of the Okta identity provider.
+// AccessOktaConfiguration is the representation of the Okta identity provider.
 //
 // API reference: https://developers.cloudflare.com/access/configuring-identity-providers/okta/
-type OktaConfiguration struct {
+type AccessOktaConfiguration struct {
 	ClientID     string `json:"client_id"`
 	ClientSecret string `json:"client_secret"`
 	OktaAccount  string `json:"okta_account"`
 }
 
-// OktaSAMLConfiguration is the representation of the Okta identity
+// AccessOktaSAMLConfiguration is the representation of the Okta identity
 // provider using SAML.
 //
 // API reference: https://developers.cloudflare.com/access/configuring-identity-providers/saml-okta/
-type OktaSAMLConfiguration struct {
+type AccessOktaSAMLConfiguration struct {
 	IssuerURL          string   `json:"issuer_url"`
 	SsoTargetURL       string   `json:"sso_target_url"`
 	Attributes         []string `json:"attributes"`
@@ -134,27 +134,27 @@ type OktaSAMLConfiguration struct {
 	IdpPublicCert      string   `json:"idp_public_cert"`
 }
 
-// OneTimePinCnfiguration is the representation of the default One Time
+// AccessOneTimePinConfiguration is the representation of the default One Time
 // Pin identity provider.
 //
 // API reference: https://developers.cloudflare.com/access/configuring-identity-providers/one-time-pin/
-type OneTimePinCnfiguration struct{}
+type AccessOneTimePinConfiguration struct{}
 
-// OneLoginOIDCConfiguration is the representation of the OneLogin
+// AccessOneLoginOIDCConfiguration is the representation of the OneLogin
 // OpenID connector as an identity provider.
 //
 // API reference: https://developers.cloudflare.com/access/configuring-identity-providers/onelogin-oidc/
-type OneLoginOIDCConfiguration struct {
+type AccessOneLoginOIDCConfiguration struct {
 	ClientID        string `json:"client_id"`
 	ClientSecret    string `json:"client_secret"`
 	OneloginAccount string `json:"onelogin_account"`
 }
 
-// OneLoginSAMLConfiguration is the representation of the OneLogin
+// AccessOneLoginSAMLConfiguration is the representation of the OneLogin
 // identity provider using SAML.
 //
 // API reference: https://developers.cloudflare.com/access/configuring-identity-providers/onelogin-saml/
-type OneLoginSAMLConfiguration struct {
+type AccessOneLoginSAMLConfiguration struct {
 	IssuerURL          string   `json:"issuer_url"`
 	SsoTargetURL       string   `json:"sso_target_url"`
 	Attributes         []string `json:"attributes"`
@@ -163,11 +163,11 @@ type OneLoginSAMLConfiguration struct {
 	IdpPublicCert      string   `json:"idp_public_cert"`
 }
 
-// PingSAMLConfiguration is the representation of the Ping identity
+// AccessPingSAMLConfiguration is the representation of the Ping identity
 // provider using SAML.
 //
 // API reference: https://developers.cloudflare.com/access/configuring-identity-providers/ping-saml/
-type PingSAMLConfiguration struct {
+type AccessPingSAMLConfiguration struct {
 	IssuerURL          string   `json:"issuer_url"`
 	SsoTargetURL       string   `json:"sso_target_url"`
 	Attributes         []string `json:"attributes"`
@@ -176,19 +176,19 @@ type PingSAMLConfiguration struct {
 	IdpPublicCert      string   `json:"idp_public_cert"`
 }
 
-// YandexConfiguration is the representation of the Yandex identity provider.
+// AccessYandexConfiguration is the representation of the Yandex identity provider.
 //
 // API reference: https://developers.cloudflare.com/access/configuring-identity-providers/yandex/
-type YandexConfiguration struct {
+type AccessYandexConfiguration struct {
 	ClientID     string `json:"client_id"`
 	ClientSecret string `json:"client_secret"`
 }
 
-// ADSAMLConfiguration is the representation of the Active Directory
+// AccessADSAMLConfiguration is the representation of the Active Directory
 // identity provider using SAML.
 //
 // API reference: https://developers.cloudflare.com/access/configuring-identity-providers/adfs/
-type ADSAMLConfiguration struct {
+type AccessADSAMLConfiguration struct {
 	IssuerURL          string   `json:"issuer_url"`
 	SsoTargetURL       string   `json:"sso_target_url"`
 	Attributes         []string `json:"attributes"`

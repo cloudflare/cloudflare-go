@@ -125,7 +125,7 @@ func TestCreateAccessIdentityProvider(t *testing.T) {
 	newIdentityProvider := AccessIdentityProvider{
 		Name: "Widget Corps OTP",
 		Type: "github",
-		Config: GitHubConfiguration{
+		Config: AccessGitHubConfiguration{
 			ClientID:     "example_id",
 			ClientSecret: "a-secret-key",
 		},
@@ -176,7 +176,7 @@ func TestUpdateAccessIdentityProvider(t *testing.T) {
 	updatedIdentityProvider := AccessIdentityProvider{
 		Name: "Widget Corps OTP",
 		Type: "github",
-		Config: GitHubConfiguration{
+		Config: AccessGitHubConfiguration{
 			ClientID:     "example_id",
 			ClientSecret: "a-secret-key",
 		},
