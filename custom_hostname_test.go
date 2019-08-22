@@ -83,6 +83,64 @@ func TestCustomHostname_CreateCustomHostname(t *testing.T) {
 	}
 }
 
+func TestCustomHostname_CreateCustomHostname_CustomOrigin(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/zones/foo/custom_hostnames", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "POST", r.Method, "Expected method 'POST', got %s", r.Method)
+
+		w.Header().Set("content-type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		fmt.Fprintf(w, `
+{
+	"success": true,
+	"errors": [],
+	"messages": [],
+	"result": {
+		"id": "0d89c70d-ad9f-4843-b99f-6cc0252067e9",
+		"hostname": "app.example.com",
+		"custom_origin_server": "example.app.com",
+		"ssl": {
+			"status": "pending_validation",
+			"method": "cname",
+			"type": "dv",
+			"cname_target": "dcv.digicert.com",
+			"cname": "810b7d5f01154524b961ba0cd578acc2.app.example.com",
+			"settings": {
+			"http2": "on"
+			}
+		}
+  	}
+}`)
+	})
+
+	response, err := client.CreateCustomHostname("foo", CustomHostname{Hostname: "app.example.com", CustomOriginServer: "example.app.com", SSL: CustomHostnameSSL{Method: "cname", Type: "dv"}})
+
+	want := &CustomHostnameResponse{
+		Result: CustomHostname{
+			ID:       "0d89c70d-ad9f-4843-b99f-6cc0252067e9",
+			Hostname: "app.example.com",
+			CustomOriginServer: "example.app.com",
+			SSL: CustomHostnameSSL{
+				Type:        "dv",
+				Method:      "cname",
+				Status:      "pending_validation",
+				CnameTarget: "dcv.digicert.com",
+				CnameName:   "810b7d5f01154524b961ba0cd578acc2.app.example.com",
+				Settings: CustomHostnameSSLSettings{
+					HTTP2: "on",
+				},
+			},
+		},
+		Response: Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}},
+	}
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, response)
+	}
+}
+
 func TestCustomHostname_CustomHostnames(t *testing.T) {
 	setup()
 	defer teardown()
@@ -92,29 +150,29 @@ func TestCustomHostname_CustomHostnames(t *testing.T) {
 
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
-"success": true,
-"result": [
-    {
-      "id": "custom_host_1",
-      "hostname": "custom.host.one",
+	"success": true,
+	"result": [
+		{
+			"id": "custom_host_1",
+			"hostname": "custom.host.one",
 			"ssl": {
-        "type": "dv",
-        "method": "cname",
-        "status": "pending_validation",
-        "cname_target": "dcv.digicert.com",
-        "cname": "810b7d5f01154524b961ba0cd578acc2.app.example.com"
-      },
-      "custom_metadata": {
+				"type": "dv",
+				"method": "cname",
+				"status": "pending_validation",
+				"cname_target": "dcv.digicert.com",
+				"cname": "810b7d5f01154524b961ba0cd578acc2.app.example.com"
+			},
+			"custom_metadata": {
 				"a_random_field": "random field value"
-      }
-    }
-],
-"result_info": {
-	  "page": 1,
-    "per_page": 20,
-    "count": 5,
-    "total_count": 5
-}
+			}
+		}
+	],
+	"result_info": {
+		"page": 1,
+		"per_page": 20,
+		"count": 5,
+		"total_count": 5
+	}
 }`)
 	})
 
