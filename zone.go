@@ -268,6 +268,18 @@ type newZone struct {
 	Account *Account `json:"organization,omitempty"`
 }
 
+// FallbackOrigin describes a fallback origin
+type FallbackOrigin struct {
+	Value string `json:"value"`
+	ID    string `json:"id,omitempty"`
+}
+
+// FallbackOriginResponse represents the response from the fallback_origin endpoint
+type FallbackOriginResponse struct {
+	Response
+	Result FallbackOrigin `json:"result"`
+}
+
 // CreateZone creates a zone on an account.
 //
 // Setting jumpstart to true will attempt to automatically scan for existing
@@ -687,4 +699,42 @@ func (api *API) ZoneSSLSettings(zoneID string) (ZoneSSLSetting, error) {
 		return ZoneSSLSetting{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
+}
+
+// FallbackOrigin returns information about the fallback origin for the specified zone.
+//
+// API reference: https://developers.cloudflare.com/ssl/ssl-for-saas/api-calls/#fallback-origin-configuration
+func (api *API) FallbackOrigin(zoneID string) (FallbackOrigin, error) {
+	uri := "/zones/" + zoneID + "/fallback_origin"
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return FallbackOrigin{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var r FallbackOriginResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return FallbackOrigin{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return r.Result, nil
+}
+
+// UpdateFallbackOrigin updates the fallback origin for a given zone.
+//
+// API reference: https://developers.cloudflare.com/ssl/ssl-for-saas/api-calls/#4-example-patch-to-change-fallback-origin
+func (api *API) UpdateFallbackOrigin(zoneID string, fbo FallbackOrigin) (*FallbackOriginResponse, error) {
+	uri := "/zones/" + zoneID + "/fallback_origin"
+	res, err := api.makeRequest("PATCH", uri, fbo)
+	if err != nil {
+		return nil, errors.Wrap(err, errMakeRequestError)
+	}
+
+	response := &FallbackOriginResponse{}
+	err = json.Unmarshal(res, &response)
+	if err != nil {
+		return nil, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return response, nil
 }
