@@ -56,6 +56,13 @@ type WAFGroupsResponse struct {
 	ResultInfo ResultInfo `json:"result_info"`
 }
 
+// WAFGroupResponse represents the response from the WAF group endpoint.
+type WAFGroupResponse struct {
+	Response
+	Result     WAFGroup   `json:"result"`
+	ResultInfo ResultInfo `json:"result_info"`
+}
+
 // WAFRule represents a WAF rule.
 type WAFRule struct {
 	ID          string `json:"id"`
@@ -183,6 +190,44 @@ func (api *API) ListWAFGroups(zoneID, packageID string) ([]WAFGroup, error) {
 		groups = append(groups, r.Result[gi])
 	}
 	return groups, nil
+}
+
+// WAFGroup returns a WAF rule group from the given WAF package.
+//
+// API Reference: https://api.cloudflare.com/#waf-rule-groups-rule-group-details
+func (api *API) WAFGroup(zoneID, packageID, groupID string) (WAFGroup, error) {
+	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID + "/groups/" + groupID
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return WAFGroup{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var r WAFGroupResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return WAFGroup{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return r.Result, nil
+}
+
+// UpdateWAFGroup lets you update the mode of a WAF Group.
+//
+// API Reference: https://api.cloudflare.com/#waf-rule-groups-edit-rule-group
+func (api *API) UpdateWAFGroup(zoneID, packageID, groupID, mode string) (WAFGroup, error) {
+	opts := WAFRuleOptions{Mode: mode}
+	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID + "/groups/" + groupID
+	res, err := api.makeRequest("PATCH", uri, opts)
+	if err != nil {
+		return WAFGroup{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var r WAFGroupResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return WAFGroup{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
 }
 
 // ListWAFRules returns a slice of the WAF rules for the given WAF package.
