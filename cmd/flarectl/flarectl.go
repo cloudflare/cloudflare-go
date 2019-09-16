@@ -93,6 +93,17 @@ func main() {
 						},
 					},
 				},
+                {
+                    Name: "delete",
+                    Action: zoneDelete,
+                    Usage: "Delete a zone",
+                    Flags: []cli.Flag{
+                        cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+                    },
+                },
 				{
 					Name:   "check",
 					Action: zoneCheck,

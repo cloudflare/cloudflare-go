@@ -80,6 +80,24 @@ func zoneList(c *cli.Context) {
 	writeTable(output, "ID", "Name", "Plan", "Status")
 }
 
+func zoneDelete(c *cli.Context) {
+    if err := checkFlags(c, "zone"); err != nil {
+		return
+	}
+
+    zoneID, err := api.ZoneIDByName(c.String("zone"))
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return
+	}
+
+	_, err = api.DeleteZone(zoneID)
+    if err != nil {
+		fmt.Fprintln(os.Stderr, fmt.Sprintf("%s", err))
+		return
+	}
+}
+
 func zoneCreateLockdown(c *cli.Context) {
 	if err := checkFlags(c, "zone", "urls", "targets", "values"); err != nil {
 		return
