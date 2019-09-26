@@ -960,3 +960,35 @@ func TestFallbackOrigin_UpdateFallbackOrigin(t *testing.T) {
 		assert.Equal(t, want, response)
 	}
 }
+
+func Test_normalizeZoneName(t *testing.T) {
+	tests := []struct {
+		name     string
+		zone     string
+		expected string
+	}{
+		{
+			name:     "unicode stays unicode",
+			zone:     "ünì¢øðe.tld",
+			expected: "ünì¢øðe.tld",
+		}, {
+			name:     "valid punycode is normalized to unicode",
+			zone:     "xn--ne-7ca90ava1cya.tld",
+			expected: "ünì¢øðe.tld",
+		}, {
+			name:     "valid punycode in second label",
+			zone:     "example.xn--j6w193g",
+			expected: "example.香港",
+		}, {
+			name:     "invalid punycode is returned without change",
+			zone:     "xn-invalid.xn-invalid-tld",
+			expected: "xn-invalid.xn-invalid-tld",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			actual := normalizeZoneName(tt.zone)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
