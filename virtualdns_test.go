@@ -21,8 +21,9 @@ func TestVirtualDNSUserAnalytics(t *testing.T) {
 	setup()
 	defer teardown()
 
-	since := time.Now().Add(-1 * time.Hour)
-	until := time.Now()
+	now := time.Now().UTC()
+	since := now.Add(-1 * time.Hour)
+	until := now
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		expectedMetrics := "queryCount,uncachedCount,staleCount,responseTimeAvg,responseTimeMedia,responseTime90th,responseTime99th"
