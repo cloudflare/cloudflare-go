@@ -14,8 +14,8 @@ env:
 matrix:
   fast_finish: true
   include:
-    - go: 1.11.x
     - go: 1.12.x
+    - go: 1.13.x
     - go: 1.x
       env: LATEST=true
     - go: tip
