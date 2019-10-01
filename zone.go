@@ -150,6 +150,12 @@ type ZoneSettingResponse struct {
 	Result []ZoneSetting `json:"result"`
 }
 
+// ZoneSettingSingleResponse represents the response from the Zone Setting endpoint for the specified setting.
+type ZoneSettingSingleResponse struct {
+	Response
+	Result ZoneSetting `json:"result"`
+}
+
 // ZoneSSLSetting contains ssl setting for a zone.
 type ZoneSSLSetting struct {
 	ID                string `json:"id"`
@@ -751,4 +757,40 @@ func normalizeZoneName(name string) string {
 		return n
 	}
 	return name
+}
+
+// ZoneSingleSetting returns information about specified setting to the specified zone.
+//
+// API reference: https://api.cloudflare.com/#zone-settings-get-all-zone-settings
+func (api *API) ZoneSingleSetting(zoneID, settingName string) (ZoneSetting, error) {
+	uri := "/zones/" + zoneID + "/settings/" + settingName
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return ZoneSetting{}, errors.Wrap(err, errMakeRequestError)
+	}
+	var r ZoneSettingSingleResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return ZoneSetting{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
+
+// UpdateZoneSingleSetting updates the specified setting for a given zone.
+//
+// API reference: https://api.cloudflare.com/#zone-settings-edit-zone-settings-info
+func (api *API) UpdateZoneSingleSetting(zoneID, settingName string, setting ZoneSetting) (*ZoneSettingSingleResponse, error) {
+	uri := "/zones/" + zoneID + "/settings/" + settingName
+	res, err := api.makeRequest("PATCH", uri, setting)
+	if err != nil {
+		return nil, errors.Wrap(err, errMakeRequestError)
+	}
+
+	response := &ZoneSettingSingleResponse{}
+	err = json.Unmarshal(res, &response)
+	if err != nil {
+		return nil, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return response, nil
 }
