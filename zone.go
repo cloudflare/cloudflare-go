@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
+	"golang.org/x/net/idna"
 )
 
 // Owner describes the resource owner.
@@ -344,7 +345,7 @@ func (api *API) ListZones(z ...string) ([]Zone, error) {
 	var err error
 	if len(z) > 0 {
 		for _, zone := range z {
-			v.Set("name", zone)
+			v.Set("name", normalizeZoneName(zone))
 			res, err = api.makeRequest("GET", "/zones?"+v.Encode(), nil)
 			if err != nil {
 				return []Zone{}, errors.Wrap(err, errMakeRequestError)
@@ -737,4 +738,17 @@ func (api *API) UpdateFallbackOrigin(zoneID string, fbo FallbackOrigin) (*Fallba
 	}
 
 	return response, nil
+}
+
+// normalizeZoneName tries to convert IDNs (international domain names)
+// from Punycode to Unicode form. If the given zone name is not represented
+// as Punycode, or converting fails (for invalid representations), it
+// is returned unchanged.
+//
+// Note: conversion errors are silently discarded.
+func normalizeZoneName(name string) string {
+	if n, err := idna.ToUnicode(name); err == nil {
+		return n
+	}
+	return name
 }
