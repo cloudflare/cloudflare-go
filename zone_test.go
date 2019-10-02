@@ -621,3 +621,106 @@ func TestZoneFilter(t *testing.T) {
 		t.Errorf("expected param %s to be %s, got %s", "name", "example.org", got)
 	}
 }
+
+func TestZonePartialHasVerificationKey(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+
+		w.Header().Set("content-type", "application/json")
+		// JSON data from: https://api.cloudflare.com/#zone-zone-details (plus an undocumented field verification_key from curl to API)
+		fmt.Fprintf(w, `{
+  "result": {
+    "id": "foo",
+    "name": "bar",
+    "status": "active",
+    "paused": false,
+    "type": "partial",
+    "development_mode": 0,
+    "verification_key": "997679347-109896157",
+    "original_name_servers": ["a","b","c","d"],
+    "original_registrar": null,
+    "original_dnshost": null,
+    "modified_on": "2019-09-04T15:11:43.409805Z",
+    "created_on": "2018-12-06T14:33:38.410126Z",
+    "activated_on": "2018-12-06T14:34:39.274528Z",
+    "meta": {
+      "step": 4,
+      "wildcard_proxiable": true,
+      "custom_certificate_quota": 1,
+      "page_rule_quota": 100,
+      "phishing_detected": false,
+      "multiple_railguns_allowed": false
+    },
+    "owner": {
+      "id": "bbbbbbbbbbbbbbbbbbbbbbbb",
+      "type": "organization",
+      "name": "OrgName"
+    },
+    "account": {
+      "id": "aaaaaaaaaaaaaaaaaaaaaaaa",
+      "name": "AccountName"
+    },
+    "permissions": [
+      "#access:edit",
+      "#access:read",
+      "#analytics:read",
+      "#app:edit",
+      "#auditlogs:read",
+      "#billing:read",
+      "#cache_purge:edit",
+      "#dns_records:edit",
+      "#dns_records:read",
+      "#lb:edit",
+      "#lb:read",
+      "#legal:read",
+      "#logs:edit",
+      "#logs:read",
+      "#member:read",
+      "#organization:edit",
+      "#organization:read",
+      "#ssl:edit",
+      "#ssl:read",
+      "#stream:edit",
+      "#stream:read",
+      "#subscription:edit",
+      "#subscription:read",
+      "#waf:edit",
+      "#waf:read",
+      "#webhooks:edit",
+      "#webhooks:read",
+      "#worker:edit",
+      "#worker:read",
+      "#zone:edit",
+      "#zone:read",
+      "#zone_settings:edit",
+      "#zone_settings:read"
+    ],
+    "plan": {
+      "id": "94f3b7b768b0458b56d2cac4fe5ec0f9",
+      "name": "Enterprise Website",
+      "price": 0,
+      "currency": "USD",
+      "frequency": "monthly",
+      "is_subscribed": true,
+      "can_subscribe": true,
+      "legacy_id": "enterprise",
+      "legacy_discount": false,
+      "externally_managed": true
+    }
+  },
+  "success": true,
+  "errors": [],
+  "messages": []
+}`)
+	}
+
+	mux.HandleFunc("/zones/foo", handler)
+
+	z, err := client.ZoneDetails("foo")
+	if assert.NoError(t, err) {
+		assert.NotEmpty(t, z.VerificationKey)
+	}
+}
