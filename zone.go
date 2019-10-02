@@ -139,7 +139,7 @@ type ZoneRatePlanResponse struct {
 type ZoneSetting struct {
 	ID            string      `json:"id"`
 	Editable      bool        `json:"editable"`
-	ModifiedOn    string      `json:"modified_on"`
+	ModifiedOn    string      `json:"modified_on,omitempty"`
 	Value         interface{} `json:"value"`
 	TimeRemaining int         `json:"time_remaining"`
 }
