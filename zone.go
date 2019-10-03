@@ -49,6 +49,7 @@ type Zone struct {
 	DeactReason string   `json:"deactivation_reason"`
 	Meta        ZoneMeta `json:"meta"`
 	Account     Account  `json:"account"`
+	VerificationKey string `json:"verification_key"`
 }
 
 // ZoneMeta describes metadata about a zone.
