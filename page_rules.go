@@ -109,7 +109,7 @@ type PageRule struct {
 	Targets    []PageRuleTarget `json:"targets"`
 	Actions    []PageRuleAction `json:"actions"`
 	Priority   int              `json:"priority"`
-	Status     string           `json:"status"` // can be: active, paused
+	Status     string           `json:"status"` // can be: active, disabled
 	ModifiedOn time.Time        `json:"modified_on,omitempty"`
 	CreatedOn  time.Time        `json:"created_on,omitempty"`
 }
