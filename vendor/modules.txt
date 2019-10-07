@@ -18,7 +18,7 @@ github.com/shurcooL/sanitized_anchor_name
 github.com/stretchr/testify/assert
 # github.com/urfave/cli v1.22.1
 github.com/urfave/cli
-# golang.org/x/net v0.0.0-20191003171128-d98b1b443823
+# golang.org/x/net v0.0.0-20191007182048-72f939374954
 golang.org/x/net/idna
 # golang.org/x/text v0.3.0
 golang.org/x/text/secure/bidirule
