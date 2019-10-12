@@ -171,14 +171,14 @@ func (api *API) CreateAccessGroup(accountID string, accessGroup AccessGroup) (Ac
 // UpdateAccessGroup updates an existing access group.
 //
 // API reference: https://api.cloudflare.com/#access-groups-update-access-group
-func (api *API) UpdateAccessGroup(accountID, groupID string, accessGroup AccessGroup) (AccessGroup, error) {
+func (api *API) UpdateAccessGroup(accountID string, accessGroup AccessGroup) (AccessGroup, error) {
 	if accessGroup.ID == "" {
 		return AccessGroup{}, errors.Errorf("access group ID cannot be empty")
 	}
 	uri := fmt.Sprintf(
 		"/accounts/%s/access/groups/%s",
 		accountID,
-		groupID,
+		accessGroup.ID,
 	)
 
 	res, err := api.makeRequest("PUT", uri, accessGroup)

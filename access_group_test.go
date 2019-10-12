@@ -253,7 +253,7 @@ func TestUpdateAccessGroup(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/groups/"+accessGroupID, handler)
-	actual, err := client.UpdateAccessGroup(accountID, accessGroupID, expectedAccessGroup)
+	actual, err := client.UpdateAccessGroup(accountID, expectedAccessGroup)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessGroup, actual)
@@ -264,7 +264,7 @@ func TestUpdateAccessGroupWithMissingID(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.UpdateAccessGroup(accountID, accessGroupID, AccessGroup{})
+	_, err := client.UpdateAccessGroup(accountID, AccessGroup{})
 	assert.EqualError(t, err, "access group ID cannot be empty")
 }
 
