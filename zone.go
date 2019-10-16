@@ -44,12 +44,12 @@ type Zone struct {
 		Name    string
 		Website string
 	} `json:"host"`
-	VanityNS    []string `json:"vanity_name_servers"`
-	Betas       []string `json:"betas"`
-	DeactReason string   `json:"deactivation_reason"`
-	Meta        ZoneMeta `json:"meta"`
-	Account     Account  `json:"account"`
-	VerificationKey string `json:"verification_key"`
+	VanityNS        []string `json:"vanity_name_servers"`
+	Betas           []string `json:"betas"`
+	DeactReason     string   `json:"deactivation_reason"`
+	Meta            ZoneMeta `json:"meta"`
+	Account         Account  `json:"account"`
+	VerificationKey string   `json:"verification_key"`
 }
 
 // ZoneMeta describes metadata about a zone.
@@ -499,7 +499,7 @@ func (api *API) ZoneSetVanityNS(zoneID string, ns []string) (Zone, error) {
 // Valid values for `planType` are "CF_FREE", "CF_PRO", "CF_BIZ" and
 // "CF_ENT".
 //
-// API reference: https://api.cloudflare.com/#zone-subscription-update-zone-subscription
+// API reference: https://api.cloudflare.com/#zone-subscription-create-zone-subscription
 func (api *API) ZoneSetPlan(zoneID string, planType string) error {
 	zonePayload := zoneSubscriptionRatePlanPayload{}
 	zonePayload.RatePlan.ID = planType
@@ -507,6 +507,26 @@ func (api *API) ZoneSetPlan(zoneID string, planType string) error {
 	uri := fmt.Sprintf("/zones/%s/subscription", zoneID)
 
 	_, err := api.makeRequest("POST", uri, zonePayload)
+	if err != nil {
+		return errors.Wrap(err, errMakeRequestError)
+	}
+
+	return nil
+}
+
+// ZoneUpdatePlan updates the rate plan of an existing zone.
+//
+// Valid values for `planType` are "CF_FREE", "CF_PRO", "CF_BIZ" and
+// "CF_ENT".
+//
+// API reference: https://api.cloudflare.com/#zone-subscription-update-zone-subscription
+func (api *API) ZoneUpdatePlan(zoneID string, planType string) error {
+	zonePayload := zoneSubscriptionRatePlanPayload{}
+	zonePayload.RatePlan.ID = planType
+
+	uri := fmt.Sprintf("/zones/%s/subscription", zoneID)
+
+	_, err := api.makeRequest("PUT", uri, zonePayload)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}
