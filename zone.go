@@ -44,12 +44,12 @@ type Zone struct {
 		Name    string
 		Website string
 	} `json:"host"`
-	VanityNS    []string `json:"vanity_name_servers"`
-	Betas       []string `json:"betas"`
-	DeactReason string   `json:"deactivation_reason"`
-	Meta        ZoneMeta `json:"meta"`
-	Account     Account  `json:"account"`
-	VerificationKey string `json:"verification_key"`
+	VanityNS        []string `json:"vanity_name_servers"`
+	Betas           []string `json:"betas"`
+	DeactReason     string   `json:"deactivation_reason"`
+	Meta            ZoneMeta `json:"meta"`
+	Account         Account  `json:"account"`
+	VerificationKey string   `json:"verification_key"`
 }
 
 // ZoneMeta describes metadata about a zone.
@@ -288,6 +288,14 @@ type FallbackOriginResponse struct {
 	Result FallbackOrigin `json:"result"`
 }
 
+// zoneSubscriptionRatePlanPayload is used to build the JSON payload for
+// setting a particular rate plan on an existing zone.
+type zoneSubscriptionRatePlanPayload struct {
+	RatePlan struct {
+		ID string `json:"id"`
+	} `json:"rate_plan"`
+}
+
 // CreateZone creates a zone on an account.
 //
 // Setting jumpstart to true will attempt to automatically scan for existing
@@ -486,20 +494,49 @@ func (api *API) ZoneSetVanityNS(zoneID string, ns []string) (Zone, error) {
 	return zone, nil
 }
 
-// ZoneSetPlan changes the zone plan.
-func (api *API) ZoneSetPlan(zoneID string, plan ZonePlan) (Zone, error) {
-	zoneopts := ZoneOptions{Plan: &plan}
-	zone, err := api.EditZone(zoneID, zoneopts)
+// ZoneSetPlan sets the rate plan of an existing zone.
+//
+// Valid values for `planType` are "CF_FREE", "CF_PRO", "CF_BIZ" and
+// "CF_ENT".
+//
+// API reference: https://api.cloudflare.com/#zone-subscription-create-zone-subscription
+func (api *API) ZoneSetPlan(zoneID string, planType string) error {
+	zonePayload := zoneSubscriptionRatePlanPayload{}
+	zonePayload.RatePlan.ID = planType
+
+	uri := fmt.Sprintf("/zones/%s/subscription", zoneID)
+
+	_, err := api.makeRequest("POST", uri, zonePayload)
 	if err != nil {
-		return Zone{}, err
+		return errors.Wrap(err, errMakeRequestError)
 	}
 
-	return zone, nil
+	return nil
+}
+
+// ZoneUpdatePlan updates the rate plan of an existing zone.
+//
+// Valid values for `planType` are "CF_FREE", "CF_PRO", "CF_BIZ" and
+// "CF_ENT".
+//
+// API reference: https://api.cloudflare.com/#zone-subscription-update-zone-subscription
+func (api *API) ZoneUpdatePlan(zoneID string, planType string) error {
+	zonePayload := zoneSubscriptionRatePlanPayload{}
+	zonePayload.RatePlan.ID = planType
+
+	uri := fmt.Sprintf("/zones/%s/subscription", zoneID)
+
+	_, err := api.makeRequest("PUT", uri, zonePayload)
+	if err != nil {
+		return errors.Wrap(err, errMakeRequestError)
+	}
+
+	return nil
 }
 
 // EditZone edits the given zone.
 //
-// This is usually called by ZoneSetPaused, ZoneSetVanityNS or ZoneSetPlan.
+// This is usually called by ZoneSetPaused or ZoneSetVanityNS.
 //
 // API reference: https://api.cloudflare.com/#zone-edit-zone-properties
 func (api *API) EditZone(zoneID string, zoneOpts ZoneOptions) (Zone, error) {
