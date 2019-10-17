@@ -116,6 +116,25 @@ func (b WorkerInheritBinding) serialize(bindingName string) (workerBindingMeta, 
 	return meta, nil, nil
 }
 
+// WorkerKvNamespaceBinding is a binding to a Workers KV Namespace
+//
+// https://developers.cloudflare.com/workers/archive/api/resource-bindings/kv-namespaces/
+type WorkerKvNamespaceBinding struct {
+	NamespaceID string
+}
+
+func (b WorkerKvNamespaceBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
+	if b.NamespaceID == "" {
+		return nil, nil, errors.Errorf(`NamespaceID for binding "%s" cannot be empty`, bindingName)
+	}
+
+	return workerBindingMeta{
+		"name":         bindingName,
+		"type":         "kv_namespace",
+		"namespace_id": b.NamespaceID,
+	}, nil, nil
+}
+
 // DeleteWorker deletes worker for a zone.
 //
 // API reference: https://api.cloudflare.com/#worker-script-delete-worker
