@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"regexp"
+	"strings"
 	"testing"
 	"time"
 
@@ -507,6 +508,48 @@ func TestWorkers_UploadWorkerWithKVBinding(t *testing.T) {
 		Bindings: map[string]WorkerBinding{
 			"b1": WorkerKvNamespaceBinding{
 				NamespaceID: "test-namespace",
+			},
+		},
+	}
+	_, err := client.UploadWorkerWithBindings(&WorkerRequestParams{ScriptName: "bar"}, &scriptParams)
+	assert.NoError(t, err)
+}
+
+func TestWorkers_UploadWorkerWithWasmBinding(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+
+		mpUpload, err := parseMultipartUpload(r)
+		assert.NoError(t, err)
+
+		partName := mpUpload.BindingMeta["b1"]["part"].(string)
+		expectedBindings := map[string]workerBindingMeta{
+			"b1": {
+				"name": "b1",
+				"type": "wasm_module",
+				"part": partName,
+			},
+		}
+		assert.Equal(t, workerScript, mpUpload.Script)
+		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
+
+		wasmContent, err := getFormValue(r, partName)
+		assert.NoError(t, err)
+		assert.Equal(t, []byte("fake-wasm"), wasmContent)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, uploadWorkerResponseData)
+	}
+	mux.HandleFunc("/accounts/foo/workers/scripts/bar", handler)
+
+	scriptParams := WorkerScriptParams{
+		Script: workerScript,
+		Bindings: map[string]WorkerBinding{
+			"b1": WorkerWebAssemblyBinding{
+				Module: strings.NewReader("fake-wasm"),
 			},
 		},
 	}

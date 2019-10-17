@@ -2,8 +2,11 @@ package cloudflare
 
 import (
 	"bytes"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"io"
+	"math/rand"
 	"mime/multipart"
 	"net/http"
 	"net/textproto"
@@ -133,6 +136,43 @@ func (b WorkerKvNamespaceBinding) serialize(bindingName string) (workerBindingMe
 		"type":         "kv_namespace",
 		"namespace_id": b.NamespaceID,
 	}, nil, nil
+}
+
+// WorkerWebAssemblyBinding is a binding to a WebAssembly module
+//
+// https://developers.cloudflare.com/workers/archive/api/resource-bindings/webassembly-modules/
+type WorkerWebAssemblyBinding struct {
+	Module io.Reader
+}
+
+func (b WorkerWebAssemblyBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
+	partName := getRandomPartName()
+
+	bodyWriter := func(mpw *multipart.Writer) error {
+		var hdr = textproto.MIMEHeader{}
+		hdr.Set("content-disposition", fmt.Sprintf(`form-data; name="%s"`, partName))
+		hdr.Set("content-type", "application/wasm")
+		pw, err := mpw.CreatePart(hdr)
+		if err != nil {
+			return err
+		}
+		_, err = io.Copy(pw, b.Module)
+		return err
+	}
+
+	return workerBindingMeta{
+		"name": bindingName,
+		"type": "wasm_module",
+		"part": partName,
+	}, bodyWriter, nil
+}
+
+// Each binding that adds a part to the multipart form body will need
+// a unique part name so we just generate a random 128bit hex string
+func getRandomPartName() string {
+	randBytes := make([]byte, 16)
+	rand.Read(randBytes)
+	return hex.EncodeToString(randBytes)
 }
 
 // DeleteWorker deletes worker for a zone.
