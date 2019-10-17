@@ -1,8 +1,11 @@
 package cloudflare
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
+	"regexp"
 	"testing"
 	"time"
 
@@ -118,7 +121,79 @@ var (
 	successResponse               = Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}}
 	workerScript                  = "addEventListener('fetch', event => {\n    event.passThroughOnException()\nevent.respondWith(handleRequest(event.request))\n})\n\nasync function handleRequest(request) {\n    return fetch(request)\n}"
 	deleteWorkerRouteResponseData = createWorkerRouteResponse
+	formDataContentTypeRegex      = regexp.MustCompile("^multipart/form-data; boundary=")
 )
+
+func getFormValue(r *http.Request, key string) ([]byte, error) {
+	err := r.ParseMultipartForm(1024 * 1024)
+	if err != nil {
+		return nil, err
+	}
+
+	// In Go 1.10 there was a bug where field values with a content-type
+	// but without a filename would end up in Form.File but in versions
+	// before and after 1.10 they would be in form.Value. Here we check
+	// both in order to handle both scenarios
+	// https://golang.org/doc/go1.11#mime/multipart
+
+	// pre/post v1.10
+	if values, ok := r.MultipartForm.Value[key]; ok {
+		return []byte(values[0]), nil
+	}
+
+	// v1.10
+	if fileHeaders, ok := r.MultipartForm.File[key]; ok {
+		file, err := fileHeaders[0].Open()
+		if err != nil {
+			return nil, err
+		}
+		return ioutil.ReadAll(file)
+	}
+
+	return nil, fmt.Errorf("no value found for key %v", key)
+}
+
+type multipartUpload = struct {
+	Script      string
+	BindingMeta map[string]workerBindingMeta
+}
+
+func parseMultipartUpload(r *http.Request) (multipartUpload, error) {
+	// Parse the metadata
+	mdBytes, err := getFormValue(r, "metadata")
+	if err != nil {
+		return multipartUpload{}, err
+	}
+
+	var metadata struct {
+		BodyPart string              `json:"body_part"`
+		Bindings []workerBindingMeta `json:"bindings"`
+	}
+	err = json.Unmarshal(mdBytes, &metadata)
+	if err != nil {
+		return multipartUpload{}, err
+	}
+
+	// Get the script
+	script, err := getFormValue(r, metadata.BodyPart)
+	if err != nil {
+		return multipartUpload{}, err
+	}
+
+	// Since bindings are specified in the Go API as a map but are uploaded as a
+	// JSON array, the ordering of uploaded bindings is non-deterministic. To make
+	// it easier to compare for equality without running into ordering issues, we
+	// convert it back to a map
+	bindingMeta := make(map[string]workerBindingMeta)
+	for _, binding := range metadata.Bindings {
+		bindingMeta[binding["name"].(string)] = binding
+	}
+
+	return multipartUpload{
+		Script:      string(script),
+		BindingMeta: bindingMeta,
+	}, nil
+}
 
 func TestWorkers_DeleteWorker(t *testing.T) {
 	setup()
@@ -241,7 +316,6 @@ func TestWorkers_ListWorkerScripts(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res.WorkerList)
 	}
-
 }
 
 func TestWorkers_UploadWorker(t *testing.T) {
@@ -252,7 +326,7 @@ func TestWorkers_UploadWorker(t *testing.T) {
 		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
 		contentTypeHeader := r.Header.Get("content-type")
 		assert.Equal(t, "application/javascript", contentTypeHeader, "Expected content-type request header to be 'application/javascript', got %s", contentTypeHeader)
-		w.Header().Set("content-type", "application/javascript")
+		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, uploadWorkerResponseData)
 	})
 	res, err := client.UploadWorker(&WorkerRequestParams{ZoneID: "foo"}, workerScript)
@@ -270,7 +344,6 @@ func TestWorkers_UploadWorker(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
-
 }
 
 func TestWorkers_UploadWorkerWithName(t *testing.T) {
@@ -281,7 +354,7 @@ func TestWorkers_UploadWorkerWithName(t *testing.T) {
 		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
 		contentTypeHeader := r.Header.Get("content-type")
 		assert.Equal(t, "application/javascript", contentTypeHeader, "Expected content-type request header to be 'application/javascript', got %s", contentTypeHeader)
-		w.Header().Set("content-type", "application/javascript")
+		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, uploadWorkerResponseData)
 	})
 	res, err := client.UploadWorker(&WorkerRequestParams{ScriptName: "bar"}, workerScript)
@@ -309,7 +382,7 @@ func TestWorkers_UploadWorkerSingleScriptWithAccount(t *testing.T) {
 		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
 		contentTypeHeader := r.Header.Get("content-type")
 		assert.Equal(t, "application/javascript", contentTypeHeader, "Expected content-type request header to be 'application/javascript', got %s", contentTypeHeader)
-		w.Header().Set("content-type", "application/javascript")
+		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, uploadWorkerResponseData)
 	})
 	res, err := client.UploadWorker(&WorkerRequestParams{ZoneID: "foo"}, workerScript)
@@ -337,6 +410,73 @@ func TestWorkers_UploadWorkerWithNameErrorsWithoutAccountId(t *testing.T) {
 	assert.Error(t, err)
 }
 
+func TestWorkers_UploadWorkerWithInheritBinding(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	// Setup route handler for both single-script and multi-script
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+
+		mpUpload, err := parseMultipartUpload(r)
+		assert.NoError(t, err)
+
+		expectedBindings := map[string]workerBindingMeta{
+			"b1": {
+				"name": "b1",
+				"type": "inherit",
+			},
+			"b2": {
+				"name":     "b2",
+				"type":     "inherit",
+				"old_name": "old_binding_name",
+			},
+		}
+		assert.Equal(t, workerScript, mpUpload.Script)
+		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, uploadWorkerResponseData)
+	}
+	mux.HandleFunc("/zones/foo/workers/script", handler)
+	mux.HandleFunc("/accounts/foo/workers/scripts/bar", handler)
+
+	scriptParams := WorkerScriptParams{
+		Script: workerScript,
+		Bindings: map[string]WorkerBinding{
+			"b1": WorkerInheritBinding{},
+			"b2": WorkerInheritBinding{
+				OldName: "old_binding_name",
+			},
+		},
+	}
+
+	// Expected response
+	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
+	want := WorkerScriptResponse{
+		successResponse,
+		WorkerScript{
+			Script: workerScript,
+			WorkerMetaData: WorkerMetaData{
+				ETAG:       "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
+				Size:       191,
+				ModifiedOn: formattedTime,
+			},
+		}}
+
+	// Test single-script
+	res, err := client.UploadWorkerWithBindings(&WorkerRequestParams{ZoneID: "foo"}, &scriptParams)
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
+
+	// Test multi-script
+	res, err = client.UploadWorkerWithBindings(&WorkerRequestParams{ScriptName: "bar"}, &scriptParams)
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
+}
+
 func TestWorkers_CreateWorkerRoute(t *testing.T) {
 	setup()
 	defer teardown()
@@ -352,7 +492,6 @@ func TestWorkers_CreateWorkerRoute(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
-
 }
 
 func TestWorkers_CreateWorkerRouteEnt(t *testing.T) {
@@ -370,7 +509,6 @@ func TestWorkers_CreateWorkerRouteEnt(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
-
 }
 
 func TestWorkers_CreateWorkerRouteSingleScriptWithAccount(t *testing.T) {
@@ -388,7 +526,6 @@ func TestWorkers_CreateWorkerRouteSingleScriptWithAccount(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
-
 }
 
 func TestWorkers_DeleteWorkerRoute(t *testing.T) {
@@ -408,7 +545,6 @@ func TestWorkers_DeleteWorkerRoute(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
-
 }
 
 func TestWorkers_DeleteWorkerRouteEnt(t *testing.T) {
@@ -428,7 +564,6 @@ func TestWorkers_DeleteWorkerRouteEnt(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
-
 }
 
 func TestWorkers_ListWorkerRoutes(t *testing.T) {
@@ -496,7 +631,6 @@ func TestWorkers_UpdateWorkerRoute(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
-
 }
 
 func TestWorkers_UpdateWorkerRouteEnt(t *testing.T) {
@@ -519,7 +653,6 @@ func TestWorkers_UpdateWorkerRouteEnt(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
-
 }
 
 func TestWorkers_UpdateWorkerRouteSingleScriptWithAccount(t *testing.T) {
@@ -542,5 +675,4 @@ func TestWorkers_UpdateWorkerRouteSingleScriptWithAccount(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
-
 }
