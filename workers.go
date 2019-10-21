@@ -89,6 +89,9 @@ type WorkerScriptResponse struct {
 // WorkerBinding is the generic interface implemented by all of
 // the various binding types
 type WorkerBinding interface {
+	// serialize is responsible for returning the binding metadata as well as an optionally
+	// returning a function that can modify the multipart form body. For example, this is used
+	// by WebAssembly bindings to add a new part containing the WebAssembly module contents.
 	serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error)
 }
 
@@ -105,7 +108,6 @@ type WorkerInheritBinding struct {
 	OldName string
 }
 
-// serialize handles serializing the binding as part of the multipart upload format. This will be
 func (b WorkerInheritBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
 	meta := workerBindingMeta{
 		"name": bindingName,
