@@ -9,6 +9,6 @@ require (
 	github.com/pkg/errors v0.8.1
 	github.com/stretchr/testify v1.4.0
 	github.com/urfave/cli v1.22.1
-	golang.org/x/net v0.0.0-20191021144547-ec77196f6094
+	golang.org/x/net v0.0.0-20191028085509-fe3aa8a45271
 	golang.org/x/time v0.0.0-20191024005414-555d28b269f0
 )
