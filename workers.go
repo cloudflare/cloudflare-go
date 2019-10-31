@@ -30,13 +30,13 @@ type WorkerScriptParams struct {
 	Bindings map[string]WorkerBinding
 }
 
-// WorkerRoute aka filters are patterns used to enable or disable workers that match requests.
+// WorkerRoute is used to map traffic matching a URL pattern to a workers
 //
-// API reference: https://api.cloudflare.com/#worker-filters-properties
+// API reference: https://api.cloudflare.com/#worker-routes-properties
 type WorkerRoute struct {
 	ID      string `json:"id,omitempty"`
 	Pattern string `json:"pattern"`
-	Enabled bool   `json:"enabled"`
+	Enabled bool   `json:"enabled"` // this is deprecated: https://api.cloudflare.com/#worker-filters-deprecated--properties
 	Script  string `json:"script,omitempty"`
 }
 
@@ -566,14 +566,9 @@ func formatMultipartBody(params *WorkerScriptParams) (string, []byte, error) {
 //
 // API reference: https://api.cloudflare.com/#worker-filters-create-filter, https://api.cloudflare.com/#worker-routes-create-route
 func (api *API) CreateWorkerRoute(zoneID string, route WorkerRoute) (WorkerRouteResponse, error) {
-	// Check whether a script name is defined in order to determine whether
-	// to use the single-script or multi-script endpoint.
-	pathComponent := "filters"
-	if route.Script != "" {
-		if api.AccountID == "" {
-			return WorkerRouteResponse{}, errors.New("account ID required for enterprise only request")
-		}
-		pathComponent = "routes"
+	pathComponent, err := getRouteEndpoint(api, route)
+	if err != nil {
+		return WorkerRouteResponse{}, err
 	}
 
 	uri := "/zones/" + zoneID + "/workers/" + pathComponent
@@ -611,7 +606,16 @@ func (api *API) DeleteWorkerRoute(zoneID string, routeID string) (WorkerRouteRes
 // API reference: https://api.cloudflare.com/#worker-filters-list-filters, https://api.cloudflare.com/#worker-routes-list-routes
 func (api *API) ListWorkerRoutes(zoneID string) (WorkerRoutesResponse, error) {
 	pathComponent := "filters"
-	if api.AccountID != "" {
+	// Unfortunately we don't have a good signal of whether the user is wanting
+	// to use the deprecated filters endpoint (https://api.cloudflare.com/#worker-filters-list-filters)
+	// or the multi-script routes endpoint (https://api.cloudflare.com/#worker-script-list-workers)
+	//
+	// The filters endpoint does not support API tokens, so if an API token is specified we need to use
+	// the routes endpoint. Otherwise, since the multi-script API endpoints that operate on a script
+	// require an AccountID, we assume that anyone specifying an AccountID is using the routes endpoint.
+	// This is likely too presumptuous. In the next major version, we should just remove the deprecated
+	// filter endpoints entirely to avoid this ambiguity.
+	if api.AccountID != "" || api.APIToken != "" {
 		pathComponent = "routes"
 	}
 	uri := "/zones/" + zoneID + "/workers/" + pathComponent
@@ -640,14 +644,9 @@ func (api *API) ListWorkerRoutes(zoneID string) (WorkerRoutesResponse, error) {
 //
 // API reference: https://api.cloudflare.com/#worker-filters-update-filter, https://api.cloudflare.com/#worker-routes-update-route
 func (api *API) UpdateWorkerRoute(zoneID string, routeID string, route WorkerRoute) (WorkerRouteResponse, error) {
-	// Check whether a script name is defined in order to determine whether
-	// to use the single-script or multi-script endpoint.
-	pathComponent := "filters"
-	if route.Script != "" {
-		if api.AccountID == "" {
-			return WorkerRouteResponse{}, errors.New("account ID required for enterprise only request")
-		}
-		pathComponent = "routes"
+	pathComponent, err := getRouteEndpoint(api, route)
+	if err != nil {
+		return WorkerRouteResponse{}, err
 	}
 	uri := "/zones/" + zoneID + "/workers/" + pathComponent + "/" + routeID
 	res, err := api.makeRequest("PUT", uri, route)
@@ -660,4 +659,19 @@ func (api *API) UpdateWorkerRoute(zoneID string, routeID string, route WorkerRou
 		return WorkerRouteResponse{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r, nil
+}
+
+func getRouteEndpoint(api *API, route WorkerRoute) (string, error) {
+	if route.Script != "" && route.Enabled == true {
+		return "", errors.New("Only `Script` or `Enabled` may be specified for a WorkerRoute, not both")
+	}
+
+	// For backwards-compatability, fallback to the deprecated filter
+	// endpoint if Enabled == true
+	// https://api.cloudflare.com/#worker-filters-deprecated--properties
+	if route.Enabled == true {
+		return "filters", nil
+	}
+
+	return "routes", nil
 }
