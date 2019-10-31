@@ -97,6 +97,26 @@ const (
     "errors": [],
     "messages": []
 }`
+	listBindingsResponseData = `{
+		"result": [
+			{
+				"name": "MY_KV",
+				"namespace_id": "89f5f8fd93f94cb98473f6f421aa3b65",
+				"type": "kv_namespace"
+			},
+			{
+				"name": "MY_WASM",
+				"type": "wasm_module"
+			},
+			{
+				"name": "MY_NEW_BINDING",
+				"type": "some_imaginary_new_binding_type"
+			}
+		],
+		"success": true,
+		"errors": [],
+		"messages": []
+	}`
 	listWorkersResponseData = `{
   "result": [
     {
@@ -755,4 +775,96 @@ func TestWorkers_UpdateWorkerRouteSingleScriptWithAccount(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
+}
+
+func TestWorkers_ListWorkerBindingsMultiScript(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	mux.HandleFunc("/accounts/foo/workers/scripts/my-script/bindings", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application-json")
+		fmt.Fprintf(w, listBindingsResponseData)
+	})
+
+	mux.HandleFunc("/accounts/foo/workers/scripts/my-script/bindings/MY_WASM/content", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/wasm")
+		_, _ = w.Write([]byte("mock multi-script wasm"))
+	})
+
+	res, err := client.ListWorkerBindings(&WorkerRequestParams{
+		ScriptName: "my-script",
+	})
+	assert.NoError(t, err)
+
+	assert.Equal(t, successResponse, res.Response)
+	assert.Equal(t, 3, len(res.BindingList))
+
+	assert.Equal(t, res.BindingList[0], WorkerBindingListItem{
+		Name: "MY_KV",
+		Binding: WorkerKvNamespaceBinding{
+			NamespaceID: "89f5f8fd93f94cb98473f6f421aa3b65",
+		},
+	})
+	assert.Equal(t, WorkerKvNamespaceBindingType, res.BindingList[0].Binding.Type())
+
+	assert.Equal(t, "MY_WASM", res.BindingList[1].Name)
+	wasmBinding := res.BindingList[1].Binding.(WorkerWebAssemblyBinding)
+	wasmModuleContent, err := ioutil.ReadAll(wasmBinding.Module)
+	assert.NoError(t, err)
+	assert.Equal(t, []byte("mock multi-script wasm"), wasmModuleContent)
+	assert.Equal(t, WorkerWebAssemblyBindingType, res.BindingList[1].Binding.Type())
+
+	assert.Equal(t, res.BindingList[2], WorkerBindingListItem{
+		Name:    "MY_NEW_BINDING",
+		Binding: WorkerInheritBinding{},
+	})
+	assert.Equal(t, WorkerInheritBindingType, res.BindingList[2].Binding.Type())
+}
+
+func TestWorkers_ListWorkerBindingsSingleScript(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/zones/foo/workers/script/bindings", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application-json")
+		fmt.Fprintf(w, listBindingsResponseData)
+	})
+
+	mux.HandleFunc("/zones/foo/workers/script/bindings/MY_WASM/content", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/wasm")
+		_, _ = w.Write([]byte("mock single-script wasm"))
+	})
+
+	res, err := client.ListWorkerBindings(&WorkerRequestParams{
+		ZoneID: "foo",
+	})
+	assert.NoError(t, err)
+
+	assert.Equal(t, successResponse, res.Response)
+	assert.Equal(t, 3, len(res.BindingList))
+
+	assert.Equal(t, res.BindingList[0], WorkerBindingListItem{
+		Name: "MY_KV",
+		Binding: WorkerKvNamespaceBinding{
+			NamespaceID: "89f5f8fd93f94cb98473f6f421aa3b65",
+		},
+	})
+	assert.Equal(t, WorkerKvNamespaceBindingType, res.BindingList[0].Binding.Type())
+
+	assert.Equal(t, "MY_WASM", res.BindingList[1].Name)
+	wasmBinding := res.BindingList[1].Binding.(WorkerWebAssemblyBinding)
+	wasmModuleContent, err := ioutil.ReadAll(wasmBinding.Module)
+	assert.NoError(t, err)
+	assert.Equal(t, []byte("mock single-script wasm"), wasmModuleContent)
+	assert.Equal(t, WorkerWebAssemblyBindingType, res.BindingList[1].Binding.Type())
+
+	assert.Equal(t, res.BindingList[2], WorkerBindingListItem{
+		Name:    "MY_NEW_BINDING",
+		Binding: WorkerInheritBinding{},
+	})
+	assert.Equal(t, WorkerInheritBindingType, res.BindingList[2].Binding.Type())
 }
