@@ -411,7 +411,7 @@ func formatMultipartBody(params *WorkerScriptParams) (string, []byte, error) {
 
 // CreateWorkerRoute creates worker route for a zone
 //
-// API reference: https://api.cloudflare.com/#worker-filters-create-filter
+// API reference: https://api.cloudflare.com/#worker-filters-create-filter, https://api.cloudflare.com/#worker-routes-create-route
 func (api *API) CreateWorkerRoute(zoneID string, route WorkerRoute) (WorkerRouteResponse, error) {
 	// Check whether a script name is defined in order to determine whether
 	// to use the single-script or multi-script endpoint.
@@ -438,11 +438,9 @@ func (api *API) CreateWorkerRoute(zoneID string, route WorkerRoute) (WorkerRoute
 
 // DeleteWorkerRoute deletes worker route for a zone
 //
-// API reference: https://api.cloudflare.com/#worker-filters-delete-filter
+// API reference: https://api.cloudflare.com/#worker-routes-delete-route
 func (api *API) DeleteWorkerRoute(zoneID string, routeID string) (WorkerRouteResponse, error) {
-	// For deleting a route, it doesn't matter whether we use the
-	// single-script or multi-script endpoint
-	uri := "/zones/" + zoneID + "/workers/filters/" + routeID
+	uri := "/zones/" + zoneID + "/workers/routes/" + routeID
 	res, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
 		return WorkerRouteResponse{}, errors.Wrap(err, errMakeRequestError)
@@ -457,7 +455,7 @@ func (api *API) DeleteWorkerRoute(zoneID string, routeID string) (WorkerRouteRes
 
 // ListWorkerRoutes returns list of worker routes
 //
-// API reference: https://api.cloudflare.com/#worker-filters-list-filters
+// API reference: https://api.cloudflare.com/#worker-filters-list-filters, https://api.cloudflare.com/#worker-routes-list-routes
 func (api *API) ListWorkerRoutes(zoneID string) (WorkerRoutesResponse, error) {
 	pathComponent := "filters"
 	if api.AccountID != "" {
@@ -487,7 +485,7 @@ func (api *API) ListWorkerRoutes(zoneID string) (WorkerRoutesResponse, error) {
 
 // UpdateWorkerRoute updates worker route for a zone.
 //
-// API reference: https://api.cloudflare.com/#worker-filters-update-filter
+// API reference: https://api.cloudflare.com/#worker-filters-update-filter, https://api.cloudflare.com/#worker-routes-update-route
 func (api *API) UpdateWorkerRoute(zoneID string, routeID string, route WorkerRoute) (WorkerRouteResponse, error) {
 	// Check whether a script name is defined in order to determine whether
 	// to use the single-script or multi-script endpoint.

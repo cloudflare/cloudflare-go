@@ -612,7 +612,7 @@ func TestWorkers_DeleteWorkerRoute(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/zones/foo/workers/filters/e7a57d8746e74ae49c25994dadb421b1", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/zones/foo/workers/routes/e7a57d8746e74ae49c25994dadb421b1", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "DELETE", r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application-json")
 		fmt.Fprintf(w, deleteWorkerRouteResponseData)
@@ -631,7 +631,7 @@ func TestWorkers_DeleteWorkerRouteEnt(t *testing.T) {
 	setup(UsingAccount("foo"))
 	defer teardown()
 
-	mux.HandleFunc("/zones/foo/workers/filters/e7a57d8746e74ae49c25994dadb421b1", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/zones/foo/workers/routes/e7a57d8746e74ae49c25994dadb421b1", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "DELETE", r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application-json")
 		fmt.Fprintf(w, deleteWorkerRouteResponseData)
