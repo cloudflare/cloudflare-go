@@ -79,6 +79,34 @@ type WorkerScriptResponse struct {
 	WorkerScript `json:"result"`
 }
 
+// WorkerBindingType represents a particular type of binding
+type WorkerBindingType string
+
+func (b WorkerBindingType) String() string {
+	return string(b)
+}
+
+const (
+	// WorkerInheritBindingType is the type for inherited bindings
+	WorkerInheritBindingType WorkerBindingType = "inherit"
+	// WorkerKvNamespaceBindingType is the type for KV Namespace bindings
+	WorkerKvNamespaceBindingType WorkerBindingType = "kv_namespace"
+	// WorkerWebAssemblyBindingType is the type for Web Assembly module bindings
+	WorkerWebAssemblyBindingType WorkerBindingType = "wasm_module"
+)
+
+// WorkerBindingListItem a struct representing an individual binding in a list of bindings
+type WorkerBindingListItem struct {
+	Name    string `json:"name"`
+	Binding WorkerBinding
+}
+
+// WorkerBindingListResponse wrapper struct for API response to worker binding list API call
+type WorkerBindingListResponse struct {
+	Response
+	BindingList []WorkerBindingListItem
+}
+
 // Workers supports multiple types of bindings, e.g. KV namespaces or WebAssembly modules, and each type
 // of binding will be represented differently in the upload request body. At a high-level, every binding
 // will specify metadata, which is a JSON object with the properties "name" and "type". Some types of bindings
@@ -89,6 +117,8 @@ type WorkerScriptResponse struct {
 // WorkerBinding is the generic interface implemented by all of
 // the various binding types
 type WorkerBinding interface {
+	Type() WorkerBindingType
+
 	// serialize is responsible for returning the binding metadata as well as an optionally
 	// returning a function that can modify the multipart form body. For example, this is used
 	// by WebAssembly bindings to add a new part containing the WebAssembly module contents.
@@ -108,10 +138,15 @@ type WorkerInheritBinding struct {
 	OldName string
 }
 
+// Type returns the type of the binding
+func (b WorkerInheritBinding) Type() WorkerBindingType {
+	return WorkerInheritBindingType
+}
+
 func (b WorkerInheritBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
 	meta := workerBindingMeta{
 		"name": bindingName,
-		"type": "inherit",
+		"type": b.Type(),
 	}
 
 	if b.OldName != "" {
@@ -128,6 +163,11 @@ type WorkerKvNamespaceBinding struct {
 	NamespaceID string
 }
 
+// Type returns the type of the binding
+func (b WorkerKvNamespaceBinding) Type() WorkerBindingType {
+	return WorkerKvNamespaceBindingType
+}
+
 func (b WorkerKvNamespaceBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
 	if b.NamespaceID == "" {
 		return nil, nil, errors.Errorf(`NamespaceID for binding "%s" cannot be empty`, bindingName)
@@ -135,7 +175,7 @@ func (b WorkerKvNamespaceBinding) serialize(bindingName string) (workerBindingMe
 
 	return workerBindingMeta{
 		"name":         bindingName,
-		"type":         "kv_namespace",
+		"type":         b.Type(),
 		"namespace_id": b.NamespaceID,
 	}, nil, nil
 }
@@ -145,6 +185,11 @@ func (b WorkerKvNamespaceBinding) serialize(bindingName string) (workerBindingMe
 // https://developers.cloudflare.com/workers/archive/api/resource-bindings/webassembly-modules/
 type WorkerWebAssemblyBinding struct {
 	Module io.Reader
+}
+
+// Type returns the type of the binding
+func (b WorkerWebAssemblyBinding) Type() WorkerBindingType {
+	return WorkerWebAssemblyBindingType
 }
 
 func (b WorkerWebAssemblyBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
@@ -164,7 +209,7 @@ func (b WorkerWebAssemblyBinding) serialize(bindingName string) (workerBindingMe
 
 	return workerBindingMeta{
 		"name": bindingName,
-		"type": "wasm_module",
+		"type": b.Type(),
 		"part": partName,
 	}, bodyWriter, nil
 }
@@ -255,6 +300,114 @@ func (api *API) downloadWorkerWithName(scriptName string) (WorkerScriptResponse,
 	r.Script = string(res)
 	r.Success = true
 	return r, nil
+}
+
+// ListWorkerBindings returns all the bindings for a particular worker
+func (api *API) ListWorkerBindings(requestParams *WorkerRequestParams) (WorkerBindingListResponse, error) {
+	if requestParams.ScriptName == "" {
+		return WorkerBindingListResponse{}, errors.New("ScriptName is required")
+	}
+	if api.AccountID == "" {
+		return WorkerBindingListResponse{}, errors.New("account ID required")
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/bindings", api.AccountID, requestParams.ScriptName)
+
+	var jsonRes struct {
+		Response
+		Bindings []workerBindingMeta `json:"result"`
+	}
+	var r WorkerBindingListResponse
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return r, errors.Wrap(err, errMakeRequestError)
+	}
+	err = json.Unmarshal(res, &jsonRes)
+	if err != nil {
+		return r, errors.Wrap(err, errUnmarshalError)
+	}
+
+	r = WorkerBindingListResponse{
+		Response:    jsonRes.Response,
+		BindingList: make([]WorkerBindingListItem, 0, len(jsonRes.Bindings)),
+	}
+	for _, jsonBinding := range jsonRes.Bindings {
+		name, ok := jsonBinding["name"].(string)
+		if !ok {
+			return r, errors.Errorf("Binding missing name %v", jsonBinding)
+		}
+		bType, ok := jsonBinding["type"].(string)
+		if !ok {
+			return r, errors.Errorf("Binding missing type %v", jsonBinding)
+		}
+		bindingListItem := WorkerBindingListItem{
+			Name: name,
+		}
+
+		switch WorkerBindingType(bType) {
+		case WorkerKvNamespaceBindingType:
+			namespaceID := jsonBinding["namespace_id"].(string)
+			bindingListItem.Binding = WorkerKvNamespaceBinding{
+				NamespaceID: namespaceID,
+			}
+		case WorkerWebAssemblyBindingType:
+			bindingListItem.Binding = WorkerWebAssemblyBinding{
+				Module: &bindingContentReader{
+					api:           api,
+					requestParams: requestParams,
+					bindingName:   name,
+				},
+			}
+		default:
+			bindingListItem.Binding = WorkerInheritBinding{}
+		}
+		r.BindingList = append(r.BindingList, bindingListItem)
+	}
+
+	return r, nil
+}
+
+// bindingContentReader is an io.Reader that will lazily load the
+// raw bytes for a binding from the API when the Read() method
+// is first called. This is only useful for binding types
+// that store raw bytes, like WebAssembly modules
+type bindingContentReader struct {
+	api           *API
+	requestParams *WorkerRequestParams
+	bindingName   string
+	content       []byte
+	position      int
+}
+
+func (b *bindingContentReader) Read(p []byte) (n int, err error) {
+	// Lazily load the content when Read() is first called
+	if b.content == nil {
+		uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/bindings/%s/content", b.api.AccountID, b.requestParams.ScriptName, b.bindingName)
+		res, err := b.api.makeRequest("GET", uri, nil)
+		if err != nil {
+			return 0, errors.Wrap(err, errMakeRequestError)
+		}
+		b.content = res
+	}
+
+	if b.position >= len(b.content) {
+		return 0, io.EOF
+	}
+
+	bytesRemaining := len(b.content) - b.position
+	bytesToProcess := 0
+	if len(p) < bytesRemaining {
+		bytesToProcess = len(p)
+	} else {
+		bytesToProcess = bytesRemaining
+	}
+
+	for i := 0; i < bytesToProcess; i++ {
+		p[i] = b.content[b.position]
+		b.position = b.position + 1
+	}
+
+	return bytesToProcess, nil
 }
 
 // ListWorkerScripts returns list of worker scripts for given account.
