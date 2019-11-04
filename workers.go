@@ -304,15 +304,14 @@ func (api *API) downloadWorkerWithName(scriptName string) (WorkerScriptResponse,
 
 // ListWorkerBindings returns all the bindings for a particular worker
 func (api *API) ListWorkerBindings(requestParams *WorkerRequestParams) (WorkerBindingListResponse, error) {
-	var uri string
-	if requestParams.ScriptName != "" {
-		if api.AccountID == "" {
-			return WorkerBindingListResponse{}, errors.New("account ID required")
-		}
-		uri = fmt.Sprintf("/accounts/%s/workers/scripts/%s/bindings", api.AccountID, requestParams.ScriptName)
-	} else {
-		uri = fmt.Sprintf("/zones/%s/workers/script/bindings", requestParams.ZoneID)
+	if requestParams.ScriptName == "" {
+		return WorkerBindingListResponse{}, errors.New("ScriptName is required")
 	}
+	if api.AccountID == "" {
+		return WorkerBindingListResponse{}, errors.New("account ID required")
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/bindings", api.AccountID, requestParams.ScriptName)
 
 	var jsonRes struct {
 		Response
@@ -383,15 +382,7 @@ type bindingContentReader struct {
 func (b *bindingContentReader) Read(p []byte) (n int, err error) {
 	// Lazily load the content when Read() is first called
 	if b.content == nil {
-		var uri string
-		if b.requestParams.ScriptName != "" {
-			if b.api.AccountID == "" {
-				return 0, errors.New("account ID required")
-			}
-			uri = fmt.Sprintf("/accounts/%s/workers/scripts/%s/bindings/%s/content", b.api.AccountID, b.requestParams.ScriptName, b.bindingName)
-		} else {
-			uri = fmt.Sprintf("/zones/%s/workers/script/bindings/%s/content", b.requestParams.ZoneID, b.bindingName)
-		}
+		uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/bindings/%s/content", b.api.AccountID, b.requestParams.ScriptName, b.bindingName)
 		res, err := b.api.makeRequest("GET", uri, nil)
 		if err != nil {
 			return 0, errors.Wrap(err, errMakeRequestError)
