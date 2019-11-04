@@ -3,11 +3,11 @@ package cloudflare
 import (
 	"context"
 	"fmt"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"net/http"
 	"sort"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
 func TestWorkersKV_CreateWorkersKVNamespace(t *testing.T) {
@@ -188,6 +188,32 @@ func TestWorkersKV_WriteWorkersKV(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
+}
+
+func TestWorkersKV_WriteWorkersKVBulk(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	kvs := WorkersKVBulkWriteRequest{{Key: "key1", Value: "value1"}, {Key: "key2", Value: "value2"}}
+
+	namespace := "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+	response := `{
+		"result": null,
+		"success": true,
+		"errors": [],
+		"messages": []
+	}`
+
+	mux.HandleFunc(fmt.Sprintf("/accounts/foo/storage/kv/namespaces/%s/bulk", namespace), func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, response)
+	})
+
+	want := successResponse
+	res, err := client.WriteWorkersKVBulk(context.Background(), namespace, kvs)
+	require.NoError(t, err)
+	assert.Equal(t, want, res)
 }
 
 func TestWorkersKV_ReadWorkersKV(t *testing.T) {

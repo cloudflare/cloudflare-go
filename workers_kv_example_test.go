@@ -85,6 +85,23 @@ func ExampleAPI_WriteWorkersKV() {
 	}
 
 	fmt.Println(resp)
+
+}
+
+func ExampleAPI_WriteWorkersKVBulk() {
+	api, err := cloudflare.New(apiKey, user, cloudflare.UsingAccount(accountID))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	payload := cloudflare.WorkersKVBulkWriteRequest{{Key: "key1", Value: "value1"}, {Key: "key2", Value: "value2"}}
+
+	resp, err := api.WriteWorkersKVBulk(context.Background(), namespace, payload)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(resp)
 }
 
 func ExampleAPI_ReadWorkersKV() {
