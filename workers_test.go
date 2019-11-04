@@ -628,6 +628,29 @@ func TestWorkers_CreateWorkerRouteSingleScriptWithAccount(t *testing.T) {
 	}
 }
 
+func TestWorkers_CreateWorkerRouteErrorsWhenMixingSingleAndMultiScriptProperties(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	route := WorkerRoute{Pattern: "app1.example.com/*", Script: "test_script", Enabled: true}
+	_, err := client.CreateWorkerRoute("foo", route)
+	assert.EqualError(t, err, "Only `Script` or `Enabled` may be specified for a WorkerRoute, not both")
+}
+
+func TestWorkers_CreateWorkerRouteWithNoScript(t *testing.T) {
+	setup(UsingAccount("foo"))
+
+	mux.HandleFunc("/zones/foo/workers/routes", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "POST", r.Method, "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application-json")
+		fmt.Fprintf(w, createWorkerRouteResponse)
+	})
+
+	route := WorkerRoute{Pattern: "app1.example.com/*"}
+	_, err := client.CreateWorkerRoute("foo", route)
+	assert.NoError(t, err)
+}
+
 func TestWorkers_DeleteWorkerRoute(t *testing.T) {
 	setup()
 	defer teardown()
@@ -821,4 +844,27 @@ func TestWorkers_ListWorkerBindingsMultiScript(t *testing.T) {
 		Binding: WorkerInheritBinding{},
 	})
 	assert.Equal(t, WorkerInheritBindingType, res.BindingList[2].Binding.Type())
+}
+
+func TestWorkers_UpdateWorkerRouteErrorsWhenMixingSingleAndMultiScriptProperties(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	route := WorkerRoute{Pattern: "app1.example.com/*", Script: "test_script", Enabled: true}
+	_, err := client.UpdateWorkerRoute("foo", "e7a57d8746e74ae49c25994dadb421b1", route)
+	assert.EqualError(t, err, "Only `Script` or `Enabled` may be specified for a WorkerRoute, not both")
+}
+
+func TestWorkers_UpdateWorkerRouteWithNoScript(t *testing.T) {
+	setup(UsingAccount("foo"))
+
+	mux.HandleFunc("/zones/foo/workers/routes/e7a57d8746e74ae49c25994dadb421b1", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		w.Header().Set("content-type", "application-json")
+		fmt.Fprintf(w, updateWorkerRouteEntResponse)
+	})
+
+	route := WorkerRoute{Pattern: "app1.example.com/*"}
+	_, err := client.UpdateWorkerRoute("foo", "e7a57d8746e74ae49c25994dadb421b1", route)
+	assert.NoError(t, err)
 }
