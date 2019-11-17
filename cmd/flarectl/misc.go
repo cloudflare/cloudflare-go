@@ -42,7 +42,7 @@ func initializeAPI(c *cli.Context) error {
 }
 
 // writeTable outputs tabular data to stdout.
-func writeTable(data [][]string, cols ...string) {
+func writeTable(c *cli.Context, data [][]string, cols ...string) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader(cols)
 	table.SetBorder(false)
@@ -99,7 +99,7 @@ func _getIps(ipType string, showMsgType bool) {
 	}
 }
 
-func userInfo(*cli.Context) {
+func userInfo(c *cli.Context) {
 	user, err := api.UserDetails()
 	if err != nil {
 		fmt.Println(err)
@@ -113,7 +113,7 @@ func userInfo(*cli.Context) {
 		user.FirstName + " " + user.LastName,
 		fmt.Sprintf("%t", user.TwoFA),
 	})
-	writeTable(output, "ID", "Email", "Username", "Name", "2FA")
+	writeTable(c, output, "ID", "Email", "Username", "Name", "2FA")
 }
 
 func userUpdate(*cli.Context) {

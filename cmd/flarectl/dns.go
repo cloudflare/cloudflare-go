@@ -57,7 +57,7 @@ func dnsCreate(c *cli.Context) {
 		formatDNSRecord(resp.Result),
 	}
 
-	writeTable(output, "ID", "Name", "Type", "Content", "TTL", "Proxiable", "Proxy", "Locked")
+	writeTable(c, output, "ID", "Name", "Type", "Content", "TTL", "Proxiable", "Proxy", "Locked")
 }
 
 func dnsCreateOrUpdate(c *cli.Context) {
@@ -129,7 +129,7 @@ func dnsCreateOrUpdate(c *cli.Context) {
 		formatDNSRecord(resp.Result),
 	}
 
-	writeTable(output, "ID", "Name", "Type", "Content", "TTL", "Proxiable", "Proxy", "Locked")
+	writeTable(c, output, "ID", "Name", "Type", "Content", "TTL", "Proxiable", "Proxy", "Locked")
 }
 
 func dnsUpdate(c *cli.Context) {

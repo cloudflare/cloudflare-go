@@ -77,22 +77,22 @@ func zoneList(c *cli.Context) {
 			z.Status,
 		})
 	}
-	writeTable(output, "ID", "Name", "Plan", "Status")
+	writeTable(c, output, "ID", "Name", "Plan", "Status")
 }
 
 func zoneDelete(c *cli.Context) {
-    if err := checkFlags(c, "zone"); err != nil {
+	if err := checkFlags(c, "zone"); err != nil {
 		return
 	}
 
-    zoneID, err := api.ZoneIDByName(c.String("zone"))
+	zoneID, err := api.ZoneIDByName(c.String("zone"))
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return
 	}
 
 	_, err = api.DeleteZone(zoneID)
-    if err != nil {
+	if err != nil {
 		fmt.Fprintln(os.Stderr, fmt.Sprintf("%s", err))
 		return
 	}
@@ -136,7 +136,7 @@ func zoneCreateLockdown(c *cli.Context) {
 	output := make([][]string, 0, 1)
 	output = append(output, formatLockdownResponse(resp))
 
-	writeTable(output, "ID")
+	writeTable(c, output, "ID")
 }
 
 func zoneInfo(c *cli.Context) {
@@ -172,7 +172,7 @@ func zoneInfo(c *cli.Context) {
 			z.Type,
 		})
 	}
-	writeTable(output, "ID", "Zone", "Plan", "Status", "Name Servers", "Paused", "Type")
+	writeTable(c, output, "ID", "Zone", "Plan", "Status", "Name Servers", "Paused", "Type")
 }
 
 func zonePlan(*cli.Context) {
@@ -232,7 +232,7 @@ func zoneCachePurge(c *cli.Context) {
 	output := make([][]string, 0, 1)
 	output = append(output, formatCacheResponse(resp))
 
-	writeTable(output, "ID")
+	writeTable(c, output, "ID")
 }
 
 func zoneRecords(c *cli.Context) {
@@ -298,7 +298,7 @@ func zoneRecords(c *cli.Context) {
 			fmt.Sprintf("%d", r.TTL),
 		})
 	}
-	writeTable(output, "ID", "Type", "Name", "Content", "Proxied", "TTL")
+	writeTable(c, output, "ID", "Type", "Name", "Content", "Proxied", "TTL")
 }
 
 func formatCacheResponse(resp cloudflare.PurgeCacheResponse) []string {
