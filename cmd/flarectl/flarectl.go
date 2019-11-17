@@ -21,6 +21,10 @@ func main() {
 			Value:  "",
 			EnvVar: "CF_ACCOUNT_ID",
 		},
+		cli.BoolFlag{
+			Name:  "json",
+			Usage: "show output as JSON instead of as a table",
+		},
 	}
 	app.Commands = []cli.Command{
 		{
