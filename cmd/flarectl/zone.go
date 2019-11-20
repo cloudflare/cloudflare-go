@@ -263,6 +263,9 @@ func zoneRecords(c *cli.Context) {
 		}
 		records = append(records, rec)
 	} else {
+		if c.String("type") != "" {
+			rr.Type = c.String("type")
+		}
 		if c.String("name") != "" {
 			rr.Name = c.String("name")
 		}
