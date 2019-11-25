@@ -248,6 +248,10 @@ func main() {
 							Usage: "zone name",
 						},
 						cli.StringFlag{
+							Name:  "type",
+							Usage: "record type",
+						},
+						cli.StringFlag{
 							Name:  "name",
 							Usage: "record name",
 						},
