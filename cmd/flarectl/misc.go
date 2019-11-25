@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"strings"
@@ -41,14 +42,41 @@ func initializeAPI(c *cli.Context) error {
 	return nil
 }
 
-// writeTable outputs tabular data to stdout.
-func writeTable(data [][]string, cols ...string) {
+// writeTableTabular outputs tabular data to STDOUT
+func writeTableTabular(data [][]string, cols ...string) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader(cols)
 	table.SetBorder(false)
 	table.AppendBulk(data)
 
 	table.Render()
+}
+
+// writeTableJSON outputs JSON data to STDOUT
+func writeTableJSON(data [][]string, cols ...string) {
+	mappedData := make([]map[string]string, 0)
+	for i := range data {
+		rowData := make(map[string]string)
+		for j := range data[i] {
+			rowData[cols[j]] = data[i][j]
+		}
+		mappedData = append(mappedData, rowData)
+	}
+	jsonData, err := json.Marshal(mappedData)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(string(jsonData))
+}
+
+// writeTable outputs JSON or tabular data to STDOUT
+func writeTable(c *cli.Context, data [][]string, cols ...string) {
+	if c.GlobalBool("json") {
+		writeTableJSON(data, cols...)
+	} else {
+		writeTableTabular(data, cols...)
+	}
 }
 
 // Utility function to check if CLI flags were given.
@@ -99,7 +127,7 @@ func _getIps(ipType string, showMsgType bool) {
 	}
 }
 
-func userInfo(*cli.Context) {
+func userInfo(c *cli.Context) {
 	user, err := api.UserDetails()
 	if err != nil {
 		fmt.Println(err)
@@ -113,7 +141,7 @@ func userInfo(*cli.Context) {
 		user.FirstName + " " + user.LastName,
 		fmt.Sprintf("%t", user.TwoFA),
 	})
-	writeTable(output, "ID", "Email", "Username", "Name", "2FA")
+	writeTable(c, output, "ID", "Email", "Username", "Name", "2FA")
 }
 
 func userUpdate(*cli.Context) {

@@ -79,7 +79,7 @@ func firewallAccessRules(c *cli.Context) {
 	for _, rule := range rules {
 		output = append(output, formatAccessRule(rule))
 	}
-	writeTable(output, "ID", "Value", "Scope", "Mode", "Notes")
+	writeTable(c, output, "ID", "Value", "Scope", "Mode", "Notes")
 }
 
 func firewallAccessRuleCreate(c *cli.Context) {
@@ -132,7 +132,7 @@ func firewallAccessRuleCreate(c *cli.Context) {
 	for _, rule := range rules {
 		output = append(output, formatAccessRule(rule))
 	}
-	writeTable(output, "ID", "Value", "Scope", "Mode", "Notes")
+	writeTable(c, output, "ID", "Value", "Scope", "Mode", "Notes")
 }
 
 func firewallAccessRuleUpdate(c *cli.Context) {
@@ -182,7 +182,7 @@ func firewallAccessRuleUpdate(c *cli.Context) {
 	for _, rule := range rules {
 		output = append(output, formatAccessRule(rule))
 	}
-	writeTable(output, "ID", "Value", "Scope", "Mode", "Notes")
+	writeTable(c, output, "ID", "Value", "Scope", "Mode", "Notes")
 
 }
 
@@ -298,7 +298,7 @@ func firewallAccessRuleDelete(c *cli.Context) {
 	for _, rule := range rules {
 		output = append(output, formatAccessRule(rule))
 	}
-	writeTable(output, "ID", "Value", "Scope", "Mode", "Notes")
+	writeTable(c, output, "ID", "Value", "Scope", "Mode", "Notes")
 }
 
 func getScope(c *cli.Context) (string, string, error) {

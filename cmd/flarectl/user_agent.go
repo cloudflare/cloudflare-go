@@ -51,7 +51,7 @@ func userAgentCreate(c *cli.Context) {
 		formatUserAgentRule(resp.Result),
 	}
 
-	writeTable(output, "ID", "Description", "Mode", "Value", "Paused")
+	writeTable(c, output, "ID", "Description", "Mode", "Value", "Paused")
 }
 
 func userAgentUpdate(c *cli.Context) {
@@ -85,7 +85,7 @@ func userAgentUpdate(c *cli.Context) {
 		formatUserAgentRule(resp.Result),
 	}
 
-	writeTable(output, "ID", "Description", "Mode", "Value", "Paused")
+	writeTable(c, output, "ID", "Description", "Mode", "Value", "Paused")
 }
 
 func userAgentDelete(c *cli.Context) {
@@ -109,7 +109,7 @@ func userAgentDelete(c *cli.Context) {
 		formatUserAgentRule(resp.Result),
 	}
 
-	writeTable(output, "ID", "Description", "Mode", "Value", "Paused")
+	writeTable(c, output, "ID", "Description", "Mode", "Value", "Paused")
 }
 
 func userAgentList(c *cli.Context) {
@@ -134,5 +134,5 @@ func userAgentList(c *cli.Context) {
 		output = append(output, formatUserAgentRule(rule))
 	}
 
-	writeTable(output, "ID", "Description", "Mode", "Value", "Paused")
+	writeTable(c, output, "ID", "Description", "Mode", "Value", "Paused")
 }
