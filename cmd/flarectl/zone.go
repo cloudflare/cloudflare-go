@@ -315,3 +315,28 @@ func formatLockdownResponse(resp *cloudflare.ZoneLockdownResponse) []string {
 		resp.Result.ID,
 	}
 }
+
+func zoneExport(c *cli.Context) {
+	var zone string
+	if len(c.Args()) > 0 {
+		zone = c.Args()[0]
+	} else if c.String("zone") != "" {
+		zone = c.String("zone")
+	} else {
+		cli.ShowSubcommandHelp(c)
+		return
+	}
+
+	zoneID, err := api.ZoneIDByName(zone)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	res, err := api.ZoneExport(zoneID)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Print(res)
+}

@@ -224,6 +224,18 @@ func main() {
 					Action:  zoneKeyless,
 					Usage:   "Keyless SSL for a zone",
 				},
+				{
+					Name:    "export",
+					Aliases: []string{"x"},
+					Action:  zoneExport,
+					Usage:   "Export DNS records for a zone",
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+					},
+				},
 			},
 		},
 
