@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"testing"
@@ -8,6 +9,40 @@ import (
 
 	"github.com/stretchr/testify/assert"
 )
+
+var (
+	payloadTemplate = `{"expires_on":"%s"}`
+	unmarshalTime   = time.Now().Round(time.Second)
+)
+
+func TestOriginCA_UnmarshalRFC3339(t *testing.T) {
+	payload := fmt.Sprintf(payloadTemplate, unmarshalTime.Format(time.RFC3339))
+
+	var cert OriginCACertificate
+	err := json.Unmarshal([]byte(payload), &cert)
+	if assert.NoError(t, err) {
+		assert.Equal(t, unmarshalTime, cert.ExpiresOn)
+	}
+}
+
+func TestOriginCA_UnmarshalString(t *testing.T) {
+	payload := fmt.Sprintf(payloadTemplate, unmarshalTime.String())
+
+	var cert OriginCACertificate
+	err := json.Unmarshal([]byte(payload), &cert)
+	if assert.NoError(t, err) {
+		assert.Equal(t, unmarshalTime, cert.ExpiresOn)
+	}
+}
+
+func TestOriginCA_UnmarshalOther(t *testing.T) {
+	payload := fmt.Sprintf(payloadTemplate, unmarshalTime.Format(time.RFC1123))
+
+	var cert OriginCACertificate
+	err := json.Unmarshal([]byte(payload), &cert)
+	assert.Error(t, err)
+	assert.Equal(t, OriginCACertificate{}, cert)
+}
 
 func TestOriginCA_CreateOriginCertificate(t *testing.T) {
 	setup()
