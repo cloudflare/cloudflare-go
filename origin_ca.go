@@ -34,6 +34,7 @@ type originCACertificateResult struct {
 	CSR             string    `json:"csr,omitempty"`
 }
 
+// UnmarshalJSON handles custom parsing from an API response to an OriginCACertificate
 func (c *OriginCACertificate) UnmarshalJSON(data []byte) error {
 	var res originCACertificateResult
 	err := json.Unmarshal(data, &res)

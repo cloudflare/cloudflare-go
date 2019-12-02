@@ -12,7 +12,7 @@ import (
 
 var (
 	payloadTemplate = `{"expires_on":"%s"}`
-	unmarshalTime   = time.Now().Round(time.Second)
+	unmarshalTime   = time.Now().UTC().Round(time.Second)
 )
 
 func TestOriginCA_UnmarshalRFC3339(t *testing.T) {
