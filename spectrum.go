@@ -8,6 +8,31 @@ import (
 	"github.com/pkg/errors"
 )
 
+// ProxyProtocol implements json.Unmarshaler in order to support deserializing of the deprecated boolean
+// value for `proxy_protocol`
+type ProxyProtocol string
+
+func (p *ProxyProtocol) UnmarshalJSON(data []byte) error {
+	var raw interface{}
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	switch pp := raw.(type) {
+	case string:
+		*p = ProxyProtocol(pp)
+	case bool:
+		if pp {
+			*p = "v1"
+		} else {
+			*p = "off"
+		}
+	default:
+		return fmt.Errorf("invalid type for proxy_protocol field: %T", pp)
+	}
+	return nil
+}
+
 // SpectrumApplication defines a single Spectrum Application.
 type SpectrumApplication struct {
 	ID            string                        `json:"id,omitempty"`
@@ -18,12 +43,30 @@ type SpectrumApplication struct {
 	OriginPort    int                           `json:"origin_port,omitempty"`
 	OriginDNS     *SpectrumApplicationOriginDNS `json:"origin_dns,omitempty"`
 	IPFirewall    bool                          `json:"ip_firewall,omitempty"`
-	ProxyProtocol bool                          `json:"proxy_protocol,omitempty"`
+	ProxyProtocol ProxyProtocol                 `json:"proxy_protocol,omitempty"`
+	SPP           bool                          `json:"spp,omitempty"`
 	TLS           string                        `json:"tls,omitempty"`
 	TrafficType   string                        `json:"traffic_type,omitempty"`
 	CreatedOn     *time.Time                    `json:"created_on,omitempty"`
 	ModifiedOn    *time.Time                    `json:"modified_on,omitempty"`
 }
+
+func (a *SpectrumApplication) UnmarshalJSON(data []byte) error {
+	var raw spectrumApplicationRaw
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	if raw.SPP {
+		raw.ProxyProtocol = "simple"
+	}
+
+	*a = SpectrumApplication(raw)
+	return nil
+}
+
+// spectrumApplicationRaw is used to inspect an application body to support the deprecated boolean value for `spp`
+type spectrumApplicationRaw SpectrumApplication
 
 // SpectrumApplicationDNS holds the external DNS configuration for a Spectrum
 // Application.
