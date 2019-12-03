@@ -8,6 +8,6 @@ require (
 	github.com/pkg/errors v0.8.1
 	github.com/stretchr/testify v1.4.0
 	github.com/urfave/cli v1.22.2
-	golang.org/x/net v0.0.0-20191125084936-ffdde1057850
+	golang.org/x/net v0.0.0-20191126235420-ef20fe5d7933
 	golang.org/x/time v0.0.0-20191024005414-555d28b269f0
 )
