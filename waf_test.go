@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
+	"strconv"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -51,6 +53,84 @@ func TestListWAFPackages(t *testing.T) {
 			Name:          "WordPress rules",
 			Description:   "Common WordPress exploit protections",
 			ZoneID:        "023e105f4ecef8ad9ca31a8372d0c353",
+			DetectionMode: "traditional",
+			Sensitivity:   "",
+			ActionMode:    "",
+		},
+	}
+
+	d, err := client.ListWAFPackages(testZoneID)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, d)
+	}
+
+	_, err = client.ListWAFRules(testZoneID, "123")
+	assert.Error(t, err)
+}
+
+func TestListWAFPackagesMultiplePages(t *testing.T) {
+	setup()
+	defer teardown()
+
+	testZoneID := "abcd123"
+
+	page := 1
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+
+		reqURI, err := url.ParseRequestURI(r.RequestURI)
+		assert.NoError(t, err)
+
+		query, err := url.ParseQuery(reqURI.RawQuery)
+		assert.NoError(t, err)
+
+		assert.Equal(t, query, url.Values{"page": []string{strconv.Itoa(page)}, "per_page": []string{"100"}})
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": [
+				{
+				"id": "fake_id_number_%[1]d",
+				"name": "Fake rule name %[1]d",
+				"description": "Fake rule description %[1]d",
+				"detection_mode": "traditional",
+				"zone_id": "%[2]s",
+				"status": "active"
+				}
+			],
+			"result_info": {
+				"page": %[1]d,
+				"per_page": 1,
+				"total_pages": 2,
+				"count": 1,
+				"total_count": 2
+			}
+		}`, page, testZoneID)
+
+		page++
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/firewall/waf/packages", handler)
+
+	want := []WAFPackage{
+		{
+			ID:            "fake_id_number_1",
+			Name:          "Fake rule name 1",
+			Description:   "Fake rule description 1",
+			ZoneID:        testZoneID,
+			DetectionMode: "traditional",
+			Sensitivity:   "",
+			ActionMode:    "",
+		},
+		{
+			ID:            "fake_id_number_2",
+			Name:          "Fake rule name 2",
+			Description:   "Fake rule description 2",
+			ZoneID:        testZoneID,
 			DetectionMode: "traditional",
 			Sensitivity:   "",
 			ActionMode:    "",
@@ -235,6 +315,92 @@ func TestListWAFGroups(t *testing.T) {
 	assert.Error(t, err)
 }
 
+func TestListWAFGroupsMultiplePages(t *testing.T) {
+	setup()
+	defer teardown()
+
+	testZoneID := "abcd123"
+	packageID := "efgh456"
+
+	page := 1
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+
+		reqURI, err := url.ParseRequestURI(r.RequestURI)
+		assert.NoError(t, err)
+
+		query, err := url.ParseQuery(reqURI.RawQuery)
+		assert.NoError(t, err)
+
+		assert.Equal(t, query, url.Values{"page": []string{strconv.Itoa(page)}, "per_page": []string{"100"}})
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": [
+				{
+					"id": "fake_group_id_%[1]d",
+					"name": "Fake Group Name %[1]d",
+					"description": "Fake Group Description %[1]d",
+					"rules_count": 1%[1]d,
+					"modified_rules_count": %[1]d,
+					"package_id": "%[2]s",
+					"mode": "on",
+					"allowed_modes": [
+						"on",
+						"off"
+					]
+				}
+			],
+			"result_info": {
+				"page": %[1]d,
+				"per_page": 1,
+				"total_pages": 2,
+				"count": 1,
+				"total_count": 2
+			}
+		}`, page, packageID)
+
+		page++
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/firewall/waf/packages/"+packageID+"/groups", handler)
+
+	want := []WAFGroup{
+		{
+			ID:                 "fake_group_id_1",
+			Name:               "Fake Group Name 1",
+			Description:        "Fake Group Description 1",
+			RulesCount:         11,
+			ModifiedRulesCount: 1,
+			PackageID:          packageID,
+			Mode:               "on",
+			AllowedModes:       []string{"on", "off"},
+		},
+		{
+			ID:                 "fake_group_id_2",
+			Name:               "Fake Group Name 2",
+			Description:        "Fake Group Description 2",
+			RulesCount:         12,
+			ModifiedRulesCount: 2,
+			PackageID:          packageID,
+			Mode:               "on",
+			AllowedModes:       []string{"on", "off"},
+		},
+	}
+
+	d, err := client.ListWAFGroups(testZoneID, packageID)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, d)
+	}
+
+	_, err = client.ListWAFGroups(testZoneID, "123")
+	assert.Error(t, err)
+}
+
 func TestWAFGroup(t *testing.T) {
 	setup()
 	defer teardown()
@@ -410,6 +576,106 @@ func TestListWAFRules(t *testing.T) {
 	}
 
 	d, err := client.ListWAFRules(testZoneID, "a25a9a7e9c00afc1fb2e0245519d725b")
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, d)
+	}
+
+	_, err = client.ListWAFRules(testZoneID, "123")
+	assert.Error(t, err)
+}
+
+func TestListWAFRulesMultiplePages(t *testing.T) {
+	setup()
+	defer teardown()
+
+	testZoneID := "abcd123"
+	packageID := "efgh456"
+
+	page := 1
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+
+		reqURI, err := url.ParseRequestURI(r.RequestURI)
+		assert.NoError(t, err)
+
+		query, err := url.ParseQuery(reqURI.RawQuery)
+		assert.NoError(t, err)
+
+		assert.Equal(t, query, url.Values{"page": []string{strconv.Itoa(page)}, "per_page": []string{"100"}})
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": [
+				{
+				"id": "fake_rule_id_%[1]d",
+				"description": "Fake Rule Description %[1]d",
+				"priority": "%[1]d",
+				"group": {
+					"id": "fake_group_id_%[1]d",
+					"name": "Fake Group Name %[1]d"
+				},
+				"package_id": "%[2]s",
+				"allowed_modes": [
+					"on",
+					"off"
+				],
+				"mode": "on"
+				}
+			],
+			"result_info": {
+				"page": %[1]d,
+				"per_page": 1,
+				"total_pages": 2,
+				"count": 1,
+				"total_count": 2
+			}
+		}`, page, packageID)
+
+		page++
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/firewall/waf/packages/"+packageID+"/rules", handler)
+
+	want := []WAFRule{
+		{
+			ID:          "fake_rule_id_1",
+			Description: "Fake Rule Description 1",
+			Priority:    "1",
+			PackageID:   packageID,
+			Group: struct {
+				ID   string `json:"id"`
+				Name string `json:"name"`
+			}{
+				ID:   "fake_group_id_1",
+				Name: "Fake Group Name 1",
+			},
+			Mode:         "on",
+			DefaultMode:  "",
+			AllowedModes: []string{"on", "off"},
+		},
+		{
+			ID:          "fake_rule_id_2",
+			Description: "Fake Rule Description 2",
+			Priority:    "2",
+			PackageID:   packageID,
+			Group: struct {
+				ID   string `json:"id"`
+				Name string `json:"name"`
+			}{
+				ID:   "fake_group_id_2",
+				Name: "Fake Group Name 2",
+			},
+			Mode:         "on",
+			DefaultMode:  "",
+			AllowedModes: []string{"on", "off"},
+		},
+	}
+
+	d, err := client.ListWAFRules(testZoneID, packageID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, d)
