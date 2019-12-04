@@ -22,6 +22,38 @@ type OriginCACertificate struct {
 	CSR             string    `json:"csr"`
 }
 
+// UnmarshalJSON handles custom parsing from an API response to an OriginCACertificate
+// http://choly.ca/post/go-json-marshalling/
+func (c *OriginCACertificate) UnmarshalJSON(data []byte) error {
+	type alias OriginCACertificate
+
+	aux := &struct {
+		ExpiresOn string `json:"expires_on"`
+		*alias
+	}{
+		alias: (*alias)(c),
+	}
+
+	var err error
+
+	if err = json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+
+	// This format comes from time.Time.String() source
+	c.ExpiresOn, err = time.Parse("2006-01-02 15:04:05.999999999 -0700 MST", aux.ExpiresOn)
+
+	if err != nil {
+		c.ExpiresOn, err = time.Parse(time.RFC3339, aux.ExpiresOn)
+	}
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // OriginCACertificateListOptions represents the parameters used to list Cloudflare-issued certificates.
 type OriginCACertificateListOptions struct {
 	ZoneID string
