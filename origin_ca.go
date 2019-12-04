@@ -13,54 +13,44 @@ import (
 //
 // API reference: https://api.cloudflare.com/#cloudflare-ca
 type OriginCACertificate struct {
-	ID              string    `json:"id,omitempty"`
-	Certificate     string    `json:"certificate,omitempty"`
-	Hostnames       []string  `json:"hostnames,omitempty"`
-	ExpiresOn       time.Time `json:"expires_on,omitempty"`
-	RequestType     string    `json:"request_type,omitempty"`
-	RequestValidity int       `json:"requested_validity,omitempty"`
-	RevokedAt       time.Time `json:"revoked_at,omitempty"`
-	CSR             string    `json:"csr,omitempty"`
-}
-
-type originCACertificateResult struct {
-	ID              string    `json:"id,omitempty"`
-	Certificate     string    `json:"certificate,omitempty"`
-	Hostnames       []string  `json:"hostnames,omitempty"`
-	ExpiresOn       string    `json:"expires_on,omitempty"`
-	RequestType     string    `json:"request_type,omitempty"`
-	RequestValidity int       `json:"requested_validity,omitempty"`
-	RevokedAt       time.Time `json:"revoked_at,omitempty"`
-	CSR             string    `json:"csr,omitempty"`
+	ID              string    `json:"id"`
+	Certificate     string    `json:"certificate"`
+	Hostnames       []string  `json:"hostnames"`
+	ExpiresOn       time.Time `json:"expires_on"`
+	RequestType     string    `json:"request_type"`
+	RequestValidity int       `json:"requested_validity"`
+	CSR             string    `json:"csr"`
 }
 
 // UnmarshalJSON handles custom parsing from an API response to an OriginCACertificate
+// http://choly.ca/post/go-json-marshalling/
 func (c *OriginCACertificate) UnmarshalJSON(data []byte) error {
-	var res originCACertificateResult
-	err := json.Unmarshal(data, &res)
-	if err != nil {
+	type alias OriginCACertificate
+
+	aux := &struct {
+		ExpiresOn string `json:"expires_on"`
+		*alias
+	}{
+		alias: (*alias)(c),
+	}
+
+	var err error
+
+	if err = json.Unmarshal(data, &aux); err != nil {
 		return err
 	}
 
 	// This format comes from time.Time.String() source
-	expires, err := time.Parse("2006-01-02 15:04:05.999999999 -0700 MST", res.ExpiresOn)
+	c.ExpiresOn, err = time.Parse("2006-01-02 15:04:05.999999999 -0700 MST", aux.ExpiresOn)
+
 	if err != nil {
-		expires, err = time.Parse(time.RFC3339, res.ExpiresOn)
+		c.ExpiresOn, err = time.Parse(time.RFC3339, aux.ExpiresOn)
 	}
+
 	if err != nil {
 		return err
 	}
 
-	*c = OriginCACertificate{
-		ID:              res.ID,
-		Certificate:     res.Certificate,
-		Hostnames:       res.Hostnames,
-		ExpiresOn:       expires,
-		RequestType:     res.RequestType,
-		RequestValidity: res.RequestValidity,
-		RevokedAt:       res.RevokedAt,
-		CSR:             res.CSR,
-	}
 	return nil
 }
 
