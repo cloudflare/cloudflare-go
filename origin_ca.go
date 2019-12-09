@@ -19,6 +19,7 @@ type OriginCACertificate struct {
 	ExpiresOn       time.Time `json:"expires_on"`
 	RequestType     string    `json:"request_type"`
 	RequestValidity int       `json:"requested_validity"`
+	RevokedAt       time.Time `json:"revoked_at,omitempty"`
 	CSR             string    `json:"csr"`
 }
 
