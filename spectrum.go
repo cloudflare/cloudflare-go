@@ -12,6 +12,8 @@ import (
 // value for `proxy_protocol`
 type ProxyProtocol string
 
+// UnmarshalJSON handles deserializing of both the deprecated boolean value and the current string value
+// for the `proxy_protocol` field.
 func (p *ProxyProtocol) UnmarshalJSON(data []byte) error {
 	var raw interface{}
 	if err := json.Unmarshal(data, &raw); err != nil {
@@ -51,6 +53,7 @@ type SpectrumApplication struct {
 	ModifiedOn    *time.Time                    `json:"modified_on,omitempty"`
 }
 
+// UnmarshalJSON handles setting the `ProxyProtocol` field based on the value of the deprecated `spp` field.
 func (a *SpectrumApplication) UnmarshalJSON(data []byte) error {
 	var raw spectrumApplicationRaw
 	if err := json.Unmarshal(data, &raw); err != nil {
