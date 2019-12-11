@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"sync"
 
 	"github.com/pkg/errors"
 )
@@ -83,18 +84,53 @@ func (api *API) CreateWorkersKVNamespace(ctx context.Context, req *WorkersKVName
 //
 // API reference: https://api.cloudflare.com/#workers-kv-namespace-list-namespaces
 func (api *API) ListWorkersKVNamespaces(ctx context.Context) (ListWorkersKVNamespacesResponse, error) {
-	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces", api.AccountID)
+	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces?per_page=100", api.AccountID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return ListWorkersKVNamespacesResponse{}, errors.Wrap(err, errMakeRequestError)
 	}
 
-	result := ListWorkersKVNamespacesResponse{}
-	if err := json.Unmarshal(res, &result); err != nil {
-		return result, errors.Wrap(err, errUnmarshalError)
+	overallResult := ListWorkersKVNamespacesResponse{}
+	if err := json.Unmarshal(res, &overallResult); err != nil {
+		return overallResult, errors.Wrap(err, errUnmarshalError)
 	}
 
-	return result, err
+	totalPageCount := overallResult.ResultInfo.TotalPages
+	var wg sync.WaitGroup
+	wg.Add(totalPageCount - 1)
+	errc := make(chan error)
+
+	for i := 2; i <= totalPageCount; i++ {
+		go func(pageNumber int) error {
+			res, err = api.makeRequestContext(ctx, http.MethodGet, fmt.Sprintf("%s&page=%d", uri, pageNumber), nil)
+			if err != nil {
+				errc <- err
+			}
+
+			pageResult := ListWorkersKVNamespacesResponse{}
+			err = json.Unmarshal(res, &pageResult)
+			if err != nil {
+				errc <- err
+			}
+
+			for _, namespace := range pageResult.Result {
+				overallResult.Result = append(overallResult.Result, namespace)
+			}
+
+			select {
+			case err := <-errc:
+				return err
+			default:
+				wg.Done()
+			}
+
+			return nil
+		}(i)
+	}
+
+	wg.Wait()
+
+	return overallResult, nil
 }
 
 // DeleteWorkersKVNamespace deletes the namespace corresponding to the given ID
