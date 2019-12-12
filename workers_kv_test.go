@@ -2,6 +2,7 @@ package cloudflare
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -100,39 +101,26 @@ func TestWorkersKV_ListWorkersKVNamespace(t *testing.T) {
 		fmt.Fprintf(w, response)
 	})
 
-	res, err := client.ListWorkersKVNamespaces(context.Background())
-	want := ListWorkersKVNamespacesResponse{
-		successResponse,
-		[]WorkersKVNamespace{
-			{
-				ID:    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-				Title: "test_namespace_1",
-			},
-			{
-				ID:    "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
-				Title: "test_namespace_2",
-			},
+	res, err := client.ListWorkersKVNamespaces()
+	want := []WorkersKVNamespace{
+		WorkersKVNamespace {
+			ID:    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+			Title: "test_namespace_1",
 		},
-		ResultInfo{
-			Page:       1,
-			PerPage:    100,
-			Count:      2,
-			TotalPages: 1,
-			Total:      2,
+		WorkersKVNamespace {
+			ID:    "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
+			Title: "test_namespace_2",
 		},
 	}
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, want.Response, res.Response)
-		assert.Equal(t, want.ResultInfo, res.ResultInfo)
-
-		sort.Slice(res.Result, func(i, j int) bool {
-			return res.Result[i].ID < res.Result[j].ID
+		sort.Slice(res, func(i, j int) bool {
+			return res[i].ID < res[j].ID
 		})
-		sort.Slice(want.Result, func(i, j int) bool {
-			return want.Result[i].ID < want.Result[j].ID
+		sort.Slice(want, func(i, j int) bool {
+			return want[i].ID < want[j].ID
 		})
-		assert.Equal(t, res.Result, want.Result)
+		assert.Equal(t, res, want)
 	}
 }
 
@@ -180,47 +168,37 @@ func TestWorkersKV_ListWorkersKVNamespaceMultiplePages(t *testing.T) {
 		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
 
-		if r.URL.Query().Get("page") == "2" {
+		if r.URL.Query().Get("page") == "1" {
+			fmt.Fprintf(w, response1)
+			return
+		} else if r.URL.Query().Get("page") == "2" {
 			fmt.Fprintf(w, response2)
 			return
+		} else {
+			panic(errors.New("Got a request for an unexpected page"))
 		}
-
-		fmt.Fprintf(w, response1)
 	})
 
-	res, err := client.ListWorkersKVNamespaces(context.Background())
-	want := ListWorkersKVNamespacesResponse{
-		successResponse,
-		[]WorkersKVNamespace{
-			{
-				ID:    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-				Title: "test_namespace_1",
-			},
-			{
-				ID:    "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
-				Title: "test_namespace_2",
-			},
+	res, err := client.ListWorkersKVNamespaces()
+	want := []WorkersKVNamespace{
+		WorkersKVNamespace {
+			ID:    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+			Title: "test_namespace_1",
 		},
-		ResultInfo{
-			Page:       1,
-			PerPage:    100,
-			Count:      1,
-			TotalPages: 2,
-			Total:      2,
+		WorkersKVNamespace {
+			ID:    "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
+			Title: "test_namespace_2",
 		},
 	}
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, want.Response, res.Response)
-		assert.Equal(t, want.ResultInfo, res.ResultInfo)
-
-		sort.Slice(res.Result, func(i, j int) bool {
-			return res.Result[i].ID < res.Result[j].ID
+		sort.Slice(res, func(i, j int) bool {
+			return res[i].ID < res[j].ID
 		})
-		sort.Slice(want.Result, func(i, j int) bool {
-			return want.Result[i].ID < want.Result[j].ID
+		sort.Slice(want, func(i, j int) bool {
+			return want[i].ID < want[j].ID
 		})
-		assert.Equal(t, res.Result, want.Result)
+		assert.Equal(t, res, want)
 	}
 }
 
