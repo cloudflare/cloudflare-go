@@ -30,7 +30,6 @@ func TestSpectrumApplication(t *testing.T) {
 				],
 				"ip_firewall": true,
 				"proxy_protocol": "off",
-				"spp": false,
 				"tls": "off",
 				"created_on": "2018-03-28T21:25:55.643771Z",
 				"modified_on": "2018-03-28T21:25:55.643771Z"
@@ -57,7 +56,6 @@ func TestSpectrumApplication(t *testing.T) {
 		OriginDirect:  []string{"tcp://192.0.2.1:22"},
 		IPFirewall:    true,
 		ProxyProtocol: "off",
-		SPP:           false,
 		TLS:           "off",
 	}
 
@@ -89,7 +87,6 @@ func TestSpectrumApplications(t *testing.T) {
 					],
 					"ip_firewall": true,
 					"proxy_protocol": "off",
-					"spp": false,
 					"tls": "off",
 					"created_on": "2018-03-28T21:25:55.643771Z",
 					"modified_on": "2018-03-28T21:25:55.643771Z"
@@ -118,7 +115,6 @@ func TestSpectrumApplications(t *testing.T) {
 			OriginDirect:  []string{"tcp://192.0.2.1:22"},
 			IPFirewall:    true,
 			ProxyProtocol: "off",
-			SPP:           false,
 			TLS:           "off",
 		},
 	}
@@ -150,7 +146,6 @@ func TestUpdateSpectrumApplication(t *testing.T) {
 				],
 				"ip_firewall": true,
 				"proxy_protocol": "off",
-				"spp": false,
 				"tls": "full",
 				"created_on": "2018-03-28T21:25:55.643771Z",
 				"modified_on": "2018-03-28T21:25:55.643771Z"
@@ -176,7 +171,6 @@ func TestUpdateSpectrumApplication(t *testing.T) {
 		OriginDirect:  []string{"tcp://192.0.2.1:23"},
 		IPFirewall:    true,
 		ProxyProtocol: "off",
-		SPP:           false,
 		TLS:           "full",
 		CreatedOn:     &createdOn,
 		ModifiedOn:    &modifiedOn,
@@ -209,7 +203,6 @@ func TestCreateSpectrumApplication(t *testing.T) {
 				],
 				"ip_firewall": true,
 				"proxy_protocol": "off",
-				"spp": false,
 				"tls": "full",
 				"created_on": "2018-03-28T21:25:55.643771Z",
 				"modified_on": "2018-03-28T21:25:55.643771Z"
@@ -267,7 +260,6 @@ func TestCreateSpectrumApplication_OriginDNS(t *testing.T) {
 				},
 				"ip_firewall": true,
 				"proxy_protocol": "off",
-				"spp": false,
 				"tls": "full",
 				"created_on": "2018-03-28T21:25:55.643771Z",
 				"modified_on": "2018-03-28T21:25:55.643771Z"
@@ -397,7 +389,6 @@ func TestSpectrumApplicationProxyProtocolDeprecations(t *testing.T) {
 			OriginDirect:  []string{"tcp://192.0.2.1:22"},
 			IPFirewall:    true,
 			ProxyProtocol: testCase.expectedProxyProtocol,
-			SPP:           testCase.actualSPP,
 			TLS:           "off",
 		}
 

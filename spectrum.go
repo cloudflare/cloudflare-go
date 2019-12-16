@@ -46,7 +46,6 @@ type SpectrumApplication struct {
 	OriginDNS     *SpectrumApplicationOriginDNS `json:"origin_dns,omitempty"`
 	IPFirewall    bool                          `json:"ip_firewall,omitempty"`
 	ProxyProtocol ProxyProtocol                 `json:"proxy_protocol,omitempty"`
-	SPP           bool                          `json:"spp,omitempty"`
 	TLS           string                        `json:"tls,omitempty"`
 	TrafficType   string                        `json:"traffic_type,omitempty"`
 	CreatedOn     *time.Time                    `json:"created_on,omitempty"`
@@ -55,16 +54,21 @@ type SpectrumApplication struct {
 
 // UnmarshalJSON handles setting the `ProxyProtocol` field based on the value of the deprecated `spp` field.
 func (a *SpectrumApplication) UnmarshalJSON(data []byte) error {
-	var raw spectrumApplicationRaw
-	if err := json.Unmarshal(data, &raw); err != nil {
+	var body map[string]interface{}
+	if err := json.Unmarshal(data, &body); err != nil {
 		return err
 	}
 
-	if raw.SPP {
-		raw.ProxyProtocol = "simple"
+	var app spectrumApplicationRaw
+	if err := json.Unmarshal(data, &app); err != nil {
+		return err
 	}
 
-	*a = SpectrumApplication(raw)
+	if spp, ok := body["spp"]; ok && spp.(bool) == true {
+		app.ProxyProtocol = "simple"
+	}
+
+	*a = SpectrumApplication(app)
 	return nil
 }
 
