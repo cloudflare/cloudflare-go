@@ -29,7 +29,7 @@ func TestSpectrumApplication(t *testing.T) {
 					"tcp://192.0.2.1:22"
 				],
 				"ip_firewall": true,
-				"proxy_protocol": false,
+				"proxy_protocol": "off",
 				"tls": "off",
 				"created_on": "2018-03-28T21:25:55.643771Z",
 				"modified_on": "2018-03-28T21:25:55.643771Z"
@@ -55,7 +55,7 @@ func TestSpectrumApplication(t *testing.T) {
 		},
 		OriginDirect:  []string{"tcp://192.0.2.1:22"},
 		IPFirewall:    true,
-		ProxyProtocol: false,
+		ProxyProtocol: "off",
 		TLS:           "off",
 	}
 
@@ -86,7 +86,7 @@ func TestSpectrumApplications(t *testing.T) {
 						"tcp://192.0.2.1:22"
 					],
 					"ip_firewall": true,
-					"proxy_protocol": false,
+					"proxy_protocol": "off",
 					"tls": "off",
 					"created_on": "2018-03-28T21:25:55.643771Z",
 					"modified_on": "2018-03-28T21:25:55.643771Z"
@@ -114,7 +114,7 @@ func TestSpectrumApplications(t *testing.T) {
 			},
 			OriginDirect:  []string{"tcp://192.0.2.1:22"},
 			IPFirewall:    true,
-			ProxyProtocol: false,
+			ProxyProtocol: "off",
 			TLS:           "off",
 		},
 	}
@@ -145,7 +145,7 @@ func TestUpdateSpectrumApplication(t *testing.T) {
 					"tcp://192.0.2.1:23"
 				],
 				"ip_firewall": true,
-				"proxy_protocol": false,
+				"proxy_protocol": "off",
 				"tls": "full",
 				"created_on": "2018-03-28T21:25:55.643771Z",
 				"modified_on": "2018-03-28T21:25:55.643771Z"
@@ -170,7 +170,7 @@ func TestUpdateSpectrumApplication(t *testing.T) {
 		},
 		OriginDirect:  []string{"tcp://192.0.2.1:23"},
 		IPFirewall:    true,
-		ProxyProtocol: false,
+		ProxyProtocol: "off",
 		TLS:           "full",
 		CreatedOn:     &createdOn,
 		ModifiedOn:    &modifiedOn,
@@ -202,7 +202,7 @@ func TestCreateSpectrumApplication(t *testing.T) {
 					"tcp://192.0.2.1:22"
 				],
 				"ip_firewall": true,
-				"proxy_protocol": false,
+				"proxy_protocol": "off",
 				"tls": "full",
 				"created_on": "2018-03-28T21:25:55.643771Z",
 				"modified_on": "2018-03-28T21:25:55.643771Z"
@@ -227,7 +227,7 @@ func TestCreateSpectrumApplication(t *testing.T) {
 		},
 		OriginDirect:  []string{"tcp://192.0.2.1:22"},
 		IPFirewall:    true,
-		ProxyProtocol: false,
+		ProxyProtocol: "off",
 		TLS:           "full",
 		CreatedOn:     &createdOn,
 		ModifiedOn:    &modifiedOn,
@@ -259,7 +259,7 @@ func TestCreateSpectrumApplication_OriginDNS(t *testing.T) {
 					"name" : "spectrum.origin.example.com"
 				},
 				"ip_firewall": true,
-				"proxy_protocol": false,
+				"proxy_protocol": "off",
 				"tls": "full",
 				"created_on": "2018-03-28T21:25:55.643771Z",
 				"modified_on": "2018-03-28T21:25:55.643771Z"
@@ -286,7 +286,7 @@ func TestCreateSpectrumApplication_OriginDNS(t *testing.T) {
 			Name: "spectrum.origin.example.com",
 		},
 		IPFirewall:    true,
-		ProxyProtocol: false,
+		ProxyProtocol: "off",
 		TLS:           "full",
 		CreatedOn:     &createdOn,
 		ModifiedOn:    &modifiedOn,
@@ -319,4 +319,84 @@ func TestDeleteSpectrumApplication(t *testing.T) {
 
 	err := client.DeleteSpectrumApplication("01a7362d577a6c3019a474fd6f485823", "f68579455bd947efb65ffa1bcf33b52c")
 	assert.NoError(t, err)
+}
+
+func TestSpectrumApplicationProxyProtocolDeprecations(t *testing.T) {
+	for _, testCase := range []struct {
+		actualProxyProtocol   bool
+		actualSPP             bool
+		expectedProxyProtocol ProxyProtocol
+	}{
+		{
+			actualProxyProtocol:   false,
+			actualSPP:             false,
+			expectedProxyProtocol: "off",
+		},
+		{
+			actualProxyProtocol:   true,
+			actualSPP:             false,
+			expectedProxyProtocol: "v1",
+		},
+		{
+			actualProxyProtocol:   false,
+			actualSPP:             true,
+			expectedProxyProtocol: "simple",
+		},
+	} {
+		setup()
+
+		handler := func(w http.ResponseWriter, r *http.Request) {
+			assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+			w.Header().Set("content-type", "application/json")
+			fmt.Fprintf(w, `{
+			"result": {
+				"id": "f68579455bd947efb65ffa1bcf33b52c",
+				"protocol": "tcp/22",
+				"ipv4": true,
+				"dns": {
+					"type": "CNAME",
+					"name": "spectrum.example.com"
+				},
+				"origin_direct": [
+					"tcp://192.0.2.1:22"
+				],
+				"ip_firewall": true,
+				"proxy_protocol": %v,
+				"spp": %v,
+				"tls": "off",
+				"created_on": "2018-03-28T21:25:55.643771Z",
+				"modified_on": "2018-03-28T21:25:55.643771Z"
+			},
+			"success": true,
+			"errors": [],
+			"messages": []
+		}`, testCase.actualProxyProtocol, testCase.actualSPP)
+		}
+
+		mux.HandleFunc("/zones/01a7362d577a6c3019a474fd6f485823/spectrum/apps/f68579455bd947efb65ffa1bcf33b52c", handler)
+		createdOn, _ := time.Parse(time.RFC3339, "2018-03-28T21:25:55.643771Z")
+		modifiedOn, _ := time.Parse(time.RFC3339, "2018-03-28T21:25:55.643771Z")
+		want := SpectrumApplication{
+			ID:         "f68579455bd947efb65ffa1bcf33b52c",
+			CreatedOn:  &createdOn,
+			ModifiedOn: &modifiedOn,
+			Protocol:   "tcp/22",
+			IPv4:       true,
+			DNS: SpectrumApplicationDNS{
+				Name: "spectrum.example.com",
+				Type: "CNAME",
+			},
+			OriginDirect:  []string{"tcp://192.0.2.1:22"},
+			IPFirewall:    true,
+			ProxyProtocol: testCase.expectedProxyProtocol,
+			TLS:           "off",
+		}
+
+		actual, err := client.SpectrumApplication("01a7362d577a6c3019a474fd6f485823", "f68579455bd947efb65ffa1bcf33b52c")
+		if assert.NoError(t, err) {
+			assert.Equal(t, want, actual)
+		}
+
+		teardown()
+	}
 }
