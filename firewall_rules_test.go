@@ -23,6 +23,20 @@ func TestFirewallRules(t *testing.T) {
 		fmt.Fprintf(w, `{
 			"result":[
 				{
+					"id":"2ae338944d6143383c3cf05a7c80d984",
+					"paused":false,
+					"description":"allow uploads without waf",
+					"action":"bypass",
+					"products": ["waf"],
+					"priority":null,
+					"filter":{
+						"id":"74217d7bd5ab435e84b1bd473bf4fb9f",
+						"expression":"http.request.uri.path matches \"^/upload$\"",
+						"paused":false,
+						"description":"/upload"
+					}
+				},
+				{
 					"id":"4ae338944d6143378c3cf05a7c77d983",
 					"paused":false,
 					"description":"allow API traffic without challenge",
@@ -81,8 +95,8 @@ func TestFirewallRules(t *testing.T) {
 			"result_info":{
 				"page":1,
 				"per_page":25,
-				"count":4,
-				"total_count":4
+				"count":5,
+				"total_count":5
 			}
 		}
 		`)
@@ -90,6 +104,20 @@ func TestFirewallRules(t *testing.T) {
 
 	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/firewall/rules", handler)
 	want := []FirewallRule{
+		{
+			ID:          "2ae338944d6143383c3cf05a7c80d984",
+			Paused:      false,
+			Description: "allow uploads without waf",
+			Action:      "bypass",
+			Priority:    nil,
+			Products:    []string{"waf"},
+			Filter: Filter{
+				ID:          "74217d7bd5ab435e84b1bd473bf4fb9f",
+				Expression:  "http.request.uri.path matches \"^/upload$\"",
+				Paused:      false,
+				Description: "/upload",
+			},
+		},
 		{
 			ID:          "4ae338944d6143378c3cf05a7c77d983",
 			Paused:      false,
