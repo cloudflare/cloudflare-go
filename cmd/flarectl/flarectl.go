@@ -328,6 +328,10 @@ func main() {
 							Name:  "content",
 							Usage: "record content",
 						},
+						cli.StringFlag{
+							Name:  "type",
+							Usage: "record type",
+						},
 						cli.IntFlag{
 							Name:  "ttl",
 							Usage: "TTL (1 = automatic)",

@@ -141,7 +141,9 @@ func (api *API) UpdateDNSRecord(zoneID, recordID string, rr DNSRecord) error {
 	if rr.Name == "" {
 		rr.Name = rec.Name
 	}
-	rr.Type = rec.Type
+	if rr.Type == "" {
+		rr.Type = rec.Type
+	}
 	uri := "/zones/" + zoneID + "/dns_records/" + recordID
 	res, err := api.makeRequest("PATCH", uri, rr)
 	if err != nil {
