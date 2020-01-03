@@ -34,7 +34,7 @@ func ExampleAPI_ListWorkersKVNamespaces() {
 		log.Fatal(err)
 	}
 
-	lsr, err := api.ListWorkersKVNamespaces()
+	lsr, err := api.ListWorkersKVNamespaces(context.Background())
 	if err != nil {
 		log.Fatal(err)
 	}

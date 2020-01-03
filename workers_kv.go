@@ -83,7 +83,7 @@ func (api *API) CreateWorkersKVNamespace(ctx context.Context, req *WorkersKVName
 // ListWorkersKVNamespaces lists storage namespaces
 //
 // API reference: https://api.cloudflare.com/#workers-kv-namespace-list-namespaces
-func (api *API) ListWorkersKVNamespaces() ([]WorkersKVNamespace, error) {
+func (api *API) ListWorkersKVNamespaces(ctx context.Context) ([]WorkersKVNamespace, error) {
 	v := url.Values{}
 	v.Set("per_page", "100")
 
@@ -93,7 +93,7 @@ func (api *API) ListWorkersKVNamespaces() ([]WorkersKVNamespace, error) {
 	for {
 		v.Set("page", strconv.Itoa(page))
 		uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces?%s", api.AccountID, v.Encode())
-		res, err := api.makeRequest(http.MethodGet, uri, nil)
+		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
 			return []WorkersKVNamespace{}, errors.Wrap(err, errMakeRequestError)
 		}

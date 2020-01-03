@@ -101,7 +101,7 @@ func TestWorkersKV_ListWorkersKVNamespace(t *testing.T) {
 		fmt.Fprintf(w, response)
 	})
 
-	res, err := client.ListWorkersKVNamespaces()
+	res, err := client.ListWorkersKVNamespaces(context.Background())
 	want := []WorkersKVNamespace{
 		WorkersKVNamespace {
 			ID:    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
@@ -179,7 +179,7 @@ func TestWorkersKV_ListWorkersKVNamespaceMultiplePages(t *testing.T) {
 		}
 	})
 
-	res, err := client.ListWorkersKVNamespaces()
+	res, err := client.ListWorkersKVNamespaces(context.Background())
 	want := []WorkersKVNamespace{
 		WorkersKVNamespace {
 			ID:    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
