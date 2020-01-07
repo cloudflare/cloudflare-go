@@ -40,9 +40,9 @@ func TestAccessIdentityProviders(t *testing.T) {
 		ID:   "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		Name: "Widget Corps OTP",
 		Type: "github",
-		Config: map[string]interface{}{
-			"client_id":     "example_id",
-			"client_secret": "a-secret-key",
+		Config: AccessIdentityProviderConfiguration{
+			ClientID:     "example_id",
+			ClientSecret: "a-secret-key",
 		},
 	}}
 
@@ -83,9 +83,9 @@ func TestAccessIdentityProviderDetails(t *testing.T) {
 		ID:   "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		Name: "Widget Corps OTP",
 		Type: "github",
-		Config: map[string]interface{}{
-			"client_id":     "example_id",
-			"client_secret": "a-secret-key",
+		Config: AccessIdentityProviderConfiguration{
+			ClientID:     "example_id",
+			ClientSecret: "a-secret-key",
 		},
 	}
 
@@ -125,7 +125,7 @@ func TestCreateAccessIdentityProvider(t *testing.T) {
 	newIdentityProvider := AccessIdentityProvider{
 		Name: "Widget Corps OTP",
 		Type: "github",
-		Config: AccessGitHubConfiguration{
+		Config: AccessIdentityProviderConfiguration{
 			ClientID:     "example_id",
 			ClientSecret: "a-secret-key",
 		},
@@ -135,9 +135,9 @@ func TestCreateAccessIdentityProvider(t *testing.T) {
 		ID:   "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		Name: "Widget Corps OTP",
 		Type: "github",
-		Config: map[string]interface{}{
-			"client_id":     "example_id",
-			"client_secret": "a-secret-key",
+		Config: AccessIdentityProviderConfiguration{
+			ClientID:     "example_id",
+			ClientSecret: "a-secret-key",
 		},
 	}
 
@@ -176,7 +176,7 @@ func TestUpdateAccessIdentityProvider(t *testing.T) {
 	updatedIdentityProvider := AccessIdentityProvider{
 		Name: "Widget Corps OTP",
 		Type: "github",
-		Config: AccessGitHubConfiguration{
+		Config: AccessIdentityProviderConfiguration{
 			ClientID:     "example_id",
 			ClientSecret: "a-secret-key",
 		},
@@ -186,9 +186,9 @@ func TestUpdateAccessIdentityProvider(t *testing.T) {
 		ID:   "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		Name: "Widget Corps OTP",
 		Type: "github",
-		Config: map[string]interface{}{
-			"client_id":     "example_id",
-			"client_secret": "a-secret-key",
+		Config: AccessIdentityProviderConfiguration{
+			ClientID:     "example_id",
+			ClientSecret: "a-secret-key",
 		},
 	}
 
@@ -229,9 +229,9 @@ func TestDeleteAccessIdentityProvider(t *testing.T) {
 		ID:   "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		Name: "Widget Corps OTP",
 		Type: "github",
-		Config: map[string]interface{}{
-			"client_id":     "example_id",
-			"client_secret": "a-secret-key",
+		Config: AccessIdentityProviderConfiguration{
+			ClientID:     "example_id",
+			ClientSecret: "a-secret-key",
 		},
 	}
 
