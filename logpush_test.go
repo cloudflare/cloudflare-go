@@ -9,13 +9,13 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-
 )
 
 const (
 	jobID                       = 1
 	serverLogpushJobDescription = `{
-    "id": %d,
+		"id": %d,
+		"dataset": "http_requests",
     "enabled": false,
 	"name": "example.com",
     "logpull_options": "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
@@ -37,6 +37,7 @@ var (
 	testLogpushTimestamp     = time.Now().UTC()
 	expectedLogpushJobStruct = LogpushJob{
 		ID:              jobID,
+		Dataset:         "http_requests",
 		Enabled:         false,
 		Name:            "example.com",
 		LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
@@ -51,14 +52,15 @@ var (
 		Message:  "",
 	}
 	expectedUpdatedLogpushJobStruct = LogpushJob{
-		ID: jobID, 
-		Enabled: true, 
-		Name: "updated.com", 
-		LogpullOptions: "fields=RayID,ClientIP,EdgeStartTimestamp", 
-		DestinationConf: "gs://mybucket/logs", 
-		LastComplete: &testLogpushTimestamp, 
-		LastError: &testLogpushTimestamp, 
-		ErrorMessage: "test",
+		ID:              jobID,
+		Dataset:         "http_requests",
+		Enabled:         true,
+		Name:            "updated.com",
+		LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp",
+		DestinationConf: "gs://mybucket/logs",
+		LastComplete:    &testLogpushTimestamp,
+		LastError:       &testLogpushTimestamp,
+		ErrorMessage:    "test",
 	}
 )
 
@@ -155,9 +157,9 @@ func TestUpdateLogpushJob(t *testing.T) {
 	setup()
 	defer teardown()
 	updatedJob := LogpushJob{
-		Enabled: true, 
-		Name: "updated.com", 
-		LogpullOptions: "fields=RayID,ClientIP,EdgeStartTimestamp", 
+		Enabled:         true,
+		Name:            "updated.com",
+		LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp",
 		DestinationConf: "gs://mybucket/logs",
 	}
 
