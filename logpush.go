@@ -141,7 +141,7 @@ func (api *API) LogpushJobsForDataset(zoneID, dataset string) ([]LogpushJob, err
 	return r.Result, nil
 }
 
-// LogpushFields returns fields for a given dataset
+// LogpushFields returns fields for a given dataset.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-list-logpush-jobs
 func (api *API) LogpushFields(zoneID, dataset string) (LogpushFields, error) {
