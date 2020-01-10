@@ -65,7 +65,7 @@ func (api *API) ListWAFOverrides(zoneID string) ([]WAFOverride, error) {
 
 // WAFOverride returns a WAF override from the given override ID.
 //
-// API Reference: https://api.cloudflare.com/#waf-overrides-update-uri-controlled-waf-configuration
+// API Reference: https://api.cloudflare.com/#waf-overrides-uri-controlled-waf-configuration-details
 func (api *API) WAFOverride(zoneID, overrideID string) (WAFOverride, error) {
 	uri := "/zones/" + zoneID + "/firewall/waf/overrides/" + overrideID
 	res, err := api.makeRequest("GET", uri, nil)
