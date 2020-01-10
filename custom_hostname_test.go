@@ -119,8 +119,8 @@ func TestCustomHostname_CreateCustomHostname_CustomOrigin(t *testing.T) {
 
 	want := &CustomHostnameResponse{
 		Result: CustomHostname{
-			ID:       "0d89c70d-ad9f-4843-b99f-6cc0252067e9",
-			Hostname: "app.example.com",
+			ID:                 "0d89c70d-ad9f-4843-b99f-6cc0252067e9",
+			Hostname:           "app.example.com",
 			CustomOriginServer: "example.app.com",
 			SSL: CustomHostnameSSL{
 				Type:        "dv",
@@ -248,5 +248,65 @@ func TestCustomHostname_CustomHostname(t *testing.T) {
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, customHostname)
+	}
+}
+
+func TestCustomHostname_UpdateCustomHostnameSSL(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/zones/foo/custom_hostnames/0d89c70d-ad9f-4843-b99f-6cc0252067e9", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "PATCH", r.Method, "Expected method 'PATCH', got %s", r.Method)
+
+		w.Header().Set("content-type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		fmt.Fprintf(w, `
+{
+	"success": true,
+	"errors": [],
+	"messages": [],
+	"result": {
+		"id": "0d89c70d-ad9f-4843-b99f-6cc0252067e9",
+		"hostname": "app.example.com",
+		"custom_origin_server": "example.app.com",
+		"ssl": {
+			"status": "pending_validation",
+			"method": "cname",
+			"type": "dv",
+			"cname_target": "dcv.digicert.com",
+			"cname": "810b7d5f01154524b961ba0cd578acc2.app.example.com",
+			"settings": {
+			"http2": "off",
+			"tls_1_3": "on"
+			}
+		}
+  	}
+}`)
+	})
+
+	response, err := client.UpdateCustomHostnameSSL("foo", "0d89c70d-ad9f-4843-b99f-6cc0252067e9", CustomHostnameSSL{Method: "cname", Type: "dv", Settings: CustomHostnameSSLSettings{HTTP2: "off", TLS13: "on"}})
+
+	want := &CustomHostnameResponse{
+		Result: CustomHostname{
+			ID:                 "0d89c70d-ad9f-4843-b99f-6cc0252067e9",
+			Hostname:           "app.example.com",
+			CustomOriginServer: "example.app.com",
+			SSL: CustomHostnameSSL{
+				Type:        "dv",
+				Method:      "cname",
+				Status:      "pending_validation",
+				CnameTarget: "dcv.digicert.com",
+				CnameName:   "810b7d5f01154524b961ba0cd578acc2.app.example.com",
+				Settings: CustomHostnameSSLSettings{
+					HTTP2: "off",
+					TLS13: "on",
+				},
+			},
+		},
+		Response: Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}},
+	}
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, response)
 	}
 }
