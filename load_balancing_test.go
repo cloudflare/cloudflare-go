@@ -1116,7 +1116,6 @@ func TestLoadBalancerDetails(t *testing.T) {
 	mux.HandleFunc("/zones/199d98642c564d2e855e9661899b7252/load_balancers/699d98642c564d2e855e9661899b7252", handler)
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2014-02-01T05:20:00.12345Z")
-	
 	want := LoadBalancer{
 		ID:           "699d98642c564d2e855e9661899b7252",
 		CreatedOn:    &createdOn,
