@@ -9,7 +9,7 @@ import (
 
 // Healthcheck describes a Healthcheck object.
 type Healthcheck struct {
-	ID            string                  `json:id,omitempty"`
+	ID            string                  `json:"id,omitempty"`
 	CreatedOn     *time.Time              `json:"created_on,omitempty"`
 	ModifiedOn    *time.Time              `json:"modified_on,omitempty"`
 	Name          string                  `json:"name"`
