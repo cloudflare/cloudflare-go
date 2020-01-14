@@ -87,7 +87,6 @@ var (
 			Suspended: false,
 			EmailAddresses: []string{"alerts@example.com"},
 		},
-		TCPConfig: nil,
 		Status: "unknown",
 		FailureReason: "",
 	}

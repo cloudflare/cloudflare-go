@@ -22,7 +22,6 @@ type Healthcheck struct {
 	Type          string                  `json:"type,omitempty"`
 	CheckRegions  []string                `json:"check_regions"`
 	HTTPConfig    *HealthcheckHTTPConfig  `json:"http_config,omitempty"`
-	TCPConfig     *HealthcheckTCPConfig   `json:"tcp_config,omitempty"`
 	Notification  HealthcheckNotification `json:"notification,omitempty"`
 	Status        string                  `json:"status"`
 	FailureReason string                  `json:"failure_reason"`
@@ -38,12 +37,6 @@ type HealthcheckHTTPConfig struct {
 	FollowRedirects bool                `json:"follow_redirects"`
 	AllowInsecure   bool                `json:"allow_insecure"`
 	Header          map[string][]string `json:"header"`
-}
-
-// HealthcheckTCPConfig describes configuration for a TCP healthcheck (Not yet implemented).
-type HealthcheckTCPConfig struct {
-	Method string `json:"method"`
-	Port   uint16 `json:"port,omitempty"`
 }
 
 // HealthcheckNotification describes notification configuration for a healthcheck.
