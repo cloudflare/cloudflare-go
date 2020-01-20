@@ -2,6 +2,7 @@ package cloudflare
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -87,7 +88,7 @@ func TestWorkersKV_ListWorkersKVNamespace(t *testing.T) {
 		"messages": [],
 		"result_info": {
 			"page": 1,
-			"per_page": 20,
+			"per_page": 100,
 			"count": 2,
 			"total_count": 2,
 			"total_pages": 1
@@ -101,38 +102,103 @@ func TestWorkersKV_ListWorkersKVNamespace(t *testing.T) {
 	})
 
 	res, err := client.ListWorkersKVNamespaces(context.Background())
-	want := ListWorkersKVNamespacesResponse{
-		successResponse,
-		[]WorkersKVNamespace{
-			{
-				ID:    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-				Title: "test_namespace_1",
-			},
-			{
-				ID:    "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
-				Title: "test_namespace_2",
-			},
+	want := []WorkersKVNamespace{
+		WorkersKVNamespace {
+			ID:    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+			Title: "test_namespace_1",
 		},
-		ResultInfo{
-			Page:       1,
-			PerPage:    20,
-			Count:      2,
-			TotalPages: 1,
-			Total:      2,
+		WorkersKVNamespace {
+			ID:    "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
+			Title: "test_namespace_2",
 		},
 	}
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, want.Response, res.Response)
-		assert.Equal(t, want.ResultInfo, res.ResultInfo)
+		sort.Slice(res, func(i, j int) bool {
+			return res[i].ID < res[j].ID
+		})
+		sort.Slice(want, func(i, j int) bool {
+			return want[i].ID < want[j].ID
+		})
+		assert.Equal(t, res, want)
+	}
+}
 
-		sort.Slice(res.Result, func(i, j int) bool {
-			return res.Result[i].ID < res.Result[j].ID
+func TestWorkersKV_ListWorkersKVNamespaceMultiplePages(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	response1 := `{
+		"result": [
+			{"id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+			"title": "test_namespace_1"
+			}
+		],
+		"success": true,
+		"errors": [],
+		"messages": [],
+		"result_info": {
+			"page": 1,
+			"per_page": 100,
+			"count": 1,
+			"total_count": 2,
+			"total_pages": 2
+		}
+	}`
+
+	response2 := `{
+		"result": [
+			{"id": "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
+			"title": "test_namespace_2"
+			}
+		],
+		"success": true,
+		"errors": [],
+		"messages": [],
+		"result_info": {
+			"page": 2,
+			"per_page": 100,
+			"count": 1,
+			"total_count": 2,
+			"total_pages": 2
+		}
+	}`
+
+	mux.HandleFunc(fmt.Sprintf("/accounts/foo/storage/kv/namespaces"), func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/javascript")
+
+		if r.URL.Query().Get("page") == "1" {
+			fmt.Fprintf(w, response1)
+			return
+		} else if r.URL.Query().Get("page") == "2" {
+			fmt.Fprintf(w, response2)
+			return
+		} else {
+			panic(errors.New("Got a request for an unexpected page"))
+		}
+	})
+
+	res, err := client.ListWorkersKVNamespaces(context.Background())
+	want := []WorkersKVNamespace{
+		WorkersKVNamespace {
+			ID:    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+			Title: "test_namespace_1",
+		},
+		WorkersKVNamespace {
+			ID:    "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
+			Title: "test_namespace_2",
+		},
+	}
+
+	if assert.NoError(t, err) {
+		sort.Slice(res, func(i, j int) bool {
+			return res[i].ID < res[j].ID
 		})
-		sort.Slice(want.Result, func(i, j int) bool {
-			return want.Result[i].ID < want.Result[j].ID
+		sort.Slice(want, func(i, j int) bool {
+			return want[i].ID < want[j].ID
 		})
-		assert.Equal(t, res.Result, want.Result)
+		assert.Equal(t, res, want)
 	}
 }
 
