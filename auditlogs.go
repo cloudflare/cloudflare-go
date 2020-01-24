@@ -110,7 +110,7 @@ func (a AuditLogFilter) ToQuery() url.Values {
 // API Reference: https://api.cloudflare.com/#audit-logs-list-organization-audit-logs
 func (api *API) GetOrganizationAuditLogs(organizationID string, a AuditLogFilter) (AuditLogResponse, error) {
 	uri := url.URL{
-		Path:       path.Join("/organizations", organizationID, "audit_logs"),
+		Path:       path.Join("/accounts", organizationID, "audit_logs"),
 		ForceQuery: true,
 		RawQuery:   a.ToQuery().Encode(),
 	}
