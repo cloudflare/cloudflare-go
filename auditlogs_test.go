@@ -13,18 +13,18 @@ func TestAuditLogFilterToQuery(t *testing.T) {
 		t.Fatalf("Did not properly stringify the id field: %s", filter.ToQuery().Encode())
 	}
 
-	filter.ActorEmail = "admin@admin.com"
-	if !strings.Contains(filter.ToQuery().Encode(), "actor.email=admin%40admin.com") {
+	filter.ActorEmail = "admin@example.com"
+	if !strings.Contains(filter.ToQuery().Encode(), "actor.email=admin%40example.com") {
 		t.Fatalf("Did not properly stringify the actor.email field: %s", filter.ToQuery().Encode())
 	}
 
-	filter.ActorIP = "1.1.1.1"
-	if !strings.Contains(filter.ToQuery().Encode(), "&actor.ip=1.1.1.1") {
+	filter.ActorIP = "192.0.2.0"
+	if !strings.Contains(filter.ToQuery().Encode(), "&actor.ip=192.0.2.0") {
 		t.Fatalf("Did not properly stringify the actorip field: %s", filter.ToQuery().Encode())
 	}
 
-	filter.ZoneName = "ejj.io"
-	if !strings.Contains(filter.ToQuery().Encode(), "&zone.name=ejj.io") {
+	filter.ZoneName = "example.com"
+	if !strings.Contains(filter.ToQuery().Encode(), "&zone.name=example.com") {
 		t.Fatalf("Did not properly stringify the zone.name field: %s", filter.ToQuery().Encode())
 	}
 
