@@ -64,7 +64,7 @@ type UserTokenIDResponse struct {
 	Result UserTokenID `json:"result"`
 }
 
-// UserTokens returns slice of all created UserTokens.
+// ListUserTokens returns slice of all created UserTokens.
 func (api *API) ListUserTokens() ([]UserToken, error) {
 	var r UserTokensResponse
 	res, err := api.makeRequest("GET", "/user/tokens", nil)
