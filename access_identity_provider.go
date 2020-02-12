@@ -35,6 +35,7 @@ type AccessIdentityProviderConfiguration struct {
 	IssuerURL          string   `json:"issuer_url,omitempty"`
 	OktaAccount        string   `json:"okta_account,omitempty"`
 	OneloginAccount    string   `json:"onelogin_account,omitempty"`
+	RedirectURL        string   `json:"redirect_url,omitempty"`
 	SignRequest        bool     `json:"sign_request,omitempty"`
 	SsoTargetURL       string   `json:"sso_target_url,omitempty"`
 	SupportGroups      bool     `json:"support_groups,omitempty"`
