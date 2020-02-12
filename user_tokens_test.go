@@ -58,6 +58,13 @@ var (
 		ModifiedOn: &testTimestamp,
 		Policies:   []UserTokenPolicy{expectedUserTokenPolicyStruct},
 	}
+
+	expectedUserTokensPermissionGroup = UserTokensPermissionGroup{
+		ID:     userTokenID,
+		Name:   "DNS Read",
+		Label:  "dns_read",
+		Scopes: []string{"com.cloudflare.api.account.zone"},
+	}
 )
 
 func TestUserTokensList(t *testing.T) {
@@ -206,6 +213,38 @@ func TestUserTokensUpdate(t *testing.T) {
 	want.Policies = []UserTokenPolicy{expectedUserTokenPolicyStruct, expectedUserTokenPolicyStruct}
 
 	actual, err := client.UpdateUserToken(want)
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestUserTokensPermissionGroups(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+		  "result": [
+			{
+				"id": %q,
+				"name": "DNS Read",
+				"label": "dns_read",
+				"scopes": ["com.cloudflare.api.account.zone"]
+			}
+		  ],
+		  "success": true,
+		  "errors": [],
+		  "messages": []
+		}
+		`, userTokenID)
+	}
+
+	mux.HandleFunc("/user/tokens/permission_groups", handler)
+	want := []UserTokensPermissionGroup{expectedUserTokensPermissionGroup}
+
+	actual, err := client.UserTokensPermissionGroups()
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
