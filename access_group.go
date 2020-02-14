@@ -61,6 +61,20 @@ type AccessGroupEveryone struct {
 	Everyone struct{} `json:"everyone"`
 }
 
+// AccessGroupServiceToken is used for managing access based on a specific
+// service token.
+type AccessGroupServiceToken struct {
+	ServiceToken struct {
+		ID string `json:"token_id"`
+	} `json:"service_token"`
+}
+
+// AccessGroupAnyValidServiceToken is used for managing access for all valid
+// service tokens (not restricted).
+type AccessGroupAnyValidServiceToken struct {
+	AnyValidServiceToken struct{} `json:"any_valid_service_token"`
+}
+
 // AccessGroupAccessGroup is used for managing access based on an
 // access group.
 type AccessGroupAccessGroup struct {
