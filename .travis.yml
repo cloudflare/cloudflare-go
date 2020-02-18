@@ -1,5 +1,6 @@
 language: go
-sudo: false
+os: linux
+dist: bionic
 
 cache:
   directories:
@@ -11,7 +12,7 @@ env:
     - GO111MODULE=on
     - GOPROXY=https://proxy.golang.org
 
-matrix:
+jobs:
   fast_finish: true
   include:
     - go: 1.12.x
