@@ -45,25 +45,15 @@ type AccessIdentityProviderConfiguration struct {
 // AccessIdentityProvidersListResponse is the API response for multiple
 // Access Identity Providers.
 type AccessIdentityProvidersListResponse struct {
-	Success  bool                             `json:"success"`
-	Errors   []string                         `json:"errors"`
-	Messages []AccessIdentityProviderMessages `json:"messages"`
+	Response
 	Result   []AccessIdentityProvider         `json:"result"`
 }
 
 // AccessIdentityProviderListResponse is the API response for a single
 // Access Identity Provider.
 type AccessIdentityProviderListResponse struct {
-	Success  bool                             `json:"success"`
-	Errors   []string                         `json:"errors"`
-	Messages []AccessIdentityProviderMessages `json:"messages"`
+	Response
 	Result   AccessIdentityProvider           `json:"result"`
-}
-
-// AccessIdentityProviderMessages holds the API responses for any additional
-// messages from the service.
-type AccessIdentityProviderMessages struct {
-	Message string `json:"message"`
 }
 
 // AccessIdentityProviders returns all Access Identity Providers for an
