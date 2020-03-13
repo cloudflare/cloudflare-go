@@ -8,11 +8,10 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-
 )
 
 const (
-	healthcheckID = "314d6b003029433741b94a7c9284915a"
+	healthcheckID       = "314d6b003029433741b94a7c9284915a"
 	healthcheckResponse = `{
 		"id": "%s",
 		"name": "example-healthcheck",
@@ -21,6 +20,8 @@ const (
 		"address": "www.example.com",
 		"retries": 2,
 		"timeout": 5,
+		"consecutive_successes": 2,
+		"consecutive_fails": 2,
 		"interval": 60,
 		"type": "HTTP",
 		"check_regions": [
@@ -55,39 +56,41 @@ const (
 )
 
 var (
-	createdOn, _ = time.Parse(time.RFC3339, "2019-01-13T12:20:00.12345Z")
+	createdOn, _  = time.Parse(time.RFC3339, "2019-01-13T12:20:00.12345Z")
 	modifiedOn, _ = time.Parse(time.RFC3339, "2019-01-13T12:20:00.12345Z")
 
 	expectedHealthcheck = Healthcheck{
-		ID:           "314d6b003029433741b94a7c9284915a",
-		CreatedOn:    &createdOn,
-		ModifiedOn:   &modifiedOn,
-		Description:  "Example Healthcheck",
-		Name:         "example-healthcheck",
-		Suspended:    false,
-		Address:      "www.example.com",
-		Retries:      2,
-		Timeout:      5,
-		Interval:     60,
-		Type:         "HTTP",
-		CheckRegions: []string{"WNAM"},
+		ID:                   "314d6b003029433741b94a7c9284915a",
+		CreatedOn:            &createdOn,
+		ModifiedOn:           &modifiedOn,
+		Description:          "Example Healthcheck",
+		Name:                 "example-healthcheck",
+		Suspended:            false,
+		Address:              "www.example.com",
+		Retries:              2,
+		ConsecutiveSuccesses: 2,
+		ConsecutiveFails:     2,
+		Timeout:              5,
+		Interval:             60,
+		Type:                 "HTTP",
+		CheckRegions:         []string{"WNAM"},
 		HTTPConfig: &HealthcheckHTTPConfig{
-			Method: "GET",
-			Path: "/",
-			Port: 8443,
-			ExpectedBody: "",
-			ExpectedCodes: []string{"200"},
+			Method:          "GET",
+			Path:            "/",
+			Port:            8443,
+			ExpectedBody:    "",
+			ExpectedCodes:   []string{"200"},
 			FollowRedirects: true,
-			AllowInsecure: false,
+			AllowInsecure:   false,
 			Header: map[string][]string{
 				"Host": []string{"www.example.com"},
 			},
 		},
 		Notification: HealthcheckNotification{
-			Suspended: false,
+			Suspended:      false,
 			EmailAddresses: []string{"alerts@example.com"},
 		},
-		Status: "unknown",
+		Status:        "unknown",
 		FailureReason: "",
 	}
 )
@@ -142,7 +145,7 @@ func TestHealthcheck(t *testing.T) {
 		`, fmt.Sprintf(healthcheckResponse, healthcheckID))
 	}
 
-	mux.HandleFunc("/zones/"+testZoneID+"/healthchecks/" + healthcheckID, handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/healthchecks/"+healthcheckID, handler)
 	want := expectedHealthcheck
 
 	actual, err := client.Healthcheck(testZoneID, healthcheckID)
@@ -155,9 +158,9 @@ func TestCreateHealthcheck(t *testing.T) {
 	setup()
 	defer teardown()
 	newHealthcheck := Healthcheck{
-		Name:            "example-healthcheck",
-		Address:         "www.example.com",
-		Suspended:       false,
+		Name:      "example-healthcheck",
+		Address:   "www.example.com",
+		Suspended: false,
 	}
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -185,8 +188,8 @@ func TestUpdateHealthcheck(t *testing.T) {
 	setup()
 	defer teardown()
 	updatedHealthcheck := Healthcheck{
-		Name: "example-healthcheck", 
-		Address: "www.example.com", 
+		Name:    "example-healthcheck",
+		Address: "www.example.com",
 		HTTPConfig: &HealthcheckHTTPConfig{
 			Path: "/newpath",
 		},
@@ -232,5 +235,82 @@ func TestDeleteHealthcheck(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/healthchecks/"+healthcheckID, handler)
 
 	err := client.DeleteHealthcheck(testZoneID, healthcheckID)
+	assert.NoError(t, err)
+}
+
+func TestCreateHealthcheckPreview(t *testing.T) {
+	setup()
+	defer teardown()
+	newHealthcheck := Healthcheck{
+		Name:      "example-healthcheck",
+		Address:   "www.example.com",
+		Suspended: false,
+	}
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+		  "result": %s,
+		  "success": true,
+		  "errors": null,
+		  "messages": null
+		}
+		`, fmt.Sprintf(healthcheckResponse, healthcheckID))
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/healthchecks/preview", handler)
+	want := expectedHealthcheck
+
+	actual, err := client.CreateHealthcheckPreview(testZoneID, newHealthcheck)
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestHealthcheckPreview(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"result": %s,
+			"success": true,
+			"errors": [],
+			"messages": []
+		}
+		`, fmt.Sprintf(healthcheckResponse, healthcheckID))
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/healthchecks/preview/"+healthcheckID, handler)
+	want := expectedHealthcheck
+
+	actual, err := client.HealthcheckPreview(testZoneID, healthcheckID)
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestDeleteHealthcheckPreview(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "DELETE", "Expected method 'DELETE', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+		  "result": null,
+		  "success": true,
+		  "errors": null,
+		  "messages": null
+		}
+		`)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/healthchecks/preview/"+healthcheckID, handler)
+
+	err := client.DeleteHealthcheckPreview(testZoneID, healthcheckID)
 	assert.NoError(t, err)
 }
