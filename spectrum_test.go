@@ -457,8 +457,8 @@ func TestSpectrumApplicationEdgeIPs(t *testing.T) {
 		IPFirewall:    true,
 		ProxyProtocol: "off",
 		TLS:           "off",
-		EdgeIPs: &EdgeIPs{
-			Type: STATIC,
+		EdgeIPs: &SpectrumApplicationEdgeIPs{
+			Type: SpectrumEdgeTypeStatic,
 			IPs:  []net.IP{net.ParseIP("192.0.2.1"), net.ParseIP("2001:db8::1")},
 		},
 	}

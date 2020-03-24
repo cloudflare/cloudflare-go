@@ -39,20 +39,21 @@ func (p *ProxyProtocol) UnmarshalJSON(data []byte) error {
 
 // SpectrumApplication defines a single Spectrum Application.
 type SpectrumApplication struct {
-	ID            string                        `json:"id,omitempty"`
-	Protocol      string                        `json:"protocol,omitempty"`
-	IPv4          bool                          `json:"ipv4,omitempty"`
-	DNS           SpectrumApplicationDNS        `json:"dns,omitempty"`
-	OriginDirect  []string                      `json:"origin_direct,omitempty"`
-	OriginPort    int                           `json:"origin_port,omitempty"`
-	OriginDNS     *SpectrumApplicationOriginDNS `json:"origin_dns,omitempty"`
-	IPFirewall    bool                          `json:"ip_firewall,omitempty"`
-	ProxyProtocol ProxyProtocol                 `json:"proxy_protocol,omitempty"`
-	TLS           string                        `json:"tls,omitempty"`
-	TrafficType   string                        `json:"traffic_type,omitempty"`
-	EdgeIPs       *EdgeIPs                      `json:"edge_ips,omitempty"`
-	CreatedOn     *time.Time                    `json:"created_on,omitempty"`
-	ModifiedOn    *time.Time                    `json:"modified_on,omitempty"`
+	ID               string                        `json:"id,omitempty"`
+	Protocol         string                        `json:"protocol,omitempty"`
+	IPv4             bool                          `json:"ipv4,omitempty"`
+	DNS              SpectrumApplicationDNS        `json:"dns,omitempty"`
+	OriginDirect     []string                      `json:"origin_direct,omitempty"`
+	OriginPort       int                           `json:"origin_port,omitempty"`
+	OriginDNS        *SpectrumApplicationOriginDNS `json:"origin_dns,omitempty"`
+	IPFirewall       bool                          `json:"ip_firewall,omitempty"`
+	ProxyProtocol    ProxyProtocol                 `json:"proxy_protocol,omitempty"`
+	TLS              string                        `json:"tls,omitempty"`
+	TrafficType      string                        `json:"traffic_type,omitempty"`
+	EdgeIPs          *SpectrumApplicationEdgeIPs   `json:"edge_ips,omitempty"`
+	ArgoSmartRouting bool                          `json:"argo_smart_routing,omitempty"`
+	CreatedOn        *time.Time                    `json:"created_on,omitempty"`
+	ModifiedOn       *time.Time                    `json:"modified_on,omitempty"`
 }
 
 // UnmarshalJSON handles setting the `ProxyProtocol` field based on the value of the deprecated `spp` field.
@@ -105,32 +106,35 @@ type SpectrumApplicationsDetailResponse struct {
 	Result []SpectrumApplication `json:"result"`
 }
 
-// EdgeIPs represents configuration for Bring-Your-Own-IP
+// SpectrumApplicationEdgeIPs represents configuration for Bring-Your-Own-IP
 // https://developers.cloudflare.com/spectrum/getting-started/byoip/
-type EdgeIPs struct {
-	Type EdgeType `json:"type"`
-	IPs  []net.IP `json:"ips,omitempty"`
+type SpectrumApplicationEdgeIPs struct {
+	Type         SpectrumApplicationEdgeType      `json:"type"`
+	Connectivity *SpectrumApplicationConnectivity `json:"connectivity,omitempty"`
+	IPs          []net.IP                         `json:"ips,omitempty"`
 }
 
-// EdgeType for possible Edge configurations
-type EdgeType string
+// SpectrumApplicationEdgeType for possible Edge configurations
+type SpectrumApplicationEdgeType string
 
 const (
-	// STATIC IP config
-	STATIC EdgeType = "static"
+	// SpectrumEdgeTypeDynamic IP config
+	SpectrumEdgeTypeDynamic SpectrumApplicationEdgeType = "dynamic"
+	// SpectrumEdgeTypeStatic IP config
+	SpectrumEdgeTypeStatic SpectrumApplicationEdgeType = "static"
 )
 
-// UnmarshalJSON function for EdgeType enum
-func (t *EdgeType) UnmarshalJSON(b []byte) error {
+// UnmarshalJSON function for SpectrumApplicationEdgeType enum
+func (t *SpectrumApplicationEdgeType) UnmarshalJSON(b []byte) error {
 	var s string
 	err := json.Unmarshal(b, &s)
 	if err != nil {
 		return err
 	}
 
-	newEdgeType := EdgeType(strings.ToLower(s))
+	newEdgeType := SpectrumApplicationEdgeType(strings.ToLower(s))
 	switch newEdgeType {
-	case STATIC:
+	case SpectrumEdgeTypeDynamic, SpectrumEdgeTypeStatic:
 		*t = newEdgeType
 		return nil
 	}
@@ -138,8 +142,57 @@ func (t *EdgeType) UnmarshalJSON(b []byte) error {
 	return errors.New(errUnmarshalError)
 }
 
-func (t EdgeType) String() string {
+func (t SpectrumApplicationEdgeType) String() string {
 	return string(t)
+}
+
+// SpectrumApplicationConnectivity specifies IP address type on the edge configuration
+type SpectrumApplicationConnectivity string
+
+const (
+	// SpectrumConnectivityAll specifies IPv4/6 edge IP
+	SpectrumConnectivityAll SpectrumApplicationConnectivity = "all"
+	// SpectrumConnectivityIPv4 specifies IPv4 edge IP
+	SpectrumConnectivityIPv4 SpectrumApplicationConnectivity = "ipv4"
+	// SpectrumConnectivityIPv6 specifies IPv6 edge IP
+	SpectrumConnectivityIPv6 SpectrumApplicationConnectivity = "ipv6"
+	// SpectrumConnectivityStatic specifies static edge IP configuration
+	SpectrumConnectivityStatic SpectrumApplicationConnectivity = "static"
+)
+
+func (c SpectrumApplicationConnectivity) String() string {
+	return string(c)
+}
+
+// UnmarshalJSON function for SpectrumApplicationConnectivity enum
+func (c *SpectrumApplicationConnectivity) UnmarshalJSON(b []byte) error {
+	var s string
+	err := json.Unmarshal(b, &s)
+	if err != nil {
+		return err
+	}
+
+	newConnectivity := SpectrumApplicationConnectivity(strings.ToLower(s))
+	if newConnectivity.Dynamic() {
+		*c = newConnectivity
+		return nil
+	}
+
+	return errors.New(errUnmarshalError)
+}
+
+// Dynamic checks if address family is specified as dynamic config
+func (c SpectrumApplicationConnectivity) Dynamic() bool {
+	switch c {
+	case SpectrumConnectivityAll, SpectrumConnectivityIPv4, SpectrumConnectivityIPv6:
+		return true
+	}
+	return false
+}
+
+// Static checks if address family is specified as static config
+func (c SpectrumApplicationConnectivity) Static() bool {
+	return c == SpectrumConnectivityStatic
 }
 
 // SpectrumApplications fetches all of the Spectrum applications for a zone.
