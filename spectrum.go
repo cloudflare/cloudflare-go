@@ -3,6 +3,8 @@ package cloudflare
 import (
 	"encoding/json"
 	"fmt"
+	"net"
+	"strings"
 	"time"
 
 	"github.com/pkg/errors"
@@ -48,6 +50,7 @@ type SpectrumApplication struct {
 	ProxyProtocol ProxyProtocol                 `json:"proxy_protocol,omitempty"`
 	TLS           string                        `json:"tls,omitempty"`
 	TrafficType   string                        `json:"traffic_type,omitempty"`
+	EdgeIPs       *EdgeIPs                      `json:"edge_ips,omitempty"`
 	CreatedOn     *time.Time                    `json:"created_on,omitempty"`
 	ModifiedOn    *time.Time                    `json:"modified_on,omitempty"`
 }
@@ -100,6 +103,43 @@ type SpectrumApplicationDetailResponse struct {
 type SpectrumApplicationsDetailResponse struct {
 	Response
 	Result []SpectrumApplication `json:"result"`
+}
+
+// EdgeIPs represents configuration for Bring-Your-Own-IP
+// https://developers.cloudflare.com/spectrum/getting-started/byoip/
+type EdgeIPs struct {
+	Type EdgeType `json:"type"`
+	IPs  []net.IP `json:"ips,omitempty"`
+}
+
+// EdgeType for possible Edge configurations
+type EdgeType string
+
+const (
+	// STATIC IP config
+	STATIC EdgeType = "static"
+)
+
+// UnmarshalJSON function for EdgeType enum
+func (t *EdgeType) UnmarshalJSON(b []byte) error {
+	var s string
+	err := json.Unmarshal(b, &s)
+	if err != nil {
+		return err
+	}
+
+	newEdgeType := EdgeType(strings.ToLower(s))
+	switch newEdgeType {
+	case STATIC:
+		*t = newEdgeType
+		return nil
+	}
+
+	return errors.New(errUnmarshalError)
+}
+
+func (t EdgeType) String() string {
+	return string(t)
 }
 
 // SpectrumApplications fetches all of the Spectrum applications for a zone.
