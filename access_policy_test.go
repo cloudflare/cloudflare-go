@@ -203,17 +203,17 @@ func TestCreateAccessPolicy(t *testing.T) {
 		AccessPolicy{
 			Name: "Allow devs",
 			Include: []interface{}{
-				AccessPolicyEmail{struct {
+				AccessGroupEmail{struct {
 					Email string `json:"email"`
 				}{Email: "test@example.com"}},
 			},
 			Exclude: []interface{}{
-				AccessPolicyEmail{struct {
+				AccessGroupEmail{struct {
 					Email string `json:"email"`
 				}{Email: "test@example.com"}},
 			},
 			Require: []interface{}{
-				AccessPolicyEmail{struct {
+				AccessGroupEmail{struct {
 					Email string `json:"email"`
 				}{Email: "test@example.com"}},
 			},
