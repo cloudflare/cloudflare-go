@@ -26,7 +26,7 @@ type CustomHostnameSSLSettings struct {
 	Ciphers       []string `json:"ciphers,omitempty"`
 }
 
-//CustomHostnameOwnershipVerification represents certificate status of a given custom hostname.
+//CustomHostnameOwnershipVerification represents ownership verification status of a given custom hostname.
 type CustomHostnameOwnershipVerification struct {
 	Type  string `json:"type,omitempty"`
 	Name  string `json:"name,omitempty"`
