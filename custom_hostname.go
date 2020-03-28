@@ -8,14 +8,14 @@ import (
 	"github.com/pkg/errors"
 )
 
-// CustomHostnameState is the enumeration of valid state values in the CustomHostnameSSL
-type CustomHostnameState string
+// CustomHostnameStatus is the enumeration of valid state values in the CustomHostnameSSL
+type CustomHostnameStatus string
 
 const (
-	PENDING CustomHostnameState = "pending"
-	ACTIVE  CustomHostnameState = "active"
-	MOVED   CustomHostnameState = "moved"
-	REMOVED CustomHostnameState = "removed"
+	PENDING CustomHostnameStatus = "pending"
+	ACTIVE  CustomHostnameStatus = "active"
+	MOVED   CustomHostnameStatus = "moved"
+	REMOVED CustomHostnameStatus = "removed"
 )
 
 // CustomHostnameSSLSettings represents the SSL settings for a custom hostname.
@@ -53,7 +53,7 @@ type CustomHostname struct {
 	CustomOriginServer    string                              `json:"custom_origin_server,omitempty"`
 	SSL                   CustomHostnameSSL                   `json:"ssl,omitempty"`
 	CustomMetadata        CustomMetadata                      `json:"custom_metadata,omitempty"`
-	State                 CustomHostnameState                 `json:"state,omitempty"`
+	Status                CustomHostnameStatus                `json:"status,omitempty"`
 	VerificationErrors    []string                            `json:"verification_errors,omitempty"`
 	OwnershipVerification CustomHostnameOwnershipVerification `json:"ownership_verification,omitempty"`
 }

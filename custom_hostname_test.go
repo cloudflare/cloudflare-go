@@ -199,7 +199,7 @@ func TestCustomHostname_CustomHostnames(t *testing.T) {
 				CnameName:   "810b7d5f01154524b961ba0cd578acc2.app.example.com",
 			},
 			CustomMetadata: CustomMetadata{"a_random_field": "random field value"},
-			State:          PENDING,
+			Status:         PENDING,
 			VerificationErrors: []string{"None of the A or AAAA records are owned " +
 				"by this account and the pre-generated ownership verification token was not found."},
 			OwnershipVerification: CustomHostnameOwnershipVerification{
@@ -240,7 +240,7 @@ func TestCustomHostname_CustomHostname(t *testing.T) {
     },
     "custom_metadata": {
       "origin": "a.custom.origin"
-    }
+    },
 	"status": "pending",
 	"verification_errors": [
 		"None of the A or AAAA records are owned by this account and the pre-generated ownership verification token was not found."
@@ -270,7 +270,7 @@ func TestCustomHostname_CustomHostname(t *testing.T) {
 			},
 		},
 		CustomMetadata: CustomMetadata{"origin": "a.custom.origin"},
-		State:          PENDING,
+		Status:         PENDING,
 		VerificationErrors: []string{"None of the A or AAAA records are owned " +
 			"by this account and the pre-generated ownership verification token was not found."},
 		OwnershipVerification: CustomHostnameOwnershipVerification{
