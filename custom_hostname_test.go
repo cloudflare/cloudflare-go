@@ -164,7 +164,16 @@ func TestCustomHostname_CustomHostnames(t *testing.T) {
 			},
 			"custom_metadata": {
 				"a_random_field": "random field value"
-			}
+			},
+			"status": "pending",
+			"verification_errors": [
+				"None of the A or AAAA records are owned by this account and the pre-generated ownership verification token was not found."
+    		],
+			"ownership_verification": {
+				"type": "txt",
+      			"name": "_cf-custom-hostname.app.example.com",
+      			"value": "5cc07c04-ea62-4a5a-95f0-419334a875a4"
+    		}
 		}
 	],
 	"result_info": {
@@ -190,6 +199,14 @@ func TestCustomHostname_CustomHostnames(t *testing.T) {
 				CnameName:   "810b7d5f01154524b961ba0cd578acc2.app.example.com",
 			},
 			CustomMetadata: CustomMetadata{"a_random_field": "random field value"},
+			State:          PENDING,
+			VerificationErrors: []string{"None of the A or AAAA records are owned " +
+				"by this account and the pre-generated ownership verification token was not found."},
+			OwnershipVerification: CustomHostnameOwnershipVerification{
+				Type:  "txt",
+				Name:  "_cf-custom-hostname.app.example.com",
+				Value: "5cc07c04-ea62-4a5a-95f0-419334a875a4",
+			},
 		},
 	}
 
@@ -224,6 +241,15 @@ func TestCustomHostname_CustomHostname(t *testing.T) {
     "custom_metadata": {
       "origin": "a.custom.origin"
     }
+	"status": "pending",
+	"verification_errors": [
+		"None of the A or AAAA records are owned by this account and the pre-generated ownership verification token was not found."
+    ],
+	"ownership_verification": {
+		"type": "txt",
+     	"name": "_cf-custom-hostname.app.example.com",
+    	"value": "5cc07c04-ea62-4a5a-95f0-419334a875a4"
+    }
   }
 }`)
 	})
@@ -244,6 +270,14 @@ func TestCustomHostname_CustomHostname(t *testing.T) {
 			},
 		},
 		CustomMetadata: CustomMetadata{"origin": "a.custom.origin"},
+		State:          PENDING,
+		VerificationErrors: []string{"None of the A or AAAA records are owned " +
+			"by this account and the pre-generated ownership verification token was not found."},
+		OwnershipVerification: CustomHostnameOwnershipVerification{
+			Type:  "txt",
+			Name:  "_cf-custom-hostname.app.example.com",
+			Value: "5cc07c04-ea62-4a5a-95f0-419334a875a4",
+		},
 	}
 
 	if assert.NoError(t, err) {
