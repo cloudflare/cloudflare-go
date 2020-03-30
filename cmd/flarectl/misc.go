@@ -13,23 +13,31 @@ import (
 )
 
 func initializeAPI(c *cli.Context) error {
+	apiToken := os.Getenv("CF_API_TOKEN")
 	apiKey := os.Getenv("CF_API_KEY")
-	if apiKey == "" {
-		err := errors.New("No CF_API_KEY environment set")
-		fmt.Fprintln(os.Stderr, err)
-		return err
-	}
-
 	apiEmail := os.Getenv("CF_API_EMAIL")
-	if apiEmail == "" {
-		err := errors.New("No CF_API_EMAIL environment set")
-		fmt.Fprintln(os.Stderr, err)
-		return err
-	}
 
 	// Be aware the following code sets the global package `api` variable
 	var err error
-	api, err = cloudflare.New(apiKey, apiEmail)
+
+	if apiToken != "" {
+		api, err = cloudflare.NewWithAPIToken(apiToken)
+	} else {
+		if apiKey == "" {
+			err := errors.New("No CF_API_KEY or CF_API_TOKEN environment set")
+			fmt.Fprintln(os.Stderr, err)
+			return err
+		}
+
+		if apiEmail == "" {
+			err := errors.New("No CF_API_EMAIL environment set")
+			fmt.Fprintln(os.Stderr, err)
+			return err
+		}
+
+		api, err = cloudflare.New(apiKey, apiEmail)
+	}
+
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "cloudflare api: %s", err)
 		return err

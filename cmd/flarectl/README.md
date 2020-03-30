@@ -12,12 +12,24 @@ go get -u github.com/cloudflare/cloudflare-go/...
 
 # Usage
 
-You must set your API key and account email address in the environment variables `CF_API_KEY` and `CF_API_EMAIL`.
+You must authenticate with Cloudflare using either an API Token or API Key.
+
+To use an API Token, set the `CF_API_TOKEN` environment variable:
+
+```
+$ export CF_API_TOKEN=Abc123Xyz
+```
+
+To use an API Key, set the `CF_API_KEY` and `CF_API_EMAIL` environment variables:
 
 ```
 $ export CF_API_KEY=abcdef1234567890
 $ export CF_API_EMAIL=someone@example.com
+```
 
+Once authenticated, you can run flarectl commands:
+
+```
 $ flarectl:
 
    flarectl - Cloudflare CLI
