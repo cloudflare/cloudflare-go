@@ -12,9 +12,13 @@ import (
 type CustomHostnameStatus string
 
 const (
+	// PENDING status represents state of CustomHostname is pending.
 	PENDING CustomHostnameStatus = "pending"
-	ACTIVE  CustomHostnameStatus = "active"
-	MOVED   CustomHostnameStatus = "moved"
+	// ACTIVE status represents state of CustomHostname is active.
+	ACTIVE CustomHostnameStatus = "active"
+	// MOVED status represents state of CustomHostname is moved.
+	MOVED CustomHostnameStatus = "moved"
+	// REMOVED status represents state of CustomHostname is removed.
 	REMOVED CustomHostnameStatus = "removed"
 )
 
