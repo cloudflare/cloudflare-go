@@ -17,7 +17,7 @@ jobs:
       - name: Lint
         run: |
           go get -v -u golang.org/x/lint/golint
-          golint -set_exit_status . cmd/flarectl
+          $(go env GOPATH)/bin/golint -set_exit_status . cmd/flarectl
       - name: Vet
         run: go vet $(go list ./... | grep -v /vendor/)
       - name: Test
