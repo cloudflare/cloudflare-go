@@ -14,5 +14,9 @@ jobs:
           go-version: ${{ matrix.go-version }}
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Lint
+        run: golint -set_exit_status . cmd/flarectl
+      - name: Vet
+        run: go vet $(go list ./... | grep -v /vendor/)
       - name: Test
         run: go test -v -race ./...
