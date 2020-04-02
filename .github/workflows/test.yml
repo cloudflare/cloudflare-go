@@ -15,7 +15,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Lint
-        run: golint -set_exit_status . cmd/flarectl
+        run: |
+          go get -v -u golang.org/x/lint/golint
+          golint -set_exit_status . cmd/flarectl
       - name: Vet
         run: go vet $(go list ./... | grep -v /vendor/)
       - name: Test
