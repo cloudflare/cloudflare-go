@@ -15,6 +15,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Lint
+        if: matrix.os != 'windows-latest'
         run: |
           go get -v -u golang.org/x/lint/golint
           $(go env GOPATH)/bin/golint -set_exit_status . cmd/flarectl
