@@ -75,6 +75,19 @@ type CustomHostnameListResponse struct {
 	ResultInfo `json:"result_info"`
 }
 
+// CustomHostnameFallbackOrigin represents a Custom Hostnames Fallback Origin
+type CustomHostnameFallbackOrigin struct {
+	Origin string   `json:"origin,omitempty"`
+	Status string   `json:"status,omitempty"`
+	Errors []string `json:"errors,omitempty"`
+}
+
+// CustomHostnameFallbackOriginResponse represents a response from the Custom Hostnames Fallback Origin endpoint.
+type CustomHostnameFallbackOriginResponse struct {
+	Result CustomHostnameFallbackOrigin `json:"result"`
+	Response
+}
+
 // UpdateCustomHostnameSSL modifies SSL configuration for the given custom
 // hostname in the given zone.
 //
@@ -193,4 +206,41 @@ func (api *API) CustomHostnameIDByName(zoneID string, hostname string) (string, 
 		}
 	}
 	return "", errors.New("CustomHostname could not be found")
+}
+
+// UpdateCustomHostnameFallbackOrigin modifies the Custom Hostname Fallback origin in the given zone.
+//
+// API reference: https://api.cloudflare.com/#custom-hostname-fallback-origin-for-a-zone-update-fallback-origin-for-custom-hostnames
+func (api *API) UpdateCustomHostnameFallbackOrigin(zoneID string, chfo CustomHostnameFallbackOrigin) (*CustomHostnameFallbackOriginResponse, error) {
+	uri := "/zones/" + zoneID + "/custom_hostnames/fallback_origin"
+	res, err := api.makeRequest("PUT", uri, chfo)
+	if err != nil {
+		return nil, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var response *CustomHostnameFallbackOriginResponse
+	err = json.Unmarshal(res, &response)
+	if err != nil {
+		return nil, errors.Wrap(err, errUnmarshalError)
+	}
+	return response, nil
+}
+
+// CustomHostnameFallbackOrigin inspects the Custom Hostname Fallback origin in the given zone.
+//
+// API reference: https://api.cloudflare.com/#custom-hostname-fallback-origin-for-a-zone-properties
+func (api *API) CustomHostnameFallbackOrigin(zoneID string) (CustomHostnameFallbackOrigin, error) {
+	uri := "/zones/" + zoneID + "/custom_hostnames/fallback_origin"
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return CustomHostnameFallbackOrigin{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var response CustomHostnameFallbackOriginResponse
+	err = json.Unmarshal(res, &response)
+	if err != nil {
+		return CustomHostnameFallbackOrigin{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return response.Result, nil
 }
