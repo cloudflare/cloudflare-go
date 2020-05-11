@@ -344,3 +344,82 @@ func TestCustomHostname_UpdateCustomHostnameSSL(t *testing.T) {
 		assert.Equal(t, want, response)
 	}
 }
+
+func TestCustomHostname_CustomHostnameFallbackOrigin(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/zones/foo/custom_hostnames/fallback_origin", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+  "success": true,
+  "errors": [],
+  "messages": [],
+  "result": {
+    "origin": "fallback.example.com",
+    "status": "pending_deployment",
+    "errors": [
+      "DNS records are not setup correctly. Origin should be a proxied A/AAAA/CNAME dns record"
+    ],
+    "created_at": "2019-10-28T18:11:23.37411Z",
+    "updated_at": "2020-03-16T18:11:23.531995Z"
+  }
+}`)
+	})
+
+	customHostnameFallbackOrigin, err := client.CustomHostnameFallbackOrigin("foo")
+
+	want := CustomHostnameFallbackOrigin{
+		Origin: "fallback.example.com",
+		Status: "pending_deployment",
+		Errors: []string {"DNS records are not setup correctly. Origin should be a proxied A/AAAA/CNAME dns record", },
+	}
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, customHostnameFallbackOrigin)
+	}
+}
+
+func TestCustomHostname_UpdateCustomHostnameFallbackOrigin(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/zones/foo/custom_hostnames/fallback_origin", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+
+		w.Header().Set("content-type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		fmt.Fprintf(w, `
+{
+  "success": true,
+  "errors": [],
+  "messages": [],
+  "result": {
+    "origin": "fallback.example.com",
+    "status": "pending_deployment",
+    "errors": [
+      "DNS records are not setup correctly. Origin should be a proxied A/AAAA/CNAME dns record"
+    ],
+    "created_at": "2019-10-28T18:11:23.37411Z",
+    "updated_at": "2020-03-16T18:11:23.531995Z"
+  }
+}`)
+	})
+
+	response, err := client.UpdateCustomHostnameFallbackOrigin("foo", CustomHostnameFallbackOrigin{Origin: "fallback.example.com",})
+
+	want := &CustomHostnameFallbackOriginResponse{
+		Result: CustomHostnameFallbackOrigin{
+			Origin: "fallback.example.com",
+			Status: "pending_deployment",
+			Errors: []string {"DNS records are not setup correctly. Origin should be a proxied A/AAAA/CNAME dns record", },
+		},
+		Response: Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}},
+	}
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, response)
+	}
+}
