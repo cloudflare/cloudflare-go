@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetLogpullRentionFlag(t *testing.T) {
+func TestGetLogpullRetentionFlag(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -26,15 +26,15 @@ func TestGetLogpullRentionFlag(t *testing.T) {
 	}
 
 	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/logs/control/retention/flag", handler)
-	want := &LogpullRentionConfiguration{Flag: true}
+	want := &LogpullRetentionConfiguration{Flag: true}
 
-	actual, err := client.GetLogpullRentionFlag("d56084adb405e0b7e32c52321bf07be6")
+	actual, err := client.GetLogpullRetentionFlag("d56084adb405e0b7e32c52321bf07be6")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
-func TestSetLogpullRentionFlag(t *testing.T) {
+func TestSetLogpullRetentionFlag(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -52,9 +52,9 @@ func TestSetLogpullRentionFlag(t *testing.T) {
 	}
 
 	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/logs/control/retention/flag", handler)
-	want := &LogpullRentionConfiguration{Flag: false}
+	want := &LogpullRetentionConfiguration{Flag: false}
 
-	actual, err := client.SetLogpullRentionFlag("d56084adb405e0b7e32c52321bf07be6", false)
+	actual, err := client.SetLogpullRetentionFlag("d56084adb405e0b7e32c52321bf07be6", false)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
