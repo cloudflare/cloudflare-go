@@ -101,7 +101,7 @@ type AccessGroupCertificateCommonName struct {
 type AccessGroupGSuite struct {
 	Gsuite struct {
 		Email              string `json:"email"`
-		ConnectionID       string `json:"connection_id"`
+		IdentityProviderID string `json:"identity_provider_id"`
 	} `json:"gsuite"`
 }
 
@@ -125,7 +125,7 @@ type AccessGroupAzure struct {
 type AccessGroupOkta struct {
 	Okta struct {
 		Name               string `json:"name"`
-		ConnectionID       string `json:"connection_id"`
+		IdentityProviderID string `json:"identity_provider_id"`
 	} `json:"okta"`
 }
 
