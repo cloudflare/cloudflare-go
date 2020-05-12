@@ -19,7 +19,7 @@ github.com/stretchr/testify/assert
 github.com/stretchr/testify/require
 # github.com/urfave/cli v1.22.4
 github.com/urfave/cli
-# golang.org/x/net v0.0.0-20200501053045-e0ff5e5a1de5
+# golang.org/x/net v0.0.0-20200506145744-7e3656a0809f
 golang.org/x/net/idna
 # golang.org/x/text v0.3.0
 golang.org/x/text/secure/bidirule
