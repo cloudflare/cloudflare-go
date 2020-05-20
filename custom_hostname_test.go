@@ -96,7 +96,7 @@ func TestCustomHostname_CreateCustomHostname(t *testing.T) {
 				Name:  "_cf-custom-hostname.app.example.com",
 				Value: "38ddbedc-6cc3-4a4c-af67-9c5b02344ce0",
 			},
-			OwnershipVerificationHTTP: CustomHosnameOwnershipVerificationHTTP{
+			OwnershipVerificationHTTP: CustomHostnameOwnershipVerificationHTTP{
 				HTTPUrl:  "http://app.example.com/.well-known/cf-custom-hostname-challenge/37c82d20-99fb-490e-ba0a-489fa483b776",
 				HTTPBody: "38ddbedc-6cc3-4a4c-af67-9c5b02344ce0",
 			},
