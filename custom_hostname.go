@@ -55,15 +55,15 @@ type CustomMetadata map[string]interface{}
 
 // CustomHostname represents a custom hostname in a zone.
 type CustomHostname struct {
-	ID                        string                                 `json:"id,omitempty"`
-	Hostname                  string                                 `json:"hostname,omitempty"`
-	CustomOriginServer        string                                 `json:"custom_origin_server,omitempty"`
-	SSL                       CustomHostnameSSL                      `json:"ssl,omitempty"`
-	CustomMetadata            CustomMetadata                         `json:"custom_metadata,omitempty"`
-	Status                    CustomHostnameStatus                   `json:"status,omitempty"`
-	VerificationErrors        []string                               `json:"verification_errors,omitempty"`
-	OwnershipVerification     CustomHostnameOwnershipVerification    `json:"ownership_verification,omitempty"`
-	OwnershipVerificationHTTP CustomHosnameOwnershipVerificationHTTP `json:"ownership_verification_http,omitempty"`
+	ID                        string                                  `json:"id,omitempty"`
+	Hostname                  string                                  `json:"hostname,omitempty"`
+	CustomOriginServer        string                                  `json:"custom_origin_server,omitempty"`
+	SSL                       CustomHostnameSSL                       `json:"ssl,omitempty"`
+	CustomMetadata            CustomMetadata                          `json:"custom_metadata,omitempty"`
+	Status                    CustomHostnameStatus                    `json:"status,omitempty"`
+	VerificationErrors        []string                                `json:"verification_errors,omitempty"`
+	OwnershipVerification     CustomHostnameOwnershipVerification     `json:"ownership_verification,omitempty"`
+	OwnershipVerificationHTTP CustomHostnameOwnershipVerificationHTTP `json:"ownership_verification_http,omitempty"`
 }
 
 // CustomHostnameOwnershipVerificationHTTP represents a response from the Custom Hostnames endpoints.
