@@ -67,7 +67,7 @@ type CustomHostname struct {
 }
 
 // CustomHosnameOwnershipVerificationHTTP represents a response from the Custom Hostnames endpoints.
-type CustomHosnameOwnershipVerificationHTTP struct {
+type CustomHostnameOwnershipVerificationHTTP struct {
 	HTTPUrl  string `json:"http_url,omitempty"`
 	HTTPBody string `json:"http_body,omitempty"`
 }
