@@ -110,6 +110,19 @@ func TestCustomHostname_CreateCustomHostname_CustomOrigin(t *testing.T) {
 			"settings": {
 			"http2": "on"
 			}
+		},
+		"status": "pending",
+		"verification_errors": [
+		  "None of the A or AAAA records are owned by this account and the pre-generated ownership verification token was not found."
+		],
+		"ownership_verification": {
+		  "type": "txt",
+		  "name": "_cf-custom-hostname.app.example.com",
+		  "value": "38ddbedc-6cc3-4a4c-af67-9c5b02344ce0"
+		},
+		"ownership_verification_http": {
+		  "http_url": "http://app.example.com/.well-known/cf-custom-hostname-challenge/37c82d20-99fb-490e-ba0a-489fa483b776",
+		  "http_body": "38ddbedc-6cc3-4a4c-af67-9c5b02344ce0"
 		}
   	}
 }`)
@@ -131,6 +144,17 @@ func TestCustomHostname_CreateCustomHostname_CustomOrigin(t *testing.T) {
 				Settings: CustomHostnameSSLSettings{
 					HTTP2: "on",
 				},
+			},
+			Status:             "pending",
+			VerificationErrors: []string{"None of the A or AAAA records are owned by this account and the pre-generated ownership verification token was not found."},
+			OwnershipVerification: CustomHostnameOwnershipVerification{
+				Type:  "txt",
+				Name:  "_cf-custom-hostname.app.example.com",
+				Value: "38ddbedc-6cc3-4a4c-af67-9c5b02344ce0",
+			},
+			OwnershipVerificationHTTP: CustomHosnameOwnershipVerificationHTTP{
+				HTTPUrl:  "http://app.example.com/.well-known/cf-custom-hostname-challenge/37c82d20-99fb-490e-ba0a-489fa483b776",
+				HTTPBody: "38ddbedc-6cc3-4a4c-af67-9c5b02344ce0",
 			},
 		},
 		Response: Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}},

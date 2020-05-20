@@ -31,11 +31,28 @@ type CustomMetadata map[string]interface{}
 
 // CustomHostname represents a custom hostname in a zone.
 type CustomHostname struct {
-	ID                 string            `json:"id,omitempty"`
-	Hostname           string            `json:"hostname,omitempty"`
-	CustomOriginServer string            `json:"custom_origin_server,omitempty"`
-	SSL                CustomHostnameSSL `json:"ssl,omitempty"`
-	CustomMetadata     CustomMetadata    `json:"custom_metadata,omitempty"`
+	ID                        string                                 `json:"id,omitempty"`
+	Hostname                  string                                 `json:"hostname,omitempty"`
+	CustomOriginServer        string                                 `json:"custom_origin_server,omitempty"`
+	SSL                       CustomHostnameSSL                      `json:"ssl,omitempty"`
+	Status                    string                                 `json:"status,omitempty"`
+	VerificationErrors        []string                               `json:"verification_errors,omitempty"`
+	CustomMetadata            CustomMetadata                         `json:"custom_metadata,omitempty"`
+	OwnershipVerification     CustomHostnameOwnershipVerification    `json:"ownership_verification,omitempty"`
+	OwnershipVerificationHTTP CustomHosnameOwnershipVerificationHTTP `json:"ownership_verification_http,omitempty"`
+}
+
+// CustomHostnameOwnershipVerification represents a response from the Custom Hostnames endpoints.
+type CustomHostnameOwnershipVerification struct {
+	Type  string `json:"type,omitempty"`
+	Name  string `json:"name,omitempty"`
+	Value string `json:"value,omitempty"`
+}
+
+// CustomHosnameOwnershipVerificationHTTP represents a response from the Custom Hostnames endpoints.
+type CustomHosnameOwnershipVerificationHTTP struct {
+	HTTPUrl  string `json:"http_url,omitempty"`
+	HTTPBody string `json:"http_body,omitempty"`
 }
 
 // CustomHostnameResponse represents a response from the Custom Hostnames endpoints.
