@@ -109,6 +109,15 @@ const (
 				"type": "wasm_module"
 			},
 			{
+				"name": "MY_PLAIN_TEXT",
+				"type": "plain_text",
+				"text": "text"
+			},
+			{
+				"name": "MY_SECRET_TEXT",
+				"type": "secret_text"
+			},
+			{
 				"name": "MY_NEW_BINDING",
 				"type": "some_imaginary_new_binding_type"
 			}
@@ -577,6 +586,80 @@ func TestWorkers_UploadWorkerWithWasmBinding(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+func TestWorkers_UploadWorkerWithPlainTextBinding(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+
+		mpUpload, err := parseMultipartUpload(r)
+		assert.NoError(t, err)
+
+		expectedBindings := map[string]workerBindingMeta{
+			"b1": {
+				"name": "b1",
+				"type": "plain_text",
+				"text": "plain text value",
+			},
+		}
+		assert.Equal(t, workerScript, mpUpload.Script)
+		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, uploadWorkerResponseData)
+	}
+	mux.HandleFunc("/accounts/foo/workers/scripts/bar", handler)
+
+	scriptParams := WorkerScriptParams{
+		Script: workerScript,
+		Bindings: map[string]WorkerBinding{
+			"b1": WorkerPlainTextBinding{
+				Text: "plain text value",
+			},
+		},
+	}
+	_, err := client.UploadWorkerWithBindings(&WorkerRequestParams{ScriptName: "bar"}, &scriptParams)
+	assert.NoError(t, err)
+}
+
+func TestWorkers_UploadWorkerWithSecretTextBinding(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+
+		mpUpload, err := parseMultipartUpload(r)
+		assert.NoError(t, err)
+
+		expectedBindings := map[string]workerBindingMeta{
+			"b1": {
+				"name": "b1",
+				"type": "secret_text",
+				"text": "secret text value",
+			},
+		}
+		assert.Equal(t, workerScript, mpUpload.Script)
+		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, uploadWorkerResponseData)
+	}
+	mux.HandleFunc("/accounts/foo/workers/scripts/bar", handler)
+
+	scriptParams := WorkerScriptParams{
+		Script: workerScript,
+		Bindings: map[string]WorkerBinding{
+			"b1": WorkerSecretTextBinding{
+				Text: "secret text value",
+			},
+		},
+	}
+	_, err := client.UploadWorkerWithBindings(&WorkerRequestParams{ScriptName: "bar"}, &scriptParams)
+	assert.NoError(t, err)
+}
+
 func TestWorkers_CreateWorkerRoute(t *testing.T) {
 	setup()
 	defer teardown()
@@ -822,7 +905,7 @@ func TestWorkers_ListWorkerBindingsMultiScript(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Equal(t, successResponse, res.Response)
-	assert.Equal(t, 3, len(res.BindingList))
+	assert.Equal(t, 5, len(res.BindingList))
 
 	assert.Equal(t, res.BindingList[0], WorkerBindingListItem{
 		Name: "MY_KV",
@@ -840,10 +923,24 @@ func TestWorkers_ListWorkerBindingsMultiScript(t *testing.T) {
 	assert.Equal(t, WorkerWebAssemblyBindingType, res.BindingList[1].Binding.Type())
 
 	assert.Equal(t, res.BindingList[2], WorkerBindingListItem{
+		Name: "MY_PLAIN_TEXT",
+		Binding: WorkerPlainTextBinding{
+			Text: "text",
+		},
+	})
+	assert.Equal(t, WorkerPlainTextBindingType, res.BindingList[2].Binding.Type())
+
+	assert.Equal(t, res.BindingList[3], WorkerBindingListItem{
+		Name:    "MY_SECRET_TEXT",
+		Binding: WorkerSecretTextBinding{},
+	})
+	assert.Equal(t, WorkerSecretTextBindingType, res.BindingList[3].Binding.Type())
+
+	assert.Equal(t, res.BindingList[4], WorkerBindingListItem{
 		Name:    "MY_NEW_BINDING",
 		Binding: WorkerInheritBinding{},
 	})
-	assert.Equal(t, WorkerInheritBindingType, res.BindingList[2].Binding.Type())
+	assert.Equal(t, WorkerInheritBindingType, res.BindingList[4].Binding.Type())
 }
 
 func TestWorkers_UpdateWorkerRouteErrorsWhenMixingSingleAndMultiScriptProperties(t *testing.T) {
