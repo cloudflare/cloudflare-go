@@ -9,6 +9,6 @@ require (
 	github.com/stretchr/testify v1.5.1
 	github.com/urfave/cli v1.22.4
 	github.com/urfave/cli/v2 v2.1.1 // indirect
-	golang.org/x/net v0.0.0-20200513185701-a91f0712d120
+	golang.org/x/net v0.0.0-20200520182314-0ba52f642ac2
 	golang.org/x/time v0.0.0-20200416051211-89c76fbcd5d1
 )
