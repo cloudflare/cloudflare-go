@@ -100,32 +100,32 @@ type AccessGroupCertificateCommonName struct {
 // AccessGroupGSuite is used to configure access based on GSuite group.
 type AccessGroupGSuite struct {
 	Gsuite struct {
-		Email              string `json:"email"`
-		IdentityProviderID string `json:"identity_provider_id"`
+		Email        string `json:"email"`
+		ConnectionID string `json:"connection_id"`
 	} `json:"gsuite"`
 }
 
 // AccessGroupGitHub is used to configure access based on a GitHub organisation.
 type AccessGroupGitHub struct {
 	GitHubOrganization struct {
-		Name               string `json:"name"`
-		IdentityProviderID string `json:"identity_provider_id"`
+		Name         string `json:"name"`
+		ConnectionID string `json:"connection_id"`
 	} `json:"github-organization"`
 }
 
 // AccessGroupAzure is used to configure access based on a Azure group.
 type AccessGroupAzure struct {
 	AzureAD struct {
-		ID                 string `json:"id"`
-		IdentityProviderID string `json:"identity_provider_id"`
+		ID           string `json:"id"`
+		ConnectionID string `json:"connection_id"`
 	} `json:"azureAD"`
 }
 
 // AccessGroupOkta is used to configure access based on a Okta group.
 type AccessGroupOkta struct {
 	Okta struct {
-		Name               string `json:"name"`
-		IdentityProviderID string `json:"identity_provider_id"`
+		Name         string `json:"name"`
+		ConnectionID string `json:"connection_id"`
 	} `json:"okta"`
 }
 
@@ -133,9 +133,9 @@ type AccessGroupOkta struct {
 // configuration.
 type AccessGroupSAML struct {
 	Saml struct {
-		AttributeName      string `json:"attribute_name"`
-		AttributeValue     string `json:"attribute_value"`
-		IdentityProviderID string `json:"identity_provider_id"`
+		AttributeName  string `json:"attribute_name"`
+		AttributeValue string `json:"attribute_value"`
+		ConnectionID   string `json:"connection_id"`
 	} `json:"saml"`
 }
 
