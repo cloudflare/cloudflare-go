@@ -56,21 +56,21 @@ type LoadBalancerMonitor struct {
 
 // LoadBalancer represents a load balancer's properties.
 type LoadBalancer struct {
-	ID                   string                `json:"id,omitempty"`
-	CreatedOn            *time.Time            `json:"created_on,omitempty"`
-	ModifiedOn           *time.Time            `json:"modified_on,omitempty"`
-	Description          string                `json:"description"`
-	Name                 string                `json:"name"`
-	TTL                  int                   `json:"ttl,omitempty"`
-	FallbackPool         string                `json:"fallback_pool"`
-	DefaultPools         []string              `json:"default_pools"`
-	RegionPools          map[string][]string   `json:"region_pools"`
-	PopPools             map[string][]string   `json:"pop_pools"`
-	Proxied              bool                  `json:"proxied"`
-	Enabled              *bool                 `json:"enabled,omitempty"`
-	Persistence          string                `json:"session_affinity,omitempty"`
-	PersistenceTTL       int                   `json:"session_affinity_ttl,omitempty"`
-	SessionAffinityAttrs *SessionAffinityAttrs `json:"session_affinity_attributes,omitempty"`
+	ID                        string                     `json:"id,omitempty"`
+	CreatedOn                 *time.Time                 `json:"created_on,omitempty"`
+	ModifiedOn                *time.Time                 `json:"modified_on,omitempty"`
+	Description               string                     `json:"description"`
+	Name                      string                     `json:"name"`
+	TTL                       int                        `json:"ttl,omitempty"`
+	FallbackPool              string                     `json:"fallback_pool"`
+	DefaultPools              []string                   `json:"default_pools"`
+	RegionPools               map[string][]string        `json:"region_pools"`
+	PopPools                  map[string][]string        `json:"pop_pools"`
+	Proxied                   bool                       `json:"proxied"`
+	Enabled                   *bool                      `json:"enabled,omitempty"`
+	Persistence               string                     `json:"session_affinity,omitempty"`
+	PersistenceTTL            int                        `json:"session_affinity_ttl,omitempty"`
+	SessionAffinityAttributes *SessionAffinityAttributes `json:"session_affinity_attributes,omitempty"`
 
 	// SteeringPolicy controls pool selection logic.
 	// "off" select pools in DefaultPools order
@@ -81,8 +81,8 @@ type LoadBalancer struct {
 	SteeringPolicy string `json:"steering_policy,omitempty"`
 }
 
-// SessionAffinityAttrs represents the fields used to set attributes in a load balancer session affinity cookie.
-type SessionAffinityAttrs struct {
+// SessionAffinityAttributes represents the fields used to set attributes in a load balancer session affinity cookie.
+type SessionAffinityAttributes struct {
 	SameSite string `json:"samesite,omitempty"`
 	Secure   string `json:"secure,omitempty"`
 }

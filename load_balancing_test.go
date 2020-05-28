@@ -918,7 +918,7 @@ func TestCreateLoadBalancer(t *testing.T) {
 		Proxied:        true,
 		Persistence:    "cookie",
 		PersistenceTTL: 5000,
-		SessionAffinityAttrs: &SessionAffinityAttrs{
+		SessionAffinityAttributes: &SessionAffinityAttributes{
 			SameSite: "Strict",
 			Secure:   "Always",
 		},
@@ -958,7 +958,7 @@ func TestCreateLoadBalancer(t *testing.T) {
 		Proxied:        true,
 		Persistence:    "cookie",
 		PersistenceTTL: 5000,
-		SessionAffinityAttrs: &SessionAffinityAttrs{
+		SessionAffinityAttributes: &SessionAffinityAttributes{
 			SameSite: "Strict",
 			Secure:   "Always",
 		},
@@ -1326,7 +1326,7 @@ func TestModifyLoadBalancer(t *testing.T) {
 		},
 		Proxied:     true,
 		Persistence: "none",
-		SessionAffinityAttrs: &SessionAffinityAttrs{
+		SessionAffinityAttributes: &SessionAffinityAttributes{
 			SameSite: "Strict",
 			Secure:   "Always",
 		},
@@ -1361,7 +1361,7 @@ func TestModifyLoadBalancer(t *testing.T) {
 		},
 		Proxied:     true,
 		Persistence: "none",
-		SessionAffinityAttrs: &SessionAffinityAttrs{
+		SessionAffinityAttributes: &SessionAffinityAttributes{
 			SameSite: "Strict",
 			Secure:   "Always",
 		},
