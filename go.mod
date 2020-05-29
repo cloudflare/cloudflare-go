@@ -6,7 +6,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/olekukonko/tablewriter v0.0.4
 	github.com/pkg/errors v0.9.1
-	github.com/stretchr/testify v1.5.1
+	github.com/stretchr/testify v1.6.0
 	github.com/urfave/cli v1.22.4
 	github.com/urfave/cli/v2 v2.1.1 // indirect
 	golang.org/x/net v0.0.0-20200520182314-0ba52f642ac2
