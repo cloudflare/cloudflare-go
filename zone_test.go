@@ -610,11 +610,11 @@ func TestWithPagination(t *testing.T) {
 	}
 }
 
-func TestZoneFilter(t *testing.T) {
+func TestZoneFilters(t *testing.T) {
 	opt := reqOption{
 		params: url.Values{},
 	}
-	of := WithZoneFilter("example.org")
+	of := WithZoneFilters("example.org", "", "")
 	of(&opt)
 
 	if got := opt.params.Get("name"); got != "example.org" {
@@ -1093,6 +1093,6 @@ func TestZonePartialHasVerificationKey(t *testing.T) {
 	z, err := client.ZoneDetails("foo")
 	if assert.NoError(t, err) {
 		assert.NotEmpty(t, z.VerificationKey)
-		assert.Equal(t, z.VerificationKey,"foo-bar")
+		assert.Equal(t, z.VerificationKey, "foo-bar")
 	}
 }
