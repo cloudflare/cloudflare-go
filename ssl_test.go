@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -84,6 +85,26 @@ func TestCreateSSL(t *testing.T) {
 
 	_, err = client.CreateSSL("bar", ZoneCustomSSLOptions{})
 	assert.Error(t, err)
+}
+
+func TestMarshalZoneCustomSSLOptions(t *testing.T) {
+	options := ZoneCustomSSLOptions{
+		Certificate: "test",
+		PrivateKey:  "test",
+		GeoRestrictions: ZoneCustomSSLGeoRestrictions{
+			Label: "test",
+		},
+	}
+	result, err := json.Marshal(&options)
+	assert.NoError(t, err, "Expected no error when marshalling ZoneCustomSSLOptions to JSON")
+	assert.Contains(t, string(result), "geo_restrictions", "expected marshalled ZoneCustomSSLOptions to contain geo_restrictions when set")
+	options = ZoneCustomSSLOptions{
+		Certificate: "test",
+		PrivateKey:  "test",
+	}
+	result, err = json.Marshal(&options)
+	assert.NoError(t, err, "Expected no error when marshalling ZoneCustomSSLOptions to JSON")
+	assert.NotContains(t, string(result), "geo_restrictions", "expected mashalled ZoneCustomSSLOptions not to contain geo_restrictions when not set")
 }
 
 func TestListSSL(t *testing.T) {

@@ -52,6 +52,26 @@ type ZoneCustomSSLOptions struct {
 	Type            string                       `json:"type,omitempty"`
 }
 
+func (r ZoneCustomSSLOptions) MarshalJSON() ([]byte, error) {
+	var geoRestrictions *ZoneCustomSSLGeoRestrictions
+	if r.GeoRestrictions != (ZoneCustomSSLGeoRestrictions{}) {
+		geoRestrictions = &r.GeoRestrictions
+	}
+	return json.Marshal(struct {
+		Certificate     string                        `json:"certificate"`
+		PrivateKey      string                        `json:"private_key"`
+		BundleMethod    string                        `json:"bundle_method,omitempty"`
+		GeoRestrictions *ZoneCustomSSLGeoRestrictions `json:"geo_restrictions,omitempty"`
+		Type            string                        `json:"type,omitempty"`
+	}{
+		Certificate:     r.Certificate,
+		PrivateKey:      r.PrivateKey,
+		BundleMethod:    r.BundleMethod,
+		GeoRestrictions: geoRestrictions,
+		Type:            r.Type,
+	})
+}
+
 // ZoneCustomSSLPriority represents a certificate's ID and priority. It is a
 // subset of ZoneCustomSSL used for patch requests.
 type ZoneCustomSSLPriority struct {
