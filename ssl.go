@@ -52,6 +52,8 @@ type ZoneCustomSSLOptions struct {
 	Type            string                       `json:"type,omitempty"`
 }
 
+// MarshalJSON Marshalls ZoneCustomSSLOptions to JSON,
+// ensuring the GeoRestrictions struct is omitted if empty.
 func (r ZoneCustomSSLOptions) MarshalJSON() ([]byte, error) {
 	var geoRestrictions *ZoneCustomSSLGeoRestrictions
 	if r.GeoRestrictions != (ZoneCustomSSLGeoRestrictions{}) {
