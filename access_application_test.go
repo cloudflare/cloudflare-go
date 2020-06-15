@@ -45,7 +45,7 @@ func TestAccessApplications(t *testing.T) {
 	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 
-	want := []AccessApplication{AccessApplication{
+	want := []AccessApplication{{
 		ID:              "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
 		CreatedAt:       &createdAt,
 		UpdatedAt:       &updatedAt,
