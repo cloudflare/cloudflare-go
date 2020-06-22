@@ -12,13 +12,15 @@ import (
 
 // AccessApplication represents an Access application.
 type AccessApplication struct {
-	ID              string     `json:"id,omitempty"`
-	CreatedAt       *time.Time `json:"created_at,omitempty"`
-	UpdatedAt       *time.Time `json:"updated_at,omitempty"`
-	AUD             string     `json:"aud,omitempty"`
-	Name            string     `json:"name"`
-	Domain          string     `json:"domain"`
-	SessionDuration string     `json:"session_duration,omitempty"`
+	ID                     string     `json:"id,omitempty"`
+	CreatedAt              *time.Time `json:"created_at,omitempty"`
+	UpdatedAt              *time.Time `json:"updated_at,omitempty"`
+	AUD                    string     `json:"aud,omitempty"`
+	Name                   string     `json:"name"`
+	Domain                 string     `json:"domain"`
+	SessionDuration        string     `json:"session_duration,omitempty"`
+	AutoRedirectToIdentity bool       `json:"auto_redirect_to_identity,omitempty"`
+	AllowedIdps            []string   `json:"allowed_idps,omitempty"`
 }
 
 // AccessApplicationListResponse represents the response from the list
