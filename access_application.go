@@ -12,13 +12,27 @@ import (
 
 // AccessApplication represents an Access application.
 type AccessApplication struct {
-	ID              string     `json:"id,omitempty"`
-	CreatedAt       *time.Time `json:"created_at,omitempty"`
-	UpdatedAt       *time.Time `json:"updated_at,omitempty"`
-	AUD             string     `json:"aud,omitempty"`
-	Name            string     `json:"name"`
-	Domain          string     `json:"domain"`
-	SessionDuration string     `json:"session_duration,omitempty"`
+	ID              string                       `json:"id,omitempty"`
+	CreatedAt       *time.Time                   `json:"created_at,omitempty"`
+	UpdatedAt       *time.Time                   `json:"updated_at,omitempty"`
+	AUD             string                       `json:"aud,omitempty"`
+	Name            string                       `json:"name"`
+	Domain          string                       `json:"domain"`
+	SessionDuration string                       `json:"session_duration,omitempty"`
+	CorsHeaders     AccessApplicationCorsHeaders `json:"cors_headers,omitempty"`
+}
+
+// AccessApplicationCorsHeaders represents the CORS HTTP headers for an Access
+// Application.
+type AccessApplicationCorsHeaders struct {
+	AllowedMethods   []string `json:"allowed_methods,omitempty"`
+	AllowedOrigins   []string `json:"allowed_origins,omitempty"`
+	AllowedHeaders   []string `json:"allowed_headers,omitempty"`
+	AllowAllMethods  bool     `json:"allow_all_methods,omitempty"`
+	AllowAllHeaders  bool     `json:"allow_all_headers,omitempty"`
+	AllowAllOrigins  bool     `json:"allow_all_origins,omitempty"`
+	AllowCredentials bool     `json:"allow_credentials,omitempty"`
+	MaxAge           int      `json:"max_age,omitempty"`
 }
 
 // AccessApplicationListResponse represents the response from the list
