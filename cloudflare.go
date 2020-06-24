@@ -259,9 +259,9 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 	switch {
 	case resp.StatusCode >= http.StatusOK && resp.StatusCode < http.StatusMultipleChoices:
 	case resp.StatusCode == http.StatusUnauthorized:
-		return nil, errors.Errorf("HTTP status %d: invalid credentials", resp.StatusCode)
+		return nil, errorFromResponse(resp.StatusCode, respBody)
 	case resp.StatusCode == http.StatusForbidden:
-		return nil, errors.Errorf("HTTP status %d: insufficient permissions", resp.StatusCode)
+		return nil, errorFromResponse(resp.StatusCode, respBody)
 	case resp.StatusCode == http.StatusServiceUnavailable,
 		resp.StatusCode == http.StatusBadGateway,
 		resp.StatusCode == http.StatusGatewayTimeout,
@@ -443,4 +443,20 @@ func WithPagination(opts PaginationOptions) ReqOption {
 		opt.params.Set("page", strconv.Itoa(opts.Page))
 		opt.params.Set("per_page", strconv.Itoa(opts.PerPage))
 	}
+}
+
+// errorFromResponse returns a formatted error from the status code and error messages
+// from the response body.
+func errorFromResponse(statusCode int, respBody []byte) error {
+	var r Response
+	err := json.Unmarshal(respBody, &r)
+	if err != nil {
+		return errors.Wrap(err, errUnmarshalError)
+	}
+
+	errMsgs := []string{}
+	for _, v := range r.Errors {
+		errMsgs = append(errMsgs, v.Message)
+	}
+	return errors.Errorf("HTTP status %d: %s", statusCode, strings.Join(errMsgs, " "))
 }
