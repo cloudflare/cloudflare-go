@@ -650,7 +650,7 @@ func TestErrorFromResponse(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/zones/01a7362d577a6c3019a474fd6f485823/access/apps", handler)
+	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/apps", handler)
 
 	_, err := client.CreateAccessApplication(
 		"01a7362d577a6c3019a474fd6f485823",
