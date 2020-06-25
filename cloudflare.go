@@ -48,6 +48,8 @@ type API struct {
 	logger            Logger
 }
 
+var _ APIV4 = &API{}
+
 // newClient provides shared logic for New and NewWithUserServiceKey
 func newClient(opts ...Option) (*API, error) {
 	silentLogger := log.New(ioutil.Discard, "", log.LstdFlags)
