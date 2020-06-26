@@ -632,3 +632,34 @@ func TestZoneIDByNameWithIDN(t *testing.T) {
 	_, err = client.ZoneIDByName("xn--exmple-corruted.com")
 	assert.Error(t, err)
 }
+
+func TestErrorFromResponse(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		w.WriteHeader(403)
+		fmt.Fprintf(w, `{
+			"success": false,
+			"errors": [ { "code": 403, "message": "this is a test error" } ],
+			"messages": [],
+			"result": {}
+		}
+		`)
+	}
+
+	mux.HandleFunc("/zones/01a7362d577a6c3019a474fd6f485823/access/apps", handler)
+
+	_, err := client.CreateAccessApplication(
+		"01a7362d577a6c3019a474fd6f485823",
+		AccessApplication{
+			Name:            "Admin Site",
+			Domain:          "test.example.com/admin",
+			SessionDuration: "24h",
+		},
+	)
+
+	assert.EqualError(t, err, "error from makeRequest: HTTP status 403: this is a test error")
+}
