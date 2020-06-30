@@ -509,3 +509,63 @@ func TestCustomHostname_UpdateCustomHostnameFallbackOrigin(t *testing.T) {
 		assert.Equal(t, want, response)
 	}
 }
+
+func TestCustomHostname_CreateCustomHostnameCustomCertificateAuthority(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/zones/foo/custom_hostnames", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "POST", r.Method, "Expected method 'POST', got %s", r.Method)
+
+		w.Header().Set("content-type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		fmt.Fprintf(w, `
+{
+  "result": {
+    "id": "614b3124-cd57-42f0-8307-000000000000",
+    "hostname": "app.example.com",
+    "ssl": {
+      "id": "d9ae4881-34d2-4820-8e28-000000000000",
+      "type": "dv",
+      "method": "http",
+      "status": "initializing",
+      "settings": {
+        "min_tls_version": "1.2"
+      },
+      "wildcard": false,
+      "certificate_authority": "lets_encrypt"
+    },
+    "custom_origin_server": "origin.example.com",
+    "created_at": "2020-06-30T21:37:36.563495Z"
+  },
+  "success": true,
+  "errors": [],
+  "messages": []
+}`)
+	})
+
+	response, err := client.CreateCustomHostname("foo", CustomHostname{Hostname: "app.example.com", SSL: CustomHostnameSSL{Method: "cname", Type: "dv", CertificateAuthority: "lets_encrypt"}})
+
+	want := &CustomHostnameResponse{
+		Result: CustomHostname{
+			ID:                 "614b3124-cd57-42f0-8307-000000000000",
+			Hostname:           "app.example.com",
+			CustomOriginServer: "origin.example.com",
+			SSL: CustomHostnameSSL{
+				Type:   "dv",
+				Method: "http",
+				Status: "initializing",
+				Settings: CustomHostnameSSLSettings{
+					MinTLSVersion: "1.2",
+				},
+				Wildcard:             false,
+				CertificateAuthority: "lets_encrypt",
+			},
+		},
+		Response: Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}},
+	}
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, response)
+	}
+}

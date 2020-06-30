@@ -39,15 +39,16 @@ type CustomHostnameOwnershipVerification struct {
 
 // CustomHostnameSSL represents the SSL section in a given custom hostname.
 type CustomHostnameSSL struct {
-	Status            string                    `json:"status,omitempty"`
-	Method            string                    `json:"method,omitempty"`
-	Type              string                    `json:"type,omitempty"`
-	CnameTarget       string                    `json:"cname_target,omitempty"`
-	CnameName         string                    `json:"cname,omitempty"`
-	Wildcard          bool                      `json:"wildcard,omitempty"`
-	CustomCertificate string                    `json:"custom_certificate,omitempty"`
-	CustomKey         string                    `json:"custom_key,omitempty"`
-	Settings          CustomHostnameSSLSettings `json:"settings,omitempty"`
+	Status               string                    `json:"status,omitempty"`
+	Method               string                    `json:"method,omitempty"`
+	Type                 string                    `json:"type,omitempty"`
+	CnameTarget          string                    `json:"cname_target,omitempty"`
+	CnameName            string                    `json:"cname,omitempty"`
+	Wildcard             bool                      `json:"wildcard,omitempty"`
+	CustomCertificate    string                    `json:"custom_certificate,omitempty"`
+	CustomKey            string                    `json:"custom_key,omitempty"`
+	CertificateAuthority string                    `json:"certificate_authority,omitempty"`
+	Settings             CustomHostnameSSLSettings `json:"settings,omitempty"`
 }
 
 // CustomMetadata defines custom metadata for the hostname. This requires logic to be implemented by Cloudflare to act on the data provided.
