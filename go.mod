@@ -1,4 +1,4 @@
-module github.com/cloudflare/cloudflare-go
+module github.com/Shopify/cloudflare-go
 
 go 1.11
 
