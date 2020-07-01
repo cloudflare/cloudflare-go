@@ -10,5 +10,5 @@ require (
 	github.com/urfave/cli v1.22.4
 	github.com/urfave/cli/v2 v2.1.1 // indirect
 	golang.org/x/net v0.0.0-20200625001655-4c5254603344
-	golang.org/x/time v0.0.0-20200416051211-89c76fbcd5d1
+	golang.org/x/time v0.0.0-20200630173020-3af7569d3a1e
 )
