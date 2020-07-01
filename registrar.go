@@ -53,9 +53,9 @@ type RegistrantContact struct {
 	Fax          string `json:"fax"`
 }
 
-// RegistrarDomainConfiguration is the structure for making updates to
-// and existing domain.
-type RegistrarDomainConfiguration struct {
+// UpdateRegistrarDomainConfiguration is the structure for making updates to
+// an existing domain.
+type UpdateRegistrarDomainConfiguration struct {
 	NameServers []string `json:"name_servers"`
 	Privacy     bool     `json:"privacy"`
 	Locked      bool     `json:"locked"`
@@ -116,24 +116,68 @@ func (api *API) RegistrarDomains(accountID string) ([]RegistrarDomain, error) {
 	return r.Result, nil
 }
 
+type TransferRegistrarDomainRequest struct {
+	RegistrantContactID string `json:"registrant_contact_id"`
+	AutoRenew           bool   `json:"auto_renew"`
+	Years               int    `json:"years"`
+	Privacy             bool   `json:"privacy"`
+	ImportDNS           bool   `json:"import_dns"`
+	Name                string `json:"name"`
+	AuthCode            string `json:"auth_code"`
+}
+
 // TransferRegistrarDomain initiates the transfer from another registrar
 // to Cloudflare Registrar.
 //
 // API reference: https://api.cloudflare.com/#registrar-domains-transfer-domain
-func (api *API) TransferRegistrarDomain(accountID, domainName string) ([]RegistrarDomain, error) {
-	uri := fmt.Sprintf("/accounts/%s/registrar/domains/%s/transfer", accountID, domainName)
+func (api *API) TransferRegistrarDomain(zone Zone, transferConfig TransferRegistrarDomainRequest) (bool, error) {
+	uri := fmt.Sprintf("/zones/%s/registrar/domains/%s/transfer", zone.ID, zone.Name)
 
-	res, err := api.makeRequest("POST", uri, nil)
+	res, err := api.makeRequest("POST", uri, transferConfig)
 	if err != nil {
-		return []RegistrarDomain{}, errors.Wrap(err, errMakeRequestError)
+		return nil, errors.Wrap(err, errMakeRequestError)
 	}
 
-	var r RegistrarDomainsDetailResponse
+	var r struct {
+		Response
+		Result struct {
+			Name    string `json:"name"`
+			Message string `json:"message"`
+		} `json:"result"`
+	}
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return []RegistrarDomain{}, errors.Wrap(err, errUnmarshalError)
+		return nil, errors.Wrap(err, errUnmarshalError)
 	}
-	return r.Result, nil
+	return r.Success, nil
+}
+
+// CheckRegistrarTransferAuthCode will check if the given EPP/auth code is valid.
+//
+// API reference: https://api.cloudflare.com/#registrar-domains-transfer-domain
+func (api *API) CheckRegistrarTransferAuthCode(accountID, domainName, authCode string) (bool, error) {
+	uri := fmt.Sprintf("/accounts/%s/registrar/domains/%s/check_auth", accountID, domainName)
+
+	res, err := api.makeRequest("POST", uri, struct {
+		AuthCode string `json:"auth_code"`
+	}{
+		authCode,
+	})
+	if err != nil {
+		return false, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var r struct {
+		Response
+		Result struct {
+			Message string `json:"message"`
+		} `json:"result"`
+	}
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return false, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Success, nil
 }
 
 // CancelRegistrarDomainTransfer cancels a pending domain transfer.
@@ -158,7 +202,7 @@ func (api *API) CancelRegistrarDomainTransfer(accountID, domainName string) ([]R
 // UpdateRegistrarDomain updates an existing Registrar Domain configuration.
 //
 // API reference: https://api.cloudflare.com/#registrar-domains-update-domain
-func (api *API) UpdateRegistrarDomain(accountID, domainName string, domainConfiguration RegistrarDomainConfiguration) (RegistrarDomain, error) {
+func (api *API) UpdateRegistrarDomain(accountID, domainName string, domainConfiguration UpdateRegistrarDomainConfiguration) (RegistrarDomain, error) {
 	uri := fmt.Sprintf("/accounts/%s/registrar/domains/%s", accountID, domainName)
 
 	res, err := api.makeRequest("PUT", uri, domainConfiguration)
