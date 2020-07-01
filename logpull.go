@@ -13,7 +13,7 @@ type LogpullRetentionConfiguration struct {
 }
 
 // LogpullRetentionConfigurationResponse is the API response, containing the
-// Logpull rentention result.
+// Logpull retention result.
 type LogpullRetentionConfigurationResponse struct {
 	Response
 	Result LogpullRetentionConfiguration `json:"result"`

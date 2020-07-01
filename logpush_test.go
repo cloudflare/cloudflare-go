@@ -270,7 +270,7 @@ func TestValidateLogpushOwnershipChallenge(t *testing.T) {
 	}
 }
 
-func TestCheckLogpushDestiantionExists(t *testing.T) {
+func TestCheckLogpushDestinationExists(t *testing.T) {
 	testCases := map[string]struct {
 		exists bool
 	}{

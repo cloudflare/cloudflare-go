@@ -308,7 +308,7 @@ func TestEnableRailgun(t *testing.T) {
 	assert.Error(t, err)
 }
 
-func TestDisbleRailgun(t *testing.T) {
+func TestDisableRailgun(t *testing.T) {
 	setup()
 	defer teardown()
 
