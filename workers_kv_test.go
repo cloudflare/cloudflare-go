@@ -429,7 +429,11 @@ func TestWorkersKV_ListStorageKeysWithOptions(t *testing.T) {
 		fmt.Fprintf(w, response)
 	})
 
-	res, err := client.ListWorkersKVs(context.Background(), namespace)
+	limit, prefix := 25, "test-prefix"
+	res, err := client.ListWorkersKVsWithOptions(context.Background(), namespace, ListWorkersKVsOptions{
+		Limit:  &limit,
+		Prefix: &prefix,
+	})
 
 	want := ListStorageKeysResponse{
 		successResponse,
