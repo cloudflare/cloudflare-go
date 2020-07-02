@@ -17,11 +17,13 @@ type WorkersKVNamespaceRequest struct {
 }
 
 // WorkersKVPair is used in an array in the request to the bulk KV api
-type WorkersKVPair struct{
-	Key string `json:"key"`
-	Value string `json:"value"`
-	Expiration int `json:"expiration,omitempty"`
-	ExpirationTTL int `json:"expiration_ttl,omitempty"`
+type WorkersKVPair struct {
+	Key           string      `json:"key"`
+	Value         string      `json:"value"`
+	Expiration    int         `json:"expiration,omitempty"`
+	ExpirationTTL int         `json:"expiration_ttl,omitempty"`
+	Metadata      interface{} `json:"metadata,omitempty"`
+	Base64        bool        `json:"base64,omitempty"`
 }
 
 // WorkersKVBulkWriteRequest is the request to the bulk KV api
