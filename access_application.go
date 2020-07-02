@@ -12,16 +12,16 @@ import (
 
 // AccessApplication represents an Access application.
 type AccessApplication struct {
-	ID                     string                       `json:"id,omitempty"`
-	CreatedAt              *time.Time                   `json:"created_at,omitempty"`
-	UpdatedAt              *time.Time                   `json:"updated_at,omitempty"`
-	AUD                    string                       `json:"aud,omitempty"`
-	Name                   string                       `json:"name"`
-	Domain                 string                       `json:"domain"`
-	SessionDuration        string                       `json:"session_duration,omitempty"`
-	AutoRedirectToIdentity bool                         `json:"auto_redirect_to_identity,omitempty"`
-	AllowedIdps            []string                     `json:"allowed_idps,omitempty"`
-	CorsHeaders            AccessApplicationCorsHeaders `json:"cors_headers,omitempty"`
+	ID                     string                        `json:"id,omitempty"`
+	CreatedAt              *time.Time                    `json:"created_at,omitempty"`
+	UpdatedAt              *time.Time                    `json:"updated_at,omitempty"`
+	AUD                    string                        `json:"aud,omitempty"`
+	Name                   string                        `json:"name"`
+	Domain                 string                        `json:"domain"`
+	SessionDuration        string                        `json:"session_duration,omitempty"`
+	AutoRedirectToIdentity bool                          `json:"auto_redirect_to_identity,omitempty"`
+	AllowedIdps            []string                      `json:"allowed_idps,omitempty"`
+	CorsHeaders            *AccessApplicationCorsHeaders `json:"cors_headers,omitempty"`
 }
 
 // AccessApplicationCorsHeaders represents the CORS HTTP headers for an Access

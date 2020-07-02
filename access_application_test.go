@@ -326,7 +326,7 @@ func TestAccessApplicationWithCORS(t *testing.T) {
 		Name:            "Admin Site",
 		Domain:          "test.example.com/admin",
 		SessionDuration: "24h",
-		CorsHeaders: AccessApplicationCorsHeaders{
+		CorsHeaders: &AccessApplicationCorsHeaders{
 			AllowedMethods:  []string{"GET"},
 			AllowedOrigins:  []string{"https://example.com"},
 			AllowAllHeaders: true,
