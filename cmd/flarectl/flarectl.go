@@ -627,7 +627,7 @@ func main() {
 							Name:    "create-or-update",
 							Aliases: []string{"o"},
 							Action:  firewallAccessRuleCreateOrUpdate,
-							Usage:   "Creatae a firewall access rule, or update it if it exists",
+							Usage:   "Create a firewall access rule, or update it if it exists",
 							Flags: []cli.Flag{
 								cli.StringFlag{
 									Name:  "zone",

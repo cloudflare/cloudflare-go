@@ -721,7 +721,7 @@ func getRouteEndpoint(api *API, route WorkerRoute) (string, error) {
 		return "", errors.New("Only `Script` or `Enabled` may be specified for a WorkerRoute, not both")
 	}
 
-	// For backwards-compatability, fallback to the deprecated filter
+	// For backwards-compatibility, fallback to the deprecated filter
 	// endpoint if Enabled == true
 	// https://api.cloudflare.com/#worker-filters-deprecated--properties
 	if route.Enabled == true {

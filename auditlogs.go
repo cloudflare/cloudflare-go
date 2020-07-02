@@ -67,7 +67,7 @@ type AuditLogFilter struct {
 }
 
 // ToQuery turns an audit log filter in to an HTTP Query Param
-// list, suitable for use in a url.URL.RawQuery. It will not inclue empty
+// list, suitable for use in a url.URL.RawQuery. It will not include empty
 // members of the struct in the query parameters.
 func (a AuditLogFilter) ToQuery() url.Values {
 	v := url.Values{}

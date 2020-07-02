@@ -84,7 +84,7 @@ type AccessGroupAccessGroup struct {
 }
 
 // AccessGroupCertificate is used for managing access to based on a valid
-// mTLS cerificate being presented.
+// mTLS certificate being presented.
 type AccessGroupCertificate struct {
 	Certificate struct{} `json:"certificate"`
 }

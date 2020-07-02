@@ -16,7 +16,7 @@ type universalSSLSettingResponse struct {
 	Result UniversalSSLSetting `json:"result"`
 }
 
-// UniversalSSLVerificationDetails represents a universal ssl verifcation's properties.
+// UniversalSSLVerificationDetails represents a universal ssl verification's properties.
 type UniversalSSLVerificationDetails struct {
 	CertificateStatus  string                       `json:"certificate_status"`
 	VerificationType   string                       `json:"verification_type"`
@@ -54,7 +54,7 @@ func (api *API) UniversalSSLSettingDetails(zoneID string) (UniversalSSLSetting, 
 	return r.Result, nil
 }
 
-// EditUniversalSSLSetting edits the uniersal ssl setting for a zone
+// EditUniversalSSLSetting edits the universal ssl setting for a zone
 //
 // API reference: https://api.cloudflare.com/#universal-ssl-settings-for-a-zone-edit-universal-ssl-settings
 func (api *API) EditUniversalSSLSetting(zoneID string, setting UniversalSSLSetting) (UniversalSSLSetting, error) {

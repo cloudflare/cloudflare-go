@@ -34,7 +34,7 @@ type AccessPolicy struct {
 }
 
 // AccessPolicyListResponse represents the response from the list
-// access polciies endpoint.
+// access policies endpoint.
 type AccessPolicyListResponse struct {
 	Result []AccessPolicy `json:"result"`
 	Response
