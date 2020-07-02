@@ -4,11 +4,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"net/http"
 	"sort"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestWorkersKV_CreateWorkersKVNamespace(t *testing.T) {
@@ -103,11 +104,11 @@ func TestWorkersKV_ListWorkersKVNamespace(t *testing.T) {
 
 	res, err := client.ListWorkersKVNamespaces(context.Background())
 	want := []WorkersKVNamespace{
-		WorkersKVNamespace {
+		WorkersKVNamespace{
 			ID:    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 			Title: "test_namespace_1",
 		},
-		WorkersKVNamespace {
+		WorkersKVNamespace{
 			ID:    "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
 			Title: "test_namespace_2",
 		},
@@ -181,11 +182,11 @@ func TestWorkersKV_ListWorkersKVNamespaceMultiplePages(t *testing.T) {
 
 	res, err := client.ListWorkersKVNamespaces(context.Background())
 	want := []WorkersKVNamespace{
-		WorkersKVNamespace {
+		WorkersKVNamespace{
 			ID:    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 			Title: "test_namespace_1",
 		},
-		WorkersKVNamespace {
+		WorkersKVNamespace{
 			ID:    "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
 			Title: "test_namespace_2",
 		},
@@ -260,7 +261,7 @@ func TestWorkersKV_WriteWorkersKVBulk(t *testing.T) {
 	setup(UsingAccount("foo"))
 	defer teardown()
 
-	kvs := WorkersKVBulkWriteRequest{{Key: "key1", Value: "value1"}, {Key: "key2", Value: "value2"}}
+	kvs := WorkersKVBulkWriteRequest{{Key: "key1", Value: "value1"}, {Key: "key2", Value: "value2"}, {Key: "key3", Value: "value3", Metadata: "meta3", Base64: true}}
 
 	namespace := "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 	response := `{
@@ -372,6 +373,89 @@ func TestWorkersKV_ListStorageKeys(t *testing.T) {
 			Count:      2,
 			TotalPages: 1,
 			Total:      2,
+		},
+	}
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want.Response, res.Response)
+		assert.Equal(t, want.ResultInfo, res.ResultInfo)
+
+		sort.Slice(res.Result, func(i, j int) bool {
+			return res.Result[i].Name < res.Result[j].Name
+		})
+
+		sort.Slice(want.Result, func(i, j int) bool {
+			return want.Result[i].Name < want.Result[j].Name
+		})
+		assert.Equal(t, want.Result, res.Result)
+	}
+}
+
+func TestWorkersKV_ListStorageKeysWithOptions(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	cursor := "AArAbNSOuYcr4HmzGH02-cfDN8Ck9ejOwkn_Ai5rsn7S9NEqVJBenU9-gYRlrsziyjKLx48hNDLvtYzBAmkPsLGdye8ECr5PqFYcIOfUITdhkyTc1x6bV8nmyjz5DO-XaZH4kYY1KfqT8NRBIe5sic6yYt3FUDttGjafy0ivi-Up-TkVdRB0OxCf3O3OB-svG6DXheV5XTdDNrNx1o_CVqy2l2j0F4iKV1qFe_KhdkjC7Y6QjhUZ1MOb3J_uznNYVCoxZ-bVAAsJmXA"
+	namespace := "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+	response := `{
+		"result": [
+			{
+				"name": "test_key_1",
+				"metadata": "test_key_1_meta"
+			},
+			{
+				"name": "test_key_2",
+				"metadata": {
+					"test2_meta_key": "test2_meta_value"
+				}
+			}
+		],
+		"success": true,
+		"errors": [],
+		"messages": [],
+		"result_info": {
+			"page": 1,
+			"per_page": 20,
+			"count": 2,
+			"total_count": 2,
+			"total_pages": 1,
+			"cursor": "` + cursor + `"
+		}
+	}`
+
+	mux.HandleFunc(fmt.Sprintf("/accounts/foo/storage/kv/namespaces/%s/keys", namespace), func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/javascript")
+		fmt.Fprintf(w, response)
+	})
+
+	limit, prefix := 25, "test-prefix"
+	res, err := client.ListWorkersKVsWithOptions(context.Background(), namespace, ListWorkersKVsOptions{
+		Limit:  &limit,
+		Prefix: &prefix,
+	})
+
+	want := ListStorageKeysResponse{
+		successResponse,
+		[]StorageKey{
+			{
+				Name:     "test_key_1",
+				Metadata: "test_key_1_meta",
+			},
+			{
+				Name: "test_key_2",
+				Metadata: map[string]interface{}{
+					"test2_meta_key": "test2_meta_value",
+				},
+			},
+		},
+		ResultInfo{
+			Page:       1,
+			PerPage:    20,
+			Count:      2,
+			TotalPages: 1,
+			Total:      2,
+			Cursor:     cursor,
 		},
 	}
 
