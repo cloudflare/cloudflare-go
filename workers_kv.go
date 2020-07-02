@@ -56,6 +56,13 @@ type StorageKey struct {
 	Metadata   interface{} `json:"metadata"`
 }
 
+// ListWorkersKVsOptions contains optional parameters for listing a namespace's keys
+type ListWorkersKVsOptions struct {
+	Limit  *int
+	Cursor *string
+	Prefix *string
+}
+
 // ListStorageKeysResponse contains a slice of keys belonging to a storage namespace,
 // pagination information, and an embedded response struct
 type ListStorageKeysResponse struct {
@@ -235,6 +242,38 @@ func (api API) DeleteWorkersKV(ctx context.Context, namespaceID, key string) (Re
 // API Reference: https://api.cloudflare.com/#workers-kv-namespace-list-a-namespace-s-keys
 func (api API) ListWorkersKVs(ctx context.Context, namespaceID string) (ListStorageKeysResponse, error) {
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/keys", api.AccountID, namespaceID)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return ListStorageKeysResponse{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	result := ListStorageKeysResponse{}
+	if err := json.Unmarshal(res, &result); err != nil {
+		return result, errors.Wrap(err, errUnmarshalError)
+	}
+	return result, err
+}
+
+// encode encodes non-nil fields into URL encoded form.
+func (o ListWorkersKVsOptions) encode() string {
+	v := url.Values{}
+	if o.Limit != nil {
+		v.Set("limit", strconv.Itoa(*o.Limit))
+	}
+	if o.Cursor != nil {
+		v.Set("cursor", *o.Cursor)
+	}
+	if o.Prefix != nil {
+		v.Set("prefix", *o.Prefix)
+	}
+	return v.Encode()
+}
+
+// ListWorkersKVsWithOptions lists a namespace's keys with optional parameters
+//
+// API Reference: https://api.cloudflare.com/#workers-kv-namespace-list-a-namespace-s-keys
+func (api API) ListWorkersKVsWithOptions(ctx context.Context, namespaceID string, o ListWorkersKVsOptions) (ListStorageKeysResponse, error) {
+	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/keys?%s", api.AccountID, namespaceID, o.encode())
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return ListStorageKeysResponse{}, errors.Wrap(err, errMakeRequestError)
