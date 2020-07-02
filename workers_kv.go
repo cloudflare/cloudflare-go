@@ -51,7 +51,9 @@ type ListWorkersKVNamespacesResponse struct {
 
 // StorageKey is a key name used to identify a storage value
 type StorageKey struct {
-	Name string `json:"name"`
+	Name       string      `json:"name"`
+	Expiration int         `json:"expiration"`
+	Metadata   interface{} `json:"metadata"`
 }
 
 // ListStorageKeysResponse contains a slice of keys belonging to a storage namespace,
