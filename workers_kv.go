@@ -237,6 +237,26 @@ func (api API) DeleteWorkersKV(ctx context.Context, namespaceID, key string) (Re
 	return result, err
 }
 
+// DeleteWorkersKVBulk deletes multiple KVs at once.
+//
+// API reference: https://api.cloudflare.com/#workers-kv-namespace-delete-multiple-key-value-pairs
+func (api *API) DeleteWorkersKVBulk(ctx context.Context, namespaceID string, keys []string) (Response, error) {
+	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/bulk", api.AccountID, namespaceID)
+	res, err := api.makeRequestWithAuthTypeAndHeaders(
+		ctx, http.MethodDelete, uri, keys, api.authType, http.Header{"Content-Type": []string{"application/json"}},
+	)
+	if err != nil {
+		return Response{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	result := Response{}
+	if err := json.Unmarshal(res, &result); err != nil {
+		return result, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return result, err
+}
+
 // ListWorkersKVs lists a namespace's keys
 //
 // API Reference: https://api.cloudflare.com/#workers-kv-namespace-list-a-namespace-s-keys
