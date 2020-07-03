@@ -331,6 +331,32 @@ func TestWorkersKV_DeleteWorkersKV(t *testing.T) {
 	}
 }
 
+func TestWorkersKV_DeleteWorkersKVBulk(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	keys := []string{"key1", "key2", "key3"}
+
+	namespace := "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+	response := `{
+		"result": null,
+		"success": true,
+		"errors": [],
+		"messages": []
+	}`
+
+	mux.HandleFunc(fmt.Sprintf("/accounts/foo/storage/kv/namespaces/%s/bulk", namespace), func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "DELETE", r.Method, "Expected method 'DELETE', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, response)
+	})
+
+	want := successResponse
+	res, err := client.DeleteWorkersKVBulk(context.Background(), namespace, keys)
+	require.NoError(t, err)
+	assert.Equal(t, want, res)
+}
+
 func TestWorkersKV_ListStorageKeys(t *testing.T) {
 	setup(UsingAccount("foo"))
 	defer teardown()
