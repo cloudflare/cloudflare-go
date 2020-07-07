@@ -31,6 +31,12 @@ const (
 	"message": ""
   }
 `
+	serverLogpushGetOwnershipChallengeInvalidResponseDescription = `{
+    "filename": "logs/challenge-filename.txt",
+	"valid": false,
+	"message": "destination is invalid"
+  }
+`
 )
 
 var (
@@ -50,6 +56,11 @@ var (
 		Filename: "logs/challenge-filename.txt",
 		Valid:    true,
 		Message:  "",
+	}
+	expectedLogpushGetOwnershipChallengeInvalidResponseStruct = LogpushGetOwnershipChallenge{
+		Filename: "logs/challenge-filename.txt",
+		Valid:    false,
+		Message:  "destination is invalid",
 	}
 	expectedUpdatedLogpushJobStruct = LogpushJob{
 		ID:              jobID,
@@ -227,6 +238,28 @@ func TestGetLogpushOwnershipChallenge(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
+}
+
+func TestGetLogpushOwnershipChallengeWithInvalidResponse(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+		  "result": %s,
+		  "success": true,
+		  "errors": null,
+		  "messages": null
+		}
+		`, serverLogpushGetOwnershipChallengeInvalidResponseDescription)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/logpush/ownership", handler)
+	_, err := client.GetLogpushOwnershipChallenge(testZoneID, "destination_conf")
+
+	assert.Error(t, err)
 }
 
 func TestValidateLogpushOwnershipChallenge(t *testing.T) {
