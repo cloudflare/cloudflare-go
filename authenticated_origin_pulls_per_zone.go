@@ -7,7 +7,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-// PerZoneAOPSettingsResponse represents the settings for Per Zone AOP.
+// PerZoneAOPSettings represents the settings for Per Zone AOP.
 type PerZoneAOPSettings struct {
 	Enabled bool `json:"enabled"`
 }

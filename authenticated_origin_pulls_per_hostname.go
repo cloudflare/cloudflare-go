@@ -43,7 +43,7 @@ type PerHostnameAOPDetails struct {
 	ExpiresOn      time.Time `json:"expires_on"`
 }
 
-// PerHostnamesAOPDetailsResponse represents Per Hostname AOP configuration metadata for a single hostname.
+// PerHostnameAOPDetailsResponse represents Per Hostname AOP configuration metadata for a single hostname.
 type PerHostnameAOPDetailsResponse struct {
 	Response
 	Result PerHostnameAOPDetails `json:"result"`
