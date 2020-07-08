@@ -225,6 +225,11 @@ func (api *API) GetLogpushOwnershipChallenge(zoneID, destinationConf string) (*L
 	if err != nil {
 		return nil, errors.Wrap(err, errUnmarshalError)
 	}
+
+	if !r.Result.Valid {
+		return nil, errors.New(r.Result.Message)
+	}
+
 	return &r.Result, nil
 }
 
