@@ -7,40 +7,40 @@ import (
 	"github.com/pkg/errors"
 )
 
-// AOP represents global AOP (tls_client_auth) metadata.
-type AOP struct {
+// AuthenticatedOriginPulls represents global AuthenticatedOriginPulls (tls_client_auth) metadata.
+type AuthenticatedOriginPulls struct {
 	ID         string    `json:"id"`
 	Value      string    `json:"value"`
 	Editable   bool      `json:"editable"`
 	ModifiedOn time.Time `json:"modified_on"`
 }
 
-// AOPResponse represents the response from the global AOP (tls_client_auth) details endpoint.
-type AOPResponse struct {
+// AuthenticatedOriginPullsResponse represents the response from the global AuthenticatedOriginPulls (tls_client_auth) details endpoint.
+type AuthenticatedOriginPullsResponse struct {
 	Response
-	Result AOP `json:"result"`
+	Result AuthenticatedOriginPulls `json:"result"`
 }
 
-// GetAOPStatus returns the configuration details for global AOP (tls_client_auth).
+// GetAuthenticatedOriginPullsStatus returns the configuration details for global AuthenticatedOriginPulls (tls_client_auth).
 //
 // API reference: https://api.cloudflare.com/#zone-settings-get-tls-client-auth-setting
-func (api *API) GetAOPStatus(zoneID string) (AOP, error) {
+func (api *API) GetAuthenticatedOriginPullsStatus(zoneID string) (AuthenticatedOriginPulls, error) {
 	uri := "/zones/" + zoneID + "/settings/tls_client_auth"
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return AOP{}, errors.Wrap(err, errMakeRequestError)
+		return AuthenticatedOriginPulls{}, errors.Wrap(err, errMakeRequestError)
 	}
-	var r AOPResponse
+	var r AuthenticatedOriginPullsResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return AOP{}, errors.Wrap(err, errUnmarshalError)
+		return AuthenticatedOriginPulls{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
 }
 
-// SetAOPStatus toggles whether global AOP is enabled for the zone.
+// SetAuthenticatedOriginPullsStatus toggles whether global AuthenticatedOriginPulls is enabled for the zone.
 //
 // API reference: https://api.cloudflare.com/#zone-settings-change-tls-client-auth-setting
-func (api *API) SetAOPStatus(zoneID string, enable bool) (AOP, error) {
+func (api *API) SetAuthenticatedOriginPullsStatus(zoneID string, enable bool) (AuthenticatedOriginPulls, error) {
 	uri := "/zones/" + zoneID + "/settings/tls_client_auth"
 	var val string
 	if enable {
@@ -55,11 +55,11 @@ func (api *API) SetAOPStatus(zoneID string, enable bool) (AOP, error) {
 	}
 	res, err := api.makeRequest("PATCH", uri, params)
 	if err != nil {
-		return AOP{}, errors.Wrap(err, errMakeRequestError)
+		return AuthenticatedOriginPulls{}, errors.Wrap(err, errMakeRequestError)
 	}
-	var r AOPResponse
+	var r AuthenticatedOriginPullsResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return AOP{}, errors.Wrap(err, errUnmarshalError)
+		return AuthenticatedOriginPulls{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
 }

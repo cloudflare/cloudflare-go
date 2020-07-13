@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestAOPDetails(t *testing.T) {
+func TestAuthenticatedOriginPullsDetails(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -30,20 +30,20 @@ func TestAOPDetails(t *testing.T) {
 	mux.HandleFunc("/zones/023e105f4ecef8ad9ca31a8372d0c353/settings/tls_client_auth", handler)
 
 	modifiedOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
-	want := AOP{
+	want := AuthenticatedOriginPulls{
 		ID:         "tls_client_auth",
 		Value:      "on",
 		Editable:   true,
 		ModifiedOn: modifiedOn,
 	}
 
-	actual, err := client.GetAOPStatus("023e105f4ecef8ad9ca31a8372d0c353")
+	actual, err := client.GetAuthenticatedOriginPullsStatus("023e105f4ecef8ad9ca31a8372d0c353")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
-func TestSetAOPStatusEnabled(t *testing.T) {
+func TestSetAuthenticatedOriginPullsStatusEnabled(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -63,20 +63,20 @@ func TestSetAOPStatusEnabled(t *testing.T) {
 	}
 	mux.HandleFunc("/zones/023e105f4ecef8ad9ca31a8372d0c353/settings/tls_client_auth", handler)
 	modifiedOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
-	want := AOP{
+	want := AuthenticatedOriginPulls{
 		ID:         "tls_client_auth",
 		Value:      "on",
 		Editable:   true,
 		ModifiedOn: modifiedOn,
 	}
 
-	actual, err := client.SetAOPStatus("023e105f4ecef8ad9ca31a8372d0c353", true)
+	actual, err := client.SetAuthenticatedOriginPullsStatus("023e105f4ecef8ad9ca31a8372d0c353", true)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
-func TestSetAOPStatusDisabled(t *testing.T) {
+func TestSetAuthenticatedOriginPullsStatusDisabled(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -96,14 +96,14 @@ func TestSetAOPStatusDisabled(t *testing.T) {
 	}
 	mux.HandleFunc("/zones/023e105f4ecef8ad9ca31a8372d0c353/settings/tls_client_auth", handler)
 	modifiedOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
-	want := AOP{
+	want := AuthenticatedOriginPulls{
 		ID:         "tls_client_auth",
 		Value:      "off",
 		Editable:   true,
 		ModifiedOn: modifiedOn,
 	}
 
-	actual, err := client.SetAOPStatus("023e105f4ecef8ad9ca31a8372d0c353", false)
+	actual, err := client.SetAuthenticatedOriginPullsStatus("023e105f4ecef8ad9ca31a8372d0c353", false)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}

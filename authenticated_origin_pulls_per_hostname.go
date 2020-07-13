@@ -7,8 +7,8 @@ import (
 	"github.com/pkg/errors"
 )
 
-// PerHostnameAOPCertificateDetails represents the metadata for a Per Hostname AOP certificate.
-type PerHostnameAOPCertificateDetails struct {
+// PerHostnameAuthenticatedOriginPullsCertificateDetails represents the metadata for a Per Hostname AuthenticatedOriginPulls certificate.
+type PerHostnameAuthenticatedOriginPullsCertificateDetails struct {
 	ID           string    `json:"id"`
 	Certificate  string    `json:"certificate"`
 	Issuer       string    `json:"issuer"`
@@ -19,14 +19,14 @@ type PerHostnameAOPCertificateDetails struct {
 	UploadedOn   time.Time `json:"uploaded_on"`
 }
 
-// PerHostnameAOPCertificateResponse represents the response from endpoints relating to creating and deleting a Per Hostname AOP certificate.
-type PerHostnameAOPCertificateResponse struct {
+// PerHostnameAuthenticatedOriginPullsCertificateResponse represents the response from endpoints relating to creating and deleting a Per Hostname AuthenticatedOriginPulls certificate.
+type PerHostnameAuthenticatedOriginPullsCertificateResponse struct {
 	Response
-	Result PerHostnameAOPCertificateDetails `json:"result"`
+	Result PerHostnameAuthenticatedOriginPullsCertificateDetails `json:"result"`
 }
 
-// PerHostnameAOPDetails contains metadata about the Per Hostname AOP configuration on a hostname.
-type PerHostnameAOPDetails struct {
+// PerHostnameAuthenticatedOriginPullsDetails contains metadata about the Per Hostname AuthenticatedOriginPulls configuration on a hostname.
+type PerHostnameAuthenticatedOriginPullsDetails struct {
 	Hostname       string    `json:"hostname"`
 	CertID         string    `json:"cert_id"`
 	Enabled        bool      `json:"enabled"`
@@ -43,107 +43,107 @@ type PerHostnameAOPDetails struct {
 	ExpiresOn      time.Time `json:"expires_on"`
 }
 
-// PerHostnameAOPDetailsResponse represents Per Hostname AOP configuration metadata for a single hostname.
-type PerHostnameAOPDetailsResponse struct {
+// PerHostnameAuthenticatedOriginPullsDetailsResponse represents Per Hostname AuthenticatedOriginPulls configuration metadata for a single hostname.
+type PerHostnameAuthenticatedOriginPullsDetailsResponse struct {
 	Response
-	Result PerHostnameAOPDetails `json:"result"`
+	Result PerHostnameAuthenticatedOriginPullsDetails `json:"result"`
 }
 
-// PerHostnamesAOPDetailsResponse represents Per Hostname AOP configuration metadata for multiple hostnames.
-type PerHostnamesAOPDetailsResponse struct {
+// PerHostnamesAuthenticatedOriginPullsDetailsResponse represents Per Hostname AuthenticatedOriginPulls configuration metadata for multiple hostnames.
+type PerHostnamesAuthenticatedOriginPullsDetailsResponse struct {
 	Response
-	Result []PerHostnameAOPDetails `json:"result"`
+	Result []PerHostnameAuthenticatedOriginPullsDetails `json:"result"`
 }
 
-// PerHostnameAOPCertificateParams represents the required data related to the client certificate being uploaded to be used in Per Hostname AOP.
-type PerHostnameAOPCertificateParams struct {
+// PerHostnameAuthenticatedOriginPullsCertificateParams represents the required data related to the client certificate being uploaded to be used in Per Hostname AuthenticatedOriginPulls.
+type PerHostnameAuthenticatedOriginPullsCertificateParams struct {
 	Certificate string `json:"certificate"`
 	PrivateKey  string `json:"private_key"`
 }
 
-// PerHostnameAOPConfig represents the config state for Per Hostname AOP applied on a hostname.
-type PerHostnameAOPConfig struct {
+// PerHostnameAuthenticatedOriginPullsConfig represents the config state for Per Hostname AuthenticatedOriginPulls applied on a hostname.
+type PerHostnameAuthenticatedOriginPullsConfig struct {
 	Hostname string `json:"hostname"`
 	CertID   string `json:"cert_id"`
 	Enabled  bool   `json:"enabled"`
 }
 
-// UploadPerHostnameAOPCertificate will upload the provided certificate and private key to the edge under Per Hostname AOP.
+// UploadPerHostnameAuthenticatedOriginPullsCertificate will upload the provided certificate and private key to the edge under Per Hostname AuthenticatedOriginPulls.
 //
 // API reference: https://api.cloudflare.com/#per-hostname-authenticated-origin-pull-upload-a-hostname-client-certificate
-func (api *API) UploadPerHostnameAOPCertificate(zoneID string, params PerHostnameAOPCertificateParams) (PerHostnameAOPCertificateDetails, error) {
+func (api *API) UploadPerHostnameAuthenticatedOriginPullsCertificate(zoneID string, params PerHostnameAuthenticatedOriginPullsCertificateParams) (PerHostnameAuthenticatedOriginPullsCertificateDetails, error) {
 	uri := "/zones/" + zoneID + "/origin_tls_client_auth/hostnames/certificates"
 	res, err := api.makeRequest("POST", uri, params)
 	if err != nil {
-		return PerHostnameAOPCertificateDetails{}, errors.Wrap(err, errMakeRequestError)
+		return PerHostnameAuthenticatedOriginPullsCertificateDetails{}, errors.Wrap(err, errMakeRequestError)
 	}
-	var r PerHostnameAOPCertificateResponse
+	var r PerHostnameAuthenticatedOriginPullsCertificateResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return PerHostnameAOPCertificateDetails{}, errors.Wrap(err, errUnmarshalError)
+		return PerHostnameAuthenticatedOriginPullsCertificateDetails{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
 }
 
-// GetPerHostnameAOPCertificate retrieves certificate metadata about the requested Per Hostname certificate.
+// GetPerHostnameAuthenticatedOriginPullsCertificate retrieves certificate metadata about the requested Per Hostname certificate.
 //
 // API reference: https://api.cloudflare.com/#per-hostname-authenticated-origin-pull-get-the-hostname-client-certificate
-func (api *API) GetPerHostnameAOPCertificate(zoneID, certificateID string) (PerHostnameAOPCertificateDetails, error) {
+func (api *API) GetPerHostnameAuthenticatedOriginPullsCertificate(zoneID, certificateID string) (PerHostnameAuthenticatedOriginPullsCertificateDetails, error) {
 	uri := "/zones/" + zoneID + "/origin_tls_client_auth/hostnames/certificates/" + certificateID
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return PerHostnameAOPCertificateDetails{}, errors.Wrap(err, errMakeRequestError)
+		return PerHostnameAuthenticatedOriginPullsCertificateDetails{}, errors.Wrap(err, errMakeRequestError)
 	}
-	var r PerHostnameAOPCertificateResponse
+	var r PerHostnameAuthenticatedOriginPullsCertificateResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return PerHostnameAOPCertificateDetails{}, errors.Wrap(err, errUnmarshalError)
+		return PerHostnameAuthenticatedOriginPullsCertificateDetails{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
 }
 
-// DeletePerHostnameAOPCertificate will remove the requested Per Hostname certificate from the edge.
+// DeletePerHostnameAuthenticatedOriginPullsCertificate will remove the requested Per Hostname certificate from the edge.
 //
 // API reference: https://api.cloudflare.com/#per-hostname-authenticated-origin-pull-delete-hostname-client-certificate
-func (api *API) DeletePerHostnameAOPCertificate(zoneID, certificateID string) (PerHostnameAOPCertificateDetails, error) {
+func (api *API) DeletePerHostnameAuthenticatedOriginPullsCertificate(zoneID, certificateID string) (PerHostnameAuthenticatedOriginPullsCertificateDetails, error) {
 	uri := "/zones/" + zoneID + "/origin_tls_client_auth/hostnames/certificates/" + certificateID
 	res, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return PerHostnameAOPCertificateDetails{}, errors.Wrap(err, errMakeRequestError)
+		return PerHostnameAuthenticatedOriginPullsCertificateDetails{}, errors.Wrap(err, errMakeRequestError)
 	}
-	var r PerHostnameAOPCertificateResponse
+	var r PerHostnameAuthenticatedOriginPullsCertificateResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return PerHostnameAOPCertificateDetails{}, errors.Wrap(err, errUnmarshalError)
+		return PerHostnameAuthenticatedOriginPullsCertificateDetails{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
 }
 
-// EditPerHostnameAOPConfig applies the supplied Per Hostname AOP config onto a hostname(s) in the edge.
+// EditPerHostnameAuthenticatedOriginPullsConfig applies the supplied Per Hostname AuthenticatedOriginPulls config onto a hostname(s) in the edge.
 //
 // API reference: https://api.cloudflare.com/#per-hostname-authenticated-origin-pull-enable-or-disable-a-hostname-for-client-authentication
-func (api *API) EditPerHostnameAOPConfig(zoneID string, config []PerHostnameAOPConfig) ([]PerHostnameAOPDetails, error) {
+func (api *API) EditPerHostnameAuthenticatedOriginPullsConfig(zoneID string, config []PerHostnameAuthenticatedOriginPullsConfig) ([]PerHostnameAuthenticatedOriginPullsDetails, error) {
 	uri := "/zones/" + zoneID + "/origin_tls_client_auth/hostnames"
 	res, err := api.makeRequest("PUT", uri, nil)
 	if err != nil {
-		return []PerHostnameAOPDetails{}, errors.Wrap(err, errMakeRequestError)
+		return []PerHostnameAuthenticatedOriginPullsDetails{}, errors.Wrap(err, errMakeRequestError)
 	}
-	var r PerHostnamesAOPDetailsResponse
+	var r PerHostnamesAuthenticatedOriginPullsDetailsResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return []PerHostnameAOPDetails{}, errors.Wrap(err, errUnmarshalError)
+		return []PerHostnameAuthenticatedOriginPullsDetails{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
 }
 
-// GetPerHostnameAOPConfig returns the config state of Per Hostname AOP of the provided hostname within a zone.
+// GetPerHostnameAuthenticatedOriginPullsConfig returns the config state of Per Hostname AuthenticatedOriginPulls of the provided hostname within a zone.
 //
 // API reference: https://api.cloudflare.com/#per-hostname-authenticated-origin-pull-get-the-hostname-status-for-client-authentication
-func (api *API) GetPerHostnameAOPConfig(zoneID, hostname string) (PerHostnameAOPDetails, error) {
+func (api *API) GetPerHostnameAuthenticatedOriginPullsConfig(zoneID, hostname string) (PerHostnameAuthenticatedOriginPullsDetails, error) {
 	uri := "/zones/" + zoneID + "/origin_tls_client_auth/hostnames/" + hostname
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return PerHostnameAOPDetails{}, errors.Wrap(err, errMakeRequestError)
+		return PerHostnameAuthenticatedOriginPullsDetails{}, errors.Wrap(err, errMakeRequestError)
 	}
-	var r PerHostnameAOPDetailsResponse
+	var r PerHostnameAuthenticatedOriginPullsDetailsResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return PerHostnameAOPDetails{}, errors.Wrap(err, errUnmarshalError)
+		return PerHostnameAuthenticatedOriginPullsDetails{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
 }
