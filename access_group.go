@@ -109,6 +109,7 @@ type AccessGroupGSuite struct {
 type AccessGroupGitHub struct {
 	GitHubOrganization struct {
 		Name               string `json:"name"`
+		Team               string `json:"team,omitempty"`
 		IdentityProviderID string `json:"identity_provider_id"`
 	} `json:"github-organization"`
 }
