@@ -38,13 +38,15 @@ func (p *ProxyProtocol) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// SpectrumApplicationOriginPort defines a union of a single port or range of ports
 type SpectrumApplicationOriginPort struct {
 	Port, Start, End uint16
 }
 
+// ErrOriginPortInvalid is a common error for failing to parse a single port or port range
 var ErrOriginPortInvalid = errors.New("invalid origin port")
 
-func (p *SpectrumApplicationOriginPort) Parse(s string) error {
+func (p *SpectrumApplicationOriginPort) parse(s string) error {
 	switch split := strings.Split(s, "-"); len(split) {
 	case 1:
 		i, err := strconv.ParseUint(split[0], 10, 16)
@@ -72,6 +74,7 @@ func (p *SpectrumApplicationOriginPort) Parse(s string) error {
 	return nil
 }
 
+// UnmarshalJSON converts a byte slice into a single port or port range
 func (p *SpectrumApplicationOriginPort) UnmarshalJSON(b []byte) error {
 	var port interface{}
 	if err := json.Unmarshal(b, &port); err != nil {
@@ -82,7 +85,7 @@ func (p *SpectrumApplicationOriginPort) UnmarshalJSON(b []byte) error {
 	case float64:
 		p.Port = uint16(i)
 	case string:
-		if err := p.Parse(i); err != nil {
+		if err := p.parse(i); err != nil {
 			return err
 		}
 	}
@@ -90,12 +93,12 @@ func (p *SpectrumApplicationOriginPort) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// MarshalJSON converts a single port or port range to a suitable byte slice
 func (p *SpectrumApplicationOriginPort) MarshalJSON() ([]byte, error) {
 	if p.End > 0 {
 		return json.Marshal(fmt.Sprintf("%d-%d", p.Start, p.End))
-	} else {
-		return json.Marshal(p.Port)
 	}
+	return json.Marshal(p.Port)
 }
 
 // SpectrumApplication defines a single Spectrum Application.
