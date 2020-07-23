@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net"
+	"strconv"
 	"strings"
 	"time"
 
@@ -37,23 +38,83 @@ func (p *ProxyProtocol) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+type SpectrumApplicationOriginPort struct {
+	Port, Start, End uint16
+}
+
+var ErrOriginPortInvalid = errors.New("invalid origin port")
+
+func (p *SpectrumApplicationOriginPort) Parse(s string) error {
+	switch split := strings.Split(s, "-"); len(split) {
+	case 1:
+		i, err := strconv.ParseUint(split[0], 10, 16)
+		if err != nil {
+			return err
+		}
+		p.Port = uint16(i)
+	case 2:
+		start, err := strconv.ParseUint(split[0], 10, 16)
+		if err != nil {
+			return err
+		}
+		end, err := strconv.ParseUint(split[1], 10, 16)
+		if err != nil {
+			return err
+		}
+		if start >= end {
+			return ErrOriginPortInvalid
+		}
+		p.Start = uint16(start)
+		p.End = uint16(end)
+	default:
+		return ErrOriginPortInvalid
+	}
+	return nil
+}
+
+func (p *SpectrumApplicationOriginPort) UnmarshalJSON(b []byte) error {
+	var port interface{}
+	if err := json.Unmarshal(b, &port); err != nil {
+		return err
+	}
+
+	switch i := port.(type) {
+	case float64:
+		p.Port = uint16(i)
+	case string:
+		if err := p.Parse(i); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (p *SpectrumApplicationOriginPort) MarshalJSON() ([]byte, error) {
+	if p.End > 0 {
+		return json.Marshal(fmt.Sprintf("%d-%d", p.Start, p.End))
+	} else {
+		return json.Marshal(p.Port)
+	}
+}
+
 // SpectrumApplication defines a single Spectrum Application.
 type SpectrumApplication struct {
-	ID               string                        `json:"id,omitempty"`
-	Protocol         string                        `json:"protocol,omitempty"`
-	IPv4             bool                          `json:"ipv4,omitempty"`
-	DNS              SpectrumApplicationDNS        `json:"dns,omitempty"`
-	OriginDirect     []string                      `json:"origin_direct,omitempty"`
-	OriginPort       int                           `json:"origin_port,omitempty"`
-	OriginDNS        *SpectrumApplicationOriginDNS `json:"origin_dns,omitempty"`
-	IPFirewall       bool                          `json:"ip_firewall,omitempty"`
-	ProxyProtocol    ProxyProtocol                 `json:"proxy_protocol,omitempty"`
-	TLS              string                        `json:"tls,omitempty"`
-	TrafficType      string                        `json:"traffic_type,omitempty"`
-	EdgeIPs          *SpectrumApplicationEdgeIPs   `json:"edge_ips,omitempty"`
-	ArgoSmartRouting bool                          `json:"argo_smart_routing,omitempty"`
-	CreatedOn        *time.Time                    `json:"created_on,omitempty"`
-	ModifiedOn       *time.Time                    `json:"modified_on,omitempty"`
+	ID               string                         `json:"id,omitempty"`
+	Protocol         string                         `json:"protocol,omitempty"`
+	IPv4             bool                           `json:"ipv4,omitempty"`
+	DNS              SpectrumApplicationDNS         `json:"dns,omitempty"`
+	OriginDirect     []string                       `json:"origin_direct,omitempty"`
+	OriginPort       *SpectrumApplicationOriginPort `json:"origin_port,omitempty"`
+	OriginDNS        *SpectrumApplicationOriginDNS  `json:"origin_dns,omitempty"`
+	IPFirewall       bool                           `json:"ip_firewall,omitempty"`
+	ProxyProtocol    ProxyProtocol                  `json:"proxy_protocol,omitempty"`
+	TLS              string                         `json:"tls,omitempty"`
+	TrafficType      string                         `json:"traffic_type,omitempty"`
+	EdgeIPs          *SpectrumApplicationEdgeIPs    `json:"edge_ips,omitempty"`
+	ArgoSmartRouting bool                           `json:"argo_smart_routing,omitempty"`
+	CreatedOn        *time.Time                     `json:"created_on,omitempty"`
+	ModifiedOn       *time.Time                     `json:"modified_on,omitempty"`
 }
 
 // UnmarshalJSON handles setting the `ProxyProtocol` field based on the value of the deprecated `spp` field.
