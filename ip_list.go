@@ -146,21 +146,21 @@ func (api *API) ListIPLists(ctx context.Context) ([]IPList, error) {
 
 // CreateIPList creates a new IP List
 // API reference: https://api.cloudflare.com/#rules-lists-create-list
-func (api *API) CreateIPList(ctx context.Context, name string, description string, kind string) (IPListResponse,
+func (api *API) CreateIPList(ctx context.Context, name string, description string, kind string) (IPList,
 	error) {
 	uri := fmt.Sprintf("/accounts/%s/rules/lists", api.AccountID)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri,
 		IPListCreateRequest{Name: name, Description: description, Kind: kind})
 	if err != nil {
-		return IPListResponse{}, errors.Wrap(err, errMakeRequestError)
+		return IPList{}, errors.Wrap(err, errMakeRequestError)
 	}
 
 	result := IPListResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return IPListResponse{}, errors.Wrap(err, errUnmarshalError)
+		return IPList{}, errors.Wrap(err, errUnmarshalError)
 	}
 
-	return result, nil
+	return result.Result, nil
 }
 
 // GetIPList returns a single IP List
