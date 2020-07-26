@@ -310,8 +310,6 @@ func (api *API) DeleteIPListItems(ctx context.Context, id string, items IPListIt
 	error) {
 	uri := fmt.Sprintf("/accounts/%s/rules/lists/%s/items", api.AccountID, id)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, items)
-	test, _ := json.Marshal(items)
-	fmt.Printf("%+v\n", string(test))
 	if err != nil {
 		return IPListItemDeleteResponse{}, errors.Wrap(err, errMakeRequestError)
 	}
