@@ -15,8 +15,8 @@ const (
 	IPListTypeIP = "ip"
 )
 
-// BulkOperation contains information about a Bulk Operation
-type BulkOperation struct {
+// IPListBulkOperation contains information about a Bulk Operation
+type IPListBulkOperation struct {
 	ID        string     `json:"id"`
 	Status    string     `json:"status"`
 	Error     string     `json:"error"`
@@ -92,10 +92,10 @@ type IPListListResponse struct {
 	Result []IPList `json:"result"`
 }
 
-// BulkOperationResponse contains a slice of IP Lists
-type BulkOperationResponse struct {
+// IPListBulkOperationResponse contains information about a Bulk Operation
+type IPListBulkOperationResponse struct {
 	Response
-	Result BulkOperation `json:"result"`
+	Result IPListBulkOperation `json:"result"`
 }
 
 // IPListDeleteResponse contains information about the deletion of an IP List
@@ -339,18 +339,18 @@ func (api *API) GetIPListItem(ctx context.Context, listID string, id string) (IP
 	return result.Result, nil
 }
 
-// GetBulkOperation returns the status of a bulk operation
+// GetIPListBulkOperation returns the status of a bulk operation
 // API reference: https://api.cloudflare.com/#rules-lists-get-list
-func (api *API) GetBulkOperation(ctx context.Context, id string) (BulkOperation, error) {
+func (api *API) GetIPListBulkOperation(ctx context.Context, id string) (IPListBulkOperation, error) {
 	uri := fmt.Sprintf("/accounts/%s/rules/lists/bulk_operations/%s", api.AccountID, id)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return BulkOperation{}, errors.Wrap(err, errMakeRequestError)
+		return IPListBulkOperation{}, errors.Wrap(err, errMakeRequestError)
 	}
 
-	result := BulkOperationResponse{}
+	result := IPListBulkOperationResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return BulkOperation{}, errors.Wrap(err, errUnmarshalError)
+		return IPListBulkOperation{}, errors.Wrap(err, errUnmarshalError)
 	}
 
 	return result.Result, nil
