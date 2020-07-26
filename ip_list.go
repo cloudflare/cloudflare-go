@@ -11,7 +11,8 @@ import (
 )
 
 const (
-	IP_LIST_TYPE_IP = "ip"
+	// IPListTypeIP specifies a list containing IP addresses
+	IPListTypeIP = "ip"
 )
 
 // BulkOperation contains information about a Bulk Operation
