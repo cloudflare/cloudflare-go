@@ -182,19 +182,19 @@ func (api *API) GetIPList(ctx context.Context, id string) (IPList, error) {
 
 // UpdateIPList updates the description of an existing IP List
 // API reference: https://api.cloudflare.com/#rules-lists-update-list
-func (api *API) UpdateIPList(ctx context.Context, id string, description string) (IPListResponse, error) {
+func (api *API) UpdateIPList(ctx context.Context, id string, description string) (IPList, error) {
 	uri := fmt.Sprintf("/accounts/%s/rules/lists/%s", api.AccountID, id)
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, IPListUpdateRequest{Description: description})
 	if err != nil {
-		return IPListResponse{}, errors.Wrap(err, errMakeRequestError)
+		return IPList{}, errors.Wrap(err, errMakeRequestError)
 	}
 
 	result := IPListResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return IPListResponse{}, errors.Wrap(err, errUnmarshalError)
+		return IPList{}, errors.Wrap(err, errUnmarshalError)
 	}
 
-	return result, nil
+	return result.Result, nil
 }
 
 // DeleteIPList deletes an IP List
