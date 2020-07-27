@@ -370,7 +370,7 @@ func (api *API) DeleteIPListItemsAsync(ctx context.Context, id string, items IPL
 	return result, nil
 }
 
-// DeleteIPListItemsAsync removes specific Items of an IP List by their ID synchronously and returns the current set
+// DeleteIPListItems removes specific Items of an IP List by their ID synchronously and returns the current set
 // of IP List Items
 func (api *API) DeleteIPListItems(ctx context.Context, id string, items IPListItemDeleteRequest) (
 	[]IPListItem, error) {
