@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"math"
 	"net/http"
 	"time"
 
@@ -72,14 +73,14 @@ type IPListUpdateRequest struct {
 	Description string `json:"description"`
 }
 
-// IPListResponse contains a single IP Lists
+// IPListResponse contains a single IP List
 type IPListResponse struct {
 	Response
 	Result IPList `json:"result"`
 }
 
-// IPListItemResponse contains information about the creation of an IP List Item
-type IPListItemResponse struct {
+// IPListItemCreateResponse contains information about the creation of an IP List Item
+type IPListItemCreateResponse struct {
 	Response
 	Result struct {
 		OperationID string `json:"operation_id"`
@@ -245,69 +246,116 @@ func (api *API) ListIPListItems(ctx context.Context, id string) ([]IPListItem, e
 	return list, nil
 }
 
-// CreateIPListItem creates a new IP List Item
-// TODO Responses won't contain an error code if we are trying to create more IPs than allowed
-// TODO shall we keep the method asynchronously or poll the bulk operations endpoint?
+// CreateIPListItemAsync creates a new IP List Item asynchronously, Users have to poll the operation status by
+// using the operation_id returned by this function.
 // API reference: https://api.cloudflare.com/#rules-lists-create-list-items
-func (api *API) CreateIPListItem(ctx context.Context, id string, ip string, comment string) (IPListItemResponse,
-	error) {
+func (api *API) CreateIPListItemAsync(ctx context.Context, id string, ip string, comment string) (
+	IPListItemCreateResponse, error) {
 	uri := fmt.Sprintf("/accounts/%s/rules/lists/%s/items", api.AccountID, id)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, []IPListItemCreateRequest{{IP: ip, Comment: comment}})
 	if err != nil {
-		return IPListItemResponse{}, errors.Wrap(err, errMakeRequestError)
+		return IPListItemCreateResponse{}, errors.Wrap(err, errMakeRequestError)
 	}
 
-	result := IPListItemResponse{}
+	result := IPListItemCreateResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return IPListItemResponse{}, errors.Wrap(err, errUnmarshalError)
+		return IPListItemCreateResponse{}, errors.Wrap(err, errUnmarshalError)
 	}
 
 	return result, nil
 }
 
-// CreateIPListItems bulk creates many IP List Items
-// TODO shall we keep the method asynchronously or poll the bulk operations endpoint?
+// CreateIPListItem creates a new IP List Item synchronously and returns the current set of IP List Items
+func (api *API) CreateIPListItem(ctx context.Context, id string, ip string, comment string) ([]IPListItem, error) {
+	result, err := api.CreateIPListItemAsync(ctx, id, ip, comment)
+
+	if err != nil {
+		return []IPListItem{}, err
+	}
+
+	err = api.pollIPListBulkOperation(ctx, result.Result.OperationID)
+	if err != nil {
+		return []IPListItem{}, err
+	}
+
+	return api.ListIPListItems(ctx, id)
+}
+
+// CreateIPListItemsAsync bulk creates many IP List Items asynchronously. Users have to poll the operation status by
+// using the operation_id returned by this function.
 // API reference: https://api.cloudflare.com/#rules-lists-create-list-items
-func (api *API) CreateIPListItems(ctx context.Context, id string, items []IPListItemCreateRequest) (IPListItemResponse,
-	error) {
+func (api *API) CreateIPListItemsAsync(ctx context.Context, id string, items []IPListItemCreateRequest) (
+	IPListItemCreateResponse, error) {
 	uri := fmt.Sprintf("/accounts/%s/rules/lists/%s/items", api.AccountID, id)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, items)
 	if err != nil {
-		return IPListItemResponse{}, errors.Wrap(err, errMakeRequestError)
+		return IPListItemCreateResponse{}, errors.Wrap(err, errMakeRequestError)
 	}
 
-	result := IPListItemResponse{}
+	result := IPListItemCreateResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return IPListItemResponse{}, errors.Wrap(err, errUnmarshalError)
+		return IPListItemCreateResponse{}, errors.Wrap(err, errUnmarshalError)
 	}
 
 	return result, nil
 }
 
-// ReplaceIPListItems replace all IP List items with a new set
-// TODO shall we keep the method asynchronously or poll the bulk operations endpoint?
+// CreateIPListItems bulk creates many IP List Items synchronously and returns the current set of IP List Items
+func (api *API) CreateIPListItems(ctx context.Context, id string, items []IPListItemCreateRequest) (
+	[]IPListItem, error) {
+	result, err := api.CreateIPListItemsAsync(ctx, id, items)
+	if err != nil {
+		return []IPListItem{}, err
+	}
+
+	err = api.pollIPListBulkOperation(ctx, result.Result.OperationID)
+	if err != nil {
+		return []IPListItem{}, err
+	}
+
+	return api.ListIPListItems(ctx, id)
+}
+
+// ReplaceIPListItemsAsync replaces all IP List Items asynchronously. Users have to poll the operation status by
+// using the operation_id returned by this function.
 // API reference: https://api.cloudflare.com/#rules-lists-replace-list-items
-func (api *API) ReplaceIPListItems(ctx context.Context, id string, items []IPListItemCreateRequest) (IPListItemResponse,
-	error) {
+func (api *API) ReplaceIPListItemsAsync(ctx context.Context, id string, items []IPListItemCreateRequest) (
+	IPListItemCreateResponse, error) {
 	uri := fmt.Sprintf("/accounts/%s/rules/lists/%s/items", api.AccountID, id)
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, items)
 	if err != nil {
-		return IPListItemResponse{}, errors.Wrap(err, errMakeRequestError)
+		return IPListItemCreateResponse{}, errors.Wrap(err, errMakeRequestError)
 	}
 
-	result := IPListItemResponse{}
+	result := IPListItemCreateResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return IPListItemResponse{}, errors.Wrap(err, errUnmarshalError)
+		return IPListItemCreateResponse{}, errors.Wrap(err, errUnmarshalError)
 	}
 
 	return result, nil
 }
 
-// DeleteIPListItems removes specific Items of an IP List by their ID
-// TODO shall we keep the method asynchronously or poll the bulk operations endpoint?
+// ReplaceIPListItems replaces all IP List Items synchronously and returns the current set of IP List Items
+func (api *API) ReplaceIPListItems(ctx context.Context, id string, items []IPListItemCreateRequest) (
+	[]IPListItem, error) {
+	result, err := api.ReplaceIPListItemsAsync(ctx, id, items)
+	if err != nil {
+		return []IPListItem{}, err
+	}
+
+	err = api.pollIPListBulkOperation(ctx, result.Result.OperationID)
+	if err != nil {
+		return []IPListItem{}, err
+	}
+
+	return api.ListIPListItems(ctx, id)
+}
+
+// DeleteIPListItemsAsync removes specific Items of an IP List by their ID asynchronously. Users have to poll the
+// operation status by using the operation_id returned by this function.
 // API reference: https://api.cloudflare.com/#rules-lists-delete-list-items
-func (api *API) DeleteIPListItems(ctx context.Context, id string, items IPListItemDeleteRequest) (IPListItemDeleteResponse,
-	error) {
+func (api *API) DeleteIPListItemsAsync(ctx context.Context, id string, items IPListItemDeleteRequest) (
+	IPListItemDeleteResponse, error) {
 	uri := fmt.Sprintf("/accounts/%s/rules/lists/%s/items", api.AccountID, id)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, items)
 	if err != nil {
@@ -320,6 +368,23 @@ func (api *API) DeleteIPListItems(ctx context.Context, id string, items IPListIt
 	}
 
 	return result, nil
+}
+
+// DeleteIPListItemsAsync removes specific Items of an IP List by their ID synchronously and returns the current set
+// of IP List Items
+func (api *API) DeleteIPListItems(ctx context.Context, id string, items IPListItemDeleteRequest) (
+	[]IPListItem, error) {
+	result, err := api.DeleteIPListItemsAsync(ctx, id, items)
+	if err != nil {
+		return []IPListItem{}, err
+	}
+
+	err = api.pollIPListBulkOperation(ctx, result.Result.OperationID)
+	if err != nil {
+		return []IPListItem{}, err
+	}
+
+	return api.ListIPListItems(ctx, id)
 }
 
 // GetIPListItem returns a single IP List Item
@@ -340,7 +405,7 @@ func (api *API) GetIPListItem(ctx context.Context, listID string, id string) (IP
 }
 
 // GetIPListBulkOperation returns the status of a bulk operation
-// API reference: https://api.cloudflare.com/#rules-lists-get-list
+// API reference: https://api.cloudflare.com/#rules-lists-get-bulk-operation
 func (api *API) GetIPListBulkOperation(ctx context.Context, id string) (IPListBulkOperation, error) {
 	uri := fmt.Sprintf("/accounts/%s/rules/lists/bulk_operations/%s", api.AccountID, id)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
@@ -354,4 +419,27 @@ func (api *API) GetIPListBulkOperation(ctx context.Context, id string) (IPListBu
 	}
 
 	return result.Result, nil
+}
+
+// this is a helper method to implement synchronous behavior for some asynchronous endpoints.
+// bulk-operation status can be either pending, running, failed or completed
+func (api *API) pollIPListBulkOperation(ctx context.Context, id string) error {
+	var i uint8
+	for i = 0; i < 16; i++ {
+		time.Sleep(0x1 << uint8(math.Ceil(float64(i/2))) * time.Second)
+
+		bulkResult, err := api.GetIPListBulkOperation(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		switch bulkResult.Status {
+		case "failed":
+			return errors.New(bulkResult.Error)
+		case "completed":
+			return nil
+		}
+	}
+
+	return errors.New(errOperationStillRunning)
 }

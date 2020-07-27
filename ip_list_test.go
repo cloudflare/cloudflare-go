@@ -192,7 +192,8 @@ func TestUpdateIPList(t *testing.T) {
 		ModifiedOn:            &modifiedOn,
 	}
 
-	actual, err := client.UpdateIPList(context.Background(), "2c0fc9fa937b11eaa1b71c4d701ab86e", "This note was updated.")
+	actual, err := client.UpdateIPList(context.Background(), "2c0fc9fa937b11eaa1b71c4d701ab86e",
+		"This note was updated.")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -329,19 +330,20 @@ func TestCreateIPListItems(t *testing.T) {
 
 	mux.HandleFunc("/accounts/foo/rules/lists/2c0fc9fa937b11eaa1b71c4d701ab86e/items", handler)
 
-	want := IPListItemResponse{}
+	want := IPListItemCreateResponse{}
 	want.Success = true
 	want.Errors = []ResponseInfo{}
 	want.Messages = []ResponseInfo{}
 	want.Result.OperationID = "4da8780eeb215e6cb7f48dd981c4ea02"
 
-	actual, err := client.CreateIPListItems(context.Background(), "2c0fc9fa937b11eaa1b71c4d701ab86e", []IPListItemCreateRequest{{
-		IP:      "10.0.0.1",
-		Comment: "Private IP",
-	}, {
-		IP:      "10.0.0.2",
-		Comment: "Another Private IP",
-	}})
+	actual, err := client.CreateIPListItemsAsync(context.Background(), "2c0fc9fa937b11eaa1b71c4d701ab86e",
+		[]IPListItemCreateRequest{{
+			IP:      "10.0.0.1",
+			Comment: "Private IP",
+		}, {
+			IP:      "10.0.0.2",
+			Comment: "Another Private IP",
+		}})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -366,19 +368,20 @@ func TestReplaceIPListItems(t *testing.T) {
 
 	mux.HandleFunc("/accounts/foo/rules/lists/2c0fc9fa937b11eaa1b71c4d701ab86e/items", handler)
 
-	want := IPListItemResponse{}
+	want := IPListItemCreateResponse{}
 	want.Success = true
 	want.Errors = []ResponseInfo{}
 	want.Messages = []ResponseInfo{}
 	want.Result.OperationID = "4da8780eeb215e6cb7f48dd981c4ea02"
 
-	actual, err := client.ReplaceIPListItems(context.Background(), "2c0fc9fa937b11eaa1b71c4d701ab86e", []IPListItemCreateRequest{{
-		IP:      "10.0.0.1",
-		Comment: "Private IP",
-	}, {
-		IP:      "10.0.0.2",
-		Comment: "Another Private IP",
-	}})
+	actual, err := client.ReplaceIPListItemsAsync(context.Background(), "2c0fc9fa937b11eaa1b71c4d701ab86e",
+		[]IPListItemCreateRequest{{
+			IP:      "10.0.0.1",
+			Comment: "Private IP",
+		}, {
+			IP:      "10.0.0.2",
+			Comment: "Another Private IP",
+		}})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -409,9 +412,10 @@ func TestDeleteIPListItems(t *testing.T) {
 	want.Messages = []ResponseInfo{}
 	want.Result.OperationID = "4da8780eeb215e6cb7f48dd981c4ea02"
 
-	actual, err := client.DeleteIPListItems(context.Background(), "2c0fc9fa937b11eaa1b71c4d701ab86e", IPListItemDeleteRequest{[]IPListItemDeleteItemRequest{{
-		ID: "34b12448945f11eaa1b71c4d701ab86e",
-	}}})
+	actual, err := client.DeleteIPListItemsAsync(context.Background(), "2c0fc9fa937b11eaa1b71c4d701ab86e",
+		IPListItemDeleteRequest{[]IPListItemDeleteItemRequest{{
+			ID: "34b12448945f11eaa1b71c4d701ab86e",
+		}}})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -438,7 +442,8 @@ func TestGetIPListItem(t *testing.T) {
 		}`)
 	}
 
-	mux.HandleFunc("/accounts/foo/rules/lists/2c0fc9fa937b11eaa1b71c4d701ab86e/items/34b12448945f11eaa1b71c4d701ab86e", handler)
+	mux.HandleFunc("/accounts/foo/rules/lists/2c0fc9fa937b11eaa1b71c4d701ab86e/items/"+
+		"34b12448945f11eaa1b71c4d701ab86e", handler)
 
 	createdOn, _ := time.Parse(time.RFC3339, "2020-01-01T08:00:00Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2020-01-10T14:00:00Z")
@@ -451,7 +456,8 @@ func TestGetIPListItem(t *testing.T) {
 		ModifiedOn: &modifiedOn,
 	}
 
-	actual, err := client.GetIPListItem(context.Background(), "2c0fc9fa937b11eaa1b71c4d701ab86e", "34b12448945f11eaa1b71c4d701ab86e")
+	actual, err := client.GetIPListItem(context.Background(), "2c0fc9fa937b11eaa1b71c4d701ab86e",
+		"34b12448945f11eaa1b71c4d701ab86e")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
