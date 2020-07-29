@@ -68,6 +68,11 @@ type PerHostnameAuthenticatedOriginPullsConfig struct {
 	Enabled  bool   `json:"enabled"`
 }
 
+// PerHostnameAuthenticatedOriginPullsConfigParams represents the expected config param format for Per Hostname AuthenticatedOriginPulls applied on a hostname.
+type PerHostnameAuthenticatedOriginPullsConfigParams struct {
+	Config []PerHostnameAuthenticatedOriginPullsConfig `json:"config"`
+}
+
 // UploadPerHostnameAuthenticatedOriginPullsCertificate will upload the provided certificate and private key to the edge under Per Hostname AuthenticatedOriginPulls.
 //
 // API reference: https://api.cloudflare.com/#per-hostname-authenticated-origin-pull-upload-a-hostname-client-certificate
@@ -121,7 +126,10 @@ func (api *API) DeletePerHostnameAuthenticatedOriginPullsCertificate(zoneID, cer
 // API reference: https://api.cloudflare.com/#per-hostname-authenticated-origin-pull-enable-or-disable-a-hostname-for-client-authentication
 func (api *API) EditPerHostnameAuthenticatedOriginPullsConfig(zoneID string, config []PerHostnameAuthenticatedOriginPullsConfig) ([]PerHostnameAuthenticatedOriginPullsDetails, error) {
 	uri := "/zones/" + zoneID + "/origin_tls_client_auth/hostnames"
-	res, err := api.makeRequest("PUT", uri, nil)
+	conf := PerHostnameAuthenticatedOriginPullsConfigParams{
+		Config: config,
+	}
+	res, err := api.makeRequest("PUT", uri, conf)
 	if err != nil {
 		return []PerHostnameAuthenticatedOriginPullsDetails{}, errors.Wrap(err, errMakeRequestError)
 	}
