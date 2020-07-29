@@ -447,8 +447,12 @@ func (api *API) pollIPListBulkOperation(ctx context.Context, id string) error {
 		switch bulkResult.Status {
 		case "failed":
 			return errors.New(bulkResult.Error)
+		case "pending", "running":
+			continue
 		case "completed":
 			return nil
+		default:
+			return errors.New(fmt.Sprintf("%s: %s", errOperationUnexpectedStatus, bulkResult.Status))
 		}
 	}
 
