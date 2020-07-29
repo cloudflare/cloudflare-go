@@ -129,6 +129,7 @@ type IPListItemsGetResponse struct {
 }
 
 // ListIPLists lists all IP Lists
+//
 // API reference: https://api.cloudflare.com/#rules-lists-list-lists
 func (api *API) ListIPLists(ctx context.Context) ([]IPList, error) {
 	uri := fmt.Sprintf("/accounts/%s/rules/lists", api.AccountID)
@@ -146,6 +147,7 @@ func (api *API) ListIPLists(ctx context.Context) ([]IPList, error) {
 }
 
 // CreateIPList creates a new IP List
+//
 // API reference: https://api.cloudflare.com/#rules-lists-create-list
 func (api *API) CreateIPList(ctx context.Context, name string, description string, kind string) (IPList,
 	error) {
@@ -165,6 +167,7 @@ func (api *API) CreateIPList(ctx context.Context, name string, description strin
 }
 
 // GetIPList returns a single IP List
+//
 // API reference: https://api.cloudflare.com/#rules-lists-get-list
 func (api *API) GetIPList(ctx context.Context, id string) (IPList, error) {
 	uri := fmt.Sprintf("/accounts/%s/rules/lists/%s", api.AccountID, id)
@@ -182,6 +185,7 @@ func (api *API) GetIPList(ctx context.Context, id string) (IPList, error) {
 }
 
 // UpdateIPList updates the description of an existing IP List
+//
 // API reference: https://api.cloudflare.com/#rules-lists-update-list
 func (api *API) UpdateIPList(ctx context.Context, id string, description string) (IPList, error) {
 	uri := fmt.Sprintf("/accounts/%s/rules/lists/%s", api.AccountID, id)
@@ -199,6 +203,7 @@ func (api *API) UpdateIPList(ctx context.Context, id string, description string)
 }
 
 // DeleteIPList deletes an IP List
+//
 // API reference: https://api.cloudflare.com/#rules-lists-delete-list
 func (api *API) DeleteIPList(ctx context.Context, id string) (IPListDeleteResponse, error) {
 	uri := fmt.Sprintf("/accounts/%s/rules/lists/%s", api.AccountID, id)
@@ -216,6 +221,7 @@ func (api *API) DeleteIPList(ctx context.Context, id string) (IPListDeleteRespon
 }
 
 // ListIPListItems returns a list with all items in an IP List
+//
 // API reference: https://api.cloudflare.com/#rules-lists-list-list-items
 func (api *API) ListIPListItems(ctx context.Context, id string) ([]IPListItem, error) {
 	var list []IPListItem
@@ -246,11 +252,11 @@ func (api *API) ListIPListItems(ctx context.Context, id string) ([]IPListItem, e
 	return list, nil
 }
 
-// CreateIPListItemAsync creates a new IP List Item asynchronously, Users have to poll the operation status by
+// CreateIPListItemAsync creates a new IP List Item asynchronously. Users have to poll the operation status by
 // using the operation_id returned by this function.
+//
 // API reference: https://api.cloudflare.com/#rules-lists-create-list-items
-func (api *API) CreateIPListItemAsync(ctx context.Context, id string, ip string, comment string) (
-	IPListItemCreateResponse, error) {
+func (api *API) CreateIPListItemAsync(ctx context.Context, id, ip, comment string) (IPListItemCreateResponse, error) {
 	uri := fmt.Sprintf("/accounts/%s/rules/lists/%s/items", api.AccountID, id)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, []IPListItemCreateRequest{{IP: ip, Comment: comment}})
 	if err != nil {
@@ -266,7 +272,7 @@ func (api *API) CreateIPListItemAsync(ctx context.Context, id string, ip string,
 }
 
 // CreateIPListItem creates a new IP List Item synchronously and returns the current set of IP List Items
-func (api *API) CreateIPListItem(ctx context.Context, id string, ip string, comment string) ([]IPListItem, error) {
+func (api *API) CreateIPListItem(ctx context.Context, id, ip, comment string) ([]IPListItem, error) {
 	result, err := api.CreateIPListItemAsync(ctx, id, ip, comment)
 
 	if err != nil {
@@ -283,6 +289,7 @@ func (api *API) CreateIPListItem(ctx context.Context, id string, ip string, comm
 
 // CreateIPListItemsAsync bulk creates many IP List Items asynchronously. Users have to poll the operation status by
 // using the operation_id returned by this function.
+//
 // API reference: https://api.cloudflare.com/#rules-lists-create-list-items
 func (api *API) CreateIPListItemsAsync(ctx context.Context, id string, items []IPListItemCreateRequest) (
 	IPListItemCreateResponse, error) {
@@ -318,6 +325,7 @@ func (api *API) CreateIPListItems(ctx context.Context, id string, items []IPList
 
 // ReplaceIPListItemsAsync replaces all IP List Items asynchronously. Users have to poll the operation status by
 // using the operation_id returned by this function.
+//
 // API reference: https://api.cloudflare.com/#rules-lists-replace-list-items
 func (api *API) ReplaceIPListItemsAsync(ctx context.Context, id string, items []IPListItemCreateRequest) (
 	IPListItemCreateResponse, error) {
@@ -353,6 +361,7 @@ func (api *API) ReplaceIPListItems(ctx context.Context, id string, items []IPLis
 
 // DeleteIPListItemsAsync removes specific Items of an IP List by their ID asynchronously. Users have to poll the
 // operation status by using the operation_id returned by this function.
+//
 // API reference: https://api.cloudflare.com/#rules-lists-delete-list-items
 func (api *API) DeleteIPListItemsAsync(ctx context.Context, id string, items IPListItemDeleteRequest) (
 	IPListItemDeleteResponse, error) {
@@ -388,8 +397,9 @@ func (api *API) DeleteIPListItems(ctx context.Context, id string, items IPListIt
 }
 
 // GetIPListItem returns a single IP List Item
+//
 // API reference: https://api.cloudflare.com/#rules-lists-get-list-item
-func (api *API) GetIPListItem(ctx context.Context, listID string, id string) (IPListItem, error) {
+func (api *API) GetIPListItem(ctx context.Context, listID, id string) (IPListItem, error) {
 	uri := fmt.Sprintf("/accounts/%s/rules/lists/%s/items/%s", api.AccountID, listID, id)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -405,6 +415,7 @@ func (api *API) GetIPListItem(ctx context.Context, listID string, id string) (IP
 }
 
 // GetIPListBulkOperation returns the status of a bulk operation
+//
 // API reference: https://api.cloudflare.com/#rules-lists-get-bulk-operation
 func (api *API) GetIPListBulkOperation(ctx context.Context, id string) (IPListBulkOperation, error) {
 	uri := fmt.Sprintf("/accounts/%s/rules/lists/bulk_operations/%s", api.AccountID, id)
@@ -421,7 +432,7 @@ func (api *API) GetIPListBulkOperation(ctx context.Context, id string) (IPListBu
 	return result.Result, nil
 }
 
-// this is a helper method to implement synchronous behavior for some asynchronous endpoints.
+// pollIPListBulkOperation implements synchronous behaviour for some asynchronous endpoints.
 // bulk-operation status can be either pending, running, failed or completed
 func (api *API) pollIPListBulkOperation(ctx context.Context, id string) error {
 	var i uint8

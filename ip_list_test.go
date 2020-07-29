@@ -243,7 +243,7 @@ func TestListIPListsItems(t *testing.T) {
 			"result": [
     			{
       				"id": "2c0fc9fa937b11eaa1b71c4d701ab86e",
-      				"ip": "10.0.0.2",
+      				"ip": "192.0.2.2",
       				"comment": "Another Private IP address",
       				"created_on": "2020-01-01T08:00:00Z",
       				"modified_on": "2020-01-10T14:00:00Z"
@@ -263,7 +263,7 @@ func TestListIPListsItems(t *testing.T) {
 			"result": [
     			{
       				"id": "2c0fc9fa937b11eaa1b71c4d701ab86e",
-      				"ip": "10.0.0.1",
+      				"ip": "192.0.2.1",
       				"comment": "Private IP address",
       				"created_on": "2020-01-01T08:00:00Z",
       				"modified_on": "2020-01-10T14:00:00Z"
@@ -291,14 +291,14 @@ func TestListIPListsItems(t *testing.T) {
 	want := []IPListItem{
 		{
 			ID:         "2c0fc9fa937b11eaa1b71c4d701ab86e",
-			IP:         "10.0.0.1",
+			IP:         "192.0.2.1",
 			Comment:    "Private IP address",
 			CreatedOn:  &createdOn,
 			ModifiedOn: &modifiedOn,
 		},
 		{
 			ID:         "2c0fc9fa937b11eaa1b71c4d701ab86e",
-			IP:         "10.0.0.2",
+			IP:         "192.0.2.2",
 			Comment:    "Another Private IP address",
 			CreatedOn:  &createdOn,
 			ModifiedOn: &modifiedOn,
@@ -338,10 +338,10 @@ func TestCreateIPListItems(t *testing.T) {
 
 	actual, err := client.CreateIPListItemsAsync(context.Background(), "2c0fc9fa937b11eaa1b71c4d701ab86e",
 		[]IPListItemCreateRequest{{
-			IP:      "10.0.0.1",
+			IP:      "192.0.2.1",
 			Comment: "Private IP",
 		}, {
-			IP:      "10.0.0.2",
+			IP:      "192.0.2.2",
 			Comment: "Another Private IP",
 		}})
 	if assert.NoError(t, err) {
@@ -376,10 +376,10 @@ func TestReplaceIPListItems(t *testing.T) {
 
 	actual, err := client.ReplaceIPListItemsAsync(context.Background(), "2c0fc9fa937b11eaa1b71c4d701ab86e",
 		[]IPListItemCreateRequest{{
-			IP:      "10.0.0.1",
+			IP:      "192.0.2.1",
 			Comment: "Private IP",
 		}, {
-			IP:      "10.0.0.2",
+			IP:      "192.0.2.2",
 			Comment: "Another Private IP",
 		}})
 	if assert.NoError(t, err) {
@@ -431,7 +431,7 @@ func TestGetIPListItem(t *testing.T) {
 		fmt.Fprint(w, `{
 			"result": {
 				"id": "2c0fc9fa937b11eaa1b71c4d701ab86e",
-				"ip": "10.0.0.1",
+				"ip": "192.0.2.1",
 				"comment": "Private IP address",
 				"created_on": "2020-01-01T08:00:00Z",
 				"modified_on": "2020-01-10T14:00:00Z"
@@ -450,7 +450,7 @@ func TestGetIPListItem(t *testing.T) {
 
 	want := IPListItem{
 		ID:         "2c0fc9fa937b11eaa1b71c4d701ab86e",
-		IP:         "10.0.0.1",
+		IP:         "192.0.2.1",
 		Comment:    "Private IP address",
 		CreatedOn:  &createdOn,
 		ModifiedOn: &modifiedOn,
