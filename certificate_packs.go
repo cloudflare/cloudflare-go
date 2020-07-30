@@ -61,28 +61,22 @@ type CertificatePackAdvancedCertificate struct {
 // CertificatePacksResponse is for responses where multiple certificates are
 // expected.
 type CertificatePacksResponse struct {
-	Success  bool              `json:"success"`
-	Errors   []string          `json:"errors"`
-	Messages []string          `json:"messages"`
-	Result   []CertificatePack `json:"result"`
+	Response
+	Result []CertificatePack `json:"result"`
 }
 
 // CertificatePacksDetailResponse contains a single certificate pack in the
 // response.
 type CertificatePacksDetailResponse struct {
-	Success  bool            `json:"success"`
-	Errors   []string        `json:"errors"`
-	Messages []string        `json:"messages"`
-	Result   CertificatePack `json:"result"`
+	Response
+	Result CertificatePack `json:"result"`
 }
 
 // CertificatePacksAdvancedDetailResponse contains a single advanced certificate
 // pack in the response.
 type CertificatePacksAdvancedDetailResponse struct {
-	Success  bool                               `json:"success"`
-	Errors   []string                           `json:"errors"`
-	Messages []string                           `json:"messages"`
-	Result   CertificatePackAdvancedCertificate `json:"result"`
+	Response
+	Result CertificatePackAdvancedCertificate `json:"result"`
 }
 
 // ListCertificatePacks returns all available TLS certificate packs for a zone.
