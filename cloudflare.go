@@ -363,14 +363,21 @@ type Response struct {
 	Messages []ResponseInfo `json:"messages"`
 }
 
+// ResultInfoCursors contains information about cursors.
+type ResultInfoCursors struct {
+	Before string `json:"before"`
+	After  string `json:"after"`
+}
+
 // ResultInfo contains metadata about the Response.
 type ResultInfo struct {
-	Page       int    `json:"page"`
-	PerPage    int    `json:"per_page"`
-	TotalPages int    `json:"total_pages"`
-	Count      int    `json:"count"`
-	Total      int    `json:"total_count"`
-	Cursor     string `json:"cursor"`
+	Page       int               `json:"page"`
+	PerPage    int               `json:"per_page"`
+	TotalPages int               `json:"total_pages"`
+	Count      int               `json:"count"`
+	Total      int               `json:"total_count"`
+	Cursor     string            `json:"cursor"`
+	Cursors    ResultInfoCursors `json:"cursors"`
 }
 
 // RawResponse keeps the result as JSON form
