@@ -258,6 +258,24 @@ func (api *API) UpdateCustomHostnameFallbackOrigin(zoneID string, chfo CustomHos
 	return response, nil
 }
 
+// DeleteCustomHostnameFallbackOrigin deletes the Custom Hostname Fallback origin in the given zone.
+//
+// API reference: https://api.cloudflare.com/#custom-hostname-fallback-origin-for-a-zone-delete-fallback-origin-for-custom-hostnames
+func (api *API) DeleteCustomHostnameFallbackOrigin(zoneID string) error {
+	uri := "/zones/" + zoneID + "/custom_hostnames/fallback_origin"
+	res, err := api.makeRequest("DELETE", uri, nil)
+	if err != nil {
+		return errors.Wrap(err, errMakeRequestError)
+	}
+
+	var response *CustomHostnameFallbackOriginResponse
+	err = json.Unmarshal(res, &response)
+	if err != nil {
+		return errors.Wrap(err, errUnmarshalError)
+	}
+	return nil
+}
+
 // CustomHostnameFallbackOrigin inspects the Custom Hostname Fallback origin in the given zone.
 //
 // API reference: https://api.cloudflare.com/#custom-hostname-fallback-origin-for-a-zone-properties
