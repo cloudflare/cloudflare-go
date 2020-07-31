@@ -11,7 +11,6 @@ import (
 
 var (
 	pageOptions         = PaginationOptions{}
-	zoneID              = "01a7362d577a6c3019a474fd6f485823"
 	accessApplicationID = "6e1c88f1-6b06-4b8a-a9e9-3ec7da2ee0c1"
 	accessPolicyID      = "699d98642c564d2e855e9661899b7252"
 
@@ -89,9 +88,9 @@ func TestAccessPolicies(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/apps/"+accessApplicationID+"/policies", handler)
+	mux.HandleFunc("/accounts/"+accountID+"/access/apps/"+accessApplicationID+"/policies", handler)
 
-	actual, _, err := client.AccessPolicies(zoneID, accessApplicationID, pageOptions)
+	actual, _, err := client.AccessPolicies(accountID, accessApplicationID, pageOptions)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, []AccessPolicy{expectedAccessPolicy}, actual)
@@ -142,9 +141,9 @@ func TestAccessPolicy(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/apps/"+accessApplicationID+"/policies/"+accessPolicyID, handler)
+	mux.HandleFunc("/accounts/"+accountID+"/access/apps/"+accessApplicationID+"/policies/"+accessPolicyID, handler)
 
-	actual, err := client.AccessPolicy(zoneID, accessApplicationID, accessPolicyID)
+	actual, err := client.AccessPolicy(accountID, accessApplicationID, accessPolicyID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessPolicy, actual)
@@ -195,10 +194,10 @@ func TestCreateAccessPolicy(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/apps/"+accessApplicationID+"/policies", handler)
+	mux.HandleFunc("/accounts/"+accountID+"/access/apps/"+accessApplicationID+"/policies", handler)
 
 	actual, err := client.CreateAccessPolicy(
-		zoneID,
+		accountID,
 		accessApplicationID,
 		AccessPolicy{
 			Name: "Allow devs",
@@ -270,8 +269,8 @@ func TestUpdateAccessPolicy(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/apps/"+accessApplicationID+"/policies/"+accessPolicyID, handler)
-	actual, err := client.UpdateAccessPolicy(zoneID, accessApplicationID, expectedAccessPolicy)
+	mux.HandleFunc("/accounts/"+accountID+"/access/apps/"+accessApplicationID+"/policies/"+accessPolicyID, handler)
+	actual, err := client.UpdateAccessPolicy(accountID, accessApplicationID, expectedAccessPolicy)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessPolicy, actual)
@@ -282,7 +281,7 @@ func TestUpdateAccessPolicyWithMissingID(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.UpdateAccessPolicy(zoneID, accessApplicationID, AccessPolicy{})
+	_, err := client.UpdateAccessPolicy(accountID, accessApplicationID, AccessPolicy{})
 	assert.EqualError(t, err, "access policy ID cannot be empty")
 }
 
@@ -304,8 +303,8 @@ func TestDeleteAccessPolicy(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/apps/"+accessApplicationID+"/policies/"+accessPolicyID, handler)
-	err := client.DeleteAccessPolicy(zoneID, accessApplicationID, accessPolicyID)
+	mux.HandleFunc("/accounts/"+accountID+"/access/apps/"+accessApplicationID+"/policies/"+accessPolicyID, handler)
+	err := client.DeleteAccessPolicy(accountID, accessApplicationID, accessPolicyID)
 
 	assert.NoError(t, err)
 }

@@ -43,7 +43,7 @@ func TestAccessApplications(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/zones/01a7362d577a6c3019a474fd6f485823/access/apps", handler)
+	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/apps", handler)
 	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 
@@ -92,7 +92,7 @@ func TestAccessApplication(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/zones/01a7362d577a6c3019a474fd6f485823/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
 	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
@@ -142,7 +142,7 @@ func TestCreateAccessApplications(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/zones/01a7362d577a6c3019a474fd6f485823/access/apps", handler)
+	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/apps", handler)
 
 	actual, err := client.CreateAccessApplication(
 		"01a7362d577a6c3019a474fd6f485823",
@@ -198,7 +198,7 @@ func TestUpdateAccessApplication(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/zones/01a7362d577a6c3019a474fd6f485823/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
 	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
@@ -250,7 +250,7 @@ func TestDeleteAccessApplication(t *testing.T) {
     `)
 	}
 
-	mux.HandleFunc("/zones/01a7362d577a6c3019a474fd6f485823/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 	err := client.DeleteAccessApplication("01a7362d577a6c3019a474fd6f485823", "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	assert.NoError(t, err)
@@ -271,7 +271,7 @@ func TestRevokeAccessApplicationTokens(t *testing.T) {
     `)
 	}
 
-	mux.HandleFunc("/zones/01a7362d577a6c3019a474fd6f485823/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db/revoke-tokens", handler)
+	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db/revoke-tokens", handler)
 	err := client.RevokeAccessApplicationTokens("01a7362d577a6c3019a474fd6f485823", "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	assert.NoError(t, err)
