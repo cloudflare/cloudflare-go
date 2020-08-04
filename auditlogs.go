@@ -35,15 +35,17 @@ type AuditLogResource struct {
 
 // AuditLog is an resource that represents an update in the cloudflare dash
 type AuditLog struct {
-	Action   AuditLogAction         `json:"action"`
-	Actor    AuditLogActor          `json:"actor"`
-	ID       string                 `json:"id"`
-	Metadata map[string]interface{} `json:"metadata"`
-	NewValue string                 `json:"newValue"`
-	OldValue string                 `json:"oldValue"`
-	Owner    AuditLogOwner          `json:"owner"`
-	Resource AuditLogResource       `json:"resource"`
-	When     time.Time              `json:"when"`
+	Action       AuditLogAction         `json:"action"`
+	Actor        AuditLogActor          `json:"actor"`
+	ID           string                 `json:"id"`
+	Metadata     map[string]interface{} `json:"metadata"`
+	NewValue     string                 `json:"newValue"`
+	NewValueJSON map[string]interface{} `json:"newValueJson"`
+	OldValue     string                 `json:"oldValue"`
+	OldValueJSON map[string]interface{} `json:"oldValueJson"`
+	Owner        AuditLogOwner          `json:"owner"`
+	Resource     AuditLogResource       `json:"resource"`
+	When         time.Time              `json:"when"`
 }
 
 // AuditLogResponse is the response returned from the cloudflare v4 api
