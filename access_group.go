@@ -140,6 +140,18 @@ type AccessGroupSAML struct {
 	} `json:"saml"`
 }
 
+// AccessGroupAuthMethod is used for managing access by the "amr"
+// (Authentication Methods References) identifier. For example, an
+// application may want to require that users authenticate using a hardware
+// key by setting the "auth_method" to "swk". A list of values are listed
+// here: https://tools.ietf.org/html/rfc8176#section-2. Custom values are
+// supported as well.
+type AccessGroupAuthMethod struct {
+	AuthMethod struct {
+		AuthMethod string `json:"auth_method"`
+	} `json:"auth_method"`
+}
+
 // AccessGroupListResponse represents the response from the list
 // access group endpoint.
 type AccessGroupListResponse struct {
