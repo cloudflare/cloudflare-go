@@ -328,15 +328,15 @@ func TestCustomHostname_CustomHostname_WithSSLError(t *testing.T) {
 "success": true,
 "result": {
 	"id": "bar",
-	"hostname": "foo.bar.com",
+	"hostname": "example.com",
 	"ssl": {
 		"type": "dv",
 		"method": "cname",
 		"status": "pending_validation",
 		"cname_target": "dcv.digicert.com",
-		"cname": "810b7d5f01154524b961ba0cd578acc2.foo.bar.com",
+		"cname": "810b7d5f01154524b961ba0cd578acc2.example.com",
 		"validation_errors": {
-			"message": "SERVFAIL looking up CAA for foo.bar.com"
+			"message": "SERVFAIL looking up CAA for example.com"
 		}
 	},
 	"status": "pending",
@@ -344,7 +344,7 @@ func TestCustomHostname_CustomHostname_WithSSLError(t *testing.T) {
 		"None of the A or AAAA records are owned by this account and the pre-generated ownership verification token was not found."
 	],
 	"ownership_verification_http": {
-		"http_url": "http://custom.test.com/.well-known/cf-custom-hostname-challenge/0d89c70d-ad9f-4843-b99f-6cc0252067e9",
+		"http_url": "http://example.com/.well-known/cf-custom-hostname-challenge/0d89c70d-ad9f-4843-b99f-6cc0252067e9",
 		"http_body": "5cc07c04-ea62-4a5a-95f0-419334a875a4"
 	}
 }
@@ -355,15 +355,15 @@ func TestCustomHostname_CustomHostname_WithSSLError(t *testing.T) {
 
 	want := CustomHostname{
 		ID:       "bar",
-		Hostname: "foo.bar.com",
+		Hostname: "example.com",
 		SSL: CustomHostnameSSL{
 			Type:        "dv",
 			Method:      "cname",
 			Status:      "pending_validation",
-			CnameName:   "810b7d5f01154524b961ba0cd578acc2.foo.bar.com",
+			CnameName:   "810b7d5f01154524b961ba0cd578acc2.example.com",
 			CnameTarget: "dcv.digicert.com",
 			ValidationErrors: CustomHostnameSSLValidationErrors{
-				Message: "SERVFAIL looking up CAA for foo.bar.com",
+				Message: "SERVFAIL looking up CAA for example.com",
 			},
 		},
 		Status: PENDING,
@@ -371,7 +371,7 @@ func TestCustomHostname_CustomHostname_WithSSLError(t *testing.T) {
 			"by this account and the pre-generated ownership verification token was not found."},
 		OwnershipVerificationHTTP: CustomHostnameOwnershipVerificationHTTP{
 			HTTPBody: "5cc07c04-ea62-4a5a-95f0-419334a875a4",
-			HTTPUrl:  "http://custom.test.com/.well-known/cf-custom-hostname-challenge/0d89c70d-ad9f-4843-b99f-6cc0252067e9",
+			HTTPUrl:  "http://example.com/.well-known/cf-custom-hostname-challenge/0d89c70d-ad9f-4843-b99f-6cc0252067e9",
 		},
 	}
 
