@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -67,12 +68,15 @@ func TestCustomHostname_CreateCustomHostname(t *testing.T) {
 		"ownership_verification_http": {
 		  "http_url": "http://app.example.com/.well-known/cf-custom-hostname-challenge/37c82d20-99fb-490e-ba0a-489fa483b776",
 		  "http_body": "38ddbedc-6cc3-4a4c-af67-9c5b02344ce0"
-		}
-  	}
+		},
+		"created_at": "2020-02-06T18:11:23.531995Z"
+	}
 }`)
 	})
 
 	response, err := client.CreateCustomHostname("foo", CustomHostname{Hostname: "app.example.com", SSL: CustomHostnameSSL{Method: "cname", Type: "dv"}})
+
+	createdAt, _ := time.Parse(time.RFC3339, "2020-02-06T18:11:23.531995Z")
 
 	want := &CustomHostnameResponse{
 		Result: CustomHostname{
@@ -100,6 +104,7 @@ func TestCustomHostname_CreateCustomHostname(t *testing.T) {
 				HTTPUrl:  "http://app.example.com/.well-known/cf-custom-hostname-challenge/37c82d20-99fb-490e-ba0a-489fa483b776",
 				HTTPBody: "38ddbedc-6cc3-4a4c-af67-9c5b02344ce0",
 			},
+			CreatedAt: &createdAt,
 		},
 		Response: Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}},
 	}
@@ -311,6 +316,70 @@ func TestCustomHostname_CustomHostname(t *testing.T) {
 	}
 }
 
+func TestCustomHostname_CustomHostname_WithSSLError(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/zones/foo/custom_hostnames/bar", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+"success": true,
+"result": {
+	"id": "bar",
+	"hostname": "foo.bar.com",
+	"ssl": {
+		"type": "dv",
+		"method": "cname",
+		"status": "pending_validation",
+		"cname_target": "dcv.digicert.com",
+		"cname": "810b7d5f01154524b961ba0cd578acc2.foo.bar.com",
+		"validation_errors": {
+			"message": "SERVFAIL looking up CAA for foo.bar.com"
+		}
+	},
+	"status": "pending",
+	"verification_errors": [
+		"None of the A or AAAA records are owned by this account and the pre-generated ownership verification token was not found."
+	],
+	"ownership_verification_http": {
+		"http_url": "http://custom.test.com/.well-known/cf-custom-hostname-challenge/0d89c70d-ad9f-4843-b99f-6cc0252067e9",
+		"http_body": "5cc07c04-ea62-4a5a-95f0-419334a875a4"
+	}
+}
+}`)
+	})
+
+	customHostname, err := client.CustomHostname("foo", "bar")
+
+	want := CustomHostname{
+		ID:       "bar",
+		Hostname: "foo.bar.com",
+		SSL: CustomHostnameSSL{
+			Type:        "dv",
+			Method:      "cname",
+			Status:      "pending_validation",
+			CnameName:   "810b7d5f01154524b961ba0cd578acc2.foo.bar.com",
+			CnameTarget: "dcv.digicert.com",
+			ValidationErrors: CustomHostnameSSLValidationErrors{
+				Message: "SERVFAIL looking up CAA for foo.bar.com",
+			},
+		},
+		Status: PENDING,
+		VerificationErrors: []string{"None of the A or AAAA records are owned " +
+			"by this account and the pre-generated ownership verification token was not found."},
+		OwnershipVerificationHTTP: CustomHostnameOwnershipVerificationHTTP{
+			HTTPBody: "5cc07c04-ea62-4a5a-95f0-419334a875a4",
+			HTTPUrl:  "http://custom.test.com/.well-known/cf-custom-hostname-challenge/0d89c70d-ad9f-4843-b99f-6cc0252067e9",
+		},
+	}
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, customHostname)
+	}
+}
+
 func TestCustomHostname_UpdateCustomHostnameSSL(t *testing.T) {
 	setup()
 	defer teardown()
@@ -487,7 +556,6 @@ func TestCustomHostname_DeleteCustomHostnameFallbackOrigin(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-
 func TestCustomHostname_UpdateCustomHostnameFallbackOrigin(t *testing.T) {
 	setup()
 	defer teardown()
@@ -566,6 +634,8 @@ func TestCustomHostname_CreateCustomHostnameCustomCertificateAuthority(t *testin
 
 	response, err := client.CreateCustomHostname("foo", CustomHostname{Hostname: "app.example.com", SSL: CustomHostnameSSL{Method: "cname", Type: "dv", CertificateAuthority: "lets_encrypt"}})
 
+	createdAt, _ := time.Parse(time.RFC3339, "2020-06-30T21:37:36.563495Z")
+
 	want := &CustomHostnameResponse{
 		Result: CustomHostname{
 			ID:                 "614b3124-cd57-42f0-8307-000000000000",
@@ -581,6 +651,7 @@ func TestCustomHostname_CreateCustomHostnameCustomCertificateAuthority(t *testin
 				Wildcard:             false,
 				CertificateAuthority: "lets_encrypt",
 			},
+			CreatedAt: &createdAt,
 		},
 		Response: Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}},
 	}
