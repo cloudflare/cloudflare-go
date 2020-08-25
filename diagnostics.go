@@ -46,14 +46,14 @@ type DiagnosticsTracerouteResponseColo struct {
 // DiagnosticsTracerouteResponseNodes holds a summary of nodes contacted in the
 // traceroute.
 type DiagnosticsTracerouteResponseNodes struct {
-	Asn             string  `json:"asn"`
-	IP              string  `json:"ip"`
-	Name            string  `json:"name"`
-	PacketCount     int     `json:"packet_count"`
-	MeanLatencyMs   float64 `json:"mean_latency_ms"`
-	StdDevLatencyMs float64 `json:"std_dev_latency_ms"`
-	MinLatencyMs    float64 `json:"min_latency_ms"`
-	MaxLatencyMs    float64 `json:"max_latency_ms"`
+	Asn         string  `json:"asn"`
+	IP          string  `json:"ip"`
+	Name        string  `json:"name"`
+	PacketCount int     `json:"packet_count"`
+	MeanRttMs   float64 `json:"mean_rtt_ms"`
+	StdDevRttMs float64 `json:"std_dev_rtt_ms"`
+	MinRttMs    float64 `json:"min_rtt_ms"`
+	MaxRttMs    float64 `json:"max_rtt_ms"`
 }
 
 // DiagnosticsTracerouteResponseHops holds packet and node information of the

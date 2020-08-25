@@ -36,10 +36,10 @@ func TestDiagnosticsPerformTraceroute(t *testing.T) {
             "ip": "1.1.1.1",
             "name": "1.1.1.1",
             "packet_count": 3,
-            "mean_latency_ms": 0.021,
-            "std_dev_latency_ms": 0.011269427669584647,
-            "min_latency_ms": 0.014,
-            "max_latency_ms": 0.034
+            "mean_rtt_ms": 0.021,
+            "std_dev_rtt_ms": 0.011269427669584647,
+            "min_rtt_ms": 0.014,
+            "max_rtt_ms": 0.034
           },
           "hops": [
             {
@@ -52,10 +52,10 @@ func TestDiagnosticsPerformTraceroute(t *testing.T) {
                   "ip": "1.1.1.1",
                   "name": "one.one.one.one",
                   "packet_count": 3,
-                  "mean_latency_ms": 0.021,
-                  "std_dev_latency_ms": 0.011269427669584647,
-                  "min_latency_ms": 0.014,
-                  "max_latency_ms": 0.034
+                  "mean_rtt_ms": 0.021,
+                  "std_dev_rtt_ms": 0.011269427669584647,
+                  "min_rtt_ms": 0.014,
+                  "max_rtt_ms": 0.034
                 }
               ]
             }
@@ -79,28 +79,28 @@ func TestDiagnosticsPerformTraceroute(t *testing.T) {
 			},
 			TracerouteTimeMs: 969,
 			TargetSummary: DiagnosticsTracerouteResponseNodes{
-				Asn:             "",
-				IP:              "1.1.1.1",
-				Name:            "1.1.1.1",
-				PacketCount:     3,
-				MeanLatencyMs:   0.021,
-				StdDevLatencyMs: 0.011269427669584647,
-				MinLatencyMs:    0.014,
-				MaxLatencyMs:    0.034,
+				Asn:         "",
+				IP:          "1.1.1.1",
+				Name:        "1.1.1.1",
+				PacketCount: 3,
+				MeanRttMs:   0.021,
+				StdDevRttMs: 0.011269427669584647,
+				MinRttMs:    0.014,
+				MaxRttMs:    0.034,
 			},
 			Hops: []DiagnosticsTracerouteResponseHops{{
 				PacketsTTL:  1,
 				PacketsSent: 3,
 				PacketsLost: 0,
 				Nodes: []DiagnosticsTracerouteResponseNodes{{
-					Asn:             "AS13335",
-					IP:              "1.1.1.1",
-					Name:            "one.one.one.one",
-					PacketCount:     3,
-					MeanLatencyMs:   0.021,
-					StdDevLatencyMs: 0.011269427669584647,
-					MinLatencyMs:    0.014,
-					MaxLatencyMs:    0.034,
+					Asn:         "AS13335",
+					IP:          "1.1.1.1",
+					Name:        "one.one.one.one",
+					PacketCount: 3,
+					MeanRttMs:   0.021,
+					StdDevRttMs: 0.011269427669584647,
+					MinRttMs:    0.014,
+					MaxRttMs:    0.034,
 				}},
 			}},
 		}},
