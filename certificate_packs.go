@@ -50,6 +50,7 @@ type CertificatePackRequest struct {
 // CertificatePackAdvancedCertificate is the structure of the advanced
 // certificate pack certificate.
 type CertificatePackAdvancedCertificate struct {
+	ID                   string   `json:"id"`
 	Type                 string   `json:"type"`
 	Hosts                []string `json:"hosts"`
 	ValidationMethod     string   `json:"validation_method"`
