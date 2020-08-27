@@ -232,6 +232,7 @@ func TestCreateAdvancedCertificatePack(t *testing.T) {
 	mux.HandleFunc("/zones/023e105f4ecef8ad9ca31a8372d0c353/ssl/certificate_packs/order", handler)
 
 	certificate := CertificatePackAdvancedCertificate{
+		ID:                   "3822ff90-ea29-44df-9e55-21300bb9419b",
 		Type:                 "advanced",
 		Hosts:                []string{"example.com", "*.example.com", "www.example.com"},
 		ValidityDays:         365,
@@ -278,6 +279,7 @@ func TestRestartAdvancedCertificateValidation(t *testing.T) {
 	mux.HandleFunc("/zones/023e105f4ecef8ad9ca31a8372d0c353/ssl/certificate_packs/3822ff90-ea29-44df-9e55-21300bb9419b", handler)
 
 	certificate := CertificatePackAdvancedCertificate{
+		ID:                   "3822ff90-ea29-44df-9e55-21300bb9419b",
 		Type:                 "advanced",
 		Hosts:                []string{"example.com", "*.example.com", "www.example.com"},
 		ValidityDays:         365,
