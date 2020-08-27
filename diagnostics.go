@@ -26,8 +26,10 @@ type DiagnosticsTracerouteConfigurationOptions struct {
 
 // DiagnosticsTracerouteResponse is the outer response of the API response.
 type DiagnosticsTracerouteResponse struct {
-	Response
-	Result []DiagnosticsTracerouteResponseResult `json:"result"`
+	Success  bool                                  `json:"success"`
+	Errors   []string                              `json:"errors"`
+	Messages []string                              `json:"messages"`
+	Result   []DiagnosticsTracerouteResponseResult `json:"result"`
 }
 
 // DiagnosticsTracerouteResponseResult is the inner API response for the
