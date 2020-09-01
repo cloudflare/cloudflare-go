@@ -1,5 +1,6 @@
 before:
   hooks:
+    - cp ../../LICENSE .
     - go mod download
 builds:
   - env:
@@ -12,22 +13,17 @@ builds:
       - amd64
       - arm
       - arm64
+    binary: flarectl
+    mod_timestamp: '{{ .CommitTimestamp }}'
 archives:
   - replacements:
-      darwin: Darwin
-      linux: Linux
-      windows: Windows
-      amd64: x86_64
+      darwin: macos
     format_overrides:
       - goos: windows
         format: zip
+    format: tar.xz
+    name_template: "{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}"
 checksum:
-  name_template: 'checksums.txt'
-snapshot:
-  name_template: "{{ .Tag }}-next"
+  disable: true
 changelog:
-  sort: asc
-  filters:
-    exclude:
-      - '^docs:'
-      - '^test:'
+  skip: true

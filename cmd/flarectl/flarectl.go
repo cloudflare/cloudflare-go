@@ -7,13 +7,20 @@ import (
 	"github.com/urfave/cli"
 )
 
+var (
+    version = "dev"
+    commit  = "none"
+    date    = "unknown"
+    builtBy = "unknown"
+)
+
 var api *cloudflare.API
 
 func main() {
 	app := cli.NewApp()
 	app.Name = "flarectl"
 	app.Usage = "Cloudflare CLI"
-	app.Version = "2017.10.0"
+	app.Version = version
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
 			Name:   "account-id",
