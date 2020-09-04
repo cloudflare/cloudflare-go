@@ -9,7 +9,7 @@ import (
 	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/olekukonko/tablewriter"
 	"github.com/pkg/errors"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 func initializeAPI(c *cli.Context) error {
@@ -80,7 +80,7 @@ func writeTableJSON(data [][]string, cols ...string) {
 
 // writeTable outputs JSON or tabular data to STDOUT
 func writeTable(c *cli.Context, data [][]string, cols ...string) {
-	if c.GlobalBool("json") {
+	if c.Bool("json") {
 		writeTableJSON(data, cols...)
 	} else {
 		writeTableTabular(data, cols...)
@@ -101,7 +101,7 @@ func checkFlags(c *cli.Context, flags ...string) error {
 	return nil
 }
 
-func ips(c *cli.Context) {
+func ips(c *cli.Context) error {
 
 	if c.String("ip-type") == "all" {
 		_getIps("ipv4", c.Bool("ip-only"))
@@ -109,6 +109,8 @@ func ips(c *cli.Context) {
 	} else {
 		_getIps(c.String("ip-type"), c.Bool("ip-only"))
 	}
+
+	return nil
 }
 
 //
@@ -135,11 +137,11 @@ func _getIps(ipType string, showMsgType bool) {
 	}
 }
 
-func userInfo(c *cli.Context) {
+func userInfo(c *cli.Context) error {
 	user, err := api.UserDetails()
 	if err != nil {
 		fmt.Println(err)
-		return
+		return err
 	}
 	var output [][]string
 	output = append(output, []string{
@@ -150,27 +152,30 @@ func userInfo(c *cli.Context) {
 		fmt.Sprintf("%t", user.TwoFA),
 	})
 	writeTable(c, output, "ID", "Email", "Username", "Name", "2FA")
+
+	return nil
 }
 
-func userUpdate(*cli.Context) {
+func userUpdate(*cli.Context) error {
+	return nil
 }
 
-func pageRules(c *cli.Context) {
+func pageRules(c *cli.Context) error {
 	if err := checkFlags(c, "zone"); err != nil {
-		return
+		return err
 	}
 	zone := c.String("zone")
 
 	zoneID, err := api.ZoneIDByName(zone)
 	if err != nil {
 		fmt.Println(err)
-		return
+		return err
 	}
 
 	rules, err := api.ListPageRules(zoneID)
 	if err != nil {
 		fmt.Println(err)
-		return
+		return err
 	}
 
 	fmt.Printf("%3s %-32s %-8s %s\n", "Pri", "ID", "Status", "URL")
@@ -196,7 +201,10 @@ func pageRules(c *cli.Context) {
 		}
 		fmt.Println("   ", strings.Join(settings, ", "))
 	}
+
+	return nil
 }
 
-func railgun(*cli.Context) {
+func railgun(*cli.Context) error {
+	return nil
 }

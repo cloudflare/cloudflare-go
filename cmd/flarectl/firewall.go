@@ -8,7 +8,7 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/cloudflare/cloudflare-go"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 func formatAccessRule(rule cloudflare.AccessRule) []string {
@@ -21,10 +21,10 @@ func formatAccessRule(rule cloudflare.AccessRule) []string {
 	}
 }
 
-func firewallAccessRules(c *cli.Context) {
+func firewallAccessRules(c *cli.Context) error {
 	accountID, zoneID, err := getScope(c)
 	if err != nil {
-		return
+		return err
 	}
 
 	// Create an empty access rule for searching for rules
@@ -52,7 +52,7 @@ func firewallAccessRules(c *cli.Context) {
 	}
 	if err != nil {
 		fmt.Println(err)
-		return
+		return err
 	}
 	totalPages := response.ResultInfo.TotalPages
 	rules := make([]cloudflare.AccessRule, 0, response.ResultInfo.Total)
@@ -69,7 +69,7 @@ func firewallAccessRules(c *cli.Context) {
 			}
 			if err != nil {
 				fmt.Println(err)
-				return
+				return err
 			}
 			rules = append(rules, response.Result...)
 		}
@@ -80,16 +80,18 @@ func firewallAccessRules(c *cli.Context) {
 		output = append(output, formatAccessRule(rule))
 	}
 	writeTable(c, output, "ID", "Value", "Scope", "Mode", "Notes")
+
+	return nil
 }
 
-func firewallAccessRuleCreate(c *cli.Context) {
+func firewallAccessRuleCreate(c *cli.Context) error {
 	if err := checkFlags(c, "mode", "value"); err != nil {
 		fmt.Println(err)
-		return
+		return err
 	}
 	accountID, zoneID, err := getScope(c)
 	if err != nil {
-		return
+		return err
 	}
 	configuration := getConfiguration(c)
 	mode := c.String("mode")
@@ -133,17 +135,19 @@ func firewallAccessRuleCreate(c *cli.Context) {
 		output = append(output, formatAccessRule(rule))
 	}
 	writeTable(c, output, "ID", "Value", "Scope", "Mode", "Notes")
+
+	return nil
 }
 
-func firewallAccessRuleUpdate(c *cli.Context) {
+func firewallAccessRuleUpdate(c *cli.Context) error {
 	if err := checkFlags(c, "id"); err != nil {
 		fmt.Println(err)
-		return
+		return err
 	}
 	id := c.String("id")
 	accountID, zoneID, err := getScope(c)
 	if err != nil {
-		return
+		return err
 	}
 	mode := c.String("mode")
 	notes := c.String("notes")
@@ -184,16 +188,17 @@ func firewallAccessRuleUpdate(c *cli.Context) {
 	}
 	writeTable(c, output, "ID", "Value", "Scope", "Mode", "Notes")
 
+	return nil
 }
 
-func firewallAccessRuleCreateOrUpdate(c *cli.Context) {
+func firewallAccessRuleCreateOrUpdate(c *cli.Context) error {
 	if err := checkFlags(c, "mode", "value"); err != nil {
 		fmt.Println(err)
-		return
+		return err
 	}
 	accountID, zoneID, err := getScope(c)
 	if err != nil {
-		return
+		return err
 	}
 	configuration := getConfiguration(c)
 	mode := c.String("mode")
@@ -214,7 +219,7 @@ func firewallAccessRuleCreateOrUpdate(c *cli.Context) {
 	}
 	if err != nil {
 		fmt.Println("Error creating or updating firewall access rule:", err)
-		return
+		return err
 	}
 
 	rule.Mode = mode
@@ -252,18 +257,20 @@ func firewallAccessRuleCreateOrUpdate(c *cli.Context) {
 			fmt.Println("Error creating firewall access rule:", err)
 		}
 	}
+
+	return nil
 }
 
-func firewallAccessRuleDelete(c *cli.Context) {
+func firewallAccessRuleDelete(c *cli.Context) error {
 	if err := checkFlags(c, "id"); err != nil {
 		fmt.Println(err)
-		return
+		return err
 	}
 	ruleID := c.String("id")
 
 	accountID, zoneID, err := getScope(c)
 	if err != nil {
-		return
+		return err
 	}
 
 	var (
@@ -299,6 +306,8 @@ func firewallAccessRuleDelete(c *cli.Context) {
 		output = append(output, formatAccessRule(rule))
 	}
 	writeTable(c, output, "ID", "Value", "Scope", "Mode", "Notes")
+
+	return nil
 }
 
 func getScope(c *cli.Context) (string, string, error) {
