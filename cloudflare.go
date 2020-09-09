@@ -293,7 +293,7 @@ func (api *API) request(ctx context.Context, method, uri string, reqBody io.Read
 	if err != nil {
 		return nil, errors.Wrap(err, "HTTP request creation failed")
 	}
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 
 	combinedHeaders := make(http.Header)
 	copyHeader(combinedHeaders, api.headers)
