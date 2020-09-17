@@ -30,7 +30,8 @@ func TestAccessApplications(t *testing.T) {
 					"domain": "test.example.com/admin",
 					"session_duration": "24h",
 					"allowed_idps": ["f174e90a-fafe-4643-bbbc-4a0ed4fc8415"],
-					"auto_redirect_to_identity": false
+					"auto_redirect_to_identity": false,
+					"enable_binding_cookie": false
 				}
 			],
 			"result_info": {
@@ -47,7 +48,7 @@ func TestAccessApplications(t *testing.T) {
 	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 
-	want := []AccessApplication{AccessApplication{
+	want := []AccessApplication{{
 		ID:                     "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
 		CreatedAt:              &createdAt,
 		UpdatedAt:              &updatedAt,
@@ -57,6 +58,7 @@ func TestAccessApplications(t *testing.T) {
 		SessionDuration:        "24h",
 		AllowedIdps:            []string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415"},
 		AutoRedirectToIdentity: false,
+		EnableBindingCookie:    false,
 	}}
 
 	actual, _, err := client.AccessApplications("01a7362d577a6c3019a474fd6f485823", PaginationOptions{})
@@ -86,7 +88,8 @@ func TestAccessApplication(t *testing.T) {
 				"domain": "test.example.com/admin",
 				"session_duration": "24h",
 				"allowed_idps": ["f174e90a-fafe-4643-bbbc-4a0ed4fc8415"],
-				"auto_redirect_to_identity": false
+				"auto_redirect_to_identity": false,
+				"enable_binding_cookie": false
 			}
 		}
 		`)
@@ -107,6 +110,7 @@ func TestAccessApplication(t *testing.T) {
 		SessionDuration:        "24h",
 		AllowedIdps:            []string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415"},
 		AutoRedirectToIdentity: false,
+		EnableBindingCookie:    false,
 	}
 
 	actual, err := client.AccessApplication("01a7362d577a6c3019a474fd6f485823", "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
@@ -136,7 +140,8 @@ func TestCreateAccessApplications(t *testing.T) {
 				"domain": "test.example.com/admin",
 				"session_duration": "24h",
 				"allowed_idps": ["f174e90a-fafe-4643-bbbc-4a0ed4fc8415"],
-				"auto_redirect_to_identity": false
+				"auto_redirect_to_identity": false,
+				"enable_binding_cookie": false
 			}
 		}
 		`)
@@ -163,6 +168,7 @@ func TestCreateAccessApplications(t *testing.T) {
 		AUD:                    "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
 		AllowedIdps:            []string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415"},
 		AutoRedirectToIdentity: false,
+		EnableBindingCookie:    false,
 		CreatedAt:              &createdAt,
 		UpdatedAt:              &updatedAt,
 	}
@@ -192,7 +198,8 @@ func TestUpdateAccessApplication(t *testing.T) {
 				"domain": "test.example.com/admin",
 				"session_duration": "24h",
 				"allowed_idps": ["f174e90a-fafe-4643-bbbc-4a0ed4fc8415"],
-				"auto_redirect_to_identity": false
+				"auto_redirect_to_identity": false,
+				"enable_binding_cookie": false
 			}
 		}
 		`)
@@ -210,6 +217,7 @@ func TestUpdateAccessApplication(t *testing.T) {
 		AUD:                    "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
 		AllowedIdps:            []string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415"},
 		AutoRedirectToIdentity: false,
+		EnableBindingCookie:    false,
 		CreatedAt:              &createdAt,
 		UpdatedAt:              &updatedAt,
 	}
