@@ -56,6 +56,13 @@ type AccessGroupIP struct {
 	} `json:"ip"`
 }
 
+// AccessGroupGeo is used for managing access based on the country code.
+type AccessGroupGeo struct {
+	Geo struct {
+		CountryCode string `json:"country_code"`
+	} `json:"geo"`
+}
+
 // AccessGroupEveryone is used for managing access to everyone.
 type AccessGroupEveryone struct {
 	Everyone struct{} `json:"everyone"`
