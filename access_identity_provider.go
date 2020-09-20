@@ -9,7 +9,7 @@ import (
 
 // AccessIdentityProvider is the structure of the provider object.
 type AccessIdentityProvider struct {
-	ID     string                              `json:"id,omitemtpy"`
+	ID     string                              `json:"id,omitempty"`
 	Name   string                              `json:"name"`
 	Type   string                              `json:"type"`
 	Config AccessIdentityProviderConfiguration `json:"config"`
