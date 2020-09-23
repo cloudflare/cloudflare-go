@@ -2,6 +2,7 @@ package cloudflare
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/url"
 	"strconv"
 	"time"
@@ -67,10 +68,33 @@ func (api *API) CreateDNSRecord(zoneID string, rr DNSRecord) (*DNSRecordResponse
 //
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-list-dns-records
 func (api *API) DNSRecords(zoneID string, rr DNSRecord) ([]DNSRecord, error) {
+	var records []DNSRecord
+	page := 1
+	// Loop over makeRequest until what we've fetched all records
+	for {
+		var r DNSListResponse
+		r, err := api.DNSRecordsWithResultInfo(zoneID, rr, 100, page)
+		if err != nil {
+			return []DNSRecord{}, err
+		}
+		records = append(records, r.Result...)
+		if r.ResultInfo.Page >= r.ResultInfo.TotalPages {
+			break
+		}
+		// Loop around and fetch the next page
+		page++
+	}
+	return records, nil
+}
+
+// DNSRecordsWithResultInfo returns the full API response a slice of DNS records and Result info metadata for the given zone identifier.
+//
+// This takes a DNSRecord to allow filtering of the results returned.
+//
+// API reference: https://api.cloudflare.com/#dns-records-for-a-zone-list-dns-records
+func (api *API) DNSRecordsWithResultInfo(zoneID string, rr DNSRecord, perPage int, page int) (DNSListResponse, error) {
 	// Construct a query string
 	v := url.Values{}
-	// Request as many records as possible per page - API max is 100
-	v.Set("per_page", "100")
 	if rr.Name != "" {
 		v.Set("name", rr.Name)
 	}
@@ -82,31 +106,20 @@ func (api *API) DNSRecords(zoneID string, rr DNSRecord) ([]DNSRecord, error) {
 	}
 
 	var query string
-	var records []DNSRecord
-	page := 1
-
-	// Loop over makeRequest until what we've fetched all records
-	for {
-		v.Set("page", strconv.Itoa(page))
-		query = "?" + v.Encode()
-		uri := "/zones/" + zoneID + "/dns_records" + query
-		res, err := api.makeRequest("GET", uri, nil)
-		if err != nil {
-			return []DNSRecord{}, errors.Wrap(err, errMakeRequestError)
-		}
-		var r DNSListResponse
-		err = json.Unmarshal(res, &r)
-		if err != nil {
-			return []DNSRecord{}, errors.Wrap(err, errUnmarshalError)
-		}
-		records = append(records, r.Result...)
-		if r.ResultInfo.Page >= r.ResultInfo.TotalPages {
-			break
-		}
-		// Loop around and fetch the next page
-		page++
+	v.Set("page", strconv.Itoa(page))
+	query = "?" + fmt.Sprintf("per_page=%d", perPage) + v.Encode()
+	uri := "/zones/" + zoneID + "/dns_records" + query
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return DNSListResponse{}, errors.Wrap(err, errMakeRequestError)
 	}
-	return records, nil
+	var dnsListResponse DNSListResponse
+	err = json.Unmarshal(res, &dnsListResponse)
+	if err != nil {
+		return DNSListResponse{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return dnsListResponse, nil
 }
 
 // DNSRecord returns a single DNS record for the given zone & record
