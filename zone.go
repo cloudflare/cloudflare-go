@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"strconv"
 	"sync"
 	"time"
 
@@ -354,6 +355,7 @@ func (api *API) ZoneActivationCheck(zoneID string) (Response, error) {
 // API reference: https://api.cloudflare.com/#zone-list-zones
 func (api *API) ListZones(z ...string) ([]Zone, error) {
 	v := url.Values{}
+
 	var res []byte
 	var r ZonesResponse
 	var zones []Zone
@@ -425,15 +427,20 @@ func (api *API) ListZones(z ...string) ([]Zone, error) {
 	return zones, nil
 }
 
-// ListZonesContext lists zones on an account. Optionally takes a list of ReqOptions.
+// ListZonesContext lists all zones on an account automatically handling the
+// pagination. Optionally takes a list of ReqOptions.
 func (api *API) ListZonesContext(ctx context.Context, opts ...ReqOption) (r ZonesResponse, err error) {
 	var res []byte
+	var zones []Zone
+
 	opt := reqOption{
 		params: url.Values{},
 	}
 	for _, of := range opts {
 		of(&opt)
 	}
+
+	opt.params.Add("per_page", "50")
 
 	res, err = api.makeRequestContext(ctx, "GET", "/zones?"+opt.params.Encode(), nil)
 	if err != nil {
@@ -443,6 +450,43 @@ func (api *API) ListZonesContext(ctx context.Context, opts ...ReqOption) (r Zone
 	if err != nil {
 		return ZonesResponse{}, errors.Wrap(err, errUnmarshalError)
 	}
+
+	totalPageCount := r.TotalPages
+	var wg sync.WaitGroup
+	wg.Add(totalPageCount)
+	errc := make(chan error)
+
+	for i := 1; i <= totalPageCount; i++ {
+		go func(pageNumber int) error {
+			opt.params.Set("page", strconv.Itoa(pageNumber))
+			res, err = api.makeRequestContext(ctx, "GET", "/zones?"+opt.params.Encode(), nil)
+			if err != nil {
+				errc <- err
+			}
+
+			err = json.Unmarshal(res, &r)
+			if err != nil {
+				errc <- err
+			}
+
+			for _, zone := range r.Result {
+				zones = append(zones, zone)
+			}
+
+			select {
+			case err := <-errc:
+				return err
+			default:
+				wg.Done()
+			}
+
+			return nil
+		}(i)
+	}
+
+	wg.Wait()
+
+	r.Result = zones
 
 	return r, nil
 }
