@@ -191,7 +191,9 @@ func TestCustomHostname_CustomHostnames(t *testing.T) {
 				"method": "cname",
 				"status": "pending_validation",
 				"cname_target": "dcv.digicert.com",
-				"cname": "810b7d5f01154524b961ba0cd578acc2.app.example.com"
+				"cname": "810b7d5f01154524b961ba0cd578acc2.app.example.com",
+				"http_url": "http://app.example.com/.well-known/pki-validation/ca3-da12a1c25e7b48cf80408c6c1763b8a2.txt",
+      			"http_body": "ca3-574923932a82475cb8592200f1a2a23d"
 			},
 			"custom_metadata": {
 				"a_random_field": "random field value"
@@ -228,6 +230,8 @@ func TestCustomHostname_CustomHostnames(t *testing.T) {
 				Status:      "pending_validation",
 				CnameTarget: "dcv.digicert.com",
 				CnameName:   "810b7d5f01154524b961ba0cd578acc2.app.example.com",
+				HTTPUrl:     "http://app.example.com/.well-known/pki-validation/ca3-da12a1c25e7b48cf80408c6c1763b8a2.txt",
+				HTTPBody:    "ca3-574923932a82475cb8592200f1a2a23d",
 			},
 			CustomMetadata: CustomMetadata{"a_random_field": "random field value"},
 			Status:         PENDING,
