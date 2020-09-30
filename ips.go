@@ -10,8 +10,9 @@ import (
 
 // IPRanges contains lists of IPv4 and IPv6 CIDRs.
 type IPRanges struct {
-	IPv4CIDRs []string `json:"ipv4_cidrs"`
-	IPv6CIDRs []string `json:"ipv6_cidrs"`
+	IPv4CIDRs      []string `json:"ipv4_cidrs"`
+	IPv6CIDRs      []string `json:"ipv6_cidrs"`
+	ChinaColoCIDRs []string `json:"china_colos"`
 }
 
 // IPsResponse is the API response containing a list of IPs.
@@ -26,7 +27,7 @@ type IPsResponse struct {
 //
 // API reference: https://api.cloudflare.com/#cloudflare-ips
 func IPs() (IPRanges, error) {
-	resp, err := http.Get(apiURL + "/ips")
+	resp, err := http.Get(apiURL + "/ips?china_colo=1")
 	if err != nil {
 		return IPRanges{}, errors.Wrap(err, "HTTP request failed")
 	}
