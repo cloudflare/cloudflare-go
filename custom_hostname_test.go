@@ -339,9 +339,9 @@ func TestCustomHostname_CustomHostname_WithSSLError(t *testing.T) {
 		"status": "pending_validation",
 		"cname_target": "dcv.digicert.com",
 		"cname": "810b7d5f01154524b961ba0cd578acc2.example.com",
-		"validation_errors": {
+		"validation_errors": [{
 			"message": "SERVFAIL looking up CAA for example.com"
-		}
+		}]
 	},
 	"status": "pending",
 	"verification_errors": [
