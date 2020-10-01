@@ -20,6 +20,7 @@ type AccessApplication struct {
 	Domain                 string                        `json:"domain"`
 	SessionDuration        string                        `json:"session_duration,omitempty"`
 	AutoRedirectToIdentity bool                          `json:"auto_redirect_to_identity,omitempty"`
+	EnableBindingCookie    bool                          `json:"enable_binding_cookie,omitempty"`
 	AllowedIdps            []string                      `json:"allowed_idps,omitempty"`
 	CorsHeaders            *AccessApplicationCorsHeaders `json:"cors_headers,omitempty"`
 }

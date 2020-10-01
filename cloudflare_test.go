@@ -1,10 +1,12 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -633,6 +635,25 @@ func TestZoneIDByNameWithIDN(t *testing.T) {
 	assert.Error(t, err)
 }
 
+func TestClient_ContextIsPassedToRequest(t *testing.T) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	httpClient := &http.Client{
+		Transport: RoundTripperFunc(func(r *http.Request) (*http.Response, error) {
+			assert.Equal(t, ctx, r.Context())
+
+			rec := httptest.NewRecorder()
+			rec.WriteHeader(http.StatusOK)
+			return rec.Result(), nil
+		}),
+	}
+
+	cfClient, _ := New("deadbeef", "cloudflare@example.org", HTTPClient(httpClient))
+
+	cfClient.ListZonesContext(ctx)
+}
+
 func TestErrorFromResponse(t *testing.T) {
 	setup()
 	defer teardown()
@@ -662,4 +683,10 @@ func TestErrorFromResponse(t *testing.T) {
 	)
 
 	assert.EqualError(t, err, "error from makeRequest: HTTP status 403: this is a test error")
+}
+
+type RoundTripperFunc func(*http.Request) (*http.Response, error)
+
+func (t RoundTripperFunc) RoundTrip(request *http.Request) (*http.Response, error) {
+	return t(request)
 }
