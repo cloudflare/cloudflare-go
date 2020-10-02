@@ -33,7 +33,18 @@ type AccessCACertificateResponse struct {
 //
 // API reference: https://api.cloudflare.com/#access-short-lived-certificates-list-short-lived-certificates
 func (api *API) AccessCACertificates(accountID string) ([]AccessCACertificate, error) {
-	uri := fmt.Sprintf("/accounts/%s/access/apps/ca", accountID)
+	return api.accessCACertificates(accountID, AccountRouteRoot)
+}
+
+// ZoneLevelAccessCACertificates returns all CA certificates within Access.
+//
+// API reference: https://api.cloudflare.com/#zone-level-access-short-lived-certificates-list-short-lived-certificates
+func (api *API) ZoneLevelAccessCACertificates(zoneID string) ([]AccessCACertificate, error) {
+	return api.accessCACertificates(zoneID, ZoneRouteRoot)
+}
+
+func (api *API) accessCACertificates(id string, routeRoot RouteRoot) ([]AccessCACertificate, error) {
+	uri := fmt.Sprintf("/%s/%s/access/apps/ca", routeRoot, id)
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
@@ -54,7 +65,19 @@ func (api *API) AccessCACertificates(accountID string) ([]AccessCACertificate, e
 //
 // API reference: https://api.cloudflare.com/#access-short-lived-certificates-short-lived-certificate-details
 func (api *API) AccessCACertificate(accountID, applicationID string) (AccessCACertificate, error) {
-	uri := fmt.Sprintf("/accounts/%s/access/apps/%s/ca", accountID, applicationID)
+	return api.accessCACertificate(accountID, applicationID, AccountRouteRoot)
+}
+
+// ZoneLevelAccessCACertificate returns a single CA certificate associated with an Access
+// Application.
+//
+// API reference: https://api.cloudflare.com/#zone-level-access-short-lived-certificates-short-lived-certificate-details
+func (api *API) ZoneLevelAccessCACertificate(zoneID, applicationID string) (AccessCACertificate, error) {
+	return api.accessCACertificate(zoneID, applicationID, ZoneRouteRoot)
+}
+
+func (api *API) accessCACertificate(id string, applicationID string, routeRoot RouteRoot) (AccessCACertificate, error) {
+	uri := fmt.Sprintf("/%s/%s/access/apps/%s/ca", routeRoot, id, applicationID)
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
@@ -75,9 +98,22 @@ func (api *API) AccessCACertificate(accountID, applicationID string) (AccessCACe
 //
 // API reference: https://api.cloudflare.com/#access-short-lived-certificates-create-short-lived-certificate
 func (api *API) CreateAccessCACertificate(accountID, applicationID string) (AccessCACertificate, error) {
+	return api.createAccessCACertificate(accountID, applicationID, AccountRouteRoot)
+}
+
+// CreateZoneLevelAccessCACertificate creates a new CA certificate for an Access
+// Application.
+//
+// API reference: https://api.cloudflare.com/#zone-level-access-short-lived-certificates-create-short-lived-certificate
+func (api *API) CreateZoneLevelAccessCACertificate(zoneID string, applicationID string) (AccessCACertificate, error) {
+	return api.createAccessCACertificate(zoneID, applicationID, ZoneRouteRoot)
+}
+
+func (api *API) createAccessCACertificate(id string, applicationID string, routeRoot RouteRoot) (AccessCACertificate, error) {
 	uri := fmt.Sprintf(
-		"/accounts/%s/access/apps/%s/ca",
-		accountID,
+		"/%s/%s/access/apps/%s/ca",
+		routeRoot,
+		id,
 		applicationID,
 	)
 
@@ -100,9 +136,22 @@ func (api *API) CreateAccessCACertificate(accountID, applicationID string) (Acce
 //
 // API reference: https://api.cloudflare.com/#access-short-lived-certificates-delete-access-certificate
 func (api *API) DeleteAccessCACertificate(accountID, applicationID string) error {
+	return api.deleteAccessCACertificate(accountID, applicationID, AccountRouteRoot)
+}
+
+// DeleteZoneLevelAccessCACertificate deletes an Access CA certificate on a defined
+// Access Application.
+//
+// API reference: https://api.cloudflare.com/#zone-level-access-short-lived-certificates-delete-access-certificate
+func (api *API) DeleteZoneLevelAccessCACertificate(zoneID, applicationID string) error {
+	return api.deleteAccessCACertificate(zoneID, applicationID, ZoneRouteRoot)
+}
+
+func (api *API) deleteAccessCACertificate(id string, applicationID string, routeRoot RouteRoot) error {
 	uri := fmt.Sprintf(
-		"/accounts/%s/access/apps/%s/ca",
-		accountID,
+		"/%s/%s/access/apps/%s/ca",
+		routeRoot,
+		id,
 		applicationID,
 	)
 

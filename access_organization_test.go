@@ -35,7 +35,6 @@ func TestAccessOrganization(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/organizations", handler)
 	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 
@@ -51,7 +50,17 @@ func TestAccessOrganization(t *testing.T) {
 		},
 	}
 
-	actual, _, err := client.AccessOrganization("01a7362d577a6c3019a474fd6f485823")
+	mux.HandleFunc("/accounts/"+accountID+"/access/organizations", handler)
+
+	actual, _, err := client.AccessOrganization(accountID)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/organizations", handler)
+
+	actual, _, err = client.ZoneLevelAccessOrganization(zoneID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -84,7 +93,6 @@ func TestCreateAccessOrganization(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/organizations", handler)
 	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 
@@ -100,7 +108,17 @@ func TestCreateAccessOrganization(t *testing.T) {
 		},
 	}
 
-	actual, err := client.CreateAccessOrganization("01a7362d577a6c3019a474fd6f485823", want)
+	mux.HandleFunc("/accounts/"+accountID+"/access/organizations", handler)
+
+	actual, err := client.CreateAccessOrganization(accountID, want)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/organizations", handler)
+
+	actual, err = client.CreateZoneLevelAccessOrganization(zoneID, want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -133,7 +151,6 @@ func TestUpdateAccessOrganization(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/organizations", handler)
 	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 
@@ -149,7 +166,17 @@ func TestUpdateAccessOrganization(t *testing.T) {
 		},
 	}
 
-	actual, err := client.UpdateAccessOrganization("01a7362d577a6c3019a474fd6f485823", want)
+	mux.HandleFunc("/accounts/"+accountID+"/access/organizations", handler)
+
+	actual, err := client.UpdateAccessOrganization(accountID, want)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/organizations", handler)
+
+	actual, err = client.UpdateZoneLevelAccessOrganization(zoneID, want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)

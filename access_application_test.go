@@ -44,7 +44,6 @@ func TestAccessApplications(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/apps", handler)
 	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 
@@ -61,7 +60,17 @@ func TestAccessApplications(t *testing.T) {
 		EnableBindingCookie:    false,
 	}}
 
-	actual, _, err := client.AccessApplications("01a7362d577a6c3019a474fd6f485823", PaginationOptions{})
+	mux.HandleFunc("/accounts/"+accountID+"/access/apps", handler)
+
+	actual, _, err := client.AccessApplications(accountID, PaginationOptions{})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/apps", handler)
+
+	actual, _, err = client.ZoneLevelAccessApplications(zoneID, PaginationOptions{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -95,8 +104,6 @@ func TestAccessApplication(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
-
 	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 
@@ -113,7 +120,17 @@ func TestAccessApplication(t *testing.T) {
 		EnableBindingCookie:    false,
 	}
 
-	actual, err := client.AccessApplication("01a7362d577a6c3019a474fd6f485823", "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	mux.HandleFunc("/accounts/"+accountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+
+	actual, err := client.AccessApplication(accountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+
+	actual, err = client.ZoneLevelAccessApplication(zoneID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -147,17 +164,6 @@ func TestCreateAccessApplications(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/apps", handler)
-
-	actual, err := client.CreateAccessApplication(
-		"01a7362d577a6c3019a474fd6f485823",
-		AccessApplication{
-			Name:            "Admin Site",
-			Domain:          "test.example.com/admin",
-			SessionDuration: "24h",
-		},
-	)
-
 	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	fullAccessApplication := AccessApplication{
@@ -172,6 +178,32 @@ func TestCreateAccessApplications(t *testing.T) {
 		CreatedAt:              &createdAt,
 		UpdatedAt:              &updatedAt,
 	}
+
+	mux.HandleFunc("/accounts/"+accountID+"/access/apps", handler)
+
+	actual, err := client.CreateAccessApplication(
+		accountID,
+		AccessApplication{
+			Name:            "Admin Site",
+			Domain:          "test.example.com/admin",
+			SessionDuration: "24h",
+		},
+	)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, fullAccessApplication, actual)
+	}
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/apps", handler)
+
+	actual, err = client.CreateZoneLevelAccessApplication(
+		zoneID,
+		AccessApplication{
+			Name:            "Admin Site",
+			Domain:          "test.example.com/admin",
+			SessionDuration: "24h",
+		},
+	)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, fullAccessApplication, actual)
@@ -205,8 +237,6 @@ func TestUpdateAccessApplication(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
-
 	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	fullAccessApplication := AccessApplication{
@@ -222,8 +252,21 @@ func TestUpdateAccessApplication(t *testing.T) {
 		UpdatedAt:              &updatedAt,
 	}
 
+	mux.HandleFunc("/accounts/"+accountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+
 	actual, err := client.UpdateAccessApplication(
-		"01a7362d577a6c3019a474fd6f485823",
+		accountID,
+		fullAccessApplication,
+	)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, fullAccessApplication, actual)
+	}
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+
+	actual, err = client.UpdateZoneLevelAccessApplication(
+		zoneID,
 		fullAccessApplication,
 	)
 
@@ -236,7 +279,10 @@ func TestUpdateAccessApplicationWithMissingID(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.UpdateAccessApplication("d56084adb405e0b7e32c52321bf07be6", AccessApplication{})
+	_, err := client.UpdateAccessApplication(zoneID, AccessApplication{})
+	assert.EqualError(t, err, "access application ID cannot be empty")
+
+	_, err = client.UpdateZoneLevelAccessApplication(zoneID, AccessApplication{})
 	assert.EqualError(t, err, "access application ID cannot be empty")
 }
 
@@ -258,8 +304,13 @@ func TestDeleteAccessApplication(t *testing.T) {
     `)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
-	err := client.DeleteAccessApplication("01a7362d577a6c3019a474fd6f485823", "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	mux.HandleFunc("/accounts/"+accountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+	err := client.DeleteAccessApplication(accountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+
+	assert.NoError(t, err)
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+	err = client.DeleteZoneLevelAccessApplication(zoneID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	assert.NoError(t, err)
 }
@@ -279,8 +330,13 @@ func TestRevokeAccessApplicationTokens(t *testing.T) {
     `)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db/revoke-tokens", handler)
-	err := client.RevokeAccessApplicationTokens("01a7362d577a6c3019a474fd6f485823", "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	mux.HandleFunc("/accounts/"+accountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db/revoke-tokens", handler)
+	err := client.RevokeAccessApplicationTokens(accountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+
+	assert.NoError(t, err)
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db/revoke-tokens", handler)
+	err = client.RevokeZoneLevelAccessApplicationTokens(zoneID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	assert.NoError(t, err)
 }
@@ -321,8 +377,6 @@ func TestAccessApplicationWithCORS(t *testing.T) {
     `)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
-
 	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 
@@ -342,7 +396,17 @@ func TestAccessApplicationWithCORS(t *testing.T) {
 		},
 	}
 
-	actual, err := client.AccessApplication("01a7362d577a6c3019a474fd6f485823", "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	mux.HandleFunc("/accounts/"+accountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+
+	actual, err := client.AccessApplication(accountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+
+	actual, err = client.ZoneLevelAccessApplication(zoneID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)

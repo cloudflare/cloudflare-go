@@ -54,6 +54,17 @@ type AccessPolicyDetailResponse struct {
 //
 // API reference: https://api.cloudflare.com/#access-policy-list-access-policies
 func (api *API) AccessPolicies(accountID, applicationID string, pageOpts PaginationOptions) ([]AccessPolicy, ResultInfo, error) {
+	return api.accessPolicies(accountID, applicationID, pageOpts, AccountRouteRoot)
+}
+
+// ZoneLevelAccessPolicies returns all access policies for an access application.
+//
+// API reference: https://api.cloudflare.com/#zone-level-access-policy-list-access-policies
+func (api *API) ZoneLevelAccessPolicies(zoneID, applicationID string, pageOpts PaginationOptions) ([]AccessPolicy, ResultInfo, error) {
+	return api.accessPolicies(zoneID, applicationID, pageOpts, ZoneRouteRoot)
+}
+
+func (api *API) accessPolicies(id string, applicationID string, pageOpts PaginationOptions, routeRoot RouteRoot) ([]AccessPolicy, ResultInfo, error) {
 	v := url.Values{}
 	if pageOpts.PerPage > 0 {
 		v.Set("per_page", strconv.Itoa(pageOpts.PerPage))
@@ -63,8 +74,9 @@ func (api *API) AccessPolicies(accountID, applicationID string, pageOpts Paginat
 	}
 
 	uri := fmt.Sprintf(
-		"/accounts/%s/access/apps/%s/policies",
-		accountID,
+		"/%s/%s/access/apps/%s/policies",
+		routeRoot,
+		id,
 		applicationID,
 	)
 
@@ -90,9 +102,21 @@ func (api *API) AccessPolicies(accountID, applicationID string, pageOpts Paginat
 //
 // API reference: https://api.cloudflare.com/#access-policy-access-policy-details
 func (api *API) AccessPolicy(accountID, applicationID, policyID string) (AccessPolicy, error) {
+	return api.accessPolicy(accountID, applicationID, policyID, AccountRouteRoot)
+}
+
+// ZoneLevelAccessPolicy returns a single policy based on the policy ID.
+//
+// API reference: https://api.cloudflare.com/#zone-level-access-policy-access-policy-details
+func (api *API) ZoneLevelAccessPolicy(zoneID, applicationID, policyID string) (AccessPolicy, error) {
+	return api.accessPolicy(zoneID, applicationID, policyID, ZoneRouteRoot)
+}
+
+func (api *API) accessPolicy(id string, applicationID string, policyID string, routeRoot RouteRoot) (AccessPolicy, error) {
 	uri := fmt.Sprintf(
-		"/accounts/%s/access/apps/%s/policies/%s",
-		accountID,
+		"/%s/%s/access/apps/%s/policies/%s",
+		routeRoot,
+		id,
 		applicationID,
 		policyID,
 	)
@@ -115,9 +139,21 @@ func (api *API) AccessPolicy(accountID, applicationID, policyID string) (AccessP
 //
 // API reference: https://api.cloudflare.com/#access-policy-create-access-policy
 func (api *API) CreateAccessPolicy(accountID, applicationID string, accessPolicy AccessPolicy) (AccessPolicy, error) {
+	return api.createAccessPolicy(accountID, applicationID, accessPolicy, AccountRouteRoot)
+}
+
+// CreateZoneLevelAccessPolicy creates a new access policy.
+//
+// API reference: https://api.cloudflare.com/#zone-level-access-policy-create-access-policy
+func (api *API) CreateZoneLevelAccessPolicy(zoneID, applicationID string, accessPolicy AccessPolicy) (AccessPolicy, error) {
+	return api.createAccessPolicy(zoneID, applicationID, accessPolicy, ZoneRouteRoot)
+}
+
+func (api *API) createAccessPolicy(id, applicationID string, accessPolicy AccessPolicy, routeRoot RouteRoot) (AccessPolicy, error) {
 	uri := fmt.Sprintf(
-		"/accounts/%s/access/apps/%s/policies",
-		accountID,
+		"/%s/%s/access/apps/%s/policies",
+		routeRoot,
+		id,
 		applicationID,
 	)
 
@@ -139,12 +175,24 @@ func (api *API) CreateAccessPolicy(accountID, applicationID string, accessPolicy
 //
 // API reference: https://api.cloudflare.com/#access-policy-update-access-policy
 func (api *API) UpdateAccessPolicy(accountID, applicationID string, accessPolicy AccessPolicy) (AccessPolicy, error) {
+	return api.updateAccessPolicy(accountID, applicationID, accessPolicy, AccountRouteRoot)
+}
+
+// UpdateZoneLevelAccessPolicy updates an existing access policy.
+//
+// API reference: https://api.cloudflare.com/#zone-level-access-policy-update-access-policy
+func (api *API) UpdateZoneLevelAccessPolicy(zoneID, applicationID string, accessPolicy AccessPolicy) (AccessPolicy, error) {
+	return api.updateAccessPolicy(zoneID, applicationID, accessPolicy, ZoneRouteRoot)
+}
+
+func (api *API) updateAccessPolicy(id, applicationID string, accessPolicy AccessPolicy, routeRoot RouteRoot) (AccessPolicy, error) {
 	if accessPolicy.ID == "" {
 		return AccessPolicy{}, errors.Errorf("access policy ID cannot be empty")
 	}
 	uri := fmt.Sprintf(
-		"/accounts/%s/access/apps/%s/policies/%s",
-		accountID,
+		"/%s/%s/access/apps/%s/policies/%s",
+		routeRoot,
+		id,
 		applicationID,
 		accessPolicy.ID,
 	)
@@ -167,9 +215,21 @@ func (api *API) UpdateAccessPolicy(accountID, applicationID string, accessPolicy
 //
 // API reference: https://api.cloudflare.com/#access-policy-update-access-policy
 func (api *API) DeleteAccessPolicy(accountID, applicationID, accessPolicyID string) error {
+	return api.deleteAccessPolicy(accountID, applicationID, accessPolicyID, AccountRouteRoot)
+}
+
+// DeleteZoneLevelAccessPolicy deletes an access policy.
+//
+// API reference: https://api.cloudflare.com/#zone-level-access-policy-delete-access-policy
+func (api *API) DeleteZoneLevelAccessPolicy(zoneID, applicationID, accessPolicyID string) error {
+	return api.deleteAccessPolicy(zoneID, applicationID, accessPolicyID, ZoneRouteRoot)
+}
+
+func (api *API) deleteAccessPolicy(id, applicationID, accessPolicyID string, routeRoot RouteRoot) error {
 	uri := fmt.Sprintf(
-		"/accounts/%s/access/apps/%s/policies/%s",
-		accountID,
+		"/%s/%s/access/apps/%s/policies/%s",
+		routeRoot,
+		id,
 		applicationID,
 		accessPolicyID,
 	)

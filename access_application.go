@@ -59,6 +59,17 @@ type AccessApplicationDetailResponse struct {
 //
 // API reference: https://api.cloudflare.com/#access-applications-list-access-applications
 func (api *API) AccessApplications(accountID string, pageOpts PaginationOptions) ([]AccessApplication, ResultInfo, error) {
+	return api.accessApplications(accountID, pageOpts, AccountRouteRoot)
+}
+
+// ZoneLevelAccessApplications returns all applications within an account.
+//
+// API reference: https://api.cloudflare.com/#zone-level-access-applications-list-access-applications
+func (api *API) ZoneLevelAccessApplications(zoneID string, pageOpts PaginationOptions) ([]AccessApplication, ResultInfo, error) {
+	return api.accessApplications(zoneID, pageOpts, ZoneRouteRoot)
+}
+
+func (api *API) accessApplications(id string, pageOpts PaginationOptions, routeRoot RouteRoot) ([]AccessApplication, ResultInfo, error) {
 	v := url.Values{}
 	if pageOpts.PerPage > 0 {
 		v.Set("per_page", strconv.Itoa(pageOpts.PerPage))
@@ -67,7 +78,7 @@ func (api *API) AccessApplications(accountID string, pageOpts PaginationOptions)
 		v.Set("page", strconv.Itoa(pageOpts.Page))
 	}
 
-	uri := "/accounts/" + accountID + "/access/apps"
+	uri := fmt.Sprintf("/%s/", routeRoot) + id + "/access/apps"
 	if len(v) > 0 {
 		uri = uri + "?" + v.Encode()
 	}
@@ -91,9 +102,22 @@ func (api *API) AccessApplications(accountID string, pageOpts PaginationOptions)
 //
 // API reference: https://api.cloudflare.com/#access-applications-access-applications-details
 func (api *API) AccessApplication(accountID, applicationID string) (AccessApplication, error) {
+	return api.accessApplication(accountID, applicationID, AccountRouteRoot)
+}
+
+// ZoneLevelAccessApplication returns a single application based on the
+// application ID.
+//
+// API reference: https://api.cloudflare.com/#zone-level-access-applications-access-applications-details
+func (api *API) ZoneLevelAccessApplication(zoneID, applicationID string) (AccessApplication, error) {
+	return api.accessApplication(zoneID, applicationID, ZoneRouteRoot)
+}
+
+func (api *API) accessApplication(id, applicationID string, routeRoot RouteRoot) (AccessApplication, error) {
 	uri := fmt.Sprintf(
-		"/accounts/%s/access/apps/%s",
-		accountID,
+		"/%s/%s/access/apps/%s",
+		routeRoot,
+		id,
 		applicationID,
 	)
 
@@ -115,7 +139,18 @@ func (api *API) AccessApplication(accountID, applicationID string) (AccessApplic
 //
 // API reference: https://api.cloudflare.com/#access-applications-create-access-application
 func (api *API) CreateAccessApplication(accountID string, accessApplication AccessApplication) (AccessApplication, error) {
-	uri := "/accounts/" + accountID + "/access/apps"
+	return api.createAccessApplication(accountID, accessApplication, AccountRouteRoot)
+}
+
+// CreateZoneLevelAccessApplication creates a new access application.
+//
+// API reference: https://api.cloudflare.com/#zone-level-access-applications-create-access-application
+func (api *API) CreateZoneLevelAccessApplication(zoneID string, accessApplication AccessApplication) (AccessApplication, error) {
+	return api.createAccessApplication(zoneID, accessApplication, ZoneRouteRoot)
+}
+
+func (api *API) createAccessApplication(id string, accessApplication AccessApplication, routeRoot RouteRoot) (AccessApplication, error) {
+	uri := fmt.Sprintf("/%s/%s/access/apps", routeRoot, id)
 
 	res, err := api.makeRequest("POST", uri, accessApplication)
 	if err != nil {
@@ -135,13 +170,25 @@ func (api *API) CreateAccessApplication(accountID string, accessApplication Acce
 //
 // API reference: https://api.cloudflare.com/#access-applications-update-access-application
 func (api *API) UpdateAccessApplication(accountID string, accessApplication AccessApplication) (AccessApplication, error) {
+	return api.updateAccessApplication(accountID, accessApplication, AccountRouteRoot)
+}
+
+// UpdateZoneLevelAccessApplication updates an existing access application.
+//
+// API reference: https://api.cloudflare.com/#zone-level-access-applications-update-access-application
+func (api *API) UpdateZoneLevelAccessApplication(zoneID string, accessApplication AccessApplication) (AccessApplication, error) {
+	return api.updateAccessApplication(zoneID, accessApplication, ZoneRouteRoot)
+}
+
+func (api *API) updateAccessApplication(id string, accessApplication AccessApplication, routeRoot RouteRoot) (AccessApplication, error) {
 	if accessApplication.ID == "" {
 		return AccessApplication{}, errors.Errorf("access application ID cannot be empty")
 	}
 
 	uri := fmt.Sprintf(
-		"/accounts/%s/access/apps/%s",
-		accountID,
+		"/%s/%s/access/apps/%s",
+		routeRoot,
+		id,
 		accessApplication.ID,
 	)
 
@@ -163,9 +210,21 @@ func (api *API) UpdateAccessApplication(accountID string, accessApplication Acce
 //
 // API reference: https://api.cloudflare.com/#access-applications-delete-access-application
 func (api *API) DeleteAccessApplication(accountID, applicationID string) error {
+	return api.deleteAccessApplication(accountID, applicationID, AccountRouteRoot)
+}
+
+// DeleteZoneLevelAccessApplication deletes an access application.
+//
+// API reference: https://api.cloudflare.com/#zone-level-access-applications-delete-access-application
+func (api *API) DeleteZoneLevelAccessApplication(zoneID, applicationID string) error {
+	return api.deleteAccessApplication(zoneID, applicationID, ZoneRouteRoot)
+}
+
+func (api *API) deleteAccessApplication(id, applicationID string, routeRoot RouteRoot) error {
 	uri := fmt.Sprintf(
-		"/accounts/%s/access/apps/%s",
-		accountID,
+		"/%s/%s/access/apps/%s",
+		routeRoot,
+		id,
 		applicationID,
 	)
 
@@ -182,9 +241,22 @@ func (api *API) DeleteAccessApplication(accountID, applicationID string) error {
 //
 // API reference: https://api.cloudflare.com/#access-applications-revoke-access-tokens
 func (api *API) RevokeAccessApplicationTokens(accountID, applicationID string) error {
+	return api.revokeAccessApplicationTokens(accountID, applicationID, AccountRouteRoot)
+}
+
+// RevokeZoneLevelAccessApplicationTokens revokes tokens associated with an
+// access application.
+//
+// API reference: https://api.cloudflare.com/#zone-level-access-applications-revoke-access-tokens
+func (api *API) RevokeZoneLevelAccessApplicationTokens(zoneID, applicationID string) error {
+	return api.revokeAccessApplicationTokens(zoneID, applicationID, ZoneRouteRoot)
+}
+
+func (api *API) revokeAccessApplicationTokens(id string, applicationID string, routeRoot RouteRoot) error {
 	uri := fmt.Sprintf(
-		"/accounts/%s/access/apps/%s/revoke-tokens",
-		accountID,
+		"/%s/%s/access/apps/%s/revoke-tokens",
+		routeRoot,
+		id,
 		applicationID,
 	)
 
