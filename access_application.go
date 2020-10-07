@@ -62,7 +62,7 @@ func (api *API) AccessApplications(accountID string, pageOpts PaginationOptions)
 	return api.accessApplications(accountID, pageOpts, AccountRouteRoot)
 }
 
-// ZoneLevelAccessApplications returns all applications within an account.
+// ZoneLevelAccessApplications returns all applications within a zone.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-applications-list-access-applications
 func (api *API) ZoneLevelAccessApplications(zoneID string, pageOpts PaginationOptions) ([]AccessApplication, ResultInfo, error) {
@@ -78,7 +78,7 @@ func (api *API) accessApplications(id string, pageOpts PaginationOptions, routeR
 		v.Set("page", strconv.Itoa(pageOpts.Page))
 	}
 
-	uri := fmt.Sprintf("/%s/", routeRoot) + id + "/access/apps"
+	uri := fmt.Sprintf("/%s/%s/access/apps", routeRoot, id)
 	if len(v) > 0 {
 		uri = uri + "?" + v.Encode()
 	}
@@ -105,7 +105,7 @@ func (api *API) AccessApplication(accountID, applicationID string) (AccessApplic
 	return api.accessApplication(accountID, applicationID, AccountRouteRoot)
 }
 
-// ZoneLevelAccessApplication returns a single application based on the
+// ZoneLevelAccessApplication returns a single zone level application based on the
 // application ID.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-applications-access-applications-details
@@ -142,7 +142,7 @@ func (api *API) CreateAccessApplication(accountID string, accessApplication Acce
 	return api.createAccessApplication(accountID, accessApplication, AccountRouteRoot)
 }
 
-// CreateZoneLevelAccessApplication creates a new access application.
+// CreateZoneLevelAccessApplication creates a new zone level access application.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-applications-create-access-application
 func (api *API) CreateZoneLevelAccessApplication(zoneID string, accessApplication AccessApplication) (AccessApplication, error) {
@@ -173,7 +173,7 @@ func (api *API) UpdateAccessApplication(accountID string, accessApplication Acce
 	return api.updateAccessApplication(accountID, accessApplication, AccountRouteRoot)
 }
 
-// UpdateZoneLevelAccessApplication updates an existing access application.
+// UpdateZoneLevelAccessApplication updates an existing zone level access application.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-applications-update-access-application
 func (api *API) UpdateZoneLevelAccessApplication(zoneID string, accessApplication AccessApplication) (AccessApplication, error) {
@@ -213,7 +213,7 @@ func (api *API) DeleteAccessApplication(accountID, applicationID string) error {
 	return api.deleteAccessApplication(accountID, applicationID, AccountRouteRoot)
 }
 
-// DeleteZoneLevelAccessApplication deletes an access application.
+// DeleteZoneLevelAccessApplication deletes a zone level access application.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-applications-delete-access-application
 func (api *API) DeleteZoneLevelAccessApplication(zoneID, applicationID string) error {
@@ -244,7 +244,7 @@ func (api *API) RevokeAccessApplicationTokens(accountID, applicationID string) e
 	return api.revokeAccessApplicationTokens(accountID, applicationID, AccountRouteRoot)
 }
 
-// RevokeZoneLevelAccessApplicationTokens revokes tokens associated with an
+// RevokeZoneLevelAccessApplicationTokens revokes tokens associated with a zone level
 // access application.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-applications-revoke-access-tokens

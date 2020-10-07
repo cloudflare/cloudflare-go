@@ -83,7 +83,7 @@ func (api *API) AccessServiceTokens(accountID string) ([]AccessServiceToken, Res
 	return api.accessServiceTokens(accountID, AccountRouteRoot)
 }
 
-// ZoneLevelAccessServiceTokens returns all Access Service Tokens for an account.
+// ZoneLevelAccessServiceTokens returns all Access Service Tokens for a zone.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-service-tokens-list-access-service-tokens
 func (api *API) ZoneLevelAccessServiceTokens(zoneID string) ([]AccessServiceToken, ResultInfo, error) {
@@ -114,7 +114,7 @@ func (api *API) CreateAccessServiceToken(accountID, name string) (AccessServiceT
 	return api.createAccessServiceToken(accountID, name, AccountRouteRoot)
 }
 
-// CreateZoneLevelAccessServiceToken creates a new Access Service Token for an account.
+// CreateZoneLevelAccessServiceToken creates a new Access Service Token for a zone.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-service-tokens-create-access-service-token
 func (api *API) CreateZoneLevelAccessServiceToken(zoneID, name string) (AccessServiceTokenCreateResponse, error) {
@@ -150,8 +150,8 @@ func (api *API) UpdateAccessServiceToken(accountID, uuid, name string) (AccessSe
 	return api.updateAccessServiceToken(accountID, uuid, name, AccountRouteRoot)
 }
 
-// UpdateZoneLevelAccessServiceToken updates an existing Access Service Token for an
-// account.
+// UpdateZoneLevelAccessServiceToken updates an existing Access Service Token for a
+// zone.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-service-tokens-update-access-service-token
 func (api *API) UpdateZoneLevelAccessServiceToken(zoneID, uuid, name string) (AccessServiceTokenUpdateResponse, error) {
@@ -187,8 +187,8 @@ func (api *API) DeleteAccessServiceToken(accountID, uuid string) (AccessServiceT
 	return api.deleteAccessServiceToken(accountID, uuid, AccountRouteRoot)
 }
 
-// DeleteZoneLevelAccessServiceToken removes an existing Access Service Token for an
-// account.
+// DeleteZoneLevelAccessServiceToken removes an existing Access Service Token for a
+// zone.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-service-tokens-delete-access-service-token
 func (api *API) DeleteZoneLevelAccessServiceToken(zoneID, uuid string) (AccessServiceTokenUpdateResponse, error) {

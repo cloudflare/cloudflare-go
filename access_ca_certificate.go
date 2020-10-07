@@ -36,7 +36,7 @@ func (api *API) AccessCACertificates(accountID string) ([]AccessCACertificate, e
 	return api.accessCACertificates(accountID, AccountRouteRoot)
 }
 
-// ZoneLevelAccessCACertificates returns all CA certificates within Access.
+// ZoneLevelAccessCACertificates returns all zone level CA certificates within Access.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-short-lived-certificates-list-short-lived-certificates
 func (api *API) ZoneLevelAccessCACertificates(zoneID string) ([]AccessCACertificate, error) {
@@ -68,7 +68,7 @@ func (api *API) AccessCACertificate(accountID, applicationID string) (AccessCACe
 	return api.accessCACertificate(accountID, applicationID, AccountRouteRoot)
 }
 
-// ZoneLevelAccessCACertificate returns a single CA certificate associated with an Access
+// ZoneLevelAccessCACertificate returns a single zone level CA certificate associated with an Access
 // Application.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-short-lived-certificates-short-lived-certificate-details
@@ -101,7 +101,7 @@ func (api *API) CreateAccessCACertificate(accountID, applicationID string) (Acce
 	return api.createAccessCACertificate(accountID, applicationID, AccountRouteRoot)
 }
 
-// CreateZoneLevelAccessCACertificate creates a new CA certificate for an Access
+// CreateZoneLevelAccessCACertificate creates a new zone level CA certificate for an Access
 // Application.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-short-lived-certificates-create-short-lived-certificate
@@ -139,7 +139,7 @@ func (api *API) DeleteAccessCACertificate(accountID, applicationID string) error
 	return api.deleteAccessCACertificate(accountID, applicationID, AccountRouteRoot)
 }
 
-// DeleteZoneLevelAccessCACertificate deletes an Access CA certificate on a defined
+// DeleteZoneLevelAccessCACertificate deletes a zone level Access CA certificate on a defined
 // Access Application.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-short-lived-certificates-delete-access-certificate

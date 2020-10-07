@@ -57,7 +57,7 @@ func (api *API) AccessPolicies(accountID, applicationID string, pageOpts Paginat
 	return api.accessPolicies(accountID, applicationID, pageOpts, AccountRouteRoot)
 }
 
-// ZoneLevelAccessPolicies returns all access policies for an access application.
+// ZoneLevelAccessPolicies returns all zone level access policies for an access application.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-policy-list-access-policies
 func (api *API) ZoneLevelAccessPolicies(zoneID, applicationID string, pageOpts PaginationOptions) ([]AccessPolicy, ResultInfo, error) {
@@ -105,7 +105,7 @@ func (api *API) AccessPolicy(accountID, applicationID, policyID string) (AccessP
 	return api.accessPolicy(accountID, applicationID, policyID, AccountRouteRoot)
 }
 
-// ZoneLevelAccessPolicy returns a single policy based on the policy ID.
+// ZoneLevelAccessPolicy returns a single zone level policy based on the policy ID.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-policy-access-policy-details
 func (api *API) ZoneLevelAccessPolicy(zoneID, applicationID, policyID string) (AccessPolicy, error) {
@@ -135,7 +135,7 @@ func (api *API) accessPolicy(id string, applicationID string, policyID string, r
 	return accessPolicyDetailResponse.Result, nil
 }
 
-// CreateAccessPolicy creates a new access policy.
+// CreateAccessPolicy creates a new zone level access policy.
 //
 // API reference: https://api.cloudflare.com/#access-policy-create-access-policy
 func (api *API) CreateAccessPolicy(accountID, applicationID string, accessPolicy AccessPolicy) (AccessPolicy, error) {
@@ -178,7 +178,7 @@ func (api *API) UpdateAccessPolicy(accountID, applicationID string, accessPolicy
 	return api.updateAccessPolicy(accountID, applicationID, accessPolicy, AccountRouteRoot)
 }
 
-// UpdateZoneLevelAccessPolicy updates an existing access policy.
+// UpdateZoneLevelAccessPolicy updates an existing zone level access policy.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-policy-update-access-policy
 func (api *API) UpdateZoneLevelAccessPolicy(zoneID, applicationID string, accessPolicy AccessPolicy) (AccessPolicy, error) {
@@ -218,7 +218,7 @@ func (api *API) DeleteAccessPolicy(accountID, applicationID, accessPolicyID stri
 	return api.deleteAccessPolicy(accountID, applicationID, accessPolicyID, AccountRouteRoot)
 }
 
-// DeleteZoneLevelAccessPolicy deletes an access policy.
+// DeleteZoneLevelAccessPolicy deletes a zone level access policy.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-policy-delete-access-policy
 func (api *API) DeleteZoneLevelAccessPolicy(zoneID, applicationID, accessPolicyID string) error {

@@ -97,7 +97,7 @@ func (api *API) AccessIdentityProviderDetails(accountID, identityProviderID stri
 	return api.accessIdentityProviderDetails(accountID, identityProviderID, AccountRouteRoot)
 }
 
-// ZoneLevelAccessIdentityProviderDetails returns a single Access Identity
+// ZoneLevelAccessIdentityProviderDetails returns a single zone level Access Identity
 // Provider for an account.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-identity-providers-access-identity-providers-details
@@ -134,7 +134,7 @@ func (api *API) CreateAccessIdentityProvider(accountID string, identityProviderC
 	return api.createAccessIdentityProvider(accountID, identityProviderConfiguration, AccountRouteRoot)
 }
 
-// CreateZoneLevelAccessIdentityProvider creates a new Access Identity Provider.
+// CreateZoneLevelAccessIdentityProvider creates a new zone level Access Identity Provider.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-identity-providers-create-access-identity-provider
 func (api *API) CreateZoneLevelAccessIdentityProvider(zoneID string, identityProviderConfiguration AccessIdentityProvider) (AccessIdentityProvider, error) {
@@ -166,7 +166,7 @@ func (api *API) UpdateAccessIdentityProvider(accountID, identityProviderUUID str
 	return api.updateAccessIdentityProvider(accountID, identityProviderUUID, identityProviderConfiguration, AccountRouteRoot)
 }
 
-// UpdateZoneLevelAccessIdentityProvider updates an existing Access Identity
+// UpdateZoneLevelAccessIdentityProvider updates an existing zone level Access Identity
 // Provider.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-identity-providers-update-access-identity-provider
@@ -203,7 +203,7 @@ func (api *API) DeleteAccessIdentityProvider(accountID, identityProviderUUID str
 	return api.deleteAccessIdentityProvider(accountID, identityProviderUUID, AccountRouteRoot)
 }
 
-// DeleteZoneLevelAccessIdentityProvider deletes an Access Identity Provider.
+// DeleteZoneLevelAccessIdentityProvider deletes a zone level Access Identity Provider.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-identity-providers-delete-access-identity-provider
 func (api *API) DeleteZoneLevelAccessIdentityProvider(zoneID, identityProviderUUID string) (AccessIdentityProvider, error) {

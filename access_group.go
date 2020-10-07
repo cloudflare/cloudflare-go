@@ -183,7 +183,7 @@ func (api *API) AccessGroups(accountID string, pageOpts PaginationOptions) ([]Ac
 	return api.accessGroups(accountID, pageOpts, AccountRouteRoot)
 }
 
-// ZoneLevelAccessGroups returns all access groups for an access application.
+// ZoneLevelAccessGroups returns all zone level access groups for an access application.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-groups-list-access-groups
 func (api *API) ZoneLevelAccessGroups(zoneID string, pageOpts PaginationOptions) ([]AccessGroup, ResultInfo, error) {
@@ -230,7 +230,7 @@ func (api *API) AccessGroup(accountID, groupID string) (AccessGroup, error) {
 	return api.accessGroup(accountID, groupID, AccountRouteRoot)
 }
 
-// ZoneLevelAccessGroup returns a single group based on the group ID.
+// ZoneLevelAccessGroup returns a single zone level group based on the group ID.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-groups-access-group-details
 func (api *API) ZoneLevelAccessGroup(zoneID, groupID string) (AccessGroup, error) {
@@ -266,7 +266,7 @@ func (api *API) CreateAccessGroup(accountID string, accessGroup AccessGroup) (Ac
 	return api.createAccessGroup(accountID, accessGroup, AccountRouteRoot)
 }
 
-// CreateZoneLevelAccessGroup creates a new access group.
+// CreateZoneLevelAccessGroup creates a new zone level access group.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-groups-create-access-group
 func (api *API) CreateZoneLevelAccessGroup(zoneID string, accessGroup AccessGroup) (AccessGroup, error) {
@@ -301,7 +301,7 @@ func (api *API) UpdateAccessGroup(accountID string, accessGroup AccessGroup) (Ac
 	return api.updateAccessGroup(accountID, accessGroup, AccountRouteRoot)
 }
 
-// UpdateZoneLevelAccessGroup updates an existing access group.
+// UpdateZoneLevelAccessGroup updates an existing zone level access group.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-groups-update-access-group
 func (api *API) UpdateZoneLevelAccessGroup(zoneID string, accessGroup AccessGroup) (AccessGroup, error) {
@@ -340,7 +340,7 @@ func (api *API) DeleteAccessGroup(accountID, groupID string) error {
 	return api.deleteAccessGroup(accountID, groupID, AccountRouteRoot)
 }
 
-// DeleteZoneLevelAccessGroup deletes an access group.
+// DeleteZoneLevelAccessGroup deletes a zone level access group.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-groups-delete-access-group
 func (api *API) DeleteZoneLevelAccessGroup(zoneID, groupID string) error {
