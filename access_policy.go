@@ -135,14 +135,14 @@ func (api *API) accessPolicy(id string, applicationID string, policyID string, r
 	return accessPolicyDetailResponse.Result, nil
 }
 
-// CreateAccessPolicy creates a new zone level access policy.
+// CreateAccessPolicy creates a new access policy.
 //
 // API reference: https://api.cloudflare.com/#access-policy-create-access-policy
 func (api *API) CreateAccessPolicy(accountID, applicationID string, accessPolicy AccessPolicy) (AccessPolicy, error) {
 	return api.createAccessPolicy(accountID, applicationID, accessPolicy, AccountRouteRoot)
 }
 
-// CreateZoneLevelAccessPolicy creates a new access policy.
+// CreateZoneLevelAccessPolicy creates a new zone level access policy.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-policy-create-access-policy
 func (api *API) CreateZoneLevelAccessPolicy(zoneID, applicationID string, accessPolicy AccessPolicy) (AccessPolicy, error) {
