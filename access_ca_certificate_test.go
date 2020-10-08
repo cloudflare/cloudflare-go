@@ -28,15 +28,23 @@ func TestAcessCACertificate(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/apps/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/ca", handler)
-
 	want := AccessCACertificate{
 		ID:        "4f74df465b2a53271d4219ac2ce2598e24b5e2c60c7924f4",
 		Aud:       "7d1996154eb606c19e31dd777fe6981f57a5ab66735c5c00fefd01b1200ba9d0",
 		PublicKey: "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTI...3urg/XpGMdgaSs5ZdptUPw= open-ssh-ca@cloudflareaccess.org",
 	}
 
-	actual, err := client.AccessCACertificate("01a7362d577a6c3019a474fd6f485823", "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	mux.HandleFunc("/accounts/"+accountID+"/access/apps/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/ca", handler)
+
+	actual, err := client.AccessCACertificate(accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/apps/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/ca", handler)
+
+	actual, err = client.ZoneLevelAccessCACertificate(zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -63,15 +71,23 @@ func TestAcessCACertificates(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/apps/ca", handler)
-
 	want := []AccessCACertificate{{
 		ID:        "4f74df465b2a53271d4219ac2ce2598e24b5e2c60c7924f4",
 		Aud:       "7d1996154eb606c19e31dd777fe6981f57a5ab66735c5c00fefd01b1200ba9d0",
 		PublicKey: "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTI...3urg/XpGMdgaSs5ZdptUPw= open-ssh-ca@cloudflareaccess.org",
 	}}
 
-	actual, err := client.AccessCACertificates("01a7362d577a6c3019a474fd6f485823")
+	mux.HandleFunc("/accounts/"+accountID+"/access/apps/ca", handler)
+
+	actual, err := client.AccessCACertificates(accountID)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/apps/ca", handler)
+
+	actual, err = client.ZoneLevelAccessCACertificates(zoneID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -98,15 +114,23 @@ func TestCreateAcessCACertificates(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/apps/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/ca", handler)
-
 	want := AccessCACertificate{
 		ID:        "4f74df465b2a53271d4219ac2ce2598e24b5e2c60c7924f4",
 		Aud:       "7d1996154eb606c19e31dd777fe6981f57a5ab66735c5c00fefd01b1200ba9d0",
 		PublicKey: "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTI...3urg/XpGMdgaSs5ZdptUPw= open-ssh-ca@cloudflareaccess.org",
 	}
 
-	actual, err := client.CreateAccessCACertificate("01a7362d577a6c3019a474fd6f485823", "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	mux.HandleFunc("/accounts/"+accountID+"/access/apps/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/ca", handler)
+
+	actual, err := client.CreateAccessCACertificate(accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/apps/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/ca", handler)
+
+	actual, err = client.CreateZoneLevelAccessCACertificate(zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -131,9 +155,15 @@ func TestDeleteAcessCACertificates(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/apps/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/ca", handler)
+	mux.HandleFunc("/accounts/"+accountID+"/access/apps/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/ca", handler)
 
-	err := client.DeleteAccessCACertificate("01a7362d577a6c3019a474fd6f485823", "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	err := client.DeleteAccessCACertificate(accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+
+	assert.NoError(t, err)
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/apps/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/ca", handler)
+
+	err = client.DeleteZoneLevelAccessCACertificate(zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	assert.NoError(t, err)
 }

@@ -34,19 +34,29 @@ func TestAccessIdentityProviders(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/identity_providers", handler)
-
-	want := []AccessIdentityProvider{AccessIdentityProvider{
-		ID:   "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		Name: "Widget Corps OTP",
-		Type: "github",
-		Config: AccessIdentityProviderConfiguration{
-			ClientID:     "example_id",
-			ClientSecret: "a-secret-key",
+	want := []AccessIdentityProvider{
+		{
+			ID:   "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+			Name: "Widget Corps OTP",
+			Type: "github",
+			Config: AccessIdentityProviderConfiguration{
+				ClientID:     "example_id",
+				ClientSecret: "a-secret-key",
+			},
 		},
-	}}
+	}
 
-	actual, err := client.AccessIdentityProviders("01a7362d577a6c3019a474fd6f485823")
+	mux.HandleFunc("/accounts/"+accountID+"/access/identity_providers", handler)
+
+	actual, err := client.AccessIdentityProviders(accountID)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/identity_providers", handler)
+
+	actual, err = client.ZoneLevelAccessIdentityProviders(zoneID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -77,8 +87,6 @@ func TestAccessIdentityProviderDetails(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc841", handler)
-
 	want := AccessIdentityProvider{
 		ID:   "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		Name: "Widget Corps OTP",
@@ -89,7 +97,17 @@ func TestAccessIdentityProviderDetails(t *testing.T) {
 		},
 	}
 
-	actual, err := client.AccessIdentityProviderDetails("01a7362d577a6c3019a474fd6f485823", "f174e90a-fafe-4643-bbbc-4a0ed4fc841")
+	mux.HandleFunc("/accounts/"+accountID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc841", handler)
+
+	actual, err := client.AccessIdentityProviderDetails(accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc841")
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc841", handler)
+
+	actual, err = client.ZoneLevelAccessIdentityProviderDetails(zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc841")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -120,8 +138,6 @@ func TestCreateAccessIdentityProvider(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/identity_providers", handler)
-
 	newIdentityProvider := AccessIdentityProvider{
 		Name: "Widget Corps OTP",
 		Type: "github",
@@ -141,7 +157,17 @@ func TestCreateAccessIdentityProvider(t *testing.T) {
 		},
 	}
 
-	actual, err := client.CreateAccessIdentityProvider("01a7362d577a6c3019a474fd6f485823", newIdentityProvider)
+	mux.HandleFunc("/accounts/"+accountID+"/access/identity_providers", handler)
+
+	actual, err := client.CreateAccessIdentityProvider(accountID, newIdentityProvider)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/identity_providers", handler)
+
+	actual, err = client.CreateZoneLevelAccessIdentityProvider(zoneID, newIdentityProvider)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -171,8 +197,6 @@ func TestUpdateAccessIdentityProvider(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
-
 	updatedIdentityProvider := AccessIdentityProvider{
 		Name: "Widget Corps OTP",
 		Type: "github",
@@ -192,7 +216,17 @@ func TestUpdateAccessIdentityProvider(t *testing.T) {
 		},
 	}
 
-	actual, err := client.UpdateAccessIdentityProvider("01a7362d577a6c3019a474fd6f485823", "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", updatedIdentityProvider)
+	mux.HandleFunc("/accounts/"+accountID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
+
+	actual, err := client.UpdateAccessIdentityProvider(accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", updatedIdentityProvider)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
+
+	actual, err = client.UpdateZoneLevelAccessIdentityProvider(zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", updatedIdentityProvider)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -223,8 +257,6 @@ func TestDeleteAccessIdentityProvider(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
-
 	want := AccessIdentityProvider{
 		ID:   "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		Name: "Widget Corps OTP",
@@ -235,7 +267,17 @@ func TestDeleteAccessIdentityProvider(t *testing.T) {
 		},
 	}
 
+	mux.HandleFunc("/accounts/"+accountID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
+
 	actual, err := client.DeleteAccessIdentityProvider("01a7362d577a6c3019a474fd6f485823", "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
+
+	actual, err = client.DeleteZoneLevelAccessIdentityProvider(zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)

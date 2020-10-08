@@ -9,7 +9,6 @@ import (
 )
 
 var (
-	accountID     = "01a7362d577a6c3019a474fd6f485823"
 	accessGroupID = "699d98642c564d2e855e9661899b7252"
 
 	expectedAccessGroup = AccessGroup{
@@ -86,6 +85,14 @@ func TestAccessGroups(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, []AccessGroup{expectedAccessGroup}, actual)
 	}
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/groups", handler)
+
+	actual, _, err = client.ZoneLevelAccessGroups(zoneID, pageOptions)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, []AccessGroup{expectedAccessGroup}, actual)
+	}
 }
 
 func TestAccessGroup(t *testing.T) {
@@ -137,6 +144,14 @@ func TestAccessGroup(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessGroup, actual)
 	}
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/groups/"+accessGroupID, handler)
+
+	actual, err = client.ZoneLevelAccessGroup(zoneID, accessGroupID)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expectedAccessGroup, actual)
+	}
 }
 
 func TestCreateAccessGroup(t *testing.T) {
@@ -183,26 +198,39 @@ func TestCreateAccessGroup(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/groups", handler)
 
+	accessGroup := AccessGroup{
+		Name: "Allow devs",
+		Include: []interface{}{
+			AccessGroupEmail{struct {
+				Email string `json:"email"`
+			}{Email: "test@example.com"}},
+		},
+		Exclude: []interface{}{
+			AccessGroupEmail{struct {
+				Email string `json:"email"`
+			}{Email: "test@example.com"}},
+		},
+		Require: []interface{}{
+			AccessGroupEmail{struct {
+				Email string `json:"email"`
+			}{Email: "test@example.com"}},
+		},
+	}
+
 	actual, err := client.CreateAccessGroup(
 		accountID,
-		AccessGroup{
-			Name: "Allow devs",
-			Include: []interface{}{
-				AccessGroupEmail{struct {
-					Email string `json:"email"`
-				}{Email: "test@example.com"}},
-			},
-			Exclude: []interface{}{
-				AccessGroupEmail{struct {
-					Email string `json:"email"`
-				}{Email: "test@example.com"}},
-			},
-			Require: []interface{}{
-				AccessGroupEmail{struct {
-					Email string `json:"email"`
-				}{Email: "test@example.com"}},
-			},
-		},
+		accessGroup,
+	)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expectedAccessGroup, actual)
+	}
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/groups", handler)
+
+	actual, err = client.CreateZoneLevelAccessGroup(
+		zoneID,
+		accessGroup,
 	)
 
 	if assert.NoError(t, err) {
@@ -258,6 +286,13 @@ func TestUpdateAccessGroup(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessGroup, actual)
 	}
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/groups/"+accessGroupID, handler)
+	actual, err = client.UpdateZoneLevelAccessGroup(zoneID, expectedAccessGroup)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expectedAccessGroup, actual)
+	}
 }
 
 func TestUpdateAccessGroupWithMissingID(t *testing.T) {
@@ -265,6 +300,9 @@ func TestUpdateAccessGroupWithMissingID(t *testing.T) {
 	defer teardown()
 
 	_, err := client.UpdateAccessGroup(accountID, AccessGroup{})
+	assert.EqualError(t, err, "access group ID cannot be empty")
+
+	_, err = client.UpdateZoneLevelAccessGroup(zoneID, AccessGroup{})
 	assert.EqualError(t, err, "access group ID cannot be empty")
 }
 
@@ -288,6 +326,11 @@ func TestDeleteAccessGroup(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/groups/"+accessGroupID, handler)
 	err := client.DeleteAccessGroup(accountID, accessGroupID)
+
+	assert.NoError(t, err)
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/groups/"+accessGroupID, handler)
+	err = client.DeleteZoneLevelAccessGroup(zoneID, accessGroupID)
 
 	assert.NoError(t, err)
 }

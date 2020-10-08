@@ -95,6 +95,14 @@ func TestAccessPolicies(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, []AccessPolicy{expectedAccessPolicy}, actual)
 	}
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/apps/"+accessApplicationID+"/policies", handler)
+
+	actual, _, err = client.ZoneLevelAccessPolicies(zoneID, accessApplicationID, pageOptions)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, []AccessPolicy{expectedAccessPolicy}, actual)
+	}
 }
 
 func TestAccessPolicy(t *testing.T) {
@@ -148,6 +156,14 @@ func TestAccessPolicy(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessPolicy, actual)
 	}
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/apps/"+accessApplicationID+"/policies/"+accessPolicyID, handler)
+
+	actual, err = client.ZoneLevelAccessPolicy(zoneID, accessApplicationID, accessPolicyID)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expectedAccessPolicy, actual)
+	}
 }
 
 func TestCreateAccessPolicy(t *testing.T) {
@@ -194,30 +210,44 @@ func TestCreateAccessPolicy(t *testing.T) {
 		`)
 	}
 
+	accessPolicy := AccessPolicy{
+		Name: "Allow devs",
+		Include: []interface{}{
+			AccessGroupEmail{struct {
+				Email string `json:"email"`
+			}{Email: "test@example.com"}},
+		},
+		Exclude: []interface{}{
+			AccessGroupEmail{struct {
+				Email string `json:"email"`
+			}{Email: "test@example.com"}},
+		},
+		Require: []interface{}{
+			AccessGroupEmail{struct {
+				Email string `json:"email"`
+			}{Email: "test@example.com"}},
+		},
+		Decision: "allow",
+	}
+
 	mux.HandleFunc("/accounts/"+accountID+"/access/apps/"+accessApplicationID+"/policies", handler)
 
 	actual, err := client.CreateAccessPolicy(
 		accountID,
 		accessApplicationID,
-		AccessPolicy{
-			Name: "Allow devs",
-			Include: []interface{}{
-				AccessGroupEmail{struct {
-					Email string `json:"email"`
-				}{Email: "test@example.com"}},
-			},
-			Exclude: []interface{}{
-				AccessGroupEmail{struct {
-					Email string `json:"email"`
-				}{Email: "test@example.com"}},
-			},
-			Require: []interface{}{
-				AccessGroupEmail{struct {
-					Email string `json:"email"`
-				}{Email: "test@example.com"}},
-			},
-			Decision: "allow",
-		},
+		accessPolicy,
+	)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expectedAccessPolicy, actual)
+	}
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/apps/"+accessApplicationID+"/policies", handler)
+
+	actual, err = client.CreateZoneLevelAccessPolicy(
+		zoneID,
+		accessApplicationID,
+		accessPolicy,
 	)
 
 	if assert.NoError(t, err) {
@@ -275,6 +305,13 @@ func TestUpdateAccessPolicy(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessPolicy, actual)
 	}
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/apps/"+accessApplicationID+"/policies/"+accessPolicyID, handler)
+	actual, err = client.UpdateZoneLevelAccessPolicy(zoneID, accessApplicationID, expectedAccessPolicy)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expectedAccessPolicy, actual)
+	}
 }
 
 func TestUpdateAccessPolicyWithMissingID(t *testing.T) {
@@ -282,6 +319,9 @@ func TestUpdateAccessPolicyWithMissingID(t *testing.T) {
 	defer teardown()
 
 	_, err := client.UpdateAccessPolicy(accountID, accessApplicationID, AccessPolicy{})
+	assert.EqualError(t, err, "access policy ID cannot be empty")
+
+	_, err = client.UpdateZoneLevelAccessPolicy(zoneID, accessApplicationID, AccessPolicy{})
 	assert.EqualError(t, err, "access policy ID cannot be empty")
 }
 
@@ -305,6 +345,11 @@ func TestDeleteAccessPolicy(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/apps/"+accessApplicationID+"/policies/"+accessPolicyID, handler)
 	err := client.DeleteAccessPolicy(accountID, accessApplicationID, accessPolicyID)
+
+	assert.NoError(t, err)
+
+	mux.HandleFunc("/zones/"+zoneID+"/access/apps/"+accessApplicationID+"/policies/"+accessPolicyID, handler)
+	err = client.DeleteZoneLevelAccessPolicy(zoneID, accessApplicationID, accessPolicyID)
 
 	assert.NoError(t, err)
 }
