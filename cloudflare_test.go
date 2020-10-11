@@ -685,6 +685,35 @@ func TestErrorFromResponse(t *testing.T) {
 	assert.EqualError(t, err, "error from makeRequest: HTTP status 403: this is a test error")
 }
 
+func TestSingleErrorFromResponse(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		w.WriteHeader(401)
+		fmt.Fprintf(w, `{
+			"error": "this is a test error"
+		}
+		`)
+	}
+
+	mux.HandleFunc("/zones/123456789abcdef0123456789abcdef0/dns_records", handler)
+
+	_, err := client.CreateDNSRecord(
+		"123456789abcdef0123456789abcdef0",
+		DNSRecord{
+			Type:    "A",
+			Name:    "autoip.example.ml",
+			Content: "1.1.1.1",
+			TTL:     1,
+		},
+	)
+
+	assert.EqualError(t, err, "error from makeRequest: HTTP status 401: this is a test error")
+}
+
 type RoundTripperFunc func(*http.Request) (*http.Response, error)
 
 func (t RoundTripperFunc) RoundTrip(request *http.Request) (*http.Response, error) {

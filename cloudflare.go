@@ -359,6 +359,7 @@ type ResponseInfo struct {
 type Response struct {
 	Success  bool           `json:"success"`
 	Errors   []ResponseInfo `json:"errors"`
+	Error    string         `json:"error"`
 	Messages []ResponseInfo `json:"messages"`
 }
 
@@ -465,5 +466,10 @@ func errorFromResponse(statusCode int, respBody []byte) error {
 	for _, v := range r.Errors {
 		errMsgs = append(errMsgs, v.Message)
 	}
+
+	if r.Error != "" {
+		errMsgs = append(errMsgs, r.Error)
+	}
+
 	return errors.Errorf("HTTP status %d: %s", statusCode, strings.Join(errMsgs, " "))
 }
