@@ -11,7 +11,7 @@ import (
 // diagnostics traceroute requests.
 type DiagnosticsTracerouteConfiguration struct {
 	Targets []string                                  `json:"targets"`
-	Colos   []string                                  `json:"colos"`
+	Colos   []string                                  `json:"colos,omitempty"`
 	Options DiagnosticsTracerouteConfigurationOptions `json:"options,omitempty"`
 }
 
