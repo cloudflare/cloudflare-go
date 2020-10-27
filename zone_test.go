@@ -1096,3 +1096,117 @@ func TestZonePartialHasVerificationKey(t *testing.T) {
 		assert.Equal(t, z.VerificationKey, "foo-bar")
 	}
 }
+
+func TestZoneDNSSECSetting(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+
+		w.Header().Set("content-type", "application/json")
+		// JSON data from: https://api.cloudflare.com/#dnssec-properties
+		fmt.Fprintf(w, `{
+			"result": {
+				"status": "active",
+				"flags": 257,
+				"algorithm": "13",
+				"key_type": "ECDSAP256SHA256",
+				"digest_type": "2",
+				"digest_algorithm": "SHA256",
+				"digest": "48E939042E82C22542CB377B580DFDC52A361CEFDC72E7F9107E2B6BD9306A45",
+				"ds": "example.com. 3600 IN DS 16953 13 2 48E939042E82C22542CB377B580DFDC52A361CEFDC72E7F9107E2B6BD9306A45",
+				"key_tag": 42,
+				"public_key": "oXiGYrSTO+LSCJ3mohc8EP+CzF9KxBj8/ydXJ22pKuZP3VAC3/Md/k7xZfz470CoRyZJ6gV6vml07IC3d8xqhA==",
+				"modified_on": "2014-01-01T05:20:00Z"
+  			}
+		}`)
+	}
+
+	mux.HandleFunc("/zones/foo/dnssec", handler)
+
+	z, err := client.ZoneDNSSECSetting("foo")
+	if assert.NoError(t, err) {
+		assert.Equal(t, z.Status, "active")
+		assert.Equal(t, z.Flags, 257)
+		assert.Equal(t, z.Algorithm, "13")
+		assert.Equal(t, z.KeyType, "ECDSAP256SHA256")
+		assert.Equal(t, z.DigestType, "2")
+		assert.Equal(t, z.DigestAlgorithm, "SHA256")
+		assert.Equal(t, z.Digest, "48E939042E82C22542CB377B580DFDC52A361CEFDC72E7F9107E2B6BD9306A45")
+		assert.Equal(t, z.DS, "example.com. 3600 IN DS 16953 13 2 48E939042E82C22542CB377B580DFDC52A361CEFDC72E7F9107E2B6BD9306A45")
+		assert.Equal(t, z.KeyTag, 42)
+		assert.Equal(t, z.PublicKey, "oXiGYrSTO+LSCJ3mohc8EP+CzF9KxBj8/ydXJ22pKuZP3VAC3/Md/k7xZfz470CoRyZJ6gV6vml07IC3d8xqhA==")
+		time, _ := time.Parse("2006-01-02T15:04:05Z", "2014-01-01T05:20:00Z")
+		assert.Equal(t, z.ModifiedOn, time)
+	}
+}
+
+func TestDeleteZoneDNSSEC(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "DELETE", r.Method, "Expected method 'DELETE', got %s", r.Method)
+
+		w.Header().Set("content-type", "application/json")
+		// JSON data from: https://api.cloudflare.com/#dnssec-properties
+		fmt.Fprintf(w, `{
+			"result": "foo"
+		}`)
+	}
+
+	mux.HandleFunc("/zones/foo/dnssec", handler)
+
+	z, err := client.DeleteZoneDNSSEC("foo")
+	if assert.NoError(t, err) {
+		assert.Equal(t, z, "foo")
+	}
+}
+
+func TestUpdateZoneDNSSEC(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "PATCH", r.Method, "Expected method 'PATCH', got %s", r.Method)
+
+		w.Header().Set("content-type", "application/json")
+		// JSON data from: https://api.cloudflare.com/#dnssec-properties
+		fmt.Fprintf(w, `{
+			"result": {
+				"status": "active",
+				"flags": 257,
+				"algorithm": "13",
+				"key_type": "ECDSAP256SHA256",
+				"digest_type": "2",
+				"digest_algorithm": "SHA256",
+				"digest": "48E939042E82C22542CB377B580DFDC52A361CEFDC72E7F9107E2B6BD9306A45",
+				"ds": "example.com. 3600 IN DS 16953 13 2 48E939042E82C22542CB377B580DFDC52A361CEFDC72E7F9107E2B6BD9306A45",
+				"key_tag": 42,
+				"public_key": "oXiGYrSTO+LSCJ3mohc8EP+CzF9KxBj8/ydXJ22pKuZP3VAC3/Md/k7xZfz470CoRyZJ6gV6vml07IC3d8xqhA==",
+				"modified_on": "2014-01-01T05:20:00Z"
+  			}
+		}`)
+	}
+
+	mux.HandleFunc("/zones/foo/dnssec", handler)
+
+	z, err := client.UpdateZoneDNSSEC("foo", ZoneDNSSECUpdateOptions{
+		Status: "active",
+	})
+	if assert.NoError(t, err) {
+		assert.Equal(t, z.Status, "active")
+		assert.Equal(t, z.Flags, 257)
+		assert.Equal(t, z.Algorithm, "13")
+		assert.Equal(t, z.KeyType, "ECDSAP256SHA256")
+		assert.Equal(t, z.DigestType, "2")
+		assert.Equal(t, z.DigestAlgorithm, "SHA256")
+		assert.Equal(t, z.Digest, "48E939042E82C22542CB377B580DFDC52A361CEFDC72E7F9107E2B6BD9306A45")
+		assert.Equal(t, z.DS, "example.com. 3600 IN DS 16953 13 2 48E939042E82C22542CB377B580DFDC52A361CEFDC72E7F9107E2B6BD9306A45")
+		assert.Equal(t, z.KeyTag, 42)
+		assert.Equal(t, z.PublicKey, "oXiGYrSTO+LSCJ3mohc8EP+CzF9KxBj8/ydXJ22pKuZP3VAC3/Md/k7xZfz470CoRyZJ6gV6vml07IC3d8xqhA==")
+		time, _ := time.Parse("2006-01-02T15:04:05Z", "2014-01-01T05:20:00Z")
+		assert.Equal(t, z.ModifiedOn, time)
+	}
+}

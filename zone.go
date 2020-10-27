@@ -850,3 +850,84 @@ func (api *API) ZoneExport(zoneID string) (string, error) {
 	}
 	return string(res), nil
 }
+
+// ZoneDNSSECResponse represents the response from the Zone DNSSEC Setting
+type ZoneDNSSECResponse struct {
+	Response
+	Result ZoneDNSSEC `json:"result"`
+}
+
+// ZoneDNSSEC represents the response from the Zone DNSSEC Setting result
+type ZoneDNSSEC struct {
+	Status          string    `json:"status"`
+	Flags           int       `json:"flags"`
+	Algorithm       string    `json:"algorithm"`
+	KeyType         string    `json:"key_type"`
+	DigestType      string    `json:"digest_type"`
+	DigestAlgorithm string    `json:"digest_algorithm"`
+	Digest          string    `json:"digest"`
+	DS              string    `json:"ds"`
+	KeyTag          int       `json:"key_tag"`
+	PublicKey       string    `json:"public_key"`
+	ModifiedOn      time.Time `json:"modified_on"`
+}
+
+// ZoneDNSSECSetting returns the DNSSEC details of a zone
+//
+// API reference: https://api.cloudflare.com/#dnssec-dnssec-details
+func (api *API) ZoneDNSSECSetting(zoneID string) (ZoneDNSSEC, error) {
+	res, err := api.makeRequest("GET", "/zones/"+zoneID+"/dnssec", nil)
+	if err != nil {
+		return ZoneDNSSEC{}, errors.Wrap(err, errMakeRequestError)
+	}
+	response := ZoneDNSSECResponse{}
+	err = json.Unmarshal(res, &response)
+	if err != nil {
+		return ZoneDNSSEC{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return response.Result, nil
+}
+
+// ZoneDNSSECDeleteResponse represents the response from the Zone DNSSEC Delete request
+type ZoneDNSSECDeleteResponse struct {
+	Response
+	Result string `json:"result"`
+}
+
+// DeleteZoneDNSSEC deletes DNSSEC for zone
+//
+// API reference: https://api.cloudflare.com/#dnssec-delete-dnssec-records
+func (api *API) DeleteZoneDNSSEC(zoneID string) (string, error) {
+	res, err := api.makeRequest("DELETE", "/zones/"+zoneID+"/dnssec", nil)
+	if err != nil {
+		return "", errors.Wrap(err, errMakeRequestError)
+	}
+	response := ZoneDNSSECDeleteResponse{}
+	err = json.Unmarshal(res, &response)
+	if err != nil {
+		return "", errors.Wrap(err, errUnmarshalError)
+	}
+	return response.Result, nil
+}
+
+// ZoneDNSSECUpdateOptions represents the options for DNSSEC update
+type ZoneDNSSECUpdateOptions struct {
+	Status string `json:"status"`
+}
+
+// UpdateZoneDNSSEC updates DNSSEC for a zone
+//
+// API reference: https://api.cloudflare.com/#dnssec-edit-dnssec-status
+func (api *API) UpdateZoneDNSSEC(zoneID string, options ZoneDNSSECUpdateOptions) (ZoneDNSSEC, error) {
+	res, err := api.makeRequest("PATCH", "/zones/"+zoneID+"/dnssec", options)
+	if err != nil {
+		return ZoneDNSSEC{}, errors.Wrap(err, errMakeRequestError)
+	}
+	response := ZoneDNSSECResponse{}
+	err = json.Unmarshal(res, &response)
+	if err != nil {
+		return ZoneDNSSEC{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return response.Result, nil
+}
