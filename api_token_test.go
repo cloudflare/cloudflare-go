@@ -81,8 +81,8 @@ func TestAPITokens(t *testing.T) {
 		ID:         "ed17574386854bf78a67040be0a770b0",
 		Name:       "readonly token",
 		Status:     "active",
-		IssuedOn:   issuedOn,
-		ModifiedOn: modifiedOn,
+		IssuedOn:   &issuedOn,
+		ModifiedOn: &modifiedOn,
 		NotBefore:  &notBefore,
 		ExpiresOn:  &expiresOn,
 		Policies: []APITokenPolicies{{
@@ -185,8 +185,8 @@ func TestGetAPIToken(t *testing.T) {
 		ID:         "ed17574386854bf78a67040be0a770b0",
 		Name:       "readonly token",
 		Status:     "active",
-		IssuedOn:   issuedOn,
-		ModifiedOn: modifiedOn,
+		IssuedOn:   &issuedOn,
+		ModifiedOn: &modifiedOn,
 		NotBefore:  &notBefore,
 		ExpiresOn:  &expiresOn,
 		Policies: []APITokenPolicies{{
