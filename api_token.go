@@ -24,8 +24,9 @@ type APIToken struct {
 
 // APITokenPermissionGroups is the permission groups associated with API tokens.
 type APITokenPermissionGroups struct {
-	ID   string `json:"id"`
-	Name string `json:"name,omitempty"`
+	ID     string   `json:"id"`
+	Name   string   `json:"name,omitempty"`
+	Scopes []string `json:"scopes,omitempty"`
 }
 
 // APITokenPolicies are policies attached to an API token.
@@ -71,6 +72,13 @@ type APITokenRollResponse struct {
 type APITokenVerifyResponse struct {
 	Response
 	Result APITokenVerifyBody `json:"result"`
+}
+
+// APITokenPermissionGroupsResponse is the API response for the available
+// permission groups.
+type APITokenPermissionGroupsResponse struct {
+	Response
+	Result []APITokenPermissionGroups `json:"result"`
 }
 
 // APITokenVerifyBody is the API body for verifying a token.
@@ -208,4 +216,22 @@ func (api *API) DeleteAPIToken(tokenID string) error {
 	}
 
 	return nil
+}
+
+// ListAPITokensPermissionGroups returns all available API token permission groups.
+//
+// API reference: https://api.cloudflare.com/#permission-groups-list-permission-groups
+func (api *API) ListAPITokensPermissionGroups() ([]APITokenPermissionGroups, error) {
+	var r APITokenPermissionGroupsResponse
+	res, err := api.makeRequest("GET", "/user/tokens/permission_groups", nil)
+	if err != nil {
+		return []APITokenPermissionGroups{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return []APITokenPermissionGroups{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return r.Result, nil
 }
