@@ -81,10 +81,10 @@ func TestAPITokens(t *testing.T) {
 		ID:         "ed17574386854bf78a67040be0a770b0",
 		Name:       "readonly token",
 		Status:     "active",
-		IssuedOn:   issuedOn,
-		ModifiedOn: modifiedOn,
-		NotBefore:  notBefore,
-		ExpiresOn:  expiresOn,
+		IssuedOn:   &issuedOn,
+		ModifiedOn: &modifiedOn,
+		NotBefore:  &notBefore,
+		ExpiresOn:  &expiresOn,
 		Policies: []APITokenPolicies{{
 			ID:        "f267e341f3dd4697bd3b9f71dd96247f",
 			Effect:    "allow",
@@ -185,10 +185,10 @@ func TestGetAPIToken(t *testing.T) {
 		ID:         "ed17574386854bf78a67040be0a770b0",
 		Name:       "readonly token",
 		Status:     "active",
-		IssuedOn:   issuedOn,
-		ModifiedOn: modifiedOn,
-		NotBefore:  notBefore,
-		ExpiresOn:  expiresOn,
+		IssuedOn:   &issuedOn,
+		ModifiedOn: &modifiedOn,
+		NotBefore:  &notBefore,
+		ExpiresOn:  &expiresOn,
 		Policies: []APITokenPolicies{{
 			ID:        "f267e341f3dd4697bd3b9f71dd96247f",
 			Effect:    "allow",
@@ -275,8 +275,8 @@ func TestCreateAPIToken(t *testing.T) {
 
 	tokenToCreate := APIToken{
 		Name:      "readonly token",
-		NotBefore: notBefore,
-		ExpiresOn: expiresOn,
+		NotBefore: &notBefore,
+		ExpiresOn: &expiresOn,
 		Policies: []APITokenPolicies{{
 			ID:        "f267e341f3dd4697bd3b9f71dd96247f",
 			Effect:    "allow",

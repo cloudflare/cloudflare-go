@@ -13,10 +13,10 @@ type APIToken struct {
 	ID         string             `json:"id,omitempty"`
 	Name       string             `json:"name"`
 	Status     string             `json:"status,omitempty"`
-	IssuedOn   time.Time          `json:"issued_on,omitempty"`
-	ModifiedOn time.Time          `json:"modified_on,omitempty"`
-	NotBefore  time.Time          `json:"not_before"`
-	ExpiresOn  time.Time          `json:"expires_on"`
+	IssuedOn   *time.Time         `json:"issued_on,omitempty"`
+	ModifiedOn *time.Time         `json:"modified_on,omitempty"`
+	NotBefore  *time.Time         `json:"not_before,omitempty"`
+	ExpiresOn  *time.Time         `json:"expires_on,omitempty"`
 	Policies   []APITokenPolicies `json:"policies"`
 	Condition  *APITokenCondition `json:"condition,omitempty"`
 	Value      string             `json:"value,omitempty"`
