@@ -378,3 +378,39 @@ func TestDeleteAPIToken(t *testing.T) {
 	err := client.DeleteAPIToken("ed17574386854bf78a67040be0a770b0")
 	assert.NoError(t, err)
 }
+
+func TestListAPITokensPermissionGroups(t *testing.T) {
+	setup()
+	defer teardown()
+
+	var pgID = "47aa30b6eb97ecae0518b750d6b142b6"
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+		  "success": true,
+		  "errors": [],
+		  "messages": [],
+		  "result": [
+			{
+				"id": %q,
+				"name": "DNS Read",
+				"scopes": ["com.cloudflare.api.account.zone"]
+			}
+		  ]
+		}
+		`, pgID)
+	}
+
+	mux.HandleFunc("/user/tokens/permission_groups", handler)
+	want := []APITokenPermissionGroups{{
+		ID:     pgID,
+		Name:   "DNS Read",
+		Scopes: []string{"com.cloudflare.api.account.zone"},
+	}}
+	actual, err := client.ListAPITokensPermissionGroups()
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
