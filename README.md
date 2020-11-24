@@ -100,7 +100,7 @@ func main() {
 ```
 
 Also refer to the
-[API documentation](https://godoc.org/github.com/cloudflare/cloudflare-go) for
+[API documentation](https://pkg.go.dev/github.com/cloudflare/cloudflare-go) for
 how to use this package in-depth.
 
 # License
