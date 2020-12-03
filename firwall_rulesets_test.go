@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestListMagicFirewallRulesets(t *testing.T) {
+func TestListFirewallRulesets(t *testing.T) {
 	setup(UsingAccount("foo"))
 	defer teardown()
 
@@ -39,7 +39,7 @@ func TestListMagicFirewallRulesets(t *testing.T) {
 
 	lastUpdated, _ := time.Parse(time.RFC3339, "2020-12-02T20:24:07.776073Z")
 
-	want := []MagicFirewallRuleset{
+	want := []FirewallRuleset{
 		{
 			ID:          "2c0fc9fa937b11eaa1b71c4d701ab86e",
 			Name:        "ruleset1",
@@ -47,17 +47,17 @@ func TestListMagicFirewallRulesets(t *testing.T) {
 			Kind:        "root",
 			Version:     "1",
 			LastUpdated: &lastUpdated,
-			Phase:       MagicFirewallRulesetPhaseMagicTransit,
+			Phase:       FirewallRulesetPhaseMagicTransit,
 		},
 	}
 
-	actual, err := client.ListMagicFirewallRulesets(context.Background())
+	actual, err := client.ListFirewallRulesets(context.Background())
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
-func TestCreateMagicFirewallRuleset(t *testing.T) {
+func TestCreateFirewallRuleset(t *testing.T) {
 	setup(UsingAccount("foo"))
 	defer teardown()
 
@@ -95,10 +95,10 @@ func TestCreateMagicFirewallRuleset(t *testing.T) {
 	mux.HandleFunc("/accounts/foo/rulesets", handler)
 
 	lastUpdated, _ := time.Parse(time.RFC3339, "2020-12-02T20:24:07.776073Z")
-	rules := []MagicFirewallRule{{
+	rules := []FirewallRulesetRule{{
 		ID:          "62449e2e0de149619edb35e59c10d801",
 		Version:     "1",
-		Action:      MagicFirewallRuleActionAllow,
+		Action:      FirewallRulesetRuleActionAllow,
 		Expression:  "tcp.dstport in { 32768..65535 }",
 		Description: "Allow TCP Ephemeral Ports",
 		LastUpdated: &lastUpdated,
@@ -106,24 +106,24 @@ func TestCreateMagicFirewallRuleset(t *testing.T) {
 		Enabled:     true,
 	}}
 
-	want := MagicFirewallRuleset{
+	want := FirewallRuleset{
 		ID:          "2c0fc9fa937b11eaa1b71c4d701ab86e",
 		Name:        "ruleset1",
 		Description: "Test Firewall Ruleset",
 		Kind:        "root",
 		Version:     "1",
 		LastUpdated: &lastUpdated,
-		Phase:       MagicFirewallRulesetPhaseMagicTransit,
+		Phase:       FirewallRulesetPhaseMagicTransit,
 		Rules:       rules,
 	}
 
-	actual, err := client.CreateMagicFirewallRuleset(context.Background(), "ruleset1", "Test Firewall Ruleset", "", "", rules)
+	actual, err := client.CreateFirewallRuleset(context.Background(), "ruleset1", "Test Firewall Ruleset", "", "", rules)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
-func TestUpdateMagicFirewallRuleset(t *testing.T) {
+func TestUpdateFirewallRuleset(t *testing.T) {
 	setup(UsingAccount("foo"))
 	defer teardown()
 
@@ -171,10 +171,10 @@ func TestUpdateMagicFirewallRuleset(t *testing.T) {
 	mux.HandleFunc("/accounts/foo/rulesets/2c0fc9fa937b11eaa1b71c4d701ab86e", handler)
 
 	lastUpdated, _ := time.Parse(time.RFC3339, "2020-12-02T20:24:07.776073Z")
-	rules := []MagicFirewallRule{{
+	rules := []FirewallRulesetRule{{
 		ID:          "62449e2e0de149619edb35e59c10d801",
 		Version:     "1",
-		Action:      MagicFirewallRuleActionAllow,
+		Action:      FirewallRulesetRuleActionAllow,
 		Expression:  "tcp.dstport in { 32768..65535 }",
 		Description: "Allow TCP Ephemeral Ports",
 		LastUpdated: &lastUpdated,
@@ -183,7 +183,7 @@ func TestUpdateMagicFirewallRuleset(t *testing.T) {
 	}, {
 		ID:          "62449e2e0de149619edb35e59c10d802",
 		Version:     "1",
-		Action:      MagicFirewallRuleActionAllow,
+		Action:      FirewallRulesetRuleActionAllow,
 		Expression:  "udp.dstport in { 32768..65535 }",
 		Description: "Allow UDP Ephemeral Ports",
 		LastUpdated: &lastUpdated,
@@ -191,27 +191,27 @@ func TestUpdateMagicFirewallRuleset(t *testing.T) {
 		Enabled:     true,
 	}}
 
-	want := MagicFirewallRuleset{
+	want := FirewallRuleset{
 		ID:          "2c0fc9fa937b11eaa1b71c4d701ab86e",
 		Name:        "ruleset1",
 		Description: "Test Firewall Ruleset Update",
 		Kind:        "root",
 		Version:     "1",
 		LastUpdated: &lastUpdated,
-		Phase:       MagicFirewallRulesetPhaseMagicTransit,
+		Phase:       FirewallRulesetPhaseMagicTransit,
 		Rules:       rules,
 	}
 
-	actual, err := client.UpdateMagicFirewallRuleset(context.Background(), "2c0fc9fa937b11eaa1b71c4d701ab86e", "Test Firewall Ruleset Update", rules)
+	actual, err := client.UpdateFirewallRuleset(context.Background(), "2c0fc9fa937b11eaa1b71c4d701ab86e", "Test Firewall Ruleset Update", rules)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
-// Magic Firewall API is not implementing the standard response blob but returns an empty response (204) in case
+// Firewall API is not implementing the standard response blob but returns an empty response (204) in case
 // of a success. So we are checking for the response body size here
 // TODO, This is going to be changed by MFW-63
-func TestDeleteMagicFirewallRuleset(t *testing.T) {
+func TestDeleteFirewallRuleset(t *testing.T) {
 	setup(UsingAccount("foo"))
 	defer teardown()
 
@@ -223,6 +223,6 @@ func TestDeleteMagicFirewallRuleset(t *testing.T) {
 
 	mux.HandleFunc("/accounts/foo/rulesets/2c0fc9fa937b11eaa1b71c4d701ab86e", handler)
 
-	err := client.DeleteMagicFirewallRuleset(context.Background(), "2c0fc9fa937b11eaa1b71c4d701ab86e")
+	err := client.DeleteFirewallRuleset(context.Background(), "2c0fc9fa937b11eaa1b71c4d701ab86e")
 	assert.NoError(t, err)
 }
