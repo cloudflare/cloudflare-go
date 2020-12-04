@@ -57,6 +57,78 @@ func TestListMagicFirewallRulesets(t *testing.T) {
 	}
 }
 
+func TestGetMagicFirewallRuleset(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+			"result": {
+				"id": "2c0fc9fa937b11eaa1b71c4d701ab86e",
+				"name": "ruleset1",
+				"description": "Test Firewall Ruleset",
+				"kind": "root",
+				"version": "1",
+				"last_updated": "2020-12-02T20:24:07.776073Z",
+				"phase": "magic_transit",
+				"rules": [
+					{
+						"id": "62449e2e0de149619edb35e59c10d801",
+						"version": "1",
+						"action": "skip",
+						"action_parameters":{
+   							"ruleset":"current"
+						},
+						"expression": "tcp.dstport in { 32768..65535 }",
+						"description": "Allow TCP Ephemeral Ports",
+						"last_updated": "2020-12-02T20:24:07.776073Z",
+						"ref": "72449e2e0de149619edb35e59c10d801",
+						"enabled": true
+					}
+				]
+			},
+			"success": true,
+			"errors": [],
+			"messages": []
+		}`)
+	}
+
+	mux.HandleFunc("/accounts/foo/rulesets/2c0fc9fa937b11eaa1b71c4d701ab86e", handler)
+
+	lastUpdated, _ := time.Parse(time.RFC3339, "2020-12-02T20:24:07.776073Z")
+	rules := []MagicFirewallRulesetRule{{
+		ID:      "62449e2e0de149619edb35e59c10d801",
+		Version: "1",
+		Action:  MagicFirewallRulesetRuleActionSkip,
+		ActionParameters: &MagicFirewallRulesetRuleActionParameters{
+			Ruleset: "current",
+		},
+		Expression:  "tcp.dstport in { 32768..65535 }",
+		Description: "Allow TCP Ephemeral Ports",
+		LastUpdated: &lastUpdated,
+		Ref:         "72449e2e0de149619edb35e59c10d801",
+		Enabled:     true,
+	}}
+
+	want := MagicFirewallRuleset{
+		ID:          "2c0fc9fa937b11eaa1b71c4d701ab86e",
+		Name:        "ruleset1",
+		Description: "Test Firewall Ruleset",
+		Kind:        "root",
+		Version:     "1",
+		LastUpdated: &lastUpdated,
+		Phase:       MagicFirewallRulesetPhaseMagicTransit,
+		Rules:       rules,
+	}
+
+	actual, err := client.GetMagicFirewallRuleset(context.Background(), "2c0fc9fa937b11eaa1b71c4d701ab86e")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
 func TestCreateMagicFirewallRuleset(t *testing.T) {
 	setup(UsingAccount("foo"))
 	defer teardown()

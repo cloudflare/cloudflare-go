@@ -78,6 +78,12 @@ type ListMagicFirewallRulesetResponse struct {
 	Result []MagicFirewallRuleset `json:"result"`
 }
 
+// GetMagicFirewallRulesetResponse contains a single Magic Firewall Ruleset
+type GetMagicFirewallRulesetResponse struct {
+	Response
+	Result MagicFirewallRuleset `json:"result"`
+}
+
 // CreateMagicFirewallRulesetResponse contains response data when creating a new Magic Firewall ruleset
 type CreateMagicFirewallRulesetResponse struct {
 	Response
@@ -103,6 +109,24 @@ func (api *API) ListMagicFirewallRulesets(ctx context.Context) ([]MagicFirewallR
 	result := ListMagicFirewallRulesetResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
 		return []MagicFirewallRuleset{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return result.Result, nil
+}
+
+// GetMagicFirewallRuleset returns a specific Magic Firewall Ruleset
+//
+// API reference: https://api.cloudflare.com/#rulesets-get-a-ruleset
+func (api *API) GetMagicFirewallRuleset(ctx context.Context, id string) (MagicFirewallRuleset, error) {
+	uri := fmt.Sprintf("/accounts/%s/rulesets/%s", api.AccountID, id)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return MagicFirewallRuleset{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	result := GetMagicFirewallRulesetResponse{}
+	if err := json.Unmarshal(res, &result); err != nil {
+		return MagicFirewallRuleset{}, errors.Wrap(err, errUnmarshalError)
 	}
 
 	return result.Result, nil
