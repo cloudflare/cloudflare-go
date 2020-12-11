@@ -9,5 +9,5 @@ require (
 	github.com/stretchr/testify v1.6.1
 	github.com/urfave/cli/v2 v2.3.0
 	golang.org/x/net v0.0.0-20201202161906-c7110b5ffcbb
-	golang.org/x/time v0.0.0-20200630173020-3af7569d3a1e
+	golang.org/x/time v0.0.0-20201208040808-7e3f01d25324
 )
