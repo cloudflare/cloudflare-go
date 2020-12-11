@@ -16,7 +16,7 @@ type DNSRecord struct {
 	Name       string      `json:"name,omitempty"`
 	Content    string      `json:"content,omitempty"`
 	Proxiable  bool        `json:"proxiable,omitempty"`
-	Proxied    bool        `json:"proxied"`
+	Proxied    bool        `json:"proxied,omitempty"`
 	TTL        int         `json:"ttl,omitempty"`
 	Locked     bool        `json:"locked,omitempty"`
 	ZoneID     string      `json:"zone_id,omitempty"`
@@ -25,7 +25,7 @@ type DNSRecord struct {
 	ModifiedOn time.Time   `json:"modified_on,omitempty"`
 	Data       interface{} `json:"data,omitempty"` // data returned by: SRV, LOC
 	Meta       interface{} `json:"meta,omitempty"`
-	Priority   int         `json:"priority"`
+	Priority   int         `json:"priority,omitempty"`
 }
 
 // DNSRecordResponse represents the response from the DNS endpoint.
