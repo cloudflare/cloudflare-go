@@ -31,7 +31,9 @@ func TestAccessApplications(t *testing.T) {
 					"session_duration": "24h",
 					"allowed_idps": ["f174e90a-fafe-4643-bbbc-4a0ed4fc8415"],
 					"auto_redirect_to_identity": false,
-					"enable_binding_cookie": false
+					"enable_binding_cookie": false,
+					"custom_deny_url": "https://www.cloudflare.com",
+					"custom_deny_message": "denied!"
 				}
 			],
 			"result_info": {
@@ -58,6 +60,8 @@ func TestAccessApplications(t *testing.T) {
 		AllowedIdps:            []string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415"},
 		AutoRedirectToIdentity: false,
 		EnableBindingCookie:    false,
+		CustomDenyMessage:      "denied!",
+		CustomDenyURL:          "https://www.cloudflare.com",
 	}}
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/apps", handler)
@@ -98,7 +102,9 @@ func TestAccessApplication(t *testing.T) {
 				"session_duration": "24h",
 				"allowed_idps": ["f174e90a-fafe-4643-bbbc-4a0ed4fc8415"],
 				"auto_redirect_to_identity": false,
-				"enable_binding_cookie": false
+				"enable_binding_cookie": false,
+				"custom_deny_url": "https://www.cloudflare.com",
+				"custom_deny_message": "denied!"
 			}
 		}
 		`)
@@ -118,6 +124,8 @@ func TestAccessApplication(t *testing.T) {
 		AllowedIdps:            []string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415"},
 		AutoRedirectToIdentity: false,
 		EnableBindingCookie:    false,
+		CustomDenyMessage:      "denied!",
+		CustomDenyURL:          "https://www.cloudflare.com",
 	}
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
@@ -158,7 +166,9 @@ func TestCreateAccessApplications(t *testing.T) {
 				"session_duration": "24h",
 				"allowed_idps": ["f174e90a-fafe-4643-bbbc-4a0ed4fc8415"],
 				"auto_redirect_to_identity": false,
-				"enable_binding_cookie": false
+				"enable_binding_cookie": false,
+				"custom_deny_url": "https://www.cloudflare.com",
+				"custom_deny_message": "denied!"
 			}
 		}
 		`)
@@ -175,6 +185,8 @@ func TestCreateAccessApplications(t *testing.T) {
 		AllowedIdps:            []string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415"},
 		AutoRedirectToIdentity: false,
 		EnableBindingCookie:    false,
+		CustomDenyMessage:      "denied!",
+		CustomDenyURL:          "https://www.cloudflare.com",
 		CreatedAt:              &createdAt,
 		UpdatedAt:              &updatedAt,
 	}
@@ -231,7 +243,9 @@ func TestUpdateAccessApplication(t *testing.T) {
 				"session_duration": "24h",
 				"allowed_idps": ["f174e90a-fafe-4643-bbbc-4a0ed4fc8415"],
 				"auto_redirect_to_identity": false,
-				"enable_binding_cookie": false
+				"enable_binding_cookie": false,
+				"custom_deny_url": "https://www.cloudflare.com",
+				"custom_deny_message": "denied!"
 			}
 		}
 		`)
@@ -248,6 +262,8 @@ func TestUpdateAccessApplication(t *testing.T) {
 		AllowedIdps:            []string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415"},
 		AutoRedirectToIdentity: false,
 		EnableBindingCookie:    false,
+		CustomDenyMessage:      "denied!",
+		CustomDenyURL:          "https://www.cloudflare.com",
 		CreatedAt:              &createdAt,
 		UpdatedAt:              &updatedAt,
 	}
