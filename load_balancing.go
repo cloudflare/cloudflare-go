@@ -83,8 +83,9 @@ type LoadBalancer struct {
 
 // SessionAffinityAttributes represents the fields used to set attributes in a load balancer session affinity cookie.
 type SessionAffinityAttributes struct {
-	SameSite string `json:"samesite,omitempty"`
-	Secure   string `json:"secure,omitempty"`
+	SameSite      string `json:"samesite,omitempty"`
+	Secure        string `json:"secure,omitempty"`
+	DrainDuration int    `json:"drain_duration,omitempty"`
 }
 
 // LoadBalancerOriginHealth represents the health of the origin.

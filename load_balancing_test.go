@@ -823,7 +823,8 @@ func TestCreateLoadBalancer(t *testing.T) {
               "session_affinity_ttl": 5000,
               "session_affinity_attributes": {
                 "samesite": "Strict",
-                "secure": "Always"
+                "secure": "Always",
+                "drain_duration": 60
               }
             }`, string(b))
 		}
@@ -871,7 +872,8 @@ func TestCreateLoadBalancer(t *testing.T) {
                 "session_affinity_ttl": 5000,
                 "session_affinity_attributes": {
                     "samesite": "Strict",
-                    "secure": "Always"
+                    "secure": "Always",
+                    "drain_duration": 60
                 }
             }
         }`)
@@ -919,8 +921,9 @@ func TestCreateLoadBalancer(t *testing.T) {
 		Persistence:    "cookie",
 		PersistenceTTL: 5000,
 		SessionAffinityAttributes: &SessionAffinityAttributes{
-			SameSite: "Strict",
-			Secure:   "Always",
+			SameSite:      "Strict",
+			Secure:        "Always",
+			DrainDuration: 60,
 		},
 	}
 	request := LoadBalancer{
@@ -959,8 +962,9 @@ func TestCreateLoadBalancer(t *testing.T) {
 		Persistence:    "cookie",
 		PersistenceTTL: 5000,
 		SessionAffinityAttributes: &SessionAffinityAttributes{
-			SameSite: "Strict",
-			Secure:   "Always",
+			SameSite:      "Strict",
+			Secure:        "Always",
+			DrainDuration: 60,
 		},
 	}
 
