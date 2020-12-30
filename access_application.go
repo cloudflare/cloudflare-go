@@ -23,6 +23,8 @@ type AccessApplication struct {
 	EnableBindingCookie    bool                          `json:"enable_binding_cookie,omitempty"`
 	AllowedIdps            []string                      `json:"allowed_idps,omitempty"`
 	CorsHeaders            *AccessApplicationCorsHeaders `json:"cors_headers,omitempty"`
+	CustomDenyMessage      string                        `json:"custom_deny_message,omitempty"`
+	CustomDenyURL          string                        `json:"custom_deny_url,omitempty"`
 }
 
 // AccessApplicationCorsHeaders represents the CORS HTTP headers for an Access
