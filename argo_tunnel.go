@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"time"
@@ -42,10 +43,10 @@ type ArgoTunnelDetailResponse struct {
 // ArgoTunnels lists all tunnels.
 //
 // API reference: https://api.cloudflare.com/#argo-tunnel-list-argo-tunnels
-func (api *API) ArgoTunnels(accountID string) ([]ArgoTunnel, error) {
+func (api *API) ArgoTunnels(ctx context.Context, accountID string) ([]ArgoTunnel, error) {
 	uri := "/accounts/" + accountID + "/tunnels"
 
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
 	if err != nil {
 		return []ArgoTunnel{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -61,10 +62,10 @@ func (api *API) ArgoTunnels(accountID string) ([]ArgoTunnel, error) {
 // ArgoTunnel returns a single Argo tunnel.
 //
 // API reference: https://api.cloudflare.com/#argo-tunnel-get-argo-tunnel
-func (api *API) ArgoTunnel(accountID, tunnelUUID string) (ArgoTunnel, error) {
+func (api *API) ArgoTunnel(ctx context.Context, accountID, tunnelUUID string) (ArgoTunnel, error) {
 	uri := fmt.Sprintf("/accounts/%s/tunnels/%s", accountID, tunnelUUID)
 
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
 	if err != nil {
 		return ArgoTunnel{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -80,12 +81,12 @@ func (api *API) ArgoTunnel(accountID, tunnelUUID string) (ArgoTunnel, error) {
 // CreateArgoTunnel creates a new tunnel for the account.
 //
 // API reference: https://api.cloudflare.com/#argo-tunnel-create-argo-tunnel
-func (api *API) CreateArgoTunnel(accountID, name, secret string) (ArgoTunnel, error) {
+func (api *API) CreateArgoTunnel(ctx context.Context, accountID, name, secret string) (ArgoTunnel, error) {
 	uri := "/accounts/" + accountID + "/tunnels"
 
 	tunnel := ArgoTunnel{Name: name, Secret: secret}
 
-	res, err := api.makeRequest("POST", uri, tunnel)
+	res, err := api.makeRequestContext(ctx, "POST", uri, tunnel)
 	if err != nil {
 		return ArgoTunnel{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -101,10 +102,10 @@ func (api *API) CreateArgoTunnel(accountID, name, secret string) (ArgoTunnel, er
 // DeleteArgoTunnel removes a single Argo tunnel.
 //
 // API reference: https://api.cloudflare.com/#argo-tunnel-delete-argo-tunnel
-func (api *API) DeleteArgoTunnel(accountID, tunnelUUID string) error {
+func (api *API) DeleteArgoTunnel(ctx context.Context, accountID, tunnelUUID string) error {
 	uri := fmt.Sprintf("/accounts/%s/tunnels/%s", accountID, tunnelUUID)
 
-	res, err := api.makeRequest("DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}
@@ -121,10 +122,10 @@ func (api *API) DeleteArgoTunnel(accountID, tunnelUUID string) error {
 // CleanupArgoTunnelConnections deletes any inactive connections on a tunnel.
 //
 // API reference: https://api.cloudflare.com/#argo-tunnel-clean-up-argo-tunnel-connections
-func (api *API) CleanupArgoTunnelConnections(accountID, tunnelUUID string) error {
+func (api *API) CleanupArgoTunnelConnections(ctx context.Context, accountID, tunnelUUID string) error {
 	uri := fmt.Sprintf("/accounts/%s/tunnels/%s/connections", accountID, tunnelUUID)
 
-	res, err := api.makeRequest("DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}

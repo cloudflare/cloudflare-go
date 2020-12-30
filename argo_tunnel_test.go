@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -55,7 +56,7 @@ func TestArgoTunnels(t *testing.T) {
 		}},
 	}}
 
-	actual, err := client.ArgoTunnels("01a7362d577a6c3019a474fd6f485823")
+	actual, err := client.ArgoTunnels(context.Background(), "01a7362d577a6c3019a474fd6f485823")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -106,7 +107,7 @@ func TestArgoTunnel(t *testing.T) {
 		}},
 	}
 
-	actual, err := client.ArgoTunnel("01a7362d577a6c3019a474fd6f485823", "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	actual, err := client.ArgoTunnel(context.Background(), "01a7362d577a6c3019a474fd6f485823", "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -157,7 +158,7 @@ func TestCreateArgoTunnel(t *testing.T) {
 		}},
 	}
 
-	actual, err := client.CreateArgoTunnel("01a7362d577a6c3019a474fd6f485823", "blog", "notarealsecret")
+	actual, err := client.CreateArgoTunnel(context.Background(), "01a7362d577a6c3019a474fd6f485823", "blog", "notarealsecret")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -194,7 +195,7 @@ func TestDeleteArgoTunnel(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/tunnels/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	err := client.DeleteArgoTunnel("01a7362d577a6c3019a474fd6f485823", "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	err := client.DeleteArgoTunnel(context.Background(), "01a7362d577a6c3019a474fd6f485823", "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 	assert.NoError(t, err)
 }
 
@@ -215,6 +216,6 @@ func TestCleanupArgoTunnelConnections(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/tunnels/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/connections", handler)
 
-	err := client.CleanupArgoTunnelConnections("01a7362d577a6c3019a474fd6f485823", "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	err := client.CleanupArgoTunnelConnections(context.Background(), "01a7362d577a6c3019a474fd6f485823", "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 	assert.NoError(t, err)
 }
