@@ -40,8 +40,8 @@ type APITokenPolicies struct {
 // APITokenRequestIPCondition is the struct for adding an IP restriction to an
 // API token.
 type APITokenRequestIPCondition struct {
-	In    []string `json:"in"`
-	NotIn []string `json:"not_in"`
+	In    []string `json:"in,omitempty"`
+	NotIn []string `json:"not_in,omitempty"`
 }
 
 // APITokenCondition is the outer structure for request conditions (currently
