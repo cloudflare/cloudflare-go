@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/pkg/errors"
@@ -46,7 +47,7 @@ type ArgoTunnelDetailResponse struct {
 func (api *API) ArgoTunnels(ctx context.Context, accountID string) ([]ArgoTunnel, error) {
 	uri := "/accounts/" + accountID + "/tunnels"
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContextWithHeaders(ctx, "GET", uri, nil, argoV1Header())
 	if err != nil {
 		return []ArgoTunnel{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -65,7 +66,7 @@ func (api *API) ArgoTunnels(ctx context.Context, accountID string) ([]ArgoTunnel
 func (api *API) ArgoTunnel(ctx context.Context, accountID, tunnelUUID string) (ArgoTunnel, error) {
 	uri := fmt.Sprintf("/accounts/%s/tunnels/%s", accountID, tunnelUUID)
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContextWithHeaders(ctx, "GET", uri, nil, argoV1Header())
 	if err != nil {
 		return ArgoTunnel{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -86,7 +87,7 @@ func (api *API) CreateArgoTunnel(ctx context.Context, accountID, name, secret st
 
 	tunnel := ArgoTunnel{Name: name, Secret: secret}
 
-	res, err := api.makeRequestContext(ctx, "POST", uri, tunnel)
+	res, err := api.makeRequestContextWithHeaders(ctx, "POST", uri, tunnel, argoV1Header())
 	if err != nil {
 		return ArgoTunnel{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -96,6 +97,7 @@ func (api *API) CreateArgoTunnel(ctx context.Context, accountID, name, secret st
 	if err != nil {
 		return ArgoTunnel{}, errors.Wrap(err, errUnmarshalError)
 	}
+
 	return argoDetailsResponse.Result, nil
 }
 
@@ -105,7 +107,7 @@ func (api *API) CreateArgoTunnel(ctx context.Context, accountID, name, secret st
 func (api *API) DeleteArgoTunnel(ctx context.Context, accountID, tunnelUUID string) error {
 	uri := fmt.Sprintf("/accounts/%s/tunnels/%s", accountID, tunnelUUID)
 
-	res, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	res, err := api.makeRequestContextWithHeaders(ctx, "DELETE", uri, nil, argoV1Header())
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}
@@ -125,7 +127,7 @@ func (api *API) DeleteArgoTunnel(ctx context.Context, accountID, tunnelUUID stri
 func (api *API) CleanupArgoTunnelConnections(ctx context.Context, accountID, tunnelUUID string) error {
 	uri := fmt.Sprintf("/accounts/%s/tunnels/%s/connections", accountID, tunnelUUID)
 
-	res, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	res, err := api.makeRequestContextWithHeaders(ctx, "DELETE", uri, nil, argoV1Header())
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}
@@ -137,4 +139,15 @@ func (api *API) CleanupArgoTunnelConnections(ctx context.Context, accountID, tun
 	}
 
 	return nil
+}
+
+// The early implementation of Argo Tunnel endpoints didn't conform to the V4
+// API standard response structure. This has been remedied going forward however
+// to support older clients this isn't yet the default. An explicit `Accept`
+// header is used to get the V4 compatible version.
+func argoV1Header() http.Header {
+	header := make(http.Header)
+	header.Set("Accept", "application/json;version=1")
+
+	return header
 }

@@ -172,6 +172,10 @@ func (api *API) makeRequestContext(ctx context.Context, method, uri string, para
 	return api.makeRequestWithAuthType(ctx, method, uri, params, api.authType)
 }
 
+func (api *API) makeRequestContextWithHeaders(ctx context.Context, method, uri string, params interface{}, headers http.Header) ([]byte, error) {
+	return api.makeRequestWithAuthTypeAndHeaders(ctx, method, uri, params, api.authType, headers)
+}
+
 func (api *API) makeRequestWithHeaders(method, uri string, params interface{}, headers http.Header) ([]byte, error) {
 	return api.makeRequestWithAuthTypeAndHeaders(context.TODO(), method, uri, params, api.authType, headers)
 }
