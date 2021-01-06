@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -41,7 +42,7 @@ func TestListWorkerCronTriggers(t *testing.T) {
 		CreatedOn:  &createdOn,
 	}}
 
-	actual, err := client.ListWorkerCronTriggers("example-script")
+	actual, err := client.ListWorkerCronTriggers(context.Background(), "example-script")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -79,7 +80,7 @@ func TestUpdateWorkerCronTriggers(t *testing.T) {
 		CreatedOn:  &createdOn,
 	}}
 
-	actual, err := client.UpdateWorkerCronTriggers("example-script", want)
+	actual, err := client.UpdateWorkerCronTriggers(context.Background(), "example-script", want)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}

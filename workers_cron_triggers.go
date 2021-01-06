@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -32,13 +33,13 @@ type WorkerCronTrigger struct {
 // script.
 //
 // API reference: https://api.cloudflare.com/#worker-cron-trigger-get-cron-triggers
-func (api *API) ListWorkerCronTriggers(scriptName string) ([]WorkerCronTrigger, error) {
+func (api *API) ListWorkerCronTriggers(ctx context.Context, scriptName string) ([]WorkerCronTrigger, error) {
 	if err := api.checkAccountID(); err != nil {
 		return []WorkerCronTrigger{}, errors.Wrap(err, errMakeRequestError)
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/schedules", api.AccountID, scriptName)
-	res, err := api.makeRequest(http.MethodGet, uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []WorkerCronTrigger{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -54,13 +55,13 @@ func (api *API) ListWorkerCronTriggers(scriptName string) ([]WorkerCronTrigger, 
 // UpdateWorkerCronTriggers updates a single schedule for a Worker cron trigger.
 //
 // API reference: https://api.cloudflare.com/#worker-cron-trigger-update-cron-triggers
-func (api *API) UpdateWorkerCronTriggers(scriptName string, crons []WorkerCronTrigger) ([]WorkerCronTrigger, error) {
+func (api *API) UpdateWorkerCronTriggers(ctx context.Context, scriptName string, crons []WorkerCronTrigger) ([]WorkerCronTrigger, error) {
 	if err := api.checkAccountID(); err != nil {
 		return []WorkerCronTrigger{}, errors.Wrap(err, errMakeRequestError)
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/schedules", api.AccountID, scriptName)
-	res, err := api.makeRequest(http.MethodPut, uri, crons)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, crons)
 	if err != nil {
 		return []WorkerCronTrigger{}, errors.Wrap(err, errMakeRequestError)
 	}
