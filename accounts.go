@@ -135,3 +135,22 @@ func (api *API) CreateAccount(account Account) (Account, error) {
 
 	return a.Result, nil
 }
+
+// DeleteAccount removes an account. Note: This requires the Tenant
+// entitlement.
+//
+// API reference: https://developers.cloudflare.com/tenant/tutorial/provisioning-resources#optional-deleting-accounts
+func (api *API) DeleteAccount(accountID string) error {
+	if accountID == "" {
+		return errors.New(errMissingAccountID)
+	}
+
+	uri := fmt.Sprintf("/accounts/%s", accountID)
+
+	_, err := api.makeRequest("DELETE", uri, nil)
+	if err != nil {
+		return errors.Wrap(err, errMakeRequestError)
+	}
+
+	return nil
+}

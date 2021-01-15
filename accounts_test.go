@@ -189,3 +189,27 @@ func TestCreateAccount(t *testing.T) {
 		assert.Equal(t, newAccount, actual)
 	}
 }
+
+func TestDeleteAccount(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, "DELETE", "Expected method 'DELETE', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "1b16db169c9cb7853009857198fae1b9"
+			}
+		}
+		`)
+	}
+
+	mux.HandleFunc("/accounts/"+accountID, handler)
+	err := client.DeleteAccount(accountID)
+
+	assert.NoError(t, err)
+}
