@@ -2,6 +2,7 @@ package cloudflare
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/url"
 	"strconv"
 
@@ -17,7 +18,8 @@ type AccountSettings struct {
 type Account struct {
 	ID       string           `json:"id,omitempty"`
 	Name     string           `json:"name,omitempty"`
-	Settings *AccountSettings `json:"settings"`
+	Type     string           `json:"type,omitempty"`
+	Settings *AccountSettings `json:"settings,omitempty"`
 }
 
 // AccountResponse represents the response from the accounts endpoint for a
@@ -100,6 +102,27 @@ func (api *API) UpdateAccount(accountID string, account Account) (Account, error
 	uri := "/accounts/" + accountID
 
 	res, err := api.makeRequest("PUT", uri, account)
+	if err != nil {
+		return Account{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var a AccountDetailResponse
+	err = json.Unmarshal(res, &a)
+	if err != nil {
+		return Account{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return a.Result, nil
+}
+
+// CreateAccount creates a new account. Note: This requires the Tenant
+// entitlement.
+//
+// API reference: https://developers.cloudflare.com/tenant/tutorial/provisioning-resources#creating-an-account
+func (api *API) CreateAccount(account Account) (Account, error) {
+	uri := "/accounts"
+
+	res, err := api.makeRequest("POST", uri, account)
 	if err != nil {
 		return Account{}, errors.Wrap(err, errMakeRequestError)
 	}
