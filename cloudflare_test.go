@@ -335,7 +335,8 @@ func TestZoneIDByNameWithNonUniqueZonesWithoutOrgID(t *testing.T) {
 				"page": 1,
 				"per_page": 20,
 				"count": 1,
-				"total_count": 2000
+				"total_count": 2000,
+				"total_pages": 1
 			}
 		}
 		`)
@@ -472,7 +473,8 @@ func TestZoneIDByNameWithNonUniqueZonesWithOrgId(t *testing.T) {
 				"page": 1,
 				"per_page": 20,
 				"count": 1,
-				"total_count": 2000
+				"total_count": 2000,
+				"total_pages": 1
 			}
 		}
 		`)
@@ -611,7 +613,8 @@ func TestZoneIDByNameWithIDN(t *testing.T) {
 				"page": 1,
 				"per_page": 20,
 				"count": 1,
-				"total_count": 2000
+				"total_count": 2000,
+				"total_pages": 1
 			}
 		}
 		`)
