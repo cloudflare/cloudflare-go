@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/url"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/pkg/errors"
@@ -163,7 +162,7 @@ func (api *API) UpdateFirewallRules(zoneID string, firewallRules []FirewallRule)
 	return firewallRulesDetailResponse.Result, nil
 }
 
-// DeleteFirewallRule updates a single firewall rule.
+// DeleteFirewallRule deletes a single firewall rule.
 //
 // API reference: https://developers.cloudflare.com/firewall/api/cf-firewall-rules/delete/#delete-a-single-rule
 func (api *API) DeleteFirewallRule(zoneID, firewallRuleID string) error {
@@ -181,12 +180,17 @@ func (api *API) DeleteFirewallRule(zoneID, firewallRuleID string) error {
 	return nil
 }
 
-// DeleteFirewallRules updates a single firewall rule.
+// DeleteFirewallRules deletes multiple firewall rules at once.
 //
 // API reference: https://developers.cloudflare.com/firewall/api/cf-firewall-rules/delete/#delete-multiple-rules
 func (api *API) DeleteFirewallRules(zoneID string, firewallRuleIDs []string) error {
-	ids := strings.Join(firewallRuleIDs, ",")
-	uri := fmt.Sprintf("/zones/%s/firewall/rules?id=%s", zoneID, ids)
+	v := url.Values{}
+
+	for _, ruleID := range firewallRuleIDs {
+		v.Add("id", ruleID)
+	}
+
+	uri := fmt.Sprintf("/zones/%s/firewall/rules?%s", zoneID, v.Encode())
 
 	_, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
