@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/url"
@@ -119,10 +120,10 @@ func (api *API) UpdateAccount(accountID string, account Account) (Account, error
 // entitlement.
 //
 // API reference: https://developers.cloudflare.com/tenant/tutorial/provisioning-resources#creating-an-account
-func (api *API) CreateAccount(account Account) (Account, error) {
+func (api *API) CreateAccount(ctx context.Context, account Account) (Account, error) {
 	uri := "/accounts"
 
-	res, err := api.makeRequest("POST", uri, account)
+	res, err := api.makeRequestContext(ctx, "POST", uri, account)
 	if err != nil {
 		return Account{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -140,14 +141,14 @@ func (api *API) CreateAccount(account Account) (Account, error) {
 // entitlement.
 //
 // API reference: https://developers.cloudflare.com/tenant/tutorial/provisioning-resources#optional-deleting-accounts
-func (api *API) DeleteAccount(accountID string) error {
+func (api *API) DeleteAccount(ctx context.Context, accountID string) error {
 	if accountID == "" {
 		return errors.New(errMissingAccountID)
 	}
 
 	uri := fmt.Sprintf("/accounts/%s", accountID)
 
-	_, err := api.makeRequest("DELETE", uri, nil)
+	_, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}

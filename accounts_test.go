@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -183,7 +184,7 @@ func TestCreateAccount(t *testing.T) {
 		Type: "standard",
 	}
 
-	actual, err := client.CreateAccount(newAccount)
+	actual, err := client.CreateAccount(context.Background(), newAccount)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, newAccount, actual)
@@ -209,7 +210,7 @@ func TestDeleteAccount(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/"+accountID, handler)
-	err := client.DeleteAccount(accountID)
+	err := client.DeleteAccount(context.Background(), accountID)
 
 	assert.NoError(t, err)
 }
