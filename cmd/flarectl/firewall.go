@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net"
+	"os"
 	"strconv"
 
 	"github.com/pkg/errors"
@@ -104,27 +105,29 @@ func firewallAccessRuleCreate(c *cli.Context) error {
 	}
 
 	var (
-		rules       []cloudflare.AccessRule
-		errCreating = "error creating firewall access rule"
+		rules []cloudflare.AccessRule
 	)
 
 	switch {
 	case accountID != "":
 		resp, err := api.CreateAccountAccessRule(accountID, rule)
 		if err != nil {
-			errors.Wrap(err, errCreating)
+			fmt.Fprintln(os.Stderr, "error creating account access rule: ", err)
+			return err
 		}
 		rules = append(rules, resp.Result)
 	case zoneID != "":
 		resp, err := api.CreateZoneAccessRule(zoneID, rule)
 		if err != nil {
-			errors.Wrap(err, errCreating)
+			fmt.Fprintln(os.Stderr, "error creating zone access rule: ", err)
+			return err
 		}
 		rules = append(rules, resp.Result)
 	default:
 		resp, err := api.CreateUserAccessRule(rule)
 		if err != nil {
-			errors.Wrap(err, errCreating)
+			fmt.Fprintln(os.Stderr, "error creating user access rule: ", err)
+			return err
 		}
 		rules = append(rules, resp.Result)
 
