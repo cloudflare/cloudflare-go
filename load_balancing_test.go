@@ -804,7 +804,7 @@ func TestCreateLoadBalancer(t *testing.T) {
                 "ENAM": [
                   "00920f38ce07c2e2f4df50b1f61d4194"
                 ]
-              },
+			  },
               "pop_pools": {
                 "LAX": [
                   "de90f38ced07c2e2f4df50b1f61d4194",
@@ -817,7 +817,20 @@ func TestCreateLoadBalancer(t *testing.T) {
                 "SJC": [
                   "00920f38ce07c2e2f4df50b1f61d4194"
                 ]
-              },
+			  },
+			  "rules": [
+				  {
+					  "name": "example rule",
+					  "condition": "cf.load_balancer.region == \"SAF\"",
+					  "disabled": false,
+					  "priority": 0,
+					  "overrides": {
+						  "region_pools": {
+							  "SAF": ["de90f38ced07c2e2f4df50b1f61d4194"]
+						  }
+					  }
+				  }
+			  ],
               "proxied": true,
               "session_affinity": "cookie",
               "session_affinity_ttl": 5000,
@@ -866,7 +879,18 @@ func TestCreateLoadBalancer(t *testing.T) {
                   "SJC": [
                     "00920f38ce07c2e2f4df50b1f61d4194"
                   ]
-                },
+				},
+				"rules": [
+				  {
+					  "name": "example rule",
+					  "condition": "cf.load_balancer.region == \"SAF\"",
+					  "overrides": {
+						  "region_pools": {
+							  "SAF": ["de90f38ced07c2e2f4df50b1f61d4194"]
+						  }
+					  }
+				  }
+			  ],
                 "proxied": true,
                 "session_affinity": "cookie",
                 "session_affinity_ttl": 5000,
@@ -917,6 +941,17 @@ func TestCreateLoadBalancer(t *testing.T) {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
+		Rules: []*LoadBalancerRule{
+			&LoadBalancerRule{
+				Name:      "example rule",
+				Condition: "cf.load_balancer.region == \"SAF\"",
+				Overrides: LoadBalancerRuleOverrides{
+					RegionPools: map[string][]string{
+						"SAF": []string{"de90f38ced07c2e2f4df50b1f61d4194"},
+					},
+				},
+			},
+		},
 		Proxied:        true,
 		Persistence:    "cookie",
 		PersistenceTTL: 5000,
@@ -956,6 +991,17 @@ func TestCreateLoadBalancer(t *testing.T) {
 			},
 			"SJC": {
 				"00920f38ce07c2e2f4df50b1f61d4194",
+			},
+		},
+		Rules: []*LoadBalancerRule{
+			&LoadBalancerRule{
+				Name:      "example rule",
+				Condition: "cf.load_balancer.region == \"SAF\"",
+				Overrides: LoadBalancerRuleOverrides{
+					RegionPools: map[string][]string{
+						"SAF": []string{"de90f38ced07c2e2f4df50b1f61d4194"},
+					},
+				},
 			},
 		},
 		Proxied:        true,

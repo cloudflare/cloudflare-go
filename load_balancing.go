@@ -71,6 +71,7 @@ type LoadBalancer struct {
 	Persistence               string                     `json:"session_affinity,omitempty"`
 	PersistenceTTL            int                        `json:"session_affinity_ttl,omitempty"`
 	SessionAffinityAttributes *SessionAffinityAttributes `json:"session_affinity_attributes,omitempty"`
+	Rules                     []*LoadBalancerRule        `json:"rules,omitempty"`
 
 	// SteeringPolicy controls pool selection logic.
 	// "off" select pools in DefaultPools order
@@ -79,6 +80,66 @@ type LoadBalancer struct {
 	// "random" selects pools in a random order
 	// "" maps to "geo" if RegionPools or PopPools have entries otherwise "off"
 	SteeringPolicy string `json:"steering_policy,omitempty"`
+}
+
+// LoadBalancerRule represents a single rule entry for a Load Balancer. Each rules
+// is run one after the other in priority order. Disabled rules are skipped.
+type LoadBalancerRule struct {
+	// Name is required but is only used for human readability
+	Name string `json:"name"`
+	// Priority controls the order of rule execution the lowest value will be invoked first
+	Priority int  `json:"priority"`
+	Disabled bool `json:"disabled"`
+
+	Condition string                    `json:"condition"`
+	Overrides LoadBalancerRuleOverrides `json:"overrides"`
+
+	// Terminates flag this rule as 'terminating'. No further rules will
+	// be executed after this one.
+	Terminates bool `json:"terminates,omitempty"`
+
+	// FixedResponse if set and the condition is true we will not run
+	// routing logic but rather directly respond with the provided fields.
+	// FixedResponse implies terminates.
+	FixedResponse *LoadBalancerFixedResponseData `json:"fixed_response,omitempty"`
+}
+
+// LoadBalancerFixedResponseData contains all the data needed to generate
+// a fixed response from a Load Balancer. This behavior can be enabled via Rules.
+type LoadBalancerFixedResponseData struct {
+	// MessageBody data to write into the http body
+	MessageBody string `json:"message_body,omitempty"`
+	// StatusCode the http status code to response with
+	StatusCode int `json:"status_code,omitempty"`
+	// ContentType value of the http 'content-type' header
+	ContentType string `json:"content_type,omitempty"`
+	// Location value of the http 'location' header
+	Location string `json:"location,omitempty"`
+}
+
+// LoadBalancerRuleOverrides are the set of field overridable by the rules system.
+type LoadBalancerRuleOverrides struct {
+	// session affinity
+	Persistence    string `json:"session_affinity,omitempty"`
+	PersistenceTTL *uint  `json:"session_affinity_ttl,omitempty"`
+
+	SessionAffinityAttrs *LoadBalancerRuleOverridesSessionAffinityAttrs `json:"session_affinity_attributes,omitempty"`
+
+	TTL uint `json:"ttl,omitempty"`
+
+	SteeringPolicy string `json:"steering_policy,omitempty"`
+	FallbackPool   string `json:"fallback_pool,omitempty"`
+
+	DefaultPools []string            `json:"default_pools,omitempty"`
+	PoPPools     map[string][]string `json:"pop_pools,omitempty"`
+	RegionPools  map[string][]string `json:"region_pools,omitempty"`
+}
+
+// LoadBalancerRuleOverridesSessionAffinityAttrs mimics SessionAffinityAttributes without the
+// DrainDuration field as that field can not be overwritten via rules.
+type LoadBalancerRuleOverridesSessionAffinityAttrs struct {
+	SameSite string `json:"samesite,omitempty"`
+	Secure   string `json:"secure,omitempty"`
 }
 
 // SessionAffinityAttributes represents the fields used to set attributes in a load balancer session affinity cookie.
