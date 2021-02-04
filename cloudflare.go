@@ -262,9 +262,7 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 
 	switch {
 	case resp.StatusCode >= http.StatusOK && resp.StatusCode < http.StatusMultipleChoices:
-	case resp.StatusCode == http.StatusUnauthorized:
-		return nil, errorFromResponse(resp.StatusCode, respBody)
-	case resp.StatusCode == http.StatusForbidden:
+	case resp.StatusCode >= 400 && resp.StatusCode < 500:
 		return nil, errorFromResponse(resp.StatusCode, respBody)
 	case resp.StatusCode == http.StatusServiceUnavailable,
 		resp.StatusCode == http.StatusBadGateway,
