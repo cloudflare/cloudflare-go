@@ -25,7 +25,7 @@ type DNSRecord struct {
 	ModifiedOn time.Time   `json:"modified_on,omitempty"`
 	Data       interface{} `json:"data,omitempty"` // data returned by: SRV, LOC
 	Meta       interface{} `json:"meta,omitempty"`
-	Priority   int         `json:"priority,omitempty"`
+	Priority   *uint16     `json:"priority,omitempty"`
 }
 
 // DNSRecordResponse represents the response from the DNS endpoint.
