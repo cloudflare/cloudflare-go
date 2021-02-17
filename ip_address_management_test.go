@@ -28,6 +28,7 @@ func TestListIPPrefix(t *testing.T) {
 					"description": "Sample Prefix",
 					"approved": "V",
 					"on_demand_enabled": true,
+					"on_demand_locked": false,
 					"advertised": true,
 					"advertised_modified_at": "2020-04-24T21:25:55.643771Z"
 				}
@@ -82,6 +83,7 @@ func TestGetIPPrefix(t *testing.T) {
 				"description": "Sample Prefix",
 				"approved": "V",
 				"on_demand_enabled": true,
+				"on_demand_locked": false,
 				"advertised": true,
 				"advertised_modified_at": "2020-04-24T21:25:55.643771Z"
 			},
@@ -133,6 +135,7 @@ func TestUpdatePrefixDescription(t *testing.T) {
 				"description": "My IP Prefix",
 				"approved": "V",
 				"on_demand_enabled": true,
+				"on_demand_locked": false,
 				"advertised": true,
 				"advertised_modified_at": "2020-04-24T21:25:55.643771Z"
 			},
