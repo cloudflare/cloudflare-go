@@ -20,6 +20,7 @@ type IPPrefix struct {
 	Description          string     `json:"description"`
 	Approved             string     `json:"approved"`
 	OnDemandEnabled      bool       `json:"on_demand_enabled"`
+	OnDemandLocked       bool       `json:"on_demand_locked"`
 	Advertised           bool       `json:"advertised"`
 	AdvertisedModifiedAt *time.Time `json:"advertised_modified_at"`
 }
