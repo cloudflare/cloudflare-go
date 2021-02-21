@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -52,7 +53,7 @@ func TestAccessOrganization(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/organizations", handler)
 
-	actual, _, err := client.AccessOrganization(accountID)
+	actual, _, err := client.AccessOrganization(context.TODO(), accountID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -60,7 +61,7 @@ func TestAccessOrganization(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/organizations", handler)
 
-	actual, _, err = client.ZoneLevelAccessOrganization(zoneID)
+	actual, _, err = client.ZoneLevelAccessOrganization(context.TODO(), zoneID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -110,7 +111,7 @@ func TestCreateAccessOrganization(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/organizations", handler)
 
-	actual, err := client.CreateAccessOrganization(accountID, want)
+	actual, err := client.CreateAccessOrganization(context.TODO(), accountID, want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -118,7 +119,7 @@ func TestCreateAccessOrganization(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/organizations", handler)
 
-	actual, err = client.CreateZoneLevelAccessOrganization(zoneID, want)
+	actual, err = client.CreateZoneLevelAccessOrganization(context.TODO(), zoneID, want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -168,7 +169,7 @@ func TestUpdateAccessOrganization(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/organizations", handler)
 
-	actual, err := client.UpdateAccessOrganization(accountID, want)
+	actual, err := client.UpdateAccessOrganization(context.TODO(), accountID, want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -176,7 +177,7 @@ func TestUpdateAccessOrganization(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/organizations", handler)
 
-	actual, err = client.UpdateZoneLevelAccessOrganization(zoneID, want)
+	actual, err = client.UpdateZoneLevelAccessOrganization(context.TODO(), zoneID, want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
