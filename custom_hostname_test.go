@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -23,7 +24,7 @@ func TestCustomHostname_DeleteCustomHostname(t *testing.T) {
 }`)
 	})
 
-	err := client.DeleteCustomHostname("foo", "bar")
+	err := client.DeleteCustomHostname(context.TODO(), "foo", "bar")
 
 	assert.NoError(t, err)
 }
@@ -74,7 +75,7 @@ func TestCustomHostname_CreateCustomHostname(t *testing.T) {
 }`)
 	})
 
-	response, err := client.CreateCustomHostname("foo", CustomHostname{Hostname: "app.example.com", SSL: CustomHostnameSSL{Method: "cname", Type: "dv"}})
+	response, err := client.CreateCustomHostname(context.TODO(), "foo", CustomHostname{Hostname: "app.example.com", SSL: CustomHostnameSSL{Method: "cname", Type: "dv"}})
 
 	createdAt, _ := time.Parse(time.RFC3339, "2020-02-06T18:11:23.531995Z")
 
@@ -146,7 +147,7 @@ func TestCustomHostname_CreateCustomHostname_CustomOrigin(t *testing.T) {
 }`)
 	})
 
-	response, err := client.CreateCustomHostname("foo", CustomHostname{Hostname: "app.example.com", CustomOriginServer: "example.app.com", SSL: CustomHostnameSSL{Method: "cname", Type: "dv"}})
+	response, err := client.CreateCustomHostname(context.TODO(), "foo", CustomHostname{Hostname: "app.example.com", CustomOriginServer: "example.app.com", SSL: CustomHostnameSSL{Method: "cname", Type: "dv"}})
 
 	want := &CustomHostnameResponse{
 		Result: CustomHostname{
@@ -218,7 +219,7 @@ func TestCustomHostname_CustomHostnames(t *testing.T) {
 }`)
 	})
 
-	customHostnames, _, err := client.CustomHostnames("foo", 1, CustomHostname{})
+	customHostnames, _, err := client.CustomHostnames(context.TODO(), "foo", 1, CustomHostname{})
 
 	want := []CustomHostname{
 		{
@@ -289,7 +290,7 @@ func TestCustomHostname_CustomHostname(t *testing.T) {
 }`)
 	})
 
-	customHostname, err := client.CustomHostname("foo", "bar")
+	customHostname, err := client.CustomHostname(context.TODO(), "foo", "bar")
 
 	want := CustomHostname{
 		ID:       "bar",
@@ -355,7 +356,7 @@ func TestCustomHostname_CustomHostname_WithSSLError(t *testing.T) {
 }`)
 	})
 
-	customHostname, err := client.CustomHostname("foo", "bar")
+	customHostname, err := client.CustomHostname(context.TODO(), "foo", "bar")
 
 	want := CustomHostname{
 		ID:       "bar",
@@ -419,7 +420,7 @@ func TestCustomHostname_UpdateCustomHostnameSSL(t *testing.T) {
 }`)
 	})
 
-	response, err := client.UpdateCustomHostnameSSL("foo", "0d89c70d-ad9f-4843-b99f-6cc0252067e9", CustomHostnameSSL{Method: "cname", Type: "dv", Settings: CustomHostnameSSLSettings{HTTP2: "off", TLS13: "on"}})
+	response, err := client.UpdateCustomHostnameSSL(context.TODO(), "foo", "0d89c70d-ad9f-4843-b99f-6cc0252067e9", CustomHostnameSSL{Method: "cname", Type: "dv", Settings: CustomHostnameSSLSettings{HTTP2: "off", TLS13: "on"}})
 
 	want := &CustomHostnameResponse{
 		Result: CustomHostname{
@@ -479,7 +480,7 @@ func TestCustomHostname_UpdateCustomHostname(t *testing.T) {
 }`)
 	})
 
-	response, err := client.UpdateCustomHostname("foo", "0d89c70d-ad9f-4843-b99f-6cc0252067e9", CustomHostname{Hostname: "app.example.com", CustomOriginServer: "example.app.com", SSL: CustomHostnameSSL{Method: "cname", Type: "dv"}})
+	response, err := client.UpdateCustomHostname(context.TODO(), "foo", "0d89c70d-ad9f-4843-b99f-6cc0252067e9", CustomHostname{Hostname: "app.example.com", CustomOriginServer: "example.app.com", SSL: CustomHostnameSSL{Method: "cname", Type: "dv"}})
 
 	want := &CustomHostnameResponse{
 		Result: CustomHostname{
@@ -530,7 +531,7 @@ func TestCustomHostname_CustomHostnameFallbackOrigin(t *testing.T) {
 }`)
 	})
 
-	customHostnameFallbackOrigin, err := client.CustomHostnameFallbackOrigin("foo")
+	customHostnameFallbackOrigin, err := client.CustomHostnameFallbackOrigin(context.TODO(), "foo")
 
 	want := CustomHostnameFallbackOrigin{
 		Origin: "fallback.example.com",
@@ -557,7 +558,7 @@ func TestCustomHostname_DeleteCustomHostnameFallbackOrigin(t *testing.T) {
 }`)
 	})
 
-	err := client.DeleteCustomHostnameFallbackOrigin("foo")
+	err := client.DeleteCustomHostnameFallbackOrigin(context.TODO(), "foo")
 
 	assert.NoError(t, err)
 }
@@ -588,7 +589,7 @@ func TestCustomHostname_UpdateCustomHostnameFallbackOrigin(t *testing.T) {
 }`)
 	})
 
-	response, err := client.UpdateCustomHostnameFallbackOrigin("foo", CustomHostnameFallbackOrigin{Origin: "fallback.example.com"})
+	response, err := client.UpdateCustomHostnameFallbackOrigin(context.TODO(), "foo", CustomHostnameFallbackOrigin{Origin: "fallback.example.com"})
 
 	want := &CustomHostnameFallbackOriginResponse{
 		Result: CustomHostnameFallbackOrigin{
@@ -638,7 +639,7 @@ func TestCustomHostname_CreateCustomHostnameCustomCertificateAuthority(t *testin
 }`)
 	})
 
-	response, err := client.CreateCustomHostname("foo", CustomHostname{Hostname: "app.example.com", SSL: CustomHostnameSSL{Method: "cname", Type: "dv", CertificateAuthority: "lets_encrypt"}})
+	response, err := client.CreateCustomHostname(context.TODO(), "foo", CustomHostname{Hostname: "app.example.com", SSL: CustomHostnameSSL{Method: "cname", Type: "dv", CertificateAuthority: "lets_encrypt"}})
 
 	createdAt, _ := time.Parse(time.RFC3339, "2020-06-30T21:37:36.563495Z")
 
