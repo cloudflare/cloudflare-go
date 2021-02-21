@@ -49,7 +49,7 @@ type AccountDetailResponse struct {
 // Accounts returns all accounts the logged in user has access to.
 //
 // API reference: https://api.cloudflare.com/#accounts-list-accounts
-func (api *API) Accounts(pageOpts PaginationOptions) ([]Account, ResultInfo, error) {
+func (api *API) Accounts(ctx context.Context, pageOpts PaginationOptions) ([]Account, ResultInfo, error) {
 	v := url.Values{}
 	if pageOpts.PerPage > 0 {
 		v.Set("per_page", strconv.Itoa(pageOpts.PerPage))
@@ -63,7 +63,7 @@ func (api *API) Accounts(pageOpts PaginationOptions) ([]Account, ResultInfo, err
 		uri = uri + "?" + v.Encode()
 	}
 
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
 	if err != nil {
 		return []Account{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -79,10 +79,10 @@ func (api *API) Accounts(pageOpts PaginationOptions) ([]Account, ResultInfo, err
 // Account returns a single account based on the ID.
 //
 // API reference: https://api.cloudflare.com/#accounts-account-details
-func (api *API) Account(accountID string) (Account, ResultInfo, error) {
+func (api *API) Account(ctx context.Context, accountID string) (Account, ResultInfo, error) {
 	uri := "/accounts/" + accountID
 
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
 	if err != nil {
 		return Account{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -99,10 +99,10 @@ func (api *API) Account(accountID string) (Account, ResultInfo, error) {
 // UpdateAccount allows management of an account using the account ID.
 //
 // API reference: https://api.cloudflare.com/#accounts-update-account
-func (api *API) UpdateAccount(accountID string, account Account) (Account, error) {
+func (api *API) UpdateAccount(ctx context.Context, accountID string, account Account) (Account, error) {
 	uri := "/accounts/" + accountID
 
-	res, err := api.makeRequest("PUT", uri, account)
+	res, err := api.makeRequestContext(ctx, "PUT", uri, account)
 	if err != nil {
 		return Account{}, errors.Wrap(err, errMakeRequestError)
 	}

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net"
 	"os"
@@ -318,7 +319,7 @@ func getScope(c *cli.Context) (string, string, error) {
 	if c.String("account") != "" {
 		account = c.String("account")
 		pageOpts := cloudflare.PaginationOptions{}
-		accounts, _, err := api.Accounts(pageOpts)
+		accounts, _, err := api.Accounts(context.TODO(), pageOpts)
 		if err != nil {
 			fmt.Println(err)
 			return "", "", err
