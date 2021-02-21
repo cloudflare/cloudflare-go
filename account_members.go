@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/url"
@@ -55,7 +56,7 @@ type AccountMemberInvitation struct {
 // AccountMembers returns all members of an account.
 //
 // API reference: https://api.cloudflare.com/#accounts-list-accounts
-func (api *API) AccountMembers(accountID string, pageOpts PaginationOptions) ([]AccountMember, ResultInfo, error) {
+func (api *API) AccountMembers(ctx context.Context, accountID string, pageOpts PaginationOptions) ([]AccountMember, ResultInfo, error) {
 	if accountID == "" {
 		return []AccountMember{}, ResultInfo{}, errors.New(errMissingAccountID)
 	}
@@ -73,7 +74,7 @@ func (api *API) AccountMembers(accountID string, pageOpts PaginationOptions) ([]
 		uri = uri + "?" + v.Encode()
 	}
 
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
 	if err != nil {
 		return []AccountMember{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -90,7 +91,7 @@ func (api *API) AccountMembers(accountID string, pageOpts PaginationOptions) ([]
 // CreateAccountMember invites a new member to join an account.
 //
 // API reference: https://api.cloudflare.com/#account-members-add-member
-func (api *API) CreateAccountMember(accountID string, emailAddress string, roles []string) (AccountMember, error) {
+func (api *API) CreateAccountMember(ctx context.Context, accountID string, emailAddress string, roles []string) (AccountMember, error) {
 	if accountID == "" {
 		return AccountMember{}, errors.New(errMissingAccountID)
 	}
@@ -101,7 +102,7 @@ func (api *API) CreateAccountMember(accountID string, emailAddress string, roles
 		Email: emailAddress,
 		Roles: roles,
 	}
-	res, err := api.makeRequest("POST", uri, newMember)
+	res, err := api.makeRequestContext(ctx, "POST", uri, newMember)
 	if err != nil {
 		return AccountMember{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -118,14 +119,14 @@ func (api *API) CreateAccountMember(accountID string, emailAddress string, roles
 // DeleteAccountMember removes a member from an account.
 //
 // API reference: https://api.cloudflare.com/#account-members-remove-member
-func (api *API) DeleteAccountMember(accountID string, userID string) error {
+func (api *API) DeleteAccountMember(ctx context.Context, accountID string, userID string) error {
 	if accountID == "" {
 		return errors.New(errMissingAccountID)
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/members/%s", accountID, userID)
 
-	_, err := api.makeRequest("DELETE", uri, nil)
+	_, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}
@@ -136,14 +137,14 @@ func (api *API) DeleteAccountMember(accountID string, userID string) error {
 // UpdateAccountMember modifies an existing account member.
 //
 // API reference: https://api.cloudflare.com/#account-members-update-member
-func (api *API) UpdateAccountMember(accountID string, userID string, member AccountMember) (AccountMember, error) {
+func (api *API) UpdateAccountMember(ctx context.Context, accountID string, userID string, member AccountMember) (AccountMember, error) {
 	if accountID == "" {
 		return AccountMember{}, errors.New(errMissingAccountID)
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/members/%s", accountID, userID)
 
-	res, err := api.makeRequest("PUT", uri, member)
+	res, err := api.makeRequestContext(ctx, "PUT", uri, member)
 	if err != nil {
 		return AccountMember{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -160,7 +161,7 @@ func (api *API) UpdateAccountMember(accountID string, userID string, member Acco
 // AccountMember returns details of a single account member.
 //
 // API reference: https://api.cloudflare.com/#account-members-member-details
-func (api *API) AccountMember(accountID string, memberID string) (AccountMember, error) {
+func (api *API) AccountMember(ctx context.Context, accountID string, memberID string) (AccountMember, error) {
 	if accountID == "" {
 		return AccountMember{}, errors.New(errMissingAccountID)
 	}
@@ -171,7 +172,7 @@ func (api *API) AccountMember(accountID string, memberID string) (AccountMember,
 		memberID,
 	)
 
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
 	if err != nil {
 		return AccountMember{}, errors.Wrap(err, errMakeRequestError)
 	}
