@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -59,7 +60,7 @@ func TestAccountRoles(t *testing.T) {
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/roles", handler)
 	want := []AccountRole{expectedAccountRole}
 
-	actual, err := client.AccountRoles("01a7362d577a6c3019a474fd6f485823")
+	actual, err := client.AccountRoles(context.TODO(), "01a7362d577a6c3019a474fd6f485823")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -104,7 +105,7 @@ func TestAccountRole(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/roles/3536bcfad5faccb999b47003c79917fb", handler)
 
-	actual, err := client.AccountRole("01a7362d577a6c3019a474fd6f485823", "3536bcfad5faccb999b47003c79917fb")
+	actual, err := client.AccountRole(context.TODO(), "01a7362d577a6c3019a474fd6f485823", "3536bcfad5faccb999b47003c79917fb")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccountRole, actual)
