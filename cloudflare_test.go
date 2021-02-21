@@ -676,14 +676,11 @@ func TestErrorFromResponse(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/apps", handler)
 
-	_, err := client.CreateAccessApplication(
-		"01a7362d577a6c3019a474fd6f485823",
-		AccessApplication{
-			Name:            "Admin Site",
-			Domain:          "test.example.com/admin",
-			SessionDuration: "24h",
-		},
-	)
+	_, err := client.CreateAccessApplication(context.TODO(), "01a7362d577a6c3019a474fd6f485823", AccessApplication{
+		Name:            "Admin Site",
+		Domain:          "test.example.com/admin",
+		SessionDuration: "24h",
+	})
 
 	assert.EqualError(t, err, "error from makeRequest: HTTP status 403: this is a test error")
 }

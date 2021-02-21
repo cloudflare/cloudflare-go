@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -66,7 +67,7 @@ func TestAccessApplications(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/apps", handler)
 
-	actual, _, err := client.AccessApplications(accountID, PaginationOptions{})
+	actual, _, err := client.AccessApplications(context.TODO(), accountID, PaginationOptions{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -74,7 +75,7 @@ func TestAccessApplications(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/apps", handler)
 
-	actual, _, err = client.ZoneLevelAccessApplications(zoneID, PaginationOptions{})
+	actual, _, err = client.ZoneLevelAccessApplications(context.TODO(), zoneID, PaginationOptions{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -130,7 +131,7 @@ func TestAccessApplication(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
-	actual, err := client.AccessApplication(accountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	actual, err := client.AccessApplication(context.TODO(), accountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -138,7 +139,7 @@ func TestAccessApplication(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
-	actual, err = client.ZoneLevelAccessApplication(zoneID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	actual, err = client.ZoneLevelAccessApplication(context.TODO(), zoneID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -193,14 +194,11 @@ func TestCreateAccessApplications(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/apps", handler)
 
-	actual, err := client.CreateAccessApplication(
-		accountID,
-		AccessApplication{
-			Name:            "Admin Site",
-			Domain:          "test.example.com/admin",
-			SessionDuration: "24h",
-		},
-	)
+	actual, err := client.CreateAccessApplication(context.TODO(), accountID, AccessApplication{
+		Name:            "Admin Site",
+		Domain:          "test.example.com/admin",
+		SessionDuration: "24h",
+	})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, fullAccessApplication, actual)
@@ -208,14 +206,11 @@ func TestCreateAccessApplications(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/apps", handler)
 
-	actual, err = client.CreateZoneLevelAccessApplication(
-		zoneID,
-		AccessApplication{
-			Name:            "Admin Site",
-			Domain:          "test.example.com/admin",
-			SessionDuration: "24h",
-		},
-	)
+	actual, err = client.CreateZoneLevelAccessApplication(context.TODO(), zoneID, AccessApplication{
+		Name:            "Admin Site",
+		Domain:          "test.example.com/admin",
+		SessionDuration: "24h",
+	})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, fullAccessApplication, actual)
@@ -270,10 +265,7 @@ func TestUpdateAccessApplication(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
-	actual, err := client.UpdateAccessApplication(
-		accountID,
-		fullAccessApplication,
-	)
+	actual, err := client.UpdateAccessApplication(context.TODO(), accountID, fullAccessApplication)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, fullAccessApplication, actual)
@@ -281,10 +273,7 @@ func TestUpdateAccessApplication(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
-	actual, err = client.UpdateZoneLevelAccessApplication(
-		zoneID,
-		fullAccessApplication,
-	)
+	actual, err = client.UpdateZoneLevelAccessApplication(context.TODO(), zoneID, fullAccessApplication)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, fullAccessApplication, actual)
@@ -295,10 +284,10 @@ func TestUpdateAccessApplicationWithMissingID(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.UpdateAccessApplication(zoneID, AccessApplication{})
+	_, err := client.UpdateAccessApplication(context.TODO(), zoneID, AccessApplication{})
 	assert.EqualError(t, err, "access application ID cannot be empty")
 
-	_, err = client.UpdateZoneLevelAccessApplication(zoneID, AccessApplication{})
+	_, err = client.UpdateZoneLevelAccessApplication(context.TODO(), zoneID, AccessApplication{})
 	assert.EqualError(t, err, "access application ID cannot be empty")
 }
 
@@ -321,12 +310,12 @@ func TestDeleteAccessApplication(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
-	err := client.DeleteAccessApplication(accountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	err := client.DeleteAccessApplication(context.TODO(), accountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	assert.NoError(t, err)
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
-	err = client.DeleteZoneLevelAccessApplication(zoneID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	err = client.DeleteZoneLevelAccessApplication(context.TODO(), zoneID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	assert.NoError(t, err)
 }
@@ -347,12 +336,12 @@ func TestRevokeAccessApplicationTokens(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db/revoke-tokens", handler)
-	err := client.RevokeAccessApplicationTokens(accountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	err := client.RevokeAccessApplicationTokens(context.TODO(), accountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	assert.NoError(t, err)
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db/revoke-tokens", handler)
-	err = client.RevokeZoneLevelAccessApplicationTokens(zoneID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	err = client.RevokeZoneLevelAccessApplicationTokens(context.TODO(), zoneID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	assert.NoError(t, err)
 }
@@ -414,7 +403,7 @@ func TestAccessApplicationWithCORS(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
-	actual, err := client.AccessApplication(accountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	actual, err := client.AccessApplication(context.TODO(), accountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -422,7 +411,7 @@ func TestAccessApplicationWithCORS(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
-	actual, err = client.ZoneLevelAccessApplication(zoneID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	actual, err = client.ZoneLevelAccessApplication(context.TODO(), zoneID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
