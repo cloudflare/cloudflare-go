@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -36,7 +37,7 @@ func TestAcessCACertificate(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/apps/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/ca", handler)
 
-	actual, err := client.AccessCACertificate(accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	actual, err := client.AccessCACertificate(context.TODO(), accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -44,7 +45,7 @@ func TestAcessCACertificate(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/apps/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/ca", handler)
 
-	actual, err = client.ZoneLevelAccessCACertificate(zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	actual, err = client.ZoneLevelAccessCACertificate(context.TODO(), zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -79,7 +80,7 @@ func TestAcessCACertificates(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/apps/ca", handler)
 
-	actual, err := client.AccessCACertificates(accountID)
+	actual, err := client.AccessCACertificates(context.TODO(), accountID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -87,7 +88,7 @@ func TestAcessCACertificates(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/apps/ca", handler)
 
-	actual, err = client.ZoneLevelAccessCACertificates(zoneID)
+	actual, err = client.ZoneLevelAccessCACertificates(context.TODO(), zoneID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -122,7 +123,7 @@ func TestCreateAcessCACertificates(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/apps/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/ca", handler)
 
-	actual, err := client.CreateAccessCACertificate(accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	actual, err := client.CreateAccessCACertificate(context.TODO(), accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -130,7 +131,7 @@ func TestCreateAcessCACertificates(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/apps/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/ca", handler)
 
-	actual, err = client.CreateZoneLevelAccessCACertificate(zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	actual, err = client.CreateZoneLevelAccessCACertificate(context.TODO(), zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -157,13 +158,13 @@ func TestDeleteAcessCACertificates(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/apps/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/ca", handler)
 
-	err := client.DeleteAccessCACertificate(accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	err := client.DeleteAccessCACertificate(context.TODO(), accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	assert.NoError(t, err)
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/apps/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/ca", handler)
 
-	err = client.DeleteZoneLevelAccessCACertificate(zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	err = client.DeleteZoneLevelAccessCACertificate(context.TODO(), zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	assert.NoError(t, err)
 }
