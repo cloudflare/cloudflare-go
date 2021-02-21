@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -90,7 +91,7 @@ func TestAccessPolicies(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/apps/"+accessApplicationID+"/policies", handler)
 
-	actual, _, err := client.AccessPolicies(accountID, accessApplicationID, pageOptions)
+	actual, _, err := client.AccessPolicies(context.TODO(), accountID, accessApplicationID, pageOptions)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, []AccessPolicy{expectedAccessPolicy}, actual)
@@ -98,7 +99,7 @@ func TestAccessPolicies(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/apps/"+accessApplicationID+"/policies", handler)
 
-	actual, _, err = client.ZoneLevelAccessPolicies(zoneID, accessApplicationID, pageOptions)
+	actual, _, err = client.ZoneLevelAccessPolicies(context.TODO(), zoneID, accessApplicationID, pageOptions)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, []AccessPolicy{expectedAccessPolicy}, actual)
@@ -151,7 +152,7 @@ func TestAccessPolicy(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/apps/"+accessApplicationID+"/policies/"+accessPolicyID, handler)
 
-	actual, err := client.AccessPolicy(accountID, accessApplicationID, accessPolicyID)
+	actual, err := client.AccessPolicy(context.TODO(), accountID, accessApplicationID, accessPolicyID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessPolicy, actual)
@@ -159,7 +160,7 @@ func TestAccessPolicy(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/apps/"+accessApplicationID+"/policies/"+accessPolicyID, handler)
 
-	actual, err = client.ZoneLevelAccessPolicy(zoneID, accessApplicationID, accessPolicyID)
+	actual, err = client.ZoneLevelAccessPolicy(context.TODO(), zoneID, accessApplicationID, accessPolicyID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessPolicy, actual)
@@ -232,11 +233,7 @@ func TestCreateAccessPolicy(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/apps/"+accessApplicationID+"/policies", handler)
 
-	actual, err := client.CreateAccessPolicy(
-		accountID,
-		accessApplicationID,
-		accessPolicy,
-	)
+	actual, err := client.CreateAccessPolicy(context.TODO(), accountID, accessApplicationID, accessPolicy)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessPolicy, actual)
@@ -244,11 +241,7 @@ func TestCreateAccessPolicy(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/apps/"+accessApplicationID+"/policies", handler)
 
-	actual, err = client.CreateZoneLevelAccessPolicy(
-		zoneID,
-		accessApplicationID,
-		accessPolicy,
-	)
+	actual, err = client.CreateZoneLevelAccessPolicy(context.TODO(), zoneID, accessApplicationID, accessPolicy)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessPolicy, actual)
@@ -300,14 +293,14 @@ func TestUpdateAccessPolicy(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/apps/"+accessApplicationID+"/policies/"+accessPolicyID, handler)
-	actual, err := client.UpdateAccessPolicy(accountID, accessApplicationID, expectedAccessPolicy)
+	actual, err := client.UpdateAccessPolicy(context.TODO(), accountID, accessApplicationID, expectedAccessPolicy)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessPolicy, actual)
 	}
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/apps/"+accessApplicationID+"/policies/"+accessPolicyID, handler)
-	actual, err = client.UpdateZoneLevelAccessPolicy(zoneID, accessApplicationID, expectedAccessPolicy)
+	actual, err = client.UpdateZoneLevelAccessPolicy(context.TODO(), zoneID, accessApplicationID, expectedAccessPolicy)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessPolicy, actual)
@@ -318,10 +311,10 @@ func TestUpdateAccessPolicyWithMissingID(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.UpdateAccessPolicy(accountID, accessApplicationID, AccessPolicy{})
+	_, err := client.UpdateAccessPolicy(context.TODO(), accountID, accessApplicationID, AccessPolicy{})
 	assert.EqualError(t, err, "access policy ID cannot be empty")
 
-	_, err = client.UpdateZoneLevelAccessPolicy(zoneID, accessApplicationID, AccessPolicy{})
+	_, err = client.UpdateZoneLevelAccessPolicy(context.TODO(), zoneID, accessApplicationID, AccessPolicy{})
 	assert.EqualError(t, err, "access policy ID cannot be empty")
 }
 
@@ -344,12 +337,12 @@ func TestDeleteAccessPolicy(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/apps/"+accessApplicationID+"/policies/"+accessPolicyID, handler)
-	err := client.DeleteAccessPolicy(accountID, accessApplicationID, accessPolicyID)
+	err := client.DeleteAccessPolicy(context.TODO(), accountID, accessApplicationID, accessPolicyID)
 
 	assert.NoError(t, err)
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/apps/"+accessApplicationID+"/policies/"+accessPolicyID, handler)
-	err = client.DeleteZoneLevelAccessPolicy(zoneID, accessApplicationID, accessPolicyID)
+	err = client.DeleteZoneLevelAccessPolicy(context.TODO(), zoneID, accessApplicationID, accessPolicyID)
 
 	assert.NoError(t, err)
 }
