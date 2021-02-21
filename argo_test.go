@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -40,7 +41,7 @@ func TestArgoSmartRouting(t *testing.T) {
 		ModifiedOn: argoTimestamp,
 	}
 
-	actual, err := client.ArgoSmartRouting("01a7362d577a6c3019a474fd6f485823")
+	actual, err := client.ArgoSmartRouting(context.TODO(), "01a7362d577a6c3019a474fd6f485823")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -76,7 +77,7 @@ func TestUpdateArgoSmartRouting(t *testing.T) {
 		ModifiedOn: argoTimestamp,
 	}
 
-	actual, err := client.UpdateArgoSmartRouting("01a7362d577a6c3019a474fd6f485823", "off")
+	actual, err := client.UpdateArgoSmartRouting(context.TODO(), "01a7362d577a6c3019a474fd6f485823", "off")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -87,7 +88,7 @@ func TestUpdateArgoSmartRoutingWithInvalidValue(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.UpdateArgoSmartRouting("01a7362d577a6c3019a474fd6f485823", "notreal")
+	_, err := client.UpdateArgoSmartRouting(context.TODO(), "01a7362d577a6c3019a474fd6f485823", "notreal")
 
 	if assert.Error(t, err) {
 		assert.Equal(t, "invalid setting value 'notreal'. must be 'on' or 'off'", err.Error())
@@ -123,7 +124,7 @@ func TestArgoTieredCaching(t *testing.T) {
 		ModifiedOn: argoTimestamp,
 	}
 
-	actual, err := client.ArgoTieredCaching("01a7362d577a6c3019a474fd6f485823")
+	actual, err := client.ArgoTieredCaching("01a7362d577a6c3019a474fd6f485823", context.TODO())
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -159,7 +160,7 @@ func TestUpdateArgoTieredCaching(t *testing.T) {
 		ModifiedOn: argoTimestamp,
 	}
 
-	actual, err := client.UpdateArgoTieredCaching("01a7362d577a6c3019a474fd6f485823", "off")
+	actual, err := client.UpdateArgoTieredCaching(context.TODO(), "01a7362d577a6c3019a474fd6f485823", "off")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -170,7 +171,7 @@ func TestUpdateArgoTieredCachingWithInvalidValue(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.UpdateArgoTieredCaching("01a7362d577a6c3019a474fd6f485823", "notreal")
+	_, err := client.UpdateArgoTieredCaching(context.TODO(), "01a7362d577a6c3019a474fd6f485823", "notreal")
 
 	if assert.Error(t, err) {
 		assert.Equal(t, "invalid setting value 'notreal'. must be 'on' or 'off'", err.Error())
