@@ -182,7 +182,7 @@ func TestClient_RetryCanSucceedAfterErrors(t *testing.T) {
 
 	mux.HandleFunc("/user/load_balancers/pools", handler)
 
-	_, err := client.ListLoadBalancerPools()
+	_, err := client.ListLoadBalancerPools(context.TODO())
 	assert.NoError(t, err)
 }
 
@@ -208,7 +208,7 @@ func TestClient_RetryReturnsPersistentErrorResponse(t *testing.T) {
 
 	mux.HandleFunc("/user/load_balancers/pools", handler)
 
-	_, err := client.ListLoadBalancerPools()
+	_, err := client.ListLoadBalancerPools(context.TODO())
 	assert.Error(t, err)
 }
 

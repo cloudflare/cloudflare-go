@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -112,7 +113,7 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 		},
 	}
 
-	actual, err := client.CreateLoadBalancerPool(request)
+	actual, err := client.CreateLoadBalancerPool(context.TODO(), request)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -182,7 +183,7 @@ func TestListLoadBalancerPools(t *testing.T) {
 		},
 	}
 
-	actual, err := client.ListLoadBalancerPools()
+	actual, err := client.ListLoadBalancerPools(context.TODO())
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -242,12 +243,12 @@ func TestLoadBalancerPoolDetails(t *testing.T) {
 		NotificationEmail: "someone@example.com",
 	}
 
-	actual, err := client.LoadBalancerPoolDetails("17b5962d775c646f3f9725cbc7a53df4")
+	actual, err := client.LoadBalancerPoolDetails(context.TODO(), "17b5962d775c646f3f9725cbc7a53df4")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	_, err = client.LoadBalancerPoolDetails("bar")
+	_, err = client.LoadBalancerPoolDetails(context.TODO(), "bar")
 	assert.Error(t, err)
 }
 
@@ -269,8 +270,8 @@ func TestDeleteLoadBalancerPool(t *testing.T) {
 	}
 
 	mux.HandleFunc("/user/load_balancers/pools/17b5962d775c646f3f9725cbc7a53df4", handler)
-	assert.NoError(t, client.DeleteLoadBalancerPool("17b5962d775c646f3f9725cbc7a53df4"))
-	assert.Error(t, client.DeleteLoadBalancerPool("bar"))
+	assert.NoError(t, client.DeleteLoadBalancerPool(context.TODO(), "17b5962d775c646f3f9725cbc7a53df4"))
+	assert.Error(t, client.DeleteLoadBalancerPool(context.TODO(), "bar"))
 }
 
 func TestModifyLoadBalancerPool(t *testing.T) {
@@ -371,7 +372,7 @@ func TestModifyLoadBalancerPool(t *testing.T) {
 		},
 	}
 
-	actual, err := client.ModifyLoadBalancerPool(request)
+	actual, err := client.ModifyLoadBalancerPool(context.TODO(), request)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -485,7 +486,7 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
 		AllowInsecure:   true,
 	}
 
-	actual, err := client.CreateLoadBalancerMonitor(request)
+	actual, err := client.CreateLoadBalancerMonitor(context.TODO(), request)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -559,7 +560,7 @@ func TestListLoadBalancerMonitors(t *testing.T) {
 		},
 	}
 
-	actual, err := client.ListLoadBalancerMonitors()
+	actual, err := client.ListLoadBalancerMonitors(context.TODO())
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -629,12 +630,12 @@ func TestLoadBalancerMonitorDetails(t *testing.T) {
 		AllowInsecure:   true,
 	}
 
-	actual, err := client.LoadBalancerMonitorDetails("f1aba936b94213e5b8dca0c0dbf1f9cc")
+	actual, err := client.LoadBalancerMonitorDetails(context.TODO(), "f1aba936b94213e5b8dca0c0dbf1f9cc")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	_, err = client.LoadBalancerMonitorDetails("bar")
+	_, err = client.LoadBalancerMonitorDetails(context.TODO(), "bar")
 	assert.Error(t, err)
 }
 
@@ -656,8 +657,8 @@ func TestDeleteLoadBalancerMonitor(t *testing.T) {
 	}
 
 	mux.HandleFunc("/user/load_balancers/monitors/f1aba936b94213e5b8dca0c0dbf1f9cc", handler)
-	assert.NoError(t, client.DeleteLoadBalancerMonitor("f1aba936b94213e5b8dca0c0dbf1f9cc"))
-	assert.Error(t, client.DeleteLoadBalancerMonitor("bar"))
+	assert.NoError(t, client.DeleteLoadBalancerMonitor(context.TODO(), "f1aba936b94213e5b8dca0c0dbf1f9cc"))
+	assert.Error(t, client.DeleteLoadBalancerMonitor(context.TODO(), "bar"))
 }
 
 func TestModifyLoadBalancerMonitor(t *testing.T) {
@@ -770,7 +771,7 @@ func TestModifyLoadBalancerMonitor(t *testing.T) {
 		AllowInsecure:   true,
 	}
 
-	actual, err := client.ModifyLoadBalancerMonitor(request)
+	actual, err := client.ModifyLoadBalancerMonitor(context.TODO(), request)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -1014,7 +1015,7 @@ func TestCreateLoadBalancer(t *testing.T) {
 		},
 	}
 
-	actual, err := client.CreateLoadBalancer("199d98642c564d2e855e9661899b7252", request)
+	actual, err := client.CreateLoadBalancer(context.TODO(), "199d98642c564d2e855e9661899b7252", request)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -1122,7 +1123,7 @@ func TestListLoadBalancers(t *testing.T) {
 		},
 	}
 
-	actual, err := client.ListLoadBalancers("199d98642c564d2e855e9661899b7252")
+	actual, err := client.ListLoadBalancers(context.TODO(), "199d98642c564d2e855e9661899b7252")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -1220,12 +1221,12 @@ func TestLoadBalancerDetails(t *testing.T) {
 		Proxied: true,
 	}
 
-	actual, err := client.LoadBalancerDetails("199d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252")
+	actual, err := client.LoadBalancerDetails(context.TODO(), "199d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	_, err = client.LoadBalancerDetails("199d98642c564d2e855e9661899b7252", "bar")
+	_, err = client.LoadBalancerDetails(context.TODO(), "199d98642c564d2e855e9661899b7252", "bar")
 	assert.Error(t, err)
 }
 
@@ -1247,8 +1248,8 @@ func TestDeleteLoadBalancer(t *testing.T) {
 	}
 
 	mux.HandleFunc("/zones/199d98642c564d2e855e9661899b7252/load_balancers/699d98642c564d2e855e9661899b7252", handler)
-	assert.NoError(t, client.DeleteLoadBalancer("199d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"))
-	assert.Error(t, client.DeleteLoadBalancer("199d98642c564d2e855e9661899b7252", "bar"))
+	assert.NoError(t, client.DeleteLoadBalancer(context.TODO(), "199d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"))
+	assert.Error(t, client.DeleteLoadBalancer(context.TODO(), "199d98642c564d2e855e9661899b7252", "bar"))
 }
 
 func TestModifyLoadBalancer(t *testing.T) {
@@ -1417,7 +1418,7 @@ func TestModifyLoadBalancer(t *testing.T) {
 		},
 	}
 
-	actual, err := client.ModifyLoadBalancer("199d98642c564d2e855e9661899b7252", request)
+	actual, err := client.ModifyLoadBalancer(context.TODO(), "199d98642c564d2e855e9661899b7252", request)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -1475,7 +1476,7 @@ func TestLoadBalancerPoolHealthDetails(t *testing.T) {
 		},
 	}
 
-	actual, err := client.PoolHealthDetails("699d98642c564d2e855e9661899b7252")
+	actual, err := client.PoolHealthDetails(context.TODO(), "699d98642c564d2e855e9661899b7252")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
