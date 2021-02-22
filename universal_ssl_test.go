@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -34,7 +35,7 @@ func TestUniversalSSLSettingDetails(t *testing.T) {
 		Enabled: true,
 	}
 
-	got, err := client.UniversalSSLSettingDetails(testZoneID)
+	got, err := client.UniversalSSLSettingDetails(context.TODO(), testZoneID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, got)
 	}
@@ -73,7 +74,7 @@ func TestEditUniversalSSLSetting(t *testing.T) {
 		Enabled: true,
 	}
 
-	got, err := client.EditUniversalSSLSetting(testZoneID, want)
+	got, err := client.EditUniversalSSLSetting(context.TODO(), testZoneID, want)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, got)
 	}
@@ -121,7 +122,7 @@ func TestUniversalSSLVerificationDetails(t *testing.T) {
 		},
 	}
 
-	got, err := client.UniversalSSLVerificationDetails(testZoneID)
+	got, err := client.UniversalSSLVerificationDetails(context.TODO(), testZoneID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, got)
 	}
