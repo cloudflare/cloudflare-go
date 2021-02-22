@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -102,7 +103,7 @@ func TestLogpushJobs(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/logpush/jobs", handler)
 	want := []LogpushJob{expectedLogpushJobStruct}
 
-	actual, err := client.LogpushJobs(testZoneID)
+	actual, err := client.LogpushJobs(context.TODO(), testZoneID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -127,7 +128,7 @@ func TestGetLogpushJob(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/logpush/jobs/"+strconv.Itoa(jobID), handler)
 	want := expectedLogpushJobStruct
 
-	actual, err := client.LogpushJob(testZoneID, jobID)
+	actual, err := client.LogpushJob(context.TODO(), testZoneID, jobID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -158,7 +159,7 @@ func TestCreateLogpushJob(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/logpush/jobs", handler)
 	want := &expectedLogpushJobStruct
 
-	actual, err := client.CreateLogpushJob(testZoneID, newJob)
+	actual, err := client.CreateLogpushJob(context.TODO(), testZoneID, newJob)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -188,7 +189,7 @@ func TestUpdateLogpushJob(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/logpush/jobs/"+strconv.Itoa(jobID), handler)
 
-	err := client.UpdateLogpushJob(testZoneID, jobID, updatedJob)
+	err := client.UpdateLogpushJob(context.TODO(), testZoneID, jobID, updatedJob)
 	assert.NoError(t, err)
 }
 
@@ -210,7 +211,7 @@ func TestDeleteLogpushJob(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/logpush/jobs/"+strconv.Itoa(jobID), handler)
 
-	err := client.DeleteLogpushJob(testZoneID, jobID)
+	err := client.DeleteLogpushJob(context.TODO(), testZoneID, jobID)
 	assert.NoError(t, err)
 }
 
@@ -234,7 +235,7 @@ func TestGetLogpushOwnershipChallenge(t *testing.T) {
 
 	want := &expectedLogpushGetOwnershipChallengeStruct
 
-	actual, err := client.GetLogpushOwnershipChallenge(testZoneID, "destination_conf")
+	actual, err := client.GetLogpushOwnershipChallenge(context.TODO(), testZoneID, "destination_conf")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -257,7 +258,7 @@ func TestGetLogpushOwnershipChallengeWithInvalidResponse(t *testing.T) {
 	}
 
 	mux.HandleFunc("/zones/"+testZoneID+"/logpush/ownership", handler)
-	_, err := client.GetLogpushOwnershipChallenge(testZoneID, "destination_conf")
+	_, err := client.GetLogpushOwnershipChallenge(context.TODO(), testZoneID, "destination_conf")
 
 	assert.Error(t, err)
 }
@@ -295,7 +296,7 @@ func TestValidateLogpushOwnershipChallenge(t *testing.T) {
 
 			mux.HandleFunc("/zones/"+testZoneID+"/logpush/ownership/validate", handler)
 
-			actual, err := client.ValidateLogpushOwnershipChallenge(testZoneID, "destination_conf", "ownership_challenge")
+			actual, err := client.ValidateLogpushOwnershipChallenge(context.TODO(), testZoneID, "destination_conf", "ownership_challenge")
 			if assert.NoError(t, err) {
 				assert.Equal(t, tc.isValid, actual)
 			}
@@ -336,7 +337,7 @@ func TestCheckLogpushDestinationExists(t *testing.T) {
 
 			mux.HandleFunc("/zones/"+testZoneID+"/logpush/validate/destination/exists", handler)
 
-			actual, err := client.CheckLogpushDestinationExists(testZoneID, "destination_conf")
+			actual, err := client.CheckLogpushDestinationExists(context.TODO(), testZoneID, "destination_conf")
 			if assert.NoError(t, err) {
 				assert.Equal(t, tc.exists, actual)
 			}
