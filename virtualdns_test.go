@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -28,7 +29,7 @@ func TestVirtualDNSUserAnalytics(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		expectedMetrics := "queryCount,uncachedCount,staleCount,responseTimeAvg,responseTimeMedia,responseTime90th,responseTime99th"
 
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET'")
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET'")
 		assert.Equal(t, expectedMetrics, r.URL.Query().Get("metrics"), "Expected many metrics in URL parameter")
 		assert.Equal(t, since.Format(time.RFC3339), r.URL.Query().Get("since"), "Expected since parameter in URL")
 		assert.Equal(t, until.Format(time.RFC3339), r.URL.Query().Get("until"), "Expected until parameter in URL")
@@ -78,7 +79,7 @@ func TestVirtualDNSUserAnalytics(t *testing.T) {
 		Since: &since,
 		Until: &until,
 	}
-	actual, err := client.VirtualDNSUserAnalytics("12345", params)
+	actual, err := client.VirtualDNSUserAnalytics(context.TODO(), "12345", params)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}

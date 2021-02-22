@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -15,7 +16,7 @@ func TestCreateSSL(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "POST", r.Method, "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		b, err := ioutil.ReadAll(r.Body)
 		defer r.Body.Close()
 
@@ -71,7 +72,7 @@ func TestCreateSSL(t *testing.T) {
 		Priority:        1,
 	}
 
-	actual, err := client.CreateSSL("023e105f4ecef8ad9ca31a8372d0c353", ZoneCustomSSLOptions{
+	actual, err := client.CreateSSL(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353", ZoneCustomSSLOptions{
 		Certificate:     "-----BEGIN CERTIFICATE----- MIIDtTCCAp2gAwIBAgIJAM15n7fdxhRtMA0GCSqGSIb3DQEBBQUAMEUxCzAJBgNV BAYTAlVTMRMwEQYDVQQIEwpTb21lLVN0YXRlMSEwHwYDVQQKExhJbnRlcm5ldCBX aWRnaXRzIFB0eSBMdGQwHhcNMTQwMzExMTkyMTU5WhcNMTQwNDEwMTkyMTU5WjBF MQswCQYDVQQGEwJVUzETMBEGA1UECBMKU29tZS1TdGF0ZTEhMB8GA1UEChMYSW50 ZXJuZXQgV2lkZ2l0cyBQdHkgTHRkMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIB CgKCAQEAvq3sKsHpeduJHimOK+fvQdKsI8z8A05MZyyLp2/R/GE8FjNv+hkVY1WQ LIyTNNQH7CJecE1nbTfo8Y56S7x/rhxC6/DJ8MIulapFPnorq46KU6yRxiM0MQ3N nTJHlHA2ozZta6YBBfVfhHWl1F0IfNbXCLKvGwWWMbCx43OfW6KTkbRnE6gFWKuO fSO5h2u5TaWVuSIzBvYs7Vza6m+gtYAvKAJV2nSZ+eSEFPDo29corOy8+huEOUL8 5FAw4BFPsr1TlrlGPFitduQUHGrSL7skk1ESGza0to3bOtrodKei2s9bk5MXm7lZ qI+WZJX4Zu9+mzZhc9pCVi8r/qlXuQIDAQABo4GnMIGkMB0GA1UdDgQWBBRvavf+ sWM4IwKiH9X9w1vl6nUVRDB1BgNVHSMEbjBsgBRvavf+sWM4IwKiH9X9w1vl6nUV RKFJpEcwRTELMAkGA1UEBhMCVVMxEzARBgNVBAgTClNvbWUtU3RhdGUxITAfBgNV BAoTGEludGVybmV0IFdpZGdpdHMgUHR5IEx0ZIIJAM15n7fdxhRtMAwGA1UdEwQF MAMBAf8wDQYJKoZIhvcNAQEFBQADggEBABY2ZzBaW0dMsAAT7tPJzrVWVzQx6KU4 UEBLudIlWPlkAwTnINCWR/8eNjCCmGA4heUdHmazdpPa8RzwOmc0NT1NQqzSyktt vTqb4iHD7+8f9MqJ9/FssCfTtqr/Qst/hGH4Wmdf1EJ/6FqYAAb5iRlPgshFZxU8 uXtA8hWn6fK6eISD9HBdcAFToUvKNZ1BIDPvh9f95Ine8ar6yGd56TUNrHR8eHBs ESxz5ddVR/oWRysNJ+aGAyYqHS8S/ttmC7r4XCAHqXptkHPCGRqkAhsterYhd4I8 /cBzejUobNCjjHFbtkAL/SjxZOLW+pNkZwfeYdM8iPkD54Uua1v2tdw= -----END CERTIFICATE-----",
 		PrivateKey:      "-----BEGIN RSA PRIVATE KEY-----MIIEowIBAAKCAQEAl 1cSc0vfcJLI4ZdWjiZZqy86Eof4czCwilyjXdvHqbdgDjz9H6K/0FX78EzVdfyExESptPCDl5YYjvcZyAWlgNfYEpFpGeoh/pTFW3hlyKImh4EgBXbDrR251J Ew2Nf56X3duibI6X20gKZA6cvdmWeKh MOOXuh1bSPU3dkb4YOF/fng5iGrx0q3txdMQXTPMZ1uXHFcBH7idgViYesXUBhdll3GP1N Y8laq0yrqh 8HMsZK m27MebqonbNmjOqE218lVEvjCdRO6xvNXrO6vNJBoGn2eGwZ8BVd0mTA3Tj43/2cmxQFY9FLq56cCXqYI1fbRRib ZLrjSNkwIDAQABAoIBABfAjjsjjxc0NxcYvKOMUb9Rpj8Sx6U/o/tDC5u XmsGX37aaJmC5yw9BQiAxgvXtQryEl5uoNoqOdsxzKV6yM0vPcwKEJVBd4G6yx6AjVJZnc2qf72erR7BbA2CQh scMDRBKE041HhgTBRNP6roim0SOgYP5JZIrGAQXNIkyE0fZc5gZNUt388ne/mjWM6Xi08BDGurLC68nsdt7Nd UYqeBVxo2EqChp5vKYZYEcG8h9XBj4u4NIwg1Mty2JqX30uBjoHvF5w/pMs8lG uvj6JR9I 19wtCuccbAJl 4cUq03UQoIDmwejea oC8A8WJr3vVpODDWrvAsjllGPBECgYEAyQRa6edYO6bsSvgbM13qXW9OQTn9YmgzfN24Ux1D66TQU6sBSLdfSHshDhTCi Ax 698aJNRWujAakA2DDgspSx98aRnHbF zvY7i7iWGesN6uN0zL 6/MK5uWoieGZRjgk230fLk00l4/FK1mJIp0apr0Lis9xmDjP5AaUPTUUCgYEAwXuhTHZWPT6v8YwOksjbuK UDkIIvyMux53kb73vrkgMboS4DB1zMLNyG 9EghS414CFROUwGl4ZUKboH1Jo5G34y8VgDuHjirTqL2H6 zNpML iMrWCXjpFKkxwPbeQnEAZ 5Rud4d PTyXAt71blZHE9tZ4KHy8cU1iKc9APcCgYAIqKZd4vg7AZK2G//X85iv06aUSrIudfyZyVcyRVVyphPPNtOEVVnGXn9rAtvqeIrOo52BR68 cj4vlXp hkDuEH QVBuY/NdQhOzFtPrKPQTJdGjIlQ2x65Vidj7r3sRukNkLPyV2v D885zcpTkp83JFuWTYiIrg275DIuAI3QKBgAglM0IrzS g3vlVQxvM1ussgRgkkYeybHq82 wUW 3DXLqeXb0s1DedplUkuoabZriz0Wh4GZFSmtA5ZpZC uV697lkYsndmp2xRhaekllW7bu pY5q88URwO2p8CO5AZ6CWFWuBwSDML5VOapGRqDRgwaD oGpb7fb7IgHOls7AoGBAJnL6Q8t35uYJ8J8hY7wso88IE04z6VaT8WganxcndesWER9eFQDHDDy//ZYeyt6M41uIY CL Vkm9Kwl/bHLJKdnOE1a9NdE6mtfah0Bk2u/YOuzyu5mmcgZiX X/OZuEbGmmbZOR1FCuIyrNYfwYohhcZP7/r0Ia/1GpkHc3Bi-----END RSA PRIVATE KEY-----",
 		BundleMethod:    "ubiquitous",
@@ -82,7 +83,7 @@ func TestCreateSSL(t *testing.T) {
 		assert.Equal(t, want, actual)
 	}
 
-	_, err = client.CreateSSL("bar", ZoneCustomSSLOptions{})
+	_, err = client.CreateSSL(context.TODO(), "bar", ZoneCustomSSLOptions{})
 	assert.Error(t, err)
 }
 
@@ -91,7 +92,7 @@ func TestListSSL(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
           "success": true,
@@ -146,12 +147,12 @@ func TestListSSL(t *testing.T) {
 		Priority:     1,
 	}
 
-	actual, err := client.ListSSL("023e105f4ecef8ad9ca31a8372d0c353")
+	actual, err := client.ListSSL(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	_, err = client.ListSSL("bar")
+	_, err = client.ListSSL(context.TODO(), "bar")
 	assert.Error(t, err)
 }
 
@@ -204,12 +205,12 @@ func TestSSLDetails(t *testing.T) {
 		Priority:     1,
 	}
 
-	actual, err := client.SSLDetails("023e105f4ecef8ad9ca31a8372d0c353", "7e7b8deba8538af625850b7b2530034c")
+	actual, err := client.SSLDetails(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353", "7e7b8deba8538af625850b7b2530034c")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	_, err = client.SSLDetails("023e105f4ecef8ad9ca31a8372d0c353", "bar")
+	_, err = client.SSLDetails(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353", "bar")
 	assert.Error(t, err)
 }
 
@@ -273,7 +274,7 @@ func TestUpdateSSL(t *testing.T) {
 		Priority:        1,
 	}
 
-	actual, err := client.UpdateSSL("023e105f4ecef8ad9ca31a8372d0c353", "7e7b8deba8538af625850b7b2530034c", ZoneCustomSSLOptions{
+	actual, err := client.UpdateSSL(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353", "7e7b8deba8538af625850b7b2530034c", ZoneCustomSSLOptions{
 		Certificate:     "-----BEGIN CERTIFICATE----- MIIDtTCCAp2gAwIBAgIJAM15n7fdxhRtMA0GCSqGSIb3DQEBBQUAMEUxCzAJBgNV BAYTAlVTMRMwEQYDVQQIEwpTb21lLVN0YXRlMSEwHwYDVQQKExhJbnRlcm5ldCBX aWRnaXRzIFB0eSBMdGQwHhcNMTQwMzExMTkyMTU5WhcNMTQwNDEwMTkyMTU5WjBF MQswCQYDVQQGEwJVUzETMBEGA1UECBMKU29tZS1TdGF0ZTEhMB8GA1UEChMYSW50 ZXJuZXQgV2lkZ2l0cyBQdHkgTHRkMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIB CgKCAQEAvq3sKsHpeduJHimOK+fvQdKsI8z8A05MZyyLp2/R/GE8FjNv+hkVY1WQ LIyTNNQH7CJecE1nbTfo8Y56S7x/rhxC6/DJ8MIulapFPnorq46KU6yRxiM0MQ3N nTJHlHA2ozZta6YBBfVfhHWl1F0IfNbXCLKvGwWWMbCx43OfW6KTkbRnE6gFWKuO fSO5h2u5TaWVuSIzBvYs7Vza6m+gtYAvKAJV2nSZ+eSEFPDo29corOy8+huEOUL8 5FAw4BFPsr1TlrlGPFitduQUHGrSL7skk1ESGza0to3bOtrodKei2s9bk5MXm7lZ qI+WZJX4Zu9+mzZhc9pCVi8r/qlXuQIDAQABo4GnMIGkMB0GA1UdDgQWBBRvavf+ sWM4IwKiH9X9w1vl6nUVRDB1BgNVHSMEbjBsgBRvavf+sWM4IwKiH9X9w1vl6nUV RKFJpEcwRTELMAkGA1UEBhMCVVMxEzARBgNVBAgTClNvbWUtU3RhdGUxITAfBgNV BAoTGEludGVybmV0IFdpZGdpdHMgUHR5IEx0ZIIJAM15n7fdxhRtMAwGA1UdEwQF MAMBAf8wDQYJKoZIhvcNAQEFBQADggEBABY2ZzBaW0dMsAAT7tPJzrVWVzQx6KU4 UEBLudIlWPlkAwTnINCWR/8eNjCCmGA4heUdHmazdpPa8RzwOmc0NT1NQqzSyktt vTqb4iHD7+8f9MqJ9/FssCfTtqr/Qst/hGH4Wmdf1EJ/6FqYAAb5iRlPgshFZxU8 uXtA8hWn6fK6eISD9HBdcAFToUvKNZ1BIDPvh9f95Ine8ar6yGd56TUNrHR8eHBs ESxz5ddVR/oWRysNJ+aGAyYqHS8S/ttmC7r4XCAHqXptkHPCGRqkAhsterYhd4I8 /cBzejUobNCjjHFbtkAL/SjxZOLW+pNkZwfeYdM8iPkD54Uua1v2tdw= -----END CERTIFICATE-----",
 		PrivateKey:      "-----BEGIN RSA PRIVATE KEY-----MIIEowIBAAKCAQEAl 1cSc0vfcJLI4ZdWjiZZqy86Eof4czCwilyjXdvHqbdgDjz9H6K/0FX78EzVdfyExESptPCDl5YYjvcZyAWlgNfYEpFpGeoh/pTFW3hlyKImh4EgBXbDrR251J Ew2Nf56X3duibI6X20gKZA6cvdmWeKh MOOXuh1bSPU3dkb4YOF/fng5iGrx0q3txdMQXTPMZ1uXHFcBH7idgViYesXUBhdll3GP1N Y8laq0yrqh 8HMsZK m27MebqonbNmjOqE218lVEvjCdRO6xvNXrO6vNJBoGn2eGwZ8BVd0mTA3Tj43/2cmxQFY9FLq56cCXqYI1fbRRib ZLrjSNkwIDAQABAoIBABfAjjsjjxc0NxcYvKOMUb9Rpj8Sx6U/o/tDC5u XmsGX37aaJmC5yw9BQiAxgvXtQryEl5uoNoqOdsxzKV6yM0vPcwKEJVBd4G6yx6AjVJZnc2qf72erR7BbA2CQh scMDRBKE041HhgTBRNP6roim0SOgYP5JZIrGAQXNIkyE0fZc5gZNUt388ne/mjWM6Xi08BDGurLC68nsdt7Nd UYqeBVxo2EqChp5vKYZYEcG8h9XBj4u4NIwg1Mty2JqX30uBjoHvF5w/pMs8lG uvj6JR9I 19wtCuccbAJl 4cUq03UQoIDmwejea oC8A8WJr3vVpODDWrvAsjllGPBECgYEAyQRa6edYO6bsSvgbM13qXW9OQTn9YmgzfN24Ux1D66TQU6sBSLdfSHshDhTCi Ax 698aJNRWujAakA2DDgspSx98aRnHbF zvY7i7iWGesN6uN0zL 6/MK5uWoieGZRjgk230fLk00l4/FK1mJIp0apr0Lis9xmDjP5AaUPTUUCgYEAwXuhTHZWPT6v8YwOksjbuK UDkIIvyMux53kb73vrkgMboS4DB1zMLNyG 9EghS414CFROUwGl4ZUKboH1Jo5G34y8VgDuHjirTqL2H6 zNpML iMrWCXjpFKkxwPbeQnEAZ 5Rud4d PTyXAt71blZHE9tZ4KHy8cU1iKc9APcCgYAIqKZd4vg7AZK2G//X85iv06aUSrIudfyZyVcyRVVyphPPNtOEVVnGXn9rAtvqeIrOo52BR68 cj4vlXp hkDuEH QVBuY/NdQhOzFtPrKPQTJdGjIlQ2x65Vidj7r3sRukNkLPyV2v D885zcpTkp83JFuWTYiIrg275DIuAI3QKBgAglM0IrzS g3vlVQxvM1ussgRgkkYeybHq82 wUW 3DXLqeXb0s1DedplUkuoabZriz0Wh4GZFSmtA5ZpZC uV697lkYsndmp2xRhaekllW7bu pY5q88URwO2p8CO5AZ6CWFWuBwSDML5VOapGRqDRgwaD oGpb7fb7IgHOls7AoGBAJnL6Q8t35uYJ8J8hY7wso88IE04z6VaT8WganxcndesWER9eFQDHDDy//ZYeyt6M41uIY CL Vkm9Kwl/bHLJKdnOE1a9NdE6mtfah0Bk2u/YOuzyu5mmcgZiX X/OZuEbGmmbZOR1FCuIyrNYfwYohhcZP7/r0Ia/1GpkHc3Bi-----END RSA PRIVATE KEY-----",
 		BundleMethod:    "ubiquitous",
@@ -283,7 +284,7 @@ func TestUpdateSSL(t *testing.T) {
 		assert.Equal(t, want, actual)
 	}
 
-	_, err = client.UpdateSSL("023e105f4ecef8ad9ca31a8372d0c353", "bar", ZoneCustomSSLOptions{})
+	_, err = client.UpdateSSL(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353", "bar", ZoneCustomSSLOptions{})
 	assert.Error(t, err)
 }
 
@@ -292,7 +293,7 @@ func TestReprioritizeSSL(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		b, err := ioutil.ReadAll(r.Body)
 		defer r.Body.Close()
 		if assert.NoError(t, err) {
@@ -357,7 +358,7 @@ func TestReprioritizeSSL(t *testing.T) {
 		Priority:     1,
 	}
 
-	actual, err := client.ReprioritizeSSL("023e105f4ecef8ad9ca31a8372d0c353", []ZoneCustomSSLPriority{
+	actual, err := client.ReprioritizeSSL(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353", []ZoneCustomSSLPriority{
 		{ID: "5a7805061c76ada191ed06f989cc3dac", Priority: 2},
 		{ID: "9a7806061c88ada191ed06f989cc3dac", Priority: 1},
 	})
@@ -372,7 +373,7 @@ func TestDeleteSSL(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "DELETE", r.Method, "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
           "id": "7e7b8deba8538af625850b7b2530034c"
@@ -381,9 +382,9 @@ func TestDeleteSSL(t *testing.T) {
 
 	mux.HandleFunc("/zones/023e105f4ecef8ad9ca31a8372d0c353/custom_certificates/7e7b8deba8538af625850b7b2530034c", handler)
 
-	err := client.DeleteSSL("023e105f4ecef8ad9ca31a8372d0c353", "7e7b8deba8538af625850b7b2530034c")
+	err := client.DeleteSSL(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353", "7e7b8deba8538af625850b7b2530034c")
 	assert.NoError(t, err, "Expected to successfully delete certificate ID '7e7b8deba8538af625850b7b2530034c', received error instead")
 
-	err = client.DeleteSSL("023e105f4ecef8ad9ca31a8372d0c353", "bar")
+	err = client.DeleteSSL(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353", "bar")
 	assert.Error(t, err, "Expected to error when attempting to delete certificate ID 'bar', did not receive error instead")
 }

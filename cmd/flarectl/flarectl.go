@@ -8,10 +8,10 @@ import (
 )
 
 var (
-    version = "dev"
-    commit  = "none"
-    date    = "unknown"
-    builtBy = "unknown"
+	version = "dev"
+	commit  = "none"
+	date    = "unknown"
+	builtBy = "unknown"
 )
 
 var api *cloudflare.API
@@ -23,9 +23,9 @@ func main() {
 	app.Version = version
 	app.Flags = []cli.Flag{
 		&cli.StringFlag{
-			Name:   "account-id",
-			Usage:  "Optional account ID",
-			Value:  "",
+			Name:    "account-id",
+			Usage:   "Optional account ID",
+			Value:   "",
 			EnvVars: []string{"CF_ACCOUNT_ID"},
 		},
 		&cli.BoolFlag{

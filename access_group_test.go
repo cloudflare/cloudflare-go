@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -33,7 +34,7 @@ func TestAccessGroups(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -80,7 +81,7 @@ func TestAccessGroups(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/groups", handler)
 
-	actual, _, err := client.AccessGroups(accountID, pageOptions)
+	actual, _, err := client.AccessGroups(context.TODO(), accountID, pageOptions)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, []AccessGroup{expectedAccessGroup}, actual)
@@ -88,7 +89,7 @@ func TestAccessGroups(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/groups", handler)
 
-	actual, _, err = client.ZoneLevelAccessGroups(zoneID, pageOptions)
+	actual, _, err = client.ZoneLevelAccessGroups(context.TODO(), zoneID, pageOptions)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, []AccessGroup{expectedAccessGroup}, actual)
@@ -100,7 +101,7 @@ func TestAccessGroup(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -139,7 +140,7 @@ func TestAccessGroup(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/groups/"+accessGroupID, handler)
 
-	actual, err := client.AccessGroup(accountID, accessGroupID)
+	actual, err := client.AccessGroup(context.TODO(), accountID, accessGroupID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessGroup, actual)
@@ -147,7 +148,7 @@ func TestAccessGroup(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/groups/"+accessGroupID, handler)
 
-	actual, err = client.ZoneLevelAccessGroup(zoneID, accessGroupID)
+	actual, err = client.ZoneLevelAccessGroup(context.TODO(), zoneID, accessGroupID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessGroup, actual)
@@ -159,7 +160,7 @@ func TestCreateAccessGroup(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -217,10 +218,7 @@ func TestCreateAccessGroup(t *testing.T) {
 		},
 	}
 
-	actual, err := client.CreateAccessGroup(
-		accountID,
-		accessGroup,
-	)
+	actual, err := client.CreateAccessGroup(context.TODO(), accountID, accessGroup)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessGroup, actual)
@@ -228,10 +226,7 @@ func TestCreateAccessGroup(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/groups", handler)
 
-	actual, err = client.CreateZoneLevelAccessGroup(
-		zoneID,
-		accessGroup,
-	)
+	actual, err = client.CreateZoneLevelAccessGroup(context.TODO(), zoneID, accessGroup)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessGroup, actual)
@@ -243,7 +238,7 @@ func TestUpdateAccessGroup(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "PUT", "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPut, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -281,14 +276,14 @@ func TestUpdateAccessGroup(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/groups/"+accessGroupID, handler)
-	actual, err := client.UpdateAccessGroup(accountID, expectedAccessGroup)
+	actual, err := client.UpdateAccessGroup(context.TODO(), accountID, expectedAccessGroup)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessGroup, actual)
 	}
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/groups/"+accessGroupID, handler)
-	actual, err = client.UpdateZoneLevelAccessGroup(zoneID, expectedAccessGroup)
+	actual, err = client.UpdateZoneLevelAccessGroup(context.TODO(), zoneID, expectedAccessGroup)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessGroup, actual)
@@ -299,10 +294,10 @@ func TestUpdateAccessGroupWithMissingID(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.UpdateAccessGroup(accountID, AccessGroup{})
+	_, err := client.UpdateAccessGroup(context.TODO(), accountID, AccessGroup{})
 	assert.EqualError(t, err, "access group ID cannot be empty")
 
-	_, err = client.UpdateZoneLevelAccessGroup(zoneID, AccessGroup{})
+	_, err = client.UpdateZoneLevelAccessGroup(context.TODO(), zoneID, AccessGroup{})
 	assert.EqualError(t, err, "access group ID cannot be empty")
 }
 
@@ -311,7 +306,7 @@ func TestDeleteAccessGroup(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "DELETE", "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodDelete, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -325,12 +320,12 @@ func TestDeleteAccessGroup(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/groups/"+accessGroupID, handler)
-	err := client.DeleteAccessGroup(accountID, accessGroupID)
+	err := client.DeleteAccessGroup(context.TODO(), accountID, accessGroupID)
 
 	assert.NoError(t, err)
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/groups/"+accessGroupID, handler)
-	err = client.DeleteZoneLevelAccessGroup(zoneID, accessGroupID)
+	err = client.DeleteZoneLevelAccessGroup(context.TODO(), zoneID, accessGroupID)
 
 	assert.NoError(t, err)
 }

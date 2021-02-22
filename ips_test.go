@@ -43,7 +43,7 @@ func Test_IPs(t *testing.T) {
 	defer func() { http.DefaultTransport = defaultTransport }()
 
 	mux.HandleFunc("/ips", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("Content-Type", "application/json")
 		fmt.Fprintf(w, `{
   "success": true,
