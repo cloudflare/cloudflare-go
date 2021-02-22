@@ -140,7 +140,7 @@ func zoneCreateLockdown(c *cli.Context) error {
 
 	var resp *cloudflare.ZoneLockdownResponse
 
-	resp, err = api.CreateZoneLockdown(zoneID, lockdown)
+	resp, err = api.CreateZoneLockdown(context2.TODO(), zoneID, lockdown)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error creating ZONE lock down: ", err)
 		return err
