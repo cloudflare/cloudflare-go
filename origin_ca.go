@@ -89,9 +89,9 @@ type originCACertificateResponseRevoke struct {
 // This function requires api.APIUserServiceKey be set to your Certificates API key.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-ca-create-certificate
-func (api *API) CreateOriginCertificate(certificate OriginCACertificate) (*OriginCACertificate, error) {
+func (api *API) CreateOriginCertificate(ctx context.Context, certificate OriginCACertificate) (*OriginCACertificate, error) {
 	uri := "/certificates"
-	res, err := api.makeRequestWithAuthType(context.TODO(), "POST", uri, certificate, AuthUserService)
+	res, err := api.makeRequestWithAuthType(ctx, "POST", uri, certificate, AuthUserService)
 
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
@@ -117,13 +117,13 @@ func (api *API) CreateOriginCertificate(certificate OriginCACertificate) (*Origi
 // This function requires api.APIUserServiceKey be set to your Certificates API key.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-ca-list-certificates
-func (api *API) OriginCertificates(options OriginCACertificateListOptions) ([]OriginCACertificate, error) {
+func (api *API) OriginCertificates(ctx context.Context, options OriginCACertificateListOptions) ([]OriginCACertificate, error) {
 	v := url.Values{}
 	if options.ZoneID != "" {
 		v.Set("zone_id", options.ZoneID)
 	}
 	uri := "/certificates" + "?" + v.Encode()
-	res, err := api.makeRequestWithAuthType(context.TODO(), "GET", uri, nil, AuthUserService)
+	res, err := api.makeRequestWithAuthType(ctx, "GET", uri, nil, AuthUserService)
 
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
@@ -149,9 +149,9 @@ func (api *API) OriginCertificates(options OriginCACertificateListOptions) ([]Or
 // This function requires api.APIUserServiceKey be set to your Certificates API key.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-ca-certificate-details
-func (api *API) OriginCertificate(certificateID string) (*OriginCACertificate, error) {
+func (api *API) OriginCertificate(ctx context.Context, certificateID string) (*OriginCACertificate, error) {
 	uri := "/certificates/" + certificateID
-	res, err := api.makeRequestWithAuthType(context.TODO(), "GET", uri, nil, AuthUserService)
+	res, err := api.makeRequestWithAuthType(ctx, "GET", uri, nil, AuthUserService)
 
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
@@ -177,9 +177,9 @@ func (api *API) OriginCertificate(certificateID string) (*OriginCACertificate, e
 // This function requires api.APIUserServiceKey be set to your Certificates API key.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-ca-revoke-certificate
-func (api *API) RevokeOriginCertificate(certificateID string) (*OriginCACertificateID, error) {
+func (api *API) RevokeOriginCertificate(ctx context.Context, certificateID string) (*OriginCACertificateID, error) {
 	uri := "/certificates/" + certificateID
-	res, err := api.makeRequestWithAuthType(context.TODO(), "DELETE", uri, nil, AuthUserService)
+	res, err := api.makeRequestWithAuthType(ctx, "DELETE", uri, nil, AuthUserService)
 
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
