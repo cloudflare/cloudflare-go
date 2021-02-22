@@ -284,7 +284,7 @@ func (api *API) DeleteWorker(ctx context.Context, requestParams *WorkerRequestPa
 		return api.deleteWorkerWithName(ctx, requestParams.ScriptName)
 	}
 	uri := "/zones/" + requestParams.ZoneID + "/workers/script"
-	res, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	var r WorkerScriptResponse
 	if err != nil {
 		return r, errors.Wrap(err, errMakeRequestError)
@@ -305,7 +305,7 @@ func (api *API) deleteWorkerWithName(ctx context.Context, scriptName string) (Wo
 		return WorkerScriptResponse{}, errors.New("account ID required")
 	}
 	uri := "/accounts/" + api.AccountID + "/workers/scripts/" + scriptName
-	res, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	var r WorkerScriptResponse
 	if err != nil {
 		return r, errors.Wrap(err, errMakeRequestError)
@@ -325,7 +325,7 @@ func (api *API) DownloadWorker(ctx context.Context, requestParams *WorkerRequest
 		return api.downloadWorkerWithName(ctx, requestParams.ScriptName)
 	}
 	uri := "/zones/" + requestParams.ZoneID + "/workers/script"
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	var r WorkerScriptResponse
 	if err != nil {
 		return r, errors.Wrap(err, errMakeRequestError)
@@ -343,7 +343,7 @@ func (api *API) downloadWorkerWithName(ctx context.Context, scriptName string) (
 		return WorkerScriptResponse{}, errors.New("account ID required")
 	}
 	uri := "/accounts/" + api.AccountID + "/workers/scripts/" + scriptName
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	var r WorkerScriptResponse
 	if err != nil {
 		return r, errors.Wrap(err, errMakeRequestError)
@@ -369,7 +369,7 @@ func (api *API) ListWorkerBindings(ctx context.Context, requestParams *WorkerReq
 		Bindings []workerBindingMeta `json:"result"`
 	}
 	var r WorkerBindingListResponse
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return r, errors.Wrap(err, errMakeRequestError)
 	}
@@ -441,7 +441,7 @@ func (b *bindingContentReader) Read(p []byte) (n int, err error) {
 	// Lazily load the content when Read() is first called
 	if b.content == nil {
 		uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/bindings/%s/content", b.api.AccountID, b.requestParams.ScriptName, b.bindingName)
-		res, err := b.api.makeRequest("GET", uri, nil)
+		res, err := b.api.makeRequest(http.MethodGet, uri, nil)
 		if err != nil {
 			return 0, errors.Wrap(err, errMakeRequestError)
 		}
@@ -476,7 +476,7 @@ func (api *API) ListWorkerScripts(ctx context.Context) (WorkerListResponse, erro
 		return WorkerListResponse{}, errors.New("account ID required")
 	}
 	uri := "/accounts/" + api.AccountID + "/workers/scripts"
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return WorkerListResponse{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -516,7 +516,7 @@ func (api *API) uploadWorkerForZone(ctx context.Context, zoneID, contentType str
 	uri := "/zones/" + zoneID + "/workers/script"
 	headers := make(http.Header)
 	headers.Set("Content-Type", contentType)
-	res, err := api.makeRequestContextWithHeaders(ctx, "PUT", uri, body, headers)
+	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPut, uri, body, headers)
 	var r WorkerScriptResponse
 	if err != nil {
 		return r, errors.Wrap(err, errMakeRequestError)
@@ -535,7 +535,7 @@ func (api *API) uploadWorkerWithName(ctx context.Context, scriptName, contentTyp
 	uri := "/accounts/" + api.AccountID + "/workers/scripts/" + scriptName
 	headers := make(http.Header)
 	headers.Set("Content-Type", contentType)
-	res, err := api.makeRequestContextWithHeaders(ctx, "PUT", uri, body, headers)
+	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPut, uri, body, headers)
 	var r WorkerScriptResponse
 	if err != nil {
 		return r, errors.Wrap(err, errMakeRequestError)
@@ -628,7 +628,7 @@ func (api *API) CreateWorkerRoute(ctx context.Context, zoneID string, route Work
 	}
 
 	uri := "/zones/" + zoneID + "/workers/" + pathComponent
-	res, err := api.makeRequestContext(ctx, "POST", uri, route)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, route)
 	if err != nil {
 		return WorkerRouteResponse{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -645,7 +645,7 @@ func (api *API) CreateWorkerRoute(ctx context.Context, zoneID string, route Work
 // API reference: https://api.cloudflare.com/#worker-routes-delete-route
 func (api *API) DeleteWorkerRoute(ctx context.Context, zoneID string, routeID string) (WorkerRouteResponse, error) {
 	uri := "/zones/" + zoneID + "/workers/routes/" + routeID
-	res, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return WorkerRouteResponse{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -675,7 +675,7 @@ func (api *API) ListWorkerRoutes(ctx context.Context, zoneID string) (WorkerRout
 		pathComponent = "routes"
 	}
 	uri := "/zones/" + zoneID + "/workers/" + pathComponent
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return WorkerRoutesResponse{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -705,7 +705,7 @@ func (api *API) UpdateWorkerRoute(ctx context.Context, zoneID string, routeID st
 		return WorkerRouteResponse{}, err
 	}
 	uri := "/zones/" + zoneID + "/workers/" + pathComponent + "/" + routeID
-	res, err := api.makeRequestContext(ctx, "PUT", uri, route)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, route)
 	if err != nil {
 		return WorkerRouteResponse{}, errors.Wrap(err, errMakeRequestError)
 	}

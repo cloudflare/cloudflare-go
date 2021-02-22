@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/pkg/errors"
@@ -78,7 +79,7 @@ func (api *API) CustomPages(ctx context.Context, options *CustomPageOptions) ([]
 
 	uri := fmt.Sprintf("/%s/%s/custom_pages", pageType, identifier)
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
@@ -120,7 +121,7 @@ func (api *API) CustomPage(ctx context.Context, options *CustomPageOptions, cust
 
 	uri := fmt.Sprintf("/%s/%s/custom_pages/%s", pageType, identifier, customPageID)
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return CustomPage{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -162,7 +163,7 @@ func (api *API) UpdateCustomPage(ctx context.Context, options *CustomPageOptions
 
 	uri := fmt.Sprintf("/%s/%s/custom_pages/%s", pageType, identifier, customPageID)
 
-	res, err := api.makeRequestContext(ctx, "PUT", uri, pageParameters)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, pageParameters)
 	if err != nil {
 		return CustomPage{}, errors.Wrap(err, errMakeRequestError)
 	}

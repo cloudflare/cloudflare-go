@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"net/url"
 	"strconv"
 	"time"
@@ -210,7 +211,7 @@ func (api *API) accessGroups(ctx context.Context, id string, pageOpts Pagination
 		uri = uri + "?" + v.Encode()
 	}
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []AccessGroup{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -246,7 +247,7 @@ func (api *API) accessGroup(ctx context.Context, id, groupID string, routeRoot R
 		groupID,
 	)
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return AccessGroup{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -281,7 +282,7 @@ func (api *API) createAccessGroup(ctx context.Context, id string, accessGroup Ac
 		id,
 	)
 
-	res, err := api.makeRequestContext(ctx, "POST", uri, accessGroup)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, accessGroup)
 	if err != nil {
 		return AccessGroup{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -320,7 +321,7 @@ func (api *API) updateAccessGroup(ctx context.Context, id string, accessGroup Ac
 		accessGroup.ID,
 	)
 
-	res, err := api.makeRequestContext(ctx, "PUT", uri, accessGroup)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, accessGroup)
 	if err != nil {
 		return AccessGroup{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -356,7 +357,7 @@ func (api *API) deleteAccessGroup(ctx context.Context, id string, groupID string
 		groupID,
 	)
 
-	_, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}

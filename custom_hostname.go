@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"net/http"
 	"net/url"
 	"strconv"
 	"time"
@@ -157,7 +158,7 @@ func (api *API) UpdateCustomHostname(ctx context.Context, zoneID string, customH
 // API reference: https://api.cloudflare.com/#custom-hostname-for-a-zone-delete-a-custom-hostname-and-any-issued-ssl-certificates-
 func (api *API) DeleteCustomHostname(ctx context.Context, zoneID string, customHostnameID string) error {
 	uri := "/zones/" + zoneID + "/custom_hostnames/" + customHostnameID
-	res, err := api.makeRequestContext(ctx,"DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}
@@ -176,7 +177,7 @@ func (api *API) DeleteCustomHostname(ctx context.Context, zoneID string, customH
 // API reference: https://api.cloudflare.com/#custom-hostname-for-a-zone-create-custom-hostname
 func (api *API) CreateCustomHostname(ctx context.Context, zoneID string, ch CustomHostname) (*CustomHostnameResponse, error) {
 	uri := "/zones/" + zoneID + "/custom_hostnames"
-	res, err := api.makeRequestContext(ctx, "POST", uri, ch)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, ch)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
@@ -206,7 +207,7 @@ func (api *API) CustomHostnames(ctx context.Context, zoneID string, page int, fi
 	query := "?" + v.Encode()
 
 	uri := "/zones/" + zoneID + "/custom_hostnames" + query
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []CustomHostname{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -224,7 +225,7 @@ func (api *API) CustomHostnames(ctx context.Context, zoneID string, page int, fi
 // API reference: https://api.cloudflare.com/#custom-hostname-for-a-zone-custom-hostname-configuration-details
 func (api *API) CustomHostname(ctx context.Context, zoneID string, customHostnameID string) (CustomHostname, error) {
 	uri := "/zones/" + zoneID + "/custom_hostnames/" + customHostnameID
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return CustomHostname{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -257,7 +258,7 @@ func (api *API) CustomHostnameIDByName(ctx context.Context, zoneID string, hostn
 // API reference: https://api.cloudflare.com/#custom-hostname-fallback-origin-for-a-zone-update-fallback-origin-for-custom-hostnames
 func (api *API) UpdateCustomHostnameFallbackOrigin(ctx context.Context, zoneID string, chfo CustomHostnameFallbackOrigin) (*CustomHostnameFallbackOriginResponse, error) {
 	uri := "/zones/" + zoneID + "/custom_hostnames/fallback_origin"
-	res, err := api.makeRequestContext(ctx, "PUT", uri, chfo)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, chfo)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
@@ -275,7 +276,7 @@ func (api *API) UpdateCustomHostnameFallbackOrigin(ctx context.Context, zoneID s
 // API reference: https://api.cloudflare.com/#custom-hostname-fallback-origin-for-a-zone-delete-fallback-origin-for-custom-hostnames
 func (api *API) DeleteCustomHostnameFallbackOrigin(ctx context.Context, zoneID string) error {
 	uri := "/zones/" + zoneID + "/custom_hostnames/fallback_origin"
-	res, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}
@@ -293,7 +294,7 @@ func (api *API) DeleteCustomHostnameFallbackOrigin(ctx context.Context, zoneID s
 // API reference: https://api.cloudflare.com/#custom-hostname-fallback-origin-for-a-zone-properties
 func (api *API) CustomHostnameFallbackOrigin(ctx context.Context, zoneID string) (CustomHostnameFallbackOrigin, error) {
 	uri := "/zones/" + zoneID + "/custom_hostnames/fallback_origin"
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return CustomHostnameFallbackOrigin{}, errors.Wrap(err, errMakeRequestError)
 	}

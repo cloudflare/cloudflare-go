@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"net/url"
 	"strconv"
 	"time"
@@ -86,7 +87,7 @@ func (api *API) accessApplications(ctx context.Context, id string, pageOpts Pagi
 		uri = uri + "?" + v.Encode()
 	}
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []AccessApplication{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -124,7 +125,7 @@ func (api *API) accessApplication(ctx context.Context, id, applicationID string,
 		applicationID,
 	)
 
-	res, err := api.makeRequestContext(ctx,"GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return AccessApplication{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -155,7 +156,7 @@ func (api *API) CreateZoneLevelAccessApplication(ctx context.Context, zoneID str
 func (api *API) createAccessApplication(ctx context.Context, id string, accessApplication AccessApplication, routeRoot RouteRoot) (AccessApplication, error) {
 	uri := fmt.Sprintf("/%s/%s/access/apps", routeRoot, id)
 
-	res, err := api.makeRequestContext(ctx, "POST", uri, accessApplication)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, accessApplication)
 	if err != nil {
 		return AccessApplication{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -195,7 +196,7 @@ func (api *API) updateAccessApplication(ctx context.Context, id string, accessAp
 		accessApplication.ID,
 	)
 
-	res, err := api.makeRequestContext(ctx,"PUT", uri, accessApplication)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, accessApplication)
 	if err != nil {
 		return AccessApplication{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -231,7 +232,7 @@ func (api *API) deleteAccessApplication(ctx context.Context, id, applicationID s
 		applicationID,
 	)
 
-	_, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}
@@ -263,7 +264,7 @@ func (api *API) revokeAccessApplicationTokens(ctx context.Context, id string, ap
 		applicationID,
 	)
 
-	_, err := api.makeRequestContext(ctx,"POST", uri, nil)
+	_, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}

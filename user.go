@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"net/http"
 	"time"
 
 	"github.com/pkg/errors"
@@ -64,7 +65,7 @@ type UserBillingProfile struct {
 // API reference: https://api.cloudflare.com/#user-user-details
 func (api *API) UserDetails(ctx context.Context) (User, error) {
 	var r UserResponse
-	res, err := api.makeRequestContext(ctx, "GET", "/user", nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, "/user", nil)
 	if err != nil {
 		return User{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -100,7 +101,7 @@ func (api *API) UpdateUser(ctx context.Context, user *User) (User, error) {
 // API reference: https://api.cloudflare.com/#user-billing-profile
 func (api *API) UserBillingProfile(ctx context.Context) (UserBillingProfile, error) {
 	var r userBillingProfileResponse
-	res, err := api.makeRequestContext(ctx, "GET", "/user/billing/profile", nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, "/user/billing/profile", nil)
 	if err != nil {
 		return UserBillingProfile{}, errors.Wrap(err, errMakeRequestError)
 	}

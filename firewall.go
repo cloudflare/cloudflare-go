@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"net/http"
 	"net/url"
 	"strconv"
 	"time"
@@ -202,7 +203,7 @@ func (api *API) listAccessRules(ctx context.Context, prefix string, accessRule A
 	query := "?" + v.Encode()
 
 	uri := prefix + "/firewall/access_rules/rules" + query
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
@@ -217,7 +218,7 @@ func (api *API) listAccessRules(ctx context.Context, prefix string, accessRule A
 
 func (api *API) createAccessRule(ctx context.Context, prefix string, accessRule AccessRule) (*AccessRuleResponse, error) {
 	uri := prefix + "/firewall/access_rules/rules"
-	res, err := api.makeRequestContext(ctx, "POST", uri, accessRule)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, accessRule)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
@@ -234,7 +235,7 @@ func (api *API) createAccessRule(ctx context.Context, prefix string, accessRule 
 func (api *API) retrieveAccessRule(ctx context.Context, prefix, accessRuleID string) (*AccessRuleResponse, error) {
 	uri := prefix + "/firewall/access_rules/rules/" + accessRuleID
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
@@ -266,7 +267,7 @@ func (api *API) updateAccessRule(ctx context.Context, prefix, accessRuleID strin
 
 func (api *API) deleteAccessRule(ctx context.Context, prefix, accessRuleID string) (*AccessRuleResponse, error) {
 	uri := prefix + "/firewall/access_rules/rules/" + accessRuleID
-	res, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}

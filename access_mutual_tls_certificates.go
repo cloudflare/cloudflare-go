@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/pkg/errors"
@@ -59,7 +60,7 @@ func (api *API) accessMutualTLSCertificates(ctx context.Context, id string, rout
 		id,
 	)
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []AccessMutualTLSCertificate{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -97,7 +98,7 @@ func (api *API) accessMutualTLSCertificate(ctx context.Context, id, certificateI
 		certificateID,
 	)
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return AccessMutualTLSCertificate{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -134,7 +135,7 @@ func (api *API) createAccessMutualTLSCertificate(ctx context.Context, id string,
 		id,
 	)
 
-	res, err := api.makeRequestContext(ctx, "POST", uri, certificate)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, certificate)
 	if err != nil {
 		return AccessMutualTLSCertificate{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -172,7 +173,7 @@ func (api *API) updateAccessMutualTLSCertificate(ctx context.Context, id string,
 		certificateID,
 	)
 
-	res, err := api.makeRequestContext(ctx, "PUT", uri, certificate)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, certificate)
 	if err != nil {
 		return AccessMutualTLSCertificate{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -210,7 +211,7 @@ func (api *API) deleteAccessMutualTLSCertificate(ctx context.Context, id, certif
 		certificateID,
 	)
 
-	res, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}

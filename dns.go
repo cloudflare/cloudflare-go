@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"net/http"
 	"net/url"
 	"strconv"
 	"time"
@@ -48,7 +49,7 @@ type DNSListResponse struct {
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-create-dns-record
 func (api *API) CreateDNSRecord(ctx context.Context, zoneID string, rr DNSRecord) (*DNSRecordResponse, error) {
 	uri := "/zones/" + zoneID + "/dns_records"
-	res, err := api.makeRequestContext(ctx, "POST", uri, rr)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, rr)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
@@ -91,7 +92,7 @@ func (api *API) DNSRecords(ctx context.Context, zoneID string, rr DNSRecord) ([]
 		v.Set("page", strconv.Itoa(page))
 		query = "?" + v.Encode()
 		uri := "/zones/" + zoneID + "/dns_records" + query
-		res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
 			return []DNSRecord{}, errors.Wrap(err, errMakeRequestError)
 		}
@@ -116,7 +117,7 @@ func (api *API) DNSRecords(ctx context.Context, zoneID string, rr DNSRecord) ([]
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-dns-record-details
 func (api *API) DNSRecord(ctx context.Context, zoneID, recordID string) (DNSRecord, error) {
 	uri := "/zones/" + zoneID + "/dns_records/" + recordID
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return DNSRecord{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -164,7 +165,7 @@ func (api *API) UpdateDNSRecord(ctx context.Context, zoneID, recordID string, rr
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-delete-dns-record
 func (api *API) DeleteDNSRecord(ctx context.Context, zoneID, recordID string) error {
 	uri := "/zones/" + zoneID + "/dns_records/" + recordID
-	res, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}

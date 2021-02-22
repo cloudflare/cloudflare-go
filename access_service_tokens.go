@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/pkg/errors"
@@ -94,7 +95,7 @@ func (api *API) ZoneLevelAccessServiceTokens(ctx context.Context, zoneID string)
 func (api *API) accessServiceTokens(ctx context.Context, id string, routeRoot RouteRoot) ([]AccessServiceToken, ResultInfo, error) {
 	uri := fmt.Sprintf("/%s/%s/access/service_tokens", routeRoot, id)
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []AccessServiceToken{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -128,7 +129,7 @@ func (api *API) createAccessServiceToken(ctx context.Context, id, name string, r
 		Name string `json:"name"`
 	}{name})
 
-	res, err := api.makeRequestContext(ctx, "POST", uri, marshalledName)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, marshalledName)
 
 	if err != nil {
 		return AccessServiceTokenCreateResponse{}, errors.Wrap(err, errMakeRequestError)
@@ -166,7 +167,7 @@ func (api *API) updateAccessServiceToken(ctx context.Context, id, uuid, name str
 		Name string `json:"name"`
 	}{name})
 
-	res, err := api.makeRequestContext(ctx, "PUT", uri, marshalledName)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, marshalledName)
 	if err != nil {
 		return AccessServiceTokenUpdateResponse{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -199,7 +200,7 @@ func (api *API) DeleteZoneLevelAccessServiceToken(ctx context.Context, zoneID, u
 func (api *API) deleteAccessServiceToken(ctx context.Context, id, uuid string, routeRoot RouteRoot) (AccessServiceTokenUpdateResponse, error) {
 	uri := fmt.Sprintf("/%s/%s/access/service_tokens/%s", routeRoot, id, uuid)
 
-	res, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return AccessServiceTokenUpdateResponse{}, errors.Wrap(err, errMakeRequestError)
 	}

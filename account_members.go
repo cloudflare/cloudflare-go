@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"net/url"
 	"strconv"
 
@@ -74,7 +75,7 @@ func (api *API) AccountMembers(ctx context.Context, accountID string, pageOpts P
 		uri = uri + "?" + v.Encode()
 	}
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []AccountMember{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -102,7 +103,7 @@ func (api *API) CreateAccountMember(ctx context.Context, accountID string, email
 		Email: emailAddress,
 		Roles: roles,
 	}
-	res, err := api.makeRequestContext(ctx, "POST", uri, newMember)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, newMember)
 	if err != nil {
 		return AccountMember{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -126,7 +127,7 @@ func (api *API) DeleteAccountMember(ctx context.Context, accountID string, userI
 
 	uri := fmt.Sprintf("/accounts/%s/members/%s", accountID, userID)
 
-	_, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}
@@ -144,7 +145,7 @@ func (api *API) UpdateAccountMember(ctx context.Context, accountID string, userI
 
 	uri := fmt.Sprintf("/accounts/%s/members/%s", accountID, userID)
 
-	res, err := api.makeRequestContext(ctx, "PUT", uri, member)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, member)
 	if err != nil {
 		return AccountMember{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -172,7 +173,7 @@ func (api *API) AccountMember(ctx context.Context, accountID string, memberID st
 		memberID,
 	)
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return AccountMember{}, errors.Wrap(err, errMakeRequestError)
 	}

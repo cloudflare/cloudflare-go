@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/pkg/errors"
@@ -59,7 +60,7 @@ func (api *API) ZoneLevelAccessOrganization(ctx context.Context, zoneID string) 
 func (api *API) accessOrganization(ctx context.Context, id string, routeRoot RouteRoot) (AccessOrganization, ResultInfo, error) {
 	uri := fmt.Sprintf("/%s/%s/access/organizations", routeRoot, id)
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return AccessOrganization{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -90,7 +91,7 @@ func (api *API) CreateZoneLevelAccessOrganization(ctx context.Context, zoneID st
 func (api *API) createAccessOrganization(ctx context.Context, id string, accessOrganization AccessOrganization, routeRoot RouteRoot) (AccessOrganization, error) {
 	uri := fmt.Sprintf("/%s/%s/access/organizations", routeRoot, id)
 
-	res, err := api.makeRequestContext(ctx, "POST", uri, accessOrganization)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, accessOrganization)
 	if err != nil {
 		return AccessOrganization{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -121,7 +122,7 @@ func (api *API) UpdateZoneLevelAccessOrganization(ctx context.Context, zoneID st
 func (api *API) updateAccessOrganization(ctx context.Context, id string, accessOrganization AccessOrganization, routeRoot RouteRoot) (AccessOrganization, error) {
 	uri := fmt.Sprintf("/%s/%s/access/organizations", routeRoot, id)
 
-	res, err := api.makeRequestContext(ctx, "PUT", uri, accessOrganization)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, accessOrganization)
 	if err != nil {
 		return AccessOrganization{}, errors.Wrap(err, errMakeRequestError)
 	}

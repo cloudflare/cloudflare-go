@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"net/http"
 	"net/url"
 	"time"
 
@@ -91,7 +92,7 @@ type originCACertificateResponseRevoke struct {
 // API reference: https://api.cloudflare.com/#cloudflare-ca-create-certificate
 func (api *API) CreateOriginCertificate(ctx context.Context, certificate OriginCACertificate) (*OriginCACertificate, error) {
 	uri := "/certificates"
-	res, err := api.makeRequestWithAuthType(ctx, "POST", uri, certificate, AuthUserService)
+	res, err := api.makeRequestWithAuthType(ctx, http.MethodPost, uri, certificate, AuthUserService)
 
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
@@ -123,7 +124,7 @@ func (api *API) OriginCertificates(ctx context.Context, options OriginCACertific
 		v.Set("zone_id", options.ZoneID)
 	}
 	uri := "/certificates" + "?" + v.Encode()
-	res, err := api.makeRequestWithAuthType(ctx, "GET", uri, nil, AuthUserService)
+	res, err := api.makeRequestWithAuthType(ctx, http.MethodGet, uri, nil, AuthUserService)
 
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
@@ -151,7 +152,7 @@ func (api *API) OriginCertificates(ctx context.Context, options OriginCACertific
 // API reference: https://api.cloudflare.com/#cloudflare-ca-certificate-details
 func (api *API) OriginCertificate(ctx context.Context, certificateID string) (*OriginCACertificate, error) {
 	uri := "/certificates/" + certificateID
-	res, err := api.makeRequestWithAuthType(ctx, "GET", uri, nil, AuthUserService)
+	res, err := api.makeRequestWithAuthType(ctx, http.MethodGet, uri, nil, AuthUserService)
 
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
@@ -179,7 +180,7 @@ func (api *API) OriginCertificate(ctx context.Context, certificateID string) (*O
 // API reference: https://api.cloudflare.com/#cloudflare-ca-revoke-certificate
 func (api *API) RevokeOriginCertificate(ctx context.Context, certificateID string) (*OriginCACertificateID, error) {
 	uri := "/certificates/" + certificateID
-	res, err := api.makeRequestWithAuthType(ctx, "DELETE", uri, nil, AuthUserService)
+	res, err := api.makeRequestWithAuthType(ctx, http.MethodDelete, uri, nil, AuthUserService)
 
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)

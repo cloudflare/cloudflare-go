@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"net/url"
 	"strconv"
 
@@ -63,7 +64,7 @@ func (api *API) Accounts(ctx context.Context, pageOpts PaginationOptions) ([]Acc
 		uri = uri + "?" + v.Encode()
 	}
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []Account{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -82,7 +83,7 @@ func (api *API) Accounts(ctx context.Context, pageOpts PaginationOptions) ([]Acc
 func (api *API) Account(ctx context.Context, accountID string) (Account, ResultInfo, error) {
 	uri := "/accounts/" + accountID
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return Account{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -102,7 +103,7 @@ func (api *API) Account(ctx context.Context, accountID string) (Account, ResultI
 func (api *API) UpdateAccount(ctx context.Context, accountID string, account Account) (Account, error) {
 	uri := "/accounts/" + accountID
 
-	res, err := api.makeRequestContext(ctx, "PUT", uri, account)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, account)
 	if err != nil {
 		return Account{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -123,7 +124,7 @@ func (api *API) UpdateAccount(ctx context.Context, accountID string, account Acc
 func (api *API) CreateAccount(ctx context.Context, account Account) (Account, error) {
 	uri := "/accounts"
 
-	res, err := api.makeRequestContext(ctx, "POST", uri, account)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, account)
 	if err != nil {
 		return Account{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -148,7 +149,7 @@ func (api *API) DeleteAccount(ctx context.Context, accountID string) error {
 
 	uri := fmt.Sprintf("/accounts/%s", accountID)
 
-	_, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}

@@ -231,7 +231,7 @@ func TestWorkers_DeleteWorker(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/workers/script", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "DELETE", r.Method, "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, deleteWorkerResponseData)
 	})
@@ -249,7 +249,7 @@ func TestWorkers_DeleteWorkerWithName(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/accounts/foo/workers/scripts/bar", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "DELETE", r.Method, "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, deleteWorkerResponseData)
 	})
@@ -275,7 +275,7 @@ func TestWorkers_DownloadWorker(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/workers/script", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, workerScript)
 	})
@@ -295,7 +295,7 @@ func TestWorkers_DownloadWorkerWithName(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/accounts/foo/workers/scripts/bar", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, workerScript)
 	})
@@ -323,7 +323,7 @@ func TestWorkers_ListWorkerScripts(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/accounts/foo/workers/scripts", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application-json")
 		fmt.Fprintf(w, listWorkersResponseData)
 	})
@@ -354,7 +354,7 @@ func TestWorkers_UploadWorker(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/workers/script", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		contentTypeHeader := r.Header.Get("content-type")
 		assert.Equal(t, "application/javascript", contentTypeHeader, "Expected content-type request header to be 'application/javascript', got %s", contentTypeHeader)
 		w.Header().Set("content-type", "application/json")
@@ -382,7 +382,7 @@ func TestWorkers_UploadWorkerWithName(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/accounts/foo/workers/scripts/bar", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		contentTypeHeader := r.Header.Get("content-type")
 		assert.Equal(t, "application/javascript", contentTypeHeader, "Expected content-type request header to be 'application/javascript', got %s", contentTypeHeader)
 		w.Header().Set("content-type", "application/json")
@@ -410,7 +410,7 @@ func TestWorkers_UploadWorkerSingleScriptWithAccount(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/workers/script", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		contentTypeHeader := r.Header.Get("content-type")
 		assert.Equal(t, "application/javascript", contentTypeHeader, "Expected content-type request header to be 'application/javascript', got %s", contentTypeHeader)
 		w.Header().Set("content-type", "application/json")
@@ -447,7 +447,7 @@ func TestWorkers_UploadWorkerWithInheritBinding(t *testing.T) {
 
 	// Setup route handler for both single-script and multi-script
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 
 		mpUpload, err := parseMultipartUpload(r)
 		assert.NoError(t, err)
@@ -513,7 +513,7 @@ func TestWorkers_UploadWorkerWithKVBinding(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 
 		mpUpload, err := parseMultipartUpload(r)
 		assert.NoError(t, err)
@@ -550,7 +550,7 @@ func TestWorkers_UploadWorkerWithWasmBinding(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 
 		mpUpload, err := parseMultipartUpload(r)
 		assert.NoError(t, err)
@@ -592,7 +592,7 @@ func TestWorkers_UploadWorkerWithPlainTextBinding(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 
 		mpUpload, err := parseMultipartUpload(r)
 		assert.NoError(t, err)
@@ -629,7 +629,7 @@ func TestWorkers_UploadWorkerWithSecretTextBinding(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 
 		mpUpload, err := parseMultipartUpload(r)
 		assert.NoError(t, err)
@@ -666,7 +666,7 @@ func TestWorkers_CreateWorkerRoute(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/workers/filters", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "POST", r.Method, "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application-json")
 		fmt.Fprintf(w, createWorkerRouteResponse)
 	})
@@ -683,7 +683,7 @@ func TestWorkers_CreateWorkerRouteEnt(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/workers/routes", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "POST", r.Method, "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application-json")
 		fmt.Fprintf(w, createWorkerRouteResponse)
 	})
@@ -700,7 +700,7 @@ func TestWorkers_CreateWorkerRouteSingleScriptWithAccount(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/workers/filters", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "POST", r.Method, "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application-json")
 		fmt.Fprintf(w, createWorkerRouteResponse)
 	})
@@ -725,7 +725,7 @@ func TestWorkers_CreateWorkerRouteWithNoScript(t *testing.T) {
 	setup(UsingAccount("foo"))
 
 	mux.HandleFunc("/zones/foo/workers/routes", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "POST", r.Method, "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application-json")
 		fmt.Fprintf(w, createWorkerRouteResponse)
 	})
@@ -740,7 +740,7 @@ func TestWorkers_DeleteWorkerRoute(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/workers/routes/e7a57d8746e74ae49c25994dadb421b1", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "DELETE", r.Method, "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application-json")
 		fmt.Fprintf(w, deleteWorkerRouteResponseData)
 	})
@@ -759,7 +759,7 @@ func TestWorkers_DeleteWorkerRouteEnt(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/workers/routes/e7a57d8746e74ae49c25994dadb421b1", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "DELETE", r.Method, "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application-json")
 		fmt.Fprintf(w, deleteWorkerRouteResponseData)
 	})
@@ -778,7 +778,7 @@ func TestWorkers_ListWorkerRoutes(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/workers/filters", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application-json")
 		fmt.Fprintf(w, listRouteResponseData)
 	})
@@ -800,7 +800,7 @@ func TestWorkers_ListWorkerRoutesEnt(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/workers/routes", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application-json")
 		fmt.Fprintf(w, listRouteEntResponseData)
 	})
@@ -823,7 +823,7 @@ func TestWorkers_UpdateWorkerRoute(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/workers/filters/e7a57d8746e74ae49c25994dadb421b1", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application-json")
 		fmt.Fprintf(w, updateWorkerRouteResponse)
 	})
@@ -845,7 +845,7 @@ func TestWorkers_UpdateWorkerRouteEnt(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/workers/routes/e7a57d8746e74ae49c25994dadb421b1", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application-json")
 		fmt.Fprintf(w, updateWorkerRouteEntResponse)
 	})
@@ -867,7 +867,7 @@ func TestWorkers_UpdateWorkerRouteSingleScriptWithAccount(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/workers/filters/e7a57d8746e74ae49c25994dadb421b1", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application-json")
 		fmt.Fprintf(w, updateWorkerRouteEntResponse)
 	})
@@ -889,13 +889,13 @@ func TestWorkers_ListWorkerBindingsMultiScript(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/accounts/foo/workers/scripts/my-script/bindings", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application-json")
 		fmt.Fprintf(w, listBindingsResponseData)
 	})
 
 	mux.HandleFunc("/accounts/foo/workers/scripts/my-script/bindings/MY_WASM/content", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/wasm")
 		_, _ = w.Write([]byte("mock multi-script wasm"))
 	})
@@ -957,7 +957,7 @@ func TestWorkers_UpdateWorkerRouteWithNoScript(t *testing.T) {
 	setup(UsingAccount("foo"))
 
 	mux.HandleFunc("/zones/foo/workers/routes/e7a57d8746e74ae49c25994dadb421b1", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application-json")
 		fmt.Fprintf(w, updateWorkerRouteEntResponse)
 	})

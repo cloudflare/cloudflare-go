@@ -15,7 +15,7 @@ func TestCustomHostname_DeleteCustomHostname(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/custom_hostnames/bar", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "DELETE", r.Method, "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `
@@ -34,7 +34,7 @@ func TestCustomHostname_CreateCustomHostname(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/custom_hostnames", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "POST", r.Method, "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
 		w.WriteHeader(http.StatusCreated)
@@ -120,7 +120,7 @@ func TestCustomHostname_CreateCustomHostname_CustomOrigin(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/custom_hostnames", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "POST", r.Method, "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
 		w.WriteHeader(http.StatusCreated)
@@ -178,7 +178,7 @@ func TestCustomHostname_CustomHostnames(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/custom_hostnames", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
@@ -256,7 +256,7 @@ func TestCustomHostname_CustomHostname(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/custom_hostnames/bar", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
@@ -326,7 +326,7 @@ func TestCustomHostname_CustomHostname_WithSSLError(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/custom_hostnames/bar", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
@@ -368,7 +368,7 @@ func TestCustomHostname_CustomHostname_WithSSLError(t *testing.T) {
 			CnameName:   "810b7d5f01154524b961ba0cd578acc2.example.com",
 			CnameTarget: "dcv.digicert.com",
 			ValidationErrors: []CustomHostnameSSLValidationErrors{
-				CustomHostnameSSLValidationErrors{
+				{
 					Message: "SERVFAIL looking up CAA for example.com",
 				},
 			},
@@ -512,7 +512,7 @@ func TestCustomHostname_CustomHostnameFallbackOrigin(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/custom_hostnames/fallback_origin", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
@@ -549,7 +549,7 @@ func TestCustomHostname_DeleteCustomHostnameFallbackOrigin(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/custom_hostnames/fallback_origin", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "DELETE", r.Method, "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `
@@ -568,7 +568,7 @@ func TestCustomHostname_UpdateCustomHostnameFallbackOrigin(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/custom_hostnames/fallback_origin", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
 		w.WriteHeader(http.StatusCreated)
@@ -610,7 +610,7 @@ func TestCustomHostname_CreateCustomHostnameCustomCertificateAuthority(t *testin
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/custom_hostnames", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "POST", r.Method, "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
 		w.WriteHeader(http.StatusCreated)

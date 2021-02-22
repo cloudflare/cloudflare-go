@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
@@ -65,7 +66,7 @@ type FilterValidationExpressionMessage struct {
 func (api *API) Filter(ctx context.Context, zoneID, filterID string) (Filter, error) {
 	uri := fmt.Sprintf("/zones/%s/filters/%s", zoneID, filterID)
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return Filter{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -98,7 +99,7 @@ func (api *API) Filters(ctx context.Context, zoneID string, pageOpts PaginationO
 		uri = uri + "?" + v.Encode()
 	}
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []Filter{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -118,7 +119,7 @@ func (api *API) Filters(ctx context.Context, zoneID string, pageOpts PaginationO
 func (api *API) CreateFilters(ctx context.Context, zoneID string, filters []Filter) ([]Filter, error) {
 	uri := "/zones/" + zoneID + "/filters"
 
-	res, err := api.makeRequestContext(ctx, "POST", uri, filters)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, filters)
 	if err != nil {
 		return []Filter{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -142,7 +143,7 @@ func (api *API) UpdateFilter(ctx context.Context, zoneID string, filter Filter) 
 
 	uri := fmt.Sprintf("/zones/%s/filters/%s", zoneID, filter.ID)
 
-	res, err := api.makeRequestContext(ctx, "PUT", uri, filter)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, filter)
 	if err != nil {
 		return Filter{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -168,7 +169,7 @@ func (api *API) UpdateFilters(ctx context.Context, zoneID string, filters []Filt
 
 	uri := "/zones/" + zoneID + "/filters"
 
-	res, err := api.makeRequestContext(ctx, "PUT", uri, filters)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, filters)
 	if err != nil {
 		return []Filter{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -192,7 +193,7 @@ func (api *API) DeleteFilter(ctx context.Context, zoneID, filterID string) error
 
 	uri := fmt.Sprintf("/zones/%s/filters/%s", zoneID, filterID)
 
-	_, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}
@@ -207,7 +208,7 @@ func (api *API) DeleteFilters(ctx context.Context, zoneID string, filterIDs []st
 	ids := strings.Join(filterIDs, ",")
 	uri := fmt.Sprintf("/zones/%s/filters?id=%s", zoneID, ids)
 
-	_, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}
@@ -222,7 +223,7 @@ func (api *API) ValidateFilterExpression(ctx context.Context, expression string)
 	uri := fmt.Sprintf("/filters/validate-expr")
 	expressionPayload := FilterValidateExpression{Expression: expression}
 
-	_, err := api.makeRequestContext(ctx, "POST", uri, expressionPayload)
+	_, err := api.makeRequestContext(ctx, http.MethodPost, uri, expressionPayload)
 	if err != nil {
 		var filterValidationResponse FilterValidateExpressionResponse
 

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net"
+	"net/http"
 	"strconv"
 	"strings"
 	"time"
@@ -266,7 +267,7 @@ func (c SpectrumApplicationConnectivity) Static() bool {
 func (api *API) SpectrumApplications(ctx context.Context, zoneID string) ([]SpectrumApplication, error) {
 	uri := "/zones/" + zoneID + "/spectrum/apps"
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []SpectrumApplication{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -290,7 +291,7 @@ func (api *API) SpectrumApplication(ctx context.Context, zoneID string, applicat
 		applicationID,
 	)
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return SpectrumApplication{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -310,7 +311,7 @@ func (api *API) SpectrumApplication(ctx context.Context, zoneID string, applicat
 func (api *API) CreateSpectrumApplication(ctx context.Context, zoneID string, appDetails SpectrumApplication) (SpectrumApplication, error) {
 	uri := "/zones/" + zoneID + "/spectrum/apps"
 
-	res, err := api.makeRequestContext(ctx, "POST", uri, appDetails)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, appDetails)
 	if err != nil {
 		return SpectrumApplication{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -334,7 +335,7 @@ func (api *API) UpdateSpectrumApplication(ctx context.Context, zoneID, appID str
 		appID,
 	)
 
-	res, err := api.makeRequestContext(ctx, "PUT", uri, appDetails)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, appDetails)
 	if err != nil {
 		return SpectrumApplication{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -358,7 +359,7 @@ func (api *API) DeleteSpectrumApplication(ctx context.Context, zoneID string, ap
 		applicationID,
 	)
 
-	_, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}

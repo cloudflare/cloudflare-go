@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"net/http"
 	"net/url"
 	"time"
 
@@ -56,7 +57,7 @@ func (api *API) CreateRailgun(ctx context.Context, name string) (Railgun, error)
 	}{
 		Name: name,
 	}
-	res, err := api.makeRequestContext(ctx, "POST", uri, params)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return Railgun{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -76,7 +77,7 @@ func (api *API) ListRailguns(ctx context.Context, options RailgunListOptions) ([
 		v.Set("direction", options.Direction)
 	}
 	uri := api.userBaseURL("") + "/railguns" + "?" + v.Encode()
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
@@ -92,7 +93,7 @@ func (api *API) ListRailguns(ctx context.Context, options RailgunListOptions) ([
 // API reference: https://api.cloudflare.com/#railgun-railgun-details
 func (api *API) RailgunDetails(ctx context.Context, railgunID string) (Railgun, error) {
 	uri := api.userBaseURL("") + "/railguns/" + railgunID
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return Railgun{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -108,7 +109,7 @@ func (api *API) RailgunDetails(ctx context.Context, railgunID string) (Railgun, 
 // API reference: https://api.cloudflare.com/#railgun-get-zones-connected-to-a-railgun
 func (api *API) RailgunZones(ctx context.Context, railgunID string) ([]Zone, error) {
 	uri := api.userBaseURL("") + "/railguns/" + railgunID + "/zones"
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
@@ -159,7 +160,7 @@ func (api *API) DisableRailgun(ctx context.Context, railgunID string) (Railgun, 
 // API reference: https://api.cloudflare.com/#railgun-delete-railgun
 func (api *API) DeleteRailgun(ctx context.Context, railgunID string) error {
 	uri := api.userBaseURL("") + "/railguns/" + railgunID
-	if _, err := api.makeRequestContext(ctx, "DELETE", uri, nil); err != nil {
+	if _, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil); err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}
 	return nil
@@ -219,7 +220,7 @@ type railgunDiagnosisResponse struct {
 // API reference: https://api.cloudflare.com/#railguns-for-a-zone-get-available-railguns
 func (api *API) ZoneRailguns(ctx context.Context, zoneID string) ([]ZoneRailgun, error) {
 	uri := "/zones/" + zoneID + "/railguns"
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
@@ -235,7 +236,7 @@ func (api *API) ZoneRailguns(ctx context.Context, zoneID string) ([]ZoneRailgun,
 // API reference: https://api.cloudflare.com/#railguns-for-a-zone-get-railgun-details
 func (api *API) ZoneRailgunDetails(ctx context.Context, zoneID, railgunID string) (ZoneRailgun, error) {
 	uri := "/zones/" + zoneID + "/railguns/" + railgunID
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return ZoneRailgun{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -251,7 +252,7 @@ func (api *API) ZoneRailgunDetails(ctx context.Context, zoneID, railgunID string
 // API reference: https://api.cloudflare.com/#railgun-connections-for-a-zone-test-railgun-connection
 func (api *API) TestRailgunConnection(ctx context.Context, zoneID, railgunID string) (RailgunDiagnosis, error) {
 	uri := "/zones/" + zoneID + "/railguns/" + railgunID + "/diagnose"
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return RailgunDiagnosis{}, errors.Wrap(err, errMakeRequestError)
 	}

@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"net/http"
 	"net/url"
 	"strconv"
 
@@ -119,7 +120,7 @@ func (api *API) ListWAFPackages(ctx context.Context, zoneID string) ([]WAFPackag
 		v.Set("page", strconv.Itoa(page))
 		query := "?" + v.Encode()
 		uri := "/zones/" + zoneID + "/firewall/waf/packages" + query
-		res, err = api.makeRequestContext(ctx, "GET", uri, nil)
+		res, err = api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
 			return []WAFPackage{}, errors.Wrap(err, errMakeRequestError)
 		}
@@ -152,7 +153,7 @@ func (api *API) ListWAFPackages(ctx context.Context, zoneID string) ([]WAFPackag
 // API Reference: https://api.cloudflare.com/#waf-rule-packages-firewall-package-details
 func (api *API) WAFPackage(ctx context.Context, zoneID, packageID string) (WAFPackage, error) {
 	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return WAFPackage{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -203,7 +204,7 @@ func (api *API) ListWAFGroups(ctx context.Context, zoneID, packageID string) ([]
 		v.Set("page", strconv.Itoa(page))
 		query := "?" + v.Encode()
 		uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID + "/groups" + query
-		res, err = api.makeRequestContext(ctx, "GET", uri, nil)
+		res, err = api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
 			return []WAFGroup{}, errors.Wrap(err, errMakeRequestError)
 		}
@@ -235,7 +236,7 @@ func (api *API) ListWAFGroups(ctx context.Context, zoneID, packageID string) ([]
 // API Reference: https://api.cloudflare.com/#waf-rule-groups-rule-group-details
 func (api *API) WAFGroup(ctx context.Context, zoneID, packageID, groupID string) (WAFGroup, error) {
 	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID + "/groups/" + groupID
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return WAFGroup{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -287,7 +288,7 @@ func (api *API) ListWAFRules(ctx context.Context, zoneID, packageID string) ([]W
 		v.Set("page", strconv.Itoa(page))
 		query := "?" + v.Encode()
 		uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID + "/rules" + query
-		res, err = api.makeRequestContext(ctx, "GET", uri, nil)
+		res, err = api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
 			return []WAFRule{}, errors.Wrap(err, errMakeRequestError)
 		}
@@ -320,7 +321,7 @@ func (api *API) ListWAFRules(ctx context.Context, zoneID, packageID string) ([]W
 // API Reference: https://api.cloudflare.com/#waf-rules-rule-details
 func (api *API) WAFRule(ctx context.Context, zoneID, packageID, ruleID string) (WAFRule, error) {
 	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID + "/rules/" + ruleID
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return WAFRule{}, errors.Wrap(err, errMakeRequestError)
 	}

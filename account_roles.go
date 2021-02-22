@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 
 	"github.com/pkg/errors"
 )
@@ -46,7 +47,7 @@ type AccountRoleDetailResponse struct {
 func (api *API) AccountRoles(ctx context.Context, accountID string) ([]AccountRole, error) {
 	uri := "/accounts/" + accountID + "/roles"
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []AccountRole{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -66,7 +67,7 @@ func (api *API) AccountRoles(ctx context.Context, accountID string) ([]AccountRo
 func (api *API) AccountRole(ctx context.Context, accountID string, roleID string) (AccountRole, error) {
 	uri := fmt.Sprintf("/accounts/%s/roles/%s", accountID, roleID)
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return AccountRole{}, errors.Wrap(err, errMakeRequestError)
 	}

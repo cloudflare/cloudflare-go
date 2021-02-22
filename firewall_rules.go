@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"net/url"
 	"strconv"
 	"time"
@@ -59,7 +60,7 @@ func (api *API) FirewallRules(ctx context.Context, zoneID string, pageOpts Pagin
 		uri = uri + "?" + v.Encode()
 	}
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []FirewallRule{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -79,7 +80,7 @@ func (api *API) FirewallRules(ctx context.Context, zoneID string, pageOpts Pagin
 func (api *API) FirewallRule(ctx context.Context, zoneID, firewallRuleID string) (FirewallRule, error) {
 	uri := fmt.Sprintf("/zones/%s/firewall/rules/%s", zoneID, firewallRuleID)
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return FirewallRule{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -99,7 +100,7 @@ func (api *API) FirewallRule(ctx context.Context, zoneID, firewallRuleID string)
 func (api *API) CreateFirewallRules(ctx context.Context, zoneID string, firewallRules []FirewallRule) ([]FirewallRule, error) {
 	uri := fmt.Sprintf("/zones/%s/firewall/rules", zoneID)
 
-	res, err := api.makeRequestContext(ctx, "POST", uri, firewallRules)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, firewallRules)
 	if err != nil {
 		return []FirewallRule{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -123,7 +124,7 @@ func (api *API) UpdateFirewallRule(ctx context.Context, zoneID string, firewallR
 
 	uri := fmt.Sprintf("/zones/%s/firewall/rules/%s", zoneID, firewallRule.ID)
 
-	res, err := api.makeRequestContext(ctx, "PUT", uri, firewallRule)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, firewallRule)
 	if err != nil {
 		return FirewallRule{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -149,7 +150,7 @@ func (api *API) UpdateFirewallRules(ctx context.Context, zoneID string, firewall
 
 	uri := fmt.Sprintf("/zones/%s/firewall/rules", zoneID)
 
-	res, err := api.makeRequestContext(ctx, "PUT", uri, firewallRules)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, firewallRules)
 	if err != nil {
 		return []FirewallRule{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -173,7 +174,7 @@ func (api *API) DeleteFirewallRule(ctx context.Context, zoneID, firewallRuleID s
 
 	uri := fmt.Sprintf("/zones/%s/firewall/rules/%s", zoneID, firewallRuleID)
 
-	_, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}
@@ -193,7 +194,7 @@ func (api *API) DeleteFirewallRules(ctx context.Context, zoneID string, firewall
 
 	uri := fmt.Sprintf("/zones/%s/firewall/rules?%s", zoneID, v.Encode())
 
-	_, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}

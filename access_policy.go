@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"net/url"
 	"strconv"
 	"time"
@@ -85,7 +86,7 @@ func (api *API) accessPolicies(ctx context.Context, id string, applicationID str
 		uri = uri + "?" + v.Encode()
 	}
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []AccessPolicy{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -122,7 +123,7 @@ func (api *API) accessPolicy(ctx context.Context, id string, applicationID strin
 		policyID,
 	)
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return AccessPolicy{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -158,7 +159,7 @@ func (api *API) createAccessPolicy(ctx context.Context, id, applicationID string
 		applicationID,
 	)
 
-	res, err := api.makeRequestContext(ctx, "POST", uri, accessPolicy)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, accessPolicy)
 	if err != nil {
 		return AccessPolicy{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -198,7 +199,7 @@ func (api *API) updateAccessPolicy(ctx context.Context, id, applicationID string
 		accessPolicy.ID,
 	)
 
-	res, err := api.makeRequestContext(ctx, "PUT", uri, accessPolicy)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, accessPolicy)
 	if err != nil {
 		return AccessPolicy{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -235,7 +236,7 @@ func (api *API) deleteAccessPolicy(ctx context.Context, id, applicationID, acces
 		accessPolicyID,
 	)
 
-	_, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}

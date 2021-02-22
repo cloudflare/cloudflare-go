@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/pkg/errors"
@@ -96,7 +97,7 @@ type APITokenVerifyBody struct {
 func (api *API) GetAPIToken(ctx context.Context, tokenID string) (APIToken, error) {
 	uri := "/user/tokens/" + tokenID
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return APIToken{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -114,7 +115,7 @@ func (api *API) GetAPIToken(ctx context.Context, tokenID string) (APIToken, erro
 //
 // API reference: https://api.cloudflare.com/#user-api-tokens-list-tokens
 func (api *API) APITokens(ctx context.Context) ([]APIToken, error) {
-	res, err := api.makeRequestContext(ctx, "GET", "/user/tokens", nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, "/user/tokens", nil)
 	if err != nil {
 		return []APIToken{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -137,7 +138,7 @@ func (api *API) APITokens(ctx context.Context) ([]APIToken, error) {
 //
 // API reference: https://api.cloudflare.com/#user-api-tokens-create-token
 func (api *API) CreateAPIToken(ctx context.Context, token APIToken) (APIToken, error) {
-	res, err := api.makeRequestContext(ctx, "POST", "/user/tokens", token)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, "/user/tokens", token)
 	if err != nil {
 		return APIToken{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -155,7 +156,7 @@ func (api *API) CreateAPIToken(ctx context.Context, token APIToken) (APIToken, e
 //
 // API reference: https://api.cloudflare.com/#user-api-tokens-update-token
 func (api *API) UpdateAPIToken(ctx context.Context, tokenID string, token APIToken) (APIToken, error) {
-	res, err := api.makeRequestContext(ctx, "PUT", "/user/tokens/"+tokenID, token)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, "/user/tokens/"+tokenID, token)
 	if err != nil {
 		return APIToken{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -175,7 +176,7 @@ func (api *API) UpdateAPIToken(ctx context.Context, tokenID string, token APITok
 func (api *API) RollAPIToken(ctx context.Context, tokenID string) (string, error) {
 	uri := fmt.Sprintf("/user/tokens/%s/value", tokenID)
 
-	res, err := api.makeRequestContext(ctx, "PUT", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, nil)
 	if err != nil {
 		return "", errors.Wrap(err, errMakeRequestError)
 	}
@@ -193,7 +194,7 @@ func (api *API) RollAPIToken(ctx context.Context, tokenID string) (string, error
 //
 // API reference: https://api.cloudflare.com/#user-api-tokens-roll-token
 func (api *API) VerifyAPIToken(ctx context.Context) (APITokenVerifyBody, error) {
-	res, err := api.makeRequestContext(ctx, "GET", "/user/tokens/verify", nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, "/user/tokens/verify", nil)
 	if err != nil {
 		return APITokenVerifyBody{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -211,7 +212,7 @@ func (api *API) VerifyAPIToken(ctx context.Context) (APITokenVerifyBody, error) 
 //
 // API reference: https://api.cloudflare.com/#user-api-tokens-delete-token
 func (api *API) DeleteAPIToken(ctx context.Context, tokenID string) error {
-	_, err := api.makeRequestContext(ctx, "DELETE", "/user/tokens/"+tokenID, nil)
+	_, err := api.makeRequestContext(ctx, http.MethodDelete, "/user/tokens/"+tokenID, nil)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}
@@ -224,7 +225,7 @@ func (api *API) DeleteAPIToken(ctx context.Context, tokenID string) error {
 // API reference: https://api.cloudflare.com/#permission-groups-list-permission-groups
 func (api *API) ListAPITokensPermissionGroups(ctx context.Context) ([]APITokenPermissionGroups, error) {
 	var r APITokenPermissionGroupsResponse
-	res, err := api.makeRequestContext(ctx, "GET", "/user/tokens/permission_groups", nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, "/user/tokens/permission_groups", nil)
 	if err != nil {
 		return []APITokenPermissionGroups{}, errors.Wrap(err, errMakeRequestError)
 	}

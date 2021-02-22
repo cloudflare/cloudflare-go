@@ -29,7 +29,7 @@ func TestVirtualDNSUserAnalytics(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		expectedMetrics := "queryCount,uncachedCount,staleCount,responseTimeAvg,responseTimeMedia,responseTime90th,responseTime99th"
 
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET'")
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET'")
 		assert.Equal(t, expectedMetrics, r.URL.Query().Get("metrics"), "Expected many metrics in URL parameter")
 		assert.Equal(t, since.Format(time.RFC3339), r.URL.Query().Get("since"), "Expected since parameter in URL")
 		assert.Equal(t, until.Format(time.RFC3339), r.URL.Query().Get("until"), "Expected until parameter in URL")

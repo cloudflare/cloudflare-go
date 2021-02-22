@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"net/http"
 	"net/url"
 	"strconv"
 
@@ -90,7 +91,7 @@ type rateLimitListResponse struct {
 // API reference: https://api.cloudflare.com/#rate-limits-for-a-zone-create-a-ratelimit
 func (api *API) CreateRateLimit(ctx context.Context, zoneID string, limit RateLimit) (RateLimit, error) {
 	uri := "/zones/" + zoneID + "/rate_limits"
-	res, err := api.makeRequestContext(ctx, "POST", uri, limit)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, limit)
 	if err != nil {
 		return RateLimit{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -118,7 +119,7 @@ func (api *API) ListRateLimits(ctx context.Context, zoneID string, pageOpts Pagi
 		uri = uri + "?" + v.Encode()
 	}
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []RateLimit{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -165,7 +166,7 @@ func (api *API) ListAllRateLimits(ctx context.Context, zoneID string) ([]RateLim
 // API reference: https://api.cloudflare.com/#rate-limits-for-a-zone-rate-limit-details
 func (api *API) RateLimit(ctx context.Context, zoneID, limitID string) (RateLimit, error) {
 	uri := "/zones/" + zoneID + "/rate_limits/" + limitID
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return RateLimit{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -182,7 +183,7 @@ func (api *API) RateLimit(ctx context.Context, zoneID, limitID string) (RateLimi
 // API reference: https://api.cloudflare.com/#rate-limits-for-a-zone-update-rate-limit
 func (api *API) UpdateRateLimit(ctx context.Context, zoneID, limitID string, limit RateLimit) (RateLimit, error) {
 	uri := "/zones/" + zoneID + "/rate_limits/" + limitID
-	res, err := api.makeRequestContext(ctx, "PUT", uri, limit)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, limit)
 	if err != nil {
 		return RateLimit{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -198,7 +199,7 @@ func (api *API) UpdateRateLimit(ctx context.Context, zoneID, limitID string, lim
 // API reference: https://api.cloudflare.com/#rate-limits-for-a-zone-delete-rate-limit
 func (api *API) DeleteRateLimit(ctx context.Context, zoneID, limitID string) error {
 	uri := "/zones/" + zoneID + "/rate_limits/" + limitID
-	res, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}

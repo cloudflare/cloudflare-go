@@ -16,8 +16,8 @@ var exampleNewLogpushJob = cloudflare.LogpushJob{
 }
 
 var exampleUpdatedLogpushJob = cloudflare.LogpushJob{
-	Enabled: true, 
-	Name: "updated.com", 
+	Enabled:         true,
+	Name:            "updated.com",
 	LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp",
 	DestinationConf: "gs://mybucket/logs",
 }

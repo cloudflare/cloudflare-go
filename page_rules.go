@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"net/http"
 	"time"
 
 	"github.com/pkg/errors"
@@ -138,7 +139,7 @@ type PageRulesResponse struct {
 // API reference: https://api.cloudflare.com/#page-rules-for-a-zone-create-a-page-rule
 func (api *API) CreatePageRule(ctx context.Context, zoneID string, rule PageRule) (*PageRule, error) {
 	uri := "/zones/" + zoneID + "/pagerules"
-	res, err := api.makeRequestContext(ctx, "POST", uri, rule)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, rule)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
@@ -155,7 +156,7 @@ func (api *API) CreatePageRule(ctx context.Context, zoneID string, rule PageRule
 // API reference: https://api.cloudflare.com/#page-rules-for-a-zone-list-page-rules
 func (api *API) ListPageRules(ctx context.Context, zoneID string) ([]PageRule, error) {
 	uri := "/zones/" + zoneID + "/pagerules"
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []PageRule{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -172,7 +173,7 @@ func (api *API) ListPageRules(ctx context.Context, zoneID string) ([]PageRule, e
 // API reference: https://api.cloudflare.com/#page-rules-for-a-zone-page-rule-details
 func (api *API) PageRule(ctx context.Context, zoneID, ruleID string) (PageRule, error) {
 	uri := "/zones/" + zoneID + "/pagerules/" + ruleID
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return PageRule{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -208,7 +209,7 @@ func (api *API) ChangePageRule(ctx context.Context, zoneID, ruleID string, rule 
 // API reference: https://api.cloudflare.com/#page-rules-for-a-zone-update-a-page-rule
 func (api *API) UpdatePageRule(ctx context.Context, zoneID, ruleID string, rule PageRule) error {
 	uri := "/zones/" + zoneID + "/pagerules/" + ruleID
-	res, err := api.makeRequestContext(ctx, "PUT", uri, rule)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, rule)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}
@@ -225,7 +226,7 @@ func (api *API) UpdatePageRule(ctx context.Context, zoneID, ruleID string, rule 
 // API reference: https://api.cloudflare.com/#page-rules-for-a-zone-delete-a-page-rule
 func (api *API) DeletePageRule(ctx context.Context, zoneID, ruleID string) error {
 	uri := "/zones/" + zoneID + "/pagerules/" + ruleID
-	res, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}

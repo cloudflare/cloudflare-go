@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 
 	"github.com/pkg/errors"
 )
@@ -76,7 +77,7 @@ func (api *API) ZoneLevelAccessIdentityProviders(ctx context.Context, zoneID str
 func (api *API) accessIdentityProviders(ctx context.Context, id string, routeRoot RouteRoot) ([]AccessIdentityProvider, error) {
 	uri := fmt.Sprintf("/%s/%s/access/identity_providers", routeRoot, id)
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []AccessIdentityProvider{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -114,7 +115,7 @@ func (api *API) accessIdentityProviderDetails(ctx context.Context, id string, id
 		identityProviderID,
 	)
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return AccessIdentityProvider{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -145,7 +146,7 @@ func (api *API) CreateZoneLevelAccessIdentityProvider(ctx context.Context, zoneI
 func (api *API) createAccessIdentityProvider(ctx context.Context, id string, identityProviderConfiguration AccessIdentityProvider, routeRoot RouteRoot) (AccessIdentityProvider, error) {
 	uri := fmt.Sprintf("/%s/%s/access/identity_providers", routeRoot, id)
 
-	res, err := api.makeRequestContext(ctx, "POST", uri, identityProviderConfiguration)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, identityProviderConfiguration)
 	if err != nil {
 		return AccessIdentityProvider{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -183,7 +184,7 @@ func (api *API) updateAccessIdentityProvider(ctx context.Context, id string, ide
 		identityProviderUUID,
 	)
 
-	res, err := api.makeRequestContext(ctx, "PUT", uri, identityProviderConfiguration)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, identityProviderConfiguration)
 	if err != nil {
 		return AccessIdentityProvider{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -219,7 +220,7 @@ func (api *API) deleteAccessIdentityProvider(ctx context.Context, id string, ide
 		identityProviderUUID,
 	)
 
-	res, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return AccessIdentityProvider{}, errors.Wrap(err, errMakeRequestError)
 	}

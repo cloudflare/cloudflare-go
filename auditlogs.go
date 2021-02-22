@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"net/http"
 	"net/url"
 	"path"
 	"strconv"
@@ -117,7 +118,7 @@ func (api *API) GetOrganizationAuditLogs(ctx context.Context, organizationID str
 		ForceQuery: true,
 		RawQuery:   a.ToQuery().Encode(),
 	}
-	res, err := api.makeRequestContext(ctx, "GET", uri.String(), nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri.String(), nil)
 	if err != nil {
 		return AuditLogResponse{}, err
 	}
@@ -144,7 +145,7 @@ func (api *API) GetUserAuditLogs(ctx context.Context, a AuditLogFilter) (AuditLo
 		ForceQuery: true,
 		RawQuery:   a.ToQuery().Encode(),
 	}
-	res, err := api.makeRequestContext(ctx, "GET", uri.String(), nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri.String(), nil)
 	if err != nil {
 		return AuditLogResponse{}, err
 	}

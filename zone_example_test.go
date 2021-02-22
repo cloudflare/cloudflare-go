@@ -2,8 +2,9 @@ package cloudflare_test
 
 import (
 	"fmt"
-	"golang.org/x/net/context"
 	"log"
+
+	"golang.org/x/net/context"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
 )

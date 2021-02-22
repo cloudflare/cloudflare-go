@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/pkg/errors"
@@ -84,7 +85,7 @@ type RegistrarDomainsDetailResponse struct {
 func (api *API) RegistrarDomain(ctx context.Context, accountID, domainName string) (RegistrarDomain, error) {
 	uri := fmt.Sprintf("/accounts/%s/registrar/domains/%s", accountID, domainName)
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return RegistrarDomain{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -104,7 +105,7 @@ func (api *API) RegistrarDomain(ctx context.Context, accountID, domainName strin
 func (api *API) RegistrarDomains(ctx context.Context, accountID string) ([]RegistrarDomain, error) {
 	uri := "/accounts/" + accountID + "/registrar/domains"
 
-	res, err := api.makeRequestContext(ctx, "POST", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
 	if err != nil {
 		return []RegistrarDomain{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -124,7 +125,7 @@ func (api *API) RegistrarDomains(ctx context.Context, accountID string) ([]Regis
 func (api *API) TransferRegistrarDomain(ctx context.Context, accountID, domainName string) ([]RegistrarDomain, error) {
 	uri := fmt.Sprintf("/accounts/%s/registrar/domains/%s/transfer", accountID, domainName)
 
-	res, err := api.makeRequestContext(ctx, "POST", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
 	if err != nil {
 		return []RegistrarDomain{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -143,7 +144,7 @@ func (api *API) TransferRegistrarDomain(ctx context.Context, accountID, domainNa
 func (api *API) CancelRegistrarDomainTransfer(ctx context.Context, accountID, domainName string) ([]RegistrarDomain, error) {
 	uri := fmt.Sprintf("/accounts/%s/registrar/domains/%s/cancel_transfer", accountID, domainName)
 
-	res, err := api.makeRequestContext(ctx, "POST", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
 	if err != nil {
 		return []RegistrarDomain{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -162,7 +163,7 @@ func (api *API) CancelRegistrarDomainTransfer(ctx context.Context, accountID, do
 func (api *API) UpdateRegistrarDomain(ctx context.Context, accountID, domainName string, domainConfiguration RegistrarDomainConfiguration) (RegistrarDomain, error) {
 	uri := fmt.Sprintf("/accounts/%s/registrar/domains/%s", accountID, domainName)
 
-	res, err := api.makeRequestContext(ctx, "PUT", uri, domainConfiguration)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, domainConfiguration)
 	if err != nil {
 		return RegistrarDomain{}, errors.Wrap(err, errMakeRequestError)
 	}

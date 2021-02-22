@@ -19,7 +19,7 @@ func TestListWAFPackages(t *testing.T) {
 	testZoneID := "abcd123"
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
 		// JSON data from: https://api.cloudflare.com/#waf-rule-packages-properties
@@ -78,7 +78,7 @@ func TestListWAFPackagesMultiplePages(t *testing.T) {
 
 	page := 1
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 
 		reqURI, err := url.ParseRequestURI(r.RequestURI)
 		assert.NoError(t, err)
@@ -155,7 +155,7 @@ func TestWAFPackage(t *testing.T) {
 	testZoneID := "abcd123"
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
 		// JSON data from: https://api.cloudflare.com/#waf-rule-packages-properties
@@ -258,7 +258,7 @@ func TestListWAFGroups(t *testing.T) {
 	testZoneID := "abcd123"
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
 
@@ -325,7 +325,7 @@ func TestListWAFGroupsMultiplePages(t *testing.T) {
 
 	page := 1
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 
 		reqURI, err := url.ParseRequestURI(r.RequestURI)
 		assert.NoError(t, err)
@@ -409,7 +409,7 @@ func TestWAFGroup(t *testing.T) {
 	testZoneID := "abcd123"
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
 		// JSON data from: https://api.cloudflare.com/#waf-rule-groups-rule-group-details
@@ -521,7 +521,7 @@ func TestListWAFRules(t *testing.T) {
 	testZoneID := "abcd123"
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
 		// JSON data from: https://api.cloudflare.com/#waf-rules-properties
@@ -595,7 +595,7 @@ func TestListWAFRulesMultiplePages(t *testing.T) {
 
 	page := 1
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 
 		reqURI, err := url.ParseRequestURI(r.RequestURI)
 		assert.NoError(t, err)
@@ -693,7 +693,7 @@ func TestWAFRule(t *testing.T) {
 	testZoneID := "abcd123"
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
 		// JSON data from: https://api.cloudflare.com/#waf-rules-properties

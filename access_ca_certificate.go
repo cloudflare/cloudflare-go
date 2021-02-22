@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 
 	"github.com/pkg/errors"
 )
@@ -47,7 +48,7 @@ func (api *API) ZoneLevelAccessCACertificates(ctx context.Context, zoneID string
 func (api *API) accessCACertificates(ctx context.Context, id string, routeRoot RouteRoot) ([]AccessCACertificate, error) {
 	uri := fmt.Sprintf("/%s/%s/access/apps/ca", routeRoot, id)
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []AccessCACertificate{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -80,7 +81,7 @@ func (api *API) ZoneLevelAccessCACertificate(ctx context.Context, zoneID, applic
 func (api *API) accessCACertificate(ctx context.Context, id, applicationID string, routeRoot RouteRoot) (AccessCACertificate, error) {
 	uri := fmt.Sprintf("/%s/%s/access/apps/%s/ca", routeRoot, id, applicationID)
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return AccessCACertificate{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -118,7 +119,7 @@ func (api *API) createAccessCACertificate(ctx context.Context, id string, applic
 		applicationID,
 	)
 
-	res, err := api.makeRequestContext(ctx, "POST", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
 	if err != nil {
 		return AccessCACertificate{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -156,7 +157,7 @@ func (api *API) deleteAccessCACertificate(ctx context.Context, id string, applic
 		applicationID,
 	)
 
-	_, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}

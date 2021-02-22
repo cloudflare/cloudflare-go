@@ -50,7 +50,7 @@ func TestOriginCA_CreateOriginCertificate(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/certificates", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "POST", r.Method, "Expected method 'POST', got %ss", r.Method)
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %ss", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
   "success": true,
@@ -97,7 +97,7 @@ func TestOriginCA_OriginCertificates(t *testing.T) {
 	testZoneID := "023e105f4ecef8ad9ca31a8372d0c353"
 
 	mux.HandleFunc("/certificates", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %ss", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %ss", r.Method)
 		assert.Equal(t, testZoneID, r.URL.Query().Get("zone_id"), "Expected zone_id '', got %%s", testZoneID)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
@@ -152,7 +152,7 @@ func TestOriginCA_OriginCertificate(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/certificates/0x47530d8f561faa08", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %ss", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %ss", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
   "success": true,
@@ -201,7 +201,7 @@ func TestOriginCA_RevokeCertificate(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/certificates/0x47530d8f561faa08", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "DELETE", r.Method, "Expected method 'DELETE', got %ss", r.Method)
+		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %ss", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
   "success": true,

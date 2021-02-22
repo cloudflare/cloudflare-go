@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/pkg/errors"
@@ -33,7 +34,7 @@ type ArgoDetailsResponse struct {
 func (api *API) ArgoSmartRouting(ctx context.Context, zoneID string) (ArgoFeatureSetting, error) {
 	uri := "/zones/" + zoneID + "/argo/smart_routing"
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return ArgoFeatureSetting{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -75,7 +76,7 @@ func (api *API) UpdateArgoSmartRouting(ctx context.Context, zoneID, settingValue
 func (api *API) ArgoTieredCaching(zoneID string, ctx context.Context) (ArgoFeatureSetting, error) {
 	uri := "/zones/" + zoneID + "/argo/tiered_caching"
 
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return ArgoFeatureSetting{}, errors.Wrap(err, errMakeRequestError)
 	}

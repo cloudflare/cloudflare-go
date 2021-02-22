@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"net/http"
 	"time"
 
 	"github.com/pkg/errors"
@@ -53,7 +54,7 @@ type PerZoneAuthenticatedOriginPullsCertificateParams struct {
 // API reference: https://api.cloudflare.com/#zone-level-authenticated-origin-pulls-get-enablement-setting-for-zone
 func (api *API) GetPerZoneAuthenticatedOriginPullsStatus(ctx context.Context, zoneID string) (PerZoneAuthenticatedOriginPullsSettings, error) {
 	uri := "/zones/" + zoneID + "/origin_tls_client_auth/settings"
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return PerZoneAuthenticatedOriginPullsSettings{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -74,7 +75,7 @@ func (api *API) SetPerZoneAuthenticatedOriginPullsStatus(ctx context.Context, zo
 	}{
 		Enabled: enable,
 	}
-	res, err := api.makeRequestContext(ctx, "PUT", uri, params)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return PerZoneAuthenticatedOriginPullsSettings{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -90,7 +91,7 @@ func (api *API) SetPerZoneAuthenticatedOriginPullsStatus(ctx context.Context, zo
 // API reference: https://api.cloudflare.com/#zone-level-authenticated-origin-pulls-upload-certificate
 func (api *API) UploadPerZoneAuthenticatedOriginPullsCertificate(ctx context.Context, zoneID string, params PerZoneAuthenticatedOriginPullsCertificateParams) (PerZoneAuthenticatedOriginPullsCertificateDetails, error) {
 	uri := "/zones/" + zoneID + "/origin_tls_client_auth"
-	res, err := api.makeRequestContext(ctx, "POST", uri, params)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return PerZoneAuthenticatedOriginPullsCertificateDetails{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -106,7 +107,7 @@ func (api *API) UploadPerZoneAuthenticatedOriginPullsCertificate(ctx context.Con
 // API reference: https://api.cloudflare.com/#zone-level-authenticated-origin-pulls-list-certificates
 func (api *API) ListPerZoneAuthenticatedOriginPullsCertificates(ctx context.Context, zoneID string) ([]PerZoneAuthenticatedOriginPullsCertificateDetails, error) {
 	uri := "/zones/" + zoneID + "/origin_tls_client_auth"
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []PerZoneAuthenticatedOriginPullsCertificateDetails{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -122,7 +123,7 @@ func (api *API) ListPerZoneAuthenticatedOriginPullsCertificates(ctx context.Cont
 // API reference: https://api.cloudflare.com/#zone-level-authenticated-origin-pulls-get-certificate-details
 func (api *API) GetPerZoneAuthenticatedOriginPullsCertificateDetails(ctx context.Context, zoneID, certificateID string) (PerZoneAuthenticatedOriginPullsCertificateDetails, error) {
 	uri := "/zones/" + zoneID + "/origin_tls_client_auth/" + certificateID
-	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return PerZoneAuthenticatedOriginPullsCertificateDetails{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -138,7 +139,7 @@ func (api *API) GetPerZoneAuthenticatedOriginPullsCertificateDetails(ctx context
 // API reference: https://api.cloudflare.com/#zone-level-authenticated-origin-pulls-delete-certificate
 func (api *API) DeletePerZoneAuthenticatedOriginPullsCertificate(ctx context.Context, zoneID, certificateID string) (PerZoneAuthenticatedOriginPullsCertificateDetails, error) {
 	uri := "/zones/" + zoneID + "/origin_tls_client_auth/" + certificateID
-	res, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return PerZoneAuthenticatedOriginPullsCertificateDetails{}, errors.Wrap(err, errMakeRequestError)
 	}
