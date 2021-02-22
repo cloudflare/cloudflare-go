@@ -28,7 +28,7 @@ func ExampleAPI_ArgoTieredCaching() {
 		log.Fatal(err)
 	}
 
-	tieredCachingSettings, err := api.ArgoTieredCaching("01a7362d577a6c3019a474fd6f485823", context.TODO())
+	tieredCachingSettings, err := api.ArgoTieredCaching(context.TODO(), "01a7362d577a6c3019a474fd6f485823")
 	if err != nil {
 		log.Fatal(err)
 	}

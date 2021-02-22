@@ -124,7 +124,7 @@ func TestArgoTieredCaching(t *testing.T) {
 		ModifiedOn: argoTimestamp,
 	}
 
-	actual, err := client.ArgoTieredCaching("01a7362d577a6c3019a474fd6f485823", context.TODO())
+	actual, err := client.ArgoTieredCaching(context.TODO(), "01a7362d577a6c3019a474fd6f485823")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
