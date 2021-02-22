@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -62,7 +63,7 @@ func TestCreateRailgun(t *testing.T) {
 		ModifiedOn:     modifiedOn,
 	}
 
-	actual, err := client.CreateRailgun("My Railgun")
+	actual, err := client.CreateRailgun(context.TODO(), "My Railgun")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -125,7 +126,7 @@ func TestListRailguns(t *testing.T) {
 		},
 	}
 
-	actual, err := client.ListRailguns(RailgunListOptions{Direction: "desc"})
+	actual, err := client.ListRailguns(context.TODO(), RailgunListOptions{Direction: "desc"})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -178,12 +179,12 @@ func TestRailgunDetails(t *testing.T) {
 		ModifiedOn:     modifiedOn,
 	}
 
-	actual, err := client.RailgunDetails("e928d310693a83094309acf9ead50448")
+	actual, err := client.RailgunDetails(context.TODO(), "e928d310693a83094309acf9ead50448")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	_, err = client.RailgunDetails("bar")
+	_, err = client.RailgunDetails(context.TODO(), "bar")
 	assert.Error(t, err)
 }
 
@@ -238,12 +239,12 @@ func TestRailgunZones(t *testing.T) {
 		},
 	}
 
-	actual, err := client.RailgunZones("e928d310693a83094309acf9ead50448")
+	actual, err := client.RailgunZones(context.TODO(), "e928d310693a83094309acf9ead50448")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	_, err = client.RailgunZones("bar")
+	_, err = client.RailgunZones(context.TODO(), "bar")
 	assert.Error(t, err)
 }
 
@@ -299,12 +300,12 @@ func TestEnableRailgun(t *testing.T) {
 		ModifiedOn:     modifiedOn,
 	}
 
-	actual, err := client.EnableRailgun("e928d310693a83094309acf9ead50448")
+	actual, err := client.EnableRailgun(context.TODO(), "e928d310693a83094309acf9ead50448")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	_, err = client.EnableRailgun("bar")
+	_, err = client.EnableRailgun(context.TODO(), "bar")
 	assert.Error(t, err)
 }
 
@@ -360,12 +361,12 @@ func TestDisableRailgun(t *testing.T) {
 		ModifiedOn:     modifiedOn,
 	}
 
-	actual, err := client.DisableRailgun("e928d310693a83094309acf9ead50448")
+	actual, err := client.DisableRailgun(context.TODO(), "e928d310693a83094309acf9ead50448")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	_, err = client.DisableRailgun("bar")
+	_, err = client.DisableRailgun(context.TODO(), "bar")
 	assert.Error(t, err)
 }
 
@@ -387,8 +388,8 @@ func TestDeleteRailgun(t *testing.T) {
 	}
 
 	mux.HandleFunc("/railguns/e928d310693a83094309acf9ead50448", handler)
-	assert.NoError(t, client.DeleteRailgun("e928d310693a83094309acf9ead50448"))
-	assert.Error(t, client.DeleteRailgun("bar"))
+	assert.NoError(t, client.DeleteRailgun(context.TODO(), "e928d310693a83094309acf9ead50448"))
+	assert.Error(t, client.DeleteRailgun(context.TODO(), "bar"))
 }
 
 func TestZoneRailguns(t *testing.T) {
@@ -429,12 +430,12 @@ func TestZoneRailguns(t *testing.T) {
 		},
 	}
 
-	actual, err := client.ZoneRailguns("023e105f4ecef8ad9ca31a8372d0c353")
+	actual, err := client.ZoneRailguns(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	_, err = client.ZoneRailguns("bar")
+	_, err = client.ZoneRailguns(context.TODO(), "bar")
 	assert.Error(t, err)
 }
 
@@ -466,12 +467,12 @@ func TestZoneRailgunDetails(t *testing.T) {
 		Connected: true,
 	}
 
-	actual, err := client.ZoneRailgunDetails("023e105f4ecef8ad9ca31a8372d0c353", "e928d310693a83094309acf9ead50448")
+	actual, err := client.ZoneRailgunDetails(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353", "e928d310693a83094309acf9ead50448")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	_, err = client.ZoneRailgunDetails("bar", "baz")
+	_, err = client.ZoneRailgunDetails(context.TODO(), "bar", "baz")
 	assert.Error(t, err)
 }
 
@@ -527,12 +528,12 @@ func TestTestRailgunConnection(t *testing.T) {
 		CFCacheStatus:   "",
 	}
 
-	actual, err := client.TestRailgunConnection("023e105f4ecef8ad9ca31a8372d0c353", "e928d310693a83094309acf9ead50448")
+	actual, err := client.TestRailgunConnection(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353", "e928d310693a83094309acf9ead50448")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	_, err = client.TestRailgunConnection("bar", "baz")
+	_, err = client.TestRailgunConnection(context.TODO(), "bar", "baz")
 	assert.Error(t, err)
 }
 
@@ -569,12 +570,12 @@ func TestConnectRailgun(t *testing.T) {
 		Connected: true,
 	}
 
-	actual, err := client.ConnectZoneRailgun("023e105f4ecef8ad9ca31a8372d0c353", "e928d310693a83094309acf9ead50448")
+	actual, err := client.ConnectZoneRailgun(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353", "e928d310693a83094309acf9ead50448")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	_, err = client.ConnectZoneRailgun("bar", "baz")
+	_, err = client.ConnectZoneRailgun(context.TODO(), "bar", "baz")
 	assert.Error(t, err)
 }
 
@@ -611,11 +612,11 @@ func TestDisconnectRailgun(t *testing.T) {
 		Connected: false,
 	}
 
-	actual, err := client.DisconnectZoneRailgun("023e105f4ecef8ad9ca31a8372d0c353", "e928d310693a83094309acf9ead50448")
+	actual, err := client.DisconnectZoneRailgun(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353", "e928d310693a83094309acf9ead50448")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	_, err = client.DisconnectZoneRailgun("bar", "baz")
+	_, err = client.DisconnectZoneRailgun(context.TODO(), "bar", "baz")
 	assert.Error(t, err)
 }
