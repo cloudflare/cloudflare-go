@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -234,7 +235,7 @@ func TestWorkers_DeleteWorker(t *testing.T) {
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, deleteWorkerResponseData)
 	})
-	res, err := client.DeleteWorker(&WorkerRequestParams{ZoneID: "foo"})
+	res, err := client.DeleteWorker(context.TODO(), &WorkerRequestParams{ZoneID: "foo"})
 	want := WorkerScriptResponse{
 		successResponse,
 		WorkerScript{}}
@@ -252,7 +253,7 @@ func TestWorkers_DeleteWorkerWithName(t *testing.T) {
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, deleteWorkerResponseData)
 	})
-	res, err := client.DeleteWorker(&WorkerRequestParams{ScriptName: "bar"})
+	res, err := client.DeleteWorker(context.TODO(), &WorkerRequestParams{ScriptName: "bar"})
 	want := WorkerScriptResponse{
 		successResponse,
 		WorkerScript{}}
@@ -265,7 +266,7 @@ func TestWorkers_DeleteWorkerWithNameErrorsWithoutAccountId(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.DeleteWorker(&WorkerRequestParams{ScriptName: "bar"})
+	_, err := client.DeleteWorker(context.TODO(), &WorkerRequestParams{ScriptName: "bar"})
 	assert.Error(t, err)
 }
 
@@ -278,7 +279,7 @@ func TestWorkers_DownloadWorker(t *testing.T) {
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, workerScript)
 	})
-	res, err := client.DownloadWorker(&WorkerRequestParams{ZoneID: "foo"})
+	res, err := client.DownloadWorker(context.TODO(), &WorkerRequestParams{ZoneID: "foo"})
 	want := WorkerScriptResponse{
 		successResponse,
 		WorkerScript{
@@ -298,7 +299,7 @@ func TestWorkers_DownloadWorkerWithName(t *testing.T) {
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, workerScript)
 	})
-	res, err := client.DownloadWorker(&WorkerRequestParams{ScriptName: "bar"})
+	res, err := client.DownloadWorker(context.TODO(), &WorkerRequestParams{ScriptName: "bar"})
 	want := WorkerScriptResponse{
 		successResponse,
 		WorkerScript{
@@ -313,7 +314,7 @@ func TestWorkers_DownloadWorkerWithNameErrorsWithoutAccountId(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.DownloadWorker(&WorkerRequestParams{ScriptName: "bar"})
+	_, err := client.DownloadWorker(context.TODO(), &WorkerRequestParams{ScriptName: "bar"})
 	assert.Error(t, err)
 }
 
@@ -327,7 +328,7 @@ func TestWorkers_ListWorkerScripts(t *testing.T) {
 		fmt.Fprintf(w, listWorkersResponseData)
 	})
 
-	res, err := client.ListWorkerScripts()
+	res, err := client.ListWorkerScripts(context.TODO())
 	sampleDate, _ := time.Parse(time.RFC3339Nano, "2018-04-22T17:10:48.938097Z")
 	want := []WorkerMetaData{
 		{
@@ -359,7 +360,7 @@ func TestWorkers_UploadWorker(t *testing.T) {
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, uploadWorkerResponseData)
 	})
-	res, err := client.UploadWorker(&WorkerRequestParams{ZoneID: "foo"}, workerScript)
+	res, err := client.UploadWorker(context.TODO(), &WorkerRequestParams{ZoneID: "foo"}, workerScript)
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
@@ -387,7 +388,7 @@ func TestWorkers_UploadWorkerWithName(t *testing.T) {
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, uploadWorkerResponseData)
 	})
-	res, err := client.UploadWorker(&WorkerRequestParams{ScriptName: "bar"}, workerScript)
+	res, err := client.UploadWorker(context.TODO(), &WorkerRequestParams{ScriptName: "bar"}, workerScript)
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
@@ -415,7 +416,7 @@ func TestWorkers_UploadWorkerSingleScriptWithAccount(t *testing.T) {
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, uploadWorkerResponseData)
 	})
-	res, err := client.UploadWorker(&WorkerRequestParams{ZoneID: "foo"}, workerScript)
+	res, err := client.UploadWorker(context.TODO(), &WorkerRequestParams{ZoneID: "foo"}, workerScript)
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
@@ -436,7 +437,7 @@ func TestWorkers_UploadWorkerWithNameErrorsWithoutAccountId(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.UploadWorker(&WorkerRequestParams{ScriptName: "bar"}, workerScript)
+	_, err := client.UploadWorker(context.TODO(), &WorkerRequestParams{ScriptName: "bar"}, workerScript)
 	assert.Error(t, err)
 }
 
@@ -495,13 +496,13 @@ func TestWorkers_UploadWorkerWithInheritBinding(t *testing.T) {
 		}}
 
 	// Test single-script
-	res, err := client.UploadWorkerWithBindings(&WorkerRequestParams{ZoneID: "foo"}, &scriptParams)
+	res, err := client.UploadWorkerWithBindings(context.TODO(), &WorkerRequestParams{ZoneID: "foo"}, &scriptParams)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
 
 	// Test multi-script
-	res, err = client.UploadWorkerWithBindings(&WorkerRequestParams{ScriptName: "bar"}, &scriptParams)
+	res, err = client.UploadWorkerWithBindings(context.TODO(), &WorkerRequestParams{ScriptName: "bar"}, &scriptParams)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
@@ -540,7 +541,7 @@ func TestWorkers_UploadWorkerWithKVBinding(t *testing.T) {
 			},
 		},
 	}
-	_, err := client.UploadWorkerWithBindings(&WorkerRequestParams{ScriptName: "bar"}, &scriptParams)
+	_, err := client.UploadWorkerWithBindings(context.TODO(), &WorkerRequestParams{ScriptName: "bar"}, &scriptParams)
 	assert.NoError(t, err)
 }
 
@@ -582,7 +583,7 @@ func TestWorkers_UploadWorkerWithWasmBinding(t *testing.T) {
 			},
 		},
 	}
-	_, err := client.UploadWorkerWithBindings(&WorkerRequestParams{ScriptName: "bar"}, &scriptParams)
+	_, err := client.UploadWorkerWithBindings(context.TODO(), &WorkerRequestParams{ScriptName: "bar"}, &scriptParams)
 	assert.NoError(t, err)
 }
 
@@ -619,7 +620,7 @@ func TestWorkers_UploadWorkerWithPlainTextBinding(t *testing.T) {
 			},
 		},
 	}
-	_, err := client.UploadWorkerWithBindings(&WorkerRequestParams{ScriptName: "bar"}, &scriptParams)
+	_, err := client.UploadWorkerWithBindings(context.TODO(), &WorkerRequestParams{ScriptName: "bar"}, &scriptParams)
 	assert.NoError(t, err)
 }
 
@@ -656,7 +657,7 @@ func TestWorkers_UploadWorkerWithSecretTextBinding(t *testing.T) {
 			},
 		},
 	}
-	_, err := client.UploadWorkerWithBindings(&WorkerRequestParams{ScriptName: "bar"}, &scriptParams)
+	_, err := client.UploadWorkerWithBindings(context.TODO(), &WorkerRequestParams{ScriptName: "bar"}, &scriptParams)
 	assert.NoError(t, err)
 }
 
@@ -670,7 +671,7 @@ func TestWorkers_CreateWorkerRoute(t *testing.T) {
 		fmt.Fprintf(w, createWorkerRouteResponse)
 	})
 	route := WorkerRoute{Pattern: "app1.example.com/*", Enabled: true}
-	res, err := client.CreateWorkerRoute("foo", route)
+	res, err := client.CreateWorkerRoute(context.TODO(), "foo", route)
 	want := WorkerRouteResponse{successResponse, WorkerRoute{ID: "e7a57d8746e74ae49c25994dadb421b1"}}
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
@@ -687,7 +688,7 @@ func TestWorkers_CreateWorkerRouteEnt(t *testing.T) {
 		fmt.Fprintf(w, createWorkerRouteResponse)
 	})
 	route := WorkerRoute{Pattern: "app1.example.com/*", Script: "test_script"}
-	res, err := client.CreateWorkerRoute("foo", route)
+	res, err := client.CreateWorkerRoute(context.TODO(), "foo", route)
 	want := WorkerRouteResponse{successResponse, WorkerRoute{ID: "e7a57d8746e74ae49c25994dadb421b1"}}
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
@@ -704,7 +705,7 @@ func TestWorkers_CreateWorkerRouteSingleScriptWithAccount(t *testing.T) {
 		fmt.Fprintf(w, createWorkerRouteResponse)
 	})
 	route := WorkerRoute{Pattern: "app1.example.com/*", Enabled: true}
-	res, err := client.CreateWorkerRoute("foo", route)
+	res, err := client.CreateWorkerRoute(context.TODO(), "foo", route)
 	want := WorkerRouteResponse{successResponse, WorkerRoute{ID: "e7a57d8746e74ae49c25994dadb421b1"}}
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
@@ -716,7 +717,7 @@ func TestWorkers_CreateWorkerRouteErrorsWhenMixingSingleAndMultiScriptProperties
 	defer teardown()
 
 	route := WorkerRoute{Pattern: "app1.example.com/*", Script: "test_script", Enabled: true}
-	_, err := client.CreateWorkerRoute("foo", route)
+	_, err := client.CreateWorkerRoute(context.TODO(), "foo", route)
 	assert.EqualError(t, err, "Only `Script` or `Enabled` may be specified for a WorkerRoute, not both")
 }
 
@@ -730,7 +731,7 @@ func TestWorkers_CreateWorkerRouteWithNoScript(t *testing.T) {
 	})
 
 	route := WorkerRoute{Pattern: "app1.example.com/*"}
-	_, err := client.CreateWorkerRoute("foo", route)
+	_, err := client.CreateWorkerRoute(context.TODO(), "foo", route)
 	assert.NoError(t, err)
 }
 
@@ -743,7 +744,7 @@ func TestWorkers_DeleteWorkerRoute(t *testing.T) {
 		w.Header().Set("content-type", "application-json")
 		fmt.Fprintf(w, deleteWorkerRouteResponseData)
 	})
-	res, err := client.DeleteWorkerRoute("foo", "e7a57d8746e74ae49c25994dadb421b1")
+	res, err := client.DeleteWorkerRoute(context.TODO(), "foo", "e7a57d8746e74ae49c25994dadb421b1")
 	want := WorkerRouteResponse{successResponse,
 		WorkerRoute{
 			ID: "e7a57d8746e74ae49c25994dadb421b1",
@@ -762,7 +763,7 @@ func TestWorkers_DeleteWorkerRouteEnt(t *testing.T) {
 		w.Header().Set("content-type", "application-json")
 		fmt.Fprintf(w, deleteWorkerRouteResponseData)
 	})
-	res, err := client.DeleteWorkerRoute("foo", "e7a57d8746e74ae49c25994dadb421b1")
+	res, err := client.DeleteWorkerRoute(context.TODO(), "foo", "e7a57d8746e74ae49c25994dadb421b1")
 	want := WorkerRouteResponse{successResponse,
 		WorkerRoute{
 			ID: "e7a57d8746e74ae49c25994dadb421b1",
@@ -782,7 +783,7 @@ func TestWorkers_ListWorkerRoutes(t *testing.T) {
 		fmt.Fprintf(w, listRouteResponseData)
 	})
 
-	res, err := client.ListWorkerRoutes("foo")
+	res, err := client.ListWorkerRoutes(context.TODO(), "foo")
 	want := WorkerRoutesResponse{successResponse,
 		[]WorkerRoute{
 			{ID: "e7a57d8746e74ae49c25994dadb421b1", Pattern: "app1.example.com/*", Enabled: true},
@@ -804,7 +805,7 @@ func TestWorkers_ListWorkerRoutesEnt(t *testing.T) {
 		fmt.Fprintf(w, listRouteEntResponseData)
 	})
 
-	res, err := client.ListWorkerRoutes("foo")
+	res, err := client.ListWorkerRoutes(context.TODO(), "foo")
 	want := WorkerRoutesResponse{successResponse,
 		[]WorkerRoute{
 			{ID: "e7a57d8746e74ae49c25994dadb421b1", Pattern: "app1.example.com/*", Script: "test_script_1", Enabled: true},
@@ -827,7 +828,7 @@ func TestWorkers_UpdateWorkerRoute(t *testing.T) {
 		fmt.Fprintf(w, updateWorkerRouteResponse)
 	})
 	route := WorkerRoute{Pattern: "app3.example.com/*", Enabled: true}
-	res, err := client.UpdateWorkerRoute("foo", "e7a57d8746e74ae49c25994dadb421b1", route)
+	res, err := client.UpdateWorkerRoute(context.TODO(), "foo", "e7a57d8746e74ae49c25994dadb421b1", route)
 	want := WorkerRouteResponse{successResponse,
 		WorkerRoute{
 			ID:      "e7a57d8746e74ae49c25994dadb421b1",
@@ -849,7 +850,7 @@ func TestWorkers_UpdateWorkerRouteEnt(t *testing.T) {
 		fmt.Fprintf(w, updateWorkerRouteEntResponse)
 	})
 	route := WorkerRoute{Pattern: "app3.example.com/*", Script: "test_script_1"}
-	res, err := client.UpdateWorkerRoute("foo", "e7a57d8746e74ae49c25994dadb421b1", route)
+	res, err := client.UpdateWorkerRoute(context.TODO(), "foo", "e7a57d8746e74ae49c25994dadb421b1", route)
 	want := WorkerRouteResponse{successResponse,
 		WorkerRoute{
 			ID:      "e7a57d8746e74ae49c25994dadb421b1",
@@ -871,7 +872,7 @@ func TestWorkers_UpdateWorkerRouteSingleScriptWithAccount(t *testing.T) {
 		fmt.Fprintf(w, updateWorkerRouteEntResponse)
 	})
 	route := WorkerRoute{Pattern: "app3.example.com/*", Enabled: true}
-	res, err := client.UpdateWorkerRoute("foo", "e7a57d8746e74ae49c25994dadb421b1", route)
+	res, err := client.UpdateWorkerRoute(context.TODO(), "foo", "e7a57d8746e74ae49c25994dadb421b1", route)
 	want := WorkerRouteResponse{successResponse,
 		WorkerRoute{
 			ID:      "e7a57d8746e74ae49c25994dadb421b1",
@@ -899,7 +900,7 @@ func TestWorkers_ListWorkerBindingsMultiScript(t *testing.T) {
 		_, _ = w.Write([]byte("mock multi-script wasm"))
 	})
 
-	res, err := client.ListWorkerBindings(&WorkerRequestParams{
+	res, err := client.ListWorkerBindings(context.TODO(), &WorkerRequestParams{
 		ScriptName: "my-script",
 	})
 	assert.NoError(t, err)
@@ -948,7 +949,7 @@ func TestWorkers_UpdateWorkerRouteErrorsWhenMixingSingleAndMultiScriptProperties
 	defer teardown()
 
 	route := WorkerRoute{Pattern: "app1.example.com/*", Script: "test_script", Enabled: true}
-	_, err := client.UpdateWorkerRoute("foo", "e7a57d8746e74ae49c25994dadb421b1", route)
+	_, err := client.UpdateWorkerRoute(context.TODO(), "foo", "e7a57d8746e74ae49c25994dadb421b1", route)
 	assert.EqualError(t, err, "Only `Script` or `Enabled` may be specified for a WorkerRoute, not both")
 }
 
@@ -962,6 +963,6 @@ func TestWorkers_UpdateWorkerRouteWithNoScript(t *testing.T) {
 	})
 
 	route := WorkerRoute{Pattern: "app1.example.com/*"}
-	_, err := client.UpdateWorkerRoute("foo", "e7a57d8746e74ae49c25994dadb421b1", route)
+	_, err := client.UpdateWorkerRoute(context.TODO(), "foo", "e7a57d8746e74ae49c25994dadb421b1", route)
 	assert.NoError(t, err)
 }
