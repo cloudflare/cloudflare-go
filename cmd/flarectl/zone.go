@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
@@ -317,7 +318,7 @@ func zoneRecords(c *cli.Context) error {
 			r.Type,
 			r.Name,
 			r.Content,
-			fmt.Sprintf("%t", r.Proxied),
+			fmt.Sprintf("%s", strconv.FormatBool(*r.Proxied)),
 			fmt.Sprintf("%d", r.TTL),
 		})
 	}
