@@ -1,6 +1,7 @@
 package main
 
 import (
+	context2 "context"
 	"fmt"
 	"os"
 	"strings"
@@ -275,7 +276,7 @@ func zoneRecords(c *cli.Context) error {
 	rr := cloudflare.DNSRecord{}
 	var records []cloudflare.DNSRecord
 	if c.String("id") != "" {
-		rec, err := api.DNSRecord(zoneID, c.String("id"))
+		rec, err := api.DNSRecord(context2.TODO(), zoneID, c.String("id"))
 		if err != nil {
 			fmt.Println(err)
 			return err
@@ -292,7 +293,7 @@ func zoneRecords(c *cli.Context) error {
 			rr.Name = c.String("content")
 		}
 		var err error
-		records, err = api.DNSRecords(zoneID, rr)
+		records, err = api.DNSRecords(context2.TODO(), zoneID, rr)
 		if err != nil {
 			fmt.Println(err)
 			return err

@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"encoding/json"
 	"net/url"
 	"strconv"
@@ -45,9 +46,9 @@ type DNSListResponse struct {
 // CreateDNSRecord creates a DNS record for the zone identifier.
 //
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-create-dns-record
-func (api *API) CreateDNSRecord(zoneID string, rr DNSRecord) (*DNSRecordResponse, error) {
+func (api *API) CreateDNSRecord(ctx context.Context, zoneID string, rr DNSRecord) (*DNSRecordResponse, error) {
 	uri := "/zones/" + zoneID + "/dns_records"
-	res, err := api.makeRequest("POST", uri, rr)
+	res, err := api.makeRequestContext(ctx, "POST", uri, rr)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
@@ -66,7 +67,7 @@ func (api *API) CreateDNSRecord(zoneID string, rr DNSRecord) (*DNSRecordResponse
 // This takes a DNSRecord to allow filtering of the results returned.
 //
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-list-dns-records
-func (api *API) DNSRecords(zoneID string, rr DNSRecord) ([]DNSRecord, error) {
+func (api *API) DNSRecords(ctx context.Context, zoneID string, rr DNSRecord) ([]DNSRecord, error) {
 	// Construct a query string
 	v := url.Values{}
 	// Request as many records as possible per page - API max is 100
@@ -90,7 +91,7 @@ func (api *API) DNSRecords(zoneID string, rr DNSRecord) ([]DNSRecord, error) {
 		v.Set("page", strconv.Itoa(page))
 		query = "?" + v.Encode()
 		uri := "/zones/" + zoneID + "/dns_records" + query
-		res, err := api.makeRequest("GET", uri, nil)
+		res, err := api.makeRequestContext(ctx, "GET", uri, nil)
 		if err != nil {
 			return []DNSRecord{}, errors.Wrap(err, errMakeRequestError)
 		}
@@ -113,9 +114,9 @@ func (api *API) DNSRecords(zoneID string, rr DNSRecord) ([]DNSRecord, error) {
 // identifiers.
 //
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-dns-record-details
-func (api *API) DNSRecord(zoneID, recordID string) (DNSRecord, error) {
+func (api *API) DNSRecord(ctx context.Context, zoneID, recordID string) (DNSRecord, error) {
 	uri := "/zones/" + zoneID + "/dns_records/" + recordID
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
 	if err != nil {
 		return DNSRecord{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -131,8 +132,8 @@ func (api *API) DNSRecord(zoneID, recordID string) (DNSRecord, error) {
 // identifiers.
 //
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-update-dns-record
-func (api *API) UpdateDNSRecord(zoneID, recordID string, rr DNSRecord) error {
-	rec, err := api.DNSRecord(zoneID, recordID)
+func (api *API) UpdateDNSRecord(ctx context.Context, zoneID, recordID string, rr DNSRecord) error {
+	rec, err := api.DNSRecord(ctx, zoneID, recordID)
 	if err != nil {
 		return err
 	}
@@ -145,7 +146,7 @@ func (api *API) UpdateDNSRecord(zoneID, recordID string, rr DNSRecord) error {
 		rr.Type = rec.Type
 	}
 	uri := "/zones/" + zoneID + "/dns_records/" + recordID
-	res, err := api.makeRequest("PATCH", uri, rr)
+	res, err := api.makeRequestContext(ctx, "PATCH", uri, rr)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}
@@ -161,9 +162,9 @@ func (api *API) UpdateDNSRecord(zoneID, recordID string, rr DNSRecord) error {
 // identifiers.
 //
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-delete-dns-record
-func (api *API) DeleteDNSRecord(zoneID, recordID string) error {
+func (api *API) DeleteDNSRecord(ctx context.Context, zoneID, recordID string) error {
 	uri := "/zones/" + zoneID + "/dns_records/" + recordID
-	res, err := api.makeRequest("DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}
