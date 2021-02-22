@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"strings"
@@ -121,7 +122,7 @@ func TestListRateLimits(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/rate_limits", handler)
 	want := []RateLimit{expectedRateLimitStruct}
 
-	actual, _, err := client.ListRateLimits(testZoneID, PaginationOptions{})
+	actual, _, err := client.ListRateLimits(context.TODO(), testZoneID, PaginationOptions{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -157,7 +158,7 @@ func TestListRateLimitsWithPageOpts(t *testing.T) {
 	pageOpts := PaginationOptions{
 		PerPage: 50,
 	}
-	actual, _, err := client.ListRateLimits(testZoneID, pageOpts)
+	actual, _, err := client.ListRateLimits(context.TODO(), testZoneID, pageOpts)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -213,7 +214,7 @@ func TestListAllRateLimitsDoesPagination(t *testing.T) {
 		want[i] = expectedRateLimitStruct
 	}
 
-	actual, err := client.ListAllRateLimits(testZoneID)
+	actual, err := client.ListAllRateLimits(context.TODO(), testZoneID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -238,7 +239,7 @@ func TestGetRateLimit(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/rate_limits/"+rateLimitID, handler)
 	want := expectedRateLimitStruct
 
-	actual, err := client.RateLimit(testZoneID, rateLimitID)
+	actual, err := client.RateLimit(context.TODO(), testZoneID, rateLimitID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -280,7 +281,7 @@ func TestCreateRateLimit(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/rate_limits", handler)
 	want := expectedRateLimitStruct
 
-	actual, err := client.CreateRateLimit(testZoneID, newRateLimit)
+	actual, err := client.CreateRateLimit(context.TODO(), testZoneID, newRateLimit)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -319,7 +320,7 @@ func TestCreateRateLimitWithZeroedThreshold(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/rate_limits", handler)
 
-	actual, err := client.CreateRateLimit(testZoneID, newRateLimit)
+	actual, err := client.CreateRateLimit(context.TODO(), testZoneID, newRateLimit)
 	assert.Error(t, err)
 	assert.Equal(t, RateLimit{}, actual)
 }
@@ -357,7 +358,7 @@ func TestUpdateRateLimit(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/rate_limits/"+rateLimitID, handler)
 	want := expectedRateLimitStruct
 
-	actual, err := client.UpdateRateLimit(testZoneID, rateLimitID, newRateLimit)
+	actual, err := client.UpdateRateLimit(context.TODO(), testZoneID, rateLimitID, newRateLimit)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -381,6 +382,6 @@ func TestDeleteRateLimit(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/rate_limits/"+rateLimitID, handler)
 
-	err := client.DeleteRateLimit(testZoneID, rateLimitID)
+	err := client.DeleteRateLimit(context.TODO(), testZoneID, rateLimitID)
 	assert.NoError(t, err)
 }
