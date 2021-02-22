@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/pkg/errors"
@@ -35,13 +36,13 @@ type WAFOverride struct {
 // ListWAFOverrides returns a slice of the WAF overrides.
 //
 // API Reference: https://api.cloudflare.com/#waf-overrides-list-uri-controlled-waf-configurations
-func (api *API) ListWAFOverrides(zoneID string) ([]WAFOverride, error) {
+func (api *API) ListWAFOverrides(ctx context.Context, zoneID string) ([]WAFOverride, error) {
 	var overrides []WAFOverride
 	var res []byte
 	var err error
 
 	uri := "/zones/" + zoneID + "/firewall/waf/overrides"
-	res, err = api.makeRequest("GET", uri, nil)
+	res, err = api.makeRequestContext(ctx, "GET", uri, nil)
 	if err != nil {
 		return []WAFOverride{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -66,9 +67,9 @@ func (api *API) ListWAFOverrides(zoneID string) ([]WAFOverride, error) {
 // WAFOverride returns a WAF override from the given override ID.
 //
 // API Reference: https://api.cloudflare.com/#waf-overrides-uri-controlled-waf-configuration-details
-func (api *API) WAFOverride(zoneID, overrideID string) (WAFOverride, error) {
+func (api *API) WAFOverride(ctx context.Context, zoneID, overrideID string) (WAFOverride, error) {
 	uri := "/zones/" + zoneID + "/firewall/waf/overrides/" + overrideID
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
 	if err != nil {
 		return WAFOverride{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -85,9 +86,9 @@ func (api *API) WAFOverride(zoneID, overrideID string) (WAFOverride, error) {
 // CreateWAFOverride creates a new WAF override.
 //
 // API reference: https://api.cloudflare.com/#waf-overrides-create-a-uri-controlled-waf-configuration
-func (api *API) CreateWAFOverride(zoneID string, override WAFOverride) (WAFOverride, error) {
+func (api *API) CreateWAFOverride(ctx context.Context, zoneID string, override WAFOverride) (WAFOverride, error) {
 	uri := "/zones/" + zoneID + "/firewall/waf/overrides"
-	res, err := api.makeRequest("POST", uri, override)
+	res, err := api.makeRequestContext(ctx, "POST", uri, override)
 	if err != nil {
 		return WAFOverride{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -101,10 +102,10 @@ func (api *API) CreateWAFOverride(zoneID string, override WAFOverride) (WAFOverr
 // UpdateWAFOverride updates an existing WAF override.
 //
 // API reference: https://api.cloudflare.com/#waf-overrides-update-uri-controlled-waf-configuration
-func (api *API) UpdateWAFOverride(zoneID, overrideID string, override WAFOverride) (WAFOverride, error) {
+func (api *API) UpdateWAFOverride(ctx context.Context, zoneID, overrideID string, override WAFOverride) (WAFOverride, error) {
 	uri := "/zones/" + zoneID + "/firewall/waf/overrides/" + overrideID
 
-	res, err := api.makeRequest("PUT", uri, override)
+	res, err := api.makeRequestContext(ctx, "PUT", uri, override)
 	if err != nil {
 		return WAFOverride{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -121,9 +122,9 @@ func (api *API) UpdateWAFOverride(zoneID, overrideID string, override WAFOverrid
 // DeleteWAFOverride deletes a WAF override for a zone.
 //
 // API reference: https://api.cloudflare.com/#waf-overrides-delete-lockdown-rule
-func (api *API) DeleteWAFOverride(zoneID, overrideID string) error {
+func (api *API) DeleteWAFOverride(ctx context.Context, zoneID, overrideID string) error {
 	uri := "/zones/" + zoneID + "/firewall/waf/overrides/" + overrideID
-	res, err := api.makeRequest("DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, "DELETE", uri, nil)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}
