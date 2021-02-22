@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"encoding/json"
 	"time"
 
@@ -61,9 +62,9 @@ type UserBillingProfile struct {
 // UserDetails provides information about the logged-in user.
 //
 // API reference: https://api.cloudflare.com/#user-user-details
-func (api *API) UserDetails() (User, error) {
+func (api *API) UserDetails(ctx context.Context) (User, error) {
 	var r UserResponse
-	res, err := api.makeRequest("GET", "/user", nil)
+	res, err := api.makeRequestContext(ctx, "GET", "/user", nil)
 	if err != nil {
 		return User{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -79,9 +80,9 @@ func (api *API) UserDetails() (User, error) {
 // UpdateUser updates the properties of the given user.
 //
 // API reference: https://api.cloudflare.com/#user-update-user
-func (api *API) UpdateUser(user *User) (User, error) {
+func (api *API) UpdateUser(ctx context.Context, user *User) (User, error) {
 	var r UserResponse
-	res, err := api.makeRequest("PATCH", "/user", user)
+	res, err := api.makeRequestContext(ctx, "PATCH", "/user", user)
 	if err != nil {
 		return User{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -97,9 +98,9 @@ func (api *API) UpdateUser(user *User) (User, error) {
 // UserBillingProfile returns the billing profile of the user.
 //
 // API reference: https://api.cloudflare.com/#user-billing-profile
-func (api *API) UserBillingProfile() (UserBillingProfile, error) {
+func (api *API) UserBillingProfile(ctx context.Context) (UserBillingProfile, error) {
 	var r userBillingProfileResponse
-	res, err := api.makeRequest("GET", "/user/billing/profile", nil)
+	res, err := api.makeRequestContext(ctx, "GET", "/user/billing/profile", nil)
 	if err != nil {
 		return UserBillingProfile{}, errors.Wrap(err, errMakeRequestError)
 	}
