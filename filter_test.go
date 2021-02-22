@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -42,7 +43,7 @@ func TestFilter(t *testing.T) {
 		Expression:  "ip.src eq 127.0.0.1",
 	}
 
-	actual, err := client.Filter("d56084adb405e0b7e32c52321bf07be6", "b7ff25282d394be7b945e23c7106ce8a")
+	actual, err := client.Filter(context.TODO(), "d56084adb405e0b7e32c52321bf07be6", "b7ff25282d394be7b945e23c7106ce8a")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -130,7 +131,7 @@ func TestFilters(t *testing.T) {
 		},
 	}
 
-	actual, err := client.Filters("d56084adb405e0b7e32c52321bf07be6", pageOpts)
+	actual, err := client.Filters(context.TODO(), "d56084adb405e0b7e32c52321bf07be6", pageOpts)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -170,7 +171,7 @@ func TestCreateSingleFilter(t *testing.T) {
 		},
 	}
 
-	actual, err := client.CreateFilters("d56084adb405e0b7e32c52321bf07be6", want)
+	actual, err := client.CreateFilters(context.TODO(), "d56084adb405e0b7e32c52321bf07be6", want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -222,7 +223,7 @@ func TestCreateMultipleFilters(t *testing.T) {
 		},
 	}
 
-	actual, err := client.CreateFilters("d56084adb405e0b7e32c52321bf07be6", want)
+	actual, err := client.CreateFilters(context.TODO(), "d56084adb405e0b7e32c52321bf07be6", want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -258,7 +259,7 @@ func TestUpdateSingleFilter(t *testing.T) {
 		Expression:  "ip.src eq 93.184.216.0",
 	}
 
-	actual, err := client.UpdateFilter("d56084adb405e0b7e32c52321bf07be6", want)
+	actual, err := client.UpdateFilter(context.TODO(), "d56084adb405e0b7e32c52321bf07be6", want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -310,7 +311,7 @@ func TestUpdateMultipleFilters(t *testing.T) {
 		},
 	}
 
-	actual, err := client.UpdateFilters("d56084adb405e0b7e32c52321bf07be6", want)
+	actual, err := client.UpdateFilters(context.TODO(), "d56084adb405e0b7e32c52321bf07be6", want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -335,7 +336,7 @@ func TestDeleteFilter(t *testing.T) {
 
 	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/filters/60ee852f9cbb4802978d15600c7f3110", handler)
 
-	err := client.DeleteFilter("d56084adb405e0b7e32c52321bf07be6", "60ee852f9cbb4802978d15600c7f3110")
+	err := client.DeleteFilter(context.TODO(), "d56084adb405e0b7e32c52321bf07be6", "60ee852f9cbb4802978d15600c7f3110")
 	assert.Nil(t, err)
 	assert.NoError(t, err)
 }
@@ -344,6 +345,6 @@ func TestDeleteFilterWithMissingID(t *testing.T) {
 	setup()
 	defer teardown()
 
-	err := client.DeleteFilter("d56084adb405e0b7e32c52321bf07be6", "")
+	err := client.DeleteFilter(context.TODO(), "d56084adb405e0b7e32c52321bf07be6", "")
 	assert.EqualError(t, err, "filter ID cannot be empty")
 }
