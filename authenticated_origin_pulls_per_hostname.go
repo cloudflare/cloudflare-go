@@ -146,7 +146,7 @@ func (api *API) EditPerHostnameAuthenticatedOriginPullsConfig(ctx context.Contex
 // API reference: https://api.cloudflare.com/#per-hostname-authenticated-origin-pull-get-the-hostname-status-for-client-authentication
 func (api *API) GetPerHostnameAuthenticatedOriginPullsConfig(ctx context.Context, zoneID, hostname string) (PerHostnameAuthenticatedOriginPullsDetails, error) {
 	uri := "/zones/" + zoneID + "/origin_tls_client_auth/hostnames/" + hostname
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, "GET", uri, nil)
 	if err != nil {
 		return PerHostnameAuthenticatedOriginPullsDetails{}, errors.Wrap(err, errMakeRequestError)
 	}
