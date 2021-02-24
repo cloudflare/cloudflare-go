@@ -277,8 +277,7 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 
 		return nil, &APIRequestError{
 			StatusCode: resp.StatusCode,
-			Message:    errBody.Errors[0].Message,
-			ErrorCode:  errBody.Errors[0].Code,
+			Errors:     errBody.Errors,
 		}
 	}
 

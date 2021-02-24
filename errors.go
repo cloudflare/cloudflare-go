@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 // Error messages
@@ -21,23 +22,28 @@ const (
 // APIRequestError is a type of error raised by API calls made by this library.
 type APIRequestError struct {
 	StatusCode int
-	Message    string
-	ErrorCode  int
+	Errors     []ResponseInfo
 }
 
 func (e APIRequestError) Error() string {
 	errString := ""
-	errString += fmt.Sprintf("HTTP status %d", e.StatusCode)
+	errString += fmt.Sprintf("HTTP status %d: ", e.StatusCode)
 
-	if e.Message != "" {
-		errString += fmt.Sprintf(": %s", e.Message)
+	errMessages := []string{}
+	for _, err := range e.Errors {
+		m := ""
+		if err.Message != "" {
+			m += fmt.Sprintf("%s", err.Message)
+		}
+
+		if err.Code != 0 {
+			m += fmt.Sprintf(" (%d)", err.Code)
+		}
+
+		errMessages = append(errMessages, m)
 	}
 
-	if e.ErrorCode != 0 {
-		errString += fmt.Sprintf(" (%d)", e.ErrorCode)
-	}
-
-	return errString
+	return errString + strings.Join(errMessages, ", ")
 }
 
 // HTTPStatusCode exposes the HTTP status from the error response encountered.
@@ -45,16 +51,28 @@ func (e APIRequestError) HTTPStatusCode() int {
 	return e.StatusCode
 }
 
-// ErrorMessage exposes the first error message from the error response
-// encountered.
-func (e *APIRequestError) ErrorMessage() string {
-	return e.Message
+// ErrorMessages exposes the error messages as a slice of strings from the error
+// response encountered.
+func (e *APIRequestError) ErrorMessages() []string {
+	messages := []string{}
+
+	for _, e := range e.Errors {
+		messages = append(messages, e.Message)
+	}
+
+	return messages
 }
 
-// InternalErrorCode exposes the first internal error code from the error
-// response encountered.
-func (e *APIRequestError) InternalErrorCode() int {
-	return e.ErrorCode
+// InternalErrorCodes exposes the internal error codes as a slice of int from
+// the error response encountered.
+func (e *APIRequestError) InternalErrorCodes() []int {
+	ec := []int{}
+
+	for _, e := range e.Errors {
+		ec = append(ec, e.Code)
+	}
+
+	return ec
 }
 
 // ServiceError returns a boolean whether or not the raised error was caused by
