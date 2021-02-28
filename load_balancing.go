@@ -1,7 +1,9 @@
 package cloudflare
 
 import (
+	"context"
 	"encoding/json"
+	"net/http"
 	"time"
 
 	"github.com/pkg/errors"
@@ -217,9 +219,9 @@ type loadBalancerPoolHealthResponse struct {
 // CreateLoadBalancerPool creates a new load balancer pool.
 //
 // API reference: https://api.cloudflare.com/#load-balancer-pools-create-pool
-func (api *API) CreateLoadBalancerPool(pool LoadBalancerPool) (LoadBalancerPool, error) {
+func (api *API) CreateLoadBalancerPool(ctx context.Context, pool LoadBalancerPool) (LoadBalancerPool, error) {
 	uri := api.userBaseURL("/user") + "/load_balancers/pools"
-	res, err := api.makeRequest("POST", uri, pool)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, pool)
 	if err != nil {
 		return LoadBalancerPool{}, err
 	}
@@ -233,9 +235,9 @@ func (api *API) CreateLoadBalancerPool(pool LoadBalancerPool) (LoadBalancerPool,
 // ListLoadBalancerPools lists load balancer pools connected to an account.
 //
 // API reference: https://api.cloudflare.com/#load-balancer-pools-list-pools
-func (api *API) ListLoadBalancerPools() ([]LoadBalancerPool, error) {
+func (api *API) ListLoadBalancerPools(ctx context.Context) ([]LoadBalancerPool, error) {
 	uri := api.userBaseURL("/user") + "/load_balancers/pools"
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -249,9 +251,9 @@ func (api *API) ListLoadBalancerPools() ([]LoadBalancerPool, error) {
 // LoadBalancerPoolDetails returns the details for a load balancer pool.
 //
 // API reference: https://api.cloudflare.com/#load-balancer-pools-pool-details
-func (api *API) LoadBalancerPoolDetails(poolID string) (LoadBalancerPool, error) {
+func (api *API) LoadBalancerPoolDetails(ctx context.Context, poolID string) (LoadBalancerPool, error) {
 	uri := api.userBaseURL("/user") + "/load_balancers/pools/" + poolID
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return LoadBalancerPool{}, err
 	}
@@ -265,9 +267,9 @@ func (api *API) LoadBalancerPoolDetails(poolID string) (LoadBalancerPool, error)
 // DeleteLoadBalancerPool disables and deletes a load balancer pool.
 //
 // API reference: https://api.cloudflare.com/#load-balancer-pools-delete-pool
-func (api *API) DeleteLoadBalancerPool(poolID string) error {
+func (api *API) DeleteLoadBalancerPool(ctx context.Context, poolID string) error {
 	uri := api.userBaseURL("/user") + "/load_balancers/pools/" + poolID
-	if _, err := api.makeRequest("DELETE", uri, nil); err != nil {
+	if _, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil); err != nil {
 		return err
 	}
 	return nil
@@ -276,9 +278,9 @@ func (api *API) DeleteLoadBalancerPool(poolID string) error {
 // ModifyLoadBalancerPool modifies a configured load balancer pool.
 //
 // API reference: https://api.cloudflare.com/#load-balancer-pools-update-pool
-func (api *API) ModifyLoadBalancerPool(pool LoadBalancerPool) (LoadBalancerPool, error) {
+func (api *API) ModifyLoadBalancerPool(ctx context.Context, pool LoadBalancerPool) (LoadBalancerPool, error) {
 	uri := api.userBaseURL("/user") + "/load_balancers/pools/" + pool.ID
-	res, err := api.makeRequest("PUT", uri, pool)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, pool)
 	if err != nil {
 		return LoadBalancerPool{}, err
 	}
@@ -292,9 +294,9 @@ func (api *API) ModifyLoadBalancerPool(pool LoadBalancerPool) (LoadBalancerPool,
 // CreateLoadBalancerMonitor creates a new load balancer monitor.
 //
 // API reference: https://api.cloudflare.com/#load-balancer-monitors-create-monitor
-func (api *API) CreateLoadBalancerMonitor(monitor LoadBalancerMonitor) (LoadBalancerMonitor, error) {
+func (api *API) CreateLoadBalancerMonitor(ctx context.Context, monitor LoadBalancerMonitor) (LoadBalancerMonitor, error) {
 	uri := api.userBaseURL("/user") + "/load_balancers/monitors"
-	res, err := api.makeRequest("POST", uri, monitor)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, monitor)
 	if err != nil {
 		return LoadBalancerMonitor{}, err
 	}
@@ -308,9 +310,9 @@ func (api *API) CreateLoadBalancerMonitor(monitor LoadBalancerMonitor) (LoadBala
 // ListLoadBalancerMonitors lists load balancer monitors connected to an account.
 //
 // API reference: https://api.cloudflare.com/#load-balancer-monitors-list-monitors
-func (api *API) ListLoadBalancerMonitors() ([]LoadBalancerMonitor, error) {
+func (api *API) ListLoadBalancerMonitors(ctx context.Context) ([]LoadBalancerMonitor, error) {
 	uri := api.userBaseURL("/user") + "/load_balancers/monitors"
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -324,9 +326,9 @@ func (api *API) ListLoadBalancerMonitors() ([]LoadBalancerMonitor, error) {
 // LoadBalancerMonitorDetails returns the details for a load balancer monitor.
 //
 // API reference: https://api.cloudflare.com/#load-balancer-monitors-monitor-details
-func (api *API) LoadBalancerMonitorDetails(monitorID string) (LoadBalancerMonitor, error) {
+func (api *API) LoadBalancerMonitorDetails(ctx context.Context, monitorID string) (LoadBalancerMonitor, error) {
 	uri := api.userBaseURL("/user") + "/load_balancers/monitors/" + monitorID
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return LoadBalancerMonitor{}, err
 	}
@@ -340,9 +342,9 @@ func (api *API) LoadBalancerMonitorDetails(monitorID string) (LoadBalancerMonito
 // DeleteLoadBalancerMonitor disables and deletes a load balancer monitor.
 //
 // API reference: https://api.cloudflare.com/#load-balancer-monitors-delete-monitor
-func (api *API) DeleteLoadBalancerMonitor(monitorID string) error {
+func (api *API) DeleteLoadBalancerMonitor(ctx context.Context, monitorID string) error {
 	uri := api.userBaseURL("/user") + "/load_balancers/monitors/" + monitorID
-	if _, err := api.makeRequest("DELETE", uri, nil); err != nil {
+	if _, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil); err != nil {
 		return err
 	}
 	return nil
@@ -351,9 +353,9 @@ func (api *API) DeleteLoadBalancerMonitor(monitorID string) error {
 // ModifyLoadBalancerMonitor modifies a configured load balancer monitor.
 //
 // API reference: https://api.cloudflare.com/#load-balancer-monitors-update-monitor
-func (api *API) ModifyLoadBalancerMonitor(monitor LoadBalancerMonitor) (LoadBalancerMonitor, error) {
+func (api *API) ModifyLoadBalancerMonitor(ctx context.Context, monitor LoadBalancerMonitor) (LoadBalancerMonitor, error) {
 	uri := api.userBaseURL("/user") + "/load_balancers/monitors/" + monitor.ID
-	res, err := api.makeRequest("PUT", uri, monitor)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, monitor)
 	if err != nil {
 		return LoadBalancerMonitor{}, err
 	}
@@ -367,9 +369,9 @@ func (api *API) ModifyLoadBalancerMonitor(monitor LoadBalancerMonitor) (LoadBala
 // CreateLoadBalancer creates a new load balancer.
 //
 // API reference: https://api.cloudflare.com/#load-balancers-create-load-balancer
-func (api *API) CreateLoadBalancer(zoneID string, lb LoadBalancer) (LoadBalancer, error) {
+func (api *API) CreateLoadBalancer(ctx context.Context, zoneID string, lb LoadBalancer) (LoadBalancer, error) {
 	uri := "/zones/" + zoneID + "/load_balancers"
-	res, err := api.makeRequest("POST", uri, lb)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, lb)
 	if err != nil {
 		return LoadBalancer{}, err
 	}
@@ -383,9 +385,9 @@ func (api *API) CreateLoadBalancer(zoneID string, lb LoadBalancer) (LoadBalancer
 // ListLoadBalancers lists load balancers configured on a zone.
 //
 // API reference: https://api.cloudflare.com/#load-balancers-list-load-balancers
-func (api *API) ListLoadBalancers(zoneID string) ([]LoadBalancer, error) {
+func (api *API) ListLoadBalancers(ctx context.Context, zoneID string) ([]LoadBalancer, error) {
 	uri := "/zones/" + zoneID + "/load_balancers"
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -399,9 +401,9 @@ func (api *API) ListLoadBalancers(zoneID string) ([]LoadBalancer, error) {
 // LoadBalancerDetails returns the details for a load balancer.
 //
 // API reference: https://api.cloudflare.com/#load-balancers-load-balancer-details
-func (api *API) LoadBalancerDetails(zoneID, lbID string) (LoadBalancer, error) {
+func (api *API) LoadBalancerDetails(ctx context.Context, zoneID, lbID string) (LoadBalancer, error) {
 	uri := "/zones/" + zoneID + "/load_balancers/" + lbID
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return LoadBalancer{}, err
 	}
@@ -415,9 +417,9 @@ func (api *API) LoadBalancerDetails(zoneID, lbID string) (LoadBalancer, error) {
 // DeleteLoadBalancer disables and deletes a load balancer.
 //
 // API reference: https://api.cloudflare.com/#load-balancers-delete-load-balancer
-func (api *API) DeleteLoadBalancer(zoneID, lbID string) error {
+func (api *API) DeleteLoadBalancer(ctx context.Context, zoneID, lbID string) error {
 	uri := "/zones/" + zoneID + "/load_balancers/" + lbID
-	if _, err := api.makeRequest("DELETE", uri, nil); err != nil {
+	if _, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil); err != nil {
 		return err
 	}
 	return nil
@@ -426,9 +428,9 @@ func (api *API) DeleteLoadBalancer(zoneID, lbID string) error {
 // ModifyLoadBalancer modifies a configured load balancer.
 //
 // API reference: https://api.cloudflare.com/#load-balancers-update-load-balancer
-func (api *API) ModifyLoadBalancer(zoneID string, lb LoadBalancer) (LoadBalancer, error) {
+func (api *API) ModifyLoadBalancer(ctx context.Context, zoneID string, lb LoadBalancer) (LoadBalancer, error) {
 	uri := "/zones/" + zoneID + "/load_balancers/" + lb.ID
-	res, err := api.makeRequest("PUT", uri, lb)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, lb)
 	if err != nil {
 		return LoadBalancer{}, err
 	}
@@ -442,9 +444,9 @@ func (api *API) ModifyLoadBalancer(zoneID string, lb LoadBalancer) (LoadBalancer
 // PoolHealthDetails fetches the latest healtcheck details for a single pool.
 //
 // API reference: https://api.cloudflare.com/#load-balancer-pools-pool-health-details
-func (api *API) PoolHealthDetails(poolID string) (LoadBalancerPoolHealth, error) {
+func (api *API) PoolHealthDetails(ctx context.Context, poolID string) (LoadBalancerPoolHealth, error) {
 	uri := api.userBaseURL("/user") + "/load_balancers/pools/" + poolID + "/health"
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return LoadBalancerPoolHealth{}, err
 	}

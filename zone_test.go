@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -15,7 +16,7 @@ func TestZoneAnalyticsDashboard(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		assert.Equal(t, "2015-01-01T12:23:00Z", r.URL.Query().Get("since"))
 		assert.Equal(t, "2015-01-02T12:23:00Z", r.URL.Query().Get("until"))
 		assert.Equal(t, "true", r.URL.Query().Get("continuous"))
@@ -321,7 +322,7 @@ func TestZoneAnalyticsDashboard(t *testing.T) {
 	}
 
 	continuous := true
-	d, err := client.ZoneAnalyticsDashboard("foo", ZoneAnalyticsOptions{
+	d, err := client.ZoneAnalyticsDashboard(context.TODO(), "foo", ZoneAnalyticsOptions{
 		Since:      &since,
 		Until:      &until,
 		Continuous: &continuous,
@@ -330,7 +331,7 @@ func TestZoneAnalyticsDashboard(t *testing.T) {
 		assert.Equal(t, want, d)
 	}
 
-	_, err = client.ZoneAnalyticsDashboard("bar", ZoneAnalyticsOptions{})
+	_, err = client.ZoneAnalyticsDashboard(context.TODO(), "bar", ZoneAnalyticsOptions{})
 	assert.Error(t, err)
 }
 
@@ -339,7 +340,7 @@ func TestZoneAnalyticsByColocation(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		assert.Equal(t, "2015-01-01T12:23:00Z", r.URL.Query().Get("since"))
 		assert.Equal(t, "2015-01-02T12:23:00Z", r.URL.Query().Get("until"))
 		assert.Equal(t, "true", r.URL.Query().Get("continuous"))
@@ -571,7 +572,7 @@ func TestZoneAnalyticsByColocation(t *testing.T) {
 	}
 
 	continuous := true
-	d, err := client.ZoneAnalyticsByColocation("foo", ZoneAnalyticsOptions{
+	d, err := client.ZoneAnalyticsByColocation(context.TODO(), "foo", ZoneAnalyticsOptions{
 		Since:      &since,
 		Until:      &until,
 		Continuous: &continuous,
@@ -580,7 +581,7 @@ func TestZoneAnalyticsByColocation(t *testing.T) {
 		assert.Equal(t, want, d)
 	}
 
-	_, err = client.ZoneAnalyticsDashboard("bar", ZoneAnalyticsOptions{})
+	_, err = client.ZoneAnalyticsDashboard(context.TODO(), "bar", ZoneAnalyticsOptions{})
 	assert.Error(t, err)
 }
 
@@ -731,7 +732,7 @@ func TestCreateZoneFullSetup(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -797,12 +798,7 @@ func TestCreateZoneFullSetup(t *testing.T) {
 
 	mux.HandleFunc("/zones", handler)
 
-	actual, err := client.CreateZone(
-		"example.com",
-		false,
-		Account{ID: "01a7362d577a6c3019a474fd6f485823"},
-		"full",
-	)
+	actual, err := client.CreateZone(context.TODO(), "example.com", false, Account{ID: "01a7362d577a6c3019a474fd6f485823"}, "full")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedFullZoneSetup, actual)
@@ -814,7 +810,7 @@ func TestCreateZonePartialSetup(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -880,12 +876,7 @@ func TestCreateZonePartialSetup(t *testing.T) {
 
 	mux.HandleFunc("/zones", handler)
 
-	actual, err := client.CreateZone(
-		"example.com",
-		false,
-		Account{ID: "01a7362d577a6c3019a474fd6f485823"},
-		"partial",
-	)
+	actual, err := client.CreateZone(context.TODO(), "example.com", false, Account{ID: "01a7362d577a6c3019a474fd6f485823"}, "partial")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedPartialZoneSetup, actual)
@@ -897,7 +888,7 @@ func TestFallbackOrigin_FallbackOrigin(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/fallback_origin", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
@@ -912,7 +903,7 @@ func TestFallbackOrigin_FallbackOrigin(t *testing.T) {
 }`)
 	})
 
-	fallbackOrigin, err := client.FallbackOrigin("foo")
+	fallbackOrigin, err := client.FallbackOrigin(context.TODO(), "foo")
 
 	want := FallbackOrigin{
 		ID:    "fallback_origin",
@@ -946,7 +937,7 @@ func TestFallbackOrigin_UpdateFallbackOrigin(t *testing.T) {
 }`)
 	})
 
-	response, err := client.UpdateFallbackOrigin("foo", FallbackOrigin{Value: "app.example.com"})
+	response, err := client.UpdateFallbackOrigin(context.TODO(), "foo", FallbackOrigin{Value: "app.example.com"})
 
 	want := &FallbackOriginResponse{
 		Result: FallbackOrigin{
@@ -998,7 +989,7 @@ func TestZonePartialHasVerificationKey(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
 		// JSON data from: https://api.cloudflare.com/#zone-zone-details (plus an undocumented field verification_key from curl to API)
@@ -1090,7 +1081,7 @@ func TestZonePartialHasVerificationKey(t *testing.T) {
 
 	mux.HandleFunc("/zones/foo", handler)
 
-	z, err := client.ZoneDetails("foo")
+	z, err := client.ZoneDetails(context.TODO(), "foo")
 	if assert.NoError(t, err) {
 		assert.NotEmpty(t, z.VerificationKey)
 		assert.Equal(t, z.VerificationKey, "foo-bar")
@@ -1102,7 +1093,7 @@ func TestZoneDNSSECSetting(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
 		// JSON data from: https://api.cloudflare.com/#dnssec-properties
@@ -1125,7 +1116,7 @@ func TestZoneDNSSECSetting(t *testing.T) {
 
 	mux.HandleFunc("/zones/foo/dnssec", handler)
 
-	z, err := client.ZoneDNSSECSetting("foo")
+	z, err := client.ZoneDNSSECSetting(context.TODO(), "foo")
 	if assert.NoError(t, err) {
 		assert.Equal(t, z.Status, "active")
 		assert.Equal(t, z.Flags, 257)
@@ -1147,7 +1138,7 @@ func TestDeleteZoneDNSSEC(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "DELETE", r.Method, "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
 		// JSON data from: https://api.cloudflare.com/#dnssec-properties
@@ -1158,7 +1149,7 @@ func TestDeleteZoneDNSSEC(t *testing.T) {
 
 	mux.HandleFunc("/zones/foo/dnssec", handler)
 
-	z, err := client.DeleteZoneDNSSEC("foo")
+	z, err := client.DeleteZoneDNSSEC(context.TODO(), "foo")
 	if assert.NoError(t, err) {
 		assert.Equal(t, z, "foo")
 	}
@@ -1192,7 +1183,7 @@ func TestUpdateZoneDNSSEC(t *testing.T) {
 
 	mux.HandleFunc("/zones/foo/dnssec", handler)
 
-	z, err := client.UpdateZoneDNSSEC("foo", ZoneDNSSECUpdateOptions{
+	z, err := client.UpdateZoneDNSSEC(context.TODO(), "foo", ZoneDNSSECUpdateOptions{
 		Status: "active",
 	})
 	if assert.NoError(t, err) {

@@ -1,6 +1,7 @@
 package cloudflare_test
 
 import (
+	"context"
 	"fmt"
 	"log"
 
@@ -22,7 +23,7 @@ func ExampleAPI_UploadWorker() {
 		log.Fatal(err)
 	}
 
-	res, err := api.UploadWorker(&cloudflare.WorkerRequestParams{ZoneID: zoneID}, workerScript)
+	res, err := api.UploadWorker(context.TODO(), &cloudflare.WorkerRequestParams{ZoneID: zoneID}, workerScript)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -37,7 +38,7 @@ func UploadWorkerWithName() {
 		log.Fatal(err)
 	}
 
-	res, err := api.UploadWorker(&cloudflare.WorkerRequestParams{ScriptName: "baz"}, workerScript)
+	res, err := api.UploadWorker(context.TODO(), &cloudflare.WorkerRequestParams{ScriptName: "baz"}, workerScript)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -55,7 +56,7 @@ func ExampleAPI_DownloadWorker() {
 		log.Fatal(err)
 	}
 
-	res, err := api.DownloadWorker(&cloudflare.WorkerRequestParams{ZoneID: zoneID})
+	res, err := api.DownloadWorker(context.TODO(), &cloudflare.WorkerRequestParams{ZoneID: zoneID})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -70,7 +71,7 @@ func DownloadWorkerWithName() {
 		log.Fatal(err)
 	}
 
-	res, err := api.DownloadWorker(&cloudflare.WorkerRequestParams{ScriptName: "baz"})
+	res, err := api.DownloadWorker(context.TODO(), &cloudflare.WorkerRequestParams{ScriptName: "baz"})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -87,7 +88,7 @@ func ExampleAPI_DeleteWorker() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	res, err := api.DeleteWorker(&cloudflare.WorkerRequestParams{ZoneID: zoneID})
+	res, err := api.DeleteWorker(context.TODO(), &cloudflare.WorkerRequestParams{ZoneID: zoneID})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -102,7 +103,7 @@ func DeleteWorkerWithName() {
 		log.Fatal(err)
 	}
 
-	res, err := api.DeleteWorker(&cloudflare.WorkerRequestParams{ScriptName: "baz"})
+	res, err := api.DeleteWorker(context.TODO(), &cloudflare.WorkerRequestParams{ScriptName: "baz"})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -115,7 +116,7 @@ func ExampleAPI_ListWorkerScripts() {
 		log.Fatal(err)
 	}
 
-	res, err := api.ListWorkerScripts()
+	res, err := api.ListWorkerScripts(context.TODO())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -133,7 +134,7 @@ func ExampleAPI_CreateWorkerRoute() {
 		log.Fatal(err)
 	}
 	route := cloudflare.WorkerRoute{Pattern: "app1.example.com/*", Enabled: true}
-	res, err := api.CreateWorkerRoute(zoneID, route)
+	res, err := api.CreateWorkerRoute(context.TODO(), zoneID, route)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -151,13 +152,13 @@ func ExampleAPI_UpdateWorkerRoute() {
 		log.Fatal(err)
 	}
 	// pull from existing list of routes to perform update on
-	routesResponse, err := api.ListWorkerRoutes(zoneID)
+	routesResponse, err := api.ListWorkerRoutes(context.TODO(), zoneID)
 	if err != nil {
 		log.Fatal(err)
 	}
 	route := cloudflare.WorkerRoute{Pattern: "app2.example.com/*", Enabled: true}
 	// update first route retrieved from the listWorkerRoutes call with details above
-	res, err := api.UpdateWorkerRoute(zoneID, routesResponse.Routes[0].ID, route)
+	res, err := api.UpdateWorkerRoute(context.TODO(), zoneID, routesResponse.Routes[0].ID, route)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -174,7 +175,7 @@ func ExampleAPI_ListWorkerRoutes() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	res, err := api.ListWorkerRoutes(zoneID)
+	res, err := api.ListWorkerRoutes(context.TODO(), zoneID)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -192,12 +193,12 @@ func ExampleAPI_DeleteWorkerRoute() {
 		log.Fatal(err)
 	}
 	// pull from existing list of routes to perform delete on
-	routesResponse, err := api.ListWorkerRoutes(zoneID)
+	routesResponse, err := api.ListWorkerRoutes(context.TODO(), zoneID)
 	if err != nil {
 		log.Fatal(err)
 	}
 	// delete first route retrieved from the listWorkerRoutes call
-	res, err := api.DeleteWorkerRoute(zoneID, routesResponse.Routes[0].ID)
+	res, err := api.DeleteWorkerRoute(context.TODO(), zoneID, routesResponse.Routes[0].ID)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -75,7 +76,7 @@ var (
 		Type:                 "HTTP",
 		CheckRegions:         []string{"WNAM"},
 		HTTPConfig: &HealthcheckHTTPConfig{
-			Method:          "GET",
+			Method:          http.MethodGet,
 			Path:            "/",
 			Port:            8443,
 			ExpectedBody:    "",
@@ -83,7 +84,7 @@ var (
 			FollowRedirects: true,
 			AllowInsecure:   false,
 			Header: map[string][]string{
-				"Host": []string{"www.example.com"},
+				"Host": {"www.example.com"},
 			},
 		},
 		Notification: HealthcheckNotification{
@@ -100,7 +101,7 @@ func TestHealthchecks(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"result": [
@@ -123,7 +124,7 @@ func TestHealthchecks(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/healthchecks", handler)
 	want := []Healthcheck{expectedHealthcheck}
 
-	actual, err := client.Healthchecks(testZoneID)
+	actual, err := client.Healthchecks(context.TODO(), testZoneID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -134,7 +135,7 @@ func TestHealthcheck(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"result": %s,
@@ -148,7 +149,7 @@ func TestHealthcheck(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/healthchecks/"+healthcheckID, handler)
 	want := expectedHealthcheck
 
-	actual, err := client.Healthcheck(testZoneID, healthcheckID)
+	actual, err := client.Healthcheck(context.TODO(), testZoneID, healthcheckID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -164,7 +165,7 @@ func TestCreateHealthcheck(t *testing.T) {
 	}
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 		  "result": %s,
@@ -178,7 +179,7 @@ func TestCreateHealthcheck(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/healthchecks", handler)
 	want := expectedHealthcheck
 
-	actual, err := client.CreateHealthcheck(testZoneID, newHealthcheck)
+	actual, err := client.CreateHealthcheck(context.TODO(), testZoneID, newHealthcheck)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -196,7 +197,7 @@ func TestUpdateHealthcheck(t *testing.T) {
 	}
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "PUT", "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPut, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 		  "result": %s,
@@ -210,7 +211,7 @@ func TestUpdateHealthcheck(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/healthchecks/"+healthcheckID, handler)
 	want := expectedHealthcheck
 
-	actual, err := client.UpdateHealthcheck(testZoneID, healthcheckID, updatedHealthcheck)
+	actual, err := client.UpdateHealthcheck(context.TODO(), testZoneID, healthcheckID, updatedHealthcheck)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -221,7 +222,7 @@ func TestDeleteHealthcheck(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "DELETE", "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodDelete, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
 		  "result": null,
@@ -234,7 +235,7 @@ func TestDeleteHealthcheck(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/healthchecks/"+healthcheckID, handler)
 
-	err := client.DeleteHealthcheck(testZoneID, healthcheckID)
+	err := client.DeleteHealthcheck(context.TODO(), testZoneID, healthcheckID)
 	assert.NoError(t, err)
 }
 
@@ -248,7 +249,7 @@ func TestCreateHealthcheckPreview(t *testing.T) {
 	}
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 		  "result": %s,
@@ -262,7 +263,7 @@ func TestCreateHealthcheckPreview(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/healthchecks/preview", handler)
 	want := expectedHealthcheck
 
-	actual, err := client.CreateHealthcheckPreview(testZoneID, newHealthcheck)
+	actual, err := client.CreateHealthcheckPreview(context.TODO(), testZoneID, newHealthcheck)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -273,7 +274,7 @@ func TestHealthcheckPreview(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"result": %s,
@@ -287,7 +288,7 @@ func TestHealthcheckPreview(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/healthchecks/preview/"+healthcheckID, handler)
 	want := expectedHealthcheck
 
-	actual, err := client.HealthcheckPreview(testZoneID, healthcheckID)
+	actual, err := client.HealthcheckPreview(context.TODO(), testZoneID, healthcheckID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -298,7 +299,7 @@ func TestDeleteHealthcheckPreview(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "DELETE", "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodDelete, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
 		  "result": null,
@@ -311,6 +312,6 @@ func TestDeleteHealthcheckPreview(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/healthchecks/preview/"+healthcheckID, handler)
 
-	err := client.DeleteHealthcheckPreview(testZoneID, healthcheckID)
+	err := client.DeleteHealthcheckPreview(context.TODO(), testZoneID, healthcheckID)
 	assert.NoError(t, err)
 }

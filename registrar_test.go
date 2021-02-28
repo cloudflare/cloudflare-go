@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -95,7 +96,7 @@ func TestRegistrarDomain(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -142,7 +143,7 @@ func TestRegistrarDomain(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/registrar/domains/cloudflare.com", handler)
 
-	actual, err := client.RegistrarDomain("01a7362d577a6c3019a474fd6f485823", "cloudflare.com")
+	actual, err := client.RegistrarDomain(context.TODO(), "01a7362d577a6c3019a474fd6f485823", "cloudflare.com")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedRegistrarDomain, actual)
@@ -154,7 +155,7 @@ func TestRegistrarDomains(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -209,7 +210,7 @@ func TestRegistrarDomains(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/registrar/domains", handler)
 
-	actual, err := client.RegistrarDomains("01a7362d577a6c3019a474fd6f485823")
+	actual, err := client.RegistrarDomains(context.TODO(), "01a7362d577a6c3019a474fd6f485823")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, []RegistrarDomain{expectedRegistrarDomain}, actual)
@@ -221,7 +222,7 @@ func TestTransferRegistrarDomain(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -276,7 +277,7 @@ func TestTransferRegistrarDomain(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/registrar/domains/cloudflare.com/transfer", handler)
 
-	actual, err := client.TransferRegistrarDomain("01a7362d577a6c3019a474fd6f485823", "cloudflare.com")
+	actual, err := client.TransferRegistrarDomain(context.TODO(), "01a7362d577a6c3019a474fd6f485823", "cloudflare.com")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, []RegistrarDomain{expectedRegistrarDomain}, actual)
@@ -288,7 +289,7 @@ func TestCancelRegistrarDomainTransfer(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -343,7 +344,7 @@ func TestCancelRegistrarDomainTransfer(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/registrar/domains/cloudflare.com/cancel_transfer", handler)
 
-	actual, err := client.CancelRegistrarDomainTransfer("01a7362d577a6c3019a474fd6f485823", "cloudflare.com")
+	actual, err := client.CancelRegistrarDomainTransfer(context.TODO(), "01a7362d577a6c3019a474fd6f485823", "cloudflare.com")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, []RegistrarDomain{expectedRegistrarDomain}, actual)
@@ -355,7 +356,7 @@ func TestUpdateRegistrarDomain(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "PUT", "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPut, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -402,14 +403,10 @@ func TestUpdateRegistrarDomain(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/registrar/domains/cloudflare.com", handler)
 
-	actual, err := client.UpdateRegistrarDomain(
-		"01a7362d577a6c3019a474fd6f485823",
-		"cloudflare.com",
-		RegistrarDomainConfiguration{
-			NameServers: []string{"ns1.cloudflare.com", "ns2.cloudflare.com"},
-			Locked:      false,
-		},
-	)
+	actual, err := client.UpdateRegistrarDomain(context.TODO(), "01a7362d577a6c3019a474fd6f485823", "cloudflare.com", RegistrarDomainConfiguration{
+		NameServers: []string{"ns1.cloudflare.com", "ns2.cloudflare.com"},
+		Locked:      false,
+	})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedRegistrarDomain, actual)

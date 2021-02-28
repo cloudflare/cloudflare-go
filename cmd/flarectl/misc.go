@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -138,7 +139,7 @@ func _getIps(ipType string, showMsgType bool) {
 }
 
 func userInfo(c *cli.Context) error {
-	user, err := api.UserDetails()
+	user, err := api.UserDetails(context.TODO())
 	if err != nil {
 		fmt.Println(err)
 		return err
@@ -172,7 +173,7 @@ func pageRules(c *cli.Context) error {
 		return err
 	}
 
-	rules, err := api.ListPageRules(zoneID)
+	rules, err := api.ListPageRules(context.TODO(), zoneID)
 	if err != nil {
 		fmt.Println(err)
 		return err

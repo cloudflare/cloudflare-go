@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"strconv"
@@ -41,7 +42,7 @@ func userAgentCreate(c *cli.Context) error {
 		},
 	}
 
-	resp, err := api.CreateUserAgentRule(zoneID, userAgentRule)
+	resp, err := api.CreateUserAgentRule(context.TODO(), zoneID, userAgentRule)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error creating User-Agent block rule: ", err)
 		return err
@@ -77,7 +78,7 @@ func userAgentUpdate(c *cli.Context) error {
 		},
 	}
 
-	resp, err := api.UpdateUserAgentRule(zoneID, c.String("id"), userAgentRule)
+	resp, err := api.UpdateUserAgentRule(context.TODO(), zoneID, c.String("id"), userAgentRule)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error updating User-Agent block rule: ", err)
 		return err
@@ -103,7 +104,7 @@ func userAgentDelete(c *cli.Context) error {
 		return err
 	}
 
-	resp, err := api.DeleteUserAgentRule(zoneID, c.String("id"))
+	resp, err := api.DeleteUserAgentRule(context.TODO(), zoneID, c.String("id"))
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error deleting User-Agent block rule: ", err)
 		return err
@@ -129,7 +130,7 @@ func userAgentList(c *cli.Context) error {
 		return err
 	}
 
-	resp, err := api.ListUserAgentRules(zoneID, c.Int("page"))
+	resp, err := api.ListUserAgentRules(context.TODO(), zoneID, c.Int("page"))
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error listing User-Agent block rules: ", err)
 		return err
