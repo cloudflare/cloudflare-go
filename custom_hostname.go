@@ -120,7 +120,7 @@ func (api *API) UpdateCustomHostnameSSL(zoneID string, customHostnameID string, 
 	}
 	res, err := api.makeRequest("PATCH", uri, ch)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	var response *CustomHostnameResponse
@@ -139,7 +139,7 @@ func (api *API) UpdateCustomHostname(zoneID string, customHostnameID string, ch 
 	uri := "/zones/" + zoneID + "/custom_hostnames/" + customHostnameID
 	res, err := api.makeRequest("PATCH", uri, ch)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	var response *CustomHostnameResponse
@@ -158,7 +158,7 @@ func (api *API) DeleteCustomHostname(zoneID string, customHostnameID string) err
 	uri := "/zones/" + zoneID + "/custom_hostnames/" + customHostnameID
 	res, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	var response *CustomHostnameResponse
@@ -177,7 +177,7 @@ func (api *API) CreateCustomHostname(zoneID string, ch CustomHostname) (*CustomH
 	uri := "/zones/" + zoneID + "/custom_hostnames"
 	res, err := api.makeRequest("POST", uri, ch)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	var response *CustomHostnameResponse
@@ -207,12 +207,12 @@ func (api *API) CustomHostnames(zoneID string, page int, filter CustomHostname) 
 	uri := "/zones/" + zoneID + "/custom_hostnames" + query
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []CustomHostname{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+		return []CustomHostname{}, ResultInfo{}, err
 	}
 	var customHostnameListResponse CustomHostnameListResponse
 	err = json.Unmarshal(res, &customHostnameListResponse)
 	if err != nil {
-		return []CustomHostname{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+		return []CustomHostname{}, ResultInfo{}, err
 	}
 
 	return customHostnameListResponse.Result, customHostnameListResponse.ResultInfo, nil
@@ -225,7 +225,7 @@ func (api *API) CustomHostname(zoneID string, customHostnameID string) (CustomHo
 	uri := "/zones/" + zoneID + "/custom_hostnames/" + customHostnameID
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return CustomHostname{}, errors.Wrap(err, errMakeRequestError)
+		return CustomHostname{}, err
 	}
 
 	var response CustomHostnameResponse
@@ -258,7 +258,7 @@ func (api *API) UpdateCustomHostnameFallbackOrigin(zoneID string, chfo CustomHos
 	uri := "/zones/" + zoneID + "/custom_hostnames/fallback_origin"
 	res, err := api.makeRequest("PUT", uri, chfo)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	var response *CustomHostnameFallbackOriginResponse
@@ -276,7 +276,7 @@ func (api *API) DeleteCustomHostnameFallbackOrigin(zoneID string) error {
 	uri := "/zones/" + zoneID + "/custom_hostnames/fallback_origin"
 	res, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	var response *CustomHostnameFallbackOriginResponse
@@ -294,7 +294,7 @@ func (api *API) CustomHostnameFallbackOrigin(zoneID string) (CustomHostnameFallb
 	uri := "/zones/" + zoneID + "/custom_hostnames/fallback_origin"
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return CustomHostnameFallbackOrigin{}, errors.Wrap(err, errMakeRequestError)
+		return CustomHostnameFallbackOrigin{}, err
 	}
 
 	var response CustomHostnameFallbackOriginResponse

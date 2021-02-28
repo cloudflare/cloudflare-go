@@ -322,7 +322,7 @@ func (api *API) CreateZone(name string, jumpstart bool, account Account, zoneTyp
 
 	res, err := api.makeRequest("POST", "/zones", newzone)
 	if err != nil {
-		return Zone{}, errors.Wrap(err, errMakeRequestError)
+		return Zone{}, err
 	}
 
 	var r ZoneResponse
@@ -339,7 +339,7 @@ func (api *API) CreateZone(name string, jumpstart bool, account Account, zoneTyp
 func (api *API) ZoneActivationCheck(zoneID string) (Response, error) {
 	res, err := api.makeRequest("PUT", "/zones/"+zoneID+"/activation_check", nil)
 	if err != nil {
-		return Response{}, errors.Wrap(err, errMakeRequestError)
+		return Response{}, err
 	}
 	var r Response
 	err = json.Unmarshal(res, &r)
@@ -365,7 +365,7 @@ func (api *API) ListZones(z ...string) ([]Zone, error) {
 			v.Set("name", normalizeZoneName(zone))
 			res, err = api.makeRequest("GET", "/zones?"+v.Encode(), nil)
 			if err != nil {
-				return []Zone{}, errors.Wrap(err, errMakeRequestError)
+				return []Zone{}, err
 			}
 			err = json.Unmarshal(res, &r)
 			if err != nil {
@@ -382,7 +382,7 @@ func (api *API) ListZones(z ...string) ([]Zone, error) {
 	} else {
 		res, err = api.makeRequest("GET", "/zones?per_page=50", nil)
 		if err != nil {
-			return []Zone{}, errors.Wrap(err, errMakeRequestError)
+			return []Zone{}, err
 		}
 		err = json.Unmarshal(res, &r)
 		if err != nil {
@@ -444,7 +444,7 @@ func (api *API) ListZonesContext(ctx context.Context, opts ...ReqOption) (r Zone
 
 	res, err = api.makeRequestContext(ctx, "GET", "/zones?"+opt.params.Encode(), nil)
 	if err != nil {
-		return ZonesResponse{}, errors.Wrap(err, errMakeRequestError)
+		return ZonesResponse{}, err
 	}
 	err = json.Unmarshal(res, &r)
 	if err != nil {
@@ -497,7 +497,7 @@ func (api *API) ListZonesContext(ctx context.Context, opts ...ReqOption) (r Zone
 func (api *API) ZoneDetails(zoneID string) (Zone, error) {
 	res, err := api.makeRequest("GET", "/zones/"+zoneID, nil)
 	if err != nil {
-		return Zone{}, errors.Wrap(err, errMakeRequestError)
+		return Zone{}, err
 	}
 	var r ZoneResponse
 	err = json.Unmarshal(res, &r)
@@ -552,7 +552,7 @@ func (api *API) ZoneSetPlan(zoneID string, planType string) error {
 
 	_, err := api.makeRequest("POST", uri, zonePayload)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil
@@ -572,7 +572,7 @@ func (api *API) ZoneUpdatePlan(zoneID string, planType string) error {
 
 	_, err := api.makeRequest("PUT", uri, zonePayload)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil
@@ -586,7 +586,7 @@ func (api *API) ZoneUpdatePlan(zoneID string, planType string) error {
 func (api *API) EditZone(zoneID string, zoneOpts ZoneOptions) (Zone, error) {
 	res, err := api.makeRequest("PATCH", "/zones/"+zoneID, zoneOpts)
 	if err != nil {
-		return Zone{}, errors.Wrap(err, errMakeRequestError)
+		return Zone{}, err
 	}
 	var r ZoneResponse
 	err = json.Unmarshal(res, &r)
@@ -607,7 +607,7 @@ func (api *API) PurgeEverything(zoneID string) (PurgeCacheResponse, error) {
 	uri := "/zones/" + zoneID + "/purge_cache"
 	res, err := api.makeRequest("POST", uri, PurgeCacheRequest{true, nil, nil, nil})
 	if err != nil {
-		return PurgeCacheResponse{}, errors.Wrap(err, errMakeRequestError)
+		return PurgeCacheResponse{}, err
 	}
 	var r PurgeCacheResponse
 	err = json.Unmarshal(res, &r)
@@ -631,7 +631,7 @@ func (api *API) PurgeCacheContext(ctx context.Context, zoneID string, pcr PurgeC
 	uri := "/zones/" + zoneID + "/purge_cache"
 	res, err := api.makeRequestContext(ctx, "POST", uri, pcr)
 	if err != nil {
-		return PurgeCacheResponse{}, errors.Wrap(err, errMakeRequestError)
+		return PurgeCacheResponse{}, err
 	}
 	var r PurgeCacheResponse
 	err = json.Unmarshal(res, &r)
@@ -647,7 +647,7 @@ func (api *API) PurgeCacheContext(ctx context.Context, zoneID string, pcr PurgeC
 func (api *API) DeleteZone(zoneID string) (ZoneID, error) {
 	res, err := api.makeRequest("DELETE", "/zones/"+zoneID, nil)
 	if err != nil {
-		return ZoneID{}, errors.Wrap(err, errMakeRequestError)
+		return ZoneID{}, err
 	}
 	var r ZoneIDResponse
 	err = json.Unmarshal(res, &r)
@@ -664,7 +664,7 @@ func (api *API) AvailableZoneRatePlans(zoneID string) ([]ZoneRatePlan, error) {
 	uri := "/zones/" + zoneID + "/available_rate_plans"
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []ZoneRatePlan{}, errors.Wrap(err, errMakeRequestError)
+		return []ZoneRatePlan{}, err
 	}
 	var r AvailableZoneRatePlansResponse
 	err = json.Unmarshal(res, &r)
@@ -681,7 +681,7 @@ func (api *API) AvailableZonePlans(zoneID string) ([]ZonePlan, error) {
 	uri := "/zones/" + zoneID + "/available_plans"
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []ZonePlan{}, errors.Wrap(err, errMakeRequestError)
+		return []ZonePlan{}, err
 	}
 	var r AvailableZonePlansResponse
 	err = json.Unmarshal(res, &r)
@@ -713,7 +713,7 @@ func (api *API) ZoneAnalyticsDashboard(zoneID string, options ZoneAnalyticsOptio
 	uri := "/zones/" + zoneID + "/analytics/dashboard" + "?" + options.encode()
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return ZoneAnalyticsData{}, errors.Wrap(err, errMakeRequestError)
+		return ZoneAnalyticsData{}, err
 	}
 	var r zoneAnalyticsDataResponse
 	err = json.Unmarshal(res, &r)
@@ -730,7 +730,7 @@ func (api *API) ZoneAnalyticsByColocation(zoneID string, options ZoneAnalyticsOp
 	uri := "/zones/" + zoneID + "/analytics/colos" + "?" + options.encode()
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 	var r zoneAnalyticsColocationResponse
 	err = json.Unmarshal(res, &r)
@@ -747,7 +747,7 @@ func (api *API) ZoneSettings(zoneID string) (*ZoneSettingResponse, error) {
 	uri := "/zones/" + zoneID + "/settings"
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &ZoneSettingResponse{}
@@ -768,7 +768,7 @@ func (api *API) UpdateZoneSettings(zoneID string, settings []ZoneSetting) (*Zone
 		Items []ZoneSetting `json:"items"`
 	}{settings})
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &ZoneSettingResponse{}
@@ -787,7 +787,7 @@ func (api *API) ZoneSSLSettings(zoneID string) (ZoneSSLSetting, error) {
 	uri := "/zones/" + zoneID + "/settings/ssl"
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return ZoneSSLSetting{}, errors.Wrap(err, errMakeRequestError)
+		return ZoneSSLSetting{}, err
 	}
 	var r ZoneSSLSettingResponse
 	err = json.Unmarshal(res, &r)
@@ -804,7 +804,7 @@ func (api *API) FallbackOrigin(zoneID string) (FallbackOrigin, error) {
 	uri := "/zones/" + zoneID + "/fallback_origin"
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return FallbackOrigin{}, errors.Wrap(err, errMakeRequestError)
+		return FallbackOrigin{}, err
 	}
 
 	var r FallbackOriginResponse
@@ -823,7 +823,7 @@ func (api *API) UpdateFallbackOrigin(zoneID string, fbo FallbackOrigin) (*Fallba
 	uri := "/zones/" + zoneID + "/fallback_origin"
 	res, err := api.makeRequest("PATCH", uri, fbo)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &FallbackOriginResponse{}
@@ -855,7 +855,7 @@ func (api *API) ZoneSingleSetting(zoneID, settingName string) (ZoneSetting, erro
 	uri := "/zones/" + zoneID + "/settings/" + settingName
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return ZoneSetting{}, errors.Wrap(err, errMakeRequestError)
+		return ZoneSetting{}, err
 	}
 	var r ZoneSettingSingleResponse
 	err = json.Unmarshal(res, &r)
@@ -872,7 +872,7 @@ func (api *API) UpdateZoneSingleSetting(zoneID, settingName string, setting Zone
 	uri := "/zones/" + zoneID + "/settings/" + settingName
 	res, err := api.makeRequest("PATCH", uri, setting)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &ZoneSettingSingleResponse{}
@@ -890,7 +890,7 @@ func (api *API) UpdateZoneSingleSetting(zoneID, settingName string, setting Zone
 func (api *API) ZoneExport(zoneID string) (string, error) {
 	res, err := api.makeRequest("GET", "/zones/"+zoneID+"/dns_records/export", nil)
 	if err != nil {
-		return "", errors.Wrap(err, errMakeRequestError)
+		return "", err
 	}
 	return string(res), nil
 }
@@ -922,7 +922,7 @@ type ZoneDNSSEC struct {
 func (api *API) ZoneDNSSECSetting(zoneID string) (ZoneDNSSEC, error) {
 	res, err := api.makeRequest("GET", "/zones/"+zoneID+"/dnssec", nil)
 	if err != nil {
-		return ZoneDNSSEC{}, errors.Wrap(err, errMakeRequestError)
+		return ZoneDNSSEC{}, err
 	}
 	response := ZoneDNSSECResponse{}
 	err = json.Unmarshal(res, &response)
@@ -945,7 +945,7 @@ type ZoneDNSSECDeleteResponse struct {
 func (api *API) DeleteZoneDNSSEC(zoneID string) (string, error) {
 	res, err := api.makeRequest("DELETE", "/zones/"+zoneID+"/dnssec", nil)
 	if err != nil {
-		return "", errors.Wrap(err, errMakeRequestError)
+		return "", err
 	}
 	response := ZoneDNSSECDeleteResponse{}
 	err = json.Unmarshal(res, &response)
@@ -966,7 +966,7 @@ type ZoneDNSSECUpdateOptions struct {
 func (api *API) UpdateZoneDNSSEC(zoneID string, options ZoneDNSSECUpdateOptions) (ZoneDNSSEC, error) {
 	res, err := api.makeRequest("PATCH", "/zones/"+zoneID+"/dnssec", options)
 	if err != nil {
-		return ZoneDNSSEC{}, errors.Wrap(err, errMakeRequestError)
+		return ZoneDNSSEC{}, err
 	}
 	response := ZoneDNSSECResponse{}
 	err = json.Unmarshal(res, &response)

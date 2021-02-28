@@ -97,7 +97,7 @@ func (api *API) GetAPIToken(tokenID string) (APIToken, error) {
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return APIToken{}, errors.Wrap(err, errMakeRequestError)
+		return APIToken{}, err
 	}
 
 	var apiTokenResponse APITokenResponse
@@ -115,7 +115,7 @@ func (api *API) GetAPIToken(tokenID string) (APIToken, error) {
 func (api *API) APITokens() ([]APIToken, error) {
 	res, err := api.makeRequest("GET", "/user/tokens", nil)
 	if err != nil {
-		return []APIToken{}, errors.Wrap(err, errMakeRequestError)
+		return []APIToken{}, err
 	}
 
 	var apiTokenListResponse APITokenListResponse
@@ -138,7 +138,7 @@ func (api *API) APITokens() ([]APIToken, error) {
 func (api *API) CreateAPIToken(token APIToken) (APIToken, error) {
 	res, err := api.makeRequest("POST", "/user/tokens", token)
 	if err != nil {
-		return APIToken{}, errors.Wrap(err, errMakeRequestError)
+		return APIToken{}, err
 	}
 
 	var createTokenAPIResponse APITokenResponse
@@ -156,7 +156,7 @@ func (api *API) CreateAPIToken(token APIToken) (APIToken, error) {
 func (api *API) UpdateAPIToken(tokenID string, token APIToken) (APIToken, error) {
 	res, err := api.makeRequest("PUT", "/user/tokens/"+tokenID, token)
 	if err != nil {
-		return APIToken{}, errors.Wrap(err, errMakeRequestError)
+		return APIToken{}, err
 	}
 
 	var updatedTokenResponse APITokenResponse
@@ -176,7 +176,7 @@ func (api *API) RollAPIToken(tokenID string) (string, error) {
 
 	res, err := api.makeRequest("PUT", uri, nil)
 	if err != nil {
-		return "", errors.Wrap(err, errMakeRequestError)
+		return "", err
 	}
 
 	var apiTokenRollResponse APITokenRollResponse
@@ -194,7 +194,7 @@ func (api *API) RollAPIToken(tokenID string) (string, error) {
 func (api *API) VerifyAPIToken() (APITokenVerifyBody, error) {
 	res, err := api.makeRequest("GET", "/user/tokens/verify", nil)
 	if err != nil {
-		return APITokenVerifyBody{}, errors.Wrap(err, errMakeRequestError)
+		return APITokenVerifyBody{}, err
 	}
 
 	var apiTokenVerifyResponse APITokenVerifyResponse
@@ -212,7 +212,7 @@ func (api *API) VerifyAPIToken() (APITokenVerifyBody, error) {
 func (api *API) DeleteAPIToken(tokenID string) error {
 	_, err := api.makeRequest("DELETE", "/user/tokens/"+tokenID, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil
@@ -225,7 +225,7 @@ func (api *API) ListAPITokensPermissionGroups() ([]APITokenPermissionGroups, err
 	var r APITokenPermissionGroupsResponse
 	res, err := api.makeRequest("GET", "/user/tokens/permission_groups", nil)
 	if err != nil {
-		return []APITokenPermissionGroups{}, errors.Wrap(err, errMakeRequestError)
+		return []APITokenPermissionGroups{}, err
 	}
 
 	err = json.Unmarshal(res, &r)

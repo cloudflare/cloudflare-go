@@ -120,7 +120,7 @@ func (api *API) ListWAFPackages(zoneID string) ([]WAFPackage, error) {
 		uri := "/zones/" + zoneID + "/firewall/waf/packages" + query
 		res, err = api.makeRequest("GET", uri, nil)
 		if err != nil {
-			return []WAFPackage{}, errors.Wrap(err, errMakeRequestError)
+			return []WAFPackage{}, err
 		}
 
 		var p WAFPackagesResponse
@@ -153,7 +153,7 @@ func (api *API) WAFPackage(zoneID, packageID string) (WAFPackage, error) {
 	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return WAFPackage{}, errors.Wrap(err, errMakeRequestError)
+		return WAFPackage{}, err
 	}
 
 	var r WAFPackageResponse
@@ -172,7 +172,7 @@ func (api *API) UpdateWAFPackage(zoneID, packageID string, opts WAFPackageOption
 	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID
 	res, err := api.makeRequest("PATCH", uri, opts)
 	if err != nil {
-		return WAFPackage{}, errors.Wrap(err, errMakeRequestError)
+		return WAFPackage{}, err
 	}
 
 	var r WAFPackageResponse
@@ -204,7 +204,7 @@ func (api *API) ListWAFGroups(zoneID, packageID string) ([]WAFGroup, error) {
 		uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID + "/groups" + query
 		res, err = api.makeRequest("GET", uri, nil)
 		if err != nil {
-			return []WAFGroup{}, errors.Wrap(err, errMakeRequestError)
+			return []WAFGroup{}, err
 		}
 
 		var r WAFGroupsResponse
@@ -236,7 +236,7 @@ func (api *API) WAFGroup(zoneID, packageID, groupID string) (WAFGroup, error) {
 	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID + "/groups/" + groupID
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return WAFGroup{}, errors.Wrap(err, errMakeRequestError)
+		return WAFGroup{}, err
 	}
 
 	var r WAFGroupResponse
@@ -256,7 +256,7 @@ func (api *API) UpdateWAFGroup(zoneID, packageID, groupID, mode string) (WAFGrou
 	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID + "/groups/" + groupID
 	res, err := api.makeRequest("PATCH", uri, opts)
 	if err != nil {
-		return WAFGroup{}, errors.Wrap(err, errMakeRequestError)
+		return WAFGroup{}, err
 	}
 
 	var r WAFGroupResponse
@@ -288,7 +288,7 @@ func (api *API) ListWAFRules(zoneID, packageID string) ([]WAFRule, error) {
 		uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID + "/rules" + query
 		res, err = api.makeRequest("GET", uri, nil)
 		if err != nil {
-			return []WAFRule{}, errors.Wrap(err, errMakeRequestError)
+			return []WAFRule{}, err
 		}
 
 		var r WAFRulesResponse
@@ -321,7 +321,7 @@ func (api *API) WAFRule(zoneID, packageID, ruleID string) (WAFRule, error) {
 	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID + "/rules/" + ruleID
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return WAFRule{}, errors.Wrap(err, errMakeRequestError)
+		return WAFRule{}, err
 	}
 
 	var r WAFRuleResponse
@@ -341,7 +341,7 @@ func (api *API) UpdateWAFRule(zoneID, packageID, ruleID, mode string) (WAFRule, 
 	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID + "/rules/" + ruleID
 	res, err := api.makeRequest("PATCH", uri, opts)
 	if err != nil {
-		return WAFRule{}, errors.Wrap(err, errMakeRequestError)
+		return WAFRule{}, err
 	}
 
 	var r WAFRuleResponse

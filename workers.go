@@ -286,7 +286,7 @@ func (api *API) DeleteWorker(requestParams *WorkerRequestParams) (WorkerScriptRe
 	res, err := api.makeRequest("DELETE", uri, nil)
 	var r WorkerScriptResponse
 	if err != nil {
-		return r, errors.Wrap(err, errMakeRequestError)
+		return r, err
 	}
 	err = json.Unmarshal(res, &r)
 	if err != nil {
@@ -307,7 +307,7 @@ func (api *API) deleteWorkerWithName(scriptName string) (WorkerScriptResponse, e
 	res, err := api.makeRequest("DELETE", uri, nil)
 	var r WorkerScriptResponse
 	if err != nil {
-		return r, errors.Wrap(err, errMakeRequestError)
+		return r, err
 	}
 	err = json.Unmarshal(res, &r)
 	if err != nil {
@@ -327,7 +327,7 @@ func (api *API) DownloadWorker(requestParams *WorkerRequestParams) (WorkerScript
 	res, err := api.makeRequest("GET", uri, nil)
 	var r WorkerScriptResponse
 	if err != nil {
-		return r, errors.Wrap(err, errMakeRequestError)
+		return r, err
 	}
 	r.Script = string(res)
 	r.Success = true
@@ -345,7 +345,7 @@ func (api *API) downloadWorkerWithName(scriptName string) (WorkerScriptResponse,
 	res, err := api.makeRequest("GET", uri, nil)
 	var r WorkerScriptResponse
 	if err != nil {
-		return r, errors.Wrap(err, errMakeRequestError)
+		return r, err
 	}
 	r.Script = string(res)
 	r.Success = true
@@ -370,7 +370,7 @@ func (api *API) ListWorkerBindings(requestParams *WorkerRequestParams) (WorkerBi
 	var r WorkerBindingListResponse
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return r, errors.Wrap(err, errMakeRequestError)
+		return r, err
 	}
 	err = json.Unmarshal(res, &jsonRes)
 	if err != nil {
@@ -442,7 +442,7 @@ func (b *bindingContentReader) Read(p []byte) (n int, err error) {
 		uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/bindings/%s/content", b.api.AccountID, b.requestParams.ScriptName, b.bindingName)
 		res, err := b.api.makeRequest("GET", uri, nil)
 		if err != nil {
-			return 0, errors.Wrap(err, errMakeRequestError)
+			return 0, err
 		}
 		b.content = res
 	}
@@ -477,7 +477,7 @@ func (api *API) ListWorkerScripts() (WorkerListResponse, error) {
 	uri := "/accounts/" + api.AccountID + "/workers/scripts"
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return WorkerListResponse{}, errors.Wrap(err, errMakeRequestError)
+		return WorkerListResponse{}, err
 	}
 	var r WorkerListResponse
 	err = json.Unmarshal(res, &r)
@@ -518,7 +518,7 @@ func (api *API) uploadWorkerForZone(zoneID, contentType string, body []byte) (Wo
 	res, err := api.makeRequestWithHeaders("PUT", uri, body, headers)
 	var r WorkerScriptResponse
 	if err != nil {
-		return r, errors.Wrap(err, errMakeRequestError)
+		return r, err
 	}
 	err = json.Unmarshal(res, &r)
 	if err != nil {
@@ -537,7 +537,7 @@ func (api *API) uploadWorkerWithName(scriptName, contentType string, body []byte
 	res, err := api.makeRequestWithHeaders("PUT", uri, body, headers)
 	var r WorkerScriptResponse
 	if err != nil {
-		return r, errors.Wrap(err, errMakeRequestError)
+		return r, err
 	}
 	err = json.Unmarshal(res, &r)
 	if err != nil {
@@ -629,7 +629,7 @@ func (api *API) CreateWorkerRoute(zoneID string, route WorkerRoute) (WorkerRoute
 	uri := "/zones/" + zoneID + "/workers/" + pathComponent
 	res, err := api.makeRequest("POST", uri, route)
 	if err != nil {
-		return WorkerRouteResponse{}, errors.Wrap(err, errMakeRequestError)
+		return WorkerRouteResponse{}, err
 	}
 	var r WorkerRouteResponse
 	err = json.Unmarshal(res, &r)
@@ -646,7 +646,7 @@ func (api *API) DeleteWorkerRoute(zoneID string, routeID string) (WorkerRouteRes
 	uri := "/zones/" + zoneID + "/workers/routes/" + routeID
 	res, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return WorkerRouteResponse{}, errors.Wrap(err, errMakeRequestError)
+		return WorkerRouteResponse{}, err
 	}
 	var r WorkerRouteResponse
 	err = json.Unmarshal(res, &r)
@@ -676,7 +676,7 @@ func (api *API) ListWorkerRoutes(zoneID string) (WorkerRoutesResponse, error) {
 	uri := "/zones/" + zoneID + "/workers/" + pathComponent
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return WorkerRoutesResponse{}, errors.Wrap(err, errMakeRequestError)
+		return WorkerRoutesResponse{}, err
 	}
 	var r WorkerRoutesResponse
 	err = json.Unmarshal(res, &r)
@@ -706,7 +706,7 @@ func (api *API) UpdateWorkerRoute(zoneID string, routeID string, route WorkerRou
 	uri := "/zones/" + zoneID + "/workers/" + pathComponent + "/" + routeID
 	res, err := api.makeRequest("PUT", uri, route)
 	if err != nil {
-		return WorkerRouteResponse{}, errors.Wrap(err, errMakeRequestError)
+		return WorkerRouteResponse{}, err
 	}
 	var r WorkerRouteResponse
 	err = json.Unmarshal(res, &r)

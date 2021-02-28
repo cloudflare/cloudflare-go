@@ -49,7 +49,7 @@ func (api *API) CreateDNSRecord(zoneID string, rr DNSRecord) (*DNSRecordResponse
 	uri := "/zones/" + zoneID + "/dns_records"
 	res, err := api.makeRequest("POST", uri, rr)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	var recordResp *DNSRecordResponse
@@ -92,7 +92,7 @@ func (api *API) DNSRecords(zoneID string, rr DNSRecord) ([]DNSRecord, error) {
 		uri := "/zones/" + zoneID + "/dns_records" + query
 		res, err := api.makeRequest("GET", uri, nil)
 		if err != nil {
-			return []DNSRecord{}, errors.Wrap(err, errMakeRequestError)
+			return []DNSRecord{}, err
 		}
 		var r DNSListResponse
 		err = json.Unmarshal(res, &r)
@@ -117,7 +117,7 @@ func (api *API) DNSRecord(zoneID, recordID string) (DNSRecord, error) {
 	uri := "/zones/" + zoneID + "/dns_records/" + recordID
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return DNSRecord{}, errors.Wrap(err, errMakeRequestError)
+		return DNSRecord{}, err
 	}
 	var r DNSRecordResponse
 	err = json.Unmarshal(res, &r)
@@ -147,7 +147,7 @@ func (api *API) UpdateDNSRecord(zoneID, recordID string, rr DNSRecord) error {
 	uri := "/zones/" + zoneID + "/dns_records/" + recordID
 	res, err := api.makeRequest("PATCH", uri, rr)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 	var r DNSRecordResponse
 	err = json.Unmarshal(res, &r)
@@ -165,7 +165,7 @@ func (api *API) DeleteDNSRecord(zoneID, recordID string) error {
 	uri := "/zones/" + zoneID + "/dns_records/" + recordID
 	res, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 	var r DNSRecordResponse
 	err = json.Unmarshal(res, &r)

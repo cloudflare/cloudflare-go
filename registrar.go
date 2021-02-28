@@ -85,7 +85,7 @@ func (api *API) RegistrarDomain(accountID, domainName string) (RegistrarDomain, 
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return RegistrarDomain{}, errors.Wrap(err, errMakeRequestError)
+		return RegistrarDomain{}, err
 	}
 
 	var r RegistrarDomainDetailResponse
@@ -105,7 +105,7 @@ func (api *API) RegistrarDomains(accountID string) ([]RegistrarDomain, error) {
 
 	res, err := api.makeRequest("POST", uri, nil)
 	if err != nil {
-		return []RegistrarDomain{}, errors.Wrap(err, errMakeRequestError)
+		return []RegistrarDomain{}, err
 	}
 
 	var r RegistrarDomainsDetailResponse
@@ -125,7 +125,7 @@ func (api *API) TransferRegistrarDomain(accountID, domainName string) ([]Registr
 
 	res, err := api.makeRequest("POST", uri, nil)
 	if err != nil {
-		return []RegistrarDomain{}, errors.Wrap(err, errMakeRequestError)
+		return []RegistrarDomain{}, err
 	}
 
 	var r RegistrarDomainsDetailResponse
@@ -144,7 +144,7 @@ func (api *API) CancelRegistrarDomainTransfer(accountID, domainName string) ([]R
 
 	res, err := api.makeRequest("POST", uri, nil)
 	if err != nil {
-		return []RegistrarDomain{}, errors.Wrap(err, errMakeRequestError)
+		return []RegistrarDomain{}, err
 	}
 
 	var r RegistrarDomainsDetailResponse
@@ -163,7 +163,7 @@ func (api *API) UpdateRegistrarDomain(accountID, domainName string, domainConfig
 
 	res, err := api.makeRequest("PUT", uri, domainConfiguration)
 	if err != nil {
-		return RegistrarDomain{}, errors.Wrap(err, errMakeRequestError)
+		return RegistrarDomain{}, err
 	}
 
 	var r RegistrarDomainDetailResponse

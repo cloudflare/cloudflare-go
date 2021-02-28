@@ -71,7 +71,7 @@ type VirtualDNSAnalyticsResponse struct {
 func (api *API) CreateVirtualDNS(v *VirtualDNS) (*VirtualDNS, error) {
 	res, err := api.makeRequest("POST", "/user/virtual_dns", v)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &VirtualDNSResponse{}
@@ -90,7 +90,7 @@ func (api *API) VirtualDNS(virtualDNSID string) (*VirtualDNS, error) {
 	uri := "/user/virtual_dns/" + virtualDNSID
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &VirtualDNSResponse{}
@@ -108,7 +108,7 @@ func (api *API) VirtualDNS(virtualDNSID string) (*VirtualDNS, error) {
 func (api *API) ListVirtualDNS() ([]*VirtualDNS, error) {
 	res, err := api.makeRequest("GET", "/user/virtual_dns", nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &VirtualDNSListResponse{}
@@ -127,7 +127,7 @@ func (api *API) UpdateVirtualDNS(virtualDNSID string, vv VirtualDNS) error {
 	uri := "/user/virtual_dns/" + virtualDNSID
 	res, err := api.makeRequest("PUT", uri, vv)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	response := &VirtualDNSResponse{}
@@ -147,7 +147,7 @@ func (api *API) DeleteVirtualDNS(virtualDNSID string) error {
 	uri := "/user/virtual_dns/" + virtualDNSID
 	res, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	response := &VirtualDNSResponse{}
@@ -179,7 +179,7 @@ func (api *API) VirtualDNSUserAnalytics(virtualDNSID string, o VirtualDNSUserAna
 	uri := "/user/virtual_dns/" + virtualDNSID + "/dns_analytics/report?" + o.encode()
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return VirtualDNSAnalytics{}, errors.Wrap(err, errMakeRequestError)
+		return VirtualDNSAnalytics{}, err
 	}
 
 	response := VirtualDNSAnalyticsResponse{}

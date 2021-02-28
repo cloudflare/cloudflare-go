@@ -74,7 +74,7 @@ func (api *API) Healthchecks(zoneID string) ([]Healthcheck, error) {
 	uri := "/zones/" + zoneID + "/healthchecks"
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []Healthcheck{}, errors.Wrap(err, errMakeRequestError)
+		return []Healthcheck{}, err
 	}
 	var r HealthcheckListResponse
 	err = json.Unmarshal(res, &r)
@@ -91,7 +91,7 @@ func (api *API) Healthcheck(zoneID, healthcheckID string) (Healthcheck, error) {
 	uri := "/zones/" + zoneID + "/healthchecks/" + healthcheckID
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return Healthcheck{}, errors.Wrap(err, errMakeRequestError)
+		return Healthcheck{}, err
 	}
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
@@ -108,7 +108,7 @@ func (api *API) CreateHealthcheck(zoneID string, healthcheck Healthcheck) (Healt
 	uri := "/zones/" + zoneID + "/healthchecks"
 	res, err := api.makeRequest("POST", uri, healthcheck)
 	if err != nil {
-		return Healthcheck{}, errors.Wrap(err, errMakeRequestError)
+		return Healthcheck{}, err
 	}
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
@@ -125,7 +125,7 @@ func (api *API) UpdateHealthcheck(zoneID string, healthcheckID string, healthche
 	uri := "/zones/" + zoneID + "/healthchecks/" + healthcheckID
 	res, err := api.makeRequest("PUT", uri, healthcheck)
 	if err != nil {
-		return Healthcheck{}, errors.Wrap(err, errMakeRequestError)
+		return Healthcheck{}, err
 	}
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
@@ -142,7 +142,7 @@ func (api *API) DeleteHealthcheck(zoneID string, healthcheckID string) error {
 	uri := "/zones/" + zoneID + "/healthchecks/" + healthcheckID
 	res, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
@@ -159,7 +159,7 @@ func (api *API) CreateHealthcheckPreview(zoneID string, healthcheck Healthcheck)
 	uri := "/zones/" + zoneID + "/healthchecks/preview"
 	res, err := api.makeRequest("POST", uri, healthcheck)
 	if err != nil {
-		return Healthcheck{}, errors.Wrap(err, errMakeRequestError)
+		return Healthcheck{}, err
 	}
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
@@ -176,7 +176,7 @@ func (api *API) HealthcheckPreview(zoneID, id string) (Healthcheck, error) {
 	uri := "/zones/" + zoneID + "/healthchecks/preview/" + id
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return Healthcheck{}, errors.Wrap(err, errMakeRequestError)
+		return Healthcheck{}, err
 	}
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
@@ -193,7 +193,7 @@ func (api *API) DeleteHealthcheckPreview(zoneID string, id string) error {
 	uri := "/zones/" + zoneID + "/healthchecks/preview/" + id
 	res, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)

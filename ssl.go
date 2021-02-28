@@ -66,7 +66,7 @@ func (api *API) CreateSSL(zoneID string, options ZoneCustomSSLOptions) (ZoneCust
 	uri := "/zones/" + zoneID + "/custom_certificates"
 	res, err := api.makeRequest("POST", uri, options)
 	if err != nil {
-		return ZoneCustomSSL{}, errors.Wrap(err, errMakeRequestError)
+		return ZoneCustomSSL{}, err
 	}
 	var r zoneCustomSSLResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -82,7 +82,7 @@ func (api *API) ListSSL(zoneID string) ([]ZoneCustomSSL, error) {
 	uri := "/zones/" + zoneID + "/custom_certificates"
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 	var r zoneCustomSSLsResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -98,7 +98,7 @@ func (api *API) SSLDetails(zoneID, certificateID string) (ZoneCustomSSL, error) 
 	uri := "/zones/" + zoneID + "/custom_certificates/" + certificateID
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return ZoneCustomSSL{}, errors.Wrap(err, errMakeRequestError)
+		return ZoneCustomSSL{}, err
 	}
 	var r zoneCustomSSLResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -114,7 +114,7 @@ func (api *API) UpdateSSL(zoneID, certificateID string, options ZoneCustomSSLOpt
 	uri := "/zones/" + zoneID + "/custom_certificates/" + certificateID
 	res, err := api.makeRequest("PATCH", uri, options)
 	if err != nil {
-		return ZoneCustomSSL{}, errors.Wrap(err, errMakeRequestError)
+		return ZoneCustomSSL{}, err
 	}
 	var r zoneCustomSSLResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -136,7 +136,7 @@ func (api *API) ReprioritizeSSL(zoneID string, p []ZoneCustomSSLPriority) ([]Zon
 	}
 	res, err := api.makeRequest("PUT", uri, params)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 	var r zoneCustomSSLsResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -151,7 +151,7 @@ func (api *API) ReprioritizeSSL(zoneID string, p []ZoneCustomSSLPriority) ([]Zon
 func (api *API) DeleteSSL(zoneID, certificateID string) error {
 	uri := "/zones/" + zoneID + "/custom_certificates/" + certificateID
 	if _, err := api.makeRequest("DELETE", uri, nil); err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 	return nil
 }

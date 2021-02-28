@@ -75,7 +75,7 @@ func (api *API) AccountMembers(accountID string, pageOpts PaginationOptions) ([]
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []AccountMember{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+		return []AccountMember{}, ResultInfo{}, err
 	}
 
 	var accountMemberListresponse AccountMembersListResponse
@@ -103,7 +103,7 @@ func (api *API) CreateAccountMember(accountID string, emailAddress string, roles
 	}
 	res, err := api.makeRequest("POST", uri, newMember)
 	if err != nil {
-		return AccountMember{}, errors.Wrap(err, errMakeRequestError)
+		return AccountMember{}, err
 	}
 
 	var accountMemberListResponse AccountMemberDetailResponse
@@ -127,7 +127,7 @@ func (api *API) DeleteAccountMember(accountID string, userID string) error {
 
 	_, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil
@@ -145,7 +145,7 @@ func (api *API) UpdateAccountMember(accountID string, userID string, member Acco
 
 	res, err := api.makeRequest("PUT", uri, member)
 	if err != nil {
-		return AccountMember{}, errors.Wrap(err, errMakeRequestError)
+		return AccountMember{}, err
 	}
 
 	var accountMemberListResponse AccountMemberDetailResponse
@@ -173,7 +173,7 @@ func (api *API) AccountMember(accountID string, memberID string) (AccountMember,
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return AccountMember{}, errors.Wrap(err, errMakeRequestError)
+		return AccountMember{}, err
 	}
 
 	var accountMemberResponse AccountMemberDetailResponse

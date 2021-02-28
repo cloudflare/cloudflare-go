@@ -47,7 +47,7 @@ func (api *API) AccountRoles(accountID string) ([]AccountRole, error) {
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []AccountRole{}, errors.Wrap(err, errMakeRequestError)
+		return []AccountRole{}, err
 	}
 
 	var accountRolesListResponse AccountRolesListResponse
@@ -67,7 +67,7 @@ func (api *API) AccountRole(accountID string, roleID string) (AccountRole, error
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return AccountRole{}, errors.Wrap(err, errMakeRequestError)
+		return AccountRole{}, err
 	}
 
 	var accountRole AccountRoleDetailResponse

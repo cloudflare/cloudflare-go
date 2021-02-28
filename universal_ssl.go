@@ -45,7 +45,7 @@ func (api *API) UniversalSSLSettingDetails(zoneID string) (UniversalSSLSetting, 
 	uri := "/zones/" + zoneID + "/ssl/universal/settings"
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return UniversalSSLSetting{}, errors.Wrap(err, errMakeRequestError)
+		return UniversalSSLSetting{}, err
 	}
 	var r universalSSLSettingResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -61,7 +61,7 @@ func (api *API) EditUniversalSSLSetting(zoneID string, setting UniversalSSLSetti
 	uri := "/zones/" + zoneID + "/ssl/universal/settings"
 	res, err := api.makeRequest("PATCH", uri, setting)
 	if err != nil {
-		return UniversalSSLSetting{}, errors.Wrap(err, errMakeRequestError)
+		return UniversalSSLSetting{}, err
 	}
 	var r universalSSLSettingResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -78,7 +78,7 @@ func (api *API) UniversalSSLVerificationDetails(zoneID string) ([]UniversalSSLVe
 	uri := "/zones/" + zoneID + "/ssl/verification"
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []UniversalSSLVerificationDetails{}, errors.Wrap(err, errMakeRequestError)
+		return []UniversalSSLVerificationDetails{}, err
 	}
 	var r universalSSLVerificationResponse
 	if err := json.Unmarshal(res, &r); err != nil {

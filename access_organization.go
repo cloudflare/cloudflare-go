@@ -60,7 +60,7 @@ func (api *API) accessOrganization(id string, routeRoot RouteRoot) (AccessOrgani
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return AccessOrganization{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+		return AccessOrganization{}, ResultInfo{}, err
 	}
 
 	var accessOrganizationListResponse AccessOrganizationListResponse
@@ -91,7 +91,7 @@ func (api *API) createAccessOrganization(id string, accessOrganization AccessOrg
 
 	res, err := api.makeRequest("POST", uri, accessOrganization)
 	if err != nil {
-		return AccessOrganization{}, errors.Wrap(err, errMakeRequestError)
+		return AccessOrganization{}, err
 	}
 
 	var accessOrganizationDetailResponse AccessOrganizationDetailResponse
@@ -122,7 +122,7 @@ func (api *API) updateAccessOrganization(id string, accessOrganization AccessOrg
 
 	res, err := api.makeRequest("PUT", uri, accessOrganization)
 	if err != nil {
-		return AccessOrganization{}, errors.Wrap(err, errMakeRequestError)
+		return AccessOrganization{}, err
 	}
 
 	var accessOrganizationDetailResponse AccessOrganizationDetailResponse

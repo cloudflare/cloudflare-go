@@ -221,7 +221,7 @@ func (api *API) CreateLoadBalancerPool(pool LoadBalancerPool) (LoadBalancerPool,
 	uri := api.userBaseURL("/user") + "/load_balancers/pools"
 	res, err := api.makeRequest("POST", uri, pool)
 	if err != nil {
-		return LoadBalancerPool{}, errors.Wrap(err, errMakeRequestError)
+		return LoadBalancerPool{}, err
 	}
 	var r loadBalancerPoolResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -237,7 +237,7 @@ func (api *API) ListLoadBalancerPools() ([]LoadBalancerPool, error) {
 	uri := api.userBaseURL("/user") + "/load_balancers/pools"
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 	var r loadBalancerPoolListResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -253,7 +253,7 @@ func (api *API) LoadBalancerPoolDetails(poolID string) (LoadBalancerPool, error)
 	uri := api.userBaseURL("/user") + "/load_balancers/pools/" + poolID
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return LoadBalancerPool{}, errors.Wrap(err, errMakeRequestError)
+		return LoadBalancerPool{}, err
 	}
 	var r loadBalancerPoolResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -268,7 +268,7 @@ func (api *API) LoadBalancerPoolDetails(poolID string) (LoadBalancerPool, error)
 func (api *API) DeleteLoadBalancerPool(poolID string) error {
 	uri := api.userBaseURL("/user") + "/load_balancers/pools/" + poolID
 	if _, err := api.makeRequest("DELETE", uri, nil); err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 	return nil
 }
@@ -280,7 +280,7 @@ func (api *API) ModifyLoadBalancerPool(pool LoadBalancerPool) (LoadBalancerPool,
 	uri := api.userBaseURL("/user") + "/load_balancers/pools/" + pool.ID
 	res, err := api.makeRequest("PUT", uri, pool)
 	if err != nil {
-		return LoadBalancerPool{}, errors.Wrap(err, errMakeRequestError)
+		return LoadBalancerPool{}, err
 	}
 	var r loadBalancerPoolResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -296,7 +296,7 @@ func (api *API) CreateLoadBalancerMonitor(monitor LoadBalancerMonitor) (LoadBala
 	uri := api.userBaseURL("/user") + "/load_balancers/monitors"
 	res, err := api.makeRequest("POST", uri, monitor)
 	if err != nil {
-		return LoadBalancerMonitor{}, errors.Wrap(err, errMakeRequestError)
+		return LoadBalancerMonitor{}, err
 	}
 	var r loadBalancerMonitorResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -312,7 +312,7 @@ func (api *API) ListLoadBalancerMonitors() ([]LoadBalancerMonitor, error) {
 	uri := api.userBaseURL("/user") + "/load_balancers/monitors"
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 	var r loadBalancerMonitorListResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -328,7 +328,7 @@ func (api *API) LoadBalancerMonitorDetails(monitorID string) (LoadBalancerMonito
 	uri := api.userBaseURL("/user") + "/load_balancers/monitors/" + monitorID
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return LoadBalancerMonitor{}, errors.Wrap(err, errMakeRequestError)
+		return LoadBalancerMonitor{}, err
 	}
 	var r loadBalancerMonitorResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -343,7 +343,7 @@ func (api *API) LoadBalancerMonitorDetails(monitorID string) (LoadBalancerMonito
 func (api *API) DeleteLoadBalancerMonitor(monitorID string) error {
 	uri := api.userBaseURL("/user") + "/load_balancers/monitors/" + monitorID
 	if _, err := api.makeRequest("DELETE", uri, nil); err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 	return nil
 }
@@ -355,7 +355,7 @@ func (api *API) ModifyLoadBalancerMonitor(monitor LoadBalancerMonitor) (LoadBala
 	uri := api.userBaseURL("/user") + "/load_balancers/monitors/" + monitor.ID
 	res, err := api.makeRequest("PUT", uri, monitor)
 	if err != nil {
-		return LoadBalancerMonitor{}, errors.Wrap(err, errMakeRequestError)
+		return LoadBalancerMonitor{}, err
 	}
 	var r loadBalancerMonitorResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -371,7 +371,7 @@ func (api *API) CreateLoadBalancer(zoneID string, lb LoadBalancer) (LoadBalancer
 	uri := "/zones/" + zoneID + "/load_balancers"
 	res, err := api.makeRequest("POST", uri, lb)
 	if err != nil {
-		return LoadBalancer{}, errors.Wrap(err, errMakeRequestError)
+		return LoadBalancer{}, err
 	}
 	var r loadBalancerResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -387,7 +387,7 @@ func (api *API) ListLoadBalancers(zoneID string) ([]LoadBalancer, error) {
 	uri := "/zones/" + zoneID + "/load_balancers"
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 	var r loadBalancerListResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -403,7 +403,7 @@ func (api *API) LoadBalancerDetails(zoneID, lbID string) (LoadBalancer, error) {
 	uri := "/zones/" + zoneID + "/load_balancers/" + lbID
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return LoadBalancer{}, errors.Wrap(err, errMakeRequestError)
+		return LoadBalancer{}, err
 	}
 	var r loadBalancerResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -418,7 +418,7 @@ func (api *API) LoadBalancerDetails(zoneID, lbID string) (LoadBalancer, error) {
 func (api *API) DeleteLoadBalancer(zoneID, lbID string) error {
 	uri := "/zones/" + zoneID + "/load_balancers/" + lbID
 	if _, err := api.makeRequest("DELETE", uri, nil); err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 	return nil
 }
@@ -430,7 +430,7 @@ func (api *API) ModifyLoadBalancer(zoneID string, lb LoadBalancer) (LoadBalancer
 	uri := "/zones/" + zoneID + "/load_balancers/" + lb.ID
 	res, err := api.makeRequest("PUT", uri, lb)
 	if err != nil {
-		return LoadBalancer{}, errors.Wrap(err, errMakeRequestError)
+		return LoadBalancer{}, err
 	}
 	var r loadBalancerResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -446,7 +446,7 @@ func (api *API) PoolHealthDetails(poolID string) (LoadBalancerPoolHealth, error)
 	uri := api.userBaseURL("/user") + "/load_balancers/pools/" + poolID + "/health"
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return LoadBalancerPoolHealth{}, errors.Wrap(err, errMakeRequestError)
+		return LoadBalancerPoolHealth{}, err
 	}
 	var r loadBalancerPoolHealthResponse
 	if err := json.Unmarshal(res, &r); err != nil {

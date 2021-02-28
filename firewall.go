@@ -203,7 +203,7 @@ func (api *API) listAccessRules(prefix string, accessRule AccessRule, page int) 
 	uri := prefix + "/firewall/access_rules/rules" + query
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &AccessRuleListResponse{}
@@ -218,7 +218,7 @@ func (api *API) createAccessRule(prefix string, accessRule AccessRule) (*AccessR
 	uri := prefix + "/firewall/access_rules/rules"
 	res, err := api.makeRequest("POST", uri, accessRule)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &AccessRuleResponse{}
@@ -236,7 +236,7 @@ func (api *API) retrieveAccessRule(prefix, accessRuleID string) (*AccessRuleResp
 	res, err := api.makeRequest("GET", uri, nil)
 
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &AccessRuleResponse{}
@@ -252,7 +252,7 @@ func (api *API) updateAccessRule(prefix, accessRuleID string, accessRule AccessR
 	uri := prefix + "/firewall/access_rules/rules/" + accessRuleID
 	res, err := api.makeRequest("PATCH", uri, accessRule)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &AccessRuleResponse{}
@@ -267,7 +267,7 @@ func (api *API) deleteAccessRule(prefix, accessRuleID string) (*AccessRuleRespon
 	uri := prefix + "/firewall/access_rules/rules/" + accessRuleID
 	res, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &AccessRuleResponse{}

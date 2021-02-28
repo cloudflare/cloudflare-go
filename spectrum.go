@@ -267,7 +267,7 @@ func (api *API) SpectrumApplications(zoneID string) ([]SpectrumApplication, erro
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []SpectrumApplication{}, errors.Wrap(err, errMakeRequestError)
+		return []SpectrumApplication{}, err
 	}
 
 	var spectrumApplications SpectrumApplicationsDetailResponse
@@ -291,7 +291,7 @@ func (api *API) SpectrumApplication(zoneID string, applicationID string) (Spectr
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return SpectrumApplication{}, errors.Wrap(err, errMakeRequestError)
+		return SpectrumApplication{}, err
 	}
 
 	var spectrumApplication SpectrumApplicationDetailResponse
@@ -311,7 +311,7 @@ func (api *API) CreateSpectrumApplication(zoneID string, appDetails SpectrumAppl
 
 	res, err := api.makeRequest("POST", uri, appDetails)
 	if err != nil {
-		return SpectrumApplication{}, errors.Wrap(err, errMakeRequestError)
+		return SpectrumApplication{}, err
 	}
 
 	var spectrumApplication SpectrumApplicationDetailResponse
@@ -335,7 +335,7 @@ func (api *API) UpdateSpectrumApplication(zoneID, appID string, appDetails Spect
 
 	res, err := api.makeRequest("PUT", uri, appDetails)
 	if err != nil {
-		return SpectrumApplication{}, errors.Wrap(err, errMakeRequestError)
+		return SpectrumApplication{}, err
 	}
 
 	var spectrumApplication SpectrumApplicationDetailResponse
@@ -359,7 +359,7 @@ func (api *API) DeleteSpectrumApplication(zoneID string, applicationID string) e
 
 	_, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil

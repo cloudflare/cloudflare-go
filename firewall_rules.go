@@ -60,7 +60,7 @@ func (api *API) FirewallRules(zoneID string, pageOpts PaginationOptions) ([]Fire
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []FirewallRule{}, errors.Wrap(err, errMakeRequestError)
+		return []FirewallRule{}, err
 	}
 
 	var firewallDetailResponse FirewallRulesDetailResponse
@@ -80,7 +80,7 @@ func (api *API) FirewallRule(zoneID, firewallRuleID string) (FirewallRule, error
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return FirewallRule{}, errors.Wrap(err, errMakeRequestError)
+		return FirewallRule{}, err
 	}
 
 	var firewallRuleResponse FirewallRuleResponse
@@ -100,7 +100,7 @@ func (api *API) CreateFirewallRules(zoneID string, firewallRules []FirewallRule)
 
 	res, err := api.makeRequest("POST", uri, firewallRules)
 	if err != nil {
-		return []FirewallRule{}, errors.Wrap(err, errMakeRequestError)
+		return []FirewallRule{}, err
 	}
 
 	var firewallRulesDetailResponse FirewallRulesDetailResponse
@@ -124,7 +124,7 @@ func (api *API) UpdateFirewallRule(zoneID string, firewallRule FirewallRule) (Fi
 
 	res, err := api.makeRequest("PUT", uri, firewallRule)
 	if err != nil {
-		return FirewallRule{}, errors.Wrap(err, errMakeRequestError)
+		return FirewallRule{}, err
 	}
 
 	var firewallRuleResponse FirewallRuleResponse
@@ -150,7 +150,7 @@ func (api *API) UpdateFirewallRules(zoneID string, firewallRules []FirewallRule)
 
 	res, err := api.makeRequest("PUT", uri, firewallRules)
 	if err != nil {
-		return []FirewallRule{}, errors.Wrap(err, errMakeRequestError)
+		return []FirewallRule{}, err
 	}
 
 	var firewallRulesDetailResponse FirewallRulesDetailResponse
@@ -174,7 +174,7 @@ func (api *API) DeleteFirewallRule(zoneID, firewallRuleID string) error {
 
 	_, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil
@@ -194,7 +194,7 @@ func (api *API) DeleteFirewallRules(zoneID string, firewallRuleIDs []string) err
 
 	_, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil

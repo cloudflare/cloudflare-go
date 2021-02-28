@@ -77,7 +77,7 @@ func (api *API) accessIdentityProviders(id string, routeRoot RouteRoot) ([]Acces
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []AccessIdentityProvider{}, errors.Wrap(err, errMakeRequestError)
+		return []AccessIdentityProvider{}, err
 	}
 
 	var accessIdentityProviderResponse AccessIdentityProvidersListResponse
@@ -115,7 +115,7 @@ func (api *API) accessIdentityProviderDetails(id string, identityProviderID stri
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return AccessIdentityProvider{}, errors.Wrap(err, errMakeRequestError)
+		return AccessIdentityProvider{}, err
 	}
 
 	var accessIdentityProviderResponse AccessIdentityProviderListResponse
@@ -146,7 +146,7 @@ func (api *API) createAccessIdentityProvider(id string, identityProviderConfigur
 
 	res, err := api.makeRequest("POST", uri, identityProviderConfiguration)
 	if err != nil {
-		return AccessIdentityProvider{}, errors.Wrap(err, errMakeRequestError)
+		return AccessIdentityProvider{}, err
 	}
 
 	var accessIdentityProviderResponse AccessIdentityProviderListResponse
@@ -184,7 +184,7 @@ func (api *API) updateAccessIdentityProvider(id string, identityProviderUUID str
 
 	res, err := api.makeRequest("PUT", uri, identityProviderConfiguration)
 	if err != nil {
-		return AccessIdentityProvider{}, errors.Wrap(err, errMakeRequestError)
+		return AccessIdentityProvider{}, err
 	}
 
 	var accessIdentityProviderResponse AccessIdentityProviderListResponse
@@ -220,7 +220,7 @@ func (api *API) deleteAccessIdentityProvider(id string, identityProviderUUID str
 
 	res, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return AccessIdentityProvider{}, errors.Wrap(err, errMakeRequestError)
+		return AccessIdentityProvider{}, err
 	}
 
 	var accessIdentityProviderResponse AccessIdentityProviderListResponse

@@ -47,7 +47,7 @@ func (api *API) AccessAuditLogs(accountID string, opts AccessAuditLogFilterOptio
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []AccessAuditLogRecord{}, errors.Wrap(err, errMakeRequestError)
+		return []AccessAuditLogRecord{}, err
 	}
 
 	var accessAuditLogListResponse AccessAuditLogListResponse

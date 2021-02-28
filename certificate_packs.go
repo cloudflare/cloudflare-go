@@ -87,7 +87,7 @@ func (api *API) ListCertificatePacks(zoneID string) ([]CertificatePack, error) {
 	uri := fmt.Sprintf("/zones/%s/ssl/certificate_packs?status=all", zoneID)
 	res, err := api.makeRequest(http.MethodGet, uri, nil)
 	if err != nil {
-		return []CertificatePack{}, errors.Wrap(err, errMakeRequestError)
+		return []CertificatePack{}, err
 	}
 
 	var certificatePacksResponse CertificatePacksResponse
@@ -106,7 +106,7 @@ func (api *API) CertificatePack(zoneID, certificatePackID string) (CertificatePa
 	uri := fmt.Sprintf("/zones/%s/ssl/certificate_packs/%s", zoneID, certificatePackID)
 	res, err := api.makeRequest(http.MethodGet, uri, nil)
 	if err != nil {
-		return CertificatePack{}, errors.Wrap(err, errMakeRequestError)
+		return CertificatePack{}, err
 	}
 
 	var certificatePacksDetailResponse CertificatePacksDetailResponse
@@ -125,7 +125,7 @@ func (api *API) CreateCertificatePack(zoneID string, cert CertificatePackRequest
 	uri := fmt.Sprintf("/zones/%s/ssl/certificate_packs", zoneID)
 	res, err := api.makeRequest(http.MethodPost, uri, cert)
 	if err != nil {
-		return CertificatePack{}, errors.Wrap(err, errMakeRequestError)
+		return CertificatePack{}, err
 	}
 
 	var certificatePacksDetailResponse CertificatePacksDetailResponse
@@ -144,7 +144,7 @@ func (api *API) DeleteCertificatePack(zoneID, certificateID string) error {
 	uri := fmt.Sprintf("/zones/%s/ssl/certificate_packs/%s", zoneID, certificateID)
 	_, err := api.makeRequest(http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil
@@ -157,7 +157,7 @@ func (api *API) CreateAdvancedCertificatePack(zoneID string, cert CertificatePac
 	uri := fmt.Sprintf("/zones/%s/ssl/certificate_packs/order", zoneID)
 	res, err := api.makeRequest(http.MethodPost, uri, cert)
 	if err != nil {
-		return CertificatePackAdvancedCertificate{}, errors.Wrap(err, errMakeRequestError)
+		return CertificatePackAdvancedCertificate{}, err
 	}
 
 	var advancedCertificatePacksDetailResponse CertificatePacksAdvancedDetailResponse
@@ -177,7 +177,7 @@ func (api *API) RestartAdvancedCertificateValidation(zoneID, certificateID strin
 	uri := fmt.Sprintf("/zones/%s/ssl/certificate_packs/%s", zoneID, certificateID)
 	res, err := api.makeRequest(http.MethodPatch, uri, nil)
 	if err != nil {
-		return CertificatePackAdvancedCertificate{}, errors.Wrap(err, errMakeRequestError)
+		return CertificatePackAdvancedCertificate{}, err
 	}
 
 	var advancedCertificatePacksDetailResponse CertificatePacksAdvancedDetailResponse

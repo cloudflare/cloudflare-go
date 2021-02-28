@@ -57,7 +57,7 @@ func (api *API) CreateRailgun(name string) (Railgun, error) {
 	}
 	res, err := api.makeRequest("POST", uri, params)
 	if err != nil {
-		return Railgun{}, errors.Wrap(err, errMakeRequestError)
+		return Railgun{}, err
 	}
 	var r railgunResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -77,7 +77,7 @@ func (api *API) ListRailguns(options RailgunListOptions) ([]Railgun, error) {
 	uri := api.userBaseURL("") + "/railguns" + "?" + v.Encode()
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 	var r railgunsResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -93,7 +93,7 @@ func (api *API) RailgunDetails(railgunID string) (Railgun, error) {
 	uri := api.userBaseURL("") + "/railguns/" + railgunID
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return Railgun{}, errors.Wrap(err, errMakeRequestError)
+		return Railgun{}, err
 	}
 	var r railgunResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -109,7 +109,7 @@ func (api *API) RailgunZones(railgunID string) ([]Zone, error) {
 	uri := api.userBaseURL("") + "/railguns/" + railgunID + "/zones"
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 	var r ZonesResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -130,7 +130,7 @@ func (api *API) enableRailgun(railgunID string, enable bool) (Railgun, error) {
 	}
 	res, err := api.makeRequest("PATCH", uri, params)
 	if err != nil {
-		return Railgun{}, errors.Wrap(err, errMakeRequestError)
+		return Railgun{}, err
 	}
 	var r railgunResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -159,7 +159,7 @@ func (api *API) DisableRailgun(railgunID string) (Railgun, error) {
 func (api *API) DeleteRailgun(railgunID string) error {
 	uri := api.userBaseURL("") + "/railguns/" + railgunID
 	if _, err := api.makeRequest("DELETE", uri, nil); err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 	return nil
 }
@@ -220,7 +220,7 @@ func (api *API) ZoneRailguns(zoneID string) ([]ZoneRailgun, error) {
 	uri := "/zones/" + zoneID + "/railguns"
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 	var r zoneRailgunsResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -236,7 +236,7 @@ func (api *API) ZoneRailgunDetails(zoneID, railgunID string) (ZoneRailgun, error
 	uri := "/zones/" + zoneID + "/railguns/" + railgunID
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return ZoneRailgun{}, errors.Wrap(err, errMakeRequestError)
+		return ZoneRailgun{}, err
 	}
 	var r zoneRailgunResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -252,7 +252,7 @@ func (api *API) TestRailgunConnection(zoneID, railgunID string) (RailgunDiagnosi
 	uri := "/zones/" + zoneID + "/railguns/" + railgunID + "/diagnose"
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return RailgunDiagnosis{}, errors.Wrap(err, errMakeRequestError)
+		return RailgunDiagnosis{}, err
 	}
 	var r railgunDiagnosisResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -273,7 +273,7 @@ func (api *API) connectZoneRailgun(zoneID, railgunID string, connect bool) (Zone
 	}
 	res, err := api.makeRequest("PATCH", uri, params)
 	if err != nil {
-		return ZoneRailgun{}, errors.Wrap(err, errMakeRequestError)
+		return ZoneRailgun{}, err
 	}
 	var r zoneRailgunResponse
 	if err := json.Unmarshal(res, &r); err != nil {

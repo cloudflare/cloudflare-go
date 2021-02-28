@@ -34,7 +34,7 @@ func (api *API) ArgoSmartRouting(zoneID string) (ArgoFeatureSetting, error) {
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return ArgoFeatureSetting{}, errors.Wrap(err, errMakeRequestError)
+		return ArgoFeatureSetting{}, err
 	}
 
 	var argoDetailsResponse ArgoDetailsResponse
@@ -57,7 +57,7 @@ func (api *API) UpdateArgoSmartRouting(zoneID, settingValue string) (ArgoFeature
 
 	res, err := api.makeRequest("PATCH", uri, ArgoFeatureSetting{Value: settingValue})
 	if err != nil {
-		return ArgoFeatureSetting{}, errors.Wrap(err, errMakeRequestError)
+		return ArgoFeatureSetting{}, err
 	}
 
 	var argoDetailsResponse ArgoDetailsResponse
@@ -76,7 +76,7 @@ func (api *API) ArgoTieredCaching(zoneID string) (ArgoFeatureSetting, error) {
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return ArgoFeatureSetting{}, errors.Wrap(err, errMakeRequestError)
+		return ArgoFeatureSetting{}, err
 	}
 
 	var argoDetailsResponse ArgoDetailsResponse
@@ -99,7 +99,7 @@ func (api *API) UpdateArgoTieredCaching(zoneID, settingValue string) (ArgoFeatur
 
 	res, err := api.makeRequest("PATCH", uri, ArgoFeatureSetting{Value: settingValue})
 	if err != nil {
-		return ArgoFeatureSetting{}, errors.Wrap(err, errMakeRequestError)
+		return ArgoFeatureSetting{}, err
 	}
 
 	var argoDetailsResponse ArgoDetailsResponse

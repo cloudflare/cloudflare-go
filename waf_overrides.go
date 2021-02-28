@@ -43,7 +43,7 @@ func (api *API) ListWAFOverrides(zoneID string) ([]WAFOverride, error) {
 	uri := "/zones/" + zoneID + "/firewall/waf/overrides"
 	res, err = api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []WAFOverride{}, errors.Wrap(err, errMakeRequestError)
+		return []WAFOverride{}, err
 	}
 
 	var r WAFOverridesResponse
@@ -70,7 +70,7 @@ func (api *API) WAFOverride(zoneID, overrideID string) (WAFOverride, error) {
 	uri := "/zones/" + zoneID + "/firewall/waf/overrides/" + overrideID
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return WAFOverride{}, errors.Wrap(err, errMakeRequestError)
+		return WAFOverride{}, err
 	}
 
 	var r WAFOverrideResponse
@@ -89,7 +89,7 @@ func (api *API) CreateWAFOverride(zoneID string, override WAFOverride) (WAFOverr
 	uri := "/zones/" + zoneID + "/firewall/waf/overrides"
 	res, err := api.makeRequest("POST", uri, override)
 	if err != nil {
-		return WAFOverride{}, errors.Wrap(err, errMakeRequestError)
+		return WAFOverride{}, err
 	}
 	var r WAFOverrideResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -106,7 +106,7 @@ func (api *API) UpdateWAFOverride(zoneID, overrideID string, override WAFOverrid
 
 	res, err := api.makeRequest("PUT", uri, override)
 	if err != nil {
-		return WAFOverride{}, errors.Wrap(err, errMakeRequestError)
+		return WAFOverride{}, err
 	}
 
 	var r WAFOverrideResponse
@@ -125,7 +125,7 @@ func (api *API) DeleteWAFOverride(zoneID, overrideID string) error {
 	uri := "/zones/" + zoneID + "/firewall/waf/overrides/" + overrideID
 	res, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 	var r WAFOverrideResponse
 	err = json.Unmarshal(res, &r)

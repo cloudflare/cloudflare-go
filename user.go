@@ -65,7 +65,7 @@ func (api *API) UserDetails() (User, error) {
 	var r UserResponse
 	res, err := api.makeRequest("GET", "/user", nil)
 	if err != nil {
-		return User{}, errors.Wrap(err, errMakeRequestError)
+		return User{}, err
 	}
 
 	err = json.Unmarshal(res, &r)
@@ -83,7 +83,7 @@ func (api *API) UpdateUser(user *User) (User, error) {
 	var r UserResponse
 	res, err := api.makeRequest("PATCH", "/user", user)
 	if err != nil {
-		return User{}, errors.Wrap(err, errMakeRequestError)
+		return User{}, err
 	}
 
 	err = json.Unmarshal(res, &r)
@@ -101,7 +101,7 @@ func (api *API) UserBillingProfile() (UserBillingProfile, error) {
 	var r userBillingProfileResponse
 	res, err := api.makeRequest("GET", "/user/billing/profile", nil)
 	if err != nil {
-		return UserBillingProfile{}, errors.Wrap(err, errMakeRequestError)
+		return UserBillingProfile{}, err
 	}
 
 	err = json.Unmarshal(res, &r)

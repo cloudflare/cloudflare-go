@@ -211,7 +211,7 @@ func (api *API) accessGroups(id string, pageOpts PaginationOptions, routeRoot Ro
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []AccessGroup{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+		return []AccessGroup{}, ResultInfo{}, err
 	}
 
 	var accessGroupListResponse AccessGroupListResponse
@@ -247,7 +247,7 @@ func (api *API) accessGroup(id string, groupID string, routeRoot RouteRoot) (Acc
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return AccessGroup{}, errors.Wrap(err, errMakeRequestError)
+		return AccessGroup{}, err
 	}
 
 	var accessGroupDetailResponse AccessGroupDetailResponse
@@ -282,7 +282,7 @@ func (api *API) createAccessGroup(id string, accessGroup AccessGroup, routeRoot 
 
 	res, err := api.makeRequest("POST", uri, accessGroup)
 	if err != nil {
-		return AccessGroup{}, errors.Wrap(err, errMakeRequestError)
+		return AccessGroup{}, err
 	}
 
 	var accessGroupDetailResponse AccessGroupDetailResponse
@@ -321,7 +321,7 @@ func (api *API) updateAccessGroup(id string, accessGroup AccessGroup, routeRoot 
 
 	res, err := api.makeRequest("PUT", uri, accessGroup)
 	if err != nil {
-		return AccessGroup{}, errors.Wrap(err, errMakeRequestError)
+		return AccessGroup{}, err
 	}
 
 	var accessGroupDetailResponse AccessGroupDetailResponse
@@ -357,7 +357,7 @@ func (api *API) deleteAccessGroup(id string, groupID string, routeRoot RouteRoot
 
 	_, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil

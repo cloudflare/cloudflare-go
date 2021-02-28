@@ -139,7 +139,7 @@ func (api *API) CreatePageRule(zoneID string, rule PageRule) (*PageRule, error) 
 	uri := "/zones/" + zoneID + "/pagerules"
 	res, err := api.makeRequest("POST", uri, rule)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 	var r PageRuleDetailResponse
 	err = json.Unmarshal(res, &r)
@@ -156,7 +156,7 @@ func (api *API) ListPageRules(zoneID string) ([]PageRule, error) {
 	uri := "/zones/" + zoneID + "/pagerules"
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []PageRule{}, errors.Wrap(err, errMakeRequestError)
+		return []PageRule{}, err
 	}
 	var r PageRulesResponse
 	err = json.Unmarshal(res, &r)
@@ -173,7 +173,7 @@ func (api *API) PageRule(zoneID, ruleID string) (PageRule, error) {
 	uri := "/zones/" + zoneID + "/pagerules/" + ruleID
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return PageRule{}, errors.Wrap(err, errMakeRequestError)
+		return PageRule{}, err
 	}
 	var r PageRuleDetailResponse
 	err = json.Unmarshal(res, &r)
@@ -191,7 +191,7 @@ func (api *API) ChangePageRule(zoneID, ruleID string, rule PageRule) error {
 	uri := "/zones/" + zoneID + "/pagerules/" + ruleID
 	res, err := api.makeRequest("PATCH", uri, rule)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 	var r PageRuleDetailResponse
 	err = json.Unmarshal(res, &r)
@@ -209,7 +209,7 @@ func (api *API) UpdatePageRule(zoneID, ruleID string, rule PageRule) error {
 	uri := "/zones/" + zoneID + "/pagerules/" + ruleID
 	res, err := api.makeRequest("PUT", uri, rule)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 	var r PageRuleDetailResponse
 	err = json.Unmarshal(res, &r)
@@ -226,7 +226,7 @@ func (api *API) DeletePageRule(zoneID, ruleID string) error {
 	uri := "/zones/" + zoneID + "/pagerules/" + ruleID
 	res, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 	var r PageRuleDetailResponse
 	err = json.Unmarshal(res, &r)

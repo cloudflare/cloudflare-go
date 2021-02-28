@@ -49,7 +49,7 @@ func (api *API) CreateZoneLockdown(zoneID string, ld ZoneLockdown) (*ZoneLockdow
 	uri := "/zones/" + zoneID + "/firewall/lockdowns"
 	res, err := api.makeRequest("POST", uri, ld)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &ZoneLockdownResponse{}
@@ -69,7 +69,7 @@ func (api *API) UpdateZoneLockdown(zoneID string, id string, ld ZoneLockdown) (*
 	uri := "/zones/" + zoneID + "/firewall/lockdowns/" + id
 	res, err := api.makeRequest("PUT", uri, ld)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &ZoneLockdownResponse{}
@@ -89,7 +89,7 @@ func (api *API) DeleteZoneLockdown(zoneID string, id string) (*ZoneLockdownRespo
 	uri := "/zones/" + zoneID + "/firewall/lockdowns/" + id
 	res, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &ZoneLockdownResponse{}
@@ -109,7 +109,7 @@ func (api *API) ZoneLockdown(zoneID string, id string) (*ZoneLockdownResponse, e
 	uri := "/zones/" + zoneID + "/firewall/lockdowns/" + id
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &ZoneLockdownResponse{}
@@ -138,7 +138,7 @@ func (api *API) ListZoneLockdowns(zoneID string, page int) (*ZoneLockdownListRes
 	uri := "/zones/" + zoneID + "/firewall/lockdowns" + query
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &ZoneLockdownListResponse{}

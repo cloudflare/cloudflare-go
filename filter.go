@@ -66,7 +66,7 @@ func (api *API) Filter(zoneID, filterID string) (Filter, error) {
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return Filter{}, errors.Wrap(err, errMakeRequestError)
+		return Filter{}, err
 	}
 
 	var filterResponse FilterDetailResponse
@@ -99,7 +99,7 @@ func (api *API) Filters(zoneID string, pageOpts PaginationOptions) ([]Filter, er
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []Filter{}, errors.Wrap(err, errMakeRequestError)
+		return []Filter{}, err
 	}
 
 	var filtersResponse FiltersDetailResponse
@@ -119,7 +119,7 @@ func (api *API) CreateFilters(zoneID string, filters []Filter) ([]Filter, error)
 
 	res, err := api.makeRequest("POST", uri, filters)
 	if err != nil {
-		return []Filter{}, errors.Wrap(err, errMakeRequestError)
+		return []Filter{}, err
 	}
 
 	var filtersResponse FiltersDetailResponse
@@ -143,7 +143,7 @@ func (api *API) UpdateFilter(zoneID string, filter Filter) (Filter, error) {
 
 	res, err := api.makeRequest("PUT", uri, filter)
 	if err != nil {
-		return Filter{}, errors.Wrap(err, errMakeRequestError)
+		return Filter{}, err
 	}
 
 	var filterResponse FilterDetailResponse
@@ -169,7 +169,7 @@ func (api *API) UpdateFilters(zoneID string, filters []Filter) ([]Filter, error)
 
 	res, err := api.makeRequest("PUT", uri, filters)
 	if err != nil {
-		return []Filter{}, errors.Wrap(err, errMakeRequestError)
+		return []Filter{}, err
 	}
 
 	var filtersResponse FiltersDetailResponse
@@ -193,7 +193,7 @@ func (api *API) DeleteFilter(zoneID, filterID string) error {
 
 	_, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil
@@ -208,7 +208,7 @@ func (api *API) DeleteFilters(zoneID string, filterIDs []string) error {
 
 	_, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil

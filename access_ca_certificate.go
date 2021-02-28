@@ -48,7 +48,7 @@ func (api *API) accessCACertificates(id string, routeRoot RouteRoot) ([]AccessCA
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []AccessCACertificate{}, errors.Wrap(err, errMakeRequestError)
+		return []AccessCACertificate{}, err
 	}
 
 	var accessCAListResponse AccessCACertificateListResponse
@@ -81,7 +81,7 @@ func (api *API) accessCACertificate(id string, applicationID string, routeRoot R
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return AccessCACertificate{}, errors.Wrap(err, errMakeRequestError)
+		return AccessCACertificate{}, err
 	}
 
 	var accessCAResponse AccessCACertificateResponse
@@ -119,7 +119,7 @@ func (api *API) createAccessCACertificate(id string, applicationID string, route
 
 	res, err := api.makeRequest("POST", uri, nil)
 	if err != nil {
-		return AccessCACertificate{}, errors.Wrap(err, errMakeRequestError)
+		return AccessCACertificate{}, err
 	}
 
 	var accessCACertificate AccessCACertificateResponse
@@ -157,7 +157,7 @@ func (api *API) deleteAccessCACertificate(id string, applicationID string, route
 
 	_, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil

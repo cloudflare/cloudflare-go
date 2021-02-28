@@ -61,7 +61,7 @@ func (api *API) accessMutualTLSCertificates(id string, routeRoot RouteRoot) ([]A
 
 	res, err := api.makeRequestContext(context.Background(), "GET", uri, nil)
 	if err != nil {
-		return []AccessMutualTLSCertificate{}, errors.Wrap(err, errMakeRequestError)
+		return []AccessMutualTLSCertificate{}, err
 	}
 
 	var accessMutualTLSCertificateListResponse AccessMutualTLSCertificateListResponse
@@ -99,7 +99,7 @@ func (api *API) accessMutualTLSCertificate(id, certificateID string, routeRoot R
 
 	res, err := api.makeRequestContext(context.Background(), "GET", uri, nil)
 	if err != nil {
-		return AccessMutualTLSCertificate{}, errors.Wrap(err, errMakeRequestError)
+		return AccessMutualTLSCertificate{}, err
 	}
 
 	var accessMutualTLSCertificateDetailResponse AccessMutualTLSCertificateDetailResponse
@@ -136,7 +136,7 @@ func (api *API) createAccessMutualTLSCertificate(id string, certificate AccessMu
 
 	res, err := api.makeRequestContext(context.Background(), "POST", uri, certificate)
 	if err != nil {
-		return AccessMutualTLSCertificate{}, errors.Wrap(err, errMakeRequestError)
+		return AccessMutualTLSCertificate{}, err
 	}
 
 	var accessMutualTLSCertificateDetailResponse AccessMutualTLSCertificateDetailResponse
@@ -174,7 +174,7 @@ func (api *API) updateAccessMutualTLSCertificate(id string, certificateID string
 
 	res, err := api.makeRequestContext(context.Background(), "PUT", uri, certificate)
 	if err != nil {
-		return AccessMutualTLSCertificate{}, errors.Wrap(err, errMakeRequestError)
+		return AccessMutualTLSCertificate{}, err
 	}
 
 	var accessMutualTLSCertificateDetailResponse AccessMutualTLSCertificateDetailResponse
@@ -212,7 +212,7 @@ func (api *API) deleteAccessMutualTLSCertificate(id, certificateID string, route
 
 	res, err := api.makeRequestContext(context.Background(), "DELETE", uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	var accessMutualTLSCertificateDetailResponse AccessMutualTLSCertificateDetailResponse

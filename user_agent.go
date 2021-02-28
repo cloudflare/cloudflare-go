@@ -51,7 +51,7 @@ func (api *API) CreateUserAgentRule(zoneID string, ld UserAgentRule) (*UserAgent
 	uri := "/zones/" + zoneID + "/firewall/ua_rules"
 	res, err := api.makeRequest("POST", uri, ld)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &UserAgentRuleResponse{}
@@ -70,7 +70,7 @@ func (api *API) UpdateUserAgentRule(zoneID string, id string, ld UserAgentRule) 
 	uri := "/zones/" + zoneID + "/firewall/ua_rules/" + id
 	res, err := api.makeRequest("PUT", uri, ld)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &UserAgentRuleResponse{}
@@ -89,7 +89,7 @@ func (api *API) DeleteUserAgentRule(zoneID string, id string) (*UserAgentRuleRes
 	uri := "/zones/" + zoneID + "/firewall/ua_rules/" + id
 	res, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &UserAgentRuleResponse{}
@@ -108,7 +108,7 @@ func (api *API) UserAgentRule(zoneID string, id string) (*UserAgentRuleResponse,
 	uri := "/zones/" + zoneID + "/firewall/ua_rules/" + id
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &UserAgentRuleResponse{}
@@ -136,7 +136,7 @@ func (api *API) ListUserAgentRules(zoneID string, page int) (*UserAgentRuleListR
 	uri := "/zones/" + zoneID + "/firewall/ua_rules" + query
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &UserAgentRuleListResponse{}

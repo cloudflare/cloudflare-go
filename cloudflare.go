@@ -389,7 +389,7 @@ type RawResponse struct {
 func (api *API) Raw(method, endpoint string, data interface{}) (json.RawMessage, error) {
 	res, err := api.makeRequest(method, endpoint, data)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	var r RawResponse

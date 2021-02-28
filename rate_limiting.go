@@ -91,7 +91,7 @@ func (api *API) CreateRateLimit(zoneID string, limit RateLimit) (RateLimit, erro
 	uri := "/zones/" + zoneID + "/rate_limits"
 	res, err := api.makeRequest("POST", uri, limit)
 	if err != nil {
-		return RateLimit{}, errors.Wrap(err, errMakeRequestError)
+		return RateLimit{}, err
 	}
 	var r rateLimitResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -119,7 +119,7 @@ func (api *API) ListRateLimits(zoneID string, pageOpts PaginationOptions) ([]Rat
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []RateLimit{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+		return []RateLimit{}, ResultInfo{}, err
 	}
 
 	var r rateLimitListResponse
@@ -166,7 +166,7 @@ func (api *API) RateLimit(zoneID, limitID string) (RateLimit, error) {
 	uri := "/zones/" + zoneID + "/rate_limits/" + limitID
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return RateLimit{}, errors.Wrap(err, errMakeRequestError)
+		return RateLimit{}, err
 	}
 	var r rateLimitResponse
 	err = json.Unmarshal(res, &r)
@@ -183,7 +183,7 @@ func (api *API) UpdateRateLimit(zoneID, limitID string, limit RateLimit) (RateLi
 	uri := "/zones/" + zoneID + "/rate_limits/" + limitID
 	res, err := api.makeRequest("PUT", uri, limit)
 	if err != nil {
-		return RateLimit{}, errors.Wrap(err, errMakeRequestError)
+		return RateLimit{}, err
 	}
 	var r rateLimitResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -199,7 +199,7 @@ func (api *API) DeleteRateLimit(zoneID, limitID string) error {
 	uri := "/zones/" + zoneID + "/rate_limits/" + limitID
 	res, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 	var r rateLimitResponse
 	err = json.Unmarshal(res, &r)

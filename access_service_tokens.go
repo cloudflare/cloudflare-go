@@ -95,7 +95,7 @@ func (api *API) accessServiceTokens(id string, routeRoot RouteRoot) ([]AccessSer
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []AccessServiceToken{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+		return []AccessServiceToken{}, ResultInfo{}, err
 	}
 
 	var accessServiceTokensListResponse AccessServiceTokensListResponse
@@ -130,7 +130,7 @@ func (api *API) createAccessServiceToken(id, name string, routeRoot RouteRoot) (
 	res, err := api.makeRequest("POST", uri, marshalledName)
 
 	if err != nil {
-		return AccessServiceTokenCreateResponse{}, errors.Wrap(err, errMakeRequestError)
+		return AccessServiceTokenCreateResponse{}, err
 	}
 
 	var accessServiceTokenCreation AccessServiceTokensCreationDetailResponse
@@ -167,7 +167,7 @@ func (api *API) updateAccessServiceToken(id, uuid, name string, routeRoot RouteR
 
 	res, err := api.makeRequest("PUT", uri, marshalledName)
 	if err != nil {
-		return AccessServiceTokenUpdateResponse{}, errors.Wrap(err, errMakeRequestError)
+		return AccessServiceTokenUpdateResponse{}, err
 	}
 
 	var accessServiceTokenUpdate AccessServiceTokensUpdateDetailResponse
@@ -200,7 +200,7 @@ func (api *API) deleteAccessServiceToken(id, uuid string, routeRoot RouteRoot) (
 
 	res, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return AccessServiceTokenUpdateResponse{}, errors.Wrap(err, errMakeRequestError)
+		return AccessServiceTokenUpdateResponse{}, err
 	}
 
 	var accessServiceTokenUpdate AccessServiceTokensUpdateDetailResponse

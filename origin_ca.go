@@ -94,7 +94,7 @@ func (api *API) CreateOriginCertificate(certificate OriginCACertificate) (*Origi
 	res, err := api.makeRequestWithAuthType(context.TODO(), "POST", uri, certificate, AuthUserService)
 
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	var originResponse *originCACertificateResponse
@@ -126,7 +126,7 @@ func (api *API) OriginCertificates(options OriginCACertificateListOptions) ([]Or
 	res, err := api.makeRequestWithAuthType(context.TODO(), "GET", uri, nil, AuthUserService)
 
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	var originResponse *originCACertificateResponseList
@@ -154,7 +154,7 @@ func (api *API) OriginCertificate(certificateID string) (*OriginCACertificate, e
 	res, err := api.makeRequestWithAuthType(context.TODO(), "GET", uri, nil, AuthUserService)
 
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	var originResponse *originCACertificateResponse
@@ -182,7 +182,7 @@ func (api *API) RevokeOriginCertificate(certificateID string) (*OriginCACertific
 	res, err := api.makeRequestWithAuthType(context.TODO(), "DELETE", uri, nil, AuthUserService)
 
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	var originResponse *originCACertificateResponseRevoke

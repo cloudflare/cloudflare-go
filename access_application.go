@@ -87,7 +87,7 @@ func (api *API) accessApplications(id string, pageOpts PaginationOptions, routeR
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []AccessApplication{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+		return []AccessApplication{}, ResultInfo{}, err
 	}
 
 	var accessApplicationListResponse AccessApplicationListResponse
@@ -125,7 +125,7 @@ func (api *API) accessApplication(id, applicationID string, routeRoot RouteRoot)
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return AccessApplication{}, errors.Wrap(err, errMakeRequestError)
+		return AccessApplication{}, err
 	}
 
 	var accessApplicationDetailResponse AccessApplicationDetailResponse
@@ -156,7 +156,7 @@ func (api *API) createAccessApplication(id string, accessApplication AccessAppli
 
 	res, err := api.makeRequest("POST", uri, accessApplication)
 	if err != nil {
-		return AccessApplication{}, errors.Wrap(err, errMakeRequestError)
+		return AccessApplication{}, err
 	}
 
 	var accessApplicationDetailResponse AccessApplicationDetailResponse
@@ -196,7 +196,7 @@ func (api *API) updateAccessApplication(id string, accessApplication AccessAppli
 
 	res, err := api.makeRequest("PUT", uri, accessApplication)
 	if err != nil {
-		return AccessApplication{}, errors.Wrap(err, errMakeRequestError)
+		return AccessApplication{}, err
 	}
 
 	var accessApplicationDetailResponse AccessApplicationDetailResponse
@@ -232,7 +232,7 @@ func (api *API) deleteAccessApplication(id, applicationID string, routeRoot Rout
 
 	_, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil
@@ -264,7 +264,7 @@ func (api *API) revokeAccessApplicationTokens(id string, applicationID string, r
 
 	_, err := api.makeRequest("POST", uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil

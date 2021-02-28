@@ -80,7 +80,7 @@ func (api *API) UploadPerHostnameAuthenticatedOriginPullsCertificate(zoneID stri
 	uri := "/zones/" + zoneID + "/origin_tls_client_auth/hostnames/certificates"
 	res, err := api.makeRequest("POST", uri, params)
 	if err != nil {
-		return PerHostnameAuthenticatedOriginPullsCertificateDetails{}, errors.Wrap(err, errMakeRequestError)
+		return PerHostnameAuthenticatedOriginPullsCertificateDetails{}, err
 	}
 	var r PerHostnameAuthenticatedOriginPullsCertificateResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -96,7 +96,7 @@ func (api *API) GetPerHostnameAuthenticatedOriginPullsCertificate(zoneID, certif
 	uri := "/zones/" + zoneID + "/origin_tls_client_auth/hostnames/certificates/" + certificateID
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return PerHostnameAuthenticatedOriginPullsCertificateDetails{}, errors.Wrap(err, errMakeRequestError)
+		return PerHostnameAuthenticatedOriginPullsCertificateDetails{}, err
 	}
 	var r PerHostnameAuthenticatedOriginPullsCertificateResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -112,7 +112,7 @@ func (api *API) DeletePerHostnameAuthenticatedOriginPullsCertificate(zoneID, cer
 	uri := "/zones/" + zoneID + "/origin_tls_client_auth/hostnames/certificates/" + certificateID
 	res, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return PerHostnameAuthenticatedOriginPullsCertificateDetails{}, errors.Wrap(err, errMakeRequestError)
+		return PerHostnameAuthenticatedOriginPullsCertificateDetails{}, err
 	}
 	var r PerHostnameAuthenticatedOriginPullsCertificateResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -131,7 +131,7 @@ func (api *API) EditPerHostnameAuthenticatedOriginPullsConfig(zoneID string, con
 	}
 	res, err := api.makeRequest("PUT", uri, conf)
 	if err != nil {
-		return []PerHostnameAuthenticatedOriginPullsDetails{}, errors.Wrap(err, errMakeRequestError)
+		return []PerHostnameAuthenticatedOriginPullsDetails{}, err
 	}
 	var r PerHostnamesAuthenticatedOriginPullsDetailsResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -147,7 +147,7 @@ func (api *API) GetPerHostnameAuthenticatedOriginPullsConfig(zoneID, hostname st
 	uri := "/zones/" + zoneID + "/origin_tls_client_auth/hostnames/" + hostname
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return PerHostnameAuthenticatedOriginPullsDetails{}, errors.Wrap(err, errMakeRequestError)
+		return PerHostnameAuthenticatedOriginPullsDetails{}, err
 	}
 	var r PerHostnameAuthenticatedOriginPullsDetailsResponse
 	if err := json.Unmarshal(res, &r); err != nil {

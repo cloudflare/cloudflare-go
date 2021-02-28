@@ -86,7 +86,7 @@ func (api *API) accessPolicies(id string, applicationID string, pageOpts Paginat
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return []AccessPolicy{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+		return []AccessPolicy{}, ResultInfo{}, err
 	}
 
 	var accessPolicyListResponse AccessPolicyListResponse
@@ -123,7 +123,7 @@ func (api *API) accessPolicy(id string, applicationID string, policyID string, r
 
 	res, err := api.makeRequest("GET", uri, nil)
 	if err != nil {
-		return AccessPolicy{}, errors.Wrap(err, errMakeRequestError)
+		return AccessPolicy{}, err
 	}
 
 	var accessPolicyDetailResponse AccessPolicyDetailResponse
@@ -159,7 +159,7 @@ func (api *API) createAccessPolicy(id, applicationID string, accessPolicy Access
 
 	res, err := api.makeRequest("POST", uri, accessPolicy)
 	if err != nil {
-		return AccessPolicy{}, errors.Wrap(err, errMakeRequestError)
+		return AccessPolicy{}, err
 	}
 
 	var accessPolicyDetailResponse AccessPolicyDetailResponse
@@ -199,7 +199,7 @@ func (api *API) updateAccessPolicy(id, applicationID string, accessPolicy Access
 
 	res, err := api.makeRequest("PUT", uri, accessPolicy)
 	if err != nil {
-		return AccessPolicy{}, errors.Wrap(err, errMakeRequestError)
+		return AccessPolicy{}, err
 	}
 
 	var accessPolicyDetailResponse AccessPolicyDetailResponse
@@ -236,7 +236,7 @@ func (api *API) deleteAccessPolicy(id, applicationID, accessPolicyID string, rou
 
 	_, err := api.makeRequest("DELETE", uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil
