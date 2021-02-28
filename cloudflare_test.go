@@ -667,7 +667,7 @@ func TestErrorFromResponse(t *testing.T) {
 		w.WriteHeader(403)
 		fmt.Fprintf(w, `{
 			"success": false,
-			"errors": [ { "code": 403, "message": "this is a test error" } ],
+			"errors": [ { "code": 9999, "message": "this is a test error" } ],
 			"messages": [],
 			"result": {}
 		}
@@ -685,7 +685,7 @@ func TestErrorFromResponse(t *testing.T) {
 		},
 	)
 
-	assert.EqualError(t, err, "error from makeRequest: HTTP status 403: this is a test error")
+	assert.EqualError(t, err, "HTTP status 403: this is a test error (9999)")
 }
 
 type RoundTripperFunc func(*http.Request) (*http.Response, error)
