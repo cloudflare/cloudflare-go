@@ -85,7 +85,7 @@ func (e *APIRequestError) ServiceError() bool {
 // something client side.
 func (e *APIRequestError) ClientError() bool {
 	return e.StatusCode >= http.StatusBadRequest &&
-		e.StatusCode <= http.StatusInternalServerError &&
+		e.StatusCode < http.StatusInternalServerError &&
 		e.StatusCode != http.StatusTooManyRequests
 }
 
