@@ -657,21 +657,15 @@ func TestClient_ContextIsPassedToRequest(t *testing.T) {
 	cfClient.ListZonesContext(ctx)
 }
 
-func TestErrorFromResponse(t *testing.T) {
+func TestErrorFromResponseWithUnmarshalingError(t *testing.T) {
 	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		w.WriteHeader(403)
-		fmt.Fprintf(w, `{
-			"success": false,
-			"errors": [ { "code": 9999, "message": "this is a test error" } ],
-			"messages": [],
-			"result": {}
-		}
-		`)
+		w.WriteHeader(400)
+		fmt.Fprintf(w, `{ not valid json`)
 	}
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/apps", handler)
@@ -685,7 +679,7 @@ func TestErrorFromResponse(t *testing.T) {
 		},
 	)
 
-	assert.EqualError(t, err, "HTTP status 403: this is a test error (9999)")
+	assert.Regexp(t, "error unmarshalling the JSON response error body: ", err)
 }
 
 type RoundTripperFunc func(*http.Request) (*http.Response, error)

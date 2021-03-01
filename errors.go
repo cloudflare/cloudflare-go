@@ -27,7 +27,11 @@ type APIRequestError struct {
 
 func (e APIRequestError) Error() string {
 	errString := ""
-	errString += fmt.Sprintf("HTTP status %d: ", e.StatusCode)
+	errString += fmt.Sprintf("HTTP status %d", e.StatusCode)
+
+	if len(e.Errors) > 0 {
+		errString += ": "
+	}
 
 	errMessages := []string{}
 	for _, err := range e.Errors {
@@ -78,15 +82,15 @@ func (e *APIRequestError) InternalErrorCodes() []int {
 // ServiceError returns a boolean whether or not the raised error was caused by
 // an internal service.
 func (e *APIRequestError) ServiceError() bool {
-	return e.StatusCode >= http.StatusInternalServerError
+	return e.StatusCode >= http.StatusInternalServerError &&
+		e.StatusCode < 600
 }
 
 // ClientError returns a boolean whether or not the raised error was caused by
 // something client side.
 func (e *APIRequestError) ClientError() bool {
 	return e.StatusCode >= http.StatusBadRequest &&
-		e.StatusCode < http.StatusInternalServerError &&
-		e.StatusCode != http.StatusTooManyRequests
+		e.StatusCode < http.StatusInternalServerError
 }
 
 // ClientRateLimited returns a boolean whether or not the raised error was
