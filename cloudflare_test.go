@@ -43,12 +43,12 @@ func TestClient_Headers(t *testing.T) {
 	// it should set default headers
 	setup()
 	mux.HandleFunc("/user", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		assert.Equal(t, "cloudflare@example.org", r.Header.Get("X-Auth-Email"))
 		assert.Equal(t, "deadbeef", r.Header.Get("X-Auth-Key"))
 		assert.Equal(t, "application/json", r.Header.Get("Content-Type"))
 	})
-	client.UserDetails()
+	client.UserDetails(context.TODO())
 	teardown()
 
 	// it should override appropriate default headers when custom headers given
@@ -57,13 +57,13 @@ func TestClient_Headers(t *testing.T) {
 	headers.Add("X-Random", "a random header")
 	setup(Headers(headers))
 	mux.HandleFunc("/user", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		assert.Equal(t, "cloudflare@example.org", r.Header.Get("X-Auth-Email"))
 		assert.Equal(t, "deadbeef", r.Header.Get("X-Auth-Key"))
 		assert.Equal(t, "application/xhtml+xml", r.Header.Get("Content-Type"))
 		assert.Equal(t, "a random header", r.Header.Get("X-Random"))
 	})
-	client.UserDetails()
+	client.UserDetails(context.TODO())
 	teardown()
 
 	// it should set X-Auth-User-Service-Key and omit X-Auth-Email and X-Auth-Key when client.authType is AuthUserService
@@ -71,14 +71,14 @@ func TestClient_Headers(t *testing.T) {
 	client.SetAuthType(AuthUserService)
 	client.APIUserServiceKey = "userservicekey"
 	mux.HandleFunc("/user", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		assert.Empty(t, r.Header.Get("X-Auth-Email"))
 		assert.Empty(t, r.Header.Get("X-Auth-Key"))
 		assert.Empty(t, r.Header.Get("Authorization"))
 		assert.Equal(t, "userservicekey", r.Header.Get("X-Auth-User-Service-Key"))
 		assert.Equal(t, "application/json", r.Header.Get("Content-Type"))
 	})
-	client.UserDetails()
+	client.UserDetails(context.TODO())
 	teardown()
 
 	// it should set X-Auth-User-Service-Key and omit X-Auth-Email and X-Auth-Key when using NewWithUserServiceKey
@@ -87,14 +87,14 @@ func TestClient_Headers(t *testing.T) {
 	assert.NoError(t, err)
 	client.BaseURL = server.URL
 	mux.HandleFunc("/user", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		assert.Empty(t, r.Header.Get("X-Auth-Email"))
 		assert.Empty(t, r.Header.Get("X-Auth-Key"))
 		assert.Empty(t, r.Header.Get("Authorization"))
 		assert.Equal(t, "userservicekey", r.Header.Get("X-Auth-User-Service-Key"))
 		assert.Equal(t, "application/json", r.Header.Get("Content-Type"))
 	})
-	client.UserDetails()
+	client.UserDetails(context.TODO())
 	teardown()
 
 	// it should set Authorization and omit others credential headers when using NewWithAPIToken
@@ -103,14 +103,14 @@ func TestClient_Headers(t *testing.T) {
 	assert.NoError(t, err)
 	client.BaseURL = server.URL
 	mux.HandleFunc("/zones/123456", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		assert.Empty(t, r.Header.Get("X-Auth-Email"))
 		assert.Empty(t, r.Header.Get("X-Auth-Key"))
 		assert.Empty(t, r.Header.Get("X-Auth-User-Service-Key"))
 		assert.Equal(t, "Bearer my-api-token", r.Header.Get("Authorization"))
 		assert.Equal(t, "application/json", r.Header.Get("Content-Type"))
 	})
-	client.UserDetails()
+	client.UserDetails(context.TODO())
 	teardown()
 }
 
@@ -121,7 +121,7 @@ func TestClient_RetryCanSucceedAfterErrors(t *testing.T) {
 	requestsReceived := 0
 	// could test any function, using ListLoadBalancerPools
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 
 		// we are doing three *retries*
@@ -182,7 +182,7 @@ func TestClient_RetryCanSucceedAfterErrors(t *testing.T) {
 
 	mux.HandleFunc("/user/load_balancers/pools", handler)
 
-	_, err := client.ListLoadBalancerPools()
+	_, err := client.ListLoadBalancerPools(context.TODO())
 	assert.NoError(t, err)
 }
 
@@ -192,7 +192,7 @@ func TestClient_RetryReturnsPersistentErrorResponse(t *testing.T) {
 
 	// could test any function, using ListLoadBalancerPools
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 
 		// return error causing client to retry
@@ -208,7 +208,7 @@ func TestClient_RetryReturnsPersistentErrorResponse(t *testing.T) {
 
 	mux.HandleFunc("/user/load_balancers/pools", handler)
 
-	_, err := client.ListLoadBalancerPools()
+	_, err := client.ListLoadBalancerPools(context.TODO())
 	assert.Error(t, err)
 }
 
@@ -217,7 +217,7 @@ func TestZoneIDByNameWithNonUniqueZonesWithoutOrgID(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -355,7 +355,7 @@ func TestZoneIDByNameWithNonUniqueZonesWithOrgId(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -495,7 +495,7 @@ func TestZoneIDByNameWithIDN(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -662,7 +662,7 @@ func TestErrorFromResponseWithUnmarshalingError(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		w.WriteHeader(400)
 		fmt.Fprintf(w, `{ not valid json`)
@@ -670,14 +670,11 @@ func TestErrorFromResponseWithUnmarshalingError(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/apps", handler)
 
-	_, err := client.CreateAccessApplication(
-		"01a7362d577a6c3019a474fd6f485823",
-		AccessApplication{
-			Name:            "Admin Site",
-			Domain:          "test.example.com/admin",
-			SessionDuration: "24h",
-		},
-	)
+	_, err := client.CreateAccessApplication(context.TODO(), "01a7362d577a6c3019a474fd6f485823", AccessApplication{
+		Name:            "Admin Site",
+		Domain:          "test.example.com/admin",
+		SessionDuration: "24h",
+	})
 
 	assert.Regexp(t, "error unmarshalling the JSON response error body: ", err)
 }

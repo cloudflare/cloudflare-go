@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -16,7 +17,7 @@ func TestDiagnosticsPerformTraceroute(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		var request DiagnosticsTracerouteConfiguration
 		var err error
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		err = json.NewDecoder(r.Body).Decode(&request)
 		assert.NoError(t, err)
 		assert.Equal(t, request.Colos, []string{"den01"}, "Exepected key 'colos' to be [\"den01\"], got %+v", request.Colos)
@@ -114,7 +115,7 @@ func TestDiagnosticsPerformTraceroute(t *testing.T) {
 	}
 
 	opts := DiagnosticsTracerouteConfigurationOptions{PacketsPerTTL: 1, PacketType: "imcp", MaxTTL: 1, WaitTime: 1}
-	trace, err := client.PerformTraceroute("01a7362d577a6c3019a474fd6f485823", []string{"1.1.1.1"}, []string{"den01"}, opts)
+	trace, err := client.PerformTraceroute(context.TODO(), "01a7362d577a6c3019a474fd6f485823", []string{"1.1.1.1"}, []string{"den01"}, opts)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, trace)
@@ -128,7 +129,7 @@ func TestDiagnosticsPerformTracerouteEmptyColos(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		var request DiagnosticsTracerouteConfiguration
 		var err error
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		err = json.NewDecoder(r.Body).Decode(&request)
 		assert.NoError(t, err)
 		assert.Nil(t, request.Colos, "Exepected key 'colos' to be nil, got %+v", request.Colos)
@@ -226,7 +227,7 @@ func TestDiagnosticsPerformTracerouteEmptyColos(t *testing.T) {
 	}
 
 	opts := DiagnosticsTracerouteConfigurationOptions{PacketsPerTTL: 1, PacketType: "imcp", MaxTTL: 1, WaitTime: 1}
-	trace, err := client.PerformTraceroute("01a7362d577a6c3019a474fd6f485823", []string{"1.1.1.1"}, []string{}, opts)
+	trace, err := client.PerformTraceroute(context.TODO(), "01a7362d577a6c3019a474fd6f485823", []string{"1.1.1.1"}, []string{}, opts)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, trace)

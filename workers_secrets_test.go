@@ -24,7 +24,7 @@ func TestWorkers_SetWorkersSecret(t *testing.T) {
 	}`
 
 	mux.HandleFunc("/accounts/foo/workers/scripts/test-script/secrets", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, response)
 	})
@@ -61,7 +61,7 @@ func TestWorkers_DeleteWorkersSecret(t *testing.T) {
 	}`
 
 	mux.HandleFunc("/accounts/foo/workers/scripts/test-script/secrets/my-secret", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "DELETE", r.Method, "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, response)
 	})
@@ -89,7 +89,7 @@ func TestWorkers_ListWorkersSecret(t *testing.T) {
 	}`
 
 	mux.HandleFunc("/accounts/foo/workers/scripts/test-script/secrets", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
 		fmt.Fprintf(w, response)
 	})

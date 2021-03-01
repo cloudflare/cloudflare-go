@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -14,7 +15,7 @@ func TestAccessAuditLogs(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
   "success": true,
@@ -52,7 +53,7 @@ func TestAccessAuditLogs(t *testing.T) {
 		RayID:      "187d944c61940c77",
 	}}
 
-	actual, err := client.AccessAuditLogs("01a7362d577a6c3019a474fd6f485823", AccessAuditLogFilterOptions{})
+	actual, err := client.AccessAuditLogs(context.TODO(), "01a7362d577a6c3019a474fd6f485823", AccessAuditLogFilterOptions{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)

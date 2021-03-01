@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -13,7 +14,7 @@ func TestAccessIdentityProviders(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -48,7 +49,7 @@ func TestAccessIdentityProviders(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/identity_providers", handler)
 
-	actual, err := client.AccessIdentityProviders(accountID)
+	actual, err := client.AccessIdentityProviders(context.TODO(), accountID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -56,7 +57,7 @@ func TestAccessIdentityProviders(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/identity_providers", handler)
 
-	actual, err = client.ZoneLevelAccessIdentityProviders(zoneID)
+	actual, err = client.ZoneLevelAccessIdentityProviders(context.TODO(), zoneID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -68,7 +69,7 @@ func TestAccessIdentityProviderDetails(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -99,7 +100,7 @@ func TestAccessIdentityProviderDetails(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc841", handler)
 
-	actual, err := client.AccessIdentityProviderDetails(accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc841")
+	actual, err := client.AccessIdentityProviderDetails(context.TODO(), accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc841")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -107,7 +108,7 @@ func TestAccessIdentityProviderDetails(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc841", handler)
 
-	actual, err = client.ZoneLevelAccessIdentityProviderDetails(zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc841")
+	actual, err = client.ZoneLevelAccessIdentityProviderDetails(context.TODO(), zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc841")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -119,7 +120,7 @@ func TestCreateAccessIdentityProvider(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -159,7 +160,7 @@ func TestCreateAccessIdentityProvider(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/identity_providers", handler)
 
-	actual, err := client.CreateAccessIdentityProvider(accountID, newIdentityProvider)
+	actual, err := client.CreateAccessIdentityProvider(context.TODO(), accountID, newIdentityProvider)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -167,7 +168,7 @@ func TestCreateAccessIdentityProvider(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/identity_providers", handler)
 
-	actual, err = client.CreateZoneLevelAccessIdentityProvider(zoneID, newIdentityProvider)
+	actual, err = client.CreateZoneLevelAccessIdentityProvider(context.TODO(), zoneID, newIdentityProvider)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -178,7 +179,7 @@ func TestUpdateAccessIdentityProvider(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "PUT", "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPut, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -218,7 +219,7 @@ func TestUpdateAccessIdentityProvider(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err := client.UpdateAccessIdentityProvider(accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", updatedIdentityProvider)
+	actual, err := client.UpdateAccessIdentityProvider(context.TODO(), accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", updatedIdentityProvider)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -226,7 +227,7 @@ func TestUpdateAccessIdentityProvider(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err = client.UpdateZoneLevelAccessIdentityProvider(zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", updatedIdentityProvider)
+	actual, err = client.UpdateZoneLevelAccessIdentityProvider(context.TODO(), zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", updatedIdentityProvider)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -238,7 +239,7 @@ func TestDeleteAccessIdentityProvider(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "DELETE", "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodDelete, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -269,7 +270,7 @@ func TestDeleteAccessIdentityProvider(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err := client.DeleteAccessIdentityProvider("01a7362d577a6c3019a474fd6f485823", "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	actual, err := client.DeleteAccessIdentityProvider(context.TODO(), "01a7362d577a6c3019a474fd6f485823", "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -277,7 +278,7 @@ func TestDeleteAccessIdentityProvider(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err = client.DeleteZoneLevelAccessIdentityProvider(zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	actual, err = client.DeleteZoneLevelAccessIdentityProvider(context.TODO(), zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)

@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -14,7 +15,7 @@ func TestAccessServiceTokens(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -48,7 +49,7 @@ func TestAccessServiceTokens(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/service_tokens", handler)
 
-	actual, _, err := client.AccessServiceTokens(accountID)
+	actual, _, err := client.AccessServiceTokens(context.TODO(), accountID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -56,7 +57,7 @@ func TestAccessServiceTokens(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/service_tokens", handler)
 
-	actual, _, err = client.ZoneLevelAccessServiceTokens(zoneID)
+	actual, _, err = client.ZoneLevelAccessServiceTokens(context.TODO(), zoneID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -68,7 +69,7 @@ func TestCreateAccessServiceToken(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -97,7 +98,7 @@ func TestCreateAccessServiceToken(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/service_tokens", handler)
 
-	actual, err := client.CreateAccessServiceToken(accountID, "CI/CD token")
+	actual, err := client.CreateAccessServiceToken(context.TODO(), accountID, "CI/CD token")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expected, actual)
@@ -105,7 +106,7 @@ func TestCreateAccessServiceToken(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/service_tokens", handler)
 
-	actual, err = client.CreateZoneLevelAccessServiceToken(zoneID, "CI/CD token")
+	actual, err = client.CreateZoneLevelAccessServiceToken(context.TODO(), zoneID, "CI/CD token")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expected, actual)
@@ -117,7 +118,7 @@ func TestUpdateAccessServiceToken(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "PUT", "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPut, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -144,11 +145,7 @@ func TestUpdateAccessServiceToken(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/service_tokens/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err := client.UpdateAccessServiceToken(
-		accountID,
-		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		"CI/CD token",
-	)
+	actual, err := client.UpdateAccessServiceToken(context.TODO(), accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", "CI/CD token")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expected, actual)
@@ -156,11 +153,7 @@ func TestUpdateAccessServiceToken(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/service_tokens/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err = client.UpdateZoneLevelAccessServiceToken(
-		zoneID,
-		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		"CI/CD token",
-	)
+	actual, err = client.UpdateZoneLevelAccessServiceToken(context.TODO(), zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", "CI/CD token")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expected, actual)
@@ -172,7 +165,7 @@ func TestDeleteAccessServiceToken(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "DELETE", "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodDelete, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -199,10 +192,7 @@ func TestDeleteAccessServiceToken(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/service_tokens/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err := client.DeleteAccessServiceToken(
-		accountID,
-		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-	)
+	actual, err := client.DeleteAccessServiceToken(context.TODO(), accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expected, actual)
@@ -210,10 +200,7 @@ func TestDeleteAccessServiceToken(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/service_tokens/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err = client.DeleteZoneLevelAccessServiceToken(
-		zoneID,
-		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-	)
+	actual, err = client.DeleteZoneLevelAccessServiceToken(context.TODO(), zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expected, actual)

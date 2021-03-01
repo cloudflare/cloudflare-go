@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -40,7 +41,7 @@ func TestListCertificatePacks(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
   "success": true,
@@ -85,7 +86,7 @@ func TestListCertificatePacks(t *testing.T) {
 	mux.HandleFunc("/zones/023e105f4ecef8ad9ca31a8372d0c353/ssl/certificate_packs", handler)
 
 	want := []CertificatePack{desiredCertificatePack}
-	actual, err := client.ListCertificatePacks("023e105f4ecef8ad9ca31a8372d0c353")
+	actual, err := client.ListCertificatePacks(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -97,7 +98,7 @@ func TestListCertificatePack(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
   "success": true,
@@ -139,7 +140,7 @@ func TestListCertificatePack(t *testing.T) {
 
 	mux.HandleFunc("/zones/023e105f4ecef8ad9ca31a8372d0c353/ssl/certificate_packs/3822ff90-ea29-44df-9e55-21300bb9419b", handler)
 
-	actual, err := client.CertificatePack("023e105f4ecef8ad9ca31a8372d0c353", "3822ff90-ea29-44df-9e55-21300bb9419b")
+	actual, err := client.CertificatePack(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353", "3822ff90-ea29-44df-9e55-21300bb9419b")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, desiredCertificatePack, actual)
@@ -151,7 +152,7 @@ func TestCreateCertificatePack(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
   "success": true,
@@ -194,7 +195,7 @@ func TestCreateCertificatePack(t *testing.T) {
 	mux.HandleFunc("/zones/023e105f4ecef8ad9ca31a8372d0c353/ssl/certificate_packs", handler)
 
 	certificate := CertificatePackRequest{Type: "custom", Hosts: []string{"example.com", "*.example.com", "www.example.com"}}
-	actual, err := client.CreateCertificatePack("023e105f4ecef8ad9ca31a8372d0c353", certificate)
+	actual, err := client.CreateCertificatePack(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353", certificate)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, desiredCertificatePack, actual)
@@ -206,7 +207,7 @@ func TestCreateAdvancedCertificatePack(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
   "success": true,
@@ -241,7 +242,7 @@ func TestCreateAdvancedCertificatePack(t *testing.T) {
 		CloudflareBranding:   false,
 	}
 
-	actual, err := client.CreateAdvancedCertificatePack("023e105f4ecef8ad9ca31a8372d0c353", certificate)
+	actual, err := client.CreateAdvancedCertificatePack(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353", certificate)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, certificate, actual)
@@ -288,7 +289,7 @@ func TestRestartAdvancedCertificateValidation(t *testing.T) {
 		CloudflareBranding:   false,
 	}
 
-	actual, err := client.RestartAdvancedCertificateValidation("023e105f4ecef8ad9ca31a8372d0c353", "3822ff90-ea29-44df-9e55-21300bb9419b")
+	actual, err := client.RestartAdvancedCertificateValidation(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353", "3822ff90-ea29-44df-9e55-21300bb9419b")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, certificate, actual)
@@ -300,7 +301,7 @@ func TestDeleteCertificatePack(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "DELETE", "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodDelete, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
   "success": true,
@@ -315,7 +316,7 @@ func TestDeleteCertificatePack(t *testing.T) {
 
 	mux.HandleFunc("/zones/023e105f4ecef8ad9ca31a8372d0c353/ssl/certificate_packs/3822ff90-ea29-44df-9e55-21300bb9419b", handler)
 
-	err := client.DeleteCertificatePack("023e105f4ecef8ad9ca31a8372d0c353", "3822ff90-ea29-44df-9e55-21300bb9419b")
+	err := client.DeleteCertificatePack(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353", "3822ff90-ea29-44df-9e55-21300bb9419b")
 
 	assert.NoError(t, err)
 }
