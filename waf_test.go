@@ -204,7 +204,7 @@ func TestUpdateWAFPackage(t *testing.T) {
 	testZoneID := "abcd123"
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "PATCH", r.Method, "Expected method 'PATCH', got %s", r.Method)
+		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
 			panic(err)
@@ -463,7 +463,7 @@ func TestUpdateWAFGroup(t *testing.T) {
 	testZoneID := "abcd123"
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "PATCH", r.Method, "Expected method 'PATCH', got %s", r.Method)
+		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
 			panic(err)
@@ -755,7 +755,7 @@ func TestUpdateWAFRule(t *testing.T) {
 	testZoneID := "abcd123"
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "PATCH", r.Method, "Expected method 'PATCH', got %s", r.Method)
+		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
 			panic(err)

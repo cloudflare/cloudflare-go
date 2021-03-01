@@ -253,7 +253,7 @@ func TestEnableRailgun(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "PATCH", "Expected method 'PATCH', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPatch, "Expected method 'PATCH', got %s", r.Method)
 		b, err := ioutil.ReadAll(r.Body)
 		defer r.Body.Close()
 		if assert.NoError(t, err) {
@@ -314,7 +314,7 @@ func TestDisableRailgun(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "PATCH", "Expected method 'PATCH', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPatch, "Expected method 'PATCH', got %s", r.Method)
 		b, err := ioutil.ReadAll(r.Body)
 		defer r.Body.Close()
 		if assert.NoError(t, err) {
@@ -542,7 +542,7 @@ func TestConnectRailgun(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "PATCH", "Expected method 'PATCH', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPatch, "Expected method 'PATCH', got %s", r.Method)
 		b, err := ioutil.ReadAll(r.Body)
 		defer r.Body.Close()
 		if assert.NoError(t, err) {
@@ -584,7 +584,7 @@ func TestDisconnectRailgun(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "PATCH", "Expected method 'PATCH', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPatch, "Expected method 'PATCH', got %s", r.Method)
 		b, err := ioutil.ReadAll(r.Body)
 		defer r.Body.Close()
 		if assert.NoError(t, err) {

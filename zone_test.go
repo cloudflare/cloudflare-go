@@ -920,7 +920,7 @@ func TestFallbackOrigin_UpdateFallbackOrigin(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/fallback_origin", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "PATCH", r.Method, "Expected method 'PATCH', got %s", r.Method)
+		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
 		w.WriteHeader(http.StatusCreated)
@@ -1160,7 +1160,7 @@ func TestUpdateZoneDNSSEC(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "PATCH", r.Method, "Expected method 'PATCH', got %s", r.Method)
+		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
 		// JSON data from: https://api.cloudflare.com/#dnssec-properties

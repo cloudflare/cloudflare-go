@@ -61,7 +61,7 @@ func (api *API) UniversalSSLSettingDetails(ctx context.Context, zoneID string) (
 // API reference: https://api.cloudflare.com/#universal-ssl-settings-for-a-zone-edit-universal-ssl-settings
 func (api *API) EditUniversalSSLSetting(ctx context.Context, zoneID string, setting UniversalSSLSetting) (UniversalSSLSetting, error) {
 	uri := "/zones/" + zoneID + "/ssl/universal/settings"
-	res, err := api.makeRequestContext(ctx, "PATCH", uri, setting)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, setting)
 	if err != nil {
 		return UniversalSSLSetting{}, errors.Wrap(err, errMakeRequestError)
 	}

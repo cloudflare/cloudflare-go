@@ -147,7 +147,7 @@ func (api *API) UpdateDNSRecord(ctx context.Context, zoneID, recordID string, rr
 		rr.Type = rec.Type
 	}
 	uri := "/zones/" + zoneID + "/dns_records/" + recordID
-	res, err := api.makeRequestContext(ctx, "PATCH", uri, rr)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, rr)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}

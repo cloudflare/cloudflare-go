@@ -130,7 +130,7 @@ func (api *API) enableRailgun(ctx context.Context, railgunID string, enable bool
 	}{
 		Enabled: enable,
 	}
-	res, err := api.makeRequestContext(ctx, "PATCH", uri, params)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
 	if err != nil {
 		return Railgun{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -273,7 +273,7 @@ func (api *API) connectZoneRailgun(ctx context.Context, zoneID, railgunID string
 	}{
 		Connected: connect,
 	}
-	res, err := api.makeRequestContext(ctx, "PATCH", uri, params)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
 	if err != nil {
 		return ZoneRailgun{}, errors.Wrap(err, errMakeRequestError)
 	}

@@ -172,7 +172,7 @@ func (api *API) WAFPackage(ctx context.Context, zoneID, packageID string) (WAFPa
 // API Reference: https://api.cloudflare.com/#waf-rule-packages-edit-firewall-package
 func (api *API) UpdateWAFPackage(ctx context.Context, zoneID, packageID string, opts WAFPackageOptions) (WAFPackage, error) {
 	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID
-	res, err := api.makeRequestContext(ctx, "PATCH", uri, opts)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, opts)
 	if err != nil {
 		return WAFPackage{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -256,7 +256,7 @@ func (api *API) WAFGroup(ctx context.Context, zoneID, packageID, groupID string)
 func (api *API) UpdateWAFGroup(ctx context.Context, zoneID, packageID, groupID, mode string) (WAFGroup, error) {
 	opts := WAFRuleOptions{Mode: mode}
 	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID + "/groups/" + groupID
-	res, err := api.makeRequestContext(ctx, "PATCH", uri, opts)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, opts)
 	if err != nil {
 		return WAFGroup{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -341,7 +341,7 @@ func (api *API) WAFRule(ctx context.Context, zoneID, packageID, ruleID string) (
 func (api *API) UpdateWAFRule(ctx context.Context, zoneID, packageID, ruleID, mode string) (WAFRule, error) {
 	opts := WAFRuleOptions{Mode: mode}
 	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID + "/rules/" + ruleID
-	res, err := api.makeRequestContext(ctx, "PATCH", uri, opts)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, opts)
 	if err != nil {
 		return WAFRule{}, errors.Wrap(err, errMakeRequestError)
 	}

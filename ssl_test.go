@@ -219,7 +219,7 @@ func TestUpdateSSL(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "PATCH", r.Method, "Expected method 'PATCH', got %s", r.Method)
+		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
 		b, err := ioutil.ReadAll(r.Body)
 		defer r.Body.Close()
 		if assert.NoError(t, err) {

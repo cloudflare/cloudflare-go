@@ -252,7 +252,7 @@ func (api *API) retrieveAccessRule(ctx context.Context, prefix, accessRuleID str
 
 func (api *API) updateAccessRule(ctx context.Context, prefix, accessRuleID string, accessRule AccessRule) (*AccessRuleResponse, error) {
 	uri := prefix + "/firewall/access_rules/rules/" + accessRuleID
-	res, err := api.makeRequestContext(ctx, "PATCH", uri, accessRule)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, accessRule)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}

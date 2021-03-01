@@ -191,7 +191,7 @@ func (api *API) PageRule(ctx context.Context, zoneID, ruleID string) (PageRule, 
 // API reference: https://api.cloudflare.com/#page-rules-for-a-zone-change-a-page-rule
 func (api *API) ChangePageRule(ctx context.Context, zoneID, ruleID string, rule PageRule) error {
 	uri := "/zones/" + zoneID + "/pagerules/" + ruleID
-	res, err := api.makeRequestContext(ctx, "PATCH", uri, rule)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, rule)
 	if err != nil {
 		return errors.Wrap(err, errMakeRequestError)
 	}

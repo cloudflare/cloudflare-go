@@ -123,7 +123,7 @@ func TestUpdatePrefixDescription(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "PATCH", "Expected method 'PATCH', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPatch, "Expected method 'PATCH', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
 			"result": {
@@ -208,7 +208,7 @@ func TestUpdateAdvertisementStatus(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "PATCH", "Expected method 'PATCH', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPatch, "Expected method 'PATCH', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
 			"result": {

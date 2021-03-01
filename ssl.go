@@ -114,7 +114,7 @@ func (api *API) SSLDetails(ctx context.Context, zoneID, certificateID string) (Z
 // API reference: https://api.cloudflare.com/#custom-ssl-for-a-zone-update-ssl-configuration
 func (api *API) UpdateSSL(ctx context.Context, zoneID, certificateID string, options ZoneCustomSSLOptions) (ZoneCustomSSL, error) {
 	uri := "/zones/" + zoneID + "/custom_certificates/" + certificateID
-	res, err := api.makeRequestContext(ctx, "PATCH", uri, options)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, options)
 	if err != nil {
 		return ZoneCustomSSL{}, errors.Wrap(err, errMakeRequestError)
 	}

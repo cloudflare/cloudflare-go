@@ -57,7 +57,7 @@ func (api *API) UpdateArgoSmartRouting(ctx context.Context, zoneID, settingValue
 
 	uri := "/zones/" + zoneID + "/argo/smart_routing"
 
-	res, err := api.makeRequestContext(ctx, "PATCH", uri, ArgoFeatureSetting{Value: settingValue})
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, ArgoFeatureSetting{Value: settingValue})
 	if err != nil {
 		return ArgoFeatureSetting{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -99,7 +99,7 @@ func (api *API) UpdateArgoTieredCaching(ctx context.Context, zoneID, settingValu
 
 	uri := "/zones/" + zoneID + "/argo/tiered_caching"
 
-	res, err := api.makeRequestContext(ctx, "PATCH", uri, ArgoFeatureSetting{Value: settingValue})
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, ArgoFeatureSetting{Value: settingValue})
 	if err != nil {
 		return ArgoFeatureSetting{}, errors.Wrap(err, errMakeRequestError)
 	}

@@ -392,7 +392,7 @@ func TestCustomHostname_UpdateCustomHostnameSSL(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/custom_hostnames/0d89c70d-ad9f-4843-b99f-6cc0252067e9", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "PATCH", r.Method, "Expected method 'PATCH', got %s", r.Method)
+		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
 		w.WriteHeader(http.StatusCreated)
@@ -452,7 +452,7 @@ func TestCustomHostname_UpdateCustomHostname(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/zones/foo/custom_hostnames/0d89c70d-ad9f-4843-b99f-6cc0252067e9", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "PATCH", r.Method, "Expected method 'PATCH', got %s", r.Method)
+		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
 		w.WriteHeader(http.StatusCreated)

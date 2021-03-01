@@ -120,7 +120,7 @@ func (api *API) UpdateCustomHostnameSSL(ctx context.Context, zoneID string, cust
 	ch := CustomHostname{
 		SSL: ssl,
 	}
-	res, err := api.makeRequestContext(ctx, "PATCH", uri, ch)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, ch)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
@@ -139,7 +139,7 @@ func (api *API) UpdateCustomHostnameSSL(ctx context.Context, zoneID string, cust
 // API reference: https://api.cloudflare.com/#custom-hostname-for-a-zone-update-custom-hostname-configuration
 func (api *API) UpdateCustomHostname(ctx context.Context, zoneID string, customHostnameID string, ch CustomHostname) (*CustomHostnameResponse, error) {
 	uri := "/zones/" + zoneID + "/custom_hostnames/" + customHostnameID
-	res, err := api.makeRequestContext(ctx, "PATCH", uri, ch)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, ch)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}

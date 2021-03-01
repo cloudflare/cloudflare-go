@@ -55,7 +55,7 @@ func (api *API) SetAuthenticatedOriginPullsStatus(ctx context.Context, zoneID st
 	}{
 		Value: val,
 	}
-	res, err := api.makeRequestContext(ctx, "PATCH", uri, params)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
 	if err != nil {
 		return AuthenticatedOriginPulls{}, errors.Wrap(err, errMakeRequestError)
 	}

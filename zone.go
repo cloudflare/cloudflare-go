@@ -585,7 +585,7 @@ func (api *API) ZoneUpdatePlan(ctx context.Context, zoneID string, planType stri
 //
 // API reference: https://api.cloudflare.com/#zone-edit-zone-properties
 func (api *API) EditZone(ctx context.Context, zoneID string, zoneOpts ZoneOptions) (Zone, error) {
-	res, err := api.makeRequestContext(ctx, "PATCH", "/zones/"+zoneID, zoneOpts)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, "/zones/"+zoneID, zoneOpts)
 	if err != nil {
 		return Zone{}, errors.Wrap(err, errMakeRequestError)
 	}
@@ -765,7 +765,7 @@ func (api *API) ZoneSettings(ctx context.Context, zoneID string) (*ZoneSettingRe
 // API reference: https://api.cloudflare.com/#zone-settings-edit-zone-settings-info
 func (api *API) UpdateZoneSettings(ctx context.Context, zoneID string, settings []ZoneSetting) (*ZoneSettingResponse, error) {
 	uri := "/zones/" + zoneID + "/settings"
-	res, err := api.makeRequestContext(ctx, "PATCH", uri, struct {
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, struct {
 		Items []ZoneSetting `json:"items"`
 	}{settings})
 	if err != nil {
@@ -822,7 +822,7 @@ func (api *API) FallbackOrigin(ctx context.Context, zoneID string) (FallbackOrig
 // API reference: https://developers.cloudflare.com/ssl/ssl-for-saas/api-calls/#4-example-patch-to-change-fallback-origin
 func (api *API) UpdateFallbackOrigin(ctx context.Context, zoneID string, fbo FallbackOrigin) (*FallbackOriginResponse, error) {
 	uri := "/zones/" + zoneID + "/fallback_origin"
-	res, err := api.makeRequestContext(ctx, "PATCH", uri, fbo)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, fbo)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
@@ -871,7 +871,7 @@ func (api *API) ZoneSingleSetting(ctx context.Context, zoneID, settingName strin
 // API reference: https://api.cloudflare.com/#zone-settings-edit-zone-settings-info
 func (api *API) UpdateZoneSingleSetting(ctx context.Context, zoneID, settingName string, setting ZoneSetting) (*ZoneSettingSingleResponse, error) {
 	uri := "/zones/" + zoneID + "/settings/" + settingName
-	res, err := api.makeRequestContext(ctx, "PATCH", uri, setting)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, setting)
 	if err != nil {
 		return nil, errors.Wrap(err, errMakeRequestError)
 	}
@@ -965,7 +965,7 @@ type ZoneDNSSECUpdateOptions struct {
 //
 // API reference: https://api.cloudflare.com/#dnssec-edit-dnssec-status
 func (api *API) UpdateZoneDNSSEC(ctx context.Context, zoneID string, options ZoneDNSSECUpdateOptions) (ZoneDNSSEC, error) {
-	res, err := api.makeRequestContext(ctx, "PATCH", "/zones/"+zoneID+"/dnssec", options)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, "/zones/"+zoneID+"/dnssec", options)
 	if err != nil {
 		return ZoneDNSSEC{}, errors.Wrap(err, errMakeRequestError)
 	}
