@@ -21,7 +21,7 @@ func ExampleAPI_ListZoneLockdowns_all() {
 	}
 
 	// Fetch all Zone Lockdown rules for a zone, by page.
-	rules, err := api.ListZoneLockdowns(context.TODO(), zoneID, 1)
+	rules, err := api.ListZoneLockdowns(context.Background(), zoneID, 1)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -57,7 +57,7 @@ func ExampleAPI_CreateZoneLockdown() {
 		Priority: 1,
 	}
 
-	response, err := api.CreateZoneLockdown(context.TODO(), zoneID, newZoneLockdown)
+	response, err := api.CreateZoneLockdown(context.Background(), zoneID, newZoneLockdown)
 	if err != nil {
 		log.Fatal(err)
 	}

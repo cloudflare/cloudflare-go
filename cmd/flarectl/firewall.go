@@ -46,11 +46,11 @@ func firewallAccessRules(c *cli.Context) error {
 	var response *cloudflare.AccessRuleListResponse
 	switch {
 	case accountID != "":
-		response, err = api.ListAccountAccessRules(context.TODO(), accountID, rule, 1)
+		response, err = api.ListAccountAccessRules(context.Background(), accountID, rule, 1)
 	case zoneID != "":
-		response, err = api.ListZoneAccessRules(context.TODO(), zoneID, rule, 1)
+		response, err = api.ListZoneAccessRules(context.Background(), zoneID, rule, 1)
 	default:
-		response, err = api.ListUserAccessRules(context.TODO(), rule, 1)
+		response, err = api.ListUserAccessRules(context.Background(), rule, 1)
 	}
 	if err != nil {
 		fmt.Println(err)
@@ -63,11 +63,11 @@ func firewallAccessRules(c *cli.Context) error {
 		for page := 2; page <= totalPages; page++ {
 			switch {
 			case accountID != "":
-				response, err = api.ListAccountAccessRules(context.TODO(), accountID, rule, page)
+				response, err = api.ListAccountAccessRules(context.Background(), accountID, rule, page)
 			case zoneID != "":
-				response, err = api.ListZoneAccessRules(context.TODO(), zoneID, rule, page)
+				response, err = api.ListZoneAccessRules(context.Background(), zoneID, rule, page)
 			default:
-				response, err = api.ListUserAccessRules(context.TODO(), rule, page)
+				response, err = api.ListUserAccessRules(context.Background(), rule, page)
 			}
 			if err != nil {
 				fmt.Println(err)
@@ -111,21 +111,21 @@ func firewallAccessRuleCreate(c *cli.Context) error {
 
 	switch {
 	case accountID != "":
-		resp, err := api.CreateAccountAccessRule(context.TODO(), accountID, rule)
+		resp, err := api.CreateAccountAccessRule(context.Background(), accountID, rule)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "error creating account access rule: ", err)
 			return err
 		}
 		rules = append(rules, resp.Result)
 	case zoneID != "":
-		resp, err := api.CreateZoneAccessRule(context.TODO(), zoneID, rule)
+		resp, err := api.CreateZoneAccessRule(context.Background(), zoneID, rule)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "error creating zone access rule: ", err)
 			return err
 		}
 		rules = append(rules, resp.Result)
 	default:
-		resp, err := api.CreateUserAccessRule(context.TODO(), rule)
+		resp, err := api.CreateUserAccessRule(context.Background(), rule)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "error creating user access rule: ", err)
 			return err
@@ -167,19 +167,19 @@ func firewallAccessRuleUpdate(c *cli.Context) error {
 	)
 	switch {
 	case accountID != "":
-		resp, err := api.UpdateAccountAccessRule(context.TODO(), accountID, id, rule)
+		resp, err := api.UpdateAccountAccessRule(context.Background(), accountID, id, rule)
 		if err != nil {
 			errors.Wrap(err, errUpdating)
 		}
 		rules = append(rules, resp.Result)
 	case zoneID != "":
-		resp, err := api.UpdateZoneAccessRule(context.TODO(), zoneID, id, rule)
+		resp, err := api.UpdateZoneAccessRule(context.Background(), zoneID, id, rule)
 		if err != nil {
 			errors.Wrap(err, errUpdating)
 		}
 		rules = append(rules, resp.Result)
 	default:
-		resp, err := api.UpdateUserAccessRule(context.TODO(), id, rule)
+		resp, err := api.UpdateUserAccessRule(context.Background(), id, rule)
 		if err != nil {
 			errors.Wrap(err, errUpdating)
 		}
@@ -215,11 +215,11 @@ func firewallAccessRuleCreateOrUpdate(c *cli.Context) error {
 	var response *cloudflare.AccessRuleListResponse
 	switch {
 	case accountID != "":
-		response, err = api.ListAccountAccessRules(context.TODO(), accountID, rule, 1)
+		response, err = api.ListAccountAccessRules(context.Background(), accountID, rule, 1)
 	case zoneID != "":
-		response, err = api.ListZoneAccessRules(context.TODO(), zoneID, rule, 1)
+		response, err = api.ListZoneAccessRules(context.Background(), zoneID, rule, 1)
 	default:
-		response, err = api.ListUserAccessRules(context.TODO(), rule, 1)
+		response, err = api.ListUserAccessRules(context.Background(), rule, 1)
 	}
 	if err != nil {
 		fmt.Println("Error creating or updating firewall access rule:", err)
@@ -238,11 +238,11 @@ func firewallAccessRuleCreateOrUpdate(c *cli.Context) error {
 			}
 			switch {
 			case accountID != "":
-				_, err = api.UpdateAccountAccessRule(context.TODO(), accountID, r.ID, rule)
+				_, err = api.UpdateAccountAccessRule(context.Background(), accountID, r.ID, rule)
 			case zoneID != "":
-				_, err = api.UpdateZoneAccessRule(context.TODO(), zoneID, r.ID, rule)
+				_, err = api.UpdateZoneAccessRule(context.Background(), zoneID, r.ID, rule)
 			default:
-				_, err = api.UpdateUserAccessRule(context.TODO(), r.ID, rule)
+				_, err = api.UpdateUserAccessRule(context.Background(), r.ID, rule)
 			}
 			if err != nil {
 				fmt.Println("Error updating firewall access rule:", err)
@@ -251,11 +251,11 @@ func firewallAccessRuleCreateOrUpdate(c *cli.Context) error {
 	} else {
 		switch {
 		case accountID != "":
-			_, err = api.CreateAccountAccessRule(context.TODO(), accountID, rule)
+			_, err = api.CreateAccountAccessRule(context.Background(), accountID, rule)
 		case zoneID != "":
-			_, err = api.CreateZoneAccessRule(context.TODO(), zoneID, rule)
+			_, err = api.CreateZoneAccessRule(context.Background(), zoneID, rule)
 		default:
-			_, err = api.CreateUserAccessRule(context.TODO(), rule)
+			_, err = api.CreateUserAccessRule(context.Background(), rule)
 		}
 		if err != nil {
 			fmt.Println("Error creating firewall access rule:", err)
@@ -283,19 +283,19 @@ func firewallAccessRuleDelete(c *cli.Context) error {
 	)
 	switch {
 	case accountID != "":
-		resp, err := api.DeleteAccountAccessRule(context.TODO(), accountID, ruleID)
+		resp, err := api.DeleteAccountAccessRule(context.Background(), accountID, ruleID)
 		if err != nil {
 			errors.Wrap(err, errDeleting)
 		}
 		rules = append(rules, resp.Result)
 	case zoneID != "":
-		resp, err := api.DeleteZoneAccessRule(context.TODO(), zoneID, ruleID)
+		resp, err := api.DeleteZoneAccessRule(context.Background(), zoneID, ruleID)
 		if err != nil {
 			errors.Wrap(err, errDeleting)
 		}
 		rules = append(rules, resp.Result)
 	default:
-		resp, err := api.DeleteUserAccessRule(context.TODO(), ruleID)
+		resp, err := api.DeleteUserAccessRule(context.Background(), ruleID)
 		if err != nil {
 			errors.Wrap(err, errDeleting)
 		}
@@ -319,7 +319,7 @@ func getScope(c *cli.Context) (string, string, error) {
 	if c.String("account") != "" {
 		account = c.String("account")
 		pageOpts := cloudflare.PaginationOptions{}
-		accounts, _, err := api.Accounts(context.TODO(), pageOpts)
+		accounts, _, err := api.Accounts(context.Background(), pageOpts)
 		if err != nil {
 			fmt.Println(err)
 			return "", "", err

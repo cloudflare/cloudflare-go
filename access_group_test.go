@@ -81,7 +81,7 @@ func TestAccessGroups(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/groups", handler)
 
-	actual, _, err := client.AccessGroups(context.TODO(), accountID, pageOptions)
+	actual, _, err := client.AccessGroups(context.Background(), accountID, pageOptions)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, []AccessGroup{expectedAccessGroup}, actual)
@@ -89,7 +89,7 @@ func TestAccessGroups(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/groups", handler)
 
-	actual, _, err = client.ZoneLevelAccessGroups(context.TODO(), zoneID, pageOptions)
+	actual, _, err = client.ZoneLevelAccessGroups(context.Background(), zoneID, pageOptions)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, []AccessGroup{expectedAccessGroup}, actual)
@@ -140,7 +140,7 @@ func TestAccessGroup(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/groups/"+accessGroupID, handler)
 
-	actual, err := client.AccessGroup(context.TODO(), accountID, accessGroupID)
+	actual, err := client.AccessGroup(context.Background(), accountID, accessGroupID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessGroup, actual)
@@ -148,7 +148,7 @@ func TestAccessGroup(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/groups/"+accessGroupID, handler)
 
-	actual, err = client.ZoneLevelAccessGroup(context.TODO(), zoneID, accessGroupID)
+	actual, err = client.ZoneLevelAccessGroup(context.Background(), zoneID, accessGroupID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessGroup, actual)
@@ -218,7 +218,7 @@ func TestCreateAccessGroup(t *testing.T) {
 		},
 	}
 
-	actual, err := client.CreateAccessGroup(context.TODO(), accountID, accessGroup)
+	actual, err := client.CreateAccessGroup(context.Background(), accountID, accessGroup)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessGroup, actual)
@@ -226,7 +226,7 @@ func TestCreateAccessGroup(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/groups", handler)
 
-	actual, err = client.CreateZoneLevelAccessGroup(context.TODO(), zoneID, accessGroup)
+	actual, err = client.CreateZoneLevelAccessGroup(context.Background(), zoneID, accessGroup)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessGroup, actual)
@@ -276,14 +276,14 @@ func TestUpdateAccessGroup(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/groups/"+accessGroupID, handler)
-	actual, err := client.UpdateAccessGroup(context.TODO(), accountID, expectedAccessGroup)
+	actual, err := client.UpdateAccessGroup(context.Background(), accountID, expectedAccessGroup)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessGroup, actual)
 	}
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/groups/"+accessGroupID, handler)
-	actual, err = client.UpdateZoneLevelAccessGroup(context.TODO(), zoneID, expectedAccessGroup)
+	actual, err = client.UpdateZoneLevelAccessGroup(context.Background(), zoneID, expectedAccessGroup)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessGroup, actual)
@@ -294,10 +294,10 @@ func TestUpdateAccessGroupWithMissingID(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.UpdateAccessGroup(context.TODO(), accountID, AccessGroup{})
+	_, err := client.UpdateAccessGroup(context.Background(), accountID, AccessGroup{})
 	assert.EqualError(t, err, "access group ID cannot be empty")
 
-	_, err = client.UpdateZoneLevelAccessGroup(context.TODO(), zoneID, AccessGroup{})
+	_, err = client.UpdateZoneLevelAccessGroup(context.Background(), zoneID, AccessGroup{})
 	assert.EqualError(t, err, "access group ID cannot be empty")
 }
 
@@ -320,12 +320,12 @@ func TestDeleteAccessGroup(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/groups/"+accessGroupID, handler)
-	err := client.DeleteAccessGroup(context.TODO(), accountID, accessGroupID)
+	err := client.DeleteAccessGroup(context.Background(), accountID, accessGroupID)
 
 	assert.NoError(t, err)
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/groups/"+accessGroupID, handler)
-	err = client.DeleteZoneLevelAccessGroup(context.TODO(), zoneID, accessGroupID)
+	err = client.DeleteZoneLevelAccessGroup(context.Background(), zoneID, accessGroupID)
 
 	assert.NoError(t, err)
 }

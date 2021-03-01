@@ -53,7 +53,7 @@ func TestAccessAuditLogs(t *testing.T) {
 		RayID:      "187d944c61940c77",
 	}}
 
-	actual, err := client.AccessAuditLogs(context.TODO(), "01a7362d577a6c3019a474fd6f485823", AccessAuditLogFilterOptions{})
+	actual, err := client.AccessAuditLogs(context.Background(), "01a7362d577a6c3019a474fd6f485823", AccessAuditLogFilterOptions{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)

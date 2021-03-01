@@ -138,7 +138,7 @@ func (api *API) SetAuthType(authType int) {
 // ZoneIDByName retrieves a zone's ID from the name.
 func (api *API) ZoneIDByName(zoneName string) (string, error) {
 	zoneName = normalizeZoneName(zoneName)
-	res, err := api.ListZonesContext(context.TODO(), WithZoneFilters(zoneName, "", ""))
+	res, err := api.ListZonesContext(context.Background(), WithZoneFilters(zoneName, "", ""))
 	if err != nil {
 		return "", errors.Wrap(err, "ListZonesContext command failed")
 	}
@@ -165,7 +165,7 @@ func (api *API) ZoneIDByName(zoneName string) (string, error) {
 // makeRequest makes a HTTP request and returns the body as a byte slice,
 // closing it before returning. params will be serialized to JSON.
 func (api *API) makeRequest(method, uri string, params interface{}) ([]byte, error) {
-	return api.makeRequestWithAuthType(context.TODO(), method, uri, params, api.authType)
+	return api.makeRequestWithAuthType(context.Background(), method, uri, params, api.authType)
 }
 
 func (api *API) makeRequestContext(ctx context.Context, method, uri string, params interface{}) ([]byte, error) {
@@ -177,7 +177,7 @@ func (api *API) makeRequestContextWithHeaders(ctx context.Context, method, uri s
 }
 
 func (api *API) makeRequestWithHeaders(method, uri string, params interface{}, headers http.Header) ([]byte, error) {
-	return api.makeRequestWithAuthTypeAndHeaders(context.TODO(), method, uri, params, api.authType, headers)
+	return api.makeRequestWithAuthTypeAndHeaders(context.Background(), method, uri, params, api.authType, headers)
 }
 
 func (api *API) makeRequestWithAuthType(ctx context.Context, method, uri string, params interface{}, authType int) ([]byte, error) {
@@ -224,7 +224,7 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 			time.Sleep(sleepDuration)
 
 		}
-		err = api.rateLimiter.Wait(context.TODO())
+		err = api.rateLimiter.Wait(context.Background())
 		if err != nil {
 			return nil, errors.Wrap(err, "Error caused by request rate limiting")
 		}

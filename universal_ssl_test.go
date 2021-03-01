@@ -35,7 +35,7 @@ func TestUniversalSSLSettingDetails(t *testing.T) {
 		Enabled: true,
 	}
 
-	got, err := client.UniversalSSLSettingDetails(context.TODO(), testZoneID)
+	got, err := client.UniversalSSLSettingDetails(context.Background(), testZoneID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, got)
 	}
@@ -74,7 +74,7 @@ func TestEditUniversalSSLSetting(t *testing.T) {
 		Enabled: true,
 	}
 
-	got, err := client.EditUniversalSSLSetting(context.TODO(), testZoneID, want)
+	got, err := client.EditUniversalSSLSetting(context.Background(), testZoneID, want)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, got)
 	}
@@ -122,7 +122,7 @@ func TestUniversalSSLVerificationDetails(t *testing.T) {
 		},
 	}
 
-	got, err := client.UniversalSSLVerificationDetails(context.TODO(), testZoneID)
+	got, err := client.UniversalSSLVerificationDetails(context.Background(), testZoneID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, got)
 	}

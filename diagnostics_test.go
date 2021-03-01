@@ -115,7 +115,7 @@ func TestDiagnosticsPerformTraceroute(t *testing.T) {
 	}
 
 	opts := DiagnosticsTracerouteConfigurationOptions{PacketsPerTTL: 1, PacketType: "imcp", MaxTTL: 1, WaitTime: 1}
-	trace, err := client.PerformTraceroute(context.TODO(), "01a7362d577a6c3019a474fd6f485823", []string{"1.1.1.1"}, []string{"den01"}, opts)
+	trace, err := client.PerformTraceroute(context.Background(), "01a7362d577a6c3019a474fd6f485823", []string{"1.1.1.1"}, []string{"den01"}, opts)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, trace)
@@ -227,7 +227,7 @@ func TestDiagnosticsPerformTracerouteEmptyColos(t *testing.T) {
 	}
 
 	opts := DiagnosticsTracerouteConfigurationOptions{PacketsPerTTL: 1, PacketType: "imcp", MaxTTL: 1, WaitTime: 1}
-	trace, err := client.PerformTraceroute(context.TODO(), "01a7362d577a6c3019a474fd6f485823", []string{"1.1.1.1"}, []string{}, opts)
+	trace, err := client.PerformTraceroute(context.Background(), "01a7362d577a6c3019a474fd6f485823", []string{"1.1.1.1"}, []string{}, opts)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, trace)

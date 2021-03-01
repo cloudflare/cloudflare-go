@@ -22,7 +22,7 @@ func ExampleAPI_ListLoadBalancers() {
 	}
 
 	// List LBs configured in zone.
-	lbList, err := api.ListLoadBalancers(context.TODO(), id)
+	lbList, err := api.ListLoadBalancers(context.Background(), id)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -40,7 +40,7 @@ func ExampleAPI_PoolHealthDetails() {
 	}
 
 	// Fetch pool health details.
-	healthInfo, err := api.PoolHealthDetails(context.TODO(), "example-pool-id")
+	healthInfo, err := api.PoolHealthDetails(context.Background(), "example-pool-id")
 	if err != nil {
 		log.Fatal(err)
 	}

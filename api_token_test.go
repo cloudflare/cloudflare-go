@@ -109,7 +109,7 @@ func TestAPITokens(t *testing.T) {
 		},
 	}
 
-	actual, err := client.APITokens(context.TODO())
+	actual, err := client.APITokens(context.Background())
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, []APIToken{expectedAPIToken}, actual)
@@ -213,7 +213,7 @@ func TestGetAPIToken(t *testing.T) {
 		},
 	}
 
-	actual, err := client.GetAPIToken(context.TODO(), "ed17574386854bf78a67040be0a770b0")
+	actual, err := client.GetAPIToken(context.Background(), "ed17574386854bf78a67040be0a770b0")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAPIToken, actual)
@@ -295,7 +295,7 @@ func TestCreateAPIToken(t *testing.T) {
 		}},
 	}
 
-	actual, err := client.CreateAPIToken(context.TODO(), tokenToCreate)
+	actual, err := client.CreateAPIToken(context.Background(), tokenToCreate)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, tokenToCreate.Name, actual.Name)
@@ -321,7 +321,7 @@ func TestRollAPIToken(t *testing.T) {
 
 	mux.HandleFunc("/user/tokens/ed17574386854bf78a67040be0a770b0/value", handler)
 
-	actual, err := client.RollAPIToken(context.TODO(), "ed17574386854bf78a67040be0a770b0")
+	actual, err := client.RollAPIToken(context.Background(), "ed17574386854bf78a67040be0a770b0")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, "8M7wS6hCpXVc-DoRnPPY_UCWPgy8aea4Wy6kCe5T", actual)
@@ -350,7 +350,7 @@ func TestVerifyAPIToken(t *testing.T) {
 
 	mux.HandleFunc("/user/tokens/verify", handler)
 
-	actual, err := client.VerifyAPIToken(context.TODO())
+	actual, err := client.VerifyAPIToken(context.Background())
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, "active", actual.Status)
@@ -376,7 +376,7 @@ func TestDeleteAPIToken(t *testing.T) {
 
 	mux.HandleFunc("/user/tokens/ed17574386854bf78a67040be0a770b0", handler)
 
-	err := client.DeleteAPIToken(context.TODO(), "ed17574386854bf78a67040be0a770b0")
+	err := client.DeleteAPIToken(context.Background(), "ed17574386854bf78a67040be0a770b0")
 	assert.NoError(t, err)
 }
 
@@ -410,7 +410,7 @@ func TestListAPITokensPermissionGroups(t *testing.T) {
 		Name:   "DNS Read",
 		Scopes: []string{"com.cloudflare.api.account.zone"},
 	}}
-	actual, err := client.ListAPITokensPermissionGroups(context.TODO())
+	actual, err := client.ListAPITokensPermissionGroups(context.Background())
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}

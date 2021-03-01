@@ -57,7 +57,7 @@ func ExampleAPI_RegistrarDomain() {
 		log.Fatal(err)
 	}
 
-	domain, err := api.RegistrarDomain(context.TODO(), "01a7362d577a6c3019a474fd6f485823", "cloudflare.com")
+	domain, err := api.RegistrarDomain(context.Background(), "01a7362d577a6c3019a474fd6f485823", "cloudflare.com")
 
 	fmt.Printf("%+v\n", domain)
 }
@@ -68,7 +68,7 @@ func ExampleAPI_RegistrarDomains() {
 		log.Fatal(err)
 	}
 
-	domains, err := api.RegistrarDomains(context.TODO(), "01a7362d577a6c3019a474fd6f485823")
+	domains, err := api.RegistrarDomains(context.Background(), "01a7362d577a6c3019a474fd6f485823")
 
 	fmt.Printf("%+v\n", domains)
 }
@@ -79,7 +79,7 @@ func ExampleAPI_TransferRegistrarDomain() {
 		log.Fatal(err)
 	}
 
-	domain, err := api.TransferRegistrarDomain(context.TODO(), "01a7362d577a6c3019a474fd6f485823", "cloudflare.com")
+	domain, err := api.TransferRegistrarDomain(context.Background(), "01a7362d577a6c3019a474fd6f485823", "cloudflare.com")
 
 	fmt.Printf("%+v\n", domain)
 }
@@ -90,7 +90,7 @@ func ExampleAPI_CancelRegistrarDomainTransfer() {
 		log.Fatal(err)
 	}
 
-	domains, err := api.CancelRegistrarDomainTransfer(context.TODO(), "01a7362d577a6c3019a474fd6f485823", "cloudflare.com")
+	domains, err := api.CancelRegistrarDomainTransfer(context.Background(), "01a7362d577a6c3019a474fd6f485823", "cloudflare.com")
 
 	fmt.Printf("%+v\n", domains)
 }
@@ -101,7 +101,7 @@ func ExampleAPI_UpdateRegistrarDomain() {
 		log.Fatal(err)
 	}
 
-	domain, err := api.UpdateRegistrarDomain(context.TODO(), "01a7362d577a6c3019a474fd6f485823", "cloudflare.com", cloudflare.RegistrarDomainConfiguration{
+	domain, err := api.UpdateRegistrarDomain(context.Background(), "01a7362d577a6c3019a474fd6f485823", "cloudflare.com", cloudflare.RegistrarDomainConfiguration{
 		NameServers: []string{"ns1.cloudflare.com", "ns2.cloudflare.com"},
 		Locked:      false,
 	})

@@ -51,7 +51,7 @@ func TestAccounts(t *testing.T) {
 	mux.HandleFunc("/accounts", handler)
 	want := []Account{expectedAccountStruct}
 
-	actual, _, err := client.Accounts(context.TODO(), PaginationOptions{})
+	actual, _, err := client.Accounts(context.Background(), PaginationOptions{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -89,7 +89,7 @@ func TestAccount(t *testing.T) {
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823", handler)
 	want := expectedAccountStruct
 
-	actual, _, err := client.Account(context.TODO(), "01a7362d577a6c3019a474fd6f485823")
+	actual, _, err := client.Account(context.Background(), "01a7362d577a6c3019a474fd6f485823")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -146,7 +146,7 @@ func TestUpdateAccount(t *testing.T) {
 		},
 	}
 
-	account, err := client.UpdateAccount(context.TODO(), newAccountDetails.ID, newAccountDetails)
+	account, err := client.UpdateAccount(context.Background(), newAccountDetails.ID, newAccountDetails)
 	if assert.NoError(t, err) {
 		assert.NotEqual(t, oldAccountDetails.Name, account.Name)
 		assert.Equal(t, account.Name, "Cloudflare Demo - New")

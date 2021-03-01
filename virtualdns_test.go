@@ -79,7 +79,7 @@ func TestVirtualDNSUserAnalytics(t *testing.T) {
 		Since: &since,
 		Until: &until,
 	}
-	actual, err := client.VirtualDNSUserAnalytics(context.TODO(), "12345", params)
+	actual, err := client.VirtualDNSUserAnalytics(context.Background(), "12345", params)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}

@@ -48,7 +48,7 @@ func dnsCreate(c *cli.Context) error {
 		TTL:     ttl,
 		Proxied: &proxy,
 	}
-	resp, err := api.CreateDNSRecord(context.TODO(), zoneID, record)
+	resp, err := api.CreateDNSRecord(context.Background(), zoneID, record)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error creating DNS record: ", err)
 		return err
@@ -85,7 +85,7 @@ func dnsCreateOrUpdate(c *cli.Context) error {
 	rr := cloudflare.DNSRecord{
 		Name: name + "." + zone,
 	}
-	records, err := api.DNSRecords(context.TODO(), zoneID, rr)
+	records, err := api.DNSRecords(context.Background(), zoneID, rr)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error fetching DNS records: ", err)
 		return err
@@ -104,7 +104,7 @@ func dnsCreateOrUpdate(c *cli.Context) error {
 				rr.TTL = ttl
 				rr.Proxied = &proxy
 
-				err := api.UpdateDNSRecord(context.TODO(), zoneID, r.ID, rr)
+				err := api.UpdateDNSRecord(context.Background(), zoneID, r.ID, rr)
 				if err != nil {
 					fmt.Println("Error updating DNS record:", err)
 					return err
@@ -121,7 +121,7 @@ func dnsCreateOrUpdate(c *cli.Context) error {
 		rr.TTL = ttl
 		rr.Proxied = &proxy
 		// TODO: Print the response.
-		resp, err = api.CreateDNSRecord(context.TODO(), zoneID, rr)
+		resp, err = api.CreateDNSRecord(context.Background(), zoneID, rr)
 		if err != nil {
 			fmt.Println("Error creating DNS record:", err)
 			return err
@@ -165,7 +165,7 @@ func dnsUpdate(c *cli.Context) error {
 		TTL:     ttl,
 		Proxied: &proxy,
 	}
-	err = api.UpdateDNSRecord(context.TODO(), zoneID, recordID, record)
+	err = api.UpdateDNSRecord(context.Background(), zoneID, recordID, record)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error updating DNS record: ", err)
 		return err
@@ -188,7 +188,7 @@ func dnsDelete(c *cli.Context) error {
 		return err
 	}
 
-	err = api.DeleteDNSRecord(context.TODO(), zoneID, recordID)
+	err = api.DeleteDNSRecord(context.Background(), zoneID, recordID)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error deleting DNS record: ", err)
 		return err

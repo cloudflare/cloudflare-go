@@ -29,7 +29,7 @@ func TestGetLogpullRetentionFlag(t *testing.T) {
 	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/logs/control/retention/flag", handler)
 	want := &LogpullRetentionConfiguration{Flag: true}
 
-	actual, err := client.GetLogpullRetentionFlag(context.TODO(), "d56084adb405e0b7e32c52321bf07be6")
+	actual, err := client.GetLogpullRetentionFlag(context.Background(), "d56084adb405e0b7e32c52321bf07be6")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -55,7 +55,7 @@ func TestSetLogpullRetentionFlag(t *testing.T) {
 	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/logs/control/retention/flag", handler)
 	want := &LogpullRetentionConfiguration{Flag: false}
 
-	actual, err := client.SetLogpullRetentionFlag(context.TODO(), "d56084adb405e0b7e32c52321bf07be6", false)
+	actual, err := client.SetLogpullRetentionFlag(context.Background(), "d56084adb405e0b7e32c52321bf07be6", false)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}

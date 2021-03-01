@@ -139,7 +139,7 @@ func _getIps(ipType string, showMsgType bool) {
 }
 
 func userInfo(c *cli.Context) error {
-	user, err := api.UserDetails(context.TODO())
+	user, err := api.UserDetails(context.Background())
 	if err != nil {
 		fmt.Println(err)
 		return err
@@ -173,7 +173,7 @@ func pageRules(c *cli.Context) error {
 		return err
 	}
 
-	rules, err := api.ListPageRules(context.TODO(), zoneID)
+	rules, err := api.ListPageRules(context.Background(), zoneID)
 	if err != nil {
 		fmt.Println(err)
 		return err

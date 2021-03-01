@@ -60,13 +60,13 @@ func TestListWAFPackages(t *testing.T) {
 		},
 	}
 
-	d, err := client.ListWAFPackages(context.TODO(), testZoneID)
+	d, err := client.ListWAFPackages(context.Background(), testZoneID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, d)
 	}
 
-	_, err = client.ListWAFRules(context.TODO(), testZoneID, "123")
+	_, err = client.ListWAFRules(context.Background(), testZoneID, "123")
 	assert.Error(t, err)
 }
 
@@ -138,13 +138,13 @@ func TestListWAFPackagesMultiplePages(t *testing.T) {
 		},
 	}
 
-	d, err := client.ListWAFPackages(context.TODO(), testZoneID)
+	d, err := client.ListWAFPackages(context.Background(), testZoneID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, d)
 	}
 
-	_, err = client.ListWAFRules(context.TODO(), testZoneID, "123")
+	_, err = client.ListWAFRules(context.Background(), testZoneID, "123")
 	assert.Error(t, err)
 }
 
@@ -187,13 +187,13 @@ func TestWAFPackage(t *testing.T) {
 		ActionMode:    "",
 	}
 
-	d, err := client.WAFPackage(context.TODO(), testZoneID, "a25a9a7e9c00afc1fb2e0245519d725b")
+	d, err := client.WAFPackage(context.Background(), testZoneID, "a25a9a7e9c00afc1fb2e0245519d725b")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, d)
 	}
 
-	_, err = client.WAFPackage(context.TODO(), testZoneID, "123")
+	_, err = client.WAFPackage(context.Background(), testZoneID, "123")
 	assert.Error(t, err)
 }
 
@@ -244,7 +244,7 @@ func TestUpdateWAFPackage(t *testing.T) {
 		ActionMode:    "challenge",
 	}
 
-	d, err := client.UpdateWAFPackage(context.TODO(), testZoneID, "a25a9a7e9c00afc1fb2e0245519d725b", WAFPackageOptions{Sensitivity: "high", ActionMode: "challenge"})
+	d, err := client.UpdateWAFPackage(context.Background(), testZoneID, "a25a9a7e9c00afc1fb2e0245519d725b", WAFPackageOptions{Sensitivity: "high", ActionMode: "challenge"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, d)
@@ -306,13 +306,13 @@ func TestListWAFGroups(t *testing.T) {
 		},
 	}
 
-	d, err := client.ListWAFGroups(context.TODO(), testZoneID, "a25a9a7e9c00afc1fb2e0245519d725b")
+	d, err := client.ListWAFGroups(context.Background(), testZoneID, "a25a9a7e9c00afc1fb2e0245519d725b")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, d)
 	}
 
-	_, err = client.ListWAFGroups(context.TODO(), testZoneID, "123")
+	_, err = client.ListWAFGroups(context.Background(), testZoneID, "123")
 	assert.Error(t, err)
 }
 
@@ -392,13 +392,13 @@ func TestListWAFGroupsMultiplePages(t *testing.T) {
 		},
 	}
 
-	d, err := client.ListWAFGroups(context.TODO(), testZoneID, packageID)
+	d, err := client.ListWAFGroups(context.Background(), testZoneID, packageID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, d)
 	}
 
-	_, err = client.ListWAFGroups(context.TODO(), testZoneID, "123")
+	_, err = client.ListWAFGroups(context.Background(), testZoneID, "123")
 	assert.Error(t, err)
 }
 
@@ -446,13 +446,13 @@ func TestWAFGroup(t *testing.T) {
 		AllowedModes:       []string{"on", "off"},
 	}
 
-	d, err := client.WAFGroup(context.TODO(), testZoneID, "a25a9a7e9c00afc1fb2e0245519d725b", "de677e5818985db1285d0e80225f06e5")
+	d, err := client.WAFGroup(context.Background(), testZoneID, "a25a9a7e9c00afc1fb2e0245519d725b", "de677e5818985db1285d0e80225f06e5")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, d)
 	}
 
-	_, err = client.WAFGroup(context.TODO(), testZoneID, "a25a9a7e9c00afc1fb2e0245519d725b", "123")
+	_, err = client.WAFGroup(context.Background(), testZoneID, "a25a9a7e9c00afc1fb2e0245519d725b", "123")
 	assert.Error(t, err)
 }
 
@@ -507,7 +507,7 @@ func TestUpdateWAFGroup(t *testing.T) {
 		AllowedModes:       []string{"on", "off"},
 	}
 
-	d, err := client.UpdateWAFGroup(context.TODO(), testZoneID, "a25a9a7e9c00afc1fb2e0245519d725b", "de677e5818985db1285d0e80225f06e5", "on")
+	d, err := client.UpdateWAFGroup(context.Background(), testZoneID, "a25a9a7e9c00afc1fb2e0245519d725b", "de677e5818985db1285d0e80225f06e5", "on")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, d)
@@ -576,13 +576,13 @@ func TestListWAFRules(t *testing.T) {
 		},
 	}
 
-	d, err := client.ListWAFRules(context.TODO(), testZoneID, "a25a9a7e9c00afc1fb2e0245519d725b")
+	d, err := client.ListWAFRules(context.Background(), testZoneID, "a25a9a7e9c00afc1fb2e0245519d725b")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, d)
 	}
 
-	_, err = client.ListWAFRules(context.TODO(), testZoneID, "123")
+	_, err = client.ListWAFRules(context.Background(), testZoneID, "123")
 	assert.Error(t, err)
 }
 
@@ -676,13 +676,13 @@ func TestListWAFRulesMultiplePages(t *testing.T) {
 		},
 	}
 
-	d, err := client.ListWAFRules(context.TODO(), testZoneID, packageID)
+	d, err := client.ListWAFRules(context.Background(), testZoneID, packageID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, d)
 	}
 
-	_, err = client.ListWAFRules(context.TODO(), testZoneID, "123")
+	_, err = client.ListWAFRules(context.Background(), testZoneID, "123")
 	assert.Error(t, err)
 }
 
@@ -738,13 +738,13 @@ func TestWAFRule(t *testing.T) {
 		AllowedModes: []string{"on", "off"},
 	}
 
-	d, err := client.WAFRule(context.TODO(), testZoneID, "a25a9a7e9c00afc1fb2e0245519d725b", "f939de3be84e66e757adcdcb87908023")
+	d, err := client.WAFRule(context.Background(), testZoneID, "a25a9a7e9c00afc1fb2e0245519d725b", "f939de3be84e66e757adcdcb87908023")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, d)
 	}
 
-	_, err = client.ListWAFRules(context.TODO(), testZoneID, "123")
+	_, err = client.ListWAFRules(context.Background(), testZoneID, "123")
 	assert.Error(t, err)
 }
 
@@ -807,12 +807,12 @@ func TestUpdateWAFRule(t *testing.T) {
 		AllowedModes: []string{"on", "off"},
 	}
 
-	d, err := client.UpdateWAFRule(context.TODO(), testZoneID, "a25a9a7e9c00afc1fb2e0245519d725b", "f939de3be84e66e757adcdcb87908023", "on")
+	d, err := client.UpdateWAFRule(context.Background(), testZoneID, "a25a9a7e9c00afc1fb2e0245519d725b", "f939de3be84e66e757adcdcb87908023", "on")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, d)
 	}
 
-	_, err = client.ListWAFRules(context.TODO(), testZoneID, "123")
+	_, err = client.ListWAFRules(context.Background(), testZoneID, "123")
 	assert.Error(t, err)
 }

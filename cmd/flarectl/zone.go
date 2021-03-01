@@ -40,7 +40,7 @@ func zoneCreate(c *cli.Context) error {
 		zoneType = "full"
 	}
 
-	_, err := api.CreateZone(context.TODO(), zone, jumpstart, account, zoneType)
+	_, err := api.CreateZone(context.Background(), zone, jumpstart, account, zoneType)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, fmt.Sprintf("%s", err))
 		return err
@@ -61,7 +61,7 @@ func zoneCheck(c *cli.Context) error {
 		return err
 	}
 
-	res, err := api.ZoneActivationCheck(context.TODO(), zoneID)
+	res, err := api.ZoneActivationCheck(context.Background(), zoneID)
 	if err != nil {
 		fmt.Println(err)
 		return err
@@ -72,7 +72,7 @@ func zoneCheck(c *cli.Context) error {
 }
 
 func zoneList(c *cli.Context) error {
-	zones, err := api.ListZones(context.TODO())
+	zones, err := api.ListZones(context.Background())
 	if err != nil {
 		fmt.Println(err)
 		return err
@@ -102,7 +102,7 @@ func zoneDelete(c *cli.Context) error {
 		return err
 	}
 
-	_, err = api.DeleteZone(context.TODO(), zoneID)
+	_, err = api.DeleteZone(context.Background(), zoneID)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, fmt.Sprintf("%s", err))
 		return err
@@ -141,7 +141,7 @@ func zoneCreateLockdown(c *cli.Context) error {
 
 	var resp *cloudflare.ZoneLockdownResponse
 
-	resp, err = api.CreateZoneLockdown(context.TODO(), zoneID, lockdown)
+	resp, err = api.CreateZoneLockdown(context.Background(), zoneID, lockdown)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error creating ZONE lock down: ", err)
 		return err
@@ -164,7 +164,7 @@ func zoneInfo(c *cli.Context) error {
 		cli.ShowSubcommandHelp(c)
 		return nil
 	}
-	zones, err := api.ListZones(context.TODO(), zone)
+	zones, err := api.ListZones(context.Background(), zone)
 	if err != nil {
 		fmt.Println(err)
 		return err
@@ -217,7 +217,7 @@ func zoneCachePurge(c *cli.Context) error {
 
 	// Purge everything
 	if c.Bool("everything") {
-		resp, err = api.PurgeEverything(context.TODO(), zoneID)
+		resp, err = api.PurgeEverything(context.Background(), zoneID)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error purging all from zone %q: %s\n", zoneName, err)
 			return err
@@ -241,7 +241,7 @@ func zoneCachePurge(c *cli.Context) error {
 			Hosts: c.StringSlice("hosts"),
 		}
 
-		resp, err = api.PurgeCache(context.TODO(), zoneID, purgeReq)
+		resp, err = api.PurgeCache(context.Background(), zoneID, purgeReq)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error purging the cache from zone %q: %s\n", zoneName, err)
 			return err
@@ -277,7 +277,7 @@ func zoneRecords(c *cli.Context) error {
 	rr := cloudflare.DNSRecord{}
 	var records []cloudflare.DNSRecord
 	if c.String("id") != "" {
-		rec, err := api.DNSRecord(context.TODO(), zoneID, c.String("id"))
+		rec, err := api.DNSRecord(context.Background(), zoneID, c.String("id"))
 		if err != nil {
 			fmt.Println(err)
 			return err
@@ -294,7 +294,7 @@ func zoneRecords(c *cli.Context) error {
 			rr.Name = c.String("content")
 		}
 		var err error
-		records, err = api.DNSRecords(context.TODO(), zoneID, rr)
+		records, err = api.DNSRecords(context.Background(), zoneID, rr)
 		if err != nil {
 			fmt.Println(err)
 			return err
@@ -356,7 +356,7 @@ func zoneExport(c *cli.Context) error {
 		return err
 	}
 
-	res, err := api.ZoneExport(context.TODO(), zoneID)
+	res, err := api.ZoneExport(context.Background(), zoneID)
 	if err != nil {
 		fmt.Println(err)
 		return err

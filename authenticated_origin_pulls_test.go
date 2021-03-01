@@ -38,7 +38,7 @@ func TestAuthenticatedOriginPullsDetails(t *testing.T) {
 		ModifiedOn: modifiedOn,
 	}
 
-	actual, err := client.GetAuthenticatedOriginPullsStatus(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	actual, err := client.GetAuthenticatedOriginPullsStatus(context.Background(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -71,7 +71,7 @@ func TestSetAuthenticatedOriginPullsStatusEnabled(t *testing.T) {
 		ModifiedOn: modifiedOn,
 	}
 
-	actual, err := client.SetAuthenticatedOriginPullsStatus(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353", true)
+	actual, err := client.SetAuthenticatedOriginPullsStatus(context.Background(), "023e105f4ecef8ad9ca31a8372d0c353", true)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -104,7 +104,7 @@ func TestSetAuthenticatedOriginPullsStatusDisabled(t *testing.T) {
 		ModifiedOn: modifiedOn,
 	}
 
-	actual, err := client.SetAuthenticatedOriginPullsStatus(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353", false)
+	actual, err := client.SetAuthenticatedOriginPullsStatus(context.Background(), "023e105f4ecef8ad9ca31a8372d0c353", false)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}

@@ -322,7 +322,7 @@ func TestZoneAnalyticsDashboard(t *testing.T) {
 	}
 
 	continuous := true
-	d, err := client.ZoneAnalyticsDashboard(context.TODO(), "foo", ZoneAnalyticsOptions{
+	d, err := client.ZoneAnalyticsDashboard(context.Background(), "foo", ZoneAnalyticsOptions{
 		Since:      &since,
 		Until:      &until,
 		Continuous: &continuous,
@@ -331,7 +331,7 @@ func TestZoneAnalyticsDashboard(t *testing.T) {
 		assert.Equal(t, want, d)
 	}
 
-	_, err = client.ZoneAnalyticsDashboard(context.TODO(), "bar", ZoneAnalyticsOptions{})
+	_, err = client.ZoneAnalyticsDashboard(context.Background(), "bar", ZoneAnalyticsOptions{})
 	assert.Error(t, err)
 }
 
@@ -572,7 +572,7 @@ func TestZoneAnalyticsByColocation(t *testing.T) {
 	}
 
 	continuous := true
-	d, err := client.ZoneAnalyticsByColocation(context.TODO(), "foo", ZoneAnalyticsOptions{
+	d, err := client.ZoneAnalyticsByColocation(context.Background(), "foo", ZoneAnalyticsOptions{
 		Since:      &since,
 		Until:      &until,
 		Continuous: &continuous,
@@ -581,7 +581,7 @@ func TestZoneAnalyticsByColocation(t *testing.T) {
 		assert.Equal(t, want, d)
 	}
 
-	_, err = client.ZoneAnalyticsDashboard(context.TODO(), "bar", ZoneAnalyticsOptions{})
+	_, err = client.ZoneAnalyticsDashboard(context.Background(), "bar", ZoneAnalyticsOptions{})
 	assert.Error(t, err)
 }
 
@@ -798,7 +798,7 @@ func TestCreateZoneFullSetup(t *testing.T) {
 
 	mux.HandleFunc("/zones", handler)
 
-	actual, err := client.CreateZone(context.TODO(), "example.com", false, Account{ID: "01a7362d577a6c3019a474fd6f485823"}, "full")
+	actual, err := client.CreateZone(context.Background(), "example.com", false, Account{ID: "01a7362d577a6c3019a474fd6f485823"}, "full")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedFullZoneSetup, actual)
@@ -876,7 +876,7 @@ func TestCreateZonePartialSetup(t *testing.T) {
 
 	mux.HandleFunc("/zones", handler)
 
-	actual, err := client.CreateZone(context.TODO(), "example.com", false, Account{ID: "01a7362d577a6c3019a474fd6f485823"}, "partial")
+	actual, err := client.CreateZone(context.Background(), "example.com", false, Account{ID: "01a7362d577a6c3019a474fd6f485823"}, "partial")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedPartialZoneSetup, actual)
@@ -903,7 +903,7 @@ func TestFallbackOrigin_FallbackOrigin(t *testing.T) {
 }`)
 	})
 
-	fallbackOrigin, err := client.FallbackOrigin(context.TODO(), "foo")
+	fallbackOrigin, err := client.FallbackOrigin(context.Background(), "foo")
 
 	want := FallbackOrigin{
 		ID:    "fallback_origin",
@@ -937,7 +937,7 @@ func TestFallbackOrigin_UpdateFallbackOrigin(t *testing.T) {
 }`)
 	})
 
-	response, err := client.UpdateFallbackOrigin(context.TODO(), "foo", FallbackOrigin{Value: "app.example.com"})
+	response, err := client.UpdateFallbackOrigin(context.Background(), "foo", FallbackOrigin{Value: "app.example.com"})
 
 	want := &FallbackOriginResponse{
 		Result: FallbackOrigin{
@@ -1081,7 +1081,7 @@ func TestZonePartialHasVerificationKey(t *testing.T) {
 
 	mux.HandleFunc("/zones/foo", handler)
 
-	z, err := client.ZoneDetails(context.TODO(), "foo")
+	z, err := client.ZoneDetails(context.Background(), "foo")
 	if assert.NoError(t, err) {
 		assert.NotEmpty(t, z.VerificationKey)
 		assert.Equal(t, z.VerificationKey, "foo-bar")
@@ -1116,7 +1116,7 @@ func TestZoneDNSSECSetting(t *testing.T) {
 
 	mux.HandleFunc("/zones/foo/dnssec", handler)
 
-	z, err := client.ZoneDNSSECSetting(context.TODO(), "foo")
+	z, err := client.ZoneDNSSECSetting(context.Background(), "foo")
 	if assert.NoError(t, err) {
 		assert.Equal(t, z.Status, "active")
 		assert.Equal(t, z.Flags, 257)
@@ -1149,7 +1149,7 @@ func TestDeleteZoneDNSSEC(t *testing.T) {
 
 	mux.HandleFunc("/zones/foo/dnssec", handler)
 
-	z, err := client.DeleteZoneDNSSEC(context.TODO(), "foo")
+	z, err := client.DeleteZoneDNSSEC(context.Background(), "foo")
 	if assert.NoError(t, err) {
 		assert.Equal(t, z, "foo")
 	}
@@ -1183,7 +1183,7 @@ func TestUpdateZoneDNSSEC(t *testing.T) {
 
 	mux.HandleFunc("/zones/foo/dnssec", handler)
 
-	z, err := client.UpdateZoneDNSSEC(context.TODO(), "foo", ZoneDNSSECUpdateOptions{
+	z, err := client.UpdateZoneDNSSEC(context.Background(), "foo", ZoneDNSSECUpdateOptions{
 		Status: "active",
 	})
 	if assert.NoError(t, err) {

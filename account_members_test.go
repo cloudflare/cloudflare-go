@@ -133,7 +133,7 @@ func TestAccountMembers(t *testing.T) {
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/members", handler)
 	want := []AccountMember{expectedAccountMemberStruct}
 
-	actual, _, err := client.AccountMembers(context.TODO(), "01a7362d577a6c3019a474fd6f485823", PaginationOptions{})
+	actual, _, err := client.AccountMembers(context.Background(), "01a7362d577a6c3019a474fd6f485823", PaginationOptions{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -144,7 +144,7 @@ func TestAccountMembersWithoutAccountID(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, _, err := client.AccountMembers(context.TODO(), "", PaginationOptions{})
+	_, _, err := client.AccountMembers(context.Background(), "", PaginationOptions{})
 
 	if assert.Error(t, err) {
 		assert.Equal(t, err.Error(), errMissingAccountID)
@@ -195,7 +195,7 @@ func TestCreateAccountMember(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/members", handler)
 
-	actual, err := client.CreateAccountMember(context.TODO(), "01a7362d577a6c3019a474fd6f485823", "user@example.com", []string{"3536bcfad5faccb999b47003c79917fb"})
+	actual, err := client.CreateAccountMember(context.Background(), "01a7362d577a6c3019a474fd6f485823", "user@example.com", []string{"3536bcfad5faccb999b47003c79917fb"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedNewAccountMemberStruct, actual)
@@ -206,7 +206,7 @@ func TestCreateAccountMemberWithoutAccountID(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.CreateAccountMember(context.TODO(), "", "user@example.com", []string{"3536bcfad5faccb999b47003c79917fb"})
+	_, err := client.CreateAccountMember(context.Background(), "", "user@example.com", []string{"3536bcfad5faccb999b47003c79917fb"})
 
 	if assert.Error(t, err) {
 		assert.Equal(t, err.Error(), errMissingAccountID)
@@ -263,7 +263,7 @@ func TestUpdateAccountMember(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/members/4536bcfad5faccb111b47003c79917fa", handler)
 
-	actual, err := client.UpdateAccountMember(context.TODO(), "01a7362d577a6c3019a474fd6f485823", "4536bcfad5faccb111b47003c79917fa", newUpdatedAccountMemberStruct)
+	actual, err := client.UpdateAccountMember(context.Background(), "01a7362d577a6c3019a474fd6f485823", "4536bcfad5faccb111b47003c79917fa", newUpdatedAccountMemberStruct)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, newUpdatedAccountMemberStruct, actual)
@@ -274,7 +274,7 @@ func TestUpdateAccountMemberWithoutAccountID(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.UpdateAccountMember(context.TODO(), "", "4536bcfad5faccb111b47003c79917fa", newUpdatedAccountMemberStruct)
+	_, err := client.UpdateAccountMember(context.Background(), "", "4536bcfad5faccb111b47003c79917fa", newUpdatedAccountMemberStruct)
 
 	if assert.Error(t, err) {
 		assert.Equal(t, err.Error(), errMissingAccountID)
@@ -327,7 +327,7 @@ func TestAccountMember(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/members/4536bcfad5faccb111b47003c79917fa", handler)
 
-	actual, err := client.AccountMember(context.TODO(), "01a7362d577a6c3019a474fd6f485823", "4536bcfad5faccb111b47003c79917fa")
+	actual, err := client.AccountMember(context.Background(), "01a7362d577a6c3019a474fd6f485823", "4536bcfad5faccb111b47003c79917fa")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccountMemberStruct, actual)
@@ -338,7 +338,7 @@ func TestAccountMemberWithoutAccountID(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.AccountMember(context.TODO(), "", "4536bcfad5faccb111b47003c79917fa")
+	_, err := client.AccountMember(context.Background(), "", "4536bcfad5faccb111b47003c79917fa")
 
 	if assert.Error(t, err) {
 		assert.Equal(t, err.Error(), errMissingAccountID)

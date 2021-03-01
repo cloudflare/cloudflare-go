@@ -143,7 +143,7 @@ func TestRegistrarDomain(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/registrar/domains/cloudflare.com", handler)
 
-	actual, err := client.RegistrarDomain(context.TODO(), "01a7362d577a6c3019a474fd6f485823", "cloudflare.com")
+	actual, err := client.RegistrarDomain(context.Background(), "01a7362d577a6c3019a474fd6f485823", "cloudflare.com")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedRegistrarDomain, actual)
@@ -210,7 +210,7 @@ func TestRegistrarDomains(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/registrar/domains", handler)
 
-	actual, err := client.RegistrarDomains(context.TODO(), "01a7362d577a6c3019a474fd6f485823")
+	actual, err := client.RegistrarDomains(context.Background(), "01a7362d577a6c3019a474fd6f485823")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, []RegistrarDomain{expectedRegistrarDomain}, actual)
@@ -277,7 +277,7 @@ func TestTransferRegistrarDomain(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/registrar/domains/cloudflare.com/transfer", handler)
 
-	actual, err := client.TransferRegistrarDomain(context.TODO(), "01a7362d577a6c3019a474fd6f485823", "cloudflare.com")
+	actual, err := client.TransferRegistrarDomain(context.Background(), "01a7362d577a6c3019a474fd6f485823", "cloudflare.com")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, []RegistrarDomain{expectedRegistrarDomain}, actual)
@@ -344,7 +344,7 @@ func TestCancelRegistrarDomainTransfer(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/registrar/domains/cloudflare.com/cancel_transfer", handler)
 
-	actual, err := client.CancelRegistrarDomainTransfer(context.TODO(), "01a7362d577a6c3019a474fd6f485823", "cloudflare.com")
+	actual, err := client.CancelRegistrarDomainTransfer(context.Background(), "01a7362d577a6c3019a474fd6f485823", "cloudflare.com")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, []RegistrarDomain{expectedRegistrarDomain}, actual)
@@ -403,7 +403,7 @@ func TestUpdateRegistrarDomain(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/registrar/domains/cloudflare.com", handler)
 
-	actual, err := client.UpdateRegistrarDomain(context.TODO(), "01a7362d577a6c3019a474fd6f485823", "cloudflare.com", RegistrarDomainConfiguration{
+	actual, err := client.UpdateRegistrarDomain(context.Background(), "01a7362d577a6c3019a474fd6f485823", "cloudflare.com", RegistrarDomainConfiguration{
 		NameServers: []string{"ns1.cloudflare.com", "ns2.cloudflare.com"},
 		Locked:      false,
 	})

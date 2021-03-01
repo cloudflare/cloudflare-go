@@ -97,7 +97,7 @@ func TestListPageRules(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/pagerules", handler)
 	want := []PageRule{expectedPageRuleStruct}
 
-	actual, err := client.ListPageRules(context.TODO(), testZoneID)
+	actual, err := client.ListPageRules(context.Background(), testZoneID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -122,7 +122,7 @@ func TestGetPageRule(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/pagerules/"+pageRuleID, handler)
 	want := expectedPageRuleStruct
 
-	actual, err := client.PageRule(context.TODO(), testZoneID, pageRuleID)
+	actual, err := client.PageRule(context.Background(), testZoneID, pageRuleID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -170,7 +170,7 @@ func TestCreatePageRule(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/pagerules", handler)
 	want := &expectedPageRuleStruct
 
-	actual, err := client.CreatePageRule(context.TODO(), testZoneID, newPageRule)
+	actual, err := client.CreatePageRule(context.Background(), testZoneID, newPageRule)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -194,6 +194,6 @@ func TestDeletePageRule(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/pagerules/"+pageRuleID, handler)
 
-	err := client.DeletePageRule(context.TODO(), testZoneID, pageRuleID)
+	err := client.DeletePageRule(context.Background(), testZoneID, pageRuleID)
 	assert.NoError(t, err)
 }

@@ -51,7 +51,7 @@ func TestWAFOverride(t *testing.T) {
 		RewriteAction: map[string]string{"default": "simulate"},
 	}
 
-	actual, err := client.WAFOverride(context.TODO(), "01a7362d577a6c3019a474fd6f485823", "a27cece9ec0e4af39ae9c58e3326e2b6")
+	actual, err := client.WAFOverride(context.Background(), "01a7362d577a6c3019a474fd6f485823", "a27cece9ec0e4af39ae9c58e3326e2b6")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -115,7 +115,7 @@ func TestListWAFOverrides(t *testing.T) {
 		},
 	}
 
-	d, err := client.ListWAFOverrides(context.TODO(), testZoneID)
+	d, err := client.ListWAFOverrides(context.Background(), testZoneID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, d)
@@ -163,7 +163,7 @@ func TestCreateWAFOverride(t *testing.T) {
 		RewriteAction: map[string]string{"default": "simulate"},
 	}
 
-	actual, err := client.CreateWAFOverride(context.TODO(), "01a7362d577a6c3019a474fd6f485823", want)
+	actual, err := client.CreateWAFOverride(context.Background(), "01a7362d577a6c3019a474fd6f485823", want)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -188,7 +188,7 @@ func TestDeleteWAFOverride(t *testing.T) {
 
 	mux.HandleFunc("/zones/01a7362d577a6c3019a474fd6f485823/firewall/waf/overrides/18a9b91a93364593a8f41bd53bb2c02d", handler)
 
-	err := client.DeleteWAFOverride(context.TODO(), "01a7362d577a6c3019a474fd6f485823", "18a9b91a93364593a8f41bd53bb2c02d")
+	err := client.DeleteWAFOverride(context.Background(), "01a7362d577a6c3019a474fd6f485823", "18a9b91a93364593a8f41bd53bb2c02d")
 	assert.NoError(t, err)
 }
 
@@ -233,7 +233,7 @@ func TestUpdateWAFOverride(t *testing.T) {
 		RewriteAction: map[string]string{"default": "block"},
 	}
 
-	actual, err := client.UpdateWAFOverride(context.TODO(), "01a7362d577a6c3019a474fd6f485823", "e160a4fca2b346a7a418f49da049c566", want)
+	actual, err := client.UpdateWAFOverride(context.Background(), "01a7362d577a6c3019a474fd6f485823", "e160a4fca2b346a7a418f49da049c566", want)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}

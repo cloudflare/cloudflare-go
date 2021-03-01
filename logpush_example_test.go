@@ -33,7 +33,7 @@ func ExampleAPI_CreateLogpushJob() {
 		log.Fatal(err)
 	}
 
-	job, err := api.CreateLogpushJob(context.TODO(), zoneID, exampleNewLogpushJob)
+	job, err := api.CreateLogpushJob(context.Background(), zoneID, exampleNewLogpushJob)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -52,7 +52,7 @@ func ExampleAPI_UpdateLogpushJob() {
 		log.Fatal(err)
 	}
 
-	err = api.UpdateLogpushJob(context.TODO(), zoneID, 1, exampleUpdatedLogpushJob)
+	err = api.UpdateLogpushJob(context.Background(), zoneID, 1, exampleUpdatedLogpushJob)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -69,7 +69,7 @@ func ExampleAPI_LogpushJobs() {
 		log.Fatal(err)
 	}
 
-	jobs, err := api.LogpushJobs(context.TODO(), zoneID)
+	jobs, err := api.LogpushJobs(context.Background(), zoneID)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -91,7 +91,7 @@ func ExampleAPI_LogpushJob() {
 		log.Fatal(err)
 	}
 
-	job, err := api.LogpushJob(context.TODO(), zoneID, 1)
+	job, err := api.LogpushJob(context.Background(), zoneID, 1)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -110,7 +110,7 @@ func ExampleAPI_DeleteLogpushJob() {
 		log.Fatal(err)
 	}
 
-	err = api.DeleteLogpushJob(context.TODO(), zoneID, 1)
+	err = api.DeleteLogpushJob(context.Background(), zoneID, 1)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -127,7 +127,7 @@ func ExampleAPI_GetLogpushOwnershipChallenge() {
 		log.Fatal(err)
 	}
 
-	ownershipChallenge, err := api.GetLogpushOwnershipChallenge(context.TODO(), zoneID, "destination_conf")
+	ownershipChallenge, err := api.GetLogpushOwnershipChallenge(context.Background(), zoneID, "destination_conf")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -146,7 +146,7 @@ func ExampleAPI_ValidateLogpushOwnershipChallenge() {
 		log.Fatal(err)
 	}
 
-	isValid, err := api.ValidateLogpushOwnershipChallenge(context.TODO(), zoneID, "destination_conf", "ownership_challenge")
+	isValid, err := api.ValidateLogpushOwnershipChallenge(context.Background(), zoneID, "destination_conf", "ownership_challenge")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -165,7 +165,7 @@ func ExampleAPI_CheckLogpushDestinationExists() {
 		log.Fatal(err)
 	}
 
-	exists, err := api.CheckLogpushDestinationExists(context.TODO(), zoneID, "destination_conf")
+	exists, err := api.CheckLogpushDestinationExists(context.Background(), zoneID, "destination_conf")
 	if err != nil {
 		log.Fatal(err)
 	}

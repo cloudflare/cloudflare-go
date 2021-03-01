@@ -124,7 +124,7 @@ func TestHealthchecks(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/healthchecks", handler)
 	want := []Healthcheck{expectedHealthcheck}
 
-	actual, err := client.Healthchecks(context.TODO(), testZoneID)
+	actual, err := client.Healthchecks(context.Background(), testZoneID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -149,7 +149,7 @@ func TestHealthcheck(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/healthchecks/"+healthcheckID, handler)
 	want := expectedHealthcheck
 
-	actual, err := client.Healthcheck(context.TODO(), testZoneID, healthcheckID)
+	actual, err := client.Healthcheck(context.Background(), testZoneID, healthcheckID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -179,7 +179,7 @@ func TestCreateHealthcheck(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/healthchecks", handler)
 	want := expectedHealthcheck
 
-	actual, err := client.CreateHealthcheck(context.TODO(), testZoneID, newHealthcheck)
+	actual, err := client.CreateHealthcheck(context.Background(), testZoneID, newHealthcheck)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -211,7 +211,7 @@ func TestUpdateHealthcheck(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/healthchecks/"+healthcheckID, handler)
 	want := expectedHealthcheck
 
-	actual, err := client.UpdateHealthcheck(context.TODO(), testZoneID, healthcheckID, updatedHealthcheck)
+	actual, err := client.UpdateHealthcheck(context.Background(), testZoneID, healthcheckID, updatedHealthcheck)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -235,7 +235,7 @@ func TestDeleteHealthcheck(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/healthchecks/"+healthcheckID, handler)
 
-	err := client.DeleteHealthcheck(context.TODO(), testZoneID, healthcheckID)
+	err := client.DeleteHealthcheck(context.Background(), testZoneID, healthcheckID)
 	assert.NoError(t, err)
 }
 
@@ -263,7 +263,7 @@ func TestCreateHealthcheckPreview(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/healthchecks/preview", handler)
 	want := expectedHealthcheck
 
-	actual, err := client.CreateHealthcheckPreview(context.TODO(), testZoneID, newHealthcheck)
+	actual, err := client.CreateHealthcheckPreview(context.Background(), testZoneID, newHealthcheck)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -288,7 +288,7 @@ func TestHealthcheckPreview(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/healthchecks/preview/"+healthcheckID, handler)
 	want := expectedHealthcheck
 
-	actual, err := client.HealthcheckPreview(context.TODO(), testZoneID, healthcheckID)
+	actual, err := client.HealthcheckPreview(context.Background(), testZoneID, healthcheckID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -312,6 +312,6 @@ func TestDeleteHealthcheckPreview(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/healthchecks/preview/"+healthcheckID, handler)
 
-	err := client.DeleteHealthcheckPreview(context.TODO(), testZoneID, healthcheckID)
+	err := client.DeleteHealthcheckPreview(context.Background(), testZoneID, healthcheckID)
 	assert.NoError(t, err)
 }

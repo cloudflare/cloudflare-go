@@ -43,12 +43,12 @@ var defaultCustomPage = CustomPage{
 }
 
 func TestCustomPagesWithoutZoneIDOrAccountID(t *testing.T) {
-	_, err := client.CustomPages(context.TODO(), &CustomPageOptions{})
+	_, err := client.CustomPages(context.Background(), &CustomPageOptions{})
 	assert.EqualError(t, err, "either account ID or zone ID must be provided")
 }
 
 func TestCustomPagesWithZoneIDAndAccountID(t *testing.T) {
-	_, err := client.CustomPages(context.TODO(), &CustomPageOptions{ZoneID: "abc123", AccountID: "321cba"})
+	_, err := client.CustomPages(context.Background(), &CustomPageOptions{ZoneID: "abc123", AccountID: "321cba"})
 	assert.EqualError(t, err, "account ID and zone ID are mutually exclusive")
 }
 
@@ -91,7 +91,7 @@ func TestCustomPagesForZone(t *testing.T) {
 	mux.HandleFunc("/zones/d992d6de698eaf2d8cf8fd53b89b18a4/custom_pages", handler)
 	want := []CustomPage{expectedCustomPage}
 
-	pages, err := client.CustomPages(context.TODO(), &CustomPageOptions{ZoneID: "d992d6de698eaf2d8cf8fd53b89b18a4"})
+	pages, err := client.CustomPages(context.Background(), &CustomPageOptions{ZoneID: "d992d6de698eaf2d8cf8fd53b89b18a4"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, pages)
@@ -137,7 +137,7 @@ func TestCustomPagesForAccount(t *testing.T) {
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/custom_pages", handler)
 	want := []CustomPage{expectedCustomPage}
 
-	pages, err := client.CustomPages(context.TODO(), &CustomPageOptions{AccountID: "01a7362d577a6c3019a474fd6f485823"})
+	pages, err := client.CustomPages(context.Background(), &CustomPageOptions{AccountID: "01a7362d577a6c3019a474fd6f485823"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, pages)
@@ -180,7 +180,7 @@ func TestCustomPageForZone(t *testing.T) {
 
 	mux.HandleFunc("/zones/d992d6de698eaf2d8cf8fd53b89b18a4/custom_pages/basic_challenge", handler)
 
-	page, err := client.CustomPage(context.TODO(), &CustomPageOptions{ZoneID: "d992d6de698eaf2d8cf8fd53b89b18a4"}, "basic_challenge")
+	page, err := client.CustomPage(context.Background(), &CustomPageOptions{ZoneID: "d992d6de698eaf2d8cf8fd53b89b18a4"}, "basic_challenge")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedCustomPage, page)
@@ -223,7 +223,7 @@ func TestCustomPageForAccount(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/custom_pages/basic_challenge", handler)
 
-	page, err := client.CustomPage(context.TODO(), &CustomPageOptions{AccountID: "01a7362d577a6c3019a474fd6f485823"}, "basic_challenge")
+	page, err := client.CustomPage(context.Background(), &CustomPageOptions{AccountID: "01a7362d577a6c3019a474fd6f485823"}, "basic_challenge")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedCustomPage, page)
@@ -265,7 +265,7 @@ func TestUpdateCustomPagesForAccount(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/custom_pages/basic_challenge", handler)
-	actual, err := client.UpdateCustomPage(context.TODO(), &CustomPageOptions{AccountID: "01a7362d577a6c3019a474fd6f485823"}, "basic_challenge", CustomPageParameters{URL: "https://mytestexample.com", State: "customized"})
+	actual, err := client.UpdateCustomPage(context.Background(), &CustomPageOptions{AccountID: "01a7362d577a6c3019a474fd6f485823"}, "basic_challenge", CustomPageParameters{URL: "https://mytestexample.com", State: "customized"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, updatedCustomPage, actual)
@@ -307,7 +307,7 @@ func TestUpdateCustomPagesForZone(t *testing.T) {
 	}
 
 	mux.HandleFunc("/zones/d992d6de698eaf2d8cf8fd53b89b18a4/custom_pages/basic_challenge", handler)
-	actual, err := client.UpdateCustomPage(context.TODO(), &CustomPageOptions{ZoneID: "d992d6de698eaf2d8cf8fd53b89b18a4"}, "basic_challenge", CustomPageParameters{URL: "https://mytestexample.com", State: "customized"})
+	actual, err := client.UpdateCustomPage(context.Background(), &CustomPageOptions{ZoneID: "d992d6de698eaf2d8cf8fd53b89b18a4"}, "basic_challenge", CustomPageParameters{URL: "https://mytestexample.com", State: "customized"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, updatedCustomPage, actual)
@@ -343,7 +343,7 @@ func TestUpdateCustomPagesToDefault(t *testing.T) {
 	}
 
 	mux.HandleFunc("/zones/d992d6de698eaf2d8cf8fd53b89b18a4/custom_pages/basic_challenge", handler)
-	actual, err := client.UpdateCustomPage(context.TODO(), &CustomPageOptions{ZoneID: "d992d6de698eaf2d8cf8fd53b89b18a4"}, "basic_challenge", CustomPageParameters{URL: nil, State: "default"})
+	actual, err := client.UpdateCustomPage(context.Background(), &CustomPageOptions{ZoneID: "d992d6de698eaf2d8cf8fd53b89b18a4"}, "basic_challenge", CustomPageParameters{URL: nil, State: "default"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, defaultCustomPage, actual)
