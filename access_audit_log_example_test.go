@@ -1,6 +1,7 @@
 package cloudflare_test
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -15,7 +16,7 @@ func ExampleAPI_AccessAuditLogs() {
 	}
 
 	filterOpts := cloudflare.AccessAuditLogFilterOptions{}
-	results, _ := api.AccessAuditLogs("someaccountid", filterOpts)
+	results, _ := api.AccessAuditLogs(context.Background(), "someaccountid", filterOpts)
 
 	for _, record := range results {
 		b, _ := json.Marshal(record)

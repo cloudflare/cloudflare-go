@@ -1,6 +1,7 @@
 package cloudflare_test
 
 import (
+	"context"
 	"fmt"
 	"log"
 
@@ -13,7 +14,7 @@ func ExampleAPI_ArgoSmartRouting() {
 		log.Fatal(err)
 	}
 
-	smartRoutingSettings, err := api.ArgoSmartRouting("01a7362d577a6c3019a474fd6f485823")
+	smartRoutingSettings, err := api.ArgoSmartRouting(context.Background(), "01a7362d577a6c3019a474fd6f485823")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -27,7 +28,7 @@ func ExampleAPI_ArgoTieredCaching() {
 		log.Fatal(err)
 	}
 
-	tieredCachingSettings, err := api.ArgoTieredCaching("01a7362d577a6c3019a474fd6f485823")
+	tieredCachingSettings, err := api.ArgoTieredCaching(context.Background(), "01a7362d577a6c3019a474fd6f485823")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -41,7 +42,7 @@ func ExampleAPI_UpdateArgoSmartRouting() {
 		log.Fatal(err)
 	}
 
-	smartRoutingSettings, err := api.UpdateArgoSmartRouting("01a7362d577a6c3019a474fd6f485823", "on")
+	smartRoutingSettings, err := api.UpdateArgoSmartRouting(context.Background(), "01a7362d577a6c3019a474fd6f485823", "on")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -55,7 +56,7 @@ func ExampleAPI_UpdateArgoTieredCaching() {
 		log.Fatal(err)
 	}
 
-	tieredCachingSettings, err := api.UpdateArgoTieredCaching("01a7362d577a6c3019a474fd6f485823", "on")
+	tieredCachingSettings, err := api.UpdateArgoTieredCaching(context.Background(), "01a7362d577a6c3019a474fd6f485823", "on")
 	if err != nil {
 		log.Fatal(err)
 	}

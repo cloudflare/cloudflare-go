@@ -1,6 +1,7 @@
 package cloudflare_test
 
 import (
+	"context"
 	"fmt"
 	"log"
 
@@ -14,7 +15,7 @@ func ExampleAPI_ListZones_all() {
 	}
 
 	// Fetch all zones available to this user.
-	zones, err := api.ListZones()
+	zones, err := api.ListZones(context.Background())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -31,7 +32,7 @@ func ExampleAPI_ListZones_filter() {
 	}
 
 	// Fetch a slice of zones example.org and example.net.
-	zones, err := api.ListZones("example.org", "example.net")
+	zones, err := api.ListZones(context.Background(), "example.org", "example.net")
 	if err != nil {
 		log.Fatal(err)
 	}

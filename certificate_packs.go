@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -83,11 +84,11 @@ type CertificatePacksAdvancedDetailResponse struct {
 // ListCertificatePacks returns all available TLS certificate packs for a zone.
 //
 // API Reference: https://api.cloudflare.com/#certificate-packs-list-certificate-packs
-func (api *API) ListCertificatePacks(zoneID string) ([]CertificatePack, error) {
+func (api *API) ListCertificatePacks(ctx context.Context, zoneID string) ([]CertificatePack, error) {
 	uri := fmt.Sprintf("/zones/%s/ssl/certificate_packs?status=all", zoneID)
-	res, err := api.makeRequest(http.MethodGet, uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []CertificatePack{}, errors.Wrap(err, errMakeRequestError)
+		return []CertificatePack{}, err
 	}
 
 	var certificatePacksResponse CertificatePacksResponse
@@ -102,11 +103,11 @@ func (api *API) ListCertificatePacks(zoneID string) ([]CertificatePack, error) {
 // CertificatePack returns a single TLS certificate pack on a zone.
 //
 // API Reference: https://api.cloudflare.com/#certificate-packs-get-certificate-pack
-func (api *API) CertificatePack(zoneID, certificatePackID string) (CertificatePack, error) {
+func (api *API) CertificatePack(ctx context.Context, zoneID, certificatePackID string) (CertificatePack, error) {
 	uri := fmt.Sprintf("/zones/%s/ssl/certificate_packs/%s", zoneID, certificatePackID)
-	res, err := api.makeRequest(http.MethodGet, uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return CertificatePack{}, errors.Wrap(err, errMakeRequestError)
+		return CertificatePack{}, err
 	}
 
 	var certificatePacksDetailResponse CertificatePacksDetailResponse
@@ -121,11 +122,11 @@ func (api *API) CertificatePack(zoneID, certificatePackID string) (CertificatePa
 // CreateCertificatePack creates a new certificate pack associated with a zone.
 //
 // API Reference: https://api.cloudflare.com/#certificate-packs-order-certificate-pack
-func (api *API) CreateCertificatePack(zoneID string, cert CertificatePackRequest) (CertificatePack, error) {
+func (api *API) CreateCertificatePack(ctx context.Context, zoneID string, cert CertificatePackRequest) (CertificatePack, error) {
 	uri := fmt.Sprintf("/zones/%s/ssl/certificate_packs", zoneID)
-	res, err := api.makeRequest(http.MethodPost, uri, cert)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, cert)
 	if err != nil {
-		return CertificatePack{}, errors.Wrap(err, errMakeRequestError)
+		return CertificatePack{}, err
 	}
 
 	var certificatePacksDetailResponse CertificatePacksDetailResponse
@@ -140,11 +141,11 @@ func (api *API) CreateCertificatePack(zoneID string, cert CertificatePackRequest
 // DeleteCertificatePack removes a certificate pack associated with a zone.
 //
 // API Reference: https://api.cloudflare.com/#certificate-packs-delete-advanced-certificate-manager-certificate-pack
-func (api *API) DeleteCertificatePack(zoneID, certificateID string) error {
+func (api *API) DeleteCertificatePack(ctx context.Context, zoneID, certificateID string) error {
 	uri := fmt.Sprintf("/zones/%s/ssl/certificate_packs/%s", zoneID, certificateID)
-	_, err := api.makeRequest(http.MethodDelete, uri, nil)
+	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil
@@ -153,11 +154,11 @@ func (api *API) DeleteCertificatePack(zoneID, certificateID string) error {
 // CreateAdvancedCertificatePack creates a new certificate pack associated with a zone.
 //
 // API Reference: https://api.cloudflare.com/#certificate-packs-order-certificate-pack
-func (api *API) CreateAdvancedCertificatePack(zoneID string, cert CertificatePackAdvancedCertificate) (CertificatePackAdvancedCertificate, error) {
+func (api *API) CreateAdvancedCertificatePack(ctx context.Context, zoneID string, cert CertificatePackAdvancedCertificate) (CertificatePackAdvancedCertificate, error) {
 	uri := fmt.Sprintf("/zones/%s/ssl/certificate_packs/order", zoneID)
-	res, err := api.makeRequest(http.MethodPost, uri, cert)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, cert)
 	if err != nil {
-		return CertificatePackAdvancedCertificate{}, errors.Wrap(err, errMakeRequestError)
+		return CertificatePackAdvancedCertificate{}, err
 	}
 
 	var advancedCertificatePacksDetailResponse CertificatePacksAdvancedDetailResponse
@@ -173,11 +174,11 @@ func (api *API) CreateAdvancedCertificatePack(zoneID string, cert CertificatePac
 // pending certificate pack.
 //
 // API Reference: https://api.cloudflare.com/#certificate-packs-restart-validation-for-advanced-certificate-manager-certificate-pack
-func (api *API) RestartAdvancedCertificateValidation(zoneID, certificateID string) (CertificatePackAdvancedCertificate, error) {
+func (api *API) RestartAdvancedCertificateValidation(ctx context.Context, zoneID, certificateID string) (CertificatePackAdvancedCertificate, error) {
 	uri := fmt.Sprintf("/zones/%s/ssl/certificate_packs/%s", zoneID, certificateID)
-	res, err := api.makeRequest(http.MethodPatch, uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, nil)
 	if err != nil {
-		return CertificatePackAdvancedCertificate{}, errors.Wrap(err, errMakeRequestError)
+		return CertificatePackAdvancedCertificate{}, err
 	}
 
 	var advancedCertificatePacksDetailResponse CertificatePacksAdvancedDetailResponse

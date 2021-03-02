@@ -1,6 +1,7 @@
 package cloudflare_test
 
 import (
+	"context"
 	"fmt"
 	"log"
 
@@ -19,7 +20,7 @@ func ExampleAPI_DNSRecords_all() {
 	}
 
 	// Fetch all records for a zone
-	recs, err := api.DNSRecords(zoneID, cloudflare.DNSRecord{})
+	recs, err := api.DNSRecords(context.Background(), zoneID, cloudflare.DNSRecord{})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -42,7 +43,7 @@ func ExampleAPI_DNSRecords_filterByContent() {
 
 	// Fetch only records whose content is 127.0.0.1
 	localhost := cloudflare.DNSRecord{Content: "127.0.0.1"}
-	recs, err := api.DNSRecords(zoneID, localhost)
+	recs, err := api.DNSRecords(context.Background(), zoneID, localhost)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -66,7 +67,7 @@ func ExampleAPI_DNSRecords_filterByName() {
 	// Fetch records of any type with name "foo.example.com"
 	// The name must be fully-qualified
 	foo := cloudflare.DNSRecord{Name: "foo.example.com"}
-	recs, err := api.DNSRecords(zoneID, foo)
+	recs, err := api.DNSRecords(context.Background(), zoneID, foo)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -89,7 +90,7 @@ func ExampleAPI_DNSRecords_filterByType() {
 
 	// Fetch only AAAA type records
 	aaaa := cloudflare.DNSRecord{Type: "AAAA"}
-	recs, err := api.DNSRecords(zoneID, aaaa)
+	recs, err := api.DNSRecords(context.Background(), zoneID, aaaa)
 	if err != nil {
 		log.Fatal(err)
 	}

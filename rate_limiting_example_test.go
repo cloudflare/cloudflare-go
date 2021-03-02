@@ -1,6 +1,7 @@
 package cloudflare_test
 
 import (
+	"context"
 	"fmt"
 	"log"
 
@@ -36,7 +37,7 @@ func ExampleAPI_CreateRateLimit() {
 		log.Fatal(err)
 	}
 
-	rateLimit, err := api.CreateRateLimit(zoneID, exampleNewRateLimit)
+	rateLimit, err := api.CreateRateLimit(context.Background(), zoneID, exampleNewRateLimit)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -59,7 +60,7 @@ func ExampleAPI_ListRateLimits() {
 		PerPage: 5,
 		Page:    1,
 	}
-	rateLimits, _, err := api.ListRateLimits(zoneID, pageOpts)
+	rateLimits, _, err := api.ListRateLimits(context.Background(), zoneID, pageOpts)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -81,7 +82,7 @@ func ExampleAPI_RateLimit() {
 		log.Fatal(err)
 	}
 
-	rateLimits, err := api.RateLimit(zoneID, "my_rate_limit_id")
+	rateLimits, err := api.RateLimit(context.Background(), zoneID, "my_rate_limit_id")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -100,7 +101,7 @@ func ExampleAPI_DeleteRateLimit() {
 		log.Fatal(err)
 	}
 
-	err = api.DeleteRateLimit(zoneID, "my_rate_limit_id")
+	err = api.DeleteRateLimit(context.Background(), zoneID, "my_rate_limit_id")
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -1,7 +1,9 @@
 package cloudflare
 
 import (
+	"context"
 	"encoding/json"
+	"net/http"
 	"time"
 
 	"github.com/pkg/errors"
@@ -24,11 +26,11 @@ type AuthenticatedOriginPullsResponse struct {
 // GetAuthenticatedOriginPullsStatus returns the configuration details for global AuthenticatedOriginPulls (tls_client_auth).
 //
 // API reference: https://api.cloudflare.com/#zone-settings-get-tls-client-auth-setting
-func (api *API) GetAuthenticatedOriginPullsStatus(zoneID string) (AuthenticatedOriginPulls, error) {
+func (api *API) GetAuthenticatedOriginPullsStatus(ctx context.Context, zoneID string) (AuthenticatedOriginPulls, error) {
 	uri := "/zones/" + zoneID + "/settings/tls_client_auth"
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return AuthenticatedOriginPulls{}, errors.Wrap(err, errMakeRequestError)
+		return AuthenticatedOriginPulls{}, err
 	}
 	var r AuthenticatedOriginPullsResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -40,7 +42,7 @@ func (api *API) GetAuthenticatedOriginPullsStatus(zoneID string) (AuthenticatedO
 // SetAuthenticatedOriginPullsStatus toggles whether global AuthenticatedOriginPulls is enabled for the zone.
 //
 // API reference: https://api.cloudflare.com/#zone-settings-change-tls-client-auth-setting
-func (api *API) SetAuthenticatedOriginPullsStatus(zoneID string, enable bool) (AuthenticatedOriginPulls, error) {
+func (api *API) SetAuthenticatedOriginPullsStatus(ctx context.Context, zoneID string, enable bool) (AuthenticatedOriginPulls, error) {
 	uri := "/zones/" + zoneID + "/settings/tls_client_auth"
 	var val string
 	if enable {
@@ -53,9 +55,9 @@ func (api *API) SetAuthenticatedOriginPullsStatus(zoneID string, enable bool) (A
 	}{
 		Value: val,
 	}
-	res, err := api.makeRequest("PATCH", uri, params)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
 	if err != nil {
-		return AuthenticatedOriginPulls{}, errors.Wrap(err, errMakeRequestError)
+		return AuthenticatedOriginPulls{}, err
 	}
 	var r AuthenticatedOriginPullsResponse
 	if err := json.Unmarshal(res, &r); err != nil {

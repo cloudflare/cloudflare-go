@@ -1,6 +1,7 @@
 package cloudflare_test
 
 import (
+	"context"
 	"fmt"
 	"log"
 
@@ -19,7 +20,7 @@ func ExampleAPI_ListUserAgentRules_all() {
 	}
 
 	// Fetch all Zone Lockdown rules for a zone, by page.
-	rules, err := api.ListUserAgentRules(zoneID, 1)
+	rules, err := api.ListUserAgentRules(context.Background(), zoneID, 1)
 	if err != nil {
 		log.Fatal(err)
 	}

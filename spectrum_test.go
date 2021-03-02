@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net"
 	"net/http"
@@ -15,7 +16,7 @@ func TestSpectrumApplication(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
 			"result": {
@@ -60,7 +61,7 @@ func TestSpectrumApplication(t *testing.T) {
 		TLS:           "off",
 	}
 
-	actual, err := client.SpectrumApplication("01a7362d577a6c3019a474fd6f485823", "f68579455bd947efb65ffa1bcf33b52c")
+	actual, err := client.SpectrumApplication(context.Background(), "01a7362d577a6c3019a474fd6f485823", "f68579455bd947efb65ffa1bcf33b52c")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -71,7 +72,7 @@ func TestSpectrumApplications(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
 			"result": [
@@ -120,7 +121,7 @@ func TestSpectrumApplications(t *testing.T) {
 		},
 	}
 
-	actual, err := client.SpectrumApplications("01a7362d577a6c3019a474fd6f485823")
+	actual, err := client.SpectrumApplications(context.Background(), "01a7362d577a6c3019a474fd6f485823")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -131,7 +132,7 @@ func TestUpdateSpectrumApplication(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "PUT", "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPut, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
 			"result": {
@@ -177,7 +178,7 @@ func TestUpdateSpectrumApplication(t *testing.T) {
 		ModifiedOn:    &modifiedOn,
 	}
 
-	actual, err := client.UpdateSpectrumApplication("01a7362d577a6c3019a474fd6f485823", "f68579455bd947efb65ffa1bcf33b52c", want)
+	actual, err := client.UpdateSpectrumApplication(context.Background(), "01a7362d577a6c3019a474fd6f485823", "f68579455bd947efb65ffa1bcf33b52c", want)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -188,7 +189,7 @@ func TestCreateSpectrumApplication(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
 			"result": {
@@ -234,7 +235,7 @@ func TestCreateSpectrumApplication(t *testing.T) {
 		ModifiedOn:    &modifiedOn,
 	}
 
-	actual, err := client.CreateSpectrumApplication("01a7362d577a6c3019a474fd6f485823", want)
+	actual, err := client.CreateSpectrumApplication(context.Background(), "01a7362d577a6c3019a474fd6f485823", want)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -245,7 +246,7 @@ func TestCreateSpectrumApplication_OriginDNS(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
 			"result": {
@@ -297,7 +298,7 @@ func TestCreateSpectrumApplication_OriginDNS(t *testing.T) {
 		ModifiedOn:    &modifiedOn,
 	}
 
-	actual, err := client.CreateSpectrumApplication("01a7362d577a6c3019a474fd6f485823", want)
+	actual, err := client.CreateSpectrumApplication(context.Background(), "01a7362d577a6c3019a474fd6f485823", want)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -308,7 +309,7 @@ func TestDeleteSpectrumApplication(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "DELETE", "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodDelete, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
 			"result": {
@@ -322,7 +323,7 @@ func TestDeleteSpectrumApplication(t *testing.T) {
 
 	mux.HandleFunc("/zones/01a7362d577a6c3019a474fd6f485823/spectrum/apps/f68579455bd947efb65ffa1bcf33b52c", handler)
 
-	err := client.DeleteSpectrumApplication("01a7362d577a6c3019a474fd6f485823", "f68579455bd947efb65ffa1bcf33b52c")
+	err := client.DeleteSpectrumApplication(context.Background(), "01a7362d577a6c3019a474fd6f485823", "f68579455bd947efb65ffa1bcf33b52c")
 	assert.NoError(t, err)
 }
 
@@ -351,7 +352,7 @@ func TestSpectrumApplicationProxyProtocolDeprecations(t *testing.T) {
 		setup()
 
 		handler := func(w http.ResponseWriter, r *http.Request) {
-			assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+			assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 			w.Header().Set("content-type", "application/json")
 			fmt.Fprintf(w, `{
 			"result": {
@@ -397,7 +398,7 @@ func TestSpectrumApplicationProxyProtocolDeprecations(t *testing.T) {
 			TLS:           "off",
 		}
 
-		actual, err := client.SpectrumApplication("01a7362d577a6c3019a474fd6f485823", "f68579455bd947efb65ffa1bcf33b52c")
+		actual, err := client.SpectrumApplication(context.Background(), "01a7362d577a6c3019a474fd6f485823", "f68579455bd947efb65ffa1bcf33b52c")
 		if assert.NoError(t, err) {
 			assert.Equal(t, want, actual)
 		}
@@ -411,7 +412,7 @@ func TestSpectrumApplicationEdgeIPs(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
 			"result": {
@@ -467,7 +468,7 @@ func TestSpectrumApplicationEdgeIPs(t *testing.T) {
 		},
 	}
 
-	actual, err := client.SpectrumApplication("01a7362d577a6c3019a474fd6f485823", "f68579455bd947efb65ffa1bcf33b52c")
+	actual, err := client.SpectrumApplication(context.Background(), "01a7362d577a6c3019a474fd6f485823", "f68579455bd947efb65ffa1bcf33b52c")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -478,7 +479,7 @@ func TestSpectrumApplicationPortRange(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
 			"result": {
@@ -541,7 +542,7 @@ func TestSpectrumApplicationPortRange(t *testing.T) {
 		},
 	}
 
-	actual, err := client.SpectrumApplication("01a7362d577a6c3019a474fd6f485823", "f68579455bd947efb65ffa1bcf33b52c")
+	actual, err := client.SpectrumApplication(context.Background(), "01a7362d577a6c3019a474fd6f485823", "f68579455bd947efb65ffa1bcf33b52c")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}

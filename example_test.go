@@ -1,6 +1,7 @@
 package cloudflare_test
 
 import (
+	"context"
 	"fmt"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
@@ -27,7 +28,7 @@ func Example() {
 	}
 
 	// Fetch all DNS records for example.org
-	records, err := api.DNSRecords(zoneID, cloudflare.DNSRecord{})
+	records, err := api.DNSRecords(context.Background(), zoneID, cloudflare.DNSRecord{})
 	if err != nil {
 		fmt.Println(err)
 		return

@@ -66,7 +66,7 @@ func (api *API) ListPrefixes(ctx context.Context) ([]IPPrefix, error) {
 	uri := fmt.Sprintf("/accounts/%s/addressing/prefixes", api.AccountID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []IPPrefix{}, errors.Wrap(err, errMakeRequestError)
+		return []IPPrefix{}, err
 	}
 
 	result := ListIPPrefixResponse{}
@@ -84,7 +84,7 @@ func (api *API) GetPrefix(ctx context.Context, id string) (IPPrefix, error) {
 	uri := fmt.Sprintf("/accounts/%s/addressing/prefixes/%s", api.AccountID, id)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return IPPrefix{}, errors.Wrap(err, errMakeRequestError)
+		return IPPrefix{}, err
 	}
 
 	result := GetIPPrefixResponse{}
@@ -102,7 +102,7 @@ func (api *API) UpdatePrefixDescription(ctx context.Context, id string, descript
 	uri := fmt.Sprintf("/accounts/%s/addressing/prefixes/%s", api.AccountID, id)
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, IPPrefixUpdateRequest{Description: description})
 	if err != nil {
-		return IPPrefix{}, errors.Wrap(err, errMakeRequestError)
+		return IPPrefix{}, err
 	}
 
 	result := GetIPPrefixResponse{}
@@ -120,7 +120,7 @@ func (api *API) GetAdvertisementStatus(ctx context.Context, id string) (Advertis
 	uri := fmt.Sprintf("/accounts/%s/addressing/prefixes/%s/bgp/status", api.AccountID, id)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return AdvertisementStatus{}, errors.Wrap(err, errMakeRequestError)
+		return AdvertisementStatus{}, err
 	}
 
 	result := GetAdvertisementStatusResponse{}
@@ -138,7 +138,7 @@ func (api *API) UpdateAdvertisementStatus(ctx context.Context, id string, advert
 	uri := fmt.Sprintf("/accounts/%s/addressing/prefixes/%s/bgp/status", api.AccountID, id)
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, AdvertisementStatusUpdateRequest{Advertised: advertised})
 	if err != nil {
-		return AdvertisementStatus{}, errors.Wrap(err, errMakeRequestError)
+		return AdvertisementStatus{}, err
 	}
 
 	result := GetAdvertisementStatusResponse{}

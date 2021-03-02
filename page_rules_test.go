@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -74,7 +75,7 @@ func TestListPageRules(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 		  "result": [
@@ -96,7 +97,7 @@ func TestListPageRules(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/pagerules", handler)
 	want := []PageRule{expectedPageRuleStruct}
 
-	actual, err := client.ListPageRules(testZoneID)
+	actual, err := client.ListPageRules(context.Background(), testZoneID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -107,7 +108,7 @@ func TestGetPageRule(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 		  "result": %s,
@@ -121,7 +122,7 @@ func TestGetPageRule(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/pagerules/"+pageRuleID, handler)
 	want := expectedPageRuleStruct
 
-	actual, err := client.PageRule(testZoneID, pageRuleID)
+	actual, err := client.PageRule(context.Background(), testZoneID, pageRuleID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -155,7 +156,7 @@ func TestCreatePageRule(t *testing.T) {
 	}
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 		  "result": %s,
@@ -169,7 +170,7 @@ func TestCreatePageRule(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/pagerules", handler)
 	want := &expectedPageRuleStruct
 
-	actual, err := client.CreatePageRule(testZoneID, newPageRule)
+	actual, err := client.CreatePageRule(context.Background(), testZoneID, newPageRule)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -180,7 +181,7 @@ func TestDeletePageRule(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "DELETE", "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodDelete, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
 		  "result": null,
@@ -193,6 +194,6 @@ func TestDeletePageRule(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/pagerules/"+pageRuleID, handler)
 
-	err := client.DeletePageRule(testZoneID, pageRuleID)
+	err := client.DeletePageRule(context.Background(), testZoneID, pageRuleID)
 	assert.NoError(t, err)
 }

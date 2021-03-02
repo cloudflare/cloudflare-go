@@ -1,7 +1,9 @@
 package cloudflare
 
 import (
+	"context"
 	"encoding/json"
+	"net/http"
 	"strconv"
 	"time"
 
@@ -93,11 +95,11 @@ type LogpushDestinationExistsRequest struct {
 // CreateLogpushJob creates a new LogpushJob for a zone.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-create-logpush-job
-func (api *API) CreateLogpushJob(zoneID string, job LogpushJob) (*LogpushJob, error) {
+func (api *API) CreateLogpushJob(ctx context.Context, zoneID string, job LogpushJob) (*LogpushJob, error) {
 	uri := "/zones/" + zoneID + "/logpush/jobs"
-	res, err := api.makeRequest("POST", uri, job)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, job)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 	var r LogpushJobDetailsResponse
 	err = json.Unmarshal(res, &r)
@@ -110,11 +112,11 @@ func (api *API) CreateLogpushJob(zoneID string, job LogpushJob) (*LogpushJob, er
 // LogpushJobs returns all Logpush Jobs for a zone.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-list-logpush-jobs
-func (api *API) LogpushJobs(zoneID string) ([]LogpushJob, error) {
+func (api *API) LogpushJobs(ctx context.Context, zoneID string) ([]LogpushJob, error) {
 	uri := "/zones/" + zoneID + "/logpush/jobs"
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []LogpushJob{}, errors.Wrap(err, errMakeRequestError)
+		return []LogpushJob{}, err
 	}
 	var r LogpushJobsResponse
 	err = json.Unmarshal(res, &r)
@@ -127,11 +129,11 @@ func (api *API) LogpushJobs(zoneID string) ([]LogpushJob, error) {
 // LogpushJobsForDataset returns all Logpush Jobs for a dataset in a zone.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-list-logpush-jobs-for-a-dataset
-func (api *API) LogpushJobsForDataset(zoneID, dataset string) ([]LogpushJob, error) {
+func (api *API) LogpushJobsForDataset(ctx context.Context, zoneID, dataset string) ([]LogpushJob, error) {
 	uri := "/zones/" + zoneID + "/logpush/datasets/" + dataset + "/jobs"
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []LogpushJob{}, errors.Wrap(err, errMakeRequestError)
+		return []LogpushJob{}, err
 	}
 	var r LogpushJobsResponse
 	err = json.Unmarshal(res, &r)
@@ -144,11 +146,11 @@ func (api *API) LogpushJobsForDataset(zoneID, dataset string) ([]LogpushJob, err
 // LogpushFields returns fields for a given dataset.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-list-logpush-jobs
-func (api *API) LogpushFields(zoneID, dataset string) (LogpushFields, error) {
+func (api *API) LogpushFields(ctx context.Context, zoneID, dataset string) (LogpushFields, error) {
 	uri := "/zones/" + zoneID + "/logpush/datasets/" + dataset + "/fields"
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return LogpushFields{}, errors.Wrap(err, errMakeRequestError)
+		return LogpushFields{}, err
 	}
 	var r LogpushFieldsResponse
 	err = json.Unmarshal(res, &r)
@@ -161,11 +163,11 @@ func (api *API) LogpushFields(zoneID, dataset string) (LogpushFields, error) {
 // LogpushJob fetches detail about one Logpush Job for a zone.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-logpush-job-details
-func (api *API) LogpushJob(zoneID string, jobID int) (LogpushJob, error) {
+func (api *API) LogpushJob(ctx context.Context, zoneID string, jobID int) (LogpushJob, error) {
 	uri := "/zones/" + zoneID + "/logpush/jobs/" + strconv.Itoa(jobID)
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return LogpushJob{}, errors.Wrap(err, errMakeRequestError)
+		return LogpushJob{}, err
 	}
 	var r LogpushJobDetailsResponse
 	err = json.Unmarshal(res, &r)
@@ -178,11 +180,11 @@ func (api *API) LogpushJob(zoneID string, jobID int) (LogpushJob, error) {
 // UpdateLogpushJob lets you update a Logpush Job.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-update-logpush-job
-func (api *API) UpdateLogpushJob(zoneID string, jobID int, job LogpushJob) error {
+func (api *API) UpdateLogpushJob(ctx context.Context, zoneID string, jobID int, job LogpushJob) error {
 	uri := "/zones/" + zoneID + "/logpush/jobs/" + strconv.Itoa(jobID)
-	res, err := api.makeRequest("PUT", uri, job)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, job)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 	var r LogpushJobDetailsResponse
 	err = json.Unmarshal(res, &r)
@@ -195,11 +197,11 @@ func (api *API) UpdateLogpushJob(zoneID string, jobID int, job LogpushJob) error
 // DeleteLogpushJob deletes a Logpush Job for a zone.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-delete-logpush-job
-func (api *API) DeleteLogpushJob(zoneID string, jobID int) error {
+func (api *API) DeleteLogpushJob(ctx context.Context, zoneID string, jobID int) error {
 	uri := "/zones/" + zoneID + "/logpush/jobs/" + strconv.Itoa(jobID)
-	res, err := api.makeRequest("DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 	var r LogpushJobDetailsResponse
 	err = json.Unmarshal(res, &r)
@@ -212,13 +214,13 @@ func (api *API) DeleteLogpushJob(zoneID string, jobID int) error {
 // GetLogpushOwnershipChallenge returns ownership challenge.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-get-ownership-challenge
-func (api *API) GetLogpushOwnershipChallenge(zoneID, destinationConf string) (*LogpushGetOwnershipChallenge, error) {
+func (api *API) GetLogpushOwnershipChallenge(ctx context.Context, zoneID, destinationConf string) (*LogpushGetOwnershipChallenge, error) {
 	uri := "/zones/" + zoneID + "/logpush/ownership"
-	res, err := api.makeRequest("POST", uri, LogpushGetOwnershipChallengeRequest{
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, LogpushGetOwnershipChallengeRequest{
 		DestinationConf: destinationConf,
 	})
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 	var r LogpushGetOwnershipChallengeResponse
 	err = json.Unmarshal(res, &r)
@@ -236,14 +238,14 @@ func (api *API) GetLogpushOwnershipChallenge(zoneID, destinationConf string) (*L
 // ValidateLogpushOwnershipChallenge returns ownership challenge validation result.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-validate-ownership-challenge
-func (api *API) ValidateLogpushOwnershipChallenge(zoneID, destinationConf, ownershipChallenge string) (bool, error) {
+func (api *API) ValidateLogpushOwnershipChallenge(ctx context.Context, zoneID, destinationConf, ownershipChallenge string) (bool, error) {
 	uri := "/zones/" + zoneID + "/logpush/ownership/validate"
-	res, err := api.makeRequest("POST", uri, LogpushValidateOwnershipChallengeRequest{
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, LogpushValidateOwnershipChallengeRequest{
 		DestinationConf:    destinationConf,
 		OwnershipChallenge: ownershipChallenge,
 	})
 	if err != nil {
-		return false, errors.Wrap(err, errMakeRequestError)
+		return false, err
 	}
 	var r LogpushGetOwnershipChallengeResponse
 	err = json.Unmarshal(res, &r)
@@ -256,13 +258,13 @@ func (api *API) ValidateLogpushOwnershipChallenge(zoneID, destinationConf, owner
 // CheckLogpushDestinationExists returns destination exists check result.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-check-destination-exists
-func (api *API) CheckLogpushDestinationExists(zoneID, destinationConf string) (bool, error) {
+func (api *API) CheckLogpushDestinationExists(ctx context.Context, zoneID, destinationConf string) (bool, error) {
 	uri := "/zones/" + zoneID + "/logpush/validate/destination/exists"
-	res, err := api.makeRequest("POST", uri, LogpushDestinationExistsRequest{
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, LogpushDestinationExistsRequest{
 		DestinationConf: destinationConf,
 	})
 	if err != nil {
-		return false, errors.Wrap(err, errMakeRequestError)
+		return false, err
 	}
 	var r LogpushDestinationExistsResponse
 	err = json.Unmarshal(res, &r)

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/pkg/errors"
@@ -40,28 +41,28 @@ type AccessMutualTLSCertificateDetailResponse struct {
 // level.
 //
 // API reference: https://api.cloudflare.com/#access-mutual-tls-authentication-properties
-func (api *API) AccessMutualTLSCertificates(accountID string) ([]AccessMutualTLSCertificate, error) {
-	return api.accessMutualTLSCertificates(accountID, AccountRouteRoot)
+func (api *API) AccessMutualTLSCertificates(ctx context.Context, accountID string) ([]AccessMutualTLSCertificate, error) {
+	return api.accessMutualTLSCertificates(ctx, accountID, AccountRouteRoot)
 }
 
 // ZoneAccessMutualTLSCertificates returns all Access TLS certificates for the
 // zone level.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-mutual-tls-authentication-properties
-func (api *API) ZoneAccessMutualTLSCertificates(zoneID string) ([]AccessMutualTLSCertificate, error) {
-	return api.accessMutualTLSCertificates(zoneID, ZoneRouteRoot)
+func (api *API) ZoneAccessMutualTLSCertificates(ctx context.Context, zoneID string) ([]AccessMutualTLSCertificate, error) {
+	return api.accessMutualTLSCertificates(ctx, zoneID, ZoneRouteRoot)
 }
 
-func (api *API) accessMutualTLSCertificates(id string, routeRoot RouteRoot) ([]AccessMutualTLSCertificate, error) {
+func (api *API) accessMutualTLSCertificates(ctx context.Context, id string, routeRoot RouteRoot) ([]AccessMutualTLSCertificate, error) {
 	uri := fmt.Sprintf(
 		"/%s/%s/access/certificates",
 		routeRoot,
 		id,
 	)
 
-	res, err := api.makeRequestContext(context.Background(), "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []AccessMutualTLSCertificate{}, errors.Wrap(err, errMakeRequestError)
+		return []AccessMutualTLSCertificate{}, err
 	}
 
 	var accessMutualTLSCertificateListResponse AccessMutualTLSCertificateListResponse
@@ -77,19 +78,19 @@ func (api *API) accessMutualTLSCertificates(id string, routeRoot RouteRoot) ([]A
 // certificate.
 //
 // API reference: https://api.cloudflare.com/#access-mutual-tls-authentication-access-certificate-details
-func (api *API) AccessMutualTLSCertificate(accountID, certificateID string) (AccessMutualTLSCertificate, error) {
-	return api.accessMutualTLSCertificate(accountID, certificateID, AccountRouteRoot)
+func (api *API) AccessMutualTLSCertificate(ctx context.Context, accountID, certificateID string) (AccessMutualTLSCertificate, error) {
+	return api.accessMutualTLSCertificate(ctx, accountID, certificateID, AccountRouteRoot)
 }
 
 // ZoneAccessMutualTLSCertificate returns a single zone level Access Mutual TLS
 // certificate.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-mutual-tls-authentication-access-certificate-details
-func (api *API) ZoneAccessMutualTLSCertificate(zoneID, certificateID string) (AccessMutualTLSCertificate, error) {
-	return api.accessMutualTLSCertificate(zoneID, certificateID, ZoneRouteRoot)
+func (api *API) ZoneAccessMutualTLSCertificate(ctx context.Context, zoneID, certificateID string) (AccessMutualTLSCertificate, error) {
+	return api.accessMutualTLSCertificate(ctx, zoneID, certificateID, ZoneRouteRoot)
 }
 
-func (api *API) accessMutualTLSCertificate(id, certificateID string, routeRoot RouteRoot) (AccessMutualTLSCertificate, error) {
+func (api *API) accessMutualTLSCertificate(ctx context.Context, id, certificateID string, routeRoot RouteRoot) (AccessMutualTLSCertificate, error) {
 	uri := fmt.Sprintf(
 		"/%s/%s/access/certificates/%s",
 		routeRoot,
@@ -97,9 +98,9 @@ func (api *API) accessMutualTLSCertificate(id, certificateID string, routeRoot R
 		certificateID,
 	)
 
-	res, err := api.makeRequestContext(context.Background(), "GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return AccessMutualTLSCertificate{}, errors.Wrap(err, errMakeRequestError)
+		return AccessMutualTLSCertificate{}, err
 	}
 
 	var accessMutualTLSCertificateDetailResponse AccessMutualTLSCertificateDetailResponse
@@ -115,28 +116,28 @@ func (api *API) accessMutualTLSCertificate(id, certificateID string, routeRoot R
 // certificate.
 //
 // API reference: https://api.cloudflare.com/#access-mutual-tls-authentication-create-access-certificate
-func (api *API) CreateAccessMutualTLSCertificate(accountID string, certificate AccessMutualTLSCertificate) (AccessMutualTLSCertificate, error) {
-	return api.createAccessMutualTLSCertificate(accountID, certificate, AccountRouteRoot)
+func (api *API) CreateAccessMutualTLSCertificate(ctx context.Context, accountID string, certificate AccessMutualTLSCertificate) (AccessMutualTLSCertificate, error) {
+	return api.createAccessMutualTLSCertificate(ctx, accountID, certificate, AccountRouteRoot)
 }
 
 // CreateZoneAccessMutualTLSCertificate creates a zone level Access TLS Mutual
 // certificate.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-mutual-tls-authentication-create-access-certificate
-func (api *API) CreateZoneAccessMutualTLSCertificate(zoneID string, certificate AccessMutualTLSCertificate) (AccessMutualTLSCertificate, error) {
-	return api.createAccessMutualTLSCertificate(zoneID, certificate, ZoneRouteRoot)
+func (api *API) CreateZoneAccessMutualTLSCertificate(ctx context.Context, zoneID string, certificate AccessMutualTLSCertificate) (AccessMutualTLSCertificate, error) {
+	return api.createAccessMutualTLSCertificate(ctx, zoneID, certificate, ZoneRouteRoot)
 }
 
-func (api *API) createAccessMutualTLSCertificate(id string, certificate AccessMutualTLSCertificate, routeRoot RouteRoot) (AccessMutualTLSCertificate, error) {
+func (api *API) createAccessMutualTLSCertificate(ctx context.Context, id string, certificate AccessMutualTLSCertificate, routeRoot RouteRoot) (AccessMutualTLSCertificate, error) {
 	uri := fmt.Sprintf(
 		"/%s/%s/access/certificates",
 		routeRoot,
 		id,
 	)
 
-	res, err := api.makeRequestContext(context.Background(), "POST", uri, certificate)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, certificate)
 	if err != nil {
-		return AccessMutualTLSCertificate{}, errors.Wrap(err, errMakeRequestError)
+		return AccessMutualTLSCertificate{}, err
 	}
 
 	var accessMutualTLSCertificateDetailResponse AccessMutualTLSCertificateDetailResponse
@@ -152,19 +153,19 @@ func (api *API) createAccessMutualTLSCertificate(id string, certificate AccessMu
 // certificate.
 //
 // API reference: https://api.cloudflare.com/#access-mutual-tls-authentication-update-access-certificate
-func (api *API) UpdateAccessMutualTLSCertificate(accountID, certificateID string, certificate AccessMutualTLSCertificate) (AccessMutualTLSCertificate, error) {
-	return api.updateAccessMutualTLSCertificate(accountID, certificateID, certificate, AccountRouteRoot)
+func (api *API) UpdateAccessMutualTLSCertificate(ctx context.Context, accountID, certificateID string, certificate AccessMutualTLSCertificate) (AccessMutualTLSCertificate, error) {
+	return api.updateAccessMutualTLSCertificate(ctx, accountID, certificateID, certificate, AccountRouteRoot)
 }
 
 // UpdateZoneAccessMutualTLSCertificate updates a zone level Access TLS Mutual
 // certificate.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-mutual-tls-authentication-update-access-certificate
-func (api *API) UpdateZoneAccessMutualTLSCertificate(zoneID, certificateID string, certificate AccessMutualTLSCertificate) (AccessMutualTLSCertificate, error) {
-	return api.updateAccessMutualTLSCertificate(zoneID, certificateID, certificate, ZoneRouteRoot)
+func (api *API) UpdateZoneAccessMutualTLSCertificate(ctx context.Context, zoneID, certificateID string, certificate AccessMutualTLSCertificate) (AccessMutualTLSCertificate, error) {
+	return api.updateAccessMutualTLSCertificate(ctx, zoneID, certificateID, certificate, ZoneRouteRoot)
 }
 
-func (api *API) updateAccessMutualTLSCertificate(id string, certificateID string, certificate AccessMutualTLSCertificate, routeRoot RouteRoot) (AccessMutualTLSCertificate, error) {
+func (api *API) updateAccessMutualTLSCertificate(ctx context.Context, id string, certificateID string, certificate AccessMutualTLSCertificate, routeRoot RouteRoot) (AccessMutualTLSCertificate, error) {
 	uri := fmt.Sprintf(
 		"/%s/%s/access/certificates/%s",
 		routeRoot,
@@ -172,9 +173,9 @@ func (api *API) updateAccessMutualTLSCertificate(id string, certificateID string
 		certificateID,
 	)
 
-	res, err := api.makeRequestContext(context.Background(), "PUT", uri, certificate)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, certificate)
 	if err != nil {
-		return AccessMutualTLSCertificate{}, errors.Wrap(err, errMakeRequestError)
+		return AccessMutualTLSCertificate{}, err
 	}
 
 	var accessMutualTLSCertificateDetailResponse AccessMutualTLSCertificateDetailResponse
@@ -190,19 +191,19 @@ func (api *API) updateAccessMutualTLSCertificate(id string, certificateID string
 // TLS certificate.
 //
 // API reference: https://api.cloudflare.com/#access-mutual-tls-authentication-update-access-certificate
-func (api *API) DeleteAccessMutualTLSCertificate(accountID, certificateID string) error {
-	return api.deleteAccessMutualTLSCertificate(accountID, certificateID, AccountRouteRoot)
+func (api *API) DeleteAccessMutualTLSCertificate(ctx context.Context, accountID, certificateID string) error {
+	return api.deleteAccessMutualTLSCertificate(ctx, accountID, certificateID, AccountRouteRoot)
 }
 
 // DeleteZoneAccessMutualTLSCertificate destroys a zone level Access Mutual TLS
 // certificate.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-mutual-tls-authentication-update-access-certificate
-func (api *API) DeleteZoneAccessMutualTLSCertificate(zoneID, certificateID string) error {
-	return api.deleteAccessMutualTLSCertificate(zoneID, certificateID, ZoneRouteRoot)
+func (api *API) DeleteZoneAccessMutualTLSCertificate(ctx context.Context, zoneID, certificateID string) error {
+	return api.deleteAccessMutualTLSCertificate(ctx, zoneID, certificateID, ZoneRouteRoot)
 }
 
-func (api *API) deleteAccessMutualTLSCertificate(id, certificateID string, routeRoot RouteRoot) error {
+func (api *API) deleteAccessMutualTLSCertificate(ctx context.Context, id, certificateID string, routeRoot RouteRoot) error {
 	uri := fmt.Sprintf(
 		"/%s/%s/access/certificates/%s",
 		routeRoot,
@@ -210,9 +211,9 @@ func (api *API) deleteAccessMutualTLSCertificate(id, certificateID string, route
 		certificateID,
 	)
 
-	res, err := api.makeRequestContext(context.Background(), "DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	var accessMutualTLSCertificateDetailResponse AccessMutualTLSCertificateDetailResponse

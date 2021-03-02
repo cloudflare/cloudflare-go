@@ -2,6 +2,7 @@ package cloudflare
 
 import (
 	"bytes"
+	"context"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
@@ -277,16 +278,16 @@ func getRandomPartName() string {
 // DeleteWorker deletes worker for a zone.
 //
 // API reference: https://api.cloudflare.com/#worker-script-delete-worker
-func (api *API) DeleteWorker(requestParams *WorkerRequestParams) (WorkerScriptResponse, error) {
+func (api *API) DeleteWorker(ctx context.Context, requestParams *WorkerRequestParams) (WorkerScriptResponse, error) {
 	// if ScriptName is provided we will treat as org request
 	if requestParams.ScriptName != "" {
-		return api.deleteWorkerWithName(requestParams.ScriptName)
+		return api.deleteWorkerWithName(ctx, requestParams.ScriptName)
 	}
 	uri := "/zones/" + requestParams.ZoneID + "/workers/script"
-	res, err := api.makeRequest("DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	var r WorkerScriptResponse
 	if err != nil {
-		return r, errors.Wrap(err, errMakeRequestError)
+		return r, err
 	}
 	err = json.Unmarshal(res, &r)
 	if err != nil {
@@ -299,15 +300,15 @@ func (api *API) DeleteWorker(requestParams *WorkerRequestParams) (WorkerScriptRe
 // Sccount must be specified as api option https://godoc.org/github.com/cloudflare/cloudflare-go#UsingAccount
 //
 // API reference: https://developers.cloudflare.com/workers/tooling/api/scripts/
-func (api *API) deleteWorkerWithName(scriptName string) (WorkerScriptResponse, error) {
+func (api *API) deleteWorkerWithName(ctx context.Context, scriptName string) (WorkerScriptResponse, error) {
 	if api.AccountID == "" {
 		return WorkerScriptResponse{}, errors.New("account ID required")
 	}
 	uri := "/accounts/" + api.AccountID + "/workers/scripts/" + scriptName
-	res, err := api.makeRequest("DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	var r WorkerScriptResponse
 	if err != nil {
-		return r, errors.Wrap(err, errMakeRequestError)
+		return r, err
 	}
 	err = json.Unmarshal(res, &r)
 	if err != nil {
@@ -319,15 +320,15 @@ func (api *API) deleteWorkerWithName(scriptName string) (WorkerScriptResponse, e
 // DownloadWorker fetch raw script content for your worker returns []byte containing worker code js
 //
 // API reference: https://api.cloudflare.com/#worker-script-download-worker
-func (api *API) DownloadWorker(requestParams *WorkerRequestParams) (WorkerScriptResponse, error) {
+func (api *API) DownloadWorker(ctx context.Context, requestParams *WorkerRequestParams) (WorkerScriptResponse, error) {
 	if requestParams.ScriptName != "" {
-		return api.downloadWorkerWithName(requestParams.ScriptName)
+		return api.downloadWorkerWithName(ctx, requestParams.ScriptName)
 	}
 	uri := "/zones/" + requestParams.ZoneID + "/workers/script"
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	var r WorkerScriptResponse
 	if err != nil {
-		return r, errors.Wrap(err, errMakeRequestError)
+		return r, err
 	}
 	r.Script = string(res)
 	r.Success = true
@@ -337,15 +338,15 @@ func (api *API) DownloadWorker(requestParams *WorkerRequestParams) (WorkerScript
 // DownloadWorkerWithName fetch raw script content for your worker returns string containing worker code js
 //
 // API reference: https://developers.cloudflare.com/workers/tooling/api/scripts/
-func (api *API) downloadWorkerWithName(scriptName string) (WorkerScriptResponse, error) {
+func (api *API) downloadWorkerWithName(ctx context.Context, scriptName string) (WorkerScriptResponse, error) {
 	if api.AccountID == "" {
 		return WorkerScriptResponse{}, errors.New("account ID required")
 	}
 	uri := "/accounts/" + api.AccountID + "/workers/scripts/" + scriptName
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	var r WorkerScriptResponse
 	if err != nil {
-		return r, errors.Wrap(err, errMakeRequestError)
+		return r, err
 	}
 	r.Script = string(res)
 	r.Success = true
@@ -353,7 +354,7 @@ func (api *API) downloadWorkerWithName(scriptName string) (WorkerScriptResponse,
 }
 
 // ListWorkerBindings returns all the bindings for a particular worker
-func (api *API) ListWorkerBindings(requestParams *WorkerRequestParams) (WorkerBindingListResponse, error) {
+func (api *API) ListWorkerBindings(ctx context.Context, requestParams *WorkerRequestParams) (WorkerBindingListResponse, error) {
 	if requestParams.ScriptName == "" {
 		return WorkerBindingListResponse{}, errors.New("ScriptName is required")
 	}
@@ -368,9 +369,9 @@ func (api *API) ListWorkerBindings(requestParams *WorkerRequestParams) (WorkerBi
 		Bindings []workerBindingMeta `json:"result"`
 	}
 	var r WorkerBindingListResponse
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return r, errors.Wrap(err, errMakeRequestError)
+		return r, err
 	}
 	err = json.Unmarshal(res, &jsonRes)
 	if err != nil {
@@ -440,9 +441,9 @@ func (b *bindingContentReader) Read(p []byte) (n int, err error) {
 	// Lazily load the content when Read() is first called
 	if b.content == nil {
 		uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/bindings/%s/content", b.api.AccountID, b.requestParams.ScriptName, b.bindingName)
-		res, err := b.api.makeRequest("GET", uri, nil)
+		res, err := b.api.makeRequest(http.MethodGet, uri, nil)
 		if err != nil {
-			return 0, errors.Wrap(err, errMakeRequestError)
+			return 0, err
 		}
 		b.content = res
 	}
@@ -470,14 +471,14 @@ func (b *bindingContentReader) Read(p []byte) (n int, err error) {
 // ListWorkerScripts returns list of worker scripts for given account.
 //
 // API reference: https://developers.cloudflare.com/workers/tooling/api/scripts/
-func (api *API) ListWorkerScripts() (WorkerListResponse, error) {
+func (api *API) ListWorkerScripts(ctx context.Context) (WorkerListResponse, error) {
 	if api.AccountID == "" {
 		return WorkerListResponse{}, errors.New("account ID required")
 	}
 	uri := "/accounts/" + api.AccountID + "/workers/scripts"
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return WorkerListResponse{}, errors.Wrap(err, errMakeRequestError)
+		return WorkerListResponse{}, err
 	}
 	var r WorkerListResponse
 	err = json.Unmarshal(res, &r)
@@ -490,35 +491,35 @@ func (api *API) ListWorkerScripts() (WorkerListResponse, error) {
 // UploadWorker push raw script content for your worker.
 //
 // API reference: https://api.cloudflare.com/#worker-script-upload-worker
-func (api *API) UploadWorker(requestParams *WorkerRequestParams, data string) (WorkerScriptResponse, error) {
+func (api *API) UploadWorker(ctx context.Context, requestParams *WorkerRequestParams, data string) (WorkerScriptResponse, error) {
 	if requestParams.ScriptName != "" {
-		return api.uploadWorkerWithName(requestParams.ScriptName, "application/javascript", []byte(data))
+		return api.uploadWorkerWithName(ctx, requestParams.ScriptName, "application/javascript", []byte(data))
 	}
-	return api.uploadWorkerForZone(requestParams.ZoneID, "application/javascript", []byte(data))
+	return api.uploadWorkerForZone(ctx, requestParams.ZoneID, "application/javascript", []byte(data))
 }
 
 // UploadWorkerWithBindings push raw script content and bindings for your worker
 //
 // API reference: https://api.cloudflare.com/#worker-script-upload-worker
-func (api *API) UploadWorkerWithBindings(requestParams *WorkerRequestParams, data *WorkerScriptParams) (WorkerScriptResponse, error) {
+func (api *API) UploadWorkerWithBindings(ctx context.Context, requestParams *WorkerRequestParams, data *WorkerScriptParams) (WorkerScriptResponse, error) {
 	contentType, body, err := formatMultipartBody(data)
 	if err != nil {
 		return WorkerScriptResponse{}, err
 	}
 	if requestParams.ScriptName != "" {
-		return api.uploadWorkerWithName(requestParams.ScriptName, contentType, body)
+		return api.uploadWorkerWithName(ctx, requestParams.ScriptName, contentType, body)
 	}
-	return api.uploadWorkerForZone(requestParams.ZoneID, contentType, body)
+	return api.uploadWorkerForZone(ctx, requestParams.ZoneID, contentType, body)
 }
 
-func (api *API) uploadWorkerForZone(zoneID, contentType string, body []byte) (WorkerScriptResponse, error) {
+func (api *API) uploadWorkerForZone(ctx context.Context, zoneID, contentType string, body []byte) (WorkerScriptResponse, error) {
 	uri := "/zones/" + zoneID + "/workers/script"
 	headers := make(http.Header)
 	headers.Set("Content-Type", contentType)
-	res, err := api.makeRequestWithHeaders("PUT", uri, body, headers)
+	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPut, uri, body, headers)
 	var r WorkerScriptResponse
 	if err != nil {
-		return r, errors.Wrap(err, errMakeRequestError)
+		return r, err
 	}
 	err = json.Unmarshal(res, &r)
 	if err != nil {
@@ -527,17 +528,17 @@ func (api *API) uploadWorkerForZone(zoneID, contentType string, body []byte) (Wo
 	return r, nil
 }
 
-func (api *API) uploadWorkerWithName(scriptName, contentType string, body []byte) (WorkerScriptResponse, error) {
+func (api *API) uploadWorkerWithName(ctx context.Context, scriptName, contentType string, body []byte) (WorkerScriptResponse, error) {
 	if api.AccountID == "" {
 		return WorkerScriptResponse{}, errors.New("account ID required")
 	}
 	uri := "/accounts/" + api.AccountID + "/workers/scripts/" + scriptName
 	headers := make(http.Header)
 	headers.Set("Content-Type", contentType)
-	res, err := api.makeRequestWithHeaders("PUT", uri, body, headers)
+	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPut, uri, body, headers)
 	var r WorkerScriptResponse
 	if err != nil {
-		return r, errors.Wrap(err, errMakeRequestError)
+		return r, err
 	}
 	err = json.Unmarshal(res, &r)
 	if err != nil {
@@ -620,16 +621,16 @@ func formatMultipartBody(params *WorkerScriptParams) (string, []byte, error) {
 // CreateWorkerRoute creates worker route for a zone
 //
 // API reference: https://api.cloudflare.com/#worker-filters-create-filter, https://api.cloudflare.com/#worker-routes-create-route
-func (api *API) CreateWorkerRoute(zoneID string, route WorkerRoute) (WorkerRouteResponse, error) {
+func (api *API) CreateWorkerRoute(ctx context.Context, zoneID string, route WorkerRoute) (WorkerRouteResponse, error) {
 	pathComponent, err := getRouteEndpoint(api, route)
 	if err != nil {
 		return WorkerRouteResponse{}, err
 	}
 
 	uri := "/zones/" + zoneID + "/workers/" + pathComponent
-	res, err := api.makeRequest("POST", uri, route)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, route)
 	if err != nil {
-		return WorkerRouteResponse{}, errors.Wrap(err, errMakeRequestError)
+		return WorkerRouteResponse{}, err
 	}
 	var r WorkerRouteResponse
 	err = json.Unmarshal(res, &r)
@@ -642,11 +643,11 @@ func (api *API) CreateWorkerRoute(zoneID string, route WorkerRoute) (WorkerRoute
 // DeleteWorkerRoute deletes worker route for a zone
 //
 // API reference: https://api.cloudflare.com/#worker-routes-delete-route
-func (api *API) DeleteWorkerRoute(zoneID string, routeID string) (WorkerRouteResponse, error) {
+func (api *API) DeleteWorkerRoute(ctx context.Context, zoneID string, routeID string) (WorkerRouteResponse, error) {
 	uri := "/zones/" + zoneID + "/workers/routes/" + routeID
-	res, err := api.makeRequest("DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return WorkerRouteResponse{}, errors.Wrap(err, errMakeRequestError)
+		return WorkerRouteResponse{}, err
 	}
 	var r WorkerRouteResponse
 	err = json.Unmarshal(res, &r)
@@ -659,7 +660,7 @@ func (api *API) DeleteWorkerRoute(zoneID string, routeID string) (WorkerRouteRes
 // ListWorkerRoutes returns list of worker routes
 //
 // API reference: https://api.cloudflare.com/#worker-filters-list-filters, https://api.cloudflare.com/#worker-routes-list-routes
-func (api *API) ListWorkerRoutes(zoneID string) (WorkerRoutesResponse, error) {
+func (api *API) ListWorkerRoutes(ctx context.Context, zoneID string) (WorkerRoutesResponse, error) {
 	pathComponent := "filters"
 	// Unfortunately we don't have a good signal of whether the user is wanting
 	// to use the deprecated filters endpoint (https://api.cloudflare.com/#worker-filters-list-filters)
@@ -674,9 +675,9 @@ func (api *API) ListWorkerRoutes(zoneID string) (WorkerRoutesResponse, error) {
 		pathComponent = "routes"
 	}
 	uri := "/zones/" + zoneID + "/workers/" + pathComponent
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return WorkerRoutesResponse{}, errors.Wrap(err, errMakeRequestError)
+		return WorkerRoutesResponse{}, err
 	}
 	var r WorkerRoutesResponse
 	err = json.Unmarshal(res, &r)
@@ -698,15 +699,15 @@ func (api *API) ListWorkerRoutes(zoneID string) (WorkerRoutesResponse, error) {
 // UpdateWorkerRoute updates worker route for a zone.
 //
 // API reference: https://api.cloudflare.com/#worker-filters-update-filter, https://api.cloudflare.com/#worker-routes-update-route
-func (api *API) UpdateWorkerRoute(zoneID string, routeID string, route WorkerRoute) (WorkerRouteResponse, error) {
+func (api *API) UpdateWorkerRoute(ctx context.Context, zoneID string, routeID string, route WorkerRoute) (WorkerRouteResponse, error) {
 	pathComponent, err := getRouteEndpoint(api, route)
 	if err != nil {
 		return WorkerRouteResponse{}, err
 	}
 	uri := "/zones/" + zoneID + "/workers/" + pathComponent + "/" + routeID
-	res, err := api.makeRequest("PUT", uri, route)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, route)
 	if err != nil {
-		return WorkerRouteResponse{}, errors.Wrap(err, errMakeRequestError)
+		return WorkerRouteResponse{}, err
 	}
 	var r WorkerRouteResponse
 	err = json.Unmarshal(res, &r)

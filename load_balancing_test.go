@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -15,7 +16,7 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		b, err := ioutil.ReadAll(r.Body)
 		defer r.Body.Close()
@@ -112,7 +113,7 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 		},
 	}
 
-	actual, err := client.CreateLoadBalancerPool(request)
+	actual, err := client.CreateLoadBalancerPool(context.Background(), request)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -123,7 +124,7 @@ func TestListLoadBalancerPools(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
             "success": true,
@@ -182,7 +183,7 @@ func TestListLoadBalancerPools(t *testing.T) {
 		},
 	}
 
-	actual, err := client.ListLoadBalancerPools()
+	actual, err := client.ListLoadBalancerPools(context.Background())
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -193,7 +194,7 @@ func TestLoadBalancerPoolDetails(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
             "success": true,
@@ -242,12 +243,12 @@ func TestLoadBalancerPoolDetails(t *testing.T) {
 		NotificationEmail: "someone@example.com",
 	}
 
-	actual, err := client.LoadBalancerPoolDetails("17b5962d775c646f3f9725cbc7a53df4")
+	actual, err := client.LoadBalancerPoolDetails(context.Background(), "17b5962d775c646f3f9725cbc7a53df4")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	_, err = client.LoadBalancerPoolDetails("bar")
+	_, err = client.LoadBalancerPoolDetails(context.Background(), "bar")
 	assert.Error(t, err)
 }
 
@@ -256,7 +257,7 @@ func TestDeleteLoadBalancerPool(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "DELETE", "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodDelete, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
             "success": true,
@@ -269,8 +270,8 @@ func TestDeleteLoadBalancerPool(t *testing.T) {
 	}
 
 	mux.HandleFunc("/user/load_balancers/pools/17b5962d775c646f3f9725cbc7a53df4", handler)
-	assert.NoError(t, client.DeleteLoadBalancerPool("17b5962d775c646f3f9725cbc7a53df4"))
-	assert.Error(t, client.DeleteLoadBalancerPool("bar"))
+	assert.NoError(t, client.DeleteLoadBalancerPool(context.Background(), "17b5962d775c646f3f9725cbc7a53df4"))
+	assert.Error(t, client.DeleteLoadBalancerPool(context.Background(), "bar"))
 }
 
 func TestModifyLoadBalancerPool(t *testing.T) {
@@ -278,7 +279,7 @@ func TestModifyLoadBalancerPool(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "PUT", "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPut, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		b, err := ioutil.ReadAll(r.Body)
 		defer r.Body.Close()
@@ -371,7 +372,7 @@ func TestModifyLoadBalancerPool(t *testing.T) {
 		},
 	}
 
-	actual, err := client.ModifyLoadBalancerPool(request)
+	actual, err := client.ModifyLoadBalancerPool(context.Background(), request)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -382,7 +383,7 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		b, err := ioutil.ReadAll(r.Body)
 		defer r.Body.Close()
@@ -451,7 +452,7 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
 		ModifiedOn:  &modifiedOn,
 		Type:        "https",
 		Description: "Login page monitor",
-		Method:      "GET",
+		Method:      http.MethodGet,
 		Path:        "/health",
 		Header: map[string][]string{
 			"Host":     {"example.com"},
@@ -469,7 +470,7 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
 	request := LoadBalancerMonitor{
 		Type:        "https",
 		Description: "Login page monitor",
-		Method:      "GET",
+		Method:      http.MethodGet,
 		Path:        "/health",
 		Header: map[string][]string{
 			"Host":     {"example.com"},
@@ -485,7 +486,7 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
 		AllowInsecure:   true,
 	}
 
-	actual, err := client.CreateLoadBalancerMonitor(request)
+	actual, err := client.CreateLoadBalancerMonitor(context.Background(), request)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -496,7 +497,7 @@ func TestListLoadBalancerMonitors(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
             "success": true,
@@ -545,7 +546,7 @@ func TestListLoadBalancerMonitors(t *testing.T) {
 			ModifiedOn:  &modifiedOn,
 			Type:        "https",
 			Description: "Login page monitor",
-			Method:      "GET",
+			Method:      http.MethodGet,
 			Path:        "/health",
 			Header: map[string][]string{
 				"Host":     {"example.com"},
@@ -559,7 +560,7 @@ func TestListLoadBalancerMonitors(t *testing.T) {
 		},
 	}
 
-	actual, err := client.ListLoadBalancerMonitors()
+	actual, err := client.ListLoadBalancerMonitors(context.Background())
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -570,7 +571,7 @@ func TestLoadBalancerMonitorDetails(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
             "success": true,
@@ -613,7 +614,7 @@ func TestLoadBalancerMonitorDetails(t *testing.T) {
 		ModifiedOn:  &modifiedOn,
 		Type:        "https",
 		Description: "Login page monitor",
-		Method:      "GET",
+		Method:      http.MethodGet,
 		Path:        "/health",
 		Header: map[string][]string{
 			"Host":     {"example.com"},
@@ -629,12 +630,12 @@ func TestLoadBalancerMonitorDetails(t *testing.T) {
 		AllowInsecure:   true,
 	}
 
-	actual, err := client.LoadBalancerMonitorDetails("f1aba936b94213e5b8dca0c0dbf1f9cc")
+	actual, err := client.LoadBalancerMonitorDetails(context.Background(), "f1aba936b94213e5b8dca0c0dbf1f9cc")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	_, err = client.LoadBalancerMonitorDetails("bar")
+	_, err = client.LoadBalancerMonitorDetails(context.Background(), "bar")
 	assert.Error(t, err)
 }
 
@@ -643,7 +644,7 @@ func TestDeleteLoadBalancerMonitor(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "DELETE", "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodDelete, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
             "success": true,
@@ -656,8 +657,8 @@ func TestDeleteLoadBalancerMonitor(t *testing.T) {
 	}
 
 	mux.HandleFunc("/user/load_balancers/monitors/f1aba936b94213e5b8dca0c0dbf1f9cc", handler)
-	assert.NoError(t, client.DeleteLoadBalancerMonitor("f1aba936b94213e5b8dca0c0dbf1f9cc"))
-	assert.Error(t, client.DeleteLoadBalancerMonitor("bar"))
+	assert.NoError(t, client.DeleteLoadBalancerMonitor(context.Background(), "f1aba936b94213e5b8dca0c0dbf1f9cc"))
+	assert.Error(t, client.DeleteLoadBalancerMonitor(context.Background(), "bar"))
 }
 
 func TestModifyLoadBalancerMonitor(t *testing.T) {
@@ -665,7 +666,7 @@ func TestModifyLoadBalancerMonitor(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "PUT", "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPut, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		b, err := ioutil.ReadAll(r.Body)
 		defer r.Body.Close()
@@ -735,7 +736,7 @@ func TestModifyLoadBalancerMonitor(t *testing.T) {
 		ModifiedOn:  &modifiedOn,
 		Type:        "http",
 		Description: "Login page monitor",
-		Method:      "GET",
+		Method:      http.MethodGet,
 		Path:        "/status",
 		Header: map[string][]string{
 			"Host":     {"example.com"},
@@ -754,7 +755,7 @@ func TestModifyLoadBalancerMonitor(t *testing.T) {
 		ID:          "f1aba936b94213e5b8dca0c0dbf1f9cc",
 		Type:        "http",
 		Description: "Login page monitor",
-		Method:      "GET",
+		Method:      http.MethodGet,
 		Path:        "/status",
 		Header: map[string][]string{
 			"Host":     {"example.com"},
@@ -770,7 +771,7 @@ func TestModifyLoadBalancerMonitor(t *testing.T) {
 		AllowInsecure:   true,
 	}
 
-	actual, err := client.ModifyLoadBalancerMonitor(request)
+	actual, err := client.ModifyLoadBalancerMonitor(context.Background(), request)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -781,7 +782,7 @@ func TestCreateLoadBalancer(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		b, err := ioutil.ReadAll(r.Body)
 		defer r.Body.Close()
@@ -942,12 +943,12 @@ func TestCreateLoadBalancer(t *testing.T) {
 			},
 		},
 		Rules: []*LoadBalancerRule{
-			&LoadBalancerRule{
+			{
 				Name:      "example rule",
 				Condition: "cf.load_balancer.region == \"SAF\"",
 				Overrides: LoadBalancerRuleOverrides{
 					RegionPools: map[string][]string{
-						"SAF": []string{"de90f38ced07c2e2f4df50b1f61d4194"},
+						"SAF": {"de90f38ced07c2e2f4df50b1f61d4194"},
 					},
 				},
 			},
@@ -994,12 +995,12 @@ func TestCreateLoadBalancer(t *testing.T) {
 			},
 		},
 		Rules: []*LoadBalancerRule{
-			&LoadBalancerRule{
+			{
 				Name:      "example rule",
 				Condition: "cf.load_balancer.region == \"SAF\"",
 				Overrides: LoadBalancerRuleOverrides{
 					RegionPools: map[string][]string{
-						"SAF": []string{"de90f38ced07c2e2f4df50b1f61d4194"},
+						"SAF": {"de90f38ced07c2e2f4df50b1f61d4194"},
 					},
 				},
 			},
@@ -1014,7 +1015,7 @@ func TestCreateLoadBalancer(t *testing.T) {
 		},
 	}
 
-	actual, err := client.CreateLoadBalancer("199d98642c564d2e855e9661899b7252", request)
+	actual, err := client.CreateLoadBalancer(context.Background(), "199d98642c564d2e855e9661899b7252", request)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -1025,7 +1026,7 @@ func TestListLoadBalancers(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
             "success": true,
@@ -1122,7 +1123,7 @@ func TestListLoadBalancers(t *testing.T) {
 		},
 	}
 
-	actual, err := client.ListLoadBalancers("199d98642c564d2e855e9661899b7252")
+	actual, err := client.ListLoadBalancers(context.Background(), "199d98642c564d2e855e9661899b7252")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -1133,7 +1134,7 @@ func TestLoadBalancerDetails(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
             "success": true,
@@ -1220,12 +1221,12 @@ func TestLoadBalancerDetails(t *testing.T) {
 		Proxied: true,
 	}
 
-	actual, err := client.LoadBalancerDetails("199d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252")
+	actual, err := client.LoadBalancerDetails(context.Background(), "199d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	_, err = client.LoadBalancerDetails("199d98642c564d2e855e9661899b7252", "bar")
+	_, err = client.LoadBalancerDetails(context.Background(), "199d98642c564d2e855e9661899b7252", "bar")
 	assert.Error(t, err)
 }
 
@@ -1234,7 +1235,7 @@ func TestDeleteLoadBalancer(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "DELETE", "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodDelete, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
             "success": true,
@@ -1247,8 +1248,8 @@ func TestDeleteLoadBalancer(t *testing.T) {
 	}
 
 	mux.HandleFunc("/zones/199d98642c564d2e855e9661899b7252/load_balancers/699d98642c564d2e855e9661899b7252", handler)
-	assert.NoError(t, client.DeleteLoadBalancer("199d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"))
-	assert.Error(t, client.DeleteLoadBalancer("199d98642c564d2e855e9661899b7252", "bar"))
+	assert.NoError(t, client.DeleteLoadBalancer(context.Background(), "199d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"))
+	assert.Error(t, client.DeleteLoadBalancer(context.Background(), "199d98642c564d2e855e9661899b7252", "bar"))
 }
 
 func TestModifyLoadBalancer(t *testing.T) {
@@ -1256,7 +1257,7 @@ func TestModifyLoadBalancer(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "PUT", "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPut, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		b, err := ioutil.ReadAll(r.Body)
 		defer r.Body.Close()
@@ -1417,7 +1418,7 @@ func TestModifyLoadBalancer(t *testing.T) {
 		},
 	}
 
-	actual, err := client.ModifyLoadBalancer("199d98642c564d2e855e9661899b7252", request)
+	actual, err := client.ModifyLoadBalancer(context.Background(), "199d98642c564d2e855e9661899b7252", request)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -1428,7 +1429,7 @@ func TestLoadBalancerPoolHealthDetails(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
             "success": true,
@@ -1462,7 +1463,7 @@ func TestLoadBalancerPoolHealthDetails(t *testing.T) {
 			"Amsterdam, NL": {
 				Healthy: true,
 				Origins: []map[string]LoadBalancerOriginHealth{
-					map[string]LoadBalancerOriginHealth{
+					{
 						"2001:DB8::5": {
 							Healthy:       true,
 							RTT:           Duration{12*time.Millisecond + 100*time.Microsecond},
@@ -1475,7 +1476,7 @@ func TestLoadBalancerPoolHealthDetails(t *testing.T) {
 		},
 	}
 
-	actual, err := client.PoolHealthDetails("699d98642c564d2e855e9661899b7252")
+	actual, err := client.PoolHealthDetails(context.Background(), "699d98642c564d2e855e9661899b7252")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
