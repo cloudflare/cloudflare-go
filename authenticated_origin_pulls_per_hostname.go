@@ -82,7 +82,7 @@ func (api *API) UploadPerHostnameAuthenticatedOriginPullsCertificate(ctx context
 	uri := "/zones/" + zoneID + "/origin_tls_client_auth/hostnames/certificates"
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
-		return PerHostnameAuthenticatedOriginPullsCertificateDetails{}, errors.Wrap(err, errMakeRequestError)
+		return PerHostnameAuthenticatedOriginPullsCertificateDetails{}, err
 	}
 	var r PerHostnameAuthenticatedOriginPullsCertificateResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -98,7 +98,7 @@ func (api *API) GetPerHostnameAuthenticatedOriginPullsCertificate(ctx context.Co
 	uri := "/zones/" + zoneID + "/origin_tls_client_auth/hostnames/certificates/" + certificateID
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return PerHostnameAuthenticatedOriginPullsCertificateDetails{}, errors.Wrap(err, errMakeRequestError)
+		return PerHostnameAuthenticatedOriginPullsCertificateDetails{}, err
 	}
 	var r PerHostnameAuthenticatedOriginPullsCertificateResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -114,7 +114,7 @@ func (api *API) DeletePerHostnameAuthenticatedOriginPullsCertificate(ctx context
 	uri := "/zones/" + zoneID + "/origin_tls_client_auth/hostnames/certificates/" + certificateID
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return PerHostnameAuthenticatedOriginPullsCertificateDetails{}, errors.Wrap(err, errMakeRequestError)
+		return PerHostnameAuthenticatedOriginPullsCertificateDetails{}, err
 	}
 	var r PerHostnameAuthenticatedOriginPullsCertificateResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -133,7 +133,7 @@ func (api *API) EditPerHostnameAuthenticatedOriginPullsConfig(ctx context.Contex
 	}
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, conf)
 	if err != nil {
-		return []PerHostnameAuthenticatedOriginPullsDetails{}, errors.Wrap(err, errMakeRequestError)
+		return []PerHostnameAuthenticatedOriginPullsDetails{}, err
 	}
 	var r PerHostnamesAuthenticatedOriginPullsDetailsResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -149,7 +149,7 @@ func (api *API) GetPerHostnameAuthenticatedOriginPullsConfig(ctx context.Context
 	uri := "/zones/" + zoneID + "/origin_tls_client_auth/hostnames/" + hostname
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return PerHostnameAuthenticatedOriginPullsDetails{}, errors.Wrap(err, errMakeRequestError)
+		return PerHostnameAuthenticatedOriginPullsDetails{}, err
 	}
 	var r PerHostnameAuthenticatedOriginPullsDetailsResponse
 	if err := json.Unmarshal(res, &r); err != nil {

@@ -49,7 +49,7 @@ func (api *API) AccountRoles(ctx context.Context, accountID string) ([]AccountRo
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []AccountRole{}, errors.Wrap(err, errMakeRequestError)
+		return []AccountRole{}, err
 	}
 
 	var accountRolesListResponse AccountRolesListResponse
@@ -69,7 +69,7 @@ func (api *API) AccountRole(ctx context.Context, accountID string, roleID string
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return AccountRole{}, errors.Wrap(err, errMakeRequestError)
+		return AccountRole{}, err
 	}
 
 	var accountRole AccountRoleDetailResponse

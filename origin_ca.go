@@ -95,7 +95,7 @@ func (api *API) CreateOriginCertificate(ctx context.Context, certificate OriginC
 	res, err := api.makeRequestWithAuthType(ctx, http.MethodPost, uri, certificate, AuthUserService)
 
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	var originResponse *originCACertificateResponse
@@ -127,7 +127,7 @@ func (api *API) OriginCertificates(ctx context.Context, options OriginCACertific
 	res, err := api.makeRequestWithAuthType(ctx, http.MethodGet, uri, nil, AuthUserService)
 
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	var originResponse *originCACertificateResponseList
@@ -155,7 +155,7 @@ func (api *API) OriginCertificate(ctx context.Context, certificateID string) (*O
 	res, err := api.makeRequestWithAuthType(ctx, http.MethodGet, uri, nil, AuthUserService)
 
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	var originResponse *originCACertificateResponse
@@ -183,7 +183,7 @@ func (api *API) RevokeOriginCertificate(ctx context.Context, certificateID strin
 	res, err := api.makeRequestWithAuthType(ctx, http.MethodDelete, uri, nil, AuthUserService)
 
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	var originResponse *originCACertificateResponseRevoke

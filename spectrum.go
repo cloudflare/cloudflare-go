@@ -269,7 +269,7 @@ func (api *API) SpectrumApplications(ctx context.Context, zoneID string) ([]Spec
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []SpectrumApplication{}, errors.Wrap(err, errMakeRequestError)
+		return []SpectrumApplication{}, err
 	}
 
 	var spectrumApplications SpectrumApplicationsDetailResponse
@@ -293,7 +293,7 @@ func (api *API) SpectrumApplication(ctx context.Context, zoneID string, applicat
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return SpectrumApplication{}, errors.Wrap(err, errMakeRequestError)
+		return SpectrumApplication{}, err
 	}
 
 	var spectrumApplication SpectrumApplicationDetailResponse
@@ -313,7 +313,7 @@ func (api *API) CreateSpectrumApplication(ctx context.Context, zoneID string, ap
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, appDetails)
 	if err != nil {
-		return SpectrumApplication{}, errors.Wrap(err, errMakeRequestError)
+		return SpectrumApplication{}, err
 	}
 
 	var spectrumApplication SpectrumApplicationDetailResponse
@@ -337,7 +337,7 @@ func (api *API) UpdateSpectrumApplication(ctx context.Context, zoneID, appID str
 
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, appDetails)
 	if err != nil {
-		return SpectrumApplication{}, errors.Wrap(err, errMakeRequestError)
+		return SpectrumApplication{}, err
 	}
 
 	var spectrumApplication SpectrumApplicationDetailResponse
@@ -361,7 +361,7 @@ func (api *API) DeleteSpectrumApplication(ctx context.Context, zoneID string, ap
 
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil

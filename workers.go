@@ -287,7 +287,7 @@ func (api *API) DeleteWorker(ctx context.Context, requestParams *WorkerRequestPa
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	var r WorkerScriptResponse
 	if err != nil {
-		return r, errors.Wrap(err, errMakeRequestError)
+		return r, err
 	}
 	err = json.Unmarshal(res, &r)
 	if err != nil {
@@ -308,7 +308,7 @@ func (api *API) deleteWorkerWithName(ctx context.Context, scriptName string) (Wo
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	var r WorkerScriptResponse
 	if err != nil {
-		return r, errors.Wrap(err, errMakeRequestError)
+		return r, err
 	}
 	err = json.Unmarshal(res, &r)
 	if err != nil {
@@ -328,7 +328,7 @@ func (api *API) DownloadWorker(ctx context.Context, requestParams *WorkerRequest
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	var r WorkerScriptResponse
 	if err != nil {
-		return r, errors.Wrap(err, errMakeRequestError)
+		return r, err
 	}
 	r.Script = string(res)
 	r.Success = true
@@ -346,7 +346,7 @@ func (api *API) downloadWorkerWithName(ctx context.Context, scriptName string) (
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	var r WorkerScriptResponse
 	if err != nil {
-		return r, errors.Wrap(err, errMakeRequestError)
+		return r, err
 	}
 	r.Script = string(res)
 	r.Success = true
@@ -371,7 +371,7 @@ func (api *API) ListWorkerBindings(ctx context.Context, requestParams *WorkerReq
 	var r WorkerBindingListResponse
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return r, errors.Wrap(err, errMakeRequestError)
+		return r, err
 	}
 	err = json.Unmarshal(res, &jsonRes)
 	if err != nil {
@@ -443,7 +443,7 @@ func (b *bindingContentReader) Read(p []byte) (n int, err error) {
 		uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/bindings/%s/content", b.api.AccountID, b.requestParams.ScriptName, b.bindingName)
 		res, err := b.api.makeRequest(http.MethodGet, uri, nil)
 		if err != nil {
-			return 0, errors.Wrap(err, errMakeRequestError)
+			return 0, err
 		}
 		b.content = res
 	}
@@ -478,7 +478,7 @@ func (api *API) ListWorkerScripts(ctx context.Context) (WorkerListResponse, erro
 	uri := "/accounts/" + api.AccountID + "/workers/scripts"
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return WorkerListResponse{}, errors.Wrap(err, errMakeRequestError)
+		return WorkerListResponse{}, err
 	}
 	var r WorkerListResponse
 	err = json.Unmarshal(res, &r)
@@ -519,7 +519,7 @@ func (api *API) uploadWorkerForZone(ctx context.Context, zoneID, contentType str
 	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPut, uri, body, headers)
 	var r WorkerScriptResponse
 	if err != nil {
-		return r, errors.Wrap(err, errMakeRequestError)
+		return r, err
 	}
 	err = json.Unmarshal(res, &r)
 	if err != nil {
@@ -538,7 +538,7 @@ func (api *API) uploadWorkerWithName(ctx context.Context, scriptName, contentTyp
 	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPut, uri, body, headers)
 	var r WorkerScriptResponse
 	if err != nil {
-		return r, errors.Wrap(err, errMakeRequestError)
+		return r, err
 	}
 	err = json.Unmarshal(res, &r)
 	if err != nil {
@@ -630,7 +630,7 @@ func (api *API) CreateWorkerRoute(ctx context.Context, zoneID string, route Work
 	uri := "/zones/" + zoneID + "/workers/" + pathComponent
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, route)
 	if err != nil {
-		return WorkerRouteResponse{}, errors.Wrap(err, errMakeRequestError)
+		return WorkerRouteResponse{}, err
 	}
 	var r WorkerRouteResponse
 	err = json.Unmarshal(res, &r)
@@ -647,7 +647,7 @@ func (api *API) DeleteWorkerRoute(ctx context.Context, zoneID string, routeID st
 	uri := "/zones/" + zoneID + "/workers/routes/" + routeID
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return WorkerRouteResponse{}, errors.Wrap(err, errMakeRequestError)
+		return WorkerRouteResponse{}, err
 	}
 	var r WorkerRouteResponse
 	err = json.Unmarshal(res, &r)
@@ -677,7 +677,7 @@ func (api *API) ListWorkerRoutes(ctx context.Context, zoneID string) (WorkerRout
 	uri := "/zones/" + zoneID + "/workers/" + pathComponent
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return WorkerRoutesResponse{}, errors.Wrap(err, errMakeRequestError)
+		return WorkerRoutesResponse{}, err
 	}
 	var r WorkerRoutesResponse
 	err = json.Unmarshal(res, &r)
@@ -707,7 +707,7 @@ func (api *API) UpdateWorkerRoute(ctx context.Context, zoneID string, routeID st
 	uri := "/zones/" + zoneID + "/workers/" + pathComponent + "/" + routeID
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, route)
 	if err != nil {
-		return WorkerRouteResponse{}, errors.Wrap(err, errMakeRequestError)
+		return WorkerRouteResponse{}, err
 	}
 	var r WorkerRouteResponse
 	err = json.Unmarshal(res, &r)

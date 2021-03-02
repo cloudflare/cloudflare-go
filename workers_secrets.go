@@ -40,7 +40,7 @@ func (api *API) SetWorkersSecret(ctx context.Context, script string, req *Worker
 	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/secrets", api.AccountID, script)
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, req)
 	if err != nil {
-		return WorkersPutSecretResponse{}, errors.Wrap(err, errMakeRequestError)
+		return WorkersPutSecretResponse{}, err
 	}
 
 	result := WorkersPutSecretResponse{}
@@ -57,7 +57,7 @@ func (api *API) DeleteWorkersSecret(ctx context.Context, script, secretName stri
 	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/secrets/%s", api.AccountID, script, secretName)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return Response{}, errors.Wrap(err, errMakeRequestError)
+		return Response{}, err
 	}
 
 	result := Response{}
@@ -74,7 +74,7 @@ func (api *API) ListWorkersSecrets(ctx context.Context, script string) (WorkersL
 	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/secrets", api.AccountID, script)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return WorkersListSecretsResponse{}, errors.Wrap(err, errMakeRequestError)
+		return WorkersListSecretsResponse{}, err
 	}
 
 	result := WorkersListSecretsResponse{}

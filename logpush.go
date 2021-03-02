@@ -99,7 +99,7 @@ func (api *API) CreateLogpushJob(ctx context.Context, zoneID string, job Logpush
 	uri := "/zones/" + zoneID + "/logpush/jobs"
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, job)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 	var r LogpushJobDetailsResponse
 	err = json.Unmarshal(res, &r)
@@ -116,7 +116,7 @@ func (api *API) LogpushJobs(ctx context.Context, zoneID string) ([]LogpushJob, e
 	uri := "/zones/" + zoneID + "/logpush/jobs"
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []LogpushJob{}, errors.Wrap(err, errMakeRequestError)
+		return []LogpushJob{}, err
 	}
 	var r LogpushJobsResponse
 	err = json.Unmarshal(res, &r)
@@ -133,7 +133,7 @@ func (api *API) LogpushJobsForDataset(ctx context.Context, zoneID, dataset strin
 	uri := "/zones/" + zoneID + "/logpush/datasets/" + dataset + "/jobs"
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []LogpushJob{}, errors.Wrap(err, errMakeRequestError)
+		return []LogpushJob{}, err
 	}
 	var r LogpushJobsResponse
 	err = json.Unmarshal(res, &r)
@@ -150,7 +150,7 @@ func (api *API) LogpushFields(ctx context.Context, zoneID, dataset string) (Logp
 	uri := "/zones/" + zoneID + "/logpush/datasets/" + dataset + "/fields"
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return LogpushFields{}, errors.Wrap(err, errMakeRequestError)
+		return LogpushFields{}, err
 	}
 	var r LogpushFieldsResponse
 	err = json.Unmarshal(res, &r)
@@ -167,7 +167,7 @@ func (api *API) LogpushJob(ctx context.Context, zoneID string, jobID int) (Logpu
 	uri := "/zones/" + zoneID + "/logpush/jobs/" + strconv.Itoa(jobID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return LogpushJob{}, errors.Wrap(err, errMakeRequestError)
+		return LogpushJob{}, err
 	}
 	var r LogpushJobDetailsResponse
 	err = json.Unmarshal(res, &r)
@@ -184,7 +184,7 @@ func (api *API) UpdateLogpushJob(ctx context.Context, zoneID string, jobID int, 
 	uri := "/zones/" + zoneID + "/logpush/jobs/" + strconv.Itoa(jobID)
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, job)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 	var r LogpushJobDetailsResponse
 	err = json.Unmarshal(res, &r)
@@ -201,7 +201,7 @@ func (api *API) DeleteLogpushJob(ctx context.Context, zoneID string, jobID int) 
 	uri := "/zones/" + zoneID + "/logpush/jobs/" + strconv.Itoa(jobID)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 	var r LogpushJobDetailsResponse
 	err = json.Unmarshal(res, &r)
@@ -220,7 +220,7 @@ func (api *API) GetLogpushOwnershipChallenge(ctx context.Context, zoneID, destin
 		DestinationConf: destinationConf,
 	})
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 	var r LogpushGetOwnershipChallengeResponse
 	err = json.Unmarshal(res, &r)
@@ -245,7 +245,7 @@ func (api *API) ValidateLogpushOwnershipChallenge(ctx context.Context, zoneID, d
 		OwnershipChallenge: ownershipChallenge,
 	})
 	if err != nil {
-		return false, errors.Wrap(err, errMakeRequestError)
+		return false, err
 	}
 	var r LogpushGetOwnershipChallengeResponse
 	err = json.Unmarshal(res, &r)
@@ -264,7 +264,7 @@ func (api *API) CheckLogpushDestinationExists(ctx context.Context, zoneID, desti
 		DestinationConf: destinationConf,
 	})
 	if err != nil {
-		return false, errors.Wrap(err, errMakeRequestError)
+		return false, err
 	}
 	var r LogpushDestinationExistsResponse
 	err = json.Unmarshal(res, &r)

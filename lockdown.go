@@ -51,7 +51,7 @@ func (api *API) CreateZoneLockdown(ctx context.Context, zoneID string, ld ZoneLo
 	uri := "/zones/" + zoneID + "/firewall/lockdowns"
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, ld)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &ZoneLockdownResponse{}
@@ -71,7 +71,7 @@ func (api *API) UpdateZoneLockdown(ctx context.Context, zoneID string, id string
 	uri := "/zones/" + zoneID + "/firewall/lockdowns/" + id
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, ld)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &ZoneLockdownResponse{}
@@ -91,7 +91,7 @@ func (api *API) DeleteZoneLockdown(ctx context.Context, zoneID string, id string
 	uri := "/zones/" + zoneID + "/firewall/lockdowns/" + id
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &ZoneLockdownResponse{}
@@ -111,7 +111,7 @@ func (api *API) ZoneLockdown(ctx context.Context, zoneID string, id string) (*Zo
 	uri := "/zones/" + zoneID + "/firewall/lockdowns/" + id
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &ZoneLockdownResponse{}
@@ -140,7 +140,7 @@ func (api *API) ListZoneLockdowns(ctx context.Context, zoneID string, page int) 
 	uri := "/zones/" + zoneID + "/firewall/lockdowns" + query
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &ZoneLockdownListResponse{}

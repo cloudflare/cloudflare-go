@@ -88,7 +88,7 @@ func (api *API) accessPolicies(ctx context.Context, id string, applicationID str
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []AccessPolicy{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+		return []AccessPolicy{}, ResultInfo{}, err
 	}
 
 	var accessPolicyListResponse AccessPolicyListResponse
@@ -125,7 +125,7 @@ func (api *API) accessPolicy(ctx context.Context, id string, applicationID strin
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return AccessPolicy{}, errors.Wrap(err, errMakeRequestError)
+		return AccessPolicy{}, err
 	}
 
 	var accessPolicyDetailResponse AccessPolicyDetailResponse
@@ -161,7 +161,7 @@ func (api *API) createAccessPolicy(ctx context.Context, id, applicationID string
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, accessPolicy)
 	if err != nil {
-		return AccessPolicy{}, errors.Wrap(err, errMakeRequestError)
+		return AccessPolicy{}, err
 	}
 
 	var accessPolicyDetailResponse AccessPolicyDetailResponse
@@ -201,7 +201,7 @@ func (api *API) updateAccessPolicy(ctx context.Context, id, applicationID string
 
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, accessPolicy)
 	if err != nil {
-		return AccessPolicy{}, errors.Wrap(err, errMakeRequestError)
+		return AccessPolicy{}, err
 	}
 
 	var accessPolicyDetailResponse AccessPolicyDetailResponse
@@ -238,7 +238,7 @@ func (api *API) deleteAccessPolicy(ctx context.Context, id, applicationID, acces
 
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil

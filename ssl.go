@@ -68,7 +68,7 @@ func (api *API) CreateSSL(ctx context.Context, zoneID string, options ZoneCustom
 	uri := "/zones/" + zoneID + "/custom_certificates"
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, options)
 	if err != nil {
-		return ZoneCustomSSL{}, errors.Wrap(err, errMakeRequestError)
+		return ZoneCustomSSL{}, err
 	}
 	var r zoneCustomSSLResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -84,7 +84,7 @@ func (api *API) ListSSL(ctx context.Context, zoneID string) ([]ZoneCustomSSL, er
 	uri := "/zones/" + zoneID + "/custom_certificates"
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 	var r zoneCustomSSLsResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -100,7 +100,7 @@ func (api *API) SSLDetails(ctx context.Context, zoneID, certificateID string) (Z
 	uri := "/zones/" + zoneID + "/custom_certificates/" + certificateID
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return ZoneCustomSSL{}, errors.Wrap(err, errMakeRequestError)
+		return ZoneCustomSSL{}, err
 	}
 	var r zoneCustomSSLResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -116,7 +116,7 @@ func (api *API) UpdateSSL(ctx context.Context, zoneID, certificateID string, opt
 	uri := "/zones/" + zoneID + "/custom_certificates/" + certificateID
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, options)
 	if err != nil {
-		return ZoneCustomSSL{}, errors.Wrap(err, errMakeRequestError)
+		return ZoneCustomSSL{}, err
 	}
 	var r zoneCustomSSLResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -138,7 +138,7 @@ func (api *API) ReprioritizeSSL(ctx context.Context, zoneID string, p []ZoneCust
 	}
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 	var r zoneCustomSSLsResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -153,7 +153,7 @@ func (api *API) ReprioritizeSSL(ctx context.Context, zoneID string, p []ZoneCust
 func (api *API) DeleteSSL(ctx context.Context, zoneID, certificateID string) error {
 	uri := "/zones/" + zoneID + "/custom_certificates/" + certificateID
 	if _, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil); err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 	return nil
 }

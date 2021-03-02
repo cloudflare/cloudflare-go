@@ -53,7 +53,7 @@ func (api *API) CreateUserAgentRule(ctx context.Context, zoneID string, ld UserA
 	uri := "/zones/" + zoneID + "/firewall/ua_rules"
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, ld)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &UserAgentRuleResponse{}
@@ -72,7 +72,7 @@ func (api *API) UpdateUserAgentRule(ctx context.Context, zoneID string, id strin
 	uri := "/zones/" + zoneID + "/firewall/ua_rules/" + id
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, ld)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &UserAgentRuleResponse{}
@@ -91,7 +91,7 @@ func (api *API) DeleteUserAgentRule(ctx context.Context, zoneID string, id strin
 	uri := "/zones/" + zoneID + "/firewall/ua_rules/" + id
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &UserAgentRuleResponse{}
@@ -110,7 +110,7 @@ func (api *API) UserAgentRule(ctx context.Context, zoneID string, id string) (*U
 	uri := "/zones/" + zoneID + "/firewall/ua_rules/" + id
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &UserAgentRuleResponse{}
@@ -138,7 +138,7 @@ func (api *API) ListUserAgentRules(ctx context.Context, zoneID string, page int)
 	uri := "/zones/" + zoneID + "/firewall/ua_rules" + query
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &UserAgentRuleListResponse{}

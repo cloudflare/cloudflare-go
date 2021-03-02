@@ -30,7 +30,7 @@ func (api *API) GetAuthenticatedOriginPullsStatus(ctx context.Context, zoneID st
 	uri := "/zones/" + zoneID + "/settings/tls_client_auth"
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return AuthenticatedOriginPulls{}, errors.Wrap(err, errMakeRequestError)
+		return AuthenticatedOriginPulls{}, err
 	}
 	var r AuthenticatedOriginPullsResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -57,7 +57,7 @@ func (api *API) SetAuthenticatedOriginPullsStatus(ctx context.Context, zoneID st
 	}
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
 	if err != nil {
-		return AuthenticatedOriginPulls{}, errors.Wrap(err, errMakeRequestError)
+		return AuthenticatedOriginPulls{}, err
 	}
 	var r AuthenticatedOriginPullsResponse
 	if err := json.Unmarshal(res, &r); err != nil {

@@ -73,7 +73,7 @@ type VirtualDNSAnalyticsResponse struct {
 func (api *API) CreateVirtualDNS(ctx context.Context, v *VirtualDNS) (*VirtualDNS, error) {
 	res, err := api.makeRequestContext(ctx, http.MethodPost, "/user/virtual_dns", v)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &VirtualDNSResponse{}
@@ -92,7 +92,7 @@ func (api *API) VirtualDNS(ctx context.Context, virtualDNSID string) (*VirtualDN
 	uri := "/user/virtual_dns/" + virtualDNSID
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &VirtualDNSResponse{}
@@ -110,7 +110,7 @@ func (api *API) VirtualDNS(ctx context.Context, virtualDNSID string) (*VirtualDN
 func (api *API) ListVirtualDNS(ctx context.Context) ([]*VirtualDNS, error) {
 	res, err := api.makeRequestContext(ctx, http.MethodGet, "/user/virtual_dns", nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &VirtualDNSListResponse{}
@@ -129,7 +129,7 @@ func (api *API) UpdateVirtualDNS(ctx context.Context, virtualDNSID string, vv Vi
 	uri := "/user/virtual_dns/" + virtualDNSID
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, vv)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	response := &VirtualDNSResponse{}
@@ -149,7 +149,7 @@ func (api *API) DeleteVirtualDNS(ctx context.Context, virtualDNSID string) error
 	uri := "/user/virtual_dns/" + virtualDNSID
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	response := &VirtualDNSResponse{}
@@ -181,7 +181,7 @@ func (api *API) VirtualDNSUserAnalytics(ctx context.Context, virtualDNSID string
 	uri := "/user/virtual_dns/" + virtualDNSID + "/dns_analytics/report?" + o.encode()
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return VirtualDNSAnalytics{}, errors.Wrap(err, errMakeRequestError)
+		return VirtualDNSAnalytics{}, err
 	}
 
 	response := VirtualDNSAnalyticsResponse{}

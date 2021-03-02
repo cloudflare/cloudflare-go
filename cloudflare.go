@@ -260,30 +260,25 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 		return nil, respErr
 	}
 
-	switch {
-	case resp.StatusCode >= http.StatusOK && resp.StatusCode < http.StatusMultipleChoices:
-	case resp.StatusCode == http.StatusUnauthorized:
-		return nil, errorFromResponse(resp.StatusCode, respBody)
-	case resp.StatusCode == http.StatusForbidden:
-		return nil, errorFromResponse(resp.StatusCode, respBody)
-	case resp.StatusCode == http.StatusServiceUnavailable,
-		resp.StatusCode == http.StatusBadGateway,
-		resp.StatusCode == http.StatusGatewayTimeout,
-		resp.StatusCode == 522,
-		resp.StatusCode == 523,
-		resp.StatusCode == 524:
-		return nil, errors.Errorf("HTTP status %d: service failure", resp.StatusCode)
-	// This isn't a great solution due to the way the `default` case is
-	// a catch all and that the `filters/validate-expr` returns a HTTP 400
-	// yet the clients need to use the HTTP body as a JSON string.
-	case resp.StatusCode == 400 && strings.HasSuffix(resp.Request.URL.Path, "/filters/validate-expr"):
-		return nil, errors.Errorf("%s", respBody)
-	default:
-		var s string
-		if respBody != nil {
-			s = string(respBody)
+	if resp.StatusCode >= http.StatusBadRequest {
+		if strings.HasSuffix(resp.Request.URL.Path, "/filters/validate-expr") {
+			return nil, errors.Errorf("%s", respBody)
 		}
-		return nil, errors.Errorf("HTTP status %d: content %q", resp.StatusCode, s)
+
+		if resp.StatusCode > http.StatusInternalServerError {
+			return nil, errors.Errorf("HTTP status %d: service failure", resp.StatusCode)
+		}
+
+		errBody := &Response{}
+		err = json.Unmarshal(respBody, &errBody)
+		if err != nil {
+			return nil, errors.Wrap(err, errUnmarshalErrorBody)
+		}
+
+		return nil, &APIRequestError{
+			StatusCode: resp.StatusCode,
+			Errors:     errBody.Errors,
+		}
 	}
 
 	return respBody, nil
@@ -394,7 +389,7 @@ type RawResponse struct {
 func (api *API) Raw(method, endpoint string, data interface{}) (json.RawMessage, error) {
 	res, err := api.makeRequest(method, endpoint, data)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	var r RawResponse
@@ -454,20 +449,4 @@ func WithPagination(opts PaginationOptions) ReqOption {
 		opt.params.Set("page", strconv.Itoa(opts.Page))
 		opt.params.Set("per_page", strconv.Itoa(opts.PerPage))
 	}
-}
-
-// errorFromResponse returns a formatted error from the status code and error messages
-// from the response body.
-func errorFromResponse(statusCode int, respBody []byte) error {
-	var r Response
-	err := json.Unmarshal(respBody, &r)
-	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
-	}
-
-	errMsgs := []string{}
-	for _, v := range r.Errors {
-		errMsgs = append(errMsgs, v.Message)
-	}
-	return errors.Errorf("HTTP status %d: %s", statusCode, strings.Join(errMsgs, " "))
 }

@@ -135,7 +135,7 @@ func (api *API) ListIPLists(ctx context.Context) ([]IPList, error) {
 	uri := fmt.Sprintf("/accounts/%s/rules/lists", api.AccountID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []IPList{}, errors.Wrap(err, errMakeRequestError)
+		return []IPList{}, err
 	}
 
 	result := IPListListResponse{}
@@ -155,7 +155,7 @@ func (api *API) CreateIPList(ctx context.Context, name string, description strin
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri,
 		IPListCreateRequest{Name: name, Description: description, Kind: kind})
 	if err != nil {
-		return IPList{}, errors.Wrap(err, errMakeRequestError)
+		return IPList{}, err
 	}
 
 	result := IPListResponse{}
@@ -173,7 +173,7 @@ func (api *API) GetIPList(ctx context.Context, id string) (IPList, error) {
 	uri := fmt.Sprintf("/accounts/%s/rules/lists/%s", api.AccountID, id)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return IPList{}, errors.Wrap(err, errMakeRequestError)
+		return IPList{}, err
 	}
 
 	result := IPListResponse{}
@@ -191,7 +191,7 @@ func (api *API) UpdateIPList(ctx context.Context, id string, description string)
 	uri := fmt.Sprintf("/accounts/%s/rules/lists/%s", api.AccountID, id)
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, IPListUpdateRequest{Description: description})
 	if err != nil {
-		return IPList{}, errors.Wrap(err, errMakeRequestError)
+		return IPList{}, err
 	}
 
 	result := IPListResponse{}
@@ -209,7 +209,7 @@ func (api *API) DeleteIPList(ctx context.Context, id string) (IPListDeleteRespon
 	uri := fmt.Sprintf("/accounts/%s/rules/lists/%s", api.AccountID, id)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return IPListDeleteResponse{}, errors.Wrap(err, errMakeRequestError)
+		return IPListDeleteResponse{}, err
 	}
 
 	result := IPListDeleteResponse{}
@@ -235,7 +235,7 @@ func (api *API) ListIPListItems(ctx context.Context, id string) ([]IPListItem, e
 		uri := fmt.Sprintf("/accounts/%s/rules/lists/%s/items%s", api.AccountID, id, cursorQuery)
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
-			return []IPListItem{}, errors.Wrap(err, errMakeRequestError)
+			return []IPListItem{}, err
 		}
 
 		result := IPListItemsListResponse{}
@@ -260,7 +260,7 @@ func (api *API) CreateIPListItemAsync(ctx context.Context, id, ip, comment strin
 	uri := fmt.Sprintf("/accounts/%s/rules/lists/%s/items", api.AccountID, id)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, []IPListItemCreateRequest{{IP: ip, Comment: comment}})
 	if err != nil {
-		return IPListItemCreateResponse{}, errors.Wrap(err, errMakeRequestError)
+		return IPListItemCreateResponse{}, err
 	}
 
 	result := IPListItemCreateResponse{}
@@ -296,7 +296,7 @@ func (api *API) CreateIPListItemsAsync(ctx context.Context, id string, items []I
 	uri := fmt.Sprintf("/accounts/%s/rules/lists/%s/items", api.AccountID, id)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, items)
 	if err != nil {
-		return IPListItemCreateResponse{}, errors.Wrap(err, errMakeRequestError)
+		return IPListItemCreateResponse{}, err
 	}
 
 	result := IPListItemCreateResponse{}
@@ -332,7 +332,7 @@ func (api *API) ReplaceIPListItemsAsync(ctx context.Context, id string, items []
 	uri := fmt.Sprintf("/accounts/%s/rules/lists/%s/items", api.AccountID, id)
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, items)
 	if err != nil {
-		return IPListItemCreateResponse{}, errors.Wrap(err, errMakeRequestError)
+		return IPListItemCreateResponse{}, err
 	}
 
 	result := IPListItemCreateResponse{}
@@ -368,7 +368,7 @@ func (api *API) DeleteIPListItemsAsync(ctx context.Context, id string, items IPL
 	uri := fmt.Sprintf("/accounts/%s/rules/lists/%s/items", api.AccountID, id)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, items)
 	if err != nil {
-		return IPListItemDeleteResponse{}, errors.Wrap(err, errMakeRequestError)
+		return IPListItemDeleteResponse{}, err
 	}
 
 	result := IPListItemDeleteResponse{}
@@ -403,7 +403,7 @@ func (api *API) GetIPListItem(ctx context.Context, listID, id string) (IPListIte
 	uri := fmt.Sprintf("/accounts/%s/rules/lists/%s/items/%s", api.AccountID, listID, id)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return IPListItem{}, errors.Wrap(err, errMakeRequestError)
+		return IPListItem{}, err
 	}
 
 	result := IPListItemsGetResponse{}
@@ -421,7 +421,7 @@ func (api *API) GetIPListBulkOperation(ctx context.Context, id string) (IPListBu
 	uri := fmt.Sprintf("/accounts/%s/rules/lists/bulk_operations/%s", api.AccountID, id)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return IPListBulkOperation{}, errors.Wrap(err, errMakeRequestError)
+		return IPListBulkOperation{}, err
 	}
 
 	result := IPListBulkOperationResponse{}

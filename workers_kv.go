@@ -80,7 +80,7 @@ func (api *API) CreateWorkersKVNamespace(ctx context.Context, req *WorkersKVName
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces", api.AccountID)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, req)
 	if err != nil {
-		return WorkersKVNamespaceResponse{}, errors.Wrap(err, errMakeRequestError)
+		return WorkersKVNamespaceResponse{}, err
 	}
 
 	result := WorkersKVNamespaceResponse{}
@@ -106,7 +106,7 @@ func (api *API) ListWorkersKVNamespaces(ctx context.Context) ([]WorkersKVNamespa
 		uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces?%s", api.AccountID, v.Encode())
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
-			return []WorkersKVNamespace{}, errors.Wrap(err, errMakeRequestError)
+			return []WorkersKVNamespace{}, err
 		}
 
 		var p ListWorkersKVNamespacesResponse
@@ -136,7 +136,7 @@ func (api *API) DeleteWorkersKVNamespace(ctx context.Context, namespaceID string
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s", api.AccountID, namespaceID)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return Response{}, errors.Wrap(err, errMakeRequestError)
+		return Response{}, err
 	}
 
 	result := Response{}
@@ -154,7 +154,7 @@ func (api *API) UpdateWorkersKVNamespace(ctx context.Context, namespaceID string
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s", api.AccountID, namespaceID)
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, req)
 	if err != nil {
-		return Response{}, errors.Wrap(err, errMakeRequestError)
+		return Response{}, err
 	}
 
 	result := Response{}
@@ -175,7 +175,7 @@ func (api *API) WriteWorkersKV(ctx context.Context, namespaceID, key string, val
 		http.MethodPut, uri, value, http.Header{"Content-Type": []string{"application/octet-stream"}},
 	)
 	if err != nil {
-		return Response{}, errors.Wrap(err, errMakeRequestError)
+		return Response{}, err
 	}
 
 	result := Response{}
@@ -195,7 +195,7 @@ func (api *API) WriteWorkersKVBulk(ctx context.Context, namespaceID string, kvs 
 		http.MethodPut, uri, kvs, http.Header{"Content-Type": []string{"application/json"}},
 	)
 	if err != nil {
-		return Response{}, errors.Wrap(err, errMakeRequestError)
+		return Response{}, err
 	}
 
 	result := Response{}
@@ -214,7 +214,7 @@ func (api API) ReadWorkersKV(ctx context.Context, namespaceID, key string) ([]by
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/values/%s", api.AccountID, namespaceID, key)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 	return res, nil
 }
@@ -227,7 +227,7 @@ func (api API) DeleteWorkersKV(ctx context.Context, namespaceID, key string) (Re
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/values/%s", api.AccountID, namespaceID, key)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return Response{}, errors.Wrap(err, errMakeRequestError)
+		return Response{}, err
 	}
 
 	result := Response{}
@@ -246,7 +246,7 @@ func (api *API) DeleteWorkersKVBulk(ctx context.Context, namespaceID string, key
 		http.MethodDelete, uri, keys, http.Header{"Content-Type": []string{"application/json"}},
 	)
 	if err != nil {
-		return Response{}, errors.Wrap(err, errMakeRequestError)
+		return Response{}, err
 	}
 
 	result := Response{}
@@ -264,7 +264,7 @@ func (api API) ListWorkersKVs(ctx context.Context, namespaceID string) (ListStor
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/keys", api.AccountID, namespaceID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return ListStorageKeysResponse{}, errors.Wrap(err, errMakeRequestError)
+		return ListStorageKeysResponse{}, err
 	}
 
 	result := ListStorageKeysResponse{}
@@ -296,7 +296,7 @@ func (api API) ListWorkersKVsWithOptions(ctx context.Context, namespaceID string
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/keys?%s", api.AccountID, namespaceID, o.encode())
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return ListStorageKeysResponse{}, errors.Wrap(err, errMakeRequestError)
+		return ListStorageKeysResponse{}, err
 	}
 
 	result := ListStorageKeysResponse{}

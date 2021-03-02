@@ -68,7 +68,7 @@ func (api *API) Filter(ctx context.Context, zoneID, filterID string) (Filter, er
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return Filter{}, errors.Wrap(err, errMakeRequestError)
+		return Filter{}, err
 	}
 
 	var filterResponse FilterDetailResponse
@@ -101,7 +101,7 @@ func (api *API) Filters(ctx context.Context, zoneID string, pageOpts PaginationO
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []Filter{}, errors.Wrap(err, errMakeRequestError)
+		return []Filter{}, err
 	}
 
 	var filtersResponse FiltersDetailResponse
@@ -121,7 +121,7 @@ func (api *API) CreateFilters(ctx context.Context, zoneID string, filters []Filt
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, filters)
 	if err != nil {
-		return []Filter{}, errors.Wrap(err, errMakeRequestError)
+		return []Filter{}, err
 	}
 
 	var filtersResponse FiltersDetailResponse
@@ -145,7 +145,7 @@ func (api *API) UpdateFilter(ctx context.Context, zoneID string, filter Filter) 
 
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, filter)
 	if err != nil {
-		return Filter{}, errors.Wrap(err, errMakeRequestError)
+		return Filter{}, err
 	}
 
 	var filterResponse FilterDetailResponse
@@ -171,7 +171,7 @@ func (api *API) UpdateFilters(ctx context.Context, zoneID string, filters []Filt
 
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, filters)
 	if err != nil {
-		return []Filter{}, errors.Wrap(err, errMakeRequestError)
+		return []Filter{}, err
 	}
 
 	var filtersResponse FiltersDetailResponse
@@ -195,7 +195,7 @@ func (api *API) DeleteFilter(ctx context.Context, zoneID, filterID string) error
 
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil
@@ -210,7 +210,7 @@ func (api *API) DeleteFilters(ctx context.Context, zoneID string, filterIDs []st
 
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil

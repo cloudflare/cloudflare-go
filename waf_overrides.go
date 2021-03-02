@@ -45,7 +45,7 @@ func (api *API) ListWAFOverrides(ctx context.Context, zoneID string) ([]WAFOverr
 	uri := "/zones/" + zoneID + "/firewall/waf/overrides"
 	res, err = api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []WAFOverride{}, errors.Wrap(err, errMakeRequestError)
+		return []WAFOverride{}, err
 	}
 
 	var r WAFOverridesResponse
@@ -72,7 +72,7 @@ func (api *API) WAFOverride(ctx context.Context, zoneID, overrideID string) (WAF
 	uri := "/zones/" + zoneID + "/firewall/waf/overrides/" + overrideID
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return WAFOverride{}, errors.Wrap(err, errMakeRequestError)
+		return WAFOverride{}, err
 	}
 
 	var r WAFOverrideResponse
@@ -91,7 +91,7 @@ func (api *API) CreateWAFOverride(ctx context.Context, zoneID string, override W
 	uri := "/zones/" + zoneID + "/firewall/waf/overrides"
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, override)
 	if err != nil {
-		return WAFOverride{}, errors.Wrap(err, errMakeRequestError)
+		return WAFOverride{}, err
 	}
 	var r WAFOverrideResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -108,7 +108,7 @@ func (api *API) UpdateWAFOverride(ctx context.Context, zoneID, overrideID string
 
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, override)
 	if err != nil {
-		return WAFOverride{}, errors.Wrap(err, errMakeRequestError)
+		return WAFOverride{}, err
 	}
 
 	var r WAFOverrideResponse
@@ -127,7 +127,7 @@ func (api *API) DeleteWAFOverride(ctx context.Context, zoneID, overrideID string
 	uri := "/zones/" + zoneID + "/firewall/waf/overrides/" + overrideID
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 	var r WAFOverrideResponse
 	err = json.Unmarshal(res, &r)

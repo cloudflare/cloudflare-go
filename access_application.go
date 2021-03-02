@@ -89,7 +89,7 @@ func (api *API) accessApplications(ctx context.Context, id string, pageOpts Pagi
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []AccessApplication{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+		return []AccessApplication{}, ResultInfo{}, err
 	}
 
 	var accessApplicationListResponse AccessApplicationListResponse
@@ -127,7 +127,7 @@ func (api *API) accessApplication(ctx context.Context, id, applicationID string,
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return AccessApplication{}, errors.Wrap(err, errMakeRequestError)
+		return AccessApplication{}, err
 	}
 
 	var accessApplicationDetailResponse AccessApplicationDetailResponse
@@ -158,7 +158,7 @@ func (api *API) createAccessApplication(ctx context.Context, id string, accessAp
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, accessApplication)
 	if err != nil {
-		return AccessApplication{}, errors.Wrap(err, errMakeRequestError)
+		return AccessApplication{}, err
 	}
 
 	var accessApplicationDetailResponse AccessApplicationDetailResponse
@@ -198,7 +198,7 @@ func (api *API) updateAccessApplication(ctx context.Context, id string, accessAp
 
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, accessApplication)
 	if err != nil {
-		return AccessApplication{}, errors.Wrap(err, errMakeRequestError)
+		return AccessApplication{}, err
 	}
 
 	var accessApplicationDetailResponse AccessApplicationDetailResponse
@@ -234,7 +234,7 @@ func (api *API) deleteAccessApplication(ctx context.Context, id, applicationID s
 
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil
@@ -266,7 +266,7 @@ func (api *API) revokeAccessApplicationTokens(ctx context.Context, id string, ap
 
 	_, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil

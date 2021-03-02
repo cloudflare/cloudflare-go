@@ -62,7 +62,7 @@ func (api *API) FirewallRules(ctx context.Context, zoneID string, pageOpts Pagin
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []FirewallRule{}, errors.Wrap(err, errMakeRequestError)
+		return []FirewallRule{}, err
 	}
 
 	var firewallDetailResponse FirewallRulesDetailResponse
@@ -82,7 +82,7 @@ func (api *API) FirewallRule(ctx context.Context, zoneID, firewallRuleID string)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return FirewallRule{}, errors.Wrap(err, errMakeRequestError)
+		return FirewallRule{}, err
 	}
 
 	var firewallRuleResponse FirewallRuleResponse
@@ -102,7 +102,7 @@ func (api *API) CreateFirewallRules(ctx context.Context, zoneID string, firewall
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, firewallRules)
 	if err != nil {
-		return []FirewallRule{}, errors.Wrap(err, errMakeRequestError)
+		return []FirewallRule{}, err
 	}
 
 	var firewallRulesDetailResponse FirewallRulesDetailResponse
@@ -126,7 +126,7 @@ func (api *API) UpdateFirewallRule(ctx context.Context, zoneID string, firewallR
 
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, firewallRule)
 	if err != nil {
-		return FirewallRule{}, errors.Wrap(err, errMakeRequestError)
+		return FirewallRule{}, err
 	}
 
 	var firewallRuleResponse FirewallRuleResponse
@@ -152,7 +152,7 @@ func (api *API) UpdateFirewallRules(ctx context.Context, zoneID string, firewall
 
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, firewallRules)
 	if err != nil {
-		return []FirewallRule{}, errors.Wrap(err, errMakeRequestError)
+		return []FirewallRule{}, err
 	}
 
 	var firewallRulesDetailResponse FirewallRulesDetailResponse
@@ -176,7 +176,7 @@ func (api *API) DeleteFirewallRule(ctx context.Context, zoneID, firewallRuleID s
 
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil
@@ -196,7 +196,7 @@ func (api *API) DeleteFirewallRules(ctx context.Context, zoneID string, firewall
 
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil

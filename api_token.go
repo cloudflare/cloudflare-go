@@ -99,7 +99,7 @@ func (api *API) GetAPIToken(ctx context.Context, tokenID string) (APIToken, erro
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return APIToken{}, errors.Wrap(err, errMakeRequestError)
+		return APIToken{}, err
 	}
 
 	var apiTokenResponse APITokenResponse
@@ -117,7 +117,7 @@ func (api *API) GetAPIToken(ctx context.Context, tokenID string) (APIToken, erro
 func (api *API) APITokens(ctx context.Context) ([]APIToken, error) {
 	res, err := api.makeRequestContext(ctx, http.MethodGet, "/user/tokens", nil)
 	if err != nil {
-		return []APIToken{}, errors.Wrap(err, errMakeRequestError)
+		return []APIToken{}, err
 	}
 
 	var apiTokenListResponse APITokenListResponse
@@ -140,7 +140,7 @@ func (api *API) APITokens(ctx context.Context) ([]APIToken, error) {
 func (api *API) CreateAPIToken(ctx context.Context, token APIToken) (APIToken, error) {
 	res, err := api.makeRequestContext(ctx, http.MethodPost, "/user/tokens", token)
 	if err != nil {
-		return APIToken{}, errors.Wrap(err, errMakeRequestError)
+		return APIToken{}, err
 	}
 
 	var createTokenAPIResponse APITokenResponse
@@ -158,7 +158,7 @@ func (api *API) CreateAPIToken(ctx context.Context, token APIToken) (APIToken, e
 func (api *API) UpdateAPIToken(ctx context.Context, tokenID string, token APIToken) (APIToken, error) {
 	res, err := api.makeRequestContext(ctx, http.MethodPut, "/user/tokens/"+tokenID, token)
 	if err != nil {
-		return APIToken{}, errors.Wrap(err, errMakeRequestError)
+		return APIToken{}, err
 	}
 
 	var updatedTokenResponse APITokenResponse
@@ -178,7 +178,7 @@ func (api *API) RollAPIToken(ctx context.Context, tokenID string) (string, error
 
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, nil)
 	if err != nil {
-		return "", errors.Wrap(err, errMakeRequestError)
+		return "", err
 	}
 
 	var apiTokenRollResponse APITokenRollResponse
@@ -196,7 +196,7 @@ func (api *API) RollAPIToken(ctx context.Context, tokenID string) (string, error
 func (api *API) VerifyAPIToken(ctx context.Context) (APITokenVerifyBody, error) {
 	res, err := api.makeRequestContext(ctx, http.MethodGet, "/user/tokens/verify", nil)
 	if err != nil {
-		return APITokenVerifyBody{}, errors.Wrap(err, errMakeRequestError)
+		return APITokenVerifyBody{}, err
 	}
 
 	var apiTokenVerifyResponse APITokenVerifyResponse
@@ -214,7 +214,7 @@ func (api *API) VerifyAPIToken(ctx context.Context) (APITokenVerifyBody, error) 
 func (api *API) DeleteAPIToken(ctx context.Context, tokenID string) error {
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, "/user/tokens/"+tokenID, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil
@@ -227,7 +227,7 @@ func (api *API) ListAPITokensPermissionGroups(ctx context.Context) ([]APITokenPe
 	var r APITokenPermissionGroupsResponse
 	res, err := api.makeRequestContext(ctx, http.MethodGet, "/user/tokens/permission_groups", nil)
 	if err != nil {
-		return []APITokenPermissionGroups{}, errors.Wrap(err, errMakeRequestError)
+		return []APITokenPermissionGroups{}, err
 	}
 
 	err = json.Unmarshal(res, &r)

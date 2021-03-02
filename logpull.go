@@ -28,7 +28,7 @@ func (api *API) GetLogpullRetentionFlag(ctx context.Context, zoneID string) (*Lo
 	uri := "/zones/" + zoneID + "/logs/control/retention/flag"
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return &LogpullRetentionConfiguration{}, errors.Wrap(err, errMakeRequestError)
+		return &LogpullRetentionConfiguration{}, err
 	}
 	var r LogpullRetentionConfigurationResponse
 	err = json.Unmarshal(res, &r)
@@ -47,12 +47,12 @@ func (api *API) SetLogpullRetentionFlag(ctx context.Context, zoneID string, enab
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, flagPayload)
 	if err != nil {
-		return &LogpullRetentionConfiguration{}, errors.Wrap(err, errMakeRequestError)
+		return &LogpullRetentionConfiguration{}, err
 	}
 	var r LogpullRetentionConfigurationResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return &LogpullRetentionConfiguration{}, errors.Wrap(err, errMakeRequestError)
+		return &LogpullRetentionConfiguration{}, err
 	}
 	return &r.Result, nil
 }

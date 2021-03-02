@@ -213,7 +213,7 @@ func (api *API) accessGroups(ctx context.Context, id string, pageOpts Pagination
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []AccessGroup{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+		return []AccessGroup{}, ResultInfo{}, err
 	}
 
 	var accessGroupListResponse AccessGroupListResponse
@@ -249,7 +249,7 @@ func (api *API) accessGroup(ctx context.Context, id, groupID string, routeRoot R
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return AccessGroup{}, errors.Wrap(err, errMakeRequestError)
+		return AccessGroup{}, err
 	}
 
 	var accessGroupDetailResponse AccessGroupDetailResponse
@@ -284,7 +284,7 @@ func (api *API) createAccessGroup(ctx context.Context, id string, accessGroup Ac
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, accessGroup)
 	if err != nil {
-		return AccessGroup{}, errors.Wrap(err, errMakeRequestError)
+		return AccessGroup{}, err
 	}
 
 	var accessGroupDetailResponse AccessGroupDetailResponse
@@ -323,7 +323,7 @@ func (api *API) updateAccessGroup(ctx context.Context, id string, accessGroup Ac
 
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, accessGroup)
 	if err != nil {
-		return AccessGroup{}, errors.Wrap(err, errMakeRequestError)
+		return AccessGroup{}, err
 	}
 
 	var accessGroupDetailResponse AccessGroupDetailResponse
@@ -359,7 +359,7 @@ func (api *API) deleteAccessGroup(ctx context.Context, id string, groupID string
 
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil

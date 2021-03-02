@@ -93,7 +93,7 @@ func (api *API) CreateRateLimit(ctx context.Context, zoneID string, limit RateLi
 	uri := "/zones/" + zoneID + "/rate_limits"
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, limit)
 	if err != nil {
-		return RateLimit{}, errors.Wrap(err, errMakeRequestError)
+		return RateLimit{}, err
 	}
 	var r rateLimitResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -121,7 +121,7 @@ func (api *API) ListRateLimits(ctx context.Context, zoneID string, pageOpts Pagi
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []RateLimit{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+		return []RateLimit{}, ResultInfo{}, err
 	}
 
 	var r rateLimitListResponse
@@ -168,7 +168,7 @@ func (api *API) RateLimit(ctx context.Context, zoneID, limitID string) (RateLimi
 	uri := "/zones/" + zoneID + "/rate_limits/" + limitID
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return RateLimit{}, errors.Wrap(err, errMakeRequestError)
+		return RateLimit{}, err
 	}
 	var r rateLimitResponse
 	err = json.Unmarshal(res, &r)
@@ -185,7 +185,7 @@ func (api *API) UpdateRateLimit(ctx context.Context, zoneID, limitID string, lim
 	uri := "/zones/" + zoneID + "/rate_limits/" + limitID
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, limit)
 	if err != nil {
-		return RateLimit{}, errors.Wrap(err, errMakeRequestError)
+		return RateLimit{}, err
 	}
 	var r rateLimitResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -201,7 +201,7 @@ func (api *API) DeleteRateLimit(ctx context.Context, zoneID, limitID string) err
 	uri := "/zones/" + zoneID + "/rate_limits/" + limitID
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 	var r rateLimitResponse
 	err = json.Unmarshal(res, &r)

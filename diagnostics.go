@@ -89,7 +89,7 @@ func (api *API) PerformTraceroute(ctx context.Context, accountID string, targets
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, diagnosticsPayload)
 	if err != nil {
-		return []DiagnosticsTracerouteResponseResult{}, errors.Wrap(err, errMakeRequestError)
+		return []DiagnosticsTracerouteResponseResult{}, err
 	}
 
 	var diagnosticsResponse DiagnosticsTracerouteResponse

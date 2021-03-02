@@ -97,7 +97,7 @@ func (api *API) accessServiceTokens(ctx context.Context, id string, routeRoot Ro
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []AccessServiceToken{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+		return []AccessServiceToken{}, ResultInfo{}, err
 	}
 
 	var accessServiceTokensListResponse AccessServiceTokensListResponse
@@ -132,7 +132,7 @@ func (api *API) createAccessServiceToken(ctx context.Context, id, name string, r
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, marshalledName)
 
 	if err != nil {
-		return AccessServiceTokenCreateResponse{}, errors.Wrap(err, errMakeRequestError)
+		return AccessServiceTokenCreateResponse{}, err
 	}
 
 	var accessServiceTokenCreation AccessServiceTokensCreationDetailResponse
@@ -169,7 +169,7 @@ func (api *API) updateAccessServiceToken(ctx context.Context, id, uuid, name str
 
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, marshalledName)
 	if err != nil {
-		return AccessServiceTokenUpdateResponse{}, errors.Wrap(err, errMakeRequestError)
+		return AccessServiceTokenUpdateResponse{}, err
 	}
 
 	var accessServiceTokenUpdate AccessServiceTokensUpdateDetailResponse
@@ -202,7 +202,7 @@ func (api *API) deleteAccessServiceToken(ctx context.Context, id, uuid string, r
 
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return AccessServiceTokenUpdateResponse{}, errors.Wrap(err, errMakeRequestError)
+		return AccessServiceTokenUpdateResponse{}, err
 	}
 
 	var accessServiceTokenUpdate AccessServiceTokensUpdateDetailResponse

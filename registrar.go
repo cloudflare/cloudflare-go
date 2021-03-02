@@ -87,7 +87,7 @@ func (api *API) RegistrarDomain(ctx context.Context, accountID, domainName strin
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return RegistrarDomain{}, errors.Wrap(err, errMakeRequestError)
+		return RegistrarDomain{}, err
 	}
 
 	var r RegistrarDomainDetailResponse
@@ -107,7 +107,7 @@ func (api *API) RegistrarDomains(ctx context.Context, accountID string) ([]Regis
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
 	if err != nil {
-		return []RegistrarDomain{}, errors.Wrap(err, errMakeRequestError)
+		return []RegistrarDomain{}, err
 	}
 
 	var r RegistrarDomainsDetailResponse
@@ -127,7 +127,7 @@ func (api *API) TransferRegistrarDomain(ctx context.Context, accountID, domainNa
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
 	if err != nil {
-		return []RegistrarDomain{}, errors.Wrap(err, errMakeRequestError)
+		return []RegistrarDomain{}, err
 	}
 
 	var r RegistrarDomainsDetailResponse
@@ -146,7 +146,7 @@ func (api *API) CancelRegistrarDomainTransfer(ctx context.Context, accountID, do
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
 	if err != nil {
-		return []RegistrarDomain{}, errors.Wrap(err, errMakeRequestError)
+		return []RegistrarDomain{}, err
 	}
 
 	var r RegistrarDomainsDetailResponse
@@ -165,7 +165,7 @@ func (api *API) UpdateRegistrarDomain(ctx context.Context, accountID, domainName
 
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, domainConfiguration)
 	if err != nil {
-		return RegistrarDomain{}, errors.Wrap(err, errMakeRequestError)
+		return RegistrarDomain{}, err
 	}
 
 	var r RegistrarDomainDetailResponse

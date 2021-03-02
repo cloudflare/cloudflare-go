@@ -59,7 +59,7 @@ func (api *API) CreateRailgun(ctx context.Context, name string) (Railgun, error)
 	}
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
-		return Railgun{}, errors.Wrap(err, errMakeRequestError)
+		return Railgun{}, err
 	}
 	var r railgunResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -79,7 +79,7 @@ func (api *API) ListRailguns(ctx context.Context, options RailgunListOptions) ([
 	uri := api.userBaseURL("") + "/railguns" + "?" + v.Encode()
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 	var r railgunsResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -95,7 +95,7 @@ func (api *API) RailgunDetails(ctx context.Context, railgunID string) (Railgun, 
 	uri := api.userBaseURL("") + "/railguns/" + railgunID
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return Railgun{}, errors.Wrap(err, errMakeRequestError)
+		return Railgun{}, err
 	}
 	var r railgunResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -111,7 +111,7 @@ func (api *API) RailgunZones(ctx context.Context, railgunID string) ([]Zone, err
 	uri := api.userBaseURL("") + "/railguns/" + railgunID + "/zones"
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 	var r ZonesResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -132,7 +132,7 @@ func (api *API) enableRailgun(ctx context.Context, railgunID string, enable bool
 	}
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
 	if err != nil {
-		return Railgun{}, errors.Wrap(err, errMakeRequestError)
+		return Railgun{}, err
 	}
 	var r railgunResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -161,7 +161,7 @@ func (api *API) DisableRailgun(ctx context.Context, railgunID string) (Railgun, 
 func (api *API) DeleteRailgun(ctx context.Context, railgunID string) error {
 	uri := api.userBaseURL("") + "/railguns/" + railgunID
 	if _, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil); err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 	return nil
 }
@@ -222,7 +222,7 @@ func (api *API) ZoneRailguns(ctx context.Context, zoneID string) ([]ZoneRailgun,
 	uri := "/zones/" + zoneID + "/railguns"
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 	var r zoneRailgunsResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -238,7 +238,7 @@ func (api *API) ZoneRailgunDetails(ctx context.Context, zoneID, railgunID string
 	uri := "/zones/" + zoneID + "/railguns/" + railgunID
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return ZoneRailgun{}, errors.Wrap(err, errMakeRequestError)
+		return ZoneRailgun{}, err
 	}
 	var r zoneRailgunResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -254,7 +254,7 @@ func (api *API) TestRailgunConnection(ctx context.Context, zoneID, railgunID str
 	uri := "/zones/" + zoneID + "/railguns/" + railgunID + "/diagnose"
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return RailgunDiagnosis{}, errors.Wrap(err, errMakeRequestError)
+		return RailgunDiagnosis{}, err
 	}
 	var r railgunDiagnosisResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -275,7 +275,7 @@ func (api *API) connectZoneRailgun(ctx context.Context, zoneID, railgunID string
 	}
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
 	if err != nil {
-		return ZoneRailgun{}, errors.Wrap(err, errMakeRequestError)
+		return ZoneRailgun{}, err
 	}
 	var r zoneRailgunResponse
 	if err := json.Unmarshal(res, &r); err != nil {

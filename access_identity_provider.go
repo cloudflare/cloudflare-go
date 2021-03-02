@@ -79,7 +79,7 @@ func (api *API) accessIdentityProviders(ctx context.Context, id string, routeRoo
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []AccessIdentityProvider{}, errors.Wrap(err, errMakeRequestError)
+		return []AccessIdentityProvider{}, err
 	}
 
 	var accessIdentityProviderResponse AccessIdentityProvidersListResponse
@@ -117,7 +117,7 @@ func (api *API) accessIdentityProviderDetails(ctx context.Context, id string, id
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return AccessIdentityProvider{}, errors.Wrap(err, errMakeRequestError)
+		return AccessIdentityProvider{}, err
 	}
 
 	var accessIdentityProviderResponse AccessIdentityProviderListResponse
@@ -148,7 +148,7 @@ func (api *API) createAccessIdentityProvider(ctx context.Context, id string, ide
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, identityProviderConfiguration)
 	if err != nil {
-		return AccessIdentityProvider{}, errors.Wrap(err, errMakeRequestError)
+		return AccessIdentityProvider{}, err
 	}
 
 	var accessIdentityProviderResponse AccessIdentityProviderListResponse
@@ -186,7 +186,7 @@ func (api *API) updateAccessIdentityProvider(ctx context.Context, id string, ide
 
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, identityProviderConfiguration)
 	if err != nil {
-		return AccessIdentityProvider{}, errors.Wrap(err, errMakeRequestError)
+		return AccessIdentityProvider{}, err
 	}
 
 	var accessIdentityProviderResponse AccessIdentityProviderListResponse
@@ -222,7 +222,7 @@ func (api *API) deleteAccessIdentityProvider(ctx context.Context, id string, ide
 
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return AccessIdentityProvider{}, errors.Wrap(err, errMakeRequestError)
+		return AccessIdentityProvider{}, err
 	}
 
 	var accessIdentityProviderResponse AccessIdentityProviderListResponse

@@ -122,7 +122,7 @@ func (api *API) UpdateCustomHostnameSSL(ctx context.Context, zoneID string, cust
 	}
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, ch)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	var response *CustomHostnameResponse
@@ -141,7 +141,7 @@ func (api *API) UpdateCustomHostname(ctx context.Context, zoneID string, customH
 	uri := "/zones/" + zoneID + "/custom_hostnames/" + customHostnameID
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, ch)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	var response *CustomHostnameResponse
@@ -160,7 +160,7 @@ func (api *API) DeleteCustomHostname(ctx context.Context, zoneID string, customH
 	uri := "/zones/" + zoneID + "/custom_hostnames/" + customHostnameID
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	var response *CustomHostnameResponse
@@ -179,7 +179,7 @@ func (api *API) CreateCustomHostname(ctx context.Context, zoneID string, ch Cust
 	uri := "/zones/" + zoneID + "/custom_hostnames"
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, ch)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	var response *CustomHostnameResponse
@@ -209,12 +209,12 @@ func (api *API) CustomHostnames(ctx context.Context, zoneID string, page int, fi
 	uri := "/zones/" + zoneID + "/custom_hostnames" + query
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []CustomHostname{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+		return []CustomHostname{}, ResultInfo{}, err
 	}
 	var customHostnameListResponse CustomHostnameListResponse
 	err = json.Unmarshal(res, &customHostnameListResponse)
 	if err != nil {
-		return []CustomHostname{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+		return []CustomHostname{}, ResultInfo{}, err
 	}
 
 	return customHostnameListResponse.Result, customHostnameListResponse.ResultInfo, nil
@@ -227,7 +227,7 @@ func (api *API) CustomHostname(ctx context.Context, zoneID string, customHostnam
 	uri := "/zones/" + zoneID + "/custom_hostnames/" + customHostnameID
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return CustomHostname{}, errors.Wrap(err, errMakeRequestError)
+		return CustomHostname{}, err
 	}
 
 	var response CustomHostnameResponse
@@ -260,7 +260,7 @@ func (api *API) UpdateCustomHostnameFallbackOrigin(ctx context.Context, zoneID s
 	uri := "/zones/" + zoneID + "/custom_hostnames/fallback_origin"
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, chfo)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	var response *CustomHostnameFallbackOriginResponse
@@ -278,7 +278,7 @@ func (api *API) DeleteCustomHostnameFallbackOrigin(ctx context.Context, zoneID s
 	uri := "/zones/" + zoneID + "/custom_hostnames/fallback_origin"
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	var response *CustomHostnameFallbackOriginResponse
@@ -296,7 +296,7 @@ func (api *API) CustomHostnameFallbackOrigin(ctx context.Context, zoneID string)
 	uri := "/zones/" + zoneID + "/custom_hostnames/fallback_origin"
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return CustomHostnameFallbackOrigin{}, errors.Wrap(err, errMakeRequestError)
+		return CustomHostnameFallbackOrigin{}, err
 	}
 
 	var response CustomHostnameFallbackOriginResponse

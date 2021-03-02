@@ -76,7 +76,7 @@ func (api *API) Healthchecks(ctx context.Context, zoneID string) ([]Healthcheck,
 	uri := "/zones/" + zoneID + "/healthchecks"
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []Healthcheck{}, errors.Wrap(err, errMakeRequestError)
+		return []Healthcheck{}, err
 	}
 	var r HealthcheckListResponse
 	err = json.Unmarshal(res, &r)
@@ -93,7 +93,7 @@ func (api *API) Healthcheck(ctx context.Context, zoneID, healthcheckID string) (
 	uri := "/zones/" + zoneID + "/healthchecks/" + healthcheckID
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return Healthcheck{}, errors.Wrap(err, errMakeRequestError)
+		return Healthcheck{}, err
 	}
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
@@ -110,7 +110,7 @@ func (api *API) CreateHealthcheck(ctx context.Context, zoneID string, healthchec
 	uri := "/zones/" + zoneID + "/healthchecks"
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, healthcheck)
 	if err != nil {
-		return Healthcheck{}, errors.Wrap(err, errMakeRequestError)
+		return Healthcheck{}, err
 	}
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
@@ -127,7 +127,7 @@ func (api *API) UpdateHealthcheck(ctx context.Context, zoneID string, healthchec
 	uri := "/zones/" + zoneID + "/healthchecks/" + healthcheckID
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, healthcheck)
 	if err != nil {
-		return Healthcheck{}, errors.Wrap(err, errMakeRequestError)
+		return Healthcheck{}, err
 	}
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
@@ -144,7 +144,7 @@ func (api *API) DeleteHealthcheck(ctx context.Context, zoneID string, healthchec
 	uri := "/zones/" + zoneID + "/healthchecks/" + healthcheckID
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
@@ -161,7 +161,7 @@ func (api *API) CreateHealthcheckPreview(ctx context.Context, zoneID string, hea
 	uri := "/zones/" + zoneID + "/healthchecks/preview"
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, healthcheck)
 	if err != nil {
-		return Healthcheck{}, errors.Wrap(err, errMakeRequestError)
+		return Healthcheck{}, err
 	}
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
@@ -178,7 +178,7 @@ func (api *API) HealthcheckPreview(ctx context.Context, zoneID, id string) (Heal
 	uri := "/zones/" + zoneID + "/healthchecks/preview/" + id
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return Healthcheck{}, errors.Wrap(err, errMakeRequestError)
+		return Healthcheck{}, err
 	}
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
@@ -195,7 +195,7 @@ func (api *API) DeleteHealthcheckPreview(ctx context.Context, zoneID string, id 
 	uri := "/zones/" + zoneID + "/healthchecks/preview/" + id
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)

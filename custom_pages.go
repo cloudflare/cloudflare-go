@@ -81,7 +81,7 @@ func (api *API) CustomPages(ctx context.Context, options *CustomPageOptions) ([]
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	var customPageResponse CustomPageResponse
@@ -123,7 +123,7 @@ func (api *API) CustomPage(ctx context.Context, options *CustomPageOptions, cust
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return CustomPage{}, errors.Wrap(err, errMakeRequestError)
+		return CustomPage{}, err
 	}
 
 	var customPageResponse CustomPageDetailResponse
@@ -165,7 +165,7 @@ func (api *API) UpdateCustomPage(ctx context.Context, options *CustomPageOptions
 
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, pageParameters)
 	if err != nil {
-		return CustomPage{}, errors.Wrap(err, errMakeRequestError)
+		return CustomPage{}, err
 	}
 
 	var customPageResponse CustomPageDetailResponse

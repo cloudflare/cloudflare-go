@@ -67,7 +67,7 @@ func (api *API) UserDetails(ctx context.Context) (User, error) {
 	var r UserResponse
 	res, err := api.makeRequestContext(ctx, http.MethodGet, "/user", nil)
 	if err != nil {
-		return User{}, errors.Wrap(err, errMakeRequestError)
+		return User{}, err
 	}
 
 	err = json.Unmarshal(res, &r)
@@ -85,7 +85,7 @@ func (api *API) UpdateUser(ctx context.Context, user *User) (User, error) {
 	var r UserResponse
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, "/user", user)
 	if err != nil {
-		return User{}, errors.Wrap(err, errMakeRequestError)
+		return User{}, err
 	}
 
 	err = json.Unmarshal(res, &r)
@@ -103,7 +103,7 @@ func (api *API) UserBillingProfile(ctx context.Context) (UserBillingProfile, err
 	var r userBillingProfileResponse
 	res, err := api.makeRequestContext(ctx, http.MethodGet, "/user/billing/profile", nil)
 	if err != nil {
-		return UserBillingProfile{}, errors.Wrap(err, errMakeRequestError)
+		return UserBillingProfile{}, err
 	}
 
 	err = json.Unmarshal(res, &r)

@@ -66,7 +66,7 @@ func (api *API) Accounts(ctx context.Context, pageOpts PaginationOptions) ([]Acc
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []Account{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+		return []Account{}, ResultInfo{}, err
 	}
 
 	var accListResponse AccountListResponse
@@ -85,7 +85,7 @@ func (api *API) Account(ctx context.Context, accountID string) (Account, ResultI
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return Account{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+		return Account{}, ResultInfo{}, err
 	}
 
 	var accResponse AccountResponse
@@ -105,7 +105,7 @@ func (api *API) UpdateAccount(ctx context.Context, accountID string, account Acc
 
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, account)
 	if err != nil {
-		return Account{}, errors.Wrap(err, errMakeRequestError)
+		return Account{}, err
 	}
 
 	var a AccountDetailResponse
@@ -126,7 +126,7 @@ func (api *API) CreateAccount(ctx context.Context, account Account) (Account, er
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, account)
 	if err != nil {
-		return Account{}, errors.Wrap(err, errMakeRequestError)
+		return Account{}, err
 	}
 
 	var a AccountDetailResponse
@@ -151,7 +151,7 @@ func (api *API) DeleteAccount(ctx context.Context, accountID string) error {
 
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil

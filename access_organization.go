@@ -62,7 +62,7 @@ func (api *API) accessOrganization(ctx context.Context, id string, routeRoot Rou
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return AccessOrganization{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+		return AccessOrganization{}, ResultInfo{}, err
 	}
 
 	var accessOrganizationListResponse AccessOrganizationListResponse
@@ -93,7 +93,7 @@ func (api *API) createAccessOrganization(ctx context.Context, id string, accessO
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, accessOrganization)
 	if err != nil {
-		return AccessOrganization{}, errors.Wrap(err, errMakeRequestError)
+		return AccessOrganization{}, err
 	}
 
 	var accessOrganizationDetailResponse AccessOrganizationDetailResponse
@@ -124,7 +124,7 @@ func (api *API) updateAccessOrganization(ctx context.Context, id string, accessO
 
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, accessOrganization)
 	if err != nil {
-		return AccessOrganization{}, errors.Wrap(err, errMakeRequestError)
+		return AccessOrganization{}, err
 	}
 
 	var accessOrganizationDetailResponse AccessOrganizationDetailResponse

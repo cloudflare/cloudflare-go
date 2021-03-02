@@ -56,7 +56,7 @@ func (api *API) GetPerZoneAuthenticatedOriginPullsStatus(ctx context.Context, zo
 	uri := "/zones/" + zoneID + "/origin_tls_client_auth/settings"
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return PerZoneAuthenticatedOriginPullsSettings{}, errors.Wrap(err, errMakeRequestError)
+		return PerZoneAuthenticatedOriginPullsSettings{}, err
 	}
 	var r PerZoneAuthenticatedOriginPullsSettingsResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -77,7 +77,7 @@ func (api *API) SetPerZoneAuthenticatedOriginPullsStatus(ctx context.Context, zo
 	}
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
-		return PerZoneAuthenticatedOriginPullsSettings{}, errors.Wrap(err, errMakeRequestError)
+		return PerZoneAuthenticatedOriginPullsSettings{}, err
 	}
 	var r PerZoneAuthenticatedOriginPullsSettingsResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -93,7 +93,7 @@ func (api *API) UploadPerZoneAuthenticatedOriginPullsCertificate(ctx context.Con
 	uri := "/zones/" + zoneID + "/origin_tls_client_auth"
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
-		return PerZoneAuthenticatedOriginPullsCertificateDetails{}, errors.Wrap(err, errMakeRequestError)
+		return PerZoneAuthenticatedOriginPullsCertificateDetails{}, err
 	}
 	var r PerZoneAuthenticatedOriginPullsCertificateResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -109,7 +109,7 @@ func (api *API) ListPerZoneAuthenticatedOriginPullsCertificates(ctx context.Cont
 	uri := "/zones/" + zoneID + "/origin_tls_client_auth"
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []PerZoneAuthenticatedOriginPullsCertificateDetails{}, errors.Wrap(err, errMakeRequestError)
+		return []PerZoneAuthenticatedOriginPullsCertificateDetails{}, err
 	}
 	var r PerZoneAuthenticatedOriginPullsCertificatesResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -125,7 +125,7 @@ func (api *API) GetPerZoneAuthenticatedOriginPullsCertificateDetails(ctx context
 	uri := "/zones/" + zoneID + "/origin_tls_client_auth/" + certificateID
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return PerZoneAuthenticatedOriginPullsCertificateDetails{}, errors.Wrap(err, errMakeRequestError)
+		return PerZoneAuthenticatedOriginPullsCertificateDetails{}, err
 	}
 	var r PerZoneAuthenticatedOriginPullsCertificateResponse
 	if err := json.Unmarshal(res, &r); err != nil {
@@ -141,7 +141,7 @@ func (api *API) DeletePerZoneAuthenticatedOriginPullsCertificate(ctx context.Con
 	uri := "/zones/" + zoneID + "/origin_tls_client_auth/" + certificateID
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return PerZoneAuthenticatedOriginPullsCertificateDetails{}, errors.Wrap(err, errMakeRequestError)
+		return PerZoneAuthenticatedOriginPullsCertificateDetails{}, err
 	}
 	var r PerZoneAuthenticatedOriginPullsCertificateResponse
 	if err := json.Unmarshal(res, &r); err != nil {

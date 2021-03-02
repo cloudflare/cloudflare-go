@@ -205,7 +205,7 @@ func (api *API) listAccessRules(ctx context.Context, prefix string, accessRule A
 	uri := prefix + "/firewall/access_rules/rules" + query
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &AccessRuleListResponse{}
@@ -220,7 +220,7 @@ func (api *API) createAccessRule(ctx context.Context, prefix string, accessRule 
 	uri := prefix + "/firewall/access_rules/rules"
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, accessRule)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &AccessRuleResponse{}
@@ -238,7 +238,7 @@ func (api *API) retrieveAccessRule(ctx context.Context, prefix, accessRuleID str
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &AccessRuleResponse{}
@@ -254,7 +254,7 @@ func (api *API) updateAccessRule(ctx context.Context, prefix, accessRuleID strin
 	uri := prefix + "/firewall/access_rules/rules/" + accessRuleID
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, accessRule)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &AccessRuleResponse{}
@@ -269,7 +269,7 @@ func (api *API) deleteAccessRule(ctx context.Context, prefix, accessRuleID strin
 	uri := prefix + "/firewall/access_rules/rules/" + accessRuleID
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	response := &AccessRuleResponse{}
