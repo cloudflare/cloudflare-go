@@ -392,36 +392,32 @@ func (api *API) ListZones(z ...string) ([]Zone, error) {
 		totalPageCount := r.TotalPages
 		var wg sync.WaitGroup
 		wg.Add(totalPageCount)
-		errc := make(chan error)
 
 		for i := 1; i <= totalPageCount; i++ {
-			go func(pageNumber int) error {
+			go func(pageNumber int) {
+				defer wg.Done()
+
 				res, err = api.makeRequest("GET", fmt.Sprintf("/zones?per_page=50&page=%d", pageNumber), nil)
 				if err != nil {
-					errc <- err
+					return
 				}
 
 				err = json.Unmarshal(res, &r)
 				if err != nil {
-					errc <- err
+					return
 				}
 
 				for _, zone := range r.Result {
 					zones = append(zones, zone)
 				}
-
-				select {
-				case err := <-errc:
-					return err
-				default:
-					wg.Done()
-				}
-
-				return nil
 			}(i)
 		}
 
 		wg.Wait()
+
+		if err != nil {
+			return []Zone{}, err
+		}
 	}
 
 	return zones, nil
