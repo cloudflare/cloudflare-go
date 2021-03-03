@@ -389,11 +389,17 @@ func (api *API) ListZones(z ...string) ([]Zone, error) {
 			return []Zone{}, errors.Wrap(err, errUnmarshalError)
 		}
 
+		zones = append(zones, r.Result...)
+
+		if r.TotalPages < 2 {
+			return zones, nil
+		}
+
 		totalPageCount := r.TotalPages
 		var wg sync.WaitGroup
-		wg.Add(totalPageCount)
+		wg.Add(totalPageCount - 1)
 
-		for i := 1; i <= totalPageCount; i++ {
+		for i := 2; i <= totalPageCount; i++ {
 			go func(pageNumber int) {
 				defer wg.Done()
 
@@ -407,9 +413,7 @@ func (api *API) ListZones(z ...string) ([]Zone, error) {
 					return
 				}
 
-				for _, zone := range r.Result {
-					zones = append(zones, zone)
-				}
+				zones = append(zones, r.Result...)
 			}(i)
 		}
 
