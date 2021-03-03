@@ -1,7 +1,9 @@
 package cloudflare
 
 import (
+	"context"
 	"encoding/json"
+	"net/http"
 	"net/url"
 	"strconv"
 	"time"
@@ -113,14 +115,14 @@ type CustomHostnameFallbackOriginResponse struct {
 // hostname in the given zone.
 //
 // API reference: https://api.cloudflare.com/#custom-hostname-for-a-zone-update-custom-hostname-configuration
-func (api *API) UpdateCustomHostnameSSL(zoneID string, customHostnameID string, ssl CustomHostnameSSL) (*CustomHostnameResponse, error) {
+func (api *API) UpdateCustomHostnameSSL(ctx context.Context, zoneID string, customHostnameID string, ssl CustomHostnameSSL) (*CustomHostnameResponse, error) {
 	uri := "/zones/" + zoneID + "/custom_hostnames/" + customHostnameID
 	ch := CustomHostname{
 		SSL: ssl,
 	}
-	res, err := api.makeRequest("PATCH", uri, ch)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, ch)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	var response *CustomHostnameResponse
@@ -135,11 +137,11 @@ func (api *API) UpdateCustomHostnameSSL(zoneID string, customHostnameID string, 
 // hostname in the given zone.
 //
 // API reference: https://api.cloudflare.com/#custom-hostname-for-a-zone-update-custom-hostname-configuration
-func (api *API) UpdateCustomHostname(zoneID string, customHostnameID string, ch CustomHostname) (*CustomHostnameResponse, error) {
+func (api *API) UpdateCustomHostname(ctx context.Context, zoneID string, customHostnameID string, ch CustomHostname) (*CustomHostnameResponse, error) {
 	uri := "/zones/" + zoneID + "/custom_hostnames/" + customHostnameID
-	res, err := api.makeRequest("PATCH", uri, ch)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, ch)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	var response *CustomHostnameResponse
@@ -154,11 +156,11 @@ func (api *API) UpdateCustomHostname(zoneID string, customHostnameID string, ch 
 // certificates).
 //
 // API reference: https://api.cloudflare.com/#custom-hostname-for-a-zone-delete-a-custom-hostname-and-any-issued-ssl-certificates-
-func (api *API) DeleteCustomHostname(zoneID string, customHostnameID string) error {
+func (api *API) DeleteCustomHostname(ctx context.Context, zoneID string, customHostnameID string) error {
 	uri := "/zones/" + zoneID + "/custom_hostnames/" + customHostnameID
-	res, err := api.makeRequest("DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	var response *CustomHostnameResponse
@@ -173,11 +175,11 @@ func (api *API) DeleteCustomHostname(zoneID string, customHostnameID string) err
 // CreateCustomHostname creates a new custom hostname and requests that an SSL certificate be issued for it.
 //
 // API reference: https://api.cloudflare.com/#custom-hostname-for-a-zone-create-custom-hostname
-func (api *API) CreateCustomHostname(zoneID string, ch CustomHostname) (*CustomHostnameResponse, error) {
+func (api *API) CreateCustomHostname(ctx context.Context, zoneID string, ch CustomHostname) (*CustomHostnameResponse, error) {
 	uri := "/zones/" + zoneID + "/custom_hostnames"
-	res, err := api.makeRequest("POST", uri, ch)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, ch)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	var response *CustomHostnameResponse
@@ -195,7 +197,7 @@ func (api *API) CreateCustomHostname(zoneID string, ch CustomHostname) (*CustomH
 // The returned ResultInfo can be used to implement pagination.
 //
 // API reference: https://api.cloudflare.com/#custom-hostname-for-a-zone-list-custom-hostnames
-func (api *API) CustomHostnames(zoneID string, page int, filter CustomHostname) ([]CustomHostname, ResultInfo, error) {
+func (api *API) CustomHostnames(ctx context.Context, zoneID string, page int, filter CustomHostname) ([]CustomHostname, ResultInfo, error) {
 	v := url.Values{}
 	v.Set("per_page", "50")
 	v.Set("page", strconv.Itoa(page))
@@ -205,14 +207,14 @@ func (api *API) CustomHostnames(zoneID string, page int, filter CustomHostname) 
 	query := "?" + v.Encode()
 
 	uri := "/zones/" + zoneID + "/custom_hostnames" + query
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []CustomHostname{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+		return []CustomHostname{}, ResultInfo{}, err
 	}
 	var customHostnameListResponse CustomHostnameListResponse
 	err = json.Unmarshal(res, &customHostnameListResponse)
 	if err != nil {
-		return []CustomHostname{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+		return []CustomHostname{}, ResultInfo{}, err
 	}
 
 	return customHostnameListResponse.Result, customHostnameListResponse.ResultInfo, nil
@@ -221,11 +223,11 @@ func (api *API) CustomHostnames(zoneID string, page int, filter CustomHostname) 
 // CustomHostname inspects the given custom hostname in the given zone.
 //
 // API reference: https://api.cloudflare.com/#custom-hostname-for-a-zone-custom-hostname-configuration-details
-func (api *API) CustomHostname(zoneID string, customHostnameID string) (CustomHostname, error) {
+func (api *API) CustomHostname(ctx context.Context, zoneID string, customHostnameID string) (CustomHostname, error) {
 	uri := "/zones/" + zoneID + "/custom_hostnames/" + customHostnameID
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return CustomHostname{}, errors.Wrap(err, errMakeRequestError)
+		return CustomHostname{}, err
 	}
 
 	var response CustomHostnameResponse
@@ -238,8 +240,8 @@ func (api *API) CustomHostname(zoneID string, customHostnameID string) (CustomHo
 }
 
 // CustomHostnameIDByName retrieves the ID for the given hostname in the given zone.
-func (api *API) CustomHostnameIDByName(zoneID string, hostname string) (string, error) {
-	customHostnames, _, err := api.CustomHostnames(zoneID, 1, CustomHostname{Hostname: hostname})
+func (api *API) CustomHostnameIDByName(ctx context.Context, zoneID string, hostname string) (string, error) {
+	customHostnames, _, err := api.CustomHostnames(ctx, zoneID, 1, CustomHostname{Hostname: hostname})
 	if err != nil {
 		return "", errors.Wrap(err, "CustomHostnames command failed")
 	}
@@ -254,11 +256,11 @@ func (api *API) CustomHostnameIDByName(zoneID string, hostname string) (string, 
 // UpdateCustomHostnameFallbackOrigin modifies the Custom Hostname Fallback origin in the given zone.
 //
 // API reference: https://api.cloudflare.com/#custom-hostname-fallback-origin-for-a-zone-update-fallback-origin-for-custom-hostnames
-func (api *API) UpdateCustomHostnameFallbackOrigin(zoneID string, chfo CustomHostnameFallbackOrigin) (*CustomHostnameFallbackOriginResponse, error) {
+func (api *API) UpdateCustomHostnameFallbackOrigin(ctx context.Context, zoneID string, chfo CustomHostnameFallbackOrigin) (*CustomHostnameFallbackOriginResponse, error) {
 	uri := "/zones/" + zoneID + "/custom_hostnames/fallback_origin"
-	res, err := api.makeRequest("PUT", uri, chfo)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, chfo)
 	if err != nil {
-		return nil, errors.Wrap(err, errMakeRequestError)
+		return nil, err
 	}
 
 	var response *CustomHostnameFallbackOriginResponse
@@ -272,11 +274,11 @@ func (api *API) UpdateCustomHostnameFallbackOrigin(zoneID string, chfo CustomHos
 // DeleteCustomHostnameFallbackOrigin deletes the Custom Hostname Fallback origin in the given zone.
 //
 // API reference: https://api.cloudflare.com/#custom-hostname-fallback-origin-for-a-zone-delete-fallback-origin-for-custom-hostnames
-func (api *API) DeleteCustomHostnameFallbackOrigin(zoneID string) error {
+func (api *API) DeleteCustomHostnameFallbackOrigin(ctx context.Context, zoneID string) error {
 	uri := "/zones/" + zoneID + "/custom_hostnames/fallback_origin"
-	res, err := api.makeRequest("DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	var response *CustomHostnameFallbackOriginResponse
@@ -290,11 +292,11 @@ func (api *API) DeleteCustomHostnameFallbackOrigin(zoneID string) error {
 // CustomHostnameFallbackOrigin inspects the Custom Hostname Fallback origin in the given zone.
 //
 // API reference: https://api.cloudflare.com/#custom-hostname-fallback-origin-for-a-zone-properties
-func (api *API) CustomHostnameFallbackOrigin(zoneID string) (CustomHostnameFallbackOrigin, error) {
+func (api *API) CustomHostnameFallbackOrigin(ctx context.Context, zoneID string) (CustomHostnameFallbackOrigin, error) {
 	uri := "/zones/" + zoneID + "/custom_hostnames/fallback_origin"
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return CustomHostnameFallbackOrigin{}, errors.Wrap(err, errMakeRequestError)
+		return CustomHostnameFallbackOrigin{}, err
 	}
 
 	var response CustomHostnameFallbackOriginResponse

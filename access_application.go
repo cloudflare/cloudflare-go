@@ -1,8 +1,10 @@
 package cloudflare
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"net/url"
 	"strconv"
 	"time"
@@ -60,18 +62,18 @@ type AccessApplicationDetailResponse struct {
 // AccessApplications returns all applications within an account.
 //
 // API reference: https://api.cloudflare.com/#access-applications-list-access-applications
-func (api *API) AccessApplications(accountID string, pageOpts PaginationOptions) ([]AccessApplication, ResultInfo, error) {
-	return api.accessApplications(accountID, pageOpts, AccountRouteRoot)
+func (api *API) AccessApplications(ctx context.Context, accountID string, pageOpts PaginationOptions) ([]AccessApplication, ResultInfo, error) {
+	return api.accessApplications(ctx, accountID, pageOpts, AccountRouteRoot)
 }
 
 // ZoneLevelAccessApplications returns all applications within a zone.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-applications-list-access-applications
-func (api *API) ZoneLevelAccessApplications(zoneID string, pageOpts PaginationOptions) ([]AccessApplication, ResultInfo, error) {
-	return api.accessApplications(zoneID, pageOpts, ZoneRouteRoot)
+func (api *API) ZoneLevelAccessApplications(ctx context.Context, zoneID string, pageOpts PaginationOptions) ([]AccessApplication, ResultInfo, error) {
+	return api.accessApplications(ctx, zoneID, pageOpts, ZoneRouteRoot)
 }
 
-func (api *API) accessApplications(id string, pageOpts PaginationOptions, routeRoot RouteRoot) ([]AccessApplication, ResultInfo, error) {
+func (api *API) accessApplications(ctx context.Context, id string, pageOpts PaginationOptions, routeRoot RouteRoot) ([]AccessApplication, ResultInfo, error) {
 	v := url.Values{}
 	if pageOpts.PerPage > 0 {
 		v.Set("per_page", strconv.Itoa(pageOpts.PerPage))
@@ -85,9 +87,9 @@ func (api *API) accessApplications(id string, pageOpts PaginationOptions, routeR
 		uri = uri + "?" + v.Encode()
 	}
 
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []AccessApplication{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+		return []AccessApplication{}, ResultInfo{}, err
 	}
 
 	var accessApplicationListResponse AccessApplicationListResponse
@@ -103,19 +105,19 @@ func (api *API) accessApplications(id string, pageOpts PaginationOptions, routeR
 // application ID.
 //
 // API reference: https://api.cloudflare.com/#access-applications-access-applications-details
-func (api *API) AccessApplication(accountID, applicationID string) (AccessApplication, error) {
-	return api.accessApplication(accountID, applicationID, AccountRouteRoot)
+func (api *API) AccessApplication(ctx context.Context, accountID, applicationID string) (AccessApplication, error) {
+	return api.accessApplication(ctx, accountID, applicationID, AccountRouteRoot)
 }
 
 // ZoneLevelAccessApplication returns a single zone level application based on the
 // application ID.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-applications-access-applications-details
-func (api *API) ZoneLevelAccessApplication(zoneID, applicationID string) (AccessApplication, error) {
-	return api.accessApplication(zoneID, applicationID, ZoneRouteRoot)
+func (api *API) ZoneLevelAccessApplication(ctx context.Context, zoneID, applicationID string) (AccessApplication, error) {
+	return api.accessApplication(ctx, zoneID, applicationID, ZoneRouteRoot)
 }
 
-func (api *API) accessApplication(id, applicationID string, routeRoot RouteRoot) (AccessApplication, error) {
+func (api *API) accessApplication(ctx context.Context, id, applicationID string, routeRoot RouteRoot) (AccessApplication, error) {
 	uri := fmt.Sprintf(
 		"/%s/%s/access/apps/%s",
 		routeRoot,
@@ -123,9 +125,9 @@ func (api *API) accessApplication(id, applicationID string, routeRoot RouteRoot)
 		applicationID,
 	)
 
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return AccessApplication{}, errors.Wrap(err, errMakeRequestError)
+		return AccessApplication{}, err
 	}
 
 	var accessApplicationDetailResponse AccessApplicationDetailResponse
@@ -140,23 +142,23 @@ func (api *API) accessApplication(id, applicationID string, routeRoot RouteRoot)
 // CreateAccessApplication creates a new access application.
 //
 // API reference: https://api.cloudflare.com/#access-applications-create-access-application
-func (api *API) CreateAccessApplication(accountID string, accessApplication AccessApplication) (AccessApplication, error) {
-	return api.createAccessApplication(accountID, accessApplication, AccountRouteRoot)
+func (api *API) CreateAccessApplication(ctx context.Context, accountID string, accessApplication AccessApplication) (AccessApplication, error) {
+	return api.createAccessApplication(ctx, accountID, accessApplication, AccountRouteRoot)
 }
 
 // CreateZoneLevelAccessApplication creates a new zone level access application.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-applications-create-access-application
-func (api *API) CreateZoneLevelAccessApplication(zoneID string, accessApplication AccessApplication) (AccessApplication, error) {
-	return api.createAccessApplication(zoneID, accessApplication, ZoneRouteRoot)
+func (api *API) CreateZoneLevelAccessApplication(ctx context.Context, zoneID string, accessApplication AccessApplication) (AccessApplication, error) {
+	return api.createAccessApplication(ctx, zoneID, accessApplication, ZoneRouteRoot)
 }
 
-func (api *API) createAccessApplication(id string, accessApplication AccessApplication, routeRoot RouteRoot) (AccessApplication, error) {
+func (api *API) createAccessApplication(ctx context.Context, id string, accessApplication AccessApplication, routeRoot RouteRoot) (AccessApplication, error) {
 	uri := fmt.Sprintf("/%s/%s/access/apps", routeRoot, id)
 
-	res, err := api.makeRequest("POST", uri, accessApplication)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, accessApplication)
 	if err != nil {
-		return AccessApplication{}, errors.Wrap(err, errMakeRequestError)
+		return AccessApplication{}, err
 	}
 
 	var accessApplicationDetailResponse AccessApplicationDetailResponse
@@ -171,18 +173,18 @@ func (api *API) createAccessApplication(id string, accessApplication AccessAppli
 // UpdateAccessApplication updates an existing access application.
 //
 // API reference: https://api.cloudflare.com/#access-applications-update-access-application
-func (api *API) UpdateAccessApplication(accountID string, accessApplication AccessApplication) (AccessApplication, error) {
-	return api.updateAccessApplication(accountID, accessApplication, AccountRouteRoot)
+func (api *API) UpdateAccessApplication(ctx context.Context, accountID string, accessApplication AccessApplication) (AccessApplication, error) {
+	return api.updateAccessApplication(ctx, accountID, accessApplication, AccountRouteRoot)
 }
 
 // UpdateZoneLevelAccessApplication updates an existing zone level access application.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-applications-update-access-application
-func (api *API) UpdateZoneLevelAccessApplication(zoneID string, accessApplication AccessApplication) (AccessApplication, error) {
-	return api.updateAccessApplication(zoneID, accessApplication, ZoneRouteRoot)
+func (api *API) UpdateZoneLevelAccessApplication(ctx context.Context, zoneID string, accessApplication AccessApplication) (AccessApplication, error) {
+	return api.updateAccessApplication(ctx, zoneID, accessApplication, ZoneRouteRoot)
 }
 
-func (api *API) updateAccessApplication(id string, accessApplication AccessApplication, routeRoot RouteRoot) (AccessApplication, error) {
+func (api *API) updateAccessApplication(ctx context.Context, id string, accessApplication AccessApplication, routeRoot RouteRoot) (AccessApplication, error) {
 	if accessApplication.ID == "" {
 		return AccessApplication{}, errors.Errorf("access application ID cannot be empty")
 	}
@@ -194,9 +196,9 @@ func (api *API) updateAccessApplication(id string, accessApplication AccessAppli
 		accessApplication.ID,
 	)
 
-	res, err := api.makeRequest("PUT", uri, accessApplication)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, accessApplication)
 	if err != nil {
-		return AccessApplication{}, errors.Wrap(err, errMakeRequestError)
+		return AccessApplication{}, err
 	}
 
 	var accessApplicationDetailResponse AccessApplicationDetailResponse
@@ -211,18 +213,18 @@ func (api *API) updateAccessApplication(id string, accessApplication AccessAppli
 // DeleteAccessApplication deletes an access application.
 //
 // API reference: https://api.cloudflare.com/#access-applications-delete-access-application
-func (api *API) DeleteAccessApplication(accountID, applicationID string) error {
-	return api.deleteAccessApplication(accountID, applicationID, AccountRouteRoot)
+func (api *API) DeleteAccessApplication(ctx context.Context, accountID, applicationID string) error {
+	return api.deleteAccessApplication(ctx, accountID, applicationID, AccountRouteRoot)
 }
 
 // DeleteZoneLevelAccessApplication deletes a zone level access application.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-applications-delete-access-application
-func (api *API) DeleteZoneLevelAccessApplication(zoneID, applicationID string) error {
-	return api.deleteAccessApplication(zoneID, applicationID, ZoneRouteRoot)
+func (api *API) DeleteZoneLevelAccessApplication(ctx context.Context, zoneID, applicationID string) error {
+	return api.deleteAccessApplication(ctx, zoneID, applicationID, ZoneRouteRoot)
 }
 
-func (api *API) deleteAccessApplication(id, applicationID string, routeRoot RouteRoot) error {
+func (api *API) deleteAccessApplication(ctx context.Context, id, applicationID string, routeRoot RouteRoot) error {
 	uri := fmt.Sprintf(
 		"/%s/%s/access/apps/%s",
 		routeRoot,
@@ -230,9 +232,9 @@ func (api *API) deleteAccessApplication(id, applicationID string, routeRoot Rout
 		applicationID,
 	)
 
-	_, err := api.makeRequest("DELETE", uri, nil)
+	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil
@@ -242,19 +244,19 @@ func (api *API) deleteAccessApplication(id, applicationID string, routeRoot Rout
 // access application.
 //
 // API reference: https://api.cloudflare.com/#access-applications-revoke-access-tokens
-func (api *API) RevokeAccessApplicationTokens(accountID, applicationID string) error {
-	return api.revokeAccessApplicationTokens(accountID, applicationID, AccountRouteRoot)
+func (api *API) RevokeAccessApplicationTokens(ctx context.Context, accountID, applicationID string) error {
+	return api.revokeAccessApplicationTokens(ctx, accountID, applicationID, AccountRouteRoot)
 }
 
 // RevokeZoneLevelAccessApplicationTokens revokes tokens associated with a zone level
 // access application.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-applications-revoke-access-tokens
-func (api *API) RevokeZoneLevelAccessApplicationTokens(zoneID, applicationID string) error {
-	return api.revokeAccessApplicationTokens(zoneID, applicationID, ZoneRouteRoot)
+func (api *API) RevokeZoneLevelAccessApplicationTokens(ctx context.Context, zoneID, applicationID string) error {
+	return api.revokeAccessApplicationTokens(ctx, zoneID, applicationID, ZoneRouteRoot)
 }
 
-func (api *API) revokeAccessApplicationTokens(id string, applicationID string, routeRoot RouteRoot) error {
+func (api *API) revokeAccessApplicationTokens(ctx context.Context, id string, applicationID string, routeRoot RouteRoot) error {
 	uri := fmt.Sprintf(
 		"/%s/%s/access/apps/%s/revoke-tokens",
 		routeRoot,
@@ -262,9 +264,9 @@ func (api *API) revokeAccessApplicationTokens(id string, applicationID string, r
 		applicationID,
 	)
 
-	_, err := api.makeRequest("POST", uri, nil)
+	_, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil

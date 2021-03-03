@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -13,7 +14,7 @@ func TestAcessCACertificate(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
   "result": {
@@ -36,7 +37,7 @@ func TestAcessCACertificate(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/apps/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/ca", handler)
 
-	actual, err := client.AccessCACertificate(accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	actual, err := client.AccessCACertificate(context.Background(), accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -44,7 +45,7 @@ func TestAcessCACertificate(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/apps/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/ca", handler)
 
-	actual, err = client.ZoneLevelAccessCACertificate(zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	actual, err = client.ZoneLevelAccessCACertificate(context.Background(), zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -56,7 +57,7 @@ func TestAcessCACertificates(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
   "result": [{
@@ -79,7 +80,7 @@ func TestAcessCACertificates(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/apps/ca", handler)
 
-	actual, err := client.AccessCACertificates(accountID)
+	actual, err := client.AccessCACertificates(context.Background(), accountID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -87,7 +88,7 @@ func TestAcessCACertificates(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/apps/ca", handler)
 
-	actual, err = client.ZoneLevelAccessCACertificates(zoneID)
+	actual, err = client.ZoneLevelAccessCACertificates(context.Background(), zoneID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -99,7 +100,7 @@ func TestCreateAcessCACertificates(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
   "result": {
@@ -122,7 +123,7 @@ func TestCreateAcessCACertificates(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/apps/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/ca", handler)
 
-	actual, err := client.CreateAccessCACertificate(accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	actual, err := client.CreateAccessCACertificate(context.Background(), accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -130,7 +131,7 @@ func TestCreateAcessCACertificates(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/apps/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/ca", handler)
 
-	actual, err = client.CreateZoneLevelAccessCACertificate(zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	actual, err = client.CreateZoneLevelAccessCACertificate(context.Background(), zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -142,7 +143,7 @@ func TestDeleteAcessCACertificates(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "DELETE", "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodDelete, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
   "result": {
@@ -157,13 +158,13 @@ func TestDeleteAcessCACertificates(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/apps/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/ca", handler)
 
-	err := client.DeleteAccessCACertificate(accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	err := client.DeleteAccessCACertificate(context.Background(), accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	assert.NoError(t, err)
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/apps/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/ca", handler)
 
-	err = client.DeleteZoneLevelAccessCACertificate(zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	err = client.DeleteZoneLevelAccessCACertificate(context.Background(), zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	assert.NoError(t, err)
 }

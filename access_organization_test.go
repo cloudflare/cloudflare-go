@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -14,7 +15,7 @@ func TestAccessOrganization(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -52,7 +53,7 @@ func TestAccessOrganization(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/organizations", handler)
 
-	actual, _, err := client.AccessOrganization(accountID)
+	actual, _, err := client.AccessOrganization(context.Background(), accountID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -60,7 +61,7 @@ func TestAccessOrganization(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/organizations", handler)
 
-	actual, _, err = client.ZoneLevelAccessOrganization(zoneID)
+	actual, _, err = client.ZoneLevelAccessOrganization(context.Background(), zoneID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -72,7 +73,7 @@ func TestCreateAccessOrganization(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -110,7 +111,7 @@ func TestCreateAccessOrganization(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/organizations", handler)
 
-	actual, err := client.CreateAccessOrganization(accountID, want)
+	actual, err := client.CreateAccessOrganization(context.Background(), accountID, want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -118,7 +119,7 @@ func TestCreateAccessOrganization(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/organizations", handler)
 
-	actual, err = client.CreateZoneLevelAccessOrganization(zoneID, want)
+	actual, err = client.CreateZoneLevelAccessOrganization(context.Background(), zoneID, want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -130,7 +131,7 @@ func TestUpdateAccessOrganization(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "PUT", "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPut, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -168,7 +169,7 @@ func TestUpdateAccessOrganization(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/organizations", handler)
 
-	actual, err := client.UpdateAccessOrganization(accountID, want)
+	actual, err := client.UpdateAccessOrganization(context.Background(), accountID, want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -176,7 +177,7 @@ func TestUpdateAccessOrganization(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/organizations", handler)
 
-	actual, err = client.UpdateZoneLevelAccessOrganization(zoneID, want)
+	actual, err = client.UpdateZoneLevelAccessOrganization(context.Background(), zoneID, want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)

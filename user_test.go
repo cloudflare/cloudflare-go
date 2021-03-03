@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -15,7 +16,7 @@ func TestUser_UserDetails(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/user", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
@@ -39,7 +40,7 @@ func TestUser_UserDetails(t *testing.T) {
 }`)
 	})
 
-	user, err := client.UserDetails()
+	user, err := client.UserDetails(context.Background())
 
 	createdOn, _ := time.Parse(time.RFC3339, "2009-07-01T00:00:00Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2016-05-06T20:32:00Z")
@@ -69,7 +70,7 @@ func TestUser_UpdateUser(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/user", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "PATCH", r.Method, "Expected method 'PATCH', got %s", r.Method)
+		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
 		b, err := ioutil.ReadAll(r.Body)
 		defer r.Body.Close()
 		if assert.NoError(t, err) {
@@ -111,7 +112,7 @@ func TestUser_UpdateUser(t *testing.T) {
 		TwoFA:     false,
 	}
 
-	userOut, err := client.UpdateUser(&userIn)
+	userOut, err := client.UpdateUser(context.Background(), &userIn)
 
 	want := User{
 		ID:         "7c5dae5552338874e5053f2534d2767a",
@@ -137,7 +138,7 @@ func TestUser_UserBillingProfile(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/user/billing/profile", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
   "success": true,
@@ -168,7 +169,7 @@ func TestUser_UserBillingProfile(t *testing.T) {
 	createdOn, _ := time.Parse(time.RFC3339, "2014-03-01T12:21:02.0000Z")
 	editedOn, _ := time.Parse(time.RFC3339, "2014-04-01T12:21:02.0000Z")
 
-	userBillingProfile, err := client.UserBillingProfile()
+	userBillingProfile, err := client.UserBillingProfile(context.Background())
 
 	want := UserBillingProfile{
 		ID:              "0020c268dbf54e975e7fe8563df49d52",

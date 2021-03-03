@@ -23,7 +23,7 @@ func TestAccounts(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -51,7 +51,7 @@ func TestAccounts(t *testing.T) {
 	mux.HandleFunc("/accounts", handler)
 	want := []Account{expectedAccountStruct}
 
-	actual, _, err := client.Accounts(PaginationOptions{})
+	actual, _, err := client.Accounts(context.Background(), PaginationOptions{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -63,7 +63,7 @@ func TestAccount(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -89,7 +89,7 @@ func TestAccount(t *testing.T) {
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823", handler)
 	want := expectedAccountStruct
 
-	actual, _, err := client.Account("01a7362d577a6c3019a474fd6f485823")
+	actual, _, err := client.Account(context.Background(), "01a7362d577a6c3019a474fd6f485823")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -101,7 +101,7 @@ func TestUpdateAccount(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "PUT", r.Method, "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		b, err := ioutil.ReadAll(r.Body)
 		defer r.Body.Close()
 
@@ -146,7 +146,7 @@ func TestUpdateAccount(t *testing.T) {
 		},
 	}
 
-	account, err := client.UpdateAccount(newAccountDetails.ID, newAccountDetails)
+	account, err := client.UpdateAccount(context.Background(), newAccountDetails.ID, newAccountDetails)
 	if assert.NoError(t, err) {
 		assert.NotEqual(t, oldAccountDetails.Name, account.Name)
 		assert.Equal(t, account.Name, "Cloudflare Demo - New")
@@ -158,7 +158,7 @@ func TestCreateAccount(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -196,7 +196,7 @@ func TestDeleteAccount(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "DELETE", "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodDelete, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,

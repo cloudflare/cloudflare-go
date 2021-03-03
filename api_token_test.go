@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -19,7 +20,7 @@ func TestAPITokens(t *testing.T) {
 	expiresOn, _ := time.Parse(time.RFC3339, "2020-01-01T00:00:00Z")
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
       "success": true,
@@ -108,7 +109,7 @@ func TestAPITokens(t *testing.T) {
 		},
 	}
 
-	actual, err := client.APITokens()
+	actual, err := client.APITokens(context.Background())
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, []APIToken{expectedAPIToken}, actual)
@@ -125,7 +126,7 @@ func TestGetAPIToken(t *testing.T) {
 	expiresOn, _ := time.Parse(time.RFC3339, "2020-01-01T00:00:00Z")
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
       "success": true,
@@ -212,7 +213,7 @@ func TestGetAPIToken(t *testing.T) {
 		},
 	}
 
-	actual, err := client.GetAPIToken("ed17574386854bf78a67040be0a770b0")
+	actual, err := client.GetAPIToken(context.Background(), "ed17574386854bf78a67040be0a770b0")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAPIToken, actual)
@@ -229,7 +230,7 @@ func TestCreateAPIToken(t *testing.T) {
 	expiresOn, _ := time.Parse(time.RFC3339, "2020-01-01T00:00:00Z")
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
     "success":true,
@@ -294,7 +295,7 @@ func TestCreateAPIToken(t *testing.T) {
 		}},
 	}
 
-	actual, err := client.CreateAPIToken(tokenToCreate)
+	actual, err := client.CreateAPIToken(context.Background(), tokenToCreate)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, tokenToCreate.Name, actual.Name)
@@ -307,7 +308,7 @@ func TestRollAPIToken(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "PUT", "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPut, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
       "success": true,
@@ -320,7 +321,7 @@ func TestRollAPIToken(t *testing.T) {
 
 	mux.HandleFunc("/user/tokens/ed17574386854bf78a67040be0a770b0/value", handler)
 
-	actual, err := client.RollAPIToken("ed17574386854bf78a67040be0a770b0")
+	actual, err := client.RollAPIToken(context.Background(), "ed17574386854bf78a67040be0a770b0")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, "8M7wS6hCpXVc-DoRnPPY_UCWPgy8aea4Wy6kCe5T", actual)
@@ -332,7 +333,7 @@ func TestVerifyAPIToken(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
       "success": true,
@@ -349,7 +350,7 @@ func TestVerifyAPIToken(t *testing.T) {
 
 	mux.HandleFunc("/user/tokens/verify", handler)
 
-	actual, err := client.VerifyAPIToken()
+	actual, err := client.VerifyAPIToken(context.Background())
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, "active", actual.Status)
@@ -361,7 +362,7 @@ func TestDeleteAPIToken(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "DELETE", "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodDelete, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
       "success": true,
@@ -375,7 +376,7 @@ func TestDeleteAPIToken(t *testing.T) {
 
 	mux.HandleFunc("/user/tokens/ed17574386854bf78a67040be0a770b0", handler)
 
-	err := client.DeleteAPIToken("ed17574386854bf78a67040be0a770b0")
+	err := client.DeleteAPIToken(context.Background(), "ed17574386854bf78a67040be0a770b0")
 	assert.NoError(t, err)
 }
 
@@ -386,7 +387,7 @@ func TestListAPITokensPermissionGroups(t *testing.T) {
 	var pgID = "47aa30b6eb97ecae0518b750d6b142b6"
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 		  "success": true,
@@ -409,7 +410,7 @@ func TestListAPITokensPermissionGroups(t *testing.T) {
 		Name:   "DNS Read",
 		Scopes: []string{"com.cloudflare.api.account.zone"},
 	}}
-	actual, err := client.ListAPITokensPermissionGroups()
+	actual, err := client.ListAPITokensPermissionGroups(context.Background())
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}

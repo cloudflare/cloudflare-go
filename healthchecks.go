@@ -1,7 +1,9 @@
 package cloudflare
 
 import (
+	"context"
 	"encoding/json"
+	"net/http"
 	"time"
 
 	"github.com/pkg/errors"
@@ -70,11 +72,11 @@ type HealthcheckResponse struct {
 // Healthchecks returns all healthchecks for a zone.
 //
 // API reference: https://api.cloudflare.com/#health-checks-list-health-checks
-func (api *API) Healthchecks(zoneID string) ([]Healthcheck, error) {
+func (api *API) Healthchecks(ctx context.Context, zoneID string) ([]Healthcheck, error) {
 	uri := "/zones/" + zoneID + "/healthchecks"
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []Healthcheck{}, errors.Wrap(err, errMakeRequestError)
+		return []Healthcheck{}, err
 	}
 	var r HealthcheckListResponse
 	err = json.Unmarshal(res, &r)
@@ -87,11 +89,11 @@ func (api *API) Healthchecks(zoneID string) ([]Healthcheck, error) {
 // Healthcheck returns a single healthcheck by ID.
 //
 // API reference: https://api.cloudflare.com/#health-checks-health-check-details
-func (api *API) Healthcheck(zoneID, healthcheckID string) (Healthcheck, error) {
+func (api *API) Healthcheck(ctx context.Context, zoneID, healthcheckID string) (Healthcheck, error) {
 	uri := "/zones/" + zoneID + "/healthchecks/" + healthcheckID
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return Healthcheck{}, errors.Wrap(err, errMakeRequestError)
+		return Healthcheck{}, err
 	}
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
@@ -104,11 +106,11 @@ func (api *API) Healthcheck(zoneID, healthcheckID string) (Healthcheck, error) {
 // CreateHealthcheck creates a new healthcheck in a zone.
 //
 // API reference: https://api.cloudflare.com/#health-checks-create-health-check
-func (api *API) CreateHealthcheck(zoneID string, healthcheck Healthcheck) (Healthcheck, error) {
+func (api *API) CreateHealthcheck(ctx context.Context, zoneID string, healthcheck Healthcheck) (Healthcheck, error) {
 	uri := "/zones/" + zoneID + "/healthchecks"
-	res, err := api.makeRequest("POST", uri, healthcheck)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, healthcheck)
 	if err != nil {
-		return Healthcheck{}, errors.Wrap(err, errMakeRequestError)
+		return Healthcheck{}, err
 	}
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
@@ -121,11 +123,11 @@ func (api *API) CreateHealthcheck(zoneID string, healthcheck Healthcheck) (Healt
 // UpdateHealthcheck updates an existing healthcheck.
 //
 // API reference: https://api.cloudflare.com/#health-checks-update-health-check
-func (api *API) UpdateHealthcheck(zoneID string, healthcheckID string, healthcheck Healthcheck) (Healthcheck, error) {
+func (api *API) UpdateHealthcheck(ctx context.Context, zoneID string, healthcheckID string, healthcheck Healthcheck) (Healthcheck, error) {
 	uri := "/zones/" + zoneID + "/healthchecks/" + healthcheckID
-	res, err := api.makeRequest("PUT", uri, healthcheck)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, healthcheck)
 	if err != nil {
-		return Healthcheck{}, errors.Wrap(err, errMakeRequestError)
+		return Healthcheck{}, err
 	}
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
@@ -138,11 +140,11 @@ func (api *API) UpdateHealthcheck(zoneID string, healthcheckID string, healthche
 // DeleteHealthcheck deletes a healthcheck in a zone.
 //
 // API reference: https://api.cloudflare.com/#health-checks-delete-health-check
-func (api *API) DeleteHealthcheck(zoneID string, healthcheckID string) error {
+func (api *API) DeleteHealthcheck(ctx context.Context, zoneID string, healthcheckID string) error {
 	uri := "/zones/" + zoneID + "/healthchecks/" + healthcheckID
-	res, err := api.makeRequest("DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
@@ -155,11 +157,11 @@ func (api *API) DeleteHealthcheck(zoneID string, healthcheckID string) error {
 // CreateHealthcheckPreview creates a new preview of a healthcheck in a zone.
 //
 // API reference: https://api.cloudflare.com/#health-checks-create-preview-health-check
-func (api *API) CreateHealthcheckPreview(zoneID string, healthcheck Healthcheck) (Healthcheck, error) {
+func (api *API) CreateHealthcheckPreview(ctx context.Context, zoneID string, healthcheck Healthcheck) (Healthcheck, error) {
 	uri := "/zones/" + zoneID + "/healthchecks/preview"
-	res, err := api.makeRequest("POST", uri, healthcheck)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, healthcheck)
 	if err != nil {
-		return Healthcheck{}, errors.Wrap(err, errMakeRequestError)
+		return Healthcheck{}, err
 	}
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
@@ -172,11 +174,11 @@ func (api *API) CreateHealthcheckPreview(zoneID string, healthcheck Healthcheck)
 // HealthcheckPreview returns a single healthcheck preview by its ID.
 //
 // API reference: https://api.cloudflare.com/#health-checks-health-check-preview-details
-func (api *API) HealthcheckPreview(zoneID, id string) (Healthcheck, error) {
+func (api *API) HealthcheckPreview(ctx context.Context, zoneID, id string) (Healthcheck, error) {
 	uri := "/zones/" + zoneID + "/healthchecks/preview/" + id
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return Healthcheck{}, errors.Wrap(err, errMakeRequestError)
+		return Healthcheck{}, err
 	}
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
@@ -189,11 +191,11 @@ func (api *API) HealthcheckPreview(zoneID, id string) (Healthcheck, error) {
 // DeleteHealthcheckPreview deletes a healthcheck preview in a zone if it exists.
 //
 // API reference: https://api.cloudflare.com/#health-checks-delete-preview-health-check
-func (api *API) DeleteHealthcheckPreview(zoneID string, id string) error {
+func (api *API) DeleteHealthcheckPreview(ctx context.Context, zoneID string, id string) error {
 	uri := "/zones/" + zoneID + "/healthchecks/preview/" + id
-	res, err := api.makeRequest("DELETE", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)

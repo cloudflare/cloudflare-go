@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -16,7 +17,7 @@ func TestUniversalSSLSettingDetails(t *testing.T) {
 	testZoneID := "abcd123"
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -34,7 +35,7 @@ func TestUniversalSSLSettingDetails(t *testing.T) {
 		Enabled: true,
 	}
 
-	got, err := client.UniversalSSLSettingDetails(testZoneID)
+	got, err := client.UniversalSSLSettingDetails(context.Background(), testZoneID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, got)
 	}
@@ -47,7 +48,7 @@ func TestEditUniversalSSLSetting(t *testing.T) {
 	testZoneID := "abcd123"
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "PATCH", r.Method, "Expected method 'PATCH', got %s", r.Method)
+		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
 			panic(err)
@@ -73,7 +74,7 @@ func TestEditUniversalSSLSetting(t *testing.T) {
 		Enabled: true,
 	}
 
-	got, err := client.EditUniversalSSLSetting(testZoneID, want)
+	got, err := client.EditUniversalSSLSetting(context.Background(), testZoneID, want)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, got)
 	}
@@ -86,7 +87,7 @@ func TestUniversalSSLVerificationDetails(t *testing.T) {
 	testZoneID := "abcd123"
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"result": [{
@@ -121,7 +122,7 @@ func TestUniversalSSLVerificationDetails(t *testing.T) {
 		},
 	}
 
-	got, err := client.UniversalSSLVerificationDetails(testZoneID)
+	got, err := client.UniversalSSLVerificationDetails(context.Background(), testZoneID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, got)
 	}

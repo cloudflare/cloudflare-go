@@ -1,6 +1,7 @@
 package cloudflare_test
 
 import (
+	"context"
 	"fmt"
 	"log"
 
@@ -42,7 +43,7 @@ func ExampleAPI_CreatePageRule() {
 		log.Fatal(err)
 	}
 
-	pageRule, err := api.CreatePageRule(zoneID, exampleNewPageRule)
+	pageRule, err := api.CreatePageRule(context.Background(), zoneID, exampleNewPageRule)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -61,7 +62,7 @@ func ExampleAPI_ListPageRules() {
 		log.Fatal(err)
 	}
 
-	pageRules, err := api.ListPageRules(zoneID)
+	pageRules, err := api.ListPageRules(context.Background(), zoneID)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -83,7 +84,7 @@ func ExampleAPI_PageRule() {
 		log.Fatal(err)
 	}
 
-	pageRules, err := api.PageRule(zoneID, "my_page_rule_id")
+	pageRules, err := api.PageRule(context.Background(), zoneID, "my_page_rule_id")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -102,7 +103,7 @@ func ExampleAPI_DeletePageRule() {
 		log.Fatal(err)
 	}
 
-	err = api.DeletePageRule(zoneID, "my_page_rule_id")
+	err = api.DeletePageRule(context.Background(), zoneID, "my_page_rule_id")
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -18,7 +19,7 @@ func TestFirewallRules(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"result":[
@@ -172,7 +173,7 @@ func TestFirewallRules(t *testing.T) {
 		},
 	}
 
-	actual, err := client.FirewallRules("d56084adb405e0b7e32c52321bf07be6", firewallRulePageOpts)
+	actual, err := client.FirewallRules(context.Background(), "d56084adb405e0b7e32c52321bf07be6", firewallRulePageOpts)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -184,7 +185,7 @@ func TestFirewallRule(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"result":{
@@ -222,7 +223,7 @@ func TestFirewallRule(t *testing.T) {
 		},
 	}
 
-	actual, err := client.FirewallRule("d56084adb405e0b7e32c52321bf07be6", "f2d427378e7542acb295380d352e2ebd")
+	actual, err := client.FirewallRule(context.Background(), "d56084adb405e0b7e32c52321bf07be6", "f2d427378e7542acb295380d352e2ebd")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -234,7 +235,7 @@ func TestCreateSingleFirewallRule(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"result":[
@@ -276,7 +277,7 @@ func TestCreateSingleFirewallRule(t *testing.T) {
 		},
 	}
 
-	actual, err := client.CreateFirewallRules("d56084adb405e0b7e32c52321bf07be6", want)
+	actual, err := client.CreateFirewallRules(context.Background(), "d56084adb405e0b7e32c52321bf07be6", want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -288,7 +289,7 @@ func TestCreateMultipleFirewallRules(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"result":[
@@ -356,7 +357,7 @@ func TestCreateMultipleFirewallRules(t *testing.T) {
 		},
 	}
 
-	actual, err := client.CreateFirewallRules("d56084adb405e0b7e32c52321bf07be6", want)
+	actual, err := client.CreateFirewallRules(context.Background(), "d56084adb405e0b7e32c52321bf07be6", want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -381,7 +382,7 @@ func TestUpdateFirewallRuleWithMissingID(t *testing.T) {
 		},
 	}
 
-	_, err := client.UpdateFirewallRule("d56084adb405e0b7e32c52321bf07be6", want)
+	_, err := client.UpdateFirewallRule(context.Background(), "d56084adb405e0b7e32c52321bf07be6", want)
 	assert.EqualError(t, err, "firewall rule ID cannot be empty")
 }
 
@@ -390,7 +391,7 @@ func TestUpdateSingleFirewallRule(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "PUT", "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPut, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"result":{
@@ -428,7 +429,7 @@ func TestUpdateSingleFirewallRule(t *testing.T) {
 		},
 	}
 
-	actual, err := client.UpdateFirewallRule("d56084adb405e0b7e32c52321bf07be6", want)
+	actual, err := client.UpdateFirewallRule(context.Background(), "d56084adb405e0b7e32c52321bf07be6", want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -440,7 +441,7 @@ func TestUpdateMultipleFirewallRules(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "PUT", "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPut, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"result":[
@@ -508,7 +509,7 @@ func TestUpdateMultipleFirewallRules(t *testing.T) {
 		},
 	}
 
-	actual, err := client.UpdateFirewallRules("d56084adb405e0b7e32c52321bf07be6", want)
+	actual, err := client.UpdateFirewallRules(context.Background(), "d56084adb405e0b7e32c52321bf07be6", want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -520,7 +521,7 @@ func TestDeleteSingleFirewallRule(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "DELETE", "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodDelete, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"result": [],
@@ -533,7 +534,7 @@ func TestDeleteSingleFirewallRule(t *testing.T) {
 
 	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/firewall/rules/f2d427378e7542acb295380d352e2ebd", handler)
 
-	err := client.DeleteFirewallRule("d56084adb405e0b7e32c52321bf07be6", "f2d427378e7542acb295380d352e2ebd")
+	err := client.DeleteFirewallRule(context.Background(), "d56084adb405e0b7e32c52321bf07be6", "f2d427378e7542acb295380d352e2ebd")
 	assert.NoError(t, err)
 }
 
@@ -541,6 +542,6 @@ func TestDeleteFirewallRuleWithMissingID(t *testing.T) {
 	setup()
 	defer teardown()
 
-	err := client.DeleteFirewallRule("d56084adb405e0b7e32c52321bf07be6", "")
+	err := client.DeleteFirewallRule(context.Background(), "d56084adb405e0b7e32c52321bf07be6", "")
 	assert.EqualError(t, err, "firewall rule ID cannot be empty")
 }

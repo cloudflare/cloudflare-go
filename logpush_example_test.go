@@ -1,6 +1,7 @@
 package cloudflare_test
 
 import (
+	"context"
 	"fmt"
 	"log"
 
@@ -15,8 +16,8 @@ var exampleNewLogpushJob = cloudflare.LogpushJob{
 }
 
 var exampleUpdatedLogpushJob = cloudflare.LogpushJob{
-	Enabled: true, 
-	Name: "updated.com", 
+	Enabled:         true,
+	Name:            "updated.com",
 	LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp",
 	DestinationConf: "gs://mybucket/logs",
 }
@@ -32,7 +33,7 @@ func ExampleAPI_CreateLogpushJob() {
 		log.Fatal(err)
 	}
 
-	job, err := api.CreateLogpushJob(zoneID, exampleNewLogpushJob)
+	job, err := api.CreateLogpushJob(context.Background(), zoneID, exampleNewLogpushJob)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -51,7 +52,7 @@ func ExampleAPI_UpdateLogpushJob() {
 		log.Fatal(err)
 	}
 
-	err = api.UpdateLogpushJob(zoneID, 1, exampleUpdatedLogpushJob)
+	err = api.UpdateLogpushJob(context.Background(), zoneID, 1, exampleUpdatedLogpushJob)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -68,7 +69,7 @@ func ExampleAPI_LogpushJobs() {
 		log.Fatal(err)
 	}
 
-	jobs, err := api.LogpushJobs(zoneID)
+	jobs, err := api.LogpushJobs(context.Background(), zoneID)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -90,7 +91,7 @@ func ExampleAPI_LogpushJob() {
 		log.Fatal(err)
 	}
 
-	job, err := api.LogpushJob(zoneID, 1)
+	job, err := api.LogpushJob(context.Background(), zoneID, 1)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -109,7 +110,7 @@ func ExampleAPI_DeleteLogpushJob() {
 		log.Fatal(err)
 	}
 
-	err = api.DeleteLogpushJob(zoneID, 1)
+	err = api.DeleteLogpushJob(context.Background(), zoneID, 1)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -126,7 +127,7 @@ func ExampleAPI_GetLogpushOwnershipChallenge() {
 		log.Fatal(err)
 	}
 
-	ownershipChallenge, err := api.GetLogpushOwnershipChallenge(zoneID, "destination_conf")
+	ownershipChallenge, err := api.GetLogpushOwnershipChallenge(context.Background(), zoneID, "destination_conf")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -145,7 +146,7 @@ func ExampleAPI_ValidateLogpushOwnershipChallenge() {
 		log.Fatal(err)
 	}
 
-	isValid, err := api.ValidateLogpushOwnershipChallenge(zoneID, "destination_conf", "ownership_challenge")
+	isValid, err := api.ValidateLogpushOwnershipChallenge(context.Background(), zoneID, "destination_conf", "ownership_challenge")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -164,7 +165,7 @@ func ExampleAPI_CheckLogpushDestinationExists() {
 		log.Fatal(err)
 	}
 
-	exists, err := api.CheckLogpushDestinationExists(zoneID, "destination_conf")
+	exists, err := api.CheckLogpushDestinationExists(context.Background(), zoneID, "destination_conf")
 	if err != nil {
 		log.Fatal(err)
 	}

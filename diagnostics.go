@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 
@@ -78,7 +79,7 @@ type DiagnosticsTracerouteResponseColos struct {
 // requested targets.
 //
 // API documentation: https://api.cloudflare.com/#diagnostics-traceroute
-func (api *API) PerformTraceroute(accountID string, targets, colos []string, tracerouteOptions DiagnosticsTracerouteConfigurationOptions) ([]DiagnosticsTracerouteResponseResult, error) {
+func (api *API) PerformTraceroute(ctx context.Context, accountID string, targets, colos []string, tracerouteOptions DiagnosticsTracerouteConfigurationOptions) ([]DiagnosticsTracerouteResponseResult, error) {
 	uri := "/accounts/" + accountID + "/diagnostics/traceroute"
 	diagnosticsPayload := DiagnosticsTracerouteConfiguration{
 		Targets: targets,
@@ -86,9 +87,9 @@ func (api *API) PerformTraceroute(accountID string, targets, colos []string, tra
 		Options: tracerouteOptions,
 	}
 
-	res, err := api.makeRequest(http.MethodPost, uri, diagnosticsPayload)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, diagnosticsPayload)
 	if err != nil {
-		return []DiagnosticsTracerouteResponseResult{}, errors.Wrap(err, errMakeRequestError)
+		return []DiagnosticsTracerouteResponseResult{}, err
 	}
 
 	var diagnosticsResponse DiagnosticsTracerouteResponse

@@ -1,9 +1,11 @@
 package cloudflare
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net"
+	"net/http"
 	"strconv"
 	"strings"
 	"time"
@@ -262,12 +264,12 @@ func (c SpectrumApplicationConnectivity) Static() bool {
 // SpectrumApplications fetches all of the Spectrum applications for a zone.
 //
 // API reference: https://developers.cloudflare.com/spectrum/api-reference/#list-spectrum-applications
-func (api *API) SpectrumApplications(zoneID string) ([]SpectrumApplication, error) {
+func (api *API) SpectrumApplications(ctx context.Context, zoneID string) ([]SpectrumApplication, error) {
 	uri := "/zones/" + zoneID + "/spectrum/apps"
 
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []SpectrumApplication{}, errors.Wrap(err, errMakeRequestError)
+		return []SpectrumApplication{}, err
 	}
 
 	var spectrumApplications SpectrumApplicationsDetailResponse
@@ -282,16 +284,16 @@ func (api *API) SpectrumApplications(zoneID string) ([]SpectrumApplication, erro
 // SpectrumApplication fetches a single Spectrum application based on the ID.
 //
 // API reference: https://developers.cloudflare.com/spectrum/api-reference/#list-spectrum-applications
-func (api *API) SpectrumApplication(zoneID string, applicationID string) (SpectrumApplication, error) {
+func (api *API) SpectrumApplication(ctx context.Context, zoneID string, applicationID string) (SpectrumApplication, error) {
 	uri := fmt.Sprintf(
 		"/zones/%s/spectrum/apps/%s",
 		zoneID,
 		applicationID,
 	)
 
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return SpectrumApplication{}, errors.Wrap(err, errMakeRequestError)
+		return SpectrumApplication{}, err
 	}
 
 	var spectrumApplication SpectrumApplicationDetailResponse
@@ -306,12 +308,12 @@ func (api *API) SpectrumApplication(zoneID string, applicationID string) (Spectr
 // CreateSpectrumApplication creates a new Spectrum application.
 //
 // API reference: https://developers.cloudflare.com/spectrum/api-reference/#create-a-spectrum-application
-func (api *API) CreateSpectrumApplication(zoneID string, appDetails SpectrumApplication) (SpectrumApplication, error) {
+func (api *API) CreateSpectrumApplication(ctx context.Context, zoneID string, appDetails SpectrumApplication) (SpectrumApplication, error) {
 	uri := "/zones/" + zoneID + "/spectrum/apps"
 
-	res, err := api.makeRequest("POST", uri, appDetails)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, appDetails)
 	if err != nil {
-		return SpectrumApplication{}, errors.Wrap(err, errMakeRequestError)
+		return SpectrumApplication{}, err
 	}
 
 	var spectrumApplication SpectrumApplicationDetailResponse
@@ -326,16 +328,16 @@ func (api *API) CreateSpectrumApplication(zoneID string, appDetails SpectrumAppl
 // UpdateSpectrumApplication updates an existing Spectrum application.
 //
 // API reference: https://developers.cloudflare.com/spectrum/api-reference/#update-a-spectrum-application
-func (api *API) UpdateSpectrumApplication(zoneID, appID string, appDetails SpectrumApplication) (SpectrumApplication, error) {
+func (api *API) UpdateSpectrumApplication(ctx context.Context, zoneID, appID string, appDetails SpectrumApplication) (SpectrumApplication, error) {
 	uri := fmt.Sprintf(
 		"/zones/%s/spectrum/apps/%s",
 		zoneID,
 		appID,
 	)
 
-	res, err := api.makeRequest("PUT", uri, appDetails)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, appDetails)
 	if err != nil {
-		return SpectrumApplication{}, errors.Wrap(err, errMakeRequestError)
+		return SpectrumApplication{}, err
 	}
 
 	var spectrumApplication SpectrumApplicationDetailResponse
@@ -350,16 +352,16 @@ func (api *API) UpdateSpectrumApplication(zoneID, appID string, appDetails Spect
 // DeleteSpectrumApplication removes a Spectrum application based on the ID.
 //
 // API reference: https://developers.cloudflare.com/spectrum/api-reference/#delete-a-spectrum-application
-func (api *API) DeleteSpectrumApplication(zoneID string, applicationID string) error {
+func (api *API) DeleteSpectrumApplication(ctx context.Context, zoneID string, applicationID string) error {
 	uri := fmt.Sprintf(
 		"/zones/%s/spectrum/apps/%s",
 		zoneID,
 		applicationID,
 	)
 
-	_, err := api.makeRequest("DELETE", uri, nil)
+	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil

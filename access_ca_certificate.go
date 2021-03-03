@@ -1,8 +1,10 @@
 package cloudflare
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 
 	"github.com/pkg/errors"
 )
@@ -32,23 +34,23 @@ type AccessCACertificateResponse struct {
 // AccessCACertificates returns all CA certificates within Access.
 //
 // API reference: https://api.cloudflare.com/#access-short-lived-certificates-list-short-lived-certificates
-func (api *API) AccessCACertificates(accountID string) ([]AccessCACertificate, error) {
-	return api.accessCACertificates(accountID, AccountRouteRoot)
+func (api *API) AccessCACertificates(ctx context.Context, accountID string) ([]AccessCACertificate, error) {
+	return api.accessCACertificates(ctx, accountID, AccountRouteRoot)
 }
 
 // ZoneLevelAccessCACertificates returns all zone level CA certificates within Access.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-short-lived-certificates-list-short-lived-certificates
-func (api *API) ZoneLevelAccessCACertificates(zoneID string) ([]AccessCACertificate, error) {
-	return api.accessCACertificates(zoneID, ZoneRouteRoot)
+func (api *API) ZoneLevelAccessCACertificates(ctx context.Context, zoneID string) ([]AccessCACertificate, error) {
+	return api.accessCACertificates(ctx, zoneID, ZoneRouteRoot)
 }
 
-func (api *API) accessCACertificates(id string, routeRoot RouteRoot) ([]AccessCACertificate, error) {
+func (api *API) accessCACertificates(ctx context.Context, id string, routeRoot RouteRoot) ([]AccessCACertificate, error) {
 	uri := fmt.Sprintf("/%s/%s/access/apps/ca", routeRoot, id)
 
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []AccessCACertificate{}, errors.Wrap(err, errMakeRequestError)
+		return []AccessCACertificate{}, err
 	}
 
 	var accessCAListResponse AccessCACertificateListResponse
@@ -64,24 +66,24 @@ func (api *API) accessCACertificates(id string, routeRoot RouteRoot) ([]AccessCA
 // Application.
 //
 // API reference: https://api.cloudflare.com/#access-short-lived-certificates-short-lived-certificate-details
-func (api *API) AccessCACertificate(accountID, applicationID string) (AccessCACertificate, error) {
-	return api.accessCACertificate(accountID, applicationID, AccountRouteRoot)
+func (api *API) AccessCACertificate(ctx context.Context, accountID, applicationID string) (AccessCACertificate, error) {
+	return api.accessCACertificate(ctx, accountID, applicationID, AccountRouteRoot)
 }
 
 // ZoneLevelAccessCACertificate returns a single zone level CA certificate associated with an Access
 // Application.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-short-lived-certificates-short-lived-certificate-details
-func (api *API) ZoneLevelAccessCACertificate(zoneID, applicationID string) (AccessCACertificate, error) {
-	return api.accessCACertificate(zoneID, applicationID, ZoneRouteRoot)
+func (api *API) ZoneLevelAccessCACertificate(ctx context.Context, zoneID, applicationID string) (AccessCACertificate, error) {
+	return api.accessCACertificate(ctx, zoneID, applicationID, ZoneRouteRoot)
 }
 
-func (api *API) accessCACertificate(id string, applicationID string, routeRoot RouteRoot) (AccessCACertificate, error) {
+func (api *API) accessCACertificate(ctx context.Context, id, applicationID string, routeRoot RouteRoot) (AccessCACertificate, error) {
 	uri := fmt.Sprintf("/%s/%s/access/apps/%s/ca", routeRoot, id, applicationID)
 
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return AccessCACertificate{}, errors.Wrap(err, errMakeRequestError)
+		return AccessCACertificate{}, err
 	}
 
 	var accessCAResponse AccessCACertificateResponse
@@ -97,19 +99,19 @@ func (api *API) accessCACertificate(id string, applicationID string, routeRoot R
 // Application.
 //
 // API reference: https://api.cloudflare.com/#access-short-lived-certificates-create-short-lived-certificate
-func (api *API) CreateAccessCACertificate(accountID, applicationID string) (AccessCACertificate, error) {
-	return api.createAccessCACertificate(accountID, applicationID, AccountRouteRoot)
+func (api *API) CreateAccessCACertificate(ctx context.Context, accountID, applicationID string) (AccessCACertificate, error) {
+	return api.createAccessCACertificate(ctx, accountID, applicationID, AccountRouteRoot)
 }
 
 // CreateZoneLevelAccessCACertificate creates a new zone level CA certificate for an Access
 // Application.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-short-lived-certificates-create-short-lived-certificate
-func (api *API) CreateZoneLevelAccessCACertificate(zoneID string, applicationID string) (AccessCACertificate, error) {
-	return api.createAccessCACertificate(zoneID, applicationID, ZoneRouteRoot)
+func (api *API) CreateZoneLevelAccessCACertificate(ctx context.Context, zoneID string, applicationID string) (AccessCACertificate, error) {
+	return api.createAccessCACertificate(ctx, zoneID, applicationID, ZoneRouteRoot)
 }
 
-func (api *API) createAccessCACertificate(id string, applicationID string, routeRoot RouteRoot) (AccessCACertificate, error) {
+func (api *API) createAccessCACertificate(ctx context.Context, id string, applicationID string, routeRoot RouteRoot) (AccessCACertificate, error) {
 	uri := fmt.Sprintf(
 		"/%s/%s/access/apps/%s/ca",
 		routeRoot,
@@ -117,9 +119,9 @@ func (api *API) createAccessCACertificate(id string, applicationID string, route
 		applicationID,
 	)
 
-	res, err := api.makeRequest("POST", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
 	if err != nil {
-		return AccessCACertificate{}, errors.Wrap(err, errMakeRequestError)
+		return AccessCACertificate{}, err
 	}
 
 	var accessCACertificate AccessCACertificateResponse
@@ -135,19 +137,19 @@ func (api *API) createAccessCACertificate(id string, applicationID string, route
 // Access Application.
 //
 // API reference: https://api.cloudflare.com/#access-short-lived-certificates-delete-access-certificate
-func (api *API) DeleteAccessCACertificate(accountID, applicationID string) error {
-	return api.deleteAccessCACertificate(accountID, applicationID, AccountRouteRoot)
+func (api *API) DeleteAccessCACertificate(ctx context.Context, accountID, applicationID string) error {
+	return api.deleteAccessCACertificate(ctx, accountID, applicationID, AccountRouteRoot)
 }
 
 // DeleteZoneLevelAccessCACertificate deletes a zone level Access CA certificate on a defined
 // Access Application.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-short-lived-certificates-delete-access-certificate
-func (api *API) DeleteZoneLevelAccessCACertificate(zoneID, applicationID string) error {
-	return api.deleteAccessCACertificate(zoneID, applicationID, ZoneRouteRoot)
+func (api *API) DeleteZoneLevelAccessCACertificate(ctx context.Context, zoneID, applicationID string) error {
+	return api.deleteAccessCACertificate(ctx, zoneID, applicationID, ZoneRouteRoot)
 }
 
-func (api *API) deleteAccessCACertificate(id string, applicationID string, routeRoot RouteRoot) error {
+func (api *API) deleteAccessCACertificate(ctx context.Context, id string, applicationID string, routeRoot RouteRoot) error {
 	uri := fmt.Sprintf(
 		"/%s/%s/access/apps/%s/ca",
 		routeRoot,
@@ -155,9 +157,9 @@ func (api *API) deleteAccessCACertificate(id string, applicationID string, route
 		applicationID,
 	)
 
-	_, err := api.makeRequest("DELETE", uri, nil)
+	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil

@@ -1,8 +1,10 @@
 package cloudflare
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"net/url"
 	"strconv"
 	"time"
@@ -53,18 +55,18 @@ type AccessPolicyDetailResponse struct {
 // AccessPolicies returns all access policies for an access application.
 //
 // API reference: https://api.cloudflare.com/#access-policy-list-access-policies
-func (api *API) AccessPolicies(accountID, applicationID string, pageOpts PaginationOptions) ([]AccessPolicy, ResultInfo, error) {
-	return api.accessPolicies(accountID, applicationID, pageOpts, AccountRouteRoot)
+func (api *API) AccessPolicies(ctx context.Context, accountID, applicationID string, pageOpts PaginationOptions) ([]AccessPolicy, ResultInfo, error) {
+	return api.accessPolicies(ctx, accountID, applicationID, pageOpts, AccountRouteRoot)
 }
 
 // ZoneLevelAccessPolicies returns all zone level access policies for an access application.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-policy-list-access-policies
-func (api *API) ZoneLevelAccessPolicies(zoneID, applicationID string, pageOpts PaginationOptions) ([]AccessPolicy, ResultInfo, error) {
-	return api.accessPolicies(zoneID, applicationID, pageOpts, ZoneRouteRoot)
+func (api *API) ZoneLevelAccessPolicies(ctx context.Context, zoneID, applicationID string, pageOpts PaginationOptions) ([]AccessPolicy, ResultInfo, error) {
+	return api.accessPolicies(ctx, zoneID, applicationID, pageOpts, ZoneRouteRoot)
 }
 
-func (api *API) accessPolicies(id string, applicationID string, pageOpts PaginationOptions, routeRoot RouteRoot) ([]AccessPolicy, ResultInfo, error) {
+func (api *API) accessPolicies(ctx context.Context, id string, applicationID string, pageOpts PaginationOptions, routeRoot RouteRoot) ([]AccessPolicy, ResultInfo, error) {
 	v := url.Values{}
 	if pageOpts.PerPage > 0 {
 		v.Set("per_page", strconv.Itoa(pageOpts.PerPage))
@@ -84,9 +86,9 @@ func (api *API) accessPolicies(id string, applicationID string, pageOpts Paginat
 		uri = uri + "?" + v.Encode()
 	}
 
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []AccessPolicy{}, ResultInfo{}, errors.Wrap(err, errMakeRequestError)
+		return []AccessPolicy{}, ResultInfo{}, err
 	}
 
 	var accessPolicyListResponse AccessPolicyListResponse
@@ -101,18 +103,18 @@ func (api *API) accessPolicies(id string, applicationID string, pageOpts Paginat
 // AccessPolicy returns a single policy based on the policy ID.
 //
 // API reference: https://api.cloudflare.com/#access-policy-access-policy-details
-func (api *API) AccessPolicy(accountID, applicationID, policyID string) (AccessPolicy, error) {
-	return api.accessPolicy(accountID, applicationID, policyID, AccountRouteRoot)
+func (api *API) AccessPolicy(ctx context.Context, accountID, applicationID, policyID string) (AccessPolicy, error) {
+	return api.accessPolicy(ctx, accountID, applicationID, policyID, AccountRouteRoot)
 }
 
 // ZoneLevelAccessPolicy returns a single zone level policy based on the policy ID.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-policy-access-policy-details
-func (api *API) ZoneLevelAccessPolicy(zoneID, applicationID, policyID string) (AccessPolicy, error) {
-	return api.accessPolicy(zoneID, applicationID, policyID, ZoneRouteRoot)
+func (api *API) ZoneLevelAccessPolicy(ctx context.Context, zoneID, applicationID, policyID string) (AccessPolicy, error) {
+	return api.accessPolicy(ctx, zoneID, applicationID, policyID, ZoneRouteRoot)
 }
 
-func (api *API) accessPolicy(id string, applicationID string, policyID string, routeRoot RouteRoot) (AccessPolicy, error) {
+func (api *API) accessPolicy(ctx context.Context, id string, applicationID string, policyID string, routeRoot RouteRoot) (AccessPolicy, error) {
 	uri := fmt.Sprintf(
 		"/%s/%s/access/apps/%s/policies/%s",
 		routeRoot,
@@ -121,9 +123,9 @@ func (api *API) accessPolicy(id string, applicationID string, policyID string, r
 		policyID,
 	)
 
-	res, err := api.makeRequest("GET", uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return AccessPolicy{}, errors.Wrap(err, errMakeRequestError)
+		return AccessPolicy{}, err
 	}
 
 	var accessPolicyDetailResponse AccessPolicyDetailResponse
@@ -138,18 +140,18 @@ func (api *API) accessPolicy(id string, applicationID string, policyID string, r
 // CreateAccessPolicy creates a new access policy.
 //
 // API reference: https://api.cloudflare.com/#access-policy-create-access-policy
-func (api *API) CreateAccessPolicy(accountID, applicationID string, accessPolicy AccessPolicy) (AccessPolicy, error) {
-	return api.createAccessPolicy(accountID, applicationID, accessPolicy, AccountRouteRoot)
+func (api *API) CreateAccessPolicy(ctx context.Context, accountID, applicationID string, accessPolicy AccessPolicy) (AccessPolicy, error) {
+	return api.createAccessPolicy(ctx, accountID, applicationID, accessPolicy, AccountRouteRoot)
 }
 
 // CreateZoneLevelAccessPolicy creates a new zone level access policy.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-policy-create-access-policy
-func (api *API) CreateZoneLevelAccessPolicy(zoneID, applicationID string, accessPolicy AccessPolicy) (AccessPolicy, error) {
-	return api.createAccessPolicy(zoneID, applicationID, accessPolicy, ZoneRouteRoot)
+func (api *API) CreateZoneLevelAccessPolicy(ctx context.Context, zoneID, applicationID string, accessPolicy AccessPolicy) (AccessPolicy, error) {
+	return api.createAccessPolicy(ctx, zoneID, applicationID, accessPolicy, ZoneRouteRoot)
 }
 
-func (api *API) createAccessPolicy(id, applicationID string, accessPolicy AccessPolicy, routeRoot RouteRoot) (AccessPolicy, error) {
+func (api *API) createAccessPolicy(ctx context.Context, id, applicationID string, accessPolicy AccessPolicy, routeRoot RouteRoot) (AccessPolicy, error) {
 	uri := fmt.Sprintf(
 		"/%s/%s/access/apps/%s/policies",
 		routeRoot,
@@ -157,9 +159,9 @@ func (api *API) createAccessPolicy(id, applicationID string, accessPolicy Access
 		applicationID,
 	)
 
-	res, err := api.makeRequest("POST", uri, accessPolicy)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, accessPolicy)
 	if err != nil {
-		return AccessPolicy{}, errors.Wrap(err, errMakeRequestError)
+		return AccessPolicy{}, err
 	}
 
 	var accessPolicyDetailResponse AccessPolicyDetailResponse
@@ -174,18 +176,18 @@ func (api *API) createAccessPolicy(id, applicationID string, accessPolicy Access
 // UpdateAccessPolicy updates an existing access policy.
 //
 // API reference: https://api.cloudflare.com/#access-policy-update-access-policy
-func (api *API) UpdateAccessPolicy(accountID, applicationID string, accessPolicy AccessPolicy) (AccessPolicy, error) {
-	return api.updateAccessPolicy(accountID, applicationID, accessPolicy, AccountRouteRoot)
+func (api *API) UpdateAccessPolicy(ctx context.Context, accountID, applicationID string, accessPolicy AccessPolicy) (AccessPolicy, error) {
+	return api.updateAccessPolicy(ctx, accountID, applicationID, accessPolicy, AccountRouteRoot)
 }
 
 // UpdateZoneLevelAccessPolicy updates an existing zone level access policy.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-policy-update-access-policy
-func (api *API) UpdateZoneLevelAccessPolicy(zoneID, applicationID string, accessPolicy AccessPolicy) (AccessPolicy, error) {
-	return api.updateAccessPolicy(zoneID, applicationID, accessPolicy, ZoneRouteRoot)
+func (api *API) UpdateZoneLevelAccessPolicy(ctx context.Context, zoneID, applicationID string, accessPolicy AccessPolicy) (AccessPolicy, error) {
+	return api.updateAccessPolicy(ctx, zoneID, applicationID, accessPolicy, ZoneRouteRoot)
 }
 
-func (api *API) updateAccessPolicy(id, applicationID string, accessPolicy AccessPolicy, routeRoot RouteRoot) (AccessPolicy, error) {
+func (api *API) updateAccessPolicy(ctx context.Context, id, applicationID string, accessPolicy AccessPolicy, routeRoot RouteRoot) (AccessPolicy, error) {
 	if accessPolicy.ID == "" {
 		return AccessPolicy{}, errors.Errorf("access policy ID cannot be empty")
 	}
@@ -197,9 +199,9 @@ func (api *API) updateAccessPolicy(id, applicationID string, accessPolicy Access
 		accessPolicy.ID,
 	)
 
-	res, err := api.makeRequest("PUT", uri, accessPolicy)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, accessPolicy)
 	if err != nil {
-		return AccessPolicy{}, errors.Wrap(err, errMakeRequestError)
+		return AccessPolicy{}, err
 	}
 
 	var accessPolicyDetailResponse AccessPolicyDetailResponse
@@ -214,18 +216,18 @@ func (api *API) updateAccessPolicy(id, applicationID string, accessPolicy Access
 // DeleteAccessPolicy deletes an access policy.
 //
 // API reference: https://api.cloudflare.com/#access-policy-update-access-policy
-func (api *API) DeleteAccessPolicy(accountID, applicationID, accessPolicyID string) error {
-	return api.deleteAccessPolicy(accountID, applicationID, accessPolicyID, AccountRouteRoot)
+func (api *API) DeleteAccessPolicy(ctx context.Context, accountID, applicationID, accessPolicyID string) error {
+	return api.deleteAccessPolicy(ctx, accountID, applicationID, accessPolicyID, AccountRouteRoot)
 }
 
 // DeleteZoneLevelAccessPolicy deletes a zone level access policy.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-policy-delete-access-policy
-func (api *API) DeleteZoneLevelAccessPolicy(zoneID, applicationID, accessPolicyID string) error {
-	return api.deleteAccessPolicy(zoneID, applicationID, accessPolicyID, ZoneRouteRoot)
+func (api *API) DeleteZoneLevelAccessPolicy(ctx context.Context, zoneID, applicationID, accessPolicyID string) error {
+	return api.deleteAccessPolicy(ctx, zoneID, applicationID, accessPolicyID, ZoneRouteRoot)
 }
 
-func (api *API) deleteAccessPolicy(id, applicationID, accessPolicyID string, routeRoot RouteRoot) error {
+func (api *API) deleteAccessPolicy(ctx context.Context, id, applicationID, accessPolicyID string, routeRoot RouteRoot) error {
 	uri := fmt.Sprintf(
 		"/%s/%s/access/apps/%s/policies/%s",
 		routeRoot,
@@ -234,9 +236,9 @@ func (api *API) deleteAccessPolicy(id, applicationID, accessPolicyID string, rou
 		accessPolicyID,
 	)
 
-	_, err := api.makeRequest("DELETE", uri, nil)
+	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return errors.Wrap(err, errMakeRequestError)
+		return err
 	}
 
 	return nil

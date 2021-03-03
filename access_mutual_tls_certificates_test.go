@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -14,7 +15,7 @@ func TestAccessMutualTLSCertificates(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -52,7 +53,7 @@ func TestAccessMutualTLSCertificates(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/certificates", handler)
 
-	actual, err := client.AccessMutualTLSCertificates(accountID)
+	actual, err := client.AccessMutualTLSCertificates(context.Background(), accountID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -60,7 +61,7 @@ func TestAccessMutualTLSCertificates(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/certificates", handler)
 
-	actual, err = client.ZoneAccessMutualTLSCertificates(zoneID)
+	actual, err = client.ZoneAccessMutualTLSCertificates(context.Background(), zoneID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -72,7 +73,7 @@ func TestAccessMutualTLSCertificate(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "GET", "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -108,7 +109,7 @@ func TestAccessMutualTLSCertificate(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/certificates/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err := client.AccessMutualTLSCertificate(accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	actual, err := client.AccessMutualTLSCertificate(context.Background(), accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -116,7 +117,7 @@ func TestAccessMutualTLSCertificate(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/certificates/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err = client.ZoneAccessMutualTLSCertificate(zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	actual, err = client.ZoneAccessMutualTLSCertificate(context.Background(), zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -128,7 +129,7 @@ func TestCreateAccessMutualTLSCertificate(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "POST", "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -169,7 +170,7 @@ func TestCreateAccessMutualTLSCertificate(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/certificates", handler)
 
-	actual, err := client.CreateAccessMutualTLSCertificate(accountID, certificate)
+	actual, err := client.CreateAccessMutualTLSCertificate(context.Background(), accountID, certificate)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -177,7 +178,7 @@ func TestCreateAccessMutualTLSCertificate(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/certificates", handler)
 
-	actual, err = client.CreateZoneAccessMutualTLSCertificate(zoneID, certificate)
+	actual, err = client.CreateZoneAccessMutualTLSCertificate(context.Background(), zoneID, certificate)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -189,7 +190,7 @@ func TestUpdateAccessMutualTLSCertificate(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "PUT", "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodPut, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -230,7 +231,7 @@ func TestUpdateAccessMutualTLSCertificate(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/certificates/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err := client.UpdateAccessMutualTLSCertificate(accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", certificate)
+	actual, err := client.UpdateAccessMutualTLSCertificate(context.Background(), accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", certificate)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -238,7 +239,7 @@ func TestUpdateAccessMutualTLSCertificate(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/certificates/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err = client.UpdateZoneAccessMutualTLSCertificate(zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", certificate)
+	actual, err = client.UpdateZoneAccessMutualTLSCertificate(context.Background(), zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", certificate)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -250,7 +251,7 @@ func TestDeleteAccessMutualTLSCertificate(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, "DELETE", "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, r.Method, http.MethodDelete, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -264,13 +265,13 @@ func TestDeleteAccessMutualTLSCertificate(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+accountID+"/access/certificates/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	err := client.DeleteAccessMutualTLSCertificate(accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	err := client.DeleteAccessMutualTLSCertificate(context.Background(), accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	assert.NoError(t, err)
 
 	mux.HandleFunc("/zones/"+zoneID+"/access/certificates/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	err = client.DeleteZoneAccessMutualTLSCertificate(zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	err = client.DeleteZoneAccessMutualTLSCertificate(context.Background(), zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	assert.NoError(t, err)
 }

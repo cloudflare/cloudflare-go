@@ -1,6 +1,7 @@
 package cloudflare_test
 
 import (
+	"context"
 	"fmt"
 	"log"
 
@@ -19,7 +20,7 @@ func ExampleAPI_ListZoneAccessRules_all() {
 	}
 
 	// Fetch all access rules for a zone
-	response, err := api.ListZoneAccessRules(zoneID, cloudflare.AccessRule{}, 1)
+	response, err := api.ListZoneAccessRules(context.Background(), zoneID, cloudflare.AccessRule{}, 1)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -44,7 +45,7 @@ func ExampleAPI_ListZoneAccessRules_filterByIP() {
 	localhost := cloudflare.AccessRule{
 		Configuration: cloudflare.AccessRuleConfiguration{Target: "127.0.0.1"},
 	}
-	response, err := api.ListZoneAccessRules(zoneID, localhost, 1)
+	response, err := api.ListZoneAccessRules(context.Background(), zoneID, localhost, 1)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -69,7 +70,7 @@ func ExampleAPI_ListZoneAccessRules_filterByMode() {
 	foo := cloudflare.AccessRule{
 		Mode: "block",
 	}
-	response, err := api.ListZoneAccessRules(zoneID, foo, 1)
+	response, err := api.ListZoneAccessRules(context.Background(), zoneID, foo, 1)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -94,7 +95,7 @@ func ExampleAPI_ListZoneAccessRules_filterByNote() {
 	foo := cloudflare.AccessRule{
 		Notes: "example",
 	}
-	response, err := api.ListZoneAccessRules(zoneID, foo, 1)
+	response, err := api.ListZoneAccessRules(context.Background(), zoneID, foo, 1)
 	if err != nil {
 		log.Fatal(err)
 	}

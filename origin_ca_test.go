@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -49,7 +50,7 @@ func TestOriginCA_CreateOriginCertificate(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/certificates", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "POST", r.Method, "Expected method 'POST', got %ss", r.Method)
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %ss", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
   "success": true,
@@ -82,7 +83,7 @@ func TestOriginCA_CreateOriginCertificate(t *testing.T) {
 		CSR:             "-----BEGIN CERTIFICATE REQUEST-----MIICvDCCAaQCAQAwdzELMAkGA1UEBhMCVVMxDTALBgNVBAgMBFV0YWgxDzANBgNVBAcMBkxpbmRvbjEWMBQGA1UECgwNRGlnaUNlcnQgSW5jLjERMA8GA1UECwwIRGlnaUNlcnQxHTAbBgNVBAMMFGV4YW1wbGUuZGlnaWNlcnQuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA8+To7d+2kPWeBv/orU3LVbJwDrSQbeKamCmowp5bqDxIwV20zqRb7APUOKYoVEFFOEQs6T6gImnIolhbiH6m4zgZ/CPvWBOkZc+c1Po2EmvBz+AD5sBdT5kzGQA6NbWyZGldxRthNLOs1efOhdnWFuhI162qmcflgpiIWDuwq4C9f+YkeJhNn9dF5+owm8cOQmDrV8NNdiTqin8q3qYAHHJRW28glJUCZkTZwIaSR6crBQ8TbYNE0dc+Caa3DOIkz1EOsHWzTx+n0zKfqcbgXi4DJx+C1bjptYPRBPZL8DAeWuA8ebudVT44yEp82G96/Ggcf7F33xMxe0yc+Xa6owIDAQABoAAwDQYJKoZIhvcNAQEFBQADggEBAB0kcrFccSmFDmxox0Ne01UIqSsDqHgL+XmHTXJwre6DhJSZwbvEtOK0G3+dr4Fs11WuUNt5qcLsx5a8uk4G6AKHMzuhLsJ7XZjgmQXGECpYQ4mC3yT3ZoCGpIXbw+iP3lmEEXgaQL0Tx5LFl/okKbKYwIqNiyKWOMj7ZR/wxWg/ZDGRs55xuoeLDJ/ZRFf9bI+IaCUd1YrfYcHIl3G87Av+r49YVwqRDT0VDV7uLgqn29XI1PpVUNCPQGn9p/eX6Qo7vpDaPybRtA2R7XLKjQaF9oXWeCUqy1hvJac9QFO297Ob1alpHPoZ7mWiEuJwjBPii6a9M9G30nUo39lBi1w=-----END CERTIFICATE REQUEST-----",
 	}
 
-	createdCertificate, err := client.CreateOriginCertificate(testCertificate)
+	createdCertificate, err := client.CreateOriginCertificate(context.Background(), testCertificate)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, createdCertificate, &testCertificate)
@@ -96,7 +97,7 @@ func TestOriginCA_OriginCertificates(t *testing.T) {
 	testZoneID := "023e105f4ecef8ad9ca31a8372d0c353"
 
 	mux.HandleFunc("/certificates", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %ss", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %ss", r.Method)
 		assert.Equal(t, testZoneID, r.URL.Query().Get("zone_id"), "Expected zone_id '', got %%s", testZoneID)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
@@ -138,7 +139,7 @@ func TestOriginCA_OriginCertificates(t *testing.T) {
 		CSR:             "-----BEGIN CERTIFICATE REQUEST-----MIICvDCCAaQCAQAwdzELMAkGA1UEBhMCVVMxDTALBgNVBAgMBFV0YWgxDzANBgNVBAcMBkxpbmRvbjEWMBQGA1UECgwNRGlnaUNlcnQgSW5jLjERMA8GA1UECwwIRGlnaUNlcnQxHTAbBgNVBAMMFGV4YW1wbGUuZGlnaWNlcnQuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA8+To7d+2kPWeBv/orU3LVbJwDrSQbeKamCmowp5bqDxIwV20zqRb7APUOKYoVEFFOEQs6T6gImnIolhbiH6m4zgZ/CPvWBOkZc+c1Po2EmvBz+AD5sBdT5kzGQA6NbWyZGldxRthNLOs1efOhdnWFuhI162qmcflgpiIWDuwq4C9f+YkeJhNn9dF5+owm8cOQmDrV8NNdiTqin8q3qYAHHJRW28glJUCZkTZwIaSR6crBQ8TbYNE0dc+Caa3DOIkz1EOsHWzTx+n0zKfqcbgXi4DJx+C1bjptYPRBPZL8DAeWuA8ebudVT44yEp82G96/Ggcf7F33xMxe0yc+Xa6owIDAQABoAAwDQYJKoZIhvcNAQEFBQADggEBAB0kcrFccSmFDmxox0Ne01UIqSsDqHgL+XmHTXJwre6DhJSZwbvEtOK0G3+dr4Fs11WuUNt5qcLsx5a8uk4G6AKHMzuhLsJ7XZjgmQXGECpYQ4mC3yT3ZoCGpIXbw+iP3lmEEXgaQL0Tx5LFl/okKbKYwIqNiyKWOMj7ZR/wxWg/ZDGRs55xuoeLDJ/ZRFf9bI+IaCUd1YrfYcHIl3G87Av+r49YVwqRDT0VDV7uLgqn29XI1PpVUNCPQGn9p/eX6Qo7vpDaPybRtA2R7XLKjQaF9oXWeCUqy1hvJac9QFO297Ob1alpHPoZ7mWiEuJwjBPii6a9M9G30nUo39lBi1w=-----END CERTIFICATE REQUEST-----",
 	}
 
-	certs, err := client.OriginCertificates(OriginCACertificateListOptions{ZoneID: testZoneID})
+	certs, err := client.OriginCertificates(context.Background(), OriginCACertificateListOptions{ZoneID: testZoneID})
 
 	if assert.NoError(t, err) {
 		assert.IsType(t, []OriginCACertificate{}, certs, "Expected type []OriginCACertificate and got %v", certs)
@@ -151,7 +152,7 @@ func TestOriginCA_OriginCertificate(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/certificates/0x47530d8f561faa08", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "GET", r.Method, "Expected method 'GET', got %ss", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %ss", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
   "success": true,
@@ -187,7 +188,7 @@ func TestOriginCA_OriginCertificate(t *testing.T) {
 		CSR:             "-----BEGIN CERTIFICATE REQUEST-----MIICvDCCAaQCAQAwdzELMAkGA1UEBhMCVVMxDTALBgNVBAgMBFV0YWgxDzANBgNVBAcMBkxpbmRvbjEWMBQGA1UECgwNRGlnaUNlcnQgSW5jLjERMA8GA1UECwwIRGlnaUNlcnQxHTAbBgNVBAMMFGV4YW1wbGUuZGlnaWNlcnQuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA8+To7d+2kPWeBv/orU3LVbJwDrSQbeKamCmowp5bqDxIwV20zqRb7APUOKYoVEFFOEQs6T6gImnIolhbiH6m4zgZ/CPvWBOkZc+c1Po2EmvBz+AD5sBdT5kzGQA6NbWyZGldxRthNLOs1efOhdnWFuhI162qmcflgpiIWDuwq4C9f+YkeJhNn9dF5+owm8cOQmDrV8NNdiTqin8q3qYAHHJRW28glJUCZkTZwIaSR6crBQ8TbYNE0dc+Caa3DOIkz1EOsHWzTx+n0zKfqcbgXi4DJx+C1bjptYPRBPZL8DAeWuA8ebudVT44yEp82G96/Ggcf7F33xMxe0yc+Xa6owIDAQABoAAwDQYJKoZIhvcNAQEFBQADggEBAB0kcrFccSmFDmxox0Ne01UIqSsDqHgL+XmHTXJwre6DhJSZwbvEtOK0G3+dr4Fs11WuUNt5qcLsx5a8uk4G6AKHMzuhLsJ7XZjgmQXGECpYQ4mC3yT3ZoCGpIXbw+iP3lmEEXgaQL0Tx5LFl/okKbKYwIqNiyKWOMj7ZR/wxWg/ZDGRs55xuoeLDJ/ZRFf9bI+IaCUd1YrfYcHIl3G87Av+r49YVwqRDT0VDV7uLgqn29XI1PpVUNCPQGn9p/eX6Qo7vpDaPybRtA2R7XLKjQaF9oXWeCUqy1hvJac9QFO297Ob1alpHPoZ7mWiEuJwjBPii6a9M9G30nUo39lBi1w=-----END CERTIFICATE REQUEST-----",
 	}
 
-	cert, err := client.OriginCertificate(testCertificate.ID)
+	cert, err := client.OriginCertificate(context.Background(), testCertificate.ID)
 
 	if assert.NoError(t, err) {
 		assert.IsType(t, &OriginCACertificate{}, cert, "Expected type &OriginCACertificate and got %v", cert)
@@ -200,7 +201,7 @@ func TestOriginCA_RevokeCertificate(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/certificates/0x47530d8f561faa08", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "DELETE", r.Method, "Expected method 'DELETE', got %ss", r.Method)
+		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %ss", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
   "success": true,
@@ -216,7 +217,7 @@ func TestOriginCA_RevokeCertificate(t *testing.T) {
 		ID: "0x47530d8f561faa08",
 	}
 
-	cert, err := client.RevokeOriginCertificate(testCertificate.ID)
+	cert, err := client.RevokeOriginCertificate(context.Background(), testCertificate.ID)
 
 	if assert.NoError(t, err) {
 		assert.IsType(t, &OriginCACertificateID{}, cert, "Expected type &OriginCACertificateID and got %v", cert)

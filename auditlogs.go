@@ -1,7 +1,9 @@
 package cloudflare
 
 import (
+	"context"
 	"encoding/json"
+	"net/http"
 	"net/url"
 	"path"
 	"strconv"
@@ -110,13 +112,13 @@ func (a AuditLogFilter) ToQuery() url.Values {
 // filtered based on any argument in the AuditLogFilter
 //
 // API Reference: https://api.cloudflare.com/#audit-logs-list-organization-audit-logs
-func (api *API) GetOrganizationAuditLogs(organizationID string, a AuditLogFilter) (AuditLogResponse, error) {
+func (api *API) GetOrganizationAuditLogs(ctx context.Context, organizationID string, a AuditLogFilter) (AuditLogResponse, error) {
 	uri := url.URL{
 		Path:       path.Join("/accounts", organizationID, "audit_logs"),
 		ForceQuery: true,
 		RawQuery:   a.ToQuery().Encode(),
 	}
-	res, err := api.makeRequest("GET", uri.String(), nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri.String(), nil)
 	if err != nil {
 		return AuditLogResponse{}, err
 	}
@@ -137,13 +139,13 @@ func unmarshalReturn(res []byte) (AuditLogResponse, error) {
 // filtered based on any argument in the AuditLogFilter
 //
 // API Reference: https://api.cloudflare.com/#audit-logs-list-user-audit-logs
-func (api *API) GetUserAuditLogs(a AuditLogFilter) (AuditLogResponse, error) {
+func (api *API) GetUserAuditLogs(ctx context.Context, a AuditLogFilter) (AuditLogResponse, error) {
 	uri := url.URL{
 		Path:       path.Join("/user", "audit_logs"),
 		ForceQuery: true,
 		RawQuery:   a.ToQuery().Encode(),
 	}
-	res, err := api.makeRequest("GET", uri.String(), nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri.String(), nil)
 	if err != nil {
 		return AuditLogResponse{}, err
 	}
