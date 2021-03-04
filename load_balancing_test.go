@@ -31,8 +31,13 @@ func TestCreateLoadBalancerPool(t *testing.T) {
                   "name": "app-server-1",
                   "address": "0.0.0.0",
                   "enabled": true,
-                  "weight": 1
-                }
+                  "weight": 1,
+				  "header": {
+					  "Host": [
+						  "example.com"
+					  ]
+				  }
+				}
               ],
               "notification_email": "someone@example.com",
               "check_regions": [
@@ -58,8 +63,13 @@ func TestCreateLoadBalancerPool(t *testing.T) {
                   "name": "app-server-1",
                   "address": "0.0.0.0",
                   "enabled": true,
-                  "weight": 1
-                }
+                  "weight": 1,
+				  "header": {
+					  "Host": [
+						  "example.com"
+					  ]
+				  }
+				}
               ],
               "notification_email": "someone@example.com",
               "check_regions": [
@@ -87,6 +97,9 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 				Address: "0.0.0.0",
 				Enabled: true,
 				Weight:  1,
+				Header: map[string][]string{
+					"Host": {"example.com"},
+				},
 			},
 		},
 		NotificationEmail: "someone@example.com",
@@ -105,6 +118,9 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 				Address: "0.0.0.0",
 				Enabled: true,
 				Weight:  1,
+				Header: map[string][]string{
+					"Host": {"example.com"},
+				},
 			},
 		},
 		NotificationEmail: "someone@example.com",
@@ -294,7 +310,12 @@ func TestModifyLoadBalancerPool(t *testing.T) {
                   "name": "app-server-2",
                   "address": "0.0.0.1",
                   "enabled": false,
-                  "weight": 1
+                  "weight": 1,
+				  "header": {
+					  "Host": [
+						  "example.com"
+					  ]
+				  }
                 }
               ],
               "notification_email": "nobody@example.com",
@@ -319,7 +340,12 @@ func TestModifyLoadBalancerPool(t *testing.T) {
                   "name": "app-server-2",
                   "address": "0.0.0.1",
                   "enabled": false,
-                  "weight": 1
+                  "weight": 1,
+				  "header": {
+					  "Host": [
+						  "example.com"
+					  ]
+				  }
                 }
               ],
               "notification_email": "nobody@example.com",
@@ -346,6 +372,9 @@ func TestModifyLoadBalancerPool(t *testing.T) {
 				Address: "0.0.0.1",
 				Enabled: false,
 				Weight:  1,
+				Header: map[string][]string{
+					"Host": {"example.com"},
+				},
 			},
 		},
 		NotificationEmail: "nobody@example.com",
@@ -364,6 +393,9 @@ func TestModifyLoadBalancerPool(t *testing.T) {
 				Address: "0.0.0.1",
 				Enabled: false,
 				Weight:  1,
+				Header: map[string][]string{
+					"Host": {"example.com"},
+				},
 			},
 		},
 		NotificationEmail: "nobody@example.com",
