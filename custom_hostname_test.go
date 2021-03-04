@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"testing"
 	"time"
@@ -454,6 +455,23 @@ func TestCustomHostname_UpdateCustomHostname(t *testing.T) {
 	mux.HandleFunc("/zones/foo/custom_hostnames/0d89c70d-ad9f-4843-b99f-6cc0252067e9", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
 
+		defer r.Body.Close()
+		reqBody, err := ioutil.ReadAll(r.Body)
+		assert.NoError(t, err, "Reading request body")
+		assert.JSONEq(t, `
+{
+	"hostname": "app.example.com",
+	"custom_origin_server": "example.app.com",
+	"ssl": {
+		"method": "cname",
+		"type": "dv",
+		"wildcard": false,
+		"settings": {}
+	},
+	"ownership_verification": {},
+	"ownership_verification_http": {}
+}`, string(reqBody), "Unexpected request body")
+
 		w.Header().Set("content-type", "application/json")
 		w.WriteHeader(http.StatusCreated)
 		fmt.Fprintf(w, `
@@ -480,7 +498,8 @@ func TestCustomHostname_UpdateCustomHostname(t *testing.T) {
 }`)
 	})
 
-	response, err := client.UpdateCustomHostname(context.Background(), "foo", "0d89c70d-ad9f-4843-b99f-6cc0252067e9", CustomHostname{Hostname: "app.example.com", CustomOriginServer: "example.app.com", SSL: CustomHostnameSSL{Method: "cname", Type: "dv"}})
+	wildcard := false
+	response, err := client.UpdateCustomHostname(context.Background(), "foo", "0d89c70d-ad9f-4843-b99f-6cc0252067e9", CustomHostname{Hostname: "app.example.com", CustomOriginServer: "example.app.com", SSL: CustomHostnameSSL{Method: "cname", Type: "dv", Wildcard: &wildcard}})
 
 	want := &CustomHostnameResponse{
 		Result: CustomHostname{
@@ -643,6 +662,7 @@ func TestCustomHostname_CreateCustomHostnameCustomCertificateAuthority(t *testin
 
 	createdAt, _ := time.Parse(time.RFC3339, "2020-06-30T21:37:36.563495Z")
 
+	wildcard := false
 	want := &CustomHostnameResponse{
 		Result: CustomHostname{
 			ID:                 "614b3124-cd57-42f0-8307-000000000000",
@@ -655,7 +675,7 @@ func TestCustomHostname_CreateCustomHostnameCustomCertificateAuthority(t *testin
 				Settings: CustomHostnameSSLSettings{
 					MinTLSVersion: "1.2",
 				},
-				Wildcard:             false,
+				Wildcard:             &wildcard,
 				CertificateAuthority: "lets_encrypt",
 			},
 			CreatedAt: &createdAt,
