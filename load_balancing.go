@@ -29,10 +29,11 @@ type LoadBalancerPool struct {
 
 // LoadBalancerOrigin represents a Load Balancer origin's properties.
 type LoadBalancerOrigin struct {
-	Name    string  `json:"name"`
-	Address string  `json:"address"`
-	Enabled bool    `json:"enabled"`
-	Weight  float64 `json:"weight"`
+	Name    string              `json:"name"`
+	Address string              `json:"address"`
+	Enabled bool                `json:"enabled"`
+	Weight  float64             `json:"weight"`
+	Header  map[string][]string `json:"header"`
 }
 
 // LoadBalancerMonitor represents a load balancer monitor's properties.
