@@ -194,8 +194,8 @@ func TestCustomHostname_CustomHostnames(t *testing.T) {
 				"status": "pending_validation",
 				"cname_target": "dcv.digicert.com",
 				"cname": "810b7d5f01154524b961ba0cd578acc2.app.example.com",
-			    "issuer": "DigiCertInc",
-			    "serial_number": "6743787633689793699141714808227354901",
+				"issuer": "DigiCertInc",
+				"serial_number": "6743787633689793699141714808227354901",
 				"http_url": "http://app.example.com/.well-known/pki-validation/ca3-da12a1c25e7b48cf80408c6c1763b8a2.txt",
       			"http_body": "ca3-574923932a82475cb8592200f1a2a23d"
 			},
@@ -275,7 +275,7 @@ func TestCustomHostname_CustomHostname(t *testing.T) {
       "type": "dv",
       "method": "http",
       "status": "active",
-	  "issuer": "DigiCertInc",
+      "issuer": "DigiCertInc",
       "serial_number": "6743787633689793699141714808227354901",
       "settings": {
         "ciphers": ["ECDHE-RSA-AES128-GCM-SHA256","AES128-SHA"],
@@ -305,11 +305,11 @@ func TestCustomHostname_CustomHostname(t *testing.T) {
 		ID:       "bar",
 		Hostname: "foo.bar.com",
 		SSL: CustomHostnameSSL{
-			ID: "0d89c70d-ad9f-4843-b99f-6cc0252067e9",
-			Status: "active",
-			Method: "http",
-			Type:   "dv",
-			Issuer: "DigiCertInc",
+			ID:           "0d89c70d-ad9f-4843-b99f-6cc0252067e9",
+			Status:       "active",
+			Method:       "http",
+			Type:         "dv",
+			Issuer:       "DigiCertInc",
 			SerialNumber: "6743787633689793699141714808227354901",
 			Settings: CustomHostnameSSLSettings{
 				HTTP2:         "on",
@@ -661,7 +661,7 @@ func TestCustomHostname_CreateCustomHostnameCustomCertificateAuthority(t *testin
 			Hostname:           "app.example.com",
 			CustomOriginServer: "origin.example.com",
 			SSL: CustomHostnameSSL{
-				ID: "d9ae4881-34d2-4820-8e28-000000000000",
+				ID:     "d9ae4881-34d2-4820-8e28-000000000000",
 				Type:   "dv",
 				Method: "http",
 				Status: "initializing",
