@@ -47,6 +47,7 @@ type CustomHostnameSSLValidationErrors struct {
 
 // CustomHostnameSSL represents the SSL section in a given custom hostname.
 type CustomHostnameSSL struct {
+	ID                   string                              `json:"id,omitempty"`
 	Status               string                              `json:"status,omitempty"`
 	Method               string                              `json:"method,omitempty"`
 	Type                 string                              `json:"type,omitempty"`
@@ -56,6 +57,8 @@ type CustomHostnameSSL struct {
 	CustomCertificate    string                              `json:"custom_certificate,omitempty"`
 	CustomKey            string                              `json:"custom_key,omitempty"`
 	CertificateAuthority string                              `json:"certificate_authority,omitempty"`
+	Issuer               string                              `json:"issuer,omitempty"`
+	SerialNumber         string                              `json:"serial_number,omitempty"`
 	Settings             CustomHostnameSSLSettings           `json:"settings,omitempty"`
 	ValidationErrors     []CustomHostnameSSLValidationErrors `json:"validation_errors,omitempty"`
 	HTTPUrl              string                              `json:"http_url,omitempty"`
