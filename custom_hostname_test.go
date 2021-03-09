@@ -661,6 +661,7 @@ func TestCustomHostname_CreateCustomHostnameCustomCertificateAuthority(t *testin
 			Hostname:           "app.example.com",
 			CustomOriginServer: "origin.example.com",
 			SSL: CustomHostnameSSL{
+				ID: "d9ae4881-34d2-4820-8e28-000000000000",
 				Type:   "dv",
 				Method: "http",
 				Status: "initializing",
