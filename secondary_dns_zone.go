@@ -9,6 +9,13 @@ import (
 
 	"github.com/pkg/errors"
 )
+
+const (
+	errSecondaryDNSInvalidAutoRefreshValue = "secondary DNS auto refresh value is invalid"
+	errSecondaryDNSInvalidZoneName         = "secondary DNS zone name is invalid"
+	errSecondaryDNSInvalidPrimaries        = "secondary DNS primaries value is invalid"
+)
+
 // SecondaryDNSZone contains the high level structure of a secondary DNS zone.
 type SecondaryDNSZone struct {
 	ID                 string    `json:"id,omitempty"`
@@ -105,3 +112,21 @@ func (api *API) UpdateSecondaryDNSZone(ctx context.Context, zoneID string, zone 
 	return result.Result, nil
 }
 
+
+// validateRequiredSecondaryDNSZoneValues ensures that the payload matches the
+// API requirements for required fields.
+func validateRequiredSecondaryDNSZoneValues(zone SecondaryDNSZone) error {
+	if zone.Name == "" {
+		return errors.New(errSecondaryDNSInvalidZoneName)
+	}
+
+	if zone.AutoRefreshSeconds == 0 || zone.AutoRefreshSeconds < 0 {
+		return errors.New(errSecondaryDNSInvalidAutoRefreshValue)
+	}
+
+	if len(zone.Primaries) == 0 {
+		return errors.New(errSecondaryDNSInvalidPrimaries)
+	}
+
+	return nil
+}

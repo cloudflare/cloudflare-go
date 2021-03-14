@@ -184,3 +184,21 @@ func TestUpdateSecondaryDNSZone(t *testing.T) {
 	}
 }
 
+
+func TestValidateRequiredSecondaryDNSZoneValues(t *testing.T) {
+	z1 := SecondaryDNSZone{}
+	err1 := validateRequiredSecondaryDNSZoneValues(z1)
+	assert.EqualError(t, err1, errSecondaryDNSInvalidZoneName)
+
+	z2 := SecondaryDNSZone{Name: "example.com."}
+	err2 := validateRequiredSecondaryDNSZoneValues(z2)
+	assert.EqualError(t, err2, errSecondaryDNSInvalidAutoRefreshValue)
+
+	z3 := SecondaryDNSZone{Name: "example.com.", AutoRefreshSeconds: 1}
+	err3 := validateRequiredSecondaryDNSZoneValues(z3)
+	assert.EqualError(t, err3, errSecondaryDNSInvalidPrimaries)
+
+	z4 := SecondaryDNSZone{Name: "example.com.", AutoRefreshSeconds: 1, Primaries: []string{"a", "b"}}
+	err4 := validateRequiredSecondaryDNSZoneValues(z4)
+	assert.NoError(t, err4)
+}
