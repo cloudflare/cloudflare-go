@@ -208,6 +208,28 @@ func TestDeleteSecondaryDNSZone(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+func TestForceSecondaryDNSZoneAXFR(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": "OK"
+		}
+		`)
+	}
+
+	mux.HandleFunc("/zones/01a7362d577a6c3019a474fd6f485823/secondary_dns/force_axfr", handler)
+
+	err := client.ForceSecondaryDNSZoneAXFR(context.Background(), "01a7362d577a6c3019a474fd6f485823")
+	assert.NoError(t, err)
+}
+
 func TestValidateRequiredSecondaryDNSZoneValues(t *testing.T) {
 	z1 := SecondaryDNSZone{}
 	err1 := validateRequiredSecondaryDNSZoneValues(z1)

@@ -34,6 +34,14 @@ type SecondaryDNSZoneDetailResponse struct {
 	Response
 	Result SecondaryDNSZone `json:"result"`
 }
+
+// SecondaryDNSZoneAXFRResponse is the API response for a single secondary
+// DNS AXFR response.
+type SecondaryDNSZoneAXFRResponse struct {
+	Response
+	Result string `json:"result"`
+}
+
 // GetSecondaryDNSZone returns the secondary DNS zone configuration for a
 // single zone.
 //
@@ -126,6 +134,24 @@ func (api *API) DeleteSecondaryDNSZone(ctx context.Context, zoneID string) error
 	return nil
 }
 
+// ForceSecondaryDNSZoneAXFR requests an immediate AXFR request.
+//
+// API reference: https://api.cloudflare.com/#secondary-dns-update-secondary-zone-configuration
+func (api *API) ForceSecondaryDNSZoneAXFR(ctx context.Context, zoneID string) error {
+	uri := fmt.Sprintf("/zones/%s/secondary_dns/force_axfr", zoneID)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
+
+	if err != nil {
+		return err
+	}
+
+	result := SecondaryDNSZoneAXFRResponse{}
+	if err := json.Unmarshal(res, &result); err != nil {
+		return errors.Wrap(err, errUnmarshalError)
+	}
+
+	return nil
+}
 
 // validateRequiredSecondaryDNSZoneValues ensures that the payload matches the
 // API requirements for required fields.
