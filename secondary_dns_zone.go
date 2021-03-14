@@ -47,3 +47,31 @@ func (api *API) GetSecondaryDNSZone(ctx context.Context, zoneID string) (Seconda
 	return r.Result, nil
 }
 
+// CreateSecondaryDNSZone creates a secondary DNS zone.
+//
+// API reference: https://api.cloudflare.com/#secondary-dns-create-secondary-zone-configuration
+func (api *API) CreateSecondaryDNSZone(ctx context.Context, zoneID string, zone SecondaryDNSZone) (SecondaryDNSZone, error) {
+	if err := validateRequiredSecondaryDNSZoneValues(zone); err != nil {
+		return SecondaryDNSZone{}, err
+	}
+
+	uri := fmt.Sprintf("/zones/%s/secondary_dns", zoneID)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri,
+		SecondaryDNSZone{
+			Name:               zone.Name,
+			AutoRefreshSeconds: zone.AutoRefreshSeconds,
+			Primaries:          zone.Primaries,
+		},
+	)
+
+	if err != nil {
+		return SecondaryDNSZone{}, err
+	}
+
+	result := SecondaryDNSZoneDetailResponse{}
+	if err := json.Unmarshal(res, &result); err != nil {
+		return SecondaryDNSZone{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return result.Result, nil
+}
