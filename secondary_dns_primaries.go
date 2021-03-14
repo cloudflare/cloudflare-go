@@ -70,3 +70,32 @@ func (api *API) ListSecondaryDNSPrimaries(ctx context.Context, accountID string)
 	return r.Result, nil
 }
 
+// CreateSecondaryDNSPrimary creates a secondary DNS primary.
+//
+// API reference: https://api.cloudflare.com/#secondary-dns-primary--create-primary
+func (api *API) CreateSecondaryDNSPrimary(ctx context.Context, accountID string, primary SecondaryDNSPrimary) (SecondaryDNSPrimary, error) {
+	if err := validateRequiredSecondaryDNSPrimaries(primary); err != nil {
+		return SecondaryDNSPrimary{}, err
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/secondary_dns/primaries", accountID)
+
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, SecondaryDNSPrimary{
+		IP:         primary.IP,
+		Port:       primary.Port,
+		IxfrEnable: primary.IxfrEnable,
+		TsigID:     primary.TsigID,
+		Name:       primary.Name,
+	})
+	if err != nil {
+		return SecondaryDNSPrimary{}, err
+	}
+
+	var r SecondaryDNSPrimaryDetailResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return SecondaryDNSPrimary{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
+
