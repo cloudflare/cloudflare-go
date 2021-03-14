@@ -112,6 +112,20 @@ func (api *API) UpdateSecondaryDNSZone(ctx context.Context, zoneID string, zone 
 	return result.Result, nil
 }
 
+// DeleteSecondaryDNSZone deletes a secondary DNS zone.
+//
+// API reference: https://api.cloudflare.com/#secondary-dns-delete-secondary-zone-configuration
+func (api *API) DeleteSecondaryDNSZone(ctx context.Context, zoneID string) error {
+	uri := fmt.Sprintf("/zones/%s/secondary_dns", zoneID)
+	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 
 // validateRequiredSecondaryDNSZoneValues ensures that the payload matches the
 // API requirements for required fields.

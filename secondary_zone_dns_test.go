@@ -184,6 +184,29 @@ func TestUpdateSecondaryDNSZone(t *testing.T) {
 	}
 }
 
+func TestDeleteSecondaryDNSZone(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, http.MethodDelete, "Expected method 'DELETE', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "269d8f4853475ca241c4e730be286b20"
+			}
+		}
+		`)
+	}
+
+	mux.HandleFunc("/zones/01a7362d577a6c3019a474fd6f485823/secondary_dns", handler)
+
+	err := client.DeleteSecondaryDNSZone(context.Background(), "01a7362d577a6c3019a474fd6f485823")
+	assert.NoError(t, err)
+}
 
 func TestValidateRequiredSecondaryDNSZoneValues(t *testing.T) {
 	z1 := SecondaryDNSZone{}
