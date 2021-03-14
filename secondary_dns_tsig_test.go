@@ -161,3 +161,26 @@ func TestUpdateSecondaryDNSZoneTSIG(t *testing.T) {
 	}
 }
 
+func TestDeleteSecondaryDNSZoneTSIG(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, http.MethodDelete, "Expected method 'DELETE', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "269d8f4853475ca241c4e730be286b20"
+			}
+		}
+		`)
+	}
+
+	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/secondary_dns/tsigs/69cd1e104af3e6ed3cb344f263fd0d5a", handler)
+
+	err := client.DeleteSecondaryDNSZoneTSIG(context.Background(), "01a7362d577a6c3019a474fd6f485823", "69cd1e104af3e6ed3cb344f263fd0d5a")
+	assert.NoError(t, err)
+}

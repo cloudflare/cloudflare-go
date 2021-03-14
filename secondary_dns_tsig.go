@@ -130,3 +130,17 @@ func (api *API) UpdateSecondaryDNSZoneTSIG(ctx context.Context, accountID string
 
 	return result.Result, nil
 }
+
+// DeleteSecondaryDNSZoneTSIG deletes a secondary DNS zone TSIG.
+//
+// API reference: https://api.cloudflare.com/#secondary-dns-tsig--delete-tsig
+func (api *API) DeleteSecondaryDNSZoneTSIG(ctx context.Context, accountID, tsigID string) error {
+	uri := fmt.Sprintf("/accounts/%s/secondary_dns/tsigs/%s", accountID, tsigID)
+	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
