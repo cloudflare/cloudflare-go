@@ -8,6 +8,13 @@ import (
 
 	"github.com/pkg/errors"
 )
+
+const (
+	errSecondaryDNSInvalidPrimaryID   = "secondary DNS primary ID is required"
+	errSecondaryDNSInvalidPrimaryIP   = "secondary DNS primary IP invalid"
+	errSecondaryDNSInvalidPrimaryPort = "secondary DNS primary port invalid"
+)
+
 // SecondaryDNSPrimary is the representation of the DNS Primary.
 type SecondaryDNSPrimary struct {
 	ID         string `json:"id,omitempty"`
@@ -99,3 +106,47 @@ func (api *API) CreateSecondaryDNSPrimary(ctx context.Context, accountID string,
 	return r.Result, nil
 }
 
+// UpdateSecondaryDNSPrimary creates a secondary DNS primary.
+//
+// API reference: https://api.cloudflare.com/#secondary-dns-primary--update-primary
+func (api *API) UpdateSecondaryDNSPrimary(ctx context.Context, accountID string, primary SecondaryDNSPrimary) (SecondaryDNSPrimary, error) {
+	if primary.ID == "" {
+		return SecondaryDNSPrimary{}, errors.New(errSecondaryDNSInvalidPrimaryID)
+	}
+
+	if err := validateRequiredSecondaryDNSPrimaries(primary); err != nil {
+		return SecondaryDNSPrimary{}, err
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/secondary_dns/primaries/%s", accountID, primary.ID)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, SecondaryDNSPrimary{
+		IP:         primary.IP,
+		Port:       primary.Port,
+		IxfrEnable: primary.IxfrEnable,
+		TsigID:     primary.TsigID,
+		Name:       primary.Name,
+	})
+	if err != nil {
+		return SecondaryDNSPrimary{}, err
+	}
+
+	var r SecondaryDNSPrimaryDetailResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return SecondaryDNSPrimary{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
+
+
+func validateRequiredSecondaryDNSPrimaries(p SecondaryDNSPrimary) error {
+	if p.IP == "" {
+		return errors.New(errSecondaryDNSInvalidPrimaryIP)
+	}
+
+	if p.Port == 0 {
+		return errors.New(errSecondaryDNSInvalidPrimaryPort)
+	}
+
+	return nil
+}
