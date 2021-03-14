@@ -69,3 +69,30 @@ func (api *API) SecondaryDNSTSIGs(ctx context.Context, accountID string) ([]Seco
 	}
 	return r.Result, nil
 }
+
+// CreateSecondaryDNSZoneTSIG creates a secondary DNS zone TSIG at the account
+// level.
+//
+// API reference: https://api.cloudflare.com/#secondary-dns-tsig--create-tsig
+func (api *API) CreateSecondaryDNSZoneTSIG(ctx context.Context, accountID string, tsig SecondaryZoneDNSTSIG) (SecondaryZoneDNSTSIG, error) {
+	uri := fmt.Sprintf("/accounts/%s/secondary_dns/tsigs", accountID)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri,
+		SecondaryZoneDNSTSIG{
+			Name:   tsig.Name,
+			Secret: tsig.Secret,
+			Algo:   tsig.Algo,
+		},
+	)
+
+	if err != nil {
+		return SecondaryZoneDNSTSIG{}, err
+	}
+
+	result := SecondaryZoneDNSTSIGDetailResponse{}
+	if err := json.Unmarshal(res, &result); err != nil {
+		return SecondaryZoneDNSTSIG{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return result.Result, nil
+}
+
