@@ -32,7 +32,7 @@ func TestGetSecondaryDNSTSIG(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/secondary_dns/tsigs/69cd1e104af3e6ed3cb344f263fd0d5a", handler)
 
-	want := SecondaryZoneDNSTSIG{
+	want := SecondaryDNSTSIG{
 		ID:     "69cd1e104af3e6ed3cb344f263fd0d5a",
 		Name:   "tsig.customer.cf.",
 		Secret: "caf79a7804b04337c9c66ccd7bef9190a1e1679b5dd03d8aa10f7ad45e1a9dab92b417896c15d4d007c7c14194538d2a5d0feffdecc5a7f0e1c570cfa700837c",
@@ -70,7 +70,7 @@ func TestSecondaryDNSTSIGs(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/secondary_dns/tsigs", handler)
 
-	want := []SecondaryZoneDNSTSIG{{
+	want := []SecondaryDNSTSIG{{
 		ID:     "69cd1e104af3e6ed3cb344f263fd0d5a",
 		Name:   "tsig.customer.cf.",
 		Secret: "caf79a7804b04337c9c66ccd7bef9190a1e1679b5dd03d8aa10f7ad45e1a9dab92b417896c15d4d007c7c14194538d2a5d0feffdecc5a7f0e1c570cfa700837c",
@@ -83,7 +83,7 @@ func TestSecondaryDNSTSIGs(t *testing.T) {
 	}
 }
 
-func TestCreateSecondaryDNSZoneTSIG(t *testing.T) {
+func TestCreateSecondaryDNSTSIG(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -106,14 +106,14 @@ func TestCreateSecondaryDNSZoneTSIG(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/secondary_dns/tsigs", handler)
 
-	want := SecondaryZoneDNSTSIG{
+	want := SecondaryDNSTSIG{
 		ID:     "69cd1e104af3e6ed3cb344f263fd0d5a",
 		Name:   "tsig.customer.cf.",
 		Secret: "caf79a7804b04337c9c66ccd7bef9190a1e1679b5dd03d8aa10f7ad45e1a9dab92b417896c15d4d007c7c14194538d2a5d0feffdecc5a7f0e1c570cfa700837c",
 		Algo:   "hmac-sha512.",
 	}
 
-	actual, err := client.CreateSecondaryDNSZoneTSIG(context.Background(), "01a7362d577a6c3019a474fd6f485823", SecondaryZoneDNSTSIG{
+	actual, err := client.CreateSecondaryDNSTSIG(context.Background(), "01a7362d577a6c3019a474fd6f485823", SecondaryDNSTSIG{
 		Name:   "tsig.customer.cf.",
 		Secret: "caf79a7804b04337c9c66ccd7bef9190a1e1679b5dd03d8aa10f7ad45e1a9dab92b417896c15d4d007c7c14194538d2a5d0feffdecc5a7f0e1c570cfa700837c",
 		Algo:   "hmac-sha512.",
@@ -124,7 +124,7 @@ func TestCreateSecondaryDNSZoneTSIG(t *testing.T) {
 	}
 }
 
-func TestUpdateSecondaryDNSZoneTSIG(t *testing.T) {
+func TestUpdateSecondaryDNSTSIG(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -147,21 +147,21 @@ func TestUpdateSecondaryDNSZoneTSIG(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/secondary_dns/tsigs/69cd1e104af3e6ed3cb344f263fd0d5a", handler)
 
-	want := SecondaryZoneDNSTSIG{
+	want := SecondaryDNSTSIG{
 		ID:     "69cd1e104af3e6ed3cb344f263fd0d5a",
 		Name:   "tsig.customer.cf.",
 		Secret: "caf79a7804b04337c9c66ccd7bef9190a1e1679b5dd03d8aa10f7ad45e1a9dab92b417896c15d4d007c7c14194538d2a5d0feffdecc5a7f0e1c570cfa700837c",
 		Algo:   "hmac-sha512.",
 	}
 
-	actual, err := client.UpdateSecondaryDNSZoneTSIG(context.Background(), "01a7362d577a6c3019a474fd6f485823", want)
+	actual, err := client.UpdateSecondaryDNSTSIG(context.Background(), "01a7362d577a6c3019a474fd6f485823", want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
-func TestDeleteSecondaryDNSZoneTSIG(t *testing.T) {
+func TestDeleteSecondaryDNSTSIG(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -181,6 +181,6 @@ func TestDeleteSecondaryDNSZoneTSIG(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/secondary_dns/tsigs/69cd1e104af3e6ed3cb344f263fd0d5a", handler)
 
-	err := client.DeleteSecondaryDNSZoneTSIG(context.Background(), "01a7362d577a6c3019a474fd6f485823", "69cd1e104af3e6ed3cb344f263fd0d5a")
+	err := client.DeleteSecondaryDNSTSIG(context.Background(), "01a7362d577a6c3019a474fd6f485823", "69cd1e104af3e6ed3cb344f263fd0d5a")
 	assert.NoError(t, err)
 }

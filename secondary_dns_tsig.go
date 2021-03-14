@@ -13,44 +13,43 @@ const (
 	errSecondaryDNSTSIGMissingID = "secondary DNS TSIG ID is required"
 )
 
-// SecondaryZoneDNSTSIG contains the structure for a secondary DNS zone TSIG.
-type SecondaryZoneDNSTSIG struct {
+// SecondaryDNSTSIG contains the structure for a secondary DNS TSIG.
+type SecondaryDNSTSIG struct {
 	ID     string `json:"id,omitempty"`
 	Name   string `json:"name"`
 	Secret string `json:"secret"`
 	Algo   string `json:"algo"`
 }
 
-// SecondaryZoneDNSTSIGDetailResponse is the API response for a single secondary
-// DNS zone TSIG.
-type SecondaryZoneDNSTSIGDetailResponse struct {
+// SecondaryDNSTSIGDetailResponse is the API response for a single secondary
+// DNS TSIG.
+type SecondaryDNSTSIGDetailResponse struct {
 	Response
-	Result SecondaryZoneDNSTSIG `json:"result"`
+	Result SecondaryDNSTSIG `json:"result"`
 }
 
-// SecondaryZoneDNSTSIGListResponse is the API response for all secondary DNS
-// zone TSIGs.
-type SecondaryZoneDNSTSIGListResponse struct {
+// SecondaryDNSTSIGListResponse is the API response for all secondary DNS TSIGs.
+type SecondaryDNSTSIGListResponse struct {
 	Response
-	Result []SecondaryZoneDNSTSIG `json:"result"`
+	Result []SecondaryDNSTSIG `json:"result"`
 }
 
 // GetSecondaryDNSTSIG gets a single account level TSIG for a secondary DNS
 // configuration.
 //
 // API reference: https://api.cloudflare.com/#secondary-dns-tsig--tsig-details
-func (api *API) GetSecondaryDNSTSIG(ctx context.Context, accountID, tsigID string) (SecondaryZoneDNSTSIG, error) {
+func (api *API) GetSecondaryDNSTSIG(ctx context.Context, accountID, tsigID string) (SecondaryDNSTSIG, error) {
 	uri := fmt.Sprintf("/accounts/%s/secondary_dns/tsigs/%s", accountID, tsigID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return SecondaryZoneDNSTSIG{}, err
+		return SecondaryDNSTSIG{}, err
 	}
 
-	var r SecondaryZoneDNSTSIGDetailResponse
+	var r SecondaryDNSTSIGDetailResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return SecondaryZoneDNSTSIG{}, errors.Wrap(err, errUnmarshalError)
+		return SecondaryDNSTSIG{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
 }
@@ -59,30 +58,29 @@ func (api *API) GetSecondaryDNSTSIG(ctx context.Context, accountID, tsigID strin
 // configuration.
 //
 // API reference: https://api.cloudflare.com/#secondary-dns-tsig--list-tsigs
-func (api *API) SecondaryDNSTSIGs(ctx context.Context, accountID string) ([]SecondaryZoneDNSTSIG, error) {
+func (api *API) SecondaryDNSTSIGs(ctx context.Context, accountID string) ([]SecondaryDNSTSIG, error) {
 	uri := fmt.Sprintf("/accounts/%s/secondary_dns/tsigs", accountID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []SecondaryZoneDNSTSIG{}, err
+		return []SecondaryDNSTSIG{}, err
 	}
 
-	var r SecondaryZoneDNSTSIGListResponse
+	var r SecondaryDNSTSIGListResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return []SecondaryZoneDNSTSIG{}, errors.Wrap(err, errUnmarshalError)
+		return []SecondaryDNSTSIG{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
 }
 
-// CreateSecondaryDNSZoneTSIG creates a secondary DNS zone TSIG at the account
-// level.
+// CreateSecondaryDNSTSIG creates a secondary DNS TSIG at the account level.
 //
 // API reference: https://api.cloudflare.com/#secondary-dns-tsig--create-tsig
-func (api *API) CreateSecondaryDNSZoneTSIG(ctx context.Context, accountID string, tsig SecondaryZoneDNSTSIG) (SecondaryZoneDNSTSIG, error) {
+func (api *API) CreateSecondaryDNSTSIG(ctx context.Context, accountID string, tsig SecondaryDNSTSIG) (SecondaryDNSTSIG, error) {
 	uri := fmt.Sprintf("/accounts/%s/secondary_dns/tsigs", accountID)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri,
-		SecondaryZoneDNSTSIG{
+		SecondaryDNSTSIG{
 			Name:   tsig.Name,
 			Secret: tsig.Secret,
 			Algo:   tsig.Algo,
@@ -90,29 +88,29 @@ func (api *API) CreateSecondaryDNSZoneTSIG(ctx context.Context, accountID string
 	)
 
 	if err != nil {
-		return SecondaryZoneDNSTSIG{}, err
+		return SecondaryDNSTSIG{}, err
 	}
 
-	result := SecondaryZoneDNSTSIGDetailResponse{}
+	result := SecondaryDNSTSIGDetailResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return SecondaryZoneDNSTSIG{}, errors.Wrap(err, errUnmarshalError)
+		return SecondaryDNSTSIG{}, errors.Wrap(err, errUnmarshalError)
 	}
 
 	return result.Result, nil
 }
 
-// UpdateSecondaryDNSZoneTSIG updates an existing secondary DNS zone TSIG at
+// UpdateSecondaryDNSTSIG updates an existing secondary DNS TSIG at
 // the account level.
 //
 // API reference: https://api.cloudflare.com/#secondary-dns-tsig--update-tsig
-func (api *API) UpdateSecondaryDNSZoneTSIG(ctx context.Context, accountID string, tsig SecondaryZoneDNSTSIG) (SecondaryZoneDNSTSIG, error) {
+func (api *API) UpdateSecondaryDNSTSIG(ctx context.Context, accountID string, tsig SecondaryDNSTSIG) (SecondaryDNSTSIG, error) {
 	if tsig.ID == "" {
-		return SecondaryZoneDNSTSIG{}, errors.New(errSecondaryDNSTSIGMissingID)
+		return SecondaryDNSTSIG{}, errors.New(errSecondaryDNSTSIGMissingID)
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/secondary_dns/tsigs/%s", accountID, tsig.ID)
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri,
-		SecondaryZoneDNSTSIG{
+		SecondaryDNSTSIG{
 			Name:   tsig.Name,
 			Secret: tsig.Secret,
 			Algo:   tsig.Algo,
@@ -120,21 +118,21 @@ func (api *API) UpdateSecondaryDNSZoneTSIG(ctx context.Context, accountID string
 	)
 
 	if err != nil {
-		return SecondaryZoneDNSTSIG{}, err
+		return SecondaryDNSTSIG{}, err
 	}
 
-	result := SecondaryZoneDNSTSIGDetailResponse{}
+	result := SecondaryDNSTSIGDetailResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return SecondaryZoneDNSTSIG{}, errors.Wrap(err, errUnmarshalError)
+		return SecondaryDNSTSIG{}, errors.Wrap(err, errUnmarshalError)
 	}
 
 	return result.Result, nil
 }
 
-// DeleteSecondaryDNSZoneTSIG deletes a secondary DNS zone TSIG.
+// DeleteSecondaryDNSTSIG deletes a secondary DNS TSIG.
 //
 // API reference: https://api.cloudflare.com/#secondary-dns-tsig--delete-tsig
-func (api *API) DeleteSecondaryDNSZoneTSIG(ctx context.Context, accountID, tsigID string) error {
+func (api *API) DeleteSecondaryDNSTSIG(ctx context.Context, accountID, tsigID string) error {
 	uri := fmt.Sprintf("/accounts/%s/secondary_dns/tsigs/%s", accountID, tsigID)
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 
