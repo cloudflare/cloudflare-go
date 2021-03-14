@@ -165,6 +165,29 @@ func TestUpdateSecondaryDNSPrimary(t *testing.T) {
 	}
 }
 
+func TestDeleteSecondaryDNSPrimary(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, http.MethodDelete, "Expected method 'DELETE', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "23ff594956f20c2a721606e94745a8aa"
+			}
+		}
+		`)
+	}
+
+	mux.HandleFunc("/zones/01a7362d577a6c3019a474fd6f485823/secondary_dns/primaries/23ff594956f20c2a721606e94745a8aa", handler)
+
+	err := client.DeleteSecondaryDNSPrimary(context.Background(), "01a7362d577a6c3019a474fd6f485823", "23ff594956f20c2a721606e94745a8aa")
+	assert.NoError(t, err)
+}
 
 func TestValidateRequiredSecondaryDNSPrimaries(t *testing.T) {
 	p1 := SecondaryDNSPrimary{}

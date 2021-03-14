@@ -138,6 +138,19 @@ func (api *API) UpdateSecondaryDNSPrimary(ctx context.Context, accountID string,
 	return r.Result, nil
 }
 
+// DeleteSecondaryDNSPrimary deletes a secondary DNS primary.
+//
+// API reference: https://api.cloudflare.com/#secondary-dns-primary--delete-primary
+func (api *API) DeleteSecondaryDNSPrimary(ctx context.Context, accountID, primaryID string) error {
+	uri := fmt.Sprintf("/zones/%s/secondary_dns/primaries/%s", accountID, primaryID)
+	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
 
 func validateRequiredSecondaryDNSPrimaries(p SecondaryDNSPrimary) error {
 	if p.IP == "" {
