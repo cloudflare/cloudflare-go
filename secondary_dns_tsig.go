@@ -8,6 +8,11 @@ import (
 
 	"github.com/pkg/errors"
 )
+
+const (
+	errSecondaryDNSTSIGMissingID = "secondary DNS TSIG ID is required"
+)
+
 // SecondaryZoneDNSTSIG contains the structure for a secondary DNS zone TSIG.
 type SecondaryZoneDNSTSIG struct {
 	ID     string `json:"id,omitempty"`
@@ -96,3 +101,32 @@ func (api *API) CreateSecondaryDNSZoneTSIG(ctx context.Context, accountID string
 	return result.Result, nil
 }
 
+// UpdateSecondaryDNSZoneTSIG updates an existing secondary DNS zone TSIG at
+// the account level.
+//
+// API reference: https://api.cloudflare.com/#secondary-dns-tsig--update-tsig
+func (api *API) UpdateSecondaryDNSZoneTSIG(ctx context.Context, accountID string, tsig SecondaryZoneDNSTSIG) (SecondaryZoneDNSTSIG, error) {
+	if tsig.ID == "" {
+		return SecondaryZoneDNSTSIG{}, errors.New(errSecondaryDNSTSIGMissingID)
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/secondary_dns/tsigs/%s", accountID, tsig.ID)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri,
+		SecondaryZoneDNSTSIG{
+			Name:   tsig.Name,
+			Secret: tsig.Secret,
+			Algo:   tsig.Algo,
+		},
+	)
+
+	if err != nil {
+		return SecondaryZoneDNSTSIG{}, err
+	}
+
+	result := SecondaryZoneDNSTSIGDetailResponse{}
+	if err := json.Unmarshal(res, &result); err != nil {
+		return SecondaryZoneDNSTSIG{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return result.Result, nil
+}
