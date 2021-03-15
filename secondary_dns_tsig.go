@@ -54,11 +54,11 @@ func (api *API) GetSecondaryDNSTSIG(ctx context.Context, accountID, tsigID strin
 	return r.Result, nil
 }
 
-// SecondaryDNSTSIGs gets all account level TSIG for a secondary DNS
+// ListSecondaryDNSTSIGs gets all account level TSIG for a secondary DNS
 // configuration.
 //
 // API reference: https://api.cloudflare.com/#secondary-dns-tsig--list-tsigs
-func (api *API) SecondaryDNSTSIGs(ctx context.Context, accountID string) ([]SecondaryDNSTSIG, error) {
+func (api *API) ListSecondaryDNSTSIGs(ctx context.Context, accountID string) ([]SecondaryDNSTSIG, error) {
 	uri := fmt.Sprintf("/accounts/%s/secondary_dns/tsigs", accountID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)

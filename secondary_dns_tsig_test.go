@@ -45,7 +45,7 @@ func TestGetSecondaryDNSTSIG(t *testing.T) {
 	}
 }
 
-func TestSecondaryDNSTSIGs(t *testing.T) {
+func TestListSecondaryDNSTSIGs(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -77,7 +77,7 @@ func TestSecondaryDNSTSIGs(t *testing.T) {
 		Algo:   "hmac-sha512.",
 	}}
 
-	actual, err := client.SecondaryDNSTSIGs(context.Background(), "01a7362d577a6c3019a474fd6f485823")
+	actual, err := client.ListSecondaryDNSTSIGs(context.Background(), "01a7362d577a6c3019a474fd6f485823")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
