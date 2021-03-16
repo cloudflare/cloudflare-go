@@ -79,13 +79,7 @@ func (api *API) ListSecondaryDNSTSIGs(ctx context.Context, accountID string) ([]
 // API reference: https://api.cloudflare.com/#secondary-dns-tsig--create-tsig
 func (api *API) CreateSecondaryDNSTSIG(ctx context.Context, accountID string, tsig SecondaryDNSTSIG) (SecondaryDNSTSIG, error) {
 	uri := fmt.Sprintf("/accounts/%s/secondary_dns/tsigs", accountID)
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri,
-		SecondaryDNSTSIG{
-			Name:   tsig.Name,
-			Secret: tsig.Secret,
-			Algo:   tsig.Algo,
-		},
-	)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, tsig)
 
 	if err != nil {
 		return SecondaryDNSTSIG{}, err
@@ -109,13 +103,7 @@ func (api *API) UpdateSecondaryDNSTSIG(ctx context.Context, accountID string, ts
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/secondary_dns/tsigs/%s", accountID, tsig.ID)
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri,
-		SecondaryDNSTSIG{
-			Name:   tsig.Name,
-			Secret: tsig.Secret,
-			Algo:   tsig.Algo,
-		},
-	)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, tsig)
 
 	if err != nil {
 		return SecondaryDNSTSIG{}, err
