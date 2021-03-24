@@ -53,7 +53,7 @@ type CustomHostnameSSL struct {
 	Type                 string                              `json:"type,omitempty"`
 	CnameTarget          string                              `json:"cname_target,omitempty"`
 	CnameName            string                              `json:"cname,omitempty"`
-	Wildcard             bool                                `json:"wildcard,omitempty"`
+	Wildcard             *bool                               `json:"wildcard,omitempty"`
 	CustomCertificate    string                              `json:"custom_certificate,omitempty"`
 	CustomKey            string                              `json:"custom_key,omitempty"`
 	CertificateAuthority string                              `json:"certificate_authority,omitempty"`
