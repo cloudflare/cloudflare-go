@@ -36,9 +36,10 @@ body:
     description: |
       Show how you think this should work and interact. No need to wrap the Go 
       code in backticks, it will be rendered as Go in the final output. 
+    render: go
   validations:
     required: true
-  render: go
+  
 - type: textarea
   attributes:
     label: References
