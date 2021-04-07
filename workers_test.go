@@ -98,6 +98,16 @@ const (
     "errors": [],
     "messages": []
 }`
+	getRouteResponseData = `{
+    "result": {
+       "id": "e7a57d8746e74ae49c25994dadb421b1",
+       "pattern": "app1.example.com/*",
+       "script": "script-name"
+    },
+    "success": true,
+    "errors": [],
+    "messages": []
+}`
 	listBindingsResponseData = `{
 		"result": [
 			{
@@ -812,6 +822,28 @@ func TestWorkers_ListWorkerRoutesEnt(t *testing.T) {
 			{ID: "f8b68e9857f85bf59c25994dadb421b1", Pattern: "app2.example.com/*", Script: "test_script_2", Enabled: true},
 			{ID: "2b5bf4240cd34c77852fac70b1bf745a", Pattern: "app3.example.com/*", Script: "", Enabled: false},
 		},
+	}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
+}
+
+func TestWorkers_GetWorkerRoute(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/zones/foo/workers/routes/1234", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application-json")
+		fmt.Fprintf(w, getRouteResponseData)
+	})
+
+	res, err := client.GetWorkerRoute(context.Background(), "foo", "1234")
+	want := WorkerRouteResponse{successResponse,
+		WorkerRoute{
+			ID:      "e7a57d8746e74ae49c25994dadb421b1",
+			Pattern: "app1.example.com/*",
+			Script:  "script-name"},
 	}
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
