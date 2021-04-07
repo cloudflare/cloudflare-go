@@ -98,3 +98,26 @@ func (e *APIRequestError) ClientError() bool {
 func (e *APIRequestError) ClientRateLimited() bool {
 	return e.StatusCode == http.StatusTooManyRequests
 }
+
+// InternalErrorCodeIs returns a boolean whether or not the desired internal
+// error code is present in `e.InternalErrorCodes`.
+func (e *APIRequestError) InternalErrorCodeIs(code int) bool {
+	for _, errCode := range e.InternalErrorCodes() {
+		if errCode == code {
+			return true
+		}
+	}
+
+	return false
+}
+
+// ErrorMessageContains returns a boolean whether or not a substring exists in
+// any of the `e.ErrorMessages` slice entries.
+func (e *APIRequestError) ErrorMessageContains(s string) bool {
+	for _, errMsg := range e.ErrorMessages() {
+		if strings.Contains(errMsg, s) {
+			return true
+		}
+	}
+	return false
+}

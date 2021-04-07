@@ -176,3 +176,21 @@ func TestAPIRequestError_ClientRateLimited(t *testing.T) {
 		})
 	}
 }
+
+func TestAPIRequestError_InternalErrorCodeIs(t *testing.T) {
+	err := &APIRequestError{Errors: []ResponseInfo{
+		{Code: 1001},
+		{Code: 2001},
+		{Code: 3001},
+	}}
+	assert.Equal(t, err.InternalErrorCodeIs(3001), true)
+}
+
+func TestAPIRequestError_ErrorMessageContains(t *testing.T) {
+	err := &APIRequestError{Errors: []ResponseInfo{
+		{Message: "dns thing broke"},
+		{Message: "application thing broke"},
+		{Message: "network thing broke"},
+	}}
+	assert.Equal(t, err.ErrorMessageContains("application thing broke"), true)
+}
