@@ -696,7 +696,7 @@ func (api *API) ListWorkerRoutes(ctx context.Context, zoneID string) (WorkerRout
 	return r, nil
 }
 
-// GetWorkerRoute returns a worker route
+// GetWorkerRoute returns a worker route.
 //
 // API reference: https://api.cloudflare.com/#worker-routes-get-route
 func (api *API) GetWorkerRoute(ctx context.Context, zoneID string, routeID string) (WorkerRouteResponse, error) {
