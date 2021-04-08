@@ -696,6 +696,23 @@ func (api *API) ListWorkerRoutes(ctx context.Context, zoneID string) (WorkerRout
 	return r, nil
 }
 
+// GetWorkerRoute returns a worker route.
+//
+// API reference: https://api.cloudflare.com/#worker-routes-get-route
+func (api *API) GetWorkerRoute(ctx context.Context, zoneID string, routeID string) (WorkerRouteResponse, error) {
+	uri := "/zones/" + zoneID + "/workers/routes/" + routeID
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return WorkerRouteResponse{}, err
+	}
+	var r WorkerRouteResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return WorkerRouteResponse{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r, nil
+}
+
 // UpdateWorkerRoute updates worker route for a zone.
 //
 // API reference: https://api.cloudflare.com/#worker-filters-update-filter, https://api.cloudflare.com/#worker-routes-update-route
