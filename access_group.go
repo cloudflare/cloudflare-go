@@ -161,6 +161,13 @@ type AccessGroupAuthMethod struct {
 	} `json:"auth_method"`
 }
 
+// AccessGroupLoginMethod restricts the application to specific IdP instances.
+type AccessGroupLoginMethod struct {
+	LoginMethod struct {
+		ID string `json:"id"`
+	} `json:"login_method"`
+}
+
 // AccessGroupListResponse represents the response from the list
 // access group endpoint.
 type AccessGroupListResponse struct {
