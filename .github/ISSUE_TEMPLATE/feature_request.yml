@@ -1,6 +1,5 @@
 name: "\U0001F680 Feature request"
 description: "Suggest a new feature or other enhancement"
-title: ""
 labels: ["kind/enhancement", "needs-triage"]
 body:
 - type: input
