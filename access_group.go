@@ -168,6 +168,12 @@ type AccessGroupLoginMethod struct {
 	} `json:"login_method"`
 }
 
+type AccessGroupDevicePosture struct {
+	DevicePosture struct {
+		ID string `json:"integration_uid"`
+	} `json:"device_posture"`
+}
+
 // AccessGroupListResponse represents the response from the list
 // access group endpoint.
 type AccessGroupListResponse struct {
