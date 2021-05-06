@@ -265,7 +265,7 @@ func (c SpectrumApplicationConnectivity) Static() bool {
 //
 // API reference: https://developers.cloudflare.com/spectrum/api-reference/#list-spectrum-applications
 func (api *API) SpectrumApplications(ctx context.Context, zoneID string) ([]SpectrumApplication, error) {
-	uri := "/zones/" + zoneID + "/spectrum/apps"
+	uri := fmt.Sprintf("/zones/%s/spectrum/apps", zoneID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -309,7 +309,7 @@ func (api *API) SpectrumApplication(ctx context.Context, zoneID string, applicat
 //
 // API reference: https://developers.cloudflare.com/spectrum/api-reference/#create-a-spectrum-application
 func (api *API) CreateSpectrumApplication(ctx context.Context, zoneID string, appDetails SpectrumApplication) (SpectrumApplication, error) {
-	uri := "/zones/" + zoneID + "/spectrum/apps"
+	uri := fmt.Sprintf("/zones/%s/spectrum/apps", zoneID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, appDetails)
 	if err != nil {

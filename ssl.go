@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -65,7 +66,7 @@ type ZoneCustomSSLPriority struct {
 //
 // API reference: https://api.cloudflare.com/#custom-ssl-for-a-zone-create-ssl-configuration
 func (api *API) CreateSSL(ctx context.Context, zoneID string, options ZoneCustomSSLOptions) (ZoneCustomSSL, error) {
-	uri := "/zones/" + zoneID + "/custom_certificates"
+	uri := fmt.Sprintf("/zones/%s/custom_certificates", zoneID)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, options)
 	if err != nil {
 		return ZoneCustomSSL{}, err
@@ -81,7 +82,7 @@ func (api *API) CreateSSL(ctx context.Context, zoneID string, options ZoneCustom
 //
 // API reference: https://api.cloudflare.com/#custom-ssl-for-a-zone-list-ssl-configurations
 func (api *API) ListSSL(ctx context.Context, zoneID string) ([]ZoneCustomSSL, error) {
-	uri := "/zones/" + zoneID + "/custom_certificates"
+	uri := fmt.Sprintf("/zones/%s/custom_certificates", zoneID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, err
@@ -97,7 +98,7 @@ func (api *API) ListSSL(ctx context.Context, zoneID string) ([]ZoneCustomSSL, er
 //
 // API reference: https://api.cloudflare.com/#custom-ssl-for-a-zone-ssl-configuration-details
 func (api *API) SSLDetails(ctx context.Context, zoneID, certificateID string) (ZoneCustomSSL, error) {
-	uri := "/zones/" + zoneID + "/custom_certificates/" + certificateID
+	uri := fmt.Sprintf("/zones/%s/custom_certificates/%s", zoneID, certificateID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return ZoneCustomSSL{}, err
@@ -113,7 +114,7 @@ func (api *API) SSLDetails(ctx context.Context, zoneID, certificateID string) (Z
 //
 // API reference: https://api.cloudflare.com/#custom-ssl-for-a-zone-update-ssl-configuration
 func (api *API) UpdateSSL(ctx context.Context, zoneID, certificateID string, options ZoneCustomSSLOptions) (ZoneCustomSSL, error) {
-	uri := "/zones/" + zoneID + "/custom_certificates/" + certificateID
+	uri := fmt.Sprintf("/zones/%s/custom_certificates/%s", zoneID, certificateID)
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, options)
 	if err != nil {
 		return ZoneCustomSSL{}, err
@@ -130,7 +131,7 @@ func (api *API) UpdateSSL(ctx context.Context, zoneID, certificateID string, opt
 //
 // API reference: https://api.cloudflare.com/#custom-ssl-for-a-zone-re-prioritize-ssl-certificates
 func (api *API) ReprioritizeSSL(ctx context.Context, zoneID string, p []ZoneCustomSSLPriority) ([]ZoneCustomSSL, error) {
-	uri := "/zones/" + zoneID + "/custom_certificates/prioritize"
+	uri := fmt.Sprintf("/zones/%s/custom_certificates/prioritize", zoneID)
 	params := struct {
 		Certificates []ZoneCustomSSLPriority `json:"certificates"`
 	}{
@@ -151,7 +152,7 @@ func (api *API) ReprioritizeSSL(ctx context.Context, zoneID string, p []ZoneCust
 //
 // API reference: https://api.cloudflare.com/#custom-ssl-for-a-zone-delete-an-ssl-certificate
 func (api *API) DeleteSSL(ctx context.Context, zoneID, certificateID string) error {
-	uri := "/zones/" + zoneID + "/custom_certificates/" + certificateID
+	uri := fmt.Sprintf("/zones/%s/custom_certificates/%s", zoneID, certificateID)
 	if _, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil); err != nil {
 		return err
 	}

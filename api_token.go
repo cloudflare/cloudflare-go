@@ -95,7 +95,7 @@ type APITokenVerifyBody struct {
 //
 // API reference: https://api.cloudflare.com/#user-api-tokens-token-details
 func (api *API) GetAPIToken(ctx context.Context, tokenID string) (APIToken, error) {
-	uri := "/user/tokens/" + tokenID
+	uri := fmt.Sprintf("/user/tokens/%s", tokenID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {

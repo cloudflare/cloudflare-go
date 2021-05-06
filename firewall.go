@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -200,9 +201,8 @@ func (api *API) listAccessRules(ctx context.Context, prefix string, accessRule A
 		v.Set("configuration_target", accessRule.Configuration.Target)
 	}
 	v.Set("page", strconv.Itoa(page))
-	query := "?" + v.Encode()
 
-	uri := prefix + "/firewall/access_rules/rules" + query
+	uri := fmt.Sprintf("%s/firewall/access_rules/rules?%s", prefix, v.Encode())
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, err
@@ -217,7 +217,7 @@ func (api *API) listAccessRules(ctx context.Context, prefix string, accessRule A
 }
 
 func (api *API) createAccessRule(ctx context.Context, prefix string, accessRule AccessRule) (*AccessRuleResponse, error) {
-	uri := prefix + "/firewall/access_rules/rules"
+	uri := fmt.Sprintf("%s/firewall/access_rules/rules", prefix)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, accessRule)
 	if err != nil {
 		return nil, err
@@ -233,7 +233,7 @@ func (api *API) createAccessRule(ctx context.Context, prefix string, accessRule 
 }
 
 func (api *API) retrieveAccessRule(ctx context.Context, prefix, accessRuleID string) (*AccessRuleResponse, error) {
-	uri := prefix + "/firewall/access_rules/rules/" + accessRuleID
+	uri := fmt.Sprintf("%s/firewall/access_rules/rules/%s", prefix, accessRuleID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 
@@ -251,7 +251,7 @@ func (api *API) retrieveAccessRule(ctx context.Context, prefix, accessRuleID str
 }
 
 func (api *API) updateAccessRule(ctx context.Context, prefix, accessRuleID string, accessRule AccessRule) (*AccessRuleResponse, error) {
-	uri := prefix + "/firewall/access_rules/rules/" + accessRuleID
+	uri := fmt.Sprintf("%s/firewall/access_rules/rules/%s", prefix, accessRuleID)
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, accessRule)
 	if err != nil {
 		return nil, err
@@ -266,7 +266,7 @@ func (api *API) updateAccessRule(ctx context.Context, prefix, accessRuleID strin
 }
 
 func (api *API) deleteAccessRule(ctx context.Context, prefix, accessRuleID string) (*AccessRuleResponse, error) {
-	uri := prefix + "/firewall/access_rules/rules/" + accessRuleID
+	uri := fmt.Sprintf("%s/firewall/access_rules/rules/%s", prefix, accessRuleID)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return nil, err

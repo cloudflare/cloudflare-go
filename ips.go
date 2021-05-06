@@ -2,6 +2,7 @@ package cloudflare
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -36,7 +37,8 @@ type IPsResponse struct {
 //
 // API reference: https://api.cloudflare.com/#cloudflare-ips
 func IPs() (IPRanges, error) {
-	resp, err := http.Get(apiURL + "/ips?china_colo=1")
+	uri := fmt.Sprintf("%s/ips?china_colo=1", apiURL)
+	resp, err := http.Get(uri)
 	if err != nil {
 		return IPRanges{}, errors.Wrap(err, "HTTP request failed")
 	}

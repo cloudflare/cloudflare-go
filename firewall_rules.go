@@ -57,7 +57,7 @@ func (api *API) FirewallRules(ctx context.Context, zoneID string, pageOpts Pagin
 	}
 
 	if len(v) > 0 {
-		uri = uri + "?" + v.Encode()
+		uri = fmt.Sprintf("%s?%s", uri, v.Encode())
 	}
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)

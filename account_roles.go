@@ -45,7 +45,7 @@ type AccountRoleDetailResponse struct {
 //
 // API reference: https://api.cloudflare.com/#account-roles-list-roles
 func (api *API) AccountRoles(ctx context.Context, accountID string) ([]AccountRole, error) {
-	uri := "/accounts/" + accountID + "/roles"
+	uri := fmt.Sprintf("/accounts/%s/roles", accountID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {

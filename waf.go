@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -118,8 +119,7 @@ func (api *API) ListWAFPackages(ctx context.Context, zoneID string) ([]WAFPackag
 	// Loop over makeRequest until what we've fetched all records
 	for {
 		v.Set("page", strconv.Itoa(page))
-		query := "?" + v.Encode()
-		uri := "/zones/" + zoneID + "/firewall/waf/packages" + query
+		uri := fmt.Sprintf("/zones/%s/firewall/waf/packages?%s", zoneID, v.Encode())
 		res, err = api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
 			return []WAFPackage{}, err
@@ -152,7 +152,7 @@ func (api *API) ListWAFPackages(ctx context.Context, zoneID string) ([]WAFPackag
 //
 // API Reference: https://api.cloudflare.com/#waf-rule-packages-firewall-package-details
 func (api *API) WAFPackage(ctx context.Context, zoneID, packageID string) (WAFPackage, error) {
-	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID
+	uri := fmt.Sprintf("/zones/%s/firewall/waf/packages/%s", zoneID, packageID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return WAFPackage{}, err
@@ -171,7 +171,7 @@ func (api *API) WAFPackage(ctx context.Context, zoneID, packageID string) (WAFPa
 //
 // API Reference: https://api.cloudflare.com/#waf-rule-packages-edit-firewall-package
 func (api *API) UpdateWAFPackage(ctx context.Context, zoneID, packageID string, opts WAFPackageOptions) (WAFPackage, error) {
-	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID
+	uri := fmt.Sprintf("/zones/%s/firewall/waf/packages/%s", zoneID, packageID)
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, opts)
 	if err != nil {
 		return WAFPackage{}, err
@@ -202,8 +202,7 @@ func (api *API) ListWAFGroups(ctx context.Context, zoneID, packageID string) ([]
 	// Loop over makeRequest until what we've fetched all records
 	for {
 		v.Set("page", strconv.Itoa(page))
-		query := "?" + v.Encode()
-		uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID + "/groups" + query
+		uri := fmt.Sprintf("/zones/%s/firewall/waf/packages/%s/groups?%s", zoneID, packageID, v.Encode())
 		res, err = api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
 			return []WAFGroup{}, err
@@ -235,7 +234,7 @@ func (api *API) ListWAFGroups(ctx context.Context, zoneID, packageID string) ([]
 //
 // API Reference: https://api.cloudflare.com/#waf-rule-groups-rule-group-details
 func (api *API) WAFGroup(ctx context.Context, zoneID, packageID, groupID string) (WAFGroup, error) {
-	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID + "/groups/" + groupID
+	uri := fmt.Sprintf("/zones/%s/firewall/waf/packages/%s/groups/%s", zoneID, packageID, groupID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return WAFGroup{}, err
@@ -255,7 +254,7 @@ func (api *API) WAFGroup(ctx context.Context, zoneID, packageID, groupID string)
 // API Reference: https://api.cloudflare.com/#waf-rule-groups-edit-rule-group
 func (api *API) UpdateWAFGroup(ctx context.Context, zoneID, packageID, groupID, mode string) (WAFGroup, error) {
 	opts := WAFRuleOptions{Mode: mode}
-	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID + "/groups/" + groupID
+	uri := fmt.Sprintf("/zones/%s/firewall/waf/packages/%s/groups/%s", zoneID, packageID, groupID)
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, opts)
 	if err != nil {
 		return WAFGroup{}, err
@@ -286,8 +285,7 @@ func (api *API) ListWAFRules(ctx context.Context, zoneID, packageID string) ([]W
 	// Loop over makeRequest until what we've fetched all records
 	for {
 		v.Set("page", strconv.Itoa(page))
-		query := "?" + v.Encode()
-		uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID + "/rules" + query
+		uri := fmt.Sprintf("/zones/%s/firewall/waf/packages/%s/rules?%s", zoneID, packageID, v.Encode())
 		res, err = api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
 			return []WAFRule{}, err
@@ -320,7 +318,7 @@ func (api *API) ListWAFRules(ctx context.Context, zoneID, packageID string) ([]W
 //
 // API Reference: https://api.cloudflare.com/#waf-rules-rule-details
 func (api *API) WAFRule(ctx context.Context, zoneID, packageID, ruleID string) (WAFRule, error) {
-	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID + "/rules/" + ruleID
+	uri := fmt.Sprintf("/zones/%s/firewall/waf/packages/%s/rules/%s", zoneID, packageID, ruleID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return WAFRule{}, err
@@ -340,7 +338,7 @@ func (api *API) WAFRule(ctx context.Context, zoneID, packageID, ruleID string) (
 // API Reference: https://api.cloudflare.com/#waf-rules-edit-rule
 func (api *API) UpdateWAFRule(ctx context.Context, zoneID, packageID, ruleID, mode string) (WAFRule, error) {
 	opts := WAFRuleOptions{Mode: mode}
-	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID + "/rules/" + ruleID
+	uri := fmt.Sprintf("/zones/%s/firewall/waf/packages/%s/rules/%s", zoneID, packageID, ruleID)
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, opts)
 	if err != nil {
 		return WAFRule{}, err

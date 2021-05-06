@@ -45,7 +45,7 @@ type ArgoTunnelDetailResponse struct {
 //
 // API reference: https://api.cloudflare.com/#argo-tunnel-list-argo-tunnels
 func (api *API) ArgoTunnels(ctx context.Context, accountID string) ([]ArgoTunnel, error) {
-	uri := "/accounts/" + accountID + "/tunnels"
+	uri := fmt.Sprintf("/accounts/%s/tunnels", accountID)
 
 	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodGet, uri, nil, argoV1Header())
 	if err != nil {
@@ -83,7 +83,7 @@ func (api *API) ArgoTunnel(ctx context.Context, accountID, tunnelUUID string) (A
 //
 // API reference: https://api.cloudflare.com/#argo-tunnel-create-argo-tunnel
 func (api *API) CreateArgoTunnel(ctx context.Context, accountID, name, secret string) (ArgoTunnel, error) {
-	uri := "/accounts/" + accountID + "/tunnels"
+	uri := fmt.Sprintf("/accounts/%s/tunnels", accountID)
 
 	tunnel := ArgoTunnel{Name: name, Secret: secret}
 

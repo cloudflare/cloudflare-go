@@ -32,7 +32,7 @@ type ArgoDetailsResponse struct {
 //
 // API reference: https://api.cloudflare.com/#argo-smart-routing-get-argo-smart-routing-setting
 func (api *API) ArgoSmartRouting(ctx context.Context, zoneID string) (ArgoFeatureSetting, error) {
-	uri := "/zones/" + zoneID + "/argo/smart_routing"
+	uri := fmt.Sprintf("/zones/%s/argo/smart_routing", zoneID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -55,7 +55,7 @@ func (api *API) UpdateArgoSmartRouting(ctx context.Context, zoneID, settingValue
 		return ArgoFeatureSetting{}, errors.New(fmt.Sprintf("invalid setting value '%s'. must be 'on' or 'off'", settingValue))
 	}
 
-	uri := "/zones/" + zoneID + "/argo/smart_routing"
+	uri := fmt.Sprintf("/zones/%s/argo/smart_routing", zoneID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, ArgoFeatureSetting{Value: settingValue})
 	if err != nil {
@@ -74,7 +74,7 @@ func (api *API) UpdateArgoSmartRouting(ctx context.Context, zoneID, settingValue
 //
 // API reference: TBA
 func (api *API) ArgoTieredCaching(ctx context.Context, zoneID string) (ArgoFeatureSetting, error) {
-	uri := "/zones/" + zoneID + "/argo/tiered_caching"
+	uri := fmt.Sprintf("/zones/%s/argo/tiered_caching", zoneID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -97,7 +97,7 @@ func (api *API) UpdateArgoTieredCaching(ctx context.Context, zoneID, settingValu
 		return ArgoFeatureSetting{}, errors.New(fmt.Sprintf("invalid setting value '%s'. must be 'on' or 'off'", settingValue))
 	}
 
-	uri := "/zones/" + zoneID + "/argo/tiered_caching"
+	uri := fmt.Sprintf("/zones/%s/argo/tiered_caching", zoneID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, ArgoFeatureSetting{Value: settingValue})
 	if err != nil {

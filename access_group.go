@@ -222,7 +222,7 @@ func (api *API) accessGroups(ctx context.Context, id string, pageOpts Pagination
 	)
 
 	if len(v) > 0 {
-		uri = uri + "?" + v.Encode()
+		uri = fmt.Sprintf("%s?%s", uri, v.Encode())
 	}
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
