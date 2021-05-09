@@ -84,7 +84,7 @@ func (api *API) Filter(ctx context.Context, zoneID, filterID string) (Filter, er
 //
 // API reference: https://developers.cloudflare.com/firewall/api/cf-filters/get/#get-all-filters
 func (api *API) Filters(ctx context.Context, zoneID string, pageOpts PaginationOptions) ([]Filter, error) {
-	uri := "/zones/" + zoneID + "/filters"
+	uri := fmt.Sprintf("/zones/%s/filters", zoneID)
 	v := url.Values{}
 
 	if pageOpts.PerPage > 0 {
@@ -96,7 +96,7 @@ func (api *API) Filters(ctx context.Context, zoneID string, pageOpts PaginationO
 	}
 
 	if len(v) > 0 {
-		uri = uri + "?" + v.Encode()
+		uri = fmt.Sprintf("%s?%s", uri, v.Encode())
 	}
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
@@ -117,7 +117,7 @@ func (api *API) Filters(ctx context.Context, zoneID string, pageOpts PaginationO
 //
 // API reference: https://developers.cloudflare.com/firewall/api/cf-filters/post/
 func (api *API) CreateFilters(ctx context.Context, zoneID string, filters []Filter) ([]Filter, error) {
-	uri := "/zones/" + zoneID + "/filters"
+	uri := fmt.Sprintf("/zones/%s/filters", zoneID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, filters)
 	if err != nil {
@@ -167,7 +167,7 @@ func (api *API) UpdateFilters(ctx context.Context, zoneID string, filters []Filt
 		}
 	}
 
-	uri := "/zones/" + zoneID + "/filters"
+	uri := fmt.Sprintf("/zones/%s/filters", zoneID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, filters)
 	if err != nil {

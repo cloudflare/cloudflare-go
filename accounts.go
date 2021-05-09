@@ -61,7 +61,7 @@ func (api *API) Accounts(ctx context.Context, pageOpts PaginationOptions) ([]Acc
 
 	uri := "/accounts"
 	if len(v) > 0 {
-		uri = uri + "?" + v.Encode()
+		uri = fmt.Sprintf("%s?%s", uri, v.Encode())
 	}
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
@@ -81,7 +81,7 @@ func (api *API) Accounts(ctx context.Context, pageOpts PaginationOptions) ([]Acc
 //
 // API reference: https://api.cloudflare.com/#accounts-account-details
 func (api *API) Account(ctx context.Context, accountID string) (Account, ResultInfo, error) {
-	uri := "/accounts/" + accountID
+	uri := fmt.Sprintf("/accounts/%s", accountID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -101,7 +101,7 @@ func (api *API) Account(ctx context.Context, accountID string) (Account, ResultI
 //
 // API reference: https://api.cloudflare.com/#accounts-update-account
 func (api *API) UpdateAccount(ctx context.Context, accountID string, account Account) (Account, error) {
-	uri := "/accounts/" + accountID
+	uri := fmt.Sprintf("/accounts/%s", accountID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, account)
 	if err != nil {

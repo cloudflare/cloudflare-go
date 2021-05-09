@@ -70,9 +70,9 @@ func (api *API) AccountMembers(ctx context.Context, accountID string, pageOpts P
 		v.Set("page", strconv.Itoa(pageOpts.Page))
 	}
 
-	uri := "/accounts/" + accountID + "/members"
+	uri := fmt.Sprintf("/accounts/%s/members", accountID)
 	if len(v) > 0 {
-		uri = uri + "?" + v.Encode()
+		uri = fmt.Sprintf("%s?%s", uri, v.Encode())
 	}
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
@@ -97,7 +97,7 @@ func (api *API) CreateAccountMember(ctx context.Context, accountID string, email
 		return AccountMember{}, errors.New(errMissingAccountID)
 	}
 
-	uri := "/accounts/" + accountID + "/members"
+	uri := fmt.Sprintf("/accounts/%s/members", accountID)
 
 	var newMember = AccountMemberInvitation{
 		Email: emailAddress,

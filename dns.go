@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -48,7 +49,7 @@ type DNSListResponse struct {
 //
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-create-dns-record
 func (api *API) CreateDNSRecord(ctx context.Context, zoneID string, rr DNSRecord) (*DNSRecordResponse, error) {
-	uri := "/zones/" + zoneID + "/dns_records"
+	uri := fmt.Sprintf("/zones/%s/dns_records", zoneID)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, rr)
 	if err != nil {
 		return nil, err
@@ -83,15 +84,13 @@ func (api *API) DNSRecords(ctx context.Context, zoneID string, rr DNSRecord) ([]
 		v.Set("content", rr.Content)
 	}
 
-	var query string
 	var records []DNSRecord
 	page := 1
 
 	// Loop over makeRequest until what we've fetched all records
 	for {
 		v.Set("page", strconv.Itoa(page))
-		query = "?" + v.Encode()
-		uri := "/zones/" + zoneID + "/dns_records" + query
+		uri := fmt.Sprintf("/zones/%s/dns_records?%s", zoneID, v.Encode())
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
 			return []DNSRecord{}, err
@@ -116,7 +115,7 @@ func (api *API) DNSRecords(ctx context.Context, zoneID string, rr DNSRecord) ([]
 //
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-dns-record-details
 func (api *API) DNSRecord(ctx context.Context, zoneID, recordID string) (DNSRecord, error) {
-	uri := "/zones/" + zoneID + "/dns_records/" + recordID
+	uri := fmt.Sprintf("/zones/%s/dns_records/%s", zoneID, recordID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return DNSRecord{}, err
@@ -146,7 +145,7 @@ func (api *API) UpdateDNSRecord(ctx context.Context, zoneID, recordID string, rr
 	if rr.Type == "" {
 		rr.Type = rec.Type
 	}
-	uri := "/zones/" + zoneID + "/dns_records/" + recordID
+	uri := fmt.Sprintf("/zones/%s/dns_records/%s", zoneID, recordID)
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, rr)
 	if err != nil {
 		return err
@@ -164,7 +163,7 @@ func (api *API) UpdateDNSRecord(ctx context.Context, zoneID, recordID string, rr
 //
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-delete-dns-record
 func (api *API) DeleteDNSRecord(ctx context.Context, zoneID, recordID string) error {
-	uri := "/zones/" + zoneID + "/dns_records/" + recordID
+	uri := fmt.Sprintf("/zones/%s/dns_records/%s", zoneID, recordID)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return err
