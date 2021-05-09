@@ -41,15 +41,13 @@ type DevicePostureRuleListResponse struct {
 // DevicePostureRuleDetailResponse is the API response, containing a single
 // device posture rule.
 type DevicePostureRuleDetailResponse struct {
-	Success  bool              `json:"success"`
-	Errors   []string          `json:"errors"`
-	Messages []string          `json:"messages"`
-	Result   DevicePostureRule `json:"result"`
+	Response
+	Result DevicePostureRule `json:"result"`
 }
 
 // DevicePostureRules returns all device posture rules within an account.
 //
-// API reference: TODO
+// API reference: https://api.cloudflare.com/#device-posture-rules-list-device-posture-rules
 func (api *API) DevicePostureRules(ctx context.Context, accountID string) ([]DevicePostureRule, ResultInfo, error) {
 	uri := fmt.Sprintf("/%s/%s/devices/posture", AccountRouteRoot, accountID)
 
@@ -69,7 +67,7 @@ func (api *API) DevicePostureRules(ctx context.Context, accountID string) ([]Dev
 
 // DevicePostureRule returns a single device posture rule based on the rule ID.
 //
-// API reference: TODO
+// API reference: https://api.cloudflare.com/#device-posture-rules-device-posture-rules-details
 func (api *API) DevicePostureRule(ctx context.Context, accountID, ruleID string) (DevicePostureRule, error) {
 	uri := fmt.Sprintf(
 		"/%s/%s/devices/posture/%s",
@@ -94,7 +92,7 @@ func (api *API) DevicePostureRule(ctx context.Context, accountID, ruleID string)
 
 // CreateDevicePostureRule creates a new device posture rule.
 //
-// API reference: TODO
+// API reference: https://api.cloudflare.com/#device-posture-rules-create-device-posture-rule
 func (api *API) CreateDevicePostureRule(ctx context.Context, accountID string, rule DevicePostureRule) (DevicePostureRule, error) {
 	uri := fmt.Sprintf("/%s/%s/devices/posture", AccountRouteRoot, accountID)
 
@@ -114,7 +112,7 @@ func (api *API) CreateDevicePostureRule(ctx context.Context, accountID string, r
 
 // UpdateDevicePostureRule updates an existing device posture rule.
 //
-// API reference: TODO
+// API reference: https://api.cloudflare.com/#device-posture-rules-update-device-posture-rule
 func (api *API) UpdateDevicePostureRule(ctx context.Context, accountID string, rule DevicePostureRule) (DevicePostureRule, error) {
 	if rule.ID == "" {
 		return DevicePostureRule{}, errors.Errorf("device posture rule ID cannot be empty")
@@ -143,7 +141,7 @@ func (api *API) UpdateDevicePostureRule(ctx context.Context, accountID string, r
 
 // DeleteDevicePostureRule deletes a device posture rule.
 //
-// API reference: TODO
+// API reference: https://api.cloudflare.com/#device-posture-rules-delete-device-posture-rule
 func (api *API) DeleteDevicePostureRule(ctx context.Context, accountID, ruleID string) error {
 	uri := fmt.Sprintf(
 		"/%s/%s/devices/posture/%s",
