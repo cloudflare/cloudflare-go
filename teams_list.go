@@ -45,10 +45,8 @@ type TeamsListListResponse struct {
 // TeamsListDetailResponse is the API response, containing a single
 // teams list.
 type TeamsListDetailResponse struct {
-	Success  bool      `json:"success"`
-	Errors   []string  `json:"errors"`
-	Messages []string  `json:"messages"`
-	Result   TeamsList `json:"result"`
+	Response
+	Result TeamsList `json:"result"`
 }
 
 // TeamsLists returns all lists within an account.
