@@ -11,20 +11,20 @@ import (
 
 // WaitingRoom describes a WaitingRoom object.
 type WaitingRoom struct {
-	ID                    string     `json:"id,omitempty"`
-	CreatedOn             *time.Time `json:"created_on,omitempty"`
-	ModifiedOn            *time.Time `json:"modified_on,omitempty"`
-	Name                  string     `json:"name"`
-	Description           string     `json:"description,omitempty"`
-	Suspended             bool       `json:"suspended"`
-	Host                  string     `json:"host"`
-	Path                  string     `json:"path"`
-	QueueAll              bool       `json:"queue_all"`
-	NewUsersPerMinute     int        `json:"new_users_per_minute"`
-	TotalActiveUsers      int        `json:"total_active_users"`
-	SessionDuration       int        `json:"session_duration"`
-	DisableSessionRenewal bool       `json:"disable_session_renewal"`
-	CustomPageHtml        string     `json:"custom_page_html,omitempty"`
+	ID                    string    `json:"id,omitempty"`
+	CreatedOn             time.Time `json:"created_on,omitempty"`
+	ModifiedOn            time.Time `json:"modified_on,omitempty"`
+	Name                  string    `json:"name"`
+	Description           string    `json:"description,omitempty"`
+	Suspended             bool      `json:"suspended"`
+	Host                  string    `json:"host"`
+	Path                  string    `json:"path"`
+	QueueAll              bool      `json:"queue_all"`
+	NewUsersPerMinute     int       `json:"new_users_per_minute"`
+	TotalActiveUsers      int       `json:"total_active_users"`
+	SessionDuration       int       `json:"session_duration"`
+	DisableSessionRenewal bool      `json:"disable_session_renewal"`
+	CustomPageHtml        string    `json:"custom_page_html,omitempty"`
 }
 
 // WaitingRoomDetailResponse is the API response, containing a single WaitingRoom.
