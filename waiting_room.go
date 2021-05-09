@@ -46,9 +46,9 @@ type WaitingRoomsResponse struct {
 // CreateWaitingRoom creates a new Waiting Room for a zone.
 //
 // API reference: https://api.cloudflare.com/#waiting-room-create-waiting-room
-func (api *API) CreateWaitingRoom(ctx context.Context, zoneID string, waiting_room WaitingRoom) (*WaitingRoom, error) {
+func (api *API) CreateWaitingRoom(ctx context.Context, zoneID string, waitingRoom WaitingRoom) (*WaitingRoom, error) {
 	uri := "/zones/" + zoneID + "/waiting_rooms"
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, waiting_room)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, waitingRoom)
 	if err != nil {
 		return nil, err
 	}
@@ -98,36 +98,36 @@ func (api *API) WaitingRoom(ctx context.Context, zoneID, waitingRoomId string) (
 // in contrast to UpdateWaitingRoom which replaces the entire Waiting room.
 //
 // API reference: https://api.cloudflare.com/#waiting-room-update-waiting-room
-func (api *API) ChangeWaitingRoom(ctx context.Context, zoneID, waitingRoomId string, waiting_room WaitingRoom) error {
+func (api *API) ChangeWaitingRoom(ctx context.Context, zoneID, waitingRoomId string, waitingRoom WaitingRoom) (WaitingRoom, error) {
 	uri := "/zones/" + zoneID + "/waiting_rooms/" + waitingRoomId
-	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, waiting_room)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, waitingRoom)
 	if err != nil {
-		return err
+		return WaitingRoom{}, err
 	}
 	var r WaitingRoomDetailResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return WaitingRoom{}, errors.Wrap(err, errUnmarshalError)
 	}
-	return nil
+	return r.Result, nil
 }
 
 // UpdateWaitingRoom lets you replace a Waiting Room. This is in contrast to
 // ChangeWaitingRoom which lets you change individual settings.
 //
 // API reference: https://api.cloudflare.com/#waiting-room-update-waiting-room
-func (api *API) UpdateWaitingRoom(ctx context.Context, zoneID, waitingRoomId string, waiting_room WaitingRoom) error {
-	uri := "/zones/" + zoneID + "/waiting_rooms/" + waitingRoomId
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, waiting_room)
+func (api *API) UpdateWaitingRoom(ctx context.Context, zoneID string, waitingRoom WaitingRoom) (WaitingRoom, error) {
+	uri := "/zones/" + zoneID + "/waiting_rooms/" + waitingRoom.ID
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, waitingRoom)
 	if err != nil {
-		return err
+		return WaitingRoom{}, err
 	}
 	var r WaitingRoomDetailResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return WaitingRoom{}, errors.Wrap(err, errUnmarshalError)
 	}
-	return nil
+	return r.Result, nil
 }
 
 // DeleteWaitingRoom deletes a Waiting Room for a zone.

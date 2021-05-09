@@ -202,3 +202,77 @@ func TestCreateWaitingRoomError(t *testing.T) {
 	_, err := client.CreateWaitingRoom(context.Background(), testZoneID, waitingRoom)
 	assert.NotNil(t, err)
 }
+
+func TestUpdateWaitingRoom(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, http.MethodPut, "Expected method 'PUT', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			  "success": true,
+			  "errors": [],
+			  "messages": [],
+			  "result": %s
+			}
+		`, waitingRoomJson)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/waiting_rooms/699d98642c564d2e855e9661899b7252", handler)
+	want := waitingRoom
+
+	actual, err := client.UpdateWaitingRoom(context.Background(), testZoneID, waitingRoom)
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestChangeWaitingRoom(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, http.MethodPatch, "Expected method 'PATCH', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			  "success": true,
+			  "errors": [],
+			  "messages": [],
+			  "result": %s
+			}
+		`, waitingRoomJson)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/waiting_rooms/699d98642c564d2e855e9661899b7252", handler)
+	want := waitingRoom
+
+	actual, err := client.ChangeWaitingRoom(context.Background(), testZoneID, "699d98642c564d2e855e9661899b7252", WaitingRoom{TotalActiveUsers: 400})
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestDeleteWaitingRoom(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, http.MethodDelete, "Expected method 'DELETE', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+			  "success": true,
+			  "errors": [],
+			  "messages": [],
+			  "result": {
+			    "id": "699d98642c564d2e855e9661899b7252"
+			  }
+			}
+		`)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/waiting_rooms/699d98642c564d2e855e9661899b7252", handler)
+
+	err := client.DeleteWaitingRoom(context.Background(), testZoneID, "699d98642c564d2e855e9661899b7252")
+	assert.NoError(t, err)
+}
