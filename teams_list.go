@@ -53,7 +53,7 @@ type TeamsListDetailResponse struct {
 
 // TeamsLists returns all lists within an account.
 //
-// API reference: TODO
+// API reference: https://api.cloudflare.com/#teams-lists-list-teams-lists
 func (api *API) TeamsLists(ctx context.Context, accountID string) ([]TeamsList, ResultInfo, error) {
 	uri := fmt.Sprintf("/%s/%s/lists", AccountRouteRoot, accountID)
 
@@ -73,7 +73,7 @@ func (api *API) TeamsLists(ctx context.Context, accountID string) ([]TeamsList, 
 
 // TeamsList returns a single list based on the list ID.
 //
-// API reference: TODO
+// API reference: https://api.cloudflare.com/#teams-lists-teams-list-details
 func (api *API) TeamsList(ctx context.Context, accountID, listID string) (TeamsList, error) {
 	uri := fmt.Sprintf(
 		"/%s/%s/lists/%s",
@@ -98,7 +98,7 @@ func (api *API) TeamsList(ctx context.Context, accountID, listID string) (TeamsL
 
 // CreateTeamsList creates a new teams list.
 //
-// API reference: TODO
+// API reference: https://api.cloudflare.com/#teams-lists-create-teams-list
 func (api *API) CreateTeamsList(ctx context.Context, accountID string, teamsList TeamsList) (TeamsList, error) {
 	uri := fmt.Sprintf("/%s/%s/lists", AccountRouteRoot, accountID)
 
@@ -118,7 +118,7 @@ func (api *API) CreateTeamsList(ctx context.Context, accountID string, teamsList
 
 // UpdateTeamsList updates an existing teams list.
 //
-// API reference: TODO
+// API reference: https://api.cloudflare.com/#teams-lists-update-teams-list
 func (api *API) UpdateTeamsList(ctx context.Context, accountID string, teamsList TeamsList) (TeamsList, error) {
 	if teamsList.ID == "" {
 		return TeamsList{}, errors.Errorf("teams list ID cannot be empty")
@@ -147,7 +147,7 @@ func (api *API) UpdateTeamsList(ctx context.Context, accountID string, teamsList
 
 // PatchTeamsList updates the items in an existing teams list.
 //
-// API reference: TODO
+// API reference: https://api.cloudflare.com/#teams-lists-patch-teams-list
 func (api *API) PatchTeamsList(ctx context.Context, accountID string, listPatch PatchTeamsList) (TeamsList, error) {
 	if listPatch.ID == "" {
 		return TeamsList{}, errors.Errorf("teams list ID cannot be empty")
@@ -176,7 +176,7 @@ func (api *API) PatchTeamsList(ctx context.Context, accountID string, listPatch 
 
 // DeleteTeamsList deletes a teams list.
 //
-// API reference: TODO
+// API reference: https://api.cloudflare.com/#teams-lists-delete-teams-list
 func (api *API) DeleteTeamsList(ctx context.Context, accountID, teamsListID string) error {
 	uri := fmt.Sprintf(
 		"/%s/%s/lists/%s",
