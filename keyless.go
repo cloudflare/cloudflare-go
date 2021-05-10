@@ -52,10 +52,10 @@ type KeylessSSLUpdateRequest struct {
 	Enabled *bool  `json:"enabled,omitempty"`
 }
 
-// CreateKeyless creates a new Keyless SSL configuration for the zone.
+// CreateKeylessSSL creates a new Keyless SSL configuration for the zone.
 //
 // API reference: https://api.cloudflare.com/#keyless-ssl-for-a-zone-create-keyless-ssl-configuration
-func (api *API) CreateKeyless(ctx context.Context, zoneID string, keylessSSL KeylessSSLCreateRequest) (KeylessSSL, error) {
+func (api *API) CreateKeylessSSL(ctx context.Context, zoneID string, keylessSSL KeylessSSLCreateRequest) (KeylessSSL, error) {
 	uri := fmt.Sprintf("/zones/%s/keyless_certificates", zoneID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, keylessSSL)
@@ -72,10 +72,10 @@ func (api *API) CreateKeyless(ctx context.Context, zoneID string, keylessSSL Key
 	return keylessSSLDetailResponse.Result, nil
 }
 
-// ListKeyless lists Keyless SSL configurations for a zone.
+// ListKeylessSSL lists Keyless SSL configurations for a zone.
 //
 // API reference: https://api.cloudflare.com/#keyless-ssl-for-a-zone-list-keyless-ssl-configurations
-func (api *API) ListKeyless(ctx context.Context, zoneID string) ([]KeylessSSL, error) {
+func (api *API) ListKeylessSSL(ctx context.Context, zoneID string) ([]KeylessSSL, error) {
 	uri := fmt.Sprintf("/zones/%s/keyless_certificates", zoneID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
@@ -92,10 +92,10 @@ func (api *API) ListKeyless(ctx context.Context, zoneID string) ([]KeylessSSL, e
 	return keylessSSLListResponse.Result, nil
 }
 
-// Keyless provides the configuration for a given Keyless SSL identifier.
+// KeylessSSL provides the configuration for a given Keyless SSL identifier.
 //
 // API reference: https://api.cloudflare.com/#keyless-ssl-for-a-zone-keyless-ssl-details
-func (api *API) Keyless(ctx context.Context, zoneID, keylessSSLID string) (KeylessSSL, error) {
+func (api *API) KeylessSSL(ctx context.Context, zoneID, keylessSSLID string) (KeylessSSL, error) {
 	uri := fmt.Sprintf("/zones/%s/keyless_certificates/%s", zoneID, keylessSSLID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
@@ -112,10 +112,10 @@ func (api *API) Keyless(ctx context.Context, zoneID, keylessSSLID string) (Keyle
 	return keylessResponse.Result, nil
 }
 
-// UpdateKeyless updates an existing Keyless SSL configuration.
+// UpdateKeylessSSL updates an existing Keyless SSL configuration.
 //
 // API reference: https://api.cloudflare.com/#keyless-ssl-for-a-zone-edit-keyless-ssl-configuration
-func (api *API) UpdateKeyless(ctx context.Context, zoneID, kelessSSLID string, keylessSSL KeylessSSLUpdateRequest) (KeylessSSL, error) {
+func (api *API) UpdateKeylessSSL(ctx context.Context, zoneID, kelessSSLID string, keylessSSL KeylessSSLUpdateRequest) (KeylessSSL, error) {
 	uri := fmt.Sprintf("/zones/%s/keyless_certificates/%s", zoneID, kelessSSLID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, keylessSSL)
@@ -132,10 +132,10 @@ func (api *API) UpdateKeyless(ctx context.Context, zoneID, kelessSSLID string, k
 	return keylessSSLDetailResponse.Result, nil
 }
 
-// DeleteKeyless deletes an existing Keyless SSL configuration.
+// DeleteKeylessSSL deletes an existing Keyless SSL configuration.
 //
 // API reference: https://api.cloudflare.com/#keyless-ssl-for-a-zone-delete-keyless-ssl-configuration
-func (api *API) DeleteKeyless(ctx context.Context, zoneID, keylessSSLID string) error {
+func (api *API) DeleteKeylessSSL(ctx context.Context, zoneID, keylessSSLID string) error {
 	uri := fmt.Sprintf("/zones/%s/keyless_certificates/%s", zoneID, keylessSSLID)
 
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)

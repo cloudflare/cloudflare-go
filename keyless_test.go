@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestCreateKeyless(t *testing.T) {
+func TestCreateKeylessSSL(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -56,7 +56,7 @@ func TestCreateKeyless(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/keyless_certificates", handler)
 
-	actual, err := client.CreateKeyless(context.Background(), zoneID, input)
+	actual, err := client.CreateKeylessSSL(context.Background(), zoneID, input)
 	require.NoError(t, err)
 
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
@@ -75,7 +75,7 @@ func TestCreateKeyless(t *testing.T) {
 	assert.Equal(t, want, actual)
 }
 
-func TestListKeyless(t *testing.T) {
+func TestListKeylessSSL(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -107,7 +107,7 @@ func TestListKeyless(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/keyless_certificates", handler)
 
-	actual, err := client.ListKeyless(context.Background(), zoneID)
+	actual, err := client.ListKeylessSSL(context.Background(), zoneID)
 	require.NoError(t, err)
 
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
@@ -126,7 +126,7 @@ func TestListKeyless(t *testing.T) {
 	assert.Equal(t, want, actual)
 }
 
-func TestKeyless(t *testing.T) {
+func TestKeylessSSL(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -156,7 +156,7 @@ func TestKeyless(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/keyless_certificates/"+"4d2844d2ce78891c34d0b6c0535a291e", handler)
 
-	actual, err := client.Keyless(context.Background(), zoneID, "4d2844d2ce78891c34d0b6c0535a291e")
+	actual, err := client.KeylessSSL(context.Background(), zoneID, "4d2844d2ce78891c34d0b6c0535a291e")
 	require.NoError(t, err)
 
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
@@ -175,7 +175,7 @@ func TestKeyless(t *testing.T) {
 	assert.Equal(t, want, actual)
 }
 
-func TestUpdateKeyless(t *testing.T) {
+func TestUpdateKeylessSSL(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -219,7 +219,7 @@ func TestUpdateKeyless(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/keyless_certificates/"+"4d2844d2ce78891c34d0b6c0535a291e", handler)
 
-	actual, err := client.UpdateKeyless(context.Background(), zoneID, "4d2844d2ce78891c34d0b6c0535a291e", input)
+	actual, err := client.UpdateKeylessSSL(context.Background(), zoneID, "4d2844d2ce78891c34d0b6c0535a291e", input)
 	require.NoError(t, err)
 
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
@@ -238,7 +238,7 @@ func TestUpdateKeyless(t *testing.T) {
 	assert.Equal(t, want, actual)
 }
 
-func TestDeleteKeyless(t *testing.T) {
+func TestDeleteKeylessSSL(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -257,6 +257,6 @@ func TestDeleteKeyless(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+zoneID+"/keyless_certificates/"+"4d2844d2ce78891c34d0b6c0535a291e", handler)
 
-	err := client.DeleteKeyless(context.Background(), zoneID, "4d2844d2ce78891c34d0b6c0535a291e")
+	err := client.DeleteKeylessSSL(context.Background(), zoneID, "4d2844d2ce78891c34d0b6c0535a291e")
 	require.NoError(t, err)
 }
