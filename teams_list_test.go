@@ -55,7 +55,7 @@ func TestTeamsLists(t *testing.T) {
 		UpdatedAt:   &updatedAt,
 	}}
 
-	mux.HandleFunc("/accounts/"+accountID+"/lists", handler)
+	mux.HandleFunc("/accounts/"+accountID+"/gateway/lists", handler)
 
 	actual, _, err := client.TeamsLists(context.Background(), accountID)
 
@@ -101,7 +101,7 @@ func TestTeamsList(t *testing.T) {
 		UpdatedAt:   &updatedAt,
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/lists/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+	mux.HandleFunc("/accounts/"+accountID+"/gateway/lists/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
 	actual, err := client.TeamsList(context.Background(), accountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
@@ -146,7 +146,7 @@ func TestCreateTeamsList(t *testing.T) {
 		UpdatedAt:   &updatedAt,
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/lists", handler)
+	mux.HandleFunc("/accounts/"+accountID+"/gateway/lists", handler)
 
 	actual, err := client.CreateTeamsList(context.Background(), accountID, TeamsList{
 		Name:        "My Serial List",
@@ -196,7 +196,7 @@ func TestUpdateTeamsList(t *testing.T) {
 		UpdatedAt:   &updatedAt,
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/lists/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+	mux.HandleFunc("/accounts/"+accountID+"/gateway/lists/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
 	actual, err := client.UpdateTeamsList(context.Background(), accountID, teamsList)
 
@@ -249,7 +249,7 @@ func TestPatchTeamsList(t *testing.T) {
 		UpdatedAt:   &updatedAt,
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/lists/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+	mux.HandleFunc("/accounts/"+accountID+"/gateway/lists/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
 	actual, err := client.PatchTeamsList(context.Background(), accountID, PatchTeamsList{
 		ID:     "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
@@ -280,7 +280,7 @@ func TestDeleteTeamsList(t *testing.T) {
     `)
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/lists/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+	mux.HandleFunc("/accounts/"+accountID+"/gateway/lists/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 	err := client.DeleteTeamsList(context.Background(), accountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	assert.NoError(t, err)

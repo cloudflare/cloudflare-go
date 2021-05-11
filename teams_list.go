@@ -53,7 +53,7 @@ type TeamsListDetailResponse struct {
 //
 // API reference: https://api.cloudflare.com/#teams-lists-list-teams-lists
 func (api *API) TeamsLists(ctx context.Context, accountID string) ([]TeamsList, ResultInfo, error) {
-	uri := fmt.Sprintf("/%s/%s/lists", AccountRouteRoot, accountID)
+	uri := fmt.Sprintf("/%s/%s/gateway/lists", AccountRouteRoot, accountID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -74,7 +74,7 @@ func (api *API) TeamsLists(ctx context.Context, accountID string) ([]TeamsList, 
 // API reference: https://api.cloudflare.com/#teams-lists-teams-list-details
 func (api *API) TeamsList(ctx context.Context, accountID, listID string) (TeamsList, error) {
 	uri := fmt.Sprintf(
-		"/%s/%s/lists/%s",
+		"/%s/%s/gateway/lists/%s",
 		AccountRouteRoot,
 		accountID,
 		listID,
@@ -98,7 +98,7 @@ func (api *API) TeamsList(ctx context.Context, accountID, listID string) (TeamsL
 //
 // API reference: https://api.cloudflare.com/#teams-lists-create-teams-list
 func (api *API) CreateTeamsList(ctx context.Context, accountID string, teamsList TeamsList) (TeamsList, error) {
-	uri := fmt.Sprintf("/%s/%s/lists", AccountRouteRoot, accountID)
+	uri := fmt.Sprintf("/%s/%s/gateway/lists", AccountRouteRoot, accountID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, teamsList)
 	if err != nil {
@@ -123,7 +123,7 @@ func (api *API) UpdateTeamsList(ctx context.Context, accountID string, teamsList
 	}
 
 	uri := fmt.Sprintf(
-		"/%s/%s/lists/%s",
+		"/%s/%s/gateway/lists/%s",
 		AccountRouteRoot,
 		accountID,
 		teamsList.ID,
@@ -152,7 +152,7 @@ func (api *API) PatchTeamsList(ctx context.Context, accountID string, listPatch 
 	}
 
 	uri := fmt.Sprintf(
-		"/%s/%s/lists/%s",
+		"/%s/%s/gateway/lists/%s",
 		AccountRouteRoot,
 		accountID,
 		listPatch.ID,
@@ -177,7 +177,7 @@ func (api *API) PatchTeamsList(ctx context.Context, accountID string, listPatch 
 // API reference: https://api.cloudflare.com/#teams-lists-delete-teams-list
 func (api *API) DeleteTeamsList(ctx context.Context, accountID, teamsListID string) error {
 	uri := fmt.Sprintf(
-		"/%s/%s/lists/%s",
+		"/%s/%s/gateway/lists/%s",
 		AccountRouteRoot,
 		accountID,
 		teamsListID,
