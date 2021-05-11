@@ -76,6 +76,22 @@ type PerHostnameAuthenticatedOriginPullsConfigParams struct {
 	Config []PerHostnameAuthenticatedOriginPullsConfig `json:"config"`
 }
 
+// ListPerHostnameAuthenticatedOriginPullsCertificate will get all certificate under Per Hostname AuthenticatedOriginPulls zone.
+//
+// API reference: https://api.cloudflare.com/#per-hostname-authenticated-origin-pull-list-certificates
+func (api *API) ListPerHostnameAuthenticatedOriginPullsCertificate(ctx context.Context, zoneID string) ([]PerHostnameAuthenticatedOriginPullsDetails, error) {
+	uri := fmt.Sprintf("/zones/%s/origin_tls_client_auth/hostnames/certificates", zoneID)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return []PerHostnameAuthenticatedOriginPullsDetails{}, err
+	}
+	var r PerHostnamesAuthenticatedOriginPullsDetailsResponse
+	if err := json.Unmarshal(res, &r); err != nil {
+		return []PerHostnameAuthenticatedOriginPullsDetails{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
+
 // UploadPerHostnameAuthenticatedOriginPullsCertificate will upload the provided certificate and private key to the edge under Per Hostname AuthenticatedOriginPulls.
 //
 // API reference: https://api.cloudflare.com/#per-hostname-authenticated-origin-pull-upload-a-hostname-client-certificate
