@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/pkg/errors"
@@ -80,7 +81,7 @@ type DiagnosticsTracerouteResponseColos struct {
 //
 // API documentation: https://api.cloudflare.com/#diagnostics-traceroute
 func (api *API) PerformTraceroute(ctx context.Context, accountID string, targets, colos []string, tracerouteOptions DiagnosticsTracerouteConfigurationOptions) ([]DiagnosticsTracerouteResponseResult, error) {
-	uri := "/accounts/" + accountID + "/diagnostics/traceroute"
+	uri := fmt.Sprintf("/accounts/%s/diagnostics/traceroute", accountID)
 	diagnosticsPayload := DiagnosticsTracerouteConfiguration{
 		Targets: targets,
 		Colos:   colos,

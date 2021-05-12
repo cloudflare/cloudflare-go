@@ -84,7 +84,7 @@ func (api *API) accessApplications(ctx context.Context, id string, pageOpts Pagi
 
 	uri := fmt.Sprintf("/%s/%s/access/apps", routeRoot, id)
 	if len(v) > 0 {
-		uri = uri + "?" + v.Encode()
+		uri = fmt.Sprintf("%s?%s", uri, v.Encode())
 	}
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)

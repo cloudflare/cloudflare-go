@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -79,7 +80,7 @@ type PerHostnameAuthenticatedOriginPullsConfigParams struct {
 //
 // API reference: https://api.cloudflare.com/#per-hostname-authenticated-origin-pull-upload-a-hostname-client-certificate
 func (api *API) UploadPerHostnameAuthenticatedOriginPullsCertificate(ctx context.Context, zoneID string, params PerHostnameAuthenticatedOriginPullsCertificateParams) (PerHostnameAuthenticatedOriginPullsCertificateDetails, error) {
-	uri := "/zones/" + zoneID + "/origin_tls_client_auth/hostnames/certificates"
+	uri := fmt.Sprintf("/zones/%s/origin_tls_client_auth/hostnames/certificates", zoneID)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return PerHostnameAuthenticatedOriginPullsCertificateDetails{}, err
@@ -95,7 +96,7 @@ func (api *API) UploadPerHostnameAuthenticatedOriginPullsCertificate(ctx context
 //
 // API reference: https://api.cloudflare.com/#per-hostname-authenticated-origin-pull-get-the-hostname-client-certificate
 func (api *API) GetPerHostnameAuthenticatedOriginPullsCertificate(ctx context.Context, zoneID, certificateID string) (PerHostnameAuthenticatedOriginPullsCertificateDetails, error) {
-	uri := "/zones/" + zoneID + "/origin_tls_client_auth/hostnames/certificates/" + certificateID
+	uri := fmt.Sprintf("/zones/%s/origin_tls_client_auth/hostnames/certificates/%s", zoneID, certificateID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return PerHostnameAuthenticatedOriginPullsCertificateDetails{}, err
@@ -111,7 +112,7 @@ func (api *API) GetPerHostnameAuthenticatedOriginPullsCertificate(ctx context.Co
 //
 // API reference: https://api.cloudflare.com/#per-hostname-authenticated-origin-pull-delete-hostname-client-certificate
 func (api *API) DeletePerHostnameAuthenticatedOriginPullsCertificate(ctx context.Context, zoneID, certificateID string) (PerHostnameAuthenticatedOriginPullsCertificateDetails, error) {
-	uri := "/zones/" + zoneID + "/origin_tls_client_auth/hostnames/certificates/" + certificateID
+	uri := fmt.Sprintf("/zones/%s/origin_tls_client_auth/hostnames/certificates/%s", zoneID, certificateID)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return PerHostnameAuthenticatedOriginPullsCertificateDetails{}, err
@@ -127,7 +128,7 @@ func (api *API) DeletePerHostnameAuthenticatedOriginPullsCertificate(ctx context
 //
 // API reference: https://api.cloudflare.com/#per-hostname-authenticated-origin-pull-enable-or-disable-a-hostname-for-client-authentication
 func (api *API) EditPerHostnameAuthenticatedOriginPullsConfig(ctx context.Context, zoneID string, config []PerHostnameAuthenticatedOriginPullsConfig) ([]PerHostnameAuthenticatedOriginPullsDetails, error) {
-	uri := "/zones/" + zoneID + "/origin_tls_client_auth/hostnames"
+	uri := fmt.Sprintf("/zones/%s/origin_tls_client_auth/hostnames", zoneID)
 	conf := PerHostnameAuthenticatedOriginPullsConfigParams{
 		Config: config,
 	}
@@ -146,7 +147,7 @@ func (api *API) EditPerHostnameAuthenticatedOriginPullsConfig(ctx context.Contex
 //
 // API reference: https://api.cloudflare.com/#per-hostname-authenticated-origin-pull-get-the-hostname-status-for-client-authentication
 func (api *API) GetPerHostnameAuthenticatedOriginPullsConfig(ctx context.Context, zoneID, hostname string) (PerHostnameAuthenticatedOriginPullsDetails, error) {
-	uri := "/zones/" + zoneID + "/origin_tls_client_auth/hostnames/" + hostname
+	uri := fmt.Sprintf("/zones/%s/origin_tls_client_auth/hostnames/%s", zoneID, hostname)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return PerHostnameAuthenticatedOriginPullsDetails{}, err

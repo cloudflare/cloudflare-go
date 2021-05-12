@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -138,7 +139,7 @@ type PageRulesResponse struct {
 //
 // API reference: https://api.cloudflare.com/#page-rules-for-a-zone-create-a-page-rule
 func (api *API) CreatePageRule(ctx context.Context, zoneID string, rule PageRule) (*PageRule, error) {
-	uri := "/zones/" + zoneID + "/pagerules"
+	uri := fmt.Sprintf("/zones/%s/pagerules", zoneID)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, rule)
 	if err != nil {
 		return nil, err
@@ -155,7 +156,7 @@ func (api *API) CreatePageRule(ctx context.Context, zoneID string, rule PageRule
 //
 // API reference: https://api.cloudflare.com/#page-rules-for-a-zone-list-page-rules
 func (api *API) ListPageRules(ctx context.Context, zoneID string) ([]PageRule, error) {
-	uri := "/zones/" + zoneID + "/pagerules"
+	uri := fmt.Sprintf("/zones/%s/pagerules", zoneID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []PageRule{}, err
@@ -172,7 +173,7 @@ func (api *API) ListPageRules(ctx context.Context, zoneID string) ([]PageRule, e
 //
 // API reference: https://api.cloudflare.com/#page-rules-for-a-zone-page-rule-details
 func (api *API) PageRule(ctx context.Context, zoneID, ruleID string) (PageRule, error) {
-	uri := "/zones/" + zoneID + "/pagerules/" + ruleID
+	uri := fmt.Sprintf("/zones/%s/pagerules/%s", zoneID, ruleID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return PageRule{}, err
@@ -190,7 +191,7 @@ func (api *API) PageRule(ctx context.Context, zoneID, ruleID string) (PageRule, 
 //
 // API reference: https://api.cloudflare.com/#page-rules-for-a-zone-change-a-page-rule
 func (api *API) ChangePageRule(ctx context.Context, zoneID, ruleID string, rule PageRule) error {
-	uri := "/zones/" + zoneID + "/pagerules/" + ruleID
+	uri := fmt.Sprintf("/zones/%s/pagerules/%s", zoneID, ruleID)
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, rule)
 	if err != nil {
 		return err
@@ -208,7 +209,7 @@ func (api *API) ChangePageRule(ctx context.Context, zoneID, ruleID string, rule 
 //
 // API reference: https://api.cloudflare.com/#page-rules-for-a-zone-update-a-page-rule
 func (api *API) UpdatePageRule(ctx context.Context, zoneID, ruleID string, rule PageRule) error {
-	uri := "/zones/" + zoneID + "/pagerules/" + ruleID
+	uri := fmt.Sprintf("/zones/%s/pagerules/%s", zoneID, ruleID)
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, rule)
 	if err != nil {
 		return err
@@ -225,7 +226,7 @@ func (api *API) UpdatePageRule(ctx context.Context, zoneID, ruleID string, rule 
 //
 // API reference: https://api.cloudflare.com/#page-rules-for-a-zone-delete-a-page-rule
 func (api *API) DeletePageRule(ctx context.Context, zoneID, ruleID string) error {
-	uri := "/zones/" + zoneID + "/pagerules/" + ruleID
+	uri := fmt.Sprintf("/zones/%s/pagerules/%s", zoneID, ruleID)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return err

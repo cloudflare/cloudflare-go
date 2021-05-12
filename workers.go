@@ -283,7 +283,7 @@ func (api *API) DeleteWorker(ctx context.Context, requestParams *WorkerRequestPa
 	if requestParams.ScriptName != "" {
 		return api.deleteWorkerWithName(ctx, requestParams.ScriptName)
 	}
-	uri := "/zones/" + requestParams.ZoneID + "/workers/script"
+	uri := fmt.Sprintf("/zones/%s/workers/script", requestParams.ZoneID)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	var r WorkerScriptResponse
 	if err != nil {
@@ -304,7 +304,7 @@ func (api *API) deleteWorkerWithName(ctx context.Context, scriptName string) (Wo
 	if api.AccountID == "" {
 		return WorkerScriptResponse{}, errors.New("account ID required")
 	}
-	uri := "/accounts/" + api.AccountID + "/workers/scripts/" + scriptName
+	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s", api.AccountID, scriptName)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	var r WorkerScriptResponse
 	if err != nil {
@@ -324,7 +324,7 @@ func (api *API) DownloadWorker(ctx context.Context, requestParams *WorkerRequest
 	if requestParams.ScriptName != "" {
 		return api.downloadWorkerWithName(ctx, requestParams.ScriptName)
 	}
-	uri := "/zones/" + requestParams.ZoneID + "/workers/script"
+	uri := fmt.Sprintf("/zones/%s/workers/script", requestParams.ZoneID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	var r WorkerScriptResponse
 	if err != nil {
@@ -342,7 +342,7 @@ func (api *API) downloadWorkerWithName(ctx context.Context, scriptName string) (
 	if api.AccountID == "" {
 		return WorkerScriptResponse{}, errors.New("account ID required")
 	}
-	uri := "/accounts/" + api.AccountID + "/workers/scripts/" + scriptName
+	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s", api.AccountID, scriptName)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	var r WorkerScriptResponse
 	if err != nil {
@@ -475,7 +475,7 @@ func (api *API) ListWorkerScripts(ctx context.Context) (WorkerListResponse, erro
 	if api.AccountID == "" {
 		return WorkerListResponse{}, errors.New("account ID required")
 	}
-	uri := "/accounts/" + api.AccountID + "/workers/scripts"
+	uri := fmt.Sprintf("/accounts/%s/workers/scripts", api.AccountID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return WorkerListResponse{}, err
@@ -513,7 +513,7 @@ func (api *API) UploadWorkerWithBindings(ctx context.Context, requestParams *Wor
 }
 
 func (api *API) uploadWorkerForZone(ctx context.Context, zoneID, contentType string, body []byte) (WorkerScriptResponse, error) {
-	uri := "/zones/" + zoneID + "/workers/script"
+	uri := fmt.Sprintf("/zones/%s/workers/script", zoneID)
 	headers := make(http.Header)
 	headers.Set("Content-Type", contentType)
 	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPut, uri, body, headers)
@@ -532,7 +532,7 @@ func (api *API) uploadWorkerWithName(ctx context.Context, scriptName, contentTyp
 	if api.AccountID == "" {
 		return WorkerScriptResponse{}, errors.New("account ID required")
 	}
-	uri := "/accounts/" + api.AccountID + "/workers/scripts/" + scriptName
+	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s", api.AccountID, scriptName)
 	headers := make(http.Header)
 	headers.Set("Content-Type", contentType)
 	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPut, uri, body, headers)
@@ -627,7 +627,7 @@ func (api *API) CreateWorkerRoute(ctx context.Context, zoneID string, route Work
 		return WorkerRouteResponse{}, err
 	}
 
-	uri := "/zones/" + zoneID + "/workers/" + pathComponent
+	uri := fmt.Sprintf("/zones/%s/workers/%s", zoneID, pathComponent)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, route)
 	if err != nil {
 		return WorkerRouteResponse{}, err
@@ -644,7 +644,7 @@ func (api *API) CreateWorkerRoute(ctx context.Context, zoneID string, route Work
 //
 // API reference: https://api.cloudflare.com/#worker-routes-delete-route
 func (api *API) DeleteWorkerRoute(ctx context.Context, zoneID string, routeID string) (WorkerRouteResponse, error) {
-	uri := "/zones/" + zoneID + "/workers/routes/" + routeID
+	uri := fmt.Sprintf("/zones/%s/workers/routes/%s", zoneID, routeID)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return WorkerRouteResponse{}, err
@@ -674,7 +674,7 @@ func (api *API) ListWorkerRoutes(ctx context.Context, zoneID string) (WorkerRout
 	if api.AccountID != "" || api.APIToken != "" {
 		pathComponent = "routes"
 	}
-	uri := "/zones/" + zoneID + "/workers/" + pathComponent
+	uri := fmt.Sprintf("/zones/%s/workers/%s", zoneID, pathComponent)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return WorkerRoutesResponse{}, err
@@ -700,7 +700,7 @@ func (api *API) ListWorkerRoutes(ctx context.Context, zoneID string) (WorkerRout
 //
 // API reference: https://api.cloudflare.com/#worker-routes-get-route
 func (api *API) GetWorkerRoute(ctx context.Context, zoneID string, routeID string) (WorkerRouteResponse, error) {
-	uri := "/zones/" + zoneID + "/workers/routes/" + routeID
+	uri := fmt.Sprintf("/zones/%s/workers/routes/%s", zoneID, routeID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return WorkerRouteResponse{}, err
@@ -721,7 +721,7 @@ func (api *API) UpdateWorkerRoute(ctx context.Context, zoneID string, routeID st
 	if err != nil {
 		return WorkerRouteResponse{}, err
 	}
-	uri := "/zones/" + zoneID + "/workers/" + pathComponent + "/" + routeID
+	uri := fmt.Sprintf("/zones/%s/workers/%s/%s", zoneID, pathComponent, routeID)
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, route)
 	if err != nil {
 		return WorkerRouteResponse{}, err

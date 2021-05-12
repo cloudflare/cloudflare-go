@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/url"
 	"time"
@@ -123,7 +124,7 @@ func (api *API) OriginCertificates(ctx context.Context, options OriginCACertific
 	if options.ZoneID != "" {
 		v.Set("zone_id", options.ZoneID)
 	}
-	uri := "/certificates" + "?" + v.Encode()
+	uri := fmt.Sprintf("/certificates?%s", v.Encode())
 	res, err := api.makeRequestWithAuthType(ctx, http.MethodGet, uri, nil, AuthUserService)
 
 	if err != nil {
@@ -151,7 +152,7 @@ func (api *API) OriginCertificates(ctx context.Context, options OriginCACertific
 //
 // API reference: https://api.cloudflare.com/#cloudflare-ca-certificate-details
 func (api *API) OriginCertificate(ctx context.Context, certificateID string) (*OriginCACertificate, error) {
-	uri := "/certificates/" + certificateID
+	uri := fmt.Sprintf("/certificates/%s", certificateID)
 	res, err := api.makeRequestWithAuthType(ctx, http.MethodGet, uri, nil, AuthUserService)
 
 	if err != nil {
@@ -179,7 +180,7 @@ func (api *API) OriginCertificate(ctx context.Context, certificateID string) (*O
 //
 // API reference: https://api.cloudflare.com/#cloudflare-ca-revoke-certificate
 func (api *API) RevokeOriginCertificate(ctx context.Context, certificateID string) (*OriginCACertificateID, error) {
-	uri := "/certificates/" + certificateID
+	uri := fmt.Sprintf("/certificates/%s", certificateID)
 	res, err := api.makeRequestWithAuthType(ctx, http.MethodDelete, uri, nil, AuthUserService)
 
 	if err != nil {

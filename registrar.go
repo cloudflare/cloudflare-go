@@ -103,7 +103,7 @@ func (api *API) RegistrarDomain(ctx context.Context, accountID, domainName strin
 //
 // API reference: https://api.cloudflare.com/#registrar-domains-list-domains
 func (api *API) RegistrarDomains(ctx context.Context, accountID string) ([]RegistrarDomain, error) {
-	uri := "/accounts/" + accountID + "/registrar/domains"
+	uri := fmt.Sprintf("/accounts/%s/registrar/domains", accountID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
 	if err != nil {

@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -27,7 +28,7 @@ type AuthenticatedOriginPullsResponse struct {
 //
 // API reference: https://api.cloudflare.com/#zone-settings-get-tls-client-auth-setting
 func (api *API) GetAuthenticatedOriginPullsStatus(ctx context.Context, zoneID string) (AuthenticatedOriginPulls, error) {
-	uri := "/zones/" + zoneID + "/settings/tls_client_auth"
+	uri := fmt.Sprintf("/zones/%s/settings/tls_client_auth", zoneID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return AuthenticatedOriginPulls{}, err
@@ -43,7 +44,7 @@ func (api *API) GetAuthenticatedOriginPullsStatus(ctx context.Context, zoneID st
 //
 // API reference: https://api.cloudflare.com/#zone-settings-change-tls-client-auth-setting
 func (api *API) SetAuthenticatedOriginPullsStatus(ctx context.Context, zoneID string, enable bool) (AuthenticatedOriginPulls, error) {
-	uri := "/zones/" + zoneID + "/settings/tls_client_auth"
+	uri := fmt.Sprintf("/zones/%s/settings/tls_client_auth", zoneID)
 	var val string
 	if enable {
 		val = "on"
