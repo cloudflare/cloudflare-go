@@ -17,9 +17,7 @@ jobs:
       - uses: actions/cache@v2.1.5
         with:
           path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
+          key: ${{ runner.os }}-go${{ matrix.go-version }}-${{ hashFiles('**/go.sum') }}
       - name: Lint
         if: matrix.os != 'windows-latest'
         run: |
