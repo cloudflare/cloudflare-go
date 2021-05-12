@@ -12,7 +12,7 @@ import (
 )
 
 var testTimestampWaitingRoom = time.Now().UTC()
-var waitingRoomJson = fmt.Sprintf(`
+var waitingRoomJSON = fmt.Sprintf(`
 		{
       "id": "699d98642c564d2e855e9661899b7252",
       "created_on": "%s",
@@ -45,7 +45,7 @@ var waitingRoom = WaitingRoom{
 	TotalActiveUsers:      1000,
 	SessionDuration:       10,
 	DisableSessionRenewal: false,
-	CustomPageHtml:        "{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Queue all enabled {{/waitTimeKnown}}",
+	CustomPageHTML:        "{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Queue all enabled {{/waitTimeKnown}}",
 }
 
 func TestListWaitingRooms(t *testing.T) {
@@ -63,7 +63,7 @@ func TestListWaitingRooms(t *testing.T) {
 			    %s
 			  ]
 			}
-		`, waitingRoomJson)
+		`, waitingRoomJSON)
 	}
 
 	mux.HandleFunc("/zones/"+testZoneID+"/waiting_rooms", handler)
@@ -113,7 +113,7 @@ func TestWaitingRoom(t *testing.T) {
 			  "messages": [],
 			  "result": %s
 			}
-		`, waitingRoomJson)
+		`, waitingRoomJSON)
 	}
 
 	mux.HandleFunc("/zones/"+testZoneID+"/waiting_rooms/699d98642c564d2e855e9661899b7252", handler)
@@ -165,7 +165,7 @@ func TestCreateWaitingRoom(t *testing.T) {
 			  "messages": [],
 			  "result": %s
 			}
-		`, waitingRoomJson)
+		`, waitingRoomJSON)
 	}
 
 	mux.HandleFunc("/zones/"+testZoneID+"/waiting_rooms", handler)
@@ -217,7 +217,7 @@ func TestUpdateWaitingRoom(t *testing.T) {
 			  "messages": [],
 			  "result": %s
 			}
-		`, waitingRoomJson)
+		`, waitingRoomJSON)
 	}
 
 	mux.HandleFunc("/zones/"+testZoneID+"/waiting_rooms/699d98642c564d2e855e9661899b7252", handler)
@@ -242,7 +242,7 @@ func TestChangeWaitingRoom(t *testing.T) {
 			  "messages": [],
 			  "result": %s
 			}
-		`, waitingRoomJson)
+		`, waitingRoomJSON)
 	}
 
 	mux.HandleFunc("/zones/"+testZoneID+"/waiting_rooms/699d98642c564d2e855e9661899b7252", handler)

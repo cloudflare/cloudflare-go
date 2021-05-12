@@ -25,7 +25,7 @@ type WaitingRoom struct {
 	TotalActiveUsers      int       `json:"total_active_users"`
 	SessionDuration       int       `json:"session_duration"`
 	DisableSessionRenewal bool      `json:"disable_session_renewal"`
-	CustomPageHtml        string    `json:"custom_page_html,omitempty"`
+	CustomPageHTML        string    `json:"custom_page_html,omitempty"`
 }
 
 // WaitingRoomDetailResponse is the API response, containing a single WaitingRoom.
