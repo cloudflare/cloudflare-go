@@ -183,6 +183,7 @@ func TestCreateWaitingRoomError(t *testing.T) {
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
+		w.WriteHeader(http.StatusBadRequest)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
 			 "success": false,
