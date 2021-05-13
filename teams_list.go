@@ -24,7 +24,8 @@ type TeamsList struct {
 
 // TeamsListItem represents a single list item.
 type TeamsListItem struct {
-	Value string `json:"value"`
+	Value     string     `json:"value"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
 }
 
 // PatchTeamsList represents a patch request for appending/removing list items.
@@ -38,6 +39,14 @@ type PatchTeamsList struct {
 // teams lists endpoint.
 type TeamsListListResponse struct {
 	Result []TeamsList `json:"result"`
+	Response
+	ResultInfo `json:"result_info"`
+}
+
+// TeamsListItemsListResponse represents the response from the list
+// teams list items endpoint.
+type TeamsListItemsListResponse struct {
+	Result []TeamsListItem `json:"result"`
 	Response
 	ResultInfo `json:"result_info"`
 }
@@ -92,6 +101,26 @@ func (api *API) TeamsList(ctx context.Context, accountID, listID string) (TeamsL
 	}
 
 	return teamsListDetailResponse.Result, nil
+}
+
+// TeamsListItems returns all list items for a list.
+//
+// API reference: https://api.cloudflare.com/#teams-lists-teams-list-items
+func (api *API) TeamsListItems(ctx context.Context, accountID, listID string) ([]TeamsListItem, ResultInfo, error) {
+	uri := fmt.Sprintf("/%s/%s/gateway/lists/%s/items", AccountRouteRoot, accountID, listID)
+
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return []TeamsListItem{}, ResultInfo{}, err
+	}
+
+	var teamsListItemsListResponse TeamsListItemsListResponse
+	err = json.Unmarshal(res, &teamsListItemsListResponse)
+	if err != nil {
+		return []TeamsListItem{}, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return teamsListItemsListResponse.Result, teamsListItemsListResponse.ResultInfo, nil
 }
 
 // CreateTeamsList creates a new teams list.
