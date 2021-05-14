@@ -17,7 +17,7 @@ func TestDiagnosticsPerformTraceroute(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		var request DiagnosticsTracerouteConfiguration
 		var err error
-		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		err = json.NewDecoder(r.Body).Decode(&request)
 		assert.NoError(t, err)
 		assert.Equal(t, request.Colos, []string{"den01"}, "Exepected key 'colos' to be [\"den01\"], got %+v", request.Colos)
@@ -129,7 +129,7 @@ func TestDiagnosticsPerformTracerouteEmptyColos(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		var request DiagnosticsTracerouteConfiguration
 		var err error
-		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		err = json.NewDecoder(r.Body).Decode(&request)
 		assert.NoError(t, err)
 		assert.Nil(t, request.Colos, "Exepected key 'colos' to be nil, got %+v", request.Colos)

@@ -16,7 +16,7 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		b, err := ioutil.ReadAll(r.Body)
 		defer r.Body.Close()
@@ -140,7 +140,7 @@ func TestListLoadBalancerPools(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
             "success": true,
@@ -210,7 +210,7 @@ func TestLoadBalancerPoolDetails(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
             "success": true,
@@ -273,7 +273,7 @@ func TestDeleteLoadBalancerPool(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, http.MethodDelete, "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
             "success": true,
@@ -295,7 +295,7 @@ func TestModifyLoadBalancerPool(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, http.MethodPut, "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		b, err := ioutil.ReadAll(r.Body)
 		defer r.Body.Close()
@@ -415,7 +415,7 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		b, err := ioutil.ReadAll(r.Body)
 		defer r.Body.Close()
@@ -529,7 +529,7 @@ func TestListLoadBalancerMonitors(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
             "success": true,
@@ -603,7 +603,7 @@ func TestLoadBalancerMonitorDetails(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
             "success": true,
@@ -676,7 +676,7 @@ func TestDeleteLoadBalancerMonitor(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, http.MethodDelete, "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
             "success": true,
@@ -698,7 +698,7 @@ func TestModifyLoadBalancerMonitor(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, http.MethodPut, "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		b, err := ioutil.ReadAll(r.Body)
 		defer r.Body.Close()
@@ -814,7 +814,7 @@ func TestCreateLoadBalancer(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		b, err := ioutil.ReadAll(r.Body)
 		defer r.Body.Close()
@@ -1058,7 +1058,7 @@ func TestListLoadBalancers(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
             "success": true,
@@ -1166,7 +1166,7 @@ func TestLoadBalancerDetails(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
             "success": true,
@@ -1267,7 +1267,7 @@ func TestDeleteLoadBalancer(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, http.MethodDelete, "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
             "success": true,
@@ -1289,7 +1289,7 @@ func TestModifyLoadBalancer(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, http.MethodPut, "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		b, err := ioutil.ReadAll(r.Body)
 		defer r.Body.Close()
@@ -1461,7 +1461,7 @@ func TestLoadBalancerPoolHealthDetails(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
             "success": true,

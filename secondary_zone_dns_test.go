@@ -15,7 +15,7 @@ func TestGetSecondaryDNSZone(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
 			"success": true,
@@ -67,7 +67,7 @@ func TestCreateSecondaryDNSZone(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
 			"success": true,
@@ -128,7 +128,7 @@ func TestUpdateSecondaryDNSZone(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, http.MethodPut, "Expected method 'PUT', got %s", r.Method)
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
 			"success": true,
@@ -189,7 +189,7 @@ func TestDeleteSecondaryDNSZone(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, http.MethodDelete, "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
 			"success": true,
@@ -213,7 +213,7 @@ func TestForceSecondaryDNSZoneAXFR(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, r.Method, http.MethodPost, "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
 			"success": true,
