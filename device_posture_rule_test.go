@@ -33,7 +33,12 @@ func TestDevicePostureRules(t *testing.T) {
 						}
 					],
 					"input": {
-						"id": "9e597887-345e-4a32-a09c-68811b129768"
+						"id": "9e597887-345e-4a32-a09c-68811b129768",
+						"path": "/tmp/data.zta",
+						"exists": true,
+						"thumbprint": "asdfasdfasdfasdf",
+						"sha256": "D75398FC796D659DEB4170569DCFEC63E3897C71E3AE8642FD3139A554AEE21E",
+						"running": true
 					}
 				}
 			],
@@ -54,7 +59,14 @@ func TestDevicePostureRules(t *testing.T) {
 		Type:        "file",
 		Schedule:    "1h",
 		Match:       []DevicePostureRuleMatch{{Platform: "ios"}},
-		Input:       DevicePostureRuleInput{ID: "9e597887-345e-4a32-a09c-68811b129768"},
+		Input: DevicePostureRuleInput{
+			ID:         "9e597887-345e-4a32-a09c-68811b129768",
+			Path:       "/tmp/data.zta",
+			Exists:     true,
+			Thumbprint: "asdfasdfasdfasdf",
+			Sha256:     "D75398FC796D659DEB4170569DCFEC63E3897C71E3AE8642FD3139A554AEE21E",
+			Running:    true,
+		},
 	}}
 
 	mux.HandleFunc("/accounts/"+accountID+"/devices/posture", handler)
