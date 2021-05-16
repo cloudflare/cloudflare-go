@@ -37,7 +37,6 @@ type ZoneLockdownConfig struct {
 type ZoneLockdownResponse struct {
 	Result ZoneLockdown `json:"result"`
 	Response
-	ResultInfo `json:"result_info"`
 }
 
 // ZoneLockdownListResponse represents a response from the List Zone Lockdown
