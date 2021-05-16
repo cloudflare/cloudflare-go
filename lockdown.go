@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"time"
 
 	"github.com/pkg/errors"
 )
@@ -20,6 +21,8 @@ type ZoneLockdown struct {
 	Configurations []ZoneLockdownConfig `json:"configurations"`
 	Paused         bool                 `json:"paused"`
 	Priority       int                  `json:"priority,omitempty"`
+	CreatedOn      *time.Time           `json:"created_on,omitempty"`
+	ModifiedOn     *time.Time           `json:"modified_on,omitempty"`
 }
 
 // ZoneLockdownConfig represents a Zone Lockdown config, which comprises
