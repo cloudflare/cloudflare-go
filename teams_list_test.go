@@ -110,6 +110,52 @@ func TestTeamsList(t *testing.T) {
 	}
 }
 
+func TestTeamsListItems(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, r.Method, http.MethodGet, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": [
+				{
+					"value": "val1",
+					"created_at": "2014-01-01T05:20:00.12345Z"
+				},
+				{
+					"value": "val2",
+					"created_at": "2014-01-01T05:20:00.12345Z"
+				}
+			]
+		}
+		`)
+	}
+
+	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+
+	want := []TeamsListItem{
+		{
+			Value:     "val1",
+			CreatedAt: &createdAt,
+		},
+		{
+			Value:     "val2",
+			CreatedAt: &createdAt,
+		},
+	}
+
+	mux.HandleFunc("/accounts/"+accountID+"/gateway/lists/480f4f69-1a28-4fdd-9240-1ed29f0ac1db/items", handler)
+
+	actual, _, err := client.TeamsListItems(context.Background(), accountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
 func TestCreateTeamsList(t *testing.T) {
 	setup()
 	defer teardown()
