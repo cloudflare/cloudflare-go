@@ -79,7 +79,7 @@ type PerHostnameAuthenticatedOriginPullsConfigParams struct {
 // ListPerHostnameAuthenticatedOriginPullsCertificate will get all certificate under Per Hostname AuthenticatedOriginPulls zone.
 //
 // API reference: https://api.cloudflare.com/#per-hostname-authenticated-origin-pull-list-certificates
-func (api *API) ListPerHostnameAuthenticatedOriginPullsCertificate(ctx context.Context, zoneID string) ([]PerHostnameAuthenticatedOriginPullsDetails, error) {
+func (api *API) ListPerHostnameAuthenticatedOriginPullsCertificates(ctx context.Context, zoneID string) ([]PerHostnameAuthenticatedOriginPullsDetails, error) {
 	uri := fmt.Sprintf("/zones/%s/origin_tls_client_auth/hostnames/certificates", zoneID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
