@@ -95,7 +95,7 @@ func TestListPerHostnameAuthenticatedOriginPullsCertificate(t *testing.T) {
 			CertUpdatedAt:  updatedAt,
 		},
 	}
-	actual, err := client.ListPerHostnameAuthenticatedOriginPullsCertificate(context.Background(), "023e105f4ecef8ad9ca31a8372d0c353")
+	actual, err := client.ListPerHostnameAuthenticatedOriginPullsCertificates(context.Background(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
