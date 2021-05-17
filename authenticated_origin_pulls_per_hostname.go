@@ -76,7 +76,7 @@ type PerHostnameAuthenticatedOriginPullsConfigParams struct {
 	Config []PerHostnameAuthenticatedOriginPullsConfig `json:"config"`
 }
 
-// ListPerHostnameAuthenticatedOriginPullsCertificate will get all certificate under Per Hostname AuthenticatedOriginPulls zone.
+// ListPerHostnameAuthenticatedOriginPullsCertificates will get all certificate under Per Hostname AuthenticatedOriginPulls zone.
 //
 // API reference: https://api.cloudflare.com/#per-hostname-authenticated-origin-pull-list-certificates
 func (api *API) ListPerHostnameAuthenticatedOriginPullsCertificates(ctx context.Context, zoneID string) ([]PerHostnameAuthenticatedOriginPullsDetails, error) {
