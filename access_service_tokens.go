@@ -26,6 +26,7 @@ type AccessServiceToken struct {
 type AccessServiceTokenUpdateResponse struct {
 	CreatedAt *time.Time `json:"created_at"`
 	UpdatedAt *time.Time `json:"updated_at"`
+	ExpiresAt *time.Time `json:"expires_at"`
 	ID        string     `json:"id"`
 	Name      string     `json:"name"`
 	ClientID  string     `json:"client_id"`
@@ -37,6 +38,7 @@ type AccessServiceTokenUpdateResponse struct {
 type AccessServiceTokenCreateResponse struct {
 	CreatedAt    *time.Time `json:"created_at"`
 	UpdatedAt    *time.Time `json:"updated_at"`
+	ExpiresAt    *time.Time `json:"expires_at"`
 	ID           string     `json:"id"`
 	Name         string     `json:"name"`
 	ClientID     string     `json:"client_id"`
