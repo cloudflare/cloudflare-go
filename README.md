@@ -61,6 +61,7 @@ go get github.com/cloudflare/cloudflare-go
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
@@ -75,8 +76,11 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// Most API calls require a Context
+	ctx := context.Background()
+
 	// Fetch user details on the account
-	u, err := api.UserDetails()
+	u, err := api.UserDetails(ctx)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -90,7 +94,7 @@ func main() {
 	}
 
 	// Fetch zone details
-	zone, err := api.ZoneDetails(id)
+	zone, err := api.ZoneDetails(ctx, id)
 	if err != nil {
 		log.Fatal(err)
 	}
