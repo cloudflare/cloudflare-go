@@ -25,6 +25,7 @@ func TestAccessServiceTokens(t *testing.T) {
 				{
 					"created_at": "2014-01-01T05:20:00.12345Z",
 					"updated_at": "2014-01-01T05:20:00.12345Z",
+					"expires_at": "2015-01-01T05:20:00.12345Z",
 					"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 					"name": "CI/CD token",
 					"client_id": "88bf3b6d86161464f6509f7219099e57.access.example.com"
@@ -36,11 +37,13 @@ func TestAccessServiceTokens(t *testing.T) {
 
 	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+	expiresAt, _ := time.Parse(time.RFC3339, "2015-01-01T05:20:00.12345Z")
 
 	want := []AccessServiceToken{
 		{
 			CreatedAt: &createdAt,
 			UpdatedAt: &updatedAt,
+			ExpiresAt: &expiresAt,
 			ID:        "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 			Name:      "CI/CD token",
 			ClientID:  "88bf3b6d86161464f6509f7219099e57.access.example.com",
@@ -78,6 +81,7 @@ func TestCreateAccessServiceToken(t *testing.T) {
 			"result": {
 				"created_at": "2014-01-01T05:20:00.12345Z",
 				"updated_at": "2014-01-01T05:20:00.12345Z",
+				"expires_at": "2015-01-01T05:20:00.12345Z",
 				"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 				"name": "CI/CD token",
 				"client_id": "88bf3b6d86161464f6509f7219099e57.access.example.com",
@@ -90,6 +94,7 @@ func TestCreateAccessServiceToken(t *testing.T) {
 	expected := AccessServiceTokenCreateResponse{
 		CreatedAt:    &createdAt,
 		UpdatedAt:    &updatedAt,
+		ExpiresAt:    &expiresAt,
 		ID:           "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		Name:         "CI/CD token",
 		ClientID:     "88bf3b6d86161464f6509f7219099e57.access.example.com",
@@ -127,6 +132,7 @@ func TestUpdateAccessServiceToken(t *testing.T) {
 			"result": {
 				"created_at": "2014-01-01T05:20:00.12345Z",
 				"updated_at": "2014-01-01T05:20:00.12345Z",
+				"expires_at": "2015-01-01T05:20:00.12345Z",
 				"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 				"name": "CI/CD token",
 				"client_id": "88bf3b6d86161464f6509f7219099e57.access.example.com"
@@ -138,6 +144,7 @@ func TestUpdateAccessServiceToken(t *testing.T) {
 	expected := AccessServiceTokenUpdateResponse{
 		CreatedAt: &createdAt,
 		UpdatedAt: &updatedAt,
+		ExpiresAt: &expiresAt,
 		ID:        "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		Name:      "CI/CD token",
 		ClientID:  "88bf3b6d86161464f6509f7219099e57.access.example.com",
@@ -174,6 +181,7 @@ func TestDeleteAccessServiceToken(t *testing.T) {
 			"result": {
 				"created_at": "2014-01-01T05:20:00.12345Z",
 				"updated_at": "2014-01-01T05:20:00.12345Z",
+				"expires_at": "2015-01-01T05:20:00.12345Z",
 				"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 				"name": "CI/CD token",
 				"client_id": "88bf3b6d86161464f6509f7219099e57.access.example.com"
@@ -185,6 +193,7 @@ func TestDeleteAccessServiceToken(t *testing.T) {
 	expected := AccessServiceTokenUpdateResponse{
 		CreatedAt: &createdAt,
 		UpdatedAt: &updatedAt,
+		ExpiresAt: &expiresAt,
 		ID:        "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		Name:      "CI/CD token",
 		ClientID:  "88bf3b6d86161464f6509f7219099e57.access.example.com",

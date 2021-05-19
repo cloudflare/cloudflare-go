@@ -17,6 +17,7 @@ var (
 
 	createdAt, _ = time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	updatedAt, _ = time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+	expiresAt, _ = time.Parse(time.RFC3339, "2015-01-01T05:20:00.12345Z")
 
 	expectedAccessPolicy = AccessPolicy{
 		ID:         "699d98642c564d2e855e9661899b7252",
