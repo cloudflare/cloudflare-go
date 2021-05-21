@@ -217,7 +217,7 @@ func TestDNSRecord(t *testing.T) {
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
 	want := DNSRecord{
-		ID:         "372e67954025e0ba6aaa6d586b9e0b59",
+		ID:         dnsRecordID,
 		Type:       "A",
 		Name:       "example.com",
 		Content:    "198.51.100.4",
