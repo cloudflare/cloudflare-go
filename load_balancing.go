@@ -22,6 +22,8 @@ type LoadBalancerPool struct {
 	Monitor           string               `json:"monitor,omitempty"`
 	Origins           []LoadBalancerOrigin `json:"origins"`
 	NotificationEmail string               `json:"notification_email,omitempty"`
+	Latitude          *float32             `json:"latitude,omitempty"`
+	Longitude         *float32             `json:"longitude,omitempty"`
 
 	// CheckRegions defines the geographic region(s) from where to run health-checks from - e.g. "WNAM", "WEU", "SAF", "SAM".
 	// Providing a null/empty value means "all regions", which may not be available to all plan types.
@@ -82,6 +84,7 @@ type LoadBalancer struct {
 	// "geo" select pools based on RegionPools/PopPools
 	// "dynamic_latency" select pools based on RTT (requires health checks)
 	// "random" selects pools in a random order
+	// "proximity" select pools based on 'distance' from request
 	// "" maps to "geo" if RegionPools or PopPools have entries otherwise "off"
 	SteeringPolicy string `json:"steering_policy,omitempty"`
 }
