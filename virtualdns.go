@@ -72,7 +72,8 @@ type VirtualDNSAnalyticsResponse struct {
 //
 // API reference: https://api.cloudflare.com/#virtual-dns-users--create-a-virtual-dns-cluster
 func (api *API) CreateVirtualDNS(ctx context.Context, v *VirtualDNS) (*VirtualDNS, error) {
-	res, err := api.makeRequestContext(ctx, http.MethodPost, "/user/virtual_dns", v)
+	uri := fmt.Sprintf("%s/virtual_dns", api.userBaseURL("/user"))
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, v)
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +91,7 @@ func (api *API) CreateVirtualDNS(ctx context.Context, v *VirtualDNS) (*VirtualDN
 //
 // API reference: https://api.cloudflare.com/#virtual-dns-users--get-a-virtual-dns-cluster
 func (api *API) VirtualDNS(ctx context.Context, virtualDNSID string) (*VirtualDNS, error) {
-	uri := fmt.Sprintf("/user/virtual_dns/%s", virtualDNSID)
+	uri := fmt.Sprintf("%s/virtual_dns/%s", api.userBaseURL("/user"), virtualDNSID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, err
@@ -109,7 +110,8 @@ func (api *API) VirtualDNS(ctx context.Context, virtualDNSID string) (*VirtualDN
 //
 // API reference: https://api.cloudflare.com/#virtual-dns-users--get-virtual-dns-clusters
 func (api *API) ListVirtualDNS(ctx context.Context) ([]*VirtualDNS, error) {
-	res, err := api.makeRequestContext(ctx, http.MethodGet, "/user/virtual_dns", nil)
+	uri := fmt.Sprintf("%s/virtual_dns", api.userBaseURL("/user"))
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -127,7 +129,7 @@ func (api *API) ListVirtualDNS(ctx context.Context) ([]*VirtualDNS, error) {
 //
 // API reference: https://api.cloudflare.com/#virtual-dns-users--modify-a-virtual-dns-cluster
 func (api *API) UpdateVirtualDNS(ctx context.Context, virtualDNSID string, vv VirtualDNS) error {
-	uri := fmt.Sprintf("/user/virtual_dns/%s", virtualDNSID)
+	uri := fmt.Sprintf("%s/virtual_dns/%s", api.userBaseURL("/user"), virtualDNSID)
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, vv)
 	if err != nil {
 		return err
@@ -147,7 +149,7 @@ func (api *API) UpdateVirtualDNS(ctx context.Context, virtualDNSID string, vv Vi
 //
 // API reference: https://api.cloudflare.com/#virtual-dns-users--delete-a-virtual-dns-cluster
 func (api *API) DeleteVirtualDNS(ctx context.Context, virtualDNSID string) error {
-	uri := fmt.Sprintf("/user/virtual_dns/%s", virtualDNSID)
+	uri := fmt.Sprintf("%s/virtual_dns/%s", api.userBaseURL("/user"), virtualDNSID)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return err
@@ -179,7 +181,7 @@ func (o VirtualDNSUserAnalyticsOptions) encode() string {
 
 // VirtualDNSUserAnalytics retrieves analytics report for a specified dimension and time range
 func (api *API) VirtualDNSUserAnalytics(ctx context.Context, virtualDNSID string, o VirtualDNSUserAnalyticsOptions) (VirtualDNSAnalytics, error) {
-	uri := fmt.Sprintf("/user/virtual_dns/%s/dns_analytics/report?%s", virtualDNSID, o.encode())
+	uri := fmt.Sprintf("%s/virtual_dns/%s/dns_analytics/report?%s", api.userBaseURL("/user"), virtualDNSID, o.encode())
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return VirtualDNSAnalytics{}, err
