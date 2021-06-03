@@ -26,6 +26,8 @@ func TestCreateLoadBalancerPool(t *testing.T) {
               "name": "primary-dc-1",
               "enabled": true,
               "monitor": "f1aba936b94213e5b8dca0c0dbf1f9cc",
+			  "latitude": 55,
+			  "longitude": -12.5,
               "origins": [
                 {
                   "name": "app-server-1",
@@ -58,6 +60,8 @@ func TestCreateLoadBalancerPool(t *testing.T) {
               "enabled": true,
               "minimum_origins": 1,
               "monitor": "f1aba936b94213e5b8dca0c0dbf1f9cc",
+			  "latitude": 55,
+			  "longitude": -12.5,
               "origins": [
                 {
                   "name": "app-server-1",
@@ -79,6 +83,10 @@ func TestCreateLoadBalancerPool(t *testing.T) {
         }`)
 	}
 
+	fptr := func(f float32) *float32 {
+		return &f
+	}
+
 	mux.HandleFunc("/user/load_balancers/pools", handler)
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2014-02-01T05:20:00.12345Z")
@@ -91,6 +99,8 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 		Enabled:        true,
 		MinimumOrigins: 1,
 		Monitor:        "f1aba936b94213e5b8dca0c0dbf1f9cc",
+		Latitude:       fptr(55),
+		Longitude:      fptr(-12.5),
 		Origins: []LoadBalancerOrigin{
 			{
 				Name:    "app-server-1",
@@ -112,6 +122,8 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 		Name:        "primary-dc-1",
 		Enabled:     true,
 		Monitor:     "f1aba936b94213e5b8dca0c0dbf1f9cc",
+		Latitude:    fptr(55),
+		Longitude:   fptr(-12.5),
 		Origins: []LoadBalancerOrigin{
 			{
 				Name:    "app-server-1",
