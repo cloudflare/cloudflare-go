@@ -18,32 +18,32 @@ func TestListMagicTransitStaticRoutes(t *testing.T) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
-		  "success": true,
-		  "errors": [],
-		  "messages": [],
-		  "result": {
-			"routes": [
-			  {
-				"id": "c4a7362d577a6c3019a474fd6f485821",
-				"created_on": "2017-06-14T00:00:00Z",
-				"modified_on": "2017-06-14T05:20:00Z",
-				"prefix": "192.0.2.0/24",
-				"nexthop": "203.0.113.1",
-				"priority": 100,
-				"description": "New route for new prefix 203.0.113.1",
-				"weight": 100,
-				"scope": {
-				  "colo_regions": [
-					"APAC"
-				  ],
-				  "colo_names": [
-					"den01"
-				  ]
-				}
-			  }
-			]
-		  }
-		}`)
+      "success": true,
+      "errors": [],
+      "messages": [],
+      "result": {
+        "routes": [
+          {
+            "id": "c4a7362d577a6c3019a474fd6f485821",
+            "created_on": "2017-06-14T00:00:00Z",
+            "modified_on": "2017-06-14T05:20:00Z",
+            "prefix": "192.0.2.0/24",
+            "nexthop": "203.0.113.1",
+            "priority": 100,
+            "description": "New route for new prefix 203.0.113.1",
+            "weight": 100,
+            "scope": {
+              "colo_regions": [
+                "APAC"
+              ],
+              "colo_names": [
+                "den01"
+              ]
+            }
+          }
+        ]
+      }
+    }`)
 	}
 
 	mux.HandleFunc("/accounts/foo/magic/routes", handler)
@@ -86,30 +86,30 @@ func TestGetMagicTransitStaticRoute(t *testing.T) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
-		  "success": true,
-		  "errors": [],
-		  "messages": [],
-		  "result": {
-			"route": {
-			  "id": "c4a7362d577a6c3019a474fd6f485821",
-			  "created_on": "2017-06-14T00:00:00Z",
-			  "modified_on": "2017-06-14T05:20:00Z",
-			  "prefix": "192.0.2.0/24",
-			  "nexthop": "203.0.113.1",
-			  "priority": 100,
-			  "description": "New route for new prefix 203.0.113.1",
-			  "weight": 100,
-			  "scope": {
-				"colo_regions": [
-				  "APAC"
-				],
-				"colo_names": [
-				  "den01"
-				]
-			  }
-			}
-		  }
-		}`)
+      "success": true,
+      "errors": [],
+      "messages": [],
+      "result": {
+        "route": {
+          "id": "c4a7362d577a6c3019a474fd6f485821",
+          "created_on": "2017-06-14T00:00:00Z",
+          "modified_on": "2017-06-14T05:20:00Z",
+          "prefix": "192.0.2.0/24",
+          "nexthop": "203.0.113.1",
+          "priority": 100,
+          "description": "New route for new prefix 203.0.113.1",
+          "weight": 100,
+          "scope": {
+            "colo_regions": [
+              "APAC"
+            ],
+            "colo_names": [
+              "den01"
+            ]
+          }
+        }
+      }
+    }`)
 	}
 
 	mux.HandleFunc("/accounts/foo/magic/routes/c4a7362d577a6c3019a474fd6f485821", handler)
@@ -150,32 +150,32 @@ func TestCreateMagicTransitStaticRoutes(t *testing.T) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
-		  "success": true,
-		  "errors": [],
-		  "messages": [],
-		  "result": {
-			"routes": [
-			  {
-				"id": "c4a7362d577a6c3019a474fd6f485821",
-				"created_on": "2017-06-14T00:00:00Z",
-				"modified_on": "2017-06-14T05:20:00Z",
-				"prefix": "192.0.2.0/24",
-				"nexthop": "203.0.113.1",
-				"priority": 100,
-				"description": "New route for new prefix 203.0.113.1",
-				"weight": 100,
-				"scope": {
-				  "colo_regions": [
-					"APAC"
-				  ],
-				  "colo_names": [
-					"den01"
-				  ]
-				}
-			  }
-			]
-		  }
-		}`)
+      "success": true,
+      "errors": [],
+      "messages": [],
+      "result": {
+        "routes": [
+          {
+            "id": "c4a7362d577a6c3019a474fd6f485821",
+            "created_on": "2017-06-14T00:00:00Z",
+            "modified_on": "2017-06-14T05:20:00Z",
+            "prefix": "192.0.2.0/24",
+            "nexthop": "203.0.113.1",
+            "priority": 100,
+            "description": "New route for new prefix 203.0.113.1",
+            "weight": 100,
+            "scope": {
+              "colo_regions": [
+                "APAC"
+              ],
+              "colo_names": [
+                "den01"
+              ]
+            }
+          }
+        ]
+      }
+    }`)
 	}
 
 	mux.HandleFunc("/accounts/foo/magic/routes", handler)
@@ -218,31 +218,31 @@ func TestUpdateMagicTransitStaticRoute(t *testing.T) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
-		  "success": true,
-		  "errors": [],
-		  "messages": [],
-		  "result": {
-			"modified": true,
-			"modified_route": {
-			  "id": "c4a7362d577a6c3019a474fd6f485821",
-			  "created_on": "2017-06-14T00:00:00Z",
-			  "modified_on": "2017-06-14T05:20:00Z",
-			  "prefix": "192.0.2.0/24",
-			  "nexthop": "203.0.113.1",
-			  "priority": 100,
-			  "description": "New route for new prefix 203.0.113.1",
-			  "weight": 100,
-			  "scope": {
-				"colo_regions": [
-				  "APAC"
-				],
-				"colo_names": [
-				  "den01"
-				]
-			  }
-			}
-		  }
-		}`)
+      "success": true,
+      "errors": [],
+      "messages": [],
+      "result": {
+        "modified": true,
+        "modified_route": {
+          "id": "c4a7362d577a6c3019a474fd6f485821",
+          "created_on": "2017-06-14T00:00:00Z",
+          "modified_on": "2017-06-14T05:20:00Z",
+          "prefix": "192.0.2.0/24",
+          "nexthop": "203.0.113.1",
+          "priority": 100,
+          "description": "New route for new prefix 203.0.113.1",
+          "weight": 100,
+          "scope": {
+            "colo_regions": [
+              "APAC"
+            ],
+            "colo_names": [
+              "den01"
+            ]
+          }
+        }
+      }
+    }`)
 	}
 
 	mux.HandleFunc("/accounts/foo/magic/routes/c4a7362d577a6c3019a474fd6f485821", handler)
@@ -283,31 +283,31 @@ func TestDeleteMagicTransitStaticRoute(t *testing.T) {
 		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
-		  "success": true,
-		  "errors": [],
-		  "messages": [],
-		  "result": {
-			"deleted": true,
-			"deleted_route": {
-			  "id": "c4a7362d577a6c3019a474fd6f485821",
-			  "created_on": "2017-06-14T00:00:00Z",
-			  "modified_on": "2017-06-14T05:20:00Z",
-			  "prefix": "192.0.2.0/24",
-			  "nexthop": "203.0.113.1",
-			  "priority": 100,
-			  "description": "New route for new prefix 203.0.113.1",
-			  "weight": 100,
-			  "scope": {
-				"colo_regions": [
-				  "APAC"
-				],
-				"colo_names": [
-				  "den01"
-				]
-			  }
-			}
-		  }
-		}`)
+      "success": true,
+      "errors": [],
+      "messages": [],
+      "result": {
+        "deleted": true,
+        "deleted_route": {
+          "id": "c4a7362d577a6c3019a474fd6f485821",
+          "created_on": "2017-06-14T00:00:00Z",
+          "modified_on": "2017-06-14T05:20:00Z",
+          "prefix": "192.0.2.0/24",
+          "nexthop": "203.0.113.1",
+          "priority": 100,
+          "description": "New route for new prefix 203.0.113.1",
+          "weight": 100,
+          "scope": {
+            "colo_regions": [
+              "APAC"
+            ],
+            "colo_names": [
+              "den01"
+            ]
+          }
+        }
+      }
+    }`)
 	}
 
 	mux.HandleFunc("/accounts/foo/magic/routes/c4a7362d577a6c3019a474fd6f485821", handler)
