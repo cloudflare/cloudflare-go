@@ -132,8 +132,7 @@ func (api *API) ListWAFPackages(ctx context.Context, zoneID string) ([]WAFPackag
 		}
 
 		if !p.Success {
-			// TODO: Provide an actual error message instead of always returning nil
-			return []WAFPackage{}, err
+			return []WAFPackage{}, errors.New(errRequestNotSuccessful)
 		}
 
 		packages = append(packages, p.Result...)
@@ -215,8 +214,7 @@ func (api *API) ListWAFGroups(ctx context.Context, zoneID, packageID string) ([]
 		}
 
 		if !r.Success {
-			// TODO: Provide an actual error message instead of always returning nil
-			return []WAFGroup{}, err
+			return []WAFGroup{}, errors.New(errRequestNotSuccessful)
 		}
 
 		groups = append(groups, r.Result...)
@@ -298,8 +296,7 @@ func (api *API) ListWAFRules(ctx context.Context, zoneID, packageID string) ([]W
 		}
 
 		if !r.Success {
-			// TODO: Provide an actual error message instead of always returning nil
-			return []WAFRule{}, err
+			return []WAFRule{}, errors.New(errRequestNotSuccessful)
 		}
 
 		rules = append(rules, r.Result...)
