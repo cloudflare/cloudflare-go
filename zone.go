@@ -373,8 +373,9 @@ func (api *API) ListZones(ctx context.Context, z ...string) ([]Zone, error) {
 				return []Zone{}, errors.Wrap(err, errUnmarshalError)
 			}
 			if !r.Success {
-				// TODO: Provide an actual error message instead of always returning nil
-				return []Zone{}, err
+				err = &UnsuccessfulResponseError{r.Messages}
+
+				return []Zone{}, errors.Wrap(err, errRequestNotSuccessful)
 			}
 			for zi := range r.Result {
 				zones = append(zones, r.Result[zi])

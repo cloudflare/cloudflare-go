@@ -184,6 +184,7 @@ func TestAPIRequestError_InternalErrorCodeIs(t *testing.T) {
 		{Code: 3001},
 	}}
 	assert.Equal(t, err.InternalErrorCodeIs(3001), true)
+	assert.Equal(t, err.InternalErrorCodeIs(4001), false)
 }
 
 func TestAPIRequestError_ErrorMessageContains(t *testing.T) {
@@ -193,4 +194,135 @@ func TestAPIRequestError_ErrorMessageContains(t *testing.T) {
 		{Message: "network thing broke"},
 	}}
 	assert.Equal(t, err.ErrorMessageContains("application thing broke"), true)
+	assert.Equal(t, err.ErrorMessageContains("auth thing broke"), false)
+}
+
+func TestUnsuccessfulResponseError_Error(t *testing.T) {
+	tests := map[string]struct {
+		response []ResponseInfo
+		want     string
+	}{
+		"basic complete response": {
+			response: []ResponseInfo{{
+				Code:    10000,
+				Message: "Authentication error",
+			}},
+			want: "Authentication error (10000)",
+		},
+		"multiple complete response": {
+			response: []ResponseInfo{
+				{
+					Code:    10000,
+					Message: "Authentication error",
+				},
+				{
+					Code:    10001,
+					Message: "Not authentication error",
+				},
+			},
+			want: "Authentication error (10000), Not authentication error (10001)",
+		},
+		"empty errors payload": {
+			response: []ResponseInfo{},
+			want:     "",
+		},
+		"missing internal error code": {
+			response: []ResponseInfo{{
+				Message: "something is broke",
+			}},
+			want: "something is broke",
+		},
+	}
+
+	for name, tc := range tests {
+		t.Run(name, func(t *testing.T) {
+			got := &UnsuccessfulResponseError{
+				Messages: tc.response,
+			}
+
+			assert.Equal(t, got.Error(), tc.want)
+		})
+	}
+}
+
+func TestUnsuccessfulResponseError_InternalErrorCodes(t *testing.T) {
+	tests := map[string]struct {
+		response []ResponseInfo
+		want     []int
+	}{
+		"single": {
+			response: []ResponseInfo{
+				{Code: 1234},
+			},
+			want: []int{1234},
+		},
+		"multiple": {
+			response: []ResponseInfo{
+				{Code: 1234},
+				{Code: 4321},
+			},
+			want: []int{1234, 4321},
+		},
+	}
+
+	for name, tc := range tests {
+		t.Run(name, func(t *testing.T) {
+			got := &UnsuccessfulResponseError{
+				Messages: tc.response,
+			}
+
+			assert.Equal(t, got.InternalErrorCodes(), tc.want)
+		})
+	}
+}
+
+func TestUnsuccessfulResponseError_ErrorMessages(t *testing.T) {
+	tests := map[string]struct {
+		response []ResponseInfo
+		want     []string
+	}{
+		"single": {
+			response: []ResponseInfo{
+				{Message: "broke once"},
+			},
+			want: []string{"broke once"},
+		},
+		"multiple": {
+			response: []ResponseInfo{
+				{Message: "broke once"},
+				{Message: "broke twice"},
+			},
+			want: []string{"broke once", "broke twice"},
+		},
+	}
+
+	for name, tc := range tests {
+		t.Run(name, func(t *testing.T) {
+			got := &UnsuccessfulResponseError{
+				Messages: tc.response,
+			}
+
+			assert.Equal(t, got.ErrorMessages(), tc.want)
+		})
+	}
+}
+
+func TestUnsuccessfulResponseError_InternalErrorCodeIs(t *testing.T) {
+	err := &UnsuccessfulResponseError{Messages: []ResponseInfo{
+		{Code: 1001},
+		{Code: 2001},
+		{Code: 3001},
+	}}
+	assert.Equal(t, err.InternalErrorCodeIs(3001), true)
+	assert.Equal(t, err.InternalErrorCodeIs(4001), false)
+}
+
+func TestUnsuccessfulResponseError_ErrorMessageContains(t *testing.T) {
+	err := &UnsuccessfulResponseError{Messages: []ResponseInfo{
+		{Message: "dns thing broke"},
+		{Message: "application thing broke"},
+		{Message: "network thing broke"},
+	}}
+	assert.Equal(t, err.ErrorMessageContains("application thing broke"), true)
+	assert.Equal(t, err.ErrorMessageContains("auth thing broke"), false)
 }

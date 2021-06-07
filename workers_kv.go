@@ -115,7 +115,9 @@ func (api *API) ListWorkersKVNamespaces(ctx context.Context) ([]WorkersKVNamespa
 		}
 
 		if !p.Success {
-			return []WorkersKVNamespace{}, errors.New(errRequestNotSuccessful)
+			err = &UnsuccessfulResponseError{p.Messages}
+
+			return []WorkersKVNamespace{}, errors.Wrap(err, errRequestNotSuccessful)
 		}
 
 		namespaces = append(namespaces, p.Result...)

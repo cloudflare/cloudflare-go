@@ -119,5 +119,75 @@ func (e *APIRequestError) ErrorMessageContains(s string) bool {
 			return true
 		}
 	}
+
+	return false
+}
+
+// UnsuccessfulResponseError is an error type that is raised
+// when a server response contains a negative status in the body.
+type UnsuccessfulResponseError struct {
+	Messages []ResponseInfo
+}
+
+func (e UnsuccessfulResponseError) Error() string {
+	var errMessages []string
+
+	for _, err := range e.Messages {
+		var m string
+		if err.Message != "" {
+			m += fmt.Sprintf("%s", err.Message)
+		}
+
+		if err.Code != 0 {
+			m += fmt.Sprintf(" (%d)", err.Code)
+		}
+
+		errMessages = append(errMessages, m)
+	}
+
+	return strings.Join(errMessages, ", ")
+}
+
+// ErrorMessages exposes the error messages as a slice of strings from the error
+// response encountered.
+func (e *UnsuccessfulResponseError) ErrorMessages() (messages []string) {
+	for _, err := range e.Messages {
+		messages = append(messages, err.Message)
+	}
+
+	return messages
+}
+
+// InternalErrorCodes exposes the internal error codes as a slice of int from
+// the error response encountered.
+func (e *UnsuccessfulResponseError) InternalErrorCodes() (codes []int) {
+	for _, err := range e.Messages {
+		codes = append(codes, err.Code)
+	}
+
+	return codes
+}
+
+// InternalErrorCodeIs returns a boolean whether or not the desired internal
+// error code is present in `e.InternalErrorCodes`.
+func (e *UnsuccessfulResponseError) InternalErrorCodeIs(code int) bool {
+	for _, errCode := range e.InternalErrorCodes() {
+		if errCode == code {
+			return true
+		}
+	}
+
+	return false
+}
+
+// ErrorMessageContains returns a boolean whether or not a substring exists in
+// any of the `e.ErrorMessages` slice entries.
+func (e *UnsuccessfulResponseError) ErrorMessageContains(s string) bool {
+	for _, errMsg := range e.ErrorMessages() {
+		if strings.Contains(errMsg, s) {
+			return true
+		}
+	}
+
 	return false
 }
