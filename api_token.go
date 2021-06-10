@@ -190,9 +190,9 @@ func (api *API) RollAPIToken(ctx context.Context, tokenID string) (string, error
 	return apiTokenRollResponse.Result, nil
 }
 
-// VerifyAPIToken rolls the value associated with the token.
+// VerifyAPIToken tests the validity of the token.
 //
-// API reference: https://api.cloudflare.com/#user-api-tokens-roll-token
+// API reference: https://api.cloudflare.com/#user-api-tokens-verify-token
 func (api *API) VerifyAPIToken(ctx context.Context) (APITokenVerifyBody, error) {
 	res, err := api.makeRequestContext(ctx, http.MethodGet, "/user/tokens/verify", nil)
 	if err != nil {
