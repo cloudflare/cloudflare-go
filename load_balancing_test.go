@@ -28,6 +28,12 @@ func TestCreateLoadBalancerPool(t *testing.T) {
               "monitor": "f1aba936b94213e5b8dca0c0dbf1f9cc",
 			  "latitude": 55,
 			  "longitude": -12.5,
+			  "load_shedding": {
+				"default_percent": 50,
+				"default_policy": "random",
+				"session_percent": 10,
+				"session_policy": "hash"
+			  },
               "origins": [
                 {
                   "name": "app-server-1",
@@ -62,6 +68,12 @@ func TestCreateLoadBalancerPool(t *testing.T) {
               "monitor": "f1aba936b94213e5b8dca0c0dbf1f9cc",
 			  "latitude": 55,
 			  "longitude": -12.5,
+			  "load_shedding": {
+				"default_percent": 50,
+				"default_policy": "random",
+				"session_percent": 10,
+				"session_policy": "hash"
+			  },
               "origins": [
                 {
                   "name": "app-server-1",
@@ -101,6 +113,12 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 		Monitor:        "f1aba936b94213e5b8dca0c0dbf1f9cc",
 		Latitude:       fptr(55),
 		Longitude:      fptr(-12.5),
+		LoadShedding: &LoadBalancerLoadShedding{
+			DefaultPercent: 50,
+			DefaultPolicy:  "random",
+			SessionPercent: 10,
+			SessionPolicy:  "hash",
+		},
 		Origins: []LoadBalancerOrigin{
 			{
 				Name:    "app-server-1",
@@ -124,6 +142,12 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 		Monitor:     "f1aba936b94213e5b8dca0c0dbf1f9cc",
 		Latitude:    fptr(55),
 		Longitude:   fptr(-12.5),
+		LoadShedding: &LoadBalancerLoadShedding{
+			DefaultPercent: 50,
+			DefaultPolicy:  "random",
+			SessionPercent: 10,
+			SessionPolicy:  "hash",
+		},
 		Origins: []LoadBalancerOrigin{
 			{
 				Name:    "app-server-1",

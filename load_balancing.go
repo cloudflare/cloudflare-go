@@ -12,18 +12,19 @@ import (
 
 // LoadBalancerPool represents a load balancer pool's properties.
 type LoadBalancerPool struct {
-	ID                string               `json:"id,omitempty"`
-	CreatedOn         *time.Time           `json:"created_on,omitempty"`
-	ModifiedOn        *time.Time           `json:"modified_on,omitempty"`
-	Description       string               `json:"description"`
-	Name              string               `json:"name"`
-	Enabled           bool                 `json:"enabled"`
-	MinimumOrigins    int                  `json:"minimum_origins,omitempty"`
-	Monitor           string               `json:"monitor,omitempty"`
-	Origins           []LoadBalancerOrigin `json:"origins"`
-	NotificationEmail string               `json:"notification_email,omitempty"`
-	Latitude          *float32             `json:"latitude,omitempty"`
-	Longitude         *float32             `json:"longitude,omitempty"`
+	ID                string                    `json:"id,omitempty"`
+	CreatedOn         *time.Time                `json:"created_on,omitempty"`
+	ModifiedOn        *time.Time                `json:"modified_on,omitempty"`
+	Description       string                    `json:"description"`
+	Name              string                    `json:"name"`
+	Enabled           bool                      `json:"enabled"`
+	MinimumOrigins    int                       `json:"minimum_origins,omitempty"`
+	Monitor           string                    `json:"monitor,omitempty"`
+	Origins           []LoadBalancerOrigin      `json:"origins"`
+	NotificationEmail string                    `json:"notification_email,omitempty"`
+	Latitude          *float32                  `json:"latitude,omitempty"`
+	Longitude         *float32                  `json:"longitude,omitempty"`
+	LoadShedding      *LoadBalancerLoadShedding `json:"load_shedding,omitempty"`
 
 	// CheckRegions defines the geographic region(s) from where to run health-checks from - e.g. "WNAM", "WEU", "SAF", "SAM".
 	// Providing a null/empty value means "all regions", which may not be available to all plan types.
@@ -87,6 +88,14 @@ type LoadBalancer struct {
 	// "proximity" select pools based on 'distance' from request
 	// "" maps to "geo" if RegionPools or PopPools have entries otherwise "off"
 	SteeringPolicy string `json:"steering_policy,omitempty"`
+}
+
+// LoadBalancerLoadShedding contains the settings for controlling load shedding
+type LoadBalancerLoadShedding struct {
+	DefaultPercent float32 `json:"default_percent,omitempty"`
+	DefaultPolicy  string  `json:"default_policy,omitempty"`
+	SessionPercent float32 `json:"session_percent,omitempty"`
+	SessionPolicy  string  `json:"session_policy,omitempty"`
 }
 
 // LoadBalancerRule represents a single rule entry for a Load Balancer. Each rules
