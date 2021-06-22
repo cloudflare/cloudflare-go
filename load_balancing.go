@@ -237,7 +237,7 @@ func (api *API) CreateLoadBalancerPool(ctx context.Context, pool LoadBalancerPoo
 	return r.Result, nil
 }
 
-// ListLoadBalancerPools lists load balancer pools connected to an account.
+// ListLoadBalancerPools lists load balancer pools connected to a user account.
 //
 // API reference: https://api.cloudflare.com/#load-balancer-pools-list-pools
 func (api *API) ListLoadBalancerPools(ctx context.Context) ([]LoadBalancerPool, error) {
@@ -458,6 +458,22 @@ func (api *API) PoolHealthDetails(ctx context.Context, poolID string) (LoadBalan
 	var r loadBalancerPoolHealthResponse
 	if err := json.Unmarshal(res, &r); err != nil {
 		return LoadBalancerPoolHealth{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
+
+// ListLoadBalancerPools lists load balancer pools connected to an account.
+//
+// API reference: https://api.cloudflare.com/#load-balancer-pools-list-pools
+func (api *API) ListAccountLoadBalancerPools(ctx context.Context, accountID string) ([]LoadBalancerPool, error) {
+	uri := fmt.Sprintf("%s/%s/load_balancers/pools", api.userBaseURL("/accounts"), accountID)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return nil, err
+	}
+	var r loadBalancerPoolListResponse
+	if err := json.Unmarshal(res, &r); err != nil {
+		return nil, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
 }
