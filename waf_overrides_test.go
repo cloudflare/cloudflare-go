@@ -61,8 +61,6 @@ func TestListWAFOverrides(t *testing.T) {
 	setup()
 	defer teardown()
 
-	testZoneID := "xyz123"
-
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 

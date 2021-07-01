@@ -69,9 +69,9 @@ func TestDevicePostureRules(t *testing.T) {
 		},
 	}}
 
-	mux.HandleFunc("/accounts/"+accountID+"/devices/posture", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/devices/posture", handler)
 
-	actual, _, err := client.DevicePostureRules(context.Background(), accountID)
+	actual, _, err := client.DevicePostureRules(context.Background(), testAccountID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -118,9 +118,9 @@ func TestDevicePostureRule(t *testing.T) {
 		Input:       DevicePostureRuleInput{ID: "9e597887-345e-4a32-a09c-68811b129768"},
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/devices/posture/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/devices/posture/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
-	actual, err := client.DevicePostureRule(context.Background(), accountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	actual, err := client.DevicePostureRule(context.Background(), testAccountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -167,9 +167,9 @@ func TestCreateDevicePostureRule(t *testing.T) {
 		Input:       DevicePostureRuleInput{ID: "9e597887-345e-4a32-a09c-68811b129768"},
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/devices/posture", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/devices/posture", handler)
 
-	actual, err := client.CreateDevicePostureRule(context.Background(), accountID, DevicePostureRule{
+	actual, err := client.CreateDevicePostureRule(context.Background(), testAccountID, DevicePostureRule{
 		Name:        "My rule name",
 		Description: "My description",
 		Type:        "file",
@@ -223,9 +223,9 @@ func TestUpdateDevicePostureRule(t *testing.T) {
 		Input:       DevicePostureRuleInput{ID: "9e597887-345e-4a32-a09c-68811b129768"},
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/devices/posture/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/devices/posture/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
-	actual, err := client.UpdateDevicePostureRule(context.Background(), accountID, rule)
+	actual, err := client.UpdateDevicePostureRule(context.Background(), testAccountID, rule)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, rule, actual)
@@ -236,7 +236,7 @@ func TestUpdateDevicePostureRuleWithMissingID(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.UpdateDevicePostureRule(context.Background(), zoneID, DevicePostureRule{})
+	_, err := client.UpdateDevicePostureRule(context.Background(), testZoneID, DevicePostureRule{})
 	assert.EqualError(t, err, "device posture rule ID cannot be empty")
 }
 
@@ -258,8 +258,8 @@ func TestDeleteDevicePostureRule(t *testing.T) {
     `)
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/devices/posture/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
-	err := client.DeleteDevicePostureRule(context.Background(), accountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	mux.HandleFunc("/accounts/"+testAccountID+"/devices/posture/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+	err := client.DeleteDevicePostureRule(context.Background(), testAccountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	assert.NoError(t, err)
 }

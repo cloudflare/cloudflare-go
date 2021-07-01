@@ -94,8 +94,6 @@ func TestOriginCA_OriginCertificates(t *testing.T) {
 	setup()
 	defer teardown()
 
-	testZoneID := "023e105f4ecef8ad9ca31a8372d0c353"
-
 	mux.HandleFunc("/certificates", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %ss", r.Method)
 		assert.Equal(t, testZoneID, r.URL.Query().Get("zone_id"), "Expected zone_id '', got %%s", testZoneID)

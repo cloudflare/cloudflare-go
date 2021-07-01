@@ -58,9 +58,9 @@ func TestCreateZoneLockdown(t *testing.T) {
 		}`)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/firewall/lockdowns", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/firewall/lockdowns", handler)
 
-	actual, err := client.CreateZoneLockdown(context.Background(), zoneID, input)
+	actual, err := client.CreateZoneLockdown(context.Background(), testZoneID, input)
 	require.NoError(t, err)
 
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
@@ -132,9 +132,9 @@ func TestUpdateZoneLockdownt(t *testing.T) {
 
 	zoneLockdownID := "372e67954025e0ba6aaa6d586b9e0b59"
 
-	mux.HandleFunc("/zones/"+zoneID+"/firewall/lockdowns/"+zoneLockdownID, handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/firewall/lockdowns/"+zoneLockdownID, handler)
 
-	actual, err := client.UpdateZoneLockdown(context.Background(), zoneID, zoneLockdownID, input)
+	actual, err := client.UpdateZoneLockdown(context.Background(), testZoneID, zoneLockdownID, input)
 	require.NoError(t, err)
 
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
@@ -178,9 +178,9 @@ func TestDeleteZoneLockdown(t *testing.T) {
 
 	zoneLockdownID := "372e67954025e0ba6aaa6d586b9e0b59"
 
-	mux.HandleFunc("/zones/"+zoneID+"/firewall/lockdowns/"+zoneLockdownID, handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/firewall/lockdowns/"+zoneLockdownID, handler)
 
-	actual, err := client.DeleteZoneLockdown(context.Background(), zoneID, zoneLockdownID)
+	actual, err := client.DeleteZoneLockdown(context.Background(), testZoneID, zoneLockdownID)
 	require.NoError(t, err)
 
 	want := &ZoneLockdownResponse{
@@ -229,9 +229,9 @@ func TestZoneLockdown(t *testing.T) {
 
 	zoneLockdownID := "372e67954025e0ba6aaa6d586b9e0b59"
 
-	mux.HandleFunc("/zones/"+zoneID+"/firewall/lockdowns/"+zoneLockdownID, handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/firewall/lockdowns/"+zoneLockdownID, handler)
 
-	actual, err := client.ZoneLockdown(context.Background(), zoneID, zoneLockdownID)
+	actual, err := client.ZoneLockdown(context.Background(), testZoneID, zoneLockdownID)
 	require.NoError(t, err)
 
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
@@ -299,9 +299,9 @@ func TestListZoneLockdowns(t *testing.T) {
 
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/firewall/lockdowns", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/firewall/lockdowns", handler)
 
-	actual, err := client.ListZoneLockdowns(context.Background(), zoneID, 1)
+	actual, err := client.ListZoneLockdowns(context.Background(), testZoneID, 1)
 	require.NoError(t, err)
 
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")

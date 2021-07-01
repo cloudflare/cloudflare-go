@@ -12,7 +12,6 @@ import (
 
 const (
 	rateLimitID                = "72dae2fc158942f2adb1dd2a3d4143bc"
-	testZoneID                 = "abcd123"
 	serverRateLimitDescription = `{
 	"id": "72dae2fc158942f2adb1dd2a3d4143bc",
 	"disabled": false,

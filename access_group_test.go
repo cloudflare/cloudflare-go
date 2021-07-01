@@ -79,17 +79,17 @@ func TestAccessGroups(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/groups", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/groups", handler)
 
-	actual, _, err := client.AccessGroups(context.Background(), accountID, pageOptions)
+	actual, _, err := client.AccessGroups(context.Background(), testAccountID, pageOptions)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, []AccessGroup{expectedAccessGroup}, actual)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/groups", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/access/groups", handler)
 
-	actual, _, err = client.ZoneLevelAccessGroups(context.Background(), zoneID, pageOptions)
+	actual, _, err = client.ZoneLevelAccessGroups(context.Background(), testZoneID, pageOptions)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, []AccessGroup{expectedAccessGroup}, actual)
@@ -138,17 +138,17 @@ func TestAccessGroup(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/groups/"+accessGroupID, handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/groups/"+accessGroupID, handler)
 
-	actual, err := client.AccessGroup(context.Background(), accountID, accessGroupID)
+	actual, err := client.AccessGroup(context.Background(), testAccountID, accessGroupID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessGroup, actual)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/groups/"+accessGroupID, handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/access/groups/"+accessGroupID, handler)
 
-	actual, err = client.ZoneLevelAccessGroup(context.Background(), zoneID, accessGroupID)
+	actual, err = client.ZoneLevelAccessGroup(context.Background(), testZoneID, accessGroupID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessGroup, actual)
@@ -197,7 +197,7 @@ func TestCreateAccessGroup(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/groups", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/groups", handler)
 
 	accessGroup := AccessGroup{
 		Name: "Allow devs",
@@ -218,15 +218,15 @@ func TestCreateAccessGroup(t *testing.T) {
 		},
 	}
 
-	actual, err := client.CreateAccessGroup(context.Background(), accountID, accessGroup)
+	actual, err := client.CreateAccessGroup(context.Background(), testAccountID, accessGroup)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessGroup, actual)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/groups", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/access/groups", handler)
 
-	actual, err = client.CreateZoneLevelAccessGroup(context.Background(), zoneID, accessGroup)
+	actual, err = client.CreateZoneLevelAccessGroup(context.Background(), testZoneID, accessGroup)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessGroup, actual)
@@ -275,15 +275,15 @@ func TestUpdateAccessGroup(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/groups/"+accessGroupID, handler)
-	actual, err := client.UpdateAccessGroup(context.Background(), accountID, expectedAccessGroup)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/groups/"+accessGroupID, handler)
+	actual, err := client.UpdateAccessGroup(context.Background(), testAccountID, expectedAccessGroup)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessGroup, actual)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/groups/"+accessGroupID, handler)
-	actual, err = client.UpdateZoneLevelAccessGroup(context.Background(), zoneID, expectedAccessGroup)
+	mux.HandleFunc("/zones/"+testZoneID+"/access/groups/"+accessGroupID, handler)
+	actual, err = client.UpdateZoneLevelAccessGroup(context.Background(), testZoneID, expectedAccessGroup)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessGroup, actual)
@@ -294,10 +294,10 @@ func TestUpdateAccessGroupWithMissingID(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.UpdateAccessGroup(context.Background(), accountID, AccessGroup{})
+	_, err := client.UpdateAccessGroup(context.Background(), testAccountID, AccessGroup{})
 	assert.EqualError(t, err, "access group ID cannot be empty")
 
-	_, err = client.UpdateZoneLevelAccessGroup(context.Background(), zoneID, AccessGroup{})
+	_, err = client.UpdateZoneLevelAccessGroup(context.Background(), testZoneID, AccessGroup{})
 	assert.EqualError(t, err, "access group ID cannot be empty")
 }
 
@@ -319,13 +319,13 @@ func TestDeleteAccessGroup(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/groups/"+accessGroupID, handler)
-	err := client.DeleteAccessGroup(context.Background(), accountID, accessGroupID)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/groups/"+accessGroupID, handler)
+	err := client.DeleteAccessGroup(context.Background(), testAccountID, accessGroupID)
 
 	assert.NoError(t, err)
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/groups/"+accessGroupID, handler)
-	err = client.DeleteZoneLevelAccessGroup(context.Background(), zoneID, accessGroupID)
+	mux.HandleFunc("/zones/"+testZoneID+"/access/groups/"+accessGroupID, handler)
+	err = client.DeleteZoneLevelAccessGroup(context.Background(), testZoneID, accessGroupID)
 
 	assert.NoError(t, err)
 }

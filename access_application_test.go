@@ -67,17 +67,17 @@ func TestAccessApplications(t *testing.T) {
 		CustomDenyURL:          "https://www.cloudflare.com",
 	}}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/apps", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps", handler)
 
-	actual, _, err := client.AccessApplications(context.Background(), accountID, PaginationOptions{})
+	actual, _, err := client.AccessApplications(context.Background(), testAccountID, PaginationOptions{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/apps", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/access/apps", handler)
 
-	actual, _, err = client.ZoneLevelAccessApplications(context.Background(), zoneID, PaginationOptions{})
+	actual, _, err = client.ZoneLevelAccessApplications(context.Background(), testZoneID, PaginationOptions{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -133,17 +133,17 @@ func TestAccessApplication(t *testing.T) {
 		CustomDenyURL:          "https://www.cloudflare.com",
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
-	actual, err := client.AccessApplication(context.Background(), accountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	actual, err := client.AccessApplication(context.Background(), testAccountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
-	actual, err = client.ZoneLevelAccessApplication(context.Background(), zoneID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	actual, err = client.ZoneLevelAccessApplication(context.Background(), testZoneID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -198,9 +198,9 @@ func TestCreateAccessApplications(t *testing.T) {
 		UpdatedAt:              &updatedAt,
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/apps", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps", handler)
 
-	actual, err := client.CreateAccessApplication(context.Background(), accountID, AccessApplication{
+	actual, err := client.CreateAccessApplication(context.Background(), testAccountID, AccessApplication{
 		Name:            "Admin Site",
 		Domain:          "test.example.com/admin",
 		SessionDuration: "24h",
@@ -210,9 +210,9 @@ func TestCreateAccessApplications(t *testing.T) {
 		assert.Equal(t, fullAccessApplication, actual)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/apps", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/access/apps", handler)
 
-	actual, err = client.CreateZoneLevelAccessApplication(context.Background(), zoneID, AccessApplication{
+	actual, err = client.CreateZoneLevelAccessApplication(context.Background(), testZoneID, AccessApplication{
 		Name:            "Admin Site",
 		Domain:          "test.example.com/admin",
 		SessionDuration: "24h",
@@ -271,17 +271,17 @@ func TestUpdateAccessApplication(t *testing.T) {
 		UpdatedAt:              &updatedAt,
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
-	actual, err := client.UpdateAccessApplication(context.Background(), accountID, fullAccessApplication)
+	actual, err := client.UpdateAccessApplication(context.Background(), testAccountID, fullAccessApplication)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, fullAccessApplication, actual)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
-	actual, err = client.UpdateZoneLevelAccessApplication(context.Background(), zoneID, fullAccessApplication)
+	actual, err = client.UpdateZoneLevelAccessApplication(context.Background(), testZoneID, fullAccessApplication)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, fullAccessApplication, actual)
@@ -292,10 +292,10 @@ func TestUpdateAccessApplicationWithMissingID(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.UpdateAccessApplication(context.Background(), zoneID, AccessApplication{})
+	_, err := client.UpdateAccessApplication(context.Background(), testZoneID, AccessApplication{})
 	assert.EqualError(t, err, "access application ID cannot be empty")
 
-	_, err = client.UpdateZoneLevelAccessApplication(context.Background(), zoneID, AccessApplication{})
+	_, err = client.UpdateZoneLevelAccessApplication(context.Background(), testZoneID, AccessApplication{})
 	assert.EqualError(t, err, "access application ID cannot be empty")
 }
 
@@ -317,13 +317,13 @@ func TestDeleteAccessApplication(t *testing.T) {
     `)
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
-	err := client.DeleteAccessApplication(context.Background(), accountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+	err := client.DeleteAccessApplication(context.Background(), testAccountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	assert.NoError(t, err)
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
-	err = client.DeleteZoneLevelAccessApplication(context.Background(), zoneID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	mux.HandleFunc("/zones/"+testZoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+	err = client.DeleteZoneLevelAccessApplication(context.Background(), testZoneID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	assert.NoError(t, err)
 }
@@ -343,13 +343,13 @@ func TestRevokeAccessApplicationTokens(t *testing.T) {
     `)
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db/revoke-tokens", handler)
-	err := client.RevokeAccessApplicationTokens(context.Background(), accountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db/revoke-tokens", handler)
+	err := client.RevokeAccessApplicationTokens(context.Background(), testAccountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	assert.NoError(t, err)
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db/revoke-tokens", handler)
-	err = client.RevokeZoneLevelAccessApplicationTokens(context.Background(), zoneID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	mux.HandleFunc("/zones/"+testZoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db/revoke-tokens", handler)
+	err = client.RevokeZoneLevelAccessApplicationTokens(context.Background(), testZoneID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	assert.NoError(t, err)
 }
@@ -411,17 +411,17 @@ func TestAccessApplicationWithCORS(t *testing.T) {
 		},
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
-	actual, err := client.AccessApplication(context.Background(), accountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	actual, err := client.AccessApplication(context.Background(), testAccountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
-	actual, err = client.ZoneLevelAccessApplication(context.Background(), zoneID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	actual, err = client.ZoneLevelAccessApplication(context.Background(), testZoneID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
