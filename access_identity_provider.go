@@ -23,6 +23,7 @@ type AccessIdentityProvider struct {
 //
 // API reference: https://developers.cloudflare.com/access/configuring-identity-providers/
 type AccessIdentityProviderConfiguration struct {
+	APIToken           string   `json:"api_token,omitempty"`
 	AppsDomain         string   `json:"apps_domain,omitempty"`
 	Attributes         []string `json:"attributes,omitempty"`
 	AuthURL            string   `json:"auth_url,omitempty"`
