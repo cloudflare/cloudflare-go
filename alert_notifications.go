@@ -8,45 +8,50 @@ import (
 	"time"
 )
 
-// MechanismData holds a single public facing mechanism data integation
-type MechanismData struct {
+// NotificationMechanismData holds a single public facing mechanism data
+// integation.
+type NotificationMechanismData struct {
 	Name string `json:"id"`
 	ID   string `json:"name"`
 }
 
-// MechanismIntegrations is a list of all the integrations of a certain mechanism type
-// e.g. all email integrations
-type MechanismIntegrations []MechanismData
+// NotificationMechanismIntegrations is a list of all the integrations of a
+// certain mechanism type e.g. all email integrations
+type NotificationMechanismIntegrations []NotificationMechanismData
 
-// Policy represents the notification policy created along with the destinations
-type Policy struct {
-	ID          string                           `json:"id"`
-	Name        string                           `json:"name"`
-	Description string                           `json:"description"`
-	Enabled     bool                             `json:"enabled"`
-	AlertType   string                           `json:"alert_type"`
-	Mechanisms  map[string]MechanismIntegrations `json:"mechanisms"`
-	Created     time.Time                        `json:"created"`
-	Modified    time.Time                        `json:"modified"`
-	Conditions  map[string]interface{}           `json:"conditions"`
-	Filters     map[string][]string              `json:"filters"`
+// NotificationPolicy represents the notification policy created along with
+// the destinations.
+type NotificationPolicy struct {
+	ID          string                                       `json:"id"`
+	Name        string                                       `json:"name"`
+	Description string                                       `json:"description"`
+	Enabled     bool                                         `json:"enabled"`
+	AlertType   string                                       `json:"alert_type"`
+	Mechanisms  map[string]NotificationMechanismIntegrations `json:"mechanisms"`
+	Created     time.Time                                    `json:"created"`
+	Modified    time.Time                                    `json:"modified"`
+	Conditions  map[string]interface{}                       `json:"conditions"`
+	Filters     map[string][]string                          `json:"filters"`
 }
 
-// PoliciesResponse holds the response for listing all notification policies for an account
-type PoliciesResponse struct {
-	Response   Response
-	ResultInfo ResultInfo
-	Result     []Policy
+// NotificationPoliciesResponse holds the response for listing all
+// notification policies for an account.
+type NotificationPoliciesResponse struct {
+	Response
+	ResultInfo
+	Result []NotificationPolicy
 }
 
-// PolicyResponse holds the response type when a single policy is retrieved
-type PolicyResponse struct {
-	Response Response
-	Result   Policy
+// NotificationPolicyResponse holds the response type when a single policy
+// is retrieved.
+type NotificationPolicyResponse struct {
+	Response
+	Result NotificationPolicy
 }
 
-// WebhookIntegration describes the webhook information along with its status
-type WebhookIntegration struct {
+// NotificationWebhookIntegration describes the webhook information along
+// with its status.
+type NotificationWebhookIntegration struct {
 	ID          string     `json:"id"`
 	Name        string     `json:"name"`
 	Type        string     `json:"type"`
@@ -56,99 +61,105 @@ type WebhookIntegration struct {
 	LastFailure *time.Time `json:"last_failure"`
 }
 
-// WebhookResponse describes a single webhook retrieved
-type WebhookResponse struct {
-	Response   Response
-	ResultInfo ResultInfo
-	Result     WebhookIntegration
+// NotificationWebhookResponse describes a single webhook retrieved.
+type NotificationWebhookResponse struct {
+	Response
+	ResultInfo
+	Result NotificationWebhookIntegration
 }
 
-// WebhooksResponse describes a list of webhooks retrieved
-type WebhooksResponse struct {
-	Response   Response
-	ResultInfo ResultInfo
-	Result     []WebhookIntegration
+// NotificationWebhooksResponse describes a list of webhooks retrieved.
+type NotificationWebhooksResponse struct {
+	Response
+	ResultInfo
+	Result []NotificationWebhookIntegration
 }
 
-// UpsertWebhooks describes a valid webhook request
-type UpsertWebhooks struct {
+// NotificationUpsertWebhooks describes a valid webhook request.
+type NotificationUpsertWebhooks struct {
 	Name   string `json:"name"`
 	URL    string `json:"url"`
 	Secret string `json:"secret"`
 }
 
-// PagerDutyResource describes a PagerDuty integration
-type PagerDutyResource struct {
+// NotificationPagerDutyResource describes a PagerDuty integration.
+type NotificationPagerDutyResource struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
 }
 
-// PagerDutyResponse describes the PagerDuty integration retrieved
-type PagerDutyResponse struct {
-	Response   Response
-	ResultInfo ResultInfo
-	Result     PagerDutyResource
+// NotificationPagerDutyResponse describes the PagerDuty integration
+// retrieved.
+type NotificationPagerDutyResponse struct {
+	Response
+	ResultInfo
+	Result NotificationPagerDutyResource
 }
 
-// Resource describes the id of an inserted/updated/deleted resource
-type Resource struct {
+// NotificationResource describes the id of an inserted/updated/deleted
+// resource.
+type NotificationResource struct {
 	ID string
 }
 
-// SaveResponse is returned when a resource is inserted/updated/deleted
+// SaveResponse is returned when a resource is inserted/updated/deleted.
 type SaveResponse struct {
-	Response Response
-	Result   Resource
+	Response
+	Result NotificationResource
 }
 
-// MechanismMetaData represents the state of the delivery mechanism
-type MechanismMetaData struct {
+// NotificationMechanismMetaData represents the state of the delivery
+// mechanism.
+type NotificationMechanismMetaData struct {
 	Eligible bool   `json:"eligible"`
 	Ready    bool   `json:"ready"`
 	Type     string `json:"type"`
 }
 
-// Mechanisms are the different possible delivery mechanisms
-type Mechanisms struct {
-	Email     MechanismMetaData `json:"email"`
-	PagerDuty MechanismMetaData `json:"pagerduty"`
-	Webhooks  MechanismMetaData `json:"webhooks,omitempty"`
+// NotificationMechanisms are the different possible delivery mechanisms.
+type NotificationMechanisms struct {
+	Email     NotificationMechanismMetaData `json:"email"`
+	PagerDuty NotificationMechanismMetaData `json:"pagerduty"`
+	Webhooks  NotificationMechanismMetaData `json:"webhooks,omitempty"`
 }
 
-// EligibilityResponse describes the eligible mechanisms that can be configured for a notification
-type EligibilityResponse struct {
-	Response Response
-	Result   Mechanisms
+// NotificationEligibilityResponse describes the eligible mechanisms that
+// can be configured for a notification.
+type NotificationEligibilityResponse struct {
+	Response
+	Result NotificationMechanisms
 }
 
-// NotificationsGroupedByProduct are grouped by products
-type NotificationsGroupedByProduct map[string][]AlertWithDescription
+// NotificationsGroupedByProduct are grouped by products.
+type NotificationsGroupedByProduct map[string][]NotificationAlertWithDescription
 
-// AlertWithDescription represents the alert/notification available
-type AlertWithDescription struct {
+// NotificationAlertWithDescription represents the alert/notification
+// available.
+type NotificationAlertWithDescription struct {
 	DisplayName string `json:"display_name"`
 	Type        string `json:"type"`
 	Description string `json:"description"`
 }
 
-// AvailableAlertsResponse describes the available alerts/notifications grouped by products
-type AvailableAlertsResponse struct {
-	Response Response
-	Result   NotificationsGroupedByProduct
+// NotificationAvailableAlertsResponse describes the available
+// alerts/notifications grouped by products.
+type NotificationAvailableAlertsResponse struct {
+	Response
+	Result NotificationsGroupedByProduct
 }
 
 // ListNotificationPolicies will return the notification policies
-// created by a user for a specific account
+// created by a user for a specific account.
 //
 // API Reference: https://api.cloudflare.com/#notification-policies-properties
-func (api *API) ListNotificationPolicies(ctx context.Context, accountID string) (PoliciesResponse, error) {
+func (api *API) ListNotificationPolicies(ctx context.Context, accountID string) (NotificationPoliciesResponse, error) {
 	baseURL := fmt.Sprintf("/accounts/%s/alerting/v3/policies", accountID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, baseURL, nil)
 	if err != nil {
-		return PoliciesResponse{}, err
+		return NotificationPoliciesResponse{}, err
 	}
-	var r PoliciesResponse
+	var r NotificationPoliciesResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return r, err
@@ -156,17 +167,18 @@ func (api *API) ListNotificationPolicies(ctx context.Context, accountID string) 
 	return r, nil
 }
 
-// GetNotificationPolicy returns a specific created by a user, given the account id and the policy id
+// GetNotificationPolicy returns a specific created by a user, given the account
+// id and the policy id.
 //
 // API Reference: https://api.cloudflare.com/#notification-policies-properties
-func (api *API) GetNotificationPolicy(ctx context.Context, accountID, policyID string) (PolicyResponse, error) {
+func (api *API) GetNotificationPolicy(ctx context.Context, accountID, policyID string) (NotificationPolicyResponse, error) {
 	baseURL := fmt.Sprintf("/accounts/%s/alerting/v3/policies/%s", accountID, policyID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, baseURL, nil)
 	if err != nil {
-		return PolicyResponse{}, err
+		return NotificationPolicyResponse{}, err
 	}
-	var r PolicyResponse
+	var r NotificationPolicyResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return r, err
@@ -174,10 +186,10 @@ func (api *API) GetNotificationPolicy(ctx context.Context, accountID, policyID s
 	return r, nil
 }
 
-// CreateNotificationPolicy creates a notification policy for an account
+// CreateNotificationPolicy creates a notification policy for an account.
 //
 // API Reference: https://api.cloudflare.com/#notification-policies-create-notification-policy
-func (api *API) CreateNotificationPolicy(ctx context.Context, accountID string, policy Policy) (SaveResponse, error) {
+func (api *API) CreateNotificationPolicy(ctx context.Context, accountID string, policy NotificationPolicy) (SaveResponse, error) {
 
 	baseURL := fmt.Sprintf("/accounts/%s/alerting/v3/policies", accountID)
 
@@ -185,13 +197,14 @@ func (api *API) CreateNotificationPolicy(ctx context.Context, accountID string, 
 	if err != nil {
 		return SaveResponse{}, err
 	}
-	return unmarshalSaveResponse(res)
+	return unmarshalNotificationSaveResponse(res)
 }
 
-// UpdateNotificationPolicy updates a notification policy, given the account id and the policy id and returns the policy id
+// UpdateNotificationPolicy updates a notification policy, given the
+// account id and the policy id and returns the policy id.
 //
 // API Reference: https://api.cloudflare.com/#notification-policies-update-notification-policy
-func (api *API) UpdateNotificationPolicy(ctx context.Context, accountID string, policy *Policy) (SaveResponse, error) {
+func (api *API) UpdateNotificationPolicy(ctx context.Context, accountID string, policy *NotificationPolicy) (SaveResponse, error) {
 	if policy == nil {
 		return SaveResponse{}, fmt.Errorf("policy cannot be nil")
 	}
@@ -201,10 +214,10 @@ func (api *API) UpdateNotificationPolicy(ctx context.Context, accountID string, 
 	if err != nil {
 		return SaveResponse{}, err
 	}
-	return unmarshalSaveResponse(res)
+	return unmarshalNotificationSaveResponse(res)
 }
 
-// DeleteNotificationPolicy deletes a notification policy for an account
+// DeleteNotificationPolicy deletes a notification policy for an account.
 //
 // API Reference: https://api.cloudflare.com/#notification-policies-delete-notification-policy
 func (api *API) DeleteNotificationPolicy(ctx context.Context, accountID, policyID string) (SaveResponse, error) {
@@ -214,20 +227,21 @@ func (api *API) DeleteNotificationPolicy(ctx context.Context, accountID, policyI
 	if err != nil {
 		return SaveResponse{}, err
 	}
-	return unmarshalSaveResponse(res)
+	return unmarshalNotificationSaveResponse(res)
 }
 
-// ListNotificationWebhooks will return the webhook destinations configured for an account
+// ListNotificationWebhooks will return the webhook destinations configured
+// for an account.
 //
 // API Reference: https://api.cloudflare.com/#notification-webhooks-list-webhooks
-func (api *API) ListNotificationWebhooks(ctx context.Context, accountID string) (WebhooksResponse, error) {
+func (api *API) ListNotificationWebhooks(ctx context.Context, accountID string) (NotificationWebhooksResponse, error) {
 	baseURL := fmt.Sprintf("/accounts/%s/alerting/v3/destinations/webhooks", accountID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, baseURL, nil)
 	if err != nil {
-		return WebhooksResponse{}, err
+		return NotificationWebhooksResponse{}, err
 	}
-	var r WebhooksResponse
+	var r NotificationWebhooksResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return r, err
@@ -238,11 +252,13 @@ func (api *API) ListNotificationWebhooks(ctx context.Context, accountID string) 
 
 // CreateNotificationWebhooks will help connect a webhooks destination.
 // A test message will be sent to the webhooks endpoint during creation.
-// If added successfully, the webhooks can be setup as a destination mechanism while creating policies.
+// If added successfully, the webhooks can be setup as a destination mechanism
+// while creating policies.
+//
 // Notifications will be posted to this URL.
 //
 // API Reference: https://api.cloudflare.com/#notification-webhooks-create-webhook
-func (api *API) CreateNotificationWebhooks(ctx context.Context, accountID string, webhooks *UpsertWebhooks) (SaveResponse, error) {
+func (api *API) CreateNotificationWebhooks(ctx context.Context, accountID string, webhooks *NotificationUpsertWebhooks) (SaveResponse, error) {
 	if webhooks == nil {
 		return SaveResponse{}, fmt.Errorf("webhooks cannot be nil")
 	}
@@ -253,20 +269,21 @@ func (api *API) CreateNotificationWebhooks(ctx context.Context, accountID string
 		return SaveResponse{}, err
 	}
 
-	return unmarshalSaveResponse(res)
+	return unmarshalNotificationSaveResponse(res)
 }
 
-// GetNotificationWebhooks will return a specific webhook destination, given the account and webhooks ids
+// GetNotificationWebhooks will return a specific webhook destination,
+// given the account and webhooks ids.
 //
 // API Reference: https://api.cloudflare.com/#notification-webhooks-get-webhook
-func (api *API) GetNotificationWebhooks(ctx context.Context, accountID, webhookID string) (WebhookResponse, error) {
+func (api *API) GetNotificationWebhooks(ctx context.Context, accountID, webhookID string) (NotificationWebhookResponse, error) {
 	baseURL := fmt.Sprintf("/accounts/%s/alerting/v3/destinations/webhooks/%s", accountID, webhookID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, baseURL, nil)
 	if err != nil {
-		return WebhookResponse{}, err
+		return NotificationWebhookResponse{}, err
 	}
-	var r WebhookResponse
+	var r NotificationWebhookResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return r, err
@@ -274,11 +291,13 @@ func (api *API) GetNotificationWebhooks(ctx context.Context, accountID, webhookI
 	return r, nil
 }
 
-// UpdateNotificationWebhooks will update a particular webhook's name, given the account and webhooks ids.
-// The webhook url and secret cannot be updated
+// UpdateNotificationWebhooks will update a particular webhook's name,
+// given the account and webhooks ids.
+//
+// The webhook url and secret cannot be updated.
 //
 // API Reference: https://api.cloudflare.com/#notification-webhooks-update-webhook
-func (api *API) UpdateNotificationWebhooks(ctx context.Context, accountID, webhookID string, webhooks *UpsertWebhooks) (SaveResponse, error) {
+func (api *API) UpdateNotificationWebhooks(ctx context.Context, accountID, webhookID string, webhooks *NotificationUpsertWebhooks) (SaveResponse, error) {
 	if webhooks == nil {
 		return SaveResponse{}, fmt.Errorf("webhooks cannot be nil")
 	}
@@ -289,11 +308,12 @@ func (api *API) UpdateNotificationWebhooks(ctx context.Context, accountID, webho
 		return SaveResponse{}, err
 	}
 
-	return unmarshalSaveResponse(res)
+	return unmarshalNotificationSaveResponse(res)
 }
 
-// DeleteNotificationWebhooks will delete a webhook, given the account and webhooks ids.
-// Deleting the webhooks will remove it from any connected notification policies.
+// DeleteNotificationWebhooks will delete a webhook, given the account and
+// webhooks ids. Deleting the webhooks will remove it from any connected
+// notification policies.
 //
 // API Reference: https://api.cloudflare.com/#notification-webhooks-delete-webhook
 func (api *API) DeleteNotificationWebhooks(ctx context.Context, accountID, webhookID string) (SaveResponse, error) {
@@ -304,20 +324,21 @@ func (api *API) DeleteNotificationWebhooks(ctx context.Context, accountID, webho
 		return SaveResponse{}, err
 	}
 
-	return unmarshalSaveResponse(res)
+	return unmarshalNotificationSaveResponse(res)
 }
 
-// ListPagerDutyDestinations will return the pagerduty destinations configured for an account
+// ListPagerDutyNotificationDestinations will return the pagerduty
+// destinations configured for an account.
 //
 // API Reference: https://api.cloudflare.com/#notification-destinations-with-pagerduty-list-pagerduty-services
-func (api *API) ListPagerDutyDestinations(ctx context.Context, accountID string) (PagerDutyResponse, error) {
+func (api *API) ListPagerDutyNotificationDestinations(ctx context.Context, accountID string) (NotificationPagerDutyResponse, error) {
 	baseURL := fmt.Sprintf("/accounts/%s/alerting/v3/destinations/pagerduty", accountID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, baseURL, nil)
 	if err != nil {
-		return PagerDutyResponse{}, err
+		return NotificationPagerDutyResponse{}, err
 	}
-	var r PagerDutyResponse
+	var r NotificationPagerDutyResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return r, err
@@ -325,10 +346,11 @@ func (api *API) ListPagerDutyDestinations(ctx context.Context, accountID string)
 	return r, nil
 }
 
-// DeletePagerDutyDestinations will delete the pagerduty destination connected for an account
+// DeletePagerDutyNotificationDestinations will delete the pagerduty
+// destination connected for an account.
 //
 // API Reference: https://api.cloudflare.com/#notification-destinations-with-pagerduty-delete-pagerduty-destinations
-func (api *API) DeletePagerDutyDestinations(ctx context.Context, accountID string) (Response, error) {
+func (api *API) DeletePagerDutyNotificationDestinations(ctx context.Context, accountID string) (Response, error) {
 	baseURL := fmt.Sprintf("/accounts/%s/alerting/v3/destinations/pagerduty", accountID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, baseURL, nil)
@@ -343,17 +365,18 @@ func (api *API) DeletePagerDutyDestinations(ctx context.Context, accountID strin
 	return r, nil
 }
 
-// GetEligibleNotificationDestinations will return the types of destinations an account is eligible to configure
+// GetEligibleNotificationDestinations will return the types of
+// destinations an account is eligible to configure.
 //
 // API Reference: https://api.cloudflare.com/#notification-mechanism-eligibility-properties
-func (api *API) GetEligibleNotificationDestinations(ctx context.Context, accountID string) (EligibilityResponse, error) {
+func (api *API) GetEligibleNotificationDestinations(ctx context.Context, accountID string) (NotificationEligibilityResponse, error) {
 	baseURL := fmt.Sprintf("/accounts/%s/alerting/v3/destinations/eligible", accountID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, baseURL, nil)
 	if err != nil {
-		return EligibilityResponse{}, err
+		return NotificationEligibilityResponse{}, err
 	}
-	var r EligibilityResponse
+	var r NotificationEligibilityResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return r, err
@@ -361,17 +384,18 @@ func (api *API) GetEligibleNotificationDestinations(ctx context.Context, account
 	return r, nil
 }
 
-// GetAvailableNotificationTypes will return the alert types available for a given account
+// GetAvailableNotificationTypes will return the alert types available for
+// a given account.
 //
 // API Reference: https://api.cloudflare.com/#notification-mechanism-eligibility-properties
-func (api *API) GetAvailableNotificationTypes(ctx context.Context, accountID string) (AvailableAlertsResponse, error) {
+func (api *API) GetAvailableNotificationTypes(ctx context.Context, accountID string) (NotificationAvailableAlertsResponse, error) {
 	baseURL := fmt.Sprintf("/accounts/%s/alerting/v3/available_alerts", accountID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, baseURL, nil)
 	if err != nil {
-		return AvailableAlertsResponse{}, err
+		return NotificationAvailableAlertsResponse{}, err
 	}
-	var r AvailableAlertsResponse
+	var r NotificationAvailableAlertsResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return r, err
@@ -380,7 +404,7 @@ func (api *API) GetAvailableNotificationTypes(ctx context.Context, accountID str
 }
 
 // unmarshal will unmarshal bytes and return a SaveResponse
-func unmarshalSaveResponse(res []byte) (SaveResponse, error) {
+func unmarshalNotificationSaveResponse(res []byte) (SaveResponse, error) {
 	var r SaveResponse
 	err := json.Unmarshal(res, &r)
 	if err != nil {

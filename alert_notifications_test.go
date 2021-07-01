@@ -21,14 +21,14 @@ var (
 	notificationTimestamp = time.Date(2021, 05, 01, 10, 47, 01, 01, time.UTC)
 )
 
-func TestAPI_GetEligibleNotificationDestinations(t *testing.T) {
+func TestGetEligibleNotificationDestinations(t *testing.T) {
 	setup()
 	defer teardown()
 
-	expected := Mechanisms{
-		Email:     MechanismMetaData{true, true, "email"},
-		PagerDuty: MechanismMetaData{true, true, "pagerduty"},
-		Webhooks:  MechanismMetaData{true, true, "webhooks"},
+	expected := NotificationMechanisms{
+		Email:     NotificationMechanismMetaData{true, true, "email"},
+		PagerDuty: NotificationMechanismMetaData{true, true, "pagerduty"},
+		Webhooks:  NotificationMechanismMetaData{true, true, "webhooks"},
 	}
 	b, err := json.Marshal(expected)
 	require.NoError(t, err)
@@ -52,14 +52,14 @@ func TestAPI_GetEligibleNotificationDestinations(t *testing.T) {
 	require.NotNil(t, actual)
 	assert.Equal(t, expected, actual.Result)
 }
-func TestAPI_GetAvailableNotificationTypes(t *testing.T) {
+func TestGetAvailableNotificationTypes(t *testing.T) {
 	setup()
 	defer teardown()
 
 	expected := make(NotificationsGroupedByProduct, 1)
-	alert1 := AlertWithDescription{Type: "secondary_dns_zone_successfully_updated", DisplayName: "Secondary DNS Successfully Updated", Description: "Secondary zone transfers are succeeding, the zone has been updated."}
-	alert2 := AlertWithDescription{Type: "secondary_dns_zone_validation_warning", DisplayName: "Secondary DNSSEC Validation Warning", Description: "The transferred DNSSEC zone is incorrectly configured."}
-	expected["DNS"] = []AlertWithDescription{alert1, alert2}
+	alert1 := NotificationAlertWithDescription{Type: "secondary_dns_zone_successfully_updated", DisplayName: "Secondary DNS Successfully Updated", Description: "Secondary zone transfers are succeeding, the zone has been updated."}
+	alert2 := NotificationAlertWithDescription{Type: "secondary_dns_zone_validation_warning", DisplayName: "Secondary DNSSEC Validation Warning", Description: "The transferred DNSSEC zone is incorrectly configured."}
+	expected["DNS"] = []NotificationAlertWithDescription{alert1, alert2}
 
 	b, err := json.Marshal(expected)
 	require.NoError(t, err)
@@ -84,11 +84,11 @@ func TestAPI_GetAvailableNotificationTypes(t *testing.T) {
 	require.NotNil(t, actual)
 	assert.Equal(t, expected, actual.Result)
 }
-func TestAPI_ListPagerDutyDestinations(t *testing.T) {
+func TestListPagerDutyDestinations(t *testing.T) {
 	setup()
 	defer teardown()
 
-	expected := PagerDutyResource{ID: "valid-uuid", Name: "my pagerduty connection"}
+	expected := NotificationPagerDutyResource{ID: "valid-uuid", Name: "my pagerduty connection"}
 	b, err := json.Marshal(expected)
 	require.NoError(t, err)
 	require.NotEmpty(t, b)
@@ -108,12 +108,12 @@ func TestAPI_ListPagerDutyDestinations(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/alerting/v3/destinations/pagerduty", handler)
 
-	actual, err := client.ListPagerDutyDestinations(context.Background(), testAccountID)
+	actual, err := client.ListPagerDutyNotificationDestinations(context.Background(), testAccountID)
 	require.Nil(t, err)
 	require.NotNil(t, actual)
 	assert.Equal(t, expected, actual.Result)
 }
-func TestAPI_DeletePagerDutyDestinations(t *testing.T) {
+func TestDeletePagerDutyDestinations(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -131,18 +131,18 @@ func TestAPI_DeletePagerDutyDestinations(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/alerting/v3/destinations/pagerduty", handler)
 
-	actual, err := client.DeletePagerDutyDestinations(context.Background(), testAccountID)
+	actual, err := client.DeletePagerDutyNotificationDestinations(context.Background(), testAccountID)
 	require.Nil(t, err)
 	require.NotNil(t, actual)
 	assert.True(t, actual.Success)
 }
-func TestAPI_CreateNotificationPolicy(t *testing.T) {
+func TestCreateNotificationPolicy(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mechanisms := make(map[string]MechanismIntegrations)
-	mechanisms["email"] = []MechanismData{{Name: "email to send notification", ID: "test@gmail.com"}}
-	policy := Policy{
+	mechanisms := make(map[string]NotificationMechanismIntegrations)
+	mechanisms["email"] = []NotificationMechanismData{{Name: "email to send notification", ID: "test@gmail.com"}}
+	policy := NotificationPolicy{
 		Description: "Notifies when my zones are under attack",
 		Name:        "CF DOS attack alert - L4",
 		Enabled:     true,
@@ -174,13 +174,13 @@ func TestAPI_CreateNotificationPolicy(t *testing.T) {
 	require.NotNil(t, res)
 }
 
-func TestAPI_GetNotificationPolicy(t *testing.T) {
+func TestGetNotificationPolicy(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mechanisms := make(map[string]MechanismIntegrations)
-	mechanisms["email"] = []MechanismData{{Name: "email to send notification", ID: "test@gmail.com"}}
-	policy := Policy{
+	mechanisms := make(map[string]NotificationMechanismIntegrations)
+	mechanisms["email"] = []NotificationMechanismData{{Name: "email to send notification", ID: "test@gmail.com"}}
+	policy := NotificationPolicy{
 		ID:          testPolicyID,
 		Description: "Notifies when my zones are under attack",
 		Name:        "CF DOS attack alert - L4",
@@ -219,13 +219,13 @@ func TestAPI_GetNotificationPolicy(t *testing.T) {
 
 }
 
-func TestAPI_ListNotificationPolicies(t *testing.T) {
+func TestListNotificationPolicies(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mechanisms := make(map[string]MechanismIntegrations)
-	mechanisms["email"] = []MechanismData{{Name: "email to send notification", ID: "test@gmail.com"}}
-	policy := Policy{
+	mechanisms := make(map[string]NotificationMechanismIntegrations)
+	mechanisms["email"] = []NotificationMechanismData{{Name: "email to send notification", ID: "test@gmail.com"}}
+	policy := NotificationPolicy{
 		ID:          testPolicyID,
 		Description: "Notifies when my zones are under attack",
 		Name:        "CF DOS attack alert - L4",
@@ -237,7 +237,7 @@ func TestAPI_ListNotificationPolicies(t *testing.T) {
 		Created:     time.Date(2021, 05, 01, 10, 47, 01, 01, time.UTC),
 		Modified:    time.Date(2021, 05, 01, 10, 47, 01, 01, time.UTC),
 	}
-	policies := []Policy{
+	policies := []NotificationPolicy{
 		policy,
 	}
 	b, err := json.Marshal(policies)
@@ -266,13 +266,13 @@ func TestAPI_ListNotificationPolicies(t *testing.T) {
 	assert.Equal(t, policies, res.Result)
 }
 
-func TestAPI_UpdateNotificationPolicy(t *testing.T) {
+func TestUpdateNotificationPolicy(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mechanisms := make(map[string]MechanismIntegrations)
-	mechanisms["email"] = []MechanismData{{Name: "email to send notification", ID: "test@gmail.com"}}
-	policy := Policy{
+	mechanisms := make(map[string]NotificationMechanismIntegrations)
+	mechanisms["email"] = []NotificationMechanismData{{Name: "email to send notification", ID: "test@gmail.com"}}
+	policy := NotificationPolicy{
 		ID:          testPolicyID,
 		Description: "Notifies when my zones are under attack",
 		Name:        "CF DOS attack alert - L4",
@@ -310,11 +310,11 @@ func TestAPI_UpdateNotificationPolicy(t *testing.T) {
 	assert.Equal(t, testPolicyID, res.Result.ID)
 
 }
-func TestAPI_DeleteNotificationPolicy(t *testing.T) {
+func TestDeleteNotificationPolicy(t *testing.T) {
 	setup()
 	defer teardown()
 
-	result := Resource{ID: testPolicyID}
+	result := NotificationResource{ID: testPolicyID}
 	b, err := json.Marshal(result)
 	require.NoError(t, err)
 	require.NotNil(t, b)
@@ -341,17 +341,17 @@ func TestAPI_DeleteNotificationPolicy(t *testing.T) {
 	assert.Equal(t, testPolicyID, res.Result.ID)
 
 }
-func TestAPI_CreateNotificationWebhooks(t *testing.T) {
+func TestCreateNotificationWebhooks(t *testing.T) {
 	setup()
 	defer teardown()
 
-	webhook := UpsertWebhooks{
+	webhook := NotificationUpsertWebhooks{
 		Name:   "my test webhook",
 		URL:    "https://example.com",
 		Secret: "mischief-managed", // optional
 	}
 
-	result := Resource{ID: testWebhookID}
+	result := NotificationResource{ID: testWebhookID}
 
 	b, err := json.Marshal(result)
 	require.NoError(t, err)
@@ -379,11 +379,11 @@ func TestAPI_CreateNotificationWebhooks(t *testing.T) {
 	assert.Equal(t, testWebhookID, res.Result.ID)
 
 }
-func TestAPI_ListNotificationWebhooks(t *testing.T) {
+func TestListNotificationWebhooks(t *testing.T) {
 	setup()
 	defer teardown()
 
-	webhook := WebhookIntegration{
+	webhook := NotificationWebhookIntegration{
 		ID:          testWebhookID,
 		Name:        "my test webhook",
 		URL:         "https://example.com",
@@ -392,7 +392,7 @@ func TestAPI_ListNotificationWebhooks(t *testing.T) {
 		LastSuccess: &notificationTimestamp,
 		LastFailure: &notificationTimestamp,
 	}
-	webhooks := []WebhookIntegration{webhook}
+	webhooks := []NotificationWebhookIntegration{webhook}
 	b, err := json.Marshal(webhooks)
 	require.NoError(t, err)
 	require.NotEmpty(t, b)
@@ -419,11 +419,11 @@ func TestAPI_ListNotificationWebhooks(t *testing.T) {
 	assert.Equal(t, webhooks, res.Result)
 }
 
-func TestAPI_GetNotificationWebhooks(t *testing.T) {
+func TestGetNotificationWebhooks(t *testing.T) {
 	setup()
 	defer teardown()
 
-	webhook := WebhookIntegration{
+	webhook := NotificationWebhookIntegration{
 		ID:          testWebhookID,
 		Name:        "my test webhook",
 		URL:         "https://example.com",
@@ -458,16 +458,16 @@ func TestAPI_GetNotificationWebhooks(t *testing.T) {
 	assert.Equal(t, webhook, res.Result)
 }
 
-func TestAPI_UpdateNotificationWebhooks(t *testing.T) {
+func TestUpdateNotificationWebhooks(t *testing.T) {
 	setup()
 	defer teardown()
 
-	result := Resource{ID: testWebhookID}
+	result := NotificationResource{ID: testWebhookID}
 	b, err := json.Marshal(result)
 	require.NoError(t, err)
 	require.NotEmpty(t, b)
 
-	webhook := UpsertWebhooks{
+	webhook := NotificationUpsertWebhooks{
 		Name:   "my test webhook with a new name",
 		URL:    "https://example.com",
 		Secret: "mischief-managed",
@@ -496,11 +496,11 @@ func TestAPI_UpdateNotificationWebhooks(t *testing.T) {
 
 }
 
-func TestAPI_DeleteNotificationWebhooks(t *testing.T) {
+func TestDeleteNotificationWebhooks(t *testing.T) {
 	setup()
 	defer teardown()
 
-	result := Resource{ID: testWebhookID}
+	result := NotificationResource{ID: testWebhookID}
 	b, err := json.Marshal(result)
 	require.NoError(t, err)
 	require.NotEmpty(t, b)
