@@ -50,17 +50,17 @@ func TestAccessServiceTokens(t *testing.T) {
 		},
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/service_tokens", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/service_tokens", handler)
 
-	actual, _, err := client.AccessServiceTokens(context.Background(), accountID)
+	actual, _, err := client.AccessServiceTokens(context.Background(), testAccountID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/service_tokens", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/access/service_tokens", handler)
 
-	actual, _, err = client.ZoneLevelAccessServiceTokens(context.Background(), zoneID)
+	actual, _, err = client.ZoneLevelAccessServiceTokens(context.Background(), testZoneID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -101,17 +101,17 @@ func TestCreateAccessServiceToken(t *testing.T) {
 		ClientSecret: "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5",
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/service_tokens", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/service_tokens", handler)
 
-	actual, err := client.CreateAccessServiceToken(context.Background(), accountID, "CI/CD token")
+	actual, err := client.CreateAccessServiceToken(context.Background(), testAccountID, "CI/CD token")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expected, actual)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/service_tokens", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/access/service_tokens", handler)
 
-	actual, err = client.CreateZoneLevelAccessServiceToken(context.Background(), zoneID, "CI/CD token")
+	actual, err = client.CreateZoneLevelAccessServiceToken(context.Background(), testZoneID, "CI/CD token")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expected, actual)
@@ -150,17 +150,17 @@ func TestUpdateAccessServiceToken(t *testing.T) {
 		ClientID:  "88bf3b6d86161464f6509f7219099e57.access.example.com",
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/service_tokens/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/service_tokens/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err := client.UpdateAccessServiceToken(context.Background(), accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", "CI/CD token")
+	actual, err := client.UpdateAccessServiceToken(context.Background(), testAccountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", "CI/CD token")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expected, actual)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/service_tokens/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/access/service_tokens/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err = client.UpdateZoneLevelAccessServiceToken(context.Background(), zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", "CI/CD token")
+	actual, err = client.UpdateZoneLevelAccessServiceToken(context.Background(), testZoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", "CI/CD token")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expected, actual)
@@ -199,17 +199,17 @@ func TestDeleteAccessServiceToken(t *testing.T) {
 		ClientID:  "88bf3b6d86161464f6509f7219099e57.access.example.com",
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/service_tokens/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/service_tokens/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err := client.DeleteAccessServiceToken(context.Background(), accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	actual, err := client.DeleteAccessServiceToken(context.Background(), testAccountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expected, actual)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/service_tokens/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/access/service_tokens/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err = client.DeleteZoneLevelAccessServiceToken(context.Background(), zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	actual, err = client.DeleteZoneLevelAccessServiceToken(context.Background(), testZoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expected, actual)

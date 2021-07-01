@@ -47,17 +47,17 @@ func TestAccessIdentityProviders(t *testing.T) {
 		},
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/identity_providers", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/identity_providers", handler)
 
-	actual, err := client.AccessIdentityProviders(context.Background(), accountID)
+	actual, err := client.AccessIdentityProviders(context.Background(), testAccountID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/identity_providers", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/access/identity_providers", handler)
 
-	actual, err = client.ZoneLevelAccessIdentityProviders(context.Background(), zoneID)
+	actual, err = client.ZoneLevelAccessIdentityProviders(context.Background(), testZoneID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -98,17 +98,17 @@ func TestAccessIdentityProviderDetails(t *testing.T) {
 		},
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc841", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc841", handler)
 
-	actual, err := client.AccessIdentityProviderDetails(context.Background(), accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc841")
+	actual, err := client.AccessIdentityProviderDetails(context.Background(), testAccountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc841")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc841", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc841", handler)
 
-	actual, err = client.ZoneLevelAccessIdentityProviderDetails(context.Background(), zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc841")
+	actual, err = client.ZoneLevelAccessIdentityProviderDetails(context.Background(), testZoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc841")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -158,17 +158,17 @@ func TestCreateAccessIdentityProvider(t *testing.T) {
 		},
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/identity_providers", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/identity_providers", handler)
 
-	actual, err := client.CreateAccessIdentityProvider(context.Background(), accountID, newIdentityProvider)
+	actual, err := client.CreateAccessIdentityProvider(context.Background(), testAccountID, newIdentityProvider)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/identity_providers", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/access/identity_providers", handler)
 
-	actual, err = client.CreateZoneLevelAccessIdentityProvider(context.Background(), zoneID, newIdentityProvider)
+	actual, err = client.CreateZoneLevelAccessIdentityProvider(context.Background(), testZoneID, newIdentityProvider)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -217,17 +217,17 @@ func TestUpdateAccessIdentityProvider(t *testing.T) {
 		},
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err := client.UpdateAccessIdentityProvider(context.Background(), accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", updatedIdentityProvider)
+	actual, err := client.UpdateAccessIdentityProvider(context.Background(), testAccountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", updatedIdentityProvider)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err = client.UpdateZoneLevelAccessIdentityProvider(context.Background(), zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", updatedIdentityProvider)
+	actual, err = client.UpdateZoneLevelAccessIdentityProvider(context.Background(), testZoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", updatedIdentityProvider)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -268,7 +268,7 @@ func TestDeleteAccessIdentityProvider(t *testing.T) {
 		},
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
 	actual, err := client.DeleteAccessIdentityProvider(context.Background(), "01a7362d577a6c3019a474fd6f485823", "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
@@ -276,9 +276,9 @@ func TestDeleteAccessIdentityProvider(t *testing.T) {
 		assert.Equal(t, want, actual)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err = client.DeleteZoneLevelAccessIdentityProvider(context.Background(), zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	actual, err = client.DeleteZoneLevelAccessIdentityProvider(context.Background(), testZoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)

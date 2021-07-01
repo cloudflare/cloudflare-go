@@ -99,13 +99,13 @@ func TestListAccessRules(t *testing.T) {
 	require.NoError(t, err)
 	assert.Equal(t, want, actual)
 
-	mux.HandleFunc("/zones/"+zoneID+"/firewall/access_rules/rules", handler)
-	actual, err = client.ListZoneAccessRules(context.Background(), zoneID, accessRule, 1)
+	mux.HandleFunc("/zones/"+testZoneID+"/firewall/access_rules/rules", handler)
+	actual, err = client.ListZoneAccessRules(context.Background(), testZoneID, accessRule, 1)
 	require.NoError(t, err)
 	assert.Equal(t, want, actual)
 
-	mux.HandleFunc("/accounts/"+accountID+"/firewall/access_rules/rules", handler)
-	actual, err = client.ListAccountAccessRules(context.Background(), accountID, accessRule, 1)
+	mux.HandleFunc("/accounts/"+testAccountID+"/firewall/access_rules/rules", handler)
+	actual, err = client.ListAccountAccessRules(context.Background(), testAccountID, accessRule, 1)
 	require.NoError(t, err)
 	assert.Equal(t, want, actual)
 }
@@ -186,13 +186,13 @@ func TestCreateAccessRule(t *testing.T) {
 	require.NoError(t, err)
 	assert.Equal(t, want, actual)
 
-	mux.HandleFunc("/zones/"+zoneID+"/firewall/access_rules/rules", handler)
-	actual, err = client.CreateZoneAccessRule(context.Background(), zoneID, input)
+	mux.HandleFunc("/zones/"+testZoneID+"/firewall/access_rules/rules", handler)
+	actual, err = client.CreateZoneAccessRule(context.Background(), testZoneID, input)
 	require.NoError(t, err)
 	assert.Equal(t, want, actual)
 
-	mux.HandleFunc("/accounts/"+accountID+"/firewall/access_rules/rules", handler)
-	actual, err = client.CreateAccountAccessRule(context.Background(), accountID, input)
+	mux.HandleFunc("/accounts/"+testAccountID+"/firewall/access_rules/rules", handler)
+	actual, err = client.CreateAccountAccessRule(context.Background(), testAccountID, input)
 	require.NoError(t, err)
 	assert.Equal(t, want, actual)
 }
@@ -263,13 +263,13 @@ func TestAccessRule(t *testing.T) {
 	require.NoError(t, err)
 	assert.Equal(t, want, actual)
 
-	mux.HandleFunc("/zones/"+zoneID+"/firewall/access_rules/rules/"+accessRuleID, handler)
-	actual, err = client.ZoneAccessRule(context.Background(), zoneID, accessRuleID)
+	mux.HandleFunc("/zones/"+testZoneID+"/firewall/access_rules/rules/"+accessRuleID, handler)
+	actual, err = client.ZoneAccessRule(context.Background(), testZoneID, accessRuleID)
 	require.NoError(t, err)
 	assert.Equal(t, want, actual)
 
-	mux.HandleFunc("/accounts/"+accountID+"/firewall/access_rules/rules/"+accessRuleID, handler)
-	actual, err = client.AccountAccessRule(context.Background(), accountID, accessRuleID)
+	mux.HandleFunc("/accounts/"+testAccountID+"/firewall/access_rules/rules/"+accessRuleID, handler)
+	actual, err = client.AccountAccessRule(context.Background(), testAccountID, accessRuleID)
 	require.NoError(t, err)
 	assert.Equal(t, want, actual)
 }
@@ -351,13 +351,13 @@ func TestUpdateAccessRule(t *testing.T) {
 	require.NoError(t, err)
 	assert.Equal(t, want, actual)
 
-	mux.HandleFunc("/zones/"+zoneID+"/firewall/access_rules/rules/"+accessRuleID, handler)
-	actual, err = client.UpdateZoneAccessRule(context.Background(), zoneID, accessRuleID, input)
+	mux.HandleFunc("/zones/"+testZoneID+"/firewall/access_rules/rules/"+accessRuleID, handler)
+	actual, err = client.UpdateZoneAccessRule(context.Background(), testZoneID, accessRuleID, input)
 	require.NoError(t, err)
 	assert.Equal(t, want, actual)
 
-	mux.HandleFunc("/accounts/"+accountID+"/firewall/access_rules/rules/"+accessRuleID, handler)
-	actual, err = client.UpdateAccountAccessRule(context.Background(), accountID, accessRuleID, input)
+	mux.HandleFunc("/accounts/"+testAccountID+"/firewall/access_rules/rules/"+accessRuleID, handler)
+	actual, err = client.UpdateAccountAccessRule(context.Background(), testAccountID, accessRuleID, input)
 	require.NoError(t, err)
 	assert.Equal(t, want, actual)
 }
@@ -393,13 +393,13 @@ func TestDeleteAccessRule(t *testing.T) {
 	require.NoError(t, err)
 	assert.Equal(t, want, actual)
 
-	mux.HandleFunc("/zones/"+zoneID+"/firewall/access_rules/rules/"+accessRuleID, handler)
-	actual, err = client.DeleteZoneAccessRule(context.Background(), zoneID, accessRuleID)
+	mux.HandleFunc("/zones/"+testZoneID+"/firewall/access_rules/rules/"+accessRuleID, handler)
+	actual, err = client.DeleteZoneAccessRule(context.Background(), testZoneID, accessRuleID)
 	require.NoError(t, err)
 	assert.Equal(t, want, actual)
 
-	mux.HandleFunc("/accounts/"+accountID+"/firewall/access_rules/rules/"+accessRuleID, handler)
-	actual, err = client.DeleteAccountAccessRule(context.Background(), accountID, accessRuleID)
+	mux.HandleFunc("/accounts/"+testAccountID+"/firewall/access_rules/rules/"+accessRuleID, handler)
+	actual, err = client.DeleteAccountAccessRule(context.Background(), testAccountID, accessRuleID)
 	require.NoError(t, err)
 	assert.Equal(t, want, actual)
 }

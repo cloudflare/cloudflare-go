@@ -14,8 +14,6 @@ func TestUniversalSSLSettingDetails(t *testing.T) {
 	setup()
 	defer teardown()
 
-	testZoneID := "abcd123"
-
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
@@ -44,8 +42,6 @@ func TestUniversalSSLSettingDetails(t *testing.T) {
 func TestEditUniversalSSLSetting(t *testing.T) {
 	setup()
 	defer teardown()
-
-	testZoneID := "abcd123"
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
@@ -83,8 +79,6 @@ func TestEditUniversalSSLSetting(t *testing.T) {
 func TestUniversalSSLVerificationDetails(t *testing.T) {
 	setup()
 	defer teardown()
-
-	testZoneID := "abcd123"
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)

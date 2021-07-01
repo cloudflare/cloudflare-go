@@ -54,9 +54,9 @@ func TestCreateKeylessSSL(t *testing.T) {
 		}`)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/keyless_certificates", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/keyless_certificates", handler)
 
-	actual, err := client.CreateKeylessSSL(context.Background(), zoneID, input)
+	actual, err := client.CreateKeylessSSL(context.Background(), testZoneID, input)
 	require.NoError(t, err)
 
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
@@ -105,9 +105,9 @@ func TestListKeylessSSL(t *testing.T) {
 		}`)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/keyless_certificates", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/keyless_certificates", handler)
 
-	actual, err := client.ListKeylessSSL(context.Background(), zoneID)
+	actual, err := client.ListKeylessSSL(context.Background(), testZoneID)
 	require.NoError(t, err)
 
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
@@ -154,9 +154,9 @@ func TestKeylessSSL(t *testing.T) {
 		}`)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/keyless_certificates/"+"4d2844d2ce78891c34d0b6c0535a291e", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/keyless_certificates/"+"4d2844d2ce78891c34d0b6c0535a291e", handler)
 
-	actual, err := client.KeylessSSL(context.Background(), zoneID, "4d2844d2ce78891c34d0b6c0535a291e")
+	actual, err := client.KeylessSSL(context.Background(), testZoneID, "4d2844d2ce78891c34d0b6c0535a291e")
 	require.NoError(t, err)
 
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
@@ -217,9 +217,9 @@ func TestUpdateKeylessSSL(t *testing.T) {
 		}`)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/keyless_certificates/"+"4d2844d2ce78891c34d0b6c0535a291e", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/keyless_certificates/"+"4d2844d2ce78891c34d0b6c0535a291e", handler)
 
-	actual, err := client.UpdateKeylessSSL(context.Background(), zoneID, "4d2844d2ce78891c34d0b6c0535a291e", input)
+	actual, err := client.UpdateKeylessSSL(context.Background(), testZoneID, "4d2844d2ce78891c34d0b6c0535a291e", input)
 	require.NoError(t, err)
 
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
@@ -255,8 +255,8 @@ func TestDeleteKeylessSSL(t *testing.T) {
 		}`)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/keyless_certificates/"+"4d2844d2ce78891c34d0b6c0535a291e", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/keyless_certificates/"+"4d2844d2ce78891c34d0b6c0535a291e", handler)
 
-	err := client.DeleteKeylessSSL(context.Background(), zoneID, "4d2844d2ce78891c34d0b6c0535a291e")
+	err := client.DeleteKeylessSSL(context.Background(), testZoneID, "4d2844d2ce78891c34d0b6c0535a291e")
 	require.NoError(t, err)
 }

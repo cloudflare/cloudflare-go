@@ -16,8 +16,6 @@ func TestListWAFPackages(t *testing.T) {
 	setup()
 	defer teardown()
 
-	testZoneID := "abcd123"
-
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 
@@ -73,8 +71,6 @@ func TestListWAFPackages(t *testing.T) {
 func TestListWAFPackagesMultiplePages(t *testing.T) {
 	setup()
 	defer teardown()
-
-	testZoneID := "abcd123"
 
 	page := 1
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -152,8 +148,6 @@ func TestWAFPackage(t *testing.T) {
 	setup()
 	defer teardown()
 
-	testZoneID := "abcd123"
-
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 
@@ -200,8 +194,6 @@ func TestWAFPackage(t *testing.T) {
 func TestUpdateWAFPackage(t *testing.T) {
 	setup()
 	defer teardown()
-
-	testZoneID := "abcd123"
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
@@ -254,8 +246,6 @@ func TestUpdateWAFPackage(t *testing.T) {
 func TestListWAFGroups(t *testing.T) {
 	setup()
 	defer teardown()
-
-	testZoneID := "abcd123"
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
@@ -319,8 +309,6 @@ func TestListWAFGroups(t *testing.T) {
 func TestListWAFGroupsMultiplePages(t *testing.T) {
 	setup()
 	defer teardown()
-
-	testZoneID := "abcd123"
 	packageID := "efgh456"
 
 	page := 1
@@ -406,8 +394,6 @@ func TestWAFGroup(t *testing.T) {
 	setup()
 	defer teardown()
 
-	testZoneID := "abcd123"
-
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 
@@ -459,8 +445,6 @@ func TestWAFGroup(t *testing.T) {
 func TestUpdateWAFGroup(t *testing.T) {
 	setup()
 	defer teardown()
-
-	testZoneID := "abcd123"
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
@@ -517,8 +501,6 @@ func TestUpdateWAFGroup(t *testing.T) {
 func TestListWAFRules(t *testing.T) {
 	setup()
 	defer teardown()
-
-	testZoneID := "abcd123"
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
@@ -589,8 +571,6 @@ func TestListWAFRules(t *testing.T) {
 func TestListWAFRulesMultiplePages(t *testing.T) {
 	setup()
 	defer teardown()
-
-	testZoneID := "abcd123"
 	packageID := "efgh456"
 
 	page := 1
@@ -690,8 +670,6 @@ func TestWAFRule(t *testing.T) {
 	setup()
 	defer teardown()
 
-	testZoneID := "abcd123"
-
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 
@@ -751,8 +729,6 @@ func TestWAFRule(t *testing.T) {
 func TestUpdateWAFRule(t *testing.T) {
 	setup()
 	defer teardown()
-
-	testZoneID := "abcd123"
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)

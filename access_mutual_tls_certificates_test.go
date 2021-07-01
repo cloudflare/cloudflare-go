@@ -51,17 +51,17 @@ func TestAccessMutualTLSCertificates(t *testing.T) {
 		AssociatedHostnames: []string{"admin.example.com"},
 	}}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/certificates", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/certificates", handler)
 
-	actual, err := client.AccessMutualTLSCertificates(context.Background(), accountID)
+	actual, err := client.AccessMutualTLSCertificates(context.Background(), testAccountID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/certificates", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/access/certificates", handler)
 
-	actual, err = client.ZoneAccessMutualTLSCertificates(context.Background(), zoneID)
+	actual, err = client.ZoneAccessMutualTLSCertificates(context.Background(), testZoneID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -107,17 +107,17 @@ func TestAccessMutualTLSCertificate(t *testing.T) {
 		AssociatedHostnames: []string{"admin.example.com"},
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/certificates/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/certificates/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err := client.AccessMutualTLSCertificate(context.Background(), accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	actual, err := client.AccessMutualTLSCertificate(context.Background(), testAccountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/certificates/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/access/certificates/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err = client.ZoneAccessMutualTLSCertificate(context.Background(), zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	actual, err = client.ZoneAccessMutualTLSCertificate(context.Background(), testZoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -168,17 +168,17 @@ func TestCreateAccessMutualTLSCertificate(t *testing.T) {
 		AssociatedHostnames: []string{"admin.example.com"},
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/certificates", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/certificates", handler)
 
-	actual, err := client.CreateAccessMutualTLSCertificate(context.Background(), accountID, certificate)
+	actual, err := client.CreateAccessMutualTLSCertificate(context.Background(), testAccountID, certificate)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/certificates", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/access/certificates", handler)
 
-	actual, err = client.CreateZoneAccessMutualTLSCertificate(context.Background(), zoneID, certificate)
+	actual, err = client.CreateZoneAccessMutualTLSCertificate(context.Background(), testZoneID, certificate)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -229,17 +229,17 @@ func TestUpdateAccessMutualTLSCertificate(t *testing.T) {
 		AssociatedHostnames: []string{"admin.example.com"},
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/certificates/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/certificates/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err := client.UpdateAccessMutualTLSCertificate(context.Background(), accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", certificate)
+	actual, err := client.UpdateAccessMutualTLSCertificate(context.Background(), testAccountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", certificate)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/certificates/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/access/certificates/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err = client.UpdateZoneAccessMutualTLSCertificate(context.Background(), zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", certificate)
+	actual, err = client.UpdateZoneAccessMutualTLSCertificate(context.Background(), testZoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", certificate)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -263,15 +263,15 @@ func TestDeleteAccessMutualTLSCertificate(t *testing.T) {
 		}`)
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/certificates/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/certificates/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	err := client.DeleteAccessMutualTLSCertificate(context.Background(), accountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	err := client.DeleteAccessMutualTLSCertificate(context.Background(), testAccountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	assert.NoError(t, err)
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/certificates/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/access/certificates/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	err = client.DeleteZoneAccessMutualTLSCertificate(context.Background(), zoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	err = client.DeleteZoneAccessMutualTLSCertificate(context.Background(), testZoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	assert.NoError(t, err)
 }

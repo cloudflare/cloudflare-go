@@ -62,7 +62,7 @@ func TestCreateDNSRecord(t *testing.T) {
 		}`)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/dns_records", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/dns_records", handler)
 
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
@@ -75,7 +75,7 @@ func TestCreateDNSRecord(t *testing.T) {
 			Proxiable:  true,
 			Proxied:    input.Proxied,
 			TTL:        input.TTL,
-			ZoneID:     zoneID,
+			ZoneID:     testZoneID,
 			ZoneName:   "example.com",
 			CreatedOn:  createdOn,
 			ModifiedOn: modifiedOn,
@@ -88,7 +88,7 @@ func TestCreateDNSRecord(t *testing.T) {
 		Response: Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}},
 	}
 
-	actual, err := client.CreateDNSRecord(context.Background(), zoneID, input)
+	actual, err := client.CreateDNSRecord(context.Background(), testZoneID, input)
 	require.NoError(t, err)
 
 	assert.Equal(t, want, actual)
@@ -144,7 +144,7 @@ func TestDNSRecords(t *testing.T) {
 		}`)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/dns_records", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/dns_records", handler)
 
 	proxied := false
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
@@ -158,7 +158,7 @@ func TestDNSRecords(t *testing.T) {
 		Proxied:    &proxied,
 		TTL:        120,
 		Locked:     false,
-		ZoneID:     zoneID,
+		ZoneID:     testZoneID,
 		ZoneName:   "example.com",
 		CreatedOn:  createdOn,
 		ModifiedOn: modifiedOn,
@@ -169,7 +169,7 @@ func TestDNSRecords(t *testing.T) {
 		},
 	}}
 
-	actual, err := client.DNSRecords(context.Background(), zoneID, input)
+	actual, err := client.DNSRecords(context.Background(), testZoneID, input)
 	require.NoError(t, err)
 
 	assert.Equal(t, want, actual)
@@ -211,7 +211,7 @@ func TestDNSRecord(t *testing.T) {
 
 	dnsRecordID := "372e67954025e0ba6aaa6d586b9e0b59"
 
-	mux.HandleFunc("/zones/"+zoneID+"/dns_records/"+dnsRecordID, handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/dns_records/"+dnsRecordID, handler)
 
 	proxied := false
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
@@ -224,7 +224,7 @@ func TestDNSRecord(t *testing.T) {
 		Proxiable:  true,
 		Proxied:    &proxied,
 		TTL:        120,
-		ZoneID:     zoneID,
+		ZoneID:     testZoneID,
 		ZoneName:   "example.com",
 		CreatedOn:  createdOn,
 		ModifiedOn: modifiedOn,
@@ -235,7 +235,7 @@ func TestDNSRecord(t *testing.T) {
 		},
 	}
 
-	actual, err := client.DNSRecord(context.Background(), zoneID, dnsRecordID)
+	actual, err := client.DNSRecord(context.Background(), testZoneID, dnsRecordID)
 	require.NoError(t, err)
 
 	assert.Equal(t, want, actual)
@@ -335,9 +335,9 @@ func TestUpdateDNSRecord(t *testing.T) {
 
 	dnsRecordID := "372e67954025e0ba6aaa6d586b9e0b59"
 
-	mux.HandleFunc("/zones/"+zoneID+"/dns_records/"+dnsRecordID, handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/dns_records/"+dnsRecordID, handler)
 
-	err := client.UpdateDNSRecord(context.Background(), zoneID, dnsRecordID, input)
+	err := client.UpdateDNSRecord(context.Background(), testZoneID, dnsRecordID, input)
 	require.NoError(t, err)
 }
 
@@ -361,8 +361,8 @@ func TestDeleteDNSRecord(t *testing.T) {
 
 	dnsRecordID := "372e67954025e0ba6aaa6d586b9e0b59"
 
-	mux.HandleFunc("/zones/"+zoneID+"/dns_records/"+dnsRecordID, handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/dns_records/"+dnsRecordID, handler)
 
-	err := client.DeleteDNSRecord(context.Background(), zoneID, dnsRecordID)
+	err := client.DeleteDNSRecord(context.Background(), testZoneID, dnsRecordID)
 	require.NoError(t, err)
 }

@@ -209,8 +209,8 @@ func TestDeleteAccount(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/"+accountID, handler)
-	err := client.DeleteAccount(context.Background(), accountID)
+	mux.HandleFunc("/accounts/"+testAccountID, handler)
+	err := client.DeleteAccount(context.Background(), testAccountID)
 
 	assert.NoError(t, err)
 }

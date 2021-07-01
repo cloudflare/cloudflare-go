@@ -51,17 +51,17 @@ func TestAccessOrganization(t *testing.T) {
 		},
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/organizations", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/organizations", handler)
 
-	actual, _, err := client.AccessOrganization(context.Background(), accountID)
+	actual, _, err := client.AccessOrganization(context.Background(), testAccountID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/organizations", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/access/organizations", handler)
 
-	actual, _, err = client.ZoneLevelAccessOrganization(context.Background(), zoneID)
+	actual, _, err = client.ZoneLevelAccessOrganization(context.Background(), testZoneID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -109,17 +109,17 @@ func TestCreateAccessOrganization(t *testing.T) {
 		},
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/organizations", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/organizations", handler)
 
-	actual, err := client.CreateAccessOrganization(context.Background(), accountID, want)
+	actual, err := client.CreateAccessOrganization(context.Background(), testAccountID, want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/organizations", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/access/organizations", handler)
 
-	actual, err = client.CreateZoneLevelAccessOrganization(context.Background(), zoneID, want)
+	actual, err = client.CreateZoneLevelAccessOrganization(context.Background(), testZoneID, want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -167,17 +167,17 @@ func TestUpdateAccessOrganization(t *testing.T) {
 		},
 	}
 
-	mux.HandleFunc("/accounts/"+accountID+"/access/organizations", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/organizations", handler)
 
-	actual, err := client.UpdateAccessOrganization(context.Background(), accountID, want)
+	actual, err := client.UpdateAccessOrganization(context.Background(), testAccountID, want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	mux.HandleFunc("/zones/"+zoneID+"/access/organizations", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/access/organizations", handler)
 
-	actual, err = client.UpdateZoneLevelAccessOrganization(context.Background(), zoneID, want)
+	actual, err = client.UpdateZoneLevelAccessOrganization(context.Background(), testZoneID, want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
