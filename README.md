@@ -43,6 +43,7 @@ The current feature list includes:
 * [x] Zone Lockdown and User-Agent Block rules
 * [x] Zones
 * [x] Workers KV
+* [x] Notifications
 
 Pull Requests are welcome, but please open an issue (or comment in an existing
 issue) to discuss any non-trivial changes before submitting code.
