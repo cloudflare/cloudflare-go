@@ -63,7 +63,7 @@ func TestListRulesets(t *testing.T) {
 	}
 }
 
-func TestGetRuleset(t *testing.T) {
+func TestGetRuleset_MagicTransit(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -107,6 +107,93 @@ func TestGetRuleset(t *testing.T) {
 	}
 
 	accountActual, err := client.GetAccountRuleset(context.Background(), testAccountID, "2c0fc9fa937b11eaa1b71c4d701ab86e")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, accountActual)
+	}
+}
+
+func TestGetRuleset_WAF(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+      "result": {
+        "id": "70339d97bdb34195bbf054b1ebe81f76",
+        "name": "Cloudflare Normalization Ruleset",
+        "description": "Created by the Cloudflare security team, this ruleset provides normalization on the URL path",
+        "kind": "managed",
+        "version": "1",
+        "rules": [
+          {
+            "id": "78723a9e0c7c4c6dbec5684cb766231d",
+            "version": "1",
+            "action": "rewrite",
+            "action_parameters": {
+              "uri": {
+                "path": {
+                  "expression": "normalize_url_path(raw.http.request.uri.path)"
+                },
+                "origin": false
+              }
+            },
+            "description": "Normalization on the URL path, without propagating it to the origin",
+            "last_updated": "2020-12-18T09:28:09.655749Z",
+            "ref": "272936dc447b41fe976255ff6b768ec0",
+            "enabled": true
+          }
+        ],
+        "last_updated": "2020-12-18T09:28:09.655749Z",
+        "phase": "http_request_sanitize"
+      },
+      "success": true,
+      "errors": [],
+      "messages": []
+    }`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/rulesets/b232b534beea4e00a21dcbb7a8a545e9", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/rulesets/b232b534beea4e00a21dcbb7a8a545e9", handler)
+
+	lastUpdated, _ := time.Parse(time.RFC3339, "2020-12-18T09:28:09.655749Z")
+
+	rules := []RulesetRule{{
+		ID:      "78723a9e0c7c4c6dbec5684cb766231d",
+		Version: "1",
+		Action:  RulesetRuleActionRewrite,
+		ActionParameters: &RulesetRuleActionParameters{
+			URI: RulesetRuleActionParametersURI{
+				Path: RulesetRuleActionParametersURIPath{
+					Expression: "normalize_url_path(raw.http.request.uri.path)",
+				},
+				Origin: false,
+			},
+		},
+		Description: "Normalization on the URL path, without propagating it to the origin",
+		LastUpdated: &lastUpdated,
+		Ref:         "272936dc447b41fe976255ff6b768ec0",
+		Enabled:     true,
+	}}
+
+	want := Ruleset{
+		ID:          "70339d97bdb34195bbf054b1ebe81f76",
+		Name:        "Cloudflare Normalization Ruleset",
+		Description: "Created by the Cloudflare security team, this ruleset provides normalization on the URL path",
+		Kind:        RulesetKindManaged,
+		Version:     "1",
+		LastUpdated: &lastUpdated,
+		Phase:       RulesetPhaseHTTPRequestSanitize,
+		Rules:       rules,
+	}
+
+	zoneActual, err := client.GetZoneRuleset(context.Background(), testZoneID, "b232b534beea4e00a21dcbb7a8a545e9")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, zoneActual)
+	}
+
+	accountActual, err := client.GetAccountRuleset(context.Background(), testAccountID, "b232b534beea4e00a21dcbb7a8a545e9")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, accountActual)
 	}
