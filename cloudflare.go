@@ -149,7 +149,7 @@ func (api *API) ZoneIDByName(zoneName string) (string, error) {
 	case 1:
 		return res.Result[0].ID, nil
 	default:
-		return "", errors.New("ambiguous zone name used without an account ID")
+		return "", errors.New("Ambiguous zone name; an account ID might help")
 	}
 }
 
