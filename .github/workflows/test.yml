@@ -18,11 +18,6 @@ jobs:
         with:
           path: ~/go/pkg/mod
           key: ${{ runner.os }}-go${{ matrix.go-version }}-${{ hashFiles('**/go.sum') }}
-      - name: Lint
-        if: matrix.os != 'windows-latest'
-        run: |
-          go get -v -u golang.org/x/lint/golint
-          $(go env GOPATH)/bin/golint -set_exit_status . cmd/flarectl
       - name: Vet
         run: go vet ./...
       - name: Test
