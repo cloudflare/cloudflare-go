@@ -347,7 +347,7 @@ func TestZoneIDByNameWithNonUniqueZonesWithoutOrgID(t *testing.T) {
 	mux.HandleFunc("/zones", handler)
 
 	_, err := client.ZoneIDByName("example.com")
-	assert.EqualError(t, err, "ambiguous zone name used without an account ID")
+	assert.EqualError(t, err, "ambiguous zone name; an account ID might help")
 }
 
 func TestZoneIDByNameWithIDN(t *testing.T) {
