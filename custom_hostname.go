@@ -74,7 +74,7 @@ type CustomHostname struct {
 	ID                        string                                  `json:"id,omitempty"`
 	Hostname                  string                                  `json:"hostname,omitempty"`
 	CustomOriginServer        string                                  `json:"custom_origin_server,omitempty"`
-	SSL                       CustomHostnameSSL                       `json:"ssl,omitempty"`
+	SSL                       *CustomHostnameSSL                      `json:"ssl,omitempty"`
 	CustomMetadata            CustomMetadata                          `json:"custom_metadata,omitempty"`
 	Status                    CustomHostnameStatus                    `json:"status,omitempty"`
 	VerificationErrors        []string                                `json:"verification_errors,omitempty"`
@@ -119,7 +119,7 @@ type CustomHostnameFallbackOriginResponse struct {
 // hostname in the given zone.
 //
 // API reference: https://api.cloudflare.com/#custom-hostname-for-a-zone-update-custom-hostname-configuration
-func (api *API) UpdateCustomHostnameSSL(ctx context.Context, zoneID string, customHostnameID string, ssl CustomHostnameSSL) (*CustomHostnameResponse, error) {
+func (api *API) UpdateCustomHostnameSSL(ctx context.Context, zoneID string, customHostnameID string, ssl *CustomHostnameSSL) (*CustomHostnameResponse, error) {
 	uri := fmt.Sprintf("/zones/%s/custom_hostnames/%s", zoneID, customHostnameID)
 	ch := CustomHostname{
 		SSL: ssl,
