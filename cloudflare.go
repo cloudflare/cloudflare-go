@@ -145,7 +145,7 @@ func (api *API) ZoneIDByName(zoneName string) (string, error) {
 
 	switch len(res.Result) {
 	case 0:
-		return "", errors.New("Zone could not be found")
+		return "", errors.New("zone could not be found")
 	case 1:
 		return res.Result[0].ID, nil
 	default:
