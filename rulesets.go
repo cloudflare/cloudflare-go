@@ -137,14 +137,15 @@ type RulesetRuleActionParametersHTTPHeaderOperation string
 // recommendation is to use the types provided where possible to avoid
 // surprises.
 type Ruleset struct {
-	ID          string        `json:"id,omitempty"`
-	Name        string        `json:"name"`
-	Description string        `json:"description"`
-	Kind        string        `json:"kind"`
-	Version     string        `json:"version,omitempty"`
-	LastUpdated *time.Time    `json:"last_updated,omitempty"`
-	Phase       string        `json:"phase"`
-	Rules       []RulesetRule `json:"rules"`
+	ID                       string        `json:"id,omitempty"`
+	Name                     string        `json:"name,omitempty"`
+	Description              string        `json:"description,omitempty"`
+	Kind                     string        `json:"kind,omitempty"`
+	Version                  string        `json:"version,omitempty"`
+	LastUpdated              *time.Time    `json:"last_updated,omitempty"`
+	Phase                    string        `json:"phase,omitempty"`
+	Rules                    []RulesetRule `json:"rules"`
+	ShareableEntitlementName string        `json:"shareable_entitlement_name,omitempty"`
 }
 
 // RulesetRuleActionParameters specifies the action parameters for a Ruleset
@@ -153,9 +154,11 @@ type RulesetRuleActionParameters struct {
 	ID        string                                           `json:"id,omitempty"`
 	Ruleset   string                                           `json:"ruleset,omitempty"`
 	Increment int                                              `json:"increment,omitempty"`
-	URI       RulesetRuleActionParametersURI                   `json:"uri,omitempty"`
+	URI       *RulesetRuleActionParametersURI                  `json:"uri,omitempty"`
 	Headers   map[string]RulesetRuleActionParametersHTTPHeader `json:"headers,omitempty"`
 	Products  []string                                         `json:"products,omitempty"`
+	Overrides *RulesetRuleActionParametersOverrides            `json:"overrides,omitempty"`
+	Rules     []RulesetRuleActionParametersRules               `json:"rules,omitempty"`
 }
 
 // RulesetRuleActionParametersURI holds the URI struct for an action parameter.
@@ -186,6 +189,25 @@ type RulesetRuleActionParametersHTTPHeader struct {
 	Expression string `json:"expression,omitempty"`
 }
 
+type RulesetRuleActionParametersOverrides struct {
+	Enabled    bool                                    `json:"enabled,omitempty"`
+	Categories []RulesetRuleActionParametersCategories `json:"categories,omitempty"`
+	Rules      []RulesetRuleActionParametersRules      `json:"rules,omitempty"`
+}
+
+type RulesetRuleActionParametersCategories struct {
+	Category string `json:"category"`
+	Action   string `json:"action,omitempty"`
+	Enabled  bool   `json:"enabled"`
+}
+
+type RulesetRuleActionParametersRules struct {
+	ID             string `json:"id"`
+	Action         string `json:"action,omitempty"`
+	Enabled        bool   `json:"enabled"`
+	ScoreThreshold int    `json:"score_threshold,omitempty"`
+}
+
 // RulesetRule contains information about a single Ruleset Rule.
 type RulesetRule struct {
 	ID               string                       `json:"id,omitempty"`
@@ -197,7 +219,6 @@ type RulesetRule struct {
 	LastUpdated      *time.Time                   `json:"last_updated,omitempty"`
 	Ref              string                       `json:"ref,omitempty"`
 	Enabled          bool                         `json:"enabled"`
-	Categories       []string                     `json:"categories,omitempty"`
 	ScoreThreshold   int                          `json:"score_threshold,omitempty"`
 }
 
@@ -382,6 +403,68 @@ func (api *API) updateRuleset(ctx context.Context, identifierType RouteRoot, ide
 	}
 
 	result := UpdateRulesetResponse{}
+	if err := json.Unmarshal(res, &result); err != nil {
+		return Ruleset{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return result.Result, nil
+}
+
+// GetZoneRulesetPhase returns a ruleset phase for a zone.
+//
+// API reference: TBA
+func (api *API) GetZoneRulesetPhase(ctx context.Context, zoneID, rulesetPhase string) (Ruleset, error) {
+	return api.getRulesetPhase(ctx, ZoneRouteRoot, zoneID, rulesetPhase)
+}
+
+// GetAccountRulesetPhase returns a ruleset phase for an account.
+//
+// API reference: TBA
+func (api *API) GetAccountRulesetPhase(ctx context.Context, accountID, rulesetPhase string) (Ruleset, error) {
+	return api.getRulesetPhase(ctx, AccountRouteRoot, accountID, rulesetPhase)
+}
+
+// getRulesetPhase returns a ruleset phase based on the zone or account and the
+// identifer.
+func (api *API) getRulesetPhase(ctx context.Context, identifierType RouteRoot, identifier, rulesetPhase string) (Ruleset, error) {
+	uri := fmt.Sprintf("/%s/%s/rulesets/phases/%s/entrypoint", identifierType, identifier, rulesetPhase)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return Ruleset{}, err
+	}
+
+	result := GetRulesetResponse{}
+	if err := json.Unmarshal(res, &result); err != nil {
+		return Ruleset{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return result.Result, nil
+}
+
+// UpdateZoneRulesetPhase updates a ruleset phase for a zone.
+//
+// API reference: TBA
+func (api *API) UpdateZoneRulesetPhase(ctx context.Context, zoneID, rulesetPhase string, ruleset Ruleset) (Ruleset, error) {
+	return api.updateRulesetPhase(ctx, ZoneRouteRoot, zoneID, rulesetPhase, ruleset)
+}
+
+// UpdateAccountRulesetPhase updates a ruleset phase for an account.
+//
+// API reference: TBA
+func (api *API) UpdateAccountRulesetPhase(ctx context.Context, accountID, rulesetPhase string, ruleset Ruleset) (Ruleset, error) {
+	return api.updateRulesetPhase(ctx, AccountRouteRoot, accountID, rulesetPhase, ruleset)
+}
+
+// updateRulesetPhase updates a ruleset phase based on the zone or account, the
+// identifer and the rules.
+func (api *API) updateRulesetPhase(ctx context.Context, identifierType RouteRoot, identifier, rulesetPhase string, ruleset Ruleset) (Ruleset, error) {
+	uri := fmt.Sprintf("/%s/%s/rulesets/phases/%s/entrypoint", identifierType, identifier, rulesetPhase)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, ruleset)
+	if err != nil {
+		return Ruleset{}, err
+	}
+
+	result := GetRulesetResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
 		return Ruleset{}, errors.Wrap(err, errUnmarshalError)
 	}
