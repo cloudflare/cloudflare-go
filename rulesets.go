@@ -48,6 +48,70 @@ const (
 	RulesetRuleActionParametersHTTPHeaderOperationSet    RulesetRuleActionParametersHTTPHeaderOperation = "set"
 )
 
+// RulesetKindValues exposes all the available `RulesetKind` values as a slice
+// of strings.
+func RulesetKindValues() []string {
+	return []string{
+		string(RulesetKindCustom),
+		string(RulesetKindManaged),
+		string(RulesetKindRoot),
+		string(RulesetKindSchema),
+		string(RulesetKindZone),
+	}
+}
+
+// RulesetPhaseValues exposes all the available `RulesetPhase` values as a slice
+// of strings.
+func RulesetPhaseValues() []string {
+	return []string{
+		string(RulesetPhaseDDoSL7),
+		string(RulesetPhaseHTTPRequestFirewallCustom),
+		string(RulesetPhaseHTTPRequestFirewallManaged),
+		string(RulesetPhaseHTTPRequestMain),
+		string(RulesetPhaseHTTPRequestSanitize),
+		string(RulesetPhaseHTTPRequestTransform),
+		string(RulesetPhaseMagicTransit),
+	}
+}
+
+// RulesetRuleActionValues exposes all the available `RulesetRuleAction` values
+// as a slice of strings.
+func RulesetRuleActionValues() []string {
+	return []string{
+		string(RulesetRuleActionBlock),
+		string(RulesetRuleActionChallenge),
+		string(RulesetRuleActionDDoSDynamic),
+		string(RulesetRuleActionExecute),
+		string(RulesetRuleActionForceConnectionClose),
+		string(RulesetRuleActionJSChallenge),
+		string(RulesetRuleActionLog),
+		string(RulesetRuleActionRewrite),
+		string(RulesetRuleActionScore),
+		string(RulesetRuleActionSkip),
+	}
+}
+
+// RulesetActionParameterProductValues exposes all the available
+// `RulesetActionParameterProduct` values as a slice of strings.
+func RulesetActionParameterProductValues() []string {
+	return []string{
+		string(RulesetActionParameterProductBIC),
+		string(RulesetActionParameterProductHOT),
+		string(RulesetActionParameterProductRateLimit),
+		string(RulesetActionParameterProductSecurityLevel),
+		string(RulesetActionParameterProductUABlock),
+		string(RulesetActionParameterProductWAF),
+		string(RulesetActionParameterProductZoneLockdown),
+	}
+}
+
+func RulesetRuleActionParametersHTTPHeaderOperationValues() []string {
+	return []string{
+		string(RulesetRuleActionParametersHTTPHeaderOperationRemove),
+		string(RulesetRuleActionParametersHTTPHeaderOperationSet),
+	}
+}
+
 // RulesetRuleAction defines a custom type that is used to express allowed
 // values for the rule action.
 type RulesetRuleAction string
@@ -59,21 +123,27 @@ type RulesetKind string
 // be applied in the request pipeline.
 type RulesetPhase string
 
+// RulesetActionParameterProduct is the custom type for defining what products
+// can be used within the action parameters of a ruleset.
 type RulesetActionParameterProduct string
 
 // RulesetRuleActionParametersHTTPHeaderOperation defines available options for
 // HTTP header operations in actions.
 type RulesetRuleActionParametersHTTPHeaderOperation string
 
-// Ruleset contains the structure of a Ruleset.
+// Ruleset contains the structure of a Ruleset. Using `string` for Kind and
+// Phase is a developer nicety to support downstream clients like Terraform who
+// don't really have a strong and expansive type system. As always, the
+// recommendation is to use the types provided where possible to avoid
+// surprises.
 type Ruleset struct {
 	ID          string        `json:"id,omitempty"`
 	Name        string        `json:"name"`
 	Description string        `json:"description"`
-	Kind        RulesetKind   `json:"kind"`
+	Kind        string        `json:"kind"`
 	Version     string        `json:"version,omitempty"`
 	LastUpdated *time.Time    `json:"last_updated,omitempty"`
-	Phase       RulesetPhase  `json:"phase"`
+	Phase       string        `json:"phase"`
 	Rules       []RulesetRule `json:"rules"`
 }
 
@@ -85,7 +155,7 @@ type RulesetRuleActionParameters struct {
 	Increment int                                              `json:"increment,omitempty"`
 	URI       RulesetRuleActionParametersURI                   `json:"uri,omitempty"`
 	Headers   map[string]RulesetRuleActionParametersHTTPHeader `json:"headers,omitempty"`
-	Products  []RulesetActionParameterProduct                  `json:"products,omitempty"`
+	Products  []string                                         `json:"products,omitempty"`
 }
 
 // RulesetRuleActionParametersURI holds the URI struct for an action parameter.
@@ -120,7 +190,7 @@ type RulesetRuleActionParametersHTTPHeader struct {
 type RulesetRule struct {
 	ID               string                       `json:"id,omitempty"`
 	Version          string                       `json:"version,omitempty"`
-	Action           RulesetRuleAction            `json:"action"`
+	Action           string                       `json:"action"`
 	ActionParameters *RulesetRuleActionParameters `json:"action_parameters,omitempty"`
 	Expression       string                       `json:"expression"`
 	Description      string                       `json:"description"`

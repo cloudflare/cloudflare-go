@@ -48,7 +48,7 @@ func TestListRulesets(t *testing.T) {
 			Kind:        "root",
 			Version:     "1",
 			LastUpdated: &lastUpdated,
-			Phase:       RulesetPhaseMagicTransit,
+			Phase:       string(RulesetPhaseMagicTransit),
 		},
 	}
 
@@ -98,7 +98,7 @@ func TestGetRuleset_MagicTransit(t *testing.T) {
 		Kind:        "root",
 		Version:     "1",
 		LastUpdated: &lastUpdated,
-		Phase:       RulesetPhaseMagicTransit,
+		Phase:       string(RulesetPhaseMagicTransit),
 	}
 
 	zoneActual, err := client.GetZoneRuleset(context.Background(), testZoneID, "2c0fc9fa937b11eaa1b71c4d701ab86e")
@@ -162,7 +162,7 @@ func TestGetRuleset_WAF(t *testing.T) {
 	rules := []RulesetRule{{
 		ID:      "78723a9e0c7c4c6dbec5684cb766231d",
 		Version: "1",
-		Action:  RulesetRuleActionRewrite,
+		Action:  string(RulesetRuleActionRewrite),
 		ActionParameters: &RulesetRuleActionParameters{
 			URI: RulesetRuleActionParametersURI{
 				Path: RulesetRuleActionParametersURIPath{
@@ -181,10 +181,10 @@ func TestGetRuleset_WAF(t *testing.T) {
 		ID:          "70339d97bdb34195bbf054b1ebe81f76",
 		Name:        "Cloudflare Normalization Ruleset",
 		Description: "Created by the Cloudflare security team, this ruleset provides normalization on the URL path",
-		Kind:        RulesetKindManaged,
+		Kind:        string(RulesetKindManaged),
 		Version:     "1",
 		LastUpdated: &lastUpdated,
-		Phase:       RulesetPhaseHTTPRequestSanitize,
+		Phase:       string(RulesetPhaseHTTPRequestSanitize),
 		Rules:       rules,
 	}
 
@@ -245,7 +245,7 @@ func TestCreateRuleset(t *testing.T) {
 	rules := []RulesetRule{{
 		ID:      "62449e2e0de149619edb35e59c10d801",
 		Version: "1",
-		Action:  RulesetRuleActionSkip,
+		Action:  string(RulesetRuleActionSkip),
 		ActionParameters: &RulesetRuleActionParameters{
 			Ruleset: "current",
 		},
@@ -260,7 +260,7 @@ func TestCreateRuleset(t *testing.T) {
 		Name:        "my example ruleset",
 		Description: "Test magic transit ruleset",
 		Kind:        "root",
-		Phase:       RulesetPhaseMagicTransit,
+		Phase:       string(RulesetPhaseMagicTransit),
 		Rules:       rules,
 	}
 
@@ -271,7 +271,7 @@ func TestCreateRuleset(t *testing.T) {
 		Kind:        "root",
 		Version:     "1",
 		LastUpdated: &lastUpdated,
-		Phase:       RulesetPhaseMagicTransit,
+		Phase:       string(RulesetPhaseMagicTransit),
 		Rules:       rules,
 	}
 
@@ -365,7 +365,7 @@ func TestUpdateRuleset(t *testing.T) {
 	rules := []RulesetRule{{
 		ID:      "62449e2e0de149619edb35e59c10d801",
 		Version: "1",
-		Action:  RulesetRuleActionSkip,
+		Action:  string(RulesetRuleActionSkip),
 		ActionParameters: &RulesetRuleActionParameters{
 			Ruleset: "current",
 		},
@@ -377,7 +377,7 @@ func TestUpdateRuleset(t *testing.T) {
 	}, {
 		ID:      "62449e2e0de149619edb35e59c10d802",
 		Version: "1",
-		Action:  RulesetRuleActionSkip,
+		Action:  string(RulesetRuleActionSkip),
 		ActionParameters: &RulesetRuleActionParameters{
 			Ruleset: "current",
 		},
@@ -395,7 +395,7 @@ func TestUpdateRuleset(t *testing.T) {
 		Kind:        "root",
 		Version:     "1",
 		LastUpdated: &lastUpdated,
-		Phase:       RulesetPhaseMagicTransit,
+		Phase:       string(RulesetPhaseMagicTransit),
 		Rules:       rules,
 	}
 
