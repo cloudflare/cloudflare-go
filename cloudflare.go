@@ -138,28 +138,19 @@ func (api *API) SetAuthType(authType int) {
 // ZoneIDByName retrieves a zone's ID from the name.
 func (api *API) ZoneIDByName(zoneName string) (string, error) {
 	zoneName = normalizeZoneName(zoneName)
-	res, err := api.ListZonesContext(context.Background(), WithZoneFilters(zoneName, "", ""))
+	res, err := api.ListZonesContext(context.Background(), WithZoneFilters(zoneName, api.AccountID, ""))
 	if err != nil {
 		return "", errors.Wrap(err, "ListZonesContext command failed")
 	}
 
-	if len(res.Result) > 1 && api.AccountID == "" {
-		return "", errors.New("ambiguous zone name used without an account ID")
+	switch len(res.Result) {
+	case 0:
+		return "", errors.New("zone could not be found")
+	case 1:
+		return res.Result[0].ID, nil
+	default:
+		return "", errors.New("ambiguous zone name; an account ID might help")
 	}
-
-	for _, zone := range res.Result {
-		if api.AccountID != "" {
-			if zone.Name == zoneName && api.AccountID == zone.Account.ID {
-				return zone.ID, nil
-			}
-		} else {
-			if zone.Name == zoneName {
-				return zone.ID, nil
-			}
-		}
-	}
-
-	return "", errors.New("Zone could not be found")
 }
 
 // makeRequest makes a HTTP request and returns the body as a byte slice,
