@@ -231,7 +231,7 @@ func zoneCachePurge(c *cli.Context) error {
 		)
 
 		if len(files) == 0 && len(tags) == 0 && len(hosts) == 0 && len(prefixes) == 0 {
-			fmt.Fprintln(os.Stderr, "You must provide at least one of the --files, --tags or --hosts flags")
+			fmt.Fprintln(os.Stderr, "You must provide at least one of the --files, --tags, --prefixes or --hosts flags")
 			return nil
 		}
 
