@@ -224,21 +224,23 @@ func zoneCachePurge(c *cli.Context) error {
 		}
 	} else {
 		var (
-			files = c.StringSlice("files")
-			tags  = c.StringSlice("tags")
-			hosts = c.StringSlice("hosts")
+			files    = c.StringSlice("files")
+			tags     = c.StringSlice("tags")
+			hosts    = c.StringSlice("hosts")
+			prefixes = c.StringSlice("prefixes")
 		)
 
-		if len(files) == 0 && len(tags) == 0 && len(hosts) == 0 {
-			fmt.Fprintln(os.Stderr, "You must provide at least one of the --files, --tags or --hosts flags")
+		if len(files) == 0 && len(tags) == 0 && len(hosts) == 0 && len(prefixes) == 0 {
+			fmt.Fprintln(os.Stderr, "You must provide at least one of the --files, --tags, --prefixes or --hosts flags")
 			return nil
 		}
 
 		// Purge selectively
 		purgeReq := cloudflare.PurgeCacheRequest{
-			Files: c.StringSlice("files"),
-			Tags:  c.StringSlice("tags"),
-			Hosts: c.StringSlice("hosts"),
+			Files:    c.StringSlice("files"),
+			Tags:     c.StringSlice("tags"),
+			Hosts:    c.StringSlice("hosts"),
+			Prefixes: c.StringSlice("prefixes"),
 		}
 
 		resp, err = api.PurgeCache(context.Background(), zoneID, purgeReq)

@@ -258,6 +258,8 @@ type PurgeCacheRequest struct {
 	Tags []string `json:"tags,omitempty"`
 	// Purge by hostname - e.g. "assets.example.com"
 	Hosts []string `json:"hosts,omitempty"`
+	// Purge by prefix - e.g. "example.com/css"
+	Prefixes []string `json:"prefixes,omitempty"`
 }
 
 // PurgeCacheResponse represents the response from the purge endpoint.

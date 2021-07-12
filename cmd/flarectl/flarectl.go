@@ -199,6 +199,10 @@ func main() {
 							Name:  "files",
 							Usage: "a list of [exact] URLs to purge",
 						},
+						&cli.StringSliceFlag{
+							Name:  "prefixes",
+							Usage: "a list of host/path prefixes to purge",
+						},
 					},
 				},
 				{
