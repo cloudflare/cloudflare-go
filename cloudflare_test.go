@@ -496,7 +496,7 @@ func TestContextTimeout(t *testing.T) {
 	cfClient, _ := New("deadbeef", "cloudflare@example.org")
 
 	start := time.Now()
-	_, err := cfClient.makeRequestContext(ctx, "HEAD", server.URL, nil)
+	_, err := cfClient.makeRequestContext(ctx, http.MethodHead, server.URL, nil)
 	assert.ErrorIs(t, err, context.DeadlineExceeded)
 	assert.WithinDuration(t, start, time.Now(), time.Second*2,
 		"makeRequestContext took too much time with an expiring context")
