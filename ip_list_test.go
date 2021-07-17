@@ -462,3 +462,14 @@ func TestGetIPListItem(t *testing.T) {
 		assert.Equal(t, want, actual)
 	}
 }
+
+func TestPollIPListTimeout(t *testing.T) {
+	ctx, cancel := context.WithTimeout(context.Background(), 0)
+	defer cancel()
+
+	start := time.Now()
+	err := client.pollIPListBulkOperation(ctx, "list1")
+	assert.ErrorIs(t, err, context.DeadlineExceeded)
+	assert.WithinDuration(t, start, time.Now(), time.Microsecond*500,
+		"pollIPListBulkOperation took too much time with an expiring context")
+}

@@ -212,7 +212,12 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 			}
 			// useful to do some simple logging here, maybe introduce levels later
 			api.logger.Printf("Sleeping %s before retry attempt number %d for request %s %s", sleepDuration.String(), i, method, uri)
-			time.Sleep(sleepDuration)
+
+			select {
+			case <-time.After(sleepDuration):
+			case <-ctx.Done():
+				return nil, errors.Wrap(ctx.Err(), "context deadline exceeded during retries")
+			}
 
 		}
 		err = api.rateLimiter.Wait(context.Background())
