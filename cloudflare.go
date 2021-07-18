@@ -216,7 +216,7 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 			select {
 			case <-time.After(sleepDuration):
 			case <-ctx.Done():
-				return nil, errors.Wrap(ctx.Err(), "context deadline exceeded during retries")
+				return nil, errors.Wrap(ctx.Err(), "operation aborted during backoff")
 			}
 
 		}

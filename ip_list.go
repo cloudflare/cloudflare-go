@@ -441,7 +441,7 @@ func (api *API) pollIPListBulkOperation(ctx context.Context, id string) error {
 		select {
 		case <-time.After(sleepDuration):
 		case <-ctx.Done():
-			return errors.Wrap(ctx.Err(), "context deadline exceeded during backoff")
+			return errors.Wrap(ctx.Err(), "operation aborted during backoff")
 		}
 
 		bulkResult, err := api.GetIPListBulkOperation(ctx, id)
