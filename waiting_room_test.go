@@ -27,6 +27,7 @@ var waitingRoomJSON = fmt.Sprintf(`
       "total_active_users": 1000,
       "session_duration": 10,
       "disable_session_renewal": false,
+      "json_response_enabled": true,
       "custom_page_html": "{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Queue all enabled {{/waitTimeKnown}}"
     }
    `, testTimestampWaitingRoom.Format(time.RFC3339Nano), testTimestampWaitingRoom.Format(time.RFC3339Nano))
@@ -45,6 +46,7 @@ var waitingRoom = WaitingRoom{
 	TotalActiveUsers:      1000,
 	SessionDuration:       10,
 	DisableSessionRenewal: false,
+	JsonResponseEnabled:   true,
 	CustomPageHTML:        "{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Queue all enabled {{/waitTimeKnown}}",
 }
 
