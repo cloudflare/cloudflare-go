@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"math"
 	"net/http"
 	"time"
 
@@ -437,7 +436,7 @@ func (api *API) GetIPListBulkOperation(ctx context.Context, id string) (IPListBu
 func (api *API) pollIPListBulkOperation(ctx context.Context, id string) error {
 	var i uint8
 	for i = 0; i < 16; i++ {
-		sleepDuration := 0x1 << uint8(math.Ceil(float64(i/2))) * time.Second
+		sleepDuration := 0x1 << uint8(float64(i/2)) * time.Second
 		select {
 		case <-time.After(sleepDuration):
 		case <-ctx.Done():
