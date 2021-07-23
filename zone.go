@@ -469,7 +469,7 @@ func (api *API) ListZonesContext(ctx context.Context, opts ...ReqOption) (r Zone
 
 			if (pageNumber < totalPageCount && len(r.Result) != pageSize) ||
 				(pageNumber == totalPageCount && len(r.Result) != lastPageSize) {
-				recordError(err)
+				recordError(errors.New(errPagination))
 				return
 			}
 
