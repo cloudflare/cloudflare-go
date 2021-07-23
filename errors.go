@@ -17,6 +17,7 @@ const (
 	errMissingAccountID          = "account ID is empty and must be provided"
 	errOperationStillRunning     = "bulk operation did not finish before timeout"
 	errOperationUnexpectedStatus = "bulk operation returned an unexpected status"
+	errPagination                = "unexpected pagination"
 )
 
 // APIRequestError is a type of error raised by API calls made by this library.
