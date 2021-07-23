@@ -358,14 +358,12 @@ func (api *API) ListZones(ctx context.Context, z ...string) ([]Zone, error) {
 	var zones []Zone
 	if len(z) > 0 {
 		var (
-			v   = url.Values{}
-			res []byte
-			r   ZonesResponse
-			err error
+			v = url.Values{}
+			r ZonesResponse
 		)
 		for _, zone := range z {
 			v.Set("name", normalizeZoneName(zone))
-			res, err = api.makeRequestContext(ctx, http.MethodGet, "/zones?"+v.Encode(), nil)
+			res, err := api.makeRequestContext(ctx, http.MethodGet, "/zones?"+v.Encode(), nil)
 			if err != nil {
 				return []Zone{}, err
 			}
@@ -424,25 +422,29 @@ func (api *API) ListZonesContext(ctx context.Context, opts ...ReqOption) (r Zone
 		totalCount     = r.Total
 	)
 
-	// sanity check
-	if len(r.Result) != pageSize ||
+	// These checks should be redundant when CloudFlare works as advertised.
+	// However, this function critically relies on these conditions.
+	if len(r.Result) != pageSize || // first page does not have exactly 50 zones
 		pageSize*totalPageCount < totalCount || // too few pages
 		totalCount < pageSize*(totalPageCount-1) { // too many pages
 		return ZonesResponse{}, errors.New(errPagination)
 	}
 
 	var (
+		// The size of the last page (which would be <= 50).
 		lastPageSize = totalCount - pageSize*(totalPageCount-1)
-		zones        = make([]Zone, totalCount) // a large slice to enable concurrent access
+		// A large slice to enable concurrent access.
+		zones = make([]Zone, totalCount)
 	)
 
-	// copy the first page into the final slice
+	// Copy the first page into zones.
 	copy(zones, r.Result)
 
 	var wg sync.WaitGroup
-	wg.Add(totalPageCount - 1)
+	wg.Add(totalPageCount - 1)  // all pages except the first one.
 	errc := make(chan error, 1) // getting the first error
 
+	// recordError sends the error to errc in a non-blocking manner
 	recordError := func(err error) {
 		select {
 		case errc <- err:
@@ -450,6 +452,7 @@ func (api *API) ListZonesContext(ctx context.Context, opts ...ReqOption) (r Zone
 		}
 	}
 
+	// Creating all the workers.
 	for i := 2; i <= totalPageCount; i++ {
 		go func(pageNumber int) {
 			defer wg.Done()
@@ -467,12 +470,17 @@ func (api *API) ListZonesContext(ctx context.Context, opts ...ReqOption) (r Zone
 				return
 			}
 
+			// Check whether the size of page is the expected size.
+			// For all pages except the last one, it should be pageSize (50).
+			// For the last pages, it should be lastPageSize.
 			if (pageNumber < totalPageCount && len(r.Result) != pageSize) ||
 				(pageNumber == totalPageCount && len(r.Result) != lastPageSize) {
 				recordError(errors.New(errPagination))
 				return
 			}
 
+			// Copy this page into zones. This should be thread-safe because
+			// we are not changing the header of zones.
 			copy(zones[pageSize*(pageNumber-1):], r.Result)
 		}(i)
 	}
@@ -480,9 +488,9 @@ func (api *API) ListZonesContext(ctx context.Context, opts ...ReqOption) (r Zone
 	wg.Wait()
 
 	select {
-	case err := <-errc:
+	case err := <-errc: // if there were any errors
 		return ZonesResponse{}, err
-	default:
+	default: // if there were no errors, the receive statement should block
 		r.Result = zones
 		return r, nil
 	}
