@@ -156,7 +156,7 @@ func TestDevicePostureDiskEncryptionRule(t *testing.T) {
 					}
 				],
 				"input": {
-					"require_all": true
+					"requireAll": true
 				}
 			}
 		}
