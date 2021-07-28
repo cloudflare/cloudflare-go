@@ -78,7 +78,7 @@ func TestDevicePostureRules(t *testing.T) {
 	}
 }
 
-func TestDevicePostureRule(t *testing.T) {
+func TestDevicePostureFileRule(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -101,7 +101,9 @@ func TestDevicePostureRule(t *testing.T) {
 					}
 				],
 				"input": {
-					"id": "9e597887-345e-4a32-a09c-68811b129768"
+					"path": "/tmp/test",
+					"exists": true,
+					"sha256": "42b4daec3962691f5893a966245e5ea30f9f8df7254e7b7af43a171e3e29c857"
 				}
 			}
 		}
@@ -115,7 +117,166 @@ func TestDevicePostureRule(t *testing.T) {
 		Type:        "file",
 		Schedule:    "1h",
 		Match:       []DevicePostureRuleMatch{{Platform: "ios"}},
-		Input:       DevicePostureRuleInput{ID: "9e597887-345e-4a32-a09c-68811b129768"},
+		Input: DevicePostureRuleInput{
+			Path:   "/tmp/test",
+			Exists: true,
+			Sha256: "42b4daec3962691f5893a966245e5ea30f9f8df7254e7b7af43a171e3e29c857",
+		},
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/devices/posture/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+
+	actual, err := client.DevicePostureRule(context.Background(), testAccountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestDevicePostureDiskEncryptionRule(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+				"schedule": "1h",
+				"type": "disk_encryption",
+				"name": "My rule name",
+				"description": "My description",
+				"match": [
+					{
+						"platform": "ios"
+					}
+				],
+				"input": {
+					"require_all": true
+				}
+			}
+		}
+		`)
+	}
+
+	want := DevicePostureRule{
+		ID:          "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		Name:        "My rule name",
+		Description: "My description",
+		Type:        "disk_encryption",
+		Schedule:    "1h",
+		Match:       []DevicePostureRuleMatch{{Platform: "ios"}},
+		Input: DevicePostureRuleInput{
+			RequireAll: true,
+		},
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/devices/posture/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+
+	actual, err := client.DevicePostureRule(context.Background(), testAccountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestDevicePostureOsVersionRule(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+				"schedule": "1h",
+				"type": "os_version",
+				"name": "My rule name",
+				"description": "My description",
+				"match": [
+					{
+						"platform": "ios"
+					}
+				],
+				"input": {
+					"version": "10.0.1",
+					"operator": ">="
+				}
+			}
+		}
+		`)
+	}
+
+	want := DevicePostureRule{
+		ID:          "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		Name:        "My rule name",
+		Description: "My description",
+		Type:        "os_version",
+		Schedule:    "1h",
+		Match:       []DevicePostureRuleMatch{{Platform: "ios"}},
+		Input: DevicePostureRuleInput{
+			Version:  "10.0.1",
+			Operator: ">=",
+		},
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/devices/posture/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+
+	actual, err := client.DevicePostureRule(context.Background(), testAccountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestDevicePostureDomainJoinedRule(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+				"schedule": "1h",
+				"type": "domain_joined",
+				"name": "My rule name",
+				"description": "My description",
+				"match": [
+					{
+						"platform": "ios"
+					}
+				],
+				"input": {
+					"domain": "example.com"
+				}
+			}
+		}
+		`)
+	}
+
+	want := DevicePostureRule{
+		ID:          "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		Name:        "My rule name",
+		Description: "My description",
+		Type:        "domain_joined",
+		Schedule:    "1h",
+		Match:       []DevicePostureRuleMatch{{Platform: "ios"}},
+		Input: DevicePostureRuleInput{
+			Domain: "example.com",
+		},
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/posture/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
