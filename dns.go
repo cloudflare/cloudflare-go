@@ -133,17 +133,20 @@ func (api *API) DNSRecord(ctx context.Context, zoneID, recordID string) (DNSReco
 //
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-update-dns-record
 func (api *API) UpdateDNSRecord(ctx context.Context, zoneID, recordID string, rr DNSRecord) error {
-	rec, err := api.DNSRecord(ctx, zoneID, recordID)
-	if err != nil {
-		return err
-	}
 	// Populate the record name from the existing one if the update didn't
 	// specify it.
-	if rr.Name == "" {
-		rr.Name = rec.Name
-	}
-	if rr.Type == "" {
-		rr.Type = rec.Type
+	if rr.Name == "" || rr.Type == "" {
+		rec, err := api.DNSRecord(ctx, zoneID, recordID)
+		if err != nil {
+			return err
+		}
+
+		if rr.Name == "" {
+			rr.Name = rec.Name
+		}
+		if rr.Type == "" {
+			rr.Type = rec.Type
+		}
 	}
 	uri := fmt.Sprintf("/zones/%s/dns_records/%s", zoneID, recordID)
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, rr)

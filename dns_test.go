@@ -254,13 +254,183 @@ func TestUpdateDNSRecord(t *testing.T) {
 		Proxied: &proxied,
 	}
 
-	handleUpdateDNSRecord := func(w http.ResponseWriter, r *http.Request) {
+	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
 
 		var v DNSRecord
 		err := json.NewDecoder(r.Body).Decode(&v)
 		require.NoError(t, err)
 		assert.Equal(t, input, v)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "372e67954025e0ba6aaa6d586b9e0b59",
+				"type": "A",
+				"name": "example.com",
+				"content": "198.51.100.4",
+				"proxiable": true,
+				"proxied": false,
+				"ttl": 120,
+				"locked": false,
+				"zone_id": "d56084adb405e0b7e32c52321bf07be6",
+				"zone_name": "example.com",
+				"created_on": "2014-01-01T05:20:00Z",
+				"modified_on": "2014-01-01T05:20:00Z",
+				"data": {},
+				"meta": {
+					"auto_added": true,
+					"source": "primary"
+				}
+			}
+		}`)
+	}
+
+	dnsRecordID := "372e67954025e0ba6aaa6d586b9e0b59"
+
+	mux.HandleFunc("/zones/"+testZoneID+"/dns_records/"+dnsRecordID, handler)
+
+	err := client.UpdateDNSRecord(context.Background(), testZoneID, dnsRecordID, input)
+	require.NoError(t, err)
+}
+
+func TestUpdateDNSRecordWithoutName(t *testing.T) {
+	setup()
+	defer teardown()
+
+	proxied := false
+	input := DNSRecord{
+		Type:    "A",
+		Content: "198.51.100.4",
+		TTL:     120,
+		Proxied: &proxied,
+	}
+
+	completedInput := DNSRecord{
+		Name:    "example.com",
+		Type:    "A",
+		Content: "198.51.100.4",
+		TTL:     120,
+		Proxied: &proxied,
+	}
+
+	handleUpdateDNSRecord := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
+
+		var v DNSRecord
+		err := json.NewDecoder(r.Body).Decode(&v)
+		require.NoError(t, err)
+		assert.Equal(t, completedInput, v)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "372e67954025e0ba6aaa6d586b9e0b59",
+				"type": "A",
+				"name": "example.com",
+				"content": "198.51.100.4",
+				"proxiable": true,
+				"proxied": false,
+				"ttl": 120,
+				"locked": false,
+				"zone_id": "d56084adb405e0b7e32c52321bf07be6",
+				"zone_name": "example.com",
+				"created_on": "2014-01-01T05:20:00Z",
+				"modified_on": "2014-01-01T05:20:00Z",
+				"data": {},
+				"meta": {
+					"auto_added": true,
+					"source": "primary"
+				}
+			}
+		}`)
+	}
+
+	handleDNSRecord := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "372e67954025e0ba6aaa6d586b9e0b59",
+				"type": "A",
+				"name": "example.com",
+				"content": "198.51.100.4",
+				"proxiable": true,
+				"proxied": false,
+				"ttl": 120,
+				"locked": false,
+				"zone_id": "d56084adb405e0b7e32c52321bf07be6",
+				"zone_name": "example.com",
+				"created_on": "2014-01-01T05:20:00Z",
+				"modified_on": "2014-01-01T05:20:00Z",
+				"data": {},
+				"meta": {
+					"auto_added": true,
+					"source": "primary"
+				}
+			}
+		}`)
+	}
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodGet {
+			handleDNSRecord(w, r)
+			return
+		}
+
+		if r.Method == http.MethodPatch {
+			handleUpdateDNSRecord(w, r)
+			return
+		}
+
+		assert.Failf(t, "Expected method 'GET' or `PATCH`, got %s", r.Method)
+	}
+
+	dnsRecordID := "372e67954025e0ba6aaa6d586b9e0b59"
+
+	mux.HandleFunc("/zones/"+testZoneID+"/dns_records/"+dnsRecordID, handler)
+
+	err := client.UpdateDNSRecord(context.Background(), testZoneID, dnsRecordID, input)
+	require.NoError(t, err)
+}
+
+func TestUpdateDNSRecordWithoutType(t *testing.T) {
+	setup()
+	defer teardown()
+
+	proxied := false
+	input := DNSRecord{
+		Name:    "example.com",
+		Content: "198.51.100.4",
+		TTL:     120,
+		Proxied: &proxied,
+	}
+
+	completedInput := DNSRecord{
+		Name:    "example.com",
+		Type:    "A",
+		Content: "198.51.100.4",
+		TTL:     120,
+		Proxied: &proxied,
+	}
+
+	handleUpdateDNSRecord := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
+
+		var v DNSRecord
+		err := json.NewDecoder(r.Body).Decode(&v)
+		require.NoError(t, err)
+		assert.Equal(t, completedInput, v)
 
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
