@@ -33,7 +33,7 @@ type DevicePostureRuleInput struct {
 	Thumbprint string `json:"thumbprint,omitempty"`
 	Sha256     string `json:"sha256,omitempty"`
 	Running    bool   `json:"running,omitempty"`
-	RequireAll bool   `json:"require_all,omitempty"`
+	RequireAll bool   `json:"requireAll,omitempty"`
 	Enabled    bool   `json:"enabled,omitempty"`
 	Version    string `json:"version,omitempty"`
 	Operator   string `json:"operator,omitempty"`
