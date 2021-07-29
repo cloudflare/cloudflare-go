@@ -422,14 +422,6 @@ func (api *API) ListZonesContext(ctx context.Context, opts ...ReqOption) (r Zone
 		totalCount     = r.Total
 	)
 
-	// These checks should be redundant when CloudFlare works as advertised.
-	// However, this function critically relies on these conditions.
-	if len(r.Result) != pageSize || // first page does not have exactly 50 zones
-		pageSize*totalPageCount < totalCount || // too few pages
-		totalCount < pageSize*(totalPageCount-1) { // too many pages
-		return ZonesResponse{}, errors.New(errPagination)
-	}
-
 	var (
 		// The size of the last page (which would be <= 50).
 		lastPageSize = totalCount - pageSize*(totalPageCount-1)
