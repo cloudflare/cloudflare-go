@@ -19,7 +19,7 @@ type CertificatePackGeoRestrictions struct {
 // CertificatePackCertificate is the base structure of a TLS certificate that is
 // contained within a certificate pack.
 type CertificatePackCertificate struct {
-	ID              int                            `json:"id"`
+	ID              string                         `json:"id"`
 	Hosts           []string                       `json:"hosts"`
 	Issuer          string                         `json:"issuer"`
 	Signature       string                         `json:"signature"`
@@ -39,7 +39,7 @@ type CertificatePack struct {
 	Type               string                       `json:"type"`
 	Hosts              []string                     `json:"hosts"`
 	Certificates       []CertificatePackCertificate `json:"certificates"`
-	PrimaryCertificate int                          `json:"primary_certificate"`
+	PrimaryCertificate string                       `json:"primary_certificate"`
 }
 
 // CertificatePackRequest is used for requesting a new certificate.

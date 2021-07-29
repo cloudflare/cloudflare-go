@@ -18,9 +18,9 @@ var (
 		ID:                 "3822ff90-ea29-44df-9e55-21300bb9419b",
 		Type:               "custom",
 		Hosts:              []string{"example.com", "*.example.com", "www.example.com"},
-		PrimaryCertificate: 12345678,
+		PrimaryCertificate: "b2cfa4183267af678ea06c7407d4d6d8",
 		Certificates: []CertificatePackCertificate{{
-			ID:              12345678,
+			ID:              "3822ff90-ea29-44df-9e55-21300bb9419b",
 			Hosts:           []string{"example.com"},
 			Issuer:          "GlobalSign",
 			Signature:       "SHA256WithRSA",
@@ -58,7 +58,7 @@ func TestListCertificatePacks(t *testing.T) {
       ],
       "certificates": [
         {
-          "id": 12345678,
+          "id": "3822ff90-ea29-44df-9e55-21300bb9419b",
           "hosts": [
             "example.com"
           ],
@@ -76,7 +76,7 @@ func TestListCertificatePacks(t *testing.T) {
           "priority": 1
         }
       ],
-      "primary_certificate": 12345678
+      "primary_certificate": "b2cfa4183267af678ea06c7407d4d6d8"
     }
   ]
 }
@@ -114,7 +114,7 @@ func TestListCertificatePack(t *testing.T) {
     ],
     "certificates": [
       {
-        "id": 12345678,
+        "id": "3822ff90-ea29-44df-9e55-21300bb9419b",
         "hosts": [
           "example.com"
         ],
@@ -132,7 +132,7 @@ func TestListCertificatePack(t *testing.T) {
         "priority": 1
       }
     ],
-    "primary_certificate": 12345678
+    "primary_certificate": "b2cfa4183267af678ea06c7407d4d6d8"
   }
 }
 		`)
@@ -168,7 +168,7 @@ func TestCreateCertificatePack(t *testing.T) {
     ],
     "certificates": [
       {
-        "id": 12345678,
+        "id": "3822ff90-ea29-44df-9e55-21300bb9419b",
         "hosts": [
           "example.com"
         ],
@@ -186,7 +186,7 @@ func TestCreateCertificatePack(t *testing.T) {
         "priority": 1
       }
     ],
-    "primary_certificate": 12345678
+    "primary_certificate": "b2cfa4183267af678ea06c7407d4d6d8"
   }
 }
 		`)
