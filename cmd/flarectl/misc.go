@@ -206,6 +206,16 @@ func pageRules(c *cli.Context) error {
 	return nil
 }
 
+func originCARootCertificate(c *cli.Context) error {
+	cert, err := cloudflare.OriginCARootCertificate(c.String("algorithm"))
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(string(cert[:]))
+	return nil
+}
+
 func railgun(*cli.Context) error {
 	return nil
 }

@@ -682,6 +682,19 @@ func main() {
 				},
 			},
 		},
+		{
+			Name:    "origin-ca-root-cert",
+			Aliases: []string{"ocrc"},
+			Action:  originCARootCertificate,
+			Usage:   "Print Origin CA Root Certificate (in PEM format)",
+			Flags: []cli.Flag{
+				&cli.StringFlag{
+					Name:     "algorithm",
+					Usage:    "certificate algorithm ( ecc | rsa )",
+					Required: true,
+				},
+			},
+		},
 	}
 	err := app.Run(os.Args)
 	if err != nil {
