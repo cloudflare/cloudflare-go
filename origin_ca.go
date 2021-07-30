@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"time"
@@ -200,5 +201,30 @@ func (api *API) RevokeOriginCertificate(ctx context.Context, certificateID strin
 	}
 
 	return &originResponse.Result, nil
+}
 
+// Gets the Cloudflare Origin CA Root Certificate for a given algorithm in PEM format.
+// Algorithm must be one of ['ecc', 'rsa'].
+func OriginCARootCertificate(algorithm string) ([]byte, error) {
+	var url string
+	switch algorithm {
+	case "ecc":
+		url = originCARootCertEccURL
+	case "rsa":
+		url = originCARootCertRsaURL
+	default:
+		return nil, fmt.Errorf("invalid algorithm: must be one of ['ecc', 'rsa']")
+	}
+
+	resp, err := http.Get(url)
+	if err != nil {
+		return nil, errors.Wrap(err, "HTTP request failed")
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Response body could not be read")
+	}
+
+	return body, nil
 }

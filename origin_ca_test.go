@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"encoding/pem"
 	"fmt"
 	"net/http"
 	"testing"
@@ -220,5 +221,31 @@ func TestOriginCA_RevokeCertificate(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.IsType(t, &OriginCACertificateID{}, cert, "Expected type &OriginCACertificateID and got %v", cert)
 		assert.Equal(t, cert, &testCertificate)
+	}
+}
+
+func TestOriginCA_OriginCARootCertificate(t *testing.T) {
+	setup()
+	defer teardown()
+
+	// This test intentionally hits the live endpoints to ensure these are
+	// - **active** (as they may change over time)
+	// - not subject to bot management
+	// - return the expected content (type)
+
+	algorithms := []string{"ecc", "rsa"}
+
+	for _, algorithm := range algorithms {
+		t.Logf("get origin CA root certificate for algorithm %s", algorithm)
+		rootCACert, err := OriginCARootCertificate(algorithm)
+
+		if assert.NoError(t, err) {
+			assert.NotNil(t, rootCACert)
+
+			// Asserts that the content returned is a PEM formatted certificate
+			p, _ := pem.Decode(rootCACert)
+			assert.NotNil(t, p)
+			assert.Equal(t, "CERTIFICATE", p.Type)
+		}
 	}
 }
