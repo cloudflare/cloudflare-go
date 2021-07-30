@@ -11,8 +11,8 @@ import (
 // NotificationMechanismData holds a single public facing mechanism data
 // integation.
 type NotificationMechanismData struct {
-	Name string `json:"id"`
-	ID   string `json:"name"`
+	Name string `json:"name"`
+	ID   string `json:"id"`
 }
 
 // NotificationMechanismIntegrations is a list of all the integrations of a
