@@ -446,7 +446,7 @@ func WithPagination(opts PaginationOptions) ReqOption {
 			opt.params.Set("page", strconv.Itoa(opts.Page))
 		}
 
-		if opts.PerPage != 0 {
+		if opts.PerPage > 0 {
 			opt.params.Set("per_page", strconv.Itoa(opts.PerPage))
 		}
 	}
