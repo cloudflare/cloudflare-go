@@ -401,6 +401,10 @@ func (api *API) ListZonesContext(ctx context.Context, opts ...ReqOption) (r Zone
 		of(&opt)
 	}
 
+	if opt.params.Get("page") != "" || opt.params.Get("per_page") != "" {
+		return ZonesResponse{}, errors.New("manual pagination is not supported for ListZonesContext")
+	}
+
 	opt.params.Add("per_page", strconv.Itoa(pageSize))
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, "/zones?"+opt.params.Encode(), nil)
