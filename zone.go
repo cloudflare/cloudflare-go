@@ -389,11 +389,46 @@ func (api *API) ListZones(ctx context.Context, z ...string) ([]Zone, error) {
 	return zones, nil
 }
 
+const listZonesPageSize = 50
+
+// listZonesFetch fetches one page of zones.
+// This is placed as a separate function to prevent any possibility of unintended capturing.
+func (api *API) listZonesFetch(ctx context.Context, wg *sync.WaitGroup, errc chan error,
+	path string, pageSize int, buf []Zone) {
+	defer wg.Done()
+
+	// recordError sends the error to errc in a non-blocking manner
+	recordError := func(err error) {
+		select {
+		case errc <- err:
+		default:
+		}
+	}
+
+	res, err := api.makeRequestContext(ctx, http.MethodGet, path, nil)
+	if err != nil {
+		recordError(err)
+		return
+	}
+
+	var r ZonesResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		recordError(err)
+		return
+	}
+
+	if len(r.Result) != pageSize {
+		recordError(errors.New(errPagination))
+		return
+	}
+
+	copy(buf, r.Result)
+}
+
 // ListZonesContext lists all zones on an account automatically handling the
 // pagination. Optionally takes a list of ReqOptions.
 func (api *API) ListZonesContext(ctx context.Context, opts ...ReqOption) (r ZonesResponse, err error) {
-	const pageSize = 50
-
 	opt := reqOption{
 		params: url.Values{},
 	}
@@ -405,7 +440,7 @@ func (api *API) ListZonesContext(ctx context.Context, opts ...ReqOption) (r Zone
 		return ZonesResponse{}, errors.New(errManualPagination)
 	}
 
-	opt.params.Add("per_page", strconv.Itoa(pageSize))
+	opt.params.Add("per_page", strconv.Itoa(listZonesPageSize))
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, "/zones?"+opt.params.Encode(), nil)
 	if err != nil {
@@ -424,12 +459,8 @@ func (api *API) ListZonesContext(ctx context.Context, opts ...ReqOption) (r Zone
 	var (
 		totalPageCount = r.TotalPages
 		totalCount     = r.Total
-	)
 
-	var (
-		// The size of the last page (which would be <= 50).
-		lastPageSize = totalCount - pageSize*(totalPageCount-1)
-		// A large slice to enable concurrent access.
+		// zones is a large slice to prevent resizing during concurrent access.
 		zones = make([]Zone, totalCount)
 	)
 
@@ -440,45 +471,21 @@ func (api *API) ListZonesContext(ctx context.Context, opts ...ReqOption) (r Zone
 	wg.Add(totalPageCount - 1)  // all pages except the first one.
 	errc := make(chan error, 1) // getting the first error
 
-	// recordError sends the error to errc in a non-blocking manner
-	recordError := func(err error) {
-		select {
-		case errc <- err:
-		default:
-		}
-	}
-
 	// Creating all the workers.
-	for i := 2; i <= totalPageCount; i++ {
-		go func(pageNumber int) {
-			defer wg.Done()
+	for pageNum := 2; pageNum <= totalPageCount; pageNum++ {
+		// note: URL.Values is just a map[string].
+		opt.params.Set("page", strconv.Itoa(pageNum))
 
-			opt.params.Set("page", strconv.Itoa(pageNumber))
-			res, err := api.makeRequestContext(ctx, http.MethodGet, "/zones?"+opt.params.Encode(), nil)
-			if err != nil {
-				recordError(err)
-				return
-			}
+		// The first index in the zone buffer
+		start := listZonesPageSize * (pageNum - 1)
 
-			err = json.Unmarshal(res, &r)
-			if err != nil {
-				recordError(err)
-				return
-			}
+		pageSize := listZonesPageSize
+		if pageNum == totalPageCount {
+			// The size of the last page (which would be <= 50).
+			pageSize = totalCount - start
+		}
 
-			// Check whether the size of page is the expected size.
-			// For all pages except the last one, it should be pageSize (50).
-			// For the last pages, it should be lastPageSize.
-			if (pageNumber < totalPageCount && len(r.Result) != pageSize) ||
-				(pageNumber == totalPageCount && len(r.Result) != lastPageSize) {
-				recordError(errors.New(errPagination))
-				return
-			}
-
-			// Copy this page into zones. This should be thread-safe because
-			// we are not changing the header of zones.
-			copy(zones[pageSize*(pageNumber-1):], r.Result)
-		}(i)
+		go api.listZonesFetch(ctx, &wg, errc, "/zones?"+opt.params.Encode(), pageSize, zones[start:])
 	}
 
 	wg.Wait()
