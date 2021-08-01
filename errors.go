@@ -18,7 +18,7 @@ const (
 	errOperationStillRunning     = "bulk operation did not finish before timeout"
 	errOperationUnexpectedStatus = "bulk operation returned an unexpected status"
 	errPagination                = "unexpected pagination in response"
-	errManualPagination          = "unexpected pagination parameters in request"
+	errManualPagination          = "unexpected pagination options passed to functions that handle pagination automatically"
 )
 
 // APIRequestError is a type of error raised by API calls made by this library.
