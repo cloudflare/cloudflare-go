@@ -1369,11 +1369,10 @@ func TestListZones(t *testing.T) {
 	)
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		if !assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method) {
+		switch {
+		case !assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method):
 			return
-		}
-
-		if !assert.Equal(t, "50", r.URL.Query().Get("per_page")) {
+		case !assert.Equal(t, "50", r.URL.Query().Get("per_page")):
 			return
 		}
 
@@ -1426,20 +1425,18 @@ func TestListZonesFailingPages(t *testing.T) {
 	isReject := func(i int) bool { return i == 4 || i == 7 }
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		if !assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method) {
+		switch {
+		case !assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method):
 			return
-		}
-
-		if !assert.Equal(t, "50", r.URL.Query().Get("per_page")) {
+		case !assert.Equal(t, "50", r.URL.Query().Get("per_page")):
 			return
 		}
 
 		page, ok := parsePage(t, totalPage, r.URL.Query().Get("page"))
-		if !ok {
+		switch {
+		case !ok:
 			return
-		}
-
-		if isReject(page) {
+		case isReject(page):
 			return
 		}
 
