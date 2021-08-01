@@ -42,7 +42,7 @@ func zoneCreate(c *cli.Context) error {
 
 	_, err := api.CreateZone(context.Background(), zone, jumpstart, account, zoneType)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, fmt.Sprintf("%s", err))
+		fmt.Fprintf(os.Stderr, err.Error()+"\n")
 		return err
 	}
 
@@ -104,7 +104,7 @@ func zoneDelete(c *cli.Context) error {
 
 	_, err = api.DeleteZone(context.Background(), zoneID)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, fmt.Sprintf("%s", err))
+		fmt.Fprintf(os.Stderr, err.Error()+"\n")
 		return err
 	}
 
@@ -123,7 +123,7 @@ func zoneCreateLockdown(c *cli.Context) error {
 	targets := c.StringSlice("targets")
 	values := c.StringSlice("values")
 	if len(targets) != len(values) {
-		cli.ShowCommandHelp(c, "targets and values does not match")
+		cli.ShowCommandHelp(c, "targets and values does not match") //nolint
 		return nil
 	}
 	var zonelockdownconfigs = []cloudflare.ZoneLockdownConfig{}
@@ -161,7 +161,7 @@ func zoneInfo(c *cli.Context) error {
 	} else if c.String("zone") != "" {
 		zone = c.String("zone")
 	} else {
-		cli.ShowSubcommandHelp(c)
+		cli.ShowSubcommandHelp(c) //nolint
 		return nil
 	}
 	zones, err := api.ListZones(context.Background(), zone)
@@ -202,7 +202,7 @@ func zoneSettings(*cli.Context) error {
 
 func zoneCachePurge(c *cli.Context) error {
 	if err := checkFlags(c, "zone"); err != nil {
-		cli.ShowSubcommandHelp(c)
+		cli.ShowSubcommandHelp(c) //nolint
 		return err
 	}
 
@@ -263,7 +263,7 @@ func zoneRecords(c *cli.Context) error {
 	} else if c.String("zone") != "" {
 		zone = c.String("zone")
 	} else {
-		cli.ShowSubcommandHelp(c)
+		cli.ShowSubcommandHelp(c) //nolint
 		return nil
 	}
 
@@ -318,7 +318,7 @@ func zoneRecords(c *cli.Context) error {
 			r.Type,
 			r.Name,
 			r.Content,
-			fmt.Sprintf("%s", strconv.FormatBool(*r.Proxied)),
+			strconv.FormatBool(*r.Proxied),
 			fmt.Sprintf("%d", r.TTL),
 		})
 	}
@@ -346,7 +346,7 @@ func zoneExport(c *cli.Context) error {
 	} else if c.String("zone") != "" {
 		zone = c.String("zone")
 	} else {
-		cli.ShowSubcommandHelp(c)
+		cli.ShowSubcommandHelp(c) //nolint
 		return nil
 	}
 

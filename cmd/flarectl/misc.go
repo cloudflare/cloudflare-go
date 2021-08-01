@@ -45,7 +45,7 @@ func initializeAPI(c *cli.Context) error {
 	}
 
 	if c.IsSet("accountid") {
-		cloudflare.UsingAccount(c.String("accountid"))(api)
+		cloudflare.UsingAccount(c.String("accountid"))(api) //nolint
 	}
 
 	return nil
@@ -92,7 +92,7 @@ func writeTable(c *cli.Context, data [][]string, cols ...string) {
 func checkFlags(c *cli.Context, flags ...string) error {
 	for _, flag := range flags {
 		if c.String(flag) == "" {
-			cli.ShowSubcommandHelp(c)
+			cli.ShowSubcommandHelp(c) //nolint
 			err := errors.Errorf("error: the required flag %q was empty or not provided", flag)
 			fmt.Fprintln(os.Stderr, err)
 			return err
@@ -122,14 +122,14 @@ func _getIps(ipType string, showMsgType bool) {
 
 	switch ipType {
 	case "ipv4":
-		if showMsgType != true {
+		if showMsgType {
 			fmt.Println("IPv4 ranges:")
 		}
 		for _, r := range ips.IPv4CIDRs {
 			fmt.Println(" ", r)
 		}
 	case "ipv6":
-		if showMsgType != true {
+		if showMsgType {
 			fmt.Println("IPv6 ranges:")
 		}
 		for _, r := range ips.IPv6CIDRs {
@@ -193,7 +193,7 @@ func pageRules(c *cli.Context) error {
 			case map[string]interface{}:
 				s = fmt.Sprintf("%s: %.f - %s", cloudflare.PageRuleActions[a.ID], v["status_code"], v["url"])
 			case nil:
-				s = fmt.Sprintf("%s", cloudflare.PageRuleActions[a.ID])
+				s = cloudflare.PageRuleActions[a.ID]
 			default:
 				vs := fmt.Sprintf("%s", v)
 				s = fmt.Sprintf("%s: %s", cloudflare.PageRuleActions[a.ID], strings.Title(strings.Replace(vs, "_", " ", -1)))

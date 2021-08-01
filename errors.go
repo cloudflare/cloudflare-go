@@ -39,7 +39,7 @@ func (e APIRequestError) Error() string {
 	for _, err := range e.Errors {
 		m := ""
 		if err.Message != "" {
-			m += fmt.Sprintf("%s", err.Message)
+			m += err.Message
 		}
 
 		if err.Code != 0 {

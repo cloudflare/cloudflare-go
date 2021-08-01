@@ -8,10 +8,10 @@ import (
 )
 
 var (
-	version = "dev"
-	commit  = "none"
-	date    = "unknown"
-	builtBy = "unknown"
+	version = "dev"     //nolint
+	commit  = "none"    //nolint
+	date    = "unknown" //nolint
+	builtBy = "unknown" //nolint
 )
 
 var api *cloudflare.API

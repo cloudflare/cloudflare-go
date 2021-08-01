@@ -10,45 +10,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-const (
-	registrarDomainPayload = `{
-		"id": "ea95132c15732412d22c1476fa83f27a",
-		"available": false,
-		"supported_tld": true,
-		"can_register": false,
-		"transfer_in": {
-			"unlock_domain": "ok",
-			"disable_privacy": "ok",
-			"enter_auth_code": "needed",
-			"approve_transfer": "unknown",
-			"accept_foa": "needed",
-			"can_cancel_transfer": true
-		},
-		"current_registrar": "Cloudflare",
-		"expires_at": "2019-08-28T23:59:59Z",
-		"registry_statuses": "ok,serverTransferProhibited",
-		"locked": false,
-		"created_at": "2018-08-28T17:26:26Z",
-		"updated_at": "2018-08-28T17:26:26Z",
-		"registrant_contact": {
-			"id": "ea95132c15732412d22c1476fa83f27a",
-			"first_name": "John",
-			"last_name": "Appleseed",
-			"organization": "Cloudflare, Inc.",
-			"address": "123 Sesame St.",
-			"address2": "Suite 430",
-			"city": "Austin",
-			"state": "TX",
-			"zip": "12345",
-			"country": "US",
-			"phone": "+1 123-123-1234",
-			"email": "user@example.com",
-			"fax": "123-867-5309"
-		}
-	}
-`
-)
-
 var (
 	createdAndModifiedTimestamp, _ = time.Parse(time.RFC3339, "2018-08-28T17:26:26Z")
 	expiresAtTimestamp, _          = time.Parse(time.RFC3339, "2019-08-28T23:59:59Z")

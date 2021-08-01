@@ -134,7 +134,7 @@ func (a *SpectrumApplication) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	if spp, ok := body["spp"]; ok && spp.(bool) == true {
+	if spp, ok := body["spp"]; ok && spp.(bool) {
 		app.ProxyProtocol = "simple"
 	}
 

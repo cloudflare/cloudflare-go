@@ -4,51 +4,8 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"time"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
-)
-
-var (
-	createdAndModifiedTimestamp, _ = time.Parse(time.RFC3339, "2018-08-28T17:26:26Z")
-	expiresAtTimestamp, _          = time.Parse(time.RFC3339, "2019-08-28T23:59:59Z")
-	expectedRegistrarTransferIn    = cloudflare.RegistrarTransferIn{
-		UnlockDomain:      "ok",
-		DisablePrivacy:    "ok",
-		EnterAuthCode:     "needed",
-		ApproveTransfer:   "unknown",
-		AcceptFoa:         "needed",
-		CanCancelTransfer: true,
-	}
-	expectedRegistrarContact = cloudflare.RegistrantContact{
-		ID:           "ea95132c15732412d22c1476fa83f27a",
-		FirstName:    "John",
-		LastName:     "Appleseed",
-		Organization: "Cloudflare, Inc.",
-		Address:      "123 Sesame St.",
-		Address2:     "Suite 430",
-		City:         "Austin",
-		State:        "TX",
-		Zip:          "12345",
-		Country:      "US",
-		Phone:        "+1 123-123-1234",
-		Email:        "user@example.com",
-		Fax:          "123-867-5309",
-	}
-	expectedRegistrarDomain = cloudflare.RegistrarDomain{
-		ID:                "ea95132c15732412d22c1476fa83f27a",
-		Available:         false,
-		SupportedTLD:      true,
-		CanRegister:       false,
-		TransferIn:        expectedRegistrarTransferIn,
-		CurrentRegistrar:  "Cloudflare",
-		ExpiresAt:         expiresAtTimestamp,
-		RegistryStatuses:  "ok,serverTransferProhibited",
-		Locked:            false,
-		CreatedAt:         createdAndModifiedTimestamp,
-		UpdatedAt:         createdAndModifiedTimestamp,
-		RegistrantContact: expectedRegistrarContact,
-	}
 )
 
 func ExampleAPI_RegistrarDomain() {
@@ -58,6 +15,12 @@ func ExampleAPI_RegistrarDomain() {
 	}
 
 	domain, err := api.RegistrarDomain(context.Background(), "01a7362d577a6c3019a474fd6f485823", "cloudflare.com")
+	if err != nil {
+		log.Fatal(err)
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	fmt.Printf("%+v\n", domain)
 }
@@ -69,6 +32,9 @@ func ExampleAPI_RegistrarDomains() {
 	}
 
 	domains, err := api.RegistrarDomains(context.Background(), "01a7362d577a6c3019a474fd6f485823")
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	fmt.Printf("%+v\n", domains)
 }
@@ -80,6 +46,9 @@ func ExampleAPI_TransferRegistrarDomain() {
 	}
 
 	domain, err := api.TransferRegistrarDomain(context.Background(), "01a7362d577a6c3019a474fd6f485823", "cloudflare.com")
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	fmt.Printf("%+v\n", domain)
 }
@@ -91,6 +60,9 @@ func ExampleAPI_CancelRegistrarDomainTransfer() {
 	}
 
 	domains, err := api.CancelRegistrarDomainTransfer(context.Background(), "01a7362d577a6c3019a474fd6f485823", "cloudflare.com")
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	fmt.Printf("%+v\n", domains)
 }
@@ -105,6 +77,9 @@ func ExampleAPI_UpdateRegistrarDomain() {
 		NameServers: []string{"ns1.cloudflare.com", "ns2.cloudflare.com"},
 		Locked:      false,
 	})
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	fmt.Printf("%+v\n", domain)
 }

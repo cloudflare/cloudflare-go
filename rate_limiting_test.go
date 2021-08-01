@@ -69,30 +69,6 @@ var expectedRateLimitStruct = RateLimit{
 		By: "nat",
 	},
 }
-var expectedRateLimitStructUpdated = RateLimit{
-	ID:          "72dae2fc158942f2adb1dd2a3d4143bc",
-	Disabled:    false,
-	Description: "test",
-	Match: RateLimitTrafficMatcher{
-		Request: RateLimitRequestMatcher{
-			Methods:    []string{"_ALL_"},
-			Schemes:    []string{"_ALL_"},
-			URLPattern: "exampledomain.com/test-rate-limit",
-		},
-		Response: RateLimitResponseMatcher{
-			OriginTraffic: &expectedOriginTraffic,
-		},
-	},
-	Threshold: 50,
-	Period:    1,
-	Action: RateLimitAction{
-		Mode:    "ban",
-		Timeout: 60,
-	},
-	Correlate: &RateLimitCorrelate{
-		By: "nat",
-	},
-}
 
 func TestListRateLimits(t *testing.T) {
 	setup()

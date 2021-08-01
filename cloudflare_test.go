@@ -48,7 +48,7 @@ func TestClient_Headers(t *testing.T) {
 		assert.Equal(t, "deadbeef", r.Header.Get("X-Auth-Key"))
 		assert.Equal(t, "application/json", r.Header.Get("Content-Type"))
 	})
-	client.UserDetails(context.Background())
+	client.UserDetails(context.Background()) //nolint
 	teardown()
 
 	// it should override appropriate default headers when custom headers given
@@ -63,7 +63,7 @@ func TestClient_Headers(t *testing.T) {
 		assert.Equal(t, "application/xhtml+xml", r.Header.Get("Content-Type"))
 		assert.Equal(t, "a random header", r.Header.Get("X-Random"))
 	})
-	client.UserDetails(context.Background())
+	client.UserDetails(context.Background()) //nolint
 	teardown()
 
 	// it should set X-Auth-User-Service-Key and omit X-Auth-Email and X-Auth-Key when client.authType is AuthUserService
@@ -78,7 +78,7 @@ func TestClient_Headers(t *testing.T) {
 		assert.Equal(t, "userservicekey", r.Header.Get("X-Auth-User-Service-Key"))
 		assert.Equal(t, "application/json", r.Header.Get("Content-Type"))
 	})
-	client.UserDetails(context.Background())
+	client.UserDetails(context.Background()) //nolint
 	teardown()
 
 	// it should set X-Auth-User-Service-Key and omit X-Auth-Email and X-Auth-Key when using NewWithUserServiceKey
@@ -94,7 +94,7 @@ func TestClient_Headers(t *testing.T) {
 		assert.Equal(t, "userservicekey", r.Header.Get("X-Auth-User-Service-Key"))
 		assert.Equal(t, "application/json", r.Header.Get("Content-Type"))
 	})
-	client.UserDetails(context.Background())
+	client.UserDetails(context.Background()) //nolint
 	teardown()
 
 	// it should set Authorization and omit others credential headers when using NewWithAPIToken
@@ -110,7 +110,7 @@ func TestClient_Headers(t *testing.T) {
 		assert.Equal(t, "Bearer my-api-token", r.Header.Get("Authorization"))
 		assert.Equal(t, "application/json", r.Header.Get("Content-Type"))
 	})
-	client.UserDetails(context.Background())
+	client.UserDetails(context.Background()) //nolint
 	teardown()
 }
 
@@ -458,7 +458,7 @@ func TestClient_ContextIsPassedToRequest(t *testing.T) {
 
 	cfClient, _ := New("deadbeef", "cloudflare@example.org", HTTPClient(httpClient))
 
-	cfClient.ListZonesContext(ctx)
+	cfClient.ListZonesContext(ctx) //nolint
 }
 
 func TestErrorFromResponseWithUnmarshalingError(t *testing.T) {
