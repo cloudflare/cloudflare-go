@@ -1339,6 +1339,23 @@ func TestUpdateZoneDNSSEC(t *testing.T) {
 	}
 }
 
+func parsePage(t *testing.T, total int, s string) (int, bool) {
+	if s == "" {
+		return 1, true
+	}
+
+	page, err := strconv.Atoi(s)
+	if !assert.NoError(t, err) {
+		return 0, false
+	}
+
+	if !assert.LessOrEqual(t, page, total) || !assert.GreaterOrEqual(t, page, 1) {
+		return 0, false
+	}
+
+	return page, true
+}
+
 func TestListZones(t *testing.T) {
 	setup()
 	defer teardown()
@@ -1357,18 +1374,9 @@ func TestListZones(t *testing.T) {
 			return
 		}
 
-		page := 1
-		if r.URL.Query().Get("page") != "" {
-			p, err := strconv.Atoi(r.URL.Query().Get("page"))
-			if !assert.NoError(t, err) {
-				return
-			}
-
-			if !assert.LessOrEqual(t, page, totalPage) || !assert.GreaterOrEqual(t, page, 1) {
-				return
-			}
-
-			page = p
+		page, ok := parsePage(t, totalPage, r.URL.Query().Get("page"))
+		if !ok {
+			return
 		}
 
 		start := (page - 1) * 50
@@ -1376,7 +1384,6 @@ func TestListZones(t *testing.T) {
 		count := 50
 		if page == totalPage {
 			count = total - start
-			assert.GreaterOrEqual(t, count, 0)
 		}
 
 		res, err := json.Marshal(mockZonesResponse(total, page, start, count))
