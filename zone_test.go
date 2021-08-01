@@ -31,7 +31,7 @@ func mustParseTime(s string) time.Time {
 }
 
 func mockZone(i int) *Zone {
-	zoneName := fmt.Sprintf("%d.example.org", i)
+	zoneName := fmt.Sprintf("%d.example.com", i)
 	ownerName := "Test Account"
 
 	return &Zone{
