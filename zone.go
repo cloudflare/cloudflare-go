@@ -419,7 +419,7 @@ func (api *API) listZonesFetch(ctx context.Context, wg *sync.WaitGroup, errc cha
 	}
 
 	if len(r.Result) != pageSize {
-		recordError(errors.New(errPagination))
+		recordError(errors.New(errResultInfo))
 		return
 	}
 

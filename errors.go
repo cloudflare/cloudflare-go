@@ -17,7 +17,7 @@ const (
 	errMissingAccountID          = "account ID is empty and must be provided"
 	errOperationStillRunning     = "bulk operation did not finish before timeout"
 	errOperationUnexpectedStatus = "bulk operation returned an unexpected status"
-	errPagination                = "unexpected pagination in response"
+	errResultInfo                = "incorrect pagination info (result_info) in responses"
 	errManualPagination          = "unexpected pagination options passed to functions that handle pagination automatically"
 )
 
