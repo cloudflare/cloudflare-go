@@ -169,19 +169,19 @@ func firewallAccessRuleUpdate(c *cli.Context) error {
 	case accountID != "":
 		resp, err := api.UpdateAccountAccessRule(context.Background(), accountID, id, rule)
 		if err != nil {
-			errors.Wrap(err, errUpdating)
+			errors.Wrap(err, errUpdating) //nolint
 		}
 		rules = append(rules, resp.Result)
 	case zoneID != "":
 		resp, err := api.UpdateZoneAccessRule(context.Background(), zoneID, id, rule)
 		if err != nil {
-			errors.Wrap(err, errUpdating)
+			errors.Wrap(err, errUpdating) //nolint
 		}
 		rules = append(rules, resp.Result)
 	default:
 		resp, err := api.UpdateUserAccessRule(context.Background(), id, rule)
 		if err != nil {
-			errors.Wrap(err, errUpdating)
+			errors.Wrap(err, errUpdating) //nolint
 		}
 		rules = append(rules, resp.Result)
 	}
@@ -285,19 +285,19 @@ func firewallAccessRuleDelete(c *cli.Context) error {
 	case accountID != "":
 		resp, err := api.DeleteAccountAccessRule(context.Background(), accountID, ruleID)
 		if err != nil {
-			errors.Wrap(err, errDeleting)
+			errors.Wrap(err, errDeleting) //nolint
 		}
 		rules = append(rules, resp.Result)
 	case zoneID != "":
 		resp, err := api.DeleteZoneAccessRule(context.Background(), zoneID, ruleID)
 		if err != nil {
-			errors.Wrap(err, errDeleting)
+			errors.Wrap(err, errDeleting) //nolint
 		}
 		rules = append(rules, resp.Result)
 	default:
 		resp, err := api.DeleteUserAccessRule(context.Background(), ruleID)
 		if err != nil {
-			errors.Wrap(err, errDeleting)
+			errors.Wrap(err, errDeleting) //nolint
 		}
 		rules = append(rules, resp.Result)
 	}

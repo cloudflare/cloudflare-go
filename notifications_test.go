@@ -42,7 +42,7 @@ func TestGetEligibleNotificationDestinations(t *testing.T) {
   "errors": [],
   "messages": [],
   "result":%s
-}`, fmt.Sprintf(string(b)))
+}`, string(b))
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/alerting/v3/destinations/eligible", handler)
@@ -74,7 +74,7 @@ func TestGetAvailableNotificationTypes(t *testing.T) {
   									"messages": [],
   									"result":%s
 								}`,
-			fmt.Sprintf(string(b)))
+			string(b))
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/alerting/v3/available_alerts", handler)
@@ -102,7 +102,7 @@ func TestListPagerDutyDestinations(t *testing.T) {
   									"messages": [],
   									"result":%s
 								}`,
-			fmt.Sprintf(string(b)))
+			string(b))
 		require.NoError(t, err)
 	}
 
@@ -164,7 +164,7 @@ func TestCreateNotificationPolicy(t *testing.T) {
   									"messages": [],
   									"result":%s
 								}`,
-			fmt.Sprintf(string(b)))
+			string(b))
 		require.NoError(t, err)
 	}
 
@@ -205,7 +205,7 @@ func TestGetNotificationPolicy(t *testing.T) {
   									"messages": [],
   									"result":%s
 								}`,
-			fmt.Sprintf(string(b)))
+			string(b))
 		require.NoError(t, err)
 	}
 
@@ -253,7 +253,7 @@ func TestListNotificationPolicies(t *testing.T) {
   									"messages": [],
   									"result":%s
 								}`,
-			fmt.Sprintf(string(b)))
+			string(b))
 		require.NoError(t, err)
 	}
 
@@ -297,7 +297,7 @@ func TestUpdateNotificationPolicy(t *testing.T) {
   									"messages": [],
   									"result":%s
 								}`,
-			fmt.Sprintf(string(b)))
+			string(b))
 		require.NoError(t, err)
 	}
 
@@ -328,7 +328,7 @@ func TestDeleteNotificationPolicy(t *testing.T) {
   									"messages": [],
   									"result":%s
 								}`,
-			fmt.Sprintf(string(b)))
+			string(b))
 		require.NoError(t, err)
 	}
 
@@ -366,7 +366,7 @@ func TestCreateNotificationWebhooks(t *testing.T) {
   									"messages": [],
   									"result":%s
 								}`,
-			fmt.Sprintf(string(b)))
+			string(b))
 		require.NoError(t, err)
 	}
 
@@ -406,7 +406,7 @@ func TestListNotificationWebhooks(t *testing.T) {
   									"messages": [],
   									"result":%s
 								}`,
-			fmt.Sprintf(string(b)))
+			string(b))
 		require.NoError(t, err)
 	}
 
@@ -445,7 +445,7 @@ func TestGetNotificationWebhooks(t *testing.T) {
   									"messages": [],
   									"result":%s
 								}`,
-			fmt.Sprintf(string(b)))
+			string(b))
 		require.NoError(t, err)
 	}
 
@@ -482,7 +482,7 @@ func TestUpdateNotificationWebhooks(t *testing.T) {
   									"messages": [],
   									"result":%s
 								}`,
-			fmt.Sprintf(string(b)))
+			string(b))
 		require.NoError(t, err)
 	}
 
@@ -514,7 +514,7 @@ func TestDeleteNotificationWebhooks(t *testing.T) {
   									"messages": [],
   									"result":%s
 								}`,
-			fmt.Sprintf(string(b)))
+			string(b))
 		require.NoError(t, err)
 	}
 

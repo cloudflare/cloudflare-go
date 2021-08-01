@@ -58,22 +58,6 @@ var (
 		Valid:    true,
 		Message:  "",
 	}
-	expectedLogpushGetOwnershipChallengeInvalidResponseStruct = LogpushGetOwnershipChallenge{
-		Filename: "logs/challenge-filename.txt",
-		Valid:    false,
-		Message:  "destination is invalid",
-	}
-	expectedUpdatedLogpushJobStruct = LogpushJob{
-		ID:              jobID,
-		Dataset:         "http_requests",
-		Enabled:         true,
-		Name:            "updated.com",
-		LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp",
-		DestinationConf: "gs://mybucket/logs",
-		LastComplete:    &testLogpushTimestamp,
-		LastError:       &testLogpushTimestamp,
-		ErrorMessage:    "test",
-	}
 )
 
 func TestLogpushJobs(t *testing.T) {

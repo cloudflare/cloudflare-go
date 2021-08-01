@@ -1,7 +1,6 @@
 package cloudflare
 
 import (
-	"fmt"
 	"strconv"
 	"testing"
 
@@ -136,7 +135,7 @@ func TestAPIRequestError_ServiceError(t *testing.T) {
 	}
 
 	for name, tc := range tests {
-		t.Run(fmt.Sprintf("%s", strconv.Itoa(name)), func(t *testing.T) {
+		t.Run(strconv.Itoa(name), func(t *testing.T) {
 			got := &APIRequestError{StatusCode: name}
 			assert.Equal(t, got.ServiceError(), tc.want)
 		})
@@ -153,7 +152,7 @@ func TestAPIRequestError_ClientError(t *testing.T) {
 	}
 
 	for name, tc := range tests {
-		t.Run(fmt.Sprintf("%s", strconv.Itoa(name)), func(t *testing.T) {
+		t.Run(strconv.Itoa(name), func(t *testing.T) {
 			got := &APIRequestError{StatusCode: name}
 			assert.Equal(t, got.ClientError(), tc.want)
 		})
@@ -170,7 +169,7 @@ func TestAPIRequestError_ClientRateLimited(t *testing.T) {
 	}
 
 	for name, tc := range tests {
-		t.Run(fmt.Sprintf("%s", strconv.Itoa(name)), func(t *testing.T) {
+		t.Run(strconv.Itoa(name), func(t *testing.T) {
 			got := &APIRequestError{StatusCode: name}
 			assert.Equal(t, got.ClientRateLimited(), tc.want)
 		})

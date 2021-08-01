@@ -735,14 +735,14 @@ func (api *API) UpdateWorkerRoute(ctx context.Context, zoneID string, routeID st
 }
 
 func getRouteEndpoint(api *API, route WorkerRoute) (string, error) {
-	if route.Script != "" && route.Enabled == true {
+	if route.Script != "" && route.Enabled {
 		return "", errors.New("Only `Script` or `Enabled` may be specified for a WorkerRoute, not both")
 	}
 
 	// For backwards-compatibility, fallback to the deprecated filter
 	// endpoint if Enabled == true
 	// https://api.cloudflare.com/#worker-filters-deprecated--properties
-	if route.Enabled == true {
+	if route.Enabled {
 		return "filters", nil
 	}
 

@@ -220,10 +220,9 @@ func (api *API) DeleteFilters(ctx context.Context, zoneID string, filterIDs []st
 //
 // API reference: https://developers.cloudflare.com/firewall/api/cf-filters/validation/
 func (api *API) ValidateFilterExpression(ctx context.Context, expression string) error {
-	uri := fmt.Sprintf("/filters/validate-expr")
 	expressionPayload := FilterValidateExpression{Expression: expression}
 
-	_, err := api.makeRequestContext(ctx, http.MethodPost, uri, expressionPayload)
+	_, err := api.makeRequestContext(ctx, http.MethodPost, "/filters/validate-expr", expressionPayload)
 	if err != nil {
 		var filterValidationResponse FilterValidateExpressionResponse
 
@@ -232,7 +231,7 @@ func (api *API) ValidateFilterExpression(ctx context.Context, expression string)
 			return errors.Wrap(jsonErr, errUnmarshalError)
 		}
 
-		if filterValidationResponse.Success != true {
+		if !filterValidationResponse.Success {
 			// Unsure why but the API returns `errors` as an array but it only
 			// ever shows the issue with one problem at a time ¯\_(ツ)_/¯
 			return errors.Errorf(filterValidationResponse.Errors[0].Message)
