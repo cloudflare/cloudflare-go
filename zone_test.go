@@ -134,8 +134,8 @@ func mockZonesResponse(total, page, start, count int) *ZonesResponse {
 		Result: zones,
 		ResultInfo: ResultInfo{
 			Page:       page,
-			PerPage:    listZonesPerPage,
-			TotalPages: (total + listZonesPerPage - 1) / listZonesPerPage,
+			PerPage:    50,
+			TotalPages: (total + 49) / 50,
 			Count:      count,
 			Total:      total,
 		},
