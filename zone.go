@@ -454,7 +454,7 @@ func (api *API) ListZonesContext(ctx context.Context, opts ...ReqOption) (r Zone
 			defer wg.Done()
 
 			opt.params.Set("page", strconv.Itoa(pageNumber))
-			res, err = api.makeRequestContext(ctx, http.MethodGet, "/zones?"+opt.params.Encode(), nil)
+			res, err := api.makeRequestContext(ctx, http.MethodGet, "/zones?"+opt.params.Encode(), nil)
 			if err != nil {
 				recordError(err)
 				return
