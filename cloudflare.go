@@ -453,8 +453,8 @@ func WithPagination(opts PaginationOptions) ReqOption {
 }
 
 // checkResultInfo checks whether ResultInfo is reasonable except that it currently
-// ignores the cursor information. perPage is the expected page size and count is
-// the actual length of the Result array.
+// ignores the cursor information. perPage, page, and count are the requested #items
+// per page, the requested page number, and the actual length of the Result array.
 //
 // Responses from the actual CloudFlare servers should pass all these checks (or we
 // discover a serious bug in the CloudFlare servers). However, the unit tests can
@@ -463,13 +463,13 @@ func WithPagination(opts PaginationOptions) ReqOption {
 // handle pagination automatically and fetch different pages in parallel.
 //
 // TODO: check cursors as well.
-func checkResultInfo(perPage, count int, info *ResultInfo) bool {
+func checkResultInfo(perPage, page, count int, info *ResultInfo) bool {
 	if info.Cursor != "" || info.Cursors.Before != "" || info.Cursors.After != "" {
 		panic("checkResultInfo could not handle cursors yet.")
 	}
 
 	switch {
-	case info.Count != count || info.PerPage != perPage:
+	case info.PerPage != perPage || info.Page != page || info.Count != count:
 		// ResultInfo does not match the expected perPage or the actual count.
 		return false
 
