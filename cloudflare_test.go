@@ -503,13 +503,12 @@ func TestContextTimeout(t *testing.T) {
 }
 
 func TestCheckResultInfo(t *testing.T) {
-	type checkResultInfoTest struct {
+	cases := [...]struct {
 		PerPage    int
 		Count      int
 		ResultInfo ResultInfo
 		Verdict    bool
-	}
-	cases := [...]checkResultInfoTest{
+	}{
 		// PerPage's do not match
 		{20, 0, ResultInfo{Page: 1, PerPage: 30, TotalPages: 0, Count: 0, Total: 0}, false},
 		// Count's do not match
