@@ -503,7 +503,7 @@ func TestContextTimeout(t *testing.T) {
 }
 
 func TestCheckResultInfo(t *testing.T) {
-	cases := [...]struct {
+	for _, c := range [...]struct {
 		PerPage    int
 		Page       int
 		Count      int
@@ -542,9 +542,7 @@ func TestCheckResultInfo(t *testing.T) {
 		{20, 2, 20, ResultInfo{Page: 2, PerPage: 20, TotalPages: 2, Count: 20, Total: 39}, false},
 		// Looking good
 		{20, 2, 19, ResultInfo{Page: 2, PerPage: 20, TotalPages: 2, Count: 19, Total: 39}, true},
-	}
-
-	for _, c := range cases {
+	} {
 		assert.Equalf(t, c.Verdict, checkResultInfo(c.PerPage, c.Page, c.Count, &c.ResultInfo), "Failed case: %+v", c)
 	}
 }
