@@ -124,16 +124,6 @@ func mockZone(i int) *Zone {
 	}
 }
 
-func mockResultInfo(total, page, start, count int) *ResultInfo {
-	return &ResultInfo{
-		Page:       page,
-		PerPage:    50,
-		TotalPages: (total + 49) / 50,
-		Count:      count,
-		Total:      total,
-	}
-}
-
 func mockZonesResponse(total, page, start, count int) *ZonesResponse {
 	zones := make([]Zone, count)
 	for i := range zones {
@@ -141,8 +131,14 @@ func mockZonesResponse(total, page, start, count int) *ZonesResponse {
 	}
 
 	return &ZonesResponse{
-		Result:     zones,
-		ResultInfo: *mockResultInfo(total, page, start, count),
+		Result: zones,
+		ResultInfo: ResultInfo{
+			Page:       page,
+			PerPage:    listZonesPerPage,
+			TotalPages: (total + listZonesPerPage - 1) / listZonesPerPage,
+			Count:      count,
+			Total:      total,
+		},
 		Response: Response{
 			Success:  true,
 			Errors:   []ResponseInfo{},
