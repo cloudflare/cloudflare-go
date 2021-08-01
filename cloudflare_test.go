@@ -501,3 +501,46 @@ func TestContextTimeout(t *testing.T) {
 	assert.WithinDuration(t, start, time.Now(), time.Second*2,
 		"makeRequestContext took too much time with an expiring context")
 }
+
+func TestCheckResultInfo(t *testing.T) {
+	type checkResultInfoTest struct {
+		PerPage    int
+		Count      int
+		ResultInfo ResultInfo
+		Verdict    bool
+	}
+	cases := [...]checkResultInfoTest{
+		// PerPage's do not match
+		{20, 0, ResultInfo{Page: 1, PerPage: 30, TotalPages: 0, Count: 0, Total: 0}, false},
+		// Count's do not match
+		{20, 2, ResultInfo{Page: 1, PerPage: 20, TotalPages: 1, Count: 1, Total: 1}, false},
+		// PerPage == 0
+		{0, 0, ResultInfo{Page: 1, PerPage: 0, TotalPages: 1, Count: 0, Total: 0}, false},
+		// Special case when #items == 0
+		{20, 0, ResultInfo{Page: 1, PerPage: 20, TotalPages: 0, Count: 0, Total: 0}, true},
+		// Total #items == 0, but #pages > 0
+		{20, 0, ResultInfo{Page: 1, PerPage: 20, TotalPages: 1, Count: 0, Total: 0}, false},
+		// Total #items > 0, but #pages == 0
+		{20, 1, ResultInfo{Page: 1, PerPage: 20, TotalPages: 0, Count: 1, Total: 1}, false},
+		// Too many total #items (one more page is needed)
+		{20, 20, ResultInfo{Page: 1, PerPage: 20, TotalPages: 1, Count: 20, Total: 21}, false},
+		// Too few total #items (the second page would be empty)
+		{20, 20, ResultInfo{Page: 1, PerPage: 20, TotalPages: 2, Count: 20, Total: 20}, false},
+		// Page number cannot be zero
+		{20, 20, ResultInfo{Page: 0, PerPage: 20, TotalPages: 1, Count: 20, Total: 20}, false},
+		// Page number cannot go beyond #pages
+		{20, 20, ResultInfo{Page: 2, PerPage: 20, TotalPages: 1, Count: 20, Total: 20}, false},
+		// The last page is full, which is okay
+		{20, 20, ResultInfo{Page: 1, PerPage: 20, TotalPages: 1, Count: 20, Total: 20}, true},
+		// We are not on the last page, so it should be full
+		{20, 19, ResultInfo{Page: 1, PerPage: 20, TotalPages: 2, Count: 19, Total: 39}, false},
+		// The last page only has 19 items, not 20.
+		{20, 20, ResultInfo{Page: 2, PerPage: 20, TotalPages: 2, Count: 20, Total: 39}, false},
+		// Looking good
+		{20, 19, ResultInfo{Page: 2, PerPage: 20, TotalPages: 2, Count: 19, Total: 39}, true},
+	}
+
+	for _, c := range cases {
+		assert.Equalf(t, c.Verdict, checkResultInfo(c.PerPage, c.Count, &c.ResultInfo), "Failed case: %+v", c)
+	}
+}

@@ -451,3 +451,61 @@ func WithPagination(opts PaginationOptions) ReqOption {
 		}
 	}
 }
+
+// checkResultInfo checks whether ResultInfo is reasonable except that it currently
+// ignores the cursor information. perPage is the expected page size and count is
+// the actual length of the Result array.
+//
+// Responses from the actual CloudFlare servers should pass all these checks (or we
+// discover a serious bug in the CloudFlare servers). However, the unit tests can
+// easily violate these constraints and this utility function can help debugging.
+// Correct pagination information is crucial for more advanced List* functions that
+// handle pagination automatically and fetch different pages in parallel.
+//
+// TODO: check cursors as well.
+func checkResultInfo(perPage, count int, info *ResultInfo) bool {
+	if info.Cursor != "" || info.Cursors.Before != "" || info.Cursors.After != "" {
+		panic("checkResultInfo could not handle cursors yet.")
+	}
+
+	switch {
+	case info.Count != count || info.PerPage != perPage:
+		// ResultInfo does not match the expected perPage or the actual count.
+		return false
+
+	case info.PerPage <= 0:
+		// PerPage is zero or negative.
+		return false
+
+	case info.Total == 0 && info.TotalPages == 0 && info.Page == 1 && info.Count == 0:
+		// Special case for total == 0. All following checks assume there is at least one item.
+		return true
+
+	case info.Total <= 0 || info.TotalPages <= 0:
+		// Total and TotalPages must be positive.
+		return false
+
+	case info.Total > info.PerPage*info.TotalPages || info.Total <= info.PerPage*(info.TotalPages-1):
+		// Total must lie in [PerPage*(TotalPages-1)+1...PerPage*TotalPages].
+		return false
+	}
+
+	// At least point, only Page or Count could go wrong.
+	switch {
+	case info.Page > info.TotalPages || info.Page <= 0:
+		// Page must lie in [1...TotalPages].
+		return false
+
+	case info.Page < info.TotalPages:
+		// Every page before the last page must be full.
+		return info.Count == info.PerPage
+
+	case info.Page == info.TotalPages:
+		// The last page contains exactly the items not in the privous pages.
+		return info.Count == info.Total-info.PerPage*(info.TotalPages-1)
+
+	default:
+		// This is actually impossible, but Go compiler does not know trichotomy
+		panic("checkResultInfo: impossible")
+	}
+}
