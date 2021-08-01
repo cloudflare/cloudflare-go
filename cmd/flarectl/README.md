@@ -41,15 +41,16 @@ VERSION:
    2017.10.0
    
 COMMANDS:
-   ips, i		Print Cloudflare IP ranges
-   user, u		User information
-   zone, z		Zone information
-   dns, d		DNS records
-   user-agents, ua	User-Agent blocking
-   pagerules, p		Page Rules
-   railgun, r		Railgun information
-   firewall, f		Firewall
-   help, h		Shows a list of commands or help for one command
+   ips, i                     Print Cloudflare IP ranges
+   user, u                    User information
+   zone, z                    Zone information
+   dns, d                     DNS records
+   user-agents, ua            User-Agent blocking
+   pagerules, p               Page Rules
+   railgun, r                 Railgun information
+   firewall, f                Firewall
+   origin-ca-root-cert, ocrc  Print Origin CA Root Certificate (in PEM format)
+   help, h                    Shows a list of commands or help for one command
    
 GLOBAL OPTIONS:
    --help, -h		show help
