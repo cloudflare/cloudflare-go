@@ -1349,16 +1349,24 @@ func TestListZones(t *testing.T) {
 	)
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
-		assert.Equal(t, "50", r.URL.Query().Get("per_page"))
+		if !assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method) {
+			return
+		}
+
+		if !assert.Equal(t, "50", r.URL.Query().Get("per_page")) {
+			return
+		}
 
 		page := 1
 		if r.URL.Query().Get("page") != "" {
 			p, err := strconv.Atoi(r.URL.Query().Get("page"))
-			assert.NoError(t, err)
+			if !assert.NoError(t, err) {
+				return
+			}
 
-			assert.LessOrEqual(t, page, totalPage)
-			assert.GreaterOrEqual(t, page, 1)
+			if !assert.LessOrEqual(t, page, totalPage) || !assert.GreaterOrEqual(t, page, 1) {
+				return
+			}
 
 			page = p
 		}
@@ -1372,10 +1380,15 @@ func TestListZones(t *testing.T) {
 		}
 
 		res, err := json.Marshal(mockZonesResponse(total, page, start, count))
-		assert.NoError(t, err)
+		if !assert.NoError(t, err) {
+			return
+		}
 
 		w.Header().Set("content-type", "application/json")
-		w.Write(res)
+
+		if _, err = w.Write(res); assert.NoError(t, err) {
+			return
+		}
 	}
 
 	mux.HandleFunc("/zones", handler)
