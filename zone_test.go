@@ -1409,3 +1409,58 @@ func TestListZones(t *testing.T) {
 		assert.Equal(t, *mockZone(i), zone)
 	}
 }
+
+func TestListZonesFailure(t *testing.T) {
+	setup()
+	defer teardown()
+
+	const (
+		total     = 1489
+		totalPage = (total + 49) / 50
+	)
+
+	// the pages to reject
+	isReject := func(i int) bool { return i == 4 || i == 7 }
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		if !assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method) {
+			return
+		}
+
+		if !assert.Equal(t, "50", r.URL.Query().Get("per_page")) {
+			return
+		}
+
+		page, ok := parsePage(t, totalPage, r.URL.Query().Get("page"))
+		if !ok {
+			return
+		}
+
+		if isReject(page) {
+			return
+		}
+
+		start := (page - 1) * 50
+
+		count := 50
+		if page == totalPage {
+			count = total - start
+		}
+
+		res, err := json.Marshal(mockZonesResponse(total, page, start, count))
+		if !assert.NoError(t, err) {
+			return
+		}
+
+		w.Header().Set("content-type", "application/json")
+
+		if _, err = w.Write(res); assert.NoError(t, err) {
+			return
+		}
+	}
+
+	mux.HandleFunc("/zones", handler)
+
+	_, err := client.ListZones(context.Background())
+	assert.Error(t, err)
+}
