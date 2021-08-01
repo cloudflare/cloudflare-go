@@ -389,7 +389,7 @@ func (api *API) ListZones(ctx context.Context, z ...string) ([]Zone, error) {
 	return zones, nil
 }
 
-const listZonesPageSize = 50
+const listZonesPerPage = 50
 
 // listZonesFetch fetches one page of zones.
 // This is placed as a separate function to prevent any possibility of unintended capturing.
@@ -440,7 +440,7 @@ func (api *API) ListZonesContext(ctx context.Context, opts ...ReqOption) (r Zone
 		return ZonesResponse{}, errors.New(errManualPagination)
 	}
 
-	opt.params.Add("per_page", strconv.Itoa(listZonesPageSize))
+	opt.params.Add("per_page", strconv.Itoa(listZonesPerPage))
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, "/zones?"+opt.params.Encode(), nil)
 	if err != nil {
@@ -477,9 +477,9 @@ func (api *API) ListZonesContext(ctx context.Context, opts ...ReqOption) (r Zone
 		opt.params.Set("page", strconv.Itoa(pageNum))
 
 		// start is the first index in the zone buffer
-		start := listZonesPageSize * (pageNum - 1)
+		start := listZonesPerPage * (pageNum - 1)
 
-		pageSize := listZonesPageSize
+		pageSize := listZonesPerPage
 		if pageNum == totalPageCount {
 			// The size of the last page (which would be <= 50).
 			pageSize = totalCount - start
