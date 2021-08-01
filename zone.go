@@ -451,6 +451,7 @@ func (api *API) ListZonesContext(ctx context.Context, opts ...ReqOption) (r Zone
 		return ZonesResponse{}, errors.Wrap(err, errUnmarshalError)
 	}
 
+	// avoid overhead in most common cases where the total #zones <= 50
 	if r.TotalPages < 2 {
 		return r, nil
 	}
