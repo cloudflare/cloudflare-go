@@ -333,9 +333,9 @@ func TestZoneIDByNameWithNonUniqueZonesWithoutOrgID(t *testing.T) {
 			],
 			"result_info": {
 				"page": 1,
-				"per_page": 20,
-				"count": 1,
-				"total_count": 2000,
+				"per_page": 50,
+				"count": 2,
+				"total_count": 2,
 				"total_pages": 1
 			}
 		}
@@ -418,9 +418,9 @@ func TestZoneIDByNameWithIDN(t *testing.T) {
 			],
 			"result_info": {
 				"page": 1,
-				"per_page": 20,
+				"per_page": 50,
 				"count": 1,
-				"total_count": 2000,
+				"total_count": 1,
 				"total_pages": 1
 			}
 		}

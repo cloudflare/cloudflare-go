@@ -355,16 +355,15 @@ func (api *API) ZoneActivationCheck(ctx context.Context, zoneID string) (Respons
 //
 // API reference: https://api.cloudflare.com/#zone-list-zones
 func (api *API) ListZones(ctx context.Context, z ...string) ([]Zone, error) {
-	v := url.Values{}
-
-	var res []byte
-	var r ZonesResponse
 	var zones []Zone
-	var err error
 	if len(z) > 0 {
+		var (
+			v = url.Values{}
+			r ZonesResponse
+		)
 		for _, zone := range z {
 			v.Set("name", normalizeZoneName(zone))
-			res, err = api.makeRequestContext(ctx, http.MethodGet, "/zones?"+v.Encode(), nil)
+			res, err := api.makeRequestContext(ctx, http.MethodGet, "/zones?"+v.Encode(), nil)
 			if err != nil {
 				return []Zone{}, err
 			}
@@ -376,64 +375,60 @@ func (api *API) ListZones(ctx context.Context, z ...string) ([]Zone, error) {
 				// TODO: Provide an actual error message instead of always returning nil
 				return []Zone{}, err
 			}
-			for zi := range r.Result {
-				zones = append(zones, r.Result[zi])
-			}
+			zones = append(zones, r.Result...)
 		}
 	} else {
-		res, err = api.makeRequestContext(ctx, http.MethodGet, "/zones?per_page=50", nil)
+		res, err := api.ListZonesContext(ctx)
 		if err != nil {
-			return []Zone{}, err
-		}
-		err = json.Unmarshal(res, &r)
-		if err != nil {
-			return []Zone{}, errors.Wrap(err, errUnmarshalError)
+			return nil, err
 		}
 
-		zones = append(zones, r.Result...)
-
-		if r.TotalPages < 2 {
-			return zones, nil
-		}
-
-		totalPageCount := r.TotalPages
-		var wg sync.WaitGroup
-		wg.Add(totalPageCount - 1)
-
-		for i := 2; i <= totalPageCount; i++ {
-			go func(pageNumber int) {
-				defer wg.Done()
-
-				res, err = api.makeRequestContext(ctx, http.MethodGet, fmt.Sprintf("/zones?per_page=50&page=%d", pageNumber), nil)
-				if err != nil {
-					return
-				}
-
-				err = json.Unmarshal(res, &r)
-				if err != nil {
-					return
-				}
-
-				zones = append(zones, r.Result...)
-			}(i)
-		}
-
-		wg.Wait()
-
-		if err != nil {
-			return []Zone{}, err
-		}
+		zones = res.Result
 	}
 
 	return zones, nil
 }
 
+const listZonesPerPage = 50
+
+// listZonesFetch fetches one page of zones.
+// This is placed as a separate function to prevent any possibility of unintended capturing.
+func (api *API) listZonesFetch(ctx context.Context, wg *sync.WaitGroup, errc chan error,
+	path string, pageSize int, buf []Zone) {
+	defer wg.Done()
+
+	// recordError sends the error to errc in a non-blocking manner
+	recordError := func(err error) {
+		select {
+		case errc <- err:
+		default:
+		}
+	}
+
+	res, err := api.makeRequestContext(ctx, http.MethodGet, path, nil)
+	if err != nil {
+		recordError(err)
+		return
+	}
+
+	var r ZonesResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		recordError(err)
+		return
+	}
+
+	if len(r.Result) != pageSize {
+		recordError(errors.New(errResultInfo))
+		return
+	}
+
+	copy(buf, r.Result)
+}
+
 // ListZonesContext lists all zones on an account automatically handling the
 // pagination. Optionally takes a list of ReqOptions.
 func (api *API) ListZonesContext(ctx context.Context, opts ...ReqOption) (r ZonesResponse, err error) {
-	var res []byte
-	var zones []Zone
-
 	opt := reqOption{
 		params: url.Values{},
 	}
@@ -441,9 +436,13 @@ func (api *API) ListZonesContext(ctx context.Context, opts ...ReqOption) (r Zone
 		of(&opt)
 	}
 
-	opt.params.Add("per_page", "50")
+	if opt.params.Get("page") != "" || opt.params.Get("per_page") != "" {
+		return ZonesResponse{}, errors.New(errManualPagination)
+	}
 
-	res, err = api.makeRequestContext(ctx, http.MethodGet, "/zones?"+opt.params.Encode(), nil)
+	opt.params.Add("per_page", strconv.Itoa(listZonesPerPage))
+
+	res, err := api.makeRequestContext(ctx, http.MethodGet, "/zones?"+opt.params.Encode(), nil)
 	if err != nil {
 		return ZonesResponse{}, err
 	}
@@ -452,44 +451,53 @@ func (api *API) ListZonesContext(ctx context.Context, opts ...ReqOption) (r Zone
 		return ZonesResponse{}, errors.Wrap(err, errUnmarshalError)
 	}
 
-	totalPageCount := r.TotalPages
+	// avoid overhead in most common cases where the total #zones <= 50
+	if r.TotalPages < 2 {
+		return r, nil
+	}
+
+	// parameters of pagination
+	var (
+		totalPageCount = r.TotalPages
+		totalCount     = r.Total
+
+		// zones is a large slice to prevent resizing during concurrent writes.
+		zones = make([]Zone, totalCount)
+	)
+
+	// Copy the first page into zones.
+	copy(zones, r.Result)
+
 	var wg sync.WaitGroup
-	wg.Add(totalPageCount)
-	errc := make(chan error)
+	wg.Add(totalPageCount - 1)  // all pages except the first one.
+	errc := make(chan error, 1) // getting the first error
 
-	for i := 1; i <= totalPageCount; i++ {
-		go func(pageNumber int) error {
-			opt.params.Set("page", strconv.Itoa(pageNumber))
-			res, err = api.makeRequestContext(ctx, http.MethodGet, "/zones?"+opt.params.Encode(), nil)
-			if err != nil {
-				errc <- err
-			}
+	// Creating all the workers.
+	for pageNum := 2; pageNum <= totalPageCount; pageNum++ {
+		// Note: URL.Values is just a map[string], so this would override the existing 'page'
+		opt.params.Set("page", strconv.Itoa(pageNum))
 
-			err = json.Unmarshal(res, &r)
-			if err != nil {
-				errc <- err
-			}
+		// start is the first index in the zone buffer
+		start := listZonesPerPage * (pageNum - 1)
 
-			for _, zone := range r.Result {
-				zones = append(zones, zone)
-			}
+		pageSize := listZonesPerPage
+		if pageNum == totalPageCount {
+			// The size of the last page (which would be <= 50).
+			pageSize = totalCount - start
+		}
 
-			select {
-			case err := <-errc:
-				return err
-			default:
-				wg.Done()
-			}
-
-			return nil
-		}(i)
+		go api.listZonesFetch(ctx, &wg, errc, "/zones?"+opt.params.Encode(), pageSize, zones[start:])
 	}
 
 	wg.Wait()
 
-	r.Result = zones
-
-	return r, nil
+	select {
+	case err := <-errc: // if there were any errors
+		return ZonesResponse{}, err
+	default: // if there were no errors, the receive statement should block
+		r.Result = zones
+		return r, nil
+	}
 }
 
 // ZoneDetails fetches information about a zone.
