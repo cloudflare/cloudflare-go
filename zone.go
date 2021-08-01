@@ -460,7 +460,7 @@ func (api *API) ListZonesContext(ctx context.Context, opts ...ReqOption) (r Zone
 		totalPageCount = r.TotalPages
 		totalCount     = r.Total
 
-		// zones is a large slice to prevent resizing during concurrent access.
+		// zones is a large slice to prevent resizing during concurrent writes.
 		zones = make([]Zone, totalCount)
 	)
 
@@ -473,10 +473,10 @@ func (api *API) ListZonesContext(ctx context.Context, opts ...ReqOption) (r Zone
 
 	// Creating all the workers.
 	for pageNum := 2; pageNum <= totalPageCount; pageNum++ {
-		// note: URL.Values is just a map[string].
+		// Note: URL.Values is just a map[string], so this would override the existing 'page'
 		opt.params.Set("page", strconv.Itoa(pageNum))
 
-		// The first index in the zone buffer
+		// start is the first index in the zone buffer
 		start := listZonesPageSize * (pageNum - 1)
 
 		pageSize := listZonesPageSize
