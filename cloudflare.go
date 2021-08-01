@@ -442,7 +442,12 @@ func WithZoneFilters(zoneName, accountID, status string) ReqOption {
 // WithPagination configures the pagination for a response.
 func WithPagination(opts PaginationOptions) ReqOption {
 	return func(opt *reqOption) {
-		opt.params.Set("page", strconv.Itoa(opts.Page))
-		opt.params.Set("per_page", strconv.Itoa(opts.PerPage))
+		if opts.Page > 0 {
+			opt.params.Set("page", strconv.Itoa(opts.Page))
+		}
+
+		if opts.PerPage > 0 {
+			opt.params.Set("per_page", strconv.Itoa(opts.PerPage))
+		}
 	}
 }
