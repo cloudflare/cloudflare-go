@@ -31,9 +31,12 @@ func mustParseTime(s string) time.Time {
 }
 
 func mockZone(i int) *Zone {
+	zoneName := fmt.Sprintf("%d.example.org", i)
+	ownerName := "Test Account"
+
 	return &Zone{
-		ID:      mockID(fmt.Sprintf("zone %d", i)),
-		Name:    fmt.Sprintf("%d.example.org", i),
+		ID:      mockID(zoneName),
+		Name:    zoneName,
 		DevMode: 0,
 		OriginalNS: []string{
 			"linda.ns.cloudflare.com",
@@ -48,9 +51,9 @@ func mockZone(i int) *Zone {
 			"noel.ns.cloudflare.com",
 		},
 		Owner: Owner{
-			ID:        mockID("Test Account"),
+			ID:        mockID(ownerName),
 			Email:     "",
-			Name:      "Test Account",
+			Name:      ownerName,
 			OwnerType: "organization",
 		},
 		Permissions: []string{
@@ -114,8 +117,8 @@ func mockZone(i int) *Zone {
 			PhishingDetected:  false,
 		},
 		Account: Account{
-			ID:   mockID("Test Account"),
-			Name: "Test Account",
+			ID:   mockID(ownerName),
+			Name: ownerName,
 		},
 		VerificationKey: "",
 	}
