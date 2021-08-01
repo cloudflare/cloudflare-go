@@ -456,3 +456,52 @@ func WithPagination(opts PaginationOptions) ReqOption {
 		}
 	}
 }
+
+// checkResultInfo checks whether ResultInfo is reasonable except that it currently
+// ignores the cursor information. perPage, page, and count are the requested #items
+// per page, the requested page number, and the actual length of the Result array.
+//
+// Responses from the actual Cloudflare servers should pass all these checks (or we
+// discover a serious bug in the Cloudflare servers). However, the unit tests can
+// easily violate these constraints and this utility function can help debugging.
+// Correct pagination information is crucial for more advanced List* functions that
+// handle pagination automatically and fetch different pages in parallel.
+//
+// TODO: check cursors as well.
+func checkResultInfo(perPage, page, count int, info *ResultInfo) bool {
+	if info.Cursor != "" || info.Cursors.Before != "" || info.Cursors.After != "" {
+		panic("checkResultInfo could not handle cursors yet.")
+	}
+
+	switch {
+	case info.PerPage != perPage || info.Page != page || info.Count != count:
+		return false
+
+	case info.PerPage <= 0:
+		return false
+
+	case info.Total == 0 && info.TotalPages == 0 && info.Page == 1 && info.Count == 0:
+		return true
+
+	case info.Total <= 0 || info.TotalPages <= 0:
+		return false
+
+	case info.Total > info.PerPage*info.TotalPages || info.Total <= info.PerPage*(info.TotalPages-1):
+		return false
+	}
+
+	switch {
+	case info.Page > info.TotalPages || info.Page <= 0:
+		return false
+
+	case info.Page < info.TotalPages:
+		return info.Count == info.PerPage
+
+	case info.Page == info.TotalPages:
+		return info.Count == info.Total-info.PerPage*(info.TotalPages-1)
+
+	default:
+		// This is actually impossible, but Go compiler does not know trichotomy
+		panic("checkResultInfo: impossible")
+	}
+}
