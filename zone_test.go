@@ -1469,29 +1469,11 @@ func TestListZonesFailingPages(t *testing.T) {
 }
 
 func TestListZonesContextManualPagination1(t *testing.T) {
-	setup()
-	defer teardown()
-
-	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.FailNow(t, "no requests should have been made")
-	}
-
-	mux.HandleFunc("/zones", handler)
-
 	_, err := client.ListZonesContext(context.Background(), WithPagination(PaginationOptions{Page: 2}))
 	assert.EqualError(t, err, errManualPagination)
 }
 
 func TestListZonesContextManualPagination2(t *testing.T) {
-	setup()
-	defer teardown()
-
-	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.FailNow(t, "no requests should have been made")
-	}
-
-	mux.HandleFunc("/zones", handler)
-
 	_, err := client.ListZonesContext(context.Background(), WithPagination(PaginationOptions{PerPage: 30}))
 	assert.EqualError(t, err, errManualPagination)
 }
