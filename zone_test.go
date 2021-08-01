@@ -2,14 +2,33 @@ package cloudflare
 
 import (
 	"context"
+	"crypto/md5"   // for generating IDs
+	"encoding/hex" // for generating IDs
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
+	"strconv"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/assert"
 )
+
+// mockID returns a hex string of length 32, suitable for all kinds of IDs
+//
+func mockID(seed string) string {
+	arr := md5.Sum([]byte(seed))
+	return hex.EncodeToString(arr[:])
+}
+
+func mustParseTime(s string) time.Time {
+	t, err := time.Parse(time.RFC3339Nano, s)
+	if err != nil {
+		panic(err)
+	}
+	return t
+}
 
 func TestZoneAnalyticsDashboard(t *testing.T) {
 	setup()
@@ -1199,5 +1218,174 @@ func TestUpdateZoneDNSSEC(t *testing.T) {
 		assert.Equal(t, z.PublicKey, "oXiGYrSTO+LSCJ3mohc8EP+CzF9KxBj8/ydXJ22pKuZP3VAC3/Md/k7xZfz470CoRyZJ6gV6vml07IC3d8xqhA==")
 		time, _ := time.Parse("2006-01-02T15:04:05Z", "2014-01-01T05:20:00Z")
 		assert.Equal(t, z.ModifiedOn, time)
+	}
+}
+
+func TestListZones(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mockZone := func(i int) Zone {
+		return Zone{
+			ID:      mockID(fmt.Sprintf("zone %d", i)),
+			Name:    fmt.Sprintf("%d.example.org", i),
+			DevMode: 0,
+			OriginalNS: []string{
+				"linda.ns.cloudflare.com",
+				"merlin.ns.cloudflare.com",
+			},
+			OriginalRegistrar: "cloudflare, inc. (id: 1910)",
+			OriginalDNSHost:   "",
+			CreatedOn:         mustParseTime("2021-07-28T05:06:20.736244Z"),
+			ModifiedOn:        mustParseTime("2021-07-28T05:06:20.736244Z"),
+			NameServers: []string{
+				"abby.ns.cloudflare.com",
+				"noel.ns.cloudflare.com",
+			},
+			Owner: Owner{
+				ID:        mockID("Test Account"),
+				Email:     "",
+				Name:      "Test Account",
+				OwnerType: "organization",
+			},
+			Permissions: []string{
+				"#access:read",
+				"#analytics:read",
+				"#auditlogs:read",
+				"#billing:read",
+				"#dns_records:read",
+				"#lb:read",
+				"#legal:read",
+				"#logs:read",
+				"#member:read",
+				"#organization:read",
+				"#ssl:read",
+				"#stream:read",
+				"#subscription:read",
+				"#waf:read",
+				"#webhooks:read",
+				"#worker:read",
+				"#zone:read",
+				"#zone_settings:read",
+			},
+			Plan: ZonePlan{
+				ZonePlanCommon: ZonePlanCommon{
+					ID:       "0feeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+					Name:     "Free Website",
+					Currency: "USD",
+				},
+				IsSubscribed:      false,
+				CanSubscribe:      false,
+				LegacyID:          "free",
+				LegacyDiscount:    false,
+				ExternallyManaged: false,
+			},
+			PlanPending: ZonePlan{
+				ZonePlanCommon: ZonePlanCommon{
+					ID: "",
+				},
+				IsSubscribed:      false,
+				CanSubscribe:      false,
+				LegacyID:          "",
+				LegacyDiscount:    false,
+				ExternallyManaged: false,
+			},
+			Status: "active",
+			Paused: false,
+			Type:   "full",
+			Host: struct {
+				Name    string
+				Website string
+			}{
+				Name:    "",
+				Website: "",
+			},
+			VanityNS:    nil,
+			Betas:       nil,
+			DeactReason: "",
+			Meta: ZoneMeta{
+				PageRuleQuota:     3,
+				WildcardProxiable: false,
+				PhishingDetected:  false,
+			},
+			Account: Account{
+				ID:   mockID("Test Account"),
+				Name: "Test Account",
+			},
+			VerificationKey: "",
+		}
+	}
+
+	mockResultInfo := func(total, page, start, count int) ResultInfo {
+		return ResultInfo{
+			Page:       page,
+			PerPage:    50,
+			TotalPages: (total + 49) / 50,
+			Count:      count,
+			Total:      total,
+		}
+	}
+
+	mockZonesResponse := func(total, page, start, count int) ZonesResponse {
+		zones := make([]Zone, count)
+		for i := range zones {
+			zones[i] = mockZone(start + i)
+		}
+
+		return ZonesResponse{
+			Result:     zones,
+			ResultInfo: mockResultInfo(total, page, start, count),
+			Response: Response{
+				Success:  true,
+				Errors:   []ResponseInfo{},
+				Messages: []ResponseInfo{},
+			},
+		}
+	}
+
+	const (
+		total     = 392
+		totalPage = (total + 49) / 50
+	)
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, "50", r.URL.Query().Get("per_page"))
+
+		page := 1
+		if r.URL.Query().Get("page") != "" {
+			p, err := strconv.Atoi(r.URL.Query().Get("page"))
+			assert.NoError(t, err)
+
+			assert.LessOrEqual(t, page, totalPage)
+			assert.GreaterOrEqual(t, page, 1)
+
+			page = p
+		}
+
+		start := (page - 1) * 50
+
+		count := 50
+		if page == totalPage {
+			count = total - start
+			assert.GreaterOrEqual(t, count, 0)
+		}
+
+		res, err := json.Marshal(mockZonesResponse(total, page, start, count))
+		assert.NoError(t, err)
+
+		w.Header().Set("content-type", "application/json")
+		w.Write(res)
+	}
+
+	mux.HandleFunc("/zones", handler)
+
+	zones, err := client.ListZones(context.Background())
+	if !assert.NoError(t, err) || !assert.Equal(t, total, len(zones)) {
+		return
+	}
+
+	for i, zone := range zones {
+		assert.Equal(t, mockZone(i), zone)
 	}
 }
