@@ -122,7 +122,7 @@ func TestUniversalSSLVerificationDetails(t *testing.T) {
 	}
 }
 
-func TestEditSSLCertificatePackValidationMethod(t *testing.T) {
+func TestUpdateSSLCertificatePackValidationMethod(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -154,7 +154,7 @@ func TestEditSSLCertificatePackValidationMethod(t *testing.T) {
 		ValidationMethod: "txt",
 	}
 
-	got, err := client.EditUniversalSSLCertificatePackValidationMethod(context.Background(), testZoneID, testCertPackUUID, want)
+	got, err := client.UpdateUniversalSSLCertificatePackValidationMethod(context.Background(), testZoneID, testCertPackUUID, want)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, got)
 	}

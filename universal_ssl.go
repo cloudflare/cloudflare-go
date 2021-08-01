@@ -99,10 +99,10 @@ func (api *API) UniversalSSLVerificationDetails(ctx context.Context, zoneID stri
 	return r.Result, nil
 }
 
-// EditUniversalSSLCertificatePackValidationMethod changes the validation method for a certificate pack
+// UpdateUniversalSSLCertificatePackValidationMethod changes the validation method for a certificate pack
 //
 // API reference: https://api.cloudflare.com/#ssl-verification-ssl-verification-details
-func (api *API) EditUniversalSSLCertificatePackValidationMethod(ctx context.Context, zoneID string, certPackUUID string, setting UniversalSSLCertificatePackValidationMethodSetting) (UniversalSSLCertificatePackValidationMethodSetting, error) {
+func (api *API) UpdateUniversalSSLCertificatePackValidationMethod(ctx context.Context, zoneID string, certPackUUID string, setting UniversalSSLCertificatePackValidationMethodSetting) (UniversalSSLCertificatePackValidationMethodSetting, error) {
 	uri := fmt.Sprintf("/zones/%s/ssl/verification/%s", zoneID, certPackUUID)
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, setting)
 	if err != nil {
