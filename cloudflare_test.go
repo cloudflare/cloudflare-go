@@ -504,45 +504,33 @@ func TestContextTimeout(t *testing.T) {
 
 func TestCheckResultInfo(t *testing.T) {
 	for _, c := range [...]struct {
+		TestName   string
 		PerPage    int
 		Page       int
 		Count      int
 		ResultInfo ResultInfo
 		Verdict    bool
 	}{
-		// PerPage's do not match
-		{20, 1, 0, ResultInfo{Page: 1, PerPage: 30, TotalPages: 0, Count: 0, Total: 0}, false},
-		// Page's do not match
-		{20, 2, 20, ResultInfo{Page: 1, PerPage: 20, TotalPages: 2, Count: 20, Total: 40}, false},
-		// Count's do not match
-		{20, 1, 20, ResultInfo{Page: 1, PerPage: 20, TotalPages: 2, Count: 19, Total: 21}, false},
-		// Count's do not match
-		{20, 1, 19, ResultInfo{Page: 1, PerPage: 20, TotalPages: 2, Count: 20, Total: 21}, false},
-		// PerPage == 0
-		{0, 1, 0, ResultInfo{Page: 1, PerPage: 0, TotalPages: 1, Count: 0, Total: 0}, false},
-		// Special case when #items == 0
-		{20, 1, 0, ResultInfo{Page: 1, PerPage: 20, TotalPages: 0, Count: 0, Total: 0}, true},
-		// Total #items == 0, but #pages > 0
-		{20, 1, 0, ResultInfo{Page: 1, PerPage: 20, TotalPages: 1, Count: 0, Total: 0}, false},
-		// Total #items > 0, but #pages == 0
-		{20, 1, 1, ResultInfo{Page: 1, PerPage: 20, TotalPages: 0, Count: 1, Total: 1}, false},
-		// Too many total #items (one more page is needed)
-		{20, 1, 20, ResultInfo{Page: 1, PerPage: 20, TotalPages: 1, Count: 20, Total: 21}, false},
-		// Too few total #items (the second page would be empty)
-		{20, 1, 20, ResultInfo{Page: 1, PerPage: 20, TotalPages: 2, Count: 20, Total: 20}, false},
-		// Page number cannot be zero
-		{20, 0, 20, ResultInfo{Page: 0, PerPage: 20, TotalPages: 1, Count: 20, Total: 20}, false},
-		// Page number cannot go beyond #pages
-		{20, 2, 20, ResultInfo{Page: 2, PerPage: 20, TotalPages: 1, Count: 20, Total: 20}, false},
-		// The last page is full, which is okay
-		{20, 1, 20, ResultInfo{Page: 1, PerPage: 20, TotalPages: 1, Count: 20, Total: 20}, true},
-		// We are not on the last page, so it should be full
-		{20, 1, 19, ResultInfo{Page: 1, PerPage: 20, TotalPages: 2, Count: 19, Total: 39}, false},
-		// The last page only has 19 items, not 20.
-		{20, 2, 20, ResultInfo{Page: 2, PerPage: 20, TotalPages: 2, Count: 20, Total: 39}, false},
-		// Looking good
-		{20, 2, 19, ResultInfo{Page: 2, PerPage: 20, TotalPages: 2, Count: 19, Total: 39}, true},
+		{"per_page do not match", 20, 1, 0, ResultInfo{Page: 1, PerPage: 30, TotalPages: 0, Count: 0, Total: 0}, false},
+		{"page counts do not match", 20, 2, 20, ResultInfo{Page: 1, PerPage: 20, TotalPages: 2, Count: 20, Total: 40}, false},
+		{"counts do not match", 20, 1, 20, ResultInfo{Page: 1, PerPage: 20, TotalPages: 2, Count: 19, Total: 21}, false},
+		{"counts do not match", 20, 1, 19, ResultInfo{Page: 1, PerPage: 20, TotalPages: 2, Count: 20, Total: 21}, false},
+		{"per_page 0", 0, 1, 0, ResultInfo{Page: 1, PerPage: 0, TotalPages: 1, Count: 0, Total: 0}, false},
+		{"number of items is zero", 20, 1, 0, ResultInfo{Page: 1, PerPage: 20, TotalPages: 0, Count: 0, Total: 0}, true},
+		{"number of items is 0 but number of pages is greater than 0", 20, 1, 0, ResultInfo{Page: 1, PerPage: 20, TotalPages: 1, Count: 0, Total: 0}, false},
+		{"total number of items greater than 0 but number of pages is 0", 20, 1, 1, ResultInfo{Page: 1, PerPage: 20, TotalPages: 0, Count: 1, Total: 1}, false},
+		{"too many total number of items (one more page is needed)", 20, 1, 20, ResultInfo{Page: 1, PerPage: 20, TotalPages: 1, Count: 20, Total: 21}, false},
+		{"too few total number of items (the second page would be empty)", 20, 1, 20, ResultInfo{Page: 1, PerPage: 20, TotalPages: 2, Count: 20, Total: 20}, false},
+		{"page number cannot be zero", 20, 0, 20, ResultInfo{Page: 0, PerPage: 20, TotalPages: 1, Count: 20, Total: 20}, false},
+		{"page number cannot go beyond number of pages", 20, 2, 20, ResultInfo{Page: 2, PerPage: 20, TotalPages: 1, Count: 20, Total: 20}, false},
+		{"the last page is full of results", 20, 1, 20, ResultInfo{Page: 1, PerPage: 20, TotalPages: 1, Count: 20, Total: 20}, true},
+		{"we are not on the last page so it should be full of results", 20, 1, 19, ResultInfo{Page: 1, PerPage: 20, TotalPages: 2, Count: 19, Total: 39}, false},
+		{"last page only has 19 items not 20", 20, 2, 20, ResultInfo{Page: 2, PerPage: 20, TotalPages: 2, Count: 20, Total: 39}, false},
+		{"fully working result info", 20, 2, 19, ResultInfo{Page: 2, PerPage: 20, TotalPages: 2, Count: 19, Total: 39}, true},
 	} {
-		assert.Equalf(t, c.Verdict, checkResultInfo(c.PerPage, c.Page, c.Count, &c.ResultInfo), "Failed case: %+v", c)
+
+		t.Run(c.TestName, func(t *testing.T) {
+			assert.Equal(t, c.Verdict, checkResultInfo(c.PerPage, c.Page, c.Count, &c.ResultInfo))
+		})
 	}
 }
