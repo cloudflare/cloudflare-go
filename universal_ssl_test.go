@@ -121,3 +121,41 @@ func TestUniversalSSLVerificationDetails(t *testing.T) {
 		assert.Equal(t, want, got)
 	}
 }
+
+func TestUpdateSSLCertificatePackValidationMethod(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			panic(err)
+		}
+		defer r.Body.Close()
+
+		assert.Equal(t, `{"validation_method":"txt"}`, string(body))
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"validation_method": "txt",
+				"status": "pending_validation"
+			}
+		  }`)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/ssl/verification/"+testCertPackUUID, handler)
+
+	want := UniversalSSLCertificatePackValidationMethodSetting{
+		ValidationMethod: "txt",
+	}
+
+	got, err := client.UpdateUniversalSSLCertificatePackValidationMethod(context.Background(), testZoneID, testCertPackUUID, want)
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, got)
+	}
+}

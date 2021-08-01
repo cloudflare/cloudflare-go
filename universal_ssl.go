@@ -41,6 +41,15 @@ type universalSSLVerificationResponse struct {
 	Result []UniversalSSLVerificationDetails `json:"result"`
 }
 
+type UniversalSSLCertificatePackValidationMethodSetting struct {
+	ValidationMethod string `json:"validation_method"`
+}
+
+type universalSSLCertificatePackValidationMethodSettingResponse struct {
+	Response
+	Result UniversalSSLCertificatePackValidationMethodSetting `json:"result"`
+}
+
 // UniversalSSLSettingDetails returns the details for a universal ssl setting
 //
 // API reference: https://api.cloudflare.com/#universal-ssl-settings-for-a-zone-universal-ssl-settings-details
@@ -86,6 +95,22 @@ func (api *API) UniversalSSLVerificationDetails(ctx context.Context, zoneID stri
 	var r universalSSLVerificationResponse
 	if err := json.Unmarshal(res, &r); err != nil {
 		return []UniversalSSLVerificationDetails{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
+
+// UpdateUniversalSSLCertificatePackValidationMethod changes the validation method for a certificate pack
+//
+// API reference: https://api.cloudflare.com/#ssl-verification-ssl-verification-details
+func (api *API) UpdateUniversalSSLCertificatePackValidationMethod(ctx context.Context, zoneID string, certPackUUID string, setting UniversalSSLCertificatePackValidationMethodSetting) (UniversalSSLCertificatePackValidationMethodSetting, error) {
+	uri := fmt.Sprintf("/zones/%s/ssl/verification/%s", zoneID, certPackUUID)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, setting)
+	if err != nil {
+		return UniversalSSLCertificatePackValidationMethodSetting{}, err
+	}
+	var r universalSSLCertificatePackValidationMethodSettingResponse
+	if err := json.Unmarshal(res, &r); err != nil {
+		return UniversalSSLCertificatePackValidationMethodSetting{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
 }
