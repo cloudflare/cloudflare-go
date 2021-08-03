@@ -44,6 +44,7 @@ The current feature list includes:
 * [x] Zones
 * [x] Workers KV
 * [x] Notifications
+* [x] Gateway Locations
 
 Pull Requests are welcome, but please open an issue (or comment in an existing
 issue) to discuss any non-trivial changes before submitting code.
