@@ -17,13 +17,17 @@ const (
 	RulesetKindSchema  RulesetKind = "schema"
 	RulesetKindZone    RulesetKind = "zone"
 
-	RulesetPhaseDDoSL7                     RulesetPhase = "ddos_l7"
-	RulesetPhaseHTTPRequestFirewallCustom  RulesetPhase = "http_request_firewall_custom"
-	RulesetPhaseHTTPRequestFirewallManaged RulesetPhase = "http_request_firewall_managed"
-	RulesetPhaseHTTPRequestMain            RulesetPhase = "http_request_main"
-	RulesetPhaseHTTPRequestSanitize        RulesetPhase = "http_request_sanitize"
-	RulesetPhaseHTTPRequestTransform       RulesetPhase = "http_request_transform"
-	RulesetPhaseMagicTransit               RulesetPhase = "magic_transit"
+	RulesetPhaseDDoSL4                      RulesetPhase = "ddos_l4"
+	RulesetPhaseDDoSL7                      RulesetPhase = "ddos_l7"
+	RulesetPhaseHTTPRequestFirewallCustom   RulesetPhase = "http_request_firewall_custom"
+	RulesetPhaseHTTPRequestFirewallManaged  RulesetPhase = "http_request_firewall_managed"
+	RulesetPhaseHTTPRequestLateTransform    RulesetPhase = "http_request_late_transform"
+	RulesetPhaseHTTPRequestMain             RulesetPhase = "http_request_main"
+	RulesetPhaseHTTPRequestSanitize         RulesetPhase = "http_request_sanitize"
+	RulesetPhaseHTTPRequestTransform        RulesetPhase = "http_request_transform"
+	RulesetPhaseHTTPResponseFirewallManaged RulesetPhase = "http_response_firewall_managed"
+	RulesetPhaseMagicTransit                RulesetPhase = "magic_transit"
+	RulesetPhaseRateLimit                   RulesetPhase = "http_ratelimit"
 
 	RulesetRuleActionBlock                RulesetRuleAction = "block"
 	RulesetRuleActionChallenge            RulesetRuleAction = "challenge"
@@ -64,13 +68,17 @@ func RulesetKindValues() []string {
 // of strings.
 func RulesetPhaseValues() []string {
 	return []string{
+		string(RulesetPhaseDDoSL4),
 		string(RulesetPhaseDDoSL7),
 		string(RulesetPhaseHTTPRequestFirewallCustom),
 		string(RulesetPhaseHTTPRequestFirewallManaged),
+		string(RulesetPhaseHTTPRequestLateTransform),
 		string(RulesetPhaseHTTPRequestMain),
 		string(RulesetPhaseHTTPRequestSanitize),
 		string(RulesetPhaseHTTPRequestTransform),
+		string(RulesetPhaseHTTPResponseFirewallManaged),
 		string(RulesetPhaseMagicTransit),
+		string(RulesetPhaseRateLimit),
 	}
 }
 
