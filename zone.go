@@ -608,7 +608,7 @@ func (api *API) EditZone(ctx context.Context, zoneID string, zoneOpts ZoneOption
 // API reference: https://api.cloudflare.com/#zone-purge-all-files
 func (api *API) PurgeEverything(ctx context.Context, zoneID string) (PurgeCacheResponse, error) {
 	uri := fmt.Sprintf("/zones/%s/purge_cache", zoneID)
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, PurgeCacheRequest{true, nil, nil, nil})
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, PurgeCacheRequest{true, nil, nil, nil, nil})
 	if err != nil {
 		return PurgeCacheResponse{}, err
 	}
