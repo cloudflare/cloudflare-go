@@ -12,6 +12,56 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func Test_normalizeDomainName(t *testing.T) {
+	tests := map[string]struct {
+		domain   string
+		expected string
+	}{
+		"empty stays empty": {
+			domain:   "",
+			expected: "",
+		},
+		"unicode gets encoded": {
+			domain:   "😺.com",
+			expected: "xn--138h.com",
+		},
+		"unicode gets mapped and encoded": {
+			domain:   "ÖBB.at",
+			expected: "xn--bb-eka.at",
+		},
+		"punycode stays punycode": {
+			domain:   "xn--138h.com",
+			expected: "xn--138h.com",
+		},
+		"hyphens are not checked": {
+			domain:   "s3--s4.com",
+			expected: "s3--s4.com",
+		},
+		"STD3 rules are not enforced": {
+			domain:   "℀.com",
+			expected: "a/c.com",
+		},
+		"bidi check is disabled": {
+			domain:   "englishﻋﺮﺑﻲ.com",
+			expected: "xn--english-gqjzfwd1j.com",
+		},
+		"invalid joiners are allowed": {
+			domain:   "a\u200cb.com",
+			expected: "xn--ab-j1t.com",
+		},
+		"partial results are used despite errors": {
+			domain:   "xn--:D.xn--.😺.com",
+			expected: "xn--:d..xn--138h.com",
+		},
+	}
+	for name, tt := range tests {
+		t.Run(name, func(t *testing.T) {
+			actual := normalizeDomainName(tt.domain)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
 func TestCreateDNSRecord(t *testing.T) {
 	setup()
 	defer teardown()

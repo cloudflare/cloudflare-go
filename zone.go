@@ -855,6 +855,9 @@ func (api *API) UpdateFallbackOrigin(ctx context.Context, zoneID string, fbo Fal
 // names. However, there should be no harm calling this function other than
 // potential performance penality.
 //
+// Confusinigly, this is in the opposite direction of normalizeDomainName
+// to work around the current quirks of the Cloudflare servers.
+//
 // Note: conversion errors are silently discarded.
 func normalizeZoneName(name string) string {
 	if n, err := idna.ToUnicode(name); err == nil {
