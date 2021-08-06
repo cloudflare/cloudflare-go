@@ -53,7 +53,7 @@ func TestTeamsLocations(t *testing.T) {
 	want := []TeamsLocation{{
 		ID:                    "0f8185414dec4a5e9034f3d917c17890",
 		Name:                  "home",
-		Networks:              []LocationNetwork{{ID: "8e4c7835436345f0ab395429b187a076", Network: "99.151.35.207/32"}},
+		Networks:              []TeamsLocationNetwork{{ID: "8e4c7835436345f0ab395429b187a076", Network: "99.151.35.207/32"}},
 		PolicyIDs:             []string{},
 		Ip:                    "2a06:98c1:54::2419",
 		Subdomain:             "q15l7x2lbw",
@@ -111,7 +111,7 @@ func TestTeamsLocation(t *testing.T) {
 	want := TeamsLocation{
 		ID:                    id,
 		Name:                  "home",
-		Networks:              []LocationNetwork{{ID: "8e4c7835436345f0ab395429b187a076", Network: "99.151.35.207/32"}},
+		Networks:              []TeamsLocationNetwork{{ID: "8e4c7835436345f0ab395429b187a076", Network: "99.151.35.207/32"}},
 		PolicyIDs:             []string{},
 		Ip:                    "2a06:98c1:54::2419",
 		Subdomain:             "q15l7x2lbw",
@@ -169,7 +169,7 @@ func TestCreateTeamsLocation(t *testing.T) {
 	want := TeamsLocation{
 		ID:                    id,
 		Name:                  "test",
-		Networks:              []LocationNetwork{{ID: "8e4c7835436345f0ab395429b187a076", Network: "99.151.35.207/32"}},
+		Networks:              []TeamsLocationNetwork{{ID: "8e4c7835436345f0ab395429b187a076", Network: "99.151.35.207/32"}},
 		PolicyIDs:             []string{},
 		Ip:                    "2a06:98c1:54::2419",
 		Subdomain:             "q15l7x2lbw",
@@ -185,7 +185,7 @@ func TestCreateTeamsLocation(t *testing.T) {
 	actual, err := client.CreateTeamsLocation(context.Background(), testAccountID, TeamsLocation{
 		Name:          "test",
 		ClientDefault: true,
-		Networks:      []LocationNetwork{},
+		Networks:      []TeamsLocationNetwork{},
 	})
 	require.Nil(t, err)
 	assert.Equal(t, want, actual)
@@ -232,7 +232,7 @@ func TestUpdateTeamsLocation(t *testing.T) {
 	want := TeamsLocation{
 		ID:                    id,
 		Name:                  "new",
-		Networks:              []LocationNetwork{{ID: "8e4c7835436345f0ab395429b187a076", Network: "99.151.35.207/32"}},
+		Networks:              []TeamsLocationNetwork{{ID: "8e4c7835436345f0ab395429b187a076", Network: "99.151.35.207/32"}},
 		PolicyIDs:             []string{},
 		Ip:                    "2a06:98c1:54::2419",
 		Subdomain:             "q15l7x2lbw",
@@ -249,7 +249,7 @@ func TestUpdateTeamsLocation(t *testing.T) {
 		ID:            id,
 		Name:          "new",
 		ClientDefault: false,
-		Networks:      []LocationNetwork{{ID: "", Network: "1.2.3.4"}},
+		Networks:      []TeamsLocationNetwork{{ID: "", Network: "1.2.3.4"}},
 	})
 	require.Nil(t, err)
 	assert.Equal(t, want, actual)
