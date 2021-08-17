@@ -22,6 +22,9 @@ type AccessPolicy struct {
 	UpdatedAt  *time.Time `json:"updated_at"`
 	Name       string     `json:"name"`
 
+	PurposeJustificationRequired *bool   `json:"purpose_justification_required,omitempty"`
+	PurposeJustificationPrompt   *string `json:"purpose_justification_prompt,omitempty"`
+
 	// The include policy works like an OR logical operator. The user must
 	// satisfy one of the rules.
 	Include []interface{} `json:"include"`
