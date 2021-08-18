@@ -4,9 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/pkg/errors"
 	"net/http"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
 type TeamsAccount struct {
@@ -15,13 +16,15 @@ type TeamsAccount struct {
 	ID           string `json:"id"`            // cloudflare account ID
 }
 
-// TeamsAccountResponse is the API response, containing information on teams account
+// TeamsAccountResponse is the API response, containing information on teams
+// account.
 type TeamsAccountResponse struct {
 	Response
 	Result TeamsAccount `json:"result"`
 }
 
-// TeamsConfigResponse is the API response, containing information on teams account config
+// TeamsConfigResponse is the API response, containing information on teams
+// account config.
 type TeamsConfigResponse struct {
 	Response
 	Result TeamsConfiguration `json:"result"`
@@ -64,7 +67,9 @@ type TeamsBlockPage struct {
 	Name            string `json:"name,omitempty"`
 }
 
-// TeamsAccount returns teams account information with internal and external id
+// TeamsAccount returns teams account information with internal and external ID.
+//
+// API reference: TBA
 func (api *API) TeamsAccount(ctx context.Context, accountID string) (TeamsAccount, error) {
 	uri := fmt.Sprintf("/accounts/%s/gateway", accountID)
 
@@ -82,7 +87,9 @@ func (api *API) TeamsAccount(ctx context.Context, accountID string) (TeamsAccoun
 	return teamsAccountResponse.Result, nil
 }
 
-// TeamsAccountConfiguration returns teams account configuration
+// TeamsAccountConfiguration returns teams account configuration.
+//
+// API reference: TBA
 func (api *API) TeamsAccountConfiguration(ctx context.Context, accountID string) (TeamsConfiguration, error) {
 	uri := fmt.Sprintf("/accounts/%s/gateway/configuration", accountID)
 
@@ -100,7 +107,9 @@ func (api *API) TeamsAccountConfiguration(ctx context.Context, accountID string)
 	return teamsConfigResponse.Result, nil
 }
 
-// TeamsAccountUpdateConfiguration upserts teams account configuration
+// TeamsAccountUpdateConfiguration updates a teams account configuration.
+//
+// API reference: TBA
 func (api *API) TeamsAccountUpdateConfiguration(ctx context.Context, accountID string, config TeamsConfiguration) (TeamsConfiguration, error) {
 	uri := fmt.Sprintf("/accounts/%s/gateway/configuration", accountID)
 

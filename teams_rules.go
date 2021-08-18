@@ -84,19 +84,19 @@ type TeamsRule struct {
 	RuleSettings TeamsRuleSettings  `json:"rule_settings,omitempty"`
 }
 
-// TeamsRuleResponse is the API response, containing a single rule
+// TeamsRuleResponse is the API response, containing a single rule.
 type TeamsRuleResponse struct {
 	Response
 	Result TeamsRule `json:"result"`
 }
 
-// TeamsRuleResponse is the API response, containing an array of rules
+// TeamsRuleResponse is the API response, containing an array of rules.
 type TeamsRulesResponse struct {
 	Response
 	Result []TeamsRule `json:"result"`
 }
 
-// TeamsRulePatchRequest is used to patch an existing rule
+// TeamsRulePatchRequest is used to patch an existing rule.
 type TeamsRulePatchRequest struct {
 	ID           string             `json:"id"`
 	Name         string             `json:"name"`
@@ -127,7 +127,7 @@ func (api *API) TeamsRules(ctx context.Context, accountID string) ([]TeamsRule, 
 	return teamsRulesResponse.Result, nil
 }
 
-// TeamsRule returns the rule with rule id in the url
+// TeamsRule returns the rule with rule ID in the URL.
 //
 // API reference: https://api.cloudflare.com/#teams-rules-properties
 func (api *API) TeamsRule(ctx context.Context, accountID string, ruleId string) (TeamsRule, error) {
@@ -147,7 +147,7 @@ func (api *API) TeamsRule(ctx context.Context, accountID string, ruleId string) 
 	return teamsRuleResponse.Result, nil
 }
 
-// TeamsCreateRule creates a rule with wirefilter expression
+// TeamsCreateRule creates a rule with wirefilter expression.
 //
 // API reference: https://api.cloudflare.com/#teams-rules-properties
 func (api *API) TeamsCreateRule(ctx context.Context, accountID string, rule TeamsRule) (TeamsRule, error) {
@@ -167,7 +167,7 @@ func (api *API) TeamsCreateRule(ctx context.Context, accountID string, rule Team
 	return teamsRuleResponse.Result, nil
 }
 
-// TeamsUpdateRule updates a rule with wirefilter expression
+// TeamsUpdateRule updates a rule with wirefilter expression.
 //
 // API reference: https://api.cloudflare.com/#teams-rules-properties
 func (api *API) TeamsUpdateRule(ctx context.Context, accountID string, ruleId string, rule TeamsRule) (TeamsRule, error) {
@@ -187,7 +187,7 @@ func (api *API) TeamsUpdateRule(ctx context.Context, accountID string, ruleId st
 	return teamsRuleResponse.Result, nil
 }
 
-// TeamsPatchRule patches a rule associated values
+// TeamsPatchRule patches a rule associated values.
 //
 // API reference: https://api.cloudflare.com/#teams-rules-properties
 func (api *API) TeamsPatchRule(ctx context.Context, accountID string, ruleId string, rule TeamsRulePatchRequest) (TeamsRule, error) {
@@ -207,7 +207,7 @@ func (api *API) TeamsPatchRule(ctx context.Context, accountID string, ruleId str
 	return teamsRuleResponse.Result, nil
 }
 
-// TeamsDeleteRule deletes a rule
+// TeamsDeleteRule deletes a rule.
 //
 // API reference: https://api.cloudflare.com/#teams-rules-properties
 func (api *API) TeamsDeleteRule(ctx context.Context, accountID string, ruleId string) error {
