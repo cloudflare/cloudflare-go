@@ -849,14 +849,10 @@ func (api *API) UpdateFallbackOrigin(ctx context.Context, zoneID string, fbo Fal
 // as Punycode, or converting fails (for invalid representations), it
 // is returned unchanged.
 //
-// Because all the zone name comparison is currently done on the server side
+// Because all the zone name comparison is currently done using the API service
 // (except for comparison with the empty string), theoretically, we could
-// remove this function and let the server decide equivalence between zone
-// names. However, there should be no harm calling this function other than
-// potential performance penality.
-//
-// Confusinigly, this is in the opposite direction of normalizeDomainName
-// to work around the current quirks of the Cloudflare servers.
+// remove this function from the Go library. However, there should be no harm
+// calling this function other than gelable performance penalty.
 //
 // Note: conversion errors are silently discarded.
 func normalizeZoneName(name string) string {

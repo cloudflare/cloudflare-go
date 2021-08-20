@@ -58,9 +58,6 @@ var nontransitionalLookup = idna.New(
 // from Unicode form to Punycode, using non-transitional process specified
 // in UTS 46.
 //
-// Confusinigly, this is in the opposite direction of normalizeZoneName
-// to work around the current quirks of the Cloudflare servers.
-//
 // Note: conversion errors are silently discarded and partial conversion
 // results are used.
 func normalizeDomainName(name string) string {
