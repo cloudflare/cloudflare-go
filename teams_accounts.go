@@ -45,21 +45,21 @@ type TeamsAccountSettings struct {
 }
 
 type TeamsAntivirus struct {
-	EnabledDownloadPhase bool `json:"enabled_download_phase,omitempty"`
-	EnabledUploadPhase   bool `json:"enabled_upload_phase,omitempty"`
-	FailClosed           bool `json:"fail_closed,omitempty"`
+	EnabledDownloadPhase bool `json:"enabled_download_phase"`
+	EnabledUploadPhase   bool `json:"enabled_upload_phase"`
+	FailClosed           bool `json:"fail_closed"`
 }
 
 type TeamsTLSDecrypt struct {
-	Enabled bool `json:"enabled,omitempty"`
+	Enabled bool `json:"enabled"`
 }
 
 type TeamsActivityLog struct {
-	Enabled bool `json:"enabled,omitempty"`
+	Enabled bool `json:"enabled"`
 }
 
 type TeamsBlockPage struct {
-	Enabled         bool   `json:"enabled,omitempty"`
+	Enabled         *bool  `json:"enabled,omitempty"`
 	FooterText      string `json:"footer_text,omitempty"`
 	HeaderText      string `json:"header_text,omitempty"`
 	LogoPath        string `json:"logo_path,omitempty"`
