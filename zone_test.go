@@ -1384,16 +1384,9 @@ func TestListZones(t *testing.T) {
 			count = total - start
 		}
 
-		res, err := json.Marshal(mockZonesResponse(total, page, start, count))
-		if !assert.NoError(t, err) {
-			return
-		}
-
 		w.Header().Set("content-type", "application/json")
-
-		if _, err = w.Write(res); assert.NoError(t, err) {
-			return
-		}
+		err := json.NewEncoder(w).Encode(mockZonesResponse(total, page, start, count))
+		assert.NoError(t, err)
 	}
 
 	mux.HandleFunc("/zones", handler)
@@ -1443,16 +1436,9 @@ func TestListZonesFailingPages(t *testing.T) {
 			count = total - start
 		}
 
-		res, err := json.Marshal(mockZonesResponse(total, page, start, count))
-		if !assert.NoError(t, err) {
-			return
-		}
-
 		w.Header().Set("content-type", "application/json")
-
-		if _, err = w.Write(res); assert.NoError(t, err) {
-			return
-		}
+		err := json.NewEncoder(w).Encode(mockZonesResponse(total, page, start, count))
+		assert.NoError(t, err)
 	}
 
 	mux.HandleFunc("/zones", handler)

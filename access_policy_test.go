@@ -19,6 +19,9 @@ var (
 	updatedAt, _ = time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	expiresAt, _ = time.Parse(time.RFC3339, "2015-01-01T05:20:00.12345Z")
 
+	purposeJustificationRequired = true
+	purposeJustificationPrompt   = "Please provide a business reason for your need to access before continuing."
+
 	expectedAccessPolicy = AccessPolicy{
 		ID:         "699d98642c564d2e855e9661899b7252",
 		Precedence: 1,
@@ -35,6 +38,8 @@ var (
 		Require: []interface{}{
 			map[string]interface{}{"email": map[string]interface{}{"email": "test@example.com"}},
 		},
+		PurposeJustificationRequired: &purposeJustificationRequired,
+		PurposeJustificationPrompt:   &purposeJustificationPrompt,
 	}
 )
 
@@ -77,7 +82,9 @@ func TestAccessPolicies(t *testing.T) {
 								"email": "test@example.com"
 							}
 						}
-					]
+					],
+					"purpose_justification_required": true,
+					"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing."
 				}
 			],
 			"result_info": {
@@ -145,7 +152,9 @@ func TestAccessPolicy(t *testing.T) {
 							"email": "test@example.com"
 						}
 					}
-				]
+				],
+				"purpose_justification_required": true,
+				"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing."
 			}
 		}
 		`)
@@ -206,7 +215,9 @@ func TestCreateAccessPolicy(t *testing.T) {
 							"email": "test@example.com"
 						}
 					}
-				]
+				],
+				"purpose_justification_required": true,
+				"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing."
 			}
 		}
 		`)
@@ -229,7 +240,9 @@ func TestCreateAccessPolicy(t *testing.T) {
 				Email string `json:"email"`
 			}{Email: "test@example.com"}},
 		},
-		Decision: "allow",
+		Decision:                     "allow",
+		PurposeJustificationRequired: &purposeJustificationRequired,
+		PurposeJustificationPrompt:   &purposeJustificationPrompt,
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/"+accessApplicationID+"/policies", handler)
@@ -287,7 +300,9 @@ func TestUpdateAccessPolicy(t *testing.T) {
 							"email": "test@example.com"
 						}
 					}
-				]
+				],
+				"purpose_justification_required": true,
+				"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing."
 			}
 		}
 		`)
