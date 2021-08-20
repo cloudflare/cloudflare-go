@@ -54,13 +54,13 @@ var nontransitionalLookup = idna.New(
 	idna.ValidateLabels(false),
 )
 
-// normalizeDomainName tries to convert IDNs (international domain names)
+// toUTS46ASCII tries to convert IDNs (international domain names)
 // from Unicode form to Punycode, using non-transitional process specified
 // in UTS 46.
 //
 // Note: conversion errors are silently discarded and partial conversion
 // results are used.
-func normalizeDomainName(name string) string {
+func toUTS46ASCII(name string) string {
 	name, _ = nontransitionalLookup.ToASCII(name)
 	return name
 }
@@ -69,7 +69,7 @@ func normalizeDomainName(name string) string {
 //
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-create-dns-record
 func (api *API) CreateDNSRecord(ctx context.Context, zoneID string, rr DNSRecord) (*DNSRecordResponse, error) {
-	rr.Name = normalizeDomainName(rr.Name)
+	rr.Name = toUTS46ASCII(rr.Name)
 
 	uri := fmt.Sprintf("/zones/%s/dns_records", zoneID)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, rr)
@@ -97,7 +97,7 @@ func (api *API) DNSRecords(ctx context.Context, zoneID string, rr DNSRecord) ([]
 	// Request as many records as possible per page - API max is 100
 	v.Set("per_page", "100")
 	if rr.Name != "" {
-		v.Set("name", normalizeDomainName(rr.Name))
+		v.Set("name", toUTS46ASCII(rr.Name))
 	}
 	if rr.Type != "" {
 		v.Set("type", rr.Type)
@@ -155,7 +155,7 @@ func (api *API) DNSRecord(ctx context.Context, zoneID, recordID string) (DNSReco
 //
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-update-dns-record
 func (api *API) UpdateDNSRecord(ctx context.Context, zoneID, recordID string, rr DNSRecord) error {
-	rr.Name = normalizeDomainName(rr.Name)
+	rr.Name = toUTS46ASCII(rr.Name)
 
 	// Populate the record name from the existing one if the update didn't
 	// specify it.

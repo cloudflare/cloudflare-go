@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func Test_normalizeDomainName(t *testing.T) {
+func Test_toUTS46ASCII(t *testing.T) {
 	tests := map[string]struct {
 		domain   string
 		expected string
@@ -56,7 +56,7 @@ func Test_normalizeDomainName(t *testing.T) {
 	}
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
-			actual := normalizeDomainName(tt.domain)
+			actual := toUTS46ASCII(tt.domain)
 			assert.Equal(t, tt.expected, actual)
 		})
 	}
