@@ -165,7 +165,7 @@ func TestGetRuleset_WAF(t *testing.T) {
 		Action:  string(RulesetRuleActionRewrite),
 		ActionParameters: &RulesetRuleActionParameters{
 			URI: &RulesetRuleActionParametersURI{
-				Path: RulesetRuleActionParametersURIPath{
+				Path: &RulesetRuleActionParametersURIPath{
 					Expression: "normalize_url_path(raw.http.request.uri.path)",
 				},
 				Origin: false,

@@ -171,14 +171,15 @@ type RulesetRuleActionParameters struct {
 
 // RulesetRuleActionParametersURI holds the URI struct for an action parameter.
 type RulesetRuleActionParametersURI struct {
-	Path   RulesetRuleActionParametersURIPath  `json:"path,omitempty"`
-	Query  RulesetRuleActionParametersURIQuery `json:"query,omitempty"`
-	Origin bool                                `json:"origin,omitempty"`
+	Path   *RulesetRuleActionParametersURIPath  `json:"path,omitempty"`
+	Query  *RulesetRuleActionParametersURIQuery `json:"query,omitempty"`
+	Origin bool                                 `json:"origin,omitempty"`
 }
 
 // RulesetRuleActionParametersURIPath holds the path specific portion of a URI
 // action parameter.
 type RulesetRuleActionParametersURIPath struct {
+	Value      string `json:"value,omitempty"`
 	Expression string `json:"expression,omitempty"`
 }
 
