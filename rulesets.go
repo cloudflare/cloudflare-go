@@ -229,6 +229,19 @@ type RulesetRule struct {
 	Ref              string                       `json:"ref,omitempty"`
 	Enabled          bool                         `json:"enabled"`
 	ScoreThreshold   int                          `json:"score_threshold,omitempty"`
+	RateLimit        *RulesetRuleRateLimit        `json:"ratelimit,omitempty"`
+}
+
+// RulesetRuleRateLimit contains the structure of a HTTP rate limit Ruleset Rule.
+type RulesetRuleRateLimit struct {
+	Characteristics   []string `json:"characteristics,omitempty"`
+	RequestsPerPeriod int      `json:"requests_per_period,omitempty"`
+	Period            int      `json:"period,omitempty"`
+	MitigationTimeout int      `json:"mitigation_timeout,omitempty"`
+
+	// Should always be sent as "" will trigger the service to use the Ruleset
+	// expression instead.
+	MitigationExpression string `json:"mitigation_expression"`
 }
 
 // UpdateRulesetRequest is the representation of a Ruleset update.
