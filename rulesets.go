@@ -159,14 +159,15 @@ type Ruleset struct {
 // RulesetRuleActionParameters specifies the action parameters for a Ruleset
 // rule.
 type RulesetRuleActionParameters struct {
-	ID        string                                           `json:"id,omitempty"`
-	Ruleset   string                                           `json:"ruleset,omitempty"`
-	Increment int                                              `json:"increment,omitempty"`
-	URI       *RulesetRuleActionParametersURI                  `json:"uri,omitempty"`
-	Headers   map[string]RulesetRuleActionParametersHTTPHeader `json:"headers,omitempty"`
-	Products  []string                                         `json:"products,omitempty"`
-	Overrides *RulesetRuleActionParametersOverrides            `json:"overrides,omitempty"`
-	Rules     []RulesetRuleActionParametersRules               `json:"rules,omitempty"`
+	ID          string                                           `json:"id,omitempty"`
+	Ruleset     string                                           `json:"ruleset,omitempty"`
+	Increment   int                                              `json:"increment,omitempty"`
+	URI         *RulesetRuleActionParametersURI                  `json:"uri,omitempty"`
+	Headers     map[string]RulesetRuleActionParametersHTTPHeader `json:"headers,omitempty"`
+	Products    []string                                         `json:"products,omitempty"`
+	Overrides   *RulesetRuleActionParametersOverrides            `json:"overrides,omitempty"`
+	Rules       []RulesetRuleActionParametersRules               `json:"rules,omitempty"`
+	MatchedData *RulesetRuleActionParametersMatchedData          `json:"matched_data,omitempty"`
 }
 
 // RulesetRuleActionParametersURI holds the URI struct for an action parameter.
@@ -215,6 +216,12 @@ type RulesetRuleActionParametersRules struct {
 	Action         string `json:"action,omitempty"`
 	Enabled        bool   `json:"enabled"`
 	ScoreThreshold int    `json:"score_threshold,omitempty"`
+}
+
+// RulesetRuleActionParametersMatchedData holds the structure for WAF based
+// payload logging.
+type RulesetRuleActionParametersMatchedData struct {
+	PublicKey string `json:"public_key,omitempty"`
 }
 
 // RulesetRule contains information about a single Ruleset Rule.
