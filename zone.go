@@ -851,6 +851,11 @@ func (api *API) UpdateFallbackOrigin(ctx context.Context, zoneID string, fbo Fal
 // as Punycode, or converting fails (for invalid representations), it
 // is returned unchanged.
 //
+// Because all the zone name comparison is currently done using the API service
+// (except for comparison with the empty string), theoretically, we could
+// remove this function from the Go library. However, there should be no harm
+// calling this function other than gelable performance penalty.
+//
 // Note: conversion errors are silently discarded.
 func normalizeZoneName(name string) string {
 	if n, err := idna.ToUnicode(name); err == nil {

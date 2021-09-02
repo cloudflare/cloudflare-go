@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
+	"golang.org/x/net/idna"
 )
 
 // DNSRecord represents a DNS record in a zone.
@@ -45,10 +46,31 @@ type DNSListResponse struct {
 	ResultInfo `json:"result_info"`
 }
 
+// nontransitionalLookup implements the nontransitional processing as specified in
+// Unicode Technical Standard 46 with almost all checkings off to maximize user freedom.
+var nontransitionalLookup = idna.New(
+	idna.MapForLookup(),
+	idna.StrictDomainName(false),
+	idna.ValidateLabels(false),
+)
+
+// toUTS46ASCII tries to convert IDNs (international domain names)
+// from Unicode form to Punycode, using non-transitional process specified
+// in UTS 46.
+//
+// Note: conversion errors are silently discarded and partial conversion
+// results are used.
+func toUTS46ASCII(name string) string {
+	name, _ = nontransitionalLookup.ToASCII(name)
+	return name
+}
+
 // CreateDNSRecord creates a DNS record for the zone identifier.
 //
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-create-dns-record
 func (api *API) CreateDNSRecord(ctx context.Context, zoneID string, rr DNSRecord) (*DNSRecordResponse, error) {
+	rr.Name = toUTS46ASCII(rr.Name)
+
 	uri := fmt.Sprintf("/zones/%s/dns_records", zoneID)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, rr)
 	if err != nil {
@@ -75,7 +97,7 @@ func (api *API) DNSRecords(ctx context.Context, zoneID string, rr DNSRecord) ([]
 	// Request as many records as possible per page - API max is 100
 	v.Set("per_page", "100")
 	if rr.Name != "" {
-		v.Set("name", rr.Name)
+		v.Set("name", toUTS46ASCII(rr.Name))
 	}
 	if rr.Type != "" {
 		v.Set("type", rr.Type)
@@ -133,6 +155,8 @@ func (api *API) DNSRecord(ctx context.Context, zoneID, recordID string) (DNSReco
 //
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-update-dns-record
 func (api *API) UpdateDNSRecord(ctx context.Context, zoneID, recordID string, rr DNSRecord) error {
+	rr.Name = toUTS46ASCII(rr.Name)
+
 	// Populate the record name from the existing one if the update didn't
 	// specify it.
 	if rr.Name == "" || rr.Type == "" {
