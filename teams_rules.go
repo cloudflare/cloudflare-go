@@ -66,6 +66,23 @@ const (
 	L4Override   TeamsGatewayAction = "l4_override"
 )
 
+func TeamsRulesActionValues() []string {
+	return []string{
+		string(Allow),
+		string(Block),
+		string(SafeSearch),
+		string(YTRestricted),
+		string(On),
+		string(Off),
+		string(Scan),
+		string(NoScan),
+		string(Isolate),
+		string(NoIsolate),
+		string(Override),
+		string(L4Override),
+	}
+}
+
 // TeamsRule represents an Teams wirefilter rule.
 type TeamsRule struct {
 	ID           string             `json:"id,omitempty"`
