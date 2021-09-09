@@ -113,29 +113,7 @@ func TestListPagerDutyDestinations(t *testing.T) {
 	require.NotNil(t, actual)
 	assert.Equal(t, expected, actual.Result)
 }
-func TestDeletePagerDutyDestinations(t *testing.T) {
-	setup()
-	defer teardown()
 
-	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
-		w.Header().Set("content-type", "application/json")
-		_, err := fmt.Fprintf(w, `{
-  									"success": true,
-  									"errors": [],
-  									"messages": []
-								}`,
-		)
-		require.NoError(t, err)
-	}
-
-	mux.HandleFunc("/accounts/"+testAccountID+"/alerting/v3/destinations/pagerduty", handler)
-
-	actual, err := client.DeletePagerDutyNotificationDestinations(context.Background(), testAccountID)
-	require.Nil(t, err)
-	require.NotNil(t, actual)
-	assert.True(t, actual.Success)
-}
 func TestCreateNotificationPolicy(t *testing.T) {
 	setup()
 	defer teardown()

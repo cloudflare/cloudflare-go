@@ -346,25 +346,6 @@ func (api *API) ListPagerDutyNotificationDestinations(ctx context.Context, accou
 	return r, nil
 }
 
-// DeletePagerDutyNotificationDestinations will delete the pagerduty
-// destination connected for an account.
-//
-// API Reference: https://api.cloudflare.com/#notification-destinations-with-pagerduty-delete-pagerduty-destinations
-func (api *API) DeletePagerDutyNotificationDestinations(ctx context.Context, accountID string) (Response, error) {
-	baseURL := fmt.Sprintf("/accounts/%s/alerting/v3/destinations/pagerduty", accountID)
-
-	res, err := api.makeRequestContext(ctx, http.MethodDelete, baseURL, nil)
-	if err != nil {
-		return Response{}, err
-	}
-	var r Response
-	err = json.Unmarshal(res, &r)
-	if err != nil {
-		return r, err
-	}
-	return r, nil
-}
-
 // GetEligibleNotificationDestinations will return the types of
 // destinations an account is eligible to configure.
 //
