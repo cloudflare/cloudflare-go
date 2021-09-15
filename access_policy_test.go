@@ -46,7 +46,7 @@ var (
 				ApprovalsNeeded: 3,
 			},
 			{
-				EmailAddresses:  []string{"email1@cloudflare.com", "email2@cloudflare.com"},
+				EmailAddresses:  []string{"email1@example.com", "email2@example.com"},
 				ApprovalsNeeded: 1,
 			},
 		},
