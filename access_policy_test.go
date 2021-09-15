@@ -40,6 +40,16 @@ var (
 		},
 		PurposeJustificationRequired: &purposeJustificationRequired,
 		PurposeJustificationPrompt:   &purposeJustificationPrompt,
+		ApprovalGroups: []AccessApprovalGroup{
+			{
+				EmailListUuid:   "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
+				ApprovalsNeeded: 3,
+			},
+			{
+				EmailAddresses:  []string{"email1@example.com", "email2@example.com"},
+				ApprovalsNeeded: 1,
+			},
+		},
 	}
 )
 
@@ -84,7 +94,17 @@ func TestAccessPolicies(t *testing.T) {
 						}
 					],
 					"purpose_justification_required": true,
-					"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing."
+					"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing.",
+					"approval_groups": [
+						{
+							"email_list_uuid": "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
+							"approvals_needed": 3
+						},
+						{
+							"email_addresses": ["email1@example.com", "email2@example.com"],
+							"approvals_needed": 1
+						}
+					]
 				}
 			],
 			"result_info": {
@@ -154,7 +174,17 @@ func TestAccessPolicy(t *testing.T) {
 					}
 				],
 				"purpose_justification_required": true,
-				"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing."
+				"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing.",
+				"approval_groups": [
+					{
+						"email_list_uuid": "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
+						"approvals_needed": 3
+					},
+					{
+						"email_addresses": ["email1@example.com", "email2@example.com"],
+						"approvals_needed": 1
+					}
+				]
 			}
 		}
 		`)
@@ -217,7 +247,17 @@ func TestCreateAccessPolicy(t *testing.T) {
 					}
 				],
 				"purpose_justification_required": true,
-				"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing."
+				"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing.",
+				"approval_groups": [
+					{
+						"email_list_uuid": "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
+						"approvals_needed": 3
+					},
+					{
+						"email_addresses": ["email1@example.com", "email2@example.com"],
+						"approvals_needed": 1
+					}
+				]
 			}
 		}
 		`)
@@ -243,6 +283,16 @@ func TestCreateAccessPolicy(t *testing.T) {
 		Decision:                     "allow",
 		PurposeJustificationRequired: &purposeJustificationRequired,
 		PurposeJustificationPrompt:   &purposeJustificationPrompt,
+		ApprovalGroups: []AccessApprovalGroup{
+			{
+				EmailListUuid:   "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
+				ApprovalsNeeded: 3,
+			},
+			{
+				EmailAddresses:  []string{"email1@example.com", "email2@example.com"},
+				ApprovalsNeeded: 1,
+			},
+		},
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/"+accessApplicationID+"/policies", handler)
@@ -302,7 +352,17 @@ func TestUpdateAccessPolicy(t *testing.T) {
 					}
 				],
 				"purpose_justification_required": true,
-				"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing."
+				"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing.",
+				"approval_groups": [
+					{
+						"email_list_uuid": "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
+						"approvals_needed": 3
+					},
+					{
+						"email_addresses": ["email1@example.com", "email2@example.com"],
+						"approvals_needed": 1
+					}
+				]
 			}
 		}
 		`)
