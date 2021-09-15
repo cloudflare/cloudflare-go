@@ -159,15 +159,17 @@ type Ruleset struct {
 // RulesetRuleActionParameters specifies the action parameters for a Ruleset
 // rule.
 type RulesetRuleActionParameters struct {
-	ID          string                                           `json:"id,omitempty"`
-	Ruleset     string                                           `json:"ruleset,omitempty"`
-	Increment   int                                              `json:"increment,omitempty"`
-	URI         *RulesetRuleActionParametersURI                  `json:"uri,omitempty"`
-	Headers     map[string]RulesetRuleActionParametersHTTPHeader `json:"headers,omitempty"`
-	Products    []string                                         `json:"products,omitempty"`
-	Overrides   *RulesetRuleActionParametersOverrides            `json:"overrides,omitempty"`
-	Rules       []RulesetRuleActionParametersRules               `json:"rules,omitempty"`
-	MatchedData *RulesetRuleActionParametersMatchedData          `json:"matched_data,omitempty"`
+	ID        string                                           `json:"id,omitempty"`
+	Ruleset   string                                           `json:"ruleset,omitempty"`
+	Rulesets  []string                                         `json:"rulesets,omitempty"`
+	Rules     map[string][]string                              `json:"rules,omitempty"`
+	Increment int                                              `json:"increment,omitempty"`
+	URI       *RulesetRuleActionParametersURI                  `json:"uri,omitempty"`
+	Headers   map[string]RulesetRuleActionParametersHTTPHeader `json:"headers,omitempty"`
+	Products  []string                                         `json:"products,omitempty"`
+	Overrides *RulesetRuleActionParametersOverrides            `json:"overrides,omitempty"`
+
+	MatchedData *RulesetRuleActionParametersMatchedData `json:"matched_data,omitempty"`
 }
 
 // RulesetRuleActionParametersURI holds the URI struct for an action parameter.
