@@ -101,7 +101,7 @@ func TestAccessPolicies(t *testing.T) {
 							"approvals_needed": 3
 						},
 						{
-							"email_addresses": ["email1@cloudflare.com", "email2@cloudflare.com"],
+							"email_addresses": ["email1@example.com", "email2@example.com"],
 							"approvals_needed": 1
 						}
 					]
@@ -181,7 +181,7 @@ func TestAccessPolicy(t *testing.T) {
 						"approvals_needed": 3
 					},
 					{
-						"email_addresses": ["email1@cloudflare.com", "email2@cloudflare.com"],
+						"email_addresses": ["email1@example.com", "email2@example.com"],
 						"approvals_needed": 1
 					}
 				]
@@ -254,7 +254,7 @@ func TestCreateAccessPolicy(t *testing.T) {
 						"approvals_needed": 3
 					},
 					{
-						"email_addresses": ["email1@cloudflare.com", "email2@cloudflare.com"],
+						"email_addresses": ["email1@example.com", "email2@example.com"],
 						"approvals_needed": 1
 					}
 				]
@@ -289,7 +289,7 @@ func TestCreateAccessPolicy(t *testing.T) {
 				ApprovalsNeeded: 3,
 			},
 			{
-				EmailAddresses:  []string{"email1@cloudflare.com", "email2@cloudflare.com"},
+				EmailAddresses:  []string{"email1@example.com", "email2@example.com"},
 				ApprovalsNeeded: 1,
 			},
 		},
@@ -359,7 +359,7 @@ func TestUpdateAccessPolicy(t *testing.T) {
 						"approvals_needed": 3
 					},
 					{
-						"email_addresses": ["email1@cloudflare.com", "email2@cloudflare.com"],
+						"email_addresses": ["email1@example.com", "email2@example.com"],
 						"approvals_needed": 1
 					}
 				]
