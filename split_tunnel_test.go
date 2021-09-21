@@ -57,8 +57,8 @@ func TestSplitTunnelIncludeAddress(t *testing.T) {
 			"messages": [],
 			"result": [
 				{
-					"address": "10.0.0.0/8",
-					"description": "default address"
+					"address": "192.0.2.0/24",
+					"description": "TEST-NET-1"
 			 }
 			]
 		}
@@ -66,8 +66,8 @@ func TestSplitTunnelIncludeAddress(t *testing.T) {
 	}
 
 	want := []SplitTunnel{{
-		Address: "10.0.0.0/8",
-		Description: "default address",
+		Address: "192.0.2.0/24",
+		Description: "TEST-NET-1",
 	}}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/policy/include", handler)
@@ -92,12 +92,12 @@ func TestUpdateSplitTunnelInclude(t *testing.T) {
 			"messages": [],
 			"result": [
 				{
-					"address": "10.0.0.0/8",
-					"description": "default address"
+					"address": "192.0.2.0/24",
+					"description": "TEST-NET-1"
 			 },
 			 {
-				  "address": "100.64.0.0/10",
-				  "description": "second default address"
+				  "address": "198.51.100.0/24",
+				  "description": "TEST-NET-2"
 		   },
 			 {
 				  "host": "*.example.com",
@@ -110,12 +110,12 @@ func TestUpdateSplitTunnelInclude(t *testing.T) {
 
 	tunnels := []SplitTunnel{
 		{
-		Address: "10.0.0.0/8",
-		Description: "default address",
+		Address: "192.0.2.0/24",
+		Description: "TEST-NET-1",
 	  },
 		{
-			Address: "100.64.0.0/10",
-			Description: "second default address",
+			Address: "198.51.100.0/24",
+			Description: "TEST-NET-2",
 		},
 		{
 			Host: "*.example.com",
@@ -180,8 +180,8 @@ func TestSplitTunnelExcludeAddress(t *testing.T) {
 			"messages": [],
 			"result": [
 				{
-					"address": "10.0.0.0/8",
-					"description": "default address"
+					"address": "192.0.2.0/24",
+					"description": "TEST-NET-1"
 			 }
 			]
 		}
@@ -189,8 +189,8 @@ func TestSplitTunnelExcludeAddress(t *testing.T) {
 	}
 
 	want := []SplitTunnel{{
-		Address: "10.0.0.0/8",
-		Description: "default address",
+		Address: "192.0.2.0/24",
+		Description: "TEST-NET-1",
 	}}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/policy/exclude", handler)
@@ -215,12 +215,12 @@ func TestUpdateSplitTunnelExclude(t *testing.T) {
 			"messages": [],
 			"result": [
 				{
-					"address": "10.0.0.0/8",
-					"description": "default address"
+					"address": "192.0.2.0/24",
+					"description": "TEST-NET-1"
 			 },
 			 {
-				  "address": "100.64.0.0/10",
-				  "description": "second default address"
+				  "address": "198.51.100.0/24",
+				  "description": "TEST-NET-2"
 		   },
 			 {
 				  "host": "*.example.com",
@@ -233,12 +233,12 @@ func TestUpdateSplitTunnelExclude(t *testing.T) {
 
 	tunnels := []SplitTunnel{
 		{
-		Address: "10.0.0.0/8",
-		Description: "default address",
+		Address: "192.0.2.0/24",
+		Description: "TEST-NET-1",
 	  },
 		{
-			Address: "100.64.0.0/10",
-			Description: "second default address",
+			Address: "198.51.100.0/24",
+			Description: "TEST-NET-2",
 		},
 		{
 			Host: "*.example.com",
