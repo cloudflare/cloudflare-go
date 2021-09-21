@@ -216,7 +216,7 @@ type RulesetRuleActionParametersCategories struct {
 type RulesetRuleActionParametersRules struct {
 	ID               string `json:"id"`
 	Action           string `json:"action,omitempty"`
-	Enabled          bool   `json:"enabled"`
+	Enabled          *bool  `json:"enabled,omitempty"`
 	ScoreThreshold   int    `json:"score_threshold,omitempty"`
 	SensitivityLevel string `json:"sensitivity_level,omitempty"`
 }
