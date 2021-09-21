@@ -214,10 +214,11 @@ type RulesetRuleActionParametersCategories struct {
 }
 
 type RulesetRuleActionParametersRules struct {
-	ID             string `json:"id"`
-	Action         string `json:"action,omitempty"`
-	Enabled        bool   `json:"enabled"`
-	ScoreThreshold int    `json:"score_threshold,omitempty"`
+	ID               string `json:"id"`
+	Action           string `json:"action,omitempty"`
+	Enabled          bool   `json:"enabled"`
+	ScoreThreshold   int    `json:"score_threshold,omitempty"`
+	SensitivityLevel string `json:"sensitivity_level,omitempty"`
 }
 
 // RulesetRuleActionParametersMatchedData holds the structure for WAF based
