@@ -9,9 +9,9 @@ import (
 	"github.com/pkg/errors"
 )
 
-// SplitTunnelGetResponse represents the response from the get split
+// SplitTunnelResponse represents the response from the get split
 // tunnel endpoints.
-type SplitTunnelGetResponse struct {
+type SplitTunnelResponse struct {
 	Response
 	Result []SplitTunnel `json:"result"`
 }
@@ -23,12 +23,11 @@ type SplitTunnel struct {
 	Description string `json:"description,omitempty"`
 }
 
-
 // ListSplitTunnel returns all include or exclude split tunnel  within an account.
 //
 // API reference for include: https://api.cloudflare.com/#device-policy-get-split-tunnel-include-list
 // API reference for exclude: https://api.cloudflare.com/#device-policy-get-split-tunnel-exclude-list
-func (api *API) ListSplitTunnel(ctx context.Context, accountID string, mode string) ([]SplitTunnel, error) {
+func (api *API) ListSplitTunnels(ctx context.Context, accountID string, mode string) ([]SplitTunnel, error) {
 	uri := fmt.Sprintf("/%s/%s/devices/policy/%s", AccountRouteRoot, accountID, mode)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
@@ -36,13 +35,13 @@ func (api *API) ListSplitTunnel(ctx context.Context, accountID string, mode stri
 		return []SplitTunnel{}, err
 	}
 
-	var splitTunnelGetResponse	SplitTunnelGetResponse
-	err = json.Unmarshal(res, &splitTunnelGetResponse)
+	var splitTunnelResponse SplitTunnelResponse
+	err = json.Unmarshal(res, &splitTunnelResponse)
 	if err != nil {
 		return []SplitTunnel{}, errors.Wrap(err, errUnmarshalError)
 	}
 
-	return splitTunnelGetResponse.Result, nil
+	return splitTunnelResponse.Result, nil
 }
 
 // UpdateSplitTunnel updates the existing split tunnel policy.
@@ -57,11 +56,11 @@ func (api *API) UpdateSplitTunnel(ctx context.Context, accountID string, mode st
 		return []SplitTunnel{}, err
 	}
 
-	var splitTunnelGetResponse	SplitTunnelGetResponse
-	err = json.Unmarshal(res, &splitTunnelGetResponse)
+	var splitTunnelResponse SplitTunnelResponse
+	err = json.Unmarshal(res, &splitTunnelResponse)
 	if err != nil {
 		return []SplitTunnel{}, errors.Wrap(err, errUnmarshalError)
 	}
 
-	return splitTunnelGetResponse.Result, nil
+	return splitTunnelResponse.Result, nil
 }

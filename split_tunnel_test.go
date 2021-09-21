@@ -16,28 +16,29 @@ func TestSplitTunnelIncludeHost(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, `{
-			"success": true,
-			"errors": [],
-			"messages": [],
-			"result": [
-				{
-					"host": "*.example.com",
-					"description": "default"
-			 }
-			]
-		}
-		`)
+		fmt.Fprintf(w, `
+    {
+      "success": true,
+      "errors": [],
+      "messages": [],
+      "result": [
+        {
+          "host": "*.example.com",
+          "description": "default"
+       }
+      ]
+    }
+    `)
 	}
 
 	want := []SplitTunnel{{
-		Host: "*.example.com",
+		Host:        "*.example.com",
 		Description: "default",
 	}}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/policy/include", handler)
 
-	actual, err := client.ListSplitTunnel(context.Background(), testAccountID, "include")
+	actual, err := client.ListSplitTunnels(context.Background(), testAccountID, "include")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -51,28 +52,29 @@ func TestSplitTunnelIncludeAddress(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, `{
-			"success": true,
-			"errors": [],
-			"messages": [],
-			"result": [
-				{
-					"address": "192.0.2.0/24",
-					"description": "TEST-NET-1"
-			 }
-			]
-		}
-		`)
+		fmt.Fprintf(w, `
+    {
+      "success": true,
+      "errors": [],
+      "messages": [],
+      "result": [
+        {
+          "address": "192.0.2.0/24",
+          "description": "TEST-NET-1"
+       }
+      ]
+    }
+    `)
 	}
 
 	want := []SplitTunnel{{
-		Address: "192.0.2.0/24",
+		Address:     "192.0.2.0/24",
 		Description: "TEST-NET-1",
 	}}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/policy/include", handler)
 
-	actual, err := client.ListSplitTunnel(context.Background(), testAccountID, "include")
+	actual, err := client.ListSplitTunnels(context.Background(), testAccountID, "include")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -86,42 +88,43 @@ func TestUpdateSplitTunnelInclude(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, `{
-			"success": true,
-			"errors": [],
-			"messages": [],
-			"result": [
-				{
-					"address": "192.0.2.0/24",
-					"description": "TEST-NET-1"
-			 },
-			 {
-				  "address": "198.51.100.0/24",
-				  "description": "TEST-NET-2"
-		   },
-			 {
-				  "host": "*.example.com",
-				  "description": "example host name"
-		   }
-			]
-		}
-		`)
+		fmt.Fprintf(w, `
+    {
+      "success": true,
+      "errors": [],
+      "messages": [],
+      "result": [
+        {
+          "address": "192.0.2.0/24",
+          "description": "TEST-NET-1"
+       },
+       {
+          "address": "198.51.100.0/24",
+          "description": "TEST-NET-2"
+       },
+       {
+          "host": "*.example.com",
+          "description": "example host name"
+       }
+      ]
+    }
+    `)
 	}
 
 	tunnels := []SplitTunnel{
 		{
-		Address: "192.0.2.0/24",
-		Description: "TEST-NET-1",
-	  },
+			Address:     "192.0.2.0/24",
+			Description: "TEST-NET-1",
+		},
 		{
-			Address: "198.51.100.0/24",
+			Address:     "198.51.100.0/24",
 			Description: "TEST-NET-2",
 		},
 		{
-			Host: "*.example.com",
+			Host:        "*.example.com",
 			Description: "example host name",
 		},
-}
+	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/policy/include", handler)
 
@@ -139,28 +142,29 @@ func TestSplitTunnelExcludeHost(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, `{
-			"success": true,
-			"errors": [],
-			"messages": [],
-			"result": [
-				{
-					"host": "*.example.com",
-					"description": "default"
-			 }
-			]
-		}
-		`)
+		fmt.Fprintf(w, `
+    {
+      "success": true,
+      "errors": [],
+      "messages": [],
+      "result": [
+        {
+          "host": "*.example.com",
+          "description": "default"
+       }
+      ]
+    }
+    `)
 	}
 
 	want := []SplitTunnel{{
-		Host: "*.example.com",
+		Host:        "*.example.com",
 		Description: "default",
 	}}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/policy/exclude", handler)
 
-	actual, err := client.ListSplitTunnel(context.Background(), testAccountID, "exclude")
+	actual, err := client.ListSplitTunnels(context.Background(), testAccountID, "exclude")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -174,28 +178,29 @@ func TestSplitTunnelExcludeAddress(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, `{
-			"success": true,
-			"errors": [],
-			"messages": [],
-			"result": [
-				{
-					"address": "192.0.2.0/24",
-					"description": "TEST-NET-1"
-			 }
-			]
-		}
-		`)
+		fmt.Fprintf(w, `
+    {
+      "success": true,
+      "errors": [],
+      "messages": [],
+      "result": [
+        {
+          "address": "192.0.2.0/24",
+          "description": "TEST-NET-1"
+       }
+      ]
+    }
+    `)
 	}
 
 	want := []SplitTunnel{{
-		Address: "192.0.2.0/24",
+		Address:     "192.0.2.0/24",
 		Description: "TEST-NET-1",
 	}}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/policy/exclude", handler)
 
-	actual, err := client.ListSplitTunnel(context.Background(), testAccountID, "exclude")
+	actual, err := client.ListSplitTunnels(context.Background(), testAccountID, "exclude")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -209,42 +214,43 @@ func TestUpdateSplitTunnelExclude(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, `{
-			"success": true,
-			"errors": [],
-			"messages": [],
-			"result": [
-				{
-					"address": "192.0.2.0/24",
-					"description": "TEST-NET-1"
-			 },
-			 {
-				  "address": "198.51.100.0/24",
-				  "description": "TEST-NET-2"
-		   },
-			 {
-				  "host": "*.example.com",
-				  "description": "example host name"
-		   }
-			]
-		}
-		`)
+		fmt.Fprintf(w, `
+    {
+      "success": true,
+      "errors": [],
+      "messages": [],
+      "result": [
+        {
+          "address": "192.0.2.0/24",
+          "description": "TEST-NET-1"
+       },
+       {
+          "address": "198.51.100.0/24",
+          "description": "TEST-NET-2"
+       },
+       {
+          "host": "*.example.com",
+          "description": "example host name"
+       }
+      ]
+    }
+    `)
 	}
 
 	tunnels := []SplitTunnel{
 		{
-		Address: "192.0.2.0/24",
-		Description: "TEST-NET-1",
-	  },
+			Address:     "192.0.2.0/24",
+			Description: "TEST-NET-1",
+		},
 		{
-			Address: "198.51.100.0/24",
+			Address:     "198.51.100.0/24",
 			Description: "TEST-NET-2",
 		},
 		{
-			Host: "*.example.com",
+			Host:        "*.example.com",
 			Description: "example host name",
 		},
-}
+	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/policy/exclude", handler)
 
