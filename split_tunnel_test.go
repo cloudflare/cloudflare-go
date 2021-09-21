@@ -37,7 +37,7 @@ func TestSplitTunnelIncludeHost(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/policy/include", handler)
 
-	actual, err := client.SplitTunnelInclude(context.Background(), testAccountID)
+	actual, err := client.ListSplitTunnel(context.Background(), testAccountID, "include")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -72,7 +72,7 @@ func TestSplitTunnelIncludeAddress(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/policy/include", handler)
 
-	actual, err := client.SplitTunnelInclude(context.Background(), testAccountID)
+	actual, err := client.ListSplitTunnel(context.Background(), testAccountID, "include")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -125,7 +125,7 @@ func TestUpdateSplitTunnelInclude(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/policy/include", handler)
 
-	actual, err := client.UpdateSplitTunnelInclude(context.Background(), testAccountID, tunnels)
+	actual, err := client.UpdateSplitTunnel(context.Background(), testAccountID, "include", tunnels)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, tunnels, actual)
@@ -160,7 +160,7 @@ func TestSplitTunnelExcludeHost(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/policy/exclude", handler)
 
-	actual, err := client.SplitTunnelExclude(context.Background(), testAccountID)
+	actual, err := client.ListSplitTunnel(context.Background(), testAccountID, "exclude")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -195,7 +195,7 @@ func TestSplitTunnelExcludeAddress(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/policy/exclude", handler)
 
-	actual, err := client.SplitTunnelExclude(context.Background(), testAccountID)
+	actual, err := client.ListSplitTunnel(context.Background(), testAccountID, "exclude")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -248,7 +248,7 @@ func TestUpdateSplitTunnelExclude(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/policy/exclude", handler)
 
-	actual, err := client.UpdateSplitTunnelExclude(context.Background(), testAccountID, tunnels)
+	actual, err := client.UpdateSplitTunnel(context.Background(), testAccountID, "exclude", tunnels)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, tunnels, actual)
