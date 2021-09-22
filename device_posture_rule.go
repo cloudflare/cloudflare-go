@@ -29,12 +29,12 @@ type DevicePostureRuleMatch struct {
 type DevicePostureRuleInput struct {
 	ID         string `json:"id,omitempty"`
 	Path       string `json:"path,omitempty"`
-	Exists     bool   `json:"exists,omitempty"`
+	Exists     bool   `json:"exists"`
 	Thumbprint string `json:"thumbprint,omitempty"`
 	Sha256     string `json:"sha256,omitempty"`
-	Running    bool   `json:"running,omitempty"`
-	RequireAll bool   `json:"requireAll,omitempty"`
-	Enabled    bool   `json:"enabled,omitempty"`
+	Running    bool   `json:"running"`
+	RequireAll bool   `json:"requireAll"`
+	Enabled    bool   `json:"enabled"`
 	Version    string `json:"version,omitempty"`
 	Operator   string `json:"operator,omitempty"`
 	Domain     string `json:"domain,omitempty"`
