@@ -808,6 +808,23 @@ func (api *API) ZoneSSLSettings(ctx context.Context, zoneID string) (ZoneSSLSett
 	return r.Result, nil
 }
 
+// UpdateZoneSSLSettings update information about SSL setting to the specified zone.
+//
+// API reference: https://api.cloudflare.com/#zone-settings-change-ssl-setting
+func (api *API) UpdateZoneSSLSettings(ctx context.Context, zoneID string, sslValue string) (ZoneSSLSetting, error) {
+	uri := fmt.Sprintf("/zones/%s/settings/ssl", zoneID)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, ZoneSSLSetting{Value: sslValue})
+	if err != nil {
+		return ZoneSSLSetting{}, err
+	}
+	var r ZoneSSLSettingResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return ZoneSSLSetting{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
+
 // FallbackOrigin returns information about the fallback origin for the specified zone.
 //
 // API reference: https://developers.cloudflare.com/ssl/ssl-for-saas/api-calls/#fallback-origin-configuration

@@ -1456,3 +1456,29 @@ func TestListZonesContextManualPagination2(t *testing.T) {
 	_, err := client.ListZonesContext(context.Background(), WithPagination(PaginationOptions{PerPage: 30}))
 	assert.EqualError(t, err, errManualPagination)
 }
+
+func TestUpdateZoneSSLSettings(t *testing.T) {
+	setup()
+	defer teardown()
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		// JSON data from: https://api.cloudflare.com/#zone-settings-properties
+		_, _ = fmt.Fprintf(w, `{
+			"result": {
+				"id": "ssl",
+				"value": "off",
+				"editable": true,
+				"modified_on": "2014-01-01T05:20:00.12345Z"
+			}
+		}`)
+	}
+	mux.HandleFunc("/zones/foo/settings/ssl", handler)
+	s, err := client.UpdateZoneSSLSettings(context.Background(), "foo", "off")
+	if assert.NoError(t, err) {
+		assert.Equal(t, s.ID, "ssl")
+		assert.Equal(t, s.Value, "off")
+		assert.Equal(t, s.Editable, true)
+		assert.Equal(t, s.ModifiedOn, "2014-01-01T05:20:00.12345Z")
+	}
+}
