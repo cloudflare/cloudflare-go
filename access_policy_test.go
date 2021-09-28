@@ -21,6 +21,7 @@ var (
 
 	purposeJustificationRequired = true
 	purposeJustificationPrompt   = "Please provide a business reason for your need to access before continuing."
+	approvalRequired             = true
 
 	expectedAccessPolicy = AccessPolicy{
 		ID:         "699d98642c564d2e855e9661899b7252",
@@ -39,6 +40,7 @@ var (
 			map[string]interface{}{"email": map[string]interface{}{"email": "test@example.com"}},
 		},
 		PurposeJustificationRequired: &purposeJustificationRequired,
+		ApprovalRequired:             &approvalRequired,
 		PurposeJustificationPrompt:   &purposeJustificationPrompt,
 		ApprovalGroups: []AccessApprovalGroup{
 			{
@@ -95,6 +97,7 @@ func TestAccessPolicies(t *testing.T) {
 					],
 					"purpose_justification_required": true,
 					"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing.",
+					"approval_required": true,
 					"approval_groups": [
 						{
 							"email_list_uuid": "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
@@ -175,6 +178,7 @@ func TestAccessPolicy(t *testing.T) {
 				],
 				"purpose_justification_required": true,
 				"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing.",
+				"approval_required": true,
 				"approval_groups": [
 					{
 						"email_list_uuid": "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
@@ -248,6 +252,7 @@ func TestCreateAccessPolicy(t *testing.T) {
 				],
 				"purpose_justification_required": true,
 				"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing.",
+				"approval_required": true,
 				"approval_groups": [
 					{
 						"email_list_uuid": "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
@@ -353,6 +358,7 @@ func TestUpdateAccessPolicy(t *testing.T) {
 				],
 				"purpose_justification_required": true,
 				"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing.",
+				"approval_required": true,
 				"approval_groups": [
 					{
 						"email_list_uuid": "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
