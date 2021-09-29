@@ -30,6 +30,7 @@ type AccessPolicy struct {
 
 	PurposeJustificationRequired *bool                 `json:"purpose_justification_required,omitempty"`
 	PurposeJustificationPrompt   *string               `json:"purpose_justification_prompt,omitempty"`
+	ApprovalRequired             *bool                 `json:"approval_required,omitempty"`
 	ApprovalGroups               []AccessApprovalGroup `json:"approval_groups"`
 
 	// The include policy works like an OR logical operator. The user must
