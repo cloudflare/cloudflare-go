@@ -50,8 +50,9 @@ type AccountMemberDetailResponse struct {
 // AccountMemberInvitation represents the invitation for a new member to
 // the account.
 type AccountMemberInvitation struct {
-	Email string   `json:"email"`
-	Roles []string `json:"roles"`
+	Email  string   `json:"email"`
+	Roles  []string `json:"roles"`
+	Status string   `json:"status,omitempty"`
 }
 
 // AccountMembers returns all members of an account.
@@ -89,10 +90,12 @@ func (api *API) AccountMembers(ctx context.Context, accountID string, pageOpts P
 	return accountMemberListresponse.Result, accountMemberListresponse.ResultInfo, nil
 }
 
-// CreateAccountMember invites a new member to join an account.
+// CreateAccountMemberWithStatus invites a new member to join an account, allowing setting the status.
+//
+// Refer to the API reference for valid statuses.
 //
 // API reference: https://api.cloudflare.com/#account-members-add-member
-func (api *API) CreateAccountMember(ctx context.Context, accountID string, emailAddress string, roles []string) (AccountMember, error) {
+func (api *API) CreateAccountMemberWithStatus(ctx context.Context, accountID string, emailAddress string, roles []string, status string) (AccountMember, error) {
 	if accountID == "" {
 		return AccountMember{}, errors.New(errMissingAccountID)
 	}
@@ -100,8 +103,9 @@ func (api *API) CreateAccountMember(ctx context.Context, accountID string, email
 	uri := fmt.Sprintf("/accounts/%s/members", accountID)
 
 	var newMember = AccountMemberInvitation{
-		Email: emailAddress,
-		Roles: roles,
+		Email:  emailAddress,
+		Roles:  roles,
+		Status: status,
 	}
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, newMember)
 	if err != nil {
@@ -115,6 +119,14 @@ func (api *API) CreateAccountMember(ctx context.Context, accountID string, email
 	}
 
 	return accountMemberListResponse.Result, nil
+}
+
+// CreateAccountMember invites a new member to join an account.
+// The member will be placed into "pending" status and receive an email confirmation.
+//
+// API reference: https://api.cloudflare.com/#account-members-add-member
+func (api *API) CreateAccountMember(ctx context.Context, accountID string, emailAddress string, roles []string) (AccountMember, error) {
+	return api.CreateAccountMemberWithStatus(ctx, accountID, emailAddress, roles, "")
 }
 
 // DeleteAccountMember removes a member from an account.
