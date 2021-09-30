@@ -73,7 +73,7 @@ import (
 
 func main() {
 	// Construct a new API object
-	api, err := cloudflare.New(os.Getenv("CF_API_KEY"), os.Getenv("CF_API_EMAIL"))
+	api, err := cloudflare.New(os.Getenv("CLOUDFLARE_API_KEY"), os.Getenv("CLOUDFLARE_API_EMAIL"))
 	if err != nil {
 		log.Fatal(err)
 	}
