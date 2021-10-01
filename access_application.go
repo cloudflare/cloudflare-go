@@ -18,10 +18,20 @@ type AccessApplicationType string
 // These constants represent all valid application types.
 const (
 	SelfHosted AccessApplicationType = "self_hosted"
+	Saas       AccessApplicationType = "saas"
 	SSH        AccessApplicationType = "ssh"
 	VNC        AccessApplicationType = "vnc"
 	File       AccessApplicationType = "file"
 	Bookmark   AccessApplicationType = "bookmark"
+)
+
+// AccessApplicationType represents the application type.
+type AccessApplicationNameIdFormat string
+
+// These constants represent all valid Name ID formats
+const (
+	Email AccessApplicationNameIdFormat = "email"
+	Id    AccessApplicationNameIdFormat = "id"
 )
 
 // AccessApplication represents an Access application.
@@ -40,6 +50,7 @@ type AccessApplication struct {
 	ID                      string                         `json:"id,omitempty"`
 	PrivateAddress          string                         `json:"private_address"`
 	CorsHeaders             *AccessApplicationCorsHeaders  `json:"cors_headers,omitempty"`
+	SaasApp                 *AccessApplicationSaasApp      `json:"saas_app,omitempty"`
 	CreatedAt               *time.Time                     `json:"created_at,omitempty"`
 	UpdatedAt               *time.Time                     `json:"updated_at,omitempty"`
 	AutoRedirectToIdentity  bool                           `json:"auto_redirect_to_identity,omitempty"`
@@ -64,6 +75,14 @@ type AccessApplicationCorsHeaders struct {
 	AllowAllOrigins  bool     `json:"allow_all_origins,omitempty"`
 	AllowCredentials bool     `json:"allow_credentials,omitempty"`
 	MaxAge           int      `json:"max_age,omitempty"`
+}
+
+// AccessApplicationSaasApp represents the SAML configuration for an Access
+// Application.
+type AccessApplicationSaasApp struct {
+	SpEntityId         string                        `json:"sp_entity_id,omitempty"`
+	ConsumerServiceUrl string                        `json:"consumer_service_url,omitempty"`
+	NameIdFormat       AccessApplicationNameIdFormat `json:"name_id_format,omitempty"`
 }
 
 // AccessApplicationListResponse represents the response from the list

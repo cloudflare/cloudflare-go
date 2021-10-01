@@ -531,3 +531,68 @@ func TestCreatePrivateAccessApplication(t *testing.T) {
 		assert.Equal(t, fullAccessApplication, actual)
 	}
 }
+
+func TestAccessApplicationWithSaasApp(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+      "success": true,
+      "errors": [],
+      "messages": [
+      ],
+      "result":{
+        "id": "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+        "created_at": "2014-01-01T05:20:00.12345Z",
+        "updated_at": "2014-01-01T05:20:00.12345Z",
+        "aud": "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
+        "name": "Admin Site",
+        "type": "saas",
+        "session_duration": "24h",
+        "saas_app": {
+			"sp_entity_id": "test",
+			"consumer_service_url": "https://example.com/sso/saml",
+			"name_id_format": "email"
+        }
+      }
+    }
+    `)
+	}
+
+	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+
+	want := AccessApplication{
+		ID:              "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		CreatedAt:       &createdAt,
+		UpdatedAt:       &updatedAt,
+		AUD:             "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
+		Name:            "Admin Site",
+		Type:            "saas",
+		SessionDuration: "24h",
+		SaasApp: &AccessApplicationSaasApp{
+			SpEntityId:         "test",
+			ConsumerServiceUrl: "https://example.com/sso/saml",
+			NameIdFormat:       "email",
+		},
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+
+	actual, err := client.AccessApplication(context.Background(), testAccountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+
+	actual, err = client.ZoneLevelAccessApplication(context.Background(), testZoneID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
