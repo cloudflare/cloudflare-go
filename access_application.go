@@ -25,20 +25,22 @@ const (
 
 // AccessApplication represents an Access application.
 type AccessApplication struct {
-	ID                     string                        `json:"id,omitempty"`
-	CreatedAt              *time.Time                    `json:"created_at,omitempty"`
-	UpdatedAt              *time.Time                    `json:"updated_at,omitempty"`
-	AUD                    string                        `json:"aud,omitempty"`
-	Name                   string                        `json:"name"`
-	Domain                 string                        `json:"domain"`
-	Type                   AccessApplicationType         `json:"type,omitempty"`
-	SessionDuration        string                        `json:"session_duration,omitempty"`
-	AutoRedirectToIdentity bool                          `json:"auto_redirect_to_identity,omitempty"`
-	EnableBindingCookie    bool                          `json:"enable_binding_cookie,omitempty"`
-	AllowedIdps            []string                      `json:"allowed_idps,omitempty"`
-	CorsHeaders            *AccessApplicationCorsHeaders `json:"cors_headers,omitempty"`
-	CustomDenyMessage      string                        `json:"custom_deny_message,omitempty"`
-	CustomDenyURL          string                        `json:"custom_deny_url,omitempty"`
+	ID                      string                        `json:"id,omitempty"`
+	CreatedAt               *time.Time                    `json:"created_at,omitempty"`
+	UpdatedAt               *time.Time                    `json:"updated_at,omitempty"`
+	AUD                     string                        `json:"aud,omitempty"`
+	Name                    string                        `json:"name"`
+	Domain                  string                        `json:"domain"`
+	Type                    AccessApplicationType         `json:"type,omitempty"`
+	SessionDuration         string                        `json:"session_duration,omitempty"`
+	AutoRedirectToIdentity  bool                          `json:"auto_redirect_to_identity,omitempty"`
+	EnableBindingCookie     bool                          `json:"enable_binding_cookie,omitempty"`
+	AllowedIdps             []string                      `json:"allowed_idps,omitempty"`
+	CorsHeaders             *AccessApplicationCorsHeaders `json:"cors_headers,omitempty"`
+	CustomDenyMessage       string                        `json:"custom_deny_message,omitempty"`
+	CustomDenyURL           string                        `json:"custom_deny_url,omitempty"`
+	HttpOnlyCookieAttribute bool                          `json:"http_only_cookie_attribute,omitempty"`
+	SameSiteCookieAttribute string                        `json:"same_site_cookie_attribute,omitempty"`
 }
 
 // AccessApplicationCorsHeaders represents the CORS HTTP headers for an Access
