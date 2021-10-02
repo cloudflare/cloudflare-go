@@ -10,9 +10,25 @@ import (
 	"github.com/pkg/errors"
 )
 
+type RegistrarDomainContacts struct {
+	Administrator RegistrantContact `json:"administrator"`
+	Billing       RegistrantContact `json:"billing"`
+	Registrant    RegistrantContact `json:"registrant"`
+	Technical     RegistrantContact `json:"technical"`
+}
+
+type RegistrarFees struct {
+	Icann        float64 `json:"icann_fee"`
+	Redemption   float64 `json:"redemption_fee"`
+	Registration float64 `json:"registration_fee"`
+	Renewal      float64 `json:"renewal_fee"`
+	Transfer     float64 `json:"transfer_fee"`
+}
+
 // RegistrarDomain is the structure of the API response for a new
 // Cloudflare Registrar domain.
 type RegistrarDomain struct {
+	RegistrarDomainConfiguration
 	ID                string              `json:"id"`
 	Available         bool                `json:"available"`
 	SupportedTLD      bool                `json:"supported_tld"`
@@ -21,10 +37,13 @@ type RegistrarDomain struct {
 	CurrentRegistrar  string              `json:"current_registrar"`
 	ExpiresAt         time.Time           `json:"expires_at"`
 	RegistryStatuses  string              `json:"registry_statuses"`
-	Locked            bool                `json:"locked"`
 	CreatedAt         time.Time           `json:"created_at"`
 	UpdatedAt         time.Time           `json:"updated_at"`
 	RegistrantContact RegistrantContact   `json:"registrant_contact"`
+	Fees              RegistrarFees       `json:"fees"`
+	Name              string              `json:"name"`
+	PendingTransfer   bool                `json:"pending_transfer"`
+	Permissions       []string            `json:"permissions"`
 }
 
 // RegistrarTransferIn contains the structure for a domain transfer in
@@ -53,6 +72,8 @@ type RegistrantContact struct {
 	Phone        string `json:"phone"`
 	Email        string `json:"email"`
 	Fax          string `json:"fax"`
+	Verified     bool   `json:"email_verified"`
+	Label        string `json:"label"`
 }
 
 // RegistrarDomainConfiguration is the structure for making updates to
@@ -76,6 +97,16 @@ type RegistrarDomainDetailResponse struct {
 type RegistrarDomainsDetailResponse struct {
 	Response
 	Result []RegistrarDomain `json:"result"`
+}
+
+type RegistrarContactsDetailResponse struct {
+	Response
+	Result []RegistrantContact `json:"result"`
+}
+
+type RegistrarContactDetailResponse struct {
+	Response
+	Result RegistrantContact `json:"result"`
 }
 
 // RegistrarDomain returns a single domain based on the account ID and
@@ -174,4 +205,54 @@ func (api *API) UpdateRegistrarDomain(ctx context.Context, accountID, domainName
 		return RegistrarDomain{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
+}
+
+func (api *API) getContacts(ctx context.Context, uri string) ([]RegistrantContact, error) {
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return []RegistrantContact{}, err
+	}
+
+	var r RegistrarContactsDetailResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return []RegistrantContact{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return r.Result, nil
+}
+
+// RegistrarContacts gets a list of all Contacts based on the account ID
+//
+// API reference: undocumented
+func (api *API) RegistrarContacts(ctx context.Context, accountID string) ([]RegistrantContact, error) {
+	uri := fmt.Sprintf("/accounts/%s/registrar/contacts", accountID)
+	return api.getContacts(ctx, uri)
+}
+
+// RegistrarContact gets a RegistrantContact based on the account ID and contact ID
+//
+// API reference: undocumented
+func (api *API) RegistrarContact(ctx context.Context, accountID, contactID string) (RegistrantContact, error) {
+	uri := fmt.Sprintf("/accounts/%s/registrar/contacts/%s", accountID, contactID)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return RegistrantContact{}, err
+	}
+
+	var r RegistrarContactDetailResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return RegistrantContact{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return r.Result, nil
+}
+
+// RegistrarDomainContacts gets a list of all Contacts based on the account and domain ID
+//
+// API reference: undocumented
+func (api *API) RegistrarDomainContacts(ctx context.Context, accountID, domainName string) ([]RegistrantContact, error) {
+	uri := fmt.Sprintf("/accounts/%s/registrar/domains/%s/contacts", accountID, domainName)
+	return api.getContacts(ctx, uri)
 }
