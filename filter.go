@@ -84,33 +84,45 @@ func (api *API) Filter(ctx context.Context, zoneID, filterID string) (Filter, er
 //
 // API reference: https://developers.cloudflare.com/firewall/api/cf-filters/get/#get-all-filters
 func (api *API) Filters(ctx context.Context, zoneID string, pageOpts PaginationOptions) ([]Filter, error) {
-	uri := fmt.Sprintf("/zones/%s/filters", zoneID)
+	// Construct a query string
 	v := url.Values{}
+	// Request as many as possible per page - API max is 100
+	v.Set("per_page", "50")
 
-	if pageOpts.PerPage > 0 {
-		v.Set("per_page", strconv.Itoa(pageOpts.PerPage))
+	var filters []Filter
+	page := 1
+
+	// Loop over makeRequest until what we've fetched all records
+	for {
+		v.Set("page", strconv.Itoa(page))
+		uri := fmt.Sprintf("/zones/%s/filters?%s", zoneID, v.Encode())
+
+		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+		if err != nil {
+			return []Filter{}, err
+		}
+
+		var f FiltersDetailResponse
+		err = json.Unmarshal(res, &f)
+		if err != nil {
+			return []Filter{}, errors.Wrap(err, errUnmarshalError)
+		}
+
+		if !f.Success {
+			// TODO: Provide an actual error message instead of always returning nil
+			return []Filter{}, err
+		}
+
+		filters = append(filters, f.Result...)
+		if f.ResultInfo.Page >= f.ResultInfo.TotalPages {
+			break
+		}
+
+		// Loop around and fetch the next page
+		page++
 	}
 
-	if pageOpts.Page > 0 {
-		v.Set("page", strconv.Itoa(pageOpts.Page))
-	}
-
-	if len(v) > 0 {
-		uri = fmt.Sprintf("%s?%s", uri, v.Encode())
-	}
-
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
-	if err != nil {
-		return []Filter{}, err
-	}
-
-	var filtersResponse FiltersDetailResponse
-	err = json.Unmarshal(res, &filtersResponse)
-	if err != nil {
-		return []Filter{}, errors.Wrap(err, errUnmarshalError)
-	}
-
-	return filtersResponse.Result, nil
+	return filters, nil
 }
 
 // CreateFilters creates new filters.
