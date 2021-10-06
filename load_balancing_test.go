@@ -26,32 +26,35 @@ func TestCreateLoadBalancerPool(t *testing.T) {
               "name": "primary-dc-1",
               "enabled": true,
               "monitor": "f1aba936b94213e5b8dca0c0dbf1f9cc",
-			  "latitude": 55,
-			  "longitude": -12.5,
-			  "load_shedding": {
-				"default_percent": 50,
-				"default_policy": "random",
-				"session_percent": 10,
-				"session_policy": "hash"
-			  },
+              "latitude": 55,
+              "longitude": -12.5,
+              "load_shedding": {
+                "default_percent": 50,
+                "default_policy": "random",
+                "session_percent": 10,
+                "session_policy": "hash"
+              },
+              "origin_steering": {
+                "policy": "random"
+              },
               "origins": [
                 {
                   "name": "app-server-1",
                   "address": "0.0.0.0",
                   "enabled": true,
                   "weight": 1,
-				  "header": {
-					  "Host": [
-						  "example.com"
-					  ]
-				  }
-				}
+                  "header": {
+                      "Host": [
+                          "example.com"
+                      ]
+                  }
+                }
               ],
               "notification_email": "someone@example.com",
               "check_regions": [
                 "WEU"
               ]
-						}`, string(b))
+            }`, string(b))
 		}
 		fmt.Fprint(w, `{
             "success": true,
@@ -66,26 +69,29 @@ func TestCreateLoadBalancerPool(t *testing.T) {
               "enabled": true,
               "minimum_origins": 1,
               "monitor": "f1aba936b94213e5b8dca0c0dbf1f9cc",
-			  "latitude": 55,
-			  "longitude": -12.5,
-			  "load_shedding": {
-				"default_percent": 50,
-				"default_policy": "random",
-				"session_percent": 10,
-				"session_policy": "hash"
-			  },
+              "latitude": 55,
+              "longitude": -12.5,
+              "load_shedding": {
+                "default_percent": 50,
+                "default_policy": "random",
+                "session_percent": 10,
+                "session_policy": "hash"
+              },
+              "origin_steering": {
+                "policy": "random"
+              },
               "origins": [
                 {
                   "name": "app-server-1",
                   "address": "0.0.0.0",
                   "enabled": true,
                   "weight": 1,
-				  "header": {
-					  "Host": [
-						  "example.com"
-					  ]
-				  }
-				}
+                  "header": {
+                      "Host": [
+                          "example.com"
+                      ]
+                  }
+                }
               ],
               "notification_email": "someone@example.com",
               "check_regions": [
@@ -119,6 +125,9 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 			SessionPercent: 10,
 			SessionPolicy:  "hash",
 		},
+		OriginSteering: &LoadBalancerOriginSteering{
+			Policy: "random",
+		},
 		Origins: []LoadBalancerOrigin{
 			{
 				Name:    "app-server-1",
@@ -147,6 +156,9 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 			DefaultPolicy:  "random",
 			SessionPercent: 10,
 			SessionPolicy:  "hash",
+		},
+		OriginSteering: &LoadBalancerOriginSteering{
+			Policy: "random",
 		},
 		Origins: []LoadBalancerOrigin{
 			{
@@ -191,6 +203,9 @@ func TestListLoadBalancerPools(t *testing.T) {
                     "name": "primary-dc-1",
                     "enabled": true,
                     "monitor": "f1aba936b94213e5b8dca0c0dbf1f9cc",
+                    "origin_steering": {
+                      "policy": "random"
+                    },
                     "origins": [
                       {
                         "name": "app-server-1",
@@ -223,6 +238,9 @@ func TestListLoadBalancerPools(t *testing.T) {
 			Name:        "primary-dc-1",
 			Enabled:     true,
 			Monitor:     "f1aba936b94213e5b8dca0c0dbf1f9cc",
+			OriginSteering: &LoadBalancerOriginSteering{
+				Policy: "random",
+			},
 			Origins: []LoadBalancerOrigin{
 				{
 					Name:    "app-server-1",
@@ -260,6 +278,9 @@ func TestLoadBalancerPoolDetails(t *testing.T) {
               "name": "primary-dc-1",
               "enabled": true,
               "monitor": "f1aba936b94213e5b8dca0c0dbf1f9cc",
+              "origin_steering": {
+                "policy": "random"
+              },
               "origins": [
                 {
                   "name": "app-server-1",
@@ -284,6 +305,9 @@ func TestLoadBalancerPoolDetails(t *testing.T) {
 		Name:        "primary-dc-1",
 		Enabled:     true,
 		Monitor:     "f1aba936b94213e5b8dca0c0dbf1f9cc",
+		OriginSteering: &LoadBalancerOriginSteering{
+			Policy: "random",
+		},
 		Origins: []LoadBalancerOrigin{
 			{
 				Name:    "app-server-1",
@@ -341,17 +365,20 @@ func TestModifyLoadBalancerPool(t *testing.T) {
               "description": "Primary data center - Provider XYZZY",
               "name": "primary-dc-2",
               "enabled": false,
+              "origin_steering": {
+                "policy": "random"
+              },
               "origins": [
                 {
                   "name": "app-server-2",
                   "address": "0.0.0.1",
                   "enabled": false,
                   "weight": 1,
-				  "header": {
-					  "Host": [
-						  "example.com"
-					  ]
-				  }
+                  "header": {
+                      "Host": [
+                          "example.com"
+                      ]
+                  }
                 }
               ],
               "notification_email": "nobody@example.com",
@@ -371,17 +398,20 @@ func TestModifyLoadBalancerPool(t *testing.T) {
               "description": "Primary data center - Provider XYZZY",
               "name": "primary-dc-2",
               "enabled": false,
+              "origin_steering": {
+                "policy": "random"
+              },
               "origins": [
                 {
                   "name": "app-server-2",
                   "address": "0.0.0.1",
                   "enabled": false,
                   "weight": 1,
-				  "header": {
-					  "Host": [
-						  "example.com"
-					  ]
-				  }
+                  "header": {
+                      "Host": [
+                          "example.com"
+                      ]
+                  }
                 }
               ],
               "notification_email": "nobody@example.com",
@@ -402,6 +432,9 @@ func TestModifyLoadBalancerPool(t *testing.T) {
 		Description: "Primary data center - Provider XYZZY",
 		Name:        "primary-dc-2",
 		Enabled:     false,
+		OriginSteering: &LoadBalancerOriginSteering{
+			Policy: "random",
+		},
 		Origins: []LoadBalancerOrigin{
 			{
 				Name:    "app-server-2",
@@ -423,6 +456,9 @@ func TestModifyLoadBalancerPool(t *testing.T) {
 		Description: "Primary data center - Provider XYZZY",
 		Name:        "primary-dc-2",
 		Enabled:     false,
+		OriginSteering: &LoadBalancerOriginSteering{
+			Policy: "random",
+		},
 		Origins: []LoadBalancerOrigin{
 			{
 				Name:    "app-server-2",

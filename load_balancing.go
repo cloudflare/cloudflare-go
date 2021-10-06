@@ -12,19 +12,20 @@ import (
 
 // LoadBalancerPool represents a load balancer pool's properties.
 type LoadBalancerPool struct {
-	ID                string                    `json:"id,omitempty"`
-	CreatedOn         *time.Time                `json:"created_on,omitempty"`
-	ModifiedOn        *time.Time                `json:"modified_on,omitempty"`
-	Description       string                    `json:"description"`
-	Name              string                    `json:"name"`
-	Enabled           bool                      `json:"enabled"`
-	MinimumOrigins    int                       `json:"minimum_origins,omitempty"`
-	Monitor           string                    `json:"monitor,omitempty"`
-	Origins           []LoadBalancerOrigin      `json:"origins"`
-	NotificationEmail string                    `json:"notification_email,omitempty"`
-	Latitude          *float32                  `json:"latitude,omitempty"`
-	Longitude         *float32                  `json:"longitude,omitempty"`
-	LoadShedding      *LoadBalancerLoadShedding `json:"load_shedding,omitempty"`
+	ID                string                      `json:"id,omitempty"`
+	CreatedOn         *time.Time                  `json:"created_on,omitempty"`
+	ModifiedOn        *time.Time                  `json:"modified_on,omitempty"`
+	Description       string                      `json:"description"`
+	Name              string                      `json:"name"`
+	Enabled           bool                        `json:"enabled"`
+	MinimumOrigins    int                         `json:"minimum_origins,omitempty"`
+	Monitor           string                      `json:"monitor,omitempty"`
+	Origins           []LoadBalancerOrigin        `json:"origins"`
+	NotificationEmail string                      `json:"notification_email,omitempty"`
+	Latitude          *float32                    `json:"latitude,omitempty"`
+	Longitude         *float32                    `json:"longitude,omitempty"`
+	LoadShedding      *LoadBalancerLoadShedding   `json:"load_shedding,omitempty"`
+	OriginSteering    *LoadBalancerOriginSteering `json:"origin_steering,omitempty"`
 
 	// CheckRegions defines the geographic region(s) from where to run health-checks from - e.g. "WNAM", "WEU", "SAF", "SAM".
 	// Providing a null/empty value means "all regions", which may not be available to all plan types.
@@ -38,6 +39,12 @@ type LoadBalancerOrigin struct {
 	Enabled bool                `json:"enabled"`
 	Weight  float64             `json:"weight"`
 	Header  map[string][]string `json:"header"`
+}
+
+// LoadBalancerOriginSteering controls origin selection for new sessions and traffic without session affinity.
+type LoadBalancerOriginSteering struct {
+	// Policy defaults to "random" (weighted) when empty or unspecified.
+	Policy string `json:"policy,omitempty"`
 }
 
 // LoadBalancerMonitor represents a load balancer monitor's properties.
