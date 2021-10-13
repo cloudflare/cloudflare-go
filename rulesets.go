@@ -203,6 +203,7 @@ type RulesetRuleActionParametersHTTPHeader struct {
 
 type RulesetRuleActionParametersOverrides struct {
 	Enabled    bool                                    `json:"enabled,omitempty"`
+	Action     string								   `json:"action,omitempty"`
 	Categories []RulesetRuleActionParametersCategories `json:"categories,omitempty"`
 	Rules      []RulesetRuleActionParametersRules      `json:"rules,omitempty"`
 }
