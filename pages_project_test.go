@@ -11,7 +11,6 @@ import (
 )
 
 const (
-	testPagesProjectID       = "5a321fc7-3162-7d36-adce-1213996a7"
 	testPagesProjectResponse = `
 	{
 		"name": "Test Pages Project",
@@ -346,7 +345,7 @@ func TestPagesProjects(t *testing.T) {
 		Count:   1,
 		Total:   1,
 	}
-	actual, resultInfo, err := client.PagesProjects(context.Background(), PaginationOptions{})
+	actual, resultInfo, err := client.PagesProjects(context.Background(), "foo", PaginationOptions{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedPagesProjects, actual)
 		assert.Equal(t, expectedResultInfo, resultInfo)
@@ -371,7 +370,7 @@ func TestPagesProject(t *testing.T) {
 
 	mux.HandleFunc("/accounts/foo/pages/projects/Test Pages Project", handler)
 
-	actual, err := client.PagesProject(context.Background(), "Test Pages Project")
+	actual, err := client.PagesProject(context.Background(), "foo", "Test Pages Project")
 	if assert.NoError(t, err) {
 		assert.Equal(t, *expectedPagesProject, actual)
 	}
@@ -395,7 +394,7 @@ func TestCreatePagesProject(t *testing.T) {
 
 	mux.HandleFunc("/accounts/foo/pages/projects", handler)
 
-	actual, err := client.CreatePagesProject(context.Background(), *expectedPagesProject)
+	actual, err := client.CreatePagesProject(context.Background(), "foo", *expectedPagesProject)
 	if assert.NoError(t, err) {
 		assert.Equal(t, *expectedPagesProject, actual)
 	}
@@ -423,7 +422,7 @@ func TestUpdatePagesProject(t *testing.T) {
 
 	mux.HandleFunc("/accounts/foo/pages/projects/Test Pages Project", handler)
 
-	_, err := client.UpdatePagesProject(context.Background(), "Test Pages Project", *updateAttributes)
+	_, err := client.UpdatePagesProject(context.Background(), "foo", "Test Pages Project", *updateAttributes)
 
 	t.Log(err)
 
@@ -448,6 +447,6 @@ func TestDeletePagesProject(t *testing.T) {
 
 	mux.HandleFunc("/accounts/foo/pages/projects/Test Pages Project", handler)
 
-	err := client.DeletePagesProject(context.Background(), "Test Pages Project")
+	err := client.DeletePagesProject(context.Background(), "foo", "Test Pages Project")
 	assert.NoError(t, err)
 }

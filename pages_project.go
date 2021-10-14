@@ -125,7 +125,7 @@ type pagesProjectListResponse struct {
 // PagesProjects returns all Pages projects for an account.
 //
 // API reference: https://api.cloudflare.com/#pages-project-get-projects
-func (api *API) PagesProjects(ctx context.Context, pageOpts PaginationOptions) ([]PagesProject, ResultInfo, error) {
+func (api *API) PagesProjects(ctx context.Context, accountID string, pageOpts PaginationOptions) ([]PagesProject, ResultInfo, error) {
 	v := url.Values{}
 	if pageOpts.PerPage > 0 {
 		v.Set("per_page", strconv.Itoa(pageOpts.PerPage))
@@ -134,7 +134,7 @@ func (api *API) PagesProjects(ctx context.Context, pageOpts PaginationOptions) (
 		v.Set("page", strconv.Itoa(pageOpts.Page))
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/pages/projects", api.AccountID)
+	uri := fmt.Sprintf("/accounts/%s/pages/projects", accountID)
 	if len(v) > 0 {
 		uri = fmt.Sprintf("%s?%s", uri, v.Encode())
 	}
@@ -154,8 +154,8 @@ func (api *API) PagesProjects(ctx context.Context, pageOpts PaginationOptions) (
 // PagesProject returns a single Pages project by name.
 //
 // API reference: https://api.cloudflare.com/#pages-project-get-project
-func (api *API) PagesProject(ctx context.Context, projectName string) (PagesProject, error) {
-	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s", api.AccountID, projectName)
+func (api *API) PagesProject(ctx context.Context, accountID, projectName string) (PagesProject, error) {
+	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s", accountID, projectName)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return PagesProject{}, err
@@ -171,8 +171,8 @@ func (api *API) PagesProject(ctx context.Context, projectName string) (PagesProj
 // CreatePagesProject creates a new Pages project in an account.
 //
 // API reference: https://api.cloudflare.com/#pages-project-create-project
-func (api *API) CreatePagesProject(ctx context.Context, pagesProject PagesProject) (PagesProject, error) {
-	uri := fmt.Sprintf("/accounts/%s/pages/projects", api.AccountID)
+func (api *API) CreatePagesProject(ctx context.Context, accountID string, pagesProject PagesProject) (PagesProject, error) {
+	uri := fmt.Sprintf("/accounts/%s/pages/projects", accountID)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, pagesProject)
 	if err != nil {
 		return PagesProject{}, err
@@ -188,8 +188,8 @@ func (api *API) CreatePagesProject(ctx context.Context, pagesProject PagesProjec
 // UpdatePagesProject updates an existing Pages project.
 //
 // API reference: https://api.cloudflare.com/#pages-project-update-project
-func (api *API) UpdatePagesProject(ctx context.Context, projectName string, pagesProject PagesProject) (PagesProject, error) {
-	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s", api.AccountID, projectName)
+func (api *API) UpdatePagesProject(ctx context.Context, accountID, projectName string, pagesProject PagesProject) (PagesProject, error) {
+	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s", accountID, projectName)
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, pagesProject)
 	if err != nil {
 		return PagesProject{}, err
@@ -205,8 +205,8 @@ func (api *API) UpdatePagesProject(ctx context.Context, projectName string, page
 // DeletePagesProject deletes a Pages project by name.
 //
 // API reference: https://api.cloudflare.com/#pages-project-delete-project
-func (api *API) DeletePagesProject(ctx context.Context, projectName string) error {
-	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s", api.AccountID, projectName)
+func (api *API) DeletePagesProject(ctx context.Context, accountID, projectName string) error {
+	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s", accountID, projectName)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return err
