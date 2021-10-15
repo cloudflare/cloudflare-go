@@ -310,7 +310,7 @@ var (
 	}
 )
 
-func TestPagesProjects(t *testing.T) {
+func TestListPagesProjects(t *testing.T) {
 	setup(UsingAccount("foo"))
 	defer teardown()
 
@@ -345,7 +345,7 @@ func TestPagesProjects(t *testing.T) {
 		Count:   1,
 		Total:   1,
 	}
-	actual, resultInfo, err := client.PagesProjects(context.Background(), "foo", PaginationOptions{})
+	actual, resultInfo, err := client.ListPagesProjects(context.Background(), "foo", PaginationOptions{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedPagesProjects, actual)
 		assert.Equal(t, expectedResultInfo, resultInfo)

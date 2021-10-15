@@ -122,10 +122,10 @@ type pagesProjectListResponse struct {
 	ResultInfo `json:"result_info"`
 }
 
-// PagesProjects returns all Pages projects for an account.
+// ListPagesProjects returns all Pages projects for an account.
 //
 // API reference: https://api.cloudflare.com/#pages-project-get-projects
-func (api *API) PagesProjects(ctx context.Context, accountID string, pageOpts PaginationOptions) ([]PagesProject, ResultInfo, error) {
+func (api *API) ListPagesProjects(ctx context.Context, accountID string, pageOpts PaginationOptions) ([]PagesProject, ResultInfo, error) {
 	v := url.Values{}
 	if pageOpts.PerPage > 0 {
 		v.Set("per_page", strconv.Itoa(pageOpts.PerPage))
