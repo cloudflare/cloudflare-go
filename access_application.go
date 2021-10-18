@@ -41,6 +41,8 @@ type AccessApplication struct {
 	CustomDenyURL           string                        `json:"custom_deny_url,omitempty"`
 	HttpOnlyCookieAttribute bool                          `json:"http_only_cookie_attribute,omitempty"`
 	SameSiteCookieAttribute string                        `json:"same_site_cookie_attribute,omitempty"`
+	LogoURL                 string                        `json:"logo_url,omitempty"`
+	SkipInterstitial        bool                          `json:"skip_interstitial,omitempty"`
 }
 
 // AccessApplicationCorsHeaders represents the CORS HTTP headers for an Access
