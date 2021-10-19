@@ -230,17 +230,18 @@ type RulesetRuleActionParametersMatchedData struct {
 
 // RulesetRule contains information about a single Ruleset Rule.
 type RulesetRule struct {
-	ID               string                       `json:"id,omitempty"`
-	Version          string                       `json:"version,omitempty"`
-	Action           string                       `json:"action"`
-	ActionParameters *RulesetRuleActionParameters `json:"action_parameters,omitempty"`
-	Expression       string                       `json:"expression"`
-	Description      string                       `json:"description"`
-	LastUpdated      *time.Time                   `json:"last_updated,omitempty"`
-	Ref              string                       `json:"ref,omitempty"`
-	Enabled          bool                         `json:"enabled"`
-	ScoreThreshold   int                          `json:"score_threshold,omitempty"`
-	RateLimit        *RulesetRuleRateLimit        `json:"ratelimit,omitempty"`
+	ID                     string                             `json:"id,omitempty"`
+	Version                string                             `json:"version,omitempty"`
+	Action                 string                             `json:"action"`
+	ActionParameters       *RulesetRuleActionParameters       `json:"action_parameters,omitempty"`
+	Expression             string                             `json:"expression"`
+	Description            string                             `json:"description"`
+	LastUpdated            *time.Time                         `json:"last_updated,omitempty"`
+	Ref                    string                             `json:"ref,omitempty"`
+	Enabled                bool                               `json:"enabled"`
+	ScoreThreshold         int                                `json:"score_threshold,omitempty"`
+	RateLimit              *RulesetRuleRateLimit              `json:"ratelimit,omitempty"`
+	ExposedCredentialCheck *RulesetRuleExposedCredentialCheck `json:"exposed_credential_check,omitempty"`
 }
 
 // RulesetRuleRateLimit contains the structure of a HTTP rate limit Ruleset Rule.
@@ -253,6 +254,13 @@ type RulesetRuleRateLimit struct {
 	// Should always be sent as "" will trigger the service to use the Ruleset
 	// expression instead.
 	MitigationExpression string `json:"mitigation_expression"`
+}
+
+// RulesetRuleExposedCredentialCheck contains the structure of an exposed
+// credential check Ruleset Rule.
+type RulesetRuleExposedCredentialCheck struct {
+	UsernameExpression string `json:"username_expression,omitempty"`
+	PasswordExpression string `json:"password_expression,omitempty"`
 }
 
 // UpdateRulesetRequest is the representation of a Ruleset update.
