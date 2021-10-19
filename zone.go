@@ -542,7 +542,7 @@ func (api *API) ZoneSetPaused(ctx context.Context, zoneID string, paused bool) (
 //
 // Valid values for `type` are "full" and "partial"
 //
-// API reference: https://api.cloudflare.com/#zone-create-zone
+// API reference: https://api.cloudflare.com/#zone-edit-zone
 func (api *API) ZoneSetType(ctx context.Context, zoneID string, zoneType string) (Zone, error) {
 	zoneopts := ZoneOptions{Type: zoneType}
 	zone, err := api.EditZone(ctx, zoneID, zoneopts)
