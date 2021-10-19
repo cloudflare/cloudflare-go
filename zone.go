@@ -538,7 +538,7 @@ func (api *API) ZoneSetPaused(ctx context.Context, zoneID string, paused bool) (
 	return zone, nil
 }
 
-// ZoneSetType toggles the CNAME-only setting for a zone.
+// ZoneSetType toggles the type for an existing zone.
 //
 // Valid values for `type` are "full" and "partial"
 //
