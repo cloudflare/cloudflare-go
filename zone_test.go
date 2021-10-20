@@ -1338,6 +1338,34 @@ func TestUpdateZoneDNSSEC(t *testing.T) {
 	}
 }
 
+func TestZoneSetType(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"result": {
+				"type": "partial",
+				"verification_key": "000000000-000000000",
+				"modified_on": "2014-01-01T05:20:00Z"
+				}
+		}`)
+	}
+
+	mux.HandleFunc("/zones/foo", handler)
+
+	z, err := client.ZoneSetType(context.Background(), "foo", "partial")
+	if assert.NoError(t, err) {
+		assert.Equal(t, z.Type, "partial")
+		assert.Equal(t, z.VerificationKey, "000000000-000000000")
+		time, _ := time.Parse("2006-01-02T15:04:05Z", "2014-01-01T05:20:00Z")
+		assert.Equal(t, z.ModifiedOn, time)
+	}
+}
+
 func parsePage(t *testing.T, total int, s string) (int, bool) {
 	if s == "" {
 		return 1, true

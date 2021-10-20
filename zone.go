@@ -523,12 +523,28 @@ type ZoneOptions struct {
 	Paused   *bool     `json:"paused,omitempty"`
 	VanityNS []string  `json:"vanity_name_servers,omitempty"`
 	Plan     *ZonePlan `json:"plan,omitempty"`
+	Type     string    `json:"type,omitempty"`
 }
 
 // ZoneSetPaused pauses Cloudflare service for the entire zone, sending all
 // traffic direct to the origin.
 func (api *API) ZoneSetPaused(ctx context.Context, zoneID string, paused bool) (Zone, error) {
 	zoneopts := ZoneOptions{Paused: &paused}
+	zone, err := api.EditZone(ctx, zoneID, zoneopts)
+	if err != nil {
+		return Zone{}, err
+	}
+
+	return zone, nil
+}
+
+// ZoneSetType toggles the type for an existing zone.
+//
+// Valid values for `type` are "full" and "partial"
+//
+// API reference: https://api.cloudflare.com/#zone-edit-zone
+func (api *API) ZoneSetType(ctx context.Context, zoneID string, zoneType string) (Zone, error) {
+	zoneopts := ZoneOptions{Type: zoneType}
 	zone, err := api.EditZone(ctx, zoneID, zoneopts)
 	if err != nil {
 		return Zone{}, err
@@ -591,7 +607,7 @@ func (api *API) ZoneUpdatePlan(ctx context.Context, zoneID string, planType stri
 
 // EditZone edits the given zone.
 //
-// This is usually called by ZoneSetPaused or ZoneSetVanityNS.
+// This is usually called by ZoneSetPaused, ZoneSetType, or ZoneSetVanityNS.
 //
 // API reference: https://api.cloudflare.com/#zone-edit-zone-properties
 func (api *API) EditZone(ctx context.Context, zoneID string, zoneOpts ZoneOptions) (Zone, error) {
