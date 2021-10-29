@@ -32,6 +32,7 @@ type CustomHostnameSSLSettings struct {
 	TLS13         string   `json:"tls_1_3,omitempty"`
 	MinTLSVersion string   `json:"min_tls_version,omitempty"`
 	Ciphers       []string `json:"ciphers,omitempty"`
+	EarlyHints    string   `json:"early_hints,omitempty"`
 }
 
 //CustomHostnameOwnershipVerification represents ownership verification status of a given custom hostname.
