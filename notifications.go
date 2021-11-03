@@ -413,7 +413,7 @@ func (api *API) GetAvailableNotificationTypes(ctx context.Context, accountID str
 // Ent = 90 days
 //
 // API Reference: https://api.cloudflare.com/#notification-history-list-history
-func (api *API) ListNotificationHistory(ctx context.Context, pageOpts PaginationOptions, accountID string) ([]NotificationHistory, ResultInfo, error) {
+func (api *API) ListNotificationHistory(ctx context.Context, accountID string, pageOpts PaginationOptions) ([]NotificationHistory, ResultInfo, error) {
 	v := url.Values{}
 	if pageOpts.PerPage > 0 {
 		v.Set("per_page", strconv.Itoa(pageOpts.PerPage))

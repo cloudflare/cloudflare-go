@@ -560,7 +560,7 @@ func TestListNotificationHistory(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/alerting/v3/history", handler)
 
-	actualResult, actualResultInfo, err := client.ListNotificationHistory(context.Background(), pageOptions, testAccountID)
+	actualResult, actualResultInfo, err := client.ListNotificationHistory(context.Background(), testAccountID, pageOptions)
 	require.Nil(t, err)
 	require.NotNil(t, actualResult)
 	require.Equal(t, expected, actualResult)
