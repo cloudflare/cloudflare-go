@@ -29,6 +29,7 @@ const (
 // CustomHostnameSSLSettings represents the SSL settings for a custom hostname.
 type CustomHostnameSSLSettings struct {
 	HTTP2         string   `json:"http2,omitempty"`
+	HTTP3         string   `json:"http3,omitempty"`
 	TLS13         string   `json:"tls_1_3,omitempty"`
 	MinTLSVersion string   `json:"min_tls_version,omitempty"`
 	Ciphers       []string `json:"ciphers,omitempty"`
