@@ -42,12 +42,17 @@ type TeamsAccountSettings struct {
 	TLSDecrypt  *TeamsTLSDecrypt  `json:"tls_decrypt,omitempty"`
 	ActivityLog *TeamsActivityLog `json:"activity_log,omitempty"`
 	BlockPage   *TeamsBlockPage   `json:"block_page,omitempty"`
+	FIPS        *TeamsFIPS        `json:"fips,omitempty"`
 }
 
 type TeamsAntivirus struct {
 	EnabledDownloadPhase bool `json:"enabled_download_phase"`
 	EnabledUploadPhase   bool `json:"enabled_upload_phase"`
 	FailClosed           bool `json:"fail_closed"`
+}
+
+type TeamsFIPS struct {
+	TLS bool `json:"tls"`
 }
 
 type TeamsTLSDecrypt struct {
