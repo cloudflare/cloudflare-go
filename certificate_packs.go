@@ -33,13 +33,24 @@ type CertificatePackCertificate struct {
 	Priority        int                            `json:"priority"`
 }
 
+// TxtValidationRecord is the structure of the TXT validation record for certificate packss pending validation
+type TxtValidationRecord struct {
+	Name  string `json:"txt_name"`
+	Value string `json:"txt_value"`
+}
+
 // CertificatePack is the overarching structure of a certificate pack response.
 type CertificatePack struct {
-	ID                 string                       `json:"id"`
-	Type               string                       `json:"type"`
-	Hosts              []string                     `json:"hosts"`
-	Certificates       []CertificatePackCertificate `json:"certificates"`
-	PrimaryCertificate string                       `json:"primary_certificate"`
+	ID                   string                       `json:"id"`
+	Type                 string                       `json:"type"`
+	Hosts                []string                     `json:"hosts"`
+	Certificates         []CertificatePackCertificate `json:"certificates"`
+	PrimaryCertificate   string                       `json:"primary_certificate"`
+	Status               string                       `json:"status"`
+	ValidityDays         int                          `json:"validity_days,omitempty"`
+	ValidationMethod     string                       `json:"validation_method,omitempty"`
+	CertificateAuthority string                       `json:"certificate_authority,omitempty"`
+	ValidationRecords    []TxtValidationRecord        `json:"validation_records,omitempty"`
 }
 
 // CertificatePackRequest is used for requesting a new certificate.

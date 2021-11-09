@@ -33,6 +33,7 @@ var (
 			ExpiresOn:       expiresOn,
 			Priority:        1,
 		}},
+		Status: "active",
 	}
 )
 
@@ -76,7 +77,8 @@ func TestListCertificatePacks(t *testing.T) {
           "priority": 1
         }
       ],
-      "primary_certificate": "b2cfa4183267af678ea06c7407d4d6d8"
+      "primary_certificate": "b2cfa4183267af678ea06c7407d4d6d8",
+      "status": "active"
     }
   ]
 }
@@ -132,7 +134,8 @@ func TestGetCertificatePack(t *testing.T) {
         "priority": 1
       }
     ],
-    "primary_certificate": "b2cfa4183267af678ea06c7407d4d6d8"
+    "primary_certificate": "b2cfa4183267af678ea06c7407d4d6d8",
+    "status": "active"
   }
 }
 		`)
@@ -144,6 +147,64 @@ func TestGetCertificatePack(t *testing.T) {
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, desiredCertificatePack, actual)
+	}
+}
+
+func TestGetPendingAdvancedCertificatePack(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+  "success": true,
+  "errors": [],
+  "messages": [],
+  "result": {
+    "id": "3822ff90-ea29-44df-9e55-21300bb9419c",
+    "type": "advanced",
+    "hosts": [
+      "example.com",
+      "*.foo.example.com"
+    ],
+    "certificates": [],
+    "primary_certificate": "0",
+    "status": "pending_validation",
+    "validity_days": 365,
+    "validation_method": "txt",
+    "certificate_authority": "digicert",
+    "validation_records": [{
+      "txt_name": "example.com",
+      "txt_value": "ca3-1234567890abcdef"
+    }]
+  }
+}
+		`)
+	}
+
+	mux.HandleFunc("/zones/023e105f4ecef8ad9ca31a8372d0c353/ssl/certificate_packs/3822ff90-ea29-44df-9e55-21300bb9419c", handler)
+
+	certificatePack := CertificatePack{
+		ID:                   "3822ff90-ea29-44df-9e55-21300bb9419c",
+		Type:                 "advanced",
+		Hosts:                []string{"example.com", "*.foo.example.com"},
+		PrimaryCertificate:   "0",
+		Certificates:         []CertificatePackCertificate{},
+		Status:               "pending_validation",
+		ValidityDays:         365,
+		ValidationMethod:     "txt",
+		CertificateAuthority: "digicert",
+		ValidationRecords: []TxtValidationRecord{{
+			Name:  "example.com",
+			Value: "ca3-1234567890abcdef",
+		}},
+	}
+
+	actual, err := client.CertificatePack(context.Background(), "023e105f4ecef8ad9ca31a8372d0c353", "3822ff90-ea29-44df-9e55-21300bb9419c")
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, certificatePack, actual)
 	}
 }
 
@@ -186,7 +247,8 @@ func TestCreateCertificatePack(t *testing.T) {
         "priority": 1
       }
     ],
-    "primary_certificate": "b2cfa4183267af678ea06c7407d4d6d8"
+    "primary_certificate": "b2cfa4183267af678ea06c7407d4d6d8",
+    "status": "active"
   }
 }
 		`)
