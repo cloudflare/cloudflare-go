@@ -59,6 +59,9 @@ func TestTeamsAccountConfiguration(t *testing.T) {
 					"tls_decrypt": {
 						"enabled": true
 					},
+					"fips": {
+						"tls": true
+					},
 					"activity_log": {
 						"enabled": true
 					}
@@ -77,6 +80,7 @@ func TestTeamsAccountConfiguration(t *testing.T) {
 			Antivirus:   &TeamsAntivirus{EnabledDownloadPhase: true},
 			ActivityLog: &TeamsActivityLog{Enabled: true},
 			TLSDecrypt:  &TeamsTLSDecrypt{Enabled: true},
+			FIPS:        &TeamsFIPS{TLS: true},
 		})
 	}
 }
