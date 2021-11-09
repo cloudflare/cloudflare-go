@@ -334,7 +334,13 @@ func TestRestartAdvancedCertificateValidation(t *testing.T) {
     "validation_method": "txt",
     "validity_days": 365,
     "certificate_authority": "digicert",
-    "cloudflare_branding": false
+    "cloudflare_branding": false,
+    "validation_records": [
+      {
+        "txt_name": "example.com",
+        "txt_value": "ca3-1234567890abcdef"
+      }
+    ]
   }
 }`)
 	}
@@ -349,6 +355,10 @@ func TestRestartAdvancedCertificateValidation(t *testing.T) {
 		ValidationMethod:     "txt",
 		CertificateAuthority: "digicert",
 		CloudflareBranding:   false,
+		ValidationRecords: []TxtValidationRecord{{
+			Name:  "example.com",
+			Value: "ca3-1234567890abcdef",
+		}},
 	}
 
 	actual, err := client.RestartAdvancedCertificateValidation(context.Background(), "023e105f4ecef8ad9ca31a8372d0c353", "3822ff90-ea29-44df-9e55-21300bb9419b")

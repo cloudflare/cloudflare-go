@@ -62,13 +62,14 @@ type CertificatePackRequest struct {
 // CertificatePackAdvancedCertificate is the structure of the advanced
 // certificate pack certificate.
 type CertificatePackAdvancedCertificate struct {
-	ID                   string   `json:"id"`
-	Type                 string   `json:"type"`
-	Hosts                []string `json:"hosts"`
-	ValidationMethod     string   `json:"validation_method"`
-	ValidityDays         int      `json:"validity_days"`
-	CertificateAuthority string   `json:"certificate_authority"`
-	CloudflareBranding   bool     `json:"cloudflare_branding"`
+	ID                   string                `json:"id"`
+	Type                 string                `json:"type"`
+	Hosts                []string              `json:"hosts"`
+	ValidationMethod     string                `json:"validation_method"`
+	ValidityDays         int                   `json:"validity_days"`
+	CertificateAuthority string                `json:"certificate_authority"`
+	CloudflareBranding   bool                  `json:"cloudflare_branding"`
+	ValidationRecords    []TxtValidationRecord `json:"validation_records,omitempty"`
 }
 
 // CertificatePacksResponse is for responses where multiple certificates are
