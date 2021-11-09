@@ -93,7 +93,7 @@ func TestListCertificatePacks(t *testing.T) {
 	}
 }
 
-func TestListCertificatePack(t *testing.T) {
+func TestGetCertificatePack(t *testing.T) {
 	setup()
 	defer teardown()
 
