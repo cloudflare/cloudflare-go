@@ -3,6 +3,7 @@ package cloudflare
 
 import (
 	"bytes"
+	"compress/gzip"
 	"context"
 	"encoding/json"
 	"io"
@@ -13,6 +14,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/pkg/errors"
@@ -169,18 +171,26 @@ func (api *API) makeRequestContext(ctx context.Context, method, uri string, para
 }
 
 func (api *API) makeRequestContextWithHeaders(ctx context.Context, method, uri string, params interface{}, headers http.Header) ([]byte, error) {
-	return api.makeRequestWithAuthTypeAndHeaders(ctx, method, uri, params, api.authType, headers)
+	return readAllClose(api.makeRequestWithAuthTypeAndHeaders(ctx, method, uri, params, api.authType, headers))
 }
 
 func (api *API) makeRequestWithHeaders(method, uri string, params interface{}, headers http.Header) ([]byte, error) {
-	return api.makeRequestWithAuthTypeAndHeaders(context.Background(), method, uri, params, api.authType, headers)
+	return readAllClose(api.makeRequestWithAuthTypeAndHeaders(context.Background(), method, uri, params, api.authType, headers))
 }
 
 func (api *API) makeRequestWithAuthType(ctx context.Context, method, uri string, params interface{}, authType int) ([]byte, error) {
-	return api.makeRequestWithAuthTypeAndHeaders(ctx, method, uri, params, authType, nil)
+	return readAllClose(api.makeRequestWithAuthTypeAndHeaders(ctx, method, uri, params, authType, nil))
 }
 
-func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, uri string, params interface{}, authType int, headers http.Header) ([]byte, error) {
+func readAllClose(r io.ReadCloser, err error) ([]byte, error) {
+	if err != nil {
+		return nil, err
+	}
+	defer r.Close()
+	return io.ReadAll(r)
+}
+
+func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, uri string, params interface{}, authType int, headers http.Header) (io.ReadCloser, error) {
 	// Replace nil with a JSON object if needed
 	var jsonBody []byte
 	var err error
@@ -237,8 +247,7 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 			// if we got a valid http response, try to read body so we can reuse the connection
 			// see https://golang.org/pkg/net/http/#Client.Do
 			if respErr == nil {
-				respBody, err = ioutil.ReadAll(resp.Body)
-				resp.Body.Close()
+				respBody, err = readBody(resp)
 
 				respErr = errors.Wrap(err, "could not read response body")
 
@@ -249,11 +258,6 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 			}
 			continue
 		} else {
-			respBody, err = ioutil.ReadAll(resp.Body)
-			defer resp.Body.Close()
-			if err != nil {
-				return nil, errors.Wrap(err, "could not read response body")
-			}
 			break
 		}
 	}
@@ -262,6 +266,10 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 	}
 
 	if resp.StatusCode >= http.StatusBadRequest {
+		respBody, err = readBody(resp)
+		if err != nil {
+			return nil, errors.Wrap(err, "could not read response body")
+		}
 		if strings.HasSuffix(resp.Request.URL.Path, "/filters/validate-expr") {
 			return nil, errors.Errorf("%s", respBody)
 		}
@@ -270,19 +278,102 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 			return nil, errors.Errorf("HTTP status %d: service failure", resp.StatusCode)
 		}
 
-		errBody := &Response{}
-		err = json.Unmarshal(respBody, &errBody)
-		if err != nil {
-			return nil, errors.Wrap(err, errUnmarshalErrorBody)
-		}
+		// Logpull/received error response are not in json.
+		if len(respBody) > 0 && respBody[0] == '{' {
+			errBody := &Response{}
+			err = json.Unmarshal(respBody, &errBody)
+			if err != nil {
+				return nil, errors.Wrap(err, errUnmarshalErrorBody)
+			}
 
+			return nil, &APIRequestError{
+				StatusCode: resp.StatusCode,
+				Errors:     errBody.Errors,
+			}
+		}
 		return nil, &APIRequestError{
 			StatusCode: resp.StatusCode,
-			Errors:     errBody.Errors,
+			Errors:     []ResponseInfo{{Message: string(respBody)}},
+		}
+
+	}
+	return getBodyReader(resp)
+}
+
+var gzipPool sync.Pool
+
+type gzipResponseBody struct {
+	body io.ReadCloser
+	gzip *gzip.Reader
+}
+
+type closeDiscardBody struct {
+	body io.ReadCloser
+}
+
+func (b *closeDiscardBody) Read(p []byte) (n int, err error) {
+	return b.body.Read(p)
+}
+
+func (b *closeDiscardBody) Close() error {
+	_, _ = io.Copy(ioutil.Discard, b.body)
+	return b.body.Close()
+}
+
+func newGzipResponseBody(body io.ReadCloser) (io.ReadCloser, error) {
+	gz := gzipPool.Get()
+	if gz == nil {
+		gzipReader, err := gzip.NewReader(body)
+		if err != nil {
+			return nil, err
+		}
+		return &gzipResponseBody{body: body, gzip: gzipReader}, nil
+	}
+	res := gz.(*gzipResponseBody)
+	err := res.Reset(body)
+	return res, err
+}
+
+func (b *gzipResponseBody) Read(p []byte) (int, error) {
+	return b.gzip.Read(p)
+}
+
+func (b *gzipResponseBody) Reset(r io.ReadCloser) error {
+	b.body = r
+	return b.gzip.Reset(r)
+}
+
+func (b *gzipResponseBody) Close() error {
+	err := b.gzip.Close()
+	if errBody := b.body.Close(); errBody != nil {
+		if err == nil {
+			err = errBody
+		} else {
+			err = errors.Wrap(err, errBody.Error())
 		}
 	}
+	gzipPool.Put(b)
+	return err
+}
 
-	return respBody, nil
+func getBodyReader(resp *http.Response) (io.ReadCloser, error) {
+	body := &closeDiscardBody{body: resp.Body}
+	if resp.Header.Get("Content-Encoding") == "gzip" {
+		return newGzipResponseBody(body)
+	}
+	return body, nil
+}
+
+func readBody(resp *http.Response) ([]byte, error) {
+	var (
+		body io.ReadCloser
+		err  error
+	)
+	if body, err = getBodyReader(resp); err != nil {
+		return nil, err
+	}
+	defer body.Close()
+	return io.ReadAll(body)
 }
 
 // request makes a HTTP request to the given API endpoint, returning the raw
@@ -423,6 +514,7 @@ type Logger interface {
 
 // ReqOption is a functional option for configuring API requests
 type ReqOption func(opt *reqOption)
+
 type reqOption struct {
 	params url.Values
 }
