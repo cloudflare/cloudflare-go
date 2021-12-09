@@ -107,7 +107,7 @@ func TestDevicePostureIntegration(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/posture/integration/"+id, handler)
 
-	actual, _, err := client.DevicePostureIntegration(context.Background(), testAccountID, id)
+	actual, err := client.DevicePostureIntegration(context.Background(), testAccountID, id)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -156,7 +156,56 @@ func TestDevicePostureIntegrationUpdate(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/posture/integration/"+id, handler)
 
-	actual, _, err := client.UpdateDevicePostureIntegration(context.Background(), testAccountID, want)
+	actual, err := client.UpdateDevicePostureIntegration(context.Background(), testAccountID, want)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestDevicePostureIntegrationCreate(t *testing.T) {
+	setup()
+	defer teardown()
+
+	id := "480f4f69-1a28-4fdd-9240-1ed29f0ac1db"
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "%s",
+				"interval": "1h",
+				"type": "workspace_one",
+				"name": "My integration name",
+				"config": {
+					"auth_url":      "https://auth_url.example.com",
+					"api_url":       "https://api_url.example.com",
+					"client_id":     "test_client_id",
+					"client_secret": "test_client_secret"
+				}
+			}
+		}`, id)
+	}
+
+	want := DevicePostureIntegration{
+		IntegrationID: id,
+		Name:          "My integration name",
+		Type:          "workspace_one",
+		Interval:      "1h",
+		Config: DevicePostureIntegrationConfig{
+			AuthUrl:      "https://auth_url.example.com",
+			ApiUrl:       "https://api_url.example.com",
+			ClientID:     "test_client_id",
+			ClientSecret: "test_client_secret",
+		},
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/devices/posture/integration", handler)
+
+	actual, err := client.CreateDevicePostureIntegration(context.Background(), testAccountID, want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
