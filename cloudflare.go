@@ -19,7 +19,7 @@ import (
 	"golang.org/x/time/rate"
 )
 
-const apiURL = "https://api.cloudflare.com/client/v4"
+var apiURL = GetAPIUrl()
 
 const (
 	originCARootCertEccURL = "https://developers.cloudflare.com/ssl/0d2cd0f374da0fb6dbf53128b60bbbf7/origin_ca_ecc_root.pem"
