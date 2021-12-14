@@ -114,7 +114,7 @@ func (api *API) CreateAccountLogpushJob(ctx context.Context, accountID string, j
 func (api *API) CreateZoneLogpushJob(ctx context.Context, zoneID string, job LogpushJob) (*LogpushJob, error) {
 	return api.createLogpushJob(ctx, zoneID, job, "zone")
 }
-func (api *API) CreateLogpushJob(ctx context.Context, zoneId string, job LogpushJob) (*LogpushJob, error) {
+func (api *API) CreateLogpushJob(ctx context.Context, zoneID string, job LogpushJob) (*LogpushJob, error) {
         return api.createLogpushJob(ctx, zoneID, job, "zone")
 }
 
