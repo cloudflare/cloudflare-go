@@ -122,7 +122,7 @@ func (api *API) CreateLogpushJob(ctx context.Context, zoneID string, job Logpush
 // LogpushJobs returns all Logpush Jobs for a zone.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-list-logpush-jobs
-func (api *API) logpushJobs(ctx context.Context, identifierType RouteRoot, identifier string) ([]LogpushJob, error) {
+func (api *API) listLogpushJobs(ctx context.Context, identifierType RouteRoot, identifier string) ([]LogpushJob, error) {
 	uri := fmt.Sprintf("/%s/%s/logpush/jobs", identifierType, identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -136,20 +136,20 @@ func (api *API) logpushJobs(ctx context.Context, identifierType RouteRoot, ident
 	return r.Result, nil
 }
 func (api *API) ListAccountLogpushJobs(ctx context.Context, accountID string) ([]LogpushJob, error) {
-	return api.logpushJobs(ctx, AccountRouteRoot, accountID, job)
+	return api.listLogpushJobs(ctx, AccountRouteRoot, accountID, job)
 }
 func (api *API) ListZoneLogpushJobs(ctx context.Context, zoneID string) ([]LogpushJob, error) {
-	return api.logpushJobs(ctx, ZoneRouteRoot, zoneID, job)
+	return api.listLogpushJobs(ctx, ZoneRouteRoot, zoneID, job)
 }
 // Eventually deprecate this
 func (api *API) LogpushJobs(ctx context.Context, zoneID string) ([]LogpushJob, error) {
-	return api.logpushJobs(ctx, ZoneRouteRoot, zoneID, job)
+	return api.listLogpushJobs(ctx, ZoneRouteRoot, zoneID, job)
 }
 
 // LogpushJobsForDataset returns all Logpush Jobs for a dataset in a zone.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-list-logpush-jobs-for-a-dataset
-func (api *API) logpushJobsForDataset(ctx context.Context, identifierType RouteRoot, identifier, dataset string) ([]LogpushJob, error) {
+func (api *API) listLogpushJobsForDataset(ctx context.Context, identifierType RouteRoot, identifier, dataset string) ([]LogpushJob, error) {
 	uri := fmt.Sprintf("/%s/%s/logpush/datasets/%s/jobs", identifierType, identifier, dataset)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -163,20 +163,20 @@ func (api *API) logpushJobsForDataset(ctx context.Context, identifierType RouteR
 	return r.Result, nil
 }
 func (api *API) ListAccountLogpushJobsForDataset(ctx context.Context, accountID, dataset string) ([]LogpushJob, error) {
-	return api.logpushJobsForDataset(ctx, AccountRouteRoot, accountID, dataset)
+	return api.listLogpushJobsForDataset(ctx, AccountRouteRoot, accountID, dataset)
 }
 func (api *API) ListZoneLogpushJobsForDataset(ctx context.Context, zoneID, dataset string) ([]LogpushJob, error) {
-	return api.logpushJobsForDataset(ctx, ZoneRouteRoot, zoneID, dataset)
+	return api.listLogpushJobsForDataset(ctx, ZoneRouteRoot, zoneID, dataset)
 }
 // Eventually deprecate this
 func (api *API) LogpushJobsForDataset(ctx context.Context, zoneID, dataset string) ([]LogpushJob, error) {
-	return api.logpushJobsForDataset(ctx, ZoneRouteRoot, zoneID, dataset)
+	return api.listLogpushJobsForDataset(ctx, ZoneRouteRoot, zoneID, dataset)
 }
 
 // LogpushFields returns fields for a given dataset.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-list-logpush-jobs
-func (api *API) logpushFields(ctx context.Context, identifierType RouteRoot, identifier, dataset string) (LogpushFields, error) {
+func (api *API) getLogpushFields(ctx context.Context, identifierType RouteRoot, identifier, dataset string) (LogpushFields, error) {
 	uri := fmt.Sprintf("/%s/%s/logpush/datasets/%s/fields", identifierType, identifier, dataset)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -190,20 +190,20 @@ func (api *API) logpushFields(ctx context.Context, identifierType RouteRoot, ide
 	return r.Result, nil
 }
 func (api *API) GetAccountLogpushFields(ctx context.Context, accountID, dataset string) (LogpushFields, error) {
-	return api.logpushFields(ctx, AccountRouteRoot, accountID, dataset)
+	return api.getLogpushFields(ctx, AccountRouteRoot, accountID, dataset)
 }
 func (api *API) GetZoneLogpushFields(ctx context.Context, zoneID, dataset string) (LogpushFields, error) {
-	return api.logpushFields(ctx, ZoneRouteRoot, zoneID, dataset)
+	return api.getLogpushFields(ctx, ZoneRouteRoot, zoneID, dataset)
 }
 // Eventually deprecate this
 func (api *API) LogpushFields(ctx context.Context, zoneID, dataset string) (LogpushFields, error) {
-	return api.logpushFields(ctx, ZoneRouteRoot, zoneID, dataset)
+	return api.getLogpushFields(ctx, ZoneRouteRoot, zoneID, dataset)
 }
 
 // LogpushJob fetches detail about one Logpush Job for a zone.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-logpush-job-details
-func (api *API) logpushJob(ctx context.Context, identifierType RouteRoot, identifier string, jobID int) (LogpushJob, error) {
+func (api *API) getLogpushJob(ctx context.Context, identifierType RouteRoot, identifier string, jobID int) (LogpushJob, error) {
 	uri := fmt.Sprintf("/%s/%s/logpush/jobs/%d", identifierType, identifier, jobID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -217,14 +217,14 @@ func (api *API) logpushJob(ctx context.Context, identifierType RouteRoot, identi
 	return r.Result, nil
 }
 func (api *API) GetAccountLogpushJob(ctx context.Context, accountID string, jobID int) (LogpushJob, error) {
-	return api.logpushJob(ctx, AccountRouteRoot, accountID, jobID)
+	return api.getLogpushJob(ctx, AccountRouteRoot, accountID, jobID)
 }
 func (api *API) GetZoneLogpushJob(ctx context.Context, zoneID string, jobID int) (LogpushJob, error) {
-	return api.logpushJob(ctx, ZoneRouteRoot, zoneID, jobID)
+	return api.getLogpushJob(ctx, ZoneRouteRoot, zoneID, jobID)
 }
 // Eventually deprecate this
 func (api *API) LogpushJob(ctx context.Context, zoneID string, jobID int) (LogpushJob, error) {
-	return api.logpushJob(ctx, ZoneRouteRoot, zoneID, jobID)
+	return api.getLogpushJob(ctx, ZoneRouteRoot, zoneID, jobID)
 }
 
 // UpdateLogpushJob lets you update a Logpush Job.
