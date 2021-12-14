@@ -114,6 +114,7 @@ func (api *API) CreateAccountLogpushJob(ctx context.Context, accountID string, j
 func (api *API) CreateZoneLogpushJob(ctx context.Context, zoneID string, job LogpushJob) (*LogpushJob, error) {
 	return api.createLogpushJob(ctx, ZoneRouteRoot, zoneID, job)
 }
+// Eventually deprecate this
 func (api *API) CreateLogpushJob(ctx context.Context, zoneID string, job LogpushJob) (*LogpushJob, error) {
         return api.createLogpushJob(ctx, ZoneRouteRoot, zoneID, job)
 }
@@ -140,6 +141,7 @@ func (api *API) ListAccountLogpushJobs(ctx context.Context, accountID string) ([
 func (api *API) ListZoneLogpushJobs(ctx context.Context, zoneID string) ([]LogpushJob, error) {
 	return api.logpushJobs(ctx, ZoneRouteRoot, zoneID, job)
 }
+// Eventually deprecate this
 func (api *API) LogpushJobs(ctx context.Context, zoneID string) ([]LogpushJob, error) {
 	return api.logpushJobs(ctx, ZoneRouteRoot, zoneID, job)
 }
@@ -166,6 +168,7 @@ func (api *API) ListAccountLogpushJobsForDataset(ctx context.Context, accountID,
 func (api *API) ListZoneLogpushJobsForDataset(ctx context.Context, zoneID, dataset string) ([]LogpushJob, error) {
 	return api.logpushJobsForDataset(ctx, ZoneRouteRoot, zoneID, dataset)
 }
+// Eventually deprecate this
 func (api *API) LogpushJobsForDataset(ctx context.Context, zoneID, dataset string) ([]LogpushJob, error) {
 	return api.logpushJobsForDataset(ctx, ZoneRouteRoot, zoneID, dataset)
 }
@@ -192,6 +195,7 @@ func (api *API) GetAccountLogpushFields(ctx context.Context, accountID, dataset 
 func (api *API) GetZoneLogpushFields(ctx context.Context, zoneID, dataset string) (LogpushFields, error) {
 	return api.logpushFields(ctx, ZoneRouteRoot, zoneID, dataset)
 }
+// Eventually deprecate this
 func (api *API) LogpushFields(ctx context.Context, zoneID, dataset string) (LogpushFields, error) {
 	return api.logpushFields(ctx, ZoneRouteRoot, zoneID, dataset)
 }
@@ -218,6 +222,7 @@ func (api *API) GetAccountLogpushJob(ctx context.Context, accountID string, jobI
 func (api *API) GetZoneLogpushJob(ctx context.Context, zoneID string, jobID int) (LogpushJob, error) {
 	return api.logpushJob(ctx, ZoneRouteRoot, zoneID, jobID)
 }
+// Eventually deprecate this
 func (api *API) LogpushJob(ctx context.Context, zoneID string, jobID int) (LogpushJob, error) {
 	return api.logpushJob(ctx, ZoneRouteRoot, zoneID, jobID)
 }
@@ -244,6 +249,7 @@ func (api *API) UpdateAccountLogpushJob(ctx context.Context, accountID string, j
 func (api *API) UpdateZoneLogpushJob(ctx context.Context, zoneID string, jobID int, job LogpushJob) error {
 	return api.updateLogpushJob(ctx, ZoneRouteRoot, zoneID, jobID, job)
 }
+// Eventually deprecate this
 func (api *API) UpdateLogpushJob(ctx context.Context, zoneID string, jobID int, job LogpushJob) error {
 	return api.updateLogpushJob(ctx, ZoneRouteRoot, zoneID, jobID, job)
 }
@@ -270,6 +276,7 @@ func (api *API) DeleteAccountLogpushJob(ctx context.Context, accountID string, j
 func (api *API) DeleteZoneLogpushJob(ctx context.Context, zoneID string, jobID int) error {
 	return api.deleteLogpushJob(ctx, ZoneRouteRoot, zoneID, jobID)
 }
+// Eventually deprecate this
 func (api *API) DeleteLogpushJob(ctx context.Context, zoneID string, jobID int) error {
 	return api.deleteLogpushJob(ctx, ZoneRouteRoot, zoneID, jobID)
 }
@@ -303,6 +310,7 @@ func (api *API) GetAccountLogpushOwnershipChallenge(ctx context.Context, account
 func (api *API) GetZoneLogpushOwnershipChallenge(ctx context.Context, zoneID, destinationConf string) (*LogpushGetOwnershipChallenge, error) {
 	return api.getLogpushOwnershipChallenge(ctx, ZoneRouteRoot, zoneID, destinationConf)
 }
+// Eventually deprecate this
 func (api *API) GetLogpushOwnershipChallenge(ctx context.Context, zoneID, destinationConf string) (*LogpushGetOwnershipChallenge, error) {
 	return api.getLogpushOwnershipChallenge(ctx, ZoneRouteRoot, zoneID, destinationConf)
 }
@@ -332,6 +340,7 @@ func (api *API) ValidateAccountLogpushOwnershipChallenge(ctx context.Context, ac
 func (api *API) ValidateZoneLogpushOwnershipChallenge(ctx context.Context, zoneID, destinationConf, ownershipChallenge string) (bool, error) {
 	return api.validateLogpushOwnershipChallenge(ctx, ZoneRouteRoot, zoneID, destinationConf, ownershipChallenge)
 }
+// Eventually deprecate this
 func (api *API) ValidateLogpushOwnershipChallenge(ctx context.Context, zoneID, destinationConf, ownershipChallenge string) (bool, error) {
 	return api.validateLogpushOwnershipChallenge(ctx, ZoneRouteRoot, zoneID, destinationConf, ownershipChallenge)
 }
@@ -360,6 +369,7 @@ func (api *API) CheckAccountLogpushDestinationExists(ctx context.Context, accoun
 func (api *API) CheckZoneLogpushDestinationExists(ctx context.Context, zoneID, destinationConf string) (bool, error) {
 	return api.checkLogpushDestinationExists(ctx, ZoneRouteRoot, zoneID, destinationConf)
 }
+// Eventually deprecate this
 func (api *API) CheckLogpushDestinationExists(ctx context.Context, zoneID, destinationConf string) (bool, error) {
 	return api.checkLogpushDestinationExists(ctx, ZoneRouteRoot, zoneID, destinationConf)
 }
