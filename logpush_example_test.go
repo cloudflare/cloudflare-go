@@ -22,7 +22,7 @@ var exampleUpdatedLogpushJob = cloudflare.LogpushJob{
 	DestinationConf: "gs://mybucket/logs",
 }
 
-func ExampleAPI_CreateLogpushJob() {
+func ExampleAPI_CreateZoneLogpushJob() {
 	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
@@ -33,7 +33,7 @@ func ExampleAPI_CreateLogpushJob() {
 		log.Fatal(err)
 	}
 
-	job, err := api.CreateLogpushJob(context.Background(), zoneID, exampleNewLogpushJob)
+	job, err := api.CreateZoneLogpushJob(context.Background(), zoneID, exampleNewLogpushJob)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -41,7 +41,7 @@ func ExampleAPI_CreateLogpushJob() {
 	fmt.Printf("%+v\n", job)
 }
 
-func ExampleAPI_UpdateLogpushJob() {
+func ExampleAPI_UpdateZoneLogpushJob() {
 	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
@@ -52,13 +52,13 @@ func ExampleAPI_UpdateLogpushJob() {
 		log.Fatal(err)
 	}
 
-	err = api.UpdateLogpushJob(context.Background(), zoneID, 1, exampleUpdatedLogpushJob)
+	err = api.UpdateZoneLogpushJob(context.Background(), zoneID, 1, exampleUpdatedLogpushJob)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func ExampleAPI_LogpushJobs() {
+func ExampleAPI_ListZoneLogpushJobs() {
 	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
@@ -69,7 +69,7 @@ func ExampleAPI_LogpushJobs() {
 		log.Fatal(err)
 	}
 
-	jobs, err := api.LogpushJobs(context.Background(), zoneID)
+	jobs, err := api.ListZoneLogpushJobs(context.Background(), zoneID)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -80,7 +80,7 @@ func ExampleAPI_LogpushJobs() {
 	}
 }
 
-func ExampleAPI_LogpushJob() {
+func ExampleAPI_GetZoneLogpushJob() {
 	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
@@ -91,7 +91,7 @@ func ExampleAPI_LogpushJob() {
 		log.Fatal(err)
 	}
 
-	job, err := api.LogpushJob(context.Background(), zoneID, 1)
+	job, err := api.GetZoneLogpushJob(context.Background(), zoneID, 1)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -99,7 +99,7 @@ func ExampleAPI_LogpushJob() {
 	fmt.Printf("%+v\n", job)
 }
 
-func ExampleAPI_DeleteLogpushJob() {
+func ExampleAPI_DeleteZoneLogpushJob() {
 	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
@@ -110,13 +110,13 @@ func ExampleAPI_DeleteLogpushJob() {
 		log.Fatal(err)
 	}
 
-	err = api.DeleteLogpushJob(context.Background(), zoneID, 1)
+	err = api.DeleteZoneLogpushJob(context.Background(), zoneID, 1)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func ExampleAPI_GetLogpushOwnershipChallenge() {
+func ExampleAPI_GetZoneLogpushOwnershipChallenge() {
 	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
@@ -127,7 +127,7 @@ func ExampleAPI_GetLogpushOwnershipChallenge() {
 		log.Fatal(err)
 	}
 
-	ownershipChallenge, err := api.GetLogpushOwnershipChallenge(context.Background(), zoneID, "destination_conf")
+	ownershipChallenge, err := api.GetZoneLogpushOwnershipChallenge(context.Background(), zoneID, "destination_conf")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -135,7 +135,7 @@ func ExampleAPI_GetLogpushOwnershipChallenge() {
 	fmt.Printf("%+v\n", ownershipChallenge)
 }
 
-func ExampleAPI_ValidateLogpushOwnershipChallenge() {
+func ExampleAPI_ValidateZoneLogpushOwnershipChallenge() {
 	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
@@ -146,7 +146,7 @@ func ExampleAPI_ValidateLogpushOwnershipChallenge() {
 		log.Fatal(err)
 	}
 
-	isValid, err := api.ValidateLogpushOwnershipChallenge(context.Background(), zoneID, "destination_conf", "ownership_challenge")
+	isValid, err := api.ValidateZoneLogpushOwnershipChallenge(context.Background(), zoneID, "destination_conf", "ownership_challenge")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -154,7 +154,7 @@ func ExampleAPI_ValidateLogpushOwnershipChallenge() {
 	fmt.Printf("%+v\n", isValid)
 }
 
-func ExampleAPI_CheckLogpushDestinationExists() {
+func ExampleAPI_CheckZoneLogpushDestinationExists() {
 	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
@@ -165,7 +165,7 @@ func ExampleAPI_CheckLogpushDestinationExists() {
 		log.Fatal(err)
 	}
 
-	exists, err := api.CheckLogpushDestinationExists(context.Background(), zoneID, "destination_conf")
+	exists, err := api.CheckZoneLogpushDestinationExists(context.Background(), zoneID, "destination_conf")
 	if err != nil {
 		log.Fatal(err)
 	}
