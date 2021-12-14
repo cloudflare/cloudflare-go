@@ -116,7 +116,7 @@ func (api *API) CreateZoneLogpushJob(ctx context.Context, zoneID string, job Log
 }
 // Eventually deprecate this
 func (api *API) CreateLogpushJob(ctx context.Context, zoneID string, job LogpushJob) (*LogpushJob, error) {
-        return api.createLogpushJob(ctx, ZoneRouteRoot, zoneID, job)
+	return api.createLogpushJob(ctx, ZoneRouteRoot, zoneID, job)
 }
 
 // LogpushJobs returns all Logpush Jobs for a zone.
