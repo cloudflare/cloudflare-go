@@ -109,13 +109,13 @@ func (api *API) createLogpushJob(ctx context.Context, identifierType RouteRoot, 
 	return &r.Result, nil
 }
 func (api *API) CreateAccountLogpushJob(ctx context.Context, accountID string, job LogpushJob) (*LogpushJob, error) {
-	return api.createLogpushJob(ctx, accountID, job, "account")
+	return api.createLogpushJob(ctx, AccountRouteRoot, accountID, job)
 }
 func (api *API) CreateZoneLogpushJob(ctx context.Context, zoneID string, job LogpushJob) (*LogpushJob, error) {
-	return api.createLogpushJob(ctx, zoneID, job, "zone")
+	return api.createLogpushJob(ctx, ZoneRouteRoot, zoneID, job)
 }
 func (api *API) CreateLogpushJob(ctx context.Context, zoneID string, job LogpushJob) (*LogpushJob, error) {
-        return api.createLogpushJob(ctx, zoneID, job, "zone")
+        return api.createLogpushJob(ctx, ZoneRouteRoot, zoneID, job)
 }
 
 // LogpushJobs returns all Logpush Jobs for a zone.
@@ -135,13 +135,13 @@ func (api *API) logpushJobs(ctx context.Context, identifierType RouteRoot, ident
 	return r.Result, nil
 }
 func (api *API) ListAccountLogpushJobs(ctx context.Context, accountID string) ([]LogpushJob, error) {
-	return api.logpushJobs(ctx, accountID, job, "account")
+	return api.logpushJobs(ctx, AccountRouteRoot, accountID, job)
 }
 func (api *API) ListZoneLogpushJobs(ctx context.Context, zoneID string) ([]LogpushJob, error) {
-	return api.logpushJobs(ctx, zoneID, job, "zone")
+	return api.logpushJobs(ctx, ZoneRouteRoot, zoneID, job)
 }
 func (api *API) LogpushJobs(ctx context.Context, zoneID string) ([]LogpushJob, error) {
-	return api.logpushJobs(ctx, zoneID, job, "zone")
+	return api.logpushJobs(ctx, ZoneRouteRoot, zoneID, job)
 }
 
 // LogpushJobsForDataset returns all Logpush Jobs for a dataset in a zone.
@@ -161,13 +161,13 @@ func (api *API) logpushJobsForDataset(ctx context.Context, identifierType RouteR
 	return r.Result, nil
 }
 func (api *API) ListAccountLogpushJobsForDataset(ctx context.Context, accountID, dataset string) ([]LogpushJob, error) {
-	return api.logpushJobsForDataset(ctx, accountID, dataset, "account")
+	return api.logpushJobsForDataset(ctx, AccountRouteRoot, accountID, dataset)
 }
 func (api *API) ListZoneLogpushJobsForDataset(ctx context.Context, zoneID, dataset string) ([]LogpushJob, error) {
-	return api.logpushJobsForDataset(ctx, zoneID, dataset, "zone")
+	return api.logpushJobsForDataset(ctx, ZoneRouteRoot, zoneID, dataset)
 }
 func (api *API) LogpushJobsForDataset(ctx context.Context, zoneID, dataset string) ([]LogpushJob, error) {
-	return api.logpushJobsForDataset(ctx, zoneID, dataset, "zone")
+	return api.logpushJobsForDataset(ctx, ZoneRouteRoot, zoneID, dataset)
 }
 
 // LogpushFields returns fields for a given dataset.
@@ -187,13 +187,13 @@ func (api *API) logpushFields(ctx context.Context, identifierType RouteRoot, ide
 	return r.Result, nil
 }
 func (api *API) GetAccountLogpushFields(ctx context.Context, accountID, dataset string) (LogpushFields, error) {
-	return api.logpushFields(ctx, accountID, dataset, "account")
+	return api.logpushFields(ctx, AccountRouteRoot, accountID, dataset)
 }
 func (api *API) GetZoneLogpushFields(ctx context.Context, zoneID, dataset string) (LogpushFields, error) {
-	return api.logpushFields(ctx, zoneID, dataset, "zone")
+	return api.logpushFields(ctx, ZoneRouteRoot, zoneID, dataset)
 }
 func (api *API) LogpushFields(ctx context.Context, zoneID, dataset string) (LogpushFields, error) {
-	return api.logpushFields(ctx, zoneID, dataset, "zone")
+	return api.logpushFields(ctx, ZoneRouteRoot, zoneID, dataset)
 }
 
 // LogpushJob fetches detail about one Logpush Job for a zone.
@@ -213,13 +213,13 @@ func (api *API) logpushJob(ctx context.Context, identifierType RouteRoot, identi
 	return r.Result, nil
 }
 func (api *API) GetAccountLogpushJob(ctx context.Context, accountID string, jobID int) (LogpushJob, error) {
-	return api.logpushJob(ctx, accountID, jobID, "account")
+	return api.logpushJob(ctx, AccountRouteRoot, accountID, jobID)
 }
 func (api *API) GetZoneLogpushJob(ctx context.Context, zoneID string, jobID int) (LogpushJob, error) {
-	return api.logpushJob(ctx, zoneID, jobID, "zone")
+	return api.logpushJob(ctx, ZoneRouteRoot, zoneID, jobID)
 }
 func (api *API) LogpushJob(ctx context.Context, zoneID string, jobID int) (LogpushJob, error) {
-	return api.logpushJob(ctx, zoneID, jobID, "zone")
+	return api.logpushJob(ctx, ZoneRouteRoot, zoneID, jobID)
 }
 
 // UpdateLogpushJob lets you update a Logpush Job.
@@ -239,13 +239,13 @@ func (api *API) updateLogpushJob(ctx context.Context, identifierType RouteRoot, 
 	return nil
 }
 func (api *API) UpdateAccountLogpushJob(ctx context.Context, accountID string, jobID int, job LogpushJob) error {
-	return api.updateLogpushJob(ctx, accountID, jobID, job, "account")
+	return api.updateLogpushJob(ctx, AccountRouteRoot, accountID, jobID)
 }
 func (api *API) UpdateZoneLogpushJob(ctx context.Context, zoneID string, jobID int, job LogpushJob) error {
-	return api.updateLogpushJob(ctx, zoneID, jobID, job, "zone")
+	return api.updateLogpushJob(ctx, ZoneRouteRoot, zoneID, jobID, job)
 }
 func (api *API) UpdateLogpushJob(ctx context.Context, zoneID string, jobID int, job LogpushJob) error {
-	return api.updateLogpushJob(ctx, zoneID, jobID, job, "zone")
+	return api.updateLogpushJob(ctx, ZoneRouteRoot, zoneID, jobID, job)
 }
 
 // DeleteLogpushJob deletes a Logpush Job for a zone.
@@ -265,13 +265,13 @@ func (api *API) deleteLogpushJob(ctx context.Context, identifierType RouteRoot, 
 	return nil
 }
 func (api *API) DeleteAccountLogpushJob(ctx context.Context, accountID string, jobID int) error {
-	return api.deleteLogpushJob(ctx, accountID, jobID, "account")
+	return api.deleteLogpushJob(ctx, AccountRouteRoot, accountID, jobID)
 }
 func (api *API) DeleteZoneLogpushJob(ctx context.Context, zoneID string, jobID int) error {
-	return api.deleteLogpushJob(ctx, zoneID, jobID, "zone")
+	return api.deleteLogpushJob(ctx, ZoneRouteRoot, zoneID, jobID)
 }
 func (api *API) DeleteLogpushJob(ctx context.Context, zoneID string, jobID int) error {
-	return api.deleteLogpushJob(ctx, zoneID, jobID, "zone")
+	return api.deleteLogpushJob(ctx, ZoneRouteRoot, zoneID, jobID)
 }
 
 // GetLogpushOwnershipChallenge returns ownership challenge.
@@ -298,13 +298,13 @@ func (api *API) getLogpushOwnershipChallenge(ctx context.Context, identifierType
 	return &r.Result, nil
 }
 func (api *API) GetAccountLogpushOwnershipChallenge(ctx context.Context, accountID, destinationConf string) (*LogpushGetOwnershipChallenge, error) {
-	return api.getLogpushOwnershipChallenge(ctx, accountID, destinationConf, "account")
+	return api.getLogpushOwnershipChallenge(ctx, AccountRouteRoot, accountID, destinationConf)
 }
 func (api *API) GetZoneLogpushOwnershipChallenge(ctx context.Context, zoneID, destinationConf string) (*LogpushGetOwnershipChallenge, error) {
-	return api.getLogpushOwnershipChallenge(ctx, zoneID, destinationConf, "zone")
+	return api.getLogpushOwnershipChallenge(ctx, ZoneRouteRoot, zoneID, destinationConf)
 }
 func (api *API) GetLogpushOwnershipChallenge(ctx context.Context, zoneID, destinationConf string) (*LogpushGetOwnershipChallenge, error) {
-	return api.getLogpushOwnershipChallenge(ctx, zoneID, destinationConf, "zone")
+	return api.getLogpushOwnershipChallenge(ctx, ZoneRouteRoot, zoneID, destinationConf)
 }
 
 // ValidateLogpushOwnershipChallenge returns ownership challenge validation result.
@@ -327,13 +327,13 @@ func (api *API) validateLogpushOwnershipChallenge(ctx context.Context, identifie
 	return r.Result.Valid, nil
 }
 func (api *API) ValidateAccountLogpushOwnershipChallenge(ctx context.Context, accountID, destinationConf, ownershipChallenge string) (bool, error) {
-	return api.validateLogpushOwnershipChallenge(ctx, accountID, destinationConf, ownershipChallenge, "account")
+	return api.validateLogpushOwnershipChallenge(ctx, AccountRouteRoot, accountID, destinationConf)
 }
 func (api *API) ValidateZoneLogpushOwnershipChallenge(ctx context.Context, zoneID, destinationConf, ownershipChallenge string) (bool, error) {
-	return api.validateLogpushOwnershipChallenge(ctx, zoneID, destinationConf, ownershipChallenge, "zone")
+	return api.validateLogpushOwnershipChallenge(ctx, ZoneRouteRoot, zoneID, destinationConf, ownershipChallenge)
 }
 func (api *API) ValidateLogpushOwnershipChallenge(ctx context.Context, zoneID, destinationConf, ownershipChallenge string) (bool, error) {
-	return api.validateLogpushOwnershipChallenge(ctx, zoneID, destinationConf, ownershipChallenge, "zone")
+	return api.validateLogpushOwnershipChallenge(ctx, ZoneRouteRoot, zoneID, destinationConf, ownershipChallenge)
 }
 
 // CheckLogpushDestinationExists returns destination exists check result.
@@ -355,11 +355,11 @@ func (api *API) checkLogpushDestinationExists(ctx context.Context, identifierTyp
 	return r.Result.Exists, nil
 }
 func (api *API) CheckAccountLogpushDestinationExists(ctx context.Context, accountID, destinationConf string) (bool, error) {
-	return api.checkLogpushDestinationExists(ctx, accountID, destinationConf, "account")
+	return api.checkLogpushDestinationExists(ctx, AccountRouteRoot, accountID, destinationConf)
 }
 func (api *API) CheckZoneLogpushDestinationExists(ctx context.Context, zoneID, destinationConf string) (bool, error) {
-	return api.checkLogpushDestinationExists(ctx, zoneID, destinationConf, "zone")
+	return api.checkLogpushDestinationExists(ctx, ZoneRouteRoot, zoneID, destinationConf)
 }
 func (api *API) CheckLogpushDestinationExists(ctx context.Context, zoneID, destinationConf string) (bool, error) {
-	return api.checkLogpushDestinationExists(ctx, zoneID, destinationConf, "zone")
+	return api.checkLogpushDestinationExists(ctx, ZoneRouteRoot, zoneID, destinationConf)
 }
