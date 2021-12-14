@@ -21,6 +21,7 @@ const (
 	SSH        AccessApplicationType = "ssh"
 	VNC        AccessApplicationType = "vnc"
 	File       AccessApplicationType = "file"
+	Bookmark   AccessApplicationType = "bookmark"
 )
 
 // AccessApplication represents an Access application.
