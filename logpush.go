@@ -133,14 +133,14 @@ func (api *API) createLogpushJob(ctx context.Context, identifierType RouteRoot, 
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-list-logpush-jobs
 func (api *API) ListAccountLogpushJobs(ctx context.Context, accountID string) ([]LogpushJob, error) {
-	return api.listLogpushJobs(ctx, AccountRouteRoot, accountID, job)
+	return api.listLogpushJobs(ctx, AccountRouteRoot, accountID)
 }
 
 // ListZoneLogpushJobs returns all zone-level Logpush Jobs for all datasets.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-list-logpush-jobs
 func (api *API) ListZoneLogpushJobs(ctx context.Context, zoneID string) ([]LogpushJob, error) {
-	return api.listLogpushJobs(ctx, ZoneRouteRoot, zoneID, job)
+	return api.listLogpushJobs(ctx, ZoneRouteRoot, zoneID)
 }
 
 // LogpushJobs returns all zone-level Logpush Jobs for all datasets.
@@ -149,7 +149,7 @@ func (api *API) ListZoneLogpushJobs(ctx context.Context, zoneID string) ([]Logpu
 //
 // Deprecated: Renamed to ListZoneLogpushJobs.
 func (api *API) LogpushJobs(ctx context.Context, zoneID string) ([]LogpushJob, error) {
-	return api.listLogpushJobs(ctx, ZoneRouteRoot, zoneID, job)
+	return api.listLogpushJobs(ctx, ZoneRouteRoot, zoneID)
 }
 
 func (api *API) listLogpushJobs(ctx context.Context, identifierType RouteRoot, identifier string) ([]LogpushJob, error) {
@@ -283,7 +283,7 @@ func (api *API) getLogpushJob(ctx context.Context, identifierType RouteRoot, ide
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-update-logpush-job
 func (api *API) UpdateAccountLogpushJob(ctx context.Context, accountID string, jobID int, job LogpushJob) error {
-	return api.updateLogpushJob(ctx, AccountRouteRoot, accountID, jobID)
+	return api.updateLogpushJob(ctx, AccountRouteRoot, accountID, jobID, job)
 }
 
 // UpdateZoneLogpushJob lets you update a Logpush Job for a zone.
@@ -401,7 +401,7 @@ func (api *API) getLogpushOwnershipChallenge(ctx context.Context, identifierType
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-validate-ownership-challenge
 func (api *API) ValidateAccountLogpushOwnershipChallenge(ctx context.Context, accountID, destinationConf, ownershipChallenge string) (bool, error) {
-	return api.validateLogpushOwnershipChallenge(ctx, AccountRouteRoot, accountID, destinationConf)
+	return api.validateLogpushOwnershipChallenge(ctx, AccountRouteRoot, accountID, destinationConf, ownershipChallenge)
 }
 
 // ValidateZoneLogpushOwnershipChallenge returns zone-level ownership challenge validation result.
