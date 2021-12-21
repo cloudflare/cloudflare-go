@@ -29,10 +29,10 @@ func TestGetLogpullRetentionFlag(t *testing.T) {
 	}`)
 	}
 
-	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/logs/control/retention/flag", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/logs/control/retention/flag", handler)
 	want := &LogpullRetentionConfiguration{Flag: true}
 
-	actual, err := client.GetLogpullRetentionFlag(context.Background(), "d56084adb405e0b7e32c52321bf07be6")
+	actual, err := client.GetLogpullRetentionFlag(context.Background(), testZoneID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -55,10 +55,10 @@ func TestSetLogpullRetentionFlag(t *testing.T) {
 	}`)
 	}
 
-	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/logs/control/retention/flag", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/logs/control/retention/flag", handler)
 	want := &LogpullRetentionConfiguration{Flag: false}
 
-	actual, err := client.SetLogpullRetentionFlag(context.Background(), "d56084adb405e0b7e32c52321bf07be6", false)
+	actual, err := client.SetLogpullRetentionFlag(context.Background(), testZoneID, false)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -78,9 +78,9 @@ func TestLogpullFields(t *testing.T) {
 	}`)
 	}
 
-	mux.HandleFunc("/zones/e49c6317afd4ceabe24c6e11d2dad231/logs/received/fields", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/logs/received/fields", handler)
 
-	actual, err := client.LogpullFields(context.Background(), "e49c6317afd4ceabe24c6e11d2dad231")
+	actual, err := client.LogpullFields(context.Background(), testZoneID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, map[string]string{
 			"foo":     "bar",
@@ -122,9 +122,9 @@ func TestLogpullReceived(t *testing.T) {
 		assert.NoError(t, wg.Close())
 	}
 
-	mux.HandleFunc("/zones/e49c6317afd4ceabe24c6e11d2dad231/logs/received", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/logs/received", handler)
 
-	l, err := client.LogpullReceived(context.Background(), "e49c6317afd4ceabe24c6e11d2dad231", start, end, LogpullReceivedOption{
+	l, err := client.LogpullReceived(context.Background(), testZoneID, start, end, LogpullReceivedOption{
 		Fields: fields,
 		Count:  &count,
 		Sample: &sample,
