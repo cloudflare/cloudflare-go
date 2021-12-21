@@ -25,7 +25,7 @@ type FallbackDomain struct {
 
 // ListFallbackDomains returns all fallback domains within an account.
 //
-// API reference for include: https://api.cloudflare.com/#devices-get-local-domain-fallback-list
+// API reference: https://api.cloudflare.com/#devices-get-local-domain-fallback-list
 func (api *API) ListFallbackDomains(ctx context.Context, accountID string) ([]FallbackDomain, error) {
 	uri := fmt.Sprintf("/%s/%s/devices/policy/fallback_domains", AccountRouteRoot, accountID)
 
@@ -45,7 +45,7 @@ func (api *API) ListFallbackDomains(ctx context.Context, accountID string) ([]Fa
 
 // UpdateFallbackDomain updates the existing fallback domain policy.
 //
-// API reference for include: https://api.cloudflare.com/#devices-set-local-domain-fallback-list
+// API reference: https://api.cloudflare.com/#devices-set-local-domain-fallback-list
 func (api *API) UpdateFallbackDomain(ctx context.Context, accountID string, domains []FallbackDomain) ([]FallbackDomain, error) {
 	uri := fmt.Sprintf("/%s/%s/devices/policy/fallback_domains", AccountRouteRoot, accountID)
 
