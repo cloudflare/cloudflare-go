@@ -38,7 +38,7 @@ The current feature list includes:
 * [x] [Railgun](https://www.cloudflare.com/railgun/) administration
 * [x] Rate Limiting
 * [x] User Administration (partial)
-* [x] Virtual DNS Management
+* [x] DNS Firewall
 * [x] Web Application Firewall (WAF)
 * [x] Zone Lockdown and User-Agent Block rules
 * [x] Zones

@@ -10,7 +10,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestVirtualDNSUserAnalytics(t *testing.T) {
+func float64Ptr(v float64) *float64 {
+	return &v
+}
+
+func int64Ptr(v int64) *int64 {
+	return &v
+}
+
+func TestDNSFirewallUserAnalytics(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -46,8 +54,8 @@ func TestVirtualDNSUserAnalytics(t *testing.T) {
 	}
 
 	mux.HandleFunc("/user/dns_firewall/12345/dns_analytics/report", handler)
-	want := VirtualDNSAnalytics{
-		Totals: VirtualDNSAnalyticsMetrics{
+	want := DNSFirewallAnalytics{
+		Totals: DNSFirewallAnalyticsMetrics{
 			QueryCount:         int64Ptr(5),
 			UncachedCount:      int64Ptr(6),
 			StaleCount:         int64Ptr(7),
@@ -58,7 +66,7 @@ func TestVirtualDNSUserAnalytics(t *testing.T) {
 		},
 	}
 
-	params := VirtualDNSUserAnalyticsOptions{
+	params := DNSFirewallUserAnalyticsOptions{
 		Metrics: []string{
 			"queryCount",
 			"uncachedCount",
@@ -71,7 +79,7 @@ func TestVirtualDNSUserAnalytics(t *testing.T) {
 		Since: &since,
 		Until: &until,
 	}
-	actual, err := client.VirtualDNSUserAnalytics(context.Background(), "12345", params)
+	actual, err := client.DNSFirewallUserAnalytics(context.Background(), "12345", params)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
