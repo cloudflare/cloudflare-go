@@ -18,9 +18,9 @@ type FallbackDomainResponse struct {
 
 // FallbackDomain represents the individual domain struct.
 type FallbackDomain struct {
-	Suffix       string `json:"suffix,omitempty"`
-	Description  string `json:"description,omitempty"`
-	DNSServer    string `json:"dns_server,omitempty"`
+	Suffix       string   `json:"suffix,omitempty"`
+	Description  string   `json:"description,omitempty"`
+	DNSServer    []string `json:"dns_server,omitempty"`
 }
 
 // ListFallbackDomains returns all fallback domains within an account.
