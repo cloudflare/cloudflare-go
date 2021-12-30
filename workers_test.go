@@ -192,7 +192,7 @@ func getFormValue(r *http.Request, key string) ([]byte, error) {
 	return nil, fmt.Errorf("no value found for key %v", key)
 }
 
-type multipartUpload = struct {
+type multipartUpload struct {
 	Script      string
 	BindingMeta map[string]workerBindingMeta
 }
