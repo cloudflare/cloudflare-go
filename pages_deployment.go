@@ -74,7 +74,6 @@ func (api *API) ListPagesDeployments(ctx context.Context, accountID string, proj
 	}
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
-	fmt.Println(string(res))
 	if err != nil {
 		return []PagesProjectDeployment{}, ResultInfo{}, err
 	}
@@ -83,7 +82,6 @@ func (api *API) ListPagesDeployments(ctx context.Context, accountID string, proj
 	if err != nil {
 		return []PagesProjectDeployment{}, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
 	}
-	fmt.Println(r.ResultInfo)
 	return r.Result, r.ResultInfo, nil
 }
 
