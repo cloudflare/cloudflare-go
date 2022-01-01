@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"time"
 
 	"github.com/pkg/errors"
 )
@@ -21,21 +22,21 @@ type SizeOptions struct {
 
 // PagesDeploymentStageLogEntry represents the logs for a Pages deployment stage.
 type PagesDeploymentStageLogs struct {
-	Name       string                         `json:"name"`
-	StartedOn  string                         `json:"started_on"`
-	FinishedOn string                         `json:"finished_on"`
-	Status     string                         `json:"status"`
-	Start      int                            `json:"start"`
-	End        int                            `json:"end"`
-	Total      int                            `json:"total"`
-	Data       []PagesDeploymentStageLogEntry `json:"data"`
+	Name      string                         `json:"name"`
+	StartedOn *time.Time                     `json:"started_on"`
+	EndedOn   *time.Time                     `json:"ended_on"`
+	Status    string                         `json:"status"`
+	Start     int                            `json:"start"`
+	End       int                            `json:"end"`
+	Total     int                            `json:"total"`
+	Data      []PagesDeploymentStageLogEntry `json:"data"`
 }
 
 // PagesDeploymentStageLogEntry represents a single log entry in a Pages deployment stage.
 type PagesDeploymentStageLogEntry struct {
-	ID        int    `json:"id"`
-	Timestamp string `json:"timestamp"`
-	Message   string `json:"message"`
+	ID        int        `json:"id"`
+	Timestamp *time.Time `json:"timestamp"`
+	Message   string     `json:"message"`
 }
 
 type pagesDeploymentListResponse struct {
@@ -73,6 +74,7 @@ func (api *API) ListPagesDeployments(ctx context.Context, accountID string, proj
 	}
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	fmt.Println(string(res))
 	if err != nil {
 		return []PagesProjectDeployment{}, ResultInfo{}, err
 	}
@@ -81,6 +83,7 @@ func (api *API) ListPagesDeployments(ctx context.Context, accountID string, proj
 	if err != nil {
 		return []PagesProjectDeployment{}, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
 	}
+	fmt.Println(r.ResultInfo)
 	return r.Result, r.ResultInfo, nil
 }
 
