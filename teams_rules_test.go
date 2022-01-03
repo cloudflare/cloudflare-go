@@ -91,6 +91,7 @@ func TestTeamsRules(t *testing.T) {
 		Action:      Isolate,
 		Filters:     []TeamsFilterType{HttpFilter},
 		Traffic:     `http.host == "example.com"`,
+		DevicePosture: "",
 		Identity:    "",
 		Version:     1,
 		RuleSettings: TeamsRuleSettings{
@@ -115,6 +116,7 @@ func TestTeamsRules(t *testing.T) {
 			Filters:     []TeamsFilterType{HttpFilter},
 			Traffic:     `http.host == "abcd.com"`,
 			Identity:    "",
+			DevicePosture: "",
 			Version:     1,
 			RuleSettings: TeamsRuleSettings{
 				BlockPageEnabled:  true,
@@ -192,6 +194,7 @@ func TestTeamsRule(t *testing.T) {
 		Filters:     []TeamsFilterType{HttpFilter},
 		Traffic:     `http.host == "abcd.com"`,
 		Identity:    "",
+		DevicePosture:    "",
 		Version:     1,
 		RuleSettings: TeamsRuleSettings{
 			BlockPageEnabled:  false,
@@ -260,6 +263,7 @@ func TestTeamsCreateRule(t *testing.T) {
 		Filters:     []TeamsFilterType{HttpFilter},
 		Traffic:     `http.host == "abcd.com"`,
 		Identity:    "",
+		DevicePosture:    "",
 		RuleSettings: TeamsRuleSettings{
 			BlockPageEnabled:  false,
 			BlockReason:       "",
@@ -332,6 +336,7 @@ func TestTeamsUpdateRule(t *testing.T) {
 		Filters:     []TeamsFilterType{HttpFilter},
 		Traffic:     "",
 		Identity:    "",
+		DevicePosture: "",
 		RuleSettings: TeamsRuleSettings{
 			BlockPageEnabled:  false,
 			BlockReason:       "",
