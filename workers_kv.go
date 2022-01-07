@@ -171,8 +171,8 @@ func (api *API) UpdateWorkersKVNamespace(ctx context.Context, namespaceID string
 func (api *API) WriteWorkersKV(ctx context.Context, namespaceID, key string, value []byte) (Response, error) {
 	key = url.PathEscape(key)
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/values/%s", api.AccountID, namespaceID, key)
-	res, err := api.makeRequestWithHeaders(
-		http.MethodPut, uri, value, http.Header{"Content-Type": []string{"application/octet-stream"}},
+	res, err := api.makeRequestContextWithHeaders(
+		ctx, http.MethodPut, uri, value, http.Header{"Content-Type": []string{"application/octet-stream"}},
 	)
 	if err != nil {
 		return Response{}, err
@@ -191,8 +191,8 @@ func (api *API) WriteWorkersKV(ctx context.Context, namespaceID, key string, val
 // API reference: https://api.cloudflare.com/#workers-kv-namespace-write-multiple-key-value-pairs
 func (api *API) WriteWorkersKVBulk(ctx context.Context, namespaceID string, kvs WorkersKVBulkWriteRequest) (Response, error) {
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/bulk", api.AccountID, namespaceID)
-	res, err := api.makeRequestWithHeaders(
-		http.MethodPut, uri, kvs, http.Header{"Content-Type": []string{"application/json"}},
+	res, err := api.makeRequestContextWithHeaders(
+		ctx, http.MethodPut, uri, kvs, http.Header{"Content-Type": []string{"application/json"}},
 	)
 	if err != nil {
 		return Response{}, err
@@ -242,8 +242,8 @@ func (api API) DeleteWorkersKV(ctx context.Context, namespaceID, key string) (Re
 // API reference: https://api.cloudflare.com/#workers-kv-namespace-delete-multiple-key-value-pairs
 func (api *API) DeleteWorkersKVBulk(ctx context.Context, namespaceID string, keys []string) (Response, error) {
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/bulk", api.AccountID, namespaceID)
-	res, err := api.makeRequestWithHeaders(
-		http.MethodDelete, uri, keys, http.Header{"Content-Type": []string{"application/json"}},
+	res, err := api.makeRequestContextWithHeaders(
+		ctx, http.MethodDelete, uri, keys, http.Header{"Content-Type": []string{"application/json"}},
 	)
 	if err != nil {
 		return Response{}, err
