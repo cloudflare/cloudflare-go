@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func timeMustParse(layout, value string) time.Time {
@@ -95,6 +96,100 @@ func TestUploadImage(t *testing.T) {
 	}
 }
 
+func TestUpdateImage(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	input := ImageUpdateRequest{
+		RequireSignedURLs: true,
+		Metadata: map[string]interface{}{
+			"meta": "metaID",
+		},
+	}
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
+
+		var v ImageUpdateRequest
+		err := json.NewDecoder(r.Body).Decode(&v)
+		require.NoError(t, err)
+		assert.Equal(t, input, v)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "ZxR0pLaXRldlBtaFhhO2FiZGVnaA",
+				"filename": "avatar.png",
+				"metadata": {
+					"meta": "metaID"
+				},
+				"requireSignedURLs": true,
+				"variants": [
+					"https://imagedelivery.net/MTt4OTd0b0w5aj/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/hero",
+					"https://imagedelivery.net/MTt4OTd0b0w5aj/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/original",
+					"https://imagedelivery.net/MTt4OTd0b0w5aj/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/thumbnail"
+				],
+				"uploaded": "2014-01-02T02:20:00Z"
+			}
+		}
+		`)
+	}
+
+	mux.HandleFunc("/accounts/foo/images/v1/ZxR0pLaXRldlBtaFhhO2FiZGVnaA", handler)
+	want := expectedImageStruct
+
+	actual, err := client.UpdateImage(context.Background(), client.AccountID, "ZxR0pLaXRldlBtaFhhO2FiZGVnaA", input)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestCreateImageDirectUploadURL(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	input := ImageDirectUploadURLRequest{
+		Expiry: time.Now().UTC().Add(30 * time.Minute),
+	}
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+
+		var v ImageDirectUploadURLRequest
+		err := json.NewDecoder(r.Body).Decode(&v)
+		require.NoError(t, err)
+		assert.Equal(t, input, v)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "ZxR0pLaXRldlBtaFhhO2FiZGVnaA",
+				"uploadURL": "https://upload.imagedelivery.net/fgr33htrthytjtyereifjewoi338272s7w1383"
+			}
+		}
+		`)
+	}
+
+	mux.HandleFunc("/accounts/foo/images/v1/direct_upload", handler)
+	want := ImageDirectUploadURL{
+		ID:        "ZxR0pLaXRldlBtaFhhO2FiZGVnaA",
+		UploadURL: "https://upload.imagedelivery.net/fgr33htrthytjtyereifjewoi338272s7w1383",
+	}
+
+	actual, err := client.CreateImageDirectUploadURL(context.Background(), client.AccountID, input)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
 func TestListImages(t *testing.T) {
 	setup(UsingAccount("foo"))
 	defer teardown()
@@ -136,6 +231,87 @@ func TestListImages(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
+}
+
+func TestImageDetails(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "ZxR0pLaXRldlBtaFhhO2FiZGVnaA",
+				"filename": "avatar.png",
+				"metadata": {
+					"meta": "metaID"
+				},
+				"requireSignedURLs": true,
+				"variants": [
+					"https://imagedelivery.net/MTt4OTd0b0w5aj/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/hero",
+					"https://imagedelivery.net/MTt4OTd0b0w5aj/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/original",
+					"https://imagedelivery.net/MTt4OTd0b0w5aj/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/thumbnail"
+				],
+				"uploaded": "2014-01-02T02:20:00Z"
+			}
+		}
+		`)
+	}
+
+	mux.HandleFunc("/accounts/foo/images/v1/ZxR0pLaXRldlBtaFhhO2FiZGVnaA", handler)
+	want := expectedImageStruct
+
+	actual, err := client.ImageDetails(context.Background(), client.AccountID, "ZxR0pLaXRldlBtaFhhO2FiZGVnaA")
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestBaseImage(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "image/png")
+		w.Write([]byte{})
+	}
+
+	mux.HandleFunc("/accounts/foo/images/v1/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/blob", handler)
+	want := []byte{}
+
+	actual, err := client.BaseImage(context.Background(), client.AccountID, "ZxR0pLaXRldlBtaFhhO2FiZGVnaA")
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestDeleteImage(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {}
+		}
+		`)
+	}
+
+	mux.HandleFunc("/accounts/foo/images/v1/ZxR0pLaXRldlBtaFhhO2FiZGVnaA", handler)
+
+	err := client.DeleteImage(context.Background(), client.AccountID, "ZxR0pLaXRldlBtaFhhO2FiZGVnaA")
+	require.NoError(t, err)
 }
 
 type fakeFile struct {
