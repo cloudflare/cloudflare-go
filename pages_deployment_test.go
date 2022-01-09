@@ -270,7 +270,7 @@ var (
 )
 
 func TestListPagesDeployments(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup(UsingAccount(testAccountID))
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -293,7 +293,7 @@ func TestListPagesDeployments(t *testing.T) {
 		}`, testPagesDeplyomentResponse)
 	}
 
-	mux.HandleFunc("/accounts/foo/pages/projects/test/deployments", handler)
+	mux.HandleFunc("/accounts/" + testAccountID + "/pages/projects/test/deployments", handler)
 
 	expectedPagesDeployments := []PagesProjectDeployment{
 		*expectedPagesDeployment,
@@ -304,7 +304,7 @@ func TestListPagesDeployments(t *testing.T) {
 		Count:   1,
 		Total:   1,
 	}
-	actual, resultInfo, err := client.ListPagesDeployments(context.Background(), "foo", "test", PaginationOptions{})
+	actual, resultInfo, err := client.ListPagesDeployments(context.Background(), testAccountID, "test", PaginationOptions{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedPagesDeployments, actual)
 		assert.Equal(t, expectedResultInfo, resultInfo)
@@ -312,7 +312,7 @@ func TestListPagesDeployments(t *testing.T) {
 }
 
 func TestGetPagesDeploymentInfo(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup(UsingAccount(testAccountID))
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -327,16 +327,16 @@ func TestGetPagesDeploymentInfo(t *testing.T) {
 		}`, testPagesDeplyomentResponse)
 	}
 
-	mux.HandleFunc("/accounts/foo/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe", handler)
+	mux.HandleFunc("/accounts/" + testAccountID + "/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe", handler)
 
-	actual, err := client.GetPagesDeploymentInfo(context.Background(), "foo", "test", "0012e50b-fa5d-44db-8cb5-1f372785dcbe")
+	actual, err := client.GetPagesDeploymentInfo(context.Background(), testAccountID, "test", "0012e50b-fa5d-44db-8cb5-1f372785dcbe")
 	if assert.NoError(t, err) {
 		assert.Equal(t, *expectedPagesDeployment, actual)
 	}
 }
 
 func TestGetPagesDeploymentStageLogs(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup(UsingAccount(testAccountID))
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -351,16 +351,16 @@ func TestGetPagesDeploymentStageLogs(t *testing.T) {
 		}`, testPagesDeploymentStageLogsResponse)
 	}
 
-	mux.HandleFunc("/accounts/foo/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe/history/build/logs", handler)
+	mux.HandleFunc("/accounts/" + testAccountID + "/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe/history/build/logs", handler)
 
-	actual, err := client.GetPagesDeploymentStageLogs(context.Background(), "foo", "test", "0012e50b-fa5d-44db-8cb5-1f372785dcbe", "build", SizeOptions{})
+	actual, err := client.GetPagesDeploymentStageLogs(context.Background(), testAccountID, "test", "0012e50b-fa5d-44db-8cb5-1f372785dcbe", "build", SizeOptions{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, *expectedPagesDeploymentStageLogs, actual)
 	}
 }
 
 func TestDeletePagesDeployment(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup(UsingAccount(testAccountID))
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -375,14 +375,14 @@ func TestDeletePagesDeployment(t *testing.T) {
 		}`)
 	}
 
-	mux.HandleFunc("/accounts/foo/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe", handler)
+	mux.HandleFunc("/accounts/" + testAccountID + "/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe", handler)
 
-	err := client.DeletePagesDeployment(context.Background(), "foo", "test", "0012e50b-fa5d-44db-8cb5-1f372785dcbe")
+	err := client.DeletePagesDeployment(context.Background(), testAccountID, "test", "0012e50b-fa5d-44db-8cb5-1f372785dcbe")
 	assert.NoError(t, err)
 }
 
 func TestCreatePagesDeployment(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup(UsingAccount(testAccountID))
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -397,16 +397,16 @@ func TestCreatePagesDeployment(t *testing.T) {
 		}`, testPagesDeplyomentResponse)
 	}
 
-	mux.HandleFunc("/accounts/foo/pages/projects/test/deployments", handler)
+	mux.HandleFunc("/accounts/" + testAccountID + "/pages/projects/test/deployments", handler)
 
-	actual, err := client.CreatePagesDeployment(context.Background(), "foo", "test")
+	actual, err := client.CreatePagesDeployment(context.Background(), testAccountID, "test")
 	if assert.NoError(t, err) {
 		assert.Equal(t, *expectedPagesDeployment, actual)
 	}
 }
 
 func TestRetryPagesDeployment(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup(UsingAccount(testAccountID))
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -421,16 +421,16 @@ func TestRetryPagesDeployment(t *testing.T) {
 		}`, testPagesDeplyomentResponse)
 	}
 
-	mux.HandleFunc("/accounts/foo/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe/retry", handler)
+	mux.HandleFunc("/accounts/" + testAccountID + "/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe/retry", handler)
 
-	actual, err := client.RetryPagesDeployment(context.Background(), "foo", "test", "0012e50b-fa5d-44db-8cb5-1f372785dcbe")
+	actual, err := client.RetryPagesDeployment(context.Background(), testAccountID, "test", "0012e50b-fa5d-44db-8cb5-1f372785dcbe")
 	if assert.NoError(t, err) {
 		assert.Equal(t, *expectedPagesDeployment, actual)
 	}
 }
 
 func TestRollbackPagesDeployment(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup(UsingAccount(testAccountID))
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -445,9 +445,9 @@ func TestRollbackPagesDeployment(t *testing.T) {
 		}`, testPagesDeplyomentResponse)
 	}
 
-	mux.HandleFunc("/accounts/foo/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe/rollback", handler)
+	mux.HandleFunc("/accounts/" + testAccountID + "/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe/rollback", handler)
 
-	actual, err := client.RollbackPagesDeployment(context.Background(), "foo", "test", "0012e50b-fa5d-44db-8cb5-1f372785dcbe")
+	actual, err := client.RollbackPagesDeployment(context.Background(), testAccountID, "test", "0012e50b-fa5d-44db-8cb5-1f372785dcbe")
 	if assert.NoError(t, err) {
 		assert.Equal(t, *expectedPagesDeployment, actual)
 	}
