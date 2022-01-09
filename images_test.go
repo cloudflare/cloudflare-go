@@ -279,7 +279,7 @@ func TestBaseImage(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "image/png")
-		w.Write([]byte{})
+		_, _ = w.Write([]byte{})
 	}
 
 	mux.HandleFunc("/accounts/foo/images/v1/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/blob", handler)
