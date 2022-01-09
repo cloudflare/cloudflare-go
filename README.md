@@ -72,7 +72,7 @@ import (
 )
 
 func main() {
-	// Construct a new API object with API KEY
+	// Construct a new API object using a global API key
 	api, err := cloudflare.New(os.Getenv("CLOUDFLARE_API_KEY"), os.Getenv("CLOUDFLARE_API_EMAIL"))
 	// alternatively, you can use a scoped API token
 	// api, err := cloudflare.NewWithAPIToken(os.Getenv("CLOUDFLARE_API_TOKEN"))
