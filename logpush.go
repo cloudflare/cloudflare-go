@@ -36,13 +36,13 @@ type LogpushJobDetailsResponse struct {
 	Result LogpushJob `json:"result"`
 }
 
-// LogpushFieldsResponse is the API response for a datasets fields
+// LogpushFieldsResponse is the API response for a datasets fields.
 type LogpushFieldsResponse struct {
 	Response
 	Result LogpushFields `json:"result"`
 }
 
-// LogpushFields is a map of available Logpush field names & descriptions
+// LogpushFields is a map of available Logpush field names & descriptions.
 type LogpushFields map[string]string
 
 // LogpushGetOwnershipChallenge describes a ownership validation.
@@ -110,7 +110,7 @@ func (api *API) CreateZoneLogpushJob(ctx context.Context, zoneID string, job Log
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-create-logpush-job
 //
-// Deprecated: Use `CreateZoneLogpushJob` or `CreateAccountLogpushJob` depending 
+// Deprecated: Use `CreateZoneLogpushJob` or `CreateAccountLogpushJob` depending
 // on the desired resource to target.
 func (api *API) CreateLogpushJob(ctx context.Context, zoneID string, job LogpushJob) (*LogpushJob, error) {
 	return api.createLogpushJob(ctx, ZoneRouteRoot, zoneID, job)
@@ -186,7 +186,7 @@ func (api *API) ListZoneLogpushJobsForDataset(ctx context.Context, zoneID, datas
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-list-logpush-jobs-for-a-dataset
 //
-// Deprecated: Use `ListZoneLogpushJobsForDataset` or 
+// Deprecated: Use `ListZoneLogpushJobsForDataset` or
 // `ListAccountLogpushJobsForDataset` depending on the desired resource
 // to target.
 func (api *API) LogpushJobsForDataset(ctx context.Context, zoneID, dataset string) ([]LogpushJob, error) {
@@ -229,7 +229,7 @@ func (api *API) GetZoneLogpushFields(ctx context.Context, zoneID, dataset string
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-list-logpush-jobs
 //
-// Deprecated: Use `GetZoneLogpushFields` or `GetAccountLogpushFields` 
+// Deprecated: Use `GetZoneLogpushFields` or `GetAccountLogpushFields`
 // depending on the desired resource to target.
 func (api *API) LogpushFields(ctx context.Context, zoneID, dataset string) (LogpushFields, error) {
 	return api.getLogpushFields(ctx, ZoneRouteRoot, zoneID, dataset)
@@ -267,7 +267,7 @@ func (api *API) GetZoneLogpushJob(ctx context.Context, zoneID string, jobID int)
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-logpush-job-details
 //
-// Deprecated: Use `GetZoneLogpushJob` or `GetAccountLogpushJob` 
+// Deprecated: Use `GetZoneLogpushJob` or `GetAccountLogpushJob`
 // depending on the desired resource to target.
 func (api *API) LogpushJob(ctx context.Context, zoneID string, jobID int) (LogpushJob, error) {
 	return api.getLogpushJob(ctx, ZoneRouteRoot, zoneID, jobID)
@@ -305,7 +305,7 @@ func (api *API) UpdateZoneLogpushJob(ctx context.Context, zoneID string, jobID i
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-update-logpush-job
 //
-// Deprecated: Use `UpdateZoneLogpushJob` or `UpdateAccountLogpushJob` 
+// Deprecated: Use `UpdateZoneLogpushJob` or `UpdateAccountLogpushJob`
 // depending on the desired resource to target.
 func (api *API) UpdateLogpushJob(ctx context.Context, zoneID string, jobID int, job LogpushJob) error {
 	return api.updateLogpushJob(ctx, ZoneRouteRoot, zoneID, jobID, job)
@@ -343,7 +343,7 @@ func (api *API) DeleteZoneLogpushJob(ctx context.Context, zoneID string, jobID i
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-delete-logpush-job
 //
-// Deprecated: Use `DeleteZoneLogpushJob` or `DeleteAccountLogpushJob` 
+// Deprecated: Use `DeleteZoneLogpushJob` or `DeleteAccountLogpushJob`
 // depending on the desired resource to target.
 func (api *API) DeleteLogpushJob(ctx context.Context, zoneID string, jobID int) error {
 	return api.deleteLogpushJob(ctx, ZoneRouteRoot, zoneID, jobID)
@@ -382,7 +382,7 @@ func (api *API) GetZoneLogpushOwnershipChallenge(ctx context.Context, zoneID, de
 // API reference: https://api.cloudflare.com/#logpush-jobs-get-ownership-challenge
 //
 // Deprecated: Use `GetZoneLogpushOwnershipChallenge` or
-// `GetAccountLogpushOwnershipChallenge` depending on the 
+// `GetAccountLogpushOwnershipChallenge` depending on the
 // desired resource to target.
 func (api *API) GetLogpushOwnershipChallenge(ctx context.Context, zoneID, destinationConf string) (*LogpushGetOwnershipChallenge, error) {
 	return api.getLogpushOwnershipChallenge(ctx, ZoneRouteRoot, zoneID, destinationConf)
@@ -428,7 +428,7 @@ func (api *API) ValidateZoneLogpushOwnershipChallenge(ctx context.Context, zoneI
 // API reference: https://api.cloudflare.com/#logpush-jobs-validate-ownership-challenge
 //
 // Deprecated: Use `ValidateZoneLogpushOwnershipChallenge` or
-// `ValidateAccountLogpushOwnershipChallenge` depending on the 
+// `ValidateAccountLogpushOwnershipChallenge` depending on the
 // desired resource to target.
 func (api *API) ValidateLogpushOwnershipChallenge(ctx context.Context, zoneID, destinationConf, ownershipChallenge string) (bool, error) {
 	return api.validateLogpushOwnershipChallenge(ctx, ZoneRouteRoot, zoneID, destinationConf, ownershipChallenge)
@@ -470,7 +470,7 @@ func (api *API) CheckZoneLogpushDestinationExists(ctx context.Context, zoneID, d
 // API reference: https://api.cloudflare.com/#logpush-jobs-check-destination-exists
 //
 // Deprecated: Use `CheckZoneLogpushDestinationExists` or
-// `CheckAccountLogpushDestinationExists` depending 
+// `CheckAccountLogpushDestinationExists` depending
 // on the desired resource to target.
 func (api *API) CheckLogpushDestinationExists(ctx context.Context, zoneID, destinationConf string) (bool, error) {
 	return api.checkLogpushDestinationExists(ctx, ZoneRouteRoot, zoneID, destinationConf)

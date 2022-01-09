@@ -26,7 +26,7 @@ func TestListAccessRules(t *testing.T) {
 			"result": [
 				{
 					"id": "92f17202ed8bd63d69a66b86a49a8f6b",
-					"notes": "This rule is on because of an event that occured on date X",
+					"notes": "This rule is on because of an event that occurred on date X",
 					"allowed_modes": [
 						"whitelist",
 						"block",
@@ -61,7 +61,7 @@ func TestListAccessRules(t *testing.T) {
 	want := &AccessRuleListResponse{
 		Result: []AccessRule{{
 			ID:           "92f17202ed8bd63d69a66b86a49a8f6b",
-			Notes:        "This rule is on because of an event that occured on date X",
+			Notes:        "This rule is on because of an event that occurred on date X",
 			AllowedModes: []string{"whitelist", "block", "challenge", "js_challenge"},
 			Mode:         "challenge",
 			Configuration: AccessRuleConfiguration{
@@ -120,7 +120,7 @@ func TestCreateAccessRule(t *testing.T) {
 			Target: "ip",
 			Value:  "198.51.100.4",
 		},
-		Notes: "This rule is on because of an event that occured on date X",
+		Notes: "This rule is on because of an event that occurred on date X",
 	}
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -138,7 +138,7 @@ func TestCreateAccessRule(t *testing.T) {
 			"messages": [],
 			"result": {
 				"id": "92f17202ed8bd63d69a66b86a49a8f6b",
-				"notes": "This rule is on because of an event that occured on date X",
+				"notes": "This rule is on because of an event that occurred on date X",
 				"allowed_modes": [
 					"whitelist",
 					"block",
@@ -210,7 +210,7 @@ func TestAccessRule(t *testing.T) {
 			"messages": [],
 			"result": {
 				"id": "92f17202ed8bd63d69a66b86a49a8f6b",
-				"notes": "This rule is on because of an event that occured on date X",
+				"notes": "This rule is on because of an event that occurred on date X",
 				"allowed_modes": [
 					"whitelist",
 					"block",
@@ -238,7 +238,7 @@ func TestAccessRule(t *testing.T) {
 	want := &AccessRuleResponse{
 		Result: AccessRule{
 			ID:           "92f17202ed8bd63d69a66b86a49a8f6b",
-			Notes:        "This rule is on because of an event that occured on date X",
+			Notes:        "This rule is on because of an event that occurred on date X",
 			AllowedModes: []string{"whitelist", "block", "challenge", "js_challenge"},
 			Mode:         "challenge",
 			Configuration: AccessRuleConfiguration{
@@ -280,7 +280,7 @@ func TestUpdateAccessRule(t *testing.T) {
 
 	input := AccessRule{
 		Mode:  "challenge",
-		Notes: "This rule is on because of an event that occured on date X",
+		Notes: "This rule is on because of an event that occurred on date X",
 	}
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -298,7 +298,7 @@ func TestUpdateAccessRule(t *testing.T) {
 			"messages": [],
 			"result": {
 				"id": "92f17202ed8bd63d69a66b86a49a8f6b",
-				"notes": "This rule is on because of an event that occured on date X",
+				"notes": "This rule is on because of an event that occurred on date X",
 				"allowed_modes": [
 					"whitelist",
 					"block",
@@ -326,7 +326,7 @@ func TestUpdateAccessRule(t *testing.T) {
 	want := &AccessRuleResponse{
 		Result: AccessRule{
 			ID:           "92f17202ed8bd63d69a66b86a49a8f6b",
-			Notes:        "This rule is on because of an event that occured on date X",
+			Notes:        "This rule is on because of an event that occurred on date X",
 			AllowedModes: []string{"whitelist", "block", "challenge", "js_challenge"},
 			Mode:         "challenge",
 			Configuration: AccessRuleConfiguration{

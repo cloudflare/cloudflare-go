@@ -86,7 +86,6 @@ func ExampleAPI_WriteWorkersKV() {
 	}
 
 	fmt.Println(resp)
-
 }
 
 func ExampleAPI_WriteWorkersKVBulk() {

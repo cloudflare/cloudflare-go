@@ -300,7 +300,7 @@ func TestUpdateMagicFirewallRuleset(t *testing.T) {
 
 // Firewall API is not implementing the standard response blob but returns an empty response (204) in case
 // of a success. So we are checking for the response body size here
-// TODO, This is going to be changed by MFW-63
+// TODO, This is going to be changed by MFW-63.
 func TestDeleteMagicFirewallRuleset(t *testing.T) {
 	setup(UsingAccount("foo"))
 	defer teardown()

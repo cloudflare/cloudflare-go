@@ -14,7 +14,7 @@ import (
 )
 
 // ProxyProtocol implements json.Unmarshaler in order to support deserializing of the deprecated boolean
-// value for `proxy_protocol`
+// value for `proxy_protocol`.
 type ProxyProtocol string
 
 // UnmarshalJSON handles deserializing of both the deprecated boolean value and the current string value
@@ -40,12 +40,12 @@ func (p *ProxyProtocol) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// SpectrumApplicationOriginPort defines a union of a single port or range of ports
+// SpectrumApplicationOriginPort defines a union of a single port or range of ports.
 type SpectrumApplicationOriginPort struct {
 	Port, Start, End uint16
 }
 
-// ErrOriginPortInvalid is a common error for failing to parse a single port or port range
+// ErrOriginPortInvalid is a common error for failing to parse a single port or port range.
 var ErrOriginPortInvalid = errors.New("invalid origin port")
 
 func (p *SpectrumApplicationOriginPort) parse(s string) error {
@@ -76,7 +76,7 @@ func (p *SpectrumApplicationOriginPort) parse(s string) error {
 	return nil
 }
 
-// UnmarshalJSON converts a byte slice into a single port or port range
+// UnmarshalJSON converts a byte slice into a single port or port range.
 func (p *SpectrumApplicationOriginPort) UnmarshalJSON(b []byte) error {
 	var port interface{}
 	if err := json.Unmarshal(b, &port); err != nil {
@@ -95,7 +95,7 @@ func (p *SpectrumApplicationOriginPort) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// MarshalJSON converts a single port or port range to a suitable byte slice
+// MarshalJSON converts a single port or port range to a suitable byte slice.
 func (p *SpectrumApplicationOriginPort) MarshalJSON() ([]byte, error) {
 	if p.End > 0 {
 		return json.Marshal(fmt.Sprintf("%d-%d", p.Start, p.End))
@@ -142,7 +142,7 @@ func (a *SpectrumApplication) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// spectrumApplicationRaw is used to inspect an application body to support the deprecated boolean value for `spp`
+// spectrumApplicationRaw is used to inspect an application body to support the deprecated boolean value for `spp`.
 type spectrumApplicationRaw SpectrumApplication
 
 // SpectrumApplicationDNS holds the external DNS configuration for a Spectrum
@@ -180,17 +180,17 @@ type SpectrumApplicationEdgeIPs struct {
 	IPs          []net.IP                         `json:"ips,omitempty"`
 }
 
-// SpectrumApplicationEdgeType for possible Edge configurations
+// SpectrumApplicationEdgeType for possible Edge configurations.
 type SpectrumApplicationEdgeType string
 
 const (
-	// SpectrumEdgeTypeDynamic IP config
+	// SpectrumEdgeTypeDynamic IP config.
 	SpectrumEdgeTypeDynamic SpectrumApplicationEdgeType = "dynamic"
-	// SpectrumEdgeTypeStatic IP config
+	// SpectrumEdgeTypeStatic IP config.
 	SpectrumEdgeTypeStatic SpectrumApplicationEdgeType = "static"
 )
 
-// UnmarshalJSON function for SpectrumApplicationEdgeType enum
+// UnmarshalJSON function for SpectrumApplicationEdgeType enum.
 func (t *SpectrumApplicationEdgeType) UnmarshalJSON(b []byte) error {
 	var s string
 	err := json.Unmarshal(b, &s)
@@ -212,17 +212,17 @@ func (t SpectrumApplicationEdgeType) String() string {
 	return string(t)
 }
 
-// SpectrumApplicationConnectivity specifies IP address type on the edge configuration
+// SpectrumApplicationConnectivity specifies IP address type on the edge configuration.
 type SpectrumApplicationConnectivity string
 
 const (
-	// SpectrumConnectivityAll specifies IPv4/6 edge IP
+	// SpectrumConnectivityAll specifies IPv4/6 edge IP.
 	SpectrumConnectivityAll SpectrumApplicationConnectivity = "all"
-	// SpectrumConnectivityIPv4 specifies IPv4 edge IP
+	// SpectrumConnectivityIPv4 specifies IPv4 edge IP.
 	SpectrumConnectivityIPv4 SpectrumApplicationConnectivity = "ipv4"
-	// SpectrumConnectivityIPv6 specifies IPv6 edge IP
+	// SpectrumConnectivityIPv6 specifies IPv6 edge IP.
 	SpectrumConnectivityIPv6 SpectrumApplicationConnectivity = "ipv6"
-	// SpectrumConnectivityStatic specifies static edge IP configuration
+	// SpectrumConnectivityStatic specifies static edge IP configuration.
 	SpectrumConnectivityStatic SpectrumApplicationConnectivity = "static"
 )
 
@@ -230,7 +230,7 @@ func (c SpectrumApplicationConnectivity) String() string {
 	return string(c)
 }
 
-// UnmarshalJSON function for SpectrumApplicationConnectivity enum
+// UnmarshalJSON function for SpectrumApplicationConnectivity enum.
 func (c *SpectrumApplicationConnectivity) UnmarshalJSON(b []byte) error {
 	var s string
 	err := json.Unmarshal(b, &s)
@@ -247,7 +247,7 @@ func (c *SpectrumApplicationConnectivity) UnmarshalJSON(b []byte) error {
 	return errors.New(errUnmarshalError)
 }
 
-// Dynamic checks if address family is specified as dynamic config
+// Dynamic checks if address family is specified as dynamic config.
 func (c SpectrumApplicationConnectivity) Dynamic() bool {
 	switch c {
 	case SpectrumConnectivityAll, SpectrumConnectivityIPv4, SpectrumConnectivityIPv6:
@@ -256,7 +256,7 @@ func (c SpectrumApplicationConnectivity) Dynamic() bool {
 	return false
 }
 
-// Static checks if address family is specified as static config
+// Static checks if address family is specified as static config.
 func (c SpectrumApplicationConnectivity) Static() bool {
 	return c == SpectrumConnectivityStatic
 }

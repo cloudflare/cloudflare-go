@@ -32,7 +32,7 @@ func TestListFallbackDomain(t *testing.T) {
 	}
 
 	want := []FallbackDomain{{
-		Suffix:        "example.com",
+		Suffix:      "example.com",
 		Description: "Domain bypass for local development",
 	}}
 
@@ -69,9 +69,9 @@ func TestFallbackDomainDNSServer(t *testing.T) {
 	}
 
 	want := []FallbackDomain{{
-		Suffix:        "example.com",
-		Description:   "Domain bypass for local development",
-		DNSServer:     []string{"192.168.0.1", "10.1.1.1"},
+		Suffix:      "example.com",
+		Description: "Domain bypass for local development",
+		DNSServer:   []string{"192.168.0.1", "10.1.1.1"},
 	}}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/policy/fallback_domains", handler)

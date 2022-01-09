@@ -68,7 +68,7 @@ func TestAccessApplications(t *testing.T) {
 		AllowedIdps:             []string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415"},
 		AutoRedirectToIdentity:  false,
 		EnableBindingCookie:     false,
-		AppLauncherVisible:     true,
+		AppLauncherVisible:      true,
 		CustomDenyMessage:       "denied!",
 		CustomDenyURL:           "https://www.cloudflare.com",
 		SameSiteCookieAttribute: "strict",

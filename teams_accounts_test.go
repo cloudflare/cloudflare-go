@@ -127,7 +127,6 @@ func TestTeamsAccountUpdateConfiguration(t *testing.T) {
 	actual, err := client.TeamsAccountUpdateConfiguration(context.Background(), testAccountID, configuration)
 
 	if assert.NoError(t, err) {
-
 		assert.Equal(t, actual, configuration)
 	}
 }

@@ -51,7 +51,7 @@ func initializeAPI(c *cli.Context) error {
 	return nil
 }
 
-// writeTableTabular outputs tabular data to STDOUT
+// writeTableTabular outputs tabular data to STDOUT.
 func writeTableTabular(data [][]string, cols ...string) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader(cols)
@@ -61,7 +61,7 @@ func writeTableTabular(data [][]string, cols ...string) {
 	table.Render()
 }
 
-// writeTableJSON outputs JSON data to STDOUT
+// writeTableJSON outputs JSON data to STDOUT.
 func writeTableJSON(data [][]string, cols ...string) {
 	mappedData := make([]map[string]string, 0)
 	for i := range data {
@@ -79,7 +79,7 @@ func writeTableJSON(data [][]string, cols ...string) {
 	fmt.Println(string(jsonData))
 }
 
-// writeTable outputs JSON or tabular data to STDOUT
+// writeTable outputs JSON or tabular data to STDOUT.
 func writeTable(c *cli.Context, data [][]string, cols ...string) {
 	if c.Bool("json") {
 		writeTableJSON(data, cols...)
@@ -103,7 +103,6 @@ func checkFlags(c *cli.Context, flags ...string) error {
 }
 
 func ips(c *cli.Context) error {
-
 	if c.String("ip-type") == "all" {
 		_getIps("ipv4", c.Bool("ip-only"))
 		_getIps("ipv6", c.Bool("ip-only"))
@@ -114,9 +113,6 @@ func ips(c *cli.Context) error {
 	return nil
 }
 
-//
-// gets type of IPs to retrieve and returns results
-//
 func _getIps(ipType string, showMsgType bool) {
 	ips, _ := cloudflare.IPs()
 

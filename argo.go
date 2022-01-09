@@ -72,7 +72,7 @@ func (api *API) UpdateArgoSmartRouting(ctx context.Context, zoneID, settingValue
 
 // ArgoTieredCaching returns the current settings for tiered caching.
 //
-// API reference: TBA
+// API reference: TBA.
 func (api *API) ArgoTieredCaching(ctx context.Context, zoneID string) (ArgoFeatureSetting, error) {
 	uri := fmt.Sprintf("/zones/%s/argo/tiered_caching", zoneID)
 
@@ -91,7 +91,7 @@ func (api *API) ArgoTieredCaching(ctx context.Context, zoneID string) (ArgoFeatu
 
 // UpdateArgoTieredCaching updates the setting for tiered caching.
 //
-// API reference: TBA
+// API reference: TBA.
 func (api *API) UpdateArgoTieredCaching(ctx context.Context, zoneID, settingValue string) (ArgoFeatureSetting, error) {
 	if !contains(validSettingValues, settingValue) {
 		return ArgoFeatureSetting{}, errors.New(fmt.Sprintf("invalid setting value '%s'. must be 'on' or 'off'", settingValue))

@@ -38,7 +38,7 @@ type IPsResponse struct {
 // API reference: https://api.cloudflare.com/#cloudflare-ips
 func IPs() (IPRanges, error) {
 	uri := fmt.Sprintf("%s/ips?china_colo=1", apiURL)
-	resp, err := http.Get(uri)
+	resp, err := http.Get(uri) //nolint:gosec
 	if err != nil {
 		return IPRanges{}, errors.Wrap(err, "HTTP request failed")
 	}

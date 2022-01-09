@@ -189,7 +189,6 @@ func TestCreateTeamsLocation(t *testing.T) {
 	})
 	require.Nil(t, err)
 	assert.Equal(t, want, actual)
-
 }
 
 func TestUpdateTeamsLocation(t *testing.T) {
@@ -253,7 +252,6 @@ func TestUpdateTeamsLocation(t *testing.T) {
 	})
 	require.Nil(t, err)
 	assert.Equal(t, want, actual)
-
 }
 
 func TestDeleteTeamsLocation(t *testing.T) {
@@ -269,5 +267,4 @@ func TestDeleteTeamsLocation(t *testing.T) {
 	mux.HandleFunc(fmt.Sprintf("/accounts/%s/gateway/locations/%s", testAccountID, id), handler)
 	err := client.DeleteTeamsLocation(context.Background(), testAccountID, id)
 	require.Nil(t, err)
-
 }

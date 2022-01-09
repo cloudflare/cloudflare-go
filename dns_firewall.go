@@ -43,7 +43,7 @@ type DNSFirewallAnalytics struct {
 	Max    DNSFirewallAnalyticsMetrics `json:"max"`
 }
 
-// DNSFirewallUserAnalyticsOptions represents range and dimension selection on analytics endpoint
+// DNSFirewallUserAnalyticsOptions represents range and dimension selection on analytics endpoint.
 type DNSFirewallUserAnalyticsOptions struct {
 	Metrics []string
 	Since   *time.Time
@@ -179,7 +179,7 @@ func (o DNSFirewallUserAnalyticsOptions) encode() string {
 	return v.Encode()
 }
 
-// DNSFirewallUserAnalytics retrieves analytics report for a specified dimension and time range
+// DNSFirewallUserAnalytics retrieves analytics report for a specified dimension and time range.
 func (api *API) DNSFirewallUserAnalytics(ctx context.Context, clusterID string, o DNSFirewallUserAnalyticsOptions) (DNSFirewallAnalytics, error) {
 	uri := fmt.Sprintf("%s/dns_firewall/%s/dns_analytics/report?%s", api.userBaseURL("/user"), clusterID, o.encode())
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)

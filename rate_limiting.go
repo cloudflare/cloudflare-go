@@ -11,7 +11,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-// RateLimit is a policy than can be applied to limit traffic within a customer domain
+// RateLimit is a policy than can be applied to limit traffic within a customer domain.
 type RateLimit struct {
 	ID          string                  `json:"id,omitempty"`
 	Disabled    bool                    `json:"disabled,omitempty"`
@@ -24,20 +24,20 @@ type RateLimit struct {
 	Correlate   *RateLimitCorrelate     `json:"correlate,omitempty"`
 }
 
-// RateLimitTrafficMatcher contains the rules that will be used to apply a rate limit to traffic
+// RateLimitTrafficMatcher contains the rules that will be used to apply a rate limit to traffic.
 type RateLimitTrafficMatcher struct {
 	Request  RateLimitRequestMatcher  `json:"request"`
 	Response RateLimitResponseMatcher `json:"response"`
 }
 
-// RateLimitRequestMatcher contains the matching rules pertaining to requests
+// RateLimitRequestMatcher contains the matching rules pertaining to requests.
 type RateLimitRequestMatcher struct {
 	Methods    []string `json:"methods,omitempty"`
 	Schemes    []string `json:"schemes,omitempty"`
 	URLPattern string   `json:"url,omitempty"`
 }
 
-// RateLimitResponseMatcher contains the matching rules pertaining to responses
+// RateLimitResponseMatcher contains the matching rules pertaining to responses.
 type RateLimitResponseMatcher struct {
 	Statuses      []int                            `json:"status,omitempty"`
 	OriginTraffic *bool                            `json:"origin_traffic,omitempty"` // api defaults to true so we need an explicit empty value
@@ -52,26 +52,26 @@ type RateLimitResponseMatcherHeader struct {
 	Value string `json:"value"`
 }
 
-// RateLimitKeyValue is k-v formatted as expected in the rate limit description
+// RateLimitKeyValue is k-v formatted as expected in the rate limit description.
 type RateLimitKeyValue struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`
 }
 
-// RateLimitAction is the action that will be taken when the rate limit threshold is reached
+// RateLimitAction is the action that will be taken when the rate limit threshold is reached.
 type RateLimitAction struct {
 	Mode     string                   `json:"mode"`
 	Timeout  int                      `json:"timeout"`
 	Response *RateLimitActionResponse `json:"response"`
 }
 
-// RateLimitActionResponse is the response that will be returned when rate limit action is triggered
+// RateLimitActionResponse is the response that will be returned when rate limit action is triggered.
 type RateLimitActionResponse struct {
 	ContentType string `json:"content_type"`
 	Body        string `json:"body"`
 }
 
-// RateLimitCorrelate pertainings to NAT support
+// RateLimitCorrelate pertainings to NAT support.
 type RateLimitCorrelate struct {
 	By string `json:"by"`
 }
