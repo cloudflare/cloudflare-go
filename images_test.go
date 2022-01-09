@@ -58,22 +58,20 @@ func TestUploadImage(t *testing.T) {
 			"success": true,
 			"errors": [],
 			"messages": [],
-			"result": [
-				{
-					"id": "ZxR0pLaXRldlBtaFhhO2FiZGVnaA",
-					"filename": "avatar.png",
-					"metadata": {
-						"meta": "metaID"
-					},
-					"requireSignedURLs": true,
-					"variants": [
-						"https://imagedelivery.net/MTt4OTd0b0w5aj/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/hero",
-						"https://imagedelivery.net/MTt4OTd0b0w5aj/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/original",
-						"https://imagedelivery.net/MTt4OTd0b0w5aj/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/thumbnail"
-					],
-					"uploaded": "2014-01-02T02:20:00Z"
-				}
-			]
+			"result": {
+				"id": "ZxR0pLaXRldlBtaFhhO2FiZGVnaA",
+				"filename": "avatar.png",
+				"metadata": {
+					"meta": "metaID"
+				},
+				"requireSignedURLs": true,
+				"variants": [
+					"https://imagedelivery.net/MTt4OTd0b0w5aj/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/hero",
+					"https://imagedelivery.net/MTt4OTd0b0w5aj/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/original",
+					"https://imagedelivery.net/MTt4OTd0b0w5aj/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/thumbnail"
+				],
+				"uploaded": "2014-01-02T02:20:00Z"
+			}
 		}
 		`)
 	}
@@ -85,7 +83,7 @@ func TestUploadImage(t *testing.T) {
 		File: fakeFile{
 			Buffer: bytes.NewBufferString("this is definitely an image"),
 		},
-		Name: "avatar.png",
+		Name:              "avatar.png",
 		RequireSignedURLs: true,
 		Metadata: map[string]interface{}{
 			"meta": "metaID",
@@ -108,22 +106,24 @@ func TestListImages(t *testing.T) {
 			"success": true,
 			"errors": [],
 			"messages": [],
-			"result": [
-				{
-					"id": "ZxR0pLaXRldlBtaFhhO2FiZGVnaA",
-					"filename": "avatar.png",
-					"metadata": {
-						"meta": "metaID"
-					},
-					"requireSignedURLs": true,
-					"variants": [
-						"https://imagedelivery.net/MTt4OTd0b0w5aj/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/hero",
-						"https://imagedelivery.net/MTt4OTd0b0w5aj/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/original",
-						"https://imagedelivery.net/MTt4OTd0b0w5aj/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/thumbnail"
-					],
-					"uploaded": "2014-01-02T02:20:00Z"
-				}
-			]
+			"result": {
+				"images": [
+					{
+						"id": "ZxR0pLaXRldlBtaFhhO2FiZGVnaA",
+						"filename": "avatar.png",
+						"metadata": {
+							"meta": "metaID"
+						},
+						"requireSignedURLs": true,
+						"variants": [
+							"https://imagedelivery.net/MTt4OTd0b0w5aj/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/hero",
+							"https://imagedelivery.net/MTt4OTd0b0w5aj/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/original",
+							"https://imagedelivery.net/MTt4OTd0b0w5aj/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/thumbnail"
+						],
+						"uploaded": "2014-01-02T02:20:00Z"
+					}
+				]
+			}
 		}
 		`)
 	}

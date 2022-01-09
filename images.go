@@ -170,7 +170,7 @@ func (api *API) ListImages(ctx context.Context, accountID string, pageOpts Pagin
 	return imagesListResponse.Result.Images, nil
 }
 
-// ImagesStats gets stats for Cloudflare Images.
+// ImagesStats gets an account's statistics for Cloudflare Images.
 //
 // API Reference: https://api.cloudflare.com/#cloudflare-images-images-usage-statistics
 func (api *API) ImagesStats(ctx context.Context, accountID string) (ImagesStatsCount, error) {
