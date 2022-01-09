@@ -7,9 +7,8 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/pkg/errors"
-
 	"github.com/cloudflare/cloudflare-go"
+	"github.com/pkg/errors"
 	"github.com/urfave/cli/v2"
 )
 
@@ -131,7 +130,6 @@ func firewallAccessRuleCreate(c *cli.Context) error {
 			return err
 		}
 		rules = append(rules, resp.Result)
-
 	}
 
 	output := make([][]string, 0, len(rules))

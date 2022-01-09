@@ -168,7 +168,7 @@ type AccessGroupLoginMethod struct {
 	} `json:"login_method"`
 }
 
-// AccessGroupDevicePosture restricts the application to specific devices
+// AccessGroupDevicePosture restricts the application to specific devices.
 type AccessGroupDevicePosture struct {
 	DevicePosture struct {
 		ID string `json:"integration_uid"`

@@ -343,7 +343,7 @@ func (api *API) GetAccountRuleset(ctx context.Context, accountID, rulesetID stri
 }
 
 // getRuleset fetches a single ruleset based on the zone or account, the
-// identifer and the ruleset ID.
+// identifier and the ruleset ID.
 func (api *API) getRuleset(ctx context.Context, identifierType RouteRoot, identifier, rulesetID string) (Ruleset, error) {
 	uri := fmt.Sprintf("/%s/%s/rulesets/%s", identifierType, identifier, rulesetID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
@@ -455,20 +455,20 @@ func (api *API) updateRuleset(ctx context.Context, identifierType RouteRoot, ide
 
 // GetZoneRulesetPhase returns a ruleset phase for a zone.
 //
-// API reference: TBA
+// API reference: TBA.
 func (api *API) GetZoneRulesetPhase(ctx context.Context, zoneID, rulesetPhase string) (Ruleset, error) {
 	return api.getRulesetPhase(ctx, ZoneRouteRoot, zoneID, rulesetPhase)
 }
 
 // GetAccountRulesetPhase returns a ruleset phase for an account.
 //
-// API reference: TBA
+// API reference: TBA.
 func (api *API) GetAccountRulesetPhase(ctx context.Context, accountID, rulesetPhase string) (Ruleset, error) {
 	return api.getRulesetPhase(ctx, AccountRouteRoot, accountID, rulesetPhase)
 }
 
 // getRulesetPhase returns a ruleset phase based on the zone or account and the
-// identifer.
+// identifier.
 func (api *API) getRulesetPhase(ctx context.Context, identifierType RouteRoot, identifier, rulesetPhase string) (Ruleset, error) {
 	uri := fmt.Sprintf("/%s/%s/rulesets/phases/%s/entrypoint", identifierType, identifier, rulesetPhase)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
@@ -486,20 +486,20 @@ func (api *API) getRulesetPhase(ctx context.Context, identifierType RouteRoot, i
 
 // UpdateZoneRulesetPhase updates a ruleset phase for a zone.
 //
-// API reference: TBA
+// API reference: TBA.
 func (api *API) UpdateZoneRulesetPhase(ctx context.Context, zoneID, rulesetPhase string, ruleset Ruleset) (Ruleset, error) {
 	return api.updateRulesetPhase(ctx, ZoneRouteRoot, zoneID, rulesetPhase, ruleset)
 }
 
 // UpdateAccountRulesetPhase updates a ruleset phase for an account.
 //
-// API reference: TBA
+// API reference: TBA.
 func (api *API) UpdateAccountRulesetPhase(ctx context.Context, accountID, rulesetPhase string, ruleset Ruleset) (Ruleset, error) {
 	return api.updateRulesetPhase(ctx, AccountRouteRoot, accountID, rulesetPhase, ruleset)
 }
 
 // updateRulesetPhase updates a ruleset phase based on the zone or account, the
-// identifer and the rules.
+// identifier and the rules.
 func (api *API) updateRulesetPhase(ctx context.Context, identifierType RouteRoot, identifier, rulesetPhase string, ruleset Ruleset) (Ruleset, error) {
 	uri := fmt.Sprintf("/%s/%s/rulesets/phases/%s/entrypoint", identifierType, identifier, rulesetPhase)
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, ruleset)

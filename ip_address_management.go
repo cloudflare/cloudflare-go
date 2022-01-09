@@ -10,7 +10,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-// IPPrefix contains information about an IP prefix
+// IPPrefix contains information about an IP prefix.
 type IPPrefix struct {
 	ID                   string     `json:"id"`
 	CreatedAt            *time.Time `json:"created_at"`
@@ -25,36 +25,36 @@ type IPPrefix struct {
 	AdvertisedModifiedAt *time.Time `json:"advertised_modified_at"`
 }
 
-// AdvertisementStatus contains information about the BGP status of an IP prefix
+// AdvertisementStatus contains information about the BGP status of an IP prefix.
 type AdvertisementStatus struct {
 	Advertised           bool       `json:"advertised"`
 	AdvertisedModifiedAt *time.Time `json:"advertised_modified_at"`
 }
 
-// ListIPPrefixResponse contains a slice of IP prefixes
+// ListIPPrefixResponse contains a slice of IP prefixes.
 type ListIPPrefixResponse struct {
 	Response
 	Result []IPPrefix `json:"result"`
 }
 
-// GetIPPrefixResponse contains a specific IP prefix's API Response
+// GetIPPrefixResponse contains a specific IP prefix's API Response.
 type GetIPPrefixResponse struct {
 	Response
 	Result IPPrefix `json:"result"`
 }
 
-// GetAdvertisementStatusResponse contains an API Response for the BGP status of the IP Prefix
+// GetAdvertisementStatusResponse contains an API Response for the BGP status of the IP Prefix.
 type GetAdvertisementStatusResponse struct {
 	Response
 	Result AdvertisementStatus `json:"result"`
 }
 
-// IPPrefixUpdateRequest contains information about prefix updates
+// IPPrefixUpdateRequest contains information about prefix updates.
 type IPPrefixUpdateRequest struct {
 	Description string `json:"description"`
 }
 
-// AdvertisementStatusUpdateRequest contains information about bgp status updates
+// AdvertisementStatusUpdateRequest contains information about bgp status updates.
 type AdvertisementStatusUpdateRequest struct {
 	Advertised bool `json:"advertised"`
 }

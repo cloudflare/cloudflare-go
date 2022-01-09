@@ -2,7 +2,7 @@ package cloudflare
 
 import (
 	"context"
-	"crypto/md5"   // for generating IDs
+	"crypto/md5"   //nolint:gosec
 	"encoding/hex" // for generating IDs
 	"encoding/json"
 	"fmt"
@@ -18,7 +18,7 @@ import (
 // mockID returns a hex string of length 32, suitable for all kinds of IDs
 // used in the Cloudflare API.
 func mockID(seed string) string {
-	arr := md5.Sum([]byte(seed))
+	arr := md5.Sum([]byte(seed)) //nolint:gosec
 	return hex.EncodeToString(arr[:])
 }
 

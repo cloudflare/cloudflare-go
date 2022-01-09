@@ -18,7 +18,7 @@ type NotificationMechanismData struct {
 }
 
 // NotificationMechanismIntegrations is a list of all the integrations of a
-// certain mechanism type e.g. all email integrations
+// certain mechanism type e.g. all email integrations.
 type NotificationMechanismIntegrations []NotificationMechanismData
 
 // NotificationPolicy represents the notification policy created along with
@@ -213,7 +213,6 @@ func (api *API) GetNotificationPolicy(ctx context.Context, accountID, policyID s
 //
 // API Reference: https://api.cloudflare.com/#notification-policies-create-notification-policy
 func (api *API) CreateNotificationPolicy(ctx context.Context, accountID string, policy NotificationPolicy) (SaveResponse, error) {
-
 	baseURL := fmt.Sprintf("/accounts/%s/alerting/v3/policies", accountID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, baseURL, policy)
@@ -270,7 +269,6 @@ func (api *API) ListNotificationWebhooks(ctx context.Context, accountID string) 
 		return r, err
 	}
 	return r, nil
-
 }
 
 // CreateNotificationWebhooks will help connect a webhooks destination.
@@ -439,7 +437,7 @@ func (api *API) ListNotificationHistory(ctx context.Context, accountID string, p
 	return r.Result, r.ResultInfo, nil
 }
 
-// unmarshal will unmarshal bytes and return a SaveResponse
+// unmarshal will unmarshal bytes and return a SaveResponse.
 func unmarshalNotificationSaveResponse(res []byte) (SaveResponse, error) {
 	var r SaveResponse
 	err := json.Unmarshal(res, &r)

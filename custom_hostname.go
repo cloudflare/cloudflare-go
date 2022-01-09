@@ -12,7 +12,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-// CustomHostnameStatus is the enumeration of valid state values in the CustomHostnameSSL
+// CustomHostnameStatus is the enumeration of valid state values in the CustomHostnameSSL.
 type CustomHostnameStatus string
 
 const (
@@ -107,7 +107,7 @@ type CustomHostnameListResponse struct {
 	ResultInfo `json:"result_info"`
 }
 
-// CustomHostnameFallbackOrigin represents a Custom Hostnames Fallback Origin
+// CustomHostnameFallbackOrigin represents a Custom Hostnames Fallback Origin.
 type CustomHostnameFallbackOrigin struct {
 	Origin string   `json:"origin,omitempty"`
 	Status string   `json:"status,omitempty"`

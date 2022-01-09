@@ -180,7 +180,6 @@ func TestListAllRateLimitsDoesPagination(t *testing.T) {
 		}
 		`, serverRateLimitDescription)
 		}
-
 	}
 
 	mux.HandleFunc("/zones/"+testZoneID+"/rate_limits", handler)

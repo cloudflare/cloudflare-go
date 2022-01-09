@@ -74,7 +74,7 @@ type TeamsBlockPage struct {
 
 // TeamsAccount returns teams account information with internal and external ID.
 //
-// API reference: TBA
+// API reference: TBA.
 func (api *API) TeamsAccount(ctx context.Context, accountID string) (TeamsAccount, error) {
 	uri := fmt.Sprintf("/accounts/%s/gateway", accountID)
 
@@ -94,7 +94,7 @@ func (api *API) TeamsAccount(ctx context.Context, accountID string) (TeamsAccoun
 
 // TeamsAccountConfiguration returns teams account configuration.
 //
-// API reference: TBA
+// API reference: TBA.
 func (api *API) TeamsAccountConfiguration(ctx context.Context, accountID string) (TeamsConfiguration, error) {
 	uri := fmt.Sprintf("/accounts/%s/gateway/configuration", accountID)
 
@@ -114,7 +114,7 @@ func (api *API) TeamsAccountConfiguration(ctx context.Context, accountID string)
 
 // TeamsAccountUpdateConfiguration updates a teams account configuration.
 //
-// API reference: TBA
+// API reference: TBA.
 func (api *API) TeamsAccountUpdateConfiguration(ctx context.Context, accountID string, config TeamsConfiguration) (TeamsConfiguration, error) {
 	uri := fmt.Sprintf("/accounts/%s/gateway/configuration", accountID)
 

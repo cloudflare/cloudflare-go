@@ -280,7 +280,6 @@ func TestListIPListsItems(t *testing.T) {
 			"messages": []
 		}`)
 		}
-
 	}
 
 	mux.HandleFunc("/accounts/foo/rules/lists/2c0fc9fa937b11eaa1b71c4d701ab86e/items", handler)

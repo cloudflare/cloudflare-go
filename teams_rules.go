@@ -30,7 +30,7 @@ type TeamsRuleSettings struct {
 	BISOAdminControls *TeamsBISOAdminControlSettings `json:"biso_admin_controls"`
 }
 
-// TeamsL4OverrideSettings used in l4 filter type rule with action set to override
+// TeamsL4OverrideSettings used in l4 filter type rule with action set to override.
 type TeamsL4OverrideSettings struct {
 	IP   string `json:"ip,omitempty"`
 	Port int    `json:"port,omitempty"`

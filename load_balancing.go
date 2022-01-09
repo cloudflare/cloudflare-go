@@ -97,7 +97,7 @@ type LoadBalancer struct {
 	SteeringPolicy string `json:"steering_policy,omitempty"`
 }
 
-// LoadBalancerLoadShedding contains the settings for controlling load shedding
+// LoadBalancerLoadShedding contains the settings for controlling load shedding.
 type LoadBalancerLoadShedding struct {
 	DefaultPercent float32 `json:"default_percent,omitempty"`
 	DefaultPolicy  string  `json:"default_policy,omitempty"`

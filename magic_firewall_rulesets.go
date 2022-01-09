@@ -11,23 +11,23 @@ import (
 )
 
 const (
-	// MagicFirewallRulesetKindRoot specifies a root Ruleset
+	// MagicFirewallRulesetKindRoot specifies a root Ruleset.
 	MagicFirewallRulesetKindRoot = "root"
 
-	// MagicFirewallRulesetPhaseMagicTransit specifies the Magic Transit Ruleset phase
+	// MagicFirewallRulesetPhaseMagicTransit specifies the Magic Transit Ruleset phase.
 	MagicFirewallRulesetPhaseMagicTransit = "magic_transit"
 
-	// MagicFirewallRulesetRuleActionSkip specifies a skip (allow) action
+	// MagicFirewallRulesetRuleActionSkip specifies a skip (allow) action.
 	MagicFirewallRulesetRuleActionSkip MagicFirewallRulesetRuleAction = "skip"
 
-	// MagicFirewallRulesetRuleActionBlock specifies a block action
+	// MagicFirewallRulesetRuleActionBlock specifies a block action.
 	MagicFirewallRulesetRuleActionBlock MagicFirewallRulesetRuleAction = "block"
 )
 
-// MagicFirewallRulesetRuleAction specifies the action for a Firewall rule
+// MagicFirewallRulesetRuleAction specifies the action for a Firewall rule.
 type MagicFirewallRulesetRuleAction string
 
-// MagicFirewallRuleset contains information about a Firewall Ruleset
+// MagicFirewallRuleset contains information about a Firewall Ruleset.
 type MagicFirewallRuleset struct {
 	ID          string                     `json:"id"`
 	Name        string                     `json:"name"`
@@ -39,12 +39,12 @@ type MagicFirewallRuleset struct {
 	Rules       []MagicFirewallRulesetRule `json:"rules"`
 }
 
-// MagicFirewallRulesetRuleActionParameters specifies the action parameters for a Firewall rule
+// MagicFirewallRulesetRuleActionParameters specifies the action parameters for a Firewall rule.
 type MagicFirewallRulesetRuleActionParameters struct {
 	Ruleset string `json:"ruleset,omitempty"`
 }
 
-// MagicFirewallRulesetRule contains information about a single Magic Firewall rule
+// MagicFirewallRulesetRule contains information about a single Magic Firewall rule.
 type MagicFirewallRulesetRule struct {
 	ID               string                                    `json:"id,omitempty"`
 	Version          string                                    `json:"version,omitempty"`
@@ -57,7 +57,7 @@ type MagicFirewallRulesetRule struct {
 	Enabled          bool                                      `json:"enabled"`
 }
 
-// CreateMagicFirewallRulesetRequest contains data for a new Firewall ruleset
+// CreateMagicFirewallRulesetRequest contains data for a new Firewall ruleset.
 type CreateMagicFirewallRulesetRequest struct {
 	Name        string                     `json:"name"`
 	Description string                     `json:"description"`
@@ -66,31 +66,31 @@ type CreateMagicFirewallRulesetRequest struct {
 	Rules       []MagicFirewallRulesetRule `json:"rules"`
 }
 
-// UpdateMagicFirewallRulesetRequest contains data for a Magic Firewall ruleset update
+// UpdateMagicFirewallRulesetRequest contains data for a Magic Firewall ruleset update.
 type UpdateMagicFirewallRulesetRequest struct {
 	Description string                     `json:"description"`
 	Rules       []MagicFirewallRulesetRule `json:"rules"`
 }
 
-// ListMagicFirewallRulesetResponse contains a list of Magic Firewall rulesets
+// ListMagicFirewallRulesetResponse contains a list of Magic Firewall rulesets.
 type ListMagicFirewallRulesetResponse struct {
 	Response
 	Result []MagicFirewallRuleset `json:"result"`
 }
 
-// GetMagicFirewallRulesetResponse contains a single Magic Firewall Ruleset
+// GetMagicFirewallRulesetResponse contains a single Magic Firewall Ruleset.
 type GetMagicFirewallRulesetResponse struct {
 	Response
 	Result MagicFirewallRuleset `json:"result"`
 }
 
-// CreateMagicFirewallRulesetResponse contains response data when creating a new Magic Firewall ruleset
+// CreateMagicFirewallRulesetResponse contains response data when creating a new Magic Firewall ruleset.
 type CreateMagicFirewallRulesetResponse struct {
 	Response
 	Result MagicFirewallRuleset `json:"result"`
 }
 
-// UpdateMagicFirewallRulesetResponse contains response data when updating an existing Magic Firewall ruleset
+// UpdateMagicFirewallRulesetResponse contains response data when updating an existing Magic Firewall ruleset.
 type UpdateMagicFirewallRulesetResponse struct {
 	Response
 	Result MagicFirewallRuleset `json:"result"`
