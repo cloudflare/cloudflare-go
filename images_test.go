@@ -97,7 +97,7 @@ func TestUploadImage(t *testing.T) {
 	}
 }
 
-func TestImages(t *testing.T) {
+func TestListImages(t *testing.T) {
 	setup(UsingAccount("foo"))
 	defer teardown()
 
@@ -131,7 +131,7 @@ func TestImages(t *testing.T) {
 	mux.HandleFunc("/accounts/foo/images/v1", handler)
 	want := []Image{expectedImageStruct}
 
-	actual, err := client.Images(context.Background(), client.AccountID, PaginationOptions{})
+	actual, err := client.ListImages(context.Background(), client.AccountID, PaginationOptions{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)

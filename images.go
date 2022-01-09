@@ -140,10 +140,10 @@ func (api *API) UploadImage(ctx context.Context, accountID string, upload ImageU
 	return imageUploadResponse.Result, nil
 }
 
-// Images lists all images.
+// ListImages lists all images.
 //
 // API Reference: https://api.cloudflare.com/#cloudflare-images-list-images
-func (api *API) Images(ctx context.Context, accountID string, pageOpts PaginationOptions) ([]Image, error) {
+func (api *API) ListImages(ctx context.Context, accountID string, pageOpts PaginationOptions) ([]Image, error) {
 	v := url.Values{}
 	if pageOpts.PerPage > 0 {
 		v.Set("per_page", strconv.Itoa(pageOpts.PerPage))
