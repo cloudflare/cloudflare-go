@@ -1,13 +1,13 @@
 # flarectl
 
-A CLI application for interacting with a Cloudflare account. Powered by [cloudflare-go].
+A CLI application for interacting with a Cloudflare account. Powered by [cloudflare-go](https://github.com/cloudflare/cloudflare-go).
 
 ## Installation 
 
 Install it when you install our command-line library:
 
 ```sh
-go get -u github.com/cloudflare/cloudflare-go/...
+go install github.com/cloudflare/cloudflare-go/cmd/flarectl@latest
 ```
 
 # Usage
