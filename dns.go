@@ -94,8 +94,7 @@ func (api *API) CreateDNSRecord(ctx context.Context, zoneID string, rr DNSRecord
 func (api *API) DNSRecords(ctx context.Context, zoneID string, rr DNSRecord) ([]DNSRecord, error) {
 	// Construct a query string
 	v := url.Values{}
-	// Request as many records as possible per page - API max is 100
-	v.Set("per_page", "100")
+	// Using default per_page value as specified by the API
 	if rr.Name != "" {
 		v.Set("name", toUTS46ASCII(rr.Name))
 	}
