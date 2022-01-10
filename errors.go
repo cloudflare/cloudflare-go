@@ -6,10 +6,10 @@ import (
 	"strings"
 )
 
-// Error messages
+// Error messages.
 const (
-	errEmptyCredentials          = "invalid credentials: key & email must not be empty"
-	errEmptyAPIToken             = "invalid credentials: API Token must not be empty"
+	errEmptyCredentials          = "invalid credentials: key & email must not be empty" //nolint:gosec,unused
+	errEmptyAPIToken             = "invalid credentials: API Token must not be empty"   //nolint:gosec,unused
 	errMakeRequestError          = "error from makeRequest"
 	errUnmarshalError            = "error unmarshalling the JSON response"
 	errUnmarshalErrorBody        = "error unmarshalling the JSON response error body"

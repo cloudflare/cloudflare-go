@@ -296,7 +296,6 @@ func TestListZoneLockdowns(t *testing.T) {
 				"total_count": 2000
 			}
 		}`)
-
 	}
 
 	mux.HandleFunc("/zones/"+testZoneID+"/firewall/lockdowns", handler)

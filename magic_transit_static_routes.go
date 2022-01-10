@@ -9,19 +9,19 @@ import (
 	"time"
 )
 
-// Magic Transit Static Routes Error messages
+// Magic Transit Static Routes Error messages.
 const (
 	errMagicTransitStaticRouteNotModified = "When trying to modify static route, API returned modified: false"
 	errMagicTransitStaticRouteNotDeleted  = "When trying to delete static route, API returned deleted: false"
 )
 
-// MagicTransitStaticRouteScope contains information about a static route's scope
+// MagicTransitStaticRouteScope contains information about a static route's scope.
 type MagicTransitStaticRouteScope struct {
 	ColoRegions []string `json:"colo_regions,omitempty"`
 	ColoNames   []string `json:"colo_names,omitempty"`
 }
 
-// MagicTransitStaticRoute contains information about a static route
+// MagicTransitStaticRoute contains information about a static route.
 type MagicTransitStaticRoute struct {
 	ID          string                       `json:"id,omitempty"`
 	Prefix      string                       `json:"prefix"`
@@ -34,7 +34,7 @@ type MagicTransitStaticRoute struct {
 	Scope       MagicTransitStaticRouteScope `json:"scope,omitempty"`
 }
 
-// ListMagicTransitStaticRoutesResponse contains a response including Magic Transit static routes
+// ListMagicTransitStaticRoutesResponse contains a response including Magic Transit static routes.
 type ListMagicTransitStaticRoutesResponse struct {
 	Response
 	Result struct {
@@ -42,7 +42,7 @@ type ListMagicTransitStaticRoutesResponse struct {
 	} `json:"result"`
 }
 
-// GetMagicTransitStaticRouteResponse contains a response including exactly one static route
+// GetMagicTransitStaticRouteResponse contains a response including exactly one static route.
 type GetMagicTransitStaticRouteResponse struct {
 	Response
 	Result struct {
@@ -50,7 +50,7 @@ type GetMagicTransitStaticRouteResponse struct {
 	} `json:"result"`
 }
 
-// UpdateMagicTransitStaticRouteResponse contains a static route update response
+// UpdateMagicTransitStaticRouteResponse contains a static route update response.
 type UpdateMagicTransitStaticRouteResponse struct {
 	Response
 	Result struct {
@@ -59,7 +59,7 @@ type UpdateMagicTransitStaticRouteResponse struct {
 	} `json:"result"`
 }
 
-// DeleteMagicTransitStaticRouteResponse contains a static route deletion response
+// DeleteMagicTransitStaticRouteResponse contains a static route deletion response.
 type DeleteMagicTransitStaticRouteResponse struct {
 	Response
 	Result struct {
@@ -68,7 +68,7 @@ type DeleteMagicTransitStaticRouteResponse struct {
 	} `json:"result"`
 }
 
-// CreateMagicTransitStaticRoutesRequest is an array of static routes to create
+// CreateMagicTransitStaticRoutesRequest is an array of static routes to create.
 type CreateMagicTransitStaticRoutesRequest struct {
 	Routes []MagicTransitStaticRoute `json:"routes"`
 }

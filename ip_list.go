@@ -11,11 +11,11 @@ import (
 )
 
 const (
-	// IPListTypeIP specifies a list containing IP addresses
+	// IPListTypeIP specifies a list containing IP addresses.
 	IPListTypeIP = "ip"
 )
 
-// IPListBulkOperation contains information about a Bulk Operation
+// IPListBulkOperation contains information about a Bulk Operation.
 type IPListBulkOperation struct {
 	ID        string     `json:"id"`
 	Status    string     `json:"status"`
@@ -23,7 +23,7 @@ type IPListBulkOperation struct {
 	Completed *time.Time `json:"completed"`
 }
 
-// IPList contains information about an IP List
+// IPList contains information about an IP List.
 type IPList struct {
 	ID                    string     `json:"id"`
 	Name                  string     `json:"name"`
@@ -35,7 +35,7 @@ type IPList struct {
 	ModifiedOn            *time.Time `json:"modified_on"`
 }
 
-// IPListItem contains information about a single IP List Item
+// IPListItem contains information about a single IP List Item.
 type IPListItem struct {
 	ID         string     `json:"id"`
 	IP         string     `json:"ip"`
@@ -44,41 +44,41 @@ type IPListItem struct {
 	ModifiedOn *time.Time `json:"modified_on"`
 }
 
-// IPListCreateRequest contains data for a new IP List
+// IPListCreateRequest contains data for a new IP List.
 type IPListCreateRequest struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	Kind        string `json:"kind"`
 }
 
-// IPListItemCreateRequest contains data for a new IP List Item
+// IPListItemCreateRequest contains data for a new IP List Item.
 type IPListItemCreateRequest struct {
 	IP      string `json:"ip"`
 	Comment string `json:"comment"`
 }
 
-// IPListItemDeleteRequest wraps IP List Items that shall be deleted
+// IPListItemDeleteRequest wraps IP List Items that shall be deleted.
 type IPListItemDeleteRequest struct {
 	Items []IPListItemDeleteItemRequest `json:"items"`
 }
 
-// IPListItemDeleteItemRequest contains single IP List Items that shall be deleted
+// IPListItemDeleteItemRequest contains single IP List Items that shall be deleted.
 type IPListItemDeleteItemRequest struct {
 	ID string `json:"id"`
 }
 
-// IPListUpdateRequest contains data for an IP List update
+// IPListUpdateRequest contains data for an IP List update.
 type IPListUpdateRequest struct {
 	Description string `json:"description"`
 }
 
-// IPListResponse contains a single IP List
+// IPListResponse contains a single IP List.
 type IPListResponse struct {
 	Response
 	Result IPList `json:"result"`
 }
 
-// IPListItemCreateResponse contains information about the creation of an IP List Item
+// IPListItemCreateResponse contains information about the creation of an IP List Item.
 type IPListItemCreateResponse struct {
 	Response
 	Result struct {
@@ -86,19 +86,19 @@ type IPListItemCreateResponse struct {
 	} `json:"result"`
 }
 
-// IPListListResponse contains a slice of IP Lists
+// IPListListResponse contains a slice of IP Lists.
 type IPListListResponse struct {
 	Response
 	Result []IPList `json:"result"`
 }
 
-// IPListBulkOperationResponse contains information about a Bulk Operation
+// IPListBulkOperationResponse contains information about a Bulk Operation.
 type IPListBulkOperationResponse struct {
 	Response
 	Result IPListBulkOperation `json:"result"`
 }
 
-// IPListDeleteResponse contains information about the deletion of an IP List
+// IPListDeleteResponse contains information about the deletion of an IP List.
 type IPListDeleteResponse struct {
 	Response
 	Result struct {
@@ -106,14 +106,14 @@ type IPListDeleteResponse struct {
 	} `json:"result"`
 }
 
-// IPListItemsListResponse contains information about IP List Items
+// IPListItemsListResponse contains information about IP List Items.
 type IPListItemsListResponse struct {
 	Response
 	ResultInfo `json:"result_info"`
 	Result     []IPListItem `json:"result"`
 }
 
-// IPListItemDeleteResponse contains information about the deletion of an IP List Item
+// IPListItemDeleteResponse contains information about the deletion of an IP List Item.
 type IPListItemDeleteResponse struct {
 	Response
 	Result struct {
@@ -121,7 +121,7 @@ type IPListItemDeleteResponse struct {
 	} `json:"result"`
 }
 
-// IPListItemsGetResponse contains information about a single IP List Item
+// IPListItemsGetResponse contains information about a single IP List Item.
 type IPListItemsGetResponse struct {
 	Response
 	Result IPListItem `json:"result"`
@@ -270,7 +270,7 @@ func (api *API) CreateIPListItemAsync(ctx context.Context, id, ip, comment strin
 	return result, nil
 }
 
-// CreateIPListItem creates a new IP List Item synchronously and returns the current set of IP List Items
+// CreateIPListItem creates a new IP List Item synchronously and returns the current set of IP List Items.
 func (api *API) CreateIPListItem(ctx context.Context, id, ip, comment string) ([]IPListItem, error) {
 	result, err := api.CreateIPListItemAsync(ctx, id, ip, comment)
 
@@ -306,7 +306,7 @@ func (api *API) CreateIPListItemsAsync(ctx context.Context, id string, items []I
 	return result, nil
 }
 
-// CreateIPListItems bulk creates many IP List Items synchronously and returns the current set of IP List Items
+// CreateIPListItems bulk creates many IP List Items synchronously and returns the current set of IP List Items.
 func (api *API) CreateIPListItems(ctx context.Context, id string, items []IPListItemCreateRequest) (
 	[]IPListItem, error) {
 	result, err := api.CreateIPListItemsAsync(ctx, id, items)
@@ -342,7 +342,7 @@ func (api *API) ReplaceIPListItemsAsync(ctx context.Context, id string, items []
 	return result, nil
 }
 
-// ReplaceIPListItems replaces all IP List Items synchronously and returns the current set of IP List Items
+// ReplaceIPListItems replaces all IP List Items synchronously and returns the current set of IP List Items.
 func (api *API) ReplaceIPListItems(ctx context.Context, id string, items []IPListItemCreateRequest) (
 	[]IPListItem, error) {
 	result, err := api.ReplaceIPListItemsAsync(ctx, id, items)
@@ -379,7 +379,7 @@ func (api *API) DeleteIPListItemsAsync(ctx context.Context, id string, items IPL
 }
 
 // DeleteIPListItems removes specific Items of an IP List by their ID synchronously and returns the current set
-// of IP List Items
+// of IP List Items.
 func (api *API) DeleteIPListItems(ctx context.Context, id string, items IPListItemDeleteRequest) (
 	[]IPListItem, error) {
 	result, err := api.DeleteIPListItemsAsync(ctx, id, items)
@@ -432,7 +432,7 @@ func (api *API) GetIPListBulkOperation(ctx context.Context, id string) (IPListBu
 }
 
 // pollIPListBulkOperation implements synchronous behaviour for some asynchronous endpoints.
-// bulk-operation status can be either pending, running, failed or completed
+// bulk-operation status can be either pending, running, failed or completed.
 func (api *API) pollIPListBulkOperation(ctx context.Context, id string) error {
 	for i := uint8(0); i < 16; i++ {
 		sleepDuration := 1 << (i / 2) * time.Second

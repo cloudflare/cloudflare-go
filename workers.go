@@ -3,11 +3,11 @@ package cloudflare
 import (
 	"bytes"
 	"context"
+	rand "crypto/rand"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
-	"math/rand"
 	"mime/multipart"
 	"net/http"
 	"net/textproto"
@@ -16,13 +16,13 @@ import (
 	"github.com/pkg/errors"
 )
 
-// WorkerRequestParams provides parameters for worker requests for both enterprise and standard requests
+// WorkerRequestParams provides parameters for worker requests for both enterprise and standard requests.
 type WorkerRequestParams struct {
 	ZoneID     string
 	ScriptName string
 }
 
-// WorkerScriptParams provides a worker script and the associated bindings
+// WorkerScriptParams provides a worker script and the associated bindings.
 type WorkerScriptParams struct {
 	Script string
 
@@ -41,25 +41,25 @@ type WorkerRoute struct {
 	Script  string `json:"script,omitempty"`
 }
 
-// WorkerRoutesResponse embeds Response struct and slice of WorkerRoutes
+// WorkerRoutesResponse embeds Response struct and slice of WorkerRoutes.
 type WorkerRoutesResponse struct {
 	Response
 	Routes []WorkerRoute `json:"result"`
 }
 
-// WorkerRouteResponse embeds Response struct and a single WorkerRoute
+// WorkerRouteResponse embeds Response struct and a single WorkerRoute.
 type WorkerRouteResponse struct {
 	Response
 	WorkerRoute `json:"result"`
 }
 
-// WorkerScript Cloudflare Worker struct with metadata
+// WorkerScript Cloudflare Worker struct with metadata.
 type WorkerScript struct {
 	WorkerMetaData
 	Script string `json:"script"`
 }
 
-// WorkerMetaData contains worker script information such as size, creation & modification dates
+// WorkerMetaData contains worker script information such as size, creation & modification dates.
 type WorkerMetaData struct {
 	ID         string    `json:"id,omitempty"`
 	ETAG       string    `json:"etag,omitempty"`
@@ -68,19 +68,19 @@ type WorkerMetaData struct {
 	ModifiedOn time.Time `json:"modified_on,omitempty"`
 }
 
-// WorkerListResponse wrapper struct for API response to worker script list API call
+// WorkerListResponse wrapper struct for API response to worker script list API call.
 type WorkerListResponse struct {
 	Response
 	WorkerList []WorkerMetaData `json:"result"`
 }
 
-// WorkerScriptResponse wrapper struct for API response to worker script calls
+// WorkerScriptResponse wrapper struct for API response to worker script calls.
 type WorkerScriptResponse struct {
 	Response
 	WorkerScript `json:"result"`
 }
 
-// WorkerBindingType represents a particular type of binding
+// WorkerBindingType represents a particular type of binding.
 type WorkerBindingType string
 
 func (b WorkerBindingType) String() string {
@@ -88,25 +88,25 @@ func (b WorkerBindingType) String() string {
 }
 
 const (
-	// WorkerInheritBindingType is the type for inherited bindings
+	// WorkerInheritBindingType is the type for inherited bindings.
 	WorkerInheritBindingType WorkerBindingType = "inherit"
-	// WorkerKvNamespaceBindingType is the type for KV Namespace bindings
+	// WorkerKvNamespaceBindingType is the type for KV Namespace bindings.
 	WorkerKvNamespaceBindingType WorkerBindingType = "kv_namespace"
-	// WorkerWebAssemblyBindingType is the type for Web Assembly module bindings
+	// WorkerWebAssemblyBindingType is the type for Web Assembly module bindings.
 	WorkerWebAssemblyBindingType WorkerBindingType = "wasm_module"
-	// WorkerSecretTextBindingType is the type for secret text bindings
+	// WorkerSecretTextBindingType is the type for secret text bindings.
 	WorkerSecretTextBindingType WorkerBindingType = "secret_text"
-	// WorkerPlainTextBindingType is the type for plain text bindings
+	// WorkerPlainTextBindingType is the type for plain text bindings.
 	WorkerPlainTextBindingType WorkerBindingType = "plain_text"
 )
 
-// WorkerBindingListItem a struct representing an individual binding in a list of bindings
+// WorkerBindingListItem a struct representing an individual binding in a list of bindings.
 type WorkerBindingListItem struct {
 	Name    string `json:"name"`
 	Binding WorkerBinding
 }
 
-// WorkerBindingListResponse wrapper struct for API response to worker binding list API call
+// WorkerBindingListResponse wrapper struct for API response to worker binding list API call.
 type WorkerBindingListResponse struct {
 	Response
 	BindingList []WorkerBindingListItem
@@ -120,7 +120,7 @@ type WorkerBindingListResponse struct {
 // multipart form. For example, WebAssembly bindings will include the contents of the WebAssembly module.
 
 // WorkerBinding is the generic interface implemented by all of
-// the various binding types
+// the various binding types.
 type WorkerBinding interface {
 	Type() WorkerBindingType
 
@@ -130,20 +130,20 @@ type WorkerBinding interface {
 	serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error)
 }
 
-// workerBindingMeta is the metadata portion of the binding
+// workerBindingMeta is the metadata portion of the binding.
 type workerBindingMeta = map[string]interface{}
 
-// workerBindingBodyWriter allows for a binding to add additional parts to the multipart body
+// workerBindingBodyWriter allows for a binding to add additional parts to the multipart body.
 type workerBindingBodyWriter func(*multipart.Writer) error
 
-// WorkerInheritBinding will just persist whatever binding content was previously uploaded
+// WorkerInheritBinding will just persist whatever binding content was previously uploaded.
 type WorkerInheritBinding struct {
 	// Optional parameter that allows for renaming a binding without changing
 	// its contents. If `OldName` is empty, the binding name will not be changed.
 	OldName string
 }
 
-// Type returns the type of the binding
+// Type returns the type of the binding.
 func (b WorkerInheritBinding) Type() WorkerBindingType {
 	return WorkerInheritBindingType
 }
@@ -168,7 +168,7 @@ type WorkerKvNamespaceBinding struct {
 	NamespaceID string
 }
 
-// Type returns the type of the binding
+// Type returns the type of the binding.
 func (b WorkerKvNamespaceBinding) Type() WorkerBindingType {
 	return WorkerKvNamespaceBindingType
 }
@@ -192,7 +192,7 @@ type WorkerWebAssemblyBinding struct {
 	Module io.Reader
 }
 
-// Type returns the type of the binding
+// Type returns the type of the binding.
 func (b WorkerWebAssemblyBinding) Type() WorkerBindingType {
 	return WorkerWebAssemblyBindingType
 }
@@ -226,7 +226,7 @@ type WorkerPlainTextBinding struct {
 	Text string
 }
 
-// Type returns the type of the binding
+// Type returns the type of the binding.
 func (b WorkerPlainTextBinding) Type() WorkerBindingType {
 	return WorkerPlainTextBindingType
 }
@@ -250,7 +250,7 @@ type WorkerSecretTextBinding struct {
 	Text string
 }
 
-// Type returns the type of the binding
+// Type returns the type of the binding.
 func (b WorkerSecretTextBinding) Type() WorkerBindingType {
 	return WorkerSecretTextBindingType
 }
@@ -268,10 +268,10 @@ func (b WorkerSecretTextBinding) serialize(bindingName string) (workerBindingMet
 }
 
 // Each binding that adds a part to the multipart form body will need
-// a unique part name so we just generate a random 128bit hex string
+// a unique part name so we just generate a random 128bit hex string.
 func getRandomPartName() string {
 	randBytes := make([]byte, 16)
-	rand.Read(randBytes)
+	rand.Read(randBytes) //nolint:errcheck
 	return hex.EncodeToString(randBytes)
 }
 
@@ -353,7 +353,7 @@ func (api *API) downloadWorkerWithName(ctx context.Context, scriptName string) (
 	return r, nil
 }
 
-// ListWorkerBindings returns all the bindings for a particular worker
+// ListWorkerBindings returns all the bindings for a particular worker.
 func (api *API) ListWorkerBindings(ctx context.Context, requestParams *WorkerRequestParams) (WorkerBindingListResponse, error) {
 	if requestParams.ScriptName == "" {
 		return WorkerBindingListResponse{}, errors.New("ScriptName is required")
@@ -428,7 +428,7 @@ func (api *API) ListWorkerBindings(ctx context.Context, requestParams *WorkerReq
 // bindingContentReader is an io.Reader that will lazily load the
 // raw bytes for a binding from the API when the Read() method
 // is first called. This is only useful for binding types
-// that store raw bytes, like WebAssembly modules
+// that store raw bytes, like WebAssembly modules.
 type bindingContentReader struct {
 	api           *API
 	requestParams *WorkerRequestParams
@@ -547,7 +547,7 @@ func (api *API) uploadWorkerWithName(ctx context.Context, scriptName, contentTyp
 	return r, nil
 }
 
-// Returns content-type, body, error
+// Returns content-type, body, error.
 func formatMultipartBody(params *WorkerScriptParams) (string, []byte, error) {
 	var buf = &bytes.Buffer{}
 	var mpw = multipart.NewWriter(buf)
@@ -622,7 +622,7 @@ func formatMultipartBody(params *WorkerScriptParams) (string, []byte, error) {
 //
 // API reference: https://api.cloudflare.com/#worker-filters-create-filter, https://api.cloudflare.com/#worker-routes-create-route
 func (api *API) CreateWorkerRoute(ctx context.Context, zoneID string, route WorkerRoute) (WorkerRouteResponse, error) {
-	pathComponent, err := getRouteEndpoint(api, route)
+	pathComponent, err := getRouteEndpoint(route)
 	if err != nil {
 		return WorkerRouteResponse{}, err
 	}
@@ -717,7 +717,7 @@ func (api *API) GetWorkerRoute(ctx context.Context, zoneID string, routeID strin
 //
 // API reference: https://api.cloudflare.com/#worker-filters-update-filter, https://api.cloudflare.com/#worker-routes-update-route
 func (api *API) UpdateWorkerRoute(ctx context.Context, zoneID string, routeID string, route WorkerRoute) (WorkerRouteResponse, error) {
-	pathComponent, err := getRouteEndpoint(api, route)
+	pathComponent, err := getRouteEndpoint(route)
 	if err != nil {
 		return WorkerRouteResponse{}, err
 	}
@@ -734,7 +734,7 @@ func (api *API) UpdateWorkerRoute(ctx context.Context, zoneID string, routeID st
 	return r, nil
 }
 
-func getRouteEndpoint(api *API, route WorkerRoute) (string, error) {
+func getRouteEndpoint(route WorkerRoute) (string, error) {
 	if route.Script != "" && route.Enabled {
 		return "", errors.New("Only `Script` or `Enabled` may be specified for a WorkerRoute, not both")
 	}

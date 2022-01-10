@@ -79,7 +79,7 @@ type ZoneRatePlan struct {
 	Components []zoneRatePlanComponents `json:"components,omitempty"`
 }
 
-// ZonePlanCommon contains fields used by various Plan endpoints
+// ZonePlanCommon contains fields used by various Plan endpoints.
 type ZonePlanCommon struct {
 	ID        string `json:"id"`
 	Name      string `json:"name,omitempty"`
@@ -280,13 +280,13 @@ type newZone struct {
 	Account *Account `json:"organization,omitempty"`
 }
 
-// FallbackOrigin describes a fallback origin
+// FallbackOrigin describes a fallback origin.
 type FallbackOrigin struct {
 	Value string `json:"value"`
 	ID    string `json:"id,omitempty"`
 }
 
-// FallbackOriginResponse represents the response from the fallback_origin endpoint
+// FallbackOriginResponse represents the response from the fallback_origin endpoint.
 type FallbackOriginResponse struct {
 	Response
 	Result FallbackOrigin `json:"result"`
@@ -944,13 +944,13 @@ func (api *API) ZoneExport(ctx context.Context, zoneID string) (string, error) {
 	return string(res), nil
 }
 
-// ZoneDNSSECResponse represents the response from the Zone DNSSEC Setting
+// ZoneDNSSECResponse represents the response from the Zone DNSSEC Setting.
 type ZoneDNSSECResponse struct {
 	Response
 	Result ZoneDNSSEC `json:"result"`
 }
 
-// ZoneDNSSEC represents the response from the Zone DNSSEC Setting result
+// ZoneDNSSEC represents the response from the Zone DNSSEC Setting result.
 type ZoneDNSSEC struct {
 	Status          string    `json:"status"`
 	Flags           int       `json:"flags"`
@@ -982,7 +982,7 @@ func (api *API) ZoneDNSSECSetting(ctx context.Context, zoneID string) (ZoneDNSSE
 	return response.Result, nil
 }
 
-// ZoneDNSSECDeleteResponse represents the response from the Zone DNSSEC Delete request
+// ZoneDNSSECDeleteResponse represents the response from the Zone DNSSEC Delete request.
 type ZoneDNSSECDeleteResponse struct {
 	Response
 	Result string `json:"result"`
@@ -1004,7 +1004,7 @@ func (api *API) DeleteZoneDNSSEC(ctx context.Context, zoneID string) (string, er
 	return response.Result, nil
 }
 
-// ZoneDNSSECUpdateOptions represents the options for DNSSEC update
+// ZoneDNSSECUpdateOptions represents the options for DNSSEC update.
 type ZoneDNSSECUpdateOptions struct {
 	Status string `json:"status"`
 }

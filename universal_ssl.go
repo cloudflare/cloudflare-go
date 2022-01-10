@@ -80,7 +80,6 @@ func (api *API) EditUniversalSSLSetting(ctx context.Context, zoneID string, sett
 		return UniversalSSLSetting{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
-
 }
 
 // UniversalSSLVerificationDetails returns the details for a universal ssl verification

@@ -216,7 +216,7 @@ func OriginCARootCertificate(algorithm string) ([]byte, error) {
 		return nil, fmt.Errorf("invalid algorithm: must be one of ['ecc', 'rsa']")
 	}
 
-	resp, err := http.Get(url)
+	resp, err := http.Get(url) //nolint:gosec
 	if err != nil {
 		return nil, errors.Wrap(err, "HTTP request failed")
 	}

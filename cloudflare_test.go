@@ -15,10 +15,10 @@ var (
 	// mux is the HTTP request multiplexer used with the test server.
 	mux *http.ServeMux
 
-	// client is the API client being tested
+	// client is the API client being tested.
 	client *API
 
-	// server is a test HTTP server used to provide mock API responses
+	// server is a test HTTP server used to provide mock API responses.
 	server *httptest.Server
 )
 
@@ -177,7 +177,6 @@ func TestClient_RetryCanSucceedAfterErrors(t *testing.T) {
         }`)
 		}
 		requestsReceived++
-
 	}
 
 	mux.HandleFunc("/user/load_balancers/pools", handler)
@@ -203,7 +202,6 @@ func TestClient_RetryReturnsPersistentErrorResponse(t *testing.T) {
 			"messages": [],
 			"result": []
 		}`)
-
 	}
 
 	mux.HandleFunc("/user/load_balancers/pools", handler)
@@ -528,7 +526,6 @@ func TestCheckResultInfo(t *testing.T) {
 		{"last page only has 19 items not 20", 20, 2, 20, ResultInfo{Page: 2, PerPage: 20, TotalPages: 2, Count: 20, Total: 39}, false},
 		{"fully working result info", 20, 2, 19, ResultInfo{Page: 2, PerPage: 20, TotalPages: 2, Count: 19, Total: 39}, true},
 	} {
-
 		t.Run(c.TestName, func(t *testing.T) {
 			assert.Equal(t, c.Verdict, checkResultInfo(c.PerPage, c.Page, c.Count, &c.ResultInfo))
 		})

@@ -194,7 +194,6 @@ func TestGetNotificationPolicy(t *testing.T) {
 	require.NotNil(t, res)
 
 	assert.Equal(t, policy, res.Result)
-
 }
 
 func TestListNotificationPolicies(t *testing.T) {
@@ -286,8 +285,8 @@ func TestUpdateNotificationPolicy(t *testing.T) {
 	require.NotNil(t, res)
 
 	assert.Equal(t, testPolicyID, res.Result.ID)
-
 }
+
 func TestDeleteNotificationPolicy(t *testing.T) {
 	setup()
 	defer teardown()
@@ -317,8 +316,8 @@ func TestDeleteNotificationPolicy(t *testing.T) {
 	require.NotNil(t, res)
 
 	assert.Equal(t, testPolicyID, res.Result.ID)
-
 }
+
 func TestCreateNotificationWebhooks(t *testing.T) {
 	setup()
 	defer teardown()
@@ -355,8 +354,8 @@ func TestCreateNotificationWebhooks(t *testing.T) {
 	require.NotNil(t, res)
 
 	assert.Equal(t, testWebhookID, res.Result.ID)
-
 }
+
 func TestListNotificationWebhooks(t *testing.T) {
 	setup()
 	defer teardown()
@@ -471,7 +470,6 @@ func TestUpdateNotificationWebhooks(t *testing.T) {
 	require.NotNil(t, res)
 
 	assert.Equal(t, testWebhookID, res.Result.ID)
-
 }
 
 func TestDeleteNotificationWebhooks(t *testing.T) {
@@ -523,14 +521,14 @@ func TestListNotificationHistory(t *testing.T) {
 	}
 
 	expectedResultInfo := ResultInfo{
-		Page:       0,
-		PerPage:    25,
-		Count:      1,
+		Page:    0,
+		PerPage: 25,
+		Count:   1,
 	}
 
 	pageOptions := PaginationOptions{
 		PerPage: 25,
-		Page: 1,
+		Page:    1,
 	}
 
 	alertHistory, err := json.Marshal(expected)

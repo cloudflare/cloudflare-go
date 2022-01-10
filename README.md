@@ -38,7 +38,7 @@ The current feature list includes:
 * [x] [Railgun](https://www.cloudflare.com/railgun/) administration
 * [x] Rate Limiting
 * [x] User Administration (partial)
-* [x] Virtual DNS Management
+* [x] DNS Firewall
 * [x] Web Application Firewall (WAF)
 * [x] Zone Lockdown and User-Agent Block rules
 * [x] Zones
@@ -51,7 +51,7 @@ issue) to discuss any non-trivial changes before submitting code.
 
 ## Installation
 
-You need a working Go environment.
+You need a working Go environment. We officially support only currently supported Go versions according to [Go project's release policy](https://go.dev/doc/devel/release#policy).
 
 ```
 go get github.com/cloudflare/cloudflare-go
@@ -72,8 +72,10 @@ import (
 )
 
 func main() {
-	// Construct a new API object
+	// Construct a new API object using a global API key
 	api, err := cloudflare.New(os.Getenv("CLOUDFLARE_API_KEY"), os.Getenv("CLOUDFLARE_API_EMAIL"))
+	// alternatively, you can use a scoped API token
+	// api, err := cloudflare.NewWithAPIToken(os.Getenv("CLOUDFLARE_API_TOKEN"))
 	if err != nil {
 		log.Fatal(err)
 	}

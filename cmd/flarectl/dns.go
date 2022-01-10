@@ -126,7 +126,6 @@ func dnsCreateOrUpdate(c *cli.Context) error {
 			fmt.Println("Error creating DNS record:", err)
 			return err
 		}
-
 	}
 
 	output := [][]string{
