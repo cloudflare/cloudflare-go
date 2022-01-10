@@ -58,7 +58,7 @@ type AccessApplicationGatewayRule struct {
 type AccessApplicationCorsHeaders struct {
 	AllowedMethods   []string `json:"allowed_methods,omitempty"`
 	AllowedOrigins   []string `json:"allowed_origins,omitempty"`
-	AllowedHeaders   []string `json:"gallowed_headers,omitempty"`
+	AllowedHeaders   []string `json:"allowed_headers,omitempty"`
 	AllowAllMethods  bool     `json:"allow_all_methods,omitempty"`
 	AllowAllHeaders  bool     `json:"allow_all_headers,omitempty"`
 	AllowAllOrigins  bool     `json:"allow_all_origins,omitempty"`
