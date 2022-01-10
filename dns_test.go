@@ -169,7 +169,6 @@ func TestDNSRecords(t *testing.T) {
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
-		assert.Equal(t, "100", r.URL.Query().Get("per_page"))
 		assert.Equal(t, asciiInput.Name, r.URL.Query().Get("name"))
 		assert.Equal(t, asciiInput.Type, r.URL.Query().Get("type"))
 		assert.Equal(t, asciiInput.Content, r.URL.Query().Get("content"))
