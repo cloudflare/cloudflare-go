@@ -130,3 +130,77 @@ func TestTeamsAccountUpdateConfiguration(t *testing.T) {
 		assert.Equal(t, actual, configuration)
 	}
 }
+
+func TestTeamsAccountGetLoggingConfiguration(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {"settings_by_rule_type":{"dns":{"log_all":false,"log_blocks":true}},"redact_pii":true}
+		}`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/gateway/logging", handler)
+
+	actual, err := client.TeamsAccountLoggingConfiguration(context.Background(), testAccountID)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, actual, TeamsLoggingSettings{
+			RedactPii: true,
+			LoggingSettingsByRuleType: map[TeamsRuleType]TeamsAccountLoggingConfiguration{
+				TeamsDnsRuleType: {LogAll: false, LogBlocks: true},
+			},
+		})
+	}
+}
+
+func TestTeamsAccountUpdateLoggingConfiguration(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {"settings_by_rule_type":{"dns":{"log_all":false,"log_blocks":true}, "http":{"log_all":true,"log_blocks":false}, "l4": {"log_all": false, "log_blocks": true}},"redact_pii":true}
+		}`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/gateway/logging", handler)
+
+	actual, err := client.TeamsAccountUpdateLoggingConfiguration(context.Background(), testAccountID, TeamsLoggingSettings{
+		RedactPii: true,
+		LoggingSettingsByRuleType: map[TeamsRuleType]TeamsAccountLoggingConfiguration{
+			TeamsDnsRuleType: {
+				LogAll:    false,
+				LogBlocks: true,
+			},
+			TeamsHttpRuleType: {
+				LogAll: true,
+			},
+			TeamsL4RuleType: {
+				LogBlocks: true,
+			},
+		},
+	})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, actual, TeamsLoggingSettings{
+			RedactPii: true,
+			LoggingSettingsByRuleType: map[TeamsRuleType]TeamsAccountLoggingConfiguration{
+				TeamsDnsRuleType:  {LogAll: false, LogBlocks: true},
+				TeamsHttpRuleType: {LogAll: true, LogBlocks: false},
+				TeamsL4RuleType:   {LogAll: false, LogBlocks: true},
+			},
+		})
+	}
+}
