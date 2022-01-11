@@ -38,11 +38,16 @@ type TeamsConfiguration struct {
 }
 
 type TeamsAccountSettings struct {
-	Antivirus   *TeamsAntivirus   `json:"antivirus,omitempty"`
-	TLSDecrypt  *TeamsTLSDecrypt  `json:"tls_decrypt,omitempty"`
-	ActivityLog *TeamsActivityLog `json:"activity_log,omitempty"`
-	BlockPage   *TeamsBlockPage   `json:"block_page,omitempty"`
-	FIPS        *TeamsFIPS        `json:"fips,omitempty"`
+	Antivirus        *TeamsAntivirus   `json:"antivirus,omitempty"`
+	TLSDecrypt       *TeamsTLSDecrypt  `json:"tls_decrypt,omitempty"`
+	ActivityLog      *TeamsActivityLog `json:"activity_log,omitempty"`
+	BlockPage        *TeamsBlockPage   `json:"block_page,omitempty"`
+	BrowserIsolation *BrowserIsolation `json:"browser_isolation,omitempty"`
+	FIPS             *TeamsFIPS        `json:"fips,omitempty"`
+}
+
+type BrowserIsolation struct {
+	UrlBrowserIsolationEnabled bool `json:"url_browser_isolation_enabled"`
 }
 
 type TeamsAntivirus struct {
@@ -70,6 +75,29 @@ type TeamsBlockPage struct {
 	LogoPath        string `json:"logo_path,omitempty"`
 	BackgroundColor string `json:"background_color,omitempty"`
 	Name            string `json:"name,omitempty"`
+}
+
+type TeamsRuleType = string
+
+const (
+	TeamsHttpRuleType TeamsRuleType = "http"
+	TeamsDnsRuleType  TeamsRuleType = "dns"
+	TeamsL4RuleType   TeamsRuleType = "l4"
+)
+
+type TeamsAccountLoggingConfiguration struct {
+	LogAll    bool `json:"log_all"`
+	LogBlocks bool `json:"log_blocks"`
+}
+
+type TeamsLoggingSettings struct {
+	LoggingSettingsByRuleType map[TeamsRuleType]TeamsAccountLoggingConfiguration `json:"settings_by_rule_type"`
+	RedactPii                 bool                                               `json:"redact_pii,omitempty"`
+}
+
+type TeamsLoggingSettingsResponse struct {
+	Response
+	Result TeamsLoggingSettings `json:"result"`
 }
 
 // TeamsAccount returns teams account information with internal and external ID.
@@ -112,6 +140,26 @@ func (api *API) TeamsAccountConfiguration(ctx context.Context, accountID string)
 	return teamsConfigResponse.Result, nil
 }
 
+// TeamsAccountLoggingConfiguration returns teams account logging configuration.
+//
+// API reference: TBA.
+func (api *API) TeamsAccountLoggingConfiguration(ctx context.Context, accountID string) (TeamsLoggingSettings, error) {
+	uri := fmt.Sprintf("/accounts/%s/gateway/logging", accountID)
+
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return TeamsLoggingSettings{}, err
+	}
+
+	var teamsConfigResponse TeamsLoggingSettingsResponse
+	err = json.Unmarshal(res, &teamsConfigResponse)
+	if err != nil {
+		return TeamsLoggingSettings{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return teamsConfigResponse.Result, nil
+}
+
 // TeamsAccountUpdateConfiguration updates a teams account configuration.
 //
 // API reference: TBA.
@@ -127,6 +175,26 @@ func (api *API) TeamsAccountUpdateConfiguration(ctx context.Context, accountID s
 	err = json.Unmarshal(res, &teamsConfigResponse)
 	if err != nil {
 		return TeamsConfiguration{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return teamsConfigResponse.Result, nil
+}
+
+// TeamsAccountUpdateLoggingConfiguration updates the log settings and returns new teams account logging configuration.
+//
+// API reference: TBA.
+func (api *API) TeamsAccountUpdateLoggingConfiguration(ctx context.Context, accountID string, config TeamsLoggingSettings) (TeamsLoggingSettings, error) {
+	uri := fmt.Sprintf("/accounts/%s/gateway/logging", accountID)
+
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, config)
+	if err != nil {
+		return TeamsLoggingSettings{}, err
+	}
+
+	var teamsConfigResponse TeamsLoggingSettingsResponse
+	err = json.Unmarshal(res, &teamsConfigResponse)
+	if err != nil {
+		return TeamsLoggingSettings{}, errors.Wrap(err, errUnmarshalError)
 	}
 
 	return teamsConfigResponse.Result, nil
