@@ -95,6 +95,16 @@ type TeamsLoggingSettings struct {
 	RedactPii                 bool                                               `json:"redact_pii,omitempty"`
 }
 
+type TeamsDeviceSettings struct {
+	GatewayProxyEnabled    bool `json:"gateway_proxy_enabled"`
+	GatewayProxyUDPEnabled bool `json:"gateway_udp_proxy_enabled"`
+}
+
+type TeamsDeviceSettingsResponse struct {
+	Response
+	Result TeamsDeviceSettings `json:"result"`
+}
+
 type TeamsLoggingSettingsResponse struct {
 	Response
 	Result TeamsLoggingSettings `json:"result"`
@@ -138,6 +148,26 @@ func (api *API) TeamsAccountConfiguration(ctx context.Context, accountID string)
 	}
 
 	return teamsConfigResponse.Result, nil
+}
+
+// TeamsAccountDeviceConfiguration returns teams account device configuration with udp status.
+//
+// API reference: TBA.
+func (api *API) TeamsAccountDeviceConfiguration(ctx context.Context, accountID string) (TeamsDeviceSettings, error) {
+	uri := fmt.Sprintf("/accounts/%s/devices/settings", accountID)
+
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return TeamsDeviceSettings{}, err
+	}
+
+	var teamsDeviceResponse TeamsDeviceSettingsResponse
+	err = json.Unmarshal(res, &teamsDeviceResponse)
+	if err != nil {
+		return TeamsDeviceSettings{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return teamsDeviceResponse.Result, nil
 }
 
 // TeamsAccountLoggingConfiguration returns teams account logging configuration.
@@ -198,4 +228,24 @@ func (api *API) TeamsAccountUpdateLoggingConfiguration(ctx context.Context, acco
 	}
 
 	return teamsConfigResponse.Result, nil
+}
+
+// TeamsAccountDeviceUpdateConfiguration updates teams account device configuration including udp filtering status.
+//
+// API reference: TBA.
+func (api *API) TeamsAccountDeviceUpdateConfiguration(ctx context.Context, accountID string, settings TeamsDeviceSettings) (TeamsDeviceSettings, error) {
+	uri := fmt.Sprintf("/accounts/%s/devices/settings", accountID)
+
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, settings)
+	if err != nil {
+		return TeamsDeviceSettings{}, err
+	}
+
+	var teamsDeviceResponse TeamsDeviceSettingsResponse
+	err = json.Unmarshal(res, &teamsDeviceResponse)
+	if err != nil {
+		return TeamsDeviceSettings{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return teamsDeviceResponse.Result, nil
 }

@@ -204,3 +204,60 @@ func TestTeamsAccountUpdateLoggingConfiguration(t *testing.T) {
 		})
 	}
 }
+
+func TestTeamsAccountGetDeviceConfiguration(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {"gateway_proxy_enabled": true,"gateway_udp_proxy_enabled":false}
+		}`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/devices/settings", handler)
+
+	actual, err := client.TeamsAccountDeviceConfiguration(context.Background(), testAccountID)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, actual, TeamsDeviceSettings{
+			GatewayProxyEnabled:    true,
+			GatewayProxyUDPEnabled: false,
+		})
+	}
+}
+
+func TestTeamsAccountUpdateDeviceConfiguration(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {"gateway_proxy_enabled": true,"gateway_udp_proxy_enabled":true}
+		}`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/devices/settings", handler)
+
+	actual, err := client.TeamsAccountDeviceUpdateConfiguration(context.Background(), testAccountID, TeamsDeviceSettings{
+		GatewayProxyUDPEnabled: true,
+		GatewayProxyEnabled:    true,
+	})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, actual, TeamsDeviceSettings{
+			GatewayProxyEnabled:    true,
+			GatewayProxyUDPEnabled: true,
+		})
+	}
+}
