@@ -169,6 +169,7 @@ type RulesetRuleActionParameters struct {
 	URI         *RulesetRuleActionParametersURI                  `json:"uri,omitempty"`
 	Headers     map[string]RulesetRuleActionParametersHTTPHeader `json:"headers,omitempty"`
 	Products    []string                                         `json:"products,omitempty"`
+	Phases      []string                                         `json:"phases,omitempty"`
 	Overrides   *RulesetRuleActionParametersOverrides            `json:"overrides,omitempty"`
 	MatchedData *RulesetRuleActionParametersMatchedData          `json:"matched_data,omitempty"`
 	Version     string                                           `json:"version,omitempty"`
