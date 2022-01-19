@@ -23,4 +23,4 @@ jobs:
       - name: structslop
         run: |
           go generate -tags tools tools/tools.go
-          $(go env GOPATH)/structslop .
+          $(go env GOPATH)/bin/structslop .
