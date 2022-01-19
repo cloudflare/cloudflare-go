@@ -66,9 +66,9 @@ type ZoneMeta struct {
 // ZonePlan contains the plan information for a zone.
 type ZonePlan struct {
 	ZonePlanCommon
+	LegacyID          string `json:"legacy_id"`
 	IsSubscribed      bool   `json:"is_subscribed"`
 	CanSubscribe      bool   `json:"can_subscribe"`
-	LegacyID          string `json:"legacy_id"`
 	LegacyDiscount    bool   `json:"legacy_discount"`
 	ExternallyManaged bool   `json:"externally_managed"`
 }

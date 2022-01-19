@@ -26,27 +26,27 @@ const (
 
 // AccessApplication represents an Access application.
 type AccessApplication struct {
-	ID                      string                         `json:"id,omitempty"`
-	CreatedAt               *time.Time                     `json:"created_at,omitempty"`
-	UpdatedAt               *time.Time                     `json:"updated_at,omitempty"`
+	GatewayRules            []AccessApplicationGatewayRule `json:"gateway_rules,omitempty"`
+	AllowedIdps             []string                       `json:"allowed_idps,omitempty"`
+	CustomDenyMessage       string                         `json:"custom_deny_message,omitempty"`
+	LogoURL                 string                         `json:"logo_url,omitempty"`
 	AUD                     string                         `json:"aud,omitempty"`
-	Name                    string                         `json:"name"`
 	Domain                  string                         `json:"domain"`
 	Type                    AccessApplicationType          `json:"type,omitempty"`
 	SessionDuration         string                         `json:"session_duration,omitempty"`
-	AutoRedirectToIdentity  bool                           `json:"auto_redirect_to_identity,omitempty"`
-	EnableBindingCookie     bool                           `json:"enable_binding_cookie,omitempty"`
-	AllowedIdps             []string                       `json:"allowed_idps,omitempty"`
-	CorsHeaders             *AccessApplicationCorsHeaders  `json:"cors_headers,omitempty"`
-	CustomDenyMessage       string                         `json:"custom_deny_message,omitempty"`
-	CustomDenyURL           string                         `json:"custom_deny_url,omitempty"`
-	HttpOnlyCookieAttribute bool                           `json:"http_only_cookie_attribute,omitempty"`
 	SameSiteCookieAttribute string                         `json:"same_site_cookie_attribute,omitempty"`
-	LogoURL                 string                         `json:"logo_url,omitempty"`
+	CustomDenyURL           string                         `json:"custom_deny_url,omitempty"`
+	Name                    string                         `json:"name"`
+	ID                      string                         `json:"id,omitempty"`
+	PrivateAddress          string                         `json:"private_address"`
+	CorsHeaders             *AccessApplicationCorsHeaders  `json:"cors_headers,omitempty"`
+	CreatedAt               *time.Time                     `json:"created_at,omitempty"`
+	UpdatedAt               *time.Time                     `json:"updated_at,omitempty"`
+	AutoRedirectToIdentity  bool                           `json:"auto_redirect_to_identity,omitempty"`
 	SkipInterstitial        bool                           `json:"skip_interstitial,omitempty"`
 	AppLauncherVisible      bool                           `json:"app_launcher_visible,omitempty"`
-	GatewayRules            []AccessApplicationGatewayRule `json:"gateway_rules,omitempty"`
-	PrivateAddress          string                         `json:"private_address"`
+	EnableBindingCookie     bool                           `json:"enable_binding_cookie,omitempty"`
+	HttpOnlyCookieAttribute bool                           `json:"http_only_cookie_attribute,omitempty"`
 }
 
 type AccessApplicationGatewayRule struct {

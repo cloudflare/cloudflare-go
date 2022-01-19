@@ -12,20 +12,20 @@ import (
 
 // WaitingRoom describes a WaitingRoom object.
 type WaitingRoom struct {
-	ID                    string    `json:"id,omitempty"`
 	CreatedOn             time.Time `json:"created_on,omitempty"`
 	ModifiedOn            time.Time `json:"modified_on,omitempty"`
+	Path                  string    `json:"path"`
 	Name                  string    `json:"name"`
 	Description           string    `json:"description,omitempty"`
-	Suspended             bool      `json:"suspended"`
+	CustomPageHTML        string    `json:"custom_page_html,omitempty"`
 	Host                  string    `json:"host"`
-	Path                  string    `json:"path"`
-	QueueAll              bool      `json:"queue_all"`
+	ID                    string    `json:"id,omitempty"`
 	NewUsersPerMinute     int       `json:"new_users_per_minute"`
 	TotalActiveUsers      int       `json:"total_active_users"`
 	SessionDuration       int       `json:"session_duration"`
+	QueueAll              bool      `json:"queue_all"`
 	DisableSessionRenewal bool      `json:"disable_session_renewal"`
-	CustomPageHTML        string    `json:"custom_page_html,omitempty"`
+	Suspended             bool      `json:"suspended"`
 	JsonResponseEnabled   bool      `json:"json_response_enabled"`
 }
 

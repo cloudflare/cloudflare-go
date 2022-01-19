@@ -105,21 +105,21 @@ func (p *SpectrumApplicationOriginPort) MarshalJSON() ([]byte, error) {
 
 // SpectrumApplication defines a single Spectrum Application.
 type SpectrumApplication struct {
-	ID               string                         `json:"id,omitempty"`
-	Protocol         string                         `json:"protocol,omitempty"`
-	IPv4             bool                           `json:"ipv4,omitempty"`
 	DNS              SpectrumApplicationDNS         `json:"dns,omitempty"`
 	OriginDirect     []string                       `json:"origin_direct,omitempty"`
-	OriginPort       *SpectrumApplicationOriginPort `json:"origin_port,omitempty"`
-	OriginDNS        *SpectrumApplicationOriginDNS  `json:"origin_dns,omitempty"`
-	IPFirewall       bool                           `json:"ip_firewall,omitempty"`
-	ProxyProtocol    ProxyProtocol                  `json:"proxy_protocol,omitempty"`
-	TLS              string                         `json:"tls,omitempty"`
+	ID               string                         `json:"id,omitempty"`
+	Protocol         string                         `json:"protocol,omitempty"`
 	TrafficType      string                         `json:"traffic_type,omitempty"`
+	TLS              string                         `json:"tls,omitempty"`
+	ProxyProtocol    ProxyProtocol                  `json:"proxy_protocol,omitempty"`
+	ModifiedOn       *time.Time                     `json:"modified_on,omitempty"`
+	OriginDNS        *SpectrumApplicationOriginDNS  `json:"origin_dns,omitempty"`
+	OriginPort       *SpectrumApplicationOriginPort `json:"origin_port,omitempty"`
+	CreatedOn        *time.Time                     `json:"created_on,omitempty"`
 	EdgeIPs          *SpectrumApplicationEdgeIPs    `json:"edge_ips,omitempty"`
 	ArgoSmartRouting bool                           `json:"argo_smart_routing,omitempty"`
-	CreatedOn        *time.Time                     `json:"created_on,omitempty"`
-	ModifiedOn       *time.Time                     `json:"modified_on,omitempty"`
+	IPv4             bool                           `json:"ipv4,omitempty"`
+	IPFirewall       bool                           `json:"ip_firewall,omitempty"`
 }
 
 // UnmarshalJSON handles setting the `ProxyProtocol` field based on the value of the deprecated `spp` field.
