@@ -26,8 +26,14 @@ type TeamsRuleSettings struct {
 	// settings for l4(network) level overrides
 	L4Override *TeamsL4OverrideSettings `json:"l4override"`
 
+	// settings for adding headers to http requests
+	AddHeaders http.Header `json:"add_headers"`
+
 	// settings for browser isolation actions
 	BISOAdminControls *TeamsBISOAdminControlSettings `json:"biso_admin_controls"`
+
+	// settings for session check in allow action
+	CheckSession *TeamsCheckSessionSettings `json:"check_session"`
 }
 
 // TeamsL4OverrideSettings used in l4 filter type rule with action set to override.
@@ -39,6 +45,13 @@ type TeamsL4OverrideSettings struct {
 type TeamsBISOAdminControlSettings struct {
 	DisablePrinting  bool `json:"dp"`
 	DisableCopyPaste bool `json:"dcp"`
+	DisableDownload  bool `json:"dd"`
+	DisableUpload    bool `json:"du"`
+	DisableKeyboard  bool `json:"dk"`
+}
+type TeamsCheckSessionSettings struct {
+	Enforce  bool     `json:"enforce"`
+	Duration Duration `json:"duration"`
 }
 
 type TeamsFilterType string
