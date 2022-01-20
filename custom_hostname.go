@@ -47,6 +47,7 @@ type CustomHostnameOwnershipVerification struct {
 type CustomHostnameSSLValidationErrors struct {
 	Message string `json:"message,omitempty"`
 }
+
 // CustomHostnameSSLCertificates represent certificate properties like issuer, expires date and etc.
 type CustomHostnameSSLCertificates struct {
 	Issuer            string     `json:"issuer"`
@@ -57,6 +58,7 @@ type CustomHostnameSSLCertificates struct {
 	FingerprintSha256 string     `json:"fingerprint_sha256"`
 	ID                string     `json:"id"`
 }
+
 // CustomHostnameSSL represents the SSL section in a given custom hostname.
 type CustomHostnameSSL struct {
 	ID                   string                              `json:"id,omitempty"`
