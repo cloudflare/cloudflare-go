@@ -49,6 +49,7 @@ type TeamsBISOAdminControlSettings struct {
 	DisableUpload    bool `json:"du"`
 	DisableKeyboard  bool `json:"dk"`
 }
+
 type TeamsCheckSessionSettings struct {
 	Enforce  bool     `json:"enforce"`
 	Duration Duration `json:"duration"`
