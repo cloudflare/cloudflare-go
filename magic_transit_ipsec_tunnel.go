@@ -27,16 +27,16 @@ type MagicTransitIPsecTunnel struct {
 	Description        string     `json:"description,omitempty"`
 }
 
-// ListMagicTransitIPSecTunnelsResponse contains a response including IPsec tunnels.
-type ListMagicTransitIPSecTunnelsResponse struct {
+// ListMagicTransitIPsecTunnelsResponse contains a response including IPsec tunnels.
+type ListMagicTransitIPsecTunnelsResponse struct {
 	Response
 	Result struct {
 		IPsecTunnels []MagicTransitIPsecTunnel `json:"ipsec_tunnels"`
 	} `json:"result"`
 }
 
-// GetMagicTransitIPSecTunnelResponse contains a response including zero or one IPsec tunnels.
-type GetMagicTransitIPSecTunnelResponse struct {
+// GetMagicTransitIPsecTunnelResponse contains a response including zero or one IPsec tunnels.
+type GetMagicTransitIPsecTunnelResponse struct {
 	Response
 	Result struct {
 		IPsecTunnel MagicTransitIPsecTunnel `json:"ipsec_tunnel"`
@@ -48,7 +48,7 @@ type CreateMagicTransitIPsecTunnelsRequest struct {
 	IPsecTunnels []MagicTransitIPsecTunnel `json:"ipsec_tunnels"`
 }
 
-// UpdateMagicTransitIPSecTunnelResponse contains a response after updating an IPsec Tunnel.
+// UpdateMagicTransitIPsecTunnelResponse contains a response after updating an IPsec Tunnel.
 type UpdateMagicTransitIPsecTunnelResponse struct {
 	Response
 	Result struct {
@@ -80,7 +80,7 @@ func (api *API) ListMagicTransitIPsecTunnels(ctx context.Context) ([]MagicTransi
 		return []MagicTransitIPsecTunnel{}, err
 	}
 
-	result := ListMagicTransitIPSecTunnelsResponse{}
+	result := ListMagicTransitIPsecTunnelsResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
 		return []MagicTransitIPsecTunnel{}, errors.Wrap(err, errUnmarshalError)
 	}
@@ -102,7 +102,7 @@ func (api *API) GetMagicTransitIPsecTunnel(ctx context.Context, id string) (Magi
 		return MagicTransitIPsecTunnel{}, err
 	}
 
-	result := GetMagicTransitIPSecTunnelResponse{}
+	result := GetMagicTransitIPsecTunnelResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
 		return MagicTransitIPsecTunnel{}, errors.Wrap(err, errUnmarshalError)
 	}
@@ -127,7 +127,7 @@ func (api *API) CreateMagicTransitIPsecTunnels(ctx context.Context, tunnels []Ma
 		return []MagicTransitIPsecTunnel{}, err
 	}
 
-	result := ListMagicTransitIPSecTunnelsResponse{}
+	result := ListMagicTransitIPsecTunnelsResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
 		return []MagicTransitIPsecTunnel{}, errors.Wrap(err, errUnmarshalError)
 	}
