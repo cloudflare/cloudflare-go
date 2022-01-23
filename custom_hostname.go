@@ -48,6 +48,17 @@ type CustomHostnameSSLValidationErrors struct {
 	Message string `json:"message,omitempty"`
 }
 
+// CustomHostnameSSLCertificate represents an SSL certificate that's part of a Certificate Pack.
+type CustomHostnameSSLCertificate struct {
+	ID                string     `json:"id,omitempty"`
+	Issuer            string     `json:"issuer,omitempty"`
+	SerialNumber      string     `json:"serial_number,omitempty"`
+	Signature         string     `json:"signature,omitempty"`
+	ExpiresOn         *time.Time `json:"expires_on,omitempty"`
+	IssuedOn          *time.Time `json:"issued_on,omitempty"`
+	FingerprintSHA256 string     `json:"fingerprint_sha256,omitempty"`
+}
+
 // CustomHostnameSSL represents the SSL section in a given custom hostname.
 type CustomHostnameSSL struct {
 	ID                   string                              `json:"id,omitempty"`
@@ -68,6 +79,7 @@ type CustomHostnameSSL struct {
 	ValidationErrors     []CustomHostnameSSLValidationErrors `json:"validation_errors,omitempty"`
 	HTTPUrl              string                              `json:"http_url,omitempty"`
 	HTTPBody             string                              `json:"http_body,omitempty"`
+	Certificates         []CustomHostnameSSLCertificate      `json:"certificates,omitempty"`
 }
 
 // CustomMetadata defines custom metadata for the hostname. This requires logic to be implemented by Cloudflare to act on the data provided.
