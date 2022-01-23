@@ -28,23 +28,24 @@ The current feature list includes:
 * [x] Cache purging
 * [x] Cloudflare IPs
 * [x] Custom hostnames
+* [x] DNS Firewall
 * [x] DNS Records
 * [x] Firewall (partial)
+* [x] Gateway Locations
 * [x] [Keyless SSL](https://blog.cloudflare.com/keyless-ssl-the-nitty-gritty-technical-details/)
 * [x] [Load Balancing](https://blog.cloudflare.com/introducing-load-balancing-intelligent-failover-with-cloudflare/)
 * [x] [Logpush Jobs](https://developers.cloudflare.com/logs/logpush/)
+* [x] Magic Transit / Magic WAN
+* [x] Notifications
 * [ ] Organization Administration
 * [x] [Origin CA](https://blog.cloudflare.com/universal-ssl-encryption-all-the-way-to-the-origin-for-free/)
 * [x] [Railgun](https://www.cloudflare.com/railgun/) administration
 * [x] Rate Limiting
 * [x] User Administration (partial)
-* [x] DNS Firewall
 * [x] Web Application Firewall (WAF)
+* [x] Workers KV
 * [x] Zone Lockdown and User-Agent Block rules
 * [x] Zones
-* [x] Workers KV
-* [x] Notifications
-* [x] Gateway Locations
 
 Pull Requests are welcome, but please open an issue (or comment in an existing
 issue) to discuss any non-trivial changes before submitting code.
