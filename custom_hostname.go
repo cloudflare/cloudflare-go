@@ -79,7 +79,7 @@ type CustomHostnameSSL struct {
 	ValidationErrors     []CustomHostnameSSLValidationErrors `json:"validation_errors,omitempty"`
 	HTTPUrl              string                              `json:"http_url,omitempty"`
 	HTTPBody             string                              `json:"http_body,omitempty"`
-	Certificates	     []CustomHostnameSSLCertificates	 `json:"certificates,omitempty"`
+	Certificates         []CustomHostnameSSLCertificates     `json:"certificates,omitempty"`
 }
 
 // CustomMetadata defines custom metadata for the hostname. This requires logic to be implemented by Cloudflare to act on the data provided.
