@@ -62,3 +62,18 @@ func (api *API) UpdateFallbackDomain(ctx context.Context, accountID string, doma
 
 	return fallbackDomainResponse.Result, nil
 }
+
+// RestoreFallbackDomainDefaults resets the domain fallback values to the default
+// list.
+//
+// API reference: TBA.
+func (api *API) RestoreFallbackDomainDefaults(ctx context.Context, accountID string) error {
+	uri := fmt.Sprintf("/%s/%s/devices/policy/fallback_domains?reset_defaults=true", AccountRouteRoot, accountID)
+
+	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, []string{})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
