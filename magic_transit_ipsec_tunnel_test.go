@@ -56,7 +56,7 @@ func TestListMagicTransitIPsecTunnels(t *testing.T) {
 		},
 	}
 
-	actual, err := client.ListMagicTransitIPsecTunnels(context.Background())
+	actual, err := client.ListMagicTransitIPsecTunnels(context.Background(), "foo")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -104,7 +104,7 @@ func TestGetMagicTransitIPsecTunnel(t *testing.T) {
 		Description:        "Tunnel for ISP X",
 	}
 
-	actual, err := client.GetMagicTransitIPsecTunnel(context.Background(), "c4a7362d577a6c3019a474fd6f485821")
+	actual, err := client.GetMagicTransitIPsecTunnel(context.Background(), "foo", "c4a7362d577a6c3019a474fd6f485821")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -154,7 +154,7 @@ func TestCreateMagicTransitIPsecTunnels(t *testing.T) {
 		Description:        "Tunnel for ISP X",
 	}}
 
-	actual, err := client.CreateMagicTransitIPsecTunnels(context.Background(), want)
+	actual, err := client.CreateMagicTransitIPsecTunnels(context.Background(), "foo", want)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -203,7 +203,7 @@ func TestUpdateMagicTransitIPsecTunnel(t *testing.T) {
 		Description:        "Tunnel for ISP X",
 	}
 
-	actual, err := client.UpdateMagicTransitIPsecTunnel(context.Background(), "c4a7362d577a6c3019a474fd6f485821", want)
+	actual, err := client.UpdateMagicTransitIPsecTunnel(context.Background(), "foo", "c4a7362d577a6c3019a474fd6f485821", want)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -252,7 +252,7 @@ func TestDeleteMagicTransitIPsecTunnel(t *testing.T) {
 		Description:        "Tunnel for ISP X",
 	}
 
-	actual, err := client.DeleteMagicTransitIPsecTunnel(context.Background(), "c4a7362d577a6c3019a474fd6f485821")
+	actual, err := client.DeleteMagicTransitIPsecTunnel(context.Background(), "foo", "c4a7362d577a6c3019a474fd6f485821")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
