@@ -4,9 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/pkg/errors"
 	"net/http"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
 // Magic Transit IPsec Tunnel Error messages.
@@ -69,12 +70,8 @@ type DeleteMagicTransitIPsecTunnelResponse struct {
 // ListMagicTransitIPsecTunnels lists all IPsec tunnels for a given account
 //
 // API reference: https://api.cloudflare.com/#magic-ipsec-tunnels-list-ipsec-tunnels
-func (api *API) ListMagicTransitIPsecTunnels(ctx context.Context, account_id string) ([]MagicTransitIPsecTunnel, error) {
-	if err := api.checkAccountID(); err != nil {
-		return []MagicTransitIPsecTunnel{}, err
-	}
-
-	uri := fmt.Sprintf("/accounts/%s/magic/ipsec_tunnels", account_id)
+func (api *API) ListMagicTransitIPsecTunnels(ctx context.Context, accountID string) ([]MagicTransitIPsecTunnel, error) {
+	uri := fmt.Sprintf("/accounts/%s/magic/ipsec_tunnels", accountID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []MagicTransitIPsecTunnel{}, err
@@ -91,12 +88,8 @@ func (api *API) ListMagicTransitIPsecTunnels(ctx context.Context, account_id str
 // GetMagicTransitIPsecTunnel returns zero or one IPsec tunnel
 //
 // API reference: https://api.cloudflare.com/#magic-ipsec-tunnels-ipsec-tunnel-details
-func (api *API) GetMagicTransitIPsecTunnel(ctx context.Context, account_id string, id string) (MagicTransitIPsecTunnel, error) {
-	if err := api.checkAccountID(); err != nil {
-		return MagicTransitIPsecTunnel{}, err
-	}
-
-	uri := fmt.Sprintf("/accounts/%s/magic/ipsec_tunnels/%s", account_id, id)
+func (api *API) GetMagicTransitIPsecTunnel(ctx context.Context, accountID string, id string) (MagicTransitIPsecTunnel, error) {
+	uri := fmt.Sprintf("/accounts/%s/magic/ipsec_tunnels/%s", accountID, id)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return MagicTransitIPsecTunnel{}, err
@@ -113,12 +106,8 @@ func (api *API) GetMagicTransitIPsecTunnel(ctx context.Context, account_id strin
 // CreateMagicTransitIPsecTunnels creates one or more IPsec tunnels
 //
 // API reference: https://api.cloudflare.com/#magic-ipsec-tunnels-create-ipsec-tunnels
-func (api *API) CreateMagicTransitIPsecTunnels(ctx context.Context, account_id string, tunnels []MagicTransitIPsecTunnel) ([]MagicTransitIPsecTunnel, error) {
-	if err := api.checkAccountID(); err != nil {
-		return []MagicTransitIPsecTunnel{}, err
-	}
-
-	uri := fmt.Sprintf("/accounts/%s/magic/ipsec_tunnels", account_id)
+func (api *API) CreateMagicTransitIPsecTunnels(ctx context.Context, accountID string, tunnels []MagicTransitIPsecTunnel) ([]MagicTransitIPsecTunnel, error) {
+	uri := fmt.Sprintf("/accounts/%s/magic/ipsec_tunnels", accountID)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, CreateMagicTransitIPsecTunnelsRequest{
 		IPsecTunnels: tunnels,
 	})
@@ -138,12 +127,8 @@ func (api *API) CreateMagicTransitIPsecTunnels(ctx context.Context, account_id s
 // UpdateMagicTransitIPsecTunnel updates an IPsec tunnel
 //
 // API reference: https://api.cloudflare.com/#magic-ipsec-tunnels-update-ipsec-tunnel
-func (api *API) UpdateMagicTransitIPsecTunnel(ctx context.Context, account_id string, id string, tunnel MagicTransitIPsecTunnel) (MagicTransitIPsecTunnel, error) {
-	if err := api.checkAccountID(); err != nil {
-		return MagicTransitIPsecTunnel{}, err
-	}
-
-	uri := fmt.Sprintf("/accounts/%s/magic/ipsec_tunnels/%s", account_id, id)
+func (api *API) UpdateMagicTransitIPsecTunnel(ctx context.Context, accountID string, id string, tunnel MagicTransitIPsecTunnel) (MagicTransitIPsecTunnel, error) {
+	uri := fmt.Sprintf("/accounts/%s/magic/ipsec_tunnels/%s", accountID, id)
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, tunnel)
 
 	if err != nil {
@@ -165,12 +150,8 @@ func (api *API) UpdateMagicTransitIPsecTunnel(ctx context.Context, account_id st
 // DeleteMagicTransitIPsecTunnel deletes an IPsec Tunnel
 //
 // API reference: https://api.cloudflare.com/#magic-ipsec-tunnels-delete-ipsec-tunnel
-func (api *API) DeleteMagicTransitIPsecTunnel(ctx context.Context, account_id string, id string) (MagicTransitIPsecTunnel, error) {
-	if err := api.checkAccountID(); err != nil {
-		return MagicTransitIPsecTunnel{}, err
-	}
-
-	uri := fmt.Sprintf("/accounts/%s/magic/ipsec_tunnels/%s", account_id, id)
+func (api *API) DeleteMagicTransitIPsecTunnel(ctx context.Context, accountID string, id string) (MagicTransitIPsecTunnel, error) {
+	uri := fmt.Sprintf("/accounts/%s/magic/ipsec_tunnels/%s", accountID, id)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 
 	if err != nil {

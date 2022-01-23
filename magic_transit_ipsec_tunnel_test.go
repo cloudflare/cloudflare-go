@@ -11,7 +11,7 @@ import (
 )
 
 func TestListMagicTransitIPsecTunnels(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -38,7 +38,7 @@ func TestListMagicTransitIPsecTunnels(t *testing.T) {
     }`)
 	}
 
-	mux.HandleFunc("/accounts/foo/magic/ipsec_tunnels", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/magic/ipsec_tunnels", handler)
 
 	createdOn, _ := time.Parse(time.RFC3339, "2017-06-14T00:00:00Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2017-06-14T05:20:00Z")
@@ -56,14 +56,14 @@ func TestListMagicTransitIPsecTunnels(t *testing.T) {
 		},
 	}
 
-	actual, err := client.ListMagicTransitIPsecTunnels(context.Background(), "foo")
+	actual, err := client.ListMagicTransitIPsecTunnels(context.Background(), testAccountID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
 func TestGetMagicTransitIPsecTunnel(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -88,7 +88,7 @@ func TestGetMagicTransitIPsecTunnel(t *testing.T) {
     }`)
 	}
 
-	mux.HandleFunc("/accounts/foo/magic/ipsec_tunnels/c4a7362d577a6c3019a474fd6f485821", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/magic/ipsec_tunnels/c4a7362d577a6c3019a474fd6f485821", handler)
 
 	createdOn, _ := time.Parse(time.RFC3339, "2017-06-14T00:00:00Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2017-06-14T05:20:00Z")
@@ -104,14 +104,14 @@ func TestGetMagicTransitIPsecTunnel(t *testing.T) {
 		Description:        "Tunnel for ISP X",
 	}
 
-	actual, err := client.GetMagicTransitIPsecTunnel(context.Background(), "foo", "c4a7362d577a6c3019a474fd6f485821")
+	actual, err := client.GetMagicTransitIPsecTunnel(context.Background(), testAccountID, "c4a7362d577a6c3019a474fd6f485821")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
 func TestCreateMagicTransitIPsecTunnels(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -138,7 +138,7 @@ func TestCreateMagicTransitIPsecTunnels(t *testing.T) {
     }`)
 	}
 
-	mux.HandleFunc("/accounts/foo/magic/ipsec_tunnels", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/magic/ipsec_tunnels", handler)
 
 	createdOn, _ := time.Parse(time.RFC3339, "2017-06-14T00:00:00Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2017-06-14T05:20:00Z")
@@ -154,14 +154,14 @@ func TestCreateMagicTransitIPsecTunnels(t *testing.T) {
 		Description:        "Tunnel for ISP X",
 	}}
 
-	actual, err := client.CreateMagicTransitIPsecTunnels(context.Background(), "foo", want)
+	actual, err := client.CreateMagicTransitIPsecTunnels(context.Background(), testAccountID, want)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
 func TestUpdateMagicTransitIPsecTunnel(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -187,7 +187,7 @@ func TestUpdateMagicTransitIPsecTunnel(t *testing.T) {
     }`)
 	}
 
-	mux.HandleFunc("/accounts/foo/magic/ipsec_tunnels/c4a7362d577a6c3019a474fd6f485821", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/magic/ipsec_tunnels/c4a7362d577a6c3019a474fd6f485821", handler)
 
 	createdOn, _ := time.Parse(time.RFC3339, "2017-06-14T00:00:00Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2017-06-14T05:20:00Z")
@@ -203,14 +203,14 @@ func TestUpdateMagicTransitIPsecTunnel(t *testing.T) {
 		Description:        "Tunnel for ISP X",
 	}
 
-	actual, err := client.UpdateMagicTransitIPsecTunnel(context.Background(), "foo", "c4a7362d577a6c3019a474fd6f485821", want)
+	actual, err := client.UpdateMagicTransitIPsecTunnel(context.Background(), testAccountID, "c4a7362d577a6c3019a474fd6f485821", want)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
 func TestDeleteMagicTransitIPsecTunnel(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -236,7 +236,7 @@ func TestDeleteMagicTransitIPsecTunnel(t *testing.T) {
     }`)
 	}
 
-	mux.HandleFunc("/accounts/foo/magic/ipsec_tunnels/c4a7362d577a6c3019a474fd6f485821", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/magic/ipsec_tunnels/c4a7362d577a6c3019a474fd6f485821", handler)
 
 	createdOn, _ := time.Parse(time.RFC3339, "2017-06-14T00:00:00Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2017-06-14T05:20:00Z")
@@ -252,7 +252,7 @@ func TestDeleteMagicTransitIPsecTunnel(t *testing.T) {
 		Description:        "Tunnel for ISP X",
 	}
 
-	actual, err := client.DeleteMagicTransitIPsecTunnel(context.Background(), "foo", "c4a7362d577a6c3019a474fd6f485821")
+	actual, err := client.DeleteMagicTransitIPsecTunnel(context.Background(), testAccountID, "c4a7362d577a6c3019a474fd6f485821")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
