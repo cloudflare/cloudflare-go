@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestRevokeUserTokens(t *testing.T) {
+func TestRevokeAccessUserTokens(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -31,7 +31,7 @@ func TestRevokeUserTokens(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-func TestZoneLevelRevokeUserTokens(t *testing.T) {
+func TestRevokeZoneLevelAccessUserTokens(t *testing.T) {
 	setup()
 	defer teardown()
 
