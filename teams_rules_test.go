@@ -2,7 +2,6 @@ package cloudflare
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"testing"
@@ -246,23 +245,6 @@ func TestTeamsCreateRule(t *testing.T) {
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
-		type PartialTeamsCheckSessionSettings struct {
-			Enforce  bool   `json:"enforce"`
-			Duration string `json:"duration"`
-		}
-		type PartialTeamsRuleSettings struct {
-			AddHeaders   http.Header                       `json:"add_headers,omitempty"`
-			CheckSession *PartialTeamsCheckSessionSettings `json:"check_session,omitempty"`
-		}
-		type PartialTeamsRule struct {
-			RuleSettings PartialTeamsRuleSettings `json:"rule_settings,omitempty"`
-		}
-		var req PartialTeamsRule
-		err := json.NewDecoder(r.Body).Decode(&req)
-		assert.NoError(t, err)
-		assert.Equal(t, req.RuleSettings.CheckSession.Duration, "5m0s")
-		assert.Equal(t, req.RuleSettings.AddHeaders[http.CanonicalHeaderKey("X-Test")], []string{"abcd"})
-
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
