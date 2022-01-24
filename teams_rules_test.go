@@ -45,7 +45,11 @@ func TestTeamsRules(t *testing.T) {
 					"override_host": "",
 					"l4override": null,
 					"biso_admin_controls": null,
-					"add_headers": null
+					"add_headers": null,
+					"check_session": {
+						"enforce": true,
+						"duration": "15m0s"
+					}
 				  }
 				},
 				{
@@ -71,7 +75,8 @@ func TestTeamsRules(t *testing.T) {
 					"override_host": "",
 					"l4override": null,
 					"biso_admin_controls": null,
-					"add_headers": null
+					"add_headers": null,
+					"check_session": null
 				  }
 				}
 			]
@@ -100,7 +105,12 @@ func TestTeamsRules(t *testing.T) {
 			OverrideIPs:       nil,
 			OverrideHost:      "",
 			L4Override:        nil,
+			AddHeaders:        nil,
 			BISOAdminControls: nil,
+			CheckSession: &TeamsCheckSessionSettings{
+				Enforce:  true,
+				Duration: Duration{900 * time.Second},
+			},
 		},
 		CreatedAt: &createdAt,
 		UpdatedAt: &updatedAt,
@@ -124,7 +134,9 @@ func TestTeamsRules(t *testing.T) {
 				OverrideIPs:       nil,
 				OverrideHost:      "",
 				L4Override:        nil,
+				AddHeaders:        nil,
 				BISOAdminControls: nil,
+				CheckSession:      nil,
 			},
 			CreatedAt: &createdAt,
 			UpdatedAt: &updatedAt,
@@ -174,7 +186,11 @@ func TestTeamsRule(t *testing.T) {
 					"override_host": "",
 					"l4override": null,
 					"biso_admin_controls": null,
-					"add_headers": null
+					"add_headers": null,
+					"check_session": {
+						"enforce": true,
+						"duration": "15m0s"
+					}
 				}
 			}
 		}
@@ -202,7 +218,12 @@ func TestTeamsRule(t *testing.T) {
 			OverrideIPs:       nil,
 			OverrideHost:      "",
 			L4Override:        nil,
+			AddHeaders:        nil,
 			BISOAdminControls: nil,
+			CheckSession: &TeamsCheckSessionSettings{
+				Enforce:  true,
+				Duration: Duration{900 * time.Second},
+			},
 		},
 		CreatedAt: &createdAt,
 		UpdatedAt: &updatedAt,
@@ -247,7 +268,13 @@ func TestTeamsCreateRule(t *testing.T) {
 					"override_host": "",
 					"l4override": null,
 					"biso_admin_controls": null,
-					"add_headers": null
+					"add_headers": {
+						"X-Test": ["abcd"]
+					},
+					"check_session": {
+						"enforce": true,
+						"duration": "5m0s"
+					}
 				}
 			}
 		}
@@ -270,7 +297,12 @@ func TestTeamsCreateRule(t *testing.T) {
 			OverrideIPs:       nil,
 			OverrideHost:      "",
 			L4Override:        nil,
+			AddHeaders:        http.Header{"X-Test": []string{"abcd"}},
 			BISOAdminControls: nil,
+			CheckSession: &TeamsCheckSessionSettings{
+				Enforce:  true,
+				Duration: Duration{300 * time.Second},
+			},
 		},
 		DeletedAt: nil,
 	}
@@ -316,7 +348,8 @@ func TestTeamsUpdateRule(t *testing.T) {
 					"override_host": "",
 					"l4override": null,
 					"biso_admin_controls": null,
-					"add_headers": null
+					"add_headers": null,
+					"check_session": null
 				}
 			}
 		}
@@ -343,7 +376,9 @@ func TestTeamsUpdateRule(t *testing.T) {
 			OverrideIPs:       nil,
 			OverrideHost:      "",
 			L4Override:        nil,
+			AddHeaders:        nil,
 			BISOAdminControls: nil,
+			CheckSession:      nil,
 		},
 		CreatedAt: &createdAt,
 		UpdatedAt: &updatedAt,
@@ -383,7 +418,8 @@ func TestTeamsPatchRule(t *testing.T) {
 					"override_host": "",
 					"l4override": null,
 					"biso_admin_controls": null,
-					"add_headers": null
+					"add_headers": null,
+					"check_session": null
 				}
 			}
 		}
@@ -402,7 +438,9 @@ func TestTeamsPatchRule(t *testing.T) {
 			OverrideIPs:       nil,
 			OverrideHost:      "",
 			L4Override:        nil,
+			AddHeaders:        nil,
 			BISOAdminControls: nil,
+			CheckSession:      nil,
 		},
 	}
 
