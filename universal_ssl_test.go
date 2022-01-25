@@ -88,10 +88,13 @@ func TestUniversalSSLVerificationDetails(t *testing.T) {
 				"certificate_status": "active",
 				"verification_type": "cname",
 				"verification_status": true,
-				"verification_info": {
-					"record_name": "b3b90cfedd89a3e487d3e383c56c4267.example.com",
-					"record_target": "6979be7e4cfc9e5c603e31df7efac9cc60fee82d.comodoca.com"
-				},
+				"verification_info": [
+				{
+					"status": "pending",
+					"http_url": "http://example.com/.well-known/acme-challenge/Km-ycWoOVh10cLfL4pRPppGt6jU_mGz8xgvNOxudMiA",
+					"http_body": "Km-ycWoOVh10cLfL4pRPppGt6jU_mGz8xgvNOxudMiA.Jckzm7Z9uOFls_MXPYibNRz6koY5a8qpI_BeHtDtf-g"
+				}
+			],
 				"brand_check": false,
 				"validation_method": "txt",
 				"cert_pack_uuid": "a77f8bd7-3b47-46b4-a6f1-75cf98109948"
@@ -109,10 +112,10 @@ func TestUniversalSSLVerificationDetails(t *testing.T) {
 			CertPackUUID:       "a77f8bd7-3b47-46b4-a6f1-75cf98109948",
 			VerificationStatus: true,
 			BrandCheck:         false,
-			VerificationInfo: UniversalSSLVerificationInfo{
-				RecordName:   "b3b90cfedd89a3e487d3e383c56c4267.example.com",
-				RecordTarget: "6979be7e4cfc9e5c603e31df7efac9cc60fee82d.comodoca.com",
-			},
+			VerificationInfo: []SSLValidationRecord{{
+				HTTPUrl:  "http://example.com/.well-known/acme-challenge/Km-ycWoOVh10cLfL4pRPppGt6jU_mGz8xgvNOxudMiA",
+				HTTPBody: "Km-ycWoOVh10cLfL4pRPppGt6jU_mGz8xgvNOxudMiA.Jckzm7Z9uOFls_MXPYibNRz6koY5a8qpI_BeHtDtf-g",
+			}},
 		},
 	}
 
