@@ -56,7 +56,8 @@ type WorkerRouteResponse struct {
 // WorkerScript Cloudflare Worker struct with metadata.
 type WorkerScript struct {
 	WorkerMetaData
-	Script string `json:"script"`
+	Script     string `json:"script"`
+	UsageModel string `json:"usage_model,omitempty"`
 }
 
 // WorkerMetaData contains worker script information such as size, creation & modification dates.
