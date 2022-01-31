@@ -29,6 +29,10 @@ type WorkerScriptParams struct {
 	// Bindings should be a map where the keys are the binding name, and the
 	// values are the binding content
 	Bindings map[string]WorkerBinding
+
+	// Module changes the Content-Type header to specify the script is an
+	// ES Module syntax script.
+	Module bool
 }
 
 // WorkerRoute is used to map traffic matching a URL pattern to a workers
@@ -492,11 +496,16 @@ func (api *API) ListWorkerScripts(ctx context.Context) (WorkerListResponse, erro
 // UploadWorker push raw script content for your worker.
 //
 // API reference: https://api.cloudflare.com/#worker-script-upload-worker
-func (api *API) UploadWorker(ctx context.Context, requestParams *WorkerRequestParams, data string) (WorkerScriptResponse, error) {
-	if requestParams.ScriptName != "" {
-		return api.uploadWorkerWithName(ctx, requestParams.ScriptName, "application/javascript", []byte(data))
+func (api *API) UploadWorker(ctx context.Context, requestParams *WorkerRequestParams, params *WorkerScriptParams) (WorkerScriptResponse, error) {
+	contentType := "application/javascript"
+	if params.Module {
+		contentType = "application/javascript+module"
 	}
-	return api.uploadWorkerForZone(ctx, requestParams.ZoneID, "application/javascript", []byte(data))
+
+	if requestParams.ScriptName != "" {
+		return api.uploadWorkerWithName(ctx, requestParams.ScriptName, contentType, []byte(params.Script))
+	}
+	return api.uploadWorkerForZone(ctx, requestParams.ZoneID, contentType, []byte(params.Script))
 }
 
 // UploadWorkerWithBindings push raw script content and bindings for your worker
@@ -594,7 +603,13 @@ func formatMultipartBody(params *WorkerScriptParams) (string, []byte, error) {
 	// Write script part
 	hdr = textproto.MIMEHeader{}
 	hdr.Set("content-disposition", fmt.Sprintf(`form-data; name="%s"`, scriptPartName))
-	hdr.Set("content-type", "application/javascript")
+
+	contentType := "application/javascript"
+	if params.Module {
+		contentType = "application/javascript+module"
+	}
+	hdr.Set("content-type", contentType)
+
 	pw, err = mpw.CreatePart(hdr)
 	if err != nil {
 		return "", nil, err

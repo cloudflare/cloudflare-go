@@ -31,6 +31,17 @@ const (
     "errors": [],
     "messages": []
 }`
+	uploadWorkerModuleResponseData = `{
+    "result": {
+        "script": "export default {\n    async fetch(request, env, event) {\n     event.passThroughOnException()\n    return fetch(request)\n    }\n}",
+        "etag": "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
+        "size": 191,
+        "modified_on": "2018-06-09T15:17:01.989141Z"
+    },
+    "success": true,
+    "errors": [],
+    "messages": []
+}`
 	updateWorkerRouteResponse = `{
     "result": {
         "id": "e7a57d8746e74ae49c25994dadb421b1",
@@ -160,6 +171,7 @@ const (
 var (
 	successResponse               = Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}}
 	workerScript                  = "addEventListener('fetch', event => {\n    event.passThroughOnException()\nevent.respondWith(handleRequest(event.request))\n})\n\nasync function handleRequest(request) {\n    return fetch(request)\n}"
+	workerModuleScript            = "export default {\n    async fetch(request, env, event) {\n     event.passThroughOnException()\n    return fetch(request)\n    }\n}"
 	deleteWorkerRouteResponseData = createWorkerRouteResponse
 )
 
@@ -368,12 +380,40 @@ func TestWorkers_UploadWorker(t *testing.T) {
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, uploadWorkerResponseData) //nolint
 	})
-	res, err := client.UploadWorker(context.Background(), &WorkerRequestParams{ZoneID: "foo"}, workerScript)
+	res, err := client.UploadWorker(context.Background(), &WorkerRequestParams{ZoneID: "foo"}, &WorkerScriptParams{Script: workerScript})
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
 		WorkerScript{
 			Script: workerScript,
+			WorkerMetaData: WorkerMetaData{
+				ETAG:       "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
+				Size:       191,
+				ModifiedOn: formattedTime,
+			},
+		}}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
+}
+
+func TestWorkers_UploadWorkerAsModule(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/zones/foo/workers/script", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+		contentTypeHeader := r.Header.Get("content-type")
+		assert.Equal(t, "application/javascript+module", contentTypeHeader, "Expected content-type request header to be 'application/javascript+module', got %s", contentTypeHeader)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, uploadWorkerModuleResponseData) //nolint
+	})
+	res, err := client.UploadWorker(context.Background(), &WorkerRequestParams{ZoneID: "foo"}, &WorkerScriptParams{Script: workerModuleScript, Module: true})
+	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
+	want := WorkerScriptResponse{
+		successResponse,
+		WorkerScript{
+			Script: workerModuleScript,
 			WorkerMetaData: WorkerMetaData{
 				ETAG:       "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
 				Size:       191,
@@ -396,7 +436,7 @@ func TestWorkers_UploadWorkerWithName(t *testing.T) {
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, uploadWorkerResponseData) //nolint
 	})
-	res, err := client.UploadWorker(context.Background(), &WorkerRequestParams{ScriptName: "bar"}, workerScript)
+	res, err := client.UploadWorker(context.Background(), &WorkerRequestParams{ScriptName: "bar"}, &WorkerScriptParams{Script: workerScript})
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
@@ -424,7 +464,7 @@ func TestWorkers_UploadWorkerSingleScriptWithAccount(t *testing.T) {
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, uploadWorkerResponseData) //nolint
 	})
-	res, err := client.UploadWorker(context.Background(), &WorkerRequestParams{ZoneID: "foo"}, workerScript)
+	res, err := client.UploadWorker(context.Background(), &WorkerRequestParams{ZoneID: "foo"}, &WorkerScriptParams{Script: workerScript})
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
@@ -445,7 +485,7 @@ func TestWorkers_UploadWorkerWithNameErrorsWithoutAccountId(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.UploadWorker(context.Background(), &WorkerRequestParams{ScriptName: "bar"}, workerScript)
+	_, err := client.UploadWorker(context.Background(), &WorkerRequestParams{ScriptName: "bar"}, &WorkerScriptParams{Script: workerScript})
 	assert.Error(t, err)
 }
 
@@ -622,6 +662,44 @@ func TestWorkers_UploadWorkerWithPlainTextBinding(t *testing.T) {
 
 	scriptParams := WorkerScriptParams{
 		Script: workerScript,
+		Bindings: map[string]WorkerBinding{
+			"b1": WorkerPlainTextBinding{
+				Text: "plain text value",
+			},
+		},
+	}
+	_, err := client.UploadWorkerWithBindings(context.Background(), &WorkerRequestParams{ScriptName: "bar"}, &scriptParams)
+	assert.NoError(t, err)
+}
+
+func TestWorkers_UploadWorkerAsModuleWithPlainTextBinding(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+
+		mpUpload, err := parseMultipartUpload(r)
+		assert.NoError(t, err)
+
+		expectedBindings := map[string]workerBindingMeta{
+			"b1": {
+				"name": "b1",
+				"type": "plain_text",
+				"text": "plain text value",
+			},
+		}
+		assert.Equal(t, workerModuleScript, mpUpload.Script)
+		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, uploadWorkerModuleResponseData) //nolint
+	}
+	mux.HandleFunc("/accounts/foo/workers/scripts/bar", handler)
+
+	scriptParams := WorkerScriptParams{
+		Script: workerModuleScript,
+		Module: true,
 		Bindings: map[string]WorkerBinding{
 			"b1": WorkerPlainTextBinding{
 				Text: "plain text value",
