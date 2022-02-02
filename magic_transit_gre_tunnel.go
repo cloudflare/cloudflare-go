@@ -26,8 +26,8 @@ type MagicTransitGRETunnel struct {
 	CloudflareGREEndpoint string                           `json:"cloudflare_gre_endpoint"`
 	InterfaceAddress      string                           `json:"interface_address"`
 	Description           string                           `json:"description,omitempty"`
-	TTL                   int8                             `json:"ttl,omitempty"`
-	MTU                   int16                            `json:"mtu,omitempty"`
+	TTL                   uint8                            `json:"ttl,omitempty"`
+	MTU                   uint16                           `json:"mtu,omitempty"`
 	HealthCheck           MagicTransitGRETunnelHealthcheck `json:"health_check"`
 }
 
