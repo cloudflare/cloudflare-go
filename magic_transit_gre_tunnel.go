@@ -18,22 +18,22 @@ const (
 
 // MagicTransitGRETunnel contains information about a GRE tunnel.
 type MagicTransitGRETunnel struct {
-	ID                    string                           `json:"id,omitempty"`
-	CreatedOn             *time.Time                       `json:"created_on,omitempty"`
-	ModifiedOn            *time.Time                       `json:"modified_on,omitempty"`
-	Name                  string                           `json:"name"`
-	CustomerGREEndpoint   string                           `json:"customer_gre_endpoint"`
-	CloudflareGREEndpoint string                           `json:"cloudflare_gre_endpoint"`
-	InterfaceAddress      string                           `json:"interface_address"`
-	Description           string                           `json:"description,omitempty"`
-	TTL                   uint8                            `json:"ttl,omitempty"`
-	MTU                   uint16                           `json:"mtu,omitempty"`
-	HealthCheck           MagicTransitGRETunnelHealthcheck `json:"health_check"`
+	ID                    string                            `json:"id,omitempty"`
+	CreatedOn             *time.Time                        `json:"created_on,omitempty"`
+	ModifiedOn            *time.Time                        `json:"modified_on,omitempty"`
+	Name                  string                            `json:"name"`
+	CustomerGREEndpoint   string                            `json:"customer_gre_endpoint"`
+	CloudflareGREEndpoint string                            `json:"cloudflare_gre_endpoint"`
+	InterfaceAddress      string                            `json:"interface_address"`
+	Description           string                            `json:"description,omitempty"`
+	TTL                   uint8                             `json:"ttl,omitempty"`
+	MTU                   uint16                            `json:"mtu,omitempty"`
+	HealthCheck           *MagicTransitGRETunnelHealthcheck `json:"health_check,omitempty"`
 }
 
 // MagicTransitGRETunnelHealthcheck contains information about a GRE tunnel health check.
 type MagicTransitGRETunnelHealthcheck struct {
-	Enabled bool   `json:"enabled,omitempty"`
+	Enabled bool   `json:"enabled"`
 	Target  string `json:"target,omitempty"`
 	Type    string `json:"type,omitempty"`
 }
