@@ -40,6 +40,8 @@ type CertificatePack struct {
 	Hosts              []string                     `json:"hosts"`
 	Certificates       []CertificatePackCertificate `json:"certificates"`
 	PrimaryCertificate string                       `json:"primary_certificate"`
+	ValidationRecords  []SSLValidationRecord        `json:"validation_records,omitempty"`
+	ValidationErrors   []SSLValidationError         `json:"validation_errors,omitempty"`
 }
 
 // CertificatePackRequest is used for requesting a new certificate.

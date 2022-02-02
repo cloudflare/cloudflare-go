@@ -158,3 +158,17 @@ func (api *API) DeleteSSL(ctx context.Context, zoneID, certificateID string) err
 	}
 	return nil
 }
+
+// SSLValidationRecord displays Domain Control Validation tokens.
+type SSLValidationRecord struct {
+	CnameTarget string `json:"cname_target,omitempty"`
+	CnameName   string `json:"cname,omitempty"`
+
+	TxtName  string `json:"txt_name,omitempty"`
+	TxtValue string `json:"txt_value,omitempty"`
+
+	HTTPUrl  string `json:"http_url,omitempty"`
+	HTTPBody string `json:"http_body,omitempty"`
+
+	Emails []string `json:"emails,omitempty"`
+}
