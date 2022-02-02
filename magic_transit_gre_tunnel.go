@@ -77,7 +77,7 @@ type DeleteMagicTransitGRETunnelResponse struct {
 	} `json:"result"`
 }
 
-// ListMagicTransitGRETunnels lists all GRE tunnels for a given account
+// ListMagicTransitGRETunnels lists all GRE tunnels for a given account.
 //
 // API reference: https://api.cloudflare.com/#magic-gre-tunnels-list-gre-tunnels
 func (api *API) ListMagicTransitGRETunnels(ctx context.Context, accountID string) ([]MagicTransitGRETunnel, error) {
@@ -95,7 +95,7 @@ func (api *API) ListMagicTransitGRETunnels(ctx context.Context, accountID string
 	return result.Result.GRETunnels, nil
 }
 
-// GetMagicTransitGRETunnel returns zero or one GRE tunnel
+// GetMagicTransitGRETunnel returns zero or one GRE tunnel.
 //
 // API reference: https://api.cloudflare.com/#magic-gre-tunnels-gre-tunnel-details
 func (api *API) GetMagicTransitGRETunnel(ctx context.Context, accountID string, id string) (MagicTransitGRETunnel, error) {
@@ -113,7 +113,7 @@ func (api *API) GetMagicTransitGRETunnel(ctx context.Context, accountID string, 
 	return result.Result.GRETunnel, nil
 }
 
-// CreateMagicTransitGRETunnels creates one or more GRE tunnels
+// CreateMagicTransitGRETunnels creates one or more GRE tunnels.
 //
 // API reference: https://api.cloudflare.com/#magic-gre-tunnels-create-gre-tunnels
 func (api *API) CreateMagicTransitGRETunnels(ctx context.Context, accountID string, tunnels []MagicTransitGRETunnel) ([]MagicTransitGRETunnel, error) {
@@ -134,7 +134,7 @@ func (api *API) CreateMagicTransitGRETunnels(ctx context.Context, accountID stri
 	return result.Result.GRETunnels, nil
 }
 
-// UpdateMagicTransitGRETunnel updates a GRE tunnel
+// UpdateMagicTransitGRETunnel updates a GRE tunnel.
 //
 // API reference: https://api.cloudflare.com/#magic-gre-tunnels-update-gre-tunnel
 func (api *API) UpdateMagicTransitGRETunnel(ctx context.Context, accountID string, id string, tunnel MagicTransitGRETunnel) (MagicTransitGRETunnel, error) {
@@ -157,7 +157,7 @@ func (api *API) UpdateMagicTransitGRETunnel(ctx context.Context, accountID strin
 	return result.Result.ModifiedGRETunnel, nil
 }
 
-// DeleteMagicTransitGRETunnel deletes a GRE tunnel
+// DeleteMagicTransitGRETunnel deletes a GRE tunnel.
 //
 // API reference: https://api.cloudflare.com/#magic-gre-tunnels-delete-gre-tunnel
 func (api *API) DeleteMagicTransitGRETunnel(ctx context.Context, accountID string, id string) (MagicTransitGRETunnel, error) {
