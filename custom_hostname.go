@@ -73,7 +73,7 @@ type CustomHostnameSSL struct {
 	SerialNumber         string                          `json:"serial_number,omitempty"`
 	Settings             CustomHostnameSSLSettings       `json:"settings,omitempty"`
 	Certificates         []CustomHostnameSSLCertificates `json:"certificates,omitempty"`
-	// Deprecated, use ValidationRecords.
+	// Deprecated: use ValidationRecords.
 	// If there a single validation record, this will equal ValidationRecords[0] for backwards compatibility.
 	SSLValidationRecord
 	ValidationRecords []SSLValidationRecord `json:"validation_records,omitempty"`
