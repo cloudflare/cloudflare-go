@@ -25,20 +25,20 @@ func TestListMagicTransitGRETunnels(t *testing.T) {
         "gre_tunnels": [
           {
             "id": "c4a7362d577a6c3019a474fd6f485821",
-			"created_on": "2017-06-14T00:00:00Z",
+            "created_on": "2017-06-14T00:00:00Z",
             "modified_on": "2017-06-14T05:20:00Z",
             "name": "GRE_1",
             "customer_gre_endpoint": "203.0.113.1",
-        	"cloudflare_gre_endpoint": "203.0.113.2",
-        	"interface_address": "192.0.2.0/31",
-        	"description": "Tunnel for ISP X",
-        	"ttl": 64,
-        	"mtu": 1476,
-        	"health_check": {
-          		"enabled": true,
-          		"target": "203.0.113.1",
-          		"type": "request"
-			}
+            "cloudflare_gre_endpoint": "203.0.113.2",
+            "interface_address": "192.0.2.0/31",
+            "description": "Tunnel for ISP X",
+            "ttl": 64,
+            "mtu": 1476,
+            "health_check": {
+              "enabled": true,
+              "target": "203.0.113.1",
+              "type": "request"
+            }
           }
         ]
       }
@@ -89,22 +89,22 @@ func TestGetMagicTransitGRETunnel(t *testing.T) {
       "messages": [],
       "result": {
         "gre_tunnel": {
-		  "id": "c4a7362d577a6c3019a474fd6f485821",
-		  "created_on": "2017-06-14T00:00:00Z",
-		  "modified_on": "2017-06-14T05:20:00Z",
-		  "name": "GRE_1",
-		  "customer_gre_endpoint": "203.0.113.1",
-		  "cloudflare_gre_endpoint": "203.0.113.2",
-		  "interface_address": "192.0.2.0/31",
-		  "description": "Tunnel for ISP X",
-		  "ttl": 64,
-		  "mtu": 1476,
-		  "health_check": {
-		    "enabled": true,
-		    "target": "203.0.113.1",
-		    "type": "request"
-		  }
-		}
+          "id": "c4a7362d577a6c3019a474fd6f485821",
+          "created_on": "2017-06-14T00:00:00Z",
+          "modified_on": "2017-06-14T05:20:00Z",
+          "name": "GRE_1",
+          "customer_gre_endpoint": "203.0.113.1",
+          "cloudflare_gre_endpoint": "203.0.113.2",
+          "interface_address": "192.0.2.0/31",
+          "description": "Tunnel for ISP X",
+          "ttl": 64,
+          "mtu": 1476,
+          "health_check": {
+            "enabled": true,
+            "target": "203.0.113.1",
+            "type": "request"
+          }
+        }
       }
     }`)
 	}
@@ -153,20 +153,20 @@ func TestCreateMagicTransitGRETunnels(t *testing.T) {
         "gre_tunnels": [
           {
             "id": "c4a7362d577a6c3019a474fd6f485821",
-			"created_on": "2017-06-14T00:00:00Z",
+            "created_on": "2017-06-14T00:00:00Z",
             "modified_on": "2017-06-14T05:20:00Z",
             "name": "GRE_1",
             "customer_gre_endpoint": "203.0.113.1",
-        	"cloudflare_gre_endpoint": "203.0.113.2",
-        	"interface_address": "192.0.2.0/31",
-        	"description": "Tunnel for ISP X",
-        	"ttl": 64,
-        	"mtu": 1476,
-        	"health_check": {
-          		"enabled": true,
-          		"target": "203.0.113.1",
-          		"type": "request"
-			}
+            "cloudflare_gre_endpoint": "203.0.113.2",
+            "interface_address": "192.0.2.0/31",
+            "description": "Tunnel for ISP X",
+            "ttl": 64,
+            "mtu": 1476,
+            "health_check": {
+                  "enabled": true,
+                  "target": "203.0.113.1",
+                  "type": "request"
+            }
           }
         ]
       }
@@ -218,22 +218,22 @@ func TestUpdateMagicTransitGRETunnel(t *testing.T) {
       "result": {
         "modified": true,
         "modified_gre_tunnel": {
-		  "id": "c4a7362d577a6c3019a474fd6f485821",
-		  "created_on": "2017-06-14T00:00:00Z",
-		  "modified_on": "2017-06-14T05:20:00Z",
-		  "name": "GRE_1",
-		  "customer_gre_endpoint": "203.0.113.1",
-		  "cloudflare_gre_endpoint": "203.0.113.2",
-		  "interface_address": "192.0.2.0/31",
-		  "description": "Tunnel for ISP X",
-		  "ttl": 64,
-		  "mtu": 1476,
-		  "health_check": {
-		    "enabled": true,
-		    "target": "203.0.113.1",
-		    "type": "request"
-		  }
-		}
+          "id": "c4a7362d577a6c3019a474fd6f485821",
+          "created_on": "2017-06-14T00:00:00Z",
+          "modified_on": "2017-06-14T05:20:00Z",
+          "name": "GRE_1",
+          "customer_gre_endpoint": "203.0.113.1",
+          "cloudflare_gre_endpoint": "203.0.113.2",
+          "interface_address": "192.0.2.0/31",
+          "description": "Tunnel for ISP X",
+          "ttl": 64,
+          "mtu": 1476,
+          "health_check": {
+            "enabled": true,
+            "target": "203.0.113.1",
+            "type": "request"
+          }
+        }
       }
     }`)
 	}
@@ -281,22 +281,22 @@ func TestDeleteMagicTransitGRETunnel(t *testing.T) {
       "result": {
         "deleted": true,
         "deleted_gre_tunnel": {
-		  "id": "c4a7362d577a6c3019a474fd6f485821",
-		  "created_on": "2017-06-14T00:00:00Z",
-		  "modified_on": "2017-06-14T05:20:00Z",
-		  "name": "GRE_1",
-		  "customer_gre_endpoint": "203.0.113.1",
-		  "cloudflare_gre_endpoint": "203.0.113.2",
-		  "interface_address": "192.0.2.0/31",
-		  "description": "Tunnel for ISP X",
-		  "ttl": 64,
-		  "mtu": 1476,
-		  "health_check": {
-		    "enabled": true,
-		    "target": "203.0.113.1",
-		    "type": "request"
-		  }
-		}
+          "id": "c4a7362d577a6c3019a474fd6f485821",
+          "created_on": "2017-06-14T00:00:00Z",
+          "modified_on": "2017-06-14T05:20:00Z",
+          "name": "GRE_1",
+          "customer_gre_endpoint": "203.0.113.1",
+          "cloudflare_gre_endpoint": "203.0.113.2",
+          "interface_address": "192.0.2.0/31",
+          "description": "Tunnel for ISP X",
+          "ttl": 64,
+          "mtu": 1476,
+          "health_check": {
+            "enabled": true,
+            "target": "203.0.113.1",
+            "type": "request"
+          }
+        }
       }
     }`)
 	}
