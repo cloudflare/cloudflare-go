@@ -62,7 +62,7 @@ func TestListMagicTransitGRETunnels(t *testing.T) {
 			Description:           "Tunnel for ISP X",
 			TTL:                   64,
 			MTU:                   1476,
-			HealthCheck: MagicTransitGRETunnelHealthcheck{
+			HealthCheck: &MagicTransitGRETunnelHealthcheck{
 				Enabled: true,
 				Target:  "203.0.113.1",
 				Type:    "request",
@@ -125,7 +125,7 @@ func TestGetMagicTransitGRETunnel(t *testing.T) {
 		Description:           "Tunnel for ISP X",
 		TTL:                   64,
 		MTU:                   1476,
-		HealthCheck: MagicTransitGRETunnelHealthcheck{
+		HealthCheck: &MagicTransitGRETunnelHealthcheck{
 			Enabled: true,
 			Target:  "203.0.113.1",
 			Type:    "request",
@@ -190,7 +190,7 @@ func TestCreateMagicTransitGRETunnels(t *testing.T) {
 			Description:           "Tunnel for ISP X",
 			TTL:                   64,
 			MTU:                   1476,
-			HealthCheck: MagicTransitGRETunnelHealthcheck{
+			HealthCheck: &MagicTransitGRETunnelHealthcheck{
 				Enabled: true,
 				Target:  "203.0.113.1",
 				Type:    "request",
@@ -254,7 +254,7 @@ func TestUpdateMagicTransitGRETunnel(t *testing.T) {
 		Description:           "Tunnel for ISP X",
 		TTL:                   64,
 		MTU:                   1476,
-		HealthCheck: MagicTransitGRETunnelHealthcheck{
+		HealthCheck: &MagicTransitGRETunnelHealthcheck{
 			Enabled: true,
 			Target:  "203.0.113.1",
 			Type:    "request",
@@ -317,7 +317,7 @@ func TestDeleteMagicTransitGRETunnel(t *testing.T) {
 		Description:           "Tunnel for ISP X",
 		TTL:                   64,
 		MTU:                   1476,
-		HealthCheck: MagicTransitGRETunnelHealthcheck{
+		HealthCheck: &MagicTransitGRETunnelHealthcheck{
 			Enabled: true,
 			Target:  "203.0.113.1",
 			Type:    "request",
