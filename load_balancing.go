@@ -80,6 +80,7 @@ type LoadBalancer struct {
 	DefaultPools              []string                   `json:"default_pools"`
 	RegionPools               map[string][]string        `json:"region_pools"`
 	PopPools                  map[string][]string        `json:"pop_pools"`
+	CountryPools              map[string][]string        `json:"country_pools"`
 	Proxied                   bool                       `json:"proxied"`
 	Enabled                   *bool                      `json:"enabled,omitempty"`
 	Persistence               string                     `json:"session_affinity,omitempty"`
@@ -89,11 +90,11 @@ type LoadBalancer struct {
 
 	// SteeringPolicy controls pool selection logic.
 	// "off" select pools in DefaultPools order
-	// "geo" select pools based on RegionPools/PopPools
+	// "geo" select pools based on RegionPools/PopPools/CountryPools
 	// "dynamic_latency" select pools based on RTT (requires health checks)
 	// "random" selects pools in a random order
 	// "proximity" select pools based on 'distance' from request
-	// "" maps to "geo" if RegionPools or PopPools have entries otherwise "off"
+	// "" maps to "geo" if RegionPools or PopPools or CountryPools have entries otherwise "off"
 	SteeringPolicy string `json:"steering_policy,omitempty"`
 }
 
@@ -156,6 +157,7 @@ type LoadBalancerRuleOverrides struct {
 	DefaultPools []string            `json:"default_pools,omitempty"`
 	PoPPools     map[string][]string `json:"pop_pools,omitempty"`
 	RegionPools  map[string][]string `json:"region_pools,omitempty"`
+	CountryPools map[string][]string `json:"country_pools,omitempty"`
 }
 
 // LoadBalancerRuleOverridesSessionAffinityAttrs mimics SessionAffinityAttributes without the
