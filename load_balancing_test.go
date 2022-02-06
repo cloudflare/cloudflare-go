@@ -909,7 +909,15 @@ func TestCreateLoadBalancer(t *testing.T) {
                 "ENAM": [
                   "00920f38ce07c2e2f4df50b1f61d4194"
                 ]
-			  },
+              },
+              "country_pools": {
+                "US": [
+                  "de90f38ced07c2e2f4df50b1f61d4194"
+                ],
+                "GB": [
+                  "abd90f38ced07c2e2f4df50b1f61d4194"
+                ]
+              },
               "pop_pools": {
                 "LAX": [
                   "de90f38ced07c2e2f4df50b1f61d4194",
@@ -970,6 +978,14 @@ func TestCreateLoadBalancer(t *testing.T) {
                   ],
                   "ENAM": [
                     "00920f38ce07c2e2f4df50b1f61d4194"
+                  ]
+                },
+                "country_pools": {
+                  "US": [
+                    "de90f38ced07c2e2f4df50b1f61d4194"
+                  ],
+                  "GB": [
+                    "abd90f38ced07c2e2f4df50b1f61d4194"
                   ]
                 },
                 "pop_pools": {
@@ -1033,6 +1049,14 @@ func TestCreateLoadBalancer(t *testing.T) {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
+		CountryPools: map[string][]string{
+			"US": {
+				"de90f38ced07c2e2f4df50b1f61d4194",
+			},
+			"GB": {
+				"abd90f38ced07c2e2f4df50b1f61d4194",
+			},
+		},
 		PopPools: map[string][]string{
 			"LAX": {
 				"de90f38ced07c2e2f4df50b1f61d4194",
@@ -1083,6 +1107,14 @@ func TestCreateLoadBalancer(t *testing.T) {
 			},
 			"ENAM": {
 				"00920f38ce07c2e2f4df50b1f61d4194",
+			},
+		},
+		CountryPools: map[string][]string{
+			"US": {
+				"de90f38ced07c2e2f4df50b1f61d4194",
+			},
+			"GB": {
+				"abd90f38ced07c2e2f4df50b1f61d4194",
 			},
 		},
 		PopPools: map[string][]string{
@@ -1159,6 +1191,14 @@ func TestListLoadBalancers(t *testing.T) {
                         "00920f38ce07c2e2f4df50b1f61d4194"
                       ]
                     },
+                    "country_pools": {
+                      "US": [
+                        "de90f38ced07c2e2f4df50b1f61d4194"
+                      ],
+                      "GB": [
+                        "abd90f38ced07c2e2f4df50b1f61d4194"
+                      ]
+                    },
                     "pop_pools": {
                       "LAX": [
                         "de90f38ced07c2e2f4df50b1f61d4194",
@@ -1208,6 +1248,14 @@ func TestListLoadBalancers(t *testing.T) {
 				},
 				"ENAM": {
 					"00920f38ce07c2e2f4df50b1f61d4194",
+				},
+			},
+			CountryPools: map[string][]string{
+				"US": {
+					"de90f38ced07c2e2f4df50b1f61d4194",
+				},
+				"GB": {
+					"abd90f38ced07c2e2f4df50b1f61d4194",
 				},
 			},
 			PopPools: map[string][]string{
@@ -1266,6 +1314,14 @@ func TestLoadBalancerDetails(t *testing.T) {
                     "00920f38ce07c2e2f4df50b1f61d4194"
                   ]
                 },
+                "country_pools": {
+                  "US": [
+                    "de90f38ced07c2e2f4df50b1f61d4194"
+                  ],
+                  "GB": [
+                    "abd90f38ced07c2e2f4df50b1f61d4194"
+                  ]
+                },
                 "pop_pools": {
                   "LAX": [
                     "de90f38ced07c2e2f4df50b1f61d4194",
@@ -1307,6 +1363,14 @@ func TestLoadBalancerDetails(t *testing.T) {
 			},
 			"ENAM": {
 				"00920f38ce07c2e2f4df50b1f61d4194",
+			},
+		},
+		CountryPools: map[string][]string{
+			"US": {
+				"de90f38ced07c2e2f4df50b1f61d4194",
+			},
+			"GB": {
+				"abd90f38ced07c2e2f4df50b1f61d4194",
 			},
 		},
 		PopPools: map[string][]string{
@@ -1383,6 +1447,14 @@ func TestModifyLoadBalancer(t *testing.T) {
                     "00920f38ce07c2e2f4df50b1f61d4194"
                   ]
                 },
+                "country_pools": {
+                  "US": [
+                    "de90f38ced07c2e2f4df50b1f61d4194"
+                  ],
+                  "GB": [
+                    "f9138c5d07c2e2f4df57b1f61d4196"
+                  ]
+                },
                 "pop_pools": {
                   "LAX": [
                     "9290f38c5d07c2e2f4df57b1f61d4196"
@@ -1423,6 +1495,14 @@ func TestModifyLoadBalancer(t *testing.T) {
                   ],
                   "ENAM": [
                     "00920f38ce07c2e2f4df50b1f61d4194"
+                  ]
+                },
+                "country_pools": {
+                  "US": [
+                    "de90f38ced07c2e2f4df50b1f61d4194"
+                  ],
+                  "GB": [
+                    "f9138c5d07c2e2f4df57b1f61d4196"
                   ]
                 },
                 "pop_pools": {
@@ -1468,6 +1548,14 @@ func TestModifyLoadBalancer(t *testing.T) {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
+		CountryPools: map[string][]string{
+			"US": {
+				"de90f38ced07c2e2f4df50b1f61d4194",
+			},
+			"GB": {
+				"f9138c5d07c2e2f4df57b1f61d4196",
+			},
+		},
 		PopPools: map[string][]string{
 			"LAX": {
 				"9290f38c5d07c2e2f4df57b1f61d4196",
@@ -1501,6 +1589,14 @@ func TestModifyLoadBalancer(t *testing.T) {
 			},
 			"ENAM": {
 				"00920f38ce07c2e2f4df50b1f61d4194",
+			},
+		},
+		CountryPools: map[string][]string{
+			"US": {
+				"de90f38ced07c2e2f4df50b1f61d4194",
+			},
+			"GB": {
+				"f9138c5d07c2e2f4df57b1f61d4196",
 			},
 		},
 		PopPools: map[string][]string{
