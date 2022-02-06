@@ -109,23 +109,26 @@ type LoadBalancerLoadShedding struct {
 // LoadBalancerRule represents a single rule entry for a Load Balancer. Each rules
 // is run one after the other in priority order. Disabled rules are skipped.
 type LoadBalancerRule struct {
-	// Name is required but is only used for human readability
-	Name string `json:"name"`
-	// Priority controls the order of rule execution the lowest value will be invoked first
-	Priority int  `json:"priority"`
-	Disabled bool `json:"disabled"`
-
-	Condition string                    `json:"condition"`
 	Overrides LoadBalancerRuleOverrides `json:"overrides"`
 
-	// Terminates flag this rule as 'terminating'. No further rules will
-	// be executed after this one.
-	Terminates bool `json:"terminates,omitempty"`
+	// Name is required but is only used for human readability
+	Name string `json:"name"`
+
+	Condition string `json:"condition"`
+
+	// Priority controls the order of rule execution the lowest value will be invoked first
+	Priority int `json:"priority"`
 
 	// FixedResponse if set and the condition is true we will not run
 	// routing logic but rather directly respond with the provided fields.
 	// FixedResponse implies terminates.
 	FixedResponse *LoadBalancerFixedResponseData `json:"fixed_response,omitempty"`
+
+	Disabled bool `json:"disabled"`
+
+	// Terminates flag this rule as 'terminating'. No further rules will
+	// be executed after this one.
+	Terminates bool `json:"terminates,omitempty"`
 }
 
 // LoadBalancerFixedResponseData contains all the data needed to generate
