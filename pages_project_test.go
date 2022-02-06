@@ -43,14 +43,20 @@ const (
 			"env_vars": {
 			  "BUILD_VERSION": {
 				"value": "1.2"
-			  }
+			  },
+              "ENV": {
+                "value": "preview"
+              }
 			}
 		  },
 		  "production": {
 			"env_vars": {
 			  "BUILD_VERSION": {
 				"value": "1.2"
-			  }
+			  },
+              "ENV": {
+                "value": "production"
+              }
 			}
 		  }
 		},
@@ -289,11 +295,25 @@ var (
 	}
 
 	expectedPagesProjectDeploymentConfigPreview = &PagesProjectDeploymentConfigEnvironment{
-		EnvVars: PagesProjectDeploymentConfigEnvVars{BuildVersion: PagesProjectDeploymentConfigBuildVersion{Value: "1.2"}},
+		EnvVars: map[string]PagesProjectDeploymentVar{
+			"BUILD_VERSION": {
+				Value: "1.2",
+			},
+			"ENV": {
+				Value: "preview",
+			},
+		},
 	}
 
 	expectedPagesProjectDeploymentConfigProduction = &PagesProjectDeploymentConfigEnvironment{
-		EnvVars: PagesProjectDeploymentConfigEnvVars{BuildVersion: PagesProjectDeploymentConfigBuildVersion{Value: "1.2"}},
+		EnvVars: map[string]PagesProjectDeploymentVar{
+			"BUILD_VERSION": {
+				Value: "1.2",
+			},
+			"ENV": {
+				Value: "production",
+			},
+		},
 	}
 
 	expectedPagesProjectSource = &PagesProjectSource{

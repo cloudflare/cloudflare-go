@@ -58,16 +58,11 @@ type PagesProjectDeploymentConfigs struct {
 
 // PagesProjectDeploymentConfigEnvironment represents the configuration for preview or production deploys.
 type PagesProjectDeploymentConfigEnvironment struct {
-	EnvVars PagesProjectDeploymentConfigEnvVars `json:"env_vars"`
-}
-
-// PagesProjectDeploymentConfigEnvVars represents the BUILD_VERSION environment variables for a specific build config.
-type PagesProjectDeploymentConfigEnvVars struct {
-	BuildVersion PagesProjectDeploymentConfigBuildVersion `json:"BUILD_VERSION"`
+	EnvVars map[string]PagesProjectDeploymentVar `json:"env_vars"`
 }
 
 // PagesProjectDeploymentConfigBuildVersion represents a value for a BUILD_VERSION.
-type PagesProjectDeploymentConfigBuildVersion struct {
+type PagesProjectDeploymentVar struct {
 	Value string `json:"value"`
 }
 
