@@ -91,7 +91,7 @@ func TestRevokeTeamsDevices(t *testing.T) {
 	deviceIds := []string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415", "g174e90a-fafe-4643-bbbc-4a0ed4fc8415"}
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'Post', got %s", r.Method)
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
       "result": null,

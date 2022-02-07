@@ -65,13 +65,13 @@ func (api *API) ListTeamsDevices(ctx context.Context, accountID string) ([]Teams
 	return response.Result, nil
 }
 
-// RevokeTeamsDevice revokes device with given identifiers
+// RevokeTeamsDevice revokes device with given identifiers.
 //
 // API reference : https://api.cloudflare.com/#devices-revoke-devices
 func (api *API) RevokeTeamsDevices(ctx context.Context, accountID string, deviceIds []string) (Response, error) {
 	uri := fmt.Sprintf("/%s/%s/devices/revoke", AccountRouteRoot, accountID)
 
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPost, uri, deviceIds, http.Header{"Content-Type": []string{"application/json"}})
+	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPost, uri, deviceIds)
 	if err != nil {
 		return Response{}, err
 	}
@@ -84,7 +84,7 @@ func (api *API) RevokeTeamsDevices(ctx context.Context, accountID string, device
 	return result, err
 }
 
-// GetTeamsDeviceDetails gets device details
+// GetTeamsDeviceDetails gets device details.
 //
 // API reference : https://api.cloudflare.com/#devices-device-details
 func (api *API) GetTeamsDeviceDetails(ctx context.Context, accountID string, deviceID string) (TeamsDeviceListItem, error) {
