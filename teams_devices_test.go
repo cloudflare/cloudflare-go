@@ -18,36 +18,36 @@ func TestTeamsDevicesList(t *testing.T) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `
-		{
-			"success": true,
-			"errors": [],
-			"messages": [],
-			"result": [
-			  {
-				"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-				"user": {
-				  "id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-				  "name": "John Appleseed",
-				  "email": "user@example.com"
-				},
-				"key": "yek0SUYoOQ10vMGsIYAevozXUQpQtNFJFfFGqER/BGc=",
-				"device_type": "windows",
-				"name": "My mobile device",
-				"model": "MyPhone(pro-X)",
-				"manufacturer": "My phone corp",
-				"deleted": true,
-				"version": "1.0.0",
-				"serial_number": "EXAMPLEHMD6R",
-				"os_version": "10.0.0",
-				"mac_address": "00-00-5E-00-53-00",
-				"ip": "1.1.1.1",
-				"created": "2017-06-14T00:00:00Z",
-				"updated": "2017-06-14T00:00:00Z",
-				"last_seen": "2017-06-14T00:00:00Z",
-				"revoked_at": "2017-06-14T00:00:00Z"
-			  }
-			]
-		  }
+        {
+          "success": true,
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+              "user": {
+                "id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+                "name": "John Appleseed",
+                "email": "user@example.com"
+              },
+              "key": "yek0SUYoOQ10vMGsIYAevozXUQpQtNFJFfFGqER/BGc=",
+              "device_type": "windows",
+              "name": "My mobile device",
+              "model": "MyPhone(pro-X)",
+              "manufacturer": "My phone corp",
+              "deleted": true,
+              "version": "1.0.0",
+              "serial_number": "EXAMPLEHMD6R",
+              "os_version": "10.0.0",
+              "mac_address": "00-00-5E-00-53-00",
+              "ip": "192.0.2.1",
+              "created": "2017-06-14T00:00:00Z",
+              "updated": "2017-06-14T00:00:00Z",
+              "last_seen": "2017-06-14T00:00:00Z",
+              "revoked_at": "2017-06-14T00:00:00Z"
+            }
+          ]
+        }
     `)
 	}
 
@@ -68,7 +68,7 @@ func TestTeamsDevicesList(t *testing.T) {
 		SerialNumber: "EXAMPLEHMD6R",
 		OSVersion:    "10.0.0",
 		MacAddress:   "00-00-5E-00-53-00",
-		IP:           "1.1.1.1",
+		IP:           "192.0.2.1",
 		Created:      "2017-06-14T00:00:00Z",
 		Updated:      "2017-06-14T00:00:00Z",
 		LastSeen:     "2017-06-14T00:00:00Z",
@@ -94,11 +94,11 @@ func TestRevokeTeamsDevices(t *testing.T) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'Post', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
-			"result": null,
-			"success": true,
-			"errors": [],
-			"messages": []
-		}`)
+      "result": null,
+      "success": true,
+      "errors": [],
+      "messages": []
+    }`)
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/revoke", handler)
@@ -117,36 +117,34 @@ func TestGetTeamsDeviceDetails(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, `
-		{
-			"success": true,
-			"errors": [],
-			"messages": [],
-			"result": 
-			  {
-				"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-				"user": {
-				  "id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-				  "name": "John Appleseed",
-				  "email": "user@example.com"
-				},
-				"key": "yek0SUYoOQ10vMGsIYAevozXUQpQtNFJFfFGqER/BGc=",
-				"device_type": "windows",
-				"name": "My mobile device",
-				"model": "MyPhone(pro-X)",
-				"manufacturer": "My phone corp",
-				"deleted": true,
-				"version": "1.0.0",
-				"serial_number": "EXAMPLEHMD6R",
-				"os_version": "10.0.0",
-				"mac_address": "00-00-5E-00-53-00",
-				"ip": "1.1.1.1",
-				"created": "2017-06-14T00:00:00Z",
-				"updated": "2017-06-14T00:00:00Z",
-				"last_seen": "2017-06-14T00:00:00Z",
-				"revoked_at": "2017-06-14T00:00:00Z"
-			  }
-		  }
+		fmt.Fprintf(w, `{
+      "success": true,
+      "errors": [],
+      "messages": [],
+      "result": {
+        "id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+        "user": {
+          "id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+          "name": "John Appleseed",
+          "email": "user@example.com"
+        },
+        "key": "yek0SUYoOQ10vMGsIYAevozXUQpQtNFJFfFGqER/BGc=",
+        "device_type": "windows",
+        "name": "My mobile device",
+        "model": "MyPhone(pro-X)",
+        "manufacturer": "My phone corp",
+        "deleted": true,
+        "version": "1.0.0",
+        "serial_number": "EXAMPLEHMD6R",
+        "os_version": "10.0.0",
+        "mac_address": "00-00-5E-00-53-00",
+        "ip": "192.0.2.1",
+        "created": "2017-06-14T00:00:00Z",
+        "updated": "2017-06-14T00:00:00Z",
+        "last_seen": "2017-06-14T00:00:00Z",
+        "revoked_at": "2017-06-14T00:00:00Z"
+      }
+    }
     `)
 	}
 
@@ -167,7 +165,7 @@ func TestGetTeamsDeviceDetails(t *testing.T) {
 		SerialNumber: "EXAMPLEHMD6R",
 		OSVersion:    "10.0.0",
 		MacAddress:   "00-00-5E-00-53-00",
-		IP:           "1.1.1.1",
+		IP:           "192.0.2.1",
 		Created:      "2017-06-14T00:00:00Z",
 		Updated:      "2017-06-14T00:00:00Z",
 		LastSeen:     "2017-06-14T00:00:00Z",
