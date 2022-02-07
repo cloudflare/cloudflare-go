@@ -71,7 +71,7 @@ func (api *API) ListTeamsDevices(ctx context.Context, accountID string) ([]Teams
 func (api *API) RevokeTeamsDevices(ctx context.Context, accountID string, deviceIds []string) (Response, error) {
 	uri := fmt.Sprintf("/%s/%s/devices/revoke", AccountRouteRoot, accountID)
 
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPost, uri, deviceIds)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, deviceIds)
 	if err != nil {
 		return Response{}, err
 	}
