@@ -12,181 +12,187 @@ import (
 
 const (
 	testPagesProjectResponse = `
-	{
-		"name": "Test Pages Project",
-		"id": "5a321fc7-3162-7d36-adce-1213996a7",
-		"created_on": "2021-01-01T00:00:00Z",
-		"subdomain": "test.pages.dev",
-		"domains": [
-		  "testdomain.com",
-		  "testdomain.org"
-		],
-		"source": {
-		  "type": "github",
-		  "config": {
-			"owner": "cloudflare",
-			"repo_name": "pages-test",
-			"production_branch": "main",
-			"pr_comments_enabled": true,
-			"deployments_enabled": true
-		  }
-		},
-		"build_config": {
-		  "build_command": "npm run build",
-		  "destination_dir": "build",
-		  "root_dir": "/",
-		  "web_analytics_tag": "0ee1d926cd60d2618a108d4232a75b73",
-		  "web_analytics_token": "c05bb382259183db3a0a822b64c11459"
-		},
-		"deployment_configs": {
-		  "preview": {
-			"env_vars": {
-			  "BUILD_VERSION": {
-				"value": "1.2"
-			  }
-			}
-		  },
-		  "production": {
-			"env_vars": {
-			  "BUILD_VERSION": {
-				"value": "1.2"
-			  }
-			}
-		  }
-		},
-		"latest_deployment": {
-		  "id": "c35216d1-ebac-1a3a-d56c-ad74e54e5",
-		  "short_id": "c35216d1",
-		  "project_id": "5a321fc7-3162-7d36-adce-1213996a7",
-		  "project_name": "pages-test",
-		  "environment": "preview",
-		  "url": "https://c35216d1.pages-test.pages.dev",
-		  "created_on": "2021-03-09T00:55:03.923456Z",
-		  "modified_on": "2021-03-09T00:58:59.045655Z",
-		  "aliases": [
-			"https://branchname.pages-test.pages.dev"
-		  ],
-		  "latest_stage": {
-			"name": "deploy",
-			"started_on": "2021-03-09T00:55:03.923456Z",
-			"ended_on": "2021-03-09T00:58:59.045655Z",
-			"status": "success"
-		  },
-		  "env_vars": {
-			"BUILD_VERSION": {
-			  "value": "1.2"
-			},
-			"ENV": {
-			  "value": "STAGING"
-			}
-		  },
-		  "deployment_trigger": {
-			"type": "ad_hoc",
-			"metadata": {
-			  "branch": "main",
-			  "commit_hash": "fa26be19de6bff93f70bc2308434e4a440bbad02",
-			  "commit_message": "Update index.html"
-			}
-		  },
-		  "stages": [
-			{
-			  "name": "queued",
-			  "started_on": "2021-06-03T15:38:15.608194Z",
-			  "ended_on": "2021-06-03T15:39:03.134378Z",
-			  "status": "active"
-			},
-			{
-			  "name": "test_stage_1",
-			  "started_on": null,
-			  "ended_on": null,
-			  "status": "idle"
-			}
-		  ],
-		  "build_config": {
-			"build_command": "npm run build",
-			"destination_dir": "build",
-			"root_dir": "/",
-			"web_analytics_tag": "0ee1d926cd60d2618a108d4232a75b73",
-			"web_analytics_token": "c05bb382259183db3a0a822b64c11459"
-		  },
-		  "source": {
-			"type": "github",
-			"config": {
-			  "owner": "cloudflare",
-			  "repo_name": "pages-test",
-			  "production_branch": "main",
-			  "pr_comments_enabled": true,
-			  "deployments_enabled": true
-			}
-		  }
-		},
-		"canonical_deployment": {
-		  "id": "c35216d1-ebac-1a3a-d56c-ad74e54e5",
-		  "short_id": "c35216d1",
-		  "project_id": "5a321fc7-3162-7d36-adce-1213996a7",
-		  "project_name": "pages-test",
-		  "environment": "preview",
-		  "url": "https://c35216d1.pages-test.pages.dev",
-		  "created_on": "2021-03-09T00:55:03.923456Z",
-		  "modified_on": "2021-03-09T00:58:59.045655Z",
-		  "aliases": [
-			"https://branchname.pages-test.pages.dev"
-		  ],
-		  "latest_stage": {
-			"name": "deploy",
-			"started_on": "2021-03-09T00:55:03.923456Z",
-			"ended_on": "2021-03-09T00:58:59.045655Z",
-			"status": "success"
-		  },
-		  "env_vars": {
-			"BUILD_VERSION": {
-			  "value": "1.2"
-			},
-			"ENV": {
-			  "value": "STAGING"
-			}
-		  },
-		  "deployment_trigger": {
-			"type": "ad_hoc",
-			"metadata": {
-			  "branch": "main",
-			  "commit_hash": "fa26be19de6bff93f70bc2308434e4a440bbad02",
-			  "commit_message": "Update index.html"
-			}
-		  },
-		  "stages": [
-			{
-			  "name": "queued",
-			  "started_on": "2021-06-03T15:38:15.608194Z",
-			  "ended_on": "2021-06-03T15:39:03.134378Z",
-			  "status": "active"
-			},
-			{
-			  "name": "test_stage_1",
-			  "started_on": null,
-			  "ended_on": null,
-			  "status": "idle"
-			}
-		  ],
-		  "build_config": {
-			"build_command": "npm run build",
-			"destination_dir": "build",
-			"root_dir": "/",
-			"web_analytics_tag": "0ee1d926cd60d2618a108d4232a75b73",
-			"web_analytics_token": "c05bb382259183db3a0a822b64c11459"
-		  },
-		  "source": {
-			"type": "github",
-			"config": {
-			  "owner": "cloudflare",
-			  "repo_name": "pages-test",
-			  "production_branch": "main",
-			  "pr_comments_enabled": true,
-			  "deployments_enabled": true
-			}
-		  }
-		}
-	  }`
+    {
+        "name": "Test Pages Project",
+        "id": "5a321fc7-3162-7d36-adce-1213996a7",
+        "created_on": "2021-01-01T00:00:00Z",
+        "subdomain": "test.pages.dev",
+        "domains": [
+          "testdomain.com",
+          "testdomain.org"
+        ],
+        "source": {
+          "type": "github",
+          "config": {
+            "owner": "cloudflare",
+            "repo_name": "pages-test",
+            "production_branch": "main",
+            "pr_comments_enabled": true,
+            "deployments_enabled": true
+          }
+        },
+        "build_config": {
+          "build_command": "npm run build",
+          "destination_dir": "build",
+          "root_dir": "/",
+          "web_analytics_tag": "0ee1d926cd60d2618a108d4232a75b73",
+          "web_analytics_token": "c05bb382259183db3a0a822b64c11459"
+        },
+        "deployment_configs": {
+          "preview": {
+            "env_vars": {
+              "BUILD_VERSION": {
+                "value": "1.2"
+              },
+              "ENV": {
+                "value": "preview"
+              }
+            }
+          },
+          "production": {
+            "env_vars": {
+              "BUILD_VERSION": {
+                "value": "1.2"
+              },
+              "ENV": {
+                "value": "production"
+              }
+            }
+          }
+        },
+        "latest_deployment": {
+          "id": "c35216d1-ebac-1a3a-d56c-ad74e54e5",
+          "short_id": "c35216d1",
+          "project_id": "5a321fc7-3162-7d36-adce-1213996a7",
+          "project_name": "pages-test",
+          "environment": "preview",
+          "url": "https://c35216d1.pages-test.pages.dev",
+          "created_on": "2021-03-09T00:55:03.923456Z",
+          "modified_on": "2021-03-09T00:58:59.045655Z",
+          "aliases": [
+            "https://branchname.pages-test.pages.dev"
+          ],
+          "latest_stage": {
+            "name": "deploy",
+            "started_on": "2021-03-09T00:55:03.923456Z",
+            "ended_on": "2021-03-09T00:58:59.045655Z",
+            "status": "success"
+          },
+          "env_vars": {
+            "BUILD_VERSION": {
+              "value": "1.2"
+            },
+            "ENV": {
+              "value": "STAGING"
+            }
+          },
+          "deployment_trigger": {
+            "type": "ad_hoc",
+            "metadata": {
+              "branch": "main",
+              "commit_hash": "fa26be19de6bff93f70bc2308434e4a440bbad02",
+              "commit_message": "Update index.html"
+            }
+          },
+          "stages": [
+            {
+              "name": "queued",
+              "started_on": "2021-06-03T15:38:15.608194Z",
+              "ended_on": "2021-06-03T15:39:03.134378Z",
+              "status": "active"
+            },
+            {
+              "name": "test_stage_1",
+              "started_on": null,
+              "ended_on": null,
+              "status": "idle"
+            }
+          ],
+          "build_config": {
+            "build_command": "npm run build",
+            "destination_dir": "build",
+            "root_dir": "/",
+            "web_analytics_tag": "0ee1d926cd60d2618a108d4232a75b73",
+            "web_analytics_token": "c05bb382259183db3a0a822b64c11459"
+          },
+          "source": {
+            "type": "github",
+            "config": {
+              "owner": "cloudflare",
+              "repo_name": "pages-test",
+              "production_branch": "main",
+              "pr_comments_enabled": true,
+              "deployments_enabled": true
+            }
+          }
+        },
+        "canonical_deployment": {
+          "id": "c35216d1-ebac-1a3a-d56c-ad74e54e5",
+          "short_id": "c35216d1",
+          "project_id": "5a321fc7-3162-7d36-adce-1213996a7",
+          "project_name": "pages-test",
+          "environment": "preview",
+          "url": "https://c35216d1.pages-test.pages.dev",
+          "created_on": "2021-03-09T00:55:03.923456Z",
+          "modified_on": "2021-03-09T00:58:59.045655Z",
+          "aliases": [
+            "https://branchname.pages-test.pages.dev"
+          ],
+          "latest_stage": {
+            "name": "deploy",
+            "started_on": "2021-03-09T00:55:03.923456Z",
+            "ended_on": "2021-03-09T00:58:59.045655Z",
+            "status": "success"
+          },
+          "env_vars": {
+            "BUILD_VERSION": {
+              "value": "1.2"
+            },
+            "ENV": {
+              "value": "STAGING"
+            }
+          },
+          "deployment_trigger": {
+            "type": "ad_hoc",
+            "metadata": {
+              "branch": "main",
+              "commit_hash": "fa26be19de6bff93f70bc2308434e4a440bbad02",
+              "commit_message": "Update index.html"
+            }
+          },
+          "stages": [
+            {
+              "name": "queued",
+              "started_on": "2021-06-03T15:38:15.608194Z",
+              "ended_on": "2021-06-03T15:39:03.134378Z",
+              "status": "active"
+            },
+            {
+              "name": "test_stage_1",
+              "started_on": null,
+              "ended_on": null,
+              "status": "idle"
+            }
+          ],
+          "build_config": {
+            "build_command": "npm run build",
+            "destination_dir": "build",
+            "root_dir": "/",
+            "web_analytics_tag": "0ee1d926cd60d2618a108d4232a75b73",
+            "web_analytics_token": "c05bb382259183db3a0a822b64c11459"
+          },
+          "source": {
+            "type": "github",
+            "config": {
+              "owner": "cloudflare",
+              "repo_name": "pages-test",
+              "production_branch": "main",
+              "pr_comments_enabled": true,
+              "deployments_enabled": true
+            }
+          }
+        }
+      }`
 )
 
 var (
@@ -289,11 +295,25 @@ var (
 	}
 
 	expectedPagesProjectDeploymentConfigPreview = &PagesProjectDeploymentConfigEnvironment{
-		EnvVars: PagesProjectDeploymentConfigEnvVars{BuildVersion: PagesProjectDeploymentConfigBuildVersion{Value: "1.2"}},
+		EnvVars: map[string]PagesProjectDeploymentVar{
+			"BUILD_VERSION": {
+				Value: "1.2",
+			},
+			"ENV": {
+				Value: "preview",
+			},
+		},
 	}
 
 	expectedPagesProjectDeploymentConfigProduction = &PagesProjectDeploymentConfigEnvironment{
-		EnvVars: PagesProjectDeploymentConfigEnvVars{BuildVersion: PagesProjectDeploymentConfigBuildVersion{Value: "1.2"}},
+		EnvVars: map[string]PagesProjectDeploymentVar{
+			"BUILD_VERSION": {
+				Value: "1.2",
+			},
+			"ENV": {
+				Value: "production",
+			},
+		},
 	}
 
 	expectedPagesProjectSource = &PagesProjectSource{
@@ -311,7 +331,7 @@ var (
 )
 
 func TestListPagesProjects(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup(UsingAccount(testAccountID))
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -319,22 +339,22 @@ func TestListPagesProjects(t *testing.T) {
 
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
-			"success": true,
-			"errors": [],
-			"messages": [],
-			"result": [
-				%s
-			],
-			"result_info": {
-				"page": 1,
-				"per_page": 100,
-				"count": 1,
-				"total_count": 1
-			  }
-		}`, testPagesProjectResponse)
+            "success": true,
+            "errors": [],
+            "messages": [],
+            "result": [
+                %s
+            ],
+            "result_info": {
+                "page": 1,
+                "per_page": 100,
+                "count": 1,
+                "total_count": 1
+            }
+        }`, testPagesProjectResponse)
 	}
 
-	mux.HandleFunc("/accounts/foo/pages/projects", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects", handler)
 
 	expectedPagesProjects := []PagesProject{
 		*expectedPagesProject,
@@ -345,7 +365,7 @@ func TestListPagesProjects(t *testing.T) {
 		Count:   1,
 		Total:   1,
 	}
-	actual, resultInfo, err := client.ListPagesProjects(context.Background(), "foo", PaginationOptions{})
+	actual, resultInfo, err := client.ListPagesProjects(context.Background(), testAccountID, PaginationOptions{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedPagesProjects, actual)
 		assert.Equal(t, expectedResultInfo, resultInfo)
@@ -353,7 +373,7 @@ func TestListPagesProjects(t *testing.T) {
 }
 
 func TestPagesProject(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup(UsingAccount(testAccountID))
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -361,23 +381,23 @@ func TestPagesProject(t *testing.T) {
 
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
-			"success": true,
-			"errors": [],
-			"messages": [],
-			"result": %s
-		}`, testPagesProjectResponse)
+            "success": true,
+            "errors": [],
+            "messages": [],
+            "result": %s
+        }`, testPagesProjectResponse)
 	}
 
-	mux.HandleFunc("/accounts/foo/pages/projects/Test Pages Project", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/Test Pages Project", handler)
 
-	actual, err := client.PagesProject(context.Background(), "foo", "Test Pages Project")
+	actual, err := client.PagesProject(context.Background(), testAccountID, "Test Pages Project")
 	if assert.NoError(t, err) {
 		assert.Equal(t, *expectedPagesProject, actual)
 	}
 }
 
 func TestCreatePagesProject(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup(UsingAccount(testAccountID))
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -385,23 +405,23 @@ func TestCreatePagesProject(t *testing.T) {
 
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
-			"success": true,
-			"errors": [],
-			"messages": [],
-			"result": %s
-		}`, testPagesProjectResponse)
+            "success": true,
+            "errors": [],
+            "messages": [],
+            "result": %s
+        }`, testPagesProjectResponse)
 	}
 
-	mux.HandleFunc("/accounts/foo/pages/projects", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects", handler)
 
-	actual, err := client.CreatePagesProject(context.Background(), "foo", *expectedPagesProject)
+	actual, err := client.CreatePagesProject(context.Background(), testAccountID, *expectedPagesProject)
 	if assert.NoError(t, err) {
 		assert.Equal(t, *expectedPagesProject, actual)
 	}
 }
 
 func TestUpdatePagesProject(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup(UsingAccount(testAccountID))
 	defer teardown()
 
 	updateAttributes := &PagesProject{
@@ -413,16 +433,16 @@ func TestUpdatePagesProject(t *testing.T) {
 
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
-			"success": true,
-			"errors": [],
-			"messages": [],
-			"result": %s
-		}`, testPagesProjectResponse)
+            "success": true,
+            "errors": [],
+            "messages": [],
+            "result": %s
+        }`, testPagesProjectResponse)
 	}
 
-	mux.HandleFunc("/accounts/foo/pages/projects/Test Pages Project", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/Test Pages Project", handler)
 
-	_, err := client.UpdatePagesProject(context.Background(), "foo", "Test Pages Project", *updateAttributes)
+	_, err := client.UpdatePagesProject(context.Background(), testAccountID, "Test Pages Project", *updateAttributes)
 
 	t.Log(err)
 
@@ -430,7 +450,7 @@ func TestUpdatePagesProject(t *testing.T) {
 }
 
 func TestDeletePagesProject(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup(UsingAccount(testAccountID))
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -438,15 +458,15 @@ func TestDeletePagesProject(t *testing.T) {
 
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
-			"success": true,
-			"errors": [],
-			"messages": [],
-			"result": null
-		}`)
+            "success": true,
+            "errors": [],
+            "messages": [],
+            "result": null
+        }`)
 	}
 
-	mux.HandleFunc("/accounts/foo/pages/projects/Test Pages Project", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/Test Pages Project", handler)
 
-	err := client.DeletePagesProject(context.Background(), "foo", "Test Pages Project")
+	err := client.DeletePagesProject(context.Background(), testAccountID, "Test Pages Project")
 	assert.NoError(t, err)
 }
