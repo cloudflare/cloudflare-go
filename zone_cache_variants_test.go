@@ -46,12 +46,12 @@ func TestZoneCacheVariants(t *testing.T) {
 	modifiedOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	want := ZoneCacheVariants{
 		ModifiedOn: modifiedOn,
-		Value: map[string][]string{
-			"avif": {
+		Value: ZoneCacheVariantsValues{
+			Avif: []string{
 				"image/webp",
 				"image/jpeg",
 			},
-			"bmp": {
+			Bmp: []string{
 				"image/webp",
 				"image/jpeg",
 			},
@@ -109,12 +109,12 @@ func TestUpdateZoneCacheVariants(t *testing.T) {
 
 	want := ZoneCacheVariants{
 		ModifiedOn: modifiedOn,
-		Value: map[string][]string{
-			"avif": {
+		Value: ZoneCacheVariantsValues{
+			Avif: []string{
 				"image/webp",
 				"image/jpeg",
 			},
-			"bmp": {
+			Bmp: []string{
 				"image/webp",
 				"image/jpeg",
 			},
@@ -122,11 +122,11 @@ func TestUpdateZoneCacheVariants(t *testing.T) {
 	}
 
 	zoneCacheVariants := ZoneCacheVariantsValues{
-		"avif": {
+		Avif: []string{
 			"image/webp",
 			"image/jpeg",
 		},
-		"bmp": {
+		Bmp: []string{
 			"image/webp",
 			"image/jpeg",
 		}}

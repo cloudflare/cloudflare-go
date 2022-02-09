@@ -10,7 +10,19 @@ import (
 	"github.com/pkg/errors"
 )
 
-type ZoneCacheVariantsValues = map[string][]string
+type ZoneCacheVariantsValues struct {
+	Avif []string `json:"avif,omitempty"`
+	Bmp  []string `json:"bmp,omitempty"`
+	Gif  []string `json:"gif,omitempty"`
+	Jpeg []string `json:"jpeg,omitempty"`
+	Jpg  []string `json:"jpg,omitempty"`
+	Jpg2 []string `json:"jpg2,omitempty"`
+	Jp2  []string `json:"jp2,omitempty"`
+	Png  []string `json:"png,omitempty"`
+	Tiff []string `json:"tiff,omitempty"`
+	Tif  []string `json:"tif,omitempty"`
+	Webp []string `json:"webp,omitempty"`
+}
 
 type ZoneCacheVariants struct {
 	ModifiedOn time.Time               `json:"modified_on"`
