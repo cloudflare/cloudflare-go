@@ -55,7 +55,7 @@ func (api *API) ZoneCacheVariants(ctx context.Context, zoneID string) (ZoneCache
 	return r.Result, nil
 }
 
-// ZoneCacheVariants updates the cache variants for a given zone.
+// UpdateZoneCacheVariants updates the cache variants for a given zone.
 //
 // API reference: https://api.cloudflare.com/#zone-cache-settings-change-variants-setting
 func (api *API) UpdateZoneCacheVariants(ctx context.Context, zoneID string, variants ZoneCacheVariantsValues) (ZoneCacheVariants, error) {
