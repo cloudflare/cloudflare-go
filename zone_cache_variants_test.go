@@ -6,11 +6,12 @@ import (
 	"io/ioutil"
 	"net/http"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestZoneSingleCacheSetting(t *testing.T) {
+func TestZoneCacheVariants(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -42,9 +43,9 @@ func TestZoneSingleCacheSetting(t *testing.T) {
 	testZoneId := "foo"
 	mux.HandleFunc("/zones/"+testZoneId+"/cache/variants", handler)
 
+	modifiedOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	want := ZoneCacheVariants{
-		ID:         "variants",
-		ModifiedOn: "2014-01-01T05:20:00.12345Z",
+		ModifiedOn: modifiedOn,
 		Value: map[string][]string{
 			"avif": {
 				"image/webp",
@@ -64,7 +65,7 @@ func TestZoneSingleCacheSetting(t *testing.T) {
 	}
 }
 
-func TestUpdateZoneSingleCacheSetting(t *testing.T) {
+func TestUpdateZoneCacheVariants(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -75,7 +76,7 @@ func TestUpdateZoneSingleCacheSetting(t *testing.T) {
 		defer r.Body.Close()
 
 		if assert.NoError(t, err) {
-			assert.JSONEq(t, `{"id":"","value":{"avif":["image/webp","image/jpeg"],"bmp":["image/webp","image/jpeg"]}}`, string(b))
+			assert.JSONEq(t, `{"value":{"avif":["image/webp","image/jpeg"],"bmp":["image/webp","image/jpeg"]}}`, string(b))
 		}
 
 		w.Header().Set("content-type", "application/json")
@@ -104,9 +105,10 @@ func TestUpdateZoneSingleCacheSetting(t *testing.T) {
 	testZoneId := "foo"
 	mux.HandleFunc("/zones/"+testZoneId+"/cache/variants", handler)
 
+	modifiedOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+
 	want := ZoneCacheVariants{
-		ID:         "variants",
-		ModifiedOn: "2014-01-01T05:20:00.12345Z",
+		ModifiedOn: modifiedOn,
 		Value: map[string][]string{
 			"avif": {
 				"image/webp",
@@ -119,7 +121,7 @@ func TestUpdateZoneSingleCacheSetting(t *testing.T) {
 		},
 	}
 
-	zoneCacheSetting := ZoneCacheVariants{Value: map[string][]string{
+	zoneCacheVariants := ZoneCacheVariantsValues{
 		"avif": {
 			"image/webp",
 			"image/jpeg",
@@ -127,16 +129,16 @@ func TestUpdateZoneSingleCacheSetting(t *testing.T) {
 		"bmp": {
 			"image/webp",
 			"image/jpeg",
-		}}}
+		}}
 
-	actual, err := client.UpdateZoneCacheVariants(context.Background(), testZoneId, zoneCacheSetting)
+	actual, err := client.UpdateZoneCacheVariants(context.Background(), testZoneId, zoneCacheVariants)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
-func TestDeleteZoneSingleCacheSetting(t *testing.T) {
+func TestDeleteZoneCacheVariants(t *testing.T) {
 	setup()
 	defer teardown()
 
