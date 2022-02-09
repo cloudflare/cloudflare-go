@@ -36,6 +36,7 @@ const (
 	RulesetRuleActionExecute              RulesetRuleAction = "execute"
 	RulesetRuleActionForceConnectionClose RulesetRuleAction = "force_connection_close"
 	RulesetRuleActionJSChallenge          RulesetRuleAction = "js_challenge"
+	RulesetRuleActionManagedChallenge     RulesetRuleAction = "managed_challenge"
 	RulesetRuleActionLog                  RulesetRuleAction = "log"
 	RulesetRuleActionRewrite              RulesetRuleAction = "rewrite"
 	RulesetRuleActionScore                RulesetRuleAction = "score"
@@ -94,6 +95,7 @@ func RulesetRuleActionValues() []string {
 		string(RulesetRuleActionExecute),
 		string(RulesetRuleActionForceConnectionClose),
 		string(RulesetRuleActionJSChallenge),
+		string(RulesetRuleActionManagedChallenge),
 		string(RulesetRuleActionLog),
 		string(RulesetRuleActionRewrite),
 		string(RulesetRuleActionScore),
