@@ -42,22 +42,22 @@ func TestZoneSingleCacheSetting(t *testing.T) {
 	testZoneId := "foo"
 	mux.HandleFunc("/zones/"+testZoneId+"/cache/variants", handler)
 
-	want := ZoneCacheSetting{
+	want := ZoneCacheVariants{
 		ID:         "variants",
 		ModifiedOn: "2014-01-01T05:20:00.12345Z",
-		Value: map[string]interface{}{
-			"avif": []interface{}{
+		Value: map[string][]string{
+			"avif": {
 				"image/webp",
 				"image/jpeg",
 			},
-			"bmp": []interface{}{
+			"bmp": {
 				"image/webp",
 				"image/jpeg",
 			},
 		},
 	}
 
-	actual, err := client.ZoneSingleCacheSetting(context.Background(), testZoneId, "variants")
+	actual, err := client.ZoneCacheVariants(context.Background(), testZoneId)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -104,22 +104,22 @@ func TestUpdateZoneSingleCacheSetting(t *testing.T) {
 	testZoneId := "foo"
 	mux.HandleFunc("/zones/"+testZoneId+"/cache/variants", handler)
 
-	want := ZoneCacheSetting{
+	want := ZoneCacheVariants{
 		ID:         "variants",
 		ModifiedOn: "2014-01-01T05:20:00.12345Z",
-		Value: map[string]interface{}{
-			"avif": []interface{}{
+		Value: map[string][]string{
+			"avif": {
 				"image/webp",
 				"image/jpeg",
 			},
-			"bmp": []interface{}{
+			"bmp": {
 				"image/webp",
 				"image/jpeg",
 			},
 		},
 	}
 
-	zoneCacheSetting := ZoneCacheSetting{Value: map[string][]string{
+	zoneCacheSetting := ZoneCacheVariants{Value: map[string][]string{
 		"avif": {
 			"image/webp",
 			"image/jpeg",
@@ -129,7 +129,7 @@ func TestUpdateZoneSingleCacheSetting(t *testing.T) {
 			"image/jpeg",
 		}}}
 
-	actual, err := client.UpdateZoneSingleCacheSetting(context.Background(), testZoneId, "variants", zoneCacheSetting)
+	actual, err := client.UpdateZoneCacheVariants(context.Background(), testZoneId, zoneCacheSetting)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -162,7 +162,7 @@ func TestDeleteZoneSingleCacheSetting(t *testing.T) {
 	testZoneId := "foo"
 	mux.HandleFunc("/zones/"+testZoneId+"/cache/variants", handler)
 
-	err := client.DeleteZoneSingleCacheSetting(context.Background(), testZoneId, "variants")
+	err := client.DeleteZoneCacheVariants(context.Background(), testZoneId)
 
 	assert.NoError(t, err)
 	assert.True(t, apiCalled)
