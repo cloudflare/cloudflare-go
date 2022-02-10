@@ -18,30 +18,29 @@ func TestZoneCacheVariants(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		// JSON data from: https://api.cloudflare.com/#zone-cache-settings-get-variants-setting
-		_, _ = fmt.Fprintf(w, `{
-			"success": true,
-			"errors": [],
-			"messages": [],
-			"result": {
-			  "id": "variants",
-			  "modified_on": "2014-01-01T05:20:00.12345Z",
-			  "value": {
-				"avif": [
-				  "image/webp",
-				  "image/jpeg"
-				],
-				"bmp": [
-				  "image/webp",
-				  "image/jpeg"
-				]
-			  }
-			}
-		  }`)
+		fmt.Fprintf(w, `
+        {
+          "success": true,
+          "errors": [],
+          "messages": [],
+          "result": {
+            "id": "variants",
+            "modified_on": "2014-01-01T05:20:00.12345Z",
+            "value": {
+              "avif": [
+                "image/webp",
+                "image/jpeg"
+              ],
+              "bmp": [
+                "image/webp",
+                "image/jpeg"
+              ]
+            }
+          }
+        }`)
 	}
 
-	testZoneId := "foo"
-	mux.HandleFunc("/zones/"+testZoneId+"/cache/variants", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/cache/variants", handler)
 
 	modifiedOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	want := ZoneCacheVariants{
@@ -58,14 +57,14 @@ func TestZoneCacheVariants(t *testing.T) {
 		},
 	}
 
-	actual, err := client.ZoneCacheVariants(context.Background(), testZoneId)
+	actual, err := client.ZoneCacheVariants(context.Background(), testZoneID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
-func TestUpdateZoneCacheVariants(t *testing.T) {
+func TestZoneCacheVariantsUpdate(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -80,30 +79,29 @@ func TestUpdateZoneCacheVariants(t *testing.T) {
 		}
 
 		w.Header().Set("content-type", "application/json")
-		// JSON data from: https://api.cloudflare.com/#zone-cache-settings-change-variants-setting
-		_, _ = fmt.Fprintf(w, `{
-			"success": true,
-			"errors": [],
-			"messages": [],
-			"result": {
-			  "id": "variants",
-			  "modified_on": "2014-01-01T05:20:00.12345Z",
-			  "value": {
-				"avif": [
-				  "image/webp",
-				  "image/jpeg"
-				],
-				"bmp": [
-				  "image/webp",
-				  "image/jpeg"
-				]
-			  }
-			}
-		  }`)
+		fmt.Fprintf(w, `
+        {
+		  "success": true,
+          "errors": [],
+          "messages": [],
+          "result": {
+		    "id": "variants",
+            "modified_on": "2014-01-01T05:20:00.12345Z",
+            "value": {
+			  "avif": [
+			    "image/webp",
+                "image/jpeg"
+              ],
+			  "bmp": [
+				"image/webp",
+				"image/jpeg"
+			  ]
+            }
+          }
+        }`)
 	}
 
-	testZoneId := "foo"
-	mux.HandleFunc("/zones/"+testZoneId+"/cache/variants", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/cache/variants", handler)
 
 	modifiedOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 
@@ -131,14 +129,14 @@ func TestUpdateZoneCacheVariants(t *testing.T) {
 			"image/jpeg",
 		}}
 
-	actual, err := client.UpdateZoneCacheVariants(context.Background(), testZoneId, zoneCacheVariants)
+	actual, err := client.UpdateZoneCacheVariants(context.Background(), testZoneID, zoneCacheVariants)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
-func TestDeleteZoneCacheVariants(t *testing.T) {
+func TestZoneCacheVariantsDelete(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -149,22 +147,21 @@ func TestDeleteZoneCacheVariants(t *testing.T) {
 		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
-		// JSON data from: https://api.cloudflare.com/#zone-cache-settings-delete-variants-setting
-		_, _ = fmt.Fprintf(w, `{
-			"success": true,
-			"errors": [],
-			"messages": [],
-			"result": {
-			  "id": "variants",
-			  "modified_on": "2014-01-01T05:20:00.12345Z"
-			}
-		  }`)
+		fmt.Fprintf(w, `
+        {
+		  "success": true,
+          "errors": [],
+          "messages": [],
+          "result": {
+            "id": "variants",
+            "modified_on": "2014-01-01T05:20:00.12345Z"
+          }
+        }`)
 	}
 
-	testZoneId := "foo"
-	mux.HandleFunc("/zones/"+testZoneId+"/cache/variants", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/cache/variants", handler)
 
-	err := client.DeleteZoneCacheVariants(context.Background(), testZoneId)
+	err := client.DeleteZoneCacheVariants(context.Background(), testZoneID)
 
 	assert.NoError(t, err)
 	assert.True(t, apiCalled)
