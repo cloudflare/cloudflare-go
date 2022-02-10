@@ -44,6 +44,7 @@ The current feature list includes:
 * [x] User Administration (partial)
 * [x] Web Application Firewall (WAF)
 * [x] Workers KV
+* [x] Zone cache settings
 * [x] Zone Lockdown and User-Agent Block rules
 * [x] Zones
 
