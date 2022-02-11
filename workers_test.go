@@ -669,6 +669,45 @@ func TestWorkers_UploadWorkerWithSecretTextBinding(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+func TestWorkers_UploadWorkerWithServiceBinding(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+
+		mpUpload, err := parseMultipartUpload(r)
+		assert.NoError(t, err)
+
+		expectedBindings := map[string]workerBindingMeta{
+			"b1": {
+				"type":        "service",
+				"name":        "b1",
+				"service":     "test-service",
+				"environment": "test-environment",
+			},
+		}
+		assert.Equal(t, workerScript, mpUpload.Script)
+		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, uploadWorkerResponseData) //nolint
+	}
+	mux.HandleFunc("/accounts/foo/workers/scripts/bar", handler)
+
+	scriptParams := WorkerScriptParams{
+		Script: workerScript,
+		Bindings: map[string]WorkerBinding{
+			"b1": WorkerServiceBinding{
+				Service:     "test-service",
+				Environment: "test-environment",
+			},
+		},
+	}
+	_, err := client.UploadWorkerWithBindings(context.Background(), &WorkerRequestParams{ScriptName: "bar"}, &scriptParams)
+	assert.NoError(t, err)
+}
+
 func TestWorkers_CreateWorkerRoute(t *testing.T) {
 	setup()
 	defer teardown()
