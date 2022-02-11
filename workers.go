@@ -3,7 +3,7 @@ package cloudflare
 import (
 	"bytes"
 	"context"
-	rand "crypto/rand"
+	"crypto/rand"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
@@ -99,6 +99,8 @@ const (
 	WorkerSecretTextBindingType WorkerBindingType = "secret_text"
 	// WorkerPlainTextBindingType is the type for plain text bindings.
 	WorkerPlainTextBindingType WorkerBindingType = "plain_text"
+	// WorkerServiceBindingType is the type for worker service bindings.
+	WorkerServiceBindingType WorkerBindingType = "service"
 )
 
 // WorkerBindingListItem a struct representing an individual binding in a list of bindings.
@@ -265,6 +267,35 @@ func (b WorkerSecretTextBinding) serialize(bindingName string) (workerBindingMet
 		"name": bindingName,
 		"type": b.Type(),
 		"text": b.Text,
+	}, nil, nil
+}
+
+// WorkerServiceBinding is a binding to another worker
+//
+// https://developers.cloudflare.com/workers/tooling/api/scripts/#add-a-plain-text-binding
+type WorkerServiceBinding struct {
+	Service     string
+	Environment string
+}
+
+// Type returns the type of the binding.
+func (b WorkerServiceBinding) Type() WorkerBindingType {
+	return WorkerServiceBindingType
+}
+
+func (b WorkerServiceBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
+	if b.Service == "" {
+		return nil, nil, errors.Errorf(`Service for binding "%s" cannot be empty`, bindingName)
+	}
+	if b.Environment == "" {
+		return nil, nil, errors.Errorf(`Environment for binding "%s" cannot be empty`, bindingName)
+	}
+
+	return workerBindingMeta{
+		"name":        bindingName,
+		"service":     b.Service,
+		"environment": b.Environment,
+		"type":        b.Type(),
 	}, nil, nil
 }
 
