@@ -251,14 +251,11 @@ type RulesetRule struct {
 
 // RulesetRuleRateLimit contains the structure of a HTTP rate limit Ruleset Rule.
 type RulesetRuleRateLimit struct {
-	Characteristics   []string `json:"characteristics,omitempty"`
-	RequestsPerPeriod int      `json:"requests_per_period,omitempty"`
-	Period            int      `json:"period,omitempty"`
-	MitigationTimeout int      `json:"mitigation_timeout,omitempty"`
-
-	// Should always be sent as "" will trigger the service to use the Ruleset
-	// expression instead.
-	MitigationExpression string `json:"mitigation_expression"`
+	Characteristics    []string `json:"characteristics,omitempty"`
+	RequestsPerPeriod  int      `json:"requests_per_period,omitempty"`
+	Period             int      `json:"period,omitempty"`
+	MitigationTimeout  int      `json:"mitigation_timeout,omitempty"`
+	CountingExpression string   `json:"counting_expression,omitempty"`
 }
 
 // RulesetRuleExposedCredentialCheck contains the structure of an exposed
