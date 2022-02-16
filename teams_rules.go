@@ -34,6 +34,9 @@ type TeamsRuleSettings struct {
 
 	// settings for session check in allow action
 	CheckSession *TeamsCheckSessionSettings `json:"check_session"`
+
+	// whether to disable dnssec validation for allow action
+	InsecureDisableDNSSECValidation bool `json:"insecure_disable_dnssec_validation"`
 }
 
 // TeamsL4OverrideSettings used in l4 filter type rule with action set to override.

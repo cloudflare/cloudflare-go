@@ -49,7 +49,8 @@ func TestTeamsRules(t *testing.T) {
 					"check_session": {
 						"enforce": true,
 						"duration": "15m0s"
-					}
+					},
+                    "insecure_disable_dnssec_validation": false
 				  }
 				},
 				{
@@ -76,7 +77,8 @@ func TestTeamsRules(t *testing.T) {
 					"l4override": null,
 					"biso_admin_controls": null,
 					"add_headers": null,
-					"check_session": null
+					"check_session": null,
+                    "insecure_disable_dnssec_validation": true
 				  }
 				}
 			]
@@ -111,6 +113,7 @@ func TestTeamsRules(t *testing.T) {
 				Enforce:  true,
 				Duration: Duration{900 * time.Second},
 			},
+			InsecureDisableDNSSECValidation: false,
 		},
 		CreatedAt: &createdAt,
 		UpdatedAt: &updatedAt,
@@ -137,6 +140,8 @@ func TestTeamsRules(t *testing.T) {
 				AddHeaders:        nil,
 				BISOAdminControls: nil,
 				CheckSession:      nil,
+				// setting is invalid for block rules, just testing serialization here
+				InsecureDisableDNSSECValidation: true,
 			},
 			CreatedAt: &createdAt,
 			UpdatedAt: &updatedAt,
@@ -190,7 +195,8 @@ func TestTeamsRule(t *testing.T) {
 					"check_session": {
 						"enforce": true,
 						"duration": "15m0s"
-					}
+					},
+                    "insecure_disable_dnssec_validation": false
 				}
 			}
 		}
@@ -224,6 +230,7 @@ func TestTeamsRule(t *testing.T) {
 				Enforce:  true,
 				Duration: Duration{900 * time.Second},
 			},
+			InsecureDisableDNSSECValidation: false,
 		},
 		CreatedAt: &createdAt,
 		UpdatedAt: &updatedAt,
@@ -274,7 +281,8 @@ func TestTeamsCreateRule(t *testing.T) {
 					"check_session": {
 						"enforce": true,
 						"duration": "5m0s"
-					}
+					},
+                    "insecure_disable_dnssec_validation": false
 				}
 			}
 		}
@@ -303,6 +311,7 @@ func TestTeamsCreateRule(t *testing.T) {
 				Enforce:  true,
 				Duration: Duration{300 * time.Second},
 			},
+			InsecureDisableDNSSECValidation: false,
 		},
 		DeletedAt: nil,
 	}
@@ -349,7 +358,8 @@ func TestTeamsUpdateRule(t *testing.T) {
 					"l4override": null,
 					"biso_admin_controls": null,
 					"add_headers": null,
-					"check_session": null
+					"check_session": null,
+                    "insecure_disable_dnssec_validation": false
 				}
 			}
 		}
@@ -371,14 +381,15 @@ func TestTeamsUpdateRule(t *testing.T) {
 		Identity:      "",
 		DevicePosture: "",
 		RuleSettings: TeamsRuleSettings{
-			BlockPageEnabled:  false,
-			BlockReason:       "",
-			OverrideIPs:       nil,
-			OverrideHost:      "",
-			L4Override:        nil,
-			AddHeaders:        nil,
-			BISOAdminControls: nil,
-			CheckSession:      nil,
+			BlockPageEnabled:                false,
+			BlockReason:                     "",
+			OverrideIPs:                     nil,
+			OverrideHost:                    "",
+			L4Override:                      nil,
+			AddHeaders:                      nil,
+			BISOAdminControls:               nil,
+			CheckSession:                    nil,
+			InsecureDisableDNSSECValidation: false,
 		},
 		CreatedAt: &createdAt,
 		UpdatedAt: &updatedAt,
@@ -419,7 +430,8 @@ func TestTeamsPatchRule(t *testing.T) {
 					"l4override": null,
 					"biso_admin_controls": null,
 					"add_headers": null,
-					"check_session": null
+					"check_session": null,
+                    "insecure_disable_dnssec_validation": false
 				}
 			}
 		}
@@ -433,14 +445,15 @@ func TestTeamsPatchRule(t *testing.T) {
 		Enabled:     true,
 		Action:      Block,
 		RuleSettings: TeamsRuleSettings{
-			BlockPageEnabled:  false,
-			BlockReason:       "",
-			OverrideIPs:       nil,
-			OverrideHost:      "",
-			L4Override:        nil,
-			AddHeaders:        nil,
-			BISOAdminControls: nil,
-			CheckSession:      nil,
+			BlockPageEnabled:                false,
+			BlockReason:                     "",
+			OverrideIPs:                     nil,
+			OverrideHost:                    "",
+			L4Override:                      nil,
+			AddHeaders:                      nil,
+			BISOAdminControls:               nil,
+			CheckSession:                    nil,
+			InsecureDisableDNSSECValidation: false,
 		},
 	}
 
