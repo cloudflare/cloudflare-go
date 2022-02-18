@@ -18,7 +18,7 @@ type DevicePostureIntegrationConfig struct {
 	ApiUrl       string `json:"api_url,omitempty"`
 }
 
-// DevicePosturIntegration represents a device posture integration.
+// DevicePostureIntegration represents a device posture integration.
 type DevicePostureIntegration struct {
 	IntegrationID string                         `json:"id,omitempty"`
 	Name          string                         `json:"name,omitempty"`
