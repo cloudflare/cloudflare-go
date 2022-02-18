@@ -11,17 +11,17 @@ import (
 )
 
 type TeamsRuleSettings struct {
-	// Enable block page on rules with action block
-	BlockPageEnabled bool `json:"block_page_enabled"`
+	// list of ipv4 or ipv6 ips to override with, when action is set to dns override
+	OverrideIPs []string `json:"override_ips"`
 
 	// show this string at block page caused by this rule
 	BlockReason string `json:"block_reason"`
 
-	// list of ipv4 or ipv6 ips to override with, when action is set to dns override
-	OverrideIPs []string `json:"override_ips"`
-
 	// host name to override with when action is set to dns override. Can not be used with OverrideIPs
 	OverrideHost string `json:"override_host"`
+
+	// settings for browser isolation actions
+	BISOAdminControls *TeamsBISOAdminControlSettings `json:"biso_admin_controls"`
 
 	// settings for l4(network) level overrides
 	L4Override *TeamsL4OverrideSettings `json:"l4override"`
@@ -29,11 +29,14 @@ type TeamsRuleSettings struct {
 	// settings for adding headers to http requests
 	AddHeaders http.Header `json:"add_headers"`
 
-	// settings for browser isolation actions
-	BISOAdminControls *TeamsBISOAdminControlSettings `json:"biso_admin_controls"`
-
 	// settings for session check in allow action
 	CheckSession *TeamsCheckSessionSettings `json:"check_session"`
+
+	// Enable block page on rules with action block
+	BlockPageEnabled bool `json:"block_page_enabled"`
+
+	// whether to disable dnssec validation for allow action
+	InsecureDisableDNSSECValidation bool `json:"insecure_disable_dnssec_validation"`
 }
 
 // TeamsL4OverrideSettings used in l4 filter type rule with action set to override.
