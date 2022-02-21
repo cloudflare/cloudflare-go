@@ -40,22 +40,22 @@ type WaitingRoomStatus struct {
 
 // WaitingRoomEvent describes a WaitingRoomEvent object.
 type WaitingRoomEvent struct {
-	ID                    string    `json:"id,omitempty"`
+	EventEndTime          time.Time `json:"event_end_time"`
 	CreatedOn             time.Time `json:"created_on,omitempty"`
 	ModifiedOn            time.Time `json:"modified_on,omitempty"`
-	Name                  string    `json:"name"`
-	Description           string    `json:"description,omitempty"`
-	Suspended             bool      `json:"suspended"`
 	PrequeueStartTime     time.Time `json:"prequeue_start_time,omitempty"`
 	EventStartTime        time.Time `json:"event_start_time"`
-	EventEndTime          time.Time `json:"event_end_time"`
-	ShuffleAtEventStart   bool      `json:"shuffle_at_event_start"`
+	Name                  string    `json:"name"`
+	Description           string    `json:"description,omitempty"`
+	QueueingMethod        string    `json:"queueing_method,omitempty"`
+	ID                    string    `json:"id,omitempty"`
+	CustomPageHTML        string    `json:"custom_page_html,omitempty"`
 	NewUsersPerMinute     int       `json:"new_users_per_minute,omitempty"`
 	TotalActiveUsers      int       `json:"total_active_users,omitempty"`
 	SessionDuration       int       `json:"session_duration,omitempty"`
 	DisableSessionRenewal bool      `json:"disable_session_renewal,omitempty"`
-	QueueingMethod        string    `json:"queueing_method,omitempty"`
-	CustomPageHTML        string    `json:"custom_page_html,omitempty"`
+	Suspended             bool      `json:"suspended"`
+	ShuffleAtEventStart   bool      `json:"shuffle_at_event_start"`
 }
 
 // WaitingRoomDetailResponse is the API response, containing a single WaitingRoom.
