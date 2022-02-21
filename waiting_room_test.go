@@ -11,10 +11,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var waitingRoomID = "699d98642c564d2e855e9661899b7252"
+var waitingRoomEventID = "25756b2dfe6e378a06b033b670413757"
 var testTimestampWaitingRoom = time.Now().UTC()
+var testTimestampWaitingRoomEvent = time.Now().UTC()
+var testTimestampWaitingRoomEventPrequeue = time.Now().UTC()
+var testTimestampWaitingRoomEventStart = testTimestampWaitingRoomEventPrequeue.Add(5 * time.Minute)
+var testTimestampWaitingRoomEventEnd = testTimestampWaitingRoomEventStart.Add(1 * time.Minute)
 var waitingRoomJSON = fmt.Sprintf(`
 		{
-      "id": "699d98642c564d2e855e9661899b7252",
+      "id": "%s",
       "created_on": "%s",
       "modified_on": "%s",
       "name": "production_webinar",
@@ -30,20 +36,45 @@ var waitingRoomJSON = fmt.Sprintf(`
       "json_response_enabled": true,
       "custom_page_html": "{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Queue all enabled {{/waitTimeKnown}}"
     }
-   `, testTimestampWaitingRoom.Format(time.RFC3339Nano), testTimestampWaitingRoom.Format(time.RFC3339Nano))
+   `, waitingRoomID, testTimestampWaitingRoom.Format(time.RFC3339Nano), testTimestampWaitingRoom.Format(time.RFC3339Nano))
 
-var waitingRoomStatusJSON = `
+var waitingRoomEventJSON = fmt.Sprintf(`
+    {
+      "id": "%s",
+      "created_on": "%s",
+      "modified_on": "%s",
+      "name": "production_webinar_event",
+      "description": "Production event - DO NOT MODIFY",
+      "suspended": false,
+      "prequeue_start_time": "%s",
+      "event_start_time": "%s",
+      "event_end_time": "%s",
+      "shuffle_at_event_start": false,
+      "new_users_per_minute": 2000,
+      "total_active_users": 2500,
+      "session_duration": null,
+      "disable_session_renewal": null,
+      "queueing_method": "random",
+      "custom_page_html": "{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Event is prequeueing / Queue all enabled {{/waitTimeKnown}}"
+    }
+   `, waitingRoomEventID, testTimestampWaitingRoomEvent.Format(time.RFC3339Nano),
+	testTimestampWaitingRoomEvent.Format(time.RFC3339Nano),
+	testTimestampWaitingRoomEventPrequeue.Format(time.RFC3339Nano),
+	testTimestampWaitingRoomEventStart.Format(time.RFC3339Nano),
+	testTimestampWaitingRoomEventEnd.Format(time.RFC3339Nano))
+
+var waitingRoomStatusJSON = fmt.Sprintf(`
     {
       "status": "queueing",
-      "event_id": "25756b2dfe6e378a06b033b670413757",
+      "event_id": "%s",
       "estimated_queued_users": 10,
       "estimated_total_active_users": 9,
       "max_estimated_time_minutes": 5
     }
-   `
+   `, waitingRoomEventID)
 
 var waitingRoom = WaitingRoom{
-	ID:                    "699d98642c564d2e855e9661899b7252",
+	ID:                    waitingRoomID,
 	CreatedOn:             testTimestampWaitingRoom,
 	ModifiedOn:            testTimestampWaitingRoom,
 	Name:                  "production_webinar",
@@ -60,9 +91,28 @@ var waitingRoom = WaitingRoom{
 	CustomPageHTML:        "{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Queue all enabled {{/waitTimeKnown}}",
 }
 
+var waitingRoomEvent = WaitingRoomEvent{
+	ID:                    waitingRoomEventID,
+	CreatedOn:             testTimestampWaitingRoomEvent,
+	ModifiedOn:            testTimestampWaitingRoomEvent,
+	Name:                  "production_webinar_event",
+	Description:           "Production event - DO NOT MODIFY",
+	Suspended:             false,
+	PrequeueStartTime:     testTimestampWaitingRoomEventPrequeue,
+	EventStartTime:        testTimestampWaitingRoomEventStart,
+	EventEndTime:          testTimestampWaitingRoomEventEnd,
+	ShuffleAtEventStart:   false,
+	NewUsersPerMinute:     2000,
+	TotalActiveUsers:      2500,
+	SessionDuration:       0,
+	DisableSessionRenewal: false,
+	QueueingMethod:        "random",
+	CustomPageHTML:        "{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Event is prequeueing / Queue all enabled {{/waitTimeKnown}}",
+}
+
 var waitingRoomStatus = WaitingRoomStatus{
 	Status:                    "queueing",
-	EventID:                   "25756b2dfe6e378a06b033b670413757",
+	EventID:                   waitingRoomEventID,
 	EstimatedQueuedUsers:      10,
 	EstimatedTotalActiveUsers: 9,
 	MaxEstimatedTimeMinutes:   5,
@@ -321,4 +371,180 @@ func TestWaitingRoomStatus(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
+}
+
+func TestCreateWaitingRoomEvent(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			  "success": true,
+			  "errors": [],
+			  "messages": [],
+			  "result": %s
+			}
+		`, waitingRoomEventJSON)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/waiting_rooms/699d98642c564d2e855e9661899b7252/events", handler)
+	want := &waitingRoomEvent
+
+	actual, err := client.CreateWaitingRoomEvent(context.Background(), testZoneID, "699d98642c564d2e855e9661899b7252", waitingRoomEvent)
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestListWaitingRoomEvents(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			  "success": true,
+			  "errors": [],
+			  "messages": [],
+			  "result": [
+			    %s
+			  ]
+			}
+		`, waitingRoomEventJSON)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/waiting_rooms/699d98642c564d2e855e9661899b7252/events", handler)
+	want := []WaitingRoomEvent{waitingRoomEvent}
+
+	actual, err := client.ListWaitingRoomEvents(context.Background(), testZoneID, "699d98642c564d2e855e9661899b7252")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestListWaitingRoomEventsNoResult(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+			  "success": true,
+			  "errors": [],
+			  "messages": [],
+			  "result": []
+			}
+		`)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/waiting_rooms/699d98642c564d2e855e9661899b7252/events", handler)
+	want := []WaitingRoomEvent{}
+
+	actual, err := client.ListWaitingRoomEvents(context.Background(), testZoneID, "699d98642c564d2e855e9661899b7252")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestWaitingRoomEvent(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			  "success": true,
+			  "errors": [],
+			  "messages": [],
+			  "result": %s
+			}
+		`, waitingRoomEventJSON)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/waiting_rooms/699d98642c564d2e855e9661899b7252/events/25756b2dfe6e378a06b033b670413757", handler)
+	want := waitingRoomEvent
+
+	actual, err := client.WaitingRoomEvent(context.Background(), testZoneID, "699d98642c564d2e855e9661899b7252", "25756b2dfe6e378a06b033b670413757")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestUpdateWaitingRoomEvent(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			  "success": true,
+			  "errors": [],
+			  "messages": [],
+			  "result": %s
+			}
+		`, waitingRoomEventJSON)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/waiting_rooms/699d98642c564d2e855e9661899b7252/events/25756b2dfe6e378a06b033b670413757", handler)
+	want := waitingRoomEvent
+
+	actual, err := client.UpdateWaitingRoomEvent(context.Background(), testZoneID, "699d98642c564d2e855e9661899b7252", waitingRoomEvent)
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestChangeWaitingRoomEvent(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PATCH', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			  "success": true,
+			  "errors": [],
+			  "messages": [],
+			  "result": %s
+			}
+		`, waitingRoomEventJSON)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/waiting_rooms/699d98642c564d2e855e9661899b7252/events/25756b2dfe6e378a06b033b670413757", handler)
+	want := waitingRoomEvent
+
+	actual, err := client.UpdateWaitingRoomEvent(context.Background(), testZoneID, "699d98642c564d2e855e9661899b7252", waitingRoomEvent)
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestDeleteWaitingRoomEvent(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+			  "success": true,
+			  "errors": [],
+			  "messages": [],
+			  "result": {
+			    "id": "25756b2dfe6e378a06b033b670413757"
+			  }
+			}
+		`)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/waiting_rooms/699d98642c564d2e855e9661899b7252/events/25756b2dfe6e378a06b033b670413757", handler)
+
+	err := client.DeleteWaitingRoomEvent(context.Background(), testZoneID, "699d98642c564d2e855e9661899b7252", "25756b2dfe6e378a06b033b670413757")
+	assert.NoError(t, err)
 }

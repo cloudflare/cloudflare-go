@@ -38,6 +38,26 @@ type WaitingRoomStatus struct {
 	MaxEstimatedTimeMinutes   int    `json:"max_estimated_time_minutes"`
 }
 
+// WaitingRoomEvent describes a WaitingRoomEvent object.
+type WaitingRoomEvent struct {
+	EventEndTime          time.Time `json:"event_end_time"`
+	CreatedOn             time.Time `json:"created_on,omitempty"`
+	ModifiedOn            time.Time `json:"modified_on,omitempty"`
+	PrequeueStartTime     time.Time `json:"prequeue_start_time,omitempty"`
+	EventStartTime        time.Time `json:"event_start_time"`
+	Name                  string    `json:"name"`
+	Description           string    `json:"description,omitempty"`
+	QueueingMethod        string    `json:"queueing_method,omitempty"`
+	ID                    string    `json:"id,omitempty"`
+	CustomPageHTML        string    `json:"custom_page_html,omitempty"`
+	NewUsersPerMinute     int       `json:"new_users_per_minute,omitempty"`
+	TotalActiveUsers      int       `json:"total_active_users,omitempty"`
+	SessionDuration       int       `json:"session_duration,omitempty"`
+	DisableSessionRenewal bool      `json:"disable_session_renewal,omitempty"`
+	Suspended             bool      `json:"suspended"`
+	ShuffleAtEventStart   bool      `json:"shuffle_at_event_start"`
+}
+
 // WaitingRoomDetailResponse is the API response, containing a single WaitingRoom.
 type WaitingRoomDetailResponse struct {
 	Response
@@ -54,6 +74,18 @@ type WaitingRoomsResponse struct {
 type WaitingRoomStatusResponse struct {
 	Response
 	Result WaitingRoomStatus `json:"result"`
+}
+
+// WaitingRoomEventDetailResponse is the API response, containing a single WaitingRoomEvent.
+type WaitingRoomEventDetailResponse struct {
+	Response
+	Result WaitingRoomEvent `json:"result"`
+}
+
+// WaitingRoomEventsResponse is the API response, containing an array of WaitingRoomEvents.
+type WaitingRoomEventsResponse struct {
+	Response
+	Result []WaitingRoomEvent `json:"result"`
 }
 
 // CreateWaitingRoom creates a new Waiting Room for a zone.
@@ -175,4 +207,108 @@ func (api *API) WaitingRoomStatus(ctx context.Context, zoneID, waitingRoomID str
 		return WaitingRoomStatus{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
+}
+
+// CreateWaitingRoomEvent creates a new event for a Waiting Room.
+//
+// API reference: https://api.cloudflare.com/#waiting-room-create-event
+func (api *API) CreateWaitingRoomEvent(ctx context.Context, zoneID string, waitingRoomID string, waitingRoomEvent WaitingRoomEvent) (*WaitingRoomEvent, error) {
+	uri := fmt.Sprintf("/zones/%s/waiting_rooms/%s/events", zoneID, waitingRoomID)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, waitingRoomEvent)
+	if err != nil {
+		return nil, err
+	}
+	var r WaitingRoomEventDetailResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return nil, errors.Wrap(err, errUnmarshalError)
+	}
+	return &r.Result, nil
+}
+
+// ListWaitingRoomEvents returns all Waiting Room Events for a zone.
+//
+// API reference: https://api.cloudflare.com/#waiting-room-list-events
+func (api *API) ListWaitingRoomEvents(ctx context.Context, zoneID string, waitingRoomID string) ([]WaitingRoomEvent, error) {
+	uri := fmt.Sprintf("/zones/%s/waiting_rooms/%s/events", zoneID, waitingRoomID)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return []WaitingRoomEvent{}, err
+	}
+	var r WaitingRoomEventsResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return []WaitingRoomEvent{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
+
+// WaitingRoomEvent fetches detail about one Waiting Room Event for a zone.
+//
+// API reference: https://api.cloudflare.com/#waiting-room-event-details
+func (api *API) WaitingRoomEvent(ctx context.Context, zoneID string, waitingRoomID string, eventID string) (WaitingRoomEvent, error) {
+	uri := fmt.Sprintf("/zones/%s/waiting_rooms/%s/events/%s", zoneID, waitingRoomID, eventID)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return WaitingRoomEvent{}, err
+	}
+	var r WaitingRoomEventDetailResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return WaitingRoomEvent{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
+
+// ChangeWaitingRoomEvent lets you change individual settings for a Waiting Room Event. This is
+// in contrast to UpdateWaitingRoomEvent which replaces the entire Waiting Room Event.
+//
+// API reference: https://api.cloudflare.com/#waiting-room-patch-event
+func (api *API) ChangeWaitingRoomEvent(ctx context.Context, zoneID, waitingRoomID string, waitingRoomEvent WaitingRoomEvent) (WaitingRoomEvent, error) {
+	uri := fmt.Sprintf("/zones/%s/waiting_rooms/%s/events/%s", zoneID, waitingRoomID, waitingRoomEvent.ID)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, waitingRoomEvent)
+	if err != nil {
+		return WaitingRoomEvent{}, err
+	}
+	var r WaitingRoomEventDetailResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return WaitingRoomEvent{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
+
+// UpdateWaitingRoomEvent lets you replace a Waiting Room Event. This is in contrast to
+// ChangeWaitingRoomEvent which lets you change individual settings.
+//
+// API reference: https://api.cloudflare.com/#waiting-room-update-event
+func (api *API) UpdateWaitingRoomEvent(ctx context.Context, zoneID string, waitingRoomID string, waitingRoomEvent WaitingRoomEvent) (WaitingRoomEvent, error) {
+	uri := fmt.Sprintf("/zones/%s/waiting_rooms/%s/events/%s", zoneID, waitingRoomID, waitingRoomEvent.ID)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, waitingRoomEvent)
+	if err != nil {
+		return WaitingRoomEvent{}, err
+	}
+	var r WaitingRoomEventDetailResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return WaitingRoomEvent{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
+
+// DeleteWaitingRoomEvent deletes an event for a Waiting Room.
+//
+// API reference: https://api.cloudflare.com/#waiting-room-delete-event
+func (api *API) DeleteWaitingRoomEvent(ctx context.Context, zoneID string, waitingRoomID string, eventID string) error {
+	uri := fmt.Sprintf("/zones/%s/waiting_rooms/%s/events/%s", zoneID, waitingRoomID, eventID)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
+	if err != nil {
+		return err
+	}
+	var r WaitingRoomEventDetailResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return errors.Wrap(err, errUnmarshalError)
+	}
+	return nil
 }
