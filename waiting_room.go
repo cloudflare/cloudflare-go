@@ -29,6 +29,15 @@ type WaitingRoom struct {
 	JsonResponseEnabled   bool      `json:"json_response_enabled"`
 }
 
+// WaitingRoomStatus describes the status of a waiting room.
+type WaitingRoomStatus struct {
+	Status                    string `json:"status"`
+	EventID                   string `json:"event_id"`
+	EstimatedQueuedUsers      int    `json:"estimated_queued_users"`
+	EstimatedTotalActiveUsers int    `json:"estimated_total_active_users"`
+	MaxEstimatedTimeMinutes   int    `json:"max_estimated_time_minutes"`
+}
+
 // WaitingRoomDetailResponse is the API response, containing a single WaitingRoom.
 type WaitingRoomDetailResponse struct {
 	Response
@@ -39,6 +48,12 @@ type WaitingRoomDetailResponse struct {
 type WaitingRoomsResponse struct {
 	Response
 	Result []WaitingRoom `json:"result"`
+}
+
+// WaitingRoomStatusResponse is the API response, containing the status of a waiting room.
+type WaitingRoomStatusResponse struct {
+	Response
+	Result WaitingRoomStatus `json:"result"`
 }
 
 // CreateWaitingRoom creates a new Waiting Room for a zone.
@@ -143,4 +158,21 @@ func (api *API) DeleteWaitingRoom(ctx context.Context, zoneID, waitingRoomID str
 		return errors.Wrap(err, errUnmarshalError)
 	}
 	return nil
+}
+
+// WaitingRoomStatus returns the status of one Waiting Room for a zone.
+//
+// API reference: https://api.cloudflare.com/#waiting-room-get-waiting-room-status
+func (api *API) WaitingRoomStatus(ctx context.Context, zoneID, waitingRoomID string) (WaitingRoomStatus, error) {
+	uri := fmt.Sprintf("/zones/%s/waiting_rooms/%s/status", zoneID, waitingRoomID)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return WaitingRoomStatus{}, err
+	}
+	var r WaitingRoomStatusResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return WaitingRoomStatus{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
 }

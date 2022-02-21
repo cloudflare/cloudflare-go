@@ -32,6 +32,16 @@ var waitingRoomJSON = fmt.Sprintf(`
     }
    `, testTimestampWaitingRoom.Format(time.RFC3339Nano), testTimestampWaitingRoom.Format(time.RFC3339Nano))
 
+var waitingRoomStatusJSON = fmt.Sprintf(`
+    {
+      "status": "queueing",
+      "event_id": "25756b2dfe6e378a06b033b670413757",
+      "estimated_queued_users": 10,
+      "estimated_total_active_users": 9,
+      "max_estimated_time_minutes": 5
+    }
+   `)
+
 var waitingRoom = WaitingRoom{
 	ID:                    "699d98642c564d2e855e9661899b7252",
 	CreatedOn:             testTimestampWaitingRoom,
@@ -48,6 +58,14 @@ var waitingRoom = WaitingRoom{
 	DisableSessionRenewal: false,
 	JsonResponseEnabled:   true,
 	CustomPageHTML:        "{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Queue all enabled {{/waitTimeKnown}}",
+}
+
+var waitingRoomStatus = WaitingRoomStatus{
+	Status:                    "queueing",
+	EventID:                   "25756b2dfe6e378a06b033b670413757",
+	EstimatedQueuedUsers:      10,
+	EstimatedTotalActiveUsers: 9,
+	MaxEstimatedTimeMinutes:   5,
 }
 
 func TestListWaitingRooms(t *testing.T) {
@@ -278,4 +296,29 @@ func TestDeleteWaitingRoom(t *testing.T) {
 
 	err := client.DeleteWaitingRoom(context.Background(), testZoneID, "699d98642c564d2e855e9661899b7252")
 	assert.NoError(t, err)
+}
+
+func TestWaitingRoomStatus(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			  "success": true,
+			  "errors": [],
+			  "messages": [],
+			  "result": %s
+			}
+		`, waitingRoomStatusJSON)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/waiting_rooms/699d98642c564d2e855e9661899b7252/status", handler)
+	want := waitingRoomStatus
+
+	actual, err := client.WaitingRoomStatus(context.Background(), testZoneID, "699d98642c564d2e855e9661899b7252")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
 }
