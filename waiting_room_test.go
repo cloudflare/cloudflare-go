@@ -32,7 +32,7 @@ var waitingRoomJSON = fmt.Sprintf(`
     }
    `, testTimestampWaitingRoom.Format(time.RFC3339Nano), testTimestampWaitingRoom.Format(time.RFC3339Nano))
 
-var waitingRoomStatusJSON = fmt.Sprintf(`
+var waitingRoomStatusJSON = `
     {
       "status": "queueing",
       "event_id": "25756b2dfe6e378a06b033b670413757",
@@ -40,7 +40,7 @@ var waitingRoomStatusJSON = fmt.Sprintf(`
       "estimated_total_active_users": 9,
       "max_estimated_time_minutes": 5
     }
-   `)
+   `
 
 var waitingRoom = WaitingRoom{
 	ID:                    "699d98642c564d2e855e9661899b7252",
