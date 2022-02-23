@@ -105,7 +105,7 @@ var waitingRoomEvent = WaitingRoomEvent{
 	NewUsersPerMinute:     2000,
 	TotalActiveUsers:      2500,
 	SessionDuration:       0,
-	DisableSessionRenewal: false,
+	DisableSessionRenewal: nil,
 	QueueingMethod:        "random",
 	CustomPageHTML:        "{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Event is prequeueing / Queue all enabled {{/waitTimeKnown}}",
 }
