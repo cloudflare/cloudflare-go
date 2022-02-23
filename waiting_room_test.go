@@ -475,6 +475,31 @@ func TestWaitingRoomEvent(t *testing.T) {
 	}
 }
 
+func TestWaitingRoomEventPreview(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			  "success": true,
+			  "errors": [],
+			  "messages": [],
+			  "result": %s
+			}
+		`, waitingRoomEventJSON)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/waiting_rooms/699d98642c564d2e855e9661899b7252/events/25756b2dfe6e378a06b033b670413757/details", handler)
+	want := waitingRoomEvent
+
+	actual, err := client.WaitingRoomEventPreview(context.Background(), testZoneID, "699d98642c564d2e855e9661899b7252", "25756b2dfe6e378a06b033b670413757")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
 func TestUpdateWaitingRoomEvent(t *testing.T) {
 	setup()
 	defer teardown()
