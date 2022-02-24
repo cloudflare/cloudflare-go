@@ -53,7 +53,7 @@ type WaitingRoomEvent struct {
 	NewUsersPerMinute     int       `json:"new_users_per_minute,omitempty"`
 	TotalActiveUsers      int       `json:"total_active_users,omitempty"`
 	SessionDuration       int       `json:"session_duration,omitempty"`
-	DisableSessionRenewal bool      `json:"disable_session_renewal,omitempty"`
+	DisableSessionRenewal *bool     `json:"disable_session_renewal,omitempty"`
 	Suspended             bool      `json:"suspended"`
 	ShuffleAtEventStart   bool      `json:"shuffle_at_event_start"`
 }
