@@ -73,6 +73,12 @@ var waitingRoomStatusJSON = fmt.Sprintf(`
     }
    `, waitingRoomEventID)
 
+var waitingRoomPagePreviewJSON = `
+    {
+      "preview_url": "http://waitingrooms.dev/preview/35af8c12-6d68-4608-babb-b53435a5ddfb"
+    }
+    `
+
 var waitingRoom = WaitingRoom{
 	ID:                    waitingRoomID,
 	CreatedOn:             testTimestampWaitingRoom,
@@ -116,6 +122,10 @@ var waitingRoomStatus = WaitingRoomStatus{
 	EstimatedQueuedUsers:      10,
 	EstimatedTotalActiveUsers: 9,
 	MaxEstimatedTimeMinutes:   5,
+}
+
+var waitingRoomPagePreview = WaitingRoomPagePreview{
+	PreviewURL: "http://waitingrooms.dev/preview/35af8c12-6d68-4608-babb-b53435a5ddfb",
 }
 
 func TestListWaitingRooms(t *testing.T) {
@@ -368,6 +378,31 @@ func TestWaitingRoomStatus(t *testing.T) {
 	want := waitingRoomStatus
 
 	actual, err := client.WaitingRoomStatus(context.Background(), testZoneID, "699d98642c564d2e855e9661899b7252")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestWaitingRoomPagePreview(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			  "success": true,
+			  "errors": [],
+			  "messages": [],
+			  "result": %s
+			}
+		`, waitingRoomPagePreviewJSON)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/waiting_rooms/preview", handler)
+	want := waitingRoomPagePreview
+
+	actual, err := client.WaitingRoomPagePreview(context.Background(), testZoneID, "{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Queue all enabled {{/waitTimeKnown}}")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
