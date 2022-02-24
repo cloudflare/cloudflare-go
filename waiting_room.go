@@ -260,6 +260,24 @@ func (api *API) WaitingRoomEvent(ctx context.Context, zoneID string, waitingRoom
 	return r.Result, nil
 }
 
+// WaitingRoomEventPreview returns an event's configuration as if it was active.
+// Inherited fields from the waiting room will be displayed with their current values.
+//
+// API reference: https://api.cloudflare.com/#waiting-room-preview-active-event-details
+func (api *API) WaitingRoomEventPreview(ctx context.Context, zoneID string, waitingRoomID string, eventID string) (WaitingRoomEvent, error) {
+	uri := fmt.Sprintf("/zones/%s/waiting_rooms/%s/events/%s/details", zoneID, waitingRoomID, eventID)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return WaitingRoomEvent{}, err
+	}
+	var r WaitingRoomEventDetailResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return WaitingRoomEvent{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
+
 // ChangeWaitingRoomEvent lets you change individual settings for a Waiting Room Event. This is
 // in contrast to UpdateWaitingRoomEvent which replaces the entire Waiting Room Event.
 //
