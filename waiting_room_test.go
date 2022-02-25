@@ -124,7 +124,7 @@ var waitingRoomStatus = WaitingRoomStatus{
 	MaxEstimatedTimeMinutes:   5,
 }
 
-var waitingRoomPagePreview = WaitingRoomPagePreview{
+var waitingRoomPagePreview = WaitingRoomPagePreviewURL{
 	PreviewURL: "http://waitingrooms.dev/preview/35af8c12-6d68-4608-babb-b53435a5ddfb",
 }
 
