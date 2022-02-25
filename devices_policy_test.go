@@ -20,7 +20,7 @@ func TestUpdateDeviceClientCertificatesZone(t *testing.T) {
 			"success": true,
 			"errors": null,
 			"messages": null,
-			"result": {"enable": true}
+			"result": {"enabled": true}
 		}`)
 	}
 
@@ -53,7 +53,7 @@ func TestGetDeviceClientCertificatesZone(t *testing.T) {
 			"success": true,
 			"errors": null,
 			"messages": null,
-			"result": {"enable": false}
+			"result": {"enabled": false}
 		}`)
 	}
 
