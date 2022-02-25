@@ -10,7 +10,7 @@ import (
 )
 
 type Enabled struct {
-	Enable bool `json:"enable"`
+	Enabled bool `json:"enabled"`
 }
 
 // DeviceClientCertificatesZone identifies if the zero trust zone is configured for an account.
