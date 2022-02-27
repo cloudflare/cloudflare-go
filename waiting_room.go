@@ -58,6 +58,16 @@ type WaitingRoomEvent struct {
 	ShuffleAtEventStart   bool      `json:"shuffle_at_event_start"`
 }
 
+// WaitingRoomPagePreviewURL describes a WaitingRoomPagePreviewURL object.
+type WaitingRoomPagePreviewURL struct {
+	PreviewURL string `json:"preview_url"`
+}
+
+// WaitingRoomPagePreviewCustomHTML describes a WaitingRoomPagePreviewCustomHTML object.
+type WaitingRoomPagePreviewCustomHTML struct {
+	CustomHTML string `json:"custom_html"`
+}
+
 // WaitingRoomDetailResponse is the API response, containing a single WaitingRoom.
 type WaitingRoomDetailResponse struct {
 	Response
@@ -74,6 +84,12 @@ type WaitingRoomsResponse struct {
 type WaitingRoomStatusResponse struct {
 	Response
 	Result WaitingRoomStatus `json:"result"`
+}
+
+// WaitingRoomPagePreviewResponse is the API response, containing the URL to a custom waiting room preview.
+type WaitingRoomPagePreviewResponse struct {
+	Response
+	Result WaitingRoomPagePreviewURL `json:"result"`
 }
 
 // WaitingRoomEventDetailResponse is the API response, containing a single WaitingRoomEvent.
@@ -205,6 +221,25 @@ func (api *API) WaitingRoomStatus(ctx context.Context, zoneID, waitingRoomID str
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return WaitingRoomStatus{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
+
+// WaitingRoomPagePreview uploads a custom waiting room page for preview and
+// returns a preview URL.
+//
+// API reference: https://api.cloudflare.com/#waiting-room-create-a-custom-waiting-room-page-preview
+func (api *API) WaitingRoomPagePreview(ctx context.Context, zoneID, customHTML string) (WaitingRoomPagePreviewURL, error) {
+	uri := fmt.Sprintf("/zones/%s/waiting_rooms/preview", zoneID)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, WaitingRoomPagePreviewCustomHTML{CustomHTML: customHTML})
+
+	if err != nil {
+		return WaitingRoomPagePreviewURL{}, err
+	}
+	var r WaitingRoomPagePreviewResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return WaitingRoomPagePreviewURL{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
 }
