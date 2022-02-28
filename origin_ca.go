@@ -221,6 +221,11 @@ func OriginCARootCertificate(algorithm string) ([]byte, error) {
 		return nil, errors.Wrap(err, "HTTP request failed")
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, errors.New(errRequestNotSuccessful)
+	}
+
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Response body could not be read")
