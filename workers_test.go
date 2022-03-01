@@ -193,8 +193,9 @@ func getFormValue(r *http.Request, key string) ([]byte, error) {
 }
 
 type multipartUpload struct {
-	Script      string
-	BindingMeta map[string]workerBindingMeta
+	Script             string
+	BindingMeta        map[string]workerBindingMeta
+	CompatibilityFlags []string
 }
 
 func parseMultipartUpload(r *http.Request) (multipartUpload, error) {
@@ -205,8 +206,9 @@ func parseMultipartUpload(r *http.Request) (multipartUpload, error) {
 	}
 
 	var metadata struct {
-		BodyPart string              `json:"body_part"`
-		Bindings []workerBindingMeta `json:"bindings"`
+		BodyPart           string              `json:"body_part"`
+		Bindings           []workerBindingMeta `json:"bindings"`
+		CompatibilityFlags []string            `json:"compatibility_flags"`
 	}
 	err = json.Unmarshal(mdBytes, &metadata)
 	if err != nil {
@@ -229,8 +231,9 @@ func parseMultipartUpload(r *http.Request) (multipartUpload, error) {
 	}
 
 	return multipartUpload{
-		Script:      string(script),
-		BindingMeta: bindingMeta,
+		Script:             string(script),
+		BindingMeta:        bindingMeta,
+		CompatibilityFlags: metadata.CompatibilityFlags,
 	}, nil
 }
 
@@ -703,6 +706,34 @@ func TestWorkers_UploadWorkerWithServiceBinding(t *testing.T) {
 				Environment: "test-environment",
 			},
 		},
+	}
+	_, err := client.UploadWorkerWithBindings(context.Background(), &WorkerRequestParams{ScriptName: "bar"}, &scriptParams)
+	assert.NoError(t, err)
+}
+
+func TestWorkers_UploadWorkerWithCompatibilityFlags(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+
+		mpUpload, err := parseMultipartUpload(r)
+		assert.NoError(t, err)
+
+		expectedCompatibilityFlags := []string{"formdata_parser_supports_files"}
+
+		assert.Equal(t, workerScript, mpUpload.Script)
+		assert.Equal(t, expectedCompatibilityFlags, mpUpload.CompatibilityFlags)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, uploadWorkerResponseData) //nolint
+	}
+	mux.HandleFunc("/accounts/foo/workers/scripts/bar", handler)
+
+	scriptParams := WorkerScriptParams{
+		Script:             workerScript,
+		CompatibilityFlags: []string{"formdata_parser_supports_files"},
 	}
 	_, err := client.UploadWorkerWithBindings(context.Background(), &WorkerRequestParams{ScriptName: "bar"}, &scriptParams)
 	assert.NoError(t, err)
