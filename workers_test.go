@@ -128,6 +128,12 @@ const (
 				"type": "secret_text"
 			},
 			{
+				"name": "SERVICE_BINDING_NAME",
+				"type": "service",
+				"service": "test_service",
+				"environment": "production"
+			},
+			{
 				"name": "MY_NEW_BINDING",
 				"type": "some_imaginary_new_binding_type"
 			}
@@ -193,8 +199,10 @@ func getFormValue(r *http.Request, key string) ([]byte, error) {
 }
 
 type multipartUpload struct {
-	Script      string
-	BindingMeta map[string]workerBindingMeta
+	Script             string
+	BindingMeta        map[string]workerBindingMeta
+	CompatibilityFlags []string
+	CompatibilityDate  string
 }
 
 func parseMultipartUpload(r *http.Request) (multipartUpload, error) {
@@ -205,8 +213,10 @@ func parseMultipartUpload(r *http.Request) (multipartUpload, error) {
 	}
 
 	var metadata struct {
-		BodyPart string              `json:"body_part"`
-		Bindings []workerBindingMeta `json:"bindings"`
+		BodyPart           string              `json:"body_part"`
+		Bindings           []workerBindingMeta `json:"bindings"`
+		CompatibilityFlags []string            `json:"compatibility_flags"`
+		CompatibilityDate  string              `json:"compatibility_date"`
 	}
 	err = json.Unmarshal(mdBytes, &metadata)
 	if err != nil {
@@ -229,8 +239,10 @@ func parseMultipartUpload(r *http.Request) (multipartUpload, error) {
 	}
 
 	return multipartUpload{
-		Script:      string(script),
-		BindingMeta: bindingMeta,
+		Script:             string(script),
+		BindingMeta:        bindingMeta,
+		CompatibilityFlags: metadata.CompatibilityFlags,
+		CompatibilityDate:  metadata.CompatibilityDate,
 	}, nil
 }
 
@@ -708,6 +720,38 @@ func TestWorkers_UploadWorkerWithServiceBinding(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+func TestWorkers_UploadWorkerWithCompatibilityFlags(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	compatibiltyDate := time.Now().Format("2006-02-01")
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+
+		mpUpload, err := parseMultipartUpload(r)
+		assert.NoError(t, err)
+
+		expectedCompatibilityFlags := []string{"formdata_parser_supports_files"}
+
+		assert.Equal(t, workerScript, mpUpload.Script)
+		assert.Equal(t, expectedCompatibilityFlags, mpUpload.CompatibilityFlags)
+		assert.Equal(t, compatibiltyDate, mpUpload.CompatibilityDate)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, uploadWorkerResponseData) //nolint
+	}
+	mux.HandleFunc("/accounts/foo/workers/scripts/bar", handler)
+
+	scriptParams := WorkerScriptParams{
+		Script:             workerScript,
+		CompatibilityFlags: []string{"formdata_parser_supports_files"},
+		CompatibilityDate:  compatibiltyDate,
+	}
+	_, err := client.UploadWorkerWithBindings(context.Background(), &WorkerRequestParams{ScriptName: "bar"}, &scriptParams)
+	assert.NoError(t, err)
+}
+
 func TestWorkers_CreateWorkerRoute(t *testing.T) {
 	setup()
 	defer teardown()
@@ -975,7 +1019,7 @@ func TestWorkers_ListWorkerBindingsMultiScript(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Equal(t, successResponse, res.Response)
-	assert.Equal(t, 5, len(res.BindingList))
+	assert.Equal(t, 6, len(res.BindingList))
 
 	assert.Equal(t, res.BindingList[0], WorkerBindingListItem{
 		Name: "MY_KV",
@@ -1007,10 +1051,19 @@ func TestWorkers_ListWorkerBindingsMultiScript(t *testing.T) {
 	assert.Equal(t, WorkerSecretTextBindingType, res.BindingList[3].Binding.Type())
 
 	assert.Equal(t, res.BindingList[4], WorkerBindingListItem{
+		Name: "SERVICE_BINDING_NAME",
+		Binding: WorkerServiceBinding{
+			Environment: "production",
+			Service:     "test_service",
+		},
+	})
+	assert.Equal(t, WorkerServiceBindingType, res.BindingList[4].Binding.Type())
+
+	assert.Equal(t, res.BindingList[5], WorkerBindingListItem{
 		Name:    "MY_NEW_BINDING",
 		Binding: WorkerInheritBinding{},
 	})
-	assert.Equal(t, WorkerInheritBindingType, res.BindingList[4].Binding.Type())
+	assert.Equal(t, WorkerInheritBindingType, res.BindingList[5].Binding.Type())
 }
 
 func TestWorkers_UpdateWorkerRouteErrorsWhenMixingSingleAndMultiScriptProperties(t *testing.T) {
