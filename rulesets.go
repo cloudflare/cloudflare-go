@@ -216,7 +216,7 @@ type RulesetRuleActionParametersOverrides struct {
 type RulesetRuleActionParametersCategories struct {
 	Category string `json:"category"`
 	Action   string `json:"action,omitempty"`
-	Enabled  bool   `json:"enabled"`
+	Enabled  *bool  `json:"enabled,omitempty"`
 }
 
 type RulesetRuleActionParametersRules struct {
