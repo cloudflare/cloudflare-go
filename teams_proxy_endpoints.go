@@ -30,7 +30,7 @@ type TeamsProxyEndpoint struct {
 
 // TeamsProxyEndpoint returns a single proxy endpoints within an account.
 //
-// API reference: https://api.cloudflare.com/#teams-proxy-endpoints-proxy-endpoint-details
+// API reference: https://api.cloudflare.com/#zero-trust-gateway-proxy-endpoints-proxy-endpoint-details
 func (api *API) TeamsProxyEndpoint(ctx context.Context, accountID, proxyEndpointID string) (TeamsProxyEndpoint, error) {
 	uri := fmt.Sprintf("/%s/%s/gateway/proxy_endpoints/%s", AccountRouteRoot, accountID, proxyEndpointID)
 
@@ -50,7 +50,7 @@ func (api *API) TeamsProxyEndpoint(ctx context.Context, accountID, proxyEndpoint
 
 // TeamsProxyEndpoints returns all proxy endpoints within an account.
 //
-// API reference: https://api.cloudflare.com/#teams-proxy-endpoints-list-proxy-endpoints
+// API reference: https://api.cloudflare.com/#zero-trust-gateway-proxy-endpoints-list-proxy-endpoints
 func (api *API) TeamsProxyEndpoints(ctx context.Context, accountID string) ([]TeamsProxyEndpoint, ResultInfo, error) {
 	uri := fmt.Sprintf("/%s/%s/gateway/proxy_endpoints", AccountRouteRoot, accountID)
 
@@ -70,7 +70,7 @@ func (api *API) TeamsProxyEndpoints(ctx context.Context, accountID string) ([]Te
 
 // CreateTeamsProxyEndpoint creates a new proxy endpoint.
 //
-// API reference: https://api.cloudflare.com/#teams-proxy-endpoints-create-proxy-endpoint
+// API reference: https://api.cloudflare.com/#zero-trust-gateway-proxy-endpoints-create-proxy-endpoint
 func (api *API) CreateTeamsProxyEndpoint(ctx context.Context, accountID string, proxyEndpoint TeamsProxyEndpoint) (TeamsProxyEndpoint, error) {
 	uri := fmt.Sprintf("/%s/%s/gateway/proxy_endpoints", AccountRouteRoot, accountID)
 
@@ -90,7 +90,7 @@ func (api *API) CreateTeamsProxyEndpoint(ctx context.Context, accountID string, 
 
 // UpdateTeamsProxyEndpoint updates an existing teams Proxy Endpoint.
 //
-// API reference: https://api.cloudflare.com/#teams-proxy-endpoints-update-proxy-endpoint
+// API reference: https://api.cloudflare.com/#zero-trust-gateway-proxy-endpoints-update-proxy-endpoint
 func (api *API) UpdateTeamsProxyEndpoint(ctx context.Context, accountID string, proxyEndpoint TeamsProxyEndpoint) (TeamsProxyEndpoint, error) {
 	if proxyEndpoint.ID == "" {
 		return TeamsProxyEndpoint{}, errors.Errorf("Proxy Endpoint ID cannot be empty")
@@ -119,7 +119,7 @@ func (api *API) UpdateTeamsProxyEndpoint(ctx context.Context, accountID string, 
 
 // DeleteTeamsProxyEndpoint deletes a teams Proxy Endpoint.
 //
-// API reference: https://api.cloudflare.com/#teams-proxy-endpoints-delete-teams-proxy-endpoint
+// API reference: https://api.cloudflare.com/#zero-trust-gateway-proxy-endpoints-delete-proxy-endpoint
 func (api *API) DeleteTeamsProxyEndpoint(ctx context.Context, accountID, proxyEndpointID string) error {
 	uri := fmt.Sprintf(
 		"/%s/%s/gateway/proxy_endpoints/%s",
