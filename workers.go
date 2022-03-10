@@ -107,6 +107,8 @@ const (
 	WorkerPlainTextBindingType WorkerBindingType = "plain_text"
 	// WorkerServiceBindingType is the type for worker service bindings.
 	WorkerServiceBindingType WorkerBindingType = "service"
+	// WorkerDynamicDispatchBindingType is the type for dynamic dispatch bindings.
+	WorkerDynamicDispatchBindingType WorkerBindingType = "dynamic_dispatch"
 )
 
 // WorkerBindingListItem a struct representing an individual binding in a list of bindings.
@@ -305,6 +307,27 @@ func (b WorkerServiceBinding) serialize(bindingName string) (workerBindingMeta, 
 	}, nil, nil
 }
 
+// WorkerDynamicDispatchBinding is a binding to a dispatcher than can dispatch another Worker
+//
+// https://developers.cloudflare.com/workers/tooling/api/scripts/#add-a-plain-text-binding
+type WorkerDynamicDispatchBinding struct{}
+
+// Type returns the type of the binding.
+func (b WorkerDynamicDispatchBinding) Type() WorkerBindingType {
+	return WorkerDynamicDispatchBindingType
+}
+
+func (b WorkerDynamicDispatchBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
+	if bindingName == "" {
+		return nil, nil, errors.Errorf(`Name for Dynamic Dispatch binding "%s" cannot be empty`, bindingName)
+	}
+
+	return workerBindingMeta{
+		"name": bindingName,
+		"type": b.Type(),
+	}, nil, nil
+}
+
 // Each binding that adds a part to the multipart form body will need
 // a unique part name so we just generate a random 128bit hex string.
 func getRandomPartName() string {
@@ -459,6 +482,8 @@ func (api *API) ListWorkerBindings(ctx context.Context, requestParams *WorkerReq
 				Service:     jsonBinding["service"].(string),
 				Environment: jsonBinding["environment"].(string),
 			}
+		case WorkerDynamicDispatchBindingType:
+			bindingListItem.Binding = WorkerDynamicDispatchBinding{}
 		default:
 			bindingListItem.Binding = WorkerInheritBinding{}
 		}
