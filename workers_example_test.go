@@ -23,7 +23,7 @@ func ExampleAPI_UploadWorker() {
 		log.Fatal(err)
 	}
 
-	res, err := api.UploadWorker(context.Background(), &cloudflare.WorkerRequestParams{ZoneID: zoneID}, workerScript)
+	res, err := api.UploadWorker(context.Background(), &cloudflare.WorkerRequestParams{ZoneID: zoneID}, &cloudflare.WorkerScriptParams{Script: workerScript})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -38,7 +38,7 @@ func UploadWorkerWithName() {
 		log.Fatal(err)
 	}
 
-	res, err := api.UploadWorker(context.Background(), &cloudflare.WorkerRequestParams{ScriptName: "baz"}, workerScript)
+	res, err := api.UploadWorker(context.Background(), &cloudflare.WorkerRequestParams{ScriptName: "baz"}, &cloudflare.WorkerScriptParams{Script: workerScript})
 	if err != nil {
 		log.Fatal(err)
 	}
