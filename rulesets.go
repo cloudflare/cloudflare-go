@@ -175,6 +175,14 @@ type RulesetRuleActionParameters struct {
 	Overrides   *RulesetRuleActionParametersOverrides            `json:"overrides,omitempty"`
 	MatchedData *RulesetRuleActionParametersMatchedData          `json:"matched_data,omitempty"`
 	Version     string                                           `json:"version,omitempty"`
+	Response    *RulesetRuleActionParameterBlockResponse         `json:"response,omitempty"`
+}
+
+// RulesetRuleActionParametersBlock holds the BlockResponse struct for an action parameter.
+type RulesetRuleActionParameterBlockResponse struct {
+	StatusCode  uint16 `json:"status_code"`
+	ContentType string `json:"content_type"`
+	Content     string `json:"content"`
 }
 
 // RulesetRuleActionParametersURI holds the URI struct for an action parameter.
@@ -256,6 +264,7 @@ type RulesetRuleRateLimit struct {
 	Period             int      `json:"period,omitempty"`
 	MitigationTimeout  int      `json:"mitigation_timeout,omitempty"`
 	CountingExpression string   `json:"counting_expression,omitempty"`
+	RequestsToOrigin   bool     `json:"requests_to_origin,omitempty"`
 }
 
 // RulesetRuleExposedCredentialCheck contains the structure of an exposed
@@ -376,7 +385,6 @@ func (api *API) CreateAccountRuleset(ctx context.Context, accountID string, rule
 func (api *API) createRuleset(ctx context.Context, identifierType RouteRoot, identifier string, ruleset Ruleset) (Ruleset, error) {
 	uri := fmt.Sprintf("/%s/%s/rulesets", identifierType, identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, ruleset)
-
 	if err != nil {
 		return Ruleset{}, err
 	}
@@ -407,7 +415,6 @@ func (api *API) DeleteAccountRuleset(ctx context.Context, accountID, rulesetID s
 func (api *API) deleteRuleset(ctx context.Context, identifierType RouteRoot, identifier, rulesetID string) error {
 	uri := fmt.Sprintf("/%s/%s/rulesets/%s", identifierType, identifier, rulesetID)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
-
 	if err != nil {
 		return err
 	}
