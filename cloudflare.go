@@ -183,28 +183,27 @@ func (api *API) makeRequestWithAuthType(ctx context.Context, method, uri string,
 }
 
 func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, uri string, params interface{}, authType int, headers http.Header) ([]byte, error) {
-	var reqBody io.Reader
 	var err error
-
-	if params != nil {
-		if r, ok := params.(io.Reader); ok {
-			reqBody = r
-		} else if paramBytes, ok := params.([]byte); ok {
-			reqBody = bytes.NewReader(paramBytes)
-		} else {
-			var jsonBody []byte
-			jsonBody, err = json.Marshal(params)
-			if err != nil {
-				return nil, errors.Wrap(err, "error marshalling params to JSON")
-			}
-			reqBody = bytes.NewReader(jsonBody)
-		}
-	}
-
 	var resp *http.Response
 	var respErr error
 	var respBody []byte
 	for i := 0; i <= api.retryPolicy.MaxRetries; i++ {
+		var reqBody io.Reader
+		if params != nil {
+			if r, ok := params.(io.Reader); ok {
+				reqBody = r
+			} else if paramBytes, ok := params.([]byte); ok {
+				reqBody = bytes.NewReader(paramBytes)
+			} else {
+				var jsonBody []byte
+				jsonBody, err = json.Marshal(params)
+				if err != nil {
+					return nil, errors.Wrap(err, "error marshalling params to JSON")
+				}
+				reqBody = bytes.NewReader(jsonBody)
+			}
+		}
+
 		if i > 0 {
 			// expect the backoff introduced here on errored requests to dominate the effect of rate limiting
 			// don't need a random component here as the rate limiter should do something similar
