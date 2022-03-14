@@ -59,19 +59,20 @@ type WorkerRouteResponse struct {
 // WorkerScript Cloudflare Worker struct with metadata.
 type WorkerScript struct {
 	WorkerMetaData
-	Script            string   `json:"script"`
-	UsageModel        string   `json:"usage_model,omitempty"`
-	CompatibiltyFlags []string `json:"compatibility_flags,omitempty"`
-	CompatibiltyDate  string   `json:"compatibility_date,omitempty"`
+	Script     string `json:"script"`
+	UsageModel string `json:"usage_model,omitempty"`
 }
 
 // WorkerMetaData contains worker script information such as size, creation & modification dates.
 type WorkerMetaData struct {
-	ID         string    `json:"id,omitempty"`
-	ETAG       string    `json:"etag,omitempty"`
-	Size       int       `json:"size,omitempty"`
-	CreatedOn  time.Time `json:"created_on,omitempty"`
-	ModifiedOn time.Time `json:"modified_on,omitempty"`
+	ID                string    `json:"id,omitempty"`
+	ETAG              string    `json:"etag,omitempty"`
+	ETAGBypass        string    `json:"etag_bypass,omitempty"`
+	Size              int       `json:"size,omitempty"`
+	CreatedOn         time.Time `json:"created_on,omitempty"`
+	ModifiedOn        time.Time `json:"modified_on,omitempty"`
+	CompatibiltyFlags []string  `json:"compatibility_flags,omitempty"`
+	CompatibiltyDate  string    `json:"compatibility_date,omitempty"`
 }
 
 // WorkerListResponse wrapper struct for API response to worker script list API call.
