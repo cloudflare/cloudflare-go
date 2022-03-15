@@ -14,7 +14,7 @@ import (
 
 // PagesProject represents a Pages project.
 type PagesProject struct {
-	Name                string                        `json:"name"`
+	Name                string                        `json:"name,omitempty"`
 	ID                  string                        `json:"id"`
 	CreatedOn           *time.Time                    `json:"created_on"`
 	SubDomain           string                        `json:"subdomain"`
