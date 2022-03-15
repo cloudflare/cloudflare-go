@@ -203,7 +203,7 @@ func (api *API) RevokeOriginCertificate(ctx context.Context, certificateID strin
 	return &originResponse.Result, nil
 }
 
-// Gets the Cloudflare Origin CA Root Certificate for a given algorithm in PEM format.
+// OriginCARootCertificate gets the Cloudflare Origin CA Root Certificate for a given algorithm in PEM format.
 // Algorithm must be one of ['ecc', 'rsa'].
 func OriginCARootCertificate(algorithm string) ([]byte, error) {
 	var url string

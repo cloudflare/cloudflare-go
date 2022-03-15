@@ -13,7 +13,7 @@ import (
 )
 
 type AccessApprovalGroup struct {
-	EmailListUuid   string   `json:"email_list_uuid,omitempty"`
+	EmailListUUID   string   `json:"email_list_uuid,omitempty"`
 	EmailAddresses  []string `json:"email_addresses,omitempty"`
 	ApprovalsNeeded int      `json:"approvals_needed,omitempty"`
 }

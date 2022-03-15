@@ -72,7 +72,7 @@ func TestAccessApplications(t *testing.T) {
 		CustomDenyMessage:       "denied!",
 		CustomDenyURL:           "https://www.example.com",
 		SameSiteCookieAttribute: "strict",
-		HttpOnlyCookieAttribute: true,
+		HTTPOnlyCookieAttribute: true,
 		LogoURL:                 "https://www.example.com/example.png",
 		SkipInterstitial:        true,
 	}}

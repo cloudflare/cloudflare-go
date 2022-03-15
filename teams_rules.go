@@ -63,8 +63,8 @@ type TeamsFilterType string
 type TeamsGatewayAction string
 
 const (
-	HttpFilter TeamsFilterType = "http"
-	DnsFilter  TeamsFilterType = "dns"
+	HTTPFilter TeamsFilterType = "http"
+	DNSFilter  TeamsFilterType = "dns"
 	L4Filter   TeamsFilterType = "l4"
 )
 
@@ -125,7 +125,7 @@ type TeamsRuleResponse struct {
 	Result TeamsRule `json:"result"`
 }
 
-// TeamsRuleResponse is the API response, containing an array of rules.
+// TeamsRulesResponse is the API response, containing an array of rules.
 type TeamsRulesResponse struct {
 	Response
 	Result []TeamsRule `json:"result"`
@@ -165,8 +165,8 @@ func (api *API) TeamsRules(ctx context.Context, accountID string) ([]TeamsRule, 
 // TeamsRule returns the rule with rule ID in the URL.
 //
 // API reference: https://api.cloudflare.com/#teams-rules-properties
-func (api *API) TeamsRule(ctx context.Context, accountID string, ruleId string) (TeamsRule, error) {
-	uri := fmt.Sprintf("/accounts/%s/gateway/rules/%s", accountID, ruleId)
+func (api *API) TeamsRule(ctx context.Context, accountID string, ruleID string) (TeamsRule, error) {
+	uri := fmt.Sprintf("/accounts/%s/gateway/rules/%s", accountID, ruleID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -205,8 +205,8 @@ func (api *API) TeamsCreateRule(ctx context.Context, accountID string, rule Team
 // TeamsUpdateRule updates a rule with wirefilter expression.
 //
 // API reference: https://api.cloudflare.com/#teams-rules-properties
-func (api *API) TeamsUpdateRule(ctx context.Context, accountID string, ruleId string, rule TeamsRule) (TeamsRule, error) {
-	uri := fmt.Sprintf("/accounts/%s/gateway/rules/%s", accountID, ruleId)
+func (api *API) TeamsUpdateRule(ctx context.Context, accountID string, ruleID string, rule TeamsRule) (TeamsRule, error) {
+	uri := fmt.Sprintf("/accounts/%s/gateway/rules/%s", accountID, ruleID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, rule)
 	if err != nil {
@@ -225,8 +225,8 @@ func (api *API) TeamsUpdateRule(ctx context.Context, accountID string, ruleId st
 // TeamsPatchRule patches a rule associated values.
 //
 // API reference: https://api.cloudflare.com/#teams-rules-properties
-func (api *API) TeamsPatchRule(ctx context.Context, accountID string, ruleId string, rule TeamsRulePatchRequest) (TeamsRule, error) {
-	uri := fmt.Sprintf("/accounts/%s/gateway/rules/%s", accountID, ruleId)
+func (api *API) TeamsPatchRule(ctx context.Context, accountID string, ruleID string, rule TeamsRulePatchRequest) (TeamsRule, error) {
+	uri := fmt.Sprintf("/accounts/%s/gateway/rules/%s", accountID, ruleID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, rule)
 	if err != nil {
@@ -245,8 +245,8 @@ func (api *API) TeamsPatchRule(ctx context.Context, accountID string, ruleId str
 // TeamsDeleteRule deletes a rule.
 //
 // API reference: https://api.cloudflare.com/#teams-rules-properties
-func (api *API) TeamsDeleteRule(ctx context.Context, accountID string, ruleId string) error {
-	uri := fmt.Sprintf("/accounts/%s/gateway/rules/%s", accountID, ruleId)
+func (api *API) TeamsDeleteRule(ctx context.Context, accountID string, ruleID string) error {
+	uri := fmt.Sprintf("/accounts/%s/gateway/rules/%s", accountID, ruleID)
 
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {

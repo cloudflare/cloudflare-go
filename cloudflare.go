@@ -173,7 +173,7 @@ func (api *API) makeRequestContextWithHeaders(ctx context.Context, method, uri s
 }
 
 // Deprecated: Use `makeRequestContextWithHeaders` instead.
-//nolint:unused
+//nolint
 func (api *API) makeRequestWithHeaders(method, uri string, params interface{}, headers http.Header) ([]byte, error) {
 	return api.makeRequestWithAuthTypeAndHeaders(context.Background(), method, uri, params, api.authType, headers)
 }
@@ -198,7 +198,7 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 				var jsonBody []byte
 				jsonBody, err = json.Marshal(params)
 				if err != nil {
-					return nil, errors.Wrap(err, "error marshalling params to JSON")
+					return nil, errors.Wrap(err, "error marshaling params to JSON")
 				}
 				reqBody = bytes.NewReader(jsonBody)
 			}
@@ -237,7 +237,7 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 			// see https://golang.org/pkg/net/http/#Client.Do
 			if respErr == nil {
 				respBody, err = ioutil.ReadAll(resp.Body)
-				resp.Body.Close()
+				resp.Body.Close() //nolint:errcheck
 
 				respErr = errors.Wrap(err, "could not read response body")
 

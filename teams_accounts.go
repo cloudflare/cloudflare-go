@@ -47,7 +47,7 @@ type TeamsAccountSettings struct {
 }
 
 type BrowserIsolation struct {
-	UrlBrowserIsolationEnabled bool `json:"url_browser_isolation_enabled"`
+	URLBrowserIsolationEnabled bool `json:"url_browser_isolation_enabled"`
 }
 
 type TeamsAntivirus struct {
@@ -80,8 +80,8 @@ type TeamsBlockPage struct {
 type TeamsRuleType = string
 
 const (
-	TeamsHttpRuleType TeamsRuleType = "http"
-	TeamsDnsRuleType  TeamsRuleType = "dns"
+	TeamsHTTPRuleType TeamsRuleType = "http"
+	TeamsDNSRuleType  TeamsRuleType = "dns"
 	TeamsL4RuleType   TeamsRuleType = "l4"
 )
 

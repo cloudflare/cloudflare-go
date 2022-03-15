@@ -23,7 +23,7 @@ type SplitTunnel struct {
 	Description string `json:"description,omitempty"`
 }
 
-// ListSplitTunnel returns all include or exclude split tunnel  within an account.
+// ListSplitTunnels returns all include or exclude split tunnel  within an account.
 //
 // API reference for include: https://api.cloudflare.com/#device-policy-get-split-tunnel-include-list
 // API reference for exclude: https://api.cloudflare.com/#device-policy-get-split-tunnel-exclude-list

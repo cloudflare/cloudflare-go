@@ -46,7 +46,7 @@ type AccessApplication struct {
 	SkipInterstitial        bool                           `json:"skip_interstitial,omitempty"`
 	AppLauncherVisible      bool                           `json:"app_launcher_visible,omitempty"`
 	EnableBindingCookie     bool                           `json:"enable_binding_cookie,omitempty"`
-	HttpOnlyCookieAttribute bool                           `json:"http_only_cookie_attribute,omitempty"`
+	HTTPOnlyCookieAttribute bool                           `json:"http_only_cookie_attribute,omitempty"`
 }
 
 type AccessApplicationGatewayRule struct {

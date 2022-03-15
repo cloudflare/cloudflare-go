@@ -19,7 +19,7 @@ type DeviceClientCertificatesZone struct {
 	Result Enabled
 }
 
-// UpdateDeviceClientCertificates controls the zero trust zone used to provision client certificates.
+// UpdateDeviceClientCertificatesZone controls the zero trust zone used to provision client certificates.
 //
 // API reference: https://api.cloudflare.com/#device-client-certificates
 func (api *API) UpdateDeviceClientCertificatesZone(ctx context.Context, zoneID string, enable bool) (DeviceClientCertificatesZone, error) {

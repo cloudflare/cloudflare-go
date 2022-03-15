@@ -61,7 +61,7 @@ type PagesProjectDeploymentConfigEnvironment struct {
 	EnvVars map[string]PagesProjectDeploymentVar `json:"env_vars"`
 }
 
-// PagesProjectDeploymentConfigBuildVersion represents a value for a BUILD_VERSION.
+// PagesProjectDeploymentVar represents a value for a BUILD_VERSION.
 type PagesProjectDeploymentVar struct {
 	Value string `json:"value"`
 }

@@ -178,7 +178,7 @@ type RulesetRuleActionParameters struct {
 	Response    *RulesetRuleActionParameterBlockResponse         `json:"response,omitempty"`
 }
 
-// RulesetRuleActionParametersBlock holds the BlockResponse struct for an action parameter.
+// RulesetRuleActionParameterBlockResponse holds the BlockResponse struct for an action parameter.
 type RulesetRuleActionParameterBlockResponse struct {
 	StatusCode  uint16 `json:"status_code"`
 	ContentType string `json:"content_type"`

@@ -45,7 +45,7 @@ type UserItem struct {
 	Email string `json:"email,omitempty"`
 }
 
-// ListTeamsDevice returns all devices for a given account.
+// ListTeamsDevices returns all devices for a given account.
 //
 // API reference : https://api.cloudflare.com/#devices-list-devices
 func (api *API) ListTeamsDevices(ctx context.Context, accountID string) ([]TeamsDeviceListItem, error) {
@@ -65,7 +65,7 @@ func (api *API) ListTeamsDevices(ctx context.Context, accountID string) ([]Teams
 	return response.Result, nil
 }
 
-// RevokeTeamsDevice revokes device with given identifiers.
+// RevokeTeamsDevices revokes device with given identifiers.
 //
 // API reference : https://api.cloudflare.com/#devices-revoke-devices
 func (api *API) RevokeTeamsDevices(ctx context.Context, accountID string, deviceIds []string) (Response, error) {

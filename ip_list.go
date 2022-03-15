@@ -431,7 +431,7 @@ func (api *API) GetIPListBulkOperation(ctx context.Context, id string) (IPListBu
 	return result.Result, nil
 }
 
-// pollIPListBulkOperation implements synchronous behaviour for some asynchronous endpoints.
+// pollIPListBulkOperation implements synchronous behavior for some asynchronous endpoints.
 // bulk-operation status can be either pending, running, failed or completed.
 func (api *API) pollIPListBulkOperation(ctx context.Context, id string) error {
 	for i := uint8(0); i < 16; i++ {

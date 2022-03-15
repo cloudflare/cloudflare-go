@@ -614,7 +614,7 @@ func formatMultipartBody(params *WorkerScriptParams) (string, []byte, error) {
 		}
 	}
 
-	mpw.Close()
+	mpw.Close() //nolint
 
 	return mpw.FormDataContentType(), buf.Bytes(), nil
 }

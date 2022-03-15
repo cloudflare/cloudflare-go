@@ -26,7 +26,7 @@ type WaitingRoom struct {
 	QueueAll              bool      `json:"queue_all"`
 	DisableSessionRenewal bool      `json:"disable_session_renewal"`
 	Suspended             bool      `json:"suspended"`
-	JsonResponseEnabled   bool      `json:"json_response_enabled"`
+	JSONResponseEnabled   bool      `json:"json_response_enabled"`
 }
 
 // WaitingRoomStatus describes the status of a waiting room.

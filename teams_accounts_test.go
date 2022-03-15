@@ -154,7 +154,7 @@ func TestTeamsAccountGetLoggingConfiguration(t *testing.T) {
 		assert.Equal(t, actual, TeamsLoggingSettings{
 			RedactPii: true,
 			LoggingSettingsByRuleType: map[TeamsRuleType]TeamsAccountLoggingConfiguration{
-				TeamsDnsRuleType: {LogAll: false, LogBlocks: true},
+				TeamsDNSRuleType: {LogAll: false, LogBlocks: true},
 			},
 		})
 	}
@@ -180,11 +180,11 @@ func TestTeamsAccountUpdateLoggingConfiguration(t *testing.T) {
 	actual, err := client.TeamsAccountUpdateLoggingConfiguration(context.Background(), testAccountID, TeamsLoggingSettings{
 		RedactPii: true,
 		LoggingSettingsByRuleType: map[TeamsRuleType]TeamsAccountLoggingConfiguration{
-			TeamsDnsRuleType: {
+			TeamsDNSRuleType: {
 				LogAll:    false,
 				LogBlocks: true,
 			},
-			TeamsHttpRuleType: {
+			TeamsHTTPRuleType: {
 				LogAll: true,
 			},
 			TeamsL4RuleType: {
@@ -197,8 +197,8 @@ func TestTeamsAccountUpdateLoggingConfiguration(t *testing.T) {
 		assert.Equal(t, actual, TeamsLoggingSettings{
 			RedactPii: true,
 			LoggingSettingsByRuleType: map[TeamsRuleType]TeamsAccountLoggingConfiguration{
-				TeamsDnsRuleType:  {LogAll: false, LogBlocks: true},
-				TeamsHttpRuleType: {LogAll: true, LogBlocks: false},
+				TeamsDNSRuleType:  {LogAll: false, LogBlocks: true},
+				TeamsHTTPRuleType: {LogAll: true, LogBlocks: false},
 				TeamsL4RuleType:   {LogAll: false, LogBlocks: true},
 			},
 		})

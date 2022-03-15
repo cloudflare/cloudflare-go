@@ -43,14 +43,14 @@ type AccessOrganizationDetailResponse struct {
 	Result   AccessOrganization `json:"result"`
 }
 
-// AccessOrganization returns the Access organisation details.
+// AccessOrganization returns the Access organization details.
 //
 // API reference: https://api.cloudflare.com/#access-organizations-access-organization-details
 func (api *API) AccessOrganization(ctx context.Context, accountID string) (AccessOrganization, ResultInfo, error) {
 	return api.accessOrganization(ctx, accountID, AccountRouteRoot)
 }
 
-// ZoneLevelAccessOrganization returns the zone level Access organisation details.
+// ZoneLevelAccessOrganization returns the zone level Access organization details.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-organizations-access-organization-details
 func (api *API) ZoneLevelAccessOrganization(ctx context.Context, zoneID string) (AccessOrganization, ResultInfo, error) {
@@ -74,14 +74,14 @@ func (api *API) accessOrganization(ctx context.Context, id string, routeRoot Rou
 	return accessOrganizationListResponse.Result, accessOrganizationListResponse.ResultInfo, nil
 }
 
-// CreateAccessOrganization creates the Access organisation details.
+// CreateAccessOrganization creates the Access organization details.
 //
 // API reference: https://api.cloudflare.com/#access-organizations-create-access-organization
 func (api *API) CreateAccessOrganization(ctx context.Context, accountID string, accessOrganization AccessOrganization) (AccessOrganization, error) {
 	return api.createAccessOrganization(ctx, accountID, accessOrganization, AccountRouteRoot)
 }
 
-// CreateZoneLevelAccessOrganization creates the zone level Access organisation details.
+// CreateZoneLevelAccessOrganization creates the zone level Access organization details.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-organizations-create-access-organization
 func (api *API) CreateZoneLevelAccessOrganization(ctx context.Context, zoneID string, accessOrganization AccessOrganization) (AccessOrganization, error) {
@@ -105,14 +105,14 @@ func (api *API) createAccessOrganization(ctx context.Context, id string, accessO
 	return accessOrganizationDetailResponse.Result, nil
 }
 
-// UpdateAccessOrganization updates the Access organisation details.
+// UpdateAccessOrganization updates the Access organization details.
 //
 // API reference: https://api.cloudflare.com/#access-organizations-update-access-organization
 func (api *API) UpdateAccessOrganization(ctx context.Context, accountID string, accessOrganization AccessOrganization) (AccessOrganization, error) {
 	return api.updateAccessOrganization(ctx, accountID, accessOrganization, AccountRouteRoot)
 }
 
-// UpdateZoneLevelAccessOrganization updates the zone level Access organisation details.
+// UpdateZoneLevelAccessOrganization updates the zone level Access organization details.
 //
 // API reference: https://api.cloudflare.com/#zone-level-access-organizations-update-access-organization
 func (api *API) UpdateZoneLevelAccessOrganization(ctx context.Context, zoneID string, accessOrganization AccessOrganization) (AccessOrganization, error) {

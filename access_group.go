@@ -114,7 +114,7 @@ type AccessGroupGSuite struct {
 	} `json:"gsuite"`
 }
 
-// AccessGroupGitHub is used to configure access based on a GitHub organisation.
+// AccessGroupGitHub is used to configure access based on a GitHub organization.
 type AccessGroupGitHub struct {
 	GitHubOrganization struct {
 		Name               string `json:"name"`

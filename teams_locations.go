@@ -31,7 +31,7 @@ type TeamsLocation struct {
 	Name                  string                 `json:"name"`
 	Networks              []TeamsLocationNetwork `json:"networks"`
 	PolicyIDs             []string               `json:"policy_ids"`
-	Ip                    string                 `json:"ip,omitempty"`
+	IP                    string                 `json:"ip,omitempty"`
 	Subdomain             string                 `json:"doh_subdomain"`
 	AnonymizedLogsEnabled bool                   `json:"anonymized_logs_enabled"`
 	IPv4Destination       string                 `json:"ipv4_destination"`

@@ -93,7 +93,7 @@ var waitingRoom = WaitingRoom{
 	TotalActiveUsers:      1000,
 	SessionDuration:       10,
 	DisableSessionRenewal: false,
-	JsonResponseEnabled:   true,
+	JSONResponseEnabled:   true,
 	CustomPageHTML:        "{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Queue all enabled {{/waitTimeKnown}}",
 }
 

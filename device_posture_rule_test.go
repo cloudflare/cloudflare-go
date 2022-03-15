@@ -49,8 +49,8 @@ func TestDevicePostureIntegrations(t *testing.T) {
 		Type:          "workspace_one",
 		Interval:      "1h",
 		Config: DevicePostureIntegrationConfig{
-			AuthUrl:      "https://auth_url.example.com",
-			ApiUrl:       "https://api_url.example.com",
+			AuthURL:      "https://auth_url.example.com",
+			APIURL:       "https://api_url.example.com",
 			ClientID:     "test_client_id",
 			ClientSecret: "test_client_secret",
 		},
@@ -98,8 +98,8 @@ func TestDevicePostureIntegration(t *testing.T) {
 		Type:          "workspace_one",
 		Interval:      "1h",
 		Config: DevicePostureIntegrationConfig{
-			AuthUrl:      "https://auth_url.example.com",
-			ApiUrl:       "https://api_url.example.com",
+			AuthURL:      "https://auth_url.example.com",
+			APIURL:       "https://api_url.example.com",
 			ClientID:     "test_client_id",
 			ClientSecret: "test_client_secret",
 		},
@@ -147,8 +147,8 @@ func TestDevicePostureIntegrationUpdate(t *testing.T) {
 		Type:          "workspace_one",
 		Interval:      "1h",
 		Config: DevicePostureIntegrationConfig{
-			AuthUrl:      "https://auth_url.example.com",
-			ApiUrl:       "https://api_url.example.com",
+			AuthURL:      "https://auth_url.example.com",
+			APIURL:       "https://api_url.example.com",
 			ClientID:     "test_client_id",
 			ClientSecret: "test_client_secret",
 		},
@@ -196,8 +196,8 @@ func TestDevicePostureIntegrationCreate(t *testing.T) {
 		Type:          "workspace_one",
 		Interval:      "1h",
 		Config: DevicePostureIntegrationConfig{
-			AuthUrl:      "https://auth_url.example.com",
-			ApiUrl:       "https://api_url.example.com",
+			AuthURL:      "https://auth_url.example.com",
+			APIURL:       "https://api_url.example.com",
 			ClientID:     "test_client_id",
 			ClientSecret: "test_client_secret",
 		},

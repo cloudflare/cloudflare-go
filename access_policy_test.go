@@ -44,7 +44,7 @@ var (
 		PurposeJustificationPrompt:   &purposeJustificationPrompt,
 		ApprovalGroups: []AccessApprovalGroup{
 			{
-				EmailListUuid:   "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
+				EmailListUUID:   "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
 				ApprovalsNeeded: 3,
 			},
 			{
@@ -290,7 +290,7 @@ func TestCreateAccessPolicy(t *testing.T) {
 		PurposeJustificationPrompt:   &purposeJustificationPrompt,
 		ApprovalGroups: []AccessApprovalGroup{
 			{
-				EmailListUuid:   "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
+				EmailListUUID:   "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
 				ApprovalsNeeded: 3,
 			},
 			{
