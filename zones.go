@@ -30,7 +30,7 @@ func (s *ZonesService) Get(ctx context.Context, zoneID string) (Zone, error) {
 		return Zone{}, fmt.Errorf(errInvalidZoneIdentifer, zoneID)
 	}
 
-	res, _ := s.client.Call(context.Background(), http.MethodGet, "/zones/"+zoneID, nil)
+	res, _ := s.client.Call(ctx, http.MethodGet, "/zones/"+zoneID, nil)
 
 	var r ZoneResponse
 	err := json.Unmarshal(res, &r)
@@ -51,7 +51,7 @@ func (s *ZonesService) List(ctx context.Context, params ZoneParams) ([]Zone, err
 		queryParams = "?" + queryParams
 	}
 
-	res, _ := s.client.Call(context.Background(), http.MethodGet, "/zones"+queryParams, nil)
+	res, _ := s.client.Call(ctx, http.MethodGet, "/zones"+queryParams, nil)
 
 	var r ZonesResponse
 	err := json.Unmarshal(res, &r)
@@ -70,7 +70,7 @@ func (s *ZonesService) Delete(ctx context.Context, zoneID string) error {
 		return fmt.Errorf(errInvalidZoneIdentifer, zoneID)
 	}
 
-	res, _ := s.client.Call(context.Background(), http.MethodDelete, "/zones/"+zoneID, nil)
+	res, _ := s.client.Call(ctx, http.MethodDelete, "/zones/"+zoneID, nil)
 
 	var r ZoneResponse
 	err := json.Unmarshal(res, &r)
