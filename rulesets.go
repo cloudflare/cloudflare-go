@@ -175,11 +175,12 @@ type RulesetRuleActionParameters struct {
 	Overrides   *RulesetRuleActionParametersOverrides            `json:"overrides,omitempty"`
 	MatchedData *RulesetRuleActionParametersMatchedData          `json:"matched_data,omitempty"`
 	Version     string                                           `json:"version,omitempty"`
-	Response    *RulesetRuleActionParameterBlockResponse         `json:"response,omitempty"`
+	Response    *RulesetRuleActionParametersBlockResponse        `json:"response,omitempty"`
 }
 
-// RulesetRuleActionParametersBlock holds the BlockResponse struct for an action parameter.
-type RulesetRuleActionParameterBlockResponse struct {
+// RulesetRuleActionParametersBlockResponse holds the BlockResponse struct
+// for an action parameter.
+type RulesetRuleActionParametersBlockResponse struct {
 	StatusCode  uint16 `json:"status_code"`
 	ContentType string `json:"content_type"`
 	Content     string `json:"content"`
