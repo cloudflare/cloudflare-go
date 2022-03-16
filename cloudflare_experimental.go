@@ -251,12 +251,12 @@ func (c *Client) makeRequest(ctx context.Context, method, uri string, params int
 			break
 		}
 	}
+
 	if respErr != nil {
 		return nil, respErr
 	}
 
 	if resp.StatusCode >= http.StatusBadRequest {
-
 		if strings.HasSuffix(resp.Request.URL.Path, "/filters/validate-expr") {
 			return nil, errors.Errorf("%s", respBody)
 		}
