@@ -16,7 +16,7 @@ jobs:
       - uses: actions/cache@v2.1.7
         with:
           path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go${{ matrix.go-version }}-${{ hashFiles('**/go.sum') }}
+          key: ${{ runner.os }}-go${{ matrix.go-version }}-${{ hashFiles('**/go.mod') }}-${{ hashFiles('**/go.sum') }}
       - name: Vet
         run: go vet ./...
       - name: Test
