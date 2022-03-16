@@ -4,11 +4,19 @@ package cloudflare
 type RouteRoot string
 
 const (
+	defaultScheme   = "https"
+	defaultHostname = "api.cloudflare.com"
+	defaultBasePath = "/client/v4"
+	userAgent       = "cloudflare-go"
+
 	// AccountRouteRoot is the accounts route namespace.
 	AccountRouteRoot RouteRoot = "accounts"
 
 	// ZoneRouteRoot is the zones route namespace.
 	ZoneRouteRoot RouteRoot = "zones"
+
+	originCARootCertEccURL = "https://developers.cloudflare.com/ssl/static/origin_ca_ecc_root.pem"
+	originCARootCertRsaURL = "https://developers.cloudflare.com/ssl/static/origin_ca_rsa_root.pem"
 
 	// Used for testing.
 	testAccountID    = "01a7362d577a6c3019a474fd6f485823"

@@ -11,12 +11,12 @@
 A Go library for interacting with
 [Cloudflare's API v4](https://api.cloudflare.com/). This library allows you to:
 
-* Manage and automate changes to your DNS records within Cloudflare
-* Manage and automate changes to your zones (domains) on Cloudflare, including
+- Manage and automate changes to your DNS records within Cloudflare
+- Manage and automate changes to your zones (domains) on Cloudflare, including
   adding new zones to your account
-* List and modify the status of WAF (Web Application Firewall) rules for your
+- List and modify the status of WAF (Web Application Firewall) rules for your
   zones
-* Fetch Cloudflare's IP ranges for automating your firewall whitelisting
+- Fetch Cloudflare's IP ranges for automating your firewall whitelisting
 
 A command-line client, [flarectl](cmd/flarectl), is also available as part of
 this project.
@@ -25,28 +25,28 @@ this project.
 
 The current feature list includes:
 
-* [x] Cache purging
-* [x] Cloudflare IPs
-* [x] Custom hostnames
-* [x] DNS Firewall
-* [x] DNS Records
-* [x] Firewall (partial)
-* [x] Gateway Locations
-* [x] [Keyless SSL](https://blog.cloudflare.com/keyless-ssl-the-nitty-gritty-technical-details/)
-* [x] [Load Balancing](https://blog.cloudflare.com/introducing-load-balancing-intelligent-failover-with-cloudflare/)
-* [x] [Logpush Jobs](https://developers.cloudflare.com/logs/logpush/)
-* [x] Magic Transit / Magic WAN
-* [x] Notifications
-* [ ] Organization Administration
-* [x] [Origin CA](https://blog.cloudflare.com/universal-ssl-encryption-all-the-way-to-the-origin-for-free/)
-* [x] [Railgun](https://www.cloudflare.com/railgun/) administration
-* [x] Rate Limiting
-* [x] User Administration (partial)
-* [x] Web Application Firewall (WAF)
-* [x] Workers KV
-* [x] Zone cache settings
-* [x] Zone Lockdown and User-Agent Block rules
-* [x] Zones
+- [x] Cache purging
+- [x] Cloudflare IPs
+- [x] Custom hostnames
+- [x] DNS Firewall
+- [x] DNS Records
+- [x] Firewall (partial)
+- [x] Gateway Locations
+- [x] [Keyless SSL](https://blog.cloudflare.com/keyless-ssl-the-nitty-gritty-technical-details/)
+- [x] [Load Balancing](https://blog.cloudflare.com/introducing-load-balancing-intelligent-failover-with-cloudflare/)
+- [x] [Logpush Jobs](https://developers.cloudflare.com/logs/logpush/)
+- [x] Magic Transit / Magic WAN
+- [x] Notifications
+- [ ] Organization Administration
+- [x] [Origin CA](https://blog.cloudflare.com/universal-ssl-encryption-all-the-way-to-the-origin-for-free/)
+- [x] [Railgun](https://www.cloudflare.com/railgun/) administration
+- [x] Rate Limiting
+- [x] User Administration (partial)
+- [x] Web Application Firewall (WAF)
+- [x] Workers KV
+- [x] Zone cache settings
+- [x] Zone Lockdown and User-Agent Block rules
+- [x] Zones
 
 Pull Requests are welcome, but please open an issue (or comment in an existing
 issue) to discuss any non-trivial changes before submitting code.
@@ -112,6 +112,12 @@ func main() {
 Also refer to the
 [API documentation](https://pkg.go.dev/github.com/cloudflare/cloudflare-go) for
 how to use this package in-depth.
+
+## Experimental improvements
+
+This library is starting to ship with experimental improvements that are not yet
+ready for production but will be introduced before the next major version. See
+[experimental README](/docs/experimental.md) for full details.
 
 # License
 

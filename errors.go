@@ -19,12 +19,15 @@ const (
 	errOperationUnexpectedStatus = "bulk operation returned an unexpected status"
 	errResultInfo                = "incorrect pagination info (result_info) in responses"
 	errManualPagination          = "unexpected pagination options passed to functions that handle pagination automatically"
+
+	errInvalidZoneIdentifer = "invalid zone identifier: %s"
 )
 
 // APIRequestError is a type of error raised by API calls made by this library.
 type APIRequestError struct {
 	StatusCode int
 	Errors     []ResponseInfo
+	RayID      string
 }
 
 func (e APIRequestError) Error() string {

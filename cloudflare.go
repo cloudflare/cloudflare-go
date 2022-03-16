@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
@@ -19,11 +20,11 @@ import (
 	"golang.org/x/time/rate"
 )
 
-const apiURL = "https://api.cloudflare.com/client/v4"
+var (
+	Version string = "dev"
 
-const (
-	originCARootCertEccURL = "https://developers.cloudflare.com/ssl/static/origin_ca_ecc_root.pem"
-	originCARootCertRsaURL = "https://developers.cloudflare.com/ssl/static/origin_ca_rsa_root.pem"
+	// Deprecated: Use `client.New` configuration instead.
+	apiURL = fmt.Sprintf("%s://%s%s", defaultScheme, defaultHostname, defaultBasePath)
 )
 
 const (
@@ -58,7 +59,7 @@ func newClient(opts ...Option) (*API, error) {
 	silentLogger := log.New(ioutil.Discard, "", log.LstdFlags)
 
 	api := &API{
-		BaseURL:     apiURL,
+		BaseURL:     fmt.Sprintf("%s://%s%s", defaultScheme, defaultHostname, defaultBasePath),
 		headers:     make(http.Header),
 		rateLimiter: rate.NewLimiter(rate.Limit(4), 1), // 4rps equates to default api limit (1200 req/5 min)
 		retryPolicy: RetryPolicy{
