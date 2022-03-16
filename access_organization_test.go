@@ -28,8 +28,10 @@ func TestAccessOrganization(t *testing.T) {
 				"auth_domain": "test.cloudflareaccess.com",
 				"login_design": {
 					"background_color": "#c5ed1b",
+					"logo_path": "https://example.com/logo.png",
 					"text_color": "#c5ed1b",
-					"logo_path": "https://example.com/logo.png"
+					"header_text": "Widget Corp",
+					"footer_text": "© Widget Corp"
 				}
 			}
 		}
@@ -46,8 +48,10 @@ func TestAccessOrganization(t *testing.T) {
 		AuthDomain: "test.cloudflareaccess.com",
 		LoginDesign: AccessOrganizationLoginDesign{
 			BackgroundColor: "#c5ed1b",
-			TextColor:       "#c5ed1b",
 			LogoPath:        "https://example.com/logo.png",
+			TextColor:       "#c5ed1b",
+			HeaderText:      "Widget Corp",
+			FooterText:      "© Widget Corp",
 		},
 	}
 
@@ -86,8 +90,10 @@ func TestCreateAccessOrganization(t *testing.T) {
 				"auth_domain": "test.cloudflareaccess.com",
 				"login_design": {
 					"background_color": "#c5ed1b",
+					"logo_path": "https://example.com/logo.png",
 					"text_color": "#c5ed1b",
-					"logo_path": "https://example.com/logo.png"
+					"header_text": "Widget Corp",
+					"footer_text": "© Widget Corp"
 				}
 			}
 		}
@@ -104,8 +110,10 @@ func TestCreateAccessOrganization(t *testing.T) {
 		AuthDomain: "test.cloudflareaccess.com",
 		LoginDesign: AccessOrganizationLoginDesign{
 			BackgroundColor: "#c5ed1b",
-			TextColor:       "#c5ed1b",
 			LogoPath:        "https://example.com/logo.png",
+			TextColor:       "#c5ed1b",
+			HeaderText:      "Widget Corp",
+			FooterText:      "© Widget Corp",
 		},
 	}
 
@@ -144,8 +152,10 @@ func TestUpdateAccessOrganization(t *testing.T) {
 				"auth_domain": "test.cloudflareaccess.com",
 				"login_design": {
 					"background_color": "#c5ed1b",
+					"logo_path": "https://example.com/logo.png",
 					"text_color": "#c5ed1b",
-					"logo_path": "https://example.com/logo.png"
+					"header_text": "Widget Corp",
+					"footer_text": "© Widget Corp"
 				}
 			}
 		}
@@ -162,8 +172,10 @@ func TestUpdateAccessOrganization(t *testing.T) {
 		AuthDomain: "test.cloudflareaccess.com",
 		LoginDesign: AccessOrganizationLoginDesign{
 			BackgroundColor: "#c5ed1b",
-			TextColor:       "#c5ed1b",
 			LogoPath:        "https://example.com/logo.png",
+			TextColor:       "#c5ed1b",
+			HeaderText:      "Widget Corp",
+			FooterText:      "© Widget Corp",
 		},
 	}
 
