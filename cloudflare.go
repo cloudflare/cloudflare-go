@@ -266,8 +266,14 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 			return nil, errors.Errorf("%s", respBody)
 		}
 
-		if resp.StatusCode > http.StatusInternalServerError {
-			return nil, errors.Errorf("HTTP status %d: service failure", resp.StatusCode)
+		if resp.StatusCode >= http.StatusInternalServerError {
+			return nil, &ServiceError{cloudflareError: &Error{
+				StatusCode: resp.StatusCode,
+				RayID:      resp.Header.Get("cf-ray"),
+				Errors: []ResponseInfo{{
+					Message: errInternalServiceError,
+				}},
+			}}
 		}
 
 		errBody := &Response{}
@@ -276,9 +282,23 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 			return nil, errors.Wrap(err, errUnmarshalErrorBody)
 		}
 
-		return nil, &APIRequestError{
+		err := &Error{
 			StatusCode: resp.StatusCode,
+			RayID:      resp.Header.Get("cf-ray"),
 			Errors:     errBody.Errors,
+		}
+
+		switch resp.StatusCode {
+		case http.StatusUnauthorized:
+			return nil, &AuthorizationError{cloudflareError: err}
+		case http.StatusForbidden:
+			return nil, &AuthenticationError{cloudflareError: err}
+		case http.StatusNotFound:
+			return nil, &NotFoundError{cloudflareError: err}
+		case http.StatusTooManyRequests:
+			return nil, &RatelimitError{cloudflareError: err}
+		default:
+			return nil, &RequestError{cloudflareError: err}
 		}
 	}
 

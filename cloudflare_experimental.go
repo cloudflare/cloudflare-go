@@ -261,20 +261,39 @@ func (c *Client) makeRequest(ctx context.Context, method, uri string, params int
 			return nil, errors.Errorf("%s", respBody)
 		}
 
-		if resp.StatusCode > http.StatusInternalServerError {
-			return nil, errors.Errorf("HTTP status %d: service failure", resp.StatusCode)
+		if resp.StatusCode >= http.StatusInternalServerError {
+			return nil, &ServiceError{cloudflareError: &Error{
+				StatusCode: resp.StatusCode,
+				RayID:      resp.Header.Get("cf-ray"),
+				Errors: []ResponseInfo{{
+					Message: errInternalServiceError,
+				}},
+			}}
 		}
 
 		errBody := &Response{}
 		err = json.Unmarshal(respBody, &errBody)
 		if err != nil {
-			return nil, fmt.Errorf("broke thing: %w", err)
+			return nil, fmt.Errorf("failed to unmarshal response body: %w", err)
 		}
 
-		return nil, &APIRequestError{
+		err := &Error{
 			StatusCode: resp.StatusCode,
-			Errors:     errBody.Errors,
 			RayID:      resp.Header.Get("cf-ray"),
+			Errors:     errBody.Errors,
+		}
+
+		switch resp.StatusCode {
+		case http.StatusUnauthorized:
+			return nil, &AuthorizationError{cloudflareError: err}
+		case http.StatusForbidden:
+			return nil, &AuthenticationError{cloudflareError: err}
+		case http.StatusNotFound:
+			return nil, &NotFoundError{cloudflareError: err}
+		case http.StatusTooManyRequests:
+			return nil, &RatelimitError{cloudflareError: err}
+		default:
+			return nil, &RequestError{cloudflareError: err}
 		}
 	}
 
