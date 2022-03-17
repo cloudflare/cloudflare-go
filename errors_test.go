@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestAPIRequestError_Error(t *testing.T) {
+func TestError_Error(t *testing.T) {
 	tests := map[string]struct {
 		response []ResponseInfo
 		want     string
@@ -17,7 +17,7 @@ func TestAPIRequestError_Error(t *testing.T) {
 				Code:    10000,
 				Message: "Authentication error",
 			}},
-			want: "HTTP status 400: Authentication error (10000)",
+			want: "Authentication error (10000)",
 		},
 		"multiple complete response": {
 			response: []ResponseInfo{
@@ -30,38 +30,34 @@ func TestAPIRequestError_Error(t *testing.T) {
 					Message: "Not authentication error",
 				},
 			},
-			want: "HTTP status 400: Authentication error (10000), Not authentication error (10001)",
-		},
-		"empty errors payload": {
-			response: []ResponseInfo{},
-			want:     "HTTP status 400",
+			want: "Authentication error (10000), Not authentication error (10001)",
 		},
 		"missing internal error code": {
 			response: []ResponseInfo{{
 				Message: "something is broke",
 			}},
-			want: "HTTP status 400: something is broke",
+			want: "something is broke",
 		},
 	}
 
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
-			got := &APIRequestError{
+			got := &RequestError{cloudflareError: &Error{
 				StatusCode: 400,
 				Errors:     tc.response,
-			}
+			}}
 
 			assert.Equal(t, got.Error(), tc.want)
 		})
 	}
 }
 
-func TestAPIRequestError_HTTPStatusCode(t *testing.T) {
-	err := &APIRequestError{StatusCode: 999}
+func TestError_HTTPStatusCode(t *testing.T) {
+	err := &Error{StatusCode: 999}
 	assert.Equal(t, err.HTTPStatusCode(), 999)
 }
 
-func TestAPIRequestError_InternalErrorCodes(t *testing.T) {
+func TestError_InternalErrorCodes(t *testing.T) {
 	tests := map[string]struct {
 		response []ResponseInfo
 		want     []int
@@ -83,7 +79,7 @@ func TestAPIRequestError_InternalErrorCodes(t *testing.T) {
 
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
-			got := &APIRequestError{
+			got := &Error{
 				StatusCode: 999,
 				Errors:     tc.response,
 			}
@@ -93,7 +89,7 @@ func TestAPIRequestError_InternalErrorCodes(t *testing.T) {
 	}
 }
 
-func TestAPIRequestError_ErrorMessages(t *testing.T) {
+func TestError_ErrorMessages(t *testing.T) {
 	tests := map[string]struct {
 		response []ResponseInfo
 		want     []string
@@ -115,7 +111,7 @@ func TestAPIRequestError_ErrorMessages(t *testing.T) {
 
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
-			got := &APIRequestError{
+			got := &Error{
 				StatusCode: 999,
 				Errors:     tc.response,
 			}
@@ -125,7 +121,7 @@ func TestAPIRequestError_ErrorMessages(t *testing.T) {
 	}
 }
 
-func TestAPIRequestError_ServiceError(t *testing.T) {
+func TestError_ServiceError(t *testing.T) {
 	tests := map[int]struct {
 		want bool
 	}{
@@ -136,13 +132,13 @@ func TestAPIRequestError_ServiceError(t *testing.T) {
 
 	for name, tc := range tests {
 		t.Run(strconv.Itoa(name), func(t *testing.T) {
-			got := &APIRequestError{StatusCode: name}
+			got := &Error{StatusCode: name}
 			assert.Equal(t, got.ServiceError(), tc.want)
 		})
 	}
 }
 
-func TestAPIRequestError_ClientError(t *testing.T) {
+func TestError_ClientError(t *testing.T) {
 	tests := map[int]struct {
 		want bool
 	}{
@@ -153,13 +149,13 @@ func TestAPIRequestError_ClientError(t *testing.T) {
 
 	for name, tc := range tests {
 		t.Run(strconv.Itoa(name), func(t *testing.T) {
-			got := &APIRequestError{StatusCode: name}
+			got := &Error{StatusCode: name}
 			assert.Equal(t, got.ClientError(), tc.want)
 		})
 	}
 }
 
-func TestAPIRequestError_ClientRateLimited(t *testing.T) {
+func TestError_ClientRateLimited(t *testing.T) {
 	tests := map[int]struct {
 		want bool
 	}{
@@ -170,14 +166,14 @@ func TestAPIRequestError_ClientRateLimited(t *testing.T) {
 
 	for name, tc := range tests {
 		t.Run(strconv.Itoa(name), func(t *testing.T) {
-			got := &APIRequestError{StatusCode: name}
+			got := &Error{StatusCode: name}
 			assert.Equal(t, got.ClientRateLimited(), tc.want)
 		})
 	}
 }
 
-func TestAPIRequestError_InternalErrorCodeIs(t *testing.T) {
-	err := &APIRequestError{Errors: []ResponseInfo{
+func TestError_InternalErrorCodeIs(t *testing.T) {
+	err := &Error{Errors: []ResponseInfo{
 		{Code: 1001},
 		{Code: 2001},
 		{Code: 3001},
@@ -185,8 +181,8 @@ func TestAPIRequestError_InternalErrorCodeIs(t *testing.T) {
 	assert.Equal(t, err.InternalErrorCodeIs(3001), true)
 }
 
-func TestAPIRequestError_ErrorMessageContains(t *testing.T) {
-	err := &APIRequestError{Errors: []ResponseInfo{
+func TestError_ErrorMessageContains(t *testing.T) {
+	err := &Error{Errors: []ResponseInfo{
 		{Message: "dns thing broke"},
 		{Message: "application thing broke"},
 		{Message: "network thing broke"},

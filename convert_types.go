@@ -5,11 +5,11 @@
 // _Most_ follow the convention of (where <type> is a Golang type such as Bool):
 //
 // <type>Ptr: Accepts a value and returns a pointer.
-// <type>Value: Accepts a pointer and returns a value.
+// <type>: Accepts a pointer and returns a value.
 // <type>PtrSlice: Accepts a slice of values and returns a slice of pointers.
-// <type>ValueSlice: Accepts a slice of pointers and returns a slice of values.
-// <type>Map: Accepts a string map of values into a string map of pointers.
-// <type>ValueMap: Accepts a string map of pointers into a string map of values.
+// <type>Slice: Accepts a slice of pointers and returns a slice of values.
+// <type>PtrMap: Accepts a string map of values into a string map of pointers.
+// <type>Map: Accepts a string map of pointers into a string map of values.
 //
 // Not all Golang types are covered here, only those that are commonly used.
 package cloudflare
@@ -76,9 +76,9 @@ func DurationPtr(v time.Duration) *time.Duration { return &v }
 // returns a pointer to it.
 func BoolPtr(v bool) *bool { return &v }
 
-// BoolValue is a helper routine that accepts a bool pointer and returns a value
+// Bool is a helper routine that accepts a bool pointer and returns a value
 // to it.
-func BoolValue(v *bool) bool {
+func Bool(v *bool) bool {
 	if v != nil {
 		return *v
 	}
@@ -94,8 +94,8 @@ func BoolPtrSlice(src []bool) []*bool {
 	return dst
 }
 
-// BoolValueSlice converts a slice of bool pointers into a slice of bool values.
-func BoolValueSlice(src []*bool) []bool {
+// BoolSlice converts a slice of bool pointers into a slice of bool values.
+func BoolSlice(src []*bool) []bool {
 	dst := make([]bool, len(src))
 	for i := 0; i < len(src); i++ {
 		if src[i] != nil {
@@ -116,9 +116,9 @@ func BoolPtrMap(src map[string]bool) map[string]*bool {
 	return dst
 }
 
-// BoolValueMap converts a string map of bool pointers into a string map of bool
+// BoolMap converts a string map of bool pointers into a string map of bool
 // values.
-func BoolValueMap(src map[string]*bool) map[string]bool {
+func BoolMap(src map[string]*bool) map[string]bool {
 	dst := make(map[string]bool)
 	for k, val := range src {
 		if val != nil {
@@ -128,27 +128,27 @@ func BoolValueMap(src map[string]*bool) map[string]bool {
 	return dst
 }
 
-// ByteValue is a helper routine that accepts a byte pointer and returns a
+// Byte is a helper routine that accepts a byte pointer and returns a
 // value to it.
-func ByteValue(v *byte) byte {
+func Byte(v *byte) byte {
 	if v != nil {
 		return *v
 	}
 	return byte(0)
 }
 
-// Complex64Value is a helper routine that accepts a complex64 pointer and
+// Complex64 is a helper routine that accepts a complex64 pointer and
 // returns a value to it.
-func Complex64Value(v *complex64) complex64 {
+func Complex64(v *complex64) complex64 {
 	if v != nil {
 		return *v
 	}
 	return 0
 }
 
-// Complex128Value is a helper routine that accepts a complex128 pointer and
+// Complex128 is a helper routine that accepts a complex128 pointer and
 // returns a value to it.
-func Complex128Value(v *complex128) complex128 {
+func Complex128(v *complex128) complex128 {
 	if v != nil {
 		return *v
 	}
@@ -159,9 +159,9 @@ func Complex128Value(v *complex128) complex128 {
 // and returns a pointer to it.
 func Float32Ptr(v float32) *float32 { return &v }
 
-// Float32Value is a helper routine that accepts a float32 pointer and returns a
+// Float32 is a helper routine that accepts a float32 pointer and returns a
 // value to it.
-func Float32Value(v *float32) float32 {
+func Float32(v *float32) float32 {
 	if v != nil {
 		return *v
 	}
@@ -178,9 +178,9 @@ func Float32PtrSlice(src []float32) []*float32 {
 	return dst
 }
 
-// Float32ValueSlice converts a slice of float32 pointers into a slice of
+// Float32Slice converts a slice of float32 pointers into a slice of
 // float32 values.
-func Float32ValueSlice(src []*float32) []float32 {
+func Float32Slice(src []*float32) []float32 {
 	dst := make([]float32, len(src))
 	for i := 0; i < len(src); i++ {
 		if src[i] != nil {
@@ -201,9 +201,9 @@ func Float32PtrMap(src map[string]float32) map[string]*float32 {
 	return dst
 }
 
-// Float32ValueMap converts a string map of float32 pointers into a string
+// Float32Map converts a string map of float32 pointers into a string
 // map of float32 values.
-func Float32ValueMap(src map[string]*float32) map[string]float32 {
+func Float32Map(src map[string]*float32) map[string]float32 {
 	dst := make(map[string]float32)
 	for k, val := range src {
 		if val != nil {
@@ -217,9 +217,9 @@ func Float32ValueMap(src map[string]*float32) map[string]float32 {
 // and returns a pointer to it.
 func Float64Ptr(v float64) *float64 { return &v }
 
-// Float64Value is a helper routine that accepts a float64 pointer and returns a
+// Float64 is a helper routine that accepts a float64 pointer and returns a
 // value to it.
-func Float64Value(v *float64) float64 {
+func Float64(v *float64) float64 {
 	if v != nil {
 		return *v
 	}
@@ -236,9 +236,9 @@ func Float64PtrSlice(src []float64) []*float64 {
 	return dst
 }
 
-// Float64ValueSlice converts a slice of float64 pointers into a slice of
+// Float64Slice converts a slice of float64 pointers into a slice of
 // float64 values.
-func Float64ValueSlice(src []*float64) []float64 {
+func Float64Slice(src []*float64) []float64 {
 	dst := make([]float64, len(src))
 	for i := 0; i < len(src); i++ {
 		if src[i] != nil {
@@ -259,9 +259,9 @@ func Float64PtrMap(src map[string]float64) map[string]*float64 {
 	return dst
 }
 
-// Float64ValueMap converts a string map of float64 pointers into a string
+// Float64Map converts a string map of float64 pointers into a string
 // map of float64 values.
-func Float64ValueMap(src map[string]*float64) map[string]float64 {
+func Float64Map(src map[string]*float64) map[string]float64 {
 	dst := make(map[string]float64)
 	for k, val := range src {
 		if val != nil {
@@ -275,9 +275,9 @@ func Float64ValueMap(src map[string]*float64) map[string]float64 {
 // returns a pointer to it.
 func IntPtr(v int) *int { return &v }
 
-// IntValue is a helper routine that accepts a int pointer and returns a value
+// Int is a helper routine that accepts a int pointer and returns a value
 // to it.
-func IntValue(v *int) int {
+func Int(v *int) int {
 	if v != nil {
 		return *v
 	}
@@ -293,8 +293,8 @@ func IntPtrSlice(src []int) []*int {
 	return dst
 }
 
-// IntValueSlice converts a slice of int pointers into a slice of int values.
-func IntValueSlice(src []*int) []int {
+// IntSlice converts a slice of int pointers into a slice of int values.
+func IntSlice(src []*int) []int {
 	dst := make([]int, len(src))
 	for i := 0; i < len(src); i++ {
 		if src[i] != nil {
@@ -315,9 +315,9 @@ func IntPtrMap(src map[string]int) map[string]*int {
 	return dst
 }
 
-// IntValueMap converts a string map of int pointers into a string map of int
+// IntMap converts a string map of int pointers into a string map of int
 // values.
-func IntValueMap(src map[string]*int) map[string]int {
+func IntMap(src map[string]*int) map[string]int {
 	dst := make(map[string]int)
 	for k, val := range src {
 		if val != nil {
@@ -331,9 +331,9 @@ func IntValueMap(src map[string]*int) map[string]int {
 // returns a pointer to it.
 func Int8Ptr(v int8) *int8 { return &v }
 
-// Int8Value is a helper routine that accepts a int8 pointer and returns a value
+// Int8 is a helper routine that accepts a int8 pointer and returns a value
 // to it.
-func Int8Value(v *int8) int8 {
+func Int8(v *int8) int8 {
 	if v != nil {
 		return *v
 	}
@@ -349,8 +349,8 @@ func Int8PtrSlice(src []int8) []*int8 {
 	return dst
 }
 
-// Int8ValueSlice converts a slice of int8 pointers into a slice of int8 values.
-func Int8ValueSlice(src []*int8) []int8 {
+// Int8Slice converts a slice of int8 pointers into a slice of int8 values.
+func Int8Slice(src []*int8) []int8 {
 	dst := make([]int8, len(src))
 	for i := 0; i < len(src); i++ {
 		if src[i] != nil {
@@ -371,9 +371,9 @@ func Int8PtrMap(src map[string]int8) map[string]*int8 {
 	return dst
 }
 
-// Int8ValueMap converts a string map of int8 pointers into a string map of int8
+// Int8Map converts a string map of int8 pointers into a string map of int8
 // values.
-func Int8ValueMap(src map[string]*int8) map[string]int8 {
+func Int8Map(src map[string]*int8) map[string]int8 {
 	dst := make(map[string]int8)
 	for k, val := range src {
 		if val != nil {
@@ -387,9 +387,9 @@ func Int8ValueMap(src map[string]*int8) map[string]int8 {
 // and returns a pointer to it.
 func Int16Ptr(v int16) *int16 { return &v }
 
-// Int16Value is a helper routine that accepts a int16 pointer and returns a
+// Int16 is a helper routine that accepts a int16 pointer and returns a
 // value to it.
-func Int16Value(v *int16) int16 {
+func Int16(v *int16) int16 {
 	if v != nil {
 		return *v
 	}
@@ -406,9 +406,9 @@ func Int16PtrSlice(src []int16) []*int16 {
 	return dst
 }
 
-// Int16ValueSlice converts a slice of int16 pointers into a slice of int16
+// Int16Slice converts a slice of int16 pointers into a slice of int16
 // values.
-func Int16ValueSlice(src []*int16) []int16 {
+func Int16Slice(src []*int16) []int16 {
 	dst := make([]int16, len(src))
 	for i := 0; i < len(src); i++ {
 		if src[i] != nil {
@@ -429,9 +429,9 @@ func Int16PtrMap(src map[string]int16) map[string]*int16 {
 	return dst
 }
 
-// Int16ValueMap converts a string map of int16 pointers into a string map of
+// Int16Map converts a string map of int16 pointers into a string map of
 // int16 values.
-func Int16ValueMap(src map[string]*int16) map[string]int16 {
+func Int16Map(src map[string]*int16) map[string]int16 {
 	dst := make(map[string]int16)
 	for k, val := range src {
 		if val != nil {
@@ -445,9 +445,9 @@ func Int16ValueMap(src map[string]*int16) map[string]int16 {
 // and returns a pointer to it.
 func Int32Ptr(v int32) *int32 { return &v }
 
-// Int32Value is a helper routine that accepts a int32 pointer and returns a
+// Int32 is a helper routine that accepts a int32 pointer and returns a
 // value to it.
-func Int32Value(v *int32) int32 {
+func Int32(v *int32) int32 {
 	if v != nil {
 		return *v
 	}
@@ -464,9 +464,9 @@ func Int32PtrSlice(src []int32) []*int32 {
 	return dst
 }
 
-// Int32ValueSlice converts a slice of int32 pointers into a slice of int32
+// Int32Slice converts a slice of int32 pointers into a slice of int32
 // values.
-func Int32ValueSlice(src []*int32) []int32 {
+func Int32Slice(src []*int32) []int32 {
 	dst := make([]int32, len(src))
 	for i := 0; i < len(src); i++ {
 		if src[i] != nil {
@@ -487,9 +487,9 @@ func Int32PtrMap(src map[string]int32) map[string]*int32 {
 	return dst
 }
 
-// Int32ValueMap converts a string map of int32 pointers into a string map of
+// Int32Map converts a string map of int32 pointers into a string map of
 // int32 values.
-func Int32ValueMap(src map[string]*int32) map[string]int32 {
+func Int32Map(src map[string]*int32) map[string]int32 {
 	dst := make(map[string]int32)
 	for k, val := range src {
 		if val != nil {
@@ -503,9 +503,9 @@ func Int32ValueMap(src map[string]*int32) map[string]int32 {
 // and returns a pointer to it.
 func Int64Ptr(v int64) *int64 { return &v }
 
-// Int64Value is a helper routine that accepts a int64 pointer and returns a
+// Int64 is a helper routine that accepts a int64 pointer and returns a
 // value to it.
-func Int64Value(v *int64) int64 {
+func Int64(v *int64) int64 {
 	if v != nil {
 		return *v
 	}
@@ -522,9 +522,9 @@ func Int64PtrSlice(src []int64) []*int64 {
 	return dst
 }
 
-// Int64ValueSlice converts a slice of int64 pointers into a slice of int64
+// Int64Slice converts a slice of int64 pointers into a slice of int64
 // values.
-func Int64ValueSlice(src []*int64) []int64 {
+func Int64Slice(src []*int64) []int64 {
 	dst := make([]int64, len(src))
 	for i := 0; i < len(src); i++ {
 		if src[i] != nil {
@@ -545,9 +545,9 @@ func Int64PtrMap(src map[string]int64) map[string]*int64 {
 	return dst
 }
 
-// Int64ValueMap converts a string map of int64 pointers into a string map of
+// Int64Map converts a string map of int64 pointers into a string map of
 // int64 values.
-func Int64ValueMap(src map[string]*int64) map[string]int64 {
+func Int64Map(src map[string]*int64) map[string]int64 {
 	dst := make(map[string]int64)
 	for k, val := range src {
 		if val != nil {
@@ -557,9 +557,9 @@ func Int64ValueMap(src map[string]*int64) map[string]int64 {
 	return dst
 }
 
-// RuneValue is a helper routine that accepts a rune pointer and returns a value
+// Rune is a helper routine that accepts a rune pointer and returns a value
 // to it.
-func RuneValue(v *rune) rune {
+func Rune(v *rune) rune {
 	if v != nil {
 		return *v
 	}
@@ -570,9 +570,9 @@ func RuneValue(v *rune) rune {
 // and returns a pointer to it.
 func StringPtr(v string) *string { return &v }
 
-// StringValue is a helper routine that accepts a string pointer and returns a
+// String is a helper routine that accepts a string pointer and returns a
 // value to it.
-func StringValue(v *string) string {
+func String(v *string) string {
 	if v != nil {
 		return *v
 	}
@@ -589,9 +589,9 @@ func StringPtrSlice(src []string) []*string {
 	return dst
 }
 
-// StringValueSlice converts a slice of string pointers into a slice of string
+// StringSlice converts a slice of string pointers into a slice of string
 // values.
-func StringValueSlice(src []*string) []string {
+func StringSlice(src []*string) []string {
 	dst := make([]string, len(src))
 	for i := 0; i < len(src); i++ {
 		if src[i] != nil {
@@ -612,9 +612,9 @@ func StringPtrMap(src map[string]string) map[string]*string {
 	return dst
 }
 
-// StringValueMap converts a string map of string pointers into a string map of
+// StringMap converts a string map of string pointers into a string map of
 // string values.
-func StringValueMap(src map[string]*string) map[string]string {
+func StringMap(src map[string]*string) map[string]string {
 	dst := make(map[string]string)
 	for k, val := range src {
 		if val != nil {
@@ -628,9 +628,9 @@ func StringValueMap(src map[string]*string) map[string]string {
 // and returns a pointer to it.
 func UintPtr(v uint) *uint { return &v }
 
-// UintValue is a helper routine that accepts a uint pointer and returns a value
+// Uint is a helper routine that accepts a uint pointer and returns a value
 // to it.
-func UintValue(v *uint) uint {
+func Uint(v *uint) uint {
 	if v != nil {
 		return *v
 	}
@@ -646,9 +646,9 @@ func UintPtrSlice(src []uint) []*uint {
 	return dst
 }
 
-// UintValueSlice converts a slice of uint pointers uinto a slice of uint
+// UintSlice converts a slice of uint pointers uinto a slice of uint
 // values.
-func UintValueSlice(src []*uint) []uint {
+func UintSlice(src []*uint) []uint {
 	dst := make([]uint, len(src))
 	for i := 0; i < len(src); i++ {
 		if src[i] != nil {
@@ -669,9 +669,9 @@ func UintPtrMap(src map[string]uint) map[string]*uint {
 	return dst
 }
 
-// UintValueMap converts a string map of uint pointers uinto a string map of
+// UintMap converts a string map of uint pointers uinto a string map of
 // uint values.
-func UintValueMap(src map[string]*uint) map[string]uint {
+func UintMap(src map[string]*uint) map[string]uint {
 	dst := make(map[string]uint)
 	for k, val := range src {
 		if val != nil {
@@ -685,9 +685,9 @@ func UintValueMap(src map[string]*uint) map[string]uint {
 // and returns a pointer to it.
 func Uint8Ptr(v uint8) *uint8 { return &v }
 
-// Uint8Value is a helper routine that accepts a uint8 pointer and returns a
+// Uint8 is a helper routine that accepts a uint8 pointer and returns a
 // value to it.
-func Uint8Value(v *uint8) uint8 {
+func Uint8(v *uint8) uint8 {
 	if v != nil {
 		return *v
 	}
@@ -704,9 +704,9 @@ func Uint8PtrSlice(src []uint8) []*uint8 {
 	return dst
 }
 
-// Uint8ValueSlice converts a slice of uint8 pointers into a slice of uint8
+// Uint8Slice converts a slice of uint8 pointers into a slice of uint8
 // values.
-func Uint8ValueSlice(src []*uint8) []uint8 {
+func Uint8Slice(src []*uint8) []uint8 {
 	dst := make([]uint8, len(src))
 	for i := 0; i < len(src); i++ {
 		if src[i] != nil {
@@ -727,9 +727,9 @@ func Uint8PtrMap(src map[string]uint8) map[string]*uint8 {
 	return dst
 }
 
-// Uint8ValueMap converts a string map of uint8 pointers into a string
+// Uint8Map converts a string map of uint8 pointers into a string
 // map of uint8 values.
-func Uint8ValueMap(src map[string]*uint8) map[string]uint8 {
+func Uint8Map(src map[string]*uint8) map[string]uint8 {
 	dst := make(map[string]uint8)
 	for k, val := range src {
 		if val != nil {
@@ -743,9 +743,9 @@ func Uint8ValueMap(src map[string]*uint8) map[string]uint8 {
 // and returns a pointer to it.
 func Uint16Ptr(v uint16) *uint16 { return &v }
 
-// Uint16Value is a helper routine that accepts a uint16 pointer and returns a
+// Uint16 is a helper routine that accepts a uint16 pointer and returns a
 // value to it.
-func Uint16Value(v *uint16) uint16 {
+func Uint16(v *uint16) uint16 {
 	if v != nil {
 		return *v
 	}
@@ -762,9 +762,9 @@ func Uint16PtrSlice(src []uint16) []*uint16 {
 	return dst
 }
 
-// Uint16ValueSlice converts a slice of uint16 pointers into a slice of uint16
+// Uint16Slice converts a slice of uint16 pointers into a slice of uint16
 // values.
-func Uint16ValueSlice(src []*uint16) []uint16 {
+func Uint16Slice(src []*uint16) []uint16 {
 	dst := make([]uint16, len(src))
 	for i := 0; i < len(src); i++ {
 		if src[i] != nil {
@@ -785,9 +785,9 @@ func Uint16PtrMap(src map[string]uint16) map[string]*uint16 {
 	return dst
 }
 
-// Uint16ValueMap converts a string map of uint16 pointers into a string map of
+// Uint16Map converts a string map of uint16 pointers into a string map of
 // uint16 values.
-func Uint16ValueMap(src map[string]*uint16) map[string]uint16 {
+func Uint16Map(src map[string]*uint16) map[string]uint16 {
 	dst := make(map[string]uint16)
 	for k, val := range src {
 		if val != nil {
@@ -801,9 +801,9 @@ func Uint16ValueMap(src map[string]*uint16) map[string]uint16 {
 // and returns a pointer to it.
 func Uint32Ptr(v uint32) *uint32 { return &v }
 
-// Uint32Value is a helper routine that accepts a uint32 pointer and returns a
+// Uint32 is a helper routine that accepts a uint32 pointer and returns a
 // value to it.
-func Uint32Value(v *uint32) uint32 {
+func Uint32(v *uint32) uint32 {
 	if v != nil {
 		return *v
 	}
@@ -820,9 +820,9 @@ func Uint32PtrSlice(src []uint32) []*uint32 {
 	return dst
 }
 
-// Uint32ValueSlice converts a slice of uint32 pointers into a slice of uint32
+// Uint32Slice converts a slice of uint32 pointers into a slice of uint32
 // values.
-func Uint32ValueSlice(src []*uint32) []uint32 {
+func Uint32Slice(src []*uint32) []uint32 {
 	dst := make([]uint32, len(src))
 	for i := 0; i < len(src); i++ {
 		if src[i] != nil {
@@ -843,9 +843,9 @@ func Uint32PtrMap(src map[string]uint32) map[string]*uint32 {
 	return dst
 }
 
-// Uint32ValueMap converts a string map of uint32 pointers into a string
+// Uint32Map converts a string map of uint32 pointers into a string
 // map of uint32 values.
-func Uint32ValueMap(src map[string]*uint32) map[string]uint32 {
+func Uint32Map(src map[string]*uint32) map[string]uint32 {
 	dst := make(map[string]uint32)
 	for k, val := range src {
 		if val != nil {
@@ -859,9 +859,9 @@ func Uint32ValueMap(src map[string]*uint32) map[string]uint32 {
 // and returns a pointer to it.
 func Uint64Ptr(v uint64) *uint64 { return &v }
 
-// Uint64Value is a helper routine that accepts a uint64 pointer and returns a
+// Uint64 is a helper routine that accepts a uint64 pointer and returns a
 // value to it.
-func Uint64Value(v *uint64) uint64 {
+func Uint64(v *uint64) uint64 {
 	if v != nil {
 		return *v
 	}
@@ -878,9 +878,9 @@ func Uint64PtrSlice(src []uint64) []*uint64 {
 	return dst
 }
 
-// Uint64ValueSlice converts a slice of uint64 pointers into a slice of uint64
+// Uint64Slice converts a slice of uint64 pointers into a slice of uint64
 // values.
-func Uint64ValueSlice(src []*uint64) []uint64 {
+func Uint64Slice(src []*uint64) []uint64 {
 	dst := make([]uint64, len(src))
 	for i := 0; i < len(src); i++ {
 		if src[i] != nil {
@@ -901,9 +901,9 @@ func Uint64PtrMap(src map[string]uint64) map[string]*uint64 {
 	return dst
 }
 
-// Uint64ValueMap converts a string map of uint64 pointers into a string map of
+// Uint64Map converts a string map of uint64 pointers into a string map of
 // uint64 values.
-func Uint64ValueMap(src map[string]*uint64) map[string]uint64 {
+func Uint64Map(src map[string]*uint64) map[string]uint64 {
 	dst := make(map[string]uint64)
 	for k, val := range src {
 		if val != nil {
@@ -913,20 +913,20 @@ func Uint64ValueMap(src map[string]*uint64) map[string]uint64 {
 	return dst
 }
 
-// TimeValue is a helper routine that accepts a time pointer value and returns a
+// Time is a helper routine that accepts a time pointer value and returns a
 // value to it.
-func TimeValue(v *time.Time) time.Time {
+func Time(v *time.Time) time.Time {
 	if v != nil {
 		return *v
 	}
 	return time.Time{}
 }
 
-// DurationValue is a helper routine that accepts a time pointer ion value
+// Duration is a helper routine that accepts a time pointer ion value
 // and returns a value to it.
-func DurationValue(v *time.Duration) time.Duration {
-	if v != nil {
-		return *v
-	}
-	return time.Duration(0)
-}
+// func Duration(v *time.Duration) time.Duration {
+// 	if v != nil {
+// 		return *v
+// 	}
+// 	return time.Duration(0)
+// }
