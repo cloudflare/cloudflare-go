@@ -54,7 +54,7 @@ func TestError_Error(t *testing.T) {
 
 func TestError_HTTPStatusCode(t *testing.T) {
 	err := &Error{StatusCode: 999}
-	assert.Equal(t, err.HTTPStatusCode(), 999)
+	assert.Equal(t, err.StatusCode, 999)
 }
 
 func TestError_InternalErrorCodes(t *testing.T) {
@@ -84,7 +84,7 @@ func TestError_InternalErrorCodes(t *testing.T) {
 				Errors:     tc.response,
 			}
 
-			assert.Equal(t, got.InternalErrorCodes(), tc.want)
+			assert.Equal(t, got.ErrorCodes, tc.want)
 		})
 	}
 }
@@ -116,7 +116,7 @@ func TestError_ErrorMessages(t *testing.T) {
 				Errors:     tc.response,
 			}
 
-			assert.Equal(t, got.ErrorMessages(), tc.want)
+			assert.Equal(t, got.ErrorMessages, tc.want)
 		})
 	}
 }
@@ -133,7 +133,7 @@ func TestError_ServiceError(t *testing.T) {
 	for name, tc := range tests {
 		t.Run(strconv.Itoa(name), func(t *testing.T) {
 			got := &Error{StatusCode: name}
-			assert.Equal(t, got.ServiceError(), tc.want)
+			assert.Equal(t, got.Type == ErrorTypeService, tc.want)
 		})
 	}
 }
@@ -167,7 +167,7 @@ func TestError_ClientRateLimited(t *testing.T) {
 	for name, tc := range tests {
 		t.Run(strconv.Itoa(name), func(t *testing.T) {
 			got := &Error{StatusCode: name}
-			assert.Equal(t, got.ClientRateLimited(), tc.want)
+			assert.Equal(t, got.Type == ErrorTypeRateLimit, tc.want)
 		})
 	}
 }
