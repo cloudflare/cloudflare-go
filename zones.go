@@ -65,7 +65,7 @@ func (s *ZonesService) Get(ctx context.Context, zoneID ZoneIdentifier) (Zone, er
 // List returns all zones that match the provided `ZoneParams` struct.
 //
 // API reference: https://api.cloudflare.com/#zone-list-zones
-func (s *ZonesService) List(ctx context.Context, params ZoneParams) ([]Zone, error) {
+func (s *ZonesService) List(ctx context.Context, params ZoneParams) ([]Zone, *ResultInfo, error) {
 	v, _ := query.Values(params)
 	queryParams := v.Encode()
 	if queryParams != "" {
@@ -77,10 +77,10 @@ func (s *ZonesService) List(ctx context.Context, params ZoneParams) ([]Zone, err
 	var r ZonesResponse
 	err := json.Unmarshal(res, &r)
 	if err != nil {
-		return []Zone{}, fmt.Errorf("failed to unmarshal zone JSON data: %w", err)
+		return []Zone{}, &ResultInfo{}, fmt.Errorf("failed to unmarshal zone JSON data: %w", err)
 	}
 
-	return r.Result, nil
+	return r.Result, &r.ResultInfo, nil
 }
 
 // Delete deletes a zone based on ID.
