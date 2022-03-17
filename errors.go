@@ -50,7 +50,7 @@ type Error struct {
 	// ErrorMessages is a list of all the error codes.
 	ErrorMessages []string
 
-	// RayID is the internal identifer for the request that was made.
+	// RayID is the internal identifier for the request that was made.
 	RayID string
 }
 
