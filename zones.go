@@ -65,7 +65,7 @@ func (s *ZonesService) Get(ctx context.Context, zoneID ZoneIdentifier) (Zone, er
 // List returns all zones that match the provided `ZoneParams` struct.
 //
 // API reference: https://api.cloudflare.com/#zone-list-zones
-func (s *ZonesService) List(ctx context.Context, params ZoneParams) ([]Zone, *ResultInfo, error) {
+func (s *ZonesService) List(ctx context.Context, params *ZoneParams) ([]Zone, *ResultInfo, error) {
 	v, _ := query.Values(params)
 	queryParams := v.Encode()
 	if queryParams != "" {
