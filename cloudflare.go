@@ -282,22 +282,36 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 			return nil, errors.Wrap(err, errUnmarshalErrorBody)
 		}
 
+		errCodes := make([]int, 0, len(errBody.Errors))
+		errMsgs := make([]string, 0, len(errBody.Errors))
+		for _, e := range errBody.Errors {
+			errCodes = append(errCodes, e.Code)
+			errMsgs = append(errMsgs, e.Message)
+		}
+
 		err := &Error{
-			StatusCode: resp.StatusCode,
-			RayID:      resp.Header.Get("cf-ray"),
-			Errors:     errBody.Errors,
+			StatusCode:    resp.StatusCode,
+			RayID:         resp.Header.Get("cf-ray"),
+			Errors:        errBody.Errors,
+			ErrorCodes:    errCodes,
+			ErrorMessages: errMsgs,
 		}
 
 		switch resp.StatusCode {
 		case http.StatusUnauthorized:
+			err.Type = ErrorTypeAuthorization
 			return nil, &AuthorizationError{cloudflareError: err}
 		case http.StatusForbidden:
+			err.Type = ErrorTypeAuthentication
 			return nil, &AuthenticationError{cloudflareError: err}
 		case http.StatusNotFound:
+			err.Type = ErrorTypeNotFound
 			return nil, &NotFoundError{cloudflareError: err}
 		case http.StatusTooManyRequests:
+			err.Type = ErrorTypeRateLimit
 			return nil, &RatelimitError{cloudflareError: err}
 		default:
+			err.Type = ErrorTypeRequest
 			return nil, &RequestError{cloudflareError: err}
 		}
 	}
