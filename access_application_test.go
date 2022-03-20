@@ -40,7 +40,8 @@ func TestAccessApplications(t *testing.T) {
 					"same_site_cookie_attribute": "strict",
 					"logo_url": "https://www.example.com/example.png",
 					"skip_interstitial": true,
-					"app_launcher_visible": true
+					"app_launcher_visible": true,
+					"service_auth_401_redirect": true
 				}
 			],
 			"result_info": {
@@ -69,6 +70,7 @@ func TestAccessApplications(t *testing.T) {
 		AutoRedirectToIdentity:  false,
 		EnableBindingCookie:     false,
 		AppLauncherVisible:      true,
+		ServiceAuth401Redirect:  true,
 		CustomDenyMessage:       "denied!",
 		CustomDenyURL:           "https://www.example.com",
 		SameSiteCookieAttribute: "strict",
@@ -121,7 +123,8 @@ func TestAccessApplication(t *testing.T) {
 				"custom_deny_message": "denied!",
 				"logo_url": "https://www.example.com/example.png",
 				"skip_interstitial": true,
-				"app_launcher_visible": true
+				"app_launcher_visible": true,
+				"service_auth_401_redirect": true
 			}
 		}
 		`)
@@ -143,6 +146,7 @@ func TestAccessApplication(t *testing.T) {
 		AutoRedirectToIdentity: false,
 		EnableBindingCookie:    false,
 		AppLauncherVisible:     true,
+		ServiceAuth401Redirect: true,
 		CustomDenyMessage:      "denied!",
 		CustomDenyURL:          "https://www.example.com",
 		LogoURL:                "https://www.example.com/example.png",
@@ -193,7 +197,8 @@ func TestCreateAccessApplications(t *testing.T) {
 				"custom_deny_message": "denied!",
 				"logo_url": "https://www.example.com/example.png",
 				"skip_interstitial": true,
-				"app_launcher_visible": true
+				"app_launcher_visible": true,
+				"service_auth_401_redirect": true
 			}
 		}
 		`)
@@ -212,6 +217,7 @@ func TestCreateAccessApplications(t *testing.T) {
 		AutoRedirectToIdentity: false,
 		EnableBindingCookie:    false,
 		AppLauncherVisible:     true,
+		ServiceAuth401Redirect: true,
 		CustomDenyMessage:      "denied!",
 		CustomDenyURL:          "https://www.example.com",
 		LogoURL:                "https://www.example.com/example.png",
@@ -272,7 +278,8 @@ func TestUpdateAccessApplication(t *testing.T) {
 				"custom_deny_message": "denied!",
 				"logo_url": "https://www.example.com/example.png",
 				"skip_interstitial": true,
-				"app_launcher_visible": true
+				"app_launcher_visible": true,
+				"service_auth_401_redirect": true
 			}
 		}
 		`)
@@ -291,6 +298,7 @@ func TestUpdateAccessApplication(t *testing.T) {
 		AutoRedirectToIdentity: false,
 		EnableBindingCookie:    false,
 		AppLauncherVisible:     true,
+		ServiceAuth401Redirect: true,
 		CustomDenyMessage:      "denied!",
 		CustomDenyURL:          "https://www.example.com",
 		LogoURL:                "https://www.example.com/example.png",
@@ -487,7 +495,8 @@ func TestCreatePrivateAccessApplication(t *testing.T) {
 				"custom_deny_message": "denied!",
 				"logo_url": "https://www.example.com/example.png",
 				"skip_interstitial": true,
-				"app_launcher_visible": false
+				"app_launcher_visible": false,
+				"service_auth_401_redirect": false
 			}
 		}
 		`)
@@ -510,6 +519,7 @@ func TestCreatePrivateAccessApplication(t *testing.T) {
 		AutoRedirectToIdentity: false,
 		EnableBindingCookie:    false,
 		AppLauncherVisible:     false,
+		ServiceAuth401Redirect: false,
 		CustomDenyMessage:      "denied!",
 		CustomDenyURL:          "https://www.example.com",
 		LogoURL:                "https://www.example.com/example.png",

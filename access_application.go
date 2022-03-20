@@ -20,8 +20,6 @@ const (
 	SelfHosted AccessApplicationType = "self_hosted"
 	SSH        AccessApplicationType = "ssh"
 	VNC        AccessApplicationType = "vnc"
-	File       AccessApplicationType = "file"
-	Bookmark   AccessApplicationType = "bookmark"
 )
 
 // AccessApplication represents an Access application.
@@ -47,6 +45,7 @@ type AccessApplication struct {
 	AppLauncherVisible      bool                           `json:"app_launcher_visible,omitempty"`
 	EnableBindingCookie     bool                           `json:"enable_binding_cookie,omitempty"`
 	HttpOnlyCookieAttribute bool                           `json:"http_only_cookie_attribute,omitempty"`
+	ServiceAuth401Redirect  bool                           `json:"service_auth_401_redirect,omitempty"`
 }
 
 type AccessApplicationGatewayRule struct {
