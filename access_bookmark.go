@@ -34,10 +34,8 @@ type AccessBookmarkListResponse struct {
 // AccessBookmarkDetailResponse is the API response, containing a single
 // access bookmark.
 type AccessBookmarkDetailResponse struct {
-	Success  bool           `json:"success"`
-	Errors   []string       `json:"errors"`
-	Messages []string       `json:"messages"`
-	Result   AccessBookmark `json:"result"`
+	Response
+	Result AccessBookmark `json:"result"`
 }
 
 // AccessBookmarks returns all bookmarks within an account.
