@@ -99,6 +99,8 @@ const (
 	WorkerSecretTextBindingType WorkerBindingType = "secret_text"
 	// WorkerPlainTextBindingType is the type for plain text bindings.
 	WorkerPlainTextBindingType WorkerBindingType = "plain_text"
+	// WorkerWorkerBindingType is the type for worker bindings.
+	WorkerWorkerBindingType WorkerBindingType = "service"
 )
 
 // WorkerBindingListItem a struct representing an individual binding in a list of bindings.
@@ -241,6 +243,33 @@ func (b WorkerPlainTextBinding) serialize(bindingName string) (workerBindingMeta
 		"name": bindingName,
 		"type": b.Type(),
 		"text": b.Text,
+	}, nil, nil
+}
+
+// WorkerWorkerBinding is a binding to another worker.
+type WorkerWorkerBinding struct {
+	Worker      string
+	Environment string
+}
+
+// Type returns the type of the binding.
+func (b WorkerWorkerBinding) Type() WorkerBindingType {
+	return WorkerWorkerBindingType
+}
+
+func (b WorkerWorkerBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
+	if b.Worker == "" {
+		return nil, nil, errors.Errorf(`Worker for binding "%s" cannot be empty`, bindingName)
+	}
+	if b.Environment == "" {
+		return nil, nil, errors.Errorf(`Environment for binding "%s" cannot be empty`, bindingName)
+	}
+
+	return workerBindingMeta{
+		"name":        bindingName,
+		"type":        b.Type(),
+		"worker":      b.Worker,
+		"environment": b.Environment,
 	}, nil, nil
 }
 
