@@ -35,6 +35,7 @@ type ClientParams struct {
 	RateLimiter    *rate.Limiter
 	RetryPolicy    RetryPolicy
 	Logger         Logger
+	Debug          bool
 }
 
 // A Client manages communication with the Cloudflare API.
@@ -73,22 +74,28 @@ func NewExperimental(config *ClientParams) (*Client, error) {
 	c := &Client{ClientParams: &ClientParams{}}
 	c.common.client = c
 
-	silentLogger := log.New(ioutil.Discard, "", log.LstdFlags)
-
 	defaultURL, _ := url.Parse(defaultScheme + "://" + defaultHostname + defaultBasePath)
-	if config.BaseURL == nil {
+	if config.BaseURL != nil {
+		c.ClientParams.BaseURL = config.BaseURL
+	} else {
 		c.ClientParams.BaseURL = defaultURL
 	}
 
-	if config.UserAgent == "" {
+	if config.UserAgent != "" {
+		c.ClientParams.UserAgent = config.UserAgent
+	} else {
 		c.ClientParams.UserAgent = userAgent + "/" + Version
 	}
 
-	if config.HTTPClient == nil {
+	if config.HTTPClient != nil {
+		c.ClientParams.HTTPClient = config.HTTPClient
+	} else {
 		c.ClientParams.HTTPClient = http.DefaultClient
 	}
 
-	if config.RateLimiter == nil {
+	if config.RateLimiter != nil {
+		c.ClientParams.RateLimiter = config.RateLimiter
+	} else {
 		c.ClientParams.RateLimiter = rate.NewLimiter(rate.Limit(4), 1) // 4rps equates to default api limit (1200 req/5 min)
 	}
 
@@ -99,12 +106,16 @@ func NewExperimental(config *ClientParams) (*Client, error) {
 	}
 	c.ClientParams.RetryPolicy = retryPolicy
 
-	if config.Headers == nil {
+	if config.Headers != nil {
+		c.ClientParams.Headers = config.Headers
+	} else {
 		c.ClientParams.Headers = make(http.Header)
 	}
 
-	if config.Logger == nil {
-		c.ClientParams.Logger = silentLogger
+	if config.Logger != nil {
+		c.ClientParams.Logger = config.Logger
+	} else {
+		c.ClientParams.Logger = log.New(ioutil.Discard, "", log.LstdFlags)
 	}
 
 	if config.Key != "" && config.Token != "" {
@@ -123,6 +134,8 @@ func NewExperimental(config *ClientParams) (*Client, error) {
 	if config.UserServiceKey != "" {
 		c.ClientParams.UserServiceKey = config.UserServiceKey
 	}
+
+	c.ClientParams.Debug = config.Debug
 
 	c.Zones = (*ZonesService)(&c.common)
 
@@ -223,6 +236,20 @@ func (c *Client) makeRequest(ctx context.Context, method, uri string, params int
 			return nil, fmt.Errorf("error caused by request rate limiting: %w", err)
 		}
 
+		if c.Debug {
+			if method == http.MethodPost || method == http.MethodPut || method == http.MethodPatch {
+				buf := &bytes.Buffer{}
+				tee := io.TeeReader(reqBody, buf)
+				debugBody, _ := ioutil.ReadAll(tee)
+				payloadBody, _ := ioutil.ReadAll(buf)
+				fmt.Printf("cloudflare-go [DEBUG] REQUEST Method:%v URI:%s Headers:%#v Body:%v\n", method, c.BaseURL.String()+uri, headers, string(debugBody))
+				// ensure we recreate the io.Reader for use
+				reqBody = bytes.NewReader(payloadBody)
+			} else {
+				fmt.Printf("cloudflare-go [DEBUG] REQUEST Method:%v URI:%s Headers:%#v Body:%v\n", method, c.BaseURL.String()+uri, headers, nil)
+			}
+		}
+
 		resp, respErr = c.request(ctx, method, uri, reqBody, headers)
 
 		// retry if the server is rate limiting us or if it failed
@@ -235,9 +262,6 @@ func (c *Client) makeRequest(ctx context.Context, method, uri string, params int
 				resp.Body.Close()
 
 				respErr = errors.Wrap(err, "could not read response body")
-
-				c.Logger.Printf("Request: %s %s got an error response %d: %s\n", method, uri, resp.StatusCode,
-					strings.Replace(strings.Replace(string(respBody), "\n", "", -1), "\t", "", -1))
 			} else {
 				c.Logger.Printf("Error performing request: %s %s : %s \n", method, uri, respErr.Error())
 			}
@@ -250,6 +274,10 @@ func (c *Client) makeRequest(ctx context.Context, method, uri string, params int
 			}
 			break
 		}
+	}
+
+	if c.Debug {
+		fmt.Printf("cloudflare-go [DEBUG] RESPONSE URI:%s StatusCode:%d Body:%#v RayID:%s\n", c.BaseURL.String()+uri, resp.StatusCode, string(respBody), resp.Header.Get("cf-ray"))
 	}
 
 	if respErr != nil {

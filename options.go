@@ -92,6 +92,13 @@ func BaseURL(baseURL string) Option {
 	}
 }
 
+func Debug(debug bool) Option {
+	return func(api *API) error {
+		api.Debug = debug
+		return nil
+	}
+}
+
 // parseOptions parses the supplied options functions and returns a configured
 // *API instance.
 func (api *API) parseOptions(opts ...Option) error {
