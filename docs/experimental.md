@@ -11,7 +11,7 @@ Majority of entities follow a standard method signature.
 
 - `Get(ctx, id)`: fetches a single entity by an identifer
 - `List(ctx, ...params)`: fetches all entities and automatically paginates
-- `Create(ctx, ...params)`: creates a new entity with the provided parameters
+- `New(ctx, ...params)`: creates a new entity with the provided parameters
 - `Update(ctx, id, ...params)`: updates an existing entity
 - `Delete(ctx, id)`: deletes a single entity
 
