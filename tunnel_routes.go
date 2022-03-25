@@ -19,8 +19,8 @@ type TunnelRoute struct {
 	DeletedAt  time.Time `json:"deleted_at"`
 }
 
-// TunnelRouteListResponse is the API response for listing tunnel routes.
-type TunnelRouteListResponse struct {
+// tunnelRouteListResponse is the API response for listing tunnel routes.
+type tunnelRouteListResponse struct {
 	Response
 	Result []TunnelRoute `json:"result"`
 }
@@ -33,7 +33,7 @@ func (api *API) TunnelRoutes(ctx context.Context) ([]TunnelRoute, error) {
 		return []TunnelRoute{}, err
 	}
 
-	var resp TunnelRouteListResponse
+	var resp tunnelRouteListResponse
 	err = json.Unmarshal(res, &resp)
 	if err != nil {
 		return []TunnelRoute{}, errors.Wrap(err, errUnmarshalError)
