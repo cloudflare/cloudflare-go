@@ -99,3 +99,27 @@ func (api *API) createTunnelRoute(ctx context.Context, tunnelId string, ipNetwor
 
 	return extractTunnelRouteResponse(api.makeRequestContext(ctx, http.MethodPost, uri, params))
 }
+
+// UpdateTunnelRoute update an existing route in the account's routing table for the given tunnel
+func (api *API) UpdateTunnelRoute(ctx context.Context, tunnelId string, currentNetwork string, newNetwork string) (TunnelRoute, error) {
+	return api.updateTunnelRoute(ctx, tunnelId, currentNetwork, newNetwork, "")
+}
+
+// UpdateTunnelRouteWithComment update an existing route in the account's routing table for the given tunnel
+func (api *API) UpdateTunnelRouteWithComment(ctx context.Context, tunnelId string, currentNetwork string, newNetwork string, comment string) (TunnelRoute, error) {
+	return api.updateTunnelRoute(ctx, tunnelId, currentNetwork, newNetwork, comment)
+}
+
+func (api *API) updateTunnelRoute(ctx context.Context, tunnelId string, currentNetwork string, newNetwork string, comment string) (TunnelRoute, error) {
+	uri := fmt.Sprintf("/%s/%s/teamnet/routes/network/%s", AccountRouteRoot, api.AccountID, url.PathEscape(currentNetwork))
+
+	params := map[string]string{
+		"tunnel_id":   tunnelId,
+		"new_network": newNetwork,
+	}
+	if comment != "" {
+		params["comment"] = comment
+	}
+
+	return extractTunnelRouteResponse(api.makeRequestContext(ctx, http.MethodPatch, uri, params))
+}
