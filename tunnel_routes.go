@@ -10,6 +10,7 @@ import (
 	"github.com/pkg/errors"
 )
 
+// TunnelRoute is the full record for a route.
 type TunnelRoute struct {
 	Network    string    `json:"network"`
 	TunnelId   string    `json:"tunnel_id"`
@@ -25,6 +26,12 @@ type tunnelRouteListResponse struct {
 	Result []TunnelRoute `json:"result"`
 }
 
+type tunnelRouteForIpResponse struct {
+	Response
+	Result TunnelRoute `json:"result"`
+}
+
+// TunnelRoutes lists all defined routes for tunnels in the account.
 func (api *API) TunnelRoutes(ctx context.Context) ([]TunnelRoute, error) {
 	uri := fmt.Sprintf("/%s/%s/teamnet/routes", AccountRouteRoot, api.AccountID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
@@ -40,4 +47,21 @@ func (api *API) TunnelRoutes(ctx context.Context) ([]TunnelRoute, error) {
 	}
 
 	return resp.Result, nil
+}
+
+// TunnelRouteForIp finds the Tunnel Route that encompasses the given IP
+func (api *API) TunnelRouteForIp(ctx context.Context, ip string) (TunnelRoute, error) {
+	uri := fmt.Sprintf("/%s/%s/teamnet/routes/ip/%s", AccountRouteRoot, api.AccountID, ip)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return TunnelRoute{}, err
+	}
+
+	var routeResponse tunnelRouteForIpResponse
+	err = json.Unmarshal(res, &routeResponse)
+	if err != nil {
+		return TunnelRoute{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return routeResponse.Result, nil
 }
