@@ -2,7 +2,9 @@ package cloudflare
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"testing"
 	"time"
@@ -97,6 +99,43 @@ func TestAPI_TunnelRouteForIp(t *testing.T) {
 	}
 }
 
-//Create Route (POST accounts/:account_identifier/teamnet/routes/network/:ip_network)
+func TestAPI_CreateTunnelRouteWithComment(t *testing.T) {
+	setup(UsingAccount(testAccountID))
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			panic(err)
+		}
+		defer r.Body.Close()
+
+		var responseContent map[string]string
+		json.Unmarshal(body, &responseContent)
+		assert.Equal(t, testTunnelID, responseContent["tunnel_id"])
+		assert.Equal(t, "foo", responseContent["comment"])
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+			  "network": "ff01::/32",
+			  "tunnel_id": "f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
+			  "tunnel_name": "blog",
+			  "comment": "Example comment for this route",
+			  "created_at": "2021-01-25T18:22:34.317854Z",
+			  "deleted_at": "2021-01-25T18:22:34.317854Z"
+            }
+          }`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/teamnet/routes/network/10.0.0.0/16", handler)
+	_, err := client.CreateTunnelRouteWithComment(context.Background(), testTunnelID, "10.0.0.0/16", "foo")
+	assert.NoError(t, err)
+}
+
 //Update Route (PATCH accounts/:account_identifier/teamnet/routes/network/:ip_network)
 //Delete Route (DELETE accounts/:account_identifier/teamnet/routes/network/:ip_network)
