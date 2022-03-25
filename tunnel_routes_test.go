@@ -176,4 +176,30 @@ func TestAPI_UpdateTunnelRouteWithComment(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-//Delete Route (DELETE accounts/:account_identifier/teamnet/routes/network/:ip_network)
+func TestAPI_DeleteTunnelRoute(t *testing.T) {
+	setup(UsingAccount(testAccountID))
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+			  "network": "ff01::/32",
+			  "tunnel_id": "f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
+			  "tunnel_name": "blog",
+			  "comment": "Example comment for this route",
+			  "created_at": "2021-01-25T18:22:34.317854Z",
+			  "deleted_at": "2021-01-25T18:22:34.317854Z"
+            }
+          }`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/teamnet/routes/network/10.0.0.0/16", handler)
+	_, err := client.DeleteTunnelRoute(context.Background(), "10.0.0.0/16")
+	assert.NoError(t, err)
+}
