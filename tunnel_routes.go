@@ -100,17 +100,24 @@ func (api *API) createTunnelRoute(ctx context.Context, tunnelId string, ipNetwor
 	return extractTunnelRouteResponse(api.makeRequestContext(ctx, http.MethodPost, uri, params))
 }
 
+// DeleteTunnelRoute delete an existing route from the account's routing table
+//
+// See: https://api.cloudflare.com/#tunnel-route-delete-route
 func (api *API) DeleteTunnelRoute(ctx context.Context, ipNetwork string) (TunnelRoute, error) {
 	uri := fmt.Sprintf("/%s/%s/teamnet/routes/network/%s", AccountRouteRoot, api.AccountID, url.PathEscape(ipNetwork))
 	return extractTunnelRouteResponse(api.makeRequestContext(ctx, http.MethodDelete, uri, nil))
 }
 
 // UpdateTunnelRoute update an existing route in the account's routing table for the given tunnel
+//
+// See: https://api.cloudflare.com/#tunnel-route-update-route
 func (api *API) UpdateTunnelRoute(ctx context.Context, tunnelId string, currentNetwork string, newNetwork string) (TunnelRoute, error) {
 	return api.updateTunnelRoute(ctx, tunnelId, currentNetwork, newNetwork, "")
 }
 
 // UpdateTunnelRouteWithComment update an existing route in the account's routing table for the given tunnel
+//
+// See: https://api.cloudflare.com/#tunnel-route-update-route
 func (api *API) UpdateTunnelRouteWithComment(ctx context.Context, tunnelId string, currentNetwork string, newNetwork string, comment string) (TunnelRoute, error) {
 	return api.updateTunnelRoute(ctx, tunnelId, currentNetwork, newNetwork, comment)
 }
