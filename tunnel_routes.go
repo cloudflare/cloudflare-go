@@ -27,9 +27,23 @@ type tunnelRouteListResponse struct {
 	Result []TunnelRoute `json:"result"`
 }
 
-type tunnelRouteForIpResponse struct {
+type tunnelRouteResponse struct {
 	Response
 	Result TunnelRoute `json:"result"`
+}
+
+func extractTunnelRouteResponse(responseBody []byte, err error) (TunnelRoute, error) {
+	if err != nil {
+		return TunnelRoute{}, err
+	}
+
+	var routeResponse tunnelRouteResponse
+	err = json.Unmarshal(responseBody, &routeResponse)
+	if err != nil {
+		return TunnelRoute{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return routeResponse.Result, nil
 }
 
 // TunnelRoutes lists all defined routes for tunnels in the account.
@@ -57,18 +71,7 @@ func (api *API) TunnelRoutes(ctx context.Context) ([]TunnelRoute, error) {
 // See: https://api.cloudflare.com/#tunnel-route-get-tunnel-route-by-ip
 func (api *API) TunnelRouteForIp(ctx context.Context, ip string) (TunnelRoute, error) {
 	uri := fmt.Sprintf("/%s/%s/teamnet/routes/ip/%s", AccountRouteRoot, api.AccountID, ip)
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
-	if err != nil {
-		return TunnelRoute{}, err
-	}
-
-	var routeResponse tunnelRouteForIpResponse
-	err = json.Unmarshal(res, &routeResponse)
-	if err != nil {
-		return TunnelRoute{}, errors.Wrap(err, errUnmarshalError)
-	}
-
-	return routeResponse.Result, nil
+	return extractTunnelRouteResponse(api.makeRequestContext(ctx, http.MethodGet, uri, nil))
 }
 
 // CreateTunnelRoute add a new route to the account's routing table for the given tunnel
@@ -94,16 +97,5 @@ func (api *API) createTunnelRoute(ctx context.Context, tunnelId string, ipNetwor
 		params["comment"] = comment
 	}
 
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
-	if err != nil {
-		return TunnelRoute{}, err
-	}
-
-	var routeResponse tunnelRouteForIpResponse
-	err = json.Unmarshal(res, &routeResponse)
-	if err != nil {
-		return TunnelRoute{}, errors.Wrap(err, errUnmarshalError)
-	}
-
-	return routeResponse.Result, nil
+	return extractTunnelRouteResponse(api.makeRequestContext(ctx, http.MethodPost, uri, params))
 }
