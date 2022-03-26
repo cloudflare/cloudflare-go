@@ -14,6 +14,13 @@ type ZoneIdentifier string
 
 type ZonesService service
 
+type ZoneCreateParams struct {
+	Name      string   `json:"name"`
+	JumpStart bool     `json:"jump_start"`
+	Type      string   `json:"type"`
+	Account   *Account `json:"organization,omitempty"`
+}
+
 type ZoneParams struct {
 	Match       string `url:"match,omitempty"`
 	Name        string `url:"name,omitempty"`
@@ -41,6 +48,24 @@ func (z ZoneIdentifier) Validate() error {
 		return fmt.Errorf(errInvalidZoneIdentifer, z)
 	}
 	return nil
+}
+
+// New creates a new zone.
+//
+// API reference: https://api.cloudflare.com/#zone-zone-details
+func (s *ZonesService) New(ctx context.Context, zone *ZoneCreateParams) (Zone, error) {
+	res, err := s.client.Call(ctx, http.MethodPost, "/zones", zone)
+	if err != nil {
+		return Zone{}, err
+	}
+
+	var r ZoneResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return Zone{}, fmt.Errorf("failed to unmarshal zone JSON data: %w", err)
+	}
+
+	return r.Result, nil
 }
 
 // Get fetches a single zone.

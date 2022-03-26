@@ -52,6 +52,7 @@ type API struct {
 	rateLimiter       *rate.Limiter
 	retryPolicy       RetryPolicy
 	logger            Logger
+	Debug             bool
 }
 
 // newClient provides shared logic for New and NewWithUserServiceKey.
@@ -229,6 +230,20 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 			return nil, errors.Wrap(err, "Error caused by request rate limiting")
 		}
 
+		if api.Debug {
+			if method == http.MethodPost || method == http.MethodPut || method == http.MethodPatch {
+				buf := &bytes.Buffer{}
+				tee := io.TeeReader(reqBody, buf)
+				debugBody, _ := ioutil.ReadAll(tee)
+				payloadBody, _ := ioutil.ReadAll(buf)
+				fmt.Printf("cloudflare-go [DEBUG] REQUEST Method:%v URI:%s Headers:%#v Body:%v\n", method, api.BaseURL+uri, headers, string(debugBody))
+				// ensure we recreate the io.Reader for use
+				reqBody = bytes.NewReader(payloadBody)
+			} else {
+				fmt.Printf("cloudflare-go [DEBUG] REQUEST Method:%v URI:%s Headers:%#v Body:%v\n", method, api.BaseURL+uri, headers, nil)
+			}
+		}
+
 		resp, respErr = api.request(ctx, method, uri, reqBody, authType, headers)
 
 		// retry if the server is rate limiting us or if it failed
@@ -259,6 +274,10 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 	}
 	if respErr != nil {
 		return nil, respErr
+	}
+
+	if api.Debug {
+		fmt.Printf("cloudflare-go [DEBUG] RESPONSE URI:%s StatusCode:%d Body:%#v RayID:%s\n", api.BaseURL, resp.StatusCode, string(respBody), resp.Header.Get("cf-ray"))
 	}
 
 	if resp.StatusCode >= http.StatusBadRequest {
