@@ -7,13 +7,28 @@ and consistent experience.
 
 ### Consistent CRUD method signatures
 
-Majority of entities follow a standard method signature.
+Majority of entities follow a standard method signature (where `$entity` is the
+resource such as `Zone`, `DNSRecord`, ...).
 
-- `Get(ctx, id)`: fetches a single entity by an identifer
-- `List(ctx, ...params)`: fetches all entities and automatically paginates
-- `New(ctx, ...params)`: creates a new entity with the provided parameters
-- `Update(ctx, id, ...params)`: updates an existing entity
-- `Delete(ctx, id)`: deletes a single entity
+| Signature                                             | Purpose                                            | Return value                                                                                                                   |
+| ----------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `Get(ctx, id) ($entity, error)`                       | Fetches a single entity by an identifer.           | Returns the entity and `error` based on the listing parameters.                                                                |
+| `List(ctx, ...params) ([]$entity, ResultInfo, error)` | Fetches all entities.                              | Returns the list of matching entities, the result information (pagination, fail/success and additional metadata), and `error`. |
+| `New(ctx, ...params) ($entity, error)`                | Creates a new entity with the provided parameters. | Returns the newly created entity and `error`.                                                                                  |
+| `Update(ctx, id, ...params) ($entity, error)`         | Updates an existing entity.                        | Returns the updated entity and `error`.                                                                                        |
+| `Delete(ctx, id) (error)`                             | Deletes a single entity.                           | Returns `error`.                                                                                                               |
+
+### Why no iterator for `List` operations?
+
+Initially, there was proposal to either: 1) automatically paginate all results
+or 2) return an `Iterator` object with `Next()` methods. I've opted to instead
+return the pagination information to the operator as using an `Iterator` object
+has some hidden complexities when attempting to cover all use cases. Some
+examples:
+
+- forward and backwards iteration
+- further filtering the iterations
+- only returning subsets
 
 ## Nested methods and services
 
@@ -38,7 +53,7 @@ for services.
 A zone is used below for the examples however, all entites will implement the
 same methods and interfaces.
 
-**initialising a new client with options like your own `http.Client`**
+### Initialising a new client with options like your own `http.Client`
 
 ```go
 params := cloudflare.ClientParams{
@@ -50,7 +65,7 @@ params := cloudflare.ClientParams{
 c, err := cloudflare.NewExperimental(params)
 ```
 
-**create a new zone**
+### Create a new zone
 
 ```go
 params := cloudflare.ClientParams{
@@ -66,7 +81,7 @@ zParams := &cloudflare.ZoneParams{
 z, _ := c.Zones.New(ctx, zParams)
 ```
 
-**fetching a known zone ID**
+### Fetching a known zone ID
 
 ```go
 params := cloudflare.ClientParams{
@@ -78,7 +93,7 @@ c, err := cloudflare.NewExperimental(params)
 z, _ := c.Zones.Get(ctx, "3e7705498e8be60520841409ebc69bc1")
 ```
 
-**fetching all zones matching a single account ID**
+### Fetching all zones matching a single account ID
 
 ```go
 params := cloudflare.ClientParams{
@@ -90,10 +105,10 @@ c, err := cloudflare.NewExperimental(params)
 zParams := &cloudflare.ZoneParams{
   AccountID: "d8e8fca2dc0f896fd7cb4cb0031ba249"
 }
-z, _ := c.Zones.List(ctx, zParams)
+z, _, _ := c.Zones.List(ctx, zParams)
 ```
 
-**update a zone**
+### Update a zone
 
 ```go
 params := cloudflare.ClientParams{
@@ -111,7 +126,7 @@ zParams := &cloudflare.ZoneParams{
 z, _ := c.Zones.Update(ctx, "b5163cf270a3fbac34827c4a2713eef4", zParams)
 ```
 
-**delete a zone**
+### Delete a zone
 
 ```go
 params := cloudflare.ClientParams{
