@@ -99,7 +99,7 @@ func TestTunnelRouteForIp(t *testing.T) {
 	}
 }
 
-func TestCreateTunnelRouteWithComment(t *testing.T) {
+func TestCreateTunnelRoute(t *testing.T) {
 	setup(UsingAccount(testAccountID))
 	defer teardown()
 
@@ -133,11 +133,11 @@ func TestCreateTunnelRouteWithComment(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/teamnet/routes/network/10.0.0.0/16", handler)
-	_, err := client.CreateTunnelRouteWithComment(context.Background(), testTunnelID, "10.0.0.0/16", "foo")
+	_, err := client.CreateTunnelRoute(context.Background(), testTunnelID, "10.0.0.0/16", "foo")
 	assert.NoError(t, err)
 }
 
-func TestUpdateTunnelRouteWithComment(t *testing.T) {
+func TestUpdateTunnelRoute(t *testing.T) {
 	setup(UsingAccount(testAccountID))
 	defer teardown()
 
@@ -172,7 +172,7 @@ func TestUpdateTunnelRouteWithComment(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/teamnet/routes/network/10.0.0.0/16", handler)
-	_, err := client.UpdateTunnelRouteWithComment(context.Background(), testTunnelID, "10.0.0.0/16", "192.168.0.0/16", "foo")
+	_, err := client.UpdateTunnelRoute(context.Background(), testTunnelID, "10.0.0.0/16", "192.168.0.0/16", "foo")
 	assert.NoError(t, err)
 }
 

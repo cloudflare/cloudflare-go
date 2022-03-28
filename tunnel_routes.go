@@ -87,18 +87,7 @@ func (api *API) TunnelRouteForIP(ctx context.Context, ip string) (TunnelRoute, e
 // CreateTunnelRoute add a new route to the account's routing table for the given tunnel.
 //
 // See: https://api.cloudflare.com/#tunnel-route-create-route
-func (api *API) CreateTunnelRoute(ctx context.Context, tunnelId string, ipNetwork string) (TunnelRoute, error) {
-	return api.createTunnelRoute(ctx, tunnelId, ipNetwork, "")
-}
-
-// CreateTunnelRouteWithComment add a new route to the account's routing table for the given tunnel.
-//
-// See: https://api.cloudflare.com/#tunnel-route-create-route
-func (api *API) CreateTunnelRouteWithComment(ctx context.Context, tunnelId string, ipNetwork string, comment string) (TunnelRoute, error) {
-	return api.createTunnelRoute(ctx, tunnelId, ipNetwork, comment)
-}
-
-func (api *API) createTunnelRoute(ctx context.Context, tunnelId string, ipNetwork string, comment string) (TunnelRoute, error) {
+func (api *API) CreateTunnelRoute(ctx context.Context, tunnelId string, ipNetwork string, comment string) (TunnelRoute, error) {
 	uri := fmt.Sprintf("/%s/%s/teamnet/routes/network/%s", AccountRouteRoot, api.AccountID, url.PathEscape(ipNetwork))
 
 	params := make(map[string]string)
@@ -121,18 +110,7 @@ func (api *API) DeleteTunnelRoute(ctx context.Context, ipNetwork string) (Tunnel
 // UpdateTunnelRoute update an existing route in the account's routing table for the given tunnel
 //
 // See: https://api.cloudflare.com/#tunnel-route-update-route
-func (api *API) UpdateTunnelRoute(ctx context.Context, tunnelId string, currentNetwork string, newNetwork string) (TunnelRoute, error) {
-	return api.updateTunnelRoute(ctx, tunnelId, currentNetwork, newNetwork, "")
-}
-
-// UpdateTunnelRouteWithComment update an existing route in the account's routing table for the given tunnel
-//
-// See: https://api.cloudflare.com/#tunnel-route-update-route
-func (api *API) UpdateTunnelRouteWithComment(ctx context.Context, tunnelId string, currentNetwork string, newNetwork string, comment string) (TunnelRoute, error) {
-	return api.updateTunnelRoute(ctx, tunnelId, currentNetwork, newNetwork, comment)
-}
-
-func (api *API) updateTunnelRoute(ctx context.Context, tunnelId string, currentNetwork string, newNetwork string, comment string) (TunnelRoute, error) {
+func (api *API) UpdateTunnelRoute(ctx context.Context, tunnelId string, currentNetwork, newNetwork, comment string) (TunnelRoute, error) {
 	uri := fmt.Sprintf("/%s/%s/teamnet/routes/network/%s", AccountRouteRoot, api.AccountID, url.PathEscape(currentNetwork))
 
 	params := map[string]string{
