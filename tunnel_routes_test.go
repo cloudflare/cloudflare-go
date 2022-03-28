@@ -50,7 +50,8 @@ func TestListTunnelRoutes(t *testing.T) {
 		},
 	}
 
-	got, err := client.TunnelRoutes(context.Background())
+	params := TunnelRoutesListParams{}
+	got, err := client.TunnelRoutes(context.Background(), params)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, got)

@@ -13,12 +13,22 @@ import (
 
 // TunnelRoute is the full record for a route.
 type TunnelRoute struct {
-	Network    string    `json:"network"`
-	TunnelId   string    `json:"tunnel_id"`
-	TunnelName string    `json:"tunnel_name"`
-	Comment    string    `json:"comment"`
+	Network    string     `json:"network"`
+	TunnelId   string     `json:"tunnel_id"`
+	TunnelName string     `json:"tunnel_name"`
+	Comment    string     `json:"comment"`
 	CreatedAt  *time.Time `json:"created_at"`
 	DeletedAt  *time.Time `json:"deleted_at"`
+}
+
+type TunnelRoutesListParams struct {
+	PaginationOptions
+	TunnelId        string     `json:"tunnel_id,omitempty"`
+	Comment         string     `json:"comment,omitempty"`
+	IsDeleted       *bool      `json:"is_deleted,omitempty"`
+	NetworkSubset   string     `json:"network_subset,omitempty"`
+	NetworkSuperset string     `json:"network_superset,omitempty"`
+	ExistedAt       *time.Time `json:"existed_at,omitempty"`
 }
 
 // tunnelRouteListResponse is the API response for listing tunnel routes.
@@ -49,9 +59,9 @@ func extractTunnelRouteResponse(responseBody []byte, err error) (TunnelRoute, er
 // TunnelRoutes lists all defined routes for tunnels in the account.
 //
 // See: https://api.cloudflare.com/#tunnel-route-list-tunnel-routes
-func (api *API) TunnelRoutes(ctx context.Context) ([]TunnelRoute, error) {
+func (api *API) TunnelRoutes(ctx context.Context, params TunnelRoutesListParams) ([]TunnelRoute, error) {
 	uri := fmt.Sprintf("/%s/%s/teamnet/routes", AccountRouteRoot, api.AccountID)
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, params)
 
 	if err != nil {
 		return []TunnelRoute{}, err
