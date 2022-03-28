@@ -42,20 +42,6 @@ type tunnelRouteResponse struct {
 	Result TunnelRoute `json:"result"`
 }
 
-func extractTunnelRouteResponse(responseBody []byte, err error) (TunnelRoute, error) {
-	if err != nil {
-		return TunnelRoute{}, err
-	}
-
-	var routeResponse tunnelRouteResponse
-	err = json.Unmarshal(responseBody, &routeResponse)
-	if err != nil {
-		return TunnelRoute{}, errors.Wrap(err, errUnmarshalError)
-	}
-
-	return routeResponse.Result, nil
-}
-
 // TunnelRoutes lists all defined routes for tunnels in the account.
 //
 // See: https://api.cloudflare.com/#tunnel-route-list-tunnel-routes
@@ -81,7 +67,19 @@ func (api *API) TunnelRoutes(ctx context.Context, params TunnelRoutesListParams)
 // See: https://api.cloudflare.com/#tunnel-route-get-tunnel-route-by-ip
 func (api *API) TunnelRouteForIP(ctx context.Context, ip string) (TunnelRoute, error) {
 	uri := fmt.Sprintf("/%s/%s/teamnet/routes/ip/%s", AccountRouteRoot, api.AccountID, ip)
-	return extractTunnelRouteResponse(api.makeRequestContext(ctx, http.MethodGet, uri, nil))
+
+	responseBody, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return TunnelRoute{}, err
+	}
+
+	var routeResponse tunnelRouteResponse
+	err = json.Unmarshal(responseBody, &routeResponse)
+	if err != nil {
+		return TunnelRoute{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return routeResponse.Result, nil
 }
 
 // CreateTunnelRoute add a new route to the account's routing table for the given tunnel.
@@ -96,7 +94,18 @@ func (api *API) CreateTunnelRoute(ctx context.Context, tunnelId string, ipNetwor
 		params["comment"] = comment
 	}
 
-	return extractTunnelRouteResponse(api.makeRequestContext(ctx, http.MethodPost, uri, params))
+	responseBody, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
+	if err != nil {
+		return TunnelRoute{}, err
+	}
+
+	var routeResponse tunnelRouteResponse
+	err = json.Unmarshal(responseBody, &routeResponse)
+	if err != nil {
+		return TunnelRoute{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return routeResponse.Result, nil
 }
 
 // DeleteTunnelRoute delete an existing route from the account's routing table
@@ -104,7 +113,19 @@ func (api *API) CreateTunnelRoute(ctx context.Context, tunnelId string, ipNetwor
 // See: https://api.cloudflare.com/#tunnel-route-delete-route
 func (api *API) DeleteTunnelRoute(ctx context.Context, ipNetwork string) (TunnelRoute, error) {
 	uri := fmt.Sprintf("/%s/%s/teamnet/routes/network/%s", AccountRouteRoot, api.AccountID, url.PathEscape(ipNetwork))
-	return extractTunnelRouteResponse(api.makeRequestContext(ctx, http.MethodDelete, uri, nil))
+
+	responseBody, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
+	if err != nil {
+		return TunnelRoute{}, err
+	}
+
+	var routeResponse tunnelRouteResponse
+	err = json.Unmarshal(responseBody, &routeResponse)
+	if err != nil {
+		return TunnelRoute{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return routeResponse.Result, nil
 }
 
 // UpdateTunnelRoute update an existing route in the account's routing table for the given tunnel
@@ -121,5 +142,16 @@ func (api *API) UpdateTunnelRoute(ctx context.Context, tunnelId string, currentN
 		params["comment"] = comment
 	}
 
-	return extractTunnelRouteResponse(api.makeRequestContext(ctx, http.MethodPatch, uri, params))
+	responseBody, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
+	if err != nil {
+		return TunnelRoute{}, err
+	}
+
+	var routeResponse tunnelRouteResponse
+	err = json.Unmarshal(responseBody, &routeResponse)
+	if err != nil {
+		return TunnelRoute{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return routeResponse.Result, nil
 }
