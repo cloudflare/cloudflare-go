@@ -69,7 +69,7 @@ func (api *API) TunnelRoutes(ctx context.Context) ([]TunnelRoute, error) {
 // TunnelRouteForIp finds the Tunnel Route that encompasses the given IP
 //
 // See: https://api.cloudflare.com/#tunnel-route-get-tunnel-route-by-ip
-func (api *API) TunnelRouteForIp(ctx context.Context, ip string) (TunnelRoute, error) {
+func (api *API) TunnelRouteForIP(ctx context.Context, ip string) (TunnelRoute, error) {
 	uri := fmt.Sprintf("/%s/%s/teamnet/routes/ip/%s", AccountRouteRoot, api.AccountID, ip)
 	return extractTunnelRouteResponse(api.makeRequestContext(ctx, http.MethodGet, uri, nil))
 }
