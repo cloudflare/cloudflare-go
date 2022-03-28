@@ -12,7 +12,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-//List Tunnel Routes (GET accounts/:account_identifier/teamnet/routes)
 func TestAPI_ListTunnelRoutes(t *testing.T) {
 	setup(UsingAccount(testAccountID))
 	defer teardown()

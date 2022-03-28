@@ -74,14 +74,14 @@ func (api *API) TunnelRouteForIp(ctx context.Context, ip string) (TunnelRoute, e
 	return extractTunnelRouteResponse(api.makeRequestContext(ctx, http.MethodGet, uri, nil))
 }
 
-// CreateTunnelRoute add a new route to the account's routing table for the given tunnel
+// CreateTunnelRoute add a new route to the account's routing table for the given tunnel.
 //
 // See: https://api.cloudflare.com/#tunnel-route-create-route
 func (api *API) CreateTunnelRoute(ctx context.Context, tunnelId string, ipNetwork string) (TunnelRoute, error) {
 	return api.createTunnelRoute(ctx, tunnelId, ipNetwork, "")
 }
 
-// CreateTunnelRouteWithComment add a new route to the account's routing table for the given tunnel
+// CreateTunnelRouteWithComment add a new route to the account's routing table for the given tunnel.
 //
 // See: https://api.cloudflare.com/#tunnel-route-create-route
 func (api *API) CreateTunnelRouteWithComment(ctx context.Context, tunnelId string, ipNetwork string, comment string) (TunnelRoute, error) {
