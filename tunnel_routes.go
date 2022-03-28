@@ -14,7 +14,7 @@ import (
 // TunnelRoute is the full record for a route.
 type TunnelRoute struct {
 	Network    string     `json:"network"`
-	TunnelId   string     `json:"tunnel_id"`
+	TunnelID   string     `json:"tunnel_id"`
 	TunnelName string     `json:"tunnel_name"`
 	Comment    string     `json:"comment"`
 	CreatedAt  *time.Time `json:"created_at"`
@@ -22,13 +22,38 @@ type TunnelRoute struct {
 }
 
 type TunnelRoutesListParams struct {
-	PaginationOptions
-	TunnelId        string     `json:"tunnel_id,omitempty"`
+	AccountID       string     `json:"-"`
+	TunnelID        string     `json:"tunnel_id,omitempty"`
 	Comment         string     `json:"comment,omitempty"`
 	IsDeleted       *bool      `json:"is_deleted,omitempty"`
 	NetworkSubset   string     `json:"network_subset,omitempty"`
 	NetworkSuperset string     `json:"network_superset,omitempty"`
 	ExistedAt       *time.Time `json:"existed_at,omitempty"`
+	PaginationOptions
+}
+
+type TunnelRoutesCreateParams struct {
+	AccountID string `json:"-"`
+	Network   string `json:"-"`
+	TunnelID  string `json:"tunnel_id"`
+	Comment   string `json:"comment,omitempty"`
+}
+
+type TunnelRoutesUpdateParams struct {
+	AccountID string `json:"-"`
+	Network   string `json:"network"`
+	TunnelID  string `json:"tunnel_id"`
+	Comment   string `json:"comment,omitempty"`
+}
+
+type TunnelRoutesForIPParams struct {
+	AccountID string `json:"-"`
+	Network   string `json:"-"`
+}
+
+type TunnelRoutesDeleteParams struct {
+	AccountID string `json:"-"`
+	Network   string `json:"-"`
 }
 
 // tunnelRouteListResponse is the API response for listing tunnel routes.
@@ -46,7 +71,11 @@ type tunnelRouteResponse struct {
 //
 // See: https://api.cloudflare.com/#tunnel-route-list-tunnel-routes
 func (api *API) TunnelRoutes(ctx context.Context, params TunnelRoutesListParams) ([]TunnelRoute, error) {
-	uri := fmt.Sprintf("/%s/%s/teamnet/routes", AccountRouteRoot, api.AccountID)
+	if params.AccountID == "" {
+		return []TunnelRoute{}, ErrMissingAccountID
+	}
+
+	uri := fmt.Sprintf("/%s/%s/teamnet/routes", AccountRouteRoot, params.AccountID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, params)
 
 	if err != nil {
@@ -62,11 +91,11 @@ func (api *API) TunnelRoutes(ctx context.Context, params TunnelRoutesListParams)
 	return resp.Result, nil
 }
 
-// TunnelRouteForIp finds the Tunnel Route that encompasses the given IP
+// TunnelRouteForIP finds the Tunnel Route that encompasses the given IP.
 //
 // See: https://api.cloudflare.com/#tunnel-route-get-tunnel-route-by-ip
-func (api *API) TunnelRouteForIP(ctx context.Context, ip string) (TunnelRoute, error) {
-	uri := fmt.Sprintf("/%s/%s/teamnet/routes/ip/%s", AccountRouteRoot, api.AccountID, ip)
+func (api *API) TunnelRouteForIP(ctx context.Context, params TunnelRoutesForIPParams) (TunnelRoute, error) {
+	uri := fmt.Sprintf("/%s/%s/teamnet/routes/ip/%s", AccountRouteRoot, params.AccountID, params.Network)
 
 	responseBody, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -82,17 +111,16 @@ func (api *API) TunnelRouteForIP(ctx context.Context, ip string) (TunnelRoute, e
 	return routeResponse.Result, nil
 }
 
-// CreateTunnelRoute add a new route to the account's routing table for the given tunnel.
+// CreateTunnelRoute add a new route to the account routing table for the given
+// tunnel.
 //
 // See: https://api.cloudflare.com/#tunnel-route-create-route
-func (api *API) CreateTunnelRoute(ctx context.Context, tunnelId string, ipNetwork string, comment string) (TunnelRoute, error) {
-	uri := fmt.Sprintf("/%s/%s/teamnet/routes/network/%s", AccountRouteRoot, api.AccountID, url.PathEscape(ipNetwork))
-
-	params := make(map[string]string)
-	params["tunnel_id"] = tunnelId
-	if comment != "" {
-		params["comment"] = comment
+func (api *API) CreateTunnelRoute(ctx context.Context, params TunnelRoutesCreateParams) (TunnelRoute, error) {
+	if params.AccountID == "" {
+		return TunnelRoute{}, ErrMissingAccountID
 	}
+
+	uri := fmt.Sprintf("/%s/%s/teamnet/routes/network/%s", AccountRouteRoot, params.AccountID, url.PathEscape(params.Network))
 
 	responseBody, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
@@ -108,39 +136,40 @@ func (api *API) CreateTunnelRoute(ctx context.Context, tunnelId string, ipNetwor
 	return routeResponse.Result, nil
 }
 
-// DeleteTunnelRoute delete an existing route from the account's routing table
+// DeleteTunnelRoute delete an existing route from the account routing table.
 //
 // See: https://api.cloudflare.com/#tunnel-route-delete-route
-func (api *API) DeleteTunnelRoute(ctx context.Context, ipNetwork string) (TunnelRoute, error) {
-	uri := fmt.Sprintf("/%s/%s/teamnet/routes/network/%s", AccountRouteRoot, api.AccountID, url.PathEscape(ipNetwork))
+func (api *API) DeleteTunnelRoute(ctx context.Context, params TunnelRoutesDeleteParams) error {
+	if params.AccountID == "" {
+		return ErrMissingAccountID
+	}
+
+	uri := fmt.Sprintf("/%s/%s/teamnet/routes/network/%s", AccountRouteRoot, params.AccountID, url.PathEscape(params.Network))
 
 	responseBody, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return TunnelRoute{}, err
+		return err
 	}
 
 	var routeResponse tunnelRouteResponse
 	err = json.Unmarshal(responseBody, &routeResponse)
 	if err != nil {
-		return TunnelRoute{}, errors.Wrap(err, errUnmarshalError)
+		return errors.Wrap(err, errUnmarshalError)
 	}
 
-	return routeResponse.Result, nil
+	return nil
 }
 
-// UpdateTunnelRoute update an existing route in the account's routing table for the given tunnel
+// UpdateTunnelRoute updates an existing route in the account routing table for
+// the given tunnel.
 //
 // See: https://api.cloudflare.com/#tunnel-route-update-route
-func (api *API) UpdateTunnelRoute(ctx context.Context, tunnelId string, currentNetwork, newNetwork, comment string) (TunnelRoute, error) {
-	uri := fmt.Sprintf("/%s/%s/teamnet/routes/network/%s", AccountRouteRoot, api.AccountID, url.PathEscape(currentNetwork))
+func (api *API) UpdateTunnelRoute(ctx context.Context, params TunnelRoutesUpdateParams) (TunnelRoute, error) {
+	if params.AccountID == "" {
+		return TunnelRoute{}, ErrMissingAccountID
+	}
 
-	params := map[string]string{
-		"tunnel_id":   tunnelId,
-		"new_network": newNetwork,
-	}
-	if comment != "" {
-		params["comment"] = comment
-	}
+	uri := fmt.Sprintf("/%s/%s/teamnet/routes/network/%s", AccountRouteRoot, params.AccountID, url.PathEscape(params.Network))
 
 	responseBody, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
 	if err != nil {

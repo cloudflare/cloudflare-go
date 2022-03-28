@@ -2,7 +2,6 @@ package cloudflare
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -13,7 +12,7 @@ import (
 )
 
 func TestListTunnelRoutes(t *testing.T) {
-	setup(UsingAccount(testAccountID))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -50,7 +49,7 @@ func TestListTunnelRoutes(t *testing.T) {
 		},
 	}
 
-	params := TunnelRoutesListParams{}
+	params := TunnelRoutesListParams{AccountID: testAccountID}
 	got, err := client.TunnelRoutes(context.Background(), params)
 
 	if assert.NoError(t, err) {
@@ -58,8 +57,8 @@ func TestListTunnelRoutes(t *testing.T) {
 	}
 }
 
-func TestTunnelRouteForIp(t *testing.T) {
-	setup(UsingAccount(testAccountID))
+func TestTunnelRouteForIP(t *testing.T) {
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -84,15 +83,15 @@ func TestTunnelRouteForIp(t *testing.T) {
 
 	ts, _ := time.Parse(time.RFC3339Nano, "2021-01-25T18:22:34.317854Z")
 	want := TunnelRoute{
-		"ff01::/32",
-		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
-		"blog",
-		"Example comment for this route",
-		&ts,
-		&ts,
+		Network:    "ff01::/32",
+		TunnelID:   "f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
+		TunnelName: "blog",
+		Comment:    "Example comment for this route",
+		CreatedAt:  &ts,
+		DeletedAt:  &ts,
 	}
 
-	got, err := client.TunnelRouteForIp(context.Background(), "10.1.0.137")
+	got, err := client.TunnelRouteForIP(context.Background(), TunnelRoutesForIPParams{AccountID: testAccountID, Network: "10.1.0.137"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, got)
@@ -100,29 +99,18 @@ func TestTunnelRouteForIp(t *testing.T) {
 }
 
 func TestCreateTunnelRoute(t *testing.T) {
-	setup(UsingAccount(testAccountID))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
-		body, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			panic(err)
-		}
-		defer r.Body.Close()
-
-		var responseContent map[string]string
-		json.Unmarshal(body, &responseContent)
-		assert.Equal(t, testTunnelID, responseContent["tunnel_id"])
-		assert.Equal(t, "foo", responseContent["comment"])
-
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
 			"errors": [],
 			"messages": [],
 			"result": {
-			  "network": "ff01::/32",
+			  "network": "10.0.0.0/16",
 			  "tunnel_id": "f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
 			  "tunnel_name": "blog",
 			  "comment": "Example comment for this route",
@@ -133,27 +121,34 @@ func TestCreateTunnelRoute(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/teamnet/routes/network/10.0.0.0/16", handler)
-	_, err := client.CreateTunnelRoute(context.Background(), testTunnelID, "10.0.0.0/16", "foo")
-	assert.NoError(t, err)
+
+	ts, _ := time.Parse(time.RFC3339Nano, "2021-01-25T18:22:34.317854Z")
+	want := TunnelRoute{
+		Network:    "10.0.0.0/16",
+		TunnelID:   "f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
+		TunnelName: "blog",
+		Comment:    "Example comment for this route",
+		CreatedAt:  &ts,
+		DeletedAt:  &ts,
+	}
+
+	tunnel, err := client.CreateTunnelRoute(context.Background(), TunnelRoutesCreateParams{AccountID: testAccountID, TunnelID: testTunnelID, Network: "10.0.0.0/16", Comment: "foo"})
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, tunnel)
+	}
 }
 
 func TestUpdateTunnelRoute(t *testing.T) {
-	setup(UsingAccount(testAccountID))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
-		body, err := ioutil.ReadAll(r.Body)
+		_, err := ioutil.ReadAll(r.Body)
 		if err != nil {
 			panic(err)
 		}
 		defer r.Body.Close()
-
-		var responseContent map[string]string
-		json.Unmarshal(body, &responseContent)
-		assert.Equal(t, testTunnelID, responseContent["tunnel_id"])
-		assert.Equal(t, "foo", responseContent["comment"])
-		assert.Equal(t, "192.168.0.0/16", responseContent["new_network"])
 
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
@@ -161,7 +156,7 @@ func TestUpdateTunnelRoute(t *testing.T) {
 			"errors": [],
 			"messages": [],
 			"result": {
-			  "network": "ff01::/32",
+			  "network": "10.0.0.0/16",
 			  "tunnel_id": "f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
 			  "tunnel_name": "blog",
 			  "comment": "Example comment for this route",
@@ -171,13 +166,26 @@ func TestUpdateTunnelRoute(t *testing.T) {
           }`)
 	}
 
+	ts, _ := time.Parse(time.RFC3339Nano, "2021-01-25T18:22:34.317854Z")
+	want := TunnelRoute{
+		Network:    "10.0.0.0/16",
+		TunnelID:   "f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
+		TunnelName: "blog",
+		Comment:    "Example comment for this route",
+		CreatedAt:  &ts,
+		DeletedAt:  &ts,
+	}
+
 	mux.HandleFunc("/accounts/"+testAccountID+"/teamnet/routes/network/10.0.0.0/16", handler)
-	_, err := client.UpdateTunnelRoute(context.Background(), testTunnelID, "10.0.0.0/16", "192.168.0.0/16", "foo")
-	assert.NoError(t, err)
+	tunnel, err := client.UpdateTunnelRoute(context.Background(), TunnelRoutesUpdateParams{AccountID: testAccountID, TunnelID: testTunnelID, Network: "10.0.0.0/16", Comment: "foo"})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, tunnel)
+	}
 }
 
 func TestDeleteTunnelRoute(t *testing.T) {
-	setup(UsingAccount(testAccountID))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -200,6 +208,6 @@ func TestDeleteTunnelRoute(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/teamnet/routes/network/10.0.0.0/16", handler)
-	_, err := client.DeleteTunnelRoute(context.Background(), "10.0.0.0/16")
+	err := client.DeleteTunnelRoute(context.Background(), TunnelRoutesDeleteParams{AccountID: testAccountID, Network: "10.0.0.0/16"})
 	assert.NoError(t, err)
 }
