@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestAPI_ListTunnelRoutes(t *testing.T) {
+func TestListTunnelRoutes(t *testing.T) {
 	setup(UsingAccount(testAccountID))
 	defer teardown()
 
@@ -57,7 +57,7 @@ func TestAPI_ListTunnelRoutes(t *testing.T) {
 	}
 }
 
-func TestAPI_TunnelRouteForIp(t *testing.T) {
+func TestTunnelRouteForIp(t *testing.T) {
 	setup(UsingAccount(testAccountID))
 	defer teardown()
 
@@ -98,7 +98,7 @@ func TestAPI_TunnelRouteForIp(t *testing.T) {
 	}
 }
 
-func TestAPI_CreateTunnelRouteWithComment(t *testing.T) {
+func TestCreateTunnelRouteWithComment(t *testing.T) {
 	setup(UsingAccount(testAccountID))
 	defer teardown()
 
@@ -136,7 +136,7 @@ func TestAPI_CreateTunnelRouteWithComment(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-func TestAPI_UpdateTunnelRouteWithComment(t *testing.T) {
+func TestUpdateTunnelRouteWithComment(t *testing.T) {
 	setup(UsingAccount(testAccountID))
 	defer teardown()
 
@@ -175,7 +175,7 @@ func TestAPI_UpdateTunnelRouteWithComment(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-func TestAPI_DeleteTunnelRoute(t *testing.T) {
+func TestDeleteTunnelRoute(t *testing.T) {
 	setup(UsingAccount(testAccountID))
 	defer teardown()
 
