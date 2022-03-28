@@ -45,8 +45,8 @@ func TestListTunnelRoutes(t *testing.T) {
 			"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
 			"blog",
 			"Example comment for this route",
-			ts,
-			ts,
+			&ts,
+			&ts,
 		},
 	}
 
@@ -87,8 +87,8 @@ func TestTunnelRouteForIp(t *testing.T) {
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
 		"blog",
 		"Example comment for this route",
-		ts,
-		ts,
+		&ts,
+		&ts,
 	}
 
 	got, err := client.TunnelRouteForIp(context.Background(), "10.1.0.137")
