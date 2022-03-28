@@ -17,8 +17,8 @@ type TunnelRoute struct {
 	TunnelId   string    `json:"tunnel_id"`
 	TunnelName string    `json:"tunnel_name"`
 	Comment    string    `json:"comment"`
-	CreatedAt  time.Time `json:"created_at"`
-	DeletedAt  time.Time `json:"deleted_at"`
+	CreatedAt  *time.Time `json:"created_at"`
+	DeletedAt  *time.Time `json:"deleted_at"`
 }
 
 // tunnelRouteListResponse is the API response for listing tunnel routes.
