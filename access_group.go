@@ -175,6 +175,13 @@ type AccessGroupDevicePosture struct {
 	} `json:"device_posture"`
 }
 
+// AccessGroupGateway restricts the application to specific devices.
+type AccessGroupGateway struct {
+	Gateway struct {
+		ID string `json:"integration_uid"`
+	} `json:"gateway"`
+}
+
 // AccessGroupListResponse represents the response from the list
 // access group endpoint.
 type AccessGroupListResponse struct {

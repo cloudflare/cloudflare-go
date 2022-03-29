@@ -19,14 +19,60 @@ var (
 		Name:      "Allow devs",
 		Include: []interface{}{
 			map[string]interface{}{"email": map[string]interface{}{"email": "test@example.com"}},
+			map[string]interface{}{"gateway": map[string]interface{}{"integration_uid": "9ca005c0-a695-402d-ba96-18d8d09c4fbf"}},
 		},
 		Exclude: []interface{}{
 			map[string]interface{}{"email": map[string]interface{}{"email": "test@example.com"}},
+			map[string]interface{}{"gateway": map[string]interface{}{"integration_uid": "9ca005c0-a695-402d-ba96-18d8d09c4fbf"}},
 		},
 		Require: []interface{}{
 			map[string]interface{}{"email": map[string]interface{}{"email": "test@example.com"}},
+			map[string]interface{}{"gateway": map[string]interface{}{"integration_uid": "9ca005c0-a695-402d-ba96-18d8d09c4fbf"}},
 		},
 	}
+
+	result = `{
+		"id": "699d98642c564d2e855e9661899b7252",
+		"created_at": "2014-01-01T05:20:00.12345Z",
+		"updated_at": "2014-01-01T05:20:00.12345Z",
+		"name": "Allow devs",
+		"include": [
+			{
+				"email": {
+					"email": "test@example.com"
+				}
+			},
+			{
+				"gateway": {
+					"integration_uid": "9ca005c0-a695-402d-ba96-18d8d09c4fbf"
+				}
+			}
+		],
+		"exclude": [
+			{
+				"email": {
+					"email": "test@example.com"
+				}
+			},
+			{
+				"gateway": {
+					"integration_uid": "9ca005c0-a695-402d-ba96-18d8d09c4fbf"
+				}
+			}
+		],
+		"require": [
+			{
+				"email": {
+					"email": "test@example.com"
+				}
+			},
+			{
+				"gateway": {
+					"integration_uid": "9ca005c0-a695-402d-ba96-18d8d09c4fbf"
+				}
+			}
+		]
+	}`
 )
 
 func TestAccessGroups(t *testing.T) {
@@ -36,38 +82,12 @@ func TestAccessGroups(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, `{
+		fmt.Fprintf(w, fmt.Sprintf(`{
 			"success": true,
 			"errors": [],
 			"messages": [],
 			"result": [
-				{
-					"id": "699d98642c564d2e855e9661899b7252",
-					"created_at": "2014-01-01T05:20:00.12345Z",
-					"updated_at": "2014-01-01T05:20:00.12345Z",
-					"name": "Allow devs",
-					"include": [
-						{
-							"email": {
-								"email": "test@example.com"
-							}
-						}
-					],
-					"exclude": [
-						{
-							"email": {
-								"email": "test@example.com"
-							}
-						}
-					],
-					"require": [
-						{
-							"email": {
-								"email": "test@example.com"
-							}
-						}
-					]
-				}
+				%s
 			],
 			"result_info": {
 				"page": 1,
@@ -76,7 +96,7 @@ func TestAccessGroups(t *testing.T) {
 				"total_count": 2000
 			}
 		}
-		`)
+		`, result))
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/groups", handler)
@@ -103,39 +123,13 @@ func TestAccessGroup(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, `{
+		fmt.Fprintf(w, fmt.Sprintf(`{
 			"success": true,
 			"errors": [],
 			"messages": [],
-			"result": {
-				"id": "699d98642c564d2e855e9661899b7252",
-				"created_at": "2014-01-01T05:20:00.12345Z",
-				"updated_at": "2014-01-01T05:20:00.12345Z",
-				"name": "Allow devs",
-				"include": [
-					{
-						"email": {
-							"email": "test@example.com"
-						}
-					}
-				],
-				"exclude": [
-					{
-						"email": {
-							"email": "test@example.com"
-						}
-					}
-				],
-				"require": [
-					{
-						"email": {
-							"email": "test@example.com"
-						}
-					}
-				]
-			}
+			"result": %s
 		}
-		`)
+		`, result))
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/groups/"+accessGroupID, handler)
@@ -162,39 +156,12 @@ func TestCreateAccessGroup(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, `{
+		fmt.Fprintf(w, fmt.Sprintf(`{
 			"success": true,
 			"errors": [],
 			"messages": [],
-			"result": {
-				"id": "699d98642c564d2e855e9661899b7252",
-				"created_at": "2014-01-01T05:20:00.12345Z",
-				"updated_at": "2014-01-01T05:20:00.12345Z",
-				"name": "Allow devs",
-				"include": [
-					{
-						"email": {
-							"email": "test@example.com"
-						}
-					}
-				],
-				"exclude": [
-					{
-						"email": {
-							"email": "test@example.com"
-						}
-					}
-				],
-				"require": [
-					{
-						"email": {
-							"email": "test@example.com"
-						}
-					}
-				]
-			}
-		}
-		`)
+			"result": %s
+		}`, result))
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/groups", handler)
@@ -205,16 +172,25 @@ func TestCreateAccessGroup(t *testing.T) {
 			AccessGroupEmail{struct {
 				Email string `json:"email"`
 			}{Email: "test@example.com"}},
+			AccessGroupGateway{struct {
+				ID string `json:"integration_uid"`
+			}{ID: "9ca005c0-a695-402d-ba96-18d8d09c4fbf"}},
 		},
 		Exclude: []interface{}{
 			AccessGroupEmail{struct {
 				Email string `json:"email"`
 			}{Email: "test@example.com"}},
+			AccessGroupGateway{struct {
+				ID string `json:"integration_uid"`
+			}{ID: "9ca005c0-a695-402d-ba96-18d8d09c4fbf"}},
 		},
 		Require: []interface{}{
 			AccessGroupEmail{struct {
 				Email string `json:"email"`
 			}{Email: "test@example.com"}},
+			AccessGroupGateway{struct {
+				ID string `json:"integration_uid"`
+			}{ID: "9ca005c0-a695-402d-ba96-18d8d09c4fbf"}},
 		},
 	}
 
@@ -240,39 +216,12 @@ func TestUpdateAccessGroup(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, `{
+		fmt.Fprintf(w, fmt.Sprintf(`{
 			"success": true,
 			"errors": [],
 			"messages": [],
-			"result": {
-				"id": "699d98642c564d2e855e9661899b7252",
-				"created_at": "2014-01-01T05:20:00.12345Z",
-				"updated_at": "2014-01-01T05:20:00.12345Z",
-				"name": "Allow devs",
-				"include": [
-					{
-						"email": {
-							"email": "test@example.com"
-						}
-					}
-				],
-				"exclude": [
-					{
-						"email": {
-							"email": "test@example.com"
-						}
-					}
-				],
-				"require": [
-					{
-						"email": {
-							"email": "test@example.com"
-						}
-					}
-				]
-			}
-		}
-		`)
+			"result": %s
+		}`, result))
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/groups/"+accessGroupID, handler)
