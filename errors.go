@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+
+	"github.com/pkg/errors"
 )
 
 // Error messages.
@@ -21,6 +23,11 @@ const (
 	errResultInfo                = "incorrect pagination info (result_info) in responses"
 	errManualPagination          = "unexpected pagination options passed to functions that handle pagination automatically"
 	errInvalidZoneIdentifer      = "invalid zone identifier: %s"
+)
+
+var (
+	ErrMissingAccountID = errors.New("required missing account ID")
+	ErrMissingZoneID    = errors.New("required missing zone ID")
 )
 
 type ErrorType string
