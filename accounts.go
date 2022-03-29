@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"time"
 
 	"github.com/pkg/errors"
 )
@@ -18,10 +19,11 @@ type AccountSettings struct {
 
 // Account represents the root object that owns resources.
 type Account struct {
-	ID       string           `json:"id,omitempty"`
-	Name     string           `json:"name,omitempty"`
-	Type     string           `json:"type,omitempty"`
-	Settings *AccountSettings `json:"settings,omitempty"`
+	ID        string           `json:"id,omitempty"`
+	Name      string           `json:"name,omitempty"`
+	Type      string           `json:"type,omitempty"`
+	CreatedOn time.Time        `json:"created_on,omitempty"`
+	Settings  *AccountSettings `json:"settings,omitempty"`
 }
 
 // AccountResponse represents the response from the accounts endpoint for a

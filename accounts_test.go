@@ -6,17 +6,22 @@ import (
 	"io/ioutil"
 	"net/http"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
 
-var expectedAccountStruct = Account{
-	ID:   "01a7362d577a6c3019a474fd6f485823",
-	Name: "Cloudflare Demo",
-	Settings: &AccountSettings{
-		EnforceTwoFactor: false,
-	},
-}
+var (
+	accountCreatedOn, _   = time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+	expectedAccountStruct = Account{
+		ID:        "01a7362d577a6c3019a474fd6f485823",
+		Name:      "Cloudflare Demo",
+		CreatedOn: accountCreatedOn,
+		Settings: &AccountSettings{
+			EnforceTwoFactor: false,
+		},
+	}
+)
 
 func TestAccounts(t *testing.T) {
 	setup()
@@ -33,6 +38,7 @@ func TestAccounts(t *testing.T) {
 				{
 					"id": "01a7362d577a6c3019a474fd6f485823",
 					"name": "Cloudflare Demo",
+					"created_on": "2014-01-01T05:20:00.12345Z",
 					"settings": {
 						"enforce_twofactor": false
 					}
@@ -72,6 +78,7 @@ func TestAccount(t *testing.T) {
 			"result": {
 				"id": "01a7362d577a6c3019a474fd6f485823",
 				"name": "Cloudflare Demo",
+				"created_on": "2014-01-01T05:20:00.12345Z",
 				"settings": {
 					"enforce_twofactor": false
 				}
@@ -109,6 +116,7 @@ func TestUpdateAccount(t *testing.T) {
 			assert.JSONEq(t, `{
 				"id":"01a7362d577a6c3019a474fd6f485823",
 				"name":"Cloudflare Demo - New",
+				"created_on": "2014-01-01T05:20:00.12345Z",
 				"settings":{
 					"enforce_twofactor":false
 					}
@@ -123,6 +131,7 @@ func TestUpdateAccount(t *testing.T) {
 			"result": {
 				"id": "01a7362d577a6c3019a474fd6f485823",
 				"name": "Cloudflare Demo - New",
+				"created_on": "2014-01-01T05:20:00.12345Z",
 				"settings": {
 					"enforce_twofactor": false
 				}
@@ -131,16 +140,18 @@ func TestUpdateAccount(t *testing.T) {
 	})
 
 	oldAccountDetails := Account{
-		ID:   "01a7362d577a6c3019a474fd6f485823",
-		Name: "Cloudflare Demo - Old",
+		ID:        "01a7362d577a6c3019a474fd6f485823",
+		Name:      "Cloudflare Demo - Old",
+		CreatedOn: accountCreatedOn,
 		Settings: &AccountSettings{
 			EnforceTwoFactor: false,
 		},
 	}
 
 	newAccountDetails := Account{
-		ID:   "01a7362d577a6c3019a474fd6f485823",
-		Name: "Cloudflare Demo - New",
+		ID:        "01a7362d577a6c3019a474fd6f485823",
+		Name:      "Cloudflare Demo - New",
+		CreatedOn: accountCreatedOn,
 		Settings: &AccountSettings{
 			EnforceTwoFactor: false,
 		},
