@@ -256,6 +256,7 @@ type RulesetRule struct {
 	ScoreThreshold         int                                `json:"score_threshold,omitempty"`
 	RateLimit              *RulesetRuleRateLimit              `json:"ratelimit,omitempty"`
 	ExposedCredentialCheck *RulesetRuleExposedCredentialCheck `json:"exposed_credential_check,omitempty"`
+	Logging                *RulesetRuleLogging                `json:"logging,omitempty"`
 }
 
 // RulesetRuleRateLimit contains the structure of a HTTP rate limit Ruleset Rule.
@@ -273,6 +274,11 @@ type RulesetRuleRateLimit struct {
 type RulesetRuleExposedCredentialCheck struct {
 	UsernameExpression string `json:"username_expression,omitempty"`
 	PasswordExpression string `json:"password_expression,omitempty"`
+}
+
+// RulesetRuleLogging contains the logging configuration for the rule.
+type RulesetRuleLogging struct {
+	Enabled *bool `json:"enabled,omitempty"`
 }
 
 // UpdateRulesetRequest is the representation of a Ruleset update.
