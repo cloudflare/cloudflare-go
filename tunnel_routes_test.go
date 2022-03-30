@@ -50,7 +50,7 @@ func TestListTunnelRoutes(t *testing.T) {
 	}
 
 	params := TunnelRoutesListParams{AccountID: testAccountID}
-	got, err := client.TunnelRoutes(context.Background(), params)
+	got, err := client.ListTunnelRoutes(context.Background(), params)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, got)
@@ -91,7 +91,7 @@ func TestTunnelRouteForIP(t *testing.T) {
 		DeletedAt:  &ts,
 	}
 
-	got, err := client.TunnelRouteForIP(context.Background(), TunnelRoutesForIPParams{AccountID: testAccountID, Network: "10.1.0.137"})
+	got, err := client.GetTunnelRouteForIP(context.Background(), TunnelRoutesForIPParams{AccountID: testAccountID, Network: "10.1.0.137"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, got)
