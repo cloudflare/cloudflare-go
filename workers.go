@@ -158,6 +158,34 @@ type WorkerInheritBinding struct {
 	OldName string
 }
 
+type WorkerTraceDetails struct {
+	Service     string `json:"service"`
+	Environment string `json:"environment"`
+}
+
+type WorkerTraceMetaData struct {
+	TAG       string             `json:"tag,omitempty"`
+	CreatedOn time.Time          `json:"created_on,omitempty"`
+	UpdatedOn time.Time          `json:"updated_on,omitempty"`
+	Producer  WorkerTraceDetails `json:"producer"`
+	Consumer  WorkerTraceDetails `json:"consumer"`
+}
+
+type WorkerTraceListResponse struct {
+	Response
+	WorkerTraceList []WorkerTraceMetaData `json:"result"`
+}
+
+type WorkerTraceResponse struct {
+	Response
+	WorkerTrace WorkerTraceMetaData `json:"result"`
+}
+
+type WorkerTraceParams struct {
+	Producer WorkerTraceDetails `json:"producer"`
+	Consumer WorkerTraceDetails `json:"consumer"`
+}
+
 // Type returns the type of the binding.
 func (b WorkerInheritBinding) Type() WorkerBindingType {
 	return WorkerInheritBindingType
@@ -844,4 +872,55 @@ func getRouteEndpoint(route WorkerRoute) (string, error) {
 	}
 
 	return "routes", nil
+}
+
+func (api *API) ListWorkerTraces(ctx context.Context) (WorkerTraceListResponse, error) {
+	if api.AccountID == "" {
+		return WorkerTraceListResponse{}, errors.New("account ID required")
+	}
+	uri := fmt.Sprintf("/accounts/%s/workers/traces", api.AccountID)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return WorkerTraceListResponse{}, err
+	}
+	var r WorkerTraceListResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return WorkerTraceListResponse{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r, nil
+}
+
+func (api *API) CreateWorkerTrace(ctx context.Context, req WorkerTraceParams) (WorkerTraceResponse, error) {
+	if api.AccountID == "" {
+		return WorkerTraceResponse{}, errors.New("account ID required")
+	}
+	uri := fmt.Sprintf("/accounts/%s/workers/traces", api.AccountID)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, req)
+	if err != nil {
+		return WorkerTraceResponse{}, err
+	}
+	var r WorkerTraceResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return WorkerTraceResponse{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r, nil
+}
+
+func (api *API) DeleteWorkerTrace(ctx context.Context, TAG string) (Response, error) {
+	if api.AccountID == "" {
+		return Response{}, errors.New("account ID required")
+	}
+	uri := fmt.Sprintf("/accounts/%s/workers/traces/%s", api.AccountID, TAG)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
+	if err != nil {
+		return Response{}, err
+	}
+	var r Response
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return Response{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r, nil
 }

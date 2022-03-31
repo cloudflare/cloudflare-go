@@ -181,6 +181,63 @@ const (
   "errors": [],
   "messages": []
 }`
+	listWorkerTracesResponseData = `{
+  "result": [
+    {
+      "tag": "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
+      "created_on": "2018-04-22T17:10:48.938097Z",
+      "updated_on": "2018-04-22T17:10:48.938097Z",
+      "producer": {
+        "service": "producer-service-1",
+        "environment": "production"
+      },
+      "consumer": {
+        "service": "consumer-service-1",
+        "environment": "production"
+      }
+    },
+    {
+      "tag": "380dg51e97e80b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43088b",
+      "created_on": "2018-04-22T17:10:48.938097Z",
+      "updated_on": "2018-04-22T17:10:48.938097Z",
+      "producer": {
+        "service": "producer-service-2",
+        "environment": "production"
+      },
+      "consumer": {
+        "service": "consumer-service-2",
+        "environment": "production"
+      }
+    }
+  ],
+  "success": true,
+  "errors": [],
+  "messages": []
+}`
+	createWorkerTraceResponseData = `{
+  "result": {
+    "tag": "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
+    "created_on": "2018-04-22T17:10:48.938097Z",
+    "updated_on": "2018-04-22T17:10:48.938097Z",
+    "producer": {
+      "service": "%s",
+      "environment": "%s"
+    },
+    "consumer": {
+      "service": "%s",
+      "environment": "%s"
+    }
+  },
+  "success": true,
+  "errors": [],
+  "messages": []
+}`
+	deleteWorkerTraceResponseData = `{
+  "result": null,
+  "success": true,
+  "errors": [],
+  "messages": []
+}`
 )
 
 var (
@@ -1263,4 +1320,125 @@ func TestWorkers_UpdateWorkerRouteWithNoScript(t *testing.T) {
 	route := WorkerRoute{Pattern: "app1.example.com/*"}
 	_, err := client.UpdateWorkerRoute(context.Background(), "foo", "e7a57d8746e74ae49c25994dadb421b1", route)
 	assert.NoError(t, err)
+}
+
+func TestWorkers_ListWorkerTraces(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	mux.HandleFunc("/accounts/foo/workers/traces", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application-json")
+		fmt.Fprintf(w, listWorkerTracesResponseData) //nolint
+	})
+
+	res, err := client.ListWorkerTraces(context.Background())
+	sampleDate, _ := time.Parse(time.RFC3339Nano, "2018-04-22T17:10:48.938097Z")
+	want := []WorkerTraceMetaData{
+		{
+			TAG:       "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
+			CreatedOn: sampleDate,
+			UpdatedOn: sampleDate,
+			Producer: WorkerTraceDetails{
+				Service:     "producer-service-1",
+				Environment: "production",
+			},
+			Consumer: WorkerTraceDetails{
+				Service:     "consumer-service-1",
+				Environment: "production",
+			},
+		},
+		{
+			TAG:       "380dg51e97e80b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43088b",
+			CreatedOn: sampleDate,
+			UpdatedOn: sampleDate,
+			Producer: WorkerTraceDetails{
+				Service:     "producer-service-2",
+				Environment: "production",
+			},
+			Consumer: WorkerTraceDetails{
+				Service:     "consumer-service-2",
+				Environment: "production",
+			},
+		},
+	}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res.WorkerTraceList)
+	}
+}
+
+func TestWorkers_CreateWorkerTrace(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	mux.HandleFunc("/accounts/foo/workers/traces", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application-json")
+		x, _ := ioutil.ReadAll(r.Body)
+
+		var reqParams WorkerTraceParams
+		_ = json.Unmarshal(x, &reqParams)
+
+		response := fmt.Sprintf(
+			createWorkerTraceResponseData,
+			reqParams.Producer.Service,
+			reqParams.Producer.Environment,
+			reqParams.Consumer.Service,
+			reqParams.Consumer.Environment,
+		)
+
+		fmt.Fprintf(w, response) //nolint
+	})
+
+	createWorkerTraceParam := WorkerTraceParams{
+		Producer: WorkerTraceDetails{
+			Service:     "producer-service",
+			Environment: "production",
+		},
+		Consumer: WorkerTraceDetails{
+			Service:     "consumer-service",
+			Environment: "production",
+		},
+	}
+
+	res, err := client.CreateWorkerTrace(context.Background(), createWorkerTraceParam)
+	sampleDate, _ := time.Parse(time.RFC3339Nano, "2018-04-22T17:10:48.938097Z")
+	want := WorkerTraceMetaData{
+		TAG:       "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
+		CreatedOn: sampleDate,
+		UpdatedOn: sampleDate,
+		Producer: WorkerTraceDetails{
+			Service:     "producer-service",
+			Environment: "production",
+		},
+		Consumer: WorkerTraceDetails{
+			Service:     "consumer-service",
+			Environment: "production",
+		},
+	}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res.WorkerTrace)
+	}
+}
+
+func TestWorkers_DeleteWorkerTrace(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	mux.HandleFunc("/accounts/foo/workers/traces/e7a57d8746e74ae49c25994dadb421b1", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
+		w.Header().Set("content-type", "application-json")
+		fmt.Fprintf(w, deleteWorkerTraceResponseData) //nolint
+	})
+
+	res, err := client.DeleteWorkerTrace(context.Background(), "e7a57d8746e74ae49c25994dadb421b1")
+
+	want := Response{
+		Success:  true,
+		Errors:   []ResponseInfo{},
+		Messages: []ResponseInfo{},
+	}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
 }
