@@ -89,6 +89,8 @@ func (b WorkerBindingType) String() string {
 }
 
 const (
+	// WorkerDurableObjectBindingType is the type for Durable Object bindings.
+	WorkerDurableObjectBindingType WorkerBindingType = "durable_object_namespace"
 	// WorkerInheritBindingType is the type for inherited bindings.
 	WorkerInheritBindingType WorkerBindingType = "inherit"
 	// WorkerKvNamespaceBindingType is the type for KV Namespace bindings.
@@ -185,6 +187,32 @@ func (b WorkerKvNamespaceBinding) serialize(bindingName string) (workerBindingMe
 		"name":         bindingName,
 		"type":         b.Type(),
 		"namespace_id": b.NamespaceID,
+	}, nil, nil
+}
+
+// WorkerDurableObjectBinding is a binding to a Workers Durable Object
+//
+// https://api.cloudflare.com/#durable-objects-namespace-properties
+type WorkerDurableObjectBinding struct {
+	ClassName  string
+	ScriptName string
+}
+
+// Type returns the type of the binding.
+func (b WorkerDurableObjectBinding) Type() WorkerBindingType {
+	return WorkerDurableObjectBindingType
+}
+
+func (b WorkerDurableObjectBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
+	if b.ClassName == "" {
+		return nil, nil, errors.Errorf(`ClassName for binding "%s" cannot be empty`, bindingName)
+	}
+
+	return workerBindingMeta{
+		"name":        bindingName,
+		"type":        b.Type(),
+		"class_name":  b.ClassName,
+		"script_name": b.ScriptName,
 	}, nil, nil
 }
 
@@ -426,6 +454,13 @@ func (api *API) ListWorkerBindings(ctx context.Context, requestParams *WorkerReq
 		}
 
 		switch WorkerBindingType(bType) {
+		case WorkerDurableObjectBindingType:
+			class_name := jsonBinding["class_name"].(string)
+			script_name := jsonBinding["script_name"].(string)
+			bindingListItem.Binding = WorkerDurableObjectBinding{
+				ClassName:  class_name,
+				ScriptName: script_name,
+			}
 		case WorkerKvNamespaceBindingType:
 			namespaceID := jsonBinding["namespace_id"].(string)
 			bindingListItem.Binding = WorkerKvNamespaceBinding{
