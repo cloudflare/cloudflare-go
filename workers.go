@@ -99,6 +99,8 @@ const (
 	WorkerSecretTextBindingType WorkerBindingType = "secret_text"
 	// WorkerPlainTextBindingType is the type for plain text bindings.
 	WorkerPlainTextBindingType WorkerBindingType = "plain_text"
+	// WorkerServiceBindingType is the type for service bindings.
+	WorkerServiceBindingType WorkerBindingType = "service"
 )
 
 // WorkerBindingListItem a struct representing an individual binding in a list of bindings.
@@ -183,6 +185,30 @@ func (b WorkerKvNamespaceBinding) serialize(bindingName string) (workerBindingMe
 		"name":         bindingName,
 		"type":         b.Type(),
 		"namespace_id": b.NamespaceID,
+	}, nil, nil
+}
+
+// WorkerServiceBinding is a binding to a Workers Service
+type WorkerServiceBinding struct {
+	Service string
+	Environment string
+}
+
+// Type returns the type of the binding.
+func (b WorkerServiceBinding) Type() WorkerBindingType {
+	return WorkerServiceBindingType
+}
+
+func (b WorkerServiceBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
+	if b.NamespaceID == "" {
+		return nil, nil, errors.Errorf(`Service for binding "%s" cannot be empty`, bindingName)
+	}
+
+	return workerBindingMeta{
+		"name":         bindingName,
+		"type":         b.Type(),
+		"service":	b.Service,
+		"environment":	b.Environment,
 	}, nil, nil
 }
 
@@ -401,6 +427,13 @@ func (api *API) ListWorkerBindings(ctx context.Context, requestParams *WorkerReq
 			namespaceID := jsonBinding["namespace_id"].(string)
 			bindingListItem.Binding = WorkerKvNamespaceBinding{
 				NamespaceID: namespaceID,
+			}
+		case WorkerServiceBindingType:
+			service := jsonBinding["service"].(string)
+			environment := jsonBinding["environment"].(string)
+			bindingListItem.Binding = WorkerServiceBinding{
+				Service: service,
+				Environment: environment,
 			}
 		case WorkerWebAssemblyBindingType:
 			bindingListItem.Binding = WorkerWebAssemblyBinding{
