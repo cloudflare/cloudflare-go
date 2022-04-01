@@ -93,14 +93,14 @@ const (
 	WorkerInheritBindingType WorkerBindingType = "inherit"
 	// WorkerKvNamespaceBindingType is the type for KV Namespace bindings.
 	WorkerKvNamespaceBindingType WorkerBindingType = "kv_namespace"
-	// WorkerWebAssemblyBindingType is the type for Web Assembly module bindings.
-	WorkerWebAssemblyBindingType WorkerBindingType = "wasm_module"
-	// WorkerSecretTextBindingType is the type for secret text bindings.
-	WorkerSecretTextBindingType WorkerBindingType = "secret_text"
 	// WorkerPlainTextBindingType is the type for plain text bindings.
 	WorkerPlainTextBindingType WorkerBindingType = "plain_text"
+	// WorkerSecretTextBindingType is the type for secret text bindings.
+	WorkerSecretTextBindingType WorkerBindingType = "secret_text"
 	// WorkerServiceBindingType is the type for service bindings.
 	WorkerServiceBindingType WorkerBindingType = "service"
+	// WorkerWebAssemblyBindingType is the type for Web Assembly module bindings.
+	WorkerWebAssemblyBindingType WorkerBindingType = "wasm_module"
 )
 
 // WorkerBindingListItem a struct representing an individual binding in a list of bindings.
@@ -428,6 +428,13 @@ func (api *API) ListWorkerBindings(ctx context.Context, requestParams *WorkerReq
 			bindingListItem.Binding = WorkerKvNamespaceBinding{
 				NamespaceID: namespaceID,
 			}
+		case WorkerPlainTextBindingType:
+			text := jsonBinding["text"].(string)
+			bindingListItem.Binding = WorkerPlainTextBinding{
+				Text: text,
+			}
+		case WorkerSecretTextBindingType:
+			bindingListItem.Binding = WorkerSecretTextBinding{}
 		case WorkerServiceBindingType:
 			service := jsonBinding["service"].(string)
 			environment := jsonBinding["environment"].(string)
@@ -443,13 +450,6 @@ func (api *API) ListWorkerBindings(ctx context.Context, requestParams *WorkerReq
 					bindingName:   name,
 				},
 			}
-		case WorkerPlainTextBindingType:
-			text := jsonBinding["text"].(string)
-			bindingListItem.Binding = WorkerPlainTextBinding{
-				Text: text,
-			}
-		case WorkerSecretTextBindingType:
-			bindingListItem.Binding = WorkerSecretTextBinding{}
 		default:
 			bindingListItem.Binding = WorkerInheritBinding{}
 		}
