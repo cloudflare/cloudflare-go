@@ -67,10 +67,10 @@ type tunnelRouteResponse struct {
 	Result TunnelRoute `json:"result"`
 }
 
-// TunnelRoutes lists all defined routes for tunnels in the account.
+// ListTunnelRoutes lists all defined routes for tunnels in the account.
 //
 // See: https://api.cloudflare.com/#tunnel-route-list-tunnel-routes
-func (api *API) TunnelRoutes(ctx context.Context, params TunnelRoutesListParams) ([]TunnelRoute, error) {
+func (api *API) ListTunnelRoutes(ctx context.Context, params TunnelRoutesListParams) ([]TunnelRoute, error) {
 	if params.AccountID == "" {
 		return []TunnelRoute{}, ErrMissingAccountID
 	}
@@ -91,10 +91,10 @@ func (api *API) TunnelRoutes(ctx context.Context, params TunnelRoutesListParams)
 	return resp.Result, nil
 }
 
-// TunnelRouteForIP finds the Tunnel Route that encompasses the given IP.
+// GetTunnelRouteForIP finds the Tunnel Route that encompasses the given IP.
 //
 // See: https://api.cloudflare.com/#tunnel-route-get-tunnel-route-by-ip
-func (api *API) TunnelRouteForIP(ctx context.Context, params TunnelRoutesForIPParams) (TunnelRoute, error) {
+func (api *API) GetTunnelRouteForIP(ctx context.Context, params TunnelRoutesForIPParams) (TunnelRoute, error) {
 	uri := fmt.Sprintf("/%s/%s/teamnet/routes/ip/%s", AccountRouteRoot, params.AccountID, params.Network)
 
 	responseBody, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
