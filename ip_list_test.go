@@ -11,7 +11,7 @@ import (
 )
 
 func TestListIPLists(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -36,7 +36,7 @@ func TestListIPLists(t *testing.T) {
 		}`)
 	}
 
-	mux.HandleFunc("/accounts/foo/rules/lists", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/rules/lists", handler)
 
 	createdOn, _ := time.Parse(time.RFC3339, "2020-01-01T08:00:00Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2020-01-10T14:00:00Z")
@@ -54,14 +54,14 @@ func TestListIPLists(t *testing.T) {
 		},
 	}
 
-	actual, err := client.ListIPLists(context.Background())
+	actual, err := client.ListIPLists(context.Background(), testAccountID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
 func TestCreateIPList(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -84,7 +84,7 @@ func TestCreateIPList(t *testing.T) {
 		}`)
 	}
 
-	mux.HandleFunc("/accounts/foo/rules/lists", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/rules/lists", handler)
 
 	createdOn, _ := time.Parse(time.RFC3339, "2020-01-01T08:00:00Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2020-01-10T14:00:00Z")
@@ -100,14 +100,14 @@ func TestCreateIPList(t *testing.T) {
 		ModifiedOn:            &modifiedOn,
 	}
 
-	actual, err := client.CreateIPList(context.Background(), "list1", "This is a note.", "ip")
+	actual, err := client.CreateIPList(context.Background(), testAccountID, "list1", "This is a note.", "ip")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
 func TestGetIPList(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -130,7 +130,7 @@ func TestGetIPList(t *testing.T) {
 		}`)
 	}
 
-	mux.HandleFunc("/accounts/foo/rules/lists/2c0fc9fa937b11eaa1b71c4d701ab86e", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/rules/lists/2c0fc9fa937b11eaa1b71c4d701ab86e", handler)
 
 	createdOn, _ := time.Parse(time.RFC3339, "2020-01-01T08:00:00Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2020-01-10T14:00:00Z")
@@ -146,14 +146,14 @@ func TestGetIPList(t *testing.T) {
 		ModifiedOn:            &modifiedOn,
 	}
 
-	actual, err := client.GetIPList(context.Background(), "2c0fc9fa937b11eaa1b71c4d701ab86e")
+	actual, err := client.GetIPList(context.Background(), testAccountID, "2c0fc9fa937b11eaa1b71c4d701ab86e")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
 func TestUpdateIPList(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -176,7 +176,7 @@ func TestUpdateIPList(t *testing.T) {
 		}`)
 	}
 
-	mux.HandleFunc("/accounts/foo/rules/lists/2c0fc9fa937b11eaa1b71c4d701ab86e", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/rules/lists/2c0fc9fa937b11eaa1b71c4d701ab86e", handler)
 
 	createdOn, _ := time.Parse(time.RFC3339, "2020-01-01T08:00:00Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2020-01-10T14:00:00Z")
@@ -192,7 +192,7 @@ func TestUpdateIPList(t *testing.T) {
 		ModifiedOn:            &modifiedOn,
 	}
 
-	actual, err := client.UpdateIPList(context.Background(), "2c0fc9fa937b11eaa1b71c4d701ab86e",
+	actual, err := client.UpdateIPList(context.Background(), testAccountID, "2c0fc9fa937b11eaa1b71c4d701ab86e",
 		"This note was updated.")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -200,7 +200,7 @@ func TestUpdateIPList(t *testing.T) {
 }
 
 func TestDeleteIPList(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -216,7 +216,7 @@ func TestDeleteIPList(t *testing.T) {
 		}`)
 	}
 
-	mux.HandleFunc("/accounts/foo/rules/lists/2c0fc9fa937b11eaa1b71c4d701ab86e", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/rules/lists/2c0fc9fa937b11eaa1b71c4d701ab86e", handler)
 
 	want := IPListDeleteResponse{}
 	want.Success = true
@@ -224,14 +224,14 @@ func TestDeleteIPList(t *testing.T) {
 	want.Messages = []ResponseInfo{}
 	want.Result.ID = "34b12448945f11eaa1b71c4d701ab86e"
 
-	actual, err := client.DeleteIPList(context.Background(), "2c0fc9fa937b11eaa1b71c4d701ab86e")
+	actual, err := client.DeleteIPList(context.Background(), testAccountID, "2c0fc9fa937b11eaa1b71c4d701ab86e")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
 func TestListIPListsItems(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -282,7 +282,7 @@ func TestListIPListsItems(t *testing.T) {
 		}
 	}
 
-	mux.HandleFunc("/accounts/foo/rules/lists/2c0fc9fa937b11eaa1b71c4d701ab86e/items", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/rules/lists/2c0fc9fa937b11eaa1b71c4d701ab86e/items", handler)
 
 	createdOn, _ := time.Parse(time.RFC3339, "2020-01-01T08:00:00Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2020-01-10T14:00:00Z")
@@ -304,14 +304,14 @@ func TestListIPListsItems(t *testing.T) {
 		},
 	}
 
-	actual, err := client.ListIPListItems(context.Background(), "2c0fc9fa937b11eaa1b71c4d701ab86e")
+	actual, err := client.ListIPListItems(context.Background(), testAccountID, "2c0fc9fa937b11eaa1b71c4d701ab86e")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
 func TestCreateIPListItems(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -327,7 +327,7 @@ func TestCreateIPListItems(t *testing.T) {
 		}`)
 	}
 
-	mux.HandleFunc("/accounts/foo/rules/lists/2c0fc9fa937b11eaa1b71c4d701ab86e/items", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/rules/lists/2c0fc9fa937b11eaa1b71c4d701ab86e/items", handler)
 
 	want := IPListItemCreateResponse{}
 	want.Success = true
@@ -335,7 +335,7 @@ func TestCreateIPListItems(t *testing.T) {
 	want.Messages = []ResponseInfo{}
 	want.Result.OperationID = "4da8780eeb215e6cb7f48dd981c4ea02"
 
-	actual, err := client.CreateIPListItemsAsync(context.Background(), "2c0fc9fa937b11eaa1b71c4d701ab86e",
+	actual, err := client.CreateIPListItemsAsync(context.Background(), testAccountID, "2c0fc9fa937b11eaa1b71c4d701ab86e",
 		[]IPListItemCreateRequest{{
 			IP:      "192.0.2.1",
 			Comment: "Private IP",
@@ -349,7 +349,7 @@ func TestCreateIPListItems(t *testing.T) {
 }
 
 func TestReplaceIPListItems(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -365,7 +365,7 @@ func TestReplaceIPListItems(t *testing.T) {
 		}`)
 	}
 
-	mux.HandleFunc("/accounts/foo/rules/lists/2c0fc9fa937b11eaa1b71c4d701ab86e/items", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/rules/lists/2c0fc9fa937b11eaa1b71c4d701ab86e/items", handler)
 
 	want := IPListItemCreateResponse{}
 	want.Success = true
@@ -373,7 +373,7 @@ func TestReplaceIPListItems(t *testing.T) {
 	want.Messages = []ResponseInfo{}
 	want.Result.OperationID = "4da8780eeb215e6cb7f48dd981c4ea02"
 
-	actual, err := client.ReplaceIPListItemsAsync(context.Background(), "2c0fc9fa937b11eaa1b71c4d701ab86e",
+	actual, err := client.ReplaceIPListItemsAsync(context.Background(), testAccountID, "2c0fc9fa937b11eaa1b71c4d701ab86e",
 		[]IPListItemCreateRequest{{
 			IP:      "192.0.2.1",
 			Comment: "Private IP",
@@ -387,7 +387,7 @@ func TestReplaceIPListItems(t *testing.T) {
 }
 
 func TestDeleteIPListItems(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -403,7 +403,7 @@ func TestDeleteIPListItems(t *testing.T) {
 		}`)
 	}
 
-	mux.HandleFunc("/accounts/foo/rules/lists/2c0fc9fa937b11eaa1b71c4d701ab86e/items", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/rules/lists/2c0fc9fa937b11eaa1b71c4d701ab86e/items", handler)
 
 	want := IPListItemDeleteResponse{}
 	want.Success = true
@@ -411,7 +411,7 @@ func TestDeleteIPListItems(t *testing.T) {
 	want.Messages = []ResponseInfo{}
 	want.Result.OperationID = "4da8780eeb215e6cb7f48dd981c4ea02"
 
-	actual, err := client.DeleteIPListItemsAsync(context.Background(), "2c0fc9fa937b11eaa1b71c4d701ab86e",
+	actual, err := client.DeleteIPListItemsAsync(context.Background(), testAccountID, "2c0fc9fa937b11eaa1b71c4d701ab86e",
 		IPListItemDeleteRequest{[]IPListItemDeleteItemRequest{{
 			ID: "34b12448945f11eaa1b71c4d701ab86e",
 		}}})
@@ -421,7 +421,7 @@ func TestDeleteIPListItems(t *testing.T) {
 }
 
 func TestGetIPListItem(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -441,7 +441,7 @@ func TestGetIPListItem(t *testing.T) {
 		}`)
 	}
 
-	mux.HandleFunc("/accounts/foo/rules/lists/2c0fc9fa937b11eaa1b71c4d701ab86e/items/"+
+	mux.HandleFunc("/accounts/"+testAccountID+"/rules/lists/2c0fc9fa937b11eaa1b71c4d701ab86e/items/"+
 		"34b12448945f11eaa1b71c4d701ab86e", handler)
 
 	createdOn, _ := time.Parse(time.RFC3339, "2020-01-01T08:00:00Z")
@@ -455,7 +455,7 @@ func TestGetIPListItem(t *testing.T) {
 		ModifiedOn: &modifiedOn,
 	}
 
-	actual, err := client.GetIPListItem(context.Background(), "2c0fc9fa937b11eaa1b71c4d701ab86e",
+	actual, err := client.GetIPListItem(context.Background(), testAccountID, "2c0fc9fa937b11eaa1b71c4d701ab86e",
 		"34b12448945f11eaa1b71c4d701ab86e")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -467,7 +467,7 @@ func TestPollIPListTimeout(t *testing.T) {
 	defer cancel()
 
 	start := time.Now()
-	err := client.pollIPListBulkOperation(ctx, "list1")
+	err := client.pollIPListBulkOperation(ctx, testAccountID, "list1")
 	assert.ErrorIs(t, err, context.DeadlineExceeded)
 	assert.WithinDuration(t, start, time.Now(), time.Second,
 		"pollIPListBulkOperation took too much time with an expiring context")
