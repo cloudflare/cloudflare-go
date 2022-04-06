@@ -15,8 +15,8 @@ import (
 // SizeOptions can be passed to a list request to configure size and cursor location
 // These values will be defaulted if omitted
 type SizeOptions struct {
-	Size   int `json:"page,omitempty"`
-	Before int `json:"per_page,omitempty"`
+	Size   int `json:"size,omitempty"`
+	Before int `json:"before,omitempty"`
 	After  int `json:"after,omitempty"`
 }
 
