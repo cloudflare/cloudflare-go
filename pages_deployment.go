@@ -12,8 +12,8 @@ import (
 	"github.com/pkg/errors"
 )
 
-// SizeOptions can be passed to a list request to configure size and cursor location
-// These values will be defaulted if omitted
+// SizeOptions can be passed to a list request to configure size and cursor location.
+// These values will be defaulted if omitted.
 type SizeOptions struct {
 	Size   int `json:"size,omitempty"`
 	Before int `json:"before,omitempty"`
