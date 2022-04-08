@@ -293,7 +293,7 @@ func zoneRecords(c *cli.Context) error {
 			rr.Name = c.String("name")
 		}
 		if c.String("content") != "" {
-			rr.Name = c.String("content")
+			rr.Content = c.String("content")
 		}
 		var err error
 		records, err = api.DNSRecords(context.Background(), zoneID, rr)
