@@ -22,8 +22,10 @@ const (
 	ACTIVE CustomHostnameStatus = "active"
 	// MOVED status represents state of CustomHostname is moved.
 	MOVED CustomHostnameStatus = "moved"
-	// DELETED status represents state of CustomHostname is removed.
+	// DELETED status represents state of CustomHostname is deleted.
 	DELETED CustomHostnameStatus = "deleted"
+	// BLOCKED status represents state of CustomHostname is blocked from going active.
+	BLOCKED CustomHostnameStatus = "blocked"
 )
 
 // CustomHostnameSSLSettings represents the SSL settings for a custom hostname.
