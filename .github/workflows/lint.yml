@@ -12,15 +12,15 @@ jobs:
           version: latest
           args: "--config .golintci.yaml"
           only-new-issues: true # only show new issues in the PR, not all.
-  structslop:
-    name: structslop
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-go@v3
-        with:
-          go-version: ^1.17
-      - name: structslop
-        run: |
-          go generate -tags tools tools/tools.go
-          $(go env GOPATH)/bin/structslop .
+  #structslop:
+  #  name: structslop
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    - uses: actions/checkout@v3
+  #    - uses: actions/setup-go@v3
+  #      with:
+  #        go-version: ^1.17
+  #    - name: structslop
+  #      run: |
+  #        go generate -tags tools tools/tools.go
+  #        $(go env GOPATH)/bin/structslop .
