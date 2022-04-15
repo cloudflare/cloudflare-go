@@ -19,14 +19,15 @@ const (
 
 	RulesetPhaseDDoSL4                       RulesetPhase = "ddos_l4"
 	RulesetPhaseDDoSL7                       RulesetPhase = "ddos_l7"
+	RulesetPhaseHTTPLogCustomFields          RulesetPhase = "http_log_custom_fields"
 	RulesetPhaseHTTPRequestFirewallCustom    RulesetPhase = "http_request_firewall_custom"
 	RulesetPhaseHTTPRequestFirewallManaged   RulesetPhase = "http_request_firewall_managed"
 	RulesetPhaseHTTPRequestLateTransform     RulesetPhase = "http_request_late_transform"
 	RulesetPhaseHTTPRequestMain              RulesetPhase = "http_request_main"
 	RulesetPhaseHTTPRequestSanitize          RulesetPhase = "http_request_sanitize"
 	RulesetPhaseHTTPRequestTransform         RulesetPhase = "http_request_transform"
-	RulesetPhaseHTTPResponseHeadersTransform RulesetPhase = "http_response_headers_transform"
 	RulesetPhaseHTTPResponseFirewallManaged  RulesetPhase = "http_response_firewall_managed"
+	RulesetPhaseHTTPResponseHeadersTransform RulesetPhase = "http_response_headers_transform"
 	RulesetPhaseMagicTransit                 RulesetPhase = "magic_transit"
 	RulesetPhaseRateLimit                    RulesetPhase = "http_ratelimit"
 
@@ -38,6 +39,7 @@ const (
 	RulesetRuleActionJSChallenge          RulesetRuleAction = "js_challenge"
 	RulesetRuleActionManagedChallenge     RulesetRuleAction = "managed_challenge"
 	RulesetRuleActionLog                  RulesetRuleAction = "log"
+	RulesetRuleActionLogCustomField       RulesetRuleAction = "log_custom_field"
 	RulesetRuleActionRewrite              RulesetRuleAction = "rewrite"
 	RulesetRuleActionScore                RulesetRuleAction = "score"
 	RulesetRuleActionSkip                 RulesetRuleAction = "skip"
@@ -72,14 +74,15 @@ func RulesetPhaseValues() []string {
 	return []string{
 		string(RulesetPhaseDDoSL4),
 		string(RulesetPhaseDDoSL7),
+		string(RulesetPhaseHTTPLogCustomFields),
 		string(RulesetPhaseHTTPRequestFirewallCustom),
 		string(RulesetPhaseHTTPRequestFirewallManaged),
 		string(RulesetPhaseHTTPRequestLateTransform),
 		string(RulesetPhaseHTTPRequestMain),
 		string(RulesetPhaseHTTPRequestSanitize),
 		string(RulesetPhaseHTTPRequestTransform),
-		string(RulesetPhaseHTTPResponseHeadersTransform),
 		string(RulesetPhaseHTTPResponseFirewallManaged),
+		string(RulesetPhaseHTTPResponseHeadersTransform),
 		string(RulesetPhaseMagicTransit),
 		string(RulesetPhaseRateLimit),
 	}
@@ -97,6 +100,7 @@ func RulesetRuleActionValues() []string {
 		string(RulesetRuleActionJSChallenge),
 		string(RulesetRuleActionManagedChallenge),
 		string(RulesetRuleActionLog),
+		string(RulesetRuleActionLogCustomField),
 		string(RulesetRuleActionRewrite),
 		string(RulesetRuleActionScore),
 		string(RulesetRuleActionSkip),
