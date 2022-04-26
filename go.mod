@@ -8,7 +8,7 @@ require (
 	github.com/orijtech/structslop v0.0.6
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.7.1
-	github.com/urfave/cli/v2 v2.4.4
+	github.com/urfave/cli/v2 v2.4.8
 	golang.org/x/net v0.0.0-20220225172249-27dd8689420f
 	golang.org/x/time v0.0.0-20220224211638-0e9765cccd65
 )
