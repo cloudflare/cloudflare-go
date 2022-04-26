@@ -252,6 +252,7 @@ func TestDevicePostureRules(t *testing.T) {
 					"type": "file",
 					"name": "My rule name",
 					"description": "My description",
+					"expiration": "1h",
 					"match": [
 						{
 							"platform": "ios"
@@ -283,6 +284,7 @@ func TestDevicePostureRules(t *testing.T) {
 		Description: "My description",
 		Type:        "file",
 		Schedule:    "1h",
+		Expiration:  "1h",
 		Match:       []DevicePostureRuleMatch{{Platform: "ios"}},
 		Input: DevicePostureRuleInput{
 			ID:         "9e597887-345e-4a32-a09c-68811b129768",
@@ -317,6 +319,7 @@ func TestDevicePostureFileRule(t *testing.T) {
 			"result": {
 				"id": "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
 				"schedule": "1h",
+				"expiration": "1h",
 				"type": "file",
 				"name": "My rule name",
 				"description": "My description",
@@ -341,6 +344,7 @@ func TestDevicePostureFileRule(t *testing.T) {
 		Description: "My description",
 		Type:        "file",
 		Schedule:    "1h",
+		Expiration:  "1h",
 		Match:       []DevicePostureRuleMatch{{Platform: "ios"}},
 		Input: DevicePostureRuleInput{
 			Path:   "/tmp/test",
@@ -372,6 +376,7 @@ func TestDevicePostureDiskEncryptionRule(t *testing.T) {
 			"result": {
 				"id": "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
 				"schedule": "1h",
+				"expiration": "1h",
 				"type": "disk_encryption",
 				"name": "My rule name",
 				"description": "My description",
@@ -394,6 +399,7 @@ func TestDevicePostureDiskEncryptionRule(t *testing.T) {
 		Description: "My description",
 		Type:        "disk_encryption",
 		Schedule:    "1h",
+		Expiration:  "1h",
 		Match:       []DevicePostureRuleMatch{{Platform: "ios"}},
 		Input: DevicePostureRuleInput{
 			RequireAll: true,
@@ -423,6 +429,7 @@ func TestDevicePostureOsVersionRule(t *testing.T) {
 			"result": {
 				"id": "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
 				"schedule": "1h",
+				"expiration": "1h",
 				"type": "os_version",
 				"name": "My rule name",
 				"description": "My description",
@@ -446,6 +453,7 @@ func TestDevicePostureOsVersionRule(t *testing.T) {
 		Description: "My description",
 		Type:        "os_version",
 		Schedule:    "1h",
+		Expiration:  "1h",
 		Match:       []DevicePostureRuleMatch{{Platform: "ios"}},
 		Input: DevicePostureRuleInput{
 			Version:  "10.0.1",
@@ -476,6 +484,7 @@ func TestDevicePostureDomainJoinedRule(t *testing.T) {
 			"result": {
 				"id": "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
 				"schedule": "1h",
+				"expiration": "1h",
 				"type": "domain_joined",
 				"name": "My rule name",
 				"description": "My description",
@@ -498,6 +507,7 @@ func TestDevicePostureDomainJoinedRule(t *testing.T) {
 		Description: "My description",
 		Type:        "domain_joined",
 		Schedule:    "1h",
+		Expiration:  "1h",
 		Match:       []DevicePostureRuleMatch{{Platform: "ios"}},
 		Input: DevicePostureRuleInput{
 			Domain: "example.com",
@@ -527,6 +537,7 @@ func TestCreateDevicePostureRule(t *testing.T) {
 			"result": {
 				"id": "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
 				"schedule": "1h",
+				"expiration": "1h",
 				"type": "file",
 				"name": "My rule name",
 				"description": "My description",
@@ -549,6 +560,7 @@ func TestCreateDevicePostureRule(t *testing.T) {
 		Description: "My description",
 		Type:        "file",
 		Schedule:    "1h",
+		Expiration:  "1h",
 		Match:       []DevicePostureRuleMatch{{Platform: "ios"}},
 		Input:       DevicePostureRuleInput{ID: "9e597887-345e-4a32-a09c-68811b129768"},
 	}
@@ -560,6 +572,7 @@ func TestCreateDevicePostureRule(t *testing.T) {
 		Description: "My description",
 		Type:        "file",
 		Schedule:    "1h",
+		Expiration:  "1h",
 		Match:       []DevicePostureRuleMatch{{Platform: "ios"}},
 		Input:       DevicePostureRuleInput{ID: "9e597887-345e-4a32-a09c-68811b129768"},
 	})
@@ -583,6 +596,7 @@ func TestUpdateDevicePostureRule(t *testing.T) {
 			"result": {
 				"id": "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
 				"schedule": "1h",
+				"expiration": "1h",
 				"type": "file",
 				"name": "My rule name",
 				"description": "My description",
@@ -605,6 +619,7 @@ func TestUpdateDevicePostureRule(t *testing.T) {
 		Description: "My description",
 		Type:        "file",
 		Schedule:    "1h",
+		Expiration:  "1h",
 		Match:       []DevicePostureRuleMatch{{Platform: "ios"}},
 		Input:       DevicePostureRuleInput{ID: "9e597887-345e-4a32-a09c-68811b129768"},
 	}
