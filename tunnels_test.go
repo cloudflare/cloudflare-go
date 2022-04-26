@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestArgoTunnels(t *testing.T) {
+func TestTunnels(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -40,30 +40,30 @@ func TestArgoTunnels(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/cfd_tunnel", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/cfd_tunnel", handler)
 
 	createdAt, _ := time.Parse(time.RFC3339, "2009-11-10T23:00:00Z")
 	deletedAt, _ := time.Parse(time.RFC3339, "2009-11-10T23:00:00Z")
-	want := []ArgoTunnel{{
+	want := []Tunnel{{
 		ID:        "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		Name:      "blog",
 		CreatedAt: &createdAt,
 		DeletedAt: &deletedAt,
-		Connections: []ArgoTunnelConnection{{
+		Connections: []TunnelConnection{{
 			ColoName:           "DFW",
 			UUID:               "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 			IsPendingReconnect: false,
 		}},
 	}}
 
-	actual, err := client.ArgoTunnels(context.Background(), "01a7362d577a6c3019a474fd6f485823")
+	actual, err := client.Tunnels(context.Background(), TunnelListParams{AccountID: testAccountID})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
-func TestArgoTunnel(t *testing.T) {
+func TestTunnel(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -91,30 +91,30 @@ func TestArgoTunnel(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
 	createdAt, _ := time.Parse(time.RFC3339, "2009-11-10T23:00:00Z")
 	deletedAt, _ := time.Parse(time.RFC3339, "2009-11-10T23:00:00Z")
-	want := ArgoTunnel{
+	want := Tunnel{
 		ID:        "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		Name:      "blog",
 		CreatedAt: &createdAt,
 		DeletedAt: &deletedAt,
-		Connections: []ArgoTunnelConnection{{
+		Connections: []TunnelConnection{{
 			ColoName:           "DFW",
 			UUID:               "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 			IsPendingReconnect: false,
 		}},
 	}
 
-	actual, err := client.ArgoTunnel(context.Background(), "01a7362d577a6c3019a474fd6f485823", "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	actual, err := client.Tunnel(context.Background(), TunnelParams{AccountID: testAccountID, UUID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
-func TestCreateArgoTunnel(t *testing.T) {
+func TestCreateTunnel(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -142,30 +142,30 @@ func TestCreateArgoTunnel(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/cfd_tunnel", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/cfd_tunnel", handler)
 
 	createdAt, _ := time.Parse(time.RFC3339, "2009-11-10T23:00:00Z")
 	deletedAt, _ := time.Parse(time.RFC3339, "2009-11-10T23:00:00Z")
-	want := ArgoTunnel{
+	want := Tunnel{
 		ID:        "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		Name:      "blog",
 		CreatedAt: &createdAt,
 		DeletedAt: &deletedAt,
-		Connections: []ArgoTunnelConnection{{
+		Connections: []TunnelConnection{{
 			ColoName:           "DFW",
 			UUID:               "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 			IsPendingReconnect: false,
 		}},
 	}
 
-	actual, err := client.CreateArgoTunnel(context.Background(), "01a7362d577a6c3019a474fd6f485823", "blog", "notarealsecret")
+	actual, err := client.CreateTunnel(context.Background(), TunnelCreateParams{AccountID: testAccountID, Name: "blog", Secret: "notarealsecret"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
-func TestDeleteArgoTunnel(t *testing.T) {
+func TestDeleteTunnel(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -193,13 +193,13 @@ func TestDeleteArgoTunnel(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	err := client.DeleteArgoTunnel(context.Background(), "01a7362d577a6c3019a474fd6f485823", "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	err := client.DeleteTunnel(context.Background(), TunnelDeleteParams{AccountID: testAccountID, UUID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
 	assert.NoError(t, err)
 }
 
-func TestCleanupArgoTunnelConnections(t *testing.T) {
+func TestCleanupTunnelConnections(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -214,8 +214,8 @@ func TestCleanupArgoTunnelConnections(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/connections", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/connections", handler)
 
-	err := client.CleanupArgoTunnelConnections(context.Background(), "01a7362d577a6c3019a474fd6f485823", "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	err := client.CleanupTunnelConnections(context.Background(), TunnelCleanupParams{AccountID: testAccountID, UUID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
 	assert.NoError(t, err)
 }
