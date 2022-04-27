@@ -98,7 +98,7 @@ func (api *API) Tunnels(ctx context.Context, params TunnelListParams) ([]Tunnel,
 
 	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel", params.AccountID)
 
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodGet, uri+queryParams, nil, tunnelV1Header())
+	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodGet, uri+queryParams, nil, nil)
 	if err != nil {
 		return []Tunnel{}, err
 	}
@@ -125,7 +125,7 @@ func (api *API) Tunnel(ctx context.Context, params TunnelParams) (Tunnel, error)
 
 	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s", params.AccountID, params.UUID)
 
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodGet, uri, nil, tunnelV1Header())
+	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodGet, uri, nil, nil)
 	if err != nil {
 		return Tunnel{}, err
 	}
@@ -158,7 +158,7 @@ func (api *API) CreateTunnel(ctx context.Context, params TunnelCreateParams) (Tu
 
 	tunnel := Tunnel{Name: params.Name, Secret: params.Secret}
 
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPost, uri, tunnel, tunnelV1Header())
+	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPost, uri, tunnel, nil)
 	if err != nil {
 		return Tunnel{}, err
 	}
@@ -192,7 +192,7 @@ func (api *API) UpdateTunnel(ctx context.Context, params TunnelUpdateParams) (Tu
 		tunnel.Secret = params.Secret
 	}
 
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPatch, uri, tunnel, tunnelV1Header())
+	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPatch, uri, tunnel, nil)
 	if err != nil {
 		return Tunnel{}, err
 	}
@@ -212,7 +212,7 @@ func (api *API) UpdateTunnel(ctx context.Context, params TunnelUpdateParams) (Tu
 func (api *API) DeleteTunnel(ctx context.Context, params TunnelDeleteParams) error {
 	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s", params.AccountID, params.UUID)
 
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodDelete, uri, nil, tunnelV1Header())
+	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodDelete, uri, nil, nil)
 	if err != nil {
 		return err
 	}
@@ -240,7 +240,7 @@ func (api *API) CleanupTunnelConnections(ctx context.Context, params TunnelClean
 
 	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s/connections", params.AccountID, params.UUID)
 
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodDelete, uri, nil, tunnelV1Header())
+	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodDelete, uri, nil, nil)
 	if err != nil {
 		return err
 	}
@@ -268,7 +268,7 @@ func (api *API) TunnelToken(ctx context.Context, params TunnelTokenParams) error
 
 	uri := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/token", params.AccountID, params.UUID)
 
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodDelete, uri, nil, tunnelV1Header())
+	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodDelete, uri, nil, nil)
 	if err != nil {
 		return err
 	}
@@ -280,15 +280,4 @@ func (api *API) TunnelToken(ctx context.Context, params TunnelTokenParams) error
 	}
 
 	return nil
-}
-
-// The early implementation of Tunnel endpoints didn't conform to the V4
-// API standard response structure. This has been remedied going forward however
-// to support older clients this isn't yet the default. An explicit `Accept`
-// header is used to get the V4 compatible version.
-func tunnelV1Header() http.Header {
-	header := make(http.Header)
-	header.Set("Accept", "application/json;version=1")
-
-	return header
 }
