@@ -13,19 +13,25 @@ import (
 
 // Tunnel is the struct definition of a tunnel.
 type Tunnel struct {
-	ID          string             `json:"id,omitempty"`
-	Name        string             `json:"name,omitempty"`
-	Secret      string             `json:"tunnel_secret,omitempty"`
-	CreatedAt   *time.Time         `json:"created_at,omitempty"`
-	DeletedAt   *time.Time         `json:"deleted_at,omitempty"`
-	Connections []TunnelConnection `json:"connections,omitempty"`
+	ID             string             `json:"id,omitempty"`
+	Name           string             `json:"name,omitempty"`
+	Secret         string             `json:"tunnel_secret,omitempty"`
+	CreatedAt      *time.Time         `json:"created_at,omitempty"`
+	DeletedAt      *time.Time         `json:"deleted_at,omitempty"`
+	Connections    []TunnelConnection `json:"connections,omitempty"`
+	ConnsActiveAt  *time.Time         `json:"conns_active_at,omitempty"`
+	ConnInactiveAt *time.Time         `json:"conns_inactive_at,omitempty"`
 }
 
 // TunnelConnection represents the connections associated with a tunnel.
 type TunnelConnection struct {
 	ColoName           string `json:"colo_name"`
-	UUID               string `json:"uuid"`
+	ID                 string `json:"id"`
 	IsPendingReconnect bool   `json:"is_pending_reconnect"`
+	ClientID           string `json:"client_id"`
+	ClientVersion      string `json:"client_version"`
+	OpenedAt           string `json:"opened_at"`
+	OriginIP           string `json:"origin_ip"`
 }
 
 // TunnelsDetailResponse is used for representing the API response payload for
