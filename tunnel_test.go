@@ -31,7 +31,11 @@ func TestTunnels(t *testing.T) {
 						{
 							"colo_name": "DFW",
 							"uuid": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-							"is_pending_reconnect": false
+							"is_pending_reconnect": false,
+							"client_id": "dc6472cc-f1ae-44a0-b795-6b8a0ce29f90",
+							"client_version": "2022.2.0",
+							"opened_at": "2021-01-25T18:22:34.317854Z",
+							"origin_ip": "85.12.78.6"
 						}
 					]
 				}
@@ -51,8 +55,12 @@ func TestTunnels(t *testing.T) {
 		DeletedAt: &deletedAt,
 		Connections: []TunnelConnection{{
 			ColoName:           "DFW",
-			UUID:               "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+			ID:                 "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 			IsPendingReconnect: false,
+			ClientID:           "dc6472cc-f1ae-44a0-b795-6b8a0ce29f90",
+			ClientVersion:      "2022.2.0",
+			OpenedAt:           "2021-01-25T18:22:34.317854Z",
+			OriginIP:           "85.12.78.6",
 		}},
 	}}
 
@@ -79,11 +87,15 @@ func TestTunnel(t *testing.T) {
 				"name":"blog",
 				"created_at":"2009-11-10T23:00:00Z",
 				"deleted_at":"2009-11-10T23:00:00Z",
-				"connections":[
+				"connections": [
 					{
-						"colo_name":"DFW",
-						"uuid":"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-						"is_pending_reconnect":false
+						"colo_name": "DFW",
+						"uuid": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+						"is_pending_reconnect": false,
+						"client_id": "dc6472cc-f1ae-44a0-b795-6b8a0ce29f90",
+						"client_version": "2022.2.0",
+						"opened_at": "2021-01-25T18:22:34.317854Z",
+						"origin_ip": "85.12.78.6"
 					}
 				]
 			}
@@ -102,8 +114,12 @@ func TestTunnel(t *testing.T) {
 		DeletedAt: &deletedAt,
 		Connections: []TunnelConnection{{
 			ColoName:           "DFW",
-			UUID:               "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+			ID:                 "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 			IsPendingReconnect: false,
+			ClientID:           "dc6472cc-f1ae-44a0-b795-6b8a0ce29f90",
+			ClientVersion:      "2022.2.0",
+			OpenedAt:           "2021-01-25T18:22:34.317854Z",
+			OriginIP:           "85.12.78.6",
 		}},
 	}
 
@@ -130,11 +146,15 @@ func TestCreateTunnel(t *testing.T) {
 				"name":"blog",
 				"created_at":"2009-11-10T23:00:00Z",
 				"deleted_at":"2009-11-10T23:00:00Z",
-				"connections":[
+				"connections": [
 					{
-						"colo_name":"DFW",
-						"uuid":"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-						"is_pending_reconnect":false
+						"colo_name": "DFW",
+						"uuid": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+						"is_pending_reconnect": false,
+						"client_id": "dc6472cc-f1ae-44a0-b795-6b8a0ce29f90",
+						"client_version": "2022.2.0",
+						"opened_at": "2021-01-25T18:22:34.317854Z",
+						"origin_ip": "85.12.78.6"
 					}
 				]
 			}
@@ -153,8 +173,12 @@ func TestCreateTunnel(t *testing.T) {
 		DeletedAt: &deletedAt,
 		Connections: []TunnelConnection{{
 			ColoName:           "DFW",
-			UUID:               "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+			ID:                 "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 			IsPendingReconnect: false,
+			ClientID:           "dc6472cc-f1ae-44a0-b795-6b8a0ce29f90",
+			ClientVersion:      "2022.2.0",
+			OpenedAt:           "2021-01-25T18:22:34.317854Z",
+			OriginIP:           "85.12.78.6",
 		}},
 	}
 
@@ -181,11 +205,15 @@ func TestDeleteTunnel(t *testing.T) {
 				"name":"blog",
 				"created_at":"2009-11-10T23:00:00Z",
 				"deleted_at":"2009-11-10T23:00:00Z",
-				"connections":[
+				"connections": [
 					{
-						"colo_name":"DFW",
-						"uuid":"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-						"is_pending_reconnect":false
+						"colo_name": "DFW",
+						"uuid": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+						"is_pending_reconnect": false,
+						"client_id": "dc6472cc-f1ae-44a0-b795-6b8a0ce29f90",
+						"client_version": "2022.2.0",
+						"opened_at": "2021-01-25T18:22:34.317854Z",
+						"origin_ip": "85.12.78.6"
 					}
 				]
 			}
