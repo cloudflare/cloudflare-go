@@ -260,7 +260,7 @@ func (api *API) CleanupTunnelConnections(ctx context.Context, params TunnelClean
 	return nil
 }
 
-// TunnelToken gets the cloudflared token for a tunnel.
+// TunnelToken that allows to run a tunnel.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-tunnel-get-cloudflare-tunnel-token
 func (api *API) TunnelToken(ctx context.Context, params TunnelTokenParams) error {
