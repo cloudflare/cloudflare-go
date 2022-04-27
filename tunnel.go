@@ -50,7 +50,7 @@ type TunnelDetailResponse struct {
 
 type TunnelParams struct {
 	AccountID string
-	UUID      string
+	ID        string
 }
 
 type TunnelCreateParams struct {
@@ -67,23 +67,23 @@ type TunnelUpdateParams struct {
 
 type TunnelDeleteParams struct {
 	AccountID string
-	UUID      string
+	ID        string
 }
 
 type TunnelCleanupParams struct {
 	AccountID string
-	UUID      string
+	ID        string
 }
 
 type TunnelTokenParams struct {
 	AccountID string
-	UUID      string
+	ID        string
 }
 
 type TunnelListParams struct {
 	AccountID string
 	Name      string     `url:"name,omitempty"`
-	UUID      string     `url:"uuid,omitempty"`
+	UUID      string     `url:"uuid,omitempty"` // the tunnel ID
 	IsDeleted bool       `url:"is_deleted,omitempty"`
 	ExistedAt *time.Time `url:"existed_at,omitempty"`
 }
@@ -125,11 +125,11 @@ func (api *API) Tunnel(ctx context.Context, params TunnelParams) (Tunnel, error)
 		return Tunnel{}, ErrMissingAccountID
 	}
 
-	if params.UUID == "" {
-		return Tunnel{}, errors.New("missing tunnel UUID")
+	if params.ID == "" {
+		return Tunnel{}, errors.New("missing tunnel ID")
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s", params.AccountID, params.UUID)
+	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s", params.AccountID, params.ID)
 
 	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodGet, uri, nil, nil)
 	if err != nil {
@@ -216,7 +216,7 @@ func (api *API) UpdateTunnel(ctx context.Context, params TunnelUpdateParams) (Tu
 //
 // API reference: https://api.cloudflare.com/#cloudflare-tunnel-delete-cloudflare-tunnel
 func (api *API) DeleteTunnel(ctx context.Context, params TunnelDeleteParams) error {
-	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s", params.AccountID, params.UUID)
+	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s", params.AccountID, params.ID)
 
 	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodDelete, uri, nil, nil)
 	if err != nil {
@@ -240,11 +240,11 @@ func (api *API) CleanupTunnelConnections(ctx context.Context, params TunnelClean
 		return ErrMissingAccountID
 	}
 
-	if params.UUID == "" {
-		return errors.New("missing tunnel UUID")
+	if params.ID == "" {
+		return errors.New("missing tunnel ID")
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s/connections", params.AccountID, params.UUID)
+	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s/connections", params.AccountID, params.ID)
 
 	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodDelete, uri, nil, nil)
 	if err != nil {
@@ -268,11 +268,11 @@ func (api *API) TunnelToken(ctx context.Context, params TunnelTokenParams) error
 		return ErrMissingAccountID
 	}
 
-	if params.UUID == "" {
-		return errors.New("missing tunnel UUID")
+	if params.ID == "" {
+		return errors.New("missing tunnel ID")
 	}
 
-	uri := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/token", params.AccountID, params.UUID)
+	uri := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/token", params.AccountID, params.ID)
 
 	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodGet, uri, nil, nil)
 	if err != nil {

@@ -30,7 +30,7 @@ func TestTunnels(t *testing.T) {
 					"connections": [
 						{
 							"colo_name": "DFW",
-							"uuid": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+							"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 							"is_pending_reconnect": false,
 							"client_id": "dc6472cc-f1ae-44a0-b795-6b8a0ce29f90",
 							"client_version": "2022.2.0",
@@ -64,7 +64,7 @@ func TestTunnels(t *testing.T) {
 		}},
 	}}
 
-	actual, err := client.Tunnels(context.Background(), TunnelListParams{AccountID: testAccountID})
+	actual, err := client.Tunnels(context.Background(), TunnelListParams{AccountID: testAccountID, UUID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -90,7 +90,7 @@ func TestTunnel(t *testing.T) {
 				"connections": [
 					{
 						"colo_name": "DFW",
-						"uuid": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+						"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 						"is_pending_reconnect": false,
 						"client_id": "dc6472cc-f1ae-44a0-b795-6b8a0ce29f90",
 						"client_version": "2022.2.0",
@@ -123,7 +123,7 @@ func TestTunnel(t *testing.T) {
 		}},
 	}
 
-	actual, err := client.Tunnel(context.Background(), TunnelParams{AccountID: testAccountID, UUID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
+	actual, err := client.Tunnel(context.Background(), TunnelParams{AccountID: testAccountID, ID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -149,7 +149,7 @@ func TestCreateTunnel(t *testing.T) {
 				"connections": [
 					{
 						"colo_name": "DFW",
-						"uuid": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+						"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 						"is_pending_reconnect": false,
 						"client_id": "dc6472cc-f1ae-44a0-b795-6b8a0ce29f90",
 						"client_version": "2022.2.0",
@@ -208,7 +208,7 @@ func TestDeleteTunnel(t *testing.T) {
 				"connections": [
 					{
 						"colo_name": "DFW",
-						"uuid": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+						"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 						"is_pending_reconnect": false,
 						"client_id": "dc6472cc-f1ae-44a0-b795-6b8a0ce29f90",
 						"client_version": "2022.2.0",
@@ -223,7 +223,7 @@ func TestDeleteTunnel(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	err := client.DeleteTunnel(context.Background(), TunnelDeleteParams{AccountID: testAccountID, UUID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
+	err := client.DeleteTunnel(context.Background(), TunnelDeleteParams{AccountID: testAccountID, ID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
 	assert.NoError(t, err)
 }
 
@@ -244,6 +244,6 @@ func TestCleanupTunnelConnections(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/connections", handler)
 
-	err := client.CleanupTunnelConnections(context.Background(), TunnelCleanupParams{AccountID: testAccountID, UUID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
+	err := client.CleanupTunnelConnections(context.Background(), TunnelCleanupParams{AccountID: testAccountID, ID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
 	assert.NoError(t, err)
 }
