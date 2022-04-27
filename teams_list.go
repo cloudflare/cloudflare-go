@@ -107,7 +107,8 @@ func (api *API) TeamsList(ctx context.Context, accountID, listID string) (TeamsL
 //
 // API reference: https://api.cloudflare.com/#teams-lists-teams-list-items
 func (api *API) TeamsListItems(ctx context.Context, accountID, listID string) ([]TeamsListItem, ResultInfo, error) {
-	uri := fmt.Sprintf("/%s/%s/gateway/lists/%s/items", AccountRouteRoot, accountID, listID)
+	// limit parameter works around bug in the API
+	uri := fmt.Sprintf("/%s/%s/gateway/lists/%s/items?limit=10000", AccountRouteRoot, accountID, listID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
