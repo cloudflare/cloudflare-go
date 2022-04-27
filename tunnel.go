@@ -274,7 +274,7 @@ func (api *API) TunnelToken(ctx context.Context, params TunnelTokenParams) error
 
 	uri := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/token", params.AccountID, params.UUID)
 
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodDelete, uri, nil, nil)
+	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodGet, uri, nil, nil)
 	if err != nil {
 		return err
 	}
