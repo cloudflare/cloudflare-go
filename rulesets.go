@@ -26,6 +26,7 @@ const (
 	RulesetPhaseHTTPRequestMain              RulesetPhase = "http_request_main"
 	RulesetPhaseHTTPRequestSanitize          RulesetPhase = "http_request_sanitize"
 	RulesetPhaseHTTPRequestTransform         RulesetPhase = "http_request_transform"
+	RulesetPhaseHTTPRequestOrigin            RulesetPhase = "http_request_origin"
 	RulesetPhaseHTTPResponseFirewallManaged  RulesetPhase = "http_response_firewall_managed"
 	RulesetPhaseHTTPResponseHeadersTransform RulesetPhase = "http_response_headers_transform"
 	RulesetPhaseMagicTransit                 RulesetPhase = "magic_transit"
@@ -43,6 +44,7 @@ const (
 	RulesetRuleActionRewrite              RulesetRuleAction = "rewrite"
 	RulesetRuleActionScore                RulesetRuleAction = "score"
 	RulesetRuleActionSkip                 RulesetRuleAction = "skip"
+	RulesetRuleActionRoute                RulesetRuleAction = "route"
 
 	RulesetActionParameterProductBIC           RulesetActionParameterProduct = "bic"
 	RulesetActionParameterProductHOT           RulesetActionParameterProduct = "hot"
@@ -81,6 +83,7 @@ func RulesetPhaseValues() []string {
 		string(RulesetPhaseHTTPRequestMain),
 		string(RulesetPhaseHTTPRequestSanitize),
 		string(RulesetPhaseHTTPRequestTransform),
+		string(RulesetPhaseHTTPRequestOrigin),
 		string(RulesetPhaseHTTPResponseFirewallManaged),
 		string(RulesetPhaseHTTPResponseHeadersTransform),
 		string(RulesetPhaseMagicTransit),
@@ -104,6 +107,7 @@ func RulesetRuleActionValues() []string {
 		string(RulesetRuleActionRewrite),
 		string(RulesetRuleActionScore),
 		string(RulesetRuleActionSkip),
+		string(RulesetRuleActionRoute),
 	}
 }
 
@@ -180,6 +184,8 @@ type RulesetRuleActionParameters struct {
 	MatchedData *RulesetRuleActionParametersMatchedData          `json:"matched_data,omitempty"`
 	Version     string                                           `json:"version,omitempty"`
 	Response    *RulesetRuleActionParametersBlockResponse        `json:"response,omitempty"`
+	HostHeader  string                                           `json:"host_header,omitempty"`
+	Origin      *RulesetRuleActionParametersOrigin               `json:"origin,omitempty"`
 }
 
 // RulesetRuleActionParametersBlockResponse holds the BlockResponse struct
@@ -244,6 +250,13 @@ type RulesetRuleActionParametersRules struct {
 // payload logging.
 type RulesetRuleActionParametersMatchedData struct {
 	PublicKey string `json:"public_key,omitempty"`
+}
+
+// RulesetRuleActionParametersOrigin is the definition for define action
+// parameters that involve Origin override.
+type RulesetRuleActionParametersOrigin struct {
+	Host string `json:"host,omitempty"`
+	Port uint16 `json:"port,omitempty"`
 }
 
 // RulesetRule contains information about a single Ruleset Rule.
