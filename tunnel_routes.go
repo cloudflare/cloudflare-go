@@ -21,14 +21,14 @@ type TunnelRoute struct {
 	DeletedAt  *time.Time `json:"deleted_at"`
 }
 
-type TunnelRoutesListParams struct {
-	AccountID       string     `json:"-"`
-	TunnelID        string     `json:"tunnel_id,omitempty"`
-	Comment         string     `json:"comment,omitempty"`
-	IsDeleted       *bool      `json:"is_deleted,omitempty"`
-	NetworkSubset   string     `json:"network_subset,omitempty"`
-	NetworkSuperset string     `json:"network_superset,omitempty"`
-	ExistedAt       *time.Time `json:"existed_at,omitempty"`
+type TunnelRoutesListOptions struct {
+	AccountID       string
+	TunnelID        string
+	Comment         string
+	IsDeleted       *bool
+	NetworkSubset   string
+	NetworkSuperset string
+	ExistedAt       *time.Time
 	PaginationOptions
 }
 
@@ -67,16 +67,40 @@ type tunnelRouteResponse struct {
 	Result TunnelRoute `json:"result"`
 }
 
+// encode encodes non-nil fields into URL encoded form.
+func (o TunnelRoutesListOptions) encode() string {
+	v := url.Values{}
+	if o.TunnelID != "" {
+		v.Set("tunnel_id", fmt.Sprintf("%s", o.TunnelID))
+	}
+	if o.Comment != "" {
+		v.Set("comment", fmt.Sprintf("%s", o.Comment))
+	}
+	if o.IsDeleted != nil {
+		v.Set("is_deleted", fmt.Sprintf("%t", *o.IsDeleted))
+	}
+	if o.NetworkSubset != "" {
+		v.Set("network_subset", fmt.Sprintf("%s", o.NetworkSubset))
+	}
+	if o.NetworkSuperset != "" {
+		v.Set("network_superset", fmt.Sprintf("%s", o.NetworkSuperset))
+	}
+	if o.ExistedAt != nil {
+		v.Set("existed_at", (*o.ExistedAt).Format(time.RFC3339))
+	}
+	return v.Encode()
+}
+
 // ListTunnelRoutes lists all defined routes for tunnels in the account.
 //
 // See: https://api.cloudflare.com/#tunnel-route-list-tunnel-routes
-func (api *API) ListTunnelRoutes(ctx context.Context, params TunnelRoutesListParams) ([]TunnelRoute, error) {
-	if params.AccountID == "" {
+func (api *API) ListTunnelRoutes(ctx context.Context, options TunnelRoutesListOptions) ([]TunnelRoute, error) {
+	if options.AccountID == "" {
 		return []TunnelRoute{}, ErrMissingAccountID
 	}
 
-	uri := fmt.Sprintf("/%s/%s/teamnet/routes", AccountRouteRoot, params.AccountID)
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, params)
+	uri := fmt.Sprintf("/%s/%s/teamnet/routes?%s", AccountRouteRoot, options.AccountID, options.encode())
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, options)
 
 	if err != nil {
 		return []TunnelRoute{}, err
