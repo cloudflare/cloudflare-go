@@ -71,19 +71,19 @@ type tunnelRouteResponse struct {
 func (o TunnelRoutesListParams) encode() string {
 	v := url.Values{}
 	if o.TunnelID != "" {
-		v.Set("tunnel_id", fmt.Sprintf("%s", o.TunnelID))
+		v.Set("tunnel_id", o.TunnelID)
 	}
 	if o.Comment != "" {
-		v.Set("comment", fmt.Sprintf("%s", o.Comment))
+		v.Set("comment", o.Comment)
 	}
 	if o.IsDeleted != nil {
 		v.Set("is_deleted", fmt.Sprintf("%t", *o.IsDeleted))
 	}
 	if o.NetworkSubset != "" {
-		v.Set("network_subset", fmt.Sprintf("%s", o.NetworkSubset))
+		v.Set("network_subset", o.NetworkSubset)
 	}
 	if o.NetworkSuperset != "" {
-		v.Set("network_superset", fmt.Sprintf("%s", o.NetworkSuperset))
+		v.Set("network_superset", o.NetworkSuperset)
 	}
 	if o.ExistedAt != nil {
 		v.Set("existed_at", (*o.ExistedAt).Format(time.RFC3339))
