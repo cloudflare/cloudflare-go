@@ -21,7 +21,7 @@ type TunnelRoute struct {
 	DeletedAt  *time.Time `json:"deleted_at"`
 }
 
-type TunnelRoutesListOptions struct {
+type TunnelRoutesListParams struct {
 	AccountID       string
 	TunnelID        string
 	Comment         string
@@ -68,7 +68,7 @@ type tunnelRouteResponse struct {
 }
 
 // encode encodes non-nil fields into URL encoded form.
-func (o TunnelRoutesListOptions) encode() string {
+func (o TunnelRoutesListParams) encode() string {
 	v := url.Values{}
 	if o.TunnelID != "" {
 		v.Set("tunnel_id", fmt.Sprintf("%s", o.TunnelID))
@@ -94,13 +94,13 @@ func (o TunnelRoutesListOptions) encode() string {
 // ListTunnelRoutes lists all defined routes for tunnels in the account.
 //
 // See: https://api.cloudflare.com/#tunnel-route-list-tunnel-routes
-func (api *API) ListTunnelRoutes(ctx context.Context, options TunnelRoutesListOptions) ([]TunnelRoute, error) {
-	if options.AccountID == "" {
+func (api *API) ListTunnelRoutes(ctx context.Context, params TunnelRoutesListParams) ([]TunnelRoute, error) {
+	if params.AccountID == "" {
 		return []TunnelRoute{}, ErrMissingAccountID
 	}
 
-	uri := fmt.Sprintf("/%s/%s/teamnet/routes?%s", AccountRouteRoot, options.AccountID, options.encode())
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, options)
+	uri := fmt.Sprintf("/%s/%s/teamnet/routes?%s", AccountRouteRoot, params.AccountID, params.encode())
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, params)
 
 	if err != nil {
 		return []TunnelRoute{}, err

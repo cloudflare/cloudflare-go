@@ -49,7 +49,7 @@ func TestListTunnelRoutes(t *testing.T) {
 		},
 	}
 
-	params := TunnelRoutesListOptions{AccountID: testAccountID}
+	params := TunnelRoutesListParams{AccountID: testAccountID}
 	got, err := client.ListTunnelRoutes(context.Background(), params)
 
 	if assert.NoError(t, err) {
