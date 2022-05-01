@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/google/go-querystring/query"
 	"github.com/pkg/errors"
 )
 
@@ -22,13 +23,13 @@ type TunnelRoute struct {
 }
 
 type TunnelRoutesListParams struct {
-	AccountID       string     `json:"-"`
-	TunnelID        string     `json:"tunnel_id,omitempty"`
-	Comment         string     `json:"comment,omitempty"`
-	IsDeleted       *bool      `json:"is_deleted,omitempty"`
-	NetworkSubset   string     `json:"network_subset,omitempty"`
-	NetworkSuperset string     `json:"network_superset,omitempty"`
-	ExistedAt       *time.Time `json:"existed_at,omitempty"`
+	AccountID       string
+	TunnelID        string     `url:"tunnel_id,omitempty"`
+	Comment         string     `url:"comment,omitempty"`
+	IsDeleted       *bool      `url:"is_deleted,omitempty"`
+	NetworkSubset   string     `url:"network_subset,omitempty"`
+	NetworkSuperset string     `url:"network_superset,omitempty"`
+	ExistedAt       *time.Time `url:"existed_at,omitempty"`
 	PaginationOptions
 }
 
@@ -75,8 +76,14 @@ func (api *API) ListTunnelRoutes(ctx context.Context, params TunnelRoutesListPar
 		return []TunnelRoute{}, ErrMissingAccountID
 	}
 
+	v, _ := query.Values(params)
+	queryParams := v.Encode()
+	if queryParams != "" {
+		queryParams = "?" + queryParams
+	}
+
 	uri := fmt.Sprintf("/%s/%s/teamnet/routes", AccountRouteRoot, params.AccountID)
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, params)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri+queryParams, params)
 
 	if err != nil {
 		return []TunnelRoute{}, err
