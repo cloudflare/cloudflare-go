@@ -23,7 +23,8 @@ const (
 	"destination_conf": "s3://mybucket/logs?region=us-west-2",
 	"last_complete": "%[2]s",
 	"last_error": "%[2]s",
-	"error_message": "test"
+	"error_message": "test",
+	"frequency": "high"
   }
 `
 	serverLogpushGetOwnershipChallengeDescription = `{
@@ -52,6 +53,7 @@ var (
 		LastComplete:    &testLogpushTimestamp,
 		LastError:       &testLogpushTimestamp,
 		ErrorMessage:    "test",
+		Frequency:       "high",
 	}
 	expectedLogpushGetOwnershipChallengeStruct = LogpushGetOwnershipChallenge{
 		Filename: "logs/challenge-filename.txt",
