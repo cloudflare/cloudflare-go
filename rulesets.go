@@ -31,6 +31,7 @@ const (
 	RulesetPhaseHTTPResponseHeadersTransform RulesetPhase = "http_response_headers_transform"
 	RulesetPhaseMagicTransit                 RulesetPhase = "magic_transit"
 	RulesetPhaseRateLimit                    RulesetPhase = "http_ratelimit"
+	RulesetPhaseSuperBotFightMode            RulesetPhase = "http_request_sbfm"
 
 	RulesetRuleActionBlock                RulesetRuleAction = "block"
 	RulesetRuleActionChallenge            RulesetRuleAction = "challenge"
@@ -88,6 +89,7 @@ func RulesetPhaseValues() []string {
 		string(RulesetPhaseHTTPResponseHeadersTransform),
 		string(RulesetPhaseMagicTransit),
 		string(RulesetPhaseRateLimit),
+		string(RulesetPhaseSuperBotFightMode),
 	}
 }
 
