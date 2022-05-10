@@ -57,6 +57,7 @@ func TestAccessApplications(t *testing.T) {
 	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 
+	httpOnlyVal := true
 	want := []AccessApplication{{
 		ID:                      "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
 		CreatedAt:               &createdAt,
@@ -74,7 +75,7 @@ func TestAccessApplications(t *testing.T) {
 		CustomDenyMessage:       "denied!",
 		CustomDenyURL:           "https://www.example.com",
 		SameSiteCookieAttribute: "strict",
-		HttpOnlyCookieAttribute: true,
+		HttpOnlyCookieAttribute: &httpOnlyVal,
 		LogoURL:                 "https://www.example.com/example.png",
 		SkipInterstitial:        true,
 	}}
@@ -124,7 +125,8 @@ func TestAccessApplication(t *testing.T) {
 				"logo_url": "https://www.example.com/example.png",
 				"skip_interstitial": true,
 				"app_launcher_visible": true,
-				"service_auth_401_redirect": true
+				"service_auth_401_redirect": true,
+				"http_only_cookie_attribute": false
 			}
 		}
 		`)
@@ -133,24 +135,26 @@ func TestAccessApplication(t *testing.T) {
 	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 
+	httpOnlyVal := false
 	want := AccessApplication{
-		ID:                     "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
-		CreatedAt:              &createdAt,
-		UpdatedAt:              &updatedAt,
-		AUD:                    "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
-		Name:                   "Admin Site",
-		Domain:                 "test.example.com/admin",
-		Type:                   "self_hosted",
-		SessionDuration:        "24h",
-		AllowedIdps:            []string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415"},
-		AutoRedirectToIdentity: false,
-		EnableBindingCookie:    false,
-		AppLauncherVisible:     true,
-		ServiceAuth401Redirect: true,
-		CustomDenyMessage:      "denied!",
-		CustomDenyURL:          "https://www.example.com",
-		LogoURL:                "https://www.example.com/example.png",
-		SkipInterstitial:       true,
+		ID:                      "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		CreatedAt:               &createdAt,
+		UpdatedAt:               &updatedAt,
+		AUD:                     "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
+		Name:                    "Admin Site",
+		Domain:                  "test.example.com/admin",
+		Type:                    "self_hosted",
+		SessionDuration:         "24h",
+		AllowedIdps:             []string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415"},
+		AutoRedirectToIdentity:  false,
+		EnableBindingCookie:     false,
+		AppLauncherVisible:      true,
+		ServiceAuth401Redirect:  true,
+		CustomDenyMessage:       "denied!",
+		CustomDenyURL:           "https://www.example.com",
+		LogoURL:                 "https://www.example.com/example.png",
+		SkipInterstitial:        true,
+		HttpOnlyCookieAttribute: &httpOnlyVal,
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
