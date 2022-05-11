@@ -34,9 +34,12 @@ var waitingRoomJSON = fmt.Sprintf(`
       "session_duration": 10,
       "disable_session_renewal": false,
       "json_response_enabled": true,
-      "custom_page_html": "{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Queue all enabled {{/waitTimeKnown}}"
+      "custom_page_html": "{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Queue all enabled {{/waitTimeKnown}}",
+      "next_event_prequeue_start_time": null,
+      "next_event_start_time": "%s"
     }
-   `, waitingRoomID, testTimestampWaitingRoom.Format(time.RFC3339Nano), testTimestampWaitingRoom.Format(time.RFC3339Nano))
+   `, waitingRoomID, testTimestampWaitingRoom.Format(time.RFC3339Nano), testTimestampWaitingRoom.Format(time.RFC3339Nano),
+	testTimestampWaitingRoomEventStart.Format(time.RFC3339Nano))
 
 var waitingRoomEventJSON = fmt.Sprintf(`
     {
@@ -80,21 +83,23 @@ var waitingRoomPagePreviewJSON = `
     `
 
 var waitingRoom = WaitingRoom{
-	ID:                    waitingRoomID,
-	CreatedOn:             testTimestampWaitingRoom,
-	ModifiedOn:            testTimestampWaitingRoom,
-	Name:                  "production_webinar",
-	Description:           "Production - DO NOT MODIFY",
-	Suspended:             false,
-	Host:                  "shop.example.com",
-	Path:                  "/shop/checkout",
-	QueueAll:              true,
-	NewUsersPerMinute:     600,
-	TotalActiveUsers:      1000,
-	SessionDuration:       10,
-	DisableSessionRenewal: false,
-	JsonResponseEnabled:   true,
-	CustomPageHTML:        "{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Queue all enabled {{/waitTimeKnown}}",
+	ID:                         waitingRoomID,
+	CreatedOn:                  testTimestampWaitingRoom,
+	ModifiedOn:                 testTimestampWaitingRoom,
+	Name:                       "production_webinar",
+	Description:                "Production - DO NOT MODIFY",
+	Suspended:                  false,
+	Host:                       "shop.example.com",
+	Path:                       "/shop/checkout",
+	QueueAll:                   true,
+	NewUsersPerMinute:          600,
+	TotalActiveUsers:           1000,
+	SessionDuration:            10,
+	DisableSessionRenewal:      false,
+	JsonResponseEnabled:        true,
+	CustomPageHTML:             "{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Queue all enabled {{/waitTimeKnown}}",
+	NextEventStartTime:         &testTimestampWaitingRoomEventStart,
+	NextEventPrequeueStartTime: nil,
 }
 
 var waitingRoomEvent = WaitingRoomEvent{
@@ -104,7 +109,7 @@ var waitingRoomEvent = WaitingRoomEvent{
 	Name:                  "production_webinar_event",
 	Description:           "Production event - DO NOT MODIFY",
 	Suspended:             false,
-	PrequeueStartTime:     testTimestampWaitingRoomEventPrequeue,
+	PrequeueStartTime:     &testTimestampWaitingRoomEventPrequeue,
 	EventStartTime:        testTimestampWaitingRoomEventStart,
 	EventEndTime:          testTimestampWaitingRoomEventEnd,
 	ShuffleAtEventStart:   false,

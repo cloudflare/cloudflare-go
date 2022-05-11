@@ -12,21 +12,23 @@ import (
 
 // WaitingRoom describes a WaitingRoom object.
 type WaitingRoom struct {
-	CreatedOn             time.Time `json:"created_on,omitempty"`
-	ModifiedOn            time.Time `json:"modified_on,omitempty"`
-	Path                  string    `json:"path"`
-	Name                  string    `json:"name"`
-	Description           string    `json:"description,omitempty"`
-	CustomPageHTML        string    `json:"custom_page_html,omitempty"`
-	Host                  string    `json:"host"`
-	ID                    string    `json:"id,omitempty"`
-	NewUsersPerMinute     int       `json:"new_users_per_minute"`
-	TotalActiveUsers      int       `json:"total_active_users"`
-	SessionDuration       int       `json:"session_duration"`
-	QueueAll              bool      `json:"queue_all"`
-	DisableSessionRenewal bool      `json:"disable_session_renewal"`
-	Suspended             bool      `json:"suspended"`
-	JsonResponseEnabled   bool      `json:"json_response_enabled"`
+	CreatedOn                  time.Time  `json:"created_on,omitempty"`
+	ModifiedOn                 time.Time  `json:"modified_on,omitempty"`
+	Path                       string     `json:"path"`
+	Name                       string     `json:"name"`
+	Description                string     `json:"description,omitempty"`
+	CustomPageHTML             string     `json:"custom_page_html,omitempty"`
+	Host                       string     `json:"host"`
+	ID                         string     `json:"id,omitempty"`
+	NewUsersPerMinute          int        `json:"new_users_per_minute"`
+	TotalActiveUsers           int        `json:"total_active_users"`
+	SessionDuration            int        `json:"session_duration"`
+	QueueAll                   bool       `json:"queue_all"`
+	DisableSessionRenewal      bool       `json:"disable_session_renewal"`
+	Suspended                  bool       `json:"suspended"`
+	JsonResponseEnabled        bool       `json:"json_response_enabled"`
+	NextEventPrequeueStartTime *time.Time `json:"next_event_prequeue_start_time,omitempty"`
+	NextEventStartTime         *time.Time `json:"next_event_start_time,omitempty"`
 }
 
 // WaitingRoomStatus describes the status of a waiting room.
@@ -40,22 +42,22 @@ type WaitingRoomStatus struct {
 
 // WaitingRoomEvent describes a WaitingRoomEvent object.
 type WaitingRoomEvent struct {
-	EventEndTime          time.Time `json:"event_end_time"`
-	CreatedOn             time.Time `json:"created_on,omitempty"`
-	ModifiedOn            time.Time `json:"modified_on,omitempty"`
-	PrequeueStartTime     time.Time `json:"prequeue_start_time,omitempty"`
-	EventStartTime        time.Time `json:"event_start_time"`
-	Name                  string    `json:"name"`
-	Description           string    `json:"description,omitempty"`
-	QueueingMethod        string    `json:"queueing_method,omitempty"`
-	ID                    string    `json:"id,omitempty"`
-	CustomPageHTML        string    `json:"custom_page_html,omitempty"`
-	NewUsersPerMinute     int       `json:"new_users_per_minute,omitempty"`
-	TotalActiveUsers      int       `json:"total_active_users,omitempty"`
-	SessionDuration       int       `json:"session_duration,omitempty"`
-	DisableSessionRenewal *bool     `json:"disable_session_renewal,omitempty"`
-	Suspended             bool      `json:"suspended"`
-	ShuffleAtEventStart   bool      `json:"shuffle_at_event_start"`
+	EventEndTime          time.Time  `json:"event_end_time"`
+	CreatedOn             time.Time  `json:"created_on,omitempty"`
+	ModifiedOn            time.Time  `json:"modified_on,omitempty"`
+	PrequeueStartTime     *time.Time `json:"prequeue_start_time,omitempty"`
+	EventStartTime        time.Time  `json:"event_start_time"`
+	Name                  string     `json:"name"`
+	Description           string     `json:"description,omitempty"`
+	QueueingMethod        string     `json:"queueing_method,omitempty"`
+	ID                    string     `json:"id,omitempty"`
+	CustomPageHTML        string     `json:"custom_page_html,omitempty"`
+	NewUsersPerMinute     int        `json:"new_users_per_minute,omitempty"`
+	TotalActiveUsers      int        `json:"total_active_users,omitempty"`
+	SessionDuration       int        `json:"session_duration,omitempty"`
+	DisableSessionRenewal *bool      `json:"disable_session_renewal,omitempty"`
+	Suspended             bool       `json:"suspended"`
+	ShuffleAtEventStart   bool       `json:"shuffle_at_event_start"`
 }
 
 // WaitingRoomPagePreviewURL describes a WaitingRoomPagePreviewURL object.
