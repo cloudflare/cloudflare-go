@@ -57,7 +57,6 @@ func TestAccessApplications(t *testing.T) {
 	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 
-	httpOnlyVal := true
 	want := []AccessApplication{{
 		ID:                      "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
 		CreatedAt:               &createdAt,
@@ -75,7 +74,7 @@ func TestAccessApplications(t *testing.T) {
 		CustomDenyMessage:       "denied!",
 		CustomDenyURL:           "https://www.example.com",
 		SameSiteCookieAttribute: "strict",
-		HttpOnlyCookieAttribute: &httpOnlyVal,
+		HttpOnlyCookieAttribute: BoolPtr(true),
 		LogoURL:                 "https://www.example.com/example.png",
 		SkipInterstitial:        true,
 	}}
@@ -135,7 +134,6 @@ func TestAccessApplication(t *testing.T) {
 	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 
-	httpOnlyVal := false
 	want := AccessApplication{
 		ID:                      "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
 		CreatedAt:               &createdAt,
@@ -154,7 +152,7 @@ func TestAccessApplication(t *testing.T) {
 		CustomDenyURL:           "https://www.example.com",
 		LogoURL:                 "https://www.example.com/example.png",
 		SkipInterstitial:        true,
-		HttpOnlyCookieAttribute: &httpOnlyVal,
+		HttpOnlyCookieAttribute: BoolPtr(true),
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
