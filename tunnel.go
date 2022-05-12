@@ -48,6 +48,12 @@ type TunnelDetailResponse struct {
 	Response
 }
 
+// TunnelTokenResponse is  the API response for a tunnel token.
+type TunnelTokenResponse struct {
+	Result string `json:"result"`
+	Response
+}
+
 type TunnelParams struct {
 	AccountID string
 	ID        string
@@ -263,27 +269,27 @@ func (api *API) CleanupTunnelConnections(ctx context.Context, params TunnelClean
 // TunnelToken that allows to run a tunnel.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-tunnel-get-cloudflare-tunnel-token
-func (api *API) TunnelToken(ctx context.Context, params TunnelTokenParams) error {
+func (api *API) TunnelToken(ctx context.Context, params TunnelTokenParams) (string, error) {
 	if params.AccountID == "" {
-		return ErrMissingAccountID
+		return "", ErrMissingAccountID
 	}
 
 	if params.ID == "" {
-		return errors.New("missing tunnel ID")
+		return "", errors.New("missing tunnel ID")
 	}
 
-	uri := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/token", params.AccountID, params.ID)
+	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s/token", params.AccountID, params.ID)
 
 	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodGet, uri, nil, nil)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	var argoDetailsResponse TunnelDetailResponse
-	err = json.Unmarshal(res, &argoDetailsResponse)
+	var tunnelTokenResponse TunnelTokenResponse
+	err = json.Unmarshal(res, &tunnelTokenResponse)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return "", errors.Wrap(err, errUnmarshalError)
 	}
 
-	return nil
+	return tunnelTokenResponse.Result, nil
 }

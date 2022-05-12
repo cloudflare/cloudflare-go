@@ -247,3 +247,26 @@ func TestCleanupTunnelConnections(t *testing.T) {
 	err := client.CleanupTunnelConnections(context.Background(), TunnelCleanupParams{AccountID: testAccountID, ID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
 	assert.NoError(t, err)
 }
+
+func TestTunnelToken(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": "ZHNraGdhc2RraGFza2hqZGFza2poZGFza2poYXNrZGpoYWtzamRoa2FzZGpoa2FzamRoa2Rhc2po\na2FzamRoa2FqCg=="
+		  }
+		`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/token", handler)
+
+	token, err := client.TunnelToken(context.Background(), TunnelTokenParams{AccountID: testAccountID, ID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
+	assert.NoError(t, err)
+	assert.Equal(t, "ZHNraGdhc2RraGFza2hqZGFza2poZGFza2poYXNrZGpoYWtzamRoa2FzZGpoa2FzamRoa2Rhc2po\na2FzamRoa2FqCg==", token)
+}
