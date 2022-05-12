@@ -152,7 +152,7 @@ func TestAccessApplication(t *testing.T) {
 		CustomDenyURL:           "https://www.example.com",
 		LogoURL:                 "https://www.example.com/example.png",
 		SkipInterstitial:        true,
-		HttpOnlyCookieAttribute: BoolPtr(true),
+		HttpOnlyCookieAttribute: BoolPtr(false),
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
