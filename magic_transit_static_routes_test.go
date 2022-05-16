@@ -11,7 +11,7 @@ import (
 )
 
 func TestListMagicTransitStaticRoutes(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -79,7 +79,7 @@ func TestListMagicTransitStaticRoutes(t *testing.T) {
 }
 
 func TestGetMagicTransitStaticRoute(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -143,7 +143,7 @@ func TestGetMagicTransitStaticRoute(t *testing.T) {
 }
 
 func TestCreateMagicTransitStaticRoutes(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -211,7 +211,7 @@ func TestCreateMagicTransitStaticRoutes(t *testing.T) {
 }
 
 func TestUpdateMagicTransitStaticRoute(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -276,7 +276,7 @@ func TestUpdateMagicTransitStaticRoute(t *testing.T) {
 }
 
 func TestDeleteMagicTransitStaticRoute(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {

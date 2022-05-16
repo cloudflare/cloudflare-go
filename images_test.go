@@ -39,7 +39,7 @@ var expectedImageStruct = Image{
 }
 
 func TestUploadImage(t *testing.T) {
-	setup(UsingAccount(testAccountID))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -80,7 +80,7 @@ func TestUploadImage(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/images/v1", handler)
 	want := expectedImageStruct
 
-	actual, err := client.UploadImage(context.Background(), client.AccountID, ImageUploadRequest{
+	actual, err := client.UploadImage(context.Background(), testAccountID, ImageUploadRequest{
 		File: fakeFile{
 			Buffer: bytes.NewBufferString("this is definitely an image"),
 		},
@@ -97,7 +97,7 @@ func TestUploadImage(t *testing.T) {
 }
 
 func TestUpdateImage(t *testing.T) {
-	setup(UsingAccount(testAccountID))
+	setup()
 	defer teardown()
 
 	input := ImageUpdateRequest{
@@ -141,7 +141,7 @@ func TestUpdateImage(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/images/v1/ZxR0pLaXRldlBtaFhhO2FiZGVnaA", handler)
 	want := expectedImageStruct
 
-	actual, err := client.UpdateImage(context.Background(), client.AccountID, "ZxR0pLaXRldlBtaFhhO2FiZGVnaA", input)
+	actual, err := client.UpdateImage(context.Background(), testAccountID, "ZxR0pLaXRldlBtaFhhO2FiZGVnaA", input)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -149,7 +149,7 @@ func TestUpdateImage(t *testing.T) {
 }
 
 func TestCreateImageDirectUploadURL(t *testing.T) {
-	setup(UsingAccount(testAccountID))
+	setup()
 	defer teardown()
 
 	input := ImageDirectUploadURLRequest{
@@ -183,7 +183,7 @@ func TestCreateImageDirectUploadURL(t *testing.T) {
 		UploadURL: "https://upload.imagedelivery.net/fgr33htrthytjtyereifjewoi338272s7w1383",
 	}
 
-	actual, err := client.CreateImageDirectUploadURL(context.Background(), client.AccountID, input)
+	actual, err := client.CreateImageDirectUploadURL(context.Background(), testAccountID, input)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -191,7 +191,7 @@ func TestCreateImageDirectUploadURL(t *testing.T) {
 }
 
 func TestListImages(t *testing.T) {
-	setup(UsingAccount(testAccountID))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -226,7 +226,7 @@ func TestListImages(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/images/v1", handler)
 	want := []Image{expectedImageStruct}
 
-	actual, err := client.ListImages(context.Background(), client.AccountID, PaginationOptions{})
+	actual, err := client.ListImages(context.Background(), testAccountID, PaginationOptions{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -234,7 +234,7 @@ func TestListImages(t *testing.T) {
 }
 
 func TestImageDetails(t *testing.T) {
-	setup(UsingAccount(testAccountID))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -265,7 +265,7 @@ func TestImageDetails(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/images/v1/ZxR0pLaXRldlBtaFhhO2FiZGVnaA", handler)
 	want := expectedImageStruct
 
-	actual, err := client.ImageDetails(context.Background(), client.AccountID, "ZxR0pLaXRldlBtaFhhO2FiZGVnaA")
+	actual, err := client.ImageDetails(context.Background(), testAccountID, "ZxR0pLaXRldlBtaFhhO2FiZGVnaA")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -273,7 +273,7 @@ func TestImageDetails(t *testing.T) {
 }
 
 func TestBaseImage(t *testing.T) {
-	setup(UsingAccount(testAccountID))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -285,7 +285,7 @@ func TestBaseImage(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/images/v1/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/blob", handler)
 	want := []byte{}
 
-	actual, err := client.BaseImage(context.Background(), client.AccountID, "ZxR0pLaXRldlBtaFhhO2FiZGVnaA")
+	actual, err := client.BaseImage(context.Background(), testAccountID, "ZxR0pLaXRldlBtaFhhO2FiZGVnaA")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -293,7 +293,7 @@ func TestBaseImage(t *testing.T) {
 }
 
 func TestDeleteImage(t *testing.T) {
-	setup(UsingAccount(testAccountID))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -310,7 +310,7 @@ func TestDeleteImage(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/images/v1/ZxR0pLaXRldlBtaFhhO2FiZGVnaA", handler)
 
-	err := client.DeleteImage(context.Background(), client.AccountID, "ZxR0pLaXRldlBtaFhhO2FiZGVnaA")
+	err := client.DeleteImage(context.Background(), testAccountID, "ZxR0pLaXRldlBtaFhhO2FiZGVnaA")
 	require.NoError(t, err)
 }
 

@@ -30,6 +30,8 @@ func Headers(headers http.Header) Option {
 
 // UsingAccount allows you to apply account-level changes (Load Balancing,
 // Railguns) to an account instead.
+//
+// Deprecated: Resources should define the `AccountID` parameter explicitly.
 func UsingAccount(accountID string) Option {
 	return func(api *API) error {
 		api.AccountID = accountID
