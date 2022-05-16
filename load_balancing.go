@@ -166,15 +166,17 @@ type LoadBalancerRuleOverrides struct {
 // LoadBalancerRuleOverridesSessionAffinityAttrs mimics SessionAffinityAttributes without the
 // DrainDuration field as that field can not be overwritten via rules.
 type LoadBalancerRuleOverridesSessionAffinityAttrs struct {
-	SameSite string `json:"samesite,omitempty"`
-	Secure   string `json:"secure,omitempty"`
+	SameSite             string `json:"samesite,omitempty"`
+	Secure               string `json:"secure,omitempty"`
+	ZeroDowntimeFailover string `json:"zero_downtime_failover,omitempty"`
 }
 
 // SessionAffinityAttributes represents the fields used to set attributes in a load balancer session affinity cookie.
 type SessionAffinityAttributes struct {
-	SameSite      string `json:"samesite,omitempty"`
-	Secure        string `json:"secure,omitempty"`
-	DrainDuration int    `json:"drain_duration,omitempty"`
+	SameSite             string `json:"samesite,omitempty"`
+	Secure               string `json:"secure,omitempty"`
+	DrainDuration        int    `json:"drain_duration,omitempty"`
+	ZeroDowntimeFailover string `json:"zero_downtime_failover,omitempty"`
 }
 
 // LoadBalancerOriginHealth represents the health of the origin.

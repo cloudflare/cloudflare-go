@@ -152,6 +152,7 @@ type DevicePostureRule struct {
 	Schedule    string                   `json:"schedule,omitempty"`
 	Match       []DevicePostureRuleMatch `json:"match,omitempty"`
 	Input       DevicePostureRuleInput   `json:"input,omitempty"`
+	Expiration  string                   `json:"expiration,omitempty"`
 }
 
 // DevicePostureRuleMatch represents the conditions that the client must match to run the rule.

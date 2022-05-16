@@ -40,7 +40,7 @@ func TestArgoTunnels(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/tunnels", handler)
+	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/cfd_tunnel", handler)
 
 	createdAt, _ := time.Parse(time.RFC3339, "2009-11-10T23:00:00Z")
 	deletedAt, _ := time.Parse(time.RFC3339, "2009-11-10T23:00:00Z")
@@ -91,7 +91,7 @@ func TestArgoTunnel(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/tunnels/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
+	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
 	createdAt, _ := time.Parse(time.RFC3339, "2009-11-10T23:00:00Z")
 	deletedAt, _ := time.Parse(time.RFC3339, "2009-11-10T23:00:00Z")
@@ -142,7 +142,7 @@ func TestCreateArgoTunnel(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/tunnels", handler)
+	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/cfd_tunnel", handler)
 
 	createdAt, _ := time.Parse(time.RFC3339, "2009-11-10T23:00:00Z")
 	deletedAt, _ := time.Parse(time.RFC3339, "2009-11-10T23:00:00Z")
@@ -193,7 +193,7 @@ func TestDeleteArgoTunnel(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/tunnels/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
+	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
 	err := client.DeleteArgoTunnel(context.Background(), "01a7362d577a6c3019a474fd6f485823", "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 	assert.NoError(t, err)
@@ -214,7 +214,7 @@ func TestCleanupArgoTunnelConnections(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/tunnels/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/connections", handler)
+	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/connections", handler)
 
 	err := client.CleanupArgoTunnelConnections(context.Background(), "01a7362d577a6c3019a474fd6f485823", "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 	assert.NoError(t, err)

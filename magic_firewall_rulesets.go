@@ -99,6 +99,8 @@ type UpdateMagicFirewallRulesetResponse struct {
 // ListMagicFirewallRulesets lists all Rulesets for a given account
 //
 // API reference: https://api.cloudflare.com/#rulesets-list-rulesets
+//
+// Deprecated: Use `ListZoneRuleset` or `ListAccountRuleset` instead.
 func (api *API) ListMagicFirewallRulesets(ctx context.Context, accountID string) ([]MagicFirewallRuleset, error) {
 	uri := fmt.Sprintf("/accounts/%s/rulesets", accountID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
@@ -117,6 +119,8 @@ func (api *API) ListMagicFirewallRulesets(ctx context.Context, accountID string)
 // GetMagicFirewallRuleset returns a specific Magic Firewall Ruleset
 //
 // API reference: https://api.cloudflare.com/#rulesets-get-a-ruleset
+//
+// Deprecated: Use `GetZoneRuleset` or `GetAccountRuleset` instead.
 func (api *API) GetMagicFirewallRuleset(ctx context.Context, accountID, ID string) (MagicFirewallRuleset, error) {
 	uri := fmt.Sprintf("/accounts/%s/rulesets/%s", accountID, ID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
@@ -135,6 +139,8 @@ func (api *API) GetMagicFirewallRuleset(ctx context.Context, accountID, ID strin
 // CreateMagicFirewallRuleset creates a Magic Firewall ruleset
 //
 // API reference: https://api.cloudflare.com/#rulesets-list-rulesets
+//
+// Deprecated: Use `CreateZoneRuleset` or `CreateAccountRuleset` instead.
 func (api *API) CreateMagicFirewallRuleset(ctx context.Context, accountID, name, description string, rules []MagicFirewallRulesetRule) (MagicFirewallRuleset, error) {
 	uri := fmt.Sprintf("/accounts/%s/rulesets", accountID)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri,
@@ -159,6 +165,8 @@ func (api *API) CreateMagicFirewallRuleset(ctx context.Context, accountID, name,
 // DeleteMagicFirewallRuleset deletes a Magic Firewall ruleset
 //
 // API reference: https://api.cloudflare.com/#rulesets-delete-ruleset
+//
+// Deprecated: Use `DeleteZoneRuleset` or `DeleteAccountRuleset` instead.
 func (api *API) DeleteMagicFirewallRuleset(ctx context.Context, accountID, ID string) error {
 	uri := fmt.Sprintf("/accounts/%s/rulesets/%s", accountID, ID)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
@@ -179,6 +187,8 @@ func (api *API) DeleteMagicFirewallRuleset(ctx context.Context, accountID, ID st
 // UpdateMagicFirewallRuleset updates a Magic Firewall ruleset
 //
 // API reference: https://api.cloudflare.com/#rulesets-update-ruleset
+//
+// Deprecated: Use `UpdateZoneRuleset` or `UpdateAccountRuleset` instead.
 func (api *API) UpdateMagicFirewallRuleset(ctx context.Context, accountID, ID string, description string, rules []MagicFirewallRulesetRule) (MagicFirewallRuleset, error) {
 	uri := fmt.Sprintf("/accounts/%s/rulesets/%s", accountID, ID)
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri,

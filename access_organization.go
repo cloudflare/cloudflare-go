@@ -22,8 +22,10 @@ type AccessOrganization struct {
 // AccessOrganizationLoginDesign represents the login design options.
 type AccessOrganizationLoginDesign struct {
 	BackgroundColor string `json:"background_color"`
-	TextColor       string `json:"text_color"`
 	LogoPath        string `json:"logo_path"`
+	TextColor       string `json:"text_color"`
+	HeaderText      string `json:"header_text"`
+	FooterText      string `json:"footer_text"`
 }
 
 // AccessOrganizationListResponse represents the response from the list

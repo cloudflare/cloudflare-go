@@ -22,6 +22,7 @@ type LogpushJob struct {
 	LastComplete       *time.Time `json:"last_complete,omitempty"`
 	LastError          *time.Time `json:"last_error,omitempty"`
 	ErrorMessage       string     `json:"error_message,omitempty"`
+	Frequency          string     `json:"frequency,omitempty"`
 }
 
 // LogpushJobsResponse is the API response, containing an array of Logpush Jobs.
