@@ -16,6 +16,8 @@ type DevicePostureIntegrationConfig struct {
 	ClientSecret string `json:"client_secret,omitempty"`
 	AuthUrl      string `json:"auth_url,omitempty"`
 	ApiUrl       string `json:"api_url,omitempty"`
+	ClientKey    string `json:"client_key,omitempty"`
+	CustomerID   string `json:"customer_id,omitempty"`
 }
 
 // DevicePostureIntegration represents a device posture integration.

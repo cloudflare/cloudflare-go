@@ -30,7 +30,9 @@ func TestDevicePostureIntegrations(t *testing.T) {
 						"auth_url":      "https://auth_url.example.com",
 						"api_url":       "https://api_url.example.com",
 						"client_id":     "test_client_id",
-						"client_secret": "test_client_secret"
+						"client_secret": "test_client_secret",
+						"customer_id":   "test_customer_id",
+						"client_key": 	 "test_client_key"
 					}
 				}
 			],
@@ -53,6 +55,8 @@ func TestDevicePostureIntegrations(t *testing.T) {
 			ApiUrl:       "https://api_url.example.com",
 			ClientID:     "test_client_id",
 			ClientSecret: "test_client_secret",
+			CustomerID:   "test_customer_id",
+			ClientKey:    "test_client_key",
 		},
 	}}
 
@@ -86,7 +90,9 @@ func TestDevicePostureIntegration(t *testing.T) {
 					"auth_url":      "https://auth_url.example.com",
 					"api_url":       "https://api_url.example.com",
 					"client_id":     "test_client_id",
-					"client_secret": "test_client_secret"
+					"client_secret": "test_client_secret",
+					"customer_id":   "test_customer_id",
+					"client_key": 	 "test_client_key"
 				}
 			}
 		}`, id)
@@ -102,6 +108,8 @@ func TestDevicePostureIntegration(t *testing.T) {
 			ApiUrl:       "https://api_url.example.com",
 			ClientID:     "test_client_id",
 			ClientSecret: "test_client_secret",
+			CustomerID:   "test_customer_id",
+			ClientKey:    "test_client_key",
 		},
 	}
 
@@ -135,7 +143,9 @@ func TestDevicePostureIntegrationUpdate(t *testing.T) {
 					"auth_url":      "https://auth_url.example.com",
 					"api_url":       "https://api_url.example.com",
 					"client_id":     "test_client_id",
-					"client_secret": "test_client_secret"
+					"client_secret": "test_client_secret",
+					"customer_id":   "test_customer_id",
+					"client_key": 	 "test_client_key"
 				}
 			}
 		}`, id)
@@ -151,6 +161,8 @@ func TestDevicePostureIntegrationUpdate(t *testing.T) {
 			ApiUrl:       "https://api_url.example.com",
 			ClientID:     "test_client_id",
 			ClientSecret: "test_client_secret",
+			CustomerID:   "test_customer_id",
+			ClientKey:    "test_client_key",
 		},
 	}
 
@@ -184,7 +196,9 @@ func TestDevicePostureIntegrationCreate(t *testing.T) {
 					"auth_url":      "https://auth_url.example.com",
 					"api_url":       "https://api_url.example.com",
 					"client_id":     "test_client_id",
-					"client_secret": "test_client_secret"
+					"client_secret": "test_client_secret",
+					"customer_id":   "test_customer_id",
+					"client_key": 	 "test_client_key"
 				}
 			}
 		}`, id)
@@ -200,6 +214,8 @@ func TestDevicePostureIntegrationCreate(t *testing.T) {
 			ApiUrl:       "https://api_url.example.com",
 			ClientID:     "test_client_id",
 			ClientSecret: "test_client_secret",
+			CustomerID:   "test_customer_id",
+			ClientKey:    "test_client_key",
 		},
 	}
 
