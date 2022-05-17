@@ -106,6 +106,14 @@ type AccessGroupCertificateCommonName struct {
 	} `json:"common_name"`
 }
 
+// AccessGroupExternalEvaluation is used for passing user identity to an external url.
+type AccessGroupExternalEvaluation struct {
+	ExternalEvaluation struct {
+		EvaluateURL string `json:"evaluate_url"`
+		KeysURL     string `json:"keys_url"`
+	} `json:"external_evaluation"`
+}
+
 // AccessGroupGSuite is used to configure access based on GSuite group.
 type AccessGroupGSuite struct {
 	Gsuite struct {
