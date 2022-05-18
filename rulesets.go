@@ -170,24 +170,33 @@ type Ruleset struct {
 	ShareableEntitlementName string        `json:"shareable_entitlement_name,omitempty"`
 }
 
+// RulesetActionParametersLogCustomField wraps an object that is part of
+// request_fields, response_fields or cookie_fields.
+type RulesetActionParametersLogCustomField struct {
+	Name string `json:"name,omitempty"`
+}
+
 // RulesetRuleActionParameters specifies the action parameters for a Ruleset
 // rule.
 type RulesetRuleActionParameters struct {
-	ID          string                                           `json:"id,omitempty"`
-	Ruleset     string                                           `json:"ruleset,omitempty"`
-	Rulesets    []string                                         `json:"rulesets,omitempty"`
-	Rules       map[string][]string                              `json:"rules,omitempty"`
-	Increment   int                                              `json:"increment,omitempty"`
-	URI         *RulesetRuleActionParametersURI                  `json:"uri,omitempty"`
-	Headers     map[string]RulesetRuleActionParametersHTTPHeader `json:"headers,omitempty"`
-	Products    []string                                         `json:"products,omitempty"`
-	Phases      []string                                         `json:"phases,omitempty"`
-	Overrides   *RulesetRuleActionParametersOverrides            `json:"overrides,omitempty"`
-	MatchedData *RulesetRuleActionParametersMatchedData          `json:"matched_data,omitempty"`
-	Version     string                                           `json:"version,omitempty"`
-	Response    *RulesetRuleActionParametersBlockResponse        `json:"response,omitempty"`
-	HostHeader  string                                           `json:"host_header,omitempty"`
-	Origin      *RulesetRuleActionParametersOrigin               `json:"origin,omitempty"`
+	ID             string                                           `json:"id,omitempty"`
+	Ruleset        string                                           `json:"ruleset,omitempty"`
+	Rulesets       []string                                         `json:"rulesets,omitempty"`
+	Rules          map[string][]string                              `json:"rules,omitempty"`
+	Increment      int                                              `json:"increment,omitempty"`
+	URI            *RulesetRuleActionParametersURI                  `json:"uri,omitempty"`
+	Headers        map[string]RulesetRuleActionParametersHTTPHeader `json:"headers,omitempty"`
+	Products       []string                                         `json:"products,omitempty"`
+	Phases         []string                                         `json:"phases,omitempty"`
+	Overrides      *RulesetRuleActionParametersOverrides            `json:"overrides,omitempty"`
+	MatchedData    *RulesetRuleActionParametersMatchedData          `json:"matched_data,omitempty"`
+	Version        string                                           `json:"version,omitempty"`
+	Response       *RulesetRuleActionParametersBlockResponse        `json:"response,omitempty"`
+	HostHeader     string                                           `json:"host_header,omitempty"`
+	Origin         *RulesetRuleActionParametersOrigin               `json:"origin,omitempty"`
+	RequestFields  []RulesetActionParametersLogCustomField          `json:"request_fields,omitempty"`
+	ResponseFields []RulesetActionParametersLogCustomField          `json:"response_fields,omitempty"`
+	CookieFields   []RulesetActionParametersLogCustomField          `json:"cookie_fields,omitempty"`
 }
 
 // RulesetRuleActionParametersBlockResponse holds the BlockResponse struct
