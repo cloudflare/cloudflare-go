@@ -21,7 +21,7 @@ import (
 )
 
 var (
-	Version string = "dev"
+	Version string = "v4"
 
 	// Deprecated: Use `client.New` configuration instead.
 	apiURL = fmt.Sprintf("%s://%s%s", defaultScheme, defaultHostname, defaultBasePath)
@@ -61,6 +61,7 @@ func newClient(opts ...Option) (*API, error) {
 
 	api := &API{
 		BaseURL:     fmt.Sprintf("%s://%s%s", defaultScheme, defaultHostname, defaultBasePath),
+		UserAgent:   userAgent + "/" + Version,
 		headers:     make(http.Header),
 		rateLimiter: rate.NewLimiter(rate.Limit(4), 1), // 4rps equates to default api limit (1200 req/5 min)
 		retryPolicy: RetryPolicy{
