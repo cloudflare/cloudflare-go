@@ -8,10 +8,9 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
-	"net/url"
-	"strconv"
 	"time"
 
+	"github.com/google/go-querystring/query"
 	"github.com/pkg/errors"
 )
 
@@ -205,20 +204,15 @@ func (api *API) CreateImageDirectUploadURL(ctx context.Context, accountID string
 //
 // API Reference: https://api.cloudflare.com/#cloudflare-images-list-images
 func (api *API) ListImages(ctx context.Context, accountID string, pageOpts PaginationOptions) ([]Image, error) {
-	v := url.Values{}
-	if pageOpts.PerPage > 0 {
-		v.Set("per_page", strconv.Itoa(pageOpts.PerPage))
-	}
-	if pageOpts.Page > 0 {
-		v.Set("page", strconv.Itoa(pageOpts.Page))
-	}
-
 	uri := fmt.Sprintf("/accounts/%s/images/v1", accountID)
-	if len(v) > 0 {
-		uri = fmt.Sprintf("%s?%s", uri, v.Encode())
+
+	v, _ := query.Values(pageOpts)
+	queryParams := v.Encode()
+	if queryParams != "" {
+		queryParams = "?" + queryParams
 	}
 
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri+queryParams, nil)
 	if err != nil {
 		return []Image{}, err
 	}
