@@ -11,7 +11,7 @@ import (
 )
 
 func TestListMagicFirewallRulesets(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -58,7 +58,7 @@ func TestListMagicFirewallRulesets(t *testing.T) {
 }
 
 func TestGetMagicFirewallRuleset(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -130,7 +130,7 @@ func TestGetMagicFirewallRuleset(t *testing.T) {
 }
 
 func TestCreateMagicFirewallRuleset(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -202,7 +202,7 @@ func TestCreateMagicFirewallRuleset(t *testing.T) {
 }
 
 func TestUpdateMagicFirewallRuleset(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -302,7 +302,7 @@ func TestUpdateMagicFirewallRuleset(t *testing.T) {
 // of a success. So we are checking for the response body size here
 // TODO, This is going to be changed by MFW-63.
 func TestDeleteMagicFirewallRuleset(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {

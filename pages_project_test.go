@@ -331,7 +331,7 @@ var (
 )
 
 func TestListPagesProjects(t *testing.T) {
-	setup(UsingAccount(testAccountID))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -373,7 +373,7 @@ func TestListPagesProjects(t *testing.T) {
 }
 
 func TestPagesProject(t *testing.T) {
-	setup(UsingAccount(testAccountID))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -397,7 +397,7 @@ func TestPagesProject(t *testing.T) {
 }
 
 func TestCreatePagesProject(t *testing.T) {
-	setup(UsingAccount(testAccountID))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -421,7 +421,7 @@ func TestCreatePagesProject(t *testing.T) {
 }
 
 func TestUpdatePagesProject(t *testing.T) {
-	setup(UsingAccount(testAccountID))
+	setup()
 	defer teardown()
 
 	updateAttributes := &PagesProject{
@@ -450,7 +450,7 @@ func TestUpdatePagesProject(t *testing.T) {
 }
 
 func TestDeletePagesProject(t *testing.T) {
-	setup(UsingAccount(testAccountID))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
