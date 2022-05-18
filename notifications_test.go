@@ -536,7 +536,7 @@ func TestListNotificationHistory(t *testing.T) {
 		Before: time.Now().Format(time.RFC3339),
 	}
 
-	historyFilters := AlertHistoryFilter{TimeRange: timeRange, Pagination: pageOptions}
+	historyFilters := AlertHistoryFilter{TimeRange: timeRange, PaginationOptions: pageOptions}
 
 	alertHistory, err := json.Marshal(expected)
 	require.NoError(t, err)

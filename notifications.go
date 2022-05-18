@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"net/url"
-	"strconv"
 	"time"
+
+	"github.com/google/go-querystring/query"
 )
 
 // NotificationMechanismData holds a single public facing mechanism data
@@ -407,14 +407,14 @@ func (api *API) GetAvailableNotificationTypes(ctx context.Context, accountID str
 
 // TimeRange is an object for filtering the alert history based on timestamp.
 type TimeRange struct {
-	Since  string `json:"since,omitempty"`
-	Before string `json:"before,omitempty"`
+	Since  string `json:"since,omitempty" url:"since,omitempty"`
+	Before string `json:"before,omitempty" url:"before,omitempty"`
 }
 
 // AlertHistoryFilter is an object for filtering the alert history response from the api.
 type AlertHistoryFilter struct {
-	TimeRange  TimeRange
-	Pagination PaginationOptions
+	TimeRange
+	PaginationOptions
 }
 
 // ListNotificationHistory will return the history of alerts sent for
@@ -424,26 +424,15 @@ type AlertHistoryFilter struct {
 //
 // API Reference: https://api.cloudflare.com/#notification-history-list-history
 func (api *API) ListNotificationHistory(ctx context.Context, accountID string, alertHistoryFilter AlertHistoryFilter) ([]NotificationHistory, ResultInfo, error) {
-	v := url.Values{}
-	if alertHistoryFilter.Pagination.PerPage > 0 {
-		v.Set("per_page", strconv.Itoa(alertHistoryFilter.Pagination.PerPage))
-	}
-	if alertHistoryFilter.Pagination.Page > 0 {
-		v.Set("page", strconv.Itoa(alertHistoryFilter.Pagination.Page))
-	}
-	if alertHistoryFilter.TimeRange.Since != "" {
-		v.Set("since", alertHistoryFilter.TimeRange.Since)
-	}
-	if alertHistoryFilter.TimeRange.Before != "" {
-		v.Set("before", alertHistoryFilter.TimeRange.Before)
+	v, _ := query.Values(alertHistoryFilter)
+
+	queryParams := v.Encode()
+	if queryParams != "" {
+		queryParams = "?" + queryParams
 	}
 
 	baseURL := fmt.Sprintf("/accounts/%s/alerting/v3/history", accountID)
-	if len(v) > 0 {
-		baseURL = fmt.Sprintf("%s?%s", baseURL, v.Encode())
-	}
-
-	res, err := api.makeRequestContext(ctx, http.MethodGet, baseURL, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, baseURL+queryParams, nil)
 	if err != nil {
 		return []NotificationHistory{}, ResultInfo{}, err
 	}
