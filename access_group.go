@@ -5,10 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"net/url"
-	"strconv"
 	"time"
 
+	"github.com/google/go-querystring/query"
 	"github.com/pkg/errors"
 )
 
@@ -215,25 +214,19 @@ func (api *API) ZoneLevelAccessGroups(ctx context.Context, zoneID string, pageOp
 }
 
 func (api *API) accessGroups(ctx context.Context, id string, pageOpts PaginationOptions, routeRoot RouteRoot) ([]AccessGroup, ResultInfo, error) {
-	v := url.Values{}
-	if pageOpts.PerPage > 0 {
-		v.Set("per_page", strconv.Itoa(pageOpts.PerPage))
-	}
-	if pageOpts.Page > 0 {
-		v.Set("page", strconv.Itoa(pageOpts.Page))
-	}
-
 	uri := fmt.Sprintf(
 		"/%s/%s/access/groups",
 		routeRoot,
 		id,
 	)
 
-	if len(v) > 0 {
-		uri = fmt.Sprintf("%s?%s", uri, v.Encode())
+	v, _ := query.Values(pageOpts)
+	queryParams := v.Encode()
+	if queryParams != "" {
+		queryParams = "?" + queryParams
 	}
 
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri+queryParams, nil)
 	if err != nil {
 		return []AccessGroup{}, ResultInfo{}, err
 	}
@@ -336,6 +329,7 @@ func (api *API) updateAccessGroup(ctx context.Context, id string, accessGroup Ac
 	if accessGroup.ID == "" {
 		return AccessGroup{}, errors.Errorf("access group ID cannot be empty")
 	}
+
 	uri := fmt.Sprintf(
 		"/%s/%s/access/groups/%s",
 		routeRoot,

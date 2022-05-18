@@ -5,10 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"net/url"
-	"strconv"
 	"time"
 
+	"github.com/google/go-querystring/query"
 	"github.com/pkg/errors"
 )
 
@@ -121,20 +120,15 @@ type pagesProjectListResponse struct {
 //
 // API reference: https://api.cloudflare.com/#pages-project-get-projects
 func (api *API) ListPagesProjects(ctx context.Context, accountID string, pageOpts PaginationOptions) ([]PagesProject, ResultInfo, error) {
-	v := url.Values{}
-	if pageOpts.PerPage > 0 {
-		v.Set("per_page", strconv.Itoa(pageOpts.PerPage))
-	}
-	if pageOpts.Page > 0 {
-		v.Set("page", strconv.Itoa(pageOpts.Page))
-	}
-
 	uri := fmt.Sprintf("/accounts/%s/pages/projects", accountID)
-	if len(v) > 0 {
-		uri = fmt.Sprintf("%s?%s", uri, v.Encode())
+
+	v, _ := query.Values(pageOpts)
+	queryParams := v.Encode()
+	if queryParams != "" {
+		queryParams = "?" + queryParams
 	}
 
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri+queryParams, nil)
 	if err != nil {
 		return []PagesProject{}, ResultInfo{}, err
 	}
