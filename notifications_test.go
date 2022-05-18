@@ -531,6 +531,13 @@ func TestListNotificationHistory(t *testing.T) {
 		Page:    1,
 	}
 
+	timeRange := TimeRange{
+		Since:  time.Now().Add(-15 * time.Minute).Format(time.RFC3339),
+		Before: time.Now().Format(time.RFC3339),
+	}
+
+	historyFilters := AlertHistoryFilter{TimeRange: timeRange, PaginationOptions: pageOptions}
+
 	alertHistory, err := json.Marshal(expected)
 	require.NoError(t, err)
 	require.NotNil(t, alertHistory)
@@ -558,7 +565,7 @@ func TestListNotificationHistory(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/alerting/v3/history", handler)
 
-	actualResult, actualResultInfo, err := client.ListNotificationHistory(context.Background(), testAccountID, pageOptions)
+	actualResult, actualResultInfo, err := client.ListNotificationHistory(context.Background(), testAccountID, historyFilters)
 	require.Nil(t, err)
 	require.NotNil(t, actualResult)
 	require.Equal(t, expected, actualResult)

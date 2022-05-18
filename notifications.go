@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"net/url"
-	"strconv"
 	"time"
+
+	"github.com/google/go-querystring/query"
 )
 
 // NotificationMechanismData holds a single public facing mechanism data
@@ -405,27 +405,34 @@ func (api *API) GetAvailableNotificationTypes(ctx context.Context, accountID str
 	return r, nil
 }
 
+// TimeRange is an object for filtering the alert history based on timestamp.
+type TimeRange struct {
+	Since  string `json:"since,omitempty" url:"since,omitempty"`
+	Before string `json:"before,omitempty" url:"before,omitempty"`
+}
+
+// AlertHistoryFilter is an object for filtering the alert history response from the api.
+type AlertHistoryFilter struct {
+	TimeRange
+	PaginationOptions
+}
+
 // ListNotificationHistory will return the history of alerts sent for
 // a given account. The time period varies based on zone plan.
 // Free, Biz, Pro = 30 days
 // Ent = 90 days
 //
 // API Reference: https://api.cloudflare.com/#notification-history-list-history
-func (api *API) ListNotificationHistory(ctx context.Context, accountID string, pageOpts PaginationOptions) ([]NotificationHistory, ResultInfo, error) {
-	v := url.Values{}
-	if pageOpts.PerPage > 0 {
-		v.Set("per_page", strconv.Itoa(pageOpts.PerPage))
-	}
-	if pageOpts.Page > 0 {
-		v.Set("page", strconv.Itoa(pageOpts.Page))
+func (api *API) ListNotificationHistory(ctx context.Context, accountID string, alertHistoryFilter AlertHistoryFilter) ([]NotificationHistory, ResultInfo, error) {
+	v, _ := query.Values(alertHistoryFilter)
+
+	queryParams := v.Encode()
+	if queryParams != "" {
+		queryParams = "?" + queryParams
 	}
 
 	baseURL := fmt.Sprintf("/accounts/%s/alerting/v3/history", accountID)
-	if len(v) > 0 {
-		baseURL = fmt.Sprintf("%s?%s", baseURL, v.Encode())
-	}
-
-	res, err := api.makeRequestContext(ctx, http.MethodGet, baseURL, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, baseURL+queryParams, nil)
 	if err != nil {
 		return []NotificationHistory{}, ResultInfo{}, err
 	}
