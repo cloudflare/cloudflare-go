@@ -405,19 +405,37 @@ func (api *API) GetAvailableNotificationTypes(ctx context.Context, accountID str
 	return r, nil
 }
 
+// TimeRange is an object for filtering the alert history based on timestamp.
+type TimeRange struct {
+	Since  string `json:"since,omitempty"`
+	Before string `json:"before,omitempty"`
+}
+
+// AlertHistoryFilter is an object for filtering the alert history response from the api.
+type AlertHistoryFilter struct {
+	TimeRange  TimeRange
+	Pagination PaginationOptions
+}
+
 // ListNotificationHistory will return the history of alerts sent for
 // a given account. The time period varies based on zone plan.
 // Free, Biz, Pro = 30 days
 // Ent = 90 days
 //
 // API Reference: https://api.cloudflare.com/#notification-history-list-history
-func (api *API) ListNotificationHistory(ctx context.Context, accountID string, pageOpts PaginationOptions) ([]NotificationHistory, ResultInfo, error) {
+func (api *API) ListNotificationHistory(ctx context.Context, accountID string, alertHistoryFilter AlertHistoryFilter) ([]NotificationHistory, ResultInfo, error) {
 	v := url.Values{}
-	if pageOpts.PerPage > 0 {
-		v.Set("per_page", strconv.Itoa(pageOpts.PerPage))
+	if alertHistoryFilter.Pagination.PerPage > 0 {
+		v.Set("per_page", strconv.Itoa(alertHistoryFilter.Pagination.PerPage))
 	}
-	if pageOpts.Page > 0 {
-		v.Set("page", strconv.Itoa(pageOpts.Page))
+	if alertHistoryFilter.Pagination.Page > 0 {
+		v.Set("page", strconv.Itoa(alertHistoryFilter.Pagination.Page))
+	}
+	if alertHistoryFilter.TimeRange.Since != "" {
+		v.Set("since", alertHistoryFilter.TimeRange.Since)
+	}
+	if alertHistoryFilter.TimeRange.Before != "" {
+		v.Set("before", alertHistoryFilter.TimeRange.Before)
 	}
 
 	baseURL := fmt.Sprintf("/accounts/%s/alerting/v3/history", accountID)
