@@ -92,7 +92,7 @@ type CustomHostname struct {
 	CustomOriginServer        string                                  `json:"custom_origin_server,omitempty"`
 	CustomOriginSNI           string                                  `json:"custom_origin_sni,omitempty"`
 	SSL                       *CustomHostnameSSL                      `json:"ssl,omitempty"`
-	CustomMetadata            CustomMetadata                          `json:"custom_metadata,omitempty"`
+	CustomMetadata            *CustomMetadata                         `json:"custom_metadata,omitempty"`
 	Status                    CustomHostnameStatus                    `json:"status,omitempty"`
 	VerificationErrors        []string                                `json:"verification_errors,omitempty"`
 	OwnershipVerification     CustomHostnameOwnershipVerification     `json:"ownership_verification,omitempty"`
