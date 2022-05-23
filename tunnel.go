@@ -87,10 +87,10 @@ type TunnelTokenParams struct {
 }
 
 type TunnelListParams struct {
-	AccountID string
+	AccountID string     `url:"-"`
 	Name      string     `url:"name,omitempty"`
 	UUID      string     `url:"uuid,omitempty"` // the tunnel ID
-	IsDeleted bool       `url:"is_deleted,omitempty"`
+	IsDeleted *bool      `url:"is_deleted,omitempty"`
 	ExistedAt *time.Time `url:"existed_at,omitempty"`
 }
 
