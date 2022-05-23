@@ -16,9 +16,14 @@ type AccessApplicationType string
 
 // These constants represent all valid application types.
 const (
-	SelfHosted AccessApplicationType = "self_hosted"
-	SSH        AccessApplicationType = "ssh"
-	VNC        AccessApplicationType = "vnc"
+	SelfHosted  AccessApplicationType = "self_hosted"
+	SSH         AccessApplicationType = "ssh"
+	VNC         AccessApplicationType = "vnc"
+	Biso        AccessApplicationType = "biso"
+	AppLauncher AccessApplicationType = "app_launcher"
+	Warp        AccessApplicationType = "warp"
+	Bookmark    AccessApplicationType = "bookmark"
+	Saas        AccessApplicationType = "saas"
 )
 
 // AccessApplication represents an Access application.
@@ -39,6 +44,7 @@ type AccessApplication struct {
 	CorsHeaders             *AccessApplicationCorsHeaders  `json:"cors_headers,omitempty"`
 	CreatedAt               *time.Time                     `json:"created_at,omitempty"`
 	UpdatedAt               *time.Time                     `json:"updated_at,omitempty"`
+	SaasApplication         *SaasApplication               `json:"saas_app,omitempty"`
 	AutoRedirectToIdentity  bool                           `json:"auto_redirect_to_identity,omitempty"`
 	SkipInterstitial        bool                           `json:"skip_interstitial,omitempty"`
 	AppLauncherVisible      bool                           `json:"app_launcher_visible,omitempty"`
@@ -79,6 +85,32 @@ type AccessApplicationDetailResponse struct {
 	Errors   []string          `json:"errors"`
 	Messages []string          `json:"messages"`
 	Result   AccessApplication `json:"result"`
+}
+
+type SourceConfig struct {
+	Name      string            `json:"name,omitempty"`
+	NameByIDP map[string]string `json:"name_by_idp,omitempty"`
+}
+
+type SAMLAttributeConfig struct {
+	Name         string       `json:"name,omitempty"`
+	NameFormat   string       `json:"name_format,omitempty"`
+	FriendlyName string       `json:"friendly_name,omitempty"`
+	Required     bool         `json:"required,omitempty"`
+	Source       SourceConfig `json:"source"`
+}
+
+type SaasApplication struct {
+	AppID              string                `json:"app_id,omitempty"`
+	ConsumerServiceUrl string                `json:"consumer_service_url,omitempty"`
+	SPEntityID         string                `json:"sp_entity_id,omitempty"`
+	PublicKey          string                `json:"public_key,omitempty"`
+	IDPEntityID        string                `json:"idp_entity_id,omitempty"`
+	NameIDFormat       string                `json:"name_id_format,omitempty"`
+	SSOEndpoint        string                `json:"sso_endpoint,omitempty"`
+	UpdatedAt          *time.Time            `json:"updated_at,omitempty"`
+	CreatedAt          *time.Time            `json:"created_at,omitempty"`
+	CustomAttributes   []SAMLAttributeConfig `json:"custom_attributes,omitempty"`
 }
 
 // AccessApplications returns all applications within an account.
