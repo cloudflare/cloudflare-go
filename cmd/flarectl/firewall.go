@@ -316,8 +316,8 @@ func getScope(c *cli.Context) (string, string, error) {
 	var account, accountID string
 	if c.String("account") != "" {
 		account = c.String("account")
-		pageOpts := cloudflare.PaginationOptions{}
-		accounts, _, err := api.Accounts(context.Background(), pageOpts)
+		params := cloudflare.AccountsListParams{}
+		accounts, _, err := api.Accounts(context.Background(), params)
 		if err != nil {
 			fmt.Println(err)
 			return "", "", err

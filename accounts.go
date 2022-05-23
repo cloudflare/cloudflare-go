@@ -48,13 +48,20 @@ type AccountDetailResponse struct {
 	Result   Account  `json:"result"`
 }
 
+// AccountsListParams holds the filterable options for Accounts.
+type AccountsListParams struct {
+	Name string `url:"name"`
+
+	PaginationOptions
+}
+
 // Accounts returns all accounts the logged in user has access to.
 //
 // API reference: https://api.cloudflare.com/#accounts-list-accounts
-func (api *API) Accounts(ctx context.Context, pageOpts PaginationOptions) ([]Account, ResultInfo, error) {
+func (api *API) Accounts(ctx context.Context, params AccountsListParams) ([]Account, ResultInfo, error) {
 	uri := "/accounts"
 
-	v, _ := query.Values(pageOpts)
+	v, _ := query.Values(params)
 	queryParams := v.Encode()
 	if queryParams != "" {
 		queryParams = "?" + queryParams
