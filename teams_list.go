@@ -7,8 +7,11 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/google/go-querystring/query"
 	"github.com/pkg/errors"
 )
+
+var ErrMissingListID = errors.New("required missing list ID")
 
 // TeamsList represents a Teams List.
 type TeamsList struct {
@@ -56,6 +59,13 @@ type TeamsListItemsListResponse struct {
 type TeamsListDetailResponse struct {
 	Response
 	Result TeamsList `json:"result"`
+}
+
+type TeamsListItemsParams struct {
+	AccountID string `url:"-"`
+	ListID    string `url:"-"`
+
+	PaginationOptions
 }
 
 // TeamsLists returns all lists within an account.
@@ -106,10 +116,24 @@ func (api *API) TeamsList(ctx context.Context, accountID, listID string) (TeamsL
 // TeamsListItems returns all list items for a list.
 //
 // API reference: https://api.cloudflare.com/#teams-lists-teams-list-items
-func (api *API) TeamsListItems(ctx context.Context, accountID, listID string) ([]TeamsListItem, ResultInfo, error) {
-	uri := fmt.Sprintf("/%s/%s/gateway/lists/%s/items", AccountRouteRoot, accountID, listID)
+func (api *API) TeamsListItems(ctx context.Context, params TeamsListItemsParams) ([]TeamsListItem, ResultInfo, error) {
+	if params.AccountID == "" {
+		return []TeamsListItem{}, ResultInfo{}, ErrMissingAccountID
+	}
 
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if params.ListID == "" {
+		return []TeamsListItem{}, ResultInfo{}, ErrMissingListID
+	}
+
+	v, _ := query.Values(params)
+	queryParams := v.Encode()
+	if queryParams != "" {
+		queryParams = "?" + queryParams
+	}
+
+	uri := fmt.Sprintf("/%s/%s/gateway/lists/%s/items", AccountRouteRoot, params.AccountID, params.ListID)
+
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri+queryParams, nil)
 	if err != nil {
 		return []TeamsListItem{}, ResultInfo{}, err
 	}

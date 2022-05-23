@@ -150,7 +150,7 @@ func TestTeamsListItems(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/gateway/lists/480f4f69-1a28-4fdd-9240-1ed29f0ac1db/items", handler)
 
-	actual, _, err := client.TeamsListItems(context.Background(), testAccountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	actual, _, err := client.TeamsListItems(context.Background(), TeamsListItemsParams{AccountID: testAccountID, ListID: "480f4f69-1a28-4fdd-9240-1ed29f0ac1db"})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
