@@ -57,7 +57,7 @@ func TestAccounts(t *testing.T) {
 	mux.HandleFunc("/accounts", handler)
 	want := []Account{expectedAccountStruct}
 
-	actual, _, err := client.Accounts(context.Background(), PaginationOptions{})
+	actual, _, err := client.Accounts(context.Background(), AccountsListParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
