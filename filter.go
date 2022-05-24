@@ -5,11 +5,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strings"
+	"net/url"
 
 	"github.com/google/go-querystring/query"
 	"github.com/pkg/errors"
 )
+
+var ErrNotEnoughFilterIDsProvided = errors.New("at least one filter ID must be provided.")
 
 // Filter holds the structure of the filter type.
 type Filter struct {
@@ -197,10 +199,21 @@ func (api *API) DeleteFilter(ctx context.Context, zoneID, filterID string) error
 //
 // API reference: https://developers.cloudflare.com/firewall/api/cf-filters/delete/#delete-multiple-filters
 func (api *API) DeleteFilters(ctx context.Context, zoneID string, filterIDs []string) error {
-	ids := strings.Join(filterIDs, ",")
-	uri := fmt.Sprintf("/zones/%s/filters?id=%s", zoneID, ids)
+	if len(filterIDs) == 0 {
+		return ErrNotEnoughFilterIDsProvided
+	}
 
-	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
+	// Swap this to a typed struct and passing in all parameters together.
+	q := url.Values{}
+	for _, id := range filterIDs {
+		q.Add("id", id)
+	}
+
+	queryParams := "?" + q.Encode()
+
+	uri := fmt.Sprintf("/zones/%s/filters", zoneID)
+
+	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri+queryParams, nil)
 	if err != nil {
 		return err
 	}
