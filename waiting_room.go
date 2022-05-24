@@ -18,6 +18,7 @@ type WaitingRoom struct {
 	Name                       string     `json:"name"`
 	Description                string     `json:"description,omitempty"`
 	CustomPageHTML             string     `json:"custom_page_html,omitempty"`
+	DefaultTemplateLanguage    string     `json:"default_template_language,omitempty"`
 	Host                       string     `json:"host"`
 	ID                         string     `json:"id,omitempty"`
 	NewUsersPerMinute          int        `json:"new_users_per_minute"`

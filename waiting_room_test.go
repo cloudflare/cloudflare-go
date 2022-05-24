@@ -19,7 +19,7 @@ var testTimestampWaitingRoomEventPrequeue = time.Now().UTC()
 var testTimestampWaitingRoomEventStart = testTimestampWaitingRoomEventPrequeue.Add(5 * time.Minute)
 var testTimestampWaitingRoomEventEnd = testTimestampWaitingRoomEventStart.Add(1 * time.Minute)
 var waitingRoomJSON = fmt.Sprintf(`
-		{
+    {
       "id": "%s",
       "created_on": "%s",
       "modified_on": "%s",
@@ -35,6 +35,7 @@ var waitingRoomJSON = fmt.Sprintf(`
       "disable_session_renewal": false,
       "json_response_enabled": true,
       "custom_page_html": "{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Queue all enabled {{/waitTimeKnown}}",
+      "default_template_language": "en-US",
       "next_event_prequeue_start_time": null,
       "next_event_start_time": "%s"
     }
@@ -98,6 +99,7 @@ var waitingRoom = WaitingRoom{
 	DisableSessionRenewal:      false,
 	JsonResponseEnabled:        true,
 	CustomPageHTML:             "{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Queue all enabled {{/waitTimeKnown}}",
+	DefaultTemplateLanguage:    "en-US",
 	NextEventStartTime:         &testTimestampWaitingRoomEventStart,
 	NextEventPrequeueStartTime: nil,
 }
