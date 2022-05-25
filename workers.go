@@ -99,6 +99,8 @@ const (
 	WorkerSecretTextBindingType WorkerBindingType = "secret_text"
 	// WorkerPlainTextBindingType is the type for plain text bindings.
 	WorkerPlainTextBindingType WorkerBindingType = "plain_text"
+	// WorkerServiceBindingType is the type for service bindings.
+	WorkerServiceBindingType WorkerBindingType = "service"
 )
 
 // WorkerBindingListItem a struct representing an individual binding in a list of bindings.
@@ -268,6 +270,33 @@ func (b WorkerSecretTextBinding) serialize(bindingName string) (workerBindingMet
 	}, nil, nil
 }
 
+type WorkerServiceBinding struct {
+	Service     string
+	Environment *string
+}
+
+func (b WorkerServiceBinding) Type() WorkerBindingType {
+	return WorkerServiceBindingType
+}
+
+func (b WorkerServiceBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
+	if b.Service == "" {
+		return nil, nil, errors.Errorf(`Service for binding "%s" cannot be empty`, bindingName)
+	}
+
+	meta := workerBindingMeta{
+		"name":    bindingName,
+		"type":    b.Type(),
+		"service": b.Service,
+	}
+
+	if b.Environment != nil {
+		meta["environment"] = *b.Environment
+	}
+
+	return meta, nil, nil
+}
+
 // Each binding that adds a part to the multipart form body will need
 // a unique part name so we just generate a random 128bit hex string.
 func getRandomPartName() string {
@@ -414,6 +443,13 @@ func (api *API) ListWorkerBindings(ctx context.Context, requestParams *WorkerReq
 			text := jsonBinding["text"].(string)
 			bindingListItem.Binding = WorkerPlainTextBinding{
 				Text: text,
+			}
+		case WorkerServiceBindingType:
+			service := jsonBinding["service"].(string)
+			environment := jsonBinding["environment"].(string)
+			bindingListItem.Binding = WorkerServiceBinding{
+				Service:     service,
+				Environment: &environment,
 			}
 		case WorkerSecretTextBindingType:
 			bindingListItem.Binding = WorkerSecretTextBinding{}
