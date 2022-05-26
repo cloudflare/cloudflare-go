@@ -64,6 +64,16 @@ func TestTeamsAccountConfiguration(t *testing.T) {
 					},
 					"activity_log": {
 						"enabled": true
+					},
+					"block_page": {
+						"enabled": true,
+						"name": "Cloudflare",
+						"footer_text": "--footer--",
+						"header_text": "--header--",
+						"mailto_address": "admin@example.com",
+						"mailto_subject": "Blocked User Inquiry",
+						"logo_path": "https://logos.com/a.png",
+						"background_color": "#ff0000"
 					}
 				}
 			}
@@ -81,6 +91,17 @@ func TestTeamsAccountConfiguration(t *testing.T) {
 			ActivityLog: &TeamsActivityLog{Enabled: true},
 			TLSDecrypt:  &TeamsTLSDecrypt{Enabled: true},
 			FIPS:        &TeamsFIPS{TLS: true},
+
+			BlockPage: &TeamsBlockPage{
+				Enabled:         BoolPtr(true),
+				FooterText:      "--footer--",
+				HeaderText:      "--header--",
+				LogoPath:        "https://logos.com/a.png",
+				BackgroundColor: "#ff0000",
+				Name:            "Cloudflare",
+				MailtoAddress:   "admin@example.com",
+				MailtoSubject:   "Blocked User Inquiry",
+			},
 		})
 	}
 }
