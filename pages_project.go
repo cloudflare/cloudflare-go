@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/google/go-querystring/query"
 	"github.com/pkg/errors"
 )
 
@@ -120,15 +119,9 @@ type pagesProjectListResponse struct {
 //
 // API reference: https://api.cloudflare.com/#pages-project-get-projects
 func (api *API) ListPagesProjects(ctx context.Context, accountID string, pageOpts PaginationOptions) ([]PagesProject, ResultInfo, error) {
-	uri := fmt.Sprintf("/accounts/%s/pages/projects", accountID)
+	uri := buildURI(fmt.Sprintf("/accounts/%s/pages/projects", accountID), pageOpts)
 
-	v, _ := query.Values(pageOpts)
-	queryParams := v.Encode()
-	if queryParams != "" {
-		queryParams = "?" + queryParams
-	}
-
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri+queryParams, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []PagesProject{}, ResultInfo{}, err
 	}

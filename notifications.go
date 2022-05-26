@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/google/go-querystring/query"
 )
 
 // NotificationMechanismData holds a single public facing mechanism data
@@ -424,15 +422,8 @@ type AlertHistoryFilter struct {
 //
 // API Reference: https://api.cloudflare.com/#notification-history-list-history
 func (api *API) ListNotificationHistory(ctx context.Context, accountID string, alertHistoryFilter AlertHistoryFilter) ([]NotificationHistory, ResultInfo, error) {
-	v, _ := query.Values(alertHistoryFilter)
-
-	queryParams := v.Encode()
-	if queryParams != "" {
-		queryParams = "?" + queryParams
-	}
-
-	baseURL := fmt.Sprintf("/accounts/%s/alerting/v3/history", accountID)
-	res, err := api.makeRequestContext(ctx, http.MethodGet, baseURL+queryParams, nil)
+	uri := buildURI(fmt.Sprintf("/accounts/%s/alerting/v3/history", accountID), alertHistoryFilter)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []NotificationHistory{}, ResultInfo{}, err
 	}

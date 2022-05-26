@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/google/go-querystring/query"
 	"github.com/pkg/errors"
 )
 
@@ -59,15 +58,7 @@ type AccountsListParams struct {
 //
 // API reference: https://api.cloudflare.com/#accounts-list-accounts
 func (api *API) Accounts(ctx context.Context, params AccountsListParams) ([]Account, ResultInfo, error) {
-	uri := "/accounts"
-
-	v, _ := query.Values(params)
-	queryParams := v.Encode()
-	if queryParams != "" {
-		queryParams = "?" + queryParams
-	}
-
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri+queryParams, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, buildURI("/accounts", params), nil)
 	if err != nil {
 		return []Account{}, ResultInfo{}, err
 	}

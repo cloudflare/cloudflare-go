@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/google/go-querystring/query"
 	"github.com/pkg/errors"
 )
 
@@ -85,15 +84,9 @@ func (api *API) Filter(ctx context.Context, zoneID, filterID string) (Filter, er
 //
 // API reference: https://developers.cloudflare.com/firewall/api/cf-filters/get/#get-all-filters
 func (api *API) Filters(ctx context.Context, zoneID string, pageOpts PaginationOptions) ([]Filter, error) {
-	uri := fmt.Sprintf("/zones/%s/filters", zoneID)
+	uri := buildURI(fmt.Sprintf("/zones/%s/filters", zoneID), pageOpts)
 
-	v, _ := query.Values(pageOpts)
-	queryParams := v.Encode()
-	if queryParams != "" {
-		queryParams = "?" + queryParams
-	}
-
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri+queryParams, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []Filter{}, err
 	}
@@ -209,11 +202,12 @@ func (api *API) DeleteFilters(ctx context.Context, zoneID string, filterIDs []st
 		q.Add("id", id)
 	}
 
-	queryParams := "?" + q.Encode()
+	uri := (&url.URL{
+		Path:     fmt.Sprintf("/zones/%s/filters", zoneID),
+		RawQuery: q.Encode(),
+	}).String()
 
-	uri := fmt.Sprintf("/zones/%s/filters", zoneID)
-
-	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri+queryParams, nil)
+	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return err
 	}

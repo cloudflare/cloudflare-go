@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/google/go-querystring/query"
 	"github.com/pkg/errors"
 )
 
@@ -96,15 +95,9 @@ func (api *API) ZoneLevelAccessApplications(ctx context.Context, zoneID string, 
 }
 
 func (api *API) accessApplications(ctx context.Context, id string, pageOpts PaginationOptions, routeRoot RouteRoot) ([]AccessApplication, ResultInfo, error) {
-	uri := fmt.Sprintf("/%s/%s/access/apps", routeRoot, id)
+	uri := buildURI(fmt.Sprintf("/%s/%s/access/apps", routeRoot, id), pageOpts)
 
-	v, _ := query.Values(pageOpts)
-	queryParams := v.Encode()
-	if queryParams != "" {
-		queryParams = "?" + queryParams
-	}
-
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri+queryParams, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []AccessApplication{}, ResultInfo{}, err
 	}

@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"regexp"
-
-	"github.com/google/go-querystring/query"
 )
 
 type ZoneIdentifier string
@@ -91,13 +89,7 @@ func (s *ZonesService) Get(ctx context.Context, zoneID ZoneIdentifier) (Zone, er
 //
 // API reference: https://api.cloudflare.com/#zone-list-zones
 func (s *ZonesService) List(ctx context.Context, params *ZoneParams) ([]Zone, *ResultInfo, error) {
-	v, _ := query.Values(params)
-	queryParams := v.Encode()
-	if queryParams != "" {
-		queryParams = "?" + queryParams
-	}
-
-	res, _ := s.client.Call(ctx, http.MethodGet, "/zones"+queryParams, nil)
+	res, _ := s.client.Call(ctx, http.MethodGet, buildURI("/zones", params), nil)
 
 	var r ZonesResponse
 	err := json.Unmarshal(res, &r)

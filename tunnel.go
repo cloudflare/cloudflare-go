@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/google/go-querystring/query"
 	"github.com/pkg/errors"
 )
 
@@ -102,15 +101,9 @@ func (api *API) Tunnels(ctx context.Context, params TunnelListParams) ([]Tunnel,
 		return []Tunnel{}, ErrMissingAccountID
 	}
 
-	v, _ := query.Values(params)
-	queryParams := v.Encode()
-	if queryParams != "" {
-		queryParams = "?" + queryParams
-	}
+	uri := buildURI(fmt.Sprintf("/accounts/%s/cfd_tunnel", params.AccountID), params)
 
-	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel", params.AccountID)
-
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodGet, uri+queryParams, nil, nil)
+	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodGet, uri, nil, nil)
 	if err != nil {
 		return []Tunnel{}, err
 	}

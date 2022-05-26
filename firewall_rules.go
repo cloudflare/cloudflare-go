@@ -8,7 +8,6 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/google/go-querystring/query"
 	"github.com/pkg/errors"
 )
 
@@ -45,15 +44,9 @@ type FirewallRuleResponse struct {
 //
 // API reference: https://developers.cloudflare.com/firewall/api/cf-firewall-rules/get/#get-all-rules
 func (api *API) FirewallRules(ctx context.Context, zoneID string, pageOpts PaginationOptions) ([]FirewallRule, error) {
-	uri := fmt.Sprintf("/zones/%s/firewall/rules", zoneID)
+	uri := buildURI(fmt.Sprintf("/zones/%s/firewall/rules", zoneID), pageOpts)
 
-	v, _ := query.Values(pageOpts)
-	queryParams := v.Encode()
-	if queryParams != "" {
-		queryParams = "?" + queryParams
-	}
-
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri+queryParams, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []FirewallRule{}, err
 	}
