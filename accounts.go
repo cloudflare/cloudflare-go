@@ -49,7 +49,7 @@ type AccountDetailResponse struct {
 
 // AccountsListParams holds the filterable options for Accounts.
 type AccountsListParams struct {
-	Name string `url:"name"`
+	Name string `url:"name,omitempty"`
 
 	PaginationOptions
 }
