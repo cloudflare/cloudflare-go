@@ -10,7 +10,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/google/go-querystring/query"
 	"github.com/pkg/errors"
 )
 
@@ -204,15 +203,9 @@ func (api *API) CreateImageDirectUploadURL(ctx context.Context, accountID string
 //
 // API Reference: https://api.cloudflare.com/#cloudflare-images-list-images
 func (api *API) ListImages(ctx context.Context, accountID string, pageOpts PaginationOptions) ([]Image, error) {
-	uri := fmt.Sprintf("/accounts/%s/images/v1", accountID)
+	uri := buildURI(fmt.Sprintf("/accounts/%s/images/v1", accountID), pageOpts)
 
-	v, _ := query.Values(pageOpts)
-	queryParams := v.Encode()
-	if queryParams != "" {
-		queryParams = "?" + queryParams
-	}
-
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri+queryParams, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []Image{}, err
 	}

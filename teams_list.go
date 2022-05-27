@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/google/go-querystring/query"
 	"github.com/pkg/errors"
 )
 
@@ -125,15 +124,12 @@ func (api *API) TeamsListItems(ctx context.Context, params TeamsListItemsParams)
 		return []TeamsListItem{}, ResultInfo{}, ErrMissingListID
 	}
 
-	v, _ := query.Values(params)
-	queryParams := v.Encode()
-	if queryParams != "" {
-		queryParams = "?" + queryParams
-	}
+	uri := buildURI(
+		fmt.Sprintf("/%s/%s/gateway/lists/%s/items", AccountRouteRoot, params.AccountID, params.ListID),
+		params,
+	)
 
-	uri := fmt.Sprintf("/%s/%s/gateway/lists/%s/items", AccountRouteRoot, params.AccountID, params.ListID)
-
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri+queryParams, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []TeamsListItem{}, ResultInfo{}, err
 	}

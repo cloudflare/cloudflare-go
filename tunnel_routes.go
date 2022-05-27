@@ -8,7 +8,6 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/google/go-querystring/query"
 	"github.com/pkg/errors"
 )
 
@@ -76,15 +75,8 @@ func (api *API) ListTunnelRoutes(ctx context.Context, params TunnelRoutesListPar
 		return []TunnelRoute{}, ErrMissingAccountID
 	}
 
-	v, _ := query.Values(params)
-	queryParams := v.Encode()
-	if queryParams != "" {
-		queryParams = "?" + queryParams
-	}
-
-	uri := fmt.Sprintf("/%s/%s/teamnet/routes", AccountRouteRoot, params.AccountID)
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri+queryParams, params)
-
+	uri := buildURI(fmt.Sprintf("/%s/%s/teamnet/routes", AccountRouteRoot, params.AccountID), params)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, params)
 	if err != nil {
 		return []TunnelRoute{}, err
 	}

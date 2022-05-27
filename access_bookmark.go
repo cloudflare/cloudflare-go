@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/google/go-querystring/query"
 	"github.com/pkg/errors"
 )
 
@@ -52,15 +51,9 @@ func (api *API) ZoneLevelAccessBookmarks(ctx context.Context, zoneID string, pag
 }
 
 func (api *API) accessBookmarks(ctx context.Context, id string, pageOpts PaginationOptions, routeRoot RouteRoot) ([]AccessBookmark, ResultInfo, error) {
-	uri := fmt.Sprintf("/%s/%s/access/bookmarks", routeRoot, id)
+	uri := buildURI(fmt.Sprintf("/%s/%s/access/bookmarks", routeRoot, id), pageOpts)
 
-	v, _ := query.Values(pageOpts)
-	queryParams := v.Encode()
-	if queryParams != "" {
-		queryParams = "?" + queryParams
-	}
-
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri+queryParams, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []AccessBookmark{}, ResultInfo{}, err
 	}

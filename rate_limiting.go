@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/google/go-querystring/query"
 	"github.com/pkg/errors"
 )
 
@@ -106,15 +105,9 @@ func (api *API) CreateRateLimit(ctx context.Context, zoneID string, limit RateLi
 //
 // API reference: https://api.cloudflare.com/#rate-limits-for-a-zone-list-rate-limits
 func (api *API) ListRateLimits(ctx context.Context, zoneID string, pageOpts PaginationOptions) ([]RateLimit, ResultInfo, error) {
-	uri := fmt.Sprintf("/zones/%s/rate_limits", zoneID)
+	uri := buildURI(fmt.Sprintf("/zones/%s/rate_limits", zoneID), pageOpts)
 
-	v, _ := query.Values(pageOpts)
-	queryParams := v.Encode()
-	if queryParams != "" {
-		queryParams = "?" + queryParams
-	}
-
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri+queryParams, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []RateLimit{}, ResultInfo{}, err
 	}

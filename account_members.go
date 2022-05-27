@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/google/go-querystring/query"
 	"github.com/pkg/errors"
 )
 
@@ -62,15 +61,9 @@ func (api *API) AccountMembers(ctx context.Context, accountID string, pageOpts P
 		return []AccountMember{}, ResultInfo{}, errors.New(errMissingAccountID)
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/members", accountID)
+	uri := buildURI(fmt.Sprintf("/accounts/%s/members", accountID), pageOpts)
 
-	v, _ := query.Values(pageOpts)
-	queryParams := v.Encode()
-	if queryParams != "" {
-		queryParams = "?" + queryParams
-	}
-
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri+queryParams, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []AccountMember{}, ResultInfo{}, err
 	}
@@ -96,7 +89,7 @@ func (api *API) CreateAccountMemberWithStatus(ctx context.Context, accountID str
 
 	uri := fmt.Sprintf("/accounts/%s/members", accountID)
 
-	var newMember = AccountMemberInvitation{
+	newMember := AccountMemberInvitation{
 		Email:  emailAddress,
 		Roles:  roles,
 		Status: status,
