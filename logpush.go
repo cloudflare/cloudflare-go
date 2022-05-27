@@ -23,6 +23,40 @@ type LogpushJob struct {
 	LastError          *time.Time `json:"last_error,omitempty"`
 	ErrorMessage       string     `json:"error_message,omitempty"`
 	Frequency          string     `json:"frequency,omitempty"`
+	Filter             string     `json:"filter,omitempty"`
+}
+
+type LogpushJobFilters struct {
+	Where LogpushJobFilter `json:"where"`
+}
+
+type Operator string
+
+const (
+	Equal              Operator = "eq"
+	NotEqual           Operator = "!eq"
+	LessThan           Operator = "lt"
+	LessThanOrEqual    Operator = "lte"
+	GreaterThan        Operator = "gt"
+	GreaterThanOrEqual Operator = "gte"
+	StartsWith         Operator = "startsWith"
+	EndsWith           Operator = "endsWith"
+	NotStartsWith      Operator = "!startsWith"
+	NotEndsWith        Operator = "!endsWith"
+	Contains           Operator = "contains"
+	NotContains        Operator = "!contains"
+	ValueIsIn          Operator = "in"
+	ValueIsNotIn       Operator = "!in"
+)
+
+type LogpushJobFilter struct {
+	// either this
+	And []LogpushJobFilter `json:"and,omitempty"`
+	Or  []LogpushJobFilter `json:"or,omitempty"`
+	// or this
+	Key      string      `json:"key,omitempty"`
+	Operator Operator    `json:"operator,omitempty"`
+	Value    interface{} `json:"value,omitempty"`
 }
 
 // LogpushJobsResponse is the API response, containing an array of Logpush Jobs.
@@ -91,6 +125,19 @@ type LogpushDestinationExistsResponse struct {
 // LogpushDestinationExistsRequest is the API request for check destination exists.
 type LogpushDestinationExistsRequest struct {
 	DestinationConf string `json:"destination_conf"`
+}
+
+// AddFilter adds a filter to a Logpush Job
+// Required since filter field is an already stringified json
+//
+// API reference: https://developers.cloudflare.com/logs/reference/logpush-api-configuration/filters/
+func (job *LogpushJob) AddFilter(filter LogpushJobFilters) (*LogpushJob, error) {
+	filterstring, err := json.Marshal(filter)
+	if err != nil {
+		return job, err
+	}
+	job.Filter = string(filterstring)
+	return job, nil
 }
 
 // CreateAccountLogpushJob creates a new account-level Logpush Job.
