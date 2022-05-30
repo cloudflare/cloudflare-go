@@ -70,12 +70,12 @@ func TestCreateTunnelVirtualNetwork(t *testing.T) {
 			"errors": [],
 			"messages": [],
 			"result": {
-				"id": "f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
-				"name": "us-east-1-vpc",
-				"is_default_network": true,
-				"comment": "Staging VPC for data science",
-				"created_at": "2021-01-25T18:22:34.317854Z",
-				"deleted_at": "2021-01-25T18:22:34.317854Z"
+			  "id": "f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
+			  "name": "us-east-1-vpc",
+			  "is_default_network": true,
+			  "comment": "Staging VPC for data science",
+			  "created_at": "2021-01-25T18:22:34.317854Z",
+			  "deleted_at": "2021-01-25T18:22:34.317854Z"
             }
           }`)
 	}
@@ -122,12 +122,12 @@ func TestUpdateTunnelVirtualNetwork(t *testing.T) {
 			"errors": [],
 			"messages": [],
 			"result": {
-				"id": "f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
-				"name": "us-east-1-vpc",
-				"is_default_network": true,
-				"comment": "Staging VPC for data science",
-				"created_at": "2021-01-25T18:22:34.317854Z",
-				"deleted_at": "2021-01-25T18:22:34.317854Z"
+			  "id": "f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
+			  "name": "us-east-1-vpc",
+			  "is_default_network": true,
+			  "comment": "Staging VPC for data science",
+			  "created_at": "2021-01-25T18:22:34.317854Z",
+			  "deleted_at": "2021-01-25T18:22:34.317854Z"
             }
           }`)
 	}
@@ -170,12 +170,12 @@ func TestDeleteTunnelVirtualNetwork(t *testing.T) {
 			"errors": [],
 			"messages": [],
 			"result": {
-				"id": "f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
-				"name": "us-east-1-vpc",
-				"is_default_network": true,
-				"comment": "Staging VPC for data science",
-				"created_at": "2021-01-25T18:22:34.317854Z",
-				"deleted_at": "2021-01-25T18:22:34.317854Z"
+			  "id": "f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
+			  "name": "us-east-1-vpc",
+			  "is_default_network": true,
+			  "comment": "Staging VPC for data science",
+			  "created_at": "2021-01-25T18:22:34.317854Z",
+			  "deleted_at": "2021-01-25T18:22:34.317854Z"
             }
           }`)
 	}
