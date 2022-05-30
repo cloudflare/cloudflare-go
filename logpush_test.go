@@ -330,3 +330,46 @@ func TestCheckLogpushDestinationExists(t *testing.T) {
 		})
 	}
 }
+
+var (
+	validFilter LogpushJobFilter = LogpushJobFilter{Key: "ClientRequestPath", Operator: Contains, Value: "static"}
+)
+
+var logpushJobFiltersTest = []struct {
+	name                 string
+	input                LogpushJobFilter
+	haserror             bool
+	expectedErrorMessage string
+}{
+	// Tests without And or Or
+	{"Empty Filter", LogpushJobFilter{}, true, "Key is missing"},
+	{"Missing Operator", LogpushJobFilter{Key: "ClientRequestPath"}, true, "Operator is missing"},
+	{"Missing Value", LogpushJobFilter{Key: "ClientRequestPath", Operator: Contains}, true, "Value is missing"},
+	{"Valid Basic Filter", validFilter, false, ""},
+	// Tests with And
+	{"Valid And Filter", LogpushJobFilter{And: []LogpushJobFilter{validFilter}}, false, ""},
+	{"And and Or", LogpushJobFilter{And: []LogpushJobFilter{validFilter}, Or: []LogpushJobFilter{validFilter}}, true, "And can't be set with Or, Key, Operator or Value"},
+	{"And and Key", LogpushJobFilter{And: []LogpushJobFilter{validFilter}, Key: "Key"}, true, "And can't be set with Or, Key, Operator or Value"},
+	{"And and Operator", LogpushJobFilter{And: []LogpushJobFilter{validFilter}, Operator: Contains}, true, "And can't be set with Or, Key, Operator or Value"},
+	{"And and Value", LogpushJobFilter{And: []LogpushJobFilter{validFilter}, Value: "Value"}, true, "And can't be set with Or, Key, Operator or Value"},
+	{"And with nested error", LogpushJobFilter{And: []LogpushJobFilter{validFilter, {}}}, true, "element 1 in And is invalid: Key is missing"},
+	// Tests with Or
+	{"Valid Or Filter", LogpushJobFilter{Or: []LogpushJobFilter{validFilter}}, false, ""},
+	{"Or and Key", LogpushJobFilter{Or: []LogpushJobFilter{validFilter}, Key: "Key"}, true, "Or can't be set with And, Key, Operator or Value"},
+	{"Or and Operator", LogpushJobFilter{Or: []LogpushJobFilter{validFilter}, Operator: Contains}, true, "Or can't be set with And, Key, Operator or Value"},
+	{"Or and Value", LogpushJobFilter{Or: []LogpushJobFilter{validFilter}, Value: "Value"}, true, "Or can't be set with And, Key, Operator or Value"},
+	{"Or with nested error", LogpushJobFilter{Or: []LogpushJobFilter{validFilter, {}}}, true, "element 1 in Or is invalid: Key is missing"},
+}
+
+func TestLogpushJobFilter_Validate(t *testing.T) {
+	for _, tt := range logpushJobFiltersTest {
+		t.Run(tt.name, func(t *testing.T) {
+			got := tt.input.Validate()
+			if tt.haserror {
+				assert.ErrorContains(t, got, tt.expectedErrorMessage)
+			} else {
+				assert.NoError(t, got)
+			}
+		})
+	}
+}

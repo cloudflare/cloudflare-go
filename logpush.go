@@ -132,12 +132,56 @@ type LogpushDestinationExistsRequest struct {
 //
 // API reference: https://developers.cloudflare.com/logs/reference/logpush-api-configuration/filters/
 func (job *LogpushJob) AddFilter(filter LogpushJobFilters) (*LogpushJob, error) {
+	err := filter.Where.Validate()
+	if err != nil {
+		return job, err
+	}
 	filterstring, err := json.Marshal(filter)
 	if err != nil {
 		return job, err
 	}
 	job.Filter = string(filterstring)
 	return job, nil
+}
+
+func (filter *LogpushJobFilter) Validate() error {
+	if filter.And != nil {
+		if filter.Or != nil || filter.Key != "" || filter.Operator != "" || filter.Value != nil {
+			return errors.New("And can't be set with Or, Key, Operator or Value")
+		}
+		for i, element := range filter.And {
+			err := element.Validate()
+			if err != nil {
+				return errors.WithMessagef(err, "element %v in And is invalid", i)
+			}
+		}
+		return nil
+	}
+	if filter.Or != nil {
+		if filter.And != nil || filter.Key != "" || filter.Operator != "" || filter.Value != nil {
+			return errors.New("Or can't be set with And, Key, Operator or Value")
+		}
+		for i, element := range filter.Or {
+			err := element.Validate()
+			if err != nil {
+				return errors.WithMessagef(err, "element %v in Or is invalid", i)
+			}
+		}
+		return nil
+	}
+	if filter.Key == "" {
+		return errors.New("Key is missing")
+	}
+
+	if filter.Operator == "" {
+		return errors.New("Operator is missing")
+	}
+
+	if filter.Value == nil {
+		return errors.New("Value is missing")
+	}
+
+	return nil
 }
 
 // CreateAccountLogpushJob creates a new account-level Logpush Job.
