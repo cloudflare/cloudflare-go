@@ -12,18 +12,18 @@ import (
 
 // LogpushJob describes a Logpush job.
 type LogpushJob struct {
-	ID                 int        `json:"id,omitempty"`
-	Dataset            string     `json:"dataset"`
-	Enabled            bool       `json:"enabled"`
-	Name               string     `json:"name"`
-	LogpullOptions     string     `json:"logpull_options"`
-	DestinationConf    string     `json:"destination_conf"`
-	OwnershipChallenge string     `json:"ownership_challenge,omitempty"`
-	LastComplete       *time.Time `json:"last_complete,omitempty"`
-	LastError          *time.Time `json:"last_error,omitempty"`
-	ErrorMessage       string     `json:"error_message,omitempty"`
-	Frequency          string     `json:"frequency,omitempty"`
-	Filter             string     `json:"filter,omitempty"`
+	ID                 int               `json:"id,omitempty"`
+	Dataset            string            `json:"dataset"`
+	Enabled            bool              `json:"enabled"`
+	Name               string            `json:"name"`
+	LogpullOptions     string            `json:"logpull_options"`
+	DestinationConf    string            `json:"destination_conf"`
+	OwnershipChallenge string            `json:"ownership_challenge,omitempty"`
+	LastComplete       *time.Time        `json:"last_complete,omitempty"`
+	LastError          *time.Time        `json:"last_error,omitempty"`
+	ErrorMessage       string            `json:"error_message,omitempty"`
+	Frequency          string            `json:"frequency,omitempty"`
+	Filter             LogpushJobFilters `json:"filter,omitempty"`
 }
 
 type LogpushJobFilters struct {
@@ -127,21 +127,46 @@ type LogpushDestinationExistsRequest struct {
 	DestinationConf string `json:"destination_conf"`
 }
 
-// AddFilter adds a filter to a Logpush Job
-// Required since filter field is an already stringified json
-//
-// API reference: https://developers.cloudflare.com/logs/reference/logpush-api-configuration/filters/
-func (job *LogpushJob) AddFilter(filter LogpushJobFilters) (*LogpushJob, error) {
-	err := filter.Where.Validate()
+/* Custom Marshaller for LogpushJob filter key */
+func (f LogpushJob) MarshalJSON() ([]byte, error) {
+	type Alias LogpushJob
+
+	filter, err := json.Marshal(f.Filter)
+
 	if err != nil {
-		return job, err
+		return nil, err
 	}
-	filterstring, err := json.Marshal(filter)
-	if err != nil {
-		return job, err
+
+	return json.Marshal(&struct {
+		Filter string `json:"filter,omitempty"`
+		Alias
+	}{
+		Filter: string(filter),
+		Alias:  (Alias)(f),
+	})
+}
+
+/* Custom Unmarshaller for LogpushJob filter key */
+func (f *LogpushJob) UnmarshalJSON(data []byte) error {
+	type Alias LogpushJob
+	aux := &struct {
+		Filter string `json:"filter,omitempty"`
+		*Alias
+	}{
+		Alias: (*Alias)(f),
 	}
-	job.Filter = string(filterstring)
-	return job, nil
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+
+	if aux != nil && aux.Filter != "" {
+		var filter LogpushJobFilters
+		if err := json.Unmarshal([]byte(aux.Filter), &filter); err != nil {
+			return err
+		}
+		f.Filter = filter
+	}
+	return nil
 }
 
 func (filter *LogpushJobFilter) Validate() error {

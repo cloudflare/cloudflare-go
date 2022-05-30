@@ -174,32 +174,27 @@ func ExampleAPI_CheckZoneLogpushDestinationExists() {
 	fmt.Printf("%+v\n", exists)
 }
 
-func ExampleLogpushJob_AddFilter() {
+func ExampleLogpushJob_MarshalJSON() {
 	job := cloudflare.LogpushJob{
 		Name:            "example.com static assets",
 		LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339&CVE-2021-44228=true",
 		Dataset:         "http_requests",
 		DestinationConf: "s3://<BUCKET_PATH>?region=us-west-2/",
-	}
-	filter := cloudflare.LogpushJobFilters{
-		Where: cloudflare.LogpushJobFilter{
-			And: []cloudflare.LogpushJobFilter{
-				{Key: "ClientRequestPath", Operator: cloudflare.Contains, Value: "/static\\"},
-				{Key: "ClientRequestHost", Operator: cloudflare.Equal, Value: "example.com"},
+		Filter: cloudflare.LogpushJobFilters{
+			Where: cloudflare.LogpushJobFilter{
+				And: []cloudflare.LogpushJobFilter{
+					{Key: "ClientRequestPath", Operator: cloudflare.Contains, Value: "/static\\"},
+					{Key: "ClientRequestHost", Operator: cloudflare.Equal, Value: "example.com"},
+				},
 			},
 		},
 	}
 
-	jobWithFilter, err := job.AddFilter(filter)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	jobstring, err := json.Marshal(jobWithFilter)
+	jobstring, err := json.Marshal(job)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	fmt.Printf("%s", jobstring)
-	// Output: {"dataset":"http_requests","enabled":false,"name":"example.com static assets","logpull_options":"fields=RayID,ClientIP,EdgeStartTimestamp\u0026timestamps=rfc3339\u0026CVE-2021-44228=true","destination_conf":"s3://\u003cBUCKET_PATH\u003e?region=us-west-2/","filter":"{\"where\":{\"and\":[{\"key\":\"ClientRequestPath\",\"operator\":\"contains\",\"value\":\"/static\\\\\"},{\"key\":\"ClientRequestHost\",\"operator\":\"eq\",\"value\":\"example.com\"}]}}"}
+	// Output: {"filter":"{\"where\":{\"and\":[{\"key\":\"ClientRequestPath\",\"operator\":\"contains\",\"value\":\"/static\\\\\"},{\"key\":\"ClientRequestHost\",\"operator\":\"eq\",\"value\":\"example.com\"}]}}","dataset":"http_requests","enabled":false,"name":"example.com static assets","logpull_options":"fields=RayID,ClientIP,EdgeStartTimestamp\u0026timestamps=rfc3339\u0026CVE-2021-44228=true","destination_conf":"s3://\u003cBUCKET_PATH\u003e?region=us-west-2/"}
 }
