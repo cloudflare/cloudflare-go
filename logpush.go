@@ -164,6 +164,9 @@ func (f *LogpushJob) UnmarshalJSON(data []byte) error {
 		if err := json.Unmarshal([]byte(aux.Filter), &filter); err != nil {
 			return err
 		}
+		if err := filter.Where.Validate(); err != nil {
+			return err
+		}
 		f.Filter = filter
 	}
 	return nil

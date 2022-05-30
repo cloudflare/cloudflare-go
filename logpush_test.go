@@ -377,24 +377,50 @@ func TestLogpushJobFilter_Validate(t *testing.T) {
 }
 
 func TestLogpushJob_Unmarshall(t *testing.T) {
-	jsonstring := `{"filter":"{\"where\":{\"and\":[{\"key\":\"ClientRequestPath\",\"operator\":\"contains\",\"value\":\"/static\\\\\"},{\"key\":\"ClientRequestHost\",\"operator\":\"eq\",\"value\":\"example.com\"}]}}","dataset":"http_requests","enabled":false,"name":"example.com static assets","logpull_options":"fields=RayID,ClientIP,EdgeStartTimestamp\u0026timestamps=rfc3339\u0026CVE-2021-44228=true","destination_conf":"s3://\u003cBUCKET_PATH\u003e?region=us-west-2/"}`
-	var job LogpushJob
-	if err := json.Unmarshal([]byte(jsonstring), &job); err != nil {
-		log.Fatal(err)
-	}
 
-	assert.Equal(t, LogpushJob{
-		Name:            "example.com static assets",
-		LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339&CVE-2021-44228=true",
-		Dataset:         "http_requests",
-		DestinationConf: "s3://<BUCKET_PATH>?region=us-west-2/",
-		Filter: LogpushJobFilters{
-			Where: LogpushJobFilter{
-				And: []LogpushJobFilter{
-					{Key: "ClientRequestPath", Operator: Contains, Value: "/static\\"},
-					{Key: "ClientRequestHost", Operator: Equal, Value: "example.com"},
+	t.Run("Valid Filter", func(t *testing.T) {
+		jsonstring := `{"filter":"{\"where\":{\"and\":[{\"key\":\"ClientRequestPath\",\"operator\":\"contains\",\"value\":\"/static\\\\\"},{\"key\":\"ClientRequestHost\",\"operator\":\"eq\",\"value\":\"example.com\"}]}}","dataset":"http_requests","enabled":false,"name":"example.com static assets","logpull_options":"fields=RayID,ClientIP,EdgeStartTimestamp\u0026timestamps=rfc3339\u0026CVE-2021-44228=true","destination_conf":"s3://\u003cBUCKET_PATH\u003e?region=us-west-2/"}`
+		var job LogpushJob
+		if err := json.Unmarshal([]byte(jsonstring), &job); err != nil {
+			log.Fatal(err)
+		}
+
+		assert.Equal(t, LogpushJob{
+			Name:            "example.com static assets",
+			LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339&CVE-2021-44228=true",
+			Dataset:         "http_requests",
+			DestinationConf: "s3://<BUCKET_PATH>?region=us-west-2/",
+			Filter: LogpushJobFilters{
+				Where: LogpushJobFilter{
+					And: []LogpushJobFilter{
+						{Key: "ClientRequestPath", Operator: Contains, Value: "/static\\"},
+						{Key: "ClientRequestHost", Operator: Equal, Value: "example.com"},
+					},
 				},
 			},
-		},
-	}, job)
+		}, job)
+	})
+
+	t.Run("Invalid Filter", func(t *testing.T) {
+		jsonstring := `{"filter":"{\"where\":{\"and\":[{\"key\":\"ClientRequestPath\",\"operator\":\"contains\"},{\"key\":\"ClientRequestHost\",\"operator\":\"eq\",\"value\":\"example.com\"}]}}","dataset":"http_requests","enabled":false,"name":"example.com static assets","logpull_options":"fields=RayID,ClientIP,EdgeStartTimestamp\u0026timestamps=rfc3339\u0026CVE-2021-44228=true","destination_conf":"s3://\u003cBUCKET_PATH\u003e?region=us-west-2/"}`
+		var job LogpushJob
+		err := json.Unmarshal([]byte(jsonstring), &job)
+
+		assert.ErrorContains(t, err, "element 0 in And is invalid: Value is missing")
+	})
+
+	t.Run("No Filter", func(t *testing.T) {
+		jsonstring := `{"dataset":"http_requests","enabled":false,"name":"example.com static assets","logpull_options":"fields=RayID,ClientIP,EdgeStartTimestamp\u0026timestamps=rfc3339\u0026CVE-2021-44228=true","destination_conf":"s3://\u003cBUCKET_PATH\u003e?region=us-west-2/"}`
+		var job LogpushJob
+		if err := json.Unmarshal([]byte(jsonstring), &job); err != nil {
+			log.Fatal(err)
+		}
+
+		assert.Equal(t, LogpushJob{
+			Name:            "example.com static assets",
+			LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339&CVE-2021-44228=true",
+			Dataset:         "http_requests",
+			DestinationConf: "s3://<BUCKET_PATH>?region=us-west-2/",
+		}, job)
+	})
 }
