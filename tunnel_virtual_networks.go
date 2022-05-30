@@ -12,7 +12,8 @@ import (
 
 var ErrMissingVnetName = errors.New("required missing virtual network name")
 
-// TunnelVirtualNetwork is segregation of Tunnel IP Routes via Virtualized Networks to handle overlapping private IPs in your origins.
+// TunnelVirtualNetwork is segregation of Tunnel IP Routes via Virtualized
+// Networks to handle overlapping private IPs in your origins.
 type TunnelVirtualNetwork struct {
 	ID               string     `json:"id"`
 	Name             string     `json:"name"`
@@ -28,6 +29,7 @@ type TunnelVirtualNetworksListParams struct {
 	Name      string `url:"name,omitempty"`
 	IsDefault *bool  `url:"is_default,omitempty"`
 	IsDeleted *bool  `url:"is_deleted,omitempty"`
+
 	PaginationOptions
 }
 
@@ -51,7 +53,8 @@ type TunnelVirtualNetworkDeleteParams struct {
 	VnetID    string `json:"-"`
 }
 
-// tunnelRouteListResponse is the API response for listing tunnel virtual networks.
+// tunnelRouteListResponse is the API response for listing tunnel virtual
+// networks.
 type tunnelVirtualNetworkListResponse struct {
 	Response
 	Result []TunnelVirtualNetwork `json:"result"`
@@ -62,9 +65,10 @@ type tunnelVirtualNetworkResponse struct {
 	Result TunnelVirtualNetwork `json:"result"`
 }
 
-// ListTunnelVirtualNetworks lists all defined virtual networks for tunnels in the account.
+// ListTunnelVirtualNetworks lists all defined virtual networks for tunnels in
+// the account.
 //
-// API documentation: https://api.cloudflare.com/#tunnel-virtual-network-list-virtual-networks
+// API reference: https://api.cloudflare.com/#tunnel-virtual-network-list-virtual-networks
 func (api *API) ListTunnelVirtualNetworks(ctx context.Context, params TunnelVirtualNetworksListParams) ([]TunnelVirtualNetwork, error) {
 	if params.AccountID == "" {
 		return []TunnelVirtualNetwork{}, ErrMissingAccountID
@@ -85,9 +89,9 @@ func (api *API) ListTunnelVirtualNetworks(ctx context.Context, params TunnelVirt
 	return resp.Result, nil
 }
 
-// CreateTunnelVirtualNetwork adds a new virtual network to the account
+// CreateTunnelVirtualNetwork adds a new virtual network to the account.
 //
-// API documentation: https://api.cloudflare.com/#tunnel-virtual-network-create-virtual-network
+// API reference: https://api.cloudflare.com/#tunnel-virtual-network-create-virtual-network
 func (api *API) CreateTunnelVirtualNetwork(ctx context.Context, params TunnelVirtualNetworkCreateParams) (TunnelVirtualNetwork, error) {
 	if params.AccountID == "" {
 		return TunnelVirtualNetwork{}, ErrMissingAccountID
@@ -113,9 +117,10 @@ func (api *API) CreateTunnelVirtualNetwork(ctx context.Context, params TunnelVir
 	return resp.Result, nil
 }
 
-// DeleteTunnelVirtualNetwork deletes an existing virtual network from the account.
+// DeleteTunnelVirtualNetwork deletes an existing virtual network from the
+// account.
 //
-// API documentation: https://api.cloudflare.com/#tunnel-virtual-network-delete-virtual-network
+// API reference: https://api.cloudflare.com/#tunnel-virtual-network-delete-virtual-network
 func (api *API) DeleteTunnelVirtualNetwork(ctx context.Context, params TunnelVirtualNetworkDeleteParams) error {
 	if params.AccountID == "" {
 		return ErrMissingAccountID
@@ -139,7 +144,7 @@ func (api *API) DeleteTunnelVirtualNetwork(ctx context.Context, params TunnelVir
 
 // UpdateTunnelRoute updates an existing virtual network in the account.
 //
-// API documentation: https://api.cloudflare.com/#tunnel-virtual-network-update-virtual-network
+// API reference: https://api.cloudflare.com/#tunnel-virtual-network-update-virtual-network
 func (api *API) UpdateTunnelVirtualNetwork(ctx context.Context, params TunnelVirtualNetworkUpdateParams) (TunnelVirtualNetwork, error) {
 	if params.AccountID == "" {
 		return TunnelVirtualNetwork{}, ErrMissingAccountID
