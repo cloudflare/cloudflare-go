@@ -6,9 +6,15 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strings"
 	"time"
 
 	"github.com/pkg/errors"
+)
+
+var (
+	ErrMissingNetwork      = errors.New("missing required network parameter")
+	ErrInvalidNetworkValue = errors.New("invalid IP parameter. Cannot use CIDR ranges for this endpoint.")
 )
 
 // TunnelRoute is the full record for a route.
@@ -22,7 +28,7 @@ type TunnelRoute struct {
 }
 
 type TunnelRoutesListParams struct {
-	AccountID       string
+	AccountID       string     `url:"-"`
 	TunnelID        string     `url:"tunnel_id,omitempty"`
 	Comment         string     `url:"comment,omitempty"`
 	IsDeleted       *bool      `url:"is_deleted,omitempty"`
@@ -76,7 +82,7 @@ func (api *API) ListTunnelRoutes(ctx context.Context, params TunnelRoutesListPar
 	}
 
 	uri := buildURI(fmt.Sprintf("/%s/%s/teamnet/routes", AccountRouteRoot, params.AccountID), params)
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, params)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []TunnelRoute{}, err
 	}
@@ -94,6 +100,18 @@ func (api *API) ListTunnelRoutes(ctx context.Context, params TunnelRoutesListPar
 //
 // See: https://api.cloudflare.com/#tunnel-route-get-tunnel-route-by-ip
 func (api *API) GetTunnelRouteForIP(ctx context.Context, params TunnelRoutesForIPParams) (TunnelRoute, error) {
+	if params.AccountID == "" {
+		return TunnelRoute{}, ErrMissingAccountID
+	}
+
+	if params.Network == "" {
+		return TunnelRoute{}, ErrMissingNetwork
+	}
+
+	if strings.Contains(params.Network, "/") {
+		return TunnelRoute{}, ErrInvalidNetworkValue
+	}
+
 	uri := fmt.Sprintf("/%s/%s/teamnet/routes/ip/%s", AccountRouteRoot, params.AccountID, params.Network)
 
 	responseBody, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
@@ -119,6 +137,10 @@ func (api *API) CreateTunnelRoute(ctx context.Context, params TunnelRoutesCreate
 		return TunnelRoute{}, ErrMissingAccountID
 	}
 
+	if params.Network == "" {
+		return TunnelRoute{}, ErrMissingNetwork
+	}
+
 	uri := fmt.Sprintf("/%s/%s/teamnet/routes/network/%s", AccountRouteRoot, params.AccountID, url.PathEscape(params.Network))
 
 	responseBody, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
@@ -141,6 +163,10 @@ func (api *API) CreateTunnelRoute(ctx context.Context, params TunnelRoutesCreate
 func (api *API) DeleteTunnelRoute(ctx context.Context, params TunnelRoutesDeleteParams) error {
 	if params.AccountID == "" {
 		return ErrMissingAccountID
+	}
+
+	if params.Network == "" {
+		return ErrMissingNetwork
 	}
 
 	uri := fmt.Sprintf("/%s/%s/teamnet/routes/network/%s", AccountRouteRoot, params.AccountID, url.PathEscape(params.Network))
