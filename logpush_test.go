@@ -377,7 +377,6 @@ func TestLogpushJobFilter_Validate(t *testing.T) {
 }
 
 func TestLogpushJob_Unmarshall(t *testing.T) {
-
 	t.Run("Valid Filter", func(t *testing.T) {
 		jsonstring := `{"filter":"{\"where\":{\"and\":[{\"key\":\"ClientRequestPath\",\"operator\":\"contains\",\"value\":\"/static\\\\\"},{\"key\":\"ClientRequestHost\",\"operator\":\"eq\",\"value\":\"example.com\"}]}}","dataset":"http_requests","enabled":false,"name":"example.com static assets","logpull_options":"fields=RayID,ClientIP,EdgeStartTimestamp\u0026timestamps=rfc3339\u0026CVE-2021-44228=true","destination_conf":"s3://\u003cBUCKET_PATH\u003e?region=us-west-2/"}`
 		var job LogpushJob
