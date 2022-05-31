@@ -10,6 +10,9 @@ import (
 	"github.com/pkg/errors"
 )
 
+// TODO The definitions in this file are deprecated and should be removed after enough time is given for users to
+//      migrate.
+
 const (
 	// IPListTypeIP specifies a list containing IP addresses.
 	IPListTypeIP = "ip"
@@ -129,6 +132,8 @@ type IPListItemsGetResponse struct {
 
 // ListIPLists lists all IP Lists
 //
+// Deprecated: Use ListLists.
+//
 // API reference: https://api.cloudflare.com/#rules-lists-list-lists
 func (api *API) ListIPLists(ctx context.Context, accountID string) ([]IPList, error) {
 	uri := fmt.Sprintf("/accounts/%s/rules/lists", accountID)
@@ -146,6 +151,8 @@ func (api *API) ListIPLists(ctx context.Context, accountID string) ([]IPList, er
 }
 
 // CreateIPList creates a new IP List
+//
+// Deprecated: Use CreateList.
 //
 // API reference: https://api.cloudflare.com/#rules-lists-create-list
 func (api *API) CreateIPList(ctx context.Context, accountID, name, description, kind string) (IPList,
@@ -167,6 +174,8 @@ func (api *API) CreateIPList(ctx context.Context, accountID, name, description, 
 
 // GetIPList returns a single IP List
 //
+// Deprecated: Use GetList.
+//
 // API reference: https://api.cloudflare.com/#rules-lists-get-list
 func (api *API) GetIPList(ctx context.Context, accountID, ID string) (IPList, error) {
 	uri := fmt.Sprintf("/accounts/%s/rules/lists/%s", accountID, ID)
@@ -184,6 +193,8 @@ func (api *API) GetIPList(ctx context.Context, accountID, ID string) (IPList, er
 }
 
 // UpdateIPList updates the description of an existing IP List
+//
+// Deprecated: Use UpdateList.
 //
 // API reference: https://api.cloudflare.com/#rules-lists-update-list
 func (api *API) UpdateIPList(ctx context.Context, accountID, ID, description string) (IPList, error) {
@@ -203,6 +214,8 @@ func (api *API) UpdateIPList(ctx context.Context, accountID, ID, description str
 
 // DeleteIPList deletes an IP List
 //
+// Deprecated: Use DeleteList.
+//
 // API reference: https://api.cloudflare.com/#rules-lists-delete-list
 func (api *API) DeleteIPList(ctx context.Context, accountID, ID string) (IPListDeleteResponse, error) {
 	uri := fmt.Sprintf("/accounts/%s/rules/lists/%s", accountID, ID)
@@ -220,6 +233,8 @@ func (api *API) DeleteIPList(ctx context.Context, accountID, ID string) (IPListD
 }
 
 // ListIPListItems returns a list with all items in an IP List
+//
+// Deprecated: Use ListListItems.
 //
 // API reference: https://api.cloudflare.com/#rules-lists-list-list-items
 func (api *API) ListIPListItems(ctx context.Context, accountID, ID string) ([]IPListItem, error) {
@@ -254,6 +269,8 @@ func (api *API) ListIPListItems(ctx context.Context, accountID, ID string) ([]IP
 // CreateIPListItemAsync creates a new IP List Item asynchronously. Users have to poll the operation status by
 // using the operation_id returned by this function.
 //
+// Deprecated: Use CreateListItemAsync.
+//
 // API reference: https://api.cloudflare.com/#rules-lists-create-list-items
 func (api *API) CreateIPListItemAsync(ctx context.Context, accountID, ID, ip, comment string) (IPListItemCreateResponse, error) {
 	uri := fmt.Sprintf("/accounts/%s/rules/lists/%s/items", accountID, ID)
@@ -271,6 +288,8 @@ func (api *API) CreateIPListItemAsync(ctx context.Context, accountID, ID, ip, co
 }
 
 // CreateIPListItem creates a new IP List Item synchronously and returns the current set of IP List Items.
+//
+// Deprecated: Use CreateListItem.
 func (api *API) CreateIPListItem(ctx context.Context, accountID, ID, ip, comment string) ([]IPListItem, error) {
 	result, err := api.CreateIPListItemAsync(ctx, accountID, ID, ip, comment)
 
@@ -288,6 +307,8 @@ func (api *API) CreateIPListItem(ctx context.Context, accountID, ID, ip, comment
 
 // CreateIPListItemsAsync bulk creates many IP List Items asynchronously. Users have to poll the operation status by
 // using the operation_id returned by this function.
+//
+// Deprecated: Use CreateListItemsAsync.
 //
 // API reference: https://api.cloudflare.com/#rules-lists-create-list-items
 func (api *API) CreateIPListItemsAsync(ctx context.Context, accountID, ID string, items []IPListItemCreateRequest) (
@@ -307,6 +328,8 @@ func (api *API) CreateIPListItemsAsync(ctx context.Context, accountID, ID string
 }
 
 // CreateIPListItems bulk creates many IP List Items synchronously and returns the current set of IP List Items.
+//
+// Deprecated: Use CreateListItems.
 func (api *API) CreateIPListItems(ctx context.Context, accountID, ID string, items []IPListItemCreateRequest) (
 	[]IPListItem, error) {
 	result, err := api.CreateIPListItemsAsync(ctx, accountID, ID, items)
@@ -324,6 +347,8 @@ func (api *API) CreateIPListItems(ctx context.Context, accountID, ID string, ite
 
 // ReplaceIPListItemsAsync replaces all IP List Items asynchronously. Users have to poll the operation status by
 // using the operation_id returned by this function.
+//
+// Deprecated: Use ReplaceListItemsAsync.
 //
 // API reference: https://api.cloudflare.com/#rules-lists-replace-list-items
 func (api *API) ReplaceIPListItemsAsync(ctx context.Context, accountID, ID string, items []IPListItemCreateRequest) (
@@ -343,6 +368,8 @@ func (api *API) ReplaceIPListItemsAsync(ctx context.Context, accountID, ID strin
 }
 
 // ReplaceIPListItems replaces all IP List Items synchronously and returns the current set of IP List Items.
+//
+// Deprecated: Use ReplaceListItems.
 func (api *API) ReplaceIPListItems(ctx context.Context, accountID, ID string, items []IPListItemCreateRequest) (
 	[]IPListItem, error) {
 	result, err := api.ReplaceIPListItemsAsync(ctx, accountID, ID, items)
@@ -360,6 +387,8 @@ func (api *API) ReplaceIPListItems(ctx context.Context, accountID, ID string, it
 
 // DeleteIPListItemsAsync removes specific Items of an IP List by their ID asynchronously. Users have to poll the
 // operation status by using the operation_id returned by this function.
+//
+// Deprecated: Use DeleteListItemsAsync.
 //
 // API reference: https://api.cloudflare.com/#rules-lists-delete-list-items
 func (api *API) DeleteIPListItemsAsync(ctx context.Context, accountID, ID string, items IPListItemDeleteRequest) (
@@ -380,6 +409,8 @@ func (api *API) DeleteIPListItemsAsync(ctx context.Context, accountID, ID string
 
 // DeleteIPListItems removes specific Items of an IP List by their ID synchronously and returns the current set
 // of IP List Items.
+//
+// Deprecated: Use DeleteListItems.
 func (api *API) DeleteIPListItems(ctx context.Context, accountID, ID string, items IPListItemDeleteRequest) (
 	[]IPListItem, error) {
 	result, err := api.DeleteIPListItemsAsync(ctx, accountID, ID, items)
@@ -396,6 +427,8 @@ func (api *API) DeleteIPListItems(ctx context.Context, accountID, ID string, ite
 }
 
 // GetIPListItem returns a single IP List Item
+//
+// Deprecated: Use GetListItem.
 //
 // API reference: https://api.cloudflare.com/#rules-lists-get-list-item
 func (api *API) GetIPListItem(ctx context.Context, accountID, listID, id string) (IPListItem, error) {
@@ -414,6 +447,8 @@ func (api *API) GetIPListItem(ctx context.Context, accountID, listID, id string)
 }
 
 // GetIPListBulkOperation returns the status of a bulk operation
+//
+// Deprecated: Use GetListBulkOperation.
 //
 // API reference: https://api.cloudflare.com/#rules-lists-get-bulk-operation
 func (api *API) GetIPListBulkOperation(ctx context.Context, accountID, ID string) (IPListBulkOperation, error) {
