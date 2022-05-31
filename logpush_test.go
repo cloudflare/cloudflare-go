@@ -2,7 +2,9 @@ package cloudflare
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 	"testing"
@@ -329,4 +331,95 @@ func TestCheckLogpushDestinationExists(t *testing.T) {
 			}
 		})
 	}
+}
+
+var (
+	validFilter LogpushJobFilter = LogpushJobFilter{Key: "ClientRequestPath", Operator: Contains, Value: "static"}
+)
+
+var logpushJobFiltersTest = []struct {
+	name                 string
+	input                LogpushJobFilter
+	haserror             bool
+	expectedErrorMessage string
+}{
+	// Tests without And or Or
+	{"Empty Filter", LogpushJobFilter{}, true, "Key is missing"},
+	{"Missing Operator", LogpushJobFilter{Key: "ClientRequestPath"}, true, "Operator is missing"},
+	{"Missing Value", LogpushJobFilter{Key: "ClientRequestPath", Operator: Contains}, true, "Value is missing"},
+	{"Valid Basic Filter", validFilter, false, ""},
+	// Tests with And
+	{"Valid And Filter", LogpushJobFilter{And: []LogpushJobFilter{validFilter}}, false, ""},
+	{"And and Or", LogpushJobFilter{And: []LogpushJobFilter{validFilter}, Or: []LogpushJobFilter{validFilter}}, true, "And can't be set with Or, Key, Operator or Value"},
+	{"And and Key", LogpushJobFilter{And: []LogpushJobFilter{validFilter}, Key: "Key"}, true, "And can't be set with Or, Key, Operator or Value"},
+	{"And and Operator", LogpushJobFilter{And: []LogpushJobFilter{validFilter}, Operator: Contains}, true, "And can't be set with Or, Key, Operator or Value"},
+	{"And and Value", LogpushJobFilter{And: []LogpushJobFilter{validFilter}, Value: "Value"}, true, "And can't be set with Or, Key, Operator or Value"},
+	{"And with nested error", LogpushJobFilter{And: []LogpushJobFilter{validFilter, {}}}, true, "element 1 in And is invalid: Key is missing"},
+	// Tests with Or
+	{"Valid Or Filter", LogpushJobFilter{Or: []LogpushJobFilter{validFilter}}, false, ""},
+	{"Or and Key", LogpushJobFilter{Or: []LogpushJobFilter{validFilter}, Key: "Key"}, true, "Or can't be set with And, Key, Operator or Value"},
+	{"Or and Operator", LogpushJobFilter{Or: []LogpushJobFilter{validFilter}, Operator: Contains}, true, "Or can't be set with And, Key, Operator or Value"},
+	{"Or and Value", LogpushJobFilter{Or: []LogpushJobFilter{validFilter}, Value: "Value"}, true, "Or can't be set with And, Key, Operator or Value"},
+	{"Or with nested error", LogpushJobFilter{Or: []LogpushJobFilter{validFilter, {}}}, true, "element 1 in Or is invalid: Key is missing"},
+}
+
+func TestLogpushJobFilter_Validate(t *testing.T) {
+	for _, tt := range logpushJobFiltersTest {
+		t.Run(tt.name, func(t *testing.T) {
+			got := tt.input.Validate()
+			if tt.haserror {
+				assert.ErrorContains(t, got, tt.expectedErrorMessage)
+			} else {
+				assert.NoError(t, got)
+			}
+		})
+	}
+}
+
+func TestLogpushJob_Unmarshall(t *testing.T) {
+	t.Run("Valid Filter", func(t *testing.T) {
+		jsonstring := `{"filter":"{\"where\":{\"and\":[{\"key\":\"ClientRequestPath\",\"operator\":\"contains\",\"value\":\"/static\\\\\"},{\"key\":\"ClientRequestHost\",\"operator\":\"eq\",\"value\":\"example.com\"}]}}","dataset":"http_requests","enabled":false,"name":"example.com static assets","logpull_options":"fields=RayID,ClientIP,EdgeStartTimestamp\u0026timestamps=rfc3339\u0026CVE-2021-44228=true","destination_conf":"s3://\u003cBUCKET_PATH\u003e?region=us-west-2/"}`
+		var job LogpushJob
+		if err := json.Unmarshal([]byte(jsonstring), &job); err != nil {
+			log.Fatal(err)
+		}
+
+		assert.Equal(t, LogpushJob{
+			Name:            "example.com static assets",
+			LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339&CVE-2021-44228=true",
+			Dataset:         "http_requests",
+			DestinationConf: "s3://<BUCKET_PATH>?region=us-west-2/",
+			Filter: LogpushJobFilters{
+				Where: LogpushJobFilter{
+					And: []LogpushJobFilter{
+						{Key: "ClientRequestPath", Operator: Contains, Value: "/static\\"},
+						{Key: "ClientRequestHost", Operator: Equal, Value: "example.com"},
+					},
+				},
+			},
+		}, job)
+	})
+
+	t.Run("Invalid Filter", func(t *testing.T) {
+		jsonstring := `{"filter":"{\"where\":{\"and\":[{\"key\":\"ClientRequestPath\",\"operator\":\"contains\"},{\"key\":\"ClientRequestHost\",\"operator\":\"eq\",\"value\":\"example.com\"}]}}","dataset":"http_requests","enabled":false,"name":"example.com static assets","logpull_options":"fields=RayID,ClientIP,EdgeStartTimestamp\u0026timestamps=rfc3339\u0026CVE-2021-44228=true","destination_conf":"s3://\u003cBUCKET_PATH\u003e?region=us-west-2/"}`
+		var job LogpushJob
+		err := json.Unmarshal([]byte(jsonstring), &job)
+
+		assert.ErrorContains(t, err, "element 0 in And is invalid: Value is missing")
+	})
+
+	t.Run("No Filter", func(t *testing.T) {
+		jsonstring := `{"dataset":"http_requests","enabled":false,"name":"example.com static assets","logpull_options":"fields=RayID,ClientIP,EdgeStartTimestamp\u0026timestamps=rfc3339\u0026CVE-2021-44228=true","destination_conf":"s3://\u003cBUCKET_PATH\u003e?region=us-west-2/"}`
+		var job LogpushJob
+		if err := json.Unmarshal([]byte(jsonstring), &job); err != nil {
+			log.Fatal(err)
+		}
+
+		assert.Equal(t, LogpushJob{
+			Name:            "example.com static assets",
+			LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339&CVE-2021-44228=true",
+			Dataset:         "http_requests",
+			DestinationConf: "s3://<BUCKET_PATH>?region=us-west-2/",
+		}, job)
+	})
 }

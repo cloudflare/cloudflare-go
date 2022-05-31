@@ -2,6 +2,7 @@ package cloudflare_test
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 
@@ -171,4 +172,29 @@ func ExampleAPI_CheckZoneLogpushDestinationExists() {
 	}
 
 	fmt.Printf("%+v\n", exists)
+}
+
+func ExampleLogpushJob_MarshalJSON() {
+	job := cloudflare.LogpushJob{
+		Name:            "example.com static assets",
+		LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339&CVE-2021-44228=true",
+		Dataset:         "http_requests",
+		DestinationConf: "s3://<BUCKET_PATH>?region=us-west-2/",
+		Filter: cloudflare.LogpushJobFilters{
+			Where: cloudflare.LogpushJobFilter{
+				And: []cloudflare.LogpushJobFilter{
+					{Key: "ClientRequestPath", Operator: cloudflare.Contains, Value: "/static\\"},
+					{Key: "ClientRequestHost", Operator: cloudflare.Equal, Value: "example.com"},
+				},
+			},
+		},
+	}
+
+	jobstring, err := json.Marshal(job)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("%s", jobstring)
+	// Output: {"filter":"{\"where\":{\"and\":[{\"key\":\"ClientRequestPath\",\"operator\":\"contains\",\"value\":\"/static\\\\\"},{\"key\":\"ClientRequestHost\",\"operator\":\"eq\",\"value\":\"example.com\"}]}}","dataset":"http_requests","enabled":false,"name":"example.com static assets","logpull_options":"fields=RayID,ClientIP,EdgeStartTimestamp\u0026timestamps=rfc3339\u0026CVE-2021-44228=true","destination_conf":"s3://\u003cBUCKET_PATH\u003e?region=us-west-2/"}
 }

@@ -12,17 +12,51 @@ import (
 
 // LogpushJob describes a Logpush job.
 type LogpushJob struct {
-	ID                 int        `json:"id,omitempty"`
-	Dataset            string     `json:"dataset"`
-	Enabled            bool       `json:"enabled"`
-	Name               string     `json:"name"`
-	LogpullOptions     string     `json:"logpull_options"`
-	DestinationConf    string     `json:"destination_conf"`
-	OwnershipChallenge string     `json:"ownership_challenge,omitempty"`
-	LastComplete       *time.Time `json:"last_complete,omitempty"`
-	LastError          *time.Time `json:"last_error,omitempty"`
-	ErrorMessage       string     `json:"error_message,omitempty"`
-	Frequency          string     `json:"frequency,omitempty"`
+	ID                 int               `json:"id,omitempty"`
+	Dataset            string            `json:"dataset"`
+	Enabled            bool              `json:"enabled"`
+	Name               string            `json:"name"`
+	LogpullOptions     string            `json:"logpull_options"`
+	DestinationConf    string            `json:"destination_conf"`
+	OwnershipChallenge string            `json:"ownership_challenge,omitempty"`
+	LastComplete       *time.Time        `json:"last_complete,omitempty"`
+	LastError          *time.Time        `json:"last_error,omitempty"`
+	ErrorMessage       string            `json:"error_message,omitempty"`
+	Frequency          string            `json:"frequency,omitempty"`
+	Filter             LogpushJobFilters `json:"filter,omitempty"`
+}
+
+type LogpushJobFilters struct {
+	Where LogpushJobFilter `json:"where"`
+}
+
+type Operator string
+
+const (
+	Equal              Operator = "eq"
+	NotEqual           Operator = "!eq"
+	LessThan           Operator = "lt"
+	LessThanOrEqual    Operator = "lte"
+	GreaterThan        Operator = "gt"
+	GreaterThanOrEqual Operator = "gte"
+	StartsWith         Operator = "startsWith"
+	EndsWith           Operator = "endsWith"
+	NotStartsWith      Operator = "!startsWith"
+	NotEndsWith        Operator = "!endsWith"
+	Contains           Operator = "contains"
+	NotContains        Operator = "!contains"
+	ValueIsIn          Operator = "in"
+	ValueIsNotIn       Operator = "!in"
+)
+
+type LogpushJobFilter struct {
+	// either this
+	And []LogpushJobFilter `json:"and,omitempty"`
+	Or  []LogpushJobFilter `json:"or,omitempty"`
+	// or this
+	Key      string      `json:"key,omitempty"`
+	Operator Operator    `json:"operator,omitempty"`
+	Value    interface{} `json:"value,omitempty"`
 }
 
 // LogpushJobsResponse is the API response, containing an array of Logpush Jobs.
@@ -91,6 +125,91 @@ type LogpushDestinationExistsResponse struct {
 // LogpushDestinationExistsRequest is the API request for check destination exists.
 type LogpushDestinationExistsRequest struct {
 	DestinationConf string `json:"destination_conf"`
+}
+
+// Custom Marshaller for LogpushJob filter key.
+func (f LogpushJob) MarshalJSON() ([]byte, error) {
+	type Alias LogpushJob
+
+	filter, err := json.Marshal(f.Filter)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return json.Marshal(&struct {
+		Filter string `json:"filter,omitempty"`
+		Alias
+	}{
+		Filter: string(filter),
+		Alias:  (Alias)(f),
+	})
+}
+
+// Custom Unmarshaller for LogpushJob filter key.
+func (f *LogpushJob) UnmarshalJSON(data []byte) error {
+	type Alias LogpushJob
+	aux := &struct {
+		Filter string `json:"filter,omitempty"`
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+
+	if aux != nil && aux.Filter != "" {
+		var filter LogpushJobFilters
+		if err := json.Unmarshal([]byte(aux.Filter), &filter); err != nil {
+			return err
+		}
+		if err := filter.Where.Validate(); err != nil {
+			return err
+		}
+		f.Filter = filter
+	}
+	return nil
+}
+
+func (filter *LogpushJobFilter) Validate() error {
+	if filter.And != nil {
+		if filter.Or != nil || filter.Key != "" || filter.Operator != "" || filter.Value != nil {
+			return errors.New("And can't be set with Or, Key, Operator or Value")
+		}
+		for i, element := range filter.And {
+			err := element.Validate()
+			if err != nil {
+				return errors.WithMessagef(err, "element %v in And is invalid", i)
+			}
+		}
+		return nil
+	}
+	if filter.Or != nil {
+		if filter.And != nil || filter.Key != "" || filter.Operator != "" || filter.Value != nil {
+			return errors.New("Or can't be set with And, Key, Operator or Value")
+		}
+		for i, element := range filter.Or {
+			err := element.Validate()
+			if err != nil {
+				return errors.WithMessagef(err, "element %v in Or is invalid", i)
+			}
+		}
+		return nil
+	}
+	if filter.Key == "" {
+		return errors.New("Key is missing")
+	}
+
+	if filter.Operator == "" {
+		return errors.New("Operator is missing")
+	}
+
+	if filter.Value == nil {
+		return errors.New("Value is missing")
+	}
+
+	return nil
 }
 
 // CreateAccountLogpushJob creates a new account-level Logpush Job.
