@@ -127,7 +127,7 @@ type LogpushDestinationExistsRequest struct {
 	DestinationConf string `json:"destination_conf"`
 }
 
-/* Custom Marshaller for LogpushJob filter key */
+// Custom Marshaller for LogpushJob filter key.
 func (f LogpushJob) MarshalJSON() ([]byte, error) {
 	type Alias LogpushJob
 
