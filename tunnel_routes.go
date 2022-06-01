@@ -57,8 +57,8 @@ type TunnelRoutesUpdateParams struct {
 }
 
 type TunnelRoutesForIPParams struct {
-	AccountID        string `json:"-"`
-	Network          string `json:"-"`
+	AccountID        string `url:"-"`
+	Network          string `url:"-"`
 	VirtualNetworkID string `url:"virtual_network_id,omitempty"`
 }
 
@@ -118,9 +118,9 @@ func (api *API) GetTunnelRouteForIP(ctx context.Context, params TunnelRoutesForI
 		return TunnelRoute{}, ErrInvalidNetworkValue
 	}
 
-	uri := fmt.Sprintf("/%s/%s/teamnet/routes/ip/%s", AccountRouteRoot, params.AccountID, params.Network)
+	uri := buildURI(fmt.Sprintf("/%s/%s/teamnet/routes/ip/%s", AccountRouteRoot, params.AccountID, params.Network), params)
 
-	responseBody, err := api.makeRequestContext(ctx, http.MethodGet, uri, params)
+	responseBody, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return TunnelRoute{}, err
 	}
