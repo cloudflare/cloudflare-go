@@ -19,47 +19,53 @@ var (
 
 // TunnelRoute is the full record for a route.
 type TunnelRoute struct {
-	Network    string     `json:"network"`
-	TunnelID   string     `json:"tunnel_id"`
-	TunnelName string     `json:"tunnel_name"`
-	Comment    string     `json:"comment"`
-	CreatedAt  *time.Time `json:"created_at"`
-	DeletedAt  *time.Time `json:"deleted_at"`
+	Network          string     `json:"network"`
+	TunnelID         string     `json:"tunnel_id"`
+	TunnelName       string     `json:"tunnel_name"`
+	Comment          string     `json:"comment"`
+	CreatedAt        *time.Time `json:"created_at"`
+	DeletedAt        *time.Time `json:"deleted_at"`
+	VirtualNetworkID string     `json:"virtual_network_id"`
 }
 
 type TunnelRoutesListParams struct {
-	AccountID       string     `url:"-"`
-	TunnelID        string     `url:"tunnel_id,omitempty"`
-	Comment         string     `url:"comment,omitempty"`
-	IsDeleted       *bool      `url:"is_deleted,omitempty"`
-	NetworkSubset   string     `url:"network_subset,omitempty"`
-	NetworkSuperset string     `url:"network_superset,omitempty"`
-	ExistedAt       *time.Time `url:"existed_at,omitempty"`
+	AccountID        string     `url:"-"`
+	TunnelID         string     `url:"tunnel_id,omitempty"`
+	Comment          string     `url:"comment,omitempty"`
+	IsDeleted        *bool      `url:"is_deleted,omitempty"`
+	NetworkSubset    string     `url:"network_subset,omitempty"`
+	NetworkSuperset  string     `url:"network_superset,omitempty"`
+	ExistedAt        *time.Time `url:"existed_at,omitempty"`
+	VirtualNetworkID string     `url:"virtual_network_id,omitempty"`
 	PaginationOptions
 }
 
 type TunnelRoutesCreateParams struct {
-	AccountID string `json:"-"`
-	Network   string `json:"-"`
-	TunnelID  string `json:"tunnel_id"`
-	Comment   string `json:"comment,omitempty"`
+	AccountID        string `json:"-"`
+	Network          string `json:"-"`
+	TunnelID         string `json:"tunnel_id"`
+	Comment          string `json:"comment,omitempty"`
+	VirtualNetworkID string `json:"virtual_network_id,omitempty"`
 }
 
 type TunnelRoutesUpdateParams struct {
-	AccountID string `json:"-"`
-	Network   string `json:"network"`
-	TunnelID  string `json:"tunnel_id"`
-	Comment   string `json:"comment,omitempty"`
+	AccountID        string `json:"-"`
+	Network          string `json:"network"`
+	TunnelID         string `json:"tunnel_id"`
+	Comment          string `json:"comment,omitempty"`
+	VirtualNetworkID string `json:"virtual_network_id,omitempty"`
 }
 
 type TunnelRoutesForIPParams struct {
-	AccountID string `json:"-"`
-	Network   string `json:"-"`
+	AccountID        string `url:"-"`
+	Network          string `url:"-"`
+	VirtualNetworkID string `url:"virtual_network_id,omitempty"`
 }
 
 type TunnelRoutesDeleteParams struct {
-	AccountID string `json:"-"`
-	Network   string `json:"-"`
+	AccountID        string `json:"-"`
+	Network          string `json:"-"`
+	VirtualNetworkID string `url:"virtual_network_id,omitempty"`
 }
 
 // tunnelRouteListResponse is the API response for listing tunnel routes.
@@ -112,7 +118,7 @@ func (api *API) GetTunnelRouteForIP(ctx context.Context, params TunnelRoutesForI
 		return TunnelRoute{}, ErrInvalidNetworkValue
 	}
 
-	uri := fmt.Sprintf("/%s/%s/teamnet/routes/ip/%s", AccountRouteRoot, params.AccountID, params.Network)
+	uri := buildURI(fmt.Sprintf("/%s/%s/teamnet/routes/ip/%s", AccountRouteRoot, params.AccountID, params.Network), params)
 
 	responseBody, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
