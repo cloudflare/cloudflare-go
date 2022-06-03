@@ -94,8 +94,8 @@ func TestCreateTunnelVirtualNetwork(t *testing.T) {
 
 	tunnel, err := client.CreateTunnelVirtualNetwork(context.Background(), TunnelVirtualNetworkCreateParams{
 		AccountID: testAccountID,
-		VnetName:  "us-east-1-vpc",
-		IsDefault: BoolPtr(true),
+		Name:      "us-east-1-vpc",
+		IsDefault: true,
 		Comment:   "Staging VPC for data science",
 	})
 
@@ -147,7 +147,7 @@ func TestUpdateTunnelVirtualNetwork(t *testing.T) {
 	tunnel, err := client.UpdateTunnelVirtualNetwork(context.Background(), TunnelVirtualNetworkUpdateParams{
 		AccountID:        testAccountID,
 		VnetID:           "f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
-		VnetName:         "us-east-1-vpc",
+		Name:             "us-east-1-vpc",
 		IsDefaultNetwork: BoolPtr(true),
 		Comment:          "Staging VPC for data science",
 	})
