@@ -35,15 +35,15 @@ type TunnelVirtualNetworksListParams struct {
 
 type TunnelVirtualNetworkCreateParams struct {
 	AccountID string `json:"-"`
-	VnetName  string `json:"vnet_name"`
+	Name      string `json:"name"`
 	Comment   string `json:"comment,omitempty"`
-	IsDefault *bool  `json:"is_default,omitempty"`
+	IsDefault bool   `json:"is_default"`
 }
 
 type TunnelVirtualNetworkUpdateParams struct {
 	AccountID        string `json:"-"`
 	VnetID           string `json:"-"`
-	VnetName         string `json:"vnet_name,omitempty"`
+	Name             string `json:"name,omitempty"`
 	Comment          string `json:"comment,omitempty"`
 	IsDefaultNetwork *bool  `json:"is_default_network,omitempty"`
 }
@@ -97,7 +97,7 @@ func (api *API) CreateTunnelVirtualNetwork(ctx context.Context, params TunnelVir
 		return TunnelVirtualNetwork{}, ErrMissingAccountID
 	}
 
-	if params.VnetName == "" {
+	if params.Name == "" {
 		return TunnelVirtualNetwork{}, ErrMissingVnetName
 	}
 
