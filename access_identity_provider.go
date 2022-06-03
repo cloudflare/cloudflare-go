@@ -43,6 +43,7 @@ type AccessIdentityProviderConfiguration struct {
 	SsoTargetURL       string   `json:"sso_target_url,omitempty"`
 	SupportGroups      bool     `json:"support_groups,omitempty"`
 	TokenURL           string   `json:"token_url,omitempty"`
+	PKCEEnabled        *bool    `json:"pkce_enabled,omitempty"`
 }
 
 // AccessIdentityProvidersListResponse is the API response for multiple
