@@ -26,8 +26,9 @@ const (
 )
 
 var (
-	ErrMissingAccountID = errors.New("required missing account ID")
-	ErrMissingZoneID    = errors.New("required missing zone ID")
+	ErrMissingAccountID          = errors.New("required missing account ID")
+	ErrMissingZoneID             = errors.New("required missing zone ID")
+	ErrMissingResourceIdentifier = errors.New("required missing resource identifier")
 )
 
 type ErrorType string
