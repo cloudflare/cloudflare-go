@@ -36,7 +36,7 @@ type TunnelVirtualNetworksListParams struct {
 type TunnelVirtualNetworkCreateParams struct {
 	AccountID string `json:"-"`
 	Name      string `json:"name"`
-	Comment   string `json:"comment,omitempty"`
+	Comment   string `json:"comment"`
 	IsDefault bool   `json:"is_default"`
 }
 
