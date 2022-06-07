@@ -257,3 +257,40 @@ func TestDeleteMagicTransitIPsecTunnel(t *testing.T) {
 		assert.Equal(t, want, actual)
 	}
 }
+
+func TestMagicTransitIPsecTunnelGeneratePSK(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+      "success": true,
+      "errors": [],
+      "messages": [],
+      "result": {
+        "psk": "itworks",
+				"psk_metadata": {
+		      "last_generated_on": "2017-06-14T05:20:00Z"
+		    }
+      }
+    }`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/magic/ipsec_tunnels/c4a7362d577a6c3019a474fd6f485821/psk_generate", handler)
+
+	lastGeneratedOn, _ := time.Parse(time.RFC3339, "2017-06-14T05:20:00Z")
+
+	want := MagicTransitIPsecTunnelPskMetadata{
+		LastGeneratedOn: &lastGeneratedOn,
+	}
+
+	want_psk := "itworks"
+
+	psk, actual, err := client.GenerateMagicTransitIPsecTunnelPSK(context.Background(), testAccountID, "c4a7362d577a6c3019a474fd6f485821")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, *actual)
+		assert.Equal(t, want_psk, psk)
+	}
+}
