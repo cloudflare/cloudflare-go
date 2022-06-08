@@ -47,6 +47,7 @@ The current feature list includes:
 - [x] Zone cache settings
 - [x] Zone Lockdown and User-Agent Block rules
 - [x] Zones
+- [x] Managed Headers
 
 Pull Requests are welcome, but please open an issue (or comment in an existing
 issue) to discuss any non-trivial changes before submitting code.
