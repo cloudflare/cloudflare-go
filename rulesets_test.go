@@ -199,6 +199,161 @@ func TestGetRuleset_WAF(t *testing.T) {
 	}
 }
 
+func TestGetRuleset_SetCacheSettings(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+      "result": {
+        "id": "70339d97bdb34195bbf054b1ebe81f76",
+        "name": "Cloudflare Cache Rules Ruleset",
+        "description": "This ruleset provides cache settings modifications",
+        "kind": "zone",
+        "version": "1",
+        "rules": [
+          {
+            "id": "78723a9e0c7c4c6dbec5684cb766231d",
+            "version": "1",
+            "action": "set_cache_settings",
+            "action_parameters": {
+				"bypass_cache": false,
+				"edge_ttl":{"mode":"respect_origin","default":60,"status_code_ttl":[{"status_code":200,"value":30},{"status_code_range":{"from":201,"to":300},"value":20}]},
+				"browser_ttl":{"mode":"override_origin","default":10},
+				"serve_stale":{"disable_stale_while_updating":true},
+				"respect_strong_etags":true,
+				"cache_key":{
+					"cache_deception_armor":true,
+					"ignore_query_strings_order":true,
+					"custom_key": {
+						"query_string":{"include":"*"},
+						"header":{"include":["habc","hdef"],"check_presence":["hfizz","hbuzz"],"exclude_origin":true},
+						"cookie":{"include":["cabc","cdef"],"check_presence":["cfizz","cbuzz"]},
+						"user":{
+							"device_type":true,
+							"geo":true,
+							"lang":true
+						},
+						"host":{
+							"resolved":true
+						}
+					}
+				},
+				"origin_error_page_passthru":true
+			},
+			"description": "Set all available cache settings in one rule",
+			"last_updated": "2020-12-18T09:28:09.655749Z",
+			"ref": "272936dc447b41fe976255ff6b768ec0",
+			"enabled": true
+          }
+        ],
+        "last_updated": "2020-12-18T09:28:09.655749Z",
+        "phase": "http_request_cache_settings"
+      },
+      "success": true,
+      "errors": [],
+      "messages": []
+    }`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/rulesets/b232b534beea4e00a21dcbb7a8a545e9", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/rulesets/b232b534beea4e00a21dcbb7a8a545e9", handler)
+
+	lastUpdated, _ := time.Parse(time.RFC3339, "2020-12-18T09:28:09.655749Z")
+
+	rules := []RulesetRule{{
+		ID:      "78723a9e0c7c4c6dbec5684cb766231d",
+		Version: "1",
+		Action:  string(RulesetRuleActionSetCacheSettings),
+		ActionParameters: &RulesetRuleActionParameters{
+			BypassCache: BoolPtr(false),
+			EdgeTTL: &RulesetRuleActionParametersEdgeTTL{
+				Mode:    "respect_origin",
+				Default: UintPtr(60),
+				StatusCodeTTL: []RulesetRuleActionParametersStatusCodeTTL{
+					{
+						StatusCodeValue: UintPtr(200),
+						Value:           IntPtr(30),
+					},
+					{
+						StatusCodeRange: &RulesetRuleActionParametersStatusCodeRange{
+							From: UintPtr(201),
+							To:   UintPtr(300),
+						},
+						Value: IntPtr(20),
+					},
+				},
+			},
+			BrowserTTL: &RulesetRuleActionParametersBrowserTTL{
+				Mode:    "override_origin",
+				Default: UintPtr(10),
+			},
+			ServeStale: &RulesetRuleActionParametersServeStale{
+				DisableStaleWhileUpdating: BoolPtr(true),
+			},
+			RespectStrongETags: BoolPtr(true),
+			CacheKey: &RulesetRuleActionParametersCacheKey{
+				IgnoreQueryStringsOrder: BoolPtr(true),
+				CacheDeceptionArmor:     BoolPtr(true),
+				CustomKey: &RulesetRuleActionParametersCustomKey{
+					Query: &RulesetRuleActionParametersCustomKeyQuery{
+						Include: &RulesetRuleActionParametersCustomKeyList{
+							All: true,
+						},
+					},
+					Header: &RulesetRuleActionParametersCustomKeyHeader{
+						RulesetRuleActionParametersCustomKeyFields: RulesetRuleActionParametersCustomKeyFields{
+							Include:       []string{"habc", "hdef"},
+							CheckPresence: []string{"hfizz", "hbuzz"},
+						},
+						ExcludeOrigin: BoolPtr(true),
+					},
+					Cookie: &RulesetRuleActionParametersCustomKeyCookie{
+						Include:       []string{"cabc", "cdef"},
+						CheckPresence: []string{"cfizz", "cbuzz"},
+					},
+					User: &RulesetRuleActionParametersCustomKeyUser{
+						DeviceType: BoolPtr(true),
+						Geo:        BoolPtr(true),
+						Lang:       BoolPtr(true),
+					},
+					Host: &RulesetRuleActionParametersCustomKeyHost{
+						Resolved: BoolPtr(true),
+					},
+				},
+			},
+			OriginErrorPagePassthru: BoolPtr(true),
+		},
+		Description: "Set all available cache settings in one rule",
+		LastUpdated: &lastUpdated,
+		Ref:         "272936dc447b41fe976255ff6b768ec0",
+		Enabled:     true,
+	}}
+
+	want := Ruleset{
+		ID:          "70339d97bdb34195bbf054b1ebe81f76",
+		Name:        "Cloudflare Cache Rules Ruleset",
+		Description: "This ruleset provides cache settings modifications",
+		Kind:        string(RulesetKindZone),
+		Version:     "1",
+		LastUpdated: &lastUpdated,
+		Phase:       string(RulesetPhaseHTTPRequestCacheSettings),
+		Rules:       rules,
+	}
+
+	zoneActual, err := client.GetZoneRuleset(context.Background(), testZoneID, "b232b534beea4e00a21dcbb7a8a545e9")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, zoneActual)
+	}
+
+	accountActual, err := client.GetAccountRuleset(context.Background(), testAccountID, "b232b534beea4e00a21dcbb7a8a545e9")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, accountActual)
+	}
+}
+
 func TestCreateRuleset(t *testing.T) {
 	setup()
 	defer teardown()
