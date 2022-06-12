@@ -17,12 +17,12 @@ import (
 //
 // This should be swapped to ResultInfoCursors once the types are corrected.
 type SizeOptions struct {
-	Size   int `json:"size,omitempty"`
-	Before int `json:"before,omitempty"`
-	After  int `json:"after,omitempty"`
+	Size   int  `json:"size,omitempty"`
+	Before *int `json:"before,omitempty"`
+	After  *int `json:"after,omitempty"`
 }
 
-// PagesDeploymentStageLogEntry represents the logs for a Pages deployment stage.
+// PagesDeploymentStageLogs represents the logs for a Pages deployment stage.
 type PagesDeploymentStageLogs struct {
 	Name      string                         `json:"name"`
 	StartedOn *time.Time                     `json:"started_on"`
@@ -41,6 +41,19 @@ type PagesDeploymentStageLogEntry struct {
 	Message   string     `json:"message"`
 }
 
+// PagesDeploymentLogs represents the logs for a Pages deployment.
+type PagesDeploymentLogs struct {
+	Total                 int                       `json:"total"`
+	IncludesContainerLogs bool                      `json:"includes_container_logs"`
+	Data                  []PagesDeploymentLogEntry `json:"data"`
+}
+
+// PagesDeploymentLogEntry represents a single log entry in a Pages deployment.
+type PagesDeploymentLogEntry struct {
+	Timestamp *time.Time `json:"ts"`
+	Line      string     `json:"line"`
+}
+
 type pagesDeploymentListResponse struct {
 	Response
 	Result     []PagesProjectDeployment `json:"result"`
@@ -55,6 +68,12 @@ type pagesDeploymentResponse struct {
 type pagesDeploymentStageLogsResponse struct {
 	Response
 	Result     PagesDeploymentStageLogs `json:"result"`
+	ResultInfo `json:"result_info"`
+}
+
+type pagesDeploymentLogsResponse struct {
+	Response
+	Result     PagesDeploymentLogs `json:"result"`
 	ResultInfo `json:"result_info"`
 }
 
@@ -76,6 +95,14 @@ type GetPagesDeploymentStageLogsParams struct {
 	ProjectName  string
 	DeploymentID string
 	StageName    string
+
+	SizeOptions
+}
+
+type GetPagesDeploymentLogsParams struct {
+	AccountID    string
+	ProjectName  string
+	DeploymentID string
 
 	SizeOptions
 }
@@ -153,15 +180,17 @@ func (api *API) GetPagesDeploymentInfo(ctx context.Context, params GetPagesDeplo
 // GetPagesDeploymentStageLogs returns the logs for a Pages deployment stage.
 //
 // API reference: https://api.cloudflare.com/#pages-deployment-get-deployment-stage-logs
+//
+// Deprecated: Use GetPagesDeploymentLogs instead.
 func (api *API) GetPagesDeploymentStageLogs(ctx context.Context, params GetPagesDeploymentStageLogsParams) (PagesDeploymentStageLogs, error) {
 	v := url.Values{}
 	if params.Size > 0 {
 		v.Set("size", strconv.Itoa(params.Size))
 	}
-	if params.Before > 0 {
-		v.Set("before", strconv.Itoa(params.Before))
-	} else if params.After > 0 {
-		v.Set("after", strconv.Itoa(params.After))
+	if params.Before != nil && *params.Before > 0 {
+		v.Set("before", strconv.Itoa(*params.Before))
+	} else if params.After != nil && *params.After > 0 {
+		v.Set("after", strconv.Itoa(*params.After))
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s/deployments/%s/history/%s/logs", params.AccountID, params.ProjectName, params.DeploymentID, params.StageName)
@@ -177,6 +206,32 @@ func (api *API) GetPagesDeploymentStageLogs(ctx context.Context, params GetPages
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return PagesDeploymentStageLogs{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
+
+// GetPagesDeploymentStageLogs returns the logs for a Pages deployment stage.
+//
+// API reference: https://api.cloudflare.com/#pages-deployment-get-deployment-stage-logs
+func (api *API) GetPagesDeploymentLogs(ctx context.Context, params GetPagesDeploymentLogsParams) (PagesDeploymentLogs, error) {
+	v := url.Values{}
+	if params.Size > 0 {
+		v.Set("size", strconv.Itoa(params.Size))
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s/deployments/%s/history/logs", params.AccountID, params.ProjectName, params.DeploymentID)
+	if len(v) > 0 {
+		uri = fmt.Sprintf("%s?%s", uri, v.Encode())
+	}
+
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return PagesDeploymentLogs{}, err
+	}
+	var r pagesDeploymentLogsResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return PagesDeploymentLogs{}, errors.Wrap(err, errUnmarshalError)
 	}
 	return r.Result, nil
 }
