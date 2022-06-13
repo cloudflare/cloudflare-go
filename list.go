@@ -13,6 +13,8 @@ import (
 const (
 	// ListTypeIP specifies a list containing IP addresses.
 	ListTypeIP = "ip"
+	// ListTypeRedirect specifies a list containing redirects.
+	ListTypeRedirect = "redirect"
 )
 
 // ListBulkOperation contains information about a Bulk Operation.
@@ -35,10 +37,22 @@ type List struct {
 	ModifiedOn            *time.Time `json:"modified_on"`
 }
 
+// Redirect represents a redirect item in a List.
+type Redirect struct {
+	SourceUrl           string `json:"source_url"`
+	IncludeSubdomains   *bool  `json:"include_subdomains,omitempty"`
+	TargetUrl           string `json:"target_url"`
+	StatusCode          *int   `json:"status_code,omitempty"`
+	PreserveQueryString *bool  `json:"preserve_query_string,omitempty"`
+	SubpathMatching     *bool  `json:"subpath_matching,omitempty"`
+	PreservePathSuffix  *bool  `json:"preserve_path_suffix,omitempty"`
+}
+
 // ListItem contains information about a single List Item.
 type ListItem struct {
 	ID         string     `json:"id"`
-	IP         string     `json:"ip"`
+	IP         *string    `json:"ip,omitempty"`
+	Redirect   *Redirect  `json:"redirect,omitempty"`
 	Comment    string     `json:"comment"`
 	CreatedOn  *time.Time `json:"created_on"`
 	ModifiedOn *time.Time `json:"modified_on"`
@@ -53,8 +67,9 @@ type ListCreateRequest struct {
 
 // ListItemCreateRequest contains data for a new List Item.
 type ListItemCreateRequest struct {
-	IP      string `json:"ip"`
-	Comment string `json:"comment"`
+	IP       *string   `json:"ip,omitempty"`
+	Redirect *Redirect `json:"redirect,omitempty"`
+	Comment  string    `json:"comment"`
 }
 
 // ListItemDeleteRequest wraps List Items that shall be deleted.
