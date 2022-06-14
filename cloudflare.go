@@ -442,7 +442,6 @@ type RawResponse struct {
 // Raw makes a HTTP request with user provided params and returns the
 // result as untouched JSON.
 func (api *API) Raw(method, endpoint string, data interface{}) (json.RawMessage, error) {
-
 	r, err := api.RawWithResponse(method, endpoint, data)
 	if err != nil {
 		return nil, err
