@@ -442,16 +442,28 @@ type RawResponse struct {
 // Raw makes a HTTP request with user provided params and returns the
 // result as untouched JSON.
 func (api *API) Raw(method, endpoint string, data interface{}) (json.RawMessage, error) {
-	res, err := api.makeRequest(method, endpoint, data)
+
+	r, err := api.RawWithResponse(method, endpoint, data)
 	if err != nil {
 		return nil, err
 	}
 
-	var r RawResponse
-	if err := json.Unmarshal(res, &r); err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
-	}
 	return r.Result, nil
+}
+
+// Raw makes a HTTP request with user provided params and returns the full response.
+func (api *API) RawWithResponse(method, endpoint string, data interface{}) (RawResponse, error) {
+	var r RawResponse
+
+	res, err := api.makeRequest(method, endpoint, data)
+	if err != nil {
+		return r, err
+	}
+
+	if err := json.Unmarshal(res, &r); err != nil {
+		return r, errors.Wrap(err, errUnmarshalError)
+	}
+	return r, nil
 }
 
 // PaginationOptions can be passed to a list request to configure paging
