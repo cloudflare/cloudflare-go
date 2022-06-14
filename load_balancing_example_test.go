@@ -22,7 +22,7 @@ func ExampleAPI_ListLoadBalancers() {
 	}
 
 	// List LBs configured in zone.
-	lbList, err := api.ListLoadBalancers(context.Background(), id)
+	lbList, err := api.ListLoadBalancers(context.Background(), cloudflare.ListLoadBalancerParams{ZoneID: id})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -32,7 +32,7 @@ func ExampleAPI_ListLoadBalancers() {
 	}
 }
 
-func ExampleAPI_PoolHealthDetails() {
+func ExampleAPI_LoadBalancerPoolHealth() {
 	// Construct a new API object.
 	api, err := cloudflare.New("deadbeef", "test@example.com")
 	if err != nil {
@@ -40,7 +40,7 @@ func ExampleAPI_PoolHealthDetails() {
 	}
 
 	// Fetch pool health details.
-	healthInfo, err := api.PoolHealthDetails(context.Background(), "example-pool-id")
+	healthInfo, err := api.LoadBalancerPoolHealth(context.Background(), cloudflare.LoadBalancerPoolHealthParams{PoolID: "example-pool-id"})
 	if err != nil {
 		log.Fatal(err)
 	}
