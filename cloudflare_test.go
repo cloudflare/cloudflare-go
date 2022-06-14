@@ -153,7 +153,7 @@ func TestClient_RetryCanSucceedAfterErrors(t *testing.T) {
             "success": true,
             "errors": [],
             "messages": [],
-            "result": 
+            "result":
                 {
                     "id": "17b5962d775c646f3f9725cbc7a53df4",
                     "created_on": "2014-01-01T05:20:00.12345Z",
@@ -184,7 +184,7 @@ func TestClient_RetryCanSucceedAfterErrors(t *testing.T) {
 
 	mux.HandleFunc("/user/load_balancers/pools", handler)
 
-	_, err := client.CreateLoadBalancerPool(context.Background(), LoadBalancerPool{ID: "123"})
+	_, err := client.CreateLoadBalancerPool(context.Background(), CreateLoadBalancerPoolParams{LoadBalancerPool: LoadBalancerPool{ID: "123"}})
 	assert.NoError(t, err)
 }
 
@@ -209,7 +209,7 @@ func TestClient_RetryReturnsPersistentErrorResponse(t *testing.T) {
 
 	mux.HandleFunc("/user/load_balancers/pools", handler)
 
-	_, err := client.ListLoadBalancerPools(context.Background())
+	_, err := client.ListLoadBalancerPools(context.Background(), ListLoadBalancerPoolParams{})
 	assert.Error(t, err)
 }
 
