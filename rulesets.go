@@ -20,6 +20,7 @@ const (
 	RulesetPhaseDDoSL4                          RulesetPhase = "ddos_l4"
 	RulesetPhaseDDoSL7                          RulesetPhase = "ddos_l7"
 	RulesetPhaseHTTPLogCustomFields             RulesetPhase = "http_log_custom_fields"
+	RulesetPhaseHTTPRequestCacheSettings        RulesetPhase = "http_request_cache_settings"
 	RulesetPhaseHTTPRequestFirewallCustom       RulesetPhase = "http_request_firewall_custom"
 	RulesetPhaseHTTPRequestFirewallManaged      RulesetPhase = "http_request_firewall_managed"
 	RulesetPhaseHTTPRequestLateTransform        RulesetPhase = "http_request_late_transform"
@@ -47,6 +48,7 @@ const (
 	RulesetRuleActionScore                RulesetRuleAction = "score"
 	RulesetRuleActionSkip                 RulesetRuleAction = "skip"
 	RulesetRuleActionRoute                RulesetRuleAction = "route"
+	RulesetRuleActionSetCacheSettings     RulesetRuleAction = "set_cache_settings"
 
 	RulesetActionParameterProductBIC           RulesetActionParameterProduct = "bic"
 	RulesetActionParameterProductHOT           RulesetActionParameterProduct = "hot"
@@ -79,6 +81,7 @@ func RulesetPhaseValues() []string {
 		string(RulesetPhaseDDoSL4),
 		string(RulesetPhaseDDoSL7),
 		string(RulesetPhaseHTTPLogCustomFields),
+		string(RulesetPhaseHTTPRequestCacheSettings),
 		string(RulesetPhaseHTTPRequestFirewallCustom),
 		string(RulesetPhaseHTTPRequestFirewallManaged),
 		string(RulesetPhaseHTTPRequestLateTransform),
@@ -112,6 +115,7 @@ func RulesetRuleActionValues() []string {
 		string(RulesetRuleActionScore),
 		string(RulesetRuleActionSkip),
 		string(RulesetRuleActionRoute),
+		string(RulesetRuleActionSetCacheSettings),
 	}
 }
 
@@ -181,24 +185,125 @@ type RulesetActionParametersLogCustomField struct {
 // RulesetRuleActionParameters specifies the action parameters for a Ruleset
 // rule.
 type RulesetRuleActionParameters struct {
-	ID             string                                           `json:"id,omitempty"`
-	Ruleset        string                                           `json:"ruleset,omitempty"`
-	Rulesets       []string                                         `json:"rulesets,omitempty"`
-	Rules          map[string][]string                              `json:"rules,omitempty"`
-	Increment      int                                              `json:"increment,omitempty"`
-	URI            *RulesetRuleActionParametersURI                  `json:"uri,omitempty"`
-	Headers        map[string]RulesetRuleActionParametersHTTPHeader `json:"headers,omitempty"`
-	Products       []string                                         `json:"products,omitempty"`
-	Phases         []string                                         `json:"phases,omitempty"`
-	Overrides      *RulesetRuleActionParametersOverrides            `json:"overrides,omitempty"`
-	MatchedData    *RulesetRuleActionParametersMatchedData          `json:"matched_data,omitempty"`
-	Version        string                                           `json:"version,omitempty"`
-	Response       *RulesetRuleActionParametersBlockResponse        `json:"response,omitempty"`
-	HostHeader     string                                           `json:"host_header,omitempty"`
-	Origin         *RulesetRuleActionParametersOrigin               `json:"origin,omitempty"`
-	RequestFields  []RulesetActionParametersLogCustomField          `json:"request_fields,omitempty"`
-	ResponseFields []RulesetActionParametersLogCustomField          `json:"response_fields,omitempty"`
-	CookieFields   []RulesetActionParametersLogCustomField          `json:"cookie_fields,omitempty"`
+	ID                      string                                           `json:"id,omitempty"`
+	Ruleset                 string                                           `json:"ruleset,omitempty"`
+	Rulesets                []string                                         `json:"rulesets,omitempty"`
+	Rules                   map[string][]string                              `json:"rules,omitempty"`
+	Increment               int                                              `json:"increment,omitempty"`
+	URI                     *RulesetRuleActionParametersURI                  `json:"uri,omitempty"`
+	Headers                 map[string]RulesetRuleActionParametersHTTPHeader `json:"headers,omitempty"`
+	Products                []string                                         `json:"products,omitempty"`
+	Phases                  []string                                         `json:"phases,omitempty"`
+	Overrides               *RulesetRuleActionParametersOverrides            `json:"overrides,omitempty"`
+	MatchedData             *RulesetRuleActionParametersMatchedData          `json:"matched_data,omitempty"`
+	Version                 string                                           `json:"version,omitempty"`
+	Response                *RulesetRuleActionParametersBlockResponse        `json:"response,omitempty"`
+	HostHeader              string                                           `json:"host_header,omitempty"`
+	Origin                  *RulesetRuleActionParametersOrigin               `json:"origin,omitempty"`
+	RequestFields           []RulesetActionParametersLogCustomField          `json:"request_fields,omitempty"`
+	ResponseFields          []RulesetActionParametersLogCustomField          `json:"response_fields,omitempty"`
+	CookieFields            []RulesetActionParametersLogCustomField          `json:"cookie_fields,omitempty"`
+	BypassCache             *bool                                            `json:"bypass_cache,omitempty"`
+	EdgeTTL                 *RulesetRuleActionParametersEdgeTTL              `json:"edge_ttl,omitempty"`
+	BrowserTTL              *RulesetRuleActionParametersBrowserTTL           `json:"browser_ttl,omitempty"`
+	ServeStale              *RulesetRuleActionParametersServeStale           `json:"serve_stale,omitempty"`
+	RespectStrongETags      *bool                                            `json:"respect_strong_etags,omitempty"`
+	CacheKey                *RulesetRuleActionParametersCacheKey             `json:"cache_key,omitempty"`
+	OriginErrorPagePassthru *bool                                            `json:"origin_error_page_passthru,omitempty"`
+}
+
+type RulesetRuleActionParametersEdgeTTL struct {
+	Mode          string                                     `json:"mode,omitempty"`
+	Default       *uint                                      `json:"default,omitempty"`
+	StatusCodeTTL []RulesetRuleActionParametersStatusCodeTTL `json:"status_code_ttl,omitempty"`
+}
+
+type RulesetRuleActionParametersStatusCodeTTL struct {
+	StatusCodeRange *RulesetRuleActionParametersStatusCodeRange `json:"status_code_range,omitempty"`
+	StatusCodeValue *uint                                       `json:"status_code,omitempty"`
+	Value           *int                                        `json:"value,omitempty"`
+}
+
+type RulesetRuleActionParametersStatusCodeRange struct {
+	From *uint `json:"from,omitempty"`
+	To   *uint `json:"to,omitempty"`
+}
+
+type RulesetRuleActionParametersBrowserTTL struct {
+	Mode    string `json:"mode"`
+	Default *uint  `json:"default,omitempty"`
+}
+
+type RulesetRuleActionParametersServeStale struct {
+	DisableStaleWhileUpdating *bool `json:"disable_stale_while_updating,omitempty"`
+}
+
+type RulesetRuleActionParametersCacheKey struct {
+	CacheByDeviceType       *bool                                 `json:"cache_by_device_type,omitempty"`
+	IgnoreQueryStringsOrder *bool                                 `json:"ignore_query_strings_order,omitempty"`
+	CacheDeceptionArmor     *bool                                 `json:"cache_deception_armor,omitempty"`
+	CustomKey               *RulesetRuleActionParametersCustomKey `json:"custom_key,omitempty"`
+}
+
+type RulesetRuleActionParametersCustomKey struct {
+	Query  *RulesetRuleActionParametersCustomKeyQuery  `json:"query_string,omitempty"`
+	Header *RulesetRuleActionParametersCustomKeyHeader `json:"header,omitempty"`
+	Cookie *RulesetRuleActionParametersCustomKeyCookie `json:"cookie,omitempty"`
+	User   *RulesetRuleActionParametersCustomKeyUser   `json:"user,omitempty"`
+	Host   *RulesetRuleActionParametersCustomKeyHost   `json:"host,omitempty"`
+}
+
+type RulesetRuleActionParametersCustomKeyHeader struct {
+	RulesetRuleActionParametersCustomKeyFields
+	ExcludeOrigin *bool `json:"exclude_origin,omitempty"`
+}
+
+type RulesetRuleActionParametersCustomKeyCookie RulesetRuleActionParametersCustomKeyFields
+
+type RulesetRuleActionParametersCustomKeyFields struct {
+	Include       []string `json:"include,omitempty"`
+	CheckPresence []string `json:"check_presence,omitempty"`
+}
+
+type RulesetRuleActionParametersCustomKeyQuery struct {
+	Include *RulesetRuleActionParametersCustomKeyList `json:"include,omitempty"`
+	Exclude *RulesetRuleActionParametersCustomKeyList `json:"exclude,omitempty"`
+}
+
+type RulesetRuleActionParametersCustomKeyList struct {
+	List []string
+	All  bool
+}
+
+func (s *RulesetRuleActionParametersCustomKeyList) UnmarshalJSON(data []byte) error {
+	var all string
+	if err := json.Unmarshal(data, &all); err == nil {
+		s.All = all == "*"
+		return nil
+	}
+	var list []string
+	if err := json.Unmarshal(data, &list); err == nil {
+		s.List = list
+	}
+
+	return nil
+}
+
+func (s RulesetRuleActionParametersCustomKeyList) MarshalJSON() ([]byte, error) {
+	if s.All {
+		return json.Marshal("*")
+	}
+	return json.Marshal(s.List)
+}
+
+type RulesetRuleActionParametersCustomKeyUser struct {
+	DeviceType *bool `json:"device_type,omitempty"`
+	Geo        *bool `json:"geo,omitempty"`
+	Lang       *bool `json:"lang,omitempty"`
+}
+
+type RulesetRuleActionParametersCustomKeyHost struct {
+	Resolved *bool `json:"resolved,omitempty"`
 }
 
 // RulesetRuleActionParametersBlockResponse holds the BlockResponse struct
