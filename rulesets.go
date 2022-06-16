@@ -26,9 +26,10 @@ const (
 	RulesetPhaseHTTPRequestLateTransform        RulesetPhase = "http_request_late_transform"
 	RulesetPhaseHTTPRequestLateTransformManaged RulesetPhase = "http_request_late_transform_managed"
 	RulesetPhaseHTTPRequestMain                 RulesetPhase = "http_request_main"
+	RulesetPhaseHTTPRequestOrigin               RulesetPhase = "http_request_origin"
+	RulesetPhaseHTTPRequestRedirect             RulesetPhase = "http_request_redirect"
 	RulesetPhaseHTTPRequestSanitize             RulesetPhase = "http_request_sanitize"
 	RulesetPhaseHTTPRequestTransform            RulesetPhase = "http_request_transform"
-	RulesetPhaseHTTPRequestOrigin               RulesetPhase = "http_request_origin"
 	RulesetPhaseHTTPResponseFirewallManaged     RulesetPhase = "http_response_firewall_managed"
 	RulesetPhaseHTTPResponseHeadersTransform    RulesetPhase = "http_response_headers_transform"
 	RulesetPhaseMagicTransit                    RulesetPhase = "magic_transit"
@@ -41,14 +42,15 @@ const (
 	RulesetRuleActionExecute              RulesetRuleAction = "execute"
 	RulesetRuleActionForceConnectionClose RulesetRuleAction = "force_connection_close"
 	RulesetRuleActionJSChallenge          RulesetRuleAction = "js_challenge"
-	RulesetRuleActionManagedChallenge     RulesetRuleAction = "managed_challenge"
 	RulesetRuleActionLog                  RulesetRuleAction = "log"
 	RulesetRuleActionLogCustomField       RulesetRuleAction = "log_custom_field"
+	RulesetRuleActionManagedChallenge     RulesetRuleAction = "managed_challenge"
+	RulesetRuleActionRedirect             RulesetRuleAction = "redirect"
 	RulesetRuleActionRewrite              RulesetRuleAction = "rewrite"
-	RulesetRuleActionScore                RulesetRuleAction = "score"
-	RulesetRuleActionSkip                 RulesetRuleAction = "skip"
 	RulesetRuleActionRoute                RulesetRuleAction = "route"
+	RulesetRuleActionScore                RulesetRuleAction = "score"
 	RulesetRuleActionSetCacheSettings     RulesetRuleAction = "set_cache_settings"
+	RulesetRuleActionSkip                 RulesetRuleAction = "skip"
 
 	RulesetActionParameterProductBIC           RulesetActionParameterProduct = "bic"
 	RulesetActionParameterProductHOT           RulesetActionParameterProduct = "hot"
@@ -88,6 +90,7 @@ func RulesetPhaseValues() []string {
 		string(RulesetPhaseHTTPRequestLateTransformManaged),
 		string(RulesetPhaseHTTPRequestMain),
 		string(RulesetPhaseHTTPRequestOrigin),
+		string(RulesetPhaseHTTPRequestRedirect),
 		string(RulesetPhaseHTTPRequestSanitize),
 		string(RulesetPhaseHTTPRequestTransform),
 		string(RulesetPhaseHTTPResponseFirewallManaged),
@@ -108,14 +111,15 @@ func RulesetRuleActionValues() []string {
 		string(RulesetRuleActionExecute),
 		string(RulesetRuleActionForceConnectionClose),
 		string(RulesetRuleActionJSChallenge),
-		string(RulesetRuleActionManagedChallenge),
 		string(RulesetRuleActionLog),
 		string(RulesetRuleActionLogCustomField),
+		string(RulesetRuleActionManagedChallenge),
+		string(RulesetRuleActionRedirect),
 		string(RulesetRuleActionRewrite),
-		string(RulesetRuleActionScore),
-		string(RulesetRuleActionSkip),
 		string(RulesetRuleActionRoute),
+		string(RulesetRuleActionScore),
 		string(RulesetRuleActionSetCacheSettings),
+		string(RulesetRuleActionSkip),
 	}
 }
 
@@ -210,6 +214,14 @@ type RulesetRuleActionParameters struct {
 	RespectStrongETags      *bool                                            `json:"respect_strong_etags,omitempty"`
 	CacheKey                *RulesetRuleActionParametersCacheKey             `json:"cache_key,omitempty"`
 	OriginErrorPagePassthru *bool                                            `json:"origin_error_page_passthru,omitempty"`
+	FromList                *RulesetRuleActionParametersFromList             `json:"from_list,omitempty"`
+}
+
+// RulesetRuleActionParametersFromList holds the FromList struct for
+// actions which pull data from a list.
+type RulesetRuleActionParametersFromList struct {
+	Name string `json:"name"`
+	Key  string `json:"key"`
 }
 
 type RulesetRuleActionParametersEdgeTTL struct {
