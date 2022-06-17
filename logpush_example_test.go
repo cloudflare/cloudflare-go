@@ -180,7 +180,7 @@ func ExampleLogpushJob_MarshalJSON() {
 		LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339&CVE-2021-44228=true",
 		Dataset:         "http_requests",
 		DestinationConf: "s3://<BUCKET_PATH>?region=us-west-2/",
-		Filter: cloudflare.LogpushJobFilters{
+		Filter: &cloudflare.LogpushJobFilters{
 			Where: cloudflare.LogpushJobFilter{
 				And: []cloudflare.LogpushJobFilter{
 					{Key: "ClientRequestPath", Operator: cloudflare.Contains, Value: "/static\\"},

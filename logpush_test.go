@@ -389,7 +389,7 @@ func TestLogpushJob_Unmarshall(t *testing.T) {
 			LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339&CVE-2021-44228=true",
 			Dataset:         "http_requests",
 			DestinationConf: "s3://<BUCKET_PATH>?region=us-west-2/",
-			Filter: LogpushJobFilters{
+			Filter: &LogpushJobFilters{
 				Where: LogpushJobFilter{
 					And: []LogpushJobFilter{
 						{Key: "ClientRequestPath", Operator: Contains, Value: "/static\\"},
@@ -435,7 +435,7 @@ func TestLogPushJob_Marshall(t *testing.T) {
 				Name:            "valid filter",
 				LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
 				DestinationConf: "https://example.com",
-				Filter: LogpushJobFilters{
+				Filter: &LogpushJobFilters{
 					Where: LogpushJobFilter{Key: "ClientRequestHost", Operator: Equal, Value: "example.com"},
 				},
 			},
