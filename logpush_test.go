@@ -17,8 +17,8 @@ import (
 const (
 	jobID                       = 1
 	serverLogpushJobDescription = `{
-		"id": %d,
-		"dataset": "http_requests",
+	"id": %d,
+	"dataset": "http_requests",
     "enabled": false,
 	"name": "example.com",
     "logpull_options": "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
@@ -422,4 +422,41 @@ func TestLogpushJob_Unmarshall(t *testing.T) {
 			DestinationConf: "s3://<BUCKET_PATH>?region=us-west-2/",
 		}, job)
 	})
+}
+
+func TestLogPushJob_Marshall(t *testing.T) {
+	testCases := []struct {
+		job  LogpushJob
+		want string
+	}{
+		{
+			job: LogpushJob{
+				Dataset:         "http_requests",
+				Name:            "valid filter",
+				LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
+				DestinationConf: "https://example.com",
+				Filter: LogpushJobFilters{
+					Where: LogpushJobFilter{Key: "ClientRequestHost", Operator: Equal, Value: "example.com"},
+				},
+			},
+			want: `{
+				"dataset": "http_requests",
+				"enabled": false,
+				"name": "valid filter",
+				"logpull_options": "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
+				"destination_conf": "https://example.com",
+				"filter":"{\"where\":{\"key\":\"ClientRequestHost\",\"operator\":\"eq\",\"value\":\"example.com\"}}"
+			}`,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.job.Name, func(t *testing.T) {
+			got, err := json.Marshal(tc.job)
+
+			if assert.NoError(t, err) {
+				assert.JSONEq(t, tc.want, string(got))
+			}
+		})
+	}
 }
