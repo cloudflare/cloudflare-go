@@ -16,6 +16,7 @@ type LogpushJob struct {
 	Dataset            string            `json:"dataset"`
 	Enabled            bool              `json:"enabled"`
 	Name               string            `json:"name"`
+	Kind               string            `json:"kind,omitempty"`
 	LogpullOptions     string            `json:"logpull_options"`
 	DestinationConf    string            `json:"destination_conf"`
 	OwnershipChallenge string            `json:"ownership_challenge,omitempty"`
@@ -131,17 +132,20 @@ type LogpushDestinationExistsRequest struct {
 func (f LogpushJob) MarshalJSON() ([]byte, error) {
 	type Alias LogpushJob
 
-	filter, err := json.Marshal(f.Filter)
-
-	if err != nil {
-		return nil, err
+	var filter string
+	if len(f.Filter.Where.And) > 0 || len(f.Filter.Where.Or) > 0 || f.Filter.Where.Key != "" || f.Filter.Where.Operator != "" || f.Filter.Where.Value != nil {
+		b, err := json.Marshal(f.Filter)
+		if err != nil {
+			return nil, err
+		}
+		filter = string(b)
 	}
 
 	return json.Marshal(&struct {
 		Filter string `json:"filter,omitempty"`
 		Alias
 	}{
-		Filter: string(filter),
+		Filter: filter,
 		Alias:  (Alias)(f),
 	})
 }

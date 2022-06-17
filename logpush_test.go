@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
@@ -17,9 +18,24 @@ import (
 const (
 	jobID                       = 1
 	serverLogpushJobDescription = `{
-		"id": %d,
-		"dataset": "http_requests",
+	"id": %d,
+	"dataset": "http_requests",
+	"kind": "",
     "enabled": false,
+	"name": "example.com",
+    "logpull_options": "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
+	"destination_conf": "s3://mybucket/logs?region=us-west-2",
+	"last_complete": "%[2]s",
+	"last_error": "%[2]s",
+	"error_message": "test",
+	"frequency": "high"
+  }
+`
+	serverEdgeLogpushJobDescription = `{
+	"id": %d,
+	"dataset": "http_requests",
+	"kind": "edge",
+    "enabled": true,
 	"name": "example.com",
     "logpull_options": "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
 	"destination_conf": "s3://mybucket/logs?region=us-west-2",
@@ -48,7 +64,21 @@ var (
 	expectedLogpushJobStruct = LogpushJob{
 		ID:              jobID,
 		Dataset:         "http_requests",
+		Kind:            "",
 		Enabled:         false,
+		Name:            "example.com",
+		LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
+		DestinationConf: "s3://mybucket/logs?region=us-west-2",
+		LastComplete:    &testLogpushTimestamp,
+		LastError:       &testLogpushTimestamp,
+		ErrorMessage:    "test",
+		Frequency:       "high",
+	}
+	expectedEdgeLogpushJobStruct = LogpushJob{
+		ID:              jobID,
+		Dataset:         "http_requests",
+		Kind:            "edge",
+		Enabled:         true,
 		Name:            "example.com",
 		LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
 		DestinationConf: "s3://mybucket/logs?region=us-west-2",
@@ -98,58 +128,179 @@ func TestLogpushJobs(t *testing.T) {
 }
 
 func TestGetLogpushJob(t *testing.T) {
-	setup()
-	defer teardown()
-
-	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
-		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, `{
-		  "result": %s,
-		  "success": true,
-		  "errors": null,
-		  "messages": null
-		}
-		`, fmt.Sprintf(serverLogpushJobDescription, jobID, testLogpushTimestamp.Format(time.RFC3339Nano)))
+	testCases := map[string]struct {
+		result string
+		want   LogpushJob
+	}{
+		"core logpush job": {
+			result: serverLogpushJobDescription,
+			want:   expectedLogpushJobStruct,
+		},
+		"edge logpush job": {
+			result: serverEdgeLogpushJobDescription,
+			want:   expectedEdgeLogpushJobStruct,
+		},
+		"filtered edge logpush job": {
+			result: `{
+				"id": %d,
+				"dataset": "http_requests",
+				"enabled": true,
+				"name": "example.com",
+				"kind": "edge",
+				"logpull_options": "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
+				"destination_conf": "s3://mybucket/logs?region=us-west-2",
+				"last_complete": "%[2]s",
+				"last_error": "%[2]s",
+				"frequency": "high",
+				"filter": "{\"where\":{\"key\":\"ClientRequestHost\",\"operator\":\"eq\",\"value\":\"example.com\"}}"
+			  }`,
+			want: LogpushJob{
+				ID:              jobID,
+				Dataset:         "http_requests",
+				Enabled:         true,
+				Name:            "example.com",
+				Kind:            "edge",
+				LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
+				DestinationConf: "s3://mybucket/logs?region=us-west-2",
+				LastComplete:    &testLogpushTimestamp,
+				LastError:       &testLogpushTimestamp,
+				Frequency:       "high",
+				Filter: LogpushJobFilters{
+					Where: LogpushJobFilter{Key: "ClientRequestHost", Operator: "eq", Value: "example.com"},
+				},
+			},
+		},
 	}
 
-	mux.HandleFunc("/zones/"+testZoneID+"/logpush/jobs/"+strconv.Itoa(jobID), handler)
-	want := expectedLogpushJobStruct
+	for name, tc := range testCases {
+		t.Run(name, func(t *testing.T) {
+			setup()
+			defer teardown()
 
-	actual, err := client.GetZoneLogpushJob(context.Background(), testZoneID, jobID)
-	if assert.NoError(t, err) {
-		assert.Equal(t, want, actual)
+			handler := func(w http.ResponseWriter, r *http.Request) {
+				assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+				w.Header().Set("content-type", "application/json")
+				fmt.Fprintf(w, `{
+				  "result": %s,
+				  "success": true,
+				  "errors": null,
+				  "messages": null
+				}
+				`, fmt.Sprintf(tc.result, jobID, testLogpushTimestamp.Format(time.RFC3339Nano)))
+			}
+
+			mux.HandleFunc("/zones/"+testZoneID+"/logpush/jobs/"+strconv.Itoa(jobID), handler)
+
+			actual, err := client.GetZoneLogpushJob(context.Background(), testZoneID, jobID)
+			if assert.NoError(t, err) {
+				assert.Equal(t, tc.want, actual)
+			}
+		})
 	}
 }
 
 func TestCreateLogpushJob(t *testing.T) {
-	setup()
-	defer teardown()
-	newJob := LogpushJob{
-		Enabled:         false,
-		Name:            "example.com",
-		LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
-		DestinationConf: "s3://mybucket/logs?region=us-west-2",
+	testCases := map[string]struct {
+		newJob  LogpushJob
+		payload string
+		result  string
+		want    LogpushJob
+	}{
+		"core logpush job": {
+			newJob: LogpushJob{
+				Dataset:         "http_requests",
+				Enabled:         false,
+				Name:            "example.com",
+				LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
+				DestinationConf: "s3://mybucket/logs?region=us-west-2",
+			},
+			payload: `{
+				"dataset": "http_requests",
+				"enabled":false,
+				"name":"example.com",
+				"logpull_options":"fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
+				"destination_conf":"s3://mybucket/logs?region=us-west-2"
+			}`,
+			result: serverLogpushJobDescription,
+			want:   expectedLogpushJobStruct,
+		},
+		"edge logpush job": {
+			newJob: LogpushJob{
+				Dataset:         "http_requests",
+				Enabled:         true,
+				Name:            "example.com",
+				Kind:            "edge",
+				LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
+				DestinationConf: "s3://mybucket/logs?region=us-west-2",
+			},
+			payload: `{
+				"dataset": "http_requests",
+				"enabled":true,
+				"name":"example.com",
+				"kind":"edge",
+				"logpull_options":"fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
+				"destination_conf":"s3://mybucket/logs?region=us-west-2"
+			}`,
+			result: serverEdgeLogpushJobDescription,
+			want:   expectedEdgeLogpushJobStruct,
+		},
+		"filtered edge logpush job": {
+			newJob: LogpushJob{
+				Dataset:         "http_requests",
+				Enabled:         true,
+				Name:            "example.com",
+				Kind:            "edge",
+				LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
+				DestinationConf: "s3://mybucket/logs?region=us-west-2",
+				Filter: LogpushJobFilters{
+					Where: LogpushJobFilter{Key: "ClientRequestHost", Operator: "eq", Value: "example.com"},
+				},
+			},
+			payload: `{
+				"dataset": "http_requests",
+				"enabled":true,
+				"name":"example.com",
+				"kind":"edge",
+				"logpull_options":"fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
+				"destination_conf":"s3://mybucket/logs?region=us-west-2",
+				"filter":"{\"where\":{\"key\":\"ClientRequestHost\",\"operator\":\"eq\",\"value\":\"example.com\"}}"
+			}`,
+			result: serverEdgeLogpushJobDescription,
+			want:   expectedEdgeLogpushJobStruct,
+		},
 	}
 
-	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
-		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, `{
-		  "result": %s,
-		  "success": true,
-		  "errors": null,
-		  "messages": null
-		}
-		`, fmt.Sprintf(serverLogpushJobDescription, jobID, testLogpushTimestamp.Format(time.RFC3339Nano)))
-	}
+	for name, tc := range testCases {
+		t.Run(name, func(t *testing.T) {
+			setup()
+			defer teardown()
 
-	mux.HandleFunc("/zones/"+testZoneID+"/logpush/jobs", handler)
-	want := &expectedLogpushJobStruct
+			handler := func(w http.ResponseWriter, r *http.Request) {
+				assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+				b, err := ioutil.ReadAll(r.Body)
+				defer r.Body.Close()
 
-	actual, err := client.CreateZoneLogpushJob(context.Background(), testZoneID, newJob)
-	if assert.NoError(t, err) {
-		assert.Equal(t, want, actual)
+				if assert.NoError(t, err) {
+					assert.JSONEq(t, tc.payload, string(b), "JSON payload not equal")
+				}
+
+				w.Header().Set("content-type", "application/json")
+				fmt.Fprintf(w, `{
+				"result": %s,
+				"success": true,
+				"errors": null,
+				"messages": null
+				}
+				`, fmt.Sprintf(tc.result, jobID, testLogpushTimestamp.Format(time.RFC3339Nano)))
+			}
+
+			mux.HandleFunc("/zones/"+testZoneID+"/logpush/jobs", handler)
+
+			actual, err := client.CreateZoneLogpushJob(context.Background(), testZoneID, tc.newJob)
+			if assert.NoError(t, err) {
+				assert.Equal(t, tc.want, *actual)
+			}
+		})
 	}
 }
 
