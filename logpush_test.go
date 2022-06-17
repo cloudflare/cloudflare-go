@@ -448,6 +448,21 @@ func TestLogPushJob_Marshall(t *testing.T) {
 				"filter":"{\"where\":{\"key\":\"ClientRequestHost\",\"operator\":\"eq\",\"value\":\"example.com\"}}"
 			}`,
 		},
+		{
+			job: LogpushJob{
+				Dataset:         "http_requests",
+				Name:            "no filter",
+				LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
+				DestinationConf: "https://example.com",
+			},
+			want: `{
+				"dataset": "http_requests",
+				"enabled": false,
+				"name": "no filter",
+				"logpull_options": "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
+				"destination_conf": "https://example.com"
+			}`,
+		},
 	}
 
 	for _, tc := range testCases {
