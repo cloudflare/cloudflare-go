@@ -17,6 +17,7 @@ type ListManagedHeadersResponse struct {
 type UpdateManagedHeadersParams struct {
 	ZoneID string
 	ManagedHeaders
+	Filter func(ManagedHeader) bool
 }
 
 type ManagedHeaders struct {
@@ -33,6 +34,33 @@ type ManagedHeader struct {
 
 type ListManagedHeadersParams struct {
 	ZoneID string
+	Filter func(ManagedHeader) bool
+}
+
+func filterManagedHeaders(headers ManagedHeaders, filter func(ManagedHeader) bool) ManagedHeaders {
+	if filter == nil {
+		filter = func(ManagedHeader) bool {
+			return true
+		}
+	}
+
+	var managedRequestHeaders []ManagedHeader
+	for i := range headers.ManagedRequestHeaders {
+		if filter(headers.ManagedRequestHeaders[i]) {
+			managedRequestHeaders = append(managedRequestHeaders, headers.ManagedRequestHeaders[i])
+		}
+	}
+	var managedResponseHeaders []ManagedHeader
+	for i := range headers.ManagedResponseHeaders {
+		if filter(headers.ManagedResponseHeaders[i]) {
+			managedResponseHeaders = append(managedResponseHeaders, headers.ManagedResponseHeaders[i])
+		}
+	}
+
+	return ManagedHeaders{
+		ManagedRequestHeaders:  managedRequestHeaders,
+		ManagedResponseHeaders: managedResponseHeaders,
+	}
 }
 
 func (api *API) ListZoneManagedHeaders(ctx context.Context, params ListManagedHeadersParams) (ManagedHeaders, error) {
@@ -52,7 +80,7 @@ func (api *API) ListZoneManagedHeaders(ctx context.Context, params ListManagedHe
 		return ManagedHeaders{}, errors.Wrap(err, errUnmarshalError)
 	}
 
-	return result.Result, nil
+	return filterManagedHeaders(result.Result, params.Filter), nil
 }
 
 func (api *API) UpdateZoneManagedHeaders(ctx context.Context, params UpdateManagedHeadersParams) (ManagedHeaders, error) {
@@ -77,5 +105,5 @@ func (api *API) UpdateZoneManagedHeaders(ctx context.Context, params UpdateManag
 		return ManagedHeaders{}, errors.Wrap(err, errUnmarshalError)
 	}
 
-	return result.Result, nil
+	return filterManagedHeaders(result.Result, params.Filter), nil
 }
