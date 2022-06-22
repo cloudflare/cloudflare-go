@@ -15,6 +15,7 @@ type LogpushJob struct {
 	ID                 int                `json:"id,omitempty"`
 	Dataset            string             `json:"dataset"`
 	Enabled            bool               `json:"enabled"`
+	Kind               string             `json:"kind,omitempty"`
 	Name               string             `json:"name"`
 	LogpullOptions     string             `json:"logpull_options"`
 	DestinationConf    string             `json:"destination_conf"`
