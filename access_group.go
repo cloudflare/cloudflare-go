@@ -189,6 +189,13 @@ type AccessGroupListResponse struct {
 	ResultInfo `json:"result_info"`
 }
 
+// AccessGroupIPList restricts the application to specific teams_list of ips.
+type AccessGroupIPList struct {
+	IPList struct {
+		ID string `json:"id"`
+	} `json:"ip_list"`
+}
+
 // AccessGroupDetailResponse is the API response, containing a single
 // access group.
 type AccessGroupDetailResponse struct {
