@@ -45,11 +45,6 @@ const (
 			}
 		},
 		"tcp_config": null,
-		"notification": {
-			"suspended": false,
-			"email_addresses": ["alerts@example.com"],
-			"trigger": "ALL"
-		},
 		"created_on": "2019-01-13T12:20:00.12345Z",
 		"modified_on": "2019-01-13T12:20:00.12345Z",
 		"status": "unknown",
@@ -87,11 +82,6 @@ var (
 			Header: map[string][]string{
 				"Host": {"www.example.com"},
 			},
-		},
-		Notification: HealthcheckNotification{
-			Suspended:      false,
-			EmailAddresses: []string{"alerts@example.com"},
-			Trigger:        "ALL",
 		},
 		Status:        "unknown",
 		FailureReason: "",
