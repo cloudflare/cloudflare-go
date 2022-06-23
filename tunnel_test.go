@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"testing"
 	"time"
@@ -183,6 +184,51 @@ func TestCreateTunnel(t *testing.T) {
 	}
 
 	actual, err := client.CreateTunnel(context.Background(), TunnelCreateParams{AccountID: testAccountID, Name: "blog", Secret: "notarealsecret"})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestAPI_UpdateTunnelConfiguration(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method '%s', got %s", http.MethodPut, r.Method)
+		rawBody, err := ioutil.ReadAll(r.Body)
+		if !assert.NoError(t, err) {
+			t.FailNow()
+		}
+
+		t.Log(string(rawBody))
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+		  "success": true,
+		  "errors": [],
+		  "messages": [],
+		  "result": {
+			"config": "{\"warp-routing\": {\"enabled\": true},  \"originRequest\" : {\"connectTimeout\": 10}, \"ingress\" : [ {\"hostname\": \"test\", \"service\": \"https://localhost:8000\" } , {\"service\": \"http_status:404\"} ]}",
+			"tunnel_id": "f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
+			"version": 5,
+			"created_at": "2021-01-25T18:22:34.317854Z"
+		  }
+		}
+		`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/configurations", handler)
+
+	want := TunnelConfigurationParams{
+		ConfigString: "{\"warp-routing\": {\"enabled\": true},  \"originRequest\" : {\"connectTimeout\": 10}, \"ingress\" : [ {\"hostname\": \"test\", \"service\": \"https://localhost:8000\" } , {\"service\": \"http_status:404\"} ]}",
+		Version:      5,
+	}
+
+	actual, err := client.UpdateTunnelConfiguration(context.Background(), TunnelConfigurationParams{
+		AccountID:    testAccountID,
+		TunnelID:     "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		ConfigString: "{\"name\":\"blog\"}",
+	})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)

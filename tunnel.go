@@ -77,11 +77,83 @@ type TunnelUpdateParams struct {
 	Secret    string `json:"tunnel_secret,omitempty"`
 }
 
+// UnvalidatedIngressRule is copied directly from: https://github.com/cloudflare/cloudflared/blob/eed7d7bbc90ccaca129bc6b6c3fd18b19e6bf856/config/configuration.go#L189
+type UnvalidatedIngressRule struct {
+	Hostname      string               `json:"hostname,omitempty"`
+	Path          string               `json:"path,omitempty"`
+	Service       string               `json:"service,omitempty"`
+	OriginRequest *OriginRequestConfig `json:"originRequest,omitempty"`
+}
+
+// OriginRequestConfig is a set of optional fields that users may set to
+// customize how cloudflared sends requests to origin services. It is used to set
+// up general config that apply to all rules, and also, specific per-rule
+// config.
+// Note: To specify a time.Duration in go-yaml, use e.g. "3s" or "24h".
+// This is copied directly from: https://github.com/cloudflare/cloudflared/blob/eed7d7bbc90ccaca129bc6b6c3fd18b19e6bf856/config/configuration.go#L189
+type OriginRequestConfig struct {
+	// HTTP proxy timeout for establishing a new connection
+	ConnectTimeout *time.Duration `json:"connectTimeout,omitempty"`
+	// HTTP proxy timeout for completing a TLS handshake
+	TLSTimeout *time.Duration `json:"tlsTimeout,omitempty"`
+	// HTTP proxy TCP keepalive duration
+	TCPKeepAlive *time.Duration `json:"tcpKeepAlive,omitempty"`
+	// HTTP proxy should disable "happy eyeballs" for IPv4/v6 fallback
+	NoHappyEyeballs *bool `json:"noHappyEyeballs,omitempty"`
+	// HTTP proxy maximum keepalive connection pool size
+	KeepAliveConnections *int `json:"keepAliveConnections,omitempty"`
+	// HTTP proxy timeout for closing an idle connection
+	KeepAliveTimeout *time.Duration `json:"keepAliveTimeout,omitempty"`
+	// Sets the HTTP Host header for the local webserver.
+	HTTPHostHeader *string `json:"httpHostHeader,omitempty"`
+	// Hostname on the origin server certificate.
+	OriginServerName *string `json:"originServerName,omitempty"`
+	// Path to the CA for the certificate of your origin.
+	// This option should be used only if your certificate is not signed by Cloudflare.
+	CAPool *string `json:"caPool,omitempty"`
+	// Disables TLS verification of the certificate presented by your origin.
+	// Will allow any certificate from the origin to be accepted.
+	// Note: The connection from your machine to Cloudflare's Edge is still encrypted.
+	NoTLSVerify *bool `json:"noTLSVerify,omitempty"`
+	// Disables chunked transfer encoding.
+	// Useful if you are running a WSGI server.
+	DisableChunkedEncoding *bool `json:"disableChunkedEncoding,omitempty"`
+	// Runs as jump host
+	BastionMode *bool `json:"bastionMode,omitempty"`
+	// Listen address for the proxy.
+	ProxyAddress *string `json:"proxyAddress,omitempty"`
+	// Listen port for the proxy.
+	ProxyPort *uint `json:"proxyPort,omitempty"`
+	// Valid options are 'socks' or empty.
+	ProxyType *string `json:"proxyType,omitempty"`
+	// IP rules for the proxy service
+	IPRules []IngressIPRule `json:"ipRules,omitempty"`
+}
+
+// IngressIPRule is copied directly from: https://github.com/cloudflare/cloudflared/blob/eed7d7bbc90ccaca129bc6b6c3fd18b19e6bf856/config/configuration.go#L228
+type IngressIPRule struct {
+	Prefix *string `json:"prefix,omitempty"`
+	Ports  []int   `json:"ports,omitempty"`
+	Allow  bool    `json:"allow,omitempty"`
+}
+
+// TunnelConfiguration is copied directly from: https://github.com/cloudflare/cloudflared/blob/eed7d7bbc90ccaca129bc6b6c3fd18b19e6bf856/config/configuration.go#L234
+type TunnelConfiguration struct {
+	Ingress     []UnvalidatedIngressRule `json:"ingress,omitempty"`
+	WarpRouting *WarpRoutingConfig       `json:"warp-routing,omitempty"`
+}
+
+// WarpRoutingConfig is copied directly from: https://github.com/cloudflare/cloudflared/blob/eed7d7bbc90ccaca129bc6b6c3fd18b19e6bf856/config/configuration.go#L242
+type WarpRoutingConfig struct {
+	Enabled bool `json:"enabled,omitempty"`
+}
+
 type TunnelConfigurationParams struct {
-	AccountID string `json:"-"`
-	TunnelID  string `json:"-"`
-	Config    string `json:"config,omitempty"`
-	Version   int    `json:"version,omitempty"`
+	AccountID    string              `json:"-"`
+	TunnelID     string              `json:"-"`
+	Config       TunnelConfiguration `json:"-"`
+	ConfigString string              `json:"config,omitempty"`
+	Version      int                 `json:"version,omitempty"`
 }
 
 type TunnelDeleteParams struct {
@@ -228,21 +300,34 @@ func (api *API) UpdateTunnel(ctx context.Context, params TunnelUpdateParams) (Tu
 // UpdateTunnelConfiguration updates an existing tunnel for the account.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-tunnel-configuration-properties
-func (api *API) UpdateTunnelConfiguration(ctx context.Context, params TunnelConfigurationParams) (Tunnel, error) {
-	if params.AccountID == "" {
-		return Tunnel{}, ErrMissingAccountID
+func (api *API) UpdateTunnelConfiguration(ctx context.Context, params TunnelConfigurationParams) (TunnelConfigurationParams, error) {
+	if len(params.AccountID) == 0 {
+		return TunnelConfigurationParams{}, ErrMissingAccountID
+	}
+
+	if len(params.TunnelID) == 0 {
+		return TunnelConfigurationParams{}, ErrMissingTunnelID
+	}
+
+	if len(params.ConfigString) == 0 {
+		raw, err := json.Marshal(params.Config)
+		if err != nil {
+			return TunnelConfigurationParams{}, errors.Wrap(err, errMarshalError)
+		}
+
+		params.ConfigString = string(raw)
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s/configurations", params.AccountID, params.TunnelID)
 	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPut, uri, params, nil)
 	if err != nil {
-		return Tunnel{}, err
+		return TunnelConfigurationParams{}, err
 	}
 
-	var argoDetailsResponse TunnelDetailResponse
+	var argoDetailsResponse TunnelConfigurationResponse
 	err = json.Unmarshal(res, &argoDetailsResponse)
 	if err != nil {
-		return Tunnel{}, errors.Wrap(err, errUnmarshalError)
+		return TunnelConfigurationParams{}, errors.Wrap(err, errUnmarshalError)
 	}
 
 	return argoDetailsResponse.Result, nil
