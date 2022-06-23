@@ -47,10 +47,16 @@ type TunnelDetailResponse struct {
 	Response
 }
 
+type TunnelConfigurationResult struct {
+	TunnelID string              `json:"tunnel_id,omitempty"`
+	Config   TunnelConfiguration `json:"config,omitempty"`
+	Version  int                 `json:"version,omitempty"`
+}
+
 // TunnelConfigurationResponse is used for representing the API response payload for
 // a single tunnel.
 type TunnelConfigurationResponse struct {
-	Result TunnelConfigurationParams `json:"result"`
+	Result TunnelConfigurationResult `json:"result"`
 	Response
 }
 
@@ -149,11 +155,14 @@ type WarpRoutingConfig struct {
 }
 
 type TunnelConfigurationParams struct {
-	AccountID    string              `json:"-"`
-	TunnelID     string              `json:"-"`
-	Config       TunnelConfiguration `json:"-"`
-	ConfigString string              `json:"config,omitempty"`
-	Version      int                 `json:"version,omitempty"`
+	AccountID string              `json:"-"`
+	TunnelID  string              `json:"-"`
+	Config    TunnelConfiguration `json:"config,omitempty"`
+}
+
+type GetTunnelConfigurationParams struct {
+	AccountID string `json:"-"`
+	TunnelID  string `json:"-"`
 }
 
 type TunnelDeleteParams struct {
@@ -300,34 +309,52 @@ func (api *API) UpdateTunnel(ctx context.Context, params TunnelUpdateParams) (Tu
 // UpdateTunnelConfiguration updates an existing tunnel for the account.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-tunnel-configuration-properties
-func (api *API) UpdateTunnelConfiguration(ctx context.Context, params TunnelConfigurationParams) (TunnelConfigurationParams, error) {
+func (api *API) UpdateTunnelConfiguration(ctx context.Context, params TunnelConfigurationParams) (TunnelConfigurationResult, error) {
 	if len(params.AccountID) == 0 {
-		return TunnelConfigurationParams{}, ErrMissingAccountID
+		return TunnelConfigurationResult{}, ErrMissingAccountID
 	}
 
 	if len(params.TunnelID) == 0 {
-		return TunnelConfigurationParams{}, ErrMissingTunnelID
-	}
-
-	if len(params.ConfigString) == 0 {
-		raw, err := json.Marshal(params.Config)
-		if err != nil {
-			return TunnelConfigurationParams{}, errors.Wrap(err, errMarshalError)
-		}
-
-		params.ConfigString = string(raw)
+		return TunnelConfigurationResult{}, ErrMissingTunnelID
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s/configurations", params.AccountID, params.TunnelID)
 	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPut, uri, params, nil)
 	if err != nil {
-		return TunnelConfigurationParams{}, err
+		return TunnelConfigurationResult{}, err
 	}
 
 	var argoDetailsResponse TunnelConfigurationResponse
 	err = json.Unmarshal(res, &argoDetailsResponse)
 	if err != nil {
-		return TunnelConfigurationParams{}, errors.Wrap(err, errUnmarshalError)
+		return TunnelConfigurationResult{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return argoDetailsResponse.Result, nil
+}
+
+// GetTunnelConfiguration updates an existing tunnel for the account.
+//
+// API reference: https://api.cloudflare.com/#cloudflare-tunnel-configuration-properties
+func (api *API) GetTunnelConfiguration(ctx context.Context, params GetTunnelConfigurationParams) (TunnelConfigurationResult, error) {
+	if len(params.AccountID) == 0 {
+		return TunnelConfigurationResult{}, ErrMissingAccountID
+	}
+
+	if len(params.TunnelID) == 0 {
+		return TunnelConfigurationResult{}, ErrMissingTunnelID
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s/configurations", params.AccountID, params.TunnelID)
+	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodGet, uri, params, nil)
+	if err != nil {
+		return TunnelConfigurationResult{}, err
+	}
+
+	var argoDetailsResponse TunnelConfigurationResponse
+	err = json.Unmarshal(res, &argoDetailsResponse)
+	if err != nil {
+		return TunnelConfigurationResult{}, errors.Wrap(err, errUnmarshalError)
 	}
 
 	return argoDetailsResponse.Result, nil
