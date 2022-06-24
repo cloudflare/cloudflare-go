@@ -222,8 +222,11 @@ func TestUser_UserBillingHistory(t *testing.T) {
   ]
 }`)
 	})
+
 	userBillingProfile, err := client.UserBillingHistory(context.Background(), UserBillingOptions{})
+
 	OccurredAt, _ := time.Parse(time.RFC3339, "2014-03-01T12:21:59.3456Z")
+
 	want := []UserBillingHistory{{
 		ID:          "b69a9f3492637782896352daae219e7d",
 		Type:        "charge",
@@ -234,8 +237,8 @@ func TestUser_UserBillingHistory(t *testing.T) {
 		Currency:    "USD",
 		Zone:        userBillingHistoryZone{Name: "example.com"},
 	}}
+
 	if assert.NoError(t, err) {
 		assert.Equal(t, userBillingProfile, want, "structs not equal")
 	}
-
 }
