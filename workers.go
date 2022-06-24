@@ -89,6 +89,8 @@ func (b WorkerBindingType) String() string {
 }
 
 const (
+	// WorkerDurableObjectBindingType is the type for Durable Object bindings.
+	WorkerDurableObjectBindingType WorkerBindingType = "durable_object_namespace"
 	// WorkerInheritBindingType is the type for inherited bindings.
 	WorkerInheritBindingType WorkerBindingType = "inherit"
 	// WorkerKvNamespaceBindingType is the type for KV Namespace bindings.
@@ -99,6 +101,8 @@ const (
 	WorkerSecretTextBindingType WorkerBindingType = "secret_text"
 	// WorkerPlainTextBindingType is the type for plain text bindings.
 	WorkerPlainTextBindingType WorkerBindingType = "plain_text"
+	// WorkerServiceBindingType is the type for service bindings.
+	WorkerServiceBindingType WorkerBindingType = "service"
 )
 
 // WorkerBindingListItem a struct representing an individual binding in a list of bindings.
@@ -186,6 +190,32 @@ func (b WorkerKvNamespaceBinding) serialize(bindingName string) (workerBindingMe
 	}, nil, nil
 }
 
+// WorkerDurableObjectBinding is a binding to a Workers Durable Object
+//
+// https://api.cloudflare.com/#durable-objects-namespace-properties
+type WorkerDurableObjectBinding struct {
+	ClassName  string
+	ScriptName string
+}
+
+// Type returns the type of the binding.
+func (b WorkerDurableObjectBinding) Type() WorkerBindingType {
+	return WorkerDurableObjectBindingType
+}
+
+func (b WorkerDurableObjectBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
+	if b.ClassName == "" {
+		return nil, nil, errors.Errorf(`ClassName for binding "%s" cannot be empty`, bindingName)
+	}
+
+	return workerBindingMeta{
+		"name":        bindingName,
+		"type":        b.Type(),
+		"class_name":  b.ClassName,
+		"script_name": b.ScriptName,
+	}, nil, nil
+}
+
 // WorkerWebAssemblyBinding is a binding to a WebAssembly module
 //
 // https://developers.cloudflare.com/workers/archive/api/resource-bindings/webassembly-modules/
@@ -266,6 +296,33 @@ func (b WorkerSecretTextBinding) serialize(bindingName string) (workerBindingMet
 		"type": b.Type(),
 		"text": b.Text,
 	}, nil, nil
+}
+
+type WorkerServiceBinding struct {
+	Service     string
+	Environment *string
+}
+
+func (b WorkerServiceBinding) Type() WorkerBindingType {
+	return WorkerServiceBindingType
+}
+
+func (b WorkerServiceBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
+	if b.Service == "" {
+		return nil, nil, errors.Errorf(`Service for binding "%s" cannot be empty`, bindingName)
+	}
+
+	meta := workerBindingMeta{
+		"name":    bindingName,
+		"type":    b.Type(),
+		"service": b.Service,
+	}
+
+	if b.Environment != nil {
+		meta["environment"] = *b.Environment
+	}
+
+	return meta, nil, nil
 }
 
 // Each binding that adds a part to the multipart form body will need
@@ -397,6 +454,13 @@ func (api *API) ListWorkerBindings(ctx context.Context, requestParams *WorkerReq
 		}
 
 		switch WorkerBindingType(bType) {
+		case WorkerDurableObjectBindingType:
+			class_name := jsonBinding["class_name"].(string)
+			script_name := jsonBinding["script_name"].(string)
+			bindingListItem.Binding = WorkerDurableObjectBinding{
+				ClassName:  class_name,
+				ScriptName: script_name,
+			}
 		case WorkerKvNamespaceBindingType:
 			namespaceID := jsonBinding["namespace_id"].(string)
 			bindingListItem.Binding = WorkerKvNamespaceBinding{
@@ -414,6 +478,13 @@ func (api *API) ListWorkerBindings(ctx context.Context, requestParams *WorkerReq
 			text := jsonBinding["text"].(string)
 			bindingListItem.Binding = WorkerPlainTextBinding{
 				Text: text,
+			}
+		case WorkerServiceBindingType:
+			service := jsonBinding["service"].(string)
+			environment := jsonBinding["environment"].(string)
+			bindingListItem.Binding = WorkerServiceBinding{
+				Service:     service,
+				Environment: &environment,
 			}
 		case WorkerSecretTextBindingType:
 			bindingListItem.Binding = WorkerSecretTextBinding{}

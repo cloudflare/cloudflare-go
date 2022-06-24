@@ -128,6 +128,12 @@ const (
 				"type": "secret_text"
 			},
 			{
+				"name": "MY_SERVICE_BINDING",
+				"type": "service",
+				"service": "MY_SERVICE",
+				"environment": "MY_ENVIRONMENT"
+			},
+			{
 				"name": "MY_NEW_BINDING",
 				"type": "some_imaginary_new_binding_type"
 			}
@@ -449,6 +455,45 @@ func TestWorkers_UploadWorkerWithNameErrorsWithoutAccountId(t *testing.T) {
 	assert.Error(t, err)
 }
 
+func TestWorkers_UploadWorkerWithDurableObjectBinding(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+
+		mpUpload, err := parseMultipartUpload(r)
+		assert.NoError(t, err)
+
+		expectedBindings := map[string]workerBindingMeta{
+			"b1": {
+				"name":        "b1",
+				"type":        "durable_object_namespace",
+				"class_name":  "TheClass",
+				"script_name": "the_script",
+			},
+		}
+		assert.Equal(t, workerScript, mpUpload.Script)
+		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, uploadWorkerResponseData) //nolint
+	}
+	mux.HandleFunc("/accounts/foo/workers/scripts/bar", handler)
+
+	scriptParams := WorkerScriptParams{
+		Script: workerScript,
+		Bindings: map[string]WorkerBinding{
+			"b1": WorkerDurableObjectBinding{
+				ClassName:  "TheClass",
+				ScriptName: "the_script",
+			},
+		},
+	}
+	_, err := client.UploadWorkerWithBindings(context.Background(), &WorkerRequestParams{ScriptName: "bar"}, &scriptParams)
+	assert.NoError(t, err)
+}
+
 func TestWorkers_UploadWorkerWithInheritBinding(t *testing.T) {
 	setup(UsingAccount("foo"))
 	defer teardown()
@@ -662,6 +707,54 @@ func TestWorkers_UploadWorkerWithSecretTextBinding(t *testing.T) {
 		Bindings: map[string]WorkerBinding{
 			"b1": WorkerSecretTextBinding{
 				Text: "secret text value",
+			},
+		},
+	}
+	_, err := client.UploadWorkerWithBindings(context.Background(), &WorkerRequestParams{ScriptName: "bar"}, &scriptParams)
+	assert.NoError(t, err)
+}
+
+func TestWorkers_UploadWorkerWithServiceBinding(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+
+		mpUpload, err := parseMultipartUpload(r)
+		assert.NoError(t, err)
+
+		expectedBindings := map[string]workerBindingMeta{
+			"b1": {
+				"name":    "b1",
+				"type":    "service",
+				"service": "the_service",
+			},
+			"b2": {
+				"name":        "b2",
+				"type":        "service",
+				"service":     "the_service",
+				"environment": "the_environment",
+			},
+		}
+		assert.Equal(t, workerScript, mpUpload.Script)
+		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, uploadWorkerResponseData) //nolint
+	}
+	mux.HandleFunc("/accounts/foo/workers/scripts/bar", handler)
+
+	environment := "the_environment"
+	scriptParams := WorkerScriptParams{
+		Script: workerScript,
+		Bindings: map[string]WorkerBinding{
+			"b1": WorkerServiceBinding{
+				Service: "the_service",
+			},
+			"b2": WorkerServiceBinding{
+				Service:     "the_service",
+				Environment: &environment,
 			},
 		},
 	}
@@ -936,7 +1029,7 @@ func TestWorkers_ListWorkerBindingsMultiScript(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Equal(t, successResponse, res.Response)
-	assert.Equal(t, 5, len(res.BindingList))
+	assert.Equal(t, 6, len(res.BindingList))
 
 	assert.Equal(t, res.BindingList[0], WorkerBindingListItem{
 		Name: "MY_KV",
@@ -967,11 +1060,21 @@ func TestWorkers_ListWorkerBindingsMultiScript(t *testing.T) {
 	})
 	assert.Equal(t, WorkerSecretTextBindingType, res.BindingList[3].Binding.Type())
 
+	environment := "MY_ENVIRONMENT"
 	assert.Equal(t, res.BindingList[4], WorkerBindingListItem{
+		Name: "MY_SERVICE_BINDING",
+		Binding: WorkerServiceBinding{
+			Service:     "MY_SERVICE",
+			Environment: &environment,
+		},
+	})
+	assert.Equal(t, WorkerServiceBindingType, res.BindingList[4].Binding.Type())
+
+	assert.Equal(t, res.BindingList[5], WorkerBindingListItem{
 		Name:    "MY_NEW_BINDING",
 		Binding: WorkerInheritBinding{},
 	})
-	assert.Equal(t, WorkerInheritBindingType, res.BindingList[4].Binding.Type())
+	assert.Equal(t, WorkerInheritBindingType, res.BindingList[5].Binding.Type())
 }
 
 func TestWorkers_UpdateWorkerRouteErrorsWhenMixingSingleAndMultiScriptProperties(t *testing.T) {

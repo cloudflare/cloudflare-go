@@ -82,7 +82,8 @@ func TestGetMagicTransitIPsecTunnel(t *testing.T) {
           "customer_endpoint": "203.0.113.1",
           "cloudflare_endpoint": "203.0.113.2",
           "interface_address": "192.0.2.0/31",
-          "description": "Tunnel for ISP X"
+          "description": "Tunnel for ISP X",
+          "allow_null_cipher": true
         }
       }
     }`)
@@ -102,6 +103,7 @@ func TestGetMagicTransitIPsecTunnel(t *testing.T) {
 		CloudflareEndpoint: "203.0.113.2",
 		InterfaceAddress:   "192.0.2.0/31",
 		Description:        "Tunnel for ISP X",
+		AllowNullCipher:    true,
 	}
 
 	actual, err := client.GetMagicTransitIPsecTunnel(context.Background(), testAccountID, "c4a7362d577a6c3019a474fd6f485821")
@@ -181,7 +183,8 @@ func TestUpdateMagicTransitIPsecTunnel(t *testing.T) {
           "customer_endpoint": "203.0.113.1",
           "cloudflare_endpoint": "203.0.113.2",
           "interface_address": "192.0.2.0/31",
-          "description": "Tunnel for ISP X"
+          "description": "Tunnel for ISP X",
+          "allow_null_cipher": true
         }
       }
     }`)
@@ -201,6 +204,7 @@ func TestUpdateMagicTransitIPsecTunnel(t *testing.T) {
 		CloudflareEndpoint: "203.0.113.2",
 		InterfaceAddress:   "192.0.2.0/31",
 		Description:        "Tunnel for ISP X",
+		AllowNullCipher:    true,
 	}
 
 	actual, err := client.UpdateMagicTransitIPsecTunnel(context.Background(), testAccountID, "c4a7362d577a6c3019a474fd6f485821", want)

@@ -41,6 +41,7 @@ type MagicTransitIPsecTunnel struct {
 	Psk                string                              `json:"psk,omitempty"`
 	PskMetadata        *MagicTransitIPsecTunnelPskMetadata `json:"psk_metadata,omitempty"`
 	RemoteIdentities   *RemoteIdentities                   `json:"remote_identities,omitempty"`
+	AllowNullCipher    bool                                `json:"allow_null_cipher"`
 }
 
 // ListMagicTransitIPsecTunnelsResponse contains a response including IPsec tunnels.
