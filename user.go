@@ -60,6 +60,35 @@ type UserBillingProfile struct {
 	EditedOn        *time.Time `json:"edited_on,omitempty"`
 }
 
+type UserBillingHistoryResponse struct {
+	Response
+	Result     []UserBillingHistory `json:"result"`
+	ResultInfo ResultInfo           `json:"result_info"`
+}
+
+type UserBillingHistory struct {
+	ID          string                 `json:"id,omitempty"`
+	Type        string                 `json:"type,omitempty"`
+	Action      string                 `json:"action,omitempty"`
+	Description string                 `json:"description,omitempty"`
+	OccurredAt  *time.Time             `json:"occurred_at,omitempty"`
+	Amount      float32                `json:"amount,omitempty"`
+	Currency    string                 `json:"currency,omitempty"`
+	Zone        userBillingHistoryZone `json:"zone"`
+}
+
+type userBillingHistoryZone struct {
+	Name string `json:"name,omitempty"`
+}
+
+type UserBillingOptions struct {
+	PaginationOptions
+	Order      string     `url:"order,omitempty"`
+	Type       string     `url:"type,omitempty"`
+	OccurredAt *time.Time `url:"occurred_at,omitempty"`
+	Action     string     `url:"action,omitempty"`
+}
+
 // UserDetails provides information about the logged-in user.
 //
 // API reference: https://api.cloudflare.com/#user-user-details
@@ -111,5 +140,22 @@ func (api *API) UserBillingProfile(ctx context.Context) (UserBillingProfile, err
 		return UserBillingProfile{}, errors.Wrap(err, errUnmarshalError)
 	}
 
+	return r.Result, nil
+}
+
+// UserBillingHistory return the billing history of the user
+//
+// API reference: https://api.cloudflare.com/#user-billing-history-billing-history-details
+func (api *API) UserBillingHistory(ctx context.Context, pageOpts UserBillingOptions) ([]UserBillingHistory, error) {
+	uri := buildURI("/user/billing/history", pageOpts)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return []UserBillingHistory{}, err
+	}
+	var r UserBillingHistoryResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return []UserBillingHistory{}, errors.Wrap(err, errUnmarshalError)
+	}
 	return r.Result, nil
 }
