@@ -231,7 +231,7 @@ func (api *API) GetPagesDeploymentStageLogs(ctx context.Context, params GetPages
 
 // GetPagesDeploymentStageLogs returns the logs for a Pages deployment stage.
 //
-// API reference: https://api.cloudflare.com/#pages-deployment-get-deployment-stage-logs
+// API reference: https://api.cloudflare.com/#pages-deployment-get-deployment-logs
 func (api *API) GetPagesDeploymentLogs(ctx context.Context, params GetPagesDeploymentLogsParams) (PagesDeploymentLogs, error) {
 	if params.AccountID == "" {
 		return PagesDeploymentLogs{}, ErrMissingAccountID
