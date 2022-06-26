@@ -172,7 +172,7 @@ func (api *API) GetPagesDeploymentInfo(ctx context.Context, params GetPagesDeplo
 		return PagesProjectDeployment{}, ErrMissingProjectName
 	}
 
-	if params.ProjectName == "" {
+	if params.DeploymentID == "" {
 		return PagesProjectDeployment{}, ErrMissingDeploymentID
 	}
 
@@ -204,7 +204,7 @@ func (api *API) GetPagesDeploymentStageLogs(ctx context.Context, params GetPages
 		return PagesDeploymentStageLogs{}, ErrMissingProjectName
 	}
 
-	if params.ProjectName == "" {
+	if params.DeploymentID == "" {
 		return PagesDeploymentStageLogs{}, ErrMissingDeploymentID
 	}
 
@@ -241,7 +241,7 @@ func (api *API) GetPagesDeploymentLogs(ctx context.Context, params GetPagesDeplo
 		return PagesDeploymentLogs{}, ErrMissingProjectName
 	}
 
-	if params.ProjectName == "" {
+	if params.DeploymentID == "" {
 		return PagesDeploymentLogs{}, ErrMissingDeploymentID
 	}
 
@@ -274,7 +274,7 @@ func (api *API) DeletePagesDeployment(ctx context.Context, params DeletePagesDep
 		return ErrMissingProjectName
 	}
 
-	if params.ProjectName == "" {
+	if params.DeploymentID == "" {
 		return ErrMissingDeploymentID
 	}
 
@@ -325,7 +325,7 @@ func (api *API) RetryPagesDeployment(ctx context.Context, params RetryPagesDeplo
 		return PagesProjectDeployment{}, ErrMissingProjectName
 	}
 
-	if params.ProjectName == "" {
+	if params.DeploymentID == "" {
 		return PagesProjectDeployment{}, ErrMissingDeploymentID
 	}
 
@@ -355,7 +355,7 @@ func (api *API) RollbackPagesDeployment(ctx context.Context, params RollbackPage
 		return PagesProjectDeployment{}, ErrMissingProjectName
 	}
 
-	if params.ProjectName == "" {
+	if params.DeploymentID == "" {
 		return PagesProjectDeployment{}, ErrMissingDeploymentID
 	}
 
