@@ -17,6 +17,7 @@ type WaitingRoom struct {
 	Path                       string     `json:"path"`
 	Name                       string     `json:"name"`
 	Description                string     `json:"description,omitempty"`
+	QueueingMethod             string     `json:"queueing_method,omitempty"`
 	CustomPageHTML             string     `json:"custom_page_html,omitempty"`
 	DefaultTemplateLanguage    string     `json:"default_template_language,omitempty"`
 	Host                       string     `json:"host"`
