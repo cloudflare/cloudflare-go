@@ -17,24 +17,25 @@ const (
 	RulesetKindSchema  RulesetKind = "schema"
 	RulesetKindZone    RulesetKind = "zone"
 
-	RulesetPhaseDDoSL4                          RulesetPhase = "ddos_l4"
-	RulesetPhaseDDoSL7                          RulesetPhase = "ddos_l7"
-	RulesetPhaseHTTPLogCustomFields             RulesetPhase = "http_log_custom_fields"
-	RulesetPhaseHTTPRequestCacheSettings        RulesetPhase = "http_request_cache_settings"
-	RulesetPhaseHTTPRequestFirewallCustom       RulesetPhase = "http_request_firewall_custom"
-	RulesetPhaseHTTPRequestFirewallManaged      RulesetPhase = "http_request_firewall_managed"
-	RulesetPhaseHTTPRequestLateTransform        RulesetPhase = "http_request_late_transform"
-	RulesetPhaseHTTPRequestLateTransformManaged RulesetPhase = "http_request_late_transform_managed"
-	RulesetPhaseHTTPRequestMain                 RulesetPhase = "http_request_main"
-	RulesetPhaseHTTPRequestOrigin               RulesetPhase = "http_request_origin"
-	RulesetPhaseHTTPRequestRedirect             RulesetPhase = "http_request_redirect"
-	RulesetPhaseHTTPRequestSanitize             RulesetPhase = "http_request_sanitize"
-	RulesetPhaseHTTPRequestTransform            RulesetPhase = "http_request_transform"
-	RulesetPhaseHTTPResponseFirewallManaged     RulesetPhase = "http_response_firewall_managed"
-	RulesetPhaseHTTPResponseHeadersTransform    RulesetPhase = "http_response_headers_transform"
-	RulesetPhaseMagicTransit                    RulesetPhase = "magic_transit"
-	RulesetPhaseRateLimit                       RulesetPhase = "http_ratelimit"
-	RulesetPhaseSuperBotFightMode               RulesetPhase = "http_request_sbfm"
+	RulesetPhaseDDoSL4                              RulesetPhase = "ddos_l4"
+	RulesetPhaseDDoSL7                              RulesetPhase = "ddos_l7"
+	RulesetPhaseHTTPLogCustomFields                 RulesetPhase = "http_log_custom_fields"
+	RulesetPhaseHTTPRequestCacheSettings            RulesetPhase = "http_request_cache_settings"
+	RulesetPhaseHTTPRequestFirewallCustom           RulesetPhase = "http_request_firewall_custom"
+	RulesetPhaseHTTPRequestFirewallManaged          RulesetPhase = "http_request_firewall_managed"
+	RulesetPhaseHTTPRequestLateTransform            RulesetPhase = "http_request_late_transform"
+	RulesetPhaseHTTPRequestLateTransformManaged     RulesetPhase = "http_request_late_transform_managed"
+	RulesetPhaseHTTPRequestMain                     RulesetPhase = "http_request_main"
+	RulesetPhaseHTTPRequestOrigin                   RulesetPhase = "http_request_origin"
+	RulesetPhaseHTTPRequestRedirect                 RulesetPhase = "http_request_redirect"
+	RulesetPhaseHTTPRequestSanitize                 RulesetPhase = "http_request_sanitize"
+	RulesetPhaseHTTPRequestTransform                RulesetPhase = "http_request_transform"
+	RulesetPhaseHTTPResponseFirewallManaged         RulesetPhase = "http_response_firewall_managed"
+	RulesetPhaseHTTPResponseHeadersTransform        RulesetPhase = "http_response_headers_transform"
+	RulesetPhaseHTTPResponseHeadersTransformManaged RulesetPhase = "http_response_headers_transform_managed"
+	RulesetPhaseMagicTransit                        RulesetPhase = "magic_transit"
+	RulesetPhaseRateLimit                           RulesetPhase = "http_ratelimit"
+	RulesetPhaseSuperBotFightMode                   RulesetPhase = "http_request_sbfm"
 
 	RulesetRuleActionBlock                RulesetRuleAction = "block"
 	RulesetRuleActionChallenge            RulesetRuleAction = "challenge"
@@ -95,6 +96,7 @@ func RulesetPhaseValues() []string {
 		string(RulesetPhaseHTTPRequestTransform),
 		string(RulesetPhaseHTTPResponseFirewallManaged),
 		string(RulesetPhaseHTTPResponseHeadersTransform),
+		string(RulesetPhaseHTTPResponseHeadersTransformManaged),
 		string(RulesetPhaseMagicTransit),
 		string(RulesetPhaseRateLimit),
 		string(RulesetPhaseSuperBotFightMode),
