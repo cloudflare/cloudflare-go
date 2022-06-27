@@ -102,7 +102,6 @@ type TunnelUpdateParams struct {
 	Secret    string `json:"tunnel_secret,omitempty"`
 }
 
-// UnvalidatedIngressRule is copied directly from: https://github.com/cloudflare/cloudflared/blob/eed7d7bbc90ccaca129bc6b6c3fd18b19e6bf856/config/configuration.go#L189
 type UnvalidatedIngressRule struct {
 	Hostname string `json:"hostname,omitempty"`
 	Path     string `json:"path,omitempty"`
@@ -113,8 +112,6 @@ type UnvalidatedIngressRule struct {
 // customize how cloudflared sends requests to origin services. It is used to set
 // up general config that apply to all rules, and also, specific per-rule
 // config.
-// Note: To specify a time.Duration in go-yaml, use e.g. "3s" or "24h".
-// This is copied directly from: https://github.com/cloudflare/cloudflared/blob/eed7d7bbc90ccaca129bc6b6c3fd18b19e6bf856/config/configuration.go#L189
 type OriginRequestConfig struct {
 	// HTTP proxy timeout for establishing a new connection
 	ConnectTimeout *time.Duration `json:"connectTimeout,omitempty"`
@@ -154,21 +151,18 @@ type OriginRequestConfig struct {
 	IPRules []IngressIPRule `json:"ipRules,omitempty"`
 }
 
-// IngressIPRule is copied directly from: https://github.com/cloudflare/cloudflared/blob/eed7d7bbc90ccaca129bc6b6c3fd18b19e6bf856/config/configuration.go#L228
 type IngressIPRule struct {
 	Prefix *string `json:"prefix,omitempty"`
 	Ports  []int   `json:"ports,omitempty"`
 	Allow  bool    `json:"allow,omitempty"`
 }
 
-// TunnelConfiguration is copied directly from: https://github.com/cloudflare/cloudflared/blob/eed7d7bbc90ccaca129bc6b6c3fd18b19e6bf856/config/configuration.go#L234
 type TunnelConfiguration struct {
 	Ingress       []UnvalidatedIngressRule `json:"ingress,omitempty"`
 	WarpRouting   *WarpRoutingConfig       `json:"warp-routing,omitempty"`
 	OriginRequest OriginRequestConfig      `json:"originRequest,omitempty"`
 }
 
-// WarpRoutingConfig is copied directly from: https://github.com/cloudflare/cloudflared/blob/eed7d7bbc90ccaca129bc6b6c3fd18b19e6bf856/config/configuration.go#L242
 type WarpRoutingConfig struct {
 	Enabled bool `json:"enabled,omitempty"`
 }
