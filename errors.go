@@ -14,7 +14,6 @@ const (
 	errEmptyAPIToken             = "invalid credentials: API Token must not be empty"   //nolint:gosec,unused
 	errInternalServiceError      = "internal service error"
 	errMakeRequestError          = "error from makeRequest"
-	errMarshalError              = "error marshalling into JSON"
 	errUnmarshalError            = "error unmarshalling the JSON response"
 	errUnmarshalErrorBody        = "error unmarshalling the JSON response error body"
 	errRequestNotSuccessful      = "error reported by API"
@@ -28,7 +27,6 @@ const (
 
 var (
 	ErrMissingAccountID          = errors.New("required missing account ID")
-	ErrMissingTunnelID           = errors.New("required missing tunnel ID")
 	ErrMissingZoneID             = errors.New("required missing zone ID")
 	ErrMissingResourceIdentifier = errors.New("required missing resource identifier")
 )

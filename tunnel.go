@@ -10,6 +10,10 @@ import (
 	"github.com/pkg/errors"
 )
 
+// ErrMissingTunnelID is for when a required tunnel ID is missing from the
+// parameters.
+var ErrMissingTunnelID = errors.New("required missing tunnel ID")
+
 // Tunnel is the struct definition of a tunnel.
 type Tunnel struct {
 	ID             string             `json:"id,omitempty"`
@@ -47,14 +51,29 @@ type TunnelDetailResponse struct {
 	Response
 }
 
+// TunnelConfigurationStringifiedConfigResult is the raw result from the API with
+// the `Config` value as a string. You probably don't want to use this anywhere
+// other than in the HTTP response unmarshaling. Use `TunnelConfigurationResult`
+// for the correct types.
+type TunnelConfigurationStringifiedConfigResult struct {
+	TunnelID string `json:"tunnel_id,omitempty"`
+	Config   string `json:"config,omitempty"`
+	Version  int    `json:"version,omitempty"`
+}
+
+type TunnelConfigurationStringifiedConfigResponse struct {
+	Result TunnelConfigurationStringifiedConfigResult `json:"result"`
+	Response
+}
+
 type TunnelConfigurationResult struct {
 	TunnelID string              `json:"tunnel_id,omitempty"`
 	Config   TunnelConfiguration `json:"config,omitempty"`
 	Version  int                 `json:"version,omitempty"`
 }
 
-// TunnelConfigurationResponse is used for representing the API response payload for
-// a single tunnel.
+// TunnelConfigurationResponse is used for representing the API response payload
+// for a single tunnel.
 type TunnelConfigurationResponse struct {
 	Result TunnelConfigurationResult `json:"result"`
 	Response
@@ -85,10 +104,9 @@ type TunnelUpdateParams struct {
 
 // UnvalidatedIngressRule is copied directly from: https://github.com/cloudflare/cloudflared/blob/eed7d7bbc90ccaca129bc6b6c3fd18b19e6bf856/config/configuration.go#L189
 type UnvalidatedIngressRule struct {
-	Hostname      string               `json:"hostname,omitempty"`
-	Path          string               `json:"path,omitempty"`
-	Service       string               `json:"service,omitempty"`
-	OriginRequest *OriginRequestConfig `json:"originRequest,omitempty"`
+	Hostname string `json:"hostname,omitempty"`
+	Path     string `json:"path,omitempty"`
+	Service  string `json:"service,omitempty"`
 }
 
 // OriginRequestConfig is a set of optional fields that users may set to
@@ -145,8 +163,9 @@ type IngressIPRule struct {
 
 // TunnelConfiguration is copied directly from: https://github.com/cloudflare/cloudflared/blob/eed7d7bbc90ccaca129bc6b6c3fd18b19e6bf856/config/configuration.go#L234
 type TunnelConfiguration struct {
-	Ingress     []UnvalidatedIngressRule `json:"ingress,omitempty"`
-	WarpRouting *WarpRoutingConfig       `json:"warp-routing,omitempty"`
+	Ingress       []UnvalidatedIngressRule `json:"ingress,omitempty"`
+	WarpRouting   *WarpRoutingConfig       `json:"warp-routing,omitempty"`
+	OriginRequest OriginRequestConfig      `json:"originRequest,omitempty"`
 }
 
 // WarpRoutingConfig is copied directly from: https://github.com/cloudflare/cloudflared/blob/eed7d7bbc90ccaca129bc6b6c3fd18b19e6bf856/config/configuration.go#L242
@@ -198,7 +217,7 @@ func (api *API) Tunnels(ctx context.Context, params TunnelListParams) ([]Tunnel,
 
 	uri := buildURI(fmt.Sprintf("/accounts/%s/cfd_tunnel", params.AccountID), params)
 
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodGet, uri, nil, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []Tunnel{}, err
 	}
@@ -225,7 +244,7 @@ func (api *API) Tunnel(ctx context.Context, params TunnelParams) (Tunnel, error)
 
 	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s", params.AccountID, params.ID)
 
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodGet, uri, nil, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return Tunnel{}, err
 	}
@@ -258,7 +277,7 @@ func (api *API) CreateTunnel(ctx context.Context, params TunnelCreateParams) (Tu
 
 	tunnel := Tunnel{Name: params.Name, Secret: params.Secret}
 
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPost, uri, tunnel, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, tunnel)
 	if err != nil {
 		return Tunnel{}, err
 	}
@@ -292,7 +311,7 @@ func (api *API) UpdateTunnel(ctx context.Context, params TunnelUpdateParams) (Tu
 		tunnel.Secret = params.Secret
 	}
 
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPatch, uri, tunnel, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, tunnel)
 	if err != nil {
 		return Tunnel{}, err
 	}
@@ -319,18 +338,35 @@ func (api *API) UpdateTunnelConfiguration(ctx context.Context, params TunnelConf
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s/configurations", params.AccountID, params.TunnelID)
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPut, uri, params, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params.Config)
 	if err != nil {
 		return TunnelConfigurationResult{}, err
 	}
 
-	var argoDetailsResponse TunnelConfigurationResponse
-	err = json.Unmarshal(res, &argoDetailsResponse)
+	// `config` comes back as a stringified representation of the configuration
+	// so we need to double unmarshal the result. First, `config` => the string
+	// struct field and if that is successful, then attempt putting it into a typed
+	// struct field.
+
+	var tunnelDetailsResponse TunnelConfigurationStringifiedConfigResponse
+	err = json.Unmarshal(res, &tunnelDetailsResponse)
 	if err != nil {
 		return TunnelConfigurationResult{}, errors.Wrap(err, errUnmarshalError)
 	}
 
-	return argoDetailsResponse.Result, nil
+	var tunnelDetails TunnelConfigurationResult
+	var tunnelConfig TunnelConfiguration
+
+	err = json.Unmarshal([]byte(tunnelDetailsResponse.Result.Config), &tunnelConfig)
+	if err != nil {
+		return TunnelConfigurationResult{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	tunnelDetails.Config = tunnelConfig
+	tunnelDetails.TunnelID = tunnelDetailsResponse.Result.TunnelID
+	tunnelDetails.Version = tunnelDetailsResponse.Result.Version
+
+	return tunnelDetails, nil
 }
 
 // GetTunnelConfiguration updates an existing tunnel for the account.
@@ -346,18 +382,35 @@ func (api *API) GetTunnelConfiguration(ctx context.Context, params GetTunnelConf
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s/configurations", params.AccountID, params.TunnelID)
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodGet, uri, params, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return TunnelConfigurationResult{}, err
 	}
 
-	var argoDetailsResponse TunnelConfigurationResponse
-	err = json.Unmarshal(res, &argoDetailsResponse)
+	// `config` comes back as a stringified representation of the configuration
+	// so we need to double unmarshal the result. First, `config` => the string
+	// struct field and if that is successful, then attempt putting it into a typed
+	// struct field.
+
+	var tunnelDetailsResponse TunnelConfigurationStringifiedConfigResponse
+	err = json.Unmarshal(res, &tunnelDetailsResponse)
 	if err != nil {
 		return TunnelConfigurationResult{}, errors.Wrap(err, errUnmarshalError)
 	}
 
-	return argoDetailsResponse.Result, nil
+	var tunnelDetails TunnelConfigurationResult
+	var tunnelConfig TunnelConfiguration
+
+	err = json.Unmarshal([]byte(tunnelDetailsResponse.Result.Config), &tunnelConfig)
+	if err != nil {
+		return TunnelConfigurationResult{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	tunnelDetails.Config = tunnelConfig
+	tunnelDetails.TunnelID = tunnelDetailsResponse.Result.TunnelID
+	tunnelDetails.Version = tunnelDetailsResponse.Result.Version
+
+	return tunnelDetails, nil
 }
 
 // DeleteTunnel removes a single Argo tunnel.
@@ -366,7 +419,7 @@ func (api *API) GetTunnelConfiguration(ctx context.Context, params GetTunnelConf
 func (api *API) DeleteTunnel(ctx context.Context, params TunnelDeleteParams) error {
 	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s", params.AccountID, params.ID)
 
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodDelete, uri, nil, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return err
 	}
@@ -394,7 +447,7 @@ func (api *API) CleanupTunnelConnections(ctx context.Context, params TunnelClean
 
 	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s/connections", params.AccountID, params.ID)
 
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodDelete, uri, nil, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return err
 	}
@@ -422,7 +475,7 @@ func (api *API) TunnelToken(ctx context.Context, params TunnelTokenParams) (stri
 
 	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s/token", params.AccountID, params.ID)
 
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodGet, uri, nil, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return "", err
 	}
