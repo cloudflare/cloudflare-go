@@ -74,7 +74,7 @@ func TestCreateDNSRecord(t *testing.T) {
 		Content:  "198.51.100.4",
 		TTL:      120,
 		Priority: &priority,
-		Proxied:  &proxied,
+		Proxied:  proxied,
 	}
 	asciiInput := DNSRecord{
 		Type:     "A",
@@ -82,7 +82,7 @@ func TestCreateDNSRecord(t *testing.T) {
 		Content:  "198.51.100.4",
 		TTL:      120,
 		Priority: &priority,
-		Proxied:  &proxied,
+		Proxied:  proxied,
 	}
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -217,7 +217,7 @@ func TestDNSRecords(t *testing.T) {
 		Name:       asciiInput.Name,
 		Content:    asciiInput.Content,
 		Proxiable:  true,
-		Proxied:    &proxied,
+		Proxied:    proxied,
 		TTL:        120,
 		Locked:     false,
 		ZoneID:     testZoneID,
@@ -284,7 +284,7 @@ func TestDNSRecord(t *testing.T) {
 		Name:       "example.com",
 		Content:    "198.51.100.4",
 		Proxiable:  true,
-		Proxied:    &proxied,
+		Proxied:    proxied,
 		TTL:        120,
 		ZoneID:     testZoneID,
 		ZoneName:   "example.com",
@@ -313,7 +313,7 @@ func TestUpdateDNSRecord(t *testing.T) {
 		Name:    "example.com",
 		Content: "198.51.100.4",
 		TTL:     120,
-		Proxied: &proxied,
+		Proxied: proxied,
 	}
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -370,7 +370,7 @@ func TestUpdateDNSRecordWithoutName(t *testing.T) {
 		Type:    "A",
 		Content: "198.51.100.4",
 		TTL:     120,
-		Proxied: &proxied,
+		Proxied: proxied,
 	}
 
 	unicodeInput := DNSRecord{
@@ -378,7 +378,7 @@ func TestUpdateDNSRecordWithoutName(t *testing.T) {
 		Type:    "A",
 		Content: "198.51.100.4",
 		TTL:     120,
-		Proxied: &proxied,
+		Proxied: proxied,
 	}
 
 	handleUpdateDNSRecord := func(w http.ResponseWriter, r *http.Request) {
@@ -478,7 +478,7 @@ func TestUpdateDNSRecordWithoutType(t *testing.T) {
 		Name:    "😺.example.com",
 		Content: "198.51.100.4",
 		TTL:     120,
-		Proxied: &proxied,
+		Proxied: proxied,
 	}
 
 	completedASCIIInput := DNSRecord{
@@ -486,7 +486,7 @@ func TestUpdateDNSRecordWithoutType(t *testing.T) {
 		Type:    "A",
 		Content: "198.51.100.4",
 		TTL:     120,
-		Proxied: &proxied,
+		Proxied: proxied,
 	}
 
 	handleUpdateDNSRecord := func(w http.ResponseWriter, r *http.Request) {
