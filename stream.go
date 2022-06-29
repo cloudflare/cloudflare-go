@@ -46,19 +46,19 @@ type StreamVideo struct {
 	NFT                   StreamVideoNFT         `json:"nft,omitempty"`
 }
 
-// StreamVideoInput represents the input parameters of a stream video
+// StreamVideoInput represents the input parameters of a stream video.
 type StreamVideoInput struct {
 	Height int `json:"height,omitempty"`
 	Width  int `json:"width,omitempty"`
 }
 
-// StreamVideoPlayback represents the playback URLs for a video
+// StreamVideoPlayback represents the playback URLs for a video.
 type StreamVideoPlayback struct {
 	HLS  string `json:"hls,omitempty"`
 	Dash string `json:"dash,omitempty"`
 }
 
-// StreamVideoStatus represents the status of a stream video
+// StreamVideoStatus represents the status of a stream video.
 type StreamVideoStatus struct {
 	State           string `json:"state,omitempty"`
 	PctComplete     int    `json:"pctComplete,omitempty"`
@@ -66,7 +66,7 @@ type StreamVideoStatus struct {
 	ErrorReasonText string `json:"errorReasonText,omitempty"`
 }
 
-// StreamVideoWatermark represents a watermark for a stream video
+// StreamVideoWatermark represents a watermark for a stream video.
 type StreamVideoWatermark struct {
 	UID            string     `json:"uid,omitempty"`
 	Size           int        `json:"size,omitempty"`
@@ -81,13 +81,13 @@ type StreamVideoWatermark struct {
 	Position       string     `json:"position,omitempty"`
 }
 
-// StreamVideoNFT represents a NFT for a stream video
+// StreamVideoNFT represents a NFT for a stream video.
 type StreamVideoNFT struct {
 	Contract string `json:"contract,omitempty"`
 	Token    int    `json:"token,omitempty"`
 }
 
-// UploadVideoOptions are base upload options used by both upload from URL and create video
+// UploadVideoOptions are base upload options used by both upload from URL and create video.
 type UploadVideoOptions struct {
 	Creator               string                  `json:"creator,omitempty"`
 	ThumbnailTimestampPct float64                 `json:"thumbnailTimestampPct,omitempty"`
@@ -96,32 +96,32 @@ type UploadVideoOptions struct {
 	Watermark             UploadVideoURLWatermark `json:"watermark,omitempty"`
 }
 
-// StreamUploadFromURLOptions are the parameters used when uploading a video from URL
+// StreamUploadFromURLOptions are the parameters used when uploading a video from URL.
 type StreamUploadFromURLOptions struct {
 	URL string `json:"url"`
 	UploadVideoOptions
 }
 
-// StreamCreateVideoOptions are parameters used when creating a video
+// StreamCreateVideoOptions are parameters used when creating a video.
 type StreamCreateVideoOptions struct {
 	MaxDurationSeconds int        `json:"maxDurationSeconds,omitempty"`
 	Expiry             *time.Time `json:"expiry,omitempty"`
 	UploadVideoOptions
 }
 
-// UploadVideoURLWatermark represents UID of an existing watermark
+// UploadVideoURLWatermark represents UID of an existing watermark.
 type UploadVideoURLWatermark struct {
 	UID string `json:"uid,omitempty"`
 }
 
-// StreamVideoCreate represents parameters returned after creating a video
+// StreamVideoCreate represents parameters returned after creating a video.
 type StreamVideoCreate struct {
 	UploadURL string               `json:"uploadURL,omitempty"`
 	UID       string               `json:"uid,omitempty"`
 	Watermark StreamVideoWatermark `json:"watermark,omitempty"`
 }
 
-// StreamListOptions represents parameters used when listing stream videos
+// StreamListOptions represents parameters used when listing stream videos.
 type StreamListOptions struct {
 	After         *time.Time `url:"after,omitempty"`
 	Before        *time.Time `url:"before,omitempty"`
@@ -133,7 +133,7 @@ type StreamListOptions struct {
 	Status        string     `url:"status,omitempty"`
 }
 
-// StreamSignedURLOptions represent parameters used when creating a signed URL
+// StreamSignedURLOptions represent parameters used when creating a signed URL.
 type StreamSignedURLOptions struct {
 	ID           string            `json:"id,omitempty"`
 	PEM          string            `json:"pem,omitempty"`
@@ -143,19 +143,19 @@ type StreamSignedURLOptions struct {
 	AccessRules  StreamAccessRules `json:"accessRules,omitempty"`
 }
 
-// StreamVideoResponse represents an API response of a stream video
+// StreamVideoResponse represents an API response of a stream video.
 type StreamVideoResponse struct {
 	Response
 	Result StreamVideo `json:"result,omitempty"`
 }
 
-// StreamVideoCreateResponse represents an API response of creating a stream video
+// StreamVideoCreateResponse represents an API response of creating a stream video.
 type StreamVideoCreateResponse struct {
 	Response
 	Result StreamVideoCreate `json:"result,omitempty"`
 }
 
-// StreamListResponse represents the API response from a StreamListRequest
+// StreamListResponse represents the API response from a StreamListRequest.
 type StreamListResponse struct {
 	Response
 	Result []StreamVideo `json:"result,omitempty"`
@@ -163,7 +163,7 @@ type StreamListResponse struct {
 	Range  string        `json:"range,omitempty"`
 }
 
-// StreamSignedURLResponse represents an API response for a signed URL
+// StreamSignedURLResponse represents an API response for a signed URL.
 type StreamSignedURLResponse struct {
 	Response
 	Result struct {
@@ -197,7 +197,7 @@ func (api *API) StreamUploadFromURL(ctx context.Context, accountID string, optio
 	return r.Result, nil
 }
 
-// StreamUploadVideoFile uploads a video from a path to the file
+// StreamUploadVideoFile uploads a video from a path to the file.
 //
 // API Reference: https://api.cloudflare.com/#stream-videos-upload-a-video-using-a-single-http-request
 func (api *API) StreamUploadVideoFile(ctx context.Context, accountID string, filePath string) (StreamVideo, error) {
@@ -236,7 +236,7 @@ func (api *API) StreamUploadVideoFile(ctx context.Context, accountID string, fil
 	return streamVideoResponse.Result, nil
 }
 
-// StreamCreateVideoDirectURL creates a video and returns an authenticated URL
+// StreamCreateVideoDirectURL creates a video and returns an authenticated URL.
 //
 // API Reference: https://api.cloudflare.com/#stream-videos-create-a-video-and-get-authenticated-direct-upload-url
 func (api *API) StreamCreateVideoDirectURL(ctx context.Context, accountID string, options StreamCreateVideoOptions) (StreamVideoCreate, error) {
@@ -257,7 +257,7 @@ func (api *API) StreamCreateVideoDirectURL(ctx context.Context, accountID string
 	return streamVideoCreateResponse.Result, nil
 }
 
-// StreamListVideos list videos currently in stream
+// StreamListVideos list videos currently in stream.
 //
 // API reference: https://api.cloudflare.com/#stream-videos-list-videos
 func (api *API) StreamListVideos(ctx context.Context, accountID string, options StreamListOptions) ([]StreamVideo, error) {
@@ -277,7 +277,7 @@ func (api *API) StreamListVideos(ctx context.Context, accountID string, options 
 
 // Skipped: https://api.cloudflare.com/#stream-videos-initiate-a-video-upload-using-tus
 
-// StreamGetVideo gets the details for a specific video
+// StreamGetVideo gets the details for a specific video.
 //
 // API Reference: https://api.cloudflare.com/#stream-videos-video-details
 func (api *API) StreamGetVideo(ctx context.Context, accountID string, videoID string) (StreamVideo, error) {
@@ -294,7 +294,7 @@ func (api *API) StreamGetVideo(ctx context.Context, accountID string, videoID st
 	return streamVideoResponse.Result, nil
 }
 
-// StreamEmbedHTML gets an HTML fragment to embed on a web page
+// StreamEmbedHTML gets an HTML fragment to embed on a web page.
 //
 // API Reference: https://api.cloudflare.com/#stream-videos-embed-code-html
 func (api *API) StreamEmbedHTML(ctx context.Context, accountID string, videoID string) (string, error) {
@@ -308,7 +308,7 @@ func (api *API) StreamEmbedHTML(ctx context.Context, accountID string, videoID s
 	return string(res), nil
 }
 
-// StreamDeleteVideo deletes a video
+// StreamDeleteVideo deletes a video.
 //
 // API Reference: https://api.cloudflare.com/#stream-videos-delete-video
 func (api *API) StreamDeleteVideo(ctx context.Context, accountID string, videoID string) error {
@@ -319,7 +319,7 @@ func (api *API) StreamDeleteVideo(ctx context.Context, accountID string, videoID
 	return nil
 }
 
-// StreamAssociateNFT associates a video to a token and contract address
+// StreamAssociateNFT associates a video to a token and contract address.
 //
 // API Reference: https://api.cloudflare.com/#stream-videos-associate-video-to-an-nft
 func (api *API) StreamAssociateNFT(ctx context.Context, accountID string, videoID string, options StreamVideoNFT) (StreamVideo, error) {
@@ -336,7 +336,7 @@ func (api *API) StreamAssociateNFT(ctx context.Context, accountID string, videoI
 	return streamVideoResponse.Result, nil
 }
 
-//StreamCreateSignedURL creates a signed URL token for a video
+//StreamCreateSignedURL creates a signed URL token for a video.
 //
 // API Reference: https://api.cloudflare.com/#stream-videos-associate-video-to-an-nft
 func (api *API) StreamCreateSignedURL(ctx context.Context, accountID string, videoID string, options StreamSignedURLOptions) (string, error) {
