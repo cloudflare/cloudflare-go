@@ -85,6 +85,63 @@ func TestListManagedHeaders(t *testing.T) {
 	}
 }
 
+func TestFilterManagedHeaders(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, r.URL.Query().Get("status"), "enabled")
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+      "result": {
+        "managed_request_headers": [
+          {
+            "id": "add_visitor_location_headers",
+            "enabled": true,
+            "has_conflict": false
+          }
+        ],
+        "managed_response_headers": [
+          {
+            "id": "remove_x-powered-by_header",
+            "enabled": true,
+            "has_conflict": false
+          }
+        ]
+      },
+      "success": true,
+      "errors": [],
+      "messages": []
+    }`)
+	}
+	mux.HandleFunc("/zones/"+testZoneID+"/managed_headers", handler)
+
+	want := ManagedHeaders{
+		ManagedRequestHeaders: []ManagedHeader{
+			{
+				ID:         "add_visitor_location_headers",
+				Enabled:    true,
+				HasCoflict: false,
+			},
+		},
+		ManagedResponseHeaders: []ManagedHeader{
+			{
+				ID:         "remove_x-powered-by_header",
+				Enabled:    true,
+				HasCoflict: false,
+			},
+		},
+	}
+
+	zoneActual, err := client.ListZoneManagedHeaders(context.Background(), ZoneIdentifier(testZoneID), ListManagedHeadersParams{
+		OnlyEnabled: true,
+	})
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, zoneActual)
+	}
+}
+
 func TestUpdateManagedHeaders(t *testing.T) {
 	setup()
 	defer teardown()

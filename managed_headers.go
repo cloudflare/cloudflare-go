@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 )
 
 type ListManagedHeadersResponse struct {
@@ -28,7 +29,9 @@ type ManagedHeader struct {
 	ConflictsWith []string `json:"conflicts_with,omitempty"`
 }
 
-type ListManagedHeadersParams struct{}
+type ListManagedHeadersParams struct {
+	OnlyEnabled bool
+}
 
 func (api *API) ListZoneManagedHeaders(ctx context.Context, rc *ResourceContainer, params ListManagedHeadersParams) (ManagedHeaders, error) {
 	if rc.Identifier == "" {
@@ -36,6 +39,11 @@ func (api *API) ListZoneManagedHeaders(ctx context.Context, rc *ResourceContaine
 	}
 
 	uri := fmt.Sprintf("/zones/%s/managed_headers", rc.Identifier)
+	if params.OnlyEnabled {
+		query := url.Values{}
+		query.Add("status", "enabled")
+		uri = fmt.Sprintf("%s?%s", uri, query.Encode())
+	}
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
