@@ -127,7 +127,6 @@ func createTestVideo() StreamVideo {
 }
 
 func TestStream_StreamUploadFromURL(t *testing.T) {
-
 	setup()
 	defer teardown()
 
@@ -161,7 +160,7 @@ func TestStream_UploadVideoFile(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/stream", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, singleStreamResponse)
+		fmt.Fprint(w, singleStreamResponse)
 	})
 	out, err := client.StreamUploadVideoFile(context.Background(), testAccountID, "stream_test.go")
 
@@ -178,7 +177,7 @@ func TestStream_CreateVideoDirectURL(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/stream/direct_upload", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, `
+		fmt.Fprint(w, `
 {
   "success": true,
   "errors": [],
@@ -319,7 +318,7 @@ func TestStream_GetVideo(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/stream/"+testVideoID, func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, singleStreamResponse)
+		fmt.Fprint(w, singleStreamResponse)
 	})
 
 	out, err := client.StreamGetVideo(context.Background(), testAccountID, testVideoID)
@@ -338,7 +337,7 @@ func TestStream_DeleteVideo(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/stream/"+testVideoID, func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, `{
+		fmt.Fprint(w, `{
 			"success": true,
 			"errors": [],
 			"messages": [],
@@ -358,7 +357,7 @@ func TestStream_EmbedHTML(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/stream/"+testVideoID+"/embed", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "text/html")
-		fmt.Fprintf(w, streamHTML)
+		fmt.Fprint(w, streamHTML)
 	})
 
 	out, err := client.StreamEmbedHTML(context.Background(), testAccountID, testVideoID)
@@ -373,7 +372,7 @@ func TestStream_AssociateNFT(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/stream/"+testVideoID, func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
-		fmt.Fprintf(w, singleStreamResponse)
+		fmt.Fprint(w, singleStreamResponse)
 	})
 
 	out, err := client.StreamAssociateNFT(context.Background(), testAccountID, testVideoID, StreamVideoNFT{Token: 5, Contract: "0x57f1887a8bf19b14fc0d912b9b2acc9af147ea85"})
@@ -391,7 +390,7 @@ func TestStream_CreateSignedURL(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/stream/"+testVideoID+"/token", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
-		fmt.Fprintf(w, `{
+		fmt.Fprint(w, `{
   "success": true,
   "errors": [],
   "messages": [],

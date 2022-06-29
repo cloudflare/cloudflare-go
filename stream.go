@@ -14,13 +14,13 @@ import (
 )
 
 var (
-	// ErrMissingUploadURL is for when a URL is required but missing
+	// ErrMissingUploadURL is for when a URL is required but missing.
 	ErrMissingUploadURL = errors.New("required url missing")
-	// ErrMissingMaxDuration is for when MaxDuration is required but missing
+	// ErrMissingMaxDuration is for when MaxDuration is required but missing.
 	ErrMissingMaxDuration = errors.New("required max duration missing")
 )
 
-// StreamVideo represents a stream video
+// StreamVideo represents a stream video.
 type StreamVideo struct {
 	AllowedOrigins        []string               `json:"allowedOrigins,omitempty"`
 	Created               *time.Time             `json:"created,omitempty"`
@@ -189,6 +189,7 @@ func (api *API) StreamUploadFromURL(ctx context.Context, accountID string, optio
 	if err != nil {
 		return StreamVideo{}, err
 	}
+
 	var r StreamVideoResponse
 	if err := json.Unmarshal(res, &r); err != nil {
 		return StreamVideo{}, err
@@ -219,6 +220,7 @@ func (api *API) StreamUploadVideoFile(ctx context.Context, accountID string, fil
 	if err := writer.Close(); err != nil {
 		return StreamVideo{}, err
 	}
+
 	res, err := api.makeRequestWithAuthTypeAndHeaders(ctx, http.MethodPost, uri, body, api.authType, http.Header{
 		"Accept":       []string{"application/json"},
 		"Content-Type": []string{writer.FormDataContentType()},
@@ -226,6 +228,7 @@ func (api *API) StreamUploadVideoFile(ctx context.Context, accountID string, fil
 	if err != nil {
 		return StreamVideo{}, err
 	}
+
 	var streamVideoResponse StreamVideoResponse
 	if err := json.Unmarshal(res, &streamVideoResponse); err != nil {
 		return StreamVideo{}, err
@@ -246,6 +249,7 @@ func (api *API) StreamCreateVideoDirectURL(ctx context.Context, accountID string
 	if err != nil {
 		return StreamVideoCreate{}, err
 	}
+
 	var streamVideoCreateResponse StreamVideoCreateResponse
 	if err := json.Unmarshal(res, &streamVideoCreateResponse); err != nil {
 		return StreamVideoCreate{}, err
@@ -263,6 +267,7 @@ func (api *API) StreamListVideos(ctx context.Context, accountID string, options 
 	if err != nil {
 		return []StreamVideo{}, err
 	}
+
 	var streamListResponse StreamListResponse
 	if err := json.Unmarshal(res, &streamListResponse); err != nil {
 		return []StreamVideo{}, err
@@ -312,7 +317,6 @@ func (api *API) StreamDeleteVideo(ctx context.Context, accountID string, videoID
 		return err
 	}
 	return nil
-
 }
 
 // StreamAssociateNFT associates a video to a token and contract address
@@ -336,7 +340,6 @@ func (api *API) StreamAssociateNFT(ctx context.Context, accountID string, videoI
 //
 // API Reference: https://api.cloudflare.com/#stream-videos-associate-video-to-an-nft
 func (api *API) StreamCreateSignedURL(ctx context.Context, accountID string, videoID string, options StreamSignedURLOptions) (string, error) {
-
 	uri := fmt.Sprintf("/accounts/%s/stream/%s/token", accountID, videoID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, options)
