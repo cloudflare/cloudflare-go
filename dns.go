@@ -27,7 +27,7 @@ type DNSRecord struct {
 	ZoneName   string      `json:"zone_name,omitempty"`
 	Priority   *uint16     `json:"priority,omitempty"`
 	TTL        int         `json:"ttl,omitempty"`
-	Proxied    bool        `json:"proxied"`
+	Proxied    bool        `json:"proxied" default:"false"`
 	Proxiable  bool        `json:"proxiable,omitempty"`
 	Locked     bool        `json:"locked,omitempty"`
 }
