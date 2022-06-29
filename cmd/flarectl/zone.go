@@ -320,7 +320,7 @@ func zoneRecords(c *cli.Context) error {
 			r.Type,
 			r.Name,
 			r.Content,
-			strconv.FormatBool(*r.Proxied),
+			strconv.FormatBool(r.Proxied),
 			fmt.Sprintf("%d", r.TTL),
 		})
 	}
