@@ -73,7 +73,10 @@ const (
 	testVideoID = "ea95132c15732412d22c1476fa83f27a"
 )
 
-var TestVideoStruct = createTestVideo()
+var (
+	TestVideoStruct     = createTestVideo()
+	TestStreamParamters = StreamParameters{AccountID: testAccountID, VideoID: testVideoID}
+)
 
 func createTestVideo() StreamVideo {
 	created, _ := time.Parse(time.RFC3339, "2014-01-02T02:20:00Z")
@@ -119,7 +122,7 @@ func createTestVideo() StreamVideo {
 			Position:       "center",
 		},
 		Meta: map[string]interface{}{},
-		NFT: StreamVideoNFT{
+		NFT: StreamVideoNFTParameters{
 			Token:    5,
 			Contract: "0x57f1887a8bf19b14fc0d912b9b2acc9af147ea85",
 		},
@@ -136,18 +139,25 @@ func TestStream_StreamUploadFromURL(t *testing.T) {
 		fmt.Fprint(w, singleStreamResponse)
 	})
 
-	// Make sure invalid URL is thrown
-	_, err := client.StreamUploadFromURL(context.Background(), testAccountID, StreamUploadFromURLOptions{})
+	// Make sure missing account ID is thrown
+	_, err := client.StreamUploadFromURL(context.Background(), StreamUploadFromURLParameters{})
+	if assert.Error(t, err) {
+		assert.Equal(t, ErrMissingAccountID, err)
+	}
+
+	// Make sure missing upload URL is thrown
+	_, err = client.StreamUploadFromURL(context.Background(), StreamUploadFromURLParameters{AccountID: testAccountID})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingUploadURL, err)
 	}
 
 	want := TestVideoStruct
-	input := StreamUploadFromURLOptions{
-		URL: "https://example.com/myvideo.mp4",
+	input := StreamUploadFromURLParameters{
+		AccountID: testAccountID,
+		URL:       "https://example.com/myvideo.mp4",
 	}
 
-	out, err := client.StreamUploadFromURL(context.Background(), testAccountID, input)
+	out, err := client.StreamUploadFromURL(context.Background(), input)
 	if assert.NoError(t, err) {
 		assert.Equal(t, out, want, "structs not equal")
 	}
@@ -162,7 +172,8 @@ func TestStream_UploadVideoFile(t *testing.T) {
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, singleStreamResponse)
 	})
-	out, err := client.StreamUploadVideoFile(context.Background(), testAccountID, "stream_test.go")
+	input := StreamUploadFileParameters{AccountID: testAccountID, VideoID: testVideoID, FilePath: "stream_test.go"}
+	out, err := client.StreamUploadVideoFile(context.Background(), input)
 
 	want := TestVideoStruct
 	if assert.NoError(t, err) {
@@ -202,14 +213,23 @@ func TestStream_CreateVideoDirectURL(t *testing.T) {
 }
 `)
 	})
-	// Make sure required parameters exist
-	_, err := client.StreamCreateVideoDirectURL(context.Background(), testAccountID, StreamCreateVideoOptions{})
+
+	// Make sure AccountID is required
+	_, err := client.StreamCreateVideoDirectURL(context.Background(), StreamCreateVideoParameters{})
+
+	if assert.Error(t, err) {
+		assert.Equal(t, ErrMissingAccountID, err)
+	}
+
+	// Make sure MaxDuration is required
+	_, err = client.StreamCreateVideoDirectURL(context.Background(), StreamCreateVideoParameters{AccountID: testAccountID})
 
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingMaxDuration, err)
 	}
 
-	out, err := client.StreamCreateVideoDirectURL(context.Background(), testAccountID, StreamCreateVideoOptions{MaxDurationSeconds: 300})
+	input := StreamCreateVideoParameters{AccountID: testAccountID, MaxDurationSeconds: 300}
+	out, err := client.StreamCreateVideoDirectURL(context.Background(), input)
 
 	created, _ := time.Parse(time.RFC3339, "2014-01-02T02:20:00Z")
 	want := StreamVideoCreate{
@@ -303,7 +323,14 @@ func TestStream_ListVideos(t *testing.T) {
 `)
 	})
 
-	out, err := client.StreamListVideos(context.Background(), testAccountID, StreamListOptions{})
+	// Make sure AccountID is required
+	_, err := client.StreamListVideos(context.Background(), StreamListParameters{})
+
+	if assert.Error(t, err) {
+		assert.Equal(t, ErrMissingAccountID, err)
+	}
+
+	out, err := client.StreamListVideos(context.Background(), StreamListParameters{AccountID: testAccountID})
 	want := TestVideoStruct
 
 	if assert.NoError(t, err) {
@@ -321,7 +348,14 @@ func TestStream_GetVideo(t *testing.T) {
 		fmt.Fprint(w, singleStreamResponse)
 	})
 
-	out, err := client.StreamGetVideo(context.Background(), testAccountID, testVideoID)
+	// Make sure AccountID is required
+	_, err := client.StreamGetVideo(context.Background(), StreamParameters{})
+
+	// Make sure VideoID is required
+	_, err = client.StreamGetVideo(context.Background(), StreamParameters{AccountID: testAccountID})
+
+	input := StreamParameters{AccountID: testAccountID, VideoID: testVideoID}
+	out, err := client.StreamGetVideo(context.Background(), input)
 
 	want := TestVideoStruct
 
@@ -345,7 +379,20 @@ func TestStream_DeleteVideo(t *testing.T) {
 		}`)
 	})
 
-	err := client.StreamDeleteVideo(context.Background(), testAccountID, testVideoID)
+	// Make sure AccountID is required
+	err := client.StreamDeleteVideo(context.Background(), StreamParameters{})
+	if assert.Error(t, err) {
+		assert.Equal(t, ErrMissingAccountID, err)
+	}
+
+	// Make sure VideoID is required
+	err = client.StreamDeleteVideo(context.Background(), StreamParameters{AccountID: testAccountID})
+	if assert.Error(t, err) {
+		assert.Equal(t, ErrMissingVideoID, err)
+	}
+
+	input := StreamParameters{AccountID: testAccountID, VideoID: testVideoID}
+	err = client.StreamDeleteVideo(context.Background(), input)
 	require.NoError(t, err)
 }
 
@@ -355,12 +402,25 @@ func TestStream_EmbedHTML(t *testing.T) {
 
 	streamHTML := `<stream id="ea95132c15732412d22c1476fa83f27a"></stream><script data-cfasync="false" defer type="text/javascript" src="https://embed.cloudflarestream.com/embed/we4g.fla9.latest.js"></script>`
 	mux.HandleFunc("/accounts/"+testAccountID+"/stream/"+testVideoID+"/embed", func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'DELETE', got %s", r.Method)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "text/html")
 		fmt.Fprint(w, streamHTML)
 	})
 
-	out, err := client.StreamEmbedHTML(context.Background(), testAccountID, testVideoID)
+	// Make sure AccountID is required
+	_, err := client.StreamEmbedHTML(context.Background(), StreamParameters{})
+	if assert.Error(t, err) {
+		assert.Equal(t, ErrMissingAccountID, err)
+	}
+
+	// Make sure VideoID is required
+	_, err = client.StreamEmbedHTML(context.Background(), StreamParameters{AccountID: testAccountID})
+	if assert.Error(t, err) {
+		assert.Equal(t, ErrMissingVideoID, err)
+	}
+
+	input := StreamParameters{AccountID: testAccountID, VideoID: testVideoID}
+	out, err := client.StreamEmbedHTML(context.Background(), input)
 	if assert.NoError(t, err) {
 		assert.Equal(t, streamHTML, out, "bad html output")
 	}
@@ -375,7 +435,20 @@ func TestStream_AssociateNFT(t *testing.T) {
 		fmt.Fprint(w, singleStreamResponse)
 	})
 
-	out, err := client.StreamAssociateNFT(context.Background(), testAccountID, testVideoID, StreamVideoNFT{Token: 5, Contract: "0x57f1887a8bf19b14fc0d912b9b2acc9af147ea85"})
+	// Make sure AccountID is required
+	_, err := client.StreamAssociateNFT(context.Background(), StreamVideoNFTParameters{})
+	if assert.Error(t, err) {
+		assert.Equal(t, ErrMissingAccountID, err)
+	}
+
+	// Make sure VideoID is required
+	_, err = client.StreamAssociateNFT(context.Background(), StreamVideoNFTParameters{AccountID: testAccountID})
+	if assert.Error(t, err) {
+		assert.Equal(t, ErrMissingVideoID, err)
+	}
+
+	input := StreamVideoNFTParameters{AccountID: testAccountID, VideoID: testVideoID, Token: 5, Contract: "0x57f1887a8bf19b14fc0d912b9b2acc9af147ea85"}
+	out, err := client.StreamAssociateNFT(context.Background(), input)
 
 	want := TestVideoStruct
 
@@ -399,7 +472,21 @@ func TestStream_CreateSignedURL(t *testing.T) {
   }
 }`)
 	})
-	out, err := client.StreamCreateSignedURL(context.Background(), testAccountID, testVideoID, StreamSignedURLOptions{})
+
+	// Make sure AccountID is required
+	_, err := client.StreamCreateSignedURL(context.Background(), StreamSignedURLParameters{})
+	if assert.Error(t, err) {
+		assert.Equal(t, ErrMissingAccountID, err)
+	}
+
+	// Make sure VideoID is required
+	_, err = client.StreamCreateSignedURL(context.Background(), StreamSignedURLParameters{AccountID: testAccountID})
+	if assert.Error(t, err) {
+		assert.Equal(t, ErrMissingVideoID, err)
+	}
+
+	input := StreamSignedURLParameters{AccountID: testAccountID, VideoID: testVideoID}
+	out, err := client.StreamCreateSignedURL(context.Background(), input)
 
 	want := "eyJhbGciOiJSUzI1NiIsImtpZCI6ImU5ZGI5OTBhODI2NjZkZDU3MWM3N2Y5NDRhNWM1YzhkIn0.eyJzdWIiOiJlYTk1MTMyYzE1NzMyNDEyZDIyYzE0NzZmYTgzZjI3YSIsImtpZCI6ImU5ZGI5OTBhODI2NjZkZDU3MWM3N2Y5NDRhNWM1YzhkIiwiZXhwIjoiMTUzNzQ2MDM2NSIsIm5iZiI6IjE1Mzc0NTMxNjUifQ.OZhqOARADn1iubK6GKcn25hN3nU-hCFF5q9w2C4yup0C4diG7aMIowiRpP-eDod8dbAJubsiFuTKrqPcmyCKWYsiv0TQueukqbQlF7HCO1TV-oF6El5-7ldJ46eD-ZQ0XgcIYEKrQOYFF8iDQbqPm3REWd6BnjKZdeVrLzuRaiSnZ9qqFpGu5dfxIY9-nZKDubJHqCr3Imtb211VIG_b9MdtO92JjvkDS-rxT_pkEfTZSafl1OU-98A7KBGtPSJHz2dHORIrUiTA6on4eIXTj9aFhGiir4rSn-rn0OjPRTtJMWIDMoQyE_fwrSYzB7MPuzL2t82BWaEbHZTfixBm5A"
 

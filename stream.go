@@ -18,35 +18,39 @@ var (
 	ErrMissingUploadURL = errors.New("required url missing")
 	// ErrMissingMaxDuration is for when MaxDuration is required but missing.
 	ErrMissingMaxDuration = errors.New("required max duration missing")
+	// ErrMissingVideoID is for when VideoID is required but missing
+	ErrMissingVideoID = errors.New("required video id missing")
+	// ErrMissingFilePath is for when FilePath is required but missing
+	ErrMissingFilePath = errors.New("required file path missing")
 )
 
 // StreamVideo represents a stream video.
 type StreamVideo struct {
-	AllowedOrigins        []string               `json:"allowedOrigins,omitempty"`
-	Created               *time.Time             `json:"created,omitempty"`
-	Duration              int                    `json:"duration,omitempty"`
-	Input                 StreamVideoInput       `json:"input,omitempty"`
-	MaxDurationSeconds    int                    `json:"maxDurationSeconds,omitempty"`
-	Meta                  map[string]interface{} `json:"meta,omitempty"`
-	Modified              *time.Time             `json:"modified,omitempty"`
-	UploadExpiry          *time.Time             `json:"uploadExpiry,omitempty"`
-	Playback              StreamVideoPlayback    `json:"playback,omitempty"`
-	Preview               string                 `json:"preview,omitempty"`
-	ReadyToStream         bool                   `json:"readyToStream,omitempty"`
-	RequireSignedURLs     bool                   `json:"requireSignedURLs,omitempty"`
-	Size                  int                    `json:"size,omitempty"`
-	Status                StreamVideoStatus      `json:"status,omitempty"`
-	Thumbnail             string                 `json:"thumbnail,omitempty"`
-	ThumbnailTimestampPct float64                `json:"thumbnailTimestampPct,omitempty"`
-	UID                   string                 `json:"uid,omitempty"`
-	Creator               string                 `json:"creator,omitempty"`
-	LiveInput             string                 `json:"liveInput,omitempty"`
-	Uploaded              *time.Time             `json:"uploaded,omitempty"`
-	Watermark             StreamVideoWatermark   `json:"watermark,omitempty"`
-	NFT                   StreamVideoNFT         `json:"nft,omitempty"`
+	AllowedOrigins        []string                 `json:"allowedOrigins,omitempty"`
+	Created               *time.Time               `json:"created,omitempty"`
+	Duration              int                      `json:"duration,omitempty"`
+	Input                 StreamVideoInput         `json:"input,omitempty"`
+	MaxDurationSeconds    int                      `json:"maxDurationSeconds,omitempty"`
+	Meta                  map[string]interface{}   `json:"meta,omitempty"`
+	Modified              *time.Time               `json:"modified,omitempty"`
+	UploadExpiry          *time.Time               `json:"uploadExpiry,omitempty"`
+	Playback              StreamVideoPlayback      `json:"playback,omitempty"`
+	Preview               string                   `json:"preview,omitempty"`
+	ReadyToStream         bool                     `json:"readyToStream,omitempty"`
+	RequireSignedURLs     bool                     `json:"requireSignedURLs,omitempty"`
+	Size                  int                      `json:"size,omitempty"`
+	Status                StreamVideoStatus        `json:"status,omitempty"`
+	Thumbnail             string                   `json:"thumbnail,omitempty"`
+	ThumbnailTimestampPct float64                  `json:"thumbnailTimestampPct,omitempty"`
+	UID                   string                   `json:"uid,omitempty"`
+	Creator               string                   `json:"creator,omitempty"`
+	LiveInput             string                   `json:"liveInput,omitempty"`
+	Uploaded              *time.Time               `json:"uploaded,omitempty"`
+	Watermark             StreamVideoWatermark     `json:"watermark,omitempty"`
+	NFT                   StreamVideoNFTParameters `json:"nft,omitempty"`
 }
 
-// StreamVideoInput represents the input parameters of a stream video.
+// StreamVideoInput represents the video input values of a stream video.
 type StreamVideoInput struct {
 	Height int `json:"height,omitempty"`
 	Width  int `json:"width,omitempty"`
@@ -81,14 +85,19 @@ type StreamVideoWatermark struct {
 	Position       string     `json:"position,omitempty"`
 }
 
-// StreamVideoNFT represents a NFT for a stream video.
-type StreamVideoNFT struct {
-	Contract string `json:"contract,omitempty"`
-	Token    int    `json:"token,omitempty"`
+// StreamVideoNFTOptions represents a NFT for a stream video.
+type StreamVideoNFTParameters struct {
+	AccountID string
+	VideoID   string
+	Contract  string `json:"contract,omitempty"`
+	Token     int    `json:"token,omitempty"`
 }
 
-// UploadVideoOptions are base upload options used by both upload from URL and create video.
-type UploadVideoOptions struct {
+// StreamUploadFromURLParameters are the parameters used when uploading a video from URL.
+type StreamUploadFromURLParameters struct {
+	AccountID             string
+	VideoID               string
+	URL                   string                  `json:"url"`
 	Creator               string                  `json:"creator,omitempty"`
 	ThumbnailTimestampPct float64                 `json:"thumbnailTimestampPct,omitempty"`
 	AllowedOrigins        []string                `json:"allowedOrigins,omitempty"`
@@ -96,17 +105,16 @@ type UploadVideoOptions struct {
 	Watermark             UploadVideoURLWatermark `json:"watermark,omitempty"`
 }
 
-// StreamUploadFromURLOptions are the parameters used when uploading a video from URL.
-type StreamUploadFromURLOptions struct {
-	URL string `json:"url"`
-	UploadVideoOptions
-}
-
-// StreamCreateVideoOptions are parameters used when creating a video.
-type StreamCreateVideoOptions struct {
-	MaxDurationSeconds int        `json:"maxDurationSeconds,omitempty"`
-	Expiry             *time.Time `json:"expiry,omitempty"`
-	UploadVideoOptions
+// StreamCreateVideoParameters are parameters used when creating a video.
+type StreamCreateVideoParameters struct {
+	AccountID             string
+	MaxDurationSeconds    int                     `json:"maxDurationSeconds,omitempty"`
+	Expiry                *time.Time              `json:"expiry,omitempty"`
+	Creator               string                  `json:"creator,omitempty"`
+	ThumbnailTimestampPct float64                 `json:"thumbnailTimestampPct,omitempty"`
+	AllowedOrigins        []string                `json:"allowedOrigins,omitempty"`
+	RequiredSignedURLs    bool                    `json:"requiredSignedURLs,omitempty"`
+	Watermark             UploadVideoURLWatermark `json:"watermark,omitempty"`
 }
 
 // UploadVideoURLWatermark represents UID of an existing watermark.
@@ -121,8 +129,23 @@ type StreamVideoCreate struct {
 	Watermark StreamVideoWatermark `json:"watermark,omitempty"`
 }
 
-// StreamListOptions represents parameters used when listing stream videos.
-type StreamListOptions struct {
+// StreamParameters are the basic parameters needed
+type StreamParameters struct {
+	AccountID string
+	VideoID   string
+}
+
+// StreamUploadFileParameters are parameters needed for file upload of a video
+type StreamUploadFileParameters struct {
+	AccountID string
+	VideoID   string
+	FilePath  string
+}
+
+// StreamListParameters represents parameters used when listing stream videos.
+type StreamListParameters struct {
+	AccountID     string
+	VideoID       string
 	After         *time.Time `url:"after,omitempty"`
 	Before        *time.Time `url:"before,omitempty"`
 	Creator       string     `url:"creator,omitempty"`
@@ -133,8 +156,10 @@ type StreamListOptions struct {
 	Status        string     `url:"status,omitempty"`
 }
 
-// StreamSignedURLOptions represent parameters used when creating a signed URL.
-type StreamSignedURLOptions struct {
+// StreamSignedURLParameters represent parameters used when creating a signed URL.
+type StreamSignedURLParameters struct {
+	AccountID    string
+	VideoID      string
 	ID           string            `json:"id,omitempty"`
 	PEM          string            `json:"pem,omitempty"`
 	EXP          int               `json:"exp,omitempty"`
@@ -179,38 +204,52 @@ type StreamAccessRules []map[string]interface{}
 // StreamUploadFromURL send a video URL to it will be downloaded and made available on Stream.
 //
 // API Reference: https://api.cloudflare.com/#stream-videos-upload-a-video-from-a-url
-func (api *API) StreamUploadFromURL(ctx context.Context, accountID string, options StreamUploadFromURLOptions) (StreamVideo, error) {
-	if options.URL == "" {
+func (api *API) StreamUploadFromURL(ctx context.Context, params StreamUploadFromURLParameters) (StreamVideo, error) {
+
+	if params.AccountID == "" {
+		return StreamVideo{}, ErrMissingAccountID
+	}
+
+	if params.URL == "" {
 		return StreamVideo{}, ErrMissingUploadURL
 	}
-	uri := fmt.Sprintf("/accounts/%s/stream/copy", accountID)
 
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, options)
+	uri := fmt.Sprintf("/accounts/%s/stream/copy", params.AccountID)
+
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return StreamVideo{}, err
 	}
 
-	var r StreamVideoResponse
-	if err := json.Unmarshal(res, &r); err != nil {
+	var streamVideoResponse StreamVideoResponse
+	if err := json.Unmarshal(res, &streamVideoResponse); err != nil {
 		return StreamVideo{}, err
 	}
-	return r.Result, nil
+	return streamVideoResponse.Result, nil
 }
 
 // StreamUploadVideoFile uploads a video from a path to the file.
 //
 // API Reference: https://api.cloudflare.com/#stream-videos-upload-a-video-using-a-single-http-request
-func (api *API) StreamUploadVideoFile(ctx context.Context, accountID string, filePath string) (StreamVideo, error) {
-	uri := fmt.Sprintf("/accounts/%s/stream", accountID)
+func (api *API) StreamUploadVideoFile(ctx context.Context, params StreamUploadFileParameters) (StreamVideo, error) {
+	if params.AccountID == "" {
+		return StreamVideo{}, ErrMissingAccountID
+	}
+
+	if params.FilePath == "" {
+		return StreamVideo{}, ErrMissingFilePath
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/stream", params.AccountID)
 
 	// Create new multipart writer
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
-	formFile, err := writer.CreateFormFile("file", filePath)
+	formFile, err := writer.CreateFormFile("file", params.FilePath)
 	if err != nil {
 		return StreamVideo{}, err
 	}
-	file, err := os.Open(filePath)
+	file, err := os.Open(params.FilePath)
 	if err != nil {
 		return StreamVideo{}, err
 	}
@@ -239,13 +278,18 @@ func (api *API) StreamUploadVideoFile(ctx context.Context, accountID string, fil
 // StreamCreateVideoDirectURL creates a video and returns an authenticated URL.
 //
 // API Reference: https://api.cloudflare.com/#stream-videos-create-a-video-and-get-authenticated-direct-upload-url
-func (api *API) StreamCreateVideoDirectURL(ctx context.Context, accountID string, options StreamCreateVideoOptions) (StreamVideoCreate, error) {
-	if options.MaxDurationSeconds == 0 {
+func (api *API) StreamCreateVideoDirectURL(ctx context.Context, params StreamCreateVideoParameters) (StreamVideoCreate, error) {
+	if params.AccountID == "" {
+		return StreamVideoCreate{}, ErrMissingAccountID
+	}
+
+	if params.MaxDurationSeconds == 0 {
 		return StreamVideoCreate{}, ErrMissingMaxDuration
 	}
-	uri := fmt.Sprintf("/accounts/%s/stream/direct_upload", accountID)
 
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, options)
+	uri := fmt.Sprintf("/accounts/%s/stream/direct_upload", params.AccountID)
+
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return StreamVideoCreate{}, err
 	}
@@ -260,8 +304,12 @@ func (api *API) StreamCreateVideoDirectURL(ctx context.Context, accountID string
 // StreamListVideos list videos currently in stream.
 //
 // API reference: https://api.cloudflare.com/#stream-videos-list-videos
-func (api *API) StreamListVideos(ctx context.Context, accountID string, options StreamListOptions) ([]StreamVideo, error) {
-	uri := buildURI(fmt.Sprintf("/accounts/%s/stream", accountID), options)
+func (api *API) StreamListVideos(ctx context.Context, params StreamListParameters) ([]StreamVideo, error) {
+	if params.AccountID == "" {
+		return []StreamVideo{}, ErrMissingAccountID
+	}
+
+	uri := buildURI(fmt.Sprintf("/accounts/%s/stream", params.AccountID), params)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -280,8 +328,17 @@ func (api *API) StreamListVideos(ctx context.Context, accountID string, options 
 // StreamGetVideo gets the details for a specific video.
 //
 // API Reference: https://api.cloudflare.com/#stream-videos-video-details
-func (api *API) StreamGetVideo(ctx context.Context, accountID string, videoID string) (StreamVideo, error) {
-	uri := fmt.Sprintf("/accounts/%s/stream/%s", accountID, videoID)
+func (api *API) StreamGetVideo(ctx context.Context, options StreamParameters) (StreamVideo, error) {
+
+	if options.AccountID == "" {
+		return StreamVideo{}, ErrMissingAccountID
+	}
+
+	if options.VideoID == "" {
+		return StreamVideo{}, ErrMissingVideoID
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/stream/%s", options.AccountID, options.VideoID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -297,8 +354,17 @@ func (api *API) StreamGetVideo(ctx context.Context, accountID string, videoID st
 // StreamEmbedHTML gets an HTML fragment to embed on a web page.
 //
 // API Reference: https://api.cloudflare.com/#stream-videos-embed-code-html
-func (api *API) StreamEmbedHTML(ctx context.Context, accountID string, videoID string) (string, error) {
-	uri := fmt.Sprintf("/accounts/%s/stream/%s/embed", accountID, videoID)
+func (api *API) StreamEmbedHTML(ctx context.Context, options StreamParameters) (string, error) {
+
+	if options.AccountID == "" {
+		return "", ErrMissingAccountID
+	}
+
+	if options.VideoID == "" {
+		return "", ErrMissingVideoID
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/stream/%s/embed", options.AccountID, options.VideoID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 
@@ -311,8 +377,17 @@ func (api *API) StreamEmbedHTML(ctx context.Context, accountID string, videoID s
 // StreamDeleteVideo deletes a video.
 //
 // API Reference: https://api.cloudflare.com/#stream-videos-delete-video
-func (api *API) StreamDeleteVideo(ctx context.Context, accountID string, videoID string) error {
-	uri := fmt.Sprintf("/accounts/%s/stream/%s", accountID, videoID)
+func (api *API) StreamDeleteVideo(ctx context.Context, options StreamParameters) error {
+
+	if options.AccountID == "" {
+		return ErrMissingAccountID
+	}
+
+	if options.VideoID == "" {
+		return ErrMissingVideoID
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/stream/%s", options.AccountID, options.VideoID)
 	if _, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil); err != nil {
 		return err
 	}
@@ -322,8 +397,17 @@ func (api *API) StreamDeleteVideo(ctx context.Context, accountID string, videoID
 // StreamAssociateNFT associates a video to a token and contract address.
 //
 // API Reference: https://api.cloudflare.com/#stream-videos-associate-video-to-an-nft
-func (api *API) StreamAssociateNFT(ctx context.Context, accountID string, videoID string, options StreamVideoNFT) (StreamVideo, error) {
-	uri := fmt.Sprintf("/accounts/%s/stream/%s", accountID, videoID)
+func (api *API) StreamAssociateNFT(ctx context.Context, options StreamVideoNFTParameters) (StreamVideo, error) {
+
+	if options.AccountID == "" {
+		return StreamVideo{}, ErrMissingAccountID
+	}
+
+	if options.VideoID == "" {
+		return StreamVideo{}, ErrMissingVideoID
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/stream/%s", options.AccountID, options.VideoID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, options)
 	if err != nil {
@@ -339,10 +423,18 @@ func (api *API) StreamAssociateNFT(ctx context.Context, accountID string, videoI
 //StreamCreateSignedURL creates a signed URL token for a video.
 //
 // API Reference: https://api.cloudflare.com/#stream-videos-associate-video-to-an-nft
-func (api *API) StreamCreateSignedURL(ctx context.Context, accountID string, videoID string, options StreamSignedURLOptions) (string, error) {
-	uri := fmt.Sprintf("/accounts/%s/stream/%s/token", accountID, videoID)
+func (api *API) StreamCreateSignedURL(ctx context.Context, params StreamSignedURLParameters) (string, error) {
 
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, options)
+	if params.AccountID == "" {
+		return "", ErrMissingAccountID
+	}
+	if params.VideoID == "" {
+		return "", ErrMissingVideoID
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/stream/%s/token", params.AccountID, params.VideoID)
+
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 
 	if err != nil {
 		return "", err
