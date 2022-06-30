@@ -196,7 +196,7 @@ type StreamSignedURLResponse struct {
 	}
 }
 
-// StreamAccessRules represents the accessRules when creating a signed URL
+// StreamAccessRules represents the accessRules when creating a signed URL.
 type StreamAccessRules []map[string]interface{}
 
 // StreamUploadFromURL send a video URL to it will be downloaded and made available on Stream.
