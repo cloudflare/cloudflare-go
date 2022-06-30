@@ -257,7 +257,7 @@ func (api *API) StreamUploadVideoFile(ctx context.Context, params StreamUploadFi
 		return StreamVideo{}, err
 	}
 
-	res, err := api.makeRequestWithAuthTypeAndHeaders(ctx, http.MethodPost, uri, body, api.authType, http.Header{
+	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPost, uri, body, http.Header{
 		"Accept":       []string{"application/json"},
 		"Content-Type": []string{writer.FormDataContentType()},
 	})
@@ -413,7 +413,7 @@ func (api *API) StreamAssociateNFT(ctx context.Context, options StreamVideoNFTPa
 	return streamVideoResponse.Result, nil
 }
 
-//StreamCreateSignedURL creates a signed URL token for a video.
+// StreamCreateSignedURL creates a signed URL token for a video.
 //
 // API Reference: https://api.cloudflare.com/#stream-videos-associate-video-to-an-nft
 func (api *API) StreamCreateSignedURL(ctx context.Context, params StreamSignedURLParameters) (string, error) {
