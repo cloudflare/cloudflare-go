@@ -197,8 +197,6 @@ type StreamSignedURLResponse struct {
 }
 
 // StreamAccessRules represents the accessRules when creating a signed URL
-//I feel like should be implemented somewhere already but couldn't find it
-// accessRules under https://api.cloudflare.com/#stream-videos-create-a-signed-url-token-for-a-video
 type StreamAccessRules []map[string]interface{}
 
 // StreamUploadFromURL send a video URL to it will be downloaded and made available on Stream.
