@@ -160,12 +160,12 @@ type StreamListParameters struct {
 type StreamSignedURLParameters struct {
 	AccountID    string
 	VideoID      string
-	ID           string            `json:"id,omitempty"`
-	PEM          string            `json:"pem,omitempty"`
-	EXP          int               `json:"exp,omitempty"`
-	NBF          int               `json:"nbf,omitempty"`
-	Downloadable bool              `json:"downloadable,omitempty"`
-	AccessRules  StreamAccessRules `json:"accessRules,omitempty"`
+	ID           string              `json:"id,omitempty"`
+	PEM          string              `json:"pem,omitempty"`
+	EXP          int                 `json:"exp,omitempty"`
+	NBF          int                 `json:"nbf,omitempty"`
+	Downloadable bool                `json:"downloadable,omitempty"`
+	AccessRules  []StreamAccessRules `json:"accessRules,omitempty"`
 }
 
 // StreamVideoResponse represents an API response of a stream video.
@@ -197,7 +197,12 @@ type StreamSignedURLResponse struct {
 }
 
 // StreamAccessRules represents the accessRules when creating a signed URL.
-type StreamAccessRules []map[string]interface{}
+type StreamAccessRules struct {
+	Type    string   `json:"type"`
+	Country []string `json:"country,omitempty"`
+	Action  string   `json:"action"`
+	IP      []string `json:"ip,omitempty"`
+}
 
 // StreamUploadFromURL send a video URL to it will be downloaded and made available on Stream.
 //
