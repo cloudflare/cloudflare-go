@@ -18,9 +18,9 @@ var (
 	ErrMissingUploadURL = errors.New("required url missing")
 	// ErrMissingMaxDuration is for when MaxDuration is required but missing.
 	ErrMissingMaxDuration = errors.New("required max duration missing")
-	// ErrMissingVideoID is for when VideoID is required but missing
+	// ErrMissingVideoID is for when VideoID is required but missing.
 	ErrMissingVideoID = errors.New("required video id missing")
-	// ErrMissingFilePath is for when FilePath is required but missing
+	// ErrMissingFilePath is for when FilePath is required but missing.
 	ErrMissingFilePath = errors.New("required file path missing")
 )
 
@@ -85,7 +85,7 @@ type StreamVideoWatermark struct {
 	Position       string     `json:"position,omitempty"`
 }
 
-// StreamVideoNFTOptions represents a NFT for a stream video.
+// StreamVideoNFTParameters represents a NFT for a stream video.
 type StreamVideoNFTParameters struct {
 	AccountID string
 	VideoID   string
@@ -129,13 +129,13 @@ type StreamVideoCreate struct {
 	Watermark StreamVideoWatermark `json:"watermark,omitempty"`
 }
 
-// StreamParameters are the basic parameters needed
+// StreamParameters are the basic parameters needed.
 type StreamParameters struct {
 	AccountID string
 	VideoID   string
 }
 
-// StreamUploadFileParameters are parameters needed for file upload of a video
+// StreamUploadFileParameters are parameters needed for file upload of a video.
 type StreamUploadFileParameters struct {
 	AccountID string
 	VideoID   string
@@ -205,7 +205,6 @@ type StreamAccessRules []map[string]interface{}
 //
 // API Reference: https://api.cloudflare.com/#stream-videos-upload-a-video-from-a-url
 func (api *API) StreamUploadFromURL(ctx context.Context, params StreamUploadFromURLParameters) (StreamVideo, error) {
-
 	if params.AccountID == "" {
 		return StreamVideo{}, ErrMissingAccountID
 	}
@@ -329,7 +328,6 @@ func (api *API) StreamListVideos(ctx context.Context, params StreamListParameter
 //
 // API Reference: https://api.cloudflare.com/#stream-videos-video-details
 func (api *API) StreamGetVideo(ctx context.Context, options StreamParameters) (StreamVideo, error) {
-
 	if options.AccountID == "" {
 		return StreamVideo{}, ErrMissingAccountID
 	}
@@ -355,7 +353,6 @@ func (api *API) StreamGetVideo(ctx context.Context, options StreamParameters) (S
 //
 // API Reference: https://api.cloudflare.com/#stream-videos-embed-code-html
 func (api *API) StreamEmbedHTML(ctx context.Context, options StreamParameters) (string, error) {
-
 	if options.AccountID == "" {
 		return "", ErrMissingAccountID
 	}
@@ -378,7 +375,6 @@ func (api *API) StreamEmbedHTML(ctx context.Context, options StreamParameters) (
 //
 // API Reference: https://api.cloudflare.com/#stream-videos-delete-video
 func (api *API) StreamDeleteVideo(ctx context.Context, options StreamParameters) error {
-
 	if options.AccountID == "" {
 		return ErrMissingAccountID
 	}
@@ -398,7 +394,6 @@ func (api *API) StreamDeleteVideo(ctx context.Context, options StreamParameters)
 //
 // API Reference: https://api.cloudflare.com/#stream-videos-associate-video-to-an-nft
 func (api *API) StreamAssociateNFT(ctx context.Context, options StreamVideoNFTParameters) (StreamVideo, error) {
-
 	if options.AccountID == "" {
 		return StreamVideo{}, ErrMissingAccountID
 	}
@@ -424,7 +419,6 @@ func (api *API) StreamAssociateNFT(ctx context.Context, options StreamVideoNFTPa
 //
 // API Reference: https://api.cloudflare.com/#stream-videos-associate-video-to-an-nft
 func (api *API) StreamCreateSignedURL(ctx context.Context, params StreamSignedURLParameters) (string, error) {
-
 	if params.AccountID == "" {
 		return "", ErrMissingAccountID
 	}

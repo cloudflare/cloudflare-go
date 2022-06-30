@@ -74,8 +74,7 @@ const (
 )
 
 var (
-	TestVideoStruct     = createTestVideo()
-	TestStreamParamters = StreamParameters{AccountID: testAccountID, VideoID: testVideoID}
+	TestVideoStruct = createTestVideo()
 )
 
 func createTestVideo() StreamVideo {
@@ -172,6 +171,19 @@ func TestStream_UploadVideoFile(t *testing.T) {
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, singleStreamResponse)
 	})
+
+	// Make sure missing account ID is thrown
+	_, err := client.StreamUploadVideoFile(context.Background(), StreamUploadFileParameters{})
+	if assert.Error(t, err) {
+		assert.Equal(t, ErrMissingAccountID, err)
+	}
+
+	// Make sure missing file path is thrown
+	_, err = client.StreamUploadVideoFile(context.Background(), StreamUploadFileParameters{AccountID: testAccountID})
+	if assert.Error(t, err) {
+		assert.Equal(t, ErrMissingFilePath, err)
+	}
+
 	input := StreamUploadFileParameters{AccountID: testAccountID, VideoID: testVideoID, FilePath: "stream_test.go"}
 	out, err := client.StreamUploadVideoFile(context.Background(), input)
 
@@ -350,9 +362,15 @@ func TestStream_GetVideo(t *testing.T) {
 
 	// Make sure AccountID is required
 	_, err := client.StreamGetVideo(context.Background(), StreamParameters{})
+	if assert.Error(t, err) {
+		assert.Equal(t, ErrMissingAccountID, err)
+	}
 
 	// Make sure VideoID is required
 	_, err = client.StreamGetVideo(context.Background(), StreamParameters{AccountID: testAccountID})
+	if assert.Error(t, err) {
+		assert.Equal(t, ErrMissingVideoID, err)
+	}
 
 	input := StreamParameters{AccountID: testAccountID, VideoID: testVideoID}
 	out, err := client.StreamGetVideo(context.Background(), input)
