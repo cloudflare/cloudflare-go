@@ -103,6 +103,8 @@ const (
 	WorkerPlainTextBindingType WorkerBindingType = "plain_text"
 	// WorkerServiceBindingType is the type for service bindings.
 	WorkerServiceBindingType WorkerBindingType = "service"
+	// WorkerR2BucketBindingType is the type for R2 bucket bindings.
+	WorkerR2BucketBindingType WorkerBindingType = "r2_bucket"
 )
 
 // WorkerBindingListItem a struct representing an individual binding in a list of bindings.
@@ -325,6 +327,28 @@ func (b WorkerServiceBinding) serialize(bindingName string) (workerBindingMeta, 
 	return meta, nil, nil
 }
 
+// WorkerR2BucketBinding is a binding to an R2 bucket.
+type WorkerR2BucketBinding struct {
+	BucketName string
+}
+
+// Type returns the type of the binding.
+func (b WorkerR2BucketBinding) Type() WorkerBindingType {
+	return WorkerR2BucketBindingType
+}
+
+func (b WorkerR2BucketBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
+	if b.BucketName == "" {
+		return nil, nil, errors.Errorf(`BucketName for binding "%s" cannot be empty`, bindingName)
+	}
+
+	return workerBindingMeta{
+		"name":        bindingName,
+		"type":        b.Type(),
+		"bucket_name": b.BucketName,
+	}, nil, nil
+}
+
 // Each binding that adds a part to the multipart form body will need
 // a unique part name so we just generate a random 128bit hex string.
 func getRandomPartName() string {
@@ -488,6 +512,11 @@ func (api *API) ListWorkerBindings(ctx context.Context, requestParams *WorkerReq
 			}
 		case WorkerSecretTextBindingType:
 			bindingListItem.Binding = WorkerSecretTextBinding{}
+		case WorkerR2BucketBindingType:
+			bucketName := jsonBinding["bucket_name"].(string)
+			bindingListItem.Binding = WorkerR2BucketBinding{
+				BucketName: bucketName,
+			}
 		default:
 			bindingListItem.Binding = WorkerInheritBinding{}
 		}
