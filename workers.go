@@ -327,7 +327,7 @@ func (b WorkerServiceBinding) serialize(bindingName string) (workerBindingMeta, 
 	return meta, nil, nil
 }
 
-// WorkerR2BucketBinding is a binding to an R2 bucket
+// WorkerR2BucketBinding is a binding to an R2 bucket.
 type WorkerR2BucketBinding struct {
 	BucketName string
 }
