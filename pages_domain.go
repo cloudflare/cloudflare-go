@@ -151,7 +151,7 @@ func (api *API) PagesPatchDomain(ctx context.Context, params PagesDomainParamete
 // PagesAddDomain adds a domain to a pages project.
 //
 // API Reference: https://community.cloudflare.com/t/add-pages-domain-via-api/303510/3
-// Blame Washly for not making it official
+// Blame Washly for not making it official.
 func (api *API) PagesAddDomain(ctx context.Context, params PagesDomainParameters) (PagesDomain, error) {
 	// Make sure account id is set
 	if params.AccountID == "" {
