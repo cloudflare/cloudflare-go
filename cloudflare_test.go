@@ -535,7 +535,7 @@ func TestCheckResultInfo(t *testing.T) {
 	}
 }
 
-// testHTTPMethod makes sure that a requests method is what is expected
+// testHTTPMethod makes sure that a request's method is what is expected.
 func testHTTPMethod(t *testing.T, expected string, r *http.Request) {
 	assert.Equal(t, expected, r.Method, "Expected method '%s', got %s", expected, r.Method)
 }
