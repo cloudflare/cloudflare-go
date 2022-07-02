@@ -37,12 +37,13 @@ func (api *API) IntelligencePhishingScan(ctx context.Context, params PhishingSca
 	if params.AccountID == "" {
 		return PhishingScan{}, ErrMissingAccountID
 	}
-	uri := buildURI(fmt.Sprintf("/accounts/%s/intel-phishing/predict", params.AccountID), params)
 
+	uri := buildURI(fmt.Sprintf("/accounts/%s/intel-phishing/predict", params.AccountID), params)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return PhishingScan{}, err
 	}
+
 	var phishingScanResponse PhishingScanResponse
 	if err := json.Unmarshal(res, &phishingScanResponse); err != nil {
 		return PhishingScan{}, err

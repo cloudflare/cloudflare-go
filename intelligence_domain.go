@@ -108,15 +108,18 @@ func (api *API) IntelligenceDomainDetails(ctx context.Context, params GetDomainD
 	if params.AccountID == "" {
 		return DomainDetails{}, ErrMissingAccountID
 	}
+
 	// Make sure Domain is set
 	if params.Domain == "" {
 		return DomainDetails{}, ErrMissingDomain
 	}
+
 	uri := buildURI(fmt.Sprintf("/accounts/%s/intel/domain", params.AccountID), params)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return DomainDetails{}, err
 	}
+
 	var domainDetails DomainDetailsResponse
 	if err := json.Unmarshal(res, &domainDetails); err != nil {
 		return DomainDetails{}, err
@@ -132,16 +135,18 @@ func (api *API) IntelligenceBulkDomainDetails(ctx context.Context, params GetBul
 	if params.AccountID == "" {
 		return []DomainDetails{}, ErrMissingAccountID
 	}
+
 	// Make sure domains are set
 	if len(params.Domains) == 0 {
 		return []DomainDetails{}, ErrMissingDomain
 	}
-	uri := buildURI(fmt.Sprintf("/accounts/%s/intel/domain/bulk", params.AccountID), params)
 
+	uri := buildURI(fmt.Sprintf("/accounts/%s/intel/domain/bulk", params.AccountID), params)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []DomainDetails{}, err
 	}
+
 	var domainDetails GetBulkDomainDetailsResponse
 	if err := json.Unmarshal(res, &domainDetails); err != nil {
 		return []DomainDetails{}, err
@@ -157,15 +162,18 @@ func (api *API) IntelligenceDomainHistory(ctx context.Context, params GetDomainH
 	if params.AccountID == "" {
 		return []DomainHistory{}, ErrMissingAccountID
 	}
+
 	// Make sure Domain is set
 	if params.Domain == "" {
 		return []DomainHistory{}, ErrMissingDomain
 	}
+
 	uri := buildURI(fmt.Sprintf("/accounts/%s/intel/domain-history", params.AccountID), params)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []DomainHistory{}, err
 	}
+
 	var domainDetails GetDomainHistoryResponse
 	if err := json.Unmarshal(res, &domainDetails); err != nil {
 		return []DomainHistory{}, err

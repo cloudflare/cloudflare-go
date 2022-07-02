@@ -68,6 +68,7 @@ func (api *API) IntelligenceASNOverview(ctx context.Context, params Intelligence
 	if err != nil {
 		return []ASNInfo{}, err
 	}
+
 	var asnInfoResponse IntelligenceASNResponse
 	if err := json.Unmarshal(res, &asnInfoResponse); err != nil {
 		return []ASNInfo{}, err
@@ -90,15 +91,14 @@ func (api *API) IntelligenceASNSubnets(ctx context.Context, params IntelligenceA
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/intel/asn/%d/subnets", params.AccountID, params.ASN)
-
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return IntelligenceASNSubnetResponse{}, err
 	}
+
 	var intelligenceASNSubnetResponse IntelligenceASNSubnetResponse
 	if err := json.Unmarshal(res, &intelligenceASNSubnetResponse); err != nil {
 		return IntelligenceASNSubnetResponse{}, err
 	}
 	return intelligenceASNSubnetResponse, nil
-
 }

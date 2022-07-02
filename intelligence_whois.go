@@ -51,6 +51,7 @@ func (api *API) IntelligenceWHOIS(ctx context.Context, params WHOISParameters) (
 	if err != nil {
 		return WHOIS{}, err
 	}
+
 	var whoisResponse WHOISResponse
 	if err := json.Unmarshal(res, &whoisResponse); err != nil {
 		return WHOIS{}, err

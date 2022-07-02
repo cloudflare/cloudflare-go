@@ -105,6 +105,7 @@ func (api *API) IntelligenceGetIPOverview(ctx context.Context, params IPIntellig
 	if err != nil {
 		return []IPIntelligence{}, err
 	}
+
 	var ipDetails IPIntelligenceResponse
 	if err := json.Unmarshal(res, &ipDetails); err != nil {
 		return []IPIntelligence{}, err
@@ -120,6 +121,7 @@ func (api *API) IntelligenceGetIPList(ctx context.Context, params IPIntelligence
 	if params.AccountID == "" {
 		return []IPIntelligenceItem{}, ErrMissingAccountID
 	}
+
 	uri := fmt.Sprintf("/accounts/%s/intel/ip-list", params.AccountID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -143,11 +145,11 @@ func (api *API) IntelligencePassiveDNS(ctx context.Context, params IPIntelligenc
 	}
 
 	uri := buildURI(fmt.Sprintf("/accounts/%s/intel/dns", params.AccountID), params)
-
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return IPPassiveDNS{}, err
 	}
+
 	var passiveDNS IPIntelligencePassiveDNSResponse
 	if err := json.Unmarshal(res, &passiveDNS); err != nil {
 		return IPPassiveDNS{}, err
