@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+// WHOIS represents whois information.
 type WHOIS struct {
 	Domain            string   `json:"domain,omitempty"`
 	CreatedDate       string   `json:"created_date,omitempty"`
@@ -19,11 +20,13 @@ type WHOIS struct {
 	Nameservers       []string `json:"nameservers,omitempty"`
 }
 
+// WHOISParameters represents parameters for a who is request.
 type WHOISParameters struct {
 	AccountID string `url:"-"`
 	Domain    string `url:"domain"`
 }
 
+// WHOISResponse represents an API response for a whois request.
 type WHOISResponse struct {
 	Response
 	Result WHOIS `json:"result,omitempty"`

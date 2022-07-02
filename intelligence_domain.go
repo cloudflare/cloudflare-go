@@ -8,11 +8,10 @@ import (
 	"net/http"
 )
 
-var (
-	// ErrMissingDomain is for when domain is needed but not given
-	ErrMissingDomain = errors.New("required domain missing")
-)
+// ErrMissingDomain is for when domain is needed but not given.
+var ErrMissingDomain = errors.New("required domain missing")
 
+// DomainDetails represents details for a domain.
 type DomainDetails struct {
 	Domain                string                `json:"domain"`
 	ResolvesToRefs        []ResolvesToRefs      `json:"resolves_to_refs"`
@@ -22,61 +21,80 @@ type DomainDetails struct {
 	ContentCategories     []ContentCategories   `json:"content_categories"`
 	AdditionalInformation AdditionalInformation `json:"additional_information"`
 }
+
+// ResolvesToRefs what a domain resolves to.
 type ResolvesToRefs struct {
 	ID    string `json:"id"`
 	Value string `json:"value"`
 }
+
 type Application struct {
 	ID   int    `json:"id"`
 	Name string `json:"name"`
 }
+
+// ContentCategories represents the categories for a domain.
 type ContentCategories struct {
 	ID              int    `json:"id"`
 	SuperCategoryID int    `json:"super_category_id"`
 	Name            string `json:"name"`
 }
+
+// AdditionalInformation represents any additional information for a domain.
 type AdditionalInformation struct {
 	SuspectedMalwareFamily string `json:"suspected_malware_family"`
 }
 
+// DomainHistory represents the history for a domain.
 type DomainHistory struct {
 	Domain          string            `json:"domain"`
 	Categorizations []Categorizations `json:"categorizations"`
 }
+
+// Categories represents categories for a domain.
 type Categories struct {
 	ID   int    `json:"id"`
 	Name string `json:"name"`
 }
+
+// Categorizations represents the categories and when those categories were set.
 type Categorizations struct {
 	Categories []Categories `json:"categories"`
 	Start      string       `json:"start"`
 	End        string       `json:"end"`
 }
+
+// GetDomainDetailsParameters represent the parameters for a domain details request.
 type GetDomainDetailsParameters struct {
 	AccountID string `url:"-"`
 	Domain    string `url:"domain,omitempty"`
 }
 
+// DomainDetailsResponse represents an API response for domain details.
 type DomainDetailsResponse struct {
 	Response
 	Result DomainDetails `json:"result,omitempty"`
 }
 
+// GetBulkDomainDetailsParameters represents the parameters for bulk domain details request.
 type GetBulkDomainDetailsParameters struct {
 	AccountID string   `url:"-"`
 	Domains   []string `url:"domain"`
 }
 
+// GetBulkDomainDetailsResponse represents an API response for bulk domain details.
 type GetBulkDomainDetailsResponse struct {
 	Response
 	Result []DomainDetails `json:"result,omitempty"`
 }
 
+// GetDomainHistoryParameters represents the parameters for domain history request.
 type GetDomainHistoryParameters struct {
 	AccountID string `url:"-"`
 	Domain    string `url:"domain,omitempty"`
 }
 
+// GetDomainHistoryResponse represents an API response for domain history.
 type GetDomainHistoryResponse struct {
 	Response
 	Result []DomainHistory `json:"result,omitempty"`

@@ -5,14 +5,16 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"time"
 )
 
+// IPIntelligence represents IP intelligence information.
 type IPIntelligence struct {
 	IP           string       `json:"ip"`
 	BelongsToRef BelongsToRef `json:"belongs_to_ref"`
 	RiskTypes    []RiskTypes  `json:"risk_types"`
 }
+
+// BelongsToRef represents information about who owns an IP address.
 type BelongsToRef struct {
 	ID          string `json:"id"`
 	Value       int    `json:"value"`
@@ -20,12 +22,15 @@ type BelongsToRef struct {
 	Country     string `json:"country"`
 	Description string `json:"description"`
 }
+
+// RiskTypes represent risk types for an IP.
 type RiskTypes struct {
 	ID              int    `json:"id"`
 	SuperCategoryID int    `json:"super_category_id"`
 	Name            string `json:"name"`
 }
 
+// IPPassiveDNS represent DNS response.
 type IPPassiveDNS struct {
 	ReverseRecords []ReverseRecords `json:"reverse_records,omitempty"`
 	Count          int              `json:"count,omitempty"`
@@ -33,52 +38,60 @@ type IPPassiveDNS struct {
 	PerPage        int              `json:"per_page,omitempty"`
 }
 
+// ReverseRecords represent records for passive DNS.
 type ReverseRecords struct {
-	FirstSeen string `json:"first_seen"`
-	LastSeen  string `json:"last_seen"`
-	Hostname  string `json:"hostname"`
+	FirstSeen string `json:"first_seen,omitempty"`
+	LastSeen  string `json:"last_seen,omitempty"`
+	Hostname  string `json:"hostname,omitempty"`
 }
 
+// IPIntelligenceParameters represents parameters for an IP Intelligence request.
 type IPIntelligenceParameters struct {
 	AccountID string `url:"-"`
 	IPv4      string `url:"ipv4,omitempty"`
 	IPv6      string `url:"ipv6,omitempty"`
 }
 
+// IPIntelligenceResponse represents an IP Intelligence API response.
 type IPIntelligenceResponse struct {
 	Response
 	Result []IPIntelligence `json:"result,omitempty"`
 }
 
+// IPIntelligenceListParameters represents the parameters for an IP list request.
 type IPIntelligenceListParameters struct {
 	AccountID string
 }
 
+// IPIntelligenceItem represents an item in an IP list.
 type IPIntelligenceItem struct {
 	ID   int    `json:"id,omitempty"`
 	Name string `json:"name,omitempty"`
 }
 
+// IPIntelligenceListResponse represents the response for an IP list API response.
 type IPIntelligenceListResponse struct {
 	Response
 	Result []IPIntelligenceItem `json:"result,omitempty"`
 }
 
+// IPIntelligencePassiveDNSParameters represents the parameters for a passive DNS request.
 type IPIntelligencePassiveDNSParameters struct {
-	AccountID string     `url:"-"`
-	IPv4      string     `url:"ipv4,omitempty"`
-	Start     *time.Time `url:"start,omitempty"`
-	End       *time.Time `url:"end,omitempty"`
-	Page      int        `url:"page,omitempty"`
-	PerPage   int        `url:"per_page,omitempty"`
+	AccountID string `url:"-"`
+	IPv4      string `url:"ipv4,omitempty"`
+	Start     string `url:"start,omitempty"`
+	End       string `url:"end,omitempty"`
+	Page      int    `url:"page,omitempty"`
+	PerPage   int    `url:"per_page,omitempty"`
 }
 
+// IPIntelligencePassiveDNSResponse represents a passive API response.
 type IPIntelligencePassiveDNSResponse struct {
 	Response
 	Result IPPassiveDNS `json:"result,omitempty"`
 }
 
-// IntelligenceGetIPOverview gets information about ipv4 or ipv6 address
+// IntelligenceGetIPOverview gets information about ipv4 or ipv6 address.
 //
 // API Reference: https://api.cloudflare.com/#ip-intelligence-get-ip-overview
 func (api *API) IntelligenceGetIPOverview(ctx context.Context, params IPIntelligenceParameters) ([]IPIntelligence, error) {
@@ -99,7 +112,7 @@ func (api *API) IntelligenceGetIPOverview(ctx context.Context, params IPIntellig
 	return ipDetails.Result, nil
 }
 
-// IntelligenceGetIPList gets intelligence ip-lists
+// IntelligenceGetIPList gets intelligence ip-lists.
 //
 // API Reference: https://api.cloudflare.com/#ip-list-get-ip-lists
 func (api *API) IntelligenceGetIPList(ctx context.Context, params IPIntelligenceListParameters) ([]IPIntelligenceItem, error) {
@@ -120,7 +133,7 @@ func (api *API) IntelligenceGetIPList(ctx context.Context, params IPIntelligence
 	return ipListItem.Result, nil
 }
 
-// IntelligencePassiveDNS gets a history of DNS for an ip
+// IntelligencePassiveDNS gets a history of DNS for an ip.
 //
 // API Reference: https://api.cloudflare.com/#passive-dns-by-ip-get-passive-dns-by-ip
 func (api *API) IntelligencePassiveDNS(ctx context.Context, params IPIntelligencePassiveDNSParameters) (IPPassiveDNS, error) {

@@ -111,3 +111,52 @@ func TestIntelligence_GetIPLists(t *testing.T) {
 		assert.Equal(t, out, want, "structs not equal")
 	}
 }
+
+func TestIntelligence_PassiveDNS(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/intel/dns", func(w http.ResponseWriter, r *http.Request) {
+		testHTTPMethod(t, http.MethodGet, r)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+  "success": true,
+  "errors": [],
+  "messages": [],
+  "result": {
+    "reverse_records": [
+      {
+        "first_seen": "2021-04-01",
+        "last_seen": "2021-04-30",
+        "hostname": "cloudflare.com"
+      }
+    ],
+    "count": 1,
+    "page": 1,
+    "per_page": 20
+  }
+}`)
+	})
+
+	// Make sure missing account ID is thrown
+	_, err := client.IntelligencePassiveDNS(context.Background(), IPIntelligencePassiveDNSParameters{})
+	if assert.Error(t, err) {
+		assert.Equal(t, ErrMissingAccountID, err)
+	}
+
+	want := IPPassiveDNS{
+		Count:   1,
+		Page:    1,
+		PerPage: 20,
+		ReverseRecords: []ReverseRecords{{
+			FirstSeen: "2021-04-01",
+			LastSeen:  "2021-04-30",
+			Hostname:  "cloudflare.com",
+		}},
+	}
+
+	out, err := client.IntelligencePassiveDNS(context.Background(), IPIntelligencePassiveDNSParameters{AccountID: testAccountID})
+	if assert.NoError(t, err) {
+		assert.Equal(t, out, want, "structs not equal")
+	}
+}

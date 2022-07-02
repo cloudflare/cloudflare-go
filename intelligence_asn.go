@@ -8,9 +8,10 @@ import (
 	"net/http"
 )
 
-// ErrMissingASN is for when ASN is required but not set
+// ErrMissingASN is for when ASN is required but not set.
 var ErrMissingASN = errors.New("required asn missing")
 
+// ASNInfo represents ASN information.
 type ASNInfo struct {
 	ASN         int      `json:"asn"`
 	Description string   `json:"description"`
@@ -20,21 +21,25 @@ type ASNInfo struct {
 	TopDomains  []string `json:"top_domains"`
 }
 
+// IntelligenceASNOverviewParameters represents parameters for an ASN request.
 type IntelligenceASNOverviewParameters struct {
 	AccountID string
 	ASN       int
 }
 
+// IntelligenceASNResponse represents an API response for ASN info.
 type IntelligenceASNResponse struct {
 	Response
 	Result []ASNInfo `json:"result,omitempty"`
 }
 
+// IntelligenceASNSubnetsParameters represents parameters for an ASN subnet request.
 type IntelligenceASNSubnetsParameters struct {
 	AccountID string
 	ASN       int
 }
 
+// IntelligenceASNSubnetResponse represents an ASN subnet API response.
 type IntelligenceASNSubnetResponse struct {
 	ASN          int      `json:"asn,omitempty"`
 	IPCountTotal int      `json:"ip_count_total,omitempty"`

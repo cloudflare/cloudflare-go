@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+// PhishingScan represent information about a phishing scan.
 type PhishingScan struct {
 	URL        string  `json:"url"`
 	Phishing   bool    `json:"phishing"`
@@ -15,12 +16,14 @@ type PhishingScan struct {
 	Classifier string  `json:"classifier"`
 }
 
+// PhishingScanParameters represent parameters for a phishing scan request.
 type PhishingScanParameters struct {
 	AccountID string `url:"-"`
 	URL       string `url:"url,omitempty"`
 	Skip      bool   `url:"skip,omitempty"`
 }
 
+// PhishingScanResponse represent an API response for a phishing scan.
 type PhishingScanResponse struct {
 	Response
 	Result PhishingScan `json:"result,omitempty"`
