@@ -26,6 +26,16 @@ type Tunnel struct {
 	ConnInactiveAt *time.Time         `json:"conns_inactive_at,omitempty"`
 }
 
+// Connection is the struct definition of a connection.
+type Connection struct {
+	ID          string             `json:"id,omitempty"`
+	Features    []string           `json:"features,omitempty"`
+	Version     string             `json:"version,omitempty"`
+	Arch        string             `json:"arch,omitempty"`
+	Connections []TunnelConnection `json:"conns,omitempty"`
+	RunAt       *time.Time         `json:"run_at,omitempty"`
+}
+
 // TunnelConnection represents the connections associated with a tunnel.
 type TunnelConnection struct {
 	ColoName           string `json:"colo_name"`
@@ -48,6 +58,13 @@ type TunnelsDetailResponse struct {
 // a single tunnel.
 type TunnelDetailResponse struct {
 	Result Tunnel `json:"result"`
+	Response
+}
+
+// TunnelConnectionResponse is used for representing the API response payload for
+// connections of a single tunnel.
+type TunnelConnectionResponse struct {
+	Result []Connection `json:"result"`
 	Response
 }
 
@@ -176,6 +193,11 @@ type TunnelConfigurationParams struct {
 type GetTunnelConfigurationParams struct {
 	AccountID string `json:"-"`
 	TunnelID  string `json:"-"`
+}
+
+type TunnelConnectionParams struct {
+	AccountID string
+	ID        string
 }
 
 type TunnelDeleteParams struct {
@@ -405,6 +427,33 @@ func (api *API) GetTunnelConfiguration(ctx context.Context, params GetTunnelConf
 	tunnelDetails.Version = tunnelDetailsResponse.Result.Version
 
 	return tunnelDetails, nil
+}
+
+// TunnelConnections gets all connections on a tunnel.
+//
+// API reference: https://api.cloudflare.com/#cloudflare-tunnel-clean-up-cloudflare-tunnel-connections
+func (api *API) TunnelConnections(ctx context.Context, params TunnelConnectionParams) ([]Connection, error) {
+	if params.AccountID == "" {
+		return []Connection{}, ErrMissingAccountID
+	}
+
+	if params.ID == "" {
+		return []Connection{}, errors.New("missing tunnel ID")
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s/connections", params.AccountID, params.ID)
+
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return []Connection{}, err
+	}
+
+	var argoDetailsResponse TunnelConnectionResponse
+	err = json.Unmarshal(res, &argoDetailsResponse)
+	if err != nil {
+		return []Connection{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return argoDetailsResponse.Result, nil
 }
 
 // DeleteTunnel removes a single Argo tunnel.
