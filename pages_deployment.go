@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/pkg/errors"
+	"errors"
 )
 
 // SizeOptions can be passed to a list request to configure size and cursor location.
@@ -155,7 +155,7 @@ func (api *API) ListPagesDeployments(ctx context.Context, params ListPagesDeploy
 	var r pagesDeploymentListResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return []PagesProjectDeployment{}, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
+		return []PagesProjectDeployment{}, ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, r.ResultInfo, nil
 }
@@ -185,7 +185,7 @@ func (api *API) GetPagesDeploymentInfo(ctx context.Context, params GetPagesDeplo
 	var r pagesDeploymentResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return PagesProjectDeployment{}, errors.Wrap(err, errUnmarshalError)
+		return PagesProjectDeployment{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -224,7 +224,7 @@ func (api *API) GetPagesDeploymentStageLogs(ctx context.Context, params GetPages
 	var r pagesDeploymentStageLogsResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return PagesDeploymentStageLogs{}, errors.Wrap(err, errUnmarshalError)
+		return PagesDeploymentStageLogs{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -257,7 +257,7 @@ func (api *API) GetPagesDeploymentLogs(ctx context.Context, params GetPagesDeplo
 	var r pagesDeploymentLogsResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return PagesDeploymentLogs{}, errors.Wrap(err, errUnmarshalError)
+		return PagesDeploymentLogs{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -308,7 +308,7 @@ func (api *API) CreatePagesDeployment(ctx context.Context, params CreatePagesDep
 	var r pagesDeploymentResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return PagesProjectDeployment{}, errors.Wrap(err, errUnmarshalError)
+		return PagesProjectDeployment{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -338,7 +338,7 @@ func (api *API) RetryPagesDeployment(ctx context.Context, params RetryPagesDeplo
 	var r pagesDeploymentResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return PagesProjectDeployment{}, errors.Wrap(err, errUnmarshalError)
+		return PagesProjectDeployment{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -368,7 +368,7 @@ func (api *API) RollbackPagesDeployment(ctx context.Context, params RollbackPage
 	var r pagesDeploymentResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return PagesProjectDeployment{}, errors.Wrap(err, errUnmarshalError)
+		return PagesProjectDeployment{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }

@@ -7,8 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
 	"io/ioutil"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestUser_UserDetails(t *testing.T) {

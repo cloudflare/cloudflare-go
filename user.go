@@ -3,10 +3,9 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 // User describes a user account.
@@ -101,7 +100,7 @@ func (api *API) UserDetails(ctx context.Context) (User, error) {
 
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return User{}, errors.Wrap(err, errUnmarshalError)
+		return User{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return r.Result, nil
@@ -119,7 +118,7 @@ func (api *API) UpdateUser(ctx context.Context, user *User) (User, error) {
 
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return User{}, errors.Wrap(err, errUnmarshalError)
+		return User{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return r.Result, nil
@@ -137,7 +136,7 @@ func (api *API) UserBillingProfile(ctx context.Context) (UserBillingProfile, err
 
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return UserBillingProfile{}, errors.Wrap(err, errUnmarshalError)
+		return UserBillingProfile{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return r.Result, nil
@@ -155,7 +154,7 @@ func (api *API) UserBillingHistory(ctx context.Context, pageOpts UserBillingOpti
 	var r UserBillingHistoryResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return []UserBillingHistory{}, errors.Wrap(err, errUnmarshalError)
+		return []UserBillingHistory{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }

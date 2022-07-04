@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/pkg/errors"
+	"errors"
 )
 
 // CustomHostnameStatus is the enumeration of valid state values in the CustomHostnameSSL.
@@ -149,7 +149,7 @@ func (api *API) UpdateCustomHostnameSSL(ctx context.Context, zoneID string, cust
 	var response *CustomHostnameResponse
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return response, nil
 }
@@ -168,7 +168,7 @@ func (api *API) UpdateCustomHostname(ctx context.Context, zoneID string, customH
 	var response *CustomHostnameResponse
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return response, nil
 }
@@ -187,7 +187,7 @@ func (api *API) DeleteCustomHostname(ctx context.Context, zoneID string, customH
 	var response *CustomHostnameResponse
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return nil
@@ -206,7 +206,7 @@ func (api *API) CreateCustomHostname(ctx context.Context, zoneID string, ch Cust
 	var response *CustomHostnameResponse
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return response, nil
@@ -253,7 +253,7 @@ func (api *API) CustomHostname(ctx context.Context, zoneID string, customHostnam
 	var response CustomHostnameResponse
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return CustomHostname{}, errors.Wrap(err, errUnmarshalError)
+		return CustomHostname{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return response.Result, nil
@@ -263,7 +263,7 @@ func (api *API) CustomHostname(ctx context.Context, zoneID string, customHostnam
 func (api *API) CustomHostnameIDByName(ctx context.Context, zoneID string, hostname string) (string, error) {
 	customHostnames, _, err := api.CustomHostnames(ctx, zoneID, 1, CustomHostname{Hostname: hostname})
 	if err != nil {
-		return "", errors.Wrap(err, "CustomHostnames command failed")
+		return "", fmt.Errorf("CustomHostnames command failed: %w", err)
 	}
 	for _, ch := range customHostnames {
 		if ch.Hostname == hostname {
@@ -286,7 +286,7 @@ func (api *API) UpdateCustomHostnameFallbackOrigin(ctx context.Context, zoneID s
 	var response *CustomHostnameFallbackOriginResponse
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return response, nil
 }
@@ -304,7 +304,7 @@ func (api *API) DeleteCustomHostnameFallbackOrigin(ctx context.Context, zoneID s
 	var response *CustomHostnameFallbackOriginResponse
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return nil
 }
@@ -322,7 +322,7 @@ func (api *API) CustomHostnameFallbackOrigin(ctx context.Context, zoneID string)
 	var response CustomHostnameFallbackOriginResponse
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return CustomHostnameFallbackOrigin{}, errors.Wrap(err, errUnmarshalError)
+		return CustomHostnameFallbackOrigin{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return response.Result, nil

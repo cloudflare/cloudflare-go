@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/pkg/errors"
+	"errors"
 )
 
 var ErrMissingVnetName = errors.New("required missing virtual network name")
@@ -83,7 +83,7 @@ func (api *API) ListTunnelVirtualNetworks(ctx context.Context, params TunnelVirt
 	var resp tunnelVirtualNetworkListResponse
 	err = json.Unmarshal(res, &resp)
 	if err != nil {
-		return []TunnelVirtualNetwork{}, errors.Wrap(err, errUnmarshalError)
+		return []TunnelVirtualNetwork{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return resp.Result, nil
@@ -111,7 +111,7 @@ func (api *API) CreateTunnelVirtualNetwork(ctx context.Context, params TunnelVir
 	var resp tunnelVirtualNetworkResponse
 	err = json.Unmarshal(responseBody, &resp)
 	if err != nil {
-		return TunnelVirtualNetwork{}, errors.Wrap(err, errUnmarshalError)
+		return TunnelVirtualNetwork{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return resp.Result, nil
@@ -136,7 +136,7 @@ func (api *API) DeleteTunnelVirtualNetwork(ctx context.Context, params TunnelVir
 	var resp tunnelVirtualNetworkResponse
 	err = json.Unmarshal(responseBody, &resp)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return nil
@@ -160,7 +160,7 @@ func (api *API) UpdateTunnelVirtualNetwork(ctx context.Context, params TunnelVir
 	var resp tunnelVirtualNetworkResponse
 	err = json.Unmarshal(responseBody, &resp)
 	if err != nil {
-		return TunnelVirtualNetwork{}, errors.Wrap(err, errUnmarshalError)
+		return TunnelVirtualNetwork{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return resp.Result, nil

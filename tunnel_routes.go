@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/pkg/errors"
+	"errors"
 )
 
 var (
@@ -96,7 +96,7 @@ func (api *API) ListTunnelRoutes(ctx context.Context, params TunnelRoutesListPar
 	var resp tunnelRouteListResponse
 	err = json.Unmarshal(res, &resp)
 	if err != nil {
-		return []TunnelRoute{}, errors.Wrap(err, errUnmarshalError)
+		return []TunnelRoute{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return resp.Result, nil
@@ -128,7 +128,7 @@ func (api *API) GetTunnelRouteForIP(ctx context.Context, params TunnelRoutesForI
 	var routeResponse tunnelRouteResponse
 	err = json.Unmarshal(responseBody, &routeResponse)
 	if err != nil {
-		return TunnelRoute{}, errors.Wrap(err, errUnmarshalError)
+		return TunnelRoute{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return routeResponse.Result, nil
@@ -157,7 +157,7 @@ func (api *API) CreateTunnelRoute(ctx context.Context, params TunnelRoutesCreate
 	var routeResponse tunnelRouteResponse
 	err = json.Unmarshal(responseBody, &routeResponse)
 	if err != nil {
-		return TunnelRoute{}, errors.Wrap(err, errUnmarshalError)
+		return TunnelRoute{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return routeResponse.Result, nil
@@ -185,7 +185,7 @@ func (api *API) DeleteTunnelRoute(ctx context.Context, params TunnelRoutesDelete
 	var routeResponse tunnelRouteResponse
 	err = json.Unmarshal(responseBody, &routeResponse)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return nil
@@ -210,7 +210,7 @@ func (api *API) UpdateTunnelRoute(ctx context.Context, params TunnelRoutesUpdate
 	var routeResponse tunnelRouteResponse
 	err = json.Unmarshal(responseBody, &routeResponse)
 	if err != nil {
-		return TunnelRoute{}, errors.Wrap(err, errUnmarshalError)
+		return TunnelRoute{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return routeResponse.Result, nil

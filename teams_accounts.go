@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 type TeamsAccount struct {
@@ -124,7 +122,7 @@ func (api *API) TeamsAccount(ctx context.Context, accountID string) (TeamsAccoun
 	var teamsAccountResponse TeamsAccountResponse
 	err = json.Unmarshal(res, &teamsAccountResponse)
 	if err != nil {
-		return TeamsAccount{}, errors.Wrap(err, errUnmarshalError)
+		return TeamsAccount{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return teamsAccountResponse.Result, nil
@@ -144,7 +142,7 @@ func (api *API) TeamsAccountConfiguration(ctx context.Context, accountID string)
 	var teamsConfigResponse TeamsConfigResponse
 	err = json.Unmarshal(res, &teamsConfigResponse)
 	if err != nil {
-		return TeamsConfiguration{}, errors.Wrap(err, errUnmarshalError)
+		return TeamsConfiguration{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return teamsConfigResponse.Result, nil
@@ -164,7 +162,7 @@ func (api *API) TeamsAccountDeviceConfiguration(ctx context.Context, accountID s
 	var teamsDeviceResponse TeamsDeviceSettingsResponse
 	err = json.Unmarshal(res, &teamsDeviceResponse)
 	if err != nil {
-		return TeamsDeviceSettings{}, errors.Wrap(err, errUnmarshalError)
+		return TeamsDeviceSettings{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return teamsDeviceResponse.Result, nil
@@ -184,7 +182,7 @@ func (api *API) TeamsAccountLoggingConfiguration(ctx context.Context, accountID 
 	var teamsConfigResponse TeamsLoggingSettingsResponse
 	err = json.Unmarshal(res, &teamsConfigResponse)
 	if err != nil {
-		return TeamsLoggingSettings{}, errors.Wrap(err, errUnmarshalError)
+		return TeamsLoggingSettings{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return teamsConfigResponse.Result, nil
@@ -204,7 +202,7 @@ func (api *API) TeamsAccountUpdateConfiguration(ctx context.Context, accountID s
 	var teamsConfigResponse TeamsConfigResponse
 	err = json.Unmarshal(res, &teamsConfigResponse)
 	if err != nil {
-		return TeamsConfiguration{}, errors.Wrap(err, errUnmarshalError)
+		return TeamsConfiguration{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return teamsConfigResponse.Result, nil
@@ -224,7 +222,7 @@ func (api *API) TeamsAccountUpdateLoggingConfiguration(ctx context.Context, acco
 	var teamsConfigResponse TeamsLoggingSettingsResponse
 	err = json.Unmarshal(res, &teamsConfigResponse)
 	if err != nil {
-		return TeamsLoggingSettings{}, errors.Wrap(err, errUnmarshalError)
+		return TeamsLoggingSettings{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return teamsConfigResponse.Result, nil
@@ -244,7 +242,7 @@ func (api *API) TeamsAccountDeviceUpdateConfiguration(ctx context.Context, accou
 	var teamsDeviceResponse TeamsDeviceSettingsResponse
 	err = json.Unmarshal(res, &teamsDeviceResponse)
 	if err != nil {
-		return TeamsDeviceSettings{}, errors.Wrap(err, errUnmarshalError)
+		return TeamsDeviceSettings{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return teamsDeviceResponse.Result, nil

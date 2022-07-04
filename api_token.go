@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 // APIToken is the full API token.
@@ -105,7 +103,7 @@ func (api *API) GetAPIToken(ctx context.Context, tokenID string) (APIToken, erro
 	var apiTokenResponse APITokenResponse
 	err = json.Unmarshal(res, &apiTokenResponse)
 	if err != nil {
-		return APIToken{}, errors.Wrap(err, errUnmarshalError)
+		return APIToken{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return apiTokenResponse.Result, nil
@@ -123,7 +121,7 @@ func (api *API) APITokens(ctx context.Context) ([]APIToken, error) {
 	var apiTokenListResponse APITokenListResponse
 	err = json.Unmarshal(res, &apiTokenListResponse)
 	if err != nil {
-		return []APIToken{}, errors.Wrap(err, errUnmarshalError)
+		return []APIToken{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return apiTokenListResponse.Result, nil
@@ -146,7 +144,7 @@ func (api *API) CreateAPIToken(ctx context.Context, token APIToken) (APIToken, e
 	var createTokenAPIResponse APITokenResponse
 	err = json.Unmarshal(res, &createTokenAPIResponse)
 	if err != nil {
-		return APIToken{}, errors.Wrap(err, errUnmarshalError)
+		return APIToken{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return createTokenAPIResponse.Result, nil
@@ -164,7 +162,7 @@ func (api *API) UpdateAPIToken(ctx context.Context, tokenID string, token APITok
 	var updatedTokenResponse APITokenResponse
 	err = json.Unmarshal(res, &updatedTokenResponse)
 	if err != nil {
-		return APIToken{}, errors.Wrap(err, errUnmarshalError)
+		return APIToken{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return updatedTokenResponse.Result, nil
@@ -184,7 +182,7 @@ func (api *API) RollAPIToken(ctx context.Context, tokenID string) (string, error
 	var apiTokenRollResponse APITokenRollResponse
 	err = json.Unmarshal(res, &apiTokenRollResponse)
 	if err != nil {
-		return "", errors.Wrap(err, errUnmarshalError)
+		return "", fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return apiTokenRollResponse.Result, nil
@@ -202,7 +200,7 @@ func (api *API) VerifyAPIToken(ctx context.Context) (APITokenVerifyBody, error) 
 	var apiTokenVerifyResponse APITokenVerifyResponse
 	err = json.Unmarshal(res, &apiTokenVerifyResponse)
 	if err != nil {
-		return APITokenVerifyBody{}, errors.Wrap(err, errUnmarshalError)
+		return APITokenVerifyBody{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return apiTokenVerifyResponse.Result, nil
@@ -232,7 +230,7 @@ func (api *API) ListAPITokensPermissionGroups(ctx context.Context) ([]APITokenPe
 
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return []APITokenPermissionGroups{}, errors.Wrap(err, errUnmarshalError)
+		return []APITokenPermissionGroups{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return r.Result, nil
