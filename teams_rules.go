@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 type TeamsRuleSettings struct {
@@ -156,7 +154,7 @@ func (api *API) TeamsRules(ctx context.Context, accountID string) ([]TeamsRule, 
 	var teamsRulesResponse TeamsRulesResponse
 	err = json.Unmarshal(res, &teamsRulesResponse)
 	if err != nil {
-		return []TeamsRule{}, errors.Wrap(err, errUnmarshalError)
+		return []TeamsRule{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return teamsRulesResponse.Result, nil
@@ -176,7 +174,7 @@ func (api *API) TeamsRule(ctx context.Context, accountID string, ruleId string) 
 	var teamsRuleResponse TeamsRuleResponse
 	err = json.Unmarshal(res, &teamsRuleResponse)
 	if err != nil {
-		return TeamsRule{}, errors.Wrap(err, errUnmarshalError)
+		return TeamsRule{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return teamsRuleResponse.Result, nil
@@ -196,7 +194,7 @@ func (api *API) TeamsCreateRule(ctx context.Context, accountID string, rule Team
 	var teamsRuleResponse TeamsRuleResponse
 	err = json.Unmarshal(res, &teamsRuleResponse)
 	if err != nil {
-		return TeamsRule{}, errors.Wrap(err, errUnmarshalError)
+		return TeamsRule{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return teamsRuleResponse.Result, nil
@@ -216,7 +214,7 @@ func (api *API) TeamsUpdateRule(ctx context.Context, accountID string, ruleId st
 	var teamsRuleResponse TeamsRuleResponse
 	err = json.Unmarshal(res, &teamsRuleResponse)
 	if err != nil {
-		return TeamsRule{}, errors.Wrap(err, errUnmarshalError)
+		return TeamsRule{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return teamsRuleResponse.Result, nil
@@ -236,7 +234,7 @@ func (api *API) TeamsPatchRule(ctx context.Context, accountID string, ruleId str
 	var teamsRuleResponse TeamsRuleResponse
 	err = json.Unmarshal(res, &teamsRuleResponse)
 	if err != nil {
-		return TeamsRule{}, errors.Wrap(err, errUnmarshalError)
+		return TeamsRule{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return teamsRuleResponse.Result, nil

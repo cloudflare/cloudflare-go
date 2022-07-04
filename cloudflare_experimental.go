@@ -15,7 +15,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/pkg/errors"
+	"errors"
+
 	"golang.org/x/time/rate"
 )
 
@@ -148,7 +149,7 @@ func NewExperimental(config *ClientParams) (*Client, error) {
 func (c *Client) request(ctx context.Context, method, uri string, reqBody io.Reader, headers http.Header) (*http.Response, error) {
 	req, err := http.NewRequestWithContext(ctx, method, c.BaseURL.String()+uri, reqBody)
 	if err != nil {
-		return nil, errors.Wrap(err, "HTTP request creation failed")
+		return nil, fmt.Errorf("HTTP request creation failed: %w", err)
 	}
 
 	combinedHeaders := make(http.Header)
@@ -183,7 +184,7 @@ func (c *Client) request(ctx context.Context, method, uri string, reqBody io.Rea
 
 	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
-		return nil, errors.Wrap(err, "HTTP request failed")
+		return nil, fmt.Errorf("HTTP request failed: %w", err)
 	}
 
 	return resp, nil
@@ -202,7 +203,7 @@ func (c *Client) makeRequest(ctx context.Context, method, uri string, params int
 			var jsonBody []byte
 			jsonBody, err = json.Marshal(params)
 			if err != nil {
-				return nil, errors.Wrap(err, "error marshalling params to JSON")
+				return nil, fmt.Errorf("error marshalling params to JSON: %w", err)
 			}
 			reqBody = bytes.NewReader(jsonBody)
 		}
@@ -261,7 +262,7 @@ func (c *Client) makeRequest(ctx context.Context, method, uri string, params int
 				respBody, err = ioutil.ReadAll(resp.Body)
 				resp.Body.Close()
 
-				respErr = errors.Wrap(err, "could not read response body")
+				respErr = fmt.Errorf("could not read response body: %w", err)
 			} else {
 				c.Logger.Printf("Error performing request: %s %s : %s \n", method, uri, respErr.Error())
 			}
@@ -270,7 +271,7 @@ func (c *Client) makeRequest(ctx context.Context, method, uri string, params int
 			respBody, err = ioutil.ReadAll(resp.Body)
 			defer resp.Body.Close()
 			if err != nil {
-				return nil, errors.Wrap(err, "could not read response body")
+				return nil, fmt.Errorf("could not read response body: %w", err)
 			}
 			break
 		}
@@ -286,7 +287,7 @@ func (c *Client) makeRequest(ctx context.Context, method, uri string, params int
 
 	if resp.StatusCode >= http.StatusBadRequest {
 		if strings.HasSuffix(resp.Request.URL.Path, "/filters/validate-expr") {
-			return nil, errors.Errorf("%s", respBody)
+			return nil, fmt.Errorf("%s", respBody)
 		}
 
 		if resp.StatusCode >= http.StatusInternalServerError {

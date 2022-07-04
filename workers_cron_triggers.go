@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 // WorkerCronTriggerResponse represents the response from the Worker cron trigger
@@ -42,7 +40,7 @@ func (api *API) ListWorkerCronTriggers(ctx context.Context, accountID, scriptNam
 
 	result := WorkerCronTriggerResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return []WorkerCronTrigger{}, errors.Wrap(err, errUnmarshalError)
+		return []WorkerCronTrigger{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result.Schedules, err
@@ -60,7 +58,7 @@ func (api *API) UpdateWorkerCronTriggers(ctx context.Context, accountID, scriptN
 
 	result := WorkerCronTriggerResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return []WorkerCronTrigger{}, errors.Wrap(err, errUnmarshalError)
+		return []WorkerCronTrigger{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result.Schedules, err

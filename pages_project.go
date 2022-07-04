@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 // PagesProject represents a Pages project.
@@ -128,7 +126,7 @@ func (api *API) ListPagesProjects(ctx context.Context, accountID string, pageOpt
 	var r pagesProjectListResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return []PagesProject{}, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
+		return []PagesProject{}, ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, r.ResultInfo, nil
 }
@@ -145,7 +143,7 @@ func (api *API) PagesProject(ctx context.Context, accountID, projectName string)
 	var r pagesProjectResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return PagesProject{}, errors.Wrap(err, errUnmarshalError)
+		return PagesProject{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -162,7 +160,7 @@ func (api *API) CreatePagesProject(ctx context.Context, accountID string, pagesP
 	var r pagesProjectResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return PagesProject{}, errors.Wrap(err, errUnmarshalError)
+		return PagesProject{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -179,7 +177,7 @@ func (api *API) UpdatePagesProject(ctx context.Context, accountID, projectName s
 	var r pagesProjectResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return PagesProject{}, errors.Wrap(err, errUnmarshalError)
+		return PagesProject{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -196,7 +194,7 @@ func (api *API) DeletePagesProject(ctx context.Context, accountID, projectName s
 	var r pagesProjectResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return nil
 }

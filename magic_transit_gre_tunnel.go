@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/pkg/errors"
+	"errors"
 )
 
 // Magic Transit GRE Tunnel Error messages.
@@ -89,7 +89,7 @@ func (api *API) ListMagicTransitGRETunnels(ctx context.Context, accountID string
 
 	result := ListMagicTransitGRETunnelsResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return []MagicTransitGRETunnel{}, errors.Wrap(err, errUnmarshalError)
+		return []MagicTransitGRETunnel{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result.GRETunnels, nil
@@ -107,7 +107,7 @@ func (api *API) GetMagicTransitGRETunnel(ctx context.Context, accountID string, 
 
 	result := GetMagicTransitGRETunnelResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return MagicTransitGRETunnel{}, errors.Wrap(err, errUnmarshalError)
+		return MagicTransitGRETunnel{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result.GRETunnel, nil
@@ -128,7 +128,7 @@ func (api *API) CreateMagicTransitGRETunnels(ctx context.Context, accountID stri
 
 	result := ListMagicTransitGRETunnelsResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return []MagicTransitGRETunnel{}, errors.Wrap(err, errUnmarshalError)
+		return []MagicTransitGRETunnel{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result.GRETunnels, nil
@@ -147,7 +147,7 @@ func (api *API) UpdateMagicTransitGRETunnel(ctx context.Context, accountID strin
 
 	result := UpdateMagicTransitGRETunnelResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return MagicTransitGRETunnel{}, errors.Wrap(err, errUnmarshalError)
+		return MagicTransitGRETunnel{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	if !result.Result.Modified {
@@ -170,7 +170,7 @@ func (api *API) DeleteMagicTransitGRETunnel(ctx context.Context, accountID strin
 
 	result := DeleteMagicTransitGRETunnelResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return MagicTransitGRETunnel{}, errors.Wrap(err, errUnmarshalError)
+		return MagicTransitGRETunnel{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	if !result.Result.Deleted {
