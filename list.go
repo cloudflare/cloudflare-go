@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/pkg/errors"
+	"errors"
 )
 
 const (
@@ -225,7 +225,7 @@ func (api *API) ListLists(ctx context.Context, params ListListsParams) ([]List, 
 
 	result := ListListResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return []List{}, errors.Wrap(err, errUnmarshalError)
+		return []List{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -248,7 +248,7 @@ func (api *API) CreateList(ctx context.Context, params ListCreateParams) (List, 
 
 	result := ListResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return List{}, errors.Wrap(err, errUnmarshalError)
+		return List{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -274,7 +274,7 @@ func (api *API) GetList(ctx context.Context, params ListGetParams) (List, error)
 
 	result := ListResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return List{}, errors.Wrap(err, errUnmarshalError)
+		return List{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -300,7 +300,7 @@ func (api *API) UpdateList(ctx context.Context, params ListUpdateParams) (List, 
 
 	result := ListResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return List{}, errors.Wrap(err, errUnmarshalError)
+		return List{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -326,7 +326,7 @@ func (api *API) DeleteList(ctx context.Context, params ListDeleteParams) (ListDe
 
 	result := ListDeleteResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return ListDeleteResponse{}, errors.Wrap(err, errUnmarshalError)
+		return ListDeleteResponse{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result, nil
@@ -352,7 +352,7 @@ func (api *API) ListListItems(ctx context.Context, params ListListItemsParams) (
 
 		result := ListItemsListResponse{}
 		if err := json.Unmarshal(res, &result); err != nil {
-			return []ListItem{}, errors.Wrap(err, errUnmarshalError)
+			return []ListItem{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 		}
 
 		list = append(list, result.Result...)
@@ -385,7 +385,7 @@ func (api *API) CreateListItemAsync(ctx context.Context, params ListCreateItemPa
 
 	result := ListItemCreateResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return ListItemCreateResponse{}, errors.Wrap(err, errUnmarshalError)
+		return ListItemCreateResponse{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result, nil
@@ -429,7 +429,7 @@ func (api *API) CreateListItemsAsync(ctx context.Context, params ListCreateItems
 
 	result := ListItemCreateResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return ListItemCreateResponse{}, errors.Wrap(err, errUnmarshalError)
+		return ListItemCreateResponse{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result, nil
@@ -473,7 +473,7 @@ func (api *API) ReplaceListItemsAsync(ctx context.Context, params ListReplaceIte
 
 	result := ListItemCreateResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return ListItemCreateResponse{}, errors.Wrap(err, errUnmarshalError)
+		return ListItemCreateResponse{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result, nil
@@ -518,7 +518,7 @@ func (api *API) DeleteListItemsAsync(ctx context.Context, params ListDeleteItems
 
 	result := ListItemDeleteResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return ListItemDeleteResponse{}, errors.Wrap(err, errUnmarshalError)
+		return ListItemDeleteResponse{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result, nil
@@ -564,7 +564,7 @@ func (api *API) GetListItem(ctx context.Context, params ListGetItemParams) (List
 
 	result := ListItemsGetResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return ListItem{}, errors.Wrap(err, errUnmarshalError)
+		return ListItem{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -590,7 +590,7 @@ func (api *API) GetListBulkOperation(ctx context.Context, params ListGetBulkOper
 
 	result := ListBulkOperationResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return ListBulkOperation{}, errors.Wrap(err, errUnmarshalError)
+		return ListBulkOperation{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -605,7 +605,7 @@ func (api *API) pollListBulkOperation(ctx context.Context, accountID, ID string)
 		select {
 		case <-time.After(sleepDuration):
 		case <-ctx.Done():
-			return errors.Wrap(ctx.Err(), "operation aborted during backoff")
+			return fmt.Errorf("operation aborted during backoff: %w", ctx.Err())
 		}
 
 		bulkResult, err := api.GetListBulkOperation(ctx, ListGetBulkOperationParams{AccountID: accountID, ID: ID})

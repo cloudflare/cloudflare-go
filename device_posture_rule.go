@@ -5,8 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-
-	"github.com/pkg/errors"
 )
 
 // DevicePostureIntegrationConfig contains authentication information
@@ -60,7 +58,7 @@ func (api *API) CreateDevicePostureIntegration(ctx context.Context, accountID st
 	var devicePostureIntegrationResponse DevicePostureIntegrationResponse
 	err = json.Unmarshal(res, &devicePostureIntegrationResponse)
 	if err != nil {
-		return DevicePostureIntegration{}, errors.Wrap(err, errUnmarshalError)
+		return DevicePostureIntegration{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return devicePostureIntegrationResponse.Result, nil
@@ -80,7 +78,7 @@ func (api *API) UpdateDevicePostureIntegration(ctx context.Context, accountID st
 	var devicePostureIntegrationResponse DevicePostureIntegrationResponse
 	err = json.Unmarshal(res, &devicePostureIntegrationResponse)
 	if err != nil {
-		return DevicePostureIntegration{}, errors.Wrap(err, errUnmarshalError)
+		return DevicePostureIntegration{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return devicePostureIntegrationResponse.Result, nil
@@ -100,7 +98,7 @@ func (api *API) DevicePostureIntegration(ctx context.Context, accountID, integra
 	var devicePostureIntegrationResponse DevicePostureIntegrationResponse
 	err = json.Unmarshal(res, &devicePostureIntegrationResponse)
 	if err != nil {
-		return DevicePostureIntegration{}, errors.Wrap(err, errUnmarshalError)
+		return DevicePostureIntegration{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return devicePostureIntegrationResponse.Result, nil
@@ -120,7 +118,7 @@ func (api *API) DevicePostureIntegrations(ctx context.Context, accountID string)
 	var devicePostureIntegrationListResponse DevicePostureIntegrationListResponse
 	err = json.Unmarshal(res, &devicePostureIntegrationListResponse)
 	if err != nil {
-		return []DevicePostureIntegration{}, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
+		return []DevicePostureIntegration{}, ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return devicePostureIntegrationListResponse.Result, devicePostureIntegrationListResponse.ResultInfo, nil
@@ -208,7 +206,7 @@ func (api *API) DevicePostureRules(ctx context.Context, accountID string) ([]Dev
 	var devicePostureRuleListResponse DevicePostureRuleListResponse
 	err = json.Unmarshal(res, &devicePostureRuleListResponse)
 	if err != nil {
-		return []DevicePostureRule{}, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
+		return []DevicePostureRule{}, ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return devicePostureRuleListResponse.Result, devicePostureRuleListResponse.ResultInfo, nil
@@ -233,7 +231,7 @@ func (api *API) DevicePostureRule(ctx context.Context, accountID, ruleID string)
 	var devicePostureRuleDetailResponse DevicePostureRuleDetailResponse
 	err = json.Unmarshal(res, &devicePostureRuleDetailResponse)
 	if err != nil {
-		return DevicePostureRule{}, errors.Wrap(err, errUnmarshalError)
+		return DevicePostureRule{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return devicePostureRuleDetailResponse.Result, nil
@@ -253,7 +251,7 @@ func (api *API) CreateDevicePostureRule(ctx context.Context, accountID string, r
 	var devicePostureRuleDetailResponse DevicePostureRuleDetailResponse
 	err = json.Unmarshal(res, &devicePostureRuleDetailResponse)
 	if err != nil {
-		return DevicePostureRule{}, errors.Wrap(err, errUnmarshalError)
+		return DevicePostureRule{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return devicePostureRuleDetailResponse.Result, nil
@@ -264,7 +262,7 @@ func (api *API) CreateDevicePostureRule(ctx context.Context, accountID string, r
 // API reference: https://api.cloudflare.com/#device-posture-rules-update-device-posture-rule
 func (api *API) UpdateDevicePostureRule(ctx context.Context, accountID string, rule DevicePostureRule) (DevicePostureRule, error) {
 	if rule.ID == "" {
-		return DevicePostureRule{}, errors.Errorf("device posture rule ID cannot be empty")
+		return DevicePostureRule{}, fmt.Errorf("device posture rule ID cannot be empty")
 	}
 
 	uri := fmt.Sprintf(
@@ -282,7 +280,7 @@ func (api *API) UpdateDevicePostureRule(ctx context.Context, accountID string, r
 	var devicePostureRuleDetailResponse DevicePostureRuleDetailResponse
 	err = json.Unmarshal(res, &devicePostureRuleDetailResponse)
 	if err != nil {
-		return DevicePostureRule{}, errors.Wrap(err, errUnmarshalError)
+		return DevicePostureRule{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return devicePostureRuleDetailResponse.Result, nil

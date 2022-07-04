@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/pkg/errors"
+	"errors"
 )
 
 // The definitions in this file are deprecated and should be removed after
@@ -145,7 +145,7 @@ func (api *API) ListIPLists(ctx context.Context, accountID string) ([]IPList, er
 
 	result := IPListListResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return []IPList{}, errors.Wrap(err, errUnmarshalError)
+		return []IPList{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -167,7 +167,7 @@ func (api *API) CreateIPList(ctx context.Context, accountID, name, description, 
 
 	result := IPListResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return IPList{}, errors.Wrap(err, errUnmarshalError)
+		return IPList{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -187,7 +187,7 @@ func (api *API) GetIPList(ctx context.Context, accountID, ID string) (IPList, er
 
 	result := IPListResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return IPList{}, errors.Wrap(err, errUnmarshalError)
+		return IPList{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -207,7 +207,7 @@ func (api *API) UpdateIPList(ctx context.Context, accountID, ID, description str
 
 	result := IPListResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return IPList{}, errors.Wrap(err, errUnmarshalError)
+		return IPList{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -227,7 +227,7 @@ func (api *API) DeleteIPList(ctx context.Context, accountID, ID string) (IPListD
 
 	result := IPListDeleteResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return IPListDeleteResponse{}, errors.Wrap(err, errUnmarshalError)
+		return IPListDeleteResponse{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result, nil
@@ -255,7 +255,7 @@ func (api *API) ListIPListItems(ctx context.Context, accountID, ID string) ([]IP
 
 		result := IPListItemsListResponse{}
 		if err := json.Unmarshal(res, &result); err != nil {
-			return []IPListItem{}, errors.Wrap(err, errUnmarshalError)
+			return []IPListItem{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 		}
 
 		list = append(list, result.Result...)
@@ -283,7 +283,7 @@ func (api *API) CreateIPListItemAsync(ctx context.Context, accountID, ID, ip, co
 
 	result := IPListItemCreateResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return IPListItemCreateResponse{}, errors.Wrap(err, errUnmarshalError)
+		return IPListItemCreateResponse{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result, nil
@@ -325,7 +325,7 @@ func (api *API) CreateIPListItemsAsync(ctx context.Context, accountID, ID string
 
 	result := IPListItemCreateResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return IPListItemCreateResponse{}, errors.Wrap(err, errUnmarshalError)
+		return IPListItemCreateResponse{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result, nil
@@ -367,7 +367,7 @@ func (api *API) ReplaceIPListItemsAsync(ctx context.Context, accountID, ID strin
 
 	result := IPListItemCreateResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return IPListItemCreateResponse{}, errors.Wrap(err, errUnmarshalError)
+		return IPListItemCreateResponse{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result, nil
@@ -409,7 +409,7 @@ func (api *API) DeleteIPListItemsAsync(ctx context.Context, accountID, ID string
 
 	result := IPListItemDeleteResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return IPListItemDeleteResponse{}, errors.Wrap(err, errUnmarshalError)
+		return IPListItemDeleteResponse{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result, nil
@@ -448,7 +448,7 @@ func (api *API) GetIPListItem(ctx context.Context, accountID, listID, id string)
 
 	result := IPListItemsGetResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return IPListItem{}, errors.Wrap(err, errUnmarshalError)
+		return IPListItem{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -468,7 +468,7 @@ func (api *API) GetIPListBulkOperation(ctx context.Context, accountID, ID string
 
 	result := IPListBulkOperationResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return IPListBulkOperation{}, errors.Wrap(err, errUnmarshalError)
+		return IPListBulkOperation{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -483,7 +483,7 @@ func (api *API) pollIPListBulkOperation(ctx context.Context, accountID, ID strin
 		select {
 		case <-time.After(sleepDuration):
 		case <-ctx.Done():
-			return errors.Wrap(ctx.Err(), "operation aborted during backoff")
+			return fmt.Errorf("operation aborted during backoff: %w", ctx.Err())
 		}
 
 		bulkResult, err := api.GetIPListBulkOperation(ctx, accountID, ID)

@@ -13,7 +13,7 @@ import (
 	"net/textproto"
 	"time"
 
-	"github.com/pkg/errors"
+	"errors"
 )
 
 // WorkerRequestParams provides parameters for worker requests for both enterprise and standard requests.
@@ -103,6 +103,8 @@ const (
 	WorkerPlainTextBindingType WorkerBindingType = "plain_text"
 	// WorkerServiceBindingType is the type for service bindings.
 	WorkerServiceBindingType WorkerBindingType = "service"
+	// WorkerR2BucketBindingType is the type for R2 bucket bindings.
+	WorkerR2BucketBindingType WorkerBindingType = "r2_bucket"
 )
 
 // WorkerBindingListItem a struct representing an individual binding in a list of bindings.
@@ -180,7 +182,7 @@ func (b WorkerKvNamespaceBinding) Type() WorkerBindingType {
 
 func (b WorkerKvNamespaceBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
 	if b.NamespaceID == "" {
-		return nil, nil, errors.Errorf(`NamespaceID for binding "%s" cannot be empty`, bindingName)
+		return nil, nil, fmt.Errorf(`NamespaceID for binding "%s" cannot be empty`, bindingName)
 	}
 
 	return workerBindingMeta{
@@ -205,7 +207,7 @@ func (b WorkerDurableObjectBinding) Type() WorkerBindingType {
 
 func (b WorkerDurableObjectBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
 	if b.ClassName == "" {
-		return nil, nil, errors.Errorf(`ClassName for binding "%s" cannot be empty`, bindingName)
+		return nil, nil, fmt.Errorf(`ClassName for binding "%s" cannot be empty`, bindingName)
 	}
 
 	return workerBindingMeta{
@@ -264,7 +266,7 @@ func (b WorkerPlainTextBinding) Type() WorkerBindingType {
 
 func (b WorkerPlainTextBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
 	if b.Text == "" {
-		return nil, nil, errors.Errorf(`Text for binding "%s" cannot be empty`, bindingName)
+		return nil, nil, fmt.Errorf(`Text for binding "%s" cannot be empty`, bindingName)
 	}
 
 	return workerBindingMeta{
@@ -288,7 +290,7 @@ func (b WorkerSecretTextBinding) Type() WorkerBindingType {
 
 func (b WorkerSecretTextBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
 	if b.Text == "" {
-		return nil, nil, errors.Errorf(`Text for binding "%s" cannot be empty`, bindingName)
+		return nil, nil, fmt.Errorf(`Text for binding "%s" cannot be empty`, bindingName)
 	}
 
 	return workerBindingMeta{
@@ -309,7 +311,7 @@ func (b WorkerServiceBinding) Type() WorkerBindingType {
 
 func (b WorkerServiceBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
 	if b.Service == "" {
-		return nil, nil, errors.Errorf(`Service for binding "%s" cannot be empty`, bindingName)
+		return nil, nil, fmt.Errorf(`Service for binding "%s" cannot be empty`, bindingName)
 	}
 
 	meta := workerBindingMeta{
@@ -323,6 +325,28 @@ func (b WorkerServiceBinding) serialize(bindingName string) (workerBindingMeta, 
 	}
 
 	return meta, nil, nil
+}
+
+// WorkerR2BucketBinding is a binding to an R2 bucket.
+type WorkerR2BucketBinding struct {
+	BucketName string
+}
+
+// Type returns the type of the binding.
+func (b WorkerR2BucketBinding) Type() WorkerBindingType {
+	return WorkerR2BucketBindingType
+}
+
+func (b WorkerR2BucketBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
+	if b.BucketName == "" {
+		return nil, nil, fmt.Errorf(`BucketName for binding "%s" cannot be empty`, bindingName)
+	}
+
+	return workerBindingMeta{
+		"name":        bindingName,
+		"type":        b.Type(),
+		"bucket_name": b.BucketName,
+	}, nil, nil
 }
 
 // Each binding that adds a part to the multipart form body will need
@@ -349,7 +373,7 @@ func (api *API) DeleteWorker(ctx context.Context, requestParams *WorkerRequestPa
 	}
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return r, errors.Wrap(err, errUnmarshalError)
+		return r, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r, nil
 }
@@ -370,7 +394,7 @@ func (api *API) deleteWorkerWithName(ctx context.Context, scriptName string) (Wo
 	}
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return r, errors.Wrap(err, errUnmarshalError)
+		return r, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r, nil
 }
@@ -433,7 +457,7 @@ func (api *API) ListWorkerBindings(ctx context.Context, requestParams *WorkerReq
 	}
 	err = json.Unmarshal(res, &jsonRes)
 	if err != nil {
-		return r, errors.Wrap(err, errUnmarshalError)
+		return r, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	r = WorkerBindingListResponse{
@@ -443,11 +467,11 @@ func (api *API) ListWorkerBindings(ctx context.Context, requestParams *WorkerReq
 	for _, jsonBinding := range jsonRes.Bindings {
 		name, ok := jsonBinding["name"].(string)
 		if !ok {
-			return r, errors.Errorf("Binding missing name %v", jsonBinding)
+			return r, fmt.Errorf("Binding missing name %v", jsonBinding)
 		}
 		bType, ok := jsonBinding["type"].(string)
 		if !ok {
-			return r, errors.Errorf("Binding missing type %v", jsonBinding)
+			return r, fmt.Errorf("Binding missing type %v", jsonBinding)
 		}
 		bindingListItem := WorkerBindingListItem{
 			Name: name,
@@ -488,6 +512,11 @@ func (api *API) ListWorkerBindings(ctx context.Context, requestParams *WorkerReq
 			}
 		case WorkerSecretTextBindingType:
 			bindingListItem.Binding = WorkerSecretTextBinding{}
+		case WorkerR2BucketBindingType:
+			bucketName := jsonBinding["bucket_name"].(string)
+			bindingListItem.Binding = WorkerR2BucketBinding{
+				BucketName: bucketName,
+			}
 		default:
 			bindingListItem.Binding = WorkerInheritBinding{}
 		}
@@ -555,7 +584,7 @@ func (api *API) ListWorkerScripts(ctx context.Context) (WorkerListResponse, erro
 	var r WorkerListResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return WorkerListResponse{}, errors.Wrap(err, errUnmarshalError)
+		return WorkerListResponse{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r, nil
 }
@@ -595,7 +624,7 @@ func (api *API) uploadWorkerForZone(ctx context.Context, zoneID, contentType str
 	}
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return r, errors.Wrap(err, errUnmarshalError)
+		return r, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r, nil
 }
@@ -614,7 +643,7 @@ func (api *API) uploadWorkerWithName(ctx context.Context, scriptName, contentTyp
 	}
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return r, errors.Wrap(err, errUnmarshalError)
+		return r, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r, nil
 }
@@ -707,7 +736,7 @@ func (api *API) CreateWorkerRoute(ctx context.Context, zoneID string, route Work
 	var r WorkerRouteResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return WorkerRouteResponse{}, errors.Wrap(err, errUnmarshalError)
+		return WorkerRouteResponse{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r, nil
 }
@@ -724,7 +753,7 @@ func (api *API) DeleteWorkerRoute(ctx context.Context, zoneID string, routeID st
 	var r WorkerRouteResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return WorkerRouteResponse{}, errors.Wrap(err, errUnmarshalError)
+		return WorkerRouteResponse{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r, nil
 }
@@ -754,7 +783,7 @@ func (api *API) ListWorkerRoutes(ctx context.Context, zoneID string) (WorkerRout
 	var r WorkerRoutesResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return WorkerRoutesResponse{}, errors.Wrap(err, errUnmarshalError)
+		return WorkerRoutesResponse{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	for i := range r.Routes {
 		route := &r.Routes[i]
@@ -780,7 +809,7 @@ func (api *API) GetWorkerRoute(ctx context.Context, zoneID string, routeID strin
 	var r WorkerRouteResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return WorkerRouteResponse{}, errors.Wrap(err, errUnmarshalError)
+		return WorkerRouteResponse{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r, nil
 }
@@ -801,7 +830,7 @@ func (api *API) UpdateWorkerRoute(ctx context.Context, zoneID string, routeID st
 	var r WorkerRouteResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return WorkerRouteResponse{}, errors.Wrap(err, errUnmarshalError)
+		return WorkerRouteResponse{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r, nil
 }

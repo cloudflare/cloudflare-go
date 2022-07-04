@@ -5,8 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-
-	"github.com/pkg/errors"
 )
 
 type ListManagedHeadersResponse struct {
@@ -49,7 +47,7 @@ func (api *API) ListZoneManagedHeaders(ctx context.Context, params ListManagedHe
 
 	result := ListManagedHeadersResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return ManagedHeaders{}, errors.Wrap(err, errUnmarshalError)
+		return ManagedHeaders{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -74,7 +72,7 @@ func (api *API) UpdateZoneManagedHeaders(ctx context.Context, params UpdateManag
 
 	result := ListManagedHeadersResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return ManagedHeaders{}, errors.Wrap(err, errUnmarshalError)
+		return ManagedHeaders{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil

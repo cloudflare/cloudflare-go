@@ -8,8 +8,6 @@ import (
 	"net/url"
 	"strconv"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 // ZoneLockdown represents a Zone Lockdown rule. A rule only permits access to
@@ -61,7 +59,7 @@ func (api *API) CreateZoneLockdown(ctx context.Context, zoneID string, ld ZoneLo
 	response := &ZoneLockdownResponse{}
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return response, nil
@@ -81,7 +79,7 @@ func (api *API) UpdateZoneLockdown(ctx context.Context, zoneID string, id string
 	response := &ZoneLockdownResponse{}
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return response, nil
@@ -101,7 +99,7 @@ func (api *API) DeleteZoneLockdown(ctx context.Context, zoneID string, id string
 	response := &ZoneLockdownResponse{}
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return response, nil
@@ -121,7 +119,7 @@ func (api *API) ZoneLockdown(ctx context.Context, zoneID string, id string) (*Zo
 	response := &ZoneLockdownResponse{}
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return response, nil
@@ -149,7 +147,7 @@ func (api *API) ListZoneLockdowns(ctx context.Context, zoneID string, page int) 
 	response := &ZoneLockdownListResponse{}
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return response, nil

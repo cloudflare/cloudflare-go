@@ -136,6 +136,11 @@ const (
 			{
 				"name": "MY_NEW_BINDING",
 				"type": "some_imaginary_new_binding_type"
+			},
+			{
+				"name": "MY_BUCKET",
+				"type": "r2_bucket",
+				"bucket_name": "bucket"
 			}
 		],
 		"success": true,
@@ -1029,7 +1034,7 @@ func TestWorkers_ListWorkerBindingsMultiScript(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Equal(t, successResponse, res.Response)
-	assert.Equal(t, 6, len(res.BindingList))
+	assert.Equal(t, 7, len(res.BindingList))
 
 	assert.Equal(t, res.BindingList[0], WorkerBindingListItem{
 		Name: "MY_KV",
@@ -1075,6 +1080,14 @@ func TestWorkers_ListWorkerBindingsMultiScript(t *testing.T) {
 		Binding: WorkerInheritBinding{},
 	})
 	assert.Equal(t, WorkerInheritBindingType, res.BindingList[5].Binding.Type())
+
+	assert.Equal(t, res.BindingList[6], WorkerBindingListItem{
+		Name: "MY_BUCKET",
+		Binding: WorkerR2BucketBinding{
+			BucketName: "bucket",
+		},
+	})
+	assert.Equal(t, WorkerR2BucketBindingType, res.BindingList[6].Binding.Type())
 }
 
 func TestWorkers_UpdateWorkerRouteErrorsWhenMixingSingleAndMultiScriptProperties(t *testing.T) {
