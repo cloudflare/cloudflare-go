@@ -63,12 +63,10 @@ type PagesDomainResponse struct {
 //
 // API Reference: https://api.cloudflare.com/#pages-domains-get-domains
 func (api *API) GetPagesDomains(ctx context.Context, params PagesDomainsParameters) ([]PagesDomain, error) {
-	// Make sure account id is set
 	if params.AccountID == "" {
 		return []PagesDomain{}, ErrMissingAccountID
 	}
 
-	// Make sure project name is set
 	if params.ProjectName == "" {
 		return []PagesDomain{}, ErrMissingProjectName
 	}
@@ -90,16 +88,14 @@ func (api *API) GetPagesDomains(ctx context.Context, params PagesDomainsParamete
 //
 // API Reference: https://api.cloudflare.com/#pages-domains-get-domains
 func (api *API) GetPagesDomain(ctx context.Context, params PagesDomainParameters) (PagesDomain, error) {
-	// Make sure account id is set
 	if params.AccountID == "" {
 		return PagesDomain{}, ErrMissingAccountID
 	}
 
-	// Make sure project name is set
 	if params.ProjectName == "" {
 		return PagesDomain{}, ErrMissingProjectName
 	}
-	// Make sure domain name is set
+
 	if params.DomainName == "" {
 		return PagesDomain{}, ErrMissingDomain
 	}
@@ -121,16 +117,14 @@ func (api *API) GetPagesDomain(ctx context.Context, params PagesDomainParameters
 //
 // API Reference: https://api.cloudflare.com/#pages-domains-patch-domain
 func (api *API) PagesPatchDomain(ctx context.Context, params PagesDomainParameters) (PagesDomain, error) {
-	// Make sure account id is set
 	if params.AccountID == "" {
 		return PagesDomain{}, ErrMissingAccountID
 	}
 
-	// Make sure project name is set
 	if params.ProjectName == "" {
 		return PagesDomain{}, ErrMissingProjectName
 	}
-	// Make sure domain name is set
+
 	if params.DomainName == "" {
 		return PagesDomain{}, ErrMissingDomain
 	}
@@ -153,16 +147,14 @@ func (api *API) PagesPatchDomain(ctx context.Context, params PagesDomainParamete
 // API Reference: https://community.cloudflare.com/t/add-pages-domain-via-api/303510/3
 // Blame Washly for not making it official.
 func (api *API) PagesAddDomain(ctx context.Context, params PagesDomainParameters) (PagesDomain, error) {
-	// Make sure account id is set
 	if params.AccountID == "" {
 		return PagesDomain{}, ErrMissingAccountID
 	}
 
-	// Make sure project name is set
 	if params.ProjectName == "" {
 		return PagesDomain{}, ErrMissingProjectName
 	}
-	// Make sure domain name is set
+
 	if params.DomainName == "" {
 		return PagesDomain{}, ErrMissingDomain
 	}
