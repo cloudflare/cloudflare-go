@@ -303,6 +303,111 @@ func TestCreateAPIToken(t *testing.T) {
 	}
 }
 
+func TestUpdateAPIToken(t *testing.T) {
+	setup()
+	defer teardown()
+
+	issuedOn, _ := time.Parse(time.RFC3339, "2018-07-01T05:20:00Z")
+	modifiedOn, _ := time.Parse(time.RFC3339, "2018-07-02T05:20:00Z")
+	notBefore, _ := time.Parse(time.RFC3339, "2018-07-01T05:20:00Z")
+	expiresOn, _ := time.Parse(time.RFC3339, "2020-01-01T00:00:00Z")
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+  "success": true,
+  "errors": [],
+  "messages": [],
+  "result": {
+    "id": "ed17574386854bf78a67040be0a770b0",
+    "name": "readonly token",
+    "status": "active",
+    "issued_on": "2018-07-01T05:20:00Z",
+    "modified_on": "2018-07-02T05:20:00Z",
+    "not_before": "2018-07-01T05:20:00Z",
+    "expires_on": "2020-01-01T00:00:00Z",
+    "policies": [
+      {
+        "id": "f267e341f3dd4697bd3b9f71dd96247f",
+        "effect": "allow",
+        "resources": {
+          "com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4": "*",
+          "com.cloudflare.api.account.zone.22b1de5f1c0e4b3ea97bb1e963b06a43": "*"
+        },
+        "permission_groups": [
+          {
+            "id": "c8fed203ed3043cba015a93ad1616f1f",
+            "name": "Zone Read"
+          },
+          {
+            "id": "82e64a83756745bbbb1c9c2701bf816b",
+            "name": "DNS Read"
+          }
+        ]
+      }
+    ],
+    "condition": {
+      "request.ip": {
+        "in": [
+          "199.27.128.0/21",
+          "2400:cb00::/32"
+        ],
+        "not_in": [
+          "199.27.128.0/21",
+          "2400:cb00::/32"
+        ]
+      }
+    }
+  }
+}`)
+	}
+
+	mux.HandleFunc("/user/tokens/ed17574386854bf78a67040be0a770b0", handler)
+
+	resources := make(map[string]interface{})
+	resources["com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4"] = "*"
+	resources["com.cloudflare.api.account.zone.22b1de5f1c0e4b3ea97bb1e963b06a43"] = "*"
+
+	expectedAPIToken := APIToken{
+		ID:         "ed17574386854bf78a67040be0a770b0",
+		Name:       "readonly token",
+		Status:     "active",
+		IssuedOn:   &issuedOn,
+		ModifiedOn: &modifiedOn,
+		NotBefore:  &notBefore,
+		ExpiresOn:  &expiresOn,
+		Policies: []APITokenPolicies{{
+			ID:        "f267e341f3dd4697bd3b9f71dd96247f",
+			Effect:    "allow",
+			Resources: resources,
+			PermissionGroups: []APITokenPermissionGroups{
+				{
+					ID:   "c8fed203ed3043cba015a93ad1616f1f",
+					Name: "Zone Read",
+				},
+				{
+					ID:   "82e64a83756745bbbb1c9c2701bf816b",
+					Name: "DNS Read",
+				},
+			},
+		},
+		},
+		Condition: &APITokenCondition{
+			RequestIP: &APITokenRequestIPCondition{
+				In:    []string{"199.27.128.0/21", "2400:cb00::/32"},
+				NotIn: []string{"199.27.128.0/21", "2400:cb00::/32"},
+			},
+		},
+	}
+
+	actual, err := client.UpdateAPIToken(context.Background(), "ed17574386854bf78a67040be0a770b0", APIToken{})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expectedAPIToken, actual)
+	}
+}
+
 func TestRollAPIToken(t *testing.T) {
 	setup()
 	defer teardown()
