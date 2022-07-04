@@ -4,13 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/pkg/errors"
 	"net/http"
 	"time"
 )
-
-// ErrMissingDomain is for when domain is required but missing.
-var ErrMissingDomain = errors.New("required missing domain")
 
 // PagesDomain represents a pages domain.
 type PagesDomain struct {
