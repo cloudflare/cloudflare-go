@@ -15,7 +15,7 @@ var testCreatedOn, _ = time.Parse(time.RFC3339, "2017-01-01T00:00:00Z")
 
 var testPagesDomain = PagesDomain{
 	ID:     "8232210c-6818-4e34-8d95-cc386874b8d2",
-	Name:   "helloworld.com",
+	Name:   "washly.mvp",
 	Status: "pending",
 	VerificationData: VerificationData{
 		Status: "active",
@@ -43,7 +43,7 @@ func TestPages_GetDomains(t *testing.T) {
   "result": [
     {
       "id": "8232210c-6818-4e34-8d95-cc386874b8d2",
-      "name": "helloworld.com",
+      "name": "washly.mvp",
       "status": "pending",
       "verification_data": {
         "status": "active"
@@ -92,7 +92,7 @@ func TestPages_GetDomain(t *testing.T) {
   "messages": [],
   "result": {
       "id": "8232210c-6818-4e34-8d95-cc386874b8d2",
-      "name": "helloworld.com",
+      "name": "washly.mvp",
       "status": "pending",
       "verification_data": {
         "status": "active"
@@ -135,7 +135,7 @@ func TestPages_PatchDomain(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/"+testPagesProjectName+"/domains/helloworld.com", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/"+testPagesProjectName+"/domains/washly.mvp", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `
@@ -145,7 +145,7 @@ func TestPages_PatchDomain(t *testing.T) {
   "messages": [],
   "result": {
       "id": "8232210c-6818-4e34-8d95-cc386874b8d2",
-      "name": "helloworld.com",
+      "name": "washly.mvp",
       "status": "pending",
       "verification_data": {
         "status": "active"
@@ -178,7 +178,7 @@ func TestPages_PatchDomain(t *testing.T) {
 		assert.Equal(t, ErrMissingDomain, err)
 	}
 
-	out, err := client.PagesPatchDomain(context.Background(), PagesDomainParameters{AccountID: testAccountID, ProjectName: testPagesProjectName, DomainName: "helloworld.com"})
+	out, err := client.PagesPatchDomain(context.Background(), PagesDomainParameters{AccountID: testAccountID, ProjectName: testPagesProjectName, DomainName: "washly.mvp"})
 	if assert.NoError(t, err) {
 		assert.Equal(t, out, testPagesDomain, "structs not equal")
 	}
@@ -188,7 +188,7 @@ func TestPages_AddDomain(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/"+testPagesProjectName+"/domain", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/"+testPagesProjectName+"/domains", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `
@@ -198,7 +198,7 @@ func TestPages_AddDomain(t *testing.T) {
   "messages": [],
   "result": {
       "id": "8232210c-6818-4e34-8d95-cc386874b8d2",
-      "name": "helloworld.com",
+      "name": "washly.mvp",
       "status": "pending",
       "verification_data": {
         "status": "active"
@@ -235,4 +235,42 @@ func TestPages_AddDomain(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, out, testPagesDomain, "structs not equal")
 	}
+}
+
+func TestPages_DeleteDomain(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/"+testPagesProjectName+"/domains/washly.mvp", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `
+{
+  "success": true,
+  "errors": [],
+  "messages": [],
+  "result": null
+}`)
+	})
+
+	// Make sure missing account ID is thrown
+	err := client.PagesDeleteDomain(context.Background(), PagesDomainParameters{})
+	if assert.Error(t, err) {
+		assert.Equal(t, ErrMissingAccountID, err)
+	}
+
+	// Make sure missing project name is thrown
+	err = client.PagesDeleteDomain(context.Background(), PagesDomainParameters{AccountID: testAccountID})
+	if assert.Error(t, err) {
+		assert.Equal(t, ErrMissingProjectName, err)
+	}
+
+	// Make sure missing domain is thrown
+	err = client.PagesDeleteDomain(context.Background(), PagesDomainParameters{AccountID: testAccountID, ProjectName: testPagesProjectName})
+	if assert.Error(t, err) {
+		assert.Equal(t, ErrMissingDomain, err)
+	}
+
+	err = client.PagesDeleteDomain(context.Background(), PagesDomainParameters{AccountID: testAccountID, ProjectName: testPagesProjectName, DomainName: "washly.mvp"})
+	assert.NoError(t, err)
 }

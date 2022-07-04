@@ -144,8 +144,7 @@ func (api *API) PagesPatchDomain(ctx context.Context, params PagesDomainParamete
 
 // PagesAddDomain adds a domain to a pages project.
 //
-// API Reference: https://community.cloudflare.com/t/add-pages-domain-via-api/303510/3
-// Blame Washly for not making it official.
+// API Reference: https://api.cloudflare.com/#pages-domains-add-domain
 func (api *API) PagesAddDomain(ctx context.Context, params PagesDomainParameters) (PagesDomain, error) {
 	if params.AccountID == "" {
 		return PagesDomain{}, ErrMissingAccountID
@@ -159,7 +158,7 @@ func (api *API) PagesAddDomain(ctx context.Context, params PagesDomainParameters
 		return PagesDomain{}, ErrMissingDomain
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s/domain", params.AccountID, params.ProjectName)
+	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s/domains", params.AccountID, params.ProjectName)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return PagesDomain{}, err
@@ -170,4 +169,29 @@ func (api *API) PagesAddDomain(ctx context.Context, params PagesDomainParameters
 		return PagesDomain{}, err
 	}
 	return pagesDomainResponse.Result, nil
+}
+
+// PagesDeleteDomain removes a domain from a pages project.
+//
+// API Reference: https://api.cloudflare.com/#pages-domains-delete-domain
+func (api *API) PagesDeleteDomain(ctx context.Context, params PagesDomainParameters) error {
+	if params.AccountID == "" {
+		return ErrMissingAccountID
+	}
+
+	if params.ProjectName == "" {
+		return ErrMissingProjectName
+	}
+
+	if params.DomainName == "" {
+		return ErrMissingDomain
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s/domains/%s", params.AccountID, params.ProjectName, params.DomainName)
+
+	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, params)
+	if err != nil {
+		return err
+	}
+	return nil
 }
