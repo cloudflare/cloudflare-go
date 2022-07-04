@@ -1,7 +1,13 @@
 name: Lint
-on: [push, pull_request]
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
 jobs:
-  golangci:
+  golangci-lint:
     name: lint
     runs-on: ubuntu-latest
     steps:
@@ -12,14 +18,28 @@ jobs:
           version: latest
           args: "--config .golintci.yaml"
           only-new-issues: true # only show new issues in the PR, not all.
-  #structslop:
+
+  semgrep:
+    name: semgrep
+    runs-on: ubuntu-latest
+    container:
+      image: returntocorp/semgrep
+    if: (github.actor != 'dependabot[bot]')
+    steps:
+      - uses: actions/checkout@v3
+      - run: semgrep ci --config .semgrep.yml
+        env:
+          # only trigger for files in this change
+          SEMGREP_BASELINE_BRANCH: ${{ github.head_ref }}
+
+  # structslop:
   #  name: structslop
   #  runs-on: ubuntu-latest
   #  steps:
   #    - uses: actions/checkout@v3
   #    - uses: actions/setup-go@v3
   #      with:
-  #        go-version: ^1.17
+  #        go-version: "1.18"
   #    - name: structslop
   #      run: |
   #        go generate -tags tools tools/tools.go

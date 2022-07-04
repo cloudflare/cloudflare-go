@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/pkg/errors"
+	"errors"
 )
 
 // ErrMissingTunnelID is for when a required tunnel ID is missing from the
@@ -219,7 +219,7 @@ func (api *API) Tunnels(ctx context.Context, params TunnelListParams) ([]Tunnel,
 	var argoDetailsResponse TunnelsDetailResponse
 	err = json.Unmarshal(res, &argoDetailsResponse)
 	if err != nil {
-		return []Tunnel{}, errors.Wrap(err, errUnmarshalError)
+		return []Tunnel{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return argoDetailsResponse.Result, nil
 }
@@ -246,7 +246,7 @@ func (api *API) Tunnel(ctx context.Context, params TunnelParams) (Tunnel, error)
 	var argoDetailsResponse TunnelDetailResponse
 	err = json.Unmarshal(res, &argoDetailsResponse)
 	if err != nil {
-		return Tunnel{}, errors.Wrap(err, errUnmarshalError)
+		return Tunnel{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return argoDetailsResponse.Result, nil
 }
@@ -279,7 +279,7 @@ func (api *API) CreateTunnel(ctx context.Context, params TunnelCreateParams) (Tu
 	var argoDetailsResponse TunnelDetailResponse
 	err = json.Unmarshal(res, &argoDetailsResponse)
 	if err != nil {
-		return Tunnel{}, errors.Wrap(err, errUnmarshalError)
+		return Tunnel{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return argoDetailsResponse.Result, nil
@@ -313,7 +313,7 @@ func (api *API) UpdateTunnel(ctx context.Context, params TunnelUpdateParams) (Tu
 	var argoDetailsResponse TunnelDetailResponse
 	err = json.Unmarshal(res, &argoDetailsResponse)
 	if err != nil {
-		return Tunnel{}, errors.Wrap(err, errUnmarshalError)
+		return Tunnel{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return argoDetailsResponse.Result, nil
@@ -345,7 +345,7 @@ func (api *API) UpdateTunnelConfiguration(ctx context.Context, params TunnelConf
 	var tunnelDetailsResponse TunnelConfigurationStringifiedConfigResponse
 	err = json.Unmarshal(res, &tunnelDetailsResponse)
 	if err != nil {
-		return TunnelConfigurationResult{}, errors.Wrap(err, errUnmarshalError)
+		return TunnelConfigurationResult{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	var tunnelDetails TunnelConfigurationResult
@@ -353,7 +353,7 @@ func (api *API) UpdateTunnelConfiguration(ctx context.Context, params TunnelConf
 
 	err = json.Unmarshal([]byte(tunnelDetailsResponse.Result.Config), &tunnelConfig)
 	if err != nil {
-		return TunnelConfigurationResult{}, errors.Wrap(err, errUnmarshalError)
+		return TunnelConfigurationResult{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	tunnelDetails.Config = tunnelConfig
@@ -389,7 +389,7 @@ func (api *API) GetTunnelConfiguration(ctx context.Context, params GetTunnelConf
 	var tunnelDetailsResponse TunnelConfigurationStringifiedConfigResponse
 	err = json.Unmarshal(res, &tunnelDetailsResponse)
 	if err != nil {
-		return TunnelConfigurationResult{}, errors.Wrap(err, errUnmarshalError)
+		return TunnelConfigurationResult{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	var tunnelDetails TunnelConfigurationResult
@@ -397,7 +397,7 @@ func (api *API) GetTunnelConfiguration(ctx context.Context, params GetTunnelConf
 
 	err = json.Unmarshal([]byte(tunnelDetailsResponse.Result.Config), &tunnelConfig)
 	if err != nil {
-		return TunnelConfigurationResult{}, errors.Wrap(err, errUnmarshalError)
+		return TunnelConfigurationResult{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	tunnelDetails.Config = tunnelConfig
@@ -421,7 +421,7 @@ func (api *API) DeleteTunnel(ctx context.Context, params TunnelDeleteParams) err
 	var argoDetailsResponse TunnelDetailResponse
 	err = json.Unmarshal(res, &argoDetailsResponse)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return nil
@@ -449,7 +449,7 @@ func (api *API) CleanupTunnelConnections(ctx context.Context, params TunnelClean
 	var argoDetailsResponse TunnelDetailResponse
 	err = json.Unmarshal(res, &argoDetailsResponse)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return nil
@@ -477,7 +477,7 @@ func (api *API) TunnelToken(ctx context.Context, params TunnelTokenParams) (stri
 	var tunnelTokenResponse TunnelTokenResponse
 	err = json.Unmarshal(res, &tunnelTokenResponse)
 	if err != nil {
-		return "", errors.Wrap(err, errUnmarshalError)
+		return "", fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return tunnelTokenResponse.Result, nil

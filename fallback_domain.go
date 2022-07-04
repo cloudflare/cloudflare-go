@@ -5,8 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-
-	"github.com/pkg/errors"
 )
 
 // FallbackDomainResponse represents the response from the get fallback
@@ -37,7 +35,7 @@ func (api *API) ListFallbackDomains(ctx context.Context, accountID string) ([]Fa
 	var fallbackDomainResponse FallbackDomainResponse
 	err = json.Unmarshal(res, &fallbackDomainResponse)
 	if err != nil {
-		return []FallbackDomain{}, errors.Wrap(err, errUnmarshalError)
+		return []FallbackDomain{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return fallbackDomainResponse.Result, nil
@@ -57,7 +55,7 @@ func (api *API) UpdateFallbackDomain(ctx context.Context, accountID string, doma
 	var fallbackDomainResponse FallbackDomainResponse
 	err = json.Unmarshal(res, &fallbackDomainResponse)
 	if err != nil {
-		return []FallbackDomain{}, errors.Wrap(err, errUnmarshalError)
+		return []FallbackDomain{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return fallbackDomainResponse.Result, nil

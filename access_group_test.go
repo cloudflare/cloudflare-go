@@ -27,6 +27,16 @@ var (
 			map[string]interface{}{"email": map[string]interface{}{"email": "test@example.com"}},
 		},
 	}
+
+	expectedAccessGroupIpList = AccessGroup{
+		ID:        "899d98642c564d2e855e9661899b7252",
+		CreatedAt: &createdAt,
+		UpdatedAt: &updatedAt,
+		Name:      "Allow devs",
+		Include: []interface{}{
+			map[string]interface{}{"ip_list": map[string]interface{}{"id": "989d98642c564d2e855e9661899b7252"}},
+		},
+	}
 )
 
 func TestAccessGroups(t *testing.T) {
@@ -328,4 +338,58 @@ func TestDeleteAccessGroup(t *testing.T) {
 	err = client.DeleteZoneLevelAccessGroup(context.Background(), testZoneID, accessGroupID)
 
 	assert.NoError(t, err)
+}
+
+func TestCreateIPListAccessGroup(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "899d98642c564d2e855e9661899b7252",
+				"created_at": "2014-01-01T05:20:00.12345Z",
+				"updated_at": "2014-01-01T05:20:00.12345Z",
+				"name": "Allow devs",
+				"include": [
+					{
+						"ip_list": {
+							"id": "989d98642c564d2e855e9661899b7252"
+						}
+					}
+				]
+			}
+		}
+		`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/groups", handler)
+
+	accessGroup := AccessGroup{
+		Name: "Allow devs by iplist",
+		Include: []interface{}{
+			AccessGroupIPList{struct {
+				ID string `json:"id"`
+			}{ID: "989d98642c564d2e855e9661899b7252"}},
+		},
+	}
+
+	actual, err := client.CreateAccessGroup(context.Background(), testAccountID, accessGroup)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expectedAccessGroupIpList, actual)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/access/groups", handler)
+
+	actual, err = client.CreateZoneLevelAccessGroup(context.Background(), testZoneID, accessGroup)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expectedAccessGroupIpList, actual)
+	}
 }

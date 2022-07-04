@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/pkg/errors"
+	"errors"
 )
 
 const (
@@ -487,7 +487,7 @@ func (api *API) listRulesets(ctx context.Context, identifierType RouteRoot, iden
 
 	result := ListRulesetResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return []Ruleset{}, errors.Wrap(err, errUnmarshalError)
+		return []Ruleset{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -518,7 +518,7 @@ func (api *API) getRuleset(ctx context.Context, identifierType RouteRoot, identi
 
 	result := GetRulesetResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return Ruleset{}, errors.Wrap(err, errUnmarshalError)
+		return Ruleset{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -547,7 +547,7 @@ func (api *API) createRuleset(ctx context.Context, identifierType RouteRoot, ide
 
 	result := CreateRulesetResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return Ruleset{}, errors.Wrap(err, errUnmarshalError)
+		return Ruleset{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -579,7 +579,7 @@ func (api *API) deleteRuleset(ctx context.Context, identifierType RouteRoot, ide
 	// empty response (204) in case of a success. So we are checking for the
 	// response body size here.
 	if len(res) > 0 {
-		return errors.Wrap(errors.New(string(res)), errMakeRequestError)
+		return fmt.Errorf(errMakeRequestError+": %w", errors.New(string(res)))
 	}
 
 	return nil
@@ -610,7 +610,7 @@ func (api *API) updateRuleset(ctx context.Context, identifierType RouteRoot, ide
 
 	result := UpdateRulesetResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return Ruleset{}, errors.Wrap(err, errUnmarshalError)
+		return Ruleset{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -641,7 +641,7 @@ func (api *API) getRulesetPhase(ctx context.Context, identifierType RouteRoot, i
 
 	result := GetRulesetResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return Ruleset{}, errors.Wrap(err, errUnmarshalError)
+		return Ruleset{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -672,7 +672,7 @@ func (api *API) updateRulesetPhase(ctx context.Context, identifierType RouteRoot
 
 	result := GetRulesetResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return Ruleset{}, errors.Wrap(err, errUnmarshalError)
+		return Ruleset{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil

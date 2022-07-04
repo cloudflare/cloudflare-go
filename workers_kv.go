@@ -8,7 +8,7 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/pkg/errors"
+	"errors"
 )
 
 // WorkersKVNamespaceRequest provides parameters for creating and updating storage namespaces.
@@ -85,7 +85,7 @@ func (api *API) CreateWorkersKVNamespace(ctx context.Context, req *WorkersKVName
 
 	result := WorkersKVNamespaceResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return result, errors.Wrap(err, errUnmarshalError)
+		return result, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result, err
@@ -111,7 +111,7 @@ func (api *API) ListWorkersKVNamespaces(ctx context.Context) ([]WorkersKVNamespa
 
 		var p ListWorkersKVNamespacesResponse
 		if err := json.Unmarshal(res, &p); err != nil {
-			return []WorkersKVNamespace{}, errors.Wrap(err, errUnmarshalError)
+			return []WorkersKVNamespace{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 		}
 
 		if !p.Success {
@@ -141,7 +141,7 @@ func (api *API) DeleteWorkersKVNamespace(ctx context.Context, namespaceID string
 
 	result := Response{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return result, errors.Wrap(err, errUnmarshalError)
+		return result, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result, err
@@ -159,7 +159,7 @@ func (api *API) UpdateWorkersKVNamespace(ctx context.Context, namespaceID string
 
 	result := Response{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return result, errors.Wrap(err, errUnmarshalError)
+		return result, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result, err
@@ -180,7 +180,7 @@ func (api *API) WriteWorkersKV(ctx context.Context, namespaceID, key string, val
 
 	result := Response{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return result, errors.Wrap(err, errUnmarshalError)
+		return result, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result, err
@@ -200,7 +200,7 @@ func (api *API) WriteWorkersKVBulk(ctx context.Context, namespaceID string, kvs 
 
 	result := Response{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return result, errors.Wrap(err, errUnmarshalError)
+		return result, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result, err
@@ -232,7 +232,7 @@ func (api API) DeleteWorkersKV(ctx context.Context, namespaceID, key string) (Re
 
 	result := Response{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return result, errors.Wrap(err, errUnmarshalError)
+		return result, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return result, err
 }
@@ -251,7 +251,7 @@ func (api *API) DeleteWorkersKVBulk(ctx context.Context, namespaceID string, key
 
 	result := Response{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return result, errors.Wrap(err, errUnmarshalError)
+		return result, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result, err
@@ -269,7 +269,7 @@ func (api API) ListWorkersKVs(ctx context.Context, namespaceID string) (ListStor
 
 	result := ListStorageKeysResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return result, errors.Wrap(err, errUnmarshalError)
+		return result, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return result, err
 }
@@ -301,7 +301,7 @@ func (api API) ListWorkersKVsWithOptions(ctx context.Context, namespaceID string
 
 	result := ListStorageKeysResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return result, errors.Wrap(err, errUnmarshalError)
+		return result, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return result, err
 }

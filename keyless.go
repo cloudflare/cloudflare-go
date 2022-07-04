@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 // KeylessSSL represents Keyless SSL configuration.
@@ -66,7 +64,7 @@ func (api *API) CreateKeylessSSL(ctx context.Context, zoneID string, keylessSSL 
 	var keylessSSLDetailResponse KeylessSSLDetailResponse
 	err = json.Unmarshal(res, &keylessSSLDetailResponse)
 	if err != nil {
-		return KeylessSSL{}, errors.Wrap(err, errUnmarshalError)
+		return KeylessSSL{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return keylessSSLDetailResponse.Result, nil
@@ -86,7 +84,7 @@ func (api *API) ListKeylessSSL(ctx context.Context, zoneID string) ([]KeylessSSL
 	var keylessSSLListResponse KeylessSSLListResponse
 	err = json.Unmarshal(res, &keylessSSLListResponse)
 	if err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return keylessSSLListResponse.Result, nil
@@ -106,7 +104,7 @@ func (api *API) KeylessSSL(ctx context.Context, zoneID, keylessSSLID string) (Ke
 	var keylessResponse KeylessSSLDetailResponse
 	err = json.Unmarshal(res, &keylessResponse)
 	if err != nil {
-		return KeylessSSL{}, errors.Wrap(err, errUnmarshalError)
+		return KeylessSSL{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return keylessResponse.Result, nil
@@ -126,7 +124,7 @@ func (api *API) UpdateKeylessSSL(ctx context.Context, zoneID, kelessSSLID string
 	var keylessSSLDetailResponse KeylessSSLDetailResponse
 	err = json.Unmarshal(res, &keylessSSLDetailResponse)
 	if err != nil {
-		return KeylessSSL{}, errors.Wrap(err, errUnmarshalError)
+		return KeylessSSL{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return keylessSSLDetailResponse.Result, nil

@@ -5,8 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-
-	"github.com/pkg/errors"
 )
 
 type Enabled struct {
@@ -32,7 +30,7 @@ func (api *API) UpdateDeviceClientCertificatesZone(ctx context.Context, zoneID s
 	}
 
 	if err := json.Unmarshal(res, &result); err != nil {
-		return result, errors.Wrap(err, errUnmarshalError)
+		return result, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result, err
@@ -51,7 +49,7 @@ func (api *API) GetDeviceClientCertificatesZone(ctx context.Context, zoneID stri
 	}
 
 	if err := json.Unmarshal(res, &result); err != nil {
-		return result, errors.Wrap(err, errUnmarshalError)
+		return result, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result, err

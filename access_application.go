@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 // AccessApplicationType represents the application type.
@@ -137,7 +135,7 @@ func (api *API) accessApplications(ctx context.Context, id string, pageOpts Pagi
 	var accessApplicationListResponse AccessApplicationListResponse
 	err = json.Unmarshal(res, &accessApplicationListResponse)
 	if err != nil {
-		return []AccessApplication{}, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
+		return []AccessApplication{}, ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessApplicationListResponse.Result, accessApplicationListResponse.ResultInfo, nil
@@ -175,7 +173,7 @@ func (api *API) accessApplication(ctx context.Context, id, applicationID string,
 	var accessApplicationDetailResponse AccessApplicationDetailResponse
 	err = json.Unmarshal(res, &accessApplicationDetailResponse)
 	if err != nil {
-		return AccessApplication{}, errors.Wrap(err, errUnmarshalError)
+		return AccessApplication{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessApplicationDetailResponse.Result, nil
@@ -206,7 +204,7 @@ func (api *API) createAccessApplication(ctx context.Context, id string, accessAp
 	var accessApplicationDetailResponse AccessApplicationDetailResponse
 	err = json.Unmarshal(res, &accessApplicationDetailResponse)
 	if err != nil {
-		return AccessApplication{}, errors.Wrap(err, errUnmarshalError)
+		return AccessApplication{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessApplicationDetailResponse.Result, nil
@@ -228,7 +226,7 @@ func (api *API) UpdateZoneLevelAccessApplication(ctx context.Context, zoneID str
 
 func (api *API) updateAccessApplication(ctx context.Context, id string, accessApplication AccessApplication, routeRoot RouteRoot) (AccessApplication, error) {
 	if accessApplication.ID == "" {
-		return AccessApplication{}, errors.Errorf("access application ID cannot be empty")
+		return AccessApplication{}, fmt.Errorf("access application ID cannot be empty")
 	}
 
 	uri := fmt.Sprintf(
@@ -246,7 +244,7 @@ func (api *API) updateAccessApplication(ctx context.Context, id string, accessAp
 	var accessApplicationDetailResponse AccessApplicationDetailResponse
 	err = json.Unmarshal(res, &accessApplicationDetailResponse)
 	if err != nil {
-		return AccessApplication{}, errors.Wrap(err, errUnmarshalError)
+		return AccessApplication{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessApplicationDetailResponse.Result, nil

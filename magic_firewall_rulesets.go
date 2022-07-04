@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/pkg/errors"
+	"errors"
 )
 
 const (
@@ -110,7 +110,7 @@ func (api *API) ListMagicFirewallRulesets(ctx context.Context, accountID string)
 
 	result := ListMagicFirewallRulesetResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return []MagicFirewallRuleset{}, errors.Wrap(err, errUnmarshalError)
+		return []MagicFirewallRuleset{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -130,7 +130,7 @@ func (api *API) GetMagicFirewallRuleset(ctx context.Context, accountID, ID strin
 
 	result := GetMagicFirewallRulesetResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return MagicFirewallRuleset{}, errors.Wrap(err, errUnmarshalError)
+		return MagicFirewallRuleset{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -156,7 +156,7 @@ func (api *API) CreateMagicFirewallRuleset(ctx context.Context, accountID, name,
 
 	result := CreateMagicFirewallRulesetResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return MagicFirewallRuleset{}, errors.Wrap(err, errUnmarshalError)
+		return MagicFirewallRuleset{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -178,7 +178,7 @@ func (api *API) DeleteMagicFirewallRuleset(ctx context.Context, accountID, ID st
 	// Firewall API is not implementing the standard response blob but returns an empty response (204) in case
 	// of a success. So we are checking for the response body size here
 	if len(res) > 0 {
-		return errors.Wrap(errors.New(string(res)), errMakeRequestError)
+		return fmt.Errorf(errMakeRequestError+": %w", errors.New(string(res)))
 	}
 
 	return nil
@@ -199,7 +199,7 @@ func (api *API) UpdateMagicFirewallRuleset(ctx context.Context, accountID, ID st
 
 	result := UpdateMagicFirewallRulesetResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return MagicFirewallRuleset{}, errors.Wrap(err, errUnmarshalError)
+		return MagicFirewallRuleset{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil

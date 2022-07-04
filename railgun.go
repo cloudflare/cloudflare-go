@@ -7,8 +7,6 @@ import (
 	"net/http"
 	"net/url"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 // Railgun represents a Railgun's properties.
@@ -64,7 +62,7 @@ func (api *API) CreateRailgun(ctx context.Context, name string) (Railgun, error)
 	}
 	var r railgunResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return Railgun{}, errors.Wrap(err, errUnmarshalError)
+		return Railgun{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -84,7 +82,7 @@ func (api *API) ListRailguns(ctx context.Context, options RailgunListOptions) ([
 	}
 	var r railgunsResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -100,7 +98,7 @@ func (api *API) RailgunDetails(ctx context.Context, railgunID string) (Railgun, 
 	}
 	var r railgunResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return Railgun{}, errors.Wrap(err, errUnmarshalError)
+		return Railgun{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -116,7 +114,7 @@ func (api *API) RailgunZones(ctx context.Context, railgunID string) ([]Zone, err
 	}
 	var r ZonesResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -137,7 +135,7 @@ func (api *API) enableRailgun(ctx context.Context, railgunID string, enable bool
 	}
 	var r railgunResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return Railgun{}, errors.Wrap(err, errUnmarshalError)
+		return Railgun{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -227,7 +225,7 @@ func (api *API) ZoneRailguns(ctx context.Context, zoneID string) ([]ZoneRailgun,
 	}
 	var r zoneRailgunsResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -243,7 +241,7 @@ func (api *API) ZoneRailgunDetails(ctx context.Context, zoneID, railgunID string
 	}
 	var r zoneRailgunResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return ZoneRailgun{}, errors.Wrap(err, errUnmarshalError)
+		return ZoneRailgun{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -259,7 +257,7 @@ func (api *API) TestRailgunConnection(ctx context.Context, zoneID, railgunID str
 	}
 	var r railgunDiagnosisResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return RailgunDiagnosis{}, errors.Wrap(err, errUnmarshalError)
+		return RailgunDiagnosis{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -280,7 +278,7 @@ func (api *API) connectZoneRailgun(ctx context.Context, zoneID, railgunID string
 	}
 	var r zoneRailgunResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return ZoneRailgun{}, errors.Wrap(err, errUnmarshalError)
+		return ZoneRailgun{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
