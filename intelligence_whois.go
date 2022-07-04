@@ -36,12 +36,10 @@ type WHOISResponse struct {
 //
 // API Reference: https://api.cloudflare.com/#whois-record-get-whois-record
 func (api *API) IntelligenceWHOIS(ctx context.Context, params WHOISParameters) (WHOIS, error) {
-	// Make sure Account ID is set
 	if params.AccountID == "" {
 		return WHOIS{}, ErrMissingAccountID
 	}
 
-	// Make sure domain  is set
 	if params.Domain == "" {
 		return WHOIS{}, ErrMissingDomain
 	}

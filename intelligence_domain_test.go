@@ -13,7 +13,7 @@ func TestIntelligence_DomainDetails(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/intel/domain", func(w http.ResponseWriter, r *http.Request) {
-		testHTTPMethod(t, http.MethodGet, r)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
   "success": true,
@@ -94,7 +94,7 @@ func TestIntelligence_BulkDomainDetails(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/intel/domain/bulk", func(w http.ResponseWriter, r *http.Request) {
-		testHTTPMethod(t, http.MethodGet, r)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
   "success": true,
@@ -166,7 +166,7 @@ func TestIntelligence_DomainHistory(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/intel/domain-history", func(w http.ResponseWriter, r *http.Request) {
-		testHTTPMethod(t, http.MethodGet, r)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
   "success": true,

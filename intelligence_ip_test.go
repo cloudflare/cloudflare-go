@@ -13,7 +13,7 @@ func TestIntelligence_GetIPOverview(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/intel/ip", func(w http.ResponseWriter, r *http.Request) {
-		testHTTPMethod(t, http.MethodGet, r)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
   "success": true,
@@ -77,7 +77,7 @@ func TestIntelligence_GetIPLists(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/intel/ip-list", func(w http.ResponseWriter, r *http.Request) {
-		testHTTPMethod(t, http.MethodGet, r)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
   "success": true,
@@ -117,7 +117,7 @@ func TestIntelligence_PassiveDNS(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/intel/dns", func(w http.ResponseWriter, r *http.Request) {
-		testHTTPMethod(t, http.MethodGet, r)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
   "success": true,

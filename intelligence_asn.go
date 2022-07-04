@@ -53,12 +53,10 @@ type IntelligenceASNSubnetResponse struct {
 //
 // API Reference: https://api.cloudflare.com/#asn-intelligence-get-asn-overview
 func (api *API) IntelligenceASNOverview(ctx context.Context, params IntelligenceASNOverviewParameters) ([]ASNInfo, error) {
-	// Make sure Account ID is set
 	if params.AccountID == "" {
 		return []ASNInfo{}, ErrMissingAccountID
 	}
 
-	// Make sure ASN is set
 	if params.ASN == 0 {
 		return []ASNInfo{}, ErrMissingASN
 	}
@@ -80,12 +78,10 @@ func (api *API) IntelligenceASNOverview(ctx context.Context, params Intelligence
 //
 // API Reference: https://api.cloudflare.com/#asn-intelligence-get-asn-subnets
 func (api *API) IntelligenceASNSubnets(ctx context.Context, params IntelligenceASNSubnetsParameters) (IntelligenceASNSubnetResponse, error) {
-	// Make sure Account ID is set
 	if params.AccountID == "" {
 		return IntelligenceASNSubnetResponse{}, ErrMissingAccountID
 	}
 
-	// Make sure ASN is set
 	if params.ASN == 0 {
 		return IntelligenceASNSubnetResponse{}, ErrMissingASN
 	}

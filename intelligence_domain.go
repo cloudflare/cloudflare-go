@@ -104,12 +104,10 @@ type GetDomainHistoryResponse struct {
 //
 // API Reference: https://api.cloudflare.com/#domain-intelligence-get-domain-details
 func (api *API) IntelligenceDomainDetails(ctx context.Context, params GetDomainDetailsParameters) (DomainDetails, error) {
-	// Make sure Account ID is set
 	if params.AccountID == "" {
 		return DomainDetails{}, ErrMissingAccountID
 	}
 
-	// Make sure Domain is set
 	if params.Domain == "" {
 		return DomainDetails{}, ErrMissingDomain
 	}
@@ -131,12 +129,10 @@ func (api *API) IntelligenceDomainDetails(ctx context.Context, params GetDomainD
 //
 // API Reference: https://api.cloudflare.com/#domain-intelligence-get-multiple-domain-details
 func (api *API) IntelligenceBulkDomainDetails(ctx context.Context, params GetBulkDomainDetailsParameters) ([]DomainDetails, error) {
-	// Make sure Account ID is set
 	if params.AccountID == "" {
 		return []DomainDetails{}, ErrMissingAccountID
 	}
 
-	// Make sure domains are set
 	if len(params.Domains) == 0 {
 		return []DomainDetails{}, ErrMissingDomain
 	}
@@ -158,12 +154,10 @@ func (api *API) IntelligenceBulkDomainDetails(ctx context.Context, params GetBul
 //
 // API Reference: https://api.cloudflare.com/#domain-history-get-domain-history
 func (api *API) IntelligenceDomainHistory(ctx context.Context, params GetDomainHistoryParameters) ([]DomainHistory, error) {
-	// Make sure Account ID is set
 	if params.AccountID == "" {
 		return []DomainHistory{}, ErrMissingAccountID
 	}
 
-	// Make sure Domain is set
 	if params.Domain == "" {
 		return []DomainHistory{}, ErrMissingDomain
 	}

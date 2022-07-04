@@ -33,7 +33,6 @@ type PhishingScanResponse struct {
 //
 // API Reference: https://api.cloudflare.com/#phishing-url-scanner-scan-suspicious-url
 func (api *API) IntelligencePhishingScan(ctx context.Context, params PhishingScanParameters) (PhishingScan, error) {
-	// Make sure Account ID is set
 	if params.AccountID == "" {
 		return PhishingScan{}, ErrMissingAccountID
 	}

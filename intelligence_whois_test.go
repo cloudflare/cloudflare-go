@@ -13,7 +13,7 @@ func TestIntelligence_WHOIS(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/intel/whois", func(w http.ResponseWriter, r *http.Request) {
-		testHTTPMethod(t, http.MethodGet, r)
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
   "success": true,

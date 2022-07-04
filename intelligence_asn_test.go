@@ -8,14 +8,14 @@ import (
 	"testing"
 )
 
-const TestASNNumber = "13335"
+const testASNNumber = "13335"
 
 func TestIntelligence_ASNOverview(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/accounts/"+testAccountID+"/intel/asn/"+TestASNNumber, func(w http.ResponseWriter, r *http.Request) {
-		testHTTPMethod(t, http.MethodGet, r)
+	mux.HandleFunc("/accounts/"+testAccountID+"/intel/asn/"+testASNNumber, func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
   "success": true,
@@ -66,8 +66,8 @@ func TestIntelligence_ASNSubnet(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/accounts/"+testAccountID+"/intel/asn/"+TestASNNumber+"/subnets", func(w http.ResponseWriter, r *http.Request) {
-		testHTTPMethod(t, http.MethodGet, r)
+	mux.HandleFunc("/accounts/"+testAccountID+"/intel/asn/"+testASNNumber+"/subnets", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
   "asn": 13335,

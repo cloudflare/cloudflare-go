@@ -95,7 +95,6 @@ type IPIntelligencePassiveDNSResponse struct {
 //
 // API Reference: https://api.cloudflare.com/#ip-intelligence-get-ip-overview
 func (api *API) IntelligenceGetIPOverview(ctx context.Context, params IPIntelligenceParameters) ([]IPIntelligence, error) {
-	// Make sure Account ID is set
 	if params.AccountID == "" {
 		return []IPIntelligence{}, ErrMissingAccountID
 	}
@@ -117,7 +116,6 @@ func (api *API) IntelligenceGetIPOverview(ctx context.Context, params IPIntellig
 //
 // API Reference: https://api.cloudflare.com/#ip-list-get-ip-lists
 func (api *API) IntelligenceGetIPList(ctx context.Context, params IPIntelligenceListParameters) ([]IPIntelligenceItem, error) {
-	// Make sure Account ID is set
 	if params.AccountID == "" {
 		return []IPIntelligenceItem{}, ErrMissingAccountID
 	}
@@ -139,7 +137,6 @@ func (api *API) IntelligenceGetIPList(ctx context.Context, params IPIntelligence
 //
 // API Reference: https://api.cloudflare.com/#passive-dns-by-ip-get-passive-dns-by-ip
 func (api *API) IntelligencePassiveDNS(ctx context.Context, params IPIntelligencePassiveDNSParameters) (IPPassiveDNS, error) {
-	// Make sure Account ID is set
 	if params.AccountID == "" {
 		return IPPassiveDNS{}, ErrMissingAccountID
 	}
