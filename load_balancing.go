@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 // LoadBalancerPool represents a load balancer pool's properties.
@@ -265,7 +263,7 @@ func (api *API) CreateLoadBalancerPool(ctx context.Context, pool LoadBalancerPoo
 	}
 	var r loadBalancerPoolResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return LoadBalancerPool{}, errors.Wrap(err, errUnmarshalError)
+		return LoadBalancerPool{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -281,7 +279,7 @@ func (api *API) ListLoadBalancerPools(ctx context.Context) ([]LoadBalancerPool, 
 	}
 	var r loadBalancerPoolListResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -297,7 +295,7 @@ func (api *API) LoadBalancerPoolDetails(ctx context.Context, poolID string) (Loa
 	}
 	var r loadBalancerPoolResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return LoadBalancerPool{}, errors.Wrap(err, errUnmarshalError)
+		return LoadBalancerPool{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -324,7 +322,7 @@ func (api *API) ModifyLoadBalancerPool(ctx context.Context, pool LoadBalancerPoo
 	}
 	var r loadBalancerPoolResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return LoadBalancerPool{}, errors.Wrap(err, errUnmarshalError)
+		return LoadBalancerPool{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -340,7 +338,7 @@ func (api *API) CreateLoadBalancerMonitor(ctx context.Context, monitor LoadBalan
 	}
 	var r loadBalancerMonitorResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return LoadBalancerMonitor{}, errors.Wrap(err, errUnmarshalError)
+		return LoadBalancerMonitor{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -356,7 +354,7 @@ func (api *API) ListLoadBalancerMonitors(ctx context.Context) ([]LoadBalancerMon
 	}
 	var r loadBalancerMonitorListResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -372,7 +370,7 @@ func (api *API) LoadBalancerMonitorDetails(ctx context.Context, monitorID string
 	}
 	var r loadBalancerMonitorResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return LoadBalancerMonitor{}, errors.Wrap(err, errUnmarshalError)
+		return LoadBalancerMonitor{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -399,7 +397,7 @@ func (api *API) ModifyLoadBalancerMonitor(ctx context.Context, monitor LoadBalan
 	}
 	var r loadBalancerMonitorResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return LoadBalancerMonitor{}, errors.Wrap(err, errUnmarshalError)
+		return LoadBalancerMonitor{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -415,7 +413,7 @@ func (api *API) CreateLoadBalancer(ctx context.Context, zoneID string, lb LoadBa
 	}
 	var r loadBalancerResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return LoadBalancer{}, errors.Wrap(err, errUnmarshalError)
+		return LoadBalancer{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -431,7 +429,7 @@ func (api *API) ListLoadBalancers(ctx context.Context, zoneID string) ([]LoadBal
 	}
 	var r loadBalancerListResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -447,7 +445,7 @@ func (api *API) LoadBalancerDetails(ctx context.Context, zoneID, lbID string) (L
 	}
 	var r loadBalancerResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return LoadBalancer{}, errors.Wrap(err, errUnmarshalError)
+		return LoadBalancer{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -474,7 +472,7 @@ func (api *API) ModifyLoadBalancer(ctx context.Context, zoneID string, lb LoadBa
 	}
 	var r loadBalancerResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return LoadBalancer{}, errors.Wrap(err, errUnmarshalError)
+		return LoadBalancer{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -490,7 +488,7 @@ func (api *API) PoolHealthDetails(ctx context.Context, poolID string) (LoadBalan
 	}
 	var r loadBalancerPoolHealthResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return LoadBalancerPoolHealth{}, errors.Wrap(err, errUnmarshalError)
+		return LoadBalancerPoolHealth{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }

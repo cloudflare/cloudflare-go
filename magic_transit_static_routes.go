@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/pkg/errors"
+	"errors"
 )
 
 // Magic Transit Static Routes Error messages.
@@ -86,7 +86,7 @@ func (api *API) ListMagicTransitStaticRoutes(ctx context.Context, accountID stri
 
 	result := ListMagicTransitStaticRoutesResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return []MagicTransitStaticRoute{}, errors.Wrap(err, errUnmarshalError)
+		return []MagicTransitStaticRoute{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result.Routes, nil
@@ -104,7 +104,7 @@ func (api *API) GetMagicTransitStaticRoute(ctx context.Context, accountID, ID st
 
 	result := GetMagicTransitStaticRouteResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return MagicTransitStaticRoute{}, errors.Wrap(err, errUnmarshalError)
+		return MagicTransitStaticRoute{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result.Route, nil
@@ -127,7 +127,7 @@ func (api *API) CreateMagicTransitStaticRoute(ctx context.Context, accountID str
 
 	result := ListMagicTransitStaticRoutesResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return []MagicTransitStaticRoute{}, errors.Wrap(err, errUnmarshalError)
+		return []MagicTransitStaticRoute{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result.Routes, nil
@@ -146,7 +146,7 @@ func (api *API) UpdateMagicTransitStaticRoute(ctx context.Context, accountID, ID
 
 	result := UpdateMagicTransitStaticRouteResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return MagicTransitStaticRoute{}, errors.Wrap(err, errUnmarshalError)
+		return MagicTransitStaticRoute{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	if !result.Result.Modified {
@@ -169,7 +169,7 @@ func (api *API) DeleteMagicTransitStaticRoute(ctx context.Context, accountID, ID
 
 	result := DeleteMagicTransitStaticRouteResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return MagicTransitStaticRoute{}, errors.Wrap(err, errUnmarshalError)
+		return MagicTransitStaticRoute{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	if !result.Result.Deleted {

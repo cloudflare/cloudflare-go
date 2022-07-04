@@ -5,8 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-
-	"github.com/pkg/errors"
 )
 
 // WorkersPutSecretRequest provides parameters for creating and updating secrets.
@@ -45,7 +43,7 @@ func (api *API) SetWorkersSecret(ctx context.Context, script string, req *Worker
 
 	result := WorkersPutSecretResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return result, errors.Wrap(err, errUnmarshalError)
+		return result, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result, err
@@ -62,7 +60,7 @@ func (api *API) DeleteWorkersSecret(ctx context.Context, script, secretName stri
 
 	result := Response{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return result, errors.Wrap(err, errUnmarshalError)
+		return result, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result, err
@@ -79,7 +77,7 @@ func (api *API) ListWorkersSecrets(ctx context.Context, script string) (WorkersL
 
 	result := WorkersListSecretsResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return result, errors.Wrap(err, errUnmarshalError)
+		return result, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result, err

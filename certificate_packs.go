@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 // CertificatePackGeoRestrictions is for the structure of the geographic
@@ -96,7 +94,7 @@ func (api *API) ListCertificatePacks(ctx context.Context, zoneID string) ([]Cert
 	var certificatePacksResponse CertificatePacksResponse
 	err = json.Unmarshal(res, &certificatePacksResponse)
 	if err != nil {
-		return []CertificatePack{}, errors.Wrap(err, errUnmarshalError)
+		return []CertificatePack{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return certificatePacksResponse.Result, nil
@@ -115,7 +113,7 @@ func (api *API) CertificatePack(ctx context.Context, zoneID, certificatePackID s
 	var certificatePacksDetailResponse CertificatePacksDetailResponse
 	err = json.Unmarshal(res, &certificatePacksDetailResponse)
 	if err != nil {
-		return CertificatePack{}, errors.Wrap(err, errUnmarshalError)
+		return CertificatePack{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return certificatePacksDetailResponse.Result, nil
@@ -134,7 +132,7 @@ func (api *API) CreateCertificatePack(ctx context.Context, zoneID string, cert C
 	var certificatePacksDetailResponse CertificatePacksDetailResponse
 	err = json.Unmarshal(res, &certificatePacksDetailResponse)
 	if err != nil {
-		return CertificatePack{}, errors.Wrap(err, errUnmarshalError)
+		return CertificatePack{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return certificatePacksDetailResponse.Result, nil
@@ -166,7 +164,7 @@ func (api *API) CreateAdvancedCertificatePack(ctx context.Context, zoneID string
 	var advancedCertificatePacksDetailResponse CertificatePacksAdvancedDetailResponse
 	err = json.Unmarshal(res, &advancedCertificatePacksDetailResponse)
 	if err != nil {
-		return CertificatePackAdvancedCertificate{}, errors.Wrap(err, errUnmarshalError)
+		return CertificatePackAdvancedCertificate{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return advancedCertificatePacksDetailResponse.Result, nil
@@ -186,7 +184,7 @@ func (api *API) RestartAdvancedCertificateValidation(ctx context.Context, zoneID
 	var advancedCertificatePacksDetailResponse CertificatePacksAdvancedDetailResponse
 	err = json.Unmarshal(res, &advancedCertificatePacksDetailResponse)
 	if err != nil {
-		return CertificatePackAdvancedCertificate{}, errors.Wrap(err, errUnmarshalError)
+		return CertificatePackAdvancedCertificate{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return advancedCertificatePacksDetailResponse.Result, nil

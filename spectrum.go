@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/pkg/errors"
+	"errors"
 )
 
 // ProxyProtocol implements json.Unmarshaler in order to support deserializing of the deprecated boolean
@@ -275,7 +275,7 @@ func (api *API) SpectrumApplications(ctx context.Context, zoneID string) ([]Spec
 	var spectrumApplications SpectrumApplicationsDetailResponse
 	err = json.Unmarshal(res, &spectrumApplications)
 	if err != nil {
-		return []SpectrumApplication{}, errors.Wrap(err, errUnmarshalError)
+		return []SpectrumApplication{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return spectrumApplications.Result, nil
@@ -299,7 +299,7 @@ func (api *API) SpectrumApplication(ctx context.Context, zoneID string, applicat
 	var spectrumApplication SpectrumApplicationDetailResponse
 	err = json.Unmarshal(res, &spectrumApplication)
 	if err != nil {
-		return SpectrumApplication{}, errors.Wrap(err, errUnmarshalError)
+		return SpectrumApplication{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return spectrumApplication.Result, nil
@@ -319,7 +319,7 @@ func (api *API) CreateSpectrumApplication(ctx context.Context, zoneID string, ap
 	var spectrumApplication SpectrumApplicationDetailResponse
 	err = json.Unmarshal(res, &spectrumApplication)
 	if err != nil {
-		return SpectrumApplication{}, errors.Wrap(err, errUnmarshalError)
+		return SpectrumApplication{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return spectrumApplication.Result, nil
@@ -343,7 +343,7 @@ func (api *API) UpdateSpectrumApplication(ctx context.Context, zoneID, appID str
 	var spectrumApplication SpectrumApplicationDetailResponse
 	err = json.Unmarshal(res, &spectrumApplication)
 	if err != nil {
-		return SpectrumApplication{}, errors.Wrap(err, errUnmarshalError)
+		return SpectrumApplication{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return spectrumApplication.Result, nil

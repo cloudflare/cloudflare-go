@@ -10,7 +10,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/pkg/errors"
+	"errors"
 )
 
 // Image represents a Cloudflare Image.
@@ -134,7 +134,7 @@ func (api *API) UploadImage(ctx context.Context, accountID string, upload ImageU
 	w := multipart.NewWriter(body)
 	if err := upload.write(w); err != nil {
 		_ = w.Close()
-		return Image{}, errors.Wrap(err, "error writing multipart body")
+		return Image{}, fmt.Errorf("error writing multipart body: %w", err)
 	}
 	_ = w.Close()
 
@@ -156,7 +156,7 @@ func (api *API) UploadImage(ctx context.Context, accountID string, upload ImageU
 	var imageDetailsResponse ImageDetailsResponse
 	err = json.Unmarshal(res, &imageDetailsResponse)
 	if err != nil {
-		return Image{}, errors.Wrap(err, errUnmarshalError)
+		return Image{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return imageDetailsResponse.Result, nil
 }
@@ -175,7 +175,7 @@ func (api *API) UpdateImage(ctx context.Context, accountID string, id string, im
 	var imageDetailsResponse ImageDetailsResponse
 	err = json.Unmarshal(res, &imageDetailsResponse)
 	if err != nil {
-		return Image{}, errors.Wrap(err, errUnmarshalError)
+		return Image{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return imageDetailsResponse.Result, nil
 }
@@ -194,7 +194,7 @@ func (api *API) CreateImageDirectUploadURL(ctx context.Context, accountID string
 	var imageDirectUploadURLResponse ImageDirectUploadURLResponse
 	err = json.Unmarshal(res, &imageDirectUploadURLResponse)
 	if err != nil {
-		return ImageDirectUploadURL{}, errors.Wrap(err, errUnmarshalError)
+		return ImageDirectUploadURL{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return imageDirectUploadURLResponse.Result, nil
 }
@@ -213,7 +213,7 @@ func (api *API) ListImages(ctx context.Context, accountID string, pageOpts Pagin
 	var imagesListResponse ImagesListResponse
 	err = json.Unmarshal(res, &imagesListResponse)
 	if err != nil {
-		return []Image{}, errors.Wrap(err, errUnmarshalError)
+		return []Image{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return imagesListResponse.Result.Images, nil
 }
@@ -232,7 +232,7 @@ func (api *API) ImageDetails(ctx context.Context, accountID string, id string) (
 	var imageDetailsResponse ImageDetailsResponse
 	err = json.Unmarshal(res, &imageDetailsResponse)
 	if err != nil {
-		return Image{}, errors.Wrap(err, errUnmarshalError)
+		return Image{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return imageDetailsResponse.Result, nil
 }
@@ -277,7 +277,7 @@ func (api *API) ImagesStats(ctx context.Context, accountID string) (ImagesStatsC
 	var imagesStatsResponse ImagesStatsResponse
 	err = json.Unmarshal(res, &imagesStatsResponse)
 	if err != nil {
-		return ImagesStatsCount{}, errors.Wrap(err, errUnmarshalError)
+		return ImagesStatsCount{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return imagesStatsResponse.Result.Count, nil
 }

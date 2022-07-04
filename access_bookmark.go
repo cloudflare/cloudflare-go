@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 // AccessBookmark represents an Access bookmark application.
@@ -61,7 +59,7 @@ func (api *API) accessBookmarks(ctx context.Context, id string, pageOpts Paginat
 	var accessBookmarkListResponse AccessBookmarkListResponse
 	err = json.Unmarshal(res, &accessBookmarkListResponse)
 	if err != nil {
-		return []AccessBookmark{}, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
+		return []AccessBookmark{}, ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessBookmarkListResponse.Result, accessBookmarkListResponse.ResultInfo, nil
@@ -99,7 +97,7 @@ func (api *API) accessBookmark(ctx context.Context, id, bookmarkID string, route
 	var accessBookmarkDetailResponse AccessBookmarkDetailResponse
 	err = json.Unmarshal(res, &accessBookmarkDetailResponse)
 	if err != nil {
-		return AccessBookmark{}, errors.Wrap(err, errUnmarshalError)
+		return AccessBookmark{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessBookmarkDetailResponse.Result, nil
@@ -130,7 +128,7 @@ func (api *API) createAccessBookmark(ctx context.Context, id string, accessBookm
 	var accessBookmarkDetailResponse AccessBookmarkDetailResponse
 	err = json.Unmarshal(res, &accessBookmarkDetailResponse)
 	if err != nil {
-		return AccessBookmark{}, errors.Wrap(err, errUnmarshalError)
+		return AccessBookmark{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessBookmarkDetailResponse.Result, nil
@@ -152,7 +150,7 @@ func (api *API) UpdateZoneLevelAccessBookmark(ctx context.Context, zoneID string
 
 func (api *API) updateAccessBookmark(ctx context.Context, id string, accessBookmark AccessBookmark, routeRoot RouteRoot) (AccessBookmark, error) {
 	if accessBookmark.ID == "" {
-		return AccessBookmark{}, errors.Errorf("access bookmark ID cannot be empty")
+		return AccessBookmark{}, fmt.Errorf("access bookmark ID cannot be empty")
 	}
 
 	uri := fmt.Sprintf(
@@ -170,7 +168,7 @@ func (api *API) updateAccessBookmark(ctx context.Context, id string, accessBookm
 	var accessBookmarkDetailResponse AccessBookmarkDetailResponse
 	err = json.Unmarshal(res, &accessBookmarkDetailResponse)
 	if err != nil {
-		return AccessBookmark{}, errors.Wrap(err, errUnmarshalError)
+		return AccessBookmark{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessBookmarkDetailResponse.Result, nil

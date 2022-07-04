@@ -5,8 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-
-	"github.com/pkg/errors"
 )
 
 // AccessCACertificate is the structure of the CA certificate used for
@@ -56,7 +54,7 @@ func (api *API) accessCACertificates(ctx context.Context, id string, routeRoot R
 	var accessCAListResponse AccessCACertificateListResponse
 	err = json.Unmarshal(res, &accessCAListResponse)
 	if err != nil {
-		return []AccessCACertificate{}, errors.Wrap(err, errUnmarshalError)
+		return []AccessCACertificate{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessCAListResponse.Result, nil
@@ -89,7 +87,7 @@ func (api *API) accessCACertificate(ctx context.Context, id, applicationID strin
 	var accessCAResponse AccessCACertificateResponse
 	err = json.Unmarshal(res, &accessCAResponse)
 	if err != nil {
-		return AccessCACertificate{}, errors.Wrap(err, errUnmarshalError)
+		return AccessCACertificate{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessCAResponse.Result, nil
@@ -127,7 +125,7 @@ func (api *API) createAccessCACertificate(ctx context.Context, id string, applic
 	var accessCACertificate AccessCACertificateResponse
 	err = json.Unmarshal(res, &accessCACertificate)
 	if err != nil {
-		return AccessCACertificate{}, errors.Wrap(err, errUnmarshalError)
+		return AccessCACertificate{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessCACertificate.Result, nil

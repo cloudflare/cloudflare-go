@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 // IPPrefix contains information about an IP prefix.
@@ -71,7 +69,7 @@ func (api *API) ListPrefixes(ctx context.Context, accountID string) ([]IPPrefix,
 
 	result := ListIPPrefixResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return []IPPrefix{}, errors.Wrap(err, errUnmarshalError)
+		return []IPPrefix{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -89,7 +87,7 @@ func (api *API) GetPrefix(ctx context.Context, accountID, ID string) (IPPrefix, 
 
 	result := GetIPPrefixResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return IPPrefix{}, errors.Wrap(err, errUnmarshalError)
+		return IPPrefix{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -107,7 +105,7 @@ func (api *API) UpdatePrefixDescription(ctx context.Context, accountID, ID strin
 
 	result := GetIPPrefixResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return IPPrefix{}, errors.Wrap(err, errUnmarshalError)
+		return IPPrefix{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -125,7 +123,7 @@ func (api *API) GetAdvertisementStatus(ctx context.Context, accountID, ID string
 
 	result := GetAdvertisementStatusResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return AdvertisementStatus{}, errors.Wrap(err, errUnmarshalError)
+		return AdvertisementStatus{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -143,7 +141,7 @@ func (api *API) UpdateAdvertisementStatus(ctx context.Context, accountID, ID str
 
 	result := GetAdvertisementStatusResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return AdvertisementStatus{}, errors.Wrap(err, errUnmarshalError)
+		return AdvertisementStatus{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil

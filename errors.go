@@ -5,30 +5,35 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/pkg/errors"
+	"errors"
 )
 
-// Error messages.
 const (
-	errEmptyCredentials          = "invalid credentials: key & email must not be empty" //nolint:gosec,unused
-	errEmptyAPIToken             = "invalid credentials: API Token must not be empty"   //nolint:gosec,unused
-	errInternalServiceError      = "internal service error"
-	errMakeRequestError          = "error from makeRequest"
-	errUnmarshalError            = "error unmarshalling the JSON response"
-	errUnmarshalErrorBody        = "error unmarshalling the JSON response error body"
-	errRequestNotSuccessful      = "error reported by API"
-	errMissingAccountID          = "account ID is empty and must be provided"
-	errOperationStillRunning     = "bulk operation did not finish before timeout"
-	errOperationUnexpectedStatus = "bulk operation returned an unexpected status"
-	errResultInfo                = "incorrect pagination info (result_info) in responses"
-	errManualPagination          = "unexpected pagination options passed to functions that handle pagination automatically"
-	errInvalidZoneIdentifer      = "invalid zone identifier: %s"
+	errEmptyCredentials                       = "invalid credentials: key & email must not be empty" //nolint:gosec,unused
+	errEmptyAPIToken                          = "invalid credentials: API Token must not be empty"   //nolint:gosec,unused
+	errInternalServiceError                   = "internal service error"
+	errMakeRequestError                       = "error from makeRequest"
+	errUnmarshalError                         = "error unmarshalling the JSON response"
+	errUnmarshalErrorBody                     = "error unmarshalling the JSON response error body"
+	errRequestNotSuccessful                   = "error reported by API"
+	errMissingAccountID                       = "required missing account ID"
+	errMissingZoneID                          = "required missing zone ID"
+	errMissingAccountOrZoneID                 = "either account ID or zone ID must be provided"
+	errAccountIDAndZoneIDAreMutuallyExclusive = "account ID and zone ID are mutually exclusive"
+	errMissingResourceIdentifier              = "required missing resource identifier"
+	errOperationStillRunning                  = "bulk operation did not finish before timeout"
+	errOperationUnexpectedStatus              = "bulk operation returned an unexpected status"
+	errResultInfo                             = "incorrect pagination info (result_info) in responses"
+	errManualPagination                       = "unexpected pagination options passed to functions that handle pagination automatically"
+	errInvalidZoneIdentifer                   = "invalid zone identifier: %s"
 )
 
 var (
-	ErrMissingAccountID          = errors.New("required missing account ID")
-	ErrMissingZoneID             = errors.New("required missing zone ID")
-	ErrMissingResourceIdentifier = errors.New("required missing resource identifier")
+	ErrMissingAccountID                       = errors.New(errMissingAccountID)
+	ErrMissingZoneID                          = errors.New(errMissingZoneID)
+	ErrAccountIDOrZoneIDAreRequired           = errors.New(errMissingAccountOrZoneID)
+	ErrAccountIDAndZoneIDAreMutuallyExclusive = errors.New(errAccountIDAndZoneIDAreMutuallyExclusive)
+	ErrMissingResourceIdentifier              = errors.New(errMissingResourceIdentifier)
 )
 
 type ErrorType string
