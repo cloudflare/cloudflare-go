@@ -309,6 +309,78 @@ func TestGetTunnelConfiguration(t *testing.T) {
 	}
 }
 
+func TestTunnelConnections(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success":true,
+			"errors":[],
+			"messages":[],
+			"result":[{
+				"id":"dc6472cc-f1ae-44a0-b795-6b8a0ce29f90",
+				"features": [
+					"allow_remote_config",
+					"serialized_headers",
+					"ha-origin"
+				],
+				"version": "2022.2.0",
+            	"arch": "linux_amd64",
+				"run_at":"2009-11-10T23:00:00Z",
+				"conns": [
+					{
+						"colo_name": "DFW",
+						"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+						"is_pending_reconnect": false,
+						"client_id": "dc6472cc-f1ae-44a0-b795-6b8a0ce29f90",
+						"client_version": "2022.2.0",
+						"opened_at": "2021-01-25T18:22:34.317854Z",
+						"origin_ip": "85.12.78.6"
+					}
+				]
+			}]
+		}
+		`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/connections", handler)
+
+	//createdAt, _ := time.Parse(time.RFC3339, "2009-11-10T23:00:00Z")
+	//deletedAt, _ := time.Parse(time.RFC3339, "2009-11-10T23:00:00Z")
+	runAt, _ := time.Parse(time.RFC3339, "2009-11-10T23:00:00Z")
+	want := []Connection{
+		{
+			ID: "dc6472cc-f1ae-44a0-b795-6b8a0ce29f90",
+			Features: []string{
+				"allow_remote_config",
+				"serialized_headers",
+				"ha-origin",
+			},
+			Version: "2022.2.0",
+			Arch:    "linux_amd64",
+			RunAt:   &runAt,
+			Connections: []TunnelConnection{{
+				ColoName:           "DFW",
+				ID:                 "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+				IsPendingReconnect: false,
+				ClientID:           "dc6472cc-f1ae-44a0-b795-6b8a0ce29f90",
+				ClientVersion:      "2022.2.0",
+				OpenedAt:           "2021-01-25T18:22:34.317854Z",
+				OriginIP:           "85.12.78.6",
+			}},
+		},
+	}
+
+	actual, err := client.TunnelConnections(context.Background(), TunnelConnectionParams{AccountID: testAccountID, ID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
 func TestDeleteTunnel(t *testing.T) {
 	setup()
 	defer teardown()
