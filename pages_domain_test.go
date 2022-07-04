@@ -15,7 +15,7 @@ var testCreatedOn, _ = time.Parse(time.RFC3339, "2017-01-01T00:00:00Z")
 
 var testPagesDomain = PagesDomain{
 	ID:     "8232210c-6818-4e34-8d95-cc386874b8d2",
-	Name:   "washly.mvp",
+	Name:   "example.com",
 	Status: "pending",
 	VerificationData: VerificationData{
 		Status: "active",
@@ -43,7 +43,7 @@ func TestPages_GetDomains(t *testing.T) {
   "result": [
     {
       "id": "8232210c-6818-4e34-8d95-cc386874b8d2",
-      "name": "washly.mvp",
+      "name": "example.com",
       "status": "pending",
       "verification_data": {
         "status": "active"
@@ -82,7 +82,7 @@ func TestPages_GetDomain(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/"+testPagesProjectName+"/domains/helloworld.com", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/"+testPagesProjectName+"/domains/example.com", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `
@@ -92,7 +92,7 @@ func TestPages_GetDomain(t *testing.T) {
   "messages": [],
   "result": {
       "id": "8232210c-6818-4e34-8d95-cc386874b8d2",
-      "name": "washly.mvp",
+      "name": "example.com",
       "status": "pending",
       "verification_data": {
         "status": "active"
@@ -125,7 +125,7 @@ func TestPages_GetDomain(t *testing.T) {
 		assert.Equal(t, ErrMissingDomain, err)
 	}
 
-	out, err := client.GetPagesDomain(context.Background(), PagesDomainParameters{AccountID: testAccountID, ProjectName: testPagesProjectName, DomainName: "helloworld.com"})
+	out, err := client.GetPagesDomain(context.Background(), PagesDomainParameters{AccountID: testAccountID, ProjectName: testPagesProjectName, DomainName: "example.com"})
 	if assert.NoError(t, err) {
 		assert.Equal(t, out, testPagesDomain, "structs not equal")
 	}
@@ -135,7 +135,7 @@ func TestPages_PatchDomain(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/"+testPagesProjectName+"/domains/washly.mvp", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/"+testPagesProjectName+"/domains/example.com", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `
@@ -145,7 +145,7 @@ func TestPages_PatchDomain(t *testing.T) {
   "messages": [],
   "result": {
       "id": "8232210c-6818-4e34-8d95-cc386874b8d2",
-      "name": "washly.mvp",
+      "name": "example.com",
       "status": "pending",
       "verification_data": {
         "status": "active"
@@ -178,7 +178,7 @@ func TestPages_PatchDomain(t *testing.T) {
 		assert.Equal(t, ErrMissingDomain, err)
 	}
 
-	out, err := client.PagesPatchDomain(context.Background(), PagesDomainParameters{AccountID: testAccountID, ProjectName: testPagesProjectName, DomainName: "washly.mvp"})
+	out, err := client.PagesPatchDomain(context.Background(), PagesDomainParameters{AccountID: testAccountID, ProjectName: testPagesProjectName, DomainName: "example.com"})
 	if assert.NoError(t, err) {
 		assert.Equal(t, out, testPagesDomain, "structs not equal")
 	}
@@ -198,7 +198,7 @@ func TestPages_AddDomain(t *testing.T) {
   "messages": [],
   "result": {
       "id": "8232210c-6818-4e34-8d95-cc386874b8d2",
-      "name": "washly.mvp",
+      "name": "example.com",
       "status": "pending",
       "verification_data": {
         "status": "active"
@@ -231,7 +231,7 @@ func TestPages_AddDomain(t *testing.T) {
 		assert.Equal(t, ErrMissingDomain, err)
 	}
 
-	out, err := client.PagesAddDomain(context.Background(), PagesDomainParameters{AccountID: testAccountID, ProjectName: testPagesProjectName, DomainName: "helloworld.com"})
+	out, err := client.PagesAddDomain(context.Background(), PagesDomainParameters{AccountID: testAccountID, ProjectName: testPagesProjectName, DomainName: "example.com"})
 	if assert.NoError(t, err) {
 		assert.Equal(t, out, testPagesDomain, "structs not equal")
 	}
@@ -241,7 +241,7 @@ func TestPages_DeleteDomain(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/"+testPagesProjectName+"/domains/washly.mvp", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/"+testPagesProjectName+"/domains/example.com", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `
@@ -271,6 +271,6 @@ func TestPages_DeleteDomain(t *testing.T) {
 		assert.Equal(t, ErrMissingDomain, err)
 	}
 
-	err = client.PagesDeleteDomain(context.Background(), PagesDomainParameters{AccountID: testAccountID, ProjectName: testPagesProjectName, DomainName: "washly.mvp"})
+	err = client.PagesDeleteDomain(context.Background(), PagesDomainParameters{AccountID: testAccountID, ProjectName: testPagesProjectName, DomainName: "example.com"})
 	assert.NoError(t, err)
 }
