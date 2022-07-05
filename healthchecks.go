@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 // Healthcheck describes a Healthcheck object.
@@ -75,7 +73,7 @@ func (api *API) Healthchecks(ctx context.Context, zoneID string) ([]Healthcheck,
 	var r HealthcheckListResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return []Healthcheck{}, errors.Wrap(err, errUnmarshalError)
+		return []Healthcheck{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -92,7 +90,7 @@ func (api *API) Healthcheck(ctx context.Context, zoneID, healthcheckID string) (
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return Healthcheck{}, errors.Wrap(err, errUnmarshalError)
+		return Healthcheck{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -109,7 +107,7 @@ func (api *API) CreateHealthcheck(ctx context.Context, zoneID string, healthchec
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return Healthcheck{}, errors.Wrap(err, errUnmarshalError)
+		return Healthcheck{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -126,7 +124,7 @@ func (api *API) UpdateHealthcheck(ctx context.Context, zoneID string, healthchec
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return Healthcheck{}, errors.Wrap(err, errUnmarshalError)
+		return Healthcheck{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -143,7 +141,7 @@ func (api *API) DeleteHealthcheck(ctx context.Context, zoneID string, healthchec
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return nil
 }
@@ -160,7 +158,7 @@ func (api *API) CreateHealthcheckPreview(ctx context.Context, zoneID string, hea
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return Healthcheck{}, errors.Wrap(err, errUnmarshalError)
+		return Healthcheck{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -177,7 +175,7 @@ func (api *API) HealthcheckPreview(ctx context.Context, zoneID, id string) (Heal
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return Healthcheck{}, errors.Wrap(err, errUnmarshalError)
+		return Healthcheck{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -194,7 +192,7 @@ func (api *API) DeleteHealthcheckPreview(ctx context.Context, zoneID string, id 
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return nil
 }

@@ -138,6 +138,42 @@ const (
 			}
 		]
 	}`
+
+	testPagesDeploymentLogsResponse = `
+	{
+		"total": 6,
+		"includes_container_logs": true,
+		"data": [
+			{
+				"ts": "2021-01-01T00:00:00Z",
+				"line": "Installing dependencies"
+			},
+			{
+				"ts": "2021-01-01T00:00:00Z",
+				"line": "Verify run directory"
+			},
+			{
+				"ts": "2021-01-01T00:00:00Z",
+				"line": "Executing user command: bash test.sh"
+			},
+			{
+				"ts": "2021-01-01T00:00:00Z",
+				"line": "Finished"
+			},
+			{
+				"ts": "2021-01-01T00:00:00Z",
+				"line": "Building functions..."
+			},
+			{
+				"ts": "2021-01-01T00:00:00Z",
+				"line": "Validating asset output directory"
+			},
+			{
+				"ts": "2021-01-01T00:00:00Z",
+				"line": "Parsed 2 valid header rules."
+			}
+		]
+	}`
 )
 
 var (
@@ -267,6 +303,43 @@ var (
 			Message:   "Parsed 2 valid header rules.",
 		},
 	}
+
+	expectedPagesDeploymentLogs = &PagesDeploymentLogs{
+		Total:                 6,
+		IncludesContainerLogs: true,
+		Data:                  expectedPagesDeploymentLogEntries,
+	}
+
+	expectedPagesDeploymentLogEntries = []PagesDeploymentLogEntry{
+		{
+			Timestamp: &pagesDeploymentDummyTime,
+			Line:      "Installing dependencies",
+		},
+		{
+			Timestamp: &pagesDeploymentDummyTime,
+			Line:      "Verify run directory",
+		},
+		{
+			Timestamp: &pagesDeploymentDummyTime,
+			Line:      "Executing user command: bash test.sh",
+		},
+		{
+			Timestamp: &pagesDeploymentDummyTime,
+			Line:      "Finished",
+		},
+		{
+			Timestamp: &pagesDeploymentDummyTime,
+			Line:      "Building functions...",
+		},
+		{
+			Timestamp: &pagesDeploymentDummyTime,
+			Line:      "Validating asset output directory",
+		},
+		{
+			Timestamp: &pagesDeploymentDummyTime,
+			Line:      "Parsed 2 valid header rules.",
+		},
+	}
 )
 
 func TestListPagesDeployments(t *testing.T) {
@@ -370,6 +443,35 @@ func TestGetPagesDeploymentStageLogs(t *testing.T) {
 	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, *expectedPagesDeploymentStageLogs, actual)
+	}
+}
+
+func TestGetPagesDeploymentLogs(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": %s
+		}`, testPagesDeploymentLogsResponse)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe/history/logs", handler)
+
+	actual, err := client.GetPagesDeploymentLogs(context.Background(), GetPagesDeploymentLogsParams{
+		AccountID:    testAccountID,
+		ProjectName:  "test",
+		DeploymentID: "0012e50b-fa5d-44db-8cb5-1f372785dcbe",
+		SizeOptions:  SizeOptions{},
+	})
+	if assert.NoError(t, err) {
+		assert.Equal(t, *expectedPagesDeploymentLogs, actual)
 	}
 }
 

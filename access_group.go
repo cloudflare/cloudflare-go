@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 // AccessGroup defines a group for allowing or disallowing access to
@@ -189,6 +187,13 @@ type AccessGroupListResponse struct {
 	ResultInfo `json:"result_info"`
 }
 
+// AccessGroupIPList restricts the application to specific teams_list of ips.
+type AccessGroupIPList struct {
+	IPList struct {
+		ID string `json:"id"`
+	} `json:"ip_list"`
+}
+
 // AccessGroupDetailResponse is the API response, containing a single
 // access group.
 type AccessGroupDetailResponse struct {
@@ -230,7 +235,7 @@ func (api *API) accessGroups(ctx context.Context, id string, pageOpts Pagination
 	var accessGroupListResponse AccessGroupListResponse
 	err = json.Unmarshal(res, &accessGroupListResponse)
 	if err != nil {
-		return []AccessGroup{}, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
+		return []AccessGroup{}, ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessGroupListResponse.Result, accessGroupListResponse.ResultInfo, nil
@@ -266,7 +271,7 @@ func (api *API) accessGroup(ctx context.Context, id, groupID string, routeRoot R
 	var accessGroupDetailResponse AccessGroupDetailResponse
 	err = json.Unmarshal(res, &accessGroupDetailResponse)
 	if err != nil {
-		return AccessGroup{}, errors.Wrap(err, errUnmarshalError)
+		return AccessGroup{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessGroupDetailResponse.Result, nil
@@ -301,7 +306,7 @@ func (api *API) createAccessGroup(ctx context.Context, id string, accessGroup Ac
 	var accessGroupDetailResponse AccessGroupDetailResponse
 	err = json.Unmarshal(res, &accessGroupDetailResponse)
 	if err != nil {
-		return AccessGroup{}, errors.Wrap(err, errUnmarshalError)
+		return AccessGroup{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessGroupDetailResponse.Result, nil
@@ -323,7 +328,7 @@ func (api *API) UpdateZoneLevelAccessGroup(ctx context.Context, zoneID string, a
 
 func (api *API) updateAccessGroup(ctx context.Context, id string, accessGroup AccessGroup, routeRoot RouteRoot) (AccessGroup, error) {
 	if accessGroup.ID == "" {
-		return AccessGroup{}, errors.Errorf("access group ID cannot be empty")
+		return AccessGroup{}, fmt.Errorf("access group ID cannot be empty")
 	}
 
 	uri := fmt.Sprintf(
@@ -341,7 +346,7 @@ func (api *API) updateAccessGroup(ctx context.Context, id string, accessGroup Ac
 	var accessGroupDetailResponse AccessGroupDetailResponse
 	err = json.Unmarshal(res, &accessGroupDetailResponse)
 	if err != nil {
-		return AccessGroup{}, errors.Wrap(err, errUnmarshalError)
+		return AccessGroup{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessGroupDetailResponse.Result, nil

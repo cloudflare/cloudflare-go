@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/pkg/errors"
+	"errors"
 )
 
 const (
@@ -17,24 +17,25 @@ const (
 	RulesetKindSchema  RulesetKind = "schema"
 	RulesetKindZone    RulesetKind = "zone"
 
-	RulesetPhaseDDoSL4                          RulesetPhase = "ddos_l4"
-	RulesetPhaseDDoSL7                          RulesetPhase = "ddos_l7"
-	RulesetPhaseHTTPLogCustomFields             RulesetPhase = "http_log_custom_fields"
-	RulesetPhaseHTTPRequestCacheSettings        RulesetPhase = "http_request_cache_settings"
-	RulesetPhaseHTTPRequestFirewallCustom       RulesetPhase = "http_request_firewall_custom"
-	RulesetPhaseHTTPRequestFirewallManaged      RulesetPhase = "http_request_firewall_managed"
-	RulesetPhaseHTTPRequestLateTransform        RulesetPhase = "http_request_late_transform"
-	RulesetPhaseHTTPRequestLateTransformManaged RulesetPhase = "http_request_late_transform_managed"
-	RulesetPhaseHTTPRequestMain                 RulesetPhase = "http_request_main"
-	RulesetPhaseHTTPRequestOrigin               RulesetPhase = "http_request_origin"
-	RulesetPhaseHTTPRequestRedirect             RulesetPhase = "http_request_redirect"
-	RulesetPhaseHTTPRequestSanitize             RulesetPhase = "http_request_sanitize"
-	RulesetPhaseHTTPRequestTransform            RulesetPhase = "http_request_transform"
-	RulesetPhaseHTTPResponseFirewallManaged     RulesetPhase = "http_response_firewall_managed"
-	RulesetPhaseHTTPResponseHeadersTransform    RulesetPhase = "http_response_headers_transform"
-	RulesetPhaseMagicTransit                    RulesetPhase = "magic_transit"
-	RulesetPhaseRateLimit                       RulesetPhase = "http_ratelimit"
-	RulesetPhaseSuperBotFightMode               RulesetPhase = "http_request_sbfm"
+	RulesetPhaseDDoSL4                              RulesetPhase = "ddos_l4"
+	RulesetPhaseDDoSL7                              RulesetPhase = "ddos_l7"
+	RulesetPhaseHTTPLogCustomFields                 RulesetPhase = "http_log_custom_fields"
+	RulesetPhaseHTTPRequestCacheSettings            RulesetPhase = "http_request_cache_settings"
+	RulesetPhaseHTTPRequestFirewallCustom           RulesetPhase = "http_request_firewall_custom"
+	RulesetPhaseHTTPRequestFirewallManaged          RulesetPhase = "http_request_firewall_managed"
+	RulesetPhaseHTTPRequestLateTransform            RulesetPhase = "http_request_late_transform"
+	RulesetPhaseHTTPRequestLateTransformManaged     RulesetPhase = "http_request_late_transform_managed"
+	RulesetPhaseHTTPRequestMain                     RulesetPhase = "http_request_main"
+	RulesetPhaseHTTPRequestOrigin                   RulesetPhase = "http_request_origin"
+	RulesetPhaseHTTPRequestRedirect                 RulesetPhase = "http_request_redirect"
+	RulesetPhaseHTTPRequestSanitize                 RulesetPhase = "http_request_sanitize"
+	RulesetPhaseHTTPRequestTransform                RulesetPhase = "http_request_transform"
+	RulesetPhaseHTTPResponseFirewallManaged         RulesetPhase = "http_response_firewall_managed"
+	RulesetPhaseHTTPResponseHeadersTransform        RulesetPhase = "http_response_headers_transform"
+	RulesetPhaseHTTPResponseHeadersTransformManaged RulesetPhase = "http_response_headers_transform_managed"
+	RulesetPhaseMagicTransit                        RulesetPhase = "magic_transit"
+	RulesetPhaseRateLimit                           RulesetPhase = "http_ratelimit"
+	RulesetPhaseSuperBotFightMode                   RulesetPhase = "http_request_sbfm"
 
 	RulesetRuleActionBlock                RulesetRuleAction = "block"
 	RulesetRuleActionChallenge            RulesetRuleAction = "challenge"
@@ -95,6 +96,7 @@ func RulesetPhaseValues() []string {
 		string(RulesetPhaseHTTPRequestTransform),
 		string(RulesetPhaseHTTPResponseFirewallManaged),
 		string(RulesetPhaseHTTPResponseHeadersTransform),
+		string(RulesetPhaseHTTPResponseHeadersTransformManaged),
 		string(RulesetPhaseMagicTransit),
 		string(RulesetPhaseRateLimit),
 		string(RulesetPhaseSuperBotFightMode),
@@ -485,7 +487,7 @@ func (api *API) listRulesets(ctx context.Context, identifierType RouteRoot, iden
 
 	result := ListRulesetResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return []Ruleset{}, errors.Wrap(err, errUnmarshalError)
+		return []Ruleset{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -516,7 +518,7 @@ func (api *API) getRuleset(ctx context.Context, identifierType RouteRoot, identi
 
 	result := GetRulesetResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return Ruleset{}, errors.Wrap(err, errUnmarshalError)
+		return Ruleset{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -545,7 +547,7 @@ func (api *API) createRuleset(ctx context.Context, identifierType RouteRoot, ide
 
 	result := CreateRulesetResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return Ruleset{}, errors.Wrap(err, errUnmarshalError)
+		return Ruleset{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -577,7 +579,7 @@ func (api *API) deleteRuleset(ctx context.Context, identifierType RouteRoot, ide
 	// empty response (204) in case of a success. So we are checking for the
 	// response body size here.
 	if len(res) > 0 {
-		return errors.Wrap(errors.New(string(res)), errMakeRequestError)
+		return fmt.Errorf(errMakeRequestError+": %w", errors.New(string(res)))
 	}
 
 	return nil
@@ -608,7 +610,7 @@ func (api *API) updateRuleset(ctx context.Context, identifierType RouteRoot, ide
 
 	result := UpdateRulesetResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return Ruleset{}, errors.Wrap(err, errUnmarshalError)
+		return Ruleset{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -639,7 +641,7 @@ func (api *API) getRulesetPhase(ctx context.Context, identifierType RouteRoot, i
 
 	result := GetRulesetResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return Ruleset{}, errors.Wrap(err, errUnmarshalError)
+		return Ruleset{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
@@ -670,7 +672,7 @@ func (api *API) updateRulesetPhase(ctx context.Context, identifierType RouteRoot
 
 	result := GetRulesetResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return Ruleset{}, errors.Wrap(err, errUnmarshalError)
+		return Ruleset{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil

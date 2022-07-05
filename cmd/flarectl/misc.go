@@ -7,9 +7,10 @@ import (
 	"os"
 	"strings"
 
+	"errors"
+
 	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/olekukonko/tablewriter"
-	"github.com/pkg/errors"
 	"github.com/urfave/cli/v2"
 )
 
@@ -93,7 +94,7 @@ func checkFlags(c *cli.Context, flags ...string) error {
 	for _, flag := range flags {
 		if c.String(flag) == "" {
 			cli.ShowSubcommandHelp(c) //nolint
-			err := errors.Errorf("error: the required flag %q was empty or not provided", flag)
+			err := fmt.Errorf("error: the required flag %q was empty or not provided", flag)
 			fmt.Fprintln(os.Stderr, err)
 			return err
 		}

@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 type AccessApprovalGroup struct {
@@ -94,7 +92,7 @@ func (api *API) accessPolicies(ctx context.Context, id string, applicationID str
 	var accessPolicyListResponse AccessPolicyListResponse
 	err = json.Unmarshal(res, &accessPolicyListResponse)
 	if err != nil {
-		return []AccessPolicy{}, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
+		return []AccessPolicy{}, ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessPolicyListResponse.Result, accessPolicyListResponse.ResultInfo, nil
@@ -131,7 +129,7 @@ func (api *API) accessPolicy(ctx context.Context, id string, applicationID strin
 	var accessPolicyDetailResponse AccessPolicyDetailResponse
 	err = json.Unmarshal(res, &accessPolicyDetailResponse)
 	if err != nil {
-		return AccessPolicy{}, errors.Wrap(err, errUnmarshalError)
+		return AccessPolicy{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessPolicyDetailResponse.Result, nil
@@ -167,7 +165,7 @@ func (api *API) createAccessPolicy(ctx context.Context, id, applicationID string
 	var accessPolicyDetailResponse AccessPolicyDetailResponse
 	err = json.Unmarshal(res, &accessPolicyDetailResponse)
 	if err != nil {
-		return AccessPolicy{}, errors.Wrap(err, errUnmarshalError)
+		return AccessPolicy{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessPolicyDetailResponse.Result, nil
@@ -189,7 +187,7 @@ func (api *API) UpdateZoneLevelAccessPolicy(ctx context.Context, zoneID, applica
 
 func (api *API) updateAccessPolicy(ctx context.Context, id, applicationID string, accessPolicy AccessPolicy, routeRoot RouteRoot) (AccessPolicy, error) {
 	if accessPolicy.ID == "" {
-		return AccessPolicy{}, errors.Errorf("access policy ID cannot be empty")
+		return AccessPolicy{}, fmt.Errorf("access policy ID cannot be empty")
 	}
 	uri := fmt.Sprintf(
 		"/%s/%s/access/apps/%s/policies/%s",
@@ -207,7 +205,7 @@ func (api *API) updateAccessPolicy(ctx context.Context, id, applicationID string
 	var accessPolicyDetailResponse AccessPolicyDetailResponse
 	err = json.Unmarshal(res, &accessPolicyDetailResponse)
 	if err != nil {
-		return AccessPolicy{}, errors.Wrap(err, errUnmarshalError)
+		return AccessPolicy{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessPolicyDetailResponse.Result, nil

@@ -5,8 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-
-	"github.com/pkg/errors"
 )
 
 // AccessIdentityProvider is the structure of the provider object.
@@ -87,7 +85,7 @@ func (api *API) accessIdentityProviders(ctx context.Context, id string, routeRoo
 	var accessIdentityProviderResponse AccessIdentityProvidersListResponse
 	err = json.Unmarshal(res, &accessIdentityProviderResponse)
 	if err != nil {
-		return []AccessIdentityProvider{}, errors.Wrap(err, errUnmarshalError)
+		return []AccessIdentityProvider{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessIdentityProviderResponse.Result, nil
@@ -125,7 +123,7 @@ func (api *API) accessIdentityProviderDetails(ctx context.Context, id string, id
 	var accessIdentityProviderResponse AccessIdentityProviderListResponse
 	err = json.Unmarshal(res, &accessIdentityProviderResponse)
 	if err != nil {
-		return AccessIdentityProvider{}, errors.Wrap(err, errUnmarshalError)
+		return AccessIdentityProvider{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessIdentityProviderResponse.Result, nil
@@ -156,7 +154,7 @@ func (api *API) createAccessIdentityProvider(ctx context.Context, id string, ide
 	var accessIdentityProviderResponse AccessIdentityProviderListResponse
 	err = json.Unmarshal(res, &accessIdentityProviderResponse)
 	if err != nil {
-		return AccessIdentityProvider{}, errors.Wrap(err, errUnmarshalError)
+		return AccessIdentityProvider{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessIdentityProviderResponse.Result, nil
@@ -194,7 +192,7 @@ func (api *API) updateAccessIdentityProvider(ctx context.Context, id string, ide
 	var accessIdentityProviderResponse AccessIdentityProviderListResponse
 	err = json.Unmarshal(res, &accessIdentityProviderResponse)
 	if err != nil {
-		return AccessIdentityProvider{}, errors.Wrap(err, errUnmarshalError)
+		return AccessIdentityProvider{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessIdentityProviderResponse.Result, nil
@@ -230,7 +228,7 @@ func (api *API) deleteAccessIdentityProvider(ctx context.Context, id string, ide
 	var accessIdentityProviderResponse AccessIdentityProviderListResponse
 	err = json.Unmarshal(res, &accessIdentityProviderResponse)
 	if err != nil {
-		return AccessIdentityProvider{}, errors.Wrap(err, errUnmarshalError)
+		return AccessIdentityProvider{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessIdentityProviderResponse.Result, nil

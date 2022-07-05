@@ -9,7 +9,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/pkg/errors"
 	"golang.org/x/net/idna"
 )
 
@@ -80,7 +79,7 @@ func (api *API) CreateDNSRecord(ctx context.Context, zoneID string, rr DNSRecord
 	var recordResp *DNSRecordResponse
 	err = json.Unmarshal(res, &recordResp)
 	if err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return recordResp, nil
@@ -119,7 +118,7 @@ func (api *API) DNSRecords(ctx context.Context, zoneID string, rr DNSRecord) ([]
 		var r DNSListResponse
 		err = json.Unmarshal(res, &r)
 		if err != nil {
-			return []DNSRecord{}, errors.Wrap(err, errUnmarshalError)
+			return []DNSRecord{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 		}
 		records = append(records, r.Result...)
 		if r.ResultInfo.Page >= r.ResultInfo.TotalPages {
@@ -144,7 +143,7 @@ func (api *API) DNSRecord(ctx context.Context, zoneID, recordID string) (DNSReco
 	var r DNSRecordResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return DNSRecord{}, errors.Wrap(err, errUnmarshalError)
+		return DNSRecord{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -179,7 +178,7 @@ func (api *API) UpdateDNSRecord(ctx context.Context, zoneID, recordID string, rr
 	var r DNSRecordResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return nil
 }
@@ -197,7 +196,7 @@ func (api *API) DeleteDNSRecord(ctx context.Context, zoneID, recordID string) er
 	var r DNSRecordResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return nil
 }

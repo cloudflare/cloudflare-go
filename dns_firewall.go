@@ -8,8 +8,6 @@ import (
 	"net/url"
 	"strings"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 // DNSFirewallCluster represents a DNS Firewall configuration.
@@ -81,7 +79,7 @@ func (api *API) CreateDNSFirewallCluster(ctx context.Context, v DNSFirewallClust
 	response := &dnsFirewallResponse{}
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return response.Result, nil
@@ -100,7 +98,7 @@ func (api *API) DNSFirewallCluster(ctx context.Context, clusterID string) (*DNSF
 	response := &dnsFirewallResponse{}
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return response.Result, nil
@@ -119,7 +117,7 @@ func (api *API) ListDNSFirewallClusters(ctx context.Context) ([]*DNSFirewallClus
 	response := &dnsFirewallListResponse{}
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return response.Result, nil
@@ -138,7 +136,7 @@ func (api *API) UpdateDNSFirewallCluster(ctx context.Context, clusterID string, 
 	response := &dnsFirewallResponse{}
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return nil
@@ -158,7 +156,7 @@ func (api *API) DeleteDNSFirewallCluster(ctx context.Context, clusterID string) 
 	response := &dnsFirewallResponse{}
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return nil
@@ -190,7 +188,7 @@ func (api *API) DNSFirewallUserAnalytics(ctx context.Context, clusterID string, 
 	response := dnsFirewallAnalyticsResponse{}
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return DNSFirewallAnalytics{}, errors.Wrap(err, errUnmarshalError)
+		return DNSFirewallAnalytics{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return response.Result, nil

@@ -189,6 +189,126 @@ func TestCreateTunnel(t *testing.T) {
 	}
 }
 
+func TestUpdateTunnelConfiguration(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method '%s', got %s", http.MethodPut, r.Method)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+			  "config": "{\"warp-routing\": {\"enabled\": true},  \"originRequest\" : {\"connectTimeout\": 10}, \"ingress\" : [ {\"hostname\": \"test.example.com\", \"service\": \"https://localhost:8000\" } , {\"service\": \"http_status:404\"} ]}",
+			  "tunnel_id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+			  "version": 5,
+			  "created_at": "2021-01-25T18:22:34.317854Z"
+			}
+		  }`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/configurations", handler)
+	want := TunnelConfigurationResult{
+		TunnelID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		Version:  5,
+		Config: TunnelConfiguration{
+			Ingress: []UnvalidatedIngressRule{
+				{
+					Hostname: "test.example.com",
+					Service:  "https://localhost:8000",
+				},
+				{
+					Service: "http_status:404",
+				},
+			},
+			WarpRouting: &WarpRoutingConfig{
+				Enabled: true,
+			},
+			OriginRequest: OriginRequestConfig{
+				ConnectTimeout: DurationPtr(10),
+			},
+		}}
+
+	actual, err := client.UpdateTunnelConfiguration(context.Background(), TunnelConfigurationParams{
+		AccountID: testAccountID,
+		TunnelID:  "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		Config: TunnelConfiguration{
+			Ingress: []UnvalidatedIngressRule{
+				{
+					Hostname: "test.example.com",
+					Service:  "https://localhost:8000",
+				},
+				{
+					Service: "http_status:404",
+				},
+			},
+			WarpRouting: &WarpRoutingConfig{
+				Enabled: true,
+			},
+			OriginRequest: OriginRequestConfig{
+				ConnectTimeout: DurationPtr(10 * time.Second),
+			},
+		},
+	})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestGetTunnelConfiguration(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method '%s', got %s", http.MethodGet, r.Method)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+			  "config": "{\"warp-routing\": {\"enabled\": true},  \"originRequest\" : {\"connectTimeout\": 10}, \"ingress\" : [ {\"hostname\": \"test.example.com\", \"service\": \"https://localhost:8000\" } , {\"service\": \"http_status:404\"} ]}",
+			  "tunnel_id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+			  "version": 5,
+			  "created_at": "2021-01-25T18:22:34.317854Z"
+			}
+		  }`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/configurations", handler)
+	want := TunnelConfigurationResult{
+		TunnelID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		Version:  5,
+		Config: TunnelConfiguration{
+			Ingress: []UnvalidatedIngressRule{
+				{
+					Hostname: "test.example.com",
+					Service:  "https://localhost:8000",
+				},
+				{
+					Service: "http_status:404",
+				},
+			},
+			WarpRouting: &WarpRoutingConfig{
+				Enabled: true,
+			},
+			OriginRequest: OriginRequestConfig{
+				ConnectTimeout: DurationPtr(10),
+			},
+		}}
+
+	actual, err := client.GetTunnelConfiguration(context.Background(), GetTunnelConfigurationParams{AccountID: testAccountID, TunnelID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
 func TestDeleteTunnel(t *testing.T) {
 	setup()
 	defer teardown()

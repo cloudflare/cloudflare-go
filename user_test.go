@@ -7,8 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
 	"io/ioutil"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestUser_UserDetails(t *testing.T) {
@@ -190,6 +191,53 @@ func TestUser_UserBillingProfile(t *testing.T) {
 		CreatedOn:       &createdOn,
 		EditedOn:        &editedOn,
 	}
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, userBillingProfile, want, "structs not equal")
+	}
+}
+
+func TestUser_UserBillingHistory(t *testing.T) {
+	setup()
+	defer teardown()
+	mux.HandleFunc("/user/billing/history", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+  "success": true,
+  "errors": [],
+  "messages": [],
+  "result": [
+    {
+      "id": "b69a9f3492637782896352daae219e7d",
+      "type": "charge",
+      "action": "subscription",
+      "description": "The billing item description",
+      "occurred_at": "2014-03-01T12:21:59.3456Z",
+      "amount": 20.99,
+      "currency": "USD",
+      "zone": {
+        "name": "example.com"
+      }
+    }
+  ]
+}`)
+	})
+
+	userBillingProfile, err := client.UserBillingHistory(context.Background(), UserBillingOptions{})
+
+	OccurredAt, _ := time.Parse(time.RFC3339, "2014-03-01T12:21:59.3456Z")
+
+	want := []UserBillingHistory{{
+		ID:          "b69a9f3492637782896352daae219e7d",
+		Type:        "charge",
+		Action:      "subscription",
+		Description: "The billing item description",
+		OccurredAt:  &OccurredAt,
+		Amount:      20.99,
+		Currency:    "USD",
+		Zone:        userBillingHistoryZone{Name: "example.com"},
+	}}
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, userBillingProfile, want, "structs not equal")

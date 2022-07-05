@@ -5,11 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"net/url"
-	"strconv"
 	"time"
 
-	"github.com/pkg/errors"
+	"errors"
 )
 
 // SizeOptions can be passed to a list request to configure size and cursor location.
@@ -17,12 +15,12 @@ import (
 //
 // This should be swapped to ResultInfoCursors once the types are corrected.
 type SizeOptions struct {
-	Size   int `json:"size,omitempty"`
-	Before int `json:"before,omitempty"`
-	After  int `json:"after,omitempty"`
+	Size   int  `json:"size,omitempty" url:"size,omitempty"`
+	Before *int `json:"before,omitempty" url:"before,omitempty"`
+	After  *int `json:"after,omitempty" url:"after,omitempty"`
 }
 
-// PagesDeploymentStageLogEntry represents the logs for a Pages deployment stage.
+// PagesDeploymentStageLogs represents the logs for a Pages deployment stage.
 type PagesDeploymentStageLogs struct {
 	Name      string                         `json:"name"`
 	StartedOn *time.Time                     `json:"started_on"`
@@ -41,6 +39,19 @@ type PagesDeploymentStageLogEntry struct {
 	Message   string     `json:"message"`
 }
 
+// PagesDeploymentLogs represents the logs for a Pages deployment.
+type PagesDeploymentLogs struct {
+	Total                 int                       `json:"total"`
+	IncludesContainerLogs bool                      `json:"includes_container_logs"`
+	Data                  []PagesDeploymentLogEntry `json:"data"`
+}
+
+// PagesDeploymentLogEntry represents a single log entry in a Pages deployment.
+type PagesDeploymentLogEntry struct {
+	Timestamp *time.Time `json:"ts"`
+	Line      string     `json:"line"`
+}
+
 type pagesDeploymentListResponse struct {
 	Response
 	Result     []PagesProjectDeployment `json:"result"`
@@ -55,6 +66,12 @@ type pagesDeploymentResponse struct {
 type pagesDeploymentStageLogsResponse struct {
 	Response
 	Result     PagesDeploymentStageLogs `json:"result"`
+	ResultInfo `json:"result_info"`
+}
+
+type pagesDeploymentLogsResponse struct {
+	Response
+	Result     PagesDeploymentLogs `json:"result"`
 	ResultInfo `json:"result_info"`
 }
 
@@ -76,6 +93,14 @@ type GetPagesDeploymentStageLogsParams struct {
 	ProjectName  string
 	DeploymentID string
 	StageName    string
+
+	SizeOptions
+}
+
+type GetPagesDeploymentLogsParams struct {
+	AccountID    string
+	ProjectName  string
+	DeploymentID string
 
 	SizeOptions
 }
@@ -103,22 +128,25 @@ type RollbackPagesDeploymentParams struct {
 	DeploymentID string
 }
 
+var (
+	ErrMissingProjectName  = errors.New("required missing project name")
+	ErrMissingDeploymentID = errors.New("required missing deployment ID")
+	ErrMissingStageName    = errors.New("required missing stage name")
+)
+
 // ListPagesDeployments returns all deployments for a Pages project.
 //
 // API reference: https://api.cloudflare.com/#pages-deployment-get-deployments
 func (api *API) ListPagesDeployments(ctx context.Context, params ListPagesDeploymentsParams) ([]PagesProjectDeployment, ResultInfo, error) {
-	v := url.Values{}
-	if params.PerPage > 0 {
-		v.Set("per_page", strconv.Itoa(params.PerPage))
-	}
-	if params.Page > 0 {
-		v.Set("page", strconv.Itoa(params.Page))
+	if params.AccountID == "" {
+		return []PagesProjectDeployment{}, ResultInfo{}, ErrMissingAccountID
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s/deployments", params.AccountID, params.ProjectName)
-	if len(v) > 0 {
-		uri = fmt.Sprintf("%s?%s", uri, v.Encode())
+	if params.ProjectName == "" {
+		return []PagesProjectDeployment{}, ResultInfo{}, ErrMissingProjectName
 	}
+
+	uri := buildURI(fmt.Sprintf("/accounts/%s/pages/projects/%s/deployments", params.AccountID, params.ProjectName), params.PaginationOptions)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -127,7 +155,7 @@ func (api *API) ListPagesDeployments(ctx context.Context, params ListPagesDeploy
 	var r pagesDeploymentListResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return []PagesProjectDeployment{}, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
+		return []PagesProjectDeployment{}, ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, r.ResultInfo, nil
 }
@@ -136,6 +164,18 @@ func (api *API) ListPagesDeployments(ctx context.Context, params ListPagesDeploy
 //
 // API reference: https://api.cloudflare.com/#pages-deployment-get-deployment-info
 func (api *API) GetPagesDeploymentInfo(ctx context.Context, params GetPagesDeploymentInfoParams) (PagesProjectDeployment, error) {
+	if params.AccountID == "" {
+		return PagesProjectDeployment{}, ErrMissingAccountID
+	}
+
+	if params.ProjectName == "" {
+		return PagesProjectDeployment{}, ErrMissingProjectName
+	}
+
+	if params.DeploymentID == "" {
+		return PagesProjectDeployment{}, ErrMissingDeploymentID
+	}
+
 	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s/deployments/%s", params.AccountID, params.ProjectName, params.DeploymentID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
@@ -145,7 +185,7 @@ func (api *API) GetPagesDeploymentInfo(ctx context.Context, params GetPagesDeplo
 	var r pagesDeploymentResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return PagesProjectDeployment{}, errors.Wrap(err, errUnmarshalError)
+		return PagesProjectDeployment{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -153,21 +193,29 @@ func (api *API) GetPagesDeploymentInfo(ctx context.Context, params GetPagesDeplo
 // GetPagesDeploymentStageLogs returns the logs for a Pages deployment stage.
 //
 // API reference: https://api.cloudflare.com/#pages-deployment-get-deployment-stage-logs
+//
+// Deprecated: Use GetPagesDeploymentLogs instead.
 func (api *API) GetPagesDeploymentStageLogs(ctx context.Context, params GetPagesDeploymentStageLogsParams) (PagesDeploymentStageLogs, error) {
-	v := url.Values{}
-	if params.Size > 0 {
-		v.Set("size", strconv.Itoa(params.Size))
-	}
-	if params.Before > 0 {
-		v.Set("before", strconv.Itoa(params.Before))
-	} else if params.After > 0 {
-		v.Set("after", strconv.Itoa(params.After))
+	if params.AccountID == "" {
+		return PagesDeploymentStageLogs{}, ErrMissingAccountID
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s/deployments/%s/history/%s/logs", params.AccountID, params.ProjectName, params.DeploymentID, params.StageName)
-	if len(v) > 0 {
-		uri = fmt.Sprintf("%s?%s", uri, v.Encode())
+	if params.ProjectName == "" {
+		return PagesDeploymentStageLogs{}, ErrMissingProjectName
 	}
+
+	if params.DeploymentID == "" {
+		return PagesDeploymentStageLogs{}, ErrMissingDeploymentID
+	}
+
+	if params.StageName == "" {
+		return PagesDeploymentStageLogs{}, ErrMissingStageName
+	}
+
+	uri := buildURI(
+		fmt.Sprintf("/accounts/%s/pages/projects/%s/deployments/%s/history/%s/logs", params.AccountID, params.ProjectName, params.DeploymentID, params.StageName),
+		params.SizeOptions,
+	)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -176,7 +224,40 @@ func (api *API) GetPagesDeploymentStageLogs(ctx context.Context, params GetPages
 	var r pagesDeploymentStageLogsResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return PagesDeploymentStageLogs{}, errors.Wrap(err, errUnmarshalError)
+		return PagesDeploymentStageLogs{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+	return r.Result, nil
+}
+
+// GetPagesDeploymentStageLogs returns the logs for a Pages deployment stage.
+//
+// API reference: https://api.cloudflare.com/#pages-deployment-get-deployment-logs
+func (api *API) GetPagesDeploymentLogs(ctx context.Context, params GetPagesDeploymentLogsParams) (PagesDeploymentLogs, error) {
+	if params.AccountID == "" {
+		return PagesDeploymentLogs{}, ErrMissingAccountID
+	}
+
+	if params.ProjectName == "" {
+		return PagesDeploymentLogs{}, ErrMissingProjectName
+	}
+
+	if params.DeploymentID == "" {
+		return PagesDeploymentLogs{}, ErrMissingDeploymentID
+	}
+
+	uri := buildURI(
+		fmt.Sprintf("/accounts/%s/pages/projects/%s/deployments/%s/history/logs", params.AccountID, params.ProjectName, params.DeploymentID),
+		params.SizeOptions,
+	)
+
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return PagesDeploymentLogs{}, err
+	}
+	var r pagesDeploymentLogsResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return PagesDeploymentLogs{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -185,6 +266,18 @@ func (api *API) GetPagesDeploymentStageLogs(ctx context.Context, params GetPages
 //
 // API reference: https://api.cloudflare.com/#pages-deployment-delete-deployment
 func (api *API) DeletePagesDeployment(ctx context.Context, params DeletePagesDeploymentParams) error {
+	if params.AccountID == "" {
+		return ErrMissingAccountID
+	}
+
+	if params.ProjectName == "" {
+		return ErrMissingProjectName
+	}
+
+	if params.DeploymentID == "" {
+		return ErrMissingDeploymentID
+	}
+
 	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s/deployments/%s", params.AccountID, params.ProjectName, params.DeploymentID)
 
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
@@ -198,6 +291,14 @@ func (api *API) DeletePagesDeployment(ctx context.Context, params DeletePagesDep
 //
 // API reference: https://api.cloudflare.com/#pages-deployment-create-deployment
 func (api *API) CreatePagesDeployment(ctx context.Context, params CreatePagesDeploymentParams) (PagesProjectDeployment, error) {
+	if params.AccountID == "" {
+		return PagesProjectDeployment{}, ErrMissingAccountID
+	}
+
+	if params.ProjectName == "" {
+		return PagesProjectDeployment{}, ErrMissingProjectName
+	}
+
 	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s/deployments", params.AccountID, params.ProjectName)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
@@ -207,7 +308,7 @@ func (api *API) CreatePagesDeployment(ctx context.Context, params CreatePagesDep
 	var r pagesDeploymentResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return PagesProjectDeployment{}, errors.Wrap(err, errUnmarshalError)
+		return PagesProjectDeployment{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -216,6 +317,18 @@ func (api *API) CreatePagesDeployment(ctx context.Context, params CreatePagesDep
 //
 // API reference: https://api.cloudflare.com/#pages-deployment-retry-deployment
 func (api *API) RetryPagesDeployment(ctx context.Context, params RetryPagesDeploymentParams) (PagesProjectDeployment, error) {
+	if params.AccountID == "" {
+		return PagesProjectDeployment{}, ErrMissingAccountID
+	}
+
+	if params.ProjectName == "" {
+		return PagesProjectDeployment{}, ErrMissingProjectName
+	}
+
+	if params.DeploymentID == "" {
+		return PagesProjectDeployment{}, ErrMissingDeploymentID
+	}
+
 	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s/deployments/%s/retry", params.AccountID, params.ProjectName, params.DeploymentID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
@@ -225,7 +338,7 @@ func (api *API) RetryPagesDeployment(ctx context.Context, params RetryPagesDeplo
 	var r pagesDeploymentResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return PagesProjectDeployment{}, errors.Wrap(err, errUnmarshalError)
+		return PagesProjectDeployment{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -234,6 +347,18 @@ func (api *API) RetryPagesDeployment(ctx context.Context, params RetryPagesDeplo
 //
 // API reference: https://api.cloudflare.com/#pages-deployment-rollback-deployment
 func (api *API) RollbackPagesDeployment(ctx context.Context, params RollbackPagesDeploymentParams) (PagesProjectDeployment, error) {
+	if params.AccountID == "" {
+		return PagesProjectDeployment{}, ErrMissingAccountID
+	}
+
+	if params.ProjectName == "" {
+		return PagesProjectDeployment{}, ErrMissingProjectName
+	}
+
+	if params.DeploymentID == "" {
+		return PagesProjectDeployment{}, ErrMissingDeploymentID
+	}
+
 	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s/deployments/%s/rollback", params.AccountID, params.ProjectName, params.DeploymentID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
@@ -243,7 +368,7 @@ func (api *API) RollbackPagesDeployment(ctx context.Context, params RollbackPage
 	var r pagesDeploymentResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return PagesProjectDeployment{}, errors.Wrap(err, errUnmarshalError)
+		return PagesProjectDeployment{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }

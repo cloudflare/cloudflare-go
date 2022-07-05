@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 // AccessServiceToken represents an Access Service Token.
@@ -105,7 +103,7 @@ func (api *API) accessServiceTokens(ctx context.Context, id string, routeRoot Ro
 	var accessServiceTokensListResponse AccessServiceTokensListResponse
 	err = json.Unmarshal(res, &accessServiceTokensListResponse)
 	if err != nil {
-		return []AccessServiceToken{}, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
+		return []AccessServiceToken{}, ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessServiceTokensListResponse.Result, accessServiceTokensListResponse.ResultInfo, nil
@@ -140,7 +138,7 @@ func (api *API) createAccessServiceToken(ctx context.Context, id, name string, r
 	var accessServiceTokenCreation AccessServiceTokensCreationDetailResponse
 	err = json.Unmarshal(res, &accessServiceTokenCreation)
 	if err != nil {
-		return AccessServiceTokenCreateResponse{}, errors.Wrap(err, errUnmarshalError)
+		return AccessServiceTokenCreateResponse{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessServiceTokenCreation.Result, nil
@@ -177,7 +175,7 @@ func (api *API) updateAccessServiceToken(ctx context.Context, id, uuid, name str
 	var accessServiceTokenUpdate AccessServiceTokensUpdateDetailResponse
 	err = json.Unmarshal(res, &accessServiceTokenUpdate)
 	if err != nil {
-		return AccessServiceTokenUpdateResponse{}, errors.Wrap(err, errUnmarshalError)
+		return AccessServiceTokenUpdateResponse{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessServiceTokenUpdate.Result, nil
@@ -210,7 +208,7 @@ func (api *API) deleteAccessServiceToken(ctx context.Context, id, uuid string, r
 	var accessServiceTokenUpdate AccessServiceTokensUpdateDetailResponse
 	err = json.Unmarshal(res, &accessServiceTokenUpdate)
 	if err != nil {
-		return AccessServiceTokenUpdateResponse{}, errors.Wrap(err, errUnmarshalError)
+		return AccessServiceTokenUpdateResponse{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessServiceTokenUpdate.Result, nil

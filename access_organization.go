@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 // AccessOrganization represents an Access organization.
@@ -70,7 +68,7 @@ func (api *API) accessOrganization(ctx context.Context, id string, routeRoot Rou
 	var accessOrganizationListResponse AccessOrganizationListResponse
 	err = json.Unmarshal(res, &accessOrganizationListResponse)
 	if err != nil {
-		return AccessOrganization{}, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
+		return AccessOrganization{}, ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessOrganizationListResponse.Result, accessOrganizationListResponse.ResultInfo, nil
@@ -101,7 +99,7 @@ func (api *API) createAccessOrganization(ctx context.Context, id string, accessO
 	var accessOrganizationDetailResponse AccessOrganizationDetailResponse
 	err = json.Unmarshal(res, &accessOrganizationDetailResponse)
 	if err != nil {
-		return AccessOrganization{}, errors.Wrap(err, errUnmarshalError)
+		return AccessOrganization{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessOrganizationDetailResponse.Result, nil
@@ -132,7 +130,7 @@ func (api *API) updateAccessOrganization(ctx context.Context, id string, accessO
 	var accessOrganizationDetailResponse AccessOrganizationDetailResponse
 	err = json.Unmarshal(res, &accessOrganizationDetailResponse)
 	if err != nil {
-		return AccessOrganization{}, errors.Wrap(err, errUnmarshalError)
+		return AccessOrganization{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessOrganizationDetailResponse.Result, nil
