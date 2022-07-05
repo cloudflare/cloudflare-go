@@ -438,7 +438,7 @@ func (api *API) TunnelConnections(ctx context.Context, params TunnelConnectionPa
 	}
 
 	if params.ID == "" {
-		return []Connection{}, errors.New("missing tunnel ID")
+		return []Connection{}, ErrMissingTunnelID
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s/connections", params.AccountID, params.ID)
