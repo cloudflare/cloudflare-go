@@ -348,8 +348,6 @@ func TestTunnelConnections(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/connections", handler)
 
-	//createdAt, _ := time.Parse(time.RFC3339, "2009-11-10T23:00:00Z")
-	//deletedAt, _ := time.Parse(time.RFC3339, "2009-11-10T23:00:00Z")
 	runAt, _ := time.Parse(time.RFC3339, "2009-11-10T23:00:00Z")
 	want := []Connection{
 		{
