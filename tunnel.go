@@ -451,7 +451,7 @@ func (api *API) TunnelConnections(ctx context.Context, params TunnelConnectionPa
 	var argoDetailsResponse TunnelConnectionResponse
 	err = json.Unmarshal(res, &argoDetailsResponse)
 	if err != nil {
-		return []Connection{}, errors.Wrap(err, errUnmarshalError)
+		return []Connection{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return argoDetailsResponse.Result, nil
 }
