@@ -431,7 +431,7 @@ func (api *API) GetTunnelConfiguration(ctx context.Context, params GetTunnelConf
 
 // TunnelConnections gets all connections on a tunnel.
 //
-// API reference: https://api.cloudflare.com/#cloudflare-tunnel-clean-up-cloudflare-tunnel-connections
+// API reference: https://api.cloudflare.com/#cloudflare-tunnel-list-cloudflare-tunnel-connections
 func (api *API) TunnelConnections(ctx context.Context, params TunnelConnectionParams) ([]Connection, error) {
 	if params.AccountID == "" {
 		return []Connection{}, ErrMissingAccountID
