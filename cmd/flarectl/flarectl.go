@@ -356,6 +356,10 @@ func main() {
 							Name:  "proxy",
 							Usage: "proxy through Cloudflare (orange cloud)",
 						},
+						&cli.UintFlag{
+							Name:  "priority",
+							Usage: "priority for an MX record. Only used for MX",
+						},
 					},
 				},
 				{
@@ -388,6 +392,10 @@ func main() {
 						&cli.BoolFlag{
 							Name:  "proxy",
 							Usage: "proxy through Cloudflare (orange cloud)",
+						},
+						&cli.UintFlag{
+							Name:  "priority",
+							Usage: "priority for an MX record. Only used for MX",
 						},
 					},
 				},

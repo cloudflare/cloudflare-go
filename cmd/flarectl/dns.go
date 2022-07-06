@@ -76,6 +76,7 @@ func dnsCreateOrUpdate(c *cli.Context) error {
 	content := c.String("content")
 	ttl := c.Int("ttl")
 	proxy := c.Bool("proxy")
+	priority := uint16(c.Uint("priority"))
 
 	zoneID, err := api.ZoneIDByName(zone)
 	if err != nil {
@@ -105,6 +106,7 @@ func dnsCreateOrUpdate(c *cli.Context) error {
 				rr.Content = content
 				rr.TTL = ttl
 				rr.Proxied = &proxy
+				rr.Priority = &priority
 
 				err := api.UpdateDNSRecord(context.Background(), zoneID, r.ID, rr)
 				if err != nil {
@@ -122,6 +124,7 @@ func dnsCreateOrUpdate(c *cli.Context) error {
 		rr.Content = content
 		rr.TTL = ttl
 		rr.Proxied = &proxy
+		rr.Priority = &priority
 		// TODO: Print the response.
 		resp, err = api.CreateDNSRecord(context.Background(), zoneID, rr)
 		if err != nil {
@@ -151,6 +154,7 @@ func dnsUpdate(c *cli.Context) error {
 	content := c.String("content")
 	ttl := c.Int("ttl")
 	proxy := c.Bool("proxy")
+	priority := uint16(c.Uint("priority"))
 
 	zoneID, err := api.ZoneIDByName(zone)
 	if err != nil {
@@ -159,12 +163,13 @@ func dnsUpdate(c *cli.Context) error {
 	}
 
 	record := cloudflare.DNSRecord{
-		ID:      recordID,
-		Name:    name,
-		Type:    strings.ToUpper(rtype),
-		Content: content,
-		TTL:     ttl,
-		Proxied: &proxy,
+		ID:       recordID,
+		Name:     name,
+		Type:     strings.ToUpper(rtype),
+		Content:  content,
+		TTL:      ttl,
+		Proxied:  &proxy,
+		Priority: &priority,
 	}
 	err = api.UpdateDNSRecord(context.Background(), zoneID, recordID, record)
 	if err != nil {
