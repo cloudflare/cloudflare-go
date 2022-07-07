@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/cweill/gotests v1.6.0
-	github.com/go-delve/delve v1.8.3
+	github.com/go-delve/delve v1.9.0
 	github.com/golangci/golangci-lint v1.46.2
 	github.com/google/go-querystring v1.1.0
 	github.com/hashicorp/go-retryablehttp v0.7.1
@@ -59,7 +59,7 @@ require (
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
 	github.com/fzipp/gocyclo v0.5.1 // indirect
 	github.com/go-critic/go-critic v0.6.3 // indirect
-	github.com/go-delve/liner v1.2.2-1 // indirect
+	github.com/go-delve/liner v1.2.3-0.20220127212407-d32d89dd2a5d // indirect
 	github.com/go-toolsmith/astcast v1.0.0 // indirect
 	github.com/go-toolsmith/astcopy v1.0.0 // indirect
 	github.com/go-toolsmith/astequal v1.0.1 // indirect
