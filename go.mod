@@ -4,7 +4,6 @@ go 1.17
 
 require (
 	github.com/cweill/gotests v1.6.0
-	github.com/davecgh/go-spew v1.1.1
 	github.com/go-delve/delve v1.8.3
 	github.com/golangci/golangci-lint v1.46.2
 	github.com/google/go-querystring v1.1.0
@@ -19,7 +18,7 @@ require (
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616
 	golang.org/x/net v0.0.0-20220412020605-290c469a71a5
 	golang.org/x/time v0.0.0-20220224211638-0e9765cccd65
-	golang.org/x/tools/gopls v0.8.4
+	golang.org/x/tools/gopls v0.9.0
 )
 
 require (
@@ -49,6 +48,7 @@ require (
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/daixiang0/gci v0.3.3 // indirect
 	github.com/dave/dst v0.26.2 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/denis-tingaikin/go-header v0.4.3 // indirect
 	github.com/derekparker/trie v0.0.0-20200317170641-1fdf38b7b0e9 // indirect
 	github.com/esimonov/ifshort v1.0.4 // indirect
@@ -181,13 +181,13 @@ require (
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 	golang.org/x/sys v0.0.0-20220704084225-05e143d24a9e // indirect
 	golang.org/x/text v0.3.7 // indirect
-	golang.org/x/tools v0.1.11-0.20220513164230-dfee1649af67 // indirect
-	golang.org/x/vuln v0.0.0-20220503210553-a5481fb0c8be // indirect
+	golang.org/x/tools v0.1.12-0.20220630195555-6178576f8ba1 // indirect
+	golang.org/x/vuln v0.0.0-20220613164644-4eb5ba49563c // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/ini.v1 v1.66.4 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	honnef.co/go/tools v0.3.1 // indirect
+	honnef.co/go/tools v0.3.2 // indirect
 	mvdan.cc/gofumpt v0.3.1 // indirect
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed // indirect
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
