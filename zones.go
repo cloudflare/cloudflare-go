@@ -74,10 +74,13 @@ func (s *ZonesService) Get(ctx context.Context, zoneID ZoneIdentifier) (Zone, er
 		return Zone{}, err
 	}
 
-	res, _ := s.client.Call(ctx, http.MethodGet, "/zones/"+zoneID.String(), nil)
+	res, err := s.client.Call(ctx, http.MethodGet, "/zones/"+zoneID.String(), nil)
+	if err != nil {
+		return Zone{}, fmt.Errorf("failed to fetch zones: %w", err)
+	}
 
 	var r ZoneResponse
-	err := json.Unmarshal(res, &r)
+	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return Zone{}, fmt.Errorf("failed to unmarshal zone JSON data: %w", err)
 	}

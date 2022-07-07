@@ -4,9 +4,11 @@ go 1.17
 
 require (
 	github.com/cweill/gotests v1.6.0
+	github.com/davecgh/go-spew v1.1.1
 	github.com/go-delve/delve v1.8.3
 	github.com/golangci/golangci-lint v1.46.2
 	github.com/google/go-querystring v1.1.0
+	github.com/hashicorp/go-retryablehttp v0.7.1
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/orijtech/structslop v0.0.6
 	github.com/pkg/errors v0.9.1
@@ -47,7 +49,6 @@ require (
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/daixiang0/gci v0.3.3 // indirect
 	github.com/dave/dst v0.26.2 // indirect
-	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/denis-tingaikin/go-header v0.4.3 // indirect
 	github.com/derekparker/trie v0.0.0-20200317170641-1fdf38b7b0e9 // indirect
 	github.com/esimonov/ifshort v1.0.4 // indirect
@@ -87,6 +88,7 @@ require (
 	github.com/gostaticanalysis/forcetypeassert v0.1.0 // indirect
 	github.com/gostaticanalysis/nilerr v0.1.1 // indirect
 	github.com/hashicorp/errwrap v1.0.0 // indirect
+	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/hashicorp/go-version v1.4.0 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
@@ -177,7 +179,7 @@ require (
 	golang.org/x/exp/typeparams v0.0.0-20220218215828-6cf2b201936e // indirect
 	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
-	golang.org/x/sys v0.0.0-20220422013727-9388b58f7150 // indirect
+	golang.org/x/sys v0.0.0-20220704084225-05e143d24a9e // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/tools v0.1.11-0.20220513164230-dfee1649af67 // indirect
 	golang.org/x/vuln v0.0.0-20220503210553-a5481fb0c8be // indirect
