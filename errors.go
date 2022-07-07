@@ -26,9 +26,13 @@ const (
 	errResultInfo                             = "incorrect pagination info (result_info) in responses"
 	errManualPagination                       = "unexpected pagination options passed to functions that handle pagination automatically"
 	errInvalidZoneIdentifer                   = "invalid zone identifier: %s"
+	errAPIKeysAndTokensAreMutuallyExclusive   = "API keys and tokens are mutually exclusive"
+	errMissingCredentials                     = "no credentials provided"
 )
 
 var (
+	ErrAPIKeysAndTokensAreMutuallyExclusive   = errors.New(errAPIKeysAndTokensAreMutuallyExclusive)
+	ErrMissingCredentials                     = errors.New(errMissingCredentials)
 	ErrMissingAccountID                       = errors.New(errMissingAccountID)
 	ErrMissingZoneID                          = errors.New(errMissingZoneID)
 	ErrAccountIDOrZoneIDAreRequired           = errors.New(errMissingAccountOrZoneID)

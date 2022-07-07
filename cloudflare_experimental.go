@@ -7,17 +7,13 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
-	"math"
 	"net/http"
 	"net/url"
 	"strings"
 	"sync"
 	"time"
 
-	"errors"
-
-	"golang.org/x/time/rate"
+	"github.com/hashicorp/go-retryablehttp"
 )
 
 type service struct {
@@ -33,9 +29,8 @@ type ClientParams struct {
 	UserAgent      string
 	Headers        http.Header
 	HTTPClient     *http.Client
-	RateLimiter    *rate.Limiter
 	RetryPolicy    RetryPolicy
-	Logger         Logger
+	Logger         LeveledLoggerInterface
 	Debug          bool
 }
 
@@ -64,7 +59,8 @@ func (c *Client) Call(ctx context.Context, method, path string, payload interfac
 }
 
 // CallWithHeaders is the entrypoint to making API calls with the correct
-// request setup and allows passing in additional HTTP headers with the request.
+// request setup (like `Call`) but allows passing in additional HTTP headers
+// with the request.
 func (c *Client) CallWithHeaders(ctx context.Context, method, path string, payload interface{}, headers http.Header) ([]byte, error) {
 	return c.makeRequest(ctx, method, path, payload, headers)
 }
@@ -91,21 +87,30 @@ func NewExperimental(config *ClientParams) (*Client, error) {
 	if config.HTTPClient != nil {
 		c.ClientParams.HTTPClient = config.HTTPClient
 	} else {
-		c.ClientParams.HTTPClient = http.DefaultClient
-	}
+		retryClient := retryablehttp.NewClient()
 
-	if config.RateLimiter != nil {
-		c.ClientParams.RateLimiter = config.RateLimiter
-	} else {
-		c.ClientParams.RateLimiter = rate.NewLimiter(rate.Limit(4), 1) // 4rps equates to default api limit (1200 req/5 min)
-	}
+		if c.RetryPolicy.MaxRetries > 0 {
+			retryClient.RetryMax = c.RetryPolicy.MaxRetries
+		} else {
+			retryClient.RetryMax = 4
+		}
 
-	retryPolicy := RetryPolicy{
-		MaxRetries:    3,
-		MinRetryDelay: time.Duration(1) * time.Second,
-		MaxRetryDelay: time.Duration(30) * time.Second,
+		if c.RetryPolicy.MinRetryDelay > 0 {
+			retryClient.RetryWaitMin = c.RetryPolicy.MinRetryDelay
+		} else {
+			retryClient.RetryWaitMin = time.Duration(1) * time.Second
+		}
+
+		if c.RetryPolicy.MaxRetryDelay > 0 {
+			retryClient.RetryWaitMax = c.RetryPolicy.MaxRetryDelay
+		} else {
+			retryClient.RetryWaitMax = time.Duration(30) * time.Second
+		}
+
+		retryClient.Logger = silentRetryLogger
+		retryClient.CheckRetry = retryPolicy
+		c.ClientParams.HTTPClient = retryClient.StandardClient()
 	}
-	c.ClientParams.RetryPolicy = retryPolicy
 
 	if config.Headers != nil {
 		c.ClientParams.Headers = config.Headers
@@ -113,14 +118,8 @@ func NewExperimental(config *ClientParams) (*Client, error) {
 		c.ClientParams.Headers = make(http.Header)
 	}
 
-	if config.Logger != nil {
-		c.ClientParams.Logger = config.Logger
-	} else {
-		c.ClientParams.Logger = log.New(ioutil.Discard, "", log.LstdFlags)
-	}
-
 	if config.Key != "" && config.Token != "" {
-		return nil, errors.New("API key and tokens are mutually exclusive")
+		return nil, ErrAPIKeysAndTokensAreMutuallyExclusive
 	}
 
 	if config.Key != "" {
@@ -137,6 +136,11 @@ func NewExperimental(config *ClientParams) (*Client, error) {
 	}
 
 	c.ClientParams.Debug = config.Debug
+	if c.ClientParams.Debug {
+		c.ClientParams.Logger = &LeveledLogger{Level: 4}
+	} else {
+		c.ClientParams.Logger = SilentLeveledLogger
+	}
 
 	c.Zones = (*ZonesService)(&c.common)
 
@@ -158,7 +162,7 @@ func (c *Client) request(ctx context.Context, method, uri string, reqBody io.Rea
 	req.Header = combinedHeaders
 
 	if c.Key == "" && c.Email == "" && c.Token == "" && c.UserServiceKey == "" {
-		return nil, errors.New("no user credentials provided")
+		return nil, ErrMissingCredentials
 	}
 
 	if c.Key != "" {
@@ -212,77 +216,30 @@ func (c *Client) makeRequest(ctx context.Context, method, uri string, params int
 	var resp *http.Response
 	var respErr error
 	var respBody []byte
-	for i := 0; i <= c.RetryPolicy.MaxRetries; i++ {
-		if i > 0 {
-			// expect the backoff introduced here on errored requests to dominate the effect of rate limiting
-			// don't need a random component here as the rate limiter should do something similar
-			// nb time duration could truncate an arbitrary float. Since our inputs are all ints, we should be ok
-			sleepDuration := time.Duration(math.Pow(2, float64(i-1)) * float64(c.RetryPolicy.MinRetryDelay))
 
-			if sleepDuration > c.RetryPolicy.MaxRetryDelay {
-				sleepDuration = c.RetryPolicy.MaxRetryDelay
-			}
-			// useful to do some simple logging here, maybe introduce levels later
-			c.Logger.Printf("sleeping %s before retry attempt number %d for request %s %s", sleepDuration.String(), i, method, uri)
-
-			select {
-			case <-time.After(sleepDuration):
-			case <-ctx.Done():
-				return nil, fmt.Errorf("operation aborted during backoff: %w", ctx.Err())
-			}
-		}
-
-		err = c.RateLimiter.Wait(ctx)
-		if err != nil {
-			return nil, fmt.Errorf("error caused by request rate limiting: %w", err)
-		}
-
-		if c.Debug {
-			if method == http.MethodPost || method == http.MethodPut || method == http.MethodPatch {
-				buf := &bytes.Buffer{}
-				tee := io.TeeReader(reqBody, buf)
-				debugBody, _ := ioutil.ReadAll(tee)
-				payloadBody, _ := ioutil.ReadAll(buf)
-				fmt.Printf("cloudflare-go [DEBUG] REQUEST Method:%v URI:%s Headers:%#v Body:%v\n", method, c.BaseURL.String()+uri, headers, string(debugBody))
-				// ensure we recreate the io.Reader for use
-				reqBody = bytes.NewReader(payloadBody)
-			} else {
-				fmt.Printf("cloudflare-go [DEBUG] REQUEST Method:%v URI:%s Headers:%#v Body:%v\n", method, c.BaseURL.String()+uri, headers, nil)
-			}
-		}
-
-		resp, respErr = c.request(ctx, method, uri, reqBody, headers)
-
-		// retry if the server is rate limiting us or if it failed
-		// assumes server operations are rolled back on failure
-		if respErr != nil || resp.StatusCode == http.StatusTooManyRequests || resp.StatusCode >= 500 {
-			// if we got a valid http response, try to read body so we can reuse the connection
-			// see https://golang.org/pkg/net/http/#Client.Do
-			if respErr == nil {
-				respBody, err = ioutil.ReadAll(resp.Body)
-				resp.Body.Close()
-
-				respErr = fmt.Errorf("could not read response body: %w", err)
-			} else {
-				c.Logger.Printf("Error performing request: %s %s : %s \n", method, uri, respErr.Error())
-			}
-			continue
-		} else {
-			respBody, err = ioutil.ReadAll(resp.Body)
-			defer resp.Body.Close()
-			if err != nil {
-				return nil, fmt.Errorf("could not read response body: %w", err)
-			}
-			break
-		}
+	if method == http.MethodPost || method == http.MethodPut || method == http.MethodPatch {
+		buf := &bytes.Buffer{}
+		tee := io.TeeReader(reqBody, buf)
+		debugBody, _ := ioutil.ReadAll(tee)
+		payloadBody, _ := ioutil.ReadAll(buf)
+		c.Logger.Debugf("REQUEST Method:%v URI:%s Headers:%#v Body:%v\n", method, c.BaseURL.String()+uri, headers, string(debugBody))
+		// ensure we recreate the io.Reader for use
+		reqBody = bytes.NewReader(payloadBody)
+	} else {
+		c.Logger.Debugf("REQUEST Method:%v URI:%s Headers:%#v Body:%v\n", method, c.BaseURL.String()+uri, headers, nil) //)
 	}
 
-	if c.Debug {
-		fmt.Printf("cloudflare-go [DEBUG] RESPONSE URI:%s StatusCode:%d Body:%#v RayID:%s\n", c.BaseURL.String()+uri, resp.StatusCode, string(respBody), resp.Header.Get("cf-ray"))
-	}
-
+	resp, respErr = c.request(ctx, method, uri, reqBody, headers)
 	if respErr != nil {
 		return nil, respErr
+	}
+
+	c.Logger.Debugf("RESPONSE URI:%s StatusCode:%d Body:%#v RayID:%s\n", c.BaseURL.String()+uri, resp.StatusCode, string(respBody), resp.Header.Get("cf-ray"))
+
+	respBody, err = ioutil.ReadAll(resp.Body)
+	resp.Body.Close()
+	if err != nil {
+		return nil, fmt.Errorf("could not read response body: %w", err)
 	}
 
 	if resp.StatusCode >= http.StatusBadRequest {
@@ -341,4 +298,29 @@ func (c *Client) makeRequest(ctx context.Context, method, uri string, params int
 	}
 
 	return respBody, nil
+}
+
+// retryPolicy defines a safe and known retry policy for API requests.
+func retryPolicy(ctx context.Context, resp *http.Response, err error) (bool, error) {
+	// Do not retry on context.Canceled or context.DeadlineExceeded
+	if ctx.Err() != nil {
+		return false, ctx.Err()
+	}
+
+	// 429 Too Many Requests is recoverable. Sometimes the server puts
+	// a Retry-After response header to indicate when the server is
+	// available to start processing request from client.
+	if resp.StatusCode == http.StatusTooManyRequests {
+		return true, nil
+	}
+
+	// Check the response code. We retry on 500-range responses to allow
+	// the server time to recover, as 500's are typically not permanent
+	// errors and may relate to outages on the server side. This will catch
+	// invalid response codes as well, like 0 and 999.
+	if resp.StatusCode == 0 || (resp.StatusCode >= 500 && resp.StatusCode != 501) {
+		return true, nil
+	}
+
+	return false, nil
 }
