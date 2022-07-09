@@ -8,7 +8,9 @@ import (
 )
 
 var (
-	ErrMissingIP  = errors.New("ip is required when using 'ipv4' or 'ipv6' indicator type and is missing")
+	// ErrMissingIP is for when ipv4 or ipv6 indicator was given but ip is missing.
+	ErrMissingIP = errors.New("ip is required when using 'ipv4' or 'ipv6' indicator type and is missing")
+	// ErrMissingURL is for when url or domain indicator was given but url is missing.
 	ErrMissingURL = errors.New("url is required when using 'domain' or 'url' indicator type and is missing")
 )
 
@@ -24,6 +26,9 @@ type MisCategorizationParameters struct {
 	SecurityRemoves []int  `json:"security_removes,omitempty"`
 }
 
+// CreateMiscategorization creates a miscatergorization.
+//
+// API Reference: https://api.cloudflare.com/#miscategorization-create-miscategorization
 func (api *API) CreateMiscategorization(ctx context.Context, params MisCategorizationParameters) error {
 	if params.AccountID == "" {
 		return ErrMissingAccountID
