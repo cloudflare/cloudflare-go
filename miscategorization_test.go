@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestAPI_CreateMiscategorization(t *testing.T) {
+func TestCreateMiscategorization(t *testing.T) {
 	setup()
 	defer teardown()
 
