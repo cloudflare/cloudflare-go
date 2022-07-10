@@ -26,7 +26,7 @@ func createTestWeb3Hostname() Web3Hostname {
 	}
 }
 
-func TestAPI_ListWeb3Hostnames(t *testing.T) {
+func TestListWeb3Hostnames(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -65,7 +65,7 @@ func TestAPI_ListWeb3Hostnames(t *testing.T) {
 	}
 }
 
-func TestAPI_CreateWeb3Hostname(t *testing.T) {
+func TestCreateWeb3Hostname(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -113,7 +113,7 @@ func TestAPI_CreateWeb3Hostname(t *testing.T) {
 	}
 }
 
-func TestAPI_GetWeb3Hostname(t *testing.T) {
+func TestGetWeb3Hostname(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -153,7 +153,7 @@ func TestAPI_GetWeb3Hostname(t *testing.T) {
 	}
 }
 
-func TestAPI_EditWeb3Hostname(t *testing.T) {
+func TestUpdateWeb3Hostname(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -193,7 +193,7 @@ func TestAPI_EditWeb3Hostname(t *testing.T) {
 	}
 }
 
-func TestAPI_DeleteWeb3Hostname(t *testing.T) {
+func TestDeleteWeb3Hostname(t *testing.T) {
 	setup()
 	defer teardown()
 
