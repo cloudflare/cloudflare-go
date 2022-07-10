@@ -25,6 +25,7 @@ type ClientParams struct {
 	Email          string
 	UserServiceKey string
 	Token          string
+	STS            *SecurityTokenConfiguration
 	BaseURL        *url.URL
 	UserAgent      string
 	Headers        http.Header
@@ -108,7 +109,6 @@ func NewExperimental(config *ClientParams) (*Client, error) {
 		}
 
 		retryClient.Logger = silentRetryLogger
-		retryClient.CheckRetry = retryPolicy
 		c.ClientParams.HTTPClient = retryClient.StandardClient()
 	}
 
@@ -140,6 +140,14 @@ func NewExperimental(config *ClientParams) (*Client, error) {
 		c.ClientParams.Logger = &LeveledLogger{Level: 4}
 	} else {
 		c.ClientParams.Logger = SilentLeveledLogger
+	}
+
+	if config.STS != nil {
+		stsToken, err := fetchSTSCredentials(config.STS)
+		if err != nil {
+			return nil, ErrSTSFailure
+		}
+		c.ClientParams.Token = stsToken
 	}
 
 	c.Zones = (*ZonesService)(&c.common)
@@ -298,29 +306,4 @@ func (c *Client) makeRequest(ctx context.Context, method, uri string, params int
 	}
 
 	return respBody, nil
-}
-
-// retryPolicy defines a safe and known retry policy for API requests.
-func retryPolicy(ctx context.Context, resp *http.Response, err error) (bool, error) {
-	// Do not retry on context.Canceled or context.DeadlineExceeded
-	if ctx.Err() != nil {
-		return false, ctx.Err()
-	}
-
-	// 429 Too Many Requests is recoverable. Sometimes the server puts
-	// a Retry-After response header to indicate when the server is
-	// available to start processing request from client.
-	if resp.StatusCode == http.StatusTooManyRequests {
-		return true, nil
-	}
-
-	// Check the response code. We retry on 500-range responses to allow
-	// the server time to recover, as 500's are typically not permanent
-	// errors and may relate to outages on the server side. This will catch
-	// invalid response codes as well, like 0 and 999.
-	if resp.StatusCode == 0 || (resp.StatusCode >= 500 && resp.StatusCode != 501) {
-		return true, nil
-	}
-
-	return false, nil
 }
