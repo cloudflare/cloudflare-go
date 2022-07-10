@@ -176,16 +176,16 @@ func TestUpdateWeb3Hostname(t *testing.T) {
 	  }
 	}`)
 	})
-	_, err := client.EditWeb3Hostname(context.Background(), Web3HostnameEditParameters{})
+	_, err := client.UpdateWeb3Hostname(context.Background(), Web3HostnameUpdateParameters{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingZoneID, err)
 	}
-	_, err = client.EditWeb3Hostname(context.Background(), Web3HostnameEditParameters{ZoneID: testZoneID})
+	_, err = client.UpdateWeb3Hostname(context.Background(), Web3HostnameUpdateParameters{ZoneID: testZoneID})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingIdentifier, err)
 	}
 
-	out, err := client.EditWeb3Hostname(context.Background(), Web3HostnameEditParameters{ZoneID: testZoneID, Identifier: testWeb3HostnameID})
+	out, err := client.UpdateWeb3Hostname(context.Background(), Web3HostnameUpdateParameters{ZoneID: testZoneID, Identifier: testWeb3HostnameID})
 	assert.NoError(t, err, "Got error getting web3 hostname")
 	want := createTestWeb3Hostname()
 	if assert.NoError(t, err) {

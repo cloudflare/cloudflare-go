@@ -62,8 +62,8 @@ type Web3HostnameDetailsParameters struct {
 	Identifier string
 }
 
-// Web3HostnameEditParameters represents the parameters for editing a web3 hostname.
-type Web3HostnameEditParameters struct {
+// Web3HostnameUpdateParameters represents the parameters for editing a web3 hostname.
+type Web3HostnameUpdateParameters struct {
 	ZoneID      string
 	Identifier  string
 	Description string `json:"description,omitempty"`
@@ -150,10 +150,10 @@ func (api *API) GetWeb3Hostname(ctx context.Context, params Web3HostnameDetailsP
 	return web3Response.Result, nil
 }
 
-// EditWeb3Hostname edits a web3 hostname.
+// UpdateWeb3Hostname edits a web3 hostname.
 //
 // API Reference: https://api.cloudflare.com/#web3-hostname-edit-web3-hostname
-func (api *API) EditWeb3Hostname(ctx context.Context, params Web3HostnameEditParameters) (Web3Hostname, error) {
+func (api *API) UpdateWeb3Hostname(ctx context.Context, params Web3HostnameUpdateParameters) (Web3Hostname, error) {
 	if params.ZoneID == "" {
 		return Web3Hostname{}, ErrMissingZoneID
 	}
