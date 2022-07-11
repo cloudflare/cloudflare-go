@@ -9,33 +9,40 @@ const (
 	UserRouteLevel    RouteLevel = "user"
 )
 
-// Resource defines an API resource you wish to target. Should not be used
-// directly, use `UserIdentifer`, `ZoneIdentifier` and `AccountIdentifier`
+// ResourceContainer defines an API resource you wish to target. Should not be
+// used directly, use `UserIdentifier`, `ZoneIdentifier` and `AccountIdentifier`
 // instead.
-type Resource struct {
+type ResourceContainer struct {
 	Level      RouteLevel
 	Identifier string
 }
 
-// UserIdentifer returns a user level *Resource.
-func UserIdentifer(id string) *Resource {
-	return &Resource{
+// ResourceIdentifier returns a generic *ResourceContainer.
+func ResourceIdentifier(id string) *ResourceContainer {
+	return &ResourceContainer{
+		Identifier: id,
+	}
+}
+
+// UserIdentifier returns a user level *ResourceContainer.
+func UserIdentifier(id string) *ResourceContainer {
+	return &ResourceContainer{
 		Level:      UserRouteLevel,
 		Identifier: id,
 	}
 }
 
-// ZoneIdentifer returns a zone level *Resource.
-func ZoneIdentifer(id string) *Resource {
-	return &Resource{
+// ZoneIdentifier returns a zone level *ResourceContainer.
+func ZoneIdentifier(id string) *ResourceContainer {
+	return &ResourceContainer{
 		Level:      ZoneRouteLevel,
 		Identifier: id,
 	}
 }
 
-// AccountIdentifer returns an account level *Resource.
-func AccountIdentifer(id string) *Resource {
-	return &Resource{
+// AccountIdentifier returns an account level *ResourceContainer.
+func AccountIdentifier(id string) *ResourceContainer {
+	return &ResourceContainer{
 		Level:      AccountRouteLevel,
 		Identifier: id,
 	}

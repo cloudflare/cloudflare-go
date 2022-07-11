@@ -5,19 +5,6 @@ and consistent experience.
 
 ## Improvements
 
-### Consistent CRUD method signatures
-
-Majority of entities follow a standard method signature (where `$entity` is the
-resource such as `Zone`, `DNSRecord`, ...).
-
-| Signature                                             | Purpose                                                                                                                              | Return value                                                                                                                   |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
-| `Get(ctx, *Resource) ($entity, error)`                | Fetches a single entity by a `Resource`. Should use `ZoneIdentifier` and `AccountIdentifier` respectively (not \*Resource directly). | Returns the entity and `error` based on the listing parameters.                                                                |
-| `List(ctx, ...params) ([]$entity, ResultInfo, error)` | Fetches all entities.                                                                                                                | Returns the list of matching entities, the result information (pagination, fail/success and additional metadata), and `error`. |
-| `New(ctx, ...params) ($entity, error)`                | Creates a new entity with the provided parameters.                                                                                   | Returns the newly created entity and `error`.                                                                                  |
-| `Update(ctx, ...params) ($entity, error)`             | Updates an existing entity.                                                                                                          | Returns the updated entity and `error`.                                                                                        |
-| `Delete(ctx, *Resource) (error)`                      | Deletes a single entity by a `Resource`. Should use `ZoneIdentifier` and `AccountIdentifier` respectively (not \*Resource directly). | Returns `error`.                                                                                                               |
-
 ### Why no iterator for `List` operations?
 
 Initially, there was proposal to either: 1) automatically paginate all results
@@ -48,12 +35,35 @@ client.Access.ServiceTokens(...)
 This avoids polluting the global namespace and having more specific methods
 for services.
 
-## Examples
+### Consistent CRUD method signatures
 
-A zone is used below for the examples however, all entites will implement the
+Majority of methods on an entity will follow a standard method signature.
+
+| Signature                                                                 | Purpose                                            | Return value                                                                                                                   |
+| ------------------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `Get(ctx, *ResourceContainer, $entityID) ($entity, error)`                | Fetches a single entity by a `$entityID`.          | Returns the entity and `error` based on the listing parameters.                                                                |
+| `List(ctx, *ResourceContainer, ...params) ([]$entity, ResultInfo, error)` | Fetches all entities.                              | Returns the list of matching entities, the result information (pagination, fail/success and additional metadata), and `error`. |
+| `New(ctx, *ResourceContainer, ...params) ($entity, error)`                | Creates a new entity with the provided parameters. | Returns the newly created entity and `error`.                                                                                  |
+| `Update(ctx, *ResourceContainer, ...params) ($entity, error)`             | Updates an existing entity.                        | Returns the updated entity and `error`.                                                                                        |
+| `Delete(ctx, *ResourceContainer, $entityID) (error)`                      | Deletes a single entity by a `$entityID`.          | Returns `error`.                                                                                                               |
+
+- `*ResourceContainer` determines the "level" of the resource and where it will
+  operate at. Operated using `UserIdentifier`, `ZoneIdentifier`, and
+  `AccountIdentifier` respectively
+- `$entityID` is the resource identifier
+- `...params` is a complex structure that allows filtering/finding resources
+  matching the struct fields
+- `$entity` the resource being operated on
+
+Exceptions to this convention will be:
+
+- Methods outside of CRUD operations
+- Top level level concepts such as `Accounts` and `Zones`
+
+#### Examples
+
+`DNSRecord` is used below for the examples however, all entites will implement the
 same methods and interfaces.
-
-### Initialising a new client with options like your own `http.Client`
 
 ```go
 params := cloudflare.ClientParams{
@@ -65,76 +75,46 @@ params := cloudflare.ClientParams{
 c, err := cloudflare.NewExperimental(params)
 ```
 
-### Create a new zone
+**Create a new DNS record**
 
 ```go
-params := cloudflare.ClientParams{
-  Key: "3bc3be114fb6323adc5b0ad7422d193a",
-  Email: "someone@example.com",
+dParams := &cloudflare.DNSRecordParams{
+  Name: "@",
+  Content: "foo.example.com",
+  TTL: 300,
 }
-c, err := cloudflare.NewExperimental(params)
+r, _ := c.DNSRecord.New(context.TODO(), cloudflare.ZoneIdentifier("b026324c6904b2a9cb4b88d6d61c81d1"), dParams)
+```
 
-zParams := &cloudflare.ZoneParams{
-  Name: "example.com",
+**Fetching a known DNS record by ID**
+
+```go
+r, _ := c.DNSRecord.Get(context.TODO(), cloudflare.ZoneIdentifier("b026324c6904b2a9cb4b88d6d61c81d1"), "3e7705498e8be60520841409ebc69bc1")
+```
+
+**Listing all records matching a single account ID (filter option)**
+
+```go
+dParams := &cloudflare.DNSRecordListParams{
   AccountID: "d8e8fca2dc0f896fd7cb4cb0031ba249"
 }
-z, _ := c.Zones.New(ctx, zParams)
+r, _, _ := c.DNSRecord.List(context.TODO(), dParams)
 ```
 
-### Fetching a known zone ID
+**Update an existing DNS record**
 
 ```go
-params := cloudflare.ClientParams{
-  Key: "3bc3be114fb6323adc5b0ad7422d193a",
-  Email: "someone@example.com",
+dParams := &cloudflare.DNSRecordParams{
+  ID: "b5163cf270a3fbac34827c4a2713eef4",
+  Name: "@",
+  Content: "bar.example.com",
+  TTL: 300,
 }
-c, err := cloudflare.NewExperimental(params)
-
-z, _ := c.Zones.Get(ctx, cloudflare.ZoneIdentifier("3e7705498e8be60520841409ebc69bc1"))
+r, _ := c.DNSRecord.Update(context.TODO(), cloudflare.ZoneIdentifier("b026324c6904b2a9cb4b88d6d61c81d1"), dParams)
 ```
 
-### Fetching all zones matching a single account ID
+**Delete a DNS Record**
 
 ```go
-params := cloudflare.ClientParams{
-  Key: "3bc3be114fb6323adc5b0ad7422d193a",
-  Email: "someone@example.com",
-}
-c, err := cloudflare.NewExperimental(params)
-
-zParams := &cloudflare.ZoneParams{
-  AccountID: "d8e8fca2dc0f896fd7cb4cb0031ba249"
-}
-z, _, _ := c.Zones.List(ctx, zParams)
-```
-
-### Update a zone
-
-```go
-params := cloudflare.ClientParams{
-  Key: "3bc3be114fb6323adc5b0ad7422d193a",
-  Email: "someone@example.com",
-}
-c, err := cloudflare.NewExperimental(params)
-
-zParams := &cloudflare.ZoneParams{
-  ID: "3e7705498e8be60520841409ebc69bc1",
-  Nameservers: cloudflare.StringSlice([]string{
-    "ns1.example.com",
-    "ns2.example.com"
-  })
-}
-z, _ := c.Zones.Update(ctx, zParams)
-```
-
-### Delete a zone
-
-```go
-params := cloudflare.ClientParams{
-  Key: "3bc3be114fb6323adc5b0ad7422d193a",
-  Email: "someone@example.com",
-}
-c, err := cloudflare.NewExperimental(params)
-
-z, _ := c.Zones.Delete(ctx, cloudflare.ZoneIdentifier("b5163cf270a3fbac34827c4a2713eef4"))
+r, _ := c.DNSRecord.Delete(context.TODO(), cloudflare.ZoneIdentifier("b026324c6904b2a9cb4b88d6d61c81d1"), "b5163cf270a3fbac34827c4a2713eef4")
 ```

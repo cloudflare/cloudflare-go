@@ -54,9 +54,7 @@ func TestListLists(t *testing.T) {
 		},
 	}
 
-	actual, err := client.ListLists(context.Background(), ListListsParams{
-		AccountID: testAccountID,
-	})
+	actual, err := client.ListLists(context.Background(), AccountIdentifier(testAccountID), ListListsParams{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -102,8 +100,8 @@ func TestCreateList(t *testing.T) {
 		ModifiedOn:            &modifiedOn,
 	}
 
-	actual, err := client.CreateList(context.Background(), ListCreateParams{
-		AccountID: testAccountID, Name: "list1", Description: "This is a note.", Kind: "ip",
+	actual, err := client.CreateList(context.Background(), AccountIdentifier(testAccountID), ListCreateParams{
+		Name: "list1", Description: "This is a note.", Kind: "ip",
 	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -150,9 +148,7 @@ func TestGetList(t *testing.T) {
 		ModifiedOn:            &modifiedOn,
 	}
 
-	actual, err := client.GetList(context.Background(), ListGetParams{
-		AccountID: testAccountID, ID: "2c0fc9fa937b11eaa1b71c4d701ab86e",
-	})
+	actual, err := client.GetList(context.Background(), AccountIdentifier(testAccountID), "2c0fc9fa937b11eaa1b71c4d701ab86e")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -198,9 +194,9 @@ func TestUpdateList(t *testing.T) {
 		ModifiedOn:            &modifiedOn,
 	}
 
-	actual, err := client.UpdateList(context.Background(),
+	actual, err := client.UpdateList(context.Background(), AccountIdentifier(testAccountID),
 		ListUpdateParams{
-			AccountID: testAccountID, ID: "2c0fc9fa937b11eaa1b71c4d701ab86e", Description: "This note was updated.",
+			ID: "2c0fc9fa937b11eaa1b71c4d701ab86e", Description: "This note was updated.",
 		},
 	)
 	if assert.NoError(t, err) {
@@ -233,9 +229,7 @@ func TestDeleteList(t *testing.T) {
 	want.Messages = []ResponseInfo{}
 	want.Result.ID = "34b12448945f11eaa1b71c4d701ab86e"
 
-	actual, err := client.DeleteList(context.Background(), ListDeleteParams{
-		AccountID: testAccountID, ID: "2c0fc9fa937b11eaa1b71c4d701ab86e",
-	})
+	actual, err := client.DeleteList(context.Background(), AccountIdentifier(testAccountID), "2c0fc9fa937b11eaa1b71c4d701ab86e")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -315,8 +309,8 @@ func TestListsItemsIP(t *testing.T) {
 		},
 	}
 
-	actual, err := client.ListListItems(context.Background(), ListListItemsParams{
-		AccountID: testAccountID, ID: "2c0fc9fa937b11eaa1b71c4d701ab86e",
+	actual, err := client.ListListItems(context.Background(), AccountIdentifier(testAccountID), ListListItemsParams{
+		ID: "2c0fc9fa937b11eaa1b71c4d701ab86e",
 	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -421,7 +415,8 @@ func TestListsItemsRedirect(t *testing.T) {
 
 	actual, err := client.ListListItems(
 		context.Background(),
-		ListListItemsParams{AccountID: testAccountID, ID: "0c0fc9fa937b11eaa1b71c4d701ab86e"},
+		AccountIdentifier(testAccountID),
+		ListListItemsParams{ID: "0c0fc9fa937b11eaa1b71c4d701ab86e"},
 	)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -453,9 +448,8 @@ func TestCreateListItemsIP(t *testing.T) {
 	want.Messages = []ResponseInfo{}
 	want.Result.OperationID = "4da8780eeb215e6cb7f48dd981c4ea02"
 
-	actual, err := client.CreateListItemsAsync(context.Background(), ListCreateItemsParams{
-		AccountID: testAccountID,
-		ID:        "2c0fc9fa937b11eaa1b71c4d701ab86e",
+	actual, err := client.CreateListItemsAsync(context.Background(), AccountIdentifier(testAccountID), ListCreateItemsParams{
+		ID: "2c0fc9fa937b11eaa1b71c4d701ab86e",
 		Items: []ListItemCreateRequest{{
 			IP:      StringPtr("192.0.2.1"),
 			Comment: "Private IP",
@@ -493,9 +487,8 @@ func TestCreateListItemsRedirect(t *testing.T) {
 	want.Messages = []ResponseInfo{}
 	want.Result.OperationID = "4da8780eeb215e6cb7f48dd981c4ea02"
 
-	actual, err := client.CreateListItemsAsync(context.Background(), ListCreateItemsParams{
-		AccountID: testAccountID,
-		ID:        "0c0fc9fa937b11eaa1b71c4d701ab86e",
+	actual, err := client.CreateListItemsAsync(context.Background(), AccountIdentifier(testAccountID), ListCreateItemsParams{
+		ID: "0c0fc9fa937b11eaa1b71c4d701ab86e",
 		Items: []ListItemCreateRequest{{
 			Redirect: &Redirect{
 				SourceUrl: "www.3fonteinen.be",
@@ -539,9 +532,8 @@ func TestReplaceListItemsIP(t *testing.T) {
 	want.Messages = []ResponseInfo{}
 	want.Result.OperationID = "4da8780eeb215e6cb7f48dd981c4ea02"
 
-	actual, err := client.ReplaceListItemsAsync(context.Background(), ListReplaceItemsParams{
-		AccountID: testAccountID,
-		ID:        "2c0fc9fa937b11eaa1b71c4d701ab86e",
+	actual, err := client.ReplaceListItemsAsync(context.Background(), AccountIdentifier(testAccountID), ListReplaceItemsParams{
+		ID: "2c0fc9fa937b11eaa1b71c4d701ab86e",
 		Items: []ListItemCreateRequest{{
 			IP:      StringPtr("192.0.2.1"),
 			Comment: "Private IP",
@@ -579,9 +571,8 @@ func TestReplaceListItemsRedirect(t *testing.T) {
 	want.Messages = []ResponseInfo{}
 	want.Result.OperationID = "4da8780eeb215e6cb7f48dd981c4ea02"
 
-	actual, err := client.ReplaceListItemsAsync(context.Background(), ListReplaceItemsParams{
-		AccountID: testAccountID,
-		ID:        "2c0fc9fa937b11eaa1b71c4d701ab86e",
+	actual, err := client.ReplaceListItemsAsync(context.Background(), AccountIdentifier(testAccountID), ListReplaceItemsParams{
+		ID: "2c0fc9fa937b11eaa1b71c4d701ab86e",
 		Items: []ListItemCreateRequest{{
 			Redirect: &Redirect{
 				SourceUrl: "www.3fonteinen.be",
@@ -625,9 +616,8 @@ func TestDeleteListItems(t *testing.T) {
 	want.Messages = []ResponseInfo{}
 	want.Result.OperationID = "4da8780eeb215e6cb7f48dd981c4ea02"
 
-	actual, err := client.DeleteListItemsAsync(context.Background(), ListDeleteItemsParams{
-		AccountID: testAccountID,
-		ID:        "2c0fc9fa937b11eaa1b71c4d701ab86e",
+	actual, err := client.DeleteListItemsAsync(context.Background(), AccountIdentifier(testAccountID), ListDeleteItemsParams{
+		ID: "2c0fc9fa937b11eaa1b71c4d701ab86e",
 		Items: ListItemDeleteRequest{[]ListItemDeleteItemRequest{{
 			ID: "34b12448945f11eaa1b71c4d701ab86e",
 		}}}})
@@ -671,11 +661,7 @@ func TestGetListItemIP(t *testing.T) {
 		ModifiedOn: &modifiedOn,
 	}
 
-	actual, err := client.GetListItem(context.Background(), ListGetItemParams{
-		AccountID: testAccountID,
-		ListID:    "2c0fc9fa937b11eaa1b71c4d701ab86e",
-		ID:        "34b12448945f11eaa1b71c4d701ab86e",
-	})
+	actual, err := client.GetListItem(context.Background(), AccountIdentifier(testAccountID), "2c0fc9fa937b11eaa1b71c4d701ab86e", "34b12448945f11eaa1b71c4d701ab86e")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -686,7 +672,7 @@ func TestPollListTimeout(t *testing.T) {
 	defer cancel()
 
 	start := time.Now()
-	err := client.pollListBulkOperation(ctx, testAccountID, "list1")
+	err := client.pollListBulkOperation(ctx, AccountIdentifier(testAccountID), "list1")
 	assert.ErrorIs(t, err, context.DeadlineExceeded)
 	assert.WithinDuration(t, start, time.Now(), time.Second,
 		"pollListBulkOperation took too much time with an expiring context")

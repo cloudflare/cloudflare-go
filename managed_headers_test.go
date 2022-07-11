@@ -79,9 +79,7 @@ func TestListManagedHeaders(t *testing.T) {
 		},
 	}
 
-	zoneActual, err := client.ListZoneManagedHeaders(context.Background(), ListManagedHeadersParams{
-		ZoneID: testZoneID,
-	})
+	zoneActual, err := client.ListZoneManagedHeaders(context.Background(), ZoneIdentifier(testZoneID), ListManagedHeadersParams{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, zoneActual)
 	}
@@ -170,8 +168,7 @@ func TestUpdateManagedHeaders(t *testing.T) {
 			},
 		},
 	}
-	zoneActual, err := client.UpdateZoneManagedHeaders(context.Background(), UpdateManagedHeadersParams{
-		ZoneID:         testZoneID,
+	zoneActual, err := client.UpdateZoneManagedHeaders(context.Background(), ZoneIdentifier(testZoneID), UpdateManagedHeadersParams{
 		ManagedHeaders: managedHeadersForUpdate,
 	})
 	if assert.NoError(t, err) {

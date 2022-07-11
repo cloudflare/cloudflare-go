@@ -64,7 +64,7 @@ func TestTunnels(t *testing.T) {
 		}},
 	}}
 
-	actual, err := client.Tunnels(context.Background(), TunnelListParams{AccountID: testAccountID, UUID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
+	actual, err := client.Tunnels(context.Background(), AccountIdentifier(testAccountID), TunnelListParams{UUID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -123,7 +123,7 @@ func TestTunnel(t *testing.T) {
 		}},
 	}
 
-	actual, err := client.Tunnel(context.Background(), TunnelParams{AccountID: testAccountID, ID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
+	actual, err := client.Tunnel(context.Background(), AccountIdentifier(testAccountID), "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -182,7 +182,7 @@ func TestCreateTunnel(t *testing.T) {
 		}},
 	}
 
-	actual, err := client.CreateTunnel(context.Background(), TunnelCreateParams{AccountID: testAccountID, Name: "blog", Secret: "notarealsecret"})
+	actual, err := client.CreateTunnel(context.Background(), AccountIdentifier(testAccountID), TunnelCreateParams{Name: "blog", Secret: "notarealsecret"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -232,9 +232,8 @@ func TestUpdateTunnelConfiguration(t *testing.T) {
 			},
 		}}
 
-	actual, err := client.UpdateTunnelConfiguration(context.Background(), TunnelConfigurationParams{
-		AccountID: testAccountID,
-		TunnelID:  "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+	actual, err := client.UpdateTunnelConfiguration(context.Background(), AccountIdentifier(testAccountID), TunnelConfigurationParams{
+		TunnelID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		Config: TunnelConfiguration{
 			Ingress: []UnvalidatedIngressRule{
 				{
@@ -302,7 +301,7 @@ func TestGetTunnelConfiguration(t *testing.T) {
 			},
 		}}
 
-	actual, err := client.GetTunnelConfiguration(context.Background(), GetTunnelConfigurationParams{AccountID: testAccountID, TunnelID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
+	actual, err := client.GetTunnelConfiguration(context.Background(), AccountIdentifier(testAccountID), "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -343,7 +342,7 @@ func TestDeleteTunnel(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	err := client.DeleteTunnel(context.Background(), TunnelDeleteParams{AccountID: testAccountID, ID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
+	err := client.DeleteTunnel(context.Background(), AccountIdentifier(testAccountID), "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 	assert.NoError(t, err)
 }
 
@@ -364,7 +363,7 @@ func TestCleanupTunnelConnections(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/connections", handler)
 
-	err := client.CleanupTunnelConnections(context.Background(), TunnelCleanupParams{AccountID: testAccountID, ID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
+	err := client.CleanupTunnelConnections(context.Background(), AccountIdentifier(testAccountID), "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 	assert.NoError(t, err)
 }
 
@@ -386,7 +385,7 @@ func TestTunnelToken(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/token", handler)
 
-	token, err := client.TunnelToken(context.Background(), TunnelTokenParams{AccountID: testAccountID, ID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
+	token, err := client.TunnelToken(context.Background(), AccountIdentifier(testAccountID), "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 	assert.NoError(t, err)
 	assert.Equal(t, "ZHNraGdhc2RraGFza2hqZGFza2poZGFza2poYXNrZGpoYWtzamRoa2FzZGpoa2FzamRoa2Rhc2po\na2FzamRoa2FqCg==", token)
 }

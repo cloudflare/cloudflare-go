@@ -51,8 +51,8 @@ func TestListTunnelRoutes(t *testing.T) {
 		},
 	}
 
-	params := TunnelRoutesListParams{AccountID: testAccountID}
-	got, err := client.ListTunnelRoutes(context.Background(), params)
+	params := TunnelRoutesListParams{}
+	got, err := client.ListTunnelRoutes(context.Background(), AccountIdentifier(testAccountID), params)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, got)
@@ -95,7 +95,7 @@ func TestTunnelRouteForIP(t *testing.T) {
 		VirtualNetworkID: "9f322de4-5988-4945-b770-f1d6ac200f86",
 	}
 
-	got, err := client.GetTunnelRouteForIP(context.Background(), TunnelRoutesForIPParams{AccountID: testAccountID, Network: "10.1.0.137"})
+	got, err := client.GetTunnelRouteForIP(context.Background(), AccountIdentifier(testAccountID), TunnelRoutesForIPParams{Network: "10.1.0.137"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, got)
@@ -138,7 +138,7 @@ func TestCreateTunnelRoute(t *testing.T) {
 		VirtualNetworkID: "9f322de4-5988-4945-b770-f1d6ac200f86",
 	}
 
-	tunnel, err := client.CreateTunnelRoute(context.Background(), TunnelRoutesCreateParams{AccountID: testAccountID, TunnelID: testTunnelID, Network: "10.0.0.0/16", Comment: "foo", VirtualNetworkID: "9f322de4-5988-4945-b770-f1d6ac200f86"})
+	tunnel, err := client.CreateTunnelRoute(context.Background(), AccountIdentifier(testAccountID), TunnelRoutesCreateParams{TunnelID: testTunnelID, Network: "10.0.0.0/16", Comment: "foo", VirtualNetworkID: "9f322de4-5988-4945-b770-f1d6ac200f86"})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, tunnel)
 	}
@@ -185,7 +185,7 @@ func TestUpdateTunnelRoute(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/teamnet/routes/network/10.0.0.0/16", handler)
-	tunnel, err := client.UpdateTunnelRoute(context.Background(), TunnelRoutesUpdateParams{AccountID: testAccountID, TunnelID: testTunnelID, Network: "10.0.0.0/16", Comment: "foo", VirtualNetworkID: "9f322de4-5988-4945-b770-f1d6ac200f86"})
+	tunnel, err := client.UpdateTunnelRoute(context.Background(), AccountIdentifier(testAccountID), TunnelRoutesUpdateParams{TunnelID: testTunnelID, Network: "10.0.0.0/16", Comment: "foo", VirtualNetworkID: "9f322de4-5988-4945-b770-f1d6ac200f86"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, tunnel)
@@ -217,6 +217,6 @@ func TestDeleteTunnelRoute(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/teamnet/routes/network/10.0.0.0/16", handler)
-	err := client.DeleteTunnelRoute(context.Background(), TunnelRoutesDeleteParams{AccountID: testAccountID, Network: "10.0.0.0/16", VirtualNetworkID: "9f322de4-5988-4945-b770-f1d6ac200f86"})
+	err := client.DeleteTunnelRoute(context.Background(), AccountIdentifier(testAccountID), TunnelRoutesDeleteParams{Network: "10.0.0.0/16", VirtualNetworkID: "9f322de4-5988-4945-b770-f1d6ac200f86"})
 	assert.NoError(t, err)
 }
