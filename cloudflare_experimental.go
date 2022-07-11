@@ -307,3 +307,23 @@ func (c *Client) makeRequest(ctx context.Context, method, uri string, params int
 
 	return respBody, nil
 }
+
+func (c *Client) get(ctx context.Context, path string, payload interface{}) ([]byte, error) {
+	return c.makeRequest(ctx, http.MethodGet, path, payload, nil)
+}
+
+func (c *Client) post(ctx context.Context, path string, payload interface{}) ([]byte, error) {
+	return c.makeRequest(ctx, http.MethodPost, path, payload, nil)
+}
+
+func (c *Client) patch(ctx context.Context, path string, payload interface{}) ([]byte, error) {
+	return c.makeRequest(ctx, http.MethodPatch, path, payload, nil)
+}
+
+func (c *Client) put(ctx context.Context, path string, payload interface{}) ([]byte, error) {
+	return c.makeRequest(ctx, http.MethodPut, path, payload, nil)
+}
+
+func (c *Client) delete(ctx context.Context, path string, payload interface{}) ([]byte, error) {
+	return c.makeRequest(ctx, http.MethodDelete, path, payload, nil)
+}
