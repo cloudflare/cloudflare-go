@@ -399,16 +399,16 @@ func (api *API) GetTunnelConfiguration(ctx context.Context, rc *ResourceContaine
 // TunnelConnections gets all connections on a tunnel.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-tunnel-list-cloudflare-tunnel-connections
-func (api *API) TunnelConnections(ctx context.Context, params TunnelConnectionParams) ([]Connection, error) {
-	if params.AccountID == "" {
+func (api *API) TunnelConnections(ctx context.Context, rc *ResourceContainer, tunnelID string) ([]Connection, error) {
+	if rc.Identifier == "" {
 		return []Connection{}, ErrMissingAccountID
 	}
 
-	if params.ID == "" {
+	if tunnelID == "" {
 		return []Connection{}, ErrMissingTunnelID
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s/connections", params.AccountID, params.ID)
+	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s/connections", rc.Identifier, tunnelID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
