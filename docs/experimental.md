@@ -10,13 +10,13 @@ and consistent experience.
 Majority of entities follow a standard method signature (where `$entity` is the
 resource such as `Zone`, `DNSRecord`, ...).
 
-| Signature                                             | Purpose                                            | Return value                                                                                                                   |
-| ----------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `Get(ctx, id) ($entity, error)`                       | Fetches a single entity by an identifer.           | Returns the entity and `error` based on the listing parameters.                                                                |
-| `List(ctx, ...params) ([]$entity, ResultInfo, error)` | Fetches all entities.                              | Returns the list of matching entities, the result information (pagination, fail/success and additional metadata), and `error`. |
-| `New(ctx, ...params) ($entity, error)`                | Creates a new entity with the provided parameters. | Returns the newly created entity and `error`.                                                                                  |
-| `Update(ctx, id, ...params) ($entity, error)`         | Updates an existing entity.                        | Returns the updated entity and `error`.                                                                                        |
-| `Delete(ctx, id) (error)`                             | Deletes a single entity.                           | Returns `error`.                                                                                                               |
+| Signature                                             | Purpose                                                                                                                              | Return value                                                                                                                   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| `Get(ctx, *Resource) ($entity, error)`                | Fetches a single entity by a `Resource`. Should use `ZoneIdentifier` and `AccountIdentifier` respectively (not \*Resource directly). | Returns the entity and `error` based on the listing parameters.                                                                |
+| `List(ctx, ...params) ([]$entity, ResultInfo, error)` | Fetches all entities.                                                                                                                | Returns the list of matching entities, the result information (pagination, fail/success and additional metadata), and `error`. |
+| `New(ctx, ...params) ($entity, error)`                | Creates a new entity with the provided parameters.                                                                                   | Returns the newly created entity and `error`.                                                                                  |
+| `Update(ctx, ...params) ($entity, error)`             | Updates an existing entity.                                                                                                          | Returns the updated entity and `error`.                                                                                        |
+| `Delete(ctx, *Resource) (error)`                      | Deletes a single entity by a `Resource`. Should use `ZoneIdentifier` and `AccountIdentifier` respectively (not \*Resource directly). | Returns `error`.                                                                                                               |
 
 ### Why no iterator for `List` operations?
 
@@ -90,7 +90,7 @@ params := cloudflare.ClientParams{
 }
 c, err := cloudflare.NewExperimental(params)
 
-z, _ := c.Zones.Get(ctx, "3e7705498e8be60520841409ebc69bc1")
+z, _ := c.Zones.Get(ctx, cloudflare.ZoneIdentifier("3e7705498e8be60520841409ebc69bc1"))
 ```
 
 ### Fetching all zones matching a single account ID
@@ -118,12 +118,13 @@ params := cloudflare.ClientParams{
 c, err := cloudflare.NewExperimental(params)
 
 zParams := &cloudflare.ZoneParams{
+  ID: "3e7705498e8be60520841409ebc69bc1",
   Nameservers: cloudflare.StringSlice([]string{
     "ns1.example.com",
     "ns2.example.com"
   })
 }
-z, _ := c.Zones.Update(ctx, "b5163cf270a3fbac34827c4a2713eef4", zParams)
+z, _ := c.Zones.Update(ctx, zParams)
 ```
 
 ### Delete a zone
@@ -135,5 +136,5 @@ params := cloudflare.ClientParams{
 }
 c, err := cloudflare.NewExperimental(params)
 
-z, _ := c.Zones.Delete(ctx, "b5163cf270a3fbac34827c4a2713eef4")
+z, _ := c.Zones.Delete(ctx, cloudflare.ZoneIdentifier("b5163cf270a3fbac34827c4a2713eef4"))
 ```
