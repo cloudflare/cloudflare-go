@@ -13,7 +13,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/ramya-rao-a/go-outline v0.0.0-20210608161538-9736a4bde949
 	github.com/stretchr/testify v1.8.0
-	github.com/urfave/cli/v2 v2.10.3
+	github.com/urfave/cli/v2 v2.11.0
 	github.com/uudashr/gopkgs/v2 v2.1.2
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616
 	golang.org/x/net v0.0.0-20220412020605-290c469a71a5
