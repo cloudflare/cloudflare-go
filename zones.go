@@ -55,8 +55,8 @@ func (s *ZonesService) New(ctx context.Context, zone *ZoneCreateParams) (Zone, e
 // Get fetches a single zone.
 //
 // API reference: https://api.cloudflare.com/#zone-zone-details
-func (s *ZonesService) Get(ctx context.Context, resource *Resource) (Zone, error) {
-	uri := fmt.Sprintf("/%s/%s", resource.Level, resource.Identifier)
+func (s *ZonesService) Get(ctx context.Context, rc *ResourceContainer) (Zone, error) {
+	uri := fmt.Sprintf("/zones/%s", rc.Identifier)
 	res, err := s.client.get(ctx, uri, nil)
 	if err != nil {
 		return Zone{}, fmt.Errorf("failed to fetch zones: %w", err)
@@ -105,8 +105,8 @@ func (s *ZonesService) Update(ctx context.Context, params *ZoneUpdateParams) ([]
 // Delete deletes a zone based on ID.
 //
 // API reference: https://api.cloudflare.com/#zone-delete-zone
-func (s *ZonesService) Delete(ctx context.Context, resource *Resource) error {
-	uri := fmt.Sprintf("/%s/%s", resource.Level, resource.Identifier)
+func (s *ZonesService) Delete(ctx context.Context, rc *ResourceContainer) error {
+	uri := fmt.Sprintf("/zones/%s", rc.Identifier)
 	res, _ := s.client.delete(ctx, uri, nil)
 
 	var r ZoneResponse
