@@ -50,8 +50,7 @@ func TestTunnelVirtualNetworks(t *testing.T) {
 		},
 	}
 
-	params := TunnelVirtualNetworksListParams{AccountID: testAccountID}
-	got, err := client.ListTunnelVirtualNetworks(context.Background(), params)
+	got, err := client.ListTunnelVirtualNetworks(context.Background(), AccountIdentifier(testAccountID), TunnelVirtualNetworksListParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, got)
@@ -92,8 +91,7 @@ func TestCreateTunnelVirtualNetwork(t *testing.T) {
 		DeletedAt:        &ts,
 	}
 
-	tunnel, err := client.CreateTunnelVirtualNetwork(context.Background(), TunnelVirtualNetworkCreateParams{
-		AccountID: testAccountID,
+	tunnel, err := client.CreateTunnelVirtualNetwork(context.Background(), AccountIdentifier(testAccountID), TunnelVirtualNetworkCreateParams{
 		Name:      "us-east-1-vpc",
 		IsDefault: true,
 		Comment:   "Staging VPC for data science",
@@ -144,8 +142,7 @@ func TestUpdateTunnelVirtualNetwork(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/teamnet/virtual_networks/f70ff985-a4ef-4643-bbbc-4a0ed4fc8415", handler)
 
-	tunnel, err := client.UpdateTunnelVirtualNetwork(context.Background(), TunnelVirtualNetworkUpdateParams{
-		AccountID:        testAccountID,
+	tunnel, err := client.UpdateTunnelVirtualNetwork(context.Background(), AccountIdentifier(testAccountID), TunnelVirtualNetworkUpdateParams{
 		VnetID:           "f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
 		Name:             "us-east-1-vpc",
 		IsDefaultNetwork: BoolPtr(true),
@@ -182,10 +179,7 @@ func TestDeleteTunnelVirtualNetwork(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/teamnet/virtual_networks/f70ff985-a4ef-4643-bbbc-4a0ed4fc8415", handler)
 
-	err := client.DeleteTunnelVirtualNetwork(context.Background(), TunnelVirtualNetworkDeleteParams{
-		AccountID: testAccountID,
-		VnetID:    "f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
-	})
+	err := client.DeleteTunnelVirtualNetwork(context.Background(), AccountIdentifier(testAccountID), "f70ff985-a4ef-4643-bbbc-4a0ed4fc8415")
 
 	assert.NoError(t, err)
 }

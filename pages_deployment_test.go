@@ -377,8 +377,7 @@ func TestListPagesDeployments(t *testing.T) {
 		Count:   1,
 		Total:   1,
 	}
-	actual, resultInfo, err := client.ListPagesDeployments(context.Background(), ListPagesDeploymentsParams{
-		AccountID:         testAccountID,
+	actual, resultInfo, err := client.ListPagesDeployments(context.Background(), AccountIdentifier(testAccountID), ListPagesDeploymentsParams{
 		ProjectName:       "test",
 		PaginationOptions: PaginationOptions{},
 	})
@@ -406,11 +405,7 @@ func TestGetPagesDeploymentInfo(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe", handler)
 
-	actual, err := client.GetPagesDeploymentInfo(context.Background(), GetPagesDeploymentInfoParams{
-		AccountID:    testAccountID,
-		ProjectName:  "test",
-		DeploymentID: "0012e50b-fa5d-44db-8cb5-1f372785dcbe",
-	})
+	actual, err := client.GetPagesDeploymentInfo(context.Background(), AccountIdentifier(testAccountID), "test", "0012e50b-fa5d-44db-8cb5-1f372785dcbe")
 	if assert.NoError(t, err) {
 		assert.Equal(t, *expectedPagesDeployment, actual)
 	}
@@ -434,8 +429,7 @@ func TestGetPagesDeploymentStageLogs(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe/history/build/logs", handler)
 
-	actual, err := client.GetPagesDeploymentStageLogs(context.Background(), GetPagesDeploymentStageLogsParams{
-		AccountID:    testAccountID,
+	actual, err := client.GetPagesDeploymentStageLogs(context.Background(), AccountIdentifier(testAccountID), GetPagesDeploymentStageLogsParams{
 		ProjectName:  "test",
 		DeploymentID: "0012e50b-fa5d-44db-8cb5-1f372785dcbe",
 		StageName:    "build",
@@ -464,8 +458,7 @@ func TestGetPagesDeploymentLogs(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe/history/logs", handler)
 
-	actual, err := client.GetPagesDeploymentLogs(context.Background(), GetPagesDeploymentLogsParams{
-		AccountID:    testAccountID,
+	actual, err := client.GetPagesDeploymentLogs(context.Background(), AccountIdentifier(testAccountID), GetPagesDeploymentLogsParams{
 		ProjectName:  "test",
 		DeploymentID: "0012e50b-fa5d-44db-8cb5-1f372785dcbe",
 		SizeOptions:  SizeOptions{},
@@ -493,11 +486,7 @@ func TestDeletePagesDeployment(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe", handler)
 
-	err := client.DeletePagesDeployment(context.Background(), DeletePagesDeploymentParams{
-		AccountID:    testAccountID,
-		ProjectName:  "test",
-		DeploymentID: "0012e50b-fa5d-44db-8cb5-1f372785dcbe",
-	})
+	err := client.DeletePagesDeployment(context.Background(), AccountIdentifier(testAccountID), "test", "0012e50b-fa5d-44db-8cb5-1f372785dcbe")
 	assert.NoError(t, err)
 }
 
@@ -519,8 +508,7 @@ func TestCreatePagesDeployment(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments", handler)
 
-	actual, err := client.CreatePagesDeployment(context.Background(), CreatePagesDeploymentParams{
-		AccountID:   testAccountID,
+	actual, err := client.CreatePagesDeployment(context.Background(), AccountIdentifier(testAccountID), CreatePagesDeploymentParams{
 		ProjectName: "test",
 	})
 
@@ -547,11 +535,7 @@ func TestRetryPagesDeployment(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe/retry", handler)
 
-	actual, err := client.RetryPagesDeployment(context.Background(), RetryPagesDeploymentParams{
-		AccountID:    testAccountID,
-		ProjectName:  "test",
-		DeploymentID: "0012e50b-fa5d-44db-8cb5-1f372785dcbe",
-	})
+	actual, err := client.RetryPagesDeployment(context.Background(), AccountIdentifier(testAccountID), "test", "0012e50b-fa5d-44db-8cb5-1f372785dcbe")
 	if assert.NoError(t, err) {
 		assert.Equal(t, *expectedPagesDeployment, actual)
 	}
@@ -575,11 +559,7 @@ func TestRollbackPagesDeployment(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe/rollback", handler)
 
-	actual, err := client.RollbackPagesDeployment(context.Background(), RollbackPagesDeploymentParams{
-		AccountID:    testAccountID,
-		ProjectName:  "test",
-		DeploymentID: "0012e50b-fa5d-44db-8cb5-1f372785dcbe",
-	})
+	actual, err := client.RollbackPagesDeployment(context.Background(), AccountIdentifier(testAccountID), "test", "0012e50b-fa5d-44db-8cb5-1f372785dcbe")
 	if assert.NoError(t, err) {
 		assert.Equal(t, *expectedPagesDeployment, actual)
 	}

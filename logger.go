@@ -3,8 +3,13 @@ package cloudflare
 import (
 	"fmt"
 	"io"
+	"log"
 	"os"
 )
+
+// silentRetryLogger is the logger provided with retryable client to stop it
+// displaying the retry attempts.
+var silentRetryLogger = log.New(io.Discard, "", log.LstdFlags)
 
 const (
 	// LevelNull sets a logger to show no messages at all.
@@ -28,18 +33,13 @@ const (
 
 // DefaultLeveledLogger is the default logger that the library will use to log
 // errors, warnings, and informational messages.
-//
-// LeveledLoggerInterface is implemented by LeveledLogger, and one can be
-// initialized at the desired level of logging.  LeveledLoggerInterface also
-// provides out-of-the-box compatibility with a Logrus Logger, but may require
-// a thin shim for use with other logging libraries that use less standard
-// conventions like Zap.
-//
-// This Logger will be inherited by any backends created by default, but will
-// be overridden if a backend is created with GetBackendWithConfig with a
-// custom LeveledLogger set.
 var DefaultLeveledLogger LeveledLoggerInterface = &LeveledLogger{
 	Level: LevelError,
+}
+
+// SilentLeveledLogger is a logger for disregarding all logs written.
+var SilentLeveledLogger LeveledLoggerInterface = &LeveledLogger{
+	Level: LevelNull,
 }
 
 // Level represents a logging level.
@@ -67,7 +67,7 @@ type LeveledLogger struct {
 // Debugf logs a debug message using Printf conventions.
 func (l *LeveledLogger) Debugf(format string, v ...interface{}) {
 	if l.Level >= LevelDebug {
-		fmt.Fprintf(l.stdout(), "[DEBUG] "+format+"\n", v...)
+		fmt.Fprintf(l.stdout(), "[debug] "+format, v...)
 	}
 }
 
@@ -75,21 +75,21 @@ func (l *LeveledLogger) Debugf(format string, v ...interface{}) {
 func (l *LeveledLogger) Errorf(format string, v ...interface{}) {
 	// Infof logs a debug message using Printf conventions.
 	if l.Level >= LevelError {
-		fmt.Fprintf(l.stderr(), "[ERROR] "+format+"\n", v...)
+		fmt.Fprintf(l.stderr(), "[error] "+format, v...)
 	}
 }
 
 // Infof logs an informational message using Printf conventions.
 func (l *LeveledLogger) Infof(format string, v ...interface{}) {
 	if l.Level >= LevelInfo {
-		fmt.Fprintf(l.stdout(), "[INFO] "+format+"\n", v...)
+		fmt.Fprintf(l.stdout(), "[info] "+format, v...)
 	}
 }
 
 // Warnf logs a warning message using Printf conventions.
 func (l *LeveledLogger) Warnf(format string, v ...interface{}) {
 	if l.Level >= LevelWarn {
-		fmt.Fprintf(l.stderr(), "[WARN] "+format+"\n", v...)
+		fmt.Fprintf(l.stderr(), "[warn] "+format, v...)
 	}
 }
 

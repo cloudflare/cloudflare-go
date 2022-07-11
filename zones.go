@@ -4,11 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/http"
-	"regexp"
 )
-
-type ZoneIdentifier string
 
 type ZonesService service
 
@@ -19,7 +15,7 @@ type ZoneCreateParams struct {
 	Account   *Account `json:"organization,omitempty"`
 }
 
-type ZoneParams struct {
+type ZoneListParams struct {
 	Match       string `url:"match,omitempty"`
 	Name        string `url:"name,omitempty"`
 	AccountName string `url:"account.name,omitempty"`
@@ -30,29 +26,19 @@ type ZoneParams struct {
 	PerPage     int    `json:"per_page,omitempty" url:"per_page,omitempty"`
 }
 
-// ZoneIdentifierValue accepts a string and returns a ZoneIdentifier for use in
-// methods that require the stricter type.
-func ZoneIdentifierValue(z string) ZoneIdentifier {
-	return ZoneIdentifier(z)
-}
-
-func (z ZoneIdentifier) String() string {
-	return string(z)
-}
-
-func (z ZoneIdentifier) Validate() error {
-	matches, _ := regexp.MatchString(`^[0-9a-fA-F]{32}$`, z.String())
-	if !matches {
-		return fmt.Errorf(errInvalidZoneIdentifer, z)
-	}
-	return nil
+type ZoneUpdateParams struct {
+	ID                string
+	Paused            *bool    `json:"paused"`
+	VanityNameServers []string `json:"vanity_name_servers,omitempty"`
+	Plan              ZonePlan `json:"plan,omitempty"`
+	Type              string   `json:"type,omitempty"`
 }
 
 // New creates a new zone.
 //
 // API reference: https://api.cloudflare.com/#zone-zone-details
 func (s *ZonesService) New(ctx context.Context, zone *ZoneCreateParams) (Zone, error) {
-	res, err := s.client.Call(ctx, http.MethodPost, "/zones", zone)
+	res, err := s.client.post(ctx, "/zones", zone)
 	if err != nil {
 		return Zone{}, err
 	}
@@ -69,15 +55,15 @@ func (s *ZonesService) New(ctx context.Context, zone *ZoneCreateParams) (Zone, e
 // Get fetches a single zone.
 //
 // API reference: https://api.cloudflare.com/#zone-zone-details
-func (s *ZonesService) Get(ctx context.Context, zoneID ZoneIdentifier) (Zone, error) {
-	if err := zoneID.Validate(); err != nil {
-		return Zone{}, err
+func (s *ZonesService) Get(ctx context.Context, rc *ResourceContainer) (Zone, error) {
+	uri := fmt.Sprintf("/zones/%s", rc.Identifier)
+	res, err := s.client.get(ctx, uri, nil)
+	if err != nil {
+		return Zone{}, fmt.Errorf("failed to fetch zones: %w", err)
 	}
 
-	res, _ := s.client.Call(ctx, http.MethodGet, "/zones/"+zoneID.String(), nil)
-
 	var r ZoneResponse
-	err := json.Unmarshal(res, &r)
+	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return Zone{}, fmt.Errorf("failed to unmarshal zone JSON data: %w", err)
 	}
@@ -88,8 +74,8 @@ func (s *ZonesService) Get(ctx context.Context, zoneID ZoneIdentifier) (Zone, er
 // List returns all zones that match the provided `ZoneParams` struct.
 //
 // API reference: https://api.cloudflare.com/#zone-list-zones
-func (s *ZonesService) List(ctx context.Context, params *ZoneParams) ([]Zone, *ResultInfo, error) {
-	res, _ := s.client.Call(ctx, http.MethodGet, buildURI("/zones", params), nil)
+func (s *ZonesService) List(ctx context.Context, params *ZoneListParams) ([]Zone, *ResultInfo, error) {
+	res, _ := s.client.get(ctx, buildURI("/zones", params), nil)
 
 	var r ZonesResponse
 	err := json.Unmarshal(res, &r)
@@ -100,15 +86,28 @@ func (s *ZonesService) List(ctx context.Context, params *ZoneParams) ([]Zone, *R
 	return r.Result, &r.ResultInfo, nil
 }
 
+// Update modifies an existing zone.
+//
+// API reference: https://api.cloudflare.com/#zone-edit-zone
+func (s *ZonesService) Update(ctx context.Context, params *ZoneUpdateParams) ([]Zone, error) {
+	uri := fmt.Sprintf("/zones/%s", params.ID)
+	res, _ := s.client.patch(ctx, uri, params)
+
+	var r ZonesResponse
+	err := json.Unmarshal(res, &r)
+	if err != nil {
+		return []Zone{}, fmt.Errorf("failed to unmarshal zone JSON data: %w", err)
+	}
+
+	return r.Result, nil
+}
+
 // Delete deletes a zone based on ID.
 //
 // API reference: https://api.cloudflare.com/#zone-delete-zone
-func (s *ZonesService) Delete(ctx context.Context, zoneID ZoneIdentifier) error {
-	if err := zoneID.Validate(); err != nil {
-		return err
-	}
-
-	res, _ := s.client.Call(ctx, http.MethodDelete, "/zones/"+zoneID.String(), nil)
+func (s *ZonesService) Delete(ctx context.Context, rc *ResourceContainer) error {
+	uri := fmt.Sprintf("/zones/%s", rc.Identifier)
+	res, _ := s.client.delete(ctx, uri, nil)
 
 	var r ZoneResponse
 	err := json.Unmarshal(res, &r)

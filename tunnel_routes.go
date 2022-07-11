@@ -29,7 +29,6 @@ type TunnelRoute struct {
 }
 
 type TunnelRoutesListParams struct {
-	AccountID        string     `url:"-"`
 	TunnelID         string     `url:"tunnel_id,omitempty"`
 	Comment          string     `url:"comment,omitempty"`
 	IsDeleted        *bool      `url:"is_deleted,omitempty"`
@@ -41,7 +40,6 @@ type TunnelRoutesListParams struct {
 }
 
 type TunnelRoutesCreateParams struct {
-	AccountID        string `json:"-"`
 	Network          string `json:"-"`
 	TunnelID         string `json:"tunnel_id"`
 	Comment          string `json:"comment,omitempty"`
@@ -49,7 +47,6 @@ type TunnelRoutesCreateParams struct {
 }
 
 type TunnelRoutesUpdateParams struct {
-	AccountID        string `json:"-"`
 	Network          string `json:"network"`
 	TunnelID         string `json:"tunnel_id"`
 	Comment          string `json:"comment,omitempty"`
@@ -57,13 +54,11 @@ type TunnelRoutesUpdateParams struct {
 }
 
 type TunnelRoutesForIPParams struct {
-	AccountID        string `url:"-"`
 	Network          string `url:"-"`
 	VirtualNetworkID string `url:"virtual_network_id,omitempty"`
 }
 
 type TunnelRoutesDeleteParams struct {
-	AccountID        string `json:"-"`
 	Network          string `json:"-"`
 	VirtualNetworkID string `url:"virtual_network_id,omitempty"`
 }
@@ -82,12 +77,12 @@ type tunnelRouteResponse struct {
 // ListTunnelRoutes lists all defined routes for tunnels in the account.
 //
 // See: https://api.cloudflare.com/#tunnel-route-list-tunnel-routes
-func (api *API) ListTunnelRoutes(ctx context.Context, params TunnelRoutesListParams) ([]TunnelRoute, error) {
-	if params.AccountID == "" {
+func (api *API) ListTunnelRoutes(ctx context.Context, rc *ResourceContainer, params TunnelRoutesListParams) ([]TunnelRoute, error) {
+	if rc.Identifier == "" {
 		return []TunnelRoute{}, ErrMissingAccountID
 	}
 
-	uri := buildURI(fmt.Sprintf("/%s/%s/teamnet/routes", AccountRouteRoot, params.AccountID), params)
+	uri := buildURI(fmt.Sprintf("/%s/%s/teamnet/routes", AccountRouteRoot, rc.Identifier), params)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []TunnelRoute{}, err
@@ -105,8 +100,8 @@ func (api *API) ListTunnelRoutes(ctx context.Context, params TunnelRoutesListPar
 // GetTunnelRouteForIP finds the Tunnel Route that encompasses the given IP.
 //
 // See: https://api.cloudflare.com/#tunnel-route-get-tunnel-route-by-ip
-func (api *API) GetTunnelRouteForIP(ctx context.Context, params TunnelRoutesForIPParams) (TunnelRoute, error) {
-	if params.AccountID == "" {
+func (api *API) GetTunnelRouteForIP(ctx context.Context, rc *ResourceContainer, params TunnelRoutesForIPParams) (TunnelRoute, error) {
+	if rc.Identifier == "" {
 		return TunnelRoute{}, ErrMissingAccountID
 	}
 
@@ -118,7 +113,7 @@ func (api *API) GetTunnelRouteForIP(ctx context.Context, params TunnelRoutesForI
 		return TunnelRoute{}, ErrInvalidNetworkValue
 	}
 
-	uri := buildURI(fmt.Sprintf("/%s/%s/teamnet/routes/ip/%s", AccountRouteRoot, params.AccountID, params.Network), params)
+	uri := buildURI(fmt.Sprintf("/%s/%s/teamnet/routes/ip/%s", AccountRouteRoot, rc.Identifier, params.Network), params)
 
 	responseBody, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -138,8 +133,8 @@ func (api *API) GetTunnelRouteForIP(ctx context.Context, params TunnelRoutesForI
 // tunnel.
 //
 // See: https://api.cloudflare.com/#tunnel-route-create-route
-func (api *API) CreateTunnelRoute(ctx context.Context, params TunnelRoutesCreateParams) (TunnelRoute, error) {
-	if params.AccountID == "" {
+func (api *API) CreateTunnelRoute(ctx context.Context, rc *ResourceContainer, params TunnelRoutesCreateParams) (TunnelRoute, error) {
+	if rc.Identifier == "" {
 		return TunnelRoute{}, ErrMissingAccountID
 	}
 
@@ -147,7 +142,7 @@ func (api *API) CreateTunnelRoute(ctx context.Context, params TunnelRoutesCreate
 		return TunnelRoute{}, ErrMissingNetwork
 	}
 
-	uri := fmt.Sprintf("/%s/%s/teamnet/routes/network/%s", AccountRouteRoot, params.AccountID, url.PathEscape(params.Network))
+	uri := fmt.Sprintf("/%s/%s/teamnet/routes/network/%s", AccountRouteRoot, rc.Identifier, url.PathEscape(params.Network))
 
 	responseBody, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
@@ -166,8 +161,8 @@ func (api *API) CreateTunnelRoute(ctx context.Context, params TunnelRoutesCreate
 // DeleteTunnelRoute delete an existing route from the account routing table.
 //
 // See: https://api.cloudflare.com/#tunnel-route-delete-route
-func (api *API) DeleteTunnelRoute(ctx context.Context, params TunnelRoutesDeleteParams) error {
-	if params.AccountID == "" {
+func (api *API) DeleteTunnelRoute(ctx context.Context, rc *ResourceContainer, params TunnelRoutesDeleteParams) error {
+	if rc.Identifier == "" {
 		return ErrMissingAccountID
 	}
 
@@ -175,7 +170,7 @@ func (api *API) DeleteTunnelRoute(ctx context.Context, params TunnelRoutesDelete
 		return ErrMissingNetwork
 	}
 
-	uri := fmt.Sprintf("/%s/%s/teamnet/routes/network/%s", AccountRouteRoot, params.AccountID, url.PathEscape(params.Network))
+	uri := fmt.Sprintf("/%s/%s/teamnet/routes/network/%s", AccountRouteRoot, rc.Identifier, url.PathEscape(params.Network))
 
 	responseBody, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
@@ -195,12 +190,12 @@ func (api *API) DeleteTunnelRoute(ctx context.Context, params TunnelRoutesDelete
 // the given tunnel.
 //
 // See: https://api.cloudflare.com/#tunnel-route-update-route
-func (api *API) UpdateTunnelRoute(ctx context.Context, params TunnelRoutesUpdateParams) (TunnelRoute, error) {
-	if params.AccountID == "" {
+func (api *API) UpdateTunnelRoute(ctx context.Context, rc *ResourceContainer, params TunnelRoutesUpdateParams) (TunnelRoute, error) {
+	if rc.Identifier == "" {
 		return TunnelRoute{}, ErrMissingAccountID
 	}
 
-	uri := fmt.Sprintf("/%s/%s/teamnet/routes/network/%s", AccountRouteRoot, params.AccountID, url.PathEscape(params.Network))
+	uri := fmt.Sprintf("/%s/%s/teamnet/routes/network/%s", AccountRouteRoot, rc.Identifier, url.PathEscape(params.Network))
 
 	responseBody, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
 	if err != nil {
