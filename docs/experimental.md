@@ -51,7 +51,7 @@ Majority of methods on an entity will follow a standard method signature.
   operate at. Operated using `UserIdentifier`, `ZoneIdentifier`, and
   `AccountIdentifier` respectively
 - `$entityID` is the resource identifier
-- `...params` is a complex structure that allows filtering/finding resources
+- `params` is a complex structure that allows filtering/finding resources
   matching the struct fields
 - `$entity` the resource being operated on
 
