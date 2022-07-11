@@ -371,7 +371,7 @@ func TestTunnelConnections(t *testing.T) {
 		},
 	}
 
-	actual, err := client.TunnelConnections(context.Background(), TunnelConnectionParams{AccountID: testAccountID, ID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
+	actual, err := client.TunnelConnections(context.Background(), AccountIdentifier(testAccountID), "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
