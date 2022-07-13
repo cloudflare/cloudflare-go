@@ -419,19 +419,19 @@ type Response struct {
 
 // ResultInfoCursors contains information about cursors.
 type ResultInfoCursors struct {
-	Before string `json:"before"`
-	After  string `json:"after"`
+	Before string `json:"before" url:"before,omitempty"`
+	After  string `json:"after" url:"after,omitempty"`
 }
 
 // ResultInfo contains metadata about the Response.
 type ResultInfo struct {
-	Page       int               `json:"page"`
-	PerPage    int               `json:"per_page"`
-	TotalPages int               `json:"total_pages"`
-	Count      int               `json:"count"`
-	Total      int               `json:"total_count"`
-	Cursor     string            `json:"cursor"`
-	Cursors    ResultInfoCursors `json:"cursors"`
+	Page       int               `json:"page" url:"page,omitempty"`
+	PerPage    int               `json:"per_page" url:"per_page,omitempty"`
+	TotalPages int               `json:"total_pages" url:"-"`
+	Count      int               `json:"count" url:"-"`
+	Total      int               `json:"total_count" url:"-"`
+	Cursor     string            `json:"cursor" url:"cursor,omitempty"`
+	Cursors    ResultInfoCursors `json:"cursors" url:"cursors,omitempty"`
 }
 
 // RawResponse keeps the result as JSON form.

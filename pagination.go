@@ -7,13 +7,13 @@ func (p ResultInfo) Done() bool {
 
 // Next advances the page of a paginated API response, but does not fetch the
 // next page of results.
-func (p ResultInfo) Next() *ResultInfo {
+func (p ResultInfo) Next() ResultInfo {
 	p.Page++
-	return &p
+	return p
 }
 
 // HasMorePages returns whether there is another page of results after the
 // current one.
 func (p ResultInfo) HasMorePages() bool {
-	return p.Page < p.TotalPages
+	return p.Page > 1 && p.Page < p.TotalPages
 }
