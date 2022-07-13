@@ -6,6 +6,8 @@ import (
 	"fmt"
 )
 
+const defaultZonesPerPage = 100
+
 type ZonesService service
 
 type ZoneCreateParams struct {
@@ -22,8 +24,8 @@ type ZoneListParams struct {
 	Status      string `url:"status,omitempty"`
 	AccountID   string `url:"account.id,omitempty"`
 	Direction   string `url:"direction,omitempty"`
-	Page        int    `json:"page,omitempty" url:"page,omitempty"`
-	PerPage     int    `json:"per_page,omitempty" url:"per_page,omitempty"`
+
+	ResultInfo // Rename `ResultInfo` in the next major version.
 }
 
 type ZoneUpdateParams struct {
@@ -73,6 +75,8 @@ func (s *ZonesService) Get(ctx context.Context, rc *ResourceContainer) (Zone, er
 
 // List returns all zones that match the provided `ZoneParams` struct.
 //
+// Pagination is automatically handled unless `params.Page` is supplied.
+//
 // API reference: https://api.cloudflare.com/#zone-list-zones
 func (s *ZonesService) List(ctx context.Context, params *ZoneListParams) ([]Zone, *ResultInfo, error) {
 	res, _ := s.client.get(ctx, buildURI("/zones", params), nil)
@@ -81,6 +85,26 @@ func (s *ZonesService) List(ctx context.Context, params *ZoneListParams) ([]Zone
 	err := json.Unmarshal(res, &r)
 	if err != nil {
 		return []Zone{}, &ResultInfo{}, fmt.Errorf("failed to unmarshal zone JSON data: %w", err)
+	}
+
+	if params.Page < 1 && params.PerPage < 1 {
+		var zones []Zone
+		params.PerPage = defaultZonesPerPage
+		params.Page = 1
+		for !params.ResultInfo.Done() {
+			res, _ := s.client.get(ctx, buildURI("/zones", params), nil)
+
+			var zResponse ZonesResponse
+			err := json.Unmarshal(res, &zResponse)
+			if err != nil {
+				return []Zone{}, &ResultInfo{}, fmt.Errorf("failed to unmarshal zone JSON data: %w", err)
+			}
+
+			zones = append(zones, zResponse.Result...)
+
+			params.ResultInfo = zResponse.ResultInfo.Next()
+		}
+		r.Result = zones
 	}
 
 	return r.Result, &r.ResultInfo, nil
