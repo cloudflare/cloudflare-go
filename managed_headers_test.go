@@ -135,7 +135,7 @@ func TestFilterManagedHeaders(t *testing.T) {
 	}
 
 	zoneActual, err := client.ListZoneManagedHeaders(context.Background(), ZoneIdentifier(testZoneID), ListManagedHeadersParams{
-		OnlyEnabled: true,
+		Status: "enabled",
 	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, zoneActual)
