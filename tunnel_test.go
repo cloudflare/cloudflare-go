@@ -17,31 +17,7 @@ func TestTunnels(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, `{
-			"success": true,
-			"errors": [],
-			"messages": [],
-			"result": [
-				{
-					"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-					"name": "blog",
-					"created_at": "2009-11-10T23:00:00Z",
-					"deleted_at": "2009-11-10T23:00:00Z",
-					"connections": [
-						{
-							"colo_name": "DFW",
-							"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-							"is_pending_reconnect": false,
-							"client_id": "dc6472cc-f1ae-44a0-b795-6b8a0ce29f90",
-							"client_version": "2022.2.0",
-							"opened_at": "2021-01-25T18:22:34.317854Z",
-							"origin_ip": "85.12.78.6"
-						}
-					]
-				}
-			]
-		}
-		`)
+		fmt.Fprint(w, loadFixture("tunnel", "multiple_full"))
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/cfd_tunnel", handler)
@@ -78,29 +54,7 @@ func TestTunnel(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, `{
-			"success":true,
-			"errors":[],
-			"messages":[],
-			"result":{
-				"id":"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-				"name":"blog",
-				"created_at":"2009-11-10T23:00:00Z",
-				"deleted_at":"2009-11-10T23:00:00Z",
-				"connections": [
-					{
-						"colo_name": "DFW",
-						"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-						"is_pending_reconnect": false,
-						"client_id": "dc6472cc-f1ae-44a0-b795-6b8a0ce29f90",
-						"client_version": "2022.2.0",
-						"opened_at": "2021-01-25T18:22:34.317854Z",
-						"origin_ip": "85.12.78.6"
-					}
-				]
-			}
-		}
-		`)
+		fmt.Fprint(w, loadFixture("tunnel", "single_full"))
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
@@ -137,29 +91,7 @@ func TestCreateTunnel(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, `{
-			"success":true,
-			"errors":[],
-			"messages":[],
-			"result":{
-				"id":"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-				"name":"blog",
-				"created_at":"2009-11-10T23:00:00Z",
-				"deleted_at":"2009-11-10T23:00:00Z",
-				"connections": [
-					{
-						"colo_name": "DFW",
-						"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-						"is_pending_reconnect": false,
-						"client_id": "dc6472cc-f1ae-44a0-b795-6b8a0ce29f90",
-						"client_version": "2022.2.0",
-						"opened_at": "2021-01-25T18:22:34.317854Z",
-						"origin_ip": "85.12.78.6"
-					}
-				]
-			}
-		}
-		`)
+		fmt.Fprint(w, loadFixture("tunnel", "single_full"))
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/cfd_tunnel", handler)
@@ -197,17 +129,7 @@ func TestUpdateTunnelConfiguration(t *testing.T) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method '%s', got %s", http.MethodPut, r.Method)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, `{
-			"success": true,
-			"errors": [],
-			"messages": [],
-			"result": {
-			  "config": "{\"warp-routing\": {\"enabled\": true},  \"originRequest\" : {\"connectTimeout\": 10}, \"ingress\" : [ {\"hostname\": \"test.example.com\", \"service\": \"https://localhost:8000\" } , {\"service\": \"http_status:404\"} ]}",
-			  "tunnel_id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-			  "version": 5,
-			  "created_at": "2021-01-25T18:22:34.317854Z"
-			}
-		  }`)
+		fmt.Fprint(w, loadFixture("tunnel", "configuration"))
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/configurations", handler)
@@ -266,17 +188,7 @@ func TestGetTunnelConfiguration(t *testing.T) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method '%s', got %s", http.MethodGet, r.Method)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, `{
-			"success": true,
-			"errors": [],
-			"messages": [],
-			"result": {
-			  "config": "{\"warp-routing\": {\"enabled\": true},  \"originRequest\" : {\"connectTimeout\": 10}, \"ingress\" : [ {\"hostname\": \"test.example.com\", \"service\": \"https://localhost:8000\" } , {\"service\": \"http_status:404\"} ]}",
-			  "tunnel_id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-			  "version": 5,
-			  "created_at": "2021-01-25T18:22:34.317854Z"
-			}
-		  }`)
+		fmt.Fprint(w, loadFixture("tunnel", "configuration"))
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/configurations", handler)
@@ -315,7 +227,7 @@ func TestTunnelConnections(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, `{
+		fmt.Fprint(w, `{
 			"success":true,
 			"errors":[],
 			"messages":[],
@@ -385,29 +297,7 @@ func TestDeleteTunnel(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, `{
-			"success":true,
-			"errors":[],
-			"messages":[],
-			"result":{
-				"id":"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-				"name":"blog",
-				"created_at":"2009-11-10T23:00:00Z",
-				"deleted_at":"2009-11-10T23:00:00Z",
-				"connections": [
-					{
-						"colo_name": "DFW",
-						"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-						"is_pending_reconnect": false,
-						"client_id": "dc6472cc-f1ae-44a0-b795-6b8a0ce29f90",
-						"client_version": "2022.2.0",
-						"opened_at": "2021-01-25T18:22:34.317854Z",
-						"origin_ip": "85.12.78.6"
-					}
-				]
-			}
-		}
-		`)
+		fmt.Fprint(w, loadFixture("tunnel", "single_full"))
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
@@ -423,12 +313,7 @@ func TestCleanupTunnelConnections(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, `{
-			"success": true,
-			"errors": [],
-			"messages": []
-		}
-		`)
+		fmt.Fprint(w, loadFixture("tunnel", "empty"))
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/connections", handler)
@@ -444,13 +329,7 @@ func TestTunnelToken(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, `{
-			"success": true,
-			"errors": [],
-			"messages": [],
-			"result": "ZHNraGdhc2RraGFza2hqZGFza2poZGFza2poYXNrZGpoYWtzamRoa2FzZGpoa2FzamRoa2Rhc2po\na2FzamRoa2FqCg=="
-		  }
-		`)
+		fmt.Fprint(w, loadFixture("tunnel", "token"))
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/token", handler)
