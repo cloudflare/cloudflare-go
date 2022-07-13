@@ -28,15 +28,16 @@ type ManagedHeader struct {
 	ConflictsWith []string `json:"conflicts_with,omitempty"`
 }
 
-type ListManagedHeadersParams struct{}
+type ListManagedHeadersParams struct {
+	Status string `url:"status,omitempty"`
+}
 
 func (api *API) ListZoneManagedHeaders(ctx context.Context, rc *ResourceContainer, params ListManagedHeadersParams) (ManagedHeaders, error) {
 	if rc.Identifier == "" {
 		return ManagedHeaders{}, ErrMissingZoneID
 	}
 
-	uri := fmt.Sprintf("/zones/%s/managed_headers", rc.Identifier)
-
+	uri := buildURI(fmt.Sprintf("/zones/%s/managed_headers", rc.Identifier), params)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return ManagedHeaders{}, err
