@@ -206,7 +206,7 @@ type RulesetRuleActionParameters struct {
 	Response                *RulesetRuleActionParametersBlockResponse        `json:"response,omitempty"`
 	HostHeader              string                                           `json:"host_header,omitempty"`
 	Origin                  *RulesetRuleActionParametersOrigin               `json:"origin,omitempty"`
-	Sni                     string                                           `json:"sni,omitempty"`
+	SNI                     string                                           `json:"sni,omitempty"`
 	RequestFields           []RulesetActionParametersLogCustomField          `json:"request_fields,omitempty"`
 	ResponseFields          []RulesetActionParametersLogCustomField          `json:"response_fields,omitempty"`
 	CookieFields            []RulesetActionParametersLogCustomField          `json:"cookie_fields,omitempty"`
