@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/pkg/errors"
 	"net/http"
 	"time"
 )
@@ -42,7 +41,7 @@ func (api *API) TeamsProxyEndpoint(ctx context.Context, accountID, proxyEndpoint
 	var teamsProxyEndpointDetailResponse TeamsProxyEndpointDetailResponse
 	err = json.Unmarshal(res, &teamsProxyEndpointDetailResponse)
 	if err != nil {
-		return TeamsProxyEndpoint{}, errors.Wrap(err, errUnmarshalError)
+		return TeamsProxyEndpoint{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return teamsProxyEndpointDetailResponse.Result, nil
@@ -62,7 +61,7 @@ func (api *API) TeamsProxyEndpoints(ctx context.Context, accountID string) ([]Te
 	var teamsProxyEndpointListResponse TeamsProxyEndpointListResponse
 	err = json.Unmarshal(res, &teamsProxyEndpointListResponse)
 	if err != nil {
-		return []TeamsProxyEndpoint{}, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
+		return []TeamsProxyEndpoint{}, ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return teamsProxyEndpointListResponse.Result, teamsProxyEndpointListResponse.ResultInfo, nil
@@ -82,7 +81,7 @@ func (api *API) CreateTeamsProxyEndpoint(ctx context.Context, accountID string, 
 	var teamsProxyEndpointDetailResponse TeamsProxyEndpointDetailResponse
 	err = json.Unmarshal(res, &teamsProxyEndpointDetailResponse)
 	if err != nil {
-		return TeamsProxyEndpoint{}, errors.Wrap(err, errUnmarshalError)
+		return TeamsProxyEndpoint{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return teamsProxyEndpointDetailResponse.Result, nil
@@ -93,7 +92,7 @@ func (api *API) CreateTeamsProxyEndpoint(ctx context.Context, accountID string, 
 // API reference: https://api.cloudflare.com/#zero-trust-gateway-proxy-endpoints-update-proxy-endpoint
 func (api *API) UpdateTeamsProxyEndpoint(ctx context.Context, accountID string, proxyEndpoint TeamsProxyEndpoint) (TeamsProxyEndpoint, error) {
 	if proxyEndpoint.ID == "" {
-		return TeamsProxyEndpoint{}, errors.Errorf("Proxy Endpoint ID cannot be empty")
+		return TeamsProxyEndpoint{}, fmt.Errorf("Proxy Endpoint ID cannot be empty")
 	}
 
 	uri := fmt.Sprintf(
@@ -111,7 +110,7 @@ func (api *API) UpdateTeamsProxyEndpoint(ctx context.Context, accountID string, 
 	var teamsProxyEndpointDetailResponse TeamsProxyEndpointDetailResponse
 	err = json.Unmarshal(res, &teamsProxyEndpointDetailResponse)
 	if err != nil {
-		return TeamsProxyEndpoint{}, errors.Wrap(err, errUnmarshalError)
+		return TeamsProxyEndpoint{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return teamsProxyEndpointDetailResponse.Result, nil

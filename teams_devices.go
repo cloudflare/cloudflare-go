@@ -5,8 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-
-	"github.com/pkg/errors"
 )
 
 type TeamsDevicesList struct {
@@ -59,7 +57,7 @@ func (api *API) ListTeamsDevices(ctx context.Context, accountID string) ([]Teams
 	var response TeamsDevicesList
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return []TeamsDeviceListItem{}, errors.Wrap(err, errUnmarshalError)
+		return []TeamsDeviceListItem{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return response.Result, nil
@@ -78,7 +76,7 @@ func (api *API) RevokeTeamsDevices(ctx context.Context, accountID string, device
 
 	result := Response{}
 	if err := json.Unmarshal(res, &result); err != nil {
-		return result, errors.Wrap(err, errUnmarshalError)
+		return result, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result, err
@@ -98,7 +96,7 @@ func (api *API) GetTeamsDeviceDetails(ctx context.Context, accountID string, dev
 	var response TeamsDeviceDetail
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return TeamsDeviceListItem{}, errors.Wrap(err, errUnmarshalError)
+		return TeamsDeviceListItem{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return response.Result, nil

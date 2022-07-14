@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 // WaitingRoom describes a WaitingRoom object.
@@ -17,6 +15,7 @@ type WaitingRoom struct {
 	Path                       string     `json:"path"`
 	Name                       string     `json:"name"`
 	Description                string     `json:"description,omitempty"`
+	QueueingMethod             string     `json:"queueing_method,omitempty"`
 	CustomPageHTML             string     `json:"custom_page_html,omitempty"`
 	DefaultTemplateLanguage    string     `json:"default_template_language,omitempty"`
 	Host                       string     `json:"host"`
@@ -119,7 +118,7 @@ func (api *API) CreateWaitingRoom(ctx context.Context, zoneID string, waitingRoo
 	var r WaitingRoomDetailResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return &r.Result, nil
 }
@@ -136,7 +135,7 @@ func (api *API) ListWaitingRooms(ctx context.Context, zoneID string) ([]WaitingR
 	var r WaitingRoomsResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return []WaitingRoom{}, errors.Wrap(err, errUnmarshalError)
+		return []WaitingRoom{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -153,7 +152,7 @@ func (api *API) WaitingRoom(ctx context.Context, zoneID, waitingRoomID string) (
 	var r WaitingRoomDetailResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return WaitingRoom{}, errors.Wrap(err, errUnmarshalError)
+		return WaitingRoom{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -171,7 +170,7 @@ func (api *API) ChangeWaitingRoom(ctx context.Context, zoneID, waitingRoomID str
 	var r WaitingRoomDetailResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return WaitingRoom{}, errors.Wrap(err, errUnmarshalError)
+		return WaitingRoom{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -189,7 +188,7 @@ func (api *API) UpdateWaitingRoom(ctx context.Context, zoneID string, waitingRoo
 	var r WaitingRoomDetailResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return WaitingRoom{}, errors.Wrap(err, errUnmarshalError)
+		return WaitingRoom{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -206,7 +205,7 @@ func (api *API) DeleteWaitingRoom(ctx context.Context, zoneID, waitingRoomID str
 	var r WaitingRoomDetailResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return nil
 }
@@ -223,7 +222,7 @@ func (api *API) WaitingRoomStatus(ctx context.Context, zoneID, waitingRoomID str
 	var r WaitingRoomStatusResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return WaitingRoomStatus{}, errors.Wrap(err, errUnmarshalError)
+		return WaitingRoomStatus{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -242,7 +241,7 @@ func (api *API) WaitingRoomPagePreview(ctx context.Context, zoneID, customHTML s
 	var r WaitingRoomPagePreviewResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return WaitingRoomPagePreviewURL{}, errors.Wrap(err, errUnmarshalError)
+		return WaitingRoomPagePreviewURL{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -259,7 +258,7 @@ func (api *API) CreateWaitingRoomEvent(ctx context.Context, zoneID string, waiti
 	var r WaitingRoomEventDetailResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return &r.Result, nil
 }
@@ -276,7 +275,7 @@ func (api *API) ListWaitingRoomEvents(ctx context.Context, zoneID string, waitin
 	var r WaitingRoomEventsResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return []WaitingRoomEvent{}, errors.Wrap(err, errUnmarshalError)
+		return []WaitingRoomEvent{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -293,7 +292,7 @@ func (api *API) WaitingRoomEvent(ctx context.Context, zoneID string, waitingRoom
 	var r WaitingRoomEventDetailResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return WaitingRoomEvent{}, errors.Wrap(err, errUnmarshalError)
+		return WaitingRoomEvent{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -311,7 +310,7 @@ func (api *API) WaitingRoomEventPreview(ctx context.Context, zoneID string, wait
 	var r WaitingRoomEventDetailResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return WaitingRoomEvent{}, errors.Wrap(err, errUnmarshalError)
+		return WaitingRoomEvent{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -329,7 +328,7 @@ func (api *API) ChangeWaitingRoomEvent(ctx context.Context, zoneID, waitingRoomI
 	var r WaitingRoomEventDetailResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return WaitingRoomEvent{}, errors.Wrap(err, errUnmarshalError)
+		return WaitingRoomEvent{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -347,7 +346,7 @@ func (api *API) UpdateWaitingRoomEvent(ctx context.Context, zoneID string, waiti
 	var r WaitingRoomEventDetailResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return WaitingRoomEvent{}, errors.Wrap(err, errUnmarshalError)
+		return WaitingRoomEvent{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -364,7 +363,7 @@ func (api *API) DeleteWaitingRoomEvent(ctx context.Context, zoneID string, waiti
 	var r WaitingRoomEventDetailResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return nil
 }

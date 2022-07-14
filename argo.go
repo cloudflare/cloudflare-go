@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/pkg/errors"
+	"errors"
 )
 
 var validSettingValues = []string{"on", "off"}
@@ -42,7 +42,7 @@ func (api *API) ArgoSmartRouting(ctx context.Context, zoneID string) (ArgoFeatur
 	var argoDetailsResponse ArgoDetailsResponse
 	err = json.Unmarshal(res, &argoDetailsResponse)
 	if err != nil {
-		return ArgoFeatureSetting{}, errors.Wrap(err, errUnmarshalError)
+		return ArgoFeatureSetting{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return argoDetailsResponse.Result, nil
 }
@@ -65,7 +65,7 @@ func (api *API) UpdateArgoSmartRouting(ctx context.Context, zoneID, settingValue
 	var argoDetailsResponse ArgoDetailsResponse
 	err = json.Unmarshal(res, &argoDetailsResponse)
 	if err != nil {
-		return ArgoFeatureSetting{}, errors.Wrap(err, errUnmarshalError)
+		return ArgoFeatureSetting{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return argoDetailsResponse.Result, nil
 }
@@ -84,7 +84,7 @@ func (api *API) ArgoTieredCaching(ctx context.Context, zoneID string) (ArgoFeatu
 	var argoDetailsResponse ArgoDetailsResponse
 	err = json.Unmarshal(res, &argoDetailsResponse)
 	if err != nil {
-		return ArgoFeatureSetting{}, errors.Wrap(err, errUnmarshalError)
+		return ArgoFeatureSetting{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return argoDetailsResponse.Result, nil
 }
@@ -107,7 +107,7 @@ func (api *API) UpdateArgoTieredCaching(ctx context.Context, zoneID, settingValu
 	var argoDetailsResponse ArgoDetailsResponse
 	err = json.Unmarshal(res, &argoDetailsResponse)
 	if err != nil {
-		return ArgoFeatureSetting{}, errors.Wrap(err, errUnmarshalError)
+		return ArgoFeatureSetting{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return argoDetailsResponse.Result, nil
 }

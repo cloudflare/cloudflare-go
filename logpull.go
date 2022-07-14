@@ -5,8 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-
-	"github.com/pkg/errors"
 )
 
 // LogpullRetentionConfiguration describes a the structure of a Logpull Retention
@@ -34,7 +32,7 @@ func (api *API) GetLogpullRetentionFlag(ctx context.Context, zoneID string) (*Lo
 	var r LogpullRetentionConfigurationResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return &r.Result, nil
 }

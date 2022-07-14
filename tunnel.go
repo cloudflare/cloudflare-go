@@ -7,9 +7,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/google/go-querystring/query"
-	"github.com/pkg/errors"
+	"errors"
 )
+
+// ErrMissingTunnelID is for when a required tunnel ID is missing from the
+// parameters.
+var ErrMissingTunnelID = errors.New("required missing tunnel ID")
 
 // Tunnel is the struct definition of a tunnel.
 type Tunnel struct {
@@ -21,6 +24,16 @@ type Tunnel struct {
 	Connections    []TunnelConnection `json:"connections,omitempty"`
 	ConnsActiveAt  *time.Time         `json:"conns_active_at,omitempty"`
 	ConnInactiveAt *time.Time         `json:"conns_inactive_at,omitempty"`
+}
+
+// Connection is the struct definition of a connection.
+type Connection struct {
+	ID          string             `json:"id,omitempty"`
+	Features    []string           `json:"features,omitempty"`
+	Version     string             `json:"version,omitempty"`
+	Arch        string             `json:"arch,omitempty"`
+	Connections []TunnelConnection `json:"conns,omitempty"`
+	RunAt       *time.Time         `json:"run_at,omitempty"`
 }
 
 // TunnelConnection represents the connections associated with a tunnel.
@@ -48,42 +61,125 @@ type TunnelDetailResponse struct {
 	Response
 }
 
+// TunnelConnectionResponse is used for representing the API response payload for
+// connections of a single tunnel.
+type TunnelConnectionResponse struct {
+	Result []Connection `json:"result"`
+	Response
+}
+
+// TunnelConfigurationStringifiedConfigResult is the raw result from the API with
+// the `Config` value as a string. You probably don't want to use this anywhere
+// other than in the HTTP response unmarshaling. Use `TunnelConfigurationResult`
+// for the correct types.
+type TunnelConfigurationStringifiedConfigResult struct {
+	TunnelID string `json:"tunnel_id,omitempty"`
+	Config   string `json:"config,omitempty"`
+	Version  int    `json:"version,omitempty"`
+}
+
+type TunnelConfigurationStringifiedConfigResponse struct {
+	Result TunnelConfigurationStringifiedConfigResult `json:"result"`
+	Response
+}
+
+type TunnelConfigurationResult struct {
+	TunnelID string              `json:"tunnel_id,omitempty"`
+	Config   TunnelConfiguration `json:"config,omitempty"`
+	Version  int                 `json:"version,omitempty"`
+}
+
+// TunnelConfigurationResponse is used for representing the API response payload
+// for a single tunnel.
+type TunnelConfigurationResponse struct {
+	Result TunnelConfigurationResult `json:"result"`
+	Response
+}
+
 // TunnelTokenResponse is  the API response for a tunnel token.
 type TunnelTokenResponse struct {
 	Result string `json:"result"`
 	Response
 }
 
-type TunnelParams struct {
-	AccountID string
-	ID        string
-}
-
 type TunnelCreateParams struct {
-	AccountID string `json:"-"`
-	Name      string `json:"name,omitempty"`
-	Secret    string `json:"tunnel_secret,omitempty"`
+	Name   string `json:"name,omitempty"`
+	Secret string `json:"tunnel_secret,omitempty"`
 }
 
 type TunnelUpdateParams struct {
-	AccountID string `json:"-"`
-	Name      string `json:"name,omitempty"`
-	Secret    string `json:"tunnel_secret,omitempty"`
+	Name   string `json:"name,omitempty"`
+	Secret string `json:"tunnel_secret,omitempty"`
 }
 
-type TunnelDeleteParams struct {
-	AccountID string
-	ID        string
+type UnvalidatedIngressRule struct {
+	Hostname string `json:"hostname,omitempty"`
+	Path     string `json:"path,omitempty"`
+	Service  string `json:"service,omitempty"`
 }
 
-type TunnelCleanupParams struct {
-	AccountID string
-	ID        string
+// OriginRequestConfig is a set of optional fields that users may set to
+// customize how cloudflared sends requests to origin services. It is used to set
+// up general config that apply to all rules, and also, specific per-rule
+// config.
+type OriginRequestConfig struct {
+	// HTTP proxy timeout for establishing a new connection
+	ConnectTimeout *time.Duration `json:"connectTimeout,omitempty"`
+	// HTTP proxy timeout for completing a TLS handshake
+	TLSTimeout *time.Duration `json:"tlsTimeout,omitempty"`
+	// HTTP proxy TCP keepalive duration
+	TCPKeepAlive *time.Duration `json:"tcpKeepAlive,omitempty"`
+	// HTTP proxy should disable "happy eyeballs" for IPv4/v6 fallback
+	NoHappyEyeballs *bool `json:"noHappyEyeballs,omitempty"`
+	// HTTP proxy maximum keepalive connection pool size
+	KeepAliveConnections *int `json:"keepAliveConnections,omitempty"`
+	// HTTP proxy timeout for closing an idle connection
+	KeepAliveTimeout *time.Duration `json:"keepAliveTimeout,omitempty"`
+	// Sets the HTTP Host header for the local webserver.
+	HTTPHostHeader *string `json:"httpHostHeader,omitempty"`
+	// Hostname on the origin server certificate.
+	OriginServerName *string `json:"originServerName,omitempty"`
+	// Path to the CA for the certificate of your origin.
+	// This option should be used only if your certificate is not signed by Cloudflare.
+	CAPool *string `json:"caPool,omitempty"`
+	// Disables TLS verification of the certificate presented by your origin.
+	// Will allow any certificate from the origin to be accepted.
+	// Note: The connection from your machine to Cloudflare's Edge is still encrypted.
+	NoTLSVerify *bool `json:"noTLSVerify,omitempty"`
+	// Disables chunked transfer encoding.
+	// Useful if you are running a WSGI server.
+	DisableChunkedEncoding *bool `json:"disableChunkedEncoding,omitempty"`
+	// Runs as jump host
+	BastionMode *bool `json:"bastionMode,omitempty"`
+	// Listen address for the proxy.
+	ProxyAddress *string `json:"proxyAddress,omitempty"`
+	// Listen port for the proxy.
+	ProxyPort *uint `json:"proxyPort,omitempty"`
+	// Valid options are 'socks' or empty.
+	ProxyType *string `json:"proxyType,omitempty"`
+	// IP rules for the proxy service
+	IPRules []IngressIPRule `json:"ipRules,omitempty"`
 }
 
-type TunnelTokenParams struct {
-	AccountID string
-	ID        string
+type IngressIPRule struct {
+	Prefix *string `json:"prefix,omitempty"`
+	Ports  []int   `json:"ports,omitempty"`
+	Allow  bool    `json:"allow,omitempty"`
+}
+
+type TunnelConfiguration struct {
+	Ingress       []UnvalidatedIngressRule `json:"ingress,omitempty"`
+	WarpRouting   *WarpRoutingConfig       `json:"warp-routing,omitempty"`
+	OriginRequest OriginRequestConfig      `json:"originRequest,omitempty"`
+}
+
+type WarpRoutingConfig struct {
+	Enabled bool `json:"enabled,omitempty"`
+}
+
+type TunnelConfigurationParams struct {
+	TunnelID string              `json:"-"`
+	Config   TunnelConfiguration `json:"config,omitempty"`
 }
 
 type TunnelListParams struct {
@@ -97,20 +193,14 @@ type TunnelListParams struct {
 // Tunnels lists all tunnels.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-tunnel-list-cloudflare-tunnels
-func (api *API) Tunnels(ctx context.Context, params TunnelListParams) ([]Tunnel, error) {
-	if params.AccountID == "" {
+func (api *API) Tunnels(ctx context.Context, rc *ResourceContainer, params TunnelListParams) ([]Tunnel, error) {
+	if rc.Identifier == "" {
 		return []Tunnel{}, ErrMissingAccountID
 	}
 
-	v, _ := query.Values(params)
-	queryParams := v.Encode()
-	if queryParams != "" {
-		queryParams = "?" + queryParams
-	}
+	uri := buildURI(fmt.Sprintf("/accounts/%s/cfd_tunnel", rc.Identifier), params)
 
-	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel", params.AccountID)
-
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodGet, uri+queryParams, nil, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []Tunnel{}, err
 	}
@@ -118,7 +208,7 @@ func (api *API) Tunnels(ctx context.Context, params TunnelListParams) ([]Tunnel,
 	var argoDetailsResponse TunnelsDetailResponse
 	err = json.Unmarshal(res, &argoDetailsResponse)
 	if err != nil {
-		return []Tunnel{}, errors.Wrap(err, errUnmarshalError)
+		return []Tunnel{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return argoDetailsResponse.Result, nil
 }
@@ -126,18 +216,18 @@ func (api *API) Tunnels(ctx context.Context, params TunnelListParams) ([]Tunnel,
 // Tunnel returns a single Argo tunnel.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-tunnel-get-cloudflare-tunnel
-func (api *API) Tunnel(ctx context.Context, params TunnelParams) (Tunnel, error) {
-	if params.AccountID == "" {
+func (api *API) Tunnel(ctx context.Context, rc *ResourceContainer, tunnelID string) (Tunnel, error) {
+	if rc.Identifier == "" {
 		return Tunnel{}, ErrMissingAccountID
 	}
 
-	if params.ID == "" {
+	if tunnelID == "" {
 		return Tunnel{}, errors.New("missing tunnel ID")
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s", params.AccountID, params.ID)
+	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s", rc.Identifier, tunnelID)
 
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodGet, uri, nil, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return Tunnel{}, err
 	}
@@ -145,7 +235,7 @@ func (api *API) Tunnel(ctx context.Context, params TunnelParams) (Tunnel, error)
 	var argoDetailsResponse TunnelDetailResponse
 	err = json.Unmarshal(res, &argoDetailsResponse)
 	if err != nil {
-		return Tunnel{}, errors.Wrap(err, errUnmarshalError)
+		return Tunnel{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return argoDetailsResponse.Result, nil
 }
@@ -153,8 +243,8 @@ func (api *API) Tunnel(ctx context.Context, params TunnelParams) (Tunnel, error)
 // CreateTunnel creates a new tunnel for the account.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-tunnel-create-cloudflare-tunnel
-func (api *API) CreateTunnel(ctx context.Context, params TunnelCreateParams) (Tunnel, error) {
-	if params.AccountID == "" {
+func (api *API) CreateTunnel(ctx context.Context, rc *ResourceContainer, params TunnelCreateParams) (Tunnel, error) {
+	if rc.Identifier == "" {
 		return Tunnel{}, ErrMissingAccountID
 	}
 
@@ -166,11 +256,11 @@ func (api *API) CreateTunnel(ctx context.Context, params TunnelCreateParams) (Tu
 		return Tunnel{}, errors.New("missing tunnel secret")
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel", params.AccountID)
+	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel", rc.Identifier)
 
 	tunnel := Tunnel{Name: params.Name, Secret: params.Secret}
 
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPost, uri, tunnel, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, tunnel)
 	if err != nil {
 		return Tunnel{}, err
 	}
@@ -178,7 +268,7 @@ func (api *API) CreateTunnel(ctx context.Context, params TunnelCreateParams) (Tu
 	var argoDetailsResponse TunnelDetailResponse
 	err = json.Unmarshal(res, &argoDetailsResponse)
 	if err != nil {
-		return Tunnel{}, errors.Wrap(err, errUnmarshalError)
+		return Tunnel{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return argoDetailsResponse.Result, nil
@@ -187,12 +277,12 @@ func (api *API) CreateTunnel(ctx context.Context, params TunnelCreateParams) (Tu
 // UpdateTunnel updates an existing tunnel for the account.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-tunnel-update-cloudflare-tunnel
-func (api *API) UpdateTunnel(ctx context.Context, params TunnelUpdateParams) (Tunnel, error) {
-	if params.AccountID == "" {
+func (api *API) UpdateTunnel(ctx context.Context, rc *ResourceContainer, params TunnelUpdateParams) (Tunnel, error) {
+	if rc.Identifier == "" {
 		return Tunnel{}, ErrMissingAccountID
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel", params.AccountID)
+	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel", rc.Identifier)
 
 	var tunnel Tunnel
 
@@ -204,7 +294,7 @@ func (api *API) UpdateTunnel(ctx context.Context, params TunnelUpdateParams) (Tu
 		tunnel.Secret = params.Secret
 	}
 
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPatch, uri, tunnel, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, tunnel)
 	if err != nil {
 		return Tunnel{}, err
 	}
@@ -212,19 +302,134 @@ func (api *API) UpdateTunnel(ctx context.Context, params TunnelUpdateParams) (Tu
 	var argoDetailsResponse TunnelDetailResponse
 	err = json.Unmarshal(res, &argoDetailsResponse)
 	if err != nil {
-		return Tunnel{}, errors.Wrap(err, errUnmarshalError)
+		return Tunnel{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
+	return argoDetailsResponse.Result, nil
+}
+
+// UpdateTunnelConfiguration updates an existing tunnel for the account.
+//
+// API reference: https://api.cloudflare.com/#cloudflare-tunnel-configuration-properties
+func (api *API) UpdateTunnelConfiguration(ctx context.Context, rc *ResourceContainer, params TunnelConfigurationParams) (TunnelConfigurationResult, error) {
+	if rc.Identifier == "" {
+		return TunnelConfigurationResult{}, ErrMissingAccountID
+	}
+
+	if params.TunnelID == "" {
+		return TunnelConfigurationResult{}, ErrMissingTunnelID
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s/configurations", rc.Identifier, params.TunnelID)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params.Config)
+	if err != nil {
+		return TunnelConfigurationResult{}, err
+	}
+
+	// `config` comes back as a stringified representation of the configuration
+	// so we need to double unmarshal the result. First, `config` => the string
+	// struct field and if that is successful, then attempt putting it into a typed
+	// struct field.
+
+	var tunnelDetailsResponse TunnelConfigurationStringifiedConfigResponse
+	err = json.Unmarshal(res, &tunnelDetailsResponse)
+	if err != nil {
+		return TunnelConfigurationResult{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+
+	var tunnelDetails TunnelConfigurationResult
+	var tunnelConfig TunnelConfiguration
+
+	err = json.Unmarshal([]byte(tunnelDetailsResponse.Result.Config), &tunnelConfig)
+	if err != nil {
+		return TunnelConfigurationResult{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+
+	tunnelDetails.Config = tunnelConfig
+	tunnelDetails.TunnelID = tunnelDetailsResponse.Result.TunnelID
+	tunnelDetails.Version = tunnelDetailsResponse.Result.Version
+
+	return tunnelDetails, nil
+}
+
+// GetTunnelConfiguration updates an existing tunnel for the account.
+//
+// API reference: https://api.cloudflare.com/#cloudflare-tunnel-configuration-properties
+func (api *API) GetTunnelConfiguration(ctx context.Context, rc *ResourceContainer, tunnelID string) (TunnelConfigurationResult, error) {
+	if rc.Identifier == "" {
+		return TunnelConfigurationResult{}, ErrMissingAccountID
+	}
+
+	if tunnelID == "" {
+		return TunnelConfigurationResult{}, ErrMissingTunnelID
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s/configurations", rc.Identifier, tunnelID)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return TunnelConfigurationResult{}, err
+	}
+
+	// `config` comes back as a stringified representation of the configuration
+	// so we need to double unmarshal the result. First, `config` => the string
+	// struct field and if that is successful, then attempt putting it into a typed
+	// struct field.
+
+	var tunnelDetailsResponse TunnelConfigurationStringifiedConfigResponse
+	err = json.Unmarshal(res, &tunnelDetailsResponse)
+	if err != nil {
+		return TunnelConfigurationResult{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+
+	var tunnelDetails TunnelConfigurationResult
+	var tunnelConfig TunnelConfiguration
+
+	err = json.Unmarshal([]byte(tunnelDetailsResponse.Result.Config), &tunnelConfig)
+	if err != nil {
+		return TunnelConfigurationResult{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+
+	tunnelDetails.Config = tunnelConfig
+	tunnelDetails.TunnelID = tunnelDetailsResponse.Result.TunnelID
+	tunnelDetails.Version = tunnelDetailsResponse.Result.Version
+
+	return tunnelDetails, nil
+}
+
+// TunnelConnections gets all connections on a tunnel.
+//
+// API reference: https://api.cloudflare.com/#cloudflare-tunnel-list-cloudflare-tunnel-connections
+func (api *API) TunnelConnections(ctx context.Context, rc *ResourceContainer, tunnelID string) ([]Connection, error) {
+	if rc.Identifier == "" {
+		return []Connection{}, ErrMissingAccountID
+	}
+
+	if tunnelID == "" {
+		return []Connection{}, ErrMissingTunnelID
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s/connections", rc.Identifier, tunnelID)
+
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return []Connection{}, err
+	}
+
+	var argoDetailsResponse TunnelConnectionResponse
+	err = json.Unmarshal(res, &argoDetailsResponse)
+	if err != nil {
+		return []Connection{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
 	return argoDetailsResponse.Result, nil
 }
 
 // DeleteTunnel removes a single Argo tunnel.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-tunnel-delete-cloudflare-tunnel
-func (api *API) DeleteTunnel(ctx context.Context, params TunnelDeleteParams) error {
-	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s", params.AccountID, params.ID)
+func (api *API) DeleteTunnel(ctx context.Context, rc *ResourceContainer, tunnelID string) error {
+	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s", rc.Identifier, tunnelID)
 
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodDelete, uri, nil, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return err
 	}
@@ -232,7 +437,7 @@ func (api *API) DeleteTunnel(ctx context.Context, params TunnelDeleteParams) err
 	var argoDetailsResponse TunnelDetailResponse
 	err = json.Unmarshal(res, &argoDetailsResponse)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return nil
@@ -241,18 +446,18 @@ func (api *API) DeleteTunnel(ctx context.Context, params TunnelDeleteParams) err
 // CleanupTunnelConnections deletes any inactive connections on a tunnel.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-tunnel-clean-up-cloudflare-tunnel-connections
-func (api *API) CleanupTunnelConnections(ctx context.Context, params TunnelCleanupParams) error {
-	if params.AccountID == "" {
+func (api *API) CleanupTunnelConnections(ctx context.Context, rc *ResourceContainer, tunnelID string) error {
+	if rc.Identifier == "" {
 		return ErrMissingAccountID
 	}
 
-	if params.ID == "" {
+	if tunnelID == "" {
 		return errors.New("missing tunnel ID")
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s/connections", params.AccountID, params.ID)
+	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s/connections", rc.Identifier, tunnelID)
 
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodDelete, uri, nil, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return err
 	}
@@ -260,7 +465,7 @@ func (api *API) CleanupTunnelConnections(ctx context.Context, params TunnelClean
 	var argoDetailsResponse TunnelDetailResponse
 	err = json.Unmarshal(res, &argoDetailsResponse)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return nil
@@ -269,18 +474,18 @@ func (api *API) CleanupTunnelConnections(ctx context.Context, params TunnelClean
 // TunnelToken that allows to run a tunnel.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-tunnel-get-cloudflare-tunnel-token
-func (api *API) TunnelToken(ctx context.Context, params TunnelTokenParams) (string, error) {
-	if params.AccountID == "" {
+func (api *API) TunnelToken(ctx context.Context, rc *ResourceContainer, tunnelID string) (string, error) {
+	if rc.Identifier == "" {
 		return "", ErrMissingAccountID
 	}
 
-	if params.ID == "" {
+	if tunnelID == "" {
 		return "", errors.New("missing tunnel ID")
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s/token", params.AccountID, params.ID)
+	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s/token", rc.Identifier, tunnelID)
 
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodGet, uri, nil, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return "", err
 	}
@@ -288,7 +493,7 @@ func (api *API) TunnelToken(ctx context.Context, params TunnelTokenParams) (stri
 	var tunnelTokenResponse TunnelTokenResponse
 	err = json.Unmarshal(res, &tunnelTokenResponse)
 	if err != nil {
-		return "", errors.Wrap(err, errUnmarshalError)
+		return "", fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return tunnelTokenResponse.Result, nil

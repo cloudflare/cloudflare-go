@@ -8,7 +8,7 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/pkg/errors"
+	"errors"
 )
 
 // UserAgentRule represents a User-Agent Block. These rules can be used to
@@ -60,7 +60,7 @@ func (api *API) CreateUserAgentRule(ctx context.Context, zoneID string, ld UserA
 	response := &UserAgentRuleResponse{}
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return response, nil
@@ -79,7 +79,7 @@ func (api *API) UpdateUserAgentRule(ctx context.Context, zoneID string, id strin
 	response := &UserAgentRuleResponse{}
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return response, nil
@@ -98,7 +98,7 @@ func (api *API) DeleteUserAgentRule(ctx context.Context, zoneID string, id strin
 	response := &UserAgentRuleResponse{}
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return response, nil
@@ -117,7 +117,7 @@ func (api *API) UserAgentRule(ctx context.Context, zoneID string, id string) (*U
 	response := &UserAgentRuleResponse{}
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return response, nil
@@ -144,7 +144,7 @@ func (api *API) ListUserAgentRules(ctx context.Context, zoneID string, page int)
 	response := &UserAgentRuleListResponse{}
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return response, nil

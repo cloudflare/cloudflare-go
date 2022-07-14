@@ -6,9 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/google/go-querystring/query"
-	"github.com/pkg/errors"
 )
 
 // AccessBookmark represents an Access bookmark application.
@@ -52,15 +49,9 @@ func (api *API) ZoneLevelAccessBookmarks(ctx context.Context, zoneID string, pag
 }
 
 func (api *API) accessBookmarks(ctx context.Context, id string, pageOpts PaginationOptions, routeRoot RouteRoot) ([]AccessBookmark, ResultInfo, error) {
-	uri := fmt.Sprintf("/%s/%s/access/bookmarks", routeRoot, id)
+	uri := buildURI(fmt.Sprintf("/%s/%s/access/bookmarks", routeRoot, id), pageOpts)
 
-	v, _ := query.Values(pageOpts)
-	queryParams := v.Encode()
-	if queryParams != "" {
-		queryParams = "?" + queryParams
-	}
-
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri+queryParams, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []AccessBookmark{}, ResultInfo{}, err
 	}
@@ -68,7 +59,7 @@ func (api *API) accessBookmarks(ctx context.Context, id string, pageOpts Paginat
 	var accessBookmarkListResponse AccessBookmarkListResponse
 	err = json.Unmarshal(res, &accessBookmarkListResponse)
 	if err != nil {
-		return []AccessBookmark{}, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
+		return []AccessBookmark{}, ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessBookmarkListResponse.Result, accessBookmarkListResponse.ResultInfo, nil
@@ -106,7 +97,7 @@ func (api *API) accessBookmark(ctx context.Context, id, bookmarkID string, route
 	var accessBookmarkDetailResponse AccessBookmarkDetailResponse
 	err = json.Unmarshal(res, &accessBookmarkDetailResponse)
 	if err != nil {
-		return AccessBookmark{}, errors.Wrap(err, errUnmarshalError)
+		return AccessBookmark{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessBookmarkDetailResponse.Result, nil
@@ -137,7 +128,7 @@ func (api *API) createAccessBookmark(ctx context.Context, id string, accessBookm
 	var accessBookmarkDetailResponse AccessBookmarkDetailResponse
 	err = json.Unmarshal(res, &accessBookmarkDetailResponse)
 	if err != nil {
-		return AccessBookmark{}, errors.Wrap(err, errUnmarshalError)
+		return AccessBookmark{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessBookmarkDetailResponse.Result, nil
@@ -159,7 +150,7 @@ func (api *API) UpdateZoneLevelAccessBookmark(ctx context.Context, zoneID string
 
 func (api *API) updateAccessBookmark(ctx context.Context, id string, accessBookmark AccessBookmark, routeRoot RouteRoot) (AccessBookmark, error) {
 	if accessBookmark.ID == "" {
-		return AccessBookmark{}, errors.Errorf("access bookmark ID cannot be empty")
+		return AccessBookmark{}, fmt.Errorf("access bookmark ID cannot be empty")
 	}
 
 	uri := fmt.Sprintf(
@@ -177,7 +168,7 @@ func (api *API) updateAccessBookmark(ctx context.Context, id string, accessBookm
 	var accessBookmarkDetailResponse AccessBookmarkDetailResponse
 	err = json.Unmarshal(res, &accessBookmarkDetailResponse)
 	if err != nil {
-		return AccessBookmark{}, errors.Wrap(err, errUnmarshalError)
+		return AccessBookmark{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessBookmarkDetailResponse.Result, nil

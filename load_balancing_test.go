@@ -931,6 +931,13 @@ func TestCreateLoadBalancer(t *testing.T) {
                   "00920f38ce07c2e2f4df50b1f61d4194"
                 ]
 			  },
+			  "random_steering": {
+			    "default_weight": 0.2,
+			    "pool_weights": {
+			        "9290f38c5d07c2e2f4df57b1f61d4196": 0.6,
+			        "de90f38ced07c2e2f4df50b1f61d4194": 0.4
+			    }
+			  },
 			  "rules": [
 				  {
 					  "name": "example rule",
@@ -1002,6 +1009,13 @@ func TestCreateLoadBalancer(t *testing.T) {
                     "00920f38ce07c2e2f4df50b1f61d4194"
                   ]
 				},
+				"random_steering": {
+				   "default_weight": 0.2,
+				    "pool_weights": {
+				        "9290f38c5d07c2e2f4df57b1f61d4196": 0.6,
+				        "de90f38ced07c2e2f4df50b1f61d4194": 0.4
+				    }
+				},
 				"rules": [
 				  {
 					  "name": "example rule",
@@ -1072,6 +1086,13 @@ func TestCreateLoadBalancer(t *testing.T) {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
+		RandomSteering: &RandomSteering{
+			DefaultWeight: 0.2,
+			PoolWeights: map[string]float64{
+				"9290f38c5d07c2e2f4df57b1f61d4196": 0.6,
+				"de90f38ced07c2e2f4df50b1f61d4194": 0.4,
+			},
+		},
 		Rules: []*LoadBalancerRule{
 			{
 				Name:      "example rule",
@@ -1131,6 +1152,13 @@ func TestCreateLoadBalancer(t *testing.T) {
 			},
 			"SJC": {
 				"00920f38ce07c2e2f4df50b1f61d4194",
+			},
+		},
+		RandomSteering: &RandomSteering{
+			DefaultWeight: 0.2,
+			PoolWeights: map[string]float64{
+				"9290f38c5d07c2e2f4df57b1f61d4196": 0.6,
+				"de90f38ced07c2e2f4df50b1f61d4194": 0.4,
 			},
 		},
 		Rules: []*LoadBalancerRule{
@@ -1216,6 +1244,13 @@ func TestListLoadBalancers(t *testing.T) {
                         "00920f38ce07c2e2f4df50b1f61d4194"
                       ]
                     },
+                    "random_steering": {
+                        "default_weight": 0.2,
+                        "pool_weights": {
+                            "9290f38c5d07c2e2f4df57b1f61d4196": 0.6,
+                            "de90f38ced07c2e2f4df50b1f61d4194": 0.4
+                        }
+                    },
                     "proxied": true
                 }
             ],
@@ -1273,6 +1308,13 @@ func TestListLoadBalancers(t *testing.T) {
 				},
 				"SJC": {
 					"00920f38ce07c2e2f4df50b1f61d4194",
+				},
+			},
+			RandomSteering: &RandomSteering{
+				DefaultWeight: 0.2,
+				PoolWeights: map[string]float64{
+					"9290f38c5d07c2e2f4df57b1f61d4196": 0.6,
+					"de90f38ced07c2e2f4df50b1f61d4194": 0.4,
 				},
 			},
 			Proxied: true,
@@ -1339,6 +1381,13 @@ func TestLoadBalancerDetails(t *testing.T) {
                     "00920f38ce07c2e2f4df50b1f61d4194"
                   ]
                 },
+                "random_steering": {
+                    "default_weight": 0.2,
+                    "pool_weights": {
+                        "9290f38c5d07c2e2f4df57b1f61d4196": 0.6,
+                        "de90f38ced07c2e2f4df50b1f61d4194": 0.4
+                    }
+                },
                 "proxied": true
             }
         }`)
@@ -1388,6 +1437,13 @@ func TestLoadBalancerDetails(t *testing.T) {
 			},
 			"SJC": {
 				"00920f38ce07c2e2f4df50b1f61d4194",
+			},
+		},
+		RandomSteering: &RandomSteering{
+			DefaultWeight: 0.2,
+			PoolWeights: map[string]float64{
+				"9290f38c5d07c2e2f4df57b1f61d4196": 0.6,
+				"de90f38ced07c2e2f4df50b1f61d4194": 0.4,
 			},
 		},
 		Proxied: true,
@@ -1470,6 +1526,12 @@ func TestModifyLoadBalancer(t *testing.T) {
                     "00920f38ce07c2e2f4df50b1f61d4194"
                   ]
                 },
+                "random_steering": {
+                    "default_weight": 0.5,
+                    "pool_weights": {
+                        "9290f38c5d07c2e2f4df57b1f61d4196": 0.2
+                    }
+                },
                 "proxied": true,
                 "session_affinity": "none",
                 "session_affinity_attributes": {
@@ -1520,6 +1582,12 @@ func TestModifyLoadBalancer(t *testing.T) {
                   "SJC": [
                     "00920f38ce07c2e2f4df50b1f61d4194"
                   ]
+                },
+                "random_steering": {
+                    "default_weight": 0.5,
+                    "pool_weights": {
+                        "9290f38c5d07c2e2f4df57b1f61d4196": 0.2
+                    }
                 },
                 "proxied": true,
                 "session_affinity": "none",
@@ -1573,6 +1641,12 @@ func TestModifyLoadBalancer(t *testing.T) {
 				"00920f38ce07c2e2f4df50b1f61d4194",
 			},
 		},
+		RandomSteering: &RandomSteering{
+			DefaultWeight: 0.5,
+			PoolWeights: map[string]float64{
+				"9290f38c5d07c2e2f4df57b1f61d4196": 0.2,
+			},
+		},
 		Proxied:     true,
 		Persistence: "none",
 		SessionAffinityAttributes: &SessionAffinityAttributes{
@@ -1615,6 +1689,12 @@ func TestModifyLoadBalancer(t *testing.T) {
 			},
 			"SJC": {
 				"00920f38ce07c2e2f4df50b1f61d4194",
+			},
+		},
+		RandomSteering: &RandomSteering{
+			DefaultWeight: 0.5,
+			PoolWeights: map[string]float64{
+				"9290f38c5d07c2e2f4df57b1f61d4196": 0.2,
 			},
 		},
 		Proxied:     true,

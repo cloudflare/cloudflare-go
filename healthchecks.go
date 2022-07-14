@@ -6,31 +6,28 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 // Healthcheck describes a Healthcheck object.
 type Healthcheck struct {
-	ID                   string                  `json:"id,omitempty"`
-	CreatedOn            *time.Time              `json:"created_on,omitempty"`
-	ModifiedOn           *time.Time              `json:"modified_on,omitempty"`
-	Name                 string                  `json:"name"`
-	Description          string                  `json:"description"`
-	Suspended            bool                    `json:"suspended"`
-	Address              string                  `json:"address"`
-	Retries              int                     `json:"retries,omitempty"`
-	Timeout              int                     `json:"timeout,omitempty"`
-	Interval             int                     `json:"interval,omitempty"`
-	ConsecutiveSuccesses int                     `json:"consecutive_successes,omitempty"`
-	ConsecutiveFails     int                     `json:"consecutive_fails,omitempty"`
-	Type                 string                  `json:"type,omitempty"`
-	CheckRegions         []string                `json:"check_regions"`
-	HTTPConfig           *HealthcheckHTTPConfig  `json:"http_config,omitempty"`
-	TCPConfig            *HealthcheckTCPConfig   `json:"tcp_config,omitempty"`
-	Notification         HealthcheckNotification `json:"notification,omitempty"`
-	Status               string                  `json:"status"`
-	FailureReason        string                  `json:"failure_reason"`
+	ID                   string                 `json:"id,omitempty"`
+	CreatedOn            *time.Time             `json:"created_on,omitempty"`
+	ModifiedOn           *time.Time             `json:"modified_on,omitempty"`
+	Name                 string                 `json:"name"`
+	Description          string                 `json:"description"`
+	Suspended            bool                   `json:"suspended"`
+	Address              string                 `json:"address"`
+	Retries              int                    `json:"retries,omitempty"`
+	Timeout              int                    `json:"timeout,omitempty"`
+	Interval             int                    `json:"interval,omitempty"`
+	ConsecutiveSuccesses int                    `json:"consecutive_successes,omitempty"`
+	ConsecutiveFails     int                    `json:"consecutive_fails,omitempty"`
+	Type                 string                 `json:"type,omitempty"`
+	CheckRegions         []string               `json:"check_regions"`
+	HTTPConfig           *HealthcheckHTTPConfig `json:"http_config,omitempty"`
+	TCPConfig            *HealthcheckTCPConfig  `json:"tcp_config,omitempty"`
+	Status               string                 `json:"status"`
+	FailureReason        string                 `json:"failure_reason"`
 }
 
 // HealthcheckHTTPConfig describes configuration for a HTTP healthcheck.
@@ -49,14 +46,6 @@ type HealthcheckHTTPConfig struct {
 type HealthcheckTCPConfig struct {
 	Method string `json:"method"`
 	Port   uint16 `json:"port,omitempty"`
-}
-
-// HealthcheckNotification describes notification configuration for a healthcheck.
-// Deprecated: Use CreateNotificationPolicy() instead.
-type HealthcheckNotification struct {
-	Suspended      bool     `json:"suspended,omitempty"`
-	EmailAddresses []string `json:"email_addresses,omitempty"`
-	Trigger        string   `json:"trigger,omitempty"`
 }
 
 // HealthcheckListResponse is the API response, containing an array of healthchecks.
@@ -84,7 +73,7 @@ func (api *API) Healthchecks(ctx context.Context, zoneID string) ([]Healthcheck,
 	var r HealthcheckListResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return []Healthcheck{}, errors.Wrap(err, errUnmarshalError)
+		return []Healthcheck{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -101,7 +90,7 @@ func (api *API) Healthcheck(ctx context.Context, zoneID, healthcheckID string) (
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return Healthcheck{}, errors.Wrap(err, errUnmarshalError)
+		return Healthcheck{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -118,7 +107,7 @@ func (api *API) CreateHealthcheck(ctx context.Context, zoneID string, healthchec
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return Healthcheck{}, errors.Wrap(err, errUnmarshalError)
+		return Healthcheck{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -135,7 +124,7 @@ func (api *API) UpdateHealthcheck(ctx context.Context, zoneID string, healthchec
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return Healthcheck{}, errors.Wrap(err, errUnmarshalError)
+		return Healthcheck{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -152,7 +141,7 @@ func (api *API) DeleteHealthcheck(ctx context.Context, zoneID string, healthchec
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return nil
 }
@@ -169,7 +158,7 @@ func (api *API) CreateHealthcheckPreview(ctx context.Context, zoneID string, hea
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return Healthcheck{}, errors.Wrap(err, errUnmarshalError)
+		return Healthcheck{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -186,7 +175,7 @@ func (api *API) HealthcheckPreview(ctx context.Context, zoneID, id string) (Heal
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return Healthcheck{}, errors.Wrap(err, errUnmarshalError)
+		return Healthcheck{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -203,7 +192,7 @@ func (api *API) DeleteHealthcheckPreview(ctx context.Context, zoneID string, id 
 	var r HealthcheckResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return nil
 }

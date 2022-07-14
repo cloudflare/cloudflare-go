@@ -7,16 +7,13 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
-	"math"
 	"net/http"
 	"net/url"
 	"strings"
 	"sync"
 	"time"
 
-	"github.com/pkg/errors"
-	"golang.org/x/time/rate"
+	"github.com/hashicorp/go-retryablehttp"
 )
 
 type service struct {
@@ -28,13 +25,13 @@ type ClientParams struct {
 	Email          string
 	UserServiceKey string
 	Token          string
+	STS            *SecurityTokenConfiguration
 	BaseURL        *url.URL
 	UserAgent      string
 	Headers        http.Header
 	HTTPClient     *http.Client
-	RateLimiter    *rate.Limiter
 	RetryPolicy    RetryPolicy
-	Logger         Logger
+	Logger         LeveledLoggerInterface
 	Debug          bool
 }
 
@@ -63,7 +60,8 @@ func (c *Client) Call(ctx context.Context, method, path string, payload interfac
 }
 
 // CallWithHeaders is the entrypoint to making API calls with the correct
-// request setup and allows passing in additional HTTP headers with the request.
+// request setup (like `Call`) but allows passing in additional HTTP headers
+// with the request.
 func (c *Client) CallWithHeaders(ctx context.Context, method, path string, payload interface{}, headers http.Header) ([]byte, error) {
 	return c.makeRequest(ctx, method, path, payload, headers)
 }
@@ -90,21 +88,29 @@ func NewExperimental(config *ClientParams) (*Client, error) {
 	if config.HTTPClient != nil {
 		c.ClientParams.HTTPClient = config.HTTPClient
 	} else {
-		c.ClientParams.HTTPClient = http.DefaultClient
-	}
+		retryClient := retryablehttp.NewClient()
 
-	if config.RateLimiter != nil {
-		c.ClientParams.RateLimiter = config.RateLimiter
-	} else {
-		c.ClientParams.RateLimiter = rate.NewLimiter(rate.Limit(4), 1) // 4rps equates to default api limit (1200 req/5 min)
-	}
+		if c.RetryPolicy.MaxRetries > 0 {
+			retryClient.RetryMax = c.RetryPolicy.MaxRetries
+		} else {
+			retryClient.RetryMax = 4
+		}
 
-	retryPolicy := RetryPolicy{
-		MaxRetries:    3,
-		MinRetryDelay: time.Duration(1) * time.Second,
-		MaxRetryDelay: time.Duration(30) * time.Second,
+		if c.RetryPolicy.MinRetryDelay > 0 {
+			retryClient.RetryWaitMin = c.RetryPolicy.MinRetryDelay
+		} else {
+			retryClient.RetryWaitMin = time.Duration(1) * time.Second
+		}
+
+		if c.RetryPolicy.MaxRetryDelay > 0 {
+			retryClient.RetryWaitMax = c.RetryPolicy.MaxRetryDelay
+		} else {
+			retryClient.RetryWaitMax = time.Duration(30) * time.Second
+		}
+
+		retryClient.Logger = silentRetryLogger
+		c.ClientParams.HTTPClient = retryClient.StandardClient()
 	}
-	c.ClientParams.RetryPolicy = retryPolicy
 
 	if config.Headers != nil {
 		c.ClientParams.Headers = config.Headers
@@ -112,14 +118,8 @@ func NewExperimental(config *ClientParams) (*Client, error) {
 		c.ClientParams.Headers = make(http.Header)
 	}
 
-	if config.Logger != nil {
-		c.ClientParams.Logger = config.Logger
-	} else {
-		c.ClientParams.Logger = log.New(ioutil.Discard, "", log.LstdFlags)
-	}
-
 	if config.Key != "" && config.Token != "" {
-		return nil, errors.New("API key and tokens are mutually exclusive")
+		return nil, ErrAPIKeysAndTokensAreMutuallyExclusive
 	}
 
 	if config.Key != "" {
@@ -136,6 +136,19 @@ func NewExperimental(config *ClientParams) (*Client, error) {
 	}
 
 	c.ClientParams.Debug = config.Debug
+	if c.ClientParams.Debug {
+		c.ClientParams.Logger = &LeveledLogger{Level: 4}
+	} else {
+		c.ClientParams.Logger = SilentLeveledLogger
+	}
+
+	if config.STS != nil {
+		stsToken, err := fetchSTSCredentials(config.STS)
+		if err != nil {
+			return nil, ErrSTSFailure
+		}
+		c.ClientParams.Token = stsToken
+	}
 
 	c.Zones = (*ZonesService)(&c.common)
 
@@ -148,7 +161,7 @@ func NewExperimental(config *ClientParams) (*Client, error) {
 func (c *Client) request(ctx context.Context, method, uri string, reqBody io.Reader, headers http.Header) (*http.Response, error) {
 	req, err := http.NewRequestWithContext(ctx, method, c.BaseURL.String()+uri, reqBody)
 	if err != nil {
-		return nil, errors.Wrap(err, "HTTP request creation failed")
+		return nil, fmt.Errorf("HTTP request creation failed: %w", err)
 	}
 
 	combinedHeaders := make(http.Header)
@@ -157,7 +170,7 @@ func (c *Client) request(ctx context.Context, method, uri string, reqBody io.Rea
 	req.Header = combinedHeaders
 
 	if c.Key == "" && c.Email == "" && c.Token == "" && c.UserServiceKey == "" {
-		return nil, errors.New("no user credentials provided")
+		return nil, ErrMissingCredentials
 	}
 
 	if c.Key != "" {
@@ -183,7 +196,7 @@ func (c *Client) request(ctx context.Context, method, uri string, reqBody io.Rea
 
 	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
-		return nil, errors.Wrap(err, "HTTP request failed")
+		return nil, fmt.Errorf("HTTP request failed: %w", err)
 	}
 
 	return resp, nil
@@ -202,7 +215,7 @@ func (c *Client) makeRequest(ctx context.Context, method, uri string, params int
 			var jsonBody []byte
 			jsonBody, err = json.Marshal(params)
 			if err != nil {
-				return nil, errors.Wrap(err, "error marshalling params to JSON")
+				return nil, fmt.Errorf("error marshalling params to JSON: %w", err)
 			}
 			reqBody = bytes.NewReader(jsonBody)
 		}
@@ -211,82 +224,35 @@ func (c *Client) makeRequest(ctx context.Context, method, uri string, params int
 	var resp *http.Response
 	var respErr error
 	var respBody []byte
-	for i := 0; i <= c.RetryPolicy.MaxRetries; i++ {
-		if i > 0 {
-			// expect the backoff introduced here on errored requests to dominate the effect of rate limiting
-			// don't need a random component here as the rate limiter should do something similar
-			// nb time duration could truncate an arbitrary float. Since our inputs are all ints, we should be ok
-			sleepDuration := time.Duration(math.Pow(2, float64(i-1)) * float64(c.RetryPolicy.MinRetryDelay))
 
-			if sleepDuration > c.RetryPolicy.MaxRetryDelay {
-				sleepDuration = c.RetryPolicy.MaxRetryDelay
-			}
-			// useful to do some simple logging here, maybe introduce levels later
-			c.Logger.Printf("sleeping %s before retry attempt number %d for request %s %s", sleepDuration.String(), i, method, uri)
-
-			select {
-			case <-time.After(sleepDuration):
-			case <-ctx.Done():
-				return nil, fmt.Errorf("operation aborted during backoff: %w", ctx.Err())
-			}
-		}
-
-		err = c.RateLimiter.Wait(ctx)
-		if err != nil {
-			return nil, fmt.Errorf("error caused by request rate limiting: %w", err)
-		}
-
-		if c.Debug {
-			if method == http.MethodPost || method == http.MethodPut || method == http.MethodPatch {
-				buf := &bytes.Buffer{}
-				tee := io.TeeReader(reqBody, buf)
-				debugBody, _ := ioutil.ReadAll(tee)
-				payloadBody, _ := ioutil.ReadAll(buf)
-				fmt.Printf("cloudflare-go [DEBUG] REQUEST Method:%v URI:%s Headers:%#v Body:%v\n", method, c.BaseURL.String()+uri, headers, string(debugBody))
-				// ensure we recreate the io.Reader for use
-				reqBody = bytes.NewReader(payloadBody)
-			} else {
-				fmt.Printf("cloudflare-go [DEBUG] REQUEST Method:%v URI:%s Headers:%#v Body:%v\n", method, c.BaseURL.String()+uri, headers, nil)
-			}
-		}
-
-		resp, respErr = c.request(ctx, method, uri, reqBody, headers)
-
-		// retry if the server is rate limiting us or if it failed
-		// assumes server operations are rolled back on failure
-		if respErr != nil || resp.StatusCode == http.StatusTooManyRequests || resp.StatusCode >= 500 {
-			// if we got a valid http response, try to read body so we can reuse the connection
-			// see https://golang.org/pkg/net/http/#Client.Do
-			if respErr == nil {
-				respBody, err = ioutil.ReadAll(resp.Body)
-				resp.Body.Close()
-
-				respErr = errors.Wrap(err, "could not read response body")
-			} else {
-				c.Logger.Printf("Error performing request: %s %s : %s \n", method, uri, respErr.Error())
-			}
-			continue
-		} else {
-			respBody, err = ioutil.ReadAll(resp.Body)
-			defer resp.Body.Close()
-			if err != nil {
-				return nil, errors.Wrap(err, "could not read response body")
-			}
-			break
-		}
+	if method == http.MethodPost || method == http.MethodPut || method == http.MethodPatch {
+		buf := &bytes.Buffer{}
+		tee := io.TeeReader(reqBody, buf)
+		debugBody, _ := ioutil.ReadAll(tee)
+		payloadBody, _ := ioutil.ReadAll(buf)
+		c.Logger.Debugf("REQUEST Method:%v URI:%s Headers:%#v Body:%v\n", method, c.BaseURL.String()+uri, headers, string(debugBody))
+		// ensure we recreate the io.Reader for use
+		reqBody = bytes.NewReader(payloadBody)
+	} else {
+		c.Logger.Debugf("REQUEST Method:%v URI:%s Headers:%#v Body:%v\n", method, c.BaseURL.String()+uri, headers, nil) //)
 	}
 
-	if c.Debug {
-		fmt.Printf("cloudflare-go [DEBUG] RESPONSE URI:%s StatusCode:%d Body:%#v RayID:%s\n", c.BaseURL.String()+uri, resp.StatusCode, string(respBody), resp.Header.Get("cf-ray"))
-	}
-
+	resp, respErr = c.request(ctx, method, uri, reqBody, headers)
 	if respErr != nil {
 		return nil, respErr
 	}
 
+	c.Logger.Debugf("RESPONSE URI:%s StatusCode:%d Body:%#v RayID:%s\n", c.BaseURL.String()+uri, resp.StatusCode, string(respBody), resp.Header.Get("cf-ray"))
+
+	respBody, err = ioutil.ReadAll(resp.Body)
+	resp.Body.Close()
+	if err != nil {
+		return nil, fmt.Errorf("could not read response body: %w", err)
+	}
+
 	if resp.StatusCode >= http.StatusBadRequest {
 		if strings.HasSuffix(resp.Request.URL.Path, "/filters/validate-expr") {
-			return nil, errors.Errorf("%s", respBody)
+			return nil, fmt.Errorf("%s", respBody)
 		}
 
 		if resp.StatusCode >= http.StatusInternalServerError {
@@ -340,4 +306,24 @@ func (c *Client) makeRequest(ctx context.Context, method, uri string, params int
 	}
 
 	return respBody, nil
+}
+
+func (c *Client) get(ctx context.Context, path string, payload interface{}) ([]byte, error) {
+	return c.makeRequest(ctx, http.MethodGet, path, payload, nil)
+}
+
+func (c *Client) post(ctx context.Context, path string, payload interface{}) ([]byte, error) {
+	return c.makeRequest(ctx, http.MethodPost, path, payload, nil)
+}
+
+func (c *Client) patch(ctx context.Context, path string, payload interface{}) ([]byte, error) {
+	return c.makeRequest(ctx, http.MethodPatch, path, payload, nil)
+}
+
+func (c *Client) put(ctx context.Context, path string, payload interface{}) ([]byte, error) {
+	return c.makeRequest(ctx, http.MethodPut, path, payload, nil)
+}
+
+func (c *Client) delete(ctx context.Context, path string, payload interface{}) ([]byte, error) {
+	return c.makeRequest(ctx, http.MethodDelete, path, payload, nil)
 }

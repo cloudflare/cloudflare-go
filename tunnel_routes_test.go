@@ -29,7 +29,8 @@ func TestListTunnelRoutes(t *testing.T) {
 				"tunnel_name": "blog",
 				"comment": "Example comment for this route",
 				"created_at": "2021-01-25T18:22:34.317854Z",
-				"deleted_at": "2021-01-25T18:22:34.317854Z"
+				"deleted_at": "2021-01-25T18:22:34.317854Z",
+				"virtual_network_id": "9f322de4-5988-4945-b770-f1d6ac200f86"
               }
             ]
           }`)
@@ -46,11 +47,12 @@ func TestListTunnelRoutes(t *testing.T) {
 			"Example comment for this route",
 			&ts,
 			&ts,
+			"9f322de4-5988-4945-b770-f1d6ac200f86",
 		},
 	}
 
-	params := TunnelRoutesListParams{AccountID: testAccountID}
-	got, err := client.ListTunnelRoutes(context.Background(), params)
+	params := TunnelRoutesListParams{}
+	got, err := client.ListTunnelRoutes(context.Background(), AccountIdentifier(testAccountID), params)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, got)
@@ -74,7 +76,8 @@ func TestTunnelRouteForIP(t *testing.T) {
 			  "tunnel_name": "blog",
 			  "comment": "Example comment for this route",
 			  "created_at": "2021-01-25T18:22:34.317854Z",
-			  "deleted_at": "2021-01-25T18:22:34.317854Z"
+			  "deleted_at": "2021-01-25T18:22:34.317854Z",
+			  "virtual_network_id": "9f322de4-5988-4945-b770-f1d6ac200f86"
             }
           }`)
 	}
@@ -83,15 +86,16 @@ func TestTunnelRouteForIP(t *testing.T) {
 
 	ts, _ := time.Parse(time.RFC3339Nano, "2021-01-25T18:22:34.317854Z")
 	want := TunnelRoute{
-		Network:    "ff01::/32",
-		TunnelID:   "f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
-		TunnelName: "blog",
-		Comment:    "Example comment for this route",
-		CreatedAt:  &ts,
-		DeletedAt:  &ts,
+		Network:          "ff01::/32",
+		TunnelID:         "f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
+		TunnelName:       "blog",
+		Comment:          "Example comment for this route",
+		CreatedAt:        &ts,
+		DeletedAt:        &ts,
+		VirtualNetworkID: "9f322de4-5988-4945-b770-f1d6ac200f86",
 	}
 
-	got, err := client.GetTunnelRouteForIP(context.Background(), TunnelRoutesForIPParams{AccountID: testAccountID, Network: "10.1.0.137"})
+	got, err := client.GetTunnelRouteForIP(context.Background(), AccountIdentifier(testAccountID), TunnelRoutesForIPParams{Network: "10.1.0.137"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, got)
@@ -115,7 +119,8 @@ func TestCreateTunnelRoute(t *testing.T) {
 			  "tunnel_name": "blog",
 			  "comment": "Example comment for this route",
 			  "created_at": "2021-01-25T18:22:34.317854Z",
-			  "deleted_at": "2021-01-25T18:22:34.317854Z"
+			  "deleted_at": "2021-01-25T18:22:34.317854Z",
+			  "virtual_network_id": "9f322de4-5988-4945-b770-f1d6ac200f86"
             }
           }`)
 	}
@@ -124,15 +129,16 @@ func TestCreateTunnelRoute(t *testing.T) {
 
 	ts, _ := time.Parse(time.RFC3339Nano, "2021-01-25T18:22:34.317854Z")
 	want := TunnelRoute{
-		Network:    "10.0.0.0/16",
-		TunnelID:   "f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
-		TunnelName: "blog",
-		Comment:    "Example comment for this route",
-		CreatedAt:  &ts,
-		DeletedAt:  &ts,
+		Network:          "10.0.0.0/16",
+		TunnelID:         "f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
+		TunnelName:       "blog",
+		Comment:          "Example comment for this route",
+		CreatedAt:        &ts,
+		DeletedAt:        &ts,
+		VirtualNetworkID: "9f322de4-5988-4945-b770-f1d6ac200f86",
 	}
 
-	tunnel, err := client.CreateTunnelRoute(context.Background(), TunnelRoutesCreateParams{AccountID: testAccountID, TunnelID: testTunnelID, Network: "10.0.0.0/16", Comment: "foo"})
+	tunnel, err := client.CreateTunnelRoute(context.Background(), AccountIdentifier(testAccountID), TunnelRoutesCreateParams{TunnelID: testTunnelID, Network: "10.0.0.0/16", Comment: "foo", VirtualNetworkID: "9f322de4-5988-4945-b770-f1d6ac200f86"})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, tunnel)
 	}
@@ -161,23 +167,25 @@ func TestUpdateTunnelRoute(t *testing.T) {
 			  "tunnel_name": "blog",
 			  "comment": "Example comment for this route",
 			  "created_at": "2021-01-25T18:22:34.317854Z",
-			  "deleted_at": "2021-01-25T18:22:34.317854Z"
+			  "deleted_at": "2021-01-25T18:22:34.317854Z",
+			  "virtual_network_id": "9f322de4-5988-4945-b770-f1d6ac200f86"
             }
           }`)
 	}
 
 	ts, _ := time.Parse(time.RFC3339Nano, "2021-01-25T18:22:34.317854Z")
 	want := TunnelRoute{
-		Network:    "10.0.0.0/16",
-		TunnelID:   "f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
-		TunnelName: "blog",
-		Comment:    "Example comment for this route",
-		CreatedAt:  &ts,
-		DeletedAt:  &ts,
+		Network:          "10.0.0.0/16",
+		TunnelID:         "f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
+		TunnelName:       "blog",
+		Comment:          "Example comment for this route",
+		CreatedAt:        &ts,
+		DeletedAt:        &ts,
+		VirtualNetworkID: "9f322de4-5988-4945-b770-f1d6ac200f86",
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/teamnet/routes/network/10.0.0.0/16", handler)
-	tunnel, err := client.UpdateTunnelRoute(context.Background(), TunnelRoutesUpdateParams{AccountID: testAccountID, TunnelID: testTunnelID, Network: "10.0.0.0/16", Comment: "foo"})
+	tunnel, err := client.UpdateTunnelRoute(context.Background(), AccountIdentifier(testAccountID), TunnelRoutesUpdateParams{TunnelID: testTunnelID, Network: "10.0.0.0/16", Comment: "foo", VirtualNetworkID: "9f322de4-5988-4945-b770-f1d6ac200f86"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, tunnel)
@@ -202,12 +210,13 @@ func TestDeleteTunnelRoute(t *testing.T) {
 			  "tunnel_name": "blog",
 			  "comment": "Example comment for this route",
 			  "created_at": "2021-01-25T18:22:34.317854Z",
-			  "deleted_at": "2021-01-25T18:22:34.317854Z"
+			  "deleted_at": "2021-01-25T18:22:34.317854Z",
+			  "virtual_network_id": "9f322de4-5988-4945-b770-f1d6ac200f86"
             }
           }`)
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/teamnet/routes/network/10.0.0.0/16", handler)
-	err := client.DeleteTunnelRoute(context.Background(), TunnelRoutesDeleteParams{AccountID: testAccountID, Network: "10.0.0.0/16"})
+	err := client.DeleteTunnelRoute(context.Background(), AccountIdentifier(testAccountID), TunnelRoutesDeleteParams{Network: "10.0.0.0/16", VirtualNetworkID: "9f322de4-5988-4945-b770-f1d6ac200f86"})
 	assert.NoError(t, err)
 }

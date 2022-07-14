@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 // ArgoTunnel is the struct definition of a tunnel.
@@ -57,7 +55,7 @@ func (api *API) ArgoTunnels(ctx context.Context, accountID string) ([]ArgoTunnel
 	var argoDetailsResponse ArgoTunnelsDetailResponse
 	err = json.Unmarshal(res, &argoDetailsResponse)
 	if err != nil {
-		return []ArgoTunnel{}, errors.Wrap(err, errUnmarshalError)
+		return []ArgoTunnel{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return argoDetailsResponse.Result, nil
 }
@@ -78,7 +76,7 @@ func (api *API) ArgoTunnel(ctx context.Context, accountID, tunnelUUID string) (A
 	var argoDetailsResponse ArgoTunnelDetailResponse
 	err = json.Unmarshal(res, &argoDetailsResponse)
 	if err != nil {
-		return ArgoTunnel{}, errors.Wrap(err, errUnmarshalError)
+		return ArgoTunnel{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return argoDetailsResponse.Result, nil
 }
@@ -101,7 +99,7 @@ func (api *API) CreateArgoTunnel(ctx context.Context, accountID, name, secret st
 	var argoDetailsResponse ArgoTunnelDetailResponse
 	err = json.Unmarshal(res, &argoDetailsResponse)
 	if err != nil {
-		return ArgoTunnel{}, errors.Wrap(err, errUnmarshalError)
+		return ArgoTunnel{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return argoDetailsResponse.Result, nil
@@ -123,7 +121,7 @@ func (api *API) DeleteArgoTunnel(ctx context.Context, accountID, tunnelUUID stri
 	var argoDetailsResponse ArgoTunnelDetailResponse
 	err = json.Unmarshal(res, &argoDetailsResponse)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return nil
@@ -145,7 +143,7 @@ func (api *API) CleanupArgoTunnelConnections(ctx context.Context, accountID, tun
 	var argoDetailsResponse ArgoTunnelDetailResponse
 	err = json.Unmarshal(res, &argoDetailsResponse)
 	if err != nil {
-		return errors.Wrap(err, errUnmarshalError)
+		return fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return nil

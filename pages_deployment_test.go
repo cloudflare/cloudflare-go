@@ -138,6 +138,42 @@ const (
 			}
 		]
 	}`
+
+	testPagesDeploymentLogsResponse = `
+	{
+		"total": 6,
+		"includes_container_logs": true,
+		"data": [
+			{
+				"ts": "2021-01-01T00:00:00Z",
+				"line": "Installing dependencies"
+			},
+			{
+				"ts": "2021-01-01T00:00:00Z",
+				"line": "Verify run directory"
+			},
+			{
+				"ts": "2021-01-01T00:00:00Z",
+				"line": "Executing user command: bash test.sh"
+			},
+			{
+				"ts": "2021-01-01T00:00:00Z",
+				"line": "Finished"
+			},
+			{
+				"ts": "2021-01-01T00:00:00Z",
+				"line": "Building functions..."
+			},
+			{
+				"ts": "2021-01-01T00:00:00Z",
+				"line": "Validating asset output directory"
+			},
+			{
+				"ts": "2021-01-01T00:00:00Z",
+				"line": "Parsed 2 valid header rules."
+			}
+		]
+	}`
 )
 
 var (
@@ -267,6 +303,43 @@ var (
 			Message:   "Parsed 2 valid header rules.",
 		},
 	}
+
+	expectedPagesDeploymentLogs = &PagesDeploymentLogs{
+		Total:                 6,
+		IncludesContainerLogs: true,
+		Data:                  expectedPagesDeploymentLogEntries,
+	}
+
+	expectedPagesDeploymentLogEntries = []PagesDeploymentLogEntry{
+		{
+			Timestamp: &pagesDeploymentDummyTime,
+			Line:      "Installing dependencies",
+		},
+		{
+			Timestamp: &pagesDeploymentDummyTime,
+			Line:      "Verify run directory",
+		},
+		{
+			Timestamp: &pagesDeploymentDummyTime,
+			Line:      "Executing user command: bash test.sh",
+		},
+		{
+			Timestamp: &pagesDeploymentDummyTime,
+			Line:      "Finished",
+		},
+		{
+			Timestamp: &pagesDeploymentDummyTime,
+			Line:      "Building functions...",
+		},
+		{
+			Timestamp: &pagesDeploymentDummyTime,
+			Line:      "Validating asset output directory",
+		},
+		{
+			Timestamp: &pagesDeploymentDummyTime,
+			Line:      "Parsed 2 valid header rules.",
+		},
+	}
 )
 
 func TestListPagesDeployments(t *testing.T) {
@@ -304,8 +377,7 @@ func TestListPagesDeployments(t *testing.T) {
 		Count:   1,
 		Total:   1,
 	}
-	actual, resultInfo, err := client.ListPagesDeployments(context.Background(), ListPagesDeploymentsParams{
-		AccountID:         testAccountID,
+	actual, resultInfo, err := client.ListPagesDeployments(context.Background(), AccountIdentifier(testAccountID), ListPagesDeploymentsParams{
 		ProjectName:       "test",
 		PaginationOptions: PaginationOptions{},
 	})
@@ -333,11 +405,7 @@ func TestGetPagesDeploymentInfo(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe", handler)
 
-	actual, err := client.GetPagesDeploymentInfo(context.Background(), GetPagesDeploymentInfoParams{
-		AccountID:    testAccountID,
-		ProjectName:  "test",
-		DeploymentID: "0012e50b-fa5d-44db-8cb5-1f372785dcbe",
-	})
+	actual, err := client.GetPagesDeploymentInfo(context.Background(), AccountIdentifier(testAccountID), "test", "0012e50b-fa5d-44db-8cb5-1f372785dcbe")
 	if assert.NoError(t, err) {
 		assert.Equal(t, *expectedPagesDeployment, actual)
 	}
@@ -361,8 +429,7 @@ func TestGetPagesDeploymentStageLogs(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe/history/build/logs", handler)
 
-	actual, err := client.GetPagesDeploymentStageLogs(context.Background(), GetPagesDeploymentStageLogsParams{
-		AccountID:    testAccountID,
+	actual, err := client.GetPagesDeploymentStageLogs(context.Background(), AccountIdentifier(testAccountID), GetPagesDeploymentStageLogsParams{
 		ProjectName:  "test",
 		DeploymentID: "0012e50b-fa5d-44db-8cb5-1f372785dcbe",
 		StageName:    "build",
@@ -370,6 +437,34 @@ func TestGetPagesDeploymentStageLogs(t *testing.T) {
 	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, *expectedPagesDeploymentStageLogs, actual)
+	}
+}
+
+func TestGetPagesDeploymentLogs(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": %s
+		}`, testPagesDeploymentLogsResponse)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe/history/logs", handler)
+
+	actual, err := client.GetPagesDeploymentLogs(context.Background(), AccountIdentifier(testAccountID), GetPagesDeploymentLogsParams{
+		ProjectName:  "test",
+		DeploymentID: "0012e50b-fa5d-44db-8cb5-1f372785dcbe",
+		SizeOptions:  SizeOptions{},
+	})
+	if assert.NoError(t, err) {
+		assert.Equal(t, *expectedPagesDeploymentLogs, actual)
 	}
 }
 
@@ -391,11 +486,7 @@ func TestDeletePagesDeployment(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe", handler)
 
-	err := client.DeletePagesDeployment(context.Background(), DeletePagesDeploymentParams{
-		AccountID:    testAccountID,
-		ProjectName:  "test",
-		DeploymentID: "0012e50b-fa5d-44db-8cb5-1f372785dcbe",
-	})
+	err := client.DeletePagesDeployment(context.Background(), AccountIdentifier(testAccountID), "test", "0012e50b-fa5d-44db-8cb5-1f372785dcbe")
 	assert.NoError(t, err)
 }
 
@@ -417,8 +508,7 @@ func TestCreatePagesDeployment(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments", handler)
 
-	actual, err := client.CreatePagesDeployment(context.Background(), CreatePagesDeploymentParams{
-		AccountID:   testAccountID,
+	actual, err := client.CreatePagesDeployment(context.Background(), AccountIdentifier(testAccountID), CreatePagesDeploymentParams{
 		ProjectName: "test",
 	})
 
@@ -445,11 +535,7 @@ func TestRetryPagesDeployment(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe/retry", handler)
 
-	actual, err := client.RetryPagesDeployment(context.Background(), RetryPagesDeploymentParams{
-		AccountID:    testAccountID,
-		ProjectName:  "test",
-		DeploymentID: "0012e50b-fa5d-44db-8cb5-1f372785dcbe",
-	})
+	actual, err := client.RetryPagesDeployment(context.Background(), AccountIdentifier(testAccountID), "test", "0012e50b-fa5d-44db-8cb5-1f372785dcbe")
 	if assert.NoError(t, err) {
 		assert.Equal(t, *expectedPagesDeployment, actual)
 	}
@@ -473,11 +559,7 @@ func TestRollbackPagesDeployment(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe/rollback", handler)
 
-	actual, err := client.RollbackPagesDeployment(context.Background(), RollbackPagesDeploymentParams{
-		AccountID:    testAccountID,
-		ProjectName:  "test",
-		DeploymentID: "0012e50b-fa5d-44db-8cb5-1f372785dcbe",
-	})
+	actual, err := client.RollbackPagesDeployment(context.Background(), AccountIdentifier(testAccountID), "test", "0012e50b-fa5d-44db-8cb5-1f372785dcbe")
 	if assert.NoError(t, err) {
 		assert.Equal(t, *expectedPagesDeployment, actual)
 	}

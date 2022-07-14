@@ -6,9 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/google/go-querystring/query"
-	"github.com/pkg/errors"
 )
 
 // AccessApplicationType represents the application type.
@@ -16,9 +13,14 @@ type AccessApplicationType string
 
 // These constants represent all valid application types.
 const (
-	SelfHosted AccessApplicationType = "self_hosted"
-	SSH        AccessApplicationType = "ssh"
-	VNC        AccessApplicationType = "vnc"
+	SelfHosted  AccessApplicationType = "self_hosted"
+	SSH         AccessApplicationType = "ssh"
+	VNC         AccessApplicationType = "vnc"
+	Biso        AccessApplicationType = "biso"
+	AppLauncher AccessApplicationType = "app_launcher"
+	Warp        AccessApplicationType = "warp"
+	Bookmark    AccessApplicationType = "bookmark"
+	Saas        AccessApplicationType = "saas"
 )
 
 // AccessApplication represents an Access application.
@@ -39,6 +41,7 @@ type AccessApplication struct {
 	CorsHeaders             *AccessApplicationCorsHeaders  `json:"cors_headers,omitempty"`
 	CreatedAt               *time.Time                     `json:"created_at,omitempty"`
 	UpdatedAt               *time.Time                     `json:"updated_at,omitempty"`
+	SaasApplication         *SaasApplication               `json:"saas_app,omitempty"`
 	AutoRedirectToIdentity  bool                           `json:"auto_redirect_to_identity,omitempty"`
 	SkipInterstitial        bool                           `json:"skip_interstitial,omitempty"`
 	AppLauncherVisible      bool                           `json:"app_launcher_visible,omitempty"`
@@ -81,6 +84,32 @@ type AccessApplicationDetailResponse struct {
 	Result   AccessApplication `json:"result"`
 }
 
+type SourceConfig struct {
+	Name      string            `json:"name,omitempty"`
+	NameByIDP map[string]string `json:"name_by_idp,omitempty"`
+}
+
+type SAMLAttributeConfig struct {
+	Name         string       `json:"name,omitempty"`
+	NameFormat   string       `json:"name_format,omitempty"`
+	FriendlyName string       `json:"friendly_name,omitempty"`
+	Required     bool         `json:"required,omitempty"`
+	Source       SourceConfig `json:"source"`
+}
+
+type SaasApplication struct {
+	AppID              string                `json:"app_id,omitempty"`
+	ConsumerServiceUrl string                `json:"consumer_service_url,omitempty"`
+	SPEntityID         string                `json:"sp_entity_id,omitempty"`
+	PublicKey          string                `json:"public_key,omitempty"`
+	IDPEntityID        string                `json:"idp_entity_id,omitempty"`
+	NameIDFormat       string                `json:"name_id_format,omitempty"`
+	SSOEndpoint        string                `json:"sso_endpoint,omitempty"`
+	UpdatedAt          *time.Time            `json:"updated_at,omitempty"`
+	CreatedAt          *time.Time            `json:"created_at,omitempty"`
+	CustomAttributes   []SAMLAttributeConfig `json:"custom_attributes,omitempty"`
+}
+
 // AccessApplications returns all applications within an account.
 //
 // API reference: https://api.cloudflare.com/#access-applications-list-access-applications
@@ -96,15 +125,9 @@ func (api *API) ZoneLevelAccessApplications(ctx context.Context, zoneID string, 
 }
 
 func (api *API) accessApplications(ctx context.Context, id string, pageOpts PaginationOptions, routeRoot RouteRoot) ([]AccessApplication, ResultInfo, error) {
-	uri := fmt.Sprintf("/%s/%s/access/apps", routeRoot, id)
+	uri := buildURI(fmt.Sprintf("/%s/%s/access/apps", routeRoot, id), pageOpts)
 
-	v, _ := query.Values(pageOpts)
-	queryParams := v.Encode()
-	if queryParams != "" {
-		queryParams = "?" + queryParams
-	}
-
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri+queryParams, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []AccessApplication{}, ResultInfo{}, err
 	}
@@ -112,7 +135,7 @@ func (api *API) accessApplications(ctx context.Context, id string, pageOpts Pagi
 	var accessApplicationListResponse AccessApplicationListResponse
 	err = json.Unmarshal(res, &accessApplicationListResponse)
 	if err != nil {
-		return []AccessApplication{}, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
+		return []AccessApplication{}, ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessApplicationListResponse.Result, accessApplicationListResponse.ResultInfo, nil
@@ -150,7 +173,7 @@ func (api *API) accessApplication(ctx context.Context, id, applicationID string,
 	var accessApplicationDetailResponse AccessApplicationDetailResponse
 	err = json.Unmarshal(res, &accessApplicationDetailResponse)
 	if err != nil {
-		return AccessApplication{}, errors.Wrap(err, errUnmarshalError)
+		return AccessApplication{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessApplicationDetailResponse.Result, nil
@@ -181,7 +204,7 @@ func (api *API) createAccessApplication(ctx context.Context, id string, accessAp
 	var accessApplicationDetailResponse AccessApplicationDetailResponse
 	err = json.Unmarshal(res, &accessApplicationDetailResponse)
 	if err != nil {
-		return AccessApplication{}, errors.Wrap(err, errUnmarshalError)
+		return AccessApplication{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessApplicationDetailResponse.Result, nil
@@ -203,7 +226,7 @@ func (api *API) UpdateZoneLevelAccessApplication(ctx context.Context, zoneID str
 
 func (api *API) updateAccessApplication(ctx context.Context, id string, accessApplication AccessApplication, routeRoot RouteRoot) (AccessApplication, error) {
 	if accessApplication.ID == "" {
-		return AccessApplication{}, errors.Errorf("access application ID cannot be empty")
+		return AccessApplication{}, fmt.Errorf("access application ID cannot be empty")
 	}
 
 	uri := fmt.Sprintf(
@@ -221,7 +244,7 @@ func (api *API) updateAccessApplication(ctx context.Context, id string, accessAp
 	var accessApplicationDetailResponse AccessApplicationDetailResponse
 	err = json.Unmarshal(res, &accessApplicationDetailResponse)
 	if err != nil {
-		return AccessApplication{}, errors.Wrap(err, errUnmarshalError)
+		return AccessApplication{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return accessApplicationDetailResponse.Result, nil

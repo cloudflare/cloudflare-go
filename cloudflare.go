@@ -16,7 +16,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/pkg/errors"
+	"errors"
+
 	"golang.org/x/time/rate"
 )
 
@@ -74,7 +75,7 @@ func newClient(opts ...Option) (*API, error) {
 
 	err := api.parseOptions(opts...)
 	if err != nil {
-		return nil, errors.Wrap(err, "options parsing failed")
+		return nil, fmt.Errorf("options parsing failed: %w", err)
 	}
 
 	// Fall back to http.DefaultClient if the package user does not provide
@@ -148,7 +149,7 @@ func (api *API) ZoneIDByName(zoneName string) (string, error) {
 	zoneName = normalizeZoneName(zoneName)
 	res, err := api.ListZonesContext(context.Background(), WithZoneFilters(zoneName, api.AccountID, ""))
 	if err != nil {
-		return "", errors.Wrap(err, "ListZonesContext command failed")
+		return "", fmt.Errorf("ListZonesContext command failed: %w", err)
 	}
 
 	switch len(res.Result) {
@@ -201,7 +202,7 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 				var jsonBody []byte
 				jsonBody, err = json.Marshal(params)
 				if err != nil {
-					return nil, errors.Wrap(err, "error marshalling params to JSON")
+					return nil, fmt.Errorf("error marshalling params to JSON: %w", err)
 				}
 				reqBody = bytes.NewReader(jsonBody)
 			}
@@ -222,13 +223,13 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 			select {
 			case <-time.After(sleepDuration):
 			case <-ctx.Done():
-				return nil, errors.Wrap(ctx.Err(), "operation aborted during backoff")
+				return nil, fmt.Errorf("operation aborted during backoff: %w", ctx.Err())
 			}
 		}
 
 		err = api.rateLimiter.Wait(ctx)
 		if err != nil {
-			return nil, errors.Wrap(err, "Error caused by request rate limiting")
+			return nil, fmt.Errorf("error caused by request rate limiting: %w", err)
 		}
 
 		if api.Debug {
@@ -256,7 +257,7 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 				respBody, err = ioutil.ReadAll(resp.Body)
 				resp.Body.Close()
 
-				respErr = errors.Wrap(err, "could not read response body")
+				respErr = fmt.Errorf("could not read response body: %w", err)
 
 				api.logger.Printf("Request: %s %s got an error response %d: %s\n", method, uri, resp.StatusCode,
 					strings.Replace(strings.Replace(string(respBody), "\n", "", -1), "\t", "", -1))
@@ -268,7 +269,7 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 			respBody, err = ioutil.ReadAll(resp.Body)
 			defer resp.Body.Close()
 			if err != nil {
-				return nil, errors.Wrap(err, "could not read response body")
+				return nil, fmt.Errorf("could not read response body: %w", err)
 			}
 			break
 		}
@@ -278,12 +279,12 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 	}
 
 	if api.Debug {
-		fmt.Printf("cloudflare-go [DEBUG] RESPONSE URI:%s StatusCode:%d Body:%#v RayID:%s\n", api.BaseURL, resp.StatusCode, string(respBody), resp.Header.Get("cf-ray"))
+		fmt.Printf("cloudflare-go [DEBUG] RESPONSE StatusCode:%d Body:%#v RayID:%s\n", resp.StatusCode, string(respBody), resp.Header.Get("cf-ray"))
 	}
 
 	if resp.StatusCode >= http.StatusBadRequest {
 		if strings.HasSuffix(resp.Request.URL.Path, "/filters/validate-expr") {
-			return nil, errors.Errorf("%s", respBody)
+			return nil, fmt.Errorf("%s", respBody)
 		}
 
 		if resp.StatusCode >= http.StatusInternalServerError {
@@ -299,7 +300,7 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 		errBody := &Response{}
 		err = json.Unmarshal(respBody, &errBody)
 		if err != nil {
-			return nil, errors.Wrap(err, errUnmarshalErrorBody)
+			return nil, fmt.Errorf(errUnmarshalErrorBody+": %w", err)
 		}
 
 		errCodes := make([]int, 0, len(errBody.Errors))
@@ -345,7 +346,7 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 func (api *API) request(ctx context.Context, method, uri string, reqBody io.Reader, authType int, headers http.Header) (*http.Response, error) {
 	req, err := http.NewRequestWithContext(ctx, method, api.BaseURL+uri, reqBody)
 	if err != nil {
-		return nil, errors.Wrap(err, "HTTP request creation failed")
+		return nil, fmt.Errorf("HTTP request creation failed: %w", err)
 	}
 
 	combinedHeaders := make(http.Header)
@@ -374,7 +375,7 @@ func (api *API) request(ctx context.Context, method, uri string, reqBody io.Read
 
 	resp, err := api.httpClient.Do(req)
 	if err != nil {
-		return nil, errors.Wrap(err, "HTTP request failed")
+		return nil, fmt.Errorf("HTTP request failed: %w", err)
 	}
 
 	return resp, nil
@@ -418,19 +419,19 @@ type Response struct {
 
 // ResultInfoCursors contains information about cursors.
 type ResultInfoCursors struct {
-	Before string `json:"before"`
-	After  string `json:"after"`
+	Before string `json:"before" url:"before,omitempty"`
+	After  string `json:"after" url:"after,omitempty"`
 }
 
 // ResultInfo contains metadata about the Response.
 type ResultInfo struct {
-	Page       int               `json:"page"`
-	PerPage    int               `json:"per_page"`
-	TotalPages int               `json:"total_pages"`
-	Count      int               `json:"count"`
-	Total      int               `json:"total_count"`
-	Cursor     string            `json:"cursor"`
-	Cursors    ResultInfoCursors `json:"cursors"`
+	Page       int               `json:"page" url:"page,omitempty"`
+	PerPage    int               `json:"per_page" url:"per_page,omitempty"`
+	TotalPages int               `json:"total_pages" url:"-"`
+	Count      int               `json:"count" url:"-"`
+	Total      int               `json:"total_count" url:"-"`
+	Cursor     string            `json:"cursor" url:"cursor,omitempty"`
+	Cursors    ResultInfoCursors `json:"cursors" url:"cursors,omitempty"`
 }
 
 // RawResponse keeps the result as JSON form.
@@ -449,7 +450,7 @@ func (api *API) Raw(method, endpoint string, data interface{}) (json.RawMessage,
 
 	var r RawResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return nil, errors.Wrap(err, errUnmarshalError)
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
