@@ -73,6 +73,8 @@ type TeamsBlockPage struct {
 	LogoPath        string `json:"logo_path,omitempty"`
 	BackgroundColor string `json:"background_color,omitempty"`
 	Name            string `json:"name,omitempty"`
+	MailtoAddress   string `json:"mailto_address,omitempty"`
+	MailtoSubject   string `json:"mailto_subject,omitempty"`
 }
 
 type TeamsRuleType = string
