@@ -183,7 +183,6 @@ type TunnelConfigurationParams struct {
 }
 
 type TunnelListParams struct {
-	AccountID string     `url:"-"`
 	Name      string     `url:"name,omitempty"`
 	UUID      string     `url:"uuid,omitempty"` // the tunnel ID
 	IsDeleted *bool      `url:"is_deleted,omitempty"`
