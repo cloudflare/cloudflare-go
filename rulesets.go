@@ -210,7 +210,7 @@ type RulesetRuleActionParameters struct {
 	RequestFields           []RulesetActionParametersLogCustomField          `json:"request_fields,omitempty"`
 	ResponseFields          []RulesetActionParametersLogCustomField          `json:"response_fields,omitempty"`
 	CookieFields            []RulesetActionParametersLogCustomField          `json:"cookie_fields,omitempty"`
-	BypassCache             *bool                                            `json:"bypass_cache,omitempty"`
+	Cache                   *bool                                            `json:"cache,omitempty"`
 	EdgeTTL                 *RulesetRuleActionParametersEdgeTTL              `json:"edge_ttl,omitempty"`
 	BrowserTTL              *RulesetRuleActionParametersBrowserTTL           `json:"browser_ttl,omitempty"`
 	ServeStale              *RulesetRuleActionParametersServeStale           `json:"serve_stale,omitempty"`

@@ -219,7 +219,7 @@ func TestGetRuleset_SetCacheSettings(t *testing.T) {
             "version": "1",
             "action": "set_cache_settings",
             "action_parameters": {
-				"bypass_cache": false,
+				"cache": true,
 				"edge_ttl":{"mode":"respect_origin","default":60,"status_code_ttl":[{"status_code":200,"value":30},{"status_code_range":{"from":201,"to":300},"value":20}]},
 				"browser_ttl":{"mode":"override_origin","default":10},
 				"serve_stale":{"disable_stale_while_updating":true},
@@ -268,7 +268,7 @@ func TestGetRuleset_SetCacheSettings(t *testing.T) {
 		Version: "1",
 		Action:  string(RulesetRuleActionSetCacheSettings),
 		ActionParameters: &RulesetRuleActionParameters{
-			BypassCache: BoolPtr(false),
+			Cache: BoolPtr(true),
 			EdgeTTL: &RulesetRuleActionParametersEdgeTTL{
 				Mode:    "respect_origin",
 				Default: UintPtr(60),
