@@ -27,6 +27,7 @@ const (
 	RulesetPhaseHTTPRequestLateTransformManaged     RulesetPhase = "http_request_late_transform_managed"
 	RulesetPhaseHTTPRequestMain                     RulesetPhase = "http_request_main"
 	RulesetPhaseHTTPRequestOrigin                   RulesetPhase = "http_request_origin"
+	RulesetPhaseHTTPRequestDynamicRedirect          RulesetPhase = "http_request_dynamic_redirect"
 	RulesetPhaseHTTPRequestRedirect                 RulesetPhase = "http_request_redirect"
 	RulesetPhaseHTTPRequestSanitize                 RulesetPhase = "http_request_sanitize"
 	RulesetPhaseHTTPRequestTransform                RulesetPhase = "http_request_transform"
@@ -91,6 +92,7 @@ func RulesetPhaseValues() []string {
 		string(RulesetPhaseHTTPRequestLateTransformManaged),
 		string(RulesetPhaseHTTPRequestMain),
 		string(RulesetPhaseHTTPRequestOrigin),
+		string(RulesetPhaseHTTPRequestDynamicRedirect),
 		string(RulesetPhaseHTTPRequestRedirect),
 		string(RulesetPhaseHTTPRequestSanitize),
 		string(RulesetPhaseHTTPRequestTransform),
@@ -218,6 +220,7 @@ type RulesetRuleActionParameters struct {
 	CacheKey                *RulesetRuleActionParametersCacheKey             `json:"cache_key,omitempty"`
 	OriginErrorPagePassthru *bool                                            `json:"origin_error_page_passthru,omitempty"`
 	FromList                *RulesetRuleActionParametersFromList             `json:"from_list,omitempty"`
+	FromValue               *RulesetRuleActionParametersFromValue            `json:"from_value,omitempty"`
 }
 
 // RulesetRuleActionParametersFromList holds the FromList struct for
@@ -225,6 +228,17 @@ type RulesetRuleActionParameters struct {
 type RulesetRuleActionParametersFromList struct {
 	Name string `json:"name"`
 	Key  string `json:"key"`
+}
+
+type RulesetRuleActionParametersFromValue struct {
+	StatusCode          uint16                               `json:"status_code,omitempty"`
+	TargetURL           RulesetRuleActionParametersTargetURL `json:"target_url"`
+	PreserveQueryString bool                                 `json:"preserve_query_string,omitempty"`
+}
+
+type RulesetRuleActionParametersTargetURL struct {
+	Value      string `json:"value,omitempty"`
+	Expression string `json:"expression,omitempty"`
 }
 
 type RulesetRuleActionParametersEdgeTTL struct {
