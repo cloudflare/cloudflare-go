@@ -3,17 +3,21 @@ module github.com/cloudflare/cloudflare-go
 go 1.17
 
 require (
+	github.com/bflad/tfproviderlint v0.28.1
+	github.com/client9/misspell v0.3.4
 	github.com/cweill/gotests v1.6.0
 	github.com/go-delve/delve v1.9.0
 	github.com/golangci/golangci-lint v1.47.1
 	github.com/google/go-querystring v1.1.0
+	github.com/hashicorp/go-changelog v0.0.0-20220419201213-5edfc0d651d8
 	github.com/hashicorp/go-retryablehttp v0.7.1
+	github.com/hashicorp/terraform-plugin-docs v0.13.0
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/orijtech/structslop v0.0.6
 	github.com/pkg/errors v0.9.1
 	github.com/ramya-rao-a/go-outline v0.0.0-20210608161538-9736a4bde949
 	github.com/stretchr/testify v1.8.0
-	github.com/urfave/cli/v2 v2.11.0
+	github.com/urfave/cli/v2 v2.11.1
 	github.com/uudashr/gopkgs/v2 v2.1.2
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616
 	golang.org/x/net v0.0.0-20220624214902-1bab6f366d9e
@@ -22,19 +26,38 @@ require (
 )
 
 require (
+	github.com/Masterminds/goutils v1.1.1 // indirect
+	github.com/Masterminds/semver/v3 v3.1.1 // indirect
+	github.com/Masterminds/sprig/v3 v3.2.2 // indirect
 	github.com/Microsoft/go-winio v0.4.16 // indirect
 	github.com/ProtonMail/go-crypto v0.0.0-20210428141323-04723f9f07d7 // indirect
 	github.com/acomagu/bufpipe v1.0.3 // indirect
+	github.com/armon/go-radix v1.0.0 // indirect
+	github.com/bflad/gopaniccheck v0.1.0 // indirect
+	github.com/bgentry/speakeasy v0.1.0 // indirect
 	github.com/emirpasic/gods v1.12.0 // indirect
 	github.com/go-git/gcfg v1.5.0 // indirect
 	github.com/go-git/go-billy/v5 v5.3.1 // indirect
 	github.com/go-git/go-git/v5 v5.4.2 // indirect
-	github.com/hashicorp/go-changelog v0.0.0-20220419201213-5edfc0d651d8 // indirect
-	github.com/imdario/mergo v0.3.12 // indirect
+	github.com/google/uuid v1.3.0 // indirect
+	github.com/hashicorp/go-checkpoint v0.5.0 // indirect
+	github.com/hashicorp/go-uuid v1.0.3 // indirect
+	github.com/hashicorp/hc-install v0.4.0 // indirect
+	github.com/hashicorp/terraform-exec v0.17.2 // indirect
+	github.com/hashicorp/terraform-json v0.14.0 // indirect
+	github.com/huandu/xstrings v1.3.2 // indirect
+	github.com/imdario/mergo v0.3.13 // indirect
 	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
 	github.com/kevinburke/ssh_config v0.0.0-20201106050909-4977a11b4351 // indirect
+	github.com/mitchellh/cli v1.1.4 // indirect
+	github.com/mitchellh/copystructure v1.2.0 // indirect
+	github.com/mitchellh/reflectwalk v1.0.2 // indirect
+	github.com/posener/complete v1.2.3 // indirect
+	github.com/russross/blackfriday v1.6.0 // indirect
+	github.com/shopspring/decimal v1.3.1 // indirect
 	github.com/xanzy/ssh-agent v0.3.0 // indirect
-	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e // indirect
+	github.com/zclconf/go-cty v1.10.0 // indirect
+	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 )
@@ -107,7 +130,7 @@ require (
 	github.com/gostaticanalysis/comment v1.4.2 // indirect
 	github.com/gostaticanalysis/forcetypeassert v0.1.0 // indirect
 	github.com/gostaticanalysis/nilerr v0.1.1 // indirect
-	github.com/hashicorp/errwrap v1.0.0 // indirect
+	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/hashicorp/go-version v1.6.0 // indirect
@@ -164,7 +187,7 @@ require (
 	github.com/ryanrolds/sqlclosecheck v0.3.0 // indirect
 	github.com/sanposhiho/wastedassign/v2 v2.0.6 // indirect
 	github.com/securego/gosec/v2 v2.12.0 // indirect
-	github.com/sergi/go-diff v1.1.0 // indirect
+	github.com/sergi/go-diff v1.2.0 // indirect
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/sivchari/containedctx v1.0.2 // indirect
