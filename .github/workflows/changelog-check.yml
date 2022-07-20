@@ -1,0 +1,21 @@
+name: Changelog check
+on: [pull_request_target]
+
+jobs:
+  changelog-check:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ^1.17
+      - run: make tools
+      - run: go run tools/cmd/changelog-check/main.go ${{ github.event.pull_request.number }}
+        env:
+          GITHUB_OWNER: cloudflare
+          GITHUB_REPO: cloudflare-go
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
