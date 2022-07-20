@@ -208,7 +208,7 @@ type RulesetRuleActionParameters struct {
 	Response                *RulesetRuleActionParametersBlockResponse        `json:"response,omitempty"`
 	HostHeader              string                                           `json:"host_header,omitempty"`
 	Origin                  *RulesetRuleActionParametersOrigin               `json:"origin,omitempty"`
-	SNI                     string                                           `json:"sni,omitempty"`
+	SNI                     *RulesetRuleActionParametersSni                  `json:"sni,omitempty"`
 	RequestFields           []RulesetActionParametersLogCustomField          `json:"request_fields,omitempty"`
 	ResponseFields          []RulesetActionParametersLogCustomField          `json:"response_fields,omitempty"`
 	CookieFields            []RulesetActionParametersLogCustomField          `json:"cookie_fields,omitempty"`
@@ -399,11 +399,17 @@ type RulesetRuleActionParametersMatchedData struct {
 	PublicKey string `json:"public_key,omitempty"`
 }
 
-// RulesetRuleActionParametersOrigin is the definition for define action
-// parameters that involve Origin override.
+// RulesetRuleActionParametersOrigin is the definition for route action
+// parameters that involve origin overrides.
 type RulesetRuleActionParametersOrigin struct {
 	Host string `json:"host,omitempty"`
 	Port uint16 `json:"port,omitempty"`
+}
+
+// RulesetRuleActionParametersSni is the definition for the route action
+// parameters that involve SNI overrides.
+type RulesetRuleActionParametersSni struct {
+	Value string `json:"value"`
 }
 
 // RulesetRule contains information about a single Ruleset Rule.
