@@ -5,17 +5,13 @@ and consistent experience.
 
 ## Improvements
 
-### Why no iterator for `List` operations?
+### Automatically paginate `List` operations by default
 
-Initially, there was proposal to either: 1) automatically paginate all results
-or 2) return an `Iterator` object with `Next()` methods. I've opted to instead
-return the pagination information to the operator as using an `Iterator` object
-has some hidden complexities when attempting to cover all use cases. Some
-examples:
+`List()` methods will automatically paginate all resources **unless** 
+`PerPage` or `Page` is supplied as a part of the `$entityListParams`.
 
-- forward and backwards iteration
-- further filtering the iterations
-- only returning subsets
+This allows us the best of both worlds where if you need to explicitly 
+override the inbuilt pagination, you have the ability to.
 
 ## Nested methods and services
 
