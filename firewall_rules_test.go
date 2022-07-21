@@ -173,7 +173,7 @@ func TestFirewallRules(t *testing.T) {
 		},
 	}
 
-	actual, err := client.FirewallRules(context.Background(), "d56084adb405e0b7e32c52321bf07be6", firewallRulePageOpts)
+	actual, _, err := client.FirewallRules(context.Background(), ZoneIdentifier("d56084adb405e0b7e32c52321bf07be6"), FirewallRuleListParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -223,7 +223,7 @@ func TestFirewallRule(t *testing.T) {
 		},
 	}
 
-	actual, err := client.FirewallRule(context.Background(), "d56084adb405e0b7e32c52321bf07be6", "f2d427378e7542acb295380d352e2ebd")
+	actual, err := client.FirewallRule(context.Background(), ZoneIdentifier("d56084adb405e0b7e32c52321bf07be6"), "f2d427378e7542acb295380d352e2ebd")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -277,7 +277,7 @@ func TestCreateSingleFirewallRule(t *testing.T) {
 		},
 	}
 
-	actual, err := client.CreateFirewallRules(context.Background(), "d56084adb405e0b7e32c52321bf07be6", want)
+	actual, err := client.CreateFirewallRules(context.Background(), ZoneIdentifier("d56084adb405e0b7e32c52321bf07be6"), want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -357,7 +357,7 @@ func TestCreateMultipleFirewallRules(t *testing.T) {
 		},
 	}
 
-	actual, err := client.CreateFirewallRules(context.Background(), "d56084adb405e0b7e32c52321bf07be6", want)
+	actual, err := client.CreateFirewallRules(context.Background(), ZoneIdentifier("d56084adb405e0b7e32c52321bf07be6"), want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -382,7 +382,7 @@ func TestUpdateFirewallRuleWithMissingID(t *testing.T) {
 		},
 	}
 
-	_, err := client.UpdateFirewallRule(context.Background(), "d56084adb405e0b7e32c52321bf07be6", want)
+	_, err := client.UpdateFirewallRule(context.Background(), ZoneIdentifier("d56084adb405e0b7e32c52321bf07be6"), want)
 	assert.EqualError(t, err, "firewall rule ID cannot be empty")
 }
 
@@ -429,7 +429,7 @@ func TestUpdateSingleFirewallRule(t *testing.T) {
 		},
 	}
 
-	actual, err := client.UpdateFirewallRule(context.Background(), "d56084adb405e0b7e32c52321bf07be6", want)
+	actual, err := client.UpdateFirewallRule(context.Background(), ZoneIdentifier("d56084adb405e0b7e32c52321bf07be6"), want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -509,7 +509,7 @@ func TestUpdateMultipleFirewallRules(t *testing.T) {
 		},
 	}
 
-	actual, err := client.UpdateFirewallRules(context.Background(), "d56084adb405e0b7e32c52321bf07be6", want)
+	actual, err := client.UpdateFirewallRules(context.Background(), ZoneIdentifier("d56084adb405e0b7e32c52321bf07be6"), want)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -534,7 +534,7 @@ func TestDeleteSingleFirewallRule(t *testing.T) {
 
 	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/firewall/rules/f2d427378e7542acb295380d352e2ebd", handler)
 
-	err := client.DeleteFirewallRule(context.Background(), "d56084adb405e0b7e32c52321bf07be6", "f2d427378e7542acb295380d352e2ebd")
+	err := client.DeleteFirewallRule(context.Background(), ZoneIdentifier("d56084adb405e0b7e32c52321bf07be6"), "f2d427378e7542acb295380d352e2ebd")
 	assert.NoError(t, err)
 }
 
@@ -542,6 +542,6 @@ func TestDeleteFirewallRuleWithMissingID(t *testing.T) {
 	setup()
 	defer teardown()
 
-	err := client.DeleteFirewallRule(context.Background(), "d56084adb405e0b7e32c52321bf07be6", "")
+	err := client.DeleteFirewallRule(context.Background(), ZoneIdentifier("d56084adb405e0b7e32c52321bf07be6"), "")
 	assert.EqualError(t, err, "firewall rule ID cannot be empty")
 }
