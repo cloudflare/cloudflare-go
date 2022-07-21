@@ -7,7 +7,7 @@ require (
 	github.com/client9/misspell v0.3.4
 	github.com/cweill/gotests v1.6.0
 	github.com/go-delve/delve v1.9.0
-	github.com/golangci/golangci-lint v1.47.1
+	github.com/golangci/golangci-lint v1.47.2
 	github.com/google/go-querystring v1.1.0
 	github.com/hashicorp/go-changelog v0.0.0-20220419201213-5edfc0d651d8
 	github.com/hashicorp/go-retryablehttp v0.7.1
