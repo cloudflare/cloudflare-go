@@ -1,0 +1,4 @@
+```release-note:bug
+rulesets: add http_custom_errors phase and serve_error action
+```
+
