@@ -15,6 +15,7 @@ BUG FIXES:
 
 DEPENDENCIES:
 
+* provider: bumps github.com/golangci/golangci-lint from 1.47.1 to 1.47.2 ([#1005](https://github.com/cloudflare/cloudflare-go/issues/1005))
 * provider: bumps github.com/urfave/cli/v2 from 2.11.0 to 2.11.1 ([#1003](https://github.com/cloudflare/cloudflare-go/issues/1003))
 
 ## 0.45.0 (July 20th, 2022)
