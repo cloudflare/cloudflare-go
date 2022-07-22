@@ -1,4 +1,7 @@
-```release-note:bug
-rulesets: add http_custom_errors phase and serve_error action
+```release-note:enhancement
+rulesets: add support for `http_custom_errors` phase
 ```
 
+```release-note:enhancement
+rulesets: add support for `serve_error` action
+```
