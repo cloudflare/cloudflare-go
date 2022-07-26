@@ -50,7 +50,7 @@ func TestAccessBookmarks(t *testing.T) {
 		Name:               "Example Site",
 		Domain:             "example.com",
 		LogoURL:            "https://www.example.com/example.png",
-		AppLauncherVisible: true,
+		AppLauncherVisible: BoolPtr(true),
 		CreatedAt:          &createdAt,
 		UpdatedAt:          &updatedAt,
 	}}
@@ -104,7 +104,7 @@ func TestAccessBookmark(t *testing.T) {
 		Name:               "Example Site",
 		Domain:             "example.com",
 		LogoURL:            "https://www.example.com/example.png",
-		AppLauncherVisible: true,
+		AppLauncherVisible: BoolPtr(true),
 		CreatedAt:          &createdAt,
 		UpdatedAt:          &updatedAt,
 	}
@@ -157,7 +157,7 @@ func TestCreateAccessBookmarks(t *testing.T) {
 		Name:               "Example Site",
 		Domain:             "example.com",
 		LogoURL:            "https://www.example.com/example.png",
-		AppLauncherVisible: true,
+		AppLauncherVisible: BoolPtr(true),
 		CreatedAt:          &createdAt,
 		UpdatedAt:          &updatedAt,
 	}
@@ -168,7 +168,7 @@ func TestCreateAccessBookmarks(t *testing.T) {
 		Name:               "Example Site",
 		Domain:             "example.com",
 		LogoURL:            "https://www.example.com/example.png",
-		AppLauncherVisible: true,
+		AppLauncherVisible: BoolPtr(true),
 	})
 
 	if assert.NoError(t, err) {
@@ -181,7 +181,7 @@ func TestCreateAccessBookmarks(t *testing.T) {
 		Name:               "Example Site",
 		Domain:             "example.com",
 		LogoURL:            "https://www.example.com/example.png",
-		AppLauncherVisible: true,
+		AppLauncherVisible: BoolPtr(true),
 	})
 
 	if assert.NoError(t, err) {
@@ -220,7 +220,7 @@ func TestUpdateAccessBookmark(t *testing.T) {
 		Name:               "Example Site",
 		Domain:             "example.com",
 		LogoURL:            "https://www.example.com/example.png",
-		AppLauncherVisible: true,
+		AppLauncherVisible: BoolPtr(true),
 		CreatedAt:          &createdAt,
 		UpdatedAt:          &updatedAt,
 	}
