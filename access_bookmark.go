@@ -14,7 +14,7 @@ type AccessBookmark struct {
 	Domain             string     `json:"domain"`
 	Name               string     `json:"name"`
 	LogoURL            string     `json:"logo_url,omitempty"`
-	AppLauncherVisible bool       `json:"app_launcher_visible,omitempty"`
+	AppLauncherVisible *bool      `json:"app_launcher_visible,omitempty"`
 	CreatedAt          *time.Time `json:"created_at,omitempty"`
 	UpdatedAt          *time.Time `json:"updated_at,omitempty"`
 }

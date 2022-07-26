@@ -42,12 +42,12 @@ type AccessApplication struct {
 	CreatedAt               *time.Time                     `json:"created_at,omitempty"`
 	UpdatedAt               *time.Time                     `json:"updated_at,omitempty"`
 	SaasApplication         *SaasApplication               `json:"saas_app,omitempty"`
-	AutoRedirectToIdentity  bool                           `json:"auto_redirect_to_identity,omitempty"`
-	SkipInterstitial        bool                           `json:"skip_interstitial,omitempty"`
-	AppLauncherVisible      bool                           `json:"app_launcher_visible,omitempty"`
-	EnableBindingCookie     bool                           `json:"enable_binding_cookie,omitempty"`
+	AutoRedirectToIdentity  *bool                          `json:"auto_redirect_to_identity,omitempty"`
+	SkipInterstitial        *bool                          `json:"skip_interstitial,omitempty"`
+	AppLauncherVisible      *bool                          `json:"app_launcher_visible,omitempty"`
+	EnableBindingCookie     *bool                          `json:"enable_binding_cookie,omitempty"`
 	HttpOnlyCookieAttribute *bool                          `json:"http_only_cookie_attribute,omitempty"`
-	ServiceAuth401Redirect  bool                           `json:"service_auth_401_redirect,omitempty"`
+	ServiceAuth401Redirect  *bool                          `json:"service_auth_401_redirect,omitempty"`
 }
 
 type AccessApplicationGatewayRule struct {
