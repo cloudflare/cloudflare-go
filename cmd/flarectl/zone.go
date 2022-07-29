@@ -7,8 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	cloudflare "github.com/cloudflare/cloudflare-go"
-	"github.com/urfave/cli/v2"
+	cloudflare "github.com/js0cha/cloudflare-go-bm"
 )
 
 func zoneCerts(*cli.Context) error {

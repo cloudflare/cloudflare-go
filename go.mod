@@ -1,6 +1,6 @@
-module github.com/cloudflare/cloudflare-go
+module github.com/js0cha/cloudflare-go-bm
 
-go 1.17
+go 1.18
 
 require (
 	github.com/bflad/tfproviderlint v0.28.1
@@ -17,7 +17,6 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/ramya-rao-a/go-outline v0.0.0-20210608161538-9736a4bde949
 	github.com/stretchr/testify v1.8.0
-	github.com/urfave/cli/v2 v2.11.1
 	github.com/uudashr/gopkgs/v2 v2.1.2
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616
 	golang.org/x/net v0.0.0-20220624214902-1bab6f366d9e
@@ -214,7 +213,6 @@ require (
 	github.com/ultraware/funlen v0.0.3 // indirect
 	github.com/ultraware/whitespace v0.0.5 // indirect
 	github.com/uudashr/gocognit v1.0.6 // indirect
-	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
 	github.com/yagipy/maintidx v1.0.0 // indirect
 	github.com/yeya24/promlinter v0.2.0 // indirect
 	gitlab.com/bosi/decorder v0.2.2 // indirect

@@ -3,8 +3,7 @@ package main
 import (
 	"os"
 
-	cloudflare "github.com/cloudflare/cloudflare-go"
-	"github.com/urfave/cli/v2"
+	cloudflare "github.com/js0cha/cloudflare-go-bm"
 )
 
 var (

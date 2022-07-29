@@ -8,9 +8,6 @@ import (
 	"strconv"
 
 	"errors"
-
-	"github.com/cloudflare/cloudflare-go"
-	"github.com/urfave/cli/v2"
 )
 
 func formatAccessRule(rule cloudflare.AccessRule) []string {

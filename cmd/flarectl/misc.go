@@ -9,9 +9,8 @@ import (
 
 	"errors"
 
-	cloudflare "github.com/cloudflare/cloudflare-go"
+	cloudflare "github.com/js0cha/cloudflare-go-bm"
 	"github.com/olekukonko/tablewriter"
-	"github.com/urfave/cli/v2"
 )
 
 func initializeAPI(c *cli.Context) error {

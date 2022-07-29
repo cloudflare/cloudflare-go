@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	cloudflare "github.com/cloudflare/cloudflare-go"
+	cloudflare "github.com/js0cha/cloudflare-go-bm"
 )
 
 func ExampleAPI_ListLoadBalancers() {
