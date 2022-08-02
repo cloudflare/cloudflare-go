@@ -3,9 +3,11 @@ package cloudflare
 import (
 	"context"
 	"fmt"
-	"github.com/stretchr/testify/assert"
+	"math/big"
 	"net/http"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 const testASNNumber = "13335"
@@ -21,18 +23,16 @@ func TestIntelligence_ASNOverview(t *testing.T) {
   "success": true,
   "errors": [],
   "messages": [],
-  "result": [
-    {
-      "asn": 13335,
-      "description": "CLOUDFLARENET",
-      "country": "US",
-      "type": "hosting_provider",
-      "domain_count": 1,
-      "top_domains": [
-        "example.com"
-      ]
-    }
-  ]
+  "result": {
+	"asn": 13335,
+	"description": "CLOUDFLARENET",
+	"country": "US",
+	"type": "hosting_provider",
+	"domain_count": 1,
+	"top_domains": [
+	"example.com"
+	]
+  }
 }`)
 	})
 
@@ -57,8 +57,7 @@ func TestIntelligence_ASNOverview(t *testing.T) {
 
 	out, err := client.IntelligenceASNOverview(context.Background(), IntelligenceASNOverviewParameters{AccountID: testAccountID, ASN: 13335})
 	if assert.NoError(t, err) {
-		assert.Equal(t, len(out), 1, "Length of ASN overview not expected")
-		assert.Equal(t, out[0], want, "structs not equal")
+		assert.Equal(t, out, want, "Response structs not equal")
 	}
 }
 
@@ -94,9 +93,9 @@ func TestIntelligence_ASNSubnet(t *testing.T) {
 		assert.Equal(t, ErrMissingASN, err)
 	}
 
-	want := IntelligenceASNSubnetResponse{
+	want := ASNSubnetInfo{
 		ASN:          13335,
-		IPCountTotal: 1,
+		IPCountTotal: big.NewInt(1),
 		Subnets:      []string{"192.0.2.0/24", "2001:DB8::/32"},
 		Count:        1,
 		Page:         1,

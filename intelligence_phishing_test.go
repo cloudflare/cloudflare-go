@@ -3,9 +3,10 @@ package cloudflare
 import (
 	"context"
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestIntelligence_PhishingScan(t *testing.T) {
@@ -30,20 +31,18 @@ func TestIntelligence_PhishingScan(t *testing.T) {
 	})
 
 	// Make sure missing account ID is thrown
-	_, err := client.IntelligencePhishingScan(context.Background(), PhishingScanParameters{})
+	_, err := client.IntelligencePhishingScanSubmission(context.Background(), PhishingScanSubmissionParameters{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	want := PhishingScan{
-		URL:        "https://www.cloudflare.com",
-		Phishing:   false,
-		Verified:   false,
-		Score:      0.99,
-		Classifier: "MACHINE_LEARNING_v2",
+	want := PhishingScanSubmission{
+		SubmittedUrls: []URLSubmission{
+			{URL: "https://www.cloudflare.com"},
+		},
 	}
 
-	out, err := client.IntelligencePhishingScan(context.Background(), PhishingScanParameters{AccountID: testAccountID, URL: "https://www.cloudflare.com"})
+	out, err := client.IntelligencePhishingScanSubmission(context.Background(), PhishingScanSubmissionParameters{AccountID: testAccountID, URL: "https://www.cloudflare.com"})
 	if assert.NoError(t, err) {
 		assert.Equal(t, out, want, "structs not equal")
 	}
