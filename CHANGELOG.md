@@ -1,4 +1,6 @@
-## 0.46.0 (Unreleased)
+## 0.47.0 (Unreleased)
+
+## 0.46.0 (3rd August, 2022)
 
 NOTES:
 
