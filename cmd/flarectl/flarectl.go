@@ -83,6 +83,13 @@ func main() {
 					Aliases: []string{"l"},
 					Action:  zoneList,
 					Usage:   "List all zones on an account",
+					Flags: []cli.Flag{
+						&cli.IntFlag{
+							Name:  "with-days-stats",
+							Usage: "add a total count stats for the last specified number of days",
+							Value: 0,
+						},
+					},
 				},
 				{
 					Name:    "create",
@@ -281,6 +288,11 @@ func main() {
 						&cli.StringFlag{
 							Name:  "content",
 							Usage: "record content",
+						},
+						&cli.IntFlag{
+							Name:  "with-days-stats",
+							Usage: "add a total count stats for the last specified number of days",
+							Value: 0,
 						},
 					},
 				},

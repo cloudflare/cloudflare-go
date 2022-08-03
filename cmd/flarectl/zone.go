@@ -2,10 +2,15 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"net/http"
 	"os"
+	"reflect"
 	"strconv"
 	"strings"
+	"time"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/urfave/cli/v2"
@@ -73,20 +78,33 @@ func zoneCheck(c *cli.Context) error {
 
 func zoneList(c *cli.Context) error {
 	zones, err := api.ListZones(context.Background())
+	nbDaysStats := c.Int("with-days-stats")
 	if err != nil {
 		fmt.Println(err)
 		return err
 	}
 	output := make([][]string, 0, len(zones))
+	cols := []string{"ID", "Name", "Plan", "Status"}
+	if nbDaysStats != 0 {
+		cols = append(cols, "Stats")
+	}
 	for _, z := range zones {
-		output = append(output, []string{
+		// Prepare the row of data to add
+		outputBuffer := make([][]string, 0, 1)
+		outputBuffer = append(outputBuffer, []string{
 			z.ID,
 			z.Name,
 			z.Plan.Name,
 			z.Status,
 		})
+		if nbDaysStats != 0 {
+			zoneStats(nbDaysStats, z.ID, &outputBuffer, 1, -1)
+		}
+
+		output = append(output, outputBuffer[0])
 	}
-	writeTable(c, output, "ID", "Name", "Plan", "Status")
+
+	writeTable(c, output, cols...)
 
 	return nil
 }
@@ -258,6 +276,98 @@ func zoneCachePurge(c *cli.Context) error {
 	return nil
 }
 
+func zoneStats(nbDaysStats int, zoneId string, output *[][]string, colDnsNameIndex int, colDnsTypeIndex int) {
+	dateTo := time.Now()
+	dateFrom := dateTo.AddDate(0, 0, -1*nbDaysStats)
+	batchSize := 100 // Number of GraphQL objects being queried by query
+	nbElems := len(*output)
+	iBatch := 0
+	for iBatch*batchSize < nbElems {
+		zoneStatsFromTo(zoneId, dateFrom, dateTo, output, colDnsNameIndex, colDnsTypeIndex, iBatch*batchSize, (iBatch+1)*batchSize)
+		iBatch = iBatch + 1
+	}
+}
+
+func zoneStatsFromTo(zoneId string, dateFrom time.Time, dateTo time.Time, output *[][]string, colDnsNameIndex int, colDnsTypeIndex int, iFrom int, iTo int) {
+	// Build the zone-scoped GraphQL query
+	totalGraphQuery := fmt.Sprintf("query { viewer { zones(filter: { zoneTag: \"%s\" }) { ", zoneId)
+	bAnyQuery := false
+	for i, r := range *output {
+		if i >= iFrom && i < iTo {
+			if colDnsTypeIndex == -1 || (*output)[i][colDnsTypeIndex] == "CNAME" || (*output)[i][colDnsTypeIndex] == "A" {
+				partGraphQuery := fmt.Sprintf(
+					"e%d: httpRequestsAdaptiveGroups(filter:{datetime_gt: \"%s\",datetime_lt: \"%s\",OR:[{clientRequestHTTPHost_like: \"%s\"},{clientRequestHTTPHost_like: \"%s\"}]}, limit: 10, orderBy: [count_DESC]) { count }",
+					i,
+					dateFrom.Format("2006-01-02T15:04:05Z"),
+					dateTo.Format("2006-01-02T15:04:05Z"),
+					"%."+strings.Replace(r[colDnsNameIndex], "*.", "", -1),
+					r[colDnsNameIndex])
+				totalGraphQuery = fmt.Sprintf("%s %s", totalGraphQuery, partGraphQuery)
+				bAnyQuery = true
+			}
+		}
+	}
+	if !bAnyQuery {
+		return
+	}
+	totalGraphQuery = fmt.Sprintf("%s}}}", totalGraphQuery)
+
+	// Post the GraphQL query
+	payload := strings.NewReader(fmt.Sprintf("{\"query\":\"%s\",\"variables\":{}}", strings.Replace(totalGraphQuery, "\"", "\\\"", -1)))
+	client := &http.Client{}
+	req, err := http.NewRequest("POST", "https://api.cloudflare.com/client/v4/graphql", payload)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return
+	}
+	apiToken := os.Getenv("CF_API_TOKEN")
+	if apiToken != "" {
+		req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", apiToken))
+	} else {
+		req.Header.Add("X-Auth-Email", os.Getenv("CF_API_EMAIL"))
+		req.Header.Add("X-Auth-Key", os.Getenv("CF_API_KEY"))
+	}
+	req.Header.Add("Content-Type", "application/json")
+	res, err := client.Do(req)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return
+	}
+	defer res.Body.Close()
+	bodyResponse, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return
+	}
+
+	// Parse the response to inject the event counts into the output
+	var resultStats map[string]interface{}
+	var zone map[string]interface{}
+	json.Unmarshal([]byte(bodyResponse), &resultStats)
+	if resultStats["data"] == nil { // This zone is not having data
+		return
+	}
+	zone = resultStats["data"].(map[string]interface{})["viewer"].(map[string]interface{})["zones"].([]interface{})[0].(map[string]interface{})
+
+	for i := iFrom; i < iTo; i++ {
+		if i >= len(*output) {
+			return
+		}
+		var zoneEid string
+		var zoneId []interface{}
+		injectedStat := ""
+		zoneEid = fmt.Sprintf("e%d", i)
+		if reflect.TypeOf(zone[zoneEid]) == reflect.TypeOf(zoneId) {
+			zoneId = zone[zoneEid].([]interface{})
+			if zoneId != nil && len(zoneId) > 0 {
+				countVal := zoneId[0].(map[string]interface{})["count"].(float64)
+				injectedStat = strconv.FormatFloat(countVal, 'f', -1, 64)
+			}
+		}
+		(*output)[i] = append((*output)[i], injectedStat)
+	}
+}
+
 func zoneRecords(c *cli.Context) error {
 	var zone string
 	if c.NArg() > 0 {
@@ -268,6 +378,7 @@ func zoneRecords(c *cli.Context) error {
 		cli.ShowSubcommandHelp(c) //nolint
 		return nil
 	}
+	nbDaysStats := c.Int("with-days-stats")
 
 	zoneID, err := api.ZoneIDByName(zone)
 	if err != nil {
@@ -302,6 +413,7 @@ func zoneRecords(c *cli.Context) error {
 			return err
 		}
 	}
+
 	output := make([][]string, 0, len(records))
 	for _, r := range records {
 		switch r.Type {
@@ -324,7 +436,12 @@ func zoneRecords(c *cli.Context) error {
 			fmt.Sprintf("%d", r.TTL),
 		})
 	}
-	writeTable(c, output, "ID", "Type", "Name", "Content", "Proxied", "TTL")
+	cols := []string{"ID", "Type", "Name", "Content", "Proxied", "TTL"}
+	if nbDaysStats != 0 {
+		zoneStats(nbDaysStats, zoneID, &output, 2, 1)
+		cols = append(cols, "Stats")
+	}
+	writeTable(c, output, cols...)
 
 	return nil
 }
