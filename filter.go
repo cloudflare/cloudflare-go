@@ -61,6 +61,8 @@ type FilterValidationExpressionMessage struct {
 }
 
 type FilterListParams struct {
+	PerPage uint16
+	Page    uint16
 	ResultInfo
 }
 
@@ -91,20 +93,8 @@ func (api *API) Filter(ctx context.Context, rc *ResourceContainer, filterID stri
 //
 // API reference: https://developers.cloudflare.com/firewall/api/cf-filters/get/#get-all-filters
 func (api *API) Filters(ctx context.Context, rc *ResourceContainer, params FilterListParams) ([]Filter, *ResultInfo, error) {
-	uri := buildURI(fmt.Sprintf("/zones/%s/filters", rc.Identifier), params)
-
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
-	if err != nil {
-		return []Filter{}, &ResultInfo{}, err
-	}
 
 	var filtersResponse FiltersDetailResponse
-	err = json.Unmarshal(res, &filtersResponse)
-
-	if err != nil {
-		return []Filter{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
-	}
-
 	if params.PerPage < 1 && params.Page < 1 {
 		var filters []Filter
 		params.PerPage = 50
@@ -128,6 +118,18 @@ func (api *API) Filters(ctx context.Context, rc *ResourceContainer, params Filte
 			params.ResultInfo = fResponse.ResultInfo.Next()
 		}
 		filtersResponse.Result = filters
+	} else {
+		uri := buildURI(fmt.Sprintf("/zones/%s/filters", rc.Identifier), params)
+
+		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+		if err != nil {
+			return []Filter{}, &ResultInfo{}, err
+		}
+		err = json.Unmarshal(res, &filtersResponse)
+
+		if err != nil {
+			return []Filter{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		}
 	}
 
 	return filtersResponse.Result, &filtersResponse.ResultInfo, nil

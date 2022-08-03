@@ -39,6 +39,8 @@ type FirewallRuleResponse struct {
 }
 
 type FirewallRuleListParams struct {
+	PerPage uint16
+	Page    uint16
 	ResultInfo
 }
 
@@ -46,18 +48,7 @@ type FirewallRuleListParams struct {
 //
 // API reference: https://developers.cloudflare.com/firewall/api/cf-firewall-rules/get/#get-all-rules
 func (api *API) FirewallRules(ctx context.Context, rc *ResourceContainer, params FirewallRuleListParams) ([]FirewallRule, *ResultInfo, error) {
-	uri := buildURI(fmt.Sprintf("/zones/%s/firewall/rules", rc.Identifier), params)
-
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
-	if err != nil {
-		return []FirewallRule{}, &ResultInfo{}, err
-	}
-
 	var firewallDetailResponse FirewallRulesDetailResponse
-	err = json.Unmarshal(res, &firewallDetailResponse)
-	if err != nil {
-		return []FirewallRule{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
-	}
 
 	if params.PerPage < 1 && params.Page < 1 {
 		var firewallRules []FirewallRule
@@ -82,6 +73,18 @@ func (api *API) FirewallRules(ctx context.Context, rc *ResourceContainer, params
 			params.ResultInfo = fResponse.ResultInfo.Next()
 		}
 		firewallDetailResponse.Result = firewallRules
+	} else {
+		uri := buildURI(fmt.Sprintf("/zones/%s/firewall/rules", rc.Identifier), params)
+
+		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+		if err != nil {
+			return []FirewallRule{}, &ResultInfo{}, err
+		}
+
+		err = json.Unmarshal(res, &firewallDetailResponse)
+		if err != nil {
+			return []FirewallRule{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		}
 	}
 
 	return firewallDetailResponse.Result, &firewallDetailResponse.ResultInfo, nil
