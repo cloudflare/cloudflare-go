@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -97,7 +96,7 @@ func TestListRateLimits(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/rate_limits", handler)
 	want := []RateLimit{expectedRateLimitStruct}
 
-	actual, _, err := client.ListRateLimits(context.Background(), testZoneID, PaginationOptions{})
+	actual, _, err := client.ListRateLimits(context.Background(), ZoneIdentifier(testZoneID), RateLimitListParams{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -130,65 +129,7 @@ func TestListRateLimitsWithPageOpts(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/rate_limits", handler)
 	want := []RateLimit{expectedRateLimitStruct}
 
-	pageOpts := PaginationOptions{
-		PerPage: 50,
-	}
-	actual, _, err := client.ListRateLimits(context.Background(), testZoneID, pageOpts)
-	if assert.NoError(t, err) {
-		assert.Equal(t, want, actual)
-	}
-}
-
-func TestListAllRateLimitsDoesPagination(t *testing.T) {
-	setup()
-	defer teardown()
-
-	oneHundredRateLimitRecords := strings.Repeat(serverRateLimitDescription+",", 99) + serverRateLimitDescription
-	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
-		w.Header().Set("content-type", "application/json")
-		if r.URL.Query().Get("page") == "1" {
-			fmt.Fprintf(w, `{
-		  "result": [
-			%s
-		  ],
-		  "success": true,
-		  "errors": null,
-		  "messages": null,
-		  "result_info": {
-			"page": 1,
-			"per_page": 100,
-			"count": 100,
-			"total_count": 101
-		  }
-		}
-		`, oneHundredRateLimitRecords)
-		} else if r.URL.Query().Get("page") == "2" {
-			fmt.Fprintf(w, `{
-		  "result": [
-			%s
-		  ],
-		  "success": true,
-		  "errors": null,
-		  "messages": null,
-		  "result_info": {
-			"page": 2,
-			"per_page": 100,
-			"count": 1,
-			"total_count": 101
-		  }
-		}
-		`, serverRateLimitDescription)
-		}
-	}
-
-	mux.HandleFunc("/zones/"+testZoneID+"/rate_limits", handler)
-	want := make([]RateLimit, 101)
-	for i := range want {
-		want[i] = expectedRateLimitStruct
-	}
-
-	actual, err := client.ListAllRateLimits(context.Background(), testZoneID)
+	actual, _, err := client.ListRateLimits(context.Background(), ZoneIdentifier(testZoneID), RateLimitListParams{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -213,7 +154,7 @@ func TestGetRateLimit(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/rate_limits/"+rateLimitID, handler)
 	want := expectedRateLimitStruct
 
-	actual, err := client.RateLimit(context.Background(), testZoneID, rateLimitID)
+	actual, err := client.RateLimit(context.Background(), ZoneIdentifier(testZoneID), rateLimitID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}

@@ -56,11 +56,7 @@ func ExampleAPI_ListRateLimits() {
 		log.Fatal(err)
 	}
 
-	pageOpts := cloudflare.PaginationOptions{
-		PerPage: 5,
-		Page:    1,
-	}
-	rateLimits, _, err := api.ListRateLimits(context.Background(), zoneID, pageOpts)
+	rateLimits, _, err := api.ListRateLimits(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.RateLimitListParams{})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -82,7 +78,7 @@ func ExampleAPI_RateLimit() {
 		log.Fatal(err)
 	}
 
-	rateLimits, err := api.RateLimit(context.Background(), zoneID, "my_rate_limit_id")
+	rateLimits, err := api.RateLimit(context.Background(), cloudflare.ZoneIdentifier(zoneID), "my_rate_limit_id")
 	if err != nil {
 		log.Fatal(err)
 	}

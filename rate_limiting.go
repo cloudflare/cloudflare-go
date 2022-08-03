@@ -83,6 +83,10 @@ type rateLimitListResponse struct {
 	ResultInfo ResultInfo  `json:"result_info"`
 }
 
+type RateLimitListParams struct {
+	ResultInfo
+}
+
 // CreateRateLimit creates a new rate limit for a zone.
 //
 // API reference: https://api.cloudflare.com/#rate-limits-for-a-zone-create-a-ratelimit
@@ -99,59 +103,56 @@ func (api *API) CreateRateLimit(ctx context.Context, zoneID string, limit RateLi
 	return r.Result, nil
 }
 
-// ListRateLimits returns Rate Limits for a zone, paginated according to the provided options
+// ListRateLimits returns Rate Limits for a zone, paginated according to the provided params
 //
 // API reference: https://api.cloudflare.com/#rate-limits-for-a-zone-list-rate-limits
-func (api *API) ListRateLimits(ctx context.Context, zoneID string, pageOpts PaginationOptions) ([]RateLimit, ResultInfo, error) {
-	uri := buildURI(fmt.Sprintf("/zones/%s/rate_limits", zoneID), pageOpts)
+func (api *API) ListRateLimits(ctx context.Context, rc *ResourceContainer, params RateLimitListParams) ([]RateLimit, *ResultInfo, error) {
+	uri := buildURI(fmt.Sprintf("/zones/%s/rate_limits", rc.Identifier), params)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []RateLimit{}, ResultInfo{}, err
+		return []RateLimit{}, &ResultInfo{}, err
 	}
 
 	var r rateLimitListResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return []RateLimit{}, ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
-	}
-	return r.Result, r.ResultInfo, nil
-}
-
-// ListAllRateLimits returns all Rate Limits for a zone.
-//
-// API reference: https://api.cloudflare.com/#rate-limits-for-a-zone-list-rate-limits
-func (api *API) ListAllRateLimits(ctx context.Context, zoneID string) ([]RateLimit, error) {
-	pageOpts := PaginationOptions{
-		PerPage: 100, // this is the max page size allowed
-		Page:    1,
+		return []RateLimit{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
-	allRateLimits := make([]RateLimit, 0)
-	for {
-		rateLimits, resultInfo, err := api.ListRateLimits(ctx, zoneID, pageOpts)
-		if err != nil {
-			return []RateLimit{}, err
+	if params.PerPage < 1 && params.Page < 1 {
+		var rateLimits []RateLimit
+		//params.PerPage = 50
+		//params.Page = 1
+
+		for !params.ResultInfo.Done() {
+			uri := buildURI(fmt.Sprintf("/zones/%s/rate_limits", rc.Identifier), params)
+
+			res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+			if err != nil {
+				return []RateLimit{}, &ResultInfo{}, err
+			}
+
+			var rResponse rateLimitListResponse
+			err = json.Unmarshal(res, &rResponse)
+			if err != nil {
+				return []RateLimit{}, &ResultInfo{}, fmt.Errorf("failed to unmarshal filters JSON data: %w", err)
+			}
+
+			rateLimits = append(rateLimits, rResponse.Result...)
+			params.ResultInfo = rResponse.ResultInfo.Next()
 		}
-		allRateLimits = append(allRateLimits, rateLimits...)
-		// total pages is not returned on this call
-		// if number of records is less than the max, this must be the last page
-		// in case TotalCount % PerPage = 0, the last request will return an empty list
-		if resultInfo.Count < resultInfo.PerPage {
-			break
-		}
-		// continue with the next page
-		pageOpts.Page = pageOpts.Page + 1
+		r.Result = rateLimits
 	}
 
-	return allRateLimits, nil
+	return r.Result, &r.ResultInfo, nil
 }
 
 // RateLimit fetches detail about one Rate Limit for a zone.
 //
 // API reference: https://api.cloudflare.com/#rate-limits-for-a-zone-rate-limit-details
-func (api *API) RateLimit(ctx context.Context, zoneID, limitID string) (RateLimit, error) {
-	uri := fmt.Sprintf("/zones/%s/rate_limits/%s", zoneID, limitID)
+func (api *API) RateLimit(ctx context.Context, rc *ResourceContainer, limitID string) (RateLimit, error) {
+	uri := fmt.Sprintf("/zones/%s/rate_limits/%s", rc.Identifier, limitID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return RateLimit{}, err
