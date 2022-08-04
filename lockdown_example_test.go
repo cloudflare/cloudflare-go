@@ -21,12 +21,12 @@ func ExampleAPI_ListZoneLockdowns_all() {
 	}
 
 	// Fetch all Zone Lockdown rules for a zone, by page.
-	rules, err := api.ListZoneLockdowns(context.Background(), zoneID, 1)
+	rules, _, err := api.ListZoneLockdowns(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.LockdownListParams{})
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	for _, r := range rules.Result {
+	for _, r := range rules {
 		fmt.Printf("%s: %s\n", strings.Join(r.URLs, ", "), r.Configurations)
 	}
 }
@@ -42,7 +42,7 @@ func ExampleAPI_CreateZoneLockdown() {
 		log.Fatal(err)
 	}
 
-	newZoneLockdown := cloudflare.ZoneLockdown{
+	newZoneLockdown := cloudflare.ZoneLockdownCreateParams{
 		Description: "Test Zone Lockdown Rule",
 		URLs: []string{
 			"*.example.org/test",
@@ -53,11 +53,10 @@ func ExampleAPI_CreateZoneLockdown() {
 				Value:  "127.0.0.1",
 			},
 		},
-		Paused:   false,
-		Priority: 1,
+		Paused: false,
 	}
 
-	response, err := api.CreateZoneLockdown(context.Background(), zoneID, newZoneLockdown)
+	response, err := api.CreateZoneLockdown(context.Background(), cloudflare.ZoneIdentifier(zoneID), newZoneLockdown)
 	if err != nil {
 		log.Fatal(err)
 	}

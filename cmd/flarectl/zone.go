@@ -133,21 +133,25 @@ func zoneCreateLockdown(c *cli.Context) error {
 			Value:  c.StringSlice("values")[index],
 		})
 	}
-	lockdown := cloudflare.ZoneLockdown{
+	params := cloudflare.ZoneLockdownCreateParams{
 		Description:    c.String("description"),
 		URLs:           c.StringSlice("urls"),
 		Configurations: zonelockdownconfigs,
 	}
 
-	var resp *cloudflare.ZoneLockdownResponse
-
-	resp, err = api.CreateZoneLockdown(context.Background(), zoneID, lockdown)
+	resp, err := api.CreateZoneLockdown(context.Background(), cloudflare.ZoneIdentifier(zoneID), params)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error creating ZONE lock down: ", err)
 		return err
 	}
+
 	output := make([][]string, 0, 1)
-	output = append(output, formatLockdownResponse(resp))
+
+	format := []string{
+		resp.ID,
+	}
+
+	output = append(output, format)
 
 	writeTable(c, output, "ID")
 
@@ -330,12 +334,6 @@ func zoneRecords(c *cli.Context) error {
 }
 
 func formatCacheResponse(resp cloudflare.PurgeCacheResponse) []string {
-	return []string{
-		resp.Result.ID,
-	}
-}
-
-func formatLockdownResponse(resp *cloudflare.ZoneLockdownResponse) []string {
 	return []string{
 		resp.Result.ID,
 	}
