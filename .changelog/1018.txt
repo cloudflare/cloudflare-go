@@ -1,0 +1,3 @@
+```release-note:enhancement
+flarectl: add support for querying count statistics on zones and DNS records
+```
