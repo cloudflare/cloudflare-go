@@ -136,5 +136,4 @@ func TestWorkersTail_DeleteWorkersTail(t *testing.T) {
 
 	err = client.DeleteWorkersTail(context.Background(), DeleteWorkersTailParameters{AccountID: testAccountID, ScriptName: testScriptName, TailID: testTailID})
 	assert.NoError(t, err)
-
 }
