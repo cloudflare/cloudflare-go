@@ -1,5 +1,9 @@
 ## 0.47.0 (Unreleased)
 
+DEPENDENCIES:
+
+* provider: bumps github.com/golangci/golangci-lint from 1.47.3 to 1.48.0 ([#1020](https://github.com/cloudflare/cloudflare-go/issues/1020))
+
 ## 0.46.0 (3rd August, 2022)
 
 NOTES:
