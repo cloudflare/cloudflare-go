@@ -22,9 +22,9 @@ type CreateWorkersAccountSettingsResponse struct {
 	Result WorkersAccountSettings
 }
 
-type GetWorkersAccountSettingsParameters struct{}
+type WorkersAccountSettingsParameters struct{}
 
-type GetWorkersAccountSettingsResponse struct {
+type WorkersAccountSettingsResponse struct {
 	Response
 	Result WorkersAccountSettings
 }
@@ -42,17 +42,19 @@ func (api *API) CreateWorkersAccountSettings(ctx context.Context, rc *ResourceCo
 	if err != nil {
 		return WorkersAccountSettings{}, err
 	}
+
 	var workersAccountSettingsResponse CreateWorkersAccountSettingsResponse
 	if err := json.Unmarshal(res, &workersAccountSettingsResponse); err != nil {
 		return WorkersAccountSettings{}, err
 	}
+
 	return workersAccountSettingsResponse.Result, nil
 }
 
-// GetWorkersAccountSettings returns the current account settings for Workers.
+// WorkersAccountSettings returns the current account settings for Workers.
 //
 // API reference: https://api.cloudflare.com/#worker-account-settings-fetch-worker-account-settings
-func (api *API) GetWorkersAccountSettings(ctx context.Context, rc *ResourceContainer, params GetWorkersAccountSettingsParameters) (WorkersAccountSettings, error) {
+func (api *API) WorkersAccountSettings(ctx context.Context, rc *ResourceContainer, params WorkersAccountSettingsParameters) (WorkersAccountSettings, error) {
 	if rc.Identifier == "" {
 		return WorkersAccountSettings{}, ErrMissingAccountID
 	}
@@ -62,9 +64,11 @@ func (api *API) GetWorkersAccountSettings(ctx context.Context, rc *ResourceConta
 	if err != nil {
 		return WorkersAccountSettings{}, err
 	}
+
 	var workersAccountSettingsResponse CreateWorkersAccountSettingsResponse
 	if err := json.Unmarshal(res, &workersAccountSettingsResponse); err != nil {
 		return WorkersAccountSettings{}, err
 	}
+
 	return workersAccountSettingsResponse.Result, nil
 }

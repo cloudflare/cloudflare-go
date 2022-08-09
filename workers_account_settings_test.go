@@ -55,7 +55,7 @@ func TestWorkersAccountSettings_GetAccountSettings(t *testing.T) {
 }`)
 	})
 
-	res, err := client.GetWorkersAccountSettings(context.Background(), AccountIdentifier(testAccountID), GetWorkersAccountSettingsParameters{})
+	res, err := client.WorkersAccountSettings(context.Background(), AccountIdentifier(testAccountID), WorkersAccountSettingsParameters{})
 	want := WorkersAccountSettings{
 		DefaultUsageModel: "unbound",
 		GreenCompute:      true,
