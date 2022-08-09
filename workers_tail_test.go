@@ -3,10 +3,11 @@ package cloudflare
 import (
 	"context"
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 const (
@@ -30,22 +31,15 @@ func TestWorkersTail_StartWorkersTail(t *testing.T) {
     "url": "wss://tail.developers.workers.dev/03dc9f77817b488fb26c5861ec18f791",
     "expires_at": "2021-08-20T19:15:51Z"
   }
-}`) //nolint
+}`)
 	})
 
-	// Make sure missing account ID is thrown
-	_, err := client.StartWorkersTail(context.Background(), StartWorkersTailParameters{})
-	if assert.Error(t, err) {
-		assert.Equal(t, ErrMissingAccountID, err)
-	}
-
-	// Make sure missing script ID is thrown
-	_, err = client.StartWorkersTail(context.Background(), StartWorkersTailParameters{AccountID: testAccountID})
+	_, err := client.StartWorkersTail(context.Background(), AccountIdentifier(testAccountID), "")
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingScriptName, err)
 	}
 
-	res, err := client.StartWorkersTail(context.Background(), StartWorkersTailParameters{AccountID: testAccountID, ScriptName: testScriptName})
+	res, err := client.StartWorkersTail(context.Background(), AccountIdentifier(testAccountID), testScriptName)
 	expiresAt, _ := time.Parse(time.RFC3339, "2021-08-20T19:15:51Z")
 	want := WorkersTail{
 		ID:        "03dc9f77817b488fb26c5861ec18f791",
@@ -74,22 +68,15 @@ func TestWorkersTail_ListWorkersTail(t *testing.T) {
     "url": "wss://tail.developers.workers.dev/03dc9f77817b488fb26c5861ec18f791",
     "expires_at": "2021-08-20T19:15:51Z"
   }
-}`) //nolint
+}`)
 	})
 
-	// Make sure missing account ID is thrown
-	_, err := client.ListWorkersTail(context.Background(), ListWorkersTailParameters{})
-	if assert.Error(t, err) {
-		assert.Equal(t, ErrMissingAccountID, err)
-	}
-
-	// Make sure missing script ID is thrown
-	_, err = client.ListWorkersTail(context.Background(), ListWorkersTailParameters{AccountID: testAccountID})
+	_, err := client.ListWorkersTail(context.Background(), AccountIdentifier(testAccountID), ListWorkersTailParameters{ScriptName: ""})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingScriptName, err)
 	}
 
-	res, err := client.ListWorkersTail(context.Background(), ListWorkersTailParameters{AccountID: testAccountID, ScriptName: testScriptName})
+	res, err := client.ListWorkersTail(context.Background(), AccountIdentifier(testAccountID), ListWorkersTailParameters{ScriptName: testScriptName})
 	expiresAt, _ := time.Parse(time.RFC3339, "2021-08-20T19:15:51Z")
 	want := WorkersTail{
 		ID:        "03dc9f77817b488fb26c5861ec18f791",
@@ -113,27 +100,19 @@ func TestWorkersTail_DeleteWorkersTail(t *testing.T) {
   "success": true,
   "errors": [],
   "messages": [],
-}`) //nolint
+}`)
 	})
 
-	// Make sure missing account ID is thrown
-	err := client.DeleteWorkersTail(context.Background(), DeleteWorkersTailParameters{})
-	if assert.Error(t, err) {
-		assert.Equal(t, ErrMissingAccountID, err)
-	}
-
-	// Make sure missing script ID is thrown
-	err = client.DeleteWorkersTail(context.Background(), DeleteWorkersTailParameters{AccountID: testAccountID})
+	err := client.DeleteWorkersTail(context.Background(), AccountIdentifier(testAccountID), "", "")
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingScriptName, err)
 	}
 
-	// Make sure missing Tail ID is thrown
-	err = client.DeleteWorkersTail(context.Background(), DeleteWorkersTailParameters{AccountID: testAccountID, ScriptName: testScriptName})
+	err = client.DeleteWorkersTail(context.Background(), AccountIdentifier(testAccountID), testScriptName, "")
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingTailID, err)
 	}
 
-	err = client.DeleteWorkersTail(context.Background(), DeleteWorkersTailParameters{AccountID: testAccountID, ScriptName: testScriptName, TailID: testTailID})
+	err = client.DeleteWorkersTail(context.Background(), AccountIdentifier(testAccountID), testScriptName, testTailID)
 	assert.NoError(t, err)
 }
