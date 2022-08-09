@@ -1,5 +1,9 @@
 ## 0.47.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* workers-tail: Add in support for Workers tail API ([#1026](https://github.com/cloudflare/cloudflare-go/issues/1026))
+
 DEPENDENCIES:
 
 * provider: bumps github.com/golangci/golangci-lint from 1.47.3 to 1.48.0 ([#1020](https://github.com/cloudflare/cloudflare-go/issues/1020))
