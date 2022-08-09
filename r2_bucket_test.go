@@ -3,9 +3,10 @@ package cloudflare
 import (
 	"context"
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 const testBucketName = "example-bucket"
@@ -22,16 +23,14 @@ func TestR2_CreateBucket(t *testing.T) {
   "errors": [],
   "messages": [],
   "result": {}
-}`) //nolint
+}`)
 	})
 
-	// Make sure missing account ID is thrown
 	err := client.CreateR2Bucket(context.Background(), AccountIdentifier(""), "")
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	// Make sure missing bucket name is thrown
 	err = client.CreateR2Bucket(context.Background(), AccountIdentifier(testAccountID), "")
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingBucketName, err)
@@ -53,16 +52,14 @@ func TestR2_DeleteBucket(t *testing.T) {
   "errors": [],
   "messages": [],
   "result": {}
-}`) //nolint
+}`)
 	})
 
-	// Make sure missing account ID is thrown
 	err := client.DeleteR2Bucket(context.Background(), AccountIdentifier(""), "")
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	// Make sure missing bucket name is thrown
 	err = client.DeleteR2Bucket(context.Background(), AccountIdentifier(testAccountID), "")
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingBucketName, err)
