@@ -2,6 +2,7 @@
 
 ENHANCEMENTS:
 
+* workers-account-settings: Add in support for Workers account settings API ([#1027](https://github.com/cloudflare/cloudflare-go/issues/1027))
 * workers-tail: Add in support for Workers tail API ([#1026](https://github.com/cloudflare/cloudflare-go/issues/1026))
 
 DEPENDENCIES:
