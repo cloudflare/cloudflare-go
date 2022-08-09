@@ -59,7 +59,7 @@ type TunnelRoutesForIPParams struct {
 }
 
 type TunnelRoutesDeleteParams struct {
-	Network          string `json:"-"`
+	Network          string `url:"-"`
 	VirtualNetworkID string `url:"virtual_network_id,omitempty"`
 }
 
@@ -170,7 +170,7 @@ func (api *API) DeleteTunnelRoute(ctx context.Context, rc *ResourceContainer, pa
 		return ErrMissingNetwork
 	}
 
-	uri := fmt.Sprintf("/%s/%s/teamnet/routes/network/%s", AccountRouteRoot, rc.Identifier, url.PathEscape(params.Network))
+	uri := buildURI(fmt.Sprintf("/%s/%s/teamnet/routes/network/%s", AccountRouteRoot, rc.Identifier, url.PathEscape(params.Network)), params)
 
 	responseBody, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
