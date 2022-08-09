@@ -13,33 +13,31 @@ type WorkersAccountSettings struct {
 }
 
 type CreateWorkersAccountSettingsParameters struct {
-	AccountID         string `json:"-"`
 	DefaultUsageModel string `json:"default_usage_model,omitempty"`
 	GreenCompute      bool   `json:"green_compute,omitempty"`
 }
+
 type CreateWorkersAccountSettingsResponse struct {
 	Response
 	Result WorkersAccountSettings
 }
 
-type GetWorkersAccountSettingsParameters struct {
-	AccountID string
-}
+type GetWorkersAccountSettingsParameters struct{}
 
 type GetWorkersAccountSettingsResponse struct {
 	Response
 	Result WorkersAccountSettings
 }
 
-// CreateWorkersAccountSettings Starts a tail that receives logs and exception from a Worker
+// CreateWorkersAccountSettings sets the account settings for Workers.
 //
 // API reference: https://api.cloudflare.com/#worker-account-settings-create-worker-account-settings
-func (api *API) CreateWorkersAccountSettings(ctx context.Context, params CreateWorkersAccountSettingsParameters) (WorkersAccountSettings, error) {
-	if params.AccountID == "" {
+func (api *API) CreateWorkersAccountSettings(ctx context.Context, rc *ResourceContainer, params CreateWorkersAccountSettingsParameters) (WorkersAccountSettings, error) {
+	if rc.Identifier == "" {
 		return WorkersAccountSettings{}, ErrMissingAccountID
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/workers/account-settings", params.AccountID)
+	uri := fmt.Sprintf("/accounts/%s/workers/account-settings", rc.Identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return WorkersAccountSettings{}, err
@@ -51,15 +49,15 @@ func (api *API) CreateWorkersAccountSettings(ctx context.Context, params CreateW
 	return workersAccountSettingsResponse.Result, nil
 }
 
-// GetWorkersAccountSettings Starts a tail that receives logs and exception from a Worker
+// GetWorkersAccountSettings returns the current account settings for Workers.
 //
 // API reference: https://api.cloudflare.com/#worker-account-settings-fetch-worker-account-settings
-func (api *API) GetWorkersAccountSettings(ctx context.Context, params GetWorkersAccountSettingsParameters) (WorkersAccountSettings, error) {
-	if params.AccountID == "" {
+func (api *API) GetWorkersAccountSettings(ctx context.Context, rc *ResourceContainer, params GetWorkersAccountSettingsParameters) (WorkersAccountSettings, error) {
+	if rc.Identifier == "" {
 		return WorkersAccountSettings{}, ErrMissingAccountID
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/workers/account-settings", params.AccountID)
+	uri := fmt.Sprintf("/accounts/%s/workers/account-settings", rc.Identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, params)
 	if err != nil {
 		return WorkersAccountSettings{}, err

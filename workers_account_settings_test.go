@@ -3,9 +3,10 @@ package cloudflare
 import (
 	"context"
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestWorkersAccountSettings_CreateAccountSettings(t *testing.T) {
@@ -13,7 +14,7 @@ func TestWorkersAccountSettings_CreateAccountSettings(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc(fmt.Sprintf("/accounts/%s/workers/account-settings", testAccountID), func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'POST', got %s", r.Method)
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
   "success": true,
@@ -23,16 +24,9 @@ func TestWorkersAccountSettings_CreateAccountSettings(t *testing.T) {
     "default_usage_model": "unbound",
 	"green_compute": false
   }
-}`) //nolint
+}`)
 	})
-
-	// Make sure missing account ID is thrown
-	_, err := client.CreateWorkersAccountSettings(context.Background(), CreateWorkersAccountSettingsParameters{})
-	if assert.Error(t, err) {
-		assert.Equal(t, ErrMissingAccountID, err)
-	}
-
-	res, err := client.CreateWorkersAccountSettings(context.Background(), CreateWorkersAccountSettingsParameters{AccountID: testAccountID, DefaultUsageModel: "unbound", GreenCompute: false})
+	res, err := client.CreateWorkersAccountSettings(context.Background(), AccountIdentifier(testAccountID), CreateWorkersAccountSettingsParameters{DefaultUsageModel: "unbound", GreenCompute: false})
 	want := WorkersAccountSettings{
 		DefaultUsageModel: "unbound",
 		GreenCompute:      false,
@@ -58,16 +52,10 @@ func TestWorkersAccountSettings_GetAccountSettings(t *testing.T) {
     "default_usage_model": "unbound",
 	"green_compute": true
   }
-}`) //nolint
+}`)
 	})
 
-	// Make sure missing account ID is thrown
-	_, err := client.GetWorkersAccountSettings(context.Background(), GetWorkersAccountSettingsParameters{})
-	if assert.Error(t, err) {
-		assert.Equal(t, ErrMissingAccountID, err)
-	}
-
-	res, err := client.GetWorkersAccountSettings(context.Background(), GetWorkersAccountSettingsParameters{AccountID: testAccountID})
+	res, err := client.GetWorkersAccountSettings(context.Background(), AccountIdentifier(testAccountID), GetWorkersAccountSettingsParameters{})
 	want := WorkersAccountSettings{
 		DefaultUsageModel: "unbound",
 		GreenCompute:      true,
