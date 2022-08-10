@@ -354,6 +354,117 @@ func TestGetRuleset_SetCacheSettings(t *testing.T) {
 	}
 }
 
+func TestGetRuleset_SetConfig(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+      "result": {
+        "id": "70339d97bdb34195bbf054b1ebe81f76",
+        "name": "Cloudflare Config Rules Ruleset",
+        "description": "This ruleset provides config rules modifications",
+        "kind": "zone",
+        "version": "1",
+        "rules": [
+          {
+            "id": "78723a9e0c7c4c6dbec5684cb766231d",
+            "version": "1",
+            "action": "set_config",
+            "action_parameters": {
+				"automatic_https_rewrites":true,
+				"autominify":{"html":true, "css":true, "js":true},
+				"bic":true,
+				"disable_apps":true,
+				"polish":"off",
+				"disable_zaraz":true,
+				"disable_railgun":true,
+				"email_obfuscation":true,
+				"mirage":true,
+				"opportunistic_encryption":true,
+				"rocket_loader":true,
+				"security_level":"off",
+				"server_side_excludes":true,
+				"ssl":"off",
+				"sxg":true,
+				"hotlink_protection":true
+            },
+			"description": "Set all available config rules in one rule",
+			"last_updated": "2020-12-18T09:28:09.655749Z",
+			"ref": "272936dc447b41fe976255ff6b768ec0",
+			"enabled": true
+          }
+        ],
+        "last_updated": "2020-12-18T09:28:09.655749Z",
+        "phase": "http_config_settings"
+      },
+      "success": true,
+      "errors": [],
+      "messages": []
+    }`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/rulesets/b232b534beea4e00a21dcbb7a8a545e9", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/rulesets/b232b534beea4e00a21dcbb7a8a545e9", handler)
+
+	lastUpdated, _ := time.Parse(time.RFC3339, "2020-12-18T09:28:09.655749Z")
+
+	rules := []RulesetRule{{
+		ID:      "78723a9e0c7c4c6dbec5684cb766231d",
+		Version: "1",
+		Action:  string(RulesetRuleActionSetConfig),
+		ActionParameters: &RulesetRuleActionParameters{
+			AutomaticHTTPSRewrites: BoolPtr(true),
+			AutoMinify: &RulesetRuleActionParametersAutoMinify{
+				HTML:    true,
+				CSS:    true,
+				JS:    true,
+			},
+			BrowserIntegrityCheck:  BoolPtr(true),
+			DisableApps:  BoolPtr(true),
+			DisableZaraz:  BoolPtr(true),
+			DisableRailgun:  BoolPtr(true),
+			EmailObfuscation:  BoolPtr(true),
+			Mirage:  BoolPtr(true),
+			OpportunisticEncryption:  BoolPtr(true),
+			Polish:  PolishOff.IntoRef(),
+			RocketLoader:  BoolPtr(true),
+			SecurityLevel: SecurityLevelOff.IntoRef(),
+			ServerSideExcludes:  BoolPtr(true),
+			SSL:  SSLOff.IntoRef(),
+			SXG:  BoolPtr(true),
+			HotLinkProtection:  BoolPtr(true),
+		},
+		Description: "Set all available config rules in one rule",
+		LastUpdated: &lastUpdated,
+		Ref:         "272936dc447b41fe976255ff6b768ec0",
+		Enabled:     true,
+	}}
+
+	want := Ruleset{
+		ID:          "70339d97bdb34195bbf054b1ebe81f76",
+		Name:        "Cloudflare Config Rules Ruleset",
+		Description: "This ruleset provides config rules modifications",
+		Kind:        string(RulesetKindZone),
+		Version:     "1",
+		LastUpdated: &lastUpdated,
+		Phase:       string(RulesetPhaseHTTPConfigSettings),
+		Rules:       rules,
+	}
+
+	zoneActual, err := client.GetZoneRuleset(context.Background(), testZoneID, "b232b534beea4e00a21dcbb7a8a545e9")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, zoneActual)
+	}
+
+	accountActual, err := client.GetAccountRuleset(context.Background(), testAccountID, "b232b534beea4e00a21dcbb7a8a545e9")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, accountActual)
+	}
+}
+
 func TestGetRuleset_RedirectFromValue(t *testing.T) {
 	setup()
 	defer teardown()
