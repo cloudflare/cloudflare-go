@@ -45,7 +45,7 @@ func (api *API) CreateWorkersAccountSettings(ctx context.Context, rc *ResourceCo
 
 	var workersAccountSettingsResponse CreateWorkersAccountSettingsResponse
 	if err := json.Unmarshal(res, &workersAccountSettingsResponse); err != nil {
-		return WorkersAccountSettings{}, err
+		return WorkersAccountSettings{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return workersAccountSettingsResponse.Result, nil
@@ -67,7 +67,7 @@ func (api *API) WorkersAccountSettings(ctx context.Context, rc *ResourceContaine
 
 	var workersAccountSettingsResponse CreateWorkersAccountSettingsResponse
 	if err := json.Unmarshal(res, &workersAccountSettingsResponse); err != nil {
-		return WorkersAccountSettings{}, err
+		return WorkersAccountSettings{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return workersAccountSettingsResponse.Result, nil
