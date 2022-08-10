@@ -1,0 +1,7 @@
+```release-note:bug
+firewall_rule: fix double endpoint calls & moving towards common method signature
+```
+
+```release-note:bug
+filter: fix double endpoint calls & moving towards common method signature
+```
