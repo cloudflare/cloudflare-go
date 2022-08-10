@@ -851,18 +851,18 @@ func getRouteEndpoint(route WorkerRoute) (string, error) {
 }
 
 type WorkerDomain struct {
-	ZoneID string `json:"zone_id"`
-	Hostname string `json:"hostname"`
-	Service string `json:"service"`
+	ZoneID      string  `json:"zone_id"`
+	Hostname    string  `json:"hostname"`
+	Service     string  `json:"service"`
 	Environment *string `json:"environment,omitempty"`
 }
 
 type WorkerDomainResult struct {
-	ID string `json:"id"`
-	ZoneID string `json:"zone_id"`
-	ZoneName string `json:"zone_name"`
-	Hostname string `json:"hostname"`
-	Service string `json:"service"`
+	ID          string `json:"id"`
+	ZoneID      string `json:"zone_id"`
+	ZoneName    string `json:"zone_name"`
+	Hostname    string `json:"hostname"`
+	Service     string `json:"service"`
 	Environment string `json:"environment"`
 }
 
@@ -877,9 +877,9 @@ type WorkerDomainResponse struct {
 func (api *API) AttachWorkerToDomain(ctx context.Context, zoneID, hostname, service string, environment *string) (WorkerDomainResponse, error) {
 	uri := fmt.Sprintf("/accounts/%s/workers/domains", api.AccountID)
 	body := WorkerDomain{
-		ZoneID: zoneID,
-		Hostname: hostname,
-		Service: service,
+		ZoneID:      zoneID,
+		Hostname:    hostname,
+		Service:     service,
 		Environment: environment,
 	}
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, body)
