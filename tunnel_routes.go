@@ -172,7 +172,7 @@ func (api *API) DeleteTunnelRoute(ctx context.Context, rc *ResourceContainer, pa
 
 	// Cannot fully utilize buildURI here because it tries to escape "%" sign
 	// from the already escaped "/" sign from Network field.
-	uri := buildURI(fmt.Sprintf("/%s/%s/teamnet/routes/network/%s", AccountRouteRoot, rc.Identifier, url.PathEscape(params.Network)), params)
+	uri := fmt.Sprintf("/%s/%s/teamnet/routes/network/%s%s", AccountRouteRoot, rc.Identifier, url.PathEscape(params.Network), buildURI("", params))
 
 	responseBody, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {

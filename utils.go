@@ -12,7 +12,7 @@ import (
 // buildURI assembles the base path and queries.
 func buildURI(path string, options interface{}) string {
 	v, _ := query.Values(options)
-	return path + (&url.URL{RawQuery: v.Encode()}).String()
+	return (&url.URL{Path: path, RawQuery: v.Encode()}).String()
 }
 
 // loadFixture takes a series of path components and returns the JSON fixture at

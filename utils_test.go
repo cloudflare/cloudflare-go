@@ -27,8 +27,6 @@ func Test_buildURI(t *testing.T) {
 		"single level path with params":          {path: "/bar", params: testExample{C: "d"}, want: "/bar?c=d"},
 		"single level path with multiple params": {path: "/foo", params: testExample{A: "b", C: "d"}, want: "/foo?a=b&c=d"},
 		"single level path with nested fields":   {path: "/foo", params: testExample{A: "b", C: "d", PaginationOptions: PaginationOptions{PerPage: 10}}, want: "/foo?a=b&c=d&per_page=10"},
-		"escaped URL path":                       {path: "/foo/10.0.0.0%2F1", params: testExample{A: "b", C: "d"}, want: "/foo/10.0.0.0%2F1?a=b&c=d"},
-		"unescaped URL path":                     {path: "/foo/10.0.0.0/1", params: testExample{A: "b", C: "d"}, want: "/foo/10.0.0.0/1?a=b&c=d"},
 	}
 
 	for name, tc := range tests {
