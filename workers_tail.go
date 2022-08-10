@@ -54,7 +54,7 @@ func (api *API) StartWorkersTail(ctx context.Context, rc *ResourceContainer, scr
 
 	var workerstailResponse StartWorkersTailResponse
 	if err := json.Unmarshal(res, &workerstailResponse); err != nil {
-		return WorkersTail{}, err
+		return WorkersTail{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return workerstailResponse.Result, nil
@@ -80,7 +80,7 @@ func (api *API) ListWorkersTail(ctx context.Context, rc *ResourceContainer, para
 
 	var workerstailResponse ListWorkersTailResponse
 	if err := json.Unmarshal(res, &workerstailResponse); err != nil {
-		return WorkersTail{}, err
+		return WorkersTail{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return workerstailResponse.Result, nil
