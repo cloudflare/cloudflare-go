@@ -60,6 +60,26 @@ type FilterValidationExpressionMessage struct {
 	Message string `json:"message"`
 }
 
+// FilterCreateParams contains required and optional params
+// for creating a filter.
+type FilterCreateParams struct {
+	ID          string `json:"id,omitempty"`
+	Expression  string `json:"expression"`
+	Paused      bool   `json:"paused"`
+	Description string `json:"description"`
+	Ref         string `json:"ref,omitempty"`
+}
+
+// FilterUpdateParams contains required and optional params
+// for updating a filter.
+type FilterUpdateParams struct {
+	ID          string `json:"id"`
+	Expression  string `json:"expression"`
+	Paused      bool   `json:"paused"`
+	Description string `json:"description"`
+	Ref         string `json:"ref,omitempty"`
+}
+
 type FilterListParams struct {
 	ResultInfo
 }
@@ -84,62 +104,57 @@ func (api *API) Filter(ctx context.Context, rc *ResourceContainer, filterID stri
 	return filterResponse.Result, nil
 }
 
-// Filters returns all filters for a zone.
+// Filters returns filters for a zone.
 //
 // Automatically paginates all results unless `params.PerPage` and `params.Page`
 // is set.
 //
 // API reference: https://developers.cloudflare.com/firewall/api/cf-filters/get/#get-all-filters
 func (api *API) Filters(ctx context.Context, rc *ResourceContainer, params FilterListParams) ([]Filter, *ResultInfo, error) {
-	uri := buildURI(fmt.Sprintf("/zones/%s/filters", rc.Identifier), params)
-
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
-	if err != nil {
-		return []Filter{}, &ResultInfo{}, err
+	autoPaginate := true
+	if params.PerPage >= 1 || params.Page >= 1 {
+		autoPaginate = false
 	}
-
-	var filtersResponse FiltersDetailResponse
-	err = json.Unmarshal(res, &filtersResponse)
-
-	if err != nil {
-		return []Filter{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
-	}
-
-	if params.PerPage < 1 && params.Page < 1 {
-		var filters []Filter
+	if params.PerPage < 1 {
 		params.PerPage = 50
+	}
+	if params.Page < 1 {
 		params.Page = 1
-
-		for !params.ResultInfo.Done() {
-			uri := buildURI(fmt.Sprintf("/zones/%s/filters", rc.Identifier), params)
-
-			res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
-			if err != nil {
-				return []Filter{}, &ResultInfo{}, err
-			}
-
-			var fResponse FiltersDetailResponse
-			err = json.Unmarshal(res, &fResponse)
-			if err != nil {
-				return []Filter{}, &ResultInfo{}, fmt.Errorf("failed to unmarshal filters JSON data: %w", err)
-			}
-
-			filters = append(filters, fResponse.Result...)
-			params.ResultInfo = fResponse.ResultInfo.Next()
-		}
-		filtersResponse.Result = filters
 	}
 
-	return filtersResponse.Result, &filtersResponse.ResultInfo, nil
+	var filters []Filter
+	var fResponse FiltersDetailResponse
+	for {
+		uri := buildURI(fmt.Sprintf("/zones/%s/filters", rc.Identifier), params)
+
+		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+		if err != nil {
+			return []Filter{}, &ResultInfo{}, err
+		}
+
+		err = json.Unmarshal(res, &fResponse)
+		if err != nil {
+			return []Filter{}, &ResultInfo{}, fmt.Errorf("failed to unmarshal filters JSON data: %w", err)
+		}
+
+		filters = append(filters, fResponse.Result...)
+		params.ResultInfo = fResponse.ResultInfo.Next()
+
+		if params.ResultInfo.Done() || !autoPaginate {
+			break
+		}
+	}
+
+	return filters, &fResponse.ResultInfo, nil
 }
 
 // CreateFilters creates new filters.
 //
 // API reference: https://developers.cloudflare.com/firewall/api/cf-filters/post/
-func (api *API) CreateFilters(ctx context.Context, rc *ResourceContainer, filters []Filter) ([]Filter, error) {
+func (api *API) CreateFilters(ctx context.Context, rc *ResourceContainer, params []FilterCreateParams) ([]Filter, error) {
 	uri := fmt.Sprintf("/zones/%s/filters", rc.Identifier)
 
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, filters)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return []Filter{}, err
 	}
@@ -156,14 +171,14 @@ func (api *API) CreateFilters(ctx context.Context, rc *ResourceContainer, filter
 // UpdateFilter updates a single filter.
 //
 // API reference: https://developers.cloudflare.com/firewall/api/cf-filters/put/#update-a-single-filter
-func (api *API) UpdateFilter(ctx context.Context, rc *ResourceContainer, filter Filter) (Filter, error) {
-	if filter.ID == "" {
+func (api *API) UpdateFilter(ctx context.Context, rc *ResourceContainer, params FilterUpdateParams) (Filter, error) {
+	if params.ID == "" {
 		return Filter{}, fmt.Errorf("filter ID cannot be empty")
 	}
 
-	uri := fmt.Sprintf("/zones/%s/filters/%s", rc.Identifier, filter.ID)
+	uri := fmt.Sprintf("/zones/%s/filters/%s", rc.Identifier, params.ID)
 
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, filter)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return Filter{}, err
 	}
@@ -180,8 +195,8 @@ func (api *API) UpdateFilter(ctx context.Context, rc *ResourceContainer, filter 
 // UpdateFilters updates many filters at once.
 //
 // API reference: https://developers.cloudflare.com/firewall/api/cf-filters/put/#update-multiple-filters
-func (api *API) UpdateFilters(ctx context.Context, rc *ResourceContainer, filters []Filter) ([]Filter, error) {
-	for _, filter := range filters {
+func (api *API) UpdateFilters(ctx context.Context, rc *ResourceContainer, params []FilterUpdateParams) ([]Filter, error) {
+	for _, filter := range params {
 		if filter.ID == "" {
 			return []Filter{}, fmt.Errorf("filter ID cannot be empty")
 		}
@@ -189,7 +204,7 @@ func (api *API) UpdateFilters(ctx context.Context, rc *ResourceContainer, filter
 
 	uri := fmt.Sprintf("/zones/%s/filters", rc.Identifier)
 
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, filters)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return []Filter{}, err
 	}

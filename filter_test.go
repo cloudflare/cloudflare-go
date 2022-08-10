@@ -157,6 +157,15 @@ func TestCreateSingleFilter(t *testing.T) {
 	}
 
 	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/filters", handler)
+	params := []FilterCreateParams{
+		{
+			ID:          "b7ff25282d394be7b945e23c7106ce8a",
+			Paused:      false,
+			Description: "Login from office",
+			Expression:  "ip.src eq 127.0.0.1",
+		},
+	}
+
 	want := []Filter{
 		{
 			ID:          "b7ff25282d394be7b945e23c7106ce8a",
@@ -166,7 +175,7 @@ func TestCreateSingleFilter(t *testing.T) {
 		},
 	}
 
-	actual, err := client.CreateFilters(context.Background(), ZoneIdentifier("d56084adb405e0b7e32c52321bf07be6"), want)
+	actual, err := client.CreateFilters(context.Background(), ZoneIdentifier("d56084adb405e0b7e32c52321bf07be6"), params)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -203,6 +212,21 @@ func TestCreateMultipleFilters(t *testing.T) {
 	}
 
 	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/filters", handler)
+	params := []FilterCreateParams{
+		{
+			ID:          "b7ff25282d394be7b945e23c7106ce8a",
+			Paused:      false,
+			Description: "Login from office",
+			Expression:  "ip.src eq 127.0.0.1",
+		},
+		{
+			ID:          "b7ff25282d394be7b945e23c7106ce8a",
+			Paused:      false,
+			Description: "Login from second office",
+			Expression:  "ip.src eq 10.0.0.1",
+		},
+	}
+
 	want := []Filter{
 		{
 			ID:          "b7ff25282d394be7b945e23c7106ce8a",
@@ -218,7 +242,7 @@ func TestCreateMultipleFilters(t *testing.T) {
 		},
 	}
 
-	actual, err := client.CreateFilters(context.Background(), ZoneIdentifier("d56084adb405e0b7e32c52321bf07be6"), want)
+	actual, err := client.CreateFilters(context.Background(), ZoneIdentifier("d56084adb405e0b7e32c52321bf07be6"), params)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -247,6 +271,13 @@ func TestUpdateSingleFilter(t *testing.T) {
 	}
 
 	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/filters/60ee852f9cbb4802978d15600c7f3110", handler)
+	params := FilterUpdateParams{
+		ID:          "60ee852f9cbb4802978d15600c7f3110",
+		Paused:      false,
+		Description: "IP of example.org",
+		Expression:  "ip.src eq 93.184.216.0",
+	}
+
 	want := Filter{
 		ID:          "60ee852f9cbb4802978d15600c7f3110",
 		Paused:      false,
@@ -254,7 +285,7 @@ func TestUpdateSingleFilter(t *testing.T) {
 		Expression:  "ip.src eq 93.184.216.0",
 	}
 
-	actual, err := client.UpdateFilter(context.Background(), ZoneIdentifier("d56084adb405e0b7e32c52321bf07be6"), want)
+	actual, err := client.UpdateFilter(context.Background(), ZoneIdentifier("d56084adb405e0b7e32c52321bf07be6"), params)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -291,6 +322,21 @@ func TestUpdateMultipleFilters(t *testing.T) {
 	}
 
 	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/filters", handler)
+	params := []FilterUpdateParams{
+		{
+			ID:          "60ee852f9cbb4802978d15600c7f3110",
+			Paused:      false,
+			Description: "IP of example.org",
+			Expression:  "ip.src eq 93.184.216.0",
+		},
+		{
+			ID:          "c218c536b2bd406f958f278cf0fa8c0f",
+			Paused:      false,
+			Description: "IP of example.com",
+			Expression:  "ip.src ne 127.0.0.1",
+		},
+	}
+
 	want := []Filter{
 		{
 			ID:          "60ee852f9cbb4802978d15600c7f3110",
@@ -306,7 +352,7 @@ func TestUpdateMultipleFilters(t *testing.T) {
 		},
 	}
 
-	actual, err := client.UpdateFilters(context.Background(), ZoneIdentifier("d56084adb405e0b7e32c52321bf07be6"), want)
+	actual, err := client.UpdateFilters(context.Background(), ZoneIdentifier("d56084adb405e0b7e32c52321bf07be6"), params)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
