@@ -71,12 +71,12 @@ func TestEmailRouting_ListRoutingRules(t *testing.T) {
 }`)
 	})
 
-	_, _, err := client.EmailRoutingListRules(context.Background(), AccountIdentifier(""), EmailRoutingListRulesParameters{})
+	_, _, err := client.ListEmailRoutingRules(context.Background(), AccountIdentifier(""), EmailRoutingListRulesParameters{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingZoneID, err)
 	}
 
-	res, resInfo, err := client.EmailRoutingListRules(context.Background(), AccountIdentifier(testZoneID), EmailRoutingListRulesParameters{Enabled: true})
+	res, resInfo, err := client.ListEmailRoutingRules(context.Background(), AccountIdentifier(testZoneID), EmailRoutingListRulesParameters{Enabled: true})
 	if assert.NoError(t, err) {
 		assert.Equal(t, resInfo.Page, 1)
 		assert.Equal(t, testEmailRoutingRule, res[0])
@@ -118,12 +118,12 @@ func TestEmailRouting_CreateRoutingRule(t *testing.T) {
 }`)
 	})
 
-	_, err := client.EmailRoutingCreateRule(context.Background(), AccountIdentifier(""), EmailRoutingCreateRuleParameters{})
+	_, err := client.CreateEmailRoutingRule(context.Background(), AccountIdentifier(""), EmailRoutingCreateRuleParameters{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingZoneID, err)
 	}
 
-	res, err := client.EmailRoutingCreateRule(context.Background(), AccountIdentifier(testZoneID), EmailRoutingCreateRuleParameters{Enabled: true})
+	res, err := client.CreateEmailRoutingRule(context.Background(), AccountIdentifier(testZoneID), EmailRoutingCreateRuleParameters{Enabled: true})
 	if assert.NoError(t, err) {
 		assert.Equal(t, testEmailRoutingRule, res)
 	}
@@ -164,12 +164,12 @@ func TestEmailRouting_GetRoutingRule(t *testing.T) {
 }`)
 	})
 
-	_, err := client.EmailRoutingGetRule(context.Background(), ZoneIdentifier(""), "")
+	_, err := client.GetEmailRoutingRule(context.Background(), ZoneIdentifier(""), "")
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingZoneID, err)
 	}
 
-	res, err := client.EmailRoutingGetRule(context.Background(), AccountIdentifier(testZoneID), "a7e6fb77503c41d8a7f3113c6918f10c")
+	res, err := client.GetEmailRoutingRule(context.Background(), AccountIdentifier(testZoneID), "a7e6fb77503c41d8a7f3113c6918f10c")
 	if assert.NoError(t, err) {
 		assert.Equal(t, testEmailRoutingRule, res)
 	}
@@ -210,16 +210,16 @@ func TestEmailRouting_UpdateRoutingRule(t *testing.T) {
 }`)
 	})
 
-	_, err := client.EmailRoutingUpdateRule(context.Background(), ZoneIdentifier(""), EmailRoutingUpdateRuleParameters{})
+	_, err := client.UpdateEmailRoutingRule(context.Background(), ZoneIdentifier(""), EmailRoutingUpdateRuleParameters{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingZoneID, err)
 	}
-	_, err = client.EmailRoutingUpdateRule(context.Background(), ZoneIdentifier(testZoneID), EmailRoutingUpdateRuleParameters{})
+	_, err = client.UpdateEmailRoutingRule(context.Background(), ZoneIdentifier(testZoneID), EmailRoutingUpdateRuleParameters{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingRuleID, err)
 	}
 
-	res, err := client.EmailRoutingUpdateRule(context.Background(), AccountIdentifier(testZoneID), EmailRoutingUpdateRuleParameters{RuleID: "a7e6fb77503c41d8a7f3113c6918f10c"})
+	res, err := client.UpdateEmailRoutingRule(context.Background(), AccountIdentifier(testZoneID), EmailRoutingUpdateRuleParameters{RuleID: "a7e6fb77503c41d8a7f3113c6918f10c"})
 	if assert.NoError(t, err) {
 		assert.Equal(t, testEmailRoutingRule, res)
 	}
@@ -260,12 +260,12 @@ func TestEmailRouting_DeleteRoutingRule(t *testing.T) {
 }`)
 	})
 
-	_, err := client.EmailRoutingDeleteRule(context.Background(), ZoneIdentifier(""), "")
+	_, err := client.DeleteEmailRoutingRule(context.Background(), ZoneIdentifier(""), "")
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingZoneID, err)
 	}
 
-	res, err := client.EmailRoutingDeleteRule(context.Background(), AccountIdentifier(testZoneID), "a7e6fb77503c41d8a7f3113c6918f10c")
+	res, err := client.DeleteEmailRoutingRule(context.Background(), AccountIdentifier(testZoneID), "a7e6fb77503c41d8a7f3113c6918f10c")
 	if assert.NoError(t, err) {
 		assert.Equal(t, testEmailRoutingRule, res)
 	}
@@ -298,7 +298,7 @@ func TestEmailRouting_GetAllRule(t *testing.T) {
 }`)
 	})
 
-	_, err := client.EmailRoutingGetCatchAllRule(context.Background(), ZoneIdentifier(""))
+	_, err := client.GetEmailRoutingCatchAllRule(context.Background(), ZoneIdentifier(""))
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingZoneID, err)
 	}
@@ -320,7 +320,7 @@ func TestEmailRouting_GetAllRule(t *testing.T) {
 		},
 	}
 
-	res, err := client.EmailRoutingGetCatchAllRule(context.Background(), AccountIdentifier(testZoneID))
+	res, err := client.GetEmailRoutingCatchAllRule(context.Background(), AccountIdentifier(testZoneID))
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
@@ -353,7 +353,7 @@ func TestEmailRouting_UpdateAllRule(t *testing.T) {
 }`)
 	})
 
-	_, err := client.EmailRoutingUpdateCatchAllRule(context.Background(), ZoneIdentifier(""), EmailRoutingCatchAllRule{})
+	_, err := client.UpdateEmailRoutingCatchAllRule(context.Background(), ZoneIdentifier(""), EmailRoutingCatchAllRule{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingZoneID, err)
 	}
@@ -375,7 +375,7 @@ func TestEmailRouting_UpdateAllRule(t *testing.T) {
 		},
 	}
 
-	res, err := client.EmailRoutingUpdateCatchAllRule(context.Background(), AccountIdentifier(testZoneID), EmailRoutingCatchAllRule{})
+	res, err := client.UpdateEmailRoutingCatchAllRule(context.Background(), AccountIdentifier(testZoneID), EmailRoutingCatchAllRule{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}

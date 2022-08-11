@@ -46,14 +46,14 @@ func TestEmailRouting_GetSettings(t *testing.T) {
 }`)
 	})
 
-	_, err := client.EmailRoutingGetSettings(context.Background(), AccountIdentifier(""))
+	_, err := client.GetEmailRoutingSettings(context.Background(), AccountIdentifier(""))
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingZoneID, err)
 	}
 
 	want := createTestEmailRoutingSettings()
 
-	res, err := client.EmailRoutingGetSettings(context.Background(), AccountIdentifier(testZoneID))
+	res, err := client.GetEmailRoutingSettings(context.Background(), AccountIdentifier(testZoneID))
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
@@ -82,14 +82,14 @@ func TestEmailRouting_Enable(t *testing.T) {
 }`)
 	})
 
-	_, err := client.EmailRoutingEnableRouting(context.Background(), AccountIdentifier(""))
+	_, err := client.EnableEmailRouting(context.Background(), AccountIdentifier(""))
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingZoneID, err)
 	}
 
 	want := createTestEmailRoutingSettings()
 
-	res, err := client.EmailRoutingEnableRouting(context.Background(), AccountIdentifier(testZoneID))
+	res, err := client.EnableEmailRouting(context.Background(), AccountIdentifier(testZoneID))
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
@@ -118,14 +118,14 @@ func TestEmailRouting_Disabled(t *testing.T) {
 }`)
 	})
 
-	_, err := client.EmailRoutingDisableRouting(context.Background(), AccountIdentifier(""))
+	_, err := client.DisableEmailRouting(context.Background(), AccountIdentifier(""))
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingZoneID, err)
 	}
 
 	want := createTestEmailRoutingSettings()
 
-	res, err := client.EmailRoutingDisableRouting(context.Background(), AccountIdentifier(testZoneID))
+	res, err := client.DisableEmailRouting(context.Background(), AccountIdentifier(testZoneID))
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
@@ -154,7 +154,7 @@ func TestEmailRouting_DNSSettings(t *testing.T) {
 }`)
 	})
 
-	_, err := client.EmailRoutingDNSSettings(context.Background(), AccountIdentifier(""))
+	_, err := client.GetEmailRoutingDNSSettings(context.Background(), AccountIdentifier(""))
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingZoneID, err)
 	}
@@ -169,7 +169,7 @@ func TestEmailRouting_DNSSettings(t *testing.T) {
 		},
 	}
 
-	res, err := client.EmailRoutingDNSSettings(context.Background(), AccountIdentifier(testZoneID))
+	res, err := client.GetEmailRoutingDNSSettings(context.Background(), AccountIdentifier(testZoneID))
 	if assert.NoError(t, err) {
 		assert.Len(t, res, 1)
 		assert.Equal(t, want, res)

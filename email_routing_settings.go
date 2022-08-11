@@ -28,18 +28,20 @@ type EmailRoutingDNSSettingsResponse struct {
 	Response
 }
 
-// EmailRoutingGetSettings Get information about the settings for your Email Routing zone.
+// GetEmailRoutingSettings Get information about the settings for your Email Routing zone.
 //
 // API reference: https://api.cloudflare.com/#email-routing---settings-get-email-routing-settings
-func (api *API) EmailRoutingGetSettings(ctx context.Context, rc *ResourceContainer) (EmailRoutingSettings, error) {
+func (api *API) GetEmailRoutingSettings(ctx context.Context, rc *ResourceContainer) (EmailRoutingSettings, error) {
 	if rc.Identifier == "" {
 		return EmailRoutingSettings{}, ErrMissingZoneID
 	}
+
 	uri := fmt.Sprintf("/zones/%s/email/routing", rc.Identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return EmailRoutingSettings{}, err
 	}
+
 	var r EmailRoutingSettingsResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
@@ -48,10 +50,10 @@ func (api *API) EmailRoutingGetSettings(ctx context.Context, rc *ResourceContain
 	return r.Result, nil
 }
 
-// EmailRoutingEnableRouting Enable you Email Routing zone. Add and lock the necessary MX and SPF records.
+// EnableEmailRouting Enable you Email Routing zone. Add and lock the necessary MX and SPF records.
 //
 // API reference: https://api.cloudflare.com/#email-routing---settings-enable-email-routing
-func (api *API) EmailRoutingEnableRouting(ctx context.Context, rc *ResourceContainer) (EmailRoutingSettings, error) {
+func (api *API) EnableEmailRouting(ctx context.Context, rc *ResourceContainer) (EmailRoutingSettings, error) {
 	if rc.Identifier == "" {
 		return EmailRoutingSettings{}, ErrMissingZoneID
 	}
@@ -60,6 +62,7 @@ func (api *API) EmailRoutingEnableRouting(ctx context.Context, rc *ResourceConta
 	if err != nil {
 		return EmailRoutingSettings{}, err
 	}
+
 	var r EmailRoutingSettingsResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
@@ -68,18 +71,20 @@ func (api *API) EmailRoutingEnableRouting(ctx context.Context, rc *ResourceConta
 	return r.Result, nil
 }
 
-// EmailRoutingDisableRouting Disable your Email Routing zone. Also removes additional MX records previously required for Email Routing to work.
+// DisableEmailRouting Disable your Email Routing zone. Also removes additional MX records previously required for Email Routing to work.
 //
 // API reference: https://api.cloudflare.com/#email-routing---settings-enable-email-routing
-func (api *API) EmailRoutingDisableRouting(ctx context.Context, rc *ResourceContainer) (EmailRoutingSettings, error) {
+func (api *API) DisableEmailRouting(ctx context.Context, rc *ResourceContainer) (EmailRoutingSettings, error) {
 	if rc.Identifier == "" {
 		return EmailRoutingSettings{}, ErrMissingZoneID
 	}
+
 	uri := fmt.Sprintf("/zones/%s/email/routing/disable", rc.Identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
 	if err != nil {
 		return EmailRoutingSettings{}, err
 	}
+
 	var r EmailRoutingSettingsResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
@@ -88,10 +93,10 @@ func (api *API) EmailRoutingDisableRouting(ctx context.Context, rc *ResourceCont
 	return r.Result, nil
 }
 
-// EmailRoutingDNSSettings Show the DNS records needed to configure your Email Routing zone.
+// GetEmailRoutingDNSSettings Show the DNS records needed to configure your Email Routing zone.
 //
 // API reference: https://api.cloudflare.com/#email-routing---settings-disable-email-routing
-func (api *API) EmailRoutingDNSSettings(ctx context.Context, rc *ResourceContainer) ([]DNSRecord, error) {
+func (api *API) GetEmailRoutingDNSSettings(ctx context.Context, rc *ResourceContainer) ([]DNSRecord, error) {
 	if rc.Identifier == "" {
 		return []DNSRecord{}, ErrMissingZoneID
 	}
@@ -100,6 +105,7 @@ func (api *API) EmailRoutingDNSSettings(ctx context.Context, rc *ResourceContain
 	if err != nil {
 		return []DNSRecord{}, err
 	}
+
 	var r EmailRoutingDNSSettingsResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {

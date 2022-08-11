@@ -76,14 +76,14 @@ type EmailRoutingCatchAllRule struct {
 	Actions  []EmailRoutingRuleAction  `json:"actions,omitempty"`
 }
 
-// EmailRoutingListRules Lists existing routing rules.
+// ListEmailRoutingRules Lists existing routing rules.
 //
 // API reference: https://api.cloudflare.com/#email-routing---routing-rules-list-routing-rules
-func (api *API) EmailRoutingListRules(ctx context.Context, rc *ResourceContainer, params EmailRoutingListRulesParameters) ([]EmailRoutingRule, *ResultInfo, error) {
-
+func (api *API) ListEmailRoutingRules(ctx context.Context, rc *ResourceContainer, params EmailRoutingListRulesParameters) ([]EmailRoutingRule, *ResultInfo, error) {
 	if rc.Identifier == "" {
 		return []EmailRoutingRule{}, &ResultInfo{}, ErrMissingZoneID
 	}
+
 	autoPaginate := true
 	if params.PerPage >= 1 || params.Page >= 1 {
 		autoPaginate = false
@@ -116,12 +116,11 @@ func (api *API) EmailRoutingListRules(ctx context.Context, rc *ResourceContainer
 	return rules, &rResponse.ResultInfo, nil
 }
 
-// EmailRoutingCreateRule Create a new routing rule.
+// CreateEmailRoutingRule Create a new routing rule.
 // Rules consist of a custom email address paired with a destination address, that forward emails to the destination address you chose.
 //
 // API reference: https://api.cloudflare.com/#email-routing---routing-rules-create-routing-rule
-func (api *API) EmailRoutingCreateRule(ctx context.Context, rc *ResourceContainer, params EmailRoutingCreateRuleParameters) (EmailRoutingRule, error) {
-
+func (api *API) CreateEmailRoutingRule(ctx context.Context, rc *ResourceContainer, params EmailRoutingCreateRuleParameters) (EmailRoutingRule, error) {
 	if rc.Identifier == "" {
 		return EmailRoutingRule{}, ErrMissingZoneID
 	}
@@ -140,11 +139,10 @@ func (api *API) EmailRoutingCreateRule(ctx context.Context, rc *ResourceContaine
 	return r.Result, nil
 }
 
-// EmailRoutingGetRule Get information for a specific routing rule already created.
+// GetEmailRoutingRule Get information for a specific routing rule already created.
 //
 // API reference: https://api.cloudflare.com/#email-routing---routing-rules-get-routing-rule
-func (api *API) EmailRoutingGetRule(ctx context.Context, rc *ResourceContainer, ruleID string) (EmailRoutingRule, error) {
-
+func (api *API) GetEmailRoutingRule(ctx context.Context, rc *ResourceContainer, ruleID string) (EmailRoutingRule, error) {
 	if rc.Identifier == "" {
 		return EmailRoutingRule{}, ErrMissingZoneID
 	}
@@ -163,11 +161,10 @@ func (api *API) EmailRoutingGetRule(ctx context.Context, rc *ResourceContainer, 
 	return r.Result, nil
 }
 
-// EmailRoutingUpdateRule Update actions, matches, or enable/disable specific routing rules
+// UpdateEmailRoutingRule Update actions, matches, or enable/disable specific routing rules
 //
 // API reference: https://api.cloudflare.com/#email-routing---routing-rules-update-routing-rule
-func (api *API) EmailRoutingUpdateRule(ctx context.Context, rc *ResourceContainer, params EmailRoutingUpdateRuleParameters) (EmailRoutingRule, error) {
-
+func (api *API) UpdateEmailRoutingRule(ctx context.Context, rc *ResourceContainer, params EmailRoutingUpdateRuleParameters) (EmailRoutingRule, error) {
 	if rc.Identifier == "" {
 		return EmailRoutingRule{}, ErrMissingZoneID
 	}
@@ -189,11 +186,10 @@ func (api *API) EmailRoutingUpdateRule(ctx context.Context, rc *ResourceContaine
 	return r.Result, nil
 }
 
-// EmailRoutingDeleteRule Delete a specific routing rule.
+// DeleteEmailRoutingRule Delete a specific routing rule.
 //
 // API reference: https://api.cloudflare.com/#email-routing---routing-rules-delete-routing-rule
-func (api *API) EmailRoutingDeleteRule(ctx context.Context, rc *ResourceContainer, ruleID string) (EmailRoutingRule, error) {
-
+func (api *API) DeleteEmailRoutingRule(ctx context.Context, rc *ResourceContainer, ruleID string) (EmailRoutingRule, error) {
 	if rc.Identifier == "" {
 		return EmailRoutingRule{}, ErrMissingZoneID
 	}
@@ -213,11 +209,10 @@ func (api *API) EmailRoutingDeleteRule(ctx context.Context, rc *ResourceContaine
 	return r.Result, nil
 }
 
-// EmailRoutingGetCatchAllRule Get information on the default catch-all routing rule.
+// GetEmailRoutingCatchAllRule Get information on the default catch-all routing rule.
 //
 // API reference: https://api.cloudflare.com/#email-routing---routing-rules-get-catch-all-rule
-func (api *API) EmailRoutingGetCatchAllRule(ctx context.Context, rc *ResourceContainer) (EmailRoutingCatchAllRule, error) {
-
+func (api *API) GetEmailRoutingCatchAllRule(ctx context.Context, rc *ResourceContainer) (EmailRoutingCatchAllRule, error) {
 	if rc.Identifier == "" {
 		return EmailRoutingCatchAllRule{}, ErrMissingZoneID
 	}
@@ -237,11 +232,10 @@ func (api *API) EmailRoutingGetCatchAllRule(ctx context.Context, rc *ResourceCon
 	return r, nil
 }
 
-// EmailRoutingUpdateCatchAllRule Enable or disable catch-all routing rule, or change action to forward to specific destination address.
+// UpdateEmailRoutingCatchAllRule Enable or disable catch-all routing rule, or change action to forward to specific destination address.
 //
 // API reference: https://api.cloudflare.com/#email-routing---routing-rules-update-catch-all-rule
-func (api *API) EmailRoutingUpdateCatchAllRule(ctx context.Context, rc *ResourceContainer, params EmailRoutingCatchAllRule) (EmailRoutingCatchAllRule, error) {
-
+func (api *API) UpdateEmailRoutingCatchAllRule(ctx context.Context, rc *ResourceContainer, params EmailRoutingCatchAllRule) (EmailRoutingCatchAllRule, error) {
 	if rc.Identifier == "" {
 		return EmailRoutingCatchAllRule{}, ErrMissingZoneID
 	}

@@ -35,11 +35,10 @@ type EmailRoutingCreateAddressResponse struct {
 	Response
 }
 
-// EmailRoutingListDestinationAddresses Lists existing destination addresses.
+// ListEmailRoutingDestinationAddresses Lists existing destination addresses.
 //
 // API reference: https://api.cloudflare.com/#email-routing---destination-addresses-list-destination-addresses
-func (api *API) EmailRoutingListDestinationAddresses(ctx context.Context, rc *ResourceContainer, params EmailRoutingListAddressParameters) ([]EmailRoutingDestinationAddress, *ResultInfo, error) {
-
+func (api *API) ListEmailRoutingDestinationAddresses(ctx context.Context, rc *ResourceContainer, params EmailRoutingListAddressParameters) ([]EmailRoutingDestinationAddress, *ResultInfo, error) {
 	if rc.Identifier == "" {
 		return []EmailRoutingDestinationAddress{}, &ResultInfo{}, ErrMissingAccountID
 	}
@@ -75,12 +74,11 @@ func (api *API) EmailRoutingListDestinationAddresses(ctx context.Context, rc *Re
 	return addresses, &eResponse.ResultInfo, nil
 }
 
-// EmailRoutingCreateDestinationAddress Create a destination address to forward your emails to.
+// CreateEmailRoutingDestinationAddress Create a destination address to forward your emails to.
 // Destination addresses need to be verified before they become active.
 //
 // API reference: https://api.cloudflare.com/#email-routing---destination-addresses-list-destination-addresses
-func (api *API) EmailRoutingCreateDestinationAddress(ctx context.Context, rc *ResourceContainer, params EmailRoutingCreateAddressParameters) (EmailRoutingDestinationAddress, error) {
-
+func (api *API) CreateEmailRoutingDestinationAddress(ctx context.Context, rc *ResourceContainer, params EmailRoutingCreateAddressParameters) (EmailRoutingDestinationAddress, error) {
 	if rc.Identifier == "" {
 		return EmailRoutingDestinationAddress{}, ErrMissingAccountID
 	}
@@ -99,11 +97,10 @@ func (api *API) EmailRoutingCreateDestinationAddress(ctx context.Context, rc *Re
 	return r.Result, nil
 }
 
-// EmailRoutingGetDestinationAddress Gets information for a specific destination email already created.
+// GetEmailRoutingDestinationAddress Gets information for a specific destination email already created.
 //
 // API reference: https://api.cloudflare.com/#email-routing---destination-addresses-get-a-destination-address
-func (api *API) EmailRoutingGetDestinationAddress(ctx context.Context, rc *ResourceContainer, addressID string) (EmailRoutingDestinationAddress, error) {
-
+func (api *API) GetEmailRoutingDestinationAddress(ctx context.Context, rc *ResourceContainer, addressID string) (EmailRoutingDestinationAddress, error) {
 	if rc.Identifier == "" {
 		return EmailRoutingDestinationAddress{}, ErrMissingAccountID
 	}
@@ -122,11 +119,10 @@ func (api *API) EmailRoutingGetDestinationAddress(ctx context.Context, rc *Resou
 	return r.Result, nil
 }
 
-// EmailRoutingDeleteDestinationAddress Gets information for a specific destination email already created.
+// DeleteEmailRoutingDestinationAddress Gets information for a specific destination email already created.
 //
 // API reference: https://api.cloudflare.com/#email-routing---destination-addresses-delete-destination-address
-func (api *API) EmailRoutingDeleteDestinationAddress(ctx context.Context, rc *ResourceContainer, addressID string) (EmailRoutingDestinationAddress, error) {
-
+func (api *API) DeleteEmailRoutingDestinationAddress(ctx context.Context, rc *ResourceContainer, addressID string) (EmailRoutingDestinationAddress, error) {
 	if rc.Identifier == "" {
 		return EmailRoutingDestinationAddress{}, ErrMissingAccountID
 	}

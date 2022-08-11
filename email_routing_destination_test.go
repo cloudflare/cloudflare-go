@@ -53,14 +53,14 @@ func TestEmailRouting_ListDestinationAddress(t *testing.T) {
 }`)
 	})
 
-	_, _, err := client.EmailRoutingListDestinationAddresses(context.Background(), AccountIdentifier(""), EmailRoutingListAddressParameters{})
+	_, _, err := client.ListEmailRoutingDestinationAddresses(context.Background(), AccountIdentifier(""), EmailRoutingListAddressParameters{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
 	want := createTestDestinationAddress()
 
-	res, resInfo, err := client.EmailRoutingListDestinationAddresses(context.Background(), AccountIdentifier(testAccountID), EmailRoutingListAddressParameters{})
+	res, resInfo, err := client.ListEmailRoutingDestinationAddresses(context.Background(), AccountIdentifier(testAccountID), EmailRoutingListAddressParameters{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, resInfo.Page, 1)
 		assert.Equal(t, want, res[0])
@@ -88,14 +88,14 @@ func TestEmailRouting_CreateDestinationAddress(t *testing.T) {
 }`)
 	})
 
-	_, err := client.EmailRoutingCreateDestinationAddress(context.Background(), AccountIdentifier(""), EmailRoutingCreateAddressParameters{})
+	_, err := client.CreateEmailRoutingDestinationAddress(context.Background(), AccountIdentifier(""), EmailRoutingCreateAddressParameters{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
 	want := createTestDestinationAddress()
 
-	res, err := client.EmailRoutingCreateDestinationAddress(context.Background(), AccountIdentifier(testAccountID), EmailRoutingCreateAddressParameters{Email: "user@example.com"})
+	res, err := client.CreateEmailRoutingDestinationAddress(context.Background(), AccountIdentifier(testAccountID), EmailRoutingCreateAddressParameters{Email: "user@example.com"})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
@@ -122,14 +122,14 @@ func TestEmailRouting_GetDestinationAddress(t *testing.T) {
 }`)
 	})
 
-	_, err := client.EmailRoutingGetDestinationAddress(context.Background(), AccountIdentifier(""), "")
+	_, err := client.GetEmailRoutingDestinationAddress(context.Background(), AccountIdentifier(""), "")
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
 	want := createTestDestinationAddress()
 
-	res, err := client.EmailRoutingGetDestinationAddress(context.Background(), AccountIdentifier(testAccountID), testEmailID)
+	res, err := client.GetEmailRoutingDestinationAddress(context.Background(), AccountIdentifier(testAccountID), testEmailID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
@@ -156,14 +156,14 @@ func TestEmailRouting_DeleteDestinationAddress(t *testing.T) {
 }`)
 	})
 
-	_, err := client.EmailRoutingDeleteDestinationAddress(context.Background(), AccountIdentifier(""), "")
+	_, err := client.DeleteEmailRoutingDestinationAddress(context.Background(), AccountIdentifier(""), "")
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
 	want := createTestDestinationAddress()
 
-	res, err := client.EmailRoutingDeleteDestinationAddress(context.Background(), AccountIdentifier(testAccountID), testEmailID)
+	res, err := client.DeleteEmailRoutingDestinationAddress(context.Background(), AccountIdentifier(testAccountID), testEmailID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
