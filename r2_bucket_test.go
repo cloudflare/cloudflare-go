@@ -15,7 +15,7 @@ func TestR2_CreateBucket(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc(fmt.Sprintf("/accounts/%s/r2/buckets/%s", testAccountID, testBucketName), func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(fmt.Sprintf("/accounts/%s/r2/buckets", testAccountID), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
@@ -26,17 +26,17 @@ func TestR2_CreateBucket(t *testing.T) {
 }`)
 	})
 
-	err := client.CreateR2Bucket(context.Background(), AccountIdentifier(""), "")
+	err := client.CreateR2Bucket(context.Background(), AccountIdentifier(""), CreateR2BucketParameters{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	err = client.CreateR2Bucket(context.Background(), AccountIdentifier(testAccountID), "")
+	err = client.CreateR2Bucket(context.Background(), AccountIdentifier(testAccountID), CreateR2BucketParameters{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingBucketName, err)
 	}
 
-	err = client.CreateR2Bucket(context.Background(), AccountIdentifier(testAccountID), "example-bucket")
+	err = client.CreateR2Bucket(context.Background(), AccountIdentifier(testAccountID), CreateR2BucketParameters{testBucketName})
 	assert.NoError(t, err)
 }
 
