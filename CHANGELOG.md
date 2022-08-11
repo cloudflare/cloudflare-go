@@ -11,6 +11,10 @@ ENHANCEMENTS:
 * workers-tail: Add in support for Workers tail API ([#1026](https://github.com/cloudflare/cloudflare-go/issues/1026))
 * workers: Add support to upload module workers ([#1010](https://github.com/cloudflare/cloudflare-go/issues/1010))
 
+BUG FIXES:
+
+* tunnel_routes: Fix not removing route when it contains virtual network ([#1030](https://github.com/cloudflare/cloudflare-go/issues/1030))
+
 DEPENDENCIES:
 
 * provider: bumps github.com/golangci/golangci-lint from 1.47.3 to 1.48.0 ([#1020](https://github.com/cloudflare/cloudflare-go/issues/1020))
