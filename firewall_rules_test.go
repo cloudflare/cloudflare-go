@@ -191,7 +191,7 @@ func TestFirewallRule(t *testing.T) {
 				"priority":null,
 				"filter":{
 					"id":"b7ff25282d394be7b945e23c7106ce8a",
-					"expression":"ip.src in {127.0.0.1} ~ \"^.*/login.php$\")",
+					"expression":"ip.src in {198.51.100.1} ~ \"^.*/login.php$\")",
 					"paused":false,
 					"description":"Login from office"
 				}
@@ -212,7 +212,7 @@ func TestFirewallRule(t *testing.T) {
 		Priority:    nil,
 		Filter: Filter{
 			ID:          "b7ff25282d394be7b945e23c7106ce8a",
-			Expression:  "ip.src in {127.0.0.1} ~ \"^.*/login.php$\")",
+			Expression:  "ip.src in {198.51.100.1} ~ \"^.*/login.php$\")",
 			Paused:      false,
 			Description: "Login from office",
 		},
@@ -242,7 +242,7 @@ func TestCreateSingleFirewallRule(t *testing.T) {
 					"priority":null,
 					"filter":{
 						"id":"b7ff25282d394be7b945e23c7106ce8a",
-						"expression":"ip.src in {127.0.0.0/24}",
+						"expression":"ip.src in {198.51.100.0/24}",
 						"paused":false,
 						"description":"Login from office"
 					}
@@ -265,7 +265,7 @@ func TestCreateSingleFirewallRule(t *testing.T) {
 			Priority:    nil,
 			Filter: Filter{
 				ID:          "b7ff25282d394be7b945e23c7106ce8a",
-				Expression:  "ip.src in {127.0.0.0/24}",
+				Expression:  "ip.src in {198.51.100.0/24}",
 				Paused:      false,
 				Description: "Login from office",
 			},
@@ -281,7 +281,7 @@ func TestCreateSingleFirewallRule(t *testing.T) {
 			Priority:    nil,
 			Filter: Filter{
 				ID:          "b7ff25282d394be7b945e23c7106ce8a",
-				Expression:  "ip.src in {127.0.0.0/24}",
+				Expression:  "ip.src in {198.51.100.0/24}",
 				Paused:      false,
 				Description: "Login from office",
 			},
@@ -312,7 +312,7 @@ func TestCreateMultipleFirewallRules(t *testing.T) {
 					"priority":null,
 					"filter":{
 						"id":"b7ff25282d394be7b945e23c7106ce8a",
-						"expression":"ip.src in {127.0.0.0/24}",
+						"expression":"ip.src in {198.51.100.0/24}",
 						"paused":false,
 						"description":"Login from office"
 					}
@@ -348,7 +348,7 @@ func TestCreateMultipleFirewallRules(t *testing.T) {
 			Priority:    nil,
 			Filter: Filter{
 				ID:          "b7ff25282d394be7b945e23c7106ce8a",
-				Expression:  "ip.src in {127.0.0.0/24}",
+				Expression:  "ip.src in {198.51.100.0/24}",
 				Paused:      false,
 				Description: "Login from office",
 			},
@@ -377,7 +377,7 @@ func TestCreateMultipleFirewallRules(t *testing.T) {
 			Priority:    nil,
 			Filter: Filter{
 				ID:          "b7ff25282d394be7b945e23c7106ce8a",
-				Expression:  "ip.src in {127.0.0.0/24}",
+				Expression:  "ip.src in {198.51.100.0/24}",
 				Paused:      false,
 				Description: "Login from office",
 			},
@@ -507,7 +507,7 @@ func TestUpdateMultipleFirewallRules(t *testing.T) {
 					"priority":null,
 					"filter":{
 						"id":"b7ff25282d394be7b945e23c7106ce8a",
-						"expression":"ip.src in {127.0.0.0/24}",
+						"expression":"ip.src in {198.51.100.0/24}",
 						"paused":false,
 						"description":"Login from office"
 					}
@@ -543,7 +543,7 @@ func TestUpdateMultipleFirewallRules(t *testing.T) {
 			Priority:    nil,
 			Filter: Filter{
 				ID:          "b7ff25282d394be7b945e23c7106ce8a",
-				Expression:  "ip.src in {127.0.0.0/24}",
+				Expression:  "ip.src in {198.51.100.0/24}",
 				Paused:      false,
 				Description: "Login from office",
 			},
@@ -572,7 +572,7 @@ func TestUpdateMultipleFirewallRules(t *testing.T) {
 			Priority:    nil,
 			Filter: Filter{
 				ID:          "b7ff25282d394be7b945e23c7106ce8a",
-				Expression:  "ip.src in {127.0.0.0/24}",
+				Expression:  "ip.src in {198.51.100.0/24}",
 				Paused:      false,
 				Description: "Login from office",
 			},

@@ -40,7 +40,7 @@ func TestCreateLoadBalancerPool(t *testing.T) {
               "origins": [
                 {
                   "name": "app-server-1",
-                  "address": "0.0.0.0",
+                  "address": "198.51.100.1",
                   "enabled": true,
                   "weight": 1,
                   "header": {
@@ -83,7 +83,7 @@ func TestCreateLoadBalancerPool(t *testing.T) {
               "origins": [
                 {
                   "name": "app-server-1",
-                  "address": "0.0.0.0",
+                  "address": "198.51.100.1",
                   "enabled": true,
                   "weight": 1,
                   "header": {
@@ -131,7 +131,7 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 		Origins: []LoadBalancerOrigin{
 			{
 				Name:    "app-server-1",
-				Address: "0.0.0.0",
+				Address: "198.51.100.1",
 				Enabled: true,
 				Weight:  1,
 				Header: map[string][]string{
@@ -163,7 +163,7 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 		Origins: []LoadBalancerOrigin{
 			{
 				Name:    "app-server-1",
-				Address: "0.0.0.0",
+				Address: "198.51.100.1",
 				Enabled: true,
 				Weight:  1,
 				Header: map[string][]string{
@@ -209,7 +209,7 @@ func TestListLoadBalancerPools(t *testing.T) {
                     "origins": [
                       {
                         "name": "app-server-1",
-                        "address": "0.0.0.0",
+                        "address": "198.51.100.1",
                         "enabled": true,
                         "weight": 1
                       }
@@ -244,7 +244,7 @@ func TestListLoadBalancerPools(t *testing.T) {
 			Origins: []LoadBalancerOrigin{
 				{
 					Name:    "app-server-1",
-					Address: "0.0.0.0",
+					Address: "198.51.100.1",
 					Enabled: true,
 					Weight:  1,
 				},
@@ -284,7 +284,7 @@ func TestLoadBalancerPoolDetails(t *testing.T) {
               "origins": [
                 {
                   "name": "app-server-1",
-                  "address": "0.0.0.0",
+                  "address": "198.51.100.1",
                   "enabled": true,
                   "weight": 1
                 }
@@ -311,7 +311,7 @@ func TestLoadBalancerPoolDetails(t *testing.T) {
 		Origins: []LoadBalancerOrigin{
 			{
 				Name:    "app-server-1",
-				Address: "0.0.0.0",
+				Address: "198.51.100.1",
 				Enabled: true,
 				Weight:  1,
 			},
@@ -371,7 +371,7 @@ func TestModifyLoadBalancerPool(t *testing.T) {
               "origins": [
                 {
                   "name": "app-server-2",
-                  "address": "0.0.0.1",
+                  "address": "198.51.100.2",
                   "enabled": false,
                   "weight": 1,
                   "header": {
@@ -404,7 +404,7 @@ func TestModifyLoadBalancerPool(t *testing.T) {
               "origins": [
                 {
                   "name": "app-server-2",
-                  "address": "0.0.0.1",
+                  "address": "198.51.100.2",
                   "enabled": false,
                   "weight": 1,
                   "header": {
@@ -438,7 +438,7 @@ func TestModifyLoadBalancerPool(t *testing.T) {
 		Origins: []LoadBalancerOrigin{
 			{
 				Name:    "app-server-2",
-				Address: "0.0.0.1",
+				Address: "198.51.100.2",
 				Enabled: false,
 				Weight:  1,
 				Header: map[string][]string{
@@ -462,7 +462,7 @@ func TestModifyLoadBalancerPool(t *testing.T) {
 		Origins: []LoadBalancerOrigin{
 			{
 				Name:    "app-server-2",
-				Address: "0.0.0.1",
+				Address: "198.51.100.2",
 				Enabled: false,
 				Weight:  1,
 				Header: map[string][]string{

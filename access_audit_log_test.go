@@ -24,7 +24,7 @@ func TestAccessAuditLogs(t *testing.T) {
   "result": [
     {
       "user_email": "michelle@example.com",
-      "ip_address": "198.41.129.166",
+      "ip_address": "198.51.100.1",
       "app_uid": "df7e2w5f-02b7-4d9d-af26-8d1988fca630",
       "app_domain": "test.example.com/admin",
       "action": "login",
@@ -43,7 +43,7 @@ func TestAccessAuditLogs(t *testing.T) {
 
 	want := []AccessAuditLogRecord{{
 		UserEmail:  "michelle@example.com",
-		IPAddress:  "198.41.129.166",
+		IPAddress:  "198.51.100.1",
 		AppUID:     "df7e2w5f-02b7-4d9d-af26-8d1988fca630",
 		AppDomain:  "test.example.com/admin",
 		Action:     "login",

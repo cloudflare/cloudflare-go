@@ -350,11 +350,11 @@ func TestUpdateAPIToken(t *testing.T) {
     "condition": {
       "request.ip": {
         "in": [
-          "199.27.128.0/21",
+          "198.51.100.0/24",
           "2400:cb00::/32"
         ],
         "not_in": [
-          "199.27.128.0/21",
+          "198.51.100.0/24",
           "2400:cb00::/32"
         ]
       }
@@ -395,8 +395,8 @@ func TestUpdateAPIToken(t *testing.T) {
 		},
 		Condition: &APITokenCondition{
 			RequestIP: &APITokenRequestIPCondition{
-				In:    []string{"199.27.128.0/21", "2400:cb00::/32"},
-				NotIn: []string{"199.27.128.0/21", "2400:cb00::/32"},
+				In:    []string{"198.51.100.0/24", "2400:cb00::/32"},
+				NotIn: []string{"198.51.100.0/24", "2400:cb00::/32"},
 			},
 		},
 	}

@@ -41,8 +41,8 @@ func ExampleAPI_DNSRecords_filterByContent() {
 		log.Fatal(err)
 	}
 
-	// Fetch only records whose content is 127.0.0.1
-	localhost := cloudflare.DNSRecord{Content: "127.0.0.1"}
+	// Fetch only records whose content is 198.51.100.1
+	localhost := cloudflare.DNSRecord{Content: "198.51.100.1"}
 	recs, err := api.DNSRecords(context.Background(), zoneID, localhost)
 	if err != nil {
 		log.Fatal(err)

@@ -21,7 +21,7 @@ func TestFilter(t *testing.T) {
 				"id": "b7ff25282d394be7b945e23c7106ce8a",
 				"paused": false,
 				"description": "Login from office",
-				"expression": "ip.src eq 127.0.0.1"
+				"expression": "ip.src eq 198.51.100.1"
 			},
 			"success": true,
 			"errors": null,
@@ -35,7 +35,7 @@ func TestFilter(t *testing.T) {
 		ID:          "b7ff25282d394be7b945e23c7106ce8a",
 		Paused:      false,
 		Description: "Login from office",
-		Expression:  "ip.src eq 127.0.0.1",
+		Expression:  "ip.src eq 198.51.100.1",
 	}
 
 	actual, err := client.Filter(context.Background(), ZoneIdentifier("d56084adb405e0b7e32c52321bf07be6"), "b7ff25282d394be7b945e23c7106ce8a")
@@ -146,7 +146,7 @@ func TestCreateSingleFilter(t *testing.T) {
 					"id": "b7ff25282d394be7b945e23c7106ce8a",
 					"paused": false,
 					"description": "Login from office",
-					"expression": "ip.src eq 127.0.0.1"
+					"expression": "ip.src eq 198.51.100.1"
 				}
 			],
 			"success": true,
@@ -162,7 +162,7 @@ func TestCreateSingleFilter(t *testing.T) {
 			ID:          "b7ff25282d394be7b945e23c7106ce8a",
 			Paused:      false,
 			Description: "Login from office",
-			Expression:  "ip.src eq 127.0.0.1",
+			Expression:  "ip.src eq 198.51.100.1",
 		},
 	}
 
@@ -171,7 +171,7 @@ func TestCreateSingleFilter(t *testing.T) {
 			ID:          "b7ff25282d394be7b945e23c7106ce8a",
 			Paused:      false,
 			Description: "Login from office",
-			Expression:  "ip.src eq 127.0.0.1",
+			Expression:  "ip.src eq 198.51.100.1",
 		},
 	}
 
@@ -195,7 +195,7 @@ func TestCreateMultipleFilters(t *testing.T) {
 					"id": "b7ff25282d394be7b945e23c7106ce8a",
 					"paused": false,
 					"description": "Login from office",
-					"expression": "ip.src eq 127.0.0.1"
+					"expression": "ip.src eq 198.51.100.1"
 				},
 				{
 					"id": "b7ff25282d394be7b945e23c7106ce8a",
@@ -217,7 +217,7 @@ func TestCreateMultipleFilters(t *testing.T) {
 			ID:          "b7ff25282d394be7b945e23c7106ce8a",
 			Paused:      false,
 			Description: "Login from office",
-			Expression:  "ip.src eq 127.0.0.1",
+			Expression:  "ip.src eq 198.51.100.1",
 		},
 		{
 			ID:          "b7ff25282d394be7b945e23c7106ce8a",
@@ -232,7 +232,7 @@ func TestCreateMultipleFilters(t *testing.T) {
 			ID:          "b7ff25282d394be7b945e23c7106ce8a",
 			Paused:      false,
 			Description: "Login from office",
-			Expression:  "ip.src eq 127.0.0.1",
+			Expression:  "ip.src eq 198.51.100.1",
 		},
 		{
 			ID:          "b7ff25282d394be7b945e23c7106ce8a",
@@ -311,7 +311,7 @@ func TestUpdateMultipleFilters(t *testing.T) {
 					"id": "c218c536b2bd406f958f278cf0fa8c0f",
 					"paused": false,
 					"description": "IP of example.com",
-					"expression": "ip.src ne 127.0.0.1"
+					"expression": "ip.src ne 198.51.100.1"
 				}
 			],
 			"success": true,
@@ -333,7 +333,7 @@ func TestUpdateMultipleFilters(t *testing.T) {
 			ID:          "c218c536b2bd406f958f278cf0fa8c0f",
 			Paused:      false,
 			Description: "IP of example.com",
-			Expression:  "ip.src ne 127.0.0.1",
+			Expression:  "ip.src ne 198.51.100.1",
 		},
 	}
 
@@ -348,7 +348,7 @@ func TestUpdateMultipleFilters(t *testing.T) {
 			ID:          "c218c536b2bd406f958f278cf0fa8c0f",
 			Paused:      false,
 			Description: "IP of example.com",
-			Expression:  "ip.src ne 127.0.0.1",
+			Expression:  "ip.src ne 198.51.100.1",
 		},
 	}
 

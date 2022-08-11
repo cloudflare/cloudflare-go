@@ -50,7 +50,7 @@ func Test_IPs(t *testing.T) {
   "errors": [],
   "messages": [],
   "result": {
-    "ipv4_cidrs": ["199.27.128.0/21"],
+    "ipv4_cidrs": ["198.51.100.0/24"],
     "ipv6_cidrs": ["ffff:ffff::/32"],
     "china_colos": ["42.81.6.0/25", "2408:871a:1801:7::/72"]
   }
@@ -62,7 +62,7 @@ func Test_IPs(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Len(t, ipRanges.IPv4CIDRs, 1)
-	assert.Equal(t, "199.27.128.0/21", ipRanges.IPv4CIDRs[0])
+	assert.Equal(t, "198.51.100.0/24", ipRanges.IPv4CIDRs[0])
 	assert.Len(t, ipRanges.IPv6CIDRs, 1)
 	assert.Equal(t, "ffff:ffff::/32", ipRanges.IPv6CIDRs[0])
 	assert.Len(t, ipRanges.ChinaIPv4CIDRs, 1)
