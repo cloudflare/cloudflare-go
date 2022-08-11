@@ -153,7 +153,7 @@ func TestClient_RetryCanSucceedAfterErrors(t *testing.T) {
             "success": true,
             "errors": [],
             "messages": [],
-            "result": 
+            "result":
                 {
                     "id": "17b5962d775c646f3f9725cbc7a53df4",
                     "created_on": "2014-01-01T05:20:00.12345Z",
@@ -165,7 +165,7 @@ func TestClient_RetryCanSucceedAfterErrors(t *testing.T) {
                     "origins": [
                       {
                         "name": "app-server-1",
-                        "address": "0.0.0.0",
+                        "address": "198.51.100.1",
                         "enabled": true
                       }
                     ],

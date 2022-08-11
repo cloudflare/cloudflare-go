@@ -36,7 +36,7 @@ func TestTunnels(t *testing.T) {
 			ClientID:           "dc6472cc-f1ae-44a0-b795-6b8a0ce29f90",
 			ClientVersion:      "2022.2.0",
 			OpenedAt:           "2021-01-25T18:22:34.317854Z",
-			OriginIP:           "85.12.78.6",
+			OriginIP:           "198.51.100.1",
 		}},
 	}}
 
@@ -73,7 +73,7 @@ func TestTunnel(t *testing.T) {
 			ClientID:           "dc6472cc-f1ae-44a0-b795-6b8a0ce29f90",
 			ClientVersion:      "2022.2.0",
 			OpenedAt:           "2021-01-25T18:22:34.317854Z",
-			OriginIP:           "85.12.78.6",
+			OriginIP:           "198.51.100.1",
 		}},
 	}
 
@@ -110,7 +110,7 @@ func TestCreateTunnel(t *testing.T) {
 			ClientID:           "dc6472cc-f1ae-44a0-b795-6b8a0ce29f90",
 			ClientVersion:      "2022.2.0",
 			OpenedAt:           "2021-01-25T18:22:34.317854Z",
-			OriginIP:           "85.12.78.6",
+			OriginIP:           "198.51.100.1",
 		}},
 	}
 
@@ -249,7 +249,7 @@ func TestTunnelConnections(t *testing.T) {
 						"client_id": "dc6472cc-f1ae-44a0-b795-6b8a0ce29f90",
 						"client_version": "2022.2.0",
 						"opened_at": "2021-01-25T18:22:34.317854Z",
-						"origin_ip": "85.12.78.6"
+						"origin_ip": "198.51.100.1"
 					}
 				]
 			}]
@@ -278,7 +278,7 @@ func TestTunnelConnections(t *testing.T) {
 				ClientID:           "dc6472cc-f1ae-44a0-b795-6b8a0ce29f90",
 				ClientVersion:      "2022.2.0",
 				OpenedAt:           "2021-01-25T18:22:34.317854Z",
-				OriginIP:           "85.12.78.6",
+				OriginIP:           "198.51.100.1",
 			}},
 		},
 	}

@@ -50,7 +50,7 @@ func ExampleAPI_CreateZoneLockdown() {
 		Configurations: []cloudflare.ZoneLockdownConfig{
 			{
 				Target: "ip",
-				Value:  "127.0.0.1",
+				Value:  "198.51.100.1",
 			},
 		},
 		Paused:   false,

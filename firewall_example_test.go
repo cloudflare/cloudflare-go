@@ -41,9 +41,9 @@ func ExampleAPI_ListZoneAccessRules_filterByIP() {
 		log.Fatal(err)
 	}
 
-	// Fetch only access rules whose target is 127.0.0.1
+	// Fetch only access rules whose target is 198.51.100.1
 	localhost := cloudflare.AccessRule{
-		Configuration: cloudflare.AccessRuleConfiguration{Target: "127.0.0.1"},
+		Configuration: cloudflare.AccessRuleConfiguration{Target: "198.51.100.1"},
 	}
 	response, err := api.ListZoneAccessRules(context.Background(), zoneID, localhost, 1)
 	if err != nil {

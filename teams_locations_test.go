@@ -28,7 +28,7 @@ func TestTeamsLocations(t *testing.T) {
 					"name": "home",
 					"networks": [
 						{
-							"network": "99.151.35.207/32",
+							"network": "198.51.100.1/32",
 							"id": "8e4c7835436345f0ab395429b187a076"
 						}
 					],
@@ -53,7 +53,7 @@ func TestTeamsLocations(t *testing.T) {
 	want := []TeamsLocation{{
 		ID:                    "0f8185414dec4a5e9034f3d917c17890",
 		Name:                  "home",
-		Networks:              []TeamsLocationNetwork{{ID: "8e4c7835436345f0ab395429b187a076", Network: "99.151.35.207/32"}},
+		Networks:              []TeamsLocationNetwork{{ID: "8e4c7835436345f0ab395429b187a076", Network: "198.51.100.1/32"}},
 		PolicyIDs:             []string{},
 		Ip:                    "2a06:98c1:54::2419",
 		Subdomain:             "q15l7x2lbw",
@@ -88,7 +88,7 @@ func TestTeamsLocation(t *testing.T) {
 				"name": "home",
 				"networks": [
 					{
-						"network": "99.151.35.207/32",
+						"network": "198.51.100.1/32",
 						"id": "8e4c7835436345f0ab395429b187a076"
 					}
 				],
@@ -111,7 +111,7 @@ func TestTeamsLocation(t *testing.T) {
 	want := TeamsLocation{
 		ID:                    id,
 		Name:                  "home",
-		Networks:              []TeamsLocationNetwork{{ID: "8e4c7835436345f0ab395429b187a076", Network: "99.151.35.207/32"}},
+		Networks:              []TeamsLocationNetwork{{ID: "8e4c7835436345f0ab395429b187a076", Network: "198.51.100.1/32"}},
 		PolicyIDs:             []string{},
 		Ip:                    "2a06:98c1:54::2419",
 		Subdomain:             "q15l7x2lbw",
@@ -146,7 +146,7 @@ func TestCreateTeamsLocation(t *testing.T) {
 				"name": "test",
 				"networks": [
 					{
-						"network": "99.151.35.207/32",
+						"network": "198.51.100.1/32",
 						"id": "8e4c7835436345f0ab395429b187a076"
 					}
 				],
@@ -169,7 +169,7 @@ func TestCreateTeamsLocation(t *testing.T) {
 	want := TeamsLocation{
 		ID:                    id,
 		Name:                  "test",
-		Networks:              []TeamsLocationNetwork{{ID: "8e4c7835436345f0ab395429b187a076", Network: "99.151.35.207/32"}},
+		Networks:              []TeamsLocationNetwork{{ID: "8e4c7835436345f0ab395429b187a076", Network: "198.51.100.1/32"}},
 		PolicyIDs:             []string{},
 		Ip:                    "2a06:98c1:54::2419",
 		Subdomain:             "q15l7x2lbw",
@@ -208,7 +208,7 @@ func TestUpdateTeamsLocation(t *testing.T) {
 				"name": "new",
 				"networks": [
 					{
-						"network": "99.151.35.207/32",
+						"network": "198.51.100.1/32",
 						"id": "8e4c7835436345f0ab395429b187a076"
 					}
 				],
@@ -231,7 +231,7 @@ func TestUpdateTeamsLocation(t *testing.T) {
 	want := TeamsLocation{
 		ID:                    id,
 		Name:                  "new",
-		Networks:              []TeamsLocationNetwork{{ID: "8e4c7835436345f0ab395429b187a076", Network: "99.151.35.207/32"}},
+		Networks:              []TeamsLocationNetwork{{ID: "8e4c7835436345f0ab395429b187a076", Network: "198.51.100.1/32"}},
 		PolicyIDs:             []string{},
 		Ip:                    "2a06:98c1:54::2419",
 		Subdomain:             "q15l7x2lbw",
