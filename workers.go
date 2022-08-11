@@ -851,10 +851,10 @@ func getRouteEndpoint(route WorkerRoute) (string, error) {
 }
 
 type WorkerDomain struct {
-	ZoneID      string  `json:"zone_id"`
-	Hostname    string  `json:"hostname"`
-	Service     string  `json:"service"`
-	Environment *string `json:"environment,omitempty"`
+	ZoneID      string `json:"zone_id"`
+	Hostname    string `json:"hostname"`
+	Service     string `json:"service"`
+	Environment string `json:"environment,omitempty"`
 }
 
 type WorkerDomainResult struct {
@@ -874,15 +874,9 @@ type WorkerDomainResponse struct {
 // AttachWorkerToDomain attaches a worker to a zone and hostname
 //
 // API reference: https://api.cloudflare.com/#worker-domain-attach-to-domain
-func (api *API) AttachWorkerToDomain(ctx context.Context, zoneID, hostname, service string, environment *string) (WorkerDomainResponse, error) {
+func (api *API) AttachWorkerToDomain(ctx context.Context, params *WorkerDomain) (WorkerDomainResponse, error) {
 	uri := fmt.Sprintf("/accounts/%s/workers/domains", api.AccountID)
-	body := WorkerDomain{
-		ZoneID:      zoneID,
-		Hostname:    hostname,
-		Service:     service,
-		Environment: environment,
-	}
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, body)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return WorkerDomainResponse{}, err
 	}
