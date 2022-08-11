@@ -18,6 +18,8 @@ type EmailRoutingDestinationAddress struct {
 
 type EmailRoutingListAddressParameters struct {
 	ResultInfo
+	Direction string `url:"direction,omitempty"`
+	Verified  *bool  `url:"verified,omitempty"`
 }
 
 type EmailRoutingListAddressResponse struct {
