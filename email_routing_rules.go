@@ -25,45 +25,45 @@ type EmailRoutingRule struct {
 	Tag      string                    `json:"tag,omitempty"`
 	Name     string                    `json:"name,omitempty"`
 	Priority int                       `json:"priority,omitempty"`
-	Enabled  bool                      `json:"enabled,omitempty"`
+	Enabled  *bool                     `json:"enabled,omitempty"`
 	Matchers []EmailRoutingRuleMatcher `json:"matchers,omitempty"`
 	Actions  []EmailRoutingRuleAction  `json:"actions,omitempty"`
 }
 
-type EmailRoutingListRulesParameters struct {
-	Enabled bool `url:"enabled,omitempty"`
+type ListEmailRoutingRulesParameters struct {
+	Enabled *bool `url:"enabled,omitempty"`
 	ResultInfo
 }
 
-type EmailRoutingListRuleResponse struct {
+type ListEmailRoutingRuleResponse struct {
 	Result     []EmailRoutingRule `json:"result"`
 	ResultInfo `json:"result_info,omitempty"`
 	Response
 }
 
-type EmailRoutingCreateRuleParameters struct {
+type CreateEmailRoutingRuleParameters struct {
 	Matchers []EmailRoutingRuleMatcher `json:"matchers,omitempty"`
 	Actions  []EmailRoutingRuleAction  `json:"actions,omitempty"`
 	Name     string                    `json:"name,omitempty"`
-	Enabled  bool                      `json:"enabled,omitempty"`
+	Enabled  *bool                     `json:"enabled,omitempty"`
 	Priority int                       `json:"priority,omitempty"`
 }
 
-type EmailRoutingCreateRuleResponse struct {
+type CreateEmailRoutingRuleResponse struct {
 	Result EmailRoutingRule `json:"result"`
 	Response
 }
 
-type EmailRoutingGetRuleResponse struct {
+type GetEmailRoutingRuleResponse struct {
 	Result EmailRoutingRule `json:"result"`
 	Response
 }
 
-type EmailRoutingUpdateRuleParameters struct {
+type UpdateEmailRoutingRuleParameters struct {
 	Matchers []EmailRoutingRuleMatcher `json:"matchers,omitempty"`
 	Actions  []EmailRoutingRuleAction  `json:"actions,omitempty"`
 	Name     string                    `json:"name,omitempty"`
-	Enabled  bool                      `json:"enabled,omitempty"`
+	Enabled  *bool                     `json:"enabled,omitempty"`
 	Priority int                       `json:"priority,omitempty"`
 	RuleID   string
 }
@@ -71,7 +71,7 @@ type EmailRoutingUpdateRuleParameters struct {
 type EmailRoutingCatchAllRule struct {
 	Tag      string                    `json:"tag,omitempty"`
 	Name     string                    `json:"name,omitempty"`
-	Enabled  bool                      `json:"enabled,omitempty"`
+	Enabled  *bool                     `json:"enabled,omitempty"`
 	Matchers []EmailRoutingRuleMatcher `json:"matchers,omitempty"`
 	Actions  []EmailRoutingRuleAction  `json:"actions,omitempty"`
 }
@@ -79,7 +79,7 @@ type EmailRoutingCatchAllRule struct {
 // ListEmailRoutingRules Lists existing routing rules.
 //
 // API reference: https://api.cloudflare.com/#email-routing---routing-rules-list-routing-rules
-func (api *API) ListEmailRoutingRules(ctx context.Context, rc *ResourceContainer, params EmailRoutingListRulesParameters) ([]EmailRoutingRule, *ResultInfo, error) {
+func (api *API) ListEmailRoutingRules(ctx context.Context, rc *ResourceContainer, params ListEmailRoutingRulesParameters) ([]EmailRoutingRule, *ResultInfo, error) {
 	if rc.Identifier == "" {
 		return []EmailRoutingRule{}, &ResultInfo{}, ErrMissingZoneID
 	}
@@ -94,8 +94,9 @@ func (api *API) ListEmailRoutingRules(ctx context.Context, rc *ResourceContainer
 	if params.Page < 1 {
 		params.Page = 1
 	}
+
 	var rules []EmailRoutingRule
-	var rResponse EmailRoutingListRuleResponse
+	var rResponse ListEmailRoutingRuleResponse
 	for {
 		uri := buildURI(fmt.Sprintf("/zones/%s/email/routing/rules", rc.Identifier), params)
 
@@ -103,16 +104,19 @@ func (api *API) ListEmailRoutingRules(ctx context.Context, rc *ResourceContainer
 		if err != nil {
 			return []EmailRoutingRule{}, &ResultInfo{}, err
 		}
+
 		err = json.Unmarshal(res, &rResponse)
 		if err != nil {
 			return []EmailRoutingRule{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 		}
+
 		rules = append(rules, rResponse.Result...)
 		params.ResultInfo = rResponse.ResultInfo.Next()
 		if params.ResultInfo.Done() || !autoPaginate {
 			break
 		}
 	}
+
 	return rules, &rResponse.ResultInfo, nil
 }
 
@@ -120,7 +124,7 @@ func (api *API) ListEmailRoutingRules(ctx context.Context, rc *ResourceContainer
 // Rules consist of a custom email address paired with a destination address, that forward emails to the destination address you chose.
 //
 // API reference: https://api.cloudflare.com/#email-routing---routing-rules-create-routing-rule
-func (api *API) CreateEmailRoutingRule(ctx context.Context, rc *ResourceContainer, params EmailRoutingCreateRuleParameters) (EmailRoutingRule, error) {
+func (api *API) CreateEmailRoutingRule(ctx context.Context, rc *ResourceContainer, params CreateEmailRoutingRuleParameters) (EmailRoutingRule, error) {
 	if rc.Identifier == "" {
 		return EmailRoutingRule{}, ErrMissingZoneID
 	}
@@ -131,11 +135,13 @@ func (api *API) CreateEmailRoutingRule(ctx context.Context, rc *ResourceContaine
 	if err != nil {
 		return EmailRoutingRule{}, err
 	}
-	var r EmailRoutingCreateRuleResponse
+
+	var r CreateEmailRoutingRuleResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return EmailRoutingRule{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
+
 	return r.Result, nil
 }
 
@@ -153,21 +159,24 @@ func (api *API) GetEmailRoutingRule(ctx context.Context, rc *ResourceContainer, 
 	if err != nil {
 		return EmailRoutingRule{}, err
 	}
-	var r EmailRoutingGetRuleResponse
+
+	var r GetEmailRoutingRuleResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return EmailRoutingRule{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
+
 	return r.Result, nil
 }
 
 // UpdateEmailRoutingRule Update actions, matches, or enable/disable specific routing rules
 //
 // API reference: https://api.cloudflare.com/#email-routing---routing-rules-update-routing-rule
-func (api *API) UpdateEmailRoutingRule(ctx context.Context, rc *ResourceContainer, params EmailRoutingUpdateRuleParameters) (EmailRoutingRule, error) {
+func (api *API) UpdateEmailRoutingRule(ctx context.Context, rc *ResourceContainer, params UpdateEmailRoutingRuleParameters) (EmailRoutingRule, error) {
 	if rc.Identifier == "" {
 		return EmailRoutingRule{}, ErrMissingZoneID
 	}
+
 	if params.RuleID == "" {
 		return EmailRoutingRule{}, ErrMissingRuleID
 	}
@@ -178,11 +187,13 @@ func (api *API) UpdateEmailRoutingRule(ctx context.Context, rc *ResourceContaine
 	if err != nil {
 		return EmailRoutingRule{}, err
 	}
-	var r EmailRoutingGetRuleResponse
+
+	var r GetEmailRoutingRuleResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return EmailRoutingRule{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
+
 	return r.Result, nil
 }
 
@@ -200,7 +211,8 @@ func (api *API) DeleteEmailRoutingRule(ctx context.Context, rc *ResourceContaine
 	if err != nil {
 		return EmailRoutingRule{}, err
 	}
-	var r EmailRoutingGetRuleResponse
+
+	var r GetEmailRoutingRuleResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return EmailRoutingRule{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
@@ -223,6 +235,7 @@ func (api *API) GetEmailRoutingCatchAllRule(ctx context.Context, rc *ResourceCon
 	if err != nil {
 		return EmailRoutingCatchAllRule{}, err
 	}
+
 	var r EmailRoutingCatchAllRule
 	err = json.Unmarshal(res, &r)
 	if err != nil {
@@ -246,6 +259,7 @@ func (api *API) UpdateEmailRoutingCatchAllRule(ctx context.Context, rc *Resource
 	if err != nil {
 		return EmailRoutingCatchAllRule{}, err
 	}
+
 	var r EmailRoutingCatchAllRule
 	err = json.Unmarshal(res, &r)
 	if err != nil {

@@ -16,23 +16,23 @@ type EmailRoutingDestinationAddress struct {
 	Modified *time.Time `json:"modified,omitempty"`
 }
 
-type EmailRoutingListAddressParameters struct {
+type ListEmailRoutingAddressParameters struct {
 	ResultInfo
 	Direction string `url:"direction,omitempty"`
 	Verified  *bool  `url:"verified,omitempty"`
 }
 
-type EmailRoutingListAddressResponse struct {
+type ListEmailRoutingAddressResponse struct {
 	Result     []EmailRoutingDestinationAddress `json:"result"`
 	ResultInfo `json:"result_info"`
 	Response
 }
 
-type EmailRoutingCreateAddressParameters struct {
+type CreateEmailRoutingAddressParameters struct {
 	Email string `json:"email,omitempty"`
 }
 
-type EmailRoutingCreateAddressResponse struct {
+type CreateEmailRoutingAddressResponse struct {
 	Result EmailRoutingDestinationAddress `json:"result,omitempty"`
 	Response
 }
@@ -40,22 +40,26 @@ type EmailRoutingCreateAddressResponse struct {
 // ListEmailRoutingDestinationAddresses Lists existing destination addresses.
 //
 // API reference: https://api.cloudflare.com/#email-routing---destination-addresses-list-destination-addresses
-func (api *API) ListEmailRoutingDestinationAddresses(ctx context.Context, rc *ResourceContainer, params EmailRoutingListAddressParameters) ([]EmailRoutingDestinationAddress, *ResultInfo, error) {
+func (api *API) ListEmailRoutingDestinationAddresses(ctx context.Context, rc *ResourceContainer, params ListEmailRoutingAddressParameters) ([]EmailRoutingDestinationAddress, *ResultInfo, error) {
 	if rc.Identifier == "" {
 		return []EmailRoutingDestinationAddress{}, &ResultInfo{}, ErrMissingAccountID
 	}
+
 	autoPaginate := true
 	if params.PerPage >= 1 || params.Page >= 1 {
 		autoPaginate = false
 	}
+
 	if params.PerPage < 1 {
 		params.PerPage = 50
 	}
+
 	if params.Page < 1 {
 		params.Page = 1
 	}
+
 	var addresses []EmailRoutingDestinationAddress
-	var eResponse EmailRoutingListAddressResponse
+	var eResponse ListEmailRoutingAddressResponse
 	for {
 		uri := buildURI(fmt.Sprintf("/accounts/%s/email/routing/addresses", rc.Identifier), params)
 
@@ -73,6 +77,7 @@ func (api *API) ListEmailRoutingDestinationAddresses(ctx context.Context, rc *Re
 			break
 		}
 	}
+
 	return addresses, &eResponse.ResultInfo, nil
 }
 
@@ -80,7 +85,7 @@ func (api *API) ListEmailRoutingDestinationAddresses(ctx context.Context, rc *Re
 // Destination addresses need to be verified before they become active.
 //
 // API reference: https://api.cloudflare.com/#email-routing---destination-addresses-list-destination-addresses
-func (api *API) CreateEmailRoutingDestinationAddress(ctx context.Context, rc *ResourceContainer, params EmailRoutingCreateAddressParameters) (EmailRoutingDestinationAddress, error) {
+func (api *API) CreateEmailRoutingDestinationAddress(ctx context.Context, rc *ResourceContainer, params CreateEmailRoutingAddressParameters) (EmailRoutingDestinationAddress, error) {
 	if rc.Identifier == "" {
 		return EmailRoutingDestinationAddress{}, ErrMissingAccountID
 	}
@@ -91,11 +96,13 @@ func (api *API) CreateEmailRoutingDestinationAddress(ctx context.Context, rc *Re
 	if err != nil {
 		return EmailRoutingDestinationAddress{}, ErrMissingAccountID
 	}
-	var r EmailRoutingCreateAddressResponse
+
+	var r CreateEmailRoutingAddressResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return EmailRoutingDestinationAddress{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
+
 	return r.Result, nil
 }
 
@@ -113,11 +120,13 @@ func (api *API) GetEmailRoutingDestinationAddress(ctx context.Context, rc *Resou
 	if err != nil {
 		return EmailRoutingDestinationAddress{}, ErrMissingAccountID
 	}
-	var r EmailRoutingCreateAddressResponse
+
+	var r CreateEmailRoutingAddressResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return EmailRoutingDestinationAddress{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
+
 	return r.Result, nil
 }
 
@@ -135,10 +144,12 @@ func (api *API) DeleteEmailRoutingDestinationAddress(ctx context.Context, rc *Re
 	if err != nil {
 		return EmailRoutingDestinationAddress{}, ErrMissingAccountID
 	}
-	var r EmailRoutingCreateAddressResponse
+
+	var r CreateEmailRoutingAddressResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return EmailRoutingDestinationAddress{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
+
 	return r.Result, nil
 }

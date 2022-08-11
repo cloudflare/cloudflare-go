@@ -3,10 +3,11 @@ package cloudflare
 import (
 	"context"
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 const testEmailID = "ea95132c15732412d22c1476fa83f27a"
@@ -53,14 +54,14 @@ func TestEmailRouting_ListDestinationAddress(t *testing.T) {
 }`)
 	})
 
-	_, _, err := client.ListEmailRoutingDestinationAddresses(context.Background(), AccountIdentifier(""), EmailRoutingListAddressParameters{})
+	_, _, err := client.ListEmailRoutingDestinationAddresses(context.Background(), AccountIdentifier(""), ListEmailRoutingAddressParameters{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
 	want := createTestDestinationAddress()
 
-	res, resInfo, err := client.ListEmailRoutingDestinationAddresses(context.Background(), AccountIdentifier(testAccountID), EmailRoutingListAddressParameters{})
+	res, resInfo, err := client.ListEmailRoutingDestinationAddresses(context.Background(), AccountIdentifier(testAccountID), ListEmailRoutingAddressParameters{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, resInfo.Page, 1)
 		assert.Equal(t, want, res[0])
@@ -88,14 +89,14 @@ func TestEmailRouting_CreateDestinationAddress(t *testing.T) {
 }`)
 	})
 
-	_, err := client.CreateEmailRoutingDestinationAddress(context.Background(), AccountIdentifier(""), EmailRoutingCreateAddressParameters{})
+	_, err := client.CreateEmailRoutingDestinationAddress(context.Background(), AccountIdentifier(""), CreateEmailRoutingAddressParameters{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
 	want := createTestDestinationAddress()
 
-	res, err := client.CreateEmailRoutingDestinationAddress(context.Background(), AccountIdentifier(testAccountID), EmailRoutingCreateAddressParameters{Email: "user@example.com"})
+	res, err := client.CreateEmailRoutingDestinationAddress(context.Background(), AccountIdentifier(testAccountID), CreateEmailRoutingAddressParameters{Email: "user@example.com"})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}

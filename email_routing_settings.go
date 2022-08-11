@@ -14,7 +14,7 @@ type EmailRoutingSettings struct {
 	Enabled    bool       `json:"enabled,omitempty"`
 	Created    *time.Time `json:"created,omitempty"`
 	Modified   *time.Time `json:"modified,omitempty"`
-	SkipWizard bool       `json:"skip_wizard,omitempty"`
+	SkipWizard *bool      `json:"skip_wizard,omitempty"`
 	Status     string     `json:"status,omitempty"`
 }
 
@@ -47,6 +47,7 @@ func (api *API) GetEmailRoutingSettings(ctx context.Context, rc *ResourceContain
 	if err != nil {
 		return EmailRoutingSettings{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
+
 	return r.Result, nil
 }
 
@@ -68,6 +69,7 @@ func (api *API) EnableEmailRouting(ctx context.Context, rc *ResourceContainer) (
 	if err != nil {
 		return EmailRoutingSettings{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
+
 	return r.Result, nil
 }
 

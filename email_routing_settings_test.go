@@ -3,10 +3,11 @@ package cloudflare
 import (
 	"context"
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func createTestEmailRoutingSettings() EmailRoutingSettings {
@@ -18,7 +19,7 @@ func createTestEmailRoutingSettings() EmailRoutingSettings {
 		Enabled:    true,
 		Created:    &created,
 		Modified:   &modified,
-		SkipWizard: true,
+		SkipWizard: BoolPtr(true),
 		Status:     "read",
 	}
 }
@@ -146,7 +147,7 @@ func TestEmailRouting_DNSSettings(t *testing.T) {
     {
       "type": "A",
       "name": "example.com",
-      "content": "127.0.0.1",
+      "content": "192.0.2.1",
       "ttl": 3600,
       "priority": 10
     }
@@ -163,7 +164,7 @@ func TestEmailRouting_DNSSettings(t *testing.T) {
 		{
 			Type:     "A",
 			Name:     "example.com",
-			Content:  "127.0.0.1",
+			Content:  "192.0.2.1",
 			TTL:      3600,
 			Priority: Uint16Ptr(10),
 		},
