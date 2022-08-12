@@ -186,6 +186,19 @@ var (
 	workerScript                  = "addEventListener('fetch', event => {\n    event.passThroughOnException()\nevent.respondWith(handleRequest(event.request))\n})\n\nasync function handleRequest(request) {\n    return fetch(request)\n}"
 	workerModuleScript            = "export default {\n    async fetch(request, env, event) {\n     event.passThroughOnException()\n    return fetch(request)\n    }\n}"
 	deleteWorkerRouteResponseData = createWorkerRouteResponse
+
+	attachWorkerToDomainResponse = fmt.Sprintf(`{
+    "result": {
+        "id": "e7a57d8746e74ae49c25994dadb421b1",
+	"zone_id": "%s",
+	"service":"test_script_1",
+	"hostname":"api4.example.com",
+	"environment":"production"
+    },
+    "success": true,
+    "errors": [],
+    "messages": []
+}`, testZoneID)
 )
 
 func getFormValue(r *http.Request, key string) ([]byte, error) {
@@ -1218,6 +1231,7 @@ func TestWorkers_UpdateWorkerRouteErrorsWhenMixingSingleAndMultiScriptProperties
 
 func TestWorkers_UpdateWorkerRouteWithNoScript(t *testing.T) {
 	setup(UsingAccount("foo"))
+	defer teardown()
 
 	mux.HandleFunc("/zones/foo/workers/routes/e7a57d8746e74ae49c25994dadb421b1", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
@@ -1228,4 +1242,27 @@ func TestWorkers_UpdateWorkerRouteWithNoScript(t *testing.T) {
 	route := WorkerRoute{Pattern: "app1.example.com/*"}
 	_, err := client.UpdateWorkerRoute(context.Background(), "foo", "e7a57d8746e74ae49c25994dadb421b1", route)
 	assert.NoError(t, err)
+}
+
+func TestWorkers_AttachWorkerToDomain(t *testing.T) {
+	setup(UsingAccount(testAccountID))
+	defer teardown()
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/workers/domains", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, deleteWorkerResponseData) //nolint
+	})
+	res, err := client.AttachWorkerToDomain(context.Background(), AccountIdentifier(testAccountID), &WorkerDomainParams{
+		ZoneID:      testZoneID,
+		Hostname:    "app4.example.com",
+		Service:     "test_script_1",
+		Environment: "production",
+	})
+	want := WorkerDomainResponse{
+		successResponse,
+		WorkerDomainResult{}}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want.Response, res.Response)
+	}
 }
