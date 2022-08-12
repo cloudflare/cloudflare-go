@@ -166,10 +166,17 @@ const (
   "errors": [],
   "messages": []
 }`
-	attachWorkerToDomainResponse = `{
+)
+
+var (
+	successResponse               = Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}}
+	workerScript                  = "addEventListener('fetch', event => {\n    event.passThroughOnException()\nevent.respondWith(handleRequest(event.request))\n})\n\nasync function handleRequest(request) {\n    return fetch(request)\n}"
+	deleteWorkerRouteResponseData = createWorkerRouteResponse
+
+	attachWorkerToDomainResponse = fmt.Sprintf(`{
     "result": {
         "id": "e7a57d8746e74ae49c25994dadb421b1",
-	"zone_id":"foo",
+	"zone_id": "%s",
 	"service":"test_script_1",
 	"hostname":"api4.example.com",
 	"environment":"production"
@@ -177,13 +184,7 @@ const (
     "success": true,
     "errors": [],
     "messages": []
-}`
-)
-
-var (
-	successResponse               = Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}}
-	workerScript                  = "addEventListener('fetch', event => {\n    event.passThroughOnException()\nevent.respondWith(handleRequest(event.request))\n})\n\nasync function handleRequest(request) {\n    return fetch(request)\n}"
-	deleteWorkerRouteResponseData = createWorkerRouteResponse
+}`, testZoneID)
 )
 
 func getFormValue(r *http.Request, key string) ([]byte, error) {
@@ -1127,16 +1128,16 @@ func TestWorkers_UpdateWorkerRouteWithNoScript(t *testing.T) {
 }
 
 func TestWorkers_AttachWorkerToDomain(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup(UsingAccount(testAccountID))
 	defer teardown()
 
-	mux.HandleFunc("/accounts/foo/workers/domains", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/accounts/"+testAccountID+"/workers/domains", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, deleteWorkerResponseData) //nolint
 	})
-	res, err := client.AttachWorkerToDomain(context.Background(), &WorkerDomain{
-		ZoneID:      "foo",
+	res, err := client.AttachWorkerToDomain(context.Background(), AccountIdentifier(testAccountID), &WorkerDomainParams{
+		ZoneID:      testZoneID,
 		Hostname:    "app4.example.com",
 		Service:     "test_script_1",
 		Environment: "production",
