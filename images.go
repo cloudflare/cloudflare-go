@@ -138,12 +138,11 @@ func (api *API) UploadImage(ctx context.Context, accountID string, upload ImageU
 	}
 	_ = w.Close()
 
-	res, err := api.makeRequestWithAuthTypeAndHeaders(
+	res, err := api.makeRequestContextWithHeaders(
 		ctx,
 		http.MethodPost,
 		uri,
 		body,
-		api.authType,
 		http.Header{
 			"Accept":       []string{"application/json"},
 			"Content-Type": []string{w.FormDataContentType()},

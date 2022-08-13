@@ -176,21 +176,42 @@ func (api *API) makeRequestContextWithHeaders(ctx context.Context, method, uri s
 	return api.makeRequestWithAuthTypeAndHeaders(ctx, method, uri, params, api.authType, headers)
 }
 
-// Deprecated: Use `makeRequestContextWithHeaders` instead.
-//nolint:unused
-func (api *API) makeRequestWithHeaders(method, uri string, params interface{}, headers http.Header) ([]byte, error) {
-	return api.makeRequestWithAuthTypeAndHeaders(context.Background(), method, uri, params, api.authType, headers)
-}
-
 func (api *API) makeRequestWithAuthType(ctx context.Context, method, uri string, params interface{}, authType int) ([]byte, error) {
 	return api.makeRequestWithAuthTypeAndHeaders(ctx, method, uri, params, authType, nil)
 }
 
+// Struct for makeRequestWithAuthTypeAndHeaders's return value.
+// Wrapper methods can return just the Body if that's all the caller needs.
+//
+// Allows callers to see the Content-Type header and HTTP Status codes in case
+// there is additional meaning for particular API calls. This is especially
+// useful if the response is a multipart/form-data because the boundary string
+// is stored as a parameter of the content type header. Caller can parse using mime/multipart.
+type APIResponse struct {
+	Body        []byte
+	ContentType string
+	StatusCode  int
+}
+
 func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, uri string, params interface{}, authType int, headers http.Header) ([]byte, error) {
+	res, err := api.makeRequestWithAuthTypeAndHeadersComplete(ctx, method, uri, params, api.authType, headers)
+	if err != nil {
+		return nil, err
+	}
+	return res.Body, err
+}
+
+// Use this method if an API response can have different Content-Type headers and different body formats.
+func (api *API) makeRequestContextWithHeadersComplete(ctx context.Context, method, uri string, params interface{}, headers http.Header) (*APIResponse, error) {
+	return api.makeRequestWithAuthTypeAndHeadersComplete(ctx, method, uri, params, api.authType, headers)
+}
+
+func (api *API) makeRequestWithAuthTypeAndHeadersComplete(ctx context.Context, method, uri string, params interface{}, authType int, headers http.Header) (*APIResponse, error) {
 	var err error
 	var resp *http.Response
 	var respErr error
 	var respBody []byte
+
 	for i := 0; i <= api.retryPolicy.MaxRetries; i++ {
 		var reqBody io.Reader
 		if params != nil {
@@ -277,13 +298,15 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 			}
 			break
 		}
-	}
+	} // for loop
+
+	// still had an error after all retries
 	if respErr != nil {
 		return nil, respErr
 	}
 
 	if api.Debug {
-		fmt.Printf("cloudflare-go [DEBUG] RESPONSE StatusCode:%d Body:%#v RayID:%s\n", resp.StatusCode, string(respBody), resp.Header.Get("cf-ray"))
+		fmt.Printf("cloudflare-go [DEBUG] RESPONSE StatusCode:%d RayID:%s ContentType:%s Body:%#v\n", resp.StatusCode, resp.Header.Get("cf-ray"), resp.Header.Get("content-type"), string(respBody))
 	}
 
 	if resp.StatusCode >= http.StatusBadRequest {
@@ -341,7 +364,11 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 		}
 	}
 
-	return respBody, nil
+	return &APIResponse{
+		Body:        respBody,
+		StatusCode:  resp.StatusCode,
+		ContentType: resp.Header.Get("content-type"),
+	}, nil
 }
 
 // request makes a HTTP request to the given API endpoint, returning the raw

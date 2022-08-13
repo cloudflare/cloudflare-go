@@ -303,8 +303,9 @@ func TestWorkers_DeleteWorker(t *testing.T) {
 	})
 	res, err := client.DeleteWorker(context.Background(), &WorkerRequestParams{ZoneID: "foo"})
 	want := WorkerScriptResponse{
-		successResponse,
-		WorkerScript{}}
+		Response: successResponse,
+	}
+
 	if assert.NoError(t, err) {
 		assert.Equal(t, want.Response, res.Response)
 	}
@@ -321,8 +322,8 @@ func TestWorkers_DeleteWorkerWithName(t *testing.T) {
 	})
 	res, err := client.DeleteWorker(context.Background(), &WorkerRequestParams{ScriptName: "bar"})
 	want := WorkerScriptResponse{
-		successResponse,
-		WorkerScript{}}
+		Response: successResponse,
+	}
 	if assert.NoError(t, err) {
 		assert.Equal(t, want.Response, res.Response)
 	}
@@ -348,6 +349,7 @@ func TestWorkers_DownloadWorker(t *testing.T) {
 	res, err := client.DownloadWorker(context.Background(), &WorkerRequestParams{ZoneID: "foo"})
 	want := WorkerScriptResponse{
 		successResponse,
+		false,
 		WorkerScript{
 			Script: workerScript,
 		}}
@@ -368,6 +370,7 @@ func TestWorkers_DownloadWorkerWithName(t *testing.T) {
 	res, err := client.DownloadWorker(context.Background(), &WorkerRequestParams{ScriptName: "bar"})
 	want := WorkerScriptResponse{
 		successResponse,
+		false,
 		WorkerScript{
 			Script: workerScript,
 		}}
@@ -382,6 +385,27 @@ func TestWorkers_DownloadWorkerWithNameErrorsWithoutAccountId(t *testing.T) {
 
 	_, err := client.DownloadWorker(context.Background(), &WorkerRequestParams{ScriptName: "bar"})
 	assert.Error(t, err)
+}
+
+func TestWorkers_DownloadWorkerModule(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	mux.HandleFunc("/accounts/foo/workers/scripts/bar", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "multipart/form-data; boundary=workermoduledownloadresponse")
+		fmt.Fprintf(w, workerModuleDownloadResponse) //nolint
+	})
+	res, err := client.DownloadWorker(context.Background(), &WorkerRequestParams{ScriptName: "bar"})
+	want := WorkerScriptResponse{
+		successResponse,
+		true,
+		WorkerScript{
+			Script: workerModuleScript,
+		}}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want.Script, res.Script)
+	}
 }
 
 func TestWorkers_ListWorkerScripts(t *testing.T) {
@@ -430,6 +454,7 @@ func TestWorkers_UploadWorker(t *testing.T) {
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
+		false,
 		WorkerScript{
 			Script: workerScript,
 			WorkerMetaData: WorkerMetaData{
@@ -468,6 +493,7 @@ func TestWorkers_UploadWorkerAsModule(t *testing.T) {
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
+		false,
 		WorkerScript{
 			Script: workerModuleScript,
 			WorkerMetaData: WorkerMetaData{
@@ -496,6 +522,7 @@ func TestWorkers_UploadWorkerWithName(t *testing.T) {
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
+		false,
 		WorkerScript{
 			Script: workerScript,
 			WorkerMetaData: WorkerMetaData{
@@ -524,6 +551,7 @@ func TestWorkers_UploadWorkerSingleScriptWithAccount(t *testing.T) {
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
+		false,
 		WorkerScript{
 			Script: workerScript,
 			WorkerMetaData: WorkerMetaData{
@@ -629,6 +657,7 @@ func TestWorkers_UploadWorkerWithInheritBinding(t *testing.T) {
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
+		false,
 		WorkerScript{
 			Script: workerScript,
 			WorkerMetaData: WorkerMetaData{
