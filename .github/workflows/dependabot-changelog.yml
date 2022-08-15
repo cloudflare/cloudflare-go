@@ -18,7 +18,7 @@ jobs:
           gh pr checkout $PR_URL
           cat << EOF > .changelog/$PR_NUMBER.txt
           \`\`\`release-note:dependency
-          provider: bumps $DEP_NAME from $DEP_PREV_VERSION to $DEP_NEXT_VERSION
+          deps: bumps $DEP_NAME from $DEP_PREV_VERSION to $DEP_NEXT_VERSION
           \`\`\`
           EOF
           git config user.name github-actions[bot]
