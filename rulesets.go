@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"errors"
@@ -38,6 +39,7 @@ const (
 	RulesetPhaseMagicTransit                        RulesetPhase = "magic_transit"
 	RulesetPhaseRateLimit                           RulesetPhase = "http_ratelimit"
 	RulesetPhaseSuperBotFightMode                   RulesetPhase = "http_request_sbfm"
+	RulesetPhaseHTTPConfigSettings                  RulesetPhase = "http_config_settings"
 
 	RulesetRuleActionBlock                RulesetRuleAction = "block"
 	RulesetRuleActionChallenge            RulesetRuleAction = "challenge"
@@ -53,6 +55,7 @@ const (
 	RulesetRuleActionRoute                RulesetRuleAction = "route"
 	RulesetRuleActionScore                RulesetRuleAction = "score"
 	RulesetRuleActionSetCacheSettings     RulesetRuleAction = "set_cache_settings"
+	RulesetRuleActionSetConfig            RulesetRuleAction = "set_config"
 	RulesetRuleActionServeError           RulesetRuleAction = "serve_error"
 	RulesetRuleActionSkip                 RulesetRuleAction = "skip"
 
@@ -105,6 +108,7 @@ func RulesetPhaseValues() []string {
 		string(RulesetPhaseMagicTransit),
 		string(RulesetPhaseRateLimit),
 		string(RulesetPhaseSuperBotFightMode),
+		string(RulesetPhaseHTTPConfigSettings),
 	}
 }
 
@@ -126,6 +130,7 @@ func RulesetRuleActionValues() []string {
 		string(RulesetRuleActionRoute),
 		string(RulesetRuleActionScore),
 		string(RulesetRuleActionSetCacheSettings),
+		string(RulesetRuleActionSetConfig),
 		string(RulesetRuleActionServeError),
 		string(RulesetRuleActionSkip),
 	}
@@ -228,6 +233,22 @@ type RulesetRuleActionParameters struct {
 	OriginErrorPagePassthru *bool                                            `json:"origin_error_page_passthru,omitempty"`
 	FromList                *RulesetRuleActionParametersFromList             `json:"from_list,omitempty"`
 	FromValue               *RulesetRuleActionParametersFromValue            `json:"from_value,omitempty"`
+	AutomaticHTTPSRewrites  *bool                                            `json:"automatic_https_rewrites,omitempty"`
+	AutoMinify              *RulesetRuleActionParametersAutoMinify           `json:"autominify,omitempty"`
+	BrowserIntegrityCheck   *bool                                            `json:"bic,omitempty"`
+	DisableApps             *bool                                            `json:"disable_apps,omitempty"`
+	DisableZaraz            *bool                                            `json:"disable_zaraz,omitempty"`
+	DisableRailgun          *bool                                            `json:"disable_railgun,omitempty"`
+	EmailObfuscation        *bool                                            `json:"email_obfuscation,omitempty"`
+	Mirage                  *bool                                            `json:"mirage,omitempty"`
+	OpportunisticEncryption *bool                                            `json:"opportunistic_encryption,omitempty"`
+	Polish                  *Polish                                          `json:"polish,omitempty"`
+	RocketLoader            *bool                                            `json:"rocket_loader,omitempty"`
+	SecurityLevel           *SecurityLevel                                   `json:"security_level,omitempty"`
+	ServerSideExcludes      *bool                                            `json:"server_side_excludes,omitempty"`
+	SSL                     *SSL                                             `json:"ssl,omitempty"`
+	SXG                     *bool                                            `json:"sxg,omitempty"`
+	HotLinkProtection       *bool                                            `json:"hotlink_protection,omitempty"`
 }
 
 // RulesetRuleActionParametersFromList holds the FromList struct for
@@ -235,6 +256,12 @@ type RulesetRuleActionParameters struct {
 type RulesetRuleActionParametersFromList struct {
 	Name string `json:"name"`
 	Key  string `json:"key"`
+}
+
+type RulesetRuleActionParametersAutoMinify struct {
+	HTML bool `json:"html"`
+	CSS  bool `json:"css"`
+	JS   bool `json:"js"`
 }
 
 type RulesetRuleActionParametersFromValue struct {
@@ -417,6 +444,183 @@ type RulesetRuleActionParametersOrigin struct {
 // parameters that involve SNI overrides.
 type RulesetRuleActionParametersSni struct {
 	Value string `json:"value"`
+}
+
+type Polish int
+
+const (
+	_ Polish = iota
+	PolishOff
+	PolishLossless
+	PolishLossy
+)
+
+func (p Polish) MarshalJSON() ([]byte, error) {
+	return json.Marshal(p.String())
+}
+
+func (p Polish) String() string {
+	return [...]string{"off", "lossless", "lossy"}[p-1]
+}
+
+func (p *Polish) UnmarshalJSON(data []byte) error {
+	var (
+		s   string
+		err error
+	)
+	err = json.Unmarshal(data, &s)
+	if err != nil {
+		return err
+	}
+	v, err := PolishFromString(s)
+	if err != nil {
+		return err
+	}
+	*p = *v
+	return nil
+}
+
+func PolishFromString(s string) (*Polish, error) {
+	s = strings.ToLower(s)
+	var v Polish
+	switch s {
+	case "off":
+		v = PolishOff
+	case "lossless":
+		v = PolishLossless
+	case "lossy":
+		v = PolishLossy
+	default:
+		return nil, fmt.Errorf("unknown variant for polish: %s", s)
+	}
+	return &v, nil
+}
+
+func (p Polish) IntoRef() *Polish {
+	return &p
+}
+
+type SecurityLevel int
+
+const (
+	_ SecurityLevel = iota
+	SecurityLevelOff
+	SecurityLevelEssentiallyOff
+	SecurityLevelLow
+	SecurityLevelMedium
+	SecurityLevelHigh
+	SecurityLevelHelp
+)
+
+func (p SecurityLevel) MarshalJSON() ([]byte, error) {
+	return json.Marshal(p.String())
+}
+
+func (p SecurityLevel) String() string {
+	return [...]string{"off", "essentially_off", "low", "medium", "high", "under_attack"}[p-1]
+}
+
+func (p *SecurityLevel) UnmarshalJSON(data []byte) error {
+	var (
+		s   string
+		err error
+	)
+	err = json.Unmarshal(data, &s)
+	if err != nil {
+		return err
+	}
+	v, err := SecurityLevelFromString(s)
+	if err != nil {
+		return err
+	}
+	*p = *v
+	return nil
+}
+
+func SecurityLevelFromString(s string) (*SecurityLevel, error) {
+	s = strings.ToLower(s)
+	var v SecurityLevel
+	switch s {
+	case "off":
+		v = SecurityLevelOff
+	case "essentially_off":
+		v = SecurityLevelEssentiallyOff
+	case "low":
+		v = SecurityLevelLow
+	case "medium":
+		v = SecurityLevelMedium
+	case "high":
+		v = SecurityLevelHigh
+	case "under_attack":
+		v = SecurityLevelHelp
+	default:
+		return nil, fmt.Errorf("unknown variant for security_level: %s", s)
+	}
+	return &v, nil
+}
+
+func (p SecurityLevel) IntoRef() *SecurityLevel {
+	return &p
+}
+
+type SSL int
+
+const (
+	_ SSL = iota
+	SSLOff
+	SSLFlexible
+	SSLFull
+	SSLStrict
+	SSLOriginPull
+)
+
+func (p SSL) MarshalJSON() ([]byte, error) {
+	return json.Marshal(p.String())
+}
+
+func (p SSL) String() string {
+	return [...]string{"off", "flexible", "full", "strict", "origin_pull"}[p-1]
+}
+
+func (p *SSL) UnmarshalJSON(data []byte) error {
+	var (
+		s   string
+		err error
+	)
+	err = json.Unmarshal(data, &s)
+	if err != nil {
+		return err
+	}
+	v, err := SSLFromString(s)
+	if err != nil {
+		return err
+	}
+	*p = *v
+	return nil
+}
+
+func SSLFromString(s string) (*SSL, error) {
+	s = strings.ToLower(s)
+	var v SSL
+	switch s {
+	case "off":
+		v = SSLOff
+	case "flexible":
+		v = SSLFlexible
+	case "full":
+		v = SSLFull
+	case "strict":
+		v = SSLStrict
+	case "origin_pull":
+		v = SSLOriginPull
+	default:
+		return nil, fmt.Errorf("unknown variant for ssl: %s", s)
+	}
+	return &v, nil
+}
+
+func (p SSL) IntoRef() *SSL {
+	return &p
 }
 
 // RulesetRule contains information about a single Ruleset Rule.
