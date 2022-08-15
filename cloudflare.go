@@ -251,6 +251,10 @@ func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, u
 		// retry if the server is rate limiting us or if it failed
 		// assumes server operations are rolled back on failure
 		if respErr != nil || resp.StatusCode == http.StatusTooManyRequests || resp.StatusCode >= 500 {
+			if resp.StatusCode == http.StatusTooManyRequests {
+				respErr = errors.New("exceeded available rate limit retries")
+			}
+
 			// if we got a valid http response, try to read body so we can reuse the connection
 			// see https://golang.org/pkg/net/http/#Client.Do
 			if respErr == nil {
