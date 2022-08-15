@@ -233,22 +233,22 @@ type RulesetRuleActionParameters struct {
 	OriginErrorPagePassthru *bool                                            `json:"origin_error_page_passthru,omitempty"`
 	FromList                *RulesetRuleActionParametersFromList             `json:"from_list,omitempty"`
 	FromValue               *RulesetRuleActionParametersFromValue            `json:"from_value,omitempty"`
-	AutomaticHTTPSRewrites  *bool 											 `json:"automatic_https_rewrites,omitempty"`
+	AutomaticHTTPSRewrites  *bool                                            `json:"automatic_https_rewrites,omitempty"`
 	AutoMinify              *RulesetRuleActionParametersAutoMinify           `json:"autominify,omitempty"`
-	BrowserIntegrityCheck   *bool                      						 `json:"bic,omitempty"`
-	DisableApps             *bool                 							 `json:"disable_apps,omitempty"`
-	DisableZaraz            *bool                 							 `json:"disable_zaraz,omitempty"`
-	DisableRailgun          *bool                							 `json:"disable_railgun,omitempty"`
-	EmailObfuscation        *bool                							 `json:"email_obfuscation,omitempty"`
-	Mirage                  *bool                							 `json:"mirage,omitempty"`
-	OpportunisticEncryption *bool                 							 `json:"opportunistic_encryption,omitempty"`
-	Polish                  *Polish       									 `json:"polish,omitempty"`
-	RocketLoader            *bool               						     `json:"rocket_loader,omitempty"`
-	SecurityLevel           *SecurityLevel									 `json:"security_level,omitempty"`
-	ServerSideExcludes      *bool              							     `json:"server_side_excludes,omitempty"`
-	SSL                     *SSL         						    		 `json:"ssl,omitempty"`
-	SXG                     *bool                							 `json:"sxg,omitempty"`
-	HotLinkProtection       *bool                							 `json:"hotlink_protection,omitempty"`
+	BrowserIntegrityCheck   *bool                                            `json:"bic,omitempty"`
+	DisableApps             *bool                                            `json:"disable_apps,omitempty"`
+	DisableZaraz            *bool                                            `json:"disable_zaraz,omitempty"`
+	DisableRailgun          *bool                                            `json:"disable_railgun,omitempty"`
+	EmailObfuscation        *bool                                            `json:"email_obfuscation,omitempty"`
+	Mirage                  *bool                                            `json:"mirage,omitempty"`
+	OpportunisticEncryption *bool                                            `json:"opportunistic_encryption,omitempty"`
+	Polish                  *Polish                                          `json:"polish,omitempty"`
+	RocketLoader            *bool                                            `json:"rocket_loader,omitempty"`
+	SecurityLevel           *SecurityLevel                                   `json:"security_level,omitempty"`
+	ServerSideExcludes      *bool                                            `json:"server_side_excludes,omitempty"`
+	SSL                     *SSL                                             `json:"ssl,omitempty"`
+	SXG                     *bool                                            `json:"sxg,omitempty"`
+	HotLinkProtection       *bool                                            `json:"hotlink_protection,omitempty"`
 }
 
 // RulesetRuleActionParametersFromList holds the FromList struct for
@@ -259,9 +259,9 @@ type RulesetRuleActionParametersFromList struct {
 }
 
 type RulesetRuleActionParametersAutoMinify struct {
-		HTML bool `json:"html"`
-		CSS  bool `json:"css"`
-		JS   bool `json:"js"`
+	HTML bool `json:"html"`
+	CSS  bool `json:"css"`
+	JS   bool `json:"js"`
 }
 
 type RulesetRuleActionParametersFromValue struct {
@@ -491,7 +491,7 @@ func PolishFromString(s string) (*Polish, error) {
 	case "lossy":
 		v = PolishLossy
 	default:
-		return nil, errors.New(fmt.Sprintf("unknown variant for polish: %s", s))
+		return nil, fmt.Errorf("unknown variant for polish: %s", s)
 	}
 	return &v, nil
 }
@@ -554,7 +554,7 @@ func SecurityLevelFromString(s string) (*SecurityLevel, error) {
 	case "under_attack":
 		v = SecurityLevelHelp
 	default:
-		return nil, errors.New(fmt.Sprintf("unknown variant for security_level: %s", s))
+		return nil, fmt.Errorf("unknown variant for security_level: %s", s)
 	}
 	return &v, nil
 }
@@ -614,7 +614,7 @@ func SSLFromString(s string) (*SSL, error) {
 	case "origin_pull":
 		v = SSLOriginPull
 	default:
-		return nil, errors.New(fmt.Sprintf("unknown variant for ssl: %s", s))
+		return nil, fmt.Errorf("unknown variant for ssl: %s", s)
 	}
 	return &v, nil
 }
@@ -622,7 +622,6 @@ func SSLFromString(s string) (*SSL, error) {
 func (p SSL) IntoRef() *SSL {
 	return &p
 }
-
 
 // RulesetRule contains information about a single Ruleset Rule.
 type RulesetRule struct {
