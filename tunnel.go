@@ -320,7 +320,7 @@ func (api *API) UpdateTunnelConfiguration(ctx context.Context, rc *ResourceConta
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s/configurations", rc.Identifier, params.TunnelID)
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params.Config)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return TunnelConfigurationResult{}, err
 	}
