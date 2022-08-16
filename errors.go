@@ -113,12 +113,22 @@ func (e RequestError) ErrorMessages() []string {
 	return e.cloudflareError.ErrorMessages
 }
 
+func (e RequestError) InternalErrorCodeIs(code int) bool {
+	return e.cloudflareError.InternalErrorCodeIs(code)
+}
+
 func (e RequestError) RayID() string {
 	return e.cloudflareError.RayID
 }
 
 func (e RequestError) Type() ErrorType {
 	return e.cloudflareError.Type
+}
+
+func NewRequestError(e *Error) RequestError {
+	return RequestError{
+		cloudflareError: e,
+	}
 }
 
 // RatelimitError is for HTTP 429s where the service is telling the client to
@@ -143,12 +153,22 @@ func (e RatelimitError) ErrorMessages() []string {
 	return e.cloudflareError.ErrorMessages
 }
 
+func (e RatelimitError) InternalErrorCodeIs(code int) bool {
+	return e.cloudflareError.InternalErrorCodeIs(code)
+}
+
 func (e RatelimitError) RayID() string {
 	return e.cloudflareError.RayID
 }
 
 func (e RatelimitError) Type() ErrorType {
 	return e.cloudflareError.Type
+}
+
+func NewRatelimitError(e *Error) RatelimitError {
+	return RatelimitError{
+		cloudflareError: e,
+	}
 }
 
 // ServiceError is a handler for 5xx errors returned to the client.
@@ -172,12 +192,22 @@ func (e ServiceError) ErrorMessages() []string {
 	return e.cloudflareError.ErrorMessages
 }
 
+func (e ServiceError) InternalErrorCodeIs(code int) bool {
+	return e.cloudflareError.InternalErrorCodeIs(code)
+}
+
 func (e ServiceError) RayID() string {
 	return e.cloudflareError.RayID
 }
 
 func (e ServiceError) Type() ErrorType {
 	return e.cloudflareError.Type
+}
+
+func NewServiceError(e *Error) ServiceError {
+	return ServiceError{
+		cloudflareError: e,
+	}
 }
 
 // AuthenticationError is for HTTP 401 responses.
@@ -201,12 +231,22 @@ func (e AuthenticationError) ErrorMessages() []string {
 	return e.cloudflareError.ErrorMessages
 }
 
+func (e AuthenticationError) InternalErrorCodeIs(code int) bool {
+	return e.cloudflareError.InternalErrorCodeIs(code)
+}
+
 func (e AuthenticationError) RayID() string {
 	return e.cloudflareError.RayID
 }
 
 func (e AuthenticationError) Type() ErrorType {
 	return e.cloudflareError.Type
+}
+
+func NewAuthenticationError(e *Error) AuthenticationError {
+	return AuthenticationError{
+		cloudflareError: e,
+	}
 }
 
 // AuthorizationError is for HTTP 403 responses.
@@ -230,12 +270,22 @@ func (e AuthorizationError) ErrorMessages() []string {
 	return e.cloudflareError.ErrorMessages
 }
 
+func (e AuthorizationError) InternalErrorCodeIs(code int) bool {
+	return e.cloudflareError.InternalErrorCodeIs(code)
+}
+
 func (e AuthorizationError) RayID() string {
 	return e.cloudflareError.RayID
 }
 
 func (e AuthorizationError) Type() ErrorType {
 	return e.cloudflareError.Type
+}
+
+func NewAuthorizationError(e *Error) AuthorizationError {
+	return AuthorizationError{
+		cloudflareError: e,
+	}
 }
 
 // NotFoundError is for HTTP 404 responses.
@@ -259,12 +309,22 @@ func (e NotFoundError) ErrorMessages() []string {
 	return e.cloudflareError.ErrorMessages
 }
 
+func (e NotFoundError) InternalErrorCodeIs(code int) bool {
+	return e.cloudflareError.InternalErrorCodeIs(code)
+}
+
 func (e NotFoundError) RayID() string {
 	return e.cloudflareError.RayID
 }
 
 func (e NotFoundError) Type() ErrorType {
 	return e.cloudflareError.Type
+}
+
+func NewNotFoundError(e *Error) NotFoundError {
+	return NotFoundError{
+		cloudflareError: e,
+	}
 }
 
 // ClientError returns a boolean whether or not the raised error was caused by
