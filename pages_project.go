@@ -59,7 +59,7 @@ type PagesProjectDeploymentConfigEnvironment struct {
 	CompatibilityFlags []string                             `json:"compatibility_flags,omitempty"`
 }
 
-// PagesProjectDeploymentVar represents a value for a BUILD_VERSION.
+// PagesProjectDeploymentVar represents a deployment environment variable
 type PagesProjectDeploymentVar struct {
 	Value string `json:"value"`
 }
