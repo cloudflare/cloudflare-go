@@ -23,7 +23,7 @@ const (
 }`
 	uploadWorkerResponseData = `{
     "result": {
-        "script": "addEventListener('fetch', event => {\n    event.passThroughOnException()\nevent.respondWith(handleRequest(event.request))\n})\n\nasync function handleRequest(request) {\n    return fetch(request)\n}",
+        "script": "addEventListener('fetch', event => {\n  event.passThroughOnException()\n  event.respondWith(handleRequest(event.request))\n})\n\nasync function handleRequest(request) {\n  return fetch(request)\n}",
         "etag": "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
         "size": 191,
         "modified_on": "2018-06-09T15:17:01.989141Z"
@@ -35,7 +35,7 @@ const (
 
 	uploadWorkerModuleResponseData = `{
     "result": {
-        "script": "export default {\n    async fetch(request, env, event) {\n     event.passThroughOnException()\n    return fetch(request)\n    }\n}",
+        "script": "export default {\n  async fetch(request, env, event) {\n    event.passThroughOnException()\n    return fetch(request)\n  }\n}",
         "etag": "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
         "size": 191,
         "modified_on": "2018-06-09T15:17:01.989141Z"
@@ -179,15 +179,38 @@ const (
   "errors": [],
   "messages": []
 }`
+	workerScript = `addEventListener('fetch', event => {
+  event.passThroughOnException()
+  event.respondWith(handleRequest(event.request))
+})
+
+async function handleRequest(request) {
+  return fetch(request)
+}`
+	workerModuleScript = `export default {
+  async fetch(request, env, event) {
+    event.passThroughOnException()
+    return fetch(request)
+  }
+}`
+	workerModuleScriptDownloadResponse = `
+--workermodulescriptdownload
+Content-Disposition: form-data; name="worker.js"
+
+export default {
+  async fetch(request, env, event) {
+    event.passThroughOnException()
+    return fetch(request)
+  }
+}
+--workermodulescriptdownload--
+`
 )
 
 var (
 	successResponse               = Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}}
-	workerScript                  = "addEventListener('fetch', event => {\n    event.passThroughOnException()\nevent.respondWith(handleRequest(event.request))\n})\n\nasync function handleRequest(request) {\n    return fetch(request)\n}"
-	workerModuleScript            = "export default {\n    async fetch(request, env, event) {\n     event.passThroughOnException()\n    return fetch(request)\n    }\n}"
 	deleteWorkerRouteResponseData = createWorkerRouteResponse
-
-	attachWorkerToDomainResponse = fmt.Sprintf(`{
+	attachWorkerToDomainResponse  = fmt.Sprintf(`{
     "result": {
         "id": "e7a57d8746e74ae49c25994dadb421b1",
 	"zone_id": "%s",
@@ -393,8 +416,8 @@ func TestWorkers_DownloadWorkerModule(t *testing.T) {
 
 	mux.HandleFunc("/accounts/foo/workers/scripts/bar", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
-		w.Header().Set("content-type", "multipart/form-data; boundary=workermoduledownloadresponse")
-		fmt.Fprintf(w, workerModuleDownloadResponse) //nolint
+		w.Header().Set("content-type", "multipart/form-data; boundary=workermodulescriptdownload")
+		fmt.Fprintf(w, workerModuleScriptDownloadResponse) //nolint
 	})
 	res, err := client.DownloadWorker(context.Background(), &WorkerRequestParams{ScriptName: "bar"})
 	want := WorkerScriptResponse{
