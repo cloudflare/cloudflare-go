@@ -1251,7 +1251,7 @@ func TestWorkers_AttachWorkerToDomain(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/domains", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, deleteWorkerResponseData) //nolint
+		fmt.Fprintf(w, attachWorkerToDomainResponse) //nolint
 	})
 	res, err := client.AttachWorkerToDomain(context.Background(), AccountIdentifier(testAccountID), &WorkerDomainParams{
 		ZoneID:      testZoneID,
@@ -1261,7 +1261,13 @@ func TestWorkers_AttachWorkerToDomain(t *testing.T) {
 	})
 	want := WorkerDomainResponse{
 		successResponse,
-		WorkerDomainResult{}}
+		WorkerDomainResult{
+			ID:          "e7a57d8746e74ae49c25994dadb421b1",
+			ZoneID:      testZoneID,
+			Service:     "test_script_1",
+			Hostname:    "api4.example.com",
+			Environment: "production",
+		}}
 	if assert.NoError(t, err) {
 		assert.Equal(t, want.Response, res.Response)
 	}
