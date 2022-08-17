@@ -1,5 +1,9 @@
 ## 0.47.0 (Unreleased)
 
+BREAKING CHANGES:
+
+* certificate_packs: deprecate "custom" configuration for ACM everywhere ([#1032](https://github.com/cloudflare/cloudflare-go/issues/1032))
+
 ENHANCEMENTS:
 
 * cloudflare: make it clear when the rate limit retries have been exhausted ([#1043](https://github.com/cloudflare/cloudflare-go/issues/1043))
