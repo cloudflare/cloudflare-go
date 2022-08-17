@@ -68,21 +68,6 @@ type TunnelConnectionResponse struct {
 	Response
 }
 
-// TunnelConfigurationStringifiedConfigResult is the raw result from the API with
-// the `Config` value as a string. You probably don't want to use this anywhere
-// other than in the HTTP response unmarshaling. Use `TunnelConfigurationResult`
-// for the correct types.
-type TunnelConfigurationStringifiedConfigResult struct {
-	TunnelID string              `json:"tunnel_id,omitempty"`
-	Config   TunnelConfiguration `json:"config,omitempty"`
-	Version  int                 `json:"version,omitempty"`
-}
-
-type TunnelConfigurationStringifiedConfigResponse struct {
-	Result TunnelConfigurationStringifiedConfigResult `json:"result"`
-	Response
-}
-
 type TunnelConfigurationResult struct {
 	TunnelID string              `json:"tunnel_id,omitempty"`
 	Config   TunnelConfiguration `json:"config,omitempty"`
@@ -325,7 +310,7 @@ func (api *API) UpdateTunnelConfiguration(ctx context.Context, rc *ResourceConta
 		return TunnelConfigurationResult{}, err
 	}
 
-	var tunnelDetailsResponse TunnelConfigurationStringifiedConfigResponse
+	var tunnelDetailsResponse TunnelConfigurationResponse
 	err = json.Unmarshal(res, &tunnelDetailsResponse)
 	if err != nil {
 		return TunnelConfigurationResult{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
@@ -358,7 +343,7 @@ func (api *API) GetTunnelConfiguration(ctx context.Context, rc *ResourceContaine
 		return TunnelConfigurationResult{}, err
 	}
 
-	var tunnelDetailsResponse TunnelConfigurationStringifiedConfigResponse
+	var tunnelDetailsResponse TunnelConfigurationResponse
 	err = json.Unmarshal(res, &tunnelDetailsResponse)
 	if err != nil {
 		return TunnelConfigurationResult{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
