@@ -1,5 +1,9 @@
 ## 0.48.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* errors: add some error type convenience functions for mocking and inspection ([#1047](https://github.com/cloudflare/cloudflare-go/issues/1047))
+
 ## 0.47.1 (August 18th, 2022)
 
 BUG FIXES:
