@@ -1,5 +1,9 @@
 ## 0.48.0 (Unreleased)
 
+BUG FIXES:
+
+* zonelockdown: add `Priority` to `ZoneLockdownCreateParams` and `ZoneLockdownUpdateParams` ([#1052](https://github.com/cloudflare/cloudflare-go/issues/1052))
+
 ## 0.47.0 (August 17th, 2022)
 
 BREAKING CHANGES:
