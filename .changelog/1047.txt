@@ -1,0 +1,3 @@
+```release-note:enhancement
+cloudflare: add some error type convenience functions for mocking and inspection
+```
