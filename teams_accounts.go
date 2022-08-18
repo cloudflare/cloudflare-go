@@ -75,6 +75,7 @@ type TeamsBlockPage struct {
 	Name            string `json:"name,omitempty"`
 	MailtoAddress   string `json:"mailto_address,omitempty"`
 	MailtoSubject   string `json:"mailto_subject,omitempty"`
+	SuppressFooter  *bool  `json:"suppress_footer,omitempty"`
 }
 
 type TeamsRuleType = string
