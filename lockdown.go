@@ -51,6 +51,7 @@ type ZoneLockdownCreateParams struct {
 	URLs           []string             `json:"urls"`
 	Configurations []ZoneLockdownConfig `json:"configurations"`
 	Paused         bool                 `json:"paused"`
+	Priority       int                  `json:"priority,omitempty"`
 }
 
 // ZoneLockdownUpdateParams contains required and optional params
@@ -61,6 +62,7 @@ type ZoneLockdownUpdateParams struct {
 	URLs           []string             `json:"urls"`
 	Configurations []ZoneLockdownConfig `json:"configurations"`
 	Paused         bool                 `json:"paused"`
+	Priority       int                  `json:"priority,omitempty"`
 }
 
 type LockdownListParams struct {
