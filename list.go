@@ -608,7 +608,7 @@ func (api *API) pollListBulkOperation(ctx context.Context, rc *ResourceContainer
 		case "completed":
 			return nil
 		default:
-			return errors.New(fmt.Sprintf("%s: %s", errOperationUnexpectedStatus, bulkResult.Status))
+			return fmt.Errorf("%s: %s", errOperationUnexpectedStatus, bulkResult.Status)
 		}
 	}
 

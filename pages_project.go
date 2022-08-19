@@ -54,31 +54,35 @@ type PagesProjectDeploymentConfigs struct {
 
 // PagesProjectDeploymentConfigEnvironment represents the configuration for preview or production deploys.
 type PagesProjectDeploymentConfigEnvironment struct {
-	EnvVars map[string]PagesProjectDeploymentVar `json:"env_vars"`
+	EnvVars            map[string]PagesProjectDeploymentVar `json:"env_vars"`
+	CompatibilityDate  string                               `json:"compatibility_date,omitempty"`
+	CompatibilityFlags []string                             `json:"compatibility_flags,omitempty"`
 }
 
-// PagesProjectDeploymentConfigBuildVersion represents a value for a BUILD_VERSION.
+// PagesProjectDeploymentVar represents a deployment environment variable.
 type PagesProjectDeploymentVar struct {
 	Value string `json:"value"`
 }
 
 // PagesProjectDeployment represents a deployment to a Pages project.
 type PagesProjectDeployment struct {
-	ID                string                        `json:"id"`
-	ShortID           string                        `json:"short_id"`
-	ProjectID         string                        `json:"project_id"`
-	ProjectName       string                        `json:"project_name"`
-	Environment       string                        `json:"environment"`
-	URL               string                        `json:"url"`
-	CreatedOn         *time.Time                    `json:"created_on"`
-	ModifiedOn        *time.Time                    `json:"modified_on"`
-	Aliases           []string                      `json:"aliases,omitempty"`
-	LatestStage       PagesProjectDeploymentStage   `json:"latest_stage"`
-	EnvVars           map[string]map[string]string  `json:"env_vars"`
-	DeploymentTrigger PagesProjectDeploymentTrigger `json:"deployment_trigger"`
-	Stages            []PagesProjectDeploymentStage `json:"stages"`
-	BuildConfig       PagesProjectBuildConfig       `json:"build_config"`
-	Source            PagesProjectSource            `json:"source"`
+	ID                 string                        `json:"id"`
+	ShortID            string                        `json:"short_id"`
+	ProjectID          string                        `json:"project_id"`
+	ProjectName        string                        `json:"project_name"`
+	Environment        string                        `json:"environment"`
+	URL                string                        `json:"url"`
+	CreatedOn          *time.Time                    `json:"created_on"`
+	ModifiedOn         *time.Time                    `json:"modified_on"`
+	Aliases            []string                      `json:"aliases,omitempty"`
+	LatestStage        PagesProjectDeploymentStage   `json:"latest_stage"`
+	EnvVars            map[string]map[string]string  `json:"env_vars"`
+	DeploymentTrigger  PagesProjectDeploymentTrigger `json:"deployment_trigger"`
+	Stages             []PagesProjectDeploymentStage `json:"stages"`
+	BuildConfig        PagesProjectBuildConfig       `json:"build_config"`
+	Source             PagesProjectSource            `json:"source"`
+	CompatibilityDate  string                        `json:"compatibility_date,omitempty"`
+	CompatibilityFlags []string                      `json:"compatibility_flags,omitempty"`
 }
 
 // PagesProjectDeploymentStage represents an individual stage in a Pages project deployment.
