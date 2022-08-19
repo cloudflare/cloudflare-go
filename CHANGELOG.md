@@ -4,6 +4,10 @@ ENHANCEMENTS:
 
 * errors: add some error type convenience functions for mocking and inspection ([#1047](https://github.com/cloudflare/cloudflare-go/issues/1047))
 
+BUG FIXES:
+
+* tunnel_configuration: Remove unnecessary double-unmarshalling due to changes in the API ([#1046](https://github.com/cloudflare/cloudflare-go/issues/1046))
+
 ## 0.47.1 (August 18th, 2022)
 
 BUG FIXES:
