@@ -1,0 +1,3 @@
+```release-note:
+Expand Worker methods to support `/accounts/:account_id/workers` API endpoints.
+```
