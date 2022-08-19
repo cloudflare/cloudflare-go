@@ -416,17 +416,18 @@ func TestWorkers_ListWorkerScripts(t *testing.T) {
 }
 
 func TestWorkers_UploadWorker(t *testing.T) {
-	setup()
+	setup(UsingAccount("foo"))
 	defer teardown()
 
-	mux.HandleFunc("/zones/foo/workers/script", func(w http.ResponseWriter, r *http.Request) {
+	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		contentTypeHeader := r.Header.Get("content-type")
 		assert.Equal(t, "application/javascript", contentTypeHeader, "Expected content-type request header to be 'application/javascript', got %s", contentTypeHeader)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, uploadWorkerResponseData) //nolint
-	})
-	res, err := client.UploadWorker(context.Background(), &WorkerRequestParams{ZoneID: "foo"}, &WorkerScriptParams{Script: workerScript})
+	}
+	mux.HandleFunc("/zones/bar/workers/script", handler)
+	mux.HandleFunc("/accounts/baz/workers/script", handler)
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
@@ -438,16 +439,22 @@ func TestWorkers_UploadWorker(t *testing.T) {
 				ModifiedOn: formattedTime,
 			},
 		}}
+
+	res, err := client.UploadWorker(context.Background(), &WorkerRequestParams{ZoneID: "bar"}, &WorkerScriptParams{Script: workerScript})
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
+	res, err = client.UploadWorker(context.Background(), &WorkerRequestParams{AccountID: "baz"}, &WorkerScriptParams{Script: workerScript})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
 }
 
 func TestWorkers_UploadWorkerAsModule(t *testing.T) {
-	setup()
+	setup(UsingAccount("foo"))
 	defer teardown()
 
-	mux.HandleFunc("/zones/foo/workers/script", func(w http.ResponseWriter, r *http.Request) {
+	handler := func(w http.ResponseWriter, r *http.Request) {
 		mpUpload, err := parseMultipartUpload(r)
 		assert.NoError(t, err)
 
@@ -463,8 +470,9 @@ func TestWorkers_UploadWorkerAsModule(t *testing.T) {
 
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, uploadWorkerModuleResponseData) //nolint
-	})
-	res, err := client.UploadWorker(context.Background(), &WorkerRequestParams{ZoneID: "foo"}, &WorkerScriptParams{Script: workerModuleScript, Module: true})
+	}
+	mux.HandleFunc("/accounts/bar/workers/script", handler)
+	mux.HandleFunc("/zones/baz/workers/script", handler)
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
@@ -476,6 +484,12 @@ func TestWorkers_UploadWorkerAsModule(t *testing.T) {
 				ModifiedOn: formattedTime,
 			},
 		}}
+
+	res, err := client.UploadWorker(context.Background(), &WorkerRequestParams{AccountID: "bar"}, &WorkerScriptParams{Script: workerModuleScript, Module: true})
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
+	res, err = client.UploadWorker(context.Background(), &WorkerRequestParams{ZoneID: "baz"}, &WorkerScriptParams{Script: workerModuleScript, Module: true})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
@@ -513,14 +527,15 @@ func TestWorkers_UploadWorkerSingleScriptWithAccount(t *testing.T) {
 	setup(UsingAccount("foo"))
 	defer teardown()
 
-	mux.HandleFunc("/zones/foo/workers/script", func(w http.ResponseWriter, r *http.Request) {
+	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		contentTypeHeader := r.Header.Get("content-type")
 		assert.Equal(t, "application/javascript", contentTypeHeader, "Expected content-type request header to be 'application/javascript', got %s", contentTypeHeader)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, uploadWorkerResponseData) //nolint
-	})
-	res, err := client.UploadWorker(context.Background(), &WorkerRequestParams{ZoneID: "foo"}, &WorkerScriptParams{Script: workerScript})
+	}
+	mux.HandleFunc("/accounts/bar/workers/script", handler)
+	mux.HandleFunc("/zones/baz/workers/script", handler)
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
@@ -532,6 +547,12 @@ func TestWorkers_UploadWorkerSingleScriptWithAccount(t *testing.T) {
 				ModifiedOn: formattedTime,
 			},
 		}}
+
+	res, err := client.UploadWorker(context.Background(), &WorkerRequestParams{AccountID: "bar"}, &WorkerScriptParams{Script: workerScript})
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
+	res, err = client.UploadWorker(context.Background(), &WorkerRequestParams{ZoneID: "baz"}, &WorkerScriptParams{Script: workerScript})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
@@ -612,8 +633,10 @@ func TestWorkers_UploadWorkerWithInheritBinding(t *testing.T) {
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, uploadWorkerResponseData) //nolint
 	}
-	mux.HandleFunc("/zones/foo/workers/script", handler)
-	mux.HandleFunc("/accounts/foo/workers/scripts/bar", handler)
+	mux.HandleFunc("/zones/bar/workers/script", handler)
+	mux.HandleFunc("/accounts/baz/workers/script", handler)
+	mux.HandleFunc("/accounts/foo/workers/scripts/blah", handler)
+	mux.HandleFunc("/accounts/baz/workers/scripts/blah", handler)
 
 	scriptParams := WorkerScriptParams{
 		Script: workerScript,
@@ -638,14 +661,26 @@ func TestWorkers_UploadWorkerWithInheritBinding(t *testing.T) {
 			},
 		}}
 
-	// Test single-script
-	res, err := client.UploadWorkerWithBindings(context.Background(), &WorkerRequestParams{ZoneID: "foo"}, &scriptParams)
+	// Test single-script, account ID ignored
+	res, err := client.UploadWorkerWithBindings(context.Background(), &WorkerRequestParams{ZoneID: "bar"}, &scriptParams)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
 
-	// Test multi-script
-	res, err = client.UploadWorkerWithBindings(context.Background(), &WorkerRequestParams{ScriptName: "bar"}, &scriptParams)
+	// Test single-script, explicit account ID
+	res, err = client.UploadWorkerWithBindings(context.Background(), &WorkerRequestParams{AccountID: "baz"}, &scriptParams)
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
+
+	// Test multi-script, implicit account ID
+	res, err = client.UploadWorkerWithBindings(context.Background(), &WorkerRequestParams{ScriptName: "blah"}, &scriptParams)
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
+
+	// Test multi-script, explicit account ID
+	res, err = client.UploadWorkerWithBindings(context.Background(), &WorkerRequestParams{AccountID: "baz", ScriptName: "blah"}, &scriptParams)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}

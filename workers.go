@@ -18,6 +18,7 @@ import (
 
 // WorkerRequestParams provides parameters for worker requests for both enterprise and standard requests.
 type WorkerRequestParams struct {
+	AccountID  string
 	ZoneID     string
 	ScriptName string
 }
@@ -543,9 +544,13 @@ type bindingContentReader struct {
 }
 
 func (b *bindingContentReader) Read(p []byte) (n int, err error) {
+	return b.ReadAccount(b.api.AccountID, p)
+}
+
+func (b *bindingContentReader) ReadAccount(accountID string, p []byte) (n int, err error) {
 	// Lazily load the content when Read() is first called
 	if b.content == nil {
-		uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/bindings/%s/content", b.api.AccountID, b.requestParams.ScriptName, b.bindingName)
+		uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/bindings/%s/content", accountID, b.requestParams.ScriptName, b.bindingName)
 		res, err := b.api.makeRequest(http.MethodGet, uri, nil)
 		if err != nil {
 			return 0, err
@@ -573,11 +578,18 @@ func (b *bindingContentReader) Read(p []byte) (n int, err error) {
 	return bytesToProcess, nil
 }
 
-// ListWorkerScripts returns list of worker scripts for given account.
+// ListWorkerScripts returns list of worker scripts for account associated with API client.
 //
 // API reference: https://developers.cloudflare.com/workers/tooling/api/scripts/
 func (api *API) ListWorkerScripts(ctx context.Context) (WorkerListResponse, error) {
-	if api.AccountID == "" {
+	return api.ListAccountWorkerScripts(ctx, api.AccountID)
+}
+
+// ListAccountWorkerScripts returns list of worker scripts for specified account.
+//
+// API reference: https://developers.cloudflare.com/workers/tooling/api/scripts/
+func (api *API) ListAccountWorkerScripts(ctx context.Context, accountID string) (WorkerListResponse, error) {
+	if accountID == "" {
 		return WorkerListResponse{}, errors.New("account ID required")
 	}
 	uri := fmt.Sprintf("/accounts/%s/workers/scripts", api.AccountID)
@@ -603,9 +615,17 @@ func (api *API) UploadWorker(ctx context.Context, requestParams *WorkerRequestPa
 
 	contentType := "application/javascript"
 	if requestParams.ScriptName != "" {
-		return api.uploadWorkerWithName(ctx, requestParams.ScriptName, contentType, []byte(params.Script))
+		if requestParams.AccountID != "" {
+			return api.uploadWorkerWithNameForAccount(ctx, requestParams.AccountID, requestParams.ScriptName, contentType, []byte(params.Script))
+		} else {
+			return api.uploadWorkerWithName(ctx, requestParams.ScriptName, contentType, []byte(params.Script))
+		}
 	}
-	return api.uploadWorkerForZone(ctx, requestParams.ZoneID, contentType, []byte(params.Script))
+	if requestParams.AccountID != "" {
+		return api.uploadWorkerForAccount(ctx, requestParams.AccountID, contentType, []byte(params.Script))
+	} else {
+		return api.uploadWorkerForZone(ctx, requestParams.ZoneID, contentType, []byte(params.Script))
+	}
 }
 
 // UploadWorkerWithBindings push raw script content and bindings for your worker
@@ -617,13 +637,20 @@ func (api *API) UploadWorkerWithBindings(ctx context.Context, requestParams *Wor
 		return WorkerScriptResponse{}, err
 	}
 	if requestParams.ScriptName != "" {
-		return api.uploadWorkerWithName(ctx, requestParams.ScriptName, contentType, body)
+		if requestParams.AccountID != "" {
+			return api.uploadWorkerWithNameForAccount(ctx, requestParams.AccountID, requestParams.ScriptName, contentType, body)
+		} else {
+			return api.uploadWorkerWithName(ctx, requestParams.ScriptName, contentType, body)
+		}
 	}
-	return api.uploadWorkerForZone(ctx, requestParams.ZoneID, contentType, body)
+	if requestParams.AccountID != "" {
+		return api.uploadWorkerForAccount(ctx, requestParams.AccountID, contentType, body)
+	} else {
+		return api.uploadWorkerForZone(ctx, requestParams.ZoneID, contentType, body)
+	}
 }
 
-func (api *API) uploadWorkerForZone(ctx context.Context, zoneID, contentType string, body []byte) (WorkerScriptResponse, error) {
-	uri := fmt.Sprintf("/zones/%s/workers/script", zoneID)
+func (api *API) uploadWorkerRaw(ctx context.Context, uri, contentType string, body []byte) (WorkerScriptResponse, error) {
 	headers := make(http.Header)
 	headers.Set("Content-Type", contentType)
 	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPut, uri, body, headers)
@@ -638,11 +665,25 @@ func (api *API) uploadWorkerForZone(ctx context.Context, zoneID, contentType str
 	return r, nil
 }
 
+func (api *API) uploadWorkerForZone(ctx context.Context, zoneID, contentType string, body []byte) (WorkerScriptResponse, error) {
+	uri := fmt.Sprintf("/zones/%s/workers/script", zoneID)
+	return api.uploadWorkerRaw(ctx, uri, contentType, body)
+}
+
+func (api *API) uploadWorkerForAccount(ctx context.Context, accountID, contentType string, body []byte) (WorkerScriptResponse, error) {
+	uri := fmt.Sprintf("/accounts/%s/workers/script", accountID)
+	return api.uploadWorkerRaw(ctx, uri, contentType, body)
+}
+
 func (api *API) uploadWorkerWithName(ctx context.Context, scriptName, contentType string, body []byte) (WorkerScriptResponse, error) {
-	if api.AccountID == "" {
+	return api.uploadWorkerWithNameForAccount(ctx, api.AccountID, scriptName, contentType, body)
+}
+
+func (api *API) uploadWorkerWithNameForAccount(ctx context.Context, accountID, scriptName, contentType string, body []byte) (WorkerScriptResponse, error) {
+	if accountID == "" {
 		return WorkerScriptResponse{}, errors.New("account ID required")
 	}
-	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s", api.AccountID, scriptName)
+	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s", accountID, scriptName)
 	headers := make(http.Header)
 	headers.Set("Content-Type", contentType)
 	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPut, uri, body, headers)
