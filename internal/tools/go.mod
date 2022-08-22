@@ -8,11 +8,12 @@ require (
 	github.com/go-delve/delve v1.9.0
 	github.com/golangci/golangci-lint v1.48.0
 	github.com/google/go-github v17.0.0+incompatible
+	github.com/hashicorp/go-changelog v0.0.0-20220419201213-5edfc0d651d8
 	github.com/orijtech/structslop v0.0.6
 	github.com/ramya-rao-a/go-outline v0.0.0-20210608161538-9736a4bde949
 	github.com/uudashr/gopkgs/v2 v2.1.2
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616
-	golang.org/x/oauth2 v0.0.0-20220808172628-8227340efae7
+	golang.org/x/oauth2 v0.0.0-20220822191816-0ebed06d0094
 	golang.org/x/tools/gopls v0.9.4
 )
 
@@ -101,7 +102,6 @@ require (
 	github.com/gostaticanalysis/forcetypeassert v0.1.0 // indirect
 	github.com/gostaticanalysis/nilerr v0.1.1 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
-	github.com/hashicorp/go-changelog v0.0.0-20220419201213-5edfc0d651d8 // indirect
 	github.com/hashicorp/go-checkpoint v0.5.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
