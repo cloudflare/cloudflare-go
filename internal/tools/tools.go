@@ -12,8 +12,11 @@ package tools
 //go:generate go install github.com/go-delve/delve/cmd/dlv
 //go:generate go install golang.org/x/lint/golint
 //go:generate go install github.com/hashicorp/go-changelog/cmd/changelog-build
+//go:generate go install github.com/google/go-github/github
+//go:generate go install golang.org/x/oauth2
 
 import (
+	// local development tooling for linting and debugging.
 	_ "github.com/cweill/gotests/gotests"
 	_ "github.com/go-delve/delve/cmd/dlv"
 	_ "github.com/golangci/golangci-lint/cmd/golangci-lint"
@@ -23,4 +26,8 @@ import (
 	_ "github.com/uudashr/gopkgs/v2/cmd/gopkgs"
 	_ "golang.org/x/lint/golint"
 	_ "golang.org/x/tools/gopls"
+
+	// used for changelog-check tooling
+	_ "github.com/google/go-github/github"
+	_ "golang.org/x/oauth2"
 )
