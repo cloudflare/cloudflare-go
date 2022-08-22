@@ -7,6 +7,7 @@ ENHANCEMENTS:
 
 BUG FIXES:
 
+* r2: fix create bucket endpoint ([#1035](https://github.com/cloudflare/cloudflare-go/issues/1035))
 * tunnel_configuration: Remove unnecessary double-unmarshalling due to changes in the API ([#1046](https://github.com/cloudflare/cloudflare-go/issues/1046))
 
 ## 0.47.1 (August 18th, 2022)
