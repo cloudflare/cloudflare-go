@@ -13,8 +13,8 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: ^1.17
-      - run: make tools
-      - run: go run tools/cmd/changelog-check/main.go ${{ github.event.pull_request.number }}
+      - run: go generate -tags tools internal/tools/tools.go
+      - run: go run internal/tools/cmd/changelog-check/main.go ${{ github.event.pull_request.number }}
         env:
           GITHUB_OWNER: cloudflare
           GITHUB_REPO: cloudflare-go
