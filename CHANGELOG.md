@@ -1,4 +1,23 @@
-## 0.48.0 (Unreleased)
+## 0.49.0 (Unreleased)
+
+## 0.48.0 (August 22nd, 2022)
+
+ENHANCEMENTS:
+
+* errors: add some error type convenience functions for mocking and inspection ([#1047](https://github.com/cloudflare/cloudflare-go/issues/1047))
+* pages_project: Add compatibility date and compatibility_flags to pages deployment configs ([#1051](https://github.com/cloudflare/cloudflare-go/issues/1051))
+* teams_account: add support for `suppress_footer` ([#1053](https://github.com/cloudflare/cloudflare-go/issues/1053))
+
+BUG FIXES:
+
+* r2: fix create bucket endpoint ([#1035](https://github.com/cloudflare/cloudflare-go/issues/1035))
+* tunnel_configuration: Remove unnecessary double-unmarshalling due to changes in the API ([#1046](https://github.com/cloudflare/cloudflare-go/issues/1046))
+
+## 0.47.1 (August 18th, 2022)
+
+BUG FIXES:
+
+* zonelockdown: add `Priority` to `ZoneLockdownCreateParams` and `ZoneLockdownUpdateParams` ([#1052](https://github.com/cloudflare/cloudflare-go/issues/1052))
 
 ## 0.47.0 (August 17th, 2022)
 

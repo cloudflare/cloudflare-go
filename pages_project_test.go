@@ -47,7 +47,9 @@ const (
               "ENV": {
                 "value": "preview"
               }
-            }
+            },
+			"compatibility_date": "2022-08-15",
+			"compatibility_flags": ["preview_flag"]
           },
           "production": {
             "env_vars": {
@@ -57,7 +59,9 @@ const (
               "ENV": {
                 "value": "production"
               }
-            }
+            },
+			"compatibility_date": "2022-08-15",
+			"compatibility_flags": ["production_flag"]
           }
         },
         "latest_deployment": {
@@ -86,6 +90,8 @@ const (
               "value": "STAGING"
             }
           },
+		  "compatibility_date": "2022-08-15",
+		  "compatibility_flags": ["deployment_flag"],
           "deployment_trigger": {
             "type": "ad_hoc",
             "metadata": {
@@ -152,6 +158,8 @@ const (
               "value": "STAGING"
             }
           },
+		  "compatibility_date": "2022-08-15",
+		  "compatibility_flags": ["deployment_flag"],
           "deployment_trigger": {
             "type": "ad_hoc",
             "metadata": {
@@ -238,10 +246,12 @@ var (
 				"value": "STAGING",
 			},
 		},
-		DeploymentTrigger: *expectedPagesProjectDeploymentTrigger,
-		Stages:            expectedStages,
-		BuildConfig:       *expectedPagesProjectBuildConfig,
-		Source:            *expectedPagesProjectSource,
+		CompatibilityFlags: []string{"deployment_flag"},
+		CompatibilityDate:  "2022-08-15",
+		DeploymentTrigger:  *expectedPagesProjectDeploymentTrigger,
+		Stages:             expectedStages,
+		BuildConfig:        *expectedPagesProjectBuildConfig,
+		Source:             *expectedPagesProjectSource,
 	}
 
 	latestDeploymentStageStartedOn, _ = time.Parse(time.RFC3339, "2021-03-09T00:55:03.923456Z")
@@ -303,6 +313,8 @@ var (
 				Value: "preview",
 			},
 		},
+		CompatibilityDate:  "2022-08-15",
+		CompatibilityFlags: []string{"preview_flag"},
 	}
 
 	expectedPagesProjectDeploymentConfigProduction = &PagesProjectDeploymentConfigEnvironment{
@@ -314,6 +326,8 @@ var (
 				Value: "production",
 			},
 		},
+		CompatibilityDate:  "2022-08-15",
+		CompatibilityFlags: []string{"production_flag"},
 	}
 
 	expectedPagesProjectSource = &PagesProjectSource{

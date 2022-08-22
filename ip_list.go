@@ -499,7 +499,7 @@ func (api *API) pollIPListBulkOperation(ctx context.Context, accountID, ID strin
 		case "completed":
 			return nil
 		default:
-			return errors.New(fmt.Sprintf("%s: %s", errOperationUnexpectedStatus, bulkResult.Status))
+			return fmt.Errorf("%s: %s", errOperationUnexpectedStatus, bulkResult.Status)
 		}
 	}
 

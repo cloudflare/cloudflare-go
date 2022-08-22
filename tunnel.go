@@ -68,21 +68,6 @@ type TunnelConnectionResponse struct {
 	Response
 }
 
-// TunnelConfigurationStringifiedConfigResult is the raw result from the API with
-// the `Config` value as a string. You probably don't want to use this anywhere
-// other than in the HTTP response unmarshaling. Use `TunnelConfigurationResult`
-// for the correct types.
-type TunnelConfigurationStringifiedConfigResult struct {
-	TunnelID string `json:"tunnel_id,omitempty"`
-	Config   string `json:"config,omitempty"`
-	Version  int    `json:"version,omitempty"`
-}
-
-type TunnelConfigurationStringifiedConfigResponse struct {
-	Result TunnelConfigurationStringifiedConfigResult `json:"result"`
-	Response
-}
-
 type TunnelConfigurationResult struct {
 	TunnelID string              `json:"tunnel_id,omitempty"`
 	Config   TunnelConfiguration `json:"config,omitempty"`
@@ -320,31 +305,20 @@ func (api *API) UpdateTunnelConfiguration(ctx context.Context, rc *ResourceConta
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel/%s/configurations", rc.Identifier, params.TunnelID)
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params.Config)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return TunnelConfigurationResult{}, err
 	}
 
-	// `config` comes back as a stringified representation of the configuration
-	// so we need to double unmarshal the result. First, `config` => the string
-	// struct field and if that is successful, then attempt putting it into a typed
-	// struct field.
-
-	var tunnelDetailsResponse TunnelConfigurationStringifiedConfigResponse
+	var tunnelDetailsResponse TunnelConfigurationResponse
 	err = json.Unmarshal(res, &tunnelDetailsResponse)
 	if err != nil {
 		return TunnelConfigurationResult{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	var tunnelDetails TunnelConfigurationResult
-	var tunnelConfig TunnelConfiguration
 
-	err = json.Unmarshal([]byte(tunnelDetailsResponse.Result.Config), &tunnelConfig)
-	if err != nil {
-		return TunnelConfigurationResult{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
-	}
-
-	tunnelDetails.Config = tunnelConfig
+	tunnelDetails.Config = tunnelDetailsResponse.Result.Config
 	tunnelDetails.TunnelID = tunnelDetailsResponse.Result.TunnelID
 	tunnelDetails.Version = tunnelDetailsResponse.Result.Version
 
@@ -369,26 +343,15 @@ func (api *API) GetTunnelConfiguration(ctx context.Context, rc *ResourceContaine
 		return TunnelConfigurationResult{}, err
 	}
 
-	// `config` comes back as a stringified representation of the configuration
-	// so we need to double unmarshal the result. First, `config` => the string
-	// struct field and if that is successful, then attempt putting it into a typed
-	// struct field.
-
-	var tunnelDetailsResponse TunnelConfigurationStringifiedConfigResponse
+	var tunnelDetailsResponse TunnelConfigurationResponse
 	err = json.Unmarshal(res, &tunnelDetailsResponse)
 	if err != nil {
 		return TunnelConfigurationResult{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	var tunnelDetails TunnelConfigurationResult
-	var tunnelConfig TunnelConfiguration
 
-	err = json.Unmarshal([]byte(tunnelDetailsResponse.Result.Config), &tunnelConfig)
-	if err != nil {
-		return TunnelConfigurationResult{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
-	}
-
-	tunnelDetails.Config = tunnelConfig
+	tunnelDetails.Config = tunnelDetailsResponse.Result.Config
 	tunnelDetails.TunnelID = tunnelDetailsResponse.Result.TunnelID
 	tunnelDetails.Version = tunnelDetailsResponse.Result.Version
 

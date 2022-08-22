@@ -73,7 +73,8 @@ func TestTeamsAccountConfiguration(t *testing.T) {
 						"mailto_address": "admin@example.com",
 						"mailto_subject": "Blocked User Inquiry",
 						"logo_path": "https://logos.com/a.png",
-						"background_color": "#ff0000"
+						"background_color": "#ff0000",
+						"suppress_footer": true
 					}
 				}
 			}
@@ -101,6 +102,7 @@ func TestTeamsAccountConfiguration(t *testing.T) {
 				Name:            "Cloudflare",
 				MailtoAddress:   "admin@example.com",
 				MailtoSubject:   "Blocked User Inquiry",
+				SuppressFooter:  BoolPtr(true),
 			},
 		})
 	}
