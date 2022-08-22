@@ -31,12 +31,12 @@ func TestR2_CreateBucket(t *testing.T) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	err = client.CreateR2Bucket(context.Background(), AccountIdentifier(testAccountID), CreateR2BucketParameters{})
+	err = client.CreateR2Bucket(context.Background(), AccountIdentifier(testAccountID), CreateR2BucketParameters{Name: ""})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingBucketName, err)
 	}
 
-	err = client.CreateR2Bucket(context.Background(), AccountIdentifier(testAccountID), CreateR2BucketParameters{testBucketName})
+	err = client.CreateR2Bucket(context.Background(), AccountIdentifier(testAccountID), CreateR2BucketParameters{Name: testBucketName})
 	assert.NoError(t, err)
 }
 
