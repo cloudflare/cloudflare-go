@@ -14,7 +14,8 @@ jobs:
         with:
           go-version: ^1.17
       - run: go generate -tags tools internal/tools/tools.go
-      - run: go run internal/tools/cmd/changelog-check/main.go ${{ github.event.pull_request.number }}
+      - run: go run cmd/changelog-check/main.go ${{ github.event.pull_request.number }}
+        working-directory: ./internal/tools
         env:
           GITHUB_OWNER: cloudflare
           GITHUB_REPO: cloudflare-go
