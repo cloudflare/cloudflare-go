@@ -8,14 +8,14 @@ import (
 )
 
 // AuthIdCharacteristics a single option from
-// configuration?properties=auth_id_characteristics
+// configuration?properties=auth_id_characteristics.
 type AuthIdCharacteristics struct {
 	Type string `json:"type"`
 	Name string `json:"name"`
 }
 
 // APIShield is all the available options under
-// configuration?properties=auth_id_characteristics
+// configuration?properties=auth_id_characteristics.
 type APIShield struct {
 	AuthIdCharacteristics []AuthIdCharacteristics `json:"auth_id_characteristics"`
 }
