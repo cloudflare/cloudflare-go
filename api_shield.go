@@ -42,3 +42,24 @@ func (api *API) GetAPIShieldConfiguration(ctx context.Context, zoneID string) (A
 
 	return asResponse.Result, asResponse.ResultInfo, nil
 }
+
+func (api *API) PutAPIShieldConfiguration(ctx context.Context, zoneID string, apiShieldData APIShield) (Response, error) {
+	uri := fmt.Sprintf("/zones/%s/api_gateway/configuration", zoneID)
+
+	data, err := json.Marshal(apiShieldData)
+	if err != nil {
+		return Response{}, err
+	}
+
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, data)
+	if err != nil {
+		return Response{}, err
+	}
+	var asResponse Response
+	err = json.Unmarshal(res, &asResponse)
+	if err != nil {
+		return Response{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+
+	return asResponse, nil
+}
