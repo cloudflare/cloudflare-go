@@ -46,7 +46,7 @@ func TestGetAPIShield(t *testing.T) {
 		AuthIdCharacteristics: authChars,
 	}
 
-	actual, _, err := client.GetAPIShieldConfiguration(context.Background(), "01a7362d577a6c3019a474fd6f485823")
+	actual, _, err := client.GetAPIShieldConfiguration(context.Background(), &ResourceContainer{Identifier: "01a7362d577a6c3019a474fd6f485823"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -76,7 +76,7 @@ func TestPutAPIShield(t *testing.T) {
 
 	want := Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}}
 
-	actual, err := client.PutAPIShieldConfiguration(context.Background(), "01a7362d577a6c3019a474fd6f485823", apiShieldData)
+	actual, err := client.PutAPIShieldConfiguration(context.Background(), &ResourceContainer{Identifier: "01a7362d577a6c3019a474fd6f485823"}, apiShieldData)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)

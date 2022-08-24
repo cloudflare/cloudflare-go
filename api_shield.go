@@ -27,8 +27,8 @@ type APIShieldResponse struct {
 	ResultInfo `json:"result_info"`
 }
 
-func (api *API) GetAPIShieldConfiguration(ctx context.Context, zoneID string) (APIShield, ResultInfo, error) {
-	uri := fmt.Sprintf("/zones/%s/api_gateway/configuration?properties=auth_id_characteristics", zoneID)
+func (api *API) GetAPIShieldConfiguration(ctx context.Context, rc *ResourceContainer) (APIShield, ResultInfo, error) {
+	uri := fmt.Sprintf("/zones/%s/api_gateway/configuration?properties=auth_id_characteristics", rc.Identifier)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -43,8 +43,8 @@ func (api *API) GetAPIShieldConfiguration(ctx context.Context, zoneID string) (A
 	return asResponse.Result, asResponse.ResultInfo, nil
 }
 
-func (api *API) PutAPIShieldConfiguration(ctx context.Context, zoneID string, apiShieldData APIShield) (Response, error) {
-	uri := fmt.Sprintf("/zones/%s/api_gateway/configuration", zoneID)
+func (api *API) PutAPIShieldConfiguration(ctx context.Context, rc *ResourceContainer, apiShieldData APIShield) (Response, error) {
+	uri := fmt.Sprintf("/zones/%s/api_gateway/configuration", rc.Identifier)
 
 	data, err := json.Marshal(apiShieldData)
 	if err != nil {
