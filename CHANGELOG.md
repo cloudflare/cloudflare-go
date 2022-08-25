@@ -1,5 +1,13 @@
 ## 0.49.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* api_shield: add GET/PUT for API Shield Configuration ([#1059](https://github.com/cloudflare/cloudflare-go/issues/1059))
+
+BUG FIXES:
+
+* email_routing_settings: change enable endpoint from `enabled` to `enable` ([#1060](https://github.com/cloudflare/cloudflare-go/issues/1060))
+
 ## 0.48.0 (August 22nd, 2022)
 
 ENHANCEMENTS:
