@@ -58,7 +58,7 @@ func (api *API) EnableEmailRouting(ctx context.Context, rc *ResourceContainer) (
 	if rc.Identifier == "" {
 		return EmailRoutingSettings{}, ErrMissingZoneID
 	}
-	uri := fmt.Sprintf("/zones/%s/email/routing/enabled", rc.Identifier)
+	uri := fmt.Sprintf("/zones/%s/email/routing/enable", rc.Identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
 	if err != nil {
 		return EmailRoutingSettings{}, err
