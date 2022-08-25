@@ -3,6 +3,7 @@
 ENHANCEMENTS:
 
 * api_shield: add GET/PUT for API Shield Configuration ([#1059](https://github.com/cloudflare/cloudflare-go/issues/1059))
+* workers: Support for multipart encoding for DownloadWorker on a module-format Worker script ([#1040](https://github.com/cloudflare/cloudflare-go/issues/1040))
 
 BUG FIXES:
 
