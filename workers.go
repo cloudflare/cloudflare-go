@@ -441,7 +441,7 @@ func (api *API) downloadWorkerWithName(ctx context.Context, scriptName string) (
 	}
 
 	// Check if the response type is multipart, in which case this was a module worker
-	mediaType, mediaParams, _ := mime.ParseMediaType(res.ContentType)
+	mediaType, mediaParams, _ := mime.ParseMediaType(res.Headers.Get("content-type"))
 	if strings.HasPrefix(mediaType, "multipart/") {
 		bytesReader := bytes.NewReader(res.Body)
 		mimeReader := multipart.NewReader(bytesReader, mediaParams["boundary"])

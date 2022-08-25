@@ -180,17 +180,16 @@ func (api *API) makeRequestWithAuthType(ctx context.Context, method, uri string,
 	return api.makeRequestWithAuthTypeAndHeaders(ctx, method, uri, params, authType, nil)
 }
 
-// Struct for makeRequestWithAuthTypeAndHeaders's return value.
-// Wrapper methods can return just the Body if that's all the caller needs.
+// APIResponse holds the structure for a response from the API. It looks alot
+// like `http.Response` however, uses a `[]byte` for the `Body` instead of a
+// `io.ReadCloser`.
 //
-// Allows callers to see the Content-Type header and HTTP Status codes in case
-// there is additional meaning for particular API calls. This is especially
-// useful if the response is a multipart/form-data because the boundary string
-// is stored as a parameter of the content type header. Caller can parse using mime/multipart.
+// This may go away in the experimental client in favour of `http.Response`.
 type APIResponse struct {
-	Body        []byte
-	ContentType string
-	StatusCode  int
+	Body       []byte
+	Status     string
+	StatusCode int
+	Headers    http.Header
 }
 
 func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, uri string, params interface{}, authType int, headers http.Header) ([]byte, error) {
@@ -298,7 +297,7 @@ func (api *API) makeRequestWithAuthTypeAndHeadersComplete(ctx context.Context, m
 			}
 			break
 		}
-	} // for loop
+	}
 
 	// still had an error after all retries
 	if respErr != nil {
@@ -365,9 +364,10 @@ func (api *API) makeRequestWithAuthTypeAndHeadersComplete(ctx context.Context, m
 	}
 
 	return &APIResponse{
-		Body:        respBody,
-		StatusCode:  resp.StatusCode,
-		ContentType: resp.Header.Get("content-type"),
+		Body:       respBody,
+		StatusCode: resp.StatusCode,
+		Status:     resp.Status,
+		Headers:    resp.Header,
 	}, nil
 }
 
