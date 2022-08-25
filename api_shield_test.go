@@ -72,11 +72,11 @@ func TestPutAPIShield(t *testing.T) {
 
 	mux.HandleFunc("/zones/01a7362d577a6c3019a474fd6f485823/api_gateway/configuration", handler)
 
-	apiShieldData := APIShield{AuthIdCharacteristics: []AuthIdCharacteristics{{Type: "header", Name: "different-header"}, {Type: "cookie", Name: "different-cookie"}}}
+	apiShieldData := UpdateAPIShieldParams{AuthIdCharacteristics: []AuthIdCharacteristics{{Type: "header", Name: "different-header"}, {Type: "cookie", Name: "different-cookie"}}}
 
 	want := Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}}
 
-	actual, err := client.PutAPIShieldConfiguration(context.Background(), &ResourceContainer{Identifier: "01a7362d577a6c3019a474fd6f485823"}, apiShieldData)
+	actual, err := client.UpdateAPIShieldConfiguration(context.Background(), &ResourceContainer{Identifier: "01a7362d577a6c3019a474fd6f485823"}, apiShieldData)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)

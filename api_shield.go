@@ -43,14 +43,14 @@ func (api *API) GetAPIShieldConfiguration(ctx context.Context, rc *ResourceConta
 	return asResponse.Result, asResponse.ResultInfo, nil
 }
 
-type UpdateAPIShieldParams { 
-    AuthIdCharacteristics []AuthIdCharacteristics `json:"auth_id_characteristics"`
+type UpdateAPIShieldParams struct {
+	AuthIdCharacteristics []AuthIdCharacteristics `json:"auth_id_characteristics"`
 }
 
 func (api *API) UpdateAPIShieldConfiguration(ctx context.Context, rc *ResourceContainer, params UpdateAPIShieldParams) (Response, error) {
 	uri := fmt.Sprintf("/zones/%s/api_gateway/configuration", rc.Identifier)
 
-	data, err := json.Marshal(apiShieldData)
+	data, err := json.Marshal(params)
 	if err != nil {
 		return Response{}, err
 	}
