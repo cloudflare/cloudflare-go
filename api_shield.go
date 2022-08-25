@@ -27,6 +27,13 @@ type APIShieldResponse struct {
 	ResultInfo `json:"result_info"`
 }
 
+type UpdateAPIShieldParams struct {
+	AuthIdCharacteristics []AuthIdCharacteristics `json:"auth_id_characteristics"`
+}
+
+// GetAPIShieldConfiguration gets a zone API shield configuration.
+//
+// API documentation: https://api.cloudflare.com/#api-shield-settings-retrieve-information-about-specific-configuration-properties
 func (api *API) GetAPIShieldConfiguration(ctx context.Context, rc *ResourceContainer) (APIShield, ResultInfo, error) {
 	uri := fmt.Sprintf("/zones/%s/api_gateway/configuration?properties=auth_id_characteristics", rc.Identifier)
 
@@ -43,19 +50,13 @@ func (api *API) GetAPIShieldConfiguration(ctx context.Context, rc *ResourceConta
 	return asResponse.Result, asResponse.ResultInfo, nil
 }
 
-type UpdateAPIShieldParams struct {
-	AuthIdCharacteristics []AuthIdCharacteristics `json:"auth_id_characteristics"`
-}
-
+// UpdateAPIShieldConfiguration sets a zone API shield configuration.
+//
+// API documentation: https://api.cloudflare.com/#api-shield-settings-set-configuration-properties
 func (api *API) UpdateAPIShieldConfiguration(ctx context.Context, rc *ResourceContainer, params UpdateAPIShieldParams) (Response, error) {
 	uri := fmt.Sprintf("/zones/%s/api_gateway/configuration", rc.Identifier)
 
-	data, err := json.Marshal(params)
-	if err != nil {
-		return Response{}, err
-	}
-
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, data)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return Response{}, err
 	}
