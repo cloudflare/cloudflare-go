@@ -64,7 +64,7 @@ func TestEmailRouting_Enable(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/zones/"+testZoneID+"/email/routing/enabled", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/zones/"+testZoneID+"/email/routing/enable", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
