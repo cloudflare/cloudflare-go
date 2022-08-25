@@ -8,9 +8,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
+	"mime"
 	"mime/multipart"
 	"net/http"
 	"net/textproto"
+	"strings"
 	"time"
 
 	"errors"
@@ -82,6 +85,7 @@ type WorkerListResponse struct {
 // WorkerScriptResponse wrapper struct for API response to worker script calls.
 type WorkerScriptResponse struct {
 	Response
+	Module       bool
 	WorkerScript `json:"result"`
 }
 
@@ -417,6 +421,7 @@ func (api *API) DownloadWorker(ctx context.Context, requestParams *WorkerRequest
 		return r, err
 	}
 	r.Script = string(res)
+	r.Module = false
 	r.Success = true
 	return r, nil
 }
@@ -429,12 +434,32 @@ func (api *API) downloadWorkerWithName(ctx context.Context, scriptName string) (
 		return WorkerScriptResponse{}, errors.New("account ID required")
 	}
 	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s", api.AccountID, scriptName)
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	res, err := api.makeRequestContextWithHeadersComplete(ctx, http.MethodGet, uri, nil, nil)
 	var r WorkerScriptResponse
 	if err != nil {
 		return r, err
 	}
-	r.Script = string(res)
+
+	// Check if the response type is multipart, in which case this was a module worker
+	mediaType, mediaParams, _ := mime.ParseMediaType(res.Headers.Get("content-type"))
+	if strings.HasPrefix(mediaType, "multipart/") {
+		bytesReader := bytes.NewReader(res.Body)
+		mimeReader := multipart.NewReader(bytesReader, mediaParams["boundary"])
+		mimePart, err := mimeReader.NextPart()
+		if err != nil {
+			return r, fmt.Errorf("could not get multipart response body: %w", err)
+		}
+		mimePartBody, err := ioutil.ReadAll(mimePart)
+		if err != nil {
+			return r, fmt.Errorf("could not read multipart response body: %w", err)
+		}
+		r.Script = string(mimePartBody)
+		r.Module = true
+	} else {
+		r.Script = string(res.Body)
+		r.Module = false
+	}
+
 	r.Success = true
 	return r, nil
 }
@@ -497,6 +522,7 @@ func (api *API) ListWorkerBindings(ctx context.Context, requestParams *WorkerReq
 		case WorkerWebAssemblyBindingType:
 			bindingListItem.Binding = WorkerWebAssemblyBinding{
 				Module: &bindingContentReader{
+					ctx:           ctx,
 					api:           api,
 					requestParams: requestParams,
 					bindingName:   name,
@@ -537,6 +563,7 @@ func (api *API) ListWorkerBindings(ctx context.Context, requestParams *WorkerReq
 type bindingContentReader struct {
 	api           *API
 	requestParams *WorkerRequestParams
+	ctx           context.Context
 	bindingName   string
 	content       []byte
 	position      int
@@ -546,7 +573,7 @@ func (b *bindingContentReader) Read(p []byte) (n int, err error) {
 	// Lazily load the content when Read() is first called
 	if b.content == nil {
 		uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/bindings/%s/content", b.api.AccountID, b.requestParams.ScriptName, b.bindingName)
-		res, err := b.api.makeRequest(http.MethodGet, uri, nil)
+		res, err := b.api.makeRequestContext(b.ctx, http.MethodGet, uri, nil)
 		if err != nil {
 			return 0, err
 		}

@@ -23,7 +23,7 @@ const (
 }`
 	uploadWorkerResponseData = `{
     "result": {
-        "script": "addEventListener('fetch', event => {\n    event.passThroughOnException()\nevent.respondWith(handleRequest(event.request))\n})\n\nasync function handleRequest(request) {\n    return fetch(request)\n}",
+        "script": "addEventListener('fetch', event => {\n  event.passThroughOnException()\n  event.respondWith(handleRequest(event.request))\n})\n\nasync function handleRequest(request) {\n  return fetch(request)\n}",
         "etag": "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
         "size": 191,
         "modified_on": "2018-06-09T15:17:01.989141Z"
@@ -35,7 +35,7 @@ const (
 
 	uploadWorkerModuleResponseData = `{
     "result": {
-        "script": "export default {\n    async fetch(request, env, event) {\n     event.passThroughOnException()\n    return fetch(request)\n    }\n}",
+        "script": "export default {\n  async fetch(request, env, event) {\n    event.passThroughOnException()\n    return fetch(request)\n  }\n}",
         "etag": "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
         "size": 191,
         "modified_on": "2018-06-09T15:17:01.989141Z"
@@ -179,15 +179,38 @@ const (
   "errors": [],
   "messages": []
 }`
+	workerScript = `addEventListener('fetch', event => {
+  event.passThroughOnException()
+  event.respondWith(handleRequest(event.request))
+})
+
+async function handleRequest(request) {
+  return fetch(request)
+}`
+	workerModuleScript = `export default {
+  async fetch(request, env, event) {
+    event.passThroughOnException()
+    return fetch(request)
+  }
+}`
+	workerModuleScriptDownloadResponse = `
+--workermodulescriptdownload
+Content-Disposition: form-data; name="worker.js"
+
+export default {
+  async fetch(request, env, event) {
+    event.passThroughOnException()
+    return fetch(request)
+  }
+}
+--workermodulescriptdownload--
+`
 )
 
 var (
 	successResponse               = Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}}
-	workerScript                  = "addEventListener('fetch', event => {\n    event.passThroughOnException()\nevent.respondWith(handleRequest(event.request))\n})\n\nasync function handleRequest(request) {\n    return fetch(request)\n}"
-	workerModuleScript            = "export default {\n    async fetch(request, env, event) {\n     event.passThroughOnException()\n    return fetch(request)\n    }\n}"
 	deleteWorkerRouteResponseData = createWorkerRouteResponse
-
-	attachWorkerToDomainResponse = fmt.Sprintf(`{
+	attachWorkerToDomainResponse  = fmt.Sprintf(`{
     "result": {
         "id": "e7a57d8746e74ae49c25994dadb421b1",
 	"zone_id": "%s",
@@ -303,8 +326,9 @@ func TestWorkers_DeleteWorker(t *testing.T) {
 	})
 	res, err := client.DeleteWorker(context.Background(), &WorkerRequestParams{ZoneID: "foo"})
 	want := WorkerScriptResponse{
-		successResponse,
-		WorkerScript{}}
+		Response: successResponse,
+	}
+
 	if assert.NoError(t, err) {
 		assert.Equal(t, want.Response, res.Response)
 	}
@@ -321,8 +345,8 @@ func TestWorkers_DeleteWorkerWithName(t *testing.T) {
 	})
 	res, err := client.DeleteWorker(context.Background(), &WorkerRequestParams{ScriptName: "bar"})
 	want := WorkerScriptResponse{
-		successResponse,
-		WorkerScript{}}
+		Response: successResponse,
+	}
 	if assert.NoError(t, err) {
 		assert.Equal(t, want.Response, res.Response)
 	}
@@ -348,6 +372,7 @@ func TestWorkers_DownloadWorker(t *testing.T) {
 	res, err := client.DownloadWorker(context.Background(), &WorkerRequestParams{ZoneID: "foo"})
 	want := WorkerScriptResponse{
 		successResponse,
+		false,
 		WorkerScript{
 			Script: workerScript,
 		}}
@@ -368,6 +393,7 @@ func TestWorkers_DownloadWorkerWithName(t *testing.T) {
 	res, err := client.DownloadWorker(context.Background(), &WorkerRequestParams{ScriptName: "bar"})
 	want := WorkerScriptResponse{
 		successResponse,
+		false,
 		WorkerScript{
 			Script: workerScript,
 		}}
@@ -382,6 +408,27 @@ func TestWorkers_DownloadWorkerWithNameErrorsWithoutAccountId(t *testing.T) {
 
 	_, err := client.DownloadWorker(context.Background(), &WorkerRequestParams{ScriptName: "bar"})
 	assert.Error(t, err)
+}
+
+func TestWorkers_DownloadWorkerModule(t *testing.T) {
+	setup(UsingAccount("foo"))
+	defer teardown()
+
+	mux.HandleFunc("/accounts/foo/workers/scripts/bar", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "multipart/form-data; boundary=workermodulescriptdownload")
+		fmt.Fprintf(w, workerModuleScriptDownloadResponse) //nolint
+	})
+	res, err := client.DownloadWorker(context.Background(), &WorkerRequestParams{ScriptName: "bar"})
+	want := WorkerScriptResponse{
+		successResponse,
+		true,
+		WorkerScript{
+			Script: workerModuleScript,
+		}}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want.Script, res.Script)
+	}
 }
 
 func TestWorkers_ListWorkerScripts(t *testing.T) {
@@ -430,6 +477,7 @@ func TestWorkers_UploadWorker(t *testing.T) {
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
+		false,
 		WorkerScript{
 			Script: workerScript,
 			WorkerMetaData: WorkerMetaData{
@@ -468,6 +516,7 @@ func TestWorkers_UploadWorkerAsModule(t *testing.T) {
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
+		false,
 		WorkerScript{
 			Script: workerModuleScript,
 			WorkerMetaData: WorkerMetaData{
@@ -496,6 +545,7 @@ func TestWorkers_UploadWorkerWithName(t *testing.T) {
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
+		false,
 		WorkerScript{
 			Script: workerScript,
 			WorkerMetaData: WorkerMetaData{
@@ -524,6 +574,7 @@ func TestWorkers_UploadWorkerSingleScriptWithAccount(t *testing.T) {
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
+		false,
 		WorkerScript{
 			Script: workerScript,
 			WorkerMetaData: WorkerMetaData{
@@ -629,6 +680,7 @@ func TestWorkers_UploadWorkerWithInheritBinding(t *testing.T) {
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
+		false,
 		WorkerScript{
 			Script: workerScript,
 			WorkerMetaData: WorkerMetaData{
