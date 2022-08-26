@@ -21,6 +21,7 @@ const (
           "testdomain.com",
           "testdomain.org"
         ],
+		"production_branch": "main",
         "source": {
           "type": "github",
           "config": {
@@ -70,6 +71,7 @@ const (
           "project_id": "5a321fc7-3162-7d36-adce-1213996a7",
           "project_name": "pages-test",
           "environment": "preview",
+		  "production_branch": "main",
           "url": "https://c35216d1.pages-test.pages.dev",
           "created_on": "2021-03-09T00:55:03.923456Z",
           "modified_on": "2021-03-09T00:58:59.045655Z",
@@ -141,6 +143,7 @@ const (
           "url": "https://c35216d1.pages-test.pages.dev",
           "created_on": "2021-03-09T00:55:03.923456Z",
           "modified_on": "2021-03-09T00:58:59.045655Z",
+		  "production_branch": "main",
           "aliases": [
             "https://branchname.pages-test.pages.dev"
           ],
@@ -220,6 +223,7 @@ var (
 		Source:              *expectedPagesProjectSource,
 		ID:                  "5a321fc7-3162-7d36-adce-1213996a7",
 		LatestDeployment:    *expectedPagesProjectDeployment,
+		ProductionBranch:    "main",
 	}
 
 	deploymentCreatedOn, _  = time.Parse(time.RFC3339, "2021-03-09T00:55:03.923456Z")
@@ -252,6 +256,7 @@ var (
 		Stages:             expectedStages,
 		BuildConfig:        *expectedPagesProjectBuildConfig,
 		Source:             *expectedPagesProjectSource,
+		ProductionBranch:   "main",
 	}
 
 	latestDeploymentStageStartedOn, _ = time.Parse(time.RFC3339, "2021-03-09T00:55:03.923456Z")
