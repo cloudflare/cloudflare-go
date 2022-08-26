@@ -41,7 +41,7 @@ const (
     "size": 4190963,
     "status": {
       "state": "inprogress",
-      "pctComplete": 51,
+      "pctComplete": "51",
       "errorReasonCode": "ERR_NON_VIDEO",
       "errorReasonText": "The file was not recognized as a valid video file."
     },
@@ -98,7 +98,7 @@ func createTestVideo() StreamVideo {
 		Size:               4190963,
 		Status: StreamVideoStatus{
 			State:           "inprogress",
-			PctComplete:     51,
+			PctComplete:     "51",
 			ErrorReasonCode: "ERR_NON_VIDEO",
 			ErrorReasonText: "The file was not recognized as a valid video file.",
 		},
@@ -304,7 +304,7 @@ func TestStream_ListVideos(t *testing.T) {
     "size": 4190963,
     "status": {
       "state": "inprogress",
-      "pctComplete": 51,
+      "pctComplete": "51",
       "errorReasonCode": "ERR_NON_VIDEO",
       "errorReasonText": "The file was not recognized as a valid video file."
     },
