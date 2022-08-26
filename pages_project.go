@@ -15,7 +15,7 @@ type PagesProject struct {
 	CreatedOn           *time.Time                    `json:"created_on"`
 	SubDomain           string                        `json:"subdomain"`
 	Domains             []string                      `json:"domains,omitempty"`
-	Source              PagesProjectSource            `json:"source,omitempty"`
+	Source              *PagesProjectSource           `json:"source,omitempty"`
 	BuildConfig         PagesProjectBuildConfig       `json:"build_config"`
 	DeploymentConfigs   PagesProjectDeploymentConfigs `json:"deployment_configs"`
 	LatestDeployment    PagesProjectDeployment        `json:"latest_deployment"`
@@ -40,11 +40,11 @@ type PagesProjectSourceConfig struct {
 
 // PagesProjectBuildConfig represents the configuration of a Pages project build process.
 type PagesProjectBuildConfig struct {
-	BuildCommand      string `json:"build_command,omitempty"`
-	DestinationDir    string `json:"destination_dir,omitempty"`
-	RootDir           string `json:"root_dir,omitempty"`
-	WebAnalyticsTag   string `json:"web_analytics_tag,omitempty"`
-	WebAnalyticsToken string `json:"web_analytics_token,omitempty"`
+	BuildCommand      string `json:"build_command"`
+	DestinationDir    string `json:"destination_dir"`
+	RootDir           string `json:"root_dir"`
+	WebAnalyticsTag   string `json:"web_analytics_tag"`
+	WebAnalyticsToken string `json:"web_analytics_token"`
 }
 
 // PagesProjectDeploymentConfigs represents the configuration for deployments in a Pages project.

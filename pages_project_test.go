@@ -220,7 +220,7 @@ var (
 		BuildConfig:         *expectedPagesProjectBuildConfig,
 		CreatedOn:           &pagesProjectCreatedOn,
 		DeploymentConfigs:   *expectedPagesProjectDeploymentConfigs,
-		Source:              *expectedPagesProjectSource,
+		Source:              expectedPagesProjectSource,
 		ID:                  "5a321fc7-3162-7d36-adce-1213996a7",
 		LatestDeployment:    *expectedPagesProjectDeployment,
 		ProductionBranch:    "main",
