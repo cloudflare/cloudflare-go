@@ -29,7 +29,18 @@ const (
             "repo_name": "pages-test",
             "production_branch": "main",
             "pr_comments_enabled": true,
-            "deployments_enabled": true
+            "deployments_enabled": true,
+			"preview_deployment_setting": "custom",
+			"preview_branch_includes": [
+				"release/*",
+				"production",
+				"main"
+			],
+			"preview_branch_excludes": [
+				"dependabot/*",
+				"dev",
+				"*/ignore"
+			]
           }
         },
         "build_config": {
@@ -61,6 +72,26 @@ const (
                 "value": "production"
               }
             },
+			"d1_databases": {
+				"D1_BINDING": { 
+					"id": "a94509c6-0757-43f3-b053-474b0ab10935" 
+				}
+			},
+			"kv_namespaces": {
+				"KV_BINDING": {
+				  "namespace_id": "5eb63bbbe01eeed093cb22bb8f5acdc3"
+				}
+			},
+		  	"durable_object_namespaces": {
+				"DO_BINDING": {
+			  		"namespace_id": "5eb63bbbe01eeed093cb22bb8f5acdc3"
+				}
+		  	},
+			"r2_buckets": {
+				"R2_BINDING": {
+					"name": "some-bucket"
+				}
+			},
 			"compatibility_date": "2022-08-15",
 			"compatibility_flags": ["production_flag"]
           }
@@ -130,7 +161,18 @@ const (
               "repo_name": "pages-test",
               "production_branch": "main",
               "pr_comments_enabled": true,
-              "deployments_enabled": true
+              "deployments_enabled": true,
+			  "preview_deployment_setting": "custom",
+			  "preview_branch_includes": [
+				"release/*",
+				"production",
+				"main"
+			  ],
+			  "preview_branch_excludes": [
+				"dependabot/*",
+				"dev",
+				"*/ignore"
+			  ]
             }
           }
         },
@@ -199,7 +241,18 @@ const (
               "repo_name": "pages-test",
               "production_branch": "main",
               "pr_comments_enabled": true,
-              "deployments_enabled": true
+              "deployments_enabled": true,
+			  "preview_deployment_setting": "custom",
+			  "preview_branch_includes": [
+				"release/*",
+				"production",
+				"main"
+			  ],
+			  "preview_branch_excludes": [
+				"dependabot/*",
+				"dev",
+				"*/ignore"
+			  ]
             }
           }
         }
@@ -333,6 +386,18 @@ var (
 		},
 		CompatibilityDate:  "2022-08-15",
 		CompatibilityFlags: []string{"production_flag"},
+		KvNamespaces: NamespaceBindingMap{
+			"KV_BINDING": &NamespaceBindingValue{Value: "5eb63bbbe01eeed093cb22bb8f5acdc3"},
+		},
+		D1Databases: D1BindingMap{
+			"D1_BINDING": &D1Binding{ID: "a94509c6-0757-43f3-b053-474b0ab10935"},
+		},
+		DoNamespaces: NamespaceBindingMap{
+			"DO_BINDING": &NamespaceBindingValue{Value: "5eb63bbbe01eeed093cb22bb8f5acdc3"},
+		},
+		R2Bindings: R2BindingMap{
+			"R2_BINDING": &R2BindingValue{Name: "some-bucket"},
+		},
 	}
 
 	expectedPagesProjectSource = &PagesProjectSource{
@@ -341,11 +406,14 @@ var (
 	}
 
 	expectedPagesProjectSourceConfig = &PagesProjectSourceConfig{
-		Owner:              "cloudflare",
-		RepoName:           "pages-test",
-		ProductionBranch:   "main",
-		PRCommentsEnabled:  true,
-		DeploymentsEnabled: true,
+		Owner:                    "cloudflare",
+		RepoName:                 "pages-test",
+		ProductionBranch:         "main",
+		PRCommentsEnabled:        true,
+		DeploymentsEnabled:       true,
+		PreviewDeploymentSetting: "custom",
+		PreviewBranchIncludes:    []string{"release/*", "production", "main"},
+		PreviewBranchExcludes:    []string{"dependabot/*", "dev", "*/ignore"},
 	}
 )
 
