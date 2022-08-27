@@ -411,7 +411,7 @@ var (
 		ProductionBranch:         "main",
 		PRCommentsEnabled:        true,
 		DeploymentsEnabled:       true,
-		PreviewDeploymentSetting: "custom",
+		PreviewDeploymentSetting: PagesPreviewCustomBranches,
 		PreviewBranchIncludes:    []string{"release/*", "production", "main"},
 		PreviewBranchExcludes:    []string{"dependabot/*", "dev", "*/ignore"},
 	}

@@ -8,6 +8,14 @@ import (
 	"time"
 )
 
+type PagesPreviewDeploymentSetting string
+
+const (
+	PagesPreviewAllBranches    PagesPreviewDeploymentSetting = "all"
+	PagesPreviewNoBranches     PagesPreviewDeploymentSetting = "none"
+	PagesPreviewCustomBranches PagesPreviewDeploymentSetting = "custom"
+)
+
 // PagesProject represents a Pages project.
 type PagesProject struct {
 	Name                string                        `json:"name,omitempty"`
@@ -31,15 +39,15 @@ type PagesProjectSource struct {
 
 // PagesProjectSourceConfig represents the properties use to configure a Pages project source.
 type PagesProjectSourceConfig struct {
-	Owner                        string   `json:"owner"`
-	RepoName                     string   `json:"repo_name"`
-	ProductionBranch             string   `json:"production_branch"`
-	PRCommentsEnabled            bool     `json:"pr_comments_enabled"`
-	DeploymentsEnabled           bool     `json:"deployments_enabled"`
-	ProductionDeploymentsEnabled bool     `json:"production_deployments_enabled"`
-	PreviewDeploymentSetting     string   `json:"preview_deployment_setting"`
-	PreviewBranchIncludes        []string `json:"preview_branch_includes"`
-	PreviewBranchExcludes        []string `json:"preview_branch_excludes"`
+	Owner                        string                        `json:"owner"`
+	RepoName                     string                        `json:"repo_name"`
+	ProductionBranch             string                        `json:"production_branch"`
+	PRCommentsEnabled            bool                          `json:"pr_comments_enabled"`
+	DeploymentsEnabled           bool                          `json:"deployments_enabled"`
+	ProductionDeploymentsEnabled bool                          `json:"production_deployments_enabled"`
+	PreviewDeploymentSetting     PagesPreviewDeploymentSetting `json:"preview_deployment_setting"`
+	PreviewBranchIncludes        []string                      `json:"preview_branch_includes"`
+	PreviewBranchExcludes        []string                      `json:"preview_branch_excludes"`
 }
 
 // PagesProjectBuildConfig represents the configuration of a Pages project build process.
@@ -133,10 +141,11 @@ type NamespaceBindingValue struct {
 	Value string `json:"namespace_id"`
 }
 
+type R2BindingMap map[string]*R2BindingValue
+
 type R2BindingValue struct {
 	Name string `json:"name"`
 }
-type R2BindingMap map[string]*R2BindingValue
 
 type D1BindingMap map[string]*D1Binding
 
