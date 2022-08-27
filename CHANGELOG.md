@@ -8,6 +8,7 @@ ENHANCEMENTS:
 BUG FIXES:
 
 * email_routing_settings: change enable endpoint from `enabled` to `enable` ([#1060](https://github.com/cloudflare/cloudflare-go/issues/1060))
+* stream: Update pctComplete to string from int ([#1066](https://github.com/cloudflare/cloudflare-go/issues/1066))
 
 ## 0.48.0 (August 22nd, 2022)
 
