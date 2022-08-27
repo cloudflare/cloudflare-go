@@ -65,7 +65,7 @@ type StreamVideoPlayback struct {
 // StreamVideoStatus represents the status of a stream video.
 type StreamVideoStatus struct {
 	State           string `json:"state,omitempty"`
-	PctComplete     int    `json:"pctComplete,omitempty"`
+	PctComplete     string `json:"pctComplete,omitempty"`
 	ErrorReasonCode string `json:"errorReasonCode,omitempty"`
 	ErrorReasonText string `json:"errorReasonText,omitempty"`
 }
