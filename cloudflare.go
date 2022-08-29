@@ -486,6 +486,32 @@ func (api *API) Raw(method, endpoint string, data interface{}) (json.RawMessage,
 	return r.Result, nil
 }
 
+func (api *API) RawContext(ctx context.Context, method, endpoint string, data interface{}) (json.RawMessage, error) {
+	res, err := api.makeRequestContext(ctx, method, endpoint, data)
+	if err != nil {
+		return nil, err
+	}
+
+	var r RawResponse
+	if err := json.Unmarshal(res, &r); err != nil {
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+	return r.Result, nil
+}
+
+func (api *API) RawContextWithHeaders(ctx context.Context, method, endpoint string, data interface{}, headers http.Header) (json.RawMessage, error) {
+	res, err := api.makeRequestContextWithHeaders(ctx, method, endpoint, data, headers)
+	if err != nil {
+		return nil, err
+	}
+
+	var r RawResponse
+	if err := json.Unmarshal(res, &r); err != nil {
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+	return r.Result, nil
+}
+
 // PaginationOptions can be passed to a list request to configure paging
 // These values will be defaulted if omitted, and PerPage has min/max limits set by resource.
 type PaginationOptions struct {
