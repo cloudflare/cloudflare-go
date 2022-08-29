@@ -13,6 +13,10 @@ BUG FIXES:
 * email_routing_settings: change enable endpoint from `enabled` to `enable` ([#1060](https://github.com/cloudflare/cloudflare-go/issues/1060))
 * stream: Update pctComplete to string from int ([#1066](https://github.com/cloudflare/cloudflare-go/issues/1066))
 
+DEPENDENCIES:
+
+* deps: bumps goreleaser/goreleaser-action from 3.0.0 to 3.1.0 ([#1067](https://github.com/cloudflare/cloudflare-go/issues/1067))
+
 ## 0.48.0 (August 22nd, 2022)
 
 ENHANCEMENTS:
