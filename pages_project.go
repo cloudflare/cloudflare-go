@@ -8,6 +8,14 @@ import (
 	"time"
 )
 
+type PagesPreviewDeploymentSetting string
+
+const (
+	PagesPreviewAllBranches    PagesPreviewDeploymentSetting = "all"
+	PagesPreviewNoBranches     PagesPreviewDeploymentSetting = "none"
+	PagesPreviewCustomBranches PagesPreviewDeploymentSetting = "custom"
+)
+
 // PagesProject represents a Pages project.
 type PagesProject struct {
 	Name                string                        `json:"name,omitempty"`
@@ -15,11 +23,12 @@ type PagesProject struct {
 	CreatedOn           *time.Time                    `json:"created_on"`
 	SubDomain           string                        `json:"subdomain"`
 	Domains             []string                      `json:"domains,omitempty"`
-	Source              PagesProjectSource            `json:"source"`
+	Source              *PagesProjectSource           `json:"source,omitempty"`
 	BuildConfig         PagesProjectBuildConfig       `json:"build_config"`
 	DeploymentConfigs   PagesProjectDeploymentConfigs `json:"deployment_configs"`
 	LatestDeployment    PagesProjectDeployment        `json:"latest_deployment"`
 	CanonicalDeployment PagesProjectDeployment        `json:"canonical_deployment"`
+	ProductionBranch    string                        `json:"production_branch,omitempty"`
 }
 
 // PagesProjectSource represents the configuration of a Pages project source.
@@ -30,11 +39,15 @@ type PagesProjectSource struct {
 
 // PagesProjectSourceConfig represents the properties use to configure a Pages project source.
 type PagesProjectSourceConfig struct {
-	Owner              string `json:"owner"`
-	RepoName           string `json:"repo_name"`
-	ProductionBranch   string `json:"production_branch"`
-	PRCommentsEnabled  bool   `json:"pr_comments_enabled"`
-	DeploymentsEnabled bool   `json:"deployments_enabled"`
+	Owner                        string                        `json:"owner"`
+	RepoName                     string                        `json:"repo_name"`
+	ProductionBranch             string                        `json:"production_branch"`
+	PRCommentsEnabled            bool                          `json:"pr_comments_enabled"`
+	DeploymentsEnabled           bool                          `json:"deployments_enabled"`
+	ProductionDeploymentsEnabled bool                          `json:"production_deployments_enabled"`
+	PreviewDeploymentSetting     PagesPreviewDeploymentSetting `json:"preview_deployment_setting"`
+	PreviewBranchIncludes        []string                      `json:"preview_branch_includes"`
+	PreviewBranchExcludes        []string                      `json:"preview_branch_excludes"`
 }
 
 // PagesProjectBuildConfig represents the configuration of a Pages project build process.
@@ -57,6 +70,10 @@ type PagesProjectDeploymentConfigEnvironment struct {
 	EnvVars            map[string]PagesProjectDeploymentVar `json:"env_vars"`
 	CompatibilityDate  string                               `json:"compatibility_date,omitempty"`
 	CompatibilityFlags []string                             `json:"compatibility_flags,omitempty"`
+	KvNamespaces       NamespaceBindingMap                  `json:"kv_namespaces,omitempty"`
+	DoNamespaces       NamespaceBindingMap                  `json:"durable_object_namespaces,omitempty"`
+	D1Databases        D1BindingMap                         `json:"d1_databases,omitempty"`
+	R2Bindings         R2BindingMap                         `json:"r2_buckets,omitempty"`
 }
 
 // PagesProjectDeploymentVar represents a deployment environment variable.
@@ -83,6 +100,7 @@ type PagesProjectDeployment struct {
 	Source             PagesProjectSource            `json:"source"`
 	CompatibilityDate  string                        `json:"compatibility_date,omitempty"`
 	CompatibilityFlags []string                      `json:"compatibility_flags,omitempty"`
+	ProductionBranch   string                        `json:"production_branch,omitempty"`
 }
 
 // PagesProjectDeploymentStage represents an individual stage in a Pages project deployment.
@@ -115,6 +133,24 @@ type pagesProjectListResponse struct {
 	Response
 	Result     []PagesProject `json:"result"`
 	ResultInfo `json:"result_info"`
+}
+
+type NamespaceBindingMap map[string]*NamespaceBindingValue
+
+type NamespaceBindingValue struct {
+	Value string `json:"namespace_id"`
+}
+
+type R2BindingMap map[string]*R2BindingValue
+
+type R2BindingValue struct {
+	Name string `json:"name"`
+}
+
+type D1BindingMap map[string]*D1Binding
+
+type D1Binding struct {
+	ID string `json:"id"`
 }
 
 // ListPagesProjects returns all Pages projects for an account.
