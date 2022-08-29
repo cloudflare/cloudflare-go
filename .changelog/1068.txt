@@ -1,0 +1,3 @@
+```release-note:enhancement
+api: expose .RawContext and .RawContextWithHeaders methods
+```
