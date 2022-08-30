@@ -18,23 +18,25 @@ type TeamsDeviceDetail struct {
 }
 
 type TeamsDeviceListItem struct {
-	User         UserItem `json:"user,omitempty"`
-	ID           string   `json:"id,omitempty"`
-	Key          string   `json:"key,omitempty"`
-	DeviceType   string   `json:"device_type,omitempty"`
-	Name         string   `json:"name,omitempty"`
-	Model        string   `json:"model,omitempty"`
-	Manufacturer string   `json:"manufacturer,omitempty"`
-	Deleted      bool     `json:"deleted,omitempty"`
-	Version      string   `json:"version,omitempty"`
-	SerialNumber string   `json:"serial_number,omitempty"`
-	OSVersion    string   `json:"os_version,omitempty"`
-	MacAddress   string   `json:"mac_address,omitempty"`
-	IP           string   `json:"ip,omitempty"`
-	Created      string   `json:"created,omitempty"`
-	Updated      string   `json:"updated,omitempty"`
-	LastSeen     string   `json:"last_seen,omitempty"`
-	RevokedAt    string   `json:"revoked_at,omitempty"`
+	User             UserItem `json:"user,omitempty"`
+	ID               string   `json:"id,omitempty"`
+	Key              string   `json:"key,omitempty"`
+	DeviceType       string   `json:"device_type,omitempty"`
+	Name             string   `json:"name,omitempty"`
+	Model            string   `json:"model,omitempty"`
+	Manufacturer     string   `json:"manufacturer,omitempty"`
+	Deleted          bool     `json:"deleted,omitempty"`
+	Version          string   `json:"version,omitempty"`
+	SerialNumber     string   `json:"serial_number,omitempty"`
+	OSVersion        string   `json:"os_version,omitempty"`
+	OSDistroName     string   `json:"os_distro_name,omitempty"`
+	OsDistroRevision string   `json:"os_distro_revision,omitempty"`
+	MacAddress       string   `json:"mac_address,omitempty"`
+	IP               string   `json:"ip,omitempty"`
+	Created          string   `json:"created,omitempty"`
+	Updated          string   `json:"updated,omitempty"`
+	LastSeen         string   `json:"last_seen,omitempty"`
+	RevokedAt        string   `json:"revoked_at,omitempty"`
 }
 
 type UserItem struct {
