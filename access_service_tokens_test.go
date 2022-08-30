@@ -167,6 +167,47 @@ func TestUpdateAccessServiceToken(t *testing.T) {
 	}
 }
 
+func TestRefreshAccessServiceToken(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"created_at": "2014-01-01T05:20:00.12345Z",
+				"updated_at": "2014-01-01T05:20:00.12345Z",
+				"expires_at": "2015-01-01T05:20:00.12345Z",
+				"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+				"name": "CI/CD token",
+				"client_id": "88bf3b6d86161464f6509f7219099e57.access.example.com"
+			}
+		}
+		`)
+	}
+
+	expected := AccessServiceTokenRefreshResponse{
+		CreatedAt: &createdAt,
+		UpdatedAt: &updatedAt,
+		ExpiresAt: &expiresAt,
+		ID:        "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		Name:      "CI/CD token",
+		ClientID:  "88bf3b6d86161464f6509f7219099e57.access.example.com",
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/service_tokens/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/refresh", handler)
+
+	actual, err := client.RefreshAccessServiceToken(context.Background(), AccountIdentifier(testAccountID), "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expected, actual)
+	}
+}
+
 func TestDeleteAccessServiceToken(t *testing.T) {
 	setup()
 	defer teardown()
