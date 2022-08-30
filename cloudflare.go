@@ -271,7 +271,7 @@ func (api *API) makeRequestWithAuthTypeAndHeadersComplete(ctx context.Context, m
 		// retry if the server is rate limiting us or if it failed
 		// assumes server operations are rolled back on failure
 		if respErr != nil || resp.StatusCode == http.StatusTooManyRequests || resp.StatusCode >= 500 {
-			if resp.StatusCode == http.StatusTooManyRequests {
+			if resp != nil && resp.StatusCode == http.StatusTooManyRequests {
 				respErr = errors.New("exceeded available rate limit retries")
 			}
 
