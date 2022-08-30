@@ -473,8 +473,8 @@ type RawResponse struct {
 
 // Raw makes a HTTP request with user provided params and returns the
 // result as untouched JSON.
-func (api *API) Raw(method, endpoint string, data interface{}) (json.RawMessage, error) {
-	res, err := api.makeRequest(method, endpoint, data)
+func (api *API) Raw(ctx context.Context, method, endpoint string, data interface{}, headers http.Header) (json.RawMessage, error) {
+	res, err := api.makeRequestContextWithHeaders(ctx, method, endpoint, data, headers)
 	if err != nil {
 		return nil, err
 	}
