@@ -280,22 +280,28 @@ func TestEmailRouting_GetAllRule(t *testing.T) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
-  "tag": "a7e6fb77503c41d8a7f3113c6918f10c",
-  "name": "Rule send to user@example.net",
-  "enabled": true,
-  "matchers": [
-    {
-      "type": "all"
-    }
-  ],
-  "actions": [
-    {
-      "type": "forward",
-      "value": [
-        "destinationaddress@example.net"
-      ]
-    }
-  ]
+  "result": {
+    "tag": "a7e6fb77503c41d8a7f3113c6918f10c",
+    "name": "Send to user@example.net rule.",
+    "matchers": [
+      {
+        "type": "all"
+      }
+    ],
+    "actions": [
+      {
+        "type": "forward",
+        "value": [
+          "destinationaddress@example.net"
+        ]
+      }
+    ],
+    "enabled": true,
+    "priority": 2147483647
+  },
+  "success": true,
+  "errors": [],
+  "messages": []
 }`)
 	})
 
@@ -306,7 +312,7 @@ func TestEmailRouting_GetAllRule(t *testing.T) {
 
 	want := EmailRoutingCatchAllRule{
 		Tag:     "a7e6fb77503c41d8a7f3113c6918f10c",
-		Name:    "Rule send to user@example.net",
+		Name:    "Send to user@example.net rule.",
 		Enabled: BoolPtr(true),
 		Matchers: []EmailRoutingRuleMatcher{
 			{
@@ -335,22 +341,28 @@ func TestEmailRouting_UpdateAllRule(t *testing.T) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
-  "tag": "a7e6fb77503c41d8a7f3113c6918f10c",
-  "name": "Rule send to user@example.net",
-  "enabled": true,
-  "matchers": [
-    {
-      "type": "all"
-    }
-  ],
-  "actions": [
-    {
-      "type": "forward",
-      "value": [
-        "destinationaddress@example.net"
-      ]
-    }
-  ]
+  "result": {
+    "tag": "a7e6fb77503c41d8a7f3113c6918f10c",
+    "name": "Send to user@example.net rule.",
+    "matchers": [
+      {
+        "type": "all"
+      }
+    ],
+    "actions": [
+      {
+        "type": "forward",
+        "value": [
+          "destinationaddress@example.net"
+        ]
+      }
+    ],
+    "enabled": true,
+    "priority": 2147483647
+  },
+  "success": true,
+  "errors": [],
+  "messages": []
 }`)
 	})
 
@@ -361,7 +373,7 @@ func TestEmailRouting_UpdateAllRule(t *testing.T) {
 
 	want := EmailRoutingCatchAllRule{
 		Tag:     "a7e6fb77503c41d8a7f3113c6918f10c",
-		Name:    "Rule send to user@example.net",
+		Name:    "Send to user@example.net rule.",
 		Enabled: BoolPtr(true),
 		Matchers: []EmailRoutingRuleMatcher{
 			{

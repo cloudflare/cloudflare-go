@@ -76,6 +76,11 @@ type EmailRoutingCatchAllRule struct {
 	Actions  []EmailRoutingRuleAction  `json:"actions,omitempty"`
 }
 
+type EmailRoutingCatchAllRuleResponse struct {
+	Result EmailRoutingCatchAllRule `json:"result"`
+	Response
+}
+
 // ListEmailRoutingRules Lists existing routing rules.
 //
 // API reference: https://api.cloudflare.com/#email-routing-routing-rules-list-routing-rules
@@ -227,21 +232,19 @@ func (api *API) GetEmailRoutingCatchAllRule(ctx context.Context, rc *ResourceCon
 	if rc.Identifier == "" {
 		return EmailRoutingCatchAllRule{}, ErrMissingZoneID
 	}
-
 	uri := fmt.Sprintf("/zones/%s/email/routing/rules/catch_all", rc.Identifier)
-
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return EmailRoutingCatchAllRule{}, err
 	}
 
-	var r EmailRoutingCatchAllRule
+	var r EmailRoutingCatchAllRuleResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return EmailRoutingCatchAllRule{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
-	return r, nil
+	return r.Result, nil
 }
 
 // UpdateEmailRoutingCatchAllRule Enable or disable catch-all routing rule, or change action to forward to specific destination address.
@@ -259,11 +262,11 @@ func (api *API) UpdateEmailRoutingCatchAllRule(ctx context.Context, rc *Resource
 		return EmailRoutingCatchAllRule{}, err
 	}
 
-	var r EmailRoutingCatchAllRule
+	var r EmailRoutingCatchAllRuleResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return EmailRoutingCatchAllRule{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
-	return r, nil
+	return r.Result, nil
 }
