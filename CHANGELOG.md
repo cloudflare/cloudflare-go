@@ -1,4 +1,6 @@
-## 0.49.0 (Unreleased)
+## 0.50.0 (Unreleased)
+
+## 0.49.0 (August 31st, 2022)
 
 ENHANCEMENTS:
 
