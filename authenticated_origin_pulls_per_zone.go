@@ -69,9 +69,7 @@ func (api *API) GetPerZoneAuthenticatedOriginPullsStatus(ctx context.Context, zo
 // API reference: https://api.cloudflare.com/#zone-level-authenticated-origin-pulls-set-enablement-for-zone
 func (api *API) SetPerZoneAuthenticatedOriginPullsStatus(ctx context.Context, zoneID string, enable bool) (PerZoneAuthenticatedOriginPullsSettings, error) {
 	uri := fmt.Sprintf("/zones/%s/origin_tls_client_auth/settings", zoneID)
-	params := struct {
-		Enabled bool `json:"enabled"`
-	}{
+	params := PerZoneAuthenticatedOriginPullsSettings{
 		Enabled: enable,
 	}
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)

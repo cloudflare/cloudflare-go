@@ -30,7 +30,7 @@ type PerHostnameAuthenticatedOriginPullsCertificateResponse struct {
 type PerHostnameAuthenticatedOriginPullsDetails struct {
 	Hostname       string    `json:"hostname"`
 	CertID         string    `json:"cert_id"`
-	Enabled        bool      `json:"enabled"`
+	Enabled        *bool     `json:"enabled"`
 	Status         string    `json:"status"`
 	CreatedAt      time.Time `json:"created_at"`
 	UpdatedAt      time.Time `json:"updated_at"`
@@ -66,7 +66,7 @@ type PerHostnameAuthenticatedOriginPullsCertificateParams struct {
 type PerHostnameAuthenticatedOriginPullsConfig struct {
 	Hostname string `json:"hostname"`
 	CertID   string `json:"cert_id"`
-	Enabled  bool   `json:"enabled"`
+	Enabled  *bool  `json:"enabled"`
 }
 
 // PerHostnameAuthenticatedOriginPullsConfigParams represents the expected config param format for Per Hostname AuthenticatedOriginPulls applied on a hostname.

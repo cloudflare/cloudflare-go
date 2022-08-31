@@ -65,7 +65,7 @@ func TestListPerHostnameAuthenticatedOriginPullsCertificate(t *testing.T) {
 	want := []PerHostnameAuthenticatedOriginPullsDetails{
 		{
 			Hostname:       "app.example.com",
-			Enabled:        true,
+			Enabled:        BoolPtr(true),
 			CertStatus:     "active",
 			CreatedAt:      createdAt,
 			UpdatedAt:      updatedAt,
@@ -80,7 +80,7 @@ func TestListPerHostnameAuthenticatedOriginPullsCertificate(t *testing.T) {
 			CertUpdatedAt:  updatedAt,
 		}, {
 			Hostname:       "anotherapp.example.com",
-			Enabled:        true,
+			Enabled:        BoolPtr(true),
 			CertStatus:     "active",
 			CreatedAt:      createdAt,
 			UpdatedAt:      updatedAt,
@@ -274,7 +274,7 @@ func TestEditPerHostnameAuthenticatedOriginPullsConfig(t *testing.T) {
 		{
 			Hostname:       "app.example.com",
 			CertID:         "2458ce5a-0c35-4c7f-82c7-8e9487d3ff60",
-			Enabled:        true,
+			Enabled:        BoolPtr(true),
 			Status:         "active",
 			CreatedAt:      createdAt,
 			UpdatedAt:      updatedAt,
@@ -293,7 +293,7 @@ func TestEditPerHostnameAuthenticatedOriginPullsConfig(t *testing.T) {
 		{
 			Hostname: "app.example.com",
 			CertID:   "2458ce5a-0c35-4c7f-82c7-8e9487d3ff60",
-			Enabled:  true,
+			Enabled:  BoolPtr(true),
 		},
 	}
 	actual, err := client.EditPerHostnameAuthenticatedOriginPullsConfig(context.Background(), "023e105f4ecef8ad9ca31a8372d0c353", config)
@@ -340,7 +340,7 @@ func TestGetPerHostnameAuthenticatedOriginPullsConfig(t *testing.T) {
 	want := PerHostnameAuthenticatedOriginPullsDetails{
 		Hostname:       "app.example.com",
 		CertID:         "2458ce5a-0c35-4c7f-82c7-8e9487d3ff60",
-		Enabled:        true,
+		Enabled:        BoolPtr(true),
 		Status:         "active",
 		CreatedAt:      createdAt,
 		UpdatedAt:      updatedAt,
