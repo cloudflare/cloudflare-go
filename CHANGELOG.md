@@ -1,5 +1,9 @@
 ## 0.50.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* auditlogs: add support for hide_user_logs filter parameter ([#1075](https://github.com/cloudflare/cloudflare-go/issues/1075))
+
 ## 0.49.0 (August 31st, 2022)
 
 ENHANCEMENTS:
