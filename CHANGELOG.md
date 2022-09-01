@@ -4,6 +4,10 @@ ENHANCEMENTS:
 
 * auditlogs: add support for hide_user_logs filter parameter ([#1075](https://github.com/cloudflare/cloudflare-go/issues/1075))
 
+DEPENDENCIES:
+
+* deps: bumps github.com/urfave/cli/v2 from 2.11.2 to 2.14.0 ([#1077](https://github.com/cloudflare/cloudflare-go/issues/1077))
+
 ## 0.49.0 (August 31st, 2022)
 
 ENHANCEMENTS:
