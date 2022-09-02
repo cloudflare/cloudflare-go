@@ -57,3 +57,15 @@ func (api *API) UpdateURLNormalizationSettings(ctx context.Context, rc *Resource
 
 	return urlNormalizationSettingsResponse.Result, nil
 }
+
+// DeleteURLNormalizationSettings https://api.cloudflare.com/#url-normalization-update-url-normalization-settings
+func (api *API) DeleteURLNormalizationSettings(ctx context.Context, rc *ResourceContainer) error {
+	uri := fmt.Sprintf("/zones/%s/url_normalization", rc.Identifier)
+
+	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
