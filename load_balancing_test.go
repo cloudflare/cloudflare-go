@@ -512,10 +512,8 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
               "expected_codes": "2xx",
               "follow_redirects": true,
               "allow_insecure": true,
-              "probe_zone": "",
-			  "consecutive_up": 0,
-			  "consecutive_down": 0
-						}`, string(b))
+              "probe_zone": ""
+		}`, string(b))
 		}
 		fmt.Fprint(w, `{
             "success": true,
@@ -544,9 +542,7 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
                 "expected_codes": "2xx",
                 "follow_redirects": true,
                 "allow_insecure": true,
-                "probe_zone": "",
-				"consecutive_up": 0,
-			  	"consecutive_down": 0
+                "probe_zone": ""
             }
         }`)
 	}
@@ -574,8 +570,6 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
 
 		FollowRedirects: true,
 		AllowInsecure:   true,
-		ConsecutiveUp:   0,
-		ConsecutiveDown: 0,
 	}
 	request := LoadBalancerMonitor{
 		Type:        "https",
@@ -594,8 +588,6 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
 
 		FollowRedirects: true,
 		AllowInsecure:   true,
-		ConsecutiveUp:   0,
-		ConsecutiveDown: 0,
 	}
 
 	actual, err := client.CreateLoadBalancerMonitor(context.Background(), request)
@@ -669,9 +661,6 @@ func TestListLoadBalancerMonitors(t *testing.T) {
 			Interval:      90,
 			ExpectedBody:  "alive",
 			ExpectedCodes: "2xx",
-
-			ConsecutiveUp:   0,
-			ConsecutiveDown: 0,
 		},
 	}
 
@@ -715,9 +704,7 @@ func TestLoadBalancerMonitorDetails(t *testing.T) {
                 "expected_codes": "2xx",
                 "follow_redirects": true,
                 "allow_insecure": true,
-                "probe_zone": "",
-				"consecutive_up": 3,
-				"consecutive_down": 2
+                "probe_zone": ""
             }
         }`)
 	}
@@ -745,8 +732,6 @@ func TestLoadBalancerMonitorDetails(t *testing.T) {
 
 		FollowRedirects: true,
 		AllowInsecure:   true,
-		ConsecutiveUp:   3,
-		ConsecutiveDown: 2,
 	}
 
 	actual, err := client.LoadBalancerMonitorDetails(context.Background(), "f1aba936b94213e5b8dca0c0dbf1f9cc")
@@ -811,9 +796,7 @@ func TestModifyLoadBalancerMonitor(t *testing.T) {
                 "expected_codes": "200",
                 "follow_redirects": true,
                 "allow_insecure": true,
-                "probe_zone": "",
-				"consecutive_up": 2,
-				"consecutive_down": 3
+                "probe_zone": ""
 						}`, string(b))
 		}
 		fmt.Fprint(w, `{
@@ -843,9 +826,7 @@ func TestModifyLoadBalancerMonitor(t *testing.T) {
                 "expected_codes": "200",
                 "follow_redirects": true,
                 "allow_insecure": true,
-                "probe_zone": "",
-				"consecutive_up": 2,
-				"consecutive_down": 3
+                "probe_zone": ""
             }
         }`)
 	}
@@ -873,8 +854,6 @@ func TestModifyLoadBalancerMonitor(t *testing.T) {
 
 		FollowRedirects: true,
 		AllowInsecure:   true,
-		ConsecutiveUp:   2,
-		ConsecutiveDown: 3,
 	}
 	request := LoadBalancerMonitor{
 		ID:          "f1aba936b94213e5b8dca0c0dbf1f9cc",
@@ -894,8 +873,6 @@ func TestModifyLoadBalancerMonitor(t *testing.T) {
 
 		FollowRedirects: true,
 		AllowInsecure:   true,
-		ConsecutiveUp:   2,
-		ConsecutiveDown: 3,
 	}
 
 	actual, err := client.ModifyLoadBalancerMonitor(context.Background(), request)
