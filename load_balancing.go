@@ -105,7 +105,7 @@ type LoadBalancerLoadShedding struct {
 	SessionPolicy  string  `json:"session_policy,omitempty"`
 }
 
-// LoadBalancerRule represents a single rule entry for a Load Balancer. Each rules
+// LoadBalancerRule represents a single rule entry for a Load Balancer. Each rule
 // is run one after the other in priority order. Disabled rules are skipped.
 type LoadBalancerRule struct {
 	Overrides LoadBalancerRuleOverrides `json:"overrides"`

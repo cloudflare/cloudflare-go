@@ -9,7 +9,10 @@ import (
 	"time"
 )
 
-var ErrMissingAccountLoadBalancerMonitorIdentifier = errors.New("require missing account load balancer identifier not found")
+var (
+	ErrMissingAccountLoadBalancerMonitorIdentifier = errors.New("require missing account load balancer identifier not found")
+	ErrMissingAccountLoadBalancerPreviewID         = errors.New("require missing account load balancer preview identifier not found")
+)
 
 type AccountLoadBalancerMonitor struct {
 	ID              string              `json:"id,omitempty"`
@@ -38,8 +41,15 @@ type PreviewAccountLoadBalancerMonitor struct {
 	Pools     map[string]string `json:"pools"`
 }
 
-// TODO: Check API Response
 type PreviewAccountLoadBalancerMonitorResult struct {
+	Healthy bool                                                        `json:"healthy"`
+	Origins []map[string]PreviewAccountLoadBalancerMonitorResultOrigins `json:"origins"`
+}
+type PreviewAccountLoadBalancerMonitorResultOrigins struct {
+	Healthy       bool     `json:"healthy"`
+	RTT           Duration `json:"rtt"`
+	FailureReason string   `json:"failure_reason"`
+	ResponseCode  int      `json:"response_code"`
 }
 
 type ListAccountLoadBalancerMonitorResponse struct {
@@ -66,8 +76,19 @@ type PatchAccountLoadBalancerMonitorResponse struct {
 }
 
 type PreviewAccountLoadBalancerMonitorParameters struct {
-	Identifier string `json:"-"`
-	AccountLoadBalancerMonitor
+	ID              string              `json:"-"`
+	Port            int                 `json:"port"`
+	Method          string              `json:"method"`
+	Timeout         int                 `json:"timeout"`
+	Path            string              `json:"path"`
+	Retries         int                 `json:"retries"`
+	FollowRedirects bool                `json:"follow_redirects"`
+	ExpectedBody    string              `json:"expected_body"`
+	ExpectedCodes   string              `json:"expected_codes"`
+	Header          map[string][]string `json:"header"`
+	AllowInsecure   bool                `json:"allow_insecure"`
+	Type            string              `json:"type"`
+	ProbeZone       string              `json:"probe_zone"`
 }
 
 type PreviewAccountLoadBalancerMonitorResponse struct {
@@ -76,7 +97,7 @@ type PreviewAccountLoadBalancerMonitorResponse struct {
 }
 
 type PreviewAccountLoadBalancerMonitorResultResponse struct {
-	Result PreviewAccountLoadBalancerMonitorResult `json:"result"`
+	Result map[string]PreviewAccountLoadBalancerMonitorResult `json:"result"`
 	Response
 }
 
@@ -225,11 +246,11 @@ func (api *API) PreviewAccountLoadBalancerMonitor(ctx context.Context, rc *Resou
 	if rc.Identifier == "" {
 		return PreviewAccountLoadBalancerMonitor{}, ErrMissingAccountID
 	}
-	if params.Identifier == "" {
+	if params.ID == "" {
 		return PreviewAccountLoadBalancerMonitor{}, ErrMissingAccountLoadBalancerMonitorIdentifier
 	}
-	uri := fmt.Sprintf("/accounts/%s/load_balancers/monitors/%s/preview", rc.Identifier, params.Identifier)
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	uri := fmt.Sprintf("/accounts/%s/load_balancers/monitors/%s/preview", rc.Identifier, params.ID)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, params)
 	if err != nil {
 		return PreviewAccountLoadBalancerMonitor{}, err
 	}
@@ -244,25 +265,26 @@ func (api *API) PreviewAccountLoadBalancerMonitor(ctx context.Context, rc *Resou
 }
 
 // PreviewAccountLoadBalancerResult Get the result of a previous preview operation using the provided preview_id.
-// TODO: Verify API RESPONSE
+//
 // API reference: https://api.cloudflare.com/#account-load-balancer-monitors-preview-monitor
-func (api *API) PreviewAccountLoadBalancerResult(ctx context.Context, rc *ResourceContainer, previewID string) (PreviewAccountLoadBalancerMonitorResult, error) {
+func (api *API) PreviewAccountLoadBalancerResult(ctx context.Context, rc *ResourceContainer, previewID string) (map[string]PreviewAccountLoadBalancerMonitorResult, error) {
 	if rc.Identifier == "" {
-		return PreviewAccountLoadBalancerMonitorResult{}, ErrMissingAccountID
+		return map[string]PreviewAccountLoadBalancerMonitorResult{}, ErrMissingAccountID
 	}
 	if previewID == "" {
-		return PreviewAccountLoadBalancerMonitorResult{}, errors.New("require previewID is missing")
+		return map[string]PreviewAccountLoadBalancerMonitorResult{}, ErrMissingAccountLoadBalancerPreviewID
 	}
-	uri := fmt.Sprintf("/accounts/%s/load_balancers/monitors/preview/%s", rc.Identifier, previewID)
+
+	uri := fmt.Sprintf("/accounts/%s/load_balancers/preview/%s", rc.Identifier, previewID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return PreviewAccountLoadBalancerMonitorResult{}, err
+		return map[string]PreviewAccountLoadBalancerMonitorResult{}, err
 	}
 
 	var result PreviewAccountLoadBalancerMonitorResultResponse
 	err = json.Unmarshal(res, &result)
 	if err != nil {
-		return PreviewAccountLoadBalancerMonitorResult{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return map[string]PreviewAccountLoadBalancerMonitorResult{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return result.Result, nil
