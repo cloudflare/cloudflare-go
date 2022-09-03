@@ -64,6 +64,8 @@ type LoadBalancerMonitor struct {
 	FollowRedirects bool                `json:"follow_redirects"`
 	AllowInsecure   bool                `json:"allow_insecure"`
 	ProbeZone       string              `json:"probe_zone"`
+	ConsecutiveUp   int                 `json:"consecutive_up"`
+	ConsecutiveDown int                 `json:"consecutive_down"`
 }
 
 // LoadBalancer represents a load balancer's properties.
