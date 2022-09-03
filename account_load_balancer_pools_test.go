@@ -879,7 +879,6 @@ func TestPatchAccountLoadBalancerPool(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
-
 }
 
 func TestDeleteAccountLoadBalancerPool(t *testing.T) {

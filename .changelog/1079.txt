@@ -1,3 +1,6 @@
 ```release-note:enhancement
-load_balancing: Add support for consecutive_up and consecutive_down.
+account_load_pools: Add support Account Load Balancer Pools.
+```
+```release-note:enhancement
+account_load_monitors: Add support Account Load Balancer Monitors.
 ```
