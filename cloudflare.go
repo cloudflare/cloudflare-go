@@ -268,8 +268,7 @@ func (api *API) makeRequestWithAuthTypeAndHeadersComplete(ctx context.Context, m
 
 		resp, respErr = api.request(ctx, method, uri, reqBody, authType, headers)
 
-		// no reason to go through retry/backoff logic on context timeouts as it delays the return
-		// and makes it less clear if the request timed out on retry due to a previous error or on context timeout
+		// short circuit processing on context timeouts
 		if respErr != nil && errors.Is(respErr, context.DeadlineExceeded) {
 			return nil, respErr
 		}
