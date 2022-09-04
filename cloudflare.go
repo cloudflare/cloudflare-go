@@ -268,6 +268,12 @@ func (api *API) makeRequestWithAuthTypeAndHeadersComplete(ctx context.Context, m
 
 		resp, respErr = api.request(ctx, method, uri, reqBody, authType, headers)
 
+		// no reason to go through retry/backoff logic on context timeouts as it delays the return
+		// and makes it less clear if the request timed out on retry due to a previous error or on context timeout
+		if respErr != nil && errors.Is(respErr, context.DeadlineExceeded) {
+			return nil, respErr
+		}
+
 		// retry if the server is rate limiting us or if it failed
 		// assumes server operations are rolled back on failure
 		if respErr != nil || resp.StatusCode == http.StatusTooManyRequests || resp.StatusCode >= 500 {
@@ -285,10 +291,6 @@ func (api *API) makeRequestWithAuthTypeAndHeadersComplete(ctx context.Context, m
 
 				api.logger.Printf("Request: %s %s got an error response %d: %s\n", method, uri, resp.StatusCode,
 					strings.Replace(strings.Replace(string(respBody), "\n", "", -1), "\t", "", -1))
-			} else if errors.Is(respErr, context.DeadlineExceeded) {
-				// no reason to go through backoff logic on context timeouts as it delays the return
-				// and makes it less clear about what happened
-				return nil, respErr
 			} else {
 				api.logger.Printf("Error performing request: %s %s : %s \n", method, uri, respErr.Error())
 			}
