@@ -285,6 +285,8 @@ func (api *API) makeRequestWithAuthTypeAndHeadersComplete(ctx context.Context, m
 
 				api.logger.Printf("Request: %s %s got an error response %d: %s\n", method, uri, resp.StatusCode,
 					strings.Replace(strings.Replace(string(respBody), "\n", "", -1), "\t", "", -1))
+			} else if errors.Is(respErr, context.DeadlineExceeded) {
+				return nil, respErr
 			} else {
 				api.logger.Printf("Error performing request: %s %s : %s \n", method, uri, respErr.Error())
 			}
