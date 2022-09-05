@@ -11,6 +11,7 @@ BUG FIXES:
 DEPENDENCIES:
 
 * deps: bumps github.com/urfave/cli/v2 from 2.11.2 to 2.14.0 ([#1077](https://github.com/cloudflare/cloudflare-go/issues/1077))
+* deps: bumps github.com/urfave/cli/v2 from 2.14.0 to 2.14.1 ([#1081](https://github.com/cloudflare/cloudflare-go/issues/1081))
 
 ## 0.49.0 (August 31st, 2022)
 
