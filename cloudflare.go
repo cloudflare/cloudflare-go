@@ -268,6 +268,11 @@ func (api *API) makeRequestWithAuthTypeAndHeadersComplete(ctx context.Context, m
 
 		resp, respErr = api.request(ctx, method, uri, reqBody, authType, headers)
 
+		// short circuit processing on context timeouts
+		if respErr != nil && errors.Is(respErr, context.DeadlineExceeded) {
+			return nil, respErr
+		}
+
 		// retry if the server is rate limiting us or if it failed
 		// assumes server operations are rolled back on failure
 		if respErr != nil || resp.StatusCode == http.StatusTooManyRequests || resp.StatusCode >= 500 {

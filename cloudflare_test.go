@@ -491,13 +491,20 @@ func (t RoundTripperFunc) RoundTrip(request *http.Request) (*http.Response, erro
 }
 
 func TestContextTimeout(t *testing.T) {
-	ctx, cancel := context.WithTimeout(context.Background(), 0)
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		time.Sleep(time.Second * time.Duration(3))
+	}
+
+	mux.HandleFunc("/timeout", handler)
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(1))
 	defer cancel()
 
-	cfClient, _ := New("deadbeef", "cloudflare@example.org")
-
 	start := time.Now()
-	_, err := cfClient.makeRequestContext(ctx, http.MethodHead, server.URL, nil)
+	_, err := client.makeRequestContext(ctx, http.MethodHead, "/timeout", nil)
 	assert.ErrorIs(t, err, context.DeadlineExceeded)
 	assert.WithinDuration(t, start, time.Now(), time.Second*2,
 		"makeRequestContext took too much time with an expiring context")
