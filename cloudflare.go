@@ -193,7 +193,7 @@ type APIResponse struct {
 }
 
 func (api *API) makeRequestWithAuthTypeAndHeaders(ctx context.Context, method, uri string, params interface{}, authType int, headers http.Header) ([]byte, error) {
-	res, err := api.makeRequestWithAuthTypeAndHeadersComplete(ctx, method, uri, params, api.authType, headers)
+	res, err := api.makeRequestWithAuthTypeAndHeadersComplete(ctx, method, uri, params, authType, headers)
 	if err != nil {
 		return nil, err
 	}
