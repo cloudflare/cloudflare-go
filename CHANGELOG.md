@@ -7,6 +7,7 @@ ENHANCEMENTS:
 BUG FIXES:
 
 * cloudflare: exiting closer to the source on context timeouts to improve error messaging and better defend from potential edge cases ([#1080](https://github.com/cloudflare/cloudflare-go/issues/1080))
+* origin certificate: Fix API auth type used ([#1082](https://github.com/cloudflare/cloudflare-go/issues/1082))
 
 DEPENDENCIES:
 
