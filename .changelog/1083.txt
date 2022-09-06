@@ -1,0 +1,6 @@
+```release-note:enhancement
+flarectl: support list,create,delete zone and account logpush jobs
+```
+```release-note:enhancement
+logpush: add support for `max_upload_bytes` and `max_upload_records` parameters
+```

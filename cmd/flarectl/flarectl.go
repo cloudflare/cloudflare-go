@@ -52,6 +52,166 @@ func main() {
 			},
 		},
 		{
+			Name:    "logpush",
+			Aliases: []string{"lp"},
+			Usage:   "Logpush",
+			Before:  initializeAPI,
+			Subcommands: []*cli.Command{
+				{
+					Name:    "list",
+					Aliases: []string{"l"},
+					Action:  zoneLogpushJobs,
+					Usage:   "List Logpush jobs for a zone",
+					Flags: []cli.Flag{
+						&cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+					},
+				},
+				{
+					Name:    "list-account",
+					Aliases: []string{"la"},
+					Action:  accountLogpushJobs,
+					Usage:   "List Logpush jobs for an account",
+					Flags: []cli.Flag{
+						&cli.StringFlag{
+							Name:  "account-id",
+							Usage: "account ID",
+						},
+					},
+				},
+				{
+					Name:    "create",
+					Aliases: []string{"c"},
+					Action:  zoneCreateLogpushJob,
+					Usage:   "Create a new Logpush job for a zone",
+					Flags: []cli.Flag{
+						&cli.StringFlag{
+							Name:  "dataset",
+							Usage: "dataset",
+						},
+						&cli.StringFlag{
+							Name:  "destination-conf",
+							Usage: "destination conf",
+						},
+						&cli.BoolFlag{
+							Name:  "enabled",
+							Usage: "enabled",
+						},
+						&cli.StringFlag{
+							Name:  "filter",
+							Usage: "filter",
+						},
+						&cli.StringFlag{
+							Name:  "kind",
+							Usage: "kind",
+						},
+						&cli.StringFlag{
+							Name:  "logpull-options",
+							Usage: "logpull options",
+						},
+						&cli.StringFlag{
+							Name:  "max-upload-bytes",
+							Usage: "max upload bytes",
+						},
+						&cli.StringFlag{
+							Name:  "max-upload-records",
+							Usage: "max upload records",
+						},
+						&cli.StringFlag{
+							Name:  "name",
+							Usage: "job name",
+						},
+						&cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+					},
+				},
+				{
+					Name:    "create-account",
+					Aliases: []string{"ca"},
+					Action:  accountCreateLogpushJob,
+					Usage:   "Create a new Logpush job for an account",
+					Flags: []cli.Flag{
+						&cli.StringFlag{
+							Name:  "account-id",
+							Usage: "account ID",
+						},
+						&cli.StringFlag{
+							Name:  "dataset",
+							Usage: "dataset",
+						},
+						&cli.StringFlag{
+							Name:  "destination-conf",
+							Usage: "destination conf",
+						},
+						&cli.BoolFlag{
+							Name:  "enabled",
+							Usage: "enabled",
+						},
+						&cli.StringFlag{
+							Name:  "filter",
+							Usage: "filter",
+						},
+						&cli.StringFlag{
+							Name:  "kind",
+							Usage: "kind",
+						},
+						&cli.StringFlag{
+							Name:  "logpull-options",
+							Usage: "logpull options",
+						},
+						&cli.StringFlag{
+							Name:  "max-upload-bytes",
+							Usage: "max upload bytes",
+						},
+						&cli.StringFlag{
+							Name:  "max-upload-records",
+							Usage: "max upload records",
+						},
+						&cli.StringFlag{
+							Name:  "name",
+							Usage: "job name",
+						},
+					},
+				},
+				{
+					Name:    "delete",
+					Aliases: []string{"d"},
+					Action:  zoneDeleteLogpushJob,
+					Usage:   "Delete a Logpush job for a zone",
+					Flags: []cli.Flag{
+						&cli.IntFlag{
+							Name:  "id",
+							Usage: "job id",
+						},
+						&cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+					},
+				},
+				{
+					Name:    "delete-account",
+					Aliases: []string{"da"},
+					Action:  accountDeleteLogpushJob,
+					Usage:   "Delete a Logpush job for an account",
+					Flags: []cli.Flag{
+						&cli.StringFlag{
+							Name:  "account-id",
+							Usage: "account ID",
+						},
+						&cli.IntFlag{
+							Name:  "id",
+							Usage: "job id",
+						},
+					},
+				},
+			},
+		},
+		{
 			Name:    "user",
 			Aliases: []string{"u"},
 			Usage:   "User information",

@@ -25,6 +25,8 @@ const (
 	"name": "example.com",
 	"logpull_options": "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
 	"destination_conf": "s3://mybucket/logs?region=us-west-2",
+	"max_upload_bytes": 5000000,
+	"max_upload_records": 1000,
 	"last_complete": "%[2]s",
 	"last_error": "%[2]s",
 	"error_message": "test",
@@ -62,16 +64,18 @@ const (
 var (
 	testLogpushTimestamp     = time.Now().UTC()
 	expectedLogpushJobStruct = LogpushJob{
-		ID:              jobID,
-		Dataset:         "http_requests",
-		Enabled:         false,
-		Name:            "example.com",
-		LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
-		DestinationConf: "s3://mybucket/logs?region=us-west-2",
-		LastComplete:    &testLogpushTimestamp,
-		LastError:       &testLogpushTimestamp,
-		ErrorMessage:    "test",
-		Frequency:       "high",
+		ID:               jobID,
+		Dataset:          "http_requests",
+		Enabled:          false,
+		Name:             "example.com",
+		LogpullOptions:   "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
+		DestinationConf:  "s3://mybucket/logs?region=us-west-2",
+		MaxUploadBytes:   5000000,
+		MaxUploadRecords: 1000,
+		LastComplete:     &testLogpushTimestamp,
+		LastError:        &testLogpushTimestamp,
+		ErrorMessage:     "test",
+		Frequency:        "high",
 	}
 	expectedEdgeLogpushJobStruct = LogpushJob{
 		ID:              jobID,

@@ -3,11 +3,10 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
-
-	"errors"
 )
 
 // LogpushJob describes a Logpush job.
@@ -20,6 +19,8 @@ type LogpushJob struct {
 	LogpullOptions     string             `json:"logpull_options"`
 	DestinationConf    string             `json:"destination_conf"`
 	OwnershipChallenge string             `json:"ownership_challenge,omitempty"`
+	MaxUploadBytes     int                `json:"max_upload_bytes,omitempty"`
+	MaxUploadRecords   int                `json:"max_upload_records,omitempty"`
 	LastComplete       *time.Time         `json:"last_complete,omitempty"`
 	LastError          *time.Time         `json:"last_error,omitempty"`
 	ErrorMessage       string             `json:"error_message,omitempty"`
@@ -136,7 +137,6 @@ func (f LogpushJob) MarshalJSON() ([]byte, error) {
 
 	if f.Filter != nil {
 		b, err := json.Marshal(f.Filter)
-
 		if err != nil {
 			return nil, err
 		}
