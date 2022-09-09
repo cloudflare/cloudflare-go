@@ -8,6 +8,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -105,7 +106,7 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 		return &f
 	}
 
-	mux.HandleFunc("/user/load_balancers/pools", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/load_balancers/pools", handler)
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2014-02-01T05:20:00.12345Z")
 	want := LoadBalancerPool{
@@ -177,9 +178,19 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 		},
 	}
 
-	actual, err := client.CreateLoadBalancerPool(context.Background(), CreateLoadBalancerPoolParams{LoadBalancerPool: request})
+	actual, err := client.CreateLoadBalancerPool(context.Background(), AccountIdentifier(testAccountID), CreateLoadBalancerPoolParams{LoadBalancerPool: request})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
+	}
+}
+
+func TestCreateLoadBalancerPool_ZoneIsNotSupported(t *testing.T) {
+	setup()
+	defer teardown()
+
+	_, err := client.CreateLoadBalancerPool(context.Background(), ZoneIdentifier(testZoneID), CreateLoadBalancerPoolParams{})
+	if assert.Error(t, err) {
+		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, ZoneRouteLevel), err.Error())
 	}
 }
 
@@ -226,7 +237,7 @@ func TestListLoadBalancerPools(t *testing.T) {
         }`)
 	}
 
-	mux.HandleFunc("/user/load_balancers/pools", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/load_balancers/pools", handler)
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2014-02-01T05:20:00.12345Z")
 	want := []LoadBalancerPool{
@@ -253,13 +264,23 @@ func TestListLoadBalancerPools(t *testing.T) {
 		},
 	}
 
-	actual, err := client.ListLoadBalancerPools(context.Background(), ListLoadBalancerPoolParams{})
+	actual, err := client.ListLoadBalancerPools(context.Background(), AccountIdentifier(testAccountID), ListLoadBalancerPoolParams{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
-func TestLoadBalancerPoolDetails(t *testing.T) {
+func TestListLoadBalancerPool_ZoneIsNotSupported(t *testing.T) {
+	setup()
+	defer teardown()
+
+	_, err := client.ListLoadBalancerPools(context.Background(), ZoneIdentifier(testZoneID), ListLoadBalancerPoolParams{})
+	if assert.Error(t, err) {
+		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, ZoneRouteLevel), err.Error())
+	}
+}
+
+func TestGetLoadBalancerPool(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -294,7 +315,7 @@ func TestLoadBalancerPoolDetails(t *testing.T) {
         }`)
 	}
 
-	mux.HandleFunc("/user/load_balancers/pools/17b5962d775c646f3f9725cbc7a53df4", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/load_balancers/pools/17b5962d775c646f3f9725cbc7a53df4", handler)
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2014-02-01T05:20:00.12345Z")
 	want := LoadBalancerPool{
@@ -319,13 +340,23 @@ func TestLoadBalancerPoolDetails(t *testing.T) {
 		NotificationEmail: "someone@example.com",
 	}
 
-	actual, err := client.LoadBalancerPool(context.Background(), LoadBalancerPoolParams{PoolID: "17b5962d775c646f3f9725cbc7a53df4"})
+	actual, err := client.GetLoadBalancerPool(context.Background(), AccountIdentifier(testAccountID), "17b5962d775c646f3f9725cbc7a53df4")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	_, err = client.LoadBalancerPool(context.Background(), LoadBalancerPoolParams{PoolID: "bar"})
+	_, err = client.GetLoadBalancerPool(context.Background(), AccountIdentifier(testAccountID), "bar")
 	assert.Error(t, err)
+}
+
+func TestGetLoadBalancerPool_ZoneIsNotSupported(t *testing.T) {
+	setup()
+	defer teardown()
+
+	_, err := client.GetLoadBalancerPool(context.Background(), ZoneIdentifier(testZoneID), "foo")
+	if assert.Error(t, err) {
+		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, ZoneRouteLevel), err.Error())
+	}
 }
 
 func TestDeleteLoadBalancerPool(t *testing.T) {
@@ -345,9 +376,19 @@ func TestDeleteLoadBalancerPool(t *testing.T) {
         }`)
 	}
 
-	mux.HandleFunc("/user/load_balancers/pools/17b5962d775c646f3f9725cbc7a53df4", handler)
-	assert.NoError(t, client.DeleteLoadBalancerPool(context.Background(), DeleteLoadBalancerPoolParams{PoolID: "17b5962d775c646f3f9725cbc7a53df4"}))
-	assert.Error(t, client.DeleteLoadBalancerPool(context.Background(), DeleteLoadBalancerPoolParams{PoolID: "bar"}))
+	mux.HandleFunc("/accounts/"+testAccountID+"/load_balancers/pools/17b5962d775c646f3f9725cbc7a53df4", handler)
+	assert.NoError(t, client.DeleteLoadBalancerPool(context.Background(), AccountIdentifier(testAccountID), "17b5962d775c646f3f9725cbc7a53df4"))
+	assert.Error(t, client.DeleteLoadBalancerPool(context.Background(), AccountIdentifier(testAccountID), "bar"))
+}
+
+func TestDeleteLoadBalancerPool_ZoneIsNotSupported(t *testing.T) {
+	setup()
+	defer teardown()
+
+	err := client.DeleteLoadBalancerPool(context.Background(), ZoneIdentifier(testZoneID), "foo")
+	if assert.Error(t, err) {
+		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, ZoneRouteLevel), err.Error())
+	}
 }
 
 func TestUpdateLoadBalancerPool(t *testing.T) {
@@ -422,7 +463,7 @@ func TestUpdateLoadBalancerPool(t *testing.T) {
         }`)
 	}
 
-	mux.HandleFunc("/user/load_balancers/pools/17b5962d775c646f3f9725cbc7a53df4", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/load_balancers/pools/17b5962d775c646f3f9725cbc7a53df4", handler)
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2017-02-01T05:20:00.12345Z")
 	want := LoadBalancerPool{
@@ -476,9 +517,19 @@ func TestUpdateLoadBalancerPool(t *testing.T) {
 		},
 	}
 
-	actual, err := client.UpdateLoadBalancerPool(context.Background(), UpdateLoadBalacerPoolParams{LoadBalancer: request})
+	actual, err := client.UpdateLoadBalancerPool(context.Background(), AccountIdentifier(testAccountID), UpdateLoadBalancerPoolParams{LoadBalancer: request})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
+	}
+}
+
+func TestUpdateLoadBalancerPool_ZoneIsNotSupported(t *testing.T) {
+	setup()
+	defer teardown()
+
+	_, err := client.UpdateLoadBalancerPool(context.Background(), ZoneIdentifier(testZoneID), UpdateLoadBalancerPoolParams{})
+	if assert.Error(t, err) {
+		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, ZoneRouteLevel), err.Error())
 	}
 }
 
@@ -547,7 +598,7 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
         }`)
 	}
 
-	mux.HandleFunc("/user/load_balancers/monitors", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/load_balancers/monitors", handler)
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2014-02-01T05:20:00.12345Z")
 	want := LoadBalancerMonitor{
@@ -590,9 +641,19 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
 		AllowInsecure:   true,
 	}
 
-	actual, err := client.CreateLoadBalancerMonitor(context.Background(), CreateLoadBalancerMonitorParams{LoadBalancerMonitor: request})
+	actual, err := client.CreateLoadBalancerMonitor(context.Background(), AccountIdentifier(testAccountID), CreateLoadBalancerMonitorParams{LoadBalancerMonitor: request})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
+	}
+}
+
+func TestCreateLoadBalancerMonitor_ZoneIsNotSupported(t *testing.T) {
+	setup()
+	defer teardown()
+
+	_, err := client.CreateLoadBalancerMonitor(context.Background(), ZoneIdentifier(testZoneID), CreateLoadBalancerMonitorParams{})
+	if assert.Error(t, err) {
+		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, ZoneRouteLevel), err.Error())
 	}
 }
 
@@ -640,7 +701,7 @@ func TestListLoadBalancerMonitors(t *testing.T) {
         }`)
 	}
 
-	mux.HandleFunc("/user/load_balancers/monitors", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/load_balancers/monitors", handler)
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2014-02-01T05:20:00.12345Z")
 	want := []LoadBalancerMonitor{
@@ -664,13 +725,23 @@ func TestListLoadBalancerMonitors(t *testing.T) {
 		},
 	}
 
-	actual, err := client.ListLoadBalancerMonitors(context.Background(), ListLoadBalancerMonitorParams{})
+	actual, err := client.ListLoadBalancerMonitors(context.Background(), AccountIdentifier(testAccountID), ListLoadBalancerMonitorParams{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
-func TestLoadBalancerMonitorDetails(t *testing.T) {
+func TestListLoadBalancerMonitors_ZoneIsNotSupported(t *testing.T) {
+	setup()
+	defer teardown()
+
+	_, err := client.ListLoadBalancerMonitors(context.Background(), ZoneIdentifier(testZoneID), ListLoadBalancerMonitorParams{})
+	if assert.Error(t, err) {
+		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, ZoneRouteLevel), err.Error())
+	}
+}
+
+func TestGetLoadBalancerMonitor(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -709,7 +780,7 @@ func TestLoadBalancerMonitorDetails(t *testing.T) {
         }`)
 	}
 
-	mux.HandleFunc("/user/load_balancers/monitors/f1aba936b94213e5b8dca0c0dbf1f9cc", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/load_balancers/monitors/f1aba936b94213e5b8dca0c0dbf1f9cc", handler)
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2014-02-01T05:20:00.12345Z")
 	want := LoadBalancerMonitor{
@@ -734,13 +805,23 @@ func TestLoadBalancerMonitorDetails(t *testing.T) {
 		AllowInsecure:   true,
 	}
 
-	actual, err := client.LoadBalancerMonitor(context.Background(), LoadBalancerMonitorParams{MonitorID: "f1aba936b94213e5b8dca0c0dbf1f9cc"})
+	actual, err := client.GetLoadBalancerMonitor(context.Background(), AccountIdentifier(testAccountID), "f1aba936b94213e5b8dca0c0dbf1f9cc")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	_, err = client.LoadBalancerMonitor(context.Background(), LoadBalancerMonitorParams{MonitorID: "bar"})
+	_, err = client.GetLoadBalancerMonitor(context.Background(), AccountIdentifier(testAccountID), "bar")
 	assert.Error(t, err)
+}
+
+func TestGetLoadBalancerMonitor_ZoneIsNotSupported(t *testing.T) {
+	setup()
+	defer teardown()
+
+	_, err := client.GetLoadBalancerMonitor(context.Background(), ZoneIdentifier(testZoneID), "foo")
+	if assert.Error(t, err) {
+		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, ZoneRouteLevel), err.Error())
+	}
 }
 
 func TestDeleteLoadBalancerMonitor(t *testing.T) {
@@ -760,9 +841,19 @@ func TestDeleteLoadBalancerMonitor(t *testing.T) {
         }`)
 	}
 
-	mux.HandleFunc("/user/load_balancers/monitors/f1aba936b94213e5b8dca0c0dbf1f9cc", handler)
-	assert.NoError(t, client.DeleteLoadBalancerMonitor(context.Background(), DeletLoadBalancerMonitorParams{MonitorID: "f1aba936b94213e5b8dca0c0dbf1f9cc"}))
-	assert.Error(t, client.DeleteLoadBalancerMonitor(context.Background(), DeletLoadBalancerMonitorParams{MonitorID: "bar"}))
+	mux.HandleFunc("/accounts/"+testAccountID+"/load_balancers/monitors/f1aba936b94213e5b8dca0c0dbf1f9cc", handler)
+	assert.NoError(t, client.DeleteLoadBalancerMonitor(context.Background(), AccountIdentifier(testAccountID), "f1aba936b94213e5b8dca0c0dbf1f9cc"))
+	assert.Error(t, client.DeleteLoadBalancerMonitor(context.Background(), AccountIdentifier(testAccountID), "bar"))
+}
+
+func TestDeleteLoadBalancerMonitor_ZoneIsNotSupported(t *testing.T) {
+	setup()
+	defer teardown()
+
+	err := client.DeleteLoadBalancerMonitor(context.Background(), ZoneIdentifier(testZoneID), "foo")
+	if assert.Error(t, err) {
+		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, ZoneRouteLevel), err.Error())
+	}
 }
 
 func TestUpdateLoadBalancerMonitor(t *testing.T) {
@@ -831,7 +922,7 @@ func TestUpdateLoadBalancerMonitor(t *testing.T) {
         }`)
 	}
 
-	mux.HandleFunc("/user/load_balancers/monitors/f1aba936b94213e5b8dca0c0dbf1f9cc", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/load_balancers/monitors/f1aba936b94213e5b8dca0c0dbf1f9cc", handler)
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2017-02-01T05:20:00.12345Z")
 	want := LoadBalancerMonitor{
@@ -875,9 +966,19 @@ func TestUpdateLoadBalancerMonitor(t *testing.T) {
 		AllowInsecure:   true,
 	}
 
-	actual, err := client.UpdateLoadBalancerMonitor(context.Background(), UpdateLoadBalancerMonitorParams{LoadBalancerMonitor: request})
+	actual, err := client.UpdateLoadBalancerMonitor(context.Background(), AccountIdentifier(testAccountID), UpdateLoadBalancerMonitorParams{LoadBalancerMonitor: request})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
+	}
+}
+
+func TestUpdateLoadBalancerMonitor_ZoneIsNotSupported(t *testing.T) {
+	setup()
+	defer teardown()
+
+	_, err := client.UpdateLoadBalancerMonitor(context.Background(), ZoneIdentifier(testZoneID), UpdateLoadBalancerMonitorParams{})
+	if assert.Error(t, err) {
+		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, ZoneRouteLevel), err.Error())
 	}
 }
 
@@ -962,6 +1063,7 @@ func TestCreateLoadBalancer(t *testing.T) {
               }
             }`, string(b))
 		}
+
 		fmt.Fprint(w, `{
             "success": true,
             "errors": [],
@@ -1040,7 +1142,7 @@ func TestCreateLoadBalancer(t *testing.T) {
         }`)
 	}
 
-	mux.HandleFunc("/zones/199d98642c564d2e855e9661899b7252/load_balancers", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/load_balancers", handler)
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2014-02-01T05:20:00.12345Z")
 	want := LoadBalancer{
@@ -1183,9 +1285,20 @@ func TestCreateLoadBalancer(t *testing.T) {
 		},
 	}
 
-	actual, err := client.CreateLoadBalancer(context.Background(), CreateLoadBalancerParams{ZoneID: "199d98642c564d2e855e9661899b7252", LoadBalancer: request})
+	actual, err := client.CreateLoadBalancer(context.Background(), ZoneIdentifier(testZoneID), CreateLoadBalancerParams{LoadBalancer: request})
+	spew.Dump(actual)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
+	}
+}
+
+func TestCreateLoadBalancer_AccountIsNotSupported(t *testing.T) {
+	setup()
+	defer teardown()
+
+	_, err := client.CreateLoadBalancer(context.Background(), AccountIdentifier(testAccountID), CreateLoadBalancerParams{})
+	if assert.Error(t, err) {
+		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, ZoneRouteLevel), err.Error())
 	}
 }
 
@@ -1263,7 +1376,7 @@ func TestListLoadBalancers(t *testing.T) {
         }`)
 	}
 
-	mux.HandleFunc("/zones/199d98642c564d2e855e9661899b7252/load_balancers", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/load_balancers", handler)
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2014-02-01T05:20:00.12345Z")
 	want := []LoadBalancer{
@@ -1321,13 +1434,23 @@ func TestListLoadBalancers(t *testing.T) {
 		},
 	}
 
-	actual, err := client.ListLoadBalancers(context.Background(), ListLoadBalancerParams{ZoneID: "199d98642c564d2e855e9661899b7252"})
+	actual, err := client.ListLoadBalancers(context.Background(), ZoneIdentifier(testZoneID), ListLoadBalancerParams{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
-func TestLoadBalancerDetails(t *testing.T) {
+func TestListLoadBalancer_AccountIsNotSupported(t *testing.T) {
+	setup()
+	defer teardown()
+
+	_, err := client.ListLoadBalancers(context.Background(), AccountIdentifier(testAccountID), ListLoadBalancerParams{})
+	if assert.Error(t, err) {
+		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, ZoneRouteLevel), err.Error())
+	}
+}
+
+func TestGetLoadBalancer(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -1393,7 +1516,7 @@ func TestLoadBalancerDetails(t *testing.T) {
         }`)
 	}
 
-	mux.HandleFunc("/zones/199d98642c564d2e855e9661899b7252/load_balancers/699d98642c564d2e855e9661899b7252", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/load_balancers/699d98642c564d2e855e9661899b7252", handler)
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2014-02-01T05:20:00.12345Z")
 	want := LoadBalancer{
@@ -1449,13 +1572,23 @@ func TestLoadBalancerDetails(t *testing.T) {
 		Proxied: true,
 	}
 
-	actual, err := client.LoadBalancer(context.Background(), LoadBalancerParams{ZoneID: "199d98642c564d2e855e9661899b7252", LoadBalancerID: "699d98642c564d2e855e9661899b7252"})
+	actual, err := client.GetLoadBalancer(context.Background(), ZoneIdentifier(testZoneID), "699d98642c564d2e855e9661899b7252")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 
-	_, err = client.LoadBalancer(context.Background(), LoadBalancerParams{ZoneID: "199d98642c564d2e855e9661899b7252", LoadBalancerID: "bar"})
+	_, err = client.GetLoadBalancer(context.Background(), ZoneIdentifier(testZoneID), "bar")
 	assert.Error(t, err)
+}
+
+func TestGetLoadBalancer_AccountIsNotSupported(t *testing.T) {
+	setup()
+	defer teardown()
+
+	_, err := client.GetLoadBalancer(context.Background(), AccountIdentifier(testAccountID), "foo")
+	if assert.Error(t, err) {
+		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, ZoneRouteLevel), err.Error())
+	}
 }
 
 func TestDeleteLoadBalancer(t *testing.T) {
@@ -1475,9 +1608,19 @@ func TestDeleteLoadBalancer(t *testing.T) {
         }`)
 	}
 
-	mux.HandleFunc("/zones/199d98642c564d2e855e9661899b7252/load_balancers/699d98642c564d2e855e9661899b7252", handler)
-	assert.NoError(t, client.DeleteLoadBalancer(context.Background(), DeleteLoadBalancerParams{ZoneID: "199d98642c564d2e855e9661899b7252", LoadBalancerID: "699d98642c564d2e855e9661899b7252"}))
-	assert.Error(t, client.DeleteLoadBalancer(context.Background(), DeleteLoadBalancerParams{ZoneID: "199d98642c564d2e855e9661899b7252", LoadBalancerID: "bar"}))
+	mux.HandleFunc("/zones/"+testZoneID+"/load_balancers/699d98642c564d2e855e9661899b7252", handler)
+	assert.NoError(t, client.DeleteLoadBalancer(context.Background(), ZoneIdentifier(testZoneID), "699d98642c564d2e855e9661899b7252"))
+	assert.Error(t, client.DeleteLoadBalancer(context.Background(), ZoneIdentifier(testZoneID), "bar"))
+}
+
+func TestDeleteLoadBalancer_AccountIsNotSupported(t *testing.T) {
+	setup()
+	defer teardown()
+
+	err := client.DeleteLoadBalancer(context.Background(), AccountIdentifier(testAccountID), "foo")
+	if assert.Error(t, err) {
+		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, ZoneRouteLevel), err.Error())
+	}
 }
 
 func TestUpdateLoadBalancer(t *testing.T) {
@@ -1600,7 +1743,7 @@ func TestUpdateLoadBalancer(t *testing.T) {
         }`)
 	}
 
-	mux.HandleFunc("/zones/199d98642c564d2e855e9661899b7252/load_balancers/699d98642c564d2e855e9661899b7252", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/load_balancers/699d98642c564d2e855e9661899b7252", handler)
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2017-02-01T05:20:00.12345Z")
 	want := LoadBalancer{
@@ -1706,9 +1849,19 @@ func TestUpdateLoadBalancer(t *testing.T) {
 		},
 	}
 
-	actual, err := client.UpdateLoadBalancer(context.Background(), UpdateLoadBalancerParams{ZoneID: "199d98642c564d2e855e9661899b7252", LoadBalancer: request})
+	actual, err := client.UpdateLoadBalancer(context.Background(), ZoneIdentifier(testZoneID), UpdateLoadBalancerParams{LoadBalancer: request})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
+	}
+}
+
+func TestUpdateLoadBalancer_AccountIsNotSupported(t *testing.T) {
+	setup()
+	defer teardown()
+
+	_, err := client.UpdateLoadBalancer(context.Background(), AccountIdentifier(testAccountID), UpdateLoadBalancerParams{LoadBalancer: LoadBalancer{}})
+	if assert.Error(t, err) {
+		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, ZoneRouteLevel), err.Error())
 	}
 }
 
@@ -1744,7 +1897,7 @@ func TestLoadBalancerPoolHealthDetails(t *testing.T) {
         }`)
 	}
 
-	mux.HandleFunc("/user/load_balancers/pools/699d98642c564d2e855e9661899b7252/health", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/load_balancers/pools/699d98642c564d2e855e9661899b7252/health", handler)
 	want := LoadBalancerPoolHealth{
 		ID: "699d98642c564d2e855e9661899b7252",
 		PopHealth: map[string]LoadBalancerPoolPopHealth{
@@ -1764,8 +1917,18 @@ func TestLoadBalancerPoolHealthDetails(t *testing.T) {
 		},
 	}
 
-	actual, err := client.LoadBalancerPoolHealth(context.Background(), LoadBalancerPoolHealthParams{PoolID: "699d98642c564d2e855e9661899b7252"})
+	actual, err := client.GetLoadBalancerPoolHealth(context.Background(), AccountIdentifier(testAccountID), "699d98642c564d2e855e9661899b7252")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
+	}
+}
+
+func TestLoadBalancerPoolHealthDetails_ZoneIsNotSupported(t *testing.T) {
+	setup()
+	defer teardown()
+
+	_, err := client.GetLoadBalancerPoolHealth(context.Background(), ZoneIdentifier(testZoneID), "foo")
+	if assert.Error(t, err) {
+		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, ZoneRouteLevel), err.Error())
 	}
 }
