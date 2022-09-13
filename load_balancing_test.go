@@ -1038,6 +1038,13 @@ func TestCreateLoadBalancer(t *testing.T) {
 			        "de90f38ced07c2e2f4df50b1f61d4194": 0.4
 			    }
 			  },
+			  "adaptive_routing": {
+				"failover_across_pools": true
+			  },
+			  "location_strategy": {
+				"prefer_ecs": "always",
+				"mode": "resolver_ip"
+			  },
 			  "rules": [
 				  {
 					  "name": "example rule",
@@ -1047,6 +1054,13 @@ func TestCreateLoadBalancer(t *testing.T) {
 					  "overrides": {
 						  "region_pools": {
 							  "SAF": ["de90f38ced07c2e2f4df50b1f61d4194"]
+						  },
+						  "adaptive_routing": {
+							"failover_across_pools": false
+						  },
+						  "location_strategy": {
+							"prefer_ecs": "never",
+							"mode": "pop"
 						  }
 					  }
 				  }
@@ -1117,6 +1131,13 @@ func TestCreateLoadBalancer(t *testing.T) {
 				        "de90f38ced07c2e2f4df50b1f61d4194": 0.4
 				    }
 				},
+				"adaptive_routing": {
+					"failover_across_pools": true
+				},
+				"location_strategy": {
+					"prefer_ecs": "always",
+					"mode": "resolver_ip"
+				},
 				"rules": [
 				  {
 					  "name": "example rule",
@@ -1124,6 +1145,13 @@ func TestCreateLoadBalancer(t *testing.T) {
 					  "overrides": {
 						  "region_pools": {
 							  "SAF": ["de90f38ced07c2e2f4df50b1f61d4194"]
+						  },
+						  "adaptive_routing": {
+							"failover_across_pools": false
+						  },
+						  "location_strategy": {
+							"prefer_ecs": "never",
+							"mode": "pop"
 						  }
 					  }
 				  }
@@ -1194,6 +1222,13 @@ func TestCreateLoadBalancer(t *testing.T) {
 				"de90f38ced07c2e2f4df50b1f61d4194": 0.4,
 			},
 		},
+		AdaptiveRouting: &AdaptiveRouting{
+			FailoverAcrossPools: BoolPtr(true),
+		},
+		LocationStrategy: &LocationStrategy{
+			PreferECS: "always",
+			Mode:      "resolver_ip",
+		},
 		Rules: []*LoadBalancerRule{
 			{
 				Name:      "example rule",
@@ -1201,6 +1236,13 @@ func TestCreateLoadBalancer(t *testing.T) {
 				Overrides: LoadBalancerRuleOverrides{
 					RegionPools: map[string][]string{
 						"SAF": {"de90f38ced07c2e2f4df50b1f61d4194"},
+					},
+					AdaptiveRouting: &AdaptiveRouting{
+						FailoverAcrossPools: BoolPtr(false),
+					},
+					LocationStrategy: &LocationStrategy{
+						PreferECS: "never",
+						Mode:      "pop",
 					},
 				},
 			},
@@ -1262,6 +1304,13 @@ func TestCreateLoadBalancer(t *testing.T) {
 				"de90f38ced07c2e2f4df50b1f61d4194": 0.4,
 			},
 		},
+		AdaptiveRouting: &AdaptiveRouting{
+			FailoverAcrossPools: BoolPtr(true),
+		},
+		LocationStrategy: &LocationStrategy{
+			PreferECS: "always",
+			Mode:      "resolver_ip",
+		},
 		Rules: []*LoadBalancerRule{
 			{
 				Name:      "example rule",
@@ -1269,6 +1318,13 @@ func TestCreateLoadBalancer(t *testing.T) {
 				Overrides: LoadBalancerRuleOverrides{
 					RegionPools: map[string][]string{
 						"SAF": {"de90f38ced07c2e2f4df50b1f61d4194"},
+					},
+					AdaptiveRouting: &AdaptiveRouting{
+						FailoverAcrossPools: BoolPtr(false),
+					},
+					LocationStrategy: &LocationStrategy{
+						PreferECS: "never",
+						Mode:      "pop",
 					},
 				},
 			},
@@ -1362,6 +1418,13 @@ func TestListLoadBalancers(t *testing.T) {
                             "de90f38ced07c2e2f4df50b1f61d4194": 0.4
                         }
                     },
+					"adaptive_routing": {
+						"failover_across_pools": true
+					},
+					"location_strategy": {
+						"prefer_ecs": "always",
+						"mode": "resolver_ip"
+					},
                     "proxied": true
                 }
             ],
@@ -1427,6 +1490,13 @@ func TestListLoadBalancers(t *testing.T) {
 					"9290f38c5d07c2e2f4df57b1f61d4196": 0.6,
 					"de90f38ced07c2e2f4df50b1f61d4194": 0.4,
 				},
+			},
+			AdaptiveRouting: &AdaptiveRouting{
+				FailoverAcrossPools: BoolPtr(true),
+			},
+			LocationStrategy: &LocationStrategy{
+				PreferECS: "always",
+				Mode:      "resolver_ip",
 			},
 			Proxied: true,
 		},
@@ -1509,6 +1579,13 @@ func TestGetLoadBalancer(t *testing.T) {
                         "de90f38ced07c2e2f4df50b1f61d4194": 0.4
                     }
                 },
+				"adaptive_routing": {
+					"failover_across_pools": true
+				},
+				"location_strategy": {
+					"prefer_ecs": "always",
+					"mode": "resolver_ip"
+				},
                 "proxied": true
             }
         }`)
@@ -1566,6 +1643,13 @@ func TestGetLoadBalancer(t *testing.T) {
 				"9290f38c5d07c2e2f4df57b1f61d4196": 0.6,
 				"de90f38ced07c2e2f4df50b1f61d4194": 0.4,
 			},
+		},
+		AdaptiveRouting: &AdaptiveRouting{
+			FailoverAcrossPools: BoolPtr(true),
+		},
+		LocationStrategy: &LocationStrategy{
+			PreferECS: "always",
+			Mode:      "resolver_ip",
 		},
 		Proxied: true,
 	}
@@ -1673,6 +1757,13 @@ func TestUpdateLoadBalancer(t *testing.T) {
                         "9290f38c5d07c2e2f4df57b1f61d4196": 0.2
                     }
                 },
+				"adaptive_routing": {
+					"failover_across_pools": false
+				},
+				"location_strategy": {
+					"prefer_ecs": "never",
+					"mode": "pop"
+				},
                 "proxied": true,
                 "session_affinity": "none",
                 "session_affinity_attributes": {
@@ -1730,6 +1821,13 @@ func TestUpdateLoadBalancer(t *testing.T) {
                         "9290f38c5d07c2e2f4df57b1f61d4196": 0.2
                     }
                 },
+				"adaptive_routing": {
+					"failover_across_pools": false
+				},
+				"location_strategy": {
+					"prefer_ecs": "never",
+					"mode": "pop"
+				},
                 "proxied": true,
                 "session_affinity": "none",
                 "session_affinity_attributes": {
@@ -1788,6 +1886,13 @@ func TestUpdateLoadBalancer(t *testing.T) {
 				"9290f38c5d07c2e2f4df57b1f61d4196": 0.2,
 			},
 		},
+		AdaptiveRouting: &AdaptiveRouting{
+			FailoverAcrossPools: BoolPtr(false),
+		},
+		LocationStrategy: &LocationStrategy{
+			PreferECS: "never",
+			Mode:      "pop",
+		},
 		Proxied:     true,
 		Persistence: "none",
 		SessionAffinityAttributes: &SessionAffinityAttributes{
@@ -1837,6 +1942,13 @@ func TestUpdateLoadBalancer(t *testing.T) {
 			PoolWeights: map[string]float64{
 				"9290f38c5d07c2e2f4df57b1f61d4196": 0.2,
 			},
+		},
+		AdaptiveRouting: &AdaptiveRouting{
+			FailoverAcrossPools: BoolPtr(false),
+		},
+		LocationStrategy: &LocationStrategy{
+			PreferECS: "never",
+			Mode:      "pop",
 		},
 		Proxied:     true,
 		Persistence: "none",
