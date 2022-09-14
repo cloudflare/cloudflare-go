@@ -1,5 +1,9 @@
 ## 0.51.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* device_posture_rule: add input fields for linux OS ([#1087](https://github.com/cloudflare/cloudflare-go/issues/1087))
+
 ## 0.50.0 (September 14, 2022)
 
 ENHANCEMENTS:
