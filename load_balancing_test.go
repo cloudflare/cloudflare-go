@@ -8,7 +8,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -1286,7 +1285,6 @@ func TestCreateLoadBalancer(t *testing.T) {
 	}
 
 	actual, err := client.CreateLoadBalancer(context.Background(), ZoneIdentifier(testZoneID), CreateLoadBalancerParams{LoadBalancer: request})
-	spew.Dump(actual)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -1298,7 +1296,7 @@ func TestCreateLoadBalancer_AccountIsNotSupported(t *testing.T) {
 
 	_, err := client.CreateLoadBalancer(context.Background(), AccountIdentifier(testAccountID), CreateLoadBalancerParams{})
 	if assert.Error(t, err) {
-		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, ZoneRouteLevel), err.Error())
+		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, AccountRouteLevel), err.Error())
 	}
 }
 
@@ -1446,7 +1444,7 @@ func TestListLoadBalancer_AccountIsNotSupported(t *testing.T) {
 
 	_, err := client.ListLoadBalancers(context.Background(), AccountIdentifier(testAccountID), ListLoadBalancerParams{})
 	if assert.Error(t, err) {
-		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, ZoneRouteLevel), err.Error())
+		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, AccountRouteLevel), err.Error())
 	}
 }
 
@@ -1587,7 +1585,7 @@ func TestGetLoadBalancer_AccountIsNotSupported(t *testing.T) {
 
 	_, err := client.GetLoadBalancer(context.Background(), AccountIdentifier(testAccountID), "foo")
 	if assert.Error(t, err) {
-		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, ZoneRouteLevel), err.Error())
+		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, AccountRouteLevel), err.Error())
 	}
 }
 
@@ -1619,7 +1617,7 @@ func TestDeleteLoadBalancer_AccountIsNotSupported(t *testing.T) {
 
 	err := client.DeleteLoadBalancer(context.Background(), AccountIdentifier(testAccountID), "foo")
 	if assert.Error(t, err) {
-		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, ZoneRouteLevel), err.Error())
+		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, AccountRouteLevel), err.Error())
 	}
 }
 
@@ -1861,7 +1859,7 @@ func TestUpdateLoadBalancer_AccountIsNotSupported(t *testing.T) {
 
 	_, err := client.UpdateLoadBalancer(context.Background(), AccountIdentifier(testAccountID), UpdateLoadBalancerParams{LoadBalancer: LoadBalancer{}})
 	if assert.Error(t, err) {
-		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, ZoneRouteLevel), err.Error())
+		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, AccountRouteLevel), err.Error())
 	}
 }
 
