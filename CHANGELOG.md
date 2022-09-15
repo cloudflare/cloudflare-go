@@ -1,5 +1,9 @@
 ## 0.51.0 (Unreleased)
 
+BREAKING CHANGES:
+
+* load_balancing: update method signatures to match experimental conventions ([#1084](https://github.com/cloudflare/cloudflare-go/issues/1084))
+
 ENHANCEMENTS:
 
 * device_posture_rule: add input fields for linux OS ([#1087](https://github.com/cloudflare/cloudflare-go/issues/1087))
