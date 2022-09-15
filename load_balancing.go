@@ -579,7 +579,7 @@ func (api *API) UpdateLoadBalancerMonitor(ctx context.Context, rc *ResourceConta
 // API reference: https://api.cloudflare.com/#load-balancers-create-load-balancer
 func (api *API) CreateLoadBalancer(ctx context.Context, rc *ResourceContainer, params CreateLoadBalancerParams) (LoadBalancer, error) {
 	if rc.Level != ZoneRouteLevel {
-		return LoadBalancer{}, fmt.Errorf(errInvalidResourceContainerAccess, ZoneRouteLevel)
+		return LoadBalancer{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
 	}
 
 	uri := fmt.Sprintf("/zones/%s/load_balancers", rc.Identifier)
@@ -600,7 +600,7 @@ func (api *API) CreateLoadBalancer(ctx context.Context, rc *ResourceContainer, p
 // API reference: https://api.cloudflare.com/#load-balancers-list-load-balancers
 func (api *API) ListLoadBalancers(ctx context.Context, rc *ResourceContainer, params ListLoadBalancerParams) ([]LoadBalancer, error) {
 	if rc.Level != ZoneRouteLevel {
-		return []LoadBalancer{}, fmt.Errorf(errInvalidResourceContainerAccess, ZoneRouteLevel)
+		return []LoadBalancer{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
 	}
 
 	uri := buildURI(fmt.Sprintf("/zones/%s/load_balancers", rc.Identifier), params.PaginationOptions)
@@ -621,7 +621,7 @@ func (api *API) ListLoadBalancers(ctx context.Context, rc *ResourceContainer, pa
 // API reference: https://api.cloudflare.com/#load-balancers-load-balancer-details
 func (api *API) GetLoadBalancer(ctx context.Context, rc *ResourceContainer, loadbalancerID string) (LoadBalancer, error) {
 	if rc.Level != ZoneRouteLevel {
-		return LoadBalancer{}, fmt.Errorf(errInvalidResourceContainerAccess, ZoneRouteLevel)
+		return LoadBalancer{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
 	}
 
 	if loadbalancerID == "" {
@@ -646,7 +646,7 @@ func (api *API) GetLoadBalancer(ctx context.Context, rc *ResourceContainer, load
 // API reference: https://api.cloudflare.com/#load-balancers-delete-load-balancer
 func (api *API) DeleteLoadBalancer(ctx context.Context, rc *ResourceContainer, loadbalancerID string) error {
 	if rc.Level != ZoneRouteLevel {
-		return fmt.Errorf(errInvalidResourceContainerAccess, ZoneRouteLevel)
+		return fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
 	}
 
 	if loadbalancerID == "" {
@@ -666,7 +666,7 @@ func (api *API) DeleteLoadBalancer(ctx context.Context, rc *ResourceContainer, l
 // API reference: https://api.cloudflare.com/#load-balancers-update-load-balancer
 func (api *API) UpdateLoadBalancer(ctx context.Context, rc *ResourceContainer, params UpdateLoadBalancerParams) (LoadBalancer, error) {
 	if rc.Level != ZoneRouteLevel {
-		return LoadBalancer{}, fmt.Errorf(errInvalidResourceContainerAccess, ZoneRouteLevel)
+		return LoadBalancer{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
 	}
 
 	if params.LoadBalancer.ID == "" {
