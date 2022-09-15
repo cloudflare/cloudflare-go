@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -252,12 +253,64 @@ type loadBalancerPoolHealthResponse struct {
 	Result LoadBalancerPoolHealth `json:"result"`
 }
 
+type CreateLoadBalancerPoolParams struct {
+	LoadBalancerPool LoadBalancerPool
+}
+
+type ListLoadBalancerPoolParams struct {
+	PaginationOptions
+}
+
+type UpdateLoadBalancerPoolParams struct {
+	LoadBalancer LoadBalancerPool
+}
+
+type CreateLoadBalancerMonitorParams struct {
+	LoadBalancerMonitor LoadBalancerMonitor
+}
+
+type ListLoadBalancerMonitorParams struct {
+	PaginationOptions
+}
+
+type UpdateLoadBalancerMonitorParams struct {
+	LoadBalancerMonitor LoadBalancerMonitor
+}
+
+type CreateLoadBalancerParams struct {
+	LoadBalancer LoadBalancer
+}
+
+type ListLoadBalancerParams struct {
+	PaginationOptions
+}
+
+type UpdateLoadBalancerParams struct {
+	LoadBalancer LoadBalancer
+}
+
+var (
+	ErrMissingPoolID         = errors.New("missing required pool ID")
+	ErrMissingMonitorID      = errors.New("missing required monitor ID")
+	ErrMissingLoadBalancerID = errors.New("missing required load balancer ID")
+)
+
 // CreateLoadBalancerPool creates a new load balancer pool.
 //
 // API reference: https://api.cloudflare.com/#load-balancer-pools-create-pool
-func (api *API) CreateLoadBalancerPool(ctx context.Context, pool LoadBalancerPool) (LoadBalancerPool, error) {
-	uri := fmt.Sprintf("%s/load_balancers/pools", api.userBaseURL("/user"))
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, pool)
+func (api *API) CreateLoadBalancerPool(ctx context.Context, rc *ResourceContainer, params CreateLoadBalancerPoolParams) (LoadBalancerPool, error) {
+	if rc.Level == ZoneRouteLevel {
+		return LoadBalancerPool{}, fmt.Errorf(errInvalidResourceContainerAccess, ZoneRouteLevel)
+	}
+
+	var uri string
+	if rc.Level == UserRouteLevel {
+		uri = "/user/load_balancers/pools"
+	} else {
+		uri = fmt.Sprintf("/accounts/%s/load_balancers/pools", rc.Identifier)
+	}
+
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params.LoadBalancerPool)
 	if err != nil {
 		return LoadBalancerPool{}, err
 	}
@@ -271,8 +324,20 @@ func (api *API) CreateLoadBalancerPool(ctx context.Context, pool LoadBalancerPoo
 // ListLoadBalancerPools lists load balancer pools connected to an account.
 //
 // API reference: https://api.cloudflare.com/#load-balancer-pools-list-pools
-func (api *API) ListLoadBalancerPools(ctx context.Context) ([]LoadBalancerPool, error) {
-	uri := fmt.Sprintf("%s/load_balancers/pools", api.userBaseURL("/user"))
+func (api *API) ListLoadBalancerPools(ctx context.Context, rc *ResourceContainer, params ListLoadBalancerPoolParams) ([]LoadBalancerPool, error) {
+	if rc.Level == ZoneRouteLevel {
+		return []LoadBalancerPool{}, fmt.Errorf(errInvalidResourceContainerAccess, ZoneRouteLevel)
+	}
+
+	var uri string
+	if rc.Level == UserRouteLevel {
+		uri = "/user/load_balancers/pools"
+	} else {
+		uri = fmt.Sprintf("/accounts/%s/load_balancers/pools", rc.Identifier)
+	}
+
+	uri = buildURI(uri, params.PaginationOptions)
+
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, err
@@ -284,11 +349,25 @@ func (api *API) ListLoadBalancerPools(ctx context.Context) ([]LoadBalancerPool, 
 	return r.Result, nil
 }
 
-// LoadBalancerPoolDetails returns the details for a load balancer pool.
+// GetLoadBalancerPool returns the details for a load balancer pool.
 //
 // API reference: https://api.cloudflare.com/#load-balancer-pools-pool-details
-func (api *API) LoadBalancerPoolDetails(ctx context.Context, poolID string) (LoadBalancerPool, error) {
-	uri := fmt.Sprintf("%s/load_balancers/pools/%s", api.userBaseURL("/user"), poolID)
+func (api *API) GetLoadBalancerPool(ctx context.Context, rc *ResourceContainer, poolID string) (LoadBalancerPool, error) {
+	if rc.Level == ZoneRouteLevel {
+		return LoadBalancerPool{}, fmt.Errorf(errInvalidResourceContainerAccess, ZoneRouteLevel)
+	}
+
+	if poolID == "" {
+		return LoadBalancerPool{}, ErrMissingPoolID
+	}
+
+	var uri string
+	if rc.Level == UserRouteLevel {
+		uri = fmt.Sprintf("/user/load_balancers/pools/%s", poolID)
+	} else {
+		uri = fmt.Sprintf("/accounts/%s/load_balancers/pools/%s", rc.Identifier, poolID)
+	}
+
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return LoadBalancerPool{}, err
@@ -303,20 +382,49 @@ func (api *API) LoadBalancerPoolDetails(ctx context.Context, poolID string) (Loa
 // DeleteLoadBalancerPool disables and deletes a load balancer pool.
 //
 // API reference: https://api.cloudflare.com/#load-balancer-pools-delete-pool
-func (api *API) DeleteLoadBalancerPool(ctx context.Context, poolID string) error {
-	uri := fmt.Sprintf("%s/load_balancers/pools/%s", api.userBaseURL("/user"), poolID)
+func (api *API) DeleteLoadBalancerPool(ctx context.Context, rc *ResourceContainer, poolID string) error {
+	if rc.Level == ZoneRouteLevel {
+		return fmt.Errorf(errInvalidResourceContainerAccess, ZoneRouteLevel)
+	}
+
+	if poolID == "" {
+		return ErrMissingPoolID
+	}
+
+	var uri string
+	if rc.Level == UserRouteLevel {
+		uri = fmt.Sprintf("/user/load_balancers/pools/%s", poolID)
+	} else {
+		uri = fmt.Sprintf("/accounts/%s/load_balancers/pools/%s", rc.Identifier, poolID)
+	}
+
 	if _, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil); err != nil {
 		return err
 	}
+
 	return nil
 }
 
-// ModifyLoadBalancerPool modifies a configured load balancer pool.
+// UpdateLoadBalancerPool modifies a configured load balancer pool.
 //
 // API reference: https://api.cloudflare.com/#load-balancer-pools-update-pool
-func (api *API) ModifyLoadBalancerPool(ctx context.Context, pool LoadBalancerPool) (LoadBalancerPool, error) {
-	uri := fmt.Sprintf("%s/load_balancers/pools/%s", api.userBaseURL("/user"), pool.ID)
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, pool)
+func (api *API) UpdateLoadBalancerPool(ctx context.Context, rc *ResourceContainer, params UpdateLoadBalancerPoolParams) (LoadBalancerPool, error) {
+	if rc.Level == ZoneRouteLevel {
+		return LoadBalancerPool{}, fmt.Errorf(errInvalidResourceContainerAccess, ZoneRouteLevel)
+	}
+
+	if params.LoadBalancer.ID == "" {
+		return LoadBalancerPool{}, ErrMissingPoolID
+	}
+
+	var uri string
+	if rc.Level == UserRouteLevel {
+		uri = fmt.Sprintf("/user/load_balancers/pools/%s", params.LoadBalancer.ID)
+	} else {
+		uri = fmt.Sprintf("/accounts/%s/load_balancers/pools/%s", rc.Identifier, params.LoadBalancer.ID)
+	}
+
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params.LoadBalancer)
 	if err != nil {
 		return LoadBalancerPool{}, err
 	}
@@ -330,9 +438,19 @@ func (api *API) ModifyLoadBalancerPool(ctx context.Context, pool LoadBalancerPoo
 // CreateLoadBalancerMonitor creates a new load balancer monitor.
 //
 // API reference: https://api.cloudflare.com/#load-balancer-monitors-create-monitor
-func (api *API) CreateLoadBalancerMonitor(ctx context.Context, monitor LoadBalancerMonitor) (LoadBalancerMonitor, error) {
-	uri := fmt.Sprintf("%s/load_balancers/monitors", api.userBaseURL("/user"))
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, monitor)
+func (api *API) CreateLoadBalancerMonitor(ctx context.Context, rc *ResourceContainer, params CreateLoadBalancerMonitorParams) (LoadBalancerMonitor, error) {
+	if rc.Level == ZoneRouteLevel {
+		return LoadBalancerMonitor{}, fmt.Errorf(errInvalidResourceContainerAccess, ZoneRouteLevel)
+	}
+
+	var uri string
+	if rc.Level == UserRouteLevel {
+		uri = "/user/load_balancers/monitors"
+	} else {
+		uri = fmt.Sprintf("/accounts/%s/load_balancers/monitors", rc.Identifier)
+	}
+
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params.LoadBalancerMonitor)
 	if err != nil {
 		return LoadBalancerMonitor{}, err
 	}
@@ -346,8 +464,20 @@ func (api *API) CreateLoadBalancerMonitor(ctx context.Context, monitor LoadBalan
 // ListLoadBalancerMonitors lists load balancer monitors connected to an account.
 //
 // API reference: https://api.cloudflare.com/#load-balancer-monitors-list-monitors
-func (api *API) ListLoadBalancerMonitors(ctx context.Context) ([]LoadBalancerMonitor, error) {
-	uri := fmt.Sprintf("%s/load_balancers/monitors", api.userBaseURL("/user"))
+func (api *API) ListLoadBalancerMonitors(ctx context.Context, rc *ResourceContainer, params ListLoadBalancerMonitorParams) ([]LoadBalancerMonitor, error) {
+	if rc.Level == ZoneRouteLevel {
+		return []LoadBalancerMonitor{}, fmt.Errorf(errInvalidResourceContainerAccess, ZoneRouteLevel)
+	}
+
+	var uri string
+	if rc.Level == UserRouteLevel {
+		uri = "/user/load_balancers/monitors"
+	} else {
+		uri = fmt.Sprintf("/accounts/%s/load_balancers/monitors", rc.Identifier)
+	}
+
+	uri = buildURI(uri, params.PaginationOptions)
+
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, err
@@ -359,11 +489,25 @@ func (api *API) ListLoadBalancerMonitors(ctx context.Context) ([]LoadBalancerMon
 	return r.Result, nil
 }
 
-// LoadBalancerMonitorDetails returns the details for a load balancer monitor.
+// GetLoadBalancerMonitor returns the details for a load balancer monitor.
 //
 // API reference: https://api.cloudflare.com/#load-balancer-monitors-monitor-details
-func (api *API) LoadBalancerMonitorDetails(ctx context.Context, monitorID string) (LoadBalancerMonitor, error) {
-	uri := fmt.Sprintf("%s/load_balancers/monitors/%s", api.userBaseURL("/user"), monitorID)
+func (api *API) GetLoadBalancerMonitor(ctx context.Context, rc *ResourceContainer, monitorID string) (LoadBalancerMonitor, error) {
+	if rc.Level == ZoneRouteLevel {
+		return LoadBalancerMonitor{}, fmt.Errorf(errInvalidResourceContainerAccess, ZoneRouteLevel)
+	}
+
+	if monitorID == "" {
+		return LoadBalancerMonitor{}, ErrMissingMonitorID
+	}
+
+	var uri string
+	if rc.Level == UserRouteLevel {
+		uri = fmt.Sprintf("/user/load_balancers/monitors/%s", monitorID)
+	} else {
+		uri = fmt.Sprintf("/accounts/%s/load_balancers/monitors/%s", rc.Identifier, monitorID)
+	}
+
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return LoadBalancerMonitor{}, err
@@ -378,20 +522,48 @@ func (api *API) LoadBalancerMonitorDetails(ctx context.Context, monitorID string
 // DeleteLoadBalancerMonitor disables and deletes a load balancer monitor.
 //
 // API reference: https://api.cloudflare.com/#load-balancer-monitors-delete-monitor
-func (api *API) DeleteLoadBalancerMonitor(ctx context.Context, monitorID string) error {
-	uri := fmt.Sprintf("%s/load_balancers/monitors/%s", api.userBaseURL("/user"), monitorID)
+func (api *API) DeleteLoadBalancerMonitor(ctx context.Context, rc *ResourceContainer, monitorID string) error {
+	if rc.Level == ZoneRouteLevel {
+		return fmt.Errorf(errInvalidResourceContainerAccess, ZoneRouteLevel)
+	}
+
+	if monitorID == "" {
+		return ErrMissingMonitorID
+	}
+
+	var uri string
+	if rc.Level == UserRouteLevel {
+		uri = fmt.Sprintf("/user/load_balancers/monitors/%s", monitorID)
+	} else {
+		uri = fmt.Sprintf("/accounts/%s/load_balancers/monitors/%s", rc.Identifier, monitorID)
+	}
+
 	if _, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-// ModifyLoadBalancerMonitor modifies a configured load balancer monitor.
+// UpdateLoadBalancerMonitor modifies a configured load balancer monitor.
 //
 // API reference: https://api.cloudflare.com/#load-balancer-monitors-update-monitor
-func (api *API) ModifyLoadBalancerMonitor(ctx context.Context, monitor LoadBalancerMonitor) (LoadBalancerMonitor, error) {
-	uri := fmt.Sprintf("%s/load_balancers/monitors/%s", api.userBaseURL("/user"), monitor.ID)
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, monitor)
+func (api *API) UpdateLoadBalancerMonitor(ctx context.Context, rc *ResourceContainer, params UpdateLoadBalancerMonitorParams) (LoadBalancerMonitor, error) {
+	if rc.Level == ZoneRouteLevel {
+		return LoadBalancerMonitor{}, fmt.Errorf(errInvalidResourceContainerAccess, ZoneRouteLevel)
+	}
+
+	if params.LoadBalancerMonitor.ID == "" {
+		return LoadBalancerMonitor{}, ErrMissingMonitorID
+	}
+
+	var uri string
+	if rc.Level == UserRouteLevel {
+		uri = fmt.Sprintf("/user/load_balancers/monitors/%s", params.LoadBalancerMonitor.ID)
+	} else {
+		uri = fmt.Sprintf("/accounts/%s/load_balancers/monitors/%s", rc.Identifier, params.LoadBalancerMonitor.ID)
+	}
+
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params.LoadBalancerMonitor)
 	if err != nil {
 		return LoadBalancerMonitor{}, err
 	}
@@ -405,9 +577,14 @@ func (api *API) ModifyLoadBalancerMonitor(ctx context.Context, monitor LoadBalan
 // CreateLoadBalancer creates a new load balancer.
 //
 // API reference: https://api.cloudflare.com/#load-balancers-create-load-balancer
-func (api *API) CreateLoadBalancer(ctx context.Context, zoneID string, lb LoadBalancer) (LoadBalancer, error) {
-	uri := fmt.Sprintf("/zones/%s/load_balancers", zoneID)
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, lb)
+func (api *API) CreateLoadBalancer(ctx context.Context, rc *ResourceContainer, params CreateLoadBalancerParams) (LoadBalancer, error) {
+	if rc.Level != ZoneRouteLevel {
+		return LoadBalancer{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
+
+	uri := fmt.Sprintf("/zones/%s/load_balancers", rc.Identifier)
+
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params.LoadBalancer)
 	if err != nil {
 		return LoadBalancer{}, err
 	}
@@ -421,8 +598,13 @@ func (api *API) CreateLoadBalancer(ctx context.Context, zoneID string, lb LoadBa
 // ListLoadBalancers lists load balancers configured on a zone.
 //
 // API reference: https://api.cloudflare.com/#load-balancers-list-load-balancers
-func (api *API) ListLoadBalancers(ctx context.Context, zoneID string) ([]LoadBalancer, error) {
-	uri := fmt.Sprintf("/zones/%s/load_balancers", zoneID)
+func (api *API) ListLoadBalancers(ctx context.Context, rc *ResourceContainer, params ListLoadBalancerParams) ([]LoadBalancer, error) {
+	if rc.Level != ZoneRouteLevel {
+		return []LoadBalancer{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
+
+	uri := buildURI(fmt.Sprintf("/zones/%s/load_balancers", rc.Identifier), params.PaginationOptions)
+
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, err
@@ -434,11 +616,20 @@ func (api *API) ListLoadBalancers(ctx context.Context, zoneID string) ([]LoadBal
 	return r.Result, nil
 }
 
-// LoadBalancerDetails returns the details for a load balancer.
+// GetLoadBalancer returns the details for a load balancer.
 //
 // API reference: https://api.cloudflare.com/#load-balancers-load-balancer-details
-func (api *API) LoadBalancerDetails(ctx context.Context, zoneID, lbID string) (LoadBalancer, error) {
-	uri := fmt.Sprintf("/zones/%s/load_balancers/%s", zoneID, lbID)
+func (api *API) GetLoadBalancer(ctx context.Context, rc *ResourceContainer, loadbalancerID string) (LoadBalancer, error) {
+	if rc.Level != ZoneRouteLevel {
+		return LoadBalancer{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
+
+	if loadbalancerID == "" {
+		return LoadBalancer{}, ErrMissingLoadBalancerID
+	}
+
+	uri := fmt.Sprintf("/zones/%s/load_balancers/%s", rc.Identifier, loadbalancerID)
+
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return LoadBalancer{}, err
@@ -453,20 +644,38 @@ func (api *API) LoadBalancerDetails(ctx context.Context, zoneID, lbID string) (L
 // DeleteLoadBalancer disables and deletes a load balancer.
 //
 // API reference: https://api.cloudflare.com/#load-balancers-delete-load-balancer
-func (api *API) DeleteLoadBalancer(ctx context.Context, zoneID, lbID string) error {
-	uri := fmt.Sprintf("/zones/%s/load_balancers/%s", zoneID, lbID)
+func (api *API) DeleteLoadBalancer(ctx context.Context, rc *ResourceContainer, loadbalancerID string) error {
+	if rc.Level != ZoneRouteLevel {
+		return fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
+
+	if loadbalancerID == "" {
+		return ErrMissingLoadBalancerID
+	}
+
+	uri := fmt.Sprintf("/zones/%s/load_balancers/%s", rc.Identifier, loadbalancerID)
+
 	if _, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-// ModifyLoadBalancer modifies a configured load balancer.
+// UpdateLoadBalancer modifies a configured load balancer.
 //
 // API reference: https://api.cloudflare.com/#load-balancers-update-load-balancer
-func (api *API) ModifyLoadBalancer(ctx context.Context, zoneID string, lb LoadBalancer) (LoadBalancer, error) {
-	uri := fmt.Sprintf("/zones/%s/load_balancers/%s", zoneID, lb.ID)
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, lb)
+func (api *API) UpdateLoadBalancer(ctx context.Context, rc *ResourceContainer, params UpdateLoadBalancerParams) (LoadBalancer, error) {
+	if rc.Level != ZoneRouteLevel {
+		return LoadBalancer{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
+
+	if params.LoadBalancer.ID == "" {
+		return LoadBalancer{}, ErrMissingLoadBalancerID
+	}
+
+	uri := fmt.Sprintf("/zones/%s/load_balancers/%s", rc.Identifier, params.LoadBalancer.ID)
+
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params.LoadBalancer)
 	if err != nil {
 		return LoadBalancer{}, err
 	}
@@ -477,11 +686,26 @@ func (api *API) ModifyLoadBalancer(ctx context.Context, zoneID string, lb LoadBa
 	return r.Result, nil
 }
 
-// PoolHealthDetails fetches the latest healtcheck details for a single pool.
+// GetLoadBalancerPoolHealth fetches the latest healtcheck details for a single
+// pool.
 //
 // API reference: https://api.cloudflare.com/#load-balancer-pools-pool-health-details
-func (api *API) PoolHealthDetails(ctx context.Context, poolID string) (LoadBalancerPoolHealth, error) {
-	uri := fmt.Sprintf("%s/load_balancers/pools/%s/health", api.userBaseURL("/user"), poolID)
+func (api *API) GetLoadBalancerPoolHealth(ctx context.Context, rc *ResourceContainer, poolID string) (LoadBalancerPoolHealth, error) {
+	if rc.Level == ZoneRouteLevel {
+		return LoadBalancerPoolHealth{}, fmt.Errorf(errInvalidResourceContainerAccess, ZoneRouteLevel)
+	}
+
+	if poolID == "" {
+		return LoadBalancerPoolHealth{}, ErrMissingPoolID
+	}
+
+	var uri string
+	if rc.Level == UserRouteLevel {
+		uri = fmt.Sprintf("/user/load_balancers/pools/%s/health", poolID)
+	} else {
+		uri = fmt.Sprintf("/accounts/%s/load_balancers/pools/%s/health", rc.Identifier, poolID)
+	}
+
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return LoadBalancerPoolHealth{}, err

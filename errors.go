@@ -29,6 +29,8 @@ const (
 	errInvalidZoneIdentifer                   = "invalid zone identifier: %s"
 	errAPIKeysAndTokensAreMutuallyExclusive   = "API keys and tokens are mutually exclusive"
 	errMissingCredentials                     = "no credentials provided"
+
+	errInvalidResourceContainerAccess = "requested resource container (%q) is not supported for this endpoint"
 )
 
 var (
