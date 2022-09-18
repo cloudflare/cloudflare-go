@@ -28,7 +28,9 @@ const (
       "width": 1920
     },
     "maxDurationSeconds": 300,
-    "meta": {},
+    "meta": {
+	  "name": "My First Stream Video"
+	},
     "modified": "2014-01-02T02:20:00Z",
     "uploadExpiry": "2014-01-02T02:20:00Z",
     "playback": {
@@ -121,7 +123,9 @@ func createTestVideo() StreamVideo {
 			Scale:          0.1,
 			Position:       "center",
 		},
-		Meta: map[string]interface{}{},
+		Meta: map[string]interface{}{
+			"name": "My First Stream Video",
+		},
 		NFT: StreamVideoNFTParameters{
 			Token:    5,
 			Contract: "0x57f1887a8bf19b14fc0d912b9b2acc9af147ea85",
@@ -155,6 +159,9 @@ func TestStream_StreamUploadFromURL(t *testing.T) {
 	input := StreamUploadFromURLParameters{
 		AccountID: testAccountID,
 		URL:       "https://example.com/myvideo.mp4",
+		Meta: map[string]interface{}{
+			"name": "My First Stream Video",
+		},
 	}
 
 	out, err := client.StreamUploadFromURL(context.Background(), input)
@@ -241,7 +248,9 @@ func TestStream_CreateVideoDirectURL(t *testing.T) {
 		assert.Equal(t, ErrMissingMaxDuration, err)
 	}
 
-	input := StreamCreateVideoParameters{AccountID: testAccountID, MaxDurationSeconds: 300}
+	input := StreamCreateVideoParameters{AccountID: testAccountID, MaxDurationSeconds: 300, Meta: map[string]interface{}{
+		"name": "My First Stream Video",
+	}}
 	out, err := client.StreamCreateVideoDirectURL(context.Background(), input)
 
 	created, _ := time.Parse(time.RFC3339, "2014-01-02T02:20:00Z")
@@ -291,7 +300,9 @@ func TestStream_ListVideos(t *testing.T) {
       "width": 1920
     },
     "maxDurationSeconds": 300,
-    "meta": {},
+    "meta": {
+	  "name": "My First Stream Video"
+	},
     "modified": "2014-01-02T02:20:00Z",
     "uploadExpiry": "2014-01-02T02:20:00Z",
     "playback": {
