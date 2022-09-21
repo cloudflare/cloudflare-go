@@ -45,10 +45,10 @@ type UserAgentRuleListResponse struct {
 // API reference: https://api.cloudflare.com/#user-agent-blocking-rules-create-a-useragent-rule
 func (api *API) CreateUserAgentRule(ctx context.Context, zoneID string, ld UserAgentRule) (*UserAgentRuleResponse, error) {
 	switch ld.Mode {
-	case "block", "challenge", "js_challenge", "whitelist":
+	case "block", "challenge", "js_challenge", "managed_challenge":
 		break
 	default:
-		return nil, errors.New(`the User-Agent Block rule mode must be one of "block", "challenge", "js_challenge", "whitelist"`)
+		return nil, errors.New(`the User-Agent Block rule mode must be one of "block", "challenge", "js_challenge", "managed_challenge"`)
 	}
 
 	uri := fmt.Sprintf("/zones/%s/firewall/ua_rules", zoneID)
