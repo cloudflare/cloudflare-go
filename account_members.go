@@ -14,6 +14,7 @@ type AccountMember struct {
 	User   AccountMemberUserDetails `json:"user"`
 	Status string                   `json:"status"`
 	Roles  []AccountRole            `json:"roles"`
+	Policies []Policy				`json:"policies"`
 }
 
 // AccountMemberUserDetails outlines all the personal information about
