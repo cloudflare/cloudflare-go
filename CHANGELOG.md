@@ -8,6 +8,10 @@ ENHANCEMENTS:
 
 * device_posture_rule: add input fields for linux OS ([#1087](https://github.com/cloudflare/cloudflare-go/issues/1087))
 
+BUG FIXES:
+
+* user-agent-blocking-rules: add missing managed_challenge validation and removed the deprecated whitelist one ([#1089](https://github.com/cloudflare/cloudflare-go/issues/1089))
+
 ## 0.50.0 (September 14, 2022)
 
 ENHANCEMENTS:
