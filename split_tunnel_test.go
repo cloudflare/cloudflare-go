@@ -260,3 +260,41 @@ func TestUpdateSplitTunnelExclude(t *testing.T) {
 		assert.Equal(t, tunnels, actual)
 	}
 }
+
+func TestSplitTunnelsDeviceSettingsPolicy(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `
+    {
+      "success": true,
+      "errors": [],
+      "messages": [],
+      "result": [
+        {
+          "host": "*.example.com",
+          "description": "default"
+       }
+      ]
+    }
+    `)
+	}
+
+	want := []SplitTunnel{{
+		Host:        "*.example.com",
+		Description: "default",
+	}}
+
+	policyID := "a842fa8a-a583-482e-9cd9-eb43362949fd"
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/devices/policy/"+policyID+"/include", handler)
+
+	actual, err := client.ListSplitTunnelsDeviceSettingsPolicy(context.Background(), testAccountID, policyID, "include")
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}

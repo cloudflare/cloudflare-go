@@ -41,6 +41,26 @@ func (api *API) ListFallbackDomains(ctx context.Context, accountID string) ([]Fa
 	return fallbackDomainResponse.Result, nil
 }
 
+// ListFallbackDomainsDeviceSettingsPolicy returns all fallback domains within an account for a specific device settings policy.
+//
+// API reference: https://api.cloudflare.com/#devices-get-local-domain-fallback-list
+func (api *API) ListFallbackDomainsDeviceSettingsPolicy(ctx context.Context, accountID, policyID string) ([]FallbackDomain, error) {
+	uri := fmt.Sprintf("/%s/%s/devices/policy/%s/fallback_domains", AccountRouteRoot, accountID, policyID)
+
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return []FallbackDomain{}, err
+	}
+
+	var fallbackDomainResponse FallbackDomainResponse
+	err = json.Unmarshal(res, &fallbackDomainResponse)
+	if err != nil {
+		return []FallbackDomain{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+
+	return fallbackDomainResponse.Result, nil
+}
+
 // UpdateFallbackDomain updates the existing fallback domain policy.
 //
 // API reference: https://api.cloudflare.com/#devices-set-local-domain-fallback-list
@@ -61,12 +81,47 @@ func (api *API) UpdateFallbackDomain(ctx context.Context, accountID string, doma
 	return fallbackDomainResponse.Result, nil
 }
 
-// RestoreFallbackDomainDefaults resets the domain fallback values to the default
-// list.
+// UpdateFallbackDomainDeviceSettingsPolicy updates the existing fallback domain policy for a specific device settings policy.
+//
+// API reference: https://api.cloudflare.com/#devices-set-local-domain-fallback-list
+func (api *API) UpdateFallbackDomainDeviceSettingsPolicy(ctx context.Context, accountID, policyID string, domains []FallbackDomain) ([]FallbackDomain, error) {
+	uri := fmt.Sprintf("/%s/%s/devices/policy/%s/fallback_domains", AccountRouteRoot, accountID, policyID)
+
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, domains)
+	if err != nil {
+		return []FallbackDomain{}, err
+	}
+
+	var fallbackDomainResponse FallbackDomainResponse
+	err = json.Unmarshal(res, &fallbackDomainResponse)
+	if err != nil {
+		return []FallbackDomain{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+
+	return fallbackDomainResponse.Result, nil
+}
+
+// RestoreFallbackDomainDefaultsDeviceSettingsPolicy resets the domain fallback values to the default
+// list for a specific device settings policy.
 //
 // API reference: TBA.
 func (api *API) RestoreFallbackDomainDefaults(ctx context.Context, accountID string) error {
 	uri := fmt.Sprintf("/%s/%s/devices/policy/fallback_domains?reset_defaults=true", AccountRouteRoot, accountID)
+
+	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, []string{})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// RestoreFallbackDomainDefaults resets the domain fallback values to the default
+// list.
+//
+// API reference: TBA.
+func (api *API) RestoreFallbackDomainDefaultsDeviceSettingsPolicy(ctx context.Context, accountID, policyID string) error {
+	uri := fmt.Sprintf("/%s/%s/devices/policy/%s/fallback_domains?reset_defaults=true", AccountRouteRoot, accountID, policyID)
 
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, []string{})
 	if err != nil {
