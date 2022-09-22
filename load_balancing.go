@@ -87,14 +87,25 @@ type LoadBalancer struct {
 	SessionAffinityAttributes *SessionAffinityAttributes `json:"session_affinity_attributes,omitempty"`
 	Rules                     []*LoadBalancerRule        `json:"rules,omitempty"`
 	RandomSteering            *RandomSteering            `json:"random_steering,omitempty"`
+	AdaptiveRouting           *AdaptiveRouting           `json:"adaptive_routing,omitempty"`
+	LocationStrategy          *LocationStrategy          `json:"location_strategy,omitempty"`
 
 	// SteeringPolicy controls pool selection logic.
-	// "off" select pools in DefaultPools order
-	// "geo" select pools based on RegionPools/PopPools/CountryPools
-	// "dynamic_latency" select pools based on RTT (requires health checks)
-	// "random" selects pools in a random order
-	// "proximity" select pools based on 'distance' from request
-	// "" maps to "geo" if RegionPools or PopPools or CountryPools have entries otherwise "off"
+	//
+	// "off": Select pools in DefaultPools order.
+	//
+	// "geo": Select pools based on RegionPools/PopPools/CountryPools.
+	// For non-proxied requests, the country for CountryPools is determined by LocationStrategy.
+	//
+	// "dynamic_latency": Select pools based on RTT (requires health checks).
+	//
+	// "random": Selects pools in a random order.
+	//
+	// "proximity": Use the pools' latitude and longitude to select the closest pool using
+	// the Cloudflare PoP location for proxied requests or the location determined by
+	// LocationStrategy for non-proxied requests.
+	//
+	// "": Maps to "geo" if RegionPools or PopPools or CountryPools have entries otherwise "off".
 	SteeringPolicy string `json:"steering_policy,omitempty"`
 }
 
@@ -162,7 +173,9 @@ type LoadBalancerRuleOverrides struct {
 	RegionPools  map[string][]string `json:"region_pools,omitempty"`
 	CountryPools map[string][]string `json:"country_pools,omitempty"`
 
-	RandomSteering *RandomSteering `json:"random_steering,omitempty"`
+	RandomSteering   *RandomSteering   `json:"random_steering,omitempty"`
+	AdaptiveRouting  *AdaptiveRouting  `json:"adaptive_routing,omitempty"`
+	LocationStrategy *LocationStrategy `json:"location_strategy,omitempty"`
 }
 
 // RandomSteering represents fields used to set pool weights on a load balancer
@@ -170,6 +183,47 @@ type LoadBalancerRuleOverrides struct {
 type RandomSteering struct {
 	DefaultWeight float64            `json:"default_weight,omitempty"`
 	PoolWeights   map[string]float64 `json:"pool_weights,omitempty"`
+}
+
+// AdaptiveRouting controls features that modify the routing of requests
+// to pools and origins in response to dynamic conditions, such as during
+// the interval between active health monitoring requests.
+// For example, zero-downtime failover occurs immediately when an origin
+// becomes unavailable due to HTTP 521, 522, or 523 response codes.
+// If there is another healthy origin in the same pool, the request is
+// retried once against this alternate origin.
+type AdaptiveRouting struct {
+	// FailoverAcrossPools extends zero-downtime failover of requests to healthy origins
+	// from alternate pools, when no healthy alternate exists in the same pool, according
+	// to the failover order defined by traffic and origin steering.
+	// When set false (the default) zero-downtime failover will only occur between origins
+	// within the same pool. See SessionAffinityAttributes for control over when sessions
+	// are broken or reassigned.
+	FailoverAcrossPools *bool `json:"failover_across_pools,omitempty"`
+}
+
+// LocationStrategy controls location-based steering for non-proxied requests.
+// See SteeringPolicy to learn how steering is affected.
+type LocationStrategy struct {
+	// PreferECS determines whether the EDNS Client Subnet (ECS) GeoIP should
+	// be preferred as the authoritative location.
+	//
+	// "always": Always prefer ECS.
+	//
+	// "never": Never prefer ECS.
+	//
+	// "proximity": (default) Prefer ECS only when SteeringPolicy="proximity".
+	//
+	// "geo": Prefer ECS only when SteeringPolicy="geo".
+	PreferECS string `json:"prefer_ecs,omitempty"`
+	// Mode determines the authoritative location when ECS is not preferred,
+	// does not exist in the request, or its GeoIP lookup is unsuccessful.
+	//
+	// "pop": (default) Use the Cloudflare PoP location.
+	//
+	// "resolver_ip": Use the DNS resolver GeoIP location.
+	// If the GeoIP lookup is unsuccessful, use the Cloudflare PoP location.
+	Mode string `json:"mode,omitempty"`
 }
 
 // LoadBalancerRuleOverridesSessionAffinityAttrs mimics SessionAffinityAttributes without the
