@@ -7,6 +7,7 @@ BREAKING CHANGES:
 ENHANCEMENTS:
 
 * device_posture_rule: add input fields for linux OS ([#1087](https://github.com/cloudflare/cloudflare-go/issues/1087))
+* load_balancing: support adaptive_routing and location_strategy ([#1091](https://github.com/cloudflare/cloudflare-go/issues/1091))
 
 BUG FIXES:
 
