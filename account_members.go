@@ -48,7 +48,7 @@ type AccountMemberDetailResponse struct {
 // the account.
 type AccountMemberInvitation struct {
 	Email    string   `json:"email"`
-	Roles    []string `json:"roles"`
+	Roles    []string `json:"roles,omitempty"`
 	Policies []Policy `json:"policies,omitempty"`
 	Status   string   `json:"status,omitempty"`
 }
@@ -101,6 +101,16 @@ func (api *API) CreateAccountMemberWithRoles(ctx context.Context, accountID stri
 		Email:    emailAddress,
 		Roles:    roles,
 		Policies: nil,
+		Status:   "",
+	}
+	return api.CreateAccountMember(ctx, accountID, invite)
+}
+
+func (api *API) CreateAccountMemberWithPolicies(ctx context.Context, accountID string, emailAddress string, policies []Policy) (AccountMember, error) {
+	invite := AccountMemberInvitation{
+		Email:    emailAddress,
+		Roles:    nil,
+		Policies: policies,
 		Status:   "",
 	}
 	return api.CreateAccountMember(ctx, accountID, invite)
