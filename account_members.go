@@ -9,12 +9,12 @@ import (
 
 // AccountMember is the definition of a member of an account.
 type AccountMember struct {
-	ID     string                   `json:"id"`
-	Code   string                   `json:"code"`
-	User   AccountMemberUserDetails `json:"user"`
-	Status string                   `json:"status"`
-	Roles  []AccountRole            `json:"roles"`
-	Policies []Policy				`json:"policies"`
+	ID       string                   `json:"id"`
+	Code     string                   `json:"code"`
+	User     AccountMemberUserDetails `json:"user"`
+	Status   string                   `json:"status"`
+	Roles    []AccountRole            `json:"roles,omitempty"`
+	Policies []Policy                 `json:"policies,omitempty"`
 }
 
 // AccountMemberUserDetails outlines all the personal information about
@@ -47,9 +47,10 @@ type AccountMemberDetailResponse struct {
 // AccountMemberInvitation represents the invitation for a new member to
 // the account.
 type AccountMemberInvitation struct {
-	Email  string   `json:"email"`
-	Roles  []string `json:"roles"`
-	Status string   `json:"status,omitempty"`
+	Email    string   `json:"email"`
+	Roles    []string `json:"roles"`
+	Policies []Policy `json:"policies,omitempty"`
+	Status   string   `json:"status,omitempty"`
 }
 
 // AccountMembers returns all members of an account.
@@ -82,18 +83,47 @@ func (api *API) AccountMembers(ctx context.Context, accountID string, pageOpts P
 //
 // API reference: https://api.cloudflare.com/#account-members-add-member
 func (api *API) CreateAccountMemberWithStatus(ctx context.Context, accountID string, emailAddress string, roles []string, status string) (AccountMember, error) {
+	invite := AccountMemberInvitation{
+		Email:    emailAddress,
+		Roles:    roles,
+		Policies: nil,
+		Status:   status,
+	}
+	return api.CreateAccountMember(ctx, accountID, invite)
+}
+
+// CreateAccountMemberWithRoles invites a new member to join an account.
+// The member will be placed into "pending" status and receive an email confirmation.
+//
+// API reference: https://api.cloudflare.com/#account-members-add-member
+func (api *API) CreateAccountMemberWithRoles(ctx context.Context, accountID string, emailAddress string, roles []string) (AccountMember, error) {
+	invite := AccountMemberInvitation{
+		Email:    emailAddress,
+		Roles:    roles,
+		Policies: nil,
+		Status:   "",
+	}
+	return api.CreateAccountMember(ctx, accountID, invite)
+}
+
+func (api *API) CreateAccountMember(ctx context.Context, accountID string, invite AccountMemberInvitation) (AccountMember, error) {
+	// make sure we have account
 	if accountID == "" {
 		return AccountMember{}, ErrMissingAccountID
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/members", accountID)
-
-	newMember := AccountMemberInvitation{
-		Email:  emailAddress,
-		Roles:  roles,
-		Status: status,
+	// make sure we have roles OR policies
+	hasRoles := invite.Roles != nil && len(invite.Roles) > 0
+	hasPolicies := invite.Policies != nil && len(invite.Policies) > 0
+	hasRolesOrPolicies := hasRoles || hasPolicies
+	hasRolesAndPolicies := hasRoles && hasPolicies
+	hasCorrectPermissions := hasRolesOrPolicies && !hasRolesAndPolicies
+	if !hasCorrectPermissions {
+		return AccountMember{}, ErrMissingMemberRolesOrPolicies
 	}
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, newMember)
+
+	uri := fmt.Sprintf("/accounts/%s/members", accountID)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, invite)
 	if err != nil {
 		return AccountMember{}, err
 	}
@@ -105,14 +135,6 @@ func (api *API) CreateAccountMemberWithStatus(ctx context.Context, accountID str
 	}
 
 	return accountMemberListResponse.Result, nil
-}
-
-// CreateAccountMember invites a new member to join an account.
-// The member will be placed into "pending" status and receive an email confirmation.
-//
-// API reference: https://api.cloudflare.com/#account-members-add-member
-func (api *API) CreateAccountMember(ctx context.Context, accountID string, emailAddress string, roles []string) (AccountMember, error) {
-	return api.CreateAccountMemberWithStatus(ctx, accountID, emailAddress, roles, "")
 }
 
 // DeleteAccountMember removes a member from an account.
