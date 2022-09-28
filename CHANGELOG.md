@@ -1,5 +1,9 @@
 ## 0.52.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* devices_policy: Add support for additional device settings policies ([#1090](https://github.com/cloudflare/cloudflare-go/issues/1090))
+
 ## 0.51.0 (September 28th, 2022)
 
 BREAKING CHANGES:
