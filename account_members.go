@@ -123,13 +123,13 @@ func (api *API) CreateAccountMember(ctx context.Context, accountID string, invit
 	}
 
 	// make sure we have roles OR policies
-	hasRoles := invite.Roles != nil && len(invite.Roles) > 0
-	hasPolicies := invite.Policies != nil && len(invite.Policies) > 0
-	hasRolesOrPolicies := hasRoles || hasPolicies
-	hasRolesAndPolicies := hasRoles && hasPolicies
-	hasCorrectPermissions := hasRolesOrPolicies && !hasRolesAndPolicies
-	if !hasCorrectPermissions {
-		return AccountMember{}, ErrMissingMemberRolesOrPolicies
+	roles := []AccountRole{}
+	for i := 0; i < len(invite.Roles); i++ {
+		roles = append(roles, AccountRole{ID: invite.Roles[i]})
+	}
+	err := validateRolesAndPolicies(roles, invite.Policies)
+	if err != nil {
+		return AccountMember{}, err
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/members", accountID)
@@ -171,6 +171,11 @@ func (api *API) DeleteAccountMember(ctx context.Context, accountID string, userI
 func (api *API) UpdateAccountMember(ctx context.Context, accountID string, userID string, member AccountMember) (AccountMember, error) {
 	if accountID == "" {
 		return AccountMember{}, ErrMissingAccountID
+	}
+
+	err := validateRolesAndPolicies(member.Roles, member.Policies)
+	if err != nil {
+		return AccountMember{}, err
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/members/%s", accountID, userID)
@@ -215,4 +220,16 @@ func (api *API) AccountMember(ctx context.Context, accountID string, memberID st
 	}
 
 	return accountMemberResponse.Result, nil
+}
+
+func validateRolesAndPolicies(roles []AccountRole, policies []Policy) error {
+	hasRoles := roles != nil && len(roles) > 0
+	hasPolicies := policies != nil && len(policies) > 0
+	hasRolesOrPolicies := hasRoles || hasPolicies
+	hasRolesAndPolicies := hasRoles && hasPolicies
+	hasCorrectPermissions := hasRolesOrPolicies && !hasRolesAndPolicies
+	if !hasCorrectPermissions {
+		return ErrMissingMemberRolesOrPolicies
+	}
+	return nil
 }

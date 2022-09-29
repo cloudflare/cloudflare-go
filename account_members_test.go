@@ -100,26 +100,26 @@ var newUpdatedAccountMemberStruct = AccountMember{
 }
 
 var mockPolicy = Policy{
-	ID:               "mock-policy-id",
+	ID: "mock-policy-id",
 	PermissionGroups: []PermissionGroup{PermissionGroup{
-		ID:          "mock-permission-group-id",
-		Name:        "mock-permission-group-name",
+		ID:   "mock-permission-group-id",
+		Name: "mock-permission-group-name",
 		Permissions: []Permission{Permission{
-			ID:         "mock-permission-id",
-			Key:        "mock-permission-key",
+			ID:  "mock-permission-id",
+			Key: "mock-permission-key",
 		}},
 	}},
-	ResourceGroups:   []ResourceGroup{ResourceGroup{
+	ResourceGroups: []ResourceGroup{ResourceGroup{
 		ID:   "mock-resource-group-id",
 		Name: "mock-resource-group-name",
 		Scope: Scope{
-			Key:          "mock-resource-group-name",
+			Key: "mock-resource-group-name",
 			ScopeObjects: []ScopeObject{ScopeObject{
 				Key: "*",
 			}},
 		},
 	}},
-	Access:           "allow",
+	Access: "allow",
 }
 
 var expectedNewAccountMemberWithPoliciesStruct = AccountMember{
@@ -369,6 +369,21 @@ func TestCreateAccountMemberWithPolicies(t *testing.T) {
 	}
 }
 
+func TestCreateAccountMemberWithRolesAndPoliciesErr(t *testing.T) {
+	setup()
+	defer teardown()
+
+	_, err := client.CreateAccountMember(context.Background(), "fake", AccountMemberInvitation{
+		Email:    "user@example.com",
+		Roles:    []string{"fake-role-id"},
+		Policies: []Policy{mockPolicy},
+		Status:   "active",
+	})
+
+	if assert.Error(t, err) {
+		assert.Equal(t, err, ErrMissingMemberRolesOrPolicies)
+	}
+}
 
 func TestCreateAccountMemberWithoutAccountID(t *testing.T) {
 	setup()
@@ -435,6 +450,89 @@ func TestUpdateAccountMember(t *testing.T) {
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, newUpdatedAccountMemberStruct, actual)
+	}
+}
+
+func TestUpdateAccountMemberWithPolicies(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "new-member-with-polcies-id",
+				"code": "new-member-with-policies-code",
+				"user": {
+					"id": "new-member-with-policies-user-id",
+					"first_name": "John",
+					"last_name": "Appleseed",
+					"email": "user@example.com",
+					"two_factor_authentication_enabled": false
+				},
+				"status": "accepted",
+				"policies": [{
+					"id": "mock-policy-id",
+					"permission_groups": [{
+						"id": "mock-permission-group-id",
+						"name": "mock-permission-group-name",
+						"permissions": [{
+							"id": "mock-permission-id",
+							"key": "mock-permission-key"
+						}]
+					}],
+					"resource_groups": [{
+						"id": "mock-resource-group-id",
+						"name": "mock-resource-group-name",
+						"scope": {
+							"key": "mock-resource-group-name",
+							"objects": [{
+								"key": "*"
+							}]
+						}
+					}],
+					"access": "allow"
+				}]
+			},
+			"result_info": {
+				"page": 1,
+				"per_page": 20,
+				"count": 1,
+				"total_count": 2000
+			}
+		}`)
+	}
+
+	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/members/new-member-with-polcies-id", handler)
+
+	actual, err := client.UpdateAccountMember(context.Background(), "01a7362d577a6c3019a474fd6f485823", "new-member-with-polcies-id", expectedNewAccountMemberWithPoliciesStruct)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expectedNewAccountMemberWithPoliciesStruct, actual)
+	}
+}
+
+func UpdateAccountMemberWithRolesAndPoliciesErr(t *testing.T) {
+	setup()
+	defer teardown()
+
+	_, err := client.UpdateAccountMember(context.Background(),
+		"01a7362d577a6c3019a474fd6f485823",
+		"",
+		AccountMember{
+			Roles: []AccountRole{AccountRole{
+				ID: "some-role",
+			}},
+			Policies: []Policy{mockPolicy},
+		},
+	)
+
+	if assert.Error(t, err) {
+		assert.Equal(t, err, ErrMissingMemberRolesOrPolicies)
 	}
 }
 
