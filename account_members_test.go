@@ -99,6 +99,43 @@ var newUpdatedAccountMemberStruct = AccountMember{
 	},
 }
 
+var mockPolicy = Policy{
+	ID:               "mock-policy-id",
+	PermissionGroups: []PermissionGroup{PermissionGroup{
+		ID:          "mock-permission-group-id",
+		Name:        "mock-permission-group-name",
+		Permissions: []Permission{Permission{
+			ID:         "mock-permission-id",
+			Key:        "mock-permission-key",
+		}},
+	}},
+	ResourceGroups:   []ResourceGroup{ResourceGroup{
+		ID:   "mock-resource-group-id",
+		Name: "mock-resource-group-name",
+		Scope: Scope{
+			Key:          "mock-resource-group-name",
+			ScopeObjects: []ScopeObject{ScopeObject{
+				Key: "*",
+			}},
+		},
+	}},
+	Access:           "allow",
+}
+
+var expectedNewAccountMemberWithPoliciesStruct = AccountMember{
+	ID:   "new-member-with-polcies-id",
+	Code: "new-member-with-policies-code",
+	User: AccountMemberUserDetails{
+		ID:                             "new-member-with-policies-user-id",
+		FirstName:                      "John",
+		LastName:                       "Appleseed",
+		Email:                          "user@example.com",
+		TwoFactorAuthenticationEnabled: false,
+	},
+	Status:   "accepted",
+	Policies: []Policy{mockPolicy},
+}
+
 func TestAccountMembers(t *testing.T) {
 	setup()
 	defer teardown()
@@ -273,6 +310,65 @@ func TestCreateAccountMember(t *testing.T) {
 		assert.Equal(t, expectedNewAccountMemberStruct, actual)
 	}
 }
+
+func TestCreateAccountMemberWithPolicies(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "new-member-with-polcies-id",
+				"code": "new-member-with-policies-code",
+				"user": {
+					"id": "new-member-with-policies-user-id",
+					"first_name": "John",
+					"last_name": "Appleseed",
+					"email": "user@example.com",
+					"two_factor_authentication_enabled": false
+				},
+				"status": "accepted",
+				"policies": [{
+					"id": "mock-policy-id",
+					"permission_groups": [{
+						"id": "mock-permission-group-id",
+						"name": "mock-permission-group-name",
+						"permissions": [{
+							"id": "mock-permission-id",
+							"key": "mock-permission-key"
+						}]
+					}],
+					"resource_groups": [{
+						"id": "mock-resource-group-id",
+						"name": "mock-resource-group-name",
+						"scope": {
+							"key": "mock-resource-group-name",
+							"objects": [{
+								"key": "*"
+							}]
+						}
+					}],
+					"access": "allow"
+				}]
+			}
+		}
+		`)
+	}
+
+	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/members", handler)
+
+	actual, err := client.CreateAccountMemberWithPolicies(context.Background(), "01a7362d577a6c3019a474fd6f485823", "user@example.com", []Policy{mockPolicy})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expectedNewAccountMemberWithPoliciesStruct, actual)
+	}
+}
+
 
 func TestCreateAccountMemberWithoutAccountID(t *testing.T) {
 	setup()
