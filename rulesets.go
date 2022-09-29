@@ -407,10 +407,11 @@ type RulesetRuleActionParametersHTTPHeader struct {
 }
 
 type RulesetRuleActionParametersOverrides struct {
-	Enabled    *bool                                   `json:"enabled,omitempty"`
-	Action     string                                  `json:"action,omitempty"`
-	Categories []RulesetRuleActionParametersCategories `json:"categories,omitempty"`
-	Rules      []RulesetRuleActionParametersRules      `json:"rules,omitempty"`
+	Enabled          *bool                                   `json:"enabled,omitempty"`
+	Action           string                                  `json:"action,omitempty"`
+	SensitivityLevel string                                  `json:"sensitivity_level,omitempty"`
+	Categories       []RulesetRuleActionParametersCategories `json:"categories,omitempty"`
+	Rules            []RulesetRuleActionParametersRules      `json:"rules,omitempty"`
 }
 
 type RulesetRuleActionParametersCategories struct {
