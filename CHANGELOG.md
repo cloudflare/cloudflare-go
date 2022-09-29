@@ -5,6 +5,10 @@ ENHANCEMENTS:
 * devices_policy: Add support for additional device settings policies ([#1090](https://github.com/cloudflare/cloudflare-go/issues/1090))
 * rulesets: add support for `sensitivity_level` to override all rule sensitivity ([#1093](https://github.com/cloudflare/cloudflare-go/issues/1093))
 
+DEPENDENCIES:
+
+* deps: bumps github.com/urfave/cli/v2 from 2.16.3 to 2.17.1 ([#1094](https://github.com/cloudflare/cloudflare-go/issues/1094))
+
 ## 0.51.0 (September 28th, 2022)
 
 BREAKING CHANGES:
