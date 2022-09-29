@@ -3,6 +3,7 @@
 ENHANCEMENTS:
 
 * devices_policy: Add support for additional device settings policies ([#1090](https://github.com/cloudflare/cloudflare-go/issues/1090))
+* rulesets: add support for `sensitivity_level` to override all rule sensitivity ([#1093](https://github.com/cloudflare/cloudflare-go/issues/1093))
 
 ## 0.51.0 (September 28th, 2022)
 
