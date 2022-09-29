@@ -54,92 +54,53 @@ func main() {
 }
 
 func runApiTest(ctx context.Context, api *cloudflare.API, accountName string) {
-	// User's account memberships endpoints
-	// TODO:
-	// 	 list user memberships
-	//	 get user membership details
-	//	 update user memberships
-	//	 delete user memberships
-
-	// - Get user details
-	user, err := api.UserDetails(ctx)
-	if err != nil {
-		log.Printf("ERROR: Failed to fetch user details: %v\n", err)
-	}
-	debugPrint("[user] get user details", user)
-
 	// Accounts endpoints
-	// - List accounts
-	accounts, _, err := api.Accounts(ctx, cloudflare.AccountsListParams{})
+	// List accounts
+	accounts, _, err := api.Accounts(ctx, cloudflare.AccountsListParams{Name: accountName})
 	if err != nil {
 		log.Printf("ERROR: Failed to fetch list of accounts: %v\n", err)
 	}
-	for i := 0; i < len(accounts); i++ {
-		debugPrint("", accounts[i].Name)
-	}
 
-	// - Get account details
+	// Get account details
 	accountId := accounts[0].ID
 	account, _, err := api.Account(ctx, accountId)
 	if err != nil {
 		log.Printf("ERROR: Failed to fetch account: %v\n", err)
 	}
-	debugPrint("[account] get account details", account)
+	debugPrint("current account", account.Name) // should match the one provided in env
 
-	// - TODO: Update account
-	//updatedAccount, err := api.UpdateAccount(ctx, accountId, account)
-	//if err != nil {
-	//	log.Printf("ERROR: Failed to fetch account: %v\n", err)
-	//}
-	//debugPrint("[account] update account", updatedAccount)
-
-	// Account memberships endpoints
-	// - List all members
-	accountMembers, _, err := api.AccountMembers(ctx, accountId, cloudflare.PaginationOptions{})
+	user, err := api.UserDetails(ctx)
 	if err != nil {
-		log.Printf("ERROR: Failed to fetch account members: %v\n", err)
+		log.Printf("ERROR: Failed to fetch user details: %v\n", err)
 	}
-	for i := 0; i < len(accountMembers); i++ {
-		debugPrint("", accountMembers[i].User.Email)
-	}
+	debugPrint("current user", user.Email)
 
-	// - TODO: Add account member
-	//newMemberEmail := "jtdocf+cfgotest@gmail.com" // TODO: use testing email
-	//var roles []string                            // TODO: need valid roles
-	//newAccountMember, err := api.CreateAccountMember(ctx, accountId, newMemberEmail, roles)
-	//if err != nil {
-	//	log.Printf("ERROR: Failed to create account member: %v\n", err)
-	//}
-	//debugPrint("[account member] newAccountMember", newAccountMember)
+	// TODO: Update user with a role and a policy and verify expected response
+	// Policies and roles expected compatibility:
+	// - Zola/Policies - Yes
+	// - Zola/Roles - Yes
+	// - Nonzola/Policies - No
+	// - Nonzola/Roles - Yes
 
-	// - TODO: Update account member
-	//updatedAccountMember, err := api.UpdateAccountMember(ctx, accountId, "someUserId", newAccountMember)
-	//if err != nil {
-	//	log.Printf("ERROR: Failed to update account member: %v\n", err)
-	//}
-	//debugPrint("[account member] updatedAccountMember", updatedAccountMember)
+	// Roles
+	// TODO: Update user with roles and verify
 
-	// - TODO: Delete account member (and validate)
-	//err = api.DeleteAccountMember(ctx, accountId, "someUserId")
-	//if err != nil {
-	//	log.Printf("ERROR: Failed to delete account member: %v\n", err)
-	//}
-
-	// Account roles
-	// List all
+	// List roles
 	accountRoles, err := api.AccountRoles(ctx, accountId)
 	if err != nil {
 		log.Printf("ERROR: Failed to fetch list of account roles: %v\n", err)
 	}
-	debugPrint("[account roles] list roles", accountRoles)
+	debugPrint("number of account roles found", len(accountRoles))
+	debugPrint("first role listed", accountRoles[0].Name)
 
-	// Get details
-	roleId := accountRoles[0].ID
-	accountRole, err := api.AccountRole(ctx, accountId, roleId)
-	if err != nil {
-		log.Printf("ERROR: Failed to fetch list of account roles: %v\n", err)
-	}
-	debugPrint("[account roles] get role details", accountRole)
+	// Policies
+	// TODO: Update user with policy and verify
+
+	// List policies
+	// note: a policy consists of a permission group and a resource group
+	permissionGroups, _ := api.ListAPITokensPermissionGroups(ctx)
+	debugPrint("number of api tokens permission groups", len(permissionGroups))
+	debugPrint("first permission group listed", permissionGroups[0].Name)
 
 }
 
