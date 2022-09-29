@@ -89,23 +89,37 @@ func (api *API) CreateAccountMemberWithStatus(ctx context.Context, accountID str
 		Policies: nil,
 		Status:   status,
 	}
-	return api.CreateAccountMember(ctx, accountID, invite)
+	return api.CreateAccountMemberInternal(ctx, accountID, invite)
 }
 
-// CreateAccountMemberWithRoles invites a new member to join an account.
+// CreateAccountMember invites a new member to join an account with roles.
 // The member will be placed into "pending" status and receive an email confirmation.
+// NOTE: If you are currently enrolled in Domain Scoped Roles, your roles will be converted to policies
+// upon member invitation. We recommend upgrading to CreateAccountMemberWithPolicies to use policies.
 //
 // API reference: https://api.cloudflare.com/#account-members-add-member
-func (api *API) CreateAccountMemberWithRoles(ctx context.Context, accountID string, emailAddress string, roles []string) (AccountMember, error) {
+func (api *API) CreateAccountMember(ctx context.Context, accountID string, emailAddress string, roles []string) (AccountMember, error) {
 	invite := AccountMemberInvitation{
 		Email:    emailAddress,
 		Roles:    roles,
 		Policies: nil,
 		Status:   "",
 	}
-	return api.CreateAccountMember(ctx, accountID, invite)
+	return api.CreateAccountMemberInternal(ctx, accountID, invite)
 }
 
+// CreateAccountMemberWithRoles is a terse wrapper around the CreateAccountMember method
+// for clarity on what permissions you're granting an AccountMember.
+//
+// API reference: https://api.cloudflare.com/#account-members-add-member
+func (api *API) CreateAccountMemberWithRoles(ctx context.Context, accountID string, emailAddress string, roles []string) (AccountMember, error) {
+	return api.CreateAccountMember(ctx, accountID, emailAddress, roles)
+}
+
+// CreateAccountMemberWithPolicies invites a new member to join your account with policies.
+// Policies are the replacement to legacy "roles", which enables the newest feature Domain Scoped Roles.
+//
+// API documentation will be coming shortly. Blog post: https://blog.cloudflare.com/domain-scoped-roles-ga/
 func (api *API) CreateAccountMemberWithPolicies(ctx context.Context, accountID string, emailAddress string, policies []Policy) (AccountMember, error) {
 	invite := AccountMemberInvitation{
 		Email:    emailAddress,
@@ -113,10 +127,12 @@ func (api *API) CreateAccountMemberWithPolicies(ctx context.Context, accountID s
 		Policies: policies,
 		Status:   "",
 	}
-	return api.CreateAccountMember(ctx, accountID, invite)
+	return api.CreateAccountMemberInternal(ctx, accountID, invite)
 }
 
-func (api *API) CreateAccountMember(ctx context.Context, accountID string, invite AccountMemberInvitation) (AccountMember, error) {
+// CreateAccountMemberInternal allows you to provide a raw AccountMemberInvitation to be processed
+// and contains the logic for other CreateAccountMember* methods
+func (api *API) CreateAccountMemberInternal(ctx context.Context, accountID string, invite AccountMemberInvitation) (AccountMember, error) {
 	// make sure we have account
 	if accountID == "" {
 		return AccountMember{}, ErrMissingAccountID
@@ -222,6 +238,8 @@ func (api *API) AccountMember(ctx context.Context, accountID string, memberID st
 	return accountMemberResponse.Result, nil
 }
 
+// validateRolesAndPolicies ensures either roles or policies are provided in
+// CreateAccountMember requests, but not both
 func validateRolesAndPolicies(roles []AccountRole, policies []Policy) error {
 	hasRoles := roles != nil && len(roles) > 0
 	hasPolicies := policies != nil && len(policies) > 0

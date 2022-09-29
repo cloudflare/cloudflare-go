@@ -304,7 +304,7 @@ func TestCreateAccountMember(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/members", handler)
 
-	actual, err := client.CreateAccountMemberWithRoles(context.Background(), "01a7362d577a6c3019a474fd6f485823", "user@example.com", []string{"3536bcfad5faccb999b47003c79917fb"})
+	actual, err := client.CreateAccountMember(context.Background(), "01a7362d577a6c3019a474fd6f485823", "user@example.com", []string{"3536bcfad5faccb999b47003c79917fb"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedNewAccountMemberStruct, actual)
@@ -373,7 +373,7 @@ func TestCreateAccountMemberWithRolesAndPoliciesErr(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.CreateAccountMember(context.Background(), "fake", AccountMemberInvitation{
+	_, err := client.CreateAccountMemberInternal(context.Background(), "fake", AccountMemberInvitation{
 		Email:    "user@example.com",
 		Roles:    []string{"fake-role-id"},
 		Policies: []Policy{mockPolicy},
@@ -389,7 +389,7 @@ func TestCreateAccountMemberWithoutAccountID(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.CreateAccountMemberWithRoles(context.Background(), "", "user@example.com", []string{"3536bcfad5faccb999b47003c79917fb"})
+	_, err := client.CreateAccountMember(context.Background(), "", "user@example.com", []string{"3536bcfad5faccb999b47003c79917fb"})
 
 	if assert.Error(t, err) {
 		assert.Equal(t, err.Error(), errMissingAccountID)
