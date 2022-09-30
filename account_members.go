@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 )
@@ -52,6 +53,9 @@ type AccountMemberInvitation struct {
 	Policies []Policy `json:"policies,omitempty"`
 	Status   string   `json:"status,omitempty"`
 }
+
+const errMissingMemberRolesOrPolicies = "account member must be created with roles or policies (not both)"
+var ErrMissingMemberRolesOrPolicies = errors.New(errMissingMemberRolesOrPolicies)
 
 // AccountMembers returns all members of an account.
 //
@@ -131,14 +135,12 @@ func (api *API) CreateAccountMemberWithPolicies(ctx context.Context, accountID s
 }
 
 // CreateAccountMemberInternal allows you to provide a raw AccountMemberInvitation to be processed
-// and contains the logic for other CreateAccountMember* methods
+// and contains the logic for other CreateAccountMember* methods.
 func (api *API) CreateAccountMemberInternal(ctx context.Context, accountID string, invite AccountMemberInvitation) (AccountMember, error) {
-	// make sure we have account
 	if accountID == "" {
 		return AccountMember{}, ErrMissingAccountID
 	}
 
-	// make sure we have roles OR policies
 	roles := []AccountRole{}
 	for i := 0; i < len(invite.Roles); i++ {
 		roles = append(roles, AccountRole{ID: invite.Roles[i]})
@@ -239,10 +241,10 @@ func (api *API) AccountMember(ctx context.Context, accountID string, memberID st
 }
 
 // validateRolesAndPolicies ensures either roles or policies are provided in
-// CreateAccountMember requests, but not both
+// CreateAccountMember requests, but not both.
 func validateRolesAndPolicies(roles []AccountRole, policies []Policy) error {
-	hasRoles := roles != nil && len(roles) > 0
-	hasPolicies := policies != nil && len(policies) > 0
+	hasRoles := len(roles) > 0
+	hasPolicies := len(policies) > 0
 	hasRolesOrPolicies := hasRoles || hasPolicies
 	hasRolesAndPolicies := hasRoles && hasPolicies
 	hasCorrectPermissions := hasRolesOrPolicies && !hasRolesAndPolicies

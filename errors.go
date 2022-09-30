@@ -17,7 +17,6 @@ const (
 	errUnmarshalErrorBody                     = "error unmarshalling the JSON response error body"
 	errRequestNotSuccessful                   = "error reported by API"
 	errMissingAccountID                       = "required missing account ID"
-	errMissingMemberRolesOrPolicies           = "account member must be created with roles or policies (not both)"
 	errMissingZoneID                          = "required missing zone ID"
 	errMissingAccountOrZoneID                 = "either account ID or zone ID must be provided"
 	errAccountIDAndZoneIDAreMutuallyExclusive = "account ID and zone ID are mutually exclusive"
@@ -42,7 +41,6 @@ var (
 	ErrAccountIDOrZoneIDAreRequired           = errors.New(errMissingAccountOrZoneID)
 	ErrAccountIDAndZoneIDAreMutuallyExclusive = errors.New(errAccountIDAndZoneIDAreMutuallyExclusive)
 	ErrMissingResourceIdentifier              = errors.New(errMissingResourceIdentifier)
-	ErrMissingMemberRolesOrPolicies           = errors.New(errMissingMemberRolesOrPolicies)
 )
 
 type ErrorType string

@@ -1,0 +1,3 @@
+```release-note:enhancement
+account-member: add support for domain scoped roles
+```
