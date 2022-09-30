@@ -55,6 +55,7 @@ type AccountMemberInvitation struct {
 }
 
 const errMissingMemberRolesOrPolicies = "account member must be created with roles or policies (not both)"
+
 var ErrMissingMemberRolesOrPolicies = errors.New(errMissingMemberRolesOrPolicies)
 
 // AccountMembers returns all members of an account.

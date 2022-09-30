@@ -101,20 +101,20 @@ var newUpdatedAccountMemberStruct = AccountMember{
 
 var mockPolicy = Policy{
 	ID: "mock-policy-id",
-	PermissionGroups: []PermissionGroup{PermissionGroup{
+	PermissionGroups: []PermissionGroup{{
 		ID:   "mock-permission-group-id",
 		Name: "mock-permission-group-name",
-		Permissions: []Permission{Permission{
+		Permissions: []Permission{{
 			ID:  "mock-permission-id",
 			Key: "mock-permission-key",
 		}},
 	}},
-	ResourceGroups: []ResourceGroup{ResourceGroup{
+	ResourceGroups: []ResourceGroup{{
 		ID:   "mock-resource-group-id",
 		Name: "mock-resource-group-name",
 		Scope: Scope{
 			Key: "mock-resource-group-name",
-			ScopeObjects: []ScopeObject{ScopeObject{
+			ScopeObjects: []ScopeObject{{
 				Key: "*",
 			}},
 		},
@@ -524,7 +524,7 @@ func UpdateAccountMemberWithRolesAndPoliciesErr(t *testing.T) {
 		"01a7362d577a6c3019a474fd6f485823",
 		"",
 		AccountMember{
-			Roles: []AccountRole{AccountRole{
+			Roles: []AccountRole{{
 				ID: "some-role",
 			}},
 			Policies: []Policy{mockPolicy},

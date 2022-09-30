@@ -36,7 +36,7 @@ func NewResourceGroup(key string) ResourceGroup {
 	scope := Scope{
 		Key: key,
 		ScopeObjects: []ScopeObject{
-			ScopeObject{
+			{
 				Key: "*",
 			},
 		},

@@ -14,7 +14,7 @@ var mockPermissionGroup = PermissionGroup{
 	Meta: map[string]string{
 		"description": "Can represent a permission group",
 	},
-	Permissions: []Permission{Permission{
+	Permissions: []Permission{{
 		ID:  "7d42552322884d19bb63ed7f69b5ac21",
 		Key: "com.cloudflare.api.account.fake.permission",
 		Attributes: map[string]string{
