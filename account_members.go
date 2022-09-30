@@ -58,6 +58,14 @@ const errMissingMemberRolesOrPolicies = "account member must be created with rol
 
 var ErrMissingMemberRolesOrPolicies = errors.New(errMissingMemberRolesOrPolicies)
 
+type CreateAccountMemberParams struct {
+	AccountId    string
+	EmailAddress string
+	Roles        []string
+	Policies     []Policy
+	Status       string
+}
+
 // AccountMembers returns all members of an account.
 //
 // API reference: https://api.cloudflare.com/#accounts-list-accounts
@@ -87,14 +95,13 @@ func (api *API) AccountMembers(ctx context.Context, accountID string, pageOpts P
 // Refer to the API reference for valid statuses.
 //
 // API reference: https://api.cloudflare.com/#account-members-add-member
-func (api *API) CreateAccountMemberWithStatus(ctx context.Context, accountID string, emailAddress string, roles []string, status string) (AccountMember, error) {
-	invite := AccountMemberInvitation{
-		Email:    emailAddress,
-		Roles:    roles,
-		Policies: nil,
-		Status:   status,
-	}
-	return api.CreateAccountMemberInternal(ctx, accountID, invite)
+func (api *API) CreateAccountMemberWithStatus(ctx context.Context, rc *ResourceContainer, accountID string, emailAddress string, roles []string, status string) (AccountMember, error) {
+	return api.CreateAccountMember(ctx, rc, CreateAccountMemberParams{
+		AccountId:    accountID,
+		EmailAddress: emailAddress,
+		Roles:        roles,
+		Status:       status,
+	})
 }
 
 // CreateAccountMember invites a new member to join an account with roles.
@@ -103,55 +110,40 @@ func (api *API) CreateAccountMemberWithStatus(ctx context.Context, accountID str
 // upon member invitation. We recommend upgrading to CreateAccountMemberWithPolicies to use policies.
 //
 // API reference: https://api.cloudflare.com/#account-members-add-member
-func (api *API) CreateAccountMember(ctx context.Context, accountID string, emailAddress string, roles []string) (AccountMember, error) {
-	invite := AccountMemberInvitation{
-		Email:    emailAddress,
-		Roles:    roles,
-		Policies: nil,
-		Status:   "",
+func (api *API) CreateAccountMember(ctx context.Context, rc *ResourceContainer, params CreateAccountMemberParams) (AccountMember, error) {
+	if rc.Level != AccountRouteLevel {
+		return AccountMember{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
 	}
-	return api.CreateAccountMemberInternal(ctx, accountID, invite)
-}
 
-// CreateAccountMemberWithRoles is a terse wrapper around the CreateAccountMember method
-// for clarity on what permissions you're granting an AccountMember.
-//
-// API reference: https://api.cloudflare.com/#account-members-add-member
-func (api *API) CreateAccountMemberWithRoles(ctx context.Context, accountID string, emailAddress string, roles []string) (AccountMember, error) {
-	return api.CreateAccountMember(ctx, accountID, emailAddress, roles)
-}
-
-// CreateAccountMemberWithPolicies invites a new member to join your account with policies.
-// Policies are the replacement to legacy "roles", which enables the newest feature Domain Scoped Roles.
-//
-// API documentation will be coming shortly. Blog post: https://blog.cloudflare.com/domain-scoped-roles-ga/
-func (api *API) CreateAccountMemberWithPolicies(ctx context.Context, accountID string, emailAddress string, policies []Policy) (AccountMember, error) {
-	invite := AccountMemberInvitation{
-		Email:    emailAddress,
-		Roles:    nil,
-		Policies: policies,
-		Status:   "",
+	if params.AccountId == "" {
+		if rc.Identifier == "" {
+			return AccountMember{}, ErrMissingAccountID
+		} else {
+			params.AccountId = rc.Identifier
+		}
 	}
-	return api.CreateAccountMemberInternal(ctx, accountID, invite)
-}
 
-// CreateAccountMemberInternal allows you to provide a raw AccountMemberInvitation to be processed
-// and contains the logic for other CreateAccountMember* methods.
-func (api *API) CreateAccountMemberInternal(ctx context.Context, accountID string, invite AccountMemberInvitation) (AccountMember, error) {
-	if accountID == "" {
-		return AccountMember{}, ErrMissingAccountID
+	invite := AccountMemberInvitation{
+		Email:  params.EmailAddress,
+		Status: params.Status,
 	}
 
 	roles := []AccountRole{}
-	for i := 0; i < len(invite.Roles); i++ {
-		roles = append(roles, AccountRole{ID: invite.Roles[i]})
+	for i := 0; i < len(params.Roles); i++ {
+		roles = append(roles, AccountRole{ID: params.Roles[i]})
 	}
-	err := validateRolesAndPolicies(roles, invite.Policies)
+	err := validateRolesAndPolicies(roles, params.Policies)
 	if err != nil {
 		return AccountMember{}, err
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/members", accountID)
+	if params.Roles != nil {
+		invite.Roles = params.Roles
+	} else if params.Policies != nil {
+		invite.Policies = params.Policies
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/members", rc.Identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, invite)
 	if err != nil {
 		return AccountMember{}, err
@@ -164,6 +156,30 @@ func (api *API) CreateAccountMemberInternal(ctx context.Context, accountID strin
 	}
 
 	return accountMemberListResponse.Result, nil
+}
+
+// CreateAccountMemberWithRoles is a terse wrapper around the CreateAccountMember method
+// for clarity on what permissions you're granting an AccountMember.
+//
+// API reference: https://api.cloudflare.com/#account-members-add-member
+func (api *API) CreateAccountMemberWithRoles(ctx context.Context, rc *ResourceContainer, accountID string, emailAddress string, roles []string) (AccountMember, error) {
+	return api.CreateAccountMember(ctx, rc, CreateAccountMemberParams{
+		AccountId:    accountID,
+		EmailAddress: emailAddress,
+		Roles:        roles,
+	})
+}
+
+// CreateAccountMemberWithPolicies invites a new member to join your account with policies.
+// Policies are the replacement to legacy "roles", which enables the newest feature Domain Scoped Roles.
+//
+// API documentation will be coming shortly. Blog post: https://blog.cloudflare.com/domain-scoped-roles-ga/
+func (api *API) CreateAccountMemberWithPolicies(ctx context.Context, rc *ResourceContainer, accountID string, emailAddress string, policies []Policy) (AccountMember, error) {
+	return api.CreateAccountMember(ctx, rc, CreateAccountMemberParams{
+		AccountId:    accountID,
+		EmailAddress: emailAddress,
+		Policies:     policies,
+	})
 }
 
 // DeleteAccountMember removes a member from an account.

@@ -252,8 +252,12 @@ func TestCreateAccountMemberWithStatus(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/members", handler)
+	accountResource := &ResourceContainer{
+		Level:      AccountRouteLevel,
+		Identifier: "01a7362d577a6c3019a474fd6f485823",
+	}
 
-	actual, err := client.CreateAccountMemberWithStatus(context.Background(), "01a7362d577a6c3019a474fd6f485823", "user@example.com", []string{"3536bcfad5faccb999b47003c79917fb"}, "accepted")
+	actual, err := client.CreateAccountMemberWithStatus(context.Background(), accountResource, "01a7362d577a6c3019a474fd6f485823", "user@example.com", []string{"3536bcfad5faccb999b47003c79917fb"}, "accepted")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedNewAccountMemberAcceptedStruct, actual)
@@ -303,8 +307,17 @@ func TestCreateAccountMember(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/members", handler)
+	accountResource := &ResourceContainer{
+		Level:      AccountRouteLevel,
+		Identifier: "01a7362d577a6c3019a474fd6f485823",
+	}
+	createAccountParams := CreateAccountMemberParams{
+		AccountId:    "01a7362d577a6c3019a474fd6f485823",
+		EmailAddress: "user@example.com",
+		Roles:        []string{"3536bcfad5faccb999b47003c79917fb"},
+	}
 
-	actual, err := client.CreateAccountMember(context.Background(), "01a7362d577a6c3019a474fd6f485823", "user@example.com", []string{"3536bcfad5faccb999b47003c79917fb"})
+	actual, err := client.CreateAccountMember(context.Background(), accountResource, createAccountParams)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedNewAccountMemberStruct, actual)
@@ -361,8 +374,12 @@ func TestCreateAccountMemberWithPolicies(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/members", handler)
+	accountResource := &ResourceContainer{
+		Level:      AccountRouteLevel,
+		Identifier: "01a7362d577a6c3019a474fd6f485823",
+	}
 
-	actual, err := client.CreateAccountMemberWithPolicies(context.Background(), "01a7362d577a6c3019a474fd6f485823", "user@example.com", []Policy{mockPolicy})
+	actual, err := client.CreateAccountMemberWithPolicies(context.Background(), accountResource, "01a7362d577a6c3019a474fd6f485823", "user@example.com", []Policy{mockPolicy})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedNewAccountMemberWithPoliciesStruct, actual)
@@ -373,11 +390,15 @@ func TestCreateAccountMemberWithRolesAndPoliciesErr(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.CreateAccountMemberInternal(context.Background(), "fake", AccountMemberInvitation{
-		Email:    "user@example.com",
-		Roles:    []string{"fake-role-id"},
-		Policies: []Policy{mockPolicy},
-		Status:   "active",
+	accountResource := &ResourceContainer{
+		Level:      AccountRouteLevel,
+		Identifier: "01a7362d577a6c3019a474fd6f485823",
+	}
+	_, err := client.CreateAccountMember(context.Background(), accountResource, CreateAccountMemberParams{
+		EmailAddress: "user@example.com",
+		Roles:        []string{"fake-role-id"},
+		Policies:     []Policy{mockPolicy},
+		Status:       "active",
 	})
 
 	if assert.Error(t, err) {
@@ -389,7 +410,15 @@ func TestCreateAccountMemberWithoutAccountID(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.CreateAccountMember(context.Background(), "", "user@example.com", []string{"3536bcfad5faccb999b47003c79917fb"})
+	accountResource := &ResourceContainer{
+		Level:      AccountRouteLevel,
+		Identifier: "",
+	}
+	_, err := client.CreateAccountMember(context.Background(), accountResource, CreateAccountMemberParams{
+		EmailAddress: "user@example.com",
+		Roles:        []string{"fake-role-id"},
+		Status:       "active",
+	})
 
 	if assert.Error(t, err) {
 		assert.Equal(t, err.Error(), errMissingAccountID)
