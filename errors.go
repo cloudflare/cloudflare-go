@@ -27,7 +27,7 @@ const (
 	errManualPagination                       = "unexpected pagination options passed to functions that handle pagination automatically"
 	errInvalidResourceIdentifer               = "invalid resource identifier: %s"
 	errInvalidZoneIdentifer                   = "invalid zone identifier: %s"
-	errAPIKeysAndTokensAreMutuallyExclusive   = "API keys and tokens are mutually exclusive"
+	errAPIKeysAndTokensAreMutuallyExclusive   = "API keys and tokens are mutually exclusive" //nolint:gosec
 	errMissingCredentials                     = "no credentials provided"
 
 	errInvalidResourceContainerAccess = "requested resource container (%q) is not supported for this endpoint"

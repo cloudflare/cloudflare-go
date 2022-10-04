@@ -29,7 +29,7 @@ const (
 	RulesetPhaseHTTPRequestLateTransformManaged     RulesetPhase = "http_request_late_transform_managed"
 	RulesetPhaseHTTPRequestMain                     RulesetPhase = "http_request_main"
 	RulesetPhaseHTTPRequestOrigin                   RulesetPhase = "http_request_origin"
-	RulesetPhaseHTTPRequestDynamicRedirect          RulesetPhase = "http_request_dynamic_redirect"
+	RulesetPhaseHTTPRequestDynamicRedirect          RulesetPhase = "http_request_dynamic_redirect" //nolint:gosec
 	RulesetPhaseHTTPRequestRedirect                 RulesetPhase = "http_request_redirect"
 	RulesetPhaseHTTPRequestSanitize                 RulesetPhase = "http_request_sanitize"
 	RulesetPhaseHTTPRequestTransform                RulesetPhase = "http_request_transform"
