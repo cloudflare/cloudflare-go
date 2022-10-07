@@ -455,8 +455,8 @@ func (api *API) UpdateWaitingRoomRule(ctx context.Context, zoneID string, waitin
 // DeleteWaitingRoomRule deletes a rule for a Waiting Room.
 //
 // API reference: https://api.cloudflare.com/#waiting-room-delete-waiting-room-rule
-func (api *API) DeleteWaitingRoomRule(ctx context.Context, zoneID string, waitingRoomID string, ruleId string) ([]WaitingRoomRule, error) {
-	uri := fmt.Sprintf("/zones/%s/waiting_rooms/%s/rules/%s", zoneID, waitingRoomID, ruleId)
+func (api *API) DeleteWaitingRoomRule(ctx context.Context, zoneID string, waitingRoomID string, ruleID string) ([]WaitingRoomRule, error) {
+	uri := fmt.Sprintf("/zones/%s/waiting_rooms/%s/rules/%s", zoneID, waitingRoomID, ruleID)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return nil, err
