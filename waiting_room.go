@@ -3,9 +3,15 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
+)
+
+var (
+	ErrMissingWaitingRoomID     = errors.New("missing required waiting room ID")
+	ErrMissingWaitingRoomRuleID = errors.New("missing required waiting room rule ID")
 )
 
 // WaitingRoom describes a WaitingRoom object.
@@ -67,7 +73,7 @@ type WaitingRoomRule struct {
 	Expression  string     `json:"expression"`
 	Description string     `json:"description"`
 	LastUpdated *time.Time `json:"last_updated,omitempty"`
-	Enabled     bool       `json:"enabled"`
+	Enabled     *bool      `json:"enabled"`
 }
 
 // WaitingRoomPagePreviewURL describes a WaitingRoomPagePreviewURL object.
@@ -384,87 +390,145 @@ func (api *API) DeleteWaitingRoomEvent(ctx context.Context, zoneID string, waiti
 	return nil
 }
 
+type ListWaitingRoomRuleParams struct {
+	WaitingRoomID string
+}
+
+type CreateWaitingRoomRuleParams struct {
+	WaitingRoomID string
+	Rule          WaitingRoomRule
+}
+
+type ReplaceWaitingRoomRuleParams struct {
+	WaitingRoomID string
+	Rules         []WaitingRoomRule
+}
+
+type UpdateWaitingRoomRuleParams struct {
+	WaitingRoomID string
+	Rule          WaitingRoomRule
+}
+
+type DeleteWaitingRoomRuleParams struct {
+	WaitingRoomID string
+	RuleID        string
+}
+
 // ListWaitingRoomRules lists all rules for a Waiting Room.
 //
 // API reference: https://api.cloudflare.com/#waiting-room-list-waiting-room-rules
-func (api *API) ListWaitingRoomRules(ctx context.Context, zoneID string, waitingRoomID string) ([]WaitingRoomRule, error) {
-	uri := fmt.Sprintf("/zones/%s/waiting_rooms/%s/rules", zoneID, waitingRoomID)
+func (api *API) ListWaitingRoomRules(ctx context.Context, rc *ResourceContainer, params ListWaitingRoomRuleParams) ([]WaitingRoomRule, error) {
+	if params.WaitingRoomID == "" {
+		return nil, ErrMissingWaitingRoomID
+	}
+
+	uri := fmt.Sprintf("/zones/%s/waiting_rooms/%s/rules", rc.Identifier, params.WaitingRoomID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, err
 	}
+
 	var r WaitingRoomRulesResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
+
 	return r.Result, nil
 }
 
 // CreateWaitingRoomRule creates a new rule for a Waiting Room.
 //
 // API reference: https://api.cloudflare.com/#waiting-room-create-waiting-room-rule
-func (api *API) CreateWaitingRoomRule(ctx context.Context, zoneID string, waitingRoomID string, rule WaitingRoomRule) ([]WaitingRoomRule, error) {
-	uri := fmt.Sprintf("/zones/%s/waiting_rooms/%s/rules", zoneID, waitingRoomID)
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, rule)
+func (api *API) CreateWaitingRoomRule(ctx context.Context, rc *ResourceContainer, params CreateWaitingRoomRuleParams) ([]WaitingRoomRule, error) {
+	if params.WaitingRoomID == "" {
+		return nil, ErrMissingWaitingRoomID
+	}
+
+	uri := fmt.Sprintf("/zones/%s/waiting_rooms/%s/rules", rc.Identifier, params.WaitingRoomID)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params.Rule)
 	if err != nil {
 		return nil, err
 	}
+
 	var r WaitingRoomRulesResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
+
 	return r.Result, nil
 }
 
 // ReplaceWaitingRoomRules replaces all rules for a Waiting Room.
 //
 // API reference: https://api.cloudflare.com/#waiting-room-replace-waiting-room-rules
-func (api *API) ReplaceWaitingRoomRules(ctx context.Context, zoneID string, waitingRoomID string, rules []WaitingRoomRule) ([]WaitingRoomRule, error) {
-	uri := fmt.Sprintf("/zones/%s/waiting_rooms/%s/rules", zoneID, waitingRoomID)
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, rules)
+func (api *API) ReplaceWaitingRoomRules(ctx context.Context, rc *ResourceContainer, params ReplaceWaitingRoomRuleParams) ([]WaitingRoomRule, error) {
+	if params.WaitingRoomID == "" {
+		return nil, ErrMissingWaitingRoomID
+	}
+
+	uri := fmt.Sprintf("/zones/%s/waiting_rooms/%s/rules", rc.Identifier, params.WaitingRoomID)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params.Rules)
 	if err != nil {
 		return nil, err
 	}
+
 	var r WaitingRoomRulesResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
+
 	return r.Result, nil
 }
 
 // UpdateWaitingRoomRule updates a rule for a Waiting Room.
 //
 // API reference: https://api.cloudflare.com/#waiting-room-patch-waiting-room-rule
-func (api *API) UpdateWaitingRoomRule(ctx context.Context, zoneID string, waitingRoomID string, rule WaitingRoomRule) ([]WaitingRoomRule, error) {
-	uri := fmt.Sprintf("/zones/%s/waiting_rooms/%s/rules/%s", zoneID, waitingRoomID, rule.ID)
-	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, rule)
+func (api *API) UpdateWaitingRoomRule(ctx context.Context, rc *ResourceContainer, params UpdateWaitingRoomRuleParams) ([]WaitingRoomRule, error) {
+	if params.WaitingRoomID == "" {
+		return nil, ErrMissingWaitingRoomID
+	}
+
+	uri := fmt.Sprintf("/zones/%s/waiting_rooms/%s/rules/%s", rc.Identifier, params.WaitingRoomID, params.Rule.ID)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params.Rule)
 	if err != nil {
 		return nil, err
 	}
+
 	var r WaitingRoomRulesResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
+
 	return r.Result, nil
 }
 
 // DeleteWaitingRoomRule deletes a rule for a Waiting Room.
 //
 // API reference: https://api.cloudflare.com/#waiting-room-delete-waiting-room-rule
-func (api *API) DeleteWaitingRoomRule(ctx context.Context, zoneID string, waitingRoomID string, ruleID string) ([]WaitingRoomRule, error) {
-	uri := fmt.Sprintf("/zones/%s/waiting_rooms/%s/rules/%s", zoneID, waitingRoomID, ruleID)
+func (api *API) DeleteWaitingRoomRule(ctx context.Context, rc *ResourceContainer, params DeleteWaitingRoomRuleParams) ([]WaitingRoomRule, error) {
+	if params.WaitingRoomID == "" {
+		return nil, ErrMissingWaitingRoomID
+	}
+
+	if params.RuleID == "" {
+		return nil, ErrMissingWaitingRoomRuleID
+	}
+
+	uri := fmt.Sprintf("/zones/%s/waiting_rooms/%s/rules/%s", rc.Identifier, params.WaitingRoomID, params.RuleID)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return nil, err
 	}
+
 	var r WaitingRoomRulesResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
+
 	return r.Result, nil
 }

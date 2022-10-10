@@ -156,7 +156,7 @@ var waitingRoomRule = WaitingRoomRule{
 	Action:      "bypass_waiting_room",
 	Expression:  "ip.src in {1.2.3.4 5.6.7.8}",
 	Description: "bypass ip",
-	Enabled:     true,
+	Enabled:     BoolPtr(true),
 	LastUpdated: &testTimestampWaitingRoom,
 }
 
@@ -662,7 +662,7 @@ func TestListWaitingRoomRules(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/waiting_rooms/699d98642c564d2e855e9661899b7252/rules", handler)
 	want := []WaitingRoomRule{waitingRoomRule}
 
-	actual, err := client.ListWaitingRoomRules(context.Background(), testZoneID, "699d98642c564d2e855e9661899b7252")
+	actual, err := client.ListWaitingRoomRules(context.Background(), ZoneIdentifier(testZoneID), ListWaitingRoomRuleParams{WaitingRoomID: "699d98642c564d2e855e9661899b7252"})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -689,7 +689,10 @@ func TestCreateWaitingRoomRule(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/waiting_rooms/699d98642c564d2e855e9661899b7252/rules", handler)
 	want := []WaitingRoomRule{waitingRoomRule}
 
-	actual, err := client.CreateWaitingRoomRule(context.Background(), testZoneID, "699d98642c564d2e855e9661899b7252", waitingRoomRule)
+	actual, err := client.CreateWaitingRoomRule(context.Background(), ZoneIdentifier(testZoneID), CreateWaitingRoomRuleParams{
+		WaitingRoomID: "699d98642c564d2e855e9661899b7252",
+		Rule:          waitingRoomRule,
+	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -716,7 +719,10 @@ func TestUpdateWaitingRoomRule(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/waiting_rooms/699d98642c564d2e855e9661899b7252/rules/"+waitingRoomRuleID, handler)
 	want := []WaitingRoomRule{waitingRoomRule}
 
-	actual, err := client.UpdateWaitingRoomRule(context.Background(), testZoneID, "699d98642c564d2e855e9661899b7252", waitingRoomRule)
+	actual, err := client.UpdateWaitingRoomRule(context.Background(), ZoneIdentifier(testZoneID), UpdateWaitingRoomRuleParams{
+		WaitingRoomID: "699d98642c564d2e855e9661899b7252",
+		Rule:          waitingRoomRule,
+	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -741,7 +747,10 @@ func TestDeleteWaitingRoomRule(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/waiting_rooms/699d98642c564d2e855e9661899b7252/rules/"+waitingRoomRuleID, handler)
 	want := []WaitingRoomRule{}
 
-	actual, err := client.DeleteWaitingRoomRule(context.Background(), testZoneID, "699d98642c564d2e855e9661899b7252", waitingRoomRuleID)
+	actual, err := client.DeleteWaitingRoomRule(context.Background(), ZoneIdentifier(testZoneID), DeleteWaitingRoomRuleParams{
+		WaitingRoomID: "699d98642c564d2e855e9661899b7252",
+		RuleID:        waitingRoomRuleID,
+	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -768,7 +777,10 @@ func TestReplaceWaitingRoomRules(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/waiting_rooms/699d98642c564d2e855e9661899b7252/rules", handler)
 	want := []WaitingRoomRule{waitingRoomRule}
 
-	actual, err := client.ReplaceWaitingRoomRules(context.Background(), testZoneID, "699d98642c564d2e855e9661899b7252", want)
+	actual, err := client.ReplaceWaitingRoomRules(context.Background(), ZoneIdentifier(testZoneID), ReplaceWaitingRoomRuleParams{
+		WaitingRoomID: "699d98642c564d2e855e9661899b7252",
+		Rules:         want,
+	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
