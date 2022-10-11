@@ -26,6 +26,7 @@ func TestAccessOrganization(t *testing.T) {
 				"updated_at": "2014-01-01T05:20:00.12345Z",
 				"name": "Widget Corps Internal Applications",
 				"auth_domain": "test.cloudflareaccess.com",
+				"is_ui_read_only": false,
 				"login_design": {
 					"background_color": "#c5ed1b",
 					"logo_path": "https://example.com/logo.png",
@@ -53,6 +54,7 @@ func TestAccessOrganization(t *testing.T) {
 			HeaderText:      "Widget Corp",
 			FooterText:      "© Widget Corp",
 		},
+		IsUIReadOnly: BoolPtr(false),
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/organizations", handler)
@@ -88,6 +90,7 @@ func TestCreateAccessOrganization(t *testing.T) {
 				"updated_at": "2014-01-01T05:20:00.12345Z",
 				"name": "Widget Corps Internal Applications",
 				"auth_domain": "test.cloudflareaccess.com",
+				"is_ui_read_only": true,
 				"login_design": {
 					"background_color": "#c5ed1b",
 					"logo_path": "https://example.com/logo.png",
@@ -115,6 +118,7 @@ func TestCreateAccessOrganization(t *testing.T) {
 			HeaderText:      "Widget Corp",
 			FooterText:      "© Widget Corp",
 		},
+		IsUIReadOnly: BoolPtr(true),
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/organizations", handler)
@@ -156,7 +160,8 @@ func TestUpdateAccessOrganization(t *testing.T) {
 					"text_color": "#c5ed1b",
 					"header_text": "Widget Corp",
 					"footer_text": "© Widget Corp"
-				}
+				},
+				"is_ui_read_only": false
 			}
 		}
 		`)
@@ -177,6 +182,7 @@ func TestUpdateAccessOrganization(t *testing.T) {
 			HeaderText:      "Widget Corp",
 			FooterText:      "© Widget Corp",
 		},
+		IsUIReadOnly: BoolPtr(false),
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/organizations", handler)

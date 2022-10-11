@@ -10,11 +10,12 @@ import (
 
 // AccessOrganization represents an Access organization.
 type AccessOrganization struct {
-	CreatedAt   *time.Time                    `json:"created_at"`
-	UpdatedAt   *time.Time                    `json:"updated_at"`
-	Name        string                        `json:"name"`
-	AuthDomain  string                        `json:"auth_domain"`
-	LoginDesign AccessOrganizationLoginDesign `json:"login_design"`
+	CreatedAt    *time.Time                    `json:"created_at"`
+	UpdatedAt    *time.Time                    `json:"updated_at"`
+	Name         string                        `json:"name"`
+	AuthDomain   string                        `json:"auth_domain"`
+	LoginDesign  AccessOrganizationLoginDesign `json:"login_design"`
+	IsUIReadOnly *bool                         `json:"is_ui_read_only,omitempty"`
 }
 
 // AccessOrganizationLoginDesign represents the login design options.
