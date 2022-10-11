@@ -2,6 +2,7 @@
 
 ENHANCEMENTS:
 
+* access: add UI read-only field to organizations ([#1104](https://github.com/cloudflare/cloudflare-go/issues/1104))
 * devices_policy: Add support for additional device settings policies ([#1090](https://github.com/cloudflare/cloudflare-go/issues/1090))
 * rulesets: add support for `sensitivity_level` to override all rule sensitivity ([#1093](https://github.com/cloudflare/cloudflare-go/issues/1093))
 
