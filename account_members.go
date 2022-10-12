@@ -93,6 +93,8 @@ func (api *API) AccountMembers(ctx context.Context, accountID string, pageOpts P
 //
 // Refer to the API reference for valid statuses.
 //
+// Deprecated: Use `CreateAccountMember` with a `Status` field instead.
+//
 // API reference: https://api.cloudflare.com/#account-members-add-member
 func (api *API) CreateAccountMemberWithStatus(ctx context.Context, accountID string, emailAddress string, roles []string, status string) (AccountMember, error) {
 	return api.CreateAccountMember(ctx, AccountIdentifier(accountID), CreateAccountMemberParams{
@@ -104,8 +106,8 @@ func (api *API) CreateAccountMemberWithStatus(ctx context.Context, accountID str
 
 // CreateAccountMember invites a new member to join an account with roles.
 // The member will be placed into "pending" status and receive an email confirmation.
-// NOTE: If you are currently enrolled in Domain Scoped Roles, your roles will be converted to policies
-// upon member invitation.
+// NOTE: If you are currently enrolled in Domain Scoped Roles, your roles will
+// be converted to policies upon member invitation.
 //
 // API reference: https://api.cloudflare.com/#account-members-add-member
 func (api *API) CreateAccountMember(ctx context.Context, rc *ResourceContainer, params CreateAccountMemberParams) (AccountMember, error) {

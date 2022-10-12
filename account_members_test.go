@@ -188,7 +188,7 @@ func TestAccountMembers(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/members", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/members", handler)
 	want := []AccountMember{expectedAccountMemberStruct}
 
 	actual, _, err := client.AccountMembers(context.Background(), "01a7362d577a6c3019a474fd6f485823", PaginationOptions{})
@@ -251,7 +251,7 @@ func TestCreateAccountMemberWithStatus(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/members", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/members", handler)
 
 	actual, err := client.CreateAccountMemberWithStatus(context.Background(), "01a7362d577a6c3019a474fd6f485823", "user@example.com", []string{"3536bcfad5faccb999b47003c79917fb"}, "accepted")
 
@@ -302,7 +302,7 @@ func TestCreateAccountMember(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/members", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/members", handler)
 
 	createAccountParams := CreateAccountMemberParams{
 		EmailAddress: "user@example.com",
@@ -365,7 +365,7 @@ func TestCreateAccountMemberWithPolicies(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/members", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/members", handler)
 	actual, err := client.CreateAccountMember(context.Background(), AccountIdentifier("01a7362d577a6c3019a474fd6f485823"), CreateAccountMemberParams{
 		EmailAddress: "user@example.com",
 		Roles:        nil,
@@ -465,7 +465,7 @@ func TestUpdateAccountMember(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/members/4536bcfad5faccb111b47003c79917fa", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/members/4536bcfad5faccb111b47003c79917fa", handler)
 
 	actual, err := client.UpdateAccountMember(context.Background(), "01a7362d577a6c3019a474fd6f485823", "4536bcfad5faccb111b47003c79917fa", newUpdatedAccountMemberStruct)
 
@@ -528,7 +528,7 @@ func TestUpdateAccountMemberWithPolicies(t *testing.T) {
 		}`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/members/new-member-with-polcies-id", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/members/new-member-with-polcies-id", handler)
 
 	actual, err := client.UpdateAccountMember(context.Background(), "01a7362d577a6c3019a474fd6f485823", "new-member-with-polcies-id", expectedNewAccountMemberWithPoliciesStruct)
 
@@ -612,7 +612,7 @@ func TestAccountMember(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/members/4536bcfad5faccb111b47003c79917fa", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/members/4536bcfad5faccb111b47003c79917fa", handler)
 
 	actual, err := client.AccountMember(context.Background(), "01a7362d577a6c3019a474fd6f485823", "4536bcfad5faccb111b47003c79917fa")
 
