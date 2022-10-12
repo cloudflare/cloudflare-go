@@ -39,9 +39,25 @@ type ListPermissionGroupParams struct {
 	RoleName string `url:"name,omitempty"`
 }
 
+const errMissingPermissionGroupID = "missing required permission group ID"
+
+var ErrMissingPermissionGroupID = errors.New(errMissingPermissionGroupID)
+
 // GetPermissionGroup returns a specific permission group from the API given
 // the account ID and permission group ID.
 func (api *API) GetPermissionGroup(ctx context.Context, rc *ResourceContainer, permissionGroupId string) (PermissionGroup, error) {
+	if rc.Level != AccountRouteLevel {
+		return PermissionGroup{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
+
+	if rc.Identifier == "" {
+		return PermissionGroup{}, ErrMissingAccountID
+	}
+
+	if permissionGroupId == "" {
+		return PermissionGroup{}, ErrMissingPermissionGroupID
+	}
+
 	uri := fmt.Sprintf("/accounts/%s/iam/permission_groups/%s?depth=2", rc.Identifier, permissionGroupId)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -60,6 +76,10 @@ func (api *API) GetPermissionGroup(ctx context.Context, rc *ResourceContainer, p
 // ListPermissionGroups returns all valid permission groups for the provided
 // parameters.
 func (api *API) ListPermissionGroups(ctx context.Context, rc *ResourceContainer, params ListPermissionGroupParams) ([]PermissionGroup, error) {
+	if rc.Level != AccountRouteLevel {
+		return []PermissionGroup{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
+
 	params.Depth = 2
 	uri := buildURI(fmt.Sprintf("/accounts/%s/iam/permission_groups", rc.Identifier), params)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
