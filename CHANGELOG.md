@@ -1,4 +1,20 @@
-## 0.51.0 (Unreleased)
+## 0.53.0 (Unreleased)
+
+## 0.52.0 (October 12th, 2022)
+
+ENHANCEMENTS:
+
+* access: add UI read-only field to organizations ([#1104](https://github.com/cloudflare/cloudflare-go/issues/1104))
+* devices_policy: Add support for additional device settings policies ([#1090](https://github.com/cloudflare/cloudflare-go/issues/1090))
+* rulesets: add support for `sensitivity_level` to override all rule sensitivity ([#1093](https://github.com/cloudflare/cloudflare-go/issues/1093))
+
+DEPENDENCIES:
+
+* deps: bumps dependabot/fetch-metadata from 1.3.3 to 1.3.4 ([#1097](https://github.com/cloudflare/cloudflare-go/issues/1097))
+* deps: bumps github.com/urfave/cli/v2 from 2.16.3 to 2.17.1 ([#1094](https://github.com/cloudflare/cloudflare-go/issues/1094))
+* deps: bumps github.com/urfave/cli/v2 from 2.17.1 to 2.19.2 ([#1103](https://github.com/cloudflare/cloudflare-go/issues/1103))
+
+## 0.51.0 (September 28th, 2022)
 
 BREAKING CHANGES:
 
@@ -7,6 +23,11 @@ BREAKING CHANGES:
 ENHANCEMENTS:
 
 * device_posture_rule: add input fields for linux OS ([#1087](https://github.com/cloudflare/cloudflare-go/issues/1087))
+* load_balancing: support adaptive_routing and location_strategy ([#1091](https://github.com/cloudflare/cloudflare-go/issues/1091))
+
+BUG FIXES:
+
+* user-agent-blocking-rules: add missing managed_challenge validation and removed the deprecated whitelist one ([#1089](https://github.com/cloudflare/cloudflare-go/issues/1089))
 
 ## 0.50.0 (September 14, 2022)
 

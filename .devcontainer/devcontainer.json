@@ -10,7 +10,7 @@
   "remoteEnv": {
     "GOPATH": "${containerEnv:GOPATH}"
   },
-  "updateContentCommand": "go generate -tags tools internal/tools/tools.go",
+  "onCreateCommand": "go generate -tags tools internal/tools/tools.go",
   "customizations": {
     "vscode": {
       "settings": {
