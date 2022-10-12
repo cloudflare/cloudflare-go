@@ -59,7 +59,6 @@ const errMissingMemberRolesOrPolicies = "account member must be created with rol
 var ErrMissingMemberRolesOrPolicies = errors.New(errMissingMemberRolesOrPolicies)
 
 type CreateAccountMemberParams struct {
-	AccountId    string
 	EmailAddress string
 	Roles        []string
 	Policies     []Policy
@@ -95,9 +94,8 @@ func (api *API) AccountMembers(ctx context.Context, accountID string, pageOpts P
 // Refer to the API reference for valid statuses.
 //
 // API reference: https://api.cloudflare.com/#account-members-add-member
-func (api *API) CreateAccountMemberWithStatus(ctx context.Context, rc *ResourceContainer, accountID string, emailAddress string, roles []string, status string) (AccountMember, error) {
-	return api.CreateAccountMember(ctx, rc, CreateAccountMemberParams{
-		AccountId:    accountID,
+func (api *API) CreateAccountMemberWithStatus(ctx context.Context, accountID string, emailAddress string, roles []string, status string) (AccountMember, error) {
+	return api.CreateAccountMember(ctx, AccountIdentifier(accountID), CreateAccountMemberParams{
 		EmailAddress: emailAddress,
 		Roles:        roles,
 		Status:       status,
@@ -107,7 +105,7 @@ func (api *API) CreateAccountMemberWithStatus(ctx context.Context, rc *ResourceC
 // CreateAccountMember invites a new member to join an account with roles.
 // The member will be placed into "pending" status and receive an email confirmation.
 // NOTE: If you are currently enrolled in Domain Scoped Roles, your roles will be converted to policies
-// upon member invitation. We recommend upgrading to CreateAccountMemberWithPolicies to use policies.
+// upon member invitation.
 //
 // API reference: https://api.cloudflare.com/#account-members-add-member
 func (api *API) CreateAccountMember(ctx context.Context, rc *ResourceContainer, params CreateAccountMemberParams) (AccountMember, error) {
@@ -115,12 +113,8 @@ func (api *API) CreateAccountMember(ctx context.Context, rc *ResourceContainer, 
 		return AccountMember{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
 	}
 
-	if params.AccountId == "" {
-		if rc.Identifier == "" {
-			return AccountMember{}, ErrMissingAccountID
-		} else {
-			params.AccountId = rc.Identifier
-		}
+	if rc.Identifier == "" {
+		return AccountMember{}, ErrMissingAccountID
 	}
 
 	invite := AccountMemberInvitation{

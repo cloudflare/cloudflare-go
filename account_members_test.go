@@ -252,12 +252,8 @@ func TestCreateAccountMemberWithStatus(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/members", handler)
-	accountResource := &ResourceContainer{
-		Level:      AccountRouteLevel,
-		Identifier: "01a7362d577a6c3019a474fd6f485823",
-	}
 
-	actual, err := client.CreateAccountMemberWithStatus(context.Background(), accountResource, "01a7362d577a6c3019a474fd6f485823", "user@example.com", []string{"3536bcfad5faccb999b47003c79917fb"}, "accepted")
+	actual, err := client.CreateAccountMemberWithStatus(context.Background(), "01a7362d577a6c3019a474fd6f485823", "user@example.com", []string{"3536bcfad5faccb999b47003c79917fb"}, "accepted")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedNewAccountMemberAcceptedStruct, actual)
@@ -307,17 +303,13 @@ func TestCreateAccountMember(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/members", handler)
-	accountResource := &ResourceContainer{
-		Level:      AccountRouteLevel,
-		Identifier: "01a7362d577a6c3019a474fd6f485823",
-	}
+
 	createAccountParams := CreateAccountMemberParams{
-		AccountId:    "01a7362d577a6c3019a474fd6f485823",
 		EmailAddress: "user@example.com",
 		Roles:        []string{"3536bcfad5faccb999b47003c79917fb"},
 	}
 
-	actual, err := client.CreateAccountMember(context.Background(), accountResource, createAccountParams)
+	actual, err := client.CreateAccountMember(context.Background(), AccountIdentifier("01a7362d577a6c3019a474fd6f485823"), createAccountParams)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedNewAccountMemberStruct, actual)
@@ -374,13 +366,7 @@ func TestCreateAccountMemberWithPolicies(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/members", handler)
-	accountResource := &ResourceContainer{
-		Level:      AccountRouteLevel,
-		Identifier: "01a7362d577a6c3019a474fd6f485823",
-	}
-
-	actual, err := client.CreateAccountMember(context.Background(), accountResource, CreateAccountMemberParams{
-		AccountId:    accountResource.Identifier,
+	actual, err := client.CreateAccountMember(context.Background(), AccountIdentifier("01a7362d577a6c3019a474fd6f485823"), CreateAccountMemberParams{
 		EmailAddress: "user@example.com",
 		Roles:        nil,
 		Policies:     []Policy{mockPolicy},
