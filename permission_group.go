@@ -34,9 +34,15 @@ type PermissionGroupDetailResponse struct {
 	Result   PermissionGroup `json:"result"`
 }
 
-// PermissionGroup returns a specific permission group from the API given the account ID and permission group ID.
-func (api *API) PermissionGroup(ctx context.Context, accountId string, permissionGroupId string) (PermissionGroup, error) {
-	uri := fmt.Sprintf("/accounts/%s/iam/permission_groups/%s?depth=2", accountId, permissionGroupId)
+type ListPermissionGroupParams struct {
+	Depth    int    `url:"depth,omitempty"`
+	RoleName string `url:"name,omitempty"`
+}
+
+// GetPermissionGroup returns a specific permission group from the API given
+// the account ID and permission group ID.
+func (api *API) GetPermissionGroup(ctx context.Context, rc *ResourceContainer, permissionGroupId string) (PermissionGroup, error) {
+	uri := fmt.Sprintf("/accounts/%s/iam/permission_groups/%s?depth=2", rc.Identifier, permissionGroupId)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return PermissionGroup{}, err
@@ -51,9 +57,11 @@ func (api *API) PermissionGroup(ctx context.Context, accountId string, permissio
 	return permissionGroupResponse.Result, nil
 }
 
-// PermissionGroups returns all valid permission groups for a provided accountID.
-func (api *API) PermissionGroups(ctx context.Context, accountId string) ([]PermissionGroup, error) {
-	uri := fmt.Sprintf("/accounts/%s/iam/permission_groups?depth=2", accountId)
+// ListPermissionGroups returns all valid permission groups for the provided
+// parameters.
+func (api *API) ListPermissionGroups(ctx context.Context, rc *ResourceContainer, params ListPermissionGroupParams) ([]PermissionGroup, error) {
+	params.Depth = 2
+	uri := buildURI(fmt.Sprintf("/accounts/%s/iam/permission_groups", rc.Identifier), params)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []PermissionGroup{}, err
@@ -66,26 +74,4 @@ func (api *API) PermissionGroups(ctx context.Context, accountId string) ([]Permi
 	}
 
 	return permissionGroupResponse.Result, nil
-}
-
-// FindPermissionGroupByName returns an array of permission groups which have been filtered by the name provided.
-func (api *API) FindPermissionGroupByName(ctx context.Context, accountId string, name string) ([]PermissionGroup, error) {
-	uri := fmt.Sprintf("/accounts/%s/iam/permission_groups?name=%s&depth=2", accountId, name)
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
-	if err != nil {
-		return []PermissionGroup{}, err
-	}
-
-	var permissionGroupResponse PermissionGroupListResponse
-	err = json.Unmarshal(res, &permissionGroupResponse)
-	if err != nil {
-		return []PermissionGroup{}, err
-	}
-
-	return permissionGroupResponse.Result, nil
-}
-
-// FindPermissionGroupForRole is a utility method to find permission groups with the role's name.
-func (api *API) FindPermissionGroupForRole(ctx context.Context, accountId string, role AccountRole) ([]PermissionGroup, error) {
-	return api.FindPermissionGroupByName(ctx, accountId, role.Name)
 }
