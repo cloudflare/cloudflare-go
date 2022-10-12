@@ -158,30 +158,6 @@ func (api *API) CreateAccountMember(ctx context.Context, rc *ResourceContainer, 
 	return accountMemberListResponse.Result, nil
 }
 
-// CreateAccountMemberWithRoles is a terse wrapper around the CreateAccountMember method
-// for clarity on what permissions you're granting an AccountMember.
-//
-// API reference: https://api.cloudflare.com/#account-members-add-member
-func (api *API) CreateAccountMemberWithRoles(ctx context.Context, rc *ResourceContainer, accountID string, emailAddress string, roles []string) (AccountMember, error) {
-	return api.CreateAccountMember(ctx, rc, CreateAccountMemberParams{
-		AccountId:    accountID,
-		EmailAddress: emailAddress,
-		Roles:        roles,
-	})
-}
-
-// CreateAccountMemberWithPolicies invites a new member to join your account with policies.
-// Policies are the replacement to legacy "roles", which enables the newest feature Domain Scoped Roles.
-//
-// API documentation will be coming shortly. Blog post: https://blog.cloudflare.com/domain-scoped-roles-ga/
-func (api *API) CreateAccountMemberWithPolicies(ctx context.Context, rc *ResourceContainer, accountID string, emailAddress string, policies []Policy) (AccountMember, error) {
-	return api.CreateAccountMember(ctx, rc, CreateAccountMemberParams{
-		AccountId:    accountID,
-		EmailAddress: emailAddress,
-		Policies:     policies,
-	})
-}
-
 // DeleteAccountMember removes a member from an account.
 //
 // API reference: https://api.cloudflare.com/#account-members-remove-member

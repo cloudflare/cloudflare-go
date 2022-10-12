@@ -379,7 +379,13 @@ func TestCreateAccountMemberWithPolicies(t *testing.T) {
 		Identifier: "01a7362d577a6c3019a474fd6f485823",
 	}
 
-	actual, err := client.CreateAccountMemberWithPolicies(context.Background(), accountResource, "01a7362d577a6c3019a474fd6f485823", "user@example.com", []Policy{mockPolicy})
+	actual, err := client.CreateAccountMember(context.Background(), accountResource, CreateAccountMemberParams{
+		AccountId:    accountResource.Identifier,
+		EmailAddress: "user@example.com",
+		Roles:        nil,
+		Policies:     []Policy{mockPolicy},
+		Status:       "",
+	})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedNewAccountMemberWithPoliciesStruct, actual)
