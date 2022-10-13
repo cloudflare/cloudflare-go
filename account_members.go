@@ -3,17 +3,19 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 )
 
 // AccountMember is the definition of a member of an account.
 type AccountMember struct {
-	ID     string                   `json:"id"`
-	Code   string                   `json:"code"`
-	User   AccountMemberUserDetails `json:"user"`
-	Status string                   `json:"status"`
-	Roles  []AccountRole            `json:"roles"`
+	ID       string                   `json:"id"`
+	Code     string                   `json:"code"`
+	User     AccountMemberUserDetails `json:"user"`
+	Status   string                   `json:"status"`
+	Roles    []AccountRole            `json:"roles,omitempty"`
+	Policies []Policy                 `json:"policies,omitempty"`
 }
 
 // AccountMemberUserDetails outlines all the personal information about
@@ -46,9 +48,21 @@ type AccountMemberDetailResponse struct {
 // AccountMemberInvitation represents the invitation for a new member to
 // the account.
 type AccountMemberInvitation struct {
-	Email  string   `json:"email"`
-	Roles  []string `json:"roles"`
-	Status string   `json:"status,omitempty"`
+	Email    string   `json:"email"`
+	Roles    []string `json:"roles,omitempty"`
+	Policies []Policy `json:"policies,omitempty"`
+	Status   string   `json:"status,omitempty"`
+}
+
+const errMissingMemberRolesOrPolicies = "account member must be created with roles or policies (not both)"
+
+var ErrMissingMemberRolesOrPolicies = errors.New(errMissingMemberRolesOrPolicies)
+
+type CreateAccountMemberParams struct {
+	EmailAddress string
+	Roles        []string
+	Policies     []Policy
+	Status       string
 }
 
 // AccountMembers returns all members of an account.
@@ -79,20 +93,54 @@ func (api *API) AccountMembers(ctx context.Context, accountID string, pageOpts P
 //
 // Refer to the API reference for valid statuses.
 //
+// Deprecated: Use `CreateAccountMember` with a `Status` field instead.
+//
 // API reference: https://api.cloudflare.com/#account-members-add-member
 func (api *API) CreateAccountMemberWithStatus(ctx context.Context, accountID string, emailAddress string, roles []string, status string) (AccountMember, error) {
-	if accountID == "" {
+	return api.CreateAccountMember(ctx, AccountIdentifier(accountID), CreateAccountMemberParams{
+		EmailAddress: emailAddress,
+		Roles:        roles,
+		Status:       status,
+	})
+}
+
+// CreateAccountMember invites a new member to join an account with roles.
+// The member will be placed into "pending" status and receive an email confirmation.
+// NOTE: If you are currently enrolled in Domain Scoped Roles, your roles will
+// be converted to policies upon member invitation.
+//
+// API reference: https://api.cloudflare.com/#account-members-add-member
+func (api *API) CreateAccountMember(ctx context.Context, rc *ResourceContainer, params CreateAccountMemberParams) (AccountMember, error) {
+	if rc.Level != AccountRouteLevel {
+		return AccountMember{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
+
+	if rc.Identifier == "" {
 		return AccountMember{}, ErrMissingAccountID
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/members", accountID)
-
-	newMember := AccountMemberInvitation{
-		Email:  emailAddress,
-		Roles:  roles,
-		Status: status,
+	invite := AccountMemberInvitation{
+		Email:  params.EmailAddress,
+		Status: params.Status,
 	}
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, newMember)
+
+	roles := []AccountRole{}
+	for i := 0; i < len(params.Roles); i++ {
+		roles = append(roles, AccountRole{ID: params.Roles[i]})
+	}
+	err := validateRolesAndPolicies(roles, params.Policies)
+	if err != nil {
+		return AccountMember{}, err
+	}
+
+	if params.Roles != nil {
+		invite.Roles = params.Roles
+	} else if params.Policies != nil {
+		invite.Policies = params.Policies
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/members", rc.Identifier)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, invite)
 	if err != nil {
 		return AccountMember{}, err
 	}
@@ -104,14 +152,6 @@ func (api *API) CreateAccountMemberWithStatus(ctx context.Context, accountID str
 	}
 
 	return accountMemberListResponse.Result, nil
-}
-
-// CreateAccountMember invites a new member to join an account.
-// The member will be placed into "pending" status and receive an email confirmation.
-//
-// API reference: https://api.cloudflare.com/#account-members-add-member
-func (api *API) CreateAccountMember(ctx context.Context, accountID string, emailAddress string, roles []string) (AccountMember, error) {
-	return api.CreateAccountMemberWithStatus(ctx, accountID, emailAddress, roles, "")
 }
 
 // DeleteAccountMember removes a member from an account.
@@ -138,6 +178,11 @@ func (api *API) DeleteAccountMember(ctx context.Context, accountID string, userI
 func (api *API) UpdateAccountMember(ctx context.Context, accountID string, userID string, member AccountMember) (AccountMember, error) {
 	if accountID == "" {
 		return AccountMember{}, ErrMissingAccountID
+	}
+
+	err := validateRolesAndPolicies(member.Roles, member.Policies)
+	if err != nil {
+		return AccountMember{}, err
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/members/%s", accountID, userID)
@@ -182,4 +227,18 @@ func (api *API) AccountMember(ctx context.Context, accountID string, memberID st
 	}
 
 	return accountMemberResponse.Result, nil
+}
+
+// validateRolesAndPolicies ensures either roles or policies are provided in
+// CreateAccountMember requests, but not both.
+func validateRolesAndPolicies(roles []AccountRole, policies []Policy) error {
+	hasRoles := len(roles) > 0
+	hasPolicies := len(policies) > 0
+	hasRolesOrPolicies := hasRoles || hasPolicies
+	hasRolesAndPolicies := hasRoles && hasPolicies
+	hasCorrectPermissions := hasRolesOrPolicies && !hasRolesAndPolicies
+	if !hasCorrectPermissions {
+		return ErrMissingMemberRolesOrPolicies
+	}
+	return nil
 }
