@@ -1,5 +1,13 @@
 ## 0.53.0 (Unreleased)
 
+BREAKING CHANGES:
+
+* account_member: `CreateAccountMember` has been updated to accept a `CreateAccountMemberParams` struct instead of multiple parameters ([#1095](https://github.com/cloudflare/cloudflare-go/issues/1095))
+
+ENHANCEMENTS:
+
+* account_member: add support for domain scoped roles ([#1095](https://github.com/cloudflare/cloudflare-go/issues/1095))
+
 ## 0.52.0 (October 12th, 2022)
 
 ENHANCEMENTS:
