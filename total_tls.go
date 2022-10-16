@@ -8,7 +8,7 @@ import (
 )
 
 type TotalTLS struct {
-	Enabled              bool   `json:"enabled,omitempty"`
+	Enabled              *bool  `json:"enabled,omitempty"`
 	CertificateAuthority string `json:"certificate_authority,omitempty"`
 	ValidityDays         int    `json:"validity_days,omitempty"`
 }
@@ -18,10 +18,10 @@ type TotalTLSResponse struct {
 	Result TotalTLS `json:"result"`
 }
 
-// TotalTLSGet Get Total TLS Settings for a Zone.
+// GetTotalTLS Get Total TLS Settings for a Zone.
 //
 // API Reference: https://api.cloudflare.com/#total-tls-total-tls-settings-details
-func (api *API) TotalTLSGet(ctx context.Context, rc *ResourceContainer) (TotalTLS, error) {
+func (api *API) GetTotalTLS(ctx context.Context, rc *ResourceContainer) (TotalTLS, error) {
 	if rc.Identifier == "" {
 		return TotalTLS{}, ErrMissingZoneID
 	}
@@ -40,10 +40,10 @@ func (api *API) TotalTLSGet(ctx context.Context, rc *ResourceContainer) (TotalTL
 	return r.Result, nil
 }
 
-// TotalTLSSet Set Total TLS Settings or disable the feature for a Zone.
+// SetTotalTLS Set Total TLS Settings or disable the feature for a Zone.
 //
 // API Reference: https://api.cloudflare.com/#total-tls-enable-or-disable-total-tls
-func (api *API) TotalTLSSet(ctx context.Context, rc *ResourceContainer, params TotalTLS) (TotalTLS, error) {
+func (api *API) SetTotalTLS(ctx context.Context, rc *ResourceContainer, params TotalTLS) (TotalTLS, error) {
 	if rc.Identifier == "" {
 		return TotalTLS{}, ErrMissingZoneID
 	}
