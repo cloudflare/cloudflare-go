@@ -3,9 +3,10 @@ package cloudflare
 import (
 	"context"
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestTotalTLS_GetSettings(t *testing.T) {
@@ -27,14 +28,14 @@ func TestTotalTLS_GetSettings(t *testing.T) {
 	}`)
 	})
 
-	_, err := client.TotalTLSGet(context.Background(), ZoneIdentifier(""))
+	_, err := client.GetTotalTLS(context.Background(), ZoneIdentifier(""))
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingZoneID, err)
 	}
 
-	result, err := client.TotalTLSGet(context.Background(), ZoneIdentifier(testZoneID))
+	result, err := client.GetTotalTLS(context.Background(), ZoneIdentifier(testZoneID))
 	if assert.NoError(t, err) {
-		assert.Equal(t, true, result.Enabled)
+		assert.Equal(t, BoolPtr(true), result.Enabled)
 		assert.Equal(t, "google", result.CertificateAuthority)
 		assert.Equal(t, 90, result.ValidityDays)
 	}
@@ -59,14 +60,14 @@ func TestTotalTLS_SetSettings(t *testing.T) {
 }`)
 	})
 
-	_, err := client.TotalTLSSet(context.Background(), ZoneIdentifier(""), TotalTLS{})
+	_, err := client.SetTotalTLS(context.Background(), ZoneIdentifier(""), TotalTLS{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingZoneID, err)
 	}
 
-	result, err := client.TotalTLSSet(context.Background(), ZoneIdentifier(testZoneID), TotalTLS{CertificateAuthority: "google", Enabled: true})
+	result, err := client.SetTotalTLS(context.Background(), ZoneIdentifier(testZoneID), TotalTLS{CertificateAuthority: "google", Enabled: BoolPtr(true)})
 	if assert.NoError(t, err) {
-		assert.Equal(t, true, result.Enabled)
+		assert.Equal(t, BoolPtr(true), result.Enabled)
 		assert.Equal(t, "google", result.CertificateAuthority)
 		assert.Equal(t, 90, result.ValidityDays)
 	}
