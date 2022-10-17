@@ -7,6 +7,7 @@ BREAKING CHANGES:
 ENHANCEMENTS:
 
 * account_member: add support for domain scoped roles ([#1095](https://github.com/cloudflare/cloudflare-go/issues/1095))
+* cloudflare: expose `Messages` from the `Response` object ([#1106](https://github.com/cloudflare/cloudflare-go/issues/1106))
 * total_tls: adds support for TotalTLS ([#1105](https://github.com/cloudflare/cloudflare-go/issues/1105))
 
 ## 0.52.0 (October 12th, 2022)
