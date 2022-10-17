@@ -10,6 +10,10 @@ ENHANCEMENTS:
 * cloudflare: expose `Messages` from the `Response` object ([#1106](https://github.com/cloudflare/cloudflare-go/issues/1106))
 * total_tls: adds support for TotalTLS ([#1105](https://github.com/cloudflare/cloudflare-go/issues/1105))
 
+DEPENDENCIES:
+
+* deps: bumps github.com/urfave/cli/v2 from 2.19.2 to 2.20.2 ([#1108](https://github.com/cloudflare/cloudflare-go/issues/1108))
+
 ## 0.52.0 (October 12th, 2022)
 
 ENHANCEMENTS:
