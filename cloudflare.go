@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -15,8 +16,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
-	"errors"
 
 	"golang.org/x/time/rate"
 )
@@ -347,6 +346,7 @@ func (api *API) makeRequestWithAuthTypeAndHeadersComplete(ctx context.Context, m
 			Errors:        errBody.Errors,
 			ErrorCodes:    errCodes,
 			ErrorMessages: errMsgs,
+			Messages:      errBody.Messages,
 		}
 
 		switch resp.StatusCode {
