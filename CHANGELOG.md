@@ -13,6 +13,7 @@ ENHANCEMENTS:
 DEPENDENCIES:
 
 * deps: bumps github.com/urfave/cli/v2 from 2.19.2 to 2.20.2 ([#1108](https://github.com/cloudflare/cloudflare-go/issues/1108))
+* deps: bumps goreleaser/goreleaser-action from 3.1.0 to 3.2.0 ([#1112](https://github.com/cloudflare/cloudflare-go/issues/1112))
 
 ## 0.52.0 (October 12th, 2022)
 
