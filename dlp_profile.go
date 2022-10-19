@@ -3,9 +3,14 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
+)
+
+var (
+	ErrMissingProfileID = errors.New("missing required profile ID")
 )
 
 // DLPPattern represents a DLP Pattern that matches an entry.
@@ -66,11 +71,28 @@ type DLPProfileResponse struct {
 	Result   DLPProfile `json:"result"`
 }
 
-// DLPProfiles returns all DLP profiles within an account.
+type ListDLPProfilesParams struct{}
+
+type CreateDLPProfilesParams struct {
+	Profiles []DLPProfile `json:"profiles"`
+	Type     string
+}
+
+type UpdateDLPProfileParams struct {
+	ProfileID string
+	Profile   DLPProfile
+	Type      string
+}
+
+// ListDLPProfiles returns all DLP profiles within an account.
 //
 // API reference: https://api.cloudflare.com/#dlp-profiles-list-all-profiles
-func (api *API) DLPProfiles(ctx context.Context, accountID string) ([]DLPProfile, error) {
-	uri := buildURI(fmt.Sprintf("/%s/%s/dlp/profiles", AccountRouteRoot, accountID), nil)
+func (api *API) ListDLPProfiles(ctx context.Context, rc *ResourceContainer, params ListDLPProfilesParams) ([]DLPProfile, error) {
+	if rc.Identifier == "" {
+		return []DLPProfile{}, ErrMissingResourceIdentifier
+	}
+
+	uri := buildURI(fmt.Sprintf("/%s/%s/dlp/profiles", rc.Level, rc.Identifier), nil)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -86,12 +108,20 @@ func (api *API) DLPProfiles(ctx context.Context, accountID string) ([]DLPProfile
 	return dlpProfilesListResponse.Result, nil
 }
 
-// DLPProfile returns a single DLP profile (custom or predefined) based on the
-// profile ID.
+// GetDLPProfile returns a single DLP profile (custom or predefined) based on
+// the profile ID.
 //
 // API reference: https://api.cloudflare.com/#dlp-profiles-get-dlp-profile
-func (api *API) DLPProfile(ctx context.Context, accountID, profileID string) (DLPProfile, error) {
-	uri := buildURI(fmt.Sprintf("/%s/%s/dlp/profiles/%s", AccountRouteRoot, accountID, profileID), nil)
+func (api *API) GetDLPProfile(ctx context.Context, rc *ResourceContainer, profileID string) (DLPProfile, error) {
+	if rc.Identifier == "" {
+		return DLPProfile{}, ErrMissingResourceIdentifier
+	}
+
+	if profileID == "" {
+		return DLPProfile{}, ErrMissingProfileID
+	}
+
+	uri := buildURI(fmt.Sprintf("/%s/%s/dlp/profiles/%s", rc.Level, rc.Identifier, profileID), nil)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -107,15 +137,21 @@ func (api *API) DLPProfile(ctx context.Context, accountID, profileID string) (DL
 	return dlpProfileResponse.Result, nil
 }
 
-// CreateDLPCustomProfiles creates a set of custom DLP Profile.
+// CreateDLPProfiles creates a set of custom DLP Profile.
 //
 // API reference: https://api.cloudflare.com/#dlp-profiles-create-custom-profiles
-func (api *API) CreateDLPCustomProfiles(ctx context.Context, accountID string, profiles []DLPProfile) ([]DLPProfile, error) {
-	uri := buildURI(fmt.Sprintf("/%s/%s/dlp/profiles/custom", AccountRouteRoot, accountID), nil)
+func (api *API) CreateDLPProfiles(ctx context.Context, rc *ResourceContainer, params CreateDLPProfilesParams) ([]DLPProfile, error) {
+	if rc.Identifier == "" {
+		return []DLPProfile{}, ErrMissingResourceIdentifier
+	}
 
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, DLPProfilesCreateRequest{
-		Profiles: profiles,
-	})
+	if params.Type == "" {
+		params.Type = "custom"
+	}
+
+	uri := buildURI(fmt.Sprintf("/%s/%s/dlp/profiles/%s", rc.Level, rc.Identifier, params.Type), nil)
+
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return []DLPProfile{}, err
 	}
@@ -129,57 +165,44 @@ func (api *API) CreateDLPCustomProfiles(ctx context.Context, accountID string, p
 	return dLPCustomProfilesResponse.Result, nil
 }
 
-// CreateDLPCustomProfile is a wrapper for CreateDLPCustomProfiles that creates a single custom DLP Profile.
-//
-// API reference: https://api.cloudflare.com/#dlp-profiles-create-custom-profiles
-func (api *API) CreateDLPCustomProfile(ctx context.Context, accountID string, profile DLPProfile) (DLPProfile, error) {
-	profiles, err := api.CreateDLPCustomProfiles(ctx, accountID, []DLPProfile{profile})
-	if err != nil {
-		return DLPProfile{}, err
-	}
-	if len(profiles) == 0 {
-		return DLPProfile{}, fmt.Errorf("%s: no profile found in the response", errUnmarshalError)
-	}
-	return profiles[0], nil
-}
-
-// DeleteDLPCustomProfile deletes a DLP custom profile.
+// DeleteDLPProfile deletes a DLP custom profile.
 //
 // API reference: https://api.cloudflare.com/#dlp-profiles-delete-custom-profile
-func (api *API) DeleteDLPCustomProfile(ctx context.Context, accountID, profileID string) error {
-	uri := buildURI(fmt.Sprintf("/%s/%s/dlp/profiles/custom/%s", AccountRouteRoot, accountID, profileID), nil)
+func (api *API) DeleteDLPProfile(ctx context.Context, rc *ResourceContainer, profileID string) error {
+	if rc.Identifier == "" {
+		return ErrMissingResourceIdentifier
+	}
+
+	if profileID == "" {
+		return ErrMissingProfileID
+	}
+
+	uri := buildURI(fmt.Sprintf("/%s/%s/dlp/profiles/custom/%s", rc.Level, rc.Identifier, profileID), nil)
 
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	return err
 }
 
-// UpdateDLPCustomProfile updates a DLP custom profile.
+// UpdateDLPProfile updates a DLP profile.
 //
 // API reference: https://api.cloudflare.com/#dlp-profiles-update-custom-profile
-func (api *API) UpdateDLPCustomProfile(ctx context.Context, accountID, profileID string, profile DLPProfile) (DLPProfile, error) {
-	uri := buildURI(fmt.Sprintf("/%s/%s/dlp/profiles/custom/%s", AccountRouteRoot, accountID, profileID), nil)
-
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, profile)
-	if err != nil {
-		return DLPProfile{}, err
-	}
-
-	var dlpProfileResponse DLPProfileResponse
-	err = json.Unmarshal(res, &dlpProfileResponse)
-	if err != nil {
-		return DLPProfile{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
-	}
-
-	return dlpProfileResponse.Result, nil
-}
-
-// UpdateDLPPredefinedProfile updates a DLP predefined profile.
-//
 // API reference: https://api.cloudflare.com/#dlp-profiles-update-predefined-profile
-func (api *API) UpdateDLPPredefinedProfile(ctx context.Context, accountID, profileID string, profile DLPProfile) (DLPProfile, error) {
-	uri := buildURI(fmt.Sprintf("/%s/%s/dlp/profiles/predefined/%s", AccountRouteRoot, accountID, profileID), nil)
+func (api *API) UpdateDLPProfile(ctx context.Context, rc *ResourceContainer, params UpdateDLPProfileParams) (DLPProfile, error) {
+	if rc.Identifier == "" {
+		return DLPProfile{}, ErrMissingResourceIdentifier
+	}
 
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, profile)
+	if params.Type == "" {
+		params.Type = "custom"
+	}
+
+	if params.ProfileID == "" {
+		return DLPProfile{}, ErrMissingProfileID
+	}
+
+	uri := buildURI(fmt.Sprintf("/%s/%s/dlp/profiles/%s/%s", rc.Level, rc.Identifier, params.Type, params.ProfileID), nil)
+
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params.Profile)
 	if err != nil {
 		return DLPProfile{}, err
 	}

@@ -4,11 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"net/http"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestDLPProfiles(t *testing.T) {
@@ -123,7 +124,7 @@ func TestDLPProfiles(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/dlp/profiles", handler)
 
-	actual, err := client.DLPProfiles(context.Background(), testAccountID)
+	actual, err := client.ListDLPProfiles(context.Background(), AccountIdentifier(testAccountID), ListDLPProfilesParams{})
 	require.NoError(t, err)
 	require.Equal(t, want, actual)
 }
@@ -194,7 +195,7 @@ func TestGetDLPProfile(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/dlp/profiles/29678c26-a191-428d-9f63-6e20a4a636a4", handler)
 
-	actual, err := client.DLPProfile(context.Background(), testAccountID, "29678c26-a191-428d-9f63-6e20a4a636a4")
+	actual, err := client.GetDLPProfile(context.Background(), AccountIdentifier(testAccountID), "29678c26-a191-428d-9f63-6e20a4a636a4")
 	require.NoError(t, err)
 	require.Equal(t, want, actual)
 }
@@ -273,7 +274,7 @@ func TestCreateDLPCustomProfiles(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/dlp/profiles/custom", handler)
 
-	actual, err := client.CreateDLPCustomProfiles(context.Background(), testAccountID, []DLPProfile{
+	profiles := []DLPProfile{
 		{
 			Name:        "Example Custom Profile",
 			Description: "just a custom profile example",
@@ -289,7 +290,8 @@ func TestCreateDLPCustomProfiles(t *testing.T) {
 				},
 			},
 		},
-	})
+	}
+	actual, err := client.CreateDLPProfiles(context.Background(), AccountIdentifier(testAccountID), CreateDLPProfilesParams{Profiles: profiles})
 	require.NoError(t, err)
 	require.Equal(t, want, actual)
 }
@@ -340,7 +342,7 @@ func TestCreateDLPCustomProfile(t *testing.T) {
 	createdAt, _ := time.Parse(time.RFC3339, "2022-10-18T08:00:56Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2022-10-18T08:00:57Z")
 
-	want := DLPProfile{
+	want := []DLPProfile{{
 
 		ID:          "29678c26-a191-428d-9f63-6e20a4a636a4",
 		Name:        "Example Custom Profile",
@@ -363,11 +365,11 @@ func TestCreateDLPCustomProfile(t *testing.T) {
 		},
 		CreatedAt: &createdAt,
 		UpdatedAt: &updatedAt,
-	}
+	}}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/dlp/profiles/custom", handler)
 
-	actual, err := client.CreateDLPCustomProfile(context.Background(), testAccountID, DLPProfile{
+	profiles := []DLPProfile{{
 		Name:        "Example Custom Profile",
 		Description: "just a custom profile example",
 		Entries: []DLPEntry{
@@ -380,6 +382,10 @@ func TestCreateDLPCustomProfile(t *testing.T) {
 				},
 			},
 		},
+	}}
+
+	actual, err := client.CreateDLPProfiles(context.Background(), AccountIdentifier(testAccountID), CreateDLPProfilesParams{
+		Profiles: profiles,
 	})
 	require.NoError(t, err)
 	require.Equal(t, want, actual)
@@ -457,7 +463,7 @@ func TestUpdateDLPCustomProfile(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/dlp/profiles/custom/29678c26-a191-428d-9f63-6e20a4a636a4", handler)
 
-	actual, err := client.UpdateDLPCustomProfile(context.Background(), testAccountID, "29678c26-a191-428d-9f63-6e20a4a636a4", DLPProfile{
+	customProfile := DLPProfile{
 		Name:        "Example Custom Profile",
 		Description: "just a custom profile example",
 		Entries: []DLPEntry{
@@ -470,6 +476,11 @@ func TestUpdateDLPCustomProfile(t *testing.T) {
 				},
 			},
 		},
+	}
+	actual, err := client.UpdateDLPProfile(context.Background(), AccountIdentifier(testAccountID), UpdateDLPProfileParams{
+		ProfileID: "29678c26-a191-428d-9f63-6e20a4a636a4",
+		Type:      "custom",
+		Profile:   customProfile,
 	})
 	require.NoError(t, err)
 	require.Equal(t, want, actual)
@@ -527,14 +538,17 @@ func TestUpdateDLPPredefinedProfile(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/dlp/profiles/predefined/29678c26-a191-428d-9f63-6e20a4a636a4", handler)
 
-	actual, err := client.UpdateDLPPredefinedProfile(context.Background(), testAccountID, "29678c26-a191-428d-9f63-6e20a4a636a4", DLPProfile{
-		Entries: []DLPEntry{
-			{
-				ID:      "29678c26-a191-428d-9f63-6e20a4a636a4",
-				Enabled: true,
+	actual, err := client.UpdateDLPProfile(context.Background(), AccountIdentifier(testAccountID), UpdateDLPProfileParams{
+		ProfileID: "29678c26-a191-428d-9f63-6e20a4a636a4",
+		Type:      "predefined",
+		Profile: DLPProfile{
+			Entries: []DLPEntry{
+				{
+					ID:      "29678c26-a191-428d-9f63-6e20a4a636a4",
+					Enabled: true,
+				},
 			},
-		},
-	})
+		}})
 	require.NoError(t, err)
 	require.Equal(t, want, actual)
 }
@@ -544,7 +558,7 @@ func TestDeleteDLPCustomProfile(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DEL', got %s", r.Method)
+		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -555,6 +569,6 @@ func TestDeleteDLPCustomProfile(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/dlp/profiles/custom/29678c26-a191-428d-9f63-6e20a4a636a4", handler)
 
-	err := client.DeleteDLPCustomProfile(context.Background(), testAccountID, "29678c26-a191-428d-9f63-6e20a4a636a4")
+	err := client.DeleteDLPProfile(context.Background(), AccountIdentifier(testAccountID), "29678c26-a191-428d-9f63-6e20a4a636a4")
 	require.NoError(t, err)
 }
