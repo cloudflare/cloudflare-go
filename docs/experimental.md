@@ -45,11 +45,14 @@ Majority of methods on an entity will follow a standard method signature.
 
 - `*ResourceContainer` determines the "level" of the resource and where it will
   operate at. Operated using `UserIdentifier`, `ZoneIdentifier`, and
-  `AccountIdentifier` respectively
-- `$entityID` is the resource identifier
+  `AccountIdentifier` respectively.
+- `$entityID` is the resource identifier.
 - `params` is a complex structure that allows filtering/finding resources
-  matching the struct fields
-- `$entity` the resource being operated on
+  matching the struct fields. By providing a structure as the third argument
+  in all the methods that require it, we can add/remove fields without the 
+  need for a breaking change and instead can issue deprecation notices when
+  specific fields are used.
+- `$entity` the resource being operated on.
 
 Exceptions to this convention will be:
 
