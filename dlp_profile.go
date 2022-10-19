@@ -137,7 +137,7 @@ func (api *API) GetDLPProfile(ctx context.Context, rc *ResourceContainer, profil
 	return dlpProfileResponse.Result, nil
 }
 
-// CreateDLPProfiles creates a set of custom DLP Profile.
+// CreateDLPProfiles creates a set of DLP Profile.
 //
 // API reference: https://api.cloudflare.com/#dlp-profiles-create-custom-profiles
 func (api *API) CreateDLPProfiles(ctx context.Context, rc *ResourceContainer, params CreateDLPProfilesParams) ([]DLPProfile, error) {
@@ -145,8 +145,8 @@ func (api *API) CreateDLPProfiles(ctx context.Context, rc *ResourceContainer, pa
 		return []DLPProfile{}, ErrMissingResourceIdentifier
 	}
 
-	if params.Type == "" {
-		params.Type = "custom"
+	if params.Type == "" || params.Type != "custom" {
+		return []DLPProfile{}, fmt.Errorf("unsupported DLP profile type: %q", params.Type)
 	}
 
 	uri := buildURI(fmt.Sprintf("/%s/%s/dlp/profiles/%s", rc.Level, rc.Identifier, params.Type), nil)
@@ -165,7 +165,7 @@ func (api *API) CreateDLPProfiles(ctx context.Context, rc *ResourceContainer, pa
 	return dLPCustomProfilesResponse.Result, nil
 }
 
-// DeleteDLPProfile deletes a DLP custom profile.
+// DeleteDLPProfile deletes a DLP profile. Only custom profiles can be deleted.
 //
 // API reference: https://api.cloudflare.com/#dlp-profiles-delete-custom-profile
 func (api *API) DeleteDLPProfile(ctx context.Context, rc *ResourceContainer, profileID string) error {
