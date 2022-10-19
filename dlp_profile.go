@@ -24,7 +24,7 @@ type DLPEntry struct {
 	ID        string `json:"id,omitempty"`
 	Name      string `json:"name,omitempty"`
 	ProfileID string `json:"profile_id,omitempty"`
-	Enabled   bool   `json:"enabled,omitempty"`
+	Enabled   *bool  `json:"enabled,omitempty"`
 	Type      string `json:"type,omitempty"`
 
 	// The following fields are only present for custom entries.
