@@ -60,18 +60,47 @@ type TeamsListDetailResponse struct {
 	Result TeamsList `json:"result"`
 }
 
-type TeamsListItemsParams struct {
-	AccountID string `url:"-"`
-	ListID    string `url:"-"`
+type ListTeamsListItemsParams struct {
+	ListID string `url:"-"`
 
-	PaginationOptions
+	ResultInfo
 }
 
-// TeamsLists returns all lists within an account.
+type ListTeamListsParams struct{}
+
+type CreateTeamsListParams struct {
+	ID          string          `json:"id,omitempty"`
+	Name        string          `json:"name"`
+	Type        string          `json:"type"`
+	Description string          `json:"description,omitempty"`
+	Items       []TeamsListItem `json:"items,omitempty"`
+	Count       uint64          `json:"count,omitempty"`
+	CreatedAt   *time.Time      `json:"created_at,omitempty"`
+	UpdatedAt   *time.Time      `json:"updated_at,omitempty"`
+}
+
+type UpdateTeamsListParams struct {
+	ID          string          `json:"id,omitempty"`
+	Name        string          `json:"name"`
+	Type        string          `json:"type"`
+	Description string          `json:"description,omitempty"`
+	Items       []TeamsListItem `json:"items,omitempty"`
+	Count       uint64          `json:"count,omitempty"`
+	CreatedAt   *time.Time      `json:"created_at,omitempty"`
+	UpdatedAt   *time.Time      `json:"updated_at,omitempty"`
+}
+
+type PatchTeamsListParams struct {
+	ID     string          `json:"id"`
+	Append []TeamsListItem `json:"append"`
+	Remove []string        `json:"remove"`
+}
+
+// ListTeamsLists returns all lists within an account.
 //
 // API reference: https://api.cloudflare.com/#teams-lists-list-teams-lists
-func (api *API) TeamsLists(ctx context.Context, accountID string) ([]TeamsList, ResultInfo, error) {
-	uri := fmt.Sprintf("/%s/%s/gateway/lists", AccountRouteRoot, accountID)
+func (api *API) ListTeamsLists(ctx context.Context, rc *ResourceContainer, params ListTeamListsParams) ([]TeamsList, ResultInfo, error) {
+	uri := fmt.Sprintf("/%s/%s/gateway/lists", AccountRouteRoot, rc.Identifier)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -87,14 +116,14 @@ func (api *API) TeamsLists(ctx context.Context, accountID string) ([]TeamsList, 
 	return teamsListListResponse.Result, teamsListListResponse.ResultInfo, nil
 }
 
-// TeamsList returns a single list based on the list ID.
+// GetTeamsList returns a single list based on the list ID.
 //
 // API reference: https://api.cloudflare.com/#teams-lists-teams-list-details
-func (api *API) TeamsList(ctx context.Context, accountID, listID string) (TeamsList, error) {
+func (api *API) GetTeamsList(ctx context.Context, rc *ResourceContainer, listID string) (TeamsList, error) {
 	uri := fmt.Sprintf(
 		"/%s/%s/gateway/lists/%s",
-		AccountRouteRoot,
-		accountID,
+		rc.Level,
+		rc.Identifier,
 		listID,
 	)
 
@@ -112,11 +141,15 @@ func (api *API) TeamsList(ctx context.Context, accountID, listID string) (TeamsL
 	return teamsListDetailResponse.Result, nil
 }
 
-// TeamsListItems returns all list items for a list.
+// ListTeamsListItems returns all list items for a list.
 //
 // API reference: https://api.cloudflare.com/#teams-lists-teams-list-items
-func (api *API) TeamsListItems(ctx context.Context, params TeamsListItemsParams) ([]TeamsListItem, ResultInfo, error) {
-	if params.AccountID == "" {
+func (api *API) ListTeamsListItems(ctx context.Context, rc *ResourceContainer, params ListTeamsListItemsParams) ([]TeamsListItem, ResultInfo, error) {
+	if rc.Level != AccountRouteLevel {
+		return []TeamsListItem{}, ResultInfo{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
+
+	if rc.Identifier == "" {
 		return []TeamsListItem{}, ResultInfo{}, ErrMissingAccountID
 	}
 
@@ -124,32 +157,63 @@ func (api *API) TeamsListItems(ctx context.Context, params TeamsListItemsParams)
 		return []TeamsListItem{}, ResultInfo{}, ErrMissingListID
 	}
 
-	uri := buildURI(
-		fmt.Sprintf("/%s/%s/gateway/lists/%s/items", AccountRouteRoot, params.AccountID, params.ListID),
-		params,
-	)
-
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
-	if err != nil {
-		return []TeamsListItem{}, ResultInfo{}, err
+	autoPaginate := true
+	if params.PerPage >= 1 || params.Page >= 1 {
+		autoPaginate = false
 	}
 
-	var teamsListItemsListResponse TeamsListItemsListResponse
-	err = json.Unmarshal(res, &teamsListItemsListResponse)
-	if err != nil {
-		return []TeamsListItem{}, ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	if params.PerPage < 1 {
+		params.PerPage = 50
 	}
 
-	return teamsListItemsListResponse.Result, teamsListItemsListResponse.ResultInfo, nil
+	if params.Page < 1 {
+		params.Page = 1
+	}
+
+	var teamListItems []TeamsListItem
+	var lResponse TeamsListItemsListResponse
+	for {
+		uri := buildURI(
+			fmt.Sprintf("/%s/%s/gateway/lists/%s/items", rc.Level, rc.Identifier, params.ListID),
+			params,
+		)
+
+		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+		if err != nil {
+			return []TeamsListItem{}, ResultInfo{}, err
+		}
+
+		err = json.Unmarshal(res, &lResponse)
+		if err != nil {
+			return []TeamsListItem{}, ResultInfo{}, fmt.Errorf("failed to unmarshal teams list JSON data: %w", err)
+		}
+
+		teamListItems = append(teamListItems, lResponse.Result...)
+		params.ResultInfo = lResponse.ResultInfo.Next()
+
+		if params.ResultInfo.Done() || !autoPaginate {
+			break
+		}
+	}
+
+	return teamListItems, lResponse.ResultInfo, nil
 }
 
 // CreateTeamsList creates a new teams list.
 //
 // API reference: https://api.cloudflare.com/#teams-lists-create-teams-list
-func (api *API) CreateTeamsList(ctx context.Context, accountID string, teamsList TeamsList) (TeamsList, error) {
-	uri := fmt.Sprintf("/%s/%s/gateway/lists", AccountRouteRoot, accountID)
+func (api *API) CreateTeamsList(ctx context.Context, rc *ResourceContainer, params CreateTeamsListParams) (TeamsList, error) {
+	if rc.Level != AccountRouteLevel {
+		return TeamsList{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
 
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, teamsList)
+	if rc.Identifier == "" {
+		return TeamsList{}, ErrMissingAccountID
+	}
+
+	uri := fmt.Sprintf("/%s/%s/gateway/lists", rc.Level, rc.Identifier)
+
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return TeamsList{}, err
 	}
@@ -166,19 +230,27 @@ func (api *API) CreateTeamsList(ctx context.Context, accountID string, teamsList
 // UpdateTeamsList updates an existing teams list.
 //
 // API reference: https://api.cloudflare.com/#teams-lists-update-teams-list
-func (api *API) UpdateTeamsList(ctx context.Context, accountID string, teamsList TeamsList) (TeamsList, error) {
-	if teamsList.ID == "" {
+func (api *API) UpdateTeamsList(ctx context.Context, rc *ResourceContainer, params UpdateTeamsListParams) (TeamsList, error) {
+	if rc.Level != AccountRouteLevel {
+		return TeamsList{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
+
+	if rc.Identifier == "" {
+		return TeamsList{}, ErrMissingAccountID
+	}
+
+	if params.ID == "" {
 		return TeamsList{}, fmt.Errorf("teams list ID cannot be empty")
 	}
 
 	uri := fmt.Sprintf(
 		"/%s/%s/gateway/lists/%s",
-		AccountRouteRoot,
-		accountID,
-		teamsList.ID,
+		rc.Level,
+		rc.Identifier,
+		params.ID,
 	)
 
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, teamsList)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return TeamsList{}, err
 	}
@@ -195,7 +267,15 @@ func (api *API) UpdateTeamsList(ctx context.Context, accountID string, teamsList
 // PatchTeamsList updates the items in an existing teams list.
 //
 // API reference: https://api.cloudflare.com/#teams-lists-patch-teams-list
-func (api *API) PatchTeamsList(ctx context.Context, accountID string, listPatch PatchTeamsList) (TeamsList, error) {
+func (api *API) PatchTeamsList(ctx context.Context, rc *ResourceContainer, listPatch PatchTeamsListParams) (TeamsList, error) {
+	if rc.Level != AccountRouteLevel {
+		return TeamsList{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
+
+	if rc.Identifier == "" {
+		return TeamsList{}, ErrMissingAccountID
+	}
+
 	if listPatch.ID == "" {
 		return TeamsList{}, fmt.Errorf("teams list ID cannot be empty")
 	}
@@ -203,7 +283,7 @@ func (api *API) PatchTeamsList(ctx context.Context, accountID string, listPatch 
 	uri := fmt.Sprintf(
 		"/%s/%s/gateway/lists/%s",
 		AccountRouteRoot,
-		accountID,
+		rc.Identifier,
 		listPatch.ID,
 	)
 
@@ -224,11 +304,19 @@ func (api *API) PatchTeamsList(ctx context.Context, accountID string, listPatch 
 // DeleteTeamsList deletes a teams list.
 //
 // API reference: https://api.cloudflare.com/#teams-lists-delete-teams-list
-func (api *API) DeleteTeamsList(ctx context.Context, accountID, teamsListID string) error {
+func (api *API) DeleteTeamsList(ctx context.Context, rc *ResourceContainer, teamsListID string) error {
+	if rc.Level != AccountRouteLevel {
+		return fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
+
+	if rc.Identifier == "" {
+		return ErrMissingAccountID
+	}
+
 	uri := fmt.Sprintf(
 		"/%s/%s/gateway/lists/%s",
 		AccountRouteRoot,
-		accountID,
+		rc.Identifier,
 		teamsListID,
 	)
 

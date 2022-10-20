@@ -291,7 +291,7 @@ func TestCreateDLPCustomProfiles(t *testing.T) {
 			},
 		},
 	}
-	actual, err := client.CreateDLPProfiles(context.Background(), AccountIdentifier(testAccountID), CreateDLPProfilesParams{Profiles: profiles})
+	actual, err := client.CreateDLPProfiles(context.Background(), AccountIdentifier(testAccountID), CreateDLPProfilesParams{Profiles: profiles, Type: "custom"})
 	require.NoError(t, err)
 	require.Equal(t, want, actual)
 }
@@ -386,6 +386,7 @@ func TestCreateDLPCustomProfile(t *testing.T) {
 
 	actual, err := client.CreateDLPProfiles(context.Background(), AccountIdentifier(testAccountID), CreateDLPProfilesParams{
 		Profiles: profiles,
+		Type:     "custom",
 	})
 	require.NoError(t, err)
 	require.Equal(t, want, actual)
