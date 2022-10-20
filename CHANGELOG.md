@@ -3,12 +3,14 @@
 BREAKING CHANGES:
 
 * account_member: `CreateAccountMember` has been updated to accept a `CreateAccountMemberParams` struct instead of multiple parameters ([#1095](https://github.com/cloudflare/cloudflare-go/issues/1095))
+* teams_list: updated methods to match the experimental client format ([#1114](https://github.com/cloudflare/cloudflare-go/issues/1114))
 
 ENHANCEMENTS:
 
 * account_member: add support for domain scoped roles ([#1095](https://github.com/cloudflare/cloudflare-go/issues/1095))
 * cloudflare: expose `Messages` from the `Response` object ([#1106](https://github.com/cloudflare/cloudflare-go/issues/1106))
 * dlp: Adds support for DLP resources ([#1111](https://github.com/cloudflare/cloudflare-go/issues/1111))
+* teams_list: `List` operations now automatically paginate ([#1114](https://github.com/cloudflare/cloudflare-go/issues/1114))
 * total_tls: adds support for TotalTLS ([#1105](https://github.com/cloudflare/cloudflare-go/issues/1105))
 
 DEPENDENCIES:
