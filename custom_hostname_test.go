@@ -3,7 +3,7 @@ package cloudflare
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"testing"
 	"time"
@@ -706,7 +706,7 @@ func TestCustomHostname_UpdateCustomHostname(t *testing.T) {
 		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
 
 		defer r.Body.Close()
-		reqBody, err := ioutil.ReadAll(r.Body)
+		reqBody, err := io.ReadAll(r.Body)
 		assert.NoError(t, err, "Reading request body")
 		assert.JSONEq(t, `
 {
@@ -786,7 +786,7 @@ func TestCustomHostname_UpdateCustomHostnameWithCustomMetadata(t *testing.T) {
 		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
 
 		defer r.Body.Close()
-		reqBody, err := ioutil.ReadAll(r.Body)
+		reqBody, err := io.ReadAll(r.Body)
 		assert.NoError(t, err, "Reading request body")
 		assert.JSONEq(t, `
 {
@@ -875,7 +875,7 @@ func TestCustomHostname_UpdateCustomHostnameWithEmptyCustomMetadata(t *testing.T
 		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
 
 		defer r.Body.Close()
-		reqBody, err := ioutil.ReadAll(r.Body)
+		reqBody, err := io.ReadAll(r.Body)
 		assert.NoError(t, err, "Reading request body")
 		assert.JSONEq(t, `
 {

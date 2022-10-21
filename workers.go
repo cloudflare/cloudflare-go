@@ -8,7 +8,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"mime"
 	"mime/multipart"
 	"net/http"
@@ -449,7 +448,7 @@ func (api *API) downloadWorkerWithName(ctx context.Context, scriptName string) (
 		if err != nil {
 			return r, fmt.Errorf("could not get multipart response body: %w", err)
 		}
-		mimePartBody, err := ioutil.ReadAll(mimePart)
+		mimePartBody, err := io.ReadAll(mimePart)
 		if err != nil {
 			return r, fmt.Errorf("could not read multipart response body: %w", err)
 		}

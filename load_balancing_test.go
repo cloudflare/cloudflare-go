@@ -3,7 +3,7 @@ package cloudflare
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"testing"
 	"time"
@@ -18,7 +18,7 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		b, err := ioutil.ReadAll(r.Body)
+		b, err := io.ReadAll(r.Body)
 		defer r.Body.Close()
 		if assert.NoError(t, err) {
 			assert.JSONEq(t, `{
@@ -397,7 +397,7 @@ func TestUpdateLoadBalancerPool(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		b, err := ioutil.ReadAll(r.Body)
+		b, err := io.ReadAll(r.Body)
 		defer r.Body.Close()
 		if assert.NoError(t, err) {
 			assert.JSONEq(t, `{
@@ -539,7 +539,7 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		b, err := ioutil.ReadAll(r.Body)
+		b, err := io.ReadAll(r.Body)
 		defer r.Body.Close()
 		if assert.NoError(t, err) {
 			assert.JSONEq(t, `{
@@ -862,7 +862,7 @@ func TestUpdateLoadBalancerMonitor(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		b, err := ioutil.ReadAll(r.Body)
+		b, err := io.ReadAll(r.Body)
 		defer r.Body.Close()
 		if assert.NoError(t, err) {
 			assert.JSONEq(t, `{
@@ -988,7 +988,7 @@ func TestCreateLoadBalancer(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		b, err := ioutil.ReadAll(r.Body)
+		b, err := io.ReadAll(r.Body)
 		defer r.Body.Close()
 		if assert.NoError(t, err) {
 			assert.JSONEq(t, `{
@@ -1712,7 +1712,7 @@ func TestUpdateLoadBalancer(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		b, err := ioutil.ReadAll(r.Body)
+		b, err := io.ReadAll(r.Body)
 		defer r.Body.Close()
 		if assert.NoError(t, err) {
 			assert.JSONEq(t, `{

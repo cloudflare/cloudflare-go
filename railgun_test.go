@@ -3,7 +3,7 @@ package cloudflare
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"testing"
 	"time"
@@ -18,7 +18,7 @@ func TestCreateRailgun(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		b, err := ioutil.ReadAll(r.Body)
+		b, err := io.ReadAll(r.Body)
 		defer r.Body.Close()
 		if assert.NoError(t, err) {
 			assert.JSONEq(t, `{"name":"My Railgun"}`, string(b))
@@ -254,7 +254,7 @@ func TestEnableRailgun(t *testing.T) {
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
-		b, err := ioutil.ReadAll(r.Body)
+		b, err := io.ReadAll(r.Body)
 		defer r.Body.Close()
 		if assert.NoError(t, err) {
 			assert.JSONEq(t, `{"enabled":true}`, string(b))
@@ -315,7 +315,7 @@ func TestDisableRailgun(t *testing.T) {
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
-		b, err := ioutil.ReadAll(r.Body)
+		b, err := io.ReadAll(r.Body)
 		defer r.Body.Close()
 		if assert.NoError(t, err) {
 			assert.JSONEq(t, `{"enabled":false}`, string(b))
@@ -543,7 +543,7 @@ func TestConnectRailgun(t *testing.T) {
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
-		b, err := ioutil.ReadAll(r.Body)
+		b, err := io.ReadAll(r.Body)
 		defer r.Body.Close()
 		if assert.NoError(t, err) {
 			assert.JSONEq(t, `{"connected":true}`, string(b))
@@ -585,7 +585,7 @@ func TestDisconnectRailgun(t *testing.T) {
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
-		b, err := ioutil.ReadAll(r.Body)
+		b, err := io.ReadAll(r.Body)
 		defer r.Body.Close()
 		if assert.NoError(t, err) {
 			assert.JSONEq(t, `{"connected":false}`, string(b))

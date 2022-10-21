@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"time"
@@ -226,7 +226,7 @@ func OriginCARootCertificate(algorithm string) ([]byte, error) {
 		return nil, errors.New(errRequestNotSuccessful)
 	}
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("Response body could not be read: %w", err)
 	}
