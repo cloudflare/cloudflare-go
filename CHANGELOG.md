@@ -12,6 +12,7 @@ ENHANCEMENTS:
 * dlp: Adds support for DLP resources ([#1111](https://github.com/cloudflare/cloudflare-go/issues/1111))
 * teams_list: `List` operations now automatically paginate ([#1114](https://github.com/cloudflare/cloudflare-go/issues/1114))
 * total_tls: adds support for TotalTLS ([#1105](https://github.com/cloudflare/cloudflare-go/issues/1105))
+* waiting_room: add support for waiting room rules ([#1102](https://github.com/cloudflare/cloudflare-go/issues/1102))
 
 DEPENDENCIES:
 
