@@ -8,7 +8,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"math"
 	"net/http"
@@ -57,7 +56,7 @@ type API struct {
 
 // newClient provides shared logic for New and NewWithUserServiceKey.
 func newClient(opts ...Option) (*API, error) {
-	silentLogger := log.New(ioutil.Discard, "", log.LstdFlags)
+	silentLogger := log.New(io.Discard, "", log.LstdFlags)
 
 	api := &API{
 		BaseURL:     fmt.Sprintf("%s://%s%s", defaultScheme, defaultHostname, defaultBasePath),
@@ -255,8 +254,8 @@ func (api *API) makeRequestWithAuthTypeAndHeadersComplete(ctx context.Context, m
 			if method == http.MethodPost || method == http.MethodPut || method == http.MethodPatch {
 				buf := &bytes.Buffer{}
 				tee := io.TeeReader(reqBody, buf)
-				debugBody, _ := ioutil.ReadAll(tee)
-				payloadBody, _ := ioutil.ReadAll(buf)
+				debugBody, _ := io.ReadAll(tee)
+				payloadBody, _ := io.ReadAll(buf)
 				fmt.Printf("cloudflare-go [DEBUG] REQUEST Method:%v URI:%s Headers:%#v Body:%v\n", method, api.BaseURL+uri, headers, string(debugBody))
 				// ensure we recreate the io.Reader for use
 				reqBody = bytes.NewReader(payloadBody)
@@ -282,7 +281,7 @@ func (api *API) makeRequestWithAuthTypeAndHeadersComplete(ctx context.Context, m
 			// if we got a valid http response, try to read body so we can reuse the connection
 			// see https://golang.org/pkg/net/http/#Client.Do
 			if respErr == nil {
-				respBody, err = ioutil.ReadAll(resp.Body)
+				respBody, err = io.ReadAll(resp.Body)
 				resp.Body.Close()
 
 				respErr = fmt.Errorf("could not read response body: %w", err)
@@ -294,7 +293,7 @@ func (api *API) makeRequestWithAuthTypeAndHeadersComplete(ctx context.Context, m
 			}
 			continue
 		} else {
-			respBody, err = ioutil.ReadAll(resp.Body)
+			respBody, err = io.ReadAll(resp.Body)
 			defer resp.Body.Close()
 			if err != nil {
 				return nil, fmt.Errorf("could not read response body: %w", err)

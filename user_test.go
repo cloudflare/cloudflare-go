@@ -3,11 +3,10 @@ package cloudflare
 import (
 	"context"
 	"fmt"
+	"io"
 	"net/http"
 	"testing"
 	"time"
-
-	"io/ioutil"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -72,7 +71,7 @@ func TestUser_UpdateUser(t *testing.T) {
 
 	mux.HandleFunc("/user", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
-		b, err := ioutil.ReadAll(r.Body)
+		b, err := io.ReadAll(r.Body)
 		defer r.Body.Close()
 		if assert.NoError(t, err) {
 			assert.JSONEq(t, `{"country":"US","first_name":"John","username":"cfuser12345","email":"user@example.com",
