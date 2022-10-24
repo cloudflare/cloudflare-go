@@ -17,6 +17,7 @@ ENHANCEMENTS:
 DEPENDENCIES:
 
 * deps: `ioutil` package is being deprecated in favor of `io` ([#1116](https://github.com/cloudflare/cloudflare-go/issues/1116))
+* deps: bumps github.com/stretchr/testify from 1.8.0 to 1.8.1 ([#1119](https://github.com/cloudflare/cloudflare-go/issues/1119))
 * deps: bumps github.com/urfave/cli/v2 from 2.19.2 to 2.20.2 ([#1108](https://github.com/cloudflare/cloudflare-go/issues/1108))
 * deps: bumps github.com/urfave/cli/v2 from 2.20.2 to 2.20.3 ([#1118](https://github.com/cloudflare/cloudflare-go/issues/1118))
 * deps: bumps goreleaser/goreleaser-action from 3.1.0 to 3.2.0 ([#1112](https://github.com/cloudflare/cloudflare-go/issues/1112))
