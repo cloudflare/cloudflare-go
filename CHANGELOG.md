@@ -1,4 +1,6 @@
-## 0.53.0 (Unreleased)
+## 0.54.0 (Unreleased)
+
+## 0.53.0 (October 26th, 2022)
 
 BREAKING CHANGES:
 
