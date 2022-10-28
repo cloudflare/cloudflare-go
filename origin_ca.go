@@ -3,13 +3,12 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
 	"time"
-
-	"errors"
 )
 
 // OriginCACertificate represents a Cloudflare-issued certificate.

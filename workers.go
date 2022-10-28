@@ -6,6 +6,7 @@ import (
 	rand "crypto/rand"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"mime"
@@ -14,8 +15,6 @@ import (
 	"net/textproto"
 	"strings"
 	"time"
-
-	"errors"
 )
 
 // WorkerRequestParams provides parameters for worker requests for both enterprise and standard requests.

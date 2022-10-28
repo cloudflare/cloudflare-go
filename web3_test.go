@@ -3,10 +3,11 @@ package cloudflare
 import (
 	"context"
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 const testWeb3HostnameID = "9a7806061c88ada191ed06f989cc3dac"

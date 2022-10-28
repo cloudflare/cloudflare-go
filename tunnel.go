@@ -3,11 +3,10 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
-
-	"errors"
 )
 
 // ErrMissingTunnelID is for when a required tunnel ID is missing from the
