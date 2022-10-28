@@ -54,6 +54,18 @@ type AccessServiceTokenCreateResponse struct {
 	ClientSecret string     `json:"client_secret"`
 }
 
+// AccessServiceTokenRotateResponse is the same API response as the Create
+// operation.
+type AccessServiceTokenRotateResponse struct {
+	CreatedAt    *time.Time `json:"created_at"`
+	UpdatedAt    *time.Time `json:"updated_at"`
+	ExpiresAt    *time.Time `json:"expires_at"`
+	ID           string     `json:"id"`
+	Name         string     `json:"name"`
+	ClientID     string     `json:"client_id"`
+	ClientSecret string     `json:"client_secret"`
+}
+
 // AccessServiceTokensListResponse represents the response from the list
 // Access Service Tokens endpoint.
 type AccessServiceTokensListResponse struct {
@@ -96,6 +108,15 @@ type AccessServiceTokensRefreshDetailResponse struct {
 	Errors   []string                          `json:"errors"`
 	Messages []string                          `json:"messages"`
 	Result   AccessServiceTokenRefreshResponse `json:"result"`
+}
+
+// AccessServiceTokensRotateSecretDetailResponse is the API response, containing a
+// single Access Service Token.
+type AccessServiceTokensRotateSecretDetailResponse struct {
+	Success  bool                             `json:"success"`
+	Errors   []string                         `json:"errors"`
+	Messages []string                         `json:"messages"`
+	Result   AccessServiceTokenRotateResponse `json:"result"`
 }
 
 // AccessServiceTokens returns all Access Service Tokens for an account.
@@ -253,4 +274,24 @@ func (api *API) RefreshAccessServiceToken(ctx context.Context, rc *ResourceConta
 	}
 
 	return accessServiceTokenRefresh.Result, nil
+}
+
+// RotateAccessServiceToken rotates the client secret of an Access Service
+// Token in place.
+// API reference: https://api.cloudflare.com/#access-service-tokens-rotate-a-service-token
+func (api *API) RotateAccessServiceToken(ctx context.Context, rc *ResourceContainer, id string) (AccessServiceTokenRotateResponse, error) {
+	uri := fmt.Sprintf("/%s/%s/access/service_tokens/%s/rotate", rc.Level, rc.Identifier, id)
+
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
+	if err != nil {
+		return AccessServiceTokenRotateResponse{}, err
+	}
+
+	var accessServiceTokenRotate AccessServiceTokensRotateSecretDetailResponse
+	err = json.Unmarshal(res, &accessServiceTokenRotate)
+	if err != nil {
+		return AccessServiceTokenRotateResponse{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+
+	return accessServiceTokenRotate.Result, nil
 }
