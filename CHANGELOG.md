@@ -1,5 +1,9 @@
 ## 0.54.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* access: add support for service token rotation ([#1120](https://github.com/cloudflare/cloudflare-go/issues/1120))
+
 ## 0.53.0 (October 26th, 2022)
 
 BREAKING CHANGES:
