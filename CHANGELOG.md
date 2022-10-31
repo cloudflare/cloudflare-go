@@ -5,6 +5,10 @@ ENHANCEMENTS:
 * access: add support for service token rotation ([#1120](https://github.com/cloudflare/cloudflare-go/issues/1120))
 * deps: fix import grouping, code formatting and enable goimports linter ([#1121](https://github.com/cloudflare/cloudflare-go/issues/1121))
 
+DEPENDENCIES:
+
+* deps: bumps github.com/urfave/cli/v2 from 2.20.3 to 2.23.0 ([#1122](https://github.com/cloudflare/cloudflare-go/issues/1122))
+
 ## 0.53.0 (October 26th, 2022)
 
 BREAKING CHANGES:
