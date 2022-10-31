@@ -3,6 +3,7 @@
 ENHANCEMENTS:
 
 * access: add support for service token rotation ([#1120](https://github.com/cloudflare/cloudflare-go/issues/1120))
+* deps: fix import grouping, code formatting and enable goimports linter ([#1121](https://github.com/cloudflare/cloudflare-go/issues/1121))
 
 ## 0.53.0 (October 26th, 2022)
 
