@@ -3,14 +3,13 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
 	"sync"
 	"time"
-
-	"errors"
 
 	"golang.org/x/net/idna"
 )

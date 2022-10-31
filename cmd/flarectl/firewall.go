@@ -2,12 +2,11 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net"
 	"os"
 	"strconv"
-
-	"errors"
 
 	"github.com/cloudflare/cloudflare-go"
 	"github.com/urfave/cli/v2"

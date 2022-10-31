@@ -1,11 +1,10 @@
 package cloudflare
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"strings"
-
-	"errors"
 )
 
 const (

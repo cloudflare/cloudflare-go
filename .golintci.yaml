@@ -32,6 +32,7 @@ linters:
     - exportloopref  # prevent scope issues with pointers in loops.
     - goconst        # use constants where values are repeated.
     - reassign       # checks that package variables are not reassigned.
+    - goimports      # checks import grouping and code formatting.
 
 output:
   format: colored-line-number

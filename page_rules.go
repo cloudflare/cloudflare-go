@@ -24,42 +24,43 @@ type PageRuleTarget struct {
 PageRuleAction is the action to take when the target is matched.
 
 Valid IDs are:
-  always_online
-  always_use_https
-  automatic_https_rewrites
-  browser_cache_ttl
-  browser_check
-  bypass_cache_on_cookie
-  cache_by_device_type
-  cache_deception_armor
-  cache_level
-  cache_key_fields
-  cache_on_cookie
-  disable_apps
-  disable_performance
-  disable_railgun
-  disable_security
-  edge_cache_ttl
-  email_obfuscation
-  explicit_cache_control
-  forwarding_url
-  host_header_override
-  ip_geolocation
-  minify
-  mirage
-  opportunistic_encryption
-  origin_error_page_pass_thru
-  polish
-  resolve_override
-  respect_strong_etag
-  response_buffering
-  rocket_loader
-  security_level
-  server_side_exclude
-  sort_query_string_for_cache
-  ssl
-  true_client_ip_header
-  waf
+
+	always_online
+	always_use_https
+	automatic_https_rewrites
+	browser_cache_ttl
+	browser_check
+	bypass_cache_on_cookie
+	cache_by_device_type
+	cache_deception_armor
+	cache_level
+	cache_key_fields
+	cache_on_cookie
+	disable_apps
+	disable_performance
+	disable_railgun
+	disable_security
+	edge_cache_ttl
+	email_obfuscation
+	explicit_cache_control
+	forwarding_url
+	host_header_override
+	ip_geolocation
+	minify
+	mirage
+	opportunistic_encryption
+	origin_error_page_pass_thru
+	polish
+	resolve_override
+	respect_strong_etag
+	response_buffering
+	rocket_loader
+	security_level
+	server_side_exclude
+	sort_query_string_for_cache
+	ssl
+	true_client_ip_header
+	waf
 */
 type PageRuleAction struct {
 	ID    string      `json:"id"`
