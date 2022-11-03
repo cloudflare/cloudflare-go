@@ -7,6 +7,7 @@ ENHANCEMENTS:
 
 DEPENDENCIES:
 
+* deps: bumps dependabot/fetch-metadata from 1.3.4 to 1.3.5 ([#1123](https://github.com/cloudflare/cloudflare-go/issues/1123))
 * deps: bumps github.com/urfave/cli/v2 from 2.20.3 to 2.23.0 ([#1122](https://github.com/cloudflare/cloudflare-go/issues/1122))
 
 ## 0.53.0 (October 26th, 2022)
