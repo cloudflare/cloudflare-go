@@ -19,6 +19,7 @@ package tools
 //go:generate go install golang.org/x/lint/golint
 //go:generate go install golang.org/x/oauth2
 //go:generate go install golang.org/x/tools/gopls@latest
+//go:generate go install golang.org/x/tools/cmd/goimports@latest
 
 import (
 	// local development tooling for linting and debugging.
@@ -35,6 +36,7 @@ import (
 	_ "github.com/securego/gosec/v2/cmd/gosec"
 	_ "github.com/uudashr/gopkgs/v2/cmd/gopkgs"
 	_ "golang.org/x/lint/golint"
+	_ "golang.org/x/tools/cmd/goimports"
 	_ "golang.org/x/tools/gopls"
 
 	// used for changelog-check tooling
