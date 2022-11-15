@@ -5,7 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 	"testing"
@@ -363,7 +363,7 @@ func parseImageMultipartUpload(r *http.Request) (imageMultipartUpload, error) {
 	}
 	defer f.Close()
 
-	u.File, err = ioutil.ReadAll(f)
+	u.File, err = io.ReadAll(f)
 	if err != nil {
 		return u, err
 	}
@@ -388,7 +388,7 @@ func getImageFormValue(r *http.Request, key string) ([]byte, error) {
 		if err != nil {
 			return nil, err
 		}
-		return ioutil.ReadAll(file)
+		return io.ReadAll(file)
 	}
 
 	return nil, fmt.Errorf("no value found for key %v", key)

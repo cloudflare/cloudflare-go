@@ -3,11 +3,10 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
-
-	"errors"
 )
 
 // The definitions in this file are deprecated and should be removed after

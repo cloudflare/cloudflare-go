@@ -3,11 +3,10 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
-
-	"errors"
 )
 
 var ErrNotEnoughFilterIDsProvided = errors.New("at least one filter ID must be provided.")

@@ -3,7 +3,7 @@ package cloudflare
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 )
@@ -41,7 +41,7 @@ func IPs() (IPRanges, error) {
 		return IPRanges{}, fmt.Errorf("HTTP request failed: %w", err)
 	}
 	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return IPRanges{}, fmt.Errorf("Response body could not be read: %w", err)
 	}

@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"mime/multipart"
 	"net/http"
 	"strings"
@@ -247,7 +247,7 @@ func getFormValue(r *http.Request, key string) ([]byte, error) {
 		if err != nil {
 			return nil, err
 		}
-		return ioutil.ReadAll(file)
+		return io.ReadAll(file)
 	}
 
 	return nil, fmt.Errorf("no value found for key %v", key)
@@ -1228,7 +1228,7 @@ func TestWorkers_ListWorkerBindingsMultiScript(t *testing.T) {
 
 	assert.Equal(t, "MY_WASM", res.BindingList[1].Name)
 	wasmBinding := res.BindingList[1].Binding.(WorkerWebAssemblyBinding)
-	wasmModuleContent, err := ioutil.ReadAll(wasmBinding.Module)
+	wasmModuleContent, err := io.ReadAll(wasmBinding.Module)
 	assert.NoError(t, err)
 	assert.Equal(t, []byte("mock multi-script wasm"), wasmModuleContent)
 	assert.Equal(t, WorkerWebAssemblyBindingType, res.BindingList[1].Binding.Type())

@@ -3,11 +3,10 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
-
-	"errors"
 )
 
 // SizeOptions can be passed to a list request to configure size and cursor location.

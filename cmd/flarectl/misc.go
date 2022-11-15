@@ -3,11 +3,10 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"strings"
-
-	"errors"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/olekukonko/tablewriter"
@@ -46,7 +45,7 @@ func initializeAPI(c *cli.Context) error {
 	}
 
 	if c.IsSet("account-id") {
-		cloudflare.UsingAccount(c.String("account-id"))(api) //nolint
+		cloudflare.UsingAccount(c.String("account-id"))(api) // nolint
 	}
 
 	return nil
@@ -93,7 +92,7 @@ func writeTable(c *cli.Context, data [][]string, cols ...string) {
 func checkFlags(c *cli.Context, flags ...string) error {
 	for _, flag := range flags {
 		if c.String(flag) == "" {
-			cli.ShowSubcommandHelp(c) //nolint
+			cli.ShowSubcommandHelp(c) // nolint
 			err := fmt.Errorf("error: the required flag %q was empty or not provided", flag)
 			fmt.Fprintln(os.Stderr, err)
 			return err

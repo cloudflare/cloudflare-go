@@ -3,13 +3,12 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"time"
-
-	"errors"
 )
 
 // OriginCACertificate represents a Cloudflare-issued certificate.
@@ -226,7 +225,7 @@ func OriginCARootCertificate(algorithm string) ([]byte, error) {
 		return nil, errors.New(errRequestNotSuccessful)
 	}
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("Response body could not be read: %w", err)
 	}
