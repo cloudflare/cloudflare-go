@@ -1,5 +1,9 @@
 ## 0.55.0 (Unreleased)
 
+DEPENDENCIES:
+
+* deps: bumps github.com/urfave/cli/v2 from 2.23.4 to 2.23.5 ([#1127](https://github.com/cloudflare/cloudflare-go/issues/1127))
+
 ## 0.54.0 (November 9th, 2022)
 
 ENHANCEMENTS:
