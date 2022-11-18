@@ -1,5 +1,9 @@
 ## 0.55.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* device_posture_rule: add input fields crowdstrike ([#1126](https://github.com/cloudflare/cloudflare-go/issues/1126))
+
 DEPENDENCIES:
 
 * deps: bumps github.com/urfave/cli/v2 from 2.23.4 to 2.23.5 ([#1127](https://github.com/cloudflare/cloudflare-go/issues/1127))
