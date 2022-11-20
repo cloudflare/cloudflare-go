@@ -31,13 +31,22 @@ type R2BucketListResponse struct {
 	Response
 }
 
-// R2Buckets Lists R2 buckets.
-func (api *API) R2Buckets(ctx context.Context, rc *ResourceContainer) ([]R2Bucket, error) {
+type ListR2BucketsParams struct {
+	Name       string `url:"name_contains,omitempty"`
+	StartAfter string `url:"start_after,omitempty"`
+	PerPage    int64  `url:"per_page,omitempty"`
+	Order      string `url:"order,omitempty"`
+	Direction  string `url:"direction,omitempty"`
+	Cursor     string `url:"cursor,omitempty"`
+}
+
+// ListR2Buckets Lists R2 buckets.
+func (api *API) ListR2Buckets(ctx context.Context, rc *ResourceContainer, params ListR2BucketsParams) ([]R2Bucket, error) {
 	if rc.Identifier == "" {
 		return []R2Bucket{}, ErrMissingAccountID
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/r2/buckets", rc.Identifier)
+	uri := buildURI(fmt.Sprintf("/accounts/%s/r2/buckets", rc.Identifier), params)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []R2Bucket{}, err

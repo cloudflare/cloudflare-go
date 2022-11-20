@@ -33,18 +33,13 @@ func TestR2_ListBuckets(t *testing.T) {
 }`)
 	})
 
-	_, err := client.R2Buckets(context.Background(), AccountIdentifier(""))
-	if assert.Error(t, err) {
-		assert.Equal(t, ErrMissingAccountID, err)
-	}
-
 	want := []R2Bucket{
 		{
 			Name:         "example-bucket",
 			CreationDate: "2022-06-24T19:58:49.477Z",
 		},
 	}
-	actual, err := client.R2Buckets(context.Background(), AccountIdentifier(testAccountID))
+	actual, err := client.ListR2Buckets(context.Background(), AccountIdentifier(testAccountID), ListR2BucketsParams{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
