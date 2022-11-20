@@ -11,6 +11,40 @@ import (
 
 const testBucketName = "example-bucket"
 
+func TestR2_ListBuckets(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc(fmt.Sprintf("/accounts/%s/r2/buckets", testAccountID), func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+  "success": true,
+  "errors": [],
+  "messages": [],
+  "result": {
+	"buckets": [
+		{
+			"name": "example-bucket",
+			"creation_date": "2022-06-24T19:58:49.477Z"
+		}
+	]
+  }
+}`)
+	})
+
+	want := []R2Bucket{
+		{
+			Name:         "example-bucket",
+			CreationDate: "2022-06-24T19:58:49.477Z",
+		},
+	}
+	actual, err := client.ListR2Buckets(context.Background(), AccountIdentifier(testAccountID), ListR2BucketsParams{})
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
 func TestR2_CreateBucket(t *testing.T) {
 	setup()
 	defer teardown()
