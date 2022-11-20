@@ -14,6 +14,15 @@ var (
 	ErrMissingEnvironment = errors.New("required environment missing")
 )
 
+type AttachWorkersDomainParams struct {
+	ID          string `json:"id,omitempty"`
+	ZoneID      string `json:"zone_id,omitempty"`
+	ZoneName    string `json:"zone_name,omitempty"`
+	Hostname    string `json:"hostname,omitempty"`
+	Service     string `json:"service,omitempty"`
+	Environment string `json:"environment,omitempty"`
+}
+
 type WorkersDomain struct {
 	ID          string `json:"id,omitempty"`
 	ZoneID      string `json:"zone_id,omitempty"`
@@ -28,7 +37,7 @@ type WorkersDomainResponse struct {
 	Result WorkersDomain `json:"result"`
 }
 
-type WorkersDomainListParams struct {
+type ListWorkersDomainParams struct {
 	ZoneID      string `url:"zone_id,omitempty"`
 	ZoneName    string `url:"zone_name,omitempty"`
 	Hostname    string `url:"hostname,omitempty"`
@@ -41,86 +50,101 @@ type WorkersDomainListResponse struct {
 	Result []WorkersDomain `json:"result"`
 }
 
-// WorkersListDomains lists all Worker Domains.
+// ListWorkersDomains lists all Worker Domains.
 //
 // API reference: https://api.cloudflare.com/#worker-domain-list-domains
-func (api *API) WorkersListDomains(ctx context.Context, rc *ResourceContainer, params WorkersDomainListParams) ([]WorkersDomain, error) {
+func (api *API) ListWorkersDomains(ctx context.Context, rc *ResourceContainer, params ListWorkersDomainParams) ([]WorkersDomain, error) {
 	if rc.Identifier == "" {
 		return []WorkersDomain{}, ErrMissingAccountID
 	}
+
 	uri := buildURI(fmt.Sprintf("/accounts/%s/workers/domains", rc.Identifier), params)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []WorkersDomain{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
+
 	var r WorkersDomainListResponse
 	if err := json.Unmarshal(res, &r); err != nil {
 		return []WorkersDomain{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
+
 	return r.Result, nil
 }
 
-// WorkersAttachDomain attaches a worker to a zone and hostname.
+// AttachWorkersDomain attaches a worker to a zone and hostname.
 //
 // API reference: https://api.cloudflare.com/#worker-domain-attach-to-domain
-func (api *API) WorkersAttachDomain(ctx context.Context, rc *ResourceContainer, domain WorkersDomain) (WorkersDomain, error) {
+func (api *API) AttachWorkersDomain(ctx context.Context, rc *ResourceContainer, domain AttachWorkersDomainParams) (WorkersDomain, error) {
 	if rc.Identifier == "" {
 		return WorkersDomain{}, ErrMissingAccountID
 	}
+
 	if domain.ZoneID == "" {
 		return WorkersDomain{}, ErrMissingZoneID
 	}
+
 	if domain.Hostname == "" {
 		return WorkersDomain{}, ErrMissingHostname
 	}
+
 	if domain.Service == "" {
 		return WorkersDomain{}, ErrMissingService
 	}
+
 	if domain.Environment == "" {
 		return WorkersDomain{}, ErrMissingEnvironment
 	}
+
 	uri := fmt.Sprintf("/accounts/%s/workers/domains", rc.Identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, domain)
 	if err != nil {
 		return WorkersDomain{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
+
 	var r WorkersDomainResponse
 	if err := json.Unmarshal(res, &r); err != nil {
 		return WorkersDomain{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
+
 	return r.Result, nil
 }
 
-// WorkersGetDomain gets a Worker Domain.
+// GetWorkersDomain gets a single Worker Domain.
 //
 // API reference: https://api.cloudflare.com/#worker-domain-get-a-domain
-func (api *API) WorkersGetDomain(ctx context.Context, rc *ResourceContainer, domainID string) (WorkersDomain, error) {
+func (api *API) GetWorkersDomain(ctx context.Context, rc *ResourceContainer, domainID string) (WorkersDomain, error) {
 	if rc.Identifier == "" {
 		return WorkersDomain{}, ErrMissingAccountID
 	}
+
 	uri := fmt.Sprintf("/accounts/%s/workers/domains/%s", rc.Identifier, domainID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return WorkersDomain{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
+
 	var r WorkersDomainResponse
 	if err := json.Unmarshal(res, &r); err != nil {
 		return WorkersDomain{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
+
 	return r.Result, nil
 }
 
-// WorkersDetachDomain detaches a worker from a zone and hostname.
+// DetachWorkersDomain detaches a worker from a zone and hostname.
 //
 // API reference: https://api.cloudflare.com/#worker-domain-detach-from-domain
-func (api *API) WorkersDetachDomain(ctx context.Context, rc *ResourceContainer, domainID string) error {
+func (api *API) DetachWorkersDomain(ctx context.Context, rc *ResourceContainer, domainID string) error {
 	if rc.Identifier == "" {
 		return ErrMissingAccountID
 	}
+
 	uri := fmt.Sprintf("/accounts/%s/workers/domains/%s", rc.Identifier, domainID)
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
+
 	return nil
 }

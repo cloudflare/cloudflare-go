@@ -41,11 +41,11 @@ func TestWorkersDomain_GetDomain(t *testing.T) {
 		  }
 		}`)
 	})
-	_, err := client.WorkersGetDomain(context.Background(), AccountIdentifier(""), "")
+	_, err := client.GetWorkersDomain(context.Background(), AccountIdentifier(""), "")
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
-	res, err := client.WorkersGetDomain(context.Background(), AccountIdentifier(testAccountID), testWorkerDomainID)
+	res, err := client.GetWorkersDomain(context.Background(), AccountIdentifier(testAccountID), testWorkerDomainID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedWorkerDomain, res)
 	}
@@ -74,11 +74,11 @@ func TestWorkersDomain_ListDomains(t *testing.T) {
 		  ]
 		}`)
 	})
-	_, err := client.WorkersListDomains(context.Background(), AccountIdentifier(""), WorkersDomainListParams{})
+	_, err := client.ListWorkersDomains(context.Background(), AccountIdentifier(""), ListWorkersDomainParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
-	res, err := client.WorkersListDomains(context.Background(), AccountIdentifier(testAccountID), WorkersDomainListParams{})
+	res, err := client.ListWorkersDomains(context.Background(), AccountIdentifier(testAccountID), ListWorkersDomainParams{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, 1, len(res))
 		assert.Equal(t, expectedWorkerDomain, res[0])
@@ -106,24 +106,24 @@ func TestWorkersDomain_AttachDomain(t *testing.T) {
 		  }
 		}`)
 	})
-	_, err := client.WorkersAttachDomain(context.Background(), AccountIdentifier(""), WorkersDomain{})
+	_, err := client.AttachWorkersDomain(context.Background(), AccountIdentifier(""), AttachWorkersDomainParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	_, err = client.WorkersAttachDomain(context.Background(), AccountIdentifier(testAccountID), WorkersDomain{})
+	_, err = client.AttachWorkersDomain(context.Background(), AccountIdentifier(testAccountID), AttachWorkersDomainParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingZoneID, err)
 	}
 
-	_, err = client.WorkersAttachDomain(context.Background(), AccountIdentifier(testAccountID), WorkersDomain{
+	_, err = client.AttachWorkersDomain(context.Background(), AccountIdentifier(testAccountID), AttachWorkersDomainParams{
 		ZoneID: testZoneID,
 	})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingHostname, err)
 	}
 
-	_, err = client.WorkersAttachDomain(context.Background(), AccountIdentifier(testAccountID), WorkersDomain{
+	_, err = client.AttachWorkersDomain(context.Background(), AccountIdentifier(testAccountID), AttachWorkersDomainParams{
 		ZoneID:   testZoneID,
 		Hostname: "foo.example.com",
 	})
@@ -131,7 +131,7 @@ func TestWorkersDomain_AttachDomain(t *testing.T) {
 		assert.Equal(t, ErrMissingService, err)
 	}
 
-	_, err = client.WorkersAttachDomain(context.Background(), AccountIdentifier(testAccountID), WorkersDomain{
+	_, err = client.AttachWorkersDomain(context.Background(), AccountIdentifier(testAccountID), AttachWorkersDomainParams{
 		ZoneID:   testZoneID,
 		Hostname: "foo.example.com",
 		Service:  "foo",
@@ -140,7 +140,7 @@ func TestWorkersDomain_AttachDomain(t *testing.T) {
 		assert.Equal(t, ErrMissingEnvironment, err)
 	}
 
-	res, err := client.WorkersAttachDomain(context.Background(), AccountIdentifier(testAccountID), WorkersDomain{
+	res, err := client.AttachWorkersDomain(context.Background(), AccountIdentifier(testAccountID), AttachWorkersDomainParams{
 		ZoneID:      testZoneID,
 		Hostname:    "foo.example.com",
 		Service:     "foo",
@@ -172,10 +172,10 @@ func TestWorkersDomain_DetachDomain(t *testing.T) {
 		  }
 		}`)
 	})
-	err := client.WorkersDetachDomain(context.Background(), AccountIdentifier(""), testWorkerDomainID)
+	err := client.DetachWorkersDomain(context.Background(), AccountIdentifier(""), testWorkerDomainID)
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
-	err = client.WorkersDetachDomain(context.Background(), AccountIdentifier(testAccountID), testWorkerDomainID)
+	err = client.DetachWorkersDomain(context.Background(), AccountIdentifier(testAccountID), testWorkerDomainID)
 	assert.NoError(t, err)
 }
