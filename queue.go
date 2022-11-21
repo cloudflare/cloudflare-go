@@ -68,7 +68,9 @@ type ListQueueConsumersResponse struct {
 	Result     []QueueConsumer `json:"result"`
 }
 
-type ListQueuesParams struct{}
+type ListQueuesParams struct {
+	ResultInfo
+}
 
 type QueueConsumerResponse struct {
 	Response
@@ -88,6 +90,7 @@ type UpdateQueueParams struct {
 
 type ListQueueConsumersParams struct {
 	QueueName string `url:"-"`
+	ResultInfo
 }
 
 type CreateQueueConsumerParams struct {
@@ -107,24 +110,46 @@ type DeleteQueueConsumerParams struct {
 // ListQueues returns the queues owned by an account.
 //
 // API reference: https://api.cloudflare.com/#queue-list-queues
-func (api *API) ListQueues(ctx context.Context, rc *ResourceContainer, params ListQueuesParams) ([]Queue, error) {
+func (api *API) ListQueues(ctx context.Context, rc *ResourceContainer, params ListQueuesParams) ([]Queue, *ResultInfo, error) {
 	if rc.Identifier == "" {
-		return []Queue{}, ErrMissingAccountID
+		return []Queue{}, &ResultInfo{}, ErrMissingAccountID
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/workers/queues", rc.Identifier)
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
-	if err != nil {
-		return []Queue{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
+	autoPaginate := true
+	if params.PerPage >= 1 || params.Page >= 1 {
+		autoPaginate = false
+	}
+	if params.PerPage < 1 {
+		params.PerPage = 50
+	}
+	if params.Page < 1 {
+		params.Page = 1
 	}
 
-	var r QueueListResponse
-	err = json.Unmarshal(res, &r)
-	if err != nil {
-		return []Queue{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	var queues []Queue
+	var qResponse QueueListResponse
+	for {
+		uri := buildURI(fmt.Sprintf("/accounts/%s/workers/queues", rc.Identifier), params)
+
+		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+		if err != nil {
+			return []Queue{}, &ResultInfo{}, err
+		}
+
+		err = json.Unmarshal(res, &qResponse)
+		if err != nil {
+			return []Queue{}, &ResultInfo{}, fmt.Errorf("failed to unmarshal filters JSON data: %w", err)
+		}
+
+		queues = append(queues, qResponse.Result...)
+		params.ResultInfo = qResponse.ResultInfo.Next()
+
+		if params.ResultInfo.Done() || !autoPaginate {
+			break
+		}
 	}
 
-	return r.Result, nil
+	return queues, &qResponse.ResultInfo, nil
 }
 
 // CreateQueue creates a new queue.
@@ -228,27 +253,50 @@ func (api *API) UpdateQueue(ctx context.Context, rc *ResourceContainer, params U
 // ListQueueConsumers returns the consumers of a queue.
 //
 // API reference: https://api.cloudflare.com/#queue-list-queue-consumers
-func (api *API) ListQueueConsumers(ctx context.Context, rc *ResourceContainer, params ListQueueConsumersParams) ([]QueueConsumer, error) {
+func (api *API) ListQueueConsumers(ctx context.Context, rc *ResourceContainer, params ListQueueConsumersParams) ([]QueueConsumer, *ResultInfo, error) {
 	if rc.Identifier == "" {
-		return []QueueConsumer{}, ErrMissingAccountID
+		return []QueueConsumer{}, &ResultInfo{}, ErrMissingAccountID
 	}
 
 	if params.QueueName == "" {
-		return []QueueConsumer{}, ErrMissingQueueName
+		return []QueueConsumer{}, &ResultInfo{}, ErrMissingQueueName
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/workers/queues/%s/consumers", rc.Identifier, params.QueueName)
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
-	if err != nil {
-		return []QueueConsumer{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
+	autoPaginate := true
+	if params.PerPage >= 1 || params.Page >= 1 {
+		autoPaginate = false
+	}
+	if params.PerPage < 1 {
+		params.PerPage = 50
+	}
+	if params.Page < 1 {
+		params.Page = 1
 	}
 
-	var r ListQueueConsumersResponse
-	err = json.Unmarshal(res, &r)
-	if err != nil {
-		return []QueueConsumer{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	var queuesConsumers []QueueConsumer
+	var qResponse ListQueueConsumersResponse
+	for {
+		uri := buildURI(fmt.Sprintf("/accounts/%s/workers/queues/%s/consumers", rc.Identifier, params.QueueName), params)
+
+		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+		if err != nil {
+			return []QueueConsumer{}, &ResultInfo{}, err
+		}
+
+		err = json.Unmarshal(res, &qResponse)
+		if err != nil {
+			return []QueueConsumer{}, &ResultInfo{}, fmt.Errorf("failed to unmarshal filters JSON data: %w", err)
+		}
+
+		queuesConsumers = append(queuesConsumers, qResponse.Result...)
+		params.ResultInfo = qResponse.ResultInfo.Next()
+
+		if params.ResultInfo.Done() || !autoPaginate {
+			break
+		}
 	}
-	return r.Result, nil
+
+	return queuesConsumers, &qResponse.ResultInfo, nil
 }
 
 // CreateQueueConsumer creates a new consumer for a queue.

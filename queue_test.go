@@ -110,12 +110,12 @@ func TestQueue_List(t *testing.T) {
 }`)
 	})
 
-	_, err := client.ListQueues(context.Background(), AccountIdentifier(""), ListQueuesParams{})
+	_, _, err := client.ListQueues(context.Background(), AccountIdentifier(""), ListQueuesParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	result, err := client.ListQueues(context.Background(), AccountIdentifier(testAccountID), ListQueuesParams{})
+	result, _, err := client.ListQueues(context.Background(), AccountIdentifier(testAccountID), ListQueuesParams{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, 1, len(result))
 		assert.Equal(t, testQueue(), result[0])
@@ -333,17 +333,17 @@ func TestQueue_ListConsumers(t *testing.T) {
 		}`)
 	})
 
-	_, err := client.ListQueueConsumers(context.Background(), AccountIdentifier(""), ListQueueConsumersParams{})
+	_, _, err := client.ListQueueConsumers(context.Background(), AccountIdentifier(""), ListQueueConsumersParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	_, err = client.ListQueueConsumers(context.Background(), AccountIdentifier(testAccountID), ListQueueConsumersParams{})
+	_, _, err = client.ListQueueConsumers(context.Background(), AccountIdentifier(testAccountID), ListQueueConsumersParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingQueueName, err)
 	}
 
-	result, err := client.ListQueueConsumers(context.Background(), AccountIdentifier(testAccountID), ListQueueConsumersParams{QueueName: testQueueName})
+	result, _, err := client.ListQueueConsumers(context.Background(), AccountIdentifier(testAccountID), ListQueueConsumersParams{QueueName: testQueueName})
 	if assert.NoError(t, err) {
 		assert.Equal(t, 1, len(result))
 		assert.Equal(t, testQueueConsumer(), result[0])
