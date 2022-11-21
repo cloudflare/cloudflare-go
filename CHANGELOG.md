@@ -3,6 +3,7 @@
 ENHANCEMENTS:
 
 * device_posture_rule: add input fields crowdstrike ([#1126](https://github.com/cloudflare/cloudflare-go/issues/1126))
+* queue: add support queue API ([#1131](https://github.com/cloudflare/cloudflare-go/issues/1131))
 * r2: Add support for listing R2 buckets ([#1063](https://github.com/cloudflare/cloudflare-go/issues/1063))
 * workers_domain: add support for workers domain API ([#1130](https://github.com/cloudflare/cloudflare-go/issues/1130))
 
