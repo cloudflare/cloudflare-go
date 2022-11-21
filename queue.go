@@ -31,6 +31,7 @@ type QueueProducer struct {
 }
 
 type QueueConsumer struct {
+	Name            string                `json:"-"`
 	Service         string                `json:"service,omitempty"`
 	ScriptName      string                `json:"script_name,omitempty"`
 	Environment     string                `json:"environment,omitempty"`
@@ -52,7 +53,7 @@ type QueueListResponse struct {
 	Result     []Queue `json:"result"`
 }
 
-type QueueCreateParams struct {
+type CreateQueueParams struct {
 	Name string `json:"queue_name"`
 }
 
@@ -61,41 +62,75 @@ type QueueResponse struct {
 	Result Queue `json:"result"`
 }
 
-type QueueListConsumersResponse struct {
+type ListQueueConsumersResponse struct {
 	Response
 	ResultInfo `json:"result_info"`
 	Result     []QueueConsumer `json:"result"`
 }
+
+type ListQueuesParams struct{}
 
 type QueueConsumerResponse struct {
 	Response
 	Result QueueConsumer `json:"result"`
 }
 
-// QueueList returns the queues owned by an account.
+type UpdateQueueParams struct {
+	ID                  string          `json:"queue_id,omitempty"`
+	Name                string          `json:"queue_name,omitempty"`
+	CreatedOn           *time.Time      `json:"created_on,omitempty"`
+	ModifiedOn          *time.Time      `json:"modified_on,omitempty"`
+	ProducersTotalCount int             `json:"producers_total_count,omitempty"`
+	Producers           []QueueProducer `json:"producers,omitempty"`
+	ConsumersTotalCount int             `json:"consumers_total_count,omitempty"`
+	Consumers           []QueueConsumer `json:"consumers,omitempty"`
+}
+
+type ListQueueConsumersParams struct {
+	QueueName string `url:"-"`
+}
+
+type CreateQueueConsumerParams struct {
+	QueueName string `json:"-"`
+	Consumer  QueueConsumer
+}
+
+type UpdateQueueConsumerParams struct {
+	QueueName string `json:"-"`
+	Consumer  QueueConsumer
+}
+
+type DeleteQueueConsumerParams struct {
+	QueueName, ConsumerName string
+}
+
+// ListQueues returns the queues owned by an account.
 //
 // API reference: https://api.cloudflare.com/#queue-list-queues
-func (api *API) QueueList(ctx context.Context, rc *ResourceContainer) ([]Queue, error) {
+func (api *API) ListQueues(ctx context.Context, rc *ResourceContainer, params ListQueuesParams) ([]Queue, error) {
 	if rc.Identifier == "" {
 		return []Queue{}, ErrMissingAccountID
 	}
+
 	uri := fmt.Sprintf("/accounts/%s/workers/queues", rc.Identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []Queue{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
+
 	var r QueueListResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return []Queue{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
+
 	return r.Result, nil
 }
 
-// QueueCreate creates a new queue.
+// CreateQueue creates a new queue.
 //
 // API reference: https://api.cloudflare.com/#queue-create-queue
-func (api *API) QueueCreate(ctx context.Context, rc *ResourceContainer, queue QueueCreateParams) (Queue, error) {
+func (api *API) CreateQueue(ctx context.Context, rc *ResourceContainer, queue CreateQueueParams) (Queue, error) {
 	if rc.Identifier == "" {
 		return Queue{}, ErrMissingAccountID
 	}
@@ -118,10 +153,10 @@ func (api *API) QueueCreate(ctx context.Context, rc *ResourceContainer, queue Qu
 	return r.Result, nil
 }
 
-// QueueDelete deletes a queue.
+// DeleteQueue deletes a queue.
 //
 // API reference: https://api.cloudflare.com/#queue-delete-queue
-func (api *API) QueueDelete(ctx context.Context, rc *ResourceContainer, queueName string) error {
+func (api *API) DeleteQueue(ctx context.Context, rc *ResourceContainer, queueName string) error {
 	if rc.Identifier == "" {
 		return ErrMissingAccountID
 	}
@@ -137,13 +172,14 @@ func (api *API) QueueDelete(ctx context.Context, rc *ResourceContainer, queueNam
 	return nil
 }
 
-// QueueGet returns a queue.
+// GetQueue returns a single queue based on the name.
 //
 // API reference: https://api.cloudflare.com/#queue-get-queue
-func (api *API) QueueGet(ctx context.Context, rc *ResourceContainer, queueName string) (Queue, error) {
+func (api *API) GetQueue(ctx context.Context, rc *ResourceContainer, queueName string) (Queue, error) {
 	if rc.Identifier == "" {
 		return Queue{}, ErrMissingAccountID
 	}
+
 	if queueName == "" {
 		return Queue{}, ErrMissingQueueName
 	}
@@ -159,23 +195,24 @@ func (api *API) QueueGet(ctx context.Context, rc *ResourceContainer, queueName s
 	if err != nil {
 		return Queue{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
+
 	return r.Result, nil
 }
 
-// QueueUpdate updates a queue.
+// UpdateQueue updates a queue.
 //
 // API reference: https://api.cloudflare.com/#queue-update-queue
-func (api *API) QueueUpdate(ctx context.Context, rc *ResourceContainer, queueName string, queue Queue) (Queue, error) {
+func (api *API) UpdateQueue(ctx context.Context, rc *ResourceContainer, params UpdateQueueParams) (Queue, error) {
 	if rc.Identifier == "" {
 		return Queue{}, ErrMissingAccountID
 	}
 
-	if queueName == "" {
+	if params.Name == "" {
 		return Queue{}, ErrMissingQueueName
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/workers/queues/%s", rc.Identifier, queueName)
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, queue)
+	uri := fmt.Sprintf("/accounts/%s/workers/queues/%s", rc.Identifier, params.Name)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, nil)
 	if err != nil {
 		return Queue{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
@@ -188,25 +225,25 @@ func (api *API) QueueUpdate(ctx context.Context, rc *ResourceContainer, queueNam
 	return r.Result, nil
 }
 
-// QueueListConsumers returns the consumers of a queue.
+// ListQueueConsumers returns the consumers of a queue.
 //
 // API reference: https://api.cloudflare.com/#queue-list-queue-consumers
-func (api *API) QueueListConsumers(ctx context.Context, rc *ResourceContainer, queueName string) ([]QueueConsumer, error) {
+func (api *API) ListQueueConsumers(ctx context.Context, rc *ResourceContainer, params ListQueueConsumersParams) ([]QueueConsumer, error) {
 	if rc.Identifier == "" {
 		return []QueueConsumer{}, ErrMissingAccountID
 	}
 
-	if queueName == "" {
+	if params.QueueName == "" {
 		return []QueueConsumer{}, ErrMissingQueueName
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/workers/queues/%s/consumers", rc.Identifier, queueName)
+	uri := fmt.Sprintf("/accounts/%s/workers/queues/%s/consumers", rc.Identifier, params.QueueName)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []QueueConsumer{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
 
-	var r QueueListConsumersResponse
+	var r ListQueueConsumersResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return []QueueConsumer{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
@@ -214,20 +251,20 @@ func (api *API) QueueListConsumers(ctx context.Context, rc *ResourceContainer, q
 	return r.Result, nil
 }
 
-// QueueCreateConsumer creates a new consumer for a queue.
+// CreateQueueConsumer creates a new consumer for a queue.
 //
 // API reference: https://api.cloudflare.com/#queue-create-queue-consumer
-func (api *API) QueueCreateConsumer(ctx context.Context, rc *ResourceContainer, queueName string, consumer QueueConsumer) (QueueConsumer, error) {
+func (api *API) CreateQueueConsumer(ctx context.Context, rc *ResourceContainer, params CreateQueueConsumerParams) (QueueConsumer, error) {
 	if rc.Identifier == "" {
 		return QueueConsumer{}, ErrMissingAccountID
 	}
 
-	if queueName == "" {
+	if params.QueueName == "" {
 		return QueueConsumer{}, ErrMissingQueueName
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/workers/queues/%s/consumers", rc.Identifier, queueName)
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, consumer)
+	uri := fmt.Sprintf("/accounts/%s/workers/queues/%s/consumers", rc.Identifier, params.QueueName)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params.Consumer)
 	if err != nil {
 		return QueueConsumer{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
@@ -240,23 +277,23 @@ func (api *API) QueueCreateConsumer(ctx context.Context, rc *ResourceContainer, 
 	return r.Result, nil
 }
 
-// QueueDeleteConsumer deletes the consumer for a queue..
+// DeleteQueueConsumer deletes the consumer for a queue..
 //
 // API reference: https://api.cloudflare.com/#queue-delete-queue-consumer
-func (api *API) QueueDeleteConsumer(ctx context.Context, rc *ResourceContainer, queueName, consumerName string) error {
+func (api *API) DeleteQueueConsumer(ctx context.Context, rc *ResourceContainer, params DeleteQueueConsumerParams) error {
 	if rc.Identifier == "" {
 		return ErrMissingAccountID
 	}
 
-	if queueName == "" {
+	if params.QueueName == "" {
 		return ErrMissingQueueName
 	}
 
-	if consumerName == "" {
+	if params.ConsumerName == "" {
 		return ErrMissingQueueConsumerName
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/workers/queues/%s/consumers/%s", rc.Identifier, queueName, consumerName)
+	uri := fmt.Sprintf("/accounts/%s/workers/queues/%s/consumers/%s", rc.Identifier, params.QueueName, params.ConsumerName)
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return fmt.Errorf("%s: %w", errMakeRequestError, err)
@@ -265,24 +302,24 @@ func (api *API) QueueDeleteConsumer(ctx context.Context, rc *ResourceContainer, 
 	return nil
 }
 
-// QueueUpdateConsumer updates the consumer for a queue, or creates one if it does not exist..
+// UpdateQueueConsumer updates the consumer for a queue, or creates one if it does not exist..
 //
 // API reference: https://api.cloudflare.com/#queue-update-queue-consumer
-func (api *API) QueueUpdateConsumer(ctx context.Context, rc *ResourceContainer, queueName, consumerName string, consumer QueueConsumer) (QueueConsumer, error) {
+func (api *API) UpdateQueueConsumer(ctx context.Context, rc *ResourceContainer, params UpdateQueueConsumerParams) (QueueConsumer, error) {
 	if rc.Identifier == "" {
 		return QueueConsumer{}, ErrMissingAccountID
 	}
 
-	if queueName == "" {
+	if params.QueueName == "" {
 		return QueueConsumer{}, ErrMissingQueueName
 	}
 
-	if consumerName == "" {
+	if params.Consumer.Name == "" {
 		return QueueConsumer{}, ErrMissingQueueConsumerName
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/workers/queues/%s/consumers/%s", rc.Identifier, queueName, consumerName)
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, consumer)
+	uri := fmt.Sprintf("/accounts/%s/workers/queues/%s/consumers/%s", rc.Identifier, params.QueueName, params.Consumer.Name)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params.Consumer)
 	if err != nil {
 		return QueueConsumer{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}

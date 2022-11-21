@@ -110,12 +110,12 @@ func TestQueue_List(t *testing.T) {
 }`)
 	})
 
-	_, err := client.QueueList(context.Background(), AccountIdentifier(""))
+	_, err := client.ListQueues(context.Background(), AccountIdentifier(""), ListQueuesParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	result, err := client.QueueList(context.Background(), AccountIdentifier(testAccountID))
+	result, err := client.ListQueues(context.Background(), AccountIdentifier(testAccountID), ListQueuesParams{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, 1, len(result))
 		assert.Equal(t, testQueue(), result[0])
@@ -142,16 +142,16 @@ func TestQueue_Create(t *testing.T) {
 		}
 	}`)
 	})
-	_, err := client.QueueCreate(context.Background(), AccountIdentifier(""), QueueCreateParams{})
+	_, err := client.CreateQueue(context.Background(), AccountIdentifier(""), CreateQueueParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	_, err = client.QueueCreate(context.Background(), AccountIdentifier(testAccountID), QueueCreateParams{})
+	_, err = client.CreateQueue(context.Background(), AccountIdentifier(testAccountID), CreateQueueParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingQueueName, err)
 	}
-	results, err := client.QueueCreate(context.Background(), AccountIdentifier(testAccountID), QueueCreateParams{Name: "example-queue"})
+	results, err := client.CreateQueue(context.Background(), AccountIdentifier(testAccountID), CreateQueueParams{Name: "example-queue"})
 	if assert.NoError(t, err) {
 		CreatedOn, _ := time.Parse(time.RFC3339, "2023-01-01T00:00:00Z")
 		ModifiedOn, _ := time.Parse(time.RFC3339, "2023-01-01T00:00:00Z")
@@ -181,17 +181,17 @@ func TestQueue_Delete(t *testing.T) {
 		  "result": null
 		}`)
 	})
-	err := client.QueueDelete(context.Background(), AccountIdentifier(""), "")
+	err := client.DeleteQueue(context.Background(), AccountIdentifier(""), "")
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	err = client.QueueDelete(context.Background(), AccountIdentifier(testAccountID), "")
+	err = client.DeleteQueue(context.Background(), AccountIdentifier(testAccountID), "")
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingQueueName, err)
 	}
 
-	err = client.QueueDelete(context.Background(), AccountIdentifier(testAccountID), testQueueName)
+	err = client.DeleteQueue(context.Background(), AccountIdentifier(testAccountID), testQueueName)
 	assert.NoError(t, err)
 }
 
@@ -236,17 +236,17 @@ func TestQueue_Get(t *testing.T) {
 		}`)
 	})
 
-	_, err := client.QueueGet(context.Background(), AccountIdentifier(""), "")
+	_, err := client.GetQueue(context.Background(), AccountIdentifier(""), "")
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	_, err = client.QueueGet(context.Background(), AccountIdentifier(testAccountID), "")
+	_, err = client.GetQueue(context.Background(), AccountIdentifier(testAccountID), "")
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingQueueName, err)
 	}
 
-	result, err := client.QueueGet(context.Background(), AccountIdentifier(testAccountID), testQueueID)
+	result, err := client.GetQueue(context.Background(), AccountIdentifier(testAccountID), testQueueID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, testQueue(), result)
 	}
@@ -256,8 +256,8 @@ func TestQueue_Update(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc(fmt.Sprintf("/accounts/%s/workers/queues/%s", testAccountID, testQueueID), func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PATCH', got %s", r.Method)
+	mux.HandleFunc(fmt.Sprintf("/accounts/%s/workers/queues/%s", testAccountID, testQueueName), func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
@@ -272,17 +272,17 @@ func TestQueue_Update(t *testing.T) {
 		}
 	}`)
 	})
-	_, err := client.QueueUpdate(context.Background(), AccountIdentifier(""), "", Queue{})
+	_, err := client.UpdateQueue(context.Background(), AccountIdentifier(""), UpdateQueueParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	_, err = client.QueueUpdate(context.Background(), AccountIdentifier(testAccountID), "", Queue{})
+	_, err = client.UpdateQueue(context.Background(), AccountIdentifier(testAccountID), UpdateQueueParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingQueueName, err)
 	}
 
-	results, err := client.QueueUpdate(context.Background(), AccountIdentifier(testAccountID), testQueueID, Queue{Name: "example-queue"})
+	results, err := client.UpdateQueue(context.Background(), AccountIdentifier(testAccountID), UpdateQueueParams{Name: "example-queue"})
 	if assert.NoError(t, err) {
 		CreatedOn, _ := time.Parse(time.RFC3339, "2023-01-01T00:00:00Z")
 		ModifiedOn, _ := time.Parse(time.RFC3339, "2023-01-01T00:00:00Z")
@@ -301,7 +301,7 @@ func TestQueue_ListConsumers(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc(fmt.Sprintf("/accounts/%s/workers/queues/%s/consumers", testAccountID, testQueueID), func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(fmt.Sprintf("/accounts/%s/workers/queues/%s/consumers", testAccountID, testQueueName), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
@@ -333,17 +333,17 @@ func TestQueue_ListConsumers(t *testing.T) {
 		}`)
 	})
 
-	_, err := client.QueueListConsumers(context.Background(), AccountIdentifier(""), "")
+	_, err := client.ListQueueConsumers(context.Background(), AccountIdentifier(""), ListQueueConsumersParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	_, err = client.QueueListConsumers(context.Background(), AccountIdentifier(testAccountID), "")
+	_, err = client.ListQueueConsumers(context.Background(), AccountIdentifier(testAccountID), ListQueueConsumersParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingQueueName, err)
 	}
 
-	result, err := client.QueueListConsumers(context.Background(), AccountIdentifier(testAccountID), testQueueID)
+	result, err := client.ListQueueConsumers(context.Background(), AccountIdentifier(testAccountID), ListQueueConsumersParams{QueueName: testQueueName})
 	if assert.NoError(t, err) {
 		assert.Equal(t, 1, len(result))
 		assert.Equal(t, testQueueConsumer(), result[0])
@@ -377,20 +377,20 @@ func TestQueue_CreateConsumer(t *testing.T) {
 		}`)
 	})
 
-	_, err := client.QueueCreateConsumer(context.Background(), AccountIdentifier(""), "", QueueConsumer{})
+	_, err := client.CreateQueueConsumer(context.Background(), AccountIdentifier(""), CreateQueueConsumerParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	_, err = client.QueueCreateConsumer(context.Background(), AccountIdentifier(testAccountID), "", QueueConsumer{})
+	_, err = client.CreateQueueConsumer(context.Background(), AccountIdentifier(testAccountID), CreateQueueConsumerParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingQueueName, err)
 	}
 
-	result, err := client.QueueCreateConsumer(context.Background(), AccountIdentifier(testAccountID), testQueueName, QueueConsumer{
+	result, err := client.CreateQueueConsumer(context.Background(), AccountIdentifier(testAccountID), CreateQueueConsumerParams{QueueName: testQueueName, Consumer: QueueConsumer{
 		Service:     "example-consumer",
 		Environment: "production",
-	})
+	}})
 	if assert.NoError(t, err) {
 		expectedQueueConsumer := testQueueConsumer()
 		expectedQueueConsumer.DeadLetterQueue = "example-dlq"
@@ -414,22 +414,22 @@ func TestQueue_DeleteConsumer(t *testing.T) {
 		}`)
 	})
 
-	err := client.QueueDeleteConsumer(context.Background(), AccountIdentifier(""), "", "")
+	err := client.DeleteQueueConsumer(context.Background(), AccountIdentifier(""), DeleteQueueConsumerParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	err = client.QueueDeleteConsumer(context.Background(), AccountIdentifier(testAccountID), "", "")
+	err = client.DeleteQueueConsumer(context.Background(), AccountIdentifier(testAccountID), DeleteQueueConsumerParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingQueueName, err)
 	}
 
-	err = client.QueueDeleteConsumer(context.Background(), AccountIdentifier(testAccountID), testQueueName, "")
+	err = client.DeleteQueueConsumer(context.Background(), AccountIdentifier(testAccountID), DeleteQueueConsumerParams{QueueName: testQueueName})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingQueueConsumerName, err)
 	}
 
-	err = client.QueueDeleteConsumer(context.Background(), AccountIdentifier(testAccountID), testQueueName, testQueueConsumerName)
+	err = client.DeleteQueueConsumer(context.Background(), AccountIdentifier(testAccountID), DeleteQueueConsumerParams{QueueName: testQueueName, ConsumerName: testQueueConsumerName})
 	assert.NoError(t, err)
 }
 
@@ -459,25 +459,26 @@ func TestQueue_UpdateConsumer(t *testing.T) {
 		}`)
 	})
 
-	_, err := client.QueueUpdateConsumer(context.Background(), AccountIdentifier(""), "", "", QueueConsumer{})
+	_, err := client.UpdateQueueConsumer(context.Background(), AccountIdentifier(""), UpdateQueueConsumerParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	_, err = client.QueueUpdateConsumer(context.Background(), AccountIdentifier(testAccountID), "", "", QueueConsumer{})
+	_, err = client.UpdateQueueConsumer(context.Background(), AccountIdentifier(testAccountID), UpdateQueueConsumerParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingQueueName, err)
 	}
 
-	_, err = client.QueueUpdateConsumer(context.Background(), AccountIdentifier(testAccountID), testQueueName, "", QueueConsumer{})
+	_, err = client.UpdateQueueConsumer(context.Background(), AccountIdentifier(testAccountID), UpdateQueueConsumerParams{QueueName: testQueueName})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingQueueConsumerName, err)
 	}
 
-	result, err := client.QueueUpdateConsumer(context.Background(), AccountIdentifier(testAccountID), testQueueName, testQueueConsumerName, QueueConsumer{
+	result, err := client.UpdateQueueConsumer(context.Background(), AccountIdentifier(testAccountID), UpdateQueueConsumerParams{QueueName: testQueueName, Consumer: QueueConsumer{
+		Name:        testQueueConsumerName,
 		Service:     "example-consumer",
 		Environment: "production",
-	})
+	}})
 	if assert.NoError(t, err) {
 		assert.Equal(t, testQueueConsumer(), result)
 	}
