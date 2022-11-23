@@ -154,6 +154,11 @@ const (
 				"name": "MY_BUCKET",
 				"type": "r2_bucket",
 				"bucket_name": "bucket"
+			},
+			{
+				"name": "MY_DATASET",
+				"type": "analytics_engine",
+				"dataset": "my_dataset"
 			}
 		],
 		"success": true,
@@ -1216,7 +1221,7 @@ func TestWorkers_ListWorkerBindingsMultiScript(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Equal(t, successResponse, res.Response)
-	assert.Equal(t, 7, len(res.BindingList))
+	assert.Equal(t, 8, len(res.BindingList))
 
 	assert.Equal(t, res.BindingList[0], WorkerBindingListItem{
 		Name: "MY_KV",
@@ -1270,6 +1275,14 @@ func TestWorkers_ListWorkerBindingsMultiScript(t *testing.T) {
 		},
 	})
 	assert.Equal(t, WorkerR2BucketBindingType, res.BindingList[6].Binding.Type())
+
+	assert.Equal(t, res.BindingList[7], WorkerBindingListItem{
+		Name: "MY_DATASET",
+		Binding: WorkerAnalyticsEngineBinding{
+			Dataset: "my_dataset",
+		},
+	})
+	assert.Equal(t, WorkerAnalyticsEngineBindingType, res.BindingList[7].Binding.Type())
 }
 
 func TestWorkers_UpdateWorkerRouteErrorsWhenMixingSingleAndMultiScriptProperties(t *testing.T) {
