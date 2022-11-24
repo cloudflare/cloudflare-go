@@ -1,5 +1,9 @@
 ## 0.56.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* workers: Support for Workers Analytics Engine bindings ([#1133](https://github.com/cloudflare/cloudflare-go/issues/1133))
+
 ## 0.55.0 (November 23th, 2022)
 
 BREAKING CHANGES:
