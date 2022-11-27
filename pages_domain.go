@@ -44,8 +44,8 @@ type PagesDomainsResponse struct {
 
 // PagesDomainParameters represents parameters for a pages domain request.
 type PagesDomainParameters struct {
-	AccountID   string
-	ProjectName string
+	AccountID   string `json:"-"`
+	ProjectName string `json:"-"`
 	DomainName  string `json:"name,omitempty"`
 }
 
