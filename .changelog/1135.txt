@@ -1,0 +1,3 @@
+```release-note:note
+Removed the logs v1 endpoint for Pages deployments. Please switch to v2: https://developers.cloudflare.com/api/operations/pages-deployment-get-deployment-logs
+```
