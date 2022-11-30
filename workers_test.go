@@ -328,7 +328,7 @@ func TestDeleteWorker(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
-		fmt.Fprintf(w, deleteWorkerResponseData)
+		fmt.Fprint(w, deleteWorkerResponseData)
 	})
 
 	err := client.DeleteWorker(context.Background(), AccountIdentifier(testAccountID), DeleteWorkerParams{ScriptName: "bar"})
@@ -342,7 +342,7 @@ func TestGetWorker(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/foo", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
-		fmt.Fprintf(w, workerScript)
+		fmt.Fprint(w, workerScript)
 	})
 	res, err := client.GetWorker(context.Background(), AccountIdentifier(testAccountID), "foo")
 	want := WorkerScriptResponse{
@@ -363,7 +363,7 @@ func TestGetWorker_Module(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/foo", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "multipart/form-data; boundary=workermodulescriptdownload")
-		fmt.Fprintf(w, workerModuleScriptDownloadResponse)
+		fmt.Fprint(w, workerModuleScriptDownloadResponse)
 	})
 
 	res, err := client.GetWorker(context.Background(), AccountIdentifier(testAccountID), "foo")
@@ -387,7 +387,7 @@ func TestListWorkers(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, listWorkersResponseData)
+		fmt.Fprint(w, listWorkersResponseData)
 	})
 
 	res, _, err := client.ListWorkers(context.Background(), AccountIdentifier(testAccountID), ListWorkersParams{})
@@ -420,7 +420,7 @@ func TestUploadWorker_Basic(t *testing.T) {
 		contentTypeHeader := r.Header.Get("content-type")
 		assert.Equal(t, "application/javascript", contentTypeHeader, "Expected content-type request header to be 'application/javascript', got %s", contentTypeHeader)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, uploadWorkerResponseData) //nolint
+		fmt.Fprint(w, uploadWorkerResponseData)
 	})
 	res, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{ScriptName: "foo", Script: workerScript})
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
@@ -459,7 +459,7 @@ func TestUploadWorker_Module(t *testing.T) {
 		assert.Equal(t, expectedContentType, contentTypeHeader, "Expected content-type request header to be %s, got %s", expectedContentType, contentTypeHeader)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, uploadWorkerModuleResponseData)
+		fmt.Fprint(w, uploadWorkerModuleResponseData)
 	})
 	res, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{ScriptName: "foo", Script: workerModuleScript, Module: true})
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
@@ -501,7 +501,7 @@ func TestUploadWorker_WithDurableObjectBinding(t *testing.T) {
 		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, uploadWorkerResponseData)
+		fmt.Fprint(w, uploadWorkerResponseData)
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
@@ -546,7 +546,7 @@ func TestUploadWorker_WithInheritBinding(t *testing.T) {
 		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, uploadWorkerResponseData)
+		fmt.Fprint(w, uploadWorkerResponseData)
 	}
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
 
@@ -598,7 +598,7 @@ func TestUploadWorker_WithKVBinding(t *testing.T) {
 		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, uploadWorkerResponseData)
+		fmt.Fprint(w, uploadWorkerResponseData)
 	}
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
 
@@ -639,7 +639,7 @@ func TestUploadWorker_WithWasmBinding(t *testing.T) {
 		assert.Equal(t, []byte("fake-wasm"), wasmContent)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, uploadWorkerResponseData)
+		fmt.Fprint(w, uploadWorkerResponseData)
 	}
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
 
@@ -677,7 +677,7 @@ func TestUploadWorker_WithPlainTextBinding(t *testing.T) {
 		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, uploadWorkerResponseData) //nolint
+		fmt.Fprint(w, uploadWorkerResponseData)
 	}
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
 
@@ -723,7 +723,7 @@ func TestUploadWorker_ModuleWithPlainTextBinding(t *testing.T) {
 		assert.Equal(t, expectedContentDisposition, contentDispositonHeader, "Expected content-disposition request header to be %s, got %s", expectedContentDisposition, contentDispositonHeader)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, uploadWorkerModuleResponseData) //nolint
+		fmt.Fprint(w, uploadWorkerModuleResponseData)
 	})
 
 	_, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{
@@ -761,7 +761,7 @@ func TestUploadWorker_WithSecretTextBinding(t *testing.T) {
 		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, uploadWorkerResponseData) //nolint
+		fmt.Fprint(w, uploadWorkerResponseData)
 	}
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
 
@@ -804,7 +804,7 @@ func TestUploadWorker_WithServiceBinding(t *testing.T) {
 		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, uploadWorkerResponseData) //nolint
+		fmt.Fprint(w, uploadWorkerResponseData)
 	}
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
 

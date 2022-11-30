@@ -17,7 +17,7 @@ func TestListWorkerBindings(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/my-script/bindings", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, listBindingsResponseData)
+		fmt.Fprint(w, listBindingsResponseData)
 	})
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/my-script/bindings/MY_WASM/content", func(w http.ResponseWriter, r *http.Request) {

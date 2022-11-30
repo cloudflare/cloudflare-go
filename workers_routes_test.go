@@ -16,7 +16,7 @@ func TestCreateWorkersRoute(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/workers/routes", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, createWorkerRouteResponse)
+		fmt.Fprint(w, createWorkerRouteResponse)
 	})
 
 	res, err := client.CreateWorkerRoute(context.Background(), ZoneIdentifier(testZoneID), CreateWorkerRouteParams{
@@ -37,7 +37,7 @@ func TestDeleteWorkersRoute(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/workers/routes/e7a57d8746e74ae49c25994dadb421b1", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, deleteWorkerRouteResponseData)
+		fmt.Fprint(w, deleteWorkerRouteResponseData)
 	})
 	res, err := client.DeleteWorkerRoute(context.Background(), ZoneIdentifier(testZoneID), "e7a57d8746e74ae49c25994dadb421b1")
 	want := WorkerRouteResponse{successResponse,
@@ -56,7 +56,7 @@ func TestListWorkersRoute(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/workers/routes", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, listWorkerRouteResponse)
+		fmt.Fprint(w, listWorkerRouteResponse)
 	})
 
 	res, err := client.ListWorkerRoutes(context.Background(), ZoneIdentifier(testZoneID), ListWorkerRoutesParams{})
@@ -79,7 +79,7 @@ func TestGetWorkersRoute(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/workers/routes/1234", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, getRouteResponseData)
+		fmt.Fprint(w, getRouteResponseData)
 	})
 
 	res, err := client.GetWorkerRoute(context.Background(), ZoneIdentifier(testZoneID), "1234")
@@ -101,7 +101,7 @@ func TestUpdateWorkersRoute(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/workers/routes/e7a57d8746e74ae49c25994dadb421b1", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, updateWorkerRouteEntResponse)
+		fmt.Fprint(w, updateWorkerRouteEntResponse)
 	})
 
 	res, err := client.UpdateWorkerRoute(context.Background(), ZoneIdentifier(testZoneID), UpdateWorkerRouteParams{

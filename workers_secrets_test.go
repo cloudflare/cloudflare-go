@@ -26,7 +26,7 @@ func TestSetWorkersSecret(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/test-script/secrets", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
-		fmt.Fprintf(w, response) //nolint
+		fmt.Fprint(w, response)
 	})
 	req := &WorkersPutSecretRequest{
 		Name: "my-secret",
@@ -63,7 +63,7 @@ func TestDeleteWorkersSecret(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/test-script/secrets/my-secret", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
-		fmt.Fprintf(w, response) //nolint
+		fmt.Fprint(w, response)
 	})
 
 	res, err := client.DeleteWorkersSecret(context.Background(), AccountIdentifier(testAccountID), DeleteWorkersSecretParams{ScriptName: "test-script", SecretName: "my-secret"})
@@ -91,7 +91,7 @@ func TestListWorkersSecret(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/test-script/secrets", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
-		fmt.Fprintf(w, response) //nolint
+		fmt.Fprint(w, response)
 	})
 
 	res, err := client.ListWorkersSecrets(context.Background(), AccountIdentifier(testAccountID), ListWorkersSecretsParams{ScriptName: "test-script"})
