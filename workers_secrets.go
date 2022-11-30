@@ -46,7 +46,8 @@ type ListWorkersSecretsParams struct {
 	ScriptName string
 }
 
-// SetWorkersSecret creates or updates a secret
+// SetWorkersSecret creates or updates a secret.
+//
 // API reference: https://api.cloudflare.com/
 func (api *API) SetWorkersSecret(ctx context.Context, rc *ResourceContainer, params SetWorkersSecretParams) (WorkersPutSecretResponse, error) {
 	if rc.Level != AccountRouteLevel {
@@ -71,7 +72,8 @@ func (api *API) SetWorkersSecret(ctx context.Context, rc *ResourceContainer, par
 	return result, err
 }
 
-// DeleteWorkersSecret deletes a secret
+// DeleteWorkersSecret deletes a secret.
+//
 // API reference: https://api.cloudflare.com/
 func (api *API) DeleteWorkersSecret(ctx context.Context, rc *ResourceContainer, params DeleteWorkersSecretParams) (Response, error) {
 	if rc.Level != AccountRouteLevel {

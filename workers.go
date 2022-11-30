@@ -103,7 +103,7 @@ type DeleteWorkerParams struct {
 	ScriptName string
 }
 
-// DeleteWorker deletes worker for a zone.
+// DeleteWorker deletes a single Worker.
 //
 // API reference: https://api.cloudflare.com/#worker-script-delete-worker
 func (api *API) DeleteWorker(ctx context.Context, rc *ResourceContainer, params DeleteWorkerParams) error {

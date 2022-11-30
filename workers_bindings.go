@@ -106,7 +106,7 @@ func (b WorkerInheritBinding) serialize(bindingName string) (workerBindingMeta, 
 	return meta, nil, nil
 }
 
-// WorkerKvNamespaceBinding is a binding to a Workers KV Namespace
+// WorkerKvNamespaceBinding is a binding to a Workers KV Namespace.
 //
 // https://developers.cloudflare.com/workers/archive/api/resource-bindings/kv-namespaces/
 type WorkerKvNamespaceBinding struct {
@@ -130,7 +130,7 @@ func (b WorkerKvNamespaceBinding) serialize(bindingName string) (workerBindingMe
 	}, nil, nil
 }
 
-// WorkerDurableObjectBinding is a binding to a Workers Durable Object
+// WorkerDurableObjectBinding is a binding to a Workers Durable Object.
 //
 // https://api.cloudflare.com/#durable-objects-namespace-properties
 type WorkerDurableObjectBinding struct {
@@ -156,7 +156,7 @@ func (b WorkerDurableObjectBinding) serialize(bindingName string) (workerBinding
 	}, nil, nil
 }
 
-// WorkerWebAssemblyBinding is a binding to a WebAssembly module
+// WorkerWebAssemblyBinding is a binding to a WebAssembly module.
 //
 // https://developers.cloudflare.com/workers/archive/api/resource-bindings/webassembly-modules/
 type WorkerWebAssemblyBinding struct {
@@ -190,7 +190,7 @@ func (b WorkerWebAssemblyBinding) serialize(bindingName string) (workerBindingMe
 	}, bodyWriter, nil
 }
 
-// WorkerPlainTextBinding is a binding to plain text
+// WorkerPlainTextBinding is a binding to plain text.
 //
 // https://developers.cloudflare.com/workers/tooling/api/scripts/#add-a-plain-text-binding
 type WorkerPlainTextBinding struct {
@@ -214,7 +214,7 @@ func (b WorkerPlainTextBinding) serialize(bindingName string) (workerBindingMeta
 	}, nil, nil
 }
 
-// WorkerSecretTextBinding is a binding to secret text
+// WorkerSecretTextBinding is a binding to secret text.
 //
 // https://developers.cloudflare.com/workers/tooling/api/scripts/#add-a-secret-text-binding
 type WorkerSecretTextBinding struct {

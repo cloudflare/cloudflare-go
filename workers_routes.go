@@ -25,7 +25,7 @@ type UpdateWorkerRouteParams struct {
 	Script  string `json:"script,omitempty"`
 }
 
-// CreateWorkerRoute creates worker route for a zone
+// CreateWorkerRoute creates worker route for a script.
 //
 // API reference: https://api.cloudflare.com/#worker-routes-create-route
 func (api *API) CreateWorkerRoute(ctx context.Context, rc *ResourceContainer, params CreateWorkerRouteParams) (WorkerRouteResponse, error) {
@@ -51,7 +51,7 @@ func (api *API) CreateWorkerRoute(ctx context.Context, rc *ResourceContainer, pa
 	return r, nil
 }
 
-// DeleteWorkerRoute deletes worker route for a zone
+// DeleteWorkerRoute deletes worker route for a script.
 //
 // API reference: https://api.cloudflare.com/#worker-routes-delete-route
 func (api *API) DeleteWorkerRoute(ctx context.Context, rc *ResourceContainer, routeID string) (WorkerRouteResponse, error) {
@@ -80,7 +80,7 @@ func (api *API) DeleteWorkerRoute(ctx context.Context, rc *ResourceContainer, ro
 	return r, nil
 }
 
-// ListWorkerRoutes returns list of Worker routes
+// ListWorkerRoutes returns list of Worker routes.
 //
 // API reference: https://api.cloudflare.com/#worker-routes-list-routes
 func (api *API) ListWorkerRoutes(ctx context.Context, rc *ResourceContainer, params ListWorkerRoutesParams) (WorkerRoutesResponse, error) {
@@ -131,7 +131,7 @@ func (api *API) GetWorkerRoute(ctx context.Context, rc *ResourceContainer, route
 	return r, nil
 }
 
-// UpdateWorkerRoute updates worker route for a zone.
+// UpdateWorkerRoute updates worker route for a script.
 //
 // API reference: https://api.cloudflare.com/#worker-routes-update-route
 func (api *API) UpdateWorkerRoute(ctx context.Context, rc *ResourceContainer, params UpdateWorkerRouteParams) (WorkerRouteResponse, error) {
