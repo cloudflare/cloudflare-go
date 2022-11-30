@@ -1,5 +1,9 @@
 ## 0.56.0 (Unreleased)
 
+NOTES:
+
+* pages: removed the v1 logs endpoint for Pages deployments. Please switch to v2: https://developers.cloudflare.com/api/operations/pages-deployment-get-deployment-logs ([#1135](https://github.com/cloudflare/cloudflare-go/issues/1135))
+
 ENHANCEMENTS:
 
 * workers: Support for Workers Analytics Engine bindings ([#1133](https://github.com/cloudflare/cloudflare-go/issues/1133))
