@@ -411,35 +411,6 @@ func TestGetPagesDeploymentInfo(t *testing.T) {
 	}
 }
 
-func TestGetPagesDeploymentStageLogs(t *testing.T) {
-	setup()
-	defer teardown()
-
-	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
-
-		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, `{
-			"success": true,
-			"errors": [],
-			"messages": [],
-			"result": %s
-		}`, testPagesDeploymentStageLogsResponse)
-	}
-
-	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe/history/build/logs", handler)
-
-	actual, err := client.GetPagesDeploymentStageLogs(context.Background(), AccountIdentifier(testAccountID), GetPagesDeploymentStageLogsParams{
-		ProjectName:  "test",
-		DeploymentID: "0012e50b-fa5d-44db-8cb5-1f372785dcbe",
-		StageName:    "build",
-		SizeOptions:  SizeOptions{},
-	})
-	if assert.NoError(t, err) {
-		assert.Equal(t, *expectedPagesDeploymentStageLogs, actual)
-	}
-}
-
 func TestGetPagesDeploymentLogs(t *testing.T) {
 	setup()
 	defer teardown()
