@@ -37,6 +37,10 @@ func (api *API) CreateWorkersAccountSettings(ctx context.Context, rc *ResourceCo
 		return WorkersAccountSettings{}, ErrMissingAccountID
 	}
 
+	if rc.Level != AccountRouteLevel {
+		return WorkersAccountSettings{}, ErrRequiredAccountLevelResourceContainer
+	}
+
 	uri := fmt.Sprintf("/accounts/%s/workers/account-settings", rc.Identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
@@ -57,6 +61,10 @@ func (api *API) CreateWorkersAccountSettings(ctx context.Context, rc *ResourceCo
 func (api *API) WorkersAccountSettings(ctx context.Context, rc *ResourceContainer, params WorkersAccountSettingsParameters) (WorkersAccountSettings, error) {
 	if rc.Identifier == "" {
 		return WorkersAccountSettings{}, ErrMissingAccountID
+	}
+
+	if rc.Level != AccountRouteLevel {
+		return WorkersAccountSettings{}, ErrRequiredAccountLevelResourceContainer
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/workers/account-settings", rc.Identifier)

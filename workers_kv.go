@@ -106,6 +106,13 @@ type ListWorkersKVsParams struct {
 //
 // API reference: https://api.cloudflare.com/#workers-kv-namespace-create-a-namespace
 func (api *API) CreateWorkersKVNamespace(ctx context.Context, rc *ResourceContainer, params CreateWorkersKVNamespaceParams) (WorkersKVNamespaceResponse, error) {
+	if rc.Level != AccountRouteLevel {
+		return WorkersKVNamespaceResponse{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return WorkersKVNamespaceResponse{}, ErrMissingIdentifier
+	}
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces", rc.Identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
@@ -124,6 +131,14 @@ func (api *API) CreateWorkersKVNamespace(ctx context.Context, rc *ResourceContai
 //
 // API reference: https://api.cloudflare.com/#workers-kv-namespace-list-namespaces
 func (api *API) ListWorkersKVNamespaces(ctx context.Context, rc *ResourceContainer, params ListWorkersKVNamespacesParams) ([]WorkersKVNamespace, *ResultInfo, error) {
+	if rc.Level != AccountRouteLevel {
+		return []WorkersKVNamespace{}, &ResultInfo{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return []WorkersKVNamespace{}, &ResultInfo{}, ErrMissingIdentifier
+	}
+
 	autoPaginate := true
 	if params.PerPage >= 1 || params.Page >= 1 {
 		autoPaginate = false
@@ -183,6 +198,14 @@ func (api *API) DeleteWorkersKVNamespace(ctx context.Context, rc *ResourceContai
 //
 // API reference: https://api.cloudflare.com/#workers-kv-namespace-rename-a-namespace
 func (api *API) UpdateWorkersKVNamespace(ctx context.Context, rc *ResourceContainer, params UpdateWorkersKVNamespaceParams) (Response, error) {
+	if rc.Level != AccountRouteLevel {
+		return Response{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return Response{}, ErrMissingIdentifier
+	}
+
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s", rc.Identifier, params.NamespaceID)
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
@@ -201,6 +224,14 @@ func (api *API) UpdateWorkersKVNamespace(ctx context.Context, rc *ResourceContai
 //
 // API reference: https://api.cloudflare.com/#workers-kv-namespace-write-key-value-pair
 func (api *API) WriteWorkersKVEntry(ctx context.Context, rc *ResourceContainer, params WriteWorkersKVEntryParams) (Response, error) {
+	if rc.Level != AccountRouteLevel {
+		return Response{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return Response{}, ErrMissingIdentifier
+	}
+
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/values/%s", rc.Identifier, params.NamespaceID, url.PathEscape(params.Key))
 	res, err := api.makeRequestContextWithHeaders(
 		ctx, http.MethodPut, uri, params.Value, http.Header{"Content-Type": []string{"application/octet-stream"}},
@@ -221,6 +252,14 @@ func (api *API) WriteWorkersKVEntry(ctx context.Context, rc *ResourceContainer, 
 //
 // API reference: https://api.cloudflare.com/#workers-kv-namespace-write-multiple-key-value-pairs
 func (api *API) WriteWorkersKVEntries(ctx context.Context, rc *ResourceContainer, params WriteWorkersKVEntriesParams) (Response, error) {
+	if rc.Level != AccountRouteLevel {
+		return Response{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return Response{}, ErrMissingIdentifier
+	}
+
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/bulk", rc.Identifier, params.NamespaceID)
 	res, err := api.makeRequestContextWithHeaders(
 		ctx, http.MethodPut, uri, params.KVs, http.Header{"Content-Type": []string{"application/json"}},
@@ -242,6 +281,13 @@ func (api *API) WriteWorkersKVEntries(ctx context.Context, rc *ResourceContainer
 //
 // API reference: https://api.cloudflare.com/#workers-kv-namespace-read-key-value-pair
 func (api API) GetWorkersKV(ctx context.Context, rc *ResourceContainer, params GetWorkersKVParams) ([]byte, error) {
+	if rc.Level != AccountRouteLevel {
+		return []byte(``), ErrRequiredAccountLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return []byte(``), ErrMissingIdentifier
+	}
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/values/%s", rc.Identifier, params.NamespaceID, url.PathEscape(params.Key))
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -254,6 +300,13 @@ func (api API) GetWorkersKV(ctx context.Context, rc *ResourceContainer, params G
 //
 // API reference: https://api.cloudflare.com/#workers-kv-namespace-delete-key-value-pair
 func (api API) DeleteWorkersKVEntry(ctx context.Context, rc *ResourceContainer, params DeleteWorkersKVEntryParams) (Response, error) {
+	if rc.Level != AccountRouteLevel {
+		return Response{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return Response{}, ErrMissingIdentifier
+	}
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/values/%s", rc.Identifier, params.NamespaceID, url.PathEscape(params.Key))
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
@@ -271,6 +324,13 @@ func (api API) DeleteWorkersKVEntry(ctx context.Context, rc *ResourceContainer, 
 //
 // API reference: https://api.cloudflare.com/#workers-kv-namespace-delete-multiple-key-value-pairs
 func (api *API) DeleteWorkersKVEntries(ctx context.Context, rc *ResourceContainer, params DeleteWorkersKVEntriesParams) (Response, error) {
+	if rc.Level != AccountRouteLevel {
+		return Response{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return Response{}, ErrMissingIdentifier
+	}
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/bulk", rc.Identifier, params.NamespaceID)
 	res, err := api.makeRequestContextWithHeaders(
 		ctx, http.MethodDelete, uri, params.Keys, http.Header{"Content-Type": []string{"application/json"}},
@@ -291,6 +351,14 @@ func (api *API) DeleteWorkersKVEntries(ctx context.Context, rc *ResourceContaine
 //
 // API Reference: https://api.cloudflare.com/#workers-kv-namespace-list-a-namespace-s-keys
 func (api API) ListWorkersKVKeys(ctx context.Context, rc *ResourceContainer, params ListWorkersKVsParams) (ListStorageKeysResponse, error) {
+	if rc.Level != AccountRouteLevel {
+		return ListStorageKeysResponse{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return ListStorageKeysResponse{}, ErrMissingIdentifier
+	}
+
 	uri := buildURI(
 		fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s/keys", rc.Identifier, params.NamespaceID),
 		params,

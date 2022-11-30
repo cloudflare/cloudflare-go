@@ -89,7 +89,7 @@ const (
     "errors": [],
     "messages": []
 }`
-	listRouteEntResponseData = `{
+	listWorkerRouteResponse = `{
     "result": [
         {
             "id": "e7a57d8746e74ae49c25994dadb421b1",
@@ -103,7 +103,8 @@ const (
         },
         {
             "id": "2b5bf4240cd34c77852fac70b1bf745a",
-            "pattern": "app3.example.com/*"
+            "pattern": "app3.example.com/*",
+			"script": "test_script_3"
         }
     ],
     "success": true,
@@ -389,7 +390,7 @@ func TestListWorkers(t *testing.T) {
 		fmt.Fprintf(w, listWorkersResponseData)
 	})
 
-	res, err := client.ListWorkers(context.Background(), AccountIdentifier(testAccountID), ListWorkersParams{})
+	res, _, err := client.ListWorkers(context.Background(), AccountIdentifier(testAccountID), ListWorkersParams{})
 	sampleDate, _ := time.Parse(time.RFC3339Nano, "2018-04-22T17:10:48.938097Z")
 	want := []WorkerMetaData{
 		{
@@ -421,7 +422,7 @@ func TestUploadWorker_Basic(t *testing.T) {
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, uploadWorkerResponseData) //nolint
 	})
-	res, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{Name: "foo", Script: workerScript})
+	res, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{ScriptName: "foo", Script: workerScript})
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
@@ -460,7 +461,7 @@ func TestUploadWorker_Module(t *testing.T) {
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, uploadWorkerModuleResponseData)
 	})
-	res, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{Name: "foo", Script: workerModuleScript, Module: true})
+	res, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{ScriptName: "foo", Script: workerModuleScript, Module: true})
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
@@ -506,8 +507,8 @@ func TestUploadWorker_WithDurableObjectBinding(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
 
 	_, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{
-		Name:   "bar",
-		Script: workerScript,
+		ScriptName: "bar",
+		Script:     workerScript,
 		Bindings: map[string]WorkerBinding{
 			"b1": WorkerDurableObjectBinding{
 				ClassName:  "TheClass",
@@ -563,8 +564,8 @@ func TestUploadWorker_WithInheritBinding(t *testing.T) {
 		}}
 
 	res, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{
-		Name:   "bar",
-		Script: workerScript,
+		ScriptName: "bar",
+		Script:     workerScript,
 		Bindings: map[string]WorkerBinding{
 			"b1": WorkerInheritBinding{},
 			"b2": WorkerInheritBinding{
@@ -602,8 +603,8 @@ func TestUploadWorker_WithKVBinding(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
 
 	_, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{
-		Name:   "bar",
-		Script: workerScript,
+		ScriptName: "bar",
+		Script:     workerScript,
 		Bindings: map[string]WorkerBinding{
 			"b1": WorkerKvNamespaceBinding{
 				NamespaceID: "test-namespace",
@@ -643,8 +644,8 @@ func TestUploadWorker_WithWasmBinding(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
 
 	_, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{
-		Name:   "bar",
-		Script: workerScript,
+		ScriptName: "bar",
+		Script:     workerScript,
 		Bindings: map[string]WorkerBinding{
 			"b1": WorkerWebAssemblyBinding{
 				Module: strings.NewReader("fake-wasm"),
@@ -681,8 +682,8 @@ func TestUploadWorker_WithPlainTextBinding(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
 
 	_, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{
-		Name:   "bar",
-		Script: workerScript,
+		ScriptName: "bar",
+		Script:     workerScript,
 		Bindings: map[string]WorkerBinding{
 			"b1": WorkerPlainTextBinding{
 				Text: "plain text value",
@@ -726,9 +727,9 @@ func TestUploadWorker_ModuleWithPlainTextBinding(t *testing.T) {
 	})
 
 	_, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{
-		Name:   "bar",
-		Script: workerModuleScript,
-		Module: true,
+		ScriptName: "bar",
+		Script:     workerModuleScript,
+		Module:     true,
 		Bindings: map[string]WorkerBinding{
 			"b1": WorkerPlainTextBinding{
 				Text: "plain text value",
@@ -765,8 +766,8 @@ func TestUploadWorker_WithSecretTextBinding(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
 
 	_, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{
-		Name:   "bar",
-		Script: workerScript,
+		ScriptName: "bar",
+		Script:     workerScript,
 		Bindings: map[string]WorkerBinding{
 			"b1": WorkerSecretTextBinding{
 				Text: "secret text value",
@@ -808,8 +809,8 @@ func TestUploadWorker_WithServiceBinding(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
 
 	_, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{
-		Name:   "bar",
-		Script: workerScript,
+		ScriptName: "bar",
+		Script:     workerScript,
 		Bindings: map[string]WorkerBinding{
 			"b1": WorkerServiceBinding{
 				Service: "the_service",

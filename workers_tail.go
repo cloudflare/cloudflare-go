@@ -42,6 +42,7 @@ func (api *API) StartWorkersTail(ctx context.Context, rc *ResourceContainer, scr
 	if rc.Identifier == "" {
 		return WorkersTail{}, ErrMissingAccountID
 	}
+
 	if scriptName == "" {
 		return WorkersTail{}, ErrMissingScriptName
 	}

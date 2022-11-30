@@ -21,8 +21,8 @@ type WorkerRequestParams struct {
 }
 
 type CreateWorkerParams struct {
-	Name   string
-	Script string
+	ScriptName string
+	Script     string
 
 	// Module changes the Content-Type header to specify the script is an
 	// ES Module syntax script.
@@ -35,7 +35,7 @@ type CreateWorkerParams struct {
 
 // WorkerScriptParams provides a worker script and the associated bindings.
 type WorkerScriptParams struct {
-	Script string
+	ScriptName string
 
 	// Module changes the Content-Type header to specify the script is an
 	// ES Module syntax script.
@@ -50,8 +50,9 @@ type WorkerScriptParams struct {
 //
 // API reference: https://api.cloudflare.com/#worker-routes-properties
 type WorkerRoute struct {
-	Pattern string `json:"pattern"`
-	Script  string `json:"script,omitempty"`
+	ID         string `json:"id,omitempty"`
+	Pattern    string `json:"pattern"`
+	ScriptName string `json:"script,omitempty"`
 }
 
 // WorkerRoutesResponse embeds Response struct and slice of WorkerRoutes.
@@ -85,6 +86,7 @@ type WorkerMetaData struct {
 // WorkerListResponse wrapper struct for API response to worker script list API call.
 type WorkerListResponse struct {
 	Response
+	ResultInfo
 	WorkerList []WorkerMetaData `json:"result"`
 }
 
@@ -105,6 +107,14 @@ type DeleteWorkerParams struct {
 //
 // API reference: https://api.cloudflare.com/#worker-script-delete-worker
 func (api *API) DeleteWorker(ctx context.Context, rc *ResourceContainer, params DeleteWorkerParams) error {
+	if rc.Level != AccountRouteLevel {
+		return ErrRequiredAccountLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return ErrMissingAccountID
+	}
+
 	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s", rc.Identifier, params.ScriptName)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 
@@ -127,11 +137,11 @@ func (api *API) DeleteWorker(ctx context.Context, rc *ResourceContainer, params 
 // API reference: https://developers.cloudflare.com/workers/tooling/api/scripts/
 func (api *API) GetWorker(ctx context.Context, rc *ResourceContainer, scriptName string) (WorkerScriptResponse, error) {
 	if rc.Level != AccountRouteLevel {
-		return WorkerScriptResponse{}, fmt.Errorf(errInvalidResourceContainerAccess, ZoneRouteLevel)
+		return WorkerScriptResponse{}, ErrRequiredAccountLevelResourceContainer
 	}
 
 	if rc.Identifier == "" {
-		return WorkerScriptResponse{}, ErrMissingIdentifier
+		return WorkerScriptResponse{}, ErrMissingAccountID
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s", rc.Identifier, scriptName)
@@ -168,30 +178,42 @@ func (api *API) GetWorker(ctx context.Context, rc *ResourceContainer, scriptName
 // ListWorkers returns list of Workers for given account.
 //
 // API reference: https://developers.cloudflare.com/workers/tooling/api/scripts/
-func (api *API) ListWorkers(ctx context.Context, rc *ResourceContainer, params ListWorkersParams) (WorkerListResponse, error) {
+func (api *API) ListWorkers(ctx context.Context, rc *ResourceContainer, params ListWorkersParams) (WorkerListResponse, *ResultInfo, error) {
+	if rc.Level != AccountRouteLevel {
+		return WorkerListResponse{}, &ResultInfo{}, ErrRequiredAccountLevelResourceContainer
+	}
+
 	if rc.Identifier == "" {
-		return WorkerListResponse{}, ErrMissingAccountID
+		return WorkerListResponse{}, &ResultInfo{}, ErrMissingAccountID
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/workers/scripts", rc.Identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return WorkerListResponse{}, err
+		return WorkerListResponse{}, &ResultInfo{}, err
 	}
 
 	var r WorkerListResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return WorkerListResponse{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return WorkerListResponse{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
-	return r, nil
+	return r, &r.ResultInfo, nil
 }
 
 // UploadWorker pushes raw script content for your Worker.
 //
 // API reference: https://api.cloudflare.com/#worker-script-upload-worker
 func (api *API) UploadWorker(ctx context.Context, rc *ResourceContainer, params CreateWorkerParams) (WorkerScriptResponse, error) {
+	if rc.Level != AccountRouteLevel {
+		return WorkerScriptResponse{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return WorkerScriptResponse{}, ErrMissingAccountID
+	}
+
 	var (
 		contentType = "application/javascript"
 		err         error
@@ -205,37 +227,7 @@ func (api *API) UploadWorker(ctx context.Context, rc *ResourceContainer, params 
 		}
 	}
 
-	if rc.Level == AccountRouteLevel {
-		return api.uploadWorkerWithName(ctx, rc, params.Name, contentType, []byte(body))
-	} else {
-		return api.uploadWorkerForZone(ctx, rc, contentType, []byte(body))
-	}
-}
-
-func (api *API) uploadWorkerForZone(ctx context.Context, rc *ResourceContainer, contentType string, body []byte) (WorkerScriptResponse, error) {
-	uri := fmt.Sprintf("/zones/%s/workers/script", rc.Identifier)
-	headers := make(http.Header)
-	headers.Set("Content-Type", contentType)
-
-	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPut, uri, body, headers)
-	var r WorkerScriptResponse
-	if err != nil {
-		return r, err
-	}
-
-	err = json.Unmarshal(res, &r)
-	if err != nil {
-		return r, fmt.Errorf("%s: %w", errUnmarshalError, err)
-	}
-
-	return r, nil
-}
-
-func (api *API) uploadWorkerWithName(ctx context.Context, rc *ResourceContainer, scriptName, contentType string, body []byte) (WorkerScriptResponse, error) {
-	if rc.Identifier == "" {
-		return WorkerScriptResponse{}, ErrMissingAccountID
-	}
-	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s", rc.Identifier, scriptName)
+	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s", rc.Identifier, params.ScriptName)
 	headers := make(http.Header)
 	headers.Set("Content-Type", contentType)
 	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPut, uri, body, headers)

@@ -8,6 +8,8 @@ import (
 	"net/http"
 )
 
+var ErrMissingWorkerRouteID = errors.New("missing required route ID")
+
 type ListWorkerRoutes struct{}
 
 type CreateWorkerRouteParams struct {
@@ -18,6 +20,7 @@ type CreateWorkerRouteParams struct {
 type ListWorkerRoutesParams struct{}
 
 type UpdateWorkerRouteParams struct {
+	ID      string `json:"id,omitempty"`
 	Pattern string `json:"pattern"`
 	Script  string `json:"script,omitempty"`
 }
@@ -140,7 +143,11 @@ func (api *API) UpdateWorkerRoute(ctx context.Context, rc *ResourceContainer, pa
 		return WorkerRouteResponse{}, ErrMissingIdentifier
 	}
 
-	uri := fmt.Sprintf("/zones/%s/workers/routes/%s", rc.Identifier, params.Script)
+	if params.ID == "" {
+		return WorkerRouteResponse{}, ErrMissingWorkerRouteID
+	}
+
+	uri := fmt.Sprintf("/zones/%s/workers/routes/%s", rc.Identifier, params.ID)
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return WorkerRouteResponse{}, err

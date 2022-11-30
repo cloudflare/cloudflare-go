@@ -41,6 +41,10 @@ const (
 	WorkerAnalyticsEngineBindingType WorkerBindingType = "analytics_engine"
 )
 
+type ListWorkerBindingsParams struct {
+	ScriptName string
+}
+
 // WorkerBindingListItem a struct representing an individual binding in a list of bindings.
 type WorkerBindingListItem struct {
 	Name    string `json:"name"`
@@ -314,15 +318,20 @@ func getRandomPartName() string {
 }
 
 // ListWorkerBindings returns all the bindings for a particular worker.
-func (api *API) ListWorkerBindings(ctx context.Context, requestParams *WorkerRequestParams) (WorkerBindingListResponse, error) {
-	if requestParams.ScriptName == "" {
+func (api *API) ListWorkerBindings(ctx context.Context, rc *ResourceContainer, params ListWorkerBindingsParams) (WorkerBindingListResponse, error) {
+	if params.ScriptName == "" {
 		return WorkerBindingListResponse{}, errors.New("ScriptName is required")
 	}
-	if api.AccountID == "" {
-		return WorkerBindingListResponse{}, errors.New("account ID required")
+
+	if rc.Level != AccountRouteLevel {
+		return WorkerBindingListResponse{}, ErrRequiredAccountLevelResourceContainer
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/bindings", api.AccountID, requestParams.ScriptName)
+	if rc.Identifier == "" {
+		return WorkerBindingListResponse{}, ErrMissingAccountID
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/bindings", rc.Identifier, params.ScriptName)
 
 	var jsonRes struct {
 		Response
@@ -371,10 +380,11 @@ func (api *API) ListWorkerBindings(ctx context.Context, requestParams *WorkerReq
 		case WorkerWebAssemblyBindingType:
 			bindingListItem.Binding = WorkerWebAssemblyBinding{
 				Module: &bindingContentReader{
-					ctx:           ctx,
-					api:           api,
-					requestParams: requestParams,
-					bindingName:   name,
+					api:         api,
+					ctx:         ctx,
+					accountID:   rc.Identifier,
+					params:      &params,
+					bindingName: name,
 				},
 			}
 		case WorkerPlainTextBindingType:
@@ -415,18 +425,19 @@ func (api *API) ListWorkerBindings(ctx context.Context, requestParams *WorkerReq
 // is first called. This is only useful for binding types
 // that store raw bytes, like WebAssembly modules.
 type bindingContentReader struct {
-	api           *API
-	requestParams *WorkerRequestParams
-	ctx           context.Context
-	bindingName   string
-	content       []byte
-	position      int
+	api         *API
+	accountID   string
+	params      *ListWorkerBindingsParams
+	ctx         context.Context
+	bindingName string
+	content     []byte
+	position    int
 }
 
 func (b *bindingContentReader) Read(p []byte) (n int, err error) {
 	// Lazily load the content when Read() is first called
 	if b.content == nil {
-		uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/bindings/%s/content", b.api.AccountID, b.requestParams.ScriptName, b.bindingName)
+		uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/bindings/%s/content", b.accountID, b.params.ScriptName, b.bindingName)
 		res, err := b.api.makeRequestContext(b.ctx, http.MethodGet, uri, nil)
 		if err != nil {
 			return 0, err
