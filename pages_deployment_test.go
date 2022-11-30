@@ -91,54 +91,6 @@ const (
 		"aliases": null
 	}`
 
-	testPagesDeploymentStageLogsResponse = `
-	{
-		"name": "build",
-		"started_on": "2021-01-01T00:00:00Z",
-		"ended_on": "2021-01-01T00:00:00Z",
-		"status": "success",
-		"start": 0,
-		"end": 5,
-		"total": 6,
-		"data": [
-			{
-				"id": 0,
-				"timestamp": "2021-01-01T00:00:00Z",
-				"message": "Installing dependencies"
-			},
-			{
-				"id": 1,
-				"timestamp": "2021-01-01T00:00:00Z",
-				"message": "Verify run directory"
-			},
-			{
-				"id": 2,
-				"timestamp": "2021-01-01T00:00:00Z",
-				"message": "Executing user command: bash test.sh"
-			},
-			{
-				"id": 3,
-				"timestamp": "2021-01-01T00:00:00Z",
-				"message": "Finished"
-			},
-			{
-				"id": 4,
-				"timestamp": "2021-01-01T00:00:00Z",
-				"message": "Building functions..."
-			},
-			{
-				"id": 5,
-				"timestamp": "2021-01-01T00:00:00Z",
-				"message": "Validating asset output directory"
-			},
-			{
-				"id": 6,
-				"timestamp": "2021-01-01T00:00:00Z",
-				"message": "Parsed 2 valid header rules."
-			}
-		]
-	}`
-
 	testPagesDeploymentLogsResponse = `
 	{
 		"total": 6,
@@ -190,9 +142,9 @@ var (
 		ModifiedOn:  &pagesDeploymentDummyTime,
 		Aliases:     nil,
 		LatestStage: *expectedPagesDeploymentLatestStage,
-		EnvVars: map[string]map[string]string{
-			"NODE_VERSION": {
-				"value": "16",
+		EnvVars: EnvironmentVariableMap{
+			"NODE_VERSION": &EnvironmentVariable{
+				Value: "16",
 			},
 		},
 		DeploymentTrigger: PagesProjectDeploymentTrigger{
@@ -253,17 +205,6 @@ var (
 		StartedOn: &pagesDeploymentDummyTime,
 		EndedOn:   &pagesDeploymentDummyTime,
 		Status:    "success",
-	}
-
-	expectedPagesDeploymentStageLogs = &PagesDeploymentStageLogs{
-		Name:      "build",
-		StartedOn: &pagesDeploymentDummyTime,
-		EndedOn:   &pagesDeploymentDummyTime,
-		Status:    "success",
-		Start:     0,
-		End:       5,
-		Total:     6,
-		Data:      expectedPagesDeploymentStageLogEntries,
 	}
 
 	expectedPagesDeploymentStageLogEntries = []PagesDeploymentStageLogEntry{
