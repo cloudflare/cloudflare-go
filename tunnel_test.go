@@ -141,6 +141,9 @@ func TestUpdateTunnelConfiguration(t *testing.T) {
 				{
 					Hostname: "test.example.com",
 					Service:  "https://localhost:8000",
+					OriginRequest: &OriginRequestConfig{
+						NoTLSVerify: BoolPtr(true),
+					},
 				},
 				{
 					Service: "http_status:404",
@@ -161,6 +164,9 @@ func TestUpdateTunnelConfiguration(t *testing.T) {
 				{
 					Hostname: "test.example.com",
 					Service:  "https://localhost:8000",
+					OriginRequest: &OriginRequestConfig{
+						NoTLSVerify: BoolPtr(true),
+					},
 				},
 				{
 					Service: "http_status:404",
@@ -200,6 +206,9 @@ func TestGetTunnelConfiguration(t *testing.T) {
 				{
 					Hostname: "test.example.com",
 					Service:  "https://localhost:8000",
+					OriginRequest: &OriginRequestConfig{
+						NoTLSVerify: BoolPtr(true),
+					},
 				},
 				{
 					Service: "http_status:404",
