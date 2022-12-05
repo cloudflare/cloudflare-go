@@ -13,6 +13,10 @@ ENHANCEMENTS:
 * pages: Updates bindings and other Functions related propreties. Service bindings, secrets, fail open/close and usage model are all now supported. ([#1136](https://github.com/cloudflare/cloudflare-go/issues/1136))
 * workers: Support for Workers Analytics Engine bindings ([#1133](https://github.com/cloudflare/cloudflare-go/issues/1133))
 
+DEPENDENCIES:
+
+* deps: bumps github.com/urfave/cli/v2 from 2.23.5 to 2.23.6 ([#1139](https://github.com/cloudflare/cloudflare-go/issues/1139))
+
 ## 0.55.0 (November 23th, 2022)
 
 BREAKING CHANGES:
