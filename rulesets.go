@@ -330,6 +330,7 @@ type RulesetRuleActionParametersCustomKeyFields struct {
 type RulesetRuleActionParametersCustomKeyQuery struct {
 	Include *RulesetRuleActionParametersCustomKeyList `json:"include,omitempty"`
 	Exclude *RulesetRuleActionParametersCustomKeyList `json:"exclude,omitempty"`
+	Ignore  *bool                                     `json:"ignore,omitempty"`
 }
 
 type RulesetRuleActionParametersCustomKeyList struct {
