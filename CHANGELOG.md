@@ -10,6 +10,7 @@ NOTES:
 
 ENHANCEMENTS:
 
+* cache_rules: add ignore option to query string struct ([#1140](https://github.com/cloudflare/cloudflare-go/issues/1140))
 * pages: Updates bindings and other Functions related propreties. Service bindings, secrets, fail open/close and usage model are all now supported. ([#1136](https://github.com/cloudflare/cloudflare-go/issues/1136))
 * workers: Support for Workers Analytics Engine bindings ([#1133](https://github.com/cloudflare/cloudflare-go/issues/1133))
 
