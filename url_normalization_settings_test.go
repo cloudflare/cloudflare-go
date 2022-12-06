@@ -84,3 +84,41 @@ func TestUpdateURLNormalizationSettings(t *testing.T) {
 		assert.Equal(t, want, got)
 	}
 }
+
+func TestDeleteURLNormalizationSettings(t *testing.T) {
+	setup()
+	defer teardown()
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+		body, err := io.ReadAll(r.Body)
+		if err != nil {
+			panic(err)
+		}
+		defer r.Body.Close()
+
+		assert.Equal(t, `{"type":"cloudflare","scope":"none"}`, string(body))
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"result": {
+				"type": "cloudflare",
+				"scope": "none"
+			},
+			"success": true,
+			"errors": [],
+			"messages": []
+		}`)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/url_normalization", handler)
+
+	want := URLNormalizationSettings{
+		Type:  "cloudflare",
+		Scope: "none",
+	}
+
+	got, err := client.DeleteURLNormalizationSettings(context.Background(), ZoneIdentifier(testZoneID))
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, got)
+	}
+}

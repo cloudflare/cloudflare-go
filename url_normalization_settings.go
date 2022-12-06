@@ -57,3 +57,12 @@ func (api *API) UpdateURLNormalizationSettings(ctx context.Context, rc *Resource
 
 	return urlNormalizationSettingsResponse.Result, nil
 }
+
+func (api *API) DeleteURLNormalizationSettings(ctx context.Context, rc *ResourceContainer) (URLNormalizationSettings, error) {
+	params := URLNormalizationSettingsUpdateParams{
+		Type:  "cloudflare",
+		Scope: "none",
+	}
+
+	return api.UpdateURLNormalizationSettings(ctx, rc, params)
+}
