@@ -29,7 +29,7 @@ func TestWorkersKV_CreateWorkersKVNamespace(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/storage/kv/namespaces", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
-		fmt.Fprintf(w, response) //nolint
+		fmt.Fprint(w, response)
 	})
 
 	res, err := client.CreateWorkersKVNamespace(context.Background(), AccountIdentifier(testAccountID), CreateWorkersKVNamespaceParams{Title: "Namespace"})
@@ -60,7 +60,7 @@ func TestWorkersKV_DeleteWorkersKVNamespace(t *testing.T) {
 	mux.HandleFunc(fmt.Sprintf("/accounts/"+testAccountID+"/storage/kv/namespaces/%s", namespace), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
-		fmt.Fprintf(w, response) //nolint
+		fmt.Fprint(w, response)
 	})
 
 	res, err := client.DeleteWorkersKVNamespace(context.Background(), AccountIdentifier(testAccountID), namespace)
@@ -99,7 +99,7 @@ func TestWorkersKV_ListWorkersKVNamespaces(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/storage/kv/namespaces", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
-		fmt.Fprintf(w, response) //nolint
+		fmt.Fprint(w, response)
 	})
 
 	res, _, err := client.ListWorkersKVNamespaces(context.Background(), AccountIdentifier(testAccountID), ListWorkersKVNamespacesParams{})
@@ -170,10 +170,10 @@ func TestWorkersKV_ListWorkersKVNamespaceMultiplePages(t *testing.T) {
 		w.Header().Set("content-type", "application/javascript")
 
 		if r.URL.Query().Get("page") == "1" {
-			fmt.Fprintf(w, response1) //nolint
+			fmt.Fprint(w, response1)
 			return
 		} else if r.URL.Query().Get("page") == "2" {
-			fmt.Fprintf(w, response2) //nolint
+			fmt.Fprint(w, response2)
 			return
 		} else {
 			panic(errors.New("Got a request for an unexpected page"))
@@ -218,7 +218,7 @@ func TestWorkersKV_UpdateWorkersKVNamespace(t *testing.T) {
 	mux.HandleFunc(fmt.Sprintf("/accounts/"+testAccountID+"/storage/kv/namespaces/%s", namespace), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
-		fmt.Fprintf(w, response) //nolint
+		fmt.Fprint(w, response)
 	})
 
 	res, err := client.UpdateWorkersKVNamespace(context.Background(), AccountIdentifier(testAccountID), UpdateWorkersKVNamespaceParams{Title: "Namespace", NamespaceID: namespace})
@@ -246,7 +246,7 @@ func TestWorkersKV_WriteWorkersKVEntry(t *testing.T) {
 	mux.HandleFunc(fmt.Sprintf("/accounts/"+testAccountID+"/storage/kv/namespaces/%s/values/%s", namespace, key), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/octet-stream")
-		fmt.Fprintf(w, response) //nolint
+		fmt.Fprint(w, response)
 	})
 
 	want := successResponse
@@ -278,7 +278,7 @@ func TestWorkersKV_WriteWorkersKVEntries(t *testing.T) {
 	mux.HandleFunc(fmt.Sprintf("/accounts/"+testAccountID+"/storage/kv/namespaces/%s/bulk", namespace), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, response) //nolint
+		fmt.Fprint(w, response)
 	})
 
 	want := successResponse
@@ -297,7 +297,7 @@ func TestWorkersKV_ReadWorkersKV(t *testing.T) {
 	mux.HandleFunc(fmt.Sprintf("/accounts/"+testAccountID+"/storage/kv/namespaces/%s/values/%s", namespace, key), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "text/plain")
-		fmt.Fprintf(w, "test_value")
+		fmt.Fprint(w, "test_value")
 	})
 
 	res, err := client.GetWorkersKV(context.Background(), AccountIdentifier(testAccountID), GetWorkersKVParams{NamespaceID: namespace, Key: key})
@@ -324,7 +324,7 @@ func TestWorkersKV_DeleteWorkersKVEntry(t *testing.T) {
 	mux.HandleFunc(fmt.Sprintf("/accounts/"+testAccountID+"/storage/kv/namespaces/%s/values/%s", namespace, key), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
-		fmt.Fprintf(w, response) //nolint
+		fmt.Fprint(w, response)
 	})
 
 	res, err := client.DeleteWorkersKVEntry(context.Background(), AccountIdentifier(testAccountID), DeleteWorkersKVEntryParams{NamespaceID: namespace, Key: key})
@@ -352,7 +352,7 @@ func TestWorkersKV_DeleteWorkersKVBulk(t *testing.T) {
 	mux.HandleFunc(fmt.Sprintf("/accounts/"+testAccountID+"/storage/kv/namespaces/%s/bulk", namespace), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, response) //nolint
+		fmt.Fprint(w, response)
 	})
 
 	want := successResponse
@@ -386,7 +386,7 @@ func TestWorkersKV_ListKeys(t *testing.T) {
 	mux.HandleFunc(fmt.Sprintf("/accounts/"+testAccountID+"/storage/kv/namespaces/%s/keys", namespace), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
-		fmt.Fprintf(w, response) //nolint
+		fmt.Fprint(w, response)
 	})
 
 	res, err := client.ListWorkersKVKeys(context.Background(), AccountIdentifier(testAccountID), ListWorkersKVsParams{NamespaceID: namespace})
@@ -456,7 +456,7 @@ func TestWorkersKV_ListKeysWithParameters(t *testing.T) {
 	mux.HandleFunc(fmt.Sprintf("/accounts/"+testAccountID+"/storage/kv/namespaces/%s/keys", namespace), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
-		fmt.Fprintf(w, response) //nolint
+		fmt.Fprint(w, response)
 	})
 
 	limit, prefix := 25, "test-prefix"

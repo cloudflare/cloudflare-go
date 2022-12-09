@@ -35,13 +35,14 @@ type ListWorkersTailResponse struct {
 	Result WorkersTail
 }
 
-// StartWorkersTail Starts a tail that receives logs and exception from a Worker
+// StartWorkersTail Starts a tail that receives logs and exception from a Worker.
 //
 // API reference: https://api.cloudflare.com/#worker-tail-logs-start-tail
 func (api *API) StartWorkersTail(ctx context.Context, rc *ResourceContainer, scriptName string) (WorkersTail, error) {
 	if rc.Identifier == "" {
 		return WorkersTail{}, ErrMissingAccountID
 	}
+
 	if scriptName == "" {
 		return WorkersTail{}, ErrMissingScriptName
 	}
@@ -60,7 +61,7 @@ func (api *API) StartWorkersTail(ctx context.Context, rc *ResourceContainer, scr
 	return workerstailResponse.Result, nil
 }
 
-// ListWorkersTail Get list of tails currently deployed on a worker
+// ListWorkersTail Get list of tails currently deployed on a Worker.
 //
 // API reference: https://api.cloudflare.com/#worker-tail-logs-list-tails
 func (api *API) ListWorkersTail(ctx context.Context, rc *ResourceContainer, params ListWorkersTailParameters) (WorkersTail, error) {
@@ -86,7 +87,7 @@ func (api *API) ListWorkersTail(ctx context.Context, rc *ResourceContainer, para
 	return workerstailResponse.Result, nil
 }
 
-// DeleteWorkersTail Deletes a tail from a Worker
+// DeleteWorkersTail Deletes a tail from a Worker.
 //
 // API reference: https://api.cloudflare.com/#worker-tail-logs-delete-tail
 func (api *API) DeleteWorkersTail(ctx context.Context, rc *ResourceContainer, scriptName, tailID string) error {
