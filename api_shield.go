@@ -74,7 +74,9 @@ func (api *API) UpdateAPIShieldConfiguration(ctx context.Context, rc *ResourceCo
 func validateAPIShieldConfigurationUpdateParams(params UpdateAPIShieldParams) UpdateAPIShieldParams {
 	// edge case for when we get an empty auth_id_characteristics. We want to send `{auth_id_characteristics: []}` to the API.
 	if len(params.AuthIdCharacteristics) <= 1 {
-		if params.AuthIdCharacteristics[0].Name == "" && params.AuthIdCharacteristics[0].Type == "" {
+		if len(params.AuthIdCharacteristics) == 0 {
+			params.AuthIdCharacteristics = make([]AuthIdCharacteristics, 0)
+		} else if params.AuthIdCharacteristics[0].Name == "" && params.AuthIdCharacteristics[0].Type == "" {
 			params.AuthIdCharacteristics = make([]AuthIdCharacteristics, 0)
 		}
 	}
