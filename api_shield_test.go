@@ -82,3 +82,33 @@ func TestPutAPIShield(t *testing.T) {
 		assert.Equal(t, want, actual)
 	}
 }
+
+func TestPutAPIShieldNoAuthIDCharacteristics(t *testing.T) {
+	setup()
+	defer teardown()
+
+	// now lets do a PUT
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+	"success" : true,
+	"errors": [],
+	"messages": [],
+	"result": []
+}
+		`)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/api_gateway/configuration", handler)
+
+	apiShieldData := UpdateAPIShieldParams{AuthIdCharacteristics: nil}
+
+	want := Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}}
+
+	actual, err := client.UpdateAPIShieldConfiguration(context.Background(), ZoneIdentifier(testZoneID), apiShieldData)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}

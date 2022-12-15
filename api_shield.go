@@ -56,6 +56,8 @@ func (api *API) GetAPIShieldConfiguration(ctx context.Context, rc *ResourceConta
 func (api *API) UpdateAPIShieldConfiguration(ctx context.Context, rc *ResourceContainer, params UpdateAPIShieldParams) (Response, error) {
 	uri := fmt.Sprintf("/zones/%s/api_gateway/configuration", rc.Identifier)
 
+	params = validateAPIShieldConfigurationUpdateParams(params)
+
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return Response{}, err
@@ -67,4 +69,14 @@ func (api *API) UpdateAPIShieldConfiguration(ctx context.Context, rc *ResourceCo
 	}
 
 	return asResponse, nil
+}
+
+func validateAPIShieldConfigurationUpdateParams(params UpdateAPIShieldParams) UpdateAPIShieldParams {
+	// edge case for when we get an empty auth_id_characteristics. We want to send `{auth_id_characteristics: []}` to the API.
+	if len(params.AuthIdCharacteristics) <= 1 {
+		if params.AuthIdCharacteristics[0].Name == "" && params.AuthIdCharacteristics[0].Type == "" {
+			params.AuthIdCharacteristics = make([]AuthIdCharacteristics, 0)
+		}
+	}
+	return params
 }
