@@ -12,38 +12,59 @@ type Config struct {
 	Sha256      string `json:"sha256,omitempty"`
 }
 
-type DeviceManagedNetworks struct {
+type DeviceManagedNetwork struct {
 	NetworkID string  `json:"network_id,omitempty"`
 	Type      string  `json:"type"`
 	Name      string  `json:"name"`
 	Config    *Config `json:"config"`
 }
 
-type DeviceManagedNetworksResponse struct {
+type DeviceManagedNetworkResponse struct {
 	Response
-	Result DeviceManagedNetworks `json:"result"`
+	Result DeviceManagedNetwork `json:"result"`
 }
 
-type DeviceManagedNetworksListResponse struct {
+type DeviceManagedNetworkListResponse struct {
 	Response
-	Result []DeviceManagedNetworks `json:"result"`
+	Result []DeviceManagedNetwork `json:"result"`
 }
 
-// ListTeamsDevice returns all devices for a given account.
+type ListDeviceManagedNetworksParams struct{}
+
+type CreateDeviceManagedNetworkParams struct {
+	NetworkID string  `json:"network_id,omitempty"`
+	Type      string  `json:"type"`
+	Name      string  `json:"name"`
+	Config    *Config `json:"config"`
+}
+
+type UpdateDeviceManagedNetworkParams struct {
+	NetworkID string  `json:"network_id,omitempty"`
+	Type      string  `json:"type"`
+	Name      string  `json:"name"`
+	Config    *Config `json:"config"`
+}
+
+// ListDeviceManagedNetwork returns all Device Managed Networks for a given
+// account.
 //
 // API reference : https://api.cloudflare.com/#device-managed-networks-list-device-managed-networks
-func (api *API) ListManagedNetworks(ctx context.Context, accountID string) ([]DeviceManagedNetworks, error) {
-	uri := fmt.Sprintf("/%s/%s/devices/networks", AccountRouteRoot, accountID)
+func (api *API) ListDeviceManagedNetworks(ctx context.Context, rc *ResourceContainer, params ListDeviceManagedNetworksParams) ([]DeviceManagedNetwork, error) {
+	if rc.Level != AccountRouteLevel {
+		return []DeviceManagedNetwork{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	uri := fmt.Sprintf("/%s/%s/devices/networks", rc.Level, rc.Identifier)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []DeviceManagedNetworks{}, err
+		return []DeviceManagedNetwork{}, err
 	}
 
-	var response DeviceManagedNetworksListResponse
+	var response DeviceManagedNetworkListResponse
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return []DeviceManagedNetworks{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return []DeviceManagedNetwork{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return response.Result, nil
@@ -52,17 +73,21 @@ func (api *API) ListManagedNetworks(ctx context.Context, accountID string) ([]De
 // CreateDeviceManagedNetwork creates a new Device Managed Network.
 //
 // API reference: https://api.cloudflare.com/#device-managed-networks-create-device-managed-network
-func (api *API) CreateDeviceManagedNetwork(ctx context.Context, accountID string, req DeviceManagedNetworks) (DeviceManagedNetworks, error) {
-	uri := fmt.Sprintf("/%s/%s/devices/networks", AccountRouteRoot, accountID)
-
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, req)
-	if err != nil {
-		return DeviceManagedNetworks{}, err
+func (api *API) CreateDeviceManagedNetwork(ctx context.Context, rc *ResourceContainer, params CreateDeviceManagedNetworkParams) (DeviceManagedNetwork, error) {
+	if rc.Level != AccountRouteLevel {
+		return DeviceManagedNetwork{}, ErrRequiredAccountLevelResourceContainer
 	}
 
-	var deviceManagedNetworksResponse DeviceManagedNetworksResponse
+	uri := fmt.Sprintf("/%s/%s/devices/networks", rc.Level, rc.Identifier)
+
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
+	if err != nil {
+		return DeviceManagedNetwork{}, err
+	}
+
+	var deviceManagedNetworksResponse DeviceManagedNetworkResponse
 	if err := json.Unmarshal(res, &deviceManagedNetworksResponse); err != nil {
-		return DeviceManagedNetworks{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return DeviceManagedNetwork{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return deviceManagedNetworksResponse.Result, err
@@ -71,56 +96,68 @@ func (api *API) CreateDeviceManagedNetwork(ctx context.Context, accountID string
 // UpdateDeviceManagedNetwork Update a Device Managed Network.
 //
 // API reference: https://api.cloudflare.com/#device-managed-networks-update-device-managed-network
-func (api *API) UpdateDeviceManagedNetwork(ctx context.Context, accountID string, networkID string, req DeviceManagedNetworks) (DeviceManagedNetworks, error) {
-	uri := fmt.Sprintf("/%s/%s/devices/networks/%s", AccountRouteRoot, accountID, networkID)
-
-	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, req)
-	if err != nil {
-		return DeviceManagedNetworks{}, err
+func (api *API) UpdateDeviceManagedNetwork(ctx context.Context, rc *ResourceContainer, params UpdateDeviceManagedNetworkParams) (DeviceManagedNetwork, error) {
+	if rc.Level != AccountRouteLevel {
+		return DeviceManagedNetwork{}, ErrRequiredAccountLevelResourceContainer
 	}
 
-	var deviceManagedNetworksResponse DeviceManagedNetworksResponse
+	uri := fmt.Sprintf("/%s/%s/devices/networks/%s", rc.Level, rc.Identifier, params.NetworkID)
+
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
+	if err != nil {
+		return DeviceManagedNetwork{}, err
+	}
+
+	var deviceManagedNetworksResponse DeviceManagedNetworkResponse
 
 	if err := json.Unmarshal(res, &deviceManagedNetworksResponse); err != nil {
-		return DeviceManagedNetworks{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return DeviceManagedNetwork{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return deviceManagedNetworksResponse.Result, err
 }
 
-// GetDeviceManagedNetwork gets a single Managed Network.
+// GetDeviceManagedNetwork gets a single Device Managed Network.
 //
 // API reference: https://api.cloudflare.com/#device-managed-networks-device-managed-network-details
-func (api *API) GetDeviceManagedNetwork(ctx context.Context, accountID string, networkID string) (DeviceManagedNetworks, error) {
-	uri := fmt.Sprintf("/%s/%s/devices/networks/%s", AccountRouteRoot, accountID, networkID)
+func (api *API) GetDeviceManagedNetwork(ctx context.Context, rc *ResourceContainer, networkID string) (DeviceManagedNetwork, error) {
+	if rc.Level != AccountRouteLevel {
+		return DeviceManagedNetwork{}, ErrRequiredAccountLevelResourceContainer
+	}
 
-	deviceManagedNetworksResponse := DeviceManagedNetworksResponse{}
+	uri := fmt.Sprintf("/%s/%s/devices/networks/%s", rc.Level, rc.Identifier, networkID)
+
+	deviceManagedNetworksResponse := DeviceManagedNetworkResponse{}
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return DeviceManagedNetworks{}, err
+		return DeviceManagedNetwork{}, err
 	}
 
 	if err := json.Unmarshal(res, &deviceManagedNetworksResponse); err != nil {
-		return DeviceManagedNetworks{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return DeviceManagedNetwork{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return deviceManagedNetworksResponse.Result, err
 }
 
-// DeleteManagedNetworks deletes a Device Managed Network. Returns the remaining device managed networks for the account.
+// DeleteManagedNetworks deletes a Device Managed Network.
 //
 // API reference: https://api.cloudflare.com/#device-managed-networks-delete-device-managed-network
-func (api *API) DeleteManagedNetworks(ctx context.Context, accountID, networkID string) ([]DeviceManagedNetworks, error) {
-	uri := fmt.Sprintf("/%s/%s/devices/networks/%s", AccountRouteRoot, accountID, networkID)
+func (api *API) DeleteManagedNetworks(ctx context.Context, rc *ResourceContainer, networkID string) ([]DeviceManagedNetwork, error) {
+	if rc.Level != AccountRouteLevel {
+		return []DeviceManagedNetwork{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	uri := fmt.Sprintf("/%s/%s/devices/networks/%s", rc.Level, rc.Identifier, networkID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return []DeviceManagedNetworks{}, err
+		return []DeviceManagedNetwork{}, err
 	}
 
-	var response DeviceManagedNetworksListResponse
+	var response DeviceManagedNetworkListResponse
 	if err := json.Unmarshal(res, &response); err != nil {
-		return []DeviceManagedNetworks{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return []DeviceManagedNetwork{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return response.Result, err
