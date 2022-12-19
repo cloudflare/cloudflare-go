@@ -9,6 +9,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+const testNetworkID = "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"
+
 func TestGetDeviceManagedNetworks(t *testing.T) {
 	setup()
 	defer teardown()
@@ -35,7 +37,7 @@ func TestGetDeviceManagedNetworks(t *testing.T) {
 	}
 
 	want := []DeviceManagedNetwork{{
-		NetworkID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		NetworkID: testNetworkID,
 		Type:      "tls",
 		Name:      "managed-network-1",
 		Config: &Config{
@@ -57,7 +59,6 @@ func TestDeviceManagedNetwork(t *testing.T) {
 	setup()
 	defer teardown()
 
-	id := "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
@@ -75,11 +76,11 @@ func TestDeviceManagedNetwork(t *testing.T) {
 				  "sha256": "b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c"
 				}
 			  }
-		  }`, id)
+		  }`, testNetworkID)
 	}
 
 	want := DeviceManagedNetwork{
-		NetworkID: id,
+		NetworkID: testNetworkID,
 		Type:      "tls",
 		Name:      "managed-network-1",
 		Config: &Config{
@@ -88,9 +89,9 @@ func TestDeviceManagedNetwork(t *testing.T) {
 		},
 	}
 
-	mux.HandleFunc("/accounts/"+testAccountID+"/devices/networks/"+id, handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/devices/networks/"+testNetworkID, handler)
 
-	actual, err := client.GetDeviceManagedNetwork(context.Background(), AccountIdentifier(testAccountID), id)
+	actual, err := client.GetDeviceManagedNetwork(context.Background(), AccountIdentifier(testAccountID), testNetworkID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -101,7 +102,6 @@ func TestCreateDeviceManagedNetwork(t *testing.T) {
 	setup()
 	defer teardown()
 
-	id := "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
@@ -119,11 +119,11 @@ func TestCreateDeviceManagedNetwork(t *testing.T) {
 				  "sha256": "b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c"
 				}
 			  }
-		  }`, id)
+		  }`, testNetworkID)
 	}
 
 	want := DeviceManagedNetwork{
-		NetworkID: id,
+		NetworkID: testNetworkID,
 		Type:      "tls",
 		Name:      "managed-network-1",
 		Config: &Config{
@@ -135,7 +135,7 @@ func TestCreateDeviceManagedNetwork(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/networks", handler)
 
 	actual, err := client.CreateDeviceManagedNetwork(context.Background(), AccountIdentifier(testAccountID), CreateDeviceManagedNetworkParams{
-		NetworkID: id,
+		NetworkID: testNetworkID,
 		Type:      "tls",
 		Name:      "managed-network-1",
 		Config: &Config{
@@ -153,7 +153,6 @@ func TestDeleteDeviceManagedNetwork(t *testing.T) {
 	setup()
 	defer teardown()
 
-	id := "480f4f69-1a28-4fdd-9240-1ed29f0ac1db"
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
@@ -176,7 +175,7 @@ func TestDeleteDeviceManagedNetwork(t *testing.T) {
 	}
 
 	want := []DeviceManagedNetwork{{
-		NetworkID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		NetworkID: testNetworkID,
 		Type:      "tls",
 		Name:      "managed-network-1",
 		Config: &Config{
@@ -185,12 +184,11 @@ func TestDeleteDeviceManagedNetwork(t *testing.T) {
 		},
 	}}
 
-	mux.HandleFunc("/accounts/"+testAccountID+"/devices/networks/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/devices/networks/"+testNetworkID, handler)
 
-	actual, err := client.DeleteManagedNetworks(context.Background(), AccountIdentifier(testAccountID), id)
+	actual, err := client.DeleteManagedNetworks(context.Background(), AccountIdentifier(testAccountID), testNetworkID)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
-
 }
