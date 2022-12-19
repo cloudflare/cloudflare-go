@@ -34,7 +34,7 @@ func TestGetDeviceManagedNetworks(t *testing.T) {
 		  }`)
 	}
 
-	want := []DeviceManagedNetworks{{
+	want := []DeviceManagedNetwork{{
 		NetworkID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		Type:      "tls",
 		Name:      "managed-network-1",
@@ -46,7 +46,7 @@ func TestGetDeviceManagedNetworks(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/networks", handler)
 
-	actual, err := client.ListManagedNetworks(context.Background(), testAccountID)
+	actual, err := client.ListDeviceManagedNetworks(context.Background(), AccountIdentifier(testAccountID), ListDeviceManagedNetworksParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -65,7 +65,7 @@ func TestDeviceManagedNetwork(t *testing.T) {
 			"success": true,
 			"errors": [],
 			"messages": [],
-			"result": 
+			"result":
 			  {
 				"network_id": "%s",
 				"type": "tls",
@@ -78,7 +78,7 @@ func TestDeviceManagedNetwork(t *testing.T) {
 		  }`, id)
 	}
 
-	want := DeviceManagedNetworks{
+	want := DeviceManagedNetwork{
 		NetworkID: id,
 		Type:      "tls",
 		Name:      "managed-network-1",
@@ -90,7 +90,7 @@ func TestDeviceManagedNetwork(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/networks/"+id, handler)
 
-	actual, err := client.GetDeviceManagedNetwork(context.Background(), testAccountID, id)
+	actual, err := client.GetDeviceManagedNetwork(context.Background(), AccountIdentifier(testAccountID), id)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -109,7 +109,7 @@ func TestCreateDeviceManagedNetwork(t *testing.T) {
 			"success": true,
 			"errors": [],
 			"messages": [],
-			"result": 
+			"result":
 			  {
 				"network_id": "%s",
 				"type": "tls",
@@ -122,7 +122,7 @@ func TestCreateDeviceManagedNetwork(t *testing.T) {
 		  }`, id)
 	}
 
-	want := DeviceManagedNetworks{
+	want := DeviceManagedNetwork{
 		NetworkID: id,
 		Type:      "tls",
 		Name:      "managed-network-1",
@@ -134,7 +134,15 @@ func TestCreateDeviceManagedNetwork(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/networks", handler)
 
-	actual, err := client.CreateDeviceManagedNetwork(context.Background(), testAccountID, want)
+	actual, err := client.CreateDeviceManagedNetwork(context.Background(), AccountIdentifier(testAccountID), CreateDeviceManagedNetworkParams{
+		NetworkID: id,
+		Type:      "tls",
+		Name:      "managed-network-1",
+		Config: &Config{
+			TlsSockAddr: "foobar:1234",
+			Sha256:      "b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c",
+		},
+	})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -167,7 +175,7 @@ func TestDeleteDeviceManagedNetwork(t *testing.T) {
 		  }`)
 	}
 
-	want := []DeviceManagedNetworks{{
+	want := []DeviceManagedNetwork{{
 		NetworkID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		Type:      "tls",
 		Name:      "managed-network-1",
@@ -179,7 +187,7 @@ func TestDeleteDeviceManagedNetwork(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/networks/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
-	actual, err := client.DeleteManagedNetworks(context.Background(), testAccountID, id)
+	actual, err := client.DeleteManagedNetworks(context.Background(), AccountIdentifier(testAccountID), id)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
