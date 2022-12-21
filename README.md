@@ -36,6 +36,7 @@ The current feature list includes:
 - [x] [Load Balancing](https://blog.cloudflare.com/introducing-load-balancing-intelligent-failover-with-cloudflare/)
 - [x] [Logpush Jobs](https://developers.cloudflare.com/logs/logpush/)
 - [x] Magic Transit / Magic WAN
+- [x] mTLS Certificate Store
 - [x] Notifications
 - [ ] Organization Administration
 - [x] [Origin CA](https://blog.cloudflare.com/universal-ssl-encryption-all-the-way-to-the-origin-for-free/)
