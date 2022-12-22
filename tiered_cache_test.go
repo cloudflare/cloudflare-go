@@ -200,7 +200,7 @@ func TestGetTieredCache(t *testing.T) {
 			}
 		})
 
-		t.Run("Generic Tiered Cache was modified more recently", func(t *testing.T) {
+		t.Run("generic tiered cache was modified more recently", func(t *testing.T) {
 			setup()
 			defer teardown()
 
