@@ -300,7 +300,7 @@ func zoneRecords(c *cli.Context) error {
 			rr.Content = c.String("content")
 		}
 		var err error
-		records, err = api.DNSRecords(context.Background(), zoneID, rr)
+		records, _, err = api.DNSRecords(context.Background(), zoneID, rr, cloudflare.DNSListParameters{})
 		if err != nil {
 			fmt.Println(err)
 			return err

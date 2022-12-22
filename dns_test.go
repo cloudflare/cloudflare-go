@@ -200,8 +200,10 @@ func TestDNSRecords(t *testing.T) {
 				}
 			],
 			"result_info": {
+				"count": 1,
 				"page": 1,
-				"total_pages": 1
+				"per_page": 20,
+				"total_count": 2000
 			}
 		}`)
 	}
@@ -231,8 +233,122 @@ func TestDNSRecords(t *testing.T) {
 		},
 	}}
 
-	actual, err := client.DNSRecords(context.Background(), testZoneID, unicodeInput)
+	actual, _, err := client.DNSRecords(context.Background(), testZoneID, unicodeInput, DNSListParameters{})
 	require.NoError(t, err)
+
+	assert.Equal(t, want, actual)
+}
+
+func TestDNSRecordsSearch(t *testing.T) {
+	setup()
+	defer teardown()
+
+	unicodeInput := DNSRecord{
+		Name:    "example.com",
+		Type:    "A",
+		Content: "198.51.100.4",
+	}
+	asciiInput := DNSRecord{
+		Name:    "example.com",
+		Type:    "A",
+		Content: "198.51.100.4",
+	}
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, asciiInput.Name, r.URL.Query().Get("name"))
+		assert.Equal(t, asciiInput.Type, r.URL.Query().Get("type"))
+		assert.Equal(t, asciiInput.Content, r.URL.Query().Get("content"))
+		assert.Equal(t, "all", r.URL.Query().Get("match"))
+		assert.Equal(t, "any", r.URL.Query().Get("tag-match"))
+		assert.Equal(t, "1", r.URL.Query().Get("page"))
+		assert.Equal(t, "type", r.URL.Query().Get("order"))
+		assert.Equal(t, "asc", r.URL.Query().Get("direction"))
+		fmt.Println(r.URL.Query()["tag"])
+		tags := r.URL.Query()["tag"]
+		assert.Equal(t, 2, len(tags))
+		assert.Equal(t, "tag.tag1", tags[0])
+		assert.Equal(t, "tag.tag2.contains", tags[1])
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": [
+				{
+					"id": "372e67954025e0ba6aaa6d586b9e0b59",
+					"type": "A",
+					"name": "example.com",
+					"content": "198.51.100.4",
+					"proxiable": true,
+					"proxied": false,
+					"ttl": 120,
+					"locked": false,
+					"zone_id": "d56084adb405e0b7e32c52321bf07be6",
+					"zone_name": "example.com",
+					"created_on": "2014-01-01T05:20:00Z",
+					"modified_on": "2014-01-01T05:20:00Z",
+					"data": {},
+					"meta": {
+						"auto_added": true,
+						"source": "primary"
+					},
+					"tags": ["tag1", "tag2extended"]
+				}
+			],
+			"result_info": {
+				"count": 1,
+				"page": 1,
+				"per_page": 20,
+				"total_count": 2000
+			}
+		}`)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/dns_records", handler)
+
+	proxied := false
+	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
+	modifiedOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
+	want := []DNSRecord{{
+		ID:         "372e67954025e0ba6aaa6d586b9e0b59",
+		Type:       "A",
+		Name:       asciiInput.Name,
+		Content:    asciiInput.Content,
+		Proxiable:  true,
+		Proxied:    &proxied,
+		TTL:        120,
+		Locked:     false,
+		ZoneID:     testZoneID,
+		ZoneName:   "example.com",
+		CreatedOn:  createdOn,
+		ModifiedOn: modifiedOn,
+		Data:       map[string]interface{}{},
+		Meta: map[string]interface{}{
+			"auto_added": true,
+			"source":     "primary",
+		},
+		Tags: []string{"tag1", "tag2extended"},
+	}}
+
+	actual, resultInfo, err := client.DNSRecords(context.Background(), testZoneID, unicodeInput, DNSListParameters{
+		Match:     "all",
+		Order:     "type",
+		Direction: ListDirectionAsc,
+		TagMatch:  "any",
+		TagSearch: []TagSearch{
+			{
+				Tag: "tag1",
+			},
+			{
+				Tag:   "tag2",
+				Query: TagQueryContains,
+			},
+		},
+	})
+	require.NoError(t, err)
+	assert.Equal(t, 2000, resultInfo.Total)
 
 	assert.Equal(t, want, actual)
 }
@@ -266,7 +382,9 @@ func TestDNSRecord(t *testing.T) {
 				"meta": {
 					"auto_added": true,
 					"source": "primary"
-				}
+				},
+				"comment": "This is a comment",
+				"tags": ["tag1", "tag2"]
 			}
 		}`)
 	}
@@ -295,6 +413,8 @@ func TestDNSRecord(t *testing.T) {
 			"auto_added": true,
 			"source":     "primary",
 		},
+		Comment: "This is a comment",
+		Tags:    []string{"tag1", "tag2"},
 	}
 
 	actual, err := client.DNSRecord(context.Background(), testZoneID, dnsRecordID)
