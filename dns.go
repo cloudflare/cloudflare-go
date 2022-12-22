@@ -5,8 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"net/url"
-	"strconv"
 	"time"
 
 	"golang.org/x/net/idna"
@@ -14,11 +12,11 @@ import (
 
 // DNSRecord represents a DNS record in a zone.
 type DNSRecord struct {
-	CreatedOn  time.Time   `json:"created_on,omitempty"`
-	ModifiedOn time.Time   `json:"modified_on,omitempty"`
-	Type       string      `json:"type,omitempty"`
-	Name       string      `json:"name,omitempty"`
-	Content    string      `json:"content,omitempty"`
+	CreatedOn  time.Time   `json:"created_on,omitempty" url:"created_on,omitempty"`
+	ModifiedOn time.Time   `json:"modified_on,omitempty" url:"modified_on,omitempty"`
+	Type       string      `json:"type,omitempty" url:"type,omitempty"`
+	Name       string      `json:"name,omitempty" url:"name,omitempty"`
+	Content    string      `json:"content,omitempty" url:"content,omitempty"`
 	Meta       interface{} `json:"meta,omitempty"`
 	Data       interface{} `json:"data,omitempty"` // data returned by: SRV, LOC
 	ID         string      `json:"id,omitempty"`
@@ -26,10 +24,10 @@ type DNSRecord struct {
 	ZoneName   string      `json:"zone_name,omitempty"`
 	Priority   *uint16     `json:"priority,omitempty"`
 	TTL        int         `json:"ttl,omitempty"`
-	Proxied    *bool       `json:"proxied,omitempty"`
+	Proxied    *bool       `json:"proxied,omitempty" url:"proxied,omitempty"`
 	Proxiable  bool        `json:"proxiable,omitempty"`
 	Locked     bool        `json:"locked,omitempty"`
-	Comment    string      `json:"comment,omitempty"`
+	Comment    string      `json:"comment,omitempty" url:"comment,omitempty"`
 	Tags       []string    `json:"tags,omitempty"`
 }
 
@@ -40,21 +38,21 @@ type DNSRecordResponse struct {
 	ResultInfo `json:"result_info"`
 }
 
-type TagQueryParameter string
-
-const (
-	TagQueryPresent    TagQueryParameter = "present"
-	TagQueryAbsent     TagQueryParameter = "absent"
-	TagQueryExact      TagQueryParameter = "exact"
-	TagQueryContains   TagQueryParameter = "contains"
-	TagQueryStartsWith TagQueryParameter = "startswith"
-	TagQueryEndsWith   TagQueryParameter = "endswith"
-)
-
-type TagSearch struct {
-	Tag   string
-	Query TagQueryParameter
-}
+//type TagQueryParameter string
+//
+//const (
+//	TagQueryPresent    TagQueryParameter = "present"
+//	TagQueryAbsent     TagQueryParameter = "absent"
+//	TagQueryExact      TagQueryParameter = "exact"
+//	TagQueryContains   TagQueryParameter = "contains"
+//	TagQueryStartsWith TagQueryParameter = "startswith"
+//	TagQueryEndsWith   TagQueryParameter = "endswith"
+//)
+//
+//type TagSearch struct {
+//	Tag   string
+//	Query TagQueryParameter
+//}
 
 type ListDirection string
 
@@ -64,13 +62,18 @@ const (
 )
 
 type DNSListParameters struct {
-	TagSearch []TagSearch   `url:"-"`
-	Order     string        `url:"order,omitempty"`
-	TagMatch  string        `url:"tag-match,omitempty"`
+	//TagSearch []TagSearch   `url:"-"`
+	Order string `url:"order,omitempty"`
+	//TagMatch  string        `url:"tag-match,omitempty"`
 	Direction ListDirection `url:"direction,omitempty"`
-	TagQuery  string        `url:"-"`
-	Match     string        `url:"match,omitempty"`
+	//TagQuery  string        `url:"-"`
+	Match string `url:"match,omitempty"`
 	ResultInfo
+}
+
+type ListDNSRecordsCombined struct {
+	DNSRecord
+	DNSListParameters
 }
 
 // DNSListResponse represents the response from the list DNS records endpoint.
@@ -132,47 +135,9 @@ func (api *API) ListDNSRecords(ctx context.Context, rc *ResourceContainer, rr DN
 	if rc.Identifier == "" {
 		return nil, nil, ErrMissingZoneID
 	}
-	// Construct a query string
-	v := url.Values{}
-	// Using default per_page value as specified by the API
+
 	if rr.Name != "" {
-		v.Set("name", toUTS46ASCII(rr.Name))
-	}
-	if rr.Type != "" {
-		v.Set("type", rr.Type)
-	}
-	if rr.Content != "" {
-		v.Set("content", rr.Content)
-	}
-
-	if rr.Proxied != nil {
-		v.Set("proxied", strconv.FormatBool(*rr.Proxied))
-	}
-
-	if len(params.TagSearch) > 0 {
-		for _, tagParam := range params.TagSearch {
-			tagText := fmt.Sprintf("tag.%s", tagParam.Tag)
-			if tagParam.Query != "" {
-				tagText += fmt.Sprintf(".%s", tagParam.Query)
-			}
-			v.Add("tag", tagText)
-		}
-	}
-
-	if params.Order != "" {
-		v.Set("order", params.Order)
-	}
-
-	if params.TagMatch != "" {
-		v.Set("tag-match", params.TagMatch)
-	}
-
-	if params.Direction != "" {
-		v.Set("direction", string(params.Direction))
-	}
-
-	if params.Match != "" {
-		v.Set("match", params.Match)
+		rr.Name = toUTS46ASCII(rr.Name)
 	}
 
 	autoPaginate := true
@@ -193,8 +158,7 @@ func (api *API) ListDNSRecords(ctx context.Context, rc *ResourceContainer, rr DN
 
 	// Loop over makeRequest until what we've fetched all records
 	for {
-		v.Set("page", strconv.Itoa(params.Page))
-		uri := fmt.Sprintf("/zones/%s/dns_records?%s", rc.Identifier, v.Encode())
+		uri := buildURI(fmt.Sprintf("/zones/%s/dns_records", rc.Identifier), ListDNSRecordsCombined{rr, params})
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
 			return []DNSRecord{}, &ResultInfo{}, err

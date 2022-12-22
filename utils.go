@@ -16,7 +16,7 @@ func buildURI(path string, options interface{}) string {
 }
 
 // loadFixture takes a series of path components and returns the JSON fixture at
-// that locationassociated.
+// that location associated.
 func loadFixture(parts ...string) string {
 	paths := []string{"testdata", "fixtures"}
 	paths = append(paths, parts...)

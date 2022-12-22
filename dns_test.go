@@ -260,15 +260,9 @@ func TestDNSRecordsSearch(t *testing.T) {
 		assert.Equal(t, recordInput.Type, r.URL.Query().Get("type"))
 		assert.Equal(t, recordInput.Content, r.URL.Query().Get("content"))
 		assert.Equal(t, "all", r.URL.Query().Get("match"))
-		assert.Equal(t, "any", r.URL.Query().Get("tag-match"))
 		assert.Equal(t, "1", r.URL.Query().Get("page"))
 		assert.Equal(t, "type", r.URL.Query().Get("order"))
 		assert.Equal(t, "asc", r.URL.Query().Get("direction"))
-		fmt.Println(r.URL.Query()["tag"])
-		tags := r.URL.Query()["tag"]
-		assert.Equal(t, 2, len(tags))
-		assert.Equal(t, "tag.tag1", tags[0])
-		assert.Equal(t, "tag.tag2.contains", tags[1])
 
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
@@ -339,16 +333,6 @@ func TestDNSRecordsSearch(t *testing.T) {
 		Match:     "all",
 		Order:     "type",
 		Direction: ListDirectionAsc,
-		TagMatch:  "any",
-		TagSearch: []TagSearch{
-			{
-				Tag: "tag1",
-			},
-			{
-				Tag:   "tag2",
-				Query: TagQueryContains,
-			},
-		},
 	})
 	require.NoError(t, err)
 	assert.Equal(t, 2000, resultInfo.Total)
