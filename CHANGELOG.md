@@ -1,5 +1,9 @@
 ## 0.58.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* tiered_cache: Add support for Tiered Caching interactions for setting Smart and Generic topologies ([#1149](https://github.com/cloudflare/cloudflare-go/issues/1149))
+
 ## 0.57.0 (December 22nd, 2022)
 
 BREAKING CHANGES:
