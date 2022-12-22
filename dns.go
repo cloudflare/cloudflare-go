@@ -71,7 +71,7 @@ type DNSListParameters struct {
 	ResultInfo
 }
 
-type ListDNSRecordsCombined struct {
+type listDNSRecordsCombined struct {
 	DNSRecord
 	DNSListParameters
 }
@@ -158,7 +158,7 @@ func (api *API) ListDNSRecords(ctx context.Context, rc *ResourceContainer, rr DN
 
 	// Loop over makeRequest until what we've fetched all records
 	for {
-		uri := buildURI(fmt.Sprintf("/zones/%s/dns_records", rc.Identifier), ListDNSRecordsCombined{rr, params})
+		uri := buildURI(fmt.Sprintf("/zones/%s/dns_records", rc.Identifier), listDNSRecordsCombined{rr, params})
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
 			return []DNSRecord{}, &ResultInfo{}, err
