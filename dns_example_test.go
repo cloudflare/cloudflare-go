@@ -8,7 +8,7 @@ import (
 	"github.com/cloudflare/cloudflare-go"
 )
 
-func ExampleAPI_DNSRecords_all() {
+func ExampleAPI_ListDNSRecords_all() {
 	api, err := cloudflare.New("deadbeef", "test@example.org")
 	if err != nil {
 		log.Fatal(err)
@@ -30,7 +30,7 @@ func ExampleAPI_DNSRecords_all() {
 	}
 }
 
-func ExampleAPI_DNSRecords_filterByContent() {
+func ExampleAPI_ListDNSRecords_filterByContent() {
 	api, err := cloudflare.New("deadbeef", "test@example.org")
 	if err != nil {
 		log.Fatal(err)
@@ -53,7 +53,7 @@ func ExampleAPI_DNSRecords_filterByContent() {
 	}
 }
 
-func ExampleAPI_DNSRecords_filterByName() {
+func ExampleAPI_ListDNSRecords_filterByName() {
 	api, err := cloudflare.New("deadbeef", "test@example.org")
 	if err != nil {
 		log.Fatal(err)
@@ -77,7 +77,7 @@ func ExampleAPI_DNSRecords_filterByName() {
 	}
 }
 
-func ExampleAPI_DNSRecords_filterByType() {
+func ExampleAPI_ListDNSRecords_filterByType() {
 	api, err := cloudflare.New("deadbeef", "test@example.org")
 	if err != nil {
 		log.Fatal(err)
