@@ -235,10 +235,10 @@ func TestDNSRecords(t *testing.T) {
 		},
 	}}
 
-	_, _, err := client.ListDNSRecords(context.Background(), ZoneIdentifier(""), unicodeInput, DNSListParameters{})
+	_, _, err := client.ListDNSRecords(context.Background(), ZoneIdentifier(""), unicodeInput, ListDNSParameters{})
 	assert.Equal(t, ErrMissingZoneID, err)
 
-	actual, _, err := client.ListDNSRecords(context.Background(), ZoneIdentifier(testZoneID), unicodeInput, DNSListParameters{})
+	actual, _, err := client.ListDNSRecords(context.Background(), ZoneIdentifier(testZoneID), unicodeInput, ListDNSParameters{})
 	require.NoError(t, err)
 
 	assert.Equal(t, want, actual)
@@ -326,7 +326,7 @@ func TestDNSRecordsSearch(t *testing.T) {
 		Tags: []string{"tag1", "tag2extended"},
 	}}
 
-	actual, resultInfo, err := client.ListDNSRecords(context.Background(), ZoneIdentifier(testZoneID), recordInput, DNSListParameters{
+	actual, resultInfo, err := client.ListDNSRecords(context.Background(), ZoneIdentifier(testZoneID), recordInput, ListDNSParameters{
 		ResultInfo: ResultInfo{
 			Page: 1,
 		},

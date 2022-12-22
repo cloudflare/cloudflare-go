@@ -61,7 +61,7 @@ const (
 	ListDirectionDesc ListDirection = "desc"
 )
 
-type DNSListParameters struct {
+type ListDNSParameters struct {
 	//TagSearch []TagSearch   `url:"-"`
 	Order string `url:"order,omitempty"`
 	//TagMatch  string        `url:"tag-match,omitempty"`
@@ -73,7 +73,7 @@ type DNSListParameters struct {
 
 type listDNSRecordsCombined struct {
 	DNSRecord
-	DNSListParameters
+	ListDNSParameters
 }
 
 // DNSListResponse represents the response from the list DNS records endpoint.
@@ -131,7 +131,7 @@ func (api *API) CreateDNSRecord(ctx context.Context, rc *ResourceContainer, rr D
 // This takes a DNSRecord to allow filtering of the results returned.
 //
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-list-dns-records
-func (api *API) ListDNSRecords(ctx context.Context, rc *ResourceContainer, rr DNSRecord, params DNSListParameters) ([]DNSRecord, *ResultInfo, error) {
+func (api *API) ListDNSRecords(ctx context.Context, rc *ResourceContainer, rr DNSRecord, params ListDNSParameters) ([]DNSRecord, *ResultInfo, error) {
 	if rc.Identifier == "" {
 		return nil, nil, ErrMissingZoneID
 	}

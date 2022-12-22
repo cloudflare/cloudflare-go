@@ -88,7 +88,7 @@ func dnsCreateOrUpdate(c *cli.Context) error {
 	rr := cloudflare.DNSRecord{
 		Name: name + "." + zone,
 	}
-	records, _, err := api.ListDNSRecords(context.Background(), cloudflare.ZoneIdentifier(zoneID), rr, cloudflare.DNSListParameters{})
+	records, _, err := api.ListDNSRecords(context.Background(), cloudflare.ZoneIdentifier(zoneID), rr, cloudflare.ListDNSParameters{})
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error fetching DNS records: ", err)
 		return err
