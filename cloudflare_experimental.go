@@ -98,13 +98,13 @@ func NewExperimental(config *ClientParams) (*Client, error) {
 		if c.RetryPolicy.MinRetryDelay > 0 {
 			retryClient.RetryWaitMin = c.RetryPolicy.MinRetryDelay
 		} else {
-			retryClient.RetryWaitMin = time.Duration(1) * time.Second
+			retryClient.RetryWaitMin = 1 * time.Second
 		}
 
 		if c.RetryPolicy.MaxRetryDelay > 0 {
 			retryClient.RetryWaitMax = c.RetryPolicy.MaxRetryDelay
 		} else {
-			retryClient.RetryWaitMax = time.Duration(30) * time.Second
+			retryClient.RetryWaitMax = 30 * time.Second
 		}
 
 		retryClient.Logger = silentRetryLogger
