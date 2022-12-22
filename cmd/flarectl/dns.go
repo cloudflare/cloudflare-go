@@ -50,7 +50,7 @@ func dnsCreate(c *cli.Context) error {
 		Proxied:  &proxy,
 		Priority: &priority,
 	}
-	resp, err := api.CreateDNSRecord(context.Background(), zoneID, record)
+	resp, err := api.CreateDNSRecord(context.Background(), cloudflare.ZoneIdentifier(zoneID), record)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error creating DNS record: ", err)
 		return err
@@ -88,7 +88,7 @@ func dnsCreateOrUpdate(c *cli.Context) error {
 	rr := cloudflare.DNSRecord{
 		Name: name + "." + zone,
 	}
-	records, _, err := api.DNSRecords(context.Background(), zoneID, rr, cloudflare.DNSListParameters{})
+	records, _, err := api.ListDNSRecords(context.Background(), cloudflare.ZoneIdentifier(zoneID), rr, cloudflare.DNSListParameters{})
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error fetching DNS records: ", err)
 		return err
@@ -108,7 +108,7 @@ func dnsCreateOrUpdate(c *cli.Context) error {
 				rr.Proxied = &proxy
 				rr.Priority = &priority
 
-				err := api.UpdateDNSRecord(context.Background(), zoneID, r.ID, rr)
+				err := api.UpdateDNSRecord(context.Background(), cloudflare.ZoneIdentifier(zoneID), r.ID, rr)
 				if err != nil {
 					fmt.Println("Error updating DNS record:", err)
 					return err
@@ -126,7 +126,7 @@ func dnsCreateOrUpdate(c *cli.Context) error {
 		rr.Proxied = &proxy
 		rr.Priority = &priority
 		// TODO: Print the response.
-		resp, err = api.CreateDNSRecord(context.Background(), zoneID, rr)
+		resp, err = api.CreateDNSRecord(context.Background(), cloudflare.ZoneIdentifier(zoneID), rr)
 		if err != nil {
 			fmt.Println("Error creating DNS record:", err)
 			return err
@@ -171,7 +171,7 @@ func dnsUpdate(c *cli.Context) error {
 		Proxied:  &proxy,
 		Priority: &priority,
 	}
-	err = api.UpdateDNSRecord(context.Background(), zoneID, recordID, record)
+	err = api.UpdateDNSRecord(context.Background(), cloudflare.ZoneIdentifier(zoneID), recordID, record)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error updating DNS record: ", err)
 		return err
@@ -194,7 +194,7 @@ func dnsDelete(c *cli.Context) error {
 		return err
 	}
 
-	err = api.DeleteDNSRecord(context.Background(), zoneID, recordID)
+	err = api.DeleteDNSRecord(context.Background(), cloudflare.ZoneIdentifier(zoneID), recordID)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error deleting DNS record: ", err)
 		return err

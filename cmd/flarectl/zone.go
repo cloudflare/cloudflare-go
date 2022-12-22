@@ -279,11 +279,11 @@ func zoneRecords(c *cli.Context) error {
 		return err
 	}
 
-	// Create a an empty record for searching for records
+	// Create an empty record for searching for records
 	rr := cloudflare.DNSRecord{}
 	var records []cloudflare.DNSRecord
 	if c.String("id") != "" {
-		rec, err := api.DNSRecord(context.Background(), zoneID, c.String("id"))
+		rec, err := api.GetDNSRecord(context.Background(), cloudflare.ZoneIdentifier(zoneID), c.String("id"))
 		if err != nil {
 			fmt.Println(err)
 			return err
@@ -300,7 +300,7 @@ func zoneRecords(c *cli.Context) error {
 			rr.Content = c.String("content")
 		}
 		var err error
-		records, _, err = api.DNSRecords(context.Background(), zoneID, rr, cloudflare.DNSListParameters{})
+		records, _, err = api.ListDNSRecords(context.Background(), cloudflare.ZoneIdentifier(zoneID), rr, cloudflare.DNSListParameters{})
 		if err != nil {
 			fmt.Println(err)
 			return err

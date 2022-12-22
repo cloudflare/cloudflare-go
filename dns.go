@@ -102,10 +102,13 @@ func toUTS46ASCII(name string) string {
 // CreateDNSRecord creates a DNS record for the zone identifier.
 //
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-create-dns-record
-func (api *API) CreateDNSRecord(ctx context.Context, zoneID string, rr DNSRecord) (*DNSRecordResponse, error) {
+func (api *API) CreateDNSRecord(ctx context.Context, rc *ResourceContainer, rr DNSRecord) (*DNSRecordResponse, error) {
+	if rc.Identifier == "" {
+		return nil, ErrMissingZoneID
+	}
 	rr.Name = toUTS46ASCII(rr.Name)
 
-	uri := fmt.Sprintf("/zones/%s/dns_records", zoneID)
+	uri := fmt.Sprintf("/zones/%s/dns_records", rc.Identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, rr)
 	if err != nil {
 		return nil, err
@@ -120,12 +123,15 @@ func (api *API) CreateDNSRecord(ctx context.Context, zoneID string, rr DNSRecord
 	return recordResp, nil
 }
 
-// DNSRecords returns a slice of DNS records for the given zone identifier.
+// ListDNSRecords returns a slice of DNS records for the given zone identifier.
 //
 // This takes a DNSRecord to allow filtering of the results returned.
 //
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-list-dns-records
-func (api *API) DNSRecords(ctx context.Context, zoneID string, rr DNSRecord, params DNSListParameters) ([]DNSRecord, *ResultInfo, error) {
+func (api *API) ListDNSRecords(ctx context.Context, rc *ResourceContainer, rr DNSRecord, params DNSListParameters) ([]DNSRecord, *ResultInfo, error) {
+	if rc.Identifier == "" {
+		return nil, nil, ErrMissingZoneID
+	}
 	// Construct a query string
 	v := url.Values{}
 	// Using default per_page value as specified by the API
@@ -188,7 +194,7 @@ func (api *API) DNSRecords(ctx context.Context, zoneID string, rr DNSRecord, par
 	// Loop over makeRequest until what we've fetched all records
 	for {
 		v.Set("page", strconv.Itoa(params.Page))
-		uri := fmt.Sprintf("/zones/%s/dns_records?%s", zoneID, v.Encode())
+		uri := fmt.Sprintf("/zones/%s/dns_records?%s", rc.Identifier, v.Encode())
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
 			return []DNSRecord{}, &ResultInfo{}, err
@@ -206,12 +212,15 @@ func (api *API) DNSRecords(ctx context.Context, zoneID string, rr DNSRecord, par
 	return records, &listResponse.ResultInfo, nil
 }
 
-// DNSRecord returns a single DNS record for the given zone & record
+// GetDNSRecord returns a single DNS record for the given zone & record
 // identifiers.
 //
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-dns-record-details
-func (api *API) DNSRecord(ctx context.Context, zoneID, recordID string) (DNSRecord, error) {
-	uri := fmt.Sprintf("/zones/%s/dns_records/%s", zoneID, recordID)
+func (api *API) GetDNSRecord(ctx context.Context, rc *ResourceContainer, recordID string) (DNSRecord, error) {
+	if rc.Identifier == "" {
+		return DNSRecord{}, ErrMissingZoneID
+	}
+	uri := fmt.Sprintf("/zones/%s/dns_records/%s", rc.Identifier, recordID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return DNSRecord{}, err
@@ -228,13 +237,16 @@ func (api *API) DNSRecord(ctx context.Context, zoneID, recordID string) (DNSReco
 // identifiers.
 //
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-update-dns-record
-func (api *API) UpdateDNSRecord(ctx context.Context, zoneID, recordID string, rr DNSRecord) error {
+func (api *API) UpdateDNSRecord(ctx context.Context, rc *ResourceContainer, recordID string, rr DNSRecord) error {
+	if rc.Identifier == "" {
+		return ErrMissingZoneID
+	}
 	rr.Name = toUTS46ASCII(rr.Name)
 
 	// Populate the record name from the existing one if the update didn't
 	// specify it.
 	if rr.Name == "" || rr.Type == "" {
-		rec, err := api.DNSRecord(ctx, zoneID, recordID)
+		rec, err := api.GetDNSRecord(ctx, rc, recordID)
 		if err != nil {
 			return err
 		}
@@ -246,7 +258,7 @@ func (api *API) UpdateDNSRecord(ctx context.Context, zoneID, recordID string, rr
 			rr.Type = rec.Type
 		}
 	}
-	uri := fmt.Sprintf("/zones/%s/dns_records/%s", zoneID, recordID)
+	uri := fmt.Sprintf("/zones/%s/dns_records/%s", rc.Identifier, recordID)
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, rr)
 	if err != nil {
 		return err
@@ -263,8 +275,11 @@ func (api *API) UpdateDNSRecord(ctx context.Context, zoneID, recordID string, rr
 // identifiers.
 //
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-delete-dns-record
-func (api *API) DeleteDNSRecord(ctx context.Context, zoneID, recordID string) error {
-	uri := fmt.Sprintf("/zones/%s/dns_records/%s", zoneID, recordID)
+func (api *API) DeleteDNSRecord(ctx context.Context, rc *ResourceContainer, recordID string) error {
+	if rc.Identifier == "" {
+		return ErrMissingZoneID
+	}
+	uri := fmt.Sprintf("/zones/%s/dns_records/%s", rc.Identifier, recordID)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return err

@@ -28,7 +28,7 @@ func Example() {
 	}
 
 	// Fetch all DNS records for example.org
-	records, _, err := api.DNSRecords(context.Background(), zoneID, cloudflare.DNSRecord{}, cloudflare.DNSListParameters{})
+	records, _, err := api.ListDNSRecords(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.DNSRecord{}, cloudflare.DNSListParameters{})
 	if err != nil {
 		fmt.Println(err)
 		return
