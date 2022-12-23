@@ -90,6 +90,7 @@ func (api *API) FirewallRules(ctx context.Context, rc *ResourceContainer, params
 	var firewallRules []FirewallRule
 	var fResponse FirewallRulesDetailResponse
 	for {
+		fResponse = FirewallRulesDetailResponse{}
 		uri := buildURI(fmt.Sprintf("/zones/%s/firewall/rules", rc.Identifier), params)
 
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
