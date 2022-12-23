@@ -1,0 +1,6 @@
+```release-note:bug
+firewall_rules: use empty reponse struct on each page call
+```
+```release-note:bug
+filter: use empty reponse struct on each page call
+```
