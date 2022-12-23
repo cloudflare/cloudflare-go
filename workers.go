@@ -214,10 +214,10 @@ func (api *API) UploadWorker(ctx context.Context, rc *ResourceContainer, params 
 		return WorkerScriptResponse{}, ErrMissingAccountID
 	}
 
+	body := []byte(params.Script)
 	var (
 		contentType = "application/javascript"
 		err         error
-		body        []byte
 	)
 
 	if params.Module || len(params.Bindings) > 0 {
