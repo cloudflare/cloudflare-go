@@ -1,4 +1,6 @@
-## 0.57.1 (Unreleased)
+## 0.58.0 (Unreleased)
+
+## 0.57.1 (December 23rd, 2022)
 
 ENHANCEMENTS:
 
