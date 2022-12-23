@@ -65,8 +65,8 @@ func newClient(opts ...Option) (*API, error) {
 		rateLimiter: rate.NewLimiter(rate.Limit(4), 1), // 4rps equates to default api limit (1200 req/5 min)
 		retryPolicy: RetryPolicy{
 			MaxRetries:    3,
-			MinRetryDelay: time.Duration(1) * time.Second,
-			MaxRetryDelay: time.Duration(30) * time.Second,
+			MinRetryDelay: 1 * time.Second,
+			MaxRetryDelay: 30 * time.Second,
 		},
 		logger: silentLogger,
 	}

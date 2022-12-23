@@ -1,5 +1,15 @@
 ## 0.58.0 (Unreleased)
 
+## 0.57.1 (December 23rd, 2022)
+
+ENHANCEMENTS:
+
+* tiered_cache: Add support for Tiered Caching interactions for setting Smart and Generic topologies ([#1149](https://github.com/cloudflare/cloudflare-go/issues/1149))
+
+BUG FIXES:
+
+* workers: correctly set `body` value for non-ES module uploads ([#1155](https://github.com/cloudflare/cloudflare-go/issues/1155))
+
 ## 0.57.0 (December 22nd, 2022)
 
 BREAKING CHANGES:
