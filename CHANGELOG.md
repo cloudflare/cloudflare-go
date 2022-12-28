@@ -9,6 +9,7 @@ BREAKING CHANGES:
 ENHANCEMENTS:
 
 * dns: add support for tags and comments ([#1151](https://github.com/cloudflare/cloudflare-go/issues/1151))
+* mtls_certificate: add support for managing mTLS certificates and assocations ([#1150](https://github.com/cloudflare/cloudflare-go/issues/1150))
 
 ## 0.57.1 (December 23rd, 2022)
 
