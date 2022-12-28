@@ -103,6 +103,7 @@ func (api *API) ListEmailRoutingRules(ctx context.Context, rc *ResourceContainer
 	var rules []EmailRoutingRule
 	var rResponse ListEmailRoutingRuleResponse
 	for {
+		rResponse = ListEmailRoutingRuleResponse{}
 		uri := buildURI(fmt.Sprintf("/zones/%s/email/routing/rules", rc.Identifier), params)
 
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)

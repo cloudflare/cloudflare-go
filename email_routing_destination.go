@@ -61,6 +61,7 @@ func (api *API) ListEmailRoutingDestinationAddresses(ctx context.Context, rc *Re
 	var addresses []EmailRoutingDestinationAddress
 	var eResponse ListEmailRoutingAddressResponse
 	for {
+		eResponse = ListEmailRoutingAddressResponse{}
 		uri := buildURI(fmt.Sprintf("/accounts/%s/email/routing/addresses", rc.Identifier), params)
 
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)

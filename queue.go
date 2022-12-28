@@ -129,6 +129,7 @@ func (api *API) ListQueues(ctx context.Context, rc *ResourceContainer, params Li
 	var queues []Queue
 	var qResponse QueueListResponse
 	for {
+		qResponse = QueueListResponse{}
 		uri := buildURI(fmt.Sprintf("/accounts/%s/workers/queues", rc.Identifier), params)
 
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
@@ -276,6 +277,7 @@ func (api *API) ListQueueConsumers(ctx context.Context, rc *ResourceContainer, p
 	var queuesConsumers []QueueConsumer
 	var qResponse ListQueueConsumersResponse
 	for {
+		qResponse = ListQueueConsumersResponse{}
 		uri := buildURI(fmt.Sprintf("/accounts/%s/workers/queues/%s/consumers", rc.Identifier, params.QueueName), params)
 
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
