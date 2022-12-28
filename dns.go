@@ -29,6 +29,8 @@ type DNSRecord struct {
 	Proxied    *bool       `json:"proxied,omitempty"`
 	Proxiable  bool        `json:"proxiable,omitempty"`
 	Locked     bool        `json:"locked,omitempty"`
+	Comment    *string     `json:"comment,omitempty"`
+	Tags       []string    `json:"tags,omitempty"`
 }
 
 // DNSRecordResponse represents the response from the DNS endpoint.
@@ -155,8 +157,7 @@ func (api *API) DNSRecord(ctx context.Context, zoneID, recordID string) (DNSReco
 func (api *API) UpdateDNSRecord(ctx context.Context, zoneID, recordID string, rr DNSRecord) error {
 	rr.Name = toUTS46ASCII(rr.Name)
 
-	// Populate the record name from the existing one if the update didn't
-	// specify it.
+	// Populate missing record details from the existing record.
 	if rr.Name == "" || rr.Type == "" {
 		rec, err := api.DNSRecord(ctx, zoneID, recordID)
 		if err != nil {

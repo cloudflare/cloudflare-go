@@ -62,12 +62,15 @@ func Test_toUTS46ASCII(t *testing.T) {
 	}
 }
 
+var commentWithEmojis string = "the quick brown 🦊 jumps over the lazy 🐶"
+
 func TestCreateDNSRecord(t *testing.T) {
 	setup()
 	defer teardown()
 
 	priority := uint16(10)
 	proxied := false
+
 	unicodeInput := DNSRecord{
 		Type:     "A",
 		Name:     "😺.example.com",
@@ -75,6 +78,8 @@ func TestCreateDNSRecord(t *testing.T) {
 		TTL:      120,
 		Priority: &priority,
 		Proxied:  &proxied,
+		Comment:  &commentWithEmojis,
+		Tags:     []string{"one:" + commentWithEmojis, "two:" + commentWithEmojis},
 	}
 	asciiInput := DNSRecord{
 		Type:     "A",
@@ -83,6 +88,8 @@ func TestCreateDNSRecord(t *testing.T) {
 		TTL:      120,
 		Priority: &priority,
 		Proxied:  &proxied,
+		Comment:  &commentWithEmojis,
+		Tags:     []string{"one:" + commentWithEmojis, "two:" + commentWithEmojis},
 	}
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -109,6 +116,8 @@ func TestCreateDNSRecord(t *testing.T) {
 				"locked": false,
 				"zone_id": "d56084adb405e0b7e32c52321bf07be6",
 				"zone_name": "example.com",
+				"comment": "the quick brown 🦊 jumps over the lazy 🐶",
+				"tags": ["one:the quick brown 🦊 jumps over the lazy 🐶", "two:the quick brown 🦊 jumps over the lazy 🐶"],
 				"created_on": "2014-01-01T05:20:00Z",
 				"modified_on": "2014-01-01T05:20:00Z",
 				"data": {},
@@ -142,6 +151,8 @@ func TestCreateDNSRecord(t *testing.T) {
 				"auto_added": true,
 				"source":     "primary",
 			},
+			Comment: &commentWithEmojis,
+			Tags:    []string{"one:" + commentWithEmojis, "two:" + commentWithEmojis},
 		},
 		Response: Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}},
 	}
@@ -190,6 +201,8 @@ func TestDNSRecords(t *testing.T) {
 					"locked": false,
 					"zone_id": "d56084adb405e0b7e32c52321bf07be6",
 					"zone_name": "example.com",
+					"comment": "the quick brown 🦊 jumps over the lazy 🐶",
+					"tags": ["one:the quick brown 🦊 jumps over the lazy 🐶", "two:the quick brown 🦊 jumps over the lazy 🐶"],
 					"created_on": "2014-01-01T05:20:00Z",
 					"modified_on": "2014-01-01T05:20:00Z",
 					"data": {},
@@ -222,6 +235,8 @@ func TestDNSRecords(t *testing.T) {
 		Locked:     false,
 		ZoneID:     testZoneID,
 		ZoneName:   "example.com",
+		Comment:    &commentWithEmojis,
+		Tags:       []string{"one:" + commentWithEmojis, "two:" + commentWithEmojis},
 		CreatedOn:  createdOn,
 		ModifiedOn: modifiedOn,
 		Data:       map[string]interface{}{},
@@ -260,6 +275,8 @@ func TestDNSRecord(t *testing.T) {
 				"locked": false,
 				"zone_id": "d56084adb405e0b7e32c52321bf07be6",
 				"zone_name": "example.com",
+				"comment": null,
+				"tags": [],
 				"created_on": "2014-01-01T05:20:00Z",
 				"modified_on": "2014-01-01T05:20:00Z",
 				"data": {},
@@ -288,6 +305,8 @@ func TestDNSRecord(t *testing.T) {
 		TTL:        120,
 		ZoneID:     testZoneID,
 		ZoneName:   "example.com",
+		Comment:    nil,
+		Tags:       []string{},
 		CreatedOn:  createdOn,
 		ModifiedOn: modifiedOn,
 		Data:       map[string]interface{}{},
@@ -340,6 +359,8 @@ func TestUpdateDNSRecord(t *testing.T) {
 				"locked": false,
 				"zone_id": "d56084adb405e0b7e32c52321bf07be6",
 				"zone_name": "example.com",
+				"comment": "the quick brown 🦊 jumps over the lazy 🐶",
+				"tags": ["one:the quick brown 🦊 jumps over the lazy 🐶", "two:the quick brown 🦊 jumps over the lazy 🐶"],
 				"created_on": "2014-01-01T05:20:00Z",
 				"modified_on": "2014-01-01T05:20:00Z",
 				"data": {},
@@ -513,6 +534,8 @@ func TestUpdateDNSRecordWithoutType(t *testing.T) {
 				"locked": false,
 				"zone_id": "d56084adb405e0b7e32c52321bf07be6",
 				"zone_name": "example.com",
+				"comment": "the quick brown 🦊 jumps over the lazy 🐶",
+				"tags": ["pangram:the quick brown 🦊 jumps over the lazy 🐶"],
 				"created_on": "2014-01-01T05:20:00Z",
 				"modified_on": "2014-01-01T05:20:00Z",
 				"data": {},
@@ -543,6 +566,8 @@ func TestUpdateDNSRecordWithoutType(t *testing.T) {
 				"locked": false,
 				"zone_id": "d56084adb405e0b7e32c52321bf07be6",
 				"zone_name": "example.com",
+				"comment": "the quick brown 🦊 jumps over the lazy 🐶",
+				"tags": ["pangram:the quick brown 🦊 jumps over the lazy 🐶"],
 				"created_on": "2014-01-01T05:20:00Z",
 				"modified_on": "2014-01-01T05:20:00Z",
 				"data": {},
