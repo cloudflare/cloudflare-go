@@ -1,5 +1,15 @@
 ## 0.58.0 (Unreleased)
 
+BREAKING CHANGES:
+
+* dns: `DNSRecord` has been renamed to `GetDNSRecord` ([#1151](https://github.com/cloudflare/cloudflare-go/issues/1151))
+* dns: `DNSRecords` has been renamed to `ListDNSRecords` ([#1151](https://github.com/cloudflare/cloudflare-go/issues/1151))
+* dns: method signatures have been updated to align with the upcoming client conventions ([#1151](https://github.com/cloudflare/cloudflare-go/issues/1151))
+
+ENHANCEMENTS:
+
+* dns: add support for tags and comments ([#1151](https://github.com/cloudflare/cloudflare-go/issues/1151))
+
 ## 0.57.1 (December 23rd, 2022)
 
 ENHANCEMENTS:
