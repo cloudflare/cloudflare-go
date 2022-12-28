@@ -68,14 +68,6 @@ func TestCreateDNSRecord(t *testing.T) {
 
 	priority := uint16(10)
 	proxied := false
-	unicodeInput := DNSRecord{
-		Type:     "A",
-		Name:     "😺.example.com",
-		Content:  "198.51.100.4",
-		TTL:      120,
-		Priority: &priority,
-		Proxied:  &proxied,
-	}
 	asciiInput := DNSRecord{
 		Type:     "A",
 		Name:     "xn--138h.example.com",
@@ -146,9 +138,16 @@ func TestCreateDNSRecord(t *testing.T) {
 		Response: Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}},
 	}
 
-	_, err := client.CreateDNSRecord(context.Background(), ZoneIdentifier(""), unicodeInput)
+	_, err := client.CreateDNSRecord(context.Background(), ZoneIdentifier(""), CreateDNSRecordParams{})
 	assert.Equal(t, ErrMissingZoneID, err)
-	actual, err := client.CreateDNSRecord(context.Background(), ZoneIdentifier(testZoneID), unicodeInput)
+
+	actual, err := client.CreateDNSRecord(context.Background(), ZoneIdentifier(testZoneID), CreateDNSRecordParams{
+		Type:     "A",
+		Name:     "😺.example.com",
+		Content:  "198.51.100.4",
+		TTL:      120,
+		Priority: &priority,
+		Proxied:  &proxied})
 	require.NoError(t, err)
 
 	assert.Equal(t, want, actual)
@@ -158,11 +157,6 @@ func TestDNSRecords(t *testing.T) {
 	setup()
 	defer teardown()
 
-	unicodeInput := DNSRecord{
-		Name:    "😺.example.com",
-		Type:    "A",
-		Content: "198.51.100.4",
-	}
 	asciiInput := DNSRecord{
 		Name:    "xn--138h.example.com",
 		Type:    "A",
@@ -235,10 +229,14 @@ func TestDNSRecords(t *testing.T) {
 		},
 	}}
 
-	_, _, err := client.ListDNSRecords(context.Background(), ZoneIdentifier(""), unicodeInput, ListDNSParameters{})
+	_, _, err := client.ListDNSRecords(context.Background(), ZoneIdentifier(""), ListDNSRecordsParams{})
 	assert.Equal(t, ErrMissingZoneID, err)
 
-	actual, _, err := client.ListDNSRecords(context.Background(), ZoneIdentifier(testZoneID), unicodeInput, ListDNSParameters{})
+	actual, _, err := client.ListDNSRecords(context.Background(), ZoneIdentifier(testZoneID), ListDNSRecordsParams{
+		Name:    "😺.example.com",
+		Type:    "A",
+		Content: "198.51.100.4",
+	})
 	require.NoError(t, err)
 
 	assert.Equal(t, want, actual)
@@ -326,13 +324,16 @@ func TestDNSRecordsSearch(t *testing.T) {
 		Tags: []string{"tag1", "tag2extended"},
 	}}
 
-	actual, resultInfo, err := client.ListDNSRecords(context.Background(), ZoneIdentifier(testZoneID), recordInput, ListDNSParameters{
+	actual, resultInfo, err := client.ListDNSRecords(context.Background(), ZoneIdentifier(testZoneID), ListDNSRecordsParams{
 		ResultInfo: ResultInfo{
 			Page: 1,
 		},
 		Match:     "all",
 		Order:     "type",
 		Direction: ListDirectionAsc,
+		Name:      "example.com",
+		Type:      "A",
+		Content:   "198.51.100.4",
 	})
 	require.NoError(t, err)
 	assert.Equal(t, 2000, resultInfo.Total)
@@ -419,6 +420,7 @@ func TestUpdateDNSRecord(t *testing.T) {
 
 	proxied := false
 	input := DNSRecord{
+		ID:      "372e67954025e0ba6aaa6d586b9e0b59",
 		Type:    "A",
 		Name:    "example.com",
 		Content: "198.51.100.4",
@@ -465,10 +467,17 @@ func TestUpdateDNSRecord(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/dns_records/"+dnsRecordID, handler)
 
-	err := client.UpdateDNSRecord(context.Background(), ZoneIdentifier(""), dnsRecordID, input)
+	err := client.UpdateDNSRecord(context.Background(), ZoneIdentifier(""), UpdateDNSRecordParams{})
 	assert.Equal(t, ErrMissingZoneID, err)
 
-	err = client.UpdateDNSRecord(context.Background(), ZoneIdentifier(testZoneID), dnsRecordID, input)
+	err = client.UpdateDNSRecord(context.Background(), ZoneIdentifier(testZoneID), UpdateDNSRecordParams{
+		ID:      dnsRecordID,
+		Type:    "A",
+		Name:    "example.com",
+		Content: "198.51.100.4",
+		TTL:     120,
+		Proxied: &proxied,
+	})
 	require.NoError(t, err)
 }
 
@@ -479,15 +488,8 @@ func TestUpdateDNSRecordWithoutName(t *testing.T) {
 	proxied := false
 
 	asciiInput := DNSRecord{
+		ID:      "372e67954025e0ba6aaa6d586b9e0b59",
 		Name:    "xn--138h.example.com",
-		Type:    "A",
-		Content: "198.51.100.4",
-		TTL:     120,
-		Proxied: &proxied,
-	}
-
-	unicodeInput := DNSRecord{
-		Name:    "😺.example.com",
 		Type:    "A",
 		Content: "198.51.100.4",
 		TTL:     120,
@@ -577,10 +579,17 @@ func TestUpdateDNSRecordWithoutName(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/dns_records/"+dnsRecordID, handler)
 
-	err := client.UpdateDNSRecord(context.Background(), ZoneIdentifier(""), dnsRecordID, unicodeInput)
+	err := client.UpdateDNSRecord(context.Background(), ZoneIdentifier(""), UpdateDNSRecordParams{})
 	assert.Equal(t, ErrMissingZoneID, err)
 
-	err = client.UpdateDNSRecord(context.Background(), ZoneIdentifier(testZoneID), dnsRecordID, unicodeInput)
+	err = client.UpdateDNSRecord(context.Background(), ZoneIdentifier(testZoneID), UpdateDNSRecordParams{
+		ID:      dnsRecordID,
+		Type:    "A",
+		Name:    "xn--138h.example.com",
+		Content: "198.51.100.4",
+		TTL:     120,
+		Proxied: &proxied,
+	})
 	require.NoError(t, err)
 }
 
@@ -590,19 +599,13 @@ func TestUpdateDNSRecordWithoutType(t *testing.T) {
 
 	proxied := false
 
-	unicodeInput := DNSRecord{
-		Name:    "😺.example.com",
-		Content: "198.51.100.4",
-		TTL:     120,
-		Proxied: &proxied,
-	}
-
 	completedASCIIInput := DNSRecord{
 		Name:    "xn--138h.example.com",
 		Type:    "A",
 		Content: "198.51.100.4",
 		TTL:     120,
 		Proxied: &proxied,
+		ID:      "372e67954025e0ba6aaa6d586b9e0b59",
 	}
 
 	handleUpdateDNSRecord := func(w http.ResponseWriter, r *http.Request) {
@@ -688,7 +691,13 @@ func TestUpdateDNSRecordWithoutType(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/dns_records/"+dnsRecordID, handler)
 
-	err := client.UpdateDNSRecord(context.Background(), ZoneIdentifier(testZoneID), dnsRecordID, unicodeInput)
+	err := client.UpdateDNSRecord(context.Background(), ZoneIdentifier(testZoneID), UpdateDNSRecordParams{
+		ID:      dnsRecordID,
+		Name:    "😺.example.com",
+		Content: "198.51.100.4",
+		TTL:     120,
+		Proxied: &proxied,
+	})
 	require.NoError(t, err)
 }
 

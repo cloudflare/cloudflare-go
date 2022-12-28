@@ -1,11 +1,15 @@
-```release-note:breaking-change
-dns: changes how DNS records are listed
-```
-
 ```release-note:enhancement
 dns: add support for tags and comments
 ```
 
 ```release-note:breaking-change
 dns: method signatures have been updated to align with the upcoming client conventions
+```
+
+```release-note:breaking-change
+dns: `DNSRecords` has been renamed to `ListDNSRecords`
+```
+
+```release-note:breaking-change
+dns: `DNSRecord` has been renamed to `GetDNSRecord`
 ```

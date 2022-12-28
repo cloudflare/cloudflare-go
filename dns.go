@@ -12,6 +12,56 @@ import (
 
 // DNSRecord represents a DNS record in a zone.
 type DNSRecord struct {
+	CreatedOn  time.Time   `json:"created_on,omitempty"`
+	ModifiedOn time.Time   `json:"modified_on,omitempty"`
+	Type       string      `json:"type,omitempty"`
+	Name       string      `json:"name,omitempty"`
+	Content    string      `json:"content,omitempty"`
+	Meta       interface{} `json:"meta,omitempty"`
+	Data       interface{} `json:"data,omitempty"` // data returned by: SRV, LOC
+	ID         string      `json:"id,omitempty"`
+	ZoneID     string      `json:"zone_id,omitempty"`
+	ZoneName   string      `json:"zone_name,omitempty"`
+	Priority   *uint16     `json:"priority,omitempty"`
+	TTL        int         `json:"ttl,omitempty"`
+	Proxied    *bool       `json:"proxied,omitempty"`
+	Proxiable  bool        `json:"proxiable,omitempty"`
+	Locked     bool        `json:"locked,omitempty"`
+	Comment    string      `json:"comment,omitempty"`
+	Tags       []string    `json:"tags,omitempty"`
+}
+
+// DNSRecordResponse represents the response from the DNS endpoint.
+type DNSRecordResponse struct {
+	Result DNSRecord `json:"result"`
+	Response
+	ResultInfo `json:"result_info"`
+}
+
+type ListDirection string
+
+const (
+	ListDirectionAsc  ListDirection = "asc"
+	ListDirectionDesc ListDirection = "desc"
+)
+
+type ListDNSRecordsParams struct {
+	CreatedOn  time.Time     `json:"created_on,omitempty" url:"created_on,omitempty"`
+	ModifiedOn time.Time     `json:"modified_on,omitempty" url:"modified_on,omitempty"`
+	Type       string        `json:"type,omitempty" url:"type,omitempty"`
+	Name       string        `json:"name,omitempty" url:"name,omitempty"`
+	Content    string        `json:"content,omitempty" url:"content,omitempty"`
+	Proxied    *bool         `json:"proxied,omitempty" url:"proxied,omitempty"`
+	Comment    string        `json:"comment,omitempty" url:"comment,omitempty"`
+	Tags       []string      `json:"tags,omitempty"`
+	Order      string        `url:"order,omitempty"`
+	Direction  ListDirection `url:"direction,omitempty"`
+	Match      string        `url:"match,omitempty"`
+
+	ResultInfo
+}
+
+type UpdateDNSRecordParams struct {
 	CreatedOn  time.Time   `json:"created_on,omitempty" url:"created_on,omitempty"`
 	ModifiedOn time.Time   `json:"modified_on,omitempty" url:"modified_on,omitempty"`
 	Type       string      `json:"type,omitempty" url:"type,omitempty"`
@@ -29,51 +79,6 @@ type DNSRecord struct {
 	Locked     bool        `json:"locked,omitempty"`
 	Comment    string      `json:"comment,omitempty" url:"comment,omitempty"`
 	Tags       []string    `json:"tags,omitempty"`
-}
-
-// DNSRecordResponse represents the response from the DNS endpoint.
-type DNSRecordResponse struct {
-	Result DNSRecord `json:"result"`
-	Response
-	ResultInfo `json:"result_info"`
-}
-
-//type TagQueryParameter string
-//
-//const (
-//	TagQueryPresent    TagQueryParameter = "present"
-//	TagQueryAbsent     TagQueryParameter = "absent"
-//	TagQueryExact      TagQueryParameter = "exact"
-//	TagQueryContains   TagQueryParameter = "contains"
-//	TagQueryStartsWith TagQueryParameter = "startswith"
-//	TagQueryEndsWith   TagQueryParameter = "endswith"
-//)
-//
-//type TagSearch struct {
-//	Tag   string
-//	Query TagQueryParameter
-//}
-
-type ListDirection string
-
-const (
-	ListDirectionAsc  ListDirection = "asc"
-	ListDirectionDesc ListDirection = "desc"
-)
-
-type ListDNSParameters struct {
-	//TagSearch []TagSearch   `url:"-"`
-	Order string `url:"order,omitempty"`
-	//TagMatch  string        `url:"tag-match,omitempty"`
-	Direction ListDirection `url:"direction,omitempty"`
-	//TagQuery  string        `url:"-"`
-	Match string `url:"match,omitempty"`
-	ResultInfo
-}
-
-type listDNSRecordsCombined struct {
-	DNSRecord
-	ListDNSParameters
 }
 
 // DNSListResponse represents the response from the list DNS records endpoint.
@@ -102,17 +107,37 @@ func toUTS46ASCII(name string) string {
 	return name
 }
 
+type CreateDNSRecordParams struct {
+	CreatedOn  time.Time   `json:"created_on,omitempty" url:"created_on,omitempty"`
+	ModifiedOn time.Time   `json:"modified_on,omitempty" url:"modified_on,omitempty"`
+	Type       string      `json:"type,omitempty" url:"type,omitempty"`
+	Name       string      `json:"name,omitempty" url:"name,omitempty"`
+	Content    string      `json:"content,omitempty" url:"content,omitempty"`
+	Meta       interface{} `json:"meta,omitempty"`
+	Data       interface{} `json:"data,omitempty"` // data returned by: SRV, LOC
+	ID         string      `json:"id,omitempty"`
+	ZoneID     string      `json:"zone_id,omitempty"`
+	ZoneName   string      `json:"zone_name,omitempty"`
+	Priority   *uint16     `json:"priority,omitempty"`
+	TTL        int         `json:"ttl,omitempty"`
+	Proxied    *bool       `json:"proxied,omitempty" url:"proxied,omitempty"`
+	Proxiable  bool        `json:"proxiable,omitempty"`
+	Locked     bool        `json:"locked,omitempty"`
+	Comment    string      `json:"comment,omitempty" url:"comment,omitempty"`
+	Tags       []string    `json:"tags,omitempty"`
+}
+
 // CreateDNSRecord creates a DNS record for the zone identifier.
 //
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-create-dns-record
-func (api *API) CreateDNSRecord(ctx context.Context, rc *ResourceContainer, rr DNSRecord) (*DNSRecordResponse, error) {
+func (api *API) CreateDNSRecord(ctx context.Context, rc *ResourceContainer, params CreateDNSRecordParams) (*DNSRecordResponse, error) {
 	if rc.Identifier == "" {
 		return nil, ErrMissingZoneID
 	}
-	rr.Name = toUTS46ASCII(rr.Name)
+	params.Name = toUTS46ASCII(params.Name)
 
 	uri := fmt.Sprintf("/zones/%s/dns_records", rc.Identifier)
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, rr)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return nil, err
 	}
@@ -128,16 +153,14 @@ func (api *API) CreateDNSRecord(ctx context.Context, rc *ResourceContainer, rr D
 
 // ListDNSRecords returns a slice of DNS records for the given zone identifier.
 //
-// This takes a DNSRecord to allow filtering of the results returned.
-//
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-list-dns-records
-func (api *API) ListDNSRecords(ctx context.Context, rc *ResourceContainer, rr DNSRecord, params ListDNSParameters) ([]DNSRecord, *ResultInfo, error) {
+func (api *API) ListDNSRecords(ctx context.Context, rc *ResourceContainer, params ListDNSRecordsParams) ([]DNSRecord, *ResultInfo, error) {
 	if rc.Identifier == "" {
 		return nil, nil, ErrMissingZoneID
 	}
 
-	if rr.Name != "" {
-		rr.Name = toUTS46ASCII(rr.Name)
+	if params.Name != "" {
+		params.Name = toUTS46ASCII(params.Name)
 	}
 
 	autoPaginate := true
@@ -156,9 +179,8 @@ func (api *API) ListDNSRecords(ctx context.Context, rc *ResourceContainer, rr DN
 	var records []DNSRecord
 	var listResponse DNSListResponse
 
-	// Loop over makeRequest until what we've fetched all records
 	for {
-		uri := buildURI(fmt.Sprintf("/zones/%s/dns_records", rc.Identifier), listDNSRecordsCombined{rr, params})
+		uri := buildURI(fmt.Sprintf("/zones/%s/dns_records", rc.Identifier), params)
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
 			return []DNSRecord{}, &ResultInfo{}, err
@@ -201,29 +223,31 @@ func (api *API) GetDNSRecord(ctx context.Context, rc *ResourceContainer, recordI
 // identifiers.
 //
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-update-dns-record
-func (api *API) UpdateDNSRecord(ctx context.Context, rc *ResourceContainer, recordID string, rr DNSRecord) error {
+func (api *API) UpdateDNSRecord(ctx context.Context, rc *ResourceContainer, params UpdateDNSRecordParams) error {
 	if rc.Identifier == "" {
 		return ErrMissingZoneID
 	}
-	rr.Name = toUTS46ASCII(rr.Name)
+
+	params.Name = toUTS46ASCII(params.Name)
 
 	// Populate the record name from the existing one if the update didn't
 	// specify it.
-	if rr.Name == "" || rr.Type == "" {
-		rec, err := api.GetDNSRecord(ctx, rc, recordID)
+	if params.Name == "" || params.Type == "" {
+		rec, err := api.GetDNSRecord(ctx, rc, params.ID)
 		if err != nil {
 			return err
 		}
 
-		if rr.Name == "" {
-			rr.Name = rec.Name
+		if params.Name == "" {
+			params.Name = rec.Name
 		}
-		if rr.Type == "" {
-			rr.Type = rec.Type
+		if params.Type == "" {
+			params.Type = rec.Type
 		}
 	}
-	uri := fmt.Sprintf("/zones/%s/dns_records/%s", rc.Identifier, recordID)
-	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, rr)
+
+	uri := fmt.Sprintf("/zones/%s/dns_records/%s", rc.Identifier, params.ID)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
 	if err != nil {
 		return err
 	}
