@@ -9,20 +9,23 @@ import (
 	"time"
 )
 
-// MTLSAssociationDetails represents the metadata for an existing association between a user-uploaded mTLS certificate and a Cloudflare service.
-type MTLSAssociationDetails struct {
+// MTLSAssociation represents the metadata for an existing association
+// between a user-uploaded mTLS certificate and a Cloudflare service.
+type MTLSAssociation struct {
 	Service string `json:"service"`
 	Status  string `json:"status"`
 }
 
-// MTLSAssociationResponse represents the response from the retrieval endpoint for mTLS certificate associations.
+// MTLSAssociationResponse represents the response from the retrieval endpoint
+// for mTLS certificate associations.
 type MTLSAssociationResponse struct {
 	Response
-	Result []MTLSAssociationDetails `json:"result"`
+	Result []MTLSAssociation `json:"result"`
 }
 
-// MTLSCertificateDetails represents the metadata for a user-uploaded mTLS certificate.
-type MTLSCertificateDetails struct {
+// MTLSCertificate represents the metadata for a user-uploaded mTLS
+// certificate.
+type MTLSCertificate struct {
 	ID           string    `json:"id"`
 	Name         string    `json:"name"`
 	Issuer       string    `json:"issuer"`
@@ -35,20 +38,23 @@ type MTLSCertificateDetails struct {
 	ExpiresOn    time.Time `json:"expires_on"`
 }
 
-// MTLSCertificateResponse represents the response from endpoints relating to retrieving, creating, and deleting an mTLS certificate.
+// MTLSCertificateResponse represents the response from endpoints relating to
+// retrieving, creating, and deleting an mTLS certificate.
 type MTLSCertificateResponse struct {
 	Response
-	Result MTLSCertificateDetails `json:"result"`
+	Result MTLSCertificate `json:"result"`
 }
 
-// MTLSCertificatesResponse represents the response from the mTLS certificate list endpoint.
+// MTLSCertificatesResponse represents the response from the mTLS certificate
+// list endpoint.
 type MTLSCertificatesResponse struct {
 	Response
-	Result     []MTLSCertificateDetails `json:"result"`
+	Result     []MTLSCertificate `json:"result"`
 	ResultInfo `json:"result_info"`
 }
 
-// MTLSCertificateParams represents the data related to the mTLS certificate being uploaded. Name is an optional field.
+// MTLSCertificateParams represents the data related to the mTLS certificate
+// being uploaded. Name is an optional field.
 type CreateMTLSCertificateParams struct {
 	Name         string `json:"name"`
 	Certificates string `json:"certificates"`
@@ -64,6 +70,10 @@ type ListMTLSCertificatesParams struct {
 	CA     bool   `url:"ca,omitempty"`
 }
 
+type ListMTLSCertificateAssociationsParams struct {
+	CertificateID string
+}
+
 var (
 	ErrMissingCertificateID = errors.New("missing required certificate ID")
 )
@@ -71,95 +81,106 @@ var (
 // ListMTLSCertificates returns a list of all user-uploaded mTLS certificates.
 //
 // API reference: https://api.cloudflare.com/#mtls-certificate-management-list-mtls-certificates
-func (api *API) ListMTLSCertificates(ctx context.Context, rc *ResourceContainer, params ListMTLSCertificatesParams) ([]MTLSCertificateDetails, ResultInfo, error) {
-	switch {
-	case rc.Level != AccountRouteLevel:
-		return []MTLSCertificateDetails{}, ResultInfo{}, ErrRequiredAccountLevelResourceContainer
-	case rc.Identifier == "":
-		return []MTLSCertificateDetails{}, ResultInfo{}, ErrMissingAccountID
+func (api *API) ListMTLSCertificates(ctx context.Context, rc *ResourceContainer, params ListMTLSCertificatesParams) ([]MTLSCertificate, ResultInfo, error) {
+	if rc.Level != AccountRouteLevel {
+		return []MTLSCertificate{}, ResultInfo{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return []MTLSCertificate{}, ResultInfo{}, ErrMissingAccountID
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/mtls_certificates", rc.Identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, params)
 	if err != nil {
-		return []MTLSCertificateDetails{}, ResultInfo{}, err
+		return []MTLSCertificate{}, ResultInfo{}, err
 	}
 	var r MTLSCertificatesResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return []MTLSCertificateDetails{}, ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return []MTLSCertificate{}, ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, r.ResultInfo, err
 }
 
-// GetMTLSCertificateDetails returns the metadata associated with a user-uploaded mTLS certificate.
+// GetMTLSCertificate returns the metadata associated with a user-uploaded mTLS
+// certificate.
 //
 // API reference: https://api.cloudflare.com/#mtls-certificate-management-get-mtls-certificate
-func (api *API) GetMTLSCertificateDetails(ctx context.Context, rc *ResourceContainer, certificateID string) (MTLSCertificateDetails, error) {
-	switch {
-	case rc.Level != AccountRouteLevel:
-		return MTLSCertificateDetails{}, ErrRequiredAccountLevelResourceContainer
-	case rc.Identifier == "":
-		return MTLSCertificateDetails{}, ErrMissingAccountID
-	case certificateID == "":
-		return MTLSCertificateDetails{}, ErrMissingCertificateID
+func (api *API) GetMTLSCertificate(ctx context.Context, rc *ResourceContainer, certificateID string) (MTLSCertificate, error) {
+	if rc.Level != AccountRouteLevel {
+		return MTLSCertificate{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return MTLSCertificate{}, ErrMissingAccountID
+	}
+
+	if certificateID == "" {
+		return MTLSCertificate{}, ErrMissingCertificateID
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/mtls_certificates/%s", rc.Identifier, certificateID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return MTLSCertificateDetails{}, err
+		return MTLSCertificate{}, err
 	}
 	var r MTLSCertificateResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return MTLSCertificateDetails{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return MTLSCertificate{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
 
-// ListMTLSCertificateAssociations returns a list of all existing associations between the mTLS certificate and Cloudflare services.
+// ListMTLSCertificateAssociations returns a list of all existing associations
+// between the mTLS certificate and Cloudflare services.
 //
 // API reference: https://api.cloudflare.com/#mtls-certificate-management-list-mtls-certificate-associations
-func (api *API) ListMTLSCertificateAssociations(ctx context.Context, rc *ResourceContainer, certificateID string) ([]MTLSAssociationDetails, error) {
-	switch {
-	case rc.Level != AccountRouteLevel:
-		return []MTLSAssociationDetails{}, ErrRequiredAccountLevelResourceContainer
-	case rc.Identifier == "":
-		return []MTLSAssociationDetails{}, ErrMissingAccountID
-	case certificateID == "":
-		return []MTLSAssociationDetails{}, ErrMissingCertificateID
+func (api *API) ListMTLSCertificateAssociations(ctx context.Context, rc *ResourceContainer, params ListMTLSCertificateAssociationsParams) ([]MTLSAssociation, error) {
+	if rc.Level != AccountRouteLevel {
+		return []MTLSAssociation{}, ErrRequiredAccountLevelResourceContainer
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/mtls_certificates/%s/associations", rc.Identifier, certificateID)
+	if rc.Identifier == "" {
+		return []MTLSAssociation{}, ErrMissingAccountID
+	}
+
+	if params.CertificateID == "" {
+		return []MTLSAssociation{}, ErrMissingCertificateID
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/mtls_certificates/%s/associations", rc.Identifier, params.CertificateID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []MTLSAssociationDetails{}, err
+		return []MTLSAssociation{}, err
 	}
 	var r MTLSAssociationResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return []MTLSAssociationDetails{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return []MTLSAssociation{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
 
-// CreateMTLSCertificate will create the provided certificate for use with mTLS enabled Cloudflare services.
+// CreateMTLSCertificate will create the provided certificate for use with mTLS
+// enabled Cloudflare services.
 //
 // API reference: https://api.cloudflare.com/#mtls-certificate-management-upload-mtls-certificate
-func (api *API) CreateMTLSCertificate(ctx context.Context, rc *ResourceContainer, params CreateMTLSCertificateParams) (MTLSCertificateDetails, error) {
-	switch {
-	case rc.Level != AccountRouteLevel:
-		return MTLSCertificateDetails{}, ErrRequiredAccountLevelResourceContainer
-	case rc.Identifier == "":
-		return MTLSCertificateDetails{}, ErrMissingAccountID
+func (api *API) CreateMTLSCertificate(ctx context.Context, rc *ResourceContainer, params CreateMTLSCertificateParams) (MTLSCertificate, error) {
+	if rc.Level != AccountRouteLevel {
+		return MTLSCertificate{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return MTLSCertificate{}, ErrMissingAccountID
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/mtls_certificates", rc.Identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
-		return MTLSCertificateDetails{}, err
+		return MTLSCertificate{}, err
 	}
 	var r MTLSCertificateResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return MTLSCertificateDetails{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return MTLSCertificate{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
@@ -167,24 +188,27 @@ func (api *API) CreateMTLSCertificate(ctx context.Context, rc *ResourceContainer
 // DeleteMTLSCertificate will delete the specified mTLS certificate.
 //
 // API reference: https://api.cloudflare.com/#mtls-certificate-management-delete-mtls-certificate
-func (api *API) DeleteMTLSCertificate(ctx context.Context, rc *ResourceContainer, certificateID string) (MTLSCertificateDetails, error) {
-	switch {
-	case rc.Level != AccountRouteLevel:
-		return MTLSCertificateDetails{}, ErrRequiredAccountLevelResourceContainer
-	case rc.Identifier == "":
-		return MTLSCertificateDetails{}, ErrMissingAccountID
-	case certificateID == "":
-		return MTLSCertificateDetails{}, ErrMissingCertificateID
+func (api *API) DeleteMTLSCertificate(ctx context.Context, rc *ResourceContainer, certificateID string) (MTLSCertificate, error) {
+	if rc.Level != AccountRouteLevel {
+		return MTLSCertificate{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return MTLSCertificate{}, ErrMissingAccountID
+	}
+
+	if certificateID == "" {
+		return MTLSCertificate{}, ErrMissingCertificateID
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/mtls_certificates/%s", rc.Identifier, certificateID)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return MTLSCertificateDetails{}, err
+		return MTLSCertificate{}, err
 	}
 	var r MTLSCertificateResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return MTLSCertificateDetails{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return MTLSCertificate{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }

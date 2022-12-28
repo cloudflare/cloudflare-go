@@ -37,7 +37,7 @@ func TestGetMTLSCertificate(t *testing.T) {
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/mtls_certificates/2458ce5a-0c35-4c7f-82c7-8e9487d3ff60", handler)
 	expiresOn, _ := time.Parse(time.RFC3339, "2122-10-29T16:59:47Z")
 	uploadedOn, _ := time.Parse(time.RFC3339, "2022-11-22T17:32:30.467938Z")
-	want := MTLSCertificateDetails{
+	want := MTLSCertificate{
 		ID:           "2458ce5a-0c35-4c7f-82c7-8e9487d3ff60",
 		Name:         "example_ca_cert_5",
 		Issuer:       "O=Example Inc.,L=California,ST=San Francisco,C=US",
@@ -49,7 +49,7 @@ func TestGetMTLSCertificate(t *testing.T) {
 		ExpiresOn:    expiresOn,
 	}
 
-	actual, err := client.GetMTLSCertificateDetails(context.Background(), AccountIdentifier(testAccountID), "2458ce5a-0c35-4c7f-82c7-8e9487d3ff60")
+	actual, err := client.GetMTLSCertificate(context.Background(), AccountIdentifier(testAccountID), "2458ce5a-0c35-4c7f-82c7-8e9487d3ff60")
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -91,7 +91,7 @@ func TestListMTLSCertificates(t *testing.T) {
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/mtls_certificates", handler)
 	expiresOn, _ := time.Parse(time.RFC3339, "2122-10-29T16:59:47Z")
 	uploadedOn, _ := time.Parse(time.RFC3339, "2022-11-22T17:32:30.467938Z")
-	want := []MTLSCertificateDetails{
+	want := []MTLSCertificate{
 		{
 			ID:           "2458ce5a-0c35-4c7f-82c7-8e9487d3ff60",
 			Name:         "example_ca_cert_5",
@@ -131,14 +131,16 @@ func TestListCertificateAssociations(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/mtls_certificates/2458ce5a-0c35-4c7f-82c7-8e9487d3ff60/associations", handler)
-	want := []MTLSAssociationDetails{
+	want := []MTLSAssociation{
 		{
 			Service: "gateway",
 			Status:  "pending_deployment",
 		},
 	}
 
-	actual, err := client.ListMTLSCertificateAssociations(context.Background(), AccountIdentifier(testAccountID), "2458ce5a-0c35-4c7f-82c7-8e9487d3ff60")
+	actual, err := client.ListMTLSCertificateAssociations(context.Background(), AccountIdentifier(testAccountID), ListMTLSCertificateAssociationsParams{
+		CertificateID: "2458ce5a-0c35-4c7f-82c7-8e9487d3ff60",
+	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -172,7 +174,7 @@ func TestUploadMTLSCertificate(t *testing.T) {
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/mtls_certificates", handler)
 	expiresOn, _ := time.Parse(time.RFC3339, "2122-10-29T16:59:47Z")
 	uploadedOn, _ := time.Parse(time.RFC3339, "2022-11-22T17:32:30.467938Z")
-	want := MTLSCertificateDetails{
+	want := MTLSCertificate{
 		ID:           "2458ce5a-0c35-4c7f-82c7-8e9487d3ff60",
 		Name:         "example_ca_cert_5",
 		Issuer:       "O=Example Inc.,L=California,ST=San Francisco,C=US",
@@ -224,7 +226,7 @@ func TestDeleteMTLSCertificate(t *testing.T) {
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/mtls_certificates/2458ce5a-0c35-4c7f-82c7-8e9487d3ff60", handler)
 	expiresOn, _ := time.Parse(time.RFC3339, "2122-10-29T16:59:47Z")
 	uploadedOn, _ := time.Parse(time.RFC3339, "2022-11-22T17:32:30.467938Z")
-	want := MTLSCertificateDetails{
+	want := MTLSCertificate{
 		ID:           "2458ce5a-0c35-4c7f-82c7-8e9487d3ff60",
 		Name:         "example_ca_cert_5",
 		Issuer:       "O=Example Inc.,L=California,ST=San Francisco,C=US",
