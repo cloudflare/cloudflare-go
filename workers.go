@@ -28,6 +28,10 @@ type CreateWorkerParams struct {
 	// ES Module syntax script.
 	Module bool
 
+	// Logpush opts the worker into Workers Logpush logging. A nil value leaves the current setting unchanged.
+	//  https://developers.cloudflare.com/workers/platform/logpush/
+	Logpush *bool
+
 	// Bindings should be a map where the keys are the binding name, and the
 	// values are the binding content
 	Bindings map[string]WorkerBinding
@@ -220,7 +224,7 @@ func (api *API) UploadWorker(ctx context.Context, rc *ResourceContainer, params 
 		err         error
 	)
 
-	if params.Module || len(params.Bindings) > 0 {
+	if params.Module || params.Logpush != nil || len(params.Bindings) > 0 {
 		contentType, body, err = formatMultipartBody(params)
 		if err != nil {
 			return WorkerScriptResponse{}, err
@@ -257,8 +261,10 @@ func formatMultipartBody(params CreateWorkerParams) (string, []byte, error) {
 		BodyPart   string              `json:"body_part,omitempty"`
 		MainModule string              `json:"main_module,omitempty"`
 		Bindings   []workerBindingMeta `json:"bindings"`
+		Logpush    *bool               `json:"logpush,omitempty"`
 	}{
 		Bindings: make([]workerBindingMeta, 0, len(params.Bindings)),
+		Logpush:  params.Logpush,
 	}
 
 	if params.Module {
