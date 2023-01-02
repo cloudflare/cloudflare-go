@@ -10,6 +10,7 @@ ENHANCEMENTS:
 
 * dns: add support for tags and comments ([#1151](https://github.com/cloudflare/cloudflare-go/issues/1151))
 * mtls_certificate: add support for managing mTLS certificates and assocations ([#1150](https://github.com/cloudflare/cloudflare-go/issues/1150))
+* workers: Add support for workers logpush enablement on script upload ([#1160](https://github.com/cloudflare/cloudflare-go/issues/1160))
 
 BUG FIXES:
 
