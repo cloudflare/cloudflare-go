@@ -277,6 +277,7 @@ func getFileDetails(r *http.Request, key string) (*multipart.FileHeader, error) 
 type multipartUpload struct {
 	Script      string
 	BindingMeta map[string]workerBindingMeta
+	Logpush     *bool
 }
 
 func parseMultipartUpload(r *http.Request) (multipartUpload, error) {
@@ -290,6 +291,7 @@ func parseMultipartUpload(r *http.Request) (multipartUpload, error) {
 		BodyPart   string              `json:"body_part,omitempty"`
 		MainModule string              `json:"main_module,omitempty"`
 		Bindings   []workerBindingMeta `json:"bindings"`
+		Logpush    *bool               `json:"logpush,omitempty"`
 	}
 	err = json.Unmarshal(mdBytes, &metadata)
 	if err != nil {
@@ -318,6 +320,7 @@ func parseMultipartUpload(r *http.Request) (multipartUpload, error) {
 	return multipartUpload{
 		Script:      string(script),
 		BindingMeta: bindingMeta,
+		Logpush:     metadata.Logpush,
 	}, nil
 }
 
@@ -822,4 +825,37 @@ func TestUploadWorker_WithServiceBinding(t *testing.T) {
 		},
 	})
 	assert.NoError(t, err)
+}
+
+func TestUploadWorker_WithLogpush(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/foo", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+		mpUpload, err := parseMultipartUpload(r)
+		assert.NoError(t, err)
+
+		expected := true
+		assert.Equal(t, &expected, mpUpload.Logpush)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, uploadWorkerResponseData)
+	})
+	res, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{ScriptName: "foo", Script: workerScript, Logpush: BoolPtr(true)})
+	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
+	want := WorkerScriptResponse{
+		successResponse,
+		false,
+		WorkerScript{
+			Script: workerScript,
+			WorkerMetaData: WorkerMetaData{
+				ETAG:       "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
+				Size:       191,
+				ModifiedOn: formattedTime,
+			},
+		}}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
 }
