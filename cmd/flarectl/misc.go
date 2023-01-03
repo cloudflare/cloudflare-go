@@ -203,7 +203,7 @@ func pageRules(c *cli.Context) error {
 }
 
 func originCARootCertificate(c *cli.Context) error {
-	cert, err := cloudflare.OriginCARootCertificate(c.String("algorithm"))
+	cert, err := cloudflare.GetOriginCARootCertificate(c.String("algorithm"))
 	if err != nil {
 		return err
 	}
