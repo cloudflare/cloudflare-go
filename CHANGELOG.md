@@ -23,6 +23,10 @@ BUG FIXES:
 * teams_list: use empty reponse struct on each page call ([#1156](https://github.com/cloudflare/cloudflare-go/issues/1156))
 * workers_kv: use empty reponse struct on each page call ([#1156](https://github.com/cloudflare/cloudflare-go/issues/1156))
 
+DEPENDENCIES:
+
+* deps: bumps github.com/hashicorp/go-retryablehttp from 0.7.1 to 0.7.2 ([#1162](https://github.com/cloudflare/cloudflare-go/issues/1162))
+
 ## 0.57.1 (December 23rd, 2022)
 
 ENHANCEMENTS:
