@@ -37,6 +37,9 @@ type TeamsRuleSettings struct {
 	InsecureDisableDNSSECValidation bool `json:"insecure_disable_dnssec_validation"`
 
 	EgressSettings *EgressSettings `json:"egress"`
+
+	// DLP payload logging configuration
+	PayloadLog *TeamsDlpPayloadLogSettings `json:"payload_log"`
 }
 
 type EgressSettings struct {
@@ -62,6 +65,10 @@ type TeamsBISOAdminControlSettings struct {
 type TeamsCheckSessionSettings struct {
 	Enforce  bool     `json:"enforce"`
 	Duration Duration `json:"duration"`
+}
+
+type TeamsDlpPayloadLogSettings struct {
+	Enabled bool `json:"enabled"`
 }
 
 type TeamsFilterType string
