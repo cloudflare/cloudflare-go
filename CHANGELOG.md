@@ -1,5 +1,9 @@
 ## 0.59.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* cloudflare: automatically redact sensitive values from HTTP interactions ([#1164](https://github.com/cloudflare/cloudflare-go/issues/1164))
+
 ## 0.58.0 (January 4th, 2023)
 
 BREAKING CHANGES:
