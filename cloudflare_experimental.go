@@ -6,8 +6,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
+	"net/http/httputil"
 	"net/url"
+	"regexp"
 	"strings"
 	"sync"
 	"time"
@@ -158,6 +161,9 @@ func NewExperimental(config *ClientParams) (*Client, error) {
 // *http.Response, or an error if one occurred. The caller is responsible for
 // closing the response body.
 func (c *Client) request(ctx context.Context, method, uri string, reqBody io.Reader, headers http.Header) (*http.Response, error) {
+	log.SetPrefix(time.Now().Format(time.RFC3339Nano) + " [DEBUG] cloudflare")
+	log.SetFlags(0)
+
 	req, err := http.NewRequestWithContext(ctx, method, c.BaseURL.String()+uri, reqBody)
 	if err != nil {
 		return nil, fmt.Errorf("HTTP request creation failed: %w", err)
@@ -193,9 +199,34 @@ func (c *Client) request(ctx context.Context, method, uri string, reqBody io.Rea
 		req.Header.Set("Content-Type", "application/json")
 	}
 
+	if c.Debug {
+		dump, err := httputil.DumpRequestOut(req, true)
+		if err != nil {
+			return nil, err
+		}
+
+		// Strip out any sensitive information from the request payload.
+		sensitiveKeys := []string{c.Key, c.Email, c.Token, c.UserServiceKey}
+		for _, key := range sensitiveKeys {
+			if key != "" {
+				valueRegex := regexp.MustCompile(fmt.Sprintf("(?m)%s", key))
+				dump = valueRegex.ReplaceAll(dump, []byte("[redacted]"))
+			}
+		}
+		log.Printf("\n%s", string(dump))
+	}
+
 	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("HTTP request failed: %w", err)
+	}
+
+	if c.Debug {
+		dump, err := httputil.DumpResponse(resp, true)
+		if err != nil {
+			return resp, err
+		}
+		log.Printf("\n%s", string(dump))
 	}
 
 	return resp, nil
@@ -224,24 +255,10 @@ func (c *Client) makeRequest(ctx context.Context, method, uri string, params int
 	var respErr error
 	var respBody []byte
 
-	if method == http.MethodPost || method == http.MethodPut || method == http.MethodPatch {
-		buf := &bytes.Buffer{}
-		tee := io.TeeReader(reqBody, buf)
-		debugBody, _ := io.ReadAll(tee)
-		payloadBody, _ := io.ReadAll(buf)
-		c.Logger.Debugf("REQUEST Method:%v URI:%s Headers:%#v Body:%v\n", method, c.BaseURL.String()+uri, headers, string(debugBody))
-		// ensure we recreate the io.Reader for use
-		reqBody = bytes.NewReader(payloadBody)
-	} else {
-		c.Logger.Debugf("REQUEST Method:%v URI:%s Headers:%#v Body:%v\n", method, c.BaseURL.String()+uri, headers, nil) //)
-	}
-
 	resp, respErr = c.request(ctx, method, uri, reqBody, headers)
 	if respErr != nil {
 		return nil, respErr
 	}
-
-	c.Logger.Debugf("RESPONSE URI:%s StatusCode:%d Body:%#v RayID:%s\n", c.BaseURL.String()+uri, resp.StatusCode, string(respBody), resp.Header.Get("cf-ray"))
 
 	respBody, err = io.ReadAll(resp.Body)
 	resp.Body.Close()
