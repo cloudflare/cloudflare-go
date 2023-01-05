@@ -1,5 +1,9 @@
 ## 0.59.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* access_organization: add user_seat_expiration_inactive_time field ([#1159](https://github.com/cloudflare/cloudflare-go/issues/1159))
+
 ## 0.58.1 (January 5th, 2023)
 
 ENHANCEMENTS:
