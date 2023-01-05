@@ -41,23 +41,23 @@ func (c DNSRecordComment) MarshalJSON() ([]byte, error) {
 
 // DNSRecord represents a DNS record in a zone.
 type DNSRecord struct {
-	CreatedOn  time.Time        `json:"created_on,omitempty"`
-	ModifiedOn time.Time        `json:"modified_on,omitempty"`
-	Type       string           `json:"type,omitempty"`
-	Name       string           `json:"name,omitempty"`
-	Content    string           `json:"content,omitempty"`
-	Meta       interface{}      `json:"meta,omitempty"`
-	Data       interface{}      `json:"data,omitempty"` // data returned by: SRV, LOC
-	ID         string           `json:"id,omitempty"`
-	ZoneID     string           `json:"zone_id,omitempty"`
-	ZoneName   string           `json:"zone_name,omitempty"`
-	Priority   *uint16          `json:"priority,omitempty"`
-	TTL        int              `json:"ttl,omitempty"`
-	Proxied    *bool            `json:"proxied,omitempty"`
-	Proxiable  bool             `json:"proxiable,omitempty"`
-	Locked     bool             `json:"locked,omitempty"`
-	Comment    DNSRecordComment `json:"comment,omitempty"`
-	Tags       []string         `json:"tags,omitempty"`
+	CreatedOn  time.Time         `json:"created_on,omitempty"`
+	ModifiedOn time.Time         `json:"modified_on,omitempty"`
+	Type       string            `json:"type,omitempty"`
+	Name       string            `json:"name,omitempty"`
+	Content    string            `json:"content,omitempty"`
+	Meta       interface{}       `json:"meta,omitempty"`
+	Data       interface{}       `json:"data,omitempty"` // data returned by: SRV, LOC
+	ID         string            `json:"id,omitempty"`
+	ZoneID     string            `json:"zone_id,omitempty"`
+	ZoneName   string            `json:"zone_name,omitempty"`
+	Priority   *uint16           `json:"priority,omitempty"`
+	TTL        int               `json:"ttl,omitempty"`
+	Proxied    *bool             `json:"proxied,omitempty"`
+	Proxiable  bool              `json:"proxiable,omitempty"`
+	Locked     bool              `json:"locked,omitempty"`
+	Comment    *DNSRecordComment `json:"comment,omitempty"`
+	Tags       []string          `json:"tags,omitempty"`
 }
 
 // DNSRecordResponse represents the response from the DNS endpoint.
@@ -138,23 +138,23 @@ func toUTS46ASCII(name string) string {
 }
 
 type CreateDNSRecordParams struct {
-	CreatedOn  time.Time        `json:"created_on,omitempty" url:"created_on,omitempty"`
-	ModifiedOn time.Time        `json:"modified_on,omitempty" url:"modified_on,omitempty"`
-	Type       string           `json:"type,omitempty" url:"type,omitempty"`
-	Name       string           `json:"name,omitempty" url:"name,omitempty"`
-	Content    string           `json:"content,omitempty" url:"content,omitempty"`
-	Meta       interface{}      `json:"meta,omitempty"`
-	Data       interface{}      `json:"data,omitempty"` // data returned by: SRV, LOC
-	ID         string           `json:"id,omitempty"`
-	ZoneID     string           `json:"zone_id,omitempty"`
-	ZoneName   string           `json:"zone_name,omitempty"`
-	Priority   *uint16          `json:"priority,omitempty"`
-	TTL        int              `json:"ttl,omitempty"`
-	Proxied    *bool            `json:"proxied,omitempty" url:"proxied,omitempty"`
-	Proxiable  bool             `json:"proxiable,omitempty"`
-	Locked     bool             `json:"locked,omitempty"`
-	Comment    DNSRecordComment `json:"comment,omitempty" url:"comment,omitempty"`
-	Tags       []string         `json:"tags,omitempty"`
+	CreatedOn  time.Time         `json:"created_on,omitempty" url:"created_on,omitempty"`
+	ModifiedOn time.Time         `json:"modified_on,omitempty" url:"modified_on,omitempty"`
+	Type       string            `json:"type,omitempty" url:"type,omitempty"`
+	Name       string            `json:"name,omitempty" url:"name,omitempty"`
+	Content    string            `json:"content,omitempty" url:"content,omitempty"`
+	Meta       interface{}       `json:"meta,omitempty"`
+	Data       interface{}       `json:"data,omitempty"` // data returned by: SRV, LOC
+	ID         string            `json:"id,omitempty"`
+	ZoneID     string            `json:"zone_id,omitempty"`
+	ZoneName   string            `json:"zone_name,omitempty"`
+	Priority   *uint16           `json:"priority,omitempty"`
+	TTL        int               `json:"ttl,omitempty"`
+	Proxied    *bool             `json:"proxied,omitempty" url:"proxied,omitempty"`
+	Proxiable  bool              `json:"proxiable,omitempty"`
+	Locked     bool              `json:"locked,omitempty"`
+	Comment    *DNSRecordComment `json:"comment,omitempty" url:"comment,omitempty"`
+	Tags       []string          `json:"tags,omitempty"`
 }
 
 // CreateDNSRecord creates a DNS record for the zone identifier.

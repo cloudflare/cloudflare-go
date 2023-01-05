@@ -382,6 +382,7 @@ func TestDNSRecord(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/dns_records/"+dnsRecordID, handler)
 
 	proxied := false
+	comment := DNSRecordComment("This is a comment")
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
 	want := DNSRecord{
@@ -401,7 +402,7 @@ func TestDNSRecord(t *testing.T) {
 			"auto_added": true,
 			"source":     "primary",
 		},
-		Comment: "This is a comment",
+		Comment: &comment,
 		Tags:    []string{"tag1", "tag2"},
 	}
 
