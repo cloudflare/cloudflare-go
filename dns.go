@@ -57,7 +57,7 @@ type ListDNSRecordsParams struct {
 	Order      string        `url:"order,omitempty"`
 	Direction  ListDirection `url:"direction,omitempty"`
 	Match      string        `url:"match,omitempty"`
-	Priority   *uint16       `json:"priority,omitempty"`
+	Priority   *uint16       `url:"-"`
 
 	ResultInfo
 }
