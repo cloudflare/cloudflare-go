@@ -165,7 +165,7 @@ func (api *API) ListDNSRecords(ctx context.Context, rc *ResourceContainer, param
 	}
 
 	autoPaginate := true
-	if params.PerPage >= 1 || params.Page >= 1 {
+	if params.Page >= 1 {
 		autoPaginate = false
 	}
 
