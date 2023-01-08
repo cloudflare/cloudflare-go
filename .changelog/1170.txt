@@ -1,0 +1,7 @@
+```release-note:note
+dns: clean up UpdateDNSRecordParams and skip record lookup
+```
+
+```release-note:breaking-change
+dns: many fields have been removed from UpdateDNSRecordParams
+```
