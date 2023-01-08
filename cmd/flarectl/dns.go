@@ -112,14 +112,12 @@ func dnsCreateOrUpdate(c *cli.Context) error {
 				}
 				resp = &cloudflare.DNSRecordResponse{
 					Result: cloudflare.DNSRecord{
-						ID:        rr.ID,
-						Name:      rr.Name,
-						Type:      rr.Type,
-						Content:   rr.Content,
-						TTL:       rr.TTL,
-						Proxiable: rr.Proxiable,
-						Proxied:   &proxy,
-						Locked:    rr.Locked,
+						ID:      rr.ID,
+						Name:    rr.Name,
+						Type:    rr.Type,
+						Content: rr.Content,
+						TTL:     rr.TTL,
+						Proxied: &proxy,
 					},
 				}
 			}

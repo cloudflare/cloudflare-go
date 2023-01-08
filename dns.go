@@ -63,23 +63,16 @@ type ListDNSRecordsParams struct {
 }
 
 type UpdateDNSRecordParams struct {
-	CreatedOn  time.Time   `json:"created_on,omitempty" url:"created_on,omitempty"`
-	ModifiedOn time.Time   `json:"modified_on,omitempty" url:"modified_on,omitempty"`
-	Type       string      `json:"type,omitempty" url:"type,omitempty"`
-	Name       string      `json:"name,omitempty" url:"name,omitempty"`
-	Content    string      `json:"content,omitempty" url:"content,omitempty"`
-	Meta       interface{} `json:"meta,omitempty"`
-	Data       interface{} `json:"data,omitempty"` // data returned by: SRV, LOC
-	ID         string      `json:"id,omitempty"`
-	ZoneID     string      `json:"zone_id,omitempty"`
-	ZoneName   string      `json:"zone_name,omitempty"`
-	Priority   *uint16     `json:"priority,omitempty"`
-	TTL        int         `json:"ttl,omitempty"`
-	Proxied    *bool       `json:"proxied,omitempty" url:"proxied,omitempty"`
-	Proxiable  bool        `json:"proxiable,omitempty"`
-	Locked     bool        `json:"locked,omitempty"`
-	Comment    string      `json:"comment,omitempty" url:"comment,omitempty"`
-	Tags       []string    `json:"tags,omitempty"`
+	Type     string      `json:"type,omitempty"`
+	Name     string      `json:"name,omitempty"`
+	Content  string      `json:"content,omitempty"`
+	Data     interface{} `json:"data,omitempty"` // data for: SRV, LOC
+	ID       string      `json:"-"`
+	Priority *uint16     `json:"-"` // internal use only
+	TTL      int         `json:"ttl,omitempty"`
+	Proxied  *bool       `json:"proxied,omitempty"`
+	Comment  string      `json:"comment,omitempty"`
+	Tags     []string    `json:"tags,omitempty"`
 }
 
 // DNSListResponse represents the response from the list DNS records endpoint.
@@ -230,22 +223,6 @@ func (api *API) UpdateDNSRecord(ctx context.Context, rc *ResourceContainer, para
 	}
 
 	params.Name = toUTS46ASCII(params.Name)
-
-	// Populate the record name from the existing one if the update didn't
-	// specify it.
-	if params.Name == "" || params.Type == "" {
-		rec, err := api.GetDNSRecord(ctx, rc, params.ID)
-		if err != nil {
-			return err
-		}
-
-		if params.Name == "" {
-			params.Name = rec.Name
-		}
-		if params.Type == "" {
-			params.Type = rec.Type
-		}
-	}
 
 	uri := fmt.Sprintf("/zones/%s/dns_records/%s", rc.Identifier, params.ID)
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
