@@ -7,6 +7,7 @@ ENHANCEMENTS:
 BUG FIXES:
 
 * dns: don't send "priority" for list operations as it isn't supported and is only used for internal filtering ([#1167](https://github.com/cloudflare/cloudflare-go/issues/1167))
+* managednetworks: Update should be PUT ([#1172](https://github.com/cloudflare/cloudflare-go/issues/1172))
 
 ## 0.58.1 (January 5th, 2023)
 
