@@ -1,0 +1,37 @@
+{
+    "success": true,
+    "errors": [],
+    "messages": [],
+    "result": [
+        {
+            "id": "372e67954025e0ba6aaa6d586b9e0b59",
+            "type": "A",
+            "name": "www.example.com",
+            "content": "198.51.100.4",
+            "proxiable": true,
+            "proxied": true,
+            "ttl": 120,
+            "locked": false,
+            "zone_id": "d56084adb405e0b7e32c52321bf07be6",
+            "zone_name": "example.com",
+            "created_on": "2014-01-01T05:20:00Z",
+            "modified_on": "2014-01-01T05:20:00Z",
+            "data": {},
+            "meta": {
+                "auto_added": true,
+                "source": "primary"
+            },
+            "tags": [
+                "tag1",
+                "tag2extended"
+            ]
+        }
+    ],
+    "result_info": {
+        "count": 1,
+        "page": 2,
+        "per_page": 1,
+        "total_count": 2,
+        "total_pages": 2
+    }
+}

@@ -153,7 +153,7 @@ func TestCreateDNSRecord(t *testing.T) {
 	assert.Equal(t, want, actual)
 }
 
-func TestDNSRecords(t *testing.T) {
+func TestListDNSRecords(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -242,7 +242,7 @@ func TestDNSRecords(t *testing.T) {
 	assert.Equal(t, want, actual)
 }
 
-func TestDNSRecordsSearch(t *testing.T) {
+func TestListDNSRecordsSearch(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -339,6 +339,39 @@ func TestDNSRecordsSearch(t *testing.T) {
 	assert.Equal(t, 2000, resultInfo.Total)
 
 	assert.Equal(t, want, actual)
+}
+
+func TestListDNSRecordsPagination(t *testing.T) {
+	// change listDNSRecordsDefaultPageSize value to 1 to force pagination
+	listDNSRecordsDefaultPageSize = 1
+
+	setup()
+	defer teardown()
+
+	var page1Called, page2Called bool
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		page := r.URL.Query().Get("page")
+		w.Header().Set("content-type", "application/json")
+
+		var response string
+		switch page {
+		case "1":
+			response = loadFixture("dns", "list_page_1")
+			page1Called = true
+		case "2":
+			response = loadFixture("dns", "list_page_2")
+			page2Called = true
+		}
+		fmt.Fprint(w, response)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/dns_records", handler)
+
+	actual, _, err := client.ListDNSRecords(context.Background(), ZoneIdentifier(testZoneID), ListDNSRecordsParams{})
+	require.NoError(t, err)
+	assert.True(t, page1Called)
+	assert.True(t, page2Called)
+	assert.Len(t, actual, 2)
 }
 
 func TestDNSRecord(t *testing.T) {

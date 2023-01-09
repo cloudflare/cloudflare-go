@@ -89,6 +89,9 @@ type DNSListResponse struct {
 	ResultInfo `json:"result_info"`
 }
 
+// listDNSRecordsDefaultPageSize represents the default per_page size of the API.
+var listDNSRecordsDefaultPageSize int = 100
+
 // nontransitionalLookup implements the nontransitional processing as specified in
 // Unicode Technical Standard 46 with almost all checkings off to maximize user freedom.
 var nontransitionalLookup = idna.New(
@@ -152,7 +155,10 @@ func (api *API) CreateDNSRecord(ctx context.Context, rc *ResourceContainer, para
 	return recordResp, nil
 }
 
-// ListDNSRecords returns a slice of DNS records for the given zone identifier.
+// ListDNSRecords returns a slice of DNS records for the given zone
+// identifier. If params doesn't include any pagination (ResultInfo)
+// options, auto pagination is performed with the default page size
+// of 100 records per request.
 //
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-list-dns-records
 func (api *API) ListDNSRecords(ctx context.Context, rc *ResourceContainer, params ListDNSRecordsParams) ([]DNSRecord, *ResultInfo, error) {
@@ -170,7 +176,7 @@ func (api *API) ListDNSRecords(ctx context.Context, rc *ResourceContainer, param
 	}
 
 	if params.PerPage < 1 {
-		params.PerPage = 50
+		params.PerPage = listDNSRecordsDefaultPageSize
 	}
 
 	if params.Page < 1 {
