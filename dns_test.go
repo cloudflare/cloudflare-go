@@ -361,6 +361,9 @@ func TestListDNSRecordsPagination(t *testing.T) {
 		case "2":
 			response = loadFixture("dns", "list_page_2")
 			page2Called = true
+		default:
+			assert.Failf(t, "Unexpeted page requested: %s", page)
+			return
 		}
 		fmt.Fprint(w, response)
 	}
