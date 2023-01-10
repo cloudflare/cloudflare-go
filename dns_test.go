@@ -139,7 +139,7 @@ func TestCreateDNSRecord(t *testing.T) {
 	}
 
 	_, err := client.CreateDNSRecord(context.Background(), ZoneIdentifier(""), CreateDNSRecordParams{})
-	assert.Equal(t, ErrMissingZoneID, err)
+	assert.ErrorIs(t, err, ErrMissingZoneID)
 
 	actual, err := client.CreateDNSRecord(context.Background(), ZoneIdentifier(testZoneID), CreateDNSRecordParams{
 		Type:     "A",
@@ -230,7 +230,7 @@ func TestListDNSRecords(t *testing.T) {
 	}}
 
 	_, _, err := client.ListDNSRecords(context.Background(), ZoneIdentifier(""), ListDNSRecordsParams{})
-	assert.Equal(t, ErrMissingZoneID, err)
+	assert.ErrorIs(t, err, ErrMissingZoneID)
 
 	actual, _, err := client.ListDNSRecords(context.Background(), ZoneIdentifier(testZoneID), ListDNSRecordsParams{
 		Name:    "😺.example.com",
@@ -377,7 +377,7 @@ func TestListDNSRecordsPagination(t *testing.T) {
 	assert.Len(t, actual, 2)
 }
 
-func TestDNSRecord(t *testing.T) {
+func TestGetDNSRecord(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -442,7 +442,10 @@ func TestDNSRecord(t *testing.T) {
 	}
 
 	_, err := client.GetDNSRecord(context.Background(), ZoneIdentifier(""), dnsRecordID)
-	assert.Equal(t, ErrMissingZoneID, err)
+	assert.ErrorIs(t, err, ErrMissingZoneID)
+
+	_, err = client.GetDNSRecord(context.Background(), ZoneIdentifier(testZoneID), "")
+	assert.ErrorIs(t, err, ErrMissingDNSRecordID)
 
 	actual, err := client.GetDNSRecord(context.Background(), ZoneIdentifier(testZoneID), dnsRecordID)
 	require.NoError(t, err)
@@ -504,8 +507,11 @@ func TestUpdateDNSRecord(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/dns_records/"+dnsRecordID, handler)
 
-	err := client.UpdateDNSRecord(context.Background(), ZoneIdentifier(""), UpdateDNSRecordParams{})
-	assert.Equal(t, ErrMissingZoneID, err)
+	err := client.UpdateDNSRecord(context.Background(), ZoneIdentifier(""), UpdateDNSRecordParams{ID: dnsRecordID})
+	assert.ErrorIs(t, err, ErrMissingZoneID)
+
+	err = client.UpdateDNSRecord(context.Background(), ZoneIdentifier(testZoneID), UpdateDNSRecordParams{})
+	assert.ErrorIs(t, err, ErrMissingDNSRecordID)
 
 	err = client.UpdateDNSRecord(context.Background(), ZoneIdentifier(testZoneID), UpdateDNSRecordParams{
 		ID:      dnsRecordID,
@@ -541,7 +547,10 @@ func TestDeleteDNSRecord(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/dns_records/"+dnsRecordID, handler)
 
 	err := client.DeleteDNSRecord(context.Background(), ZoneIdentifier(""), dnsRecordID)
-	assert.Equal(t, ErrMissingZoneID, err)
+	assert.ErrorIs(t, err, ErrMissingZoneID)
+
+	err = client.DeleteDNSRecord(context.Background(), ZoneIdentifier(testZoneID), "")
+	assert.ErrorIs(t, err, ErrMissingDNSRecordID)
 
 	err = client.DeleteDNSRecord(context.Background(), ZoneIdentifier(testZoneID), dnsRecordID)
 	require.NoError(t, err)
