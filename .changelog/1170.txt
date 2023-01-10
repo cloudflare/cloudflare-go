@@ -3,5 +3,5 @@ dns: remove additional lookup from `Update` operations when `Name` or `Type` was
 ```
 
 ```release-note:breaking-change
-dns: many fields have been removed from UpdateDNSRecordParams
+dns: remove these read-only fields from `UpdateDNSRecordParams`: `CreatedOn`, `ModifiedOn`, `Meta`, `ZoneID`, `ZoneName`, `Proxiable`, and `Locked`
 ```
