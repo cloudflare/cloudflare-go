@@ -1,5 +1,5 @@
 ```release-note:note
-dns: clean up UpdateDNSRecordParams and skip record lookup
+dns: remove additional lookup from `Update` operations when `Name` or `Type` was omitted
 ```
 
 ```release-note:breaking-change
