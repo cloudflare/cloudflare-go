@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	cloudflare "github.com/cloudflare/cloudflare-go"
+	cloudflare "github.com/grafana/cloudflare-go"
 	"github.com/urfave/cli/v2"
 )
 

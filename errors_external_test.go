@@ -3,7 +3,7 @@ package cloudflare_test
 import (
 	"testing"
 
-	cloudflare "github.com/cloudflare/cloudflare-go"
+	cloudflare "github.com/grafana/cloudflare-go"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -8,7 +8,7 @@ import (
 	"os"
 	"strings"
 
-	cloudflare "github.com/cloudflare/cloudflare-go"
+	cloudflare "github.com/grafana/cloudflare-go"
 	"github.com/olekukonko/tablewriter"
 	"github.com/urfave/cli/v2"
 )

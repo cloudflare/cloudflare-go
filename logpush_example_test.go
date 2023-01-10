@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log"
 
-	cloudflare "github.com/cloudflare/cloudflare-go"
+	cloudflare "github.com/grafana/cloudflare-go"
 )
 
 var exampleNewLogpushJob = cloudflare.LogpushJob{
