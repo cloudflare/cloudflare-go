@@ -259,6 +259,10 @@ func (api *API) DeleteDNSRecord(ctx context.Context, rc *ResourceContainer, reco
 	if rc.Identifier == "" {
 		return ErrMissingZoneID
 	}
+	if recordID == "" {
+		return ErrMissingDNSRecordID
+	}
+
 	uri := fmt.Sprintf("/zones/%s/dns_records/%s", rc.Identifier, recordID)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
