@@ -156,9 +156,7 @@ func (api *API) CreateDNSRecord(ctx context.Context, rc *ResourceContainer, para
 }
 
 // ListDNSRecords returns a slice of DNS records for the given zone
-// identifier. If params doesn't include any pagination (ResultInfo)
-// options, auto pagination is performed with the default page size
-// of 100 records per request.
+// identifier. 
 //
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-list-dns-records
 func (api *API) ListDNSRecords(ctx context.Context, rc *ResourceContainer, params ListDNSRecordsParams) ([]DNSRecord, *ResultInfo, error) {
