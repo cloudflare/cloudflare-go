@@ -1,5 +1,13 @@
 ## 0.59.0 (Unreleased)
 
+BREAKING CHANGES:
+
+* dns: remove these read-only fields from `UpdateDNSRecordParams`: `CreatedOn`, `ModifiedOn`, `Meta`, `ZoneID`, `ZoneName`, `Proxiable`, and `Locked` ([#1170](https://github.com/cloudflare/cloudflare-go/issues/1170))
+
+NOTES:
+
+* dns: remove additional lookup from `Update` operations when `Name` or `Type` was omitted ([#1170](https://github.com/cloudflare/cloudflare-go/issues/1170))
+
 ENHANCEMENTS:
 
 * access_organization: add user_seat_expiration_inactive_time field ([#1159](https://github.com/cloudflare/cloudflare-go/issues/1159))
