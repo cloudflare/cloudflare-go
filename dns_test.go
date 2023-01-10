@@ -261,6 +261,8 @@ func TestListDNSRecordsSearch(t *testing.T) {
 		assert.Equal(t, "1", r.URL.Query().Get("page"))
 		assert.Equal(t, "type", r.URL.Query().Get("order"))
 		assert.Equal(t, "asc", r.URL.Query().Get("direction"))
+		assert.Equal(t, "any", r.URL.Query().Get("tag-match"))
+		assert.ElementsMatch(t, []string{"tag1", "tag2"}, r.URL.Query()["tag"])
 
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
@@ -334,6 +336,8 @@ func TestListDNSRecordsSearch(t *testing.T) {
 		Name:      "example.com",
 		Type:      "A",
 		Content:   "198.51.100.4",
+		TagMatch:  "any",
+		Tags:      []string{"tag1", "tag2"},
 	})
 	require.NoError(t, err)
 	assert.Equal(t, 2000, resultInfo.Total)
