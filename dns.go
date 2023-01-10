@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -192,6 +193,9 @@ func (api *API) ListDNSRecords(ctx context.Context, rc *ResourceContainer, param
 	return records, &listResponse.ResultInfo, nil
 }
 
+// ErrMissingDNSRecordID is for when DNS record ID is needed but not given.
+var ErrMissingDNSRecordID = errors.New("required DNS record ID missing")
+
 // GetDNSRecord returns a single DNS record for the given zone & record
 // identifiers.
 //
@@ -200,6 +204,10 @@ func (api *API) GetDNSRecord(ctx context.Context, rc *ResourceContainer, recordI
 	if rc.Identifier == "" {
 		return DNSRecord{}, ErrMissingZoneID
 	}
+	if recordID == "" {
+		return DNSRecord{}, ErrMissingDNSRecordID
+	}
+
 	uri := fmt.Sprintf("/zones/%s/dns_records/%s", rc.Identifier, recordID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -220,6 +228,9 @@ func (api *API) GetDNSRecord(ctx context.Context, rc *ResourceContainer, recordI
 func (api *API) UpdateDNSRecord(ctx context.Context, rc *ResourceContainer, params UpdateDNSRecordParams) error {
 	if rc.Identifier == "" {
 		return ErrMissingZoneID
+	}
+	if params.ID == "" {
+		return ErrMissingDNSRecordID
 	}
 
 	params.Name = toUTS46ASCII(params.Name)
