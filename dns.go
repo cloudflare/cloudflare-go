@@ -47,18 +47,17 @@ const (
 )
 
 type ListDNSRecordsParams struct {
-	CreatedOn  time.Time     `json:"created_on,omitempty" url:"created_on,omitempty"`
-	ModifiedOn time.Time     `json:"modified_on,omitempty" url:"modified_on,omitempty"`
-	Type       string        `json:"type,omitempty" url:"type,omitempty"`
-	Name       string        `json:"name,omitempty" url:"name,omitempty"`
-	Content    string        `json:"content,omitempty" url:"content,omitempty"`
-	Proxied    *bool         `json:"proxied,omitempty" url:"proxied,omitempty"`
-	Comment    string        `json:"comment,omitempty" url:"comment,omitempty"`
-	Tags       []string      `json:"tags,omitempty"`
-	Order      string        `url:"order,omitempty"`
-	Direction  ListDirection `url:"direction,omitempty"`
-	Match      string        `url:"match,omitempty"`
-	Priority   *uint16       `url:"-"`
+	Type      string        `url:"type,omitempty"`
+	Name      string        `url:"name,omitempty"`
+	Content   string        `url:"content,omitempty"`
+	Proxied   *bool         `url:"proxied,omitempty"`
+	Comment   string        `url:"comment,omitempty"`
+	Tags      []string      `url:"tag,omitempty"` // potentially multiple `tag=`
+	TagMatch  string        `url:"tag-match,omitempty"`
+	Order     string        `url:"order,omitempty"`
+	Direction ListDirection `url:"direction,omitempty"`
+	Match     string        `url:"match,omitempty"`
+	Priority  *uint16       `url:"-"`
 
 	ResultInfo
 }
@@ -157,9 +156,7 @@ func (api *API) ListDNSRecords(ctx context.Context, rc *ResourceContainer, param
 		return nil, nil, ErrMissingZoneID
 	}
 
-	if params.Name != "" {
-		params.Name = toUTS46ASCII(params.Name)
-	}
+	params.Name = toUTS46ASCII(params.Name)
 
 	autoPaginate := true
 	if params.PerPage >= 1 || params.Page >= 1 {
