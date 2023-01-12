@@ -278,6 +278,7 @@ type multipartUpload struct {
 	Script             string
 	BindingMeta        map[string]workerBindingMeta
 	Logpush            *bool
+	CompatibilityDate  string
 	CompatibilityFlags []string
 }
 
@@ -293,6 +294,7 @@ func parseMultipartUpload(r *http.Request) (multipartUpload, error) {
 		MainModule         string              `json:"main_module,omitempty"`
 		Bindings           []workerBindingMeta `json:"bindings"`
 		Logpush            *bool               `json:"logpush,omitempty"`
+		CompatibilityDate  string              `json:"compatibility_date,omitempty"`
 		CompatibilityFlags []string            `json:"compatibility_flags,omitempty"`
 	}
 	err = json.Unmarshal(mdBytes, &metadata)
@@ -323,6 +325,7 @@ func parseMultipartUpload(r *http.Request) (multipartUpload, error) {
 		Script:             string(script),
 		BindingMeta:        bindingMeta,
 		Logpush:            metadata.Logpush,
+		CompatibilityDate:  metadata.CompatibilityDate,
 		CompatibilityFlags: metadata.CompatibilityFlags,
 	}, nil
 }
@@ -867,16 +870,18 @@ func TestUploadWorker_WithCompatibilityFlags(t *testing.T) {
 	setup()
 	defer teardown()
 
+	compatibilityDate := time.Now().Format("2006-01-02")
+	compatibilityFlags := []string{"formdata_parser_supports_files"}
+
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 
 		mpUpload, err := parseMultipartUpload(r)
 		assert.NoError(t, err)
 
-		expectedCompatibilityFlags := []string{"formdata_parser_supports_files"}
-
 		assert.Equal(t, workerScript, mpUpload.Script)
-		assert.Equal(t, expectedCompatibilityFlags, mpUpload.CompatibilityFlags)
+		assert.Equal(t, compatibilityDate, mpUpload.CompatibilityDate)
+		assert.Equal(t, compatibilityFlags, mpUpload.CompatibilityFlags)
 
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, uploadWorkerResponseData)
@@ -886,7 +891,8 @@ func TestUploadWorker_WithCompatibilityFlags(t *testing.T) {
 	_, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{
 		ScriptName:         "bar",
 		Script:             workerScript,
-		CompatibilityFlags: []string{"formdata_parser_supports_files"},
+		CompatibilityDate:  compatibilityDate,
+		CompatibilityFlags: compatibilityFlags,
 	})
 	assert.NoError(t, err)
 }
