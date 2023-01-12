@@ -275,9 +275,10 @@ func getFileDetails(r *http.Request, key string) (*multipart.FileHeader, error) 
 }
 
 type multipartUpload struct {
-	Script      string
-	BindingMeta map[string]workerBindingMeta
-	Logpush     *bool
+	Script             string
+	BindingMeta        map[string]workerBindingMeta
+	Logpush            *bool
+	CompatibilityFlags []string
 }
 
 func parseMultipartUpload(r *http.Request) (multipartUpload, error) {
@@ -288,10 +289,11 @@ func parseMultipartUpload(r *http.Request) (multipartUpload, error) {
 	}
 
 	var metadata struct {
-		BodyPart   string              `json:"body_part,omitempty"`
-		MainModule string              `json:"main_module,omitempty"`
-		Bindings   []workerBindingMeta `json:"bindings"`
-		Logpush    *bool               `json:"logpush,omitempty"`
+		BodyPart           string              `json:"body_part,omitempty"`
+		MainModule         string              `json:"main_module,omitempty"`
+		Bindings           []workerBindingMeta `json:"bindings"`
+		Logpush            *bool               `json:"logpush,omitempty"`
+		CompatibilityFlags []string            `json:"compatibility_flags,omitempty"`
 	}
 	err = json.Unmarshal(mdBytes, &metadata)
 	if err != nil {
@@ -318,9 +320,10 @@ func parseMultipartUpload(r *http.Request) (multipartUpload, error) {
 	}
 
 	return multipartUpload{
-		Script:      string(script),
-		BindingMeta: bindingMeta,
-		Logpush:     metadata.Logpush,
+		Script:             string(script),
+		BindingMeta:        bindingMeta,
+		Logpush:            metadata.Logpush,
+		CompatibilityFlags: metadata.CompatibilityFlags,
 	}, nil
 }
 
@@ -858,4 +861,32 @@ func TestUploadWorker_WithLogpush(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
+}
+
+func TestUploadWorker_WithCompatibilityFlags(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+
+		mpUpload, err := parseMultipartUpload(r)
+		assert.NoError(t, err)
+
+		expectedCompatibilityFlags := []string{"formdata_parser_supports_files"}
+
+		assert.Equal(t, workerScript, mpUpload.Script)
+		assert.Equal(t, expectedCompatibilityFlags, mpUpload.CompatibilityFlags)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, uploadWorkerResponseData)
+	}
+	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
+
+	_, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{
+		ScriptName:         "bar",
+		Script:             workerScript,
+		CompatibilityFlags: []string{"formdata_parser_supports_files"},
+	})
+	assert.NoError(t, err)
 }
