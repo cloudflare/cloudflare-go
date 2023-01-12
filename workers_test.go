@@ -884,7 +884,7 @@ func TestUploadWorker_WithCompatibilityFlags(t *testing.T) {
 		assert.Equal(t, compatibilityFlags, mpUpload.CompatibilityFlags)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, uploadWorkerResponseData)
+		fmt.Fprint(w, uploadWorkerResponseData)
 	}
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
 
