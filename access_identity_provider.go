@@ -9,10 +9,11 @@ import (
 
 // AccessIdentityProvider is the structure of the provider object.
 type AccessIdentityProvider struct {
-	ID     string                              `json:"id,omitempty"`
-	Name   string                              `json:"name"`
-	Type   string                              `json:"type"`
-	Config AccessIdentityProviderConfiguration `json:"config"`
+	ID         string                                  `json:"id,omitempty"`
+	Name       string                                  `json:"name"`
+	Type       string                                  `json:"type"`
+	Config     AccessIdentityProviderConfiguration     `json:"config"`
+	ScimConfig AccessIdentityProviderScimConfiguration `json:"scim_config"`
 }
 
 // AccessIdentityProviderConfiguration is the combined structure of *all*
@@ -42,6 +43,14 @@ type AccessIdentityProviderConfiguration struct {
 	SupportGroups      bool     `json:"support_groups,omitempty"`
 	TokenURL           string   `json:"token_url,omitempty"`
 	PKCEEnabled        *bool    `json:"pkce_enabled,omitempty"`
+}
+
+type AccessIdentityProviderScimConfiguration struct {
+	Enabled                bool   `json:"enabled,omitempty"`
+	Secret                 string `json:"secret,omitempty"`
+	UserDeprovision        bool   `json:"user_deprovision,omitempty"`
+	SeatDeprovision        bool   `json:"seat_deprovision,omitempty"`
+	GroupMemberDeprovision bool   `json:"group_member_deprovision,omitempty"`
 }
 
 // AccessIdentityProvidersListResponse is the API response for multiple
