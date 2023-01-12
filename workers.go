@@ -35,6 +35,16 @@ type CreateWorkerParams struct {
 	// Bindings should be a map where the keys are the binding name, and the
 	// values are the binding content
 	Bindings map[string]WorkerBinding
+
+	// CompatibilityDate is a date in the form yyyy-mm-dd,
+	// which will be used to determine which version of the Workers runtime is used.
+	//  https://developers.cloudflare.com/workers/platform/compatibility-dates/
+	CompatibilityDate string
+
+	// CompatibilityFlags are the names of features of the Workers runtime to be enabled or disabled,
+	// usually used together with CompatibilityDate.
+	//  https://developers.cloudflare.com/workers/platform/compatibility-dates/#compatibility-flags
+	CompatibilityFlags []string
 }
 
 // WorkerScriptParams provides a worker script and the associated bindings.
@@ -224,7 +234,7 @@ func (api *API) UploadWorker(ctx context.Context, rc *ResourceContainer, params 
 		err         error
 	)
 
-	if params.Module || params.Logpush != nil || len(params.Bindings) > 0 {
+	if params.Module || params.Logpush != nil || len(params.Bindings) > 0 || params.CompatibilityDate != "" || len(params.CompatibilityFlags) > 0 {
 		contentType, body, err = formatMultipartBody(params)
 		if err != nil {
 			return WorkerScriptResponse{}, err
@@ -258,13 +268,17 @@ func formatMultipartBody(params CreateWorkerParams) (string, []byte, error) {
 	// Write metadata part
 	var scriptPartName string
 	meta := struct {
-		BodyPart   string              `json:"body_part,omitempty"`
-		MainModule string              `json:"main_module,omitempty"`
-		Bindings   []workerBindingMeta `json:"bindings"`
-		Logpush    *bool               `json:"logpush,omitempty"`
+		BodyPart           string              `json:"body_part,omitempty"`
+		MainModule         string              `json:"main_module,omitempty"`
+		Bindings           []workerBindingMeta `json:"bindings"`
+		Logpush            *bool               `json:"logpush,omitempty"`
+		CompatibilityDate  string              `json:"compatibility_date,omitempty"`
+		CompatibilityFlags []string            `json:"compatibility_flags,omitempty"`
 	}{
-		Bindings: make([]workerBindingMeta, 0, len(params.Bindings)),
-		Logpush:  params.Logpush,
+		Bindings:           make([]workerBindingMeta, 0, len(params.Bindings)),
+		Logpush:            params.Logpush,
+		CompatibilityDate:  params.CompatibilityDate,
+		CompatibilityFlags: params.CompatibilityFlags,
 	}
 
 	if params.Module {

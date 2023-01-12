@@ -275,9 +275,11 @@ func getFileDetails(r *http.Request, key string) (*multipart.FileHeader, error) 
 }
 
 type multipartUpload struct {
-	Script      string
-	BindingMeta map[string]workerBindingMeta
-	Logpush     *bool
+	Script             string
+	BindingMeta        map[string]workerBindingMeta
+	Logpush            *bool
+	CompatibilityDate  string
+	CompatibilityFlags []string
 }
 
 func parseMultipartUpload(r *http.Request) (multipartUpload, error) {
@@ -288,10 +290,12 @@ func parseMultipartUpload(r *http.Request) (multipartUpload, error) {
 	}
 
 	var metadata struct {
-		BodyPart   string              `json:"body_part,omitempty"`
-		MainModule string              `json:"main_module,omitempty"`
-		Bindings   []workerBindingMeta `json:"bindings"`
-		Logpush    *bool               `json:"logpush,omitempty"`
+		BodyPart           string              `json:"body_part,omitempty"`
+		MainModule         string              `json:"main_module,omitempty"`
+		Bindings           []workerBindingMeta `json:"bindings"`
+		Logpush            *bool               `json:"logpush,omitempty"`
+		CompatibilityDate  string              `json:"compatibility_date,omitempty"`
+		CompatibilityFlags []string            `json:"compatibility_flags,omitempty"`
 	}
 	err = json.Unmarshal(mdBytes, &metadata)
 	if err != nil {
@@ -318,9 +322,11 @@ func parseMultipartUpload(r *http.Request) (multipartUpload, error) {
 	}
 
 	return multipartUpload{
-		Script:      string(script),
-		BindingMeta: bindingMeta,
-		Logpush:     metadata.Logpush,
+		Script:             string(script),
+		BindingMeta:        bindingMeta,
+		Logpush:            metadata.Logpush,
+		CompatibilityDate:  metadata.CompatibilityDate,
+		CompatibilityFlags: metadata.CompatibilityFlags,
 	}, nil
 }
 
@@ -858,4 +864,35 @@ func TestUploadWorker_WithLogpush(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
+}
+
+func TestUploadWorker_WithCompatibilityFlags(t *testing.T) {
+	setup()
+	defer teardown()
+
+	compatibilityDate := time.Now().Format("2006-01-02")
+	compatibilityFlags := []string{"formdata_parser_supports_files"}
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+
+		mpUpload, err := parseMultipartUpload(r)
+		assert.NoError(t, err)
+
+		assert.Equal(t, workerScript, mpUpload.Script)
+		assert.Equal(t, compatibilityDate, mpUpload.CompatibilityDate)
+		assert.Equal(t, compatibilityFlags, mpUpload.CompatibilityFlags)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, uploadWorkerResponseData)
+	}
+	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
+
+	_, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{
+		ScriptName:         "bar",
+		Script:             workerScript,
+		CompatibilityDate:  compatibilityDate,
+		CompatibilityFlags: compatibilityFlags,
+	})
+	assert.NoError(t, err)
 }
