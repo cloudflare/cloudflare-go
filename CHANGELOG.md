@@ -16,6 +16,7 @@ ENHANCEMENTS:
 * dns: the URL parameter `tag-match` for listing DNS records is now supported as the field `TagMatch` in `ListDNSRecordsParams` ([#1173](https://github.com/cloudflare/cloudflare-go/issues/1173))
 * dns: update default `per_page` attribute to 100 records ([#1171](https://github.com/cloudflare/cloudflare-go/issues/1171))
 * teams_rules: adds support for Egress Policies ([#1142](https://github.com/cloudflare/cloudflare-go/issues/1142))
+* workers: Add support for compatibility_date and compatibility_flags when upoading a worker script ([#1177](https://github.com/cloudflare/cloudflare-go/issues/1177))
 
 BUG FIXES:
 
