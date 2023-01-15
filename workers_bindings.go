@@ -39,6 +39,8 @@ const (
 	WorkerR2BucketBindingType WorkerBindingType = "r2_bucket"
 	// WorkerAnalyticsEngineBindingType is the type for Analytics Engine dataset bindings.
 	WorkerAnalyticsEngineBindingType WorkerBindingType = "analytics_engine"
+	// WorkerQueueBindingType is the type for queue bindings.
+	WorkerQueueBindingType WorkerBindingType = "queue"
 )
 
 type ListWorkerBindingsParams struct {
@@ -309,6 +311,34 @@ func (b WorkerAnalyticsEngineBinding) serialize(bindingName string) (workerBindi
 	}, nil, nil
 }
 
+// WorkerQueueBinding is a binding to a Workers Queue.
+//
+// https://developers.cloudflare.com/workers/platform/bindings/#queue-bindings
+type WorkerQueueBinding struct {
+	Binding string
+	Queue   string
+}
+
+// Type returns the type of the binding.
+func (b WorkerQueueBinding) Type() WorkerBindingType {
+	return WorkerQueueBindingType
+}
+
+func (b WorkerQueueBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
+	if b.Binding == "" {
+		return nil, nil, fmt.Errorf(`Binding name for binding "%s" cannot be empty`, bindingName)
+	}
+	if b.Queue == "" {
+		return nil, nil, fmt.Errorf(`Queue name for binding "%s" cannot be empty`, bindingName)
+	}
+
+	return workerBindingMeta{
+		"type":       b.Type(),
+		"name":       b.Binding,
+		"queue_name": b.Queue,
+	}, nil, nil
+}
+
 // Each binding that adds a part to the multipart form body will need
 // a unique part name so we just generate a random 128bit hex string.
 func getRandomPartName() string {
@@ -376,6 +406,12 @@ func (api *API) ListWorkerBindings(ctx context.Context, rc *ResourceContainer, p
 			namespaceID := jsonBinding["namespace_id"].(string)
 			bindingListItem.Binding = WorkerKvNamespaceBinding{
 				NamespaceID: namespaceID,
+			}
+		case WorkerQueueBindingType:
+			queueName := jsonBinding["queue_name"].(string)
+			bindingListItem.Binding = WorkerQueueBinding{
+				Binding: name,
+				Queue:   queueName,
 			}
 		case WorkerWebAssemblyBindingType:
 			bindingListItem.Binding = WorkerWebAssemblyBinding{
