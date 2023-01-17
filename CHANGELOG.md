@@ -1,4 +1,6 @@
-## 0.59.0 (Unreleased)
+## 0.60.0 (Unreleased)
+
+## 0.59.0 (January 18th, 2023)
 
 BREAKING CHANGES:
 
