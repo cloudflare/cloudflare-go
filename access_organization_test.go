@@ -163,7 +163,8 @@ func TestUpdateAccessOrganization(t *testing.T) {
 					"header_text": "Widget Corp",
 					"footer_text": "© Widget Corp"
 				},
-				"is_ui_read_only": false
+				"is_ui_read_only": false,
+				"ui_read_only_toggle_reason": "this is my reason"
 			}
 		}
 		`)
@@ -184,7 +185,8 @@ func TestUpdateAccessOrganization(t *testing.T) {
 			HeaderText:      "Widget Corp",
 			FooterText:      "© Widget Corp",
 		},
-		IsUIReadOnly: BoolPtr(false),
+		IsUIReadOnly:           BoolPtr(false),
+		UIReadOnlyToggleReason: "this is my reason",
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/organizations", handler)
