@@ -645,7 +645,7 @@ type RulesetRule struct {
 type RulesetRuleRateLimit struct {
 	Characteristics         []string `json:"characteristics,omitempty"`
 	RequestsPerPeriod       int      `json:"requests_per_period,omitempty"`
-	ScorePerPeriod	        int      `json:"score_per_period,omitempty"`
+	ScorePerPeriod          int      `json:"score_per_period,omitempty"`
 	ScoreResponseHeaderName string   `json:"score_response_header_name,omitempty"`
 	Period                  int      `json:"period,omitempty"`
 	MitigationTimeout       int      `json:"mitigation_timeout,omitempty"`
