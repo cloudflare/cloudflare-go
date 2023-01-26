@@ -1,5 +1,9 @@
 ## 0.60.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* magic_transit_ipsec_tunnel: makes customer endpoint an optional field for ipsec tunnel creation ([#1185](https://github.com/cloudflare/cloudflare-go/issues/1185))
+
 DEPENDENCIES:
 
 * deps: bumps dependabot/fetch-metadata from 1.3.5 to 1.3.6 ([#1184](https://github.com/cloudflare/cloudflare-go/issues/1184))
