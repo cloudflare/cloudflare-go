@@ -161,9 +161,6 @@ func NewExperimental(config *ClientParams) (*Client, error) {
 // *http.Response, or an error if one occurred. The caller is responsible for
 // closing the response body.
 func (c *Client) request(ctx context.Context, method, uri string, reqBody io.Reader, headers http.Header) (*http.Response, error) {
-	log.SetPrefix(time.Now().Format(time.RFC3339Nano) + " [DEBUG] cloudflare")
-	log.SetFlags(0)
-
 	req, err := http.NewRequestWithContext(ctx, method, c.BaseURL.String()+uri, reqBody)
 	if err != nil {
 		return nil, fmt.Errorf("HTTP request creation failed: %w", err)
