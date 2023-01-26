@@ -83,6 +83,7 @@ type WorkerMetaData struct {
 	ID         string    `json:"id,omitempty"`
 	ETAG       string    `json:"etag,omitempty"`
 	Size       int       `json:"size,omitempty"`
+	Logpush    bool      `json:"logpush"`
 	CreatedOn  time.Time `json:"created_on,omitempty"`
 	ModifiedOn time.Time `json:"modified_on,omitempty"`
 }

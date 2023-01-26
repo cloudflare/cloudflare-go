@@ -21,17 +21,6 @@ const (
     "errors": [],
     "messages": []
 }`
-	uploadWorkerResponseData = `{
-    "result": {
-        "script": "addEventListener('fetch', event => {\n  event.passThroughOnException()\n  event.respondWith(handleRequest(event.request))\n})\n\nasync function handleRequest(request) {\n  return fetch(request)\n}",
-        "etag": "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
-        "size": 191,
-        "modified_on": "2018-06-09T15:17:01.989141Z"
-    },
-    "success": true,
-    "errors": [],
-    "messages": []
-}`
 
 	uploadWorkerModuleResponseData = `{
     "result": {
@@ -213,21 +202,24 @@ export default {
 `
 )
 
+func workersUploadResponse(logpush bool) string {
+	return fmt.Sprintf(`{
+		"result": {
+			"script": "addEventListener('fetch', event => {\n  event.passThroughOnException()\n  event.respondWith(handleRequest(event.request))\n})\n\nasync function handleRequest(request) {\n  return fetch(request)\n}",
+			"etag": "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
+			"size": 191,
+			"logpush": %t,
+			"modified_on": "2018-06-09T15:17:01.989141Z"
+		},
+		"success": true,
+		"errors": [],
+		"messages": []
+	}`, logpush)
+}
+
 var (
 	successResponse               = Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}}
 	deleteWorkerRouteResponseData = createWorkerRouteResponse
-	attachWorkerToDomainResponse  = fmt.Sprintf(`{
-    "result": {
-        "id": "e7a57d8746e74ae49c25994dadb421b1",
-	"zone_id": "%s",
-	"service":"test_script_1",
-	"hostname":"api4.example.com",
-	"environment":"production"
-    },
-    "success": true,
-    "errors": [],
-    "messages": []
-}`, testZoneID)
 )
 
 func getFormValue(r *http.Request, key string) ([]byte, error) {
@@ -423,7 +415,7 @@ func TestUploadWorker_Basic(t *testing.T) {
 		contentTypeHeader := r.Header.Get("content-type")
 		assert.Equal(t, "application/javascript", contentTypeHeader, "Expected content-type request header to be 'application/javascript', got %s", contentTypeHeader)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, uploadWorkerResponseData)
+		fmt.Fprint(w, workersUploadResponse(false))
 	})
 	res, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{ScriptName: "foo", Script: workerScript})
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
@@ -504,7 +496,7 @@ func TestUploadWorker_WithDurableObjectBinding(t *testing.T) {
 		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, uploadWorkerResponseData)
+		fmt.Fprint(w, workersUploadResponse(false))
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
@@ -549,7 +541,7 @@ func TestUploadWorker_WithInheritBinding(t *testing.T) {
 		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, uploadWorkerResponseData)
+		fmt.Fprint(w, workersUploadResponse(false))
 	}
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
 
@@ -601,7 +593,7 @@ func TestUploadWorker_WithKVBinding(t *testing.T) {
 		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, uploadWorkerResponseData)
+		fmt.Fprint(w, workersUploadResponse(false))
 	}
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
 
@@ -642,7 +634,7 @@ func TestUploadWorker_WithWasmBinding(t *testing.T) {
 		assert.Equal(t, []byte("fake-wasm"), wasmContent)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, uploadWorkerResponseData)
+		fmt.Fprint(w, workersUploadResponse(false))
 	}
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
 
@@ -680,7 +672,7 @@ func TestUploadWorker_WithPlainTextBinding(t *testing.T) {
 		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, uploadWorkerResponseData)
+		fmt.Fprint(w, workersUploadResponse(false))
 	}
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
 
@@ -764,7 +756,7 @@ func TestUploadWorker_WithSecretTextBinding(t *testing.T) {
 		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, uploadWorkerResponseData)
+		fmt.Fprint(w, workersUploadResponse(false))
 	}
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
 
@@ -807,7 +799,7 @@ func TestUploadWorker_WithServiceBinding(t *testing.T) {
 		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, uploadWorkerResponseData)
+		fmt.Fprint(w, workersUploadResponse(false))
 	}
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
 
@@ -840,7 +832,7 @@ func TestUploadWorker_WithLogpush(t *testing.T) {
 		assert.Equal(t, &expected, mpUpload.Logpush)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, uploadWorkerResponseData)
+		fmt.Fprint(w, workersUploadResponse(*mpUpload.Logpush))
 	})
 	res, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{ScriptName: "foo", Script: workerScript, Logpush: BoolPtr(true)})
 	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
@@ -852,6 +844,7 @@ func TestUploadWorker_WithLogpush(t *testing.T) {
 			WorkerMetaData: WorkerMetaData{
 				ETAG:       "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
 				Size:       191,
+				Logpush:    true,
 				ModifiedOn: formattedTime,
 			},
 		}}
