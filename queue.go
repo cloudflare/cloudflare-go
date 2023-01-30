@@ -78,7 +78,8 @@ type QueueConsumerResponse struct {
 }
 
 type UpdateQueueParams struct {
-	Name string `json:"queue_name,omitempty"`
+	Name        string `json:"-"`
+	UpdatedName string `json:"queue_name,omitempty"`
 }
 
 type ListQueueConsumersParams struct {
@@ -221,16 +222,16 @@ func (api *API) GetQueue(ctx context.Context, rc *ResourceContainer, queueName s
 // UpdateQueue updates a queue.
 //
 // API reference: https://api.cloudflare.com/#queue-update-queue
-func (api *API) UpdateQueue(ctx context.Context, rc *ResourceContainer, queueName string, params UpdateQueueParams) (Queue, error) {
+func (api *API) UpdateQueue(ctx context.Context, rc *ResourceContainer, params UpdateQueueParams) (Queue, error) {
 	if rc.Identifier == "" {
 		return Queue{}, ErrMissingAccountID
 	}
 
-	if params.Name == "" {
+	if params.Name == "" || params.UpdatedName == "" {
 		return Queue{}, ErrMissingQueueName
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/workers/queues/%s", rc.Identifier, queueName)
+	uri := fmt.Sprintf("/accounts/%s/workers/queues/%s", rc.Identifier, params.Name)
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return Queue{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
