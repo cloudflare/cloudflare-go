@@ -71,7 +71,7 @@ type UpdateDNSRecordParams struct {
 	Priority *uint16     `json:"-"` // internal use only
 	TTL      int         `json:"ttl,omitempty"`
 	Proxied  *bool       `json:"proxied,omitempty"`
-	Comment  string      `json:"comment,omitempty"`
+	Comment  string      `json:"comment"`
 	Tags     []string    `json:"tags,omitempty"`
 }
 
@@ -229,6 +229,7 @@ func (api *API) UpdateDNSRecord(ctx context.Context, rc *ResourceContainer, para
 	if rc.Identifier == "" {
 		return ErrMissingZoneID
 	}
+
 	if params.ID == "" {
 		return ErrMissingDNSRecordID
 	}
