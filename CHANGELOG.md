@@ -1,4 +1,6 @@
-## 0.60.0 (Unreleased)
+## 0.61.0 (Unreleased)
+
+## 0.60.0 (1st February, 2023)
 
 BREAKING CHANGES:
 
@@ -7,6 +9,7 @@ BREAKING CHANGES:
 ENHANCEMENTS:
 
 * dlp_profile: Add new allowed_match_count field to profiles ([#1193](https://github.com/cloudflare/cloudflare-go/issues/1193))
+* dns: allow sending empty strings to remove comments ([#1195](https://github.com/cloudflare/cloudflare-go/issues/1195))
 * magic_transit_ipsec_tunnel: makes customer endpoint an optional field for ipsec tunnel creation ([#1185](https://github.com/cloudflare/cloudflare-go/issues/1185))
 * rulesets: add support for `score_per_period` and `score_response_header_name` ([#1183](https://github.com/cloudflare/cloudflare-go/issues/1183))
 

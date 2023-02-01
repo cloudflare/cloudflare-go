@@ -528,6 +528,64 @@ func TestUpdateDNSRecord(t *testing.T) {
 	require.NoError(t, err)
 }
 
+func TestUpdateDNSRecord_ClearComment(t *testing.T) {
+	setup()
+	defer teardown()
+
+	input := DNSRecord{
+		ID:      "372e67954025e0ba6aaa6d586b9e0b59",
+		Comment: "",
+	}
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
+
+		var v DNSRecord
+		err := json.NewDecoder(r.Body).Decode(&v)
+		require.NoError(t, err)
+		v.ID = "372e67954025e0ba6aaa6d586b9e0b59"
+		assert.Equal(t, input, v)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "372e67954025e0ba6aaa6d586b9e0b59",
+				"type": "A",
+				"name": "example.com",
+				"content": "198.51.100.4",
+				"proxiable": true,
+				"proxied": false,
+				"ttl": 120,
+				"locked": false,
+				"zone_id": "d56084adb405e0b7e32c52321bf07be6",
+				"zone_name": "example.com",
+				"created_on": "2014-01-01T05:20:00Z",
+				"modified_on": "2014-01-01T05:20:00Z",
+				"comment":null,
+				"tags":[],
+				"data": {},
+				"meta": {
+					"auto_added": true,
+					"source": "primary"
+				}
+			}
+		}`)
+	}
+
+	dnsRecordID := "372e67954025e0ba6aaa6d586b9e0b59"
+
+	mux.HandleFunc("/zones/"+testZoneID+"/dns_records/"+dnsRecordID, handler)
+
+	err := client.UpdateDNSRecord(context.Background(), ZoneIdentifier(testZoneID), UpdateDNSRecordParams{
+		ID:      dnsRecordID,
+		Comment: "",
+	})
+	require.NoError(t, err)
+}
+
 func TestDeleteDNSRecord(t *testing.T) {
 	setup()
 	defer teardown()
