@@ -72,7 +72,7 @@ type UpdateDNSRecordParams struct {
 	TTL      int         `json:"ttl,omitempty"`
 	Proxied  *bool       `json:"proxied,omitempty"`
 	Comment  string      `json:"comment,omitempty"`
-	Tags     []string    `json:"tags,omitempty"`
+	Tags     []string    `json:"tags"`
 }
 
 // DNSListResponse represents the response from the list DNS records endpoint.
