@@ -1,5 +1,9 @@
 ## 0.61.0 (Unreleased)
 
+BUG FIXES:
+
+* dns: always send `tags` to allow clearing ([#1196](https://github.com/cloudflare/cloudflare-go/issues/1196))
+
 ## 0.60.0 (1st February, 2023)
 
 BREAKING CHANGES:
