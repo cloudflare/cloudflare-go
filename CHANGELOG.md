@@ -4,6 +4,10 @@ BUG FIXES:
 
 * dns: always send `tags` to allow clearing ([#1196](https://github.com/cloudflare/cloudflare-go/issues/1196))
 
+DEPENDENCIES:
+
+* deps: bumps github.com/urfave/cli/v2 from 2.24.2 to 2.24.3 ([#1199](https://github.com/cloudflare/cloudflare-go/issues/1199))
+
 ## 0.60.0 (1st February, 2023)
 
 BREAKING CHANGES:
