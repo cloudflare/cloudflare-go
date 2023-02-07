@@ -41,7 +41,7 @@ type DLPProfile struct {
 	Name              string `json:"name,omitempty"`
 	Type              string `json:"type,omitempty"`
 	Description       string `json:"description,omitempty"`
-	AllowedMatchCount uint   `json:"allowed_match_count"`
+	AllowedMatchCount int    `json:"allowed_match_count"`
 
 	// The following fields are omitted for predefined DLP
 	// profiles
