@@ -1,5 +1,9 @@
 ## 0.61.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* dlp_profile: Use int rather than uint for allowed_match_count field ([#1200](https://github.com/cloudflare/cloudflare-go/issues/1200))
+
 BUG FIXES:
 
 * dns: always send `tags` to allow clearing ([#1196](https://github.com/cloudflare/cloudflare-go/issues/1196))
