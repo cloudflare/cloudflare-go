@@ -21,37 +21,43 @@ const (
 	Warp        AccessApplicationType = "warp"
 	Bookmark    AccessApplicationType = "bookmark"
 	Saas        AccessApplicationType = "saas"
+	Private     AccessApplicationType = "private"
 )
 
 // AccessApplication represents an Access application.
 type AccessApplication struct {
-	GatewayRules            []AccessApplicationGatewayRule `json:"gateway_rules,omitempty"`
-	AllowedIdps             []string                       `json:"allowed_idps,omitempty"`
-	CustomDenyMessage       string                         `json:"custom_deny_message,omitempty"`
-	LogoURL                 string                         `json:"logo_url,omitempty"`
-	AUD                     string                         `json:"aud,omitempty"`
-	Domain                  string                         `json:"domain"`
-	Type                    AccessApplicationType          `json:"type,omitempty"`
-	SessionDuration         string                         `json:"session_duration,omitempty"`
-	SameSiteCookieAttribute string                         `json:"same_site_cookie_attribute,omitempty"`
-	CustomDenyURL           string                         `json:"custom_deny_url,omitempty"`
-	Name                    string                         `json:"name"`
-	ID                      string                         `json:"id,omitempty"`
-	PrivateAddress          string                         `json:"private_address"`
-	CorsHeaders             *AccessApplicationCorsHeaders  `json:"cors_headers,omitempty"`
-	CreatedAt               *time.Time                     `json:"created_at,omitempty"`
-	UpdatedAt               *time.Time                     `json:"updated_at,omitempty"`
-	SaasApplication         *SaasApplication               `json:"saas_app,omitempty"`
-	AutoRedirectToIdentity  *bool                          `json:"auto_redirect_to_identity,omitempty"`
-	SkipInterstitial        *bool                          `json:"skip_interstitial,omitempty"`
-	AppLauncherVisible      *bool                          `json:"app_launcher_visible,omitempty"`
-	EnableBindingCookie     *bool                          `json:"enable_binding_cookie,omitempty"`
-	HttpOnlyCookieAttribute *bool                          `json:"http_only_cookie_attribute,omitempty"`
-	ServiceAuth401Redirect  *bool                          `json:"service_auth_401_redirect,omitempty"`
+	AllowedIdps             []string                      `json:"allowed_idps,omitempty"`
+	CustomDenyMessage       string                        `json:"custom_deny_message,omitempty"`
+	LogoURL                 string                        `json:"logo_url,omitempty"`
+	AUD                     string                        `json:"aud,omitempty"`
+	Domain                  string                        `json:"domain"`
+	Type                    AccessApplicationType         `json:"type,omitempty"`
+	SessionDuration         string                        `json:"session_duration,omitempty"`
+	SameSiteCookieAttribute string                        `json:"same_site_cookie_attribute,omitempty"`
+	CustomDenyURL           string                        `json:"custom_deny_url,omitempty"`
+	Name                    string                        `json:"name"`
+	ID                      string                        `json:"id,omitempty"`
+	CorsHeaders             *AccessApplicationCorsHeaders `json:"cors_headers,omitempty"`
+	CreatedAt               *time.Time                    `json:"created_at,omitempty"`
+	UpdatedAt               *time.Time                    `json:"updated_at,omitempty"`
+	SaasApplication         *SaasApplication              `json:"saas_app,omitempty"`
+	AutoRedirectToIdentity  *bool                         `json:"auto_redirect_to_identity,omitempty"`
+	SkipInterstitial        *bool                         `json:"skip_interstitial,omitempty"`
+	AppLauncherVisible      *bool                         `json:"app_launcher_visible,omitempty"`
+	EnableBindingCookie     *bool                         `json:"enable_binding_cookie,omitempty"`
+	HttpOnlyCookieAttribute *bool                         `json:"http_only_cookie_attribute,omitempty"`
+	ServiceAuth401Redirect  *bool                         `json:"service_auth_401_redirect,omitempty"`
+	GatewayRules            []TeamsRule                   `json:"gateway_rules,omitempty"`
+	Origins                 []PrivateAppOrigins           `json:"origins,omitempty"`
 }
 
-type AccessApplicationGatewayRule struct {
-	ID string `json:"id,omitempty"`
+// PrivateAppOrigins represents a private application's origin data
+type PrivateAppOrigins struct {
+	Protocol         string `json:"transport"`
+	IP               string `json:"destination_ip"`
+	Port             int    `json:"destination_port"`
+	Hostname         string `json:"hostname,omitempty"`
+	VirtualNetworkID string `json:"virtual_network_id"`
 }
 
 // AccessApplicationCorsHeaders represents the CORS HTTP headers for an Access
