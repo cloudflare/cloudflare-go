@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"net/url"
 	"testing"
 	"time"
 
@@ -41,6 +42,52 @@ func TestTunnels(t *testing.T) {
 	}}
 
 	actual, err := client.Tunnels(context.Background(), AccountIdentifier(testAccountID), TunnelListParams{UUID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestTunnelsPagination(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		qry, _ := url.Parse(r.RequestURI)
+		assert.Equal(t, "blog", qry.Query().Get("name"))
+		assert.Equal(t, "2", qry.Query().Get("page"))
+		assert.Equal(t, "1", qry.Query().Get("per_page"))
+		fmt.Fprint(w, loadFixture("tunnel", "multiple_full"))
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/cfd_tunnel", handler)
+
+	createdAt, _ := time.Parse(time.RFC3339, "2009-11-10T23:00:00Z")
+	deletedAt, _ := time.Parse(time.RFC3339, "2009-11-10T23:00:00Z")
+	want := []Tunnel{
+		{
+			ID:        "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+			Name:      "blog",
+			CreatedAt: &createdAt,
+			DeletedAt: &deletedAt,
+			Connections: []TunnelConnection{{
+				ColoName:           "DFW",
+				ID:                 "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+				IsPendingReconnect: false,
+				ClientID:           "dc6472cc-f1ae-44a0-b795-6b8a0ce29f90",
+				ClientVersion:      "2022.2.0",
+				OpenedAt:           "2021-01-25T18:22:34.317854Z",
+				OriginIP:           "198.51.100.1",
+			}},
+		},
+	}
+
+	actual, err := client.Tunnels(context.Background(), AccountIdentifier(testAccountID),
+		TunnelListParams{
+			Name: "blog",
+		}, WithPagination(PaginationOptions{PerPage: 1, Page: 2}))
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
