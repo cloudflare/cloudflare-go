@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"github.com/google/go-querystring/query"
 	"net/http"
-	"strconv"
 	"time"
 )
 
@@ -192,17 +191,8 @@ func (api *API) Tunnels(ctx context.Context, rc *ResourceContainer, params Tunne
 		of(&opt)
 	}
 
-	if opt.params.Get("page") != "" || opt.params.Get("per_page") != "" {
-		return []Tunnel{}, errors.New(errManualPagination)
-	}
-
-	opt.params.Add("per_page", strconv.Itoa(listZonesPerPage))
-
-	paramsStr := opt.params.Encode()
-	fmt.Printf("Issuing a cfd_tunnel query with params [%v]", paramsStr)
-
 	res, err := api.makeRequestContext(ctx, http.MethodGet,
-		fmt.Sprintf("/accounts/%s/cfd_tunnel?%s", rc.Identifier, paramsStr), nil)
+		fmt.Sprintf("/accounts/%s/cfd_tunnel?%s", rc.Identifier, opt.params.Encode()), nil)
 	if err != nil {
 		return []Tunnel{}, err
 	}
