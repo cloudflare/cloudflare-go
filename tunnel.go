@@ -5,9 +5,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/google/go-querystring/query"
 	"net/http"
 	"time"
+
+	"github.com/google/go-querystring/query"
 )
 
 // ErrMissingTunnelID is for when a required tunnel ID is missing from the
