@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/google/go-querystring/query"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -176,14 +178,28 @@ type TunnelListParams struct {
 // Tunnels lists all tunnels.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-tunnel-list-cloudflare-tunnels
-func (api *API) Tunnels(ctx context.Context, rc *ResourceContainer, params TunnelListParams) ([]Tunnel, error) {
+func (api *API) Tunnels(ctx context.Context, rc *ResourceContainer, params TunnelListParams, opts ...ReqOption) ([]Tunnel, error) {
 	if rc.Identifier == "" {
 		return []Tunnel{}, ErrMissingAccountID
 	}
 
-	uri := buildURI(fmt.Sprintf("/accounts/%s/cfd_tunnel", rc.Identifier), params)
+	v, _ := query.Values(params)
+	opt := reqOption{
+		params: v,
+	}
 
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	for _, of := range opts {
+		of(&opt)
+	}
+
+	if opt.params.Get("page") != "" || opt.params.Get("per_page") != "" {
+		return []Tunnel{}, errors.New(errManualPagination)
+	}
+
+	opt.params.Add("per_page", strconv.Itoa(listZonesPerPage))
+
+	res, err := api.makeRequestContext(ctx, http.MethodGet,
+		fmt.Sprintf("/accounts/%s/cfd_tunnel?%s", rc.Identifier, opt.params.Encode()), nil)
 	if err != nil {
 		return []Tunnel{}, err
 	}
