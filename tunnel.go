@@ -198,8 +198,11 @@ func (api *API) Tunnels(ctx context.Context, rc *ResourceContainer, params Tunne
 
 	opt.params.Add("per_page", strconv.Itoa(listZonesPerPage))
 
+	paramsStr := opt.params.Encode()
+	fmt.Printf("Issuing a cfd_tunnel query with params [%v]", paramsStr)
+
 	res, err := api.makeRequestContext(ctx, http.MethodGet,
-		fmt.Sprintf("/accounts/%s/cfd_tunnel?%s", rc.Identifier, opt.params.Encode()), nil)
+		fmt.Sprintf("/accounts/%s/cfd_tunnel?%s", rc.Identifier, paramsStr), nil)
 	if err != nil {
 		return []Tunnel{}, err
 	}
