@@ -2,6 +2,7 @@
 
 ENHANCEMENTS:
 
+* cloudflare: make it clearer when we hit a server error and to retry later ([#1207](https://github.com/cloudflare/cloudflare-go/issues/1207))
 * dlp_profile: Use int rather than uint for allowed_match_count field ([#1200](https://github.com/cloudflare/cloudflare-go/issues/1200))
 
 BUG FIXES:
