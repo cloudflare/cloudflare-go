@@ -27,20 +27,21 @@ var (
 			{Address: "10.0.0.0/8"},
 			{Address: "100.64.0.0/10"},
 		},
-		GatewayUniqueID: StringPtr("t1235"),
-		SupportURL:      StringPtr(""),
-		CaptivePortal:   IntPtr(180),
-		AllowModeSwitch: BoolPtr(false),
-		SwitchLocked:    BoolPtr(false),
-		AllowUpdates:    BoolPtr(false),
-		AutoConnect:     IntPtr(0),
-		AllowedToLeave:  BoolPtr(true),
-		Enabled:         BoolPtr(true),
-		PolicyID:        nil,
-		Name:            nil,
-		Match:           nil,
-		Precedence:      nil,
-		Default:         true,
+		GatewayUniqueID:  StringPtr("t1235"),
+		SupportURL:       StringPtr(""),
+		CaptivePortal:    IntPtr(180),
+		AllowModeSwitch:  BoolPtr(false),
+		SwitchLocked:     BoolPtr(false),
+		AllowUpdates:     BoolPtr(false),
+		AutoConnect:      IntPtr(0),
+		AllowedToLeave:   BoolPtr(true),
+		Enabled:          BoolPtr(true),
+		PolicyID:         nil,
+		Name:             nil,
+		Match:            nil,
+		Precedence:       nil,
+		Default:          true,
+		ExcludeOfficeIps: BoolPtr(false),
 	}
 
 	nonDefaultDeviceSettingsPolicy = DeviceSettingsPolicy{
@@ -56,20 +57,21 @@ var (
 			{Address: "10.0.0.0/8"},
 			{Address: "100.64.0.0/10"},
 		},
-		GatewayUniqueID: StringPtr("t1235"),
-		SupportURL:      StringPtr(""),
-		CaptivePortal:   IntPtr(180),
-		AllowModeSwitch: BoolPtr(false),
-		SwitchLocked:    BoolPtr(false),
-		AllowUpdates:    BoolPtr(false),
-		AutoConnect:     IntPtr(0),
-		AllowedToLeave:  BoolPtr(true),
-		PolicyID:        &deviceSettingsPolicyID,
-		Enabled:         BoolPtr(true),
-		Name:            StringPtr("test"),
-		Match:           &deviceSettingsPolicyMatch,
-		Precedence:      &deviceSettingsPolicyPrecedence,
-		Default:         false,
+		GatewayUniqueID:  StringPtr("t1235"),
+		SupportURL:       StringPtr(""),
+		CaptivePortal:    IntPtr(180),
+		AllowModeSwitch:  BoolPtr(false),
+		SwitchLocked:     BoolPtr(false),
+		AllowUpdates:     BoolPtr(false),
+		AutoConnect:      IntPtr(0),
+		AllowedToLeave:   BoolPtr(true),
+		PolicyID:         &deviceSettingsPolicyID,
+		Enabled:          BoolPtr(true),
+		Name:             StringPtr("test"),
+		Match:            &deviceSettingsPolicyMatch,
+		Precedence:       &deviceSettingsPolicyPrecedence,
+		Default:          false,
+		ExcludeOfficeIps: BoolPtr(true),
 	}
 
 	defaultDeviceSettingsPolicyJson = `{
@@ -102,7 +104,8 @@ var (
 		"auto_connect": 0,
 		"allowed_to_leave": true,
 		"enabled": true,
-		"default": true
+		"default": true,
+		"exclude_office_ips":false
 	}`
 
 	nonDefaultDeviceSettingsPolicyJson = fmt.Sprintf(`{
@@ -139,7 +142,8 @@ var (
 		"name": "test",
 		"match": %#v,
 		"precedence": 10,
-		"default": false
+		"default": false,
+		"exclude_office_ips":true
 	}`, deviceSettingsPolicyID, deviceSettingsPolicyMatch)
 )
 
