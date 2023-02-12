@@ -15,13 +15,13 @@ const (
 )
 
 func ExampleAPI_CreateWorkersKVNamespace() {
-	api, err := cloudflare.New(apiKey, user, cloudflare.UsingAccount(accountID))
+	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	req := &cloudflare.WorkersKVNamespaceRequest{Title: "test_namespace2"}
-	response, err := api.CreateWorkersKVNamespace(context.Background(), req)
+	req := cloudflare.CreateWorkersKVNamespaceParams{Title: "test_namespace2"}
+	response, err := api.CreateWorkersKVNamespace(context.Background(), cloudflare.AccountIdentifier(accountID), req)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -30,26 +30,35 @@ func ExampleAPI_CreateWorkersKVNamespace() {
 }
 
 func ExampleAPI_ListWorkersKVNamespaces() {
-	api, err := cloudflare.New(apiKey, user, cloudflare.UsingAccount(accountID))
+	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	lsr, err := api.ListWorkersKVNamespaces(context.Background())
+	lsr, _, err := api.ListWorkersKVNamespaces(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.ListWorkersKVNamespacesParams{})
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	fmt.Println(lsr)
-}
 
-func ExampleAPI_DeleteWorkersKVNamespace() {
-	api, err := cloudflare.New(apiKey, user, cloudflare.UsingAccount(accountID))
+	resp, _, err := api.ListWorkersKVNamespaces(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.ListWorkersKVNamespacesParams{ResultInfo: cloudflare.ResultInfo{
+		PerPage: 10,
+	}})
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	response, err := api.DeleteWorkersKVNamespace(context.Background(), namespace)
+	fmt.Println(resp)
+}
+
+func ExampleAPI_DeleteWorkersKVNamespace() {
+	api, err := cloudflare.New(apiKey, user)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	response, err := api.DeleteWorkersKVNamespace(context.Background(), cloudflare.AccountIdentifier(accountID), namespace)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -58,12 +67,15 @@ func ExampleAPI_DeleteWorkersKVNamespace() {
 }
 
 func ExampleAPI_UpdateWorkersKVNamespace() {
-	api, err := cloudflare.New(apiKey, user, cloudflare.UsingAccount(accountID))
+	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	resp, err := api.UpdateWorkersKVNamespace(context.Background(), namespace, &cloudflare.WorkersKVNamespaceRequest{Title: "test_title"})
+	resp, err := api.UpdateWorkersKVNamespace(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.UpdateWorkersKVNamespaceParams{
+		NamespaceID: namespace,
+		Title:       "test_title",
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -71,8 +83,8 @@ func ExampleAPI_UpdateWorkersKVNamespace() {
 	fmt.Println(resp)
 }
 
-func ExampleAPI_WriteWorkersKV() {
-	api, err := cloudflare.New(apiKey, user, cloudflare.UsingAccount(accountID))
+func ExampleAPI_WriteWorkersKVEntry() {
+	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -80,7 +92,11 @@ func ExampleAPI_WriteWorkersKV() {
 	payload := []byte("test payload")
 	key := "test_key"
 
-	resp, err := api.WriteWorkersKV(context.Background(), namespace, key, payload)
+	resp, err := api.WriteWorkersKVEntry(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.WriteWorkersKVEntryParams{
+		NamespaceID: namespace,
+		Key:         key,
+		Value:       payload,
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -88,13 +104,13 @@ func ExampleAPI_WriteWorkersKV() {
 	fmt.Println(resp)
 }
 
-func ExampleAPI_WriteWorkersKVBulk() {
-	api, err := cloudflare.New(apiKey, user, cloudflare.UsingAccount(accountID))
+func ExampleAPI_WriteWorkersKVEntries() {
+	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	payload := cloudflare.WorkersKVBulkWriteRequest{
+	payload := []*cloudflare.WorkersKVPair{
 		{
 			Key:   "key1",
 			Value: "value1",
@@ -107,7 +123,10 @@ func ExampleAPI_WriteWorkersKVBulk() {
 		},
 	}
 
-	resp, err := api.WriteWorkersKVBulk(context.Background(), namespace, payload)
+	resp, err := api.WriteWorkersKVEntries(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.WriteWorkersKVEntriesParams{
+		NamespaceID: namespace,
+		KVs:         payload,
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -115,14 +134,14 @@ func ExampleAPI_WriteWorkersKVBulk() {
 	fmt.Println(resp)
 }
 
-func ExampleAPI_ReadWorkersKV() {
-	api, err := cloudflare.New(apiKey, user, cloudflare.UsingAccount(accountID))
+func ExampleAPI_GetWorkersKV() {
+	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	key := "test_key"
-	resp, err := api.ReadWorkersKV(context.Background(), namespace, key)
+	resp, err := api.GetWorkersKV(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.GetWorkersKVParams{NamespaceID: namespace, Key: key})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -130,14 +149,17 @@ func ExampleAPI_ReadWorkersKV() {
 	fmt.Printf("%s\n", resp)
 }
 
-func ExampleAPI_DeleteWorkersKV() {
-	api, err := cloudflare.New(apiKey, user, cloudflare.UsingAccount(accountID))
+func ExampleAPI_DeleteWorkersKVEntry() {
+	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	key := "test_key"
-	resp, err := api.DeleteWorkersKV(context.Background(), namespace, key)
+	resp, err := api.DeleteWorkersKVEntry(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.DeleteWorkersKVEntryParams{
+		NamespaceID: namespace,
+		Key:         key,
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -145,15 +167,18 @@ func ExampleAPI_DeleteWorkersKV() {
 	fmt.Printf("%+v\n", resp)
 }
 
-func ExampleAPI_DeleteWorkersKVBulk() {
-	api, err := cloudflare.New(apiKey, user, cloudflare.UsingAccount(accountID))
+func ExampleAPI_DeleteWorkersKVEntries() {
+	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	keys := []string{"key1", "key2", "key3"}
 
-	resp, err := api.DeleteWorkersKVBulk(context.Background(), namespace, keys)
+	resp, err := api.DeleteWorkersKVEntries(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.DeleteWorkersKVEntriesParams{
+		NamespaceID: namespace,
+		Keys:        keys,
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -161,22 +186,8 @@ func ExampleAPI_DeleteWorkersKVBulk() {
 	fmt.Println(resp)
 }
 
-func ExampleAPI_ListWorkersKVs() {
-	api, err := cloudflare.New(apiKey, user, cloudflare.UsingAccount(accountID))
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	resp, err := api.ListWorkersKVs(context.Background(), namespace)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println(resp)
-}
-
-func ExampleAPI_ListWorkersKVsWithOptions() {
-	api, err := cloudflare.New(apiKey, user, cloudflare.UsingAccount(accountID))
+func ExampleAPI_ListWorkersKVKeys() {
+	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -185,13 +196,12 @@ func ExampleAPI_ListWorkersKVsWithOptions() {
 	prefix := "my-prefix"
 	cursor := "AArAbNSOuYcr4HmzGH02-cfDN8Ck9ejOwkn_Ai5rsn7S9NEqVJBenU9-gYRlrsziyjKLx48hNDLvtYzBAmkPsLGdye8ECr5PqFYcIOfUITdhkyTc1x6bV8nmyjz5DO-XaZH4kYY1KfqT8NRBIe5sic6yYt3FUDttGjafy0ivi-Up-TkVdRB0OxCf3O3OB-svG6DXheV5XTdDNrNx1o_CVqy2l2j0F4iKV1qFe_KhdkjC7Y6QjhUZ1MOb3J_uznNYVCoxZ-bVAAsJmXA"
 
-	options := cloudflare.ListWorkersKVsOptions{
-		Limit:  &limit,
-		Prefix: &prefix,
-		Cursor: &cursor,
-	}
-
-	resp, err := api.ListWorkersKVsWithOptions(context.Background(), namespace, options)
+	resp, err := api.ListWorkersKVKeys(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.ListWorkersKVsParams{
+		NamespaceID: namespace,
+		Prefix:      prefix,
+		Limit:       limit,
+		Cursor:      cursor,
+	})
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -1,4 +1,185 @@
-## 0.55.0 (Unreleased)
+## 0.61.0 (Unreleased)
+
+ENHANCEMENTS:
+
+* cloudflare: make it clearer when we hit a server error and to retry later ([#1207](https://github.com/cloudflare/cloudflare-go/issues/1207))
+* dlp_profile: Use int rather than uint for allowed_match_count field ([#1200](https://github.com/cloudflare/cloudflare-go/issues/1200))
+
+BUG FIXES:
+
+* dns: always send `tags` to allow clearing ([#1196](https://github.com/cloudflare/cloudflare-go/issues/1196))
+
+DEPENDENCIES:
+
+* deps: bumps github.com/urfave/cli/v2 from 2.24.2 to 2.24.3 ([#1199](https://github.com/cloudflare/cloudflare-go/issues/1199))
+
+## 0.60.0 (1st February, 2023)
+
+BREAKING CHANGES:
+
+* queues: UpdateQueue has been updated to match the API and now correctly updates a Queue's name ([#1188](https://github.com/cloudflare/cloudflare-go/issues/1188))
+
+ENHANCEMENTS:
+
+* dlp_profile: Add new allowed_match_count field to profiles ([#1193](https://github.com/cloudflare/cloudflare-go/issues/1193))
+* dns: allow sending empty strings to remove comments ([#1195](https://github.com/cloudflare/cloudflare-go/issues/1195))
+* magic_transit_ipsec_tunnel: makes customer endpoint an optional field for ipsec tunnel creation ([#1185](https://github.com/cloudflare/cloudflare-go/issues/1185))
+* rulesets: add support for `score_per_period` and `score_response_header_name` ([#1183](https://github.com/cloudflare/cloudflare-go/issues/1183))
+
+DEPENDENCIES:
+
+* deps: bumps dependabot/fetch-metadata from 1.3.5 to 1.3.6 ([#1184](https://github.com/cloudflare/cloudflare-go/issues/1184))
+* deps: bumps github.com/urfave/cli/v2 from 2.23.7 to 2.24.1 ([#1180](https://github.com/cloudflare/cloudflare-go/issues/1180))
+* deps: bumps github.com/urfave/cli/v2 from 2.24.1 to 2.24.2 ([#1191](https://github.com/cloudflare/cloudflare-go/issues/1191))
+* deps: bumps goreleaser/goreleaser-action from 4.1.0 to 4.2.0 ([#1192](https://github.com/cloudflare/cloudflare-go/issues/1192))
+
+## 0.59.0 (January 18th, 2023)
+
+BREAKING CHANGES:
+
+* dns: remove these read-only fields from `UpdateDNSRecordParams`: `CreatedOn`, `ModifiedOn`, `Meta`, `ZoneID`, `ZoneName`, `Proxiable`, and `Locked` ([#1170](https://github.com/cloudflare/cloudflare-go/issues/1170))
+* dns: the fields `CreatedOn` and `ModifiedOn` are removed from `ListDNSRecordsParams` ([#1173](https://github.com/cloudflare/cloudflare-go/issues/1173))
+
+NOTES:
+
+* dns: remove additional lookup from `Update` operations when `Name` or `Type` was omitted ([#1170](https://github.com/cloudflare/cloudflare-go/issues/1170))
+
+ENHANCEMENTS:
+
+* access_organization: add user_seat_expiration_inactive_time field ([#1159](https://github.com/cloudflare/cloudflare-go/issues/1159))
+* dns: `GetDNSRecord`, `UpdateDNSRecord` and `DeleteDNSRecord` now return the new, dedicated error `ErrMissingDNSRecordID` when an empty DNS record ID is given. ([#1174](https://github.com/cloudflare/cloudflare-go/issues/1174))
+* dns: the URL parameter `tag-match` for listing DNS records is now supported as the field `TagMatch` in `ListDNSRecordsParams` ([#1173](https://github.com/cloudflare/cloudflare-go/issues/1173))
+* dns: update default `per_page` attribute to 100 records ([#1171](https://github.com/cloudflare/cloudflare-go/issues/1171))
+* teams_rules: adds support for Egress Policies ([#1142](https://github.com/cloudflare/cloudflare-go/issues/1142))
+* workers: Add support for compatibility_date and compatibility_flags when upoading a worker script ([#1177](https://github.com/cloudflare/cloudflare-go/issues/1177))
+* workers: script upload now supports Queues bindings ([#1176](https://github.com/cloudflare/cloudflare-go/issues/1176))
+
+BUG FIXES:
+
+* dns: don't send "priority" for list operations as it isn't supported and is only used for internal filtering ([#1167](https://github.com/cloudflare/cloudflare-go/issues/1167))
+* dns: the field `Tags` in `ListDNSRecordsParams` was not correctly serialized into URL queries ([#1173](https://github.com/cloudflare/cloudflare-go/issues/1173))
+* managednetworks: Update should be PUT ([#1172](https://github.com/cloudflare/cloudflare-go/issues/1172))
+
+## 0.58.1 (January 5th, 2023)
+
+ENHANCEMENTS:
+
+* cloudflare: automatically redact sensitive values from HTTP interactions ([#1164](https://github.com/cloudflare/cloudflare-go/issues/1164))
+
+## 0.58.0 (January 4th, 2023)
+
+BREAKING CHANGES:
+
+* dns: `DNSRecord` has been renamed to `GetDNSRecord` ([#1151](https://github.com/cloudflare/cloudflare-go/issues/1151))
+* dns: `DNSRecords` has been renamed to `ListDNSRecords` ([#1151](https://github.com/cloudflare/cloudflare-go/issues/1151))
+* dns: method signatures have been updated to align with the upcoming client conventions ([#1151](https://github.com/cloudflare/cloudflare-go/issues/1151))
+* origin_ca: renamed to `CreateOriginCertificate` to `CreateOriginCACertificate` ([#1161](https://github.com/cloudflare/cloudflare-go/issues/1161))
+* origin_ca: renamed to `OriginCARootCertificate` to `GetOriginCARootCertificate` ([#1161](https://github.com/cloudflare/cloudflare-go/issues/1161))
+* origin_ca: renamed to `OriginCertificate` to `GetOriginCACertificate` ([#1161](https://github.com/cloudflare/cloudflare-go/issues/1161))
+* origin_ca: renamed to `OriginCertificates` to `ListOriginCACertificates` ([#1161](https://github.com/cloudflare/cloudflare-go/issues/1161))
+* origin_ca: renamed to `RevokeOriginCertificate` to `RevokeOriginCACertificate` ([#1161](https://github.com/cloudflare/cloudflare-go/issues/1161))
+
+ENHANCEMENTS:
+
+* dns: add support for tags and comments ([#1151](https://github.com/cloudflare/cloudflare-go/issues/1151))
+* mtls_certificate: add support for managing mTLS certificates and assocations ([#1150](https://github.com/cloudflare/cloudflare-go/issues/1150))
+* origin_ca: add support for using API keys, API tokens or API User service keys for interacting with Origin CA endpoints ([#1161](https://github.com/cloudflare/cloudflare-go/issues/1161))
+* workers: Add support for workers logpush enablement on script upload ([#1160](https://github.com/cloudflare/cloudflare-go/issues/1160))
+
+BUG FIXES:
+
+* email_routing_destination: use empty reponse struct on each page call ([#1156](https://github.com/cloudflare/cloudflare-go/issues/1156))
+* email_routing_rules: use empty reponse struct on each page call ([#1156](https://github.com/cloudflare/cloudflare-go/issues/1156))
+* filter: use empty reponse struct on each page call ([#1156](https://github.com/cloudflare/cloudflare-go/issues/1156))
+* firewall_rules: use empty reponse struct on each page call ([#1156](https://github.com/cloudflare/cloudflare-go/issues/1156))
+* lockdown: use empty reponse struct on each page call ([#1156](https://github.com/cloudflare/cloudflare-go/issues/1156))
+* queue: use empty reponse struct on each page call ([#1156](https://github.com/cloudflare/cloudflare-go/issues/1156))
+* teams_list: use empty reponse struct on each page call ([#1156](https://github.com/cloudflare/cloudflare-go/issues/1156))
+* workers_kv: use empty reponse struct on each page call ([#1156](https://github.com/cloudflare/cloudflare-go/issues/1156))
+
+DEPENDENCIES:
+
+* deps: bumps github.com/hashicorp/go-retryablehttp from 0.7.1 to 0.7.2 ([#1162](https://github.com/cloudflare/cloudflare-go/issues/1162))
+
+## 0.57.1 (December 23rd, 2022)
+
+ENHANCEMENTS:
+
+* tiered_cache: Add support for Tiered Caching interactions for setting Smart and Generic topologies ([#1149](https://github.com/cloudflare/cloudflare-go/issues/1149))
+
+BUG FIXES:
+
+* workers: correctly set `body` value for non-ES module uploads ([#1155](https://github.com/cloudflare/cloudflare-go/issues/1155))
+
+## 0.57.0 (December 22nd, 2022)
+
+BREAKING CHANGES:
+
+* workers: API operations now target account level resources instead of older zone level resources (these are a 1:1 now) ([#1137](https://github.com/cloudflare/cloudflare-go/issues/1137))
+* workers: method signatures have been updated to align with the upcoming client conventions ([#1137](https://github.com/cloudflare/cloudflare-go/issues/1137))
+* workers_bindings: method signatures have been updated to align with the upcoming client conventions ([#1137](https://github.com/cloudflare/cloudflare-go/issues/1137))
+* workers_cron_triggers: method signatures have been updated to align with the upcoming client conventions ([#1137](https://github.com/cloudflare/cloudflare-go/issues/1137))
+* workers_kv: method signatures have been updated to align with the upcoming client conventions ([#1137](https://github.com/cloudflare/cloudflare-go/issues/1137))
+* workers_routes: method signatures have been updated to align with the upcoming client conventions ([#1137](https://github.com/cloudflare/cloudflare-go/issues/1137))
+* workers_secrets: method signatures have been updated to align with the upcoming client conventions ([#1137](https://github.com/cloudflare/cloudflare-go/issues/1137))
+* workers_tails: method signatures have been updated to align with the upcoming client conventions ([#1137](https://github.com/cloudflare/cloudflare-go/issues/1137))
+
+NOTES:
+
+* workers: all worker methods have been split into product ownership(-ish) files ([#1137](https://github.com/cloudflare/cloudflare-go/issues/1137))
+* workers: all worker methods now require an explicit `ResourceContainer` for endpoints instead of relying on the globally defined `api.AccountID` ([#1137](https://github.com/cloudflare/cloudflare-go/issues/1137))
+
+ENHANCEMENTS:
+
+* managed_networks: add CRUD functionality for managednetworks ([#1148](https://github.com/cloudflare/cloudflare-go/issues/1148))
+
+DEPENDENCIES:
+
+* deps: bumps goreleaser/goreleaser-action from 3.2.0 to 4.1.0 ([#1146](https://github.com/cloudflare/cloudflare-go/issues/1146))
+
+## 0.56.0 (December 5th, 2022)
+
+BREAKING CHANGES:
+
+* pages: Changed the type of EnvVars in PagesProjectDeploymentConfigEnvironment & PagesProjectDeployment in order to properly support secrets. ([#1136](https://github.com/cloudflare/cloudflare-go/issues/1136))
+
+NOTES:
+
+* pages: removed the v1 logs endpoint for Pages deployments. Please switch to v2: https://developers.cloudflare.com/api/operations/pages-deployment-get-deployment-logs ([#1135](https://github.com/cloudflare/cloudflare-go/issues/1135))
+
+ENHANCEMENTS:
+
+* cache_rules: add ignore option to query string struct ([#1140](https://github.com/cloudflare/cloudflare-go/issues/1140))
+* pages: Updates bindings and other Functions related propreties. Service bindings, secrets, fail open/close and usage model are all now supported. ([#1136](https://github.com/cloudflare/cloudflare-go/issues/1136))
+* workers: Support for Workers Analytics Engine bindings ([#1133](https://github.com/cloudflare/cloudflare-go/issues/1133))
+
+DEPENDENCIES:
+
+* deps: bumps github.com/urfave/cli/v2 from 2.23.5 to 2.23.6 ([#1139](https://github.com/cloudflare/cloudflare-go/issues/1139))
+
+## 0.55.0 (November 23th, 2022)
+
+BREAKING CHANGES:
+
+* workers_kv: `CreateWorkersKVNamespace` has been updated to match the experimental client method signatures (https://github.com/cloudflare/cloudflare-go/blob/master/docs/experimental.md). ([#1115](https://github.com/cloudflare/cloudflare-go/issues/1115))
+* workers_kv: `DeleteWorkersKVBulk` has been renamed to `DeleteWorkersKVEntries`. ([#1115](https://github.com/cloudflare/cloudflare-go/issues/1115))
+* workers_kv: `DeleteWorkersKVNamespace` has been updated to match the experimental client method signatures (https://github.com/cloudflare/cloudflare-go/blob/master/docs/experimental.md). ([#1115](https://github.com/cloudflare/cloudflare-go/issues/1115))
+* workers_kv: `DeleteWorkersKV` has been renamed to `DeleteWorkersKVEntry`. ([#1115](https://github.com/cloudflare/cloudflare-go/issues/1115))
+* workers_kv: `ListWorkersKVNamespaces` has been updated to match the experimental client method signatures (https://github.com/cloudflare/cloudflare-go/blob/master/docs/experimental.md). ([#1115](https://github.com/cloudflare/cloudflare-go/issues/1115))
+* workers_kv: `ListWorkersKVsWithOptions` has been removed. Use `ListWorkersKVKeys` instead and pass in the options. ([#1115](https://github.com/cloudflare/cloudflare-go/issues/1115))
+* workers_kv: `ListWorkersKVs` has been renamed to `ListWorkersKVKeys`. ([#1115](https://github.com/cloudflare/cloudflare-go/issues/1115))
+* workers_kv: `ReadWorkersKV` has been renamed to `GetWorkersKV`. ([#1115](https://github.com/cloudflare/cloudflare-go/issues/1115))
+* workers_kv: `UpdateWorkersKVNamespace` has been updated to match the experimental client method signatures (https://github.com/cloudflare/cloudflare-go/blob/master/docs/experimental.md). ([#1115](https://github.com/cloudflare/cloudflare-go/issues/1115))
+* workers_kv: `WriteWorkersKVBulk` has been renamed to `WriteWorkersKVEntries`. ([#1115](https://github.com/cloudflare/cloudflare-go/issues/1115))
+* workers_kv: `WriteWorkersKV` has been renamed to `WriteWorkersKVEntry`. ([#1115](https://github.com/cloudflare/cloudflare-go/issues/1115))
+
+ENHANCEMENTS:
+
+* device_posture_rule: add input fields crowdstrike ([#1126](https://github.com/cloudflare/cloudflare-go/issues/1126))
+* queue: add support queue API ([#1131](https://github.com/cloudflare/cloudflare-go/issues/1131))
+* r2: Add support for listing R2 buckets ([#1063](https://github.com/cloudflare/cloudflare-go/issues/1063))
+* workers_domain: add support for workers domain API ([#1130](https://github.com/cloudflare/cloudflare-go/issues/1130))
+* workers_kv: `ListWorkersKVNamespaces` automatically paginates all results unless `PerPage` is defined. ([#1115](https://github.com/cloudflare/cloudflare-go/issues/1115))
 
 DEPENDENCIES:
 

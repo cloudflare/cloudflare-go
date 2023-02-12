@@ -91,54 +91,6 @@ const (
 		"aliases": null
 	}`
 
-	testPagesDeploymentStageLogsResponse = `
-	{
-		"name": "build",
-		"started_on": "2021-01-01T00:00:00Z",
-		"ended_on": "2021-01-01T00:00:00Z",
-		"status": "success",
-		"start": 0,
-		"end": 5,
-		"total": 6,
-		"data": [
-			{
-				"id": 0,
-				"timestamp": "2021-01-01T00:00:00Z",
-				"message": "Installing dependencies"
-			},
-			{
-				"id": 1,
-				"timestamp": "2021-01-01T00:00:00Z",
-				"message": "Verify run directory"
-			},
-			{
-				"id": 2,
-				"timestamp": "2021-01-01T00:00:00Z",
-				"message": "Executing user command: bash test.sh"
-			},
-			{
-				"id": 3,
-				"timestamp": "2021-01-01T00:00:00Z",
-				"message": "Finished"
-			},
-			{
-				"id": 4,
-				"timestamp": "2021-01-01T00:00:00Z",
-				"message": "Building functions..."
-			},
-			{
-				"id": 5,
-				"timestamp": "2021-01-01T00:00:00Z",
-				"message": "Validating asset output directory"
-			},
-			{
-				"id": 6,
-				"timestamp": "2021-01-01T00:00:00Z",
-				"message": "Parsed 2 valid header rules."
-			}
-		]
-	}`
-
 	testPagesDeploymentLogsResponse = `
 	{
 		"total": 6,
@@ -190,9 +142,9 @@ var (
 		ModifiedOn:  &pagesDeploymentDummyTime,
 		Aliases:     nil,
 		LatestStage: *expectedPagesDeploymentLatestStage,
-		EnvVars: map[string]map[string]string{
-			"NODE_VERSION": {
-				"value": "16",
+		EnvVars: EnvironmentVariableMap{
+			"NODE_VERSION": &EnvironmentVariable{
+				Value: "16",
 			},
 		},
 		DeploymentTrigger: PagesProjectDeploymentTrigger{
@@ -253,17 +205,6 @@ var (
 		StartedOn: &pagesDeploymentDummyTime,
 		EndedOn:   &pagesDeploymentDummyTime,
 		Status:    "success",
-	}
-
-	expectedPagesDeploymentStageLogs = &PagesDeploymentStageLogs{
-		Name:      "build",
-		StartedOn: &pagesDeploymentDummyTime,
-		EndedOn:   &pagesDeploymentDummyTime,
-		Status:    "success",
-		Start:     0,
-		End:       5,
-		Total:     6,
-		Data:      expectedPagesDeploymentStageLogEntries,
 	}
 
 	expectedPagesDeploymentStageLogEntries = []PagesDeploymentStageLogEntry{
@@ -408,35 +349,6 @@ func TestGetPagesDeploymentInfo(t *testing.T) {
 	actual, err := client.GetPagesDeploymentInfo(context.Background(), AccountIdentifier(testAccountID), "test", "0012e50b-fa5d-44db-8cb5-1f372785dcbe")
 	if assert.NoError(t, err) {
 		assert.Equal(t, *expectedPagesDeployment, actual)
-	}
-}
-
-func TestGetPagesDeploymentStageLogs(t *testing.T) {
-	setup()
-	defer teardown()
-
-	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
-
-		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, `{
-			"success": true,
-			"errors": [],
-			"messages": [],
-			"result": %s
-		}`, testPagesDeploymentStageLogsResponse)
-	}
-
-	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe/history/build/logs", handler)
-
-	actual, err := client.GetPagesDeploymentStageLogs(context.Background(), AccountIdentifier(testAccountID), GetPagesDeploymentStageLogsParams{
-		ProjectName:  "test",
-		DeploymentID: "0012e50b-fa5d-44db-8cb5-1f372785dcbe",
-		StageName:    "build",
-		SizeOptions:  SizeOptions{},
-	})
-	if assert.NoError(t, err) {
-		assert.Equal(t, *expectedPagesDeploymentStageLogs, actual)
 	}
 }
 

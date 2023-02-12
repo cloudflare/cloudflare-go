@@ -32,11 +32,34 @@ type WorkersListSecretsResponse struct {
 	Result []WorkersSecret `json:"result"`
 }
 
-// SetWorkersSecret creates or updates a secret
+type SetWorkersSecretParams struct {
+	ScriptName string
+	Secret     *WorkersPutSecretRequest
+}
+
+type DeleteWorkersSecretParams struct {
+	ScriptName string
+	SecretName string
+}
+
+type ListWorkersSecretsParams struct {
+	ScriptName string
+}
+
+// SetWorkersSecret creates or updates a secret.
+//
 // API reference: https://api.cloudflare.com/
-func (api *API) SetWorkersSecret(ctx context.Context, script string, req *WorkersPutSecretRequest) (WorkersPutSecretResponse, error) {
-	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/secrets", api.AccountID, script)
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, req)
+func (api *API) SetWorkersSecret(ctx context.Context, rc *ResourceContainer, params SetWorkersSecretParams) (WorkersPutSecretResponse, error) {
+	if rc.Level != AccountRouteLevel {
+		return WorkersPutSecretResponse{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return WorkersPutSecretResponse{}, ErrMissingAccountID
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/secrets", rc.Identifier, params.ScriptName)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params.Secret)
 	if err != nil {
 		return WorkersPutSecretResponse{}, err
 	}
@@ -49,10 +72,19 @@ func (api *API) SetWorkersSecret(ctx context.Context, script string, req *Worker
 	return result, err
 }
 
-// DeleteWorkersSecret deletes a secret
+// DeleteWorkersSecret deletes a secret.
+//
 // API reference: https://api.cloudflare.com/
-func (api *API) DeleteWorkersSecret(ctx context.Context, script, secretName string) (Response, error) {
-	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/secrets/%s", api.AccountID, script, secretName)
+func (api *API) DeleteWorkersSecret(ctx context.Context, rc *ResourceContainer, params DeleteWorkersSecretParams) (Response, error) {
+	if rc.Level != AccountRouteLevel {
+		return Response{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return Response{}, ErrMissingAccountID
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/secrets/%s", rc.Identifier, params.ScriptName, params.SecretName)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return Response{}, err
@@ -68,8 +100,16 @@ func (api *API) DeleteWorkersSecret(ctx context.Context, script, secretName stri
 
 // ListWorkersSecrets lists secrets for a given worker
 // API reference: https://api.cloudflare.com/
-func (api *API) ListWorkersSecrets(ctx context.Context, script string) (WorkersListSecretsResponse, error) {
-	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/secrets", api.AccountID, script)
+func (api *API) ListWorkersSecrets(ctx context.Context, rc *ResourceContainer, params ListWorkersSecretsParams) (WorkersListSecretsResponse, error) {
+	if rc.Level != AccountRouteLevel {
+		return WorkersListSecretsResponse{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return WorkersListSecretsResponse{}, ErrMissingAccountID
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/secrets", rc.Identifier, params.ScriptName)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return WorkersListSecretsResponse{}, err

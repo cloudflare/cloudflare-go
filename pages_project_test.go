@@ -58,7 +58,11 @@ const (
               },
               "ENV": {
                 "value": "preview"
-              }
+              },
+			  "API_KEY": {
+				"value": "",
+				"type": "secret_text"
+			  }
             },
 			"compatibility_date": "2022-08-15",
 			"compatibility_flags": ["preview_flag"]
@@ -70,7 +74,11 @@ const (
               },
               "ENV": {
                 "value": "production"
-              }
+              },
+			  "API_KEY": {
+				"value": "",
+				"type": "secret_text"
+			  }
             },
 			"d1_databases": {
 				"D1_BINDING": { 
@@ -92,8 +100,17 @@ const (
 					"name": "some-bucket"
 				}
 			},
+			"services": {
+				"SERVICE_BINDING": {
+					"service": "some-worker",
+					"environment": "production"
+				}
+			},
 			"compatibility_date": "2022-08-15",
-			"compatibility_flags": ["production_flag"]
+			"compatibility_flags": ["production_flag"],
+			"fail_open": false,
+			"always_use_latest_compatibility_date": false,
+			"usage_model": "bundled"
           }
         },
         "latest_deployment": {
@@ -121,10 +138,17 @@ const (
             },
             "ENV": {
               "value": "STAGING"
-            }
+            },
+			"API_KEY": {
+			  "value": "",
+			  "type": "secret_text"
+			}
           },
 		  "compatibility_date": "2022-08-15",
 		  "compatibility_flags": ["deployment_flag"],
+		  "fail_open": false,
+		  "always_use_latest_compatibility_date": false,
+		  "usage_model": "bundled",
           "deployment_trigger": {
             "type": "ad_hoc",
             "metadata": {
@@ -201,10 +225,18 @@ const (
             },
             "ENV": {
               "value": "STAGING"
-            }
+            },
+			"API_KEY": {
+			  "value": "",
+			  "type": "secret_text"
+			}
           },
 		  "compatibility_date": "2022-08-15",
 		  "compatibility_flags": ["deployment_flag"],
+		  "fail_open": false,
+		  "always_use_latest_compatibility_date": false,
+		  "build_image_major_version": 1,
+		  "usage_model": "bundled",
           "deployment_trigger": {
             "type": "ad_hoc",
             "metadata": {
@@ -295,16 +327,21 @@ var (
 			"https://branchname.pages-test.pages.dev",
 		},
 		LatestStage: *expectedPagesProjectLatestDeploymentStage,
-		EnvVars: map[string]map[string]string{
-			"BUILD_VERSION": {
-				"value": "1.2",
+		EnvVars: EnvironmentVariableMap{
+			"BUILD_VERSION": &EnvironmentVariable{
+				Value: "1.2",
 			},
-			"ENV": {
-				"value": "STAGING",
+			"ENV": &EnvironmentVariable{
+				Value: "STAGING",
+			},
+			"API_KEY": &EnvironmentVariable{
+				Value: "",
+				Type:  SecretText,
 			},
 		},
 		CompatibilityFlags: []string{"deployment_flag"},
 		CompatibilityDate:  "2022-08-15",
+		UsageModel:         Bundled,
 		DeploymentTrigger:  *expectedPagesProjectDeploymentTrigger,
 		Stages:             expectedStages,
 		BuildConfig:        *expectedPagesProjectBuildConfig,
@@ -363,12 +400,16 @@ var (
 	}
 
 	expectedPagesProjectDeploymentConfigPreview = &PagesProjectDeploymentConfigEnvironment{
-		EnvVars: map[string]PagesProjectDeploymentVar{
-			"BUILD_VERSION": {
+		EnvVars: EnvironmentVariableMap{
+			"BUILD_VERSION": &EnvironmentVariable{
 				Value: "1.2",
 			},
-			"ENV": {
+			"ENV": &EnvironmentVariable{
 				Value: "preview",
+			},
+			"API_KEY": &EnvironmentVariable{
+				Value: "",
+				Type:  SecretText,
 			},
 		},
 		CompatibilityDate:  "2022-08-15",
@@ -376,16 +417,18 @@ var (
 	}
 
 	expectedPagesProjectDeploymentConfigProduction = &PagesProjectDeploymentConfigEnvironment{
-		EnvVars: map[string]PagesProjectDeploymentVar{
-			"BUILD_VERSION": {
+		EnvVars: EnvironmentVariableMap{
+			"BUILD_VERSION": &EnvironmentVariable{
 				Value: "1.2",
 			},
-			"ENV": {
+			"ENV": &EnvironmentVariable{
 				Value: "production",
 			},
+			"API_KEY": &EnvironmentVariable{
+				Value: "",
+				Type:  SecretText,
+			},
 		},
-		CompatibilityDate:  "2022-08-15",
-		CompatibilityFlags: []string{"production_flag"},
 		KvNamespaces: NamespaceBindingMap{
 			"KV_BINDING": &NamespaceBindingValue{Value: "5eb63bbbe01eeed093cb22bb8f5acdc3"},
 		},
@@ -398,6 +441,17 @@ var (
 		R2Bindings: R2BindingMap{
 			"R2_BINDING": &R2BindingValue{Name: "some-bucket"},
 		},
+		ServiceBindings: ServiceBindingMap{
+			"SERVICE_BINDING": &ServiceBinding{
+				Service:     "some-worker",
+				Environment: "production",
+			},
+		},
+		CompatibilityDate:                "2022-08-15",
+		CompatibilityFlags:               []string{"production_flag"},
+		FailOpen:                         false,
+		AlwaysUseLatestCompatibilityDate: false,
+		UsageModel:                       Bundled,
 	}
 
 	expectedPagesProjectSource = &PagesProjectSource{

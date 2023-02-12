@@ -67,18 +67,17 @@ type PagesProjectDeploymentConfigs struct {
 
 // PagesProjectDeploymentConfigEnvironment represents the configuration for preview or production deploys.
 type PagesProjectDeploymentConfigEnvironment struct {
-	EnvVars            map[string]PagesProjectDeploymentVar `json:"env_vars"`
-	CompatibilityDate  string                               `json:"compatibility_date,omitempty"`
-	CompatibilityFlags []string                             `json:"compatibility_flags,omitempty"`
-	KvNamespaces       NamespaceBindingMap                  `json:"kv_namespaces,omitempty"`
-	DoNamespaces       NamespaceBindingMap                  `json:"durable_object_namespaces,omitempty"`
-	D1Databases        D1BindingMap                         `json:"d1_databases,omitempty"`
-	R2Bindings         R2BindingMap                         `json:"r2_buckets,omitempty"`
-}
-
-// PagesProjectDeploymentVar represents a deployment environment variable.
-type PagesProjectDeploymentVar struct {
-	Value string `json:"value"`
+	EnvVars                          EnvironmentVariableMap `json:"env_vars,omitempty"`
+	KvNamespaces                     NamespaceBindingMap    `json:"kv_namespaces,omitempty"`
+	DoNamespaces                     NamespaceBindingMap    `json:"durable_object_namespaces,omitempty"`
+	D1Databases                      D1BindingMap           `json:"d1_databases,omitempty"`
+	R2Bindings                       R2BindingMap           `json:"r2_buckets,omitempty"`
+	ServiceBindings                  ServiceBindingMap      `json:"services,omitempty"`
+	CompatibilityDate                string                 `json:"compatibility_date,omitempty"`
+	CompatibilityFlags               []string               `json:"compatibility_flags,omitempty"`
+	FailOpen                         bool                   `json:"fail_open"`
+	AlwaysUseLatestCompatibilityDate bool                   `json:"always_use_latest_compatibility_date"`
+	UsageModel                       UsageModel             `json:"usage_model,omitempty"`
 }
 
 // PagesProjectDeployment represents a deployment to a Pages project.
@@ -93,13 +92,20 @@ type PagesProjectDeployment struct {
 	ModifiedOn         *time.Time                    `json:"modified_on"`
 	Aliases            []string                      `json:"aliases,omitempty"`
 	LatestStage        PagesProjectDeploymentStage   `json:"latest_stage"`
-	EnvVars            map[string]map[string]string  `json:"env_vars"`
+	EnvVars            EnvironmentVariableMap        `json:"env_vars"`
+	KvNamespaces       NamespaceBindingMap           `json:"kv_namespaces,omitempty"`
+	DoNamespaces       NamespaceBindingMap           `json:"durable_object_namespaces,omitempty"`
+	D1Databases        D1BindingMap                  `json:"d1_databases,omitempty"`
+	R2Bindings         R2BindingMap                  `json:"r2_buckets,omitempty"`
+	ServiceBindings    ServiceBindingMap             `json:"services,omitempty"`
 	DeploymentTrigger  PagesProjectDeploymentTrigger `json:"deployment_trigger"`
 	Stages             []PagesProjectDeploymentStage `json:"stages"`
 	BuildConfig        PagesProjectBuildConfig       `json:"build_config"`
 	Source             PagesProjectSource            `json:"source"`
 	CompatibilityDate  string                        `json:"compatibility_date,omitempty"`
 	CompatibilityFlags []string                      `json:"compatibility_flags,omitempty"`
+	UsageModel         UsageModel                    `json:"usage_model,omitempty"`
+	IsSkipped          bool                          `json:"is_skipped"`
 	ProductionBranch   string                        `json:"production_branch,omitempty"`
 }
 
@@ -135,6 +141,21 @@ type pagesProjectListResponse struct {
 	ResultInfo `json:"result_info"`
 }
 
+type EnvironmentVariableMap map[string]*EnvironmentVariable
+
+// PagesProjectDeploymentVar represents a deployment environment variable.
+type EnvironmentVariable struct {
+	Value string     `json:"value"`
+	Type  EnvVarType `json:"type"`
+}
+
+type EnvVarType string
+
+const (
+	PlainText  EnvVarType = "plain_text"
+	SecretText EnvVarType = "secret_text"
+)
+
 type NamespaceBindingMap map[string]*NamespaceBindingValue
 
 type NamespaceBindingValue struct {
@@ -152,6 +173,20 @@ type D1BindingMap map[string]*D1Binding
 type D1Binding struct {
 	ID string `json:"id"`
 }
+
+type ServiceBindingMap map[string]*ServiceBinding
+
+type ServiceBinding struct {
+	Service     string `json:"service"`
+	Environment string `json:"environment"`
+}
+
+type UsageModel string
+
+const (
+	Bundled UsageModel = "bundled"
+	Unbound UsageModel = "unbound"
+)
 
 // ListPagesProjects returns all Pages projects for an account.
 //

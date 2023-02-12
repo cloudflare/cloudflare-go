@@ -9,8 +9,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestWorkers_SetWorkersSecret(t *testing.T) {
-	setup(UsingAccount("foo"))
+func TestSetWorkersSecret(t *testing.T) {
+	setup()
 	defer teardown()
 
 	response := `{
@@ -23,16 +23,16 @@ func TestWorkers_SetWorkersSecret(t *testing.T) {
 		"messages": []
 	}`
 
-	mux.HandleFunc("/accounts/foo/workers/scripts/test-script/secrets", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/test-script/secrets", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
-		fmt.Fprintf(w, response) //nolint
+		fmt.Fprint(w, response)
 	})
 	req := &WorkersPutSecretRequest{
 		Name: "my-secret",
 		Text: "super-secret",
 	}
-	res, err := client.SetWorkersSecret(context.Background(), "test-script", req)
+	res, err := client.SetWorkersSecret(context.Background(), AccountIdentifier(testAccountID), SetWorkersSecretParams{ScriptName: "test-script", Secret: req})
 	want := WorkersPutSecretResponse{
 		successResponse,
 		WorkersSecret{
@@ -46,8 +46,8 @@ func TestWorkers_SetWorkersSecret(t *testing.T) {
 	}
 }
 
-func TestWorkers_DeleteWorkersSecret(t *testing.T) {
-	setup(UsingAccount("foo"))
+func TestDeleteWorkersSecret(t *testing.T) {
+	setup()
 	defer teardown()
 
 	response := `{
@@ -60,13 +60,13 @@ func TestWorkers_DeleteWorkersSecret(t *testing.T) {
 		"messages": []
 	}`
 
-	mux.HandleFunc("/accounts/foo/workers/scripts/test-script/secrets/my-secret", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/test-script/secrets/my-secret", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
-		fmt.Fprintf(w, response) //nolint
+		fmt.Fprint(w, response)
 	})
 
-	res, err := client.DeleteWorkersSecret(context.Background(), "test-script", "my-secret")
+	res, err := client.DeleteWorkersSecret(context.Background(), AccountIdentifier(testAccountID), DeleteWorkersSecretParams{ScriptName: "test-script", SecretName: "my-secret"})
 	want := successResponse
 
 	if assert.NoError(t, err) {
@@ -74,8 +74,8 @@ func TestWorkers_DeleteWorkersSecret(t *testing.T) {
 	}
 }
 
-func TestWorkers_ListWorkersSecret(t *testing.T) {
-	setup(UsingAccount("foo"))
+func TestListWorkersSecret(t *testing.T) {
+	setup()
 	defer teardown()
 
 	response := `{
@@ -88,13 +88,13 @@ func TestWorkers_ListWorkersSecret(t *testing.T) {
 		"messages": []
 	}`
 
-	mux.HandleFunc("/accounts/foo/workers/scripts/test-script/secrets", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/test-script/secrets", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
-		fmt.Fprintf(w, response) //nolint
+		fmt.Fprint(w, response)
 	})
 
-	res, err := client.ListWorkersSecrets(context.Background(), "test-script")
+	res, err := client.ListWorkersSecrets(context.Background(), AccountIdentifier(testAccountID), ListWorkersSecretsParams{ScriptName: "test-script"})
 	want := WorkersListSecretsResponse{
 		successResponse,
 		[]WorkersSecret{

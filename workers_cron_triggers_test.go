@@ -11,7 +11,7 @@ import (
 )
 
 func TestListWorkerCronTriggers(t *testing.T) {
-	setup(UsingAccount("9a7806061c88ada191ed06f989cc3dac"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -42,14 +42,14 @@ func TestListWorkerCronTriggers(t *testing.T) {
 		CreatedOn:  &createdOn,
 	}}
 
-	actual, err := client.ListWorkerCronTriggers(context.Background(), testAccountID, "example-script")
+	actual, err := client.ListWorkerCronTriggers(context.Background(), AccountIdentifier(testAccountID), ListWorkerCronTriggersParams{ScriptName: "example-script"})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
 func TestUpdateWorkerCronTriggers(t *testing.T) {
-	setup(UsingAccount("9a7806061c88ada191ed06f989cc3dac"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -80,7 +80,7 @@ func TestUpdateWorkerCronTriggers(t *testing.T) {
 		CreatedOn:  &createdOn,
 	}}
 
-	actual, err := client.UpdateWorkerCronTriggers(context.Background(), testAccountID, "example-script", want)
+	actual, err := client.UpdateWorkerCronTriggers(context.Background(), AccountIdentifier(testAccountID), UpdateWorkerCronTriggersParams{ScriptName: "example-script", Crons: want})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}

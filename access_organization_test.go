@@ -27,6 +27,7 @@ func TestAccessOrganization(t *testing.T) {
 				"name": "Widget Corps Internal Applications",
 				"auth_domain": "test.cloudflareaccess.com",
 				"is_ui_read_only": false,
+				"user_seat_expiration_inactive_time": "720h",
 				"login_design": {
 					"background_color": "#c5ed1b",
 					"logo_path": "https://example.com/logo.png",
@@ -54,7 +55,8 @@ func TestAccessOrganization(t *testing.T) {
 			HeaderText:      "Widget Corp",
 			FooterText:      "© Widget Corp",
 		},
-		IsUIReadOnly: BoolPtr(false),
+		IsUIReadOnly:                   BoolPtr(false),
+		UserSeatExpirationInactiveTime: "720h",
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/organizations", handler)

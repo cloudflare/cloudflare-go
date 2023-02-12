@@ -43,7 +43,8 @@ func TestDLPProfiles(t *testing.T) {
 							"type": "predefined"
 						}
 					],
-					"type": "predefined"
+					"type": "predefined",
+					"allowed_match_count": 0
 				},
 				{
 					"id": "29678c26-a191-428d-9f63-6e20a4a636a4",
@@ -66,7 +67,8 @@ func TestDLPProfiles(t *testing.T) {
 					"created_at": "2022-10-18T08:00:56Z",
 					"updated_at": "2022-10-18T08:00:57Z",
 					"type": "custom",
-					"description": "just a custom profile example"
+					"description": "just a custom profile example",
+					"allowed_match_count": 1
 				}
 			]
 		}
@@ -78,10 +80,11 @@ func TestDLPProfiles(t *testing.T) {
 
 	want := []DLPProfile{
 		{
-			ID:          "d658f520-6ecb-4a34-a725-ba37243c2d28",
-			Name:        "U.S. Social Security Numbers",
-			Type:        "predefined",
-			Description: "",
+			ID:                "d658f520-6ecb-4a34-a725-ba37243c2d28",
+			Name:              "U.S. Social Security Numbers",
+			Type:              "predefined",
+			Description:       "",
+			AllowedMatchCount: 0,
 			Entries: []DLPEntry{
 				{
 					ID:        "111b9d4b-a5c6-40f0-957d-9d53b25dd84a",
@@ -99,10 +102,11 @@ func TestDLPProfiles(t *testing.T) {
 			},
 		},
 		{
-			ID:          "29678c26-a191-428d-9f63-6e20a4a636a4",
-			Name:        "Example Custom Profile",
-			Type:        "custom",
-			Description: "just a custom profile example",
+			ID:                "29678c26-a191-428d-9f63-6e20a4a636a4",
+			Name:              "Example Custom Profile",
+			Type:              "custom",
+			Description:       "just a custom profile example",
+			AllowedMatchCount: 1,
 			Entries: []DLPEntry{
 				{
 					ID:        "ef79b054-12d4-4067-bb30-b85f6267b91c",
@@ -161,7 +165,8 @@ func TestGetDLPProfile(t *testing.T) {
 				"created_at": "2022-10-18T08:00:56Z",
 				"updated_at": "2022-10-18T08:00:57Z",
 				"type": "custom",
-				"description": "just a custom profile example"
+				"description": "just a custom profile example",
+				"allowed_match_count": 42
 			}
 		}`)
 	}
@@ -170,10 +175,11 @@ func TestGetDLPProfile(t *testing.T) {
 	updatedAt, _ := time.Parse(time.RFC3339, "2022-10-18T08:00:57Z")
 
 	want := DLPProfile{
-		ID:          "29678c26-a191-428d-9f63-6e20a4a636a4",
-		Name:        "Example Custom Profile",
-		Type:        "custom",
-		Description: "just a custom profile example",
+		ID:                "29678c26-a191-428d-9f63-6e20a4a636a4",
+		Name:              "Example Custom Profile",
+		Type:              "custom",
+		Description:       "just a custom profile example",
+		AllowedMatchCount: 42,
 		Entries: []DLPEntry{
 			{
 				ID:        "ef79b054-12d4-4067-bb30-b85f6267b91c",
@@ -238,7 +244,8 @@ func TestCreateDLPCustomProfiles(t *testing.T) {
 				"created_at": "2022-10-18T08:00:56Z",
 				"updated_at": "2022-10-18T08:00:57Z",
 				"type": "custom",
-				"description": "`+requestProfile.Description+`"
+				"description": "`+requestProfile.Description+`",
+				"allowed_match_count": 0
 			}]
 		}`)
 	}
@@ -267,8 +274,9 @@ func TestCreateDLPCustomProfiles(t *testing.T) {
 					UpdatedAt: &updatedAt,
 				},
 			},
-			CreatedAt: &createdAt,
-			UpdatedAt: &updatedAt,
+			CreatedAt:         &createdAt,
+			UpdatedAt:         &updatedAt,
+			AllowedMatchCount: 0,
 		},
 	}
 
@@ -289,6 +297,7 @@ func TestCreateDLPCustomProfiles(t *testing.T) {
 					},
 				},
 			},
+			AllowedMatchCount: 0,
 		},
 	}
 	actual, err := client.CreateDLPProfiles(context.Background(), AccountIdentifier(testAccountID), CreateDLPProfilesParams{Profiles: profiles, Type: "custom"})
@@ -334,7 +343,8 @@ func TestCreateDLPCustomProfile(t *testing.T) {
 				"created_at": "2022-10-18T08:00:56Z",
 				"updated_at": "2022-10-18T08:00:57Z",
 				"type": "custom",
-				"description": "`+requestProfile.Description+`"
+				"description": "`+requestProfile.Description+`",
+				"allowed_match_count": 0
 			}]
 		}`)
 	}
@@ -363,8 +373,9 @@ func TestCreateDLPCustomProfile(t *testing.T) {
 				UpdatedAt: &updatedAt,
 			},
 		},
-		CreatedAt: &createdAt,
-		UpdatedAt: &updatedAt,
+		CreatedAt:         &createdAt,
+		UpdatedAt:         &updatedAt,
+		AllowedMatchCount: 0,
 	}}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/dlp/profiles/custom", handler)
@@ -382,6 +393,7 @@ func TestCreateDLPCustomProfile(t *testing.T) {
 				},
 			},
 		},
+		AllowedMatchCount: 0,
 	}}
 
 	actual, err := client.CreateDLPProfiles(context.Background(), AccountIdentifier(testAccountID), CreateDLPProfilesParams{
@@ -429,7 +441,8 @@ func TestUpdateDLPCustomProfile(t *testing.T) {
 				"created_at": "2022-10-18T08:00:56Z",
 				"updated_at": "2022-10-18T08:00:57Z",
 				"type": "custom",
-				"description": "`+requestProfile.Description+`"
+				"description": "`+requestProfile.Description+`",
+				"allowed_match_count": 0
 			}
 		}`)
 	}
@@ -458,8 +471,9 @@ func TestUpdateDLPCustomProfile(t *testing.T) {
 				UpdatedAt: &updatedAt,
 			},
 		},
-		CreatedAt: &createdAt,
-		UpdatedAt: &updatedAt,
+		CreatedAt:         &createdAt,
+		UpdatedAt:         &updatedAt,
+		AllowedMatchCount: 0,
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/dlp/profiles/custom/29678c26-a191-428d-9f63-6e20a4a636a4", handler)
@@ -477,6 +491,7 @@ func TestUpdateDLPCustomProfile(t *testing.T) {
 				},
 			},
 		},
+		AllowedMatchCount: 0,
 	}
 	actual, err := client.UpdateDLPProfile(context.Background(), AccountIdentifier(testAccountID), UpdateDLPProfileParams{
 		ProfileID: "29678c26-a191-428d-9f63-6e20a4a636a4",
@@ -516,7 +531,8 @@ func TestUpdateDLPPredefinedProfile(t *testing.T) {
 					}
 				],
 				"type": "predefined",
-				"description": "example predefined profile"
+				"description": "example predefined profile",
+				"allowed_match_count": 0
 			}
 		}`)
 	}
@@ -535,6 +551,7 @@ func TestUpdateDLPPredefinedProfile(t *testing.T) {
 				Enabled:   BoolPtr(true),
 			},
 		},
+		AllowedMatchCount: 0,
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/dlp/profiles/predefined/29678c26-a191-428d-9f63-6e20a4a636a4", handler)

@@ -8,12 +8,12 @@ jobs:
     if: github.event.pull_request.merged || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-go@v3
-        with:
-          go-version: 1.18
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - uses: actions/setup-go@v3
+        with:
+          go-version-file: 'internal/tools/go.mod'
       - run: go generate -tags tools internal/tools/tools.go
       - run: ./scripts/generate-changelog.sh
       - run: |

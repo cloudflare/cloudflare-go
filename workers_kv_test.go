@@ -13,7 +13,7 @@ import (
 )
 
 func TestWorkersKV_CreateWorkersKVNamespace(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	response := `{
@@ -26,13 +26,13 @@ func TestWorkersKV_CreateWorkersKVNamespace(t *testing.T) {
 		"messages": []
 	}`
 
-	mux.HandleFunc("/accounts/foo/storage/kv/namespaces", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/accounts/"+testAccountID+"/storage/kv/namespaces", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
-		fmt.Fprintf(w, response) //nolint
+		fmt.Fprint(w, response)
 	})
 
-	res, err := client.CreateWorkersKVNamespace(context.Background(), &WorkersKVNamespaceRequest{Title: "Namespace"})
+	res, err := client.CreateWorkersKVNamespace(context.Background(), AccountIdentifier(testAccountID), CreateWorkersKVNamespaceParams{Title: "Namespace"})
 	want := WorkersKVNamespaceResponse{
 		successResponse,
 		WorkersKVNamespace{
@@ -47,7 +47,7 @@ func TestWorkersKV_CreateWorkersKVNamespace(t *testing.T) {
 }
 
 func TestWorkersKV_DeleteWorkersKVNamespace(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	namespace := "3aeaxxxxee014exxxx4cf66xxxxc0448"
@@ -57,13 +57,13 @@ func TestWorkersKV_DeleteWorkersKVNamespace(t *testing.T) {
 		"messages": []
 	}`
 
-	mux.HandleFunc(fmt.Sprintf("/accounts/foo/storage/kv/namespaces/%s", namespace), func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(fmt.Sprintf("/accounts/"+testAccountID+"/storage/kv/namespaces/%s", namespace), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
-		fmt.Fprintf(w, response) //nolint
+		fmt.Fprint(w, response)
 	})
 
-	res, err := client.DeleteWorkersKVNamespace(context.Background(), namespace)
+	res, err := client.DeleteWorkersKVNamespace(context.Background(), AccountIdentifier(testAccountID), namespace)
 	want := successResponse
 
 	if assert.NoError(t, err) {
@@ -71,8 +71,8 @@ func TestWorkersKV_DeleteWorkersKVNamespace(t *testing.T) {
 	}
 }
 
-func TestWorkersKV_ListWorkersKVNamespace(t *testing.T) {
-	setup(UsingAccount("foo"))
+func TestWorkersKV_ListWorkersKVNamespaces(t *testing.T) {
+	setup()
 	defer teardown()
 
 	response := `{
@@ -96,13 +96,13 @@ func TestWorkersKV_ListWorkersKVNamespace(t *testing.T) {
 		}
 	}`
 
-	mux.HandleFunc("/accounts/foo/storage/kv/namespaces", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/accounts/"+testAccountID+"/storage/kv/namespaces", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
-		fmt.Fprintf(w, response) //nolint
+		fmt.Fprint(w, response)
 	})
 
-	res, err := client.ListWorkersKVNamespaces(context.Background())
+	res, _, err := client.ListWorkersKVNamespaces(context.Background(), AccountIdentifier(testAccountID), ListWorkersKVNamespacesParams{})
 	want := []WorkersKVNamespace{
 		{
 			ID:    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
@@ -126,7 +126,7 @@ func TestWorkersKV_ListWorkersKVNamespace(t *testing.T) {
 }
 
 func TestWorkersKV_ListWorkersKVNamespaceMultiplePages(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	response1 := `{
@@ -165,22 +165,22 @@ func TestWorkersKV_ListWorkersKVNamespaceMultiplePages(t *testing.T) {
 		}
 	}`
 
-	mux.HandleFunc("/accounts/foo/storage/kv/namespaces", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/accounts/"+testAccountID+"/storage/kv/namespaces", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
 
 		if r.URL.Query().Get("page") == "1" {
-			fmt.Fprintf(w, response1) //nolint
+			fmt.Fprint(w, response1)
 			return
 		} else if r.URL.Query().Get("page") == "2" {
-			fmt.Fprintf(w, response2) //nolint
+			fmt.Fprint(w, response2)
 			return
 		} else {
 			panic(errors.New("Got a request for an unexpected page"))
 		}
 	})
 
-	res, err := client.ListWorkersKVNamespaces(context.Background())
+	res, _, err := client.ListWorkersKVNamespaces(context.Background(), AccountIdentifier(testAccountID), ListWorkersKVNamespacesParams{})
 	want := []WorkersKVNamespace{
 		{
 			ID:    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
@@ -204,7 +204,7 @@ func TestWorkersKV_ListWorkersKVNamespaceMultiplePages(t *testing.T) {
 }
 
 func TestWorkersKV_UpdateWorkersKVNamespace(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	namespace := "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
@@ -215,13 +215,13 @@ func TestWorkersKV_UpdateWorkersKVNamespace(t *testing.T) {
 		"messages": []
 	}`
 
-	mux.HandleFunc(fmt.Sprintf("/accounts/foo/storage/kv/namespaces/%s", namespace), func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(fmt.Sprintf("/accounts/"+testAccountID+"/storage/kv/namespaces/%s", namespace), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
-		fmt.Fprintf(w, response) //nolint
+		fmt.Fprint(w, response)
 	})
 
-	res, err := client.UpdateWorkersKVNamespace(context.Background(), namespace, &WorkersKVNamespaceRequest{Title: "Namespace"})
+	res, err := client.UpdateWorkersKVNamespace(context.Background(), AccountIdentifier(testAccountID), UpdateWorkersKVNamespaceParams{Title: "Namespace", NamespaceID: namespace})
 	want := successResponse
 
 	if assert.NoError(t, err) {
@@ -229,8 +229,8 @@ func TestWorkersKV_UpdateWorkersKVNamespace(t *testing.T) {
 	}
 }
 
-func TestWorkersKV_WriteWorkersKV(t *testing.T) {
-	setup(UsingAccount("foo"))
+func TestWorkersKV_WriteWorkersKVEntry(t *testing.T) {
+	setup()
 	defer teardown()
 
 	key := "test_key"
@@ -243,25 +243,29 @@ func TestWorkersKV_WriteWorkersKV(t *testing.T) {
 		"messages": []
 	}`
 
-	mux.HandleFunc(fmt.Sprintf("/accounts/foo/storage/kv/namespaces/%s/values/%s", namespace, key), func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(fmt.Sprintf("/accounts/"+testAccountID+"/storage/kv/namespaces/%s/values/%s", namespace, key), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/octet-stream")
-		fmt.Fprintf(w, response) //nolint
+		fmt.Fprint(w, response)
 	})
 
 	want := successResponse
-	res, err := client.WriteWorkersKV(context.Background(), namespace, key, value)
+	res, err := client.WriteWorkersKVEntry(context.Background(), AccountIdentifier(testAccountID), WriteWorkersKVEntryParams{NamespaceID: namespace, Key: key, Value: value})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
 }
 
-func TestWorkersKV_WriteWorkersKVBulk(t *testing.T) {
-	setup(UsingAccount("foo"))
+func TestWorkersKV_WriteWorkersKVEntries(t *testing.T) {
+	setup()
 	defer teardown()
 
-	kvs := WorkersKVBulkWriteRequest{{Key: "key1", Value: "value1"}, {Key: "key2", Value: "value2"}, {Key: "key3", Value: "value3", Metadata: "meta3", Base64: true}}
+	kvs := []*WorkersKVPair{
+		{Key: "key1", Value: "value1"},
+		{Key: "key2", Value: "value2"},
+		{Key: "key3", Value: "value3", Metadata: "meta3", Base64: true},
+	}
 
 	namespace := "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 	response := `{
@@ -271,32 +275,32 @@ func TestWorkersKV_WriteWorkersKVBulk(t *testing.T) {
 		"messages": []
 	}`
 
-	mux.HandleFunc(fmt.Sprintf("/accounts/foo/storage/kv/namespaces/%s/bulk", namespace), func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(fmt.Sprintf("/accounts/"+testAccountID+"/storage/kv/namespaces/%s/bulk", namespace), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, response) //nolint
+		fmt.Fprint(w, response)
 	})
 
 	want := successResponse
-	res, err := client.WriteWorkersKVBulk(context.Background(), namespace, kvs)
+	res, err := client.WriteWorkersKVEntries(context.Background(), AccountIdentifier(testAccountID), WriteWorkersKVEntriesParams{NamespaceID: namespace, KVs: kvs})
 	require.NoError(t, err)
 	assert.Equal(t, want, res)
 }
 
 func TestWorkersKV_ReadWorkersKV(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	key := "test_key"
 	namespace := "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
-	mux.HandleFunc(fmt.Sprintf("/accounts/foo/storage/kv/namespaces/%s/values/%s", namespace, key), func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(fmt.Sprintf("/accounts/"+testAccountID+"/storage/kv/namespaces/%s/values/%s", namespace, key), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "text/plain")
-		fmt.Fprintf(w, "test_value")
+		fmt.Fprint(w, "test_value")
 	})
 
-	res, err := client.ReadWorkersKV(context.Background(), namespace, key)
+	res, err := client.GetWorkersKV(context.Background(), AccountIdentifier(testAccountID), GetWorkersKVParams{NamespaceID: namespace, Key: key})
 	want := []byte("test_value")
 
 	if assert.NoError(t, err) {
@@ -304,8 +308,8 @@ func TestWorkersKV_ReadWorkersKV(t *testing.T) {
 	}
 }
 
-func TestWorkersKV_DeleteWorkersKV(t *testing.T) {
-	setup(UsingAccount("foo"))
+func TestWorkersKV_DeleteWorkersKVEntry(t *testing.T) {
+	setup()
 	defer teardown()
 
 	key := "test_key"
@@ -317,13 +321,13 @@ func TestWorkersKV_DeleteWorkersKV(t *testing.T) {
 		"messages": []
 	}`
 
-	mux.HandleFunc(fmt.Sprintf("/accounts/foo/storage/kv/namespaces/%s/values/%s", namespace, key), func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(fmt.Sprintf("/accounts/"+testAccountID+"/storage/kv/namespaces/%s/values/%s", namespace, key), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
-		fmt.Fprintf(w, response) //nolint
+		fmt.Fprint(w, response)
 	})
 
-	res, err := client.DeleteWorkersKV(context.Background(), namespace, key)
+	res, err := client.DeleteWorkersKVEntry(context.Background(), AccountIdentifier(testAccountID), DeleteWorkersKVEntryParams{NamespaceID: namespace, Key: key})
 	want := successResponse
 
 	if assert.NoError(t, err) {
@@ -332,7 +336,7 @@ func TestWorkersKV_DeleteWorkersKV(t *testing.T) {
 }
 
 func TestWorkersKV_DeleteWorkersKVBulk(t *testing.T) {
-	setup(UsingAccount("foo"))
+	setup()
 	defer teardown()
 
 	keys := []string{"key1", "key2", "key3"}
@@ -345,20 +349,20 @@ func TestWorkersKV_DeleteWorkersKVBulk(t *testing.T) {
 		"messages": []
 	}`
 
-	mux.HandleFunc(fmt.Sprintf("/accounts/foo/storage/kv/namespaces/%s/bulk", namespace), func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(fmt.Sprintf("/accounts/"+testAccountID+"/storage/kv/namespaces/%s/bulk", namespace), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, response) //nolint
+		fmt.Fprint(w, response)
 	})
 
 	want := successResponse
-	res, err := client.DeleteWorkersKVBulk(context.Background(), namespace, keys)
+	res, err := client.DeleteWorkersKVEntries(context.Background(), AccountIdentifier(testAccountID), DeleteWorkersKVEntriesParams{NamespaceID: namespace, Keys: keys})
 	require.NoError(t, err)
 	assert.Equal(t, want, res)
 }
 
-func TestWorkersKV_ListStorageKeys(t *testing.T) {
-	setup(UsingAccount("foo"))
+func TestWorkersKV_ListKeys(t *testing.T) {
+	setup()
 	defer teardown()
 
 	namespace := "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
@@ -379,13 +383,13 @@ func TestWorkersKV_ListStorageKeys(t *testing.T) {
 		}
 	}`
 
-	mux.HandleFunc(fmt.Sprintf("/accounts/foo/storage/kv/namespaces/%s/keys", namespace), func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(fmt.Sprintf("/accounts/"+testAccountID+"/storage/kv/namespaces/%s/keys", namespace), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
-		fmt.Fprintf(w, response) //nolint
+		fmt.Fprint(w, response)
 	})
 
-	res, err := client.ListWorkersKVs(context.Background(), namespace)
+	res, err := client.ListWorkersKVKeys(context.Background(), AccountIdentifier(testAccountID), ListWorkersKVsParams{NamespaceID: namespace})
 
 	want := ListStorageKeysResponse{
 		successResponse,
@@ -417,8 +421,8 @@ func TestWorkersKV_ListStorageKeys(t *testing.T) {
 	}
 }
 
-func TestWorkersKV_ListStorageKeysWithOptions(t *testing.T) {
-	setup(UsingAccount("foo"))
+func TestWorkersKV_ListKeysWithParameters(t *testing.T) {
+	setup()
 	defer teardown()
 
 	cursor := "AArAbNSOuYcr4HmzGH02-cfDN8Ck9ejOwkn_Ai5rsn7S9NEqVJBenU9-gYRlrsziyjKLx48hNDLvtYzBAmkPsLGdye8ECr5PqFYcIOfUITdhkyTc1x6bV8nmyjz5DO-XaZH4kYY1KfqT8NRBIe5sic6yYt3FUDttGjafy0ivi-Up-TkVdRB0OxCf3O3OB-svG6DXheV5XTdDNrNx1o_CVqy2l2j0F4iKV1qFe_KhdkjC7Y6QjhUZ1MOb3J_uznNYVCoxZ-bVAAsJmXA"
@@ -449,16 +453,17 @@ func TestWorkersKV_ListStorageKeysWithOptions(t *testing.T) {
 		}
 	}`
 
-	mux.HandleFunc(fmt.Sprintf("/accounts/foo/storage/kv/namespaces/%s/keys", namespace), func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(fmt.Sprintf("/accounts/"+testAccountID+"/storage/kv/namespaces/%s/keys", namespace), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
-		fmt.Fprintf(w, response) //nolint
+		fmt.Fprint(w, response)
 	})
 
 	limit, prefix := 25, "test-prefix"
-	res, err := client.ListWorkersKVsWithOptions(context.Background(), namespace, ListWorkersKVsOptions{
-		Limit:  &limit,
-		Prefix: &prefix,
+	res, err := client.ListWorkersKVKeys(context.Background(), AccountIdentifier(testAccountID), ListWorkersKVsParams{
+		NamespaceID: namespace,
+		Limit:       limit,
+		Prefix:      prefix,
 	})
 
 	want := ListStorageKeysResponse{

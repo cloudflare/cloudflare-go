@@ -171,6 +171,10 @@ type DevicePostureRuleInput struct {
 	RequireAll       bool   `json:"requireAll,omitempty"`
 	Enabled          bool   `json:"enabled,omitempty"`
 	Version          string `json:"version,omitempty"`
+	VersionOperator  string `json:"versionOperator,omitempty"`
+	Overall          string `json:"overall,omitempty"`
+	SensorConfig     string `json:"sensor_config,omitempty"`
+	Os               string `json:"os,omitempty"`
 	OsDistroName     string `json:"os_distro_name,omitempty"`
 	OsDistroRevision string `json:"os_distro_revision,omitempty"`
 	Operator         string `json:"operator,omitempty"`
