@@ -41,7 +41,7 @@ func TestTunnels(t *testing.T) {
 		}},
 	}}
 
-	actual, err := client.Tunnels(context.Background(), AccountIdentifier(testAccountID), TunnelListParams{UUID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
+	actual, _, err := client.Tunnels(context.Background(), AccountIdentifier(testAccountID), TunnelListParams{UUID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -84,10 +84,14 @@ func TestTunnelsPagination(t *testing.T) {
 		},
 	}
 
-	actual, err := client.Tunnels(context.Background(), AccountIdentifier(testAccountID),
+	actual, _, err := client.Tunnels(context.Background(), AccountIdentifier(testAccountID),
 		TunnelListParams{
 			Name: "blog",
-		}, WithPagination(PaginationOptions{PerPage: 1, Page: 2}))
+			ResultInfo: ResultInfo{
+				Page:    2,
+				PerPage: 1,
+			},
+		})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
