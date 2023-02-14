@@ -52,7 +52,7 @@ func TestGetDeviceDexTests(t *testing.T) {
 		Description: "dex test description",
 		Interval:    "0h30m0s",
 		Enabled:     true,
-		Data: &Data{
+		Data: &DeviceDexTestData{
 			"kind":   "http",
 			"method": "GET",
 			"host":   "https://dash.cloudflare.com",
@@ -108,7 +108,7 @@ func TestDeviceDexTest(t *testing.T) {
 		Description: "dex test description",
 		Interval:    "0h30m0s",
 		Enabled:     true,
-		Data: &Data{
+		Data: &DeviceDexTestData{
 			"kind":   "http",
 			"method": "GET",
 			"host":   "https://dash.cloudflare.com",
@@ -160,7 +160,7 @@ func TestCreateDeviceDexTest(t *testing.T) {
 		Description: "dex test description",
 		Interval:    "0h30m0s",
 		Enabled:     true,
-		Data: &Data{
+		Data: &DeviceDexTestData{
 			"kind":   "http",
 			"method": "GET",
 			"host":   "https://dash.cloudflare.com",
@@ -177,7 +177,7 @@ func TestCreateDeviceDexTest(t *testing.T) {
 		Description: "dex test description",
 		Interval:    "0h30m0s",
 		Enabled:     true,
-		Data: &Data{
+		Data: &DeviceDexTestData{
 			"kind":   "http",
 			"method": "GET",
 			"host":   "https://dash.cloudflare.com",

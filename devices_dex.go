@@ -8,17 +8,17 @@ import (
 	"time"
 )
 
-type Data map[string]interface{}
+type DeviceDexTestData map[string]interface{}
 
 type DeviceDexTest struct {
-	TestID      string    `json:"test_id"`
-	Name        string    `json:"name"`
-	Description string    `json:"description,omitempty"`
-	Interval    string    `json:"interval"`
-	Enabled     bool      `json:"enabled"`
-	Updated     time.Time `json:"updated"`
-	Created     time.Time `json:"created"`
-	Data        *Data     `json:"data"`
+	TestID      string             `json:"test_id"`
+	Name        string             `json:"name"`
+	Description string             `json:"description,omitempty"`
+	Interval    string             `json:"interval"`
+	Enabled     bool               `json:"enabled"`
+	Updated     time.Time          `json:"updated"`
+	Created     time.Time          `json:"created"`
+	Data        *DeviceDexTestData `json:"data"`
 }
 
 type DeviceDexTests struct {
@@ -38,25 +38,24 @@ type DeviceDexTestListResponse struct {
 type ListDeviceDexTestParams struct{}
 
 type CreateDeviceDexTestParams struct {
-	TestID      string `json:"network_id,omitempty"`
-	Name        string `json:"name"`
-	Description string `json:"description,omitempty"`
-	Interval    string `json:"interval"`
-	Enabled     bool   `json:"enabled"`
-	Data        *Data  `json:"data"`
+	TestID      string             `json:"network_id,omitempty"`
+	Name        string             `json:"name"`
+	Description string             `json:"description,omitempty"`
+	Interval    string             `json:"interval"`
+	Enabled     bool               `json:"enabled"`
+	Data        *DeviceDexTestData `json:"data"`
 }
 
 type UpdateDeviceDexTestParams struct {
-	TestID      string `json:"network_id,omitempty"`
-	Name        string `json:"name"`
-	Description string `json:"description,omitempty"`
-	Interval    string `json:"interval"`
-	Enabled     bool   `json:"enabled"`
-	Data        *Data  `json:"data"`
+	TestID      string             `json:"network_id,omitempty"`
+	Name        string             `json:"name"`
+	Description string             `json:"description,omitempty"`
+	Interval    string             `json:"interval"`
+	Enabled     bool               `json:"enabled"`
+	Data        *DeviceDexTestData `json:"data"`
 }
 
-// ListDexTests returns all Device Managed Networks for a given
-// account.
+// ListDexTests returns all Device Dex Tests for a given account.
 //
 // API reference : https://developers.cloudflare.com/api/operations/device-dex-test-details
 func (api *API) ListDexTests(ctx context.Context, rc *ResourceContainer, params ListDeviceDexTestParams) (DeviceDexTests, error) {
@@ -80,7 +79,7 @@ func (api *API) ListDexTests(ctx context.Context, rc *ResourceContainer, params 
 	return response.Result, nil
 }
 
-// CreateDeviceDexTest creates a new Device Managed Network.
+// CreateDeviceDexTest created a new Device Dex Test
 //
 // API reference: https://developers.cloudflare.com/api/operations/device-dex-test-create-device-dex-test
 func (api *API) CreateDeviceDexTest(ctx context.Context, rc *ResourceContainer, params CreateDeviceDexTestParams) (DeviceDexTest, error) {
@@ -103,7 +102,7 @@ func (api *API) CreateDeviceDexTest(ctx context.Context, rc *ResourceContainer, 
 	return deviceDexTestResponse.Result, err
 }
 
-// UpdateDeviceDexTest Update a Device Managed Network.
+// UpdateDeviceDexTest Updates a Device Dex Test.
 //
 // API reference: https://developers.cloudflare.com/api/operations/device-dex-test-update-device-dex-test
 func (api *API) UpdateDeviceDexTest(ctx context.Context, rc *ResourceContainer, params UpdateDeviceDexTestParams) (DeviceManagedNetwork, error) {
@@ -127,7 +126,7 @@ func (api *API) UpdateDeviceDexTest(ctx context.Context, rc *ResourceContainer, 
 	return deviceManagedNetworksResponse.Result, err
 }
 
-// GetDeviceDexTest gets a single Device Managed Network.
+// GetDeviceDexTest gets a single Device Dex Test.
 //
 // API reference: https://developers.cloudflare.com/api/operations/device-dex-test-get-device-dex-test
 func (api *API) GetDeviceDexTest(ctx context.Context, rc *ResourceContainer, testID string) (DeviceDexTest, error) {
@@ -150,7 +149,7 @@ func (api *API) GetDeviceDexTest(ctx context.Context, rc *ResourceContainer, tes
 	return deviceDexTestResponse.Result, err
 }
 
-// DeleteDexTest deletes a Device Managed Network.
+// DeleteDexTest deletes a Device Dex Test.
 //
 // API reference: https://developers.cloudflare.com/api/operations/device-dex-test-delete-device-dex-test
 func (api *API) DeleteDexTest(ctx context.Context, rc *ResourceContainer, testID string) (DeviceDexTests, error) {
