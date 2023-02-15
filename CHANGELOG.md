@@ -9,6 +9,7 @@ ENHANCEMENTS:
 BUG FIXES:
 
 * dns: always send `tags` to allow clearing ([#1196](https://github.com/cloudflare/cloudflare-go/issues/1196))
+* stream: renamed `RequiredSignedURLs` to `RequireSignedURLs` ([#1202](https://github.com/cloudflare/cloudflare-go/issues/1202))
 
 DEPENDENCIES:
 
