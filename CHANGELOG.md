@@ -1,4 +1,6 @@
-## 0.61.0 (Unreleased)
+## 0.62.0 (Unreleased)
+
+## 0.61.0 (15th February, 2023)
 
 ENHANCEMENTS:
 
