@@ -4,6 +4,10 @@ ENHANCEMENTS:
 
 * teams_accounts: Add new root_certificate_installation_enabled field ([#1208](https://github.com/cloudflare/cloudflare-go/issues/1208))
 
+DEPENDENCIES:
+
+* deps: bumps github.com/urfave/cli/v2 from 2.24.3 to 2.24.4 ([#1210](https://github.com/cloudflare/cloudflare-go/issues/1210))
+
 ## 0.61.0 (15th February, 2023)
 
 ENHANCEMENTS:
