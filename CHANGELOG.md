@@ -2,6 +2,7 @@
 
 ENHANCEMENTS:
 
+* dex_test: add CRUD functionality for DEX test configurations ([#1209](https://github.com/cloudflare/cloudflare-go/issues/1209))
 * teams_accounts: Add new root_certificate_installation_enabled field ([#1208](https://github.com/cloudflare/cloudflare-go/issues/1208))
 
 DEPENDENCIES:
