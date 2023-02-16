@@ -1,5 +1,9 @@
 ## 0.62.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* teams_accounts: Add new root_certificate_installation_enabled field ([#1208](https://github.com/cloudflare/cloudflare-go/issues/1208))
+
 ## 0.61.0 (15th February, 2023)
 
 ENHANCEMENTS:
