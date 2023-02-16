@@ -51,7 +51,7 @@ type TunnelConnection struct {
 type TunnelsDetailResponse struct {
 	Result []Tunnel `json:"result"`
 	Response
-	ResultInfo
+	ResultInfo `json:"result_info"`
 }
 
 // listTunnelsDefaultPageSize represents the default per_page size of the API.
