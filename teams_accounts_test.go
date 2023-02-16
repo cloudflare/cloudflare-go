@@ -239,7 +239,7 @@ func TestTeamsAccountGetDeviceConfiguration(t *testing.T) {
 			"success": true,
 			"errors": [],
 			"messages": [],
-			"result": {"gateway_proxy_enabled": true,"gateway_udp_proxy_enabled":false}
+			"result": {"gateway_proxy_enabled": true,"gateway_udp_proxy_enabled":false, "root_certificate_installation_enabled":true}
 		}`)
 	}
 
@@ -249,8 +249,9 @@ func TestTeamsAccountGetDeviceConfiguration(t *testing.T) {
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, actual, TeamsDeviceSettings{
-			GatewayProxyEnabled:    true,
-			GatewayProxyUDPEnabled: false,
+			GatewayProxyEnabled:                true,
+			GatewayProxyUDPEnabled:             false,
+			RootCertificateInstallationEnabled: true,
 		})
 	}
 }
@@ -266,21 +267,23 @@ func TestTeamsAccountUpdateDeviceConfiguration(t *testing.T) {
 			"success": true,
 			"errors": [],
 			"messages": [],
-			"result": {"gateway_proxy_enabled": true,"gateway_udp_proxy_enabled":true}
+			"result": {"gateway_proxy_enabled": true,"gateway_udp_proxy_enabled":true, "root_certificate_installation_enabled":true}
 		}`)
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/settings", handler)
 
 	actual, err := client.TeamsAccountDeviceUpdateConfiguration(context.Background(), testAccountID, TeamsDeviceSettings{
-		GatewayProxyUDPEnabled: true,
-		GatewayProxyEnabled:    true,
+		GatewayProxyUDPEnabled:             true,
+		GatewayProxyEnabled:                true,
+		RootCertificateInstallationEnabled: true,
 	})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, actual, TeamsDeviceSettings{
-			GatewayProxyEnabled:    true,
-			GatewayProxyUDPEnabled: true,
+			GatewayProxyEnabled:                true,
+			GatewayProxyUDPEnabled:             true,
+			RootCertificateInstallationEnabled: true,
 		})
 	}
 }

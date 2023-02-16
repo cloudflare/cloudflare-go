@@ -97,8 +97,9 @@ type TeamsLoggingSettings struct {
 }
 
 type TeamsDeviceSettings struct {
-	GatewayProxyEnabled    bool `json:"gateway_proxy_enabled"`
-	GatewayProxyUDPEnabled bool `json:"gateway_udp_proxy_enabled"`
+	GatewayProxyEnabled                bool `json:"gateway_proxy_enabled"`
+	GatewayProxyUDPEnabled             bool `json:"gateway_udp_proxy_enabled"`
+	RootCertificateInstallationEnabled bool `json:"root_certificate_installation_enabled"`
 }
 
 type TeamsDeviceSettingsResponse struct {
