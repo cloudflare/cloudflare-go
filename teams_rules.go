@@ -37,6 +37,20 @@ type TeamsRuleSettings struct {
 	InsecureDisableDNSSECValidation bool `json:"insecure_disable_dnssec_validation"`
 
 	EgressSettings *EgressSettings `json:"egress"`
+
+	UntrustedCertSettings *UntrustedCertSettings `json:"untrusted_cert"`
+}
+
+type TeamsGatewayUntrustedCertAction string
+
+const (
+	UntrustedCertPassthrough TeamsGatewayUntrustedCertAction = "pass_through"
+	UntrustedCertBlock       TeamsGatewayUntrustedCertAction = "block"
+	UntrustedCertError       TeamsGatewayUntrustedCertAction = "error"
+)
+
+type UntrustedCertSettings struct {
+	Action TeamsGatewayUntrustedCertAction `json:"action"`
 }
 
 type EgressSettings struct {
@@ -106,6 +120,14 @@ func TeamsRulesActionValues() []string {
 		string(Override),
 		string(L4Override),
 		string(Egress),
+	}
+}
+
+func TeamsRulesUntrustedCertActionValues() []string {
+	return []string{
+		string(UntrustedCertPassthrough),
+		string(UntrustedCertBlock),
+		string(UntrustedCertError),
 	}
 }
 
