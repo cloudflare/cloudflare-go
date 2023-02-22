@@ -1,4 +1,16 @@
-## 0.61.0 (Unreleased)
+## 0.62.0 (Unreleased)
+
+ENHANCEMENTS:
+
+* dex_test: add CRUD functionality for DEX test configurations ([#1209](https://github.com/cloudflare/cloudflare-go/issues/1209))
+* teams_accounts: Add new root_certificate_installation_enabled field ([#1208](https://github.com/cloudflare/cloudflare-go/issues/1208))
+* tunnels: automatically paginate `ListTunnels` ([#1206](https://github.com/cloudflare/cloudflare-go/issues/1206))
+
+DEPENDENCIES:
+
+* deps: bumps github.com/urfave/cli/v2 from 2.24.3 to 2.24.4 ([#1210](https://github.com/cloudflare/cloudflare-go/issues/1210))
+
+## 0.61.0 (15th February, 2023)
 
 ENHANCEMENTS:
 
@@ -9,6 +21,7 @@ ENHANCEMENTS:
 BUG FIXES:
 
 * dns: always send `tags` to allow clearing ([#1196](https://github.com/cloudflare/cloudflare-go/issues/1196))
+* stream: renamed `RequiredSignedURLs` to `RequireSignedURLs` ([#1202](https://github.com/cloudflare/cloudflare-go/issues/1202))
 
 DEPENDENCIES:
 
