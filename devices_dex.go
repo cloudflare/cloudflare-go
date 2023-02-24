@@ -38,7 +38,7 @@ type DeviceDexTestListResponse struct {
 type ListDeviceDexTestParams struct{}
 
 type CreateDeviceDexTestParams struct {
-	TestID      string             `json:"network_id,omitempty"`
+	TestID      string             `json:"test_id,omitempty"`
 	Name        string             `json:"name"`
 	Description string             `json:"description,omitempty"`
 	Interval    string             `json:"interval"`
@@ -47,7 +47,7 @@ type CreateDeviceDexTestParams struct {
 }
 
 type UpdateDeviceDexTestParams struct {
-	TestID      string             `json:"network_id,omitempty"`
+	TestID      string             `json:"test_id,omitempty"`
 	Name        string             `json:"name"`
 	Description string             `json:"description,omitempty"`
 	Interval    string             `json:"interval"`
@@ -105,25 +105,25 @@ func (api *API) CreateDeviceDexTest(ctx context.Context, rc *ResourceContainer, 
 // UpdateDeviceDexTest Updates a Device Dex Test.
 //
 // API reference: https://developers.cloudflare.com/api/operations/device-dex-test-update-device-dex-test
-func (api *API) UpdateDeviceDexTest(ctx context.Context, rc *ResourceContainer, params UpdateDeviceDexTestParams) (DeviceManagedNetwork, error) {
+func (api *API) UpdateDeviceDexTest(ctx context.Context, rc *ResourceContainer, params UpdateDeviceDexTestParams) (DeviceDexTest, error) {
 	if rc.Level != AccountRouteLevel {
-		return DeviceManagedNetwork{}, ErrRequiredAccountLevelResourceContainer
+		return DeviceDexTest{}, ErrRequiredAccountLevelResourceContainer
 	}
 
 	uri := fmt.Sprintf("/%s/%s/devices/dex_tests/%s", rc.Level, rc.Identifier, params.TestID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
-		return DeviceManagedNetwork{}, err
+		return DeviceDexTest{}, err
 	}
 
-	var deviceManagedNetworksResponse DeviceManagedNetworkResponse
+	var deviceDexTestsResponse DeviceDexTestResponse
 
-	if err := json.Unmarshal(res, &deviceManagedNetworksResponse); err != nil {
-		return DeviceManagedNetwork{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	if err := json.Unmarshal(res, &deviceDexTestsResponse); err != nil {
+		return DeviceDexTest{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
-	return deviceManagedNetworksResponse.Result, err
+	return deviceDexTestsResponse.Result, err
 }
 
 // GetDeviceDexTest gets a single Device Dex Test.
