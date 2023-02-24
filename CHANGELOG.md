@@ -12,6 +12,7 @@ DEPENDENCIES:
 * deps: bumps golang.org/x/net from 0.0.0-20220722155237-a158d28d115b to 0.7.0 ([#1219](https://github.com/cloudflare/cloudflare-go/issues/1219))
 * deps: bumps golang.org/x/text from 0.3.7 to 0.3.8 ([#1215](https://github.com/cloudflare/cloudflare-go/issues/1215))
 * deps: bumps golang.org/x/text from 0.3.7 to 0.3.8 ([#1216](https://github.com/cloudflare/cloudflare-go/issues/1216))
+* deps: bumps golang.org/x/time from 0.0.0-20220224211638-0e9765cccd65 to 0.3.0 ([#1217](https://github.com/cloudflare/cloudflare-go/issues/1217))
 
 ## 0.61.0 (15th February, 2023)
 
