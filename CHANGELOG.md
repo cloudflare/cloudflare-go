@@ -3,6 +3,7 @@
 ENHANCEMENTS:
 
 * dex_test: add CRUD functionality for DEX test configurations ([#1209](https://github.com/cloudflare/cloudflare-go/issues/1209))
+* dlp: Adds support for partial payload logging ([#1212](https://github.com/cloudflare/cloudflare-go/issues/1212))
 * teams_accounts: Add new root_certificate_installation_enabled field ([#1208](https://github.com/cloudflare/cloudflare-go/issues/1208))
 * tunnels: automatically paginate `ListTunnels` ([#1206](https://github.com/cloudflare/cloudflare-go/issues/1206))
 
