@@ -347,7 +347,7 @@ func TestListDNSRecordsSearch(t *testing.T) {
 
 func TestListDNSRecordsPagination(t *testing.T) {
 	// change listDNSRecordsDefaultPageSize value to 1 to force pagination
-	listDNSRecordsDefaultPageSize = 1
+	listDNSRecordsDefaultPageSize = 3
 
 	setup()
 	defer teardown()
@@ -378,7 +378,45 @@ func TestListDNSRecordsPagination(t *testing.T) {
 	require.NoError(t, err)
 	assert.True(t, page1Called)
 	assert.True(t, page2Called)
-	assert.Len(t, actual, 2)
+	assert.Len(t, actual, 5)
+
+	type ls struct {
+		Results []map[string]interface{} `json:"result"`
+	}
+
+	expectedRecords := make(map[string]map[string]interface{})
+
+	response1 := loadFixture("dns", "list_page_1")
+	var fixtureDataPage1 ls
+	err = json.Unmarshal([]byte(response1), &fixtureDataPage1)
+	assert.NoError(t, err)
+	for _, record := range fixtureDataPage1.Results {
+		expectedRecords[record["id"].(string)] = record
+	}
+
+	response2 := loadFixture("dns", "list_page_2")
+	var fixtureDataPage2 ls
+	err = json.Unmarshal([]byte(response2), &fixtureDataPage2)
+	assert.NoError(t, err)
+	for _, record := range fixtureDataPage2.Results {
+		expectedRecords[record["id"].(string)] = record
+	}
+
+	for _, actualRecord := range actual {
+		expected, exist := expectedRecords[actualRecord.ID]
+		assert.True(t, exist, "DNS record doesn't exist in fixtures")
+		assert.Equal(t, expected["type"].(string), actualRecord.Type)
+		assert.Equal(t, expected["name"].(string), actualRecord.Name)
+		assert.Equal(t, expected["content"].(string), actualRecord.Content)
+		assert.Equal(t, expected["proxiable"].(bool), actualRecord.Proxiable)
+		assert.Equal(t, expected["proxied"].(bool), *actualRecord.Proxied)
+		assert.Equal(t, int(expected["ttl"].(float64)), actualRecord.TTL)
+		assert.Equal(t, expected["locked"].(bool), actualRecord.Locked)
+		assert.Equal(t, expected["zone_id"].(string), actualRecord.ZoneID)
+		assert.Equal(t, expected["zone_name"].(string), actualRecord.ZoneName)
+		assert.Equal(t, expected["data"], actualRecord.Data)
+		assert.Equal(t, expected["meta"], actualRecord.Meta)
+	}
 }
 
 func TestGetDNSRecord(t *testing.T) {
