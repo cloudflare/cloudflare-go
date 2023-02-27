@@ -40,6 +40,20 @@ type TeamsRuleSettings struct {
 
 	// DLP payload logging configuration
 	PayloadLog *TeamsDlpPayloadLogSettings `json:"payload_log"`
+
+	UntrustedCertSettings *UntrustedCertSettings `json:"untrusted_cert"`
+}
+
+type TeamsGatewayUntrustedCertAction string
+
+const (
+	UntrustedCertPassthrough TeamsGatewayUntrustedCertAction = "pass_through"
+	UntrustedCertBlock       TeamsGatewayUntrustedCertAction = "block"
+	UntrustedCertError       TeamsGatewayUntrustedCertAction = "error"
+)
+
+type UntrustedCertSettings struct {
+	Action TeamsGatewayUntrustedCertAction `json:"action"`
 }
 
 type EgressSettings struct {
@@ -113,6 +127,14 @@ func TeamsRulesActionValues() []string {
 		string(Override),
 		string(L4Override),
 		string(Egress),
+	}
+}
+
+func TeamsRulesUntrustedCertActionValues() []string {
+	return []string{
+		string(UntrustedCertPassthrough),
+		string(UntrustedCertBlock),
+		string(UntrustedCertError),
 	}
 }
 

@@ -50,7 +50,10 @@ func TestTeamsRules(t *testing.T) {
 						"enforce": true,
 						"duration": "15m0s"
 					},
-                    "insecure_disable_dnssec_validation": false
+                    "insecure_disable_dnssec_validation": false,
+					"untrusted_cert": {
+						"action": "error"
+					}
 				  }
 				},
 				{
@@ -78,7 +81,10 @@ func TestTeamsRules(t *testing.T) {
 					"biso_admin_controls": null,
 					"add_headers": null,
 					"check_session": null,
-                    "insecure_disable_dnssec_validation": true
+                    "insecure_disable_dnssec_validation": true,
+					"untrusted_cert": {
+						"action": "pass_through"
+					}
 				  }
 				}
 			]
@@ -114,6 +120,9 @@ func TestTeamsRules(t *testing.T) {
 				Duration: Duration{900 * time.Second},
 			},
 			InsecureDisableDNSSECValidation: false,
+			UntrustedCertSettings: &UntrustedCertSettings{
+				Action: UntrustedCertError,
+			},
 		},
 		CreatedAt: &createdAt,
 		UpdatedAt: &updatedAt,
@@ -142,6 +151,9 @@ func TestTeamsRules(t *testing.T) {
 				CheckSession:      nil,
 				// setting is invalid for block rules, just testing serialization here
 				InsecureDisableDNSSECValidation: true,
+				UntrustedCertSettings: &UntrustedCertSettings{
+					Action: UntrustedCertPassthrough,
+				},
 			},
 			CreatedAt: &createdAt,
 			UpdatedAt: &updatedAt,
@@ -196,7 +208,10 @@ func TestTeamsRule(t *testing.T) {
 						"enforce": true,
 						"duration": "15m0s"
 					},
-                    "insecure_disable_dnssec_validation": false
+                    "insecure_disable_dnssec_validation": false,
+					"untrusted_cert": {
+						"action": "block"
+					}
 				}
 			}
 		}
@@ -231,6 +246,9 @@ func TestTeamsRule(t *testing.T) {
 				Duration: Duration{900 * time.Second},
 			},
 			InsecureDisableDNSSECValidation: false,
+			UntrustedCertSettings: &UntrustedCertSettings{
+				Action: UntrustedCertBlock,
+			},
 		},
 		CreatedAt: &createdAt,
 		UpdatedAt: &updatedAt,
