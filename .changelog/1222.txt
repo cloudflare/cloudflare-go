@@ -1,3 +1,3 @@
 ```release-note:bug
-DNS: dont reuse DNSListResponse when using pagination to avoid Proxied pointer overwrite
+dns: dont reuse DNSListResponse when using pagination to avoid Proxied pointer overwrite
 ```
