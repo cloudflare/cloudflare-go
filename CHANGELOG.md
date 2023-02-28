@@ -11,6 +11,7 @@ ENHANCEMENTS:
 BUG FIXES:
 
 * dex_test: use dex test types and json struct mappings instead of managed networks ([#1213](https://github.com/cloudflare/cloudflare-go/issues/1213))
+* dns: dont reuse DNSListResponse when using pagination to avoid Proxied pointer overwrite ([#1222](https://github.com/cloudflare/cloudflare-go/issues/1222))
 
 DEPENDENCIES:
 
