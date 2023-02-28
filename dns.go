@@ -172,7 +172,7 @@ func (api *API) ListDNSRecords(ctx context.Context, rc *ResourceContainer, param
 	}
 
 	var records []DNSRecord
-	var listResponse DNSListResponse
+	var lastResultInfo ResultInfo
 
 	for {
 		uri := buildURI(fmt.Sprintf("/zones/%s/dns_records", rc.Identifier), params)
@@ -180,17 +180,19 @@ func (api *API) ListDNSRecords(ctx context.Context, rc *ResourceContainer, param
 		if err != nil {
 			return []DNSRecord{}, &ResultInfo{}, err
 		}
+		var listResponse DNSListResponse
 		err = json.Unmarshal(res, &listResponse)
 		if err != nil {
 			return []DNSRecord{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 		}
 		records = append(records, listResponse.Result...)
+		lastResultInfo = listResponse.ResultInfo
 		params.ResultInfo = listResponse.ResultInfo.Next()
 		if params.ResultInfo.Done() || !autoPaginate {
 			break
 		}
 	}
-	return records, &listResponse.ResultInfo, nil
+	return records, &lastResultInfo, nil
 }
 
 // ErrMissingDNSRecordID is for when DNS record ID is needed but not given.
