@@ -5,6 +5,7 @@ ENHANCEMENTS:
 * dex_test: add CRUD functionality for DEX test configurations ([#1209](https://github.com/cloudflare/cloudflare-go/issues/1209))
 * dlp: Adds support for partial payload logging ([#1212](https://github.com/cloudflare/cloudflare-go/issues/1212))
 * teams_accounts: Add new root_certificate_installation_enabled field ([#1208](https://github.com/cloudflare/cloudflare-go/issues/1208))
+* teams_rules: Add `untrusted_cert` rule setting ([#1214](https://github.com/cloudflare/cloudflare-go/issues/1214))
 * tunnels: automatically paginate `ListTunnels` ([#1206](https://github.com/cloudflare/cloudflare-go/issues/1206))
 
 BUG FIXES:
@@ -13,6 +14,7 @@ BUG FIXES:
 
 DEPENDENCIES:
 
+* deps: bumps github.com/stretchr/testify from 1.8.1 to 1.8.2 ([#1220](https://github.com/cloudflare/cloudflare-go/issues/1220))
 * deps: bumps github.com/urfave/cli/v2 from 2.24.3 to 2.24.4 ([#1210](https://github.com/cloudflare/cloudflare-go/issues/1210))
 * deps: bumps golang.org/x/net from 0.0.0-20220722155237-a158d28d115b to 0.7.0 ([#1218](https://github.com/cloudflare/cloudflare-go/issues/1218))
 * deps: bumps golang.org/x/net from 0.0.0-20220722155237-a158d28d115b to 0.7.0 ([#1219](https://github.com/cloudflare/cloudflare-go/issues/1219))
