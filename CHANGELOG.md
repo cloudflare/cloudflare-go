@@ -1,5 +1,9 @@
 ## 0.63.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* access_organization: add ui_read_only_toggle_reason field ([#1181](https://github.com/cloudflare/cloudflare-go/issues/1181))
+
 ## 0.62.0 (1st March, 2023)
 
 ENHANCEMENTS:
