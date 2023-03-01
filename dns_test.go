@@ -347,7 +347,7 @@ func TestListDNSRecordsSearch(t *testing.T) {
 
 func TestListDNSRecordsPagination(t *testing.T) {
 	// change listDNSRecordsDefaultPageSize value to 1 to force pagination
-	listDNSRecordsDefaultPageSize = 1
+	listDNSRecordsDefaultPageSize = 3
 
 	setup()
 	defer teardown()
@@ -378,7 +378,45 @@ func TestListDNSRecordsPagination(t *testing.T) {
 	require.NoError(t, err)
 	assert.True(t, page1Called)
 	assert.True(t, page2Called)
-	assert.Len(t, actual, 2)
+	assert.Len(t, actual, 5)
+
+	type ls struct {
+		Results []map[string]interface{} `json:"result"`
+	}
+
+	expectedRecords := make(map[string]map[string]interface{})
+
+	response1 := loadFixture("dns", "list_page_1")
+	var fixtureDataPage1 ls
+	err = json.Unmarshal([]byte(response1), &fixtureDataPage1)
+	assert.NoError(t, err)
+	for _, record := range fixtureDataPage1.Results {
+		expectedRecords[record["id"].(string)] = record
+	}
+
+	response2 := loadFixture("dns", "list_page_2")
+	var fixtureDataPage2 ls
+	err = json.Unmarshal([]byte(response2), &fixtureDataPage2)
+	assert.NoError(t, err)
+	for _, record := range fixtureDataPage2.Results {
+		expectedRecords[record["id"].(string)] = record
+	}
+
+	for _, actualRecord := range actual {
+		expected, exist := expectedRecords[actualRecord.ID]
+		assert.True(t, exist, "DNS record doesn't exist in fixtures")
+		assert.Equal(t, expected["type"].(string), actualRecord.Type)
+		assert.Equal(t, expected["name"].(string), actualRecord.Name)
+		assert.Equal(t, expected["content"].(string), actualRecord.Content)
+		assert.Equal(t, expected["proxiable"].(bool), actualRecord.Proxiable)
+		assert.Equal(t, expected["proxied"].(bool), *actualRecord.Proxied)
+		assert.Equal(t, int(expected["ttl"].(float64)), actualRecord.TTL)
+		assert.Equal(t, expected["locked"].(bool), actualRecord.Locked)
+		assert.Equal(t, expected["zone_id"].(string), actualRecord.ZoneID)
+		assert.Equal(t, expected["zone_name"].(string), actualRecord.ZoneName)
+		assert.Equal(t, expected["data"], actualRecord.Data)
+		assert.Equal(t, expected["meta"], actualRecord.Meta)
+	}
 }
 
 func TestGetDNSRecord(t *testing.T) {
@@ -524,6 +562,64 @@ func TestUpdateDNSRecord(t *testing.T) {
 		Content: "198.51.100.4",
 		TTL:     120,
 		Proxied: &proxied,
+	})
+	require.NoError(t, err)
+}
+
+func TestUpdateDNSRecord_ClearComment(t *testing.T) {
+	setup()
+	defer teardown()
+
+	input := DNSRecord{
+		ID:      "372e67954025e0ba6aaa6d586b9e0b59",
+		Comment: "",
+	}
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
+
+		var v DNSRecord
+		err := json.NewDecoder(r.Body).Decode(&v)
+		require.NoError(t, err)
+		v.ID = "372e67954025e0ba6aaa6d586b9e0b59"
+		assert.Equal(t, input, v)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "372e67954025e0ba6aaa6d586b9e0b59",
+				"type": "A",
+				"name": "example.com",
+				"content": "198.51.100.4",
+				"proxiable": true,
+				"proxied": false,
+				"ttl": 120,
+				"locked": false,
+				"zone_id": "d56084adb405e0b7e32c52321bf07be6",
+				"zone_name": "example.com",
+				"created_on": "2014-01-01T05:20:00Z",
+				"modified_on": "2014-01-01T05:20:00Z",
+				"comment":null,
+				"tags":[],
+				"data": {},
+				"meta": {
+					"auto_added": true,
+					"source": "primary"
+				}
+			}
+		}`)
+	}
+
+	dnsRecordID := "372e67954025e0ba6aaa6d586b9e0b59"
+
+	mux.HandleFunc("/zones/"+testZoneID+"/dns_records/"+dnsRecordID, handler)
+
+	err := client.UpdateDNSRecord(context.Background(), ZoneIdentifier(testZoneID), UpdateDNSRecordParams{
+		ID:      dnsRecordID,
+		Comment: "",
 	})
 	require.NoError(t, err)
 }

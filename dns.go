@@ -71,8 +71,8 @@ type UpdateDNSRecordParams struct {
 	Priority *uint16     `json:"-"` // internal use only
 	TTL      int         `json:"ttl,omitempty"`
 	Proxied  *bool       `json:"proxied,omitempty"`
-	Comment  string      `json:"comment,omitempty"`
-	Tags     []string    `json:"tags,omitempty"`
+	Comment  string      `json:"comment"`
+	Tags     []string    `json:"tags"`
 }
 
 // DNSListResponse represents the response from the list DNS records endpoint.
@@ -172,7 +172,7 @@ func (api *API) ListDNSRecords(ctx context.Context, rc *ResourceContainer, param
 	}
 
 	var records []DNSRecord
-	var listResponse DNSListResponse
+	var lastResultInfo ResultInfo
 
 	for {
 		uri := buildURI(fmt.Sprintf("/zones/%s/dns_records", rc.Identifier), params)
@@ -180,17 +180,19 @@ func (api *API) ListDNSRecords(ctx context.Context, rc *ResourceContainer, param
 		if err != nil {
 			return []DNSRecord{}, &ResultInfo{}, err
 		}
+		var listResponse DNSListResponse
 		err = json.Unmarshal(res, &listResponse)
 		if err != nil {
 			return []DNSRecord{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 		}
 		records = append(records, listResponse.Result...)
+		lastResultInfo = listResponse.ResultInfo
 		params.ResultInfo = listResponse.ResultInfo.Next()
 		if params.ResultInfo.Done() || !autoPaginate {
 			break
 		}
 	}
-	return records, &listResponse.ResultInfo, nil
+	return records, &lastResultInfo, nil
 }
 
 // ErrMissingDNSRecordID is for when DNS record ID is needed but not given.
@@ -229,6 +231,7 @@ func (api *API) UpdateDNSRecord(ctx context.Context, rc *ResourceContainer, para
 	if rc.Identifier == "" {
 		return ErrMissingZoneID
 	}
+
 	if params.ID == "" {
 		return ErrMissingDNSRecordID
 	}

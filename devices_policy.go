@@ -42,6 +42,7 @@ type DeviceSettingsPolicy struct {
 	Match               *string           `json:"match"`
 	Precedence          *int              `json:"precedence"`
 	Default             bool              `json:"default"`
+	ExcludeOfficeIps    *bool             `json:"exclude_office_ips"`
 }
 
 type DeviceSettingsPolicyResponse struct {
@@ -68,6 +69,7 @@ type DeviceSettingsPolicyRequest struct {
 	Name                *string        `json:"name,omitempty"`
 	Match               *string        `json:"match,omitempty"`
 	Enabled             *bool          `json:"enabled,omitempty"`
+	ExcludeOfficeIps    *bool          `json:"exclude_office_ips"`
 }
 
 // UpdateDeviceClientCertificates controls the zero trust zone used to provision client certificates.

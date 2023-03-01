@@ -51,7 +51,11 @@ type TunnelConnection struct {
 type TunnelsDetailResponse struct {
 	Result []Tunnel `json:"result"`
 	Response
+	ResultInfo `json:"result_info"`
 }
+
+// listTunnelsDefaultPageSize represents the default per_page size of the API.
+var listTunnelsDefaultPageSize int = 100
 
 // TunnelDetailResponse is used for representing the API response payload for
 // a single tunnel.
@@ -171,29 +175,54 @@ type TunnelListParams struct {
 	UUID      string     `url:"uuid,omitempty"` // the tunnel ID
 	IsDeleted *bool      `url:"is_deleted,omitempty"`
 	ExistedAt *time.Time `url:"existed_at,omitempty"`
+
+	ResultInfo
 }
 
 // Tunnels lists all tunnels.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-tunnel-list-cloudflare-tunnels
-func (api *API) Tunnels(ctx context.Context, rc *ResourceContainer, params TunnelListParams) ([]Tunnel, error) {
+func (api *API) Tunnels(ctx context.Context, rc *ResourceContainer, params TunnelListParams) ([]Tunnel, *ResultInfo, error) {
 	if rc.Identifier == "" {
-		return []Tunnel{}, ErrMissingAccountID
+		return []Tunnel{}, &ResultInfo{}, ErrMissingAccountID
 	}
 
-	uri := buildURI(fmt.Sprintf("/accounts/%s/cfd_tunnel", rc.Identifier), params)
-
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
-	if err != nil {
-		return []Tunnel{}, err
+	autoPaginate := true
+	if params.PerPage >= 1 || params.Page >= 1 {
+		autoPaginate = false
 	}
 
-	var argoDetailsResponse TunnelsDetailResponse
-	err = json.Unmarshal(res, &argoDetailsResponse)
-	if err != nil {
-		return []Tunnel{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	if params.PerPage < 1 {
+		params.PerPage = listTunnelsDefaultPageSize
 	}
-	return argoDetailsResponse.Result, nil
+
+	if params.Page < 1 {
+		params.Page = 1
+	}
+
+	var records []Tunnel
+	var listResponse TunnelsDetailResponse
+
+	for {
+		uri := buildURI(fmt.Sprintf("/accounts/%s/cfd_tunnel", rc.Identifier), params)
+		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+		if err != nil {
+			return []Tunnel{}, &ResultInfo{}, err
+		}
+
+		err = json.Unmarshal(res, &listResponse)
+		if err != nil {
+			return []Tunnel{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		}
+
+		records = append(records, listResponse.Result...)
+		params.ResultInfo = listResponse.ResultInfo.Next()
+		if params.ResultInfo.Done() || !autoPaginate {
+			break
+		}
+	}
+
+	return records, &listResponse.ResultInfo, nil
 }
 
 // Tunnel returns a single Argo tunnel.
