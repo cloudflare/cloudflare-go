@@ -38,24 +38,24 @@ func TestChallengeWidgets_Create(t *testing.T) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `
-{
-  "success": true,
-  "errors": [],
-  "messages": [],
-  "result": {
-    "sitekey": "0x4AAF00AAAABn0R22HWm-YUc",
-    "secret": "0x4AAF00AAAABn0R22HWm098HVBjhdsYUc",
-    "created_on": "2014-01-01T05:20:00.123123Z",
-    "modified_on": "2014-01-01T05:20:00.123123Z",
-    "name": "blog.cloudflare.com login form",
-    "domains": [
-      "203.0.113.1",
-      "cloudflare.com",
-      "blog.example.com"
-    ],
-    "type": "invisible"
-  }
-}`)
+			{
+			  "success": true,
+			  "errors": [],
+			  "messages": [],
+			  "result": {
+				"sitekey": "0x4AAF00AAAABn0R22HWm-YUc",
+				"secret": "0x4AAF00AAAABn0R22HWm098HVBjhdsYUc",
+				"created_on": "2014-01-01T05:20:00.123123Z",
+				"modified_on": "2014-01-01T05:20:00.123123Z",
+				"name": "blog.cloudflare.com login form",
+				"domains": [
+				  "203.0.113.1",
+				  "cloudflare.com",
+				  "blog.example.com"
+				],
+				"type": "invisible"
+			  }
+			}`)
 	})
 
 	// Make sure missing account ID is thrown
