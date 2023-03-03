@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestTunnels(t *testing.T) {
+func TestListTunnels(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -41,14 +41,14 @@ func TestTunnels(t *testing.T) {
 		}},
 	}}
 
-	actual, _, err := client.Tunnels(context.Background(), AccountIdentifier(testAccountID), TunnelListParams{UUID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
+	actual, _, err := client.ListTunnels(context.Background(), AccountIdentifier(testAccountID), TunnelListParams{UUID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
-func TestTunnelsPagination(t *testing.T) {
+func TestListTunnelsPagination(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -84,7 +84,7 @@ func TestTunnelsPagination(t *testing.T) {
 		},
 	}
 
-	actual, _, err := client.Tunnels(context.Background(), AccountIdentifier(testAccountID),
+	actual, _, err := client.ListTunnels(context.Background(), AccountIdentifier(testAccountID),
 		TunnelListParams{
 			Name: "blog",
 			ResultInfo: ResultInfo{
@@ -98,7 +98,7 @@ func TestTunnelsPagination(t *testing.T) {
 	}
 }
 
-func TestTunnel(t *testing.T) {
+func TestGetTunnel(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -126,9 +126,12 @@ func TestTunnel(t *testing.T) {
 			OpenedAt:           "2021-01-25T18:22:34.317854Z",
 			OriginIP:           "198.51.100.1",
 		}},
+		TunnelType:   "cfd_tunnel",
+		Status:       "healthy",
+		RemoteConfig: true,
 	}
 
-	actual, err := client.Tunnel(context.Background(), AccountIdentifier(testAccountID), "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	actual, err := client.GetTunnel(context.Background(), AccountIdentifier(testAccountID), "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -163,9 +166,12 @@ func TestCreateTunnel(t *testing.T) {
 			OpenedAt:           "2021-01-25T18:22:34.317854Z",
 			OriginIP:           "198.51.100.1",
 		}},
+		TunnelType:   "cfd_tunnel",
+		Status:       "healthy",
+		RemoteConfig: true,
 	}
 
-	actual, err := client.CreateTunnel(context.Background(), AccountIdentifier(testAccountID), TunnelCreateParams{Name: "blog", Secret: "notarealsecret"})
+	actual, err := client.CreateTunnel(context.Background(), AccountIdentifier(testAccountID), TunnelCreateParams{Name: "blog", Secret: "notarealsecret", ConfigSrc: "cloudflare"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -334,7 +340,7 @@ func TestTunnelConnections(t *testing.T) {
 		},
 	}
 
-	actual, err := client.TunnelConnections(context.Background(), AccountIdentifier(testAccountID), "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	actual, err := client.ListTunnelConnections(context.Background(), AccountIdentifier(testAccountID), "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -385,7 +391,7 @@ func TestTunnelToken(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/token", handler)
 
-	token, err := client.TunnelToken(context.Background(), AccountIdentifier(testAccountID), "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	token, err := client.GetTunnelToken(context.Background(), AccountIdentifier(testAccountID), "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 	assert.NoError(t, err)
 	assert.Equal(t, "ZHNraGdhc2RraGFza2hqZGFza2poZGFza2poYXNrZGpoYWtzamRoa2FzZGpoa2FzamRoa2Rhc2po\na2FzamRoa2FqCg==", token)
 }
