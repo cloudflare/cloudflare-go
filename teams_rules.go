@@ -147,7 +147,7 @@ func TeamsRulesActionValues() []string {
 		string(Override),
 		string(L4Override),
 		string(Egress),
-		string(AuditSSh),
+		string(AuditSSH),
 	}
 }
 
