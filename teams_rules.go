@@ -46,7 +46,7 @@ type TeamsRuleSettings struct {
 	AuditSSH *AuditSSHRuleSettings `json:"audit_ssh"`
 
 	// Turns on ip category based filter on dns if the rule contains dns category checks
-	IpCategories bool `json:"ip_categories"`
+	IPCategories bool `json:"ip_categories"`
 
 	// Allow parent MSP accounts to enable bypass their children's rules.
 	AllowChildBypass bool `json:"allow_child_bypass"`
