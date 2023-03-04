@@ -129,7 +129,7 @@ const (
 	Override     TeamsGatewayAction = "override"     // http
 	L4Override   TeamsGatewayAction = "l4_override"  // l4
 	Egress       TeamsGatewayAction = "egress"       // egress
-	AuditSSh     TeamsGatewayAction = "audit_ssh"    // l4
+	AuditSSH     TeamsGatewayAction = "audit_ssh"    // l4
 )
 
 func TeamsRulesActionValues() []string {
