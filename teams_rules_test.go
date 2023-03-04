@@ -451,7 +451,7 @@ func TestTeamsCreateL4Rule(t *testing.T) {
 		Description:   "rule description",
 		Precedence:    1000,
 		Enabled:       true,
-		Action:        AuditSSh,
+		Action:        AuditSSH,
 		Filters:       []TeamsFilterType{L4Filter},
 		Traffic:       `net.src.geo.country == "US"`,
 		Identity:      "",
