@@ -17,6 +17,9 @@
         "opened_at": "2021-01-25T18:22:34.317854Z",
         "origin_ip": "198.51.100.1"
       }
-    ]
+    ],
+    "status": "healthy",
+    "tun_type": "cfd_tunnel",
+    "remote_config": true
   }
 }
