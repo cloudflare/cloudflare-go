@@ -1,5 +1,9 @@
 ```release-note:breaking-change
-tunnel: changed to use List and Get
+tunnel: renamed `Tunnels` to `ListTunnels`
+```
+
+```release-note:breaking-change
+tunnel: renamed `Tunnel` to `GetTunnel`
 ```
 ```release-note:enhancement
 tunnel: updated parameters to latest API docs
