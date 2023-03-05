@@ -1,9 +1,15 @@
 ## 0.63.0 (Unreleased)
 
+BREAKING CHANGES:
+
+* tunnel: renamed `Tunnel` to `GetTunnel` ([#1227](https://github.com/cloudflare/cloudflare-go/issues/1227))
+* tunnel: renamed `Tunnels` to `ListTunnels` ([#1227](https://github.com/cloudflare/cloudflare-go/issues/1227))
+
 ENHANCEMENTS:
 
 * access_organization: add ui_read_only_toggle_reason field ([#1181](https://github.com/cloudflare/cloudflare-go/issues/1181))
 * added audit_ssh to gateway actions, updated gateway rule settings ([#1226](https://github.com/cloudflare/cloudflare-go/issues/1226))
+* tunnel: updated parameters to latest API docs ([#1227](https://github.com/cloudflare/cloudflare-go/issues/1227))
 
 ## 0.62.0 (1st March, 2023)
 
