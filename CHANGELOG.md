@@ -11,6 +11,10 @@ ENHANCEMENTS:
 * added audit_ssh to gateway actions, updated gateway rule settings ([#1226](https://github.com/cloudflare/cloudflare-go/issues/1226))
 * tunnel: updated parameters to latest API docs ([#1227](https://github.com/cloudflare/cloudflare-go/issues/1227))
 
+DEPENDENCIES:
+
+* deps: bumps golang.org/x/net from 0.7.0 to 0.8.0 ([#1228](https://github.com/cloudflare/cloudflare-go/issues/1228))
+
 ## 0.62.0 (1st March, 2023)
 
 ENHANCEMENTS:
