@@ -58,10 +58,7 @@ func (api *API) ListWAFOverrides(ctx context.Context, zoneID string) ([]WAFOverr
 		return []WAFOverride{}, err
 	}
 
-	for ri := range r.Result {
-		overrides = append(overrides, r.Result[ri])
-	}
-	return overrides, nil
+	return append(overrides, r.Result...), nil
 }
 
 // WAFOverride returns a WAF override from the given override ID.
