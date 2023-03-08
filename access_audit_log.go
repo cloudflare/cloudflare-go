@@ -74,11 +74,11 @@ func (a AccessAuditLogFilterOptions) Encode() string {
 	}
 
 	if a.Since != nil {
-		v.Set("since", (*a.Since).Format(time.RFC3339))
+		v.Set("since", a.Since.Format(time.RFC3339))
 	}
 
 	if a.Until != nil {
-		v.Set("until", (*a.Until).Format(time.RFC3339))
+		v.Set("until", a.Until.Format(time.RFC3339))
 	}
 
 	return v.Encode()
