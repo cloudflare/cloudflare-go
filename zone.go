@@ -722,10 +722,10 @@ func (api *API) AvailableZonePlans(ctx context.Context, zoneID string) ([]ZonePl
 func (o ZoneAnalyticsOptions) encode() string {
 	v := url.Values{}
 	if o.Since != nil {
-		v.Set("since", (*o.Since).Format(time.RFC3339))
+		v.Set("since", o.Since.Format(time.RFC3339))
 	}
 	if o.Until != nil {
-		v.Set("until", (*o.Until).Format(time.RFC3339))
+		v.Set("until", o.Until.Format(time.RFC3339))
 	}
 	if o.Continuous != nil {
 		v.Set("continuous", fmt.Sprintf("%t", *o.Continuous))
