@@ -162,25 +162,26 @@ type DevicePostureRuleMatch struct {
 
 // DevicePostureRuleInput represents the value to be checked against.
 type DevicePostureRuleInput struct {
-	ID               string `json:"id,omitempty"`
-	Path             string `json:"path,omitempty"`
-	Exists           bool   `json:"exists,omitempty"`
-	Thumbprint       string `json:"thumbprint,omitempty"`
-	Sha256           string `json:"sha256,omitempty"`
-	Running          bool   `json:"running,omitempty"`
-	RequireAll       bool   `json:"requireAll,omitempty"`
-	Enabled          bool   `json:"enabled,omitempty"`
-	Version          string `json:"version,omitempty"`
-	VersionOperator  string `json:"versionOperator,omitempty"`
-	Overall          string `json:"overall,omitempty"`
-	SensorConfig     string `json:"sensor_config,omitempty"`
-	Os               string `json:"os,omitempty"`
-	OsDistroName     string `json:"os_distro_name,omitempty"`
-	OsDistroRevision string `json:"os_distro_revision,omitempty"`
-	Operator         string `json:"operator,omitempty"`
-	Domain           string `json:"domain,omitempty"`
-	ComplianceStatus string `json:"compliance_status,omitempty"`
-	ConnectionID     string `json:"connection_id,omitempty"`
+	ID               string   `json:"id,omitempty"`
+	Path             string   `json:"path,omitempty"`
+	Exists           bool     `json:"exists,omitempty"`
+	Thumbprint       string   `json:"thumbprint,omitempty"`
+	Sha256           string   `json:"sha256,omitempty"`
+	Running          bool     `json:"running,omitempty"`
+	RequireAll       bool     `json:"requireAll,omitempty"`
+	CheckDisks       []string `json:"checkDisks,omitempty"`
+	Enabled          bool     `json:"enabled,omitempty"`
+	Version          string   `json:"version,omitempty"`
+	VersionOperator  string   `json:"versionOperator,omitempty"`
+	Overall          string   `json:"overall,omitempty"`
+	SensorConfig     string   `json:"sensor_config,omitempty"`
+	Os               string   `json:"os,omitempty"`
+	OsDistroName     string   `json:"os_distro_name,omitempty"`
+	OsDistroRevision string   `json:"os_distro_revision,omitempty"`
+	Operator         string   `json:"operator,omitempty"`
+	Domain           string   `json:"domain,omitempty"`
+	ComplianceStatus string   `json:"compliance_status,omitempty"`
+	ConnectionID     string   `json:"connection_id,omitempty"`
 }
 
 // DevicePostureRuleListResponse represents the response from the list
