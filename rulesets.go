@@ -40,6 +40,7 @@ const (
 	RulesetPhaseSuperBotFightMode                   RulesetPhase = "http_request_sbfm"
 	RulesetPhaseHTTPConfigSettings                  RulesetPhase = "http_config_settings"
 
+	RulesetRuleActionAllow                RulesetRuleAction = "allow"
 	RulesetRuleActionBlock                RulesetRuleAction = "block"
 	RulesetRuleActionChallenge            RulesetRuleAction = "challenge"
 	RulesetRuleActionDDoSDynamic          RulesetRuleAction = "ddos_dynamic"
@@ -115,6 +116,7 @@ func RulesetPhaseValues() []string {
 // as a slice of strings.
 func RulesetRuleActionValues() []string {
 	return []string{
+		string(RulesetRuleActionAllow),
 		string(RulesetRuleActionBlock),
 		string(RulesetRuleActionChallenge),
 		string(RulesetRuleActionDDoSDynamic),
@@ -185,7 +187,7 @@ type Ruleset struct {
 	Name                     string        `json:"name,omitempty"`
 	Description              string        `json:"description,omitempty"`
 	Kind                     string        `json:"kind,omitempty"`
-	Version                  string        `json:"version,omitempty"`
+	Version                  *string       `json:"version,omitempty"`
 	LastUpdated              *time.Time    `json:"last_updated,omitempty"`
 	Phase                    string        `json:"phase,omitempty"`
 	Rules                    []RulesetRule `json:"rules"`
@@ -212,7 +214,7 @@ type RulesetRuleActionParameters struct {
 	Phases                  []string                                         `json:"phases,omitempty"`
 	Overrides               *RulesetRuleActionParametersOverrides            `json:"overrides,omitempty"`
 	MatchedData             *RulesetRuleActionParametersMatchedData          `json:"matched_data,omitempty"`
-	Version                 string                                           `json:"version,omitempty"`
+	Version                 *string                                          `json:"version,omitempty"`
 	Response                *RulesetRuleActionParametersBlockResponse        `json:"response,omitempty"`
 	HostHeader              string                                           `json:"host_header,omitempty"`
 	Origin                  *RulesetRuleActionParametersOrigin               `json:"origin,omitempty"`
@@ -381,7 +383,7 @@ type RulesetRuleActionParametersBlockResponse struct {
 type RulesetRuleActionParametersURI struct {
 	Path   *RulesetRuleActionParametersURIPath  `json:"path,omitempty"`
 	Query  *RulesetRuleActionParametersURIQuery `json:"query,omitempty"`
-	Origin bool                                 `json:"origin,omitempty"`
+	Origin *bool                                `json:"origin,omitempty"`
 }
 
 // RulesetRuleActionParametersURIPath holds the path specific portion of a URI
@@ -394,8 +396,8 @@ type RulesetRuleActionParametersURIPath struct {
 // RulesetRuleActionParametersURIQuery holds the query specific portion of a URI
 // action parameter.
 type RulesetRuleActionParametersURIQuery struct {
-	Value      string `json:"value,omitempty"`
-	Expression string `json:"expression,omitempty"`
+	Value      *string `json:"value,omitempty"`
+	Expression string  `json:"expression,omitempty"`
 }
 
 // RulesetRuleActionParametersHTTPHeader is the definition for define action
@@ -627,14 +629,14 @@ func (p SSL) IntoRef() *SSL {
 // RulesetRule contains information about a single Ruleset Rule.
 type RulesetRule struct {
 	ID                     string                             `json:"id,omitempty"`
-	Version                string                             `json:"version,omitempty"`
+	Version                *string                            `json:"version,omitempty"`
 	Action                 string                             `json:"action"`
 	ActionParameters       *RulesetRuleActionParameters       `json:"action_parameters,omitempty"`
 	Expression             string                             `json:"expression"`
-	Description            string                             `json:"description"`
+	Description            string                             `json:"description,omitempty"`
 	LastUpdated            *time.Time                         `json:"last_updated,omitempty"`
 	Ref                    string                             `json:"ref,omitempty"`
-	Enabled                bool                               `json:"enabled"`
+	Enabled                *bool                              `json:"enabled,omitempty"`
 	ScoreThreshold         int                                `json:"score_threshold,omitempty"`
 	RateLimit              *RulesetRuleRateLimit              `json:"ratelimit,omitempty"`
 	ExposedCredentialCheck *RulesetRuleExposedCredentialCheck `json:"exposed_credential_check,omitempty"`
