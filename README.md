@@ -121,6 +121,6 @@ This library is starting to ship with experimental improvements that are not yet
 ready for production but will be introduced before the next major version. See
 [experimental README](/docs/experimental.md) for full details.
 
-# License
+## License
 
 BSD licensed. See the [LICENSE](LICENSE) file for details.
