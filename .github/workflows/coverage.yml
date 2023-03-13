@@ -12,7 +12,7 @@ jobs:
       - uses: actions/cache@v3
         with:
           path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go1.18-${{ hashFiles('**/go.mod') }}-${{ hashFiles('**/go.sum') }}
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.mod') }}-${{ hashFiles('**/go.sum') }}
       - name: Run coverage
         run: go test ./... -coverprofile=coverage.txt -covermode=atomic
       - name: Upload coverage to Codecov
