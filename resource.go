@@ -1,5 +1,7 @@
 package cloudflare
 
+import "fmt"
+
 // RouteLevel holds the "level" where the resource resides.
 type RouteLevel string
 
@@ -15,6 +17,17 @@ const (
 type ResourceContainer struct {
 	Level      RouteLevel
 	Identifier string
+}
+
+// Returns a URL fragment of the endpoint scoped by the container.
+//
+// For example, a zone identifier would have a fragment like "zones/foobar" while
+// an account identifier would generate "accounts/foobar".
+func (rc *ResourceContainer) URLFragment() string {
+	if rc.Level == "" {
+		return rc.Identifier
+	}
+	return fmt.Sprintf("%s/%s", rc.Level, rc.Identifier)
 }
 
 // ResourceIdentifier returns a generic *ResourceContainer.
