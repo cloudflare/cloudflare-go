@@ -76,12 +76,13 @@ func TestListAddressMap(t *testing.T) {
 			CreatedAt:    createdAt,
 			ModifiedAt:   modifiedAt,
 			Description:  &addressMapDesc,
-			Deletable:    true,
-			CanModifyIPs: true,
+			Deletable:    BoolPtr(true),
+			CanModifyIPs: BoolPtr(true),
 			DefaultSNI:   &addressMapDefaultSNI,
-			Enabled:      true,
+			Enabled:      BoolPtr(true),
 			IPs:          []AddressMapIP{{"192.0.2.1", ipCreatedAt}},
 			Memberships:  []AddressMapMembership{{AddressMapMembershipContainer{"01a7362d577a6c3019a474fd6f485823", AddressMapMembershipZone}, true, membershipCreatedAt}},
+				Deletable:  BoolPtr(true),
 		},
 	}
 
@@ -141,12 +142,13 @@ func TestGetAddressMap(t *testing.T) {
 		CreatedAt:    createdAt,
 		ModifiedAt:   modifiedAt,
 		Description:  &addressMapDesc,
-		Deletable:    true,
-		CanModifyIPs: true,
+		Deletable:    BoolPtr(true),
+		CanModifyIPs: BoolPtr(true),
 		DefaultSNI:   &addressMapDefaultSNI,
-		Enabled:      true,
+		Enabled:      BoolPtr(true),
 		IPs:          []AddressMapIP{{"192.0.2.1", ipCreatedAt}},
 		Memberships:  []AddressMapMembership{{AddressMapMembershipContainer{"01a7362d577a6c3019a474fd6f485823", AddressMapMembershipZone}, true, membershipCreatedAt}},
+			Deletable:  BoolPtr(true),
 	}
 
 	actual, err := client.GetAddressMap(context.Background(), AccountIdentifier(testAccountID), "9a7806061c88ada191ed06f989cc3dac")
@@ -205,12 +207,13 @@ func TestUpdateAddressMap(t *testing.T) {
 		CreatedAt:    createdAt,
 		ModifiedAt:   modifiedAt,
 		Description:  &addressMapDesc,
-		Deletable:    true,
-		CanModifyIPs: true,
+		Deletable:    BoolPtr(true),
+		CanModifyIPs: BoolPtr(true),
 		DefaultSNI:   &addressMapDefaultSNI,
-		Enabled:      true,
+		Enabled:      BoolPtr(true),
 		IPs:          []AddressMapIP{{"192.0.2.1", ipCreatedAt}},
 		Memberships:  []AddressMapMembership{{AddressMapMembershipContainer{"01a7362d577a6c3019a474fd6f485823", AddressMapMembershipZone}, true, membershipCreatedAt}},
+			Deletable:  BoolPtr(true),
 	}
 
 	actual, err := client.UpdateAddressMap(context.Background(), AccountIdentifier(testAccountID), AddressMapUpdateParams{ID: "9a7806061c88ada191ed06f989cc3dac"})

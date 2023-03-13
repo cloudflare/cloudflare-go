@@ -13,9 +13,9 @@ type AddressMap struct {
 	ID           string                 `json:"id"`
 	Description  *string                `json:"description,omitempty"`
 	DefaultSNI   *string                `json:"default_sni"`
-	Enabled      bool                   `json:"enabled"`
-	Deletable    bool                   `json:"can_delete"`
-	CanModifyIPs bool                   `json:"can_modify_ips"`
+	Enabled      *bool                  `json:"enabled"`
+	Deletable    *bool                  `json:"can_delete"`
+	CanModifyIPs *bool                  `json:"can_modify_ips"`
 	Memberships  []AddressMapMembership `json:"memberships"`
 	IPs          []AddressMapIP         `json:"ips"`
 	CreatedAt    time.Time              `json:"created_at"`
@@ -33,9 +33,10 @@ type AddressMapMembershipContainer struct {
 }
 
 type AddressMapMembership struct {
-	AddressMapMembershipContainer
-	Deletable bool      `json:"can_delete"`
-	CreatedAt time.Time `json:"created_at"`
+	Identifier string                   `json:"identifier"`
+	Kind       AddressMapMembershipKind `json:"kind"`
+	Deletable  *bool                    `json:"can_delete"`
+	CreatedAt  time.Time                `json:"created_at"`
 }
 
 func (ammb *AddressMapMembershipContainer) URLFragment() string {
