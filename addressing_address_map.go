@@ -69,16 +69,16 @@ type GetAddressMapResponse struct {
 	Result AddressMap `json:"result"`
 }
 
-// AddressMapCreateParams contains information about an address map to be created.
-type AddressMapCreateParams struct {
+// CreateAddressMapParams contains information about an address map to be created.
+type CreateAddressMapParams struct {
 	Description *string                         `json:"description"`
 	Enabled     *bool                           `json:"enabled"`
 	IPs         []string                        `json:"ips"`
 	Memberships []AddressMapMembershipContainer `json:"memberships"`
 }
 
-// AddressMapUpdateParams contains information about an address map to be updated.
-type AddressMapUpdateParams struct {
+// UpdateAddressMapParams contains information about an address map to be updated.
+type UpdateAddressMapParams struct {
 	ID          string  `json:"id"`
 	Description *string `json:"description,omitempty"`
 	Enabled     *bool   `json:"enabled,omitempty"`
@@ -86,35 +86,47 @@ type AddressMapUpdateParams struct {
 }
 
 // AddressMapFilter contains filter parameters for finding a list of address maps.
-type AddressMapFilterParams struct {
+type ListAddressMapsParams struct {
 	IP   *string `url:"ip,omitempty"`
 	CIDR *string `url:"cidr,omitempty"`
 }
 
-// AddressMapIPParams contains request parameters to add/remove IP address to/from an address map.
-type AddressMapIPParams struct {
-	// ID represents the target address map for adding/removing the IP address.
+// CreateIPAddressToAddressMapParams contains request parameters to add/remove IP address to/from an address map.
+type CreateIPAddressToAddressMapParams struct {
+	// ID represents the target address map for adding the IP address.
 	ID string
 	// The IP address.
 	IP string
 }
 
-// AddressMapMembershipParams contains request parameters to add/remove membership from an address map.
-type AddressMapMembershipParams struct {
-	// ID represents the target address map for adding/removing the membershp.
+// CreateMembershipToAddressMapParams contains request parameters to add/remove membership from an address map.
+type CreateMembershipToAddressMapParams struct {
+	// ID represents the target address map for adding the membershp.
 	ID         string
 	Membership AddressMapMembershipContainer
+}
+
+type DeleteMembershipFromAddressMapParams struct {
+	// ID represents the target address map for removing the IP address.
+	ID         string
+	Membership AddressMapMembershipContainer
+}
+
+type DeleteIPAddressFromAddressMapParams struct {
+	// ID represents the target address map for adding the membershp.
+	ID string
+	IP string
 }
 
 // ListAddressMaps lists all address maps owned by the account.
 //
 // API reference: https://developers.cloudflare.com/api/operations/ip-address-management-address-maps-list-address-maps
-func (api *API) ListAddressMaps(ctx context.Context, rc *ResourceContainer, params AddressMapFilterParams) ([]AddressMap, error) {
+func (api *API) ListAddressMaps(ctx context.Context, rc *ResourceContainer, params ListAddressMapsParams) ([]AddressMap, error) {
 	if rc.Level != AccountRouteLevel {
 		return []AddressMap{}, ErrRequiredAccountLevelResourceContainer
 	}
 
-	uri := buildURI(fmt.Sprintf("/%s/addressing/address_maps", rc.URLFragment()), params)
+	uri := buildURI(fmt.Sprintf("/%s/%s/addressing/address_maps", rc.Level, rc.Identifier), params)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []AddressMap{}, err
@@ -131,7 +143,7 @@ func (api *API) ListAddressMaps(ctx context.Context, rc *ResourceContainer, para
 // CreateAddressMap creates a new address map under the account.
 //
 // API reference: https://developers.cloudflare.com/api/operations/ip-address-management-address-maps-create-address-map
-func (api *API) CreateAddressMap(ctx context.Context, rc *ResourceContainer, params AddressMapCreateParams) (AddressMap, error) {
+func (api *API) CreateAddressMap(ctx context.Context, rc *ResourceContainer, params CreateAddressMapParams) (AddressMap, error) {
 	if rc.Level != AccountRouteLevel {
 		return AddressMap{}, ErrRequiredAccountLevelResourceContainer
 	}
@@ -175,7 +187,7 @@ func (api *API) GetAddressMap(ctx context.Context, rc *ResourceContainer, id str
 // UpdateAddressMap modifies properties of an address map owned by the account.
 //
 // API reference: https://developers.cloudflare.com/api/operations/ip-address-management-address-maps-update-address-map
-func (api *API) UpdateAddressMap(ctx context.Context, rc *ResourceContainer, params AddressMapUpdateParams) (AddressMap, error) {
+func (api *API) UpdateAddressMap(ctx context.Context, rc *ResourceContainer, params UpdateAddressMapParams) (AddressMap, error) {
 	if rc.Level != AccountRouteLevel {
 		return AddressMap{}, ErrRequiredAccountLevelResourceContainer
 	}
@@ -210,7 +222,7 @@ func (api *API) DeleteAddressMap(ctx context.Context, rc *ResourceContainer, id 
 // CreateIPAddressToAddressMap adds an IP address from a prefix owned by the account to a particular address map.
 //
 // API reference: https://developers.cloudflare.com/api/operations/ip-address-management-address-maps-add-an-ip-to-an-address-map
-func (api *API) CreateIPAddressToAddressMap(ctx context.Context, rc *ResourceContainer, params AddressMapIPParams) error {
+func (api *API) CreateIPAddressToAddressMap(ctx context.Context, rc *ResourceContainer, params CreateIPAddressToAddressMapParams) error {
 	if rc.Level != AccountRouteLevel {
 		return ErrRequiredAccountLevelResourceContainer
 	}
@@ -223,7 +235,7 @@ func (api *API) CreateIPAddressToAddressMap(ctx context.Context, rc *ResourceCon
 // DeleteIPAddressFromAddressMap removes an IP address from a particular address map.
 //
 // API reference: https://developers.cloudflare.com/api/operations/ip-address-management-address-maps-remove-an-ip-from-an-address-map
-func (api *API) DeleteIPAddressFromAddressMap(ctx context.Context, rc *ResourceContainer, params AddressMapIPParams) error {
+func (api *API) DeleteIPAddressFromAddressMap(ctx context.Context, rc *ResourceContainer, params DeleteIPAddressFromAddressMapParams) error {
 	if rc.Level != AccountRouteLevel {
 		return ErrRequiredAccountLevelResourceContainer
 	}
@@ -238,7 +250,7 @@ func (api *API) DeleteIPAddressFromAddressMap(ctx context.Context, rc *ResourceC
 // API reference:
 //   - account: https://developers.cloudflare.com/api/operations/ip-address-management-address-maps-add-an-account-membership-to-an-address-map
 //   - zone: https://developers.cloudflare.com/api/operations/ip-address-management-address-maps-add-a-zone-membership-to-an-address-map
-func (api *API) CreateMembershipToAddressMap(ctx context.Context, rc *ResourceContainer, params AddressMapMembershipParams) error {
+func (api *API) CreateMembershipToAddressMap(ctx context.Context, rc *ResourceContainer, params CreateMembershipToAddressMapParams) error {
 	if rc.Level != AccountRouteLevel {
 		return ErrRequiredAccountLevelResourceContainer
 	}
@@ -247,7 +259,7 @@ func (api *API) CreateMembershipToAddressMap(ctx context.Context, rc *ResourceCo
 		return fmt.Errorf("requested membershp kind (%q) is not supported", params.Membership.Kind)
 	}
 
-	uri := fmt.Sprintf("/%s/addressing/address_maps/%s/%s", rc.URLFragment(), params.ID, params.Membership.URLFragment())
+	uri := fmt.Sprintf("/%s/%s/addressing/address_maps/%s/%s", rc.Level, rc.Identifier, params.ID, params.Membership.URLFragment())
 	_, err := api.makeRequestContext(ctx, http.MethodPut, uri, nil)
 	return err
 }
@@ -257,7 +269,7 @@ func (api *API) CreateMembershipToAddressMap(ctx context.Context, rc *ResourceCo
 // API reference:
 //   - account: https://developers.cloudflare.com/api/operations/ip-address-management-address-maps-remove-an-account-membership-from-an-address-map
 //   - zone: https://developers.cloudflare.com/api/operations/ip-address-management-address-maps-remove-a-zone-membership-from-an-address-map
-func (api *API) DeleteMembershipFromAddressMap(ctx context.Context, rc *ResourceContainer, params AddressMapMembershipParams) error {
+func (api *API) DeleteMembershipFromAddressMap(ctx context.Context, rc *ResourceContainer, params DeleteMembershipFromAddressMapParams) error {
 	if rc.Level != AccountRouteLevel {
 		return ErrRequiredAccountLevelResourceContainer
 	}
@@ -266,7 +278,7 @@ func (api *API) DeleteMembershipFromAddressMap(ctx context.Context, rc *Resource
 		return fmt.Errorf("requested membershp kind (%q) is not supported", params.Membership.Kind)
 	}
 
-	uri := fmt.Sprintf("/%s/addressing/address_maps/%s/%s", rc.URLFragment(), params.ID, params.Membership.URLFragment())
+	uri := fmt.Sprintf("/%s/%s/addressing/address_maps/%s/%s", rc.Level, rc.Identifier, params.ID, params.Membership.URLFragment())
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	return err
 }

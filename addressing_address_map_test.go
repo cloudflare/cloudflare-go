@@ -81,12 +81,16 @@ func TestListAddressMap(t *testing.T) {
 			DefaultSNI:   &addressMapDefaultSNI,
 			Enabled:      BoolPtr(true),
 			IPs:          []AddressMapIP{{"192.0.2.1", ipCreatedAt}},
-			Memberships:  []AddressMapMembership{{AddressMapMembershipContainer{"01a7362d577a6c3019a474fd6f485823", AddressMapMembershipZone}, true, membershipCreatedAt}},
+			Memberships: []AddressMapMembership{{
+				Identifier: "01a7362d577a6c3019a474fd6f485823",
+				Kind:       AddressMapMembershipZone,
 				Deletable:  BoolPtr(true),
+				CreatedAt:  membershipCreatedAt,
+			}},
 		},
 	}
 
-	actual, err := client.ListAddressMaps(context.Background(), AccountIdentifier(testAccountID), AddressMapFilterParams{&expectedIP, &expectedCIDR})
+	actual, err := client.ListAddressMaps(context.Background(), AccountIdentifier(testAccountID), ListAddressMapsParams{&expectedIP, &expectedCIDR})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -147,8 +151,12 @@ func TestGetAddressMap(t *testing.T) {
 		DefaultSNI:   &addressMapDefaultSNI,
 		Enabled:      BoolPtr(true),
 		IPs:          []AddressMapIP{{"192.0.2.1", ipCreatedAt}},
-		Memberships:  []AddressMapMembership{{AddressMapMembershipContainer{"01a7362d577a6c3019a474fd6f485823", AddressMapMembershipZone}, true, membershipCreatedAt}},
+		Memberships: []AddressMapMembership{{
+			Identifier: "01a7362d577a6c3019a474fd6f485823",
+			Kind:       AddressMapMembershipZone,
 			Deletable:  BoolPtr(true),
+			CreatedAt:  membershipCreatedAt,
+		}},
 	}
 
 	actual, err := client.GetAddressMap(context.Background(), AccountIdentifier(testAccountID), "9a7806061c88ada191ed06f989cc3dac")
@@ -212,11 +220,15 @@ func TestUpdateAddressMap(t *testing.T) {
 		DefaultSNI:   &addressMapDefaultSNI,
 		Enabled:      BoolPtr(true),
 		IPs:          []AddressMapIP{{"192.0.2.1", ipCreatedAt}},
-		Memberships:  []AddressMapMembership{{AddressMapMembershipContainer{"01a7362d577a6c3019a474fd6f485823", AddressMapMembershipZone}, true, membershipCreatedAt}},
+		Memberships: []AddressMapMembership{{
+			Identifier: "01a7362d577a6c3019a474fd6f485823",
+			Kind:       AddressMapMembershipZone,
 			Deletable:  BoolPtr(true),
+			CreatedAt:  membershipCreatedAt,
+		}},
 	}
 
-	actual, err := client.UpdateAddressMap(context.Background(), AccountIdentifier(testAccountID), AddressMapUpdateParams{ID: "9a7806061c88ada191ed06f989cc3dac"})
+	actual, err := client.UpdateAddressMap(context.Background(), AccountIdentifier(testAccountID), UpdateAddressMapParams{ID: "9a7806061c88ada191ed06f989cc3dac"})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -262,7 +274,7 @@ func TestAddIPAddressToAddressMap(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/addressing/address_maps/9a7806061c88ada191ed06f989cc3dac/ips/192.0.2.1", handler)
 
-	err := client.CreateIPAddressToAddressMap(context.Background(), AccountIdentifier(testAccountID), AddressMapIPParams{"9a7806061c88ada191ed06f989cc3dac", "192.0.2.1"})
+	err := client.CreateIPAddressToAddressMap(context.Background(), AccountIdentifier(testAccountID), CreateIPAddressToAddressMapParams{"9a7806061c88ada191ed06f989cc3dac", "192.0.2.1"})
 	assert.NoError(t, err)
 }
 
@@ -283,7 +295,7 @@ func TestRemoveIPAddressFromAddressMap(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/addressing/address_maps/9a7806061c88ada191ed06f989cc3dac/ips/192.0.2.1", handler)
 
-	err := client.DeleteIPAddressFromAddressMap(context.Background(), AccountIdentifier(testAccountID), AddressMapIPParams{"9a7806061c88ada191ed06f989cc3dac", "192.0.2.1"})
+	err := client.DeleteIPAddressFromAddressMap(context.Background(), AccountIdentifier(testAccountID), DeleteIPAddressFromAddressMapParams{"9a7806061c88ada191ed06f989cc3dac", "192.0.2.1"})
 	assert.NoError(t, err)
 }
 
@@ -304,7 +316,7 @@ func TestAddZoneToAddressMap(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/addressing/address_maps/9a7806061c88ada191ed06f989cc3dac/zones/01a7362d577a6c3019a474fd6f485823", handler)
 
-	err := client.CreateMembershipToAddressMap(context.Background(), AccountIdentifier(testAccountID), AddressMapMembershipParams{"9a7806061c88ada191ed06f989cc3dac", AddressMapMembershipContainer{"01a7362d577a6c3019a474fd6f485823", AddressMapMembershipZone}})
+	err := client.CreateMembershipToAddressMap(context.Background(), AccountIdentifier(testAccountID), CreateMembershipToAddressMapParams{"9a7806061c88ada191ed06f989cc3dac", AddressMapMembershipContainer{"01a7362d577a6c3019a474fd6f485823", AddressMapMembershipZone}})
 	assert.NoError(t, err)
 }
 
@@ -325,7 +337,7 @@ func TestRemoveZoneFromAddressMap(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/addressing/address_maps/9a7806061c88ada191ed06f989cc3dac/zones/01a7362d577a6c3019a474fd6f485823", handler)
 
-	err := client.DeleteMembershipFromAddressMap(context.Background(), AccountIdentifier(testAccountID), AddressMapMembershipParams{"9a7806061c88ada191ed06f989cc3dac", AddressMapMembershipContainer{"01a7362d577a6c3019a474fd6f485823", AddressMapMembershipZone}})
+	err := client.DeleteMembershipFromAddressMap(context.Background(), AccountIdentifier(testAccountID), DeleteMembershipFromAddressMapParams{"9a7806061c88ada191ed06f989cc3dac", AddressMapMembershipContainer{"01a7362d577a6c3019a474fd6f485823", AddressMapMembershipZone}})
 	assert.NoError(t, err)
 }
 
@@ -346,7 +358,7 @@ func TestAddAccountToAddressMap(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/addressing/address_maps/9a7806061c88ada191ed06f989cc3dac/accounts/01a7362d577a6c3019a474fd6f485823", handler)
 
-	err := client.CreateMembershipToAddressMap(context.Background(), AccountIdentifier(testAccountID), AddressMapMembershipParams{"9a7806061c88ada191ed06f989cc3dac", AddressMapMembershipContainer{"01a7362d577a6c3019a474fd6f485823", AddressMapMembershipAccount}})
+	err := client.CreateMembershipToAddressMap(context.Background(), AccountIdentifier(testAccountID), CreateMembershipToAddressMapParams{"9a7806061c88ada191ed06f989cc3dac", AddressMapMembershipContainer{"01a7362d577a6c3019a474fd6f485823", AddressMapMembershipAccount}})
 	assert.NoError(t, err)
 }
 
@@ -367,6 +379,6 @@ func TestRemoveAccountFromAddressMap(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/addressing/address_maps/9a7806061c88ada191ed06f989cc3dac/accounts/01a7362d577a6c3019a474fd6f485823", handler)
 
-	err := client.DeleteMembershipFromAddressMap(context.Background(), AccountIdentifier(testAccountID), AddressMapMembershipParams{"9a7806061c88ada191ed06f989cc3dac", AddressMapMembershipContainer{"01a7362d577a6c3019a474fd6f485823", AddressMapMembershipAccount}})
+	err := client.DeleteMembershipFromAddressMap(context.Background(), AccountIdentifier(testAccountID), DeleteMembershipFromAddressMapParams{"9a7806061c88ada191ed06f989cc3dac", AddressMapMembershipContainer{"01a7362d577a6c3019a474fd6f485823", AddressMapMembershipAccount}})
 	assert.NoError(t, err)
 }
