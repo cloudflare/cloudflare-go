@@ -9,6 +9,7 @@ ENHANCEMENTS:
 
 * access_organization: add ui_read_only_toggle_reason field ([#1181](https://github.com/cloudflare/cloudflare-go/issues/1181))
 * added audit_ssh to gateway actions, updated gateway rule settings ([#1226](https://github.com/cloudflare/cloudflare-go/issues/1226))
+* addressing: Add `Address Map` support ([#1232](https://github.com/cloudflare/cloudflare-go/issues/1232))
 * teams_account: add support for `check_disks` ([#1197](https://github.com/cloudflare/cloudflare-go/issues/1197))
 * tunnel: updated parameters to latest API docs ([#1227](https://github.com/cloudflare/cloudflare-go/issues/1227))
 
