@@ -79,7 +79,7 @@ type CreateAddressMapParams struct {
 
 // UpdateAddressMapParams contains information about an address map to be updated.
 type UpdateAddressMapParams struct {
-	ID          string  `json:"id"`
+	ID          string  `json:"-"`
 	Description *string `json:"description,omitempty"`
 	Enabled     *bool   `json:"enabled,omitempty"`
 	DefaultSNI  *string `json:"default_sni,omitempty"`
@@ -245,7 +245,7 @@ func (api *API) DeleteIPAddressFromAddressMap(ctx context.Context, rc *ResourceC
 	return err
 }
 
-// AddMembershipToAddressMap adds a zone/account as a member of a particular address map.
+// CreateMembershipToAddressMap adds a zone/account as a member of a particular address map.
 //
 // API reference:
 //   - account: https://developers.cloudflare.com/api/operations/ip-address-management-address-maps-add-an-account-membership-to-an-address-map
