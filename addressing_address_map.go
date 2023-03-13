@@ -126,7 +126,7 @@ func (api *API) ListAddressMaps(ctx context.Context, rc *ResourceContainer, para
 		return []AddressMap{}, ErrRequiredAccountLevelResourceContainer
 	}
 
-	uri := buildURI(fmt.Sprintf("/%s/%s/addressing/address_maps", rc.Level, rc.Identifier), params)
+	uri := buildURI(fmt.Sprintf("/%s/addressing/address_maps", rc.URLFragment()), params)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []AddressMap{}, err
@@ -259,7 +259,7 @@ func (api *API) CreateMembershipToAddressMap(ctx context.Context, rc *ResourceCo
 		return fmt.Errorf("requested membershp kind (%q) is not supported", params.Membership.Kind)
 	}
 
-	uri := fmt.Sprintf("/%s/%s/addressing/address_maps/%s/%s", rc.Level, rc.Identifier, params.ID, params.Membership.URLFragment())
+	uri := fmt.Sprintf("/%s/addressing/address_maps/%s/%s", rc.URLFragment(), params.ID, params.Membership.URLFragment())
 	_, err := api.makeRequestContext(ctx, http.MethodPut, uri, nil)
 	return err
 }
@@ -278,7 +278,7 @@ func (api *API) DeleteMembershipFromAddressMap(ctx context.Context, rc *Resource
 		return fmt.Errorf("requested membershp kind (%q) is not supported", params.Membership.Kind)
 	}
 
-	uri := fmt.Sprintf("/%s/%s/addressing/address_maps/%s/%s", rc.Level, rc.Identifier, params.ID, params.Membership.URLFragment())
+	uri := fmt.Sprintf("/%s/addressing/address_maps/%s/%s", rc.URLFragment(), params.ID, params.Membership.URLFragment())
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	return err
 }
