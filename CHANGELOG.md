@@ -1,5 +1,9 @@
 ## 0.64.0 (Unreleased)
 
+DEPENDENCIES:
+
+* deps: bumps actions/setup-go from 3 to 4 ([#1236](https://github.com/cloudflare/cloudflare-go/issues/1236))
+
 ## 0.63.0 (15th March, 2023)
 
 BREAKING CHANGES:
