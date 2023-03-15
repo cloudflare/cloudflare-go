@@ -21,38 +21,6 @@ A Go library for interacting with
 A command-line client, [flarectl](cmd/flarectl), is also available as part of
 this project.
 
-## Features
-
-The current feature list includes:
-
-- [x] Cache purging
-- [x] Cloudflare IPs
-- [x] Custom hostnames
-- [x] DNS Firewall
-- [x] DNS Records
-- [x] Firewall (partial)
-- [x] Gateway Locations
-- [x] [Keyless SSL](https://blog.cloudflare.com/keyless-ssl-the-nitty-gritty-technical-details/)
-- [x] [Load Balancing](https://blog.cloudflare.com/introducing-load-balancing-intelligent-failover-with-cloudflare/)
-- [x] [Logpush Jobs](https://developers.cloudflare.com/logs/logpush/)
-- [x] Magic Transit / Magic WAN
-- [x] mTLS Certificate Store
-- [x] Notifications
-- [ ] Organization Administration
-- [x] [Origin CA](https://blog.cloudflare.com/universal-ssl-encryption-all-the-way-to-the-origin-for-free/)
-- [x] [Railgun](https://www.cloudflare.com/railgun/) administration
-- [x] Rate Limiting
-- [x] User Administration (partial)
-- [x] Web Application Firewall (WAF)
-- [x] Workers KV
-- [x] Zone cache settings
-- [x] Zone Lockdown and User-Agent Block rules
-- [x] Zones
-- [x] Managed Headers
-
-Pull Requests are welcome, but please open an issue (or comment in an existing
-issue) to discuss any non-trivial changes before submitting code.
-
 ## Installation
 
 You need a working Go environment. We officially support only currently supported Go versions according to [Go project's release policy](https://go.dev/doc/devel/release#policy).
@@ -94,20 +62,6 @@ func main() {
 	}
 	// Print user details
 	fmt.Println(u)
-
-	// Fetch the zone ID
-	id, err := api.ZoneIDByName("example.com") // Assuming example.com exists in your Cloudflare account already
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Fetch zone details
-	zone, err := api.ZoneDetails(ctx, id)
-	if err != nil {
-		log.Fatal(err)
-	}
-	// Print zone details
-	fmt.Println(zone)
 }
 ```
 
@@ -120,6 +74,11 @@ how to use this package in-depth.
 This library is starting to ship with experimental improvements that are not yet
 ready for production but will be introduced before the next major version. See
 [experimental README](/docs/experimental.md) for full details.
+
+## Contributing
+
+Pull Requests are welcome, but please open an issue (or comment in an existing
+issue) to discuss any non-trivial changes before submitting code.
 
 ## License
 
