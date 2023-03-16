@@ -30,6 +30,8 @@ type AccessIdentityProviderConfiguration struct {
 	CertsURL           string   `json:"certs_url,omitempty"`
 	ClientID           string   `json:"client_id,omitempty"`
 	ClientSecret       string   `json:"client_secret,omitempty"`
+	Claims             []string `json:"claims,omitempty"`
+	Scopes             []string `json:"scopes,omitempty"`
 	DirectoryID        string   `json:"directory_id,omitempty"`
 	EmailAttributeName string   `json:"email_attribute_name,omitempty"`
 	IdpPublicCert      string   `json:"idp_public_cert,omitempty"`
