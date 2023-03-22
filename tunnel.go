@@ -275,9 +275,7 @@ func (api *API) CreateTunnel(ctx context.Context, rc *ResourceContainer, params 
 
 	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel", rc.Identifier)
 
-	tunnel := Tunnel{Name: params.Name, Secret: params.Secret}
-
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, tunnel)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return Tunnel{}, err
 	}
