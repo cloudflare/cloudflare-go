@@ -43,6 +43,7 @@ type AccessApplication struct {
 	UpdatedAt               *time.Time                     `json:"updated_at,omitempty"`
 	SaasApplication         *SaasApplication               `json:"saas_app,omitempty"`
 	AutoRedirectToIdentity  *bool                          `json:"auto_redirect_to_identity,omitempty"`
+	Policies                []AccessPolicy                 `json:"policies"`
 	SkipInterstitial        *bool                          `json:"skip_interstitial,omitempty"`
 	AppLauncherVisible      *bool                          `json:"app_launcher_visible,omitempty"`
 	EnableBindingCookie     *bool                          `json:"enable_binding_cookie,omitempty"`

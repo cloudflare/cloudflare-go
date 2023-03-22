@@ -33,6 +33,50 @@ func TestAccessApplications(t *testing.T) {
 					"session_duration": "24h",
 					"allowed_idps": ["f174e90a-fafe-4643-bbbc-4a0ed4fc8415"],
 					"auto_redirect_to_identity": false,
+					"policies": [
+						{
+							"id": "699d98642c564d2e855e9661899b7252",
+							"precedence": 1,
+							"decision": "allow",
+							"created_at": "2014-01-01T05:20:00.12345Z",
+							"updated_at": "2014-01-01T05:20:00.12345Z",
+							"name": "Allow devs",
+							"include": [
+								{
+									"email": {
+										"email": "test@example.com"
+									}
+								}
+							],
+							"exclude": [
+								{
+									"email": {
+										"email": "test@example.com"
+									}
+								}
+							],
+							"require": [
+								{
+									"email": {
+										"email": "test@example.com"
+									}
+								}
+							],
+							"purpose_justification_required": true,
+							"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing.",
+							"approval_required": true,
+							"approval_groups": [
+								{
+									"email_list_uuid": "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
+									"approvals_needed": 3
+								},
+								{
+									"email_addresses": ["email1@example.com", "email2@example.com"],
+									"approvals_needed": 1
+								}
+							]
+						}
+					],
 					"enable_binding_cookie": false,
 					"custom_deny_url": "https://www.example.com",
 					"custom_deny_message": "denied!",
@@ -68,6 +112,7 @@ func TestAccessApplications(t *testing.T) {
 		SessionDuration:         "24h",
 		AllowedIdps:             []string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415"},
 		AutoRedirectToIdentity:  BoolPtr(false),
+		Policies:                []AccessPolicy{expectedAccessPolicy},
 		EnableBindingCookie:     BoolPtr(false),
 		AppLauncherVisible:      BoolPtr(true),
 		ServiceAuth401Redirect:  BoolPtr(true),
