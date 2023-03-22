@@ -8,7 +8,7 @@ import (
 )
 
 type WorkersSubdomain struct {
-	Name string `json:"name,omitempty"`
+	Name string `json:"subdomain,omitempty"`
 }
 
 type WorkersSubdomainResponse struct {
