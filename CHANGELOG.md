@@ -4,6 +4,10 @@ ENHANCEMENTS:
 
 * access_identity_provider: add `claims` and `scopes` fields ([#1237](https://github.com/cloudflare/cloudflare-go/issues/1237))
 
+BUG FIXES:
+
+* tunnel: Fix 'CreateTunnel' for tunnels using config_src ([#1238](https://github.com/cloudflare/cloudflare-go/issues/1238))
+
 DEPENDENCIES:
 
 * deps: bumps actions/setup-go from 3 to 4 ([#1236](https://github.com/cloudflare/cloudflare-go/issues/1236))
