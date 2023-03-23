@@ -549,13 +549,13 @@ func TestUpdateDNSRecord(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/dns_records/"+dnsRecordID, handler)
 
-	err := client.UpdateDNSRecord(context.Background(), ZoneIdentifier(""), UpdateDNSRecordParams{ID: dnsRecordID})
+	_, err := client.UpdateDNSRecord(context.Background(), ZoneIdentifier(""), UpdateDNSRecordParams{ID: dnsRecordID})
 	assert.ErrorIs(t, err, ErrMissingZoneID)
 
-	err = client.UpdateDNSRecord(context.Background(), ZoneIdentifier(testZoneID), UpdateDNSRecordParams{})
+	_, err = client.UpdateDNSRecord(context.Background(), ZoneIdentifier(testZoneID), UpdateDNSRecordParams{})
 	assert.ErrorIs(t, err, ErrMissingDNSRecordID)
 
-	err = client.UpdateDNSRecord(context.Background(), ZoneIdentifier(testZoneID), UpdateDNSRecordParams{
+	_, err = client.UpdateDNSRecord(context.Background(), ZoneIdentifier(testZoneID), UpdateDNSRecordParams{
 		ID:      dnsRecordID,
 		Type:    "A",
 		Name:    "😺.example.com",
@@ -617,7 +617,7 @@ func TestUpdateDNSRecord_ClearComment(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/dns_records/"+dnsRecordID, handler)
 
-	err := client.UpdateDNSRecord(context.Background(), ZoneIdentifier(testZoneID), UpdateDNSRecordParams{
+	_, err := client.UpdateDNSRecord(context.Background(), ZoneIdentifier(testZoneID), UpdateDNSRecordParams{
 		ID:      dnsRecordID,
 		Comment: "",
 	})

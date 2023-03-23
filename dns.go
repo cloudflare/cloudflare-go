@@ -227,13 +227,13 @@ func (api *API) GetDNSRecord(ctx context.Context, rc *ResourceContainer, recordI
 // identifiers.
 //
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-update-dns-record
-func (api *API) UpdateDNSRecord(ctx context.Context, rc *ResourceContainer, params UpdateDNSRecordParams) error {
+func (api *API) UpdateDNSRecord(ctx context.Context, rc *ResourceContainer, params UpdateDNSRecordParams) (DNSRecord, error) {
 	if rc.Identifier == "" {
-		return ErrMissingZoneID
+		return DNSRecord{}, ErrMissingZoneID
 	}
 
 	if params.ID == "" {
-		return ErrMissingDNSRecordID
+		return DNSRecord{}, ErrMissingDNSRecordID
 	}
 
 	params.Name = toUTS46ASCII(params.Name)
@@ -241,14 +241,15 @@ func (api *API) UpdateDNSRecord(ctx context.Context, rc *ResourceContainer, para
 	uri := fmt.Sprintf("/zones/%s/dns_records/%s", rc.Identifier, params.ID)
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
 	if err != nil {
-		return err
+		return DNSRecord{}, err
 	}
 	var r DNSRecordResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
-		return fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return DNSRecord{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
-	return nil
+
+	return r.Result, nil
 }
 
 // DeleteDNSRecord deletes a single DNS record for the given zone & record
