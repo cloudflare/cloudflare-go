@@ -48,11 +48,11 @@ type TeamsRuleSettings struct {
 	// Turns on ip category based filter on dns if the rule contains dns category checks
 	IPCategories bool `json:"ip_categories"`
 
-	// Allow parent MSP accounts to enable bypass their children's rules.
-	AllowChildBypass bool `json:"allow_child_bypass"`
+	// Allow parent MSP accounts to enable bypass their children's rules. Do not set them for non MSP accounts.
+	AllowChildBypass *bool `json:"allow_child_bypass,omitempty"`
 
-	// Allow child MSP accounts to bypass their parent's rules
-	BypassParentRule bool `json:"bypass_parent_rule"`
+	// Allow child MSP accounts to bypass their parent's rules. Do not set them for non MSP accounts.
+	BypassParentRule *bool `json:"bypass_parent_rule,omitempty"`
 
 	// Action taken when an untrusted origin certificate error occurs in a http allow rule
 	UntrustedCertSettings *UntrustedCertSettings `json:"untrusted_cert"`
