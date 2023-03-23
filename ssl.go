@@ -10,19 +10,19 @@ import (
 
 // ZoneCustomSSL represents custom SSL certificate metadata.
 type ZoneCustomSSL struct {
-	ID              string                       `json:"id"`
-	Hosts           []string                     `json:"hosts"`
-	Issuer          string                       `json:"issuer"`
-	Signature       string                       `json:"signature"`
-	Status          string                       `json:"status"`
-	BundleMethod    string                       `json:"bundle_method"`
-	GeoRestrictions ZoneCustomSSLGeoRestrictions `json:"geo_restrictions"`
-	ZoneID          string                       `json:"zone_id"`
-	UploadedOn      time.Time                    `json:"uploaded_on"`
-	ModifiedOn      time.Time                    `json:"modified_on"`
-	ExpiresOn       time.Time                    `json:"expires_on"`
-	Priority        int                          `json:"priority"`
-	KeylessServer   KeylessSSL                   `json:"keyless_server"`
+	ID              string                        `json:"id"`
+	Hosts           []string                      `json:"hosts"`
+	Issuer          string                        `json:"issuer"`
+	Signature       string                        `json:"signature"`
+	Status          string                        `json:"status"`
+	BundleMethod    string                        `json:"bundle_method"`
+	GeoRestrictions *ZoneCustomSSLGeoRestrictions `json:"geo_restrictions,omitempty"`
+	ZoneID          string                        `json:"zone_id"`
+	UploadedOn      time.Time                     `json:"uploaded_on"`
+	ModifiedOn      time.Time                     `json:"modified_on"`
+	ExpiresOn       time.Time                     `json:"expires_on"`
+	Priority        int                           `json:"priority"`
+	KeylessServer   KeylessSSL                    `json:"keyless_server"`
 }
 
 // ZoneCustomSSLGeoRestrictions represents the parameter to create or update
