@@ -6,6 +6,8 @@ ENHANCEMENTS:
 
 BUG FIXES:
 
+* teams_rules: `AllowChildBypass` changes from a `bool` to `*bool` ([#1242](https://github.com/cloudflare/cloudflare-go/issues/1242))
+* teams_rules: `BypassParentRule` changes from a `bool` to `*bool` ([#1242](https://github.com/cloudflare/cloudflare-go/issues/1242))
 * tunnel: Fix 'CreateTunnel' for tunnels using config_src ([#1238](https://github.com/cloudflare/cloudflare-go/issues/1238))
 
 DEPENDENCIES:
