@@ -127,25 +127,25 @@ type CreateDNSRecordParams struct {
 // CreateDNSRecord creates a DNS record for the zone identifier.
 //
 // API reference: https://api.cloudflare.com/#dns-records-for-a-zone-create-dns-record
-func (api *API) CreateDNSRecord(ctx context.Context, rc *ResourceContainer, params CreateDNSRecordParams) (*DNSRecordResponse, error) {
+func (api *API) CreateDNSRecord(ctx context.Context, rc *ResourceContainer, params CreateDNSRecordParams) (DNSRecord, error) {
 	if rc.Identifier == "" {
-		return nil, ErrMissingZoneID
+		return DNSRecord{}, ErrMissingZoneID
 	}
 	params.Name = toUTS46ASCII(params.Name)
 
 	uri := fmt.Sprintf("/zones/%s/dns_records", rc.Identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
-		return nil, err
+		return DNSRecord{}, err
 	}
 
 	var recordResp *DNSRecordResponse
 	err = json.Unmarshal(res, &recordResp)
 	if err != nil {
-		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return DNSRecord{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
-	return recordResp, nil
+	return recordResp.Result, nil
 }
 
 // ListDNSRecords returns a slice of DNS records for the given zone identifier.
@@ -243,13 +243,14 @@ func (api *API) UpdateDNSRecord(ctx context.Context, rc *ResourceContainer, para
 	if err != nil {
 		return DNSRecord{}, err
 	}
-	var r DNSRecordResponse
-	err = json.Unmarshal(res, &r)
+
+	var recordResp *DNSRecordResponse
+	err = json.Unmarshal(res, &recordResp)
 	if err != nil {
 		return DNSRecord{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
-	return r.Result, nil
+	return recordResp.Result, nil
 }
 
 // DeleteDNSRecord deletes a single DNS record for the given zone & record

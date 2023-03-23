@@ -116,26 +116,23 @@ func TestCreateDNSRecord(t *testing.T) {
 
 	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
 	modifiedOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
-	want := &DNSRecordResponse{
-		Result: DNSRecord{
-			ID:         "372e67954025e0ba6aaa6d586b9e0b59",
-			Type:       asciiInput.Type,
-			Name:       asciiInput.Name,
-			Content:    asciiInput.Content,
-			Proxiable:  true,
-			Proxied:    asciiInput.Proxied,
-			TTL:        asciiInput.TTL,
-			ZoneID:     testZoneID,
-			ZoneName:   "example.com",
-			CreatedOn:  createdOn,
-			ModifiedOn: modifiedOn,
-			Data:       map[string]interface{}{},
-			Meta: map[string]interface{}{
-				"auto_added": true,
-				"source":     "primary",
-			},
+	want := DNSRecord{
+		ID:         "372e67954025e0ba6aaa6d586b9e0b59",
+		Type:       asciiInput.Type,
+		Name:       asciiInput.Name,
+		Content:    asciiInput.Content,
+		Proxiable:  true,
+		Proxied:    asciiInput.Proxied,
+		TTL:        asciiInput.TTL,
+		ZoneID:     testZoneID,
+		ZoneName:   "example.com",
+		CreatedOn:  createdOn,
+		ModifiedOn: modifiedOn,
+		Data:       map[string]interface{}{},
+		Meta: map[string]interface{}{
+			"auto_added": true,
+			"source":     "primary",
 		},
-		Response: Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}},
 	}
 
 	_, err := client.CreateDNSRecord(context.Background(), ZoneIdentifier(""), CreateDNSRecordParams{})
