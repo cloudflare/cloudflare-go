@@ -1,5 +1,9 @@
 ## 0.64.0 (Unreleased)
 
+BREAKING CHANGES:
+
+* dns: Changed Create/UpdateDNSRecord method signatures to return (DNSRecord, error) ([#1243](https://github.com/cloudflare/cloudflare-go/issues/1243))
+
 ENHANCEMENTS:
 
 * access_identity_provider: add `claims` and `scopes` fields ([#1237](https://github.com/cloudflare/cloudflare-go/issues/1237))
