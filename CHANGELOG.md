@@ -3,6 +3,7 @@
 ENHANCEMENTS:
 
 * access_identity_provider: add `claims` and `scopes` fields ([#1237](https://github.com/cloudflare/cloudflare-go/issues/1237))
+* access_identity_provider: add scim_config field ([#1178](https://github.com/cloudflare/cloudflare-go/issues/1178))
 
 BUG FIXES:
 
