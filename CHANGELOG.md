@@ -18,6 +18,7 @@ BUG FIXES:
 DEPENDENCIES:
 
 * deps: bumps actions/setup-go from 3 to 4 ([#1236](https://github.com/cloudflare/cloudflare-go/issues/1236))
+* deps: bumps github.com/urfave/cli/v2 from 2.25.0 to 2.25.1 ([#1250](https://github.com/cloudflare/cloudflare-go/issues/1250))
 
 ## 0.63.0 (15th March, 2023)
 
