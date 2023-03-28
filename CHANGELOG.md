@@ -3,6 +3,8 @@
 BREAKING CHANGES:
 
 * dns: Changed Create/UpdateDNSRecord method signatures to return (DNSRecord, error) ([#1243](https://github.com/cloudflare/cloudflare-go/issues/1243))
+* zone: `UpdateZoneSingleSetting` has been renamed to `UpdateZoneSetting` and updated method signature inline with our expected conventions ([#1251](https://github.com/cloudflare/cloudflare-go/issues/1251))
+* zone: `ZoneSingleSetting` has been renamed to `GetZoneSetting` and updated method signature inline with our expected conventions ([#1251](https://github.com/cloudflare/cloudflare-go/issues/1251))
 
 ENHANCEMENTS:
 
@@ -10,6 +12,7 @@ ENHANCEMENTS:
 * access_identity_provider: add scim_config field ([#1178](https://github.com/cloudflare/cloudflare-go/issues/1178))
 * devices_policy: update `Mode` field to use new `ServiceMode` string type with explicit const service mode values ([#1249](https://github.com/cloudflare/cloudflare-go/issues/1249))
 * ssl: make `GeoRestrictions` a pointer inside of ZoneCustomSSL ([#1244](https://github.com/cloudflare/cloudflare-go/issues/1244))
+* zone: `GetZoneSetting` and `UpdateZoneSetting` now allow configuring the path for where a setting resides instead of assuming `settings` ([#1251](https://github.com/cloudflare/cloudflare-go/issues/1251))
 
 BUG FIXES:
 
