@@ -1510,3 +1510,103 @@ func TestUpdateZoneSSLSettings(t *testing.T) {
 		assert.Equal(t, s.ModifiedOn, "2014-01-01T05:20:00.12345Z")
 	}
 }
+
+func TestGetZoneSetting(t *testing.T) {
+	setup()
+	defer teardown()
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		_, _ = fmt.Fprintf(w, `{
+			"result": {
+				"id": "ssl",
+				"value": "off",
+				"editable": true,
+				"modified_on": "2014-01-01T05:20:00.12345Z"
+			}
+		}`)
+	}
+	mux.HandleFunc("/zones/foo/settings/ssl", handler)
+	s, err := client.GetZoneSetting(context.Background(), ZoneIdentifier("foo"), GetZoneSettingParams{Name: "ssl"})
+	if assert.NoError(t, err) {
+		assert.Equal(t, s.ID, "ssl")
+		assert.Equal(t, s.Value, "off")
+		assert.Equal(t, s.Editable, true)
+		assert.Equal(t, s.ModifiedOn, "2014-01-01T05:20:00.12345Z")
+	}
+}
+
+func TestGetZoneSettingWithCustomPathPrefix(t *testing.T) {
+	setup()
+	defer teardown()
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		_, _ = fmt.Fprintf(w, `{
+			"result": {
+				"id": "ssl",
+				"value": "off",
+				"editable": true,
+				"modified_on": "2014-01-01T05:20:00.12345Z"
+			}
+		}`)
+	}
+	mux.HandleFunc("/zones/foo/my_custom_path/ssl", handler)
+	s, err := client.GetZoneSetting(context.Background(), ZoneIdentifier("foo"), GetZoneSettingParams{Name: "ssl", PathPrefix: "my_custom_path"})
+	if assert.NoError(t, err) {
+		assert.Equal(t, s.ID, "ssl")
+		assert.Equal(t, s.Value, "off")
+		assert.Equal(t, s.Editable, true)
+		assert.Equal(t, s.ModifiedOn, "2014-01-01T05:20:00.12345Z")
+	}
+}
+
+func TestUpdateZoneSetting(t *testing.T) {
+	setup()
+	defer teardown()
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		_, _ = fmt.Fprintf(w, `{
+			"result": {
+				"id": "ssl",
+				"value": "off",
+				"editable": true,
+				"modified_on": "2014-01-01T05:20:00.12345Z"
+			}
+		}`)
+	}
+	mux.HandleFunc("/zones/foo/settings/ssl", handler)
+	s, err := client.UpdateZoneSetting(context.Background(), ZoneIdentifier("foo"), UpdateZoneSettingParams{Name: "ssl", Value: "off"})
+	if assert.NoError(t, err) {
+		assert.Equal(t, s.ID, "ssl")
+		assert.Equal(t, s.Value, "off")
+		assert.Equal(t, s.Editable, true)
+		assert.Equal(t, s.ModifiedOn, "2014-01-01T05:20:00.12345Z")
+	}
+}
+
+func TestUpdateZoneSettingWithCustomPathPrefix(t *testing.T) {
+	setup()
+	defer teardown()
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		_, _ = fmt.Fprintf(w, `{
+			"result": {
+				"id": "ssl",
+				"value": "off",
+				"editable": true,
+				"modified_on": "2014-01-01T05:20:00.12345Z"
+			}
+		}`)
+	}
+	mux.HandleFunc("/zones/foo/my_custom_path/ssl", handler)
+	s, err := client.UpdateZoneSetting(context.Background(), ZoneIdentifier("foo"), UpdateZoneSettingParams{Name: "ssl", PathPrefix: "my_custom_path", Value: "off"})
+	if assert.NoError(t, err) {
+		assert.Equal(t, s.ID, "ssl")
+		assert.Equal(t, s.Value, "off")
+		assert.Equal(t, s.Editable, true)
+		assert.Equal(t, s.ModifiedOn, "2014-01-01T05:20:00.12345Z")
+	}
+}

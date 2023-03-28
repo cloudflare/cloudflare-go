@@ -14,6 +14,11 @@ import (
 	"golang.org/x/net/idna"
 )
 
+var (
+	// ErrMissingSettingName is for when setting name is required but missing.
+	ErrMissingSettingName = errors.New("zone setting name required but missing")
+)
+
 // Owner describes the resource owner.
 type Owner struct {
 	ID        string `json:"id"`
@@ -298,6 +303,17 @@ type zoneSubscriptionRatePlanPayload struct {
 	RatePlan struct {
 		ID string `json:"id"`
 	} `json:"rate_plan"`
+}
+
+type GetZoneSettingParams struct {
+	Name       string `json:"-"`
+	PathPrefix string `json:"-"`
+}
+
+type UpdateZoneSettingParams struct {
+	Name       string      `json:"-"`
+	PathPrefix string      `json:"-"`
+	Value      interface{} `json:"value"`
 }
 
 // CreateZone creates a zone on an account.
@@ -897,11 +913,25 @@ func normalizeZoneName(name string) string {
 	return name
 }
 
-// ZoneSingleSetting returns information about specified setting to the specified zone.
+// GetZoneSetting returns information about specified setting to the specified
+// zone.
 //
 // API reference: https://api.cloudflare.com/#zone-settings-get-all-zone-settings
-func (api *API) ZoneSingleSetting(ctx context.Context, zoneID, settingName string) (ZoneSetting, error) {
-	uri := fmt.Sprintf("/zones/%s/settings/%s", zoneID, settingName)
+func (api *API) GetZoneSetting(ctx context.Context, rc *ResourceContainer, params GetZoneSettingParams) (ZoneSetting, error) {
+	if rc.Level != ZoneRouteLevel {
+		return ZoneSetting{}, ErrRequiredZoneLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return ZoneSetting{}, ErrMissingName
+	}
+
+	pathPrefix := "settings"
+	if params.PathPrefix != "" {
+		pathPrefix = params.PathPrefix
+	}
+
+	uri := fmt.Sprintf("/zones/%s/%s/%s", rc.Identifier, pathPrefix, params.Name)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return ZoneSetting{}, err
@@ -914,23 +944,36 @@ func (api *API) ZoneSingleSetting(ctx context.Context, zoneID, settingName strin
 	return r.Result, nil
 }
 
-// UpdateZoneSingleSetting updates the specified setting for a given zone.
+// UpdateZoneSetting updates the specified setting for a given zone.
 //
 // API reference: https://api.cloudflare.com/#zone-settings-edit-zone-settings-info
-func (api *API) UpdateZoneSingleSetting(ctx context.Context, zoneID, settingName string, setting ZoneSetting) (*ZoneSettingSingleResponse, error) {
-	uri := fmt.Sprintf("/zones/%s/settings/%s", zoneID, settingName)
-	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, setting)
+func (api *API) UpdateZoneSetting(ctx context.Context, rc *ResourceContainer, params UpdateZoneSettingParams) (ZoneSetting, error) {
+	if rc.Level != ZoneRouteLevel {
+		return ZoneSetting{}, ErrRequiredZoneLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return ZoneSetting{}, ErrMissingName
+	}
+
+	pathPrefix := "settings"
+	if params.PathPrefix != "" {
+		pathPrefix = params.PathPrefix
+	}
+
+	uri := fmt.Sprintf("/zones/%s/%s/%s", rc.Identifier, pathPrefix, params.Name)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
 	if err != nil {
-		return nil, err
+		return ZoneSetting{}, err
 	}
 
 	response := &ZoneSettingSingleResponse{}
 	err = json.Unmarshal(res, &response)
 	if err != nil {
-		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return ZoneSetting{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
-	return response, nil
+	return response.Result, nil
 }
 
 // ZoneExport returns the text BIND config for the given zone
