@@ -1,4 +1,6 @@
-## 0.64.0 (Unreleased)
+## 0.65.0 (Unreleased)
+
+## 0.64.0 (29th March, 2023)
 
 BREAKING CHANGES:
 
