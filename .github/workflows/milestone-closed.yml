@@ -27,9 +27,9 @@ jobs:
           for element in "${issues[@]}"
           do
               echo "Locking $element"
-              echo "no" | gh pr lock -r resolved $element
-              echo "no" | gh issue lock -r resolved $element
+              echo "no" | gh pr lock -r resolved $element || true
+              echo "no" | gh issue lock -r resolved $element || true
           done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ISSUES: ${{ needs.comment-on-closed-milestone.outputs.ids }}
+          ISSUES: ${{ jobs.comment-on-closed-milestone.outputs.ids }}
