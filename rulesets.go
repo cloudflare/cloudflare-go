@@ -66,6 +66,7 @@ const (
 
 	RulesetRuleActionParametersHTTPHeaderOperationRemove RulesetRuleActionParametersHTTPHeaderOperation = "remove"
 	RulesetRuleActionParametersHTTPHeaderOperationSet    RulesetRuleActionParametersHTTPHeaderOperation = "set"
+	RulesetRuleActionParametersHTTPHeaderOperationAdd    RulesetRuleActionParametersHTTPHeaderOperation = "add"
 )
 
 // RulesetKindValues exposes all the available `RulesetKind` values as a slice
@@ -149,6 +150,7 @@ func RulesetRuleActionParametersHTTPHeaderOperationValues() []string {
 	return []string{
 		string(RulesetRuleActionParametersHTTPHeaderOperationRemove),
 		string(RulesetRuleActionParametersHTTPHeaderOperationSet),
+		string(RulesetRuleActionParametersHTTPHeaderOperationAdd),
 	}
 }
 
