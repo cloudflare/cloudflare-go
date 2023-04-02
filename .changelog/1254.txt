@@ -1,0 +1,3 @@
+```release-note:note
+dns: improved 'create-or-update' command in flarectl to support 'name' parameters containing 'zone' values
+```
