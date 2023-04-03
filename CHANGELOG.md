@@ -1,5 +1,9 @@
 ## 0.65.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* access: Add `isolation_required` flag to Access policies ([#1258](https://github.com/cloudflare/cloudflare-go/issues/1258))
+
 ## 0.64.0 (29th March, 2023)
 
 BREAKING CHANGES:
