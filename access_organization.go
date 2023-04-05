@@ -18,6 +18,7 @@ type AccessOrganization struct {
 	IsUIReadOnly                   *bool                         `json:"is_ui_read_only,omitempty"`
 	UIReadOnlyToggleReason         string                        `json:"ui_read_only_toggle_reason,omitempty"`
 	UserSeatExpirationInactiveTime string                        `json:"user_seat_expiration_inactive_time,omitempty"`
+	AutoRedirectToIdentity         *bool                         `json:"auto_redirect_to_identity,omitempty"`
 }
 
 // AccessOrganizationLoginDesign represents the login design options.
