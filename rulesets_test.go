@@ -554,6 +554,86 @@ func TestGetRuleset_RedirectFromValue(t *testing.T) {
 	}
 }
 
+func TestGetRuleset_CompressResponse(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+      "result": {
+        "id": "70339d97bdb34195bbf054b1ebe81f76",
+        "name": "Cloudflare compress response ruleset",
+        "description": "This ruleset provides response compression rules",
+        "kind": "zone",
+        "version": "1",
+        "rules": [
+          {
+            "id": "78723a9e0c7c4c6dbec5684cb766231d",
+            "version": "1",
+            "action": "compress_response",
+            "action_parameters": {
+				"algorithms": [ { "name": "brotli" }, { "name": "default" } ]
+            },
+			"description": "Compress response rule",
+			"last_updated": "2020-12-18T09:28:09.655749Z",
+			"ref": "272936dc447b41fe976255ff6b768ec0",
+			"enabled": true
+          }
+        ],
+        "last_updated": "2020-12-18T09:28:09.655749Z",
+        "phase": "http_response_compression"
+      },
+      "success": true,
+      "errors": [],
+      "messages": []
+    }`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/rulesets/b232b534beea4e00a21dcbb7a8a545e9", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/rulesets/b232b534beea4e00a21dcbb7a8a545e9", handler)
+
+	lastUpdated, _ := time.Parse(time.RFC3339, "2020-12-18T09:28:09.655749Z")
+
+	rules := []RulesetRule{{
+		ID:      "78723a9e0c7c4c6dbec5684cb766231d",
+		Version: StringPtr("1"),
+		Action:  string(RulesetRuleActionCompressResponse),
+		ActionParameters: &RulesetRuleActionParameters{
+			Algorithms: []RulesetRuleActionParametersCompressionAlgorithm{
+				{Name: "brotli"},
+				{Name: "default"},
+			},
+		},
+		Description: "Compress response rule",
+		LastUpdated: &lastUpdated,
+		Ref:         "272936dc447b41fe976255ff6b768ec0",
+		Enabled:     BoolPtr(true),
+	}}
+
+	want := Ruleset{
+		ID:          "70339d97bdb34195bbf054b1ebe81f76",
+		Name:        "Cloudflare compress response ruleset",
+		Description: "This ruleset provides response compression rules",
+		Kind:        string(RulesetKindZone),
+		Version:     StringPtr("1"),
+		LastUpdated: &lastUpdated,
+		Phase:       string(RulesetPhaseHTTPResponseCompression),
+		Rules:       rules,
+	}
+
+	zoneActual, err := client.GetZoneRuleset(context.Background(), testZoneID, "b232b534beea4e00a21dcbb7a8a545e9")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, zoneActual)
+	}
+
+	accountActual, err := client.GetAccountRuleset(context.Background(), testAccountID, "b232b534beea4e00a21dcbb7a8a545e9")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, accountActual)
+	}
+}
+
 func TestCreateRuleset(t *testing.T) {
 	setup()
 	defer teardown()
