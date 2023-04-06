@@ -5,6 +5,8 @@ ENHANCEMENTS:
 * access: Add `auto_redirect_to_identity` flag to Access organizations ([#1260](https://github.com/cloudflare/cloudflare-go/issues/1260))
 * access: Add `isolation_required` flag to Access policies ([#1258](https://github.com/cloudflare/cloudflare-go/issues/1258))
 * rulesets: add support for add operation to HTTP header configuration ([#1253](https://github.com/cloudflare/cloudflare-go/issues/1253))
+* rulesets: add support for the `compress_response` action ([#1261](https://github.com/cloudflare/cloudflare-go/issues/1261))
+* rulesets: add support for the `http_response_compression` phase ([#1261](https://github.com/cloudflare/cloudflare-go/issues/1261))
 
 DEPENDENCIES:
 
