@@ -6,6 +6,10 @@ ENHANCEMENTS:
 * access: Add `isolation_required` flag to Access policies ([#1258](https://github.com/cloudflare/cloudflare-go/issues/1258))
 * rulesets: add support for add operation to HTTP header configuration ([#1253](https://github.com/cloudflare/cloudflare-go/issues/1253))
 
+DEPENDENCIES:
+
+* deps: bumps golang.org/x/net from 0.8.0 to 0.9.0 ([#1263](https://github.com/cloudflare/cloudflare-go/issues/1263))
+
 ## 0.64.0 (29th March, 2023)
 
 BREAKING CHANGES:
