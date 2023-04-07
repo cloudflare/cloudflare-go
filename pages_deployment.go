@@ -62,12 +62,6 @@ type pagesDeploymentResponse struct {
 	Result PagesProjectDeployment `json:"result"`
 }
 
-type pagesDeploymentStageLogsResponse struct {
-	Response
-	Result     PagesDeploymentStageLogs `json:"result"`
-	ResultInfo `json:"result_info"`
-}
-
 type pagesDeploymentLogsResponse struct {
 	Response
 	Result     PagesDeploymentLogs `json:"result"`
@@ -77,7 +71,7 @@ type pagesDeploymentLogsResponse struct {
 type ListPagesDeploymentsParams struct {
 	ProjectName string
 
-	PaginationOptions
+	ResultInfo
 }
 
 type GetPagesDeploymentInfoParams struct {
@@ -122,33 +116,55 @@ type RollbackPagesDeploymentParams struct {
 var (
 	ErrMissingProjectName  = errors.New("required missing project name")
 	ErrMissingDeploymentID = errors.New("required missing deployment ID")
-	ErrMissingStageName    = errors.New("required missing stage name")
 )
 
 // ListPagesDeployments returns all deployments for a Pages project.
 //
 // API reference: https://api.cloudflare.com/#pages-deployment-get-deployments
-func (api *API) ListPagesDeployments(ctx context.Context, rc *ResourceContainer, params ListPagesDeploymentsParams) ([]PagesProjectDeployment, ResultInfo, error) {
+func (api *API) ListPagesDeployments(ctx context.Context, rc *ResourceContainer, params ListPagesDeploymentsParams) ([]PagesProjectDeployment, *ResultInfo, error) {
 	if rc.Identifier == "" {
-		return []PagesProjectDeployment{}, ResultInfo{}, ErrMissingAccountID
+		return []PagesProjectDeployment{}, &ResultInfo{}, ErrMissingAccountID
 	}
 
 	if params.ProjectName == "" {
-		return []PagesProjectDeployment{}, ResultInfo{}, ErrMissingProjectName
+		return []PagesProjectDeployment{}, &ResultInfo{}, ErrMissingProjectName
 	}
 
-	uri := buildURI(fmt.Sprintf("/accounts/%s/pages/projects/%s/deployments", rc.Identifier, params.ProjectName), params.PaginationOptions)
-
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
-	if err != nil {
-		return []PagesProjectDeployment{}, ResultInfo{}, err
+	autoPaginate := true
+	if params.PerPage >= 1 || params.Page >= 1 {
+		autoPaginate = false
 	}
+
+	if params.PerPage < 1 {
+		params.PerPage = 50
+	}
+
+	if params.Page < 1 {
+		params.Page = 1
+	}
+
+	var deployments []PagesProjectDeployment
 	var r pagesDeploymentListResponse
-	err = json.Unmarshal(res, &r)
-	if err != nil {
-		return []PagesProjectDeployment{}, ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+
+	for {
+		r = pagesDeploymentListResponse{}
+		uri := buildURI(fmt.Sprintf("/accounts/%s/pages/projects/%s/deployments", rc.Identifier, params.ProjectName), params)
+		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+		if err != nil {
+			return []PagesProjectDeployment{}, &ResultInfo{}, err
+		}
+		err = json.Unmarshal(res, &r)
+		if err != nil {
+			return []PagesProjectDeployment{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		}
+		deployments = append(deployments, r.Result...)
+		params.ResultInfo = r.ResultInfo.Next()
+		if params.ResultInfo.Done() || !autoPaginate {
+			break
+		}
+
 	}
-	return r.Result, r.ResultInfo, nil
+	return r.Result, &r.ResultInfo, nil
 }
 
 // GetPagesDeploymentInfo returns a deployment for a Pages project.
