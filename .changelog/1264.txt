@@ -1,3 +1,7 @@
 ```release-note:breaking-change
 pages_deployment: add support for auto pagination
 ```
+
+```release-note:breaking-change
+pages_deployment: change DeletePagesDeploymentParams to be URL parameters
+```

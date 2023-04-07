@@ -398,7 +398,7 @@ func TestDeletePagesDeployment(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe", handler)
 
-	err := client.DeletePagesDeployment(context.Background(), AccountIdentifier(testAccountID), "test", "0012e50b-fa5d-44db-8cb5-1f372785dcbe")
+	err := client.DeletePagesDeployment(context.Background(), AccountIdentifier(testAccountID), "test", "0012e50b-fa5d-44db-8cb5-1f372785dcbe", DeletePagesDeploymentParams{})
 	assert.NoError(t, err)
 }
 
