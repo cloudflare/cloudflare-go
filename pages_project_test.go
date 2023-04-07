@@ -585,8 +585,6 @@ func TestUpdatePagesProject(t *testing.T) {
 
 	_, err := client.UpdatePagesProject(context.Background(), testAccountID, "Test Pages Project", *updateAttributes)
 
-	t.Log(err)
-
 	assert.NoError(t, err)
 }
 

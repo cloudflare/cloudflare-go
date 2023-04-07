@@ -319,12 +319,12 @@ func TestListPagesDeployments(t *testing.T) {
 		Total:   1,
 	}
 	actual, resultInfo, err := client.ListPagesDeployments(context.Background(), AccountIdentifier(testAccountID), ListPagesDeploymentsParams{
-		ProjectName:       "test",
-		PaginationOptions: PaginationOptions{},
+		ProjectName: "test",
+		ResultInfo:  ResultInfo{},
 	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedPagesDeployments, actual)
-		assert.Equal(t, expectedResultInfo, resultInfo)
+		assert.Equal(t, &expectedResultInfo, resultInfo)
 	}
 }
 
