@@ -95,7 +95,7 @@ type GetPagesDeploymentLogsParams struct {
 }
 
 type DeletePagesDeploymentParams struct {
-	force bool `url:"force,omitempty"`
+	Force bool `url:"force,omitempty"`
 }
 
 type CreatePagesDeploymentParams struct {
@@ -162,7 +162,7 @@ func (api *API) ListPagesDeployments(ctx context.Context, rc *ResourceContainer,
 			break
 		}
 	}
-	return r.Result, &r.ResultInfo, nil
+	return deployments, &r.ResultInfo, nil
 }
 
 // GetPagesDeploymentInfo returns a deployment for a Pages project.
