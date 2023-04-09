@@ -69,7 +69,7 @@ type pagesDeploymentLogsResponse struct {
 }
 
 type ListPagesDeploymentsParams struct {
-	ProjectName string
+	ProjectName string `url:"-"`
 
 	ResultInfo
 }
@@ -135,7 +135,7 @@ func (api *API) ListPagesDeployments(ctx context.Context, rc *ResourceContainer,
 	}
 
 	if params.PerPage < 1 {
-		params.PerPage = 50
+		params.PerPage = 25
 	}
 
 	if params.Page < 1 {
@@ -146,7 +146,6 @@ func (api *API) ListPagesDeployments(ctx context.Context, rc *ResourceContainer,
 	var r pagesDeploymentListResponse
 
 	for {
-		r = pagesDeploymentListResponse{}
 		uri := buildURI(fmt.Sprintf("/accounts/%s/pages/projects/%s/deployments", rc.Identifier, params.ProjectName), params)
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
