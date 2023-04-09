@@ -207,44 +207,6 @@ var (
 		Status:    "success",
 	}
 
-	expectedPagesDeploymentStageLogEntries = []PagesDeploymentStageLogEntry{
-		{
-			ID:        0,
-			Timestamp: &pagesDeploymentDummyTime,
-			Message:   "Installing dependencies",
-		},
-		{
-			ID:        1,
-			Timestamp: &pagesDeploymentDummyTime,
-			Message:   "Verify run directory",
-		},
-		{
-			ID:        2,
-			Timestamp: &pagesDeploymentDummyTime,
-			Message:   "Executing user command: bash test.sh",
-		},
-		{
-			ID:        3,
-			Timestamp: &pagesDeploymentDummyTime,
-			Message:   "Finished",
-		},
-		{
-			ID:        4,
-			Timestamp: &pagesDeploymentDummyTime,
-			Message:   "Building functions...",
-		},
-		{
-			ID:        5,
-			Timestamp: &pagesDeploymentDummyTime,
-			Message:   "Validating asset output directory",
-		},
-		{
-			ID:        6,
-			Timestamp: &pagesDeploymentDummyTime,
-			Message:   "Parsed 2 valid header rules.",
-		},
-	}
-
 	expectedPagesDeploymentLogs = &PagesDeploymentLogs{
 		Total:                 6,
 		IncludesContainerLogs: true,
