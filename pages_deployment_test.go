@@ -251,6 +251,8 @@ func TestListPagesDeployments(t *testing.T) {
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, "25", r.URL.Query().Get("per_page"))
+		assert.Equal(t, "1", r.URL.Query().Get("page"))
 
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
@@ -348,7 +350,7 @@ func TestDeletePagesDeployment(t *testing.T) {
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
-
+		assert.Equal(t, "true", r.URL.Query().Get("force"))
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -360,7 +362,7 @@ func TestDeletePagesDeployment(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe", handler)
 
-	err := client.DeletePagesDeployment(context.Background(), AccountIdentifier(testAccountID), "test", "0012e50b-fa5d-44db-8cb5-1f372785dcbe", DeletePagesDeploymentParams{})
+	err := client.DeletePagesDeployment(context.Background(), AccountIdentifier(testAccountID), DeletePagesDeploymentParams{ProjectName: "test", DeploymentID: "0012e50b-fa5d-44db-8cb5-1f372785dcbe", Force: true})
 	assert.NoError(t, err)
 }
 

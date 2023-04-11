@@ -95,7 +95,9 @@ type GetPagesDeploymentLogsParams struct {
 }
 
 type DeletePagesDeploymentParams struct {
-	Force bool `url:"force,omitempty"`
+	ProjectName  string `url:"-"`
+	DeploymentID string `url:"-"`
+	Force        bool   `url:"force,omitempty"`
 }
 
 type CreatePagesDeploymentParams struct {
@@ -230,20 +232,20 @@ func (api *API) GetPagesDeploymentLogs(ctx context.Context, rc *ResourceContaine
 // DeletePagesDeployment deletes a Pages deployment.
 //
 // API reference: https://api.cloudflare.com/#pages-deployment-delete-deployment
-func (api *API) DeletePagesDeployment(ctx context.Context, rc *ResourceContainer, projectName, deploymentID string, params DeletePagesDeploymentParams) error {
+func (api *API) DeletePagesDeployment(ctx context.Context, rc *ResourceContainer, params DeletePagesDeploymentParams) error {
 	if rc.Identifier == "" {
 		return ErrMissingAccountID
 	}
 
-	if projectName == "" {
+	if params.ProjectName == "" {
 		return ErrMissingProjectName
 	}
 
-	if deploymentID == "" {
+	if params.DeploymentID == "" {
 		return ErrMissingDeploymentID
 	}
 
-	uri := buildURI(fmt.Sprintf("/accounts/%s/pages/projects/%s/deployments/%s", rc.Identifier, projectName, deploymentID), params)
+	uri := buildURI(fmt.Sprintf("/accounts/%s/pages/projects/%s/deployments/%s", rc.Identifier, params.ProjectName, params.DeploymentID), params)
 
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
