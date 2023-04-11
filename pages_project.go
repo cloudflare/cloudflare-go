@@ -3,7 +3,6 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -189,15 +188,43 @@ const (
 	Unbound UsageModel = "unbound"
 )
 
+type ListPagesProjectsParams struct {
+	PaginationOptions
+}
+
+type CreatePagesProjectParams struct {
+	Name                string                        `json:"name,omitempty"`
+	SubDomain           string                        `json:"subdomain"`
+	Domains             []string                      `json:"domains,omitempty"`
+	Source              *PagesProjectSource           `json:"source,omitempty"`
+	BuildConfig         PagesProjectBuildConfig       `json:"build_config"`
+	DeploymentConfigs   PagesProjectDeploymentConfigs `json:"deployment_configs"`
+	LatestDeployment    PagesProjectDeployment        `json:"latest_deployment"`
+	CanonicalDeployment PagesProjectDeployment        `json:"canonical_deployment"`
+	ProductionBranch    string                        `json:"production_branch,omitempty"`
+}
+
+type UpdatePagesProjectParams struct {
+	Name                string                        `json:"name,omitempty"`
+	SubDomain           string                        `json:"subdomain"`
+	Domains             []string                      `json:"domains,omitempty"`
+	Source              *PagesProjectSource           `json:"source,omitempty"`
+	BuildConfig         PagesProjectBuildConfig       `json:"build_config"`
+	DeploymentConfigs   PagesProjectDeploymentConfigs `json:"deployment_configs"`
+	LatestDeployment    PagesProjectDeployment        `json:"latest_deployment"`
+	CanonicalDeployment PagesProjectDeployment        `json:"canonical_deployment"`
+	ProductionBranch    string                        `json:"production_branch,omitempty"`
+}
+
 // ListPagesProjects returns all Pages projects for an account.
 //
 // API reference: https://api.cloudflare.com/#pages-project-get-projects
-func (api *API) ListPagesProjects(ctx context.Context, rc *ResourceContainer, pageOpts PaginationOptions) ([]PagesProject, ResultInfo, error) {
+func (api *API) ListPagesProjects(ctx context.Context, rc *ResourceContainer, params ListPagesProjectsParams) ([]PagesProject, ResultInfo, error) {
 	if rc.Identifier == "" {
-		return []PagesProject{}, ResultInfo{}, errors.New(errMissingAccountID)
+		return []PagesProject{}, ResultInfo{}, ErrMissingAccountID
 	}
 
-	uri := buildURI(fmt.Sprintf("/accounts/%s/pages/projects", rc.Identifier), pageOpts)
+	uri := buildURI(fmt.Sprintf("/accounts/%s/pages/projects", rc.Identifier), params)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -216,7 +243,7 @@ func (api *API) ListPagesProjects(ctx context.Context, rc *ResourceContainer, pa
 // API reference: https://api.cloudflare.com/#pages-project-get-project
 func (api *API) GetPagesProject(ctx context.Context, rc *ResourceContainer, projectName string) (PagesProject, error) {
 	if rc.Identifier == "" {
-		return PagesProject{}, errors.New(errMissingAccountID)
+		return PagesProject{}, ErrMissingAccountID
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s", rc.Identifier, projectName)
@@ -235,12 +262,12 @@ func (api *API) GetPagesProject(ctx context.Context, rc *ResourceContainer, proj
 // CreatePagesProject creates a new Pages project in an account.
 //
 // API reference: https://api.cloudflare.com/#pages-project-create-project
-func (api *API) CreatePagesProject(ctx context.Context, rc *ResourceContainer, pagesProject PagesProject) (PagesProject, error) {
+func (api *API) CreatePagesProject(ctx context.Context, rc *ResourceContainer, params CreatePagesProjectParams) (PagesProject, error) {
 	if rc.Identifier == "" {
-		return PagesProject{}, errors.New(errMissingAccountID)
+		return PagesProject{}, ErrMissingAccountID
 	}
 	uri := fmt.Sprintf("/accounts/%s/pages/projects", rc.Identifier)
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, pagesProject)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return PagesProject{}, err
 	}
@@ -255,13 +282,17 @@ func (api *API) CreatePagesProject(ctx context.Context, rc *ResourceContainer, p
 // UpdatePagesProject updates an existing Pages project.
 //
 // API reference: https://api.cloudflare.com/#pages-project-update-project
-func (api *API) UpdatePagesProject(ctx context.Context, rc *ResourceContainer, projectName string, pagesProject PagesProject) (PagesProject, error) {
+func (api *API) UpdatePagesProject(ctx context.Context, rc *ResourceContainer, params UpdatePagesProjectParams) (PagesProject, error) {
 	if rc.Identifier == "" {
-		return PagesProject{}, errors.New(errMissingAccountID)
+		return PagesProject{}, ErrMissingAccountID
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s", rc.Identifier, projectName)
-	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, pagesProject)
+	if params.Name == "" {
+		return PagesProject{}, ErrMissingName
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s", rc.Identifier, params.Name)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
 	if err != nil {
 		return PagesProject{}, err
 	}
@@ -278,7 +309,7 @@ func (api *API) UpdatePagesProject(ctx context.Context, rc *ResourceContainer, p
 // API reference: https://api.cloudflare.com/#pages-project-delete-project
 func (api *API) DeletePagesProject(ctx context.Context, rc *ResourceContainer, projectName string) error {
 	if rc.Identifier == "" {
-		return errors.New(errMissingAccountID)
+		return ErrMissingAccountID
 	}
 	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s", rc.Identifier, projectName)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
