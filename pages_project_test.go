@@ -81,8 +81,8 @@ const (
 			  }
             },
 			"d1_databases": {
-				"D1_BINDING": { 
-					"id": "a94509c6-0757-43f3-b053-474b0ab10935" 
+				"D1_BINDING": {
+					"id": "a94509c6-0757-43f3-b053-474b0ab10935"
 				}
 			},
 			"kv_namespaces": {
@@ -522,12 +522,12 @@ func TestListPagesProjects(t *testing.T) {
 		Total:   1,
 	}
 
-	_, _, err := client.ListPagesProjects(context.Background(), AccountIdentifier(""), PaginationOptions{})
+	_, _, err := client.ListPagesProjects(context.Background(), AccountIdentifier(""), ListPagesProjectsParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, err.Error(), errMissingAccountID)
 	}
 
-	actual, resultInfo, err := client.ListPagesProjects(context.Background(), AccountIdentifier(testAccountID), PaginationOptions{})
+	actual, resultInfo, err := client.ListPagesProjects(context.Background(), AccountIdentifier(testAccountID), ListPagesProjectsParams{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedPagesProjects, actual)
 		assert.Equal(t, expectedResultInfo, resultInfo)
@@ -581,14 +581,28 @@ func TestCreatePagesProject(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects", handler)
 
-	_, err := client.CreatePagesProject(context.Background(), AccountIdentifier(""), *expectedPagesProject)
+	params := &CreatePagesProjectParams{
+		SubDomain: "test.pages.dev",
+		Name:      "Test Pages Project",
+		Domains: []string{
+			"testdomain.com",
+			"testdomain.org",
+		},
+		CanonicalDeployment: *expectedPagesProjectDeployment,
+		BuildConfig:         *expectedPagesProjectBuildConfig,
+		DeploymentConfigs:   *expectedPagesProjectDeploymentConfigs,
+		Source:              expectedPagesProjectSource,
+		LatestDeployment:    *expectedPagesProjectDeployment,
+		ProductionBranch:    "main",
+	}
+	_, err := client.CreatePagesProject(context.Background(), AccountIdentifier(""), *params)
 	if assert.Error(t, err) {
 		assert.Equal(t, err.Error(), errMissingAccountID)
 	}
 
-	actual, err := client.CreatePagesProject(context.Background(), AccountIdentifier(testAccountID), *expectedPagesProject)
+	actual, err := client.CreatePagesProject(context.Background(), AccountIdentifier(testAccountID), *params)
 	if assert.NoError(t, err) {
-		assert.Equal(t, *expectedPagesProject, actual)
+		assert.Equal(t, params, actual)
 	}
 }
 
@@ -596,7 +610,7 @@ func TestUpdatePagesProject(t *testing.T) {
 	setup()
 	defer teardown()
 
-	updateAttributes := &PagesProject{
+	updateAttributes := &UpdatePagesProjectParams{
 		Name: "updated-project-name",
 	}
 
@@ -614,12 +628,12 @@ func TestUpdatePagesProject(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/Test Pages Project", handler)
 
-	_, err := client.UpdatePagesProject(context.Background(), AccountIdentifier(""), "Test Pages Project", *updateAttributes)
+	_, err := client.UpdatePagesProject(context.Background(), AccountIdentifier(""), *updateAttributes)
 	if assert.Error(t, err) {
 		assert.Equal(t, err.Error(), errMissingAccountID)
 	}
 
-	_, err = client.UpdatePagesProject(context.Background(), AccountIdentifier(testAccountID), "Test Pages Project", *updateAttributes)
+	_, err = client.UpdatePagesProject(context.Background(), AccountIdentifier(testAccountID), *updateAttributes)
 
 	assert.NoError(t, err)
 }
