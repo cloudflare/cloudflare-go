@@ -521,7 +521,13 @@ func TestListPagesProjects(t *testing.T) {
 		Count:   1,
 		Total:   1,
 	}
-	actual, resultInfo, err := client.ListPagesProjects(context.Background(), testAccountID, PaginationOptions{})
+
+	_, _, err := client.ListPagesProjects(context.Background(), AccountIdentifier(""), PaginationOptions{})
+	if assert.Error(t, err) {
+		assert.Equal(t, err.Error(), errMissingAccountID)
+	}
+
+	actual, resultInfo, err := client.ListPagesProjects(context.Background(), AccountIdentifier(testAccountID), PaginationOptions{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedPagesProjects, actual)
 		assert.Equal(t, expectedResultInfo, resultInfo)
@@ -546,7 +552,12 @@ func TestPagesProject(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/Test Pages Project", handler)
 
-	actual, err := client.PagesProject(context.Background(), testAccountID, "Test Pages Project")
+	_, err := client.GetPagesProject(context.Background(), AccountIdentifier(""), "Test Pages Project")
+	if assert.Error(t, err) {
+		assert.Equal(t, err.Error(), errMissingAccountID)
+	}
+
+	actual, err := client.GetPagesProject(context.Background(), AccountIdentifier(testAccountID), "Test Pages Project")
 	if assert.NoError(t, err) {
 		assert.Equal(t, *expectedPagesProject, actual)
 	}
@@ -570,7 +581,12 @@ func TestCreatePagesProject(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects", handler)
 
-	actual, err := client.CreatePagesProject(context.Background(), testAccountID, *expectedPagesProject)
+	_, err := client.CreatePagesProject(context.Background(), AccountIdentifier(""), *expectedPagesProject)
+	if assert.Error(t, err) {
+		assert.Equal(t, err.Error(), errMissingAccountID)
+	}
+
+	actual, err := client.CreatePagesProject(context.Background(), AccountIdentifier(testAccountID), *expectedPagesProject)
 	if assert.NoError(t, err) {
 		assert.Equal(t, *expectedPagesProject, actual)
 	}
@@ -598,7 +614,12 @@ func TestUpdatePagesProject(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/Test Pages Project", handler)
 
-	_, err := client.UpdatePagesProject(context.Background(), testAccountID, "Test Pages Project", *updateAttributes)
+	_, err := client.UpdatePagesProject(context.Background(), AccountIdentifier(""), "Test Pages Project", *updateAttributes)
+	if assert.Error(t, err) {
+		assert.Equal(t, err.Error(), errMissingAccountID)
+	}
+
+	_, err = client.UpdatePagesProject(context.Background(), AccountIdentifier(testAccountID), "Test Pages Project", *updateAttributes)
 
 	assert.NoError(t, err)
 }
@@ -621,6 +642,11 @@ func TestDeletePagesProject(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/Test Pages Project", handler)
 
-	err := client.DeletePagesProject(context.Background(), testAccountID, "Test Pages Project")
+	err := client.DeletePagesProject(context.Background(), AccountIdentifier(""), "Test Pages Project")
+	if assert.Error(t, err) {
+		assert.Equal(t, err.Error(), errMissingAccountID)
+	}
+
+	err = client.DeletePagesProject(context.Background(), AccountIdentifier(testAccountID), "Test Pages Project")
 	assert.NoError(t, err)
 }

@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -193,8 +194,12 @@ const (
 // ListPagesProjects returns all Pages projects for an account.
 //
 // API reference: https://api.cloudflare.com/#pages-project-get-projects
-func (api *API) ListPagesProjects(ctx context.Context, accountID string, pageOpts PaginationOptions) ([]PagesProject, ResultInfo, error) {
-	uri := buildURI(fmt.Sprintf("/accounts/%s/pages/projects", accountID), pageOpts)
+func (api *API) ListPagesProjects(ctx context.Context, rc *ResourceContainer, pageOpts PaginationOptions) ([]PagesProject, ResultInfo, error) {
+	if rc.Identifier == "" {
+		return []PagesProject{}, ResultInfo{}, errors.New(errMissingAccountID)
+	}
+
+	uri := buildURI(fmt.Sprintf("/accounts/%s/pages/projects", rc.Identifier), pageOpts)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -208,11 +213,15 @@ func (api *API) ListPagesProjects(ctx context.Context, accountID string, pageOpt
 	return r.Result, r.ResultInfo, nil
 }
 
-// PagesProject returns a single Pages project by name.
+// GetPagesProject returns a single Pages project by name.
 //
 // API reference: https://api.cloudflare.com/#pages-project-get-project
-func (api *API) PagesProject(ctx context.Context, accountID, projectName string) (PagesProject, error) {
-	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s", accountID, projectName)
+func (api *API) GetPagesProject(ctx context.Context, rc *ResourceContainer, projectName string) (PagesProject, error) {
+	if rc.Identifier == "" {
+		return PagesProject{}, errors.New(errMissingAccountID)
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s", rc.Identifier, projectName)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return PagesProject{}, err
@@ -228,8 +237,11 @@ func (api *API) PagesProject(ctx context.Context, accountID, projectName string)
 // CreatePagesProject creates a new Pages project in an account.
 //
 // API reference: https://api.cloudflare.com/#pages-project-create-project
-func (api *API) CreatePagesProject(ctx context.Context, accountID string, pagesProject PagesProject) (PagesProject, error) {
-	uri := fmt.Sprintf("/accounts/%s/pages/projects", accountID)
+func (api *API) CreatePagesProject(ctx context.Context, rc *ResourceContainer, pagesProject PagesProject) (PagesProject, error) {
+	if rc.Identifier == "" {
+		return PagesProject{}, errors.New(errMissingAccountID)
+	}
+	uri := fmt.Sprintf("/accounts/%s/pages/projects", rc.Identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, pagesProject)
 	if err != nil {
 		return PagesProject{}, err
@@ -245,8 +257,12 @@ func (api *API) CreatePagesProject(ctx context.Context, accountID string, pagesP
 // UpdatePagesProject updates an existing Pages project.
 //
 // API reference: https://api.cloudflare.com/#pages-project-update-project
-func (api *API) UpdatePagesProject(ctx context.Context, accountID, projectName string, pagesProject PagesProject) (PagesProject, error) {
-	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s", accountID, projectName)
+func (api *API) UpdatePagesProject(ctx context.Context, rc *ResourceContainer, projectName string, pagesProject PagesProject) (PagesProject, error) {
+	if rc.Identifier == "" {
+		return PagesProject{}, errors.New(errMissingAccountID)
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s", rc.Identifier, projectName)
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, pagesProject)
 	if err != nil {
 		return PagesProject{}, err
@@ -262,8 +278,11 @@ func (api *API) UpdatePagesProject(ctx context.Context, accountID, projectName s
 // DeletePagesProject deletes a Pages project by name.
 //
 // API reference: https://api.cloudflare.com/#pages-project-delete-project
-func (api *API) DeletePagesProject(ctx context.Context, accountID, projectName string) error {
-	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s", accountID, projectName)
+func (api *API) DeletePagesProject(ctx context.Context, rc *ResourceContainer, projectName string) error {
+	if rc.Identifier == "" {
+		return errors.New(errMissingAccountID)
+	}
+	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s", rc.Identifier, projectName)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return err
