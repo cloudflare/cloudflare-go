@@ -32,4 +32,4 @@ jobs:
           done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ISSUES: ${{ jobs.comment-on-closed-milestone.outputs.ids }}
+          ISSUES: ${{ needs.comment-on-closed-milestone.outputs.ids }}
