@@ -1,3 +1,0 @@
-```release-note:enhancement
-challenge_widget: add support for the challenge widget API
-```

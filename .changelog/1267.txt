@@ -1,0 +1,3 @@
+```release-note:enhancement
+challenge_widget: add support for turnstile
+```

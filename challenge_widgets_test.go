@@ -26,7 +26,8 @@ var (
 			"cloudflare.com",
 			"blog.example.com",
 		},
-		Type: "invisible",
+		Type:         "invisible",
+		BotFightMode: true,
 	}
 )
 
@@ -53,7 +54,8 @@ func TestChallengeWidgets_Create(t *testing.T) {
 				  "cloudflare.com",
 				  "blog.example.com"
 				],
-				"type": "invisible"
+				"type": "invisible",
+				"bot_fight_mode": true
 			  }
 			}`)
 	})
@@ -65,8 +67,9 @@ func TestChallengeWidgets_Create(t *testing.T) {
 	}
 
 	out, err := client.CreateChallengeWidget(context.Background(), AccountIdentifier(testAccountID), ChallengeWidget{
-		Name: "blog.cloudflare.com login form",
-		Type: "invisible",
+		Name:         "blog.cloudflare.com login form",
+		Type:         "invisible",
+		BotFightMode: true,
 		Domains: []string{
 			"203.0.113.1",
 			"cloudflare.com",
@@ -102,7 +105,8 @@ func TestChallengeWidgets_List(t *testing.T) {
         "cloudflare.com",
         "blog.example.com"
       ],
-      "type": "invisible"
+      "type": "invisible",
+      "bot_fight_mode": true
     }
   ],
   "result_info": {
@@ -150,7 +154,8 @@ func TestChallengeWidgets_Get(t *testing.T) {
       "cloudflare.com",
       "blog.example.com"
     ],
-    "type": "invisible"
+    "type": "invisible",
+	"bot_fight_mode": true
   }
 }`)
 	})
@@ -195,7 +200,8 @@ func TestChallengeWidgets_Update(t *testing.T) {
       "cloudflare.com",
       "blog.example.com"
     ],
-    "type": "invisible"
+    "type": "invisible",
+	"bot_fight_mode": true
   }
 }`)
 	})
@@ -241,7 +247,8 @@ func TestChallengeWidgets_RotateSecret(t *testing.T) {
       "cloudflare.com",
       "blog.example.com"
     ],
-    "type": "invisible"
+    "type": "invisible",
+	"bot_fight_mode": true
   }
 }`)
 	})
@@ -286,7 +293,8 @@ func TestChallengeWidgets_Delete(t *testing.T) {
       "cloudflare.com",
       "blog.example.com"
     ],
-    "type": "invisible"
+    "type": "invisible",
+	"bot_fight_mode": true
   }
 }`)
 	})

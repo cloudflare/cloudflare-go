@@ -12,13 +12,14 @@ import (
 var ErrMissingSiteKey = errors.New("required site key missing")
 
 type ChallengeWidget struct {
-	SiteKey    string     `json:"sitekey,omitempty"`
-	Secret     string     `json:"secret,omitempty"`
-	CreatedOn  *time.Time `json:"created_on,omitempty"`
-	ModifiedOn *time.Time `json:"modified_on,omitempty"`
-	Name       string     `json:"name"`
-	Domains    []string   `json:"domains"`
-	Type       string     `json:"type"`
+	SiteKey      string     `json:"sitekey,omitempty"`
+	Secret       string     `json:"secret,omitempty"`
+	CreatedOn    *time.Time `json:"created_on,omitempty"`
+	ModifiedOn   *time.Time `json:"modified_on,omitempty"`
+	Name         string     `json:"name,omitempty"`
+	Domains      []string   `json:"domains,omitempty"`
+	Type         string     `json:"type,omitempty"`
+	BotFightMode bool       `json:"bot_fight_mode,omitempty"`
 }
 
 type ChallengeWidgetResponse struct {
