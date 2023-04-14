@@ -1,5 +1,9 @@
 ## 0.66.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* dns: add support for importing and exporting DNS records using BIND file configurations ([#1266](https://github.com/cloudflare/cloudflare-go/issues/1266))
+
 ## 0.65.0 (12th April, 2023)
 
 ENHANCEMENTS:
