@@ -28,6 +28,7 @@ func TestAccessOrganization(t *testing.T) {
 				"auth_domain": "test.cloudflareaccess.com",
 				"is_ui_read_only": false,
 				"user_seat_expiration_inactive_time": "720h",
+				"auto_redirect_to_identity": true,
 				"login_design": {
 					"background_color": "#c5ed1b",
 					"logo_path": "https://example.com/logo.png",
@@ -57,6 +58,7 @@ func TestAccessOrganization(t *testing.T) {
 		},
 		IsUIReadOnly:                   BoolPtr(false),
 		UserSeatExpirationInactiveTime: "720h",
+		AutoRedirectToIdentity:         BoolPtr(true),
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/organizations", handler)

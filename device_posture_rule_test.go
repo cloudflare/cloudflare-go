@@ -402,7 +402,8 @@ func TestDevicePostureDiskEncryptionRule(t *testing.T) {
 					}
 				],
 				"input": {
-					"requireAll": true
+					"requireAll": true,
+					"checkDisks": ["C", "D"]
 				}
 			}
 		}
@@ -419,6 +420,7 @@ func TestDevicePostureDiskEncryptionRule(t *testing.T) {
 		Match:       []DevicePostureRuleMatch{{Platform: "ios"}},
 		Input: DevicePostureRuleInput{
 			RequireAll: true,
+			CheckDisks: []string{"C", "D"},
 		},
 	}
 

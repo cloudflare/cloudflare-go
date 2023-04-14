@@ -36,11 +36,25 @@ type TeamsRuleSettings struct {
 	// whether to disable dnssec validation for allow action
 	InsecureDisableDNSSECValidation bool `json:"insecure_disable_dnssec_validation"`
 
+	// settings for rules with egress action
 	EgressSettings *EgressSettings `json:"egress"`
 
 	// DLP payload logging configuration
 	PayloadLog *TeamsDlpPayloadLogSettings `json:"payload_log"`
 
+	//AuditSsh Settings
+	AuditSSH *AuditSSHRuleSettings `json:"audit_ssh"`
+
+	// Turns on ip category based filter on dns if the rule contains dns category checks
+	IPCategories bool `json:"ip_categories"`
+
+	// Allow parent MSP accounts to enable bypass their children's rules. Do not set them for non MSP accounts.
+	AllowChildBypass *bool `json:"allow_child_bypass,omitempty"`
+
+	// Allow child MSP accounts to bypass their parent's rules. Do not set them for non MSP accounts.
+	BypassParentRule *bool `json:"bypass_parent_rule,omitempty"`
+
+	// Action taken when an untrusted origin certificate error occurs in a http allow rule
 	UntrustedCertSettings *UntrustedCertSettings `json:"untrusted_cert"`
 }
 
@@ -56,6 +70,10 @@ type UntrustedCertSettings struct {
 	Action TeamsGatewayUntrustedCertAction `json:"action"`
 }
 
+type AuditSSHRuleSettings struct {
+	CommandLogging bool `json:"command_logging"`
+}
+
 type EgressSettings struct {
 	Ipv6Range    string `json:"ipv6"`
 	Ipv4         string `json:"ipv4"`
@@ -69,11 +87,12 @@ type TeamsL4OverrideSettings struct {
 }
 
 type TeamsBISOAdminControlSettings struct {
-	DisablePrinting  bool `json:"dp"`
-	DisableCopyPaste bool `json:"dcp"`
-	DisableDownload  bool `json:"dd"`
-	DisableUpload    bool `json:"du"`
-	DisableKeyboard  bool `json:"dk"`
+	DisablePrinting             bool `json:"dp"`
+	DisableCopyPaste            bool `json:"dcp"`
+	DisableDownload             bool `json:"dd"`
+	DisableUpload               bool `json:"du"`
+	DisableKeyboard             bool `json:"dk"`
+	DisableClipboardRedirection bool `json:"dcr"`
 }
 
 type TeamsCheckSessionSettings struct {
@@ -97,19 +116,20 @@ const (
 )
 
 const (
-	Allow        TeamsGatewayAction = "allow"
-	Block        TeamsGatewayAction = "block"
-	SafeSearch   TeamsGatewayAction = "safesearch"
-	YTRestricted TeamsGatewayAction = "ytrestricted"
-	On           TeamsGatewayAction = "on"
-	Off          TeamsGatewayAction = "off"
-	Scan         TeamsGatewayAction = "scan"
-	NoScan       TeamsGatewayAction = "noscan"
-	Isolate      TeamsGatewayAction = "isolate"
-	NoIsolate    TeamsGatewayAction = "noisolate"
-	Override     TeamsGatewayAction = "override"
-	L4Override   TeamsGatewayAction = "l4_override"
-	Egress       TeamsGatewayAction = "egress"
+	Allow        TeamsGatewayAction = "allow"        // dns|http|l4
+	Block        TeamsGatewayAction = "block"        // dns|http|l4
+	SafeSearch   TeamsGatewayAction = "safesearch"   // dns
+	YTRestricted TeamsGatewayAction = "ytrestricted" // dns
+	On           TeamsGatewayAction = "on"           // http
+	Off          TeamsGatewayAction = "off"          // http
+	Scan         TeamsGatewayAction = "scan"         // http
+	NoScan       TeamsGatewayAction = "noscan"       // http
+	Isolate      TeamsGatewayAction = "isolate"      // http
+	NoIsolate    TeamsGatewayAction = "noisolate"    // http
+	Override     TeamsGatewayAction = "override"     // http
+	L4Override   TeamsGatewayAction = "l4_override"  // l4
+	Egress       TeamsGatewayAction = "egress"       // egress
+	AuditSSH     TeamsGatewayAction = "audit_ssh"    // l4
 )
 
 func TeamsRulesActionValues() []string {
@@ -127,6 +147,7 @@ func TeamsRulesActionValues() []string {
 		string(Override),
 		string(L4Override),
 		string(Egress),
+		string(AuditSSH),
 	}
 }
 

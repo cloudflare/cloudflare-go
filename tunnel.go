@@ -23,16 +23,20 @@ type Tunnel struct {
 	Connections    []TunnelConnection `json:"connections,omitempty"`
 	ConnsActiveAt  *time.Time         `json:"conns_active_at,omitempty"`
 	ConnInactiveAt *time.Time         `json:"conns_inactive_at,omitempty"`
+	TunnelType     string             `json:"tun_type,omitempty"`
+	Status         string             `json:"status,omitempty"`
+	RemoteConfig   bool               `json:"remote_config,omitempty"`
 }
 
 // Connection is the struct definition of a connection.
 type Connection struct {
-	ID          string             `json:"id,omitempty"`
-	Features    []string           `json:"features,omitempty"`
-	Version     string             `json:"version,omitempty"`
-	Arch        string             `json:"arch,omitempty"`
-	Connections []TunnelConnection `json:"conns,omitempty"`
-	RunAt       *time.Time         `json:"run_at,omitempty"`
+	ID            string             `json:"id,omitempty"`
+	Features      []string           `json:"features,omitempty"`
+	Version       string             `json:"version,omitempty"`
+	Arch          string             `json:"arch,omitempty"`
+	Connections   []TunnelConnection `json:"conns,omitempty"`
+	RunAt         *time.Time         `json:"run_at,omitempty"`
+	ConfigVersion int                `json:"config_version,omitempty"`
 }
 
 // TunnelConnection represents the connections associated with a tunnel.
@@ -91,8 +95,9 @@ type TunnelTokenResponse struct {
 }
 
 type TunnelCreateParams struct {
-	Name   string `json:"name,omitempty"`
-	Secret string `json:"tunnel_secret,omitempty"`
+	Name      string `json:"name,omitempty"`
+	Secret    string `json:"tunnel_secret,omitempty"`
+	ConfigSrc string `json:"config_src,omitempty"`
 }
 
 type TunnelUpdateParams struct {
@@ -179,10 +184,10 @@ type TunnelListParams struct {
 	ResultInfo
 }
 
-// Tunnels lists all tunnels.
+// ListTunnels lists all tunnels.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-tunnel-list-cloudflare-tunnels
-func (api *API) Tunnels(ctx context.Context, rc *ResourceContainer, params TunnelListParams) ([]Tunnel, *ResultInfo, error) {
+func (api *API) ListTunnels(ctx context.Context, rc *ResourceContainer, params TunnelListParams) ([]Tunnel, *ResultInfo, error) {
 	if rc.Identifier == "" {
 		return []Tunnel{}, &ResultInfo{}, ErrMissingAccountID
 	}
@@ -225,10 +230,10 @@ func (api *API) Tunnels(ctx context.Context, rc *ResourceContainer, params Tunne
 	return records, &listResponse.ResultInfo, nil
 }
 
-// Tunnel returns a single Argo tunnel.
+// GetTunnel returns a single Argo tunnel.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-tunnel-get-cloudflare-tunnel
-func (api *API) Tunnel(ctx context.Context, rc *ResourceContainer, tunnelID string) (Tunnel, error) {
+func (api *API) GetTunnel(ctx context.Context, rc *ResourceContainer, tunnelID string) (Tunnel, error) {
 	if rc.Identifier == "" {
 		return Tunnel{}, ErrMissingAccountID
 	}
@@ -270,9 +275,7 @@ func (api *API) CreateTunnel(ctx context.Context, rc *ResourceContainer, params 
 
 	uri := fmt.Sprintf("/accounts/%s/cfd_tunnel", rc.Identifier)
 
-	tunnel := Tunnel{Name: params.Name, Secret: params.Secret}
-
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, tunnel)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return Tunnel{}, err
 	}
@@ -386,10 +389,10 @@ func (api *API) GetTunnelConfiguration(ctx context.Context, rc *ResourceContaine
 	return tunnelDetails, nil
 }
 
-// TunnelConnections gets all connections on a tunnel.
+// ListTunnelConnections gets all connections on a tunnel.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-tunnel-list-cloudflare-tunnel-connections
-func (api *API) TunnelConnections(ctx context.Context, rc *ResourceContainer, tunnelID string) ([]Connection, error) {
+func (api *API) ListTunnelConnections(ctx context.Context, rc *ResourceContainer, tunnelID string) ([]Connection, error) {
 	if rc.Identifier == "" {
 		return []Connection{}, ErrMissingAccountID
 	}
@@ -461,10 +464,10 @@ func (api *API) CleanupTunnelConnections(ctx context.Context, rc *ResourceContai
 	return nil
 }
 
-// TunnelToken that allows to run a tunnel.
+// GetTunnelToken that allows to run a tunnel.
 //
 // API reference: https://api.cloudflare.com/#cloudflare-tunnel-get-cloudflare-tunnel-token
-func (api *API) TunnelToken(ctx context.Context, rc *ResourceContainer, tunnelID string) (string, error) {
+func (api *API) GetTunnelToken(ctx context.Context, rc *ResourceContainer, tunnelID string) (string, error) {
 	if rc.Identifier == "" {
 		return "", ErrMissingAccountID
 	}

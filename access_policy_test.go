@@ -19,6 +19,7 @@ var (
 	updatedAt, _ = time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	expiresAt, _ = time.Parse(time.RFC3339, "2015-01-01T05:20:00.12345Z")
 
+	isolationRequired            = true
 	purposeJustificationRequired = true
 	purposeJustificationPrompt   = "Please provide a business reason for your need to access before continuing."
 	approvalRequired             = true
@@ -39,6 +40,7 @@ var (
 		Require: []interface{}{
 			map[string]interface{}{"email": map[string]interface{}{"email": "test@example.com"}},
 		},
+		IsolationRequired:            &isolationRequired,
 		PurposeJustificationRequired: &purposeJustificationRequired,
 		ApprovalRequired:             &approvalRequired,
 		PurposeJustificationPrompt:   &purposeJustificationPrompt,
@@ -95,6 +97,7 @@ func TestAccessPolicies(t *testing.T) {
 							}
 						}
 					],
+					"isolation_required": true,
 					"purpose_justification_required": true,
 					"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing.",
 					"approval_required": true,
@@ -176,6 +179,7 @@ func TestAccessPolicy(t *testing.T) {
 						}
 					}
 				],
+				"isolation_required": true,
 				"purpose_justification_required": true,
 				"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing.",
 				"approval_required": true,
@@ -250,6 +254,7 @@ func TestCreateAccessPolicy(t *testing.T) {
 						}
 					}
 				],
+				"isolation_required": true,
 				"purpose_justification_required": true,
 				"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing.",
 				"approval_required": true,
@@ -356,6 +361,7 @@ func TestUpdateAccessPolicy(t *testing.T) {
 						}
 					}
 				],
+				"isolation_required": true,
 				"purpose_justification_required": true,
 				"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing.",
 				"approval_required": true,
