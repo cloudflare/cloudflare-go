@@ -101,7 +101,8 @@ type DeletePagesDeploymentParams struct {
 }
 
 type CreatePagesDeploymentParams struct {
-	ProjectName string
+	ProjectName string `json:"-"`
+	Branch      string `json:"branch,omitempty"`
 }
 
 type RetryPagesDeploymentParams struct {
@@ -268,7 +269,7 @@ func (api *API) CreatePagesDeployment(ctx context.Context, rc *ResourceContainer
 
 	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s/deployments", rc.Identifier, params.ProjectName)
 
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return PagesProjectDeployment{}, err
 	}
