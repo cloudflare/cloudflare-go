@@ -1,5 +1,9 @@
 package cloudflare
 
+import (
+	"math"
+)
+
 // Done returns true for the last page and false otherwise.
 func (p ResultInfo) Done() bool {
 	// A little hacky but if the response body is lacking a defined `ResultInfo`
@@ -40,4 +44,12 @@ func (p ResultInfo) HasMorePages() bool {
 	}
 
 	return p.Page >= 1 && p.Page < p.TotalPages
+}
+
+// DoneCount returns true for the last page and false otherwise.
+// This function uses the Total and PerPage fields to generate TotalPages
+// then calls Done()
+func (p ResultInfo) DoneCount() bool {
+	p.TotalPages = int(math.Ceil(float64(p.Total) / float64(p.PerPage)))
+	return p.Done()
 }
