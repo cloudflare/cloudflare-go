@@ -8,7 +8,7 @@ require (
 	github.com/curioswitch/go-reassign v0.2.0
 	github.com/cweill/gotests v1.6.0
 	github.com/go-delve/delve v1.9.0
-	github.com/golangci/golangci-lint v1.50.1
+	github.com/golangci/golangci-lint v1.48.0
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/hashicorp/go-changelog v0.0.0-20220419201213-5edfc0d651d8
 	github.com/jgautheron/goconst v1.5.1
