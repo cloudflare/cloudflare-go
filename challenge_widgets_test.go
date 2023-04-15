@@ -28,6 +28,7 @@ var (
 		},
 		Type:         "invisible",
 		BotFightMode: true,
+		Region:       "world",
 	}
 )
 
@@ -55,7 +56,8 @@ func TestChallengeWidgets_Create(t *testing.T) {
 				  "blog.example.com"
 				],
 				"type": "invisible",
-				"bot_fight_mode": true
+				"bot_fight_mode": true,
+				"region": "world"
 			  }
 			}`)
 	})
@@ -75,6 +77,7 @@ func TestChallengeWidgets_Create(t *testing.T) {
 			"cloudflare.com",
 			"blog.example.com",
 		},
+		Region: "world",
 	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedChallengeWidget, out, "create challenge_widgets structs not equal")
@@ -87,6 +90,7 @@ func TestChallengeWidgets_List(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/challenges/widgets", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, "asc", r.URL.Query().Get("order"))
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `
 {
@@ -106,7 +110,8 @@ func TestChallengeWidgets_List(t *testing.T) {
         "blog.example.com"
       ],
       "type": "invisible",
-      "bot_fight_mode": true
+      "bot_fight_mode": true,
+	  "region": "world"
     }
   ],
   "result_info": {
@@ -123,7 +128,9 @@ func TestChallengeWidgets_List(t *testing.T) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	out, results, err := client.ListChallengeWidget(context.Background(), AccountIdentifier(testAccountID), ListChallengeWidgetRequest{})
+	out, results, err := client.ListChallengeWidget(context.Background(), AccountIdentifier(testAccountID), ListChallengeWidgetRequest{
+		Order: "asc",
+	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, 1, len(out), "expected 1 challenge_widgets")
 		assert.Equal(t, 20, results.PerPage, "expected 20 per page")
@@ -155,7 +162,8 @@ func TestChallengeWidgets_Get(t *testing.T) {
       "blog.example.com"
     ],
     "type": "invisible",
-	"bot_fight_mode": true
+	"bot_fight_mode": true,
+	"region": "world"
   }
 }`)
 	})
@@ -201,7 +209,8 @@ func TestChallengeWidgets_Update(t *testing.T) {
       "blog.example.com"
     ],
     "type": "invisible",
-	"bot_fight_mode": true
+	"bot_fight_mode": true,
+	"region": "world"
   }
 }`)
 	})
@@ -248,7 +257,8 @@ func TestChallengeWidgets_RotateSecret(t *testing.T) {
       "blog.example.com"
     ],
     "type": "invisible",
-	"bot_fight_mode": true
+	"bot_fight_mode": true,
+	"region": "world"
   }
 }`)
 	})
@@ -294,7 +304,8 @@ func TestChallengeWidgets_Delete(t *testing.T) {
       "blog.example.com"
     ],
     "type": "invisible",
-	"bot_fight_mode": true
+	"bot_fight_mode": true,
+	"region": "world"
   }
 }`)
 	})

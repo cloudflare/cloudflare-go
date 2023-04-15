@@ -20,6 +20,7 @@ type ChallengeWidget struct {
 	Domains      []string   `json:"domains,omitempty"`
 	Type         string     `json:"type,omitempty"`
 	BotFightMode bool       `json:"bot_fight_mode,omitempty"`
+	Region       string     `json:"region,omitempty"`
 }
 
 type ChallengeWidgetResponse struct {
