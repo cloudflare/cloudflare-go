@@ -26,7 +26,7 @@ var (
 			"cloudflare.com",
 			"blog.example.com",
 		},
-		Type:         "invisible",
+		Mode:         "invisible",
 		BotFightMode: true,
 		Region:       "world",
 	}
@@ -55,7 +55,7 @@ func TestChallengeWidgets_Create(t *testing.T) {
 				  "cloudflare.com",
 				  "blog.example.com"
 				],
-				"type": "invisible",
+				"mode": "invisible",
 				"bot_fight_mode": true,
 				"region": "world"
 			  }
@@ -63,14 +63,14 @@ func TestChallengeWidgets_Create(t *testing.T) {
 	})
 
 	// Make sure missing account ID is thrown
-	_, err := client.CreateChallengeWidget(context.Background(), AccountIdentifier(""), ChallengeWidget{})
+	_, err := client.CreateChallengeWidget(context.Background(), AccountIdentifier(""), CreateChallengeWidgetRequest{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	out, err := client.CreateChallengeWidget(context.Background(), AccountIdentifier(testAccountID), ChallengeWidget{
+	out, err := client.CreateChallengeWidget(context.Background(), AccountIdentifier(testAccountID), CreateChallengeWidgetRequest{
 		Name:         "blog.cloudflare.com login form",
-		Type:         "invisible",
+		Mode:         "invisible",
 		BotFightMode: true,
 		Domains: []string{
 			"203.0.113.1",
@@ -109,7 +109,7 @@ func TestChallengeWidgets_List(t *testing.T) {
         "cloudflare.com",
         "blog.example.com"
       ],
-      "type": "invisible",
+      "mode": "invisible",
       "bot_fight_mode": true,
 	  "region": "world"
     }
@@ -161,7 +161,7 @@ func TestChallengeWidgets_Get(t *testing.T) {
       "cloudflare.com",
       "blog.example.com"
     ],
-    "type": "invisible",
+    "mode": "invisible",
 	"bot_fight_mode": true,
 	"region": "world"
   }
@@ -208,7 +208,7 @@ func TestChallengeWidgets_Update(t *testing.T) {
       "cloudflare.com",
       "blog.example.com"
     ],
-    "type": "invisible",
+    "mode": "invisible",
 	"bot_fight_mode": true,
 	"region": "world"
   }
@@ -256,7 +256,7 @@ func TestChallengeWidgets_RotateSecret(t *testing.T) {
       "cloudflare.com",
       "blog.example.com"
     ],
-    "type": "invisible",
+    "mode": "invisible",
 	"bot_fight_mode": true,
 	"region": "world"
   }
@@ -303,7 +303,7 @@ func TestChallengeWidgets_Delete(t *testing.T) {
       "cloudflare.com",
       "blog.example.com"
     ],
-    "type": "invisible",
+    "mode": "invisible",
 	"bot_fight_mode": true,
 	"region": "world"
   }

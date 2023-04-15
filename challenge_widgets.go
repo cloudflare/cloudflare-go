@@ -18,9 +18,18 @@ type ChallengeWidget struct {
 	ModifiedOn   *time.Time `json:"modified_on,omitempty"`
 	Name         string     `json:"name,omitempty"`
 	Domains      []string   `json:"domains,omitempty"`
-	Type         string     `json:"type,omitempty"`
+	Mode         string     `json:"mode,omitempty"`
 	BotFightMode bool       `json:"bot_fight_mode,omitempty"`
 	Region       string     `json:"region,omitempty"`
+}
+
+type CreateChallengeWidgetRequest struct {
+	Name         string   `json:"name,omitempty"`
+	Domains      []string `json:"domains,omitempty"`
+	Mode         string   `json:"mode,omitempty"`
+	BotFightMode bool     `json:"bot_fight_mode,omitempty"`
+	Region       string   `json:"region,omitempty"`
+	OffLabel     bool     `json:"off_label,omitempty"`
 }
 
 type ChallengeWidgetResponse struct {
@@ -48,7 +57,7 @@ type RotateChallengeWidgetRequest struct {
 // CreateChallengeWidget creates a new challenge widgets.
 //
 // API reference: https://api.cloudflare.com/#challenge-widgets-properties
-func (api *API) CreateChallengeWidget(ctx context.Context, rc *ResourceContainer, params ChallengeWidget) (ChallengeWidget, error) {
+func (api *API) CreateChallengeWidget(ctx context.Context, rc *ResourceContainer, params CreateChallengeWidgetRequest) (ChallengeWidget, error) {
 	if rc.Identifier == "" {
 		return ChallengeWidget{}, ErrMissingAccountID
 	}
