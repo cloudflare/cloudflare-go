@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	testPagesDeplyomentResponse = `
+	testPagesDeploymentResponse = `
 	{
 		"id": "0012e50b-fa5d-44db-8cb5-1f372785dcbe",
 		"short_id": "0012e50b",
@@ -268,7 +268,7 @@ func TestListPagesDeployments(t *testing.T) {
 				"count": 1,
 				"total_count": 1
 			  }
-		}`, testPagesDeplyomentResponse)
+		}`, testPagesDeploymentResponse)
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments", handler)
@@ -292,6 +292,62 @@ func TestListPagesDeployments(t *testing.T) {
 	}
 }
 
+func TestListPagesDeploymentsPagination(t *testing.T) {
+	setup()
+	defer teardown()
+	var page1Called, page2Called bool
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		page := r.URL.Query().Get("page")
+		w.Header().Set("content-type", "application/json")
+		switch page {
+		case "1":
+			page1Called = true
+			fmt.Fprintf(w, `{
+				"success": true,
+				"errors": [],
+				"messages": [],	
+				"result": [
+					%s
+				],
+				"result_info": {
+					"page": 1,
+					"per_page": 25,
+					"total_count": 26
+				  }
+			}`, testPagesDeploymentResponse)
+		case "2":
+			page2Called = true
+			fmt.Fprintf(w, `{
+				"success": true,
+				"errors": [],
+				"messages": [],	
+				"result": [
+					%s
+				],
+				"result_info": {
+					"page": 2,
+					"per_page": 25,
+					"total_count": 26
+				  }
+			}`, testPagesDeploymentResponse)
+		default:
+			assert.Failf(t, "Unexpected page number", "Expected page 1 or 2, got %s", page)
+			return
+		}
+	}
+	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments", handler)
+	actual, resultInfo, err := client.ListPagesDeployments(context.Background(), AccountIdentifier(testAccountID), ListPagesDeploymentsParams{
+		ProjectName: "test",
+		ResultInfo:  ResultInfo{},
+	})
+	if assert.NoError(t, err) {
+		assert.True(t, page1Called)
+		assert.True(t, page2Called)
+		assert.Equal(t, 2, len(actual))
+		assert.Equal(t, 26, resultInfo.Total)
+	}
+}
+
 func TestGetPagesDeploymentInfo(t *testing.T) {
 	setup()
 	defer teardown()
@@ -305,7 +361,7 @@ func TestGetPagesDeploymentInfo(t *testing.T) {
 			"errors": [],
 			"messages": [],
 			"result": %s
-		}`, testPagesDeplyomentResponse)
+		}`, testPagesDeploymentResponse)
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe", handler)
@@ -379,7 +435,7 @@ func TestCreatePagesDeployment(t *testing.T) {
 			"errors": [],
 			"messages": [],
 			"result": %s
-		}`, testPagesDeplyomentResponse)
+		}`, testPagesDeploymentResponse)
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments", handler)
@@ -406,7 +462,7 @@ func TestRetryPagesDeployment(t *testing.T) {
 			"errors": [],
 			"messages": [],
 			"result": %s
-		}`, testPagesDeplyomentResponse)
+		}`, testPagesDeploymentResponse)
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe/retry", handler)
@@ -430,7 +486,7 @@ func TestRollbackPagesDeployment(t *testing.T) {
 			"errors": [],
 			"messages": [],
 			"result": %s
-		}`, testPagesDeplyomentResponse)
+		}`, testPagesDeploymentResponse)
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe/rollback", handler)

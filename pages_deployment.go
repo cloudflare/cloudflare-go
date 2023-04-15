@@ -160,7 +160,7 @@ func (api *API) ListPagesDeployments(ctx context.Context, rc *ResourceContainer,
 		}
 		deployments = append(deployments, r.Result...)
 		params.ResultInfo = r.ResultInfo.Next()
-		if params.ResultInfo.Done() || !autoPaginate {
+		if params.DoneCount() || !autoPaginate {
 			break
 		}
 	}
