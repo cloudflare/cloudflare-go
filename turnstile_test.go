@@ -29,6 +29,7 @@ var (
 		Mode:         "invisible",
 		BotFightMode: true,
 		Region:       "world",
+		OffLabel:     false,
 	}
 )
 
@@ -57,7 +58,8 @@ func TestTurnstileWidget_Create(t *testing.T) {
 				],
 				"mode": "invisible",
 				"bot_fight_mode": true,
-				"region": "world"
+				"region": "world",
+				"offlabel": false
 			  }
 			}`)
 	})
@@ -77,7 +79,8 @@ func TestTurnstileWidget_Create(t *testing.T) {
 			"cloudflare.com",
 			"blog.example.com",
 		},
-		Region: "world",
+		Region:   "world",
+		OffLabel: false,
 	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedTurnstileWidget, out, "create challenge_widgets structs not equal")
@@ -111,7 +114,8 @@ func TestTurnstileWidget_List(t *testing.T) {
       ],
       "mode": "invisible",
       "bot_fight_mode": true,
-	  "region": "world"
+	  "region": "world",
+	  "offlabel": false
     }
   ],
   "result_info": {
@@ -163,7 +167,8 @@ func TestTurnstileWidget_Get(t *testing.T) {
     ],
     "mode": "invisible",
 	"bot_fight_mode": true,
-	"region": "world"
+	"region": "world",
+	"offlabel": false
   }
 }`)
 	})
@@ -210,7 +215,8 @@ func TestTurnstileWidgets_Update(t *testing.T) {
     ],
     "mode": "invisible",
 	"bot_fight_mode": true,
-	"region": "world"
+	"region": "world",
+	"offlabel": false
   }
 }`)
 	})
@@ -258,7 +264,8 @@ func TestTurnstileWidgets_RotateSecret(t *testing.T) {
     ],
     "mode": "invisible",
 	"bot_fight_mode": true,
-	"region": "world"
+	"region": "world",
+	"offlabel": false
   }
 }`)
 	})
@@ -305,7 +312,8 @@ func TestTurnstileWidgets_Delete(t *testing.T) {
     ],
     "mode": "invisible",
 	"bot_fight_mode": true,
-	"region": "world"
+	"region": "world",
+	"offlabel": false
   }
 }`)
 	})

@@ -21,7 +21,7 @@ type TurnstileWidget struct {
 	Mode         string     `json:"mode,omitempty"`
 	BotFightMode bool       `json:"bot_fight_mode,omitempty"`
 	Region       string     `json:"region,omitempty"`
-	OffLabel     bool       `json:"off_label,omitempty"`
+	OffLabel     bool       `json:"offlabel,omitempty"`
 }
 
 type CreateTurnstileWidgetRequest struct {
@@ -30,7 +30,7 @@ type CreateTurnstileWidgetRequest struct {
 	Mode         string   `json:"mode,omitempty"`
 	BotFightMode bool     `json:"bot_fight_mode,omitempty"`
 	Region       string   `json:"region,omitempty"`
-	OffLabel     bool     `json:"off_label,omitempty"`
+	OffLabel     bool     `json:"offlabel,omitempty"`
 }
 
 type TurnstileWidgetResponse struct {
@@ -88,7 +88,7 @@ func (api *API) ListTurnstileWidgets(ctx context.Context, rc *ResourceContainer,
 	}
 
 	if params.PerPage < 1 {
-		params.PerPage = 50
+		params.PerPage = 25
 	}
 
 	if params.Page < 1 {
