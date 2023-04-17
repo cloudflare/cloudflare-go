@@ -10,16 +10,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-const testChallengeWidgetSiteKey = "0x4AAF00AAAABn0R22HWm-YUc"
+const testTurnstileWidgetSiteKey = "0x4AAF00AAAABn0R22HWm-YUc"
 
 var (
-	challengeWidgetCreatedOn, _  = time.Parse(time.RFC3339, "2014-01-01T05:20:00.123123Z")
-	challengeWidgetModifiedOn, _ = time.Parse(time.RFC3339, "2014-01-01T05:20:00.123123Z")
-	expectedChallengeWidget      = ChallengeWidget{
+	turnstileWidgetCreatedOn, _  = time.Parse(time.RFC3339, "2014-01-01T05:20:00.123123Z")
+	turnstileWidgetModifiedOn, _ = time.Parse(time.RFC3339, "2014-01-01T05:20:00.123123Z")
+	expectedTurnstileWidget      = TurnstileWidget{
 		SiteKey:    "0x4AAF00AAAABn0R22HWm-YUc",
 		Secret:     "0x4AAF00AAAABn0R22HWm098HVBjhdsYUc",
-		CreatedOn:  &challengeWidgetCreatedOn,
-		ModifiedOn: &challengeWidgetModifiedOn,
+		CreatedOn:  &turnstileWidgetCreatedOn,
+		ModifiedOn: &turnstileWidgetModifiedOn,
 		Name:       "blog.cloudflare.com login form",
 		Domains: []string{
 			"203.0.113.1",
@@ -32,7 +32,7 @@ var (
 	}
 )
 
-func TestChallengeWidgets_Create(t *testing.T) {
+func TestTurnstileWidget_Create(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -63,12 +63,12 @@ func TestChallengeWidgets_Create(t *testing.T) {
 	})
 
 	// Make sure missing account ID is thrown
-	_, err := client.CreateChallengeWidget(context.Background(), AccountIdentifier(""), CreateChallengeWidgetRequest{})
+	_, err := client.CreateTurnstileWidget(context.Background(), AccountIdentifier(""), CreateTurnstileWidgetRequest{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	out, err := client.CreateChallengeWidget(context.Background(), AccountIdentifier(testAccountID), CreateChallengeWidgetRequest{
+	out, err := client.CreateTurnstileWidget(context.Background(), AccountIdentifier(testAccountID), CreateTurnstileWidgetRequest{
 		Name:         "blog.cloudflare.com login form",
 		Mode:         "invisible",
 		BotFightMode: true,
@@ -80,11 +80,11 @@ func TestChallengeWidgets_Create(t *testing.T) {
 		Region: "world",
 	})
 	if assert.NoError(t, err) {
-		assert.Equal(t, expectedChallengeWidget, out, "create challenge_widgets structs not equal")
+		assert.Equal(t, expectedTurnstileWidget, out, "create challenge_widgets structs not equal")
 	}
 }
 
-func TestChallengeWidgets_List(t *testing.T) {
+func TestTurnstileWidget_List(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -123,26 +123,26 @@ func TestChallengeWidgets_List(t *testing.T) {
 }`)
 	})
 
-	_, _, err := client.ListChallengeWidget(context.Background(), AccountIdentifier(""), ListChallengeWidgetRequest{})
+	_, _, err := client.ListTurnstileWidgets(context.Background(), AccountIdentifier(""), ListTurnstileWidgetRequest{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	out, results, err := client.ListChallengeWidget(context.Background(), AccountIdentifier(testAccountID), ListChallengeWidgetRequest{
-		Order: "asc",
+	out, results, err := client.ListTurnstileWidgets(context.Background(), AccountIdentifier(testAccountID), ListTurnstileWidgetRequest{
+		Order: OrderDirectionAsc,
 	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, 1, len(out), "expected 1 challenge_widgets")
 		assert.Equal(t, 20, results.PerPage, "expected 20 per page")
-		assert.Equal(t, expectedChallengeWidget, out[0], "list challenge_widgets structs not equal")
+		assert.Equal(t, expectedTurnstileWidget, out[0], "list challenge_widgets structs not equal")
 	}
 }
 
-func TestChallengeWidgets_Get(t *testing.T) {
+func TestTurnstileWidget_Get(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/accounts/"+testAccountID+"/challenges/widgets/"+testChallengeWidgetSiteKey, func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/accounts/"+testAccountID+"/challenges/widgets/"+testTurnstileWidgetSiteKey, func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `
@@ -168,28 +168,28 @@ func TestChallengeWidgets_Get(t *testing.T) {
 }`)
 	})
 
-	_, err := client.GetChallengeWidget(context.Background(), AccountIdentifier(""), "")
+	_, err := client.GetTurnstileWidget(context.Background(), AccountIdentifier(""), "")
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	_, err = client.GetChallengeWidget(context.Background(), AccountIdentifier(testAccountID), "")
+	_, err = client.GetTurnstileWidget(context.Background(), AccountIdentifier(testAccountID), "")
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingSiteKey, err)
 	}
 
-	out, err := client.GetChallengeWidget(context.Background(), AccountIdentifier(testAccountID), testChallengeWidgetSiteKey)
+	out, err := client.GetTurnstileWidget(context.Background(), AccountIdentifier(testAccountID), testTurnstileWidgetSiteKey)
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, expectedChallengeWidget, out, "get challenge_widgets structs not equal")
+		assert.Equal(t, expectedTurnstileWidget, out, "get challenge_widgets structs not equal")
 	}
 }
 
-func TestChallengeWidgets_Update(t *testing.T) {
+func TestTurnstileWidgets_Update(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/accounts/"+testAccountID+"/challenges/widgets/"+testChallengeWidgetSiteKey, func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/accounts/"+testAccountID+"/challenges/widgets/"+testTurnstileWidgetSiteKey, func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `
@@ -215,29 +215,29 @@ func TestChallengeWidgets_Update(t *testing.T) {
 }`)
 	})
 
-	_, err := client.UpdateChallengeWidget(context.Background(), AccountIdentifier(""), ChallengeWidget{})
+	_, err := client.UpdateTurnstileWidget(context.Background(), AccountIdentifier(""), TurnstileWidget{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	_, err = client.UpdateChallengeWidget(context.Background(), AccountIdentifier(testAccountID), ChallengeWidget{})
+	_, err = client.UpdateTurnstileWidget(context.Background(), AccountIdentifier(testAccountID), TurnstileWidget{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingSiteKey, err)
 	}
 
-	out, err := client.UpdateChallengeWidget(context.Background(), AccountIdentifier(testAccountID), ChallengeWidget{
-		SiteKey: testChallengeWidgetSiteKey,
+	out, err := client.UpdateTurnstileWidget(context.Background(), AccountIdentifier(testAccountID), TurnstileWidget{
+		SiteKey: testTurnstileWidgetSiteKey,
 	})
 	if assert.NoError(t, err) {
-		assert.Equal(t, expectedChallengeWidget, out, "update challenge_widgets structs not equal")
+		assert.Equal(t, expectedTurnstileWidget, out, "update challenge_widgets structs not equal")
 	}
 }
 
-func TestChallengeWidgets_RotateSecret(t *testing.T) {
+func TestTurnstileWidgets_RotateSecret(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/accounts/"+testAccountID+"/challenges/widgets/"+testChallengeWidgetSiteKey+"/rotate_secret", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/accounts/"+testAccountID+"/challenges/widgets/"+testTurnstileWidgetSiteKey+"/rotate_secret", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `
@@ -264,27 +264,27 @@ func TestChallengeWidgets_RotateSecret(t *testing.T) {
 	})
 
 	// Make sure missing account ID is thrown
-	_, err := client.RotateChallengeWidget(context.Background(), AccountIdentifier(""), RotateChallengeWidgetRequest{})
+	_, err := client.RotateTurnstileWidget(context.Background(), AccountIdentifier(""), RotateTurnstileWidgetRequest{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	_, err = client.RotateChallengeWidget(context.Background(), AccountIdentifier(testAccountID), RotateChallengeWidgetRequest{})
+	_, err = client.RotateTurnstileWidget(context.Background(), AccountIdentifier(testAccountID), RotateTurnstileWidgetRequest{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingSiteKey, err)
 	}
 
-	out, err := client.RotateChallengeWidget(context.Background(), AccountIdentifier(testAccountID), RotateChallengeWidgetRequest{SiteKey: testChallengeWidgetSiteKey})
+	out, err := client.RotateTurnstileWidget(context.Background(), AccountIdentifier(testAccountID), RotateTurnstileWidgetRequest{SiteKey: testTurnstileWidgetSiteKey})
 	if assert.NoError(t, err) {
-		assert.Equal(t, expectedChallengeWidget, out, "rotate challenge_widgets structs not equal")
+		assert.Equal(t, expectedTurnstileWidget, out, "rotate challenge_widgets structs not equal")
 	}
 }
 
-func TestChallengeWidgets_Delete(t *testing.T) {
+func TestTurnstileWidgets_Delete(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/accounts/"+testAccountID+"/challenges/widgets/"+testChallengeWidgetSiteKey, func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/accounts/"+testAccountID+"/challenges/widgets/"+testTurnstileWidgetSiteKey, func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `
@@ -311,16 +311,16 @@ func TestChallengeWidgets_Delete(t *testing.T) {
 	})
 
 	// Make sure missing account ID is thrown
-	err := client.DeleteChallengeWidget(context.Background(), AccountIdentifier(""), "")
+	err := client.DeleteTurnstileWidget(context.Background(), AccountIdentifier(""), "")
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	err = client.DeleteChallengeWidget(context.Background(), AccountIdentifier(testAccountID), "")
+	err = client.DeleteTurnstileWidget(context.Background(), AccountIdentifier(testAccountID), "")
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingSiteKey, err)
 	}
 
-	err = client.DeleteChallengeWidget(context.Background(), AccountIdentifier(testAccountID), testChallengeWidgetSiteKey)
+	err = client.DeleteTurnstileWidget(context.Background(), AccountIdentifier(testAccountID), testTurnstileWidgetSiteKey)
 	assert.NoError(t, err)
 }

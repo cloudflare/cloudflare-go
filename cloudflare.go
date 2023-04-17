@@ -596,3 +596,10 @@ func checkResultInfo(perPage, page, count int, info *ResultInfo) bool {
 		panic("checkResultInfo: impossible")
 	}
 }
+
+type OrderDirection string
+
+const (
+	OrderDirectionAsc  OrderDirection = "asc"
+	OrderDirectionDesc OrderDirection = "desc"
+)
