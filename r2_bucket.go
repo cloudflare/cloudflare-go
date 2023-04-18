@@ -43,7 +43,8 @@ type ListR2BucketsParams struct {
 }
 
 type CreateR2BucketParameters struct {
-	Name string `json:"name,omitempty"`
+	Name         string `json:"name,omitempty"`
+	LocationHind string `json:"locationHint,omitempty"`
 }
 
 type R2BucketResponse struct {
@@ -75,19 +76,25 @@ func (api *API) ListR2Buckets(ctx context.Context, rc *ResourceContainer, params
 // CreateR2Bucket Creates a new R2 bucket.
 //
 // API reference: https://api.cloudflare.com/#r2-bucket-create-bucket
-func (api *API) CreateR2Bucket(ctx context.Context, rc *ResourceContainer, params CreateR2BucketParameters) error {
+func (api *API) CreateR2Bucket(ctx context.Context, rc *ResourceContainer, params CreateR2BucketParameters) (R2Bucket, error) {
 	if rc.Identifier == "" {
-		return ErrMissingAccountID
+		return R2Bucket{}, ErrMissingAccountID
 	}
 
 	if params.Name == "" {
-		return ErrMissingBucketName
+		return R2Bucket{}, ErrMissingBucketName
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/r2/buckets", rc.Identifier)
-	_, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 
-	return err
+	var r2BucketResponse R2BucketResponse
+	err = json.Unmarshal(res, &r2BucketResponse)
+	if err != nil {
+		return R2Bucket{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+
+	return r2BucketResponse.Result, nil
 }
 
 // GetR2Bucket Gets an existing R2 bucket.
