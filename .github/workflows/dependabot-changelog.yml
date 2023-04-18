@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Fetch dependabot metadata
         id: dependabot-metadata
-        uses: dependabot/fetch-metadata@v1.3.6
+        uses: dependabot/fetch-metadata@v1.4.0
       - uses: actions/checkout@v3
       - run: |
           gh pr checkout $PR_URL
