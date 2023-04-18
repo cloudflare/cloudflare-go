@@ -65,12 +65,12 @@ func TestTurnstileWidget_Create(t *testing.T) {
 	})
 
 	// Make sure missing account ID is thrown
-	_, err := client.CreateTurnstileWidget(context.Background(), AccountIdentifier(""), CreateTurnstileWidgetRequest{})
+	_, err := client.CreateTurnstileWidget(context.Background(), AccountIdentifier(""), CreateTurnstileWidgetParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	out, err := client.CreateTurnstileWidget(context.Background(), AccountIdentifier(testAccountID), CreateTurnstileWidgetRequest{
+	out, err := client.CreateTurnstileWidget(context.Background(), AccountIdentifier(testAccountID), CreateTurnstileWidgetParams{
 		Name:         "blog.cloudflare.com login form",
 		Mode:         "invisible",
 		BotFightMode: true,
@@ -127,12 +127,12 @@ func TestTurnstileWidget_List(t *testing.T) {
 }`)
 	})
 
-	_, _, err := client.ListTurnstileWidgets(context.Background(), AccountIdentifier(""), ListTurnstileWidgetRequest{})
+	_, _, err := client.ListTurnstileWidgets(context.Background(), AccountIdentifier(""), ListTurnstileWidgetParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	out, results, err := client.ListTurnstileWidgets(context.Background(), AccountIdentifier(testAccountID), ListTurnstileWidgetRequest{
+	out, results, err := client.ListTurnstileWidgets(context.Background(), AccountIdentifier(testAccountID), ListTurnstileWidgetParams{
 		Order: OrderDirectionAsc,
 	})
 	if assert.NoError(t, err) {
@@ -221,17 +221,17 @@ func TestTurnstileWidgets_Update(t *testing.T) {
 }`)
 	})
 
-	_, err := client.UpdateTurnstileWidget(context.Background(), AccountIdentifier(""), TurnstileWidget{})
+	_, err := client.UpdateTurnstileWidget(context.Background(), AccountIdentifier(""), UpdateTurnstileWidgetParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	_, err = client.UpdateTurnstileWidget(context.Background(), AccountIdentifier(testAccountID), TurnstileWidget{})
+	_, err = client.UpdateTurnstileWidget(context.Background(), AccountIdentifier(testAccountID), UpdateTurnstileWidgetParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingSiteKey, err)
 	}
 
-	out, err := client.UpdateTurnstileWidget(context.Background(), AccountIdentifier(testAccountID), TurnstileWidget{
+	out, err := client.UpdateTurnstileWidget(context.Background(), AccountIdentifier(testAccountID), UpdateTurnstileWidgetParams{
 		SiteKey: testTurnstileWidgetSiteKey,
 	})
 	if assert.NoError(t, err) {
@@ -271,17 +271,17 @@ func TestTurnstileWidgets_RotateSecret(t *testing.T) {
 	})
 
 	// Make sure missing account ID is thrown
-	_, err := client.RotateTurnstileWidget(context.Background(), AccountIdentifier(""), RotateTurnstileWidgetRequest{})
+	_, err := client.RotateTurnstileWidget(context.Background(), AccountIdentifier(""), RotateTurnstileWidgetParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	_, err = client.RotateTurnstileWidget(context.Background(), AccountIdentifier(testAccountID), RotateTurnstileWidgetRequest{})
+	_, err = client.RotateTurnstileWidget(context.Background(), AccountIdentifier(testAccountID), RotateTurnstileWidgetParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingSiteKey, err)
 	}
 
-	out, err := client.RotateTurnstileWidget(context.Background(), AccountIdentifier(testAccountID), RotateTurnstileWidgetRequest{SiteKey: testTurnstileWidgetSiteKey})
+	out, err := client.RotateTurnstileWidget(context.Background(), AccountIdentifier(testAccountID), RotateTurnstileWidgetParams{SiteKey: testTurnstileWidgetSiteKey})
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedTurnstileWidget, out, "rotate challenge_widgets structs not equal")
 	}

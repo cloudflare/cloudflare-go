@@ -24,7 +24,18 @@ type TurnstileWidget struct {
 	OffLabel     bool       `json:"offlabel,omitempty"`
 }
 
-type CreateTurnstileWidgetRequest struct {
+type CreateTurnstileWidgetParams struct {
+	Name         string   `json:"name,omitempty"`
+	Domains      []string `json:"domains,omitempty"`
+	Mode         string   `json:"mode,omitempty"`
+	BotFightMode bool     `json:"bot_fight_mode,omitempty"`
+	Region       string   `json:"region,omitempty"`
+	OffLabel     bool     `json:"offlabel,omitempty"`
+}
+
+type UpdateTurnstileWidgetParams struct {
+	SiteKey      string   `json:"sitekey,omitempty"`
+	Secret       string   `json:"secret,omitempty"`
 	Name         string   `json:"name,omitempty"`
 	Domains      []string `json:"domains,omitempty"`
 	Mode         string   `json:"mode,omitempty"`
@@ -38,7 +49,7 @@ type TurnstileWidgetResponse struct {
 	Result TurnstileWidget `json:"result"`
 }
 
-type ListTurnstileWidgetRequest struct {
+type ListTurnstileWidgetParams struct {
 	ResultInfo
 	Direction string         `url:"direction,omitempty"`
 	Order     OrderDirection `url:"order,omitempty"`
@@ -50,7 +61,7 @@ type ListTurnstileWidgetResponse struct {
 	Result     []TurnstileWidget `json:"result"`
 }
 
-type RotateTurnstileWidgetRequest struct {
+type RotateTurnstileWidgetParams struct {
 	SiteKey               string
 	InvalidateImmediately bool `json:"invalidate_immediately,omitempty"`
 }
@@ -58,27 +69,30 @@ type RotateTurnstileWidgetRequest struct {
 // CreateTurnstileWidget creates a new challenge widgets.
 //
 // API reference: https://api.cloudflare.com/#challenge-widgets-properties
-func (api *API) CreateTurnstileWidget(ctx context.Context, rc *ResourceContainer, params CreateTurnstileWidgetRequest) (TurnstileWidget, error) {
+func (api *API) CreateTurnstileWidget(ctx context.Context, rc *ResourceContainer, params CreateTurnstileWidgetParams) (TurnstileWidget, error) {
 	if rc.Identifier == "" {
 		return TurnstileWidget{}, ErrMissingAccountID
 	}
+
 	uri := fmt.Sprintf("/accounts/%s/challenges/widgets", rc.Identifier)
 	res, err := api.makeRequestContext(ctx, "POST", uri, params)
 	if err != nil {
 		return TurnstileWidget{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
+
 	var r TurnstileWidgetResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return TurnstileWidget{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
+
 	return r.Result, nil
 }
 
 // ListTurnstileWidgets lists challenge widgets.
 //
 // API reference: https://api.cloudflare.com/#challenge-widgets-list-challenge-widgets
-func (api *API) ListTurnstileWidgets(ctx context.Context, rc *ResourceContainer, params ListTurnstileWidgetRequest) ([]TurnstileWidget, *ResultInfo, error) {
+func (api *API) ListTurnstileWidgets(ctx context.Context, rc *ResourceContainer, params ListTurnstileWidgetParams) ([]TurnstileWidget, *ResultInfo, error) {
 	if rc.Identifier == "" {
 		return []TurnstileWidget{}, &ResultInfo{}, ErrMissingAccountID
 	}
@@ -99,8 +113,8 @@ func (api *API) ListTurnstileWidgets(ctx context.Context, rc *ResourceContainer,
 	var r ListTurnstileWidgetResponse
 	for {
 		uri := buildURI(fmt.Sprintf("/accounts/%s/challenges/widgets", rc.Identifier), params)
-
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+
 		if err != nil {
 			return []TurnstileWidget{}, &ResultInfo{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 		}
@@ -108,6 +122,7 @@ func (api *API) ListTurnstileWidgets(ctx context.Context, rc *ResourceContainer,
 		if err != nil {
 			return []TurnstileWidget{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 		}
+
 		widgets = append(widgets, r.Result...)
 		params.ResultInfo = r.ResultInfo.Next()
 		if params.ResultInfo.Done() || !autoPaginate {
@@ -118,24 +133,24 @@ func (api *API) ListTurnstileWidgets(ctx context.Context, rc *ResourceContainer,
 	return widgets, &r.ResultInfo, nil
 }
 
-// GetTurnstileWidget shows a single challenge widget configuration..
+// GetTurnstileWidget shows a single challenge widget configuration.
 //
 // API reference: https://api.cloudflare.com/#challenge-widgets-challenge-widget-details
-func (api *API) GetTurnstileWidget(ctx context.Context, rc *ResourceContainer, SiteKey string) (TurnstileWidget, error) {
+func (api *API) GetTurnstileWidget(ctx context.Context, rc *ResourceContainer, siteKey string) (TurnstileWidget, error) {
 	if rc.Identifier == "" {
 		return TurnstileWidget{}, ErrMissingAccountID
 	}
 
-	if SiteKey == "" {
+	if siteKey == "" {
 		return TurnstileWidget{}, ErrMissingSiteKey
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/challenges/widgets/%s", rc.Identifier, SiteKey)
+	uri := fmt.Sprintf("/accounts/%s/challenges/widgets/%s", rc.Identifier, siteKey)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
-
 	if err != nil {
 		return TurnstileWidget{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
+
 	var r TurnstileWidgetResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
@@ -148,18 +163,21 @@ func (api *API) GetTurnstileWidget(ctx context.Context, rc *ResourceContainer, S
 // UpdateTurnstileWidget update the configuration of a widget.
 //
 // API reference: https://api.cloudflare.com/#challenge-widgets-update-a-challenge-widget
-func (api *API) UpdateTurnstileWidget(ctx context.Context, rc *ResourceContainer, widget TurnstileWidget) (TurnstileWidget, error) {
+func (api *API) UpdateTurnstileWidget(ctx context.Context, rc *ResourceContainer, params UpdateTurnstileWidgetParams) (TurnstileWidget, error) {
 	if rc.Identifier == "" {
 		return TurnstileWidget{}, ErrMissingAccountID
 	}
-	if widget.SiteKey == "" {
+
+	if params.SiteKey == "" {
 		return TurnstileWidget{}, ErrMissingSiteKey
 	}
-	uri := fmt.Sprintf("/accounts/%s/challenges/widgets/%s", rc.Identifier, widget.SiteKey)
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, widget)
+
+	uri := fmt.Sprintf("/accounts/%s/challenges/widgets/%s", rc.Identifier, params.SiteKey)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return TurnstileWidget{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
+
 	var r TurnstileWidgetResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
@@ -168,12 +186,14 @@ func (api *API) UpdateTurnstileWidget(ctx context.Context, rc *ResourceContainer
 	return r.Result, nil
 }
 
-// RotateTurnstileWidget generates a new secret key for this widget. If invalidate_immediately is set to false, the previous secret remains valid for 2 hours.
+// RotateTurnstileWidget generates a new secret key for this widget. If
+// invalidate_immediately is set to false, the previous secret remains valid for
+// 2 hours.
 //
 // Note that secrets cannot be rotated again during the grace period.
 //
 // API reference: https://api.cloudflare.com/#challenge-widgets-rotate-secret-for-a-challenge-widget
-func (api *API) RotateTurnstileWidget(ctx context.Context, rc *ResourceContainer, param RotateTurnstileWidgetRequest) (TurnstileWidget, error) {
+func (api *API) RotateTurnstileWidget(ctx context.Context, rc *ResourceContainer, param RotateTurnstileWidgetParams) (TurnstileWidget, error) {
 	if rc.Identifier == "" {
 		return TurnstileWidget{}, ErrMissingAccountID
 	}
@@ -187,26 +207,28 @@ func (api *API) RotateTurnstileWidget(ctx context.Context, rc *ResourceContainer
 	if err != nil {
 		return TurnstileWidget{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
+
 	var r TurnstileWidgetResponse
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return TurnstileWidget{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
+
 	return r.Result, nil
 }
 
 // DeleteTurnstileWidget delete a challenge widget.
 //
 // API reference: https://api.cloudflare.com/#challenge-widgets-delete-a-challenge-widget
-func (api *API) DeleteTurnstileWidget(ctx context.Context, rc *ResourceContainer, SiteKey string) error {
+func (api *API) DeleteTurnstileWidget(ctx context.Context, rc *ResourceContainer, siteKey string) error {
 	if rc.Identifier == "" {
 		return ErrMissingAccountID
 	}
 
-	if SiteKey == "" {
+	if siteKey == "" {
 		return ErrMissingSiteKey
 	}
-	uri := fmt.Sprintf("/accounts/%s/challenges/widgets/%s", rc.Identifier, SiteKey)
+	uri := fmt.Sprintf("/accounts/%s/challenges/widgets/%s", rc.Identifier, siteKey)
 
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
@@ -218,5 +240,6 @@ func (api *API) DeleteTurnstileWidget(ctx context.Context, rc *ResourceContainer
 	if err != nil {
 		return fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
+
 	return nil
 }
