@@ -124,7 +124,7 @@ func TestR2_CreateBucket(t *testing.T) {
 		Location:     "ENAM",
 	}
 
-	actual, err := client.CreateR2Bucket(context.Background(), AccountIdentifier(testAccountID), CreateR2BucketParameters{Name: testBucketName})
+	actual, err := client.CreateR2Bucket(context.Background(), AccountIdentifier(testAccountID), CreateR2BucketParameters{Name: testBucketName, LocationHint: "ENAM"})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}

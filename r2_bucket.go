@@ -44,7 +44,7 @@ type ListR2BucketsParams struct {
 
 type CreateR2BucketParameters struct {
 	Name         string `json:"name,omitempty"`
-	LocationHind string `json:"locationHint,omitempty"`
+	LocationHint string `json:"locationHint,omitempty"`
 }
 
 type R2BucketResponse struct {
