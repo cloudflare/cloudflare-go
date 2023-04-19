@@ -10,6 +10,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+const regionalHostname = "eu.example.com"
+
 func TestListRegions(t *testing.T) {
 	setup()
 	defer teardown()
@@ -60,10 +62,10 @@ func TestListRegionalHostnames(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, `{
+		fmt.Fprint(w, fmt.Sprintf(`{
 		  "result": [
 			{
-			  "hostname": "ca.regional.ipam.rocks",
+			  "hostname": "%s",
 			  "region_key": "ca",
 			  "created_on": "2023-01-14T00:47:57.060267Z"
 			}
@@ -71,7 +73,7 @@ func TestListRegionalHostnames(t *testing.T) {
 		  "success": true,
 		  "errors": [],
 		  "messages": []
-		}`)
+		}`, regionalHostname))
 	}
 
 	mux.HandleFunc("/zones/"+testZoneID+"/addressing/regional_hostnames", handler)
@@ -79,7 +81,7 @@ func TestListRegionalHostnames(t *testing.T) {
 	createdOn, _ := time.Parse(time.RFC3339, "2023-01-14T00:47:57.060267Z")
 	want := []RegionalHostname{
 		{
-			Hostname:  "ca.regional.ipam.rocks",
+			Hostname:  regionalHostname,
 			RegionKey: "ca",
 			CreatedOn: &createdOn,
 		},
@@ -98,23 +100,23 @@ func TestCreateRegionalHostname(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, `{
+		fmt.Fprint(w, fmt.Sprintf(`{
 		  "result": {
-			  "hostname": "ca.regional.ipam.rocks",
+			  "hostname": "%s",
 			  "region_key": "ca",
 			  "created_on": "2023-01-14T00:47:57.060267Z"
 		  },
 		  "success": true,
 		  "errors": [],
 		  "messages": []
-		}`)
+		}`, regionalHostname))
 	}
 
 	mux.HandleFunc("/zones/"+testZoneID+"/addressing/regional_hostnames", handler)
 
 	want := RegionalHostname{
 		RegionKey: "ca",
-		Hostname:  "ca.regional.ipam.rocks",
+		Hostname:  regionalHostname,
 	}
 
 	actual, err := client.CreateDataLocalizationRegionalHostname(context.Background(), ZoneIdentifier(testZoneID), want)
@@ -132,26 +134,25 @@ func TestGetRegionalHostname(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, `{
+		fmt.Fprint(w, fmt.Sprintf(`{
 		  "result": {
-			  "hostname": "ca.regional.ipam.rocks",
+			  "hostname": "%s",
 			  "region_key": "ca",
 			  "created_on": "2023-01-14T00:47:57.060267Z"
 		  },
 		  "success": true,
 		  "errors": [],
 		  "messages": []
-		}`)
+		}`, regionalHostname))
 	}
 
-	testHostname := "ca.regional.ipam.rocks"
-	mux.HandleFunc("/zones/"+testZoneID+"/addressing/regional_hostnames/"+testHostname, handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/addressing/regional_hostnames/"+regionalHostname, handler)
 
-	actual, err := client.GetDataLocalizationRegionalHostname(context.Background(), ZoneIdentifier(testZoneID), testHostname)
+	actual, err := client.GetDataLocalizationRegionalHostname(context.Background(), ZoneIdentifier(testZoneID), regionalHostname)
 	createdOn, _ := time.Parse(time.RFC3339, "2023-01-14T00:47:57.060267Z")
 	want := RegionalHostname{
 		RegionKey: "ca",
-		Hostname:  "ca.regional.ipam.rocks",
+		Hostname:  regionalHostname,
 		CreatedOn: &createdOn,
 	}
 	if assert.NoError(t, err) {
@@ -166,24 +167,23 @@ func TestUpdateRegionalHostname(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, `{
+		fmt.Fprint(w, fmt.Sprintf(`{
 		  "result": {
-			  "hostname": "ca.regional.ipam.rocks",
+			  "hostname": "%s",
 			  "region_key": "eu",
 			  "created_on": "2023-01-14T00:47:57.060267Z"
 		  },
 		  "success": true,
 		  "errors": [],
 		  "messages": []
-		}`)
+		}`, regionalHostname))
 	}
 
-	testHostname := "ca.regional.ipam.rocks"
 	want := RegionalHostname{
 		RegionKey: "eu",
-		Hostname:  testHostname,
+		Hostname:  regionalHostname,
 	}
-	mux.HandleFunc("/zones/"+testZoneID+"/addressing/regional_hostnames/"+testHostname, handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/addressing/regional_hostnames/"+regionalHostname, handler)
 
 	actual, err := client.UpdateDataLocalizationRegionalHostname(context.Background(), ZoneIdentifier(testZoneID), want)
 	createdOn, _ := time.Parse(time.RFC3339, "2023-01-14T00:47:57.060267Z")
@@ -201,9 +201,8 @@ func TestDeleteRegionalHostname(t *testing.T) {
 		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 	}
 
-	testHostname := "ca.regional.ipam.rocks"
-	mux.HandleFunc("/zones/"+testZoneID+"/addressing/regional_hostnames/"+testHostname, handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/addressing/regional_hostnames/"+regionalHostname, handler)
 
-	err := client.DeleteDataLocalizationRegionalHostname(context.Background(), ZoneIdentifier(testZoneID), testHostname)
+	err := client.DeleteDataLocalizationRegionalHostname(context.Background(), ZoneIdentifier(testZoneID), regionalHostname)
 	assert.NoError(t, err)
 }
