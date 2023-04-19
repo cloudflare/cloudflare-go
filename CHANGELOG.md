@@ -3,6 +3,7 @@
 ENHANCEMENTS:
 
 * access_application: Add `path_cookie_attribute` app setting ([#1223](https://github.com/cloudflare/cloudflare-go/issues/1223))
+* data localization: add support for regional hostnames API ([#1270](https://github.com/cloudflare/cloudflare-go/issues/1270))
 * dns: add support for importing and exporting DNS records using BIND file configurations ([#1266](https://github.com/cloudflare/cloudflare-go/issues/1266))
 * turnstile: add support for turnstile ([#1267](https://github.com/cloudflare/cloudflare-go/issues/1267))
 
