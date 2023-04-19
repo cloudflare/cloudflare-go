@@ -25,10 +25,23 @@ type regionalHostnameResponse struct {
 	Result RegionalHostname `json:"result"`
 }
 
+type ListDataLocalizationRegionsParams struct{}
+type ListDataLocalizationRegionalHostnamesParams struct{}
+
+type CreateDataLocalizationRegionalHostnameParams struct {
+	Hostname  string `json:"hostname"`
+	RegionKey string `json:"region_key"`
+}
+
+type UpdateDataLocalizationRegionalHostnameParams struct {
+	Hostname  string `json:"-"`
+	RegionKey string `json:"region_key"`
+}
+
 // ListDataLocalizationRegions lists all available regions.
 //
 // API reference: https://developers.cloudflare.com/data-localization/regional-services/get-started/#configure-regional-services-via-api
-func (api *API) ListDataLocalizationRegions(ctx context.Context, rc *ResourceContainer) ([]Region, error) {
+func (api *API) ListDataLocalizationRegions(ctx context.Context, rc *ResourceContainer, params ListDataLocalizationRegionsParams) ([]Region, error) {
 	if rc.Level != AccountRouteLevel {
 		return []Region{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
 	}
@@ -55,7 +68,7 @@ func (api *API) ListDataLocalizationRegions(ctx context.Context, rc *ResourceCon
 // ListDataLocalizationRegionalHostnames lists all regional hostnames for a zone.
 //
 // API reference: https://developers.cloudflare.com/data-localization/regional-services/get-started/#configure-regional-services-via-api
-func (api *API) ListDataLocalizationRegionalHostnames(ctx context.Context, rc *ResourceContainer) ([]RegionalHostname, error) {
+func (api *API) ListDataLocalizationRegionalHostnames(ctx context.Context, rc *ResourceContainer, params ListDataLocalizationRegionalHostnamesParams) ([]RegionalHostname, error) {
 	if rc.Level != ZoneRouteLevel {
 		return []RegionalHostname{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
 	}
@@ -82,7 +95,7 @@ func (api *API) ListDataLocalizationRegionalHostnames(ctx context.Context, rc *R
 // CreateDataLocalizationRegionalHostname lists all regional hostnames for a zone.
 //
 // API reference: https://developers.cloudflare.com/data-localization/regional-services/get-started/#configure-regional-services-via-api
-func (api *API) CreateDataLocalizationRegionalHostname(ctx context.Context, rc *ResourceContainer, regionalHostname RegionalHostname) (RegionalHostname, error) {
+func (api *API) CreateDataLocalizationRegionalHostname(ctx context.Context, rc *ResourceContainer, params CreateDataLocalizationRegionalHostnameParams) (RegionalHostname, error) {
 	if rc.Level != ZoneRouteLevel {
 		return RegionalHostname{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
 	}
@@ -93,9 +106,7 @@ func (api *API) CreateDataLocalizationRegionalHostname(ctx context.Context, rc *
 
 	uri := fmt.Sprintf("/zones/%s/addressing/regional_hostnames", rc.Identifier)
 
-	// Ensure we don't send this value, otherwise the service will reject the request.
-	regionalHostname.CreatedOn = nil
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, regionalHostname)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return RegionalHostname{}, err
 	}
@@ -135,7 +146,7 @@ func (api *API) GetDataLocalizationRegionalHostname(ctx context.Context, rc *Res
 // UpdateDataLocalizationRegionalHostname returns the details of a specific regional hostname.
 //
 // API reference: https://developers.cloudflare.com/data-localization/regional-services/get-started/#configure-regional-services-via-api
-func (api *API) UpdateDataLocalizationRegionalHostname(ctx context.Context, rc *ResourceContainer, regionalHostname RegionalHostname) (RegionalHostname, error) {
+func (api *API) UpdateDataLocalizationRegionalHostname(ctx context.Context, rc *ResourceContainer, params UpdateDataLocalizationRegionalHostnameParams) (RegionalHostname, error) {
 	if rc.Level != ZoneRouteLevel {
 		return RegionalHostname{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
 	}
@@ -144,13 +155,8 @@ func (api *API) UpdateDataLocalizationRegionalHostname(ctx context.Context, rc *
 		return RegionalHostname{}, ErrMissingZoneID
 	}
 
-	uri := fmt.Sprintf("/zones/%s/addressing/regional_hostnames/%s", rc.Identifier, regionalHostname.Hostname)
+	uri := fmt.Sprintf("/zones/%s/addressing/regional_hostnames/%s", rc.Identifier, params.Hostname)
 
-	params := struct {
-		RegionKey string `json:"region_key"`
-	}{
-		RegionKey: regionalHostname.RegionKey,
-	}
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
 	if err != nil {
 		return RegionalHostname{}, err

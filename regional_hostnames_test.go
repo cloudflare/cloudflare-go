@@ -19,7 +19,7 @@ func TestListRegions(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, `{
+		fmt.Fprintf(w, `{
 			"result": [
 				{
 				  "key": "ca",
@@ -49,7 +49,7 @@ func TestListRegions(t *testing.T) {
 		},
 	}
 
-	actual, err := client.ListDataLocalizationRegions(context.Background(), AccountIdentifier(testAccountID))
+	actual, err := client.ListDataLocalizationRegions(context.Background(), AccountIdentifier(testAccountID), ListDataLocalizationRegionsParams{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -62,7 +62,7 @@ func TestListRegionalHostnames(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, fmt.Sprintf(`{
+		fmt.Fprintf(w, `{
 		  "result": [
 			{
 			  "hostname": "%s",
@@ -73,7 +73,7 @@ func TestListRegionalHostnames(t *testing.T) {
 		  "success": true,
 		  "errors": [],
 		  "messages": []
-		}`, regionalHostname))
+		}`, regionalHostname)
 	}
 
 	mux.HandleFunc("/zones/"+testZoneID+"/addressing/regional_hostnames", handler)
@@ -87,7 +87,7 @@ func TestListRegionalHostnames(t *testing.T) {
 		},
 	}
 
-	actual, err := client.ListDataLocalizationRegionalHostnames(context.Background(), ZoneIdentifier(testZoneID))
+	actual, err := client.ListDataLocalizationRegionalHostnames(context.Background(), ZoneIdentifier(testZoneID), ListDataLocalizationRegionalHostnamesParams{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -100,7 +100,7 @@ func TestCreateRegionalHostname(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, fmt.Sprintf(`{
+		fmt.Fprintf(w, `{
 		  "result": {
 			  "hostname": "%s",
 			  "region_key": "ca",
@@ -109,17 +109,22 @@ func TestCreateRegionalHostname(t *testing.T) {
 		  "success": true,
 		  "errors": [],
 		  "messages": []
-		}`, regionalHostname))
+		}`, regionalHostname)
 	}
 
 	mux.HandleFunc("/zones/"+testZoneID+"/addressing/regional_hostnames", handler)
+
+	params := CreateDataLocalizationRegionalHostnameParams{
+		RegionKey: "ca",
+		Hostname:  regionalHostname,
+	}
 
 	want := RegionalHostname{
 		RegionKey: "ca",
 		Hostname:  regionalHostname,
 	}
 
-	actual, err := client.CreateDataLocalizationRegionalHostname(context.Background(), ZoneIdentifier(testZoneID), want)
+	actual, err := client.CreateDataLocalizationRegionalHostname(context.Background(), ZoneIdentifier(testZoneID), params)
 	createdOn, _ := time.Parse(time.RFC3339, "2023-01-14T00:47:57.060267Z")
 	want.CreatedOn = &createdOn
 	if assert.NoError(t, err) {
@@ -134,7 +139,7 @@ func TestGetRegionalHostname(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, fmt.Sprintf(`{
+		fmt.Fprintf(w, `{
 		  "result": {
 			  "hostname": "%s",
 			  "region_key": "ca",
@@ -143,7 +148,7 @@ func TestGetRegionalHostname(t *testing.T) {
 		  "success": true,
 		  "errors": [],
 		  "messages": []
-		}`, regionalHostname))
+		}`, regionalHostname)
 	}
 
 	mux.HandleFunc("/zones/"+testZoneID+"/addressing/regional_hostnames/"+regionalHostname, handler)
@@ -167,7 +172,7 @@ func TestUpdateRegionalHostname(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, fmt.Sprintf(`{
+		fmt.Fprintf(w, `{
 		  "result": {
 			  "hostname": "%s",
 			  "region_key": "eu",
@@ -176,16 +181,22 @@ func TestUpdateRegionalHostname(t *testing.T) {
 		  "success": true,
 		  "errors": [],
 		  "messages": []
-		}`, regionalHostname))
+		}`, regionalHostname)
+	}
+
+	params := UpdateDataLocalizationRegionalHostnameParams{
+		RegionKey: "eu",
+		Hostname:  regionalHostname,
 	}
 
 	want := RegionalHostname{
 		RegionKey: "eu",
 		Hostname:  regionalHostname,
 	}
+
 	mux.HandleFunc("/zones/"+testZoneID+"/addressing/regional_hostnames/"+regionalHostname, handler)
 
-	actual, err := client.UpdateDataLocalizationRegionalHostname(context.Background(), ZoneIdentifier(testZoneID), want)
+	actual, err := client.UpdateDataLocalizationRegionalHostname(context.Background(), ZoneIdentifier(testZoneID), params)
 	createdOn, _ := time.Parse(time.RFC3339, "2023-01-14T00:47:57.060267Z")
 	want.CreatedOn = &createdOn
 	if assert.NoError(t, err) {
