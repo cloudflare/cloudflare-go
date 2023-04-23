@@ -41,7 +41,8 @@ func TestAccessApplications(t *testing.T) {
 					"logo_url": "https://www.example.com/example.png",
 					"skip_interstitial": true,
 					"app_launcher_visible": true,
-					"service_auth_401_redirect": true
+					"service_auth_401_redirect": true,
+					"path_cookie_attribute": true
 				}
 			],
 			"result_info": {
@@ -77,6 +78,7 @@ func TestAccessApplications(t *testing.T) {
 		HttpOnlyCookieAttribute: BoolPtr(true),
 		LogoURL:                 "https://www.example.com/example.png",
 		SkipInterstitial:        BoolPtr(true),
+		PathCookieAttribute:     BoolPtr(true),
 	}}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps", handler)
@@ -125,7 +127,8 @@ func TestAccessApplication(t *testing.T) {
 				"skip_interstitial": true,
 				"app_launcher_visible": true,
 				"service_auth_401_redirect": true,
-				"http_only_cookie_attribute": false
+				"http_only_cookie_attribute": false,
+				"path_cookie_attribute": false
 			}
 		}
 		`)
@@ -153,6 +156,7 @@ func TestAccessApplication(t *testing.T) {
 		LogoURL:                 "https://www.example.com/example.png",
 		SkipInterstitial:        BoolPtr(true),
 		HttpOnlyCookieAttribute: BoolPtr(false),
+		PathCookieAttribute:     BoolPtr(false),
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)

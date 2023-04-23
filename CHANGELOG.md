@@ -2,7 +2,16 @@
 
 ENHANCEMENTS:
 
+* access_application: Add `path_cookie_attribute` app setting ([#1223](https://github.com/cloudflare/cloudflare-go/issues/1223))
+* certificate_packs: add `Status` field to indicate the status of certificate pack ([#1271](https://github.com/cloudflare/cloudflare-go/issues/1271))
+* data localization: add support for regional hostnames API ([#1270](https://github.com/cloudflare/cloudflare-go/issues/1270))
 * dns: add support for importing and exporting DNS records using BIND file configurations ([#1266](https://github.com/cloudflare/cloudflare-go/issues/1266))
+* logpush: add support for max upload parameters ([#1272](https://github.com/cloudflare/cloudflare-go/issues/1272))
+* turnstile: add support for turnstile ([#1267](https://github.com/cloudflare/cloudflare-go/issues/1267))
+
+DEPENDENCIES:
+
+* deps: bumps dependabot/fetch-metadata from 1.3.6 to 1.4.0 ([#1269](https://github.com/cloudflare/cloudflare-go/issues/1269))
 
 ## 0.65.0 (12th April, 2023)
 
