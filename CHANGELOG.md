@@ -1,5 +1,9 @@
 ## 0.67.0 (Unreleased)
 
+NOTES:
+
+* dns_firewall: The `OriginIPs` field has been renamed to `UpstreamIPs`. ([#1246](https://github.com/cloudflare/cloudflare-go/issues/1246))
+
 ## 0.66.0 (26th April, 2023)
 
 ENHANCEMENTS:
