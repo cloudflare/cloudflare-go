@@ -14,7 +14,7 @@ import (
 type DNSFirewallCluster struct {
 	ID                   string   `json:"id,omitempty"`
 	Name                 string   `json:"name"`
-	OriginIPs            []string `json:"origin_ips"`
+	UpstreamIPs          []string `json:"upstream_ips"`
 	DNSFirewallIPs       []string `json:"dns_firewall_ips,omitempty"`
 	MinimumCacheTTL      uint     `json:"minimum_cache_ttl,omitempty"`
 	MaximumCacheTTL      uint     `json:"maximum_cache_ttl,omitempty"`
