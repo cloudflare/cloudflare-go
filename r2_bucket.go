@@ -87,6 +87,9 @@ func (api *API) CreateR2Bucket(ctx context.Context, rc *ResourceContainer, param
 
 	uri := fmt.Sprintf("/accounts/%s/r2/buckets", rc.Identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
+	if err != nil {
+		return R2Bucket{}, err
+	}
 
 	var r2BucketResponse R2BucketResponse
 	err = json.Unmarshal(res, &r2BucketResponse)
