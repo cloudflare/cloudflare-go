@@ -312,7 +312,8 @@ func TestListPagesDeploymentsPagination(t *testing.T) {
 				"result_info": {
 					"page": 1,
 					"per_page": 25,
-					"total_count": 26
+					"total_count": 26,
+					"total_pages": 2
 				  }
 			}`, testPagesDeploymentResponse)
 		case "2":
@@ -327,7 +328,8 @@ func TestListPagesDeploymentsPagination(t *testing.T) {
 				"result_info": {
 					"page": 2,
 					"per_page": 25,
-					"total_count": 26
+					"total_count": 26,
+					"total_pages": 2
 				  }
 			}`, testPagesDeploymentResponse)
 		default:
