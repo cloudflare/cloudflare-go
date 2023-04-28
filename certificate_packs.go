@@ -38,6 +38,7 @@ type CertificatePack struct {
 	Hosts                []string                     `json:"hosts"`
 	Certificates         []CertificatePackCertificate `json:"certificates"`
 	PrimaryCertificate   string                       `json:"primary_certificate"`
+	Status               string                       `json:"status"`
 	ValidationRecords    []SSLValidationRecord        `json:"validation_records,omitempty"`
 	ValidationErrors     []SSLValidationError         `json:"validation_errors,omitempty"`
 	ValidationMethod     string                       `json:"validation_method"`

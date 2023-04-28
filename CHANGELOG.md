@@ -1,8 +1,18 @@
-## 0.66.0 (Unreleased)
+## 0.67.0 (Unreleased)
+
+NOTES:
+
+* dns_firewall: The `OriginIPs` field has been renamed to `UpstreamIPs`. ([#1246](https://github.com/cloudflare/cloudflare-go/issues/1246))
+
+## 0.66.0 (26th April, 2023)
 
 ENHANCEMENTS:
 
+* access_application: Add `path_cookie_attribute` app setting ([#1223](https://github.com/cloudflare/cloudflare-go/issues/1223))
+* certificate_packs: add `Status` field to indicate the status of certificate pack ([#1271](https://github.com/cloudflare/cloudflare-go/issues/1271))
+* data localization: add support for regional hostnames API ([#1270](https://github.com/cloudflare/cloudflare-go/issues/1270))
 * dns: add support for importing and exporting DNS records using BIND file configurations ([#1266](https://github.com/cloudflare/cloudflare-go/issues/1266))
+* logpush: add support for max upload parameters ([#1272](https://github.com/cloudflare/cloudflare-go/issues/1272))
 * turnstile: add support for turnstile ([#1267](https://github.com/cloudflare/cloudflare-go/issues/1267))
 
 DEPENDENCIES:
