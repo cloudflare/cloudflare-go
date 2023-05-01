@@ -4,6 +4,10 @@ NOTES:
 
 * dns_firewall: The `OriginIPs` field has been renamed to `UpstreamIPs`. ([#1246](https://github.com/cloudflare/cloudflare-go/issues/1246))
 
+DEPENDENCIES:
+
+* deps: bumps github.com/urfave/cli/v2 from 2.25.1 to 2.25.3 ([#1274](https://github.com/cloudflare/cloudflare-go/issues/1274))
+
 ## 0.66.0 (26th April, 2023)
 
 ENHANCEMENTS:
