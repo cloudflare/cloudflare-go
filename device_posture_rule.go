@@ -182,6 +182,10 @@ type DevicePostureRuleInput struct {
 	Domain           string   `json:"domain,omitempty"`
 	ComplianceStatus string   `json:"compliance_status,omitempty"`
 	ConnectionID     string   `json:"connection_id,omitempty"`
+	IssueCount       string   `json:"issue_count,omitempty"`
+	CountOperator    string   `json:"countOperator,omitempty"`
+	TotalScore       string   `json:"total_score,omitempty"`
+	ScoreOperator    string   `json:"scoreOperator,omitempty"`
 }
 
 // DevicePostureRuleListResponse represents the response from the list
