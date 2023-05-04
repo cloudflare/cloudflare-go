@@ -275,7 +275,7 @@ type RulesetRuleActionParametersAutoMinify struct {
 type RulesetRuleActionParametersFromValue struct {
 	StatusCode          uint16                               `json:"status_code,omitempty"`
 	TargetURL           RulesetRuleActionParametersTargetURL `json:"target_url"`
-	PreserveQueryString bool                                 `json:"preserve_query_string,omitempty"`
+	PreserveQueryString *bool                                `json:"preserve_query_string,omitempty"`
 }
 
 type RulesetRuleActionParametersTargetURL struct {

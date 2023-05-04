@@ -523,7 +523,7 @@ func TestGetRuleset_RedirectFromValue(t *testing.T) {
 				TargetURL: RulesetRuleActionParametersTargetURL{
 					Value: "some_host.com",
 				},
-				PreserveQueryString: true,
+				PreserveQueryString: BoolPtr(true),
 			},
 		},
 		Description: "Set dynamic redirect from value",
