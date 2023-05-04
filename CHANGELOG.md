@@ -8,6 +8,10 @@ ENHANCEMENTS:
 
 * device_posture_rule: add input fields tanium, intune and kolide ([#1268](https://github.com/cloudflare/cloudflare-go/issues/1268))
 
+BUG FIXES:
+
+* rulesets: allow `PreserveQueryString` to be nullable ([#1275](https://github.com/cloudflare/cloudflare-go/issues/1275))
+
 DEPENDENCIES:
 
 * deps: bumps github.com/urfave/cli/v2 from 2.25.1 to 2.25.3 ([#1274](https://github.com/cloudflare/cloudflare-go/issues/1274))
