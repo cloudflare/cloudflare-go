@@ -76,6 +76,12 @@ type WaitingRoomRule struct {
 	Enabled     *bool      `json:"enabled"`
 }
 
+// WaitingRoomSettings describes zone-level waiting room settings.
+type WaitingRoomSettings struct {
+	// Whether to allow verified search engine crawlers to bypass all waiting rooms on this zone
+	SearchEngineCrawlerBypass bool `json:"search_engine_crawler_bypass"`
+}
+
 // WaitingRoomPagePreviewURL describes a WaitingRoomPagePreviewURL object.
 type WaitingRoomPagePreviewURL struct {
 	PreviewURL string `json:"preview_url"`
@@ -96,6 +102,12 @@ type WaitingRoomDetailResponse struct {
 type WaitingRoomsResponse struct {
 	Response
 	Result []WaitingRoom `json:"result"`
+}
+
+// WaitingRoomSettingsResponse is the API response, containing zone-level Waiting Room settings.
+type WaitingRoomSettingsResponse struct {
+	Response
+	Result WaitingRoomSettings `json:"result"`
 }
 
 // WaitingRoomStatusResponse is the API response, containing the status of a waiting room.
@@ -530,5 +542,78 @@ func (api *API) DeleteWaitingRoomRule(ctx context.Context, rc *ResourceContainer
 		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
+	return r.Result, nil
+}
+
+// GetWaitingRoomSettings fetches the Waiting Room zone-level settings for a zone.
+//
+// API reference: https://api.cloudflare.com/#waiting-room-get-zone-settings
+func (api *API) GetWaitingRoomSettings(ctx context.Context, rc *ResourceContainer) (WaitingRoomSettings, error) {
+	if rc.Level != ZoneRouteLevel {
+		return WaitingRoomSettings{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
+
+	uri := fmt.Sprintf("/zones/%s/waiting_rooms/settings", rc.Identifier)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return WaitingRoomSettings{}, err
+	}
+	var r WaitingRoomSettingsResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return WaitingRoomSettings{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+	return r.Result, nil
+}
+
+type PatchWaitingRoomSettingsParams struct {
+	SearchEngineCrawlerBypass *bool `json:"search_engine_crawler_bypass,omitempty"`
+}
+
+// PatchWaitingRoomSettings lets you change individual zone-level Waiting Room settings. This is
+// in contrast to UpdateWaitingRoomSettings which replaces all settings.
+//
+// API reference: https://api.cloudflare.com/#waiting-room-patch-zone-settings
+func (api *API) PatchWaitingRoomSettings(ctx context.Context, rc *ResourceContainer, params PatchWaitingRoomSettingsParams) (WaitingRoomSettings, error) {
+	if rc.Level != ZoneRouteLevel {
+		return WaitingRoomSettings{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
+
+	uri := fmt.Sprintf("/zones/%s/waiting_rooms/settings", rc.Identifier)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
+	if err != nil {
+		return WaitingRoomSettings{}, err
+	}
+	var r WaitingRoomSettingsResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return WaitingRoomSettings{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+	return r.Result, nil
+}
+
+type UpdateWaitingRoomSettingsParams struct {
+	SearchEngineCrawlerBypass *bool `json:"search_engine_crawler_bypass,omitempty"`
+}
+
+// UpdateWaitingRoomSettings lets you replace all zone-level Waiting Room settings. This is in contrast to
+// ChangeWaitingRoomSettings which lets you change individual settings.
+//
+// API reference: https://api.cloudflare.com/#waiting-room-update-zone-settings
+func (api *API) UpdateWaitingRoomSettings(ctx context.Context, rc *ResourceContainer, params UpdateWaitingRoomSettingsParams) (WaitingRoomSettings, error) {
+	if rc.Level != ZoneRouteLevel {
+		return WaitingRoomSettings{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
+
+	uri := fmt.Sprintf("/zones/%s/waiting_rooms/settings", rc.Identifier)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
+	if err != nil {
+		return WaitingRoomSettings{}, err
+	}
+	var r WaitingRoomSettingsResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return WaitingRoomSettings{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
 	return r.Result, nil
 }
