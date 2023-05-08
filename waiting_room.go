@@ -597,7 +597,7 @@ type UpdateWaitingRoomSettingsParams struct {
 }
 
 // UpdateWaitingRoomSettings lets you replace all zone-level Waiting Room settings. This is in contrast to
-// ChangeWaitingRoomSettings which lets you change individual settings.
+// PatchWaitingRoomSettings which lets you change individual settings.
 //
 // API reference: https://api.cloudflare.com/#waiting-room-update-zone-settings
 func (api *API) UpdateWaitingRoomSettings(ctx context.Context, rc *ResourceContainer, params UpdateWaitingRoomSettingsParams) (WaitingRoomSettings, error) {
