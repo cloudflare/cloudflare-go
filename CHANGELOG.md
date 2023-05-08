@@ -7,6 +7,7 @@ NOTES:
 ENHANCEMENTS:
 
 * device_posture_rule: add input fields tanium, intune and kolide ([#1268](https://github.com/cloudflare/cloudflare-go/issues/1268))
+* waiting_room: add support for zone-level settings ([#1276](https://github.com/cloudflare/cloudflare-go/issues/1276))
 
 BUG FIXES:
 
