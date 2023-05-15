@@ -13,7 +13,7 @@ import (
 var cacheReserveTimestampString = "2019-02-20T22:37:07.107449Z"
 var cacheReserveTimestamp, _ = time.Parse(time.RFC3339Nano, cacheReserveTimestampString)
 
-func TestZoneCacheReserve(t *testing.T) {
+func TestCacheReserve(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -34,20 +34,20 @@ func TestZoneCacheReserve(t *testing.T) {
 	}
 
 	mux.HandleFunc("/zones/01a7362d577a6c3019a474fd6f485823/cache/cache_reserve", handler)
-	want := ZoneCacheReserve{
+	want := CacheReserve{
 		ID:         "cache_reserve",
 		Value:      "on",
 		ModifiedOn: cacheReserveTimestamp,
 	}
 
-	actual, err := client.GetZoneCacheReserve(context.Background(), "01a7362d577a6c3019a474fd6f485823")
+	actual, err := client.GetCacheReserve(context.Background(), ZoneIdentifier("01a7362d577a6c3019a474fd6f485823"), GetCacheReserveParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
-func TestUpdateZoneCacheReserve(t *testing.T) {
+func TestUpdateCacheReserve(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -68,13 +68,13 @@ func TestUpdateZoneCacheReserve(t *testing.T) {
 	}
 
 	mux.HandleFunc("/zones/01a7362d577a6c3019a474fd6f485823/cache/cache_reserve", handler)
-	want := ZoneCacheReserve{
+	want := CacheReserve{
 		ID:         "cache_reserve",
 		Value:      "off",
 		ModifiedOn: cacheReserveTimestamp,
 	}
 
-	actual, err := client.UpdateZoneCacheReserve(context.Background(), "01a7362d577a6c3019a474fd6f485823", "off")
+	actual, err := client.UpdateCacheReserve(context.Background(), ZoneIdentifier("01a7362d577a6c3019a474fd6f485823"), UpdateCacheReserveParams{Value: "off"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
