@@ -23,10 +23,6 @@ type CacheReserveDetailsResponse struct {
 	Response
 }
 
-type updateCacheReserveRequest struct {
-	Value string `json:"value"`
-}
-
 type zoneCacheReserveSingleResponse struct {
 	Response
 	Result CacheReserve `json:"result"`
