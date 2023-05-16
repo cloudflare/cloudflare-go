@@ -1,4 +1,10 @@
-## 0.67.0 (Unreleased)
+## 0.68.0 (Unreleased)
+
+ENHANCEMENTS:
+
+* zone: Added `GetCacheReserve` and `UpdateacheReserve` to allow setting Cache Reserve for a zone. ([#1278](https://github.com/cloudflare/cloudflare-go/issues/1278))
+
+## 0.67.0 (May 10th, 2023)
 
 NOTES:
 
@@ -16,6 +22,7 @@ BUG FIXES:
 DEPENDENCIES:
 
 * deps: bumps github.com/urfave/cli/v2 from 2.25.1 to 2.25.3 ([#1274](https://github.com/cloudflare/cloudflare-go/issues/1274))
+* deps: bumps golang.org/x/net from 0.9.0 to 0.10.0 ([#1280](https://github.com/cloudflare/cloudflare-go/issues/1280))
 
 ## 0.66.0 (26th April, 2023)
 
