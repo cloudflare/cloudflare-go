@@ -2,6 +2,8 @@
 
 ENHANCEMENTS:
 
+* pages: add support for Smart Placement. Added `Placement` in `PagesProjectDeploymentConfigEnvironment`. ([#1279](https://github.com/cloudflare/cloudflare-go/issues/1279))
+* workers: add support for Smart Placement. Added `Placement` in `CreateWorkerParams`. ([#1279](https://github.com/cloudflare/cloudflare-go/issues/1279))
 * zone: Added `GetCacheReserve` and `UpdateacheReserve` to allow setting Cache Reserve for a zone. ([#1278](https://github.com/cloudflare/cloudflare-go/issues/1278))
 
 ## 0.67.0 (May 10th, 2023)
