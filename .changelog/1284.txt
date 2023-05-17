@@ -1,0 +1,3 @@
+```release-note:bug
+turnstile: Fix sitekey/secret being sent in update request body
+```
