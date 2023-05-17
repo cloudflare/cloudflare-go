@@ -211,6 +211,18 @@ export default {
 }
 --workermodulescriptdownload--
 `
+	uploadModuleWorkerSmartPlacement = `{
+    "result": {
+        "script": "export default {\n  async fetch(request, env, event) {\n    event.passThroughOnException()\n    return fetch(request)\n  }\n}",
+        "etag": "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
+        "size": 191,
+        "modified_on": "2018-06-09T15:17:01.989141Z",
+		"placement_mode": "smart"
+    },
+    "success": true,
+    "errors": [],
+    "messages": []
+}`
 )
 
 var (
@@ -280,6 +292,7 @@ type multipartUpload struct {
 	Logpush            *bool
 	CompatibilityDate  string
 	CompatibilityFlags []string
+	Placement          *Placement
 }
 
 func parseMultipartUpload(r *http.Request) (multipartUpload, error) {
@@ -296,6 +309,7 @@ func parseMultipartUpload(r *http.Request) (multipartUpload, error) {
 		Logpush            *bool               `json:"logpush,omitempty"`
 		CompatibilityDate  string              `json:"compatibility_date,omitempty"`
 		CompatibilityFlags []string            `json:"compatibility_flags,omitempty"`
+		Placement          *Placement          `json:"placement,omitempty"`
 	}
 	err = json.Unmarshal(mdBytes, &metadata)
 	if err != nil {
@@ -327,6 +341,7 @@ func parseMultipartUpload(r *http.Request) (multipartUpload, error) {
 		Logpush:            metadata.Logpush,
 		CompatibilityDate:  metadata.CompatibilityDate,
 		CompatibilityFlags: metadata.CompatibilityFlags,
+		Placement:          metadata.Placement,
 	}, nil
 }
 
@@ -932,4 +947,52 @@ func TestUploadWorker_WithQueueBinding(t *testing.T) {
 			},
 		}})
 	assert.NoError(t, err)
+}
+
+func TestUploadWorker_WithSmartPlacementEnabled(t *testing.T) {
+	setup()
+	defer teardown()
+
+	placementMode := PlacementModeSmart
+	response := uploadModuleWorkerSmartPlacement
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+
+		mpUpload, err := parseMultipartUpload(r)
+		assert.NoError(t, err)
+
+		assert.Equal(t, workerScript, mpUpload.Script)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, response)
+	}
+	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
+
+	t.Run("Test enabling Smart Placement", func(t *testing.T) {
+		worker, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{
+			ScriptName: "bar",
+			Script:     workerScript,
+			Placement: &Placement{
+				Mode: placementMode,
+			},
+		})
+		assert.NoError(t, err)
+		assert.Equal(t, placementMode, *worker.PlacementMode)
+	})
+
+	t.Run("Test disabling placement", func(t *testing.T) {
+		placementMode = PlacementModeOff
+		response = uploadWorkerModuleResponseData
+
+		worker, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{
+			ScriptName: "bar",
+			Script:     workerScript,
+			Placement: &Placement{
+				Mode: placementMode,
+			},
+		})
+		assert.NoError(t, err)
+		assert.Nil(t, worker.PlacementMode)
+	})
 }
