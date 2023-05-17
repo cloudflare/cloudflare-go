@@ -8,6 +8,7 @@ ENHANCEMENTS:
 
 BUG FIXES:
 
+* turnstile: remove `SiteKey` being sent in rotate secret's request body ([#1285](https://github.com/cloudflare/cloudflare-go/issues/1285))
 * turnstile: remove `SiteKey`/`Secret` being sent in update request body ([#1284](https://github.com/cloudflare/cloudflare-go/issues/1284))
 
 ## 0.67.0 (May 10th, 2023)
