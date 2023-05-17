@@ -61,8 +61,8 @@ type ListTurnstileWidgetResponse struct {
 }
 
 type RotateTurnstileWidgetParams struct {
-	SiteKey               string
-	InvalidateImmediately bool `json:"invalidate_immediately,omitempty"`
+	SiteKey               string `json:"-"`
+	InvalidateImmediately bool   `json:"invalidate_immediately,omitempty"`
 }
 
 // CreateTurnstileWidget creates a new challenge widgets.
