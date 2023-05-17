@@ -34,7 +34,6 @@ type CreateTurnstileWidgetParams struct {
 }
 
 type UpdateTurnstileWidgetParams struct {
-	SiteKey      string   `json:"sitekey,omitempty"`
 	Secret       string   `json:"secret,omitempty"`
 	Name         string   `json:"name,omitempty"`
 	Domains      []string `json:"domains,omitempty"`
@@ -62,7 +61,6 @@ type ListTurnstileWidgetResponse struct {
 }
 
 type RotateTurnstileWidgetParams struct {
-	SiteKey               string
 	InvalidateImmediately bool `json:"invalidate_immediately,omitempty"`
 }
 
@@ -163,16 +161,16 @@ func (api *API) GetTurnstileWidget(ctx context.Context, rc *ResourceContainer, s
 // UpdateTurnstileWidget update the configuration of a widget.
 //
 // API reference: https://api.cloudflare.com/#challenge-widgets-update-a-challenge-widget
-func (api *API) UpdateTurnstileWidget(ctx context.Context, rc *ResourceContainer, params UpdateTurnstileWidgetParams) (TurnstileWidget, error) {
+func (api *API) UpdateTurnstileWidget(ctx context.Context, rc *ResourceContainer, siteKey string, params UpdateTurnstileWidgetParams) (TurnstileWidget, error) {
 	if rc.Identifier == "" {
 		return TurnstileWidget{}, ErrMissingAccountID
 	}
 
-	if params.SiteKey == "" {
+	if siteKey == "" {
 		return TurnstileWidget{}, ErrMissingSiteKey
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/challenges/widgets/%s", rc.Identifier, params.SiteKey)
+	uri := fmt.Sprintf("/accounts/%s/challenges/widgets/%s", rc.Identifier, siteKey)
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return TurnstileWidget{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
@@ -193,15 +191,15 @@ func (api *API) UpdateTurnstileWidget(ctx context.Context, rc *ResourceContainer
 // Note that secrets cannot be rotated again during the grace period.
 //
 // API reference: https://api.cloudflare.com/#challenge-widgets-rotate-secret-for-a-challenge-widget
-func (api *API) RotateTurnstileWidget(ctx context.Context, rc *ResourceContainer, param RotateTurnstileWidgetParams) (TurnstileWidget, error) {
+func (api *API) RotateTurnstileWidget(ctx context.Context, rc *ResourceContainer, siteKey string, param RotateTurnstileWidgetParams) (TurnstileWidget, error) {
 	if rc.Identifier == "" {
 		return TurnstileWidget{}, ErrMissingAccountID
 	}
-	if param.SiteKey == "" {
+	if siteKey == "" {
 		return TurnstileWidget{}, ErrMissingSiteKey
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/challenges/widgets/%s/rotate_secret", rc.Identifier, param.SiteKey)
+	uri := fmt.Sprintf("/accounts/%s/challenges/widgets/%s/rotate_secret", rc.Identifier, siteKey)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, param)
 
 	if err != nil {

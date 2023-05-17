@@ -226,13 +226,13 @@ func TestTurnstileWidgets_Update(t *testing.T) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	_, err = client.UpdateTurnstileWidget(context.Background(), AccountIdentifier(testAccountID), UpdateTurnstileWidgetParams{})
+	_, err = client.UpdateTurnstileWidget(context.Background(), AccountIdentifier(testAccountID), "", UpdateTurnstileWidgetParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingSiteKey, err)
 	}
 
-	out, err := client.UpdateTurnstileWidget(context.Background(), AccountIdentifier(testAccountID), UpdateTurnstileWidgetParams{
-		SiteKey: testTurnstileWidgetSiteKey,
+	out, err := client.UpdateTurnstileWidget(context.Background(), AccountIdentifier(testAccountID), testTurnstileWidgetSiteKey, UpdateTurnstileWidgetParams{
+		Mode: "invisible",
 	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedTurnstileWidget, out, "update challenge_widgets structs not equal")
@@ -276,12 +276,12 @@ func TestTurnstileWidgets_RotateSecret(t *testing.T) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	_, err = client.RotateTurnstileWidget(context.Background(), AccountIdentifier(testAccountID), RotateTurnstileWidgetParams{})
+	_, err = client.RotateTurnstileWidget(context.Background(), AccountIdentifier(testAccountID), "", RotateTurnstileWidgetParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingSiteKey, err)
 	}
 
-	out, err := client.RotateTurnstileWidget(context.Background(), AccountIdentifier(testAccountID), RotateTurnstileWidgetParams{SiteKey: testTurnstileWidgetSiteKey})
+	out, err := client.RotateTurnstileWidget(context.Background(), AccountIdentifier(testAccountID), testTurnstileWidgetSiteKey, RotateTurnstileWidgetParams{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedTurnstileWidget, out, "rotate challenge_widgets structs not equal")
 	}
