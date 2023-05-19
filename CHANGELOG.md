@@ -11,6 +11,10 @@ BUG FIXES:
 * turnstile: remove `SiteKey` being sent in rotate secret's request body ([#1285](https://github.com/cloudflare/cloudflare-go/issues/1285))
 * turnstile: remove `SiteKey`/`Secret` being sent in update request body ([#1284](https://github.com/cloudflare/cloudflare-go/issues/1284))
 
+DEPENDENCIES:
+
+* deps: bumps github.com/stretchr/testify from 1.8.2 to 1.8.3 ([#1286](https://github.com/cloudflare/cloudflare-go/issues/1286))
+
 ## 0.67.0 (May 10th, 2023)
 
 NOTES:
