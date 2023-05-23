@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"time"
 )
 
 var (
@@ -14,8 +15,9 @@ var (
 
 // R2Bucket defines a container for objects stored in R2 Storage.
 type R2Bucket struct {
-	Name         string `json:"name"`
-	CreationDate string `json:"creation_date,omitempty"`
+	Name         string     `json:"name"`
+	CreationDate *time.Time `json:"creation_date,omitempty"`
+	Location     string     `json:"location,omitempty"`
 }
 
 // R2Buckets represents the map of buckets response from
@@ -40,6 +42,16 @@ type ListR2BucketsParams struct {
 	Cursor     string `url:"cursor,omitempty"`
 }
 
+type CreateR2BucketParameters struct {
+	Name         string `json:"name,omitempty"`
+	LocationHint string `json:"locationHint,omitempty"`
+}
+
+type R2BucketResponse struct {
+	Result R2Bucket `json:"result"`
+	Response
+}
+
 // ListR2Buckets Lists R2 buckets.
 func (api *API) ListR2Buckets(ctx context.Context, rc *ResourceContainer, params ListR2BucketsParams) ([]R2Bucket, error) {
 	if rc.Identifier == "" {
@@ -61,26 +73,58 @@ func (api *API) ListR2Buckets(ctx context.Context, rc *ResourceContainer, params
 	return r2BucketListResponse.Result.Buckets, nil
 }
 
-type CreateR2BucketParameters struct {
-	Name string `json:"name,omitempty"`
-}
-
 // CreateR2Bucket Creates a new R2 bucket.
 //
 // API reference: https://api.cloudflare.com/#r2-bucket-create-bucket
-func (api *API) CreateR2Bucket(ctx context.Context, rc *ResourceContainer, params CreateR2BucketParameters) error {
+func (api *API) CreateR2Bucket(ctx context.Context, rc *ResourceContainer, params CreateR2BucketParameters) (R2Bucket, error) {
 	if rc.Identifier == "" {
-		return ErrMissingAccountID
+		return R2Bucket{}, ErrMissingAccountID
 	}
 
 	if params.Name == "" {
-		return ErrMissingBucketName
+		return R2Bucket{}, ErrMissingBucketName
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/r2/buckets", rc.Identifier)
-	_, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
+	if err != nil {
+		return R2Bucket{}, err
+	}
 
-	return err
+	var r2BucketResponse R2BucketResponse
+	err = json.Unmarshal(res, &r2BucketResponse)
+	if err != nil {
+		return R2Bucket{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+
+	return r2BucketResponse.Result, nil
+}
+
+// GetR2Bucket Gets an existing R2 bucket.
+//
+// API reference: https://api.cloudflare.com/#r2-bucket-get-bucket
+func (api *API) GetR2Bucket(ctx context.Context, rc *ResourceContainer, bucketName string) (R2Bucket, error) {
+	if rc.Identifier == "" {
+		return R2Bucket{}, ErrMissingAccountID
+	}
+
+	if bucketName == "" {
+		return R2Bucket{}, ErrMissingBucketName
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/r2/buckets/%s", rc.Identifier, bucketName)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return R2Bucket{}, err
+	}
+
+	var r2BucketResponse R2BucketResponse
+	err = json.Unmarshal(res, &r2BucketResponse)
+	if err != nil {
+		return R2Bucket{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+
+	return r2BucketResponse.Result, nil
 }
 
 // DeleteR2Bucket Deletes an existing R2 bucket.
