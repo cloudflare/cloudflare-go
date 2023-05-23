@@ -6,6 +6,7 @@ BREAKING CHANGES:
 
 ENHANCEMENTS:
 
+* adds OriginRequest field to UnvalidatedIngressRule struct. ([#1138](https://github.com/cloudflare/cloudflare-go/issues/1138))
 * lists: add support for hostname and ASN lists. ([#1288](https://github.com/cloudflare/cloudflare-go/issues/1288))
 * pages: add support for Smart Placement. Added `Placement` in `PagesProjectDeploymentConfigEnvironment`. ([#1279](https://github.com/cloudflare/cloudflare-go/issues/1279))
 * r2_bucket: add support for getting a bucket ([#1265](https://github.com/cloudflare/cloudflare-go/issues/1265))
