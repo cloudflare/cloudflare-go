@@ -495,18 +495,18 @@ func TestContextTimeout(t *testing.T) {
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		time.Sleep(time.Second * time.Duration(3))
+		time.Sleep(3 * time.Second)
 	}
 
 	mux.HandleFunc("/timeout", handler)
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(1))
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
 	start := time.Now()
 	_, err := client.makeRequestContext(ctx, http.MethodHead, "/timeout", nil)
 	assert.ErrorIs(t, err, context.DeadlineExceeded)
-	assert.WithinDuration(t, start, time.Now(), time.Second*2,
+	assert.WithinDuration(t, start, time.Now(), 2*time.Second,
 		"makeRequestContext took too much time with an expiring context")
 }
 

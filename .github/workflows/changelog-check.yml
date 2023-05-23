@@ -3,16 +3,13 @@ on: [pull_request_target]
 
 jobs:
   changelog-check:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Set up Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v4
         with:
-          go-version: ^1.17
+          go-version-file: 'internal/tools/go.mod'
       - run: go generate -tags tools internal/tools/tools.go
       - run: go run cmd/changelog-check/main.go ${{ github.event.pull_request.number }}
         working-directory: ./internal/tools

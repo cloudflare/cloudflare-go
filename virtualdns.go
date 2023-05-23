@@ -130,7 +130,7 @@ func (v VirtualDNS) vdnsUpgrade() DNSFirewallCluster {
 	return DNSFirewallCluster{
 		ID:                   v.ID,
 		Name:                 v.Name,
-		OriginIPs:            v.OriginIPs,
+		UpstreamIPs:          v.OriginIPs,
 		DNSFirewallIPs:       v.VirtualDNSIPs,
 		MinimumCacheTTL:      v.MinimumCacheTTL,
 		MaximumCacheTTL:      v.MaximumCacheTTL,
@@ -147,7 +147,7 @@ func (v *DNSFirewallCluster) vdnsDowngrade() *VirtualDNS {
 	return &VirtualDNS{
 		ID:                   v.ID,
 		Name:                 v.Name,
-		OriginIPs:            v.OriginIPs,
+		OriginIPs:            v.UpstreamIPs,
 		VirtualDNSIPs:        v.DNSFirewallIPs,
 		MinimumCacheTTL:      v.MinimumCacheTTL,
 		MaximumCacheTTL:      v.MaximumCacheTTL,

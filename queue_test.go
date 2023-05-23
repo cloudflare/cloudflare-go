@@ -272,17 +272,17 @@ func TestQueue_Update(t *testing.T) {
 		}
 	}`)
 	})
-	_, err := client.UpdateQueue(context.Background(), AccountIdentifier(""), UpdateQueueParams{})
+	_, err := client.UpdateQueue(context.Background(), AccountIdentifier(""), UpdateQueueParams{Name: testQueueName})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	_, err = client.UpdateQueue(context.Background(), AccountIdentifier(testAccountID), UpdateQueueParams{})
+	_, err = client.UpdateQueue(context.Background(), AccountIdentifier(testAccountID), UpdateQueueParams{Name: testQueueName})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingQueueName, err)
 	}
 
-	results, err := client.UpdateQueue(context.Background(), AccountIdentifier(testAccountID), UpdateQueueParams{Name: "example-queue"})
+	results, err := client.UpdateQueue(context.Background(), AccountIdentifier(testAccountID), UpdateQueueParams{Name: testQueueName, UpdatedName: "renamed-example-queue"})
 	if assert.NoError(t, err) {
 		CreatedOn, _ := time.Parse(time.RFC3339, "2023-01-01T00:00:00Z")
 		ModifiedOn, _ := time.Parse(time.RFC3339, "2023-01-01T00:00:00Z")

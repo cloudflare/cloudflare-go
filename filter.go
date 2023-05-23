@@ -124,6 +124,7 @@ func (api *API) Filters(ctx context.Context, rc *ResourceContainer, params Filte
 	var filters []Filter
 	var fResponse FiltersDetailResponse
 	for {
+		fResponse = FiltersDetailResponse{}
 		uri := buildURI(fmt.Sprintf("/zones/%s/filters", rc.Identifier), params)
 
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)

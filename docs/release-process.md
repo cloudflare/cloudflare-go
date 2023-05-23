@@ -2,8 +2,13 @@
 
 We aim to release on a fortnightly cadence, alternating weeks with the [terraform-provider-cloudflare](https://github.com/cloudflare/terraform-provider-cloudflare).
 
-This is to accommodate downstream tools and allow cahnges from this library to
+This is to accommodate downstream tools and allow changes from this library to
 be used in the other systems without a month long delay.
+
+To determine when the next release is due, you can either:
+
+- Review the latest [releases](https://github.com/cloudflare/cloudflare-go/releases); or
+- Review the [current milestones](https://github.com/cloudflare/cloudflare-go/milestones).
 
 If a hotfix is needed, the same process outlined below is used however only the
 semantic versioning patch version is bumped.

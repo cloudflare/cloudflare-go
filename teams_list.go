@@ -172,6 +172,7 @@ func (api *API) ListTeamsListItems(ctx context.Context, rc *ResourceContainer, p
 	var teamListItems []TeamsListItem
 	var lResponse TeamsListItemsListResponse
 	for {
+		lResponse = TeamsListItemsListResponse{}
 		uri := buildURI(
 			fmt.Sprintf("/%s/%s/gateway/lists/%s/items", rc.Level, rc.Identifier, params.ListID),
 			params,

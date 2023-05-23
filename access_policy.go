@@ -24,6 +24,7 @@ type AccessPolicy struct {
 	UpdatedAt  *time.Time `json:"updated_at"`
 	Name       string     `json:"name"`
 
+	IsolationRequired            *bool                 `json:"isolation_required,omitempty"`
 	PurposeJustificationRequired *bool                 `json:"purpose_justification_required,omitempty"`
 	PurposeJustificationPrompt   *string               `json:"purpose_justification_prompt,omitempty"`
 	ApprovalRequired             *bool                 `json:"approval_required,omitempty"`

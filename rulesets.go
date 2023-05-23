@@ -35,11 +35,13 @@ const (
 	RulesetPhaseHTTPResponseFirewallManaged         RulesetPhase = "http_response_firewall_managed"
 	RulesetPhaseHTTPResponseHeadersTransform        RulesetPhase = "http_response_headers_transform"
 	RulesetPhaseHTTPResponseHeadersTransformManaged RulesetPhase = "http_response_headers_transform_managed"
+	RulesetPhaseHTTPResponseCompression             RulesetPhase = "http_response_compression"
 	RulesetPhaseMagicTransit                        RulesetPhase = "magic_transit"
 	RulesetPhaseRateLimit                           RulesetPhase = "http_ratelimit"
 	RulesetPhaseSuperBotFightMode                   RulesetPhase = "http_request_sbfm"
 	RulesetPhaseHTTPConfigSettings                  RulesetPhase = "http_config_settings"
 
+	RulesetRuleActionAllow                RulesetRuleAction = "allow"
 	RulesetRuleActionBlock                RulesetRuleAction = "block"
 	RulesetRuleActionChallenge            RulesetRuleAction = "challenge"
 	RulesetRuleActionDDoSDynamic          RulesetRuleAction = "ddos_dynamic"
@@ -57,6 +59,7 @@ const (
 	RulesetRuleActionSetConfig            RulesetRuleAction = "set_config"
 	RulesetRuleActionServeError           RulesetRuleAction = "serve_error"
 	RulesetRuleActionSkip                 RulesetRuleAction = "skip"
+	RulesetRuleActionCompressResponse     RulesetRuleAction = "compress_response"
 
 	RulesetActionParameterProductBIC           RulesetActionParameterProduct = "bic"
 	RulesetActionParameterProductHOT           RulesetActionParameterProduct = "hot"
@@ -68,6 +71,7 @@ const (
 
 	RulesetRuleActionParametersHTTPHeaderOperationRemove RulesetRuleActionParametersHTTPHeaderOperation = "remove"
 	RulesetRuleActionParametersHTTPHeaderOperationSet    RulesetRuleActionParametersHTTPHeaderOperation = "set"
+	RulesetRuleActionParametersHTTPHeaderOperationAdd    RulesetRuleActionParametersHTTPHeaderOperation = "add"
 )
 
 // RulesetKindValues exposes all the available `RulesetKind` values as a slice
@@ -104,6 +108,7 @@ func RulesetPhaseValues() []string {
 		string(RulesetPhaseHTTPResponseFirewallManaged),
 		string(RulesetPhaseHTTPResponseHeadersTransform),
 		string(RulesetPhaseHTTPResponseHeadersTransformManaged),
+		string(RulesetPhaseHTTPResponseCompression),
 		string(RulesetPhaseMagicTransit),
 		string(RulesetPhaseRateLimit),
 		string(RulesetPhaseSuperBotFightMode),
@@ -115,6 +120,7 @@ func RulesetPhaseValues() []string {
 // as a slice of strings.
 func RulesetRuleActionValues() []string {
 	return []string{
+		string(RulesetRuleActionAllow),
 		string(RulesetRuleActionBlock),
 		string(RulesetRuleActionChallenge),
 		string(RulesetRuleActionDDoSDynamic),
@@ -132,6 +138,7 @@ func RulesetRuleActionValues() []string {
 		string(RulesetRuleActionSetConfig),
 		string(RulesetRuleActionServeError),
 		string(RulesetRuleActionSkip),
+		string(RulesetRuleActionCompressResponse),
 	}
 }
 
@@ -153,6 +160,7 @@ func RulesetRuleActionParametersHTTPHeaderOperationValues() []string {
 	return []string{
 		string(RulesetRuleActionParametersHTTPHeaderOperationRemove),
 		string(RulesetRuleActionParametersHTTPHeaderOperationSet),
+		string(RulesetRuleActionParametersHTTPHeaderOperationAdd),
 	}
 }
 
@@ -185,7 +193,7 @@ type Ruleset struct {
 	Name                     string        `json:"name,omitempty"`
 	Description              string        `json:"description,omitempty"`
 	Kind                     string        `json:"kind,omitempty"`
-	Version                  string        `json:"version,omitempty"`
+	Version                  *string       `json:"version,omitempty"`
 	LastUpdated              *time.Time    `json:"last_updated,omitempty"`
 	Phase                    string        `json:"phase,omitempty"`
 	Rules                    []RulesetRule `json:"rules"`
@@ -201,53 +209,54 @@ type RulesetActionParametersLogCustomField struct {
 // RulesetRuleActionParameters specifies the action parameters for a Ruleset
 // rule.
 type RulesetRuleActionParameters struct {
-	ID                      string                                           `json:"id,omitempty"`
-	Ruleset                 string                                           `json:"ruleset,omitempty"`
-	Rulesets                []string                                         `json:"rulesets,omitempty"`
-	Rules                   map[string][]string                              `json:"rules,omitempty"`
-	Increment               int                                              `json:"increment,omitempty"`
-	URI                     *RulesetRuleActionParametersURI                  `json:"uri,omitempty"`
-	Headers                 map[string]RulesetRuleActionParametersHTTPHeader `json:"headers,omitempty"`
-	Products                []string                                         `json:"products,omitempty"`
-	Phases                  []string                                         `json:"phases,omitempty"`
-	Overrides               *RulesetRuleActionParametersOverrides            `json:"overrides,omitempty"`
-	MatchedData             *RulesetRuleActionParametersMatchedData          `json:"matched_data,omitempty"`
-	Version                 string                                           `json:"version,omitempty"`
-	Response                *RulesetRuleActionParametersBlockResponse        `json:"response,omitempty"`
-	HostHeader              string                                           `json:"host_header,omitempty"`
-	Origin                  *RulesetRuleActionParametersOrigin               `json:"origin,omitempty"`
-	SNI                     *RulesetRuleActionParametersSni                  `json:"sni,omitempty"`
-	RequestFields           []RulesetActionParametersLogCustomField          `json:"request_fields,omitempty"`
-	ResponseFields          []RulesetActionParametersLogCustomField          `json:"response_fields,omitempty"`
-	CookieFields            []RulesetActionParametersLogCustomField          `json:"cookie_fields,omitempty"`
-	Cache                   *bool                                            `json:"cache,omitempty"`
-	EdgeTTL                 *RulesetRuleActionParametersEdgeTTL              `json:"edge_ttl,omitempty"`
-	BrowserTTL              *RulesetRuleActionParametersBrowserTTL           `json:"browser_ttl,omitempty"`
-	ServeStale              *RulesetRuleActionParametersServeStale           `json:"serve_stale,omitempty"`
-	Content                 string                                           `json:"content,omitempty"`
-	ContentType             string                                           `json:"content_type,omitempty"`
-	StatusCode              uint16                                           `json:"status_code,omitempty"`
-	RespectStrongETags      *bool                                            `json:"respect_strong_etags,omitempty"`
-	CacheKey                *RulesetRuleActionParametersCacheKey             `json:"cache_key,omitempty"`
-	OriginErrorPagePassthru *bool                                            `json:"origin_error_page_passthru,omitempty"`
-	FromList                *RulesetRuleActionParametersFromList             `json:"from_list,omitempty"`
-	FromValue               *RulesetRuleActionParametersFromValue            `json:"from_value,omitempty"`
-	AutomaticHTTPSRewrites  *bool                                            `json:"automatic_https_rewrites,omitempty"`
-	AutoMinify              *RulesetRuleActionParametersAutoMinify           `json:"autominify,omitempty"`
-	BrowserIntegrityCheck   *bool                                            `json:"bic,omitempty"`
-	DisableApps             *bool                                            `json:"disable_apps,omitempty"`
-	DisableZaraz            *bool                                            `json:"disable_zaraz,omitempty"`
-	DisableRailgun          *bool                                            `json:"disable_railgun,omitempty"`
-	EmailObfuscation        *bool                                            `json:"email_obfuscation,omitempty"`
-	Mirage                  *bool                                            `json:"mirage,omitempty"`
-	OpportunisticEncryption *bool                                            `json:"opportunistic_encryption,omitempty"`
-	Polish                  *Polish                                          `json:"polish,omitempty"`
-	RocketLoader            *bool                                            `json:"rocket_loader,omitempty"`
-	SecurityLevel           *SecurityLevel                                   `json:"security_level,omitempty"`
-	ServerSideExcludes      *bool                                            `json:"server_side_excludes,omitempty"`
-	SSL                     *SSL                                             `json:"ssl,omitempty"`
-	SXG                     *bool                                            `json:"sxg,omitempty"`
-	HotLinkProtection       *bool                                            `json:"hotlink_protection,omitempty"`
+	ID                      string                                            `json:"id,omitempty"`
+	Ruleset                 string                                            `json:"ruleset,omitempty"`
+	Rulesets                []string                                          `json:"rulesets,omitempty"`
+	Rules                   map[string][]string                               `json:"rules,omitempty"`
+	Increment               int                                               `json:"increment,omitempty"`
+	URI                     *RulesetRuleActionParametersURI                   `json:"uri,omitempty"`
+	Headers                 map[string]RulesetRuleActionParametersHTTPHeader  `json:"headers,omitempty"`
+	Products                []string                                          `json:"products,omitempty"`
+	Phases                  []string                                          `json:"phases,omitempty"`
+	Overrides               *RulesetRuleActionParametersOverrides             `json:"overrides,omitempty"`
+	MatchedData             *RulesetRuleActionParametersMatchedData           `json:"matched_data,omitempty"`
+	Version                 *string                                           `json:"version,omitempty"`
+	Response                *RulesetRuleActionParametersBlockResponse         `json:"response,omitempty"`
+	HostHeader              string                                            `json:"host_header,omitempty"`
+	Origin                  *RulesetRuleActionParametersOrigin                `json:"origin,omitempty"`
+	SNI                     *RulesetRuleActionParametersSni                   `json:"sni,omitempty"`
+	RequestFields           []RulesetActionParametersLogCustomField           `json:"request_fields,omitempty"`
+	ResponseFields          []RulesetActionParametersLogCustomField           `json:"response_fields,omitempty"`
+	CookieFields            []RulesetActionParametersLogCustomField           `json:"cookie_fields,omitempty"`
+	Cache                   *bool                                             `json:"cache,omitempty"`
+	EdgeTTL                 *RulesetRuleActionParametersEdgeTTL               `json:"edge_ttl,omitempty"`
+	BrowserTTL              *RulesetRuleActionParametersBrowserTTL            `json:"browser_ttl,omitempty"`
+	ServeStale              *RulesetRuleActionParametersServeStale            `json:"serve_stale,omitempty"`
+	Content                 string                                            `json:"content,omitempty"`
+	ContentType             string                                            `json:"content_type,omitempty"`
+	StatusCode              uint16                                            `json:"status_code,omitempty"`
+	RespectStrongETags      *bool                                             `json:"respect_strong_etags,omitempty"`
+	CacheKey                *RulesetRuleActionParametersCacheKey              `json:"cache_key,omitempty"`
+	OriginErrorPagePassthru *bool                                             `json:"origin_error_page_passthru,omitempty"`
+	FromList                *RulesetRuleActionParametersFromList              `json:"from_list,omitempty"`
+	FromValue               *RulesetRuleActionParametersFromValue             `json:"from_value,omitempty"`
+	AutomaticHTTPSRewrites  *bool                                             `json:"automatic_https_rewrites,omitempty"`
+	AutoMinify              *RulesetRuleActionParametersAutoMinify            `json:"autominify,omitempty"`
+	BrowserIntegrityCheck   *bool                                             `json:"bic,omitempty"`
+	DisableApps             *bool                                             `json:"disable_apps,omitempty"`
+	DisableZaraz            *bool                                             `json:"disable_zaraz,omitempty"`
+	DisableRailgun          *bool                                             `json:"disable_railgun,omitempty"`
+	EmailObfuscation        *bool                                             `json:"email_obfuscation,omitempty"`
+	Mirage                  *bool                                             `json:"mirage,omitempty"`
+	OpportunisticEncryption *bool                                             `json:"opportunistic_encryption,omitempty"`
+	Polish                  *Polish                                           `json:"polish,omitempty"`
+	RocketLoader            *bool                                             `json:"rocket_loader,omitempty"`
+	SecurityLevel           *SecurityLevel                                    `json:"security_level,omitempty"`
+	ServerSideExcludes      *bool                                             `json:"server_side_excludes,omitempty"`
+	SSL                     *SSL                                              `json:"ssl,omitempty"`
+	SXG                     *bool                                             `json:"sxg,omitempty"`
+	HotLinkProtection       *bool                                             `json:"hotlink_protection,omitempty"`
+	Algorithms              []RulesetRuleActionParametersCompressionAlgorithm `json:"algorithms,omitempty"`
 }
 
 // RulesetRuleActionParametersFromList holds the FromList struct for
@@ -266,7 +275,7 @@ type RulesetRuleActionParametersAutoMinify struct {
 type RulesetRuleActionParametersFromValue struct {
 	StatusCode          uint16                               `json:"status_code,omitempty"`
 	TargetURL           RulesetRuleActionParametersTargetURL `json:"target_url"`
-	PreserveQueryString bool                                 `json:"preserve_query_string,omitempty"`
+	PreserveQueryString *bool                                `json:"preserve_query_string,omitempty"`
 }
 
 type RulesetRuleActionParametersTargetURL struct {
@@ -330,6 +339,7 @@ type RulesetRuleActionParametersCustomKeyFields struct {
 type RulesetRuleActionParametersCustomKeyQuery struct {
 	Include *RulesetRuleActionParametersCustomKeyList `json:"include,omitempty"`
 	Exclude *RulesetRuleActionParametersCustomKeyList `json:"exclude,omitempty"`
+	Ignore  *bool                                     `json:"ignore,omitempty"`
 }
 
 type RulesetRuleActionParametersCustomKeyList struct {
@@ -380,7 +390,7 @@ type RulesetRuleActionParametersBlockResponse struct {
 type RulesetRuleActionParametersURI struct {
 	Path   *RulesetRuleActionParametersURIPath  `json:"path,omitempty"`
 	Query  *RulesetRuleActionParametersURIQuery `json:"query,omitempty"`
-	Origin bool                                 `json:"origin,omitempty"`
+	Origin *bool                                `json:"origin,omitempty"`
 }
 
 // RulesetRuleActionParametersURIPath holds the path specific portion of a URI
@@ -393,8 +403,8 @@ type RulesetRuleActionParametersURIPath struct {
 // RulesetRuleActionParametersURIQuery holds the query specific portion of a URI
 // action parameter.
 type RulesetRuleActionParametersURIQuery struct {
-	Value      string `json:"value,omitempty"`
-	Expression string `json:"expression,omitempty"`
+	Value      *string `json:"value,omitempty"`
+	Expression string  `json:"expression,omitempty"`
 }
 
 // RulesetRuleActionParametersHTTPHeader is the definition for define action
@@ -444,6 +454,12 @@ type RulesetRuleActionParametersOrigin struct {
 // parameters that involve SNI overrides.
 type RulesetRuleActionParametersSni struct {
 	Value string `json:"value"`
+}
+
+// RulesetRuleActionParametersCompressionAlgorithm defines a compression
+// algorithm for the compress_response action.
+type RulesetRuleActionParametersCompressionAlgorithm struct {
+	Name string `json:"name"`
 }
 
 type Polish int
@@ -626,14 +642,14 @@ func (p SSL) IntoRef() *SSL {
 // RulesetRule contains information about a single Ruleset Rule.
 type RulesetRule struct {
 	ID                     string                             `json:"id,omitempty"`
-	Version                string                             `json:"version,omitempty"`
+	Version                *string                            `json:"version,omitempty"`
 	Action                 string                             `json:"action"`
 	ActionParameters       *RulesetRuleActionParameters       `json:"action_parameters,omitempty"`
 	Expression             string                             `json:"expression"`
-	Description            string                             `json:"description"`
+	Description            string                             `json:"description,omitempty"`
 	LastUpdated            *time.Time                         `json:"last_updated,omitempty"`
 	Ref                    string                             `json:"ref,omitempty"`
-	Enabled                bool                               `json:"enabled"`
+	Enabled                *bool                              `json:"enabled,omitempty"`
 	ScoreThreshold         int                                `json:"score_threshold,omitempty"`
 	RateLimit              *RulesetRuleRateLimit              `json:"ratelimit,omitempty"`
 	ExposedCredentialCheck *RulesetRuleExposedCredentialCheck `json:"exposed_credential_check,omitempty"`
@@ -642,12 +658,14 @@ type RulesetRule struct {
 
 // RulesetRuleRateLimit contains the structure of a HTTP rate limit Ruleset Rule.
 type RulesetRuleRateLimit struct {
-	Characteristics    []string `json:"characteristics,omitempty"`
-	RequestsPerPeriod  int      `json:"requests_per_period,omitempty"`
-	Period             int      `json:"period,omitempty"`
-	MitigationTimeout  int      `json:"mitigation_timeout,omitempty"`
-	CountingExpression string   `json:"counting_expression,omitempty"`
-	RequestsToOrigin   bool     `json:"requests_to_origin,omitempty"`
+	Characteristics         []string `json:"characteristics,omitempty"`
+	RequestsPerPeriod       int      `json:"requests_per_period,omitempty"`
+	ScorePerPeriod          int      `json:"score_per_period,omitempty"`
+	ScoreResponseHeaderName string   `json:"score_response_header_name,omitempty"`
+	Period                  int      `json:"period,omitempty"`
+	MitigationTimeout       int      `json:"mitigation_timeout,omitempty"`
+	CountingExpression      string   `json:"counting_expression,omitempty"`
+	RequestsToOrigin        bool     `json:"requests_to_origin,omitempty"`
 }
 
 // RulesetRuleExposedCredentialCheck contains the structure of an exposed
