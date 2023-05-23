@@ -45,6 +45,8 @@ type CreateWorkerParams struct {
 	// usually used together with CompatibilityDate.
 	//  https://developers.cloudflare.com/workers/platform/compatibility-dates/#compatibility-flags
 	CompatibilityFlags []string
+
+	Placement *Placement
 }
 
 // WorkerScriptParams provides a worker script and the associated bindings.
@@ -90,11 +92,15 @@ type WorkerScript struct {
 
 // WorkerMetaData contains worker script information such as size, creation & modification dates.
 type WorkerMetaData struct {
-	ID         string    `json:"id,omitempty"`
-	ETAG       string    `json:"etag,omitempty"`
-	Size       int       `json:"size,omitempty"`
-	CreatedOn  time.Time `json:"created_on,omitempty"`
-	ModifiedOn time.Time `json:"modified_on,omitempty"`
+	ID               string         `json:"id,omitempty"`
+	ETAG             string         `json:"etag,omitempty"`
+	Size             int            `json:"size,omitempty"`
+	CreatedOn        time.Time      `json:"created_on,omitempty"`
+	ModifiedOn       time.Time      `json:"modified_on,omitempty"`
+	Logpush          *bool          `json:"logpush,omitempty"`
+	LastDeployedFrom *string        `json:"last_deployed_from,omitempty"`
+	DeploymentId     *string        `json:"deployment_id,omitempty"`
+	PlacementMode    *PlacementMode `json:"placement_mode,omitempty"`
 }
 
 // WorkerListResponse wrapper struct for API response to worker script list API call.
@@ -115,6 +121,17 @@ type ListWorkersParams struct{}
 
 type DeleteWorkerParams struct {
 	ScriptName string
+}
+
+type PlacementMode string
+
+const (
+	PlacementModeOff   PlacementMode = ""
+	PlacementModeSmart PlacementMode = "smart"
+)
+
+type Placement struct {
+	Mode PlacementMode `json:"mode"`
 }
 
 // DeleteWorker deletes a single Worker.
@@ -234,7 +251,7 @@ func (api *API) UploadWorker(ctx context.Context, rc *ResourceContainer, params 
 		err         error
 	)
 
-	if params.Module || params.Logpush != nil || len(params.Bindings) > 0 || params.CompatibilityDate != "" || len(params.CompatibilityFlags) > 0 {
+	if params.Module || params.Logpush != nil || params.Placement != nil || len(params.Bindings) > 0 || params.CompatibilityDate != "" || len(params.CompatibilityFlags) > 0 {
 		contentType, body, err = formatMultipartBody(params)
 		if err != nil {
 			return WorkerScriptResponse{}, err
@@ -274,11 +291,13 @@ func formatMultipartBody(params CreateWorkerParams) (string, []byte, error) {
 		Logpush            *bool               `json:"logpush,omitempty"`
 		CompatibilityDate  string              `json:"compatibility_date,omitempty"`
 		CompatibilityFlags []string            `json:"compatibility_flags,omitempty"`
+		Placement          *Placement          `json:"placement,omitempty"`
 	}{
 		Bindings:           make([]workerBindingMeta, 0, len(params.Bindings)),
 		Logpush:            params.Logpush,
 		CompatibilityDate:  params.CompatibilityDate,
 		CompatibilityFlags: params.CompatibilityFlags,
+		Placement:          params.Placement,
 	}
 
 	if params.Module {

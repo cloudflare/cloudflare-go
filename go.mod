@@ -6,9 +6,9 @@ require (
 	github.com/google/go-querystring v1.1.0
 	github.com/hashicorp/go-retryablehttp v0.7.2
 	github.com/olekukonko/tablewriter v0.0.5
-	github.com/stretchr/testify v1.8.2
-	github.com/urfave/cli/v2 v2.25.1
-	golang.org/x/net v0.9.0
+	github.com/stretchr/testify v1.8.3
+	github.com/urfave/cli/v2 v2.25.3
+	golang.org/x/net v0.10.0
 	golang.org/x/time v0.3.0
 )
 

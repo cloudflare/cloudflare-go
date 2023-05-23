@@ -34,8 +34,7 @@ type CreateTurnstileWidgetParams struct {
 }
 
 type UpdateTurnstileWidgetParams struct {
-	SiteKey      string   `json:"sitekey,omitempty"`
-	Secret       string   `json:"secret,omitempty"`
+	SiteKey      string   `json:"-"`
 	Name         string   `json:"name,omitempty"`
 	Domains      []string `json:"domains,omitempty"`
 	Mode         string   `json:"mode,omitempty"`
@@ -62,8 +61,8 @@ type ListTurnstileWidgetResponse struct {
 }
 
 type RotateTurnstileWidgetParams struct {
-	SiteKey               string
-	InvalidateImmediately bool `json:"invalidate_immediately,omitempty"`
+	SiteKey               string `json:"-"`
+	InvalidateImmediately bool   `json:"invalidate_immediately,omitempty"`
 }
 
 // CreateTurnstileWidget creates a new challenge widgets.
