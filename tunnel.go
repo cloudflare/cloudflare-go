@@ -106,9 +106,10 @@ type TunnelUpdateParams struct {
 }
 
 type UnvalidatedIngressRule struct {
-	Hostname string `json:"hostname,omitempty"`
-	Path     string `json:"path,omitempty"`
-	Service  string `json:"service,omitempty"`
+	Hostname      string               `json:"hostname,omitempty"`
+	Path          string               `json:"path,omitempty"`
+	Service       string               `json:"service,omitempty"`
+	OriginRequest *OriginRequestConfig `json:"originRequest,omitempty"`
 }
 
 // OriginRequestConfig is a set of optional fields that users may set to
