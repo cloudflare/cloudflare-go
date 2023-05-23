@@ -13,6 +13,7 @@ BUG FIXES:
 
 DEPENDENCIES:
 
+* deps: bumps dependabot/fetch-metadata from 1.4.0 to 1.5.0 ([#1287](https://github.com/cloudflare/cloudflare-go/issues/1287))
 * deps: bumps github.com/stretchr/testify from 1.8.2 to 1.8.3 ([#1286](https://github.com/cloudflare/cloudflare-go/issues/1286))
 
 ## 0.67.0 (May 10th, 2023)
