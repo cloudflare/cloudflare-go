@@ -74,7 +74,7 @@ type UpdateDNSRecordParams struct {
 	Content  string      `json:"content,omitempty"`
 	Data     interface{} `json:"data,omitempty"` // data for: SRV, LOC
 	ID       string      `json:"-"`
-	Priority *uint16     `json:"-"` // internal use only
+	Priority *uint16     `json:"priority,omitempty"`
 	TTL      int         `json:"ttl,omitempty"`
 	Proxied  *bool       `json:"proxied,omitempty"`
 	Comment  string      `json:"comment"`
