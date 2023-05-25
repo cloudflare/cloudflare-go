@@ -1,5 +1,9 @@
 ## 0.69.0 (Unreleased)
 
+DEPENDENCIES:
+
+* deps: bumps dependabot/fetch-metadata from 1.5.0 to 1.5.1 ([#1292](https://github.com/cloudflare/cloudflare-go/issues/1292))
+
 ## 0.68.0 (May 24th, 2023)
 
 BREAKING CHANGES:
