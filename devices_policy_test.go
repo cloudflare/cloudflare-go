@@ -42,6 +42,7 @@ var (
 		Precedence:       nil,
 		Default:          true,
 		ExcludeOfficeIps: BoolPtr(false),
+		Description:      nil,
 	}
 
 	nonDefaultDeviceSettingsPolicy = DeviceSettingsPolicy{
@@ -72,6 +73,7 @@ var (
 		Precedence:       &deviceSettingsPolicyPrecedence,
 		Default:          false,
 		ExcludeOfficeIps: BoolPtr(true),
+		Description:      StringPtr("Test Description"),
 	}
 
 	defaultDeviceSettingsPolicyJson = `{
@@ -143,7 +145,8 @@ var (
 		"match": %#v,
 		"precedence": 10,
 		"default": false,
-		"exclude_office_ips":true
+		"exclude_office_ips":true,
+		"description":"Test Description"
 	}`, deviceSettingsPolicyID, deviceSettingsPolicyMatch)
 )
 
@@ -240,9 +243,10 @@ func TestCreateDeviceSettingsPolicy(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/policy", handler)
 
 	actual, err := client.CreateDeviceSettingsPolicy(context.Background(), testAccountID, DeviceSettingsPolicyRequest{
-		Precedence: IntPtr(10),
-		Match:      &deviceSettingsPolicyMatch,
-		Name:       StringPtr("test"),
+		Precedence:  IntPtr(10),
+		Match:       &deviceSettingsPolicyMatch,
+		Name:        StringPtr("test"),
+		Description: StringPtr("Test Description"),
 	})
 
 	if assert.NoError(t, err) {
