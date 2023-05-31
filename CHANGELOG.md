@@ -7,6 +7,7 @@ ENHANCEMENTS:
 DEPENDENCIES:
 
 * deps: bumps dependabot/fetch-metadata from 1.5.0 to 1.5.1 ([#1292](https://github.com/cloudflare/cloudflare-go/issues/1292))
+* deps: bumps github.com/stretchr/testify from 1.8.3 to 1.8.4 ([#1296](https://github.com/cloudflare/cloudflare-go/issues/1296))
 * deps: bumps github.com/urfave/cli/v2 from 2.25.3 to 2.25.5 ([#1295](https://github.com/cloudflare/cloudflare-go/issues/1295))
 
 ## 0.68.0 (May 24th, 2023)
