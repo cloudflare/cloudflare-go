@@ -15,7 +15,7 @@ jobs:
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
-          version: 'v1.5.2' # can go back to latest once golangci/golangci-lint#3866 lands
+          version: 'v1.52' # can go back to latest once golangci/golangci-lint#3866 lands
           args: "--config .golintci.yaml"
           only-new-issues: true # only show new issues in the PR, not all.
 
