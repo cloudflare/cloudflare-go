@@ -2,6 +2,7 @@
 
 ENHANCEMENTS:
 
+* custom_hostname: add support for `bundle_method` TLS configuration ([#1298](https://github.com/cloudflare/cloudflare-go/issues/1298))
 * devices_policy: Add missing description field to policy ([#1294](https://github.com/cloudflare/cloudflare-go/issues/1294))
 
 BUG FIXES:
