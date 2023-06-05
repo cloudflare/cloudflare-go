@@ -190,6 +190,53 @@ func TestCreateImageDirectUploadURL(t *testing.T) {
 	}
 }
 
+func TestCreateImageDirectUploadURLV2(t *testing.T) {
+	setup()
+	defer teardown()
+
+	input := ImageDirectUploadURLV2Request{
+		Expiry: time.Now().UTC().Add(30 * time.Minute),
+		Metadata: map[string]interface{}{
+			"metaKey1": "metaValue1",
+			"metaKey2": "metaValue2",
+		},
+		RequireSignedURLs: true,
+	}
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+
+		var v ImageDirectUploadURLV2Request
+		err := json.NewDecoder(r.Body).Decode(&v)
+		require.NoError(t, err)
+		assert.Equal(t, input, v)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "ZxR0pLaXRldlBtaFhhO2FiZGVnaA",
+				"uploadURL": "https://upload.imagedelivery.net/fgr33htrthytjtyereifjewoi338272s7w1383"
+			}
+		}
+		`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/images/v2/direct_upload", handler)
+	want := ImageDirectUploadURL{
+		ID:        "ZxR0pLaXRldlBtaFhhO2FiZGVnaA",
+		UploadURL: "https://upload.imagedelivery.net/fgr33htrthytjtyereifjewoi338272s7w1383",
+	}
+
+	actual, err := client.CreateImageDirectUploadURLV2(context.Background(), testAccountID, input)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
 func TestListImages(t *testing.T) {
 	setup()
 	defer teardown()
