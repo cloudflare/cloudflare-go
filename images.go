@@ -83,6 +83,12 @@ type ImageDirectUploadURLRequest struct {
 	Expiry time.Time `json:"expiry"`
 }
 
+type ImageDirectUploadURLV2Request struct {
+	Expiry            time.Time              `json:"expiry"`
+	Metadata          map[string]interface{} `json:"metadata,omitempty"`
+	RequireSignedURLs bool                   `json:"requireSignedURLs"`
+}
+
 // ImageDirectUploadURLResponse is the API response for a direct image upload url.
 type ImageDirectUploadURLResponse struct {
 	Result ImageDirectUploadURL `json:"result"`
@@ -183,6 +189,23 @@ func (api *API) UpdateImage(ctx context.Context, accountID string, id string, im
 // API Reference: https://api.cloudflare.com/#cloudflare-images-create-authenticated-direct-upload-url
 func (api *API) CreateImageDirectUploadURL(ctx context.Context, accountID string, params ImageDirectUploadURLRequest) (ImageDirectUploadURL, error) {
 	uri := fmt.Sprintf("/accounts/%s/images/v1/direct_upload", accountID)
+
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
+	if err != nil {
+		return ImageDirectUploadURL{}, err
+	}
+
+	var imageDirectUploadURLResponse ImageDirectUploadURLResponse
+	err = json.Unmarshal(res, &imageDirectUploadURLResponse)
+	if err != nil {
+		return ImageDirectUploadURL{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+	return imageDirectUploadURLResponse.Result, nil
+}
+
+// CreateImageDirectUploadURLV2 creates an authenticated v2 direct upload url.
+func (api *API) CreateImageDirectUploadURLV2(ctx context.Context, accountID string, params ImageDirectUploadURLV2Request) (ImageDirectUploadURL, error) {
+	uri := fmt.Sprintf("/accounts/%s/images/v2/direct_upload", accountID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
