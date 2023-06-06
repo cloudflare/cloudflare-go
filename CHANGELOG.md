@@ -1,5 +1,9 @@
 ## 0.69.0 (Unreleased)
 
+BREAKING CHANGES:
+
+* stream: StreamVideo.Duration has changed from int to float64. ([#1190](https://github.com/cloudflare/cloudflare-go/issues/1190))
+
 ENHANCEMENTS:
 
 * custom_hostname: add support for `bundle_method` TLS configuration ([#1298](https://github.com/cloudflare/cloudflare-go/issues/1298))
@@ -8,6 +12,7 @@ ENHANCEMENTS:
 BUG FIXES:
 
 * email_routing_destination: return encountered error, not `ErrMissingAccountID` all the time ([#1297](https://github.com/cloudflare/cloudflare-go/issues/1297))
+* stream: Fix a bug that cannot unmarshal video duration number. ([#1190](https://github.com/cloudflare/cloudflare-go/issues/1190))
 
 DEPENDENCIES:
 
