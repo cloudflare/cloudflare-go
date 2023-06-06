@@ -22,7 +22,7 @@ const (
       "example.com"
     ],
     "created": "2014-01-02T02:20:00Z",
-    "duration": 300,
+    "duration": 300.5,
     "input": {
       "height": 1080,
       "width": 1920
@@ -86,7 +86,7 @@ func createTestVideo() StreamVideo {
 	return StreamVideo{
 		AllowedOrigins:     []string{"example.com"},
 		Created:            &created,
-		Duration:           300,
+		Duration:           300.5,
 		Input:              StreamVideoInput{Height: 1080, Width: 1920},
 		MaxDurationSeconds: 300,
 		Modified:           &modified,
@@ -285,7 +285,7 @@ func TestStream_ListVideos(t *testing.T) {
       "example.com"
     ],
     "created": "2014-01-02T02:20:00Z",
-    "duration": 300,
+    "duration": 300.5,
     "input": {
       "height": 1080,
       "width": 1920

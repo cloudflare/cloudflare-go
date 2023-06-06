@@ -28,7 +28,7 @@ var (
 type StreamVideo struct {
 	AllowedOrigins        []string                 `json:"allowedOrigins,omitempty"`
 	Created               *time.Time               `json:"created,omitempty"`
-	Duration              int                      `json:"duration,omitempty"`
+	Duration              float64                  `json:"duration,omitempty"`
 	Input                 StreamVideoInput         `json:"input,omitempty"`
 	MaxDurationSeconds    int                      `json:"maxDurationSeconds,omitempty"`
 	Meta                  map[string]interface{}   `json:"meta,omitempty"`
