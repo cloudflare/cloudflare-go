@@ -6,9 +6,10 @@ BREAKING CHANGES:
 
 ENHANCEMENTS:
 
-* Added self_hosted_domains to access apps ([#1281](https://github.com/cloudflare/cloudflare-go/issues/1281))
+* access: Added `self_hosted_domains` support to access applications ([#1281](https://github.com/cloudflare/cloudflare-go/issues/1281))
 * custom_hostname: add support for `bundle_method` TLS configuration ([#1298](https://github.com/cloudflare/cloudflare-go/issues/1298))
 * devices_policy: Add missing description field to policy ([#1294](https://github.com/cloudflare/cloudflare-go/issues/1294))
+* stream: added metadata support ([#1088](https://github.com/cloudflare/cloudflare-go/issues/1088))
 
 BUG FIXES:
 
