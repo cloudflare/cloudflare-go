@@ -103,6 +103,7 @@ type StreamUploadFromURLParameters struct {
 	AllowedOrigins        []string                `json:"allowedOrigins,omitempty"`
 	RequireSignedURLs     bool                    `json:"requireSignedURLs,omitempty"`
 	Watermark             UploadVideoURLWatermark `json:"watermark,omitempty"`
+	Meta                  map[string]interface{}  `json:"meta,omitempty"`
 }
 
 // StreamCreateVideoParameters are parameters used when creating a video.
@@ -115,6 +116,7 @@ type StreamCreateVideoParameters struct {
 	AllowedOrigins        []string                `json:"allowedOrigins,omitempty"`
 	RequireSignedURLs     bool                    `json:"requireSignedURLs,omitempty"`
 	Watermark             UploadVideoURLWatermark `json:"watermark,omitempty"`
+	Meta                  map[string]interface{}  `json:"meta,omitempty"`
 }
 
 // UploadVideoURLWatermark represents UID of an existing watermark.
