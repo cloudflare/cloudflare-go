@@ -17,9 +17,19 @@ type DeviceClientCertificatesZone struct {
 	Result Enabled
 }
 
+type ServiceMode string
+
+const (
+	oneDotOne      ServiceMode = "1dot1"
+	warp           ServiceMode = "warp"
+	proxy          ServiceMode = "proxy"
+	postureOnly    ServiceMode = "posture_only"
+	warpTunnelOnly ServiceMode = "warp_tunnel_only"
+)
+
 type ServiceModeV2 struct {
-	Mode string `json:"mode,omitempty"`
-	Port int    `json:"port,omitempty"`
+	Mode ServiceMode `json:"mode,omitempty"`
+	Port int         `json:"port,omitempty"`
 }
 
 type DeviceSettingsPolicy struct {
@@ -42,6 +52,8 @@ type DeviceSettingsPolicy struct {
 	Match               *string           `json:"match"`
 	Precedence          *int              `json:"precedence"`
 	Default             bool              `json:"default"`
+	ExcludeOfficeIps    *bool             `json:"exclude_office_ips"`
+	Description         *string           `json:"description"`
 }
 
 type DeviceSettingsPolicyResponse struct {
@@ -68,6 +80,8 @@ type DeviceSettingsPolicyRequest struct {
 	Name                *string        `json:"name,omitempty"`
 	Match               *string        `json:"match,omitempty"`
 	Enabled             *bool          `json:"enabled,omitempty"`
+	ExcludeOfficeIps    *bool          `json:"exclude_office_ips"`
+	Description         *string        `json:"description,omitempty"`
 }
 
 // UpdateDeviceClientCertificates controls the zero trust zone used to provision client certificates.

@@ -310,7 +310,7 @@ func zoneRecords(c *cli.Context) error {
 	for _, r := range records {
 		switch r.Type {
 		case "MX":
-			r.Content = fmt.Sprintf("%d %s", r.Priority, r.Content)
+			r.Content = fmt.Sprintf("%d %s", *r.Priority, r.Content)
 		case "SRV":
 			dp := r.Data.(map[string]interface{})
 			r.Content = fmt.Sprintf("%.f %s", dp["priority"], r.Content)

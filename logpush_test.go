@@ -28,7 +28,8 @@ const (
 	"last_complete": "%[2]s",
 	"last_error": "%[2]s",
 	"error_message": "test",
-	"frequency": "high"
+	"frequency": "high",
+	"max_upload_bytes": 5000000
   }
 `
 	serverEdgeLogpushJobDescription = `{
@@ -72,6 +73,7 @@ var (
 		LastError:       &testLogpushTimestamp,
 		ErrorMessage:    "test",
 		Frequency:       "high",
+		MaxUploadBytes:  5000000,
 	}
 	expectedEdgeLogpushJobStruct = LogpushJob{
 		ID:              jobID,
@@ -177,18 +179,20 @@ func TestCreateLogpushJob(t *testing.T) {
 	}{
 		"core logpush job": {
 			newJob: LogpushJob{
-				Dataset:         "http_requests",
-				Enabled:         false,
-				Name:            "example.com",
-				LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
-				DestinationConf: "s3://mybucket/logs?region=us-west-2",
+				Dataset:          "http_requests",
+				Enabled:          false,
+				Name:             "example.com",
+				LogpullOptions:   "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
+				DestinationConf:  "s3://mybucket/logs?region=us-west-2",
+				MaxUploadRecords: 1000,
 			},
 			payload: `{
 				"dataset": "http_requests",
 				"enabled":false,
 				"name":"example.com",
 				"logpull_options":"fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
-				"destination_conf":"s3://mybucket/logs?region=us-west-2"
+				"destination_conf":"s3://mybucket/logs?region=us-west-2",
+				"max_upload_records": 1000
 			}`,
 			result: serverLogpushJobDescription,
 			want:   expectedLogpushJobStruct,

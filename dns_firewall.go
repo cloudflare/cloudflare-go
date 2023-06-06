@@ -14,7 +14,7 @@ import (
 type DNSFirewallCluster struct {
 	ID                   string   `json:"id,omitempty"`
 	Name                 string   `json:"name"`
-	OriginIPs            []string `json:"origin_ips"`
+	UpstreamIPs          []string `json:"upstream_ips"`
 	DNSFirewallIPs       []string `json:"dns_firewall_ips,omitempty"`
 	MinimumCacheTTL      uint     `json:"minimum_cache_ttl,omitempty"`
 	MaximumCacheTTL      uint     `json:"maximum_cache_ttl,omitempty"`
@@ -166,10 +166,10 @@ func (api *API) DeleteDNSFirewallCluster(ctx context.Context, clusterID string) 
 func (o DNSFirewallUserAnalyticsOptions) encode() string {
 	v := url.Values{}
 	if o.Since != nil {
-		v.Set("since", (*o.Since).UTC().Format(time.RFC3339))
+		v.Set("since", o.Since.UTC().Format(time.RFC3339))
 	}
 	if o.Until != nil {
-		v.Set("until", (*o.Until).UTC().Format(time.RFC3339))
+		v.Set("until", o.Until.UTC().Format(time.RFC3339))
 	}
 	if o.Metrics != nil {
 		v.Set("metrics", strings.Join(o.Metrics, ","))

@@ -1,13 +1,205 @@
-## 0.60.0 (Unreleased)
+## 0.69.0 (Unreleased)
 
 ENHANCEMENTS:
 
+* custom_hostname: add support for `bundle_method` TLS configuration ([#1298](https://github.com/cloudflare/cloudflare-go/issues/1298))
+* devices_policy: Add missing description field to policy ([#1294](https://github.com/cloudflare/cloudflare-go/issues/1294))
+
+BUG FIXES:
+
+* email_routing_destination: return encountered error, not `ErrMissingAccountID` all the time ([#1297](https://github.com/cloudflare/cloudflare-go/issues/1297))
+
+DEPENDENCIES:
+
+* deps: bumps dependabot/fetch-metadata from 1.5.0 to 1.5.1 ([#1292](https://github.com/cloudflare/cloudflare-go/issues/1292))
+* deps: bumps github.com/stretchr/testify from 1.8.3 to 1.8.4 ([#1296](https://github.com/cloudflare/cloudflare-go/issues/1296))
+* deps: bumps github.com/urfave/cli/v2 from 2.25.3 to 2.25.5 ([#1295](https://github.com/cloudflare/cloudflare-go/issues/1295))
+
+## 0.68.0 (May 24th, 2023)
+
+BREAKING CHANGES:
+
+* r2_bucket: change creation time from string to *time.Time ([#1265](https://github.com/cloudflare/cloudflare-go/issues/1265))
+
+ENHANCEMENTS:
+
+* adds OriginRequest field to UnvalidatedIngressRule struct. ([#1138](https://github.com/cloudflare/cloudflare-go/issues/1138))
+* lists: add support for hostname and ASN lists. ([#1288](https://github.com/cloudflare/cloudflare-go/issues/1288))
+* pages: add support for Smart Placement. Added `Placement` in `PagesProjectDeploymentConfigEnvironment`. ([#1279](https://github.com/cloudflare/cloudflare-go/issues/1279))
+* r2_bucket: add support for getting a bucket ([#1265](https://github.com/cloudflare/cloudflare-go/issues/1265))
+* tunnels: add support for `access` and `http2Origin` keys ([#1291](https://github.com/cloudflare/cloudflare-go/issues/1291))
+* workers: add support for Smart Placement. Added `Placement` in `CreateWorkerParams`. ([#1279](https://github.com/cloudflare/cloudflare-go/issues/1279))
+* zone: Added `GetCacheReserve` and `UpdateacheReserve` to allow setting Cache Reserve for a zone. ([#1278](https://github.com/cloudflare/cloudflare-go/issues/1278))
+
+BUG FIXES:
+
+* dns: fix MX record priority not set by UpdateDNSRecord ([#1290](https://github.com/cloudflare/cloudflare-go/issues/1290))
+* flarectl/dns: ensure MX priority value is dereferenced ([#1289](https://github.com/cloudflare/cloudflare-go/issues/1289))
+* turnstile: remove `SiteKey` being sent in rotate secret's request body ([#1285](https://github.com/cloudflare/cloudflare-go/issues/1285))
+* turnstile: remove `SiteKey`/`Secret` being sent in update request body ([#1284](https://github.com/cloudflare/cloudflare-go/issues/1284))
+
+DEPENDENCIES:
+
+* deps: bumps dependabot/fetch-metadata from 1.4.0 to 1.5.0 ([#1287](https://github.com/cloudflare/cloudflare-go/issues/1287))
+* deps: bumps github.com/stretchr/testify from 1.8.2 to 1.8.3 ([#1286](https://github.com/cloudflare/cloudflare-go/issues/1286))
+
+## 0.67.0 (May 10th, 2023)
+
+NOTES:
+
+* dns_firewall: The `OriginIPs` field has been renamed to `UpstreamIPs`. ([#1246](https://github.com/cloudflare/cloudflare-go/issues/1246))
+
+ENHANCEMENTS:
+
+* device_posture_rule: add input fields tanium, intune and kolide ([#1268](https://github.com/cloudflare/cloudflare-go/issues/1268))
+* waiting_room: add support for zone-level settings ([#1276](https://github.com/cloudflare/cloudflare-go/issues/1276))
+
+BUG FIXES:
+
+* rulesets: allow `PreserveQueryString` to be nullable ([#1275](https://github.com/cloudflare/cloudflare-go/issues/1275))
+
+DEPENDENCIES:
+
+* deps: bumps github.com/urfave/cli/v2 from 2.25.1 to 2.25.3 ([#1274](https://github.com/cloudflare/cloudflare-go/issues/1274))
+* deps: bumps golang.org/x/net from 0.9.0 to 0.10.0 ([#1280](https://github.com/cloudflare/cloudflare-go/issues/1280))
+
+## 0.66.0 (26th April, 2023)
+
+ENHANCEMENTS:
+
+* access_application: Add `path_cookie_attribute` app setting ([#1223](https://github.com/cloudflare/cloudflare-go/issues/1223))
+* certificate_packs: add `Status` field to indicate the status of certificate pack ([#1271](https://github.com/cloudflare/cloudflare-go/issues/1271))
+* data localization: add support for regional hostnames API ([#1270](https://github.com/cloudflare/cloudflare-go/issues/1270))
+* dns: add support for importing and exporting DNS records using BIND file configurations ([#1266](https://github.com/cloudflare/cloudflare-go/issues/1266))
+* logpush: add support for max upload parameters ([#1272](https://github.com/cloudflare/cloudflare-go/issues/1272))
+* turnstile: add support for turnstile ([#1267](https://github.com/cloudflare/cloudflare-go/issues/1267))
+
+DEPENDENCIES:
+
+* deps: bumps dependabot/fetch-metadata from 1.3.6 to 1.4.0 ([#1269](https://github.com/cloudflare/cloudflare-go/issues/1269))
+
+## 0.65.0 (12th April, 2023)
+
+ENHANCEMENTS:
+
+* access: Add `auto_redirect_to_identity` flag to Access organizations ([#1260](https://github.com/cloudflare/cloudflare-go/issues/1260))
+* access: Add `isolation_required` flag to Access policies ([#1258](https://github.com/cloudflare/cloudflare-go/issues/1258))
+* rulesets: add support for add operation to HTTP header configuration ([#1253](https://github.com/cloudflare/cloudflare-go/issues/1253))
+* rulesets: add support for the `compress_response` action ([#1261](https://github.com/cloudflare/cloudflare-go/issues/1261))
+* rulesets: add support for the `http_response_compression` phase ([#1261](https://github.com/cloudflare/cloudflare-go/issues/1261))
+
+DEPENDENCIES:
+
+* deps: bumps golang.org/x/net from 0.8.0 to 0.9.0 ([#1263](https://github.com/cloudflare/cloudflare-go/issues/1263))
+
+## 0.64.0 (29th March, 2023)
+
+BREAKING CHANGES:
+
+* dns: Changed Create/UpdateDNSRecord method signatures to return (DNSRecord, error) ([#1243](https://github.com/cloudflare/cloudflare-go/issues/1243))
+* zone: `UpdateZoneSingleSetting` has been renamed to `UpdateZoneSetting` and updated method signature inline with our expected conventions ([#1251](https://github.com/cloudflare/cloudflare-go/issues/1251))
+* zone: `ZoneSingleSetting` has been renamed to `GetZoneSetting` and updated method signature inline with our expected conventions ([#1251](https://github.com/cloudflare/cloudflare-go/issues/1251))
+
+ENHANCEMENTS:
+
+* access_identity_provider: add `claims` and `scopes` fields ([#1237](https://github.com/cloudflare/cloudflare-go/issues/1237))
+* access_identity_provider: add scim_config field ([#1178](https://github.com/cloudflare/cloudflare-go/issues/1178))
+* devices_policy: update `Mode` field to use new `ServiceMode` string type with explicit const service mode values ([#1249](https://github.com/cloudflare/cloudflare-go/issues/1249))
+* ssl: make `GeoRestrictions` a pointer inside of ZoneCustomSSL ([#1244](https://github.com/cloudflare/cloudflare-go/issues/1244))
+* zone: `GetZoneSetting` and `UpdateZoneSetting` now allow configuring the path for where a setting resides instead of assuming `settings` ([#1251](https://github.com/cloudflare/cloudflare-go/issues/1251))
+
+BUG FIXES:
+
+* teams_rules: `AllowChildBypass` changes from a `bool` to `*bool` ([#1242](https://github.com/cloudflare/cloudflare-go/issues/1242))
+* teams_rules: `BypassParentRule` changes from a `bool` to `*bool` ([#1242](https://github.com/cloudflare/cloudflare-go/issues/1242))
+* tunnel: Fix 'CreateTunnel' for tunnels using config_src ([#1238](https://github.com/cloudflare/cloudflare-go/issues/1238))
+
+DEPENDENCIES:
+
+* deps: bumps actions/setup-go from 3 to 4 ([#1236](https://github.com/cloudflare/cloudflare-go/issues/1236))
+* deps: bumps github.com/urfave/cli/v2 from 2.25.0 to 2.25.1 ([#1250](https://github.com/cloudflare/cloudflare-go/issues/1250))
+
+## 0.63.0 (15th March, 2023)
+
+BREAKING CHANGES:
+
+* tunnel: renamed `Tunnel` to `GetTunnel` ([#1227](https://github.com/cloudflare/cloudflare-go/issues/1227))
+* tunnel: renamed `Tunnels` to `ListTunnels` ([#1227](https://github.com/cloudflare/cloudflare-go/issues/1227))
+
+ENHANCEMENTS:
+
+* access_organization: add ui_read_only_toggle_reason field ([#1181](https://github.com/cloudflare/cloudflare-go/issues/1181))
+* added audit_ssh to gateway actions, updated gateway rule settings ([#1226](https://github.com/cloudflare/cloudflare-go/issues/1226))
+* addressing: Add `Address Map` support ([#1232](https://github.com/cloudflare/cloudflare-go/issues/1232))
+* teams_account: add support for `check_disks` ([#1197](https://github.com/cloudflare/cloudflare-go/issues/1197))
+* tunnel: updated parameters to latest API docs ([#1227](https://github.com/cloudflare/cloudflare-go/issues/1227))
+
+DEPENDENCIES:
+
+* deps: bumps github.com/urfave/cli/v2 from 2.24.4 to 2.25.0 ([#1229](https://github.com/cloudflare/cloudflare-go/issues/1229))
+* deps: bumps golang.org/x/net from 0.7.0 to 0.8.0 ([#1228](https://github.com/cloudflare/cloudflare-go/issues/1228))
+
+## 0.62.0 (1st March, 2023)
+
+ENHANCEMENTS:
+
+* dex_test: add CRUD functionality for DEX test configurations ([#1209](https://github.com/cloudflare/cloudflare-go/issues/1209))
+* dlp: Adds support for partial payload logging ([#1212](https://github.com/cloudflare/cloudflare-go/issues/1212))
+* teams_accounts: Add new root_certificate_installation_enabled field ([#1208](https://github.com/cloudflare/cloudflare-go/issues/1208))
+* teams_rules: Add `untrusted_cert` rule setting ([#1214](https://github.com/cloudflare/cloudflare-go/issues/1214))
+* tunnels: automatically paginate `ListTunnels` ([#1206](https://github.com/cloudflare/cloudflare-go/issues/1206))
+
+BUG FIXES:
+
+* dex_test: use dex test types and json struct mappings instead of managed networks ([#1213](https://github.com/cloudflare/cloudflare-go/issues/1213))
+* dns: dont reuse DNSListResponse when using pagination to avoid Proxied pointer overwrite ([#1222](https://github.com/cloudflare/cloudflare-go/issues/1222))
+
+DEPENDENCIES:
+
+* deps: bumps github.com/stretchr/testify from 1.8.1 to 1.8.2 ([#1220](https://github.com/cloudflare/cloudflare-go/issues/1220))
+* deps: bumps github.com/urfave/cli/v2 from 2.24.3 to 2.24.4 ([#1210](https://github.com/cloudflare/cloudflare-go/issues/1210))
+* deps: bumps golang.org/x/net from 0.0.0-20220722155237-a158d28d115b to 0.7.0 ([#1218](https://github.com/cloudflare/cloudflare-go/issues/1218))
+* deps: bumps golang.org/x/net from 0.0.0-20220722155237-a158d28d115b to 0.7.0 ([#1219](https://github.com/cloudflare/cloudflare-go/issues/1219))
+* deps: bumps golang.org/x/text from 0.3.7 to 0.3.8 ([#1215](https://github.com/cloudflare/cloudflare-go/issues/1215))
+* deps: bumps golang.org/x/text from 0.3.7 to 0.3.8 ([#1216](https://github.com/cloudflare/cloudflare-go/issues/1216))
+* deps: bumps golang.org/x/time from 0.0.0-20220224211638-0e9765cccd65 to 0.3.0 ([#1217](https://github.com/cloudflare/cloudflare-go/issues/1217))
+
+## 0.61.0 (15th February, 2023)
+
+ENHANCEMENTS:
+
+* cloudflare: make it clearer when we hit a server error and to retry later ([#1207](https://github.com/cloudflare/cloudflare-go/issues/1207))
+* devices_policy: Add new exclude_office_ips field to policy ([#1205](https://github.com/cloudflare/cloudflare-go/issues/1205))
+* dlp_profile: Use int rather than uint for allowed_match_count field ([#1200](https://github.com/cloudflare/cloudflare-go/issues/1200))
+
+BUG FIXES:
+
+* dns: always send `tags` to allow clearing ([#1196](https://github.com/cloudflare/cloudflare-go/issues/1196))
+* stream: renamed `RequiredSignedURLs` to `RequireSignedURLs` ([#1202](https://github.com/cloudflare/cloudflare-go/issues/1202))
+
+DEPENDENCIES:
+
+* deps: bumps github.com/urfave/cli/v2 from 2.24.2 to 2.24.3 ([#1199](https://github.com/cloudflare/cloudflare-go/issues/1199))
+
+## 0.60.0 (1st February, 2023)
+
+BREAKING CHANGES:
+
+* queues: UpdateQueue has been updated to match the API and now correctly updates a Queue's name ([#1188](https://github.com/cloudflare/cloudflare-go/issues/1188))
+
+ENHANCEMENTS:
+
+* dlp_profile: Add new allowed_match_count field to profiles ([#1193](https://github.com/cloudflare/cloudflare-go/issues/1193))
+* dns: allow sending empty strings to remove comments ([#1195](https://github.com/cloudflare/cloudflare-go/issues/1195))
 * magic_transit_ipsec_tunnel: makes customer endpoint an optional field for ipsec tunnel creation ([#1185](https://github.com/cloudflare/cloudflare-go/issues/1185))
+* rulesets: add support for `score_per_period` and `score_response_header_name` ([#1183](https://github.com/cloudflare/cloudflare-go/issues/1183))
 
 DEPENDENCIES:
 
 * deps: bumps dependabot/fetch-metadata from 1.3.5 to 1.3.6 ([#1184](https://github.com/cloudflare/cloudflare-go/issues/1184))
 * deps: bumps github.com/urfave/cli/v2 from 2.23.7 to 2.24.1 ([#1180](https://github.com/cloudflare/cloudflare-go/issues/1180))
+* deps: bumps github.com/urfave/cli/v2 from 2.24.1 to 2.24.2 ([#1191](https://github.com/cloudflare/cloudflare-go/issues/1191))
+* deps: bumps goreleaser/goreleaser-action from 4.1.0 to 4.2.0 ([#1192](https://github.com/cloudflare/cloudflare-go/issues/1192))
 
 ## 0.59.0 (January 18th, 2023)
 

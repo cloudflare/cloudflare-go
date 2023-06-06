@@ -7,7 +7,7 @@
       "warp-routing": { "enabled": true },
       "originRequest": { "connectTimeout": 10 },
       "ingress": [
-        { "hostname": "test.example.com", "service": "https://localhost:8000" },
+        { "hostname": "test.example.com", "service": "https://localhost:8000", "originRequest": { "noTLSVerify": true } },
         { "service": "http_status:404" }
       ]
     },

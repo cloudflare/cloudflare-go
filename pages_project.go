@@ -78,6 +78,7 @@ type PagesProjectDeploymentConfigEnvironment struct {
 	FailOpen                         bool                   `json:"fail_open"`
 	AlwaysUseLatestCompatibilityDate bool                   `json:"always_use_latest_compatibility_date"`
 	UsageModel                       UsageModel             `json:"usage_model,omitempty"`
+	Placement                        *Placement             `json:"placement,omitempty"`
 }
 
 // PagesProjectDeployment represents a deployment to a Pages project.
@@ -98,6 +99,7 @@ type PagesProjectDeployment struct {
 	D1Databases        D1BindingMap                  `json:"d1_databases,omitempty"`
 	R2Bindings         R2BindingMap                  `json:"r2_buckets,omitempty"`
 	ServiceBindings    ServiceBindingMap             `json:"services,omitempty"`
+	Placement          *Placement                    `json:"placement,omitempty"`
 	DeploymentTrigger  PagesProjectDeploymentTrigger `json:"deployment_trigger"`
 	Stages             []PagesProjectDeploymentStage `json:"stages"`
 	BuildConfig        PagesProjectBuildConfig       `json:"build_config"`

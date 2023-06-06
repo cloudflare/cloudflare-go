@@ -34,6 +34,7 @@ What sort of change does your code introduce/modify?
 - [ ] I have updated the documentation accordingly.
 - [ ] I have added tests to cover my changes.
 - [ ] All new and existing tests passed.
-- [ ] This change is using publicly documented (api.cloudflare.com or developers.cloudflare.com) and stable APIs.
+- [ ] This change is using publicly documented in [cloudflare/api-schemas](https://github.com/cloudflare/api-schemas) 
+      and relies on stable APIs.
 
 [1]: https://help.github.com/articles/closing-issues-using-keywords/

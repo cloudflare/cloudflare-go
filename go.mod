@@ -1,15 +1,15 @@
 module github.com/cloudflare/cloudflare-go
 
-go 1.17
+go 1.18
 
 require (
 	github.com/google/go-querystring v1.1.0
 	github.com/hashicorp/go-retryablehttp v0.7.2
 	github.com/olekukonko/tablewriter v0.0.5
-	github.com/stretchr/testify v1.8.1
-	github.com/urfave/cli/v2 v2.24.2
-	golang.org/x/net v0.0.0-20220722155237-a158d28d115b
-	golang.org/x/time v0.0.0-20220224211638-0e9765cccd65
+	github.com/stretchr/testify v1.8.4
+	github.com/urfave/cli/v2 v2.25.5
+	golang.org/x/net v0.10.0
+	golang.org/x/time v0.3.0
 )
 
 require gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
@@ -30,7 +30,6 @@ require (
 	github.com/rogpeppe/go-internal v1.8.1 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
-	golang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f // indirect
-	golang.org/x/text v0.3.7 // indirect
+	golang.org/x/text v0.9.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
