@@ -33,16 +33,31 @@ type LoadBalancerPool struct {
 
 // LoadBalancerOrigin represents a Load Balancer origin's properties.
 type LoadBalancerOrigin struct {
-	Name    string              `json:"name"`
-	Address string              `json:"address"`
-	Enabled bool                `json:"enabled"`
-	Weight  float64             `json:"weight"`
-	Header  map[string][]string `json:"header"`
+	Name    string `json:"name"`
+	Address string `json:"address"`
+	Enabled bool   `json:"enabled"`
+	// Weight of this origin relative to other origins in the pool.
+	// Based on the configured weight the total traffic is distributed
+	// among origins within the pool.
+	//
+	// When LoadBalancerOriginSteering.Policy="least_outstanding_requests", this
+	// weight is used to scale the origin's outstanding requests.
+	Weight float64             `json:"weight"`
+	Header map[string][]string `json:"header"`
 }
 
 // LoadBalancerOriginSteering controls origin selection for new sessions and traffic without session affinity.
 type LoadBalancerOriginSteering struct {
-	// Policy defaults to "random" (weighted) when empty or unspecified.
+	// Policy determines the type of origin steering policy to use.
+	// It defaults to "random" (weighted) when empty or unspecified.
+	//
+	// "random": Select an origin randomly.
+	//
+	// "hash": Select an origin by computing a hash over the CF-Connecting-IP address.
+	//
+	// "least_outstanding_requests": Select an origin by taking into consideration origin weights,
+	// as well as each origin's number of outstanding requests. Origins with more pending requests
+	// are weighted proportionately less relative to others.
 	Policy string `json:"policy,omitempty"`
 }
 
@@ -104,6 +119,10 @@ type LoadBalancer struct {
 	// "proximity": Use the pools' latitude and longitude to select the closest pool using
 	// the Cloudflare PoP location for proxied requests or the location determined by
 	// LocationStrategy for non-proxied requests.
+	//
+	// "least_outstanding_requests": Select a pool by taking into consideration
+	// RandomSteering weights, as well as each pool's number of outstanding requests.
+	// Pools with more pending requests are weighted proportionately less relative to others.
 	//
 	// "": Maps to "geo" if RegionPools or PopPools or CountryPools have entries otherwise "off".
 	SteeringPolicy string `json:"steering_policy,omitempty"`
@@ -178,8 +197,13 @@ type LoadBalancerRuleOverrides struct {
 	LocationStrategy *LocationStrategy `json:"location_strategy,omitempty"`
 }
 
-// RandomSteering represents fields used to set pool weights on a load balancer
-// with "random" steering policy.
+// RandomSteering configures pool weights.
+//
+// SteeringPolicy="random": A random pool is selected with probability
+// proportional to pool weights.
+//
+// SteeringPolicy="least_outstanding_requests": Use pool weights to
+// scale each pool's outstanding requests.
 type RandomSteering struct {
 	DefaultWeight float64            `json:"default_weight,omitempty"`
 	PoolWeights   map[string]float64 `json:"pool_weights,omitempty"`
