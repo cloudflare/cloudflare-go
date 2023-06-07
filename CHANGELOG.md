@@ -4,6 +4,10 @@ ENHANCEMENTS:
 
 * load_balancing: extend documentation for least_outstanding_requests steering policy ([#1293](https://github.com/cloudflare/cloudflare-go/issues/1293))
 
+DEPENDENCIES:
+
+* deps: bumps github.com/hashicorp/go-retryablehttp from 0.7.3 to 0.7.4 ([#1301](https://github.com/cloudflare/cloudflare-go/issues/1301))
+
 ## 0.69.0 (June 7th, 2023)
 
 BREAKING CHANGES:
