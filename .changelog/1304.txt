@@ -1,0 +1,3 @@
+```release-note:enhancement
+account_level_custom_hostnames: add support for the account level custom hostname api
+```
