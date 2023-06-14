@@ -28,7 +28,7 @@ var (
 type StreamVideo struct {
 	AllowedOrigins        []string                 `json:"allowedOrigins,omitempty"`
 	Created               *time.Time               `json:"created,omitempty"`
-	Duration              int                      `json:"duration,omitempty"`
+	Duration              float64                  `json:"duration,omitempty"`
 	Input                 StreamVideoInput         `json:"input,omitempty"`
 	MaxDurationSeconds    int                      `json:"maxDurationSeconds,omitempty"`
 	Meta                  map[string]interface{}   `json:"meta,omitempty"`
@@ -103,6 +103,7 @@ type StreamUploadFromURLParameters struct {
 	AllowedOrigins        []string                `json:"allowedOrigins,omitempty"`
 	RequireSignedURLs     bool                    `json:"requireSignedURLs,omitempty"`
 	Watermark             UploadVideoURLWatermark `json:"watermark,omitempty"`
+	Meta                  map[string]interface{}  `json:"meta,omitempty"`
 }
 
 // StreamCreateVideoParameters are parameters used when creating a video.
@@ -115,6 +116,7 @@ type StreamCreateVideoParameters struct {
 	AllowedOrigins        []string                `json:"allowedOrigins,omitempty"`
 	RequireSignedURLs     bool                    `json:"requireSignedURLs,omitempty"`
 	Watermark             UploadVideoURLWatermark `json:"watermark,omitempty"`
+	Meta                  map[string]interface{}  `json:"meta,omitempty"`
 }
 
 // UploadVideoURLWatermark represents UID of an existing watermark.

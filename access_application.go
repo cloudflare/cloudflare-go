@@ -31,6 +31,7 @@ type AccessApplication struct {
 	LogoURL                 string                         `json:"logo_url,omitempty"`
 	AUD                     string                         `json:"aud,omitempty"`
 	Domain                  string                         `json:"domain"`
+	SelfHostedDomains       []string                       `json:"self_hosted_domains"`
 	Type                    AccessApplicationType          `json:"type,omitempty"`
 	SessionDuration         string                         `json:"session_duration,omitempty"`
 	SameSiteCookieAttribute string                         `json:"same_site_cookie_attribute,omitempty"`
