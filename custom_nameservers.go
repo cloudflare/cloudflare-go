@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 )
@@ -41,16 +42,44 @@ type customNameserverCreateResponse struct {
 	Result CustomNameserverResult `json:"result"`
 }
 
+type getEligibleZonesAccountCustomNameserversResponse struct {
+	Result []string `json:"result"`
+}
+
 type customNameserverZoneMetadata struct {
 	Response
 	Result CustomNameserverZoneMetadata
 }
 
-// GetAccountCustomNameservers lists an account's custom nameservers.
+type GetCustomNameserversParams struct{}
+
+type CreateCustomNameserversParams struct {
+	NSName string `json:"ns_name"`
+	NSSet  int    `json:"ns_set"`
+}
+
+type DeleteCustomNameserversParams struct {
+	NSName string
+}
+
+type GetEligibleZonesAccountCustomNameserversParams struct{}
+
+type GetCustomNameserverZoneMetadataParams struct{}
+
+type UpdateCustomNameserverZoneMetadataParams struct {
+	Type    string `json:"type"`
+	NSSet   string `json:"ns_set"`
+	Enabled bool   `json:"enabled"`
+}
+
+// GetCustomNameservers lists an account's custom nameservers.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/account-level-custom-nameservers-list-account-custom-nameservers
-func (api *API) GetAccountCustomNameservers(ctx context.Context, rc *ResourceContainer) ([]CustomNameserverResult, error) {
-	uri := fmt.Sprintf("/accounts/%s/custom_ns", rc.Identifier)
+func (api *API) GetCustomNameservers(ctx context.Context, rc *ResourceContainer, params GetCustomNameserversParams) ([]CustomNameserverResult, error) {
+	if rc.Level != AccountRouteLevel {
+		return []CustomNameserverResult{}, ErrRequiredAccountLevelResourceContainer
+	}
+	uri := fmt.Sprintf("/%s/%s/custom_ns", rc.Level, rc.Identifier)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -66,13 +95,17 @@ func (api *API) GetAccountCustomNameservers(ctx context.Context, rc *ResourceCon
 	return response.Result, nil
 }
 
-// CreateAccountCustomNameserver adds an account custom nameserver.
+// CreateCustomNameservers adds a custom nameserver.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/account-level-custom-nameservers-add-account-custom-nameserver
-func (api *API) CreateAccountCustomNameserver(ctx context.Context, rc *ResourceContainer, param CustomNameserver) (CustomNameserverResult, error) {
-	uri := fmt.Sprintf("/accounts/%s/custom_ns", rc.Identifier)
+func (api *API) CreateCustomNameservers(ctx context.Context, rc *ResourceContainer, params CreateCustomNameserversParams) (CustomNameserverResult, error) {
+	if rc.Level != AccountRouteLevel {
+		return CustomNameserverResult{}, ErrRequiredAccountLevelResourceContainer
+	}
 
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, param)
+	uri := fmt.Sprintf("/%s/%s/custom_ns", rc.Level, rc.Identifier)
+
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return CustomNameserverResult{}, err
 	}
@@ -86,11 +119,19 @@ func (api *API) CreateAccountCustomNameserver(ctx context.Context, rc *ResourceC
 	return response.Result, nil
 }
 
-// DeleteAccountCustomNameserver removes an account custom nameserver.
+// DeleteCustomNameservers removes a custom nameserver.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/account-level-custom-nameservers-delete-account-custom-nameserver
-func (api *API) DeleteAccountCustomNameserver(ctx context.Context, rc *ResourceContainer, nsName string) error {
-	uri := fmt.Sprintf("/accounts/%s/custom_ns/%s", rc.Identifier, nsName)
+func (api *API) DeleteCustomNameservers(ctx context.Context, rc *ResourceContainer, params DeleteCustomNameserversParams) error {
+	if rc.Level != AccountRouteLevel {
+		return ErrRequiredAccountLevelResourceContainer
+	}
+
+	if params.NSName == "" {
+		return errors.New("missing required NSName parameter")
+	}
+
+	uri := fmt.Sprintf("/%s/%s/custom_ns/%s", rc.Level, rc.Identifier, params.NSName)
 
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
@@ -103,18 +144,19 @@ func (api *API) DeleteAccountCustomNameserver(ctx context.Context, rc *ResourceC
 // GetEligibleZonesAccountCustomNameservers lists zones eligible for account custom nameservers.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/account-level-custom-nameservers-get-eligible-zones-for-account-custom-nameservers
-func (api *API) GetEligibleZonesAccountCustomNameservers(ctx context.Context, rc *ResourceContainer) ([]string, error) {
-	uri := fmt.Sprintf("/accounts/%s/custom_ns/availability", rc.Identifier)
+func (api *API) GetEligibleZonesAccountCustomNameservers(ctx context.Context, rc *ResourceContainer, params GetEligibleZonesAccountCustomNameserversParams) ([]string, error) {
+	if rc.Level != AccountRouteLevel {
+		return []string{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	uri := fmt.Sprintf("/%s/%s/custom_ns/availability", rc.Level, rc.Identifier)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	response := struct {
-		Result []string `json:"result"`
-	}{}
-
+	var response getEligibleZonesAccountCustomNameserversResponse
 	err = json.Unmarshal(res, &response)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
@@ -123,19 +165,22 @@ func (api *API) GetEligibleZonesAccountCustomNameservers(ctx context.Context, rc
 	return response.Result, nil
 }
 
-// GetAccountCustomNameserverZoneMetadata get metadata for account-level custom nameservers on a zone.
+// GetCustomNameserverZoneMetadata get metadata for account-level custom nameservers on a zone.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/account-level-custom-nameservers-usage-for-a-zone-get-account-custom-nameserver-related-zone-metadata
-func (api *API) GetAccountCustomNameserverZoneMetadata(ctx context.Context, rc *ResourceContainer) (CustomNameserverZoneMetadata, error) {
-	uri := fmt.Sprintf("/zones/%s/custom_ns", rc.Identifier)
+func (api *API) GetCustomNameserverZoneMetadata(ctx context.Context, rc *ResourceContainer, params GetCustomNameserverZoneMetadataParams) (CustomNameserverZoneMetadata, error) {
+	if rc.Level != ZoneRouteLevel {
+		return CustomNameserverZoneMetadata{}, ErrRequiredZoneLevelResourceContainer
+	}
+
+	uri := fmt.Sprintf("/%s/%s/custom_ns", rc.Level, rc.Identifier)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return CustomNameserverZoneMetadata{}, err
 	}
 
-	response := &customNameserverZoneMetadata{}
-
+	var response customNameserverZoneMetadata
 	err = json.Unmarshal(res, &response)
 	if err != nil {
 		return CustomNameserverZoneMetadata{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
@@ -144,19 +189,21 @@ func (api *API) GetAccountCustomNameserverZoneMetadata(ctx context.Context, rc *
 	return response.Result, nil
 }
 
-// UpdateAccountCustomNameserverZoneMetadata set metadata for account-level custom nameservers on a zone.
+// UpdateCustomNameserverZoneMetadata set metadata for account-level custom nameservers on a zone.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/account-level-custom-nameservers-usage-for-a-zone-set-account-custom-nameserver-related-zone-metadata
-func (api *API) UpdateAccountCustomNameserverZoneMetadata(ctx context.Context, rc *ResourceContainer, param CustomNameserverZoneMetadata) error {
-	uri := fmt.Sprintf("/zones/%s/custom_ns", rc.Identifier)
+func (api *API) UpdateCustomNameserverZoneMetadata(ctx context.Context, rc *ResourceContainer, params UpdateCustomNameserverZoneMetadataParams) error {
+	if rc.Level != ZoneRouteLevel {
+		return ErrRequiredZoneLevelResourceContainer
+	}
 
-	param.Type = ""
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, param)
+	uri := fmt.Sprintf("/%s/%s/custom_ns", rc.Level, rc.Identifier)
+
+	params.Type = ""
+	_, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return nil
 	}
-
-	fmt.Println(string(res))
 
 	return nil
 }

@@ -85,7 +85,7 @@ func TestAccountCustomNameserver_Get(t *testing.T) {
 		},
 	}
 
-	actual, err := client.GetAccountCustomNameservers(context.Background(), AccountIdentifier("01a7362d577a6c3019a474fd6f485823"))
+	actual, err := client.GetCustomNameservers(context.Background(), AccountIdentifier("01a7362d577a6c3019a474fd6f485823"), GetCustomNameserversParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -136,10 +136,10 @@ func TestAccountCustomNameserver_Create(t *testing.T) {
 		NSSet:  1,
 	}
 
-	actual, err := client.CreateAccountCustomNameserver(
+	actual, err := client.CreateCustomNameservers(
 		context.Background(),
 		AccountIdentifier("01a7362d577a6c3019a474fd6f485823"),
-		CustomNameserver{
+		CreateCustomNameserversParams{
 			NSName: "ns1.example.com",
 			NSSet:  1,
 		},
@@ -212,7 +212,7 @@ func TestAccountCustomNameserver_GetAccountCustomNameserverZoneMetadata(t *testi
 		Enabled: true,
 	}
 
-	actual, err := client.GetAccountCustomNameserverZoneMetadata(
+	actual, err := client.GetCustomNameserverZoneMetadata(
 		context.Background(),
 		ZoneIdentifier("023e105f4ecef8ad9ca31a8372d0c353"),
 	)
