@@ -53,7 +53,7 @@ func TestAccountCustomNameserver_Get(t *testing.T) {
 		}`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/custom_ns", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/custom_ns", handler)
 	want := []CustomNameserverResult{
 		{
 			DNSRecords: []CustomNameserverRecord{
@@ -85,7 +85,7 @@ func TestAccountCustomNameserver_Get(t *testing.T) {
 		},
 	}
 
-	actual, err := client.GetCustomNameservers(context.Background(), AccountIdentifier("01a7362d577a6c3019a474fd6f485823"), GetCustomNameserversParams{})
+	actual, err := client.GetCustomNameservers(context.Background(), AccountIdentifier(testAccountID), GetCustomNameserversParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -120,7 +120,7 @@ func TestAccountCustomNameserver_Create(t *testing.T) {
 		}`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/custom_ns", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/custom_ns", handler)
 	want := CustomNameserverResult{
 		DNSRecords: []CustomNameserverRecord{
 			{
@@ -138,7 +138,7 @@ func TestAccountCustomNameserver_Create(t *testing.T) {
 
 	actual, err := client.CreateCustomNameservers(
 		context.Background(),
-		AccountIdentifier("01a7362d577a6c3019a474fd6f485823"),
+		AccountIdentifier(testAccountID),
 		CreateCustomNameserversParams{
 			NSName: "ns1.example.com",
 			NSSet:  1,
@@ -169,7 +169,7 @@ func TestAccountCustomNameserver_GetEligibleZones(t *testing.T) {
 }`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/custom_ns/availability", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/custom_ns/availability", handler)
 	want := []string{
 		"example.com",
 		"example2.com",
@@ -178,7 +178,8 @@ func TestAccountCustomNameserver_GetEligibleZones(t *testing.T) {
 
 	actual, err := client.GetEligibleZonesAccountCustomNameservers(
 		context.Background(),
-		AccountIdentifier("01a7362d577a6c3019a474fd6f485823"),
+		AccountIdentifier(testAccountID),
+		GetEligibleZonesAccountCustomNameserversParams{},
 	)
 
 	if assert.NoError(t, err) {
@@ -205,7 +206,7 @@ func TestAccountCustomNameserver_GetAccountCustomNameserverZoneMetadata(t *testi
 		}`)
 	}
 
-	mux.HandleFunc("/zones/023e105f4ecef8ad9ca31a8372d0c353/custom_ns", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/custom_ns", handler)
 	want := CustomNameserverZoneMetadata{
 		Type:    "account",
 		NSSet:   "1",
@@ -214,7 +215,8 @@ func TestAccountCustomNameserver_GetAccountCustomNameserverZoneMetadata(t *testi
 
 	actual, err := client.GetCustomNameserverZoneMetadata(
 		context.Background(),
-		ZoneIdentifier("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneIdentifier(testZoneID),
+		GetCustomNameserverZoneMetadataParams{},
 	)
 
 	if assert.NoError(t, err) {
