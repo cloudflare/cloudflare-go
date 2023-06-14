@@ -202,7 +202,7 @@ func (api *API) UpdateCustomNameserverZoneMetadata(ctx context.Context, rc *Reso
 	params.Type = ""
 	_, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
-		return nil
+		return err
 	}
 
 	return nil
