@@ -72,7 +72,7 @@ type UpdateCustomNameserverZoneMetadataParams struct {
 	Enabled bool   `json:"enabled"`
 }
 
-// GetCustomNameservers lists an account's custom nameservers.
+// GetCustomNameservers lists custom nameservers.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/account-level-custom-nameservers-list-account-custom-nameservers
 func (api *API) GetCustomNameservers(ctx context.Context, rc *ResourceContainer, params GetCustomNameserversParams) ([]CustomNameserverResult, error) {
@@ -86,7 +86,7 @@ func (api *API) GetCustomNameservers(ctx context.Context, rc *ResourceContainer,
 		return nil, err
 	}
 
-	response := &customNameserverListResponse{}
+	var response customNameserverListResponse
 	err = json.Unmarshal(res, &response)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
@@ -141,7 +141,7 @@ func (api *API) DeleteCustomNameservers(ctx context.Context, rc *ResourceContain
 	return nil
 }
 
-// GetEligibleZonesAccountCustomNameservers lists zones eligible for account custom nameservers.
+// GetEligibleZonesAccountCustomNameservers lists zones eligible for custom nameservers.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/account-level-custom-nameservers-get-eligible-zones-for-account-custom-nameservers
 func (api *API) GetEligibleZonesAccountCustomNameservers(ctx context.Context, rc *ResourceContainer, params GetEligibleZonesAccountCustomNameserversParams) ([]string, error) {
@@ -165,7 +165,7 @@ func (api *API) GetEligibleZonesAccountCustomNameservers(ctx context.Context, rc
 	return response.Result, nil
 }
 
-// GetCustomNameserverZoneMetadata get metadata for account-level custom nameservers on a zone.
+// GetCustomNameserverZoneMetadata get metadata for custom nameservers on a zone.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/account-level-custom-nameservers-usage-for-a-zone-get-account-custom-nameserver-related-zone-metadata
 func (api *API) GetCustomNameserverZoneMetadata(ctx context.Context, rc *ResourceContainer, params GetCustomNameserverZoneMetadataParams) (CustomNameserverZoneMetadata, error) {
@@ -189,7 +189,7 @@ func (api *API) GetCustomNameserverZoneMetadata(ctx context.Context, rc *Resourc
 	return response.Result, nil
 }
 
-// UpdateCustomNameserverZoneMetadata set metadata for account-level custom nameservers on a zone.
+// UpdateCustomNameserverZoneMetadata set metadata for custom nameservers on a zone.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/account-level-custom-nameservers-usage-for-a-zone-set-account-custom-nameserver-related-zone-metadata
 func (api *API) UpdateCustomNameserverZoneMetadata(ctx context.Context, rc *ResourceContainer, params UpdateCustomNameserverZoneMetadataParams) error {
