@@ -206,6 +206,8 @@ func (api *API) CreateImageDirectUploadURL(ctx context.Context, accountID string
 var imagesMultipartBoundary = "----CloudflareImagesGoClientBoundary"
 
 // CreateImageDirectUploadURLV2 creates an authenticated v2 direct upload url.
+//
+// API Reference: https://developers.cloudflare.com/api/operations/cloudflare-images-create-authenticated-direct-upload-url-v-2
 func (api *API) CreateImageDirectUploadURLV2(ctx context.Context, accountID string, params ImageDirectUploadURLV2Request) (ImageDirectUploadURL, error) {
 	uri := fmt.Sprintf("/accounts/%s/images/v2/direct_upload", accountID)
 
