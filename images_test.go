@@ -194,23 +194,29 @@ func TestCreateImageDirectUploadURLV2(t *testing.T) {
 	setup()
 	defer teardown()
 
+	exp := time.Now().UTC().Add(30 * time.Minute)
+	metadata := map[string]interface{}{
+		"metaKey1": "metaValue1",
+		"metaKey2": "metaValue2",
+	}
 	input := ImageDirectUploadURLV2Request{
-		Expiry: time.Now().UTC().Add(30 * time.Minute),
-		Metadata: map[string]interface{}{
-			"metaKey1": "metaValue1",
-			"metaKey2": "metaValue2",
-		},
+		Expiry:            exp,
+		Metadata:          metadata,
 		RequireSignedURLs: true,
 	}
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
-
-		var v ImageDirectUploadURLV2Request
-		err := json.NewDecoder(r.Body).Decode(&v)
+		require.Equal(t,
+			fmt.Sprintf("multipart/form-data; boundary=%s", imagesMultipartBoundary),
+			r.Header.Get("Content-Type"),
+		)
+		require.NoError(t, r.ParseMultipartForm(32<<20))
+		require.Equal(t, exp.Format(time.RFC3339), r.Form.Get("expiry"))
+		require.Equal(t, "true", r.Form.Get("requireSignedURLs"))
+		marshalledMetadata, err := json.Marshal(metadata)
 		require.NoError(t, err)
-		assert.Equal(t, input, v)
-
+		require.Equal(t, string(marshalledMetadata), r.Form.Get("metadata"))
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -231,7 +237,6 @@ func TestCreateImageDirectUploadURLV2(t *testing.T) {
 	}
 
 	actual, err := client.CreateImageDirectUploadURLV2(context.Background(), testAccountID, input)
-
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}

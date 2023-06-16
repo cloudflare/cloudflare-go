@@ -203,11 +203,43 @@ func (api *API) CreateImageDirectUploadURL(ctx context.Context, accountID string
 	return imageDirectUploadURLResponse.Result, nil
 }
 
+var imagesMultipartBoundary = "----CloudflareImagesGoClientBoundary"
+
 // CreateImageDirectUploadURLV2 creates an authenticated v2 direct upload url.
 func (api *API) CreateImageDirectUploadURLV2(ctx context.Context, accountID string, params ImageDirectUploadURLV2Request) (ImageDirectUploadURL, error) {
 	uri := fmt.Sprintf("/accounts/%s/images/v2/direct_upload", accountID)
 
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	writer.SetBoundary(imagesMultipartBoundary)
+	if params.RequireSignedURLs {
+		writer.WriteField("requireSignedURLs", "true")
+	}
+	if !params.Expiry.IsZero() {
+		writer.WriteField("expiry", params.Expiry.Format(time.RFC3339))
+	}
+	if params.Metadata != nil {
+		metadataBytes, err := json.Marshal(params.Metadata)
+		if err != nil {
+			return ImageDirectUploadURL{}, fmt.Errorf("error marshalling metadata to JSON: %w", err)
+		}
+		writer.WriteField("metadata", string(metadataBytes))
+	}
+	err := writer.Close()
+	if err != nil {
+		return ImageDirectUploadURL{}, fmt.Errorf("error closing multipart writer: %w", err)
+	}
+
+	res, err := api.makeRequestContextWithHeaders(
+		ctx,
+		http.MethodPost,
+		uri,
+		body,
+		http.Header{
+			"Accept":       []string{"application/json"},
+			"Content-Type": []string{writer.FormDataContentType()},
+		},
+	)
 	if err != nil {
 		return ImageDirectUploadURL{}, err
 	}
