@@ -16,25 +16,27 @@ var (
 
 // WaitingRoom describes a WaitingRoom object.
 type WaitingRoom struct {
-	CreatedOn                  time.Time  `json:"created_on,omitempty"`
-	ModifiedOn                 time.Time  `json:"modified_on,omitempty"`
-	Path                       string     `json:"path"`
-	Name                       string     `json:"name"`
-	Description                string     `json:"description,omitempty"`
-	QueueingMethod             string     `json:"queueing_method,omitempty"`
-	CustomPageHTML             string     `json:"custom_page_html,omitempty"`
-	DefaultTemplateLanguage    string     `json:"default_template_language,omitempty"`
-	Host                       string     `json:"host"`
-	ID                         string     `json:"id,omitempty"`
-	NewUsersPerMinute          int        `json:"new_users_per_minute"`
-	TotalActiveUsers           int        `json:"total_active_users"`
-	SessionDuration            int        `json:"session_duration"`
-	QueueAll                   bool       `json:"queue_all"`
-	DisableSessionRenewal      bool       `json:"disable_session_renewal"`
-	Suspended                  bool       `json:"suspended"`
-	JsonResponseEnabled        bool       `json:"json_response_enabled"`
-	NextEventPrequeueStartTime *time.Time `json:"next_event_prequeue_start_time,omitempty"`
-	NextEventStartTime         *time.Time `json:"next_event_start_time,omitempty"`
+	CreatedOn                  time.Time           `json:"created_on,omitempty"`
+	ModifiedOn                 time.Time           `json:"modified_on,omitempty"`
+	Path                       string              `json:"path"`
+	Name                       string              `json:"name"`
+	Description                string              `json:"description,omitempty"`
+	QueueingMethod             string              `json:"queueing_method,omitempty"`
+	CustomPageHTML             string              `json:"custom_page_html,omitempty"`
+	DefaultTemplateLanguage    string              `json:"default_template_language,omitempty"`
+	Host                       string              `json:"host"`
+	ID                         string              `json:"id,omitempty"`
+	NewUsersPerMinute          int                 `json:"new_users_per_minute"`
+	TotalActiveUsers           int                 `json:"total_active_users"`
+	SessionDuration            int                 `json:"session_duration"`
+	QueueAll                   bool                `json:"queue_all"`
+	DisableSessionRenewal      bool                `json:"disable_session_renewal"`
+	Suspended                  bool                `json:"suspended"`
+	JsonResponseEnabled        bool                `json:"json_response_enabled"`
+	NextEventPrequeueStartTime *time.Time          `json:"next_event_prequeue_start_time,omitempty"`
+	NextEventStartTime         *time.Time          `json:"next_event_start_time,omitempty"`
+	CookieSuffix               string              `json:"cookie_suffix"`
+	AdditionalRoutes           []*WaitingRoomRoute `json:"additional_routes,omitempty"`
 }
 
 // WaitingRoomStatus describes the status of a waiting room.
@@ -90,6 +92,12 @@ type WaitingRoomPagePreviewURL struct {
 // WaitingRoomPagePreviewCustomHTML describes a WaitingRoomPagePreviewCustomHTML object.
 type WaitingRoomPagePreviewCustomHTML struct {
 	CustomHTML string `json:"custom_html"`
+}
+
+// WaitingRoomRoute describes a WaitingRoomRoute object.
+type WaitingRoomRoute struct {
+	Host string `json:"host"`
+	Path string `json:"path"`
 }
 
 // WaitingRoomDetailResponse is the API response, containing a single WaitingRoom.
