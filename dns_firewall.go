@@ -3,12 +3,13 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
-	"net/url"
-	"strings"
 	"time"
 )
+
+var ErrMissingClusterID = errors.New("missing required cluster ID")
 
 // DNSFirewallCluster represents a DNS Firewall configuration.
 type DNSFirewallCluster struct {
@@ -43,9 +44,9 @@ type DNSFirewallAnalytics struct {
 
 // DNSFirewallUserAnalyticsOptions represents range and dimension selection on analytics endpoint.
 type DNSFirewallUserAnalyticsOptions struct {
-	Metrics []string
-	Since   *time.Time
-	Until   *time.Time
+	Metrics []string   `url:"metrics,omitempty" del:","`
+	Since   *time.Time `url:"since,omitempty"`
+	Until   *time.Time `url:"until,omitempty"`
 }
 
 // dnsFirewallResponse represents a DNS Firewall response.
@@ -66,12 +67,42 @@ type dnsFirewallAnalyticsResponse struct {
 	Result DNSFirewallAnalytics `json:"result"`
 }
 
+type CreateDNSFirewallClusterParams struct {
+	Name                 string   `json:"name"`
+	UpstreamIPs          []string `json:"upstream_ips"`
+	DNSFirewallIPs       []string `json:"dns_firewall_ips,omitempty"`
+	MinimumCacheTTL      uint     `json:"minimum_cache_ttl,omitempty"`
+	MaximumCacheTTL      uint     `json:"maximum_cache_ttl,omitempty"`
+	DeprecateAnyRequests bool     `json:"deprecate_any_requests"`
+}
+
+type GetDNSFirewallClusterParams struct {
+	ClusterID string `json:"-"`
+}
+
+type UpdateDNSFirewallClusterParams struct {
+	ClusterID            string   `json:"-"`
+	Name                 string   `json:"name"`
+	UpstreamIPs          []string `json:"upstream_ips"`
+	DNSFirewallIPs       []string `json:"dns_firewall_ips,omitempty"`
+	MinimumCacheTTL      uint     `json:"minimum_cache_ttl,omitempty"`
+	MaximumCacheTTL      uint     `json:"maximum_cache_ttl,omitempty"`
+	DeprecateAnyRequests bool     `json:"deprecate_any_requests"`
+}
+
+type ListDNSFirewallClustersParams struct{}
+
+type GetDNSFirewallUserAnalyticsParams struct {
+	ClusterID string `json:"-"`
+	DNSFirewallUserAnalyticsOptions
+}
+
 // CreateDNSFirewallCluster creates a new DNS Firewall cluster.
 //
 // API reference: https://api.cloudflare.com/#dns-firewall-create-dns-firewall-cluster
-func (api *API) CreateDNSFirewallCluster(ctx context.Context, v DNSFirewallCluster) (*DNSFirewallCluster, error) {
-	uri := fmt.Sprintf("%s/dns_firewall", api.userBaseURL("/user"))
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, v)
+func (api *API) CreateDNSFirewallCluster(ctx context.Context, rc *ResourceContainer, params CreateDNSFirewallClusterParams) (*DNSFirewallCluster, error) {
+	uri := fmt.Sprintf("/%s/dns_firewall", rc.URLFragment())
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return nil, err
 	}
@@ -85,11 +116,15 @@ func (api *API) CreateDNSFirewallCluster(ctx context.Context, v DNSFirewallClust
 	return response.Result, nil
 }
 
-// DNSFirewallCluster fetches a single DNS Firewall cluster.
+// GetDNSFirewallCluster fetches a single DNS Firewall cluster.
 //
 // API reference: https://api.cloudflare.com/#dns-firewall-dns-firewall-cluster-details
-func (api *API) DNSFirewallCluster(ctx context.Context, clusterID string) (*DNSFirewallCluster, error) {
-	uri := fmt.Sprintf("%s/dns_firewall/%s", api.userBaseURL("/user"), clusterID)
+func (api *API) GetDNSFirewallCluster(ctx context.Context, rc *ResourceContainer, params GetDNSFirewallClusterParams) (*DNSFirewallCluster, error) {
+	if params.ClusterID == "" {
+		return &DNSFirewallCluster{}, ErrMissingClusterID
+	}
+
+	uri := fmt.Sprintf("/%s/dns_firewall/%s", rc.URLFragment(), params.ClusterID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, err
@@ -107,8 +142,8 @@ func (api *API) DNSFirewallCluster(ctx context.Context, clusterID string) (*DNSF
 // ListDNSFirewallClusters lists the DNS Firewall clusters associated with an account.
 //
 // API reference: https://api.cloudflare.com/#dns-firewall-list-dns-firewall-clusters
-func (api *API) ListDNSFirewallClusters(ctx context.Context) ([]*DNSFirewallCluster, error) {
-	uri := fmt.Sprintf("%s/dns_firewall", api.userBaseURL("/user"))
+func (api *API) ListDNSFirewallClusters(ctx context.Context, rc *ResourceContainer, params ListDNSFirewallClustersParams) ([]*DNSFirewallCluster, error) {
+	uri := fmt.Sprintf("/%s/dns_firewall", rc.URLFragment())
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, err
@@ -126,9 +161,13 @@ func (api *API) ListDNSFirewallClusters(ctx context.Context) ([]*DNSFirewallClus
 // UpdateDNSFirewallCluster updates a DNS Firewall cluster.
 //
 // API reference: https://api.cloudflare.com/#dns-firewall-update-dns-firewall-cluster
-func (api *API) UpdateDNSFirewallCluster(ctx context.Context, clusterID string, vv DNSFirewallCluster) error {
-	uri := fmt.Sprintf("%s/dns_firewall/%s", api.userBaseURL("/user"), clusterID)
-	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, vv)
+func (api *API) UpdateDNSFirewallCluster(ctx context.Context, rc *ResourceContainer, params UpdateDNSFirewallClusterParams) error {
+	if params.ClusterID == "" {
+		return ErrMissingClusterID
+	}
+
+	uri := fmt.Sprintf("/%s/dns_firewall/%s", rc.URLFragment(), params.ClusterID)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
 	if err != nil {
 		return err
 	}
@@ -146,8 +185,8 @@ func (api *API) UpdateDNSFirewallCluster(ctx context.Context, clusterID string, 
 // undone, and will stop all traffic to that cluster.
 //
 // API reference: https://api.cloudflare.com/#dns-firewall-delete-dns-firewall-cluster
-func (api *API) DeleteDNSFirewallCluster(ctx context.Context, clusterID string) error {
-	uri := fmt.Sprintf("%s/dns_firewall/%s", api.userBaseURL("/user"), clusterID)
+func (api *API) DeleteDNSFirewallCluster(ctx context.Context, rc *ResourceContainer, clusterID string) error {
+	uri := fmt.Sprintf("/%s/dns_firewall/%s", rc.URLFragment(), clusterID)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return err
@@ -162,24 +201,9 @@ func (api *API) DeleteDNSFirewallCluster(ctx context.Context, clusterID string) 
 	return nil
 }
 
-// encode encodes non-nil fields into URL encoded form.
-func (o DNSFirewallUserAnalyticsOptions) encode() string {
-	v := url.Values{}
-	if o.Since != nil {
-		v.Set("since", o.Since.UTC().Format(time.RFC3339))
-	}
-	if o.Until != nil {
-		v.Set("until", o.Until.UTC().Format(time.RFC3339))
-	}
-	if o.Metrics != nil {
-		v.Set("metrics", strings.Join(o.Metrics, ","))
-	}
-	return v.Encode()
-}
-
-// DNSFirewallUserAnalytics retrieves analytics report for a specified dimension and time range.
-func (api *API) DNSFirewallUserAnalytics(ctx context.Context, clusterID string, o DNSFirewallUserAnalyticsOptions) (DNSFirewallAnalytics, error) {
-	uri := fmt.Sprintf("%s/dns_firewall/%s/dns_analytics/report?%s", api.userBaseURL("/user"), clusterID, o.encode())
+// GetDNSFirewallUserAnalytics retrieves analytics report for a specified dimension and time range.
+func (api *API) GetDNSFirewallUserAnalytics(ctx context.Context, rc *ResourceContainer, params GetDNSFirewallUserAnalyticsParams) (DNSFirewallAnalytics, error) {
+	uri := buildURI(fmt.Sprintf("/%s/dns_firewall/%s/dns_analytics/report", rc.URLFragment(), params.ClusterID), params.DNSFirewallUserAnalyticsOptions)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return DNSFirewallAnalytics{}, err

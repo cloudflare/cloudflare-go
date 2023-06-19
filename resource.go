@@ -27,6 +27,11 @@ func (rc *ResourceContainer) URLFragment() string {
 	if rc.Level == "" {
 		return rc.Identifier
 	}
+
+	if rc.Level == UserRouteLevel {
+		return "user"
+	}
+
 	return fmt.Sprintf("%s/%s", rc.Level, rc.Identifier)
 }
 
