@@ -352,7 +352,7 @@ func TestZoneIDByNameWithNonUniqueZonesWithoutOrgID(t *testing.T) {
 }
 
 func TestZoneIDByNameWithIDN(t *testing.T) {
-	setup(UsingAccount("01a7362d577a6c3019a474fd6f485823"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
