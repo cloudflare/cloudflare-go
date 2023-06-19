@@ -1,5 +1,11 @@
 ## 0.70.0 (Unreleased)
 
+BREAKING CHANGES:
+
+* dns_firewall: modernise method signatures and conventions to align with the experimental client ([#1313](https://github.com/cloudflare/cloudflare-go/issues/1313))
+* railgun: remove support for railgun ([#1312](https://github.com/cloudflare/cloudflare-go/issues/1312))
+* virtualdns: remove support in favour of newer DNS firewall methods ([#1313](https://github.com/cloudflare/cloudflare-go/issues/1313))
+
 ENHANCEMENTS:
 
 * custom_nameservers: add support for managing custom nameservers ([#1304](https://github.com/cloudflare/cloudflare-go/issues/1304))
