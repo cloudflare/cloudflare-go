@@ -45,7 +45,6 @@ type API struct {
 	APIUserServiceKey string
 	APIToken          string
 	BaseURL           string
-	AccountID         string
 	UserAgent         string
 	headers           http.Header
 	httpClient        *http.Client
@@ -147,7 +146,7 @@ func (api *API) SetAuthType(authType int) {
 // ZoneIDByName retrieves a zone's ID from the name.
 func (api *API) ZoneIDByName(zoneName string) (string, error) {
 	zoneName = normalizeZoneName(zoneName)
-	res, err := api.ListZonesContext(context.Background(), WithZoneFilters(zoneName, api.AccountID, ""))
+	res, err := api.ListZonesContext(context.Background(), WithZoneFilters(zoneName, "", ""))
 	if err != nil {
 		return "", fmt.Errorf("ListZonesContext command failed: %w", err)
 	}
@@ -414,19 +413,6 @@ func (api *API) request(ctx context.Context, method, uri string, reqBody io.Read
 	}
 
 	return resp, nil
-}
-
-// Returns the base URL to use for API endpoints that exist for accounts.
-// If an account option was used when creating the API instance, returns
-// the account URL.
-//
-// accountBase is the base URL for endpoints referring to the current user.
-// It exists as a parameter because it is not consistent across APIs.
-func (api *API) userBaseURL(accountBase string) string {
-	if api.AccountID != "" {
-		return "/accounts/" + api.AccountID
-	}
-	return accountBase
 }
 
 // copyHeader copies all headers for `source` and sets them on `target`.
