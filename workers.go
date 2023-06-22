@@ -90,6 +90,11 @@ type WorkerScript struct {
 	UsageModel string `json:"usage_model,omitempty"`
 }
 
+type WorkersTailConsumer struct {
+	Service     string  `json:"service"`
+	Environment *string `json:"environment,omitempty"`
+}
+
 // WorkerMetaData contains worker script information such as size, creation & modification dates.
 type WorkerMetaData struct {
 	ID               string         `json:"id,omitempty"`
