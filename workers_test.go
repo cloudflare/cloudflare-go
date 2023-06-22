@@ -245,54 +245,67 @@ var (
 	}
 )
 
+//nolint:unused
 func withWorkerScript(content string) workersTestResponseOpt {
 	return func(r *WorkersTestScriptResponse) { r.Script = content }
 }
 
+//nolint:unused
 func withWorkerUsageModel(um string) workersTestResponseOpt {
 	return func(r *WorkersTestScriptResponse) { r.UsageModel = um }
 }
 
+//nolint:unused
 func withWorkerHandlers(h []string) workersTestResponseOpt {
 	return func(r *WorkersTestScriptResponse) { r.Handlers = h }
 }
 
+//nolint:unused
 func withWorkerID(id string) workersTestResponseOpt {
 	return func(r *WorkersTestScriptResponse) { r.ID = id }
 }
 
+//nolint:unused
 func withWorkerEtag(etag string) workersTestResponseOpt {
 	return func(r *WorkersTestScriptResponse) { r.ETAG = etag }
 }
 
+//nolint:unused
 func withWorkerSize(size uint) workersTestResponseOpt {
 	return func(r *WorkersTestScriptResponse) { r.Size = size }
 }
 
+//nolint:unused
 func withWorkerCreatedOn(co time.Time) workersTestResponseOpt {
 	return func(r *WorkersTestScriptResponse) { r.CreatedOn = co.Format(time.RFC3339Nano) }
 }
 
+//nolint:unused
 func withWorkerModifiedOn(mo time.Time) workersTestResponseOpt {
 	return func(r *WorkersTestScriptResponse) { r.ModifiedOn = mo.Format(time.RFC3339Nano) }
 }
 
+//nolint:unused
 func withWorkerLogpush(logpush *bool) workersTestResponseOpt {
 	return func(r *WorkersTestScriptResponse) { r.Logpush = logpush }
 }
 
+//nolint:unused
 func withWorkerPlacementMode(mode *string) workersTestResponseOpt {
 	return func(r *WorkersTestScriptResponse) { r.PlacementMode = mode }
 }
 
+//nolint:unused
 func withWorkerTailConsumers(consumers ...WorkersTailConsumer) workersTestResponseOpt {
 	return func(r *WorkersTestScriptResponse) { r.TailConsumers = &consumers }
 }
 
+//nolint:unused
 func withWorkerLastDeployedFrom(from *string) workersTestResponseOpt {
 	return func(r *WorkersTestScriptResponse) { r.LastDeployedFrom = from }
 }
 
+//nolint:unused
 func withWorkerDeploymentId(dID *string) workersTestResponseOpt {
 	return func(r *WorkersTestScriptResponse) { r.DeploymentId = dID }
 }
