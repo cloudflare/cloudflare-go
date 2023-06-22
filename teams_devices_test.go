@@ -41,7 +41,7 @@ func TestTeamsDevicesList(t *testing.T) {
               "os_version": "10.0.0",
               "os_distro_name": "ubuntu",
               "os_distro_revision": "1.0.0",
-			  "os_version_extra": "(a),
+			  "os_version_extra": "(a)",
               "mac_address": "00-00-5E-00-53-00",
               "ip": "192.0.2.1",
               "created": "2017-06-14T00:00:00Z",
