@@ -1,5 +1,9 @@
 ## 0.71.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* device_posture_rule: support os_version_extra ([#1316](https://github.com/cloudflare/cloudflare-go/issues/1316))
+
 ## 0.70.0 (June 21st, 2023)
 
 BREAKING CHANGES:
