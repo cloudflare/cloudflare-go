@@ -211,19 +211,20 @@ var (
 
 type (
 	WorkersTestScriptResponse struct {
-		Script            string   `json:"script"`
-		UsageModel        string   `json:"usage_model,omitempty"`
-		Handlers          []string `json:"handlers"`
-		ID                string   `json:"id,omitempty"`
-		ETAG              string   `json:"etag,omitempty"`
-		Size              uint     `json:"size,omitempty"`
-		CreatedOn         string   `json:"created_on,omitempty"`
-		ModifiedOn        string   `json:"modified_on,omitempty"`
-		LastDeployedFrom  *string  `json:"last_deployed_from,omitempty"`
-		DeploymentId      *string  `json:"deployment_id,omitempty"`
-		CompatibilityDate *string  `json:"compatibility_date,omitempty"`
-		Logpush           *bool    `json:"logpush,omitempty"`
-		PlacementMode     *string  `json:"placement_mode,omitempty"`
+		Script            string                 `json:"script"`
+		UsageModel        string                 `json:"usage_model,omitempty"`
+		Handlers          []string               `json:"handlers"`
+		ID                string                 `json:"id,omitempty"`
+		ETAG              string                 `json:"etag,omitempty"`
+		Size              uint                   `json:"size,omitempty"`
+		CreatedOn         string                 `json:"created_on,omitempty"`
+		ModifiedOn        string                 `json:"modified_on,omitempty"`
+		LastDeployedFrom  *string                `json:"last_deployed_from,omitempty"`
+		DeploymentId      *string                `json:"deployment_id,omitempty"`
+		CompatibilityDate *string                `json:"compatibility_date,omitempty"`
+		Logpush           *bool                  `json:"logpush,omitempty"`
+		TailConsumers     *[]WorkersTailConsumer `json:"tail_consumers,omitempty"`
+		PlacementMode     *string                `json:"placement_mode,omitempty"`
 	}
 	workersTestResponseOpt func(r *WorkersTestScriptResponse)
 )
@@ -282,6 +283,10 @@ func withWorkerLogpush(logpush *bool) workersTestResponseOpt {
 
 func withWorkerPlacementMode(mode *string) workersTestResponseOpt {
 	return func(r *WorkersTestScriptResponse) { r.PlacementMode = mode }
+}
+
+func withWorkerTailConsumers(consumers ...WorkersTailConsumer) workersTestResponseOpt {
+	return func(r *WorkersTestScriptResponse) { r.TailConsumers = &consumers }
 }
 
 func withWorkerLastDeployedFrom(from *string) workersTestResponseOpt {
@@ -1081,5 +1086,44 @@ func TestUploadWorker_WithSmartPlacementEnabled(t *testing.T) {
 		})
 		assert.NoError(t, err)
 		assert.Nil(t, worker.PlacementMode)
+	})
+}
+
+func TestUploadWorker_WithTailConsumers(t *testing.T) {
+	setup()
+	defer teardown()
+
+	response := workersScriptResponse(t,
+		withWorkerScript(expectedWorkersModuleWorkerScript))
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+
+		mpUpload, err := parseMultipartUpload(r)
+		assert.NoError(t, err)
+
+		assert.Equal(t, workerScript, mpUpload.Script)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, response)
+	}
+	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
+
+	t.Run("adds tail consumers", func(t *testing.T) {
+		tailConsumers := []WorkersTailConsumer{
+			{Service: "my-service-a"},
+			{Service: "my-service-b", Environment: ptr("production")},
+		}
+		response = workersScriptResponse(t,
+			withWorkerScript(expectedWorkersModuleWorkerScript),
+			withWorkerTailConsumers(tailConsumers...))
+
+		worker, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{
+			ScriptName:    "bar",
+			Script:        workerScript,
+			TailConsumers: ptr(tailConsumers),
+		})
+		assert.NoError(t, err)
+		require.NotNil(t, worker.TailConsumers)
+		assert.Len(t, *worker.TailConsumers, 2)
 	})
 }
