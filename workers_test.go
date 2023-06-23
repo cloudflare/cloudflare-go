@@ -963,7 +963,7 @@ func TestUploadWorker_WithLogpush(t *testing.T) {
 		assert.Equal(t, &expected, mpUpload.Logpush)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, workersScriptResponse(t, withWorkerLogpush(logpush), withWorkerModifiedOn(formattedTime)))
+		fmt.Fprint(w, workersScriptResponse(t, withWorkerScript(expectedWorkersModuleWorkerScript), withWorkerLogpush(logpush), withWorkerModifiedOn(formattedTime)))
 	})
 	res, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{ScriptName: "foo", Script: workerScript, Logpush: logpush})
 	want := WorkerScriptResponse{
