@@ -239,9 +239,9 @@ var (
 		ID:                "e7a57d8746e74ae49c25994dadb421b1",
 		ETAG:              "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
 		Size:              191,
-		LastDeployedFrom:  ptr("dash"),
-		Logpush:           ptr(false),
-		CompatibilityDate: ptr("2022-07-12"),
+		LastDeployedFrom:  StringPtr("dash"),
+		Logpush:           BoolPtr(false),
+		CompatibilityDate: StringPtr("2022-07-12"),
 	}
 )
 
@@ -545,8 +545,8 @@ func TestUploadWorker_Basic(t *testing.T) {
 				ETAG:             "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
 				Size:             191,
 				ModifiedOn:       formattedTime,
-				Logpush:          ptr(false),
-				LastDeployedFrom: ptr("dash"),
+				Logpush:          BoolPtr(false),
+				LastDeployedFrom: StringPtr("dash"),
 			},
 		}}
 	if assert.NoError(t, err) {
@@ -588,8 +588,8 @@ func TestUploadWorker_Module(t *testing.T) {
 				ETAG:             "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
 				Size:             191,
 				CreatedOn:        formattedCreatedTime,
-				Logpush:          ptr(false),
-				LastDeployedFrom: ptr("dash"),
+				Logpush:          BoolPtr(false),
+				LastDeployedFrom: StringPtr("dash"),
 			},
 		}}
 	if assert.NoError(t, err) {
@@ -680,8 +680,8 @@ func TestUploadWorker_WithInheritBinding(t *testing.T) {
 				ETAG:             "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
 				Size:             191,
 				ModifiedOn:       formattedTime,
-				Logpush:          ptr(false),
-				LastDeployedFrom: ptr("dash"),
+				Logpush:          BoolPtr(false),
+				LastDeployedFrom: StringPtr("dash"),
 			},
 		}}
 
@@ -952,7 +952,7 @@ func TestUploadWorker_WithLogpush(t *testing.T) {
 
 	var (
 		formattedTime, _ = time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
-		logpush          = ptr(true)
+		logpush          = BoolPtr(true)
 	)
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/foo", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
@@ -978,7 +978,7 @@ func TestUploadWorker_WithLogpush(t *testing.T) {
 				Size:             191,
 				ModifiedOn:       formattedTime,
 				Logpush:          logpush,
-				LastDeployedFrom: ptr("dash"),
+				LastDeployedFrom: StringPtr("dash"),
 			},
 		}}
 	if assert.NoError(t, err) {
@@ -1059,7 +1059,7 @@ func TestUploadWorker_WithSmartPlacementEnabled(t *testing.T) {
 	defer teardown()
 
 	placementMode := PlacementModeSmart
-	response := workersScriptResponse(t, withWorkerScript(expectedWorkersModuleWorkerScript), withWorkerPlacementMode(ptr("smart")))
+	response := workersScriptResponse(t, withWorkerScript(expectedWorkersModuleWorkerScript), withWorkerPlacementMode(StringPtr("smart")))
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
@@ -1124,7 +1124,7 @@ func TestUploadWorker_WithTailConsumers(t *testing.T) {
 	t.Run("adds tail consumers", func(t *testing.T) {
 		tailConsumers := []WorkersTailConsumer{
 			{Service: "my-service-a"},
-			{Service: "my-service-b", Environment: ptr("production")},
+			{Service: "my-service-b", Environment: StringPtr("production")},
 		}
 		response = workersScriptResponse(t,
 			withWorkerScript(expectedWorkersModuleWorkerScript),
@@ -1133,7 +1133,7 @@ func TestUploadWorker_WithTailConsumers(t *testing.T) {
 		worker, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{
 			ScriptName:    "bar",
 			Script:        workerScript,
-			TailConsumers: ptr(tailConsumers),
+			TailConsumers: &tailConsumers,
 		})
 		assert.NoError(t, err)
 		require.NotNil(t, worker.TailConsumers)

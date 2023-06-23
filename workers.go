@@ -28,12 +28,15 @@ type CreateWorkerParams struct {
 	// ES Module syntax script.
 	Module bool
 
-	// Logpush opts the worker into Workers Logpush logging. A nil value leaves the current setting unchanged.
-	//  https://developers.cloudflare.com/workers/platform/logpush/
+	// Logpush opts the worker into Workers Logpush logging. A nil value leaves
+	// the current setting unchanged.
+	//
+	// Documentation: https://developers.cloudflare.com/workers/platform/logpush/
 	Logpush *bool
 
-	// TailConsumers specifices a list of Workers that will consume the logs of the attached Worker.
-	//  https://developers.cloudflare.com/workers/platform/tail-workers/
+	// TailConsumers specifies a list of Workers that will consume the logs of
+	// the attached Worker.
+	// Documentation: https://developers.cloudflare.com/workers/platform/tail-workers/
 	TailConsumers *[]WorkersTailConsumer
 
 	// Bindings should be a map where the keys are the binding name, and the
