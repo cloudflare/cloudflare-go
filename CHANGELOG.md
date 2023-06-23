@@ -3,6 +3,7 @@
 ENHANCEMENTS:
 
 * device_posture_rule: support os_version_extra ([#1316](https://github.com/cloudflare/cloudflare-go/issues/1316))
+* workers: Add ability to specify tail Workers in script metadata ([#1317](https://github.com/cloudflare/cloudflare-go/issues/1317))
 
 ## 0.70.0 (June 21st, 2023)
 
