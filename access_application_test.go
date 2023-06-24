@@ -10,6 +10,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+const (
+	testAccessApplicationID = "480f4f69-1a28-4fdd-9240-1ed29f0ac1db"
+)
+
 func TestAccessApplications(t *testing.T) {
 	setup()
 	defer teardown()

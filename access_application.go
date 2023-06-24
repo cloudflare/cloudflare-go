@@ -144,7 +144,7 @@ func (api *API) ListAccessApplications(ctx context.Context, rc *ResourceContaine
 
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
-			return []AccessApplication{}, &ResultInfo{}, err
+			return []AccessApplication{}, &ResultInfo{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 		}
 
 		err = json.Unmarshal(res, &r)
@@ -175,7 +175,7 @@ func (api *API) GetAccessApplication(ctx context.Context, rc *ResourceContainer,
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return AccessApplication{}, err
+		return AccessApplication{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
 
 	var accessApplicationDetailResponse AccessApplicationDetailResponse
@@ -196,7 +196,7 @@ func (api *API) CreateAccessApplication(ctx context.Context, rc *ResourceContain
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, accessApplication)
 	if err != nil {
-		return AccessApplication{}, err
+		return AccessApplication{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
 
 	var accessApplicationDetailResponse AccessApplicationDetailResponse
@@ -226,7 +226,7 @@ func (api *API) UpdateAccessApplication(ctx context.Context, rc *ResourceContain
 
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, accessApplication)
 	if err != nil {
-		return AccessApplication{}, err
+		return AccessApplication{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
 
 	var accessApplicationDetailResponse AccessApplicationDetailResponse
@@ -252,7 +252,7 @@ func (api *API) DeleteAccessApplication(ctx context.Context, rc *ResourceContain
 
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return err
+		return fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
 
 	return nil
@@ -273,7 +273,7 @@ func (api *API) RevokeAccessApplicationTokens(ctx context.Context, rc *ResourceC
 
 	_, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
 	if err != nil {
-		return err
+		return fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
 
 	return nil
