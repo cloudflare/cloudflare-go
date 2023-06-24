@@ -1,0 +1,6 @@
+```release-note:breaking-change
+access_application: add support for auto pagination
+```
+```release-note:breaking-change
+access_application: Merge all methods to use ResourceContainer
+```
