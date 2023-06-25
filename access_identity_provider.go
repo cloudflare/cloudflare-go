@@ -59,79 +59,85 @@ type AccessIdentityProviderScimConfiguration struct {
 // Access Identity Providers.
 type AccessIdentityProvidersListResponse struct {
 	Response
-	Result []AccessIdentityProvider `json:"result"`
+	Result     []AccessIdentityProvider `json:"result"`
+	ResultInfo `json:"result_info"`
 }
 
-// AccessIdentityProviderListResponse is the API response for a single
+// AccessIdentityProviderResponse is the API response for a single
 // Access Identity Provider.
-type AccessIdentityProviderListResponse struct {
+type AccessIdentityProviderResponse struct {
 	Response
 	Result AccessIdentityProvider `json:"result"`
 }
 
-// AccessIdentityProviders returns all Access Identity Providers for an
+// ListAccessIdentityProviders returns all Access Identity Providers for an
 // account.
 //
-// API reference: https://api.cloudflare.com/#access-identity-providers-list-access-identity-providers
-func (api *API) AccessIdentityProviders(ctx context.Context, accountID string) ([]AccessIdentityProvider, error) {
-	return api.accessIdentityProviders(ctx, accountID, AccountRouteRoot)
-}
+// Account API Reference: https://developers.cloudflare.com/api/operations/access-identity-providers-list-access-identity-providers
+// Zone API Reference: https://developers.cloudflare.com/api/operations/zone-level-access-identity-providers-list-access-identity-providers
+func (api *API) ListAccessIdentityProviders(ctx context.Context, rc *ResourceContainer, pageOpts PaginationOptions) ([]AccessIdentityProvider, *ResultInfo, error) {
+	baseURL := fmt.Sprintf("/%s/%s/access/identity_providers", rc.Level, rc.Identifier)
 
-// ZoneLevelAccessIdentityProviders returns all Access Identity Providers for an
-// account.
-//
-// API reference: https://api.cloudflare.com/#zone-level-access-identity-providers-list-access-identity-providers
-func (api *API) ZoneLevelAccessIdentityProviders(ctx context.Context, zoneID string) ([]AccessIdentityProvider, error) {
-	return api.accessIdentityProviders(ctx, zoneID, ZoneRouteRoot)
-}
-
-func (api *API) accessIdentityProviders(ctx context.Context, id string, routeRoot RouteRoot) ([]AccessIdentityProvider, error) {
-	uri := fmt.Sprintf("/%s/%s/access/identity_providers", routeRoot, id)
-
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
-	if err != nil {
-		return []AccessIdentityProvider{}, err
+	autoPaginate := true
+	if pageOpts.PerPage >= 1 || pageOpts.Page >= 1 {
+		autoPaginate = false
 	}
 
-	var accessIdentityProviderResponse AccessIdentityProvidersListResponse
-	err = json.Unmarshal(res, &accessIdentityProviderResponse)
-	if err != nil {
-		return []AccessIdentityProvider{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	if pageOpts.PerPage < 1 {
+		pageOpts.PerPage = 25
 	}
 
-	return accessIdentityProviderResponse.Result, nil
+	if pageOpts.Page < 1 {
+		pageOpts.Page = 1
+	}
+
+	resultInfo := ResultInfo{
+		Page:    pageOpts.Page,
+		PerPage: pageOpts.PerPage,
+	}
+
+	var accessProviders []AccessIdentityProvider
+	var r AccessIdentityProvidersListResponse
+
+	for {
+		uri := buildURI(baseURL, resultInfo)
+		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+		if err != nil {
+			return []AccessIdentityProvider{}, &ResultInfo{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
+		}
+
+		err = json.Unmarshal(res, &r)
+		if err != nil {
+			return []AccessIdentityProvider{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		}
+		resultInfo = r.ResultInfo.Next()
+		if resultInfo.Done() || autoPaginate {
+			break
+		}
+	}
+
+	return accessProviders, &r.ResultInfo, nil
 }
 
-// AccessIdentityProviderDetails returns a single Access Identity
+// GetAccessIdentityProvider returns a single Access Identity
 // Provider for an account.
 //
-// API reference: https://api.cloudflare.com/#access-identity-providers-access-identity-providers-details
-func (api *API) AccessIdentityProviderDetails(ctx context.Context, accountID, identityProviderID string) (AccessIdentityProvider, error) {
-	return api.accessIdentityProviderDetails(ctx, accountID, identityProviderID, AccountRouteRoot)
-}
-
-// ZoneLevelAccessIdentityProviderDetails returns a single zone level Access Identity
-// Provider for an account.
-//
-// API reference: https://api.cloudflare.com/#zone-level-access-identity-providers-access-identity-providers-details
-func (api *API) ZoneLevelAccessIdentityProviderDetails(ctx context.Context, zoneID, identityProviderID string) (AccessIdentityProvider, error) {
-	return api.accessIdentityProviderDetails(ctx, zoneID, identityProviderID, ZoneRouteRoot)
-}
-
-func (api *API) accessIdentityProviderDetails(ctx context.Context, id string, identityProviderID string, routeRoot RouteRoot) (AccessIdentityProvider, error) {
+// Account API Reference: https://developers.cloudflare.com/api/operations/access-identity-providers-get-an-access-identity-provider
+// Zone API Reference: https://developers.cloudflare.com/api/operations/zone-level-access-identity-providers-get-an-access-identity-provider
+func (api *API) GetAccessIdentityProvider(ctx context.Context, rc *ResourceContainer, identityProviderID string) (AccessIdentityProvider, error) {
 	uri := fmt.Sprintf(
 		"/%s/%s/access/identity_providers/%s",
-		routeRoot,
-		id,
+		rc.Level,
+		rc.Identifier,
 		identityProviderID,
 	)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return AccessIdentityProvider{}, err
+		return AccessIdentityProvider{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
 
-	var accessIdentityProviderResponse AccessIdentityProviderListResponse
+	var accessIdentityProviderResponse AccessIdentityProviderResponse
 	err = json.Unmarshal(res, &accessIdentityProviderResponse)
 	if err != nil {
 		return AccessIdentityProvider{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
@@ -142,27 +148,17 @@ func (api *API) accessIdentityProviderDetails(ctx context.Context, id string, id
 
 // CreateAccessIdentityProvider creates a new Access Identity Provider.
 //
-// API reference: https://api.cloudflare.com/#access-identity-providers-create-access-identity-provider
-func (api *API) CreateAccessIdentityProvider(ctx context.Context, accountID string, identityProviderConfiguration AccessIdentityProvider) (AccessIdentityProvider, error) {
-	return api.createAccessIdentityProvider(ctx, accountID, identityProviderConfiguration, AccountRouteRoot)
-}
-
-// CreateZoneLevelAccessIdentityProvider creates a new zone level Access Identity Provider.
-//
-// API reference: https://api.cloudflare.com/#zone-level-access-identity-providers-create-access-identity-provider
-func (api *API) CreateZoneLevelAccessIdentityProvider(ctx context.Context, zoneID string, identityProviderConfiguration AccessIdentityProvider) (AccessIdentityProvider, error) {
-	return api.createAccessIdentityProvider(ctx, zoneID, identityProviderConfiguration, ZoneRouteRoot)
-}
-
-func (api *API) createAccessIdentityProvider(ctx context.Context, id string, identityProviderConfiguration AccessIdentityProvider, routeRoot RouteRoot) (AccessIdentityProvider, error) {
-	uri := fmt.Sprintf("/%s/%s/access/identity_providers", routeRoot, id)
+// Account API Reference: https://developers.cloudflare.com/api/operations/access-identity-providers-add-an-access-identity-provider
+// Zone API Reference: https://developers.cloudflare.com/api/operations/zone-level-access-identity-providers-add-an-access-identity-provider
+func (api *API) CreateAccessIdentityProvider(ctx context.Context, rc *ResourceContainer, identityProviderConfiguration AccessIdentityProvider) (AccessIdentityProvider, error) {
+	uri := fmt.Sprintf("/%s/%s/access/identity_providers", rc.Level, rc.Identifier)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, identityProviderConfiguration)
 	if err != nil {
-		return AccessIdentityProvider{}, err
+		return AccessIdentityProvider{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
 
-	var accessIdentityProviderResponse AccessIdentityProviderListResponse
+	var accessIdentityProviderResponse AccessIdentityProviderResponse
 	err = json.Unmarshal(res, &accessIdentityProviderResponse)
 	if err != nil {
 		return AccessIdentityProvider{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
@@ -174,24 +170,13 @@ func (api *API) createAccessIdentityProvider(ctx context.Context, id string, ide
 // UpdateAccessIdentityProvider updates an existing Access Identity
 // Provider.
 //
-// API reference: https://api.cloudflare.com/#access-identity-providers-create-access-identity-provider
-func (api *API) UpdateAccessIdentityProvider(ctx context.Context, accountID, identityProviderUUID string, identityProviderConfiguration AccessIdentityProvider) (AccessIdentityProvider, error) {
-	return api.updateAccessIdentityProvider(ctx, accountID, identityProviderUUID, identityProviderConfiguration, AccountRouteRoot)
-}
-
-// UpdateZoneLevelAccessIdentityProvider updates an existing zone level Access Identity
-// Provider.
-//
-// API reference: https://api.cloudflare.com/#zone-level-access-identity-providers-update-access-identity-provider
-func (api *API) UpdateZoneLevelAccessIdentityProvider(ctx context.Context, zoneID, identityProviderUUID string, identityProviderConfiguration AccessIdentityProvider) (AccessIdentityProvider, error) {
-	return api.updateAccessIdentityProvider(ctx, zoneID, identityProviderUUID, identityProviderConfiguration, ZoneRouteRoot)
-}
-
-func (api *API) updateAccessIdentityProvider(ctx context.Context, id string, identityProviderUUID string, identityProviderConfiguration AccessIdentityProvider, routeRoot RouteRoot) (AccessIdentityProvider, error) {
+// Account API Reference: https://developers.cloudflare.com/api/operations/access-identity-providers-update-an-access-identity-provider
+// Zone API Reference: https://developers.cloudflare.com/api/operations/zone-level-access-identity-providers-update-an-access-identity-provider
+func (api *API) UpdateAccessIdentityProvider(ctx context.Context, rc *ResourceContainer, identityProviderUUID string, identityProviderConfiguration AccessIdentityProvider) (AccessIdentityProvider, error) {
 	uri := fmt.Sprintf(
 		"/%s/%s/access/identity_providers/%s",
-		routeRoot,
-		id,
+		rc.Level,
+		rc.Identifier,
 		identityProviderUUID,
 	)
 
@@ -200,7 +185,7 @@ func (api *API) updateAccessIdentityProvider(ctx context.Context, id string, ide
 		return AccessIdentityProvider{}, err
 	}
 
-	var accessIdentityProviderResponse AccessIdentityProviderListResponse
+	var accessIdentityProviderResponse AccessIdentityProviderResponse
 	err = json.Unmarshal(res, &accessIdentityProviderResponse)
 	if err != nil {
 		return AccessIdentityProvider{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
@@ -211,32 +196,22 @@ func (api *API) updateAccessIdentityProvider(ctx context.Context, id string, ide
 
 // DeleteAccessIdentityProvider deletes an Access Identity Provider.
 //
-// API reference: https://api.cloudflare.com/#access-identity-providers-create-access-identity-provider
-func (api *API) DeleteAccessIdentityProvider(ctx context.Context, accountID, identityProviderUUID string) (AccessIdentityProvider, error) {
-	return api.deleteAccessIdentityProvider(ctx, accountID, identityProviderUUID, AccountRouteRoot)
-}
-
-// DeleteZoneLevelAccessIdentityProvider deletes a zone level Access Identity Provider.
-//
-// API reference: https://api.cloudflare.com/#zone-level-access-identity-providers-delete-access-identity-provider
-func (api *API) DeleteZoneLevelAccessIdentityProvider(ctx context.Context, zoneID, identityProviderUUID string) (AccessIdentityProvider, error) {
-	return api.deleteAccessIdentityProvider(ctx, zoneID, identityProviderUUID, ZoneRouteRoot)
-}
-
-func (api *API) deleteAccessIdentityProvider(ctx context.Context, id string, identityProviderUUID string, routeRoot RouteRoot) (AccessIdentityProvider, error) {
+// Account API Reference: https://developers.cloudflare.com/api/operations/access-identity-providers-delete-an-access-identity-provider
+// Zone API Reference: https://developers.cloudflare.com/api/operations/zone-level-access-identity-providers-delete-an-access-identity-provider
+func (api *API) DeleteAccessIdentityProvider(ctx context.Context, rc *ResourceContainer, identityProviderUUID string) (AccessIdentityProvider, error) {
 	uri := fmt.Sprintf(
 		"/%s/%s/access/identity_providers/%s",
-		routeRoot,
-		id,
+		rc.Level,
+		rc.Identifier,
 		identityProviderUUID,
 	)
 
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return AccessIdentityProvider{}, err
+		return AccessIdentityProvider{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
 
-	var accessIdentityProviderResponse AccessIdentityProviderListResponse
+	var accessIdentityProviderResponse AccessIdentityProviderResponse
 	err = json.Unmarshal(res, &accessIdentityProviderResponse)
 	if err != nil {
 		return AccessIdentityProvider{}, fmt.Errorf("%s: %w", errUnmarshalError, err)

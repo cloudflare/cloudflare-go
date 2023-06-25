@@ -20,6 +20,13 @@ access_group: add support for auto pagination
 ```
 
 ```release-note:breaking-change
+access_identity_provider: Merge all account and zone level operations to use Resource Container
+```
+```release-note:enhancement
+access_identity_provider: add support for auto pagination
+```
+
+```release-note:breaking-change
 access_mutual_tls_certificates: Merge all account and zone level operations to use Resource Container
 ```
 ```release-note:enhancement
