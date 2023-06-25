@@ -20,5 +20,8 @@ access_group: add support for auto pagination
 access_mutual_tls_certificates: Merge all account and zone level operations to use Resource Container
 ```
 ```release-note:breaking-change
+access_organization: Merge all account and zone level operations to use Resource Container
+```
+```release-note:breaking-change
 access_user_token: Merge all account and zone level operations to use Resource Container
 ```
