@@ -27,7 +27,7 @@ func TestRevokeAccessUserTokens(t *testing.T) {
 
 	AccessUserEmail := AccessUserEmail{Email: "test@example.com"}
 
-	err := client.RevokeAccessUserTokens(context.Background(), testAccountID, AccessUserEmail)
+	err := client.RevokeAccessUserTokens(context.Background(), testAccountRC, AccessUserEmail)
 
 	assert.NoError(t, err)
 }
@@ -50,7 +50,7 @@ func TestRevokeZoneLevelAccessUserTokens(t *testing.T) {
 
 	AccessUserEmail := AccessUserEmail{Email: "test@example.com"}
 
-	err := client.RevokeZoneLevelAccessUserTokens(context.Background(), testZoneID, AccessUserEmail)
+	err := client.RevokeAccessUserTokens(context.Background(), testZoneRC, AccessUserEmail)
 
 	assert.NoError(t, err)
 }

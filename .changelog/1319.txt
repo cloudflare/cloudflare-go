@@ -16,3 +16,6 @@ access_group: Merge all account and zone level operations to use Resource Contai
 ```release-note:enhancement
 access_group: add support for auto pagination
 ```
+```release-note:breaking-change
+access_user_token: Merge all account and zone level operations to use Resource Container
+```
