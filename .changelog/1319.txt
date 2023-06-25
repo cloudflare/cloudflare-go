@@ -1,6 +1,18 @@
 ```release-note:breaking-change
+access_application: Merge all account and zone level operations to use Resource Container
+```
+```release-note:enhancement
 access_application: add support for auto pagination
 ```
 ```release-note:breaking-change
-access_application: Merge all methods to use ResourceContainer
+access_ca_certificate: Merge all account and zone level operations to use Resource Container
+```
+```release-note:enhancement
+access_ca_certificate: add support for auto pagination
+```
+```release-note:breaking-change
+access_group: Merge all account and zone level operations to use Resource Container
+```
+```release-note:enhancement
+access_group: add support for auto pagination
 ```
