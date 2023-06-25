@@ -23,5 +23,8 @@ access_mutual_tls_certificates: Merge all account and zone level operations to u
 access_organization: Merge all account and zone level operations to use Resource Container
 ```
 ```release-note:breaking-change
+access_service_tokens: Merge all account and zone level operations to use Resource Container
+```
+```release-note:breaking-change
 access_user_token: Merge all account and zone level operations to use Resource Container
 ```
