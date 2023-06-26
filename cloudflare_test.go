@@ -22,10 +22,10 @@ var (
 	// server is a test HTTP server used to provide mock API responses.
 	server *httptest.Server
 
-	// testAccountRC is a test account resource container
+	// testAccountRC is a test account resource container.
 	testAccountRC = AccountIdentifier(testAccountID)
 
-	// testZoneRC is a test zone resource container
+	// testZoneRC is a test zone resource container.
 	testZoneRC = ZoneIdentifier(testZoneID)
 )
 

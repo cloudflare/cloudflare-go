@@ -300,7 +300,28 @@ func TestUpdateAccessApplication(t *testing.T) {
 		`)
 	}
 
-	fullAccessApplication := UpdateAccessApplicationParams{
+	fullAccessApplication := AccessApplication{
+		ID:                     "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		Name:                   "Admin Site",
+		Domain:                 "test.example.com/admin",
+		SelfHostedDomains:      []string{"test.example.com/admin", "test.example.com/admin2"},
+		Type:                   "self_hosted",
+		SessionDuration:        "24h",
+		AUD:                    "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
+		AllowedIdps:            []string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415"},
+		AutoRedirectToIdentity: BoolPtr(false),
+		EnableBindingCookie:    BoolPtr(false),
+		AppLauncherVisible:     BoolPtr(true),
+		ServiceAuth401Redirect: BoolPtr(true),
+		CustomDenyMessage:      "denied!",
+		CustomDenyURL:          "https://www.example.com",
+		LogoURL:                "https://www.example.com/example.png",
+		SkipInterstitial:       BoolPtr(true),
+		CreatedAt:              &createdAt,
+		UpdatedAt:              &updatedAt,
+	}
+
+	params := UpdateAccessApplicationParams{
 		ID:                     "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
 		Name:                   "Admin Site",
 		Domain:                 "test.example.com/admin",
@@ -321,7 +342,7 @@ func TestUpdateAccessApplication(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
-	actual, err := client.UpdateAccessApplication(context.Background(), AccountIdentifier(testAccountID), fullAccessApplication)
+	actual, err := client.UpdateAccessApplication(context.Background(), AccountIdentifier(testAccountID), params)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, fullAccessApplication, actual)
@@ -329,7 +350,24 @@ func TestUpdateAccessApplication(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
-	actual, err = client.UpdateAccessApplication(context.Background(), ZoneIdentifier(testZoneID), fullAccessApplication)
+	actual, err = client.UpdateAccessApplication(context.Background(), ZoneIdentifier(testZoneID), UpdateAccessApplicationParams{
+		ID:                     "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		Name:                   "Admin Site",
+		Domain:                 "test.example.com/admin",
+		SelfHostedDomains:      []string{"test.example.com/admin", "test.example.com/admin2"},
+		Type:                   "self_hosted",
+		SessionDuration:        "24h",
+		AUD:                    "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
+		AllowedIdps:            []string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415"},
+		AutoRedirectToIdentity: BoolPtr(false),
+		EnableBindingCookie:    BoolPtr(false),
+		AppLauncherVisible:     BoolPtr(true),
+		ServiceAuth401Redirect: BoolPtr(true),
+		CustomDenyMessage:      "denied!",
+		CustomDenyURL:          "https://www.example.com",
+		LogoURL:                "https://www.example.com/example.png",
+		SkipInterstitial:       BoolPtr(true),
+	})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, fullAccessApplication, actual)
