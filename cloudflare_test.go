@@ -481,7 +481,7 @@ func TestErrorFromResponseWithUnmarshalingError(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/apps", handler)
 
-	_, err := client.CreateAccessApplication(context.Background(), AccountIdentifier("01a7362d577a6c3019a474fd6f485823"), AccessApplication{
+	_, err := client.CreateAccessApplication(context.Background(), AccountIdentifier("01a7362d577a6c3019a474fd6f485823"), CreateAccessApplicationParams{
 		Name:            "Admin Site",
 		Domain:          "test.example.com/admin",
 		SessionDuration: "24h",

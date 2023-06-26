@@ -87,7 +87,7 @@ func TestAccessApplications(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps", handler)
 
-	actual, _, err := client.ListAccessApplications(context.Background(), AccountIdentifier(testAccountID), PaginationOptions{})
+	actual, _, err := client.ListAccessApplications(context.Background(), AccountIdentifier(testAccountID), ListAccessApplicationsParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -95,7 +95,7 @@ func TestAccessApplications(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/apps", handler)
 
-	actual, _, err = client.ListAccessApplications(context.Background(), ZoneIdentifier(testZoneID), PaginationOptions{})
+	actual, _, err = client.ListAccessApplications(context.Background(), ZoneIdentifier(testZoneID), ListAccessApplicationsParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -242,7 +242,7 @@ func TestCreateAccessApplications(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps", handler)
 
-	actual, err := client.CreateAccessApplication(context.Background(), AccountIdentifier(testAccountID), AccessApplication{
+	actual, err := client.CreateAccessApplication(context.Background(), AccountIdentifier(testAccountID), CreateAccessApplicationParams{
 		Name:            "Admin Site",
 		Domain:          "test.example.com/admin",
 		SessionDuration: "24h",
@@ -254,7 +254,7 @@ func TestCreateAccessApplications(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/apps", handler)
 
-	actual, err = client.CreateAccessApplication(context.Background(), ZoneIdentifier(testZoneID), AccessApplication{
+	actual, err = client.CreateAccessApplication(context.Background(), ZoneIdentifier(testZoneID), CreateAccessApplicationParams{
 		Name:            "Admin Site",
 		Domain:          "test.example.com/admin",
 		SessionDuration: "24h",
@@ -300,9 +300,7 @@ func TestUpdateAccessApplication(t *testing.T) {
 		`)
 	}
 
-	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
-	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
-	fullAccessApplication := AccessApplication{
+	fullAccessApplication := UpdateAccessApplicationParams{
 		ID:                     "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
 		Name:                   "Admin Site",
 		Domain:                 "test.example.com/admin",
@@ -319,8 +317,6 @@ func TestUpdateAccessApplication(t *testing.T) {
 		CustomDenyURL:          "https://www.example.com",
 		LogoURL:                "https://www.example.com/example.png",
 		SkipInterstitial:       BoolPtr(true),
-		CreatedAt:              &createdAt,
-		UpdatedAt:              &updatedAt,
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
@@ -344,10 +340,10 @@ func TestUpdateAccessApplicationWithMissingID(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.UpdateAccessApplication(context.Background(), AccountIdentifier(testAccountID), AccessApplication{})
+	_, err := client.UpdateAccessApplication(context.Background(), AccountIdentifier(testAccountID), UpdateAccessApplicationParams{})
 	assert.EqualError(t, err, "access application ID cannot be empty")
 
-	_, err = client.UpdateAccessApplication(context.Background(), AccountIdentifier(testAccountID), AccessApplication{})
+	_, err = client.UpdateAccessApplication(context.Background(), AccountIdentifier(testAccountID), UpdateAccessApplicationParams{})
 	assert.EqualError(t, err, "access application ID cannot be empty")
 }
 
@@ -546,7 +542,7 @@ func TestCreatePrivateAccessApplication(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps", handler)
 
-	actual, err := client.CreateAccessApplication(context.Background(), AccountIdentifier(testAccountID), AccessApplication{
+	actual, err := client.CreateAccessApplication(context.Background(), AccountIdentifier(testAccountID), CreateAccessApplicationParams{
 		Name:            "Admin Site",
 		PrivateAddress:  "198.51.100.0",
 		SessionDuration: "24h",
@@ -672,7 +668,7 @@ func TestCreateSaasAccessApplications(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps", handler)
 
-	actual, err := client.CreateAccessApplication(context.Background(), AccountIdentifier(testAccountID), AccessApplication{
+	actual, err := client.CreateAccessApplication(context.Background(), AccountIdentifier(testAccountID), CreateAccessApplicationParams{
 		Name: "Admin Saas Site",
 		SaasApplication: &SaasApplication{
 			ConsumerServiceUrl: "https://examplesaas.com",
@@ -688,7 +684,7 @@ func TestCreateSaasAccessApplications(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/apps", handler)
 
-	actual, err = client.CreateAccessApplication(context.Background(), ZoneIdentifier(testZoneID), AccessApplication{
+	actual, err = client.CreateAccessApplication(context.Background(), ZoneIdentifier(testZoneID), CreateAccessApplicationParams{
 		Name: "Admin Saas Site",
 		SaasApplication: &SaasApplication{
 			ConsumerServiceUrl: "https://saas.example.com",
