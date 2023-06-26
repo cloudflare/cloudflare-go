@@ -36,11 +36,32 @@ type AccessMutualTLSCertificateDetailResponse struct {
 	Result AccessMutualTLSCertificate `json:"result"`
 }
 
+type ListAccessMutualTLSCertificatesParams struct {
+	ResultInfo
+}
+
+type CreateAccessMutualTLSCertificateParams struct {
+	ExpiresOn           time.Time `json:"expires_on,omitempty"`
+	Name                string    `json:"name,omitempty"`
+	Fingerprint         string    `json:"fingerprint,omitempty"`
+	Certificate         string    `json:"certificate,omitempty"`
+	AssociatedHostnames []string  `json:"associated_hostnames,omitempty"`
+}
+
+type UpdateAccessMutualTLSCertificateParams struct {
+	ID                  string    `json:"-"`
+	ExpiresOn           time.Time `json:"expires_on,omitempty"`
+	Name                string    `json:"name,omitempty"`
+	Fingerprint         string    `json:"fingerprint,omitempty"`
+	Certificate         string    `json:"certificate,omitempty"`
+	AssociatedHostnames []string  `json:"associated_hostnames,omitempty"`
+}
+
 // ListAccessMutualTLSCertificates returns all Access TLS certificates
 //
 // Account API Reference: https://developers.cloudflare.com/api/operations/access-mtls-authentication-list-mtls-certificates
 // Zone API Reference: https://developers.cloudflare.com/api/operations/zone-level-access-mtls-authentication-list-mtls-certificates
-func (api *API) ListAccessMutualTLSCertificates(ctx context.Context, rc *ResourceContainer, pageOpts PaginationOptions) ([]AccessMutualTLSCertificate, *ResultInfo, error) {
+func (api *API) ListAccessMutualTLSCertificates(ctx context.Context, rc *ResourceContainer, params ListAccessMutualTLSCertificatesParams) ([]AccessMutualTLSCertificate, *ResultInfo, error) {
 	baseURL := fmt.Sprintf(
 		"/%s/%s/access/certificates",
 		rc.Level,
@@ -48,21 +69,21 @@ func (api *API) ListAccessMutualTLSCertificates(ctx context.Context, rc *Resourc
 	)
 
 	autoPaginate := true
-	if pageOpts.PerPage >= 1 || pageOpts.Page >= 1 {
+	if params.PerPage >= 1 || params.Page >= 1 {
 		autoPaginate = false
 	}
 
-	if pageOpts.PerPage < 1 {
-		pageOpts.PerPage = 25
+	if params.PerPage < 1 {
+		params.PerPage = 25
 	}
 
-	if pageOpts.Page < 1 {
-		pageOpts.Page = 1
+	if params.Page < 1 {
+		params.Page = 1
 	}
 
 	resultInfo := ResultInfo{
-		Page:    pageOpts.Page,
-		PerPage: pageOpts.PerPage,
+		Page:    params.Page,
+		PerPage: params.PerPage,
 	}
 
 	var accessCertificates []AccessMutualTLSCertificate
@@ -121,14 +142,14 @@ func (api *API) GetAccessMutualTLSCertificate(ctx context.Context, rc *ResourceC
 //
 // Account API Reference: https://developers.cloudflare.com/api/operations/access-mtls-authentication-add-an-mtls-certificate
 // Zone API Reference: https://developers.cloudflare.com/api/operations/zone-level-access-mtls-authentication-add-an-mtls-certificate
-func (api *API) CreateAccessMutualTLSCertificate(ctx context.Context, rc *ResourceContainer, certificate AccessMutualTLSCertificate) (AccessMutualTLSCertificate, error) {
+func (api *API) CreateAccessMutualTLSCertificate(ctx context.Context, rc *ResourceContainer, params CreateAccessMutualTLSCertificateParams) (AccessMutualTLSCertificate, error) {
 	uri := fmt.Sprintf(
 		"/%s/%s/access/certificates",
 		rc.Level,
 		rc.Identifier,
 	)
 
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, certificate)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return AccessMutualTLSCertificate{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
@@ -147,15 +168,15 @@ func (api *API) CreateAccessMutualTLSCertificate(ctx context.Context, rc *Resour
 //
 // Account API Reference: https://developers.cloudflare.com/api/operations/access-mtls-authentication-update-an-mtls-certificate
 // Zone API Reference: https://developers.cloudflare.com/api/operations/zone-level-access-mtls-authentication-update-an-mtls-certificate
-func (api *API) UpdateAccessMutualTLSCertificate(ctx context.Context, rc *ResourceContainer, certificateID string, certificate AccessMutualTLSCertificate) (AccessMutualTLSCertificate, error) {
+func (api *API) UpdateAccessMutualTLSCertificate(ctx context.Context, rc *ResourceContainer, params UpdateAccessMutualTLSCertificateParams) (AccessMutualTLSCertificate, error) {
 	uri := fmt.Sprintf(
 		"/%s/%s/access/certificates/%s",
 		rc.Level,
 		rc.Identifier,
-		certificateID,
+		params.ID,
 	)
 
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, certificate)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return AccessMutualTLSCertificate{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}

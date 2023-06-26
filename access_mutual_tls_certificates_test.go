@@ -53,7 +53,7 @@ func TestAccessMutualTLSCertificates(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/certificates", handler)
 
-	actual, _, err := client.ListAccessMutualTLSCertificates(context.Background(), testAccountRC, PaginationOptions{})
+	actual, _, err := client.ListAccessMutualTLSCertificates(context.Background(), testAccountRC, ListAccessMutualTLSCertificatesParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -61,7 +61,7 @@ func TestAccessMutualTLSCertificates(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/certificates", handler)
 
-	actual, _, err = client.ListAccessMutualTLSCertificates(context.Background(), testZoneRC, PaginationOptions{})
+	actual, _, err = client.ListAccessMutualTLSCertificates(context.Background(), testZoneRC, ListAccessMutualTLSCertificatesParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -153,7 +153,7 @@ func TestCreateAccessMutualTLSCertificate(t *testing.T) {
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	expiresOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 
-	certificate := AccessMutualTLSCertificate{
+	certificate := CreateAccessMutualTLSCertificateParams{
 		Name:        "Allow devs",
 		Certificate: "-----BEGIN CERTIFICATE-----\nMIIGAjCCA+qgAwIBAgIJAI7kymlF7CWT...N4RI7KKB7nikiuUf8vhULKy5IX10\nDrUtmu/B\n-----END CERTIFICATE-----",
 	}
@@ -214,7 +214,8 @@ func TestUpdateAccessMutualTLSCertificate(t *testing.T) {
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	expiresOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 
-	certificate := AccessMutualTLSCertificate{
+	certificate := UpdateAccessMutualTLSCertificateParams{
+		ID:          "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		Name:        "Allow devs",
 		Certificate: "-----BEGIN CERTIFICATE-----\nMIIGAjCCA+qgAwIBAgIJAI7kymlF7CWT...N4RI7KKB7nikiuUf8vhULKy5IX10\nDrUtmu/B\n-----END CERTIFICATE-----",
 	}
@@ -231,7 +232,7 @@ func TestUpdateAccessMutualTLSCertificate(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/certificates/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err := client.UpdateAccessMutualTLSCertificate(context.Background(), testAccountRC, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", certificate)
+	actual, err := client.UpdateAccessMutualTLSCertificate(context.Background(), testAccountRC, certificate)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -239,7 +240,7 @@ func TestUpdateAccessMutualTLSCertificate(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/certificates/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err = client.UpdateAccessMutualTLSCertificate(context.Background(), testZoneRC, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", certificate)
+	actual, err = client.UpdateAccessMutualTLSCertificate(context.Background(), testZoneRC, certificate)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
