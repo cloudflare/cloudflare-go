@@ -1,7 +1,25 @@
 ## 0.71.0 (Unreleased)
 
+BREAKING CHANGES:
+
+* access_application: refactor methods to use `ResourceContainer` instead of dedicated account/zone methods ([#1319](https://github.com/cloudflare/cloudflare-go/issues/1319))
+* access_ca_certificate: refactor methods to use `ResourceContainer` instead of dedicated account/zone methods ([#1319](https://github.com/cloudflare/cloudflare-go/issues/1319))
+* access_group: refactor methods to use `ResourceContainer` instead of dedicated account/zone methods ([#1319](https://github.com/cloudflare/cloudflare-go/issues/1319))
+* access_identity_provider: refactor methods to use `ResourceContainer` instead of dedicated account/zone methods ([#1319](https://github.com/cloudflare/cloudflare-go/issues/1319))
+* access_mutual_tls_certificates: refactor methods to use `ResourceContainer` instead of dedicated account/zone methods ([#1319](https://github.com/cloudflare/cloudflare-go/issues/1319))
+* access_organization: refactor methods to use `ResourceContainer` instead of dedicated account/zone methods ([#1319](https://github.com/cloudflare/cloudflare-go/issues/1319))
+* access_policy: refactor methods to use `ResourceContainer` instead of dedicated account/zone methods ([#1319](https://github.com/cloudflare/cloudflare-go/issues/1319))
+* access_service_tokens: refactor methods to use `ResourceContainer` instead of dedicated account/zone methods ([#1319](https://github.com/cloudflare/cloudflare-go/issues/1319))
+* access_user_token: refactor methods to use `ResourceContainer` instead of dedicated account/zone methods ([#1319](https://github.com/cloudflare/cloudflare-go/issues/1319))
+
 ENHANCEMENTS:
 
+* access_application: add support for auto pagination ([#1319](https://github.com/cloudflare/cloudflare-go/issues/1319))
+* access_ca_certificate: add support for auto pagination ([#1319](https://github.com/cloudflare/cloudflare-go/issues/1319))
+* access_group: add support for auto pagination ([#1319](https://github.com/cloudflare/cloudflare-go/issues/1319))
+* access_identity_provider: add support for auto pagination ([#1319](https://github.com/cloudflare/cloudflare-go/issues/1319))
+* access_mutual_tls_certificates: add support for auto pagination ([#1319](https://github.com/cloudflare/cloudflare-go/issues/1319))
+* access_policy: add support for auto pagination ([#1319](https://github.com/cloudflare/cloudflare-go/issues/1319))
 * device_posture_rule: support os_version_extra ([#1316](https://github.com/cloudflare/cloudflare-go/issues/1316))
 * workers: Add ability to specify tail Workers in script metadata ([#1317](https://github.com/cloudflare/cloudflare-go/issues/1317))
 
