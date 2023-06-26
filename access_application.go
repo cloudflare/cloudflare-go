@@ -112,64 +112,122 @@ type SaasApplication struct {
 	CustomAttributes   []SAMLAttributeConfig `json:"custom_attributes,omitempty"`
 }
 
-// AccessApplications returns all applications within an account.
-//
-// API reference: https://api.cloudflare.com/#access-applications-list-access-applications
-func (api *API) AccessApplications(ctx context.Context, accountID string, pageOpts PaginationOptions) ([]AccessApplication, ResultInfo, error) {
-	return api.accessApplications(ctx, accountID, pageOpts, AccountRouteRoot)
+type ListAccessApplicationsParams struct {
+	ResultInfo
 }
 
-// ZoneLevelAccessApplications returns all applications within a zone.
-//
-// API reference: https://api.cloudflare.com/#zone-level-access-applications-list-access-applications
-func (api *API) ZoneLevelAccessApplications(ctx context.Context, zoneID string, pageOpts PaginationOptions) ([]AccessApplication, ResultInfo, error) {
-	return api.accessApplications(ctx, zoneID, pageOpts, ZoneRouteRoot)
+type CreateAccessApplicationParams struct {
+	AllowedIdps             []string                       `json:"allowed_idps,omitempty"`
+	AppLauncherVisible      *bool                          `json:"app_launcher_visible,omitempty"`
+	AUD                     string                         `json:"aud,omitempty"`
+	AutoRedirectToIdentity  *bool                          `json:"auto_redirect_to_identity,omitempty"`
+	CorsHeaders             *AccessApplicationCorsHeaders  `json:"cors_headers,omitempty"`
+	CustomDenyMessage       string                         `json:"custom_deny_message,omitempty"`
+	CustomDenyURL           string                         `json:"custom_deny_url,omitempty"`
+	Domain                  string                         `json:"domain"`
+	EnableBindingCookie     *bool                          `json:"enable_binding_cookie,omitempty"`
+	GatewayRules            []AccessApplicationGatewayRule `json:"gateway_rules,omitempty"`
+	HttpOnlyCookieAttribute *bool                          `json:"http_only_cookie_attribute,omitempty"`
+	LogoURL                 string                         `json:"logo_url,omitempty"`
+	Name                    string                         `json:"name"`
+	PathCookieAttribute     *bool                          `json:"path_cookie_attribute,omitempty"`
+	PrivateAddress          string                         `json:"private_address"`
+	SaasApplication         *SaasApplication               `json:"saas_app,omitempty"`
+	SameSiteCookieAttribute string                         `json:"same_site_cookie_attribute,omitempty"`
+	SelfHostedDomains       []string                       `json:"self_hosted_domains"`
+	ServiceAuth401Redirect  *bool                          `json:"service_auth_401_redirect,omitempty"`
+	SessionDuration         string                         `json:"session_duration,omitempty"`
+	SkipInterstitial        *bool                          `json:"skip_interstitial,omitempty"`
+	Type                    AccessApplicationType          `json:"type,omitempty"`
 }
 
-func (api *API) accessApplications(ctx context.Context, id string, pageOpts PaginationOptions, routeRoot RouteRoot) ([]AccessApplication, ResultInfo, error) {
-	uri := buildURI(fmt.Sprintf("/%s/%s/access/apps", routeRoot, id), pageOpts)
+type UpdateAccessApplicationParams struct {
+	ID                      string                         `json:"id,omitempty"`
+	AllowedIdps             []string                       `json:"allowed_idps,omitempty"`
+	AppLauncherVisible      *bool                          `json:"app_launcher_visible,omitempty"`
+	AUD                     string                         `json:"aud,omitempty"`
+	AutoRedirectToIdentity  *bool                          `json:"auto_redirect_to_identity,omitempty"`
+	CorsHeaders             *AccessApplicationCorsHeaders  `json:"cors_headers,omitempty"`
+	CustomDenyMessage       string                         `json:"custom_deny_message,omitempty"`
+	CustomDenyURL           string                         `json:"custom_deny_url,omitempty"`
+	Domain                  string                         `json:"domain"`
+	EnableBindingCookie     *bool                          `json:"enable_binding_cookie,omitempty"`
+	GatewayRules            []AccessApplicationGatewayRule `json:"gateway_rules,omitempty"`
+	HttpOnlyCookieAttribute *bool                          `json:"http_only_cookie_attribute,omitempty"`
+	LogoURL                 string                         `json:"logo_url,omitempty"`
+	Name                    string                         `json:"name"`
+	PathCookieAttribute     *bool                          `json:"path_cookie_attribute,omitempty"`
+	PrivateAddress          string                         `json:"private_address"`
+	SaasApplication         *SaasApplication               `json:"saas_app,omitempty"`
+	SameSiteCookieAttribute string                         `json:"same_site_cookie_attribute,omitempty"`
+	SelfHostedDomains       []string                       `json:"self_hosted_domains"`
+	ServiceAuth401Redirect  *bool                          `json:"service_auth_401_redirect,omitempty"`
+	SessionDuration         string                         `json:"session_duration,omitempty"`
+	SkipInterstitial        *bool                          `json:"skip_interstitial,omitempty"`
+	Type                    AccessApplicationType          `json:"type,omitempty"`
+}
 
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
-	if err != nil {
-		return []AccessApplication{}, ResultInfo{}, err
+// ListAccessApplications returns all applications within an account or zone.
+//
+// Account API reference: https://developers.cloudflare.com/api/operations/access-applications-list-access-applications
+// Zone API reference: https://developers.cloudflare.com/api/operations/zone-level-access-applications-list-access-applications
+func (api *API) ListAccessApplications(ctx context.Context, rc *ResourceContainer, params ListAccessApplicationsParams) ([]AccessApplication, *ResultInfo, error) {
+	baseURL := fmt.Sprintf("/%s/%s/access/apps", rc.Level, rc.Identifier)
+
+	autoPaginate := true
+	if params.PerPage >= 1 || params.Page >= 1 {
+		autoPaginate = false
 	}
 
-	var accessApplicationListResponse AccessApplicationListResponse
-	err = json.Unmarshal(res, &accessApplicationListResponse)
-	if err != nil {
-		return []AccessApplication{}, ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	if params.PerPage < 1 {
+		params.PerPage = 25
 	}
 
-	return accessApplicationListResponse.Result, accessApplicationListResponse.ResultInfo, nil
+	if params.Page < 1 {
+		params.Page = 1
+	}
+
+	var applications []AccessApplication
+	var r AccessApplicationListResponse
+
+	for {
+		uri := buildURI(baseURL, params)
+
+		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+		if err != nil {
+			return []AccessApplication{}, &ResultInfo{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
+		}
+
+		err = json.Unmarshal(res, &r)
+		if err != nil {
+			return []AccessApplication{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		}
+		applications = append(applications, r.Result...)
+		params.ResultInfo = r.ResultInfo.Next()
+		if params.ResultInfo.Done() || autoPaginate {
+			break
+		}
+	}
+
+	return applications, &r.ResultInfo, nil
 }
 
-// AccessApplication returns a single application based on the
-// application ID.
+// GetAccessApplication returns a single application based on the application
+// ID for either account or zone.
 //
-// API reference: https://api.cloudflare.com/#access-applications-access-applications-details
-func (api *API) AccessApplication(ctx context.Context, accountID, applicationID string) (AccessApplication, error) {
-	return api.accessApplication(ctx, accountID, applicationID, AccountRouteRoot)
-}
-
-// ZoneLevelAccessApplication returns a single zone level application based on the
-// application ID.
-//
-// API reference: https://api.cloudflare.com/#zone-level-access-applications-access-applications-details
-func (api *API) ZoneLevelAccessApplication(ctx context.Context, zoneID, applicationID string) (AccessApplication, error) {
-	return api.accessApplication(ctx, zoneID, applicationID, ZoneRouteRoot)
-}
-
-func (api *API) accessApplication(ctx context.Context, id, applicationID string, routeRoot RouteRoot) (AccessApplication, error) {
+// Account API reference: https://developers.cloudflare.com/api/operations/access-applications-get-an-access-application
+// Zone API reference: https://developers.cloudflare.com/api/operations/zone-level-access-applications-get-an-access-application
+func (api *API) GetAccessApplication(ctx context.Context, rc *ResourceContainer, applicationID string) (AccessApplication, error) {
 	uri := fmt.Sprintf(
 		"/%s/%s/access/apps/%s",
-		routeRoot,
-		id,
+		rc.Level,
+		rc.Identifier,
 		applicationID,
 	)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return AccessApplication{}, err
+		return AccessApplication{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
 
 	var accessApplicationDetailResponse AccessApplicationDetailResponse
@@ -183,24 +241,14 @@ func (api *API) accessApplication(ctx context.Context, id, applicationID string,
 
 // CreateAccessApplication creates a new access application.
 //
-// API reference: https://api.cloudflare.com/#access-applications-create-access-application
-func (api *API) CreateAccessApplication(ctx context.Context, accountID string, accessApplication AccessApplication) (AccessApplication, error) {
-	return api.createAccessApplication(ctx, accountID, accessApplication, AccountRouteRoot)
-}
+// Account API reference: https://developers.cloudflare.com/api/operations/access-applications-add-an-application
+// Zone API reference: https://developers.cloudflare.com/api/operations/zone-level-access-applications-add-a-bookmark-application
+func (api *API) CreateAccessApplication(ctx context.Context, rc *ResourceContainer, params CreateAccessApplicationParams) (AccessApplication, error) {
+	uri := fmt.Sprintf("/%s/%s/access/apps", rc.Level, rc.Identifier)
 
-// CreateZoneLevelAccessApplication creates a new zone level access application.
-//
-// API reference: https://api.cloudflare.com/#zone-level-access-applications-create-access-application
-func (api *API) CreateZoneLevelAccessApplication(ctx context.Context, zoneID string, accessApplication AccessApplication) (AccessApplication, error) {
-	return api.createAccessApplication(ctx, zoneID, accessApplication, ZoneRouteRoot)
-}
-
-func (api *API) createAccessApplication(ctx context.Context, id string, accessApplication AccessApplication, routeRoot RouteRoot) (AccessApplication, error) {
-	uri := fmt.Sprintf("/%s/%s/access/apps", routeRoot, id)
-
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, accessApplication)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
-		return AccessApplication{}, err
+		return AccessApplication{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
 
 	var accessApplicationDetailResponse AccessApplicationDetailResponse
@@ -214,33 +262,23 @@ func (api *API) createAccessApplication(ctx context.Context, id string, accessAp
 
 // UpdateAccessApplication updates an existing access application.
 //
-// API reference: https://api.cloudflare.com/#access-applications-update-access-application
-func (api *API) UpdateAccessApplication(ctx context.Context, accountID string, accessApplication AccessApplication) (AccessApplication, error) {
-	return api.updateAccessApplication(ctx, accountID, accessApplication, AccountRouteRoot)
-}
-
-// UpdateZoneLevelAccessApplication updates an existing zone level access application.
-//
-// API reference: https://api.cloudflare.com/#zone-level-access-applications-update-access-application
-func (api *API) UpdateZoneLevelAccessApplication(ctx context.Context, zoneID string, accessApplication AccessApplication) (AccessApplication, error) {
-	return api.updateAccessApplication(ctx, zoneID, accessApplication, ZoneRouteRoot)
-}
-
-func (api *API) updateAccessApplication(ctx context.Context, id string, accessApplication AccessApplication, routeRoot RouteRoot) (AccessApplication, error) {
-	if accessApplication.ID == "" {
+// Account API reference: https://developers.cloudflare.com/api/operations/access-applications-update-a-bookmark-application
+// Zone API reference: https://developers.cloudflare.com/api/operations/zone-level-access-applications-update-a-bookmark-application
+func (api *API) UpdateAccessApplication(ctx context.Context, rc *ResourceContainer, params UpdateAccessApplicationParams) (AccessApplication, error) {
+	if params.ID == "" {
 		return AccessApplication{}, fmt.Errorf("access application ID cannot be empty")
 	}
 
 	uri := fmt.Sprintf(
 		"/%s/%s/access/apps/%s",
-		routeRoot,
-		id,
-		accessApplication.ID,
+		rc.Level,
+		rc.Identifier,
+		params.ID,
 	)
 
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, accessApplication)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
-		return AccessApplication{}, err
+		return AccessApplication{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
 
 	var accessApplicationDetailResponse AccessApplicationDetailResponse
@@ -254,29 +292,19 @@ func (api *API) updateAccessApplication(ctx context.Context, id string, accessAp
 
 // DeleteAccessApplication deletes an access application.
 //
-// API reference: https://api.cloudflare.com/#access-applications-delete-access-application
-func (api *API) DeleteAccessApplication(ctx context.Context, accountID, applicationID string) error {
-	return api.deleteAccessApplication(ctx, accountID, applicationID, AccountRouteRoot)
-}
-
-// DeleteZoneLevelAccessApplication deletes a zone level access application.
-//
-// API reference: https://api.cloudflare.com/#zone-level-access-applications-delete-access-application
-func (api *API) DeleteZoneLevelAccessApplication(ctx context.Context, zoneID, applicationID string) error {
-	return api.deleteAccessApplication(ctx, zoneID, applicationID, ZoneRouteRoot)
-}
-
-func (api *API) deleteAccessApplication(ctx context.Context, id, applicationID string, routeRoot RouteRoot) error {
+// Account API reference: https://developers.cloudflare.com/api/operations/access-applications-delete-an-access-application
+// Zone API reference: https://developers.cloudflare.com/api/operations/zone-level-access-applications-delete-an-access-application
+func (api *API) DeleteAccessApplication(ctx context.Context, rc *ResourceContainer, applicationID string) error {
 	uri := fmt.Sprintf(
 		"/%s/%s/access/apps/%s",
-		routeRoot,
-		id,
+		rc.Level,
+		rc.Identifier,
 		applicationID,
 	)
 
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return err
+		return fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
 
 	return nil
@@ -285,30 +313,19 @@ func (api *API) deleteAccessApplication(ctx context.Context, id, applicationID s
 // RevokeAccessApplicationTokens revokes tokens associated with an
 // access application.
 //
-// API reference: https://api.cloudflare.com/#access-applications-revoke-access-tokens
-func (api *API) RevokeAccessApplicationTokens(ctx context.Context, accountID, applicationID string) error {
-	return api.revokeAccessApplicationTokens(ctx, accountID, applicationID, AccountRouteRoot)
-}
-
-// RevokeZoneLevelAccessApplicationTokens revokes tokens associated with a zone level
-// access application.
-//
-// API reference: https://api.cloudflare.com/#zone-level-access-applications-revoke-access-tokens
-func (api *API) RevokeZoneLevelAccessApplicationTokens(ctx context.Context, zoneID, applicationID string) error {
-	return api.revokeAccessApplicationTokens(ctx, zoneID, applicationID, ZoneRouteRoot)
-}
-
-func (api *API) revokeAccessApplicationTokens(ctx context.Context, id string, applicationID string, routeRoot RouteRoot) error {
+// Account API reference: https://developers.cloudflare.com/api/operations/access-applications-revoke-service-tokens
+// Zone API reference: https://developers.cloudflare.com/api/operations/zone-level-access-applications-revoke-service-tokens
+func (api *API) RevokeAccessApplicationTokens(ctx context.Context, rc *ResourceContainer, applicationID string) error {
 	uri := fmt.Sprintf(
 		"/%s/%s/access/apps/%s/revoke-tokens",
-		routeRoot,
-		id,
+		rc.Level,
+		rc.Identifier,
 		applicationID,
 	)
 
 	_, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
 	if err != nil {
-		return err
+		return fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
 
 	return nil

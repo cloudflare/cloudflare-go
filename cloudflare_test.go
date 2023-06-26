@@ -21,6 +21,12 @@ var (
 
 	// server is a test HTTP server used to provide mock API responses.
 	server *httptest.Server
+
+	// testAccountRC is a test account resource container.
+	testAccountRC = AccountIdentifier(testAccountID)
+
+	// testZoneRC is a test zone resource container.
+	testZoneRC = ZoneIdentifier(testZoneID)
 )
 
 func setup(opts ...Option) {
@@ -352,7 +358,7 @@ func TestZoneIDByNameWithNonUniqueZonesWithoutOrgID(t *testing.T) {
 }
 
 func TestZoneIDByNameWithIDN(t *testing.T) {
-	setup(UsingAccount("01a7362d577a6c3019a474fd6f485823"))
+	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -475,7 +481,7 @@ func TestErrorFromResponseWithUnmarshalingError(t *testing.T) {
 
 	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/access/apps", handler)
 
-	_, err := client.CreateAccessApplication(context.Background(), "01a7362d577a6c3019a474fd6f485823", AccessApplication{
+	_, err := client.CreateAccessApplication(context.Background(), AccountIdentifier("01a7362d577a6c3019a474fd6f485823"), CreateAccessApplicationParams{
 		Name:            "Admin Site",
 		Domain:          "test.example.com/admin",
 		SessionDuration: "24h",

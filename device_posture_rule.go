@@ -178,6 +178,7 @@ type DevicePostureRuleInput struct {
 	Os               string   `json:"os,omitempty"`
 	OsDistroName     string   `json:"os_distro_name,omitempty"`
 	OsDistroRevision string   `json:"os_distro_revision,omitempty"`
+	OSVersionExtra   string   `json:"os_version_extra,omitempty"`
 	Operator         string   `json:"operator,omitempty"`
 	Domain           string   `json:"domain,omitempty"`
 	ComplianceStatus string   `json:"compliance_status,omitempty"`

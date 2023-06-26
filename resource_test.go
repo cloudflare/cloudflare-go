@@ -11,8 +11,11 @@ func TestResourcURLFragment(t *testing.T) {
 		container *ResourceContainer
 		want      string
 	}{
-		"account resource":       {container: AccountIdentifier("foo"), want: "accounts/foo"},
-		"zone resource":          {container: ZoneIdentifier("foo"), want: "zones/foo"},
+		"account resource": {container: AccountIdentifier("foo"), want: "accounts/foo"},
+		"zone resource":    {container: ZoneIdentifier("foo"), want: "zones/foo"},
+		// this is pretty well deprecated in favour of `AccountIdentifier` but
+		// here for completeness.
+		"user level resource":    {container: UserIdentifier("foo"), want: "user"},
 		"missing level resource": {container: &ResourceContainer{Level: "", Identifier: "foo"}, want: "foo"},
 	}
 
