@@ -48,7 +48,7 @@ func (api *API) AccessAuditLogs(ctx context.Context, accountID string, opts Acce
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []AccessAuditLogRecord{}, err
+		return []AccessAuditLogRecord{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
 
 	var accessAuditLogListResponse AccessAuditLogListResponse

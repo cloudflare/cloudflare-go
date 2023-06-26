@@ -3,9 +3,14 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
+)
+
+var (
+	ErrMissingServiceTokenUUID = errors.New("missing required service token UUID")
 )
 
 // AccessServiceToken represents an Access Service Token.
@@ -119,22 +124,19 @@ type AccessServiceTokensRotateSecretDetailResponse struct {
 	Result   AccessServiceTokenRotateResponse `json:"result"`
 }
 
-// AccessServiceTokens returns all Access Service Tokens for an account.
-//
-// API reference: https://api.cloudflare.com/#access-service-tokens-list-access-service-tokens
-func (api *API) AccessServiceTokens(ctx context.Context, accountID string) ([]AccessServiceToken, ResultInfo, error) {
-	return api.accessServiceTokens(ctx, accountID, AccountRouteRoot)
+type ListAccessServiceTokensParams struct{}
+
+type CreateAccessServiceTokenParams struct {
+	Name string `json:"name"`
 }
 
-// ZoneLevelAccessServiceTokens returns all Access Service Tokens for a zone.
-//
-// API reference: https://api.cloudflare.com/#zone-level-access-service-tokens-list-access-service-tokens
-func (api *API) ZoneLevelAccessServiceTokens(ctx context.Context, zoneID string) ([]AccessServiceToken, ResultInfo, error) {
-	return api.accessServiceTokens(ctx, zoneID, ZoneRouteRoot)
+type UpdateAccessServiceTokenParams struct {
+	Name string `json:"name"`
+	UUID string `json:"-"`
 }
 
-func (api *API) accessServiceTokens(ctx context.Context, id string, routeRoot RouteRoot) ([]AccessServiceToken, ResultInfo, error) {
-	uri := fmt.Sprintf("/%s/%s/access/service_tokens", routeRoot, id)
+func (api *API) ListAccessServiceTokens(ctx context.Context, rc *ResourceContainer, params ListAccessServiceTokensParams) ([]AccessServiceToken, ResultInfo, error) {
+	uri := fmt.Sprintf("/%s/%s/access/service_tokens", rc.Level, rc.Identifier)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -150,27 +152,9 @@ func (api *API) accessServiceTokens(ctx context.Context, id string, routeRoot Ro
 	return accessServiceTokensListResponse.Result, accessServiceTokensListResponse.ResultInfo, nil
 }
 
-// CreateAccessServiceToken creates a new Access Service Token for an account.
-//
-// API reference: https://api.cloudflare.com/#access-service-tokens-create-access-service-token
-func (api *API) CreateAccessServiceToken(ctx context.Context, accountID, name string) (AccessServiceTokenCreateResponse, error) {
-	return api.createAccessServiceToken(ctx, accountID, name, AccountRouteRoot)
-}
-
-// CreateZoneLevelAccessServiceToken creates a new Access Service Token for a zone.
-//
-// API reference: https://api.cloudflare.com/#zone-level-access-service-tokens-create-access-service-token
-func (api *API) CreateZoneLevelAccessServiceToken(ctx context.Context, zoneID, name string) (AccessServiceTokenCreateResponse, error) {
-	return api.createAccessServiceToken(ctx, zoneID, name, ZoneRouteRoot)
-}
-
-func (api *API) createAccessServiceToken(ctx context.Context, id, name string, routeRoot RouteRoot) (AccessServiceTokenCreateResponse, error) {
-	uri := fmt.Sprintf("/%s/%s/access/service_tokens", routeRoot, id)
-	marshalledName, _ := json.Marshal(struct {
-		Name string `json:"name"`
-	}{name})
-
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, marshalledName)
+func (api *API) CreateAccessServiceToken(ctx context.Context, rc *ResourceContainer, params CreateAccessServiceTokenParams) (AccessServiceTokenCreateResponse, error) {
+	uri := fmt.Sprintf("/%s/%s/access/service_tokens", rc.Level, rc.Identifier)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 
 	if err != nil {
 		return AccessServiceTokenCreateResponse{}, err
@@ -185,30 +169,14 @@ func (api *API) createAccessServiceToken(ctx context.Context, id, name string, r
 	return accessServiceTokenCreation.Result, nil
 }
 
-// UpdateAccessServiceToken updates an existing Access Service Token for an
-// account.
-//
-// API reference: https://api.cloudflare.com/#access-service-tokens-update-access-service-token
-func (api *API) UpdateAccessServiceToken(ctx context.Context, accountID, uuid, name string) (AccessServiceTokenUpdateResponse, error) {
-	return api.updateAccessServiceToken(ctx, accountID, uuid, name, AccountRouteRoot)
-}
+func (api *API) UpdateAccessServiceToken(ctx context.Context, rc *ResourceContainer, params UpdateAccessServiceTokenParams) (AccessServiceTokenUpdateResponse, error) {
+	if params.UUID == "" {
+		return AccessServiceTokenUpdateResponse{}, ErrMissingServiceTokenUUID
+	}
 
-// UpdateZoneLevelAccessServiceToken updates an existing Access Service Token for a
-// zone.
-//
-// API reference: https://api.cloudflare.com/#zone-level-access-service-tokens-update-access-service-token
-func (api *API) UpdateZoneLevelAccessServiceToken(ctx context.Context, zoneID, uuid, name string) (AccessServiceTokenUpdateResponse, error) {
-	return api.updateAccessServiceToken(ctx, zoneID, uuid, name, ZoneRouteRoot)
-}
+	uri := fmt.Sprintf("/%s/%s/access/service_tokens/%s", rc.Level, rc.Identifier, params.UUID)
 
-func (api *API) updateAccessServiceToken(ctx context.Context, id, uuid, name string, routeRoot RouteRoot) (AccessServiceTokenUpdateResponse, error) {
-	uri := fmt.Sprintf("/%s/%s/access/service_tokens/%s", routeRoot, id, uuid)
-
-	marshalledName, _ := json.Marshal(struct {
-		Name string `json:"name"`
-	}{name})
-
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, marshalledName)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return AccessServiceTokenUpdateResponse{}, err
 	}
@@ -222,24 +190,8 @@ func (api *API) updateAccessServiceToken(ctx context.Context, id, uuid, name str
 	return accessServiceTokenUpdate.Result, nil
 }
 
-// DeleteAccessServiceToken removes an existing Access Service Token for an
-// account.
-//
-// API reference: https://api.cloudflare.com/#access-service-tokens-delete-access-service-token
-func (api *API) DeleteAccessServiceToken(ctx context.Context, accountID, uuid string) (AccessServiceTokenUpdateResponse, error) {
-	return api.deleteAccessServiceToken(ctx, accountID, uuid, AccountRouteRoot)
-}
-
-// DeleteZoneLevelAccessServiceToken removes an existing Access Service Token for a
-// zone.
-//
-// API reference: https://api.cloudflare.com/#zone-level-access-service-tokens-delete-access-service-token
-func (api *API) DeleteZoneLevelAccessServiceToken(ctx context.Context, zoneID, uuid string) (AccessServiceTokenUpdateResponse, error) {
-	return api.deleteAccessServiceToken(ctx, zoneID, uuid, ZoneRouteRoot)
-}
-
-func (api *API) deleteAccessServiceToken(ctx context.Context, id, uuid string, routeRoot RouteRoot) (AccessServiceTokenUpdateResponse, error) {
-	uri := fmt.Sprintf("/%s/%s/access/service_tokens/%s", routeRoot, id, uuid)
+func (api *API) DeleteAccessServiceToken(ctx context.Context, rc *ResourceContainer, uuid string) (AccessServiceTokenUpdateResponse, error) {
+	uri := fmt.Sprintf("/%s/%s/access/service_tokens/%s", rc.Level, rc.Identifier, uuid)
 
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
