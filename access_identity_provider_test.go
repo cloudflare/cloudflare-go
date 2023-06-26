@@ -57,7 +57,7 @@ func TestListAccessIdentityProviders(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/identity_providers", handler)
 
-	actual, _, err := client.ListAccessIdentityProviders(context.Background(), testAccountRC, PaginationOptions{})
+	actual, _, err := client.ListAccessIdentityProviders(context.Background(), testAccountRC, ListAccessIdentityProvidersParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -65,7 +65,7 @@ func TestListAccessIdentityProviders(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/identity_providers", handler)
 
-	actual, _, err = client.ListAccessIdentityProviders(context.Background(), testZoneRC, PaginationOptions{})
+	actual, _, err = client.ListAccessIdentityProviders(context.Background(), testZoneRC, ListAccessIdentityProvidersParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -147,7 +147,7 @@ func TestCreateAccessIdentityProvider(t *testing.T) {
 		`)
 	}
 
-	newIdentityProvider := AccessIdentityProvider{
+	newIdentityProvider := CreateAccessIdentityProviderParams{
 		Name: "Widget Corps OTP",
 		Type: "github",
 		Config: AccessIdentityProviderConfiguration{
@@ -206,7 +206,8 @@ func TestUpdateAccessIdentityProvider(t *testing.T) {
 		`)
 	}
 
-	updatedIdentityProvider := AccessIdentityProvider{
+	updatedIdentityProvider := UpdateAccessIdentityProviderParams{
+		ID:   "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		Name: "Widget Corps OTP",
 		Type: "github",
 		Config: AccessIdentityProviderConfiguration{
@@ -227,7 +228,7 @@ func TestUpdateAccessIdentityProvider(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err := client.UpdateAccessIdentityProvider(context.Background(), testAccountRC, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", updatedIdentityProvider)
+	actual, err := client.UpdateAccessIdentityProvider(context.Background(), testAccountRC, updatedIdentityProvider)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -235,7 +236,7 @@ func TestUpdateAccessIdentityProvider(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err = client.UpdateAccessIdentityProvider(context.Background(), testZoneRC, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", updatedIdentityProvider)
+	actual, err = client.UpdateAccessIdentityProvider(context.Background(), testZoneRC, updatedIdentityProvider)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
