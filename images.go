@@ -84,9 +84,9 @@ type ImageDirectUploadURLRequest struct {
 }
 
 type ImageDirectUploadURLV2Request struct {
-	Expiry            time.Time              `json:"expiry"`
+	Expiry            *time.Time             `json:"expiry,omitempty"`
 	Metadata          map[string]interface{} `json:"metadata,omitempty"`
-	RequireSignedURLs bool                   `json:"requireSignedURLs"`
+	RequireSignedURLs *bool                  `json:"requireSignedURLs,omitempty"`
 }
 
 // ImageDirectUploadURLResponse is the API response for a direct image upload url.
@@ -214,7 +214,7 @@ func (api *API) CreateImageDirectUploadURLV2(ctx context.Context, accountID stri
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 	writer.SetBoundary(imagesMultipartBoundary)
-	if params.RequireSignedURLs {
+	if *params.RequireSignedURLs {
 		writer.WriteField("requireSignedURLs", "true")
 	}
 	if !params.Expiry.IsZero() {

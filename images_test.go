@@ -199,10 +199,11 @@ func TestCreateImageDirectUploadURLV2(t *testing.T) {
 		"metaKey1": "metaValue1",
 		"metaKey2": "metaValue2",
 	}
+	requireSignedURLs := true
 	input := ImageDirectUploadURLV2Request{
-		Expiry:            exp,
+		Expiry:            &exp,
 		Metadata:          metadata,
-		RequireSignedURLs: true,
+		RequireSignedURLs: &requireSignedURLs,
 	}
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
