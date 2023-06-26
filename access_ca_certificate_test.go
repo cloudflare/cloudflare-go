@@ -80,7 +80,7 @@ func TestAccessCACertificates(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/ca", handler)
 
-	actual, _, err := client.ListAccessCACertificates(context.Background(), testAccountRC, PaginationOptions{})
+	actual, _, err := client.ListAccessCACertificates(context.Background(), testAccountRC, ListAccessCACertificatesParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -88,7 +88,7 @@ func TestAccessCACertificates(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/apps/ca", handler)
 
-	actual, _, err = client.ListAccessCACertificates(context.Background(), testZoneRC, PaginationOptions{})
+	actual, _, err = client.ListAccessCACertificates(context.Background(), testZoneRC, ListAccessCACertificatesParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -123,7 +123,7 @@ func TestCreateAccessCACertificates(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/ca", handler)
 
-	actual, err := client.CreateAccessCACertificate(context.Background(), testAccountRC, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	actual, err := client.CreateAccessCACertificate(context.Background(), testAccountRC, CreateAccessCACertificateParams{ApplicationID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -131,7 +131,7 @@ func TestCreateAccessCACertificates(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/apps/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/ca", handler)
 
-	actual, err = client.CreateAccessCACertificate(context.Background(), testZoneRC, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	actual, err = client.CreateAccessCACertificate(context.Background(), testZoneRC, CreateAccessCACertificateParams{ApplicationID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)

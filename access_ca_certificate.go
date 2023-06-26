@@ -30,29 +30,37 @@ type AccessCACertificateResponse struct {
 	Result AccessCACertificate `json:"result"`
 }
 
+type ListAccessCACertificatesParams struct {
+	PaginationOptions
+}
+
+type CreateAccessCACertificateParams struct {
+	ApplicationID string
+}
+
 // ListAccessCACertificates returns all AccessCACertificate within Access.
 //
 // Account API reference: https://developers.cloudflare.com/api/operations/access-short-lived-certificate-c-as-list-short-lived-certificate-c-as
 // Zone API reference: https://developers.cloudflare.com/api/operations/zone-level-access-short-lived-certificate-c-as-list-short-lived-certificate-c-as
-func (api *API) ListAccessCACertificates(ctx context.Context, rc *ResourceContainer, pageOpts PaginationOptions) ([]AccessCACertificate, *ResultInfo, error) {
+func (api *API) ListAccessCACertificates(ctx context.Context, rc *ResourceContainer, params ListAccessCACertificatesParams) ([]AccessCACertificate, *ResultInfo, error) {
 	baseURL := fmt.Sprintf("/%s/%s/access/apps/ca", rc.Level, rc.Identifier)
 
 	autoPaginate := true
-	if pageOpts.PerPage >= 1 || pageOpts.Page >= 1 {
+	if params.PerPage >= 1 || params.Page >= 1 {
 		autoPaginate = false
 	}
 
-	if pageOpts.PerPage < 1 {
-		pageOpts.PerPage = 25
+	if params.PerPage < 1 {
+		params.PerPage = 25
 	}
 
-	if pageOpts.Page < 1 {
-		pageOpts.Page = 1
+	if params.Page < 1 {
+		params.Page = 1
 	}
 
 	resultInfo := ResultInfo{
-		Page:    pageOpts.Page,
-		PerPage: pageOpts.PerPage,
+		Page:    params.Page,
+		PerPage: params.PerPage,
 	}
 
 	var accessCACertificates []AccessCACertificate
@@ -79,7 +87,8 @@ func (api *API) ListAccessCACertificates(ctx context.Context, rc *ResourceContai
 	return accessCACertificates, &resultInfo, nil
 }
 
-// GetAccessCACertificate returns a single CA certificate associated within Access.
+// GetAccessCACertificate returns a single CA certificate associated within
+// Access.
 //
 // Account API reference: https://developers.cloudflare.com/api/operations/access-short-lived-certificate-c-as-get-a-short-lived-certificate-ca
 // Zone API reference: https://developers.cloudflare.com/api/operations/zone-level-access-short-lived-certificate-c-as-get-a-short-lived-certificate-ca
@@ -104,12 +113,12 @@ func (api *API) GetAccessCACertificate(ctx context.Context, rc *ResourceContaine
 //
 // Account API reference: https://developers.cloudflare.com/api/operations/access-short-lived-certificate-c-as-create-a-short-lived-certificate-ca
 // Zone API reference: https://developers.cloudflare.com/api/operations/zone-level-access-short-lived-certificate-c-as-create-a-short-lived-certificate-ca
-func (api *API) CreateAccessCACertificate(ctx context.Context, rc *ResourceContainer, applicationID string) (AccessCACertificate, error) {
+func (api *API) CreateAccessCACertificate(ctx context.Context, rc *ResourceContainer, params CreateAccessCACertificateParams) (AccessCACertificate, error) {
 	uri := fmt.Sprintf(
 		"/%s/%s/access/apps/%s/ca",
 		rc.Level,
 		rc.Identifier,
-		applicationID,
+		params.ApplicationID,
 	)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
