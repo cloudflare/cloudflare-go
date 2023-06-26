@@ -69,63 +69,65 @@ func TestAccessPolicies(t *testing.T) {
 			"errors": [],
 			"messages": [],
 			"result": [
-				{
-					"id": "699d98642c564d2e855e9661899b7252",
-					"precedence": 1,
-					"decision": "allow",
-					"created_at": "2014-01-01T05:20:00.12345Z",
-					"updated_at": "2014-01-01T05:20:00.12345Z",
-					"name": "Allow devs",
-					"include": [
-						{
-							"email": {
-								"email": "test@example.com"
-							}
-						}
+			  {
+				"id": "699d98642c564d2e855e9661899b7252",
+				"precedence": 1,
+				"decision": "allow",
+				"created_at": "2014-01-01T05:20:00.12345Z",
+				"updated_at": "2014-01-01T05:20:00.12345Z",
+				"name": "Allow devs",
+				"include": [
+				  {
+					"email": {
+					  "email": "test@example.com"
+					}
+				  }
+				],
+				"exclude": [
+				  {
+					"email": {
+					  "email": "test@example.com"
+					}
+				  }
+				],
+				"require": [
+				  {
+					"email": {
+					  "email": "test@example.com"
+					}
+				  }
+				],
+				"isolation_required": true,
+				"purpose_justification_required": true,
+				"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing.",
+				"approval_required": true,
+				"approval_groups": [
+				  {
+					"email_list_uuid": "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
+					"approvals_needed": 3
+				  },
+				  {
+					"email_addresses": [
+					  "email1@example.com",
+					  "email2@example.com"
 					],
-					"exclude": [
-						{
-							"email": {
-								"email": "test@example.com"
-							}
-						}
-					],
-					"require": [
-						{
-							"email": {
-								"email": "test@example.com"
-							}
-						}
-					],
-					"isolation_required": true,
-					"purpose_justification_required": true,
-					"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing.",
-					"approval_required": true,
-					"approval_groups": [
-						{
-							"email_list_uuid": "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
-							"approvals_needed": 3
-						},
-						{
-							"email_addresses": ["email1@example.com", "email2@example.com"],
-							"approvals_needed": 1
-						}
-					]
-				}
+					"approvals_needed": 1
+				  }
+				]
+			  }
 			],
 			"result_info": {
-				"page": 1,
-				"per_page": 20,
-				"count": 1,
-				"total_count": 2000
+			  "page": 1,
+			  "per_page": 20,
+			  "count": 1,
+			  "total_count": 20
 			}
-		}
-		`)
+		  }`)
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/"+accessApplicationID+"/policies", handler)
 
-	actual, _, err := client.ListAccessPolicies(context.Background(), testAccountRC, accessApplicationID, pageOptions)
+	actual, _, err := client.ListAccessPolicies(context.Background(), testAccountRC, ListAccessPoliciesParams{ApplicationID: accessApplicationID})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, []AccessPolicy{expectedAccessPolicy}, actual)
@@ -133,7 +135,7 @@ func TestAccessPolicies(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/apps/"+accessApplicationID+"/policies", handler)
 
-	actual, _, err = client.ListAccessPolicies(context.Background(), testZoneRC, accessApplicationID, pageOptions)
+	actual, _, err = client.ListAccessPolicies(context.Background(), testZoneRC, ListAccessPoliciesParams{ApplicationID: accessApplicationID})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, []AccessPolicy{expectedAccessPolicy}, actual)
@@ -200,7 +202,7 @@ func TestAccessPolicy(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/"+accessApplicationID+"/policies/"+accessPolicyID, handler)
 
-	actual, err := client.GetAccessPolicy(context.Background(), testAccountRC, accessApplicationID, accessPolicyID)
+	actual, err := client.GetAccessPolicy(context.Background(), testAccountRC, GetAccessPolicyParams{ApplicationID: accessApplicationID, PolicyID: accessPolicyID})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessPolicy, actual)
@@ -208,7 +210,7 @@ func TestAccessPolicy(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/apps/"+accessApplicationID+"/policies/"+accessPolicyID, handler)
 
-	actual, err = client.GetAccessPolicy(context.Background(), testZoneRC, accessApplicationID, accessPolicyID)
+	actual, err = client.GetAccessPolicy(context.Background(), testZoneRC, GetAccessPolicyParams{ApplicationID: accessApplicationID, PolicyID: accessPolicyID})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessPolicy, actual)
@@ -273,8 +275,9 @@ func TestCreateAccessPolicy(t *testing.T) {
 		`)
 	}
 
-	accessPolicy := AccessPolicy{
-		Name: "Allow devs",
+	accessPolicy := CreateAccessPolicyParams{
+		ApplicationID: accessApplicationID,
+		Name:          "Allow devs",
 		Include: []interface{}{
 			AccessGroupEmail{struct {
 				Email string `json:"email"`
@@ -307,7 +310,7 @@ func TestCreateAccessPolicy(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/"+accessApplicationID+"/policies", handler)
 
-	actual, err := client.CreateAccessPolicy(context.Background(), testAccountRC, accessApplicationID, accessPolicy)
+	actual, err := client.CreateAccessPolicy(context.Background(), testAccountRC, accessPolicy)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessPolicy, actual)
@@ -315,7 +318,7 @@ func TestCreateAccessPolicy(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/apps/"+accessApplicationID+"/policies", handler)
 
-	actual, err = client.CreateAccessPolicy(context.Background(), testZoneRC, accessApplicationID, accessPolicy)
+	actual, err = client.CreateAccessPolicy(context.Background(), testZoneRC, accessPolicy)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessPolicy, actual)
@@ -425,12 +428,12 @@ func TestDeleteAccessPolicy(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/"+accessApplicationID+"/policies/"+accessPolicyID, handler)
-	err := client.DeleteAccessPolicy(context.Background(), testAccountRC, accessApplicationID, accessPolicyID)
+	err := client.DeleteAccessPolicy(context.Background(), testAccountRC, DeleteAccessPolicyParams{ApplicationID: accessApplicationID, PolicyID: accessPolicyID})
 
 	assert.NoError(t, err)
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/apps/"+accessApplicationID+"/policies/"+accessPolicyID, handler)
-	err = client.DeleteAccessPolicy(context.Background(), testZoneRC, accessApplicationID, accessPolicyID)
+	err = client.DeleteAccessPolicy(context.Background(), testZoneRC, DeleteAccessPolicyParams{ApplicationID: accessApplicationID, PolicyID: accessPolicyID})
 
 	assert.NoError(t, err)
 }
