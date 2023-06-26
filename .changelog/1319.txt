@@ -1,52 +1,59 @@
 ```release-note:breaking-change
-access_application: Merge all account and zone level operations to use Resource Container
+access_application: refactor methods to use `ResourceContainer` instead of dedicated account/zone methods
 ```
+
 ```release-note:enhancement
 access_application: add support for auto pagination
 ```
 
 ```release-note:breaking-change
-access_ca_certificate: Merge all account and zone level operations to use Resource Container
+access_ca_certificate: refactor methods to use `ResourceContainer` instead of dedicated account/zone methods
 ```
+
 ```release-note:enhancement
 access_ca_certificate: add support for auto pagination
 ```
 
 ```release-note:breaking-change
-access_group: Merge all account and zone level operations to use Resource Container
+access_group: refactor methods to use `ResourceContainer` instead of dedicated account/zone methods
 ```
+
 ```release-note:enhancement
 access_group: add support for auto pagination
 ```
 
 ```release-note:breaking-change
-access_identity_provider: Merge all account and zone level operations to use Resource Container
+access_identity_provider: refactor methods to use `ResourceContainer` instead of dedicated account/zone methods
 ```
+
 ```release-note:enhancement
 access_identity_provider: add support for auto pagination
 ```
 
 ```release-note:breaking-change
-access_mutual_tls_certificates: Merge all account and zone level operations to use Resource Container
+access_mutual_tls_certificates: refactor methods to use `ResourceContainer` instead of dedicated account/zone methods
 ```
+
 ```release-note:enhancement
 access_mutual_tls_certificates: add support for auto pagination
 ```
 
 ```release-note:breaking-change
-access_organization: Merge all account and zone level operations to use Resource Container
+access_organization: refactor methods to use `ResourceContainer` instead of dedicated account/zone methods
 ```
 
 ```release-note:breaking-change
-access_policy: Merge all account and zone level operations to use Resource Container
+access_policy: refactor methods to use `ResourceContainer` instead of dedicated account/zone methods
 ```
+
 ```release-note:enhancement
 access_policy: add support for auto pagination
 ```
 
 ```release-note:breaking-change
-access_service_tokens: Merge all account and zone level operations to use Resource Container
+access_service_tokens: refactor methods to use `ResourceContainer` instead of dedicated account/zone methods
 ```
+
 ```release-note:breaking-change
-access_user_token: Merge all account and zone level operations to use Resource Container
+access_user_token: refactor methods to use `ResourceContainer` instead of dedicated account/zone methods
 ```
