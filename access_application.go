@@ -113,7 +113,7 @@ type SaasApplication struct {
 }
 
 type ListAccessApplicationsParams struct {
-	PaginationOptions
+	ResultInfo
 }
 
 type CreateAccessApplicationParams struct {
@@ -187,15 +187,11 @@ func (api *API) ListAccessApplications(ctx context.Context, rc *ResourceContaine
 		params.Page = 1
 	}
 
-	resultInfo := ResultInfo{
-		Page:    params.Page,
-		PerPage: params.PerPage,
-	}
-
 	var applications []AccessApplication
 	var r AccessApplicationListResponse
+
 	for {
-		uri := buildURI(baseURL, resultInfo)
+		uri := buildURI(baseURL, params)
 
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
@@ -207,8 +203,8 @@ func (api *API) ListAccessApplications(ctx context.Context, rc *ResourceContaine
 			return []AccessApplication{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 		}
 		applications = append(applications, r.Result...)
-		resultInfo = r.ResultInfo.Next()
-		if resultInfo.Done() || autoPaginate {
+		params.ResultInfo = r.ResultInfo.Next()
+		if params.ResultInfo.Done() || autoPaginate {
 			break
 		}
 	}

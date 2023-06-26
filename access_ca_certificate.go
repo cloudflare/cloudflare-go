@@ -31,7 +31,7 @@ type AccessCACertificateResponse struct {
 }
 
 type ListAccessCACertificatesParams struct {
-	PaginationOptions
+	ResultInfo
 }
 
 type CreateAccessCACertificateParams struct {
@@ -58,16 +58,11 @@ func (api *API) ListAccessCACertificates(ctx context.Context, rc *ResourceContai
 		params.Page = 1
 	}
 
-	resultInfo := ResultInfo{
-		Page:    params.Page,
-		PerPage: params.PerPage,
-	}
-
 	var accessCACertificates []AccessCACertificate
 	var r AccessCACertificateListResponse
 
 	for {
-		uri := buildURI(baseURL, resultInfo)
+		uri := buildURI(baseURL, params)
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
 			return []AccessCACertificate{}, &ResultInfo{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
@@ -78,13 +73,13 @@ func (api *API) ListAccessCACertificates(ctx context.Context, rc *ResourceContai
 			return []AccessCACertificate{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 		}
 		accessCACertificates = append(accessCACertificates, r.Result...)
-		resultInfo = r.ResultInfo.Next()
-		if resultInfo.Done() || autoPaginate {
+		params.ResultInfo = r.ResultInfo.Next()
+		if params.ResultInfo.Done() || autoPaginate {
 			break
 		}
 	}
 
-	return accessCACertificates, &resultInfo, nil
+	return accessCACertificates, &r.ResultInfo, nil
 }
 
 // GetAccessCACertificate returns a single CA certificate associated within

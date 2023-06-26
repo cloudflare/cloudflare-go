@@ -91,7 +91,7 @@ func TestAccessGroups(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/groups", handler)
 
-	actual, _, err := client.ListAccessGroups(context.Background(), testAccountRC, ListAccessGroupsParams{PaginationOptions{}})
+	actual, _, err := client.ListAccessGroups(context.Background(), testAccountRC, ListAccessGroupsParams{ResultInfo{}})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, []AccessGroup{expectedAccessGroup}, actual)
@@ -99,7 +99,7 @@ func TestAccessGroups(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/groups", handler)
 
-	actual, _, err = client.ListAccessGroups(context.Background(), testZoneRC, ListAccessGroupsParams{PaginationOptions{}})
+	actual, _, err = client.ListAccessGroups(context.Background(), testZoneRC, ListAccessGroupsParams{ResultInfo{}})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, []AccessGroup{expectedAccessGroup}, actual)

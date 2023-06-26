@@ -204,7 +204,7 @@ type AccessGroupDetailResponse struct {
 }
 
 type ListAccessGroupsParams struct {
-	PaginationOptions
+	ResultInfo
 }
 
 type CreateAccessGroupParams struct {
@@ -260,16 +260,11 @@ func (api *API) ListAccessGroups(ctx context.Context, rc *ResourceContainer, par
 		params.Page = 1
 	}
 
-	resultInfo := ResultInfo{
-		Page:    params.Page,
-		PerPage: params.PerPage,
-	}
-
 	var accessGroups []AccessGroup
 	var r AccessGroupListResponse
 
 	for {
-		uri := buildURI(baseURL, resultInfo)
+		uri := buildURI(baseURL, params)
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
 			return []AccessGroup{}, &ResultInfo{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
@@ -280,8 +275,8 @@ func (api *API) ListAccessGroups(ctx context.Context, rc *ResourceContainer, par
 			return []AccessGroup{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 		}
 		accessGroups = append(accessGroups, r.Result...)
-		resultInfo = r.ResultInfo.Next()
-		if resultInfo.Done() || autoPaginate {
+		params.ResultInfo = r.ResultInfo.Next()
+		if params.ResultInfo.Done() || autoPaginate {
 			break
 		}
 	}

@@ -81,16 +81,11 @@ func (api *API) ListAccessMutualTLSCertificates(ctx context.Context, rc *Resourc
 		params.Page = 1
 	}
 
-	resultInfo := ResultInfo{
-		Page:    params.Page,
-		PerPage: params.PerPage,
-	}
-
 	var accessCertificates []AccessMutualTLSCertificate
 	var r AccessMutualTLSCertificateListResponse
 
 	for {
-		uri := buildURI(baseURL, resultInfo)
+		uri := buildURI(baseURL, params)
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
 			return []AccessMutualTLSCertificate{}, &ResultInfo{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
@@ -101,8 +96,8 @@ func (api *API) ListAccessMutualTLSCertificates(ctx context.Context, rc *Resourc
 			return []AccessMutualTLSCertificate{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 		}
 		accessCertificates = append(accessCertificates, r.Result...)
-		resultInfo = r.ResultInfo.Next()
-		if resultInfo.Done() || autoPaginate {
+		params.ResultInfo = r.ResultInfo.Next()
+		if params.ResultInfo.Done() || autoPaginate {
 			break
 		}
 	}
