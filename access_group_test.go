@@ -91,7 +91,7 @@ func TestAccessGroups(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/groups", handler)
 
-	actual, _, err := client.ListAccessGroups(context.Background(), testAccountRC, pageOptions)
+	actual, _, err := client.ListAccessGroups(context.Background(), testAccountRC, ListAccessGroupsParams{PaginationOptions{}})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, []AccessGroup{expectedAccessGroup}, actual)
@@ -99,7 +99,7 @@ func TestAccessGroups(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/groups", handler)
 
-	actual, _, err = client.ListAccessGroups(context.Background(), testZoneRC, pageOptions)
+	actual, _, err = client.ListAccessGroups(context.Background(), testZoneRC, ListAccessGroupsParams{PaginationOptions{}})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, []AccessGroup{expectedAccessGroup}, actual)
@@ -209,7 +209,7 @@ func TestCreateAccessGroup(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/groups", handler)
 
-	accessGroup := AccessGroup{
+	params := CreateAccessGroupParams{
 		Name: "Allow devs",
 		Include: []interface{}{
 			AccessGroupEmail{struct {
@@ -228,7 +228,7 @@ func TestCreateAccessGroup(t *testing.T) {
 		},
 	}
 
-	actual, err := client.CreateAccessGroup(context.Background(), testAccountRC, accessGroup)
+	actual, err := client.CreateAccessGroup(context.Background(), testAccountRC, params)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessGroup, actual)
@@ -236,7 +236,7 @@ func TestCreateAccessGroup(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/groups", handler)
 
-	actual, err = client.CreateAccessGroup(context.Background(), testZoneRC, accessGroup)
+	actual, err = client.CreateAccessGroup(context.Background(), testZoneRC, params)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessGroup, actual)
@@ -285,15 +285,28 @@ func TestUpdateAccessGroup(t *testing.T) {
 		`)
 	}
 
+	params := UpdateAccessGroupParams{
+		ID:   "699d98642c564d2e855e9661899b7252",
+		Name: "Allow devs",
+		Include: []interface{}{
+			map[string]interface{}{"email": map[string]interface{}{"email": "test@example.com"}},
+		},
+		Exclude: []interface{}{
+			map[string]interface{}{"email": map[string]interface{}{"email": "test@example.com"}},
+		},
+		Require: []interface{}{
+			map[string]interface{}{"email": map[string]interface{}{"email": "test@example.com"}},
+		},
+	}
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/groups/"+accessGroupID, handler)
-	actual, err := client.UpdateAccessGroup(context.Background(), testAccountRC, expectedAccessGroup)
+	actual, err := client.UpdateAccessGroup(context.Background(), testAccountRC, params)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessGroup, actual)
 	}
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/groups/"+accessGroupID, handler)
-	actual, err = client.UpdateAccessGroup(context.Background(), testZoneRC, expectedAccessGroup)
+	actual, err = client.UpdateAccessGroup(context.Background(), testZoneRC, params)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessGroup, actual)
@@ -304,10 +317,10 @@ func TestUpdateAccessGroupWithMissingID(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.UpdateAccessGroup(context.Background(), testAccountRC, AccessGroup{})
+	_, err := client.UpdateAccessGroup(context.Background(), testAccountRC, UpdateAccessGroupParams{})
 	assert.EqualError(t, err, "access group ID cannot be empty")
 
-	_, err = client.UpdateAccessGroup(context.Background(), testZoneRC, AccessGroup{})
+	_, err = client.UpdateAccessGroup(context.Background(), testZoneRC, UpdateAccessGroupParams{})
 	assert.EqualError(t, err, "access group ID cannot be empty")
 }
 
@@ -370,7 +383,7 @@ func TestCreateIPListAccessGroup(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/groups", handler)
 
-	accessGroup := AccessGroup{
+	accessGroup := CreateAccessGroupParams{
 		Name: "Allow devs by iplist",
 		Include: []interface{}{
 			AccessGroupIPList{struct {

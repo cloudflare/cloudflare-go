@@ -203,29 +203,66 @@ type AccessGroupDetailResponse struct {
 	Result   AccessGroup `json:"result"`
 }
 
+type ListAccessGroupsParams struct {
+	PaginationOptions
+}
+
+type CreateAccessGroupParams struct {
+	Name string `json:"name"`
+
+	// The include group works like an OR logical operator. The user must
+	// satisfy one of the rules.
+	Include []interface{} `json:"include"`
+
+	// The exclude group works like a NOT logical operator. The user must
+	// not satisfy all the rules in exclude.
+	Exclude []interface{} `json:"exclude"`
+
+	// The require group works like a AND logical operator. The user must
+	// satisfy all the rules in require.
+	Require []interface{} `json:"require"`
+}
+
+type UpdateAccessGroupParams struct {
+	ID   string `json:"id,omitempty"`
+	Name string `json:"name"`
+
+	// The include group works like an OR logical operator. The user must
+	// satisfy one of the rules.
+	Include []interface{} `json:"include"`
+
+	// The exclude group works like a NOT logical operator. The user must
+	// not satisfy all the rules in exclude.
+	Exclude []interface{} `json:"exclude"`
+
+	// The require group works like a AND logical operator. The user must
+	// satisfy all the rules in require.
+	Require []interface{} `json:"require"`
+}
+
 // ListAccessGroups returns all access groups for an access application.
 //
 // Account API Reference: https://developers.cloudflare.com/api/operations/access-groups-list-access-groups
 // Zone API Reference: https://developers.cloudflare.com/api/operations/zone-level-access-groups-list-access-groups
-func (api *API) ListAccessGroups(ctx context.Context, rc *ResourceContainer, pageOpts PaginationOptions) ([]AccessGroup, *ResultInfo, error) {
+func (api *API) ListAccessGroups(ctx context.Context, rc *ResourceContainer, params ListAccessGroupsParams) ([]AccessGroup, *ResultInfo, error) {
 	baseURL := fmt.Sprintf("/%s/%s/access/groups", rc.Level, rc.Identifier)
 
 	autoPaginate := true
-	if pageOpts.PerPage >= 1 || pageOpts.Page >= 1 {
+	if params.PerPage >= 1 || params.Page >= 1 {
 		autoPaginate = false
 	}
 
-	if pageOpts.PerPage < 1 {
-		pageOpts.PerPage = 25
+	if params.PerPage < 1 {
+		params.PerPage = 25
 	}
 
-	if pageOpts.Page < 1 {
-		pageOpts.Page = 1
+	if params.Page < 1 {
+		params.Page = 1
 	}
 
 	resultInfo := ResultInfo{
-		Page:    pageOpts.Page,
-		PerPage: pageOpts.PerPage,
+		Page:    params.Page,
+		PerPage: params.PerPage,
 	}
 
 	var accessGroups []AccessGroup
@@ -278,18 +315,18 @@ func (api *API) GetAccessGroup(ctx context.Context, rc *ResourceContainer, group
 	return accessGroupDetailResponse.Result, nil
 }
 
-// CreateAccessGroup creates a new access group
+// CreateAccessGroup creates a new access group.
 //
 // Account API Reference: https://developers.cloudflare.com/api/operations/access-groups-create-an-access-group
 // Zone API Reference:https://developers.cloudflare.com/api/operations/zone-level-access-groups-create-an-access-group
-func (api *API) CreateAccessGroup(ctx context.Context, rc *ResourceContainer, accessGroup AccessGroup) (AccessGroup, error) {
+func (api *API) CreateAccessGroup(ctx context.Context, rc *ResourceContainer, params CreateAccessGroupParams) (AccessGroup, error) {
 	uri := fmt.Sprintf(
 		"/%s/%s/access/groups",
 		rc.Level,
 		rc.Identifier,
 	)
 
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, accessGroup)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return AccessGroup{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
@@ -303,12 +340,12 @@ func (api *API) CreateAccessGroup(ctx context.Context, rc *ResourceContainer, ac
 	return accessGroupDetailResponse.Result, nil
 }
 
-// UpdateAccessGroup updates an existing access group
+// UpdateAccessGroup updates an existing access group.
 //
 // Account API Reference: https://developers.cloudflare.com/api/operations/access-groups-update-an-access-group
 // Zone API Reference: https://developers.cloudflare.com/api/operations/zone-level-access-groups-update-an-access-group
-func (api *API) UpdateAccessGroup(ctx context.Context, rc *ResourceContainer, accessGroup AccessGroup) (AccessGroup, error) {
-	if accessGroup.ID == "" {
+func (api *API) UpdateAccessGroup(ctx context.Context, rc *ResourceContainer, params UpdateAccessGroupParams) (AccessGroup, error) {
+	if params.ID == "" {
 		return AccessGroup{}, fmt.Errorf("access group ID cannot be empty")
 	}
 
@@ -316,10 +353,10 @@ func (api *API) UpdateAccessGroup(ctx context.Context, rc *ResourceContainer, ac
 		"/%s/%s/access/groups/%s",
 		rc.Level,
 		rc.Identifier,
-		accessGroup.ID,
+		params.ID,
 	)
 
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, accessGroup)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return AccessGroup{}, err
 	}
