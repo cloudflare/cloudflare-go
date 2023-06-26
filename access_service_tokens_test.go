@@ -52,7 +52,7 @@ func TestAccessServiceTokens(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/service_tokens", handler)
 
-	actual, _, err := client.ListAccessServiceTokens(context.Background(), testAccountRC)
+	actual, _, err := client.ListAccessServiceTokens(context.Background(), testAccountRC, ListAccessServiceTokensParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -60,7 +60,7 @@ func TestAccessServiceTokens(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/service_tokens", handler)
 
-	actual, _, err = client.ListAccessServiceTokens(context.Background(), testZoneRC)
+	actual, _, err = client.ListAccessServiceTokens(context.Background(), testZoneRC, ListAccessServiceTokensParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -103,7 +103,7 @@ func TestCreateAccessServiceToken(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/service_tokens", handler)
 
-	actual, err := client.CreateAccessServiceToken(context.Background(), testAccountRC, "CI/CD token")
+	actual, err := client.CreateAccessServiceToken(context.Background(), testAccountRC, CreateAccessServiceTokenParams{Name: "CI/CD token"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expected, actual)
@@ -111,7 +111,7 @@ func TestCreateAccessServiceToken(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/service_tokens", handler)
 
-	actual, err = client.CreateAccessServiceToken(context.Background(), testZoneRC, "CI/CD token")
+	actual, err = client.CreateAccessServiceToken(context.Background(), testZoneRC, CreateAccessServiceTokenParams{Name: "CI/CD token"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expected, actual)
@@ -152,7 +152,7 @@ func TestUpdateAccessServiceToken(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/service_tokens/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err := client.UpdateAccessServiceToken(context.Background(), testAccountRC, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", "CI/CD token")
+	actual, err := client.UpdateAccessServiceToken(context.Background(), testAccountRC, UpdateAccessServiceTokenParams{UUID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", Name: "CI/CD token"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expected, actual)
@@ -160,7 +160,7 @@ func TestUpdateAccessServiceToken(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/service_tokens/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err = client.UpdateAccessServiceToken(context.Background(), testZoneRC, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", "CI/CD token")
+	actual, err = client.UpdateAccessServiceToken(context.Background(), testZoneRC, UpdateAccessServiceTokenParams{UUID: "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", Name: "CI/CD token"})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expected, actual)
