@@ -63,7 +63,7 @@ func TestAccessOrganization(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/organizations", handler)
 
-	actual, _, err := client.GetAccessOrganization(context.Background(), testAccountRC)
+	actual, _, err := client.GetAccessOrganization(context.Background(), testAccountRC, GetAccessOrganizationParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -71,7 +71,7 @@ func TestAccessOrganization(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/organizations", handler)
 
-	actual, _, err = client.GetAccessOrganization(context.Background(), testZoneRC)
+	actual, _, err = client.GetAccessOrganization(context.Background(), testZoneRC, GetAccessOrganizationParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -111,9 +111,9 @@ func TestCreateAccessOrganization(t *testing.T) {
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 
 	want := AccessOrganization{
-		Name:       "Widget Corps Internal Applications",
 		CreatedAt:  &createdAt,
 		UpdatedAt:  &updatedAt,
+		Name:       "Widget Corps Internal Applications",
 		AuthDomain: "test.cloudflareaccess.com",
 		LoginDesign: AccessOrganizationLoginDesign{
 			BackgroundColor: "#c5ed1b",
@@ -127,7 +127,18 @@ func TestCreateAccessOrganization(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/organizations", handler)
 
-	actual, err := client.CreateAccessOrganization(context.Background(), testAccountRC, want)
+	actual, err := client.CreateAccessOrganization(context.Background(), testAccountRC, CreateAccessOrganizationParams{
+		Name:       "Widget Corps Internal Applications",
+		AuthDomain: "test.cloudflareaccess.com",
+		LoginDesign: AccessOrganizationLoginDesign{
+			BackgroundColor: "#c5ed1b",
+			LogoPath:        "https://example.com/logo.png",
+			TextColor:       "#c5ed1b",
+			HeaderText:      "Widget Corp",
+			FooterText:      "© Widget Corp",
+		},
+		IsUIReadOnly: BoolPtr(true),
+	})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -135,7 +146,18 @@ func TestCreateAccessOrganization(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/organizations", handler)
 
-	actual, err = client.CreateAccessOrganization(context.Background(), testZoneRC, want)
+	actual, err = client.CreateAccessOrganization(context.Background(), testZoneRC, CreateAccessOrganizationParams{
+		Name:       "Widget Corps Internal Applications",
+		AuthDomain: "test.cloudflareaccess.com",
+		LoginDesign: AccessOrganizationLoginDesign{
+			BackgroundColor: "#c5ed1b",
+			LogoPath:        "https://example.com/logo.png",
+			TextColor:       "#c5ed1b",
+			HeaderText:      "Widget Corp",
+			FooterText:      "© Widget Corp",
+		},
+		IsUIReadOnly: BoolPtr(true),
+	})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -176,9 +198,9 @@ func TestUpdateAccessOrganization(t *testing.T) {
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 
 	want := AccessOrganization{
-		Name:       "Widget Corps Internal Applications",
 		CreatedAt:  &createdAt,
 		UpdatedAt:  &updatedAt,
+		Name:       "Widget Corps Internal Applications",
 		AuthDomain: "test.cloudflareaccess.com",
 		LoginDesign: AccessOrganizationLoginDesign{
 			BackgroundColor: "#c5ed1b",
@@ -193,7 +215,19 @@ func TestUpdateAccessOrganization(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/organizations", handler)
 
-	actual, err := client.UpdateAccessOrganization(context.Background(), testAccountRC, want)
+	actual, err := client.UpdateAccessOrganization(context.Background(), testAccountRC, UpdateAccessOrganizationParams{
+		Name:       "Widget Corps Internal Applications",
+		AuthDomain: "test.cloudflareaccess.com",
+		LoginDesign: AccessOrganizationLoginDesign{
+			BackgroundColor: "#c5ed1b",
+			LogoPath:        "https://example.com/logo.png",
+			TextColor:       "#c5ed1b",
+			HeaderText:      "Widget Corp",
+			FooterText:      "© Widget Corp",
+		},
+		IsUIReadOnly:           BoolPtr(false),
+		UIReadOnlyToggleReason: "this is my reason",
+	})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -201,7 +235,19 @@ func TestUpdateAccessOrganization(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/organizations", handler)
 
-	actual, err = client.UpdateAccessOrganization(context.Background(), testZoneRC, want)
+	actual, err = client.UpdateAccessOrganization(context.Background(), testZoneRC, UpdateAccessOrganizationParams{
+		Name:       "Widget Corps Internal Applications",
+		AuthDomain: "test.cloudflareaccess.com",
+		LoginDesign: AccessOrganizationLoginDesign{
+			BackgroundColor: "#c5ed1b",
+			LogoPath:        "https://example.com/logo.png",
+			TextColor:       "#c5ed1b",
+			HeaderText:      "Widget Corp",
+			FooterText:      "© Widget Corp",
+		},
+		IsUIReadOnly:           BoolPtr(false),
+		UIReadOnlyToggleReason: "this is my reason",
+	})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)

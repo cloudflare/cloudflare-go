@@ -47,21 +47,29 @@ type AccessOrganizationDetailResponse struct {
 	Result   AccessOrganization `json:"result"`
 }
 
-//// AccessOrganization returns the Access organisation details.
-////
-//// API reference: https://api.cloudflare.com/#access-organizations-access-organization-details
-//func (api *API) AccessOrganization(ctx context.Context, accountID string) (AccessOrganization, ResultInfo, error) {
-//	return api.accessOrganization(ctx, accountID, AccountRouteRoot)
-//}
-//
-//// ZoneLevelAccessOrganization returns the zone level Access organisation details.
-////
-//// API reference: https://api.cloudflare.com/#zone-level-access-organizations-access-organization-details
-//func (api *API) ZoneLevelAccessOrganization(ctx context.Context, zoneID string) (AccessOrganization, ResultInfo, error) {
-//	return api.accessOrganization(ctx, zoneID, ZoneRouteRoot)
-//}
+type GetAccessOrganizationParams struct{}
 
-func (api *API) GetAccessOrganization(ctx context.Context, rc *ResourceContainer) (AccessOrganization, ResultInfo, error) {
+type CreateAccessOrganizationParams struct {
+	Name                           string                        `json:"name"`
+	AuthDomain                     string                        `json:"auth_domain"`
+	LoginDesign                    AccessOrganizationLoginDesign `json:"login_design"`
+	IsUIReadOnly                   *bool                         `json:"is_ui_read_only,omitempty"`
+	UIReadOnlyToggleReason         string                        `json:"ui_read_only_toggle_reason,omitempty"`
+	UserSeatExpirationInactiveTime string                        `json:"user_seat_expiration_inactive_time,omitempty"`
+	AutoRedirectToIdentity         *bool                         `json:"auto_redirect_to_identity,omitempty"`
+}
+
+type UpdateAccessOrganizationParams struct {
+	Name                           string                        `json:"name"`
+	AuthDomain                     string                        `json:"auth_domain"`
+	LoginDesign                    AccessOrganizationLoginDesign `json:"login_design"`
+	IsUIReadOnly                   *bool                         `json:"is_ui_read_only,omitempty"`
+	UIReadOnlyToggleReason         string                        `json:"ui_read_only_toggle_reason,omitempty"`
+	UserSeatExpirationInactiveTime string                        `json:"user_seat_expiration_inactive_time,omitempty"`
+	AutoRedirectToIdentity         *bool                         `json:"auto_redirect_to_identity,omitempty"`
+}
+
+func (api *API) GetAccessOrganization(ctx context.Context, rc *ResourceContainer, params GetAccessOrganizationParams) (AccessOrganization, ResultInfo, error) {
 	uri := fmt.Sprintf("/%s/%s/access/organizations", rc.Level, rc.Identifier)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
@@ -78,24 +86,10 @@ func (api *API) GetAccessOrganization(ctx context.Context, rc *ResourceContainer
 	return accessOrganizationListResponse.Result, accessOrganizationListResponse.ResultInfo, nil
 }
 
-//// CreateAccessOrganization creates the Access organisation details.
-////
-//// API reference: https://api.cloudflare.com/#access-organizations-create-access-organization
-//func (api *API) CreateAccessOrganization(ctx context.Context, accountID string, accessOrganization AccessOrganization) (AccessOrganization, error) {
-//	return api.createAccessOrganization(ctx, accountID, accessOrganization, AccountRouteRoot)
-//}
-//
-//// CreateZoneLevelAccessOrganization creates the zone level Access organisation details.
-////
-//// API reference: https://api.cloudflare.com/#zone-level-access-organizations-create-access-organization
-//func (api *API) CreateZoneLevelAccessOrganization(ctx context.Context, zoneID string, accessOrganization AccessOrganization) (AccessOrganization, error) {
-//	return api.createAccessOrganization(ctx, zoneID, accessOrganization, ZoneRouteRoot)
-//}
-
-func (api *API) CreateAccessOrganization(ctx context.Context, rc *ResourceContainer, accessOrganization AccessOrganization) (AccessOrganization, error) {
+func (api *API) CreateAccessOrganization(ctx context.Context, rc *ResourceContainer, params CreateAccessOrganizationParams) (AccessOrganization, error) {
 	uri := fmt.Sprintf("/%s/%s/access/organizations", rc.Level, rc.Identifier)
 
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, accessOrganization)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return AccessOrganization{}, err
 	}
@@ -111,26 +105,12 @@ func (api *API) CreateAccessOrganization(ctx context.Context, rc *ResourceContai
 
 // UpdateAccessOrganization updates the Access organisation details.
 //
-// API reference: https://api.cloudflare.com/#access-organizations-update-access-organization
-//func (api *API) UpdateAccessOrganization(ctx context.Context, accountID string, accessOrganization AccessOrganization) (AccessOrganization, error) {
-//	return api.updateAccessOrganization(ctx, accountID, accessOrganization, AccountRouteRoot)
-//}
-//
-//// UpdateZoneLevelAccessOrganization updates the zone level Access organisation details.
-////
-//// API reference: https://api.cloudflare.com/#zone-level-access-organizations-update-access-organization
-//func (api *API) UpdateZoneLevelAccessOrganization(ctx context.Context, zoneID string, accessOrganization AccessOrganization) (AccessOrganization, error) {
-//	return api.updateAccessOrganization(ctx, zoneID, accessOrganization, ZoneRouteRoot)
-//}
-
-// UpdateAccessOrganization updates the Access organisation details.
-//
 // Account API reference: https://api.cloudflare.com/#access-organizations-update-access-organization
 // Zone API reference: https://api.cloudflare.com/#zone-level-access-organizations-update-access-organization
-func (api *API) UpdateAccessOrganization(ctx context.Context, rc *ResourceContainer, accessOrganization AccessOrganization) (AccessOrganization, error) {
+func (api *API) UpdateAccessOrganization(ctx context.Context, rc *ResourceContainer, params UpdateAccessOrganizationParams) (AccessOrganization, error) {
 	uri := fmt.Sprintf("/%s/%s/access/organizations", rc.Level, rc.Identifier)
 
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, accessOrganization)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return AccessOrganization{}, err
 	}
