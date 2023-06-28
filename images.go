@@ -80,10 +80,7 @@ type ImageUpdateRequest struct {
 
 // ImageDirectUploadURLRequest is the data required for a CreateImageDirectUploadURL request.
 type ImageDirectUploadURLRequest struct {
-	Expiry time.Time `json:"expiry"`
-}
-
-type ImageDirectUploadURLV2Request struct {
+	Version           ApiVersion             `json:"version"`
 	Expiry            *time.Time             `json:"expiry,omitempty"`
 	Metadata          map[string]interface{} `json:"metadata,omitempty"`
 	RequireSignedURLs *bool                  `json:"requireSignedURLs,omitempty"`
@@ -184,64 +181,73 @@ func (api *API) UpdateImage(ctx context.Context, accountID string, id string, im
 	return imageDetailsResponse.Result, nil
 }
 
+var imagesMultipartBoundary = "----CloudflareImagesGoClientBoundary"
+
 // CreateImageDirectUploadURL creates an authenticated direct upload url.
 //
 // API Reference: https://api.cloudflare.com/#cloudflare-images-create-authenticated-direct-upload-url
-func (api *API) CreateImageDirectUploadURL(ctx context.Context, accountID string, params ImageDirectUploadURLRequest) (ImageDirectUploadURL, error) {
-	uri := fmt.Sprintf("/accounts/%s/images/v1/direct_upload", accountID)
-
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
-	if err != nil {
-		return ImageDirectUploadURL{}, err
+func (api *API) CreateImageDirectUploadURL(ctx context.Context, rc *ResourceContainer, params ImageDirectUploadURLRequest) (ImageDirectUploadURL, error) {
+	if rc.Level != AccountRouteLevel {
+		return ImageDirectUploadURL{}, ErrRequiredAccountLevelResourceContainer
 	}
 
-	var imageDirectUploadURLResponse ImageDirectUploadURLResponse
-	err = json.Unmarshal(res, &imageDirectUploadURLResponse)
-	if err != nil {
-		return ImageDirectUploadURL{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	if params.Version != "" && params.Version != V1 && params.Version != V2 {
+		return ImageDirectUploadURL{}, ErrInvalidAPIVersion
 	}
-	return imageDirectUploadURLResponse.Result, nil
-}
 
-var imagesMultipartBoundary = "----CloudflareImagesGoClientBoundary"
-
-// CreateImageDirectUploadURLV2 creates an authenticated v2 direct upload url.
-//
-// API Reference: https://developers.cloudflare.com/api/operations/cloudflare-images-create-authenticated-direct-upload-url-v-2
-func (api *API) CreateImageDirectUploadURLV2(ctx context.Context, accountID string, params ImageDirectUploadURLV2Request) (ImageDirectUploadURL, error) {
-	uri := fmt.Sprintf("/accounts/%s/images/v2/direct_upload", accountID)
-
-	body := &bytes.Buffer{}
-	writer := multipart.NewWriter(body)
-	writer.SetBoundary(imagesMultipartBoundary)
-	if *params.RequireSignedURLs {
-		writer.WriteField("requireSignedURLs", "true")
-	}
-	if !params.Expiry.IsZero() {
-		writer.WriteField("expiry", params.Expiry.Format(time.RFC3339))
-	}
-	if params.Metadata != nil {
-		metadataBytes, err := json.Marshal(params.Metadata)
-		if err != nil {
-			return ImageDirectUploadURL{}, fmt.Errorf("error marshalling metadata to JSON: %w", err)
+	var err error
+	var uri string
+	var res []byte
+	switch params.Version {
+	case V2:
+		uri = fmt.Sprintf("/%s/%s/images/%s/direct_upload", rc.Level, rc.Identifier, params.Version)
+		body := &bytes.Buffer{}
+		writer := multipart.NewWriter(body)
+		if err := writer.SetBoundary(imagesMultipartBoundary); err != nil {
+			return ImageDirectUploadURL{}, fmt.Errorf("error setting multipart boundary")
 		}
-		writer.WriteField("metadata", string(metadataBytes))
-	}
-	err := writer.Close()
-	if err != nil {
-		return ImageDirectUploadURL{}, fmt.Errorf("error closing multipart writer: %w", err)
+
+		if *params.RequireSignedURLs {
+			if err = writer.WriteField("requireSignedURLs", "true"); err != nil {
+				return ImageDirectUploadURL{}, fmt.Errorf("error writing requireSignedURLs field: %w", err)
+			}
+		}
+		if !params.Expiry.IsZero() {
+			if err = writer.WriteField("expiry", params.Expiry.Format(time.RFC3339)); err != nil {
+				return ImageDirectUploadURL{}, fmt.Errorf("error writing expiry field: %w", err)
+			}
+		}
+		if params.Metadata != nil {
+			var metadataBytes []byte
+			if metadataBytes, err = json.Marshal(params.Metadata); err != nil {
+				return ImageDirectUploadURL{}, fmt.Errorf("error marshalling metadata to JSON: %w", err)
+			}
+			if err = writer.WriteField("metadata", string(metadataBytes)); err != nil {
+				return ImageDirectUploadURL{}, fmt.Errorf("error writing metadata field: %w", err)
+			}
+		}
+		if err = writer.Close(); err != nil {
+			return ImageDirectUploadURL{}, fmt.Errorf("error closing multipart writer: %w", err)
+		}
+
+		res, err = api.makeRequestContextWithHeaders(
+			ctx,
+			http.MethodPost,
+			uri,
+			body,
+			http.Header{
+				"Accept":       []string{"application/json"},
+				"Content-Type": []string{writer.FormDataContentType()},
+			},
+		)
+	case V1:
+	case "":
+		uri = fmt.Sprintf("/%s/%s/images/%s/direct_upload", rc.Level, rc.Identifier, V1)
+		res, err = api.makeRequestContext(ctx, http.MethodPost, uri, params)
+	default:
+		return ImageDirectUploadURL{}, ErrInvalidAPIVersion
 	}
 
-	res, err := api.makeRequestContextWithHeaders(
-		ctx,
-		http.MethodPost,
-		uri,
-		body,
-		http.Header{
-			"Accept":       []string{"application/json"},
-			"Content-Type": []string{writer.FormDataContentType()},
-		},
-	)
 	if err != nil {
 		return ImageDirectUploadURL{}, err
 	}
