@@ -21,8 +21,16 @@ import (
 	"golang.org/x/time/rate"
 )
 
+type ApiVersion string
+
+const (
+	V1 ApiVersion = "v1"
+	V2 ApiVersion = "v2"
+	V4 ApiVersion = "v4"
+)
+
 var (
-	Version string = "v4"
+	Version string = string(V4)
 
 	// Deprecated: Use `client.New` configuration instead.
 	apiURL = fmt.Sprintf("%s://%s%s", defaultScheme, defaultHostname, defaultBasePath)

@@ -152,8 +152,9 @@ func TestCreateImageDirectUploadURL(t *testing.T) {
 	setup()
 	defer teardown()
 
+	expiry := time.Now().UTC().Add(30 * time.Minute)
 	input := ImageDirectUploadURLRequest{
-		Expiry: time.Now().UTC().Add(30 * time.Minute),
+		Expiry: &expiry,
 	}
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -183,7 +184,7 @@ func TestCreateImageDirectUploadURL(t *testing.T) {
 		UploadURL: "https://upload.imagedelivery.net/fgr33htrthytjtyereifjewoi338272s7w1383",
 	}
 
-	actual, err := client.CreateImageDirectUploadURL(context.Background(), testAccountID, input)
+	actual, err := client.CreateImageDirectUploadURL(context.Background(), AccountIdentifier(testAccountID), input)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -200,7 +201,8 @@ func TestCreateImageDirectUploadURLV2(t *testing.T) {
 		"metaKey2": "metaValue2",
 	}
 	requireSignedURLs := true
-	input := ImageDirectUploadURLV2Request{
+	input := ImageDirectUploadURLRequest{
+		Version:           V2,
 		Expiry:            &exp,
 		Metadata:          metadata,
 		RequireSignedURLs: &requireSignedURLs,
@@ -237,7 +239,7 @@ func TestCreateImageDirectUploadURLV2(t *testing.T) {
 		UploadURL: "https://upload.imagedelivery.net/fgr33htrthytjtyereifjewoi338272s7w1383",
 	}
 
-	actual, err := client.CreateImageDirectUploadURLV2(context.Background(), testAccountID, input)
+	actual, err := client.CreateImageDirectUploadURL(context.Background(), AccountIdentifier(testAccountID), input)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
