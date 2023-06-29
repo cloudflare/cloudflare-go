@@ -1,0 +1,3 @@
+```release-note:enhancement
+zone: adds `ZoneDCVDelegation` function to retrieve zone DCV delegation information
+```
