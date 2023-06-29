@@ -175,6 +175,11 @@ func zoneInfo(c *cli.Context) error {
 	}
 	output := make([][]string, 0, len(zones))
 	for _, z := range zones {
+		dcvDelegation, err := api.ZoneDCVDelegation(context.Background(), z.ID)
+		if err != nil {
+			fmt.Println(err)
+			return err
+		}
 		var nameservers []string
 		if len(z.VanityNS) > 0 {
 			nameservers = z.VanityNS
@@ -189,9 +194,10 @@ func zoneInfo(c *cli.Context) error {
 			strings.Join(nameservers, ", "),
 			fmt.Sprintf("%t", z.Paused),
 			z.Type,
+			fmt.Sprintf("%s%s", dcvDelegation.UUID, cloudflare.ZoneDCVDelegationHostname),
 		})
 	}
-	writeTable(c, output, "ID", "Zone", "Plan", "Status", "Name Servers", "Paused", "Type")
+	writeTable(c, output, "ID", "Zone", "Plan", "Status", "Name Servers", "Paused", "Type", "DCV Delegation")
 
 	return nil
 }

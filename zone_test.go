@@ -1610,3 +1610,22 @@ func TestUpdateZoneSettingWithCustomPathPrefix(t *testing.T) {
 		assert.Equal(t, s.ModifiedOn, "2014-01-01T05:20:00.12345Z")
 	}
 }
+
+func TestZoneDCVDelegation(t *testing.T) {
+	setup()
+	defer teardown()
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method '%s', got %s", http.MethodGet, r.Method)
+		w.Header().Set("content-type", "application/json")
+		_, _ = fmt.Fprintf(w, `{
+			"result": {
+				"UUID": "johv1uc9ii4cheeg"
+			}
+		}`)
+	}
+	mux.HandleFunc("/zones/foo/dcv_delegation/uuid", handler)
+	s, err := client.ZoneDCVDelegation(context.Background(), "foo")
+	if assert.NoError(t, err) {
+		assert.Equal(t, s.UUID, "johv1uc9ii4cheeg")
+	}
+}
