@@ -101,7 +101,6 @@ func TestUpdateImage(t *testing.T) {
 	defer teardown()
 
 	input := UpdateImageParams{
-		ID:                "ZxR0pLaXRldlBtaFhhO2FiZGVnaA",
 		RequireSignedURLs: true,
 		Metadata: map[string]interface{}{
 			"meta": "metaID",
@@ -142,7 +141,13 @@ func TestUpdateImage(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/images/v1/ZxR0pLaXRldlBtaFhhO2FiZGVnaA", handler)
 	want := expectedImageStruct
 
-	actual, err := client.UpdateImage(context.Background(), AccountIdentifier(testAccountID), input)
+	actual, err := client.UpdateImage(context.Background(), AccountIdentifier(testAccountID), UpdateImageParams{
+		ID:                "ZxR0pLaXRldlBtaFhhO2FiZGVnaA",
+		RequireSignedURLs: true,
+		Metadata: map[string]interface{}{
+			"meta": "metaID",
+		},
+	})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
