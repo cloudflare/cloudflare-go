@@ -12,6 +12,18 @@ import (
 	"time"
 )
 
+var (
+	ErrInvalidImagesAPIVersion = errors.New("invalid images API version")
+	ErrMissingImageID          = errors.New("required image ID missing")
+)
+
+type ImagesAPIVersion string
+
+const (
+	V1 ImagesAPIVersion = "v1"
+	V2 ImagesAPIVersion = "v2"
+)
+
 // Image represents a Cloudflare Image.
 type Image struct {
 	ID                string                 `json:"id"`
@@ -81,6 +93,7 @@ type ImageUpdateRequest struct {
 // ImageDirectUploadURLRequest is the data required for a CreateImageDirectUploadURL request.
 type ImageDirectUploadURLRequest struct {
 	Version           ApiVersion             `json:"version"`
+	Version           ImagesAPIVersion       `json:"-"`
 	Expiry            *time.Time             `json:"expiry,omitempty"`
 	Metadata          map[string]interface{} `json:"metadata,omitempty"`
 	RequireSignedURLs *bool                  `json:"requireSignedURLs,omitempty"`
