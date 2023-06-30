@@ -80,7 +80,7 @@ func TestUploadImage(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/images/v1", handler)
 	want := expectedImageStruct
 
-	actual, err := client.UploadImage(context.Background(), testAccountID, ImageUploadRequest{
+	actual, err := client.UploadImage(context.Background(), AccountIdentifier(testAccountID), UploadImageParams{
 		File: fakeFile{
 			Buffer: bytes.NewBufferString("this is definitely an image"),
 		},
@@ -100,7 +100,8 @@ func TestUpdateImage(t *testing.T) {
 	setup()
 	defer teardown()
 
-	input := ImageUpdateRequest{
+	input := UpdateImageParams{
+		ID:                "ZxR0pLaXRldlBtaFhhO2FiZGVnaA",
 		RequireSignedURLs: true,
 		Metadata: map[string]interface{}{
 			"meta": "metaID",
@@ -110,7 +111,7 @@ func TestUpdateImage(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
 
-		var v ImageUpdateRequest
+		var v UpdateImageParams
 		err := json.NewDecoder(r.Body).Decode(&v)
 		require.NoError(t, err)
 		assert.Equal(t, input, v)
@@ -141,7 +142,7 @@ func TestUpdateImage(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/images/v1/ZxR0pLaXRldlBtaFhhO2FiZGVnaA", handler)
 	want := expectedImageStruct
 
-	actual, err := client.UpdateImage(context.Background(), testAccountID, "ZxR0pLaXRldlBtaFhhO2FiZGVnaA", input)
+	actual, err := client.UpdateImage(context.Background(), AccountIdentifier(testAccountID), input)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -153,14 +154,14 @@ func TestCreateImageDirectUploadURL(t *testing.T) {
 	defer teardown()
 
 	expiry := time.Now().UTC().Add(30 * time.Minute)
-	input := ImageDirectUploadURLRequest{
+	input := CreateImageDirectUploadURLParams{
 		Expiry: &expiry,
 	}
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 
-		var v ImageDirectUploadURLRequest
+		var v CreateImageDirectUploadURLParams
 		err := json.NewDecoder(r.Body).Decode(&v)
 		require.NoError(t, err)
 		assert.Equal(t, input, v)
@@ -201,8 +202,8 @@ func TestCreateImageDirectUploadURLV2(t *testing.T) {
 		"metaKey2": "metaValue2",
 	}
 	requireSignedURLs := true
-	input := ImageDirectUploadURLRequest{
-		Version:           V2,
+	input := CreateImageDirectUploadURLParams{
+		Version:           ImagesAPIVersionV2,
 		Expiry:            &exp,
 		Metadata:          metadata,
 		RequireSignedURLs: &requireSignedURLs,
@@ -281,7 +282,7 @@ func TestListImages(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/images/v1", handler)
 	want := []Image{expectedImageStruct}
 
-	actual, err := client.ListImages(context.Background(), testAccountID, PaginationOptions{})
+	actual, err := client.ListImages(context.Background(), AccountIdentifier(testAccountID), ListImagesParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -320,7 +321,7 @@ func TestImageDetails(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/images/v1/ZxR0pLaXRldlBtaFhhO2FiZGVnaA", handler)
 	want := expectedImageStruct
 
-	actual, err := client.ImageDetails(context.Background(), testAccountID, "ZxR0pLaXRldlBtaFhhO2FiZGVnaA")
+	actual, err := client.GetImage(context.Background(), AccountIdentifier(testAccountID), "ZxR0pLaXRldlBtaFhhO2FiZGVnaA")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -340,7 +341,7 @@ func TestBaseImage(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/images/v1/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/blob", handler)
 	want := []byte{}
 
-	actual, err := client.BaseImage(context.Background(), testAccountID, "ZxR0pLaXRldlBtaFhhO2FiZGVnaA")
+	actual, err := client.GetBaseImage(context.Background(), AccountIdentifier(testAccountID), "ZxR0pLaXRldlBtaFhhO2FiZGVnaA")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -365,7 +366,7 @@ func TestDeleteImage(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/images/v1/ZxR0pLaXRldlBtaFhhO2FiZGVnaA", handler)
 
-	err := client.DeleteImage(context.Background(), testAccountID, "ZxR0pLaXRldlBtaFhhO2FiZGVnaA")
+	err := client.DeleteImage(context.Background(), AccountIdentifier(testAccountID), "ZxR0pLaXRldlBtaFhhO2FiZGVnaA")
 	require.NoError(t, err)
 }
 

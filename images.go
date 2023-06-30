@@ -20,8 +20,8 @@ var (
 type ImagesAPIVersion string
 
 const (
-	V1 ImagesAPIVersion = "v1"
-	V2 ImagesAPIVersion = "v2"
+	ImagesAPIVersionV1 ImagesAPIVersion = "v1"
+	ImagesAPIVersionV2 ImagesAPIVersion = "v2"
 )
 
 // Image represents a Cloudflare Image.
@@ -34,8 +34,8 @@ type Image struct {
 	Uploaded          time.Time              `json:"uploaded"`
 }
 
-// ImageUploadRequest is the data required for an Image Upload request.
-type ImageUploadRequest struct {
+// UploadImageParams is the data required for an Image Upload request.
+type UploadImageParams struct {
 	File              io.ReadCloser
 	Name              string
 	RequireSignedURLs bool
@@ -44,7 +44,7 @@ type ImageUploadRequest struct {
 
 // write writes the image upload data to a multipart writer, so
 // it can be used in an HTTP request.
-func (b ImageUploadRequest) write(mpw *multipart.Writer) error {
+func (b UploadImageParams) write(mpw *multipart.Writer) error {
 	if b.File == nil {
 		return errors.New("a file to upload must be specified")
 	}
@@ -84,15 +84,15 @@ func (b ImageUploadRequest) write(mpw *multipart.Writer) error {
 	return nil
 }
 
-// ImageUpdateRequest is the data required for an UpdateImage request.
-type ImageUpdateRequest struct {
+// UpdateImageParams is the data required for an UpdateImage request.
+type UpdateImageParams struct {
+	ID                string                 `json:"-"`
 	RequireSignedURLs bool                   `json:"requireSignedURLs"`
 	Metadata          map[string]interface{} `json:"metadata,omitempty"`
 }
 
-// ImageDirectUploadURLRequest is the data required for a CreateImageDirectUploadURL request.
-type ImageDirectUploadURLRequest struct {
-	Version           ApiVersion             `json:"version"`
+// CreateImageDirectUploadURLParams is the data required for a CreateImageDirectUploadURL request.
+type CreateImageDirectUploadURLParams struct {
 	Version           ImagesAPIVersion       `json:"-"`
 	Expiry            *time.Time             `json:"expiry,omitempty"`
 	Metadata          map[string]interface{} `json:"metadata,omitempty"`
@@ -139,15 +139,23 @@ type ImagesStatsCount struct {
 	Allowed int64 `json:"allowed"`
 }
 
+type ListImagesParams struct {
+	ResultInfo
+}
+
 // UploadImage uploads a single image.
 //
 // API Reference: https://api.cloudflare.com/#cloudflare-images-upload-an-image-using-a-single-http-request
-func (api *API) UploadImage(ctx context.Context, accountID string, upload ImageUploadRequest) (Image, error) {
-	uri := fmt.Sprintf("/accounts/%s/images/v1", accountID)
+func (api *API) UploadImage(ctx context.Context, rc *ResourceContainer, params UploadImageParams) (Image, error) {
+	if rc.Level != AccountRouteLevel {
+		return Image{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/images/v1", rc.Identifier)
 
 	body := &bytes.Buffer{}
 	w := multipart.NewWriter(body)
-	if err := upload.write(w); err != nil {
+	if err := params.write(w); err != nil {
 		_ = w.Close()
 		return Image{}, fmt.Errorf("error writing multipart body: %w", err)
 	}
@@ -178,10 +186,14 @@ func (api *API) UploadImage(ctx context.Context, accountID string, upload ImageU
 // UpdateImage updates an existing image's metadata.
 //
 // API Reference: https://api.cloudflare.com/#cloudflare-images-update-image
-func (api *API) UpdateImage(ctx context.Context, accountID string, id string, image ImageUpdateRequest) (Image, error) {
-	uri := fmt.Sprintf("/accounts/%s/images/v1/%s", accountID, id)
+func (api *API) UpdateImage(ctx context.Context, rc *ResourceContainer, params UpdateImageParams) (Image, error) {
+	if rc.Level != AccountRouteLevel {
+		return Image{}, ErrRequiredAccountLevelResourceContainer
+	}
 
-	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, image)
+	uri := fmt.Sprintf("/accounts/%s/images/v1/%s", rc.Identifier, params.ID)
+
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
 	if err != nil {
 		return Image{}, err
 	}
@@ -199,20 +211,20 @@ var imagesMultipartBoundary = "----CloudflareImagesGoClientBoundary"
 // CreateImageDirectUploadURL creates an authenticated direct upload url.
 //
 // API Reference: https://api.cloudflare.com/#cloudflare-images-create-authenticated-direct-upload-url
-func (api *API) CreateImageDirectUploadURL(ctx context.Context, rc *ResourceContainer, params ImageDirectUploadURLRequest) (ImageDirectUploadURL, error) {
+func (api *API) CreateImageDirectUploadURL(ctx context.Context, rc *ResourceContainer, params CreateImageDirectUploadURLParams) (ImageDirectUploadURL, error) {
 	if rc.Level != AccountRouteLevel {
 		return ImageDirectUploadURL{}, ErrRequiredAccountLevelResourceContainer
 	}
 
-	if params.Version != "" && params.Version != V1 && params.Version != V2 {
-		return ImageDirectUploadURL{}, ErrInvalidAPIVersion
+	if params.Version != "" && params.Version != ImagesAPIVersionV1 && params.Version != ImagesAPIVersionV2 {
+		return ImageDirectUploadURL{}, ErrInvalidImagesAPIVersion
 	}
 
 	var err error
 	var uri string
 	var res []byte
 	switch params.Version {
-	case V2:
+	case ImagesAPIVersionV2:
 		uri = fmt.Sprintf("/%s/%s/images/%s/direct_upload", rc.Level, rc.Identifier, params.Version)
 		body := &bytes.Buffer{}
 		writer := multipart.NewWriter(body)
@@ -253,12 +265,12 @@ func (api *API) CreateImageDirectUploadURL(ctx context.Context, rc *ResourceCont
 				"Content-Type": []string{writer.FormDataContentType()},
 			},
 		)
-	case V1:
+	case ImagesAPIVersionV1:
 	case "":
-		uri = fmt.Sprintf("/%s/%s/images/%s/direct_upload", rc.Level, rc.Identifier, V1)
+		uri = fmt.Sprintf("/%s/%s/images/%s/direct_upload", rc.Level, rc.Identifier, ImagesAPIVersionV1)
 		res, err = api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	default:
-		return ImageDirectUploadURL{}, ErrInvalidAPIVersion
+		return ImageDirectUploadURL{}, ErrInvalidImagesAPIVersion
 	}
 
 	if err != nil {
@@ -276,8 +288,8 @@ func (api *API) CreateImageDirectUploadURL(ctx context.Context, rc *ResourceCont
 // ListImages lists all images.
 //
 // API Reference: https://api.cloudflare.com/#cloudflare-images-list-images
-func (api *API) ListImages(ctx context.Context, accountID string, pageOpts PaginationOptions) ([]Image, error) {
-	uri := buildURI(fmt.Sprintf("/accounts/%s/images/v1", accountID), pageOpts)
+func (api *API) ListImages(ctx context.Context, rc *ResourceContainer, params ListImagesParams) ([]Image, error) {
+	uri := buildURI(fmt.Sprintf("/accounts/%s/images/v1", rc.Identifier), params)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -292,11 +304,15 @@ func (api *API) ListImages(ctx context.Context, accountID string, pageOpts Pagin
 	return imagesListResponse.Result.Images, nil
 }
 
-// ImageDetails gets the details of an uploaded image.
+// GetImage gets the details of an uploaded image.
 //
 // API Reference: https://api.cloudflare.com/#cloudflare-images-image-details
-func (api *API) ImageDetails(ctx context.Context, accountID string, id string) (Image, error) {
-	uri := fmt.Sprintf("/accounts/%s/images/v1/%s", accountID, id)
+func (api *API) GetImage(ctx context.Context, rc *ResourceContainer, id string) (Image, error) {
+	if rc.Level != AccountRouteLevel {
+		return Image{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/images/v1/%s", rc.Identifier, id)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -311,11 +327,15 @@ func (api *API) ImageDetails(ctx context.Context, accountID string, id string) (
 	return imageDetailsResponse.Result, nil
 }
 
-// BaseImage gets the base image used to derive variants.
+// GetBaseImage gets the base image used to derive variants.
 //
 // API Reference: https://api.cloudflare.com/#cloudflare-images-base-image
-func (api *API) BaseImage(ctx context.Context, accountID string, id string) ([]byte, error) {
-	uri := fmt.Sprintf("/accounts/%s/images/v1/%s/blob", accountID, id)
+func (api *API) GetBaseImage(ctx context.Context, rc *ResourceContainer, id string) ([]byte, error) {
+	if rc.Level != AccountRouteLevel {
+		return []byte{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/images/v1/%s/blob", rc.Identifier, id)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -327,8 +347,12 @@ func (api *API) BaseImage(ctx context.Context, accountID string, id string) ([]b
 // DeleteImage deletes an image.
 //
 // API Reference: https://api.cloudflare.com/#cloudflare-images-delete-image
-func (api *API) DeleteImage(ctx context.Context, accountID string, id string) error {
-	uri := fmt.Sprintf("/accounts/%s/images/v1/%s", accountID, id)
+func (api *API) DeleteImage(ctx context.Context, rc *ResourceContainer, id string) error {
+	if rc.Level != AccountRouteLevel {
+		return ErrRequiredAccountLevelResourceContainer
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/images/v1/%s", rc.Identifier, id)
 
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
@@ -337,11 +361,15 @@ func (api *API) DeleteImage(ctx context.Context, accountID string, id string) er
 	return nil
 }
 
-// ImagesStats gets an account's statistics for Cloudflare Images.
+// GetImagesStats gets an account's statistics for Cloudflare Images.
 //
 // API Reference: https://api.cloudflare.com/#cloudflare-images-images-usage-statistics
-func (api *API) ImagesStats(ctx context.Context, accountID string) (ImagesStatsCount, error) {
-	uri := fmt.Sprintf("/accounts/%s/images/v1/stats", accountID)
+func (api *API) GetImagesStats(ctx context.Context, rc *ResourceContainer) (ImagesStatsCount, error) {
+	if rc.Level != AccountRouteLevel {
+		return ImagesStatsCount{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/images/v1/stats", rc.Identifier)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
