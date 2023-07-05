@@ -1,5 +1,9 @@
 ## 0.72.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* resource_container: expose `Type` on `*ResourceContainer` to explicitly denote what type of resource it is instead of inferring from `Level`. ([#1325](https://github.com/cloudflare/cloudflare-go/issues/1325))
+
 ## 0.71.0 (July 5th, 2023)
 
 BREAKING CHANGES:
