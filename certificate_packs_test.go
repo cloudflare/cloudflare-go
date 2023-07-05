@@ -47,6 +47,22 @@ var (
 		ValidityDays:         90,
 		CertificateAuthority: "lets_encrypt",
 	}
+
+	pendingCertificatePackRecords = CertificatePack{
+		ID:                   "64289572-8b22-4cd4-af3c-3fef28ef5dae",
+		Type:                 "advanced",
+		Hosts:                []string{"example.com"},
+		Certificates:         []CertificatePackCertificate{},
+		PrimaryCertificate:   "0",
+		Status:               "pending_validation",
+		ValidationRecords:    []SSLValidationRecord{SSLValidationRecord{CnameTarget: "", CnameName: "", TxtName: "_acme-challenge.example.com", TxtValue: "QkyhZpLUAD4r3Fn9urywnXzeIeZ_ZG68MxJgBY32NmU", HTTPUrl: "", HTTPBody: "", Emails: []string(nil)}},
+		ValidationErrors:     []SSLValidationError(nil),
+		ValidationMethod:     "txt",
+		ValidityDays:         90,
+		CertificateAuthority: "lets_encrypt",
+		CloudflareBranding:   false,
+		DelegationRecords:    []SSLDelegationRecord{SSLDelegationRecord{CnameTarget: "example.com.0f461ad6a17edc91.dcv.cloudflare.com", CnameName: "_acme-challenge.example.com"}},
+	}
 )
 
 func TestListCertificatePacks(t *testing.T) {
@@ -267,14 +283,14 @@ func TestDeleteCertificatePack(t *testing.T) {
 		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
-  "success": true,
-  "errors": [],
-  "messages": [],
-  "result": {
-    "id": "3822ff90-ea29-44df-9e55-21300bb9419b"
-  }
-}
-		`)
+      "success": true,
+      "errors": [],
+      "messages": [],
+      "result": {
+        "id": "3822ff90-ea29-44df-9e55-21300bb9419b"
+      }
+    }
+        `)
 	}
 
 	mux.HandleFunc("/zones/"+testZoneID+"/ssl/certificate_packs/3822ff90-ea29-44df-9e55-21300bb9419b", handler)
@@ -282,4 +298,54 @@ func TestDeleteCertificatePack(t *testing.T) {
 	err := client.DeleteCertificatePack(context.Background(), testZoneID, "3822ff90-ea29-44df-9e55-21300bb9419b")
 
 	assert.NoError(t, err)
+}
+
+func TestListCertificatePackPending(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+      "success": true,
+      "errors": [],
+      "messages": [],
+      "result": {
+		"id": "64289572-8b22-4cd4-af3c-3fef28ef5dae",
+		"type": "advanced",
+		"hosts": [
+		  "example.com"
+		],
+		"primary_certificate": "0",
+		"status": "pending_validation",
+		"certificates": [],
+		"created_on": "2023-06-21T13:48:39.114782Z",
+		"validity_days": 90,
+		"validation_method": "txt",
+		"validation_records": [
+		  {
+			"status": "pending",
+			"txt_name": "_acme-challenge.example.com",
+			"txt_value": "QkyhZpLUAD4r3Fn9urywnXzeIeZ_ZG68MxJgBY32NmU"
+		  }
+		],
+		"dcv_delegation_records": [
+		  {
+			"cname": "_acme-challenge.example.com",
+			"cname_target": "example.com.0f461ad6a17edc91.dcv.cloudflare.com"
+		  }
+		],
+		"certificate_authority": "lets_encrypt"
+	  }
+    }`)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/ssl/certificate_packs/3822ff90-ea29-44df-9e55-21300bb9419a", handler)
+
+	actual, err := client.CertificatePack(context.Background(), testZoneID, "3822ff90-ea29-44df-9e55-21300bb9419a")
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, pendingCertificatePackRecords, actual)
+	}
 }

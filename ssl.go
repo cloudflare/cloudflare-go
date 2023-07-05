@@ -170,3 +170,9 @@ type SSLValidationRecord struct {
 
 	Emails []string `json:"emails,omitempty"`
 }
+
+// SSLDelegationRecord displays Domain Control Delegation tokens.
+type SSLDelegationRecord struct {
+	CnameTarget string `json:"cname_target,omitempty"`
+	CnameName   string `json:"cname,omitempty"`
+}
