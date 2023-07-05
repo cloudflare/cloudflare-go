@@ -329,6 +329,36 @@ func TestUpdateAccessPolicy(t *testing.T) {
 	setup()
 	defer teardown()
 
+	accessPolicy := UpdateAccessPolicyParams{
+		ApplicationID: accessApplicationID,
+		PolicyID:      accessPolicyID,
+		Precedence:    1,
+		Decision:      "allow",
+		Name:          "Allow devs",
+		Include: []interface{}{
+			map[string]interface{}{"email": map[string]interface{}{"email": "test@example.com"}},
+		},
+		Exclude: []interface{}{
+			map[string]interface{}{"email": map[string]interface{}{"email": "test@example.com"}},
+		},
+		Require: []interface{}{
+			map[string]interface{}{"email": map[string]interface{}{"email": "test@example.com"}},
+		},
+		IsolationRequired:            &isolationRequired,
+		PurposeJustificationRequired: &purposeJustificationRequired,
+		ApprovalRequired:             &approvalRequired,
+		PurposeJustificationPrompt:   &purposeJustificationPrompt,
+		ApprovalGroups: []AccessApprovalGroup{
+			{
+				EmailListUuid:   "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
+				ApprovalsNeeded: 3,
+			},
+			{
+				EmailAddresses:  []string{"email1@example.com", "email2@example.com"},
+				ApprovalsNeeded: 1,
+			},
+		},
+	}
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
@@ -384,14 +414,14 @@ func TestUpdateAccessPolicy(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/"+accessApplicationID+"/policies/"+accessPolicyID, handler)
-	actual, err := client.UpdateAccessPolicy(context.Background(), testAccountRC, accessApplicationID, expectedAccessPolicy)
+	actual, err := client.UpdateAccessPolicy(context.Background(), testAccountRC, accessPolicy)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessPolicy, actual)
 	}
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/apps/"+accessApplicationID+"/policies/"+accessPolicyID, handler)
-	actual, err = client.UpdateAccessPolicy(context.Background(), testZoneRC, accessApplicationID, expectedAccessPolicy)
+	actual, err = client.UpdateAccessPolicy(context.Background(), testZoneRC, accessPolicy)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccessPolicy, actual)
@@ -402,10 +432,10 @@ func TestUpdateAccessPolicyWithMissingID(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.UpdateAccessPolicy(context.Background(), testAccountRC, accessApplicationID, AccessPolicy{})
+	_, err := client.UpdateAccessPolicy(context.Background(), testAccountRC, UpdateAccessPolicyParams{ApplicationID: accessApplicationID})
 	assert.EqualError(t, err, "access policy ID cannot be empty")
 
-	_, err = client.UpdateAccessPolicy(context.Background(), testZoneRC, accessApplicationID, AccessPolicy{})
+	_, err = client.UpdateAccessPolicy(context.Background(), testZoneRC, UpdateAccessPolicyParams{ApplicationID: accessApplicationID})
 	assert.EqualError(t, err, "access policy ID cannot be empty")
 }
 

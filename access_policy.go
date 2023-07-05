@@ -101,6 +101,33 @@ type CreateAccessPolicyParams struct {
 	Require []interface{} `json:"require"`
 }
 
+type UpdateAccessPolicyParams struct {
+	ApplicationID string `json:"-"`
+	PolicyID      string `json:"-"`
+
+	Precedence int    `json:"precedence"`
+	Decision   string `json:"decision"`
+	Name       string `json:"name"`
+
+	IsolationRequired            *bool                 `json:"isolation_required,omitempty"`
+	PurposeJustificationRequired *bool                 `json:"purpose_justification_required,omitempty"`
+	PurposeJustificationPrompt   *string               `json:"purpose_justification_prompt,omitempty"`
+	ApprovalRequired             *bool                 `json:"approval_required,omitempty"`
+	ApprovalGroups               []AccessApprovalGroup `json:"approval_groups"`
+
+	// The include policy works like an OR logical operator. The user must
+	// satisfy one of the rules.
+	Include []interface{} `json:"include"`
+
+	// The exclude policy works like a NOT logical operator. The user must
+	// not satisfy all the rules in exclude.
+	Exclude []interface{} `json:"exclude"`
+
+	// The require policy works like a AND logical operator. The user must
+	// satisfy all the rules in require.
+	Require []interface{} `json:"require"`
+}
+
 type DeleteAccessPolicyParams struct {
 	ApplicationID string `json:"-"`
 	PolicyID      string `json:"-"`
@@ -215,19 +242,20 @@ func (api *API) CreateAccessPolicy(ctx context.Context, rc *ResourceContainer, p
 //
 // Account API reference: https://developers.cloudflare.com/api/operations/access-policies-update-an-access-policy
 // Zone API reference: https://developers.cloudflare.com/api/operations/zone-level-access-policies-update-an-access-policy
-func (api *API) UpdateAccessPolicy(ctx context.Context, rc *ResourceContainer, applicationID string, accessPolicy AccessPolicy) (AccessPolicy, error) {
-	if accessPolicy.ID == "" {
+func (api *API) UpdateAccessPolicy(ctx context.Context, rc *ResourceContainer, params UpdateAccessPolicyParams) (AccessPolicy, error) {
+	if params.PolicyID == "" {
 		return AccessPolicy{}, fmt.Errorf("access policy ID cannot be empty")
 	}
+
 	uri := fmt.Sprintf(
 		"/%s/%s/access/apps/%s/policies/%s",
 		rc.Level,
 		rc.Identifier,
-		applicationID,
-		accessPolicy.ID,
+		params.ApplicationID,
+		params.PolicyID,
 	)
 
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, accessPolicy)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return AccessPolicy{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
