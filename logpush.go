@@ -181,6 +181,106 @@ func (f *LogpushJob) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (f CreateLogpushJobParams) MarshalJSON() ([]byte, error) {
+	type Alias CreateLogpushJobParams
+
+	var filter string
+
+	if f.Filter != nil {
+		b, err := json.Marshal(f.Filter)
+
+		if err != nil {
+			return nil, err
+		}
+
+		filter = string(b)
+	}
+
+	return json.Marshal(&struct {
+		Filter string `json:"filter,omitempty"`
+		Alias
+	}{
+		Filter: filter,
+		Alias:  (Alias)(f),
+	})
+}
+
+// Custom Unmarshaller for CreateLogpushJobParams filter key.
+func (f *CreateLogpushJobParams) UnmarshalJSON(data []byte) error {
+	type Alias CreateLogpushJobParams
+	aux := &struct {
+		Filter string `json:"filter,omitempty"`
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+
+	if aux != nil && aux.Filter != "" {
+		var filter LogpushJobFilters
+		if err := json.Unmarshal([]byte(aux.Filter), &filter); err != nil {
+			return err
+		}
+		if err := filter.Where.Validate(); err != nil {
+			return err
+		}
+		f.Filter = &filter
+	}
+	return nil
+}
+
+func (f UpdateLogpushJobParams) MarshalJSON() ([]byte, error) {
+	type Alias UpdateLogpushJobParams
+
+	var filter string
+
+	if f.Filter != nil {
+		b, err := json.Marshal(f.Filter)
+
+		if err != nil {
+			return nil, err
+		}
+
+		filter = string(b)
+	}
+
+	return json.Marshal(&struct {
+		Filter string `json:"filter,omitempty"`
+		Alias
+	}{
+		Filter: filter,
+		Alias:  (Alias)(f),
+	})
+}
+
+// Custom Unmarshaller for UpdateLogpushJobParams filter key.
+func (f *UpdateLogpushJobParams) UnmarshalJSON(data []byte) error {
+	type Alias UpdateLogpushJobParams
+	aux := &struct {
+		Filter string `json:"filter,omitempty"`
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+
+	if aux != nil && aux.Filter != "" {
+		var filter LogpushJobFilters
+		if err := json.Unmarshal([]byte(aux.Filter), &filter); err != nil {
+			return err
+		}
+		if err := filter.Where.Validate(); err != nil {
+			return err
+		}
+		f.Filter = &filter
+	}
+	return nil
+}
+
 func (filter *LogpushJobFilter) Validate() error {
 	if filter.And != nil {
 		if filter.Or != nil || filter.Key != "" || filter.Operator != "" || filter.Value != nil {
@@ -221,33 +321,66 @@ func (filter *LogpushJobFilter) Validate() error {
 	return nil
 }
 
-// CreateAccountLogpushJob creates a new account-level Logpush Job.
-//
-// API reference: https://api.cloudflare.com/#logpush-jobs-create-logpush-job
-func (api *API) CreateAccountLogpushJob(ctx context.Context, accountID string, job LogpushJob) (*LogpushJob, error) {
-	return api.createLogpushJob(ctx, AccountRouteRoot, accountID, job)
+type CreateLogpushJobParams struct {
+	Dataset                  string             `json:"dataset"`
+	Enabled                  bool               `json:"enabled"`
+	Kind                     string             `json:"kind,omitempty"`
+	Name                     string             `json:"name"`
+	LogpullOptions           string             `json:"logpull_options"`
+	DestinationConf          string             `json:"destination_conf"`
+	OwnershipChallenge       string             `json:"ownership_challenge,omitempty"`
+	ErrorMessage             string             `json:"error_message,omitempty"`
+	Frequency                string             `json:"frequency,omitempty"`
+	Filter                   *LogpushJobFilters `json:"filter,omitempty"`
+	MaxUploadBytes           int                `json:"max_upload_bytes,omitempty"`
+	MaxUploadRecords         int                `json:"max_upload_records,omitempty"`
+	MaxUploadIntervalSeconds int                `json:"max_upload_interval_seconds,omitempty"`
 }
 
-// CreateZoneLogpushJob creates a new zone-level Logpush Job.
-//
-// API reference: https://api.cloudflare.com/#logpush-jobs-create-logpush-job
-func (api *API) CreateZoneLogpushJob(ctx context.Context, zoneID string, job LogpushJob) (*LogpushJob, error) {
-	return api.createLogpushJob(ctx, ZoneRouteRoot, zoneID, job)
+type ListLogpushJobsParams struct{}
+
+type ListLogpushJobsForDatasetParams struct {
+	Dataset string `json:"-"`
+}
+
+type GetLogpushFieldsParams struct {
+	Dataset string `json:"-"`
+}
+
+type UpdateLogpushJobParams struct {
+	ID                       int                `json:"-"`
+	Dataset                  string             `json:"dataset"`
+	Enabled                  bool               `json:"enabled"`
+	Kind                     string             `json:"kind,omitempty"`
+	Name                     string             `json:"name"`
+	LogpullOptions           string             `json:"logpull_options"`
+	DestinationConf          string             `json:"destination_conf"`
+	OwnershipChallenge       string             `json:"ownership_challenge,omitempty"`
+	LastComplete             *time.Time         `json:"last_complete,omitempty"`
+	LastError                *time.Time         `json:"last_error,omitempty"`
+	ErrorMessage             string             `json:"error_message,omitempty"`
+	Frequency                string             `json:"frequency,omitempty"`
+	Filter                   *LogpushJobFilters `json:"filter,omitempty"`
+	MaxUploadBytes           int                `json:"max_upload_bytes,omitempty"`
+	MaxUploadRecords         int                `json:"max_upload_records,omitempty"`
+	MaxUploadIntervalSeconds int                `json:"max_upload_interval_seconds,omitempty"`
+}
+
+type ValidateLogpushOwnershipChallengeParams struct {
+	DestinationConf    string `json:"destination_conf"`
+	OwnershipChallenge string `json:"ownership_challenge"`
+}
+
+type GetLogpushOwnershipChallengeParams struct {
+	DestinationConf string `json:"destination_conf"`
 }
 
 // CreateLogpushJob creates a new zone-level Logpush Job.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-create-logpush-job
-//
-// Deprecated: Use `CreateZoneLogpushJob` or `CreateAccountLogpushJob` depending
-// on the desired resource to target.
-func (api *API) CreateLogpushJob(ctx context.Context, zoneID string, job LogpushJob) (*LogpushJob, error) {
-	return api.createLogpushJob(ctx, ZoneRouteRoot, zoneID, job)
-}
-
-func (api *API) createLogpushJob(ctx context.Context, identifierType RouteRoot, identifier string, job LogpushJob) (*LogpushJob, error) {
-	uri := fmt.Sprintf("/%s/%s/logpush/jobs", identifierType, identifier)
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, job)
+func (api *API) CreateLogpushJob(ctx context.Context, rc *ResourceContainer, params CreateLogpushJobParams) (*LogpushJob, error) {
+	uri := fmt.Sprintf("/%s/%s/logpush/jobs", rc.Level, rc.Identifier)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return nil, err
 	}
@@ -259,32 +392,11 @@ func (api *API) createLogpushJob(ctx context.Context, identifierType RouteRoot, 
 	return &r.Result, nil
 }
 
-// ListAccountLogpushJobs returns all account-level Logpush Jobs for all datasets.
+// ListAccountLogpushJobs returns all Logpush Jobs for all datasets.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-list-logpush-jobs
-func (api *API) ListAccountLogpushJobs(ctx context.Context, accountID string) ([]LogpushJob, error) {
-	return api.listLogpushJobs(ctx, AccountRouteRoot, accountID)
-}
-
-// ListZoneLogpushJobs returns all zone-level Logpush Jobs for all datasets.
-//
-// API reference: https://api.cloudflare.com/#logpush-jobs-list-logpush-jobs
-func (api *API) ListZoneLogpushJobs(ctx context.Context, zoneID string) ([]LogpushJob, error) {
-	return api.listLogpushJobs(ctx, ZoneRouteRoot, zoneID)
-}
-
-// LogpushJobs returns all zone-level Logpush Jobs for all datasets.
-//
-// API reference: https://api.cloudflare.com/#logpush-jobs-list-logpush-jobs
-//
-// Deprecated: Use `ListZoneLogpushJobs` or `ListAccountLogpushJobs`
-// depending on the desired resource to target.
-func (api *API) LogpushJobs(ctx context.Context, zoneID string) ([]LogpushJob, error) {
-	return api.listLogpushJobs(ctx, ZoneRouteRoot, zoneID)
-}
-
-func (api *API) listLogpushJobs(ctx context.Context, identifierType RouteRoot, identifier string) ([]LogpushJob, error) {
-	uri := fmt.Sprintf("/%s/%s/logpush/jobs", identifierType, identifier)
+func (api *API) ListLogpushJobs(ctx context.Context, rc *ResourceContainer, params ListLogpushJobsParams) ([]LogpushJob, error) {
+	uri := fmt.Sprintf("/%s/%s/logpush/jobs", rc.Level, rc.Identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []LogpushJob{}, err
@@ -297,33 +409,11 @@ func (api *API) listLogpushJobs(ctx context.Context, identifierType RouteRoot, i
 	return r.Result, nil
 }
 
-// ListAccountLogpushJobsForDataset returns all account-level Logpush Jobs for a dataset.
+// LogpushJobsForDataset returns all Logpush Jobs for a dataset.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-list-logpush-jobs-for-a-dataset
-func (api *API) ListAccountLogpushJobsForDataset(ctx context.Context, accountID, dataset string) ([]LogpushJob, error) {
-	return api.listLogpushJobsForDataset(ctx, AccountRouteRoot, accountID, dataset)
-}
-
-// ListZoneLogpushJobsForDataset returns all zone-level Logpush Jobs for a dataset.
-//
-// API reference: https://api.cloudflare.com/#logpush-jobs-list-logpush-jobs-for-a-dataset
-func (api *API) ListZoneLogpushJobsForDataset(ctx context.Context, zoneID, dataset string) ([]LogpushJob, error) {
-	return api.listLogpushJobsForDataset(ctx, ZoneRouteRoot, zoneID, dataset)
-}
-
-// LogpushJobsForDataset returns all zone-level Logpush Jobs for a dataset.
-//
-// API reference: https://api.cloudflare.com/#logpush-jobs-list-logpush-jobs-for-a-dataset
-//
-// Deprecated: Use `ListZoneLogpushJobsForDataset` or
-// `ListAccountLogpushJobsForDataset` depending on the desired resource
-// to target.
-func (api *API) LogpushJobsForDataset(ctx context.Context, zoneID, dataset string) ([]LogpushJob, error) {
-	return api.listLogpushJobsForDataset(ctx, ZoneRouteRoot, zoneID, dataset)
-}
-
-func (api *API) listLogpushJobsForDataset(ctx context.Context, identifierType RouteRoot, identifier, dataset string) ([]LogpushJob, error) {
-	uri := fmt.Sprintf("/%s/%s/logpush/datasets/%s/jobs", identifierType, identifier, dataset)
+func (api *API) ListLogpushJobsForDataset(ctx context.Context, rc *ResourceContainer, params ListLogpushJobsForDatasetParams) ([]LogpushJob, error) {
+	uri := fmt.Sprintf("/%s/%s/logpush/datasets/%s/jobs", rc.Level, rc.Identifier, params.Dataset)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []LogpushJob{}, err
@@ -334,38 +424,13 @@ func (api *API) listLogpushJobsForDataset(ctx context.Context, identifierType Ro
 		return []LogpushJob{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
-}
-
-// GetAccountLogpushFields returns fields for a given account-level dataset.
-//
-// Account fields documentation: https://developers.cloudflare.com/logs/reference/log-fields/account
-//
-// API reference: https://api.cloudflare.com/#logpush-jobs-list-logpush-jobs
-func (api *API) GetAccountLogpushFields(ctx context.Context, accountID, dataset string) (LogpushFields, error) {
-	return api.getLogpushFields(ctx, AccountRouteRoot, accountID, dataset)
-}
-
-// GetZoneLogpushFields returns fields for a given zone-level dataset.
-//
-// Zone fields documentation: https://developers.cloudflare.com/logs/reference/log-fields/zone
-//
-// API reference: https://api.cloudflare.com/#logpush-jobs-list-logpush-jobs
-func (api *API) GetZoneLogpushFields(ctx context.Context, zoneID, dataset string) (LogpushFields, error) {
-	return api.getLogpushFields(ctx, ZoneRouteRoot, zoneID, dataset)
 }
 
 // LogpushFields returns fields for a given dataset.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-list-logpush-jobs
-//
-// Deprecated: Use `GetZoneLogpushFields` or `GetAccountLogpushFields`
-// depending on the desired resource to target.
-func (api *API) LogpushFields(ctx context.Context, zoneID, dataset string) (LogpushFields, error) {
-	return api.getLogpushFields(ctx, ZoneRouteRoot, zoneID, dataset)
-}
-
-func (api *API) getLogpushFields(ctx context.Context, identifierType RouteRoot, identifier, dataset string) (LogpushFields, error) {
-	uri := fmt.Sprintf("/%s/%s/logpush/datasets/%s/fields", identifierType, identifier, dataset)
+func (api *API) GetLogpushFields(ctx context.Context, rc *ResourceContainer, params GetLogpushFieldsParams) (LogpushFields, error) {
+	uri := fmt.Sprintf("/%s/%s/logpush/datasets/%s/fields", rc.Level, rc.Identifier, params.Dataset)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return LogpushFields{}, err
@@ -378,32 +443,11 @@ func (api *API) getLogpushFields(ctx context.Context, identifierType RouteRoot, 
 	return r.Result, nil
 }
 
-// GetAccountLogpushJob fetches detail about one account-level Logpush Job.
-//
-// API reference: https://api.cloudflare.com/#logpush-jobs-logpush-job-details
-func (api *API) GetAccountLogpushJob(ctx context.Context, accountID string, jobID int) (LogpushJob, error) {
-	return api.getLogpushJob(ctx, AccountRouteRoot, accountID, jobID)
-}
-
-// GetZoneLogpushJob fetches detail about one Logpush Job for a zone.
-//
-// API reference: https://api.cloudflare.com/#logpush-jobs-logpush-job-details
-func (api *API) GetZoneLogpushJob(ctx context.Context, zoneID string, jobID int) (LogpushJob, error) {
-	return api.getLogpushJob(ctx, ZoneRouteRoot, zoneID, jobID)
-}
-
 // LogpushJob fetches detail about one Logpush Job for a zone.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-logpush-job-details
-//
-// Deprecated: Use `GetZoneLogpushJob` or `GetAccountLogpushJob`
-// depending on the desired resource to target.
-func (api *API) LogpushJob(ctx context.Context, zoneID string, jobID int) (LogpushJob, error) {
-	return api.getLogpushJob(ctx, ZoneRouteRoot, zoneID, jobID)
-}
-
-func (api *API) getLogpushJob(ctx context.Context, identifierType RouteRoot, identifier string, jobID int) (LogpushJob, error) {
-	uri := fmt.Sprintf("/%s/%s/logpush/jobs/%d", identifierType, identifier, jobID)
+func (api *API) GetLogpushJob(ctx context.Context, rc *ResourceContainer, jobID int) (LogpushJob, error) {
+	uri := fmt.Sprintf("/%s/%s/logpush/jobs/%d", rc.Level, rc.Identifier, jobID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return LogpushJob{}, err
@@ -416,33 +460,12 @@ func (api *API) getLogpushJob(ctx context.Context, identifierType RouteRoot, ide
 	return r.Result, nil
 }
 
-// UpdateAccountLogpushJob lets you update an account-level Logpush Job.
-//
-// API reference: https://api.cloudflare.com/#logpush-jobs-update-logpush-job
-func (api *API) UpdateAccountLogpushJob(ctx context.Context, accountID string, jobID int, job LogpushJob) error {
-	return api.updateLogpushJob(ctx, AccountRouteRoot, accountID, jobID, job)
-}
-
-// UpdateZoneLogpushJob lets you update a Logpush Job for a zone.
-//
-// API reference: https://api.cloudflare.com/#logpush-jobs-update-logpush-job
-func (api *API) UpdateZoneLogpushJob(ctx context.Context, zoneID string, jobID int, job LogpushJob) error {
-	return api.updateLogpushJob(ctx, ZoneRouteRoot, zoneID, jobID, job)
-}
-
 // UpdateLogpushJob lets you update a Logpush Job.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-update-logpush-job
-//
-// Deprecated: Use `UpdateZoneLogpushJob` or `UpdateAccountLogpushJob`
-// depending on the desired resource to target.
-func (api *API) UpdateLogpushJob(ctx context.Context, zoneID string, jobID int, job LogpushJob) error {
-	return api.updateLogpushJob(ctx, ZoneRouteRoot, zoneID, jobID, job)
-}
-
-func (api *API) updateLogpushJob(ctx context.Context, identifierType RouteRoot, identifier string, jobID int, job LogpushJob) error {
-	uri := fmt.Sprintf("/%s/%s/logpush/jobs/%d", identifierType, identifier, jobID)
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, job)
+func (api *API) UpdateLogpushJob(ctx context.Context, rc *ResourceContainer, params UpdateLogpushJobParams) error {
+	uri := fmt.Sprintf("/%s/%s/logpush/jobs/%d", rc.Level, rc.Identifier, params.ID)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return err
 	}
@@ -454,32 +477,11 @@ func (api *API) updateLogpushJob(ctx context.Context, identifierType RouteRoot, 
 	return nil
 }
 
-// DeleteAccountLogpushJob deletes an account-level Logpush Job.
-//
-// API reference: https://api.cloudflare.com/#logpush-jobs-delete-logpush-job
-func (api *API) DeleteAccountLogpushJob(ctx context.Context, accountID string, jobID int) error {
-	return api.deleteLogpushJob(ctx, AccountRouteRoot, accountID, jobID)
-}
-
-// DeleteZoneLogpushJob deletes a Logpush Job for a zone.
-//
-// API reference: https://api.cloudflare.com/#logpush-jobs-delete-logpush-job
-func (api *API) DeleteZoneLogpushJob(ctx context.Context, zoneID string, jobID int) error {
-	return api.deleteLogpushJob(ctx, ZoneRouteRoot, zoneID, jobID)
-}
-
 // DeleteLogpushJob deletes a Logpush Job for a zone.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-delete-logpush-job
-//
-// Deprecated: Use `DeleteZoneLogpushJob` or `DeleteAccountLogpushJob`
-// depending on the desired resource to target.
-func (api *API) DeleteLogpushJob(ctx context.Context, zoneID string, jobID int) error {
-	return api.deleteLogpushJob(ctx, ZoneRouteRoot, zoneID, jobID)
-}
-
-func (api *API) deleteLogpushJob(ctx context.Context, identifierType RouteRoot, identifier string, jobID int) error {
-	uri := fmt.Sprintf("/%s/%s/logpush/jobs/%d", identifierType, identifier, jobID)
+func (api *API) DeleteLogpushJob(ctx context.Context, rc *ResourceContainer, jobID int) error {
+	uri := fmt.Sprintf("/%s/%s/logpush/jobs/%d", rc.Level, rc.Identifier, jobID)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return err
@@ -492,36 +494,12 @@ func (api *API) deleteLogpushJob(ctx context.Context, identifierType RouteRoot, 
 	return nil
 }
 
-// GetAccountLogpushOwnershipChallenge returns ownership challenge.
-//
-// API reference: https://api.cloudflare.com/#logpush-jobs-get-ownership-challenge
-func (api *API) GetAccountLogpushOwnershipChallenge(ctx context.Context, accountID, destinationConf string) (*LogpushGetOwnershipChallenge, error) {
-	return api.getLogpushOwnershipChallenge(ctx, AccountRouteRoot, accountID, destinationConf)
-}
-
-// GetZoneLogpushOwnershipChallenge returns ownership challenge.
-//
-// API reference: https://api.cloudflare.com/#logpush-jobs-get-ownership-challenge
-func (api *API) GetZoneLogpushOwnershipChallenge(ctx context.Context, zoneID, destinationConf string) (*LogpushGetOwnershipChallenge, error) {
-	return api.getLogpushOwnershipChallenge(ctx, ZoneRouteRoot, zoneID, destinationConf)
-}
-
 // GetLogpushOwnershipChallenge returns ownership challenge.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-get-ownership-challenge
-//
-// Deprecated: Use `GetZoneLogpushOwnershipChallenge` or
-// `GetAccountLogpushOwnershipChallenge` depending on the
-// desired resource to target.
-func (api *API) GetLogpushOwnershipChallenge(ctx context.Context, zoneID, destinationConf string) (*LogpushGetOwnershipChallenge, error) {
-	return api.getLogpushOwnershipChallenge(ctx, ZoneRouteRoot, zoneID, destinationConf)
-}
-
-func (api *API) getLogpushOwnershipChallenge(ctx context.Context, identifierType RouteRoot, identifier, destinationConf string) (*LogpushGetOwnershipChallenge, error) {
-	uri := fmt.Sprintf("/%s/%s/logpush/ownership", identifierType, identifier)
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, LogpushGetOwnershipChallengeRequest{
-		DestinationConf: destinationConf,
-	})
+func (api *API) GetLogpushOwnershipChallenge(ctx context.Context, rc *ResourceContainer, params GetLogpushOwnershipChallengeParams) (*LogpushGetOwnershipChallenge, error) {
+	uri := fmt.Sprintf("/%s/%s/logpush/ownership", rc.Level, rc.Identifier)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return nil, err
 	}
@@ -538,37 +516,12 @@ func (api *API) getLogpushOwnershipChallenge(ctx context.Context, identifierType
 	return &r.Result, nil
 }
 
-// ValidateAccountLogpushOwnershipChallenge returns account-level ownership challenge validation result.
-//
-// API reference: https://api.cloudflare.com/#logpush-jobs-validate-ownership-challenge
-func (api *API) ValidateAccountLogpushOwnershipChallenge(ctx context.Context, accountID, destinationConf, ownershipChallenge string) (bool, error) {
-	return api.validateLogpushOwnershipChallenge(ctx, AccountRouteRoot, accountID, destinationConf, ownershipChallenge)
-}
-
-// ValidateZoneLogpushOwnershipChallenge returns zone-level ownership challenge validation result.
-//
-// API reference: https://api.cloudflare.com/#logpush-jobs-validate-ownership-challenge
-func (api *API) ValidateZoneLogpushOwnershipChallenge(ctx context.Context, zoneID, destinationConf, ownershipChallenge string) (bool, error) {
-	return api.validateLogpushOwnershipChallenge(ctx, ZoneRouteRoot, zoneID, destinationConf, ownershipChallenge)
-}
-
 // ValidateLogpushOwnershipChallenge returns zone-level ownership challenge validation result.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-validate-ownership-challenge
-//
-// Deprecated: Use `ValidateZoneLogpushOwnershipChallenge` or
-// `ValidateAccountLogpushOwnershipChallenge` depending on the
-// desired resource to target.
-func (api *API) ValidateLogpushOwnershipChallenge(ctx context.Context, zoneID, destinationConf, ownershipChallenge string) (bool, error) {
-	return api.validateLogpushOwnershipChallenge(ctx, ZoneRouteRoot, zoneID, destinationConf, ownershipChallenge)
-}
-
-func (api *API) validateLogpushOwnershipChallenge(ctx context.Context, identifierType RouteRoot, identifier, destinationConf, ownershipChallenge string) (bool, error) {
-	uri := fmt.Sprintf("/%s/%s/logpush/ownership/validate", identifierType, identifier)
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, LogpushValidateOwnershipChallengeRequest{
-		DestinationConf:    destinationConf,
-		OwnershipChallenge: ownershipChallenge,
-	})
+func (api *API) ValidateLogpushOwnershipChallenge(ctx context.Context, rc *ResourceContainer, params ValidateLogpushOwnershipChallengeParams) (bool, error) {
+	uri := fmt.Sprintf("/%s/%s/logpush/ownership/validate", rc.Level, rc.Identifier)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return false, err
 	}
@@ -580,33 +533,11 @@ func (api *API) validateLogpushOwnershipChallenge(ctx context.Context, identifie
 	return r.Result.Valid, nil
 }
 
-// CheckAccountLogpushDestinationExists returns account-level destination exists check result.
-//
-// API reference: https://api.cloudflare.com/#logpush-jobs-check-destination-exists
-func (api *API) CheckAccountLogpushDestinationExists(ctx context.Context, accountID, destinationConf string) (bool, error) {
-	return api.checkLogpushDestinationExists(ctx, AccountRouteRoot, accountID, destinationConf)
-}
-
-// CheckZoneLogpushDestinationExists returns zone-level destination exists check result.
-//
-// API reference: https://api.cloudflare.com/#logpush-jobs-check-destination-exists
-func (api *API) CheckZoneLogpushDestinationExists(ctx context.Context, zoneID, destinationConf string) (bool, error) {
-	return api.checkLogpushDestinationExists(ctx, ZoneRouteRoot, zoneID, destinationConf)
-}
-
 // CheckLogpushDestinationExists returns zone-level destination exists check result.
 //
 // API reference: https://api.cloudflare.com/#logpush-jobs-check-destination-exists
-//
-// Deprecated: Use `CheckZoneLogpushDestinationExists` or
-// `CheckAccountLogpushDestinationExists` depending
-// on the desired resource to target.
-func (api *API) CheckLogpushDestinationExists(ctx context.Context, zoneID, destinationConf string) (bool, error) {
-	return api.checkLogpushDestinationExists(ctx, ZoneRouteRoot, zoneID, destinationConf)
-}
-
-func (api *API) checkLogpushDestinationExists(ctx context.Context, identifierType RouteRoot, identifier, destinationConf string) (bool, error) {
-	uri := fmt.Sprintf("/%s/%s/logpush/validate/destination/exists", identifierType, identifier)
+func (api *API) CheckLogpushDestinationExists(ctx context.Context, rc *ResourceContainer, destinationConf string) (bool, error) {
+	uri := fmt.Sprintf("/%s/%s/logpush/validate/destination/exists", rc.Level, rc.Identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, LogpushDestinationExistsRequest{
 		DestinationConf: destinationConf,
 	})
