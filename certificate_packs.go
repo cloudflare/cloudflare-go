@@ -45,6 +45,7 @@ type CertificatePack struct {
 	ValidityDays         int                          `json:"validity_days"`
 	CertificateAuthority string                       `json:"certificate_authority"`
 	CloudflareBranding   bool                         `json:"cloudflare_branding"`
+	DelegationRecords    []SSLDelegationRecord        `json:"dcv_delegation_records,omitempty"`
 }
 
 // CertificatePackRequest is used for requesting a new certificate.
