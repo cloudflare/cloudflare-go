@@ -1,5 +1,12 @@
 ## 0.73.0 (Unreleased)
 
+BREAKING CHANGES:
+
+* pages_deployment: add support for auto pagination ([#1264](https://github.com/cloudflare/cloudflare-go/issues/1264))
+* pages_deployment: change DeletePagesDeploymentParams to contain all parameters ([#1264](https://github.com/cloudflare/cloudflare-go/issues/1264))
+* pages_project: change to use ResourceContainer for account ID ([#1264](https://github.com/cloudflare/cloudflare-go/issues/1264))
+* pages_project: rename PagesProject to GetPagesProject ([#1264](https://github.com/cloudflare/cloudflare-go/issues/1264))
+
 DEPENDENCIES:
 
 * deps: bumps golang.org/x/net from 0.11.0 to 0.12.0 ([#1328](https://github.com/cloudflare/cloudflare-go/issues/1328))
