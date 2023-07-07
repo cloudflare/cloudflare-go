@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	testPagesDeplyomentResponse = `
+	testPagesDeploymentResponse = `
 	{
 		"id": "0012e50b-fa5d-44db-8cb5-1f372785dcbe",
 		"short_id": "0012e50b",
@@ -207,44 +207,6 @@ var (
 		Status:    "success",
 	}
 
-	expectedPagesDeploymentStageLogEntries = []PagesDeploymentStageLogEntry{
-		{
-			ID:        0,
-			Timestamp: &pagesDeploymentDummyTime,
-			Message:   "Installing dependencies",
-		},
-		{
-			ID:        1,
-			Timestamp: &pagesDeploymentDummyTime,
-			Message:   "Verify run directory",
-		},
-		{
-			ID:        2,
-			Timestamp: &pagesDeploymentDummyTime,
-			Message:   "Executing user command: bash test.sh",
-		},
-		{
-			ID:        3,
-			Timestamp: &pagesDeploymentDummyTime,
-			Message:   "Finished",
-		},
-		{
-			ID:        4,
-			Timestamp: &pagesDeploymentDummyTime,
-			Message:   "Building functions...",
-		},
-		{
-			ID:        5,
-			Timestamp: &pagesDeploymentDummyTime,
-			Message:   "Validating asset output directory",
-		},
-		{
-			ID:        6,
-			Timestamp: &pagesDeploymentDummyTime,
-			Message:   "Parsed 2 valid header rules.",
-		},
-	}
-
 	expectedPagesDeploymentLogs = &PagesDeploymentLogs{
 		Total:                 6,
 		IncludesContainerLogs: true,
@@ -289,6 +251,8 @@ func TestListPagesDeployments(t *testing.T) {
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, "25", r.URL.Query().Get("per_page"))
+		assert.Equal(t, "1", r.URL.Query().Get("page"))
 
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
@@ -304,7 +268,7 @@ func TestListPagesDeployments(t *testing.T) {
 				"count": 1,
 				"total_count": 1
 			  }
-		}`, testPagesDeplyomentResponse)
+		}`, testPagesDeploymentResponse)
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments", handler)
@@ -319,12 +283,70 @@ func TestListPagesDeployments(t *testing.T) {
 		Total:   1,
 	}
 	actual, resultInfo, err := client.ListPagesDeployments(context.Background(), AccountIdentifier(testAccountID), ListPagesDeploymentsParams{
-		ProjectName:       "test",
-		PaginationOptions: PaginationOptions{},
+		ProjectName: "test",
+		ResultInfo:  ResultInfo{},
 	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedPagesDeployments, actual)
-		assert.Equal(t, expectedResultInfo, resultInfo)
+		assert.Equal(t, &expectedResultInfo, resultInfo)
+	}
+}
+
+func TestListPagesDeploymentsPagination(t *testing.T) {
+	setup()
+	defer teardown()
+	var page1Called, page2Called bool
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		page := r.URL.Query().Get("page")
+		w.Header().Set("content-type", "application/json")
+		switch page {
+		case "1":
+			page1Called = true
+			fmt.Fprintf(w, `{
+				"success": true,
+				"errors": [],
+				"messages": [],	
+				"result": [
+					%s
+				],
+				"result_info": {
+					"page": 1,
+					"per_page": 25,
+					"total_count": 26,
+					"total_pages": 2
+				  }
+			}`, testPagesDeploymentResponse)
+		case "2":
+			page2Called = true
+			fmt.Fprintf(w, `{
+				"success": true,
+				"errors": [],
+				"messages": [],	
+				"result": [
+					%s
+				],
+				"result_info": {
+					"page": 2,
+					"per_page": 25,
+					"total_count": 26,
+					"total_pages": 2
+				  }
+			}`, testPagesDeploymentResponse)
+		default:
+			assert.Failf(t, "Unexpected page number", "Expected page 1 or 2, got %s", page)
+			return
+		}
+	}
+	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments", handler)
+	actual, resultInfo, err := client.ListPagesDeployments(context.Background(), AccountIdentifier(testAccountID), ListPagesDeploymentsParams{
+		ProjectName: "test",
+		ResultInfo:  ResultInfo{},
+	})
+	if assert.NoError(t, err) {
+		assert.True(t, page1Called)
+		assert.True(t, page2Called)
+		assert.Equal(t, 2, len(actual))
+		assert.Equal(t, 26, resultInfo.Total)
 	}
 }
 
@@ -341,7 +363,7 @@ func TestGetPagesDeploymentInfo(t *testing.T) {
 			"errors": [],
 			"messages": [],
 			"result": %s
-		}`, testPagesDeplyomentResponse)
+		}`, testPagesDeploymentResponse)
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe", handler)
@@ -386,7 +408,7 @@ func TestDeletePagesDeployment(t *testing.T) {
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
-
+		assert.Equal(t, "true", r.URL.Query().Get("force"))
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -398,7 +420,7 @@ func TestDeletePagesDeployment(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe", handler)
 
-	err := client.DeletePagesDeployment(context.Background(), AccountIdentifier(testAccountID), "test", "0012e50b-fa5d-44db-8cb5-1f372785dcbe")
+	err := client.DeletePagesDeployment(context.Background(), AccountIdentifier(testAccountID), DeletePagesDeploymentParams{ProjectName: "test", DeploymentID: "0012e50b-fa5d-44db-8cb5-1f372785dcbe", Force: true})
 	assert.NoError(t, err)
 }
 
@@ -415,7 +437,7 @@ func TestCreatePagesDeployment(t *testing.T) {
 			"errors": [],
 			"messages": [],
 			"result": %s
-		}`, testPagesDeplyomentResponse)
+		}`, testPagesDeploymentResponse)
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments", handler)
@@ -442,7 +464,7 @@ func TestRetryPagesDeployment(t *testing.T) {
 			"errors": [],
 			"messages": [],
 			"result": %s
-		}`, testPagesDeplyomentResponse)
+		}`, testPagesDeploymentResponse)
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe/retry", handler)
@@ -466,7 +488,7 @@ func TestRollbackPagesDeployment(t *testing.T) {
 			"errors": [],
 			"messages": [],
 			"result": %s
-		}`, testPagesDeplyomentResponse)
+		}`, testPagesDeploymentResponse)
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/test/deployments/0012e50b-fa5d-44db-8cb5-1f372785dcbe/rollback", handler)
