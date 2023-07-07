@@ -207,6 +207,9 @@ type CreatePagesProjectParams struct {
 }
 
 type UpdatePagesProjectParams struct {
+	// `ID` is used for addressing the resource via the UI or a stable
+	// anchor whereas `Name` is used for updating the value.
+	ID                  string                        `json:"-"`
 	Name                string                        `json:"name,omitempty"`
 	SubDomain           string                        `json:"subdomain"`
 	Domains             []string                      `json:"domains,omitempty"`
@@ -289,11 +292,11 @@ func (api *API) UpdatePagesProject(ctx context.Context, rc *ResourceContainer, p
 		return PagesProject{}, ErrMissingAccountID
 	}
 
-	if params.Name == "" {
+	if params.ID == "" {
 		return PagesProject{}, ErrMissingName
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s", rc.Identifier, params.Name)
+	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s", rc.Identifier, params.ID)
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
 	if err != nil {
 		return PagesProject{}, err
