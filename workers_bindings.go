@@ -407,6 +407,19 @@ func (b DispatchNamespaceBinding) serialize(bindingName string) (workerBindingMe
 	return meta, nil, nil
 }
 
+// UnsafeBinding is for experimental or deprecated bindings, and allows specifying any binding type or property
+type UnsafeBinding map[string]interface{}
+
+// Type returns the type of the binding.
+func (b UnsafeBinding) Type() WorkerBindingType {
+	return ""
+}
+
+func (b UnsafeBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
+	b["name"] = bindingName
+	return b, nil, nil
+}
+
 // Each binding that adds a part to the multipart form body will need
 // a unique part name so we just generate a random 128bit hex string.
 func getRandomPartName() string {

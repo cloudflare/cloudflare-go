@@ -1233,3 +1233,39 @@ func TestUploadWorker_ToDispatchNamespace(t *testing.T) {
 	})
 	assert.NoError(t, err)
 }
+
+func TestUploadWorker_UnsafeBinding(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+
+		mpUpload, err := parseMultipartUpload(r)
+		assert.NoError(t, err)
+
+		assert.Equal(t, workerScript, mpUpload.Script)
+
+		require.Contains(t, mpUpload.BindingMeta, "b1")
+		assert.Contains(t, mpUpload.BindingMeta["b1"], "name")
+		assert.Equal(t, "b1", mpUpload.BindingMeta["b1"]["name"])
+		assert.Contains(t, mpUpload.BindingMeta["b1"], "type")
+		assert.Equal(t, "dynamic_dispatch", mpUpload.BindingMeta["b1"]["type"])
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Println(workersScriptResponse(t))
+		fmt.Fprint(w, workersScriptResponse(t))
+	}
+	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
+
+	_, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{
+		ScriptName: "bar",
+		Script:     workerScript,
+		Bindings: map[string]WorkerBinding{
+			"b1": UnsafeBinding{
+				"type": "dynamic_dispatch",
+			},
+		},
+	})
+	assert.NoError(t, err)
+}
