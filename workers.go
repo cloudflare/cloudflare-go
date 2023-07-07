@@ -114,6 +114,7 @@ type WorkerMetaData struct {
 	LastDeployedFrom *string                `json:"last_deployed_from,omitempty"`
 	DeploymentId     *string                `json:"deployment_id,omitempty"`
 	PlacementMode    *PlacementMode         `json:"placement_mode,omitempty"`
+	PipelineHash     *string                `json:"pipeline_hash,omitempty"`
 }
 
 // WorkerListResponse wrapper struct for API response to worker script list API call.
