@@ -293,7 +293,7 @@ func (api *API) UpdatePagesProject(ctx context.Context, rc *ResourceContainer, p
 	}
 
 	if params.ID == "" {
-		return PagesProject{}, ErrMissingName
+		return PagesProject{}, ErrMissingIdentifier
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s", rc.Identifier, params.ID)
