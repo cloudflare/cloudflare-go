@@ -602,7 +602,7 @@ func TestCreatePagesProject(t *testing.T) {
 
 	actual, err := client.CreatePagesProject(context.Background(), AccountIdentifier(testAccountID), *params)
 	if assert.NoError(t, err) {
-		assert.Equal(t, params, actual)
+		assert.Equal(t, *expectedPagesProject, actual)
 	}
 }
 
@@ -611,6 +611,7 @@ func TestUpdatePagesProject(t *testing.T) {
 	defer teardown()
 
 	updateAttributes := &UpdatePagesProjectParams{
+		ID:   "Test Pages Project",
 		Name: "updated-project-name",
 	}
 
