@@ -1054,6 +1054,64 @@ func TestUploadWorker_WithQueueBinding(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+func TestUploadWorker_WithDispatchNamespaceBinding(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+
+		mpUpload, err := parseMultipartUpload(r)
+		assert.NoError(t, err)
+
+		expectedBindings := map[string]workerBindingMeta{
+			"b1": {
+				"name":      "b1",
+				"type":      "dispatch_namespace",
+				"namespace": "n1",
+				"outbound": map[string]interface{}{
+					"worker": map[string]interface{}{
+						"service":     "w1",
+						"environment": "e1",
+					},
+					"params": []interface{}{
+						map[string]interface{}{"name": "param1"},
+					},
+				},
+			},
+		}
+		assert.Equal(t, workerScript, mpUpload.Script)
+		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, workersScriptResponse(t))
+	}
+	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
+
+	environmentName := "e1"
+	_, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{
+		ScriptName: "bar",
+		Script:     workerScript,
+		Bindings: map[string]WorkerBinding{
+			"b1": DispatchNamespaceBinding{
+				Binding:   "b1",
+				Namespace: "n1",
+				Outbound: &NamespaceOutboundOptions{
+					Worker: WorkerReference{
+						Service:     "w1",
+						Environment: &environmentName,
+					},
+					Params: []OutboundParamSchema{
+						{
+							Name: "param1",
+						},
+					},
+				},
+			},
+		}})
+	assert.NoError(t, err)
+}
+
 func TestUploadWorker_WithSmartPlacementEnabled(t *testing.T) {
 	setup()
 	defer teardown()
