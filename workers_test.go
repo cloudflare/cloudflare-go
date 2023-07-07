@@ -1198,3 +1198,38 @@ func TestUploadWorker_WithTailConsumers(t *testing.T) {
 		assert.Len(t, *worker.TailConsumers, 2)
 	})
 }
+
+func TestUploadWorker_ToDispatchNamespace(t *testing.T) {
+	setup()
+	defer teardown()
+
+	namespaceName := "n1"
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+
+		mpUpload, err := parseMultipartUpload(r)
+		assert.NoError(t, err)
+
+		assert.Equal(t, workerScript, mpUpload.Script)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, workersScriptResponse(t))
+	}
+	mux.HandleFunc(
+		fmt.Sprintf("/accounts/"+testAccountID+"/workers/namespaces/%s/scripts/bar", namespaceName),
+		handler,
+	)
+
+	_, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{
+		ScriptName:            "bar",
+		Script:                workerScript,
+		DispatchNamespaceName: &namespaceName,
+		Bindings: map[string]WorkerBinding{
+			"b1": WorkerPlainTextBinding{
+				Text: "hello",
+			},
+		},
+	})
+	assert.NoError(t, err)
+}

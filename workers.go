@@ -24,6 +24,9 @@ type CreateWorkerParams struct {
 	ScriptName string
 	Script     string
 
+	// DispatchNamespaceName uploads the worker to a WFP dispatch namespace if provided
+	DispatchNamespaceName *string
+
 	// Module changes the Content-Type header to specify the script is an
 	// ES Module syntax script.
 	Module bool
@@ -273,6 +276,10 @@ func (api *API) UploadWorker(ctx context.Context, rc *ResourceContainer, params 
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s", rc.Identifier, params.ScriptName)
+	if params.DispatchNamespaceName != nil {
+		uri = fmt.Sprintf("/accounts/%s/workers/namespaces/%s/scripts/%s", rc.Identifier, *params.DispatchNamespaceName, params.ScriptName)
+	}
+
 	headers := make(http.Header)
 	headers.Set("Content-Type", contentType)
 	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPut, uri, body, headers)
