@@ -14,6 +14,10 @@ const (
 	ListTypeIP = "ip"
 	// ListTypeRedirect specifies a list containing redirects.
 	ListTypeRedirect = "redirect"
+	// ListTypeHostname specifies a list containing hostnames.
+	ListTypeHostname = "hostname"
+	// ListTypeHostname specifies a list containing autonomous system numbers (ASNs).
+	ListTypeASN = "asn"
 )
 
 // ListBulkOperation contains information about a Bulk Operation.
@@ -47,11 +51,17 @@ type Redirect struct {
 	PreservePathSuffix  *bool  `json:"preserve_path_suffix,omitempty"`
 }
 
+type Hostname struct {
+	UrlHostname string `json:"url_hostname"`
+}
+
 // ListItem contains information about a single List Item.
 type ListItem struct {
 	ID         string     `json:"id"`
 	IP         *string    `json:"ip,omitempty"`
 	Redirect   *Redirect  `json:"redirect,omitempty"`
+	Hostname   *Hostname  `json:"hostname,omitempty"`
+	ASN        *uint32    `json:"asn,omitempty"`
 	Comment    string     `json:"comment"`
 	CreatedOn  *time.Time `json:"created_on"`
 	ModifiedOn *time.Time `json:"modified_on"`
@@ -68,6 +78,8 @@ type ListCreateRequest struct {
 type ListItemCreateRequest struct {
 	IP       *string   `json:"ip,omitempty"`
 	Redirect *Redirect `json:"redirect,omitempty"`
+	Hostname *Hostname `json:"hostname,omitempty"`
+	ASN      *uint32   `json:"asn,omitempty"`
 	Comment  string    `json:"comment"`
 }
 

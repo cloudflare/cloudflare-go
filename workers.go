@@ -28,9 +28,16 @@ type CreateWorkerParams struct {
 	// ES Module syntax script.
 	Module bool
 
-	// Logpush opts the worker into Workers Logpush logging. A nil value leaves the current setting unchanged.
-	//  https://developers.cloudflare.com/workers/platform/logpush/
+	// Logpush opts the worker into Workers Logpush logging. A nil value leaves
+	// the current setting unchanged.
+	//
+	// Documentation: https://developers.cloudflare.com/workers/platform/logpush/
 	Logpush *bool
+
+	// TailConsumers specifies a list of Workers that will consume the logs of
+	// the attached Worker.
+	// Documentation: https://developers.cloudflare.com/workers/platform/tail-workers/
+	TailConsumers *[]WorkersTailConsumer
 
 	// Bindings should be a map where the keys are the binding name, and the
 	// values are the binding content
@@ -45,6 +52,8 @@ type CreateWorkerParams struct {
 	// usually used together with CompatibilityDate.
 	//  https://developers.cloudflare.com/workers/platform/compatibility-dates/#compatibility-flags
 	CompatibilityFlags []string
+
+	Placement *Placement
 }
 
 // WorkerScriptParams provides a worker script and the associated bindings.
@@ -88,13 +97,23 @@ type WorkerScript struct {
 	UsageModel string `json:"usage_model,omitempty"`
 }
 
+type WorkersTailConsumer struct {
+	Service     string  `json:"service"`
+	Environment *string `json:"environment,omitempty"`
+}
+
 // WorkerMetaData contains worker script information such as size, creation & modification dates.
 type WorkerMetaData struct {
-	ID         string    `json:"id,omitempty"`
-	ETAG       string    `json:"etag,omitempty"`
-	Size       int       `json:"size,omitempty"`
-	CreatedOn  time.Time `json:"created_on,omitempty"`
-	ModifiedOn time.Time `json:"modified_on,omitempty"`
+	ID               string                 `json:"id,omitempty"`
+	ETAG             string                 `json:"etag,omitempty"`
+	Size             int                    `json:"size,omitempty"`
+	CreatedOn        time.Time              `json:"created_on,omitempty"`
+	ModifiedOn       time.Time              `json:"modified_on,omitempty"`
+	Logpush          *bool                  `json:"logpush,omitempty"`
+	TailConsumers    *[]WorkersTailConsumer `json:"tail_consumers,omitempty"`
+	LastDeployedFrom *string                `json:"last_deployed_from,omitempty"`
+	DeploymentId     *string                `json:"deployment_id,omitempty"`
+	PlacementMode    *PlacementMode         `json:"placement_mode,omitempty"`
 }
 
 // WorkerListResponse wrapper struct for API response to worker script list API call.
@@ -115,6 +134,17 @@ type ListWorkersParams struct{}
 
 type DeleteWorkerParams struct {
 	ScriptName string
+}
+
+type PlacementMode string
+
+const (
+	PlacementModeOff   PlacementMode = ""
+	PlacementModeSmart PlacementMode = "smart"
+)
+
+type Placement struct {
+	Mode PlacementMode `json:"mode"`
 }
 
 // DeleteWorker deletes a single Worker.
@@ -234,7 +264,7 @@ func (api *API) UploadWorker(ctx context.Context, rc *ResourceContainer, params 
 		err         error
 	)
 
-	if params.Module || params.Logpush != nil || len(params.Bindings) > 0 || params.CompatibilityDate != "" || len(params.CompatibilityFlags) > 0 {
+	if params.Module || params.Logpush != nil || params.Placement != nil || len(params.Bindings) > 0 || params.CompatibilityDate != "" || len(params.CompatibilityFlags) > 0 || params.TailConsumers != nil {
 		contentType, body, err = formatMultipartBody(params)
 		if err != nil {
 			return WorkerScriptResponse{}, err
@@ -268,17 +298,21 @@ func formatMultipartBody(params CreateWorkerParams) (string, []byte, error) {
 	// Write metadata part
 	var scriptPartName string
 	meta := struct {
-		BodyPart           string              `json:"body_part,omitempty"`
-		MainModule         string              `json:"main_module,omitempty"`
-		Bindings           []workerBindingMeta `json:"bindings"`
-		Logpush            *bool               `json:"logpush,omitempty"`
-		CompatibilityDate  string              `json:"compatibility_date,omitempty"`
-		CompatibilityFlags []string            `json:"compatibility_flags,omitempty"`
+		BodyPart           string                 `json:"body_part,omitempty"`
+		MainModule         string                 `json:"main_module,omitempty"`
+		Bindings           []workerBindingMeta    `json:"bindings"`
+		Logpush            *bool                  `json:"logpush,omitempty"`
+		TailConsumers      *[]WorkersTailConsumer `json:"tail_consumers,omitempty"`
+		CompatibilityDate  string                 `json:"compatibility_date,omitempty"`
+		CompatibilityFlags []string               `json:"compatibility_flags,omitempty"`
+		Placement          *Placement             `json:"placement,omitempty"`
 	}{
 		Bindings:           make([]workerBindingMeta, 0, len(params.Bindings)),
 		Logpush:            params.Logpush,
+		TailConsumers:      params.TailConsumers,
 		CompatibilityDate:  params.CompatibilityDate,
 		CompatibilityFlags: params.CompatibilityFlags,
+		Placement:          params.Placement,
 	}
 
 	if params.Module {

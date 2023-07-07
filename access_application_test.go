@@ -10,6 +10,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+const (
+	testAccessApplicationID = "480f4f69-1a28-4fdd-9240-1ed29f0ac1db"
+)
+
 func TestAccessApplications(t *testing.T) {
 	setup()
 	defer teardown()
@@ -83,7 +87,7 @@ func TestAccessApplications(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps", handler)
 
-	actual, _, err := client.AccessApplications(context.Background(), testAccountID, PaginationOptions{})
+	actual, _, err := client.ListAccessApplications(context.Background(), AccountIdentifier(testAccountID), ListAccessApplicationsParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -91,7 +95,7 @@ func TestAccessApplications(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/apps", handler)
 
-	actual, _, err = client.ZoneLevelAccessApplications(context.Background(), testZoneID, PaginationOptions{})
+	actual, _, err = client.ListAccessApplications(context.Background(), ZoneIdentifier(testZoneID), ListAccessApplicationsParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -116,6 +120,7 @@ func TestAccessApplication(t *testing.T) {
 				"aud": "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
 				"name": "Admin Site",
 				"domain": "test.example.com/admin",
+				"self_hosted_domains": ["test.example.com/admin", "test.example.com/admin2"],
 				"type": "self_hosted",
 				"session_duration": "24h",
 				"allowed_idps": ["f174e90a-fafe-4643-bbbc-4a0ed4fc8415"],
@@ -144,6 +149,7 @@ func TestAccessApplication(t *testing.T) {
 		AUD:                     "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
 		Name:                    "Admin Site",
 		Domain:                  "test.example.com/admin",
+		SelfHostedDomains:       []string{"test.example.com/admin", "test.example.com/admin2"},
 		Type:                    "self_hosted",
 		SessionDuration:         "24h",
 		AllowedIdps:             []string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415"},
@@ -161,7 +167,7 @@ func TestAccessApplication(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
-	actual, err := client.AccessApplication(context.Background(), testAccountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	actual, err := client.GetAccessApplication(context.Background(), AccountIdentifier(testAccountID), "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -169,7 +175,7 @@ func TestAccessApplication(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
-	actual, err = client.ZoneLevelAccessApplication(context.Background(), testZoneID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	actual, err = client.GetAccessApplication(context.Background(), ZoneIdentifier(testZoneID), "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -194,6 +200,7 @@ func TestCreateAccessApplications(t *testing.T) {
 				"aud": "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
 				"name": "Admin Site",
 				"domain": "test.example.com/admin",
+				"self_hosted_domains": ["test.example.com/admin", "test.example.com/admin2"],
 				"type": "self_hosted",
 				"session_duration": "24h",
 				"allowed_idps": ["f174e90a-fafe-4643-bbbc-4a0ed4fc8415"],
@@ -216,6 +223,7 @@ func TestCreateAccessApplications(t *testing.T) {
 		ID:                     "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
 		Name:                   "Admin Site",
 		Domain:                 "test.example.com/admin",
+		SelfHostedDomains:      []string{"test.example.com/admin", "test.example.com/admin2"},
 		Type:                   "self_hosted",
 		SessionDuration:        "24h",
 		AUD:                    "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
@@ -234,7 +242,7 @@ func TestCreateAccessApplications(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps", handler)
 
-	actual, err := client.CreateAccessApplication(context.Background(), testAccountID, AccessApplication{
+	actual, err := client.CreateAccessApplication(context.Background(), AccountIdentifier(testAccountID), CreateAccessApplicationParams{
 		Name:            "Admin Site",
 		Domain:          "test.example.com/admin",
 		SessionDuration: "24h",
@@ -246,7 +254,7 @@ func TestCreateAccessApplications(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/apps", handler)
 
-	actual, err = client.CreateZoneLevelAccessApplication(context.Background(), testZoneID, AccessApplication{
+	actual, err = client.CreateAccessApplication(context.Background(), ZoneIdentifier(testZoneID), CreateAccessApplicationParams{
 		Name:            "Admin Site",
 		Domain:          "test.example.com/admin",
 		SessionDuration: "24h",
@@ -275,6 +283,7 @@ func TestUpdateAccessApplication(t *testing.T) {
 				"aud": "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
 				"name": "Admin Site",
 				"domain": "test.example.com/admin",
+				"self_hosted_domains": ["test.example.com/admin", "test.example.com/admin2"],
 				"type": "self_hosted",
 				"session_duration": "24h",
 				"allowed_idps": ["f174e90a-fafe-4643-bbbc-4a0ed4fc8415"],
@@ -291,12 +300,11 @@ func TestUpdateAccessApplication(t *testing.T) {
 		`)
 	}
 
-	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
-	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	fullAccessApplication := AccessApplication{
 		ID:                     "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
 		Name:                   "Admin Site",
 		Domain:                 "test.example.com/admin",
+		SelfHostedDomains:      []string{"test.example.com/admin", "test.example.com/admin2"},
 		Type:                   "self_hosted",
 		SessionDuration:        "24h",
 		AUD:                    "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
@@ -313,9 +321,28 @@ func TestUpdateAccessApplication(t *testing.T) {
 		UpdatedAt:              &updatedAt,
 	}
 
+	params := UpdateAccessApplicationParams{
+		ID:                     "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		Name:                   "Admin Site",
+		Domain:                 "test.example.com/admin",
+		SelfHostedDomains:      []string{"test.example.com/admin", "test.example.com/admin2"},
+		Type:                   "self_hosted",
+		SessionDuration:        "24h",
+		AUD:                    "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
+		AllowedIdps:            []string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415"},
+		AutoRedirectToIdentity: BoolPtr(false),
+		EnableBindingCookie:    BoolPtr(false),
+		AppLauncherVisible:     BoolPtr(true),
+		ServiceAuth401Redirect: BoolPtr(true),
+		CustomDenyMessage:      "denied!",
+		CustomDenyURL:          "https://www.example.com",
+		LogoURL:                "https://www.example.com/example.png",
+		SkipInterstitial:       BoolPtr(true),
+	}
+
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
-	actual, err := client.UpdateAccessApplication(context.Background(), testAccountID, fullAccessApplication)
+	actual, err := client.UpdateAccessApplication(context.Background(), AccountIdentifier(testAccountID), params)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, fullAccessApplication, actual)
@@ -323,7 +350,24 @@ func TestUpdateAccessApplication(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
-	actual, err = client.UpdateZoneLevelAccessApplication(context.Background(), testZoneID, fullAccessApplication)
+	actual, err = client.UpdateAccessApplication(context.Background(), ZoneIdentifier(testZoneID), UpdateAccessApplicationParams{
+		ID:                     "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		Name:                   "Admin Site",
+		Domain:                 "test.example.com/admin",
+		SelfHostedDomains:      []string{"test.example.com/admin", "test.example.com/admin2"},
+		Type:                   "self_hosted",
+		SessionDuration:        "24h",
+		AUD:                    "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
+		AllowedIdps:            []string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415"},
+		AutoRedirectToIdentity: BoolPtr(false),
+		EnableBindingCookie:    BoolPtr(false),
+		AppLauncherVisible:     BoolPtr(true),
+		ServiceAuth401Redirect: BoolPtr(true),
+		CustomDenyMessage:      "denied!",
+		CustomDenyURL:          "https://www.example.com",
+		LogoURL:                "https://www.example.com/example.png",
+		SkipInterstitial:       BoolPtr(true),
+	})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, fullAccessApplication, actual)
@@ -334,10 +378,10 @@ func TestUpdateAccessApplicationWithMissingID(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.UpdateAccessApplication(context.Background(), testZoneID, AccessApplication{})
+	_, err := client.UpdateAccessApplication(context.Background(), AccountIdentifier(testAccountID), UpdateAccessApplicationParams{})
 	assert.EqualError(t, err, "access application ID cannot be empty")
 
-	_, err = client.UpdateZoneLevelAccessApplication(context.Background(), testZoneID, AccessApplication{})
+	_, err = client.UpdateAccessApplication(context.Background(), AccountIdentifier(testAccountID), UpdateAccessApplicationParams{})
 	assert.EqualError(t, err, "access application ID cannot be empty")
 }
 
@@ -360,12 +404,12 @@ func TestDeleteAccessApplication(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
-	err := client.DeleteAccessApplication(context.Background(), testAccountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	err := client.DeleteAccessApplication(context.Background(), AccountIdentifier(testAccountID), "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	assert.NoError(t, err)
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
-	err = client.DeleteZoneLevelAccessApplication(context.Background(), testZoneID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	err = client.DeleteAccessApplication(context.Background(), ZoneIdentifier(testZoneID), "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	assert.NoError(t, err)
 }
@@ -386,12 +430,12 @@ func TestRevokeAccessApplicationTokens(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db/revoke-tokens", handler)
-	err := client.RevokeAccessApplicationTokens(context.Background(), testAccountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	err := client.RevokeAccessApplicationTokens(context.Background(), AccountIdentifier(testAccountID), "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	assert.NoError(t, err)
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db/revoke-tokens", handler)
-	err = client.RevokeZoneLevelAccessApplicationTokens(context.Background(), testZoneID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	err = client.RevokeAccessApplicationTokens(context.Background(), ZoneIdentifier(testZoneID), "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	assert.NoError(t, err)
 }
@@ -455,7 +499,7 @@ func TestAccessApplicationWithCORS(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
-	actual, err := client.AccessApplication(context.Background(), testAccountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	actual, err := client.GetAccessApplication(context.Background(), AccountIdentifier(testAccountID), "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -463,7 +507,7 @@ func TestAccessApplicationWithCORS(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
-	actual, err = client.ZoneLevelAccessApplication(context.Background(), testZoneID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+	actual, err = client.GetAccessApplication(context.Background(), ZoneIdentifier(testZoneID), "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -536,7 +580,7 @@ func TestCreatePrivateAccessApplication(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps", handler)
 
-	actual, err := client.CreateAccessApplication(context.Background(), testAccountID, AccessApplication{
+	actual, err := client.CreateAccessApplication(context.Background(), AccountIdentifier(testAccountID), CreateAccessApplicationParams{
 		Name:            "Admin Site",
 		PrivateAddress:  "198.51.100.0",
 		SessionDuration: "24h",
@@ -662,7 +706,7 @@ func TestCreateSaasAccessApplications(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps", handler)
 
-	actual, err := client.CreateAccessApplication(context.Background(), testAccountID, AccessApplication{
+	actual, err := client.CreateAccessApplication(context.Background(), AccountIdentifier(testAccountID), CreateAccessApplicationParams{
 		Name: "Admin Saas Site",
 		SaasApplication: &SaasApplication{
 			ConsumerServiceUrl: "https://examplesaas.com",
@@ -678,7 +722,7 @@ func TestCreateSaasAccessApplications(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/apps", handler)
 
-	actual, err = client.CreateZoneLevelAccessApplication(context.Background(), testZoneID, AccessApplication{
+	actual, err = client.CreateAccessApplication(context.Background(), ZoneIdentifier(testZoneID), CreateAccessApplicationParams{
 		Name: "Admin Saas Site",
 		SaasApplication: &SaasApplication{
 			ConsumerServiceUrl: "https://saas.example.com",

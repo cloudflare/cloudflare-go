@@ -189,6 +189,7 @@ func TestUpdateTunnelConfiguration(t *testing.T) {
 		fmt.Fprint(w, loadFixture("tunnel", "configuration"))
 	}
 
+	timeout, _ := time.ParseDuration("10s")
 	mux.HandleFunc(fmt.Sprintf("/accounts/%s/cfd_tunnel/%s/configurations", testAccountID, testTunnelID), handler)
 	want := TunnelConfigurationResult{
 		TunnelID: testTunnelID,
@@ -198,6 +199,9 @@ func TestUpdateTunnelConfiguration(t *testing.T) {
 				{
 					Hostname: "test.example.com",
 					Service:  "https://localhost:8000",
+					OriginRequest: &OriginRequestConfig{
+						NoTLSVerify: BoolPtr(true),
+					},
 				},
 				{
 					Service: "http_status:404",
@@ -207,7 +211,7 @@ func TestUpdateTunnelConfiguration(t *testing.T) {
 				Enabled: true,
 			},
 			OriginRequest: OriginRequestConfig{
-				ConnectTimeout: DurationPtr(10),
+				ConnectTimeout: &TunnelDuration{timeout},
 			},
 		}}
 
@@ -218,6 +222,9 @@ func TestUpdateTunnelConfiguration(t *testing.T) {
 				{
 					Hostname: "test.example.com",
 					Service:  "https://localhost:8000",
+					OriginRequest: &OriginRequestConfig{
+						NoTLSVerify: BoolPtr(true),
+					},
 				},
 				{
 					Service: "http_status:404",
@@ -227,7 +234,7 @@ func TestUpdateTunnelConfiguration(t *testing.T) {
 				Enabled: true,
 			},
 			OriginRequest: OriginRequestConfig{
-				ConnectTimeout: DurationPtr(10 * time.Second),
+				ConnectTimeout: &TunnelDuration{10},
 			},
 		},
 	})
@@ -248,6 +255,7 @@ func TestGetTunnelConfiguration(t *testing.T) {
 		fmt.Fprint(w, loadFixture("tunnel", "configuration"))
 	}
 
+	timeout, _ := time.ParseDuration("10s")
 	mux.HandleFunc(fmt.Sprintf("/accounts/%s/cfd_tunnel/%s/configurations", testAccountID, testTunnelID), handler)
 	want := TunnelConfigurationResult{
 		TunnelID: testTunnelID,
@@ -257,6 +265,9 @@ func TestGetTunnelConfiguration(t *testing.T) {
 				{
 					Hostname: "test.example.com",
 					Service:  "https://localhost:8000",
+					OriginRequest: &OriginRequestConfig{
+						NoTLSVerify: BoolPtr(true),
+					},
 				},
 				{
 					Service: "http_status:404",
@@ -266,7 +277,7 @@ func TestGetTunnelConfiguration(t *testing.T) {
 				Enabled: true,
 			},
 			OriginRequest: OriginRequestConfig{
-				ConnectTimeout: DurationPtr(10),
+				ConnectTimeout: &TunnelDuration{timeout},
 			},
 		}}
 

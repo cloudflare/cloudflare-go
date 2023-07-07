@@ -31,6 +31,7 @@ type TeamsDeviceListItem struct {
 	OSVersion        string   `json:"os_version,omitempty"`
 	OSDistroName     string   `json:"os_distro_name,omitempty"`
 	OsDistroRevision string   `json:"os_distro_revision,omitempty"`
+	OSVersionExtra   string   `json:"os_version_extra,omitempty"`
 	MacAddress       string   `json:"mac_address,omitempty"`
 	IP               string   `json:"ip,omitempty"`
 	Created          string   `json:"created,omitempty"`

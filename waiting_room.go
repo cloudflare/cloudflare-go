@@ -16,25 +16,27 @@ var (
 
 // WaitingRoom describes a WaitingRoom object.
 type WaitingRoom struct {
-	CreatedOn                  time.Time  `json:"created_on,omitempty"`
-	ModifiedOn                 time.Time  `json:"modified_on,omitempty"`
-	Path                       string     `json:"path"`
-	Name                       string     `json:"name"`
-	Description                string     `json:"description,omitempty"`
-	QueueingMethod             string     `json:"queueing_method,omitempty"`
-	CustomPageHTML             string     `json:"custom_page_html,omitempty"`
-	DefaultTemplateLanguage    string     `json:"default_template_language,omitempty"`
-	Host                       string     `json:"host"`
-	ID                         string     `json:"id,omitempty"`
-	NewUsersPerMinute          int        `json:"new_users_per_minute"`
-	TotalActiveUsers           int        `json:"total_active_users"`
-	SessionDuration            int        `json:"session_duration"`
-	QueueAll                   bool       `json:"queue_all"`
-	DisableSessionRenewal      bool       `json:"disable_session_renewal"`
-	Suspended                  bool       `json:"suspended"`
-	JsonResponseEnabled        bool       `json:"json_response_enabled"`
-	NextEventPrequeueStartTime *time.Time `json:"next_event_prequeue_start_time,omitempty"`
-	NextEventStartTime         *time.Time `json:"next_event_start_time,omitempty"`
+	CreatedOn                  time.Time           `json:"created_on,omitempty"`
+	ModifiedOn                 time.Time           `json:"modified_on,omitempty"`
+	Path                       string              `json:"path"`
+	Name                       string              `json:"name"`
+	Description                string              `json:"description,omitempty"`
+	QueueingMethod             string              `json:"queueing_method,omitempty"`
+	CustomPageHTML             string              `json:"custom_page_html,omitempty"`
+	DefaultTemplateLanguage    string              `json:"default_template_language,omitempty"`
+	Host                       string              `json:"host"`
+	ID                         string              `json:"id,omitempty"`
+	NewUsersPerMinute          int                 `json:"new_users_per_minute"`
+	TotalActiveUsers           int                 `json:"total_active_users"`
+	SessionDuration            int                 `json:"session_duration"`
+	QueueAll                   bool                `json:"queue_all"`
+	DisableSessionRenewal      bool                `json:"disable_session_renewal"`
+	Suspended                  bool                `json:"suspended"`
+	JsonResponseEnabled        bool                `json:"json_response_enabled"`
+	NextEventPrequeueStartTime *time.Time          `json:"next_event_prequeue_start_time,omitempty"`
+	NextEventStartTime         *time.Time          `json:"next_event_start_time,omitempty"`
+	CookieSuffix               string              `json:"cookie_suffix"`
+	AdditionalRoutes           []*WaitingRoomRoute `json:"additional_routes,omitempty"`
 }
 
 // WaitingRoomStatus describes the status of a waiting room.
@@ -76,6 +78,12 @@ type WaitingRoomRule struct {
 	Enabled     *bool      `json:"enabled"`
 }
 
+// WaitingRoomSettings describes zone-level waiting room settings.
+type WaitingRoomSettings struct {
+	// Whether to allow verified search engine crawlers to bypass all waiting rooms on this zone
+	SearchEngineCrawlerBypass bool `json:"search_engine_crawler_bypass"`
+}
+
 // WaitingRoomPagePreviewURL describes a WaitingRoomPagePreviewURL object.
 type WaitingRoomPagePreviewURL struct {
 	PreviewURL string `json:"preview_url"`
@@ -84,6 +92,12 @@ type WaitingRoomPagePreviewURL struct {
 // WaitingRoomPagePreviewCustomHTML describes a WaitingRoomPagePreviewCustomHTML object.
 type WaitingRoomPagePreviewCustomHTML struct {
 	CustomHTML string `json:"custom_html"`
+}
+
+// WaitingRoomRoute describes a WaitingRoomRoute object.
+type WaitingRoomRoute struct {
+	Host string `json:"host"`
+	Path string `json:"path"`
 }
 
 // WaitingRoomDetailResponse is the API response, containing a single WaitingRoom.
@@ -96,6 +110,12 @@ type WaitingRoomDetailResponse struct {
 type WaitingRoomsResponse struct {
 	Response
 	Result []WaitingRoom `json:"result"`
+}
+
+// WaitingRoomSettingsResponse is the API response, containing zone-level Waiting Room settings.
+type WaitingRoomSettingsResponse struct {
+	Response
+	Result WaitingRoomSettings `json:"result"`
 }
 
 // WaitingRoomStatusResponse is the API response, containing the status of a waiting room.
@@ -530,5 +550,78 @@ func (api *API) DeleteWaitingRoomRule(ctx context.Context, rc *ResourceContainer
 		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
+	return r.Result, nil
+}
+
+// GetWaitingRoomSettings fetches the Waiting Room zone-level settings for a zone.
+//
+// API reference: https://api.cloudflare.com/#waiting-room-get-zone-settings
+func (api *API) GetWaitingRoomSettings(ctx context.Context, rc *ResourceContainer) (WaitingRoomSettings, error) {
+	if rc.Level != ZoneRouteLevel {
+		return WaitingRoomSettings{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
+
+	uri := fmt.Sprintf("/zones/%s/waiting_rooms/settings", rc.Identifier)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return WaitingRoomSettings{}, err
+	}
+	var r WaitingRoomSettingsResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return WaitingRoomSettings{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+	return r.Result, nil
+}
+
+type PatchWaitingRoomSettingsParams struct {
+	SearchEngineCrawlerBypass *bool `json:"search_engine_crawler_bypass,omitempty"`
+}
+
+// PatchWaitingRoomSettings lets you change individual zone-level Waiting Room settings. This is
+// in contrast to UpdateWaitingRoomSettings which replaces all settings.
+//
+// API reference: https://api.cloudflare.com/#waiting-room-patch-zone-settings
+func (api *API) PatchWaitingRoomSettings(ctx context.Context, rc *ResourceContainer, params PatchWaitingRoomSettingsParams) (WaitingRoomSettings, error) {
+	if rc.Level != ZoneRouteLevel {
+		return WaitingRoomSettings{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
+
+	uri := fmt.Sprintf("/zones/%s/waiting_rooms/settings", rc.Identifier)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
+	if err != nil {
+		return WaitingRoomSettings{}, err
+	}
+	var r WaitingRoomSettingsResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return WaitingRoomSettings{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+	return r.Result, nil
+}
+
+type UpdateWaitingRoomSettingsParams struct {
+	SearchEngineCrawlerBypass *bool `json:"search_engine_crawler_bypass,omitempty"`
+}
+
+// UpdateWaitingRoomSettings lets you replace all zone-level Waiting Room settings. This is in contrast to
+// PatchWaitingRoomSettings which lets you change individual settings.
+//
+// API reference: https://api.cloudflare.com/#waiting-room-update-zone-settings
+func (api *API) UpdateWaitingRoomSettings(ctx context.Context, rc *ResourceContainer, params UpdateWaitingRoomSettingsParams) (WaitingRoomSettings, error) {
+	if rc.Level != ZoneRouteLevel {
+		return WaitingRoomSettings{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
+
+	uri := fmt.Sprintf("/zones/%s/waiting_rooms/settings", rc.Identifier)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
+	if err != nil {
+		return WaitingRoomSettings{}, err
+	}
+	var r WaitingRoomSettingsResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return WaitingRoomSettings{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
 	return r.Result, nil
 }

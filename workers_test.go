@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 const (
@@ -21,29 +22,7 @@ const (
     "errors": [],
     "messages": []
 }`
-	uploadWorkerResponseData = `{
-    "result": {
-        "script": "addEventListener('fetch', event => {\n  event.passThroughOnException()\n  event.respondWith(handleRequest(event.request))\n})\n\nasync function handleRequest(request) {\n  return fetch(request)\n}",
-        "etag": "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
-        "size": 191,
-        "modified_on": "2018-06-09T15:17:01.989141Z"
-    },
-    "success": true,
-    "errors": [],
-    "messages": []
-}`
 
-	uploadWorkerModuleResponseData = `{
-    "result": {
-        "script": "export default {\n  async fetch(request, env, event) {\n    event.passThroughOnException()\n    return fetch(request)\n  }\n}",
-        "etag": "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
-        "size": 191,
-        "modified_on": "2018-06-09T15:17:01.989141Z"
-    },
-    "success": true,
-    "errors": [],
-    "messages": []
-}`
 	updateWorkerRouteResponse = `{
     "result": {
         "id": "e7a57d8746e74ae49c25994dadb421b1",
@@ -230,6 +209,125 @@ var (
 }`, testZoneID)
 )
 
+type (
+	WorkersTestScriptResponse struct {
+		Script            string                 `json:"script"`
+		UsageModel        string                 `json:"usage_model,omitempty"`
+		Handlers          []string               `json:"handlers"`
+		ID                string                 `json:"id,omitempty"`
+		ETAG              string                 `json:"etag,omitempty"`
+		Size              uint                   `json:"size,omitempty"`
+		CreatedOn         string                 `json:"created_on,omitempty"`
+		ModifiedOn        string                 `json:"modified_on,omitempty"`
+		LastDeployedFrom  *string                `json:"last_deployed_from,omitempty"`
+		DeploymentId      *string                `json:"deployment_id,omitempty"`
+		CompatibilityDate *string                `json:"compatibility_date,omitempty"`
+		Logpush           *bool                  `json:"logpush,omitempty"`
+		TailConsumers     *[]WorkersTailConsumer `json:"tail_consumers,omitempty"`
+		PlacementMode     *string                `json:"placement_mode,omitempty"`
+	}
+	workersTestResponseOpt func(r *WorkersTestScriptResponse)
+)
+
+var (
+	expectedWorkersServiceWorkerScript = "addEventListener('fetch', event => {\n  event.passThroughOnException()\n  event.respondWith(handleRequest(event.request))\n})\n\nasync function handleRequest(request) {\n  return fetch(request)\n}"
+	expectedWorkersModuleWorkerScript  = "export default {\n  async fetch(request, env, event) {\n    event.passThroughOnException()\n    return fetch(request)\n  }\n}"
+	WorkersDefaultTestResponse         = WorkersTestScriptResponse{
+		Script:            expectedWorkersServiceWorkerScript,
+		Handlers:          []string{"fetch"},
+		UsageModel:        "unbound",
+		ID:                "e7a57d8746e74ae49c25994dadb421b1",
+		ETAG:              "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
+		Size:              191,
+		LastDeployedFrom:  StringPtr("dash"),
+		Logpush:           BoolPtr(false),
+		CompatibilityDate: StringPtr("2022-07-12"),
+	}
+)
+
+//nolint:unused
+func withWorkerScript(content string) workersTestResponseOpt {
+	return func(r *WorkersTestScriptResponse) { r.Script = content }
+}
+
+//nolint:unused
+func withWorkerUsageModel(um string) workersTestResponseOpt {
+	return func(r *WorkersTestScriptResponse) { r.UsageModel = um }
+}
+
+//nolint:unused
+func withWorkerHandlers(h []string) workersTestResponseOpt {
+	return func(r *WorkersTestScriptResponse) { r.Handlers = h }
+}
+
+//nolint:unused
+func withWorkerID(id string) workersTestResponseOpt {
+	return func(r *WorkersTestScriptResponse) { r.ID = id }
+}
+
+//nolint:unused
+func withWorkerEtag(etag string) workersTestResponseOpt {
+	return func(r *WorkersTestScriptResponse) { r.ETAG = etag }
+}
+
+//nolint:unused
+func withWorkerSize(size uint) workersTestResponseOpt {
+	return func(r *WorkersTestScriptResponse) { r.Size = size }
+}
+
+//nolint:unused
+func withWorkerCreatedOn(co time.Time) workersTestResponseOpt {
+	return func(r *WorkersTestScriptResponse) { r.CreatedOn = co.Format(time.RFC3339Nano) }
+}
+
+//nolint:unused
+func withWorkerModifiedOn(mo time.Time) workersTestResponseOpt {
+	return func(r *WorkersTestScriptResponse) { r.ModifiedOn = mo.Format(time.RFC3339Nano) }
+}
+
+//nolint:unused
+func withWorkerLogpush(logpush *bool) workersTestResponseOpt {
+	return func(r *WorkersTestScriptResponse) { r.Logpush = logpush }
+}
+
+//nolint:unused
+func withWorkerPlacementMode(mode *string) workersTestResponseOpt {
+	return func(r *WorkersTestScriptResponse) { r.PlacementMode = mode }
+}
+
+//nolint:unused
+func withWorkerTailConsumers(consumers ...WorkersTailConsumer) workersTestResponseOpt {
+	return func(r *WorkersTestScriptResponse) { r.TailConsumers = &consumers }
+}
+
+//nolint:unused
+func withWorkerLastDeployedFrom(from *string) workersTestResponseOpt {
+	return func(r *WorkersTestScriptResponse) { r.LastDeployedFrom = from }
+}
+
+//nolint:unused
+func withWorkerDeploymentId(dID *string) workersTestResponseOpt {
+	return func(r *WorkersTestScriptResponse) { r.DeploymentId = dID }
+}
+
+func workersScriptResponse(t testing.TB, opts ...workersTestResponseOpt) string {
+	var responseConfig = WorkersDefaultTestResponse
+	for _, opt := range opts {
+		opt(&responseConfig)
+	}
+
+	bytes, err := json.Marshal(struct {
+		Response
+		Result WorkersTestScriptResponse `json:"result"`
+	}{
+		Response: Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}},
+		Result:   responseConfig,
+	})
+	require.NoError(t, err)
+
+	return string(bytes)
+}
+
 func getFormValue(r *http.Request, key string) ([]byte, error) {
 	err := r.ParseMultipartForm(1024 * 1024)
 	if err != nil {
@@ -280,6 +378,7 @@ type multipartUpload struct {
 	Logpush            *bool
 	CompatibilityDate  string
 	CompatibilityFlags []string
+	Placement          *Placement
 }
 
 func parseMultipartUpload(r *http.Request) (multipartUpload, error) {
@@ -296,6 +395,7 @@ func parseMultipartUpload(r *http.Request) (multipartUpload, error) {
 		Logpush            *bool               `json:"logpush,omitempty"`
 		CompatibilityDate  string              `json:"compatibility_date,omitempty"`
 		CompatibilityFlags []string            `json:"compatibility_flags,omitempty"`
+		Placement          *Placement          `json:"placement,omitempty"`
 	}
 	err = json.Unmarshal(mdBytes, &metadata)
 	if err != nil {
@@ -327,6 +427,7 @@ func parseMultipartUpload(r *http.Request) (multipartUpload, error) {
 		Logpush:            metadata.Logpush,
 		CompatibilityDate:  metadata.CompatibilityDate,
 		CompatibilityFlags: metadata.CompatibilityFlags,
+		Placement:          metadata.Placement,
 	}, nil
 }
 
@@ -424,24 +525,28 @@ func TestUploadWorker_Basic(t *testing.T) {
 	setup()
 	defer teardown()
 
+	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/foo", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		contentTypeHeader := r.Header.Get("content-type")
 		assert.Equal(t, "application/javascript", contentTypeHeader, "Expected content-type request header to be 'application/javascript', got %s", contentTypeHeader)
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, uploadWorkerResponseData)
+		fmt.Fprint(w, workersScriptResponse(t, withWorkerModifiedOn(formattedTime)))
 	})
 	res, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{ScriptName: "foo", Script: workerScript})
-	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
 		successResponse,
 		false,
 		WorkerScript{
-			Script: workerScript,
+			Script:     workerScript,
+			UsageModel: "unbound",
 			WorkerMetaData: WorkerMetaData{
-				ETAG:       "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
-				Size:       191,
-				ModifiedOn: formattedTime,
+				ID:               "e7a57d8746e74ae49c25994dadb421b1",
+				ETAG:             "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
+				Size:             191,
+				ModifiedOn:       formattedTime,
+				Logpush:          BoolPtr(false),
+				LastDeployedFrom: StringPtr("dash"),
 			},
 		}}
 	if assert.NoError(t, err) {
@@ -453,6 +558,7 @@ func TestUploadWorker_Module(t *testing.T) {
 	setup()
 	defer teardown()
 
+	formattedCreatedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/foo", func(w http.ResponseWriter, r *http.Request) {
 		mpUpload, err := parseMultipartUpload(r)
 		assert.NoError(t, err)
@@ -468,19 +574,22 @@ func TestUploadWorker_Module(t *testing.T) {
 		assert.Equal(t, expectedContentType, contentTypeHeader, "Expected content-type request header to be %s, got %s", expectedContentType, contentTypeHeader)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, uploadWorkerModuleResponseData)
+		fmt.Fprint(w, workersScriptResponse(t, withWorkerScript(expectedWorkersModuleWorkerScript), withWorkerCreatedOn(formattedCreatedTime)))
 	})
 	res, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{ScriptName: "foo", Script: workerModuleScript, Module: true})
-	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
-		successResponse,
-		false,
-		WorkerScript{
-			Script: workerModuleScript,
+		Response: successResponse,
+		Module:   false,
+		WorkerScript: WorkerScript{
+			Script:     workerModuleScript,
+			UsageModel: "unbound",
 			WorkerMetaData: WorkerMetaData{
-				ETAG:       "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
-				Size:       191,
-				ModifiedOn: formattedTime,
+				ID:               "e7a57d8746e74ae49c25994dadb421b1",
+				ETAG:             "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
+				Size:             191,
+				CreatedOn:        formattedCreatedTime,
+				Logpush:          BoolPtr(false),
+				LastDeployedFrom: StringPtr("dash"),
 			},
 		}}
 	if assert.NoError(t, err) {
@@ -510,7 +619,7 @@ func TestUploadWorker_WithDurableObjectBinding(t *testing.T) {
 		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, uploadWorkerResponseData)
+		fmt.Fprint(w, workersScriptResponse(t))
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
@@ -533,6 +642,7 @@ func TestUploadWorker_WithInheritBinding(t *testing.T) {
 	setup()
 	defer teardown()
 
+	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	// Setup route handler for both single-script and multi-script
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
@@ -555,20 +665,23 @@ func TestUploadWorker_WithInheritBinding(t *testing.T) {
 		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, uploadWorkerResponseData)
+		fmt.Fprint(w, workersScriptResponse(t, withWorkerModifiedOn(formattedTime)))
 	}
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
 
-	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
 	want := WorkerScriptResponse{
-		successResponse,
-		false,
-		WorkerScript{
-			Script: workerScript,
+		Response: successResponse,
+		Module:   false,
+		WorkerScript: WorkerScript{
+			Script:     workerScript,
+			UsageModel: "unbound",
 			WorkerMetaData: WorkerMetaData{
-				ETAG:       "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
-				Size:       191,
-				ModifiedOn: formattedTime,
+				ID:               "e7a57d8746e74ae49c25994dadb421b1",
+				ETAG:             "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
+				Size:             191,
+				ModifiedOn:       formattedTime,
+				Logpush:          BoolPtr(false),
+				LastDeployedFrom: StringPtr("dash"),
 			},
 		}}
 
@@ -607,7 +720,7 @@ func TestUploadWorker_WithKVBinding(t *testing.T) {
 		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, uploadWorkerResponseData)
+		fmt.Fprint(w, workersScriptResponse(t))
 	}
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
 
@@ -648,7 +761,7 @@ func TestUploadWorker_WithWasmBinding(t *testing.T) {
 		assert.Equal(t, []byte("fake-wasm"), wasmContent)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, uploadWorkerResponseData)
+		fmt.Fprint(w, workersScriptResponse(t))
 	}
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
 
@@ -686,7 +799,7 @@ func TestUploadWorker_WithPlainTextBinding(t *testing.T) {
 		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, uploadWorkerResponseData)
+		fmt.Fprint(w, workersScriptResponse(t))
 	}
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
 
@@ -732,7 +845,7 @@ func TestUploadWorker_ModuleWithPlainTextBinding(t *testing.T) {
 		assert.Equal(t, expectedContentDisposition, contentDispositonHeader, "Expected content-disposition request header to be %s, got %s", expectedContentDisposition, contentDispositonHeader)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, uploadWorkerModuleResponseData)
+		fmt.Fprint(w, workersScriptResponse(t, withWorkerScript(expectedWorkersModuleWorkerScript)))
 	})
 
 	_, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{
@@ -770,7 +883,7 @@ func TestUploadWorker_WithSecretTextBinding(t *testing.T) {
 		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, uploadWorkerResponseData)
+		fmt.Fprint(w, workersScriptResponse(t))
 	}
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
 
@@ -813,7 +926,7 @@ func TestUploadWorker_WithServiceBinding(t *testing.T) {
 		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, uploadWorkerResponseData)
+		fmt.Fprint(w, workersScriptResponse(t))
 	}
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
 
@@ -837,6 +950,10 @@ func TestUploadWorker_WithLogpush(t *testing.T) {
 	setup()
 	defer teardown()
 
+	var (
+		formattedTime, _ = time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
+		logpush          = BoolPtr(true)
+	)
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/foo", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		mpUpload, err := parseMultipartUpload(r)
@@ -846,19 +963,22 @@ func TestUploadWorker_WithLogpush(t *testing.T) {
 		assert.Equal(t, &expected, mpUpload.Logpush)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, uploadWorkerResponseData)
+		fmt.Fprint(w, workersScriptResponse(t, withWorkerScript(expectedWorkersModuleWorkerScript), withWorkerLogpush(logpush), withWorkerModifiedOn(formattedTime)))
 	})
-	res, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{ScriptName: "foo", Script: workerScript, Logpush: BoolPtr(true)})
-	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
+	res, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{ScriptName: "foo", Script: workerScript, Logpush: logpush})
 	want := WorkerScriptResponse{
-		successResponse,
-		false,
-		WorkerScript{
-			Script: workerScript,
+		Response: successResponse,
+		Module:   false,
+		WorkerScript: WorkerScript{
+			Script:     expectedWorkersModuleWorkerScript,
+			UsageModel: "unbound",
 			WorkerMetaData: WorkerMetaData{
-				ETAG:       "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
-				Size:       191,
-				ModifiedOn: formattedTime,
+				ID:               "e7a57d8746e74ae49c25994dadb421b1",
+				ETAG:             "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
+				Size:             191,
+				ModifiedOn:       formattedTime,
+				Logpush:          logpush,
+				LastDeployedFrom: StringPtr("dash"),
 			},
 		}}
 	if assert.NoError(t, err) {
@@ -884,7 +1004,7 @@ func TestUploadWorker_WithCompatibilityFlags(t *testing.T) {
 		assert.Equal(t, compatibilityFlags, mpUpload.CompatibilityFlags)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, uploadWorkerResponseData)
+		fmt.Fprint(w, workersScriptResponse(t))
 	}
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
 
@@ -918,7 +1038,7 @@ func TestUploadWorker_WithQueueBinding(t *testing.T) {
 		assert.Equal(t, expectedBindings, mpUpload.BindingMeta)
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, uploadWorkerResponseData)
+		fmt.Fprint(w, workersScriptResponse(t))
 	}
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
 
@@ -932,4 +1052,91 @@ func TestUploadWorker_WithQueueBinding(t *testing.T) {
 			},
 		}})
 	assert.NoError(t, err)
+}
+
+func TestUploadWorker_WithSmartPlacementEnabled(t *testing.T) {
+	setup()
+	defer teardown()
+
+	placementMode := PlacementModeSmart
+	response := workersScriptResponse(t, withWorkerScript(expectedWorkersModuleWorkerScript), withWorkerPlacementMode(StringPtr("smart")))
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+
+		mpUpload, err := parseMultipartUpload(r)
+		assert.NoError(t, err)
+
+		assert.Equal(t, workerScript, mpUpload.Script)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, response)
+	}
+	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
+
+	t.Run("Test enabling Smart Placement", func(t *testing.T) {
+		worker, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{
+			ScriptName: "bar",
+			Script:     workerScript,
+			Placement: &Placement{
+				Mode: placementMode,
+			},
+		})
+		assert.NoError(t, err)
+		assert.Equal(t, placementMode, *worker.PlacementMode)
+	})
+
+	t.Run("Test disabling placement", func(t *testing.T) {
+		placementMode = PlacementModeOff
+		response = workersScriptResponse(t, withWorkerScript(expectedWorkersModuleWorkerScript))
+
+		worker, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{
+			ScriptName: "bar",
+			Script:     workerScript,
+			Placement: &Placement{
+				Mode: placementMode,
+			},
+		})
+		assert.NoError(t, err)
+		assert.Nil(t, worker.PlacementMode)
+	})
+}
+
+func TestUploadWorker_WithTailConsumers(t *testing.T) {
+	setup()
+	defer teardown()
+
+	response := workersScriptResponse(t,
+		withWorkerScript(expectedWorkersModuleWorkerScript))
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+
+		mpUpload, err := parseMultipartUpload(r)
+		assert.NoError(t, err)
+
+		assert.Equal(t, workerScript, mpUpload.Script)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, response)
+	}
+	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)
+
+	t.Run("adds tail consumers", func(t *testing.T) {
+		tailConsumers := []WorkersTailConsumer{
+			{Service: "my-service-a"},
+			{Service: "my-service-b", Environment: StringPtr("production")},
+		}
+		response = workersScriptResponse(t,
+			withWorkerScript(expectedWorkersModuleWorkerScript),
+			withWorkerTailConsumers(tailConsumers...))
+
+		worker, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{
+			ScriptName:    "bar",
+			Script:        workerScript,
+			TailConsumers: &tailConsumers,
+		})
+		assert.NoError(t, err)
+		require.NotNil(t, worker.TailConsumers)
+		assert.Len(t, *worker.TailConsumers, 2)
+	})
 }

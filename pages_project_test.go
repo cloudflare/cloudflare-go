@@ -110,7 +110,10 @@ const (
 			"compatibility_flags": ["production_flag"],
 			"fail_open": false,
 			"always_use_latest_compatibility_date": false,
-			"usage_model": "bundled"
+			"usage_model": "bundled",
+			"placement": {
+				"mode": "smart"
+			}
           }
         },
         "latest_deployment": {
@@ -144,6 +147,9 @@ const (
 			  "type": "secret_text"
 			}
           },
+		  "placement": {
+			"mode": "smart"
+		  },
 		  "compatibility_date": "2022-08-15",
 		  "compatibility_flags": ["deployment_flag"],
 		  "fail_open": false,
@@ -231,6 +237,9 @@ const (
 			  "type": "secret_text"
 			}
           },
+		  "placement": {
+			"mode": "smart"
+		  },
 		  "compatibility_date": "2022-08-15",
 		  "compatibility_flags": ["deployment_flag"],
 		  "fail_open": false,
@@ -338,6 +347,9 @@ var (
 				Value: "",
 				Type:  SecretText,
 			},
+		},
+		Placement: &Placement{
+			Mode: PlacementModeSmart,
 		},
 		CompatibilityFlags: []string{"deployment_flag"},
 		CompatibilityDate:  "2022-08-15",
@@ -452,6 +464,9 @@ var (
 		FailOpen:                         false,
 		AlwaysUseLatestCompatibilityDate: false,
 		UsageModel:                       Bundled,
+		Placement: &Placement{
+			Mode: PlacementModeSmart,
+		},
 	}
 
 	expectedPagesProjectSource = &PagesProjectSource{

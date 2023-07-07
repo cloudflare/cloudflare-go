@@ -6,8 +6,33 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 )
+
+// A TunnelDuration is a Duration that has custom serialization for JSON.
+// JSON in Javascript assumes that int fields are 32 bits and Duration fields
+// are deserialized assuming that numbers are in nanoseconds, which in 32bit
+// integers limits to just 2 seconds. This type assumes that when
+// serializing/deserializing from JSON, that the number is in seconds, while it
+// maintains the YAML serde assumptions.
+type TunnelDuration struct {
+	time.Duration
+}
+
+func (s TunnelDuration) MarshalJSON() ([]byte, error) {
+	return json.Marshal(s.Duration.Seconds())
+}
+
+func (s *TunnelDuration) UnmarshalJSON(data []byte) error {
+	seconds, err := strconv.ParseInt(string(data), 10, 64)
+	if err != nil {
+		return err
+	}
+
+	s.Duration = time.Duration(seconds * int64(time.Second))
+	return nil
+}
 
 // ErrMissingTunnelID is for when a required tunnel ID is missing from the
 // parameters.
@@ -106,9 +131,10 @@ type TunnelUpdateParams struct {
 }
 
 type UnvalidatedIngressRule struct {
-	Hostname string `json:"hostname,omitempty"`
-	Path     string `json:"path,omitempty"`
-	Service  string `json:"service,omitempty"`
+	Hostname      string               `json:"hostname,omitempty"`
+	Path          string               `json:"path,omitempty"`
+	Service       string               `json:"service,omitempty"`
+	OriginRequest *OriginRequestConfig `json:"originRequest,omitempty"`
 }
 
 // OriginRequestConfig is a set of optional fields that users may set to
@@ -117,17 +143,17 @@ type UnvalidatedIngressRule struct {
 // config.
 type OriginRequestConfig struct {
 	// HTTP proxy timeout for establishing a new connection
-	ConnectTimeout *time.Duration `json:"connectTimeout,omitempty"`
+	ConnectTimeout *TunnelDuration `json:"connectTimeout,omitempty"`
 	// HTTP proxy timeout for completing a TLS handshake
-	TLSTimeout *time.Duration `json:"tlsTimeout,omitempty"`
+	TLSTimeout *TunnelDuration `json:"tlsTimeout,omitempty"`
 	// HTTP proxy TCP keepalive duration
-	TCPKeepAlive *time.Duration `json:"tcpKeepAlive,omitempty"`
+	TCPKeepAlive *TunnelDuration `json:"tcpKeepAlive,omitempty"`
 	// HTTP proxy should disable "happy eyeballs" for IPv4/v6 fallback
 	NoHappyEyeballs *bool `json:"noHappyEyeballs,omitempty"`
 	// HTTP proxy maximum keepalive connection pool size
 	KeepAliveConnections *int `json:"keepAliveConnections,omitempty"`
 	// HTTP proxy timeout for closing an idle connection
-	KeepAliveTimeout *time.Duration `json:"keepAliveTimeout,omitempty"`
+	KeepAliveTimeout *TunnelDuration `json:"keepAliveTimeout,omitempty"`
 	// Sets the HTTP Host header for the local webserver.
 	HTTPHostHeader *string `json:"httpHostHeader,omitempty"`
 	// Hostname on the origin server certificate.
@@ -152,6 +178,20 @@ type OriginRequestConfig struct {
 	ProxyType *string `json:"proxyType,omitempty"`
 	// IP rules for the proxy service
 	IPRules []IngressIPRule `json:"ipRules,omitempty"`
+	// Attempt to connect to origin with HTTP/2
+	Http2Origin *bool `json:"http2Origin,omitempty"`
+	// Access holds all access related configs
+	Access *AccessConfig `json:"access,omitempty"`
+}
+
+type AccessConfig struct {
+	// Required when set to true will fail every request that does not arrive
+	// through an access authenticated endpoint.
+	Required bool `yaml:"required" json:"required,omitempty"`
+	// TeamName is the organization team name to get the public key certificates for.
+	TeamName string `yaml:"teamName" json:"teamName"`
+	// AudTag is the AudTag to verify access JWT against.
+	AudTag []string `yaml:"audTag" json:"audTag"`
 }
 
 type IngressIPRule struct {
