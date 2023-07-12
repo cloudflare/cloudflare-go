@@ -1209,7 +1209,7 @@ func TestUploadWorker_ToDispatchNamespace(t *testing.T) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 
 		mpUpload, err := parseMultipartUpload(r)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 
 		assert.Equal(t, workerScript, mpUpload.Script)
 
@@ -1242,7 +1242,7 @@ func TestUploadWorker_UnsafeBinding(t *testing.T) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 
 		mpUpload, err := parseMultipartUpload(r)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 
 		assert.Equal(t, workerScript, mpUpload.Script)
 

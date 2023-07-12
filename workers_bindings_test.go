@@ -1,7 +1,9 @@
 package cloudflare
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -94,4 +96,47 @@ func TestListWorkerBindings(t *testing.T) {
 		},
 	})
 	assert.Equal(t, WorkerAnalyticsEngineBindingType, res.BindingList[7].Binding.Type())
+}
+
+func ExampleUnsafeBinding() {
+	pretty := func(meta workerBindingMeta) string {
+		buf := bytes.NewBufferString("")
+		encoder := json.NewEncoder(buf)
+		encoder.SetIndent("", "  ")
+		if err := encoder.Encode(meta); err != nil {
+			fmt.Println("error:", err)
+		}
+		return buf.String()
+	}
+
+	binding_a := WorkerServiceBinding{
+		Service: "foo",
+	}
+	meta_a, _, _ := binding_a.serialize("my_binding")
+	meta_a_json := pretty(meta_a)
+	fmt.Println(meta_a_json)
+
+	binding_b := UnsafeBinding{
+		"type":    "service",
+		"service": "foo",
+	}
+	meta_b, _, _ := binding_b.serialize("my_binding")
+	meta_b_json := pretty(meta_b)
+	fmt.Println(meta_b_json)
+
+	fmt.Println(meta_a_json == meta_b_json)
+	// Output:
+	// {
+	//   "name": "my_binding",
+	//   "service": "foo",
+	//   "type": "service"
+	// }
+	//
+	// {
+	//   "name": "my_binding",
+	//   "service": "foo",
+	//   "type": "service"
+	// }
+	//
+	// true
 }

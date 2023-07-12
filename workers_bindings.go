@@ -407,7 +407,7 @@ func (b DispatchNamespaceBinding) serialize(bindingName string) (workerBindingMe
 	return meta, nil, nil
 }
 
-// UnsafeBinding is for experimental or deprecated bindings, and allows specifying any binding type or property
+// UnsafeBinding is for experimental or deprecated bindings, and allows specifying any binding type or property.
 type UnsafeBinding map[string]interface{}
 
 // Type returns the type of the binding.
