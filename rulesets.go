@@ -861,7 +861,7 @@ func (api *API) GetRulesetEntrypoint(ctx context.Context, rc *ResourceContainer,
 	return result.Result, nil
 }
 
-// UpdateRulesetEntrypoint updates a ruleset phase based on the entrypoint.
+// UpdateRulesetEntrypoint updates an entrypoint ruleset based on the phase.
 func (api *API) UpdateRulesetEntrypoint(ctx context.Context, rc *ResourceContainer, params UpdateRulesetEntrypointParams) (Ruleset, error) {
 	if params.Phase == "" {
 		return Ruleset{}, ErrMissingRulesetPhase
