@@ -845,7 +845,7 @@ func (api *API) UpdateRuleset(ctx context.Context, rc *ResourceContainer, params
 	return result.Result, nil
 }
 
-// GetRulesetEntrypoint returns a ruleset phase based on the resource entrypoint.
+// GetRulesetEntrypoint returns an entrypoint ruleset based on the phase.
 func (api *API) GetRulesetEntrypoint(ctx context.Context, rc *ResourceContainer, phase string) (Ruleset, error) {
 	uri := fmt.Sprintf("/%s/%s/rulesets/phases/%s/entrypoint", rc.Level, rc.Identifier, phase)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
