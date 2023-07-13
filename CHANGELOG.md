@@ -6,6 +6,18 @@ BREAKING CHANGES:
 * pages_deployment: change DeletePagesDeploymentParams to contain all parameters ([#1264](https://github.com/cloudflare/cloudflare-go/issues/1264))
 * pages_project: change to use ResourceContainer for account ID ([#1264](https://github.com/cloudflare/cloudflare-go/issues/1264))
 * pages_project: rename PagesProject to GetPagesProject ([#1264](https://github.com/cloudflare/cloudflare-go/issues/1264))
+* rulesets: `CreateAccountRuleset` is removed in favour of `CreateRuleset` ([#1333](https://github.com/cloudflare/cloudflare-go/issues/1333))
+* rulesets: `CreateZoneRuleset` is removed in favour of `CreateRuleset` ([#1333](https://github.com/cloudflare/cloudflare-go/issues/1333))
+* rulesets: `DeleteAccountRuleset` is removed in favour of `DeleteRuleset` ([#1333](https://github.com/cloudflare/cloudflare-go/issues/1333))
+* rulesets: `DeleteZoneRuleset` is removed in favour of `DeleteRuleset` ([#1333](https://github.com/cloudflare/cloudflare-go/issues/1333))
+* rulesets: `GetAccountRulesetPhase` is removed in favour of `GetEntrypointRuleset` ([#1333](https://github.com/cloudflare/cloudflare-go/issues/1333))
+* rulesets: `GetAccountRuleset` is removed in favour of `GetRuleset` ([#1333](https://github.com/cloudflare/cloudflare-go/issues/1333))
+* rulesets: `GetZoneRulesetPhase` is removed in favour of `GetEntrypointRuleset` ([#1333](https://github.com/cloudflare/cloudflare-go/issues/1333))
+* rulesets: `GetZoneRuleset` is removed in favour of `GetRuleset` ([#1333](https://github.com/cloudflare/cloudflare-go/issues/1333))
+* rulesets: `UpdateAccountRulesetPhase` is removed in favour of `UpdateEntrypointRuleset` ([#1333](https://github.com/cloudflare/cloudflare-go/issues/1333))
+* rulesets: `UpdateAccountRuleset` is removed in favour of `UpdateRuleset` ([#1333](https://github.com/cloudflare/cloudflare-go/issues/1333))
+* rulesets: `UpdateZoneRulesetPhase` is removed in favour of `UpdateEntrypointRuleset` ([#1333](https://github.com/cloudflare/cloudflare-go/issues/1333))
+* rulesets: `UpdateZoneRuleset` is removed in favour of `UpdateRuleset` ([#1333](https://github.com/cloudflare/cloudflare-go/issues/1333))
 
 DEPENDENCIES:
 
