@@ -31,17 +31,17 @@ rulesets: `UpdateAccountRuleset` is removed in favour of `UpdateRuleset`
 ```
 
 ```release-note:breaking-change
-rulesets: `GetZoneRulesetPhase` is removed in favour of `GetRulesetEntrypoint`
+rulesets: `GetZoneRulesetPhase` is removed in favour of `GetEntrypointRuleset`
 ```
 
 ```release-note:breaking-change
-rulesets: `GetAccountRulesetPhase` is removed in favour of `GetRulesetEntrypoint`
+rulesets: `GetAccountRulesetPhase` is removed in favour of `GetEntrypointRuleset`
 ```
 
 ```release-note:breaking-change
-rulesets: `UpdateZoneRulesetPhase` is removed in favour of `UpdateRulesetEntrypoint`
+rulesets: `UpdateZoneRulesetPhase` is removed in favour of `UpdateEntrypointRuleset`
 ```
 
 ```release-note:breaking-change
-rulesets: `UpdateAccountRulesetPhase` is removed in favour of `UpdateRulesetEntrypoint`
+rulesets: `UpdateAccountRulesetPhase` is removed in favour of `UpdateEntrypointRuleset`
 ```
