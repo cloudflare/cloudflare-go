@@ -733,7 +733,7 @@ type UpdateRulesetParams struct {
 	Rules       []RulesetRule `json:"rules"`
 }
 
-type UpdateRulesetEntrypointParams struct {
+type UpdateEntrypointRulesetParams struct {
 	Name        string        `json:"name,omitempty"`
 	Description string        `json:"description,omitempty"`
 	Kind        string        `json:"kind,omitempty"`
@@ -845,8 +845,8 @@ func (api *API) UpdateRuleset(ctx context.Context, rc *ResourceContainer, params
 	return result.Result, nil
 }
 
-// GetRulesetEntrypoint returns an entrypoint ruleset based on the phase.
-func (api *API) GetRulesetEntrypoint(ctx context.Context, rc *ResourceContainer, phase string) (Ruleset, error) {
+// GetEntrypointRuleset returns a ruleset phase based on the resource entrypoint.
+func (api *API) GetEntrypointRuleset(ctx context.Context, rc *ResourceContainer, phase string) (Ruleset, error) {
 	uri := fmt.Sprintf("/%s/%s/rulesets/phases/%s/entrypoint", rc.Level, rc.Identifier, phase)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -861,8 +861,8 @@ func (api *API) GetRulesetEntrypoint(ctx context.Context, rc *ResourceContainer,
 	return result.Result, nil
 }
 
-// UpdateRulesetEntrypoint updates an entrypoint ruleset based on the phase.
-func (api *API) UpdateRulesetEntrypoint(ctx context.Context, rc *ResourceContainer, params UpdateRulesetEntrypointParams) (Ruleset, error) {
+// UpdateEntrypointRuleset updates a ruleset phase based on the entrypoint.
+func (api *API) UpdateEntrypointRuleset(ctx context.Context, rc *ResourceContainer, params UpdateEntrypointRulesetParams) (Ruleset, error) {
 	if params.Phase == "" {
 		return Ruleset{}, ErrMissingRulesetPhase
 	}
