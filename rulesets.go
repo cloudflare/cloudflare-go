@@ -10,6 +10,10 @@ import (
 	"time"
 )
 
+var (
+	ErrMissingRulesetPhase = errors.New("missing required phase")
+)
+
 const (
 	RulesetKindCustom  RulesetKind = "custom"
 	RulesetKindManaged RulesetKind = "managed"
@@ -711,24 +715,40 @@ type UpdateRulesetResponse struct {
 	Result Ruleset `json:"result"`
 }
 
-// ListZoneRulesets fetches all rulesets for a zone.
+type ListRulesetsParams struct{}
+
+type CreateRulesetParams struct {
+	Name                     string        `json:"name,omitempty"`
+	Description              string        `json:"description,omitempty"`
+	Kind                     string        `json:"kind,omitempty"`
+	Version                  *string       `json:"version,omitempty"`
+	Phase                    string        `json:"phase,omitempty"`
+	Rules                    []RulesetRule `json:"rules"`
+	ShareableEntitlementName string        `json:"shareable_entitlement_name,omitempty"`
+}
+
+type UpdateRulesetParams struct {
+	ID          string        `json:"-"`
+	Description string        `json:"description"`
+	Rules       []RulesetRule `json:"rules"`
+}
+
+type UpdateEntrypointRulesetParams struct {
+	Name        string        `json:"name,omitempty"`
+	Description string        `json:"description,omitempty"`
+	Kind        string        `json:"kind,omitempty"`
+	Version     *string       `json:"version,omitempty"`
+	Phase       string        `json:"-"`
+	Rules       []RulesetRule `json:"rules"`
+}
+
+// ListRulesets lists all Rulesets for a given zone or account depending on the
+// ResourceContainer type provided.
 //
 // API reference: https://api.cloudflare.com/#zone-rulesets-list-zone-rulesets
-func (api *API) ListZoneRulesets(ctx context.Context, zoneID string) ([]Ruleset, error) {
-	return api.listRulesets(ctx, ZoneRouteRoot, zoneID)
-}
-
-// ListAccountRulesets fetches all rulesets for an account.
-//
 // API reference: https://api.cloudflare.com/#account-rulesets-list-account-rulesets
-func (api *API) ListAccountRulesets(ctx context.Context, accountID string) ([]Ruleset, error) {
-	return api.listRulesets(ctx, AccountRouteRoot, accountID)
-}
-
-// listRulesets lists all Rulesets for a given zone or account depending on the
-// identifier type provided.
-func (api *API) listRulesets(ctx context.Context, identifierType RouteRoot, identifier string) ([]Ruleset, error) {
-	uri := fmt.Sprintf("/%s/%s/rulesets", identifierType, identifier)
+func (api *API) ListRulesets(ctx context.Context, rc *ResourceContainer, params ListRulesetsParams) ([]Ruleset, error) {
+	uri := fmt.Sprintf("/%s/%s/rulesets", rc.Level, rc.Identifier)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -743,24 +763,12 @@ func (api *API) listRulesets(ctx context.Context, identifierType RouteRoot, iden
 	return result.Result, nil
 }
 
-// GetZoneRuleset fetches a single ruleset for a zone.
+// GetRuleset fetches a single ruleset.
 //
 // API reference: https://api.cloudflare.com/#zone-rulesets-get-a-zone-ruleset
-func (api *API) GetZoneRuleset(ctx context.Context, zoneID, rulesetID string) (Ruleset, error) {
-	return api.getRuleset(ctx, ZoneRouteRoot, zoneID, rulesetID)
-}
-
-// GetAccountRuleset fetches a single ruleset for an account.
-//
 // API reference: https://api.cloudflare.com/#account-rulesets-get-an-account-ruleset
-func (api *API) GetAccountRuleset(ctx context.Context, accountID, rulesetID string) (Ruleset, error) {
-	return api.getRuleset(ctx, AccountRouteRoot, accountID, rulesetID)
-}
-
-// getRuleset fetches a single ruleset based on the zone or account, the
-// identifier and the ruleset ID.
-func (api *API) getRuleset(ctx context.Context, identifierType RouteRoot, identifier, rulesetID string) (Ruleset, error) {
-	uri := fmt.Sprintf("/%s/%s/rulesets/%s", identifierType, identifier, rulesetID)
+func (api *API) GetRuleset(ctx context.Context, rc *ResourceContainer, rulesetID string) (Ruleset, error) {
+	uri := fmt.Sprintf("/%s/%s/rulesets/%s", rc.Level, rc.Identifier, rulesetID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return Ruleset{}, err
@@ -774,23 +782,13 @@ func (api *API) getRuleset(ctx context.Context, identifierType RouteRoot, identi
 	return result.Result, nil
 }
 
-// CreateZoneRuleset creates a new ruleset for a zone.
+// CreateRuleset initialises a new ruleset.
 //
 // API reference: https://api.cloudflare.com/#zone-rulesets-create-zone-ruleset
-func (api *API) CreateZoneRuleset(ctx context.Context, zoneID string, ruleset Ruleset) (Ruleset, error) {
-	return api.createRuleset(ctx, ZoneRouteRoot, zoneID, ruleset)
-}
-
-// CreateAccountRuleset creates a new ruleset for an account.
-//
 // API reference: https://api.cloudflare.com/#account-rulesets-create-account-ruleset
-func (api *API) CreateAccountRuleset(ctx context.Context, accountID string, ruleset Ruleset) (Ruleset, error) {
-	return api.createRuleset(ctx, AccountRouteRoot, accountID, ruleset)
-}
-
-func (api *API) createRuleset(ctx context.Context, identifierType RouteRoot, identifier string, ruleset Ruleset) (Ruleset, error) {
-	uri := fmt.Sprintf("/%s/%s/rulesets", identifierType, identifier)
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, ruleset)
+func (api *API) CreateRuleset(ctx context.Context, rc *ResourceContainer, params CreateRulesetParams) (Ruleset, error) {
+	uri := fmt.Sprintf("/%s/%s/rulesets", rc.Level, rc.Identifier)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return Ruleset{}, err
 	}
@@ -803,23 +801,12 @@ func (api *API) createRuleset(ctx context.Context, identifierType RouteRoot, ide
 	return result.Result, nil
 }
 
-// DeleteZoneRuleset deletes a single ruleset for a zone.
+// DeleteRuleset removes a ruleset based on the ruleset ID.
 //
 // API reference: https://api.cloudflare.com/#zone-rulesets-delete-zone-ruleset
-func (api *API) DeleteZoneRuleset(ctx context.Context, zoneID, rulesetID string) error {
-	return api.deleteRuleset(ctx, ZoneRouteRoot, zoneID, rulesetID)
-}
-
-// DeleteAccountRuleset deletes a single ruleset for an account.
-//
 // API reference: https://api.cloudflare.com/#account-rulesets-delete-account-ruleset
-func (api *API) DeleteAccountRuleset(ctx context.Context, accountID, rulesetID string) error {
-	return api.deleteRuleset(ctx, AccountRouteRoot, accountID, rulesetID)
-}
-
-// deleteRuleset removes a ruleset based on the ruleset ID.
-func (api *API) deleteRuleset(ctx context.Context, identifierType RouteRoot, identifier, rulesetID string) error {
-	uri := fmt.Sprintf("/%s/%s/rulesets/%s", identifierType, identifier, rulesetID)
+func (api *API) DeleteRuleset(ctx context.Context, rc *ResourceContainer, rulesetID string) error {
+	uri := fmt.Sprintf("/%s/%s/rulesets/%s", rc.Level, rc.Identifier, rulesetID)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return err
@@ -835,25 +822,17 @@ func (api *API) deleteRuleset(ctx context.Context, identifierType RouteRoot, ide
 	return nil
 }
 
-// UpdateZoneRuleset updates a single ruleset for a zone.
+// UpdateRuleset updates a ruleset based on the ruleset ID.
 //
 // API reference: https://api.cloudflare.com/#zone-rulesets-update-a-zone-ruleset
-func (api *API) UpdateZoneRuleset(ctx context.Context, zoneID, rulesetID, description string, rules []RulesetRule) (Ruleset, error) {
-	return api.updateRuleset(ctx, ZoneRouteRoot, zoneID, rulesetID, description, rules)
-}
-
-// UpdateAccountRuleset updates a single ruleset for an account.
-//
 // API reference: https://api.cloudflare.com/#account-rulesets-update-account-ruleset
-func (api *API) UpdateAccountRuleset(ctx context.Context, accountID, rulesetID, description string, rules []RulesetRule) (Ruleset, error) {
-	return api.updateRuleset(ctx, AccountRouteRoot, accountID, rulesetID, description, rules)
-}
+func (api *API) UpdateRuleset(ctx context.Context, rc *ResourceContainer, params UpdateRulesetParams) (Ruleset, error) {
+	if params.ID == "" {
+		return Ruleset{}, ErrMissingResourceIdentifier
+	}
 
-// updateRuleset updates a ruleset based on the ruleset ID.
-func (api *API) updateRuleset(ctx context.Context, identifierType RouteRoot, identifier, rulesetID, description string, rules []RulesetRule) (Ruleset, error) {
-	uri := fmt.Sprintf("/%s/%s/rulesets/%s", identifierType, identifier, rulesetID)
-	payload := UpdateRulesetRequest{Description: description, Rules: rules}
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, payload)
+	uri := fmt.Sprintf("/%s/%s/rulesets/%s", rc.Level, rc.Identifier, params.ID)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return Ruleset{}, err
 	}
@@ -866,24 +845,9 @@ func (api *API) updateRuleset(ctx context.Context, identifierType RouteRoot, ide
 	return result.Result, nil
 }
 
-// GetZoneRulesetPhase returns a ruleset phase for a zone.
-//
-// API reference: TBA.
-func (api *API) GetZoneRulesetPhase(ctx context.Context, zoneID, rulesetPhase string) (Ruleset, error) {
-	return api.getRulesetPhase(ctx, ZoneRouteRoot, zoneID, rulesetPhase)
-}
-
-// GetAccountRulesetPhase returns a ruleset phase for an account.
-//
-// API reference: TBA.
-func (api *API) GetAccountRulesetPhase(ctx context.Context, accountID, rulesetPhase string) (Ruleset, error) {
-	return api.getRulesetPhase(ctx, AccountRouteRoot, accountID, rulesetPhase)
-}
-
-// getRulesetPhase returns a ruleset phase based on the zone or account and the
-// identifier.
-func (api *API) getRulesetPhase(ctx context.Context, identifierType RouteRoot, identifier, rulesetPhase string) (Ruleset, error) {
-	uri := fmt.Sprintf("/%s/%s/rulesets/phases/%s/entrypoint", identifierType, identifier, rulesetPhase)
+// GetEntrypointRuleset returns a ruleset phase based on the resource entrypoint.
+func (api *API) GetEntrypointRuleset(ctx context.Context, rc *ResourceContainer, phase string) (Ruleset, error) {
+	uri := fmt.Sprintf("/%s/%s/rulesets/phases/%s/entrypoint", rc.Level, rc.Identifier, phase)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return Ruleset{}, err
@@ -897,25 +861,14 @@ func (api *API) getRulesetPhase(ctx context.Context, identifierType RouteRoot, i
 	return result.Result, nil
 }
 
-// UpdateZoneRulesetPhase updates a ruleset phase for a zone.
-//
-// API reference: TBA.
-func (api *API) UpdateZoneRulesetPhase(ctx context.Context, zoneID, rulesetPhase string, ruleset Ruleset) (Ruleset, error) {
-	return api.updateRulesetPhase(ctx, ZoneRouteRoot, zoneID, rulesetPhase, ruleset)
-}
+// UpdateEntrypointRuleset updates a ruleset phase based on the entrypoint.
+func (api *API) UpdateEntrypointRuleset(ctx context.Context, rc *ResourceContainer, params UpdateEntrypointRulesetParams) (Ruleset, error) {
+	if params.Phase == "" {
+		return Ruleset{}, ErrMissingRulesetPhase
+	}
 
-// UpdateAccountRulesetPhase updates a ruleset phase for an account.
-//
-// API reference: TBA.
-func (api *API) UpdateAccountRulesetPhase(ctx context.Context, accountID, rulesetPhase string, ruleset Ruleset) (Ruleset, error) {
-	return api.updateRulesetPhase(ctx, AccountRouteRoot, accountID, rulesetPhase, ruleset)
-}
-
-// updateRulesetPhase updates a ruleset phase based on the zone or account, the
-// identifier and the rules.
-func (api *API) updateRulesetPhase(ctx context.Context, identifierType RouteRoot, identifier, rulesetPhase string, ruleset Ruleset) (Ruleset, error) {
-	uri := fmt.Sprintf("/%s/%s/rulesets/phases/%s/entrypoint", identifierType, identifier, rulesetPhase)
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, ruleset)
+	uri := fmt.Sprintf("/%s/%s/rulesets/phases/%s/entrypoint", rc.Level, rc.Identifier, params.Phase)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return Ruleset{}, err
 	}
