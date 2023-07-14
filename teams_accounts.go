@@ -36,12 +36,13 @@ type TeamsConfiguration struct {
 }
 
 type TeamsAccountSettings struct {
-	Antivirus        *TeamsAntivirus   `json:"antivirus,omitempty"`
-	TLSDecrypt       *TeamsTLSDecrypt  `json:"tls_decrypt,omitempty"`
-	ActivityLog      *TeamsActivityLog `json:"activity_log,omitempty"`
-	BlockPage        *TeamsBlockPage   `json:"block_page,omitempty"`
-	BrowserIsolation *BrowserIsolation `json:"browser_isolation,omitempty"`
-	FIPS             *TeamsFIPS        `json:"fips,omitempty"`
+	Antivirus         *TeamsAntivirus         `json:"antivirus,omitempty"`
+	TLSDecrypt        *TeamsTLSDecrypt        `json:"tls_decrypt,omitempty"`
+	ActivityLog       *TeamsActivityLog       `json:"activity_log,omitempty"`
+	BlockPage         *TeamsBlockPage         `json:"block_page,omitempty"`
+	BrowserIsolation  *BrowserIsolation       `json:"browser_isolation,omitempty"`
+	FIPS              *TeamsFIPS              `json:"fips,omitempty"`
+	ProtocolDetection *TeamsProtocolDetection `json:"protocol_detection,omitempty"`
 }
 
 type BrowserIsolation struct {
@@ -59,6 +60,10 @@ type TeamsFIPS struct {
 }
 
 type TeamsTLSDecrypt struct {
+	Enabled bool `json:"enabled"`
+}
+
+type TeamsProtocolDetection struct {
 	Enabled bool `json:"enabled"`
 }
 

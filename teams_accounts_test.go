@@ -59,6 +59,9 @@ func TestTeamsAccountConfiguration(t *testing.T) {
 					"tls_decrypt": {
 						"enabled": true
 					},
+					"protocol_detection": {
+						"enabled": true
+					},
 					"fips": {
 						"tls": true
 					},
@@ -88,10 +91,11 @@ func TestTeamsAccountConfiguration(t *testing.T) {
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, actual.Settings, TeamsAccountSettings{
-			Antivirus:   &TeamsAntivirus{EnabledDownloadPhase: true},
-			ActivityLog: &TeamsActivityLog{Enabled: true},
-			TLSDecrypt:  &TeamsTLSDecrypt{Enabled: true},
-			FIPS:        &TeamsFIPS{TLS: true},
+			Antivirus:         &TeamsAntivirus{EnabledDownloadPhase: true},
+			ActivityLog:       &TeamsActivityLog{Enabled: true},
+			TLSDecrypt:        &TeamsTLSDecrypt{Enabled: true},
+			ProtocolDetection: &TeamsProtocolDetection{Enabled: true},
+			FIPS:              &TeamsFIPS{TLS: true},
 
 			BlockPage: &TeamsBlockPage{
 				Enabled:         BoolPtr(true),
@@ -129,6 +133,9 @@ func TestTeamsAccountUpdateConfiguration(t *testing.T) {
 					},
 					"activity_log": {
 						"enabled": true
+					},
+					"protocol_detection": {
+						"enabled": true
 					}
 				}
 			}
@@ -137,9 +144,10 @@ func TestTeamsAccountUpdateConfiguration(t *testing.T) {
 	}
 
 	settings := TeamsAccountSettings{
-		Antivirus:   &TeamsAntivirus{EnabledDownloadPhase: false},
-		ActivityLog: &TeamsActivityLog{Enabled: true},
-		TLSDecrypt:  &TeamsTLSDecrypt{Enabled: true},
+		Antivirus:         &TeamsAntivirus{EnabledDownloadPhase: false},
+		ActivityLog:       &TeamsActivityLog{Enabled: true},
+		TLSDecrypt:        &TeamsTLSDecrypt{Enabled: true},
+		ProtocolDetection: &TeamsProtocolDetection{Enabled: true},
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/gateway/configuration", handler)
