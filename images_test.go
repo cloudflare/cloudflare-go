@@ -96,6 +96,61 @@ func TestUploadImage(t *testing.T) {
 	}
 }
 
+func TestUploadImageByUrl(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+
+		u, err := parseImageMultipartUploadByUrl(r)
+		if !assert.NoError(t, err) {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+		assert.Equal(t, u.RequireSignedURLs, true)
+		assert.Equal(t, u.Metadata, map[string]interface{}{"meta": "metaID"})
+		assert.Equal(t, u.Url, "https://www.images-elsewhere.com/avatar.png")
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "ZxR0pLaXRldlBtaFhhO2FiZGVnaA",
+				"filename": "avatar.png",
+				"metadata": {
+					"meta": "metaID"
+				},
+				"requireSignedURLs": true,
+				"variants": [
+					"https://imagedelivery.net/MTt4OTd0b0w5aj/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/hero",
+					"https://imagedelivery.net/MTt4OTd0b0w5aj/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/original",
+					"https://imagedelivery.net/MTt4OTd0b0w5aj/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/thumbnail"
+				],
+				"uploaded": "2014-01-02T02:20:00Z"
+			}
+		}
+		`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/images/v1", handler)
+	want := expectedImageStruct
+
+	actual, err := client.UploadImageByUrl(context.Background(), AccountIdentifier(testAccountID), UploadImageByUrlParams{
+		Url:               "https://www.images-elsewhere.com/avatar.png",
+		RequireSignedURLs: true,
+		Metadata: map[string]interface{}{
+			"meta": "metaID",
+		},
+	})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
 func TestUpdateImage(t *testing.T) {
 	setup()
 	defer teardown()
@@ -427,6 +482,52 @@ func parseImageMultipartUpload(r *http.Request) (imageMultipartUpload, error) {
 	u.File, err = io.ReadAll(f)
 	if err != nil {
 		return u, err
+	}
+
+	return u, nil
+}
+
+type imageMultipartUploadByUrl struct {
+	Url               string
+	RequireSignedURLs bool
+	Metadata          map[string]interface{}
+}
+
+func parseImageMultipartUploadByUrl(r *http.Request) (imageMultipartUploadByUrl, error) {
+	var u imageMultipartUploadByUrl
+	mdBytes, err := getImageFormValue(r, "metadata")
+	if err != nil {
+		if !strings.HasPrefix(err.Error(), "no value found for key") {
+			return u, err
+		}
+	}
+	if mdBytes != nil {
+		err = json.Unmarshal(mdBytes, &u.Metadata)
+		if err != nil {
+			return u, err
+		}
+	}
+
+	rsuBytes, err := getImageFormValue(r, "requireSignedURLs")
+	if err != nil {
+		if !strings.HasPrefix(err.Error(), "no value found for key") {
+			return u, err
+		}
+	}
+	if rsuBytes != nil {
+		if bytes.Equal(rsuBytes, []byte("true")) {
+			u.RequireSignedURLs = true
+		}
+	}
+
+	urlBytes, err := getImageFormValue(r, "url")
+	if err != nil {
+		if !strings.HasPrefix(err.Error(), "no value found for key") {
+			return u, err
+		}
+	}
+	if urlBytes != nil {
+		u.Url = string(urlBytes)
 	}
 
 	return u, nil

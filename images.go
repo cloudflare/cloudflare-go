@@ -84,6 +84,43 @@ func (b UploadImageParams) write(mpw *multipart.Writer) error {
 	return nil
 }
 
+// UploadImageByUrlParams is the data required for an Image Upload by URL request.
+type UploadImageByUrlParams struct {
+	Url               string
+	RequireSignedURLs bool
+	Metadata          map[string]interface{}
+}
+
+func (b UploadImageByUrlParams) write(mpw *multipart.Writer) error {
+	err := mpw.WriteField("url", b.Url)
+	if err != nil {
+		return err
+	}
+
+	// According to the Cloudflare docs, this field defaults to false.
+	// For simplicity, we will only send it if the value is true, however
+	// if the default is changed to true, this logic will need to be updated.
+	if b.RequireSignedURLs {
+		err = mpw.WriteField("requireSignedURLs", "true")
+		if err != nil {
+			return err
+		}
+	}
+
+	if b.Metadata != nil {
+		part, err := mpw.CreateFormField("metadata")
+		if err != nil {
+			return err
+		}
+		err = json.NewEncoder(part).Encode(b.Metadata)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 // UpdateImageParams is the data required for an UpdateImage request.
 type UpdateImageParams struct {
 	ID                string                 `json:"-"`
@@ -147,6 +184,46 @@ type ListImagesParams struct {
 //
 // API Reference: https://api.cloudflare.com/#cloudflare-images-upload-an-image-using-a-single-http-request
 func (api *API) UploadImage(ctx context.Context, rc *ResourceContainer, params UploadImageParams) (Image, error) {
+	if rc.Level != AccountRouteLevel {
+		return Image{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/images/v1", rc.Identifier)
+
+	body := &bytes.Buffer{}
+	w := multipart.NewWriter(body)
+	if err := params.write(w); err != nil {
+		_ = w.Close()
+		return Image{}, fmt.Errorf("error writing multipart body: %w", err)
+	}
+	_ = w.Close()
+
+	res, err := api.makeRequestContextWithHeaders(
+		ctx,
+		http.MethodPost,
+		uri,
+		body,
+		http.Header{
+			"Accept":       []string{"application/json"},
+			"Content-Type": []string{w.FormDataContentType()},
+		},
+	)
+	if err != nil {
+		return Image{}, err
+	}
+
+	var imageDetailsResponse ImageDetailsResponse
+	err = json.Unmarshal(res, &imageDetailsResponse)
+	if err != nil {
+		return Image{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+	return imageDetailsResponse.Result, nil
+}
+
+// UploadImageByUrl uploads a single image from a given url.
+//
+// API Reference: https://api.cloudflare.com/#cloudflare-images-upload-an-image-using-a-single-http-request
+func (api *API) UploadImageByUrl(ctx context.Context, rc *ResourceContainer, params UploadImageByUrlParams) (Image, error) {
 	if rc.Level != AccountRouteLevel {
 		return Image{}, ErrRequiredAccountLevelResourceContainer
 	}
