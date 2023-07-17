@@ -103,7 +103,7 @@ func TestUploadImageByUrl(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 
-		u, err := parseImageMultipartUploadByUrl(r)
+		u, err := parseImageMultipartUpload(r)
 		if !assert.NoError(t, err) {
 			w.WriteHeader(http.StatusBadRequest)
 			return
@@ -138,7 +138,7 @@ func TestUploadImageByUrl(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/images/v1", handler)
 	want := expectedImageStruct
 
-	actual, err := client.UploadImageByUrl(context.Background(), AccountIdentifier(testAccountID), UploadImageByUrlParams{
+	actual, err := client.UploadImage(context.Background(), AccountIdentifier(testAccountID), UploadImageParams{
 		Url:               "https://www.images-elsewhere.com/avatar.png",
 		RequireSignedURLs: true,
 		Metadata: map[string]interface{}{
@@ -442,6 +442,7 @@ type imageMultipartUpload struct {
 	// this is for testing, never read an entire file into memory,
 	// especially when being done on a per-http request basis.
 	File              []byte
+	Url               string
 	RequireSignedURLs bool
 	Metadata          map[string]interface{}
 }
@@ -473,61 +474,27 @@ func parseImageMultipartUpload(r *http.Request) (imageMultipartUpload, error) {
 		}
 	}
 
-	f, _, err := r.FormFile("file")
-	if err != nil {
-		return u, err
-	}
-	defer f.Close()
-
-	u.File, err = io.ReadAll(f)
-	if err != nil {
-		return u, err
-	}
-
-	return u, nil
-}
-
-type imageMultipartUploadByUrl struct {
-	Url               string
-	RequireSignedURLs bool
-	Metadata          map[string]interface{}
-}
-
-func parseImageMultipartUploadByUrl(r *http.Request) (imageMultipartUploadByUrl, error) {
-	var u imageMultipartUploadByUrl
-	mdBytes, err := getImageFormValue(r, "metadata")
-	if err != nil {
-		if !strings.HasPrefix(err.Error(), "no value found for key") {
-			return u, err
+	if _, ok := r.MultipartForm.Value["url"]; ok {
+		urlBytes, err := getImageFormValue(r, "url")
+		if err != nil {
+			if !strings.HasPrefix(err.Error(), "no value found for key") {
+				return u, err
+			}
 		}
-	}
-	if mdBytes != nil {
-		err = json.Unmarshal(mdBytes, &u.Metadata)
+		if urlBytes != nil {
+			u.Url = string(urlBytes)
+		}
+	} else {
+		f, _, err := r.FormFile("file")
 		if err != nil {
 			return u, err
 		}
-	}
+		defer f.Close()
 
-	rsuBytes, err := getImageFormValue(r, "requireSignedURLs")
-	if err != nil {
-		if !strings.HasPrefix(err.Error(), "no value found for key") {
+		u.File, err = io.ReadAll(f)
+		if err != nil {
 			return u, err
 		}
-	}
-	if rsuBytes != nil {
-		if bytes.Equal(rsuBytes, []byte("true")) {
-			u.RequireSignedURLs = true
-		}
-	}
-
-	urlBytes, err := getImageFormValue(r, "url")
-	if err != nil {
-		if !strings.HasPrefix(err.Error(), "no value found for key") {
-			return u, err
-		}
-	}
-	if urlBytes != nil {
-		u.Url = string(urlBytes)
 	}
 
 	return u, nil
