@@ -37,6 +37,7 @@ type Image struct {
 // UploadImageParams is the data required for an Image Upload request.
 type UploadImageParams struct {
 	File              io.ReadCloser
+	URL               string
 	Name              string
 	RequireSignedURLs bool
 	Metadata          map[string]interface{}
@@ -45,33 +46,43 @@ type UploadImageParams struct {
 // write writes the image upload data to a multipart writer, so
 // it can be used in an HTTP request.
 func (b UploadImageParams) write(mpw *multipart.Writer) error {
-	if b.File == nil {
-		return errors.New("a file to upload must be specified")
+	if b.File == nil && b.URL == "" {
+		return errors.New("a file or url to upload must be specified")
 	}
-	name := b.Name
-	part, err := mpw.CreateFormFile("file", name)
-	if err != nil {
-		return err
-	}
-	_, err = io.Copy(part, b.File)
-	if err != nil {
+
+	if b.File != nil {
+		name := b.Name
+		part, err := mpw.CreateFormFile("file", name)
+		if err != nil {
+			return err
+		}
+		_, err = io.Copy(part, b.File)
+		if err != nil {
+			_ = b.File.Close()
+			return err
+		}
 		_ = b.File.Close()
-		return err
 	}
-	_ = b.File.Close()
+
+	if b.URL != "" {
+		err := mpw.WriteField("url", b.URL)
+		if err != nil {
+			return err
+		}
+	}
 
 	// According to the Cloudflare docs, this field defaults to false.
 	// For simplicity, we will only send it if the value is true, however
 	// if the default is changed to true, this logic will need to be updated.
 	if b.RequireSignedURLs {
-		err = mpw.WriteField("requireSignedURLs", "true")
+		err := mpw.WriteField("requireSignedURLs", "true")
 		if err != nil {
 			return err
 		}
 	}
 
 	if b.Metadata != nil {
-		part, err = mpw.CreateFormField("metadata")
+		part, err := mpw.CreateFormField("metadata")
 		if err != nil {
 			return err
 		}
@@ -149,6 +160,10 @@ type ListImagesParams struct {
 func (api *API) UploadImage(ctx context.Context, rc *ResourceContainer, params UploadImageParams) (Image, error) {
 	if rc.Level != AccountRouteLevel {
 		return Image{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	if params.File != nil && params.URL != "" {
+		return Image{}, errors.New("file and url uploads are mutually exclusive and can only be performed individually")
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/images/v1", rc.Identifier)

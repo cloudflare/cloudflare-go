@@ -96,6 +96,61 @@ func TestUploadImage(t *testing.T) {
 	}
 }
 
+func TestUploadImageByUrl(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+
+		u, err := parseImageMultipartUpload(r)
+		if !assert.NoError(t, err) {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+		assert.Equal(t, u.RequireSignedURLs, true)
+		assert.Equal(t, u.Metadata, map[string]interface{}{"meta": "metaID"})
+		assert.Equal(t, u.Url, "https://www.images-elsewhere.com/avatar.png")
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "ZxR0pLaXRldlBtaFhhO2FiZGVnaA",
+				"filename": "avatar.png",
+				"metadata": {
+					"meta": "metaID"
+				},
+				"requireSignedURLs": true,
+				"variants": [
+					"https://imagedelivery.net/MTt4OTd0b0w5aj/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/hero",
+					"https://imagedelivery.net/MTt4OTd0b0w5aj/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/original",
+					"https://imagedelivery.net/MTt4OTd0b0w5aj/ZxR0pLaXRldlBtaFhhO2FiZGVnaA/thumbnail"
+				],
+				"uploaded": "2014-01-02T02:20:00Z"
+			}
+		}
+		`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/images/v1", handler)
+	want := expectedImageStruct
+
+	actual, err := client.UploadImage(context.Background(), AccountIdentifier(testAccountID), UploadImageParams{
+		URL:               "https://www.images-elsewhere.com/avatar.png",
+		RequireSignedURLs: true,
+		Metadata: map[string]interface{}{
+			"meta": "metaID",
+		},
+	})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
 func TestUpdateImage(t *testing.T) {
 	setup()
 	defer teardown()
@@ -195,6 +250,20 @@ func TestCreateImageDirectUploadURL(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
+}
+
+func TestCreateImageConflictingTypes(t *testing.T) {
+	setup()
+	defer teardown()
+
+	_, err := client.UploadImage(context.Background(), AccountIdentifier(testAccountID), UploadImageParams{
+		URL: "https://example.com/foo.jpg",
+		File: fakeFile{
+			Buffer: bytes.NewBufferString("this is definitely an image"),
+		},
+	})
+
+	assert.Error(t, err)
 }
 
 func TestCreateImageDirectUploadURLV2(t *testing.T) {
@@ -387,6 +456,7 @@ type imageMultipartUpload struct {
 	// this is for testing, never read an entire file into memory,
 	// especially when being done on a per-http request basis.
 	File              []byte
+	Url               string
 	RequireSignedURLs bool
 	Metadata          map[string]interface{}
 }
@@ -418,15 +488,27 @@ func parseImageMultipartUpload(r *http.Request) (imageMultipartUpload, error) {
 		}
 	}
 
-	f, _, err := r.FormFile("file")
-	if err != nil {
-		return u, err
-	}
-	defer f.Close()
+	if _, ok := r.MultipartForm.Value["url"]; ok {
+		urlBytes, err := getImageFormValue(r, "url")
+		if err != nil {
+			if !strings.HasPrefix(err.Error(), "no value found for key") {
+				return u, err
+			}
+		}
+		if urlBytes != nil {
+			u.Url = string(urlBytes)
+		}
+	} else {
+		f, _, err := r.FormFile("file")
+		if err != nil {
+			return u, err
+		}
+		defer f.Close()
 
-	u.File, err = io.ReadAll(f)
-	if err != nil {
-		return u, err
+		u.File, err = io.ReadAll(f)
+		if err != nil {
+			return u, err
+		}
 	}
 
 	return u, nil
