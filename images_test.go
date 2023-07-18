@@ -139,7 +139,7 @@ func TestUploadImageByUrl(t *testing.T) {
 	want := expectedImageStruct
 
 	actual, err := client.UploadImage(context.Background(), AccountIdentifier(testAccountID), UploadImageParams{
-		Url:               "https://www.images-elsewhere.com/avatar.png",
+		URL:               "https://www.images-elsewhere.com/avatar.png",
 		RequireSignedURLs: true,
 		Metadata: map[string]interface{}{
 			"meta": "metaID",

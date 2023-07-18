@@ -37,7 +37,7 @@ type Image struct {
 // UploadImageParams is the data required for an Image Upload request.
 type UploadImageParams struct {
 	File              io.ReadCloser
-	Url               string
+	URL               string
 	Name              string
 	RequireSignedURLs bool
 	Metadata          map[string]interface{}
@@ -46,7 +46,7 @@ type UploadImageParams struct {
 // write writes the image upload data to a multipart writer, so
 // it can be used in an HTTP request.
 func (b UploadImageParams) write(mpw *multipart.Writer) error {
-	if b.File == nil && b.Url == "" {
+	if b.File == nil && b.URL == "" {
 		return errors.New("a file or url to upload must be specified")
 	}
 
@@ -64,8 +64,8 @@ func (b UploadImageParams) write(mpw *multipart.Writer) error {
 		_ = b.File.Close()
 	}
 
-	if b.Url != "" {
-		err := mpw.WriteField("url", b.Url)
+	if b.URL != "" {
+		err := mpw.WriteField("url", b.URL)
 		if err != nil {
 			return err
 		}
