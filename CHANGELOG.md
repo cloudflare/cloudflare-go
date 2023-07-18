@@ -19,6 +19,10 @@ BREAKING CHANGES:
 * rulesets: `UpdateZoneRulesetPhase` is removed in favour of `UpdateEntrypointRuleset` ([#1333](https://github.com/cloudflare/cloudflare-go/issues/1333))
 * rulesets: `UpdateZoneRuleset` is removed in favour of `UpdateRuleset` ([#1333](https://github.com/cloudflare/cloudflare-go/issues/1333))
 
+ENHANCEMENTS:
+
+* images: adds ability to upload image by url ([#1335](https://github.com/cloudflare/cloudflare-go/issues/1335))
+
 DEPENDENCIES:
 
 * deps: bumps golang.org/x/net from 0.11.0 to 0.12.0 ([#1328](https://github.com/cloudflare/cloudflare-go/issues/1328))
