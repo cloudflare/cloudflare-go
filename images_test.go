@@ -252,6 +252,20 @@ func TestCreateImageDirectUploadURL(t *testing.T) {
 	}
 }
 
+func TestCreateImageConflictingTypes(t *testing.T) {
+	setup()
+	defer teardown()
+
+	_, err := client.UploadImage(context.Background(), AccountIdentifier(testAccountID), UploadImageParams{
+		URL: "https://example.com/foo.jpg",
+		File: fakeFile{
+			Buffer: bytes.NewBufferString("this is definitely an image"),
+		},
+	})
+
+	assert.Error(t, err)
+}
+
 func TestCreateImageDirectUploadURLV2(t *testing.T) {
 	setup()
 	defer teardown()

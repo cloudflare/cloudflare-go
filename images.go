@@ -162,6 +162,10 @@ func (api *API) UploadImage(ctx context.Context, rc *ResourceContainer, params U
 		return Image{}, ErrRequiredAccountLevelResourceContainer
 	}
 
+	if params.File != nil && params.URL != "" {
+		return Image{}, errors.New("file and url uploads are mutually exclusive and can only be performed individually")
+	}
+
 	uri := fmt.Sprintf("/accounts/%s/images/v1", rc.Identifier)
 
 	body := &bytes.Buffer{}
