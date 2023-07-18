@@ -115,7 +115,7 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 		Description:    "Primary data center - Provider XYZ",
 		Name:           "primary-dc-1",
 		Enabled:        true,
-		MinimumOrigins: 1,
+		MinimumOrigins: IntPtr(1),
 		Monitor:        "f1aba936b94213e5b8dca0c0dbf1f9cc",
 		Latitude:       fptr(55),
 		Longitude:      fptr(-12.5),
