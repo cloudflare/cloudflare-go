@@ -33,7 +33,7 @@ func TestRegionalTieredCache(t *testing.T) {
 		`, regionalTieredCacheTimestampString)
 	}
 
-	mux.HandleFunc("/zones/01a7362d577a6c3019a474fd6f485823/cache/regional_tiered_cache", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/cache/regional_tiered_cache", handler)
 	want := RegionalTieredCache{
 		ID:         "regional_tiered_cache",
 		Value:      "on",
@@ -42,7 +42,7 @@ func TestRegionalTieredCache(t *testing.T) {
 
 	actual, err := client.GetRegionalTieredCache(
 		context.Background(),
-		ZoneIdentifier("01a7362d577a6c3019a474fd6f485823"),
+		ZoneIdentifier(testZoneID),
 		GetRegionalTieredCacheParams{},
 	)
 
@@ -71,7 +71,7 @@ func TestUpdateRegionalTieredCache(t *testing.T) {
 		`, regionalTieredCacheTimestampString)
 	}
 
-	mux.HandleFunc("/zones/01a7362d577a6c3019a474fd6f485823/cache/regional_tiered_cache", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/cache/regional_tiered_cache", handler)
 	want := RegionalTieredCache{
 		ID:         "regional_tiered_cache",
 		Value:      "off",
@@ -80,7 +80,7 @@ func TestUpdateRegionalTieredCache(t *testing.T) {
 
 	actual, err := client.UpdateRegionalTieredCache(
 		context.Background(),
-		ZoneIdentifier("01a7362d577a6c3019a474fd6f485823"),
+		ZoneIdentifier(testZoneID),
 		UpdateRegionalTieredCacheParams{Value: "off"},
 	)
 

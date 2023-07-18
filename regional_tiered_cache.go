@@ -34,7 +34,8 @@ type UpdateRegionalTieredCacheParams struct {
 	Value string `json:"value"`
 }
 
-// GetRegionalTieredCache returns information about the current regional tiered cache settings.
+// GetRegionalTieredCache returns information about the current regional tiered
+// cache settings.
 //
 // API reference: https://developers.cloudflare.com/api/operations/zone-cache-settings-get-regional-tiered-cache-setting
 func (api *API) GetRegionalTieredCache(ctx context.Context, rc *ResourceContainer, params GetRegionalTieredCacheParams) (RegionalTieredCache, error) {
@@ -57,7 +58,8 @@ func (api *API) GetRegionalTieredCache(ctx context.Context, rc *ResourceContaine
 	return RegionalTieredCacheDetailsResponse.Result, nil
 }
 
-// UpdateRegionalTieredCache updates the regional tiered cache setting for a zone.
+// UpdateRegionalTieredCache updates the regional tiered cache setting for a
+// zone.
 //
 // API reference: https://developers.cloudflare.com/api/operations/zone-cache-settings-change-regional-tiered-cache-setting
 func (api *API) UpdateRegionalTieredCache(ctx context.Context, rc *ResourceContainer, params UpdateRegionalTieredCacheParams) (RegionalTieredCache, error) {
