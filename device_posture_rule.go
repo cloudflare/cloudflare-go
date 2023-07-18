@@ -187,6 +187,12 @@ type DevicePostureRuleInput struct {
 	CountOperator    string   `json:"countOperator,omitempty"`
 	TotalScore       string   `json:"total_score,omitempty"`
 	ScoreOperator    string   `json:"scoreOperator,omitempty"`
+	CertificateID    string   `json:"certificate_id,omitempty"`
+	CommonName       string   `json:"cn,omitempty"`
+	ActiveThreats    int      `json:"active_threats,omitempty"`
+	NetworkStatus    string   `json:"network_status,omitempty"`
+	Infected         bool     `json:"infected,omitempty"`
+	IsActive         bool     `json:"is_active,omitempty"`
 }
 
 // DevicePostureRuleListResponse represents the response from the list
