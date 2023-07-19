@@ -16,13 +16,7 @@ builds:
     binary: flarectl
     mod_timestamp: '{{ .CommitTimestamp }}'
 archives:
-  - replacements:
-      darwin: macos
-    format_overrides:
-      - goos: windows
-        format: zip
-    format: tar.xz
-    name_template: "{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}"
+  - name_template: "{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}"
 checksum:
   disable: true
 changelog:

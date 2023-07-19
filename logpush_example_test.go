@@ -9,21 +9,7 @@ import (
 	cloudflare "github.com/cloudflare/cloudflare-go"
 )
 
-var exampleNewLogpushJob = cloudflare.LogpushJob{
-	Enabled:         false,
-	Name:            "example.com",
-	LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
-	DestinationConf: "s3://mybucket/logs?region=us-west-2",
-}
-
-var exampleUpdatedLogpushJob = cloudflare.LogpushJob{
-	Enabled:         true,
-	Name:            "updated.com",
-	LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp",
-	DestinationConf: "gs://mybucket/logs",
-}
-
-func ExampleAPI_CreateZoneLogpushJob() {
+func ExampleAPI_CreateLogpushJob() {
 	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
@@ -34,7 +20,12 @@ func ExampleAPI_CreateZoneLogpushJob() {
 		log.Fatal(err)
 	}
 
-	job, err := api.CreateZoneLogpushJob(context.Background(), zoneID, exampleNewLogpushJob)
+	job, err := api.CreateLogpushJob(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.CreateLogpushJobParams{
+		Enabled:         false,
+		Name:            "example.com",
+		LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
+		DestinationConf: "s3://mybucket/logs?region=us-west-2",
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -42,7 +33,7 @@ func ExampleAPI_CreateZoneLogpushJob() {
 	fmt.Printf("%+v\n", job)
 }
 
-func ExampleAPI_UpdateZoneLogpushJob() {
+func ExampleAPI_UpdateLogpushJob() {
 	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
@@ -53,13 +44,19 @@ func ExampleAPI_UpdateZoneLogpushJob() {
 		log.Fatal(err)
 	}
 
-	err = api.UpdateZoneLogpushJob(context.Background(), zoneID, 1, exampleUpdatedLogpushJob)
+	err = api.UpdateLogpushJob(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.UpdateLogpushJobParams{
+		ID:              1,
+		Enabled:         true,
+		Name:            "updated.com",
+		LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp",
+		DestinationConf: "gs://mybucket/logs",
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func ExampleAPI_ListZoneLogpushJobs() {
+func ExampleAPI_ListLogpushJobs() {
 	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
@@ -70,7 +67,7 @@ func ExampleAPI_ListZoneLogpushJobs() {
 		log.Fatal(err)
 	}
 
-	jobs, err := api.ListZoneLogpushJobs(context.Background(), zoneID)
+	jobs, err := api.ListLogpushJobs(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.ListLogpushJobsParams{})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -81,7 +78,7 @@ func ExampleAPI_ListZoneLogpushJobs() {
 	}
 }
 
-func ExampleAPI_GetZoneLogpushJob() {
+func ExampleAPI_GetLogpushJob() {
 	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
@@ -92,7 +89,7 @@ func ExampleAPI_GetZoneLogpushJob() {
 		log.Fatal(err)
 	}
 
-	job, err := api.GetZoneLogpushJob(context.Background(), zoneID, 1)
+	job, err := api.GetLogpushJob(context.Background(), cloudflare.ZoneIdentifier(zoneID), 1)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -100,7 +97,7 @@ func ExampleAPI_GetZoneLogpushJob() {
 	fmt.Printf("%+v\n", job)
 }
 
-func ExampleAPI_DeleteZoneLogpushJob() {
+func ExampleAPI_DeleteLogpushJob() {
 	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
@@ -111,13 +108,13 @@ func ExampleAPI_DeleteZoneLogpushJob() {
 		log.Fatal(err)
 	}
 
-	err = api.DeleteZoneLogpushJob(context.Background(), zoneID, 1)
+	err = api.DeleteLogpushJob(context.Background(), cloudflare.ZoneIdentifier(zoneID), 1)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func ExampleAPI_GetZoneLogpushOwnershipChallenge() {
+func ExampleAPI_GetLogpushOwnershipChallenge() {
 	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
@@ -128,7 +125,7 @@ func ExampleAPI_GetZoneLogpushOwnershipChallenge() {
 		log.Fatal(err)
 	}
 
-	ownershipChallenge, err := api.GetZoneLogpushOwnershipChallenge(context.Background(), zoneID, "destination_conf")
+	ownershipChallenge, err := api.GetLogpushOwnershipChallenge(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.GetLogpushOwnershipChallengeParams{DestinationConf: "destination_conf"})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -136,7 +133,7 @@ func ExampleAPI_GetZoneLogpushOwnershipChallenge() {
 	fmt.Printf("%+v\n", ownershipChallenge)
 }
 
-func ExampleAPI_ValidateZoneLogpushOwnershipChallenge() {
+func ExampleAPI_ValidateLogpushOwnershipChallenge() {
 	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
@@ -147,7 +144,10 @@ func ExampleAPI_ValidateZoneLogpushOwnershipChallenge() {
 		log.Fatal(err)
 	}
 
-	isValid, err := api.ValidateZoneLogpushOwnershipChallenge(context.Background(), zoneID, "destination_conf", "ownership_challenge")
+	isValid, err := api.ValidateLogpushOwnershipChallenge(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.ValidateLogpushOwnershipChallengeParams{
+		DestinationConf:    "destination_conf",
+		OwnershipChallenge: "ownership_challenge",
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -155,7 +155,7 @@ func ExampleAPI_ValidateZoneLogpushOwnershipChallenge() {
 	fmt.Printf("%+v\n", isValid)
 }
 
-func ExampleAPI_CheckZoneLogpushDestinationExists() {
+func ExampleAPI_CheckLogpushDestinationExists() {
 	api, err := cloudflare.New(apiKey, user)
 	if err != nil {
 		log.Fatal(err)
@@ -166,7 +166,7 @@ func ExampleAPI_CheckZoneLogpushDestinationExists() {
 		log.Fatal(err)
 	}
 
-	exists, err := api.CheckZoneLogpushDestinationExists(context.Background(), zoneID, "destination_conf")
+	exists, err := api.CheckLogpushDestinationExists(context.Background(), cloudflare.ZoneIdentifier(zoneID), "destination_conf")
 	if err != nil {
 		log.Fatal(err)
 	}

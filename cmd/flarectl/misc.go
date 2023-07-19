@@ -44,10 +44,6 @@ func initializeAPI(c *cli.Context) error {
 		return err
 	}
 
-	if c.IsSet("account-id") {
-		cloudflare.UsingAccount(c.String("account-id"))(api) // nolint
-	}
-
 	return nil
 }
 

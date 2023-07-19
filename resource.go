@@ -2,13 +2,30 @@ package cloudflare
 
 import "fmt"
 
-// RouteLevel holds the "level" where the resource resides.
+// RouteLevel holds the "level" where the resource resides. Commonly used in
+// routing configurations or builders.
 type RouteLevel string
 
+// ResourceType holds the type of the resource. This is similar to `RouteLevel`
+// however this is the singular version of `RouteLevel` and isn't suitable for
+// use in routing.
+type ResourceType string
+
 const (
-	AccountRouteLevel RouteLevel = "accounts"
-	ZoneRouteLevel    RouteLevel = "zones"
-	UserRouteLevel    RouteLevel = "user"
+	user    = "user"
+	zone    = "zone"
+	account = "account"
+
+	zones    = zone + "s"
+	accounts = account + "s"
+
+	AccountRouteLevel RouteLevel = accounts
+	ZoneRouteLevel    RouteLevel = zones
+	UserRouteLevel    RouteLevel = user
+
+	AccountType ResourceType = account
+	ZoneType    ResourceType = zone
+	UserType    ResourceType = user
 )
 
 // ResourceContainer defines an API resource you wish to target. Should not be
@@ -17,6 +34,33 @@ const (
 type ResourceContainer struct {
 	Level      RouteLevel
 	Identifier string
+	Type       ResourceType
+}
+
+func (r RouteLevel) String() string {
+	switch r {
+	case AccountRouteLevel:
+		return accounts
+	case ZoneRouteLevel:
+		return zones
+	case UserRouteLevel:
+		return user
+	default:
+		return "unknown"
+	}
+}
+
+func (r ResourceType) String() string {
+	switch r {
+	case AccountType:
+		return account
+	case ZoneType:
+		return zone
+	case UserType:
+		return user
+	default:
+		return "unknown"
+	}
 }
 
 // Returns a URL fragment of the endpoint scoped by the container.
@@ -27,6 +71,11 @@ func (rc *ResourceContainer) URLFragment() string {
 	if rc.Level == "" {
 		return rc.Identifier
 	}
+
+	if rc.Level == UserRouteLevel {
+		return user
+	}
+
 	return fmt.Sprintf("%s/%s", rc.Level, rc.Identifier)
 }
 
@@ -42,6 +91,7 @@ func UserIdentifier(id string) *ResourceContainer {
 	return &ResourceContainer{
 		Level:      UserRouteLevel,
 		Identifier: id,
+		Type:       UserType,
 	}
 }
 
@@ -50,6 +100,7 @@ func ZoneIdentifier(id string) *ResourceContainer {
 	return &ResourceContainer{
 		Level:      ZoneRouteLevel,
 		Identifier: id,
+		Type:       ZoneType,
 	}
 }
 
@@ -58,5 +109,6 @@ func AccountIdentifier(id string) *ResourceContainer {
 	return &ResourceContainer{
 		Level:      AccountRouteLevel,
 		Identifier: id,
+		Type:       AccountType,
 	}
 }

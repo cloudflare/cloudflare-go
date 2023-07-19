@@ -9,12 +9,14 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestAccessIdentityProviders(t *testing.T) {
+func TestListAccessIdentityProviders(t *testing.T) {
 	setup()
 	defer teardown()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		assert.Equal(t, "1", r.URL.Query().Get("page"))
+		assert.Equal(t, "25", r.URL.Query().Get("per_page"))
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"success": true,
@@ -30,7 +32,13 @@ func TestAccessIdentityProviders(t *testing.T) {
 						"client_secret": "a-secret-key"
 					}
 				}
-			]
+			],
+			"result_info": {
+				"count": 1,
+				"page": 1,
+				"per_page": 20,
+				"total_count": 1
+		  	}
 		}
 		`)
 	}
@@ -49,7 +57,7 @@ func TestAccessIdentityProviders(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/identity_providers", handler)
 
-	actual, err := client.AccessIdentityProviders(context.Background(), testAccountID)
+	actual, _, err := client.ListAccessIdentityProviders(context.Background(), testAccountRC, ListAccessIdentityProvidersParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -57,7 +65,7 @@ func TestAccessIdentityProviders(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/identity_providers", handler)
 
-	actual, err = client.ZoneLevelAccessIdentityProviders(context.Background(), testZoneID)
+	actual, _, err = client.ListAccessIdentityProviders(context.Background(), testZoneRC, ListAccessIdentityProvidersParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -100,7 +108,7 @@ func TestAccessIdentityProviderDetails(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc841", handler)
 
-	actual, err := client.AccessIdentityProviderDetails(context.Background(), testAccountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc841")
+	actual, err := client.GetAccessIdentityProvider(context.Background(), testAccountRC, "f174e90a-fafe-4643-bbbc-4a0ed4fc841")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -108,7 +116,7 @@ func TestAccessIdentityProviderDetails(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc841", handler)
 
-	actual, err = client.ZoneLevelAccessIdentityProviderDetails(context.Background(), testZoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc841")
+	actual, err = client.GetAccessIdentityProvider(context.Background(), testZoneRC, "f174e90a-fafe-4643-bbbc-4a0ed4fc841")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -139,7 +147,7 @@ func TestCreateAccessIdentityProvider(t *testing.T) {
 		`)
 	}
 
-	newIdentityProvider := AccessIdentityProvider{
+	newIdentityProvider := CreateAccessIdentityProviderParams{
 		Name: "Widget Corps OTP",
 		Type: "github",
 		Config: AccessIdentityProviderConfiguration{
@@ -160,7 +168,7 @@ func TestCreateAccessIdentityProvider(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/identity_providers", handler)
 
-	actual, err := client.CreateAccessIdentityProvider(context.Background(), testAccountID, newIdentityProvider)
+	actual, err := client.CreateAccessIdentityProvider(context.Background(), testAccountRC, newIdentityProvider)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -168,7 +176,7 @@ func TestCreateAccessIdentityProvider(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/identity_providers", handler)
 
-	actual, err = client.CreateZoneLevelAccessIdentityProvider(context.Background(), testZoneID, newIdentityProvider)
+	actual, err = client.CreateAccessIdentityProvider(context.Background(), testZoneRC, newIdentityProvider)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -198,7 +206,8 @@ func TestUpdateAccessIdentityProvider(t *testing.T) {
 		`)
 	}
 
-	updatedIdentityProvider := AccessIdentityProvider{
+	updatedIdentityProvider := UpdateAccessIdentityProviderParams{
+		ID:   "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		Name: "Widget Corps OTP",
 		Type: "github",
 		Config: AccessIdentityProviderConfiguration{
@@ -219,7 +228,7 @@ func TestUpdateAccessIdentityProvider(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err := client.UpdateAccessIdentityProvider(context.Background(), testAccountID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", updatedIdentityProvider)
+	actual, err := client.UpdateAccessIdentityProvider(context.Background(), testAccountRC, updatedIdentityProvider)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -227,7 +236,7 @@ func TestUpdateAccessIdentityProvider(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err = client.UpdateZoneLevelAccessIdentityProvider(context.Background(), testZoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", updatedIdentityProvider)
+	actual, err = client.UpdateAccessIdentityProvider(context.Background(), testZoneRC, updatedIdentityProvider)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -270,7 +279,7 @@ func TestDeleteAccessIdentityProvider(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err := client.DeleteAccessIdentityProvider(context.Background(), "01a7362d577a6c3019a474fd6f485823", "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	actual, err := client.DeleteAccessIdentityProvider(context.Background(), testAccountRC, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -278,7 +287,7 @@ func TestDeleteAccessIdentityProvider(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
 
-	actual, err = client.DeleteZoneLevelAccessIdentityProvider(context.Background(), testZoneID, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
+	actual, err = client.DeleteAccessIdentityProvider(context.Background(), testZoneRC, "f174e90a-fafe-4643-bbbc-4a0ed4fc8415")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)

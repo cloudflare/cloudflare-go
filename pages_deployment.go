@@ -62,12 +62,6 @@ type pagesDeploymentResponse struct {
 	Result PagesProjectDeployment `json:"result"`
 }
 
-type pagesDeploymentStageLogsResponse struct {
-	Response
-	Result     PagesDeploymentStageLogs `json:"result"`
-	ResultInfo `json:"result_info"`
-}
-
 type pagesDeploymentLogsResponse struct {
 	Response
 	Result     PagesDeploymentLogs `json:"result"`
@@ -75,9 +69,9 @@ type pagesDeploymentLogsResponse struct {
 }
 
 type ListPagesDeploymentsParams struct {
-	ProjectName string
+	ProjectName string `url:"-"`
 
-	PaginationOptions
+	ResultInfo
 }
 
 type GetPagesDeploymentInfoParams struct {
@@ -101,12 +95,14 @@ type GetPagesDeploymentLogsParams struct {
 }
 
 type DeletePagesDeploymentParams struct {
-	ProjectName  string
-	DeploymentID string
+	ProjectName  string `url:"-"`
+	DeploymentID string `url:"-"`
+	Force        bool   `url:"force,omitempty"`
 }
 
 type CreatePagesDeploymentParams struct {
-	ProjectName string
+	ProjectName string `json:"-"`
+	Branch      string `json:"branch,omitempty"`
 }
 
 type RetryPagesDeploymentParams struct {
@@ -122,33 +118,53 @@ type RollbackPagesDeploymentParams struct {
 var (
 	ErrMissingProjectName  = errors.New("required missing project name")
 	ErrMissingDeploymentID = errors.New("required missing deployment ID")
-	ErrMissingStageName    = errors.New("required missing stage name")
 )
 
 // ListPagesDeployments returns all deployments for a Pages project.
 //
 // API reference: https://api.cloudflare.com/#pages-deployment-get-deployments
-func (api *API) ListPagesDeployments(ctx context.Context, rc *ResourceContainer, params ListPagesDeploymentsParams) ([]PagesProjectDeployment, ResultInfo, error) {
+func (api *API) ListPagesDeployments(ctx context.Context, rc *ResourceContainer, params ListPagesDeploymentsParams) ([]PagesProjectDeployment, *ResultInfo, error) {
 	if rc.Identifier == "" {
-		return []PagesProjectDeployment{}, ResultInfo{}, ErrMissingAccountID
+		return []PagesProjectDeployment{}, &ResultInfo{}, ErrMissingAccountID
 	}
 
 	if params.ProjectName == "" {
-		return []PagesProjectDeployment{}, ResultInfo{}, ErrMissingProjectName
+		return []PagesProjectDeployment{}, &ResultInfo{}, ErrMissingProjectName
 	}
 
-	uri := buildURI(fmt.Sprintf("/accounts/%s/pages/projects/%s/deployments", rc.Identifier, params.ProjectName), params.PaginationOptions)
-
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
-	if err != nil {
-		return []PagesProjectDeployment{}, ResultInfo{}, err
+	autoPaginate := true
+	if params.PerPage >= 1 || params.Page >= 1 {
+		autoPaginate = false
 	}
+
+	if params.PerPage < 1 {
+		params.PerPage = 25
+	}
+
+	if params.Page < 1 {
+		params.Page = 1
+	}
+
+	var deployments []PagesProjectDeployment
 	var r pagesDeploymentListResponse
-	err = json.Unmarshal(res, &r)
-	if err != nil {
-		return []PagesProjectDeployment{}, ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+
+	for {
+		uri := buildURI(fmt.Sprintf("/accounts/%s/pages/projects/%s/deployments", rc.Identifier, params.ProjectName), params)
+		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+		if err != nil {
+			return []PagesProjectDeployment{}, &ResultInfo{}, err
+		}
+		err = json.Unmarshal(res, &r)
+		if err != nil {
+			return []PagesProjectDeployment{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		}
+		deployments = append(deployments, r.Result...)
+		params.ResultInfo = r.ResultInfo.Next()
+		if params.Done() || !autoPaginate {
+			break
+		}
 	}
-	return r.Result, r.ResultInfo, nil
+	return deployments, &r.ResultInfo, nil
 }
 
 // GetPagesDeploymentInfo returns a deployment for a Pages project.
@@ -217,20 +233,20 @@ func (api *API) GetPagesDeploymentLogs(ctx context.Context, rc *ResourceContaine
 // DeletePagesDeployment deletes a Pages deployment.
 //
 // API reference: https://api.cloudflare.com/#pages-deployment-delete-deployment
-func (api *API) DeletePagesDeployment(ctx context.Context, rc *ResourceContainer, projectName, deploymentID string) error {
+func (api *API) DeletePagesDeployment(ctx context.Context, rc *ResourceContainer, params DeletePagesDeploymentParams) error {
 	if rc.Identifier == "" {
 		return ErrMissingAccountID
 	}
 
-	if projectName == "" {
+	if params.ProjectName == "" {
 		return ErrMissingProjectName
 	}
 
-	if deploymentID == "" {
+	if params.DeploymentID == "" {
 		return ErrMissingDeploymentID
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s/deployments/%s", rc.Identifier, projectName, deploymentID)
+	uri := buildURI(fmt.Sprintf("/accounts/%s/pages/projects/%s/deployments/%s", rc.Identifier, params.ProjectName, params.DeploymentID), params)
 
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
@@ -253,7 +269,7 @@ func (api *API) CreatePagesDeployment(ctx context.Context, rc *ResourceContainer
 
 	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s/deployments", rc.Identifier, params.ProjectName)
 
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return PagesProjectDeployment{}, err
 	}
