@@ -22,6 +22,7 @@ BREAKING CHANGES:
 ENHANCEMENTS:
 
 * images: adds ability to upload image by url ([#1335](https://github.com/cloudflare/cloudflare-go/issues/1335))
+* load_balancing: support header session affinity policy ([#1302](https://github.com/cloudflare/cloudflare-go/issues/1302))
 * zone: Added `GetRegionalTieredCache` and `UpdateRegionalTieredCache` to allow setting Regional Tiered Cache for a zone. ([#1336](https://github.com/cloudflare/cloudflare-go/issues/1336))
 
 DEPENDENCIES:
