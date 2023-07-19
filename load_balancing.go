@@ -253,17 +253,21 @@ type LocationStrategy struct {
 // LoadBalancerRuleOverridesSessionAffinityAttrs mimics SessionAffinityAttributes without the
 // DrainDuration field as that field can not be overwritten via rules.
 type LoadBalancerRuleOverridesSessionAffinityAttrs struct {
-	SameSite             string `json:"samesite,omitempty"`
-	Secure               string `json:"secure,omitempty"`
-	ZeroDowntimeFailover string `json:"zero_downtime_failover,omitempty"`
+	SameSite             string   `json:"samesite,omitempty"`
+	Secure               string   `json:"secure,omitempty"`
+	ZeroDowntimeFailover string   `json:"zero_downtime_failover,omitempty"`
+	Headers              []string `json:"headers,omitempty"`
+	RequireAllHeaders    *bool    `json:"require_all_headers,omitempty"`
 }
 
-// SessionAffinityAttributes represents the fields used to set attributes in a load balancer session affinity cookie.
+// SessionAffinityAttributes represents additional configuration options for session affinity.
 type SessionAffinityAttributes struct {
-	SameSite             string `json:"samesite,omitempty"`
-	Secure               string `json:"secure,omitempty"`
-	DrainDuration        int    `json:"drain_duration,omitempty"`
-	ZeroDowntimeFailover string `json:"zero_downtime_failover,omitempty"`
+	SameSite             string   `json:"samesite,omitempty"`
+	Secure               string   `json:"secure,omitempty"`
+	DrainDuration        int      `json:"drain_duration,omitempty"`
+	ZeroDowntimeFailover string   `json:"zero_downtime_failover,omitempty"`
+	Headers              []string `json:"headers,omitempty"`
+	RequireAllHeaders    bool     `json:"require_all_headers,omitempty"`
 }
 
 // LoadBalancerOriginHealth represents the health of the origin.
