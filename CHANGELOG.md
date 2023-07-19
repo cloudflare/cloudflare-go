@@ -21,6 +21,8 @@ BREAKING CHANGES:
 
 ENHANCEMENTS:
 
+* device_posture_rule: support active_threats, network_status, infected, and is_active for sentinelone_s2s posture rule ([#1339](https://github.com/cloudflare/cloudflare-go/issues/1339))
+* device_posture_rule: support certificate_id and cn for client_certificate posture rule ([#1339](https://github.com/cloudflare/cloudflare-go/issues/1339))
 * images: adds ability to upload image by url ([#1335](https://github.com/cloudflare/cloudflare-go/issues/1335))
 * load_balancing: support header session affinity policy ([#1302](https://github.com/cloudflare/cloudflare-go/issues/1302))
 * zone: Added `GetRegionalTieredCache` and `UpdateRegionalTieredCache` to allow setting Regional Tiered Cache for a zone. ([#1336](https://github.com/cloudflare/cloudflare-go/issues/1336))
