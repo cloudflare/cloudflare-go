@@ -120,6 +120,8 @@ func dnsCreateOrUpdate(c *cli.Context) error {
 		rr.TTL = ttl
 		rr.Proxied = &proxy
 		rr.Priority = &priority
+		rr.Name = name
+
 		// TODO: Print the response.
 		result, err = api.CreateDNSRecord(context.Background(), cloudflare.ZoneIdentifier(zoneID), rr)
 		if err != nil {
