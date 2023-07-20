@@ -1,5 +1,9 @@
 ## 0.74.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* teams-accounts: Adds support for protocol detection ([#1340](https://github.com/cloudflare/cloudflare-go/issues/1340))
+
 ## 0.73.0 (July 19th, 2023)
 
 BREAKING CHANGES:
