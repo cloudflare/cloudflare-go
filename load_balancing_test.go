@@ -197,7 +197,7 @@ func TestCreateLoadBalancerPool_MinimumOriginsZero(t *testing.T) {
               "description": "Primary data center - Provider XYZ",
               "name": "primary-dc-2",
               "minimum_origins": 0,
-              "enabled": false,
+              "enabled": true,
               "check_regions": null,
               "origins": null
             }`, string(b))
@@ -238,6 +238,7 @@ func TestCreateLoadBalancerPool_MinimumOriginsZero(t *testing.T) {
 	request := LoadBalancerPool{
 		Description:    "Primary data center - Provider XYZ",
 		Name:           "primary-dc-2",
+		Enabled:        true,
 		MinimumOrigins: IntPtr(0),
 	}
 
