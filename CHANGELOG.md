@@ -3,6 +3,10 @@
 ENHANCEMENTS:
 
 * teams-accounts: Adds support for protocol detection ([#1340](https://github.com/cloudflare/cloudflare-go/issues/1340))
+* workers: Add `pipeline_hash` field to Workers script response struct. ([#1330](https://github.com/cloudflare/cloudflare-go/issues/1330))
+* workers: Add support for declaring arbitrary bindings with UnsafeBinding. ([#1330](https://github.com/cloudflare/cloudflare-go/issues/1330))
+* workers: Add support for uploading scripts to a Workers for Platforms namespace. ([#1330](https://github.com/cloudflare/cloudflare-go/issues/1330))
+* workers: Add support for uploading workers with Workers for Platforms namespace bindings. ([#1330](https://github.com/cloudflare/cloudflare-go/issues/1330))
 
 ## 0.73.0 (July 19th, 2023)
 
