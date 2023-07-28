@@ -114,12 +114,15 @@ func dnsCreateOrUpdate(c *cli.Context) error {
 		}
 	} else {
 		// Record doesn't exist - create it
-		rr := cloudflare.CreateDNSRecordParams{}
-		rr.Type = rtype
-		rr.Content = content
-		rr.TTL = ttl
-		rr.Proxied = &proxy
-		rr.Priority = &priority
+		rr := cloudflare.CreateDNSRecordParams{
+			Name:     name,
+			Type:     rtype,
+			Content:  content,
+			TTL:      ttl,
+			Proxied:  &proxy,
+			Priority: &priority,
+		}
+
 		// TODO: Print the response.
 		result, err = api.CreateDNSRecord(context.Background(), cloudflare.ZoneIdentifier(zoneID), rr)
 		if err != nil {
