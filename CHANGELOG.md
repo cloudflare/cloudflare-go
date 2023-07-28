@@ -8,6 +8,10 @@ ENHANCEMENTS:
 * workers: Add support for uploading scripts to a Workers for Platforms namespace. ([#1330](https://github.com/cloudflare/cloudflare-go/issues/1330))
 * workers: Add support for uploading workers with Workers for Platforms namespace bindings. ([#1330](https://github.com/cloudflare/cloudflare-go/issues/1330))
 
+BUG FIXES:
+
+* flarectl: allow for create or update to actually create the record ([#1341](https://github.com/cloudflare/cloudflare-go/issues/1341))
+
 ## 0.73.0 (July 19th, 2023)
 
 BREAKING CHANGES:
