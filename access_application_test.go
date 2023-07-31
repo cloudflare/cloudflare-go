@@ -46,7 +46,8 @@ func TestAccessApplications(t *testing.T) {
 					"skip_interstitial": true,
 					"app_launcher_visible": true,
 					"service_auth_401_redirect": true,
-					"path_cookie_attribute": true
+					"path_cookie_attribute": true,
+					"custom_pages": ["480f4f69-1a28-4fdd-9240-1ed29f0ac1dc"]
 				}
 			],
 			"result_info": {
@@ -83,6 +84,7 @@ func TestAccessApplications(t *testing.T) {
 		LogoURL:                 "https://www.example.com/example.png",
 		SkipInterstitial:        BoolPtr(true),
 		PathCookieAttribute:     BoolPtr(true),
+		CustomPages:             []string{"480f4f69-1a28-4fdd-9240-1ed29f0ac1dc"},
 	}}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps", handler)

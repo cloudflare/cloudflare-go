@@ -50,6 +50,7 @@ type AccessApplication struct {
 	HttpOnlyCookieAttribute *bool                          `json:"http_only_cookie_attribute,omitempty"`
 	ServiceAuth401Redirect  *bool                          `json:"service_auth_401_redirect,omitempty"`
 	PathCookieAttribute     *bool                          `json:"path_cookie_attribute,omitempty"`
+	CustomPages             []string                       `json:"custom_pages,omitempty"`
 }
 
 type AccessApplicationGatewayRule struct {
@@ -139,6 +140,7 @@ type CreateAccessApplicationParams struct {
 	SessionDuration         string                         `json:"session_duration,omitempty"`
 	SkipInterstitial        *bool                          `json:"skip_interstitial,omitempty"`
 	Type                    AccessApplicationType          `json:"type,omitempty"`
+	CustomPages             []string                       `json:"custom_pages,omitempty"`
 }
 
 type UpdateAccessApplicationParams struct {
@@ -165,6 +167,7 @@ type UpdateAccessApplicationParams struct {
 	SessionDuration         string                         `json:"session_duration,omitempty"`
 	SkipInterstitial        *bool                          `json:"skip_interstitial,omitempty"`
 	Type                    AccessApplicationType          `json:"type,omitempty"`
+	CustomPages             []string                       `json:"custom_pages,omitempty"`
 }
 
 // ListAccessApplications returns all applications within an account or zone.
