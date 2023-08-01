@@ -14,6 +14,8 @@ ENHANCEMENTS:
 BUG FIXES:
 
 * flarectl: allow for create or update to actually create the record ([#1341](https://github.com/cloudflare/cloudflare-go/issues/1341))
+* load_balancing: Fix pool creation with MinimumOrigins set to 0 ([#1338](https://github.com/cloudflare/cloudflare-go/issues/1338))
+* workers: Fix namespace dispatch upload API path ([#1345](https://github.com/cloudflare/cloudflare-go/issues/1345))
 
 ## 0.73.0 (July 19th, 2023)
 
