@@ -716,13 +716,11 @@ type UpdateRulesetResponse struct {
 type ListRulesetsParams struct{}
 
 type CreateRulesetParams struct {
-	Name                     string        `json:"name,omitempty"`
-	Description              string        `json:"description,omitempty"`
-	Kind                     string        `json:"kind,omitempty"`
-	Version                  *string       `json:"version,omitempty"`
-	Phase                    string        `json:"phase,omitempty"`
-	Rules                    []RulesetRule `json:"rules"`
-	ShareableEntitlementName string        `json:"shareable_entitlement_name,omitempty"`
+	Name        string        `json:"name,omitempty"`
+	Description string        `json:"description,omitempty"`
+	Kind        string        `json:"kind,omitempty"`
+	Phase       string        `json:"phase,omitempty"`
+	Rules       []RulesetRule `json:"rules"`
 }
 
 type UpdateRulesetParams struct {
@@ -732,11 +730,8 @@ type UpdateRulesetParams struct {
 }
 
 type UpdateEntrypointRulesetParams struct {
-	Name        string        `json:"name,omitempty"`
-	Description string        `json:"description,omitempty"`
-	Kind        string        `json:"kind,omitempty"`
-	Version     *string       `json:"version,omitempty"`
 	Phase       string        `json:"-"`
+	Description string        `json:"description,omitempty"`
 	Rules       []RulesetRule `json:"rules"`
 }
 
