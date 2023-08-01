@@ -19,6 +19,11 @@ var (
 	ErrMissingSettingName = errors.New("zone setting name required but missing")
 )
 
+const (
+	// ZoneDCVDelegationHostname is the DCV delegation hostname.
+	ZoneDCVDelegationHostname = ".dcv.cloudflare.com"
+)
+
 // Owner describes the resource owner.
 type Owner struct {
 	ID        string `json:"id"`
@@ -108,6 +113,17 @@ type ZoneID struct {
 type ZoneResponse struct {
 	Response
 	Result Zone `json:"result"`
+}
+
+// ZoneDCVDelegationResponse represents the response from the Zone DCV Delegation.
+type ZoneDCVDelegationResponse struct {
+	Response
+	Result ZoneDCVDelegation `json:"result"`
+}
+
+// ZoneDCVDelegation contains only the DCV delegation UUID.
+type ZoneDCVDelegation struct {
+	UUID string `json:"uuid"`
 }
 
 // ZonesResponse represents the response from the Zone endpoint containing an array of zones.
@@ -836,6 +852,22 @@ func (api *API) ZoneSSLSettings(ctx context.Context, zoneID string) (ZoneSSLSett
 	err = json.Unmarshal(res, &r)
 	if err != nil {
 		return ZoneSSLSetting{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+	return r.Result, nil
+}
+
+// ZoneDCVDelegation returns information about DCV Delegation to the specified zone.
+func (api *API) ZoneDCVDelegation(ctx context.Context, zoneID string) (ZoneDCVDelegation, error) {
+	uri := fmt.Sprintf("/zones/%s/dcv_delegation/uuid", zoneID)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+
+	if err != nil {
+		return ZoneDCVDelegation{}, err
+	}
+	var r ZoneDCVDelegationResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return ZoneDCVDelegation{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return r.Result, nil
 }
