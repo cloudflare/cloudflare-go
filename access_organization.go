@@ -19,6 +19,7 @@ type AccessOrganization struct {
 	UIReadOnlyToggleReason         string                        `json:"ui_read_only_toggle_reason,omitempty"`
 	UserSeatExpirationInactiveTime string                        `json:"user_seat_expiration_inactive_time,omitempty"`
 	AutoRedirectToIdentity         *bool                         `json:"auto_redirect_to_identity,omitempty"`
+	CustomPages                    AccessOrganizationCustomPages `json:"custom_pages,omitempty"`
 }
 
 // AccessOrganizationLoginDesign represents the login design options.
@@ -28,6 +29,11 @@ type AccessOrganizationLoginDesign struct {
 	TextColor       string `json:"text_color"`
 	HeaderText      string `json:"header_text"`
 	FooterText      string `json:"footer_text"`
+}
+
+type AccessOrganizationCustomPages struct {
+	Forbidden      AccessCustomPageType `json:"forbidden,omitempty"`
+	IdentityDenied AccessCustomPageType `json:"identity_denied,omitempty"`
 }
 
 // AccessOrganizationListResponse represents the response from the list
@@ -57,6 +63,7 @@ type CreateAccessOrganizationParams struct {
 	UIReadOnlyToggleReason         string                        `json:"ui_read_only_toggle_reason,omitempty"`
 	UserSeatExpirationInactiveTime string                        `json:"user_seat_expiration_inactive_time,omitempty"`
 	AutoRedirectToIdentity         *bool                         `json:"auto_redirect_to_identity,omitempty"`
+	CustomPages                    AccessOrganizationCustomPages `json:"custom_pages,omitempty"`
 }
 
 type UpdateAccessOrganizationParams struct {
@@ -67,6 +74,7 @@ type UpdateAccessOrganizationParams struct {
 	UIReadOnlyToggleReason         string                        `json:"ui_read_only_toggle_reason,omitempty"`
 	UserSeatExpirationInactiveTime string                        `json:"user_seat_expiration_inactive_time,omitempty"`
 	AutoRedirectToIdentity         *bool                         `json:"auto_redirect_to_identity,omitempty"`
+	CustomPages                    AccessOrganizationCustomPages `json:"custom_pages,omitempty"`
 }
 
 func (api *API) GetAccessOrganization(ctx context.Context, rc *ResourceContainer, params GetAccessOrganizationParams) (AccessOrganization, ResultInfo, error) {
