@@ -1217,7 +1217,7 @@ func TestUploadWorker_ToDispatchNamespace(t *testing.T) {
 		fmt.Fprint(w, workersScriptResponse(t))
 	}
 	mux.HandleFunc(
-		fmt.Sprintf("/accounts/"+testAccountID+"/workers/namespaces/%s/scripts/bar", namespaceName),
+		fmt.Sprintf("/accounts/"+testAccountID+"/workers/dispatch/namespaces/%s/scripts/bar", namespaceName),
 		handler,
 	)
 

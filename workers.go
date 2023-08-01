@@ -277,7 +277,7 @@ func (api *API) UploadWorker(ctx context.Context, rc *ResourceContainer, params 
 
 	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s", rc.Identifier, params.ScriptName)
 	if params.DispatchNamespaceName != nil {
-		uri = fmt.Sprintf("/accounts/%s/workers/namespaces/%s/scripts/%s", rc.Identifier, *params.DispatchNamespaceName, params.ScriptName)
+		uri = fmt.Sprintf("/accounts/%s/workers/dispatch/namespaces/%s/scripts/%s", rc.Identifier, *params.DispatchNamespaceName, params.ScriptName)
 	}
 
 	headers := make(http.Header)
