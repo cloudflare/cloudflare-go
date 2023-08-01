@@ -2,6 +2,9 @@
 
 ENHANCEMENTS:
 
+* access_application: Add support for custom pages ([#1343](https://github.com/cloudflare/cloudflare-go/issues/1343))
+* access_custom_page: Add support for custom pages ([#1343](https://github.com/cloudflare/cloudflare-go/issues/1343))
+* access_organization: add support for custom pages ([#1343](https://github.com/cloudflare/cloudflare-go/issues/1343))
 * teams-accounts: Adds support for protocol detection ([#1340](https://github.com/cloudflare/cloudflare-go/issues/1340))
 * workers: Add `pipeline_hash` field to Workers script response struct. ([#1330](https://github.com/cloudflare/cloudflare-go/issues/1330))
 * workers: Add support for declaring arbitrary bindings with UnsafeBinding. ([#1330](https://github.com/cloudflare/cloudflare-go/issues/1330))
