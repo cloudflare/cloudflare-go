@@ -18,7 +18,6 @@ const (
 	RulesetKindCustom  RulesetKind = "custom"
 	RulesetKindManaged RulesetKind = "managed"
 	RulesetKindRoot    RulesetKind = "root"
-	RulesetKindSchema  RulesetKind = "schema"
 	RulesetKindZone    RulesetKind = "zone"
 
 	RulesetPhaseDDoSL4                              RulesetPhase = "ddos_l4"
@@ -85,7 +84,6 @@ func RulesetKindValues() []string {
 		string(RulesetKindCustom),
 		string(RulesetKindManaged),
 		string(RulesetKindRoot),
-		string(RulesetKindSchema),
 		string(RulesetKindZone),
 	}
 }
