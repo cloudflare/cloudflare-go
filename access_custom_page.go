@@ -3,9 +3,12 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 )
+
+var ErrMissingUID = errors.New("required UID missing")
 
 type AccessCustomPageType string
 
@@ -34,8 +37,23 @@ type AccessCustomPageResponse struct {
 	Result AccessCustomPage `json:"result"`
 }
 
-func (api *API) AccessCustomPages(ctx context.Context, rc *ResourceContainer, pageOpts PaginationOptions) ([]AccessCustomPage, error) {
-	uri := buildURI(fmt.Sprintf("/%s/%s/access/custom_pages", rc.Level, rc.Identifier), pageOpts)
+type ListAccessCustomPagesParams struct{}
+
+type CreateAccessCustomPageParams struct {
+	CustomHTML string               `json:"custom_html,omitempty"`
+	Name       string               `json:"name,omitempty"`
+	Type       AccessCustomPageType `json:"type,omitempty"`
+}
+
+type UpdateAccessCustomPageParams struct {
+	CustomHTML string               `json:"custom_html,omitempty"`
+	Name       string               `json:"name,omitempty"`
+	Type       AccessCustomPageType `json:"type,omitempty"`
+	UID        string               `json:"uid,omitempty"`
+}
+
+func (api *API) ListAccessCustomPages(ctx context.Context, rc *ResourceContainer, params ListAccessCustomPagesParams) ([]AccessCustomPage, error) {
+	uri := buildURI(fmt.Sprintf("/%s/%s/access/custom_pages", rc.Level, rc.Identifier), params)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []AccessCustomPage{}, err
@@ -49,8 +67,8 @@ func (api *API) AccessCustomPages(ctx context.Context, rc *ResourceContainer, pa
 	return customPagesResponse.Result, nil
 }
 
-func (api *API) AccessCustomPage(ctx context.Context, rc *ResourceContainer, customPageID string) (AccessCustomPage, error) {
-	uri := fmt.Sprintf("/%s/%s/access/custom_pages/%s", rc.Level, rc.Identifier, customPageID)
+func (api *API) GetAccessCustomPage(ctx context.Context, rc *ResourceContainer, id string) (AccessCustomPage, error) {
+	uri := fmt.Sprintf("/%s/%s/access/custom_pages/%s", rc.Level, rc.Identifier, id)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return AccessCustomPage{}, err
@@ -64,9 +82,9 @@ func (api *API) AccessCustomPage(ctx context.Context, rc *ResourceContainer, cus
 	return customPageResponse.Result, nil
 }
 
-func (api *API) CreateAccessCustomPage(ctx context.Context, rc *ResourceContainer, customPage AccessCustomPage) (AccessCustomPage, error) {
+func (api *API) CreateAccessCustomPage(ctx context.Context, rc *ResourceContainer, params CreateAccessCustomPageParams) (AccessCustomPage, error) {
 	uri := fmt.Sprintf("/%s/%s/access/custom_pages", rc.Level, rc.Identifier)
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, customPage)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return AccessCustomPage{}, err
 	}
@@ -79,8 +97,8 @@ func (api *API) CreateAccessCustomPage(ctx context.Context, rc *ResourceContaine
 	return customPageResponse.Result, nil
 }
 
-func (api *API) DeleteAccessCustomPage(ctx context.Context, rc *ResourceContainer, customPageID string) error {
-	uri := fmt.Sprintf("/%s/%s/access/custom_pages/%s", rc.Level, rc.Identifier, customPageID)
+func (api *API) DeleteAccessCustomPage(ctx context.Context, rc *ResourceContainer, id string) error {
+	uri := fmt.Sprintf("/%s/%s/access/custom_pages/%s", rc.Level, rc.Identifier, id)
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return err
@@ -88,9 +106,13 @@ func (api *API) DeleteAccessCustomPage(ctx context.Context, rc *ResourceContaine
 	return nil
 }
 
-func (api *API) UpdateAccessCustomPage(ctx context.Context, rc *ResourceContainer, customPageID string, customPage AccessCustomPage) (AccessCustomPage, error) {
-	uri := fmt.Sprintf("/%s/%s/access/custom_pages/%s", rc.Level, rc.Identifier, customPageID)
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, customPage)
+func (api *API) UpdateAccessCustomPage(ctx context.Context, rc *ResourceContainer, params UpdateAccessCustomPageParams) (AccessCustomPage, error) {
+	if params.UID == "" {
+		return AccessCustomPage{}, ErrMissingUID
+	}
+
+	uri := fmt.Sprintf("/%s/%s/access/custom_pages/%s", rc.Level, rc.Identifier, params.UID)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return AccessCustomPage{}, err
 	}

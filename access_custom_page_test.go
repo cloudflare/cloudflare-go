@@ -46,7 +46,7 @@ func TestAccessCustomPages(t *testing.T) {
 		},
 	}
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/custom_pages", handler)
-	actual, err := client.AccessCustomPages(context.Background(), AccountIdentifier(testAccountID), PaginationOptions{})
+	actual, err := client.ListAccessCustomPages(context.Background(), AccountIdentifier(testAccountID), ListAccessCustomPagesParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -82,7 +82,7 @@ func TestAccessCustomPage(t *testing.T) {
 		CustomHTML: "<html><body><h1>Forbidden</h1></body></html>",
 	}
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/custom_pages/480f4f69-1a28-4fdd-9240-1ed29f0ac1dc", handler)
-	actual, err := client.AccessCustomPage(context.Background(), AccountIdentifier(testAccountID), "480f4f69-1a28-4fdd-9240-1ed29f0ac1dc")
+	actual, err := client.GetAccessCustomPage(context.Background(), AccountIdentifier(testAccountID), "480f4f69-1a28-4fdd-9240-1ed29f0ac1dc")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -119,7 +119,7 @@ func TestCreateAccessCustomPage(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/custom_pages", handler)
-	actual, err := client.CreateAccessCustomPage(context.Background(), AccountIdentifier(testAccountID), AccessCustomPage{
+	actual, err := client.CreateAccessCustomPage(context.Background(), AccountIdentifier(testAccountID), CreateAccessCustomPageParams{
 		Name:       "Forbidden",
 		Type:       Forbidden,
 		CustomHTML: "<html><body><h1>Forbidden</h1></body></html>",
@@ -160,7 +160,12 @@ func TestUpdateAccessCustomPage(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/custom_pages/480f4f69-1a28-4fdd-9240-1ed29f0ac1dc", handler)
-	actual, err := client.UpdateAccessCustomPage(context.Background(), AccountIdentifier(testAccountID), "480f4f69-1a28-4fdd-9240-1ed29f0ac1dc", customPage)
+	actual, err := client.UpdateAccessCustomPage(context.Background(), AccountIdentifier(testAccountID), UpdateAccessCustomPageParams{
+		UID:        "480f4f69-1a28-4fdd-9240-1ed29f0ac1dc",
+		Name:       "Forbidden",
+		Type:       Forbidden,
+		CustomHTML: "<html><body><h1>Forbidden</h1></body></html>",
+	})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, customPage, actual)
