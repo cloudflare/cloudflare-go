@@ -17,7 +17,7 @@ type LoadBalancerPool struct {
 	Description       string                      `json:"description"`
 	Name              string                      `json:"name"`
 	Enabled           bool                        `json:"enabled"`
-	MinimumOrigins    int                         `json:"minimum_origins,omitempty"`
+	MinimumOrigins    *int                        `json:"minimum_origins,omitempty"`
 	Monitor           string                      `json:"monitor,omitempty"`
 	Origins           []LoadBalancerOrigin        `json:"origins"`
 	NotificationEmail string                      `json:"notification_email,omitempty"`

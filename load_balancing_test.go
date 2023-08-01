@@ -115,7 +115,7 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 		Description:    "Primary data center - Provider XYZ",
 		Name:           "primary-dc-1",
 		Enabled:        true,
-		MinimumOrigins: 1,
+		MinimumOrigins: IntPtr(1),
 		Monitor:        "f1aba936b94213e5b8dca0c0dbf1f9cc",
 		Latitude:       fptr(55),
 		Longitude:      fptr(-12.5),
@@ -175,6 +175,71 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 		CheckRegions: []string{
 			"WEU",
 		},
+	}
+
+	actual, err := client.CreateLoadBalancerPool(context.Background(), AccountIdentifier(testAccountID), CreateLoadBalancerPoolParams{LoadBalancerPool: request})
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestCreateLoadBalancerPool_MinimumOriginsZero(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		b, err := io.ReadAll(r.Body)
+		defer r.Body.Close()
+		if assert.NoError(t, err) {
+			assert.JSONEq(t, `{
+              "description": "Primary data center - Provider XYZ",
+              "name": "primary-dc-2",
+              "minimum_origins": 0,
+              "enabled": true,
+              "check_regions": null,
+              "origins": null
+            }`, string(b))
+		}
+		fmt.Fprint(w, `{
+            "success": true,
+            "errors": [],
+            "messages": [],
+            "result": {
+              "description": "Primary data center - Provider XYZ",
+              "created_on": "2014-01-01T05:20:00.12345Z",
+              "modified_on": "2014-02-01T05:20:00.12345Z",
+              "id": "f6fea70e5154b4c563bd549ef405b7d7",
+              "enabled": true,
+              "minimum_origins": 0,
+              "name": "primary-dc-2",
+              "notification_email": "",
+              "check_regions": null,
+              "origins": []
+            }
+        }`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/load_balancers/pools", handler)
+	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+	modifiedOn, _ := time.Parse(time.RFC3339, "2014-02-01T05:20:00.12345Z")
+	want := LoadBalancerPool{
+		ID:                "f6fea70e5154b4c563bd549ef405b7d7",
+		CreatedOn:         &createdOn,
+		ModifiedOn:        &modifiedOn,
+		Description:       "Primary data center - Provider XYZ",
+		Name:              "primary-dc-2",
+		Enabled:           true,
+		MinimumOrigins:    IntPtr(0),
+		Origins:           []LoadBalancerOrigin{},
+		NotificationEmail: "",
+	}
+	request := LoadBalancerPool{
+		Description:    "Primary data center - Provider XYZ",
+		Name:           "primary-dc-2",
+		Enabled:        true,
+		MinimumOrigins: IntPtr(0),
 	}
 
 	actual, err := client.CreateLoadBalancerPool(context.Background(), AccountIdentifier(testAccountID), CreateLoadBalancerPoolParams{LoadBalancerPool: request})
