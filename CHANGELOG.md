@@ -1,5 +1,9 @@
 ## 0.75.0 (Unreleased)
 
+DEPENDENCIES:
+
+* deps: bumps golang.org/x/net from 0.12.0 to 0.13.0 ([#1353](https://github.com/cloudflare/cloudflare-go/issues/1353))
+
 ## 0.74.0 (August 2nd, 2023)
 
 ENHANCEMENTS:
