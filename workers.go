@@ -16,8 +16,9 @@ import (
 
 // WorkerRequestParams provides parameters for worker requests for both enterprise and standard requests.
 type WorkerRequestParams struct {
-	ZoneID     string
-	ScriptName string
+	ZoneID                string
+	ScriptName            string
+	DispatchNamespaceName *string
 }
 
 type CreateWorkerParams struct {
@@ -132,6 +133,12 @@ type WorkerScriptResponse struct {
 	Response
 	Module       bool
 	WorkerScript `json:"result"`
+}
+
+// WorkerScriptTagResponse wrapper struct for API response to worker script tag calls.
+type WorkerScriptTagResponse struct {
+	Tags []string `json:"result"`
+	Response
 }
 
 type ListWorkersParams struct{}
@@ -392,4 +399,40 @@ func formatMultipartBody(params CreateWorkerParams) (string, []byte, error) {
 	mpw.Close()
 
 	return mpw.FormDataContentType(), buf.Bytes(), nil
+}
+
+// TagWorker sets the tags for your Worker.
+//
+// API reference: https://api.cloudflare.com/#worker-script-upload-worker
+func (api *API) TagWorker(ctx context.Context, rc *ResourceContainer, params WorkerRequestParams, tags []string) (WorkerScriptTagResponse, error) {
+	var r WorkerScriptTagResponse
+	if rc.Level != AccountRouteLevel {
+		return r, ErrRequiredAccountLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return r, ErrMissingAccountID
+	}
+
+	body, err := json.Marshal(tags)
+	if err != nil {
+		return r, err
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/tags", rc.Identifier, params.ScriptName)
+	if params.DispatchNamespaceName != nil {
+		uri = fmt.Sprintf("/accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/tags", rc.Identifier, *params.DispatchNamespaceName, params.ScriptName)
+	}
+
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, body)
+	if err != nil {
+		return r, err
+	}
+
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return r, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+
+	return r, nil
 }

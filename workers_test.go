@@ -22,7 +22,15 @@ const (
     "errors": [],
     "messages": []
 }`
-
+	tagWorkerResponse = `{
+    "result": [
+        "testtag=1",
+        "anothertest"
+    ],
+    "success": true,
+    "errors": [],
+    "messages": []
+}`
 	updateWorkerRouteResponse = `{
     "result": {
         "id": "e7a57d8746e74ae49c25994dadb421b1",
@@ -1267,5 +1275,34 @@ func TestUploadWorker_UnsafeBinding(t *testing.T) {
 			},
 		},
 	})
+	assert.NoError(t, err)
+}
+
+func TestTagWorker(t *testing.T) {
+	setup()
+	defer teardown()
+
+	namespaceName := "n1"
+	scriptName := "bar"
+	tags := []string{"testtag=1", "anothertest"}
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+		bytes, err := json.Marshal(WorkerScriptTagResponse{
+			Response: Response{Success: true, Errors: []ResponseInfo{}, Messages: []ResponseInfo{}},
+			Tags:     tags,
+		})
+		assert.NoError(t, err)
+		fmt.Fprint(w, string(bytes))
+	}
+	mux.HandleFunc(
+		fmt.Sprintf("/accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/tags", testAccountID, namespaceName, scriptName),
+		handler,
+	)
+
+	_, err := client.TagWorker(context.Background(), AccountIdentifier(testAccountID), WorkerRequestParams{
+		ScriptName:            scriptName,
+		DispatchNamespaceName: &namespaceName,
+	}, tags)
 	assert.NoError(t, err)
 }
