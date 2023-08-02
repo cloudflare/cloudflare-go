@@ -159,7 +159,7 @@ type Placement struct {
 
 // DeleteWorker deletes a single Worker.
 //
-// API reference: https://api.cloudflare.com/#worker-script-delete-worker
+// API reference: https://developers.cloudflare.com/api/operations/worker-script-delete-worker
 func (api *API) DeleteWorker(ctx context.Context, rc *ResourceContainer, params DeleteWorkerParams) error {
 	if rc.Level != AccountRouteLevel {
 		return ErrRequiredAccountLevelResourceContainer
@@ -188,7 +188,7 @@ func (api *API) DeleteWorker(ctx context.Context, rc *ResourceContainer, params 
 // GetWorker fetch raw script content for your worker returns string containing
 // worker code js.
 //
-// API reference: https://developers.cloudflare.com/workers/tooling/api/scripts/
+// API reference: https://developers.cloudflare.com/api/operations/worker-script-download-worker
 func (api *API) GetWorker(ctx context.Context, rc *ResourceContainer, scriptName string) (WorkerScriptResponse, error) {
 	if rc.Level != AccountRouteLevel {
 		return WorkerScriptResponse{}, ErrRequiredAccountLevelResourceContainer
@@ -231,7 +231,7 @@ func (api *API) GetWorker(ctx context.Context, rc *ResourceContainer, scriptName
 
 // ListWorkers returns list of Workers for given account.
 //
-// API reference: https://developers.cloudflare.com/workers/tooling/api/scripts/
+// API reference: https://developers.cloudflare.com/api/operations/worker-script-list-workers
 func (api *API) ListWorkers(ctx context.Context, rc *ResourceContainer, params ListWorkersParams) (WorkerListResponse, *ResultInfo, error) {
 	if rc.Level != AccountRouteLevel {
 		return WorkerListResponse{}, &ResultInfo{}, ErrRequiredAccountLevelResourceContainer
@@ -258,7 +258,7 @@ func (api *API) ListWorkers(ctx context.Context, rc *ResourceContainer, params L
 
 // UploadWorker pushes raw script content for your Worker.
 //
-// API reference: https://api.cloudflare.com/#worker-script-upload-worker
+// API reference: https://developers.cloudflare.com/api/operations/worker-script-upload-worker-module
 func (api *API) UploadWorker(ctx context.Context, rc *ResourceContainer, params CreateWorkerParams) (WorkerScriptResponse, error) {
 	if rc.Level != AccountRouteLevel {
 		return WorkerScriptResponse{}, ErrRequiredAccountLevelResourceContainer
