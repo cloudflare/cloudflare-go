@@ -90,7 +90,7 @@ type UpdateAccessIdentityProviderParams struct {
 	ScimConfig AccessIdentityProviderScimConfiguration `json:"scim_config"`
 }
 
-// AccessAuthContext represents an Access Azure Identity Provider Auth Context
+// AccessAuthContext represents an Access Azure Identity Provider Auth Context.
 type AccessAuthContext struct {
 	ID          string `json:"id"`
 	UID         string `json:"uid"`
@@ -274,10 +274,10 @@ func (api *API) ListAccessIdentityProviderAuthContexts(ctx context.Context, rc *
 	return accessAuthContextListResponse.Result, nil
 }
 
-// UpdateAccessIdentityProvider updates an existing Access Identity
+// UpdateAccessIdentityProviderAuthContexts updates an existing Access Identity
 // Provider.
 // AzureAD only
-// Account API Reference: https://developers.cloudflare.com/api/operations/access-identity-providers-update-an-access-identity-provider
+// Account API Reference: https://developers.cloudflare.com/api/operations/access-identity-providers-refresh-an-access-identity-provider-auth-contexts
 // Zone API Reference: https://developers.cloudflare.com/api/operations/zone-level-access-identity-providers-update-an-access-identity-provider
 func (api *API) UpdateAccessIdentityProviderAuthContexts(ctx context.Context, rc *ResourceContainer, identityProviderID string) (AccessIdentityProvider, error) {
 	uri := fmt.Sprintf(
