@@ -134,6 +134,12 @@ type WorkerScriptResponse struct {
 	WorkerScript `json:"result"`
 }
 
+// WorkerScriptSettingsResponse wrapper struct for API response to worker script settings calls.
+type WorkerScriptSettingsResponse struct {
+	Response
+	WorkerMetaData
+}
+
 type ListWorkersParams struct{}
 
 type DeleteWorkerParams struct {
@@ -293,6 +299,139 @@ func (api *API) UploadWorker(ctx context.Context, rc *ResourceContainer, params 
 	if err != nil {
 		return r, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
+
+	return r, nil
+}
+
+// GetScriptContent returns the pure script content of a worker.
+//
+// API reference: TODO:
+func (api *API) GetScriptContent(ctx context.Context, rc *ResourceContainer, scriptName string) (string, error) {
+	if rc.Level != AccountRouteLevel {
+		return "", ErrRequiredAccountLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return "", ErrMissingAccountID
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/content/v2", rc.Identifier, scriptName)
+	res, err := api.makeRequestContextWithHeadersComplete(ctx, http.MethodGet, uri, nil, nil)
+	if err != nil {
+		return "", err
+	}
+
+	return string(res.Body), nil
+}
+
+// PutScriptContent pushes only script content, no metadata.
+//
+// API reference: TODO:
+func (api *API) PutScriptContent(ctx context.Context, rc *ResourceContainer, params CreateWorkerParams) (WorkerScriptResponse, error) {
+	if rc.Level != AccountRouteLevel {
+		return WorkerScriptResponse{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return WorkerScriptResponse{}, ErrMissingAccountID
+	}
+
+	body := []byte(params.Script)
+	var (
+		contentType = "application/javascript"
+		err         error
+	)
+
+	if params.Module {
+		contentType, body, err = formatMultipartBody(params)
+		if err != nil {
+			return WorkerScriptResponse{}, err
+		}
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/content", rc.Identifier, params.ScriptName)
+	if params.DispatchNamespaceName != nil {
+		uri = fmt.Sprintf("/accounts/%s/workers/dispatch_namespaces/%s/scripts/%s/content", rc.Identifier, *params.DispatchNamespaceName, params.ScriptName)
+	}
+
+	headers := make(http.Header)
+	headers.Set("Content-Type", contentType)
+	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPut, uri, body, headers)
+
+	var r WorkerScriptResponse
+	if err != nil {
+		return r, err
+	}
+
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return r, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+
+	return r, nil
+}
+
+// GetScriptSettings returns the metadata of a worker.
+//
+// API reference: TODO:
+func (api *API) GetScriptSettings(ctx context.Context, rc *ResourceContainer, scriptName string) (WorkerScriptSettingsResponse, error) {
+	if rc.Level != AccountRouteLevel {
+		return WorkerScriptSettingsResponse{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return WorkerScriptSettingsResponse{}, ErrMissingAccountID
+	}
+
+	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/settings", rc.Identifier, scriptName)
+	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodGet, uri, nil, nil)
+	var r WorkerScriptSettingsResponse
+	if err != nil {
+		return r, err
+	}
+
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return r, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+
+	r.Success = true
+
+	return r, nil
+}
+
+// PatchScriptSettings pushes only script metadata.
+//
+// API reference: TODO:
+func (api *API) PatchScriptSettings(ctx context.Context, rc *ResourceContainer, params CreateWorkerParams) (WorkerScriptSettingsResponse, error) {
+	if rc.Level != AccountRouteLevel {
+		return WorkerScriptSettingsResponse{}, ErrRequiredAccountLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return WorkerScriptSettingsResponse{}, ErrMissingAccountID
+	}
+
+	body, err := json.Marshal(params)
+	if err != nil {
+		return WorkerScriptSettingsResponse{}, err
+	}
+	headers := make(http.Header)
+	headers.Set("Content-Type", "application/json")
+
+	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/settings", rc.Identifier, params.ScriptName)
+	res, err := api.makeRequestContextWithHeaders(ctx, http.MethodPatch, uri, body, headers)
+	var r WorkerScriptSettingsResponse
+	if err != nil {
+		return r, err
+	}
+
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return r, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+
+	r.Success = true
 
 	return r, nil
 }
