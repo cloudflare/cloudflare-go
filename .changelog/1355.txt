@@ -1,0 +1,3 @@
+```release-note:enhancement
+cloudflare: Added RawResponse method which returns the Response alongside the raw Result
+```

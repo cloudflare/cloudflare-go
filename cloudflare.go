@@ -476,6 +476,21 @@ func (api *API) Raw(ctx context.Context, method, endpoint string, data interface
 	return r.Result, nil
 }
 
+// RawResponse makes a HTTP request with user provided params and returns the
+// result as untouched JSON along with the standard Response.
+func (api *API) RawResponse(ctx context.Context, method, endpoint string, data interface{}, headers http.Header) (RawResponse, error) {
+	var r RawResponse
+	res, err := api.makeRequestContextWithHeaders(ctx, method, endpoint, data, headers)
+	if err != nil {
+		return r, err
+	}
+
+	if err := json.Unmarshal(res, &r); err != nil {
+		return r, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+	return r, nil
+}
+
 // PaginationOptions can be passed to a list request to configure paging
 // These values will be defaulted if omitted, and PerPage has min/max limits set by resource.
 type PaginationOptions struct {
