@@ -89,6 +89,9 @@ type ObservatoryPageTrend struct {
 	CLS              []*float64 `json:"cls"`
 }
 
+type ListObservatoryPagesParams struct {
+}
+
 // ObservatoryPagesResponse is the API response, containing a list of ObservatoryPage.
 type ObservatoryPagesResponse struct {
 	Response
@@ -98,7 +101,7 @@ type ObservatoryPagesResponse struct {
 // ListObservatoryPages returns a list of pages which have been tested.
 //
 // API reference: https://api.cloudflare.com/#speed-list-pages
-func (api *API) ListObservatoryPages(ctx context.Context, rc *ResourceContainer) ([]ObservatoryPage, error) {
+func (api *API) ListObservatoryPages(ctx context.Context, rc *ResourceContainer, params ListObservatoryPagesParams) ([]ObservatoryPage, error) {
 	uri := fmt.Sprintf("/zones/%s/speed_api/pages", rc.Identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
