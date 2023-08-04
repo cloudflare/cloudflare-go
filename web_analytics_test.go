@@ -169,7 +169,7 @@ func TestGetWebAnalyticsSite(t *testing.T) {
 	}
 	mux.HandleFunc("/accounts/"+testAccountID+"/rum/site_info/"+siteTag, handler)
 	want := site
-	actual, err := client.GetWebAnalyticsSite(context.Background(), AccountIdentifier(testAccountID), WebAnalyticsSiteParams{
+	actual, err := client.GetWebAnalyticsSite(context.Background(), AccountIdentifier(testAccountID), GetWebAnalyticsSiteParams{
 		SiteTag: siteTag,
 	})
 	if assert.NoError(t, err) {
