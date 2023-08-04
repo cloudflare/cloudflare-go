@@ -173,10 +173,10 @@ type WebAnalyticsSiteParams struct {
 	SiteTag string
 }
 
-// WebAnalyticsSite fetches detail about one Web Analytics Site for an Account.
+// GetWebAnalyticsSite fetches detail about one Web Analytics Site for an Account.
 //
 // API reference: https://api.cloudflare.com/#web-analytics-get-site
-func (api *API) WebAnalyticsSite(ctx context.Context, rc *ResourceContainer, params WebAnalyticsSiteParams) (*WebAnalyticsSite, error) {
+func (api *API) GetWebAnalyticsSite(ctx context.Context, rc *ResourceContainer, params WebAnalyticsSiteParams) (*WebAnalyticsSite, error) {
 	if rc.Level != AccountRouteLevel {
 		return nil, ErrRequiredAccountLevelResourceContainer
 	}
