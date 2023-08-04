@@ -6,8 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"net/url"
-	"strconv"
 	"time"
 )
 
@@ -142,11 +140,11 @@ func (api *API) CreateWebAnalyticsSite(ctx context.Context, rc *ResourceContaine
 
 type ListWebAnalyticsSitesParams struct {
 	// Page offset for pagination.
-	Page int
+	Page int `url:"page,omitempty"`
 	// Items per page limit for pagination.
-	PerPage int
+	PerPage int `url:"per_page,omitempty"`
 	// Property to order Sites by, "host" or "created".
-	OrderBy string
+	OrderBy string `url:"order_by,omitempty"`
 }
 
 // ListWebAnalyticsSites returns all Web Analytics Sites for an Account.
@@ -156,17 +154,8 @@ func (api *API) ListWebAnalyticsSites(ctx context.Context, rc *ResourceContainer
 	if rc.Level != AccountRouteLevel {
 		return nil, nil, ErrRequiredAccountLevelResourceContainer
 	}
-	v := url.Values{}
-	if params.Page > 0 {
-		v.Set("page", strconv.Itoa(params.Page))
-	}
-	if params.PerPage > 0 {
-		v.Set("per_page", strconv.Itoa(params.PerPage))
-	}
-	if params.OrderBy != "" {
-		v.Set("order_by", params.OrderBy)
-	}
-	uri := fmt.Sprintf("/accounts/%s/rum/site_info/list?"+v.Encode(), rc.Identifier)
+
+	uri := buildURI(fmt.Sprintf("/accounts/%s/rum/site_info/list", rc.Identifier), params)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
