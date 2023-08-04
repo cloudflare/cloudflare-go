@@ -3,7 +3,9 @@ package cloudflare
 import (
 	"context"
 	"fmt"
+	"io"
 	"net/http"
+	"strings"
 	"testing"
 	"time"
 
@@ -181,6 +183,9 @@ func TestCreateWebAnalyticsSite(t *testing.T) {
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+		body, err := io.ReadAll(r.Body)
+		assert.NoError(t, err)
+		assert.True(t, strings.Contains(string(body), `"auto_install":true`))
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			  "success": true,
@@ -193,8 +198,8 @@ func TestCreateWebAnalyticsSite(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/rum/site_info", handler)
 	want := site
 	actual, err := client.CreateWebAnalyticsSite(context.Background(), AccountIdentifier(testAccountID), CreateWebAnalyticsSiteParams{
-		Host:        "example.com",
-		AutoInstall: true,
+		ZoneTag: StringPtr(testZoneID),
+		//AutoInstall: BoolPtr(true),  // should default to true
 	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, &want, actual)
@@ -221,7 +226,7 @@ func TestUpdateWebAnalyticsSite(t *testing.T) {
 	actual, err := client.UpdateWebAnalyticsSite(context.Background(), AccountIdentifier(testAccountID), UpdateWebAnalyticsSiteParams{
 		SiteTag:     site.SiteTag,
 		Host:        "example.com",
-		AutoInstall: true,
+		AutoInstall: BoolPtr(true),
 	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, &want, actual)
