@@ -16,6 +16,9 @@ var (
 	ErrMissingWebAnalyticsSiteHost  = errors.New("missing required web analytics host or zone tag")
 )
 
+// listWebAnalyticsSitesDefaultPageSize represents the default per_pagesize of the API.
+var listWebAnalyticsSitesDefaultPageSize = 10
+
 // WebAnalyticsSite describes a Web Analytics Site object.
 type WebAnalyticsSite struct {
 	SiteTag   string    `json:"site_tag"`
@@ -139,10 +142,7 @@ func (api *API) CreateWebAnalyticsSite(ctx context.Context, rc *ResourceContaine
 }
 
 type ListWebAnalyticsSitesParams struct {
-	// Page offset for pagination.
-	Page int `url:"page,omitempty"`
-	// Items per page limit for pagination.
-	PerPage int `url:"per_page,omitempty"`
+	ResultInfo
 	// Property to order Sites by, "host" or "created".
 	OrderBy string `url:"order_by,omitempty"`
 }
@@ -155,18 +155,41 @@ func (api *API) ListWebAnalyticsSites(ctx context.Context, rc *ResourceContainer
 		return nil, nil, ErrRequiredAccountLevelResourceContainer
 	}
 
-	uri := buildURI(fmt.Sprintf("/accounts/%s/rum/site_info/list", rc.Identifier), params)
+	autoPaginate := true
+	if params.PerPage >= 1 || params.Page >= 1 {
+		autoPaginate = false
+	}
+	if params.PerPage < 1 {
+		params.PerPage = listWebAnalyticsSitesDefaultPageSize
+	}
 
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
-	if err != nil {
-		return nil, nil, err
+	if params.Page < 1 {
+		params.Page = 1
 	}
-	var r WebAnalyticsSitesResponse
-	err = json.Unmarshal(res, &r)
-	if err != nil {
-		return nil, nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
+
+	var sites []WebAnalyticsSite
+	var lastResultInfo ResultInfo
+
+	for {
+		uri := buildURI(fmt.Sprintf("/accounts/%s/rum/site_info/list", rc.Identifier), params)
+
+		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+		if err != nil {
+			return nil, nil, err
+		}
+		var r WebAnalyticsSitesResponse
+		err = json.Unmarshal(res, &r)
+		if err != nil {
+			return nil, nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		}
+		sites = append(sites, r.Result...)
+		lastResultInfo = r.ResultInfo
+		params.ResultInfo = r.ResultInfo.Next()
+		if params.ResultInfo.Done() || !autoPaginate {
+			break
+		}
 	}
-	return r.Result, &r.ResultInfo, nil
+	return sites, &lastResultInfo, nil
 }
 
 type WebAnalyticsSiteParams struct {

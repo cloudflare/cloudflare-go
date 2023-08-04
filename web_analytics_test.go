@@ -131,8 +131,10 @@ func TestListWebAnalyticsSites(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/rum/site_info/list", handler)
 	want := []WebAnalyticsSite{site}
 	actual, resultInfo, err := client.ListWebAnalyticsSites(context.Background(), AccountIdentifier(testAccountID), ListWebAnalyticsSitesParams{
-		Page:    1,
-		PerPage: 10,
+		ResultInfo: ResultInfo{
+			Page:    0,
+			PerPage: 0,
+		},
 		OrderBy: "host",
 	})
 	if assert.NoError(t, err) {
@@ -144,6 +146,7 @@ func TestListWebAnalyticsSites(t *testing.T) {
 			Count:      1,
 			Total:      1,
 		}, resultInfo)
+		assert.Len(t, actual, 1)
 	}
 }
 
