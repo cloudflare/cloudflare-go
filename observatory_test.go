@@ -231,7 +231,7 @@ func TestObservatoryPageTrend(t *testing.T) {
 		SI:               []*int{nil, IntPtr(10)},
 		CLS:              []*float64{nil, Float64Ptr(0.10)},
 	}
-	trend, err := client.ObservatoryPageTrend(context.Background(), ZoneIdentifier(testZoneID), ObservatoryPageTrendParams{
+	trend, err := client.GetObservatoryPageTrend(context.Background(), ZoneIdentifier(testZoneID), GetObservatoryPageTrendParams{
 		URL:        testURL,
 		Region:     region,
 		DeviceType: "DESKTOP",
@@ -353,7 +353,7 @@ func TestObservatoryPageTest(t *testing.T) {
 	}
 	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/"+testURL+"/tests/"+observatoryTestID, handler)
 	want := pageTest
-	test, err := client.ObservatoryPageTest(context.Background(), ZoneIdentifier(testZoneID), ObservatoryPageTestParams{
+	test, err := client.GetObservatoryPageTest(context.Background(), ZoneIdentifier(testZoneID), GetObservatoryPageTestParams{
 		TestID: observatoryTestID,
 		URL:    testURL,
 	})
@@ -409,7 +409,7 @@ func TestObservatoryScheduledPageTest(t *testing.T) {
 	}
 	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/schedule/"+testURL, handler)
 	want := schedule
-	schedule, err := client.ObservatoryScheduledPageTest(context.Background(), ZoneIdentifier(testZoneID), ObservatoryScheduledPageTestParams{
+	schedule, err := client.GetObservatoryScheduledPageTest(context.Background(), ZoneIdentifier(testZoneID), GetObservatoryScheduledPageTestParams{
 		URL:    testURL,
 		Region: region,
 	})

@@ -113,7 +113,7 @@ func (api *API) ListObservatoryPages(ctx context.Context, rc *ResourceContainer)
 	return r.Result, nil
 }
 
-type ObservatoryPageTrendParams struct {
+type GetObservatoryPageTrendParams struct {
 	URL        string
 	Region     string
 	DeviceType string
@@ -128,10 +128,10 @@ type ObservatoryPageTrendResponse struct {
 	Result ObservatoryPageTrend `json:"result"`
 }
 
-// ObservatoryPageTrend returns a the trend of web vital metrics for a page in a specific region.
+// GetObservatoryPageTrend returns a the trend of web vital metrics for a page in a specific region.
 //
 // API reference: https://api.cloudflare.com/#speed-list-page-trend
-func (api *API) ObservatoryPageTrend(ctx context.Context, rc *ResourceContainer, params ObservatoryPageTrendParams) (*ObservatoryPageTrend, error) {
+func (api *API) GetObservatoryPageTrend(ctx context.Context, rc *ResourceContainer, params GetObservatoryPageTrendParams) (*ObservatoryPageTrend, error) {
 	if params.URL == "" {
 		return nil, ErrMissingObservatoryUrl
 	}
@@ -272,15 +272,15 @@ func (api *API) DeleteObservatoryPageTests(ctx context.Context, rc *ResourceCont
 	return &r.Result.Count, nil
 }
 
-type ObservatoryPageTestParams struct {
+type GetObservatoryPageTestParams struct {
 	URL    string
 	TestID string
 }
 
-// ObservatoryPageTest returns a specific test for a page.
+// GetObservatoryPageTest returns a specific test for a page.
 //
 // API reference: https://api.cloudflare.com/#speed-get-test
-func (api *API) ObservatoryPageTest(ctx context.Context, rc *ResourceContainer, params ObservatoryPageTestParams) (*ObservatoryPageTest, error) {
+func (api *API) GetObservatoryPageTest(ctx context.Context, rc *ResourceContainer, params GetObservatoryPageTestParams) (*ObservatoryPageTest, error) {
 	if params.URL == "" {
 		return nil, ErrMissingObservatoryUrl
 	}
@@ -344,7 +344,7 @@ func (api *API) CreateObservatoryScheduledPageTest(ctx context.Context, rc *Reso
 	return &r.Result, nil
 }
 
-type ObservatoryScheduledPageTestParams struct {
+type GetObservatoryScheduledPageTestParams struct {
 	URL    string
 	Region string
 }
@@ -354,10 +354,10 @@ type ObservatoryScheduleResponse struct {
 	Result ObservatorySchedule `json:"result"`
 }
 
-// ObservatoryScheduledPageTest returns the test schedule for a page in a specific region.
+// GetObservatoryScheduledPageTest returns the test schedule for a page in a specific region.
 //
 // API reference: https://api.cloudflare.com/#speed-get-scheduled-test
-func (api *API) ObservatoryScheduledPageTest(ctx context.Context, rc *ResourceContainer, params ObservatoryScheduledPageTestParams) (*ObservatorySchedule, error) {
+func (api *API) GetObservatoryScheduledPageTest(ctx context.Context, rc *ResourceContainer, params GetObservatoryScheduledPageTestParams) (*ObservatorySchedule, error) {
 	if params.URL == "" {
 		return nil, ErrMissingObservatoryUrl
 	}
