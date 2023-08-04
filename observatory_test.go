@@ -187,7 +187,7 @@ func TestListObservatoryPages(t *testing.T) {
 	want := []ObservatoryPage{
 		page,
 	}
-	pages, err := client.ListObservatoryPages(context.Background(), ZoneIdentifier(testZoneID))
+	pages, err := client.ListObservatoryPages(context.Background(), ZoneIdentifier(testZoneID), ListObservatoryPagesParams{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, pages)
 	}
@@ -267,11 +267,13 @@ func TestListObservatoryPageTests(t *testing.T) {
 	want := []ObservatoryPageTest{
 		pageTest,
 	}
-	tests, err := client.ListObservatoryPageTests(context.Background(), ZoneIdentifier(testZoneID), ListObservatoryPageTestParams{
-		URL:     testURL,
-		Page:    1,
-		PerPage: 10,
-		Region:  region,
+	tests, _, err := client.ListObservatoryPageTests(context.Background(), ZoneIdentifier(testZoneID), ListObservatoryPageTestParams{
+		URL: testURL,
+		ResultInfo: ResultInfo{
+			Page:    1,
+			PerPage: 10,
+		},
+		Region: region,
 	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, tests)

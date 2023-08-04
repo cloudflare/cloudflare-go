@@ -160,36 +160,57 @@ func (api *API) GetObservatoryPageTrend(ctx context.Context, rc *ResourceContain
 	return &r.Result, nil
 }
 
+var listObservatoryPageTestDefaultPageSize = 20
+
 type ListObservatoryPageTestParams struct {
-	URL     string `url:"-"`
-	Page    int    `url:"page,omitempty"`
-	PerPage int    `url:"per_page,omitempty"`
-	Region  string `url:"region"`
+	URL    string `url:"-"`
+	Region string `url:"region"`
+	ResultInfo
 }
 
 type ObservatoryPageTestsResponse struct {
 	Response
-	Result []ObservatoryPageTest `json:"result"`
+	Result     []ObservatoryPageTest `json:"result"`
+	ResultInfo `json:"result_info"`
 }
 
 // ListObservatoryPageTests returns a list of tests for a page in a specific region.
 //
 // API reference: https://api.cloudflare.com/#speed-list-test-history
-func (api *API) ListObservatoryPageTests(ctx context.Context, rc *ResourceContainer, params ListObservatoryPageTestParams) ([]ObservatoryPageTest, error) {
+func (api *API) ListObservatoryPageTests(ctx context.Context, rc *ResourceContainer, params ListObservatoryPageTestParams) ([]ObservatoryPageTest, *ResultInfo, error) {
 	if params.URL == "" {
-		return nil, ErrMissingObservatoryUrl
+		return nil, nil, ErrMissingObservatoryUrl
 	}
-	uri := buildURI(fmt.Sprintf("/zones/%s/speed_api/pages/%s/tests", rc.Identifier, url.PathEscape(params.URL)), params)
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
-	if err != nil {
-		return nil, err
+	autoPaginate := true
+	if params.PerPage >= 1 || params.Page >= 1 {
+		autoPaginate = false
 	}
-	var r ObservatoryPageTestsResponse
-	err = json.Unmarshal(res, &r)
-	if err != nil {
-		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	if params.PerPage < 1 {
+		params.PerPage = listObservatoryPageTestDefaultPageSize
 	}
-	return r.Result, nil
+	if params.Page < 1 {
+		params.Page = 1
+	}
+	var tests []ObservatoryPageTest
+	var lastResultInfo ResultInfo
+	for {
+		uri := buildURI(fmt.Sprintf("/zones/%s/speed_api/pages/%s/tests", rc.Identifier, url.PathEscape(params.URL)), params)
+		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+		if err != nil {
+			return nil, nil, err
+		}
+		var r ObservatoryPageTestsResponse
+		err = json.Unmarshal(res, &r)
+		if err != nil {
+			return nil, nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		}
+		tests = append(tests, r.Result...)
+		lastResultInfo = r.ResultInfo.Next()
+		if params.ResultInfo.Done() || !autoPaginate {
+			break
+		}
+	}
+	return tests, &lastResultInfo, nil
 }
 
 type CreateObservatoryPageTestParams struct {
