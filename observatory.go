@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -115,11 +114,11 @@ func (api *API) ListObservatoryPages(ctx context.Context, rc *ResourceContainer)
 
 type GetObservatoryPageTrendParams struct {
 	URL        string
-	Region     string
-	DeviceType string
-	Start      time.Time
-	End        *time.Time
-	Timezone   string
+	Region     string     `url:"region"`
+	DeviceType string     `url:"deviceType"`
+	Start      time.Time  `url:"start"`
+	End        *time.Time `url:"end,omitempty"`
+	Timezone   string     `url:"tz"`
 	Metrics    []string
 }
 
@@ -159,10 +158,10 @@ func (api *API) GetObservatoryPageTrend(ctx context.Context, rc *ResourceContain
 }
 
 type ListObservatoryPageTestParams struct {
-	URL     string
-	Page    int
-	PerPage int
-	Region  string
+	URL     string `url:"-"`
+	Page    int    `url:"page,omitempty"`
+	PerPage int    `url:"per_page,omitempty"`
+	Region  string `url:"region"`
 }
 
 type ObservatoryPageTestsResponse struct {
@@ -177,16 +176,7 @@ func (api *API) ListObservatoryPageTests(ctx context.Context, rc *ResourceContai
 	if params.URL == "" {
 		return nil, ErrMissingObservatoryUrl
 	}
-	v := url.Values{}
-	if params.Page > 0 {
-		v.Set("page", strconv.Itoa(params.Page))
-	}
-	if params.PerPage > 0 {
-		v.Set("per_page", strconv.Itoa(params.PerPage))
-	}
-	v.Set("region", params.Region)
-	uri := fmt.Sprintf("/zones/%s/speed_api/pages/%s/tests?", rc.Identifier, url.PathEscape(params.URL))
-	uri = uri + v.Encode()
+	uri := buildURI(fmt.Sprintf("/zones/%s/speed_api/pages/%s/tests", rc.Identifier, url.PathEscape(params.URL)), params)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, err
@@ -235,7 +225,7 @@ func (api *API) CreateObservatoryPageTest(ctx context.Context, rc *ResourceConta
 
 type DeleteObservatoryPageTestsParams struct {
 	URL    string
-	Region string
+	Region string `url:"region"`
 }
 
 type ObservatoryCountResponse struct {
@@ -252,15 +242,8 @@ func (api *API) DeleteObservatoryPageTests(ctx context.Context, rc *ResourceCont
 	if params.URL == "" {
 		return nil, ErrMissingObservatoryUrl
 	}
-	v := url.Values{}
-	v.Set("region", params.Region)
-	uri := fmt.Sprintf("/zones/%s/speed_api/pages/%s/tests?", rc.Identifier, url.PathEscape(params.URL))
-	uri = uri + v.Encode()
-	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, struct {
-		Region string `json:"region"`
-	}{
-		Region: params.Region,
-	})
+	uri := buildURI(fmt.Sprintf("/zones/%s/speed_api/pages/%s/tests", rc.Identifier, url.PathEscape(params.URL)), params)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -302,8 +285,8 @@ func (api *API) GetObservatoryPageTest(ctx context.Context, rc *ResourceContaine
 
 type CreateObservatoryScheduledPageTestParams struct {
 	URL       string
-	Region    string
-	Frequency string
+	Region    string `url:"region"`
+	Frequency string `url:"frequency"`
 }
 
 type ObservatoryScheduledPageTest struct {
@@ -323,11 +306,7 @@ func (api *API) CreateObservatoryScheduledPageTest(ctx context.Context, rc *Reso
 	if params.URL == "" {
 		return nil, ErrMissingObservatoryUrl
 	}
-	v := url.Values{}
-	v.Set("region", params.Region)
-	v.Set("frequency", params.Frequency)
-	uri := fmt.Sprintf("/zones/%s/speed_api/schedule/%s?", rc.Identifier, url.PathEscape(params.URL))
-	uri = uri + v.Encode()
+	uri := buildURI(fmt.Sprintf("/zones/%s/speed_api/schedule/%s", rc.Identifier, url.PathEscape(params.URL)), params)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, struct {
 		Region string `json:"region"`
 	}{
@@ -346,7 +325,7 @@ func (api *API) CreateObservatoryScheduledPageTest(ctx context.Context, rc *Reso
 
 type GetObservatoryScheduledPageTestParams struct {
 	URL    string
-	Region string
+	Region string `url:"region"`
 }
 
 type ObservatoryScheduleResponse struct {
@@ -361,10 +340,7 @@ func (api *API) GetObservatoryScheduledPageTest(ctx context.Context, rc *Resourc
 	if params.URL == "" {
 		return nil, ErrMissingObservatoryUrl
 	}
-	v := url.Values{}
-	v.Set("region", params.Region)
-	uri := fmt.Sprintf("/zones/%s/speed_api/schedule/%s?", rc.Identifier, url.PathEscape(params.URL))
-	uri = uri + v.Encode()
+	uri := buildURI(fmt.Sprintf("/zones/%s/speed_api/schedule/%s", rc.Identifier, url.PathEscape(params.URL)), params)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, err
@@ -379,7 +355,7 @@ func (api *API) GetObservatoryScheduledPageTest(ctx context.Context, rc *Resourc
 
 type DeleteObservatoryScheduledPageTestParams struct {
 	URL    string
-	Region string
+	Region string `url:"region"`
 }
 
 // DeleteObservatoryScheduledPageTest deletes the test schedule for a page in a specific region.
@@ -389,10 +365,7 @@ func (api *API) DeleteObservatoryScheduledPageTest(ctx context.Context, rc *Reso
 	if params.URL == "" {
 		return nil, ErrMissingObservatoryUrl
 	}
-	v := url.Values{}
-	v.Set("region", params.Region)
-	uri := fmt.Sprintf("/zones/%s/speed_api/schedule/%s?", rc.Identifier, url.PathEscape(params.URL))
-	uri = uri + v.Encode()
+	uri := buildURI(fmt.Sprintf("/zones/%s/speed_api/schedule/%s", rc.Identifier, url.PathEscape(params.URL)), params)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return nil, err

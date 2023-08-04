@@ -263,7 +263,7 @@ func TestListObservatoryPageTests(t *testing.T) {
 			}
 		`, pageTestJSON)
 	}
-	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/"+testURL+"/tests", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/pages/"+testURL+"/tests", handler)
 	want := []ObservatoryPageTest{
 		pageTest,
 	}
@@ -296,7 +296,7 @@ func TestCreateObservatoryPageTest(t *testing.T) {
 			}
 		`, pageTestJSON)
 	}
-	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/"+testURL+"/tests", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/pages/"+testURL+"/tests", handler)
 	want := pageTest
 	test, err := client.CreateObservatoryPageTest(context.Background(), ZoneIdentifier(testZoneID), CreateObservatoryPageTestParams{
 		URL:    testURL,
@@ -325,7 +325,7 @@ func TestDeleteObservatoryPageTests(t *testing.T) {
 			}
 		`)
 	}
-	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/"+testURL+"/tests", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/pages/"+testURL+"/tests", handler)
 	want := 2
 	count, err := client.DeleteObservatoryPageTests(context.Background(), ZoneIdentifier(testZoneID), DeleteObservatoryPageTestsParams{
 		URL:    testURL,
@@ -336,7 +336,7 @@ func TestDeleteObservatoryPageTests(t *testing.T) {
 	}
 }
 
-func TestObservatoryPageTest(t *testing.T) {
+func TestGetObservatoryPageTest(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -351,7 +351,7 @@ func TestObservatoryPageTest(t *testing.T) {
 			}
 		`, pageTestJSON)
 	}
-	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/"+testURL+"/tests/"+observatoryTestID, handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/pages/"+testURL+"/tests/"+observatoryTestID, handler)
 	want := pageTest
 	test, err := client.GetObservatoryPageTest(context.Background(), ZoneIdentifier(testZoneID), GetObservatoryPageTestParams{
 		TestID: observatoryTestID,
@@ -379,7 +379,7 @@ func TestCreateObservatoryScheduledPageTest(t *testing.T) {
 			}
 		`, scheduledPageTestJSON)
 	}
-	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/"+testURL+"/schedule", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/schedule/"+testURL, handler)
 	want := scheduledPageTest
 	pages, err := client.CreateObservatoryScheduledPageTest(context.Background(), ZoneIdentifier(testZoneID), CreateObservatoryScheduledPageTestParams{
 		Frequency: frequency,
