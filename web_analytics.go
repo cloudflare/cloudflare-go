@@ -121,6 +121,9 @@ type CreateWebAnalyticsSiteParams struct {
 //
 // API reference: https://api.cloudflare.com/#web-analytics-create-site
 func (api *API) CreateWebAnalyticsSite(ctx context.Context, rc *ResourceContainer, params CreateWebAnalyticsSiteParams) (*WebAnalyticsSite, error) {
+	if rc.Level != AccountRouteLevel {
+		return nil, ErrRequiredAccountLevelResourceContainer
+	}
 	if params.Host == "" && params.ZoneTag == "" {
 		return nil, ErrMissingWebAnalyticsSiteHost
 	}
@@ -150,6 +153,9 @@ type ListWebAnalyticsSitesParams struct {
 //
 // API reference: https://api.cloudflare.com/#web-analytics-list-sites
 func (api *API) ListWebAnalyticsSites(ctx context.Context, rc *ResourceContainer, params ListWebAnalyticsSitesParams) ([]WebAnalyticsSite, *ResultInfo, error) {
+	if rc.Level != AccountRouteLevel {
+		return nil, nil, ErrRequiredAccountLevelResourceContainer
+	}
 	v := url.Values{}
 	if params.Page > 0 {
 		v.Set("page", strconv.Itoa(params.Page))
@@ -182,6 +188,9 @@ type WebAnalyticsSiteParams struct {
 //
 // API reference: https://api.cloudflare.com/#web-analytics-get-site
 func (api *API) WebAnalyticsSite(ctx context.Context, rc *ResourceContainer, params WebAnalyticsSiteParams) (*WebAnalyticsSite, error) {
+	if rc.Level != AccountRouteLevel {
+		return nil, ErrRequiredAccountLevelResourceContainer
+	}
 	if params.SiteTag == "" {
 		return nil, ErrMissingWebAnalyticsSiteTag
 	}
@@ -212,6 +221,9 @@ type UpdateWebAnalyticsSiteParams struct {
 //
 // API reference: https://api.cloudflare.com/#web-analytics-update-site
 func (api *API) UpdateWebAnalyticsSite(ctx context.Context, rc *ResourceContainer, params UpdateWebAnalyticsSiteParams) (*WebAnalyticsSite, error) {
+	if rc.Level != AccountRouteLevel {
+		return nil, ErrRequiredAccountLevelResourceContainer
+	}
 	if params.SiteTag == "" {
 		return nil, ErrMissingWebAnalyticsSiteTag
 	}
@@ -236,6 +248,9 @@ type DeleteWebAnalyticsSiteParams struct {
 //
 // API reference: https://api.cloudflare.com/#web-analytics-delete-site
 func (api *API) DeleteWebAnalyticsSite(ctx context.Context, rc *ResourceContainer, params DeleteWebAnalyticsSiteParams) (*string, error) {
+	if rc.Level != AccountRouteLevel {
+		return nil, ErrRequiredAccountLevelResourceContainer
+	}
 	if params.SiteTag == "" {
 		return nil, ErrMissingWebAnalyticsSiteTag
 	}
@@ -261,6 +276,9 @@ type CreateWebAnalyticsRuleParams struct {
 //
 // API reference: https://api.cloudflare.com/#web-analytics-create-rule
 func (api *API) CreateWebAnalyticsRule(ctx context.Context, rc *ResourceContainer, params CreateWebAnalyticsRuleParams) (*WebAnalyticsRule, error) {
+	if rc.Level != AccountRouteLevel {
+		return nil, ErrRequiredAccountLevelResourceContainer
+	}
 	if params.RulesetID == "" {
 		return nil, ErrMissingWebAnalyticsRulesetID
 	}
@@ -285,6 +303,9 @@ type ListWebAnalyticsRulesParams struct {
 //
 // API reference: https://api.cloudflare.com/#web-analytics-list-rules
 func (api *API) ListWebAnalyticsRules(ctx context.Context, rc *ResourceContainer, params ListWebAnalyticsRulesParams) (*WebAnalyticsRulesetRules, error) {
+	if rc.Level != AccountRouteLevel {
+		return nil, ErrRequiredAccountLevelResourceContainer
+	}
 	if params.RulesetID == "" {
 		return nil, ErrMissingWebAnalyticsRulesetID
 	}
@@ -310,6 +331,9 @@ type DeleteWebAnalyticsRuleParams struct {
 //
 // API reference: https://api.cloudflare.com/#web-analytics-delete-rule
 func (api *API) DeleteWebAnalyticsRule(ctx context.Context, rc *ResourceContainer, params DeleteWebAnalyticsRuleParams) (*string, error) {
+	if rc.Level != AccountRouteLevel {
+		return nil, ErrRequiredAccountLevelResourceContainer
+	}
 	if params.RulesetID == "" {
 		return nil, ErrMissingWebAnalyticsRulesetID
 	}
@@ -339,6 +363,9 @@ type UpdateWebAnalyticsRuleParams struct {
 //
 // API reference: https://api.cloudflare.com/#web-analytics-update-rule
 func (api *API) UpdateWebAnalyticsRule(ctx context.Context, rc *ResourceContainer, params UpdateWebAnalyticsRuleParams) (*WebAnalyticsRule, error) {
+	if rc.Level != AccountRouteLevel {
+		return nil, ErrRequiredAccountLevelResourceContainer
+	}
 	if params.RulesetID == "" {
 		return nil, ErrMissingWebAnalyticsRulesetID
 	}
