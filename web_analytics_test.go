@@ -3,8 +3,6 @@ package cloudflare
 import (
 	"context"
 	"fmt"
-	"io"
-	"log"
 	"net/http"
 	"testing"
 	"time"
@@ -372,51 +370,6 @@ func TestDeleteWebAnalyticsRule(t *testing.T) {
 	actual, err := client.DeleteWebAnalyticsRule(context.Background(), AccountIdentifier(testAccountID), DeleteWebAnalyticsRuleParams{
 		RulesetID: rulesetID,
 		RuleID:    ruleID,
-	})
-	if assert.NoError(t, err) {
-		assert.Equal(t, &want, actual)
-	}
-}
-
-func TestModifyWebAnalyticsRules(t *testing.T) {
-	setup()
-	defer teardown()
-
-	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
-		b, _ := io.ReadAll(r.Body)
-		log.Println(string(b))
-		w.Header().Set("content-type", "application/json")
-		fmt.Fprintf(w, `{
-			  "success": true,
-			  "errors": [],
-			  "messages": [],
-			  "result": {
-                "ruleset": %s,
-                "rules": [
-                  %s
-                ]
-              }
-			}
-		`, rulesetJSON, ruleJSON)
-	}
-	mux.HandleFunc("/accounts/"+testAccountID+"/rum/v2/"+rulesetID+"/rules", handler)
-	want := WebAnalyticsRulesetRules{
-		Ruleset: ruleset,
-		Rules:   []WebAnalyticsRule{rule},
-	}
-	actual, err := client.ModifyWebAnalyticsRules(context.Background(), AccountIdentifier(testAccountID), ModifyWebAnalyticsRulesParams{
-		RulesetID: rulesetID,
-		Rules: []CreateWebAnalyticsRule{
-			{
-				ID:        ruleID,
-				Host:      "example.com",
-				Paths:     []string{"/updated"},
-				Inclusive: false,
-				IsPaused:  false,
-			},
-		},
-		DeleteRules: []string{ruleID},
 	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, &want, actual)

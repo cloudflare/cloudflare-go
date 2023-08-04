@@ -357,37 +357,3 @@ func (api *API) UpdateWebAnalyticsRule(ctx context.Context, rc *ResourceContaine
 	}
 	return &r.Result, nil
 }
-
-type ModifyWebAnalyticsRulesParams struct {
-	RulesetID string
-	// Rules is a list of rules to create if no id is specified, or modify if an existing id is specified.
-	Rules []CreateWebAnalyticsRule
-	// DeleteRules is a list of rule ids to be deleted
-	DeleteRules []string
-}
-
-// ModifyWebAnalyticsRules lets you create, updated, or delete multiple Web Analytics Rule for a WebAnalyticsRuleset.
-//
-// API reference: https://api.cloudflare.com/#web-analytics-modify-rules
-func (api *API) ModifyWebAnalyticsRules(ctx context.Context, rc *ResourceContainer, params ModifyWebAnalyticsRulesParams) (*WebAnalyticsRulesetRules, error) {
-	if params.RulesetID == "" {
-		return nil, ErrMissingWebAnalyticsRulesetID
-	}
-	uri := fmt.Sprintf("/accounts/%s/rum/v2/%s/rules", rc.Identifier, params.RulesetID)
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, struct {
-		Rules       []CreateWebAnalyticsRule `json:"rules"`
-		DeleteRules []string                 `json:"delete_rules"`
-	}{
-		Rules:       params.Rules,
-		DeleteRules: params.DeleteRules,
-	})
-	if err != nil {
-		return nil, err
-	}
-	var r WebAnalyticsRulesResponse
-	err = json.Unmarshal(res, &r)
-	if err != nil {
-		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
-	}
-	return &r.Result, nil
-}
