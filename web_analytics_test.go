@@ -81,7 +81,7 @@ var site = WebAnalyticsSite{
 	Rules: []WebAnalyticsRule{
 		rule,
 	},
-	Created: createdTimestamp.UTC(),
+	Created: TimePtr(createdTimestamp.UTC()),
 }
 
 var ruleset = WebAnalyticsRuleset{
@@ -98,7 +98,7 @@ var rule = WebAnalyticsRule{
 		"*",
 	},
 	Inclusive: true,
-	Created:   createdTimestamp.UTC(),
+	Created:   TimePtr(createdTimestamp.UTC()),
 	IsPaused:  false,
 	Priority:  1000,
 }

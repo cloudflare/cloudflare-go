@@ -22,9 +22,9 @@ var listWebAnalyticsSitesDefaultPageSize = 10
 
 // WebAnalyticsSite describes a Web Analytics Site object.
 type WebAnalyticsSite struct {
-	SiteTag   string    `json:"site_tag"`
-	SiteToken string    `json:"site_token"`
-	Created   time.Time `json:"created,omitempty"`
+	SiteTag   string     `json:"site_tag"`
+	SiteToken string     `json:"site_token"`
+	Created   *time.Time `json:"created,omitempty"`
 	// Snippet is an encoded JS script to insert into your site HTML.
 	Snippet string `json:"snippet"`
 	// AutoInstall defines whether Cloudflare will inject the JS snippet automatically for orange-clouded sites.
@@ -39,8 +39,8 @@ type WebAnalyticsRule struct {
 	Host  string   `json:"host"`
 	Paths []string `json:"paths"`
 	// Inclusive defines whether the rule includes or excludes the matched traffic from being measured in web analytics.
-	Inclusive bool      `json:"inclusive"`
-	Created   time.Time `json:"created,omitempty"`
+	Inclusive bool       `json:"inclusive"`
+	Created   *time.Time `json:"created,omitempty"`
 	// IsPaused defines whether the rule is paused (inactive) or not.
 	IsPaused bool `json:"is_paused"`
 	Priority int  `json:"priority,omitempty"`
