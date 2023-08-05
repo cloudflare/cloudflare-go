@@ -112,9 +112,9 @@ type WebAnalyticsSiteTagResponse struct {
 
 type CreateWebAnalyticsSiteParams struct {
 	// Host is the host to measure traffic for.
-	Host *string `json:"host,omitempty"`
+	Host string `json:"host,omitempty"`
 	// ZoneTag is the zone tag to measure traffic for.
-	ZoneTag *string `json:"zone_tag,omitempty"`
+	ZoneTag string `json:"zone_tag,omitempty"`
 	// AutoInstall defines whether Cloudflare will inject the JS snippet automatically for orange-clouded sites.
 	AutoInstall *bool `json:"auto_install"`
 }
@@ -126,15 +126,15 @@ func (api *API) CreateWebAnalyticsSite(ctx context.Context, rc *ResourceContaine
 	if rc.Level != AccountRouteLevel {
 		return nil, ErrRequiredAccountLevelResourceContainer
 	}
-	if params.Host == nil && params.ZoneTag == nil {
+	if params.Host == "" && params.ZoneTag == "" {
 		return nil, ErrMissingWebAnalyticsSiteHost
 	}
-	if params.Host != nil && params.ZoneTag != nil {
+	if params.Host != "" && params.ZoneTag != "" {
 		return nil, ErrConflictingWebAnalyticSiteHost
 	}
 	if params.AutoInstall == nil {
 		// default auto_install to true for orange-clouded zones (zone_tag is specified)
-		params.AutoInstall = BoolPtr(params.ZoneTag != nil)
+		params.AutoInstall = BoolPtr(params.ZoneTag != "")
 	}
 	uri := fmt.Sprintf("/accounts/%s/rum/site_info", rc.Identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
