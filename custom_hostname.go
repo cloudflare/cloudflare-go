@@ -2,13 +2,14 @@ package cloudflare
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
 	"time"
+
+	"github.com/goccy/go-json"
 )
 
 // CustomHostnameStatus is the enumeration of valid state values in the CustomHostnameSSL.

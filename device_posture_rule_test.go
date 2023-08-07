@@ -240,7 +240,7 @@ func TestDevicePostureIntegrationDelete(t *testing.T) {
 			"success": true,
 			"errors": [],
 			"messages": [],
-			"result": null 
+			"result": null
 		}`)
 	}
 

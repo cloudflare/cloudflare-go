@@ -1,9 +1,10 @@
 package cloudflare
 
 import (
-	"encoding/json"
 	"fmt"
 	"time"
+
+	"github.com/goccy/go-json"
 )
 
 func ExampleDuration() {

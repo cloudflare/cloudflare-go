@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"testing"
-
 	"time"
 
 	"github.com/stretchr/testify/assert"

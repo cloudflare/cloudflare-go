@@ -2,7 +2,6 @@ package cloudflare
 
 import (
 	"net/http"
-
 	"time"
 
 	"golang.org/x/time/rate"

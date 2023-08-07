@@ -2,12 +2,13 @@ package cloudflare
 
 import (
 	"context"
-	"encoding/json"
 	"net/http"
 	"net/url"
 	"path"
 	"strconv"
 	"time"
+
+	"github.com/goccy/go-json"
 )
 
 // AuditLogAction is a member of AuditLog, the action that was taken.
