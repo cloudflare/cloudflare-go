@@ -2,12 +2,13 @@ package cloudflare
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/goccy/go-json"
 )
 
 // A TunnelDuration is a Duration that has custom serialization for JSON.

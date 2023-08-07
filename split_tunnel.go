@@ -2,9 +2,10 @@ package cloudflare
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/goccy/go-json"
 )
 
 // SplitTunnelResponse represents the response from the get split

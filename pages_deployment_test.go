@@ -305,7 +305,7 @@ func TestListPagesDeploymentsPagination(t *testing.T) {
 			fmt.Fprintf(w, `{
 				"success": true,
 				"errors": [],
-				"messages": [],	
+				"messages": [],
 				"result": [
 					%s
 				],
@@ -321,7 +321,7 @@ func TestListPagesDeploymentsPagination(t *testing.T) {
 			fmt.Fprintf(w, `{
 				"success": true,
 				"errors": [],
-				"messages": [],	
+				"messages": [],
 				"result": [
 					%s
 				],

@@ -2,11 +2,12 @@ package cloudflare
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
 	"time"
+
+	"github.com/goccy/go-json"
 )
 
 // FirewallRule is the struct of the firewall rule.

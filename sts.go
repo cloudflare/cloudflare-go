@@ -1,11 +1,12 @@
 package cloudflare
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"net/http"
+
+	"github.com/goccy/go-json"
 
 	"github.com/hashicorp/go-retryablehttp"
 )

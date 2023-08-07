@@ -2,9 +2,10 @@ package cloudflare
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/goccy/go-json"
 )
 
 // DiagnosticsTracerouteConfiguration is the overarching structure of the

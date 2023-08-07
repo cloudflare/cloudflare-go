@@ -2,13 +2,13 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
 	"strings"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
+	"github.com/goccy/go-json"
 	"github.com/olekukonko/tablewriter"
 	"github.com/urfave/cli/v2"
 )

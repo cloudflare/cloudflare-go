@@ -3,13 +3,14 @@ package cloudflare
 import (
 	"bytes"
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"mime/multipart"
 	"net/http"
 	"time"
+
+	"github.com/goccy/go-json"
 )
 
 var (

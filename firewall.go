@@ -2,12 +2,13 @@ package cloudflare
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
 	"time"
+
+	"github.com/goccy/go-json"
 )
 
 // AccessRule represents a firewall access rule.
