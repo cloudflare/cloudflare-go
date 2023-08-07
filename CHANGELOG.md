@@ -1,5 +1,9 @@
 ## 0.75.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* waiting_room: add support for `queueing_status_code` ([#1357](https://github.com/cloudflare/cloudflare-go/issues/1357))
+
 DEPENDENCIES:
 
 * deps: bumps golang.org/x/net from 0.12.0 to 0.13.0 ([#1353](https://github.com/cloudflare/cloudflare-go/issues/1353))
