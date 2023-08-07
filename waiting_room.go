@@ -37,6 +37,7 @@ type WaitingRoom struct {
 	NextEventStartTime         *time.Time          `json:"next_event_start_time,omitempty"`
 	CookieSuffix               string              `json:"cookie_suffix"`
 	AdditionalRoutes           []*WaitingRoomRoute `json:"additional_routes,omitempty"`
+	QueueingStatusCode         int                 `json:"queueing_status_code"`
 }
 
 // WaitingRoomStatus describes the status of a waiting room.
