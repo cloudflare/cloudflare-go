@@ -672,8 +672,15 @@ func (api *API) PurgeCache(ctx context.Context, zoneID string, pcr PurgeCacheReq
 //
 // API reference: https://api.cloudflare.com/#zone-purge-individual-files-by-url-and-cache-tags
 func (api *API) PurgeCacheContext(ctx context.Context, zoneID string, pcr PurgeCacheRequest) (PurgeCacheResponse, error) {
+	// manually build the payload to ensure we don't escape HTML entities to
+	// match their keys for purging.
+	payload, err := json.MarshalWithOption(pcr, json.DisableHTMLEscape())
+	if err != nil {
+		return PurgeCacheResponse{}, err
+	}
+
 	uri := fmt.Sprintf("/zones/%s/purge_cache", zoneID)
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, pcr)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, payload)
 	if err != nil {
 		return PurgeCacheResponse{}, err
 	}
