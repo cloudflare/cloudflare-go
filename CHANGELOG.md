@@ -2,7 +2,12 @@
 
 ENHANCEMENTS:
 
+* cloudflare: swap `encoding/json` for `github.com/goccy/go-json` ([#1360](https://github.com/cloudflare/cloudflare-go/issues/1360))
 * waiting_room: add support for `queueing_status_code` ([#1357](https://github.com/cloudflare/cloudflare-go/issues/1357))
+
+BUG FIXES:
+
+* cache_purge: don't escape HTML entity values in URLs for cache keys ([#1360](https://github.com/cloudflare/cloudflare-go/issues/1360))
 
 DEPENDENCIES:
 
