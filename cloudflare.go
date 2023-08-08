@@ -462,23 +462,8 @@ type RawResponse struct {
 }
 
 // Raw makes a HTTP request with user provided params and returns the
-// result as untouched JSON.
-func (api *API) Raw(ctx context.Context, method, endpoint string, data interface{}, headers http.Header) (json.RawMessage, error) {
-	res, err := api.makeRequestContextWithHeaders(ctx, method, endpoint, data, headers)
-	if err != nil {
-		return nil, err
-	}
-
-	var r RawResponse
-	if err := json.Unmarshal(res, &r); err != nil {
-		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
-	}
-	return r.Result, nil
-}
-
-// RawResponse makes a HTTP request with user provided params and returns the
-// result as untouched JSON along with the standard Response.
-func (api *API) RawResponse(ctx context.Context, method, endpoint string, data interface{}, headers http.Header) (RawResponse, error) {
+// result as a RawResponse, which contains the untouched JSON result.
+func (api *API) Raw(ctx context.Context, method, endpoint string, data interface{}, headers http.Header) (RawResponse, error) {
 	var r RawResponse
 	res, err := api.makeRequestContextWithHeaders(ctx, method, endpoint, data, headers)
 	if err != nil {

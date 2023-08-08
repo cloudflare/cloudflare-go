@@ -1,3 +1,3 @@
 ```release-note:enhancement
-cloudflare: Added RawResponse method which returns the Response alongside the raw Result
+cloudflare: Changes Raw method to return a RawResponse rather than the raw JSON message
 ```
