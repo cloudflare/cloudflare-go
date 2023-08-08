@@ -495,24 +495,24 @@ func TestGetWorker_Module(t *testing.T) {
 	}
 }
 
-func TestGetScriptContent(t *testing.T) {
+func TestGetWorkersScriptContent(t *testing.T) {
 	setup()
 	defer teardown()
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/foo/content/v2", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
-		fmt.Fprintf(w, workerScript)
+		fmt.Fprint(w, workerScript)
 	})
 
-	res, err := client.GetScriptContent(context.Background(), AccountIdentifier(testAccountID), "foo")
+	res, err := client.GetWorkersScriptContent(context.Background(), AccountIdentifier(testAccountID), "foo")
 	want := workerScript
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
 }
 
-func TestPutScriptContent(t *testing.T) {
+func TestUpdateWorkersScriptContent(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -525,7 +525,7 @@ func TestPutScriptContent(t *testing.T) {
 		fmt.Fprint(w, workersScriptResponse(t, withWorkerModifiedOn(formattedTime)))
 	})
 
-	res, err := client.PutScriptContent(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{ScriptName: "foo", Script: workerScript})
+	res, err := client.UpdateWorkersScriptContent(context.Background(), AccountIdentifier(testAccountID), UpdateWorkersScriptContentParams{ScriptName: "foo", Script: workerScript})
 	want := WorkerScriptResponse{
 		successResponse,
 		false,
@@ -538,17 +538,17 @@ func TestPutScriptContent(t *testing.T) {
 	}
 }
 
-func TestGetScriptSettings(t *testing.T) {
+func TestGetWorkersScriptSettings(t *testing.T) {
 	setup()
 	defer teardown()
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/foo/settings", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
-		fmt.Fprintf(w, workerMetadata)
+		fmt.Fprint(w, workerMetadata)
 	})
 
-	res, err := client.GetScriptSettings(context.Background(), AccountIdentifier(testAccountID), "foo")
+	res, err := client.GetWorkersScriptSettings(context.Background(), AccountIdentifier(testAccountID), "foo")
 	logpush := true
 	want := WorkerScriptSettingsResponse{
 		successResponse,
@@ -562,17 +562,17 @@ func TestGetScriptSettings(t *testing.T) {
 	}
 }
 
-func TestPatchScriptSettings(t *testing.T) {
+func TestUpdateWorkersScriptSettings(t *testing.T) {
 	setup()
 	defer teardown()
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/foo/settings", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
 		w.Header().Set("content-type", "application/javascript")
-		fmt.Fprintf(w, workerMetadata)
+		fmt.Fprint(w, workerMetadata)
 	})
 
-	res, err := client.PatchScriptSettings(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{ScriptName: "foo"})
+	res, err := client.UpdateWorkersScriptSettings(context.Background(), AccountIdentifier(testAccountID), UpdateWorkersScriptSettingsParams{ScriptName: "foo"})
 	logpush := true
 	want := WorkerScriptSettingsResponse{
 		successResponse,

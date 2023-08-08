@@ -59,6 +59,49 @@ type CreateWorkerParams struct {
 	Placement *Placement
 }
 
+type UpdateWorkersScriptContentParams struct {
+	ScriptName string
+	Script     string
+
+	// DispatchNamespaceName uploads the worker to a WFP dispatch namespace if provided
+	DispatchNamespaceName *string
+
+	// Module changes the Content-Type header to specify the script is an
+	// ES Module syntax script.
+	Module bool
+}
+
+type UpdateWorkersScriptSettingsParams struct {
+	ScriptName string
+
+	// Logpush opts the worker into Workers Logpush logging. A nil value leaves
+	// the current setting unchanged.
+	//
+	// Documentation: https://developers.cloudflare.com/workers/platform/logpush/
+	Logpush *bool
+
+	// TailConsumers specifies a list of Workers that will consume the logs of
+	// the attached Worker.
+	// Documentation: https://developers.cloudflare.com/workers/platform/tail-workers/
+	TailConsumers *[]WorkersTailConsumer
+
+	// Bindings should be a map where the keys are the binding name, and the
+	// values are the binding content
+	Bindings map[string]WorkerBinding
+
+	// CompatibilityDate is a date in the form yyyy-mm-dd,
+	// which will be used to determine which version of the Workers runtime is used.
+	//  https://developers.cloudflare.com/workers/platform/compatibility-dates/
+	CompatibilityDate string
+
+	// CompatibilityFlags are the names of features of the Workers runtime to be enabled or disabled,
+	// usually used together with CompatibilityDate.
+	//  https://developers.cloudflare.com/workers/platform/compatibility-dates/#compatibility-flags
+	CompatibilityFlags []string
+
+	Placement *Placement
+}
+
 // WorkerScriptParams provides a worker script and the associated bindings.
 type WorkerScriptParams struct {
 	ScriptName string
@@ -303,10 +346,10 @@ func (api *API) UploadWorker(ctx context.Context, rc *ResourceContainer, params 
 	return r, nil
 }
 
-// GetScriptContent returns the pure script content of a worker.
+// GetWorkersScriptContent returns the pure script content of a worker.
 //
-// API reference: TODO:
-func (api *API) GetScriptContent(ctx context.Context, rc *ResourceContainer, scriptName string) (string, error) {
+// API reference: TODO: https://developers.cloudflare.com/api
+func (api *API) GetWorkersScriptContent(ctx context.Context, rc *ResourceContainer, scriptName string) (string, error) {
 	if rc.Level != AccountRouteLevel {
 		return "", ErrRequiredAccountLevelResourceContainer
 	}
@@ -324,10 +367,10 @@ func (api *API) GetScriptContent(ctx context.Context, rc *ResourceContainer, scr
 	return string(res.Body), nil
 }
 
-// PutScriptContent pushes only script content, no metadata.
+// UpdateWorkersScriptContent pushes only script content, no metadata.
 //
-// API reference: TODO:
-func (api *API) PutScriptContent(ctx context.Context, rc *ResourceContainer, params CreateWorkerParams) (WorkerScriptResponse, error) {
+// API reference: TODO: https://developers.cloudflare.com/api
+func (api *API) UpdateWorkersScriptContent(ctx context.Context, rc *ResourceContainer, params UpdateWorkersScriptContentParams) (WorkerScriptResponse, error) {
 	if rc.Level != AccountRouteLevel {
 		return WorkerScriptResponse{}, ErrRequiredAccountLevelResourceContainer
 	}
@@ -343,7 +386,12 @@ func (api *API) PutScriptContent(ctx context.Context, rc *ResourceContainer, par
 	)
 
 	if params.Module {
-		contentType, body, err = formatMultipartBody(params)
+		var formattedParams CreateWorkerParams
+		formattedParams.Script = params.Script
+		formattedParams.ScriptName = params.ScriptName
+		formattedParams.Module = params.Module
+		formattedParams.DispatchNamespaceName = params.DispatchNamespaceName
+		contentType, body, err = formatMultipartBody(formattedParams)
 		if err != nil {
 			return WorkerScriptResponse{}, err
 		}
@@ -371,10 +419,10 @@ func (api *API) PutScriptContent(ctx context.Context, rc *ResourceContainer, par
 	return r, nil
 }
 
-// GetScriptSettings returns the metadata of a worker.
+// GetWorkersScriptSettings returns the metadata of a worker.
 //
-// API reference: TODO:
-func (api *API) GetScriptSettings(ctx context.Context, rc *ResourceContainer, scriptName string) (WorkerScriptSettingsResponse, error) {
+// API reference: TODO: https://developers.cloudflare.com/api
+func (api *API) GetWorkersScriptSettings(ctx context.Context, rc *ResourceContainer, scriptName string) (WorkerScriptSettingsResponse, error) {
 	if rc.Level != AccountRouteLevel {
 		return WorkerScriptSettingsResponse{}, ErrRequiredAccountLevelResourceContainer
 	}
@@ -400,10 +448,10 @@ func (api *API) GetScriptSettings(ctx context.Context, rc *ResourceContainer, sc
 	return r, nil
 }
 
-// PatchScriptSettings pushes only script metadata.
+// UpdateWorkersScriptSettings pushes only script metadata.
 //
-// API reference: TODO:
-func (api *API) PatchScriptSettings(ctx context.Context, rc *ResourceContainer, params CreateWorkerParams) (WorkerScriptSettingsResponse, error) {
+// API reference: TODO: https://developers.cloudflare.com/api
+func (api *API) UpdateWorkersScriptSettings(ctx context.Context, rc *ResourceContainer, params UpdateWorkersScriptSettingsParams) (WorkerScriptSettingsResponse, error) {
 	if rc.Level != AccountRouteLevel {
 		return WorkerScriptSettingsResponse{}, ErrRequiredAccountLevelResourceContainer
 	}
