@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-// BotManagement represents the bots config for a zone
+// BotManagement represents the bots config for a zone.
 type BotManagement struct {
 	EnableJS                     *bool   `json:"enable_js,omitempty"`
 	FightMode                    *bool   `json:"fight_mode,omitempty"`

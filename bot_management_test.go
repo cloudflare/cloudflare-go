@@ -45,11 +45,10 @@ func TestGetBotManagement(t *testing.T) {
 	}
 }
 
-func TestPutBotManagement(t *testing.T) {
+func TestUpdateBotManagement(t *testing.T) {
 	setup()
 	defer teardown()
 
-	// now lets do a PUT
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		assert.Equal(t, "2.0.0", r.Header.Get("Cloudflare-Version"))
