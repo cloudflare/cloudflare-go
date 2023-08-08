@@ -1,5 +1,9 @@
 ## 0.75.0 (Unreleased)
 
+BREAKING CHANGES:
+
+* cloudflare: `Raw` method now returns a RawResponse rather than the raw JSON `Result` message ([#1355](https://github.com/cloudflare/cloudflare-go/issues/1355))
+
 ENHANCEMENTS:
 
 * bot_management: add support for bot_management API ([#1363](https://github.com/cloudflare/cloudflare-go/issues/1363))
