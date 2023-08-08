@@ -4,13 +4,14 @@ import (
 	"context"
 	rand "crypto/rand"
 	"encoding/hex"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"mime/multipart"
 	"net/http"
 	"net/textproto"
+
+	"github.com/goccy/go-json"
 )
 
 // WorkerBindingType represents a particular type of binding.

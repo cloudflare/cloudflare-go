@@ -2,10 +2,11 @@ package cloudflare
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
+
+	"github.com/goccy/go-json"
 )
 
 // CreateWorkersKVNamespaceParams provides parameters for creating and updating storage namespaces.

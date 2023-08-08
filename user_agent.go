@@ -2,12 +2,13 @@ package cloudflare
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
+
+	"github.com/goccy/go-json"
 )
 
 // UserAgentRule represents a User-Agent Block. These rules can be used to

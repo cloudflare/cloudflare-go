@@ -40,8 +40,9 @@ var waitingRoomJSON = fmt.Sprintf(`
       "default_template_language": "en-US",
       "next_event_prequeue_start_time": null,
       "next_event_start_time": "%s",
-			"cookie_suffix": "example_shop",
-			"additional_routes": [{"host": "shop2.example.com", "path": "/shop/checkout"}]
+	  "cookie_suffix": "example_shop",
+	  "additional_routes": [{"host": "shop2.example.com", "path": "/shop/checkout"}],
+	  "queueing_status_code": 200
     }
    `, waitingRoomID, testTimestampWaitingRoom.Format(time.RFC3339Nano), testTimestampWaitingRoom.Format(time.RFC3339Nano),
 	testTimestampWaitingRoomEventStart.Format(time.RFC3339Nano))
@@ -127,6 +128,7 @@ var waitingRoom = WaitingRoom{
 	NextEventPrequeueStartTime: nil,
 	CookieSuffix:               "example_shop",
 	AdditionalRoutes:           []*WaitingRoomRoute{{Host: "shop2.example.com", Path: "/shop/checkout"}},
+	QueueingStatusCode:         200,
 }
 
 var waitingRoomEvent = WaitingRoomEvent{

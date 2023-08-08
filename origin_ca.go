@@ -2,12 +2,13 @@ package cloudflare
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"time"
+
+	"github.com/goccy/go-json"
 )
 
 // OriginCACertificate represents a Cloudflare-issued certificate.
@@ -38,13 +39,13 @@ type CreateOriginCertificateParams struct {
 // UnmarshalJSON handles custom parsing from an API response to an OriginCACertificate
 // http://choly.ca/post/go-json-marshalling/
 func (c *OriginCACertificate) UnmarshalJSON(data []byte) error {
-	type alias OriginCACertificate
+	type Alias OriginCACertificate
 
 	aux := &struct {
 		ExpiresOn string `json:"expires_on"`
-		*alias
+		*Alias
 	}{
-		alias: (*alias)(c),
+		Alias: (*Alias)(c),
 	}
 
 	var err error

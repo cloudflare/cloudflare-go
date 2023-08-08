@@ -2,9 +2,10 @@ package cloudflare_test
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"log"
+
+	"github.com/goccy/go-json"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
 )
