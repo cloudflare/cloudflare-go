@@ -92,7 +92,7 @@ func (api *API) DeleteZoneHold(ctx context.Context, zoneID string, params ZoneHo
 // Retrieve whether the zone is subject to a zone hold, and metadata about the hold.
 //
 // API reference: https://developers.cloudflare.com/api/operations/zones-0-hold-get
-func (api *API) ZoneHold(ctx context.Context, zoneID string) (ZoneHold, error) {
+func (api *API) GetZoneHold(ctx context.Context, zoneID string) (ZoneHold, error) {
 	uri := fmt.Sprintf("/zones/%s/hold", zoneID)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
