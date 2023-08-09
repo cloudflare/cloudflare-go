@@ -154,7 +154,7 @@ type HostnameTLSSettingsCiphersResponse struct {
 	ResultInfo `json:"result_info"`
 }
 
-// ListHostnameTLSSettingsCiphersParams represents the data related to per-hostname ciphers tls settings being retrieved
+// ListHostnameTLSSettingsCiphersParams represents the data related to per-hostname ciphers tls settings being retrieved.
 type ListHostnameTLSSettingsCiphersParams struct {
 	PaginationOptions
 	Limit    int      `url:"limit,omitempty"`
