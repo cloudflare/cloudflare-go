@@ -8,8 +8,7 @@ import (
 	"github.com/goccy/go-json"
 )
 
-// ZoneHold represents a Zone Hold rule. A rule only permits access to
-// the provided URL pattern(s) from the given IP address(es) or subnet(s).
+// Retrieve whether the zone is subject to a zone hold, and metadata about the hold.
 type ZoneHold struct {
 	Hold              bool    `json:"hold"`
 	IncludeSubdomains *bool   `json:"include_subdomains,omitempty"`
@@ -23,29 +22,29 @@ type ZoneHoldResponse struct {
 	ResultInfo `json:"result_info"`
 }
 
-// ZoneHoldDeleteResponse represents a response from the List Zone Hold
+// ZoneHoldDeleteResponse represents a response from the Delete Zone Hold
 // endpoint.
 type ZoneHoldDeleteResponse struct {
 	Result ZoneHold `json:"result"`
 }
 
-// ZoneHoldCreateParams contains required and optional params
-// for creating a zone Hold.
+// ZoneHoldCreateParams represents params for the Create Zone Hold
+// endpoint.
 type ZoneHoldCreateParams struct {
 	ID                string `json:"id"`
 	Hold              bool   `json:"hold"`
 	IncludeSubdomains *bool  `json:"include_subdomains,omitempty"`
 }
 
-// ZoneHoldDeleteParams contains required and optional params
-// for updating a zone Hold.
+// ZoneHoldDeleteParams represents params for the Delete Zone Hold
+// endpoint.
 type ZoneHoldDeleteParams struct {
 	ID        string  `json:"id"`
 	Hold      bool    `json:"hold"`
 	HoldAfter *string `json:"hold_after,omitempty"`
 }
 
-// CreateZoneHold creates a Zone ZoneHold rule for the given zone ID.
+// Enforce a zone hold on the zone, blocking the creation and activation of zones with this zone's hostname.
 //
 // API reference: https://developers.cloudflare.com/api/operations/zones-0-hold-post
 func (api *API) CreateZoneHold(ctx context.Context, zoneID string, params ZoneHoldCreateParams) (ZoneHold, error) {
@@ -70,7 +69,7 @@ func (api *API) CreateZoneHold(ctx context.Context, zoneID string, params ZoneHo
 	return response.Result, nil
 }
 
-// DeleteZoneHold deletes a Zone ZoneHold rule (based on the ID) for the given zone ID.
+// Stop enforcement of a zone hold on the zone, permanently or temporarily, allowing the creation and activation of zones with this zone's hostname.
 //
 // API reference:https://developers.cloudflare.com/api/operations/zones-0-hold-delete
 func (api *API) DeleteZoneHold(ctx context.Context, zoneID string, params ZoneHoldDeleteParams) (ZoneHold, error) {
@@ -92,7 +91,7 @@ func (api *API) DeleteZoneHold(ctx context.Context, zoneID string, params ZoneHo
 	return response.Result, nil
 }
 
-// ZoneHold retrieves a Zone ZoneHold rule (based on the ID) for the given zone ID.
+// Retrieve whether the zone is subject to a zone hold, and metadata about the hold.
 //
 // API reference: https://developers.cloudflare.com/api/operations/zones-0-hold-get
 func (api *API) ZoneHold(ctx context.Context, zoneID string) (ZoneHold, error) {
