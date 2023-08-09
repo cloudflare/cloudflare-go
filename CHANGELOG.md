@@ -3,11 +3,20 @@
 BREAKING CHANGES:
 
 * cloudflare: `Raw` method now returns a RawResponse rather than the raw JSON `Result` message ([#1355](https://github.com/cloudflare/cloudflare-go/issues/1355))
+* rulesets: Rename `RulesetPhaseRateLimit` to `RulesetPhaseHTTPRatelimit`, to match the phase name ([#1367](https://github.com/cloudflare/cloudflare-go/issues/1367))
+* rulesets: Rename `RulesetPhaseSuperBotFightMode` to `RulesetPhaseHTTPRequestSBFM`, to match the phase name ([#1367](https://github.com/cloudflare/cloudflare-go/issues/1367))
+
+NOTES:
+
+* rulesets: Remove non-existent `allow` action ([#1367](https://github.com/cloudflare/cloudflare-go/issues/1367))
+* rulesets: Remove non-existent `http_request_main` phase ([#1367](https://github.com/cloudflare/cloudflare-go/issues/1367))
+* rulesets: Remove non-public `http_response_headers_transform_managed` and `http_request_late_transform_managed` phases ([#1367](https://github.com/cloudflare/cloudflare-go/issues/1367))
 
 ENHANCEMENTS:
 
 * bot_management: add support for bot_management API ([#1363](https://github.com/cloudflare/cloudflare-go/issues/1363))
 * cloudflare: swap `encoding/json` for `github.com/goccy/go-json` ([#1360](https://github.com/cloudflare/cloudflare-go/issues/1360))
+* rulesets: Add the `ddos_mitigation` action ([#1367](https://github.com/cloudflare/cloudflare-go/issues/1367))
 * waiting_room: add support for `queueing_status_code` ([#1357](https://github.com/cloudflare/cloudflare-go/issues/1357))
 
 BUG FIXES:
