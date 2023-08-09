@@ -47,12 +47,92 @@ func TestListHostnameTLSSettingsMinTLSVersion(t *testing.T) {
 			Hostname:  "app.example.com",
 			Value:     "1.2",
 			Status:    "active",
-			CreatedAt: createdAt,
-			UpdatedAt: updatedAt,
+			CreatedAt: &createdAt,
+			UpdatedAt: &updatedAt,
 		},
 	}
 
-	actual, _, err := client.ListHostnameTLSSettings(context.Background(), ZoneIdentifier(testZoneID), "min_tls_version", ListHostnameTLSSettingsParams{})
+	actual, _, err := client.ListHostnameTLSSettings(context.Background(), ZoneIdentifier(testZoneID), ListHostnameTLSSettingsParams{Setting: "min_tls_version"})
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestUpdateHostnameTLSSettingMinTLSVersion(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"hostname": "app.example.com",
+				"value": "1.2",
+				"status": "active",
+				"created_at": "2023-07-26T21:12:55.56942Z",
+				"updated_at": "2023-07-31T22:06:44.739794Z"
+			}
+		}`)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/hostnames/settings/min_tls_version/app.example.com", handler)
+	createdAt, _ := time.Parse(time.RFC3339, "2023-07-26T21:12:55.56942Z")
+	updatedAt, _ := time.Parse(time.RFC3339, "2023-07-31T22:06:44.739794Z")
+
+	want := HostnameTLSSetting{
+		Hostname:  "app.example.com",
+		Value:     "1.2",
+		Status:    "active",
+		CreatedAt: &createdAt,
+		UpdatedAt: &updatedAt,
+	}
+
+	params := UpdateHostnameTLSSettingParams{
+		Setting:  "min_tls_version",
+		Hostname: "app.example.com",
+		Value:    "1.2",
+	}
+	actual, err := client.UpdateHostnameTLSSetting(context.Background(), ZoneIdentifier(testZoneID), params)
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestDeleteHostnameTLSSettingMinTLSVersion(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"hostname": "app.example.com",
+				"value": "",
+				"status": "active",
+				"created_at": "2023-07-26T21:12:55.56942Z",
+				"updated_at": "2023-07-31T22:06:44.739794Z"
+			}
+		}`)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/hostnames/settings/min_tls_version/app.example.com", handler)
+	createdAt, _ := time.Parse(time.RFC3339, "2023-07-26T21:12:55.56942Z")
+	updatedAt, _ := time.Parse(time.RFC3339, "2023-07-31T22:06:44.739794Z")
+	want := HostnameTLSSetting{
+		Hostname:  "app.example.com",
+		Value:     "",
+		Status:    "active",
+		CreatedAt: &createdAt,
+		UpdatedAt: &updatedAt,
+	}
+
+	actual, err := client.DeleteHostnameTLSSetting(context.Background(), ZoneIdentifier(testZoneID), DeleteHostnameTLSSettingParams{Setting: "min_tls_version", Hostname: "app.example.com"})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -94,28 +174,23 @@ func TestListHostnameTLSSettingsCiphers(t *testing.T) {
 	createdAt, _ := time.Parse(time.RFC3339, "2023-07-26T21:12:55.56942Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2023-07-31T22:06:44.739794Z")
 
-	strs := []string{"AES128-GCM-SHA256", "ECDHE-RSA-AES128-GCM-SHA256"}
-	cipherssuites := make([]interface{}, len(strs))
-	for i, s := range strs {
-		cipherssuites[i] = s
-	}
-	want := []HostnameTLSSetting{
+	want := []HostnameTLSSettingCiphers{
 		{
 			Hostname:  "app.example.com",
-			Value:     cipherssuites,
+			Value:     []string{"AES128-GCM-SHA256", "ECDHE-RSA-AES128-GCM-SHA256"},
 			Status:    "active",
-			CreatedAt: createdAt,
-			UpdatedAt: updatedAt,
+			CreatedAt: &createdAt,
+			UpdatedAt: &updatedAt,
 		},
 	}
 
-	actual, _, err := client.ListHostnameTLSSettings(context.Background(), ZoneIdentifier(testZoneID), "ciphers", ListHostnameTLSSettingsParams{})
+	actual, _, err := client.ListHostnameTLSSettingsCiphers(context.Background(), ZoneIdentifier(testZoneID), ListHostnameTLSSettingsCiphersParams{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
-func TestEditHostnameTLSSetting(t *testing.T) {
+func TestUpdateHostnameTLSSettingCiphers(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -142,29 +217,25 @@ func TestEditHostnameTLSSetting(t *testing.T) {
 	createdAt, _ := time.Parse(time.RFC3339, "2023-07-26T21:12:55.56942Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2023-07-31T22:06:44.739794Z")
 
-	strs := []string{"AES128-GCM-SHA256", "ECDHE-RSA-AES128-GCM-SHA256"}
-	cipherssuites := make([]interface{}, len(strs))
-	for i, s := range strs {
-		cipherssuites[i] = s
-	}
-	want := HostnameTLSSetting{
+	want := HostnameTLSSettingCiphers{
 		Hostname:  "app.example.com",
-		Value:     cipherssuites,
+		Value:     []string{"AES128-GCM-SHA256", "ECDHE-RSA-AES128-GCM-SHA256"},
 		Status:    "active",
-		CreatedAt: createdAt,
-		UpdatedAt: updatedAt,
+		CreatedAt: &createdAt,
+		UpdatedAt: &updatedAt,
 	}
 
-	params := EditHostnameTLSSettingParams{
-		Value: []string{"AES128-GCM-SHA256", "ECDHE-RSA-AES128-GCM-SHA256"},
+	params := UpdateHostnameTLSSettingCiphersParams{
+		Hostname: "app.example.com",
+		Value:    []string{"AES128-GCM-SHA256", "ECDHE-RSA-AES128-GCM-SHA256"},
 	}
-	actual, err := client.EditHostnameTLSSetting(context.Background(), ZoneIdentifier(testZoneID), "ciphers", "app.example.com", params)
+	actual, err := client.UpdateHostnameTLSSettingCiphers(context.Background(), ZoneIdentifier(testZoneID), params)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
-func TestDeleteHostnameTLSSetting(t *testing.T) {
+func TestDeleteHostnameTLSSettingCiphers(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -187,15 +258,15 @@ func TestDeleteHostnameTLSSetting(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/hostnames/settings/ciphers/app.example.com", handler)
 	createdAt, _ := time.Parse(time.RFC3339, "2023-07-26T21:12:55.56942Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2023-07-31T22:06:44.739794Z")
-	want := HostnameTLSSetting{
+	want := HostnameTLSSettingCiphers{
 		Hostname:  "app.example.com",
-		Value:     "",
+		Value:     []string{},
 		Status:    "active",
-		CreatedAt: createdAt,
-		UpdatedAt: updatedAt,
+		CreatedAt: &createdAt,
+		UpdatedAt: &updatedAt,
 	}
 
-	actual, err := client.DeleteHostnameTLSSetting(context.Background(), ZoneIdentifier(testZoneID), "ciphers", "app.example.com")
+	actual, err := client.DeleteHostnameTLSSettingCiphers(context.Background(), ZoneIdentifier(testZoneID), DeleteHostnameTLSSettingCiphersParams{Hostname: "app.example.com"})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
