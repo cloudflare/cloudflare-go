@@ -21,35 +21,32 @@ const (
 	RulesetKindRoot    RulesetKind = "root"
 	RulesetKindZone    RulesetKind = "zone"
 
-	RulesetPhaseDDoSL4                              RulesetPhase = "ddos_l4"
-	RulesetPhaseDDoSL7                              RulesetPhase = "ddos_l7"
-	RulesetPhaseHTTPConfigSettings                  RulesetPhase = "http_config_settings"
-	RulesetPhaseHTTPCustomErrors                    RulesetPhase = "http_custom_errors"
-	RulesetPhaseHTTPLogCustomFields                 RulesetPhase = "http_log_custom_fields"
-	RulesetPhaseHTTPRequestCacheSettings            RulesetPhase = "http_request_cache_settings"
-	RulesetPhaseHTTPRequestDynamicRedirect          RulesetPhase = "http_request_dynamic_redirect" //nolint:gosec
-	RulesetPhaseHTTPRequestFirewallCustom           RulesetPhase = "http_request_firewall_custom"
-	RulesetPhaseHTTPRequestFirewallManaged          RulesetPhase = "http_request_firewall_managed"
-	RulesetPhaseHTTPRequestLateTransform            RulesetPhase = "http_request_late_transform"
-	RulesetPhaseHTTPRequestLateTransformManaged     RulesetPhase = "http_request_late_transform_managed"
-	RulesetPhaseHTTPRequestMain                     RulesetPhase = "http_request_main"
-	RulesetPhaseHTTPRequestOrigin                   RulesetPhase = "http_request_origin"
-	RulesetPhaseHTTPRequestRedirect                 RulesetPhase = "http_request_redirect"
-	RulesetPhaseHTTPRequestSanitize                 RulesetPhase = "http_request_sanitize"
-	RulesetPhaseHTTPRequestTransform                RulesetPhase = "http_request_transform"
-	RulesetPhaseHTTPResponseCompression             RulesetPhase = "http_response_compression"
-	RulesetPhaseHTTPResponseFirewallManaged         RulesetPhase = "http_response_firewall_managed"
-	RulesetPhaseHTTPResponseHeadersTransform        RulesetPhase = "http_response_headers_transform"
-	RulesetPhaseHTTPResponseHeadersTransformManaged RulesetPhase = "http_response_headers_transform_managed"
-	RulesetPhaseMagicTransit                        RulesetPhase = "magic_transit"
-	RulesetPhaseRateLimit                           RulesetPhase = "http_ratelimit"
-	RulesetPhaseSuperBotFightMode                   RulesetPhase = "http_request_sbfm"
+	RulesetPhaseDDoSL4                       RulesetPhase = "ddos_l4"
+	RulesetPhaseDDoSL7                       RulesetPhase = "ddos_l7"
+	RulesetPhaseHTTPConfigSettings           RulesetPhase = "http_config_settings"
+	RulesetPhaseHTTPCustomErrors             RulesetPhase = "http_custom_errors"
+	RulesetPhaseHTTPLogCustomFields          RulesetPhase = "http_log_custom_fields"
+	RulesetPhaseHTTPRatelimit                RulesetPhase = "http_ratelimit"
+	RulesetPhaseHTTPRequestCacheSettings     RulesetPhase = "http_request_cache_settings"
+	RulesetPhaseHTTPRequestDynamicRedirect   RulesetPhase = "http_request_dynamic_redirect" //nolint:gosec
+	RulesetPhaseHTTPRequestFirewallCustom    RulesetPhase = "http_request_firewall_custom"
+	RulesetPhaseHTTPRequestFirewallManaged   RulesetPhase = "http_request_firewall_managed"
+	RulesetPhaseHTTPRequestLateTransform     RulesetPhase = "http_request_late_transform"
+	RulesetPhaseHTTPRequestOrigin            RulesetPhase = "http_request_origin"
+	RulesetPhaseHTTPRequestRedirect          RulesetPhase = "http_request_redirect"
+	RulesetPhaseHTTPRequestSanitize          RulesetPhase = "http_request_sanitize"
+	RulesetPhaseHTTPRequestSBFM              RulesetPhase = "http_request_sbfm"
+	RulesetPhaseHTTPRequestTransform         RulesetPhase = "http_request_transform"
+	RulesetPhaseHTTPResponseCompression      RulesetPhase = "http_response_compression"
+	RulesetPhaseHTTPResponseFirewallManaged  RulesetPhase = "http_response_firewall_managed"
+	RulesetPhaseHTTPResponseHeadersTransform RulesetPhase = "http_response_headers_transform"
+	RulesetPhaseMagicTransit                 RulesetPhase = "magic_transit"
 
-	RulesetRuleActionAllow                RulesetRuleAction = "allow"
 	RulesetRuleActionBlock                RulesetRuleAction = "block"
 	RulesetRuleActionChallenge            RulesetRuleAction = "challenge"
 	RulesetRuleActionCompressResponse     RulesetRuleAction = "compress_response"
 	RulesetRuleActionDDoSDynamic          RulesetRuleAction = "ddos_dynamic"
+	RulesetRuleActionDDoSMitigation       RulesetRuleAction = "ddos_mitigation"
 	RulesetRuleActionExecute              RulesetRuleAction = "execute"
 	RulesetRuleActionForceConnectionClose RulesetRuleAction = "force_connection_close"
 	RulesetRuleActionJSChallenge          RulesetRuleAction = "js_challenge"
@@ -98,24 +95,21 @@ func RulesetPhaseValues() []string {
 		string(RulesetPhaseHTTPConfigSettings),
 		string(RulesetPhaseHTTPCustomErrors),
 		string(RulesetPhaseHTTPLogCustomFields),
+		string(RulesetPhaseHTTPRatelimit),
 		string(RulesetPhaseHTTPRequestCacheSettings),
 		string(RulesetPhaseHTTPRequestDynamicRedirect),
 		string(RulesetPhaseHTTPRequestFirewallCustom),
 		string(RulesetPhaseHTTPRequestFirewallManaged),
 		string(RulesetPhaseHTTPRequestLateTransform),
-		string(RulesetPhaseHTTPRequestLateTransformManaged),
-		string(RulesetPhaseHTTPRequestMain),
 		string(RulesetPhaseHTTPRequestOrigin),
 		string(RulesetPhaseHTTPRequestRedirect),
 		string(RulesetPhaseHTTPRequestSanitize),
+		string(RulesetPhaseHTTPRequestSBFM),
 		string(RulesetPhaseHTTPRequestTransform),
 		string(RulesetPhaseHTTPResponseCompression),
 		string(RulesetPhaseHTTPResponseFirewallManaged),
 		string(RulesetPhaseHTTPResponseHeadersTransform),
-		string(RulesetPhaseHTTPResponseHeadersTransformManaged),
 		string(RulesetPhaseMagicTransit),
-		string(RulesetPhaseRateLimit),
-		string(RulesetPhaseSuperBotFightMode),
 	}
 }
 
@@ -123,11 +117,11 @@ func RulesetPhaseValues() []string {
 // as a slice of strings.
 func RulesetRuleActionValues() []string {
 	return []string{
-		string(RulesetRuleActionAllow),
 		string(RulesetRuleActionBlock),
 		string(RulesetRuleActionChallenge),
 		string(RulesetRuleActionCompressResponse),
 		string(RulesetRuleActionDDoSDynamic),
+		string(RulesetRuleActionDDoSMitigation),
 		string(RulesetRuleActionExecute),
 		string(RulesetRuleActionForceConnectionClose),
 		string(RulesetRuleActionJSChallenge),
