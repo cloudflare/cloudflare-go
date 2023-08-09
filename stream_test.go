@@ -577,7 +577,13 @@ func TestStream_StreamInitiateTUSVideoUpload(t *testing.T) {
 		// Make sure Upload-Length header is set
 		assert.Equal(t, "123", r.Header.Get("Upload-Length"))
 		// set the response headers
-		w.Header().Set("Location", "https://production.gateway.api.cloudflare.com/client/v4/accounts/test-account-id/media/278f2a7e763c73dedc064b965d2cfbed?tusv2=true")
+		// if query param direct_user=true, then return the direct url in the header
+		if r.URL.Query().Get("direct_user") == "true" {
+			w.Header().Set("Location", "https://upload.videodelivery.net/tus/90c68cb5cd4fd5350b1962279c90bec0?tusv2=true")
+		} else {
+			w.Header().Set("Location", "https://production.gateway.api.cloudflare.com/client/v4/accounts/test-account-id/media/278f2a7e763c73dedc064b965d2cfbed?tusv2=true")
+		}
+
 		w.Header().Set("stream-media-id", "278f2a7e763c73dedc064b965d2cfbed")
 		w.Header().Set("Tus-Resumable", "1.0.0")
 		w.WriteHeader(http.StatusCreated)
@@ -601,6 +607,14 @@ func TestStream_StreamInitiateTUSVideoUpload(t *testing.T) {
 	out, err := client.StreamInitiateTUSVideoUpload(context.Background(), AccountIdentifier(testAccountID), params)
 	if assert.NoError(t, err) {
 		assert.Equal(t, "https://production.gateway.api.cloudflare.com/client/v4/accounts/test-account-id/media/278f2a7e763c73dedc064b965d2cfbed?tusv2=true", out.ResponseHeaders.Get("Location"))
+		assert.Equal(t, "278f2a7e763c73dedc064b965d2cfbed", out.ResponseHeaders.Get("stream-media-id"))
+		assert.Equal(t, "1.0.0", out.ResponseHeaders.Get("Tus-Resumable"))
+	}
+
+	params.DirectUserUpload = true
+	out, err = client.StreamInitiateTUSVideoUpload(context.Background(), AccountIdentifier(testAccountID), params)
+	if assert.NoError(t, err) {
+		assert.Equal(t, "https://upload.videodelivery.net/tus/90c68cb5cd4fd5350b1962279c90bec0?tusv2=true", out.ResponseHeaders.Get("Location"))
 		assert.Equal(t, "278f2a7e763c73dedc064b965d2cfbed", out.ResponseHeaders.Get("stream-media-id"))
 		assert.Equal(t, "1.0.0", out.ResponseHeaders.Get("Tus-Resumable"))
 	}

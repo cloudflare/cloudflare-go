@@ -190,10 +190,11 @@ type StreamSignedURLParameters struct {
 }
 
 type StreamInitiateTUSUploadParameters struct {
-	TusResumable  TusProtocolVersion
-	UploadLength  int64
-	UploadCreator string
-	Metadata      TUSUploadMetadata
+	DirectUserUpload bool
+	TusResumable     TusProtocolVersion
+	UploadLength     int64
+	UploadCreator    string
+	Metadata         TUSUploadMetadata
 }
 
 type StreamInitiateTUSUploadResponse struct {
@@ -394,7 +395,7 @@ func (api *API) StreamListVideos(ctx context.Context, params StreamListParameter
 	return streamListResponse.Result, nil
 }
 
-// StreamInitiateTUSVideoUpload initiates a TUS upload for a video.
+// StreamInitiateTUSVideoUpload generates a direct upload TUS url for a video.
 //
 // API Reference: https://developers.cloudflare.com/api/operations/stream-videos-initiate-video-uploads-using-tus
 func (api *API) StreamInitiateTUSVideoUpload(ctx context.Context, rc *ResourceContainer, params StreamInitiateTUSUploadParameters) (StreamInitiateTUSUploadResponse, error) {
@@ -430,6 +431,9 @@ func (api *API) StreamInitiateTUSVideoUpload(ctx context.Context, rc *ResourceCo
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/stream", rc.Identifier)
+	if params.DirectUserUpload {
+		uri += "?direct_user=true"
+	}
 	res, err := api.makeRequestWithAuthTypeAndHeadersComplete(ctx, http.MethodPost, uri, nil, api.authType, headers)
 	if err != nil {
 		return StreamInitiateTUSUploadResponse{}, err
