@@ -31,16 +31,12 @@ type ZoneHoldDeleteResponse struct {
 // ZoneHoldCreateParams represents params for the Create Zone Hold
 // endpoint.
 type ZoneHoldCreateParams struct {
-	ID                string `json:"id"`
-	Hold              bool   `json:"hold"`
-	IncludeSubdomains *bool  `json:"include_subdomains,omitempty"`
+	IncludeSubdomains *bool `json:"include_subdomains,omitempty"`
 }
 
 // ZoneHoldDeleteParams represents params for the Delete Zone Hold
 // endpoint.
 type ZoneHoldDeleteParams struct {
-	ID        string  `json:"id"`
-	Hold      bool    `json:"hold"`
 	HoldAfter *string `json:"hold_after,omitempty"`
 }
 
@@ -52,7 +48,7 @@ func (api *API) CreateZoneHold(ctx context.Context, zoneID string, params ZoneHo
 	if params.IncludeSubdomains != nil {
 		uri = fmt.Sprintf("%s?include_subdomains=%t", uri, *params.IncludeSubdomains)
 	}
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
 	if err != nil {
 		return ZoneHold{}, err
 	}
