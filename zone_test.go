@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/md5"   //nolint:gosec
 	"encoding/hex" // for generating IDs
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -12,6 +11,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/goccy/go-json"
 	"github.com/stretchr/testify/assert"
 )
 

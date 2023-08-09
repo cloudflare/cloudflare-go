@@ -2,8 +2,9 @@ package cloudflare
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
+
+	"github.com/goccy/go-json"
 )
 
 const defaultZonesPerPage = 100

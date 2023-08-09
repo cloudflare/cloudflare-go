@@ -3,7 +3,6 @@ package cloudflare
 import (
 	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 	"mime"
@@ -12,6 +11,8 @@ import (
 	"net/textproto"
 	"strings"
 	"time"
+
+	"github.com/goccy/go-json"
 )
 
 // WorkerRequestParams provides parameters for worker requests for both enterprise and standard requests.

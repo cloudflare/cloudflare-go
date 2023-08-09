@@ -1,11 +1,12 @@
 package cloudflare
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"strings"
+
+	"github.com/goccy/go-json"
 )
 
 // IPRangesResponse contains the structure for the API response, not modified.

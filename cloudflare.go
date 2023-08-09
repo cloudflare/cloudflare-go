@@ -4,7 +4,6 @@ package cloudflare
 import (
 	"bytes"
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -17,6 +16,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/goccy/go-json"
 
 	"golang.org/x/time/rate"
 )
@@ -462,18 +463,18 @@ type RawResponse struct {
 }
 
 // Raw makes a HTTP request with user provided params and returns the
-// result as untouched JSON.
-func (api *API) Raw(ctx context.Context, method, endpoint string, data interface{}, headers http.Header) (json.RawMessage, error) {
+// result as a RawResponse, which contains the untouched JSON result.
+func (api *API) Raw(ctx context.Context, method, endpoint string, data interface{}, headers http.Header) (RawResponse, error) {
+	var r RawResponse
 	res, err := api.makeRequestContextWithHeaders(ctx, method, endpoint, data, headers)
 	if err != nil {
-		return nil, err
+		return r, err
 	}
 
-	var r RawResponse
 	if err := json.Unmarshal(res, &r); err != nil {
-		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return r, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
-	return r.Result, nil
+	return r, nil
 }
 
 // PaginationOptions can be passed to a list request to configure paging

@@ -1,8 +1,23 @@
 ## 0.75.0 (Unreleased)
 
+BREAKING CHANGES:
+
+* cloudflare: `Raw` method now returns a RawResponse rather than the raw JSON `Result` message ([#1355](https://github.com/cloudflare/cloudflare-go/issues/1355))
+
+ENHANCEMENTS:
+
+* bot_management: add support for bot_management API ([#1363](https://github.com/cloudflare/cloudflare-go/issues/1363))
+* cloudflare: swap `encoding/json` for `github.com/goccy/go-json` ([#1360](https://github.com/cloudflare/cloudflare-go/issues/1360))
+* waiting_room: add support for `queueing_status_code` ([#1357](https://github.com/cloudflare/cloudflare-go/issues/1357))
+
+BUG FIXES:
+
+* cache_purge: don't escape HTML entity values in URLs for cache keys ([#1360](https://github.com/cloudflare/cloudflare-go/issues/1360))
+
 DEPENDENCIES:
 
 * deps: bumps golang.org/x/net from 0.12.0 to 0.13.0 ([#1353](https://github.com/cloudflare/cloudflare-go/issues/1353))
+* deps: bumps golang.org/x/net from 0.13.0 to 0.14.0 ([#1362](https://github.com/cloudflare/cloudflare-go/issues/1362))
 
 ## 0.74.0 (August 2nd, 2023)
 

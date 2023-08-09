@@ -2,10 +2,11 @@ package cloudflare
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
+
+	"github.com/goccy/go-json"
 )
 
 // PerHostnameAuthenticatedOriginPullsCertificateDetails represents the metadata for a Per Hostname AuthenticatedOriginPulls certificate.
