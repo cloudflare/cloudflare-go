@@ -4,15 +4,16 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/goccy/go-json"
 )
 
 // Retrieve whether the zone is subject to a zone hold, and metadata about the hold.
 type ZoneHold struct {
-	Hold              bool    `json:"hold"`
-	IncludeSubdomains *bool   `json:"include_subdomains,omitempty"`
-	HoldAfter         *string `json:"hold_after,omitempty"`
+	Hold              bool       `json:"hold"`
+	IncludeSubdomains *bool      `json:"include_subdomains,omitempty"`
+	HoldAfter         *time.Time `json:"hold_after,omitempty"`
 }
 
 // ZoneHoldResponse represents a response from the Zone Hold endpoint.
@@ -37,7 +38,7 @@ type ZoneHoldCreateParams struct {
 // ZoneHoldDeleteParams represents params for the Delete Zone Hold
 // endpoint.
 type ZoneHoldDeleteParams struct {
-	HoldAfter *string `json:"hold_after,omitempty"`
+	HoldAfter *time.Time `json:"hold_after,omitempty"`
 }
 
 // Enforce a zone hold on the zone, blocking the creation and activation of zones with this zone's hostname.
@@ -71,7 +72,8 @@ func (api *API) CreateZoneHold(ctx context.Context, zoneID string, params ZoneHo
 func (api *API) DeleteZoneHold(ctx context.Context, zoneID string, params ZoneHoldDeleteParams) (ZoneHold, error) {
 	uri := fmt.Sprintf("/zones/%s/hold", zoneID)
 	if params.HoldAfter != nil {
-		uri = fmt.Sprintf("%s?hold_after=%s", uri, *params.HoldAfter)
+		t := *params.HoldAfter
+		uri = fmt.Sprintf("%s?hold_after=%s", uri, t.Format(time.RFC3339))
 	}
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
