@@ -58,6 +58,33 @@ type CreateWorkerParams struct {
 	CompatibilityFlags []string
 
 	Placement *Placement
+
+	// Tags are used to better manage CRUD operations at scale.
+	//  https://developers.cloudflare.com/cloudflare-for-platforms/workers-for-platforms/platform/tags/
+	Tags []string
+}
+
+func (p CreateWorkerParams) RequiresMultipart() bool {
+	switch {
+	case p.Module:
+		return true
+	case p.Logpush != nil:
+		return true
+	case p.Placement != nil:
+		return true
+	case len(p.Bindings) > 0:
+		return true
+	case p.CompatibilityDate != "":
+		return true
+	case len(p.CompatibilityFlags) > 0:
+		return true
+	case p.TailConsumers != nil:
+		return true
+	case len(p.Tags) > 0:
+		return true
+	}
+
+	return false
 }
 
 // WorkerScriptParams provides a worker script and the associated bindings.
@@ -269,7 +296,7 @@ func (api *API) UploadWorker(ctx context.Context, rc *ResourceContainer, params 
 		err         error
 	)
 
-	if params.Module || params.Logpush != nil || params.Placement != nil || len(params.Bindings) > 0 || params.CompatibilityDate != "" || len(params.CompatibilityFlags) > 0 || params.TailConsumers != nil {
+	if params.RequiresMultipart() {
 		contentType, body, err = formatMultipartBody(params)
 		if err != nil {
 			return WorkerScriptResponse{}, err
@@ -315,6 +342,7 @@ func formatMultipartBody(params CreateWorkerParams) (string, []byte, error) {
 		CompatibilityDate  string                 `json:"compatibility_date,omitempty"`
 		CompatibilityFlags []string               `json:"compatibility_flags,omitempty"`
 		Placement          *Placement             `json:"placement,omitempty"`
+		Tags               []string               `json:"tags"`
 	}{
 		Bindings:           make([]workerBindingMeta, 0, len(params.Bindings)),
 		Logpush:            params.Logpush,
@@ -322,6 +350,7 @@ func formatMultipartBody(params CreateWorkerParams) (string, []byte, error) {
 		CompatibilityDate:  params.CompatibilityDate,
 		CompatibilityFlags: params.CompatibilityFlags,
 		Placement:          params.Placement,
+		Tags:               params.Tags,
 	}
 
 	if params.Module {
