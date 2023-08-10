@@ -16,6 +16,7 @@ ENHANCEMENTS:
 
 * bot_management: add support for bot_management API ([#1363](https://github.com/cloudflare/cloudflare-go/issues/1363))
 * cloudflare: swap `encoding/json` for `github.com/goccy/go-json` ([#1360](https://github.com/cloudflare/cloudflare-go/issues/1360))
+* device_posture_rule: support eid_last_seen and risk_level and correct total_score for Tanium posture rule ([#1366](https://github.com/cloudflare/cloudflare-go/issues/1366))
 * rulesets: Add the `ddos_mitigation` action ([#1367](https://github.com/cloudflare/cloudflare-go/issues/1367))
 * waiting_room: add support for `queueing_status_code` ([#1357](https://github.com/cloudflare/cloudflare-go/issues/1357))
 
