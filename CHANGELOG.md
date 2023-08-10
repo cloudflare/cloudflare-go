@@ -19,6 +19,7 @@ ENHANCEMENTS:
 * device_posture_rule: support eid_last_seen and risk_level and correct total_score for Tanium posture rule ([#1366](https://github.com/cloudflare/cloudflare-go/issues/1366))
 * rulesets: Add the `ddos_mitigation` action ([#1367](https://github.com/cloudflare/cloudflare-go/issues/1367))
 * waiting_room: add support for `queueing_status_code` ([#1357](https://github.com/cloudflare/cloudflare-go/issues/1357))
+* workers: add support for tagging Worker scripts ([#1368](https://github.com/cloudflare/cloudflare-go/issues/1368))
 
 BUG FIXES:
 
