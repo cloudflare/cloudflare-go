@@ -24,12 +24,6 @@ type ZoneHoldResponse struct {
 	ResultInfo `json:"result_info"`
 }
 
-// ZoneHoldDeleteResponse represents a response from the Delete Zone Hold
-// endpoint.
-type ZoneHoldDeleteResponse struct {
-	Result ZoneHold `json:"result"`
-}
-
 // CreateZoneHoldParams represents params for the Create Zone Hold
 // endpoint.
 type CreateZoneHoldParams struct {
@@ -83,7 +77,7 @@ func (api *API) DeleteZoneHold(ctx context.Context, rc *ResourceContainer, param
 		return ZoneHold{}, err
 	}
 
-	response := &ZoneHoldDeleteResponse{}
+	response := &ZoneHoldResponse{}
 	err = json.Unmarshal(res, &response)
 	if err != nil {
 		return ZoneHold{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
