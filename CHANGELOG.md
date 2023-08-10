@@ -31,6 +31,7 @@ DEPENDENCIES:
 
 * deps: bumps golang.org/x/net from 0.12.0 to 0.13.0 ([#1353](https://github.com/cloudflare/cloudflare-go/issues/1353))
 * deps: bumps golang.org/x/net from 0.13.0 to 0.14.0 ([#1362](https://github.com/cloudflare/cloudflare-go/issues/1362))
+* deps: bumps goreleaser/goreleaser-action from 4.3.0 to 4.4.0 ([#1369](https://github.com/cloudflare/cloudflare-go/issues/1369))
 
 ## 0.74.0 (August 2nd, 2023)
 
