@@ -155,7 +155,7 @@ type ListWebAnalyticsSitesParams struct {
 	OrderBy string `url:"order_by,omitempty"`
 }
 
-// ListWebAnalyticsSites returns all Web Analytics Sites for an Account.
+// ListWebAnalyticsSites returns all Web Analytics Sites of an Account.
 //
 // API reference: https://api.cloudflare.com/#web-analytics-list-sites
 func (api *API) ListWebAnalyticsSites(ctx context.Context, rc *ResourceContainer, params ListWebAnalyticsSitesParams) ([]WebAnalyticsSite, *ResultInfo, error) {
@@ -237,7 +237,7 @@ type UpdateWebAnalyticsSiteParams struct {
 	AutoInstall *bool `json:"auto_install"`
 }
 
-// UpdateWebAnalyticsSite lets you replace a Web Analytics Site for an Account.
+// UpdateWebAnalyticsSite updates an existing Web Analytics Site for an Account.
 //
 // API reference: https://api.cloudflare.com/#web-analytics-update-site
 func (api *API) UpdateWebAnalyticsSite(ctx context.Context, rc *ResourceContainer, params UpdateWebAnalyticsSiteParams) (*WebAnalyticsSite, error) {
@@ -268,7 +268,7 @@ type DeleteWebAnalyticsSiteParams struct {
 	SiteTag string
 }
 
-// DeleteWebAnalyticsSite deletes a Web Analytics Site for an Account.
+// DeleteWebAnalyticsSite deletes an existing Web Analytics Site for an Account.
 //
 // API reference: https://api.cloudflare.com/#web-analytics-delete-site
 func (api *API) DeleteWebAnalyticsSite(ctx context.Context, rc *ResourceContainer, params DeleteWebAnalyticsSiteParams) (*string, error) {
@@ -296,7 +296,7 @@ type CreateWebAnalyticsRuleParams struct {
 	Rule      CreateWebAnalyticsRule
 }
 
-// CreateWebAnalyticsRule creates a new Web Analytics Rule for a WebAnalyticsRuleset.
+// CreateWebAnalyticsRule creates a new Web Analytics Rule in a Web Analytics ruleset.
 //
 // API reference: https://api.cloudflare.com/#web-analytics-create-rule
 func (api *API) CreateWebAnalyticsRule(ctx context.Context, rc *ResourceContainer, params CreateWebAnalyticsRuleParams) (*WebAnalyticsRule, error) {
@@ -323,7 +323,7 @@ type ListWebAnalyticsRulesParams struct {
 	RulesetID string
 }
 
-// ListWebAnalyticsRules fetches all Web Analytics Rules for a WebAnalyticsRuleset.
+// ListWebAnalyticsRules fetches all Web Analytics Rules in a Web Analytics ruleset.
 //
 // API reference: https://api.cloudflare.com/#web-analytics-list-rules
 func (api *API) ListWebAnalyticsRules(ctx context.Context, rc *ResourceContainer, params ListWebAnalyticsRulesParams) (*WebAnalyticsRulesetRules, error) {
@@ -351,7 +351,7 @@ type DeleteWebAnalyticsRuleParams struct {
 	RuleID    string
 }
 
-// DeleteWebAnalyticsRule deletes a Web Analytics Rule for a WebAnalyticsRuleset.
+// DeleteWebAnalyticsRule deletes an existing Web Analytics Rule from a Web Analytics ruleset.
 //
 // API reference: https://api.cloudflare.com/#web-analytics-delete-rule
 func (api *API) DeleteWebAnalyticsRule(ctx context.Context, rc *ResourceContainer, params DeleteWebAnalyticsRuleParams) (*string, error) {
@@ -383,7 +383,7 @@ type UpdateWebAnalyticsRuleParams struct {
 	Rule      CreateWebAnalyticsRule
 }
 
-// UpdateWebAnalyticsRule lets you replace a Web Analytics Rule for a WebAnalyticsRuleset.
+// UpdateWebAnalyticsRule updates a Web Analytics Rule in a Web Analytics ruleset.
 //
 // API reference: https://api.cloudflare.com/#web-analytics-update-rule
 func (api *API) UpdateWebAnalyticsRule(ctx context.Context, rc *ResourceContainer, params UpdateWebAnalyticsRuleParams) (*WebAnalyticsRule, error) {

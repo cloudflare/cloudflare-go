@@ -198,7 +198,7 @@ func TestCreateWebAnalyticsSite(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/rum/site_info", handler)
 	want := site
 	actual, err := client.CreateWebAnalyticsSite(context.Background(), AccountIdentifier(testAccountID), CreateWebAnalyticsSiteParams{
-		ZoneTag: StringPtr(testZoneID),
+		ZoneTag: testZoneID,
 		//AutoInstall: BoolPtr(true),  // should default to true
 	})
 	if assert.NoError(t, err) {
