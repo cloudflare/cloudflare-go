@@ -17,7 +17,7 @@ var siteToken = "75300e6c2c5648d983fcef2a6c03d14e"
 var rulesetID = "2e8804e9-674f-4652-94a4-1c664d0d6764"
 var ruleID = "3caf59c9-eda3-4f99-a4a3-ee5fc2358a78"
 
-// var snippetFormat = `\u003c!-- Cloudflare Web Analytics --\u003e\u003cscript defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{\"token\": \"%s\"}'\u003e\u003c/script\u003e\u003c!-- End Cloudflare Web Analytics --\u003e`
+// var snippetFormat = `\u003c!-- Cloudflare Web Analytics --\u003e\u003cscript defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{\"token\": \"%s\"}'\u003e\u003c/script\u003e\u003c!-- End Cloudflare Web Analytics --\u003e`.
 var snippetFormat = `%s`
 var createdTimestamp = time.Now().UTC()
 var siteJSON = fmt.Sprintf(`
