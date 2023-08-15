@@ -20,6 +20,7 @@ ENHANCEMENTS:
 * per_hostname_tls_settings: add support for managing hostname level TLS settings ([#1356](https://github.com/cloudflare/cloudflare-go/issues/1356))
 * rulesets: Add the `ddos_mitigation` action ([#1367](https://github.com/cloudflare/cloudflare-go/issues/1367))
 * waiting_room: add support for `queueing_status_code` ([#1357](https://github.com/cloudflare/cloudflare-go/issues/1357))
+* web_analytics: add support for web_analytics API ([#1348](https://github.com/cloudflare/cloudflare-go/issues/1348))
 * workers: add support for tagging Worker scripts ([#1368](https://github.com/cloudflare/cloudflare-go/issues/1368))
 * zone_hold: add support for zone hold API ([#1365](https://github.com/cloudflare/cloudflare-go/issues/1365))
 
