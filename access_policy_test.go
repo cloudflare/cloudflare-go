@@ -325,6 +325,141 @@ func TestCreateAccessPolicy(t *testing.T) {
 	}
 }
 
+func TestCreateAccessPolicyAuthContextRule(t *testing.T) {
+	setup()
+	defer teardown()
+	expectedAccessPolicyAuthContext := AccessPolicy{
+		ID:         "699d98642c564d2e855e9661899b7252",
+		Precedence: 1,
+		Decision:   "allow",
+		CreatedAt:  &createdAt,
+		UpdatedAt:  &updatedAt,
+		Name:       "Allow devs",
+		Include: []interface{}{
+			map[string]interface{}{"email": map[string]interface{}{"email": "test@example.com"}},
+		},
+		Exclude: []interface{}{},
+		Require: []interface{}{
+			map[string]interface{}{"auth_context": map[string]interface{}{"id": "authContextID123", "identity_provider_id": "IDPIDtest123", "ac_id": "c1"}},
+		},
+		IsolationRequired:            &isolationRequired,
+		PurposeJustificationRequired: &purposeJustificationRequired,
+		ApprovalRequired:             &approvalRequired,
+		PurposeJustificationPrompt:   &purposeJustificationPrompt,
+		ApprovalGroups: []AccessApprovalGroup{
+			{
+				EmailListUuid:   "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
+				ApprovalsNeeded: 3,
+			},
+			{
+				EmailAddresses:  []string{"email1@example.com", "email2@example.com"},
+				ApprovalsNeeded: 1,
+			},
+		},
+	}
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "699d98642c564d2e855e9661899b7252",
+				"precedence": 1,
+				"decision": "allow",
+				"created_at": "2014-01-01T05:20:00.12345Z",
+				"updated_at": "2014-01-01T05:20:00.12345Z",
+				"name": "Allow devs",
+				"include": [
+					{
+						"email": {
+							"email": "test@example.com"
+						}
+					}
+				],
+				"exclude": [],
+				"require": [
+					{
+						"auth_context": {
+							"id": "authContextID123",
+							"identity_provider_id": "IDPIDtest123",
+							"ac_id": "c1"
+						}
+					}
+				],
+				"isolation_required": true,
+				"purpose_justification_required": true,
+				"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing.",
+				"approval_required": true,
+				"approval_groups": [
+					{
+						"email_list_uuid": "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
+						"approvals_needed": 3
+					},
+					{
+						"email_addresses": ["email1@example.com", "email2@example.com"],
+						"approvals_needed": 1
+					}
+				]
+			}
+		}
+		`)
+	}
+
+	accessPolicy := CreateAccessPolicyParams{
+		ApplicationID: accessApplicationID,
+		Name:          "Allow devs",
+		Include: []interface{}{
+			AccessGroupEmail{struct {
+				Email string `json:"email"`
+			}{Email: "test@example.com"}},
+		},
+		Exclude: []interface{}{},
+		Require: []interface{}{
+			AccessGroupAzureAuthContext{struct {
+				ID                 string `json:"id"`
+				IdentityProviderID string `json:"identity_provider_id"`
+				ACID               string `json:"ac_id"`
+			}{
+				ID:                 "authContextID123",
+				IdentityProviderID: "IDPIDtest123",
+				ACID:               "c1",
+			}},
+		},
+		Decision:                     "allow",
+		PurposeJustificationRequired: &purposeJustificationRequired,
+		PurposeJustificationPrompt:   &purposeJustificationPrompt,
+		ApprovalGroups: []AccessApprovalGroup{
+			{
+				EmailListUuid:   "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
+				ApprovalsNeeded: 3,
+			},
+			{
+				EmailAddresses:  []string{"email1@example.com", "email2@example.com"},
+				ApprovalsNeeded: 1,
+			},
+		},
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/"+accessApplicationID+"/policies", handler)
+
+	actual, err := client.CreateAccessPolicy(context.Background(), testAccountRC, accessPolicy)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expectedAccessPolicyAuthContext, actual)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/access/apps/"+accessApplicationID+"/policies", handler)
+
+	actual, err = client.CreateAccessPolicy(context.Background(), testZoneRC, accessPolicy)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expectedAccessPolicyAuthContext, actual)
+	}
+}
+
 func TestUpdateAccessPolicy(t *testing.T) {
 	setup()
 	defer teardown()
