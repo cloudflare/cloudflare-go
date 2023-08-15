@@ -22,6 +22,7 @@ type AccessServiceToken struct {
 	ID        string     `json:"id"`
 	Name      string     `json:"name"`
 	UpdatedAt *time.Time `json:"updated_at"`
+	Duration  string     `json:"duration,omitempty"`
 }
 
 // AccessServiceTokenUpdateResponse represents the response from the API
@@ -34,6 +35,7 @@ type AccessServiceTokenUpdateResponse struct {
 	ID        string     `json:"id"`
 	Name      string     `json:"name"`
 	ClientID  string     `json:"client_id"`
+	Duration  string     `json:"duration,omitempty"`
 }
 
 // AccessServiceTokenRefreshResponse represents the response from the API
@@ -45,6 +47,7 @@ type AccessServiceTokenRefreshResponse struct {
 	ID        string     `json:"id"`
 	Name      string     `json:"name"`
 	ClientID  string     `json:"client_id"`
+	Duration  string     `json:"duration,omitempty"`
 }
 
 // AccessServiceTokenCreateResponse is the same API response as the Update
@@ -58,6 +61,7 @@ type AccessServiceTokenCreateResponse struct {
 	Name         string     `json:"name"`
 	ClientID     string     `json:"client_id"`
 	ClientSecret string     `json:"client_secret"`
+	Duration     string     `json:"duration,omitempty"`
 }
 
 // AccessServiceTokenRotateResponse is the same API response as the Create
@@ -70,6 +74,7 @@ type AccessServiceTokenRotateResponse struct {
 	Name         string     `json:"name"`
 	ClientID     string     `json:"client_id"`
 	ClientSecret string     `json:"client_secret"`
+	Duration     string     `json:"duration,omitempty"`
 }
 
 // AccessServiceTokensListResponse represents the response from the list
@@ -128,12 +133,14 @@ type AccessServiceTokensRotateSecretDetailResponse struct {
 type ListAccessServiceTokensParams struct{}
 
 type CreateAccessServiceTokenParams struct {
-	Name string `json:"name"`
+	Name     string `json:"name"`
+	Duration string `json:"duration,omitempty"`
 }
 
 type UpdateAccessServiceTokenParams struct {
-	Name string `json:"name"`
-	UUID string `json:"-"`
+	Name     string `json:"name"`
+	UUID     string `json:"-"`
+	Duration string `json:"duration,omitempty"`
 }
 
 func (api *API) ListAccessServiceTokens(ctx context.Context, rc *ResourceContainer, params ListAccessServiceTokensParams) ([]AccessServiceToken, ResultInfo, error) {
