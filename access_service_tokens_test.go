@@ -28,7 +28,8 @@ func TestAccessServiceTokens(t *testing.T) {
 					"expires_at": "2015-01-01T05:20:00.12345Z",
 					"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 					"name": "CI/CD token",
-					"client_id": "88bf3b6d86161464f6509f7219099e57.access.example.com"
+					"client_id": "88bf3b6d86161464f6509f7219099e57.access.example.com",
+					"duration": "8760h"
 				}
 			]
 		}
@@ -47,6 +48,7 @@ func TestAccessServiceTokens(t *testing.T) {
 			ID:        "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 			Name:      "CI/CD token",
 			ClientID:  "88bf3b6d86161464f6509f7219099e57.access.example.com",
+			Duration:  "8760h",
 		},
 	}
 
@@ -85,7 +87,8 @@ func TestCreateAccessServiceToken(t *testing.T) {
 				"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 				"name": "CI/CD token",
 				"client_id": "88bf3b6d86161464f6509f7219099e57.access.example.com",
-				"client_secret": "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5"
+				"client_secret": "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5",
+				"duration": "8760h"
 			}
 		}
 		`)
@@ -99,6 +102,7 @@ func TestCreateAccessServiceToken(t *testing.T) {
 		Name:         "CI/CD token",
 		ClientID:     "88bf3b6d86161464f6509f7219099e57.access.example.com",
 		ClientSecret: "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5",
+		Duration:     "8760h",
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/service_tokens", handler)
@@ -135,7 +139,8 @@ func TestUpdateAccessServiceToken(t *testing.T) {
 				"expires_at": "2015-01-01T05:20:00.12345Z",
 				"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 				"name": "CI/CD token",
-				"client_id": "88bf3b6d86161464f6509f7219099e57.access.example.com"
+				"client_id": "88bf3b6d86161464f6509f7219099e57.access.example.com",
+				"duration": "8760h"
 			}
 		}
 		`)
@@ -148,6 +153,7 @@ func TestUpdateAccessServiceToken(t *testing.T) {
 		ID:        "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		Name:      "CI/CD token",
 		ClientID:  "88bf3b6d86161464f6509f7219099e57.access.example.com",
+		Duration:  "8760h",
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/service_tokens/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
@@ -184,7 +190,8 @@ func TestRefreshAccessServiceToken(t *testing.T) {
 				"expires_at": "2015-01-01T05:20:00.12345Z",
 				"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 				"name": "CI/CD token",
-				"client_id": "88bf3b6d86161464f6509f7219099e57.access.example.com"
+				"client_id": "88bf3b6d86161464f6509f7219099e57.access.example.com",
+				"duration": "8760h"
 			}
 		}
 		`)
@@ -197,6 +204,7 @@ func TestRefreshAccessServiceToken(t *testing.T) {
 		ID:        "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		Name:      "CI/CD token",
 		ClientID:  "88bf3b6d86161464f6509f7219099e57.access.example.com",
+		Duration:  "8760h",
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/service_tokens/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/refresh", handler)
@@ -226,7 +234,8 @@ func TestRotateAccessServiceToken(t *testing.T) {
 				"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 				"name": "CI/CD token",
 				"client_id": "88bf3b6d86161464f6509f7219099e57.access.example.com",
-				"client_secret": "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5"
+				"client_secret": "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5",
+				"duration": "8760h"
 			}
 		}
 		`)
@@ -240,6 +249,7 @@ func TestRotateAccessServiceToken(t *testing.T) {
 		Name:         "CI/CD token",
 		ClientID:     "88bf3b6d86161464f6509f7219099e57.access.example.com",
 		ClientSecret: "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5",
+		Duration:     "8760h",
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/service_tokens/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/rotate", handler)
@@ -268,7 +278,8 @@ func TestDeleteAccessServiceToken(t *testing.T) {
 				"expires_at": "2015-01-01T05:20:00.12345Z",
 				"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 				"name": "CI/CD token",
-				"client_id": "88bf3b6d86161464f6509f7219099e57.access.example.com"
+				"client_id": "88bf3b6d86161464f6509f7219099e57.access.example.com",
+				"duration": "8760h"
 			}
 		}
 		`)
@@ -281,6 +292,7 @@ func TestDeleteAccessServiceToken(t *testing.T) {
 		ID:        "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		Name:      "CI/CD token",
 		ClientID:  "88bf3b6d86161464f6509f7219099e57.access.example.com",
+		Duration:  "8760h",
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/service_tokens/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)

@@ -1,14 +1,34 @@
-## 0.75.0 (Unreleased)
+## 0.76.0 (Unreleased)
+
+## 0.75.0 (August 16th, 2023)
 
 BREAKING CHANGES:
 
 * cloudflare: `Raw` method now returns a RawResponse rather than the raw JSON `Result` message ([#1355](https://github.com/cloudflare/cloudflare-go/issues/1355))
+* rulesets: Rename `RulesetPhaseRateLimit` to `RulesetPhaseHTTPRatelimit`, to match the phase name ([#1367](https://github.com/cloudflare/cloudflare-go/issues/1367))
+* rulesets: Rename `RulesetPhaseSuperBotFightMode` to `RulesetPhaseHTTPRequestSBFM`, to match the phase name ([#1367](https://github.com/cloudflare/cloudflare-go/issues/1367))
+
+NOTES:
+
+* rulesets: Remove non-existent `allow` action ([#1367](https://github.com/cloudflare/cloudflare-go/issues/1367))
+* rulesets: Remove non-existent `http_request_main` phase ([#1367](https://github.com/cloudflare/cloudflare-go/issues/1367))
+* rulesets: Remove non-public `http_response_headers_transform_managed` and `http_request_late_transform_managed` phases ([#1367](https://github.com/cloudflare/cloudflare-go/issues/1367))
 
 ENHANCEMENTS:
 
+* access_group: add auth_context group ruletype ([#1344](https://github.com/cloudflare/cloudflare-go/issues/1344))
+* access_identity_provider: add attr conditional_access_enabled ([#1344](https://github.com/cloudflare/cloudflare-go/issues/1344))
+* access_identity_provider: add auth context list/put endpoint ([#1344](https://github.com/cloudflare/cloudflare-go/issues/1344))
+* access_service_token: add support for managing `Duration` ([#1347](https://github.com/cloudflare/cloudflare-go/issues/1347))
 * bot_management: add support for bot_management API ([#1363](https://github.com/cloudflare/cloudflare-go/issues/1363))
 * cloudflare: swap `encoding/json` for `github.com/goccy/go-json` ([#1360](https://github.com/cloudflare/cloudflare-go/issues/1360))
+* device_posture_rule: support eid_last_seen and risk_level and correct total_score for Tanium posture rule ([#1366](https://github.com/cloudflare/cloudflare-go/issues/1366))
+* per_hostname_tls_settings: add support for managing hostname level TLS settings ([#1356](https://github.com/cloudflare/cloudflare-go/issues/1356))
+* rulesets: Add the `ddos_mitigation` action ([#1367](https://github.com/cloudflare/cloudflare-go/issues/1367))
 * waiting_room: add support for `queueing_status_code` ([#1357](https://github.com/cloudflare/cloudflare-go/issues/1357))
+* web_analytics: add support for web_analytics API ([#1348](https://github.com/cloudflare/cloudflare-go/issues/1348))
+* workers: add support for tagging Worker scripts ([#1368](https://github.com/cloudflare/cloudflare-go/issues/1368))
+* zone_hold: add support for zone hold API ([#1365](https://github.com/cloudflare/cloudflare-go/issues/1365))
 
 BUG FIXES:
 
@@ -18,6 +38,7 @@ DEPENDENCIES:
 
 * deps: bumps golang.org/x/net from 0.12.0 to 0.13.0 ([#1353](https://github.com/cloudflare/cloudflare-go/issues/1353))
 * deps: bumps golang.org/x/net from 0.13.0 to 0.14.0 ([#1362](https://github.com/cloudflare/cloudflare-go/issues/1362))
+* deps: bumps goreleaser/goreleaser-action from 4.3.0 to 4.4.0 ([#1369](https://github.com/cloudflare/cloudflare-go/issues/1369))
 
 ## 0.74.0 (August 2nd, 2023)
 

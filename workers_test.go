@@ -380,6 +380,7 @@ type multipartUpload struct {
 	CompatibilityDate  string
 	CompatibilityFlags []string
 	Placement          *Placement
+	Tags               []string
 }
 
 func parseMultipartUpload(r *http.Request) (multipartUpload, error) {
@@ -397,6 +398,7 @@ func parseMultipartUpload(r *http.Request) (multipartUpload, error) {
 		CompatibilityDate  string              `json:"compatibility_date,omitempty"`
 		CompatibilityFlags []string            `json:"compatibility_flags,omitempty"`
 		Placement          *Placement          `json:"placement,omitempty"`
+		Tags               []string            `json:"tags"`
 	}
 	err = json.Unmarshal(mdBytes, &metadata)
 	if err != nil {
@@ -429,6 +431,7 @@ func parseMultipartUpload(r *http.Request) (multipartUpload, error) {
 		CompatibilityDate:  metadata.CompatibilityDate,
 		CompatibilityFlags: metadata.CompatibilityFlags,
 		Placement:          metadata.Placement,
+		Tags:               metadata.Tags,
 	}, nil
 }
 
@@ -1231,6 +1234,40 @@ func TestUploadWorker_ToDispatchNamespace(t *testing.T) {
 				Text: "hello",
 			},
 		},
+	})
+	assert.NoError(t, err)
+}
+
+func TestUploadWorker_ToDispatchNamespace_Tags(t *testing.T) {
+	setup()
+	defer teardown()
+
+	namespaceName := "n1"
+	tags := []string{"hello=there", "another-tag"}
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+
+		mpUpload, err := parseMultipartUpload(r)
+		require.NoError(t, err)
+
+		assert.Equal(t, workerScript, mpUpload.Script)
+
+		assert.EqualValues(t, tags, mpUpload.Tags)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, workersScriptResponse(t))
+	}
+	mux.HandleFunc(
+		fmt.Sprintf("/accounts/"+testAccountID+"/workers/dispatch/namespaces/%s/scripts/bar", namespaceName),
+		handler,
+	)
+
+	_, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{
+		ScriptName:            "bar",
+		Script:                workerScript,
+		DispatchNamespaceName: &namespaceName,
+		Tags:                  tags,
 	})
 	assert.NoError(t, err)
 }
