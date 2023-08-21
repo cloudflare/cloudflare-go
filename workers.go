@@ -348,7 +348,7 @@ func (api *API) UploadWorker(ctx context.Context, rc *ResourceContainer, params 
 
 // GetWorkersScriptContent returns the pure script content of a worker.
 //
-// API reference: TODO: https://developers.cloudflare.com/api
+// API reference: https://developers.cloudflare.com/api/operations/worker-script-get-content
 func (api *API) GetWorkersScriptContent(ctx context.Context, rc *ResourceContainer, scriptName string) (string, error) {
 	if rc.Level != AccountRouteLevel {
 		return "", ErrRequiredAccountLevelResourceContainer
@@ -369,7 +369,7 @@ func (api *API) GetWorkersScriptContent(ctx context.Context, rc *ResourceContain
 
 // UpdateWorkersScriptContent pushes only script content, no metadata.
 //
-// API reference: TODO: https://developers.cloudflare.com/api
+// API reference: https://developers.cloudflare.com/api/operations/worker-script-put-content
 func (api *API) UpdateWorkersScriptContent(ctx context.Context, rc *ResourceContainer, params UpdateWorkersScriptContentParams) (WorkerScriptResponse, error) {
 	if rc.Level != AccountRouteLevel {
 		return WorkerScriptResponse{}, ErrRequiredAccountLevelResourceContainer
@@ -421,7 +421,7 @@ func (api *API) UpdateWorkersScriptContent(ctx context.Context, rc *ResourceCont
 
 // GetWorkersScriptSettings returns the metadata of a worker.
 //
-// API reference: TODO: https://developers.cloudflare.com/api
+// API reference: https://developers.cloudflare.com/api/operations/worker-script-get-settings
 func (api *API) GetWorkersScriptSettings(ctx context.Context, rc *ResourceContainer, scriptName string) (WorkerScriptSettingsResponse, error) {
 	if rc.Level != AccountRouteLevel {
 		return WorkerScriptSettingsResponse{}, ErrRequiredAccountLevelResourceContainer
@@ -450,7 +450,7 @@ func (api *API) GetWorkersScriptSettings(ctx context.Context, rc *ResourceContai
 
 // UpdateWorkersScriptSettings pushes only script metadata.
 //
-// API reference: TODO: https://developers.cloudflare.com/api
+// API reference: https://developers.cloudflare.com/api/operations/worker-script-patch-settings
 func (api *API) UpdateWorkersScriptSettings(ctx context.Context, rc *ResourceContainer, params UpdateWorkersScriptSettingsParams) (WorkerScriptSettingsResponse, error) {
 	if rc.Level != AccountRouteLevel {
 		return WorkerScriptSettingsResponse{}, ErrRequiredAccountLevelResourceContainer
