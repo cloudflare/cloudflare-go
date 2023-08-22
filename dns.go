@@ -34,7 +34,7 @@ type DNSRecord struct {
 	Proxied    *bool       `json:"proxied,omitempty"`
 	Proxiable  bool        `json:"proxiable,omitempty"`
 	Locked     bool        `json:"locked,omitempty"`
-	Comment    string      `json:"comment,omitempty"`
+	Comment    string      `json:"comment,omitempty"` // the server will omit the comment field when the comment is empty
 	Tags       []string    `json:"tags,omitempty"`
 }
 
@@ -57,8 +57,8 @@ type ListDNSRecordsParams struct {
 	Name      string        `url:"name,omitempty"`
 	Content   string        `url:"content,omitempty"`
 	Proxied   *bool         `url:"proxied,omitempty"`
-	Comment   string        `url:"comment,omitempty"`
-	Tags      []string      `url:"tag,omitempty"` // potentially multiple `tag=`
+	Comment   string        `url:"comment,omitempty"` // currently, the server does not support searching for records with an empty comment
+	Tags      []string      `url:"tag,omitempty"`     // potentially multiple `tag=`
 	TagMatch  string        `url:"tag-match,omitempty"`
 	Order     string        `url:"order,omitempty"`
 	Direction ListDirection `url:"direction,omitempty"`
@@ -77,7 +77,7 @@ type UpdateDNSRecordParams struct {
 	Priority *uint16     `json:"priority,omitempty"`
 	TTL      int         `json:"ttl,omitempty"`
 	Proxied  *bool       `json:"proxied,omitempty"`
-	Comment  string      `json:"comment"`
+	Comment  *string     `json:"comment,omitempty"` // nil will keep the current comment, while StringPtr("") will empty it
 	Tags     []string    `json:"tags"`
 }
 
@@ -193,7 +193,7 @@ type CreateDNSRecordParams struct {
 	Proxied    *bool       `json:"proxied,omitempty" url:"proxied,omitempty"`
 	Proxiable  bool        `json:"proxiable,omitempty"`
 	Locked     bool        `json:"locked,omitempty"`
-	Comment    string      `json:"comment,omitempty" url:"comment,omitempty"`
+	Comment    string      `json:"comment,omitempty" url:"comment,omitempty"` // to the server, there's no difference between "no comment" and "empty comment"
 	Tags       []string    `json:"tags,omitempty"`
 }
 
