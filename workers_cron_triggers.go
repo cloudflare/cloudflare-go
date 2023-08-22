@@ -40,7 +40,7 @@ type UpdateWorkerCronTriggersParams struct {
 // ListWorkerCronTriggers fetches all available cron triggers for a single Worker
 // script.
 //
-// API reference: https://api.cloudflare.com/#worker-cron-trigger-get-cron-triggers
+// API reference: https://developers.cloudflare.com/api/operations/worker-cron-trigger-get-cron-triggers
 func (api *API) ListWorkerCronTriggers(ctx context.Context, rc *ResourceContainer, params ListWorkerCronTriggersParams) ([]WorkerCronTrigger, error) {
 	if rc.Level != AccountRouteLevel {
 		return []WorkerCronTrigger{}, ErrRequiredAccountLevelResourceContainer
@@ -66,7 +66,7 @@ func (api *API) ListWorkerCronTriggers(ctx context.Context, rc *ResourceContaine
 
 // UpdateWorkerCronTriggers updates a single schedule for a Worker cron trigger.
 //
-// API reference: https://api.cloudflare.com/#worker-cron-trigger-update-cron-triggers
+// API reference: https://developers.cloudflare.com/api/operations/worker-cron-trigger-update-cron-triggers
 func (api *API) UpdateWorkerCronTriggers(ctx context.Context, rc *ResourceContainer, params UpdateWorkerCronTriggersParams) ([]WorkerCronTrigger, error) {
 	if rc.Level != AccountRouteLevel {
 		return []WorkerCronTrigger{}, ErrRequiredAccountLevelResourceContainer

@@ -165,6 +165,11 @@ const (
   "errors": [],
   "messages": []
 }`
+	workerMetadata = `{
+		"id": "e7a57d8746e74ae49c25994dadb421b1",
+		"etag": "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
+		"logpush": true
+	}`
 	workerScript = `addEventListener('fetch', event => {
   event.passThroughOnException()
   event.respondWith(handleRequest(event.request))
@@ -491,6 +496,97 @@ func TestGetWorker_Module(t *testing.T) {
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want.Script, res.Script)
+	}
+}
+
+func TestGetWorkersScriptContent(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/foo/content/v2", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/javascript")
+		fmt.Fprint(w, workerScript)
+	})
+
+	res, err := client.GetWorkersScriptContent(context.Background(), AccountIdentifier(testAccountID), "foo")
+	want := workerScript
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, res)
+	}
+}
+
+func TestUpdateWorkersScriptContent(t *testing.T) {
+	setup()
+	defer teardown()
+
+	formattedTime, _ := time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
+	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/foo/content", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+		contentTypeHeader := r.Header.Get("content-type")
+		assert.Equal(t, "application/javascript", contentTypeHeader, "Expected content-type request header to be 'application/javascript', got %s", contentTypeHeader)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, workersScriptResponse(t, withWorkerModifiedOn(formattedTime)))
+	})
+
+	res, err := client.UpdateWorkersScriptContent(context.Background(), AccountIdentifier(testAccountID), UpdateWorkersScriptContentParams{ScriptName: "foo", Script: workerScript})
+	want := WorkerScriptResponse{
+		successResponse,
+		false,
+		WorkerScript{
+			Script: workerScript,
+		},
+	}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want.Script, res.Script)
+	}
+}
+
+func TestGetWorkersScriptSettings(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/foo/settings", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/javascript")
+		fmt.Fprint(w, workerMetadata)
+	})
+
+	res, err := client.GetWorkersScriptSettings(context.Background(), AccountIdentifier(testAccountID), "foo")
+	logpush := true
+	want := WorkerScriptSettingsResponse{
+		successResponse,
+		WorkerMetaData{
+			ID:      "e7a57d8746e74ae49c25994dadb421b1",
+			ETAG:    "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
+			Logpush: &logpush,
+		}}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want.WorkerMetaData, res.WorkerMetaData)
+	}
+}
+
+func TestUpdateWorkersScriptSettings(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/foo/settings", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
+		w.Header().Set("content-type", "application/javascript")
+		fmt.Fprint(w, workerMetadata)
+	})
+
+	res, err := client.UpdateWorkersScriptSettings(context.Background(), AccountIdentifier(testAccountID), UpdateWorkersScriptSettingsParams{ScriptName: "foo"})
+	logpush := true
+	want := WorkerScriptSettingsResponse{
+		successResponse,
+		WorkerMetaData{
+			ID:      "e7a57d8746e74ae49c25994dadb421b1",
+			ETAG:    "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
+			Logpush: &logpush,
+		}}
+	if assert.NoError(t, err) {
+		assert.Equal(t, want.WorkerMetaData, res.WorkerMetaData)
 	}
 }
 
