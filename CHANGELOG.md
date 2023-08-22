@@ -1,5 +1,10 @@
 ## 0.76.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* workers: Add support for retrieving and uploading only script content. ([#1361](https://github.com/cloudflare/cloudflare-go/issues/1361))
+* workers: Add support for retrieving and uploading only script metadata. ([#1361](https://github.com/cloudflare/cloudflare-go/issues/1361))
+
 ## 0.75.0 (August 16th, 2023)
 
 BREAKING CHANGES:
