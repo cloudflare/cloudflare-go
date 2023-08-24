@@ -4,7 +4,7 @@ import (
 	"math"
 )
 
-// Look first for total_pages, but if total_count and per_page are set then use that to get page count
+// Look first for total_pages, but if total_count and per_page are set then use that to get page count.
 func (p ResultInfo) getTotalPages() int {
 	totalPages := p.TotalPages
 	if totalPages == 0 && p.Total > 0 && p.PerPage > 0 {
