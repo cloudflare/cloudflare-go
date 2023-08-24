@@ -1,0 +1,8 @@
+```release-note:bug
+pagination: Will look at `total_count` and `per_page` to calculate `total_pages` if `total_pages` is zero
+access_application: Use autopaginate flag as expected
+access_ca_certificate: Use autopaginate flag as expected
+access_group: Use autopaginate flag as expected
+access_mutual_tls_certifcate: Use autopaginate flag as expected
+access_policy: Use autopaginate flag as expected
+```
