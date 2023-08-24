@@ -178,7 +178,7 @@ func (api *API) ListAccessPolicies(ctx context.Context, rc *ResourceContainer, p
 		}
 		accessPolicies = append(accessPolicies, r.Result...)
 		params.ResultInfo = r.ResultInfo.Next()
-		if params.ResultInfo.Done() || autoPaginate {
+		if params.ResultInfo.Done() || !autoPaginate {
 			break
 		}
 	}

@@ -286,7 +286,7 @@ func (api *API) ListAccessGroups(ctx context.Context, rc *ResourceContainer, par
 		}
 		accessGroups = append(accessGroups, r.Result...)
 		params.ResultInfo = r.ResultInfo.Next()
-		if params.ResultInfo.Done() || autoPaginate {
+		if params.ResultInfo.Done() || !autoPaginate {
 			break
 		}
 	}

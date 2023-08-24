@@ -119,7 +119,7 @@ func TestListSSL(t *testing.T) {
             "page": 1,
             "per_page": 20,
             "count": 1,
-            "total_count": 2000
+            "total_count": 1
           }
         }`)
 	}
@@ -330,7 +330,7 @@ func TestReprioritizeSSL(t *testing.T) {
             "page": 1,
             "per_page": 20,
             "count": 1,
-            "total_count": 2000
+            "total_count": 1
           }
         }`)
 	}
