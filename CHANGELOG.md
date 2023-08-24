@@ -5,6 +5,15 @@ ENHANCEMENTS:
 * workers: Add support for retrieving and uploading only script content. ([#1361](https://github.com/cloudflare/cloudflare-go/issues/1361))
 * workers: Add support for retrieving and uploading only script metadata. ([#1361](https://github.com/cloudflare/cloudflare-go/issues/1361))
 
+BUG FIXES:
+
+* access_application: Use autopaginate flag as expected ([#1372](https://github.com/cloudflare/cloudflare-go/issues/1372))
+* access_ca_certificate: Use autopaginate flag as expected ([#1372](https://github.com/cloudflare/cloudflare-go/issues/1372))
+* access_group: Use autopaginate flag as expected ([#1372](https://github.com/cloudflare/cloudflare-go/issues/1372))
+* access_mutual_tls_certifcate: Use autopaginate flag as expected ([#1372](https://github.com/cloudflare/cloudflare-go/issues/1372))
+* access_policy: Use autopaginate flag as expected ([#1372](https://github.com/cloudflare/cloudflare-go/issues/1372))
+* pagination: Will look at `total_count` and `per_page` to calculate `total_pages` if `total_pages` is zero ([#1372](https://github.com/cloudflare/cloudflare-go/issues/1372))
+
 ## 0.75.0 (August 16th, 2023)
 
 BREAKING CHANGES:
