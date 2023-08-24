@@ -208,7 +208,7 @@ func (api *API) ListAccessApplications(ctx context.Context, rc *ResourceContaine
 		}
 		applications = append(applications, r.Result...)
 		params.ResultInfo = r.ResultInfo.Next()
-		if params.ResultInfo.Done() || autoPaginate {
+		if params.ResultInfo.Done() || !autoPaginate {
 			break
 		}
 	}
