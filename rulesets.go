@@ -247,6 +247,7 @@ type RulesetRuleActionParameters struct {
 	Mirage                  *bool                                             `json:"mirage,omitempty"`
 	OpportunisticEncryption *bool                                             `json:"opportunistic_encryption,omitempty"`
 	Polish                  *Polish                                           `json:"polish,omitempty"`
+	ReadTimeout             *uint                                             `json:"read_timeout,omitempty"`
 	RocketLoader            *bool                                             `json:"rocket_loader,omitempty"`
 	SecurityLevel           *SecurityLevel                                    `json:"security_level,omitempty"`
 	ServerSideExcludes      *bool                                             `json:"server_side_excludes,omitempty"`
