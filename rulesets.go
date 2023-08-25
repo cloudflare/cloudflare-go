@@ -234,6 +234,7 @@ type RulesetRuleActionParameters struct {
 	StatusCode              uint16                                            `json:"status_code,omitempty"`
 	RespectStrongETags      *bool                                             `json:"respect_strong_etags,omitempty"`
 	CacheKey                *RulesetRuleActionParametersCacheKey              `json:"cache_key,omitempty"`
+	OriginCacheControl      *bool                                             `json:"origin_cache_control,omitempty"`
 	OriginErrorPagePassthru *bool                                             `json:"origin_error_page_passthru,omitempty"`
 	FromList                *RulesetRuleActionParametersFromList              `json:"from_list,omitempty"`
 	FromValue               *RulesetRuleActionParametersFromValue             `json:"from_value,omitempty"`
