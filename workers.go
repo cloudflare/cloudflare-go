@@ -174,6 +174,7 @@ type WorkerScript struct {
 type WorkersTailConsumer struct {
 	Service     string  `json:"service"`
 	Environment *string `json:"environment,omitempty"`
+	Namespace   *string `json:"namespace,omitempty"`
 }
 
 // WorkerMetaData contains worker script information such as size, creation & modification dates.
