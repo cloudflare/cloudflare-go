@@ -2,6 +2,7 @@
 
 ENHANCEMENTS:
 
+* access_application: added custom_non_identity_deny_url ([#1373](https://github.com/cloudflare/cloudflare-go/issues/1373))
 * workers: Add support for retrieving and uploading only script content. ([#1361](https://github.com/cloudflare/cloudflare-go/issues/1361))
 * workers: Add support for retrieving and uploading only script metadata. ([#1361](https://github.com/cloudflare/cloudflare-go/issues/1361))
 
