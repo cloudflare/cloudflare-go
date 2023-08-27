@@ -64,25 +64,25 @@ type LoadBalancerOriginSteering struct {
 
 // LoadBalancerMonitor represents a load balancer monitor's properties.
 type LoadBalancerMonitor struct {
-	ID               string              `json:"id,omitempty"`
-	CreatedOn        *time.Time          `json:"created_on,omitempty"`
-	ModifiedOn       *time.Time          `json:"modified_on,omitempty"`
-	Type             string              `json:"type"`
-	Description      string              `json:"description"`
-	Method           string              `json:"method"`
-	Path             string              `json:"path"`
-	Header           map[string][]string `json:"header"`
-	Timeout          int                 `json:"timeout"`
-	Retries          int                 `json:"retries"`
-	Interval         int                 `json:"interval"`
-	Consecutive_up   int                 `json:"consecutive_up"`
-	Consecutive_down int                 `json:"consecutive_down"`
-	Port             uint16              `json:"port,omitempty"`
-	ExpectedBody     string              `json:"expected_body"`
-	ExpectedCodes    string              `json:"expected_codes"`
-	FollowRedirects  bool                `json:"follow_redirects"`
-	AllowInsecure    bool                `json:"allow_insecure"`
-	ProbeZone        string              `json:"probe_zone"`
+	ID              string              `json:"id,omitempty"`
+	CreatedOn       *time.Time          `json:"created_on,omitempty"`
+	ModifiedOn      *time.Time          `json:"modified_on,omitempty"`
+	Type            string              `json:"type"`
+	Description     string              `json:"description"`
+	Method          string              `json:"method"`
+	Path            string              `json:"path"`
+	Header          map[string][]string `json:"header"`
+	Timeout         int                 `json:"timeout"`
+	Retries         int                 `json:"retries"`
+	Interval        int                 `json:"interval"`
+	ConsecutiveUp   int                 `json:"consecutive_up"`
+	ConsecutiveDown int                 `json:"consecutive_down"`
+	Port            uint16              `json:"port,omitempty"`
+	ExpectedBody    string              `json:"expected_body"`
+	ExpectedCodes   string              `json:"expected_codes"`
+	FollowRedirects bool                `json:"follow_redirects"`
+	AllowInsecure   bool                `json:"allow_insecure"`
+	ProbeZone       string              `json:"probe_zone"`
 }
 
 // LoadBalancer represents a load balancer's properties.
