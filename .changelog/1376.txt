@@ -1,0 +1,3 @@
+```release-note:bug
+images: Fix issue parsing Image Details from API due to incorrect struct json field
+```
