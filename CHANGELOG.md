@@ -1,5 +1,9 @@
 ## 0.76.0 (Unreleased)
 
+BREAKING CHANGES:
+
+* images: Renamed Image struct "Metadata" field to "Meta" ([#1379](https://github.com/cloudflare/cloudflare-go/issues/1379))
+
 ENHANCEMENTS:
 
 * access_application: added custom_non_identity_deny_url ([#1373](https://github.com/cloudflare/cloudflare-go/issues/1373))
@@ -14,6 +18,7 @@ BUG FIXES:
 * access_group: Use autopaginate flag as expected ([#1372](https://github.com/cloudflare/cloudflare-go/issues/1372))
 * access_mutual_tls_certifcate: Use autopaginate flag as expected ([#1372](https://github.com/cloudflare/cloudflare-go/issues/1372))
 * access_policy: Use autopaginate flag as expected ([#1372](https://github.com/cloudflare/cloudflare-go/issues/1372))
+* images: Fix issue parsing Image Details from API due to incorrect struct json field ([#1379](https://github.com/cloudflare/cloudflare-go/issues/1379))
 * pagination: Will look at `total_count` and `per_page` to calculate `total_pages` if `total_pages` is zero ([#1372](https://github.com/cloudflare/cloudflare-go/issues/1372))
 
 ## 0.75.0 (August 16th, 2023)
