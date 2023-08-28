@@ -7,6 +7,7 @@ BREAKING CHANGES:
 ENHANCEMENTS:
 
 * access_application: added custom_non_identity_deny_url ([#1373](https://github.com/cloudflare/cloudflare-go/issues/1373))
+* load_balancer_monitor: add support for `consecutive_up`, `consecutive_down` ([#1380](https://github.com/cloudflare/cloudflare-go/issues/1380))
 * workers: Add support for retrieving and uploading only script content. ([#1361](https://github.com/cloudflare/cloudflare-go/issues/1361))
 * workers: Add support for retrieving and uploading only script metadata. ([#1361](https://github.com/cloudflare/cloudflare-go/issues/1361))
 * workers: allow namespaced scripts to be used as Worker tail consumers ([#1377](https://github.com/cloudflare/cloudflare-go/issues/1377))
