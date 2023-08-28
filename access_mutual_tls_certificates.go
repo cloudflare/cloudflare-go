@@ -98,7 +98,7 @@ func (api *API) ListAccessMutualTLSCertificates(ctx context.Context, rc *Resourc
 		}
 		accessCertificates = append(accessCertificates, r.Result...)
 		params.ResultInfo = r.ResultInfo.Next()
-		if params.ResultInfo.Done() || autoPaginate {
+		if params.ResultInfo.Done() || !autoPaginate {
 			break
 		}
 	}

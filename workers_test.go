@@ -1283,6 +1283,7 @@ func TestUploadWorker_WithTailConsumers(t *testing.T) {
 		tailConsumers := []WorkersTailConsumer{
 			{Service: "my-service-a"},
 			{Service: "my-service-b", Environment: StringPtr("production")},
+			{Service: "a-namespaced-service", Namespace: StringPtr("a-dispatch-namespace")},
 		}
 		response = workersScriptResponse(t,
 			withWorkerScript(expectedWorkersModuleWorkerScript),
@@ -1295,7 +1296,7 @@ func TestUploadWorker_WithTailConsumers(t *testing.T) {
 		})
 		assert.NoError(t, err)
 		require.NotNil(t, worker.TailConsumers)
-		assert.Len(t, *worker.TailConsumers, 2)
+		assert.Len(t, *worker.TailConsumers, 3)
 	})
 }
 

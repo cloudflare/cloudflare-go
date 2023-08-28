@@ -28,6 +28,14 @@ func TestPagination_Done(t *testing.T) {
 			r:        ResultInfo{Page: 3, TotalPages: 1},
 			expected: true,
 		},
+		"total pages missing but done": {
+			r:        ResultInfo{Page: 4, Total: 70, PerPage: 25},
+			expected: true,
+		},
+		"total pages missing and not done": {
+			r:        ResultInfo{Page: 1, Total: 70, PerPage: 25},
+			expected: false,
+		},
 	}
 
 	for name, tc := range testCases {
@@ -58,6 +66,14 @@ func TestPagination_Next(t *testing.T) {
 		"total pages less than page": {
 			r:        ResultInfo{Page: 3, TotalPages: 1},
 			expected: ResultInfo{Page: 3, TotalPages: 1},
+		},
+		"use per page and greater than page": {
+			r:        ResultInfo{Page: 4, Total: 70, PerPage: 25},
+			expected: ResultInfo{Page: 4, Total: 70, PerPage: 25},
+		},
+		"use per page and less than page": {
+			r:        ResultInfo{Page: 1, Total: 70, PerPage: 25},
+			expected: ResultInfo{Page: 2, Total: 70, PerPage: 25},
 		},
 	}
 
@@ -92,6 +108,14 @@ func TestPagination_HasMorePages(t *testing.T) {
 		"total pages less than page": {
 			r:        ResultInfo{Page: 3, TotalPages: 1},
 			expected: false,
+		},
+		"use per page and greater than page": {
+			r:        ResultInfo{Page: 4, Total: 70, PerPage: 25},
+			expected: false,
+		},
+		"use per page and less than page": {
+			r:        ResultInfo{Page: 1, Total: 70, PerPage: 25},
+			expected: true,
 		},
 	}
 

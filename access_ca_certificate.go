@@ -75,7 +75,7 @@ func (api *API) ListAccessCACertificates(ctx context.Context, rc *ResourceContai
 		}
 		accessCACertificates = append(accessCACertificates, r.Result...)
 		params.ResultInfo = r.ResultInfo.Next()
-		if params.ResultInfo.Done() || autoPaginate {
+		if params.ResultInfo.Done() || !autoPaginate {
 			break
 		}
 	}

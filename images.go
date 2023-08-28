@@ -29,7 +29,7 @@ const (
 type Image struct {
 	ID                string                 `json:"id"`
 	Filename          string                 `json:"filename"`
-	Metadata          map[string]interface{} `json:"metadata,omitempty"`
+	Meta              map[string]interface{} `json:"meta,omitempty"`
 	RequireSignedURLs bool                   `json:"requireSignedURLs"`
 	Variants          []string               `json:"variants"`
 	Uploaded          time.Time              `json:"uploaded"`

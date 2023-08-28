@@ -27,7 +27,7 @@ func timeMustParse(layout, value string) time.Time {
 var expectedImageStruct = Image{
 	ID:       "ZxR0pLaXRldlBtaFhhO2FiZGVnaA",
 	Filename: "avatar.png",
-	Metadata: map[string]interface{}{
+	Meta: map[string]interface{}{
 		"meta": "metaID",
 	},
 	RequireSignedURLs: true,
@@ -63,7 +63,7 @@ func TestUploadImage(t *testing.T) {
 			"result": {
 				"id": "ZxR0pLaXRldlBtaFhhO2FiZGVnaA",
 				"filename": "avatar.png",
-				"metadata": {
+				"meta": {
 					"meta": "metaID"
 				},
 				"requireSignedURLs": true,
@@ -121,7 +121,7 @@ func TestUploadImageByUrl(t *testing.T) {
 			"result": {
 				"id": "ZxR0pLaXRldlBtaFhhO2FiZGVnaA",
 				"filename": "avatar.png",
-				"metadata": {
+				"meta": {
 					"meta": "metaID"
 				},
 				"requireSignedURLs": true,
@@ -179,7 +179,7 @@ func TestUpdateImage(t *testing.T) {
 			"result": {
 				"id": "ZxR0pLaXRldlBtaFhhO2FiZGVnaA",
 				"filename": "avatar.png",
-				"metadata": {
+				"meta": {
 					"meta": "metaID"
 				},
 				"requireSignedURLs": true,
@@ -337,7 +337,7 @@ func TestListImages(t *testing.T) {
 					{
 						"id": "ZxR0pLaXRldlBtaFhhO2FiZGVnaA",
 						"filename": "avatar.png",
-						"metadata": {
+						"meta": {
 							"meta": "metaID"
 						},
 						"requireSignedURLs": true,
@@ -378,7 +378,7 @@ func TestImageDetails(t *testing.T) {
 			"result": {
 				"id": "ZxR0pLaXRldlBtaFhhO2FiZGVnaA",
 				"filename": "avatar.png",
-				"metadata": {
+				"meta": {
 					"meta": "metaID"
 				},
 				"requireSignedURLs": true,

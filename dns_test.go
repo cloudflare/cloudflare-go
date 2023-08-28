@@ -196,7 +196,7 @@ func TestListDNSRecords(t *testing.T) {
 				"count": 1,
 				"page": 1,
 				"per_page": 20,
-				"total_count": 2000
+				"total_count": 1
 			}
 		}`)
 	}
@@ -292,7 +292,7 @@ func TestListDNSRecordsSearch(t *testing.T) {
 				"count": 1,
 				"page": 1,
 				"per_page": 20,
-				"total_count": 2000
+				"total_count": 1
 			}
 		}`)
 	}
@@ -337,7 +337,7 @@ func TestListDNSRecordsSearch(t *testing.T) {
 		Tags:      []string{"tag1", "tag2"},
 	})
 	require.NoError(t, err)
-	assert.Equal(t, 2000, resultInfo.Total)
+	assert.Equal(t, 1, resultInfo.Total)
 
 	assert.Equal(t, want, actual)
 }
