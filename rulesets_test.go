@@ -242,6 +242,7 @@ func TestGetRuleset_SetCacheSettings(t *testing.T) {
 					}
 				},
 				"origin_cache_control": true,
+				"read_timeout": 1000,
 				"origin_error_page_passthru":true
 			},
 			"description": "Set all available cache settings in one rule",
@@ -326,6 +327,7 @@ func TestGetRuleset_SetCacheSettings(t *testing.T) {
 				},
 			},
 			OriginCacheControl:      BoolPtr(true),
+			ReadTimeout:             UintPtr(1000),
 			OriginErrorPagePassthru: BoolPtr(true),
 		},
 		Description: "Set all available cache settings in one rule",

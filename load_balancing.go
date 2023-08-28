@@ -75,6 +75,8 @@ type LoadBalancerMonitor struct {
 	Timeout         int                 `json:"timeout"`
 	Retries         int                 `json:"retries"`
 	Interval        int                 `json:"interval"`
+	ConsecutiveUp   int                 `json:"consecutive_up"`
+	ConsecutiveDown int                 `json:"consecutive_down"`
 	Port            uint16              `json:"port,omitempty"`
 	ExpectedBody    string              `json:"expected_body"`
 	ExpectedCodes   string              `json:"expected_codes"`
