@@ -27,7 +27,7 @@ func timeMustParse(layout, value string) time.Time {
 var expectedImageStruct = Image{
 	ID:       "ZxR0pLaXRldlBtaFhhO2FiZGVnaA",
 	Filename: "avatar.png",
-	Metadata: map[string]interface{}{
+	Meta: map[string]interface{}{
 		"meta": "metaID",
 	},
 	RequireSignedURLs: true,
