@@ -191,11 +191,11 @@ type StreamSignedURLParameters struct {
 }
 
 type StreamInitiateTUSUploadParameters struct {
-	DirectUserUpload bool
-	TusResumable     TusProtocolVersion
-	UploadLength     int64
-	UploadCreator    string
-	Metadata         TUSUploadMetadata
+	DirectUserUpload bool               `url:"direct_user,omitempty"`
+	TusResumable     TusProtocolVersion `url:"-"`
+	UploadLength     int64              `url:"-"`
+	UploadCreator    string             `url:"-"`
+	Metadata         TUSUploadMetadata  `url:"-"`
 }
 
 type StreamInitiateTUSUploadResponse struct {
@@ -431,10 +431,7 @@ func (api *API) StreamInitiateTUSVideoUpload(ctx context.Context, rc *ResourceCo
 		headers.Set("Upload-Metadata", metadataTusCsv)
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/stream", rc.Identifier)
-	if params.DirectUserUpload {
-		uri += "?direct_user=true"
-	}
+	uri := buildURI(fmt.Sprintf("/accounts/%s/stream", rc.Identifier), params)
 	res, err := api.makeRequestWithAuthTypeAndHeadersComplete(ctx, http.MethodPost, uri, nil, api.authType, headers)
 	if err != nil {
 		return StreamInitiateTUSUploadResponse{}, err
