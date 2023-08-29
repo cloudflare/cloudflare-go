@@ -1388,7 +1388,6 @@ func TestUploadWorker_UnsafeBinding(t *testing.T) {
 		assert.Equal(t, "dynamic_dispatch", mpUpload.BindingMeta["b1"]["type"])
 
 		w.Header().Set("content-type", "application/json")
-		fmt.Println(workersScriptResponse(t))
 		fmt.Fprint(w, workersScriptResponse(t))
 	}
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/bar", handler)

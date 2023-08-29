@@ -524,3 +524,98 @@ func TestStream_CreateSignedURL(t *testing.T) {
 		assert.Equal(t, want, out, "structs not equal")
 	}
 }
+
+func TestStream_TUSUploadMetadataToTUSCsv(t *testing.T) {
+	md := TUSUploadMetadata{
+		Name: "test.mp4",
+	}
+	csv, err := md.ToTUSCsv()
+	assert.NoError(t, err)
+	assert.Equal(t, "name dGVzdC5tcDQ=", csv)
+
+	md.RequireSignedURLs = true
+	csv, err = md.ToTUSCsv()
+	assert.NoError(t, err)
+	assert.Equal(t, "name dGVzdC5tcDQ=,requiresignedurls", csv)
+
+	md.AllowedOrigins = "example.com"
+	csv, err = md.ToTUSCsv()
+	assert.NoError(t, err)
+	assert.Equal(t, "name dGVzdC5tcDQ=,requiresignedurls,allowedorigins ZXhhbXBsZS5jb20=", csv)
+
+	md.ThumbnailTimestampPct = 0.5
+	csv, err = md.ToTUSCsv()
+	assert.NoError(t, err)
+	assert.Equal(t, "name dGVzdC5tcDQ=,requiresignedurls,allowedorigins ZXhhbXBsZS5jb20=,thumbnailtimestamppct MC41", csv)
+
+	scheduleDeletion, _ := time.Parse(time.RFC3339, "2023-10-01T02:20:00Z")
+	md.ScheduledDeletion = &scheduleDeletion
+	csv, err = md.ToTUSCsv()
+	assert.NoError(t, err)
+	assert.Equal(t, "name dGVzdC5tcDQ=,requiresignedurls,allowedorigins ZXhhbXBsZS5jb20=,thumbnailtimestamppct MC41,scheduledDeletion MjAyMy0xMC0wMVQwMjoyMDowMFo=", csv)
+
+	md.Watermark = "watermark-profile-uid"
+	csv, err = md.ToTUSCsv()
+	assert.NoError(t, err)
+	assert.Equal(t, "name dGVzdC5tcDQ=,requiresignedurls,allowedorigins ZXhhbXBsZS5jb20=,thumbnailtimestamppct MC41,scheduledDeletion MjAyMy0xMC0wMVQwMjoyMDowMFo=,watermark d2F0ZXJtYXJrLXByb2ZpbGUtdWlk", csv)
+
+	// empty metadata should return empty string
+	md = TUSUploadMetadata{}
+	csv, err = md.ToTUSCsv()
+	assert.NoError(t, err)
+	assert.Equal(t, "", csv)
+}
+
+func TestStream_StreamInitiateTUSVideoUpload(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/stream", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+		// Make sure Tus-Resumable header is set
+		assert.Equal(t, "1.0.0", r.Header.Get("Tus-Resumable"))
+		// Make sure Upload-Length header is set
+		assert.Equal(t, "123", r.Header.Get("Upload-Length"))
+		// set the response headers
+		// if query param direct_user=true, then return the direct url in the header
+		if r.URL.Query().Get("direct_user") == "true" {
+			w.Header().Set("Location", "https://upload.videodelivery.net/tus/90c68cb5cd4fd5350b1962279c90bec0?tusv2=true")
+		} else {
+			w.Header().Set("Location", "https://api.cloudflare.com/client/v4/accounts/"+testAccountID+"/media/278f2a7e763c73dedc064b965d2cfbed?tusv2=true")
+		}
+
+		w.Header().Set("stream-media-id", "278f2a7e763c73dedc064b965d2cfbed")
+		w.Header().Set("Tus-Resumable", "1.0.0")
+		w.WriteHeader(http.StatusCreated)
+	})
+
+	// Make sure Tus-Resumable header is set
+	params := StreamInitiateTUSUploadParameters{}
+	_, err := client.StreamInitiateTUSVideoUpload(context.Background(), AccountIdentifier(testAccountID), params)
+	if assert.Error(t, err) {
+		assert.Equal(t, ErrMissingTusResumable, err)
+	}
+	params.TusResumable = TusProtocolVersion1_0_0
+
+	// Make sure Upload-Length header is set
+	_, err = client.StreamInitiateTUSVideoUpload(context.Background(), AccountIdentifier(testAccountID), params)
+	if assert.Error(t, err) {
+		assert.Equal(t, ErrMissingUploadLength, err)
+	}
+	params.UploadLength = 123
+
+	out, err := client.StreamInitiateTUSVideoUpload(context.Background(), AccountIdentifier(testAccountID), params)
+	if assert.NoError(t, err) {
+		assert.Equal(t, "https://api.cloudflare.com/client/v4/accounts/"+testAccountID+"/media/278f2a7e763c73dedc064b965d2cfbed?tusv2=true", out.ResponseHeaders.Get("Location"))
+		assert.Equal(t, "278f2a7e763c73dedc064b965d2cfbed", out.ResponseHeaders.Get("stream-media-id"))
+		assert.Equal(t, "1.0.0", out.ResponseHeaders.Get("Tus-Resumable"))
+	}
+
+	params.DirectUserUpload = true
+	out, err = client.StreamInitiateTUSVideoUpload(context.Background(), AccountIdentifier(testAccountID), params)
+	if assert.NoError(t, err) {
+		assert.Equal(t, "https://upload.videodelivery.net/tus/90c68cb5cd4fd5350b1962279c90bec0?tusv2=true", out.ResponseHeaders.Get("Location"))
+		assert.Equal(t, "278f2a7e763c73dedc064b965d2cfbed", out.ResponseHeaders.Get("stream-media-id"))
+		assert.Equal(t, "1.0.0", out.ResponseHeaders.Get("Tus-Resumable"))
+	}
+}
