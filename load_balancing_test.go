@@ -296,7 +296,7 @@ func TestListLoadBalancerPools(t *testing.T) {
                 "page": 1,
                 "per_page": 20,
                 "count": 1,
-                "total_count": 2000
+                "total_count": 1
             }
         }`)
 	}
@@ -623,6 +623,8 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
               "timeout": 3,
               "retries": 0,
               "interval": 90,
+              "consecutive_up": 2,
+              "consecutive_down": 2,
               "expected_body": "alive",
               "expected_codes": "2xx",
               "follow_redirects": true,
@@ -653,6 +655,8 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
                 "timeout": 3,
                 "retries": 0,
                 "interval": 90,
+                "consecutive_up": 2,
+                "consecutive_down": 2,
                 "expected_body": "alive",
                 "expected_codes": "2xx",
                 "follow_redirects": true,
@@ -677,11 +681,13 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
 			"Host":     {"example.com"},
 			"X-App-ID": {"abc123"},
 		},
-		Timeout:       3,
-		Retries:       0,
-		Interval:      90,
-		ExpectedBody:  "alive",
-		ExpectedCodes: "2xx",
+		Timeout:         3,
+		Retries:         0,
+		Interval:        90,
+		ConsecutiveUp:   2,
+		ConsecutiveDown: 2,
+		ExpectedBody:    "alive",
+		ExpectedCodes:   "2xx",
 
 		FollowRedirects: true,
 		AllowInsecure:   true,
@@ -695,11 +701,13 @@ func TestCreateLoadBalancerMonitor(t *testing.T) {
 			"Host":     {"example.com"},
 			"X-App-ID": {"abc123"},
 		},
-		Timeout:       3,
-		Retries:       0,
-		Interval:      90,
-		ExpectedBody:  "alive",
-		ExpectedCodes: "2xx",
+		Timeout:         3,
+		Retries:         0,
+		Interval:        90,
+		ConsecutiveUp:   2,
+		ConsecutiveDown: 2,
+		ExpectedBody:    "alive",
+		ExpectedCodes:   "2xx",
 
 		FollowRedirects: true,
 		AllowInsecure:   true,
@@ -752,6 +760,8 @@ func TestListLoadBalancerMonitors(t *testing.T) {
                     "timeout": 3,
                     "retries": 0,
                     "interval": 90,
+                    "consecutive_up": 2,
+                    "consecutive_down": 2,
                     "expected_body": "alive",
                     "expected_codes": "2xx"
                 }
@@ -760,7 +770,7 @@ func TestListLoadBalancerMonitors(t *testing.T) {
                 "page": 1,
                 "per_page": 20,
                 "count": 1,
-                "total_count": 2000
+                "total_count": 1
             }
         }`)
 	}
@@ -781,11 +791,13 @@ func TestListLoadBalancerMonitors(t *testing.T) {
 				"Host":     {"example.com"},
 				"X-App-ID": {"abc123"},
 			},
-			Timeout:       3,
-			Retries:       0,
-			Interval:      90,
-			ExpectedBody:  "alive",
-			ExpectedCodes: "2xx",
+			Timeout:         3,
+			Retries:         0,
+			Interval:        90,
+			ConsecutiveUp:   2,
+			ConsecutiveDown: 2,
+			ExpectedBody:    "alive",
+			ExpectedCodes:   "2xx",
 		},
 	}
 
@@ -835,6 +847,8 @@ func TestGetLoadBalancerMonitor(t *testing.T) {
                 "timeout": 3,
                 "retries": 0,
                 "interval": 90,
+                "consecutive_up": 2,
+                "consecutive_down": 2,
                 "expected_body": "alive",
                 "expected_codes": "2xx",
                 "follow_redirects": true,
@@ -859,11 +873,13 @@ func TestGetLoadBalancerMonitor(t *testing.T) {
 			"Host":     {"example.com"},
 			"X-App-ID": {"abc123"},
 		},
-		Timeout:       3,
-		Retries:       0,
-		Interval:      90,
-		ExpectedBody:  "alive",
-		ExpectedCodes: "2xx",
+		Timeout:         3,
+		Retries:         0,
+		Interval:        90,
+		ConsecutiveUp:   2,
+		ConsecutiveDown: 2,
+		ExpectedBody:    "alive",
+		ExpectedCodes:   "2xx",
 
 		FollowRedirects: true,
 		AllowInsecure:   true,
@@ -947,6 +963,8 @@ func TestUpdateLoadBalancerMonitor(t *testing.T) {
                 "timeout": 3,
                 "retries": 0,
                 "interval": 90,
+                "consecutive_up": 2,
+                "consecutive_down": 2,
                 "expected_body": "kicking",
                 "expected_codes": "200",
                 "follow_redirects": true,
@@ -977,6 +995,8 @@ func TestUpdateLoadBalancerMonitor(t *testing.T) {
                 "timeout": 3,
                 "retries": 0,
                 "interval": 90,
+                "consecutive_up": 2,
+                "consecutive_down": 2,
                 "expected_body": "kicking",
                 "expected_codes": "200",
                 "follow_redirects": true,
@@ -1001,11 +1021,13 @@ func TestUpdateLoadBalancerMonitor(t *testing.T) {
 			"Host":     {"example.com"},
 			"X-App-ID": {"easy"},
 		},
-		Timeout:       3,
-		Retries:       0,
-		Interval:      90,
-		ExpectedBody:  "kicking",
-		ExpectedCodes: "200",
+		Timeout:         3,
+		Retries:         0,
+		Interval:        90,
+		ConsecutiveUp:   2,
+		ConsecutiveDown: 2,
+		ExpectedBody:    "kicking",
+		ExpectedCodes:   "200",
 
 		FollowRedirects: true,
 		AllowInsecure:   true,
@@ -1020,11 +1042,13 @@ func TestUpdateLoadBalancerMonitor(t *testing.T) {
 			"Host":     {"example.com"},
 			"X-App-ID": {"easy"},
 		},
-		Timeout:       3,
-		Retries:       0,
-		Interval:      90,
-		ExpectedBody:  "kicking",
-		ExpectedCodes: "200",
+		Timeout:         3,
+		Retries:         0,
+		Interval:        90,
+		ConsecutiveUp:   2,
+		ConsecutiveDown: 2,
+		ExpectedBody:    "kicking",
+		ExpectedCodes:   "200",
 
 		FollowRedirects: true,
 		AllowInsecure:   true,
@@ -1497,7 +1521,7 @@ func TestListLoadBalancers(t *testing.T) {
                 "page": 1,
                 "per_page": 20,
                 "count": 1,
-                "total_count": 2000
+                "total_count": 1
             }
         }`)
 	}

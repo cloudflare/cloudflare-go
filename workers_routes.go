@@ -28,7 +28,7 @@ type UpdateWorkerRouteParams struct {
 
 // CreateWorkerRoute creates worker route for a script.
 //
-// API reference: https://api.cloudflare.com/#worker-routes-create-route
+// API reference: https://developers.cloudflare.com/api/operations/worker-routes-create-route
 func (api *API) CreateWorkerRoute(ctx context.Context, rc *ResourceContainer, params CreateWorkerRouteParams) (WorkerRouteResponse, error) {
 	if rc.Level != ZoneRouteLevel {
 		return WorkerRouteResponse{}, fmt.Errorf(errInvalidResourceContainerAccess, ZoneRouteLevel)
@@ -54,7 +54,7 @@ func (api *API) CreateWorkerRoute(ctx context.Context, rc *ResourceContainer, pa
 
 // DeleteWorkerRoute deletes worker route for a script.
 //
-// API reference: https://api.cloudflare.com/#worker-routes-delete-route
+// API reference: https://developers.cloudflare.com/api/operations/worker-routes-delete-route
 func (api *API) DeleteWorkerRoute(ctx context.Context, rc *ResourceContainer, routeID string) (WorkerRouteResponse, error) {
 	if rc.Level != ZoneRouteLevel {
 		return WorkerRouteResponse{}, fmt.Errorf(errInvalidResourceContainerAccess, ZoneRouteLevel)
@@ -83,7 +83,7 @@ func (api *API) DeleteWorkerRoute(ctx context.Context, rc *ResourceContainer, ro
 
 // ListWorkerRoutes returns list of Worker routes.
 //
-// API reference: https://api.cloudflare.com/#worker-routes-list-routes
+// API reference: https://developers.cloudflare.com/api/operations/worker-routes-list-routes
 func (api *API) ListWorkerRoutes(ctx context.Context, rc *ResourceContainer, params ListWorkerRoutesParams) (WorkerRoutesResponse, error) {
 	if rc.Level != ZoneRouteLevel {
 		return WorkerRoutesResponse{}, fmt.Errorf(errInvalidResourceContainerAccess, ZoneRouteLevel)
@@ -109,7 +109,7 @@ func (api *API) ListWorkerRoutes(ctx context.Context, rc *ResourceContainer, par
 
 // GetWorkerRoute returns a Workers route.
 //
-// API reference: https://api.cloudflare.com/#worker-routes-get-route
+// API reference: https://developers.cloudflare.com/api/operations/worker-routes-get-route
 func (api *API) GetWorkerRoute(ctx context.Context, rc *ResourceContainer, routeID string) (WorkerRouteResponse, error) {
 	if rc.Level != ZoneRouteLevel {
 		return WorkerRouteResponse{}, fmt.Errorf(errInvalidResourceContainerAccess, ZoneRouteLevel)
@@ -134,7 +134,7 @@ func (api *API) GetWorkerRoute(ctx context.Context, rc *ResourceContainer, route
 
 // UpdateWorkerRoute updates worker route for a script.
 //
-// API reference: https://api.cloudflare.com/#worker-routes-update-route
+// API reference: https://developers.cloudflare.com/api/operations/worker-routes-update-route
 func (api *API) UpdateWorkerRoute(ctx context.Context, rc *ResourceContainer, params UpdateWorkerRouteParams) (WorkerRouteResponse, error) {
 	if rc.Level != ZoneRouteLevel {
 		return WorkerRouteResponse{}, fmt.Errorf(errInvalidResourceContainerAccess, ZoneRouteLevel)
