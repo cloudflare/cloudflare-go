@@ -1,5 +1,9 @@
 ## 0.77.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* streams: adds support to initiate tus upload ([#1359](https://github.com/cloudflare/cloudflare-go/issues/1359))
+
 ## 0.76.0 (August 30th, 2023)
 
 BREAKING CHANGES:
