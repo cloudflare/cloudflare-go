@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: comment-on-closed-milestone
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: |
           IFS=',' read -r -a issues <<< "$ISSUES"
           for element in "${issues[@]}"
