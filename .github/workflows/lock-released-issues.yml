@@ -15,7 +15,7 @@ jobs:
   lock-closed-issues:
     runs-on: ubuntu-latest
     steps: 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: |
           IFS=',' read -r -a issues <<< "$ISSUES"
           for element in "${issues[@]}"
