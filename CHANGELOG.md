@@ -8,6 +8,7 @@ ENHANCEMENTS:
 DEPENDENCIES:
 
 * deps: bumps actions/checkout from 3 to 4 ([#1387](https://github.com/cloudflare/cloudflare-go/issues/1387))
+* deps: bumps goreleaser/goreleaser-action from 4.4.0 to 4.6.0 ([#1388](https://github.com/cloudflare/cloudflare-go/issues/1388))
 
 ## 0.76.0 (August 30th, 2023)
 
