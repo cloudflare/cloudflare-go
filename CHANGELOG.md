@@ -3,6 +3,7 @@
 ENHANCEMENTS:
 
 * streams: adds support to initiate tus upload ([#1359](https://github.com/cloudflare/cloudflare-go/issues/1359))
+* tunnel: add support for `include_prefix`, `exclude_prefix` in list operations ([#1385](https://github.com/cloudflare/cloudflare-go/issues/1385))
 
 DEPENDENCIES:
 
