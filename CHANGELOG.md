@@ -4,6 +4,10 @@ ENHANCEMENTS:
 
 * streams: adds support to initiate tus upload ([#1359](https://github.com/cloudflare/cloudflare-go/issues/1359))
 
+DEPENDENCIES:
+
+* deps: bumps actions/checkout from 3 to 4 ([#1387](https://github.com/cloudflare/cloudflare-go/issues/1387))
+
 ## 0.76.0 (August 30th, 2023)
 
 BREAKING CHANGES:
