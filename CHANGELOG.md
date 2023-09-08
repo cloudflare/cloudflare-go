@@ -3,6 +3,7 @@
 ENHANCEMENTS:
 
 * access_identity_provider: add support for email_claim_name and authorization_server_id ([#1390](https://github.com/cloudflare/cloudflare-go/issues/1390))
+* access_identity_provider: add support for ping_env_id ([#1391](https://github.com/cloudflare/cloudflare-go/issues/1391))
 * streams: adds support to initiate tus upload ([#1359](https://github.com/cloudflare/cloudflare-go/issues/1359))
 * tunnel: add support for `include_prefix`, `exclude_prefix` in list operations ([#1385](https://github.com/cloudflare/cloudflare-go/issues/1385))
 
