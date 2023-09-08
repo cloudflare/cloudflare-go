@@ -42,6 +42,7 @@ type AccessIdentityProviderConfiguration struct {
 	OktaAccount               string   `json:"okta_account,omitempty"`
 	OktaAuthorizationServerID string   `json:"authorization_server_id,omitempty"`
 	OneloginAccount           string   `json:"onelogin_account,omitempty"`
+	PingEnvID                 string   `json:"ping_env_id,omitempty"`
 	RedirectURL               string   `json:"redirect_url,omitempty"`
 	SignRequest               bool     `json:"sign_request,omitempty"`
 	SsoTargetURL              string   `json:"sso_target_url,omitempty"`
