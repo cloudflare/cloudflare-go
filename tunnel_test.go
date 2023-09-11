@@ -200,7 +200,7 @@ func TestUpdateTunnelConfiguration(t *testing.T) {
 					Hostname: "test.example.com",
 					Service:  "https://localhost:8000",
 					OriginRequest: &OriginRequestConfig{
-						NoTLSVerify: BoolPtr(true),
+						NoTLSVerify: Ref(true),
 					},
 				},
 				{
@@ -213,7 +213,8 @@ func TestUpdateTunnelConfiguration(t *testing.T) {
 			OriginRequest: OriginRequestConfig{
 				ConnectTimeout: &TunnelDuration{timeout},
 			},
-		}}
+		},
+	}
 
 	actual, err := client.UpdateTunnelConfiguration(context.Background(), AccountIdentifier(testAccountID), TunnelConfigurationParams{
 		TunnelID: testTunnelID,
@@ -223,7 +224,7 @@ func TestUpdateTunnelConfiguration(t *testing.T) {
 					Hostname: "test.example.com",
 					Service:  "https://localhost:8000",
 					OriginRequest: &OriginRequestConfig{
-						NoTLSVerify: BoolPtr(true),
+						NoTLSVerify: Ref(true),
 					},
 				},
 				{
@@ -266,7 +267,7 @@ func TestGetTunnelConfiguration(t *testing.T) {
 					Hostname: "test.example.com",
 					Service:  "https://localhost:8000",
 					OriginRequest: &OriginRequestConfig{
-						NoTLSVerify: BoolPtr(true),
+						NoTLSVerify: Ref(true),
 					},
 				},
 				{
@@ -279,7 +280,8 @@ func TestGetTunnelConfiguration(t *testing.T) {
 			OriginRequest: OriginRequestConfig{
 				ConnectTimeout: &TunnelDuration{timeout},
 			},
-		}}
+		},
+	}
 
 	actual, err := client.GetTunnelConfiguration(context.Background(), AccountIdentifier(testAccountID), testTunnelID)
 

@@ -18,7 +18,7 @@ var (
 		ServiceModeV2: &ServiceModeV2{
 			Mode: "warp",
 		},
-		DisableAutoFallback: BoolPtr(false),
+		DisableAutoFallback: Ref(false),
 		FallbackDomains: &[]FallbackDomain{
 			{Suffix: "invalid"},
 			{Suffix: "test"},
@@ -27,21 +27,21 @@ var (
 			{Address: "10.0.0.0/8"},
 			{Address: "100.64.0.0/10"},
 		},
-		GatewayUniqueID:  StringPtr("t1235"),
-		SupportURL:       StringPtr(""),
-		CaptivePortal:    IntPtr(180),
-		AllowModeSwitch:  BoolPtr(false),
-		SwitchLocked:     BoolPtr(false),
-		AllowUpdates:     BoolPtr(false),
-		AutoConnect:      IntPtr(0),
-		AllowedToLeave:   BoolPtr(true),
-		Enabled:          BoolPtr(true),
+		GatewayUniqueID:  Ref("t1235"),
+		SupportURL:       Ref(""),
+		CaptivePortal:    Ref(180),
+		AllowModeSwitch:  Ref(false),
+		SwitchLocked:     Ref(false),
+		AllowUpdates:     Ref(false),
+		AutoConnect:      Ref(0),
+		AllowedToLeave:   Ref(true),
+		Enabled:          Ref(true),
 		PolicyID:         nil,
 		Name:             nil,
 		Match:            nil,
 		Precedence:       nil,
 		Default:          true,
-		ExcludeOfficeIps: BoolPtr(false),
+		ExcludeOfficeIps: Ref(false),
 		Description:      nil,
 	}
 
@@ -49,7 +49,7 @@ var (
 		ServiceModeV2: &ServiceModeV2{
 			Mode: "warp",
 		},
-		DisableAutoFallback: BoolPtr(false),
+		DisableAutoFallback: Ref(false),
 		FallbackDomains: &[]FallbackDomain{
 			{Suffix: "invalid"},
 			{Suffix: "test"},
@@ -58,22 +58,22 @@ var (
 			{Address: "10.0.0.0/8"},
 			{Address: "100.64.0.0/10"},
 		},
-		GatewayUniqueID:  StringPtr("t1235"),
-		SupportURL:       StringPtr(""),
-		CaptivePortal:    IntPtr(180),
-		AllowModeSwitch:  BoolPtr(false),
-		SwitchLocked:     BoolPtr(false),
-		AllowUpdates:     BoolPtr(false),
-		AutoConnect:      IntPtr(0),
-		AllowedToLeave:   BoolPtr(true),
+		GatewayUniqueID:  Ref("t1235"),
+		SupportURL:       Ref(""),
+		CaptivePortal:    Ref(180),
+		AllowModeSwitch:  Ref(false),
+		SwitchLocked:     Ref(false),
+		AllowUpdates:     Ref(false),
+		AutoConnect:      Ref(0),
+		AllowedToLeave:   Ref(true),
 		PolicyID:         &deviceSettingsPolicyID,
-		Enabled:          BoolPtr(true),
-		Name:             StringPtr("test"),
+		Enabled:          Ref(true),
+		Name:             Ref("test"),
 		Match:            &deviceSettingsPolicyMatch,
 		Precedence:       &deviceSettingsPolicyPrecedence,
 		Default:          false,
-		ExcludeOfficeIps: BoolPtr(true),
-		Description:      StringPtr("Test Description"),
+		ExcludeOfficeIps: Ref(true),
+		Description:      Ref("Test Description"),
 	}
 
 	defaultDeviceSettingsPolicyJson = `{
@@ -243,10 +243,10 @@ func TestCreateDeviceSettingsPolicy(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/policy", handler)
 
 	actual, err := client.CreateDeviceSettingsPolicy(context.Background(), testAccountID, DeviceSettingsPolicyRequest{
-		Precedence:  IntPtr(10),
+		Precedence:  Ref(10),
 		Match:       &deviceSettingsPolicyMatch,
-		Name:        StringPtr("test"),
-		Description: StringPtr("Test Description"),
+		Name:        Ref("test"),
+		Description: Ref("Test Description"),
 	})
 
 	if assert.NoError(t, err) {

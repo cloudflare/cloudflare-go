@@ -295,14 +295,14 @@ func TestListsItemsIP(t *testing.T) {
 	want := []ListItem{
 		{
 			ID:         "2c0fc9fa937b11eaa1b71c4d701ab86e",
-			IP:         StringPtr("192.0.2.1"),
+			IP:         Ref("192.0.2.1"),
 			Comment:    "Private IP address",
 			CreatedOn:  &createdOn,
 			ModifiedOn: &modifiedOn,
 		},
 		{
 			ID:         "2c0fc9fa937b11eaa1b71c4d701ab86e",
-			IP:         StringPtr("192.0.2.2"),
+			IP:         Ref("192.0.2.2"),
 			Comment:    "Another Private IP address",
 			CreatedOn:  &createdOn,
 			ModifiedOn: &modifiedOn,
@@ -390,12 +390,12 @@ func TestListsItemsRedirect(t *testing.T) {
 			ID: "0c0fc9fa937b11eaa1b71c4d701ab86e",
 			Redirect: &Redirect{
 				SourceUrl:           "http://cloudflare.com",
-				IncludeSubdomains:   BoolPtr(true),
+				IncludeSubdomains:   Ref(true),
 				TargetUrl:           "https://cloudflare.com",
-				StatusCode:          IntPtr(302),
-				PreserveQueryString: BoolPtr(true),
-				SubpathMatching:     BoolPtr(true),
-				PreservePathSuffix:  BoolPtr(false),
+				StatusCode:          Ref(302),
+				PreserveQueryString: Ref(true),
+				SubpathMatching:     Ref(true),
+				PreservePathSuffix:  Ref(false),
 			},
 			Comment:    "Cloudflare http redirect",
 			CreatedOn:  &createdOn,
@@ -517,7 +517,7 @@ func TestListsItemsASN(t *testing.T) {
 	want := []ListItem{
 		{
 			ID:         "0c0fc9fa937b11eaa1b71c4d701ab86e",
-			ASN:        Uint32Ptr(3456),
+			ASN:        Ref[uint32](3456),
 			Comment:    "ASN",
 			CreatedOn:  &createdOn,
 			ModifiedOn: &modifiedOn,
@@ -562,12 +562,13 @@ func TestCreateListItemsIP(t *testing.T) {
 	actual, err := client.CreateListItemsAsync(context.Background(), AccountIdentifier(testAccountID), ListCreateItemsParams{
 		ID: "2c0fc9fa937b11eaa1b71c4d701ab86e",
 		Items: []ListItemCreateRequest{{
-			IP:      StringPtr("192.0.2.1"),
+			IP:      Ref("192.0.2.1"),
 			Comment: "Private IP",
 		}, {
-			IP:      StringPtr("192.0.2.2"),
+			IP:      Ref("192.0.2.2"),
 			Comment: "Another Private IP",
-		}}})
+		}},
+	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -612,7 +613,8 @@ func TestCreateListItemsRedirect(t *testing.T) {
 				TargetUrl: "https://cloudflare.com",
 			},
 			Comment: "Redirect cf",
-		}}})
+		}},
+	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -660,7 +662,8 @@ func TestCreateListItemsHostname(t *testing.T) {
 				UrlHostname: "*.abc.com", // ie. equivalent to match all subdomains of abc.com excluding abc.com
 			},
 			Comment: "Hostname abc",
-		}}})
+		}},
+	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -694,12 +697,13 @@ func TestCreateListItemsASN(t *testing.T) {
 	actual, err := client.CreateListItemsAsync(context.Background(), AccountIdentifier(testAccountID), ListCreateItemsParams{
 		ID: "0c0fc9fa937b11eaa1b71c4d701ab86e",
 		Items: []ListItemCreateRequest{{
-			ASN:     Uint32Ptr(458),
+			ASN:     Ref[uint32](458),
 			Comment: "ASN 458",
 		}, {
-			ASN:     Uint32Ptr(789),
+			ASN:     Ref[uint32](789),
 			Comment: "ASN 789",
-		}}})
+		}},
+	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -733,12 +737,13 @@ func TestReplaceListItemsIP(t *testing.T) {
 	actual, err := client.ReplaceListItemsAsync(context.Background(), AccountIdentifier(testAccountID), ListReplaceItemsParams{
 		ID: "2c0fc9fa937b11eaa1b71c4d701ab86e",
 		Items: []ListItemCreateRequest{{
-			IP:      StringPtr("192.0.2.1"),
+			IP:      Ref("192.0.2.1"),
 			Comment: "Private IP",
 		}, {
-			IP:      StringPtr("192.0.2.2"),
+			IP:      Ref("192.0.2.2"),
 			Comment: "Another Private IP",
-		}}})
+		}},
+	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -783,7 +788,8 @@ func TestReplaceListItemsRedirect(t *testing.T) {
 				TargetUrl: "https://cloudflare.com",
 			},
 			Comment: "Redirect cf",
-		}}})
+		}},
+	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -826,7 +832,8 @@ func TestReplaceListItemsHostname(t *testing.T) {
 				UrlHostname: "cf.com",
 			},
 			Comment: "Hostname cf",
-		}}})
+		}},
+	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -860,12 +867,13 @@ func TestReplaceListItemsASN(t *testing.T) {
 	actual, err := client.ReplaceListItemsAsync(context.Background(), AccountIdentifier(testAccountID), ListReplaceItemsParams{
 		ID: "2c0fc9fa937b11eaa1b71c4d701ab86e",
 		Items: []ListItemCreateRequest{{
-			ASN:     Uint32Ptr(4567),
+			ASN:     Ref[uint32](4567),
 			Comment: "ASN 4567",
 		}, {
-			ASN:     Uint32Ptr(8901),
+			ASN:     Ref[uint32](8901),
 			Comment: "ASN 8901",
-		}}})
+		}},
+	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -900,7 +908,8 @@ func TestDeleteListItems(t *testing.T) {
 		ID: "2c0fc9fa937b11eaa1b71c4d701ab86e",
 		Items: ListItemDeleteRequest{[]ListItemDeleteItemRequest{{
 			ID: "34b12448945f11eaa1b71c4d701ab86e",
-		}}}})
+		}}},
+	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -935,7 +944,7 @@ func TestGetListItemIP(t *testing.T) {
 
 	want := ListItem{
 		ID:         "2c0fc9fa937b11eaa1b71c4d701ab86e",
-		IP:         StringPtr("192.0.2.1"),
+		IP:         Ref("192.0.2.1"),
 		Comment:    "Private IP address",
 		CreatedOn:  &createdOn,
 		ModifiedOn: &modifiedOn,
@@ -1021,7 +1030,7 @@ func TestGetListItemASN(t *testing.T) {
 
 	want := ListItem{
 		ID:         "2c0fc9fa937b11eaa1b71c4d701ab86e",
-		ASN:        Uint32Ptr(5555),
+		ASN:        Ref[uint32](5555),
 		Comment:    "asn 5555",
 		CreatedOn:  &createdOn,
 		ModifiedOn: &modifiedOn,

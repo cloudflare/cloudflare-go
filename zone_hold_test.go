@@ -35,11 +35,11 @@ func TestCreateZoneHold(t *testing.T) {
 		assert.Equal(t, ErrRequiredZoneLevelResourceContainer, err)
 	}
 
-	out, err := client.CreateZoneHold(context.Background(), ZoneIdentifier(testZoneID), CreateZoneHoldParams{IncludeSubdomains: BoolPtr(true)})
+	out, err := client.CreateZoneHold(context.Background(), ZoneIdentifier(testZoneID), CreateZoneHoldParams{IncludeSubdomains: Ref(true)})
 	holdAfter, _ := time.Parse(time.RFC3339Nano, "2023-03-20T15:12:32Z")
 	want := ZoneHold{
-		IncludeSubdomains: BoolPtr(true),
-		Hold:              BoolPtr(true),
+		IncludeSubdomains: Ref(true),
+		Hold:              Ref(true),
 		HoldAfter:         &holdAfter,
 	}
 
@@ -76,8 +76,8 @@ func TestDeleteZoneHold(t *testing.T) {
 	holdAfter, _ := time.Parse(time.RFC3339, "2023-03-20T15:12:32.025799Z")
 	out, err := client.DeleteZoneHold(context.Background(), ZoneIdentifier(testZoneID), DeleteZoneHoldParams{HoldAfter: &holdAfter})
 	want := ZoneHold{
-		IncludeSubdomains: BoolPtr(false),
-		Hold:              BoolPtr(false),
+		IncludeSubdomains: Ref(false),
+		Hold:              Ref(false),
 		HoldAfter:         &holdAfter,
 	}
 
@@ -113,8 +113,8 @@ func TestGetZoneHold(t *testing.T) {
 	out, err := client.GetZoneHold(context.Background(), ZoneIdentifier(testZoneID), GetZoneHoldParams{})
 	holdAfter, _ := time.Parse(time.RFC3339Nano, "2023-03-20T15:12:32Z")
 	want := ZoneHold{
-		IncludeSubdomains: BoolPtr(false),
-		Hold:              BoolPtr(false),
+		IncludeSubdomains: Ref(false),
+		Hold:              Ref(false),
 		HoldAfter:         &holdAfter,
 	}
 

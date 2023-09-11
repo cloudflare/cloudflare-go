@@ -56,9 +56,9 @@ func TestAccessOrganization(t *testing.T) {
 			HeaderText:      "Widget Corp",
 			FooterText:      "© Widget Corp",
 		},
-		IsUIReadOnly:                   BoolPtr(false),
+		IsUIReadOnly:                   Ref(false),
 		UserSeatExpirationInactiveTime: "720h",
-		AutoRedirectToIdentity:         BoolPtr(true),
+		AutoRedirectToIdentity:         Ref(true),
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/organizations", handler)
@@ -122,7 +122,7 @@ func TestCreateAccessOrganization(t *testing.T) {
 			HeaderText:      "Widget Corp",
 			FooterText:      "© Widget Corp",
 		},
-		IsUIReadOnly: BoolPtr(true),
+		IsUIReadOnly: Ref(true),
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/organizations", handler)
@@ -137,7 +137,7 @@ func TestCreateAccessOrganization(t *testing.T) {
 			HeaderText:      "Widget Corp",
 			FooterText:      "© Widget Corp",
 		},
-		IsUIReadOnly: BoolPtr(true),
+		IsUIReadOnly: Ref(true),
 	})
 
 	if assert.NoError(t, err) {
@@ -156,7 +156,7 @@ func TestCreateAccessOrganization(t *testing.T) {
 			HeaderText:      "Widget Corp",
 			FooterText:      "© Widget Corp",
 		},
-		IsUIReadOnly: BoolPtr(true),
+		IsUIReadOnly: Ref(true),
 	})
 
 	if assert.NoError(t, err) {
@@ -209,7 +209,7 @@ func TestUpdateAccessOrganization(t *testing.T) {
 			HeaderText:      "Widget Corp",
 			FooterText:      "© Widget Corp",
 		},
-		IsUIReadOnly:           BoolPtr(false),
+		IsUIReadOnly:           Ref(false),
 		UIReadOnlyToggleReason: "this is my reason",
 	}
 
@@ -225,7 +225,7 @@ func TestUpdateAccessOrganization(t *testing.T) {
 			HeaderText:      "Widget Corp",
 			FooterText:      "© Widget Corp",
 		},
-		IsUIReadOnly:           BoolPtr(false),
+		IsUIReadOnly:           Ref(false),
 		UIReadOnlyToggleReason: "this is my reason",
 	})
 
@@ -245,7 +245,7 @@ func TestUpdateAccessOrganization(t *testing.T) {
 			HeaderText:      "Widget Corp",
 			FooterText:      "© Widget Corp",
 		},
-		IsUIReadOnly:           BoolPtr(false),
+		IsUIReadOnly:           Ref(false),
 		UIReadOnlyToggleReason: "this is my reason",
 	})
 

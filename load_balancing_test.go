@@ -115,7 +115,7 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 		Description:    "Primary data center - Provider XYZ",
 		Name:           "primary-dc-1",
 		Enabled:        true,
-		MinimumOrigins: IntPtr(1),
+		MinimumOrigins: Ref(1),
 		Monitor:        "f1aba936b94213e5b8dca0c0dbf1f9cc",
 		Latitude:       fptr(55),
 		Longitude:      fptr(-12.5),
@@ -231,7 +231,7 @@ func TestCreateLoadBalancerPool_MinimumOriginsZero(t *testing.T) {
 		Description:       "Primary data center - Provider XYZ",
 		Name:              "primary-dc-2",
 		Enabled:           true,
-		MinimumOrigins:    IntPtr(0),
+		MinimumOrigins:    Ref(0),
 		Origins:           []LoadBalancerOrigin{},
 		NotificationEmail: "",
 	}
@@ -239,7 +239,7 @@ func TestCreateLoadBalancerPool_MinimumOriginsZero(t *testing.T) {
 		Description:    "Primary data center - Provider XYZ",
 		Name:           "primary-dc-2",
 		Enabled:        true,
-		MinimumOrigins: IntPtr(0),
+		MinimumOrigins: Ref(0),
 	}
 
 	actual, err := client.CreateLoadBalancerPool(context.Background(), AccountIdentifier(testAccountID), CreateLoadBalancerPoolParams{LoadBalancerPool: request})
@@ -1312,7 +1312,7 @@ func TestCreateLoadBalancer(t *testing.T) {
 			},
 		},
 		AdaptiveRouting: &AdaptiveRouting{
-			FailoverAcrossPools: BoolPtr(true),
+			FailoverAcrossPools: Ref(true),
 		},
 		LocationStrategy: &LocationStrategy{
 			PreferECS: "always",
@@ -1327,7 +1327,7 @@ func TestCreateLoadBalancer(t *testing.T) {
 						"SAF": {"de90f38ced07c2e2f4df50b1f61d4194"},
 					},
 					AdaptiveRouting: &AdaptiveRouting{
-						FailoverAcrossPools: BoolPtr(false),
+						FailoverAcrossPools: Ref(false),
 					},
 					LocationStrategy: &LocationStrategy{
 						PreferECS: "never",
@@ -1394,7 +1394,7 @@ func TestCreateLoadBalancer(t *testing.T) {
 			},
 		},
 		AdaptiveRouting: &AdaptiveRouting{
-			FailoverAcrossPools: BoolPtr(true),
+			FailoverAcrossPools: Ref(true),
 		},
 		LocationStrategy: &LocationStrategy{
 			PreferECS: "always",
@@ -1409,7 +1409,7 @@ func TestCreateLoadBalancer(t *testing.T) {
 						"SAF": {"de90f38ced07c2e2f4df50b1f61d4194"},
 					},
 					AdaptiveRouting: &AdaptiveRouting{
-						FailoverAcrossPools: BoolPtr(false),
+						FailoverAcrossPools: Ref(false),
 					},
 					LocationStrategy: &LocationStrategy{
 						PreferECS: "never",
@@ -1581,7 +1581,7 @@ func TestListLoadBalancers(t *testing.T) {
 				},
 			},
 			AdaptiveRouting: &AdaptiveRouting{
-				FailoverAcrossPools: BoolPtr(true),
+				FailoverAcrossPools: Ref(true),
 			},
 			LocationStrategy: &LocationStrategy{
 				PreferECS: "always",
@@ -1734,7 +1734,7 @@ func TestGetLoadBalancer(t *testing.T) {
 			},
 		},
 		AdaptiveRouting: &AdaptiveRouting{
-			FailoverAcrossPools: BoolPtr(true),
+			FailoverAcrossPools: Ref(true),
 		},
 		LocationStrategy: &LocationStrategy{
 			PreferECS: "always",
@@ -1976,7 +1976,7 @@ func TestUpdateLoadBalancer(t *testing.T) {
 			},
 		},
 		AdaptiveRouting: &AdaptiveRouting{
-			FailoverAcrossPools: BoolPtr(false),
+			FailoverAcrossPools: Ref(false),
 		},
 		LocationStrategy: &LocationStrategy{
 			PreferECS: "never",
@@ -2033,7 +2033,7 @@ func TestUpdateLoadBalancer(t *testing.T) {
 			},
 		},
 		AdaptiveRouting: &AdaptiveRouting{
-			FailoverAcrossPools: BoolPtr(false),
+			FailoverAcrossPools: Ref(false),
 		},
 		LocationStrategy: &LocationStrategy{
 			PreferECS: "never",

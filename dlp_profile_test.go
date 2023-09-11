@@ -92,13 +92,13 @@ func TestDLPProfiles(t *testing.T) {
 					Name:      "SSN Numeric Detection",
 					ProfileID: "d658f520-6ecb-4a34-a725-ba37243c2d28",
 					Type:      "predefined",
-					Enabled:   BoolPtr(false),
+					Enabled:   Ref(false),
 				},
 				{
 					ID:   "aec08712-ee49-4109-9d9f-3b229c5b3dcd",
 					Name: "SSN Text", ProfileID: "d658f520-6ecb-4a34-a725-ba37243c2d28",
 					Type:    "predefined",
-					Enabled: BoolPtr(false),
+					Enabled: Ref(false),
 				},
 			},
 		},
@@ -113,7 +113,7 @@ func TestDLPProfiles(t *testing.T) {
 					ID:        "ef79b054-12d4-4067-bb30-b85f6267b91c",
 					Name:      "matches credit card regex",
 					ProfileID: "29678c26-a191-428d-9f63-6e20a4a636a4",
-					Enabled:   BoolPtr(true),
+					Enabled:   Ref(true),
 					Type:      "custom",
 					Pattern: &DLPPattern{
 						Regex:      "^4[0-9]$",
@@ -125,7 +125,8 @@ func TestDLPProfiles(t *testing.T) {
 			},
 			CreatedAt: &createdAt,
 			UpdatedAt: &updatedAt,
-		}}
+		},
+	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/dlp/profiles", handler)
 
@@ -186,7 +187,7 @@ func TestGetDLPProfile(t *testing.T) {
 				ID:        "ef79b054-12d4-4067-bb30-b85f6267b91c",
 				Name:      "matches credit card regex",
 				ProfileID: "29678c26-a191-428d-9f63-6e20a4a636a4",
-				Enabled:   BoolPtr(true),
+				Enabled:   Ref(true),
 				Pattern: &DLPPattern{
 					Regex:      "^4[0-9]$",
 					Validation: "luhn",
@@ -238,7 +239,7 @@ func TestCreateDLPCustomProfiles(t *testing.T) {
 							"regex": "`+requestProfile.Entries[0].Pattern.Regex+`",
 							"validation": "`+requestProfile.Entries[0].Pattern.Validation+`"
 						},
-						"enabled": `+fmt.Sprintf("%t", Bool(requestProfile.Entries[0].Enabled))+`,
+						"enabled": `+fmt.Sprintf("%t", Deref(requestProfile.Entries[0].Enabled))+`,
 						"type": "custom"
 					}
 				],
@@ -265,7 +266,7 @@ func TestCreateDLPCustomProfiles(t *testing.T) {
 					ID:        "ef79b054-12d4-4067-bb30-b85f6267b91c",
 					Name:      "matches credit card regex",
 					ProfileID: "29678c26-a191-428d-9f63-6e20a4a636a4",
-					Enabled:   BoolPtr(true),
+					Enabled:   Ref(true),
 					Type:      "custom",
 					Pattern: &DLPPattern{
 						Regex:      "^4[0-9]$",
@@ -291,7 +292,7 @@ func TestCreateDLPCustomProfiles(t *testing.T) {
 			Entries: []DLPEntry{
 				{
 					Name:    "matches credit card regex",
-					Enabled: BoolPtr(true),
+					Enabled: Ref(true),
 					Pattern: &DLPPattern{
 						Regex:      "^4[0-9]$",
 						Validation: "luhn",
@@ -337,7 +338,7 @@ func TestCreateDLPCustomProfile(t *testing.T) {
 							"regex": "`+requestProfile.Entries[0].Pattern.Regex+`",
 							"validation": "`+requestProfile.Entries[0].Pattern.Validation+`"
 						},
-						"enabled": `+fmt.Sprintf("%t", Bool(requestProfile.Entries[0].Enabled))+`,
+						"enabled": `+fmt.Sprintf("%t", Deref(requestProfile.Entries[0].Enabled))+`,
 						"type": "custom"
 					}
 				],
@@ -354,7 +355,6 @@ func TestCreateDLPCustomProfile(t *testing.T) {
 	updatedAt, _ := time.Parse(time.RFC3339, "2022-10-18T08:00:57Z")
 
 	want := []DLPProfile{{
-
 		ID:          "29678c26-a191-428d-9f63-6e20a4a636a4",
 		Name:        "Example Custom Profile",
 		Type:        "custom",
@@ -365,7 +365,7 @@ func TestCreateDLPCustomProfile(t *testing.T) {
 				Name:      "matches credit card regex",
 				ProfileID: "29678c26-a191-428d-9f63-6e20a4a636a4",
 				Type:      "custom",
-				Enabled:   BoolPtr(true),
+				Enabled:   Ref(true),
 				Pattern: &DLPPattern{
 					Regex:      "^4[0-9]$",
 					Validation: "luhn",
@@ -387,7 +387,7 @@ func TestCreateDLPCustomProfile(t *testing.T) {
 		Entries: []DLPEntry{
 			{
 				Name:    "matches credit card regex",
-				Enabled: BoolPtr(true),
+				Enabled: Ref(true),
 				Pattern: &DLPPattern{
 					Regex:      "^4[0-9]$",
 					Validation: "luhn",
@@ -435,7 +435,7 @@ func TestUpdateDLPCustomProfile(t *testing.T) {
 							"regex": "`+requestProfile.Entries[0].Pattern.Regex+`",
 							"validation": "`+requestProfile.Entries[0].Pattern.Validation+`"
 						},
-						"enabled": `+fmt.Sprintf("%t", Bool(requestProfile.Entries[0].Enabled))+`,
+						"enabled": `+fmt.Sprintf("%t", Deref(requestProfile.Entries[0].Enabled))+`,
 						"type": "custom"
 					}
 				],
@@ -452,7 +452,6 @@ func TestUpdateDLPCustomProfile(t *testing.T) {
 	updatedAt, _ := time.Parse(time.RFC3339, "2022-10-18T08:00:57Z")
 
 	want := DLPProfile{
-
 		ID:          "29678c26-a191-428d-9f63-6e20a4a636a4",
 		Name:        "Example Custom Profile",
 		Type:        "custom",
@@ -462,7 +461,7 @@ func TestUpdateDLPCustomProfile(t *testing.T) {
 				ID:        "ef79b054-12d4-4067-bb30-b85f6267b91c",
 				Name:      "matches credit card regex",
 				ProfileID: "29678c26-a191-428d-9f63-6e20a4a636a4",
-				Enabled:   BoolPtr(true),
+				Enabled:   Ref(true),
 				Type:      "custom",
 				Pattern: &DLPPattern{
 					Regex:      "^4[0-9]$",
@@ -485,7 +484,7 @@ func TestUpdateDLPCustomProfile(t *testing.T) {
 		Entries: []DLPEntry{
 			{
 				Name:    "matches credit card regex",
-				Enabled: BoolPtr(true),
+				Enabled: Ref(true),
 				Pattern: &DLPPattern{
 					Regex:      "^4[0-9]$",
 					Validation: "luhn",
@@ -527,7 +526,7 @@ func TestUpdateDLPPredefinedProfile(t *testing.T) {
 						"id": "ef79b054-12d4-4067-bb30-b85f6267b91c",
 						"name": "Example predefined entry",
 						"profile_id": "29678c26-a191-428d-9f63-6e20a4a636a4",
-						"enabled": `+fmt.Sprintf("%t", Bool(requestProfile.Entries[0].Enabled))+`,
+						"enabled": `+fmt.Sprintf("%t", Deref(requestProfile.Entries[0].Enabled))+`,
 						"type": "predefined"
 					}
 				],
@@ -549,7 +548,7 @@ func TestUpdateDLPPredefinedProfile(t *testing.T) {
 				Name:      "Example predefined entry",
 				ProfileID: "29678c26-a191-428d-9f63-6e20a4a636a4",
 				Type:      "predefined",
-				Enabled:   BoolPtr(true),
+				Enabled:   Ref(true),
 			},
 		},
 		AllowedMatchCount: 0,
@@ -564,10 +563,11 @@ func TestUpdateDLPPredefinedProfile(t *testing.T) {
 			Entries: []DLPEntry{
 				{
 					ID:      "29678c26-a191-428d-9f63-6e20a4a636a4",
-					Enabled: BoolPtr(true),
+					Enabled: Ref(true),
 				},
 			},
-		}})
+		},
+	})
 	require.NoError(t, err)
 	require.Equal(t, want, actual)
 }

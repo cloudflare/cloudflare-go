@@ -48,13 +48,13 @@ func TestDNSFirewallUserAnalytics_UserLevel(t *testing.T) {
 	mux.HandleFunc("/user/dns_firewall/12345/dns_analytics/report", handler)
 	want := DNSFirewallAnalytics{
 		Totals: DNSFirewallAnalyticsMetrics{
-			QueryCount:         Int64Ptr(5),
-			UncachedCount:      Int64Ptr(6),
-			StaleCount:         Int64Ptr(7),
-			ResponseTimeAvg:    Float64Ptr(1.0),
-			ResponseTimeMedian: Float64Ptr(2.0),
-			ResponseTime90th:   Float64Ptr(3.0),
-			ResponseTime99th:   Float64Ptr(4.0),
+			QueryCount:         Ref[int64](5),
+			UncachedCount:      Ref[int64](6),
+			StaleCount:         Ref[int64](7),
+			ResponseTimeAvg:    Ref(1.0),
+			ResponseTimeMedian: Ref(2.0),
+			ResponseTime90th:   Ref(3.0),
+			ResponseTime99th:   Ref(4.0),
 		},
 	}
 
@@ -115,13 +115,13 @@ func TestDNSFirewallUserAnalytics_AccountLevel(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/dns_firewall/12345/dns_analytics/report", handler)
 	want := DNSFirewallAnalytics{
 		Totals: DNSFirewallAnalyticsMetrics{
-			QueryCount:         Int64Ptr(5),
-			UncachedCount:      Int64Ptr(6),
-			StaleCount:         Int64Ptr(7),
-			ResponseTimeAvg:    Float64Ptr(1.0),
-			ResponseTimeMedian: Float64Ptr(2.0),
-			ResponseTime90th:   Float64Ptr(3.0),
-			ResponseTime99th:   Float64Ptr(4.0),
+			QueryCount:         Ref[int64](5),
+			UncachedCount:      Ref[int64](6),
+			StaleCount:         Ref[int64](7),
+			ResponseTimeAvg:    Ref(1.0),
+			ResponseTimeMedian: Ref(2.0),
+			ResponseTime90th:   Ref(3.0),
+			ResponseTime99th:   Ref(4.0),
 		},
 	}
 

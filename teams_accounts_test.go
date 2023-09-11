@@ -98,7 +98,7 @@ func TestTeamsAccountConfiguration(t *testing.T) {
 			FIPS:              &TeamsFIPS{TLS: true},
 
 			BlockPage: &TeamsBlockPage{
-				Enabled:         BoolPtr(true),
+				Enabled:         Ref(true),
 				FooterText:      "--footer--",
 				HeaderText:      "--header--",
 				LogoPath:        "https://logos.com/a.png",
@@ -106,7 +106,7 @@ func TestTeamsAccountConfiguration(t *testing.T) {
 				Name:            "Cloudflare",
 				MailtoAddress:   "admin@example.com",
 				MailtoSubject:   "Blocked User Inquiry",
-				SuppressFooter:  BoolPtr(true),
+				SuppressFooter:  Ref(true),
 			},
 		})
 	}

@@ -134,7 +134,7 @@ func (api *API) CreateWebAnalyticsSite(ctx context.Context, rc *ResourceContaine
 	}
 	if params.AutoInstall == nil {
 		// default auto_install to true for orange-clouded zones (zone_tag is specified)
-		params.AutoInstall = BoolPtr(params.ZoneTag != "")
+		params.AutoInstall = Ref(params.ZoneTag != "")
 	}
 	uri := fmt.Sprintf("/accounts/%s/rum/site_info", rc.Identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
@@ -249,7 +249,7 @@ func (api *API) UpdateWebAnalyticsSite(ctx context.Context, rc *ResourceContaine
 	}
 	if params.AutoInstall == nil {
 		// default auto_install to true for orange-clouded zones (zone_tag is specified)
-		params.AutoInstall = BoolPtr(params.ZoneTag != "")
+		params.AutoInstall = Ref(params.ZoneTag != "")
 	}
 	uri := fmt.Sprintf("/accounts/%s/rum/site_info/%s", rc.Identifier, params.SiteTag)
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)

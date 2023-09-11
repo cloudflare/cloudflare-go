@@ -46,7 +46,7 @@ func TestListRulesets(t *testing.T) {
 			Name:        "my example ruleset",
 			Description: "Test magic transit ruleset",
 			Kind:        "root",
-			Version:     StringPtr("1"),
+			Version:     Ref("1"),
 			LastUpdated: &lastUpdated,
 			Phase:       string(RulesetPhaseMagicTransit),
 		},
@@ -96,7 +96,7 @@ func TestGetRuleset_MagicTransit(t *testing.T) {
 		Name:        "my example ruleset",
 		Description: "Test magic transit ruleset",
 		Kind:        "root",
-		Version:     StringPtr("1"),
+		Version:     Ref("1"),
 		LastUpdated: &lastUpdated,
 		Phase:       string(RulesetPhaseMagicTransit),
 	}
@@ -141,7 +141,7 @@ func TestGetRuleset_WAF(t *testing.T) {
             },
             "description": "Normalization on the URL path, without propagating it to the origin",
             "last_updated": "2020-12-18T09:28:09.655749Z",
-            "ref": "272936dc447b41fe976255ff6b768ec0",
+            "Ref": "272936dc447b41fe976255ff6b768ec0",
             "enabled": true
           }
         ],
@@ -161,20 +161,20 @@ func TestGetRuleset_WAF(t *testing.T) {
 
 	rules := []RulesetRule{{
 		ID:      "78723a9e0c7c4c6dbec5684cb766231d",
-		Version: StringPtr("1"),
+		Version: Ref("1"),
 		Action:  string(RulesetRuleActionRewrite),
 		ActionParameters: &RulesetRuleActionParameters{
 			URI: &RulesetRuleActionParametersURI{
 				Path: &RulesetRuleActionParametersURIPath{
 					Expression: "normalize_url_path(raw.http.request.uri.path)",
 				},
-				Origin: BoolPtr(false),
+				Origin: Ref(false),
 			},
 		},
 		Description: "Normalization on the URL path, without propagating it to the origin",
 		LastUpdated: &lastUpdated,
 		Ref:         "272936dc447b41fe976255ff6b768ec0",
-		Enabled:     BoolPtr(true),
+		Enabled:     Ref(true),
 	}}
 
 	want := Ruleset{
@@ -182,7 +182,7 @@ func TestGetRuleset_WAF(t *testing.T) {
 		Name:        "Cloudflare Normalization Ruleset",
 		Description: "Created by the Cloudflare security team, this ruleset provides normalization on the URL path",
 		Kind:        string(RulesetKindManaged),
-		Version:     StringPtr("1"),
+		Version:     Ref("1"),
 		LastUpdated: &lastUpdated,
 		Phase:       string(RulesetPhaseHTTPRequestSanitize),
 		Rules:       rules,
@@ -252,7 +252,7 @@ func TestGetRuleset_SetCacheSettings(t *testing.T) {
 			},
 			"description": "Set all available cache settings in one rule",
 			"last_updated": "2020-12-18T09:28:09.655749Z",
-			"ref": "272936dc447b41fe976255ff6b768ec0",
+			"Ref": "272936dc447b41fe976255ff6b768ec0",
 			"enabled": true
           }
         ],
@@ -272,38 +272,38 @@ func TestGetRuleset_SetCacheSettings(t *testing.T) {
 
 	rules := []RulesetRule{{
 		ID:      "78723a9e0c7c4c6dbec5684cb766231d",
-		Version: StringPtr("1"),
+		Version: Ref("1"),
 		Action:  string(RulesetRuleActionSetCacheSettings),
 		ActionParameters: &RulesetRuleActionParameters{
-			Cache: BoolPtr(true),
+			Cache: Ref(true),
 			EdgeTTL: &RulesetRuleActionParametersEdgeTTL{
 				Mode:    "respect_origin",
-				Default: UintPtr(60),
+				Default: Ref[uint](60),
 				StatusCodeTTL: []RulesetRuleActionParametersStatusCodeTTL{
 					{
-						StatusCodeValue: UintPtr(200),
-						Value:           IntPtr(30),
+						StatusCodeValue: Ref[uint](200),
+						Value:           Ref(30),
 					},
 					{
 						StatusCodeRange: &RulesetRuleActionParametersStatusCodeRange{
-							From: UintPtr(201),
-							To:   UintPtr(300),
+							From: Ref[uint](201),
+							To:   Ref[uint](300),
 						},
-						Value: IntPtr(20),
+						Value: Ref(20),
 					},
 				},
 			},
 			BrowserTTL: &RulesetRuleActionParametersBrowserTTL{
 				Mode:    "override_origin",
-				Default: UintPtr(10),
+				Default: Ref[uint](10),
 			},
 			ServeStale: &RulesetRuleActionParametersServeStale{
-				DisableStaleWhileUpdating: BoolPtr(true),
+				DisableStaleWhileUpdating: Ref(true),
 			},
-			RespectStrongETags: BoolPtr(true),
+			RespectStrongETags: Ref(true),
 			CacheKey: &RulesetRuleActionParametersCacheKey{
-				IgnoreQueryStringsOrder: BoolPtr(true),
-				CacheDeceptionArmor:     BoolPtr(true),
+				IgnoreQueryStringsOrder: Ref(true),
+				CacheDeceptionArmor:     Ref(true),
 				CustomKey: &RulesetRuleActionParametersCustomKey{
 					Query: &RulesetRuleActionParametersCustomKeyQuery{
 						Include: &RulesetRuleActionParametersCustomKeyList{
@@ -315,35 +315,35 @@ func TestGetRuleset_SetCacheSettings(t *testing.T) {
 							Include:       []string{"habc", "hdef"},
 							CheckPresence: []string{"hfizz", "hbuzz"},
 						},
-						ExcludeOrigin: BoolPtr(true),
+						ExcludeOrigin: Ref(true),
 					},
 					Cookie: &RulesetRuleActionParametersCustomKeyCookie{
 						Include:       []string{"cabc", "cdef"},
 						CheckPresence: []string{"cfizz", "cbuzz"},
 					},
 					User: &RulesetRuleActionParametersCustomKeyUser{
-						DeviceType: BoolPtr(true),
-						Geo:        BoolPtr(true),
-						Lang:       BoolPtr(true),
+						DeviceType: Ref(true),
+						Geo:        Ref(true),
+						Lang:       Ref(true),
 					},
 					Host: &RulesetRuleActionParametersCustomKeyHost{
-						Resolved: BoolPtr(true),
+						Resolved: Ref(true),
 					},
 				},
 			},
 			AdditionalCacheablePorts: []int{1, 2, 3, 4},
-			OriginCacheControl:       BoolPtr(true),
-			ReadTimeout:              UintPtr(1000),
-			OriginErrorPagePassthru:  BoolPtr(true),
+			OriginCacheControl:       Ref(true),
+			ReadTimeout:              Ref[uint](1000),
+			OriginErrorPagePassthru:  Ref(true),
 			CacheReserve: &RulesetRuleActionParametersCacheReserve{
-				Eligible:        BoolPtr(true),
-				MinimumFileSize: UintPtr(1000),
+				Eligible:        Ref(true),
+				MinimumFileSize: Ref[uint](1000),
 			},
 		},
 		Description: "Set all available cache settings in one rule",
 		LastUpdated: &lastUpdated,
 		Ref:         "272936dc447b41fe976255ff6b768ec0",
-		Enabled:     BoolPtr(true),
+		Enabled:     Ref(true),
 	}}
 
 	want := Ruleset{
@@ -351,7 +351,7 @@ func TestGetRuleset_SetCacheSettings(t *testing.T) {
 		Name:        "Cloudflare Cache Rules Ruleset",
 		Description: "This ruleset provides cache settings modifications",
 		Kind:        string(RulesetKindZone),
-		Version:     StringPtr("1"),
+		Version:     Ref("1"),
 		LastUpdated: &lastUpdated,
 		Phase:       string(RulesetPhaseHTTPRequestCacheSettings),
 		Rules:       rules,
@@ -407,7 +407,7 @@ func TestGetRuleset_SetConfig(t *testing.T) {
             },
 			"description": "Set all available config rules in one rule",
 			"last_updated": "2020-12-18T09:28:09.655749Z",
-			"ref": "272936dc447b41fe976255ff6b768ec0",
+			"Ref": "272936dc447b41fe976255ff6b768ec0",
 			"enabled": true
           }
         ],
@@ -427,34 +427,34 @@ func TestGetRuleset_SetConfig(t *testing.T) {
 
 	rules := []RulesetRule{{
 		ID:      "78723a9e0c7c4c6dbec5684cb766231d",
-		Version: StringPtr("1"),
+		Version: Ref("1"),
 		Action:  string(RulesetRuleActionSetConfig),
 		ActionParameters: &RulesetRuleActionParameters{
-			AutomaticHTTPSRewrites: BoolPtr(true),
+			AutomaticHTTPSRewrites: Ref(true),
 			AutoMinify: &RulesetRuleActionParametersAutoMinify{
 				HTML: true,
 				CSS:  true,
 				JS:   true,
 			},
-			BrowserIntegrityCheck:   BoolPtr(true),
-			DisableApps:             BoolPtr(true),
-			DisableZaraz:            BoolPtr(true),
-			DisableRailgun:          BoolPtr(true),
-			EmailObfuscation:        BoolPtr(true),
-			Mirage:                  BoolPtr(true),
-			OpportunisticEncryption: BoolPtr(true),
+			BrowserIntegrityCheck:   Ref(true),
+			DisableApps:             Ref(true),
+			DisableZaraz:            Ref(true),
+			DisableRailgun:          Ref(true),
+			EmailObfuscation:        Ref(true),
+			Mirage:                  Ref(true),
+			OpportunisticEncryption: Ref(true),
 			Polish:                  PolishOff.IntoRef(),
-			RocketLoader:            BoolPtr(true),
+			RocketLoader:            Ref(true),
 			SecurityLevel:           SecurityLevelOff.IntoRef(),
-			ServerSideExcludes:      BoolPtr(true),
+			ServerSideExcludes:      Ref(true),
 			SSL:                     SSLOff.IntoRef(),
-			SXG:                     BoolPtr(true),
-			HotLinkProtection:       BoolPtr(true),
+			SXG:                     Ref(true),
+			HotLinkProtection:       Ref(true),
 		},
 		Description: "Set all available config rules in one rule",
 		LastUpdated: &lastUpdated,
 		Ref:         "272936dc447b41fe976255ff6b768ec0",
-		Enabled:     BoolPtr(true),
+		Enabled:     Ref(true),
 	}}
 
 	want := Ruleset{
@@ -462,7 +462,7 @@ func TestGetRuleset_SetConfig(t *testing.T) {
 		Name:        "Cloudflare Config Rules Ruleset",
 		Description: "This ruleset provides config rules modifications",
 		Kind:        string(RulesetKindZone),
-		Version:     StringPtr("1"),
+		Version:     Ref("1"),
 		LastUpdated: &lastUpdated,
 		Phase:       string(RulesetPhaseHTTPConfigSettings),
 		Rules:       rules,
@@ -509,7 +509,7 @@ func TestGetRuleset_RedirectFromValue(t *testing.T) {
 			},
 			"description": "Set dynamic redirect from value",
 			"last_updated": "2020-12-18T09:28:09.655749Z",
-			"ref": "272936dc447b41fe976255ff6b768ec0",
+			"Ref": "272936dc447b41fe976255ff6b768ec0",
 			"enabled": true
           }
         ],
@@ -529,7 +529,7 @@ func TestGetRuleset_RedirectFromValue(t *testing.T) {
 
 	rules := []RulesetRule{{
 		ID:      "78723a9e0c7c4c6dbec5684cb766231d",
-		Version: StringPtr("1"),
+		Version: Ref("1"),
 		Action:  string(RulesetRuleActionRedirect),
 		ActionParameters: &RulesetRuleActionParameters{
 			FromValue: &RulesetRuleActionParametersFromValue{
@@ -537,13 +537,13 @@ func TestGetRuleset_RedirectFromValue(t *testing.T) {
 				TargetURL: RulesetRuleActionParametersTargetURL{
 					Value: "some_host.com",
 				},
-				PreserveQueryString: BoolPtr(true),
+				PreserveQueryString: Ref(true),
 			},
 		},
 		Description: "Set dynamic redirect from value",
 		LastUpdated: &lastUpdated,
 		Ref:         "272936dc447b41fe976255ff6b768ec0",
-		Enabled:     BoolPtr(true),
+		Enabled:     Ref(true),
 	}}
 
 	want := Ruleset{
@@ -551,7 +551,7 @@ func TestGetRuleset_RedirectFromValue(t *testing.T) {
 		Name:        "Cloudflare Redirect Rules Ruleset",
 		Description: "This ruleset provides redirect from value",
 		Kind:        string(RulesetKindZone),
-		Version:     StringPtr("1"),
+		Version:     Ref("1"),
 		LastUpdated: &lastUpdated,
 		Phase:       string(RulesetPhaseHTTPRequestDynamicRedirect),
 		Rules:       rules,
@@ -592,7 +592,7 @@ func TestGetRuleset_CompressResponse(t *testing.T) {
             },
 			"description": "Compress response rule",
 			"last_updated": "2020-12-18T09:28:09.655749Z",
-			"ref": "272936dc447b41fe976255ff6b768ec0",
+			"Ref": "272936dc447b41fe976255ff6b768ec0",
 			"enabled": true
           }
         ],
@@ -612,7 +612,7 @@ func TestGetRuleset_CompressResponse(t *testing.T) {
 
 	rules := []RulesetRule{{
 		ID:      "78723a9e0c7c4c6dbec5684cb766231d",
-		Version: StringPtr("1"),
+		Version: Ref("1"),
 		Action:  string(RulesetRuleActionCompressResponse),
 		ActionParameters: &RulesetRuleActionParameters{
 			Algorithms: []RulesetRuleActionParametersCompressionAlgorithm{
@@ -623,7 +623,7 @@ func TestGetRuleset_CompressResponse(t *testing.T) {
 		Description: "Compress response rule",
 		LastUpdated: &lastUpdated,
 		Ref:         "272936dc447b41fe976255ff6b768ec0",
-		Enabled:     BoolPtr(true),
+		Enabled:     Ref(true),
 	}}
 
 	want := Ruleset{
@@ -631,7 +631,7 @@ func TestGetRuleset_CompressResponse(t *testing.T) {
 		Name:        "Cloudflare compress response ruleset",
 		Description: "This ruleset provides response compression rules",
 		Kind:        string(RulesetKindZone),
-		Version:     StringPtr("1"),
+		Version:     Ref("1"),
 		LastUpdated: &lastUpdated,
 		Phase:       string(RulesetPhaseHTTPResponseCompression),
 		Rules:       rules,
@@ -675,7 +675,7 @@ func TestCreateRuleset(t *testing.T) {
             "expression": "tcp.dstport in { 32768..65535 }",
             "description": "Allow TCP Ephemeral Ports",
             "last_updated": "2020-12-02T20:24:07.776073Z",
-            "ref": "72449e2e0de149619edb35e59c10d801",
+            "Ref": "72449e2e0de149619edb35e59c10d801",
             "enabled": true
           }
         ]
@@ -693,7 +693,7 @@ func TestCreateRuleset(t *testing.T) {
 
 	rules := []RulesetRule{{
 		ID:      "62449e2e0de149619edb35e59c10d801",
-		Version: StringPtr("1"),
+		Version: Ref("1"),
 		Action:  string(RulesetRuleActionSkip),
 		ActionParameters: &RulesetRuleActionParameters{
 			Ruleset: "current",
@@ -702,7 +702,7 @@ func TestCreateRuleset(t *testing.T) {
 		Description: "Allow TCP Ephemeral Ports",
 		LastUpdated: &lastUpdated,
 		Ref:         "72449e2e0de149619edb35e59c10d801",
-		Enabled:     BoolPtr(true),
+		Enabled:     Ref(true),
 	}}
 
 	newRuleset := CreateRulesetParams{
@@ -718,7 +718,7 @@ func TestCreateRuleset(t *testing.T) {
 		Name:        "my example ruleset",
 		Description: "Test magic transit ruleset",
 		Kind:        "root",
-		Version:     StringPtr("1"),
+		Version:     Ref("1"),
 		LastUpdated: &lastUpdated,
 		Phase:       string(RulesetPhaseMagicTransit),
 		Rules:       rules,
@@ -782,7 +782,7 @@ func TestUpdateRuleset(t *testing.T) {
             "expression": "tcp.dstport in { 32768..65535 }",
             "description": "Allow TCP Ephemeral Ports",
             "last_updated": "2020-12-02T20:24:07.776073Z",
-            "ref": "72449e2e0de149619edb35e59c10d801",
+            "Ref": "72449e2e0de149619edb35e59c10d801",
             "enabled": true
           },
           {
@@ -795,7 +795,7 @@ func TestUpdateRuleset(t *testing.T) {
             "expression": "udp.dstport in { 32768..65535 }",
             "description": "Allow UDP Ephemeral Ports",
             "last_updated": "2020-12-02T20:24:07.776073Z",
-            "ref": "72449e2e0de149619edb35e59c10d801",
+            "Ref": "72449e2e0de149619edb35e59c10d801",
             "enabled": true
           }
         ]
@@ -813,7 +813,7 @@ func TestUpdateRuleset(t *testing.T) {
 
 	rules := []RulesetRule{{
 		ID:      "62449e2e0de149619edb35e59c10d801",
-		Version: StringPtr("1"),
+		Version: Ref("1"),
 		Action:  string(RulesetRuleActionSkip),
 		ActionParameters: &RulesetRuleActionParameters{
 			Ruleset: "current",
@@ -822,10 +822,10 @@ func TestUpdateRuleset(t *testing.T) {
 		Description: "Allow TCP Ephemeral Ports",
 		LastUpdated: &lastUpdated,
 		Ref:         "72449e2e0de149619edb35e59c10d801",
-		Enabled:     BoolPtr(true),
+		Enabled:     Ref(true),
 	}, {
 		ID:      "62449e2e0de149619edb35e59c10d802",
-		Version: StringPtr("1"),
+		Version: Ref("1"),
 		Action:  string(RulesetRuleActionSkip),
 		ActionParameters: &RulesetRuleActionParameters{
 			Ruleset: "current",
@@ -834,7 +834,7 @@ func TestUpdateRuleset(t *testing.T) {
 		Description: "Allow UDP Ephemeral Ports",
 		LastUpdated: &lastUpdated,
 		Ref:         "72449e2e0de149619edb35e59c10d801",
-		Enabled:     BoolPtr(true),
+		Enabled:     Ref(true),
 	}}
 
 	updated := UpdateRulesetParams{
@@ -848,7 +848,7 @@ func TestUpdateRuleset(t *testing.T) {
 		Name:        "ruleset1",
 		Description: "Test Firewall Ruleset Update",
 		Kind:        "root",
-		Version:     StringPtr("1"),
+		Version:     Ref("1"),
 		LastUpdated: &lastUpdated,
 		Phase:       string(RulesetPhaseMagicTransit),
 		Rules:       rules,

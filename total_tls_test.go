@@ -35,7 +35,7 @@ func TestTotalTLS_GetSettings(t *testing.T) {
 
 	result, err := client.GetTotalTLS(context.Background(), ZoneIdentifier(testZoneID))
 	if assert.NoError(t, err) {
-		assert.Equal(t, BoolPtr(true), result.Enabled)
+		assert.Equal(t, Ref(true), result.Enabled)
 		assert.Equal(t, "google", result.CertificateAuthority)
 		assert.Equal(t, 90, result.ValidityDays)
 	}
@@ -65,9 +65,9 @@ func TestTotalTLS_SetSettings(t *testing.T) {
 		assert.Equal(t, ErrMissingZoneID, err)
 	}
 
-	result, err := client.SetTotalTLS(context.Background(), ZoneIdentifier(testZoneID), TotalTLS{CertificateAuthority: "google", Enabled: BoolPtr(true)})
+	result, err := client.SetTotalTLS(context.Background(), ZoneIdentifier(testZoneID), TotalTLS{CertificateAuthority: "google", Enabled: Ref(true)})
 	if assert.NoError(t, err) {
-		assert.Equal(t, BoolPtr(true), result.Enabled)
+		assert.Equal(t, Ref(true), result.Enabled)
 		assert.Equal(t, "google", result.CertificateAuthority)
 		assert.Equal(t, 90, result.ValidityDays)
 	}

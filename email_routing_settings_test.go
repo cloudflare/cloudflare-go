@@ -19,7 +19,7 @@ func createTestEmailRoutingSettings() EmailRoutingSettings {
 		Enabled:    true,
 		Created:    &created,
 		Modified:   &modified,
-		SkipWizard: BoolPtr(true),
+		SkipWizard: Ref(true),
 		Status:     "read",
 	}
 }
@@ -166,7 +166,7 @@ func TestEmailRouting_DNSSettings(t *testing.T) {
 			Name:     "example.com",
 			Content:  "192.0.2.1",
 			TTL:      3600,
-			Priority: Uint16Ptr(10),
+			Priority: Ref[uint16](10),
 		},
 	}
 

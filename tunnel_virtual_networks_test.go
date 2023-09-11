@@ -145,7 +145,7 @@ func TestUpdateTunnelVirtualNetwork(t *testing.T) {
 	tunnel, err := client.UpdateTunnelVirtualNetwork(context.Background(), AccountIdentifier(testAccountID), TunnelVirtualNetworkUpdateParams{
 		VnetID:           "f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
 		Name:             "us-east-1-vpc",
-		IsDefaultNetwork: BoolPtr(true),
+		IsDefaultNetwork: Ref(true),
 		Comment:          "Staging VPC for data science",
 	})
 

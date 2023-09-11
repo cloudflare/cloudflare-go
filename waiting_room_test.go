@@ -5,21 +5,21 @@ import (
 	"fmt"
 	"net/http"
 	"testing"
-
 	"time"
 
 	"github.com/stretchr/testify/assert"
 )
 
-var waitingRoomID = "699d98642c564d2e855e9661899b7252"
-var waitingRoomEventID = "25756b2dfe6e378a06b033b670413757"
-var waitingRoomRuleID = "25756b2dfe6e378a06b033b670413757"
-var testTimestampWaitingRoom = time.Now().UTC()
-var testTimestampWaitingRoomEvent = time.Now().UTC()
-var testTimestampWaitingRoomEventPrequeue = time.Now().UTC()
-var testTimestampWaitingRoomEventStart = testTimestampWaitingRoomEventPrequeue.Add(5 * time.Minute)
-var testTimestampWaitingRoomEventEnd = testTimestampWaitingRoomEventStart.Add(1 * time.Minute)
-var waitingRoomJSON = fmt.Sprintf(`
+var (
+	waitingRoomID                         = "699d98642c564d2e855e9661899b7252"
+	waitingRoomEventID                    = "25756b2dfe6e378a06b033b670413757"
+	waitingRoomRuleID                     = "25756b2dfe6e378a06b033b670413757"
+	testTimestampWaitingRoom              = time.Now().UTC()
+	testTimestampWaitingRoomEvent         = time.Now().UTC()
+	testTimestampWaitingRoomEventPrequeue = time.Now().UTC()
+	testTimestampWaitingRoomEventStart    = testTimestampWaitingRoomEventPrequeue.Add(5 * time.Minute)
+	testTimestampWaitingRoomEventEnd      = testTimestampWaitingRoomEventStart.Add(1 * time.Minute)
+	waitingRoomJSON                       = fmt.Sprintf(`
     {
       "id": "%s",
       "created_on": "%s",
@@ -45,7 +45,8 @@ var waitingRoomJSON = fmt.Sprintf(`
 	  "queueing_status_code": 200
     }
    `, waitingRoomID, testTimestampWaitingRoom.Format(time.RFC3339Nano), testTimestampWaitingRoom.Format(time.RFC3339Nano),
-	testTimestampWaitingRoomEventStart.Format(time.RFC3339Nano))
+		testTimestampWaitingRoomEventStart.Format(time.RFC3339Nano))
+)
 
 var waitingRoomEventJSON = fmt.Sprintf(`
     {
@@ -168,7 +169,7 @@ var waitingRoomRule = WaitingRoomRule{
 	Action:      "bypass_waiting_room",
 	Expression:  "ip.src in {1.2.3.4 5.6.7.8}",
 	Description: "bypass ip",
-	Enabled:     BoolPtr(true),
+	Enabled:     Ref(true),
 	LastUpdated: &testTimestampWaitingRoom,
 }
 
@@ -177,11 +178,11 @@ var waitingRoomSettings = WaitingRoomSettings{
 }
 
 var waitingRoomSettingsUpdate = UpdateWaitingRoomSettingsParams{
-	SearchEngineCrawlerBypass: BoolPtr(true),
+	SearchEngineCrawlerBypass: Ref(true),
 }
 
 var waitingRoomSettingsPatch = PatchWaitingRoomSettingsParams{
-	SearchEngineCrawlerBypass: BoolPtr(true),
+	SearchEngineCrawlerBypass: Ref(true),
 }
 
 func TestListWaitingRooms(t *testing.T) {

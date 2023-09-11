@@ -245,9 +245,9 @@ var (
 		ID:                "e7a57d8746e74ae49c25994dadb421b1",
 		ETAG:              "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
 		Size:              191,
-		LastDeployedFrom:  StringPtr("dash"),
-		Logpush:           BoolPtr(false),
-		CompatibilityDate: StringPtr("2022-07-12"),
+		LastDeployedFrom:  Ref("dash"),
+		Logpush:           Ref(false),
+		CompatibilityDate: Ref("2022-07-12"),
 	}
 )
 
@@ -317,7 +317,7 @@ func withWorkerDeploymentId(dID *string) workersTestResponseOpt {
 }
 
 func workersScriptResponse(t testing.TB, opts ...workersTestResponseOpt) string {
-	var responseConfig = WorkersDefaultTestResponse
+	responseConfig := WorkersDefaultTestResponse
 	for _, opt := range opts {
 		opt(&responseConfig)
 	}
@@ -469,7 +469,8 @@ func TestGetWorker(t *testing.T) {
 		false,
 		WorkerScript{
 			Script: workerScript,
-		}}
+		},
+	}
 	if assert.NoError(t, err) {
 		assert.Equal(t, want.Script, res.Script)
 	}
@@ -560,7 +561,8 @@ func TestGetWorkersScriptSettings(t *testing.T) {
 			ID:      "e7a57d8746e74ae49c25994dadb421b1",
 			ETAG:    "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
 			Logpush: &logpush,
-		}}
+		},
+	}
 	if assert.NoError(t, err) {
 		assert.Equal(t, want.WorkerMetaData, res.WorkerMetaData)
 	}
@@ -584,7 +586,8 @@ func TestUpdateWorkersScriptSettings(t *testing.T) {
 			ID:      "e7a57d8746e74ae49c25994dadb421b1",
 			ETAG:    "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
 			Logpush: &logpush,
-		}}
+		},
+	}
 	if assert.NoError(t, err) {
 		assert.Equal(t, want.WorkerMetaData, res.WorkerMetaData)
 	}
@@ -645,10 +648,11 @@ func TestUploadWorker_Basic(t *testing.T) {
 				ETAG:             "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
 				Size:             191,
 				ModifiedOn:       formattedTime,
-				Logpush:          BoolPtr(false),
-				LastDeployedFrom: StringPtr("dash"),
+				Logpush:          Ref(false),
+				LastDeployedFrom: Ref("dash"),
 			},
-		}}
+		},
+	}
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
@@ -688,10 +692,11 @@ func TestUploadWorker_Module(t *testing.T) {
 				ETAG:             "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
 				Size:             191,
 				CreatedOn:        formattedCreatedTime,
-				Logpush:          BoolPtr(false),
-				LastDeployedFrom: StringPtr("dash"),
+				Logpush:          Ref(false),
+				LastDeployedFrom: Ref("dash"),
 			},
-		}}
+		},
+	}
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
@@ -780,10 +785,11 @@ func TestUploadWorker_WithInheritBinding(t *testing.T) {
 				ETAG:             "279cf40d86d70b82f6cd3ba90a646b3ad995912da446836d7371c21c6a43977a",
 				Size:             191,
 				ModifiedOn:       formattedTime,
-				Logpush:          BoolPtr(false),
-				LastDeployedFrom: StringPtr("dash"),
+				Logpush:          Ref(false),
+				LastDeployedFrom: Ref("dash"),
 			},
-		}}
+		},
+	}
 
 	res, err := client.UploadWorker(context.Background(), AccountIdentifier(testAccountID), CreateWorkerParams{
 		ScriptName: "bar",
@@ -793,7 +799,8 @@ func TestUploadWorker_WithInheritBinding(t *testing.T) {
 			"b2": WorkerInheritBinding{
 				OldName: "old_binding_name",
 			},
-		}})
+		},
+	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
@@ -831,7 +838,8 @@ func TestUploadWorker_WithKVBinding(t *testing.T) {
 			"b1": WorkerKvNamespaceBinding{
 				NamespaceID: "test-namespace",
 			},
-		}})
+		},
+	})
 	assert.NoError(t, err)
 }
 
@@ -1039,7 +1047,7 @@ func TestUploadWorker_WithServiceBinding(t *testing.T) {
 			},
 			"b2": WorkerServiceBinding{
 				Service:     "the_service",
-				Environment: StringPtr("the_environment"),
+				Environment: Ref("the_environment"),
 			},
 		},
 	})
@@ -1052,7 +1060,7 @@ func TestUploadWorker_WithLogpush(t *testing.T) {
 
 	var (
 		formattedTime, _ = time.Parse(time.RFC3339Nano, "2018-06-09T15:17:01.989141Z")
-		logpush          = BoolPtr(true)
+		logpush          = Ref(true)
 	)
 	mux.HandleFunc("/accounts/"+testAccountID+"/workers/scripts/foo", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
@@ -1078,9 +1086,10 @@ func TestUploadWorker_WithLogpush(t *testing.T) {
 				Size:             191,
 				ModifiedOn:       formattedTime,
 				Logpush:          logpush,
-				LastDeployedFrom: StringPtr("dash"),
+				LastDeployedFrom: Ref("dash"),
 			},
-		}}
+		},
+	}
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, res)
 	}
@@ -1150,7 +1159,8 @@ func TestUploadWorker_WithQueueBinding(t *testing.T) {
 				Binding: "b1",
 				Queue:   "test-queue",
 			},
-		}})
+		},
+	})
 	assert.NoError(t, err)
 }
 
@@ -1208,7 +1218,8 @@ func TestUploadWorker_WithDispatchNamespaceBinding(t *testing.T) {
 					},
 				},
 			},
-		}})
+		},
+	})
 	assert.NoError(t, err)
 }
 
@@ -1217,7 +1228,7 @@ func TestUploadWorker_WithSmartPlacementEnabled(t *testing.T) {
 	defer teardown()
 
 	placementMode := PlacementModeSmart
-	response := workersScriptResponse(t, withWorkerScript(expectedWorkersModuleWorkerScript), withWorkerPlacementMode(StringPtr("smart")))
+	response := workersScriptResponse(t, withWorkerScript(expectedWorkersModuleWorkerScript), withWorkerPlacementMode(Ref("smart")))
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
@@ -1282,8 +1293,8 @@ func TestUploadWorker_WithTailConsumers(t *testing.T) {
 	t.Run("adds tail consumers", func(t *testing.T) {
 		tailConsumers := []WorkersTailConsumer{
 			{Service: "my-service-a"},
-			{Service: "my-service-b", Environment: StringPtr("production")},
-			{Service: "a-namespaced-service", Namespace: StringPtr("a-dispatch-namespace")},
+			{Service: "my-service-b", Environment: Ref("production")},
+			{Service: "a-namespaced-service", Namespace: Ref("a-dispatch-namespace")},
 		}
 		response = workersScriptResponse(t,
 			withWorkerScript(expectedWorkersModuleWorkerScript),

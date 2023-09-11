@@ -33,9 +33,9 @@ func TestGetBotManagement(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/bot_management", handler)
 
 	want := BotManagement{
-		EnableJS:         BoolPtr(false),
-		FightMode:        BoolPtr(true),
-		UsingLatestModel: BoolPtr(true),
+		EnableJS:         Ref(false),
+		FightMode:        Ref(true),
+		UsingLatestModel: Ref(true),
 	}
 
 	actual, err := client.GetBotManagement(context.Background(), ZoneIdentifier(testZoneID))
@@ -69,14 +69,14 @@ func TestUpdateBotManagement(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/bot_management", handler)
 
 	bmData := UpdateBotManagementParams{
-		EnableJS:  BoolPtr(false),
-		FightMode: BoolPtr(true),
+		EnableJS:  Ref(false),
+		FightMode: Ref(true),
 	}
 
 	want := BotManagement{
-		EnableJS:         BoolPtr(false),
-		FightMode:        BoolPtr(true),
-		UsingLatestModel: BoolPtr(true),
+		EnableJS:         Ref(false),
+		FightMode:        Ref(true),
+		UsingLatestModel: Ref(true),
 	}
 
 	actual, err := client.UpdateBotManagement(context.Background(), ZoneIdentifier(testZoneID), bmData)

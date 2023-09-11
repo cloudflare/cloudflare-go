@@ -12,15 +12,18 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var siteTag = "46c32e0ea0e85e90aa1a6df4596b831e"
-var siteToken = "75300e6c2c5648d983fcef2a6c03d14e"
-var rulesetID = "2e8804e9-674f-4652-94a4-1c664d0d6764"
-var ruleID = "3caf59c9-eda3-4f99-a4a3-ee5fc2358a78"
+var (
+	siteTag   = "46c32e0ea0e85e90aa1a6df4596b831e"
+	siteToken = "75300e6c2c5648d983fcef2a6c03d14e"
+	rulesetID = "2e8804e9-674f-4652-94a4-1c664d0d6764"
+	ruleID    = "3caf59c9-eda3-4f99-a4a3-ee5fc2358a78"
+)
 
 // var snippetFormat = `\u003c!-- Cloudflare Web Analytics --\u003e\u003cscript defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{\"token\": \"%s\"}'\u003e\u003c/script\u003e\u003c!-- End Cloudflare Web Analytics --\u003e`.
-var snippetFormat = `%s`
-var createdTimestamp = time.Now().UTC()
-var siteJSON = fmt.Sprintf(`
+var (
+	snippetFormat    = `%s`
+	createdTimestamp = time.Now().UTC()
+	siteJSON         = fmt.Sprintf(`
 {
   "site_tag": "%s",
   "site_token": "%s",
@@ -48,6 +51,7 @@ var siteJSON = fmt.Sprintf(`
   ]
 }
 `, siteTag, siteToken, createdTimestamp.Format(time.RFC3339Nano), fmt.Sprintf(snippetFormat, siteToken), testZoneID, rulesetID, createdTimestamp.Format(time.RFC3339Nano), ruleID)
+)
 
 var rulesetJSON = fmt.Sprintf(`
 {
@@ -81,7 +85,7 @@ var site = WebAnalyticsSite{
 	Rules: []WebAnalyticsRule{
 		rule,
 	},
-	Created: TimePtr(createdTimestamp.UTC()),
+	Created: Ref(createdTimestamp.UTC()),
 }
 
 var ruleset = WebAnalyticsRuleset{
@@ -98,7 +102,7 @@ var rule = WebAnalyticsRule{
 		"*",
 	},
 	Inclusive: true,
-	Created:   TimePtr(createdTimestamp.UTC()),
+	Created:   Ref(createdTimestamp.UTC()),
 	IsPaused:  false,
 	Priority:  1000,
 }
@@ -199,7 +203,7 @@ func TestCreateWebAnalyticsSite(t *testing.T) {
 	want := site
 	actual, err := client.CreateWebAnalyticsSite(context.Background(), AccountIdentifier(testAccountID), CreateWebAnalyticsSiteParams{
 		ZoneTag: testZoneID,
-		//AutoInstall: BoolPtr(true),  // should default to true
+		// AutoInstall: Ref(true),  // should default to true
 	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, &want, actual)
@@ -226,7 +230,7 @@ func TestUpdateWebAnalyticsSite(t *testing.T) {
 	actual, err := client.UpdateWebAnalyticsSite(context.Background(), AccountIdentifier(testAccountID), UpdateWebAnalyticsSiteParams{
 		SiteTag:     site.SiteTag,
 		Host:        "example.com",
-		AutoInstall: BoolPtr(true),
+		AutoInstall: Ref(true),
 	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, &want, actual)

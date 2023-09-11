@@ -13,7 +13,7 @@ var testEmailRoutingRule = EmailRoutingRule{
 	Tag:      "a7e6fb77503c41d8a7f3113c6918f10c",
 	Name:     "Rule send to user@example.net",
 	Priority: 0,
-	Enabled:  BoolPtr(true),
+	Enabled:  Ref(true),
 	Matchers: []EmailRoutingRuleMatcher{
 		{
 			Type:  "literal",
@@ -77,7 +77,7 @@ func TestEmailRouting_ListRoutingRules(t *testing.T) {
 		assert.Equal(t, ErrMissingZoneID, err)
 	}
 
-	res, resInfo, err := client.ListEmailRoutingRules(context.Background(), AccountIdentifier(testZoneID), ListEmailRoutingRulesParameters{Enabled: BoolPtr(true)})
+	res, resInfo, err := client.ListEmailRoutingRules(context.Background(), AccountIdentifier(testZoneID), ListEmailRoutingRulesParameters{Enabled: Ref(true)})
 	if assert.NoError(t, err) {
 		assert.Equal(t, resInfo.Page, 1)
 		assert.Equal(t, testEmailRoutingRule, res[0])
@@ -124,7 +124,7 @@ func TestEmailRouting_CreateRoutingRule(t *testing.T) {
 		assert.Equal(t, ErrMissingZoneID, err)
 	}
 
-	res, err := client.CreateEmailRoutingRule(context.Background(), AccountIdentifier(testZoneID), CreateEmailRoutingRuleParameters{Enabled: BoolPtr(true)})
+	res, err := client.CreateEmailRoutingRule(context.Background(), AccountIdentifier(testZoneID), CreateEmailRoutingRuleParameters{Enabled: Ref(true)})
 	if assert.NoError(t, err) {
 		assert.Equal(t, testEmailRoutingRule, res)
 	}
@@ -313,7 +313,7 @@ func TestEmailRouting_GetAllRule(t *testing.T) {
 	want := EmailRoutingCatchAllRule{
 		Tag:     "a7e6fb77503c41d8a7f3113c6918f10c",
 		Name:    "Send to user@example.net rule.",
-		Enabled: BoolPtr(true),
+		Enabled: Ref(true),
 		Matchers: []EmailRoutingRuleMatcher{
 			{
 				Type: "all",
@@ -374,7 +374,7 @@ func TestEmailRouting_UpdateAllRule(t *testing.T) {
 	want := EmailRoutingCatchAllRule{
 		Tag:     "a7e6fb77503c41d8a7f3113c6918f10c",
 		Name:    "Send to user@example.net rule.",
-		Enabled: BoolPtr(true),
+		Enabled: Ref(true),
 		Matchers: []EmailRoutingRuleMatcher{
 			{
 				Type: "all",
