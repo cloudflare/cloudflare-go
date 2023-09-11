@@ -1,0 +1,3 @@
+```release-note:breaking-change
+Type conversion helper functions are replaced by generic `Ref`, `Deref`, `RefSlice`, `DerefSlice`, `RefMap`, and `DerefMap`. As an example, `StringPtr("hello")` is now `Ref("hello")`. If Go could not infer the types, you can specify them explicitly. For instance, `Ref[uint](1)` will return a pointer to the `uint` value 1.
+```
