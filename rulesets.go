@@ -237,6 +237,7 @@ type RulesetRuleActionParameters struct {
 	CacheKey                 *RulesetRuleActionParametersCacheKey              `json:"cache_key,omitempty"`
 	OriginCacheControl       *bool                                             `json:"origin_cache_control,omitempty"`
 	OriginErrorPagePassthru  *bool                                             `json:"origin_error_page_passthru,omitempty"`
+	CacheReserve             *RulesetRuleActionParametersCacheReserve          `json:"cache_reserve,omitempty"`
 	FromList                 *RulesetRuleActionParametersFromList              `json:"from_list,omitempty"`
 	FromValue                *RulesetRuleActionParametersFromValue             `json:"from_value,omitempty"`
 	AutomaticHTTPSRewrites   *bool                                             `json:"automatic_https_rewrites,omitempty"`
@@ -314,6 +315,11 @@ type RulesetRuleActionParametersCacheKey struct {
 	IgnoreQueryStringsOrder *bool                                 `json:"ignore_query_strings_order,omitempty"`
 	CacheDeceptionArmor     *bool                                 `json:"cache_deception_armor,omitempty"`
 	CustomKey               *RulesetRuleActionParametersCustomKey `json:"custom_key,omitempty"`
+}
+
+type RulesetRuleActionParametersCacheReserve struct {
+	Eligible        *bool `json:"eligible,omitempty"`
+	MinimumFileSize *uint `json:"minimum_file_size,omitempty"`
 }
 
 type RulesetRuleActionParametersCustomKey struct {
