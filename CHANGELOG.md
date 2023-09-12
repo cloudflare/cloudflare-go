@@ -1,9 +1,12 @@
-## 0.77.0 (Unreleased)
+## 0.78.0 (Unreleased)
+
+## 0.77.0 (September 13th, 2023)
 
 ENHANCEMENTS:
 
 * access_identity_provider: add support for email_claim_name and authorization_server_id ([#1390](https://github.com/cloudflare/cloudflare-go/issues/1390))
 * access_identity_provider: add support for ping_env_id ([#1391](https://github.com/cloudflare/cloudflare-go/issues/1391))
+* dcv_delegation: add GET for DCV Delegation UUID ([#1384](https://github.com/cloudflare/cloudflare-go/issues/1384))
 * streams: adds support to initiate tus upload ([#1359](https://github.com/cloudflare/cloudflare-go/issues/1359))
 * tunnel: add support for `include_prefix`, `exclude_prefix` in list operations ([#1385](https://github.com/cloudflare/cloudflare-go/issues/1385))
 
@@ -16,6 +19,7 @@ DEPENDENCIES:
 * deps: bumps actions/checkout from 3 to 4 ([#1387](https://github.com/cloudflare/cloudflare-go/issues/1387))
 * deps: bumps golang.org/x/net from 0.14.0 to 0.15.0 ([#1389](https://github.com/cloudflare/cloudflare-go/issues/1389))
 * deps: bumps goreleaser/goreleaser-action from 4.4.0 to 4.6.0 ([#1388](https://github.com/cloudflare/cloudflare-go/issues/1388))
+* deps: bumps goreleaser/goreleaser-action from 4.6.0 to 5.0.0 ([#1396](https://github.com/cloudflare/cloudflare-go/issues/1396))
 
 ## 0.76.0 (August 30th, 2023)
 
