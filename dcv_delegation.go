@@ -21,7 +21,7 @@ type DCVDelegationResponse struct {
 
 type GetDCVDelegationParams struct {}
 
-// GetDCVDelegation gets a zone DCV Delegation UUID
+// GetDCVDelegation gets a zone DCV Delegation UUID.
 //
 // TODO: Add API documentation
 func (api *API) GetDCVDelegation(ctx context.Context, rc *ResourceContainer) (DCVDelegation, ResultInfo, error) {
