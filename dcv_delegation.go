@@ -24,7 +24,7 @@ type GetDCVDelegationParams struct {}
 // GetDCVDelegation gets a zone DCV Delegation UUID.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/dcv-delegation-uuid-get
-func (api *API) GetDCVDelegation(ctx context.Context, rc *ResourceContainer) (DCVDelegation, ResultInfo, error) {
+func (api *API) GetDCVDelegation(ctx context.Context, rc *ResourceContainer, params GetDCVDelegationParams) (DCVDelegation, ResultInfo, error) {
 	uri := fmt.Sprintf("/zones/%s/dcv_delegation/uuid", rc.Identifier)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
