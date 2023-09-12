@@ -35,7 +35,7 @@ func TestGetDCVDelegation(t *testing.T) {
 		UUID: testUuid,
 	}
 
-	actual, _, err := client.GetDCVDelegation(context.Background(), ZoneIdentifier(testZoneID))
+	actual, _, err := client.GetDCVDelegation(context.Background(), ZoneIdentifier(testZoneID), GetDCVDelegationParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
