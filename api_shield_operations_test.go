@@ -1,0 +1,480 @@
+package cloudflare
+
+import (
+	"context"
+	"fmt"
+	"io"
+	"net/http"
+	"net/url"
+	"testing"
+	"time"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+)
+
+const testAPIShieldOperationId = "9def2cb0-3ed0-4737-92ca-f09efa4718fd"
+
+func TestGetAPIShieldOperation(t *testing.T) {
+	setup()
+	t.Cleanup(teardown)
+
+	endpoint := fmt.Sprintf("/zones/%s/api_gateway/operations/%s", testZoneID, testAPIShieldOperationId)
+	response := `{
+		"success" : true,
+		"errors": [],
+		"messages": [],
+		"result": {
+			"operation_id": "9def2cb0-3ed0-4737-92ca-f09efa4718fd",
+			"method": "POST",
+			"host": "api.cloudflare.com",
+			"endpoint": "/client/v4/zones",
+			"last_updated": "2023-03-02T15:46:06.000000Z"
+		}
+	}`
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		require.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		require.Empty(t, r.URL.Query())
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, response)
+	}
+
+	mux.HandleFunc(endpoint, handler)
+
+	actual, err := client.GetAPIShieldOperation(
+		context.Background(),
+		ZoneIdentifier(testZoneID),
+		testAPIShieldOperationId,
+		nil,
+	)
+
+	expected := &APIShieldOperation{
+		APIShieldCreateOperation: APIShieldCreateOperation{
+			Method:   "POST",
+			Host:     "api.cloudflare.com",
+			Endpoint: "/client/v4/zones",
+		},
+		ID:          testAPIShieldOperationId,
+		LastUpdated: time.Date(2023, time.March, 2, 15, 46, 6, 0, time.UTC),
+		Features:    nil,
+	}
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expected, actual)
+	}
+}
+
+func TestGetAPIShieldOperationWithOptions(t *testing.T) {
+	endpoint := fmt.Sprintf("/zones/%s/api_gateway/operations/%s", testZoneID, testAPIShieldOperationId)
+	response := `{
+		"success" : true,
+		"errors": [],
+		"messages": [],
+		"result": {
+			"operation_id": "9def2cb0-3ed0-4737-92ca-f09efa4718fd",
+			"method": "POST",
+			"host": "api.cloudflare.com",
+			"endpoint": "/client/v4/zones",
+			"last_updated": "2023-03-02T15:46:06.000000Z",
+			"features":{
+				"thresholds":{},
+				"parameter_schemas":{}
+			}
+		}
+	}`
+
+	tests := []struct {
+		name           string
+		getOptions     *APIShieldGetOperationParams
+		expectedParams url.Values
+	}{
+		{
+			name: "one feature",
+			getOptions: &APIShieldGetOperationParams{
+				Features: []string{"thresholds"},
+			},
+			expectedParams: url.Values{
+				"feature": []string{"thresholds"},
+			},
+		},
+		{
+			name: "more than one feature",
+			getOptions: &APIShieldGetOperationParams{
+				Features: []string{"thresholds", "parameter_schemas"},
+			},
+			expectedParams: url.Values{
+				"feature": []string{"thresholds", "parameter_schemas"},
+			},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			setup()
+			t.Cleanup(teardown)
+			handler := func(w http.ResponseWriter, r *http.Request) {
+				require.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+				require.Equal(t, test.expectedParams, r.URL.Query())
+				w.Header().Set("content-type", "application/json")
+				fmt.Fprint(w, response)
+			}
+
+			mux.HandleFunc(endpoint, handler)
+
+			actual, err := client.GetAPIShieldOperation(
+				context.Background(),
+				ZoneIdentifier(testZoneID),
+				testAPIShieldOperationId,
+				test.getOptions,
+			)
+
+			expected := &APIShieldOperation{
+				APIShieldCreateOperation: APIShieldCreateOperation{
+					Method:   "POST",
+					Host:     "api.cloudflare.com",
+					Endpoint: "/client/v4/zones",
+				},
+				ID:          "9def2cb0-3ed0-4737-92ca-f09efa4718fd",
+				LastUpdated: time.Date(2023, time.March, 2, 15, 46, 6, 0, time.UTC),
+				Features: map[string]any{
+					"thresholds":        map[string]any{},
+					"parameter_schemas": map[string]any{},
+				},
+			}
+
+			if assert.NoError(t, err) {
+				assert.Equal(t, expected, actual)
+			}
+		})
+	}
+}
+
+func TestGetAPIShieldOperations(t *testing.T) {
+	endpoint := fmt.Sprintf("/zones/%s/api_gateway/operations", testZoneID)
+	response := `{
+		"success" : true,
+		"errors": [],
+		"messages": [],
+		"result": [
+			{
+				"operation_id": "9def2cb0-3ed0-4737-92ca-f09efa4718fd",
+				"method": "POST",
+				"host": "api.cloudflare.com",
+				"endpoint": "/client/v4/zones",
+				"last_updated": "2023-03-02T15:46:06.000000Z"
+			}
+
+		],
+		"result_info": {
+			"page": 3,
+			"per_page": 20,
+			"count": 1,
+			"total_count": 2000
+		}
+	}`
+
+	setup()
+	t.Cleanup(teardown)
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		require.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		require.Empty(t, r.URL.Query())
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, response)
+	}
+
+	mux.HandleFunc(endpoint, handler)
+
+	actual, actualResultInfo, err := client.GetAPIShieldOperations(
+		context.Background(),
+		ZoneIdentifier(testZoneID),
+		nil,
+	)
+
+	expectedOps := []APIShieldOperation{
+		{
+			APIShieldCreateOperation: APIShieldCreateOperation{
+				Method:   "POST",
+				Host:     "api.cloudflare.com",
+				Endpoint: "/client/v4/zones",
+			},
+			ID:          "9def2cb0-3ed0-4737-92ca-f09efa4718fd",
+			LastUpdated: time.Date(2023, time.March, 2, 15, 46, 6, 0, time.UTC),
+			Features:    nil,
+		},
+	}
+
+	expectedResultInfo := ResultInfo{
+		Page:    3,
+		PerPage: 20,
+		Count:   1,
+		Total:   2000,
+	}
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expectedOps, actual)
+		assert.Equal(t, expectedResultInfo, actualResultInfo)
+	}
+}
+
+func TestGetAPIShieldOperationsWithOptions(t *testing.T) {
+	endpoint := fmt.Sprintf("/zones/%s/api_gateway/operations", testZoneID)
+	response := `{
+		"success" : true,
+		"errors": [],
+		"messages": [],
+		"result": [
+			{
+				"operation_id": "9def2cb0-3ed0-4737-92ca-f09efa4718fd",
+				"method": "POST",
+				"host": "api.cloudflare.com",
+				"endpoint": "/client/v4/zones",
+				"last_updated": "2023-03-02T15:46:06.000000Z",
+				"features": {
+					"thresholds": {}
+                }
+			}
+		],
+		"result_info": {
+			"page": 3,
+			"per_page": 20,
+			"count": 1,
+			"total_count": 2000
+		}
+	}`
+
+	tests := []struct {
+		name           string
+		params         *APIShieldGetOperationsParams
+		expectedParams url.Values
+	}{
+		{
+			name: "all params",
+			params: &APIShieldGetOperationsParams{
+				Features:  []string{"thresholds", "parameter_schemas"},
+				Direction: "desc",
+				OrderBy:   "host",
+				Filters: &APIShieldGetOperationsFilters{
+					Hosts:    []string{"api.cloudflare.com", "developers.cloudflare.com"},
+					Methods:  []string{"GET", "PUT"},
+					Endpoint: "/client",
+				},
+				Pagination: &PaginationOptions{
+					Page:    1,
+					PerPage: 25,
+				},
+			},
+			expectedParams: url.Values{
+				"feature":   []string{"thresholds", "parameter_schemas"},
+				"direction": []string{"desc"},
+				"order":     []string{"host"},
+				"host":      []string{"api.cloudflare.com", "developers.cloudflare.com"},
+				"method":    []string{"GET", "PUT"},
+				"endpoint":  []string{"/client"},
+				"page":      []string{"1"},
+				"per_page":  []string{"25"},
+			},
+		},
+		{
+			name: "features only",
+			params: &APIShieldGetOperationsParams{
+				Features: []string{"thresholds", "parameter_schemas"},
+			},
+			expectedParams: url.Values{
+				"feature": []string{"thresholds", "parameter_schemas"},
+			},
+		},
+		{
+			name: "direction only",
+			params: &APIShieldGetOperationsParams{
+				Direction: "desc",
+			},
+			expectedParams: url.Values{
+				"direction": []string{"desc"},
+			},
+		},
+		{
+			name: "order only",
+			params: &APIShieldGetOperationsParams{
+				OrderBy: "host",
+			},
+			expectedParams: url.Values{
+				"order": []string{"host"},
+			},
+		},
+		{
+			name: "hosts only",
+			params: &APIShieldGetOperationsParams{
+				Filters: &APIShieldGetOperationsFilters{
+					Hosts: []string{"api.cloudflare.com", "developers.cloudflare.com"},
+				},
+			},
+			expectedParams: url.Values{
+				"host": []string{"api.cloudflare.com", "developers.cloudflare.com"},
+			},
+		},
+		{
+			name: "methods only",
+			params: &APIShieldGetOperationsParams{
+				Filters: &APIShieldGetOperationsFilters{
+					Methods: []string{"GET", "PUT"},
+				},
+			},
+			expectedParams: url.Values{
+				"method": []string{"GET", "PUT"},
+			},
+		},
+		{
+			name: "endpoint only",
+			params: &APIShieldGetOperationsParams{
+				Filters: &APIShieldGetOperationsFilters{
+					Endpoint: "/client",
+				},
+			},
+			expectedParams: url.Values{
+				"endpoint": []string{"/client"},
+			},
+		},
+		{
+			name: "pagination only",
+			params: &APIShieldGetOperationsParams{
+				Pagination: &PaginationOptions{
+					Page:    1,
+					PerPage: 25,
+				},
+			},
+			expectedParams: url.Values{
+				"page":     []string{"1"},
+				"per_page": []string{"25"},
+			},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			setup()
+			t.Cleanup(teardown)
+			handler := func(w http.ResponseWriter, r *http.Request) {
+				require.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+				require.Equal(t, test.expectedParams, r.URL.Query())
+				w.Header().Set("content-type", "application/json")
+				fmt.Fprint(w, response)
+			}
+
+			mux.HandleFunc(endpoint, handler)
+
+			actual, _, err := client.GetAPIShieldOperations(
+				context.Background(),
+				ZoneIdentifier(testZoneID),
+				test.params,
+			)
+
+			expected := []APIShieldOperation{
+				{
+					APIShieldCreateOperation: APIShieldCreateOperation{
+						Method:   "POST",
+						Host:     "api.cloudflare.com",
+						Endpoint: "/client/v4/zones",
+					},
+					ID:          "9def2cb0-3ed0-4737-92ca-f09efa4718fd",
+					LastUpdated: time.Date(2023, time.March, 2, 15, 46, 6, 0, time.UTC),
+					Features: map[string]any{
+						"thresholds": map[string]any{},
+					},
+				},
+			}
+
+			if assert.NoError(t, err) {
+				assert.Equal(t, expected, actual)
+			}
+		})
+	}
+}
+
+func TestPostAPIShieldOperations(t *testing.T) {
+	setup()
+	t.Cleanup(teardown)
+
+	endpoint := fmt.Sprintf("/zones/%s/api_gateway/operations", testZoneID)
+	response := `{
+		"success" : true,
+		"errors": [],
+		"messages": [],
+		"result": [
+			{
+				"operation_id": "9def2cb0-3ed0-4737-92ca-f09efa4718fd",
+				"method": "POST",
+				"host": "api.cloudflare.com",
+				"endpoint": "/client/v4/zones",
+				"last_updated": "2023-03-02T15:46:06.000000Z"
+			}
+		]
+	}`
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		require.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+
+		body, err := io.ReadAll(r.Body)
+		require.NoError(t, err)
+		require.Equal(t, []byte(`[{"method":"POST","host":"api.cloudflare.com","endpoint":"/client/v4/zones"}]`), body)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, response)
+	}
+
+	mux.HandleFunc(endpoint, handler)
+
+	actual, err := client.PostAPIShieldOperations(
+		context.Background(),
+		ZoneIdentifier(testZoneID),
+		[]APIShieldCreateOperation{
+			{
+				Method:   "POST",
+				Host:     "api.cloudflare.com",
+				Endpoint: "/client/v4/zones",
+			},
+		},
+	)
+
+	expected := []APIShieldOperation{
+		{
+			APIShieldCreateOperation: APIShieldCreateOperation{
+				Method:   "POST",
+				Host:     "api.cloudflare.com",
+				Endpoint: "/client/v4/zones",
+			},
+			ID:          "9def2cb0-3ed0-4737-92ca-f09efa4718fd",
+			LastUpdated: time.Date(2023, time.March, 2, 15, 46, 6, 0, time.UTC),
+			Features:    nil,
+		},
+	}
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expected, actual)
+	}
+}
+
+func TestDeleteAPIShieldOperation(t *testing.T) {
+	setup()
+	t.Cleanup(teardown)
+
+	endpoint := fmt.Sprintf("/zones/%s/api_gateway/operations/%s", testZoneID, testAPIShieldOperationId)
+	response := `{"result":{},"success":true,"errors":[],"messages":[]}`
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		require.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
+		require.Empty(t, r.URL.Query())
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, response)
+	}
+
+	mux.HandleFunc(endpoint, handler)
+
+	err := client.DeleteAPIShieldOperation(
+		context.Background(),
+		ZoneIdentifier(testZoneID),
+		testAPIShieldOperationId,
+	)
+
+	assert.NoError(t, err)
+}
