@@ -7,6 +7,10 @@ ENHANCEMENTS:
 * streams: adds support to initiate tus upload ([#1359](https://github.com/cloudflare/cloudflare-go/issues/1359))
 * tunnel: add support for `include_prefix`, `exclude_prefix` in list operations ([#1385](https://github.com/cloudflare/cloudflare-go/issues/1385))
 
+BUG FIXES:
+
+* dns: keep comments when calling UpdateDNSRecord with zero values of UpdateDNSRecordParams ([#1393](https://github.com/cloudflare/cloudflare-go/issues/1393))
+
 DEPENDENCIES:
 
 * deps: bumps actions/checkout from 3 to 4 ([#1387](https://github.com/cloudflare/cloudflare-go/issues/1387))
