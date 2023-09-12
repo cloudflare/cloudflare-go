@@ -17,6 +17,7 @@ DEPENDENCIES:
 * deps: bumps actions/checkout from 3 to 4 ([#1387](https://github.com/cloudflare/cloudflare-go/issues/1387))
 * deps: bumps golang.org/x/net from 0.14.0 to 0.15.0 ([#1389](https://github.com/cloudflare/cloudflare-go/issues/1389))
 * deps: bumps goreleaser/goreleaser-action from 4.4.0 to 4.6.0 ([#1388](https://github.com/cloudflare/cloudflare-go/issues/1388))
+* deps: bumps goreleaser/goreleaser-action from 4.6.0 to 5.0.0 ([#1396](https://github.com/cloudflare/cloudflare-go/issues/1396))
 
 ## 0.76.0 (August 30th, 2023)
 
