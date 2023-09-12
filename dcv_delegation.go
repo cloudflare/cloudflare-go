@@ -19,6 +19,8 @@ type DCVDelegationResponse struct {
 	ResultInfo `json:"result_info"`
 }
 
+type GetDCVDelegationParams struct {}
+
 // GetDCVDelegation gets a zone DCV Delegation UUID
 //
 // TODO: Add API documentation
