@@ -13,7 +13,7 @@ jobs:
       - name: Fetch dependabot metadata
         id: dependabot-metadata
         uses: dependabot/fetch-metadata@v1.6.0
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: |
           gh pr checkout $PR_URL
           cat << EOF > .changelog/$PR_NUMBER.txt

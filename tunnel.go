@@ -217,10 +217,12 @@ type TunnelConfigurationParams struct {
 }
 
 type TunnelListParams struct {
-	Name      string     `url:"name,omitempty"`
-	UUID      string     `url:"uuid,omitempty"` // the tunnel ID
-	IsDeleted *bool      `url:"is_deleted,omitempty"`
-	ExistedAt *time.Time `url:"existed_at,omitempty"`
+	Name          string     `url:"name,omitempty"`
+	UUID          string     `url:"uuid,omitempty"` // the tunnel ID
+	IsDeleted     *bool      `url:"is_deleted,omitempty"`
+	ExistedAt     *time.Time `url:"existed_at,omitempty"`
+	IncludePrefix string     `url:"include_prefix,omitempty"`
+	ExcludePrefix string     `url:"exclude_prefix,omitempty"`
 
 	ResultInfo
 }
