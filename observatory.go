@@ -115,7 +115,7 @@ func (api *API) ListObservatoryPages(ctx context.Context, rc *ResourceContainer,
 }
 
 type GetObservatoryPageTrendParams struct {
-	URL        string
+	URL        string     `url:"-"`
 	Region     string     `url:"region"`
 	DeviceType string     `url:"deviceType"`
 	Start      *time.Time `url:"start"`
@@ -237,7 +237,7 @@ func (api *API) CreateObservatoryPageTest(ctx context.Context, rc *ResourceConta
 }
 
 type DeleteObservatoryPageTestsParams struct {
-	URL    string
+	URL    string `url:"-"`
 	Region string `url:"region"`
 }
 
@@ -297,7 +297,7 @@ func (api *API) GetObservatoryPageTest(ctx context.Context, rc *ResourceContaine
 }
 
 type CreateObservatoryScheduledPageTestParams struct {
-	URL       string
+	URL       string `url:"-"`
 	Region    string `url:"region"`
 	Frequency string `url:"frequency"`
 }
@@ -337,7 +337,7 @@ func (api *API) CreateObservatoryScheduledPageTest(ctx context.Context, rc *Reso
 }
 
 type GetObservatoryScheduledPageTestParams struct {
-	URL    string
+	URL    string `url:"-"`
 	Region string `url:"region"`
 }
 
@@ -367,7 +367,7 @@ func (api *API) GetObservatoryScheduledPageTest(ctx context.Context, rc *Resourc
 }
 
 type DeleteObservatoryScheduledPageTestParams struct {
-	URL    string
+	URL    string `url:"-"`
 	Region string `url:"region"`
 }
 
