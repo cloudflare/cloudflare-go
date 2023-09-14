@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"strings"
 	"time"
 )
 
@@ -27,7 +26,7 @@ type ObservatoryPage struct {
 // ObservatoryPageTest describes a single test for a web page.
 type ObservatoryPageTest struct {
 	ID                string                      `json:"id"`
-	Date              time.Time                   `json:"date"`
+	Date              *time.Time                  `json:"date"`
 	URL               string                      `json:"url"`
 	Region            labeledRegion               `json:"region"`
 	ScheduleFrequency *string                     `json:"scheduleFrequency"`
@@ -119,10 +118,10 @@ type GetObservatoryPageTrendParams struct {
 	URL        string
 	Region     string     `url:"region"`
 	DeviceType string     `url:"deviceType"`
-	Start      time.Time  `url:"start"`
+	Start      *time.Time `url:"start"`
 	End        *time.Time `url:"end,omitempty"`
 	Timezone   string     `url:"tz"`
-	Metrics    []string
+	Metrics    []string   `url:"metrics"`
 }
 
 type ObservatoryPageTrendResponse struct {
@@ -137,17 +136,7 @@ func (api *API) GetObservatoryPageTrend(ctx context.Context, rc *ResourceContain
 	if params.URL == "" {
 		return nil, ErrMissingObservatoryUrl
 	}
-	v := url.Values{}
-	v.Set("region", params.Region)
-	v.Set("deviceType", params.DeviceType)
-	v.Set("start", params.Start.Format(time.RFC3339Nano))
-	v.Set("tz", params.Timezone)
-	if params.End != nil {
-		v.Set("end", params.End.Format(time.RFC3339Nano))
-	}
-	v.Set("metrics", strings.Join(params.Metrics, ","))
-	uri := fmt.Sprintf("/zones/%s/speed_api/pages/%s/trend?", rc.Identifier, url.PathEscape(params.URL))
-	uri = uri + v.Encode()
+	uri := buildURI(fmt.Sprintf("/zones/%s/speed_api/pages/%s/trend", rc.Identifier, url.PathEscape(params.URL)), params)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, err

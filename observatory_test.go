@@ -140,7 +140,7 @@ var page = ObservatoryPage{
 }
 var pageTest = ObservatoryPageTest{
 	ID:   observatoryTestID,
-	Date: date,
+	Date: &date,
 	URL:  testURL,
 	Region: labeledRegion{
 		Value: region,
@@ -235,7 +235,7 @@ func TestObservatoryPageTrend(t *testing.T) {
 		URL:        testURL,
 		Region:     region,
 		DeviceType: "DESKTOP",
-		Start:      date,
+		Start:      &date,
 		End:        &date,
 		Timezone:   "America/Chicago",
 		Metrics:    []string{"fcp,lcp"},
