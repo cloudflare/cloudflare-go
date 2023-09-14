@@ -2,66 +2,82 @@ package cloudflare
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
-	"net/url"
-	"strconv"
-	"strings"
 	"time"
-)
 
-// APIShieldCreateOperation should be used when creating an operation in API Shield Endpoint Management.
-type APIShieldCreateOperation struct {
-	Method   string `json:"method"`
-	Host     string `json:"host"`
-	Endpoint string `json:"endpoint"`
-}
+	"github.com/goccy/go-json"
+)
 
 // APIShieldOperation represents an operation stored in API Shield Endpoint Management.
 type APIShieldOperation struct {
-	APIShieldCreateOperation
+	APIShieldBasicOperation
 	ID          string         `json:"operation_id"`
 	LastUpdated time.Time      `json:"last_updated"`
 	Features    map[string]any `json:"features,omitempty"`
 }
 
-// APIShieldGetOperationParams represents the query parameters to set when retrieving an operation.
+// GetAPIShieldOperationParams represents the parameters to pass when retrieving an operation.
 //
 // See API documentation https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-retrieve-information-about-an-operation
-type APIShieldGetOperationParams struct {
+type GetAPIShieldOperationParams struct {
+	// The Operation ID to retrieve
+	OperationID string `url:"-"`
 	// Features represents a set of features to return in `features` object when
 	// performing making read requests against an Operation or listing operations.
-	Features []string
+	Features []string `url:"feature,omitempty"`
 }
 
-// APIShieldGetOperationsParams represents the query parameters to set when retrieving operations
+// CreateAPIShieldOperationsParams represents the parameters to pass when adding one or more operations.
+//
+// See API documentation https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-add-operations-to-a-zone
+type CreateAPIShieldOperationsParams struct {
+	// Operations are a slice of operations to be created in API Shield Endpoint Management
+	Operations []APIShieldBasicOperation `url:"-"`
+}
+
+// APIShieldBasicOperation should be used when creating an operation in API Shield Endpoint Management.
+type APIShieldBasicOperation struct {
+	Method   string `json:"method"`
+	Host     string `json:"host"`
+	Endpoint string `json:"endpoint"`
+}
+
+// DeleteAPIShieldOperationParams represents the parameters to pass to delete an operation.
+//
+// See API documentation https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-delete-an-operation
+type DeleteAPIShieldOperationParams struct {
+	// OperationID is the operation to be deleted
+	OperationID string `url:"-"`
+}
+
+// ListAPIShieldOperationsParams represents the parameters to pass when retrieving operations
 //
 // See API documentation https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-retrieve-information-about-all-operations-on-a-zone
-type APIShieldGetOperationsParams struct {
+type ListAPIShieldOperationsParams struct {
 	// Features represents a set of features to return in `features` object when
 	// performing making read requests against an Operation or listing operations.
-	Features []string
+	Features []string `url:"feature,omitempty"`
 	// Direction to order results.
-	Direction string
+	Direction string `url:"direction,omitempty"`
 	// OrderBy when requesting a feature, the feature keys are available for ordering as well, e.g., thresholds.suggested_threshold.
-	OrderBy string
+	OrderBy string `url:"order,omitempty"`
 	// Filters to only return operations that match filtering criteria, see APIShieldGetOperationsFilters
-	Filters *APIShieldGetOperationsFilters
+	APIShieldListOperationsFilters
 	// Pagination options to apply to the request.
-	Pagination *PaginationOptions
+	PaginationOptions
 }
 
-// APIShieldGetOperationsFilters represents the filtering query parameters to set when retrieving operations
+// APIShieldListOperationsFilters represents the filtering query parameters to set when retrieving operations
 //
 // See API documentation https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-retrieve-information-about-all-operations-on-a-zone
-type APIShieldGetOperationsFilters struct {
-	// Host filters results to only include the specified hosts.
-	Hosts []string
-	// Host filters results to only include the specified methods.
-	Methods []string
+type APIShieldListOperationsFilters struct {
+	// Hosts filters results to only include the specified hosts.
+	Hosts []string `url:"host,omitempty"`
+	// Methods filters results to only include the specified methods.
+	Methods []string `url:"method,omitempty"`
 	// Endpoint filter results to only include endpoints containing this pattern.
-	Endpoint string
+	Endpoint string `url:"endpoint,omitempty"`
 }
 
 // APIShieldGetOperationResponse represents the response from the api_gateway/operations/{id} endpoint.
@@ -86,12 +102,10 @@ type APIShieldDeleteOperationResponse struct {
 // GetAPIShieldOperation returns information about an operation
 //
 // API documentation https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-retrieve-information-about-an-operation
-func (api *API) GetAPIShieldOperation(ctx context.Context, rc *ResourceContainer, operationID string, params *APIShieldGetOperationParams) (*APIShieldOperation, error) {
-	uri := fmt.Sprintf("/zones/%s/api_gateway/operations/%s", rc.Identifier, operationID)
+func (api *API) GetAPIShieldOperation(ctx context.Context, rc *ResourceContainer, params GetAPIShieldOperationParams) (*APIShieldOperation, error) {
+	path := fmt.Sprintf("/zones/%s/api_gateway/operations/%s", rc.Identifier, params.OperationID)
 
-	if params != nil {
-		uri = strings.Join([]string{uri, params.Encode()}, "?")
-	}
+	uri := buildURI(path, params)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -107,14 +121,13 @@ func (api *API) GetAPIShieldOperation(ctx context.Context, rc *ResourceContainer
 	return &asResponse.Result, nil
 }
 
-// GetAPIShieldOperations retrieve information about all operations on a zone
+// ListAPIShieldOperations retrieve information about all operations on a zone
 //
 // API documentation https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-retrieve-information-about-all-operations-on-a-zone
-func (api *API) GetAPIShieldOperations(ctx context.Context, rc *ResourceContainer, params *APIShieldGetOperationsParams) ([]APIShieldOperation, ResultInfo, error) {
-	uri := fmt.Sprintf("/zones/%s/api_gateway/operations", rc.Identifier)
-	if params != nil {
-		uri = strings.Join([]string{uri, params.Encode()}, "?")
-	}
+func (api *API) ListAPIShieldOperations(ctx context.Context, rc *ResourceContainer, params ListAPIShieldOperationsParams) ([]APIShieldOperation, ResultInfo, error) {
+	path := fmt.Sprintf("/zones/%s/api_gateway/operations", rc.Identifier)
+
+	uri := buildURI(path, params)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -130,13 +143,13 @@ func (api *API) GetAPIShieldOperations(ctx context.Context, rc *ResourceContaine
 	return asResponse.Result, asResponse.ResultInfo, nil
 }
 
-// PostAPIShieldOperations add one or more operations to a zone.
+// CreateAPIShieldOperations add one or more operations to a zone.
 //
 // API documentation https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-add-operations-to-a-zone
-func (api *API) PostAPIShieldOperations(ctx context.Context, rc *ResourceContainer, operations []APIShieldCreateOperation) ([]APIShieldOperation, error) {
+func (api *API) CreateAPIShieldOperations(ctx context.Context, rc *ResourceContainer, params CreateAPIShieldOperationsParams) ([]APIShieldOperation, error) {
 	uri := fmt.Sprintf("/zones/%s/api_gateway/operations", rc.Identifier)
 
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, operations)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params.Operations)
 	if err != nil {
 		return nil, err
 	}
@@ -154,8 +167,8 @@ func (api *API) PostAPIShieldOperations(ctx context.Context, rc *ResourceContain
 // DeleteAPIShieldOperation deletes a single operation
 //
 // API documentation https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-delete-an-operation
-func (api *API) DeleteAPIShieldOperation(ctx context.Context, rc *ResourceContainer, operationID string) error {
-	uri := fmt.Sprintf("/zones/%s/api_gateway/operations/%s", rc.Identifier, operationID)
+func (api *API) DeleteAPIShieldOperation(ctx context.Context, rc *ResourceContainer, params DeleteAPIShieldOperationParams) error {
+	uri := fmt.Sprintf("/zones/%s/api_gateway/operations/%s", rc.Identifier, params.OperationID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
@@ -169,53 +182,4 @@ func (api *API) DeleteAPIShieldOperation(ctx context.Context, rc *ResourceContai
 	}
 
 	return nil
-}
-
-// Encode is a custom method for encoding APIShieldGetOperationParams into a usable HTTP
-// query parameter string.
-func (a APIShieldGetOperationParams) Encode() string {
-	v := url.Values{}
-	for _, f := range a.Features {
-		v.Add("feature", f)
-	}
-
-	return v.Encode()
-}
-
-// Encode is a custom method for encoding APIShieldGetOperationsParams into a usable HTTP
-// query parameter string.
-func (a APIShieldGetOperationsParams) Encode() string {
-	v := url.Values{}
-	for _, f := range a.Features {
-		v.Add("feature", f)
-	}
-
-	if a.Direction != "" {
-		v.Set("direction", a.Direction)
-	}
-
-	if a.OrderBy != "" {
-		v.Set("order", a.OrderBy)
-	}
-
-	if a.Pagination != nil {
-		v.Set("page", strconv.Itoa(a.Pagination.Page))
-		v.Set("per_page", strconv.Itoa(a.Pagination.PerPage))
-	}
-
-	if a.Filters != nil {
-		if a.Filters.Endpoint != "" {
-			v.Set("endpoint", a.Filters.Endpoint)
-		}
-
-		for _, h := range a.Filters.Hosts {
-			v.Add("host", h)
-		}
-
-		for _, m := range a.Filters.Methods {
-			v.Add("method", m)
-		}
-	}
-
-	return v.Encode()
 }

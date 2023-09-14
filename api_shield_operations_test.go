@@ -45,12 +45,13 @@ func TestGetAPIShieldOperation(t *testing.T) {
 	actual, err := client.GetAPIShieldOperation(
 		context.Background(),
 		ZoneIdentifier(testZoneID),
-		testAPIShieldOperationId,
-		nil,
+		GetAPIShieldOperationParams{
+			OperationID: testAPIShieldOperationId,
+		},
 	)
 
 	expected := &APIShieldOperation{
-		APIShieldCreateOperation: APIShieldCreateOperation{
+		APIShieldBasicOperation: APIShieldBasicOperation{
 			Method:   "POST",
 			Host:     "api.cloudflare.com",
 			Endpoint: "/client/v4/zones",
@@ -65,7 +66,7 @@ func TestGetAPIShieldOperation(t *testing.T) {
 	}
 }
 
-func TestGetAPIShieldOperationWithOptions(t *testing.T) {
+func TestGetAPIShieldOperationWithParams(t *testing.T) {
 	endpoint := fmt.Sprintf("/zones/%s/api_gateway/operations/%s", testZoneID, testAPIShieldOperationId)
 	response := `{
 		"success" : true,
@@ -86,13 +87,14 @@ func TestGetAPIShieldOperationWithOptions(t *testing.T) {
 
 	tests := []struct {
 		name           string
-		getOptions     *APIShieldGetOperationParams
+		getParams      GetAPIShieldOperationParams
 		expectedParams url.Values
 	}{
 		{
 			name: "one feature",
-			getOptions: &APIShieldGetOperationParams{
-				Features: []string{"thresholds"},
+			getParams: GetAPIShieldOperationParams{
+				OperationID: testAPIShieldOperationId,
+				Features:    []string{"thresholds"},
 			},
 			expectedParams: url.Values{
 				"feature": []string{"thresholds"},
@@ -100,8 +102,9 @@ func TestGetAPIShieldOperationWithOptions(t *testing.T) {
 		},
 		{
 			name: "more than one feature",
-			getOptions: &APIShieldGetOperationParams{
-				Features: []string{"thresholds", "parameter_schemas"},
+			getParams: GetAPIShieldOperationParams{
+				OperationID: testAPIShieldOperationId,
+				Features:    []string{"thresholds", "parameter_schemas"},
 			},
 			expectedParams: url.Values{
 				"feature": []string{"thresholds", "parameter_schemas"},
@@ -125,12 +128,11 @@ func TestGetAPIShieldOperationWithOptions(t *testing.T) {
 			actual, err := client.GetAPIShieldOperation(
 				context.Background(),
 				ZoneIdentifier(testZoneID),
-				testAPIShieldOperationId,
-				test.getOptions,
+				test.getParams,
 			)
 
 			expected := &APIShieldOperation{
-				APIShieldCreateOperation: APIShieldCreateOperation{
+				APIShieldBasicOperation: APIShieldBasicOperation{
 					Method:   "POST",
 					Host:     "api.cloudflare.com",
 					Endpoint: "/client/v4/zones",
@@ -150,7 +152,7 @@ func TestGetAPIShieldOperationWithOptions(t *testing.T) {
 	}
 }
 
-func TestGetAPIShieldOperations(t *testing.T) {
+func TestListAPIShieldOperations(t *testing.T) {
 	endpoint := fmt.Sprintf("/zones/%s/api_gateway/operations", testZoneID)
 	response := `{
 		"success" : true,
@@ -185,15 +187,15 @@ func TestGetAPIShieldOperations(t *testing.T) {
 
 	mux.HandleFunc(endpoint, handler)
 
-	actual, actualResultInfo, err := client.GetAPIShieldOperations(
+	actual, actualResultInfo, err := client.ListAPIShieldOperations(
 		context.Background(),
 		ZoneIdentifier(testZoneID),
-		nil,
+		ListAPIShieldOperationsParams{},
 	)
 
 	expectedOps := []APIShieldOperation{
 		{
-			APIShieldCreateOperation: APIShieldCreateOperation{
+			APIShieldBasicOperation: APIShieldBasicOperation{
 				Method:   "POST",
 				Host:     "api.cloudflare.com",
 				Endpoint: "/client/v4/zones",
@@ -217,7 +219,7 @@ func TestGetAPIShieldOperations(t *testing.T) {
 	}
 }
 
-func TestGetAPIShieldOperationsWithOptions(t *testing.T) {
+func TestListAPIShieldOperationsWithParams(t *testing.T) {
 	endpoint := fmt.Sprintf("/zones/%s/api_gateway/operations", testZoneID)
 	response := `{
 		"success" : true,
@@ -245,21 +247,21 @@ func TestGetAPIShieldOperationsWithOptions(t *testing.T) {
 
 	tests := []struct {
 		name           string
-		params         *APIShieldGetOperationsParams
+		params         ListAPIShieldOperationsParams
 		expectedParams url.Values
 	}{
 		{
 			name: "all params",
-			params: &APIShieldGetOperationsParams{
+			params: ListAPIShieldOperationsParams{
 				Features:  []string{"thresholds", "parameter_schemas"},
 				Direction: "desc",
 				OrderBy:   "host",
-				Filters: &APIShieldGetOperationsFilters{
+				APIShieldListOperationsFilters: APIShieldListOperationsFilters{
 					Hosts:    []string{"api.cloudflare.com", "developers.cloudflare.com"},
 					Methods:  []string{"GET", "PUT"},
 					Endpoint: "/client",
 				},
-				Pagination: &PaginationOptions{
+				PaginationOptions: PaginationOptions{
 					Page:    1,
 					PerPage: 25,
 				},
@@ -277,7 +279,7 @@ func TestGetAPIShieldOperationsWithOptions(t *testing.T) {
 		},
 		{
 			name: "features only",
-			params: &APIShieldGetOperationsParams{
+			params: ListAPIShieldOperationsParams{
 				Features: []string{"thresholds", "parameter_schemas"},
 			},
 			expectedParams: url.Values{
@@ -286,7 +288,7 @@ func TestGetAPIShieldOperationsWithOptions(t *testing.T) {
 		},
 		{
 			name: "direction only",
-			params: &APIShieldGetOperationsParams{
+			params: ListAPIShieldOperationsParams{
 				Direction: "desc",
 			},
 			expectedParams: url.Values{
@@ -295,7 +297,7 @@ func TestGetAPIShieldOperationsWithOptions(t *testing.T) {
 		},
 		{
 			name: "order only",
-			params: &APIShieldGetOperationsParams{
+			params: ListAPIShieldOperationsParams{
 				OrderBy: "host",
 			},
 			expectedParams: url.Values{
@@ -304,8 +306,8 @@ func TestGetAPIShieldOperationsWithOptions(t *testing.T) {
 		},
 		{
 			name: "hosts only",
-			params: &APIShieldGetOperationsParams{
-				Filters: &APIShieldGetOperationsFilters{
+			params: ListAPIShieldOperationsParams{
+				APIShieldListOperationsFilters: APIShieldListOperationsFilters{
 					Hosts: []string{"api.cloudflare.com", "developers.cloudflare.com"},
 				},
 			},
@@ -315,8 +317,8 @@ func TestGetAPIShieldOperationsWithOptions(t *testing.T) {
 		},
 		{
 			name: "methods only",
-			params: &APIShieldGetOperationsParams{
-				Filters: &APIShieldGetOperationsFilters{
+			params: ListAPIShieldOperationsParams{
+				APIShieldListOperationsFilters: APIShieldListOperationsFilters{
 					Methods: []string{"GET", "PUT"},
 				},
 			},
@@ -326,8 +328,8 @@ func TestGetAPIShieldOperationsWithOptions(t *testing.T) {
 		},
 		{
 			name: "endpoint only",
-			params: &APIShieldGetOperationsParams{
-				Filters: &APIShieldGetOperationsFilters{
+			params: ListAPIShieldOperationsParams{
+				APIShieldListOperationsFilters: APIShieldListOperationsFilters{
 					Endpoint: "/client",
 				},
 			},
@@ -337,8 +339,8 @@ func TestGetAPIShieldOperationsWithOptions(t *testing.T) {
 		},
 		{
 			name: "pagination only",
-			params: &APIShieldGetOperationsParams{
-				Pagination: &PaginationOptions{
+			params: ListAPIShieldOperationsParams{
+				PaginationOptions: PaginationOptions{
 					Page:    1,
 					PerPage: 25,
 				},
@@ -363,7 +365,7 @@ func TestGetAPIShieldOperationsWithOptions(t *testing.T) {
 
 			mux.HandleFunc(endpoint, handler)
 
-			actual, _, err := client.GetAPIShieldOperations(
+			actual, _, err := client.ListAPIShieldOperations(
 				context.Background(),
 				ZoneIdentifier(testZoneID),
 				test.params,
@@ -371,7 +373,7 @@ func TestGetAPIShieldOperationsWithOptions(t *testing.T) {
 
 			expected := []APIShieldOperation{
 				{
-					APIShieldCreateOperation: APIShieldCreateOperation{
+					APIShieldBasicOperation: APIShieldBasicOperation{
 						Method:   "POST",
 						Host:     "api.cloudflare.com",
 						Endpoint: "/client/v4/zones",
@@ -391,7 +393,7 @@ func TestGetAPIShieldOperationsWithOptions(t *testing.T) {
 	}
 }
 
-func TestPostAPIShieldOperations(t *testing.T) {
+func TestCreateAPIShieldOperations(t *testing.T) {
 	setup()
 	t.Cleanup(teardown)
 
@@ -424,21 +426,23 @@ func TestPostAPIShieldOperations(t *testing.T) {
 
 	mux.HandleFunc(endpoint, handler)
 
-	actual, err := client.PostAPIShieldOperations(
+	actual, err := client.CreateAPIShieldOperations(
 		context.Background(),
 		ZoneIdentifier(testZoneID),
-		[]APIShieldCreateOperation{
-			{
-				Method:   "POST",
-				Host:     "api.cloudflare.com",
-				Endpoint: "/client/v4/zones",
+		CreateAPIShieldOperationsParams{
+			Operations: []APIShieldBasicOperation{
+				{
+					Method:   "POST",
+					Host:     "api.cloudflare.com",
+					Endpoint: "/client/v4/zones",
+				},
 			},
 		},
 	)
 
 	expected := []APIShieldOperation{
 		{
-			APIShieldCreateOperation: APIShieldCreateOperation{
+			APIShieldBasicOperation: APIShieldBasicOperation{
 				Method:   "POST",
 				Host:     "api.cloudflare.com",
 				Endpoint: "/client/v4/zones",
@@ -473,7 +477,9 @@ func TestDeleteAPIShieldOperation(t *testing.T) {
 	err := client.DeleteAPIShieldOperation(
 		context.Background(),
 		ZoneIdentifier(testZoneID),
-		testAPIShieldOperationId,
+		DeleteAPIShieldOperationParams{
+			OperationID: testAPIShieldOperationId,
+		},
 	)
 
 	assert.NoError(t, err)
