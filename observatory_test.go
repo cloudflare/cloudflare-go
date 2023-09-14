@@ -301,8 +301,10 @@ func TestCreateObservatoryPageTest(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/pages/"+testURL+"/tests", handler)
 	want := pageTest
 	test, err := client.CreateObservatoryPageTest(context.Background(), ZoneIdentifier(testZoneID), CreateObservatoryPageTestParams{
-		URL:    testURL,
-		Region: region,
+		URL: testURL,
+		Settings: CreateObservatoryPageTestSettings{
+			Region: region,
+		},
 	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, &want, test)

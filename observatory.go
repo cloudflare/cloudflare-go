@@ -204,8 +204,11 @@ func (api *API) ListObservatoryPageTests(ctx context.Context, rc *ResourceContai
 }
 
 type CreateObservatoryPageTestParams struct {
-	URL    string
-	Region string
+	URL      string
+	Settings CreateObservatoryPageTestSettings
+}
+type CreateObservatoryPageTestSettings struct {
+	Region string `json:"region"`
 }
 
 type ObservatoryPageTestResponse struct {
@@ -221,11 +224,7 @@ func (api *API) CreateObservatoryPageTest(ctx context.Context, rc *ResourceConta
 		return nil, ErrMissingObservatoryUrl
 	}
 	uri := fmt.Sprintf("/zones/%s/speed_api/pages/%s/tests", rc.Identifier, url.PathEscape(params.URL))
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, struct {
-		Region string `json:"region"`
-	}{
-		Region: params.Region,
-	})
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params.Settings)
 	if err != nil {
 		return nil, err
 	}
