@@ -1,5 +1,9 @@
 ## 0.78.0 (Unreleased)
 
+DEPENDENCIES:
+
+* deps: bumps codecov/codecov-action from 3 to 4 ([#1402](https://github.com/cloudflare/cloudflare-go/issues/1402))
+
 ## 0.77.0 (September 13th, 2023)
 
 ENHANCEMENTS:
