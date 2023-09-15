@@ -13,13 +13,13 @@ import (
 type APIShieldOperation struct {
 	APIShieldBasicOperation
 	ID          string         `json:"operation_id"`
-	LastUpdated time.Time      `json:"last_updated"`
+	LastUpdated *time.Time     `json:"last_updated"`
 	Features    map[string]any `json:"features,omitempty"`
 }
 
 // GetAPIShieldOperationParams represents the parameters to pass when retrieving an operation.
 //
-// See API documentation https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-retrieve-information-about-an-operation
+// API documentation: https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-retrieve-information-about-an-operation
 type GetAPIShieldOperationParams struct {
 	// The Operation ID to retrieve
 	OperationID string `url:"-"`
@@ -30,7 +30,7 @@ type GetAPIShieldOperationParams struct {
 
 // CreateAPIShieldOperationsParams represents the parameters to pass when adding one or more operations.
 //
-// See API documentation https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-add-operations-to-a-zone
+// API documentation: https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-add-operations-to-a-zone
 type CreateAPIShieldOperationsParams struct {
 	// Operations are a slice of operations to be created in API Shield Endpoint Management
 	Operations []APIShieldBasicOperation `url:"-"`
@@ -45,7 +45,7 @@ type APIShieldBasicOperation struct {
 
 // DeleteAPIShieldOperationParams represents the parameters to pass to delete an operation.
 //
-// See API documentation https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-delete-an-operation
+// API documentation: https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-delete-an-operation
 type DeleteAPIShieldOperationParams struct {
 	// OperationID is the operation to be deleted
 	OperationID string `url:"-"`
@@ -53,7 +53,7 @@ type DeleteAPIShieldOperationParams struct {
 
 // ListAPIShieldOperationsParams represents the parameters to pass when retrieving operations
 //
-// See API documentation https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-retrieve-information-about-all-operations-on-a-zone
+// API documentation: https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-retrieve-information-about-all-operations-on-a-zone
 type ListAPIShieldOperationsParams struct {
 	// Features represents a set of features to return in `features` object when
 	// performing making read requests against an Operation or listing operations.
@@ -70,7 +70,7 @@ type ListAPIShieldOperationsParams struct {
 
 // APIShieldListOperationsFilters represents the filtering query parameters to set when retrieving operations
 //
-// See API documentation https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-retrieve-information-about-all-operations-on-a-zone
+// API documentation: https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-retrieve-information-about-all-operations-on-a-zone
 type APIShieldListOperationsFilters struct {
 	// Hosts filters results to only include the specified hosts.
 	Hosts []string `url:"host,omitempty"`

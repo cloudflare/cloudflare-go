@@ -50,6 +50,7 @@ func TestGetAPIShieldOperation(t *testing.T) {
 		},
 	)
 
+	time := time.Date(2023, time.March, 2, 15, 46, 6, 0, time.UTC)
 	expected := &APIShieldOperation{
 		APIShieldBasicOperation: APIShieldBasicOperation{
 			Method:   "POST",
@@ -57,7 +58,7 @@ func TestGetAPIShieldOperation(t *testing.T) {
 			Endpoint: "/client/v4/zones",
 		},
 		ID:          testAPIShieldOperationId,
-		LastUpdated: time.Date(2023, time.March, 2, 15, 46, 6, 0, time.UTC),
+		LastUpdated: &time,
 		Features:    nil,
 	}
 
@@ -131,6 +132,7 @@ func TestGetAPIShieldOperationWithParams(t *testing.T) {
 				test.getParams,
 			)
 
+			time := time.Date(2023, time.March, 2, 15, 46, 6, 0, time.UTC)
 			expected := &APIShieldOperation{
 				APIShieldBasicOperation: APIShieldBasicOperation{
 					Method:   "POST",
@@ -138,7 +140,7 @@ func TestGetAPIShieldOperationWithParams(t *testing.T) {
 					Endpoint: "/client/v4/zones",
 				},
 				ID:          "9def2cb0-3ed0-4737-92ca-f09efa4718fd",
-				LastUpdated: time.Date(2023, time.March, 2, 15, 46, 6, 0, time.UTC),
+				LastUpdated: &time,
 				Features: map[string]any{
 					"thresholds":        map[string]any{},
 					"parameter_schemas": map[string]any{},
@@ -193,6 +195,7 @@ func TestListAPIShieldOperations(t *testing.T) {
 		ListAPIShieldOperationsParams{},
 	)
 
+	time := time.Date(2023, time.March, 2, 15, 46, 6, 0, time.UTC)
 	expectedOps := []APIShieldOperation{
 		{
 			APIShieldBasicOperation: APIShieldBasicOperation{
@@ -201,7 +204,7 @@ func TestListAPIShieldOperations(t *testing.T) {
 				Endpoint: "/client/v4/zones",
 			},
 			ID:          "9def2cb0-3ed0-4737-92ca-f09efa4718fd",
-			LastUpdated: time.Date(2023, time.March, 2, 15, 46, 6, 0, time.UTC),
+			LastUpdated: &time,
 			Features:    nil,
 		},
 	}
@@ -371,6 +374,7 @@ func TestListAPIShieldOperationsWithParams(t *testing.T) {
 				test.params,
 			)
 
+			time := time.Date(2023, time.March, 2, 15, 46, 6, 0, time.UTC)
 			expected := []APIShieldOperation{
 				{
 					APIShieldBasicOperation: APIShieldBasicOperation{
@@ -379,7 +383,7 @@ func TestListAPIShieldOperationsWithParams(t *testing.T) {
 						Endpoint: "/client/v4/zones",
 					},
 					ID:          "9def2cb0-3ed0-4737-92ca-f09efa4718fd",
-					LastUpdated: time.Date(2023, time.March, 2, 15, 46, 6, 0, time.UTC),
+					LastUpdated: &time,
 					Features: map[string]any{
 						"thresholds": map[string]any{},
 					},
@@ -440,6 +444,7 @@ func TestCreateAPIShieldOperations(t *testing.T) {
 		},
 	)
 
+	time := time.Date(2023, time.March, 2, 15, 46, 6, 0, time.UTC)
 	expected := []APIShieldOperation{
 		{
 			APIShieldBasicOperation: APIShieldBasicOperation{
@@ -448,7 +453,7 @@ func TestCreateAPIShieldOperations(t *testing.T) {
 				Endpoint: "/client/v4/zones",
 			},
 			ID:          "9def2cb0-3ed0-4737-92ca-f09efa4718fd",
-			LastUpdated: time.Date(2023, time.March, 2, 15, 46, 6, 0, time.UTC),
+			LastUpdated: &time,
 			Features:    nil,
 		},
 	}
