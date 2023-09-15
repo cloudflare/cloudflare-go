@@ -4,6 +4,10 @@ ENHANCEMENTS:
 
 * observatory: add support for observatory API ([#1401](https://github.com/cloudflare/cloudflare-go/issues/1401))
 
+BUG FIXES:
+
+* semgrep: Improved IPv4 validation by implementing a new pattern to handle cases where non-IPv4 addresses were previously accepted. ([#1382](https://github.com/cloudflare/cloudflare-go/issues/1382))
+
 DEPENDENCIES:
 
 * deps: bumps codecov/codecov-action from 3 to 4 ([#1402](https://github.com/cloudflare/cloudflare-go/issues/1402))
