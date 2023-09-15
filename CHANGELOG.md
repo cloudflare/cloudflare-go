@@ -1,5 +1,9 @@
 ## 0.78.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* observatory: add support for observatory API ([#1401](https://github.com/cloudflare/cloudflare-go/issues/1401))
+
 DEPENDENCIES:
 
 * deps: bumps codecov/codecov-action from 3 to 4 ([#1402](https://github.com/cloudflare/cloudflare-go/issues/1402))
