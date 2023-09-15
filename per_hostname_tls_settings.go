@@ -2,11 +2,12 @@ package cloudflare
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
 	"time"
+
+	"github.com/goccy/go-json"
 )
 
 // HostnameTLSSetting represents the metadata for a user-created tls setting.
