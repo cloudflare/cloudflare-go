@@ -280,7 +280,7 @@ func (api *API) GetObservatoryPageTest(ctx context.Context, rc *ResourceContaine
 	if params.URL == "" {
 		return nil, ErrMissingObservatoryUrl
 	}
-	if params.URL == "" {
+	if params.TestID == "" {
 		return nil, ErrMissingObservatoryTestID
 	}
 	uri := fmt.Sprintf("/zones/%s/speed_api/pages/%s/tests/%s", rc.Identifier, url.PathEscape(params.URL), params.TestID)
