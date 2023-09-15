@@ -297,9 +297,9 @@ func (api *API) GetObservatoryPageTest(ctx context.Context, rc *ResourceContaine
 }
 
 type CreateObservatoryScheduledPageTestParams struct {
-	URL       string `url:"-"`
-	Region    string `url:"region"`
-	Frequency string `url:"frequency"`
+	URL       string `url:"-" json:"-"`
+	Region    string `url:"region" json:"region"`
+	Frequency string `url:"frequency" json:"-"`
 }
 
 type ObservatoryScheduledPageTest struct {
@@ -320,11 +320,7 @@ func (api *API) CreateObservatoryScheduledPageTest(ctx context.Context, rc *Reso
 		return nil, ErrMissingObservatoryUrl
 	}
 	uri := buildURI(fmt.Sprintf("/zones/%s/speed_api/schedule/%s", rc.Identifier, url.PathEscape(params.URL)), params)
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, struct {
-		Region string `json:"region"`
-	}{
-		Region: params.Region,
-	})
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return nil, err
 	}
