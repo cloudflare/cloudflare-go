@@ -98,7 +98,7 @@ var pageTestJSON = fmt.Sprintf(`
   "desktopReport": %[7]s
 }`, observatoryTestID, date.Format(time.RFC3339Nano), testURL, region, regionLabel, frequency, reportJSON, reportJSON)
 
-var reportJSON = fmt.Sprintf(`
+var reportJSON = `
 {
   "state": "COMPLETED",
   "deviceType": "DESKTOP",
@@ -111,7 +111,7 @@ var reportJSON = fmt.Sprintf(`
   "si": 10,
   "cls": 0.10
 }
-`)
+`
 
 var report = ObservatoryLighthouseReport{
 	PerformanceScore: 100,
