@@ -1,0 +1,9 @@
+```release-note:bug
+account_role: make it auto-paginate
+```
+```release-note:breaking-change
+account_role: change methods to use updated format
+```
+```release-note:breaking-change
+account_role: change to using resource container
+```
