@@ -7,6 +7,8 @@ BREAKING CHANGES:
 
 ENHANCEMENTS:
 
+* access_application: Add support for tags ([#1403](https://github.com/cloudflare/cloudflare-go/issues/1403))
+* access_tag: Add support for tags ([#1403](https://github.com/cloudflare/cloudflare-go/issues/1403))
 * observatory: add support for observatory API ([#1401](https://github.com/cloudflare/cloudflare-go/issues/1401))
 
 BUG FIXES:
