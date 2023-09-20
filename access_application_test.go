@@ -48,7 +48,8 @@ func TestAccessApplications(t *testing.T) {
 					"app_launcher_visible": true,
 					"service_auth_401_redirect": true,
 					"path_cookie_attribute": true,
-					"custom_pages": ["480f4f69-1a28-4fdd-9240-1ed29f0ac1dc"]
+					"custom_pages": ["480f4f69-1a28-4fdd-9240-1ed29f0ac1dc"],
+					"tags": ["engineers"]
 				}
 			],
 			"result_info": {
@@ -86,6 +87,7 @@ func TestAccessApplications(t *testing.T) {
 		SkipInterstitial:         BoolPtr(true),
 		PathCookieAttribute:      BoolPtr(true),
 		CustomPages:              []string{"480f4f69-1a28-4fdd-9240-1ed29f0ac1dc"},
+		Tags:                     []string{"engineers"},
 		CustomNonIdentityDenyURL: "https://blocked.com",
 	}}
 
@@ -218,7 +220,8 @@ func TestCreateAccessApplications(t *testing.T) {
 				"logo_url": "https://www.example.com/example.png",
 				"skip_interstitial": true,
 				"app_launcher_visible": true,
-				"service_auth_401_redirect": true
+				"service_auth_401_redirect": true,
+				"tags": ["engineers"]
 			}
 		}
 		`)
@@ -246,6 +249,7 @@ func TestCreateAccessApplications(t *testing.T) {
 		CreatedAt:                &createdAt,
 		UpdatedAt:                &updatedAt,
 		CustomNonIdentityDenyURL: "https://blocked.com",
+		Tags:                     []string{"engineers"},
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps", handler)
@@ -303,7 +307,8 @@ func TestUpdateAccessApplication(t *testing.T) {
 				"logo_url": "https://www.example.com/example.png",
 				"skip_interstitial": true,
 				"app_launcher_visible": true,
-				"service_auth_401_redirect": true
+				"service_auth_401_redirect": true,
+				"tags": ["engineers"]
 			}
 		}
 		`)
@@ -326,6 +331,7 @@ func TestUpdateAccessApplication(t *testing.T) {
 		CustomDenyURL:            "https://www.example.com",
 		LogoURL:                  "https://www.example.com/example.png",
 		CustomNonIdentityDenyURL: "https://blocked.com",
+		Tags:                     []string{"engineers"},
 		SkipInterstitial:         BoolPtr(true),
 		CreatedAt:                &createdAt,
 		UpdatedAt:                &updatedAt,
@@ -349,6 +355,7 @@ func TestUpdateAccessApplication(t *testing.T) {
 		LogoURL:                  "https://www.example.com/example.png",
 		SkipInterstitial:         BoolPtr(true),
 		CustomNonIdentityDenyURL: "https://blocked.com",
+		Tags:                     []string{"engineers"},
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
@@ -634,6 +641,7 @@ func TestCreateSaasAccessApplications(t *testing.T) {
 				"app_launcher_visible": true,
 				"service_auth_401_redirect": true,
 				"custom_non_identity_deny_url": "https://blocked.com",
+				"tags": ["engineers"],
 				"saas_app": {
 					"consumer_service_url": "https://saas.example.com",
 					"sp_entity_id": "dash.example.com",
@@ -716,6 +724,7 @@ func TestCreateSaasAccessApplications(t *testing.T) {
 		CreatedAt:                &createdAt,
 		UpdatedAt:                &updatedAt,
 		CustomNonIdentityDenyURL: "https://blocked.com",
+		Tags:                     []string{"engineers"},
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps", handler)

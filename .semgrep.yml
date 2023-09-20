@@ -7,7 +7,7 @@ rules:
       include:
         - '*.go'
     patterns:
-      - pattern-regex: '\d+\.\d+\.\d+\.\d+'
+      - pattern-regex: '(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'
       - pattern-not-regex: '10\.\d+\.\d+.\d+'
       - pattern-not-regex: '192\.168\.\d+.\d+'
       - pattern-not-regex: '192\.0\.2\.\d+'    # 192.0.2.0/24 (TEST-NET-1, rfc5737)
@@ -32,4 +32,17 @@ rules:
       - pattern-either:
         - pattern: |
             errors.Wrap(...)
+    severity: WARNING
+  - id: no-use-of-stdlib-json
+    languages:
+      - go
+    message: Favour "github.com/goccy/go-json" instead of "encoding/json" to allow better customisation of marshaling and unmarshaling JSON attributes. See https://github.com/cloudflare/cloudflare-go/pull/1360 for full details.
+    paths:
+      include:
+        - '*.go'
+    patterns:
+      - pattern-regex: '\"encoding\/json\"'
+    fix-regex:
+      regex: \".*\"
+      replacement: '"github.com/goccy/go-json"'
     severity: WARNING
