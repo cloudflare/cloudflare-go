@@ -759,3 +759,117 @@ func TestCreateSaasAccessApplications(t *testing.T) {
 		assert.Equal(t, fullAccessApplication, actual)
 	}
 }
+
+func TestCreateApplicationWithAppLauncherCustomization(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+				"created_at": "2014-01-01T05:20:00.12345Z",
+				"updated_at": "2014-01-01T05:20:00.12345Z",
+				"aud": "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
+				"name": "App Launcher",
+				"type": "app_launcher",
+				"session_duration": "24h",
+				"auto_redirect_to_identity": false,
+				"enable_binding_cookie": false,
+				"custom_deny_url": "https://www.example.com",
+				"custom_deny_message": "denied!",
+				"logo_url": "https://www.example.com/example.png",
+				"skip_interstitial": true,
+				"app_launcher_visible": false,
+				"service_auth_401_redirect": false,
+				"landing_page_design": {
+					"title": "A title",
+					"message": "a message",
+					"image_url": "https://www.example.com/example.png",
+					"button_color": "green",
+					"button_text_color": "red"
+				},
+				"header_bg_color": "red",
+				"bg_color": "blue",
+				"footer_links": [
+					{
+						"url": "https://somesite.com",
+						"name": "bug"
+					}
+				]
+			}
+		}
+		`)
+	}
+
+	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+	fullAccessApplication := AccessApplication{
+		ID:                     "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		Name:                   "App Launcher",
+		Type:                   "app_launcher",
+		SessionDuration:        "24h",
+		AUD:                    "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
+		AutoRedirectToIdentity: BoolPtr(false),
+		EnableBindingCookie:    BoolPtr(false),
+		AppLauncherVisible:     BoolPtr(false),
+		ServiceAuth401Redirect: BoolPtr(false),
+		CustomDenyMessage:      "denied!",
+		CustomDenyURL:          "https://www.example.com",
+		LogoURL:                "https://www.example.com/example.png",
+		SkipInterstitial:       BoolPtr(true),
+		CreatedAt:              &createdAt,
+		UpdatedAt:              &updatedAt,
+		AppLauncherCustomization: AppLauncherCustomization{
+			LandingPageDesign: AccessLandingPageDesign{
+				Title:           "A title",
+				Message:         "a message",
+				ImageURL:        "https://www.example.com/example.png",
+				ButtonColor:     "green",
+				ButtonTextColor: "red",
+			},
+			HeaderBackgroundColor: "red",
+			BackgroundColor:       "blue",
+			FooterLinks: []AccessFooterLink{
+				{
+					URL:  "https://somesite.com",
+					Name: "bug",
+				},
+			},
+		},
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps", handler)
+
+	actual, err := client.CreateAccessApplication(context.Background(), AccountIdentifier(testAccountID), CreateAccessApplicationParams{
+		Name:            "Admin Site",
+		SessionDuration: "24h",
+		Type:            "app_launcher",
+		AppLauncherCustomization: AppLauncherCustomization{
+			LandingPageDesign: AccessLandingPageDesign{
+				Title:           "A title",
+				Message:         "a message",
+				ImageURL:        "https://www.example.com/example.png",
+				ButtonColor:     "green",
+				ButtonTextColor: "red",
+			},
+			HeaderBackgroundColor: "red",
+			BackgroundColor:       "blue",
+			FooterLinks: []AccessFooterLink{
+				{
+					URL:  "https://somesite.com",
+					Name: "bug",
+				},
+			},
+		},
+	})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, fullAccessApplication, actual)
+	}
+}
