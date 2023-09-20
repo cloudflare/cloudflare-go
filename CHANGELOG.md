@@ -1,11 +1,17 @@
 ## 0.78.0 (Unreleased)
 
+BREAKING CHANGES:
+
+* account_role: `AccountRole` has been renamed to `GetAccountRole` to align with the updated method conventions ([#1405](https://github.com/cloudflare/cloudflare-go/issues/1405))
+* account_role: `AccountRoles` has been renamed to `ListAccountRoles` to align with the updated method conventions ([#1405](https://github.com/cloudflare/cloudflare-go/issues/1405))
+
 ENHANCEMENTS:
 
 * observatory: add support for observatory API ([#1401](https://github.com/cloudflare/cloudflare-go/issues/1401))
 
 BUG FIXES:
 
+* account_role: autopaginate all available results instead of a static number ([#1405](https://github.com/cloudflare/cloudflare-go/issues/1405))
 * semgrep: Improved IPv4 validation by implementing a new pattern to handle cases where non-IPv4 addresses were previously accepted. ([#1382](https://github.com/cloudflare/cloudflare-go/issues/1382))
 
 DEPENDENCIES:
