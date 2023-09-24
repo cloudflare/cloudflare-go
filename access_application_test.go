@@ -760,7 +760,7 @@ func TestCreateSaasAccessApplications(t *testing.T) {
 	}
 }
 
-func TestCreateApplicationWithAppLauncherCustomization(t *testing.T) {
+func TestCreateApplicationWithAccessAppLauncherCustomization(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -825,7 +825,7 @@ func TestCreateApplicationWithAppLauncherCustomization(t *testing.T) {
 		SkipInterstitial:       BoolPtr(true),
 		CreatedAt:              &createdAt,
 		UpdatedAt:              &updatedAt,
-		AppLauncherCustomization: AppLauncherCustomization{
+		AccessAppLauncherCustomization: AccessAppLauncherCustomization{
 			LandingPageDesign: AccessLandingPageDesign{
 				Title:           "A title",
 				Message:         "a message",
@@ -850,7 +850,7 @@ func TestCreateApplicationWithAppLauncherCustomization(t *testing.T) {
 		Name:            "Admin Site",
 		SessionDuration: "24h",
 		Type:            "app_launcher",
-		AppLauncherCustomization: AppLauncherCustomization{
+		AccessAppLauncherCustomization: AccessAppLauncherCustomization{
 			LandingPageDesign: AccessLandingPageDesign{
 				Title:           "A title",
 				Message:         "a message",

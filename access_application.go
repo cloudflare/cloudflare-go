@@ -54,7 +54,7 @@ type AccessApplication struct {
 	PathCookieAttribute      *bool                          `json:"path_cookie_attribute,omitempty"`
 	CustomPages              []string                       `json:"custom_pages,omitempty"`
 	Tags                     []string                       `json:"tags,omitempty"`
-	AppLauncherCustomization
+	AccessAppLauncherCustomization
 }
 
 type AccessApplicationGatewayRule struct {
@@ -117,7 +117,7 @@ type SaasApplication struct {
 	CustomAttributes   []SAMLAttributeConfig `json:"custom_attributes,omitempty"`
 }
 
-type AppLauncherCustomization struct {
+type AccessAppLauncherCustomization struct {
 	LandingPageDesign     AccessLandingPageDesign `json:"landing_page_design"`
 	LogoURL               string                  `json:"app_launcher_logo_url"`
 	HeaderBackgroundColor string                  `json:"header_bg_color"`
@@ -167,7 +167,7 @@ type CreateAccessApplicationParams struct {
 	Type                     AccessApplicationType          `json:"type,omitempty"`
 	CustomPages              []string                       `json:"custom_pages,omitempty"`
 	Tags                     []string                       `json:"tags,omitempty"`
-	AppLauncherCustomization
+	AccessAppLauncherCustomization
 }
 
 type UpdateAccessApplicationParams struct {
@@ -197,7 +197,7 @@ type UpdateAccessApplicationParams struct {
 	Type                     AccessApplicationType          `json:"type,omitempty"`
 	CustomPages              []string                       `json:"custom_pages,omitempty"`
 	Tags                     []string                       `json:"tags,omitempty"`
-	AppLauncherCustomization
+	AccessAppLauncherCustomization
 }
 
 // ListAccessApplications returns all applications within an account or zone.
