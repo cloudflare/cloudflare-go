@@ -39,6 +39,7 @@ type AccessApplication struct {
 	CustomDenyURL            string                         `json:"custom_deny_url,omitempty"`
 	CustomNonIdentityDenyURL string                         `json:"custom_non_identity_deny_url,omitempty"`
 	Name                     string                         `json:"name"`
+        Policies                 []AccessPolicy                 `json:"policies"`
 	ID                       string                         `json:"id,omitempty"`
 	PrivateAddress           string                         `json:"private_address"`
 	CorsHeaders              *AccessApplicationCorsHeaders  `json:"cors_headers,omitempty"`
