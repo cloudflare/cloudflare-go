@@ -5,6 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
+	"strconv"
 	"time"
 
 	"github.com/goccy/go-json"
@@ -177,7 +179,9 @@ type ListDeleteParams struct {
 }
 
 type ListListItemsParams struct {
-	ID string
+	ID      string
+	Search  string
+	PerPage *uint32
 }
 
 type ListCreateItemsParams struct {
@@ -336,14 +340,21 @@ func (api *API) DeleteList(ctx context.Context, rc *ResourceContainer, listID st
 // API reference: https://api.cloudflare.com/#rules-lists-list-list-items
 func (api *API) ListListItems(ctx context.Context, rc *ResourceContainer, params ListListItemsParams) ([]ListItem, error) {
 	var list []ListItem
-	var cursor string
-	var cursorQuery string
+
+	var query = url.Values{}
+	if params.Search != "" {
+		query.Set("search", params.Search)
+	}
+	if params.PerPage != nil {
+		query.Set("per_page", strconv.FormatUint(uint64(*params.PerPage), 10))
+	}
 
 	for {
-		if len(cursor) > 0 {
-			cursorQuery = fmt.Sprintf("?cursor=%s", cursor)
+		uri := fmt.Sprintf("/accounts/%s/rules/lists/%s/items", rc.Identifier, params.ID)
+		if queryEncode := query.Encode(); queryEncode != "" {
+			uri += "?" + queryEncode
 		}
-		uri := fmt.Sprintf("/accounts/%s/rules/lists/%s/items%s", rc.Identifier, params.ID, cursorQuery)
+
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
 			return []ListItem{}, err
@@ -355,8 +366,10 @@ func (api *API) ListListItems(ctx context.Context, rc *ResourceContainer, params
 		}
 
 		list = append(list, result.Result...)
-		if cursor = result.ResultInfo.Cursors.After; cursor == "" {
+		if cursor := result.ResultInfo.Cursors.After; cursor == "" {
 			break
+		} else {
+			query.Set("cursor", cursor)
 		}
 	}
 
