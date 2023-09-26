@@ -5,8 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"net/url"
-	"strconv"
 	"time"
 
 	"github.com/goccy/go-json"
@@ -179,9 +177,10 @@ type ListDeleteParams struct {
 }
 
 type ListListItemsParams struct {
-	ID      string
-	Search  string
-	PerPage *uint32
+	ID      string `url:"-"`
+	Search  string `url:"search,omitempty"`
+	PerPage int    `url:"per_page,omitempty"`
+	Cursor  string `url:"cursor,omitempty"`
 }
 
 type ListCreateItemsParams struct {
@@ -341,19 +340,8 @@ func (api *API) DeleteList(ctx context.Context, rc *ResourceContainer, listID st
 func (api *API) ListListItems(ctx context.Context, rc *ResourceContainer, params ListListItemsParams) ([]ListItem, error) {
 	var list []ListItem
 
-	var query = url.Values{}
-	if params.Search != "" {
-		query.Set("search", params.Search)
-	}
-	if params.PerPage != nil {
-		query.Set("per_page", strconv.FormatUint(uint64(*params.PerPage), 10))
-	}
-
 	for {
-		uri := fmt.Sprintf("/accounts/%s/rules/lists/%s/items", rc.Identifier, params.ID)
-		if queryEncode := query.Encode(); queryEncode != "" {
-			uri += "?" + queryEncode
-		}
+		uri := buildURI(fmt.Sprintf("/accounts/%s/rules/lists/%s/items", rc.Identifier, params.ID), params)
 
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
@@ -369,7 +357,7 @@ func (api *API) ListListItems(ctx context.Context, rc *ResourceContainer, params
 		if cursor := result.ResultInfo.Cursors.After; cursor == "" {
 			break
 		} else {
-			query.Set("cursor", cursor)
+			params.Cursor = cursor
 		}
 	}
 
