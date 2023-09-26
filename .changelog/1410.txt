@@ -1,0 +1,3 @@
+```release-note:bug
+cloudflare: fix incorrect data type in UpdateCustomNameserverZoneMetadataParams struct
+```

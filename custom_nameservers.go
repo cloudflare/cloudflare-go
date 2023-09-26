@@ -68,9 +68,8 @@ type GetEligibleZonesAccountCustomNameserversParams struct{}
 type GetCustomNameserverZoneMetadataParams struct{}
 
 type UpdateCustomNameserverZoneMetadataParams struct {
-	Type    string `json:"type"`
-	NSSet   string `json:"ns_set"`
-	Enabled bool   `json:"enabled"`
+	NSSet   int  `json:"ns_set"`
+	Enabled bool `json:"enabled"`
 }
 
 // GetCustomNameservers lists custom nameservers.
