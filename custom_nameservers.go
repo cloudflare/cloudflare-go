@@ -199,7 +199,6 @@ func (api *API) UpdateCustomNameserverZoneMetadata(ctx context.Context, rc *Reso
 
 	uri := fmt.Sprintf("/%s/%s/custom_ns", rc.Level, rc.Identifier)
 
-	params.Type = ""
 	_, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return err
