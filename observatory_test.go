@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"strings"
 	"testing"
 	"time"
@@ -12,7 +13,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var testURL = "example.com"
+var testURL = "example.com/a/b"
+var escapedTestURL = url.PathEscape(testURL)
 var region = "us-central1"
 var regionLabel = "Iowa, USA"
 var frequency = "DAILY"
@@ -173,6 +175,7 @@ func TestListObservatoryPages(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
+		assert.Equal(t, "/zones/"+testZoneID+"/speed_api/pages", r.URL.EscapedPath())
 		fmt.Fprintf(w, `{
 			  "success": true,
 			  "errors": [],
@@ -202,6 +205,7 @@ func TestObservatoryPageTrend(t *testing.T) {
 		assert.Equal(t, "DESKTOP", r.URL.Query().Get("deviceType"))
 		assert.Equal(t, "America/Chicago", r.URL.Query().Get("tz"))
 		assert.Equal(t, "fcp,lcp", r.URL.Query().Get("metrics"))
+		assert.Equal(t, "/zones/"+testZoneID+"/speed_api/pages/"+escapedTestURL+"/trend", r.URL.EscapedPath())
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			  "success": true,
@@ -254,6 +258,7 @@ func TestListObservatoryPageTests(t *testing.T) {
 		assert.Equal(t, region, r.URL.Query().Get("region"))
 		assert.Equal(t, "1", r.URL.Query().Get("page"))
 		assert.Equal(t, "10", r.URL.Query().Get("per_page"))
+		assert.Equal(t, "/zones/"+testZoneID+"/speed_api/pages/"+escapedTestURL+"/tests", r.URL.EscapedPath())
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			  "success": true,
@@ -289,6 +294,7 @@ func TestCreateObservatoryPageTest(t *testing.T) {
 		b, err := io.ReadAll(r.Body)
 		assert.NoError(t, err)
 		assert.True(t, strings.Contains(string(b), region))
+		assert.Equal(t, "/zones/"+testZoneID+"/speed_api/pages/"+escapedTestURL+"/tests", r.URL.EscapedPath())
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			  "success": true,
@@ -318,6 +324,7 @@ func TestDeleteObservatoryPageTests(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		assert.Equal(t, region, r.URL.Query().Get("region"))
+		assert.Equal(t, "/zones/"+testZoneID+"/speed_api/pages/"+escapedTestURL+"/tests", r.URL.EscapedPath())
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			  "success": true,
@@ -346,6 +353,8 @@ func TestGetObservatoryPageTest(t *testing.T) {
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+
+		assert.Equal(t, "/zones/"+testZoneID+"/speed_api/pages/"+escapedTestURL+"/tests/"+observatoryTestID, r.URL.EscapedPath())
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			  "success": true,
@@ -374,6 +383,7 @@ func TestCreateObservatoryScheduledPageTest(t *testing.T) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		assert.Equal(t, frequency, r.URL.Query().Get("frequency"))
 		assert.Equal(t, region, r.URL.Query().Get("region"))
+		assert.Equal(t, "/zones/"+testZoneID+"/speed_api/schedule/"+escapedTestURL, r.URL.EscapedPath())
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			  "success": true,
@@ -402,6 +412,7 @@ func TestObservatoryScheduledPageTest(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		assert.Equal(t, region, r.URL.Query().Get("region"))
+		assert.Equal(t, "/zones/"+testZoneID+"/speed_api/schedule/"+escapedTestURL, r.URL.EscapedPath())
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			  "success": true,
@@ -429,6 +440,7 @@ func TestDeleteObservatoryScheduledPageTest(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		assert.Equal(t, region, r.URL.Query().Get("region"))
+		assert.Equal(t, "/zones/"+testZoneID+"/speed_api/schedule/"+escapedTestURL, r.URL.EscapedPath())
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			  "success": true,
