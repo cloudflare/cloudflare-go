@@ -1,4 +1,10 @@
-## 0.78.0 (Unreleased)
+## 0.79.0 (Unreleased)
+
+BUG FIXES:
+
+* observatory: fix double url encoding ([#1412](https://github.com/cloudflare/cloudflare-go/issues/1412))
+
+## 0.78.0 (September 27th, 2023)
 
 BREAKING CHANGES:
 
