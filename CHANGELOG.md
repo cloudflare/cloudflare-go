@@ -2,6 +2,7 @@
 
 BUG FIXES:
 
+* custom_nameservers: change `NSSet` from string to int to match API response ([#1410](https://github.com/cloudflare/cloudflare-go/issues/1410))
 * observatory: fix double url encoding ([#1412](https://github.com/cloudflare/cloudflare-go/issues/1412))
 
 ## 0.78.0 (September 27th, 2023)
