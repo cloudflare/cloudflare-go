@@ -28,9 +28,8 @@ type CustomNameserverResult struct {
 }
 
 type CustomNameserverZoneMetadata struct {
-	Type    string `json:"type"`
-	NSSet   string `json:"ns_set"`
-	Enabled bool   `json:"enabled"`
+	NSSet   int  `json:"ns_set"`
+	Enabled bool `json:"enabled"`
 }
 
 type customNameserverListResponse struct {
