@@ -28,9 +28,8 @@ type CustomNameserverResult struct {
 }
 
 type CustomNameserverZoneMetadata struct {
-	Type    string `json:"type"`
-	NSSet   string `json:"ns_set"`
-	Enabled bool   `json:"enabled"`
+	NSSet   int  `json:"ns_set"`
+	Enabled bool `json:"enabled"`
 }
 
 type customNameserverListResponse struct {
@@ -68,9 +67,8 @@ type GetEligibleZonesAccountCustomNameserversParams struct{}
 type GetCustomNameserverZoneMetadataParams struct{}
 
 type UpdateCustomNameserverZoneMetadataParams struct {
-	Type    string `json:"type"`
-	NSSet   string `json:"ns_set"`
-	Enabled bool   `json:"enabled"`
+	NSSet   int  `json:"ns_set"`
+	Enabled bool `json:"enabled"`
 }
 
 // GetCustomNameservers lists custom nameservers.
@@ -200,7 +198,6 @@ func (api *API) UpdateCustomNameserverZoneMetadata(ctx context.Context, rc *Reso
 
 	uri := fmt.Sprintf("/%s/%s/custom_ns", rc.Level, rc.Identifier)
 
-	params.Type = ""
 	_, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return err

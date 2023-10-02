@@ -196,8 +196,7 @@ func TestAccountCustomNameserver_GetAccountCustomNameserverZoneMetadata(t *testi
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"result": {
-				"type": "account",
-				"ns_set": "1",
+				"ns_set": 1,
 				"enabled": true
 			},
 			"success": true,
@@ -208,8 +207,7 @@ func TestAccountCustomNameserver_GetAccountCustomNameserverZoneMetadata(t *testi
 
 	mux.HandleFunc("/zones/"+testZoneID+"/custom_ns", handler)
 	want := CustomNameserverZoneMetadata{
-		Type:    "account",
-		NSSet:   "1",
+		NSSet:   1,
 		Enabled: true,
 	}
 
