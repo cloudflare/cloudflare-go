@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/goccy/go-json"
+	"github.com/google/go-querystring/query"
 )
 
 var (
@@ -137,7 +138,9 @@ func (api *API) GetObservatoryPageTrend(ctx context.Context, rc *ResourceContain
 	if params.URL == "" {
 		return nil, ErrMissingObservatoryUrl
 	}
-	uri := buildURI(fmt.Sprintf("/zones/%s/speed_api/pages/%s/trend", rc.Identifier, url.PathEscape(params.URL)), params)
+	// cannot use buildURI because params.URL contains "/" that should be encoded and buildURI will double encode %2F into %252F
+	v, _ := query.Values(params)
+	uri := fmt.Sprintf("/zones/%s/speed_api/pages/%s/trend?%s", rc.Identifier, url.PathEscape(params.URL), v.Encode())
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, err
@@ -184,7 +187,9 @@ func (api *API) ListObservatoryPageTests(ctx context.Context, rc *ResourceContai
 	var tests []ObservatoryPageTest
 	var lastResultInfo ResultInfo
 	for {
-		uri := buildURI(fmt.Sprintf("/zones/%s/speed_api/pages/%s/tests", rc.Identifier, url.PathEscape(params.URL)), params)
+		// cannot use buildURI because params.URL contains "/" that should be encoded and buildURI will double encode %2F into %252F
+		v, _ := query.Values(params)
+		uri := fmt.Sprintf("/zones/%s/speed_api/pages/%s/tests?%s", rc.Identifier, url.PathEscape(params.URL), v.Encode())
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
 			return nil, nil, err
@@ -255,7 +260,9 @@ func (api *API) DeleteObservatoryPageTests(ctx context.Context, rc *ResourceCont
 	if params.URL == "" {
 		return nil, ErrMissingObservatoryUrl
 	}
-	uri := buildURI(fmt.Sprintf("/zones/%s/speed_api/pages/%s/tests", rc.Identifier, url.PathEscape(params.URL)), params)
+	// cannot use buildURI because params.URL contains "/" that should be encoded and buildURI will double encode %2F into %252F
+	v, _ := query.Values(params)
+	uri := fmt.Sprintf("/zones/%s/speed_api/pages/%s/tests?%s", rc.Identifier, url.PathEscape(params.URL), v.Encode())
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return nil, err
@@ -298,7 +305,7 @@ func (api *API) GetObservatoryPageTest(ctx context.Context, rc *ResourceContaine
 
 type CreateObservatoryScheduledPageTestParams struct {
 	URL       string `url:"-" json:"-"`
-	Region    string `url:"region" json:"region"`
+	Region    string `url:"region" json:"-"`
 	Frequency string `url:"frequency" json:"-"`
 }
 
@@ -319,8 +326,10 @@ func (api *API) CreateObservatoryScheduledPageTest(ctx context.Context, rc *Reso
 	if params.URL == "" {
 		return nil, ErrMissingObservatoryUrl
 	}
-	uri := buildURI(fmt.Sprintf("/zones/%s/speed_api/schedule/%s", rc.Identifier, url.PathEscape(params.URL)), params)
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
+	// cannot use buildURI because params.URL contains "/" that should be encoded and buildURI will double encode %2F into %252F
+	v, _ := query.Values(params)
+	uri := fmt.Sprintf("/zones/%s/speed_api/schedule/%s?%s", rc.Identifier, url.PathEscape(params.URL), v.Encode())
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -349,7 +358,9 @@ func (api *API) GetObservatoryScheduledPageTest(ctx context.Context, rc *Resourc
 	if params.URL == "" {
 		return nil, ErrMissingObservatoryUrl
 	}
-	uri := buildURI(fmt.Sprintf("/zones/%s/speed_api/schedule/%s", rc.Identifier, url.PathEscape(params.URL)), params)
+	// cannot use buildURI because params.URL contains "/" that should be encoded and buildURI will double encode %2F into %252F
+	v, _ := query.Values(params)
+	uri := fmt.Sprintf("/zones/%s/speed_api/schedule/%s?%s", rc.Identifier, url.PathEscape(params.URL), v.Encode())
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, err
@@ -374,7 +385,9 @@ func (api *API) DeleteObservatoryScheduledPageTest(ctx context.Context, rc *Reso
 	if params.URL == "" {
 		return nil, ErrMissingObservatoryUrl
 	}
-	uri := buildURI(fmt.Sprintf("/zones/%s/speed_api/schedule/%s", rc.Identifier, url.PathEscape(params.URL)), params)
+	// cannot use buildURI because params.URL contains "/" that should be encoded and buildURI will double encode %2F into %252F
+	v, _ := query.Values(params)
+	uri := fmt.Sprintf("/zones/%s/speed_api/schedule/%s?%s", rc.Identifier, url.PathEscape(params.URL), v.Encode())
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return nil, err
