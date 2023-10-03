@@ -119,7 +119,7 @@ func TestListAPIShieldSchemas(t *testing.T) {
 				"validation_enabled": true,
 				"source": "{}"
 			}
-		], 
+		],
 		"result_info": {
 			"page": 3,
 			"per_page": 20,
@@ -247,7 +247,7 @@ func TestDeleteAPIShieldSchema(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-func TestPatchAPIShieldSchema(t *testing.T) {
+func TestUpdateAPIShieldSchema(t *testing.T) {
 	setup()
 	t.Cleanup(teardown)
 
@@ -278,10 +278,10 @@ func TestPatchAPIShieldSchema(t *testing.T) {
 
 	mux.HandleFunc(endpoint, handler)
 
-	actual, err := client.PatchAPIShieldSchema(
+	actual, err := client.UpdateAPIShieldSchema(
 		context.Background(),
 		ZoneIdentifier(testZoneID),
-		PatchAPIShieldSchemaParams{
+		UpdateAPIShieldSchemaParams{
 			SchemaID:          testAPIShieldSchemaId,
 			ValidationEnabled: BoolPtr(true),
 		},
@@ -491,11 +491,11 @@ func TestMustProvideSchemaID(t *testing.T) {
 	t.Cleanup(teardown)
 
 	_, err := client.GetAPIShieldSchema(context.Background(), ZoneIdentifier(testZoneID), GetAPIShieldSchemaParams{})
-	require.ErrorContains(t, err, "params.schemaID must be provided")
+	require.ErrorContains(t, err, "schema ID must be provided")
 
-	_, err = client.PatchAPIShieldSchema(context.Background(), ZoneIdentifier(testZoneID), PatchAPIShieldSchemaParams{})
-	require.ErrorContains(t, err, "params.schemaID must be provided")
+	_, err = client.UpdateAPIShieldSchema(context.Background(), ZoneIdentifier(testZoneID), UpdateAPIShieldSchemaParams{})
+	require.ErrorContains(t, err, "schema ID must be provided")
 
 	err = client.DeleteAPIShieldSchema(context.Background(), ZoneIdentifier(testZoneID), DeleteAPIShieldSchemaParams{})
-	require.ErrorContains(t, err, "params.schemaID must be provided")
+	require.ErrorContains(t, err, "schema ID must be provided")
 }

@@ -76,10 +76,10 @@ type DeleteAPIShieldSchemaParams struct {
 	SchemaID string `url:"-"`
 }
 
-// PatchAPIShieldSchemaParams represents the parameters to pass to patch certain fields on an existing schema
+// UpdateAPIShieldSchemaParams represents the parameters to pass to patch certain fields on an existing schema
 //
 // API documentation: https://developers.cloudflare.com/api/operations/api-shield-schema-validation-enable-validation-for-a-schema
-type PatchAPIShieldSchemaParams struct {
+type UpdateAPIShieldSchemaParams struct {
 	// SchemaID is the schema to be patched
 	SchemaID string `json:"-" url:"-"`
 
@@ -183,7 +183,7 @@ func (cse APIShieldCreateSchemaEventWithLocations) String() string {
 // API documentation: https://developers.cloudflare.com/api/operations/api-shield-schema-validation-retrieve-information-about-specific-schema
 func (api *API) GetAPIShieldSchema(ctx context.Context, rc *ResourceContainer, params GetAPIShieldSchemaParams) (*APIShieldSchema, error) {
 	if params.SchemaID == "" {
-		return nil, fmt.Errorf("params.schemaID must be provided")
+		return nil, fmt.Errorf("schema ID must be provided")
 	}
 
 	path := fmt.Sprintf("/zones/%s/api_gateway/user_schemas/%s", rc.Identifier, params.SchemaID)
@@ -233,11 +233,11 @@ func (api *API) CreateAPIShieldSchema(ctx context.Context, rc *ResourceContainer
 	uri := fmt.Sprintf("/zones/%s/api_gateway/user_schemas", rc.Identifier)
 
 	if params.Name == "" {
-		return nil, fmt.Errorf("params.Name must not be empty")
+		return nil, fmt.Errorf("name must not be empty")
 	}
 
 	if params.Source == nil {
-		return nil, fmt.Errorf("params.Source must not be nil")
+		return nil, fmt.Errorf("source must not be nil")
 	}
 
 	// Prepare the form to be submitted
@@ -290,7 +290,7 @@ func (api *API) CreateAPIShieldSchema(ctx context.Context, rc *ResourceContainer
 // API documentation: https://developers.cloudflare.com/api/operations/api-shield-schema-delete-a-schema
 func (api *API) DeleteAPIShieldSchema(ctx context.Context, rc *ResourceContainer, params DeleteAPIShieldSchemaParams) error {
 	if params.SchemaID == "" {
-		return fmt.Errorf("params.schemaID must be provided")
+		return fmt.Errorf("schema ID must be provided")
 	}
 
 	uri := fmt.Sprintf("/zones/%s/api_gateway/user_schemas/%s", rc.Identifier, params.SchemaID)
@@ -309,12 +309,12 @@ func (api *API) DeleteAPIShieldSchema(ctx context.Context, rc *ResourceContainer
 	return nil
 }
 
-// PatchAPIShieldSchema updates certain fields on an existing schema
+// UpdateAPIShieldSchema updates certain fields on an existing schema.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/api-shield-schema-validation-enable-validation-for-a-schema
-func (api *API) PatchAPIShieldSchema(ctx context.Context, rc *ResourceContainer, params PatchAPIShieldSchemaParams) (*APIShieldSchema, error) {
+func (api *API) UpdateAPIShieldSchema(ctx context.Context, rc *ResourceContainer, params UpdateAPIShieldSchemaParams) (*APIShieldSchema, error) {
 	if params.SchemaID == "" {
-		return nil, fmt.Errorf("params.schemaID must be provided")
+		return nil, fmt.Errorf("schema ID must be provided")
 	}
 
 	uri := fmt.Sprintf("/zones/%s/api_gateway/user_schemas/%s", rc.Identifier, params.SchemaID)
