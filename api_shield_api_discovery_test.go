@@ -65,8 +65,8 @@ func TestListAPIShieldDiscoveryOperations(t *testing.T) {
 			Endpoint:    "/client/v4/zones",
 			ID:          "9def2cb0-3ed0-4737-92ca-f09efa4718fd",
 			LastUpdated: &lastUpdated,
-			Origin:      []string{"ML"},
-			State:       "review",
+			Origin:      []APIShieldDiscoveryOrigin{APIShieldDiscoveryOriginML},
+			State:       APIShieldDiscoveryStateReview,
 		},
 	}
 
@@ -96,8 +96,8 @@ func TestListAPIShieldDiscoveryOperationsWithParams(t *testing.T) {
 				"host": "api.cloudflare.com",
 				"endpoint": "/client/v4/zones",
 				"last_updated": "2023-03-02T15:46:06.000000Z",
-				"origin": ["ML"],
-				"state": "review",
+				"origin": ["SessionIdentifier"],
+				"state": "saved",
 				"features": {
 					"traffic_stats": {}
 				}
@@ -121,14 +121,12 @@ func TestListAPIShieldDiscoveryOperationsWithParams(t *testing.T) {
 			params: ListAPIShieldDiscoveryOperationsParams{
 				Direction: "desc",
 				OrderBy:   "host",
-				APIShieldListDiscoveryOperationsFilters: APIShieldListDiscoveryOperationsFilters{
-					Hosts:    []string{"api.cloudflare.com", "developers.cloudflare.com"},
-					Methods:  []string{"GET", "PUT"},
-					Endpoint: "/client",
-					Origin:   "ML",
-					State:    "review",
-					Diff:     true,
-				},
+				Hosts:     []string{"api.cloudflare.com", "developers.cloudflare.com"},
+				Methods:   []string{"GET", "PUT"},
+				Endpoint:  "/client",
+				Origin:    APIShieldDiscoveryOriginSessionIdentifier,
+				State:     APIShieldDiscoveryStateSaved,
+				Diff:      true,
 				PaginationOptions: PaginationOptions{
 					Page:    1,
 					PerPage: 25,
@@ -140,8 +138,8 @@ func TestListAPIShieldDiscoveryOperationsWithParams(t *testing.T) {
 				"host":      []string{"api.cloudflare.com", "developers.cloudflare.com"},
 				"method":    []string{"GET", "PUT"},
 				"endpoint":  []string{"/client"},
-				"origin":    []string{"ML"},
-				"state":     []string{"review"},
+				"origin":    []string{"SessionIdentifier"},
+				"state":     []string{"saved"},
 				"diff":      []string{"true"},
 				"page":      []string{"1"},
 				"per_page":  []string{"25"},
@@ -168,9 +166,7 @@ func TestListAPIShieldDiscoveryOperationsWithParams(t *testing.T) {
 		{
 			name: "hosts only",
 			params: ListAPIShieldDiscoveryOperationsParams{
-				APIShieldListDiscoveryOperationsFilters: APIShieldListDiscoveryOperationsFilters{
-					Hosts: []string{"api.cloudflare.com", "developers.cloudflare.com"},
-				},
+				Hosts: []string{"api.cloudflare.com", "developers.cloudflare.com"},
 			},
 			expectedParams: url.Values{
 				"host": []string{"api.cloudflare.com", "developers.cloudflare.com"},
@@ -179,9 +175,7 @@ func TestListAPIShieldDiscoveryOperationsWithParams(t *testing.T) {
 		{
 			name: "methods only",
 			params: ListAPIShieldDiscoveryOperationsParams{
-				APIShieldListDiscoveryOperationsFilters: APIShieldListDiscoveryOperationsFilters{
-					Methods: []string{"GET", "PUT"},
-				},
+				Methods: []string{"GET", "PUT"},
 			},
 			expectedParams: url.Values{
 				"method": []string{"GET", "PUT"},
@@ -190,9 +184,7 @@ func TestListAPIShieldDiscoveryOperationsWithParams(t *testing.T) {
 		{
 			name: "endpoint only",
 			params: ListAPIShieldDiscoveryOperationsParams{
-				APIShieldListDiscoveryOperationsFilters: APIShieldListDiscoveryOperationsFilters{
-					Endpoint: "/client",
-				},
+				Endpoint: "/client",
 			},
 			expectedParams: url.Values{
 				"endpoint": []string{"/client"},
@@ -201,31 +193,25 @@ func TestListAPIShieldDiscoveryOperationsWithParams(t *testing.T) {
 		{
 			name: "origin only",
 			params: ListAPIShieldDiscoveryOperationsParams{
-				APIShieldListDiscoveryOperationsFilters: APIShieldListDiscoveryOperationsFilters{
-					Origin: "ML",
-				},
+				Origin: APIShieldDiscoveryOriginSessionIdentifier,
 			},
 			expectedParams: url.Values{
-				"origin": []string{"ML"},
+				"origin": []string{"SessionIdentifier"},
 			},
 		},
 		{
 			name: "state only",
 			params: ListAPIShieldDiscoveryOperationsParams{
-				APIShieldListDiscoveryOperationsFilters: APIShieldListDiscoveryOperationsFilters{
-					State: "review",
-				},
+				State: APIShieldDiscoveryStateSaved,
 			},
 			expectedParams: url.Values{
-				"state": []string{"review"},
+				"state": []string{"saved"},
 			},
 		},
 		{
 			name: "diff only",
 			params: ListAPIShieldDiscoveryOperationsParams{
-				APIShieldListDiscoveryOperationsFilters: APIShieldListDiscoveryOperationsFilters{
-					Diff: true,
-				},
+				Diff: true,
 			},
 			expectedParams: url.Values{
 				"diff": []string{"true"},
@@ -273,8 +259,8 @@ func TestListAPIShieldDiscoveryOperationsWithParams(t *testing.T) {
 					Endpoint:    "/client/v4/zones",
 					ID:          "9def2cb0-3ed0-4737-92ca-f09efa4718fd",
 					LastUpdated: &lastUpdated,
-					Origin:      []string{"ML"},
-					State:       "review",
+					Origin:      []APIShieldDiscoveryOrigin{APIShieldDiscoveryOriginSessionIdentifier},
+					State:       APIShieldDiscoveryStateSaved,
 					Features: map[string]any{
 						"traffic_stats": map[string]any{},
 					},
@@ -288,7 +274,7 @@ func TestListAPIShieldDiscoveryOperationsWithParams(t *testing.T) {
 	}
 }
 
-func TestPatchAPIShieldDiscoveryOperation(t *testing.T) {
+func TestUpdateAPIShieldDiscoveryOperation(t *testing.T) {
 	setup()
 	t.Cleanup(teardown)
 
@@ -316,21 +302,19 @@ func TestPatchAPIShieldDiscoveryOperation(t *testing.T) {
 
 	mux.HandleFunc(endpoint, handler)
 
-	actual, err := client.PatchAPIShieldDiscoveryOperation(
+	actual, err := client.UpdateAPIShieldDiscoveryOperation(
 		context.Background(),
 		ZoneIdentifier(testZoneID),
-		PatchAPIShieldDiscoveryOperationParams{
+		UpdateAPIShieldDiscoveryOperationParams{
 			OperationID: testAPIShieldDiscoveryOperationID,
-			PatchAPIShieldDiscoveryOperation: PatchAPIShieldDiscoveryOperation{
-				State: "ignored",
-			},
+			State:       APIShieldDiscoveryStateIgnored,
 		},
 	)
 
 	// patch result is a cut down representation of the schema
 	// so metadata like created date is not populated
-	expected := &PatchAPIShieldDiscoveryOperation{
-		State: "ignored",
+	expected := &UpdateAPIShieldDiscoveryOperation{
+		State: APIShieldDiscoveryStateIgnored,
 	}
 
 	if assert.NoError(t, err) {
@@ -340,7 +324,7 @@ func TestPatchAPIShieldDiscoveryOperation(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-func TestPatchAPIShieldDiscoveryOperations(t *testing.T) {
+func TestUpdateAPIShieldDiscoveryOperations(t *testing.T) {
 	setup()
 	t.Cleanup(teardown)
 
@@ -369,18 +353,18 @@ func TestPatchAPIShieldDiscoveryOperations(t *testing.T) {
 
 	mux.HandleFunc(endpoint, handler)
 
-	actual, err := client.PatchAPIShieldDiscoveryOperations(
+	actual, err := client.UpdateAPIShieldDiscoveryOperations(
 		context.Background(),
 		ZoneIdentifier(testZoneID),
-		PatchAPIShieldDiscoveryOperationsParams{
-			"9b16ce22-d1bf-425d-869f-a11f8240fafb": PatchAPIShieldDiscoveryOperation{State: "ignored"},
-			"c51c2ea1-a690-48fd-8e3f-7fc79b269947": PatchAPIShieldDiscoveryOperation{State: "review"},
+		UpdateAPIShieldDiscoveryOperationsParams{
+			"9b16ce22-d1bf-425d-869f-a11f8240fafb": UpdateAPIShieldDiscoveryOperation{State: APIShieldDiscoveryStateIgnored},
+			"c51c2ea1-a690-48fd-8e3f-7fc79b269947": UpdateAPIShieldDiscoveryOperation{State: APIShieldDiscoveryStateReview},
 		},
 	)
 
-	expected := &PatchAPIShieldDiscoveryOperationsParams{
-		"9b16ce22-d1bf-425d-869f-a11f8240fafb": PatchAPIShieldDiscoveryOperation{State: "ignored"},
-		"c51c2ea1-a690-48fd-8e3f-7fc79b269947": PatchAPIShieldDiscoveryOperation{State: "review"},
+	expected := &UpdateAPIShieldDiscoveryOperationsParams{
+		"9b16ce22-d1bf-425d-869f-a11f8240fafb": UpdateAPIShieldDiscoveryOperation{State: APIShieldDiscoveryStateIgnored},
+		"c51c2ea1-a690-48fd-8e3f-7fc79b269947": UpdateAPIShieldDiscoveryOperation{State: APIShieldDiscoveryStateReview},
 	}
 
 	if assert.NoError(t, err) {
@@ -394,6 +378,6 @@ func TestMustProvideDiscoveryOperationID(t *testing.T) {
 	setup()
 	t.Cleanup(teardown)
 
-	_, err := client.PatchAPIShieldDiscoveryOperation(context.Background(), ZoneIdentifier(testZoneID), PatchAPIShieldDiscoveryOperationParams{})
-	require.ErrorContains(t, err, "params.OperationID must be provided")
+	_, err := client.UpdateAPIShieldDiscoveryOperation(context.Background(), ZoneIdentifier(testZoneID), UpdateAPIShieldDiscoveryOperationParams{})
+	require.ErrorContains(t, err, "operation ID must be provided")
 }

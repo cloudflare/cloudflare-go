@@ -9,16 +9,40 @@ import (
 	"github.com/goccy/go-json"
 )
 
+// APIShieldDiscoveryOrigin is an enumeration on what discovery engine an operation was discovered by.
+type APIShieldDiscoveryOrigin string
+
+const (
+
+	// APIShieldDiscoveryOriginML discovered operations that were sourced using ML API Discovery.
+	APIShieldDiscoveryOriginML APIShieldDiscoveryOrigin = "ML"
+	// APIShieldDiscoveryOriginSessionIdentifier discovered operations that were sourced using Session Identifier
+	// API Discovery.
+	APIShieldDiscoveryOriginSessionIdentifier APIShieldDiscoveryOrigin = "SessionIdentifier"
+)
+
+// APIShieldDiscoveryState is an enumeration on states a discovery operation can be in.
+type APIShieldDiscoveryState string
+
+const (
+	// APIShieldDiscoveryStateReview discovered operations that are not saved into API Shield Endpoint Management.
+	APIShieldDiscoveryStateReview APIShieldDiscoveryState = "review"
+	// APIShieldDiscoveryStateSaved discovered operations that are already saved into API Shield Endpoint Management.
+	APIShieldDiscoveryStateSaved APIShieldDiscoveryState = "saved"
+	// APIShieldDiscoveryStateIgnored discovered operations that have been marked as ignored.
+	APIShieldDiscoveryStateIgnored APIShieldDiscoveryState = "ignored"
+)
+
 // APIShieldDiscoveryOperation is an operation that was discovered by API Discovery.
 type APIShieldDiscoveryOperation struct {
-	// ID represents the ID of the operation
+	// ID represents the ID of the operation, formatted as UUID
 	ID string `json:"id"`
 	// Origin represents the API discovery engine(s) that discovered this operation
-	Origin []string `json:"origin"`
+	Origin []APIShieldDiscoveryOrigin `json:"origin"`
 	// State represents the state of operation in API Discovery
-	State string `json:"state"`
+	State APIShieldDiscoveryState `json:"state"`
 	// LastUpdated timestamp of when this operation was last updated
-	LastUpdated *time.Time `json:"last_updated,omitempty"`
+	LastUpdated *time.Time `json:"last_updated"`
 	// Features are additional data about the operation
 	Features map[string]any `json:"features,omitempty"`
 
@@ -35,55 +59,49 @@ type ListAPIShieldDiscoveryOperationsParams struct {
 	Direction string `url:"direction,omitempty"`
 	// OrderBy when requesting a feature, the feature keys are available for ordering as well, e.g., thresholds.suggested_threshold.
 	OrderBy string `url:"order,omitempty"`
-	// Filters to only return operations that match filtering criteria, see APIShieldGetOperationsFilters
-	APIShieldListDiscoveryOperationsFilters
-	// Pagination options to apply to the request.
-	PaginationOptions
-}
-
-// APIShieldListDiscoveryOperationsFilters represents the filtering query parameters to set when retrieving discovery operations.
-//
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-api-discovery-retrieve-discovered-operations-on-a-zone
-type APIShieldListDiscoveryOperationsFilters struct {
 	// Hosts filters results to only include the specified hosts.
 	Hosts []string `url:"host,omitempty"`
 	// Methods filters results to only include the specified methods.
 	Methods []string `url:"method,omitempty"`
-	// Endpoint filter results to only include endpoints containing this pattern.
+	// Endpoint filters results to only include endpoints containing this pattern.
 	Endpoint string `url:"endpoint,omitempty"`
 	// Diff when true, only return API Discovery results that are not saved into API Shield Endpoint Management
 	Diff bool `url:"diff,omitempty"`
-	// Origin filter results to only include discovery results sourced from a particular discovery engine
-	Origin string `url:"origin,omitempty"`
-	// State filter results to only include discovery results in a particular state.
-	State string `url:"state,omitempty"`
+	// Origin filters results to only include discovery results sourced from a particular discovery engine
+	// See APIShieldDiscoveryOrigin for valid values.
+	Origin APIShieldDiscoveryOrigin `url:"origin,omitempty"`
+	// State filters results to only include discovery results in a particular state
+	// See APIShieldDiscoveryState for valid values.
+	State APIShieldDiscoveryState `url:"state,omitempty"`
+
+	// Pagination options to apply to the request.
+	PaginationOptions
 }
 
-// PatchAPIShieldDiscoveryOperationParams represents the parameters to pass to patch a discovery operation
+// UpdateAPIShieldDiscoveryOperationParams represents the parameters to pass to patch a discovery operation
 //
 // API documentation: https://developers.cloudflare.com/api/operations/api-shield-api-patch-discovered-operation
-type PatchAPIShieldDiscoveryOperationParams struct {
-	// OperationID is the operation to be patched
-	OperationID string `json:"-" url:"-"`
-
-	PatchAPIShieldDiscoveryOperation
+type UpdateAPIShieldDiscoveryOperationParams struct {
+	// OperationID is the ID, formatted as UUID, of the operation to be updated
+	OperationID string                  `json:"-" url:"-"`
+	State       APIShieldDiscoveryState `json:"state" url:"-"`
 }
 
-// PatchAPIShieldDiscoveryOperationsParams maps discovery operation IDs to PatchAPIShieldDiscoveryOperation structs
+// UpdateAPIShieldDiscoveryOperationsParams maps discovery operation IDs to PatchAPIShieldDiscoveryOperation structs
 //
 // Example:
 //
-//	PatchAPIShieldDiscoveryOperations{
+//	UpdateAPIShieldDiscoveryOperations{
 //			"99522293-a505-45e5-bbad-bbc339f5dc40": PatchAPIShieldDiscoveryOperation{ State: "review" },
 //	}
 //
 // API documentation: https://developers.cloudflare.com/api/operations/api-shield-api-patch-discovered-operations
-type PatchAPIShieldDiscoveryOperationsParams map[string]PatchAPIShieldDiscoveryOperation
+type UpdateAPIShieldDiscoveryOperationsParams map[string]UpdateAPIShieldDiscoveryOperation
 
-// PatchAPIShieldDiscoveryOperation represents the state to set on a discovery operation.
-type PatchAPIShieldDiscoveryOperation struct {
+// UpdateAPIShieldDiscoveryOperation represents the state to set on a discovery operation.
+type UpdateAPIShieldDiscoveryOperation struct {
 	// State is the state to set on the operation
-	State string `json:"state" url:"-"`
+	State APIShieldDiscoveryState `json:"state" url:"-"`
 }
 
 // APIShieldListDiscoveryOperationsResponse represents the response from the api_gateway/discovery/operations endpoint.
@@ -95,13 +113,13 @@ type APIShieldListDiscoveryOperationsResponse struct {
 
 // APIShieldPatchDiscoveryOperationResponse represents the response from the PATCH api_gateway/discovery/operations/{id} endpoint.
 type APIShieldPatchDiscoveryOperationResponse struct {
-	Result PatchAPIShieldDiscoveryOperation `json:"result"`
+	Result UpdateAPIShieldDiscoveryOperation `json:"result"`
 	Response
 }
 
 // APIShieldPatchDiscoveryOperationsResponse represents the response from the PATCH api_gateway/discovery/operations endpoint.
 type APIShieldPatchDiscoveryOperationsResponse struct {
-	Result PatchAPIShieldDiscoveryOperationsParams `json:"result"`
+	Result UpdateAPIShieldDiscoveryOperationsParams `json:"result"`
 	Response
 }
 
@@ -109,9 +127,7 @@ type APIShieldPatchDiscoveryOperationsResponse struct {
 //
 // API documentation: https://developers.cloudflare.com/api/operations/api-shield-api-discovery-retrieve-discovered-operations-on-a-zone
 func (api *API) ListAPIShieldDiscoveryOperations(ctx context.Context, rc *ResourceContainer, params ListAPIShieldDiscoveryOperationsParams) ([]APIShieldDiscoveryOperation, ResultInfo, error) {
-	path := fmt.Sprintf("/zones/%s/api_gateway/discovery/operations", rc.Identifier)
-
-	uri := buildURI(path, params)
+	uri := buildURI(fmt.Sprintf("/zones/%s/api_gateway/discovery/operations", rc.Identifier), params)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -127,12 +143,12 @@ func (api *API) ListAPIShieldDiscoveryOperations(ctx context.Context, rc *Resour
 	return asResponse.Result, asResponse.ResultInfo, nil
 }
 
-// PatchAPIShieldDiscoveryOperation updates certain fields on a discovered operation
+// UpdateAPIShieldDiscoveryOperation updates certain fields on a discovered operation.
 //
 // API Documentation: https://developers.cloudflare.com/api/operations/api-shield-api-patch-discovered-operation
-func (api *API) PatchAPIShieldDiscoveryOperation(ctx context.Context, rc *ResourceContainer, params PatchAPIShieldDiscoveryOperationParams) (*PatchAPIShieldDiscoveryOperation, error) {
+func (api *API) UpdateAPIShieldDiscoveryOperation(ctx context.Context, rc *ResourceContainer, params UpdateAPIShieldDiscoveryOperationParams) (*UpdateAPIShieldDiscoveryOperation, error) {
 	if params.OperationID == "" {
-		return nil, fmt.Errorf("params.OperationID must be provided")
+		return nil, fmt.Errorf("operation ID must be provided")
 	}
 
 	uri := fmt.Sprintf("/zones/%s/api_gateway/discovery/operations/%s", rc.Identifier, params.OperationID)
@@ -152,10 +168,10 @@ func (api *API) PatchAPIShieldDiscoveryOperation(ctx context.Context, rc *Resour
 	return &asResponse.Result, nil
 }
 
-// PatchAPIShieldDiscoveryOperations bulk updates certain fields on multiple discovered operations
+// UpdateAPIShieldDiscoveryOperations bulk updates certain fields on multiple discovered operations
 //
 // API documentation: https://developers.cloudflare.com/api/operations/api-shield-api-patch-discovered-operations
-func (api *API) PatchAPIShieldDiscoveryOperations(ctx context.Context, rc *ResourceContainer, params PatchAPIShieldDiscoveryOperationsParams) (*PatchAPIShieldDiscoveryOperationsParams, error) {
+func (api *API) UpdateAPIShieldDiscoveryOperations(ctx context.Context, rc *ResourceContainer, params UpdateAPIShieldDiscoveryOperationsParams) (*UpdateAPIShieldDiscoveryOperationsParams, error) {
 	uri := fmt.Sprintf("/zones/%s/api_gateway/discovery/operations", rc.Identifier)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
