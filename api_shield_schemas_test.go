@@ -88,12 +88,13 @@ func TestGetAPIShieldSchema(t *testing.T) {
 				test.getParams,
 			)
 
+			createdAt := time.Date(2023, time.March, 2, 15, 46, 6, 0, time.UTC)
 			expected := &APIShieldSchema{
 				ID:                testAPIShieldSchemaId,
 				Name:              "petstore.json",
 				Kind:              "openapi_v3",
 				Source:            "{}",
-				CreatedAt:         time.Date(2023, time.March, 2, 15, 46, 6, 0, time.UTC),
+				CreatedAt:         &createdAt,
 				ValidationEnabled: true,
 			}
 
@@ -194,13 +195,14 @@ func TestListAPIShieldSchemas(t *testing.T) {
 				test.getParams,
 			)
 
+			createdAt := time.Date(2023, time.March, 2, 15, 46, 6, 0, time.UTC)
 			expected := []APIShieldSchema{
 				{
 					ID:                testAPIShieldSchemaId,
 					Name:              "petstore.json",
 					Kind:              "openapi_v3",
 					Source:            "{}",
-					CreatedAt:         time.Date(2023, time.March, 2, 15, 46, 6, 0, time.UTC),
+					CreatedAt:         &createdAt,
 					ValidationEnabled: true,
 				},
 			}
@@ -405,13 +407,14 @@ func TestCreateAPIShieldSchema(t *testing.T) {
 		},
 	)
 
+	createdAt := time.Date(2023, time.March, 2, 15, 46, 6, 0, time.UTC)
 	expected := &APIShieldCreateSchemaResult{
 		Schema: APIShieldSchema{
 			ID:                testAPIShieldSchemaId,
 			Name:              "petstore.json",
 			Kind:              "openapi_v3",
 			Source:            "{}",
-			CreatedAt:         time.Date(2023, time.March, 2, 15, 46, 6, 0, time.UTC),
+			CreatedAt:         &createdAt,
 			ValidationEnabled: true,
 		},
 		Events: APIShieldCreateSchemaEvents{

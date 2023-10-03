@@ -24,7 +24,7 @@ type APIShieldSchema struct {
 	// Source is the contents of the schema
 	Source string `json:"source,omitempty"`
 	// CreatedAt is the time the schema was created
-	CreatedAt time.Time `json:"created_at,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
 	// ValidationEnabled controls if schema is used for validation
 	ValidationEnabled bool `json:"validation_enabled,omitempty"`
 }
