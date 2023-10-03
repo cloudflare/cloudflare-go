@@ -57,10 +57,14 @@ func TestAccountRoles(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/roles", handler)
+	mux.HandleFunc(fmt.Sprintf("/accounts/%s/roles", testAccountID), handler)
 	want := []AccountRole{expectedAccountRole}
+	_, err := client.ListAccountRoles(context.Background(), AccountIdentifier(""), ListAccountRolesParams{})
+	if assert.Error(t, err, "Expected error when no account ID is provided") {
+		assert.Equal(t, ErrMissingAccountID, err)
+	}
 
-	actual, err := client.AccountRoles(context.Background(), "01a7362d577a6c3019a474fd6f485823")
+	actual, err := client.ListAccountRoles(context.Background(), testAccountRC, ListAccountRolesParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -103,9 +107,13 @@ func TestAccountRole(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/01a7362d577a6c3019a474fd6f485823/roles/3536bcfad5faccb999b47003c79917fb", handler)
+	mux.HandleFunc(fmt.Sprintf("/accounts/%s/roles/3536bcfad5faccb999b47003c79917fb", testAccountID), handler)
+	_, err := client.GetAccountRole(context.Background(), AccountIdentifier(""), "3536bcfad5faccb999b47003c79917fb")
+	if assert.Error(t, err, "Expected error when no account ID is provided") {
+		assert.Equal(t, ErrMissingAccountID, err)
+	}
 
-	actual, err := client.AccountRole(context.Background(), "01a7362d577a6c3019a474fd6f485823", "3536bcfad5faccb999b47003c79917fb")
+	actual, err := client.GetAccountRole(context.Background(), testAccountRC, "3536bcfad5faccb999b47003c79917fb")
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, expectedAccountRole, actual)

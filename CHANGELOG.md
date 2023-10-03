@@ -1,4 +1,32 @@
-## 0.78.0 (Unreleased)
+## 0.79.0 (Unreleased)
+
+BUG FIXES:
+
+* custom_nameservers: change `NSSet` from string to int to match API response ([#1410](https://github.com/cloudflare/cloudflare-go/issues/1410))
+* observatory: fix double url encoding ([#1412](https://github.com/cloudflare/cloudflare-go/issues/1412))
+
+## 0.78.0 (September 27th, 2023)
+
+BREAKING CHANGES:
+
+* account_role: `AccountRole` has been renamed to `GetAccountRole` to align with the updated method conventions ([#1405](https://github.com/cloudflare/cloudflare-go/issues/1405))
+* account_role: `AccountRoles` has been renamed to `ListAccountRoles` to align with the updated method conventions ([#1405](https://github.com/cloudflare/cloudflare-go/issues/1405))
+
+ENHANCEMENTS:
+
+* access_application: Add support for tags ([#1403](https://github.com/cloudflare/cloudflare-go/issues/1403))
+* access_tag: Add support for tags ([#1403](https://github.com/cloudflare/cloudflare-go/issues/1403))
+* list_item: allow filtering by search term, cursor and per page attributes ([#1409](https://github.com/cloudflare/cloudflare-go/issues/1409))
+* observatory: add support for observatory API ([#1401](https://github.com/cloudflare/cloudflare-go/issues/1401))
+
+BUG FIXES:
+
+* account_role: autopaginate all available results instead of a static number ([#1405](https://github.com/cloudflare/cloudflare-go/issues/1405))
+* semgrep: Improved IPv4 validation by implementing a new pattern to handle cases where non-IPv4 addresses were previously accepted. ([#1382](https://github.com/cloudflare/cloudflare-go/issues/1382))
+
+DEPENDENCIES:
+
+* deps: bumps codecov/codecov-action from 3 to 4 ([#1402](https://github.com/cloudflare/cloudflare-go/issues/1402))
 
 ## 0.77.0 (September 13th, 2023)
 

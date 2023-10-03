@@ -177,7 +177,10 @@ type ListDeleteParams struct {
 }
 
 type ListListItemsParams struct {
-	ID string
+	ID      string `url:"-"`
+	Search  string `url:"search,omitempty"`
+	PerPage int    `url:"per_page,omitempty"`
+	Cursor  string `url:"cursor,omitempty"`
 }
 
 type ListCreateItemsParams struct {
@@ -336,14 +339,10 @@ func (api *API) DeleteList(ctx context.Context, rc *ResourceContainer, listID st
 // API reference: https://api.cloudflare.com/#rules-lists-list-list-items
 func (api *API) ListListItems(ctx context.Context, rc *ResourceContainer, params ListListItemsParams) ([]ListItem, error) {
 	var list []ListItem
-	var cursor string
-	var cursorQuery string
 
 	for {
-		if len(cursor) > 0 {
-			cursorQuery = fmt.Sprintf("?cursor=%s", cursor)
-		}
-		uri := fmt.Sprintf("/accounts/%s/rules/lists/%s/items%s", rc.Identifier, params.ID, cursorQuery)
+		uri := buildURI(fmt.Sprintf("/accounts/%s/rules/lists/%s/items", rc.Identifier, params.ID), params)
+
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
 			return []ListItem{}, err
@@ -355,8 +354,10 @@ func (api *API) ListListItems(ctx context.Context, rc *ResourceContainer, params
 		}
 
 		list = append(list, result.Result...)
-		if cursor = result.ResultInfo.Cursors.After; cursor == "" {
+		if cursor := result.ResultInfo.Cursors.After; cursor == "" {
 			break
+		} else {
+			params.Cursor = cursor
 		}
 	}
 
