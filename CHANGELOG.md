@@ -1,5 +1,9 @@
 ## 0.79.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* api_shield_schema: Add support for managing schemas for API Shield Schema Validation 2.0 ([#1406](https://github.com/cloudflare/cloudflare-go/issues/1406))
+
 BUG FIXES:
 
 * custom_nameservers: change `NSSet` from string to int to match API response ([#1410](https://github.com/cloudflare/cloudflare-go/issues/1410))
