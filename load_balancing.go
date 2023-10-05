@@ -43,6 +43,8 @@ type LoadBalancerOrigin struct {
 	//
 	// When LoadBalancerOriginSteering.Policy="least_outstanding_requests", this
 	// weight is used to scale the origin's outstanding requests.
+	// When LoadBalancerOriginSteering.Policy="least_connections", this
+	// weight is used to scale the origin's open connections.
 	Weight float64             `json:"weight"`
 	Header map[string][]string `json:"header"`
 }
@@ -59,6 +61,10 @@ type LoadBalancerOriginSteering struct {
 	// "least_outstanding_requests": Select an origin by taking into consideration origin weights,
 	// as well as each origin's number of outstanding requests. Origins with more pending requests
 	// are weighted proportionately less relative to others.
+	//
+	// "least_connections": Select an origin by taking into consideration origin weights,
+	// as well as each origin's number of open connections. Origins with more open connections
+	// are weighted proportionately less relative to others. Supported for HTTP/1 and HTTP/2 connections.
 	Policy string `json:"policy,omitempty"`
 }
 
@@ -126,6 +132,11 @@ type LoadBalancer struct {
 	// "least_outstanding_requests": Select a pool by taking into consideration
 	// RandomSteering weights, as well as each pool's number of outstanding requests.
 	// Pools with more pending requests are weighted proportionately less relative to others.
+	//
+	// "least_connections": Select a pool by taking into consideration
+	// RandomSteering weights, as well as each pool's number of open connections.
+	// Pools with more open connections are weighted proportionately less relative to others.
+	// Supported for HTTP/1 and HTTP/2 connections.
 	//
 	// "": Maps to "geo" if RegionPools or PopPools or CountryPools have entries otherwise "off".
 	SteeringPolicy string `json:"steering_policy,omitempty"`
@@ -207,6 +218,9 @@ type LoadBalancerRuleOverrides struct {
 //
 // SteeringPolicy="least_outstanding_requests": Use pool weights to
 // scale each pool's outstanding requests.
+//
+// SteeringPolicy="least_connections": Use pool weights to
+// scale each pool's open connections.
 type RandomSteering struct {
 	DefaultWeight float64            `json:"default_weight,omitempty"`
 	PoolWeights   map[string]float64 `json:"pool_weights,omitempty"`
