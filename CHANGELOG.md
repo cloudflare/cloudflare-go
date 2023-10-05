@@ -2,6 +2,7 @@
 
 ENHANCEMENTS:
 
+* api_shield_discovery: Add support for Get/Patch API Shield API Discovery Operations ([#1413](https://github.com/cloudflare/cloudflare-go/issues/1413))
 * api_shield_schema: Add support for managing schemas for API Shield Schema Validation 2.0 ([#1406](https://github.com/cloudflare/cloudflare-go/issues/1406))
 
 BUG FIXES:
