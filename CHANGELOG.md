@@ -10,6 +10,10 @@ BUG FIXES:
 * custom_nameservers: change `NSSet` from string to int to match API response ([#1410](https://github.com/cloudflare/cloudflare-go/issues/1410))
 * observatory: fix double url encoding ([#1412](https://github.com/cloudflare/cloudflare-go/issues/1412))
 
+DEPENDENCIES:
+
+* deps: bumps golang.org/x/net from 0.15.0 to 0.16.0 ([#1416](https://github.com/cloudflare/cloudflare-go/issues/1416))
+
 ## 0.78.0 (September 27th, 2023)
 
 BREAKING CHANGES:
