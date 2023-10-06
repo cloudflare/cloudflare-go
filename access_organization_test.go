@@ -29,6 +29,7 @@ func TestAccessOrganization(t *testing.T) {
 				"is_ui_read_only": false,
 				"user_seat_expiration_inactive_time": "720h",
 				"auto_redirect_to_identity": true,
+				"session_duration": "12h",
 				"login_design": {
 					"background_color": "#c5ed1b",
 					"logo_path": "https://example.com/logo.png",
@@ -57,6 +58,7 @@ func TestAccessOrganization(t *testing.T) {
 			FooterText:      "© Widget Corp",
 		},
 		IsUIReadOnly:                   BoolPtr(false),
+		SessionDuration:                StringPtr("12h"),
 		UserSeatExpirationInactiveTime: "720h",
 		AutoRedirectToIdentity:         BoolPtr(true),
 	}
@@ -95,6 +97,7 @@ func TestCreateAccessOrganization(t *testing.T) {
 				"name": "Widget Corps Internal Applications",
 				"auth_domain": "test.cloudflareaccess.com",
 				"is_ui_read_only": true,
+				"session_duration": "12h",
 				"login_design": {
 					"background_color": "#c5ed1b",
 					"logo_path": "https://example.com/logo.png",
@@ -122,7 +125,8 @@ func TestCreateAccessOrganization(t *testing.T) {
 			HeaderText:      "Widget Corp",
 			FooterText:      "© Widget Corp",
 		},
-		IsUIReadOnly: BoolPtr(true),
+		IsUIReadOnly:    BoolPtr(true),
+		SessionDuration: StringPtr("12h"),
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/organizations", handler)
@@ -137,7 +141,8 @@ func TestCreateAccessOrganization(t *testing.T) {
 			HeaderText:      "Widget Corp",
 			FooterText:      "© Widget Corp",
 		},
-		IsUIReadOnly: BoolPtr(true),
+		IsUIReadOnly:    BoolPtr(true),
+		SessionDuration: StringPtr("12h"),
 	})
 
 	if assert.NoError(t, err) {
@@ -156,7 +161,8 @@ func TestCreateAccessOrganization(t *testing.T) {
 			HeaderText:      "Widget Corp",
 			FooterText:      "© Widget Corp",
 		},
-		IsUIReadOnly: BoolPtr(true),
+		IsUIReadOnly:    BoolPtr(true),
+		SessionDuration: StringPtr("12h"),
 	})
 
 	if assert.NoError(t, err) {
@@ -188,7 +194,8 @@ func TestUpdateAccessOrganization(t *testing.T) {
 					"footer_text": "© Widget Corp"
 				},
 				"is_ui_read_only": false,
-				"ui_read_only_toggle_reason": "this is my reason"
+				"ui_read_only_toggle_reason": "this is my reason",
+				"session_duration": "12h"
 			}
 		}
 		`)
@@ -211,6 +218,7 @@ func TestUpdateAccessOrganization(t *testing.T) {
 		},
 		IsUIReadOnly:           BoolPtr(false),
 		UIReadOnlyToggleReason: "this is my reason",
+		SessionDuration:        StringPtr("12h"),
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/organizations", handler)
@@ -226,6 +234,7 @@ func TestUpdateAccessOrganization(t *testing.T) {
 			FooterText:      "© Widget Corp",
 		},
 		IsUIReadOnly:           BoolPtr(false),
+		SessionDuration:        StringPtr("12h"),
 		UIReadOnlyToggleReason: "this is my reason",
 	})
 
@@ -247,6 +256,7 @@ func TestUpdateAccessOrganization(t *testing.T) {
 		},
 		IsUIReadOnly:           BoolPtr(false),
 		UIReadOnlyToggleReason: "this is my reason",
+		SessionDuration:        StringPtr("12h"),
 	})
 
 	if assert.NoError(t, err) {

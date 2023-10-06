@@ -20,6 +20,7 @@ type AccessOrganization struct {
 	UIReadOnlyToggleReason         string                        `json:"ui_read_only_toggle_reason,omitempty"`
 	UserSeatExpirationInactiveTime string                        `json:"user_seat_expiration_inactive_time,omitempty"`
 	AutoRedirectToIdentity         *bool                         `json:"auto_redirect_to_identity,omitempty"`
+	SessionDuration                *string                       `json:"session_duration,omitempty"`
 	CustomPages                    AccessOrganizationCustomPages `json:"custom_pages,omitempty"`
 }
 
@@ -64,6 +65,7 @@ type CreateAccessOrganizationParams struct {
 	UIReadOnlyToggleReason         string                        `json:"ui_read_only_toggle_reason,omitempty"`
 	UserSeatExpirationInactiveTime string                        `json:"user_seat_expiration_inactive_time,omitempty"`
 	AutoRedirectToIdentity         *bool                         `json:"auto_redirect_to_identity,omitempty"`
+	SessionDuration                *string                       `json:"session_duration,omitempty"`
 	CustomPages                    AccessOrganizationCustomPages `json:"custom_pages,omitempty"`
 }
 
@@ -75,6 +77,7 @@ type UpdateAccessOrganizationParams struct {
 	UIReadOnlyToggleReason         string                        `json:"ui_read_only_toggle_reason,omitempty"`
 	UserSeatExpirationInactiveTime string                        `json:"user_seat_expiration_inactive_time,omitempty"`
 	AutoRedirectToIdentity         *bool                         `json:"auto_redirect_to_identity,omitempty"`
+	SessionDuration                *string                       `json:"session_duration,omitempty"`
 	CustomPages                    AccessOrganizationCustomPages `json:"custom_pages,omitempty"`
 }
 
