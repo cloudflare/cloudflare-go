@@ -81,7 +81,7 @@ func (api *API) ListD1Databases(ctx context.Context, rc *ResourceContainer, para
 	}
 
 	if params.PerPage < 1 {
-		params.PerPage = 25
+		params.PerPage = 100
 	}
 
 	if params.Page < 1 {
