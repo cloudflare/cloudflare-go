@@ -3,10 +3,11 @@ package cloudflare
 import (
 	"context"
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 const (
@@ -57,11 +58,11 @@ func TestListD1Databases(t *testing.T) {
         }`, testD1Result)
 	})
 
-	_, _, err := client.ListD1Databases(context.Background(), AccountIdentifier(""), ListD1Parameters{})
+	_, _, err := client.ListD1Databases(context.Background(), AccountIdentifier(""), ListD1DatabasesParams{})
 	if assert.Error(t, err, "Didn't get error for missing Account ID get listing D1 Database") {
 		assert.Equal(t, err.Error(), errMissingAccountID)
 	}
-	actual, _, err := client.ListD1Databases(context.Background(), testAccountRC, ListD1Parameters{})
+	actual, _, err := client.ListD1Databases(context.Background(), testAccountRC, ListD1DatabasesParams{})
 	if assert.NoError(t, err, "ListD1Databases returned error: %v", err) {
 		expected := []D1Database{testD1Database}
 		if !assert.Equal(t, expected, actual) {
@@ -112,11 +113,11 @@ func TestCreateD1Database(t *testing.T) {
 		}`, testD1Result)
 	})
 
-	_, err := client.CreateD1Database(context.Background(), AccountIdentifier(""), CreateD1Parameters{})
+	_, err := client.CreateD1Database(context.Background(), AccountIdentifier(""), CreateD1DatabaseParams{})
 	if assert.Error(t, err, "Didn't get error for missing Account ID get creating D1 Database") {
 		assert.Equal(t, err.Error(), errMissingAccountID)
 	}
-	actual, err := client.CreateD1Database(context.Background(), testAccountRC, CreateD1Parameters{
+	actual, err := client.CreateD1Database(context.Background(), testAccountRC, CreateD1DatabaseParams{
 		Name: "my-database",
 	})
 	if assert.NoError(t, err, "CreateD1Database returned error: %v", err) {
@@ -186,24 +187,24 @@ func TestQueryD1Database(t *testing.T) {
 		}`)
 	})
 
-	_, err := client.QueryD1Database(context.Background(), AccountIdentifier(""), QueryD1Parameters{})
+	_, err := client.QueryD1Database(context.Background(), AccountIdentifier(""), QueryD1DatabaseParams{})
 	if assert.Error(t, err, "Didn't get error for missing Account ID get querying D1 Database") {
 		assert.Equal(t, err, ErrMissingAccountID)
 	}
-	_, err = client.QueryD1Database(context.Background(), testAccountRC, QueryD1Parameters{})
+	_, err = client.QueryD1Database(context.Background(), testAccountRC, QueryD1DatabaseParams{})
 	if assert.Error(t, err, "Didn't get error for missing D1 Database ID get querying D1 Database") {
 		assert.Equal(t, err, ErrMissingDatabaseID)
 	}
-	actual, err := client.QueryD1Database(context.Background(), testAccountRC, QueryD1Parameters{
+	actual, err := client.QueryD1Database(context.Background(), testAccountRC, QueryD1DatabaseParams{
 		DatabaseID: testD1DatabaseID,
 		SQL:        "SELECT * FROM my-database",
 		Parameters: []string{"param1", "param2"},
 	})
 	if assert.NoError(t, err, "QueryD1Database returned error: %v", err) {
 		expected := D1Result{
-			Success: true,
+			Success: BoolPtr(true),
 			Meta: D1DatabaseMetadata{
-				ChangedDB:   false,
+				ChangedDB:   BoolPtr(false),
 				Changes:     0,
 				Duration:    3.3,
 				LastRowID:   3,

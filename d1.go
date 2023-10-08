@@ -3,9 +3,10 @@ package cloudflare
 import (
 	"context"
 	"fmt"
-	"github.com/goccy/go-json"
 	"net/http"
 	"time"
+
+	"github.com/goccy/go-json"
 )
 
 var (
@@ -21,7 +22,7 @@ type D1Database struct {
 	FileSize  int64      `json:"file_size"`
 }
 
-type ListD1Parameters struct {
+type ListD1DatabasesParams struct {
 	Name string `url:"name,omitempty"`
 	ResultInfo
 }
@@ -32,7 +33,7 @@ type ListD1Response struct {
 	ResultInfo `json:"result_info"`
 }
 
-type CreateD1Parameters struct {
+type CreateD1DatabaseParams struct {
 	Name string `json:"name"`
 }
 
@@ -41,14 +42,14 @@ type D1DatabaseResponse struct {
 	Response
 }
 
-type QueryD1Parameters struct {
+type QueryD1DatabaseParams struct {
 	DatabaseID string   `json:"database_id"`
 	SQL        string   `json:"sql"`
 	Parameters []string `json:"params"`
 }
 
 type D1DatabaseMetadata struct {
-	ChangedDB   bool    `json:"changed_db"`
+	ChangedDB   *bool   `json:"changed_db,omitempty"`
 	Changes     int     `json:"changes"`
 	Duration    float64 `json:"duration"`
 	LastRowID   int     `json:"last_row_id"`
@@ -58,7 +59,7 @@ type D1DatabaseMetadata struct {
 }
 
 type D1Result struct {
-	Success bool               `json:"success"`
+	Success *bool              `json:"success"`
 	Results []map[string]any   `json:"results"`
 	Meta    D1DatabaseMetadata `json:"meta"`
 }
@@ -70,7 +71,7 @@ type QueryD1Response struct {
 // ListD1Databases returns all databases for an account.
 //
 // API reference: https://developers.cloudflare.com/api/operations/cloudflare-d1-list-databases
-func (api *API) ListD1Databases(ctx context.Context, rc *ResourceContainer, params ListD1Parameters) ([]D1Database, *ResultInfo, error) {
+func (api *API) ListD1Databases(ctx context.Context, rc *ResourceContainer, params ListD1DatabasesParams) ([]D1Database, *ResultInfo, error) {
 	if rc.Identifier == "" {
 		return []D1Database{}, &ResultInfo{}, ErrMissingAccountID
 	}
@@ -112,7 +113,7 @@ func (api *API) ListD1Databases(ctx context.Context, rc *ResourceContainer, para
 // CreateD1Database creates a new database for an account.
 //
 // API reference: https://developers.cloudflare.com/api/operations/cloudflare-d1-create-database
-func (api *API) CreateD1Database(ctx context.Context, rc *ResourceContainer, params CreateD1Parameters) (D1Database, error) {
+func (api *API) CreateD1Database(ctx context.Context, rc *ResourceContainer, params CreateD1DatabaseParams) (D1Database, error) {
 	if rc.Identifier == "" {
 		return D1Database{}, ErrMissingAccountID
 	}
@@ -174,7 +175,7 @@ func (api *API) GetD1Database(ctx context.Context, rc *ResourceContainer, databa
 // QueryD1Database queries a database for an account.
 //
 // API reference: https://developers.cloudflare.com/api/operations/cloudflare-d1-query-database
-func (api *API) QueryD1Database(ctx context.Context, rc *ResourceContainer, params QueryD1Parameters) ([]D1Result, error) {
+func (api *API) QueryD1Database(ctx context.Context, rc *ResourceContainer, params QueryD1DatabaseParams) ([]D1Result, error) {
 	if rc.Identifier == "" {
 		return []D1Result{}, ErrMissingAccountID
 	}
