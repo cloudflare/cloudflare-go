@@ -502,3 +502,81 @@ func TestMustProvideSchemaID(t *testing.T) {
 	err = client.DeleteAPIShieldSchema(context.Background(), ZoneIdentifier(testZoneID), DeleteAPIShieldSchemaParams{})
 	require.ErrorContains(t, err, "schema ID must be provided")
 }
+
+func TestGetAPIShieldSchemaValidationSettings(t *testing.T) {
+	endpoint := fmt.Sprintf("/zones/%s/api_gateway/settings/schema_validation", testZoneID)
+	response := `{
+		"success" : true,
+		"errors": [],
+		"messages": [],
+		"result": {
+			"validation_default_mitigation_action": "log",
+			"validation_override_mitigation_action": "none"
+		}
+	}`
+
+	setup()
+	t.Cleanup(teardown)
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		require.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		require.Empty(t, r.URL.Query())
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, response)
+	}
+
+	mux.HandleFunc(endpoint, handler)
+
+	actual, err := client.GetAPIShieldSchemaValidationSettings(
+		context.Background(),
+		ZoneIdentifier(testZoneID),
+	)
+
+	none := "none"
+	expected := &APIShieldSchemaValidationSettings{
+		DefaultMitigationAction:  "log",
+		OverrideMitigationAction: &none,
+	}
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expected, actual)
+	}
+}
+
+func TestUpdateAPIShieldSchemaValidationSettings(t *testing.T) {
+	endpoint := fmt.Sprintf("/zones/%s/api_gateway/settings/schema_validation", testZoneID)
+	response := `{
+		"success" : true,
+		"errors": [],
+		"messages": [],
+		"result": {
+			"validation_default_mitigation_action": "log",
+			"validation_override_mitigation_action": null
+		}
+	}`
+
+	setup()
+	t.Cleanup(teardown)
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		require.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
+		require.Empty(t, r.URL.Query())
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, response)
+	}
+
+	mux.HandleFunc(endpoint, handler)
+
+	actual, err := client.UpdateAPIShieldSchemaValidationSettings(
+		context.Background(),
+		ZoneIdentifier(testZoneID),
+		UpdateAPIShieldSchemaValidationSettingsParams{}, // specifying nil is ok for fields
+	)
+
+	expected := &APIShieldSchemaValidationSettings{
+		DefaultMitigationAction:  "log",
+		OverrideMitigationAction: nil,
+	}
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expected, actual)
+	}
+}
