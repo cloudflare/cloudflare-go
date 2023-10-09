@@ -43,7 +43,7 @@ type D1DatabaseResponse struct {
 }
 
 type QueryD1DatabaseParams struct {
-	DatabaseID string   `json:"database_id"`
+	DatabaseID string   `json:"-"`
 	SQL        string   `json:"sql"`
 	Parameters []string `json:"params"`
 }
@@ -63,6 +63,7 @@ type D1Result struct {
 	Results []map[string]any   `json:"results"`
 	Meta    D1DatabaseMetadata `json:"meta"`
 }
+
 type QueryD1Response struct {
 	Result []D1Result `json:"result"`
 	Response

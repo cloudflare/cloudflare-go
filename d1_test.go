@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"fmt"
+	"io"
 	"net/http"
 	"testing"
 	"time"
@@ -156,6 +157,13 @@ func TestQueryD1Database(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/d1/database/"+testD1DatabaseID+"/query", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
+		b, err := io.ReadAll(r.Body)
+		if err != nil {
+			t.Errorf("Error reading request body: %v", err)
+		}
+		if got := string(b); got != `{"sql":"SELECT * FROM my-database","params":["param1","param2"]}` {
+			t.Errorf("request Body is %s, want %s", got, `{"sql":"SELECT * FROM my-database","params":["param1","param2"]}`)
+		}
 		fmt.Fprintf(w, `{
 			"success": true,
 			"errors": [],
