@@ -13,6 +13,7 @@ BUG FIXES:
 DEPENDENCIES:
 
 * deps: bumps golang.org/x/net from 0.15.0 to 0.16.0 ([#1416](https://github.com/cloudflare/cloudflare-go/issues/1416))
+* deps: bumps golang.org/x/net from 0.16.0 to 0.17.0 ([#1420](https://github.com/cloudflare/cloudflare-go/issues/1420))
 
 ## 0.78.0 (September 27th, 2023)
 
