@@ -1,11 +1,11 @@
-## 0.79.0 (Unreleased)
+## 0.80.0 (Unreleased)
+
+## 0.79.0 (October 11th, 2023)
 
 ENHANCEMENTS:
 
 * access_organization: Add support for session_duration ([#1415](https://github.com/cloudflare/cloudflare-go/issues/1415))
 * access_policy: Add support for session_duration ([#1415](https://github.com/cloudflare/cloudflare-go/issues/1415))
-
-## 0.79.0 (Unreleased)
 
 ENHANCEMENTS:
 
