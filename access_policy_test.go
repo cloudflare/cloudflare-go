@@ -41,6 +41,7 @@ var (
 			map[string]interface{}{"email": map[string]interface{}{"email": "test@example.com"}},
 		},
 		IsolationRequired:            &isolationRequired,
+		SessionDuration:              StringPtr("12h"),
 		PurposeJustificationRequired: &purposeJustificationRequired,
 		ApprovalRequired:             &approvalRequired,
 		PurposeJustificationPrompt:   &purposeJustificationPrompt,
@@ -101,6 +102,7 @@ func TestAccessPolicies(t *testing.T) {
 				"purpose_justification_required": true,
 				"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing.",
 				"approval_required": true,
+				"session_duration": "12h",
 				"approval_groups": [
 				  {
 					"email_list_uuid": "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
@@ -185,6 +187,7 @@ func TestAccessPolicy(t *testing.T) {
 				"purpose_justification_required": true,
 				"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing.",
 				"approval_required": true,
+				"session_duration": "12h",
 				"approval_groups": [
 					{
 						"email_list_uuid": "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
@@ -260,6 +263,7 @@ func TestCreateAccessPolicy(t *testing.T) {
 				"purpose_justification_required": true,
 				"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing.",
 				"approval_required": true,
+				"session_duration": "12h",
 				"approval_groups": [
 					{
 						"email_list_uuid": "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
@@ -296,6 +300,7 @@ func TestCreateAccessPolicy(t *testing.T) {
 		Decision:                     "allow",
 		PurposeJustificationRequired: &purposeJustificationRequired,
 		PurposeJustificationPrompt:   &purposeJustificationPrompt,
+		SessionDuration:              StringPtr("12h"),
 		ApprovalGroups: []AccessApprovalGroup{
 			{
 				EmailListUuid:   "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
@@ -328,6 +333,7 @@ func TestCreateAccessPolicy(t *testing.T) {
 func TestCreateAccessPolicyAuthContextRule(t *testing.T) {
 	setup()
 	defer teardown()
+
 	expectedAccessPolicyAuthContext := AccessPolicy{
 		ID:         "699d98642c564d2e855e9661899b7252",
 		Precedence: 1,
@@ -346,6 +352,7 @@ func TestCreateAccessPolicyAuthContextRule(t *testing.T) {
 		PurposeJustificationRequired: &purposeJustificationRequired,
 		ApprovalRequired:             &approvalRequired,
 		PurposeJustificationPrompt:   &purposeJustificationPrompt,
+		SessionDuration:              StringPtr("12h"),
 		ApprovalGroups: []AccessApprovalGroup{
 			{
 				EmailListUuid:   "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
@@ -393,6 +400,7 @@ func TestCreateAccessPolicyAuthContextRule(t *testing.T) {
 				"purpose_justification_required": true,
 				"purpose_justification_prompt": "Please provide a business reason for your need to access before continuing.",
 				"approval_required": true,
+				"session_duration": "12h",
 				"approval_groups": [
 					{
 						"email_list_uuid": "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
@@ -483,6 +491,7 @@ func TestUpdateAccessPolicy(t *testing.T) {
 		PurposeJustificationRequired: &purposeJustificationRequired,
 		ApprovalRequired:             &approvalRequired,
 		PurposeJustificationPrompt:   &purposeJustificationPrompt,
+		SessionDuration:              StringPtr("12h"),
 		ApprovalGroups: []AccessApprovalGroup{
 			{
 				EmailListUuid:   "2413b6d7-bbe5-48bd-8fbb-e52069c85561",
@@ -508,6 +517,7 @@ func TestUpdateAccessPolicy(t *testing.T) {
 				"created_at": "2014-01-01T05:20:00.12345Z",
 				"updated_at": "2014-01-01T05:20:00.12345Z",
 				"name": "Allow devs",
+				"session_duration": "12h",
 				"include": [
 					{
 						"email": {

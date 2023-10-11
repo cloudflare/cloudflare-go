@@ -31,6 +31,7 @@ type AccessPolicy struct {
 	Name       string     `json:"name"`
 
 	IsolationRequired            *bool                 `json:"isolation_required,omitempty"`
+	SessionDuration              *string               `json:"session_duration,omitempty"`
 	PurposeJustificationRequired *bool                 `json:"purpose_justification_required,omitempty"`
 	PurposeJustificationPrompt   *string               `json:"purpose_justification_prompt,omitempty"`
 	ApprovalRequired             *bool                 `json:"approval_required,omitempty"`
@@ -84,6 +85,7 @@ type CreateAccessPolicyParams struct {
 	Name       string `json:"name"`
 
 	IsolationRequired            *bool                 `json:"isolation_required,omitempty"`
+	SessionDuration              *string               `json:"session_duration,omitempty"`
 	PurposeJustificationRequired *bool                 `json:"purpose_justification_required,omitempty"`
 	PurposeJustificationPrompt   *string               `json:"purpose_justification_prompt,omitempty"`
 	ApprovalRequired             *bool                 `json:"approval_required,omitempty"`
@@ -111,6 +113,7 @@ type UpdateAccessPolicyParams struct {
 	Name       string `json:"name"`
 
 	IsolationRequired            *bool                 `json:"isolation_required,omitempty"`
+	SessionDuration              *string               `json:"session_duration,omitempty"`
 	PurposeJustificationRequired *bool                 `json:"purpose_justification_required,omitempty"`
 	PurposeJustificationPrompt   *string               `json:"purpose_justification_prompt,omitempty"`
 	ApprovalRequired             *bool                 `json:"approval_required,omitempty"`
