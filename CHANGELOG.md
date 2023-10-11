@@ -2,6 +2,13 @@
 
 ENHANCEMENTS:
 
+* access_organization: Add support for session_duration ([#1415](https://github.com/cloudflare/cloudflare-go/issues/1415))
+* access_policy: Add support for session_duration ([#1415](https://github.com/cloudflare/cloudflare-go/issues/1415))
+
+## 0.79.0 (Unreleased)
+
+ENHANCEMENTS:
+
 * api_shield_discovery: Add support for Get/Patch API Shield API Discovery Operations ([#1413](https://github.com/cloudflare/cloudflare-go/issues/1413))
 * api_shield_schema: Add support for managing schemas for API Shield Schema Validation 2.0 ([#1406](https://github.com/cloudflare/cloudflare-go/issues/1406))
 * d1: adds support for d1 ([#1417](https://github.com/cloudflare/cloudflare-go/issues/1417))
