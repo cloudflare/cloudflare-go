@@ -5,6 +5,7 @@ ENHANCEMENTS:
 * api_shield_discovery: Add support for Get/Patch API Shield API Discovery Operations ([#1413](https://github.com/cloudflare/cloudflare-go/issues/1413))
 * api_shield_schema: Add support for managing schemas for API Shield Schema Validation 2.0 ([#1406](https://github.com/cloudflare/cloudflare-go/issues/1406))
 * d1: adds support for d1 ([#1417](https://github.com/cloudflare/cloudflare-go/issues/1417))
+* teams: Add `audit_ssh_settings` endpoints ([#1419](https://github.com/cloudflare/cloudflare-go/issues/1419))
 
 BUG FIXES:
 
