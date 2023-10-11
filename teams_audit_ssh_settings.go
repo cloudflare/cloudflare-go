@@ -33,7 +33,11 @@ type UpdateAuditSSHSettingsParams struct {
 //
 // API reference: https://api.cloudflare.com/#zero-trust-get-audit-ssh-settings
 func (api *API) GetAuditSSHSettings(ctx context.Context, rc *ResourceContainer, params GetAuditSSHSettingsParams) (AuditSSHSettings, ResultInfo, error) {
-	uri := fmt.Sprintf("/%s/%s/gateway/audit_ssh_settings", AccountRouteRoot, rc.Identifier)
+	if rc.Level != AccountRouteLevel {
+		return AuditSSHSettings{}, ResultInfo{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
+
+	uri := fmt.Sprintf("/%s/%s/gateway/audit_ssh_settings", rc.Level, rc.Identifier)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
