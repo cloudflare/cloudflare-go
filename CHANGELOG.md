@@ -1,4 +1,6 @@
-## 0.79.0 (Unreleased)
+## 0.80.0 (Unreleased)
+
+## 0.79.0 (October 11th, 2023)
 
 ENHANCEMENTS:
 
