@@ -54,6 +54,7 @@ type AccessApplication struct {
 	PathCookieAttribute      *bool                          `json:"path_cookie_attribute,omitempty"`
 	CustomPages              []string                       `json:"custom_pages,omitempty"`
 	Tags                     []string                       `json:"tags,omitempty"`
+	AccessAppLauncherCustomization
 }
 
 type AccessApplicationGatewayRule struct {
@@ -116,6 +117,26 @@ type SaasApplication struct {
 	CustomAttributes   []SAMLAttributeConfig `json:"custom_attributes,omitempty"`
 }
 
+type AccessAppLauncherCustomization struct {
+	LandingPageDesign     AccessLandingPageDesign `json:"landing_page_design"`
+	LogoURL               string                  `json:"app_launcher_logo_url"`
+	HeaderBackgroundColor string                  `json:"header_bg_color"`
+	BackgroundColor       string                  `json:"bg_color"`
+	FooterLinks           []AccessFooterLink      `json:"footer_links"`
+}
+
+type AccessFooterLink struct {
+	Name string `json:"name"`
+	URL  string `json:"url"`
+}
+
+type AccessLandingPageDesign struct {
+	Title           string `json:"title"`
+	Message         string `json:"message"`
+	ImageURL        string `json:"image_url"`
+	ButtonColor     string `json:"button_color"`
+	ButtonTextColor string `json:"button_text_color"`
+}
 type ListAccessApplicationsParams struct {
 	ResultInfo
 }
@@ -146,6 +167,7 @@ type CreateAccessApplicationParams struct {
 	Type                     AccessApplicationType          `json:"type,omitempty"`
 	CustomPages              []string                       `json:"custom_pages,omitempty"`
 	Tags                     []string                       `json:"tags,omitempty"`
+	AccessAppLauncherCustomization
 }
 
 type UpdateAccessApplicationParams struct {
@@ -175,6 +197,7 @@ type UpdateAccessApplicationParams struct {
 	Type                     AccessApplicationType          `json:"type,omitempty"`
 	CustomPages              []string                       `json:"custom_pages,omitempty"`
 	Tags                     []string                       `json:"tags,omitempty"`
+	AccessAppLauncherCustomization
 }
 
 // ListAccessApplications returns all applications within an account or zone.
