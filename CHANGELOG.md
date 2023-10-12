@@ -1,5 +1,9 @@
 ## 0.80.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* access_application: Add support for app launcher customization fields ([#1407](https://github.com/cloudflare/cloudflare-go/issues/1407))
+
 DEPENDENCIES:
 
 * deps: bumps golang.org/x/net from 0.7.0 to 0.17.0 ([#1421](https://github.com/cloudflare/cloudflare-go/issues/1421))
