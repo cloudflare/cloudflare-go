@@ -580,3 +580,90 @@ func TestUpdateAPIShieldSchemaValidationSettings(t *testing.T) {
 		assert.Equal(t, expected, actual)
 	}
 }
+
+func TestGetAPIShieldOperationSchemaValidationSettings(t *testing.T) {
+	endpoint := fmt.Sprintf("/zones/%s/api_gateway/operations/%s/schema_validation", testZoneID, testAPIShieldOperationId)
+	response := `{
+		"success" : true,
+		"errors": [],
+		"messages": [],
+		"result": {
+			"mitigation_action": "log"
+		}
+	}`
+
+	setup()
+	t.Cleanup(teardown)
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		require.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		require.Empty(t, r.URL.Query())
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, response)
+	}
+
+	mux.HandleFunc(endpoint, handler)
+
+	actual, err := client.GetAPIShieldOperationSchemaValidationSettings(
+		context.Background(),
+		ZoneIdentifier(testZoneID),
+		GetAPIShieldOperationSchemaValidationSettingsParams{OperationID: testAPIShieldOperationId},
+	)
+
+	log := "log"
+	expected := &APIShieldOperationSchemaValidationSettings{
+		MitigationAction: &log,
+	}
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expected, actual)
+	}
+}
+
+func TestUpdateAPIShieldOperationSchemaValidationSettings(t *testing.T) {
+	endpoint := fmt.Sprintf("/zones/%s/api_gateway/operations/schema_validation", testZoneID)
+	response := fmt.Sprintf(`{
+		"success" : true,
+		"errors": [],
+		"messages": [],
+		"result": {
+			"%s": null
+		}
+	}`, testAPIShieldOperationId)
+
+	setup()
+	t.Cleanup(teardown)
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		require.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
+		require.Empty(t, r.URL.Query())
+
+		body, err := io.ReadAll(r.Body)
+		require.NoError(t, err)
+		expected := fmt.Sprintf(`{"%s":{"mitigation_action":null}}`, testAPIShieldOperationId)
+		require.Equal(t, expected, string(body))
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, response)
+	}
+
+	mux.HandleFunc(endpoint, handler)
+
+	actual, err := client.UpdateAPIShieldOperationSchemaValidationSettings(
+		context.Background(),
+		ZoneIdentifier(testZoneID),
+		UpdateAPIShieldOperationSchemaValidationSettings{
+			testAPIShieldOperationId: APIShieldOperationSchemaValidationSettings{
+				MitigationAction: nil,
+			},
+		},
+	)
+
+	expected := &UpdateAPIShieldOperationSchemaValidationSettings{
+		testAPIShieldOperationId: APIShieldOperationSchemaValidationSettings{
+			MitigationAction: nil,
+		},
+	}
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expected, actual)
+	}
+}
