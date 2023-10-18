@@ -1,9 +1,37 @@
-## 0.79.0 (Unreleased)
+## 0.80.0 (Unreleased)
+
+ENHANCEMENTS:
+
+* access_application: Add support for app launcher customization fields ([#1407](https://github.com/cloudflare/cloudflare-go/issues/1407))
+* api_shield_schema: Add support for Get/Update API Shield Schema Validation Settings ([#1418](https://github.com/cloudflare/cloudflare-go/issues/1418))
+
+DEPENDENCIES:
+
+* deps: bumps golang.org/x/net from 0.7.0 to 0.17.0 ([#1421](https://github.com/cloudflare/cloudflare-go/issues/1421))
+
+## 0.79.0 (October 11th, 2023)
+
+ENHANCEMENTS:
+
+* access_organization: Add support for session_duration ([#1415](https://github.com/cloudflare/cloudflare-go/issues/1415))
+* access_policy: Add support for session_duration ([#1415](https://github.com/cloudflare/cloudflare-go/issues/1415))
+
+ENHANCEMENTS:
+
+* api_shield_discovery: Add support for Get/Patch API Shield API Discovery Operations ([#1413](https://github.com/cloudflare/cloudflare-go/issues/1413))
+* api_shield_schema: Add support for managing schemas for API Shield Schema Validation 2.0 ([#1406](https://github.com/cloudflare/cloudflare-go/issues/1406))
+* d1: adds support for d1 ([#1417](https://github.com/cloudflare/cloudflare-go/issues/1417))
+* teams: Add `audit_ssh_settings` endpoints ([#1419](https://github.com/cloudflare/cloudflare-go/issues/1419))
 
 BUG FIXES:
 
 * custom_nameservers: change `NSSet` from string to int to match API response ([#1410](https://github.com/cloudflare/cloudflare-go/issues/1410))
 * observatory: fix double url encoding ([#1412](https://github.com/cloudflare/cloudflare-go/issues/1412))
+
+DEPENDENCIES:
+
+* deps: bumps golang.org/x/net from 0.15.0 to 0.16.0 ([#1416](https://github.com/cloudflare/cloudflare-go/issues/1416))
+* deps: bumps golang.org/x/net from 0.16.0 to 0.17.0 ([#1420](https://github.com/cloudflare/cloudflare-go/issues/1420))
 
 ## 0.78.0 (September 27th, 2023)
 
