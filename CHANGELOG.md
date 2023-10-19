@@ -4,6 +4,7 @@ ENHANCEMENTS:
 
 * access_application: Add support for app launcher customization fields ([#1407](https://github.com/cloudflare/cloudflare-go/issues/1407))
 * api_shield_schema: Add support for Get/Update API Shield Schema Validation Settings ([#1418](https://github.com/cloudflare/cloudflare-go/issues/1418))
+* load_balancing: extend documentation for least_connections steering policy ([#1414](https://github.com/cloudflare/cloudflare-go/issues/1414))
 
 DEPENDENCIES:
 
