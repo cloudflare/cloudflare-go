@@ -48,6 +48,7 @@ type TeamsAccountSettings struct {
 
 type BrowserIsolation struct {
 	UrlBrowserIsolationEnabled bool `json:"url_browser_isolation_enabled"`
+	NonIdentityEnabled         bool `json:"non_identity_enabled"`
 }
 
 type TeamsAntivirus struct {
