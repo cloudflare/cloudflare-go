@@ -78,6 +78,9 @@ func TestTeamsAccountConfiguration(t *testing.T) {
 						"logo_path": "https://logos.com/a.png",
 						"background_color": "#ff0000",
 						"suppress_footer": true
+					},
+					"body_scanning": {
+						"inspection_mode": "deep"
 					}
 				}
 			}
@@ -96,6 +99,7 @@ func TestTeamsAccountConfiguration(t *testing.T) {
 			TLSDecrypt:        &TeamsTLSDecrypt{Enabled: true},
 			ProtocolDetection: &TeamsProtocolDetection{Enabled: true},
 			FIPS:              &TeamsFIPS{TLS: true},
+			BodyScanning:      &TeamsBodyScanning{InspectionMode: "deep"},
 
 			BlockPage: &TeamsBlockPage{
 				Enabled:         BoolPtr(true),

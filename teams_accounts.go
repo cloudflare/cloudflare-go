@@ -44,6 +44,7 @@ type TeamsAccountSettings struct {
 	BrowserIsolation  *BrowserIsolation       `json:"browser_isolation,omitempty"`
 	FIPS              *TeamsFIPS              `json:"fips,omitempty"`
 	ProtocolDetection *TeamsProtocolDetection `json:"protocol_detection,omitempty"`
+	BodyScanning      *TeamsBodyScanning      `json:"body_scanning,omitempty"`
 }
 
 type BrowserIsolation struct {
@@ -82,6 +83,17 @@ type TeamsBlockPage struct {
 	MailtoAddress   string `json:"mailto_address,omitempty"`
 	MailtoSubject   string `json:"mailto_subject,omitempty"`
 	SuppressFooter  *bool  `json:"suppress_footer,omitempty"`
+}
+
+type TeamsInspectionMode = string
+
+const (
+	TeamsShallowInspectionMode TeamsInspectionMode = "shallow"
+	TeamsDeepInspectionMode    TeamsInspectionMode = "deep"
+)
+
+type TeamsBodyScanning struct {
+	InspectionMode TeamsInspectionMode `json:"inspection_mode,omitempty"`
 }
 
 type TeamsRuleType = string
