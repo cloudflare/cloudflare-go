@@ -79,6 +79,10 @@ func TestTeamsAccountConfiguration(t *testing.T) {
 						"background_color": "#ff0000",
 						"suppress_footer": true
 					},
+					"browser_isolation": {
+						"url_browser_isolation_enabled": true,
+						"non_identity_enabled": true
+          				},
 					"body_scanning": {
 						"inspection_mode": "deep"
 					}
@@ -111,6 +115,10 @@ func TestTeamsAccountConfiguration(t *testing.T) {
 				MailtoAddress:   "admin@example.com",
 				MailtoSubject:   "Blocked User Inquiry",
 				SuppressFooter:  BoolPtr(true),
+			},
+			BrowserIsolation: &BrowserIsolation{
+				UrlBrowserIsolationEnabled: BoolPtr(true),
+				NonIdentityEnabled:         BoolPtr(true),
 			},
 		})
 	}
