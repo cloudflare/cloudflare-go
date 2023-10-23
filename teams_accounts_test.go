@@ -113,8 +113,8 @@ func TestTeamsAccountConfiguration(t *testing.T) {
 				SuppressFooter:  BoolPtr(true),
 			},
 			BrowserIsolation: &BrowserIsolation{
-				UrlBrowserIsolationEnabled: true,
-				NonIdentityEnabled:         true,
+				UrlBrowserIsolationEnabled: BoolPtr(true),
+				NonIdentityEnabled:         BoolPtr(true),
 			},
 		})
 	}
