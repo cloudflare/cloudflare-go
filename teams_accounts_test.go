@@ -82,6 +82,9 @@ func TestTeamsAccountConfiguration(t *testing.T) {
 					"browser_isolation": {
 						"url_browser_isolation_enabled": true,
 						"non_identity_enabled": true
+          }
+					"body_scanning": {
+						"inspection_mode": "deep"
 					}
 				}
 			}
@@ -100,6 +103,7 @@ func TestTeamsAccountConfiguration(t *testing.T) {
 			TLSDecrypt:        &TeamsTLSDecrypt{Enabled: true},
 			ProtocolDetection: &TeamsProtocolDetection{Enabled: true},
 			FIPS:              &TeamsFIPS{TLS: true},
+			BodyScanning:      &TeamsBodyScanning{InspectionMode: "deep"},
 
 			BlockPage: &TeamsBlockPage{
 				Enabled:         BoolPtr(true),
