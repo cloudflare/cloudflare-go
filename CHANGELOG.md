@@ -1,5 +1,9 @@
 ## 0.80.0 (Unreleased)
 
+BREAKING CHANGES:
+
+* teams: `BrowserIsolation.UrlBrowserIsolationEnabled` has changed from `bool` to `*bool` to meet the library conventions ([#1424](https://github.com/cloudflare/cloudflare-go/issues/1424))
+
 ENHANCEMENTS:
 
 * access_application: Add support for app launcher customization fields ([#1407](https://github.com/cloudflare/cloudflare-go/issues/1407))
@@ -7,6 +11,7 @@ ENHANCEMENTS:
 * api_shield_schema: Add support for Get/Update API Shield Schema Validation Settings ([#1418](https://github.com/cloudflare/cloudflare-go/issues/1418))
 * foo: Add support for body_scanning (Enhanced File Detection) in teams account configuration ([#1423](https://github.com/cloudflare/cloudflare-go/issues/1423))
 * load_balancing: extend documentation for least_connections steering policy ([#1414](https://github.com/cloudflare/cloudflare-go/issues/1414))
+* teams: Add `non_identity_enabled` boolean in browser isolation settings ([#1424](https://github.com/cloudflare/cloudflare-go/issues/1424))
 
 DEPENDENCIES:
 
