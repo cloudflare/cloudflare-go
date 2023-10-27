@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -58,10 +59,24 @@ func TestUpdateAccessUserSeat(t *testing.T) {
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/seats", handler)
+	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+	want := []AccessUpdateAccessUserSeatResult{
+		{
+			AccessSeat:  false,
+			CreatedAt:   &createdAt,
+			GatewaySeat: false,
+			SeatUID:     "",
+			UpdatedAt:   &updatedAt,
+		},
+	}
 
-	// actual, err := client.UpdateAccessUserSeat(context.Background(), testAccountRC, UpdateAccessUserSeatParams{SeatUID: testAccessGroupSeatUID, AccessSeat: false, GatewaySeat: false})
-
-	// if assert.NoError(t, err) {
-	// 	assert.Equal(t, []AccessGroup{expectedAccessGroup}, actual)
-	// }
+	actual, err := client.UpdateAccessUserSeat(context.Background(), testAccountRC, UpdateAccessUserSeatParams{
+		SeatUID:     testAccessGroupSeatUID,
+		AccessSeat:  false,
+		GatewaySeat: false,
+	})
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
 }

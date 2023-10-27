@@ -12,9 +12,8 @@ import (
 var (
 	testAccessUserID        = "access-user-id"
 	testAccessUserSessionID = "access-user-session-id"
-	testAccessNonce         = "access-nonce"
 
-	expectedAccessUser = AccessUser{
+	expectedListAccessUserResult = AccessUser{
 		AccessSeat:          false,
 		ActiveDeviceCount:   2,
 		CreatedAt:           "2014-01-01T05:20:00.12345Z",
@@ -28,7 +27,7 @@ var (
 		UpdatedAt:           "2014-01-01T05:20:00.12345Z",
 	}
 
-	expectedAccessUserSession = AccessUserActiveSession{
+	expectedGetAccessUserActiveSessionsResult = AccessUserActiveSessionResult{
 		Expiration: 1694813506,
 		Metadata: AccessUserActiveSessionMetadata{
 			Apps: map[string]AccessUserActiveSessionMetadataApp{
@@ -53,7 +52,7 @@ var (
 		Name: "string",
 	}
 
-	expectedAccessUserFailedLogins = AccessUserFailedLogin{
+	expectedGetAccessUserFailedLoginsResult = AccessUserFailedLoginResult{
 		Expiration: 0,
 		Metadata: AccessUserFailedLoginMetadata{
 			AppName:   "Test App",
@@ -65,12 +64,12 @@ var (
 		},
 	}
 
-	expectedAccessUserLastSeenIdentity = AccessUserLastSeenIdentity{
+	expectedGetAccessUserLastSeenIdentityResult = GetAccessUserLastSeenIdentityResult{
 		AccountID:  "1234567890",
 		AuthStatus: "NONE",
 		CommonName: "",
 		DevicePosture: map[string]AccessUserDevicePosture{
-			"property1": AccessUserDevicePosture{
+			"property1": {
 				Check: AccessUserDevicePostureCheck{
 					Exists: true,
 					Path:   "string",
@@ -84,7 +83,7 @@ var (
 				Timestamp:   "string",
 				Type:        "string",
 			},
-			"property2": AccessUserDevicePosture{
+			"property2": {
 				Check: AccessUserDevicePostureCheck{
 					Exists: true,
 					Path:   "string",
@@ -101,10 +100,10 @@ var (
 		},
 		DeviceID: "",
 		DeviceSessions: map[string]AccessUserDeviceSession{
-			"property1": AccessUserDeviceSession{
+			"property1": {
 				LastAuthenticated: 1638832687,
 			},
-			"property2": AccessUserDeviceSession{
+			"property2": {
 				LastAuthenticated: 1638832687,
 			},
 		},
@@ -133,7 +132,7 @@ var (
 		Version:            2,
 	}
 
-	expectedAccessUserActiveSession = AccessUserLastSeenIdentitySession{
+	expectedGetAccessUserSingleActiveSessionResult = GetAccessUserSingleActiveSessionResult{
 		AccountID:  "1234567890",
 		AuthStatus: "NONE",
 		CommonName: "",
@@ -143,7 +142,6 @@ var (
 					Exists: true,
 					Path:   "string",
 				},
-
 				Data:        map[string]interface{}{},
 				Description: "string",
 				Error:       "string",
@@ -189,7 +187,7 @@ var (
 		IP:        "127.0.0.0",
 		IsGateway: false,
 		IsWarp:    false,
-		MTLSAuth: AccessUserMTLSAuth{
+		MtlsAuth: AccessUserMTLSAuth{
 			AuthStatus:    "string",
 			CertIssuerDN:  "string",
 			CertIssuerSKI: "string",
@@ -205,11 +203,10 @@ var (
 )
 
 func TestListAccessUsers_ZoneIsNotSupported(t *testing.T) {
-
 	setup()
 	defer teardown()
 
-	_, _, err := client.ListAccessUsers(context.Background(), testZoneRC, ListAccessGroupsParams{})
+	_, _, err := client.ListAccessUsers(context.Background(), testZoneRC, AccessUserParams{})
 	assert.EqualError(t, err, fmt.Sprintf(errInvalidResourceContainerAccess, ZoneRouteLevel))
 }
 
@@ -251,15 +248,14 @@ func TestListAccessUsers(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/users", handler)
 
-	actual, _, err := client.ListAccessUsers(context.Background(), testAccountRC, ListAccessGroupsParams{})
+	actual, _, err := client.ListAccessUsers(context.Background(), testAccountRC, AccessUserParams{})
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, []AccessUser{expectedAccessUser}, actual)
+		assert.Equal(t, []AccessUser{expectedListAccessUserResult}, actual)
 	}
 }
 
 func TestGetGetAccessUserActiveSessions_ZoneIsNotSupported(t *testing.T) {
-
 	setup()
 	defer teardown()
 
@@ -322,12 +318,11 @@ func TestGetGetAccessUserActiveSessions(t *testing.T) {
 	}
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, []AccessUserActiveSession{expectedAccessUserSession}, actual)
+		assert.Equal(t, []AccessUserActiveSessionResult{expectedGetAccessUserActiveSessionsResult}, actual)
 	}
 }
 
 func TestGetAccessUserSingleActiveSession_ZoneIsNotSupported(t *testing.T) {
-
 	setup()
 	defer teardown()
 
@@ -418,25 +413,21 @@ func TestGetAccessUserSingleActiveSession(t *testing.T) {
 		`)
 	}
 
-	mux.HandleFunc("/accounts/"+testAccountID+"/access/users/"+testAccessUserID+"/active_sessions/"+testAccessNonce, handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/users/"+testAccessUserID+"/active_sessions/"+testAccessUserSessionID, handler)
 
 	actual, err := client.GetAccessUserSingleActiveSession(context.Background(), testAccountRC, testAccessUserID, testAccessUserSessionID)
-	if err != nil {
-		t.Fatal(err)
-	}
+
 	if assert.NoError(t, err) {
-		assert.Equal(t, expectedAccessUserLastSeenIdentity, actual)
+		assert.Equal(t, expectedGetAccessUserSingleActiveSessionResult, actual)
 	}
 }
 
 func TestGetAccessUserFailedLogins_ZoneIsNotSupported(t *testing.T) {
-
 	setup()
 	defer teardown()
 
 	_, err := client.GetAccessUserFailedLogins(context.Background(), testZoneRC, testAccessUserID)
 	assert.EqualError(t, err, fmt.Sprintf(errInvalidResourceContainerAccess, ZoneRouteLevel))
-
 }
 
 func TestGetAccessUserFailedLogins(t *testing.T) {
@@ -478,12 +469,11 @@ func TestGetAccessUserFailedLogins(t *testing.T) {
 	actual, err := client.GetAccessUserFailedLogins(context.Background(), testAccountRC, testAccessUserID)
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, []AccessUserFailedLogin{expectedAccessUserFailedLogins}, actual)
+		assert.Equal(t, []AccessUserFailedLoginResult{expectedGetAccessUserFailedLoginsResult}, actual)
 	}
 }
 
 func TestGetAccessUserLastSeenIdentity_ZoneIsNotSupported(t *testing.T) {
-
 	setup()
 	defer teardown()
 
@@ -578,6 +568,6 @@ func TestGetAccessUserLastSeenIdentity(t *testing.T) {
 	actual, err := client.GetAccessUserLastSeenIdentity(context.Background(), testAccountRC, testAccessUserID)
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, expectedAccessUserLastSeenIdentity, actual)
+		assert.Equal(t, expectedGetAccessUserLastSeenIdentityResult, actual)
 	}
 }

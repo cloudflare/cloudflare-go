@@ -8,21 +8,18 @@ import (
 	"github.com/goccy/go-json"
 )
 
-// AccessUserActiveSessionsResponse represents the response from the list access user active sessions endpoint.
 type AccessUserActiveSessionsResponse struct {
-	Result     []AccessUserActiveSession `json:"result"`
-	ResultInfo ResultInfo                `json:"result_info"`
+	Result     []AccessUserActiveSessionResult `json:"result"`
+	ResultInfo ResultInfo                      `json:"result_info"`
 	Response
 }
 
-// AccessUserSingleActiveSessionResponse represents the response from the get access user single active session endpoint.
-type AccessUserActiveSession struct {
+type AccessUserActiveSessionResult struct {
 	Expiration int64                           `json:"expiration"`
 	Metadata   AccessUserActiveSessionMetadata `json:"metadata"`
 	Name       string                          `json:"name"`
 }
 
-// AccessUserSingleActiveSessionResponse represents the response from the get access user single active session endpoint.
 type AccessUserActiveSessionMetadata struct {
 	Apps    map[string]AccessUserActiveSessionMetadataApp `json:"apps"`
 	Expires int64                                         `json:"expires"`
@@ -31,7 +28,6 @@ type AccessUserActiveSessionMetadata struct {
 	TTL     int64                                         `json:"ttl"`
 }
 
-// AccessUserSingleActiveSessionResponse represents the response from the get access user single active session endpoint.
 type AccessUserActiveSessionMetadataApp struct {
 	Hostname string `json:"hostname"`
 	Name     string `json:"name"`
@@ -39,17 +35,9 @@ type AccessUserActiveSessionMetadataApp struct {
 	UID      string `json:"uid"`
 }
 
-// AccessUserSingleActiveSessionResponse represents the response from the get access user single active session endpoint.
-type AccessUserSingleActiveSessionResponse struct {
-	Result     AccessUserLastSeenIdentitySession `json:"result"`
-	ResultInfo ResultInfo                        `json:"result_info"`
-	Response
-}
-
-// AccessUserDevicePosture represents the device posture for a user.
 type AccessUserDevicePosture struct {
 	Check       AccessUserDevicePostureCheck `json:"check"`
-	Data        interface{}                  `json:"data"`
+	Data        map[string]interface{}       `json:"data"`
 	Description string                       `json:"description"`
 	Error       string                       `json:"error"`
 	ID          string                       `json:"id"`
@@ -59,25 +47,21 @@ type AccessUserDevicePosture struct {
 	Type        string                       `json:"type"`
 }
 
-// AccessUserDeviceSession represents the device session for a user.
 type AccessUserDeviceSession struct {
 	LastAuthenticated int64 `json:"last_authenticated"`
 }
 
-// AccessUserFailedLoginsResponse represents the response from the list access user failed logins endpoint.
 type AccessUserFailedLoginsResponse struct {
-	Result     []AccessUserFailedLogin `json:"result"`
-	ResultInfo ResultInfo              `json:"result_info"`
+	Result     []AccessUserFailedLoginResult `json:"result"`
+	ResultInfo ResultInfo                    `json:"result_info"`
 	Response
 }
 
-// AccessUserFailedLogin represents a failed login for a user.
-type AccessUserFailedLogin struct {
+type AccessUserFailedLoginResult struct {
 	Expiration int64                         `json:"expiration"`
 	Metadata   AccessUserFailedLoginMetadata `json:"metadata"`
 }
 
-// AccessUserFailedLoginMetadata represents the metadata for a failed login for a user.
 type AccessUserFailedLoginMetadata struct {
 	AppName   string `json:"app_name"`
 	Aud       string `json:"aud"`
@@ -87,26 +71,18 @@ type AccessUserFailedLoginMetadata struct {
 	UserUUID  string `json:"user_uuid"`
 }
 
-// AccessUserLastSeenIdentityResponse represents the response from the get access user last seen identity endpoint.
 type AccessUserLastSeenIdentityResponse struct {
-	Result     AccessUserLastSeenIdentity `json:"result"`
-	ResultInfo ResultInfo                 `json:"result_info"`
+	Result     AccessUserLastSeenIdentityResult `json:"result"`
+	ResultInfo ResultInfo                       `json:"result_info"`
 	Response
 }
 
-type AccessUserLastSeenIdentitySessionResponse struct {
-	Result     AccessUserLastSeenIdentitySession `json:"result"`
-	ResultInfo ResultInfo                        `json:"result_info"`
-	Response
-}
-
-// AccessUserLastSeenIdentity represents the last seen identity for a user.
-type AccessUserLastSeenIdentity struct {
+type AccessUserLastSeenIdentityResult struct {
 	AccountID          string                             `json:"account_id"`
 	AuthStatus         string                             `json:"auth_status"`
 	CommonName         string                             `json:"common_name"`
-	DevicePosture      map[string]AccessUserDevicePosture `json:"devicePosture"`
 	DeviceID           string                             `json:"device_id"`
+	DevicePosture      map[string]AccessUserDevicePosture `json:"devicePosture"`
 	DeviceSessions     map[string]AccessUserDeviceSession `json:"device_sessions"`
 	Email              string                             `json:"email"`
 	Geo                AccessUserIdentityGeo              `json:"geo"`
@@ -122,13 +98,19 @@ type AccessUserLastSeenIdentity struct {
 	Version            int                                `json:"version"`
 }
 
-type AccessUserLastSeenIdentitySession struct {
+type AccessUserLastSeenIdentitySessionResponse struct {
+	Result     GetAccessUserLastSeenIdentityResult `json:"result"`
+	ResultInfo ResultInfo                          `json:"result_info"`
+	Response
+}
+
+type GetAccessUserLastSeenIdentityResult struct {
 	AccountID          string                             `json:"account_id"`
 	AuthStatus         string                             `json:"auth_status"`
 	CommonName         string                             `json:"common_name"`
 	DevicePosture      map[string]AccessUserDevicePosture `json:"devicePosture"`
-	DeviceID           string                             `json:"device_id"`
 	DeviceSessions     map[string]AccessUserDeviceSession `json:"device_sessions"`
+	DeviceID           string                             `json:"device_id"`
 	Email              string                             `json:"email"`
 	Geo                AccessUserIdentityGeo              `json:"geo"`
 	IAT                int64                              `json:"iat"`
@@ -136,32 +118,27 @@ type AccessUserLastSeenIdentitySession struct {
 	IP                 string                             `json:"ip"`
 	IsGateway          bool                               `json:"is_gateway"`
 	IsWarp             bool                               `json:"is_warp"`
-	MTLSAuth           AccessUserMTLSAuth                 `json:"mtls_auth"`
+	MtlsAuth           AccessUserMTLSAuth                 `json:"mtls_auth"`
 	ServiceTokenID     string                             `json:"service_token_id"`
 	ServiceTokenStatus bool                               `json:"service_token_status"`
 	UserUUID           string                             `json:"user_uuid"`
 	Version            int                                `json:"version"`
-	IsActive           bool                               `json:"isActive"`
 }
 
-// AccessUserDevicePostureCheck represents the device posture check for a user.
 type AccessUserDevicePostureCheck struct {
 	Exists bool   `json:"exists"`
 	Path   string `json:"path"`
 }
 
-// AccessUserLastSeenIdentityMetadata represents the metadata for the last seen identity for a user.
 type AccessUserIdentityGeo struct {
 	Country string `json:"country"`
 }
 
-// AccessUserLastSeenIdentityMetadata represents the metadata for the last seen identity for a user.
 type AccessUserIDP struct {
 	ID   string `json:"id"`
 	Type string `json:"type"`
 }
 
-// AccessUserMTLSAuth represents the mTLS auth for a user.
 type AccessUserMTLSAuth struct {
 	AuthStatus    string `json:"auth_status"`
 	CertIssuerDN  string `json:"cert_issuer_dn"`
@@ -170,14 +147,12 @@ type AccessUserMTLSAuth struct {
 	CertSerial    string `json:"cert_serial"`
 }
 
-// AccessUserListResponse represents the response from the list access users endpoint.
 type AccessUserListResponse struct {
 	Result     []AccessUser `json:"result"`
 	ResultInfo ResultInfo   `json:"result_info"`
 	Response
 }
 
-// AccessUser represents a user for a single cloudflare access/zerotrust account.
 type AccessUser struct {
 	ID                  string `json:"id"`
 	AccessSeat          bool   `json:"access_seat"`
@@ -192,15 +167,42 @@ type AccessUser struct {
 	UpdatedAt           string `json:"updated_at"`
 }
 
-// AccessUserParams represents the parameters to update an access user.
 type AccessUserParams struct {
 	ResultInfo
+}
+
+type GetAccessUserSingleActiveSessionResponse struct {
+	Result     GetAccessUserSingleActiveSessionResult `json:"result"`
+	ResultInfo ResultInfo                             `json:"result_info"`
+	Response
+}
+
+type GetAccessUserSingleActiveSessionResult struct {
+	AccountID          string                             `json:"account_id"`
+	AuthStatus         string                             `json:"auth_status"`
+	CommonName         string                             `json:"common_name"`
+	DevicePosture      map[string]AccessUserDevicePosture `json:"devicePosture"`
+	DeviceSessions     map[string]AccessUserDeviceSession `json:"device_sessions"`
+	DeviceID           string                             `json:"device_id"`
+	Email              string                             `json:"email"`
+	Geo                AccessUserIdentityGeo              `json:"geo"`
+	IAT                int64                              `json:"iat"`
+	IDP                AccessUserIDP                      `json:"idp"`
+	IP                 string                             `json:"ip"`
+	IsGateway          bool                               `json:"is_gateway"`
+	IsWarp             bool                               `json:"is_warp"`
+	MtlsAuth           AccessUserMTLSAuth                 `json:"mtls_auth"`
+	ServiceTokenID     string                             `json:"service_token_id"`
+	ServiceTokenStatus bool                               `json:"service_token_status"`
+	UserUUID           string                             `json:"user_uuid"`
+	Version            int                                `json:"version"`
+	IsActive           bool                               `json:"isActive"`
 }
 
 // ListAccessUsers returns a list of users for a single cloudflare access/zerotrust account.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/zero-trust-users-get-users
-func (api *API) ListAccessUsers(ctx context.Context, rc *ResourceContainer, params ListAccessGroupsParams) ([]AccessUser, *ResultInfo, error) {
+func (api *API) ListAccessUsers(ctx context.Context, rc *ResourceContainer, params AccessUserParams) ([]AccessUser, *ResultInfo, error) {
 	if rc.Level != AccountRouteLevel {
 		return []AccessUser{}, &ResultInfo{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
 	}
@@ -247,9 +249,9 @@ func (api *API) ListAccessUsers(ctx context.Context, rc *ResourceContainer, para
 // GetAccessUserActiveSessions returns a list of active sessions for an user.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/zero-trust-users-get-active-sessions
-func (api *API) GetAccessUserActiveSessions(ctx context.Context, rc *ResourceContainer, userID string) ([]AccessUserActiveSession, error) {
+func (api *API) GetAccessUserActiveSessions(ctx context.Context, rc *ResourceContainer, userID string) ([]AccessUserActiveSessionResult, error) {
 	if rc.Level != AccountRouteLevel {
-		return []AccessUserActiveSession{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+		return []AccessUserActiveSessionResult{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
 	}
 
 	uri := fmt.Sprintf(
@@ -261,13 +263,13 @@ func (api *API) GetAccessUserActiveSessions(ctx context.Context, rc *ResourceCon
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []AccessUserActiveSession{}, err
+		return []AccessUserActiveSessionResult{}, err
 	}
 
 	var accessUserActiveSessionsResponse AccessUserActiveSessionsResponse
 	err = json.Unmarshal(res, &accessUserActiveSessionsResponse)
 	if err != nil {
-		return []AccessUserActiveSession{}, err
+		return []AccessUserActiveSessionResult{}, err
 	}
 	return accessUserActiveSessionsResponse.Result, nil
 }
@@ -275,9 +277,9 @@ func (api *API) GetAccessUserActiveSessions(ctx context.Context, rc *ResourceCon
 // GetAccessUserSingleActiveSession returns a single active session for a user.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/zero-trust-users-get-active-session
-func (api *API) GetAccessUserSingleActiveSession(ctx context.Context, rc *ResourceContainer, userID string, sessionID string) (AccessUserLastSeenIdentitySession, error) {
+func (api *API) GetAccessUserSingleActiveSession(ctx context.Context, rc *ResourceContainer, userID string, sessionID string) (GetAccessUserSingleActiveSessionResult, error) {
 	if rc.Level != AccountRouteLevel {
-		return AccessUserLastSeenIdentitySession{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+		return GetAccessUserSingleActiveSessionResult{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
 	}
 
 	uri := fmt.Sprintf(
@@ -290,23 +292,23 @@ func (api *API) GetAccessUserSingleActiveSession(ctx context.Context, rc *Resour
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return AccessUserLastSeenIdentitySession{}, err
+		return GetAccessUserSingleActiveSessionResult{}, err
 	}
 
-	var accessUserActiveSessionsResponse AccessUserSingleActiveSessionResponse
-	err = json.Unmarshal(res, &accessUserActiveSessionsResponse)
+	var accessUserActiveSingleSessionsResponse GetAccessUserSingleActiveSessionResponse
+	err = json.Unmarshal(res, &accessUserActiveSingleSessionsResponse)
 	if err != nil {
-		return AccessUserLastSeenIdentitySession{}, err
+		return GetAccessUserSingleActiveSessionResult{}, err
 	}
-	return accessUserActiveSessionsResponse.Result, nil
+	return accessUserActiveSingleSessionsResponse.Result, nil
 }
 
 // GetAccessUserFailedLogins returns a list of failed logins for a user.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/zero-trust-users-get-failed-logins
-func (api *API) GetAccessUserFailedLogins(ctx context.Context, rc *ResourceContainer, userID string) ([]AccessUserFailedLogin, error) {
+func (api *API) GetAccessUserFailedLogins(ctx context.Context, rc *ResourceContainer, userID string) ([]AccessUserFailedLoginResult, error) {
 	if rc.Level != AccountRouteLevel {
-		return []AccessUserFailedLogin{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+		return []AccessUserFailedLoginResult{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
 	}
 
 	uri := fmt.Sprintf(
@@ -318,13 +320,13 @@ func (api *API) GetAccessUserFailedLogins(ctx context.Context, rc *ResourceConta
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return []AccessUserFailedLogin{}, err
+		return []AccessUserFailedLoginResult{}, err
 	}
 
 	var accessUserFailedLoginsResponse AccessUserFailedLoginsResponse
 	err = json.Unmarshal(res, &accessUserFailedLoginsResponse)
 	if err != nil {
-		return []AccessUserFailedLogin{}, err
+		return []AccessUserFailedLoginResult{}, err
 	}
 	return accessUserFailedLoginsResponse.Result, nil
 }
@@ -332,9 +334,9 @@ func (api *API) GetAccessUserFailedLogins(ctx context.Context, rc *ResourceConta
 // GetAccessUserLastSeenIdentity returns the last seen identity for a user.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/zero-trust-users-get-last-seen-identity
-func (api *API) GetAccessUserLastSeenIdentity(ctx context.Context, rc *ResourceContainer, userID string) (AccessUserLastSeenIdentitySession, error) {
+func (api *API) GetAccessUserLastSeenIdentity(ctx context.Context, rc *ResourceContainer, userID string) (GetAccessUserLastSeenIdentityResult, error) {
 	if rc.Level != AccountRouteLevel {
-		return AccessUserLastSeenIdentitySession{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+		return GetAccessUserLastSeenIdentityResult{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
 	}
 
 	uri := fmt.Sprintf(
@@ -346,13 +348,13 @@ func (api *API) GetAccessUserLastSeenIdentity(ctx context.Context, rc *ResourceC
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return AccessUserLastSeenIdentitySession{}, err
+		return GetAccessUserLastSeenIdentityResult{}, err
 	}
 
 	var accessUserLastSeenIdentityResponse AccessUserLastSeenIdentitySessionResponse
 	err = json.Unmarshal(res, &accessUserLastSeenIdentityResponse)
 	if err != nil {
-		return AccessUserLastSeenIdentitySession{}, err
+		return GetAccessUserLastSeenIdentityResult{}, err
 	}
 	return accessUserLastSeenIdentityResponse.Result, nil
 }
