@@ -11,6 +11,7 @@ import (
 
 var errMissingAccessSeatUID = errors.New("missing required access seat UID")
 
+// AccessUserSeat represents a Access User Seat.
 type AccessUserSeat struct {
 	AccessSeat  bool   `json:"access_seat"`
 	CreatedAt   string `json:"created_at"`
@@ -19,13 +20,14 @@ type AccessUserSeat struct {
 	UpdatedAt   string `json:"updated_at"`
 }
 
-// Removes a user from a Zero Trust seat when both access_seat and gateway_seat are set to false.
+// UpdateAccessUserSeatParams
 type UpdateAccessUserSeatParams struct {
 	SeatUID     string `json:"seat_uid"`
 	AccessSeat  bool   `json:"access_seat"`
 	GatewaySeat bool   `json:"gateway_seat"`
 }
 
+// AccessUserSeatResponse represents the response from the access user seat endpoints.
 type UpdateAccessUserSeatResponse struct {
 	Success    bool           `json:"success"`
 	Errors     []string       `json:"errors"`
@@ -35,10 +37,13 @@ type UpdateAccessUserSeatResponse struct {
 }
 
 // UpdateAccessUserSeat updates a Access User Seat.
-// UpdateAccessUserSeat Removes a user from a Zero Trust seat when both access_seat and gateway_seat are set to false.
 //
-// Access API reference: https://developers.cloudflare.com/api/operations/zero-trust-seats-update-a-user-seat
+// API documentation: https://developers.cloudflare.com/api/operations/zero-trust-seats-update-a-user-seat
 func (api *API) UpdateAccessUserSeat(ctx context.Context, rc *ResourceContainer, params UpdateAccessUserSeatParams) (AccessUserSeat, error) {
+	if rc.Level != AccountRouteLevel {
+		return AccessUserSeat{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
+
 	if params.SeatUID == "" {
 		return AccessUserSeat{}, errMissingAccessSeatUID
 	}
