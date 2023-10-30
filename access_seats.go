@@ -21,7 +21,7 @@ type AccessUpdateAccessUserSeatResult struct {
 	SeatUID     string     `json:"seat_uid,omitempty"`
 }
 
-// UpdateAccessUserSeatParams
+// UpdateAccessUserSeatParams represents the update payload for access seats.
 type UpdateAccessUserSeatParams struct {
 	SeatUID     string `json:"seat_uid,omitempty"`
 	AccessSeat  *bool  `json:"access_seat"`
