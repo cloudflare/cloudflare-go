@@ -1,5 +1,14 @@
 ## 0.81.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* access_seats: Add UpdateAccessUserSeat() to list IP Access Rules ([#1427](https://github.com/cloudflare/cloudflare-go/issues/1427))
+* access_user: Add GetAccessUserActiveSessions() to get all active sessions for a Access/Zero-Trust user. ([#1427](https://github.com/cloudflare/cloudflare-go/issues/1427))
+* access_user: Add GetAccessUserFailedLogins() to get all failed login attempts for a Access/Zero-Trust user. ([#1427](https://github.com/cloudflare/cloudflare-go/issues/1427))
+* access_user: Add GetAccessUserLastSeenIdentity() to get last seen identity for a Access/Zero-Trust user. ([#1427](https://github.com/cloudflare/cloudflare-go/issues/1427))
+* access_user: Add GetAccessUserSingleActiveSession() to get an active session for a Access/Zero-Trust user. ([#1427](https://github.com/cloudflare/cloudflare-go/issues/1427))
+* access_user: Add ListAccessUsers() to get a list of users for a Access/Zero-Trust account. ([#1427](https://github.com/cloudflare/cloudflare-go/issues/1427))
+
 ## 0.80.0 (October 25th, 2023)
 
 BREAKING CHANGES:
