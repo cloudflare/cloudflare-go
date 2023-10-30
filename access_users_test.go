@@ -14,11 +14,11 @@ var (
 	testAccessUserSessionID = "access-user-session-id"
 
 	expectedListAccessUserResult = AccessUser{
-		AccessSeat:          false,
+		AccessSeat:          BoolPtr(false),
 		ActiveDeviceCount:   2,
 		CreatedAt:           "2014-01-01T05:20:00.12345Z",
 		Email:               "jdoe@example.com",
-		GatewaySeat:         false,
+		GatewaySeat:         BoolPtr(false),
 		ID:                  "f3b12456-80dd-4e89-9f5f-ba3dfff12365",
 		LastSuccessfulLogin: "2020-07-01T05:20:00Z",
 		Name:                "Jane Doe",
@@ -45,7 +45,7 @@ var (
 				},
 			},
 			Expires: 1694813506,
-			Iat:     1694791905,
+			IAT:     1694791905,
 			Nonce:   "X1aXj1lFVcqqyoXF",
 			TTL:     21600,
 		},
@@ -71,7 +71,7 @@ var (
 		DevicePosture: map[string]AccessUserDevicePosture{
 			"property1": {
 				Check: AccessUserDevicePostureCheck{
-					Exists: true,
+					Exists: BoolPtr(true),
 					Path:   "string",
 				},
 				Data:        map[string]interface{}{},
@@ -79,13 +79,13 @@ var (
 				Error:       "string",
 				ID:          "string",
 				RuleName:    "string",
-				Success:     true,
+				Success:     BoolPtr(true),
 				Timestamp:   "string",
 				Type:        "string",
 			},
 			"property2": {
 				Check: AccessUserDevicePostureCheck{
-					Exists: true,
+					Exists: BoolPtr(true),
 					Path:   "string",
 				},
 				Data:        map[string]interface{}{},
@@ -93,7 +93,7 @@ var (
 				Error:       "string",
 				ID:          "string",
 				RuleName:    "string",
-				Success:     true,
+				Success:     BoolPtr(true),
 				Timestamp:   "string",
 				Type:        "string",
 			},
@@ -117,17 +117,17 @@ var (
 			Type: "string",
 		},
 		IP:        "127.0.0.0",
-		IsGateway: false,
-		IsWarp:    false,
+		IsGateway: BoolPtr(false),
+		IsWarp:    BoolPtr(false),
 		MtlsAuth: AccessUserMTLSAuth{
 			AuthStatus:    "string",
 			CertIssuerDN:  "string",
 			CertIssuerSKI: "string",
-			CertPresented: true,
+			CertPresented: BoolPtr(true),
 			CertSerial:    "string",
 		},
 		ServiceTokenID:     "",
-		ServiceTokenStatus: false,
+		ServiceTokenStatus: BoolPtr(false),
 		UserUUID:           "57cf8cf2-f55a-4588-9ac9-f5e41e9f09b4",
 		Version:            2,
 	}
@@ -139,7 +139,7 @@ var (
 		DevicePosture: map[string]AccessUserDevicePosture{
 			"property1": {
 				Check: AccessUserDevicePostureCheck{
-					Exists: true,
+					Exists: BoolPtr(true),
 					Path:   "string",
 				},
 				Data:        map[string]interface{}{},
@@ -147,13 +147,13 @@ var (
 				Error:       "string",
 				ID:          "string",
 				RuleName:    "string",
-				Success:     true,
+				Success:     BoolPtr(true),
 				Timestamp:   "string",
 				Type:        "string",
 			},
 			"property2": {
 				Check: AccessUserDevicePostureCheck{
-					Exists: true,
+					Exists: BoolPtr(true),
 					Path:   "string",
 				},
 				Data:        map[string]interface{}{},
@@ -161,7 +161,7 @@ var (
 				Error:       "string",
 				ID:          "string",
 				RuleName:    "string",
-				Success:     true,
+				Success:     BoolPtr(true),
 				Timestamp:   "string",
 				Type:        "string",
 			},
@@ -185,20 +185,20 @@ var (
 			Type: "string",
 		},
 		IP:        "127.0.0.0",
-		IsGateway: false,
-		IsWarp:    false,
+		IsGateway: BoolPtr(false),
+		IsWarp:    BoolPtr(false),
 		MtlsAuth: AccessUserMTLSAuth{
 			AuthStatus:    "string",
 			CertIssuerDN:  "string",
 			CertIssuerSKI: "string",
-			CertPresented: true,
+			CertPresented: BoolPtr(true),
 			CertSerial:    "string",
 		},
 		ServiceTokenID:     "",
-		ServiceTokenStatus: false,
+		ServiceTokenStatus: BoolPtr(false),
 		UserUUID:           "57cf8cf2-f55a-4588-9ac9-f5e41e9f09b4",
 		Version:            2,
-		IsActive:           true,
+		IsActive:           BoolPtr(true),
 	}
 )
 

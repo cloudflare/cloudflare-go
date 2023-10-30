@@ -14,25 +14,25 @@ var errMissingAccessSeatUID = errors.New("missing required access seat UID")
 
 // AccessUpdateAccessUserSeatResult represents a Access User Seat.
 type AccessUpdateAccessUserSeatResult struct {
-	AccessSeat  bool       `json:"access_seat"`
+	AccessSeat  *bool      `json:"access_seat"`
 	CreatedAt   *time.Time `json:"created_at"`
 	UpdatedAt   *time.Time `json:"updated_at"`
-	GatewaySeat bool       `json:"gateway_seat"`
+	GatewaySeat *bool      `json:"gateway_seat"`
 	SeatUID     string     `json:"seat_uid,omitempty"`
 }
 
 // UpdateAccessUserSeatParams
 type UpdateAccessUserSeatParams struct {
 	SeatUID     string `json:"seat_uid,omitempty"`
-	AccessSeat  bool   `json:"access_seat"`
-	GatewaySeat bool   `json:"gateway_seat"`
+	AccessSeat  *bool  `json:"access_seat"`
+	GatewaySeat *bool  `json:"gateway_seat"`
 }
 
 // AccessUserSeatResponse represents the response from the access user seat endpoints.
 type UpdateAccessUserSeatResponse struct {
 	Response
 	Result     []AccessUpdateAccessUserSeatResult `json:"result"`
-	ResultInfo ResultInfo                         `json:"result_info"`
+	ResultInfo `json:"result_info"`
 }
 
 // UpdateAccessUserSeat updates a Access User Seat.

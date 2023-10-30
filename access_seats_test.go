@@ -63,9 +63,9 @@ func TestUpdateAccessUserSeat(t *testing.T) {
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	want := []AccessUpdateAccessUserSeatResult{
 		{
-			AccessSeat:  false,
+			AccessSeat:  BoolPtr(false),
 			CreatedAt:   &createdAt,
-			GatewaySeat: false,
+			GatewaySeat: BoolPtr(false),
 			SeatUID:     "",
 			UpdatedAt:   &updatedAt,
 		},
@@ -73,8 +73,8 @@ func TestUpdateAccessUserSeat(t *testing.T) {
 
 	actual, err := client.UpdateAccessUserSeat(context.Background(), testAccountRC, UpdateAccessUserSeatParams{
 		SeatUID:     testAccessGroupSeatUID,
-		AccessSeat:  false,
-		GatewaySeat: false,
+		AccessSeat:  BoolPtr(false),
+		GatewaySeat: BoolPtr(false),
 	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)

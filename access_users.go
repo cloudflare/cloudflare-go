@@ -10,7 +10,7 @@ import (
 
 type AccessUserActiveSessionsResponse struct {
 	Result     []AccessUserActiveSessionResult `json:"result"`
-	ResultInfo ResultInfo                      `json:"result_info"`
+	ResultInfo `json:"result_info"`
 	Response
 }
 
@@ -23,7 +23,7 @@ type AccessUserActiveSessionResult struct {
 type AccessUserActiveSessionMetadata struct {
 	Apps    map[string]AccessUserActiveSessionMetadataApp `json:"apps"`
 	Expires int64                                         `json:"expires"`
-	Iat     int64                                         `json:"iat"`
+	IAT     int64                                         `json:"iat"`
 	Nonce   string                                        `json:"nonce"`
 	TTL     int64                                         `json:"ttl"`
 }
@@ -42,7 +42,7 @@ type AccessUserDevicePosture struct {
 	Error       string                       `json:"error"`
 	ID          string                       `json:"id"`
 	RuleName    string                       `json:"rule_name"`
-	Success     bool                         `json:"success"`
+	Success     *bool                        `json:"success"`
 	Timestamp   string                       `json:"timestamp"`
 	Type        string                       `json:"type"`
 }
@@ -53,7 +53,7 @@ type AccessUserDeviceSession struct {
 
 type AccessUserFailedLoginsResponse struct {
 	Result     []AccessUserFailedLoginResult `json:"result"`
-	ResultInfo ResultInfo                    `json:"result_info"`
+	ResultInfo `json:"result_info"`
 	Response
 }
 
@@ -89,11 +89,11 @@ type AccessUserLastSeenIdentityResult struct {
 	IAT                int64                              `json:"iat"`
 	IDP                AccessUserIDP                      `json:"idp"`
 	IP                 string                             `json:"ip"`
-	IsGateway          bool                               `json:"is_gateway"`
-	IsWarp             bool                               `json:"is_warp"`
+	IsGateway          *bool                              `json:"is_gateway"`
+	IsWarp             *bool                              `json:"is_warp"`
 	MtlsAuth           AccessUserMTLSAuth                 `json:"mtls_auth"`
 	ServiceTokenID     string                             `json:"service_token_id"`
-	ServiceTokenStatus bool                               `json:"service_token_status"`
+	ServiceTokenStatus *bool                              `json:"service_token_status"`
 	UserUUID           string                             `json:"user_uuid"`
 	Version            int                                `json:"version"`
 }
@@ -116,17 +116,17 @@ type GetAccessUserLastSeenIdentityResult struct {
 	IAT                int64                              `json:"iat"`
 	IDP                AccessUserIDP                      `json:"idp"`
 	IP                 string                             `json:"ip"`
-	IsGateway          bool                               `json:"is_gateway"`
-	IsWarp             bool                               `json:"is_warp"`
+	IsGateway          *bool                              `json:"is_gateway"`
+	IsWarp             *bool                              `json:"is_warp"`
 	MtlsAuth           AccessUserMTLSAuth                 `json:"mtls_auth"`
 	ServiceTokenID     string                             `json:"service_token_id"`
-	ServiceTokenStatus bool                               `json:"service_token_status"`
+	ServiceTokenStatus *bool                              `json:"service_token_status"`
 	UserUUID           string                             `json:"user_uuid"`
 	Version            int                                `json:"version"`
 }
 
 type AccessUserDevicePostureCheck struct {
-	Exists bool   `json:"exists"`
+	Exists *bool  `json:"exists"`
 	Path   string `json:"path"`
 }
 
@@ -143,23 +143,23 @@ type AccessUserMTLSAuth struct {
 	AuthStatus    string `json:"auth_status"`
 	CertIssuerDN  string `json:"cert_issuer_dn"`
 	CertIssuerSKI string `json:"cert_issuer_ski"`
-	CertPresented bool   `json:"cert_presented"`
+	CertPresented *bool  `json:"cert_presented"`
 	CertSerial    string `json:"cert_serial"`
 }
 
 type AccessUserListResponse struct {
 	Result     []AccessUser `json:"result"`
-	ResultInfo ResultInfo   `json:"result_info"`
+	ResultInfo `json:"result_info"`
 	Response
 }
 
 type AccessUser struct {
 	ID                  string `json:"id"`
-	AccessSeat          bool   `json:"access_seat"`
+	AccessSeat          *bool  `json:"access_seat"`
 	ActiveDeviceCount   int    `json:"active_device_count"`
 	CreatedAt           string `json:"created_at"`
 	Email               string `json:"email"`
-	GatewaySeat         bool   `json:"gateway_seat"`
+	GatewaySeat         *bool  `json:"gateway_seat"`
 	LastSuccessfulLogin string `json:"last_successful_login"`
 	Name                string `json:"name"`
 	SeatUID             string `json:"seat_uid"`
@@ -173,7 +173,7 @@ type AccessUserParams struct {
 
 type GetAccessUserSingleActiveSessionResponse struct {
 	Result     GetAccessUserSingleActiveSessionResult `json:"result"`
-	ResultInfo ResultInfo                             `json:"result_info"`
+	ResultInfo `json:"result_info"`
 	Response
 }
 
@@ -189,14 +189,14 @@ type GetAccessUserSingleActiveSessionResult struct {
 	IAT                int64                              `json:"iat"`
 	IDP                AccessUserIDP                      `json:"idp"`
 	IP                 string                             `json:"ip"`
-	IsGateway          bool                               `json:"is_gateway"`
-	IsWarp             bool                               `json:"is_warp"`
+	IsGateway          *bool                              `json:"is_gateway"`
+	IsWarp             *bool                              `json:"is_warp"`
 	MtlsAuth           AccessUserMTLSAuth                 `json:"mtls_auth"`
 	ServiceTokenID     string                             `json:"service_token_id"`
-	ServiceTokenStatus bool                               `json:"service_token_status"`
+	ServiceTokenStatus *bool                              `json:"service_token_status"`
 	UserUUID           string                             `json:"user_uuid"`
 	Version            int                                `json:"version"`
-	IsActive           bool                               `json:"isActive"`
+	IsActive           *bool                              `json:"isActive"`
 }
 
 // ListAccessUsers returns a list of users for a single cloudflare access/zerotrust account.
