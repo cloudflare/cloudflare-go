@@ -1,0 +1,3 @@
+```release-note:enhancement
+pages: Added mTLS and Vectorize bindings to pages_project
+```
