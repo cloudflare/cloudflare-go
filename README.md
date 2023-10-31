@@ -2,13 +2,10 @@
 
 <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go"><img src="https://pkg.go.dev/badge/github.com/cloudflare/cloudflare-sdk-go.svg" alt="Go Reference"></a>
 
-The Cloudflare Go library provides convenient access to the Cloudflare REST
-API from applications written in Go.
+The Cloudflare Go library provides convenient access to [the Cloudflare REST
+API](https://developers.cloudflare.com/api/) from applications written in Go.
 
 ## Installation
-
-Within a Go module, you can just import this package and let the Go compiler
-resolve this module.
 
 ```go
 import (
@@ -16,17 +13,19 @@ import (
 )
 ```
 
-Or, explicitly import this package with
+Or to pin the version:
 
+```sh
+go get -u 'github.com/cloudflare/cloudflare-sdk-go@v0.0.1'
 ```
-go get -u 'github.com/cloudflare/cloudflare-sdk-go'
-```
 
-## Documentation
+## Requirements
 
-The API documentation can be found [here](https://developers.cloudflare.com/api/).
+This library requires Go 1.18+.
 
 ## Usage
+
+The full API of this library can be found in [api.md](https://www.github.com/cloudflare/cloudflare-sdk-go/blob/main/api.md).
 
 ```go
 package main
@@ -35,195 +34,249 @@ import (
 	"context"
 	"fmt"
 	"github.com/cloudflare/cloudflare-sdk-go"
-	"github.com/cloudflare/cloudflare-sdk-go/fields"
-	"github.com/cloudflare/cloudflare-sdk-go/requests"
+	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
 func main() {
-	client := cloudflare.NewCloudflare()
-	res, err := client.Zones.New(context.TODO(), &requests.ZoneNewParams{
-		Account: fields.F(requests.ZoneNewParamsAccount{
-			ID: fields.F("023e105f4ecef8ad9ca31a8372d0c353"), Name: "example.com", Type: "full",
+	client := cloudflare.NewClient(
+		option.WithAPIKey("my-cloudflare-api-key"), // defaults to os.LookupEnv("CLOUDFLARE_API_KEY")
+	)
+	zoneNewResponse, err := client.Zones.New(context.TODO(), cloudflare.ZoneNewParams{
+		Account: cloudflare.F(cloudflare.ZoneNewParamsAccount{
+			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}),
+		Name: cloudflare.F("example.com"),
+		Type: cloudflare.F(cloudflare.ZoneNewParamsTypeFull),
 	})
 	if err != nil {
-		panic(err)
+		panic(err.Error())
 	}
-	fmt.Sprintf("%s", res.Result.ID)
+	fmt.Printf("%+v\n", zoneNewResponse.Result.ID)
 }
 
 ```
 
 ### Request Fields
 
-Types for requests look like the following:
+All request parameters are wrapped in a generic `Field` type,
+which we use to distinguish zero values from null or omitted fields.
+
+This prevents accidentally sending a zero value if you forget a required parameter,
+and enables explicitly sending `null`, `false`, `''`, or `0` on optional parameters.
+Any field not specified is not sent.
+
+To construct fields with values, use the helpers `String()`, `Int()`, `Float()`, or most commonly, the generic `F[T]()`.
+To send a null, use `Null[T]()`, and to send a nonconforming value, use `Raw[T](any)`. For example:
 
 ```go
-type FooParams struct {
-	ID     fields.Field[string] `json:"id,required"`
-	Number fields.Field[int64]  `json:"number,required"`
-	Name   fields.Field[string] `json:"name"`
-	Other  fields.Field[Bar]    `json:"other"`
-}
+params := FooParams{
+	Name: cloudflare.F("hello"),
 
-type Bar struct {
-	Number fields.Field[int64]  `json:"number"`
-	Name   fields.Field[string] `json:"name"`
-}
-```
+	// Explicitly send `"description": null`
+	Description: cloudflare.Null[string](),
 
-For each field, you can either supply a value field with `fields.F(...)`, a
-`null` value with `fields.NullField()`, or some raw JSON value with
-`fields.RawField(...)` that you specify as a byte slice. If you do not supply a
-value, then we do not populate the field. An example request may look like
+	Point: cloudflare.F(cloudflare.Point{
+		X: cloudflare.Int(0),
+		Y: cloudflare.Int(1),
 
-```go
-params := &FooParams{
-	// Normally populates this field as `"id": "food_id"`
-	ID: fields.F("foo_id"),
-
-	// Integer helper casts integer values and literals to fields.Field[int64]
-	Number: fields.Int(12),
-
-	// Explicitly sends this field as null, e.g., `"name": null`
-	Name: fields.NullField[string](),
-
-	// Overrides this field as `"other": "ovveride_this_field"`
-	Other: fields.RawField[Bar]("override_this_field")
+		// In cases where the API specifies a given type,
+		// but you want to send something else, use `Raw`:
+		Z: cloudflare.Raw[int64](0.01), // sends a float
+	}),
 }
 ```
-
-If you want to add or override some field in the JSON, then you can use the `options.WithJSONSet(key string, value interface{})` RequestOption, which you can read more about [here](#requestoptions). Internally, this uses 'github.com/tidwall/sjson' library, so you can compose complex access as seen [here](https://github.com/tidwall/sjson).
 
 ### Response Objects
 
-Response objects in this SDK have value type members. Accessing properties on
-response objects is as simple as:
+All fields in response structs are value types (not pointers or wrappers).
+
+If a given field is `null`, not present, or invalid, the corresponding field
+will simply be its zero value.
+
+All response structs also include a special `JSON` field, containing more detailed
+information about each property, which you can use like so:
 
 ```go
-res, err := client.Service.Foo(context.TODO())
-res.Name // is just some string value
+if res.Name == "" {
+	// true if `"name"` is either not present or explicitly null
+	res.JSON.Name.IsNull()
+
+	// true if the `"name"` key was not present in the repsonse JSON at all
+	res.JSON.Name.IsMissing()
+
+	// When the API returns data that cannot be coerced to the expected type:
+	if res.JSON.Name.IsInvalid() {
+		raw := res.JSON.Name.Raw()
+
+		legacyName := struct{
+			First string `json:"first"`
+			Last  string `json:"last"`
+		}{}
+		json.Unmarshal([]byte(raw), &legacyName)
+		name = legacyName.First + " " + legacyName.Last
+	}
+}
 ```
 
-If null, not present, or invalid, all fields will simply be their empty values.
-
-If you want to be able to tell that the value is either `null`, not present, or
-invalid, we provide metadata in the `JSON` property of every response object.
-
-```go
-// This is true if `name` is _either_ not present or explicitly null
-res.JSON.Name.IsNull()
-
-// This is true if `name` is not present
-res.JSON.Name.IsMissing()
-
-// This is true if `name` is present, but not coercable
-res.JSON.Name.IsMissing()
-
-// If needed, you can access the Raw JSON value of the field by accessing
-res.JSON.Name.Raw()
-```
-
-You can also access the JSON value of the entire object with `res.JSON.Raw`.
-
-There may be instances where we provide experimental or private API features
-for some customers. In those cases, the related features will not be exposed to
-the SDK as typed fields, and are instead deserialized to an internal map. We
-provide methods to get and set these json fields in API objects.
+These `.JSON` structs also include an `Extras` map containing
+any properties in the json response that were not specified
+in the struct. This can be useful for API features not yet
+present in the SDK.
 
 ```go
-// Access the JSON value as
-body := res.JSON.Extras["extra_field"].Raw()
-
-// You can `Unmarshal` the JSON into a struct as needed
-custom := struct{A string, B int64}{}
-json.Unmarshal(body, &custom)
+body := res.JSON.ExtraFields["my_unexpected_field"].Raw()
 ```
 
 ### RequestOptions
 
-This library uses the functional options pattern. `RequestOptions` are closures
-that mutate a `RequestConfig`. These options can be supplied to the client or
-at individual requests, and they will cascade appropriately.
-
-At each request, these closures will be run in the order that they are
-supplied, after the defaults for that particular request.
-
-For example:
+This library uses the functional options pattern. Functions defined in the
+`option` package return a `RequestOption`, which is a closure that mutates a
+`RequestConfig`. These options can be supplied to the client or at individual
+requests. For example:
 
 ```go
-client := Cloudflare.NewCloudflare(
-	// Adds header to every request made by client
-	options.WithHeader("X-Some-Header", "custom_header_info"),
-
-	// Overrides APIkey read from environment
-	options.WithAPIKey("api_key"),
+client := cloudflare.NewClient(
+	// Adds a header to every request made by the client
+	option.WithHeader("X-Some-Header", "custom_header_info"),
 )
 
-client.Zones.New(
-	context.TODO(),
-	...,
-	// These options override the client options
-	options.WithHeader("X-Some-Header", "some_other_custom_header_info"),
-	options.WithAPIKey("other_api_key"),
+client.Zones.New(context.TODO(), ...,
+	// Override the header
+	option.WithHeader("X-Some-Header", "some_other_custom_header_info"),
+	// Add an undocumented field to the request body, using sjson syntax
+	option.WithJSONSet("some.json.path", map[string]string{"my": "object"}),
 )
 ```
 
+The full list of request options is [here](https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go/option).
+
 ### Pagination
 
-List methods in the Cloudflare API are paginated.
+This library provides some conveniences for working with paginated list endpoints.
 
-In addition to exposing standard response values, this library provides an
-auto-paginating iterator with each list response, so you do not have to request
-successive pages manually:
-
-To iterate over all elements in a paginated list, we call the paginated
-endpoint which returns a `Page`, then iterate while there is a `Next()`
-element. When `Next()` is called, it will load the next element into
-`Current()`, which is also aliased to the endpoint-specific name. If we are at
-the end of the current page, `Next()` will fetch the next page.
+You can use `.ListAutoPaging()` methods to iterate through items across all pages:
 
 ```go
-page, err := <Service>(
-	context.TODO(),
-	...,
-)
-if err != nil {
-	panic(err.Error())
-}
-for page.Next() {
-	item := page.Current()
-	// ...
-}
-if page.Err() != nil {
-	panic(page.Err().Error())
-}
+// TODO
+```
+
+Or you can use simple `.List()` methods to fetch a single page and receive a standard response object
+with additional helper methods like `.GetNextPage()`, e.g.:
+
+```go
+// TODO
 ```
 
 ### Errors
 
-For the errors generated by the SDK, we provide extra convenience methods for debugging.
+When the API returns a non-success status code, we return an error with type
+`*cloudflare.Error`. This contains the `StatusCode`, `*http.Request`, and
+`*http.Response` values of the request, as well as the JSON of the error body
+(much like other response objects in the SDK).
+
+To handle errors, we recommend that you use the `errors.As` pattern:
+
+```go
+_, err := client.Zones.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+if err != nil {
+	var apierr *cloudflare.Error
+	if errors.As(err, &apierr) {
+		println(string(apierr.DumpRequest(true)))  // Prints the serialized HTTP request
+		println(string(apierr.DumpResponse(true))) // Prints the serialized HTTP response
+	}
+	panic(err.Error()) // GET "/zones/{identifier}": 400 Bad Request { ... }
+}
+```
+
+When other errors occur, they are returned unwrapped; for example,
+if HTTP transport fails, you might receive `*url.Error` wrapping `*net.OpError`.
+
+### Timeouts
+
+Requests do not time out by default; use context to configure a timeout for a request lifecycle.
+
+Note that if a request is [retried](#retries), the context timeout does not start over.
+To set a per-retry timeout, use `option.WithRequestTimeout()`.
+
+```go
+// This sets the timeout for the request, including all the retries.
+ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
+defer cancel()
+client.Zones.Update(
+	ctx,
+	"023e105f4ecef8ad9ca31a8372d0c353",
+	cloudflare.ZoneUpdateParams{},
+	// This sets the per-retry timeout
+	option.WithRequestTimeout(20*time.Second),
+)
+```
+
+## Retries
+
+Certain errors will be automatically retried 2 times by default, with a short exponential backoff.
+We retry by default all connection errors, 408 Request Timeout, 409 Conflict, 429 Rate Limit,
+and >=500 Internal errors.
+
+You can use the `WithMaxRetries` option to configure or disable this:
+
+```go
+// Configure the default for all requests:
+client := cloudflare.NewClient(
+	option.WithMaxRetries(0), // default is 2
+)
+
+// Override per-request:
+client.Zones.Get(
+	context.TODO(),
+	"023e105f4ecef8ad9ca31a8372d0c353",
+	option.WithMaxRetries(5),
+)
+```
 
 ### Middleware
 
-You may apply any middleware you wish by overriding the `http.Client` with
-`options.WithClient(client)`. An example of a basic logging middleware is given
-below:
+We provide `option.WithMiddleware` which applies the given
+middleware to requests.
 
 ```go
-TODO
+func Logger(req *http.Request, next option.MiddlewareNext) (res *http.Response, err error) {
+	// Before the request
+	start := time.Now()
+	LogReq(req)
+
+	// Forward the request to the next handler
+	res, err = next(req)
+
+	// Handle stuff after the request
+	end := time.Now()
+	LogRes(res, err, start - end)
+
+    return res, err
+}
+
+client := cloudflare.NewClient(
+	option.WithMiddleware(Logger),
+)
 ```
 
-## Status
+When multiple middlewares are provided as variadic arguments, the middlewares
+are applied left to right. If `option.WithMiddleware` is given
+multiple times, for example first in the client then the method, the
+middleware in the client will run first and the middleware given in the method
+will run next.
 
-This package is in beta. Its internals and interfaces are not stable and
-subject to change without a major semver bump; please reach out if you rely on
-any undocumented behavior.
+You may also replace the default `http.Client` with
+`option.WithHTTPClient(client)`. Only one http client is
+accepted (this overwrites any previous client) and receives requests after any
+middleware has been applied.
 
-We are keen for your feedback; please email us at
-[dev-feedback@todo.com](mailto:dev-feedback@todo.com) or open an issue with questions, bugs, or
-suggestions.
+## Semantic Versioning
 
-## Requirements
+This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:
 
-This library requires Go 1.18+.
+1. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals)_.
+2. Changes that we do not expect to impact the vast majority of users in practice.
+
+We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
+
+We are keen for your feedback; please open an [issue](https://www.github.com/cloudflare/cloudflare-sdk-go/issues) with questions, bugs, or suggestions.
