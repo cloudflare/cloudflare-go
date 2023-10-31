@@ -106,6 +106,29 @@ const (
 					"environment": "production"
 				}
 			},
+			"queue_producers": {
+				"QUEUE_PRODUCER_BINDING": {
+					"name": "my-queue"
+				}
+			},
+			"analytics_engine_datasets": {
+				"ANALYTICS_ENGINE_BINDING": {
+					"dataset": "my_dataset"
+				}
+			},
+			"ai_bindings": {
+				"AI_BINDING": {}
+			},
+			"mtls_certificates": {
+				"MTLS_BINDING": {
+					"certificate_id": "18a00f73-a6d1-458d-96d5-acb9b868ea66"
+				}
+			},
+			"vectorize_bindings": {
+				"VERTORIZE_BINDING": {
+					"index_name": "my_index"
+				}
+			},
 			"compatibility_date": "2022-08-15",
 			"compatibility_flags": ["production_flag"],
 			"fail_open": false,
@@ -457,6 +480,29 @@ var (
 			"SERVICE_BINDING": &ServiceBinding{
 				Service:     "some-worker",
 				Environment: "production",
+			},
+		},
+		QueueProducers: QueueProducerBindingMap{
+			"QUEUE_PRODUCER_BINDING": &QueueProducerBinding{
+				Name: "my-queue",
+			},
+		},
+		AnalyticsEngineDatasets: AnalyticsEngineBindingMap{
+			"ANALYTICS_ENGINE_BINDING": &AnalyticsEngineBinding{
+				Dataset: "my_dataset",
+			},
+		},
+		AiBindings: AiBindingMap{
+			"AI_BINDING": &AiBinding{},
+		},
+		MtlsBindings: MtlsBindingMap{
+			"MTLS_BINDING": &MtlsBinding{
+				CertificateID: "18a00f73-a6d1-458d-96d5-acb9b868ea66",
+			},
+		},
+		VectorizeBindings: VectorizeBindingMap{
+			"VERTORIZE_BINDING": &VectorizeBinding{
+				IndexName: "my_index",
 			},
 		},
 		CompatibilityDate:                "2022-08-15",

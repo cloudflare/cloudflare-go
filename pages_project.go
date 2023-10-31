@@ -68,48 +68,58 @@ type PagesProjectDeploymentConfigs struct {
 
 // PagesProjectDeploymentConfigEnvironment represents the configuration for preview or production deploys.
 type PagesProjectDeploymentConfigEnvironment struct {
-	EnvVars                          EnvironmentVariableMap `json:"env_vars,omitempty"`
-	KvNamespaces                     NamespaceBindingMap    `json:"kv_namespaces,omitempty"`
-	DoNamespaces                     NamespaceBindingMap    `json:"durable_object_namespaces,omitempty"`
-	D1Databases                      D1BindingMap           `json:"d1_databases,omitempty"`
-	R2Bindings                       R2BindingMap           `json:"r2_buckets,omitempty"`
-	ServiceBindings                  ServiceBindingMap      `json:"services,omitempty"`
-	CompatibilityDate                string                 `json:"compatibility_date,omitempty"`
-	CompatibilityFlags               []string               `json:"compatibility_flags,omitempty"`
-	FailOpen                         bool                   `json:"fail_open"`
-	AlwaysUseLatestCompatibilityDate bool                   `json:"always_use_latest_compatibility_date"`
-	UsageModel                       UsageModel             `json:"usage_model,omitempty"`
-	Placement                        *Placement             `json:"placement,omitempty"`
+	EnvVars                          EnvironmentVariableMap    `json:"env_vars,omitempty"`
+	KvNamespaces                     NamespaceBindingMap       `json:"kv_namespaces,omitempty"`
+	DoNamespaces                     NamespaceBindingMap       `json:"durable_object_namespaces,omitempty"`
+	D1Databases                      D1BindingMap              `json:"d1_databases,omitempty"`
+	R2Bindings                       R2BindingMap              `json:"r2_buckets,omitempty"`
+	ServiceBindings                  ServiceBindingMap         `json:"services,omitempty"`
+	QueueProducers                   QueueProducerBindingMap   `json:"queue_producers,omitempty"`
+	AnalyticsEngineDatasets          AnalyticsEngineBindingMap `json:"analytics_engine_datasets,omitempty"`
+	AiBindings                       AiBindingMap              `json:"ai_bindings,omitempty"`
+	MtlsBindings                     MtlsBindingMap            `json:"mtls_certificates,omitempty"`
+	VectorizeBindings                VectorizeBindingMap       `json:"vectorize_bindings,omitempty"`
+	CompatibilityDate                string                    `json:"compatibility_date,omitempty"`
+	CompatibilityFlags               []string                  `json:"compatibility_flags,omitempty"`
+	FailOpen                         bool                      `json:"fail_open"`
+	AlwaysUseLatestCompatibilityDate bool                      `json:"always_use_latest_compatibility_date"`
+	UsageModel                       UsageModel                `json:"usage_model,omitempty"`
+	Placement                        *Placement                `json:"placement,omitempty"`
 }
 
 // PagesProjectDeployment represents a deployment to a Pages project.
 type PagesProjectDeployment struct {
-	ID                 string                        `json:"id"`
-	ShortID            string                        `json:"short_id"`
-	ProjectID          string                        `json:"project_id"`
-	ProjectName        string                        `json:"project_name"`
-	Environment        string                        `json:"environment"`
-	URL                string                        `json:"url"`
-	CreatedOn          *time.Time                    `json:"created_on"`
-	ModifiedOn         *time.Time                    `json:"modified_on"`
-	Aliases            []string                      `json:"aliases,omitempty"`
-	LatestStage        PagesProjectDeploymentStage   `json:"latest_stage"`
-	EnvVars            EnvironmentVariableMap        `json:"env_vars"`
-	KvNamespaces       NamespaceBindingMap           `json:"kv_namespaces,omitempty"`
-	DoNamespaces       NamespaceBindingMap           `json:"durable_object_namespaces,omitempty"`
-	D1Databases        D1BindingMap                  `json:"d1_databases,omitempty"`
-	R2Bindings         R2BindingMap                  `json:"r2_buckets,omitempty"`
-	ServiceBindings    ServiceBindingMap             `json:"services,omitempty"`
-	Placement          *Placement                    `json:"placement,omitempty"`
-	DeploymentTrigger  PagesProjectDeploymentTrigger `json:"deployment_trigger"`
-	Stages             []PagesProjectDeploymentStage `json:"stages"`
-	BuildConfig        PagesProjectBuildConfig       `json:"build_config"`
-	Source             PagesProjectSource            `json:"source"`
-	CompatibilityDate  string                        `json:"compatibility_date,omitempty"`
-	CompatibilityFlags []string                      `json:"compatibility_flags,omitempty"`
-	UsageModel         UsageModel                    `json:"usage_model,omitempty"`
-	IsSkipped          bool                          `json:"is_skipped"`
-	ProductionBranch   string                        `json:"production_branch,omitempty"`
+	ID                      string                        `json:"id"`
+	ShortID                 string                        `json:"short_id"`
+	ProjectID               string                        `json:"project_id"`
+	ProjectName             string                        `json:"project_name"`
+	Environment             string                        `json:"environment"`
+	URL                     string                        `json:"url"`
+	CreatedOn               *time.Time                    `json:"created_on"`
+	ModifiedOn              *time.Time                    `json:"modified_on"`
+	Aliases                 []string                      `json:"aliases,omitempty"`
+	LatestStage             PagesProjectDeploymentStage   `json:"latest_stage"`
+	EnvVars                 EnvironmentVariableMap        `json:"env_vars"`
+	KvNamespaces            NamespaceBindingMap           `json:"kv_namespaces,omitempty"`
+	DoNamespaces            NamespaceBindingMap           `json:"durable_object_namespaces,omitempty"`
+	D1Databases             D1BindingMap                  `json:"d1_databases,omitempty"`
+	R2Bindings              R2BindingMap                  `json:"r2_buckets,omitempty"`
+	ServiceBindings         ServiceBindingMap             `json:"services,omitempty"`
+	QueueProducers          QueueProducerBindingMap       `json:"queue_producers,omitempty"`
+	AnalyticsEngineDatasets AnalyticsEngineBindingMap     `json:"analytics_engine_datasets,omitempty"`
+	AiBindings              AiBindingMap                  `json:"ai_bindings,omitempty"`
+	MtlsBindings            MtlsBindingMap                `json:"mtls_certificates,omitempty"`
+	VectorizeBindings       VectorizeBindingMap           `json:"vectorize_bindings,omitempty"`
+	Placement               *Placement                    `json:"placement,omitempty"`
+	DeploymentTrigger       PagesProjectDeploymentTrigger `json:"deployment_trigger"`
+	Stages                  []PagesProjectDeploymentStage `json:"stages"`
+	BuildConfig             PagesProjectBuildConfig       `json:"build_config"`
+	Source                  PagesProjectSource            `json:"source"`
+	CompatibilityDate       string                        `json:"compatibility_date,omitempty"`
+	CompatibilityFlags      []string                      `json:"compatibility_flags,omitempty"`
+	UsageModel              UsageModel                    `json:"usage_model,omitempty"`
+	IsSkipped               bool                          `json:"is_skipped"`
+	ProductionBranch        string                        `json:"production_branch,omitempty"`
 }
 
 // PagesProjectDeploymentStage represents an individual stage in a Pages project deployment.
@@ -182,6 +192,36 @@ type ServiceBindingMap map[string]*ServiceBinding
 type ServiceBinding struct {
 	Service     string `json:"service"`
 	Environment string `json:"environment"`
+}
+
+type QueueProducerBindingMap map[string]*QueueProducerBinding
+
+type QueueProducerBinding struct {
+	Name string `json:"name"`
+}
+
+type AnalyticsEngineBindingMap map[string]*AnalyticsEngineBinding
+
+type AnalyticsEngineBinding struct {
+	Dataset string `json:"dataset"`
+}
+
+type AiBindingMap map[string]*AiBinding
+
+type AiBinding struct {
+	ProjectID *string `json:"project_id,omitempty"`
+}
+
+type MtlsBindingMap map[string]*MtlsBinding
+
+type MtlsBinding struct {
+	CertificateID string `json:"certificate_id"`
+}
+
+type VectorizeBindingMap map[string]*VectorizeBinding
+
+type VectorizeBinding struct {
+	IndexName string `json:"index_name"`
 }
 
 type UsageModel string
