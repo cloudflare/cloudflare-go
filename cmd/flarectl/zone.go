@@ -11,8 +11,8 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-func zoneCerts(*cli.Context) error {
-	return nil
+func zoneCerts(c *cli.Context) error {
+	return certificatePacksList(c)
 }
 
 func zoneKeyless(*cli.Context) error {

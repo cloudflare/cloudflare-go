@@ -228,6 +228,16 @@ func main() {
 					Aliases: []string{"c"},
 					Action:  zoneCerts,
 					Usage:   "Custom SSL certificates for a zone",
+					Flags: []cli.Flag{
+						&cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+						&cli.StringFlag{
+							Name:  "id",
+							Usage: "certificate pack ID",
+						},
+					},
 				},
 				{
 					Name:    "keyless",
@@ -249,7 +259,81 @@ func main() {
 				},
 			},
 		},
-
+		{
+			Name:    "certs",
+			Aliases: []string{"c"},
+			Usage:   "Certificate Packs",
+			Before:  initializeAPI,
+			Subcommands: []*cli.Command{
+				{
+					Name:    "list",
+					Aliases: []string{"l"},
+					Action:  certificatePacksList,
+					Usage:   "List Certificate Packs for a zone",
+					Flags: []cli.Flag{
+						&cli.StringFlag{
+							Name:  "id",
+							Usage: "certificate pack ID",
+						},
+						&cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+					},
+				},
+				{
+					Name:    "order",
+					Aliases: []string{"o"},
+					Action:  certificatePackCreate,
+					Usage:   "Order Advanced Certificate Manager Certificate Pack",
+					Flags: []cli.Flag{
+						&cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+						&cli.StringFlag{
+							Name:  "hosts",
+							Usage: "Comma separated list of valid host names for the certificate packs. Must contain the zone apex, may not contain more than 50 hosts, and may not be empty",
+						},
+						&cli.StringFlag{
+							Name:  "validation",
+							Usage: "validation method: txt, http or email",
+							Value: "txt",
+						},
+						&cli.IntFlag{
+							Name:  "validity-days",
+							Usage: "14, 30, 90 or 365",
+							Value: 30,
+						},
+						&cli.StringFlag{
+							Name:  "authority",
+							Usage: "Certificate Authority selected for the order: google or lets_encrypt",
+							Value: "lets_encrypt",
+						},
+						&cli.BoolFlag{
+							Name:  "cloudflare-branding",
+							Usage: "Whether or not to add Cloudflare Branding for the order. This will add sni.cloudflaressl.com as the Common Name if set true.",
+							Value: false,
+						},
+					},
+				}, {
+					Name:    "delete",
+					Aliases: []string{"d"},
+					Action:  certificatePackDelete,
+					Usage:   "Delete Advanced Certificate Manager Certificate Pack",
+					Flags: []cli.Flag{
+						&cli.StringFlag{
+							Name:  "zone",
+							Usage: "zone name",
+						},
+						&cli.StringFlag{
+							Name:  "id",
+							Usage: "Certificate Pack id",
+						},
+					},
+				},
+			},
+		},
 		{
 			Name:    "dns",
 			Aliases: []string{"d"},
