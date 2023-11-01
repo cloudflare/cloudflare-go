@@ -421,3 +421,47 @@ func TestGetDeviceSettings(t *testing.T) {
 		assert.Equal(t, want, actual)
 	}
 }
+
+func TestListDeviceSettingsPolicies(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": null,
+			"messages": null,
+			"result": [%s],
+			"result_info": {
+  				"count": 1,
+  				"page": 1,
+  				"per_page": 20,
+  				"total_count": 1
+			}
+		}`, nonDefaultDeviceSettingsPolicyJson)
+	}
+
+	want := []DeviceSettingsPolicy{nonDefaultDeviceSettingsPolicy}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/devices/policies", handler)
+
+	actual, resultInfo, err := client.ListDeviceSettingsPolicies(context.Background(), testAccountID, ListDeviceSettingsPoliciesParams{
+		ResultInfo: ResultInfo{
+			Page:    1,
+			PerPage: 20,
+		},
+	})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+		assert.Equal(t, &ResultInfo{
+			Count:   1,
+			Page:    1,
+			PerPage: 20,
+			Total:   1,
+		}, resultInfo)
+		assert.Len(t, actual, 1)
+	}
+}

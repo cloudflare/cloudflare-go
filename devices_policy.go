@@ -21,11 +21,12 @@ type DeviceClientCertificatesZone struct {
 type ServiceMode string
 
 const (
-	oneDotOne      ServiceMode = "1dot1"
-	warp           ServiceMode = "warp"
-	proxy          ServiceMode = "proxy"
-	postureOnly    ServiceMode = "posture_only"
-	warpTunnelOnly ServiceMode = "warp_tunnel_only"
+	oneDotOne                                 ServiceMode = "1dot1"
+	warp                                      ServiceMode = "warp"
+	proxy                                     ServiceMode = "proxy"
+	postureOnly                               ServiceMode = "posture_only"
+	warpTunnelOnly                            ServiceMode = "warp_tunnel_only"
+	listDeviceSettingsPoliciesDefaultPageSize             = 20
 )
 
 type ServiceModeV2 struct {
@@ -83,6 +84,12 @@ type DeviceSettingsPolicyRequest struct {
 	Enabled             *bool          `json:"enabled,omitempty"`
 	ExcludeOfficeIps    *bool          `json:"exclude_office_ips"`
 	Description         *string        `json:"description,omitempty"`
+}
+
+type ListDeviceSettingsPoliciesResponse struct {
+	Response
+	ResultInfo ResultInfo             `json:"result_info"`
+	Result     []DeviceSettingsPolicy `json:"result"`
 }
 
 // UpdateDeviceClientCertificates controls the zero trust zone used to provision client certificates.
@@ -235,4 +242,45 @@ func (api *API) GetDeviceSettingsPolicy(ctx context.Context, accountID, policyID
 	}
 
 	return result, err
+}
+
+type ListDeviceSettingsPoliciesParams struct {
+	ResultInfo
+}
+
+// ListDeviceSettingsPolicies returns all device settings policies for an account
+//
+// API reference: https://api.cloudflare.com/#devices-list-device-settings-policies
+func (api *API) ListDeviceSettingsPolicies(ctx context.Context, accountID string, params ListDeviceSettingsPoliciesParams) ([]DeviceSettingsPolicy, *ResultInfo, error) {
+
+	autoPaginate := true
+	if params.PerPage >= 1 || params.Page >= 1 {
+		autoPaginate = false
+	}
+
+	if params.PerPage < 1 {
+		params.PerPage = listDeviceSettingsPoliciesDefaultPageSize
+	}
+
+	var policies []DeviceSettingsPolicy
+	var lastResultInfo ResultInfo
+	for {
+		uri := buildURI(fmt.Sprintf("/%s/%s/devices/policies", AccountRouteRoot, accountID), params)
+		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+		if err != nil {
+			return nil, nil, err
+		}
+		var r ListDeviceSettingsPoliciesResponse
+		err = json.Unmarshal(res, &r)
+		if err != nil {
+			return nil, nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		}
+		policies = append(policies, r.Result...)
+		lastResultInfo = r.ResultInfo
+		params.ResultInfo = r.ResultInfo.Next()
+		if params.ResultInfo.Done() || !autoPaginate {
+			break
+		}
+	}
+	return policies, &lastResultInfo, nil
 }
