@@ -1,5 +1,18 @@
 ## 0.81.0 (Unreleased)
 
+BREAKING CHANGES:
+
+* devices_policy: `CreateDeviceSettingsPolicy` is updated with method signatures matching the library conventions ([#1433](https://github.com/cloudflare/cloudflare-go/issues/1433))
+* devices_policy: `DeleteDeviceSettingsPolicy` is updated with method signatures matching the library conventions ([#1433](https://github.com/cloudflare/cloudflare-go/issues/1433))
+* devices_policy: `DeviceClientCertificates` is renamed to `DeviceClientCertificates` ([#1433](https://github.com/cloudflare/cloudflare-go/issues/1433))
+* devices_policy: `GetDefaultDeviceSettingsPolicy` is updated with method signatures matching the library conventions ([#1433](https://github.com/cloudflare/cloudflare-go/issues/1433))
+* devices_policy: `GetDeviceClientCertificatesZone` is renamed to `GetDeviceClientCertificates` with updated method signatures ([#1433](https://github.com/cloudflare/cloudflare-go/issues/1433))
+* devices_policy: `GetDeviceClientCertificates` is updated with method signatures matching the library conventions ([#1433](https://github.com/cloudflare/cloudflare-go/issues/1433))
+* devices_policy: `GetDeviceSettingsPolicy` is updated with method signatures matching the library conventions ([#1433](https://github.com/cloudflare/cloudflare-go/issues/1433))
+* devices_policy: `UpdateDefaultDeviceSettingsPolicy` is updated with method signatures matching the library conventions ([#1433](https://github.com/cloudflare/cloudflare-go/issues/1433))
+* devices_policy: `UpdateDeviceClientCertificatesZone` is renamed to `UpdateDeviceClientCertificates` with updated method signatures ([#1433](https://github.com/cloudflare/cloudflare-go/issues/1433))
+* devices_policy: `UpdateDeviceSettingsPolicy` is updated with method signatures matching the library conventions ([#1433](https://github.com/cloudflare/cloudflare-go/issues/1433))
+
 ENHANCEMENTS:
 
 * access_seats: Add UpdateAccessUserSeat() to list IP Access Rules ([#1427](https://github.com/cloudflare/cloudflare-go/issues/1427))
@@ -8,6 +21,7 @@ ENHANCEMENTS:
 * access_user: Add GetAccessUserLastSeenIdentity() to get last seen identity for a Access/Zero-Trust user. ([#1427](https://github.com/cloudflare/cloudflare-go/issues/1427))
 * access_user: Add GetAccessUserSingleActiveSession() to get an active session for a Access/Zero-Trust user. ([#1427](https://github.com/cloudflare/cloudflare-go/issues/1427))
 * access_user: Add ListAccessUsers() to get a list of users for a Access/Zero-Trust account. ([#1427](https://github.com/cloudflare/cloudflare-go/issues/1427))
+* devices_policy: Add support for listing device settings policies ([#1433](https://github.com/cloudflare/cloudflare-go/issues/1433))
 
 ## 0.80.0 (October 25th, 2023)
 
