@@ -150,7 +150,7 @@ var (
 	}`, deviceSettingsPolicyID, deviceSettingsPolicyMatch)
 )
 
-func TestUpdateDeviceClientCertificatesZone(t *testing.T) {
+func TestUpdateDeviceClientCertificates(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -165,7 +165,7 @@ func TestUpdateDeviceClientCertificatesZone(t *testing.T) {
 		}`)
 	}
 
-	want := DeviceClientCertificatesZone{
+	want := DeviceClientCertificates{
 		Response: Response{
 			Success:  true,
 			Errors:   nil,
@@ -176,14 +176,14 @@ func TestUpdateDeviceClientCertificatesZone(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/devices/policy/certificates", handler)
 
-	actual, err := client.UpdateDeviceClientCertificatesZone(context.Background(), testZoneID, true)
+	actual, err := client.UpdateDeviceClientCertificates(context.Background(), ZoneIdentifier(testZoneID), UpdateDeviceClientCertificatesParams{Enabled: BoolPtr(true)})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
 }
 
-func TestGetDeviceClientCertificatesZone(t *testing.T) {
+func TestGetDeviceClientCertificates(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -198,7 +198,7 @@ func TestGetDeviceClientCertificatesZone(t *testing.T) {
 		}`)
 	}
 
-	want := DeviceClientCertificatesZone{
+	want := DeviceClientCertificates{
 		Response: Response{
 			Success:  true,
 			Errors:   nil,
@@ -209,7 +209,7 @@ func TestGetDeviceClientCertificatesZone(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/devices/policy/certificates", handler)
 
-	actual, err := client.GetDeviceClientCertificatesZone(context.Background(), testZoneID)
+	actual, err := client.GetDeviceClientCertificates(context.Background(), ZoneIdentifier(testZoneID), GetDeviceClientCertificatesParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -231,18 +231,9 @@ func TestCreateDeviceSettingsPolicy(t *testing.T) {
 		}`, nonDefaultDeviceSettingsPolicyJson)
 	}
 
-	want := DeviceSettingsPolicyResponse{
-		Response: Response{
-			Success:  true,
-			Errors:   nil,
-			Messages: nil,
-		},
-		Result: nonDefaultDeviceSettingsPolicy,
-	}
-
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/policy", handler)
 
-	actual, err := client.CreateDeviceSettingsPolicy(context.Background(), testAccountID, DeviceSettingsPolicyRequest{
+	actual, err := client.CreateDeviceSettingsPolicy(context.Background(), AccountIdentifier(testAccountID), CreateDeviceSettingsPolicyParams{
 		Precedence:  IntPtr(10),
 		Match:       &deviceSettingsPolicyMatch,
 		Name:        StringPtr("test"),
@@ -250,7 +241,7 @@ func TestCreateDeviceSettingsPolicy(t *testing.T) {
 	})
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, want, actual)
+		assert.Equal(t, nonDefaultDeviceSettingsPolicy, actual)
 	}
 }
 
@@ -269,21 +260,12 @@ func TestUpdateDefaultDeviceSettingsPolicy(t *testing.T) {
 		}`, defaultDeviceSettingsPolicyJson)
 	}
 
-	want := DeviceSettingsPolicyResponse{
-		Response: Response{
-			Success:  true,
-			Errors:   nil,
-			Messages: nil,
-		},
-		Result: defaultDeviceSettingsPolicy,
-	}
-
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/policy", handler)
 
-	actual, err := client.UpdateDefaultDeviceSettingsPolicy(context.Background(), testAccountID, DeviceSettingsPolicyRequest{})
+	actual, err := client.UpdateDefaultDeviceSettingsPolicy(context.Background(), AccountIdentifier(testAccountID), UpdateDefaultDeviceSettingsPolicyParams{})
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, want, actual)
+		assert.Equal(t, defaultDeviceSettingsPolicy, actual)
 	}
 }
 
@@ -303,23 +285,16 @@ func TestUpdateDeviceSettingsPolicy(t *testing.T) {
 	}
 
 	precedence := 10
-	want := DeviceSettingsPolicyResponse{
-		Response: Response{
-			Success:  true,
-			Errors:   nil,
-			Messages: nil,
-		},
-		Result: nonDefaultDeviceSettingsPolicy,
-	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/policy/"+deviceSettingsPolicyID, handler)
 
-	actual, err := client.UpdateDeviceSettingsPolicy(context.Background(), testAccountID, deviceSettingsPolicyID, DeviceSettingsPolicyRequest{
+	actual, err := client.UpdateDeviceSettingsPolicy(context.Background(), AccountIdentifier(testAccountID), UpdateDeviceSettingsPolicyParams{
+		PolicyID:   &deviceSettingsPolicyID,
 		Precedence: &precedence,
 	})
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, want, actual)
+		assert.Equal(t, nonDefaultDeviceSettingsPolicy, actual)
 	}
 }
 
@@ -338,21 +313,12 @@ func TestDeleteDeviceSettingsPolicy(t *testing.T) {
 		}`, defaultDeviceSettingsPolicyJson)
 	}
 
-	want := DeleteDeviceSettingsPolicyResponse{
-		Response: Response{
-			Success:  true,
-			Errors:   nil,
-			Messages: nil,
-		},
-		Result: []DeviceSettingsPolicy{defaultDeviceSettingsPolicy},
-	}
-
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/policy/"+deviceSettingsPolicyID, handler)
 
-	actual, err := client.DeleteDeviceSettingsPolicy(context.Background(), testAccountID, deviceSettingsPolicyID)
+	actual, err := client.DeleteDeviceSettingsPolicy(context.Background(), AccountIdentifier(testAccountID), deviceSettingsPolicyID)
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, want, actual)
+		assert.Equal(t, []DeviceSettingsPolicy{defaultDeviceSettingsPolicy}, actual)
 	}
 }
 
@@ -371,21 +337,12 @@ func TestGetDefaultDeviceSettings(t *testing.T) {
 		}`, defaultDeviceSettingsPolicyJson)
 	}
 
-	want := DeviceSettingsPolicyResponse{
-		Response: Response{
-			Success:  true,
-			Errors:   nil,
-			Messages: nil,
-		},
-		Result: defaultDeviceSettingsPolicy,
-	}
-
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/policy", handler)
 
-	actual, err := client.GetDefaultDeviceSettingsPolicy(context.Background(), testAccountID)
+	actual, err := client.GetDefaultDeviceSettingsPolicy(context.Background(), AccountIdentifier(testAccountID), GetDefaultDeviceSettingsPolicyParams{})
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, want, actual)
+		assert.Equal(t, defaultDeviceSettingsPolicy, actual)
 	}
 }
 
@@ -404,20 +361,55 @@ func TestGetDeviceSettings(t *testing.T) {
 		}`, nonDefaultDeviceSettingsPolicyJson)
 	}
 
-	want := DeviceSettingsPolicyResponse{
-		Response: Response{
-			Success:  true,
-			Errors:   nil,
-			Messages: nil,
-		},
-		Result: nonDefaultDeviceSettingsPolicy,
-	}
-
 	mux.HandleFunc("/accounts/"+testAccountID+"/devices/policy/"+deviceSettingsPolicyID, handler)
 
-	actual, err := client.GetDeviceSettingsPolicy(context.Background(), testAccountID, deviceSettingsPolicyID)
+	actual, err := client.GetDeviceSettingsPolicy(context.Background(), AccountIdentifier(testAccountID), GetDeviceSettingsPolicyParams{PolicyID: &deviceSettingsPolicyID})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, nonDefaultDeviceSettingsPolicy, actual)
+	}
+}
+
+func TestListDeviceSettingsPolicies(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": null,
+			"messages": null,
+			"result": [%s],
+			"result_info": {
+  				"count": 1,
+  				"page": 1,
+  				"per_page": 20,
+  				"total_count": 1
+			}
+		}`, nonDefaultDeviceSettingsPolicyJson)
+	}
+
+	want := []DeviceSettingsPolicy{nonDefaultDeviceSettingsPolicy}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/devices/policies", handler)
+
+	actual, resultInfo, err := client.ListDeviceSettingsPolicies(context.Background(), AccountIdentifier(testAccountID), ListDeviceSettingsPoliciesParams{
+		ResultInfo: ResultInfo{
+			Page:    1,
+			PerPage: 20,
+		},
+	})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
+		assert.Equal(t, &ResultInfo{
+			Count:   1,
+			Page:    1,
+			PerPage: 20,
+			Total:   1,
+		}, resultInfo)
+		assert.Len(t, actual, 1)
 	}
 }
