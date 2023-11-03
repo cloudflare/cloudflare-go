@@ -130,6 +130,7 @@ func TestZoneListWithOptionalParams(t *testing.T) {
 }
 
 func TestZoneDelete(t *testing.T) {
+	t.Skip("body parameter is required")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -137,7 +138,6 @@ func TestZoneDelete(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	t.Skip("body parameter is required")
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("my-cloudflare-api-key"),

@@ -270,6 +270,12 @@ func (cfg *RequestConfig) Execute() (err error) {
 	if cfg.ResponseBodyInto == nil {
 		return nil
 	}
+
+	if responseBodyInto, ok := cfg.ResponseBodyInto.(**http.Response); ok {
+		*responseBodyInto = res
+		return nil
+	}
+
 	contents, err := io.ReadAll(res.Body)
 	if err != nil {
 		return fmt.Errorf("error reading response body: %w", err)

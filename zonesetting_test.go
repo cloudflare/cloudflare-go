@@ -36,6 +36,7 @@ func TestZoneSettingList(t *testing.T) {
 }
 
 func TestZoneSettingEdit(t *testing.T) {
+	t.Skip("oneOf doesnt match")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -43,7 +44,6 @@ func TestZoneSettingEdit(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	t.Skip("oneOf doesnt match")
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("my-cloudflare-api-key"),
