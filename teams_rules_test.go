@@ -108,8 +108,6 @@ func TestTeamsRules(t *testing.T) {
 
 	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
-	dnsPort := 5053
-	trueBool := true
 
 	want := []TeamsRule{{
 		ID:            "7559a944-3dd7-41bf-b183-360a814a8c36",
@@ -144,14 +142,14 @@ func TestTeamsRules(t *testing.T) {
 					{
 						TeamsDnsResolverAddress{
 							IP:   "10.0.0.2",
-							Port: &dnsPort,
+							Port: IntPtr(5053),
 						},
 					},
 					{
 						TeamsDnsResolverAddress{
 							IP:                         "192.168.0.2",
 							VnetID:                     "16fd7a32-11f0-4687-a0bb-7031d241e184",
-							RouteThroughPrivateNetwork: &trueBool,
+							RouteThroughPrivateNetwork: BoolPtr(true),
 						},
 					},
 				},
@@ -194,7 +192,7 @@ func TestTeamsRules(t *testing.T) {
 				UntrustedCertSettings: &UntrustedCertSettings{
 					Action: UntrustedCertPassthrough,
 				},
-				ResolveDnsThroughCloudflare: &trueBool,
+				ResolveDnsThroughCloudflare: BoolPtr(true),
 			},
 			CreatedAt: &createdAt,
 			UpdatedAt: &updatedAt,
