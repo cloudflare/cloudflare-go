@@ -214,7 +214,7 @@ func (api *API) CreateCustomHostname(ctx context.Context, zoneID string, ch Cust
 }
 
 // CustomHostnames fetches custom hostnames for the given zone,
-// by applying filter.Hostname if not empty and scoping the result to page'th 50 items.
+// by applying filter and scoping the result to page'th 50 items.
 //
 // The returned ResultInfo can be used to implement pagination.
 //
@@ -225,6 +225,15 @@ func (api *API) CustomHostnames(ctx context.Context, zoneID string, page int, fi
 	v.Set("page", strconv.Itoa(page))
 	if filter.Hostname != "" {
 		v.Set("hostname", filter.Hostname)
+	} else {
+		if filter.Status != "" {
+			v.Set("hostname_status", string(filter.Status))
+		}
+		if ssl := filter.SSL; ssl != nil {
+			if ssl.Status != "" {
+				v.Set("ssl_status", ssl.Status)
+			}
+		}
 	}
 
 	uri := fmt.Sprintf("/zones/%s/custom_hostnames?%s", zoneID, v.Encode())

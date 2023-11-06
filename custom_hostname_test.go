@@ -492,6 +492,162 @@ func TestCustomHostname_CustomHostnames(t *testing.T) {
 	}
 }
 
+func TestCustomHostname_CustomHostnames_WithHostnameStatusQueryParam(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/zones/foo/custom_hostnames", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+
+		hostnameStatus := r.URL.Query().Get("hostname_status")
+		assert.Equal(t, "blocked", hostnameStatus, "Expected query param hostname_status 'blocked', got %s", hostnameStatus)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+	"success": true,
+	"result": [
+		{
+			"id": "custom_host_1",
+			"hostname": "custom.host.one",
+			"custom_metadata": {
+				"a_random_field": "random field value"
+			},
+			"status": "blocked",
+			"verification_errors": [
+				"None of the A or AAAA records are owned by this account and the pre-generated ownership verification token was not found."
+    		],
+			"ownership_verification": {
+				"type": "txt",
+      			"name": "_cf-custom-hostname.app.example.com",
+      			"value": "5cc07c04-ea62-4a5a-95f0-419334a875a4"
+    		}
+		}
+	],
+	"result_info": {
+		"page": 1,
+		"per_page": 20,
+		"count": 1,
+		"total_count": 1
+	}
+}`)
+	})
+
+	customHostnames, _, err := client.CustomHostnames(context.Background(), "foo", 1, CustomHostname{
+		Status: BLOCKED,
+	})
+
+	want := []CustomHostname{
+		{
+			ID:             "custom_host_1",
+			Hostname:       "custom.host.one",
+			CustomMetadata: &CustomMetadata{"a_random_field": "random field value"},
+			Status:         BLOCKED,
+			VerificationErrors: []string{"None of the A or AAAA records are owned " +
+				"by this account and the pre-generated ownership verification token was not found."},
+			OwnershipVerification: CustomHostnameOwnershipVerification{
+				Type:  "txt",
+				Name:  "_cf-custom-hostname.app.example.com",
+				Value: "5cc07c04-ea62-4a5a-95f0-419334a875a4",
+			},
+		},
+	}
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, customHostnames)
+	}
+}
+
+func TestCustomHostname_CustomHostnames_WithSSLStatusQueryParam(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/zones/foo/custom_hostnames", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+
+		sslStatus := r.URL.Query().Get("ssl_status")
+		assert.Equal(t, "pending_validation", sslStatus, "Expected query param ssl_status 'pending_validation', got %s", sslStatus)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+	"success": true,
+	"result": [
+		{
+			"id": "custom_host_1",
+			"hostname": "custom.host.one",
+			"ssl": {
+				"id": "0d89c70d-ad9f-4843-b99f-6cc0252067e9",
+				"type": "dv",
+				"method": "cname",
+				"status": "pending_validation",
+				"cname_target": "dcv.digicert.com",
+				"cname": "810b7d5f01154524b961ba0cd578acc2.app.example.com",
+				"issuer": "DigiCertInc",
+				"serial_number": "6743787633689793699141714808227354901",
+				"http_url": "http://app.example.com/.well-known/pki-validation/ca3-da12a1c25e7b48cf80408c6c1763b8a2.txt",
+      			"http_body": "ca3-574923932a82475cb8592200f1a2a23d"
+			},
+			"custom_metadata": {
+				"a_random_field": "random field value"
+			},
+			"status": "pending",
+			"verification_errors": [
+				"None of the A or AAAA records are owned by this account and the pre-generated ownership verification token was not found."
+    		],
+			"ownership_verification": {
+				"type": "txt",
+      			"name": "_cf-custom-hostname.app.example.com",
+      			"value": "5cc07c04-ea62-4a5a-95f0-419334a875a4"
+    		}
+		}
+	],
+	"result_info": {
+		"page": 1,
+		"per_page": 20,
+		"count": 1,
+		"total_count": 1
+	}
+}`)
+	})
+
+	customHostnames, _, err := client.CustomHostnames(context.Background(), "foo", 1, CustomHostname{
+		SSL: &CustomHostnameSSL{Status: "pending_validation"},
+	})
+
+	want := []CustomHostname{
+		{
+			ID:       "custom_host_1",
+			Hostname: "custom.host.one",
+			SSL: &CustomHostnameSSL{
+				ID:     "0d89c70d-ad9f-4843-b99f-6cc0252067e9",
+				Type:   "dv",
+				Method: "cname",
+				Status: "pending_validation",
+				SSLValidationRecord: SSLValidationRecord{
+					CnameTarget: "dcv.digicert.com",
+					CnameName:   "810b7d5f01154524b961ba0cd578acc2.app.example.com",
+					HTTPUrl:     "http://app.example.com/.well-known/pki-validation/ca3-da12a1c25e7b48cf80408c6c1763b8a2.txt",
+					HTTPBody:    "ca3-574923932a82475cb8592200f1a2a23d",
+				},
+				Issuer:       "DigiCertInc",
+				SerialNumber: "6743787633689793699141714808227354901",
+			},
+			CustomMetadata: &CustomMetadata{"a_random_field": "random field value"},
+			Status:         PENDING,
+			VerificationErrors: []string{"None of the A or AAAA records are owned " +
+				"by this account and the pre-generated ownership verification token was not found."},
+			OwnershipVerification: CustomHostnameOwnershipVerification{
+				Type:  "txt",
+				Name:  "_cf-custom-hostname.app.example.com",
+				Value: "5cc07c04-ea62-4a5a-95f0-419334a875a4",
+			},
+		},
+	}
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, customHostnames)
+	}
+}
+
 func TestCustomHostname_CustomHostname(t *testing.T) {
 	setup()
 	defer teardown()
