@@ -23,6 +23,10 @@ ENHANCEMENTS:
 * access_user: Add ListAccessUsers() to get a list of users for a Access/Zero-Trust account. ([#1427](https://github.com/cloudflare/cloudflare-go/issues/1427))
 * devices_policy: Add support for listing device settings policies ([#1433](https://github.com/cloudflare/cloudflare-go/issues/1433))
 
+DEPENDENCIES:
+
+* deps: bumps golang.org/x/time from 0.3.0 to 0.4.0 ([#1434](https://github.com/cloudflare/cloudflare-go/issues/1434))
+
 ## 0.80.0 (October 25th, 2023)
 
 BREAKING CHANGES:
