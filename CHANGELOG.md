@@ -22,6 +22,7 @@ ENHANCEMENTS:
 * access_user: Add GetAccessUserSingleActiveSession() to get an active session for a Access/Zero-Trust user. ([#1427](https://github.com/cloudflare/cloudflare-go/issues/1427))
 * access_user: Add ListAccessUsers() to get a list of users for a Access/Zero-Trust account. ([#1427](https://github.com/cloudflare/cloudflare-go/issues/1427))
 * devices_policy: Add support for listing device settings policies ([#1433](https://github.com/cloudflare/cloudflare-go/issues/1433))
+* teams_rules: Add support for resolver policies ([#1436](https://github.com/cloudflare/cloudflare-go/issues/1436))
 
 DEPENDENCIES:
 
