@@ -25,7 +25,7 @@ func TestZoneSettingBrotliUpdate(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("my-cloudflare-api-key"),
 	)
-	_, err := client.Zones.Settings.Brotlis.Update(
+	_, err := client.Zones.Settings.Brotli.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.ZoneSettingBrotliUpdateParams{
@@ -53,7 +53,7 @@ func TestZoneSettingBrotliList(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("my-cloudflare-api-key"),
 	)
-	_, err := client.Zones.Settings.Brotlis.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Zones.Settings.Brotli.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

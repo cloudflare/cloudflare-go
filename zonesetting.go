@@ -27,7 +27,7 @@ type ZoneSettingService struct {
 	AlwaysUseHTTPs                 *ZoneSettingAlwaysUseHTTPService
 	AutomaticHTTPsRewrites         *ZoneSettingAutomaticHTTPsRewriteService
 	AutomaticPlatformOptimizations *ZoneSettingAutomaticPlatformOptimizationService
-	Brotlis                        *ZoneSettingBrotliService
+	Brotli                         *ZoneSettingBrotliService
 	BrowserCacheTtls               *ZoneSettingBrowserCacheTtlService
 	BrowserChecks                  *ZoneSettingBrowserCheckService
 	CacheLevels                    *ZoneSettingCacheLevelService
@@ -85,7 +85,7 @@ func NewZoneSettingService(opts ...option.RequestOption) (r *ZoneSettingService)
 	r.AlwaysUseHTTPs = NewZoneSettingAlwaysUseHTTPService(opts...)
 	r.AutomaticHTTPsRewrites = NewZoneSettingAutomaticHTTPsRewriteService(opts...)
 	r.AutomaticPlatformOptimizations = NewZoneSettingAutomaticPlatformOptimizationService(opts...)
-	r.Brotlis = NewZoneSettingBrotliService(opts...)
+	r.Brotli = NewZoneSettingBrotliService(opts...)
 	r.BrowserCacheTtls = NewZoneSettingBrowserCacheTtlService(opts...)
 	r.BrowserChecks = NewZoneSettingBrowserCheckService(opts...)
 	r.CacheLevels = NewZoneSettingCacheLevelService(opts...)
