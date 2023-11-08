@@ -78,7 +78,7 @@ func WithMaxRetries(retries int) RequestOption {
 // any value if there was one already present.
 func WithHeader(key, value string) RequestOption {
 	return func(r *requestconfig.RequestConfig) error {
-		r.Request.Header[key] = []string{value}
+		r.Request.Header.Set(key, value)
 		return nil
 	}
 }
@@ -87,7 +87,7 @@ func WithHeader(key, value string) RequestOption {
 // onto any existing values.
 func WithHeaderAdd(key, value string) RequestOption {
 	return func(r *requestconfig.RequestConfig) error {
-		r.Request.Header[key] = append(r.Request.Header[key], value)
+		r.Request.Header.Add(key, value)
 		return nil
 	}
 }
@@ -95,7 +95,7 @@ func WithHeaderAdd(key, value string) RequestOption {
 // WithHeaderDel returns a RequestOption that deletes the header value(s) associated with the given key.
 func WithHeaderDel(key string) RequestOption {
 	return func(r *requestconfig.RequestConfig) error {
-		delete(r.Request.Header, key)
+		r.Request.Header.Del(key)
 		return nil
 	}
 }
