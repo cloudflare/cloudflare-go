@@ -1,5 +1,10 @@
 ## 0.82.0 (Unreleased)
 
+DEPENDENCIES:
+
+* deps: bumps github.com/hashicorp/go-retryablehttp from 0.7.4 to 0.7.5 ([#1438](https://github.com/cloudflare/cloudflare-go/issues/1438))
+* deps: bumps golang.org/x/net from 0.17.0 to 0.18.0 ([#1439](https://github.com/cloudflare/cloudflare-go/issues/1439))
+
 ## 0.81.0 (November 8th, 2023)
 
 BREAKING CHANGES:
