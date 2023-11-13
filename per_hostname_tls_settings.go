@@ -34,11 +34,11 @@ type HostnameTLSSettingsResponse struct {
 
 // ListHostnameTLSSettingsParams represents the data related to per-hostname tls settings being retrieved.
 type ListHostnameTLSSettingsParams struct {
-	Setting string
-	PaginationOptions
-	Limit    int      `url:"limit,omitempty"`
-	Offset   int      `url:"offset,omitempty"`
-	Hostname []string `url:"hostname,omitempty"`
+	Setting           string `json:"-" url:"setting,omitempty"`
+	PaginationOptions `json:"-"`
+	Limit             int      `json:"-" url:"limit,omitempty"`
+	Offset            int      `json:"-" url:"offset,omitempty"`
+	Hostname          []string `json:"-" url:"hostname,omitempty"`
 }
 
 // UpdateHostnameTLSSettingParams represents the data related to the per-hostname tls setting being updated.
@@ -69,8 +69,8 @@ func (api *API) ListHostnameTLSSettings(ctx context.Context, rc *ResourceContain
 		return []HostnameTLSSetting{}, ResultInfo{}, ErrMissingHostnameTLSSettingName
 	}
 
-	uri := fmt.Sprintf("/zones/%s/hostnames/settings/%s", rc.Identifier, params.Setting)
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, params)
+	uri := buildURI(fmt.Sprintf("/zones/%s/hostnames/settings/%s", rc.Identifier, params.Setting), params)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []HostnameTLSSetting{}, ResultInfo{}, err
 	}
@@ -158,9 +158,9 @@ type HostnameTLSSettingsCiphersResponse struct {
 // ListHostnameTLSSettingsCiphersParams represents the data related to per-hostname ciphers tls settings being retrieved.
 type ListHostnameTLSSettingsCiphersParams struct {
 	PaginationOptions
-	Limit    int      `url:"limit,omitempty"`
-	Offset   int      `url:"offset,omitempty"`
-	Hostname []string `url:"hostname,omitempty"`
+	Limit    int      `json:"-" url:"limit,omitempty"`
+	Offset   int      `json:"-" url:"offset,omitempty"`
+	Hostname []string `json:"-" url:"hostname,omitempty"`
 }
 
 // UpdateHostnameTLSSettingCiphersParams represents the data related to the per-hostname ciphers tls setting being updated.
@@ -183,8 +183,8 @@ func (api *API) ListHostnameTLSSettingsCiphers(ctx context.Context, rc *Resource
 		return []HostnameTLSSettingCiphers{}, ResultInfo{}, ErrMissingZoneID
 	}
 
-	uri := fmt.Sprintf("/zones/%s/hostnames/settings/ciphers", rc.Identifier)
-	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, params)
+	uri := buildURI(fmt.Sprintf("/zones/%s/hostnames/settings/ciphers", rc.Identifier), params)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []HostnameTLSSettingCiphers{}, ResultInfo{}, err
 	}
