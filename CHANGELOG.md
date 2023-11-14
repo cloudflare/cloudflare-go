@@ -1,5 +1,9 @@
 ## 0.82.0 (Unreleased)
 
+BUG FIXES:
+
+* per_hostname_tls_setting: use `buildURI` for defining the query parameters when sorting ([#1440](https://github.com/cloudflare/cloudflare-go/issues/1440))
+
 DEPENDENCIES:
 
 * deps: bumps github.com/hashicorp/go-retryablehttp from 0.7.4 to 0.7.5 ([#1438](https://github.com/cloudflare/cloudflare-go/issues/1438))
