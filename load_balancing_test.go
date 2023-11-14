@@ -47,7 +47,8 @@ func TestCreateLoadBalancerPool(t *testing.T) {
                       "Host": [
                           "example.com"
                       ]
-                  }
+                  },
+			      "virtual_network_id":"a5624d4e-044a-4ff0-b3e1-e2465353d4b4"
                 }
               ],
               "notification_email": "someone@example.com",
@@ -90,7 +91,8 @@ func TestCreateLoadBalancerPool(t *testing.T) {
                       "Host": [
                           "example.com"
                       ]
-                  }
+                  },
+			      "virtual_network_id":"a5624d4e-044a-4ff0-b3e1-e2465353d4b4"
                 }
               ],
               "notification_email": "someone@example.com",
@@ -137,6 +139,7 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 				Header: map[string][]string{
 					"Host": {"example.com"},
 				},
+				VirtualNetworkId: "a5624d4e-044a-4ff0-b3e1-e2465353d4b4",
 			},
 		},
 		NotificationEmail: "someone@example.com",
@@ -169,6 +172,7 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 				Header: map[string][]string{
 					"Host": {"example.com"},
 				},
+				VirtualNetworkId: "a5624d4e-044a-4ff0-b3e1-e2465353d4b4",
 			},
 		},
 		NotificationEmail: "someone@example.com",
@@ -286,7 +290,8 @@ func TestListLoadBalancerPools(t *testing.T) {
                         "name": "app-server-1",
                         "address": "198.51.100.1",
                         "enabled": true,
-                        "weight": 1
+                        "weight": 1,
+					    "virtual_network_id":"a5624d4e-044a-4ff0-b3e1-e2465353d4b4"
                       }
                     ],
                     "notification_email": "someone@example.com"
@@ -318,10 +323,11 @@ func TestListLoadBalancerPools(t *testing.T) {
 			},
 			Origins: []LoadBalancerOrigin{
 				{
-					Name:    "app-server-1",
-					Address: "198.51.100.1",
-					Enabled: true,
-					Weight:  1,
+					Name:             "app-server-1",
+					Address:          "198.51.100.1",
+					Enabled:          true,
+					Weight:           1,
+					VirtualNetworkId: "a5624d4e-044a-4ff0-b3e1-e2465353d4b4",
 				},
 			},
 			NotificationEmail: "someone@example.com",
@@ -371,7 +377,8 @@ func TestGetLoadBalancerPool(t *testing.T) {
                   "name": "app-server-1",
                   "address": "198.51.100.1",
                   "enabled": true,
-                  "weight": 1
+                  "weight": 1,
+				  "virtual_network_id":"a5624d4e-044a-4ff0-b3e1-e2465353d4b4"
                 }
               ],
               "notification_email": "someone@example.com"
@@ -395,10 +402,11 @@ func TestGetLoadBalancerPool(t *testing.T) {
 		},
 		Origins: []LoadBalancerOrigin{
 			{
-				Name:    "app-server-1",
-				Address: "198.51.100.1",
-				Enabled: true,
-				Weight:  1,
+				Name:             "app-server-1",
+				Address:          "198.51.100.1",
+				Enabled:          true,
+				Weight:           1,
+				VirtualNetworkId: "a5624d4e-044a-4ff0-b3e1-e2465353d4b4",
 			},
 		},
 		NotificationEmail: "someone@example.com",
@@ -483,7 +491,8 @@ func TestUpdateLoadBalancerPool(t *testing.T) {
                       "Host": [
                           "example.com"
                       ]
-                  }
+                  },
+			      "virtual_network_id":"a5624d4e-044a-4ff0-b3e1-e2465353d4b4"
                 }
               ],
               "notification_email": "nobody@example.com",
@@ -516,7 +525,8 @@ func TestUpdateLoadBalancerPool(t *testing.T) {
                       "Host": [
                           "example.com"
                       ]
-                  }
+                  },
+			      "virtual_network_id":"a5624d4e-044a-4ff0-b3e1-e2465353d4b4"
                 }
               ],
               "notification_email": "nobody@example.com",
@@ -549,6 +559,7 @@ func TestUpdateLoadBalancerPool(t *testing.T) {
 				Header: map[string][]string{
 					"Host": {"example.com"},
 				},
+				VirtualNetworkId: "a5624d4e-044a-4ff0-b3e1-e2465353d4b4",
 			},
 		},
 		NotificationEmail: "nobody@example.com",
@@ -573,6 +584,7 @@ func TestUpdateLoadBalancerPool(t *testing.T) {
 				Header: map[string][]string{
 					"Host": {"example.com"},
 				},
+				VirtualNetworkId: "a5624d4e-044a-4ff0-b3e1-e2465353d4b4",
 			},
 		},
 		NotificationEmail: "nobody@example.com",
