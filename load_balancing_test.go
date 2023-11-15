@@ -139,7 +139,7 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 				Header: map[string][]string{
 					"Host": {"example.com"},
 				},
-				VirtualNetworkId: "a5624d4e-044a-4ff0-b3e1-e2465353d4b4",
+				VirtualNetworkID: "a5624d4e-044a-4ff0-b3e1-e2465353d4b4",
 			},
 		},
 		NotificationEmail: "someone@example.com",
@@ -172,7 +172,7 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 				Header: map[string][]string{
 					"Host": {"example.com"},
 				},
-				VirtualNetworkId: "a5624d4e-044a-4ff0-b3e1-e2465353d4b4",
+				VirtualNetworkID: "a5624d4e-044a-4ff0-b3e1-e2465353d4b4",
 			},
 		},
 		NotificationEmail: "someone@example.com",
@@ -327,7 +327,7 @@ func TestListLoadBalancerPools(t *testing.T) {
 					Address:          "198.51.100.1",
 					Enabled:          true,
 					Weight:           1,
-					VirtualNetworkId: "a5624d4e-044a-4ff0-b3e1-e2465353d4b4",
+					VirtualNetworkID: "a5624d4e-044a-4ff0-b3e1-e2465353d4b4",
 				},
 			},
 			NotificationEmail: "someone@example.com",
@@ -406,7 +406,7 @@ func TestGetLoadBalancerPool(t *testing.T) {
 				Address:          "198.51.100.1",
 				Enabled:          true,
 				Weight:           1,
-				VirtualNetworkId: "a5624d4e-044a-4ff0-b3e1-e2465353d4b4",
+				VirtualNetworkID: "a5624d4e-044a-4ff0-b3e1-e2465353d4b4",
 			},
 		},
 		NotificationEmail: "someone@example.com",
@@ -559,7 +559,7 @@ func TestUpdateLoadBalancerPool(t *testing.T) {
 				Header: map[string][]string{
 					"Host": {"example.com"},
 				},
-				VirtualNetworkId: "a5624d4e-044a-4ff0-b3e1-e2465353d4b4",
+				VirtualNetworkID: "a5624d4e-044a-4ff0-b3e1-e2465353d4b4",
 			},
 		},
 		NotificationEmail: "nobody@example.com",
@@ -584,7 +584,7 @@ func TestUpdateLoadBalancerPool(t *testing.T) {
 				Header: map[string][]string{
 					"Host": {"example.com"},
 				},
-				VirtualNetworkId: "a5624d4e-044a-4ff0-b3e1-e2465353d4b4",
+				VirtualNetworkID: "a5624d4e-044a-4ff0-b3e1-e2465353d4b4",
 			},
 		},
 		NotificationEmail: "nobody@example.com",
