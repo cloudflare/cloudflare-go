@@ -49,7 +49,7 @@ type LoadBalancerOrigin struct {
 	Header map[string][]string `json:"header"`
 	// The virtual network subnet ID the origin belongs in.
 	// Virtual network must also belong to the account.
-	VirtualNetworkId string `json:"virtual_network_id,omitempty"`
+	VirtualNetworkID string `json:"virtual_network_id,omitempty"`
 }
 
 // LoadBalancerOriginSteering controls origin selection for new sessions and traffic without session affinity.
