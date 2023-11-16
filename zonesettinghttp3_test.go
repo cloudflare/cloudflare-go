@@ -24,7 +24,6 @@ func TestZoneSettingHttp3Update(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
 	)
 	_, err := client.Zones.Settings.Http3s.Update(
 		context.TODO(),
@@ -53,7 +52,6 @@ func TestZoneSettingHttp3List(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
 	)
 	_, err := client.Zones.Settings.Http3s.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {

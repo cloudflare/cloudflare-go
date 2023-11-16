@@ -24,7 +24,6 @@ func TestZoneRateLimitGet(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
 	)
 	_, err := client.Zones.RateLimits.Get(
 		context.TODO(),
@@ -51,7 +50,6 @@ func TestZoneRateLimitListWithOptionalParams(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
 	)
 	_, err := client.Zones.RateLimits.List(
 		context.TODO(),
