@@ -66,8 +66,8 @@ type ZoneSettingAlwaysOnlineUpdateResponse struct {
 	// more information.
 	Result ZoneSettingAlwaysOnlineUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingAlwaysOnlineUpdateResponseJSON
+	Success bool                                      `json:"success"`
+	JSON    zoneSettingAlwaysOnlineUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingAlwaysOnlineUpdateResponseJSON contains the JSON metadata for the
@@ -86,9 +86,9 @@ func (r *ZoneSettingAlwaysOnlineUpdateResponse) UnmarshalJSON(data []byte) (err 
 }
 
 type ZoneSettingAlwaysOnlineUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingAlwaysOnlineUpdateResponseErrorJSON
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    zoneSettingAlwaysOnlineUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingAlwaysOnlineUpdateResponseErrorJSON contains the JSON metadata for
@@ -105,9 +105,9 @@ func (r *ZoneSettingAlwaysOnlineUpdateResponseError) UnmarshalJSON(data []byte) 
 }
 
 type ZoneSettingAlwaysOnlineUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingAlwaysOnlineUpdateResponseMessageJSON
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    zoneSettingAlwaysOnlineUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingAlwaysOnlineUpdateResponseMessageJSON contains the JSON metadata for
@@ -138,7 +138,7 @@ type ZoneSettingAlwaysOnlineUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingAlwaysOnlineUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingAlwaysOnlineUpdateResponseResultJSON
+	JSON  zoneSettingAlwaysOnlineUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingAlwaysOnlineUpdateResponseResultJSON contains the JSON metadata for
@@ -190,8 +190,8 @@ type ZoneSettingAlwaysOnlineListResponse struct {
 	// more information.
 	Result ZoneSettingAlwaysOnlineListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingAlwaysOnlineListResponseJSON
+	Success bool                                    `json:"success"`
+	JSON    zoneSettingAlwaysOnlineListResponseJSON `json:"-"`
 }
 
 // zoneSettingAlwaysOnlineListResponseJSON contains the JSON metadata for the
@@ -210,9 +210,9 @@ func (r *ZoneSettingAlwaysOnlineListResponse) UnmarshalJSON(data []byte) (err er
 }
 
 type ZoneSettingAlwaysOnlineListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingAlwaysOnlineListResponseErrorJSON
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    zoneSettingAlwaysOnlineListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingAlwaysOnlineListResponseErrorJSON contains the JSON metadata for the
@@ -229,9 +229,9 @@ func (r *ZoneSettingAlwaysOnlineListResponseError) UnmarshalJSON(data []byte) (e
 }
 
 type ZoneSettingAlwaysOnlineListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingAlwaysOnlineListResponseMessageJSON
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    zoneSettingAlwaysOnlineListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingAlwaysOnlineListResponseMessageJSON contains the JSON metadata for
@@ -262,7 +262,7 @@ type ZoneSettingAlwaysOnlineListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingAlwaysOnlineListResponseResultValue `json:"value"`
-	JSON  zoneSettingAlwaysOnlineListResponseResultJSON
+	JSON  zoneSettingAlwaysOnlineListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingAlwaysOnlineListResponseResultJSON contains the JSON metadata for the

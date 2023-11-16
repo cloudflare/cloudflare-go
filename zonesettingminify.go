@@ -60,8 +60,8 @@ type ZoneSettingMinifyUpdateResponse struct {
 	// for more information.
 	Result ZoneSettingMinifyUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingMinifyUpdateResponseJSON
+	Success bool                                `json:"success"`
+	JSON    zoneSettingMinifyUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingMinifyUpdateResponseJSON contains the JSON metadata for the struct
@@ -80,9 +80,9 @@ func (r *ZoneSettingMinifyUpdateResponse) UnmarshalJSON(data []byte) (err error)
 }
 
 type ZoneSettingMinifyUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingMinifyUpdateResponseErrorJSON
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    zoneSettingMinifyUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingMinifyUpdateResponseErrorJSON contains the JSON metadata for the
@@ -99,9 +99,9 @@ func (r *ZoneSettingMinifyUpdateResponseError) UnmarshalJSON(data []byte) (err e
 }
 
 type ZoneSettingMinifyUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingMinifyUpdateResponseMessageJSON
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    zoneSettingMinifyUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingMinifyUpdateResponseMessageJSON contains the JSON metadata for the
@@ -130,7 +130,7 @@ type ZoneSettingMinifyUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingMinifyUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingMinifyUpdateResponseResultJSON
+	JSON  zoneSettingMinifyUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingMinifyUpdateResponseResultJSON contains the JSON metadata for the
@@ -171,8 +171,8 @@ type ZoneSettingMinifyUpdateResponseResultValue struct {
 	// Automatically minify all HTML files for your website.
 	HTML ZoneSettingMinifyUpdateResponseResultValueHTML `json:"html"`
 	// Automatically minify all JavaScript files for your website.
-	Js   ZoneSettingMinifyUpdateResponseResultValueJs `json:"js"`
-	JSON zoneSettingMinifyUpdateResponseResultValueJSON
+	Js   ZoneSettingMinifyUpdateResponseResultValueJs   `json:"js"`
+	JSON zoneSettingMinifyUpdateResponseResultValueJSON `json:"-"`
 }
 
 // zoneSettingMinifyUpdateResponseResultValueJSON contains the JSON metadata for
@@ -221,8 +221,8 @@ type ZoneSettingMinifyListResponse struct {
 	// for more information.
 	Result ZoneSettingMinifyListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingMinifyListResponseJSON
+	Success bool                              `json:"success"`
+	JSON    zoneSettingMinifyListResponseJSON `json:"-"`
 }
 
 // zoneSettingMinifyListResponseJSON contains the JSON metadata for the struct
@@ -241,9 +241,9 @@ func (r *ZoneSettingMinifyListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneSettingMinifyListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingMinifyListResponseErrorJSON
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    zoneSettingMinifyListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingMinifyListResponseErrorJSON contains the JSON metadata for the struct
@@ -260,9 +260,9 @@ func (r *ZoneSettingMinifyListResponseError) UnmarshalJSON(data []byte) (err err
 }
 
 type ZoneSettingMinifyListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingMinifyListResponseMessageJSON
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    zoneSettingMinifyListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingMinifyListResponseMessageJSON contains the JSON metadata for the
@@ -291,7 +291,7 @@ type ZoneSettingMinifyListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingMinifyListResponseResultValue `json:"value"`
-	JSON  zoneSettingMinifyListResponseResultJSON
+	JSON  zoneSettingMinifyListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingMinifyListResponseResultJSON contains the JSON metadata for the
@@ -332,8 +332,8 @@ type ZoneSettingMinifyListResponseResultValue struct {
 	// Automatically minify all HTML files for your website.
 	HTML ZoneSettingMinifyListResponseResultValueHTML `json:"html"`
 	// Automatically minify all JavaScript files for your website.
-	Js   ZoneSettingMinifyListResponseResultValueJs `json:"js"`
-	JSON zoneSettingMinifyListResponseResultValueJSON
+	Js   ZoneSettingMinifyListResponseResultValueJs   `json:"js"`
+	JSON zoneSettingMinifyListResponseResultValueJSON `json:"-"`
 }
 
 // zoneSettingMinifyListResponseResultValueJSON contains the JSON metadata for the

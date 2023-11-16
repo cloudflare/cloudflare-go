@@ -53,7 +53,7 @@ type DnssecSingle struct {
 	Result   DnssecSingleResult    `json:"result"`
 	// Whether the API call was successful
 	Success DnssecSingleSuccess `json:"success"`
-	JSON    dnssecSingleJSON
+	JSON    dnssecSingleJSON    `json:"-"`
 }
 
 // dnssecSingleJSON contains the JSON metadata for the struct [DnssecSingle]
@@ -71,9 +71,9 @@ func (r *DnssecSingle) UnmarshalJSON(data []byte) (err error) {
 }
 
 type DnssecSingleError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    dnssecSingleErrorJSON
+	Code    int64                 `json:"code,required"`
+	Message string                `json:"message,required"`
+	JSON    dnssecSingleErrorJSON `json:"-"`
 }
 
 // dnssecSingleErrorJSON contains the JSON metadata for the struct
@@ -90,9 +90,9 @@ func (r *DnssecSingleError) UnmarshalJSON(data []byte) (err error) {
 }
 
 type DnssecSingleMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    dnssecSingleMessageJSON
+	Code    int64                   `json:"code,required"`
+	Message string                  `json:"message,required"`
+	JSON    dnssecSingleMessageJSON `json:"-"`
 }
 
 // dnssecSingleMessageJSON contains the JSON metadata for the struct
@@ -131,7 +131,7 @@ type DnssecSingleResult struct {
 	PublicKey string `json:"public_key,nullable"`
 	// Status of DNSSEC, based on user-desired state and presence of necessary records.
 	Status DnssecSingleResultStatus `json:"status"`
-	JSON   dnssecSingleResultJSON
+	JSON   dnssecSingleResultJSON   `json:"-"`
 }
 
 // dnssecSingleResultJSON contains the JSON metadata for the struct

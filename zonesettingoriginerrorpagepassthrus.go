@@ -61,8 +61,8 @@ type ZoneSettingOriginErrorPagePassThrusUpdateResponse struct {
 	// to 522 errors and is limited to Enterprise Zones.
 	Result ZoneSettingOriginErrorPagePassThrusUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingOriginErrorPagePassThrusUpdateResponseJSON
+	Success bool                                                  `json:"success"`
+	JSON    zoneSettingOriginErrorPagePassThrusUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingOriginErrorPagePassThrusUpdateResponseJSON contains the JSON metadata
@@ -81,9 +81,9 @@ func (r *ZoneSettingOriginErrorPagePassThrusUpdateResponse) UnmarshalJSON(data [
 }
 
 type ZoneSettingOriginErrorPagePassThrusUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingOriginErrorPagePassThrusUpdateResponseErrorJSON
+	Code    int64                                                      `json:"code,required"`
+	Message string                                                     `json:"message,required"`
+	JSON    zoneSettingOriginErrorPagePassThrusUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingOriginErrorPagePassThrusUpdateResponseErrorJSON contains the JSON
@@ -100,9 +100,9 @@ func (r *ZoneSettingOriginErrorPagePassThrusUpdateResponseError) UnmarshalJSON(d
 }
 
 type ZoneSettingOriginErrorPagePassThrusUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingOriginErrorPagePassThrusUpdateResponseMessageJSON
+	Code    int64                                                        `json:"code,required"`
+	Message string                                                       `json:"message,required"`
+	JSON    zoneSettingOriginErrorPagePassThrusUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingOriginErrorPagePassThrusUpdateResponseMessageJSON contains the JSON
@@ -132,7 +132,7 @@ type ZoneSettingOriginErrorPagePassThrusUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingOriginErrorPagePassThrusUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingOriginErrorPagePassThrusUpdateResponseResultJSON
+	JSON  zoneSettingOriginErrorPagePassThrusUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingOriginErrorPagePassThrusUpdateResponseResultJSON contains the JSON
@@ -183,8 +183,8 @@ type ZoneSettingOriginErrorPagePassThrusListResponse struct {
 	// to 522 errors and is limited to Enterprise Zones.
 	Result ZoneSettingOriginErrorPagePassThrusListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingOriginErrorPagePassThrusListResponseJSON
+	Success bool                                                `json:"success"`
+	JSON    zoneSettingOriginErrorPagePassThrusListResponseJSON `json:"-"`
 }
 
 // zoneSettingOriginErrorPagePassThrusListResponseJSON contains the JSON metadata
@@ -203,9 +203,9 @@ func (r *ZoneSettingOriginErrorPagePassThrusListResponse) UnmarshalJSON(data []b
 }
 
 type ZoneSettingOriginErrorPagePassThrusListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingOriginErrorPagePassThrusListResponseErrorJSON
+	Code    int64                                                    `json:"code,required"`
+	Message string                                                   `json:"message,required"`
+	JSON    zoneSettingOriginErrorPagePassThrusListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingOriginErrorPagePassThrusListResponseErrorJSON contains the JSON
@@ -222,9 +222,9 @@ func (r *ZoneSettingOriginErrorPagePassThrusListResponseError) UnmarshalJSON(dat
 }
 
 type ZoneSettingOriginErrorPagePassThrusListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingOriginErrorPagePassThrusListResponseMessageJSON
+	Code    int64                                                      `json:"code,required"`
+	Message string                                                     `json:"message,required"`
+	JSON    zoneSettingOriginErrorPagePassThrusListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingOriginErrorPagePassThrusListResponseMessageJSON contains the JSON
@@ -253,7 +253,7 @@ type ZoneSettingOriginErrorPagePassThrusListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingOriginErrorPagePassThrusListResponseResultValue `json:"value"`
-	JSON  zoneSettingOriginErrorPagePassThrusListResponseResultJSON
+	JSON  zoneSettingOriginErrorPagePassThrusListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingOriginErrorPagePassThrusListResponseResultJSON contains the JSON

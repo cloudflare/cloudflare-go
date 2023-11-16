@@ -63,8 +63,8 @@ type ZoneSettingSecurityLevelUpdateResponse struct {
 	// (https://support.cloudflare.com/hc/en-us/articles/200170056).
 	Result ZoneSettingSecurityLevelUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingSecurityLevelUpdateResponseJSON
+	Success bool                                       `json:"success"`
+	JSON    zoneSettingSecurityLevelUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingSecurityLevelUpdateResponseJSON contains the JSON metadata for the
@@ -83,9 +83,9 @@ func (r *ZoneSettingSecurityLevelUpdateResponse) UnmarshalJSON(data []byte) (err
 }
 
 type ZoneSettingSecurityLevelUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingSecurityLevelUpdateResponseErrorJSON
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    zoneSettingSecurityLevelUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingSecurityLevelUpdateResponseErrorJSON contains the JSON metadata for
@@ -102,9 +102,9 @@ func (r *ZoneSettingSecurityLevelUpdateResponseError) UnmarshalJSON(data []byte)
 }
 
 type ZoneSettingSecurityLevelUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingSecurityLevelUpdateResponseMessageJSON
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    zoneSettingSecurityLevelUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingSecurityLevelUpdateResponseMessageJSON contains the JSON metadata for
@@ -134,7 +134,7 @@ type ZoneSettingSecurityLevelUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingSecurityLevelUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingSecurityLevelUpdateResponseResultJSON
+	JSON  zoneSettingSecurityLevelUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingSecurityLevelUpdateResponseResultJSON contains the JSON metadata for
@@ -189,8 +189,8 @@ type ZoneSettingSecurityLevelListResponse struct {
 	// (https://support.cloudflare.com/hc/en-us/articles/200170056).
 	Result ZoneSettingSecurityLevelListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingSecurityLevelListResponseJSON
+	Success bool                                     `json:"success"`
+	JSON    zoneSettingSecurityLevelListResponseJSON `json:"-"`
 }
 
 // zoneSettingSecurityLevelListResponseJSON contains the JSON metadata for the
@@ -209,9 +209,9 @@ func (r *ZoneSettingSecurityLevelListResponse) UnmarshalJSON(data []byte) (err e
 }
 
 type ZoneSettingSecurityLevelListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingSecurityLevelListResponseErrorJSON
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    zoneSettingSecurityLevelListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingSecurityLevelListResponseErrorJSON contains the JSON metadata for the
@@ -228,9 +228,9 @@ func (r *ZoneSettingSecurityLevelListResponseError) UnmarshalJSON(data []byte) (
 }
 
 type ZoneSettingSecurityLevelListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingSecurityLevelListResponseMessageJSON
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    zoneSettingSecurityLevelListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingSecurityLevelListResponseMessageJSON contains the JSON metadata for
@@ -260,7 +260,7 @@ type ZoneSettingSecurityLevelListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingSecurityLevelListResponseResultValue `json:"value"`
-	JSON  zoneSettingSecurityLevelListResponseResultJSON
+	JSON  zoneSettingSecurityLevelListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingSecurityLevelListResponseResultJSON contains the JSON metadata for

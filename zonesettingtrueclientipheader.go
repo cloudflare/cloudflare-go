@@ -57,8 +57,8 @@ type ZoneSettingTrueClientIPHeaderUpdateResponse struct {
 	// headers we send to the origin. This is limited to Enterprise Zones.
 	Result ZoneSettingTrueClientIPHeaderUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingTrueClientIPHeaderUpdateResponseJSON
+	Success bool                                            `json:"success"`
+	JSON    zoneSettingTrueClientIPHeaderUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingTrueClientIPHeaderUpdateResponseJSON contains the JSON metadata for
@@ -77,9 +77,9 @@ func (r *ZoneSettingTrueClientIPHeaderUpdateResponse) UnmarshalJSON(data []byte)
 }
 
 type ZoneSettingTrueClientIPHeaderUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingTrueClientIPHeaderUpdateResponseErrorJSON
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    zoneSettingTrueClientIPHeaderUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingTrueClientIPHeaderUpdateResponseErrorJSON contains the JSON metadata
@@ -96,9 +96,9 @@ func (r *ZoneSettingTrueClientIPHeaderUpdateResponseError) UnmarshalJSON(data []
 }
 
 type ZoneSettingTrueClientIPHeaderUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingTrueClientIPHeaderUpdateResponseMessageJSON
+	Code    int64                                                  `json:"code,required"`
+	Message string                                                 `json:"message,required"`
+	JSON    zoneSettingTrueClientIPHeaderUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingTrueClientIPHeaderUpdateResponseMessageJSON contains the JSON
@@ -126,7 +126,7 @@ type ZoneSettingTrueClientIPHeaderUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingTrueClientIPHeaderUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingTrueClientIPHeaderUpdateResponseResultJSON
+	JSON  zoneSettingTrueClientIPHeaderUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingTrueClientIPHeaderUpdateResponseResultJSON contains the JSON metadata
@@ -175,8 +175,8 @@ type ZoneSettingTrueClientIPHeaderListResponse struct {
 	// headers we send to the origin. This is limited to Enterprise Zones.
 	Result ZoneSettingTrueClientIPHeaderListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingTrueClientIPHeaderListResponseJSON
+	Success bool                                          `json:"success"`
+	JSON    zoneSettingTrueClientIPHeaderListResponseJSON `json:"-"`
 }
 
 // zoneSettingTrueClientIPHeaderListResponseJSON contains the JSON metadata for the
@@ -195,9 +195,9 @@ func (r *ZoneSettingTrueClientIPHeaderListResponse) UnmarshalJSON(data []byte) (
 }
 
 type ZoneSettingTrueClientIPHeaderListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingTrueClientIPHeaderListResponseErrorJSON
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    zoneSettingTrueClientIPHeaderListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingTrueClientIPHeaderListResponseErrorJSON contains the JSON metadata
@@ -214,9 +214,9 @@ func (r *ZoneSettingTrueClientIPHeaderListResponseError) UnmarshalJSON(data []by
 }
 
 type ZoneSettingTrueClientIPHeaderListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingTrueClientIPHeaderListResponseMessageJSON
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    zoneSettingTrueClientIPHeaderListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingTrueClientIPHeaderListResponseMessageJSON contains the JSON metadata
@@ -244,7 +244,7 @@ type ZoneSettingTrueClientIPHeaderListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingTrueClientIPHeaderListResponseResultValue `json:"value"`
-	JSON  zoneSettingTrueClientIPHeaderListResponseResultJSON
+	JSON  zoneSettingTrueClientIPHeaderListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingTrueClientIPHeaderListResponseResultJSON contains the JSON metadata

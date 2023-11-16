@@ -99,8 +99,8 @@ type ZoneSettingSslUpdateResponse struct {
 	// (hostname). (https://support.cloudflare.com/hc/en-us/articles/200170416).
 	Result ZoneSettingSslUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingSslUpdateResponseJSON
+	Success bool                             `json:"success"`
+	JSON    zoneSettingSslUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingSslUpdateResponseJSON contains the JSON metadata for the struct
@@ -119,9 +119,9 @@ func (r *ZoneSettingSslUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneSettingSslUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingSslUpdateResponseErrorJSON
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    zoneSettingSslUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingSslUpdateResponseErrorJSON contains the JSON metadata for the struct
@@ -138,9 +138,9 @@ func (r *ZoneSettingSslUpdateResponseError) UnmarshalJSON(data []byte) (err erro
 }
 
 type ZoneSettingSslUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingSslUpdateResponseMessageJSON
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    zoneSettingSslUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingSslUpdateResponseMessageJSON contains the JSON metadata for the
@@ -182,7 +182,7 @@ type ZoneSettingSslUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting. Notes: Depends on the zone's plan level
 	Value ZoneSettingSslUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingSslUpdateResponseResultJSON
+	JSON  zoneSettingSslUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingSslUpdateResponseResultJSON contains the JSON metadata for the struct
@@ -247,8 +247,8 @@ type ZoneSettingSslListResponse struct {
 	// (hostname). (https://support.cloudflare.com/hc/en-us/articles/200170416).
 	Result ZoneSettingSslListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingSslListResponseJSON
+	Success bool                           `json:"success"`
+	JSON    zoneSettingSslListResponseJSON `json:"-"`
 }
 
 // zoneSettingSslListResponseJSON contains the JSON metadata for the struct
@@ -267,9 +267,9 @@ func (r *ZoneSettingSslListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneSettingSslListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingSslListResponseErrorJSON
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    zoneSettingSslListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingSslListResponseErrorJSON contains the JSON metadata for the struct
@@ -286,9 +286,9 @@ func (r *ZoneSettingSslListResponseError) UnmarshalJSON(data []byte) (err error)
 }
 
 type ZoneSettingSslListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingSslListResponseMessageJSON
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    zoneSettingSslListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingSslListResponseMessageJSON contains the JSON metadata for the struct
@@ -330,7 +330,7 @@ type ZoneSettingSslListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting. Notes: Depends on the zone's plan level
 	Value ZoneSettingSslListResponseResultValue `json:"value"`
-	JSON  zoneSettingSslListResponseResultJSON
+	JSON  zoneSettingSslListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingSslListResponseResultJSON contains the JSON metadata for the struct

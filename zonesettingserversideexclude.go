@@ -84,8 +84,8 @@ type ZoneSettingServerSideExcludeUpdateResponse struct {
 	// (https://support.cloudflare.com/hc/en-us/articles/200170036).
 	Result ZoneSettingServerSideExcludeUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingServerSideExcludeUpdateResponseJSON
+	Success bool                                           `json:"success"`
+	JSON    zoneSettingServerSideExcludeUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingServerSideExcludeUpdateResponseJSON contains the JSON metadata for
@@ -104,9 +104,9 @@ func (r *ZoneSettingServerSideExcludeUpdateResponse) UnmarshalJSON(data []byte) 
 }
 
 type ZoneSettingServerSideExcludeUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingServerSideExcludeUpdateResponseErrorJSON
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    zoneSettingServerSideExcludeUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingServerSideExcludeUpdateResponseErrorJSON contains the JSON metadata
@@ -123,9 +123,9 @@ func (r *ZoneSettingServerSideExcludeUpdateResponseError) UnmarshalJSON(data []b
 }
 
 type ZoneSettingServerSideExcludeUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingServerSideExcludeUpdateResponseMessageJSON
+	Code    int64                                                 `json:"code,required"`
+	Message string                                                `json:"message,required"`
+	JSON    zoneSettingServerSideExcludeUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingServerSideExcludeUpdateResponseMessageJSON contains the JSON metadata
@@ -162,7 +162,7 @@ type ZoneSettingServerSideExcludeUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingServerSideExcludeUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingServerSideExcludeUpdateResponseResultJSON
+	JSON  zoneSettingServerSideExcludeUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingServerSideExcludeUpdateResponseResultJSON contains the JSON metadata
@@ -220,8 +220,8 @@ type ZoneSettingServerSideExcludeListResponse struct {
 	// (https://support.cloudflare.com/hc/en-us/articles/200170036).
 	Result ZoneSettingServerSideExcludeListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingServerSideExcludeListResponseJSON
+	Success bool                                         `json:"success"`
+	JSON    zoneSettingServerSideExcludeListResponseJSON `json:"-"`
 }
 
 // zoneSettingServerSideExcludeListResponseJSON contains the JSON metadata for the
@@ -240,9 +240,9 @@ func (r *ZoneSettingServerSideExcludeListResponse) UnmarshalJSON(data []byte) (e
 }
 
 type ZoneSettingServerSideExcludeListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingServerSideExcludeListResponseErrorJSON
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    zoneSettingServerSideExcludeListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingServerSideExcludeListResponseErrorJSON contains the JSON metadata for
@@ -259,9 +259,9 @@ func (r *ZoneSettingServerSideExcludeListResponseError) UnmarshalJSON(data []byt
 }
 
 type ZoneSettingServerSideExcludeListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingServerSideExcludeListResponseMessageJSON
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    zoneSettingServerSideExcludeListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingServerSideExcludeListResponseMessageJSON contains the JSON metadata
@@ -298,7 +298,7 @@ type ZoneSettingServerSideExcludeListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingServerSideExcludeListResponseResultValue `json:"value"`
-	JSON  zoneSettingServerSideExcludeListResponseResultJSON
+	JSON  zoneSettingServerSideExcludeListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingServerSideExcludeListResponseResultJSON contains the JSON metadata

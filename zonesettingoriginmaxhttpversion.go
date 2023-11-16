@@ -59,8 +59,8 @@ type ZoneSettingOriginMaxHTTPVersionUpdateResponse struct {
 	Messages []ZoneSettingOriginMaxHTTPVersionUpdateResponseMessage `json:"messages"`
 	Result   ZoneSettingOriginMaxHTTPVersionUpdateResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingOriginMaxHTTPVersionUpdateResponseJSON
+	Success bool                                              `json:"success"`
+	JSON    zoneSettingOriginMaxHTTPVersionUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingOriginMaxHTTPVersionUpdateResponseJSON contains the JSON metadata for
@@ -79,9 +79,9 @@ func (r *ZoneSettingOriginMaxHTTPVersionUpdateResponse) UnmarshalJSON(data []byt
 }
 
 type ZoneSettingOriginMaxHTTPVersionUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingOriginMaxHTTPVersionUpdateResponseErrorJSON
+	Code    int64                                                  `json:"code,required"`
+	Message string                                                 `json:"message,required"`
+	JSON    zoneSettingOriginMaxHTTPVersionUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingOriginMaxHTTPVersionUpdateResponseErrorJSON contains the JSON
@@ -98,9 +98,9 @@ func (r *ZoneSettingOriginMaxHTTPVersionUpdateResponseError) UnmarshalJSON(data 
 }
 
 type ZoneSettingOriginMaxHTTPVersionUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingOriginMaxHTTPVersionUpdateResponseMessageJSON
+	Code    int64                                                    `json:"code,required"`
+	Message string                                                   `json:"message,required"`
+	JSON    zoneSettingOriginMaxHTTPVersionUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingOriginMaxHTTPVersionUpdateResponseMessageJSON contains the JSON
@@ -120,8 +120,8 @@ type ZoneSettingOriginMaxHTTPVersionUpdateResponseResult struct {
 	// Identifier of the zone setting.
 	ID ZoneSettingOriginMaxHTTPVersionUpdateResponseResultID `json:"id,required"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingOriginMaxHTTPVersionUpdateResponseResultJSON
+	ModifiedOn time.Time                                               `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingOriginMaxHTTPVersionUpdateResponseResultJSON `json:"-"`
 }
 
 // zoneSettingOriginMaxHTTPVersionUpdateResponseResultJSON contains the JSON
@@ -149,8 +149,8 @@ type ZoneSettingOriginMaxHTTPVersionListResponse struct {
 	Messages []ZoneSettingOriginMaxHTTPVersionListResponseMessage `json:"messages"`
 	Result   ZoneSettingOriginMaxHTTPVersionListResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingOriginMaxHTTPVersionListResponseJSON
+	Success bool                                            `json:"success"`
+	JSON    zoneSettingOriginMaxHTTPVersionListResponseJSON `json:"-"`
 }
 
 // zoneSettingOriginMaxHTTPVersionListResponseJSON contains the JSON metadata for
@@ -169,9 +169,9 @@ func (r *ZoneSettingOriginMaxHTTPVersionListResponse) UnmarshalJSON(data []byte)
 }
 
 type ZoneSettingOriginMaxHTTPVersionListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingOriginMaxHTTPVersionListResponseErrorJSON
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    zoneSettingOriginMaxHTTPVersionListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingOriginMaxHTTPVersionListResponseErrorJSON contains the JSON metadata
@@ -188,9 +188,9 @@ func (r *ZoneSettingOriginMaxHTTPVersionListResponseError) UnmarshalJSON(data []
 }
 
 type ZoneSettingOriginMaxHTTPVersionListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingOriginMaxHTTPVersionListResponseMessageJSON
+	Code    int64                                                  `json:"code,required"`
+	Message string                                                 `json:"message,required"`
+	JSON    zoneSettingOriginMaxHTTPVersionListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingOriginMaxHTTPVersionListResponseMessageJSON contains the JSON
@@ -210,8 +210,8 @@ type ZoneSettingOriginMaxHTTPVersionListResponseResult struct {
 	// Identifier of the zone setting.
 	ID ZoneSettingOriginMaxHTTPVersionListResponseResultID `json:"id,required"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingOriginMaxHTTPVersionListResponseResultJSON
+	ModifiedOn time.Time                                             `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingOriginMaxHTTPVersionListResponseResultJSON `json:"-"`
 }
 
 // zoneSettingOriginMaxHTTPVersionListResponseResultJSON contains the JSON metadata

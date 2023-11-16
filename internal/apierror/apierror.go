@@ -15,7 +15,7 @@ import (
 // made and the API returns a response with a HTTP status code. Other errors are
 // not wrapped by this SDK.
 type Error struct {
-	JSON       errorJSON
+	JSON       errorJSON `json:"-"`
 	StatusCode int
 	Request    *http.Request
 	Response   *http.Response

@@ -54,8 +54,8 @@ type ZoneSettingSecurityHeaderUpdateResponse struct {
 	// Cloudflare security header for a zone.
 	Result ZoneSettingSecurityHeaderUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingSecurityHeaderUpdateResponseJSON
+	Success bool                                        `json:"success"`
+	JSON    zoneSettingSecurityHeaderUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingSecurityHeaderUpdateResponseJSON contains the JSON metadata for the
@@ -74,9 +74,9 @@ func (r *ZoneSettingSecurityHeaderUpdateResponse) UnmarshalJSON(data []byte) (er
 }
 
 type ZoneSettingSecurityHeaderUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingSecurityHeaderUpdateResponseErrorJSON
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    zoneSettingSecurityHeaderUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingSecurityHeaderUpdateResponseErrorJSON contains the JSON metadata for
@@ -93,9 +93,9 @@ func (r *ZoneSettingSecurityHeaderUpdateResponseError) UnmarshalJSON(data []byte
 }
 
 type ZoneSettingSecurityHeaderUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingSecurityHeaderUpdateResponseMessageJSON
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    zoneSettingSecurityHeaderUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingSecurityHeaderUpdateResponseMessageJSON contains the JSON metadata
@@ -121,7 +121,7 @@ type ZoneSettingSecurityHeaderUpdateResponseResult struct {
 	// last time this setting was modified.
 	ModifiedOn time.Time                                          `json:"modified_on,nullable" format:"date-time"`
 	Value      ZoneSettingSecurityHeaderUpdateResponseResultValue `json:"value"`
-	JSON       zoneSettingSecurityHeaderUpdateResponseResultJSON
+	JSON       zoneSettingSecurityHeaderUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingSecurityHeaderUpdateResponseResultJSON contains the JSON metadata for
@@ -158,7 +158,7 @@ const (
 type ZoneSettingSecurityHeaderUpdateResponseResultValue struct {
 	// Strict Transport Security.
 	StrictTransportSecurity ZoneSettingSecurityHeaderUpdateResponseResultValueStrictTransportSecurity `json:"strict_transport_security"`
-	JSON                    zoneSettingSecurityHeaderUpdateResponseResultValueJSON
+	JSON                    zoneSettingSecurityHeaderUpdateResponseResultValueJSON                    `json:"-"`
 }
 
 // zoneSettingSecurityHeaderUpdateResponseResultValueJSON contains the JSON
@@ -182,8 +182,8 @@ type ZoneSettingSecurityHeaderUpdateResponseResultValueStrictTransportSecurity s
 	// Max age in seconds of the strict transport security.
 	MaxAge float64 `json:"max_age"`
 	// Whether or not to include 'X-Content-Type-Options: nosniff' header.
-	Nosniff bool `json:"nosniff"`
-	JSON    zoneSettingSecurityHeaderUpdateResponseResultValueStrictTransportSecurityJSON
+	Nosniff bool                                                                          `json:"nosniff"`
+	JSON    zoneSettingSecurityHeaderUpdateResponseResultValueStrictTransportSecurityJSON `json:"-"`
 }
 
 // zoneSettingSecurityHeaderUpdateResponseResultValueStrictTransportSecurityJSON
@@ -208,8 +208,8 @@ type ZoneSettingSecurityHeaderListResponse struct {
 	// Cloudflare security header for a zone.
 	Result ZoneSettingSecurityHeaderListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingSecurityHeaderListResponseJSON
+	Success bool                                      `json:"success"`
+	JSON    zoneSettingSecurityHeaderListResponseJSON `json:"-"`
 }
 
 // zoneSettingSecurityHeaderListResponseJSON contains the JSON metadata for the
@@ -228,9 +228,9 @@ func (r *ZoneSettingSecurityHeaderListResponse) UnmarshalJSON(data []byte) (err 
 }
 
 type ZoneSettingSecurityHeaderListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingSecurityHeaderListResponseErrorJSON
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    zoneSettingSecurityHeaderListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingSecurityHeaderListResponseErrorJSON contains the JSON metadata for
@@ -247,9 +247,9 @@ func (r *ZoneSettingSecurityHeaderListResponseError) UnmarshalJSON(data []byte) 
 }
 
 type ZoneSettingSecurityHeaderListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingSecurityHeaderListResponseMessageJSON
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    zoneSettingSecurityHeaderListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingSecurityHeaderListResponseMessageJSON contains the JSON metadata for
@@ -275,7 +275,7 @@ type ZoneSettingSecurityHeaderListResponseResult struct {
 	// last time this setting was modified.
 	ModifiedOn time.Time                                        `json:"modified_on,nullable" format:"date-time"`
 	Value      ZoneSettingSecurityHeaderListResponseResultValue `json:"value"`
-	JSON       zoneSettingSecurityHeaderListResponseResultJSON
+	JSON       zoneSettingSecurityHeaderListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingSecurityHeaderListResponseResultJSON contains the JSON metadata for
@@ -312,7 +312,7 @@ const (
 type ZoneSettingSecurityHeaderListResponseResultValue struct {
 	// Strict Transport Security.
 	StrictTransportSecurity ZoneSettingSecurityHeaderListResponseResultValueStrictTransportSecurity `json:"strict_transport_security"`
-	JSON                    zoneSettingSecurityHeaderListResponseResultValueJSON
+	JSON                    zoneSettingSecurityHeaderListResponseResultValueJSON                    `json:"-"`
 }
 
 // zoneSettingSecurityHeaderListResponseResultValueJSON contains the JSON metadata
@@ -336,8 +336,8 @@ type ZoneSettingSecurityHeaderListResponseResultValueStrictTransportSecurity str
 	// Max age in seconds of the strict transport security.
 	MaxAge float64 `json:"max_age"`
 	// Whether or not to include 'X-Content-Type-Options: nosniff' header.
-	Nosniff bool `json:"nosniff"`
-	JSON    zoneSettingSecurityHeaderListResponseResultValueStrictTransportSecurityJSON
+	Nosniff bool                                                                        `json:"nosniff"`
+	JSON    zoneSettingSecurityHeaderListResponseResultValueStrictTransportSecurityJSON `json:"-"`
 }
 
 // zoneSettingSecurityHeaderListResponseResultValueStrictTransportSecurityJSON

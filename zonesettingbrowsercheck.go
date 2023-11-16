@@ -66,8 +66,8 @@ type ZoneSettingBrowserCheckUpdateResponse struct {
 	// (https://support.cloudflare.com/hc/en-us/articles/200170086).
 	Result ZoneSettingBrowserCheckUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingBrowserCheckUpdateResponseJSON
+	Success bool                                      `json:"success"`
+	JSON    zoneSettingBrowserCheckUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingBrowserCheckUpdateResponseJSON contains the JSON metadata for the
@@ -86,9 +86,9 @@ func (r *ZoneSettingBrowserCheckUpdateResponse) UnmarshalJSON(data []byte) (err 
 }
 
 type ZoneSettingBrowserCheckUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingBrowserCheckUpdateResponseErrorJSON
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    zoneSettingBrowserCheckUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingBrowserCheckUpdateResponseErrorJSON contains the JSON metadata for
@@ -105,9 +105,9 @@ func (r *ZoneSettingBrowserCheckUpdateResponseError) UnmarshalJSON(data []byte) 
 }
 
 type ZoneSettingBrowserCheckUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingBrowserCheckUpdateResponseMessageJSON
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    zoneSettingBrowserCheckUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingBrowserCheckUpdateResponseMessageJSON contains the JSON metadata for
@@ -138,7 +138,7 @@ type ZoneSettingBrowserCheckUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingBrowserCheckUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingBrowserCheckUpdateResponseResultJSON
+	JSON  zoneSettingBrowserCheckUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingBrowserCheckUpdateResponseResultJSON contains the JSON metadata for
@@ -190,8 +190,8 @@ type ZoneSettingBrowserCheckListResponse struct {
 	// (https://support.cloudflare.com/hc/en-us/articles/200170086).
 	Result ZoneSettingBrowserCheckListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingBrowserCheckListResponseJSON
+	Success bool                                    `json:"success"`
+	JSON    zoneSettingBrowserCheckListResponseJSON `json:"-"`
 }
 
 // zoneSettingBrowserCheckListResponseJSON contains the JSON metadata for the
@@ -210,9 +210,9 @@ func (r *ZoneSettingBrowserCheckListResponse) UnmarshalJSON(data []byte) (err er
 }
 
 type ZoneSettingBrowserCheckListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingBrowserCheckListResponseErrorJSON
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    zoneSettingBrowserCheckListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingBrowserCheckListResponseErrorJSON contains the JSON metadata for the
@@ -229,9 +229,9 @@ func (r *ZoneSettingBrowserCheckListResponseError) UnmarshalJSON(data []byte) (e
 }
 
 type ZoneSettingBrowserCheckListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingBrowserCheckListResponseMessageJSON
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    zoneSettingBrowserCheckListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingBrowserCheckListResponseMessageJSON contains the JSON metadata for
@@ -262,7 +262,7 @@ type ZoneSettingBrowserCheckListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingBrowserCheckListResponseResultValue `json:"value"`
-	JSON  zoneSettingBrowserCheckListResponseResultJSON
+	JSON  zoneSettingBrowserCheckListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingBrowserCheckListResponseResultJSON contains the JSON metadata for the

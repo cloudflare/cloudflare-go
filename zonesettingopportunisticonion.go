@@ -57,8 +57,8 @@ type ZoneSettingOpportunisticOnionUpdateResponse struct {
 	// connection to use our onion services instead of exit nodes.
 	Result ZoneSettingOpportunisticOnionUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingOpportunisticOnionUpdateResponseJSON
+	Success bool                                            `json:"success"`
+	JSON    zoneSettingOpportunisticOnionUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingOpportunisticOnionUpdateResponseJSON contains the JSON metadata for
@@ -77,9 +77,9 @@ func (r *ZoneSettingOpportunisticOnionUpdateResponse) UnmarshalJSON(data []byte)
 }
 
 type ZoneSettingOpportunisticOnionUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingOpportunisticOnionUpdateResponseErrorJSON
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    zoneSettingOpportunisticOnionUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingOpportunisticOnionUpdateResponseErrorJSON contains the JSON metadata
@@ -96,9 +96,9 @@ func (r *ZoneSettingOpportunisticOnionUpdateResponseError) UnmarshalJSON(data []
 }
 
 type ZoneSettingOpportunisticOnionUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingOpportunisticOnionUpdateResponseMessageJSON
+	Code    int64                                                  `json:"code,required"`
+	Message string                                                 `json:"message,required"`
+	JSON    zoneSettingOpportunisticOnionUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingOpportunisticOnionUpdateResponseMessageJSON contains the JSON
@@ -127,7 +127,7 @@ type ZoneSettingOpportunisticOnionUpdateResponseResult struct {
 	// Value of the zone setting. Notes: Default value depends on the zone's plan
 	// level.
 	Value ZoneSettingOpportunisticOnionUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingOpportunisticOnionUpdateResponseResultJSON
+	JSON  zoneSettingOpportunisticOnionUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingOpportunisticOnionUpdateResponseResultJSON contains the JSON metadata
@@ -177,8 +177,8 @@ type ZoneSettingOpportunisticOnionListResponse struct {
 	// connection to use our onion services instead of exit nodes.
 	Result ZoneSettingOpportunisticOnionListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingOpportunisticOnionListResponseJSON
+	Success bool                                          `json:"success"`
+	JSON    zoneSettingOpportunisticOnionListResponseJSON `json:"-"`
 }
 
 // zoneSettingOpportunisticOnionListResponseJSON contains the JSON metadata for the
@@ -197,9 +197,9 @@ func (r *ZoneSettingOpportunisticOnionListResponse) UnmarshalJSON(data []byte) (
 }
 
 type ZoneSettingOpportunisticOnionListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingOpportunisticOnionListResponseErrorJSON
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    zoneSettingOpportunisticOnionListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingOpportunisticOnionListResponseErrorJSON contains the JSON metadata
@@ -216,9 +216,9 @@ func (r *ZoneSettingOpportunisticOnionListResponseError) UnmarshalJSON(data []by
 }
 
 type ZoneSettingOpportunisticOnionListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingOpportunisticOnionListResponseMessageJSON
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    zoneSettingOpportunisticOnionListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingOpportunisticOnionListResponseMessageJSON contains the JSON metadata
@@ -247,7 +247,7 @@ type ZoneSettingOpportunisticOnionListResponseResult struct {
 	// Value of the zone setting. Notes: Default value depends on the zone's plan
 	// level.
 	Value ZoneSettingOpportunisticOnionListResponseResultValue `json:"value"`
-	JSON  zoneSettingOpportunisticOnionListResponseResultJSON
+	JSON  zoneSettingOpportunisticOnionListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingOpportunisticOnionListResponseResultJSON contains the JSON metadata

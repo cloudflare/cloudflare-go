@@ -56,7 +56,7 @@ type RatelimitCollection struct {
 	ResultInfo RatelimitCollectionResultInfo `json:"result_info"`
 	// Whether the API call was successful
 	Success RatelimitCollectionSuccess `json:"success"`
-	JSON    ratelimitCollectionJSON
+	JSON    ratelimitCollectionJSON    `json:"-"`
 }
 
 // ratelimitCollectionJSON contains the JSON metadata for the struct
@@ -76,9 +76,9 @@ func (r *RatelimitCollection) UnmarshalJSON(data []byte) (err error) {
 }
 
 type RatelimitCollectionError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    ratelimitCollectionErrorJSON
+	Code    int64                        `json:"code,required"`
+	Message string                       `json:"message,required"`
+	JSON    ratelimitCollectionErrorJSON `json:"-"`
 }
 
 // ratelimitCollectionErrorJSON contains the JSON metadata for the struct
@@ -95,9 +95,9 @@ func (r *RatelimitCollectionError) UnmarshalJSON(data []byte) (err error) {
 }
 
 type RatelimitCollectionMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    ratelimitCollectionMessageJSON
+	Code    int64                          `json:"code,required"`
+	Message string                         `json:"message,required"`
+	JSON    ratelimitCollectionMessageJSON `json:"-"`
 }
 
 // ratelimitCollectionMessageJSON contains the JSON metadata for the struct
@@ -135,8 +135,8 @@ type RatelimitCollectionResult struct {
 	Period float64 `json:"period"`
 	// The threshold that will trigger the configured mitigation action. Configure this
 	// value along with the `period` property to establish a threshold per period.
-	Threshold float64 `json:"threshold"`
-	JSON      ratelimitCollectionResultJSON
+	Threshold float64                       `json:"threshold"`
+	JSON      ratelimitCollectionResultJSON `json:"-"`
 }
 
 // ratelimitCollectionResultJSON contains the JSON metadata for the struct
@@ -174,8 +174,8 @@ type RatelimitCollectionResultAction struct {
 	// Must be an integer value greater than or equal to the period. Notes: If "mode"
 	// is "challenge", "managed_challenge", or "js_challenge", Cloudflare will use the
 	// zone's Challenge Passage time and you should not provide this value.
-	Timeout float64 `json:"timeout"`
-	JSON    ratelimitCollectionResultActionJSON
+	Timeout float64                             `json:"timeout"`
+	JSON    ratelimitCollectionResultActionJSON `json:"-"`
 }
 
 // ratelimitCollectionResultActionJSON contains the JSON metadata for the struct
@@ -215,8 +215,8 @@ type RatelimitCollectionResultActionResponse struct {
 	Body string `json:"body"`
 	// The content type of the body. Must be one of the following: `text/plain`,
 	// `text/xml`, or `application/json`.
-	ContentType string `json:"content_type"`
-	JSON        ratelimitCollectionResultActionResponseJSON
+	ContentType string                                      `json:"content_type"`
+	JSON        ratelimitCollectionResultActionResponseJSON `json:"-"`
 }
 
 // ratelimitCollectionResultActionResponseJSON contains the JSON metadata for the
@@ -235,8 +235,8 @@ func (r *RatelimitCollectionResultActionResponse) UnmarshalJSON(data []byte) (er
 type RatelimitCollectionResultBypass struct {
 	Name RatelimitCollectionResultBypassName `json:"name"`
 	// The URL to bypass.
-	Value string `json:"value"`
-	JSON  ratelimitCollectionResultBypassJSON
+	Value string                              `json:"value"`
+	JSON  ratelimitCollectionResultBypassJSON `json:"-"`
 }
 
 // ratelimitCollectionResultBypassJSON contains the JSON metadata for the struct
@@ -263,7 +263,7 @@ type RatelimitCollectionResultMatch struct {
 	Headers  []RatelimitCollectionResultMatchHeader `json:"headers"`
 	Request  RatelimitCollectionResultMatchRequest  `json:"request"`
 	Response RatelimitCollectionResultMatchResponse `json:"response"`
-	JSON     ratelimitCollectionResultMatchJSON
+	JSON     ratelimitCollectionResultMatchJSON     `json:"-"`
 }
 
 // ratelimitCollectionResultMatchJSON contains the JSON metadata for the struct
@@ -286,8 +286,8 @@ type RatelimitCollectionResultMatchHeader struct {
 	// The operator used when matching: `eq` means "equal" and `ne` means "not equal".
 	Op RatelimitCollectionResultMatchHeadersOp `json:"op"`
 	// The value of the response header, which must match exactly.
-	Value string `json:"value"`
-	JSON  ratelimitCollectionResultMatchHeaderJSON
+	Value string                                   `json:"value"`
+	JSON  ratelimitCollectionResultMatchHeaderJSON `json:"-"`
 }
 
 // ratelimitCollectionResultMatchHeaderJSON contains the JSON metadata for the
@@ -325,8 +325,8 @@ type RatelimitCollectionResultMatchRequest struct {
 	// `example.org/path*`. Normalization is applied before the pattern is matched. `*`
 	// wildcards are expanded to match applicable traffic. Query strings are not
 	// matched. Set the value to `*` to match all traffic to your zone.
-	URL  string `json:"url"`
-	JSON ratelimitCollectionResultMatchRequestJSON
+	URL  string                                    `json:"url"`
+	JSON ratelimitCollectionResultMatchRequestJSON `json:"-"`
 }
 
 // ratelimitCollectionResultMatchRequestJSON contains the JSON metadata for the
@@ -362,8 +362,8 @@ type RatelimitCollectionResultMatchResponse struct {
 	// will not count towards rate limiting. This field is optional. Notes: This field
 	// is deprecated. Instead, use response headers and set "origin_traffic" to "false"
 	// to avoid legacy behaviour interacting with the "response_headers" property.
-	OriginTraffic bool `json:"origin_traffic"`
-	JSON          ratelimitCollectionResultMatchResponseJSON
+	OriginTraffic bool                                       `json:"origin_traffic"`
+	JSON          ratelimitCollectionResultMatchResponseJSON `json:"-"`
 }
 
 // ratelimitCollectionResultMatchResponseJSON contains the JSON metadata for the
@@ -386,8 +386,8 @@ type RatelimitCollectionResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64 `json:"total_count"`
-	JSON       ratelimitCollectionResultInfoJSON
+	TotalCount float64                           `json:"total_count"`
+	JSON       ratelimitCollectionResultInfoJSON `json:"-"`
 }
 
 // ratelimitCollectionResultInfoJSON contains the JSON metadata for the struct
@@ -418,7 +418,7 @@ type RatelimitSingle struct {
 	Result   interface{}              `json:"result"`
 	// Whether the API call was successful
 	Success RatelimitSingleSuccess `json:"success"`
-	JSON    ratelimitSingleJSON
+	JSON    ratelimitSingleJSON    `json:"-"`
 }
 
 // ratelimitSingleJSON contains the JSON metadata for the struct [RatelimitSingle]
@@ -436,9 +436,9 @@ func (r *RatelimitSingle) UnmarshalJSON(data []byte) (err error) {
 }
 
 type RatelimitSingleError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    ratelimitSingleErrorJSON
+	Code    int64                    `json:"code,required"`
+	Message string                   `json:"message,required"`
+	JSON    ratelimitSingleErrorJSON `json:"-"`
 }
 
 // ratelimitSingleErrorJSON contains the JSON metadata for the struct
@@ -455,9 +455,9 @@ func (r *RatelimitSingleError) UnmarshalJSON(data []byte) (err error) {
 }
 
 type RatelimitSingleMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    ratelimitSingleMessageJSON
+	Code    int64                      `json:"code,required"`
+	Message string                     `json:"message,required"`
+	JSON    ratelimitSingleMessageJSON `json:"-"`
 }
 
 // ratelimitSingleMessageJSON contains the JSON metadata for the struct

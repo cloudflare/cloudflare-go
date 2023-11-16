@@ -63,8 +63,8 @@ type ZoneSettingPrivacyPassUpdateResponse struct {
 	// (https://support.cloudflare.com/hc/en-us/articles/115001992652-Privacy-Pass).
 	Result ZoneSettingPrivacyPassUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingPrivacyPassUpdateResponseJSON
+	Success bool                                     `json:"success"`
+	JSON    zoneSettingPrivacyPassUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingPrivacyPassUpdateResponseJSON contains the JSON metadata for the
@@ -83,9 +83,9 @@ func (r *ZoneSettingPrivacyPassUpdateResponse) UnmarshalJSON(data []byte) (err e
 }
 
 type ZoneSettingPrivacyPassUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingPrivacyPassUpdateResponseErrorJSON
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    zoneSettingPrivacyPassUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingPrivacyPassUpdateResponseErrorJSON contains the JSON metadata for the
@@ -102,9 +102,9 @@ func (r *ZoneSettingPrivacyPassUpdateResponseError) UnmarshalJSON(data []byte) (
 }
 
 type ZoneSettingPrivacyPassUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingPrivacyPassUpdateResponseMessageJSON
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    zoneSettingPrivacyPassUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingPrivacyPassUpdateResponseMessageJSON contains the JSON metadata for
@@ -134,7 +134,7 @@ type ZoneSettingPrivacyPassUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingPrivacyPassUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingPrivacyPassUpdateResponseResultJSON
+	JSON  zoneSettingPrivacyPassUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingPrivacyPassUpdateResponseResultJSON contains the JSON metadata for
@@ -185,8 +185,8 @@ type ZoneSettingPrivacyPassListResponse struct {
 	// (https://support.cloudflare.com/hc/en-us/articles/115001992652-Privacy-Pass).
 	Result ZoneSettingPrivacyPassListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingPrivacyPassListResponseJSON
+	Success bool                                   `json:"success"`
+	JSON    zoneSettingPrivacyPassListResponseJSON `json:"-"`
 }
 
 // zoneSettingPrivacyPassListResponseJSON contains the JSON metadata for the struct
@@ -205,9 +205,9 @@ func (r *ZoneSettingPrivacyPassListResponse) UnmarshalJSON(data []byte) (err err
 }
 
 type ZoneSettingPrivacyPassListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingPrivacyPassListResponseErrorJSON
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    zoneSettingPrivacyPassListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingPrivacyPassListResponseErrorJSON contains the JSON metadata for the
@@ -224,9 +224,9 @@ func (r *ZoneSettingPrivacyPassListResponseError) UnmarshalJSON(data []byte) (er
 }
 
 type ZoneSettingPrivacyPassListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingPrivacyPassListResponseMessageJSON
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    zoneSettingPrivacyPassListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingPrivacyPassListResponseMessageJSON contains the JSON metadata for the
@@ -256,7 +256,7 @@ type ZoneSettingPrivacyPassListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingPrivacyPassListResponseResultValue `json:"value"`
-	JSON  zoneSettingPrivacyPassListResponseResultJSON
+	JSON  zoneSettingPrivacyPassListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingPrivacyPassListResponseResultJSON contains the JSON metadata for the

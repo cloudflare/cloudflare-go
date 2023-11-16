@@ -60,8 +60,8 @@ type ZoneSettingWebpUpdateResponse struct {
 	// serve a WebP version of the original image.
 	Result ZoneSettingWebpUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingWebpUpdateResponseJSON
+	Success bool                              `json:"success"`
+	JSON    zoneSettingWebpUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingWebpUpdateResponseJSON contains the JSON metadata for the struct
@@ -80,9 +80,9 @@ func (r *ZoneSettingWebpUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneSettingWebpUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingWebpUpdateResponseErrorJSON
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    zoneSettingWebpUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingWebpUpdateResponseErrorJSON contains the JSON metadata for the struct
@@ -99,9 +99,9 @@ func (r *ZoneSettingWebpUpdateResponseError) UnmarshalJSON(data []byte) (err err
 }
 
 type ZoneSettingWebpUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingWebpUpdateResponseMessageJSON
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    zoneSettingWebpUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingWebpUpdateResponseMessageJSON contains the JSON metadata for the
@@ -130,7 +130,7 @@ type ZoneSettingWebpUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingWebpUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingWebpUpdateResponseResultJSON
+	JSON  zoneSettingWebpUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingWebpUpdateResponseResultJSON contains the JSON metadata for the
@@ -180,8 +180,8 @@ type ZoneSettingWebpListResponse struct {
 	// serve a WebP version of the original image.
 	Result ZoneSettingWebpListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingWebpListResponseJSON
+	Success bool                            `json:"success"`
+	JSON    zoneSettingWebpListResponseJSON `json:"-"`
 }
 
 // zoneSettingWebpListResponseJSON contains the JSON metadata for the struct
@@ -200,9 +200,9 @@ func (r *ZoneSettingWebpListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneSettingWebpListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingWebpListResponseErrorJSON
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    zoneSettingWebpListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingWebpListResponseErrorJSON contains the JSON metadata for the struct
@@ -219,9 +219,9 @@ func (r *ZoneSettingWebpListResponseError) UnmarshalJSON(data []byte) (err error
 }
 
 type ZoneSettingWebpListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingWebpListResponseMessageJSON
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    zoneSettingWebpListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingWebpListResponseMessageJSON contains the JSON metadata for the struct
@@ -250,7 +250,7 @@ type ZoneSettingWebpListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingWebpListResponseResultValue `json:"value"`
-	JSON  zoneSettingWebpListResponseResultJSON
+	JSON  zoneSettingWebpListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingWebpListResponseResultJSON contains the JSON metadata for the struct

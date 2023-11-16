@@ -55,8 +55,8 @@ type ZoneSettingOpportunisticEncryptionUpdateResponse struct {
 	// Enables the Opportunistic Encryption feature for a zone.
 	Result ZoneSettingOpportunisticEncryptionUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingOpportunisticEncryptionUpdateResponseJSON
+	Success bool                                                 `json:"success"`
+	JSON    zoneSettingOpportunisticEncryptionUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingOpportunisticEncryptionUpdateResponseJSON contains the JSON metadata
@@ -75,9 +75,9 @@ func (r *ZoneSettingOpportunisticEncryptionUpdateResponse) UnmarshalJSON(data []
 }
 
 type ZoneSettingOpportunisticEncryptionUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingOpportunisticEncryptionUpdateResponseErrorJSON
+	Code    int64                                                     `json:"code,required"`
+	Message string                                                    `json:"message,required"`
+	JSON    zoneSettingOpportunisticEncryptionUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingOpportunisticEncryptionUpdateResponseErrorJSON contains the JSON
@@ -94,9 +94,9 @@ func (r *ZoneSettingOpportunisticEncryptionUpdateResponseError) UnmarshalJSON(da
 }
 
 type ZoneSettingOpportunisticEncryptionUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingOpportunisticEncryptionUpdateResponseMessageJSON
+	Code    int64                                                       `json:"code,required"`
+	Message string                                                      `json:"message,required"`
+	JSON    zoneSettingOpportunisticEncryptionUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingOpportunisticEncryptionUpdateResponseMessageJSON contains the JSON
@@ -125,7 +125,7 @@ type ZoneSettingOpportunisticEncryptionUpdateResponseResult struct {
 	// Value of the zone setting. Notes: Default value depends on the zone's plan
 	// level.
 	Value ZoneSettingOpportunisticEncryptionUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingOpportunisticEncryptionUpdateResponseResultJSON
+	JSON  zoneSettingOpportunisticEncryptionUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingOpportunisticEncryptionUpdateResponseResultJSON contains the JSON
@@ -174,8 +174,8 @@ type ZoneSettingOpportunisticEncryptionListResponse struct {
 	// Enables the Opportunistic Encryption feature for a zone.
 	Result ZoneSettingOpportunisticEncryptionListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingOpportunisticEncryptionListResponseJSON
+	Success bool                                               `json:"success"`
+	JSON    zoneSettingOpportunisticEncryptionListResponseJSON `json:"-"`
 }
 
 // zoneSettingOpportunisticEncryptionListResponseJSON contains the JSON metadata
@@ -194,9 +194,9 @@ func (r *ZoneSettingOpportunisticEncryptionListResponse) UnmarshalJSON(data []by
 }
 
 type ZoneSettingOpportunisticEncryptionListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingOpportunisticEncryptionListResponseErrorJSON
+	Code    int64                                                   `json:"code,required"`
+	Message string                                                  `json:"message,required"`
+	JSON    zoneSettingOpportunisticEncryptionListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingOpportunisticEncryptionListResponseErrorJSON contains the JSON
@@ -213,9 +213,9 @@ func (r *ZoneSettingOpportunisticEncryptionListResponseError) UnmarshalJSON(data
 }
 
 type ZoneSettingOpportunisticEncryptionListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingOpportunisticEncryptionListResponseMessageJSON
+	Code    int64                                                     `json:"code,required"`
+	Message string                                                    `json:"message,required"`
+	JSON    zoneSettingOpportunisticEncryptionListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingOpportunisticEncryptionListResponseMessageJSON contains the JSON
@@ -243,7 +243,7 @@ type ZoneSettingOpportunisticEncryptionListResponseResult struct {
 	// Value of the zone setting. Notes: Default value depends on the zone's plan
 	// level.
 	Value ZoneSettingOpportunisticEncryptionListResponseResultValue `json:"value"`
-	JSON  zoneSettingOpportunisticEncryptionListResponseResultJSON
+	JSON  zoneSettingOpportunisticEncryptionListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingOpportunisticEncryptionListResponseResultJSON contains the JSON

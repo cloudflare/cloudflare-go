@@ -57,8 +57,8 @@ type ZoneSettingBrotliUpdateResponse struct {
 	// Cloudflare will serve a Brotli compressed version of the asset.
 	Result ZoneSettingBrotliUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingBrotliUpdateResponseJSON
+	Success bool                                `json:"success"`
+	JSON    zoneSettingBrotliUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingBrotliUpdateResponseJSON contains the JSON metadata for the struct
@@ -77,9 +77,9 @@ func (r *ZoneSettingBrotliUpdateResponse) UnmarshalJSON(data []byte) (err error)
 }
 
 type ZoneSettingBrotliUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingBrotliUpdateResponseErrorJSON
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    zoneSettingBrotliUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingBrotliUpdateResponseErrorJSON contains the JSON metadata for the
@@ -96,9 +96,9 @@ func (r *ZoneSettingBrotliUpdateResponseError) UnmarshalJSON(data []byte) (err e
 }
 
 type ZoneSettingBrotliUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingBrotliUpdateResponseMessageJSON
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    zoneSettingBrotliUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingBrotliUpdateResponseMessageJSON contains the JSON metadata for the
@@ -126,7 +126,7 @@ type ZoneSettingBrotliUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingBrotliUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingBrotliUpdateResponseResultJSON
+	JSON  zoneSettingBrotliUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingBrotliUpdateResponseResultJSON contains the JSON metadata for the
@@ -175,8 +175,8 @@ type ZoneSettingBrotliListResponse struct {
 	// Cloudflare will serve a Brotli compressed version of the asset.
 	Result ZoneSettingBrotliListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingBrotliListResponseJSON
+	Success bool                              `json:"success"`
+	JSON    zoneSettingBrotliListResponseJSON `json:"-"`
 }
 
 // zoneSettingBrotliListResponseJSON contains the JSON metadata for the struct
@@ -195,9 +195,9 @@ func (r *ZoneSettingBrotliListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneSettingBrotliListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingBrotliListResponseErrorJSON
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    zoneSettingBrotliListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingBrotliListResponseErrorJSON contains the JSON metadata for the struct
@@ -214,9 +214,9 @@ func (r *ZoneSettingBrotliListResponseError) UnmarshalJSON(data []byte) (err err
 }
 
 type ZoneSettingBrotliListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingBrotliListResponseMessageJSON
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    zoneSettingBrotliListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingBrotliListResponseMessageJSON contains the JSON metadata for the
@@ -244,7 +244,7 @@ type ZoneSettingBrotliListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingBrotliListResponseResultValue `json:"value"`
-	JSON  zoneSettingBrotliListResponseResultJSON
+	JSON  zoneSettingBrotliListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingBrotliListResponseResultJSON contains the JSON metadata for the

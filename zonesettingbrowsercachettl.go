@@ -63,8 +63,8 @@ type ZoneSettingBrowserCacheTtlUpdateResponse struct {
 	// (https://support.cloudflare.com/hc/en-us/articles/200168276).
 	Result ZoneSettingBrowserCacheTtlUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingBrowserCacheTtlUpdateResponseJSON
+	Success bool                                         `json:"success"`
+	JSON    zoneSettingBrowserCacheTtlUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingBrowserCacheTtlUpdateResponseJSON contains the JSON metadata for the
@@ -83,9 +83,9 @@ func (r *ZoneSettingBrowserCacheTtlUpdateResponse) UnmarshalJSON(data []byte) (e
 }
 
 type ZoneSettingBrowserCacheTtlUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingBrowserCacheTtlUpdateResponseErrorJSON
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    zoneSettingBrowserCacheTtlUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingBrowserCacheTtlUpdateResponseErrorJSON contains the JSON metadata for
@@ -102,9 +102,9 @@ func (r *ZoneSettingBrowserCacheTtlUpdateResponseError) UnmarshalJSON(data []byt
 }
 
 type ZoneSettingBrowserCacheTtlUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingBrowserCacheTtlUpdateResponseMessageJSON
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    zoneSettingBrowserCacheTtlUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingBrowserCacheTtlUpdateResponseMessageJSON contains the JSON metadata
@@ -135,7 +135,7 @@ type ZoneSettingBrowserCacheTtlUpdateResponseResult struct {
 	// Value of the zone setting. Notes: Setting a TTL of 0 is equivalent to selecting
 	// `Respect Existing Headers`
 	Value ZoneSettingBrowserCacheTtlUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingBrowserCacheTtlUpdateResponseResultJSON
+	JSON  zoneSettingBrowserCacheTtlUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingBrowserCacheTtlUpdateResponseResultJSON contains the JSON metadata
@@ -213,8 +213,8 @@ type ZoneSettingBrowserCacheTtlListResponse struct {
 	// (https://support.cloudflare.com/hc/en-us/articles/200168276).
 	Result ZoneSettingBrowserCacheTtlListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingBrowserCacheTtlListResponseJSON
+	Success bool                                       `json:"success"`
+	JSON    zoneSettingBrowserCacheTtlListResponseJSON `json:"-"`
 }
 
 // zoneSettingBrowserCacheTtlListResponseJSON contains the JSON metadata for the
@@ -233,9 +233,9 @@ func (r *ZoneSettingBrowserCacheTtlListResponse) UnmarshalJSON(data []byte) (err
 }
 
 type ZoneSettingBrowserCacheTtlListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingBrowserCacheTtlListResponseErrorJSON
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    zoneSettingBrowserCacheTtlListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingBrowserCacheTtlListResponseErrorJSON contains the JSON metadata for
@@ -252,9 +252,9 @@ func (r *ZoneSettingBrowserCacheTtlListResponseError) UnmarshalJSON(data []byte)
 }
 
 type ZoneSettingBrowserCacheTtlListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingBrowserCacheTtlListResponseMessageJSON
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    zoneSettingBrowserCacheTtlListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingBrowserCacheTtlListResponseMessageJSON contains the JSON metadata for
@@ -285,7 +285,7 @@ type ZoneSettingBrowserCacheTtlListResponseResult struct {
 	// Value of the zone setting. Notes: Setting a TTL of 0 is equivalent to selecting
 	// `Respect Existing Headers`
 	Value ZoneSettingBrowserCacheTtlListResponseResultValue `json:"value"`
-	JSON  zoneSettingBrowserCacheTtlListResponseResultJSON
+	JSON  zoneSettingBrowserCacheTtlListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingBrowserCacheTtlListResponseResultJSON contains the JSON metadata for

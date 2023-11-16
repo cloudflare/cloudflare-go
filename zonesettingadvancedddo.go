@@ -49,8 +49,8 @@ type ZoneSettingAdvancedDdoListResponse struct {
 	// Enterprise zones.
 	Result ZoneSettingAdvancedDdoListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingAdvancedDdoListResponseJSON
+	Success bool                                   `json:"success"`
+	JSON    zoneSettingAdvancedDdoListResponseJSON `json:"-"`
 }
 
 // zoneSettingAdvancedDdoListResponseJSON contains the JSON metadata for the struct
@@ -69,9 +69,9 @@ func (r *ZoneSettingAdvancedDdoListResponse) UnmarshalJSON(data []byte) (err err
 }
 
 type ZoneSettingAdvancedDdoListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingAdvancedDdoListResponseErrorJSON
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    zoneSettingAdvancedDdoListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingAdvancedDdoListResponseErrorJSON contains the JSON metadata for the
@@ -88,9 +88,9 @@ func (r *ZoneSettingAdvancedDdoListResponseError) UnmarshalJSON(data []byte) (er
 }
 
 type ZoneSettingAdvancedDdoListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingAdvancedDdoListResponseMessageJSON
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    zoneSettingAdvancedDdoListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingAdvancedDdoListResponseMessageJSON contains the JSON metadata for the
@@ -119,7 +119,7 @@ type ZoneSettingAdvancedDdoListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting. Notes: Defaults to on for Business+ plans
 	Value ZoneSettingAdvancedDdoListResponseResultValue `json:"value"`
-	JSON  zoneSettingAdvancedDdoListResponseResultJSON
+	JSON  zoneSettingAdvancedDdoListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingAdvancedDdoListResponseResultJSON contains the JSON metadata for the

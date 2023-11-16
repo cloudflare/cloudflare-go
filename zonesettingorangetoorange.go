@@ -57,8 +57,8 @@ type ZoneSettingOrangeToOrangeUpdateResponse struct {
 	// on Cloudflare.
 	Result ZoneSettingOrangeToOrangeUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingOrangeToOrangeUpdateResponseJSON
+	Success bool                                        `json:"success"`
+	JSON    zoneSettingOrangeToOrangeUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingOrangeToOrangeUpdateResponseJSON contains the JSON metadata for the
@@ -77,9 +77,9 @@ func (r *ZoneSettingOrangeToOrangeUpdateResponse) UnmarshalJSON(data []byte) (er
 }
 
 type ZoneSettingOrangeToOrangeUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingOrangeToOrangeUpdateResponseErrorJSON
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    zoneSettingOrangeToOrangeUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingOrangeToOrangeUpdateResponseErrorJSON contains the JSON metadata for
@@ -96,9 +96,9 @@ func (r *ZoneSettingOrangeToOrangeUpdateResponseError) UnmarshalJSON(data []byte
 }
 
 type ZoneSettingOrangeToOrangeUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingOrangeToOrangeUpdateResponseMessageJSON
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    zoneSettingOrangeToOrangeUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingOrangeToOrangeUpdateResponseMessageJSON contains the JSON metadata
@@ -126,7 +126,7 @@ type ZoneSettingOrangeToOrangeUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingOrangeToOrangeUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingOrangeToOrangeUpdateResponseResultJSON
+	JSON  zoneSettingOrangeToOrangeUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingOrangeToOrangeUpdateResponseResultJSON contains the JSON metadata for
@@ -175,8 +175,8 @@ type ZoneSettingOrangeToOrangeListResponse struct {
 	// on Cloudflare.
 	Result ZoneSettingOrangeToOrangeListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingOrangeToOrangeListResponseJSON
+	Success bool                                      `json:"success"`
+	JSON    zoneSettingOrangeToOrangeListResponseJSON `json:"-"`
 }
 
 // zoneSettingOrangeToOrangeListResponseJSON contains the JSON metadata for the
@@ -195,9 +195,9 @@ func (r *ZoneSettingOrangeToOrangeListResponse) UnmarshalJSON(data []byte) (err 
 }
 
 type ZoneSettingOrangeToOrangeListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingOrangeToOrangeListResponseErrorJSON
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    zoneSettingOrangeToOrangeListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingOrangeToOrangeListResponseErrorJSON contains the JSON metadata for
@@ -214,9 +214,9 @@ func (r *ZoneSettingOrangeToOrangeListResponseError) UnmarshalJSON(data []byte) 
 }
 
 type ZoneSettingOrangeToOrangeListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingOrangeToOrangeListResponseMessageJSON
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    zoneSettingOrangeToOrangeListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingOrangeToOrangeListResponseMessageJSON contains the JSON metadata for
@@ -244,7 +244,7 @@ type ZoneSettingOrangeToOrangeListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingOrangeToOrangeListResponseResultValue `json:"value"`
-	JSON  zoneSettingOrangeToOrangeListResponseResultJSON
+	JSON  zoneSettingOrangeToOrangeListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingOrangeToOrangeListResponseResultJSON contains the JSON metadata for

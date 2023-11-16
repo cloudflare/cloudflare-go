@@ -60,8 +60,8 @@ type ZoneSettingAlwaysUseHTTPUpdateResponse struct {
 	// consider creating an "Always use HTTPS" page rule.
 	Result ZoneSettingAlwaysUseHTTPUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingAlwaysUseHTTPUpdateResponseJSON
+	Success bool                                       `json:"success"`
+	JSON    zoneSettingAlwaysUseHTTPUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingAlwaysUseHTTPUpdateResponseJSON contains the JSON metadata for the
@@ -80,9 +80,9 @@ func (r *ZoneSettingAlwaysUseHTTPUpdateResponse) UnmarshalJSON(data []byte) (err
 }
 
 type ZoneSettingAlwaysUseHTTPUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingAlwaysUseHTTPUpdateResponseErrorJSON
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    zoneSettingAlwaysUseHTTPUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingAlwaysUseHTTPUpdateResponseErrorJSON contains the JSON metadata for
@@ -99,9 +99,9 @@ func (r *ZoneSettingAlwaysUseHTTPUpdateResponseError) UnmarshalJSON(data []byte)
 }
 
 type ZoneSettingAlwaysUseHTTPUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingAlwaysUseHTTPUpdateResponseMessageJSON
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    zoneSettingAlwaysUseHTTPUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingAlwaysUseHTTPUpdateResponseMessageJSON contains the JSON metadata for
@@ -130,7 +130,7 @@ type ZoneSettingAlwaysUseHTTPUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingAlwaysUseHTTPUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingAlwaysUseHTTPUpdateResponseResultJSON
+	JSON  zoneSettingAlwaysUseHTTPUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingAlwaysUseHTTPUpdateResponseResultJSON contains the JSON metadata for
@@ -180,8 +180,8 @@ type ZoneSettingAlwaysUseHTTPListResponse struct {
 	// consider creating an "Always use HTTPS" page rule.
 	Result ZoneSettingAlwaysUseHTTPListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingAlwaysUseHTTPListResponseJSON
+	Success bool                                     `json:"success"`
+	JSON    zoneSettingAlwaysUseHTTPListResponseJSON `json:"-"`
 }
 
 // zoneSettingAlwaysUseHTTPListResponseJSON contains the JSON metadata for the
@@ -200,9 +200,9 @@ func (r *ZoneSettingAlwaysUseHTTPListResponse) UnmarshalJSON(data []byte) (err e
 }
 
 type ZoneSettingAlwaysUseHTTPListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingAlwaysUseHTTPListResponseErrorJSON
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    zoneSettingAlwaysUseHTTPListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingAlwaysUseHTTPListResponseErrorJSON contains the JSON metadata for the
@@ -219,9 +219,9 @@ func (r *ZoneSettingAlwaysUseHTTPListResponseError) UnmarshalJSON(data []byte) (
 }
 
 type ZoneSettingAlwaysUseHTTPListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingAlwaysUseHTTPListResponseMessageJSON
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    zoneSettingAlwaysUseHTTPListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingAlwaysUseHTTPListResponseMessageJSON contains the JSON metadata for
@@ -250,7 +250,7 @@ type ZoneSettingAlwaysUseHTTPListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingAlwaysUseHTTPListResponseResultValue `json:"value"`
-	JSON  zoneSettingAlwaysUseHTTPListResponseResultJSON
+	JSON  zoneSettingAlwaysUseHTTPListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingAlwaysUseHTTPListResponseResultJSON contains the JSON metadata for

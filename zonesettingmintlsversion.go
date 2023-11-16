@@ -56,8 +56,8 @@ type ZoneSettingMinTlsVersionUpdateResponse struct {
 	// rejected, while 1.1, 1.2, and 1.3 (if enabled) will be permitted.
 	Result ZoneSettingMinTlsVersionUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingMinTlsVersionUpdateResponseJSON
+	Success bool                                       `json:"success"`
+	JSON    zoneSettingMinTlsVersionUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingMinTlsVersionUpdateResponseJSON contains the JSON metadata for the
@@ -76,9 +76,9 @@ func (r *ZoneSettingMinTlsVersionUpdateResponse) UnmarshalJSON(data []byte) (err
 }
 
 type ZoneSettingMinTlsVersionUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingMinTlsVersionUpdateResponseErrorJSON
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    zoneSettingMinTlsVersionUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingMinTlsVersionUpdateResponseErrorJSON contains the JSON metadata for
@@ -95,9 +95,9 @@ func (r *ZoneSettingMinTlsVersionUpdateResponseError) UnmarshalJSON(data []byte)
 }
 
 type ZoneSettingMinTlsVersionUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingMinTlsVersionUpdateResponseMessageJSON
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    zoneSettingMinTlsVersionUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingMinTlsVersionUpdateResponseMessageJSON contains the JSON metadata for
@@ -126,7 +126,7 @@ type ZoneSettingMinTlsVersionUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingMinTlsVersionUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingMinTlsVersionUpdateResponseResultJSON
+	JSON  zoneSettingMinTlsVersionUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingMinTlsVersionUpdateResponseResultJSON contains the JSON metadata for
@@ -178,8 +178,8 @@ type ZoneSettingMinTlsVersionListResponse struct {
 	// rejected, while 1.1, 1.2, and 1.3 (if enabled) will be permitted.
 	Result ZoneSettingMinTlsVersionListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingMinTlsVersionListResponseJSON
+	Success bool                                     `json:"success"`
+	JSON    zoneSettingMinTlsVersionListResponseJSON `json:"-"`
 }
 
 // zoneSettingMinTlsVersionListResponseJSON contains the JSON metadata for the
@@ -198,9 +198,9 @@ func (r *ZoneSettingMinTlsVersionListResponse) UnmarshalJSON(data []byte) (err e
 }
 
 type ZoneSettingMinTlsVersionListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingMinTlsVersionListResponseErrorJSON
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    zoneSettingMinTlsVersionListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingMinTlsVersionListResponseErrorJSON contains the JSON metadata for the
@@ -217,9 +217,9 @@ func (r *ZoneSettingMinTlsVersionListResponseError) UnmarshalJSON(data []byte) (
 }
 
 type ZoneSettingMinTlsVersionListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingMinTlsVersionListResponseMessageJSON
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    zoneSettingMinTlsVersionListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingMinTlsVersionListResponseMessageJSON contains the JSON metadata for
@@ -248,7 +248,7 @@ type ZoneSettingMinTlsVersionListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingMinTlsVersionListResponseResultValue `json:"value"`
-	JSON  zoneSettingMinTlsVersionListResponseResultJSON
+	JSON  zoneSettingMinTlsVersionListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingMinTlsVersionListResponseResultJSON contains the JSON metadata for

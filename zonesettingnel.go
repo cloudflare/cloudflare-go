@@ -56,8 +56,8 @@ type ZoneSettingNelUpdateResponse struct {
 	// Enable Network Error Logging reporting on your zone. (Beta)
 	Result ZoneSettingNelUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingNelUpdateResponseJSON
+	Success bool                             `json:"success"`
+	JSON    zoneSettingNelUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingNelUpdateResponseJSON contains the JSON metadata for the struct
@@ -76,9 +76,9 @@ func (r *ZoneSettingNelUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneSettingNelUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingNelUpdateResponseErrorJSON
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    zoneSettingNelUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingNelUpdateResponseErrorJSON contains the JSON metadata for the struct
@@ -95,9 +95,9 @@ func (r *ZoneSettingNelUpdateResponseError) UnmarshalJSON(data []byte) (err erro
 }
 
 type ZoneSettingNelUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingNelUpdateResponseMessageJSON
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    zoneSettingNelUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingNelUpdateResponseMessageJSON contains the JSON metadata for the
@@ -124,7 +124,7 @@ type ZoneSettingNelUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingNelUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingNelUpdateResponseResultJSON
+	JSON  zoneSettingNelUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingNelUpdateResponseResultJSON contains the JSON metadata for the struct
@@ -160,8 +160,8 @@ const (
 
 // Value of the zone setting.
 type ZoneSettingNelUpdateResponseResultValue struct {
-	Enabled bool `json:"enabled"`
-	JSON    zoneSettingNelUpdateResponseResultValueJSON
+	Enabled bool                                        `json:"enabled"`
+	JSON    zoneSettingNelUpdateResponseResultValueJSON `json:"-"`
 }
 
 // zoneSettingNelUpdateResponseResultValueJSON contains the JSON metadata for the
@@ -182,8 +182,8 @@ type ZoneSettingNelListResponse struct {
 	// Enable Network Error Logging reporting on your zone. (Beta)
 	Result ZoneSettingNelListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingNelListResponseJSON
+	Success bool                           `json:"success"`
+	JSON    zoneSettingNelListResponseJSON `json:"-"`
 }
 
 // zoneSettingNelListResponseJSON contains the JSON metadata for the struct
@@ -202,9 +202,9 @@ func (r *ZoneSettingNelListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneSettingNelListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingNelListResponseErrorJSON
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    zoneSettingNelListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingNelListResponseErrorJSON contains the JSON metadata for the struct
@@ -221,9 +221,9 @@ func (r *ZoneSettingNelListResponseError) UnmarshalJSON(data []byte) (err error)
 }
 
 type ZoneSettingNelListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingNelListResponseMessageJSON
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    zoneSettingNelListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingNelListResponseMessageJSON contains the JSON metadata for the struct
@@ -250,7 +250,7 @@ type ZoneSettingNelListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingNelListResponseResultValue `json:"value"`
-	JSON  zoneSettingNelListResponseResultJSON
+	JSON  zoneSettingNelListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingNelListResponseResultJSON contains the JSON metadata for the struct
@@ -286,8 +286,8 @@ const (
 
 // Value of the zone setting.
 type ZoneSettingNelListResponseResultValue struct {
-	Enabled bool `json:"enabled"`
-	JSON    zoneSettingNelListResponseResultValueJSON
+	Enabled bool                                      `json:"enabled"`
+	JSON    zoneSettingNelListResponseResultValueJSON `json:"-"`
 }
 
 // zoneSettingNelListResponseResultValueJSON contains the JSON metadata for the

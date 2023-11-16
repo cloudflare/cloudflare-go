@@ -66,8 +66,8 @@ type ZoneSettingCacheLevelUpdateResponse struct {
 	// string. (https://support.cloudflare.com/hc/en-us/articles/200168256).
 	Result ZoneSettingCacheLevelUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingCacheLevelUpdateResponseJSON
+	Success bool                                    `json:"success"`
+	JSON    zoneSettingCacheLevelUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingCacheLevelUpdateResponseJSON contains the JSON metadata for the
@@ -86,9 +86,9 @@ func (r *ZoneSettingCacheLevelUpdateResponse) UnmarshalJSON(data []byte) (err er
 }
 
 type ZoneSettingCacheLevelUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingCacheLevelUpdateResponseErrorJSON
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    zoneSettingCacheLevelUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingCacheLevelUpdateResponseErrorJSON contains the JSON metadata for the
@@ -105,9 +105,9 @@ func (r *ZoneSettingCacheLevelUpdateResponseError) UnmarshalJSON(data []byte) (e
 }
 
 type ZoneSettingCacheLevelUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingCacheLevelUpdateResponseMessageJSON
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    zoneSettingCacheLevelUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingCacheLevelUpdateResponseMessageJSON contains the JSON metadata for
@@ -138,7 +138,7 @@ type ZoneSettingCacheLevelUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingCacheLevelUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingCacheLevelUpdateResponseResultJSON
+	JSON  zoneSettingCacheLevelUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingCacheLevelUpdateResponseResultJSON contains the JSON metadata for the
@@ -191,8 +191,8 @@ type ZoneSettingCacheLevelListResponse struct {
 	// string. (https://support.cloudflare.com/hc/en-us/articles/200168256).
 	Result ZoneSettingCacheLevelListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingCacheLevelListResponseJSON
+	Success bool                                  `json:"success"`
+	JSON    zoneSettingCacheLevelListResponseJSON `json:"-"`
 }
 
 // zoneSettingCacheLevelListResponseJSON contains the JSON metadata for the struct
@@ -211,9 +211,9 @@ func (r *ZoneSettingCacheLevelListResponse) UnmarshalJSON(data []byte) (err erro
 }
 
 type ZoneSettingCacheLevelListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingCacheLevelListResponseErrorJSON
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    zoneSettingCacheLevelListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingCacheLevelListResponseErrorJSON contains the JSON metadata for the
@@ -230,9 +230,9 @@ func (r *ZoneSettingCacheLevelListResponseError) UnmarshalJSON(data []byte) (err
 }
 
 type ZoneSettingCacheLevelListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingCacheLevelListResponseMessageJSON
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    zoneSettingCacheLevelListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingCacheLevelListResponseMessageJSON contains the JSON metadata for the
@@ -263,7 +263,7 @@ type ZoneSettingCacheLevelListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingCacheLevelListResponseResultValue `json:"value"`
-	JSON  zoneSettingCacheLevelListResponseResultJSON
+	JSON  zoneSettingCacheLevelListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingCacheLevelListResponseResultJSON contains the JSON metadata for the

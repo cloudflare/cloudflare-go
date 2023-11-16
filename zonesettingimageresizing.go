@@ -63,8 +63,8 @@ type ZoneSettingImageResizingUpdateResponse struct {
 	// more information.
 	Result ZoneSettingImageResizingUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingImageResizingUpdateResponseJSON
+	Success bool                                       `json:"success"`
+	JSON    zoneSettingImageResizingUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingImageResizingUpdateResponseJSON contains the JSON metadata for the
@@ -83,9 +83,9 @@ func (r *ZoneSettingImageResizingUpdateResponse) UnmarshalJSON(data []byte) (err
 }
 
 type ZoneSettingImageResizingUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingImageResizingUpdateResponseErrorJSON
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    zoneSettingImageResizingUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingImageResizingUpdateResponseErrorJSON contains the JSON metadata for
@@ -102,9 +102,9 @@ func (r *ZoneSettingImageResizingUpdateResponseError) UnmarshalJSON(data []byte)
 }
 
 type ZoneSettingImageResizingUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingImageResizingUpdateResponseMessageJSON
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    zoneSettingImageResizingUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingImageResizingUpdateResponseMessageJSON contains the JSON metadata for
@@ -134,7 +134,7 @@ type ZoneSettingImageResizingUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Whether the feature is enabled, disabled, or enabled in `open proxy` mode.
 	Value ZoneSettingImageResizingUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingImageResizingUpdateResponseResultJSON
+	JSON  zoneSettingImageResizingUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingImageResizingUpdateResponseResultJSON contains the JSON metadata for
@@ -186,8 +186,8 @@ type ZoneSettingImageResizingListResponse struct {
 	// more information.
 	Result ZoneSettingImageResizingListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingImageResizingListResponseJSON
+	Success bool                                     `json:"success"`
+	JSON    zoneSettingImageResizingListResponseJSON `json:"-"`
 }
 
 // zoneSettingImageResizingListResponseJSON contains the JSON metadata for the
@@ -206,9 +206,9 @@ func (r *ZoneSettingImageResizingListResponse) UnmarshalJSON(data []byte) (err e
 }
 
 type ZoneSettingImageResizingListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingImageResizingListResponseErrorJSON
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    zoneSettingImageResizingListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingImageResizingListResponseErrorJSON contains the JSON metadata for the
@@ -225,9 +225,9 @@ func (r *ZoneSettingImageResizingListResponseError) UnmarshalJSON(data []byte) (
 }
 
 type ZoneSettingImageResizingListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingImageResizingListResponseMessageJSON
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    zoneSettingImageResizingListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingImageResizingListResponseMessageJSON contains the JSON metadata for
@@ -257,7 +257,7 @@ type ZoneSettingImageResizingListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Whether the feature is enabled, disabled, or enabled in `open proxy` mode.
 	Value ZoneSettingImageResizingListResponseResultValue `json:"value"`
-	JSON  zoneSettingImageResizingListResponseResultJSON
+	JSON  zoneSettingImageResizingListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingImageResizingListResponseResultJSON contains the JSON metadata for

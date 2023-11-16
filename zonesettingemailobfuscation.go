@@ -57,8 +57,8 @@ type ZoneSettingEmailObfuscationUpdateResponse struct {
 	// humans. (https://support.cloudflare.com/hc/en-us/articles/200170016).
 	Result ZoneSettingEmailObfuscationUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingEmailObfuscationUpdateResponseJSON
+	Success bool                                          `json:"success"`
+	JSON    zoneSettingEmailObfuscationUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingEmailObfuscationUpdateResponseJSON contains the JSON metadata for the
@@ -77,9 +77,9 @@ func (r *ZoneSettingEmailObfuscationUpdateResponse) UnmarshalJSON(data []byte) (
 }
 
 type ZoneSettingEmailObfuscationUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingEmailObfuscationUpdateResponseErrorJSON
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    zoneSettingEmailObfuscationUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingEmailObfuscationUpdateResponseErrorJSON contains the JSON metadata
@@ -96,9 +96,9 @@ func (r *ZoneSettingEmailObfuscationUpdateResponseError) UnmarshalJSON(data []by
 }
 
 type ZoneSettingEmailObfuscationUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingEmailObfuscationUpdateResponseMessageJSON
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    zoneSettingEmailObfuscationUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingEmailObfuscationUpdateResponseMessageJSON contains the JSON metadata
@@ -126,7 +126,7 @@ type ZoneSettingEmailObfuscationUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingEmailObfuscationUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingEmailObfuscationUpdateResponseResultJSON
+	JSON  zoneSettingEmailObfuscationUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingEmailObfuscationUpdateResponseResultJSON contains the JSON metadata
@@ -175,8 +175,8 @@ type ZoneSettingEmailObfuscationListResponse struct {
 	// humans. (https://support.cloudflare.com/hc/en-us/articles/200170016).
 	Result ZoneSettingEmailObfuscationListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingEmailObfuscationListResponseJSON
+	Success bool                                        `json:"success"`
+	JSON    zoneSettingEmailObfuscationListResponseJSON `json:"-"`
 }
 
 // zoneSettingEmailObfuscationListResponseJSON contains the JSON metadata for the
@@ -195,9 +195,9 @@ func (r *ZoneSettingEmailObfuscationListResponse) UnmarshalJSON(data []byte) (er
 }
 
 type ZoneSettingEmailObfuscationListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingEmailObfuscationListResponseErrorJSON
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    zoneSettingEmailObfuscationListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingEmailObfuscationListResponseErrorJSON contains the JSON metadata for
@@ -214,9 +214,9 @@ func (r *ZoneSettingEmailObfuscationListResponseError) UnmarshalJSON(data []byte
 }
 
 type ZoneSettingEmailObfuscationListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingEmailObfuscationListResponseMessageJSON
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    zoneSettingEmailObfuscationListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingEmailObfuscationListResponseMessageJSON contains the JSON metadata
@@ -244,7 +244,7 @@ type ZoneSettingEmailObfuscationListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingEmailObfuscationListResponseResultValue `json:"value"`
-	JSON  zoneSettingEmailObfuscationListResponseResultJSON
+	JSON  zoneSettingEmailObfuscationListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingEmailObfuscationListResponseResultJSON contains the JSON metadata for

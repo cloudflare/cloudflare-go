@@ -63,8 +63,8 @@ type ZoneSettingWebsocketUpdateResponse struct {
 	// [Can I use Cloudflare with Websockets](https://support.cloudflare.com/hc/en-us/articles/200169466-Can-I-use-Cloudflare-with-WebSockets-).
 	Result ZoneSettingWebsocketUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingWebsocketUpdateResponseJSON
+	Success bool                                   `json:"success"`
+	JSON    zoneSettingWebsocketUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingWebsocketUpdateResponseJSON contains the JSON metadata for the struct
@@ -83,9 +83,9 @@ func (r *ZoneSettingWebsocketUpdateResponse) UnmarshalJSON(data []byte) (err err
 }
 
 type ZoneSettingWebsocketUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingWebsocketUpdateResponseErrorJSON
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    zoneSettingWebsocketUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingWebsocketUpdateResponseErrorJSON contains the JSON metadata for the
@@ -102,9 +102,9 @@ func (r *ZoneSettingWebsocketUpdateResponseError) UnmarshalJSON(data []byte) (er
 }
 
 type ZoneSettingWebsocketUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingWebsocketUpdateResponseMessageJSON
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    zoneSettingWebsocketUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingWebsocketUpdateResponseMessageJSON contains the JSON metadata for the
@@ -137,7 +137,7 @@ type ZoneSettingWebsocketUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingWebsocketUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingWebsocketUpdateResponseResultJSON
+	JSON  zoneSettingWebsocketUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingWebsocketUpdateResponseResultJSON contains the JSON metadata for the
@@ -191,8 +191,8 @@ type ZoneSettingWebsocketListResponse struct {
 	// [Can I use Cloudflare with Websockets](https://support.cloudflare.com/hc/en-us/articles/200169466-Can-I-use-Cloudflare-with-WebSockets-).
 	Result ZoneSettingWebsocketListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingWebsocketListResponseJSON
+	Success bool                                 `json:"success"`
+	JSON    zoneSettingWebsocketListResponseJSON `json:"-"`
 }
 
 // zoneSettingWebsocketListResponseJSON contains the JSON metadata for the struct
@@ -211,9 +211,9 @@ func (r *ZoneSettingWebsocketListResponse) UnmarshalJSON(data []byte) (err error
 }
 
 type ZoneSettingWebsocketListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingWebsocketListResponseErrorJSON
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    zoneSettingWebsocketListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingWebsocketListResponseErrorJSON contains the JSON metadata for the
@@ -230,9 +230,9 @@ func (r *ZoneSettingWebsocketListResponseError) UnmarshalJSON(data []byte) (err 
 }
 
 type ZoneSettingWebsocketListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingWebsocketListResponseMessageJSON
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    zoneSettingWebsocketListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingWebsocketListResponseMessageJSON contains the JSON metadata for the
@@ -265,7 +265,7 @@ type ZoneSettingWebsocketListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingWebsocketListResponseResultValue `json:"value"`
-	JSON  zoneSettingWebsocketListResponseResultJSON
+	JSON  zoneSettingWebsocketListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingWebsocketListResponseResultJSON contains the JSON metadata for the

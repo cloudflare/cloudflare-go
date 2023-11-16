@@ -63,8 +63,8 @@ type ZoneSettingResponseBufferingUpdateResponse struct {
 	// and is not buffered by Cloudflare. This is limited to Enterprise Zones.
 	Result ZoneSettingResponseBufferingUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingResponseBufferingUpdateResponseJSON
+	Success bool                                           `json:"success"`
+	JSON    zoneSettingResponseBufferingUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingResponseBufferingUpdateResponseJSON contains the JSON metadata for
@@ -83,9 +83,9 @@ func (r *ZoneSettingResponseBufferingUpdateResponse) UnmarshalJSON(data []byte) 
 }
 
 type ZoneSettingResponseBufferingUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingResponseBufferingUpdateResponseErrorJSON
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    zoneSettingResponseBufferingUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingResponseBufferingUpdateResponseErrorJSON contains the JSON metadata
@@ -102,9 +102,9 @@ func (r *ZoneSettingResponseBufferingUpdateResponseError) UnmarshalJSON(data []b
 }
 
 type ZoneSettingResponseBufferingUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingResponseBufferingUpdateResponseMessageJSON
+	Code    int64                                                 `json:"code,required"`
+	Message string                                                `json:"message,required"`
+	JSON    zoneSettingResponseBufferingUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingResponseBufferingUpdateResponseMessageJSON contains the JSON metadata
@@ -134,7 +134,7 @@ type ZoneSettingResponseBufferingUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingResponseBufferingUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingResponseBufferingUpdateResponseResultJSON
+	JSON  zoneSettingResponseBufferingUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingResponseBufferingUpdateResponseResultJSON contains the JSON metadata
@@ -185,8 +185,8 @@ type ZoneSettingResponseBufferingListResponse struct {
 	// and is not buffered by Cloudflare. This is limited to Enterprise Zones.
 	Result ZoneSettingResponseBufferingListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingResponseBufferingListResponseJSON
+	Success bool                                         `json:"success"`
+	JSON    zoneSettingResponseBufferingListResponseJSON `json:"-"`
 }
 
 // zoneSettingResponseBufferingListResponseJSON contains the JSON metadata for the
@@ -205,9 +205,9 @@ func (r *ZoneSettingResponseBufferingListResponse) UnmarshalJSON(data []byte) (e
 }
 
 type ZoneSettingResponseBufferingListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingResponseBufferingListResponseErrorJSON
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    zoneSettingResponseBufferingListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingResponseBufferingListResponseErrorJSON contains the JSON metadata for
@@ -224,9 +224,9 @@ func (r *ZoneSettingResponseBufferingListResponseError) UnmarshalJSON(data []byt
 }
 
 type ZoneSettingResponseBufferingListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingResponseBufferingListResponseMessageJSON
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    zoneSettingResponseBufferingListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingResponseBufferingListResponseMessageJSON contains the JSON metadata
@@ -256,7 +256,7 @@ type ZoneSettingResponseBufferingListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingResponseBufferingListResponseResultValue `json:"value"`
-	JSON  zoneSettingResponseBufferingListResponseResultJSON
+	JSON  zoneSettingResponseBufferingListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingResponseBufferingListResponseResultJSON contains the JSON metadata

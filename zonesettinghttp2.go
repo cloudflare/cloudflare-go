@@ -54,8 +54,8 @@ type ZoneSettingHttp2UpdateResponse struct {
 	// HTTP2 enabled for this zone.
 	Result ZoneSettingHttp2UpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingHttp2UpdateResponseJSON
+	Success bool                               `json:"success"`
+	JSON    zoneSettingHttp2UpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingHttp2UpdateResponseJSON contains the JSON metadata for the struct
@@ -74,9 +74,9 @@ func (r *ZoneSettingHttp2UpdateResponse) UnmarshalJSON(data []byte) (err error) 
 }
 
 type ZoneSettingHttp2UpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingHttp2UpdateResponseErrorJSON
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    zoneSettingHttp2UpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingHttp2UpdateResponseErrorJSON contains the JSON metadata for the
@@ -93,9 +93,9 @@ func (r *ZoneSettingHttp2UpdateResponseError) UnmarshalJSON(data []byte) (err er
 }
 
 type ZoneSettingHttp2UpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingHttp2UpdateResponseMessageJSON
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    zoneSettingHttp2UpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingHttp2UpdateResponseMessageJSON contains the JSON metadata for the
@@ -122,7 +122,7 @@ type ZoneSettingHttp2UpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the HTTP2 setting.
 	Value ZoneSettingHttp2UpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingHttp2UpdateResponseResultJSON
+	JSON  zoneSettingHttp2UpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingHttp2UpdateResponseResultJSON contains the JSON metadata for the
@@ -170,8 +170,8 @@ type ZoneSettingHttp2ListResponse struct {
 	// HTTP2 enabled for this zone.
 	Result ZoneSettingHttp2ListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingHttp2ListResponseJSON
+	Success bool                             `json:"success"`
+	JSON    zoneSettingHttp2ListResponseJSON `json:"-"`
 }
 
 // zoneSettingHttp2ListResponseJSON contains the JSON metadata for the struct
@@ -190,9 +190,9 @@ func (r *ZoneSettingHttp2ListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneSettingHttp2ListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingHttp2ListResponseErrorJSON
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    zoneSettingHttp2ListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingHttp2ListResponseErrorJSON contains the JSON metadata for the struct
@@ -209,9 +209,9 @@ func (r *ZoneSettingHttp2ListResponseError) UnmarshalJSON(data []byte) (err erro
 }
 
 type ZoneSettingHttp2ListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingHttp2ListResponseMessageJSON
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    zoneSettingHttp2ListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingHttp2ListResponseMessageJSON contains the JSON metadata for the
@@ -238,7 +238,7 @@ type ZoneSettingHttp2ListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the HTTP2 setting.
 	Value ZoneSettingHttp2ListResponseResultValue `json:"value"`
-	JSON  zoneSettingHttp2ListResponseResultJSON
+	JSON  zoneSettingHttp2ListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingHttp2ListResponseResultJSON contains the JSON metadata for the struct

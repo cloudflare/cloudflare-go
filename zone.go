@@ -84,8 +84,8 @@ type APIResponseSingleID struct {
 	Messages []APIResponseSingleIDMessage `json:"messages"`
 	Result   APIResponseSingleIDResult    `json:"result,nullable"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    apiResponseSingleIDJSON
+	Success bool                    `json:"success"`
+	JSON    apiResponseSingleIDJSON `json:"-"`
 }
 
 // apiResponseSingleIDJSON contains the JSON metadata for the struct
@@ -104,9 +104,9 @@ func (r *APIResponseSingleID) UnmarshalJSON(data []byte) (err error) {
 }
 
 type APIResponseSingleIDError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    apiResponseSingleIDErrorJSON
+	Code    int64                        `json:"code,required"`
+	Message string                       `json:"message,required"`
+	JSON    apiResponseSingleIDErrorJSON `json:"-"`
 }
 
 // apiResponseSingleIDErrorJSON contains the JSON metadata for the struct
@@ -123,9 +123,9 @@ func (r *APIResponseSingleIDError) UnmarshalJSON(data []byte) (err error) {
 }
 
 type APIResponseSingleIDMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    apiResponseSingleIDMessageJSON
+	Code    int64                          `json:"code,required"`
+	Message string                         `json:"message,required"`
+	JSON    apiResponseSingleIDMessageJSON `json:"-"`
 }
 
 // apiResponseSingleIDMessageJSON contains the JSON metadata for the struct
@@ -143,8 +143,8 @@ func (r *APIResponseSingleIDMessage) UnmarshalJSON(data []byte) (err error) {
 
 type APIResponseSingleIDResult struct {
 	// Identifier
-	ID   string `json:"id,required"`
-	JSON apiResponseSingleIDResultJSON
+	ID   string                        `json:"id,required"`
+	JSON apiResponseSingleIDResultJSON `json:"-"`
 }
 
 // apiResponseSingleIDResultJSON contains the JSON metadata for the struct
@@ -164,8 +164,8 @@ type ZoneNewResponse struct {
 	Messages []ZoneNewResponseMessage `json:"messages"`
 	Result   ZoneNewResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneNewResponseJSON
+	Success bool                `json:"success"`
+	JSON    zoneNewResponseJSON `json:"-"`
 }
 
 // zoneNewResponseJSON contains the JSON metadata for the struct [ZoneNewResponse]
@@ -183,9 +183,9 @@ func (r *ZoneNewResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneNewResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneNewResponseErrorJSON
+	Code    int64                    `json:"code,required"`
+	Message string                   `json:"message,required"`
+	JSON    zoneNewResponseErrorJSON `json:"-"`
 }
 
 // zoneNewResponseErrorJSON contains the JSON metadata for the struct
@@ -202,9 +202,9 @@ func (r *ZoneNewResponseError) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneNewResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneNewResponseMessageJSON
+	Code    int64                      `json:"code,required"`
+	Message string                     `json:"message,required"`
+	JSON    zoneNewResponseMessageJSON `json:"-"`
 }
 
 // zoneNewResponseMessageJSON contains the JSON metadata for the struct
@@ -241,8 +241,8 @@ type ZoneNewResponseResult struct {
 	// for full zones?
 	OriginalNameServers []string `json:"original_name_servers,required,nullable" format:"hostname"`
 	// Registrar for the domain at the time of switching to Cloudflare
-	OriginalRegistrar string `json:"original_registrar,required,nullable"`
-	JSON              zoneNewResponseResultJSON
+	OriginalRegistrar string                    `json:"original_registrar,required,nullable"`
+	JSON              zoneNewResponseResultJSON `json:"-"`
 }
 
 // zoneNewResponseResultJSON contains the JSON metadata for the struct
@@ -270,8 +270,8 @@ type ZoneGetResponse struct {
 	Messages []ZoneGetResponseMessage `json:"messages"`
 	Result   ZoneGetResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneGetResponseJSON
+	Success bool                `json:"success"`
+	JSON    zoneGetResponseJSON `json:"-"`
 }
 
 // zoneGetResponseJSON contains the JSON metadata for the struct [ZoneGetResponse]
@@ -289,9 +289,9 @@ func (r *ZoneGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneGetResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneGetResponseErrorJSON
+	Code    int64                    `json:"code,required"`
+	Message string                   `json:"message,required"`
+	JSON    zoneGetResponseErrorJSON `json:"-"`
 }
 
 // zoneGetResponseErrorJSON contains the JSON metadata for the struct
@@ -308,9 +308,9 @@ func (r *ZoneGetResponseError) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneGetResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneGetResponseMessageJSON
+	Code    int64                      `json:"code,required"`
+	Message string                     `json:"message,required"`
+	JSON    zoneGetResponseMessageJSON `json:"-"`
 }
 
 // zoneGetResponseMessageJSON contains the JSON metadata for the struct
@@ -347,8 +347,8 @@ type ZoneGetResponseResult struct {
 	// for full zones?
 	OriginalNameServers []string `json:"original_name_servers,required,nullable" format:"hostname"`
 	// Registrar for the domain at the time of switching to Cloudflare
-	OriginalRegistrar string `json:"original_registrar,required,nullable"`
-	JSON              zoneGetResponseResultJSON
+	OriginalRegistrar string                    `json:"original_registrar,required,nullable"`
+	JSON              zoneGetResponseResultJSON `json:"-"`
 }
 
 // zoneGetResponseResultJSON contains the JSON metadata for the struct
@@ -376,8 +376,8 @@ type ZoneUpdateResponse struct {
 	Messages []ZoneUpdateResponseMessage `json:"messages"`
 	Result   ZoneUpdateResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneUpdateResponseJSON
+	Success bool                   `json:"success"`
+	JSON    zoneUpdateResponseJSON `json:"-"`
 }
 
 // zoneUpdateResponseJSON contains the JSON metadata for the struct
@@ -396,9 +396,9 @@ func (r *ZoneUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneUpdateResponseErrorJSON
+	Code    int64                       `json:"code,required"`
+	Message string                      `json:"message,required"`
+	JSON    zoneUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneUpdateResponseErrorJSON contains the JSON metadata for the struct
@@ -415,9 +415,9 @@ func (r *ZoneUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneUpdateResponseMessageJSON
+	Code    int64                         `json:"code,required"`
+	Message string                        `json:"message,required"`
+	JSON    zoneUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneUpdateResponseMessageJSON contains the JSON metadata for the struct
@@ -454,8 +454,8 @@ type ZoneUpdateResponseResult struct {
 	// for full zones?
 	OriginalNameServers []string `json:"original_name_servers,required,nullable" format:"hostname"`
 	// Registrar for the domain at the time of switching to Cloudflare
-	OriginalRegistrar string `json:"original_registrar,required,nullable"`
-	JSON              zoneUpdateResponseResultJSON
+	OriginalRegistrar string                       `json:"original_registrar,required,nullable"`
+	JSON              zoneUpdateResponseResultJSON `json:"-"`
 }
 
 // zoneUpdateResponseResultJSON contains the JSON metadata for the struct
@@ -484,8 +484,8 @@ type ZoneListResponse struct {
 	Result     []ZoneListResponseResult   `json:"result"`
 	ResultInfo ZoneListResponseResultInfo `json:"result_info"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneListResponseJSON
+	Success bool                 `json:"success"`
+	JSON    zoneListResponseJSON `json:"-"`
 }
 
 // zoneListResponseJSON contains the JSON metadata for the struct
@@ -505,9 +505,9 @@ func (r *ZoneListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneListResponseErrorJSON
+	Code    int64                     `json:"code,required"`
+	Message string                    `json:"message,required"`
+	JSON    zoneListResponseErrorJSON `json:"-"`
 }
 
 // zoneListResponseErrorJSON contains the JSON metadata for the struct
@@ -524,9 +524,9 @@ func (r *ZoneListResponseError) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneListResponseMessageJSON
+	Code    int64                       `json:"code,required"`
+	Message string                      `json:"message,required"`
+	JSON    zoneListResponseMessageJSON `json:"-"`
 }
 
 // zoneListResponseMessageJSON contains the JSON metadata for the struct
@@ -563,8 +563,8 @@ type ZoneListResponseResult struct {
 	// for full zones?
 	OriginalNameServers []string `json:"original_name_servers,required,nullable" format:"hostname"`
 	// Registrar for the domain at the time of switching to Cloudflare
-	OriginalRegistrar string `json:"original_registrar,required,nullable"`
-	JSON              zoneListResponseResultJSON
+	OriginalRegistrar string                     `json:"original_registrar,required,nullable"`
+	JSON              zoneListResponseResultJSON `json:"-"`
 }
 
 // zoneListResponseResultJSON contains the JSON metadata for the struct
@@ -595,8 +595,8 @@ type ZoneListResponseResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64 `json:"total_count"`
-	JSON       zoneListResponseResultInfoJSON
+	TotalCount float64                        `json:"total_count"`
+	JSON       zoneListResponseResultInfoJSON `json:"-"`
 }
 
 // zoneListResponseResultInfoJSON contains the JSON metadata for the struct

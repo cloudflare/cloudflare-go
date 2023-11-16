@@ -57,8 +57,8 @@ type ZoneSettingTlsClientAuthUpdateResponse struct {
 	// client certificate (Enterprise Only).
 	Result ZoneSettingTlsClientAuthUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingTlsClientAuthUpdateResponseJSON
+	Success bool                                       `json:"success"`
+	JSON    zoneSettingTlsClientAuthUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingTlsClientAuthUpdateResponseJSON contains the JSON metadata for the
@@ -77,9 +77,9 @@ func (r *ZoneSettingTlsClientAuthUpdateResponse) UnmarshalJSON(data []byte) (err
 }
 
 type ZoneSettingTlsClientAuthUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingTlsClientAuthUpdateResponseErrorJSON
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    zoneSettingTlsClientAuthUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingTlsClientAuthUpdateResponseErrorJSON contains the JSON metadata for
@@ -96,9 +96,9 @@ func (r *ZoneSettingTlsClientAuthUpdateResponseError) UnmarshalJSON(data []byte)
 }
 
 type ZoneSettingTlsClientAuthUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingTlsClientAuthUpdateResponseMessageJSON
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    zoneSettingTlsClientAuthUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingTlsClientAuthUpdateResponseMessageJSON contains the JSON metadata for
@@ -126,7 +126,7 @@ type ZoneSettingTlsClientAuthUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// value of the zone setting.
 	Value ZoneSettingTlsClientAuthUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingTlsClientAuthUpdateResponseResultJSON
+	JSON  zoneSettingTlsClientAuthUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingTlsClientAuthUpdateResponseResultJSON contains the JSON metadata for
@@ -175,8 +175,8 @@ type ZoneSettingTlsClientAuthListResponse struct {
 	// client certificate (Enterprise Only).
 	Result ZoneSettingTlsClientAuthListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingTlsClientAuthListResponseJSON
+	Success bool                                     `json:"success"`
+	JSON    zoneSettingTlsClientAuthListResponseJSON `json:"-"`
 }
 
 // zoneSettingTlsClientAuthListResponseJSON contains the JSON metadata for the
@@ -195,9 +195,9 @@ func (r *ZoneSettingTlsClientAuthListResponse) UnmarshalJSON(data []byte) (err e
 }
 
 type ZoneSettingTlsClientAuthListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingTlsClientAuthListResponseErrorJSON
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    zoneSettingTlsClientAuthListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingTlsClientAuthListResponseErrorJSON contains the JSON metadata for the
@@ -214,9 +214,9 @@ func (r *ZoneSettingTlsClientAuthListResponseError) UnmarshalJSON(data []byte) (
 }
 
 type ZoneSettingTlsClientAuthListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingTlsClientAuthListResponseMessageJSON
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    zoneSettingTlsClientAuthListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingTlsClientAuthListResponseMessageJSON contains the JSON metadata for
@@ -244,7 +244,7 @@ type ZoneSettingTlsClientAuthListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// value of the zone setting.
 	Value ZoneSettingTlsClientAuthListResponseResultValue `json:"value"`
-	JSON  zoneSettingTlsClientAuthListResponseResultJSON
+	JSON  zoneSettingTlsClientAuthListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingTlsClientAuthListResponseResultJSON contains the JSON metadata for

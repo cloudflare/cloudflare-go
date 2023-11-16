@@ -60,8 +60,8 @@ type ZoneSettingSslRecommenderUpdateResponse struct {
 	// origin servers support.
 	Result ZoneSettingSslRecommenderUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingSslRecommenderUpdateResponseJSON
+	Success bool                                        `json:"success"`
+	JSON    zoneSettingSslRecommenderUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingSslRecommenderUpdateResponseJSON contains the JSON metadata for the
@@ -80,9 +80,9 @@ func (r *ZoneSettingSslRecommenderUpdateResponse) UnmarshalJSON(data []byte) (er
 }
 
 type ZoneSettingSslRecommenderUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingSslRecommenderUpdateResponseErrorJSON
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    zoneSettingSslRecommenderUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingSslRecommenderUpdateResponseErrorJSON contains the JSON metadata for
@@ -99,9 +99,9 @@ func (r *ZoneSettingSslRecommenderUpdateResponseError) UnmarshalJSON(data []byte
 }
 
 type ZoneSettingSslRecommenderUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingSslRecommenderUpdateResponseMessageJSON
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    zoneSettingSslRecommenderUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingSslRecommenderUpdateResponseMessageJSON contains the JSON metadata
@@ -129,8 +129,8 @@ type ZoneSettingSslRecommenderUpdateResponseResult struct {
 	// ssl-recommender enrollment setting.
 	Enabled bool `json:"enabled"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingSslRecommenderUpdateResponseResultJSON
+	ModifiedOn time.Time                                         `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingSslRecommenderUpdateResponseResultJSON `json:"-"`
 }
 
 // zoneSettingSslRecommenderUpdateResponseResultJSON contains the JSON metadata for
@@ -172,8 +172,8 @@ type ZoneSettingSslRecommenderListResponse struct {
 	// origin servers support.
 	Result ZoneSettingSslRecommenderListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingSslRecommenderListResponseJSON
+	Success bool                                      `json:"success"`
+	JSON    zoneSettingSslRecommenderListResponseJSON `json:"-"`
 }
 
 // zoneSettingSslRecommenderListResponseJSON contains the JSON metadata for the
@@ -192,9 +192,9 @@ func (r *ZoneSettingSslRecommenderListResponse) UnmarshalJSON(data []byte) (err 
 }
 
 type ZoneSettingSslRecommenderListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingSslRecommenderListResponseErrorJSON
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    zoneSettingSslRecommenderListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingSslRecommenderListResponseErrorJSON contains the JSON metadata for
@@ -211,9 +211,9 @@ func (r *ZoneSettingSslRecommenderListResponseError) UnmarshalJSON(data []byte) 
 }
 
 type ZoneSettingSslRecommenderListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingSslRecommenderListResponseMessageJSON
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    zoneSettingSslRecommenderListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingSslRecommenderListResponseMessageJSON contains the JSON metadata for
@@ -241,8 +241,8 @@ type ZoneSettingSslRecommenderListResponseResult struct {
 	// ssl-recommender enrollment setting.
 	Enabled bool `json:"enabled"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingSslRecommenderListResponseResultJSON
+	ModifiedOn time.Time                                       `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingSslRecommenderListResponseResultJSON `json:"-"`
 }
 
 // zoneSettingSslRecommenderListResponseResultJSON contains the JSON metadata for

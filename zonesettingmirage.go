@@ -63,8 +63,8 @@ type ZoneSettingMirageUpdateResponse struct {
 	// more information.
 	Result ZoneSettingMirageUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingMirageUpdateResponseJSON
+	Success bool                                `json:"success"`
+	JSON    zoneSettingMirageUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingMirageUpdateResponseJSON contains the JSON metadata for the struct
@@ -83,9 +83,9 @@ func (r *ZoneSettingMirageUpdateResponse) UnmarshalJSON(data []byte) (err error)
 }
 
 type ZoneSettingMirageUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingMirageUpdateResponseErrorJSON
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    zoneSettingMirageUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingMirageUpdateResponseErrorJSON contains the JSON metadata for the
@@ -102,9 +102,9 @@ func (r *ZoneSettingMirageUpdateResponseError) UnmarshalJSON(data []byte) (err e
 }
 
 type ZoneSettingMirageUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingMirageUpdateResponseMessageJSON
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    zoneSettingMirageUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingMirageUpdateResponseMessageJSON contains the JSON metadata for the
@@ -134,7 +134,7 @@ type ZoneSettingMirageUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingMirageUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingMirageUpdateResponseResultJSON
+	JSON  zoneSettingMirageUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingMirageUpdateResponseResultJSON contains the JSON metadata for the
@@ -185,8 +185,8 @@ type ZoneSettingMirageListResponse struct {
 	// more information.
 	Result ZoneSettingMirageListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingMirageListResponseJSON
+	Success bool                              `json:"success"`
+	JSON    zoneSettingMirageListResponseJSON `json:"-"`
 }
 
 // zoneSettingMirageListResponseJSON contains the JSON metadata for the struct
@@ -205,9 +205,9 @@ func (r *ZoneSettingMirageListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneSettingMirageListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingMirageListResponseErrorJSON
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    zoneSettingMirageListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingMirageListResponseErrorJSON contains the JSON metadata for the struct
@@ -224,9 +224,9 @@ func (r *ZoneSettingMirageListResponseError) UnmarshalJSON(data []byte) (err err
 }
 
 type ZoneSettingMirageListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingMirageListResponseMessageJSON
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    zoneSettingMirageListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingMirageListResponseMessageJSON contains the JSON metadata for the
@@ -256,7 +256,7 @@ type ZoneSettingMirageListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingMirageListResponseResultValue `json:"value"`
-	JSON  zoneSettingMirageListResponseResultJSON
+	JSON  zoneSettingMirageListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingMirageListResponseResultJSON contains the JSON metadata for the

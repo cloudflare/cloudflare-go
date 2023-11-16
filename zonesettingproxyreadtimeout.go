@@ -54,8 +54,8 @@ type ZoneSettingProxyReadTimeoutUpdateResponse struct {
 	// Maximum time between two read operations from origin.
 	Result ZoneSettingProxyReadTimeoutUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingProxyReadTimeoutUpdateResponseJSON
+	Success bool                                          `json:"success"`
+	JSON    zoneSettingProxyReadTimeoutUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingProxyReadTimeoutUpdateResponseJSON contains the JSON metadata for the
@@ -74,9 +74,9 @@ func (r *ZoneSettingProxyReadTimeoutUpdateResponse) UnmarshalJSON(data []byte) (
 }
 
 type ZoneSettingProxyReadTimeoutUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingProxyReadTimeoutUpdateResponseErrorJSON
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    zoneSettingProxyReadTimeoutUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingProxyReadTimeoutUpdateResponseErrorJSON contains the JSON metadata
@@ -93,9 +93,9 @@ func (r *ZoneSettingProxyReadTimeoutUpdateResponseError) UnmarshalJSON(data []by
 }
 
 type ZoneSettingProxyReadTimeoutUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingProxyReadTimeoutUpdateResponseMessageJSON
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    zoneSettingProxyReadTimeoutUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingProxyReadTimeoutUpdateResponseMessageJSON contains the JSON metadata
@@ -121,8 +121,8 @@ type ZoneSettingProxyReadTimeoutUpdateResponseResult struct {
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting. Notes: Value must be between 1 and 6000
-	Value float64 `json:"value"`
-	JSON  zoneSettingProxyReadTimeoutUpdateResponseResultJSON
+	Value float64                                             `json:"value"`
+	JSON  zoneSettingProxyReadTimeoutUpdateResponseResultJSON `json:"-"`
 }
 
 // zoneSettingProxyReadTimeoutUpdateResponseResultJSON contains the JSON metadata
@@ -162,8 +162,8 @@ type ZoneSettingProxyReadTimeoutListResponse struct {
 	// Maximum time between two read operations from origin.
 	Result ZoneSettingProxyReadTimeoutListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingProxyReadTimeoutListResponseJSON
+	Success bool                                        `json:"success"`
+	JSON    zoneSettingProxyReadTimeoutListResponseJSON `json:"-"`
 }
 
 // zoneSettingProxyReadTimeoutListResponseJSON contains the JSON metadata for the
@@ -182,9 +182,9 @@ func (r *ZoneSettingProxyReadTimeoutListResponse) UnmarshalJSON(data []byte) (er
 }
 
 type ZoneSettingProxyReadTimeoutListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingProxyReadTimeoutListResponseErrorJSON
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    zoneSettingProxyReadTimeoutListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingProxyReadTimeoutListResponseErrorJSON contains the JSON metadata for
@@ -201,9 +201,9 @@ func (r *ZoneSettingProxyReadTimeoutListResponseError) UnmarshalJSON(data []byte
 }
 
 type ZoneSettingProxyReadTimeoutListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingProxyReadTimeoutListResponseMessageJSON
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    zoneSettingProxyReadTimeoutListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingProxyReadTimeoutListResponseMessageJSON contains the JSON metadata
@@ -229,8 +229,8 @@ type ZoneSettingProxyReadTimeoutListResponseResult struct {
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting. Notes: Value must be between 1 and 6000
-	Value float64 `json:"value"`
-	JSON  zoneSettingProxyReadTimeoutListResponseResultJSON
+	Value float64                                           `json:"value"`
+	JSON  zoneSettingProxyReadTimeoutListResponseResultJSON `json:"-"`
 }
 
 // zoneSettingProxyReadTimeoutListResponseResultJSON contains the JSON metadata for

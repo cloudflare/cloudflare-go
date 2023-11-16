@@ -54,8 +54,8 @@ type ZoneSettingTls1_3UpdateResponse struct {
 	// Enables Crypto TLS 1.3 feature for a zone.
 	Result ZoneSettingTls1_3UpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingTls1_3UpdateResponseJSON
+	Success bool                                `json:"success"`
+	JSON    zoneSettingTls1_3UpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingTls1_3UpdateResponseJSON contains the JSON metadata for the struct
@@ -74,9 +74,9 @@ func (r *ZoneSettingTls1_3UpdateResponse) UnmarshalJSON(data []byte) (err error)
 }
 
 type ZoneSettingTls1_3UpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingTls1_3UpdateResponseErrorJSON
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    zoneSettingTls1_3UpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingTls1_3UpdateResponseErrorJSON contains the JSON metadata for the
@@ -93,9 +93,9 @@ func (r *ZoneSettingTls1_3UpdateResponseError) UnmarshalJSON(data []byte) (err e
 }
 
 type ZoneSettingTls1_3UpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingTls1_3UpdateResponseMessageJSON
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    zoneSettingTls1_3UpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingTls1_3UpdateResponseMessageJSON contains the JSON metadata for the
@@ -123,7 +123,7 @@ type ZoneSettingTls1_3UpdateResponseResult struct {
 	// Value of the zone setting. Notes: Default value depends on the zone's plan
 	// level.
 	Value ZoneSettingTls1_3UpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingTls1_3UpdateResponseResultJSON
+	JSON  zoneSettingTls1_3UpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingTls1_3UpdateResponseResultJSON contains the JSON metadata for the
@@ -173,8 +173,8 @@ type ZoneSettingTls1_3ListResponse struct {
 	// Enables Crypto TLS 1.3 feature for a zone.
 	Result ZoneSettingTls1_3ListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingTls1_3ListResponseJSON
+	Success bool                              `json:"success"`
+	JSON    zoneSettingTls1_3ListResponseJSON `json:"-"`
 }
 
 // zoneSettingTls1_3ListResponseJSON contains the JSON metadata for the struct
@@ -193,9 +193,9 @@ func (r *ZoneSettingTls1_3ListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneSettingTls1_3ListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingTls1_3ListResponseErrorJSON
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    zoneSettingTls1_3ListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingTls1_3ListResponseErrorJSON contains the JSON metadata for the struct
@@ -212,9 +212,9 @@ func (r *ZoneSettingTls1_3ListResponseError) UnmarshalJSON(data []byte) (err err
 }
 
 type ZoneSettingTls1_3ListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingTls1_3ListResponseMessageJSON
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    zoneSettingTls1_3ListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingTls1_3ListResponseMessageJSON contains the JSON metadata for the
@@ -242,7 +242,7 @@ type ZoneSettingTls1_3ListResponseResult struct {
 	// Value of the zone setting. Notes: Default value depends on the zone's plan
 	// level.
 	Value ZoneSettingTls1_3ListResponseResultValue `json:"value"`
-	JSON  zoneSettingTls1_3ListResponseResultJSON
+	JSON  zoneSettingTls1_3ListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingTls1_3ListResponseResultJSON contains the JSON metadata for the

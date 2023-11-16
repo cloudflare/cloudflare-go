@@ -57,8 +57,8 @@ type ZoneSettingIpv6UpdateResponse struct {
 	// (https://support.cloudflare.com/hc/en-us/articles/200168586).
 	Result ZoneSettingIpv6UpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingIpv6UpdateResponseJSON
+	Success bool                              `json:"success"`
+	JSON    zoneSettingIpv6UpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingIpv6UpdateResponseJSON contains the JSON metadata for the struct
@@ -77,9 +77,9 @@ func (r *ZoneSettingIpv6UpdateResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneSettingIpv6UpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingIpv6UpdateResponseErrorJSON
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    zoneSettingIpv6UpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingIpv6UpdateResponseErrorJSON contains the JSON metadata for the struct
@@ -96,9 +96,9 @@ func (r *ZoneSettingIpv6UpdateResponseError) UnmarshalJSON(data []byte) (err err
 }
 
 type ZoneSettingIpv6UpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingIpv6UpdateResponseMessageJSON
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    zoneSettingIpv6UpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingIpv6UpdateResponseMessageJSON contains the JSON metadata for the
@@ -126,7 +126,7 @@ type ZoneSettingIpv6UpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingIpv6UpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingIpv6UpdateResponseResultJSON
+	JSON  zoneSettingIpv6UpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingIpv6UpdateResponseResultJSON contains the JSON metadata for the
@@ -175,8 +175,8 @@ type ZoneSettingIpv6ListResponse struct {
 	// (https://support.cloudflare.com/hc/en-us/articles/200168586).
 	Result ZoneSettingIpv6ListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingIpv6ListResponseJSON
+	Success bool                            `json:"success"`
+	JSON    zoneSettingIpv6ListResponseJSON `json:"-"`
 }
 
 // zoneSettingIpv6ListResponseJSON contains the JSON metadata for the struct
@@ -195,9 +195,9 @@ func (r *ZoneSettingIpv6ListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneSettingIpv6ListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingIpv6ListResponseErrorJSON
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    zoneSettingIpv6ListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingIpv6ListResponseErrorJSON contains the JSON metadata for the struct
@@ -214,9 +214,9 @@ func (r *ZoneSettingIpv6ListResponseError) UnmarshalJSON(data []byte) (err error
 }
 
 type ZoneSettingIpv6ListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingIpv6ListResponseMessageJSON
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    zoneSettingIpv6ListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingIpv6ListResponseMessageJSON contains the JSON metadata for the struct
@@ -244,7 +244,7 @@ type ZoneSettingIpv6ListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingIpv6ListResponseResultValue `json:"value"`
-	JSON  zoneSettingIpv6ListResponseResultJSON
+	JSON  zoneSettingIpv6ListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingIpv6ListResponseResultJSON contains the JSON metadata for the struct

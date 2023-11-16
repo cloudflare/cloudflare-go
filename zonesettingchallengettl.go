@@ -66,8 +66,8 @@ type ZoneSettingChallengeTtlUpdateResponse struct {
 	// (https://support.cloudflare.com/hc/en-us/articles/200170136).
 	Result ZoneSettingChallengeTtlUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingChallengeTtlUpdateResponseJSON
+	Success bool                                      `json:"success"`
+	JSON    zoneSettingChallengeTtlUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingChallengeTtlUpdateResponseJSON contains the JSON metadata for the
@@ -86,9 +86,9 @@ func (r *ZoneSettingChallengeTtlUpdateResponse) UnmarshalJSON(data []byte) (err 
 }
 
 type ZoneSettingChallengeTtlUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingChallengeTtlUpdateResponseErrorJSON
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    zoneSettingChallengeTtlUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingChallengeTtlUpdateResponseErrorJSON contains the JSON metadata for
@@ -105,9 +105,9 @@ func (r *ZoneSettingChallengeTtlUpdateResponseError) UnmarshalJSON(data []byte) 
 }
 
 type ZoneSettingChallengeTtlUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingChallengeTtlUpdateResponseMessageJSON
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    zoneSettingChallengeTtlUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingChallengeTtlUpdateResponseMessageJSON contains the JSON metadata for
@@ -138,7 +138,7 @@ type ZoneSettingChallengeTtlUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingChallengeTtlUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingChallengeTtlUpdateResponseResultJSON
+	JSON  zoneSettingChallengeTtlUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingChallengeTtlUpdateResponseResultJSON contains the JSON metadata for
@@ -202,8 +202,8 @@ type ZoneSettingChallengeTtlListResponse struct {
 	// (https://support.cloudflare.com/hc/en-us/articles/200170136).
 	Result ZoneSettingChallengeTtlListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingChallengeTtlListResponseJSON
+	Success bool                                    `json:"success"`
+	JSON    zoneSettingChallengeTtlListResponseJSON `json:"-"`
 }
 
 // zoneSettingChallengeTtlListResponseJSON contains the JSON metadata for the
@@ -222,9 +222,9 @@ func (r *ZoneSettingChallengeTtlListResponse) UnmarshalJSON(data []byte) (err er
 }
 
 type ZoneSettingChallengeTtlListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingChallengeTtlListResponseErrorJSON
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    zoneSettingChallengeTtlListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingChallengeTtlListResponseErrorJSON contains the JSON metadata for the
@@ -241,9 +241,9 @@ func (r *ZoneSettingChallengeTtlListResponseError) UnmarshalJSON(data []byte) (e
 }
 
 type ZoneSettingChallengeTtlListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingChallengeTtlListResponseMessageJSON
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    zoneSettingChallengeTtlListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingChallengeTtlListResponseMessageJSON contains the JSON metadata for
@@ -274,7 +274,7 @@ type ZoneSettingChallengeTtlListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingChallengeTtlListResponseResultValue `json:"value"`
-	JSON  zoneSettingChallengeTtlListResponseResultJSON
+	JSON  zoneSettingChallengeTtlListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingChallengeTtlListResponseResultJSON contains the JSON metadata for the

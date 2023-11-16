@@ -55,8 +55,8 @@ type ZoneSettingCipherUpdateResponse struct {
 	// BoringSSL format.
 	Result ZoneSettingCipherUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingCipherUpdateResponseJSON
+	Success bool                                `json:"success"`
+	JSON    zoneSettingCipherUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingCipherUpdateResponseJSON contains the JSON metadata for the struct
@@ -75,9 +75,9 @@ func (r *ZoneSettingCipherUpdateResponse) UnmarshalJSON(data []byte) (err error)
 }
 
 type ZoneSettingCipherUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingCipherUpdateResponseErrorJSON
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    zoneSettingCipherUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingCipherUpdateResponseErrorJSON contains the JSON metadata for the
@@ -94,9 +94,9 @@ func (r *ZoneSettingCipherUpdateResponseError) UnmarshalJSON(data []byte) (err e
 }
 
 type ZoneSettingCipherUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingCipherUpdateResponseMessageJSON
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    zoneSettingCipherUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingCipherUpdateResponseMessageJSON contains the JSON metadata for the
@@ -123,8 +123,8 @@ type ZoneSettingCipherUpdateResponseResult struct {
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
-	Value []string `json:"value"`
-	JSON  zoneSettingCipherUpdateResponseResultJSON
+	Value []string                                  `json:"value"`
+	JSON  zoneSettingCipherUpdateResponseResultJSON `json:"-"`
 }
 
 // zoneSettingCipherUpdateResponseResultJSON contains the JSON metadata for the
@@ -165,8 +165,8 @@ type ZoneSettingCipherListResponse struct {
 	// BoringSSL format.
 	Result ZoneSettingCipherListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingCipherListResponseJSON
+	Success bool                              `json:"success"`
+	JSON    zoneSettingCipherListResponseJSON `json:"-"`
 }
 
 // zoneSettingCipherListResponseJSON contains the JSON metadata for the struct
@@ -185,9 +185,9 @@ func (r *ZoneSettingCipherListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneSettingCipherListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingCipherListResponseErrorJSON
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    zoneSettingCipherListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingCipherListResponseErrorJSON contains the JSON metadata for the struct
@@ -204,9 +204,9 @@ func (r *ZoneSettingCipherListResponseError) UnmarshalJSON(data []byte) (err err
 }
 
 type ZoneSettingCipherListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingCipherListResponseMessageJSON
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    zoneSettingCipherListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingCipherListResponseMessageJSON contains the JSON metadata for the
@@ -233,8 +233,8 @@ type ZoneSettingCipherListResponseResult struct {
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
-	Value []string `json:"value"`
-	JSON  zoneSettingCipherListResponseResultJSON
+	Value []string                                `json:"value"`
+	JSON  zoneSettingCipherListResponseResultJSON `json:"-"`
 }
 
 // zoneSettingCipherListResponseResultJSON contains the JSON metadata for the

@@ -81,8 +81,8 @@ type ZoneSettingRocketLoaderUpdateResponse struct {
 	// for more information.
 	Result ZoneSettingRocketLoaderUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingRocketLoaderUpdateResponseJSON
+	Success bool                                      `json:"success"`
+	JSON    zoneSettingRocketLoaderUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingRocketLoaderUpdateResponseJSON contains the JSON metadata for the
@@ -101,9 +101,9 @@ func (r *ZoneSettingRocketLoaderUpdateResponse) UnmarshalJSON(data []byte) (err 
 }
 
 type ZoneSettingRocketLoaderUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingRocketLoaderUpdateResponseErrorJSON
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    zoneSettingRocketLoaderUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingRocketLoaderUpdateResponseErrorJSON contains the JSON metadata for
@@ -120,9 +120,9 @@ func (r *ZoneSettingRocketLoaderUpdateResponseError) UnmarshalJSON(data []byte) 
 }
 
 type ZoneSettingRocketLoaderUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingRocketLoaderUpdateResponseMessageJSON
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    zoneSettingRocketLoaderUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingRocketLoaderUpdateResponseMessageJSON contains the JSON metadata for
@@ -158,7 +158,7 @@ type ZoneSettingRocketLoaderUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingRocketLoaderUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingRocketLoaderUpdateResponseResultJSON
+	JSON  zoneSettingRocketLoaderUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingRocketLoaderUpdateResponseResultJSON contains the JSON metadata for
@@ -215,8 +215,8 @@ type ZoneSettingRocketLoaderListResponse struct {
 	// for more information.
 	Result ZoneSettingRocketLoaderListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingRocketLoaderListResponseJSON
+	Success bool                                    `json:"success"`
+	JSON    zoneSettingRocketLoaderListResponseJSON `json:"-"`
 }
 
 // zoneSettingRocketLoaderListResponseJSON contains the JSON metadata for the
@@ -235,9 +235,9 @@ func (r *ZoneSettingRocketLoaderListResponse) UnmarshalJSON(data []byte) (err er
 }
 
 type ZoneSettingRocketLoaderListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingRocketLoaderListResponseErrorJSON
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    zoneSettingRocketLoaderListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingRocketLoaderListResponseErrorJSON contains the JSON metadata for the
@@ -254,9 +254,9 @@ func (r *ZoneSettingRocketLoaderListResponseError) UnmarshalJSON(data []byte) (e
 }
 
 type ZoneSettingRocketLoaderListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingRocketLoaderListResponseMessageJSON
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    zoneSettingRocketLoaderListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingRocketLoaderListResponseMessageJSON contains the JSON metadata for
@@ -292,7 +292,7 @@ type ZoneSettingRocketLoaderListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingRocketLoaderListResponseResultValue `json:"value"`
-	JSON  zoneSettingRocketLoaderListResponseResultJSON
+	JSON  zoneSettingRocketLoaderListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingRocketLoaderListResponseResultJSON contains the JSON metadata for the

@@ -63,8 +63,8 @@ type ZoneSettingPolishUpdateResponse struct {
 	// recommended for hi-res photography sites.
 	Result ZoneSettingPolishUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingPolishUpdateResponseJSON
+	Success bool                                `json:"success"`
+	JSON    zoneSettingPolishUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingPolishUpdateResponseJSON contains the JSON metadata for the struct
@@ -83,9 +83,9 @@ func (r *ZoneSettingPolishUpdateResponse) UnmarshalJSON(data []byte) (err error)
 }
 
 type ZoneSettingPolishUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingPolishUpdateResponseErrorJSON
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    zoneSettingPolishUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingPolishUpdateResponseErrorJSON contains the JSON metadata for the
@@ -102,9 +102,9 @@ func (r *ZoneSettingPolishUpdateResponseError) UnmarshalJSON(data []byte) (err e
 }
 
 type ZoneSettingPolishUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingPolishUpdateResponseMessageJSON
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    zoneSettingPolishUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingPolishUpdateResponseMessageJSON contains the JSON metadata for the
@@ -136,7 +136,7 @@ type ZoneSettingPolishUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingPolishUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingPolishUpdateResponseResultJSON
+	JSON  zoneSettingPolishUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingPolishUpdateResponseResultJSON contains the JSON metadata for the
@@ -190,8 +190,8 @@ type ZoneSettingPolishListResponse struct {
 	// recommended for hi-res photography sites.
 	Result ZoneSettingPolishListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingPolishListResponseJSON
+	Success bool                              `json:"success"`
+	JSON    zoneSettingPolishListResponseJSON `json:"-"`
 }
 
 // zoneSettingPolishListResponseJSON contains the JSON metadata for the struct
@@ -210,9 +210,9 @@ func (r *ZoneSettingPolishListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneSettingPolishListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingPolishListResponseErrorJSON
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    zoneSettingPolishListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingPolishListResponseErrorJSON contains the JSON metadata for the struct
@@ -229,9 +229,9 @@ func (r *ZoneSettingPolishListResponseError) UnmarshalJSON(data []byte) (err err
 }
 
 type ZoneSettingPolishListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingPolishListResponseMessageJSON
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    zoneSettingPolishListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingPolishListResponseMessageJSON contains the JSON metadata for the
@@ -263,7 +263,7 @@ type ZoneSettingPolishListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingPolishListResponseResultValue `json:"value"`
-	JSON  zoneSettingPolishListResponseResultJSON
+	JSON  zoneSettingPolishListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingPolishListResponseResultJSON contains the JSON metadata for the

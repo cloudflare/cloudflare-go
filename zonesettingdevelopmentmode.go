@@ -69,8 +69,8 @@ type ZoneSettingDevelopmentModeUpdateResponse struct {
 	// hours and then automatically toggle off.
 	Result ZoneSettingDevelopmentModeUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingDevelopmentModeUpdateResponseJSON
+	Success bool                                         `json:"success"`
+	JSON    zoneSettingDevelopmentModeUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingDevelopmentModeUpdateResponseJSON contains the JSON metadata for the
@@ -89,9 +89,9 @@ func (r *ZoneSettingDevelopmentModeUpdateResponse) UnmarshalJSON(data []byte) (e
 }
 
 type ZoneSettingDevelopmentModeUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingDevelopmentModeUpdateResponseErrorJSON
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    zoneSettingDevelopmentModeUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingDevelopmentModeUpdateResponseErrorJSON contains the JSON metadata for
@@ -108,9 +108,9 @@ func (r *ZoneSettingDevelopmentModeUpdateResponseError) UnmarshalJSON(data []byt
 }
 
 type ZoneSettingDevelopmentModeUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingDevelopmentModeUpdateResponseMessageJSON
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    zoneSettingDevelopmentModeUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingDevelopmentModeUpdateResponseMessageJSON contains the JSON metadata
@@ -146,7 +146,7 @@ type ZoneSettingDevelopmentModeUpdateResponseResult struct {
 	TimeRemaining float64 `json:"time_remaining"`
 	// Value of the zone setting.
 	Value ZoneSettingDevelopmentModeUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingDevelopmentModeUpdateResponseResultJSON
+	JSON  zoneSettingDevelopmentModeUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingDevelopmentModeUpdateResponseResultJSON contains the JSON metadata
@@ -200,8 +200,8 @@ type ZoneSettingDevelopmentModeListResponse struct {
 	// hours and then automatically toggle off.
 	Result ZoneSettingDevelopmentModeListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingDevelopmentModeListResponseJSON
+	Success bool                                       `json:"success"`
+	JSON    zoneSettingDevelopmentModeListResponseJSON `json:"-"`
 }
 
 // zoneSettingDevelopmentModeListResponseJSON contains the JSON metadata for the
@@ -220,9 +220,9 @@ func (r *ZoneSettingDevelopmentModeListResponse) UnmarshalJSON(data []byte) (err
 }
 
 type ZoneSettingDevelopmentModeListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingDevelopmentModeListResponseErrorJSON
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    zoneSettingDevelopmentModeListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingDevelopmentModeListResponseErrorJSON contains the JSON metadata for
@@ -239,9 +239,9 @@ func (r *ZoneSettingDevelopmentModeListResponseError) UnmarshalJSON(data []byte)
 }
 
 type ZoneSettingDevelopmentModeListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingDevelopmentModeListResponseMessageJSON
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    zoneSettingDevelopmentModeListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingDevelopmentModeListResponseMessageJSON contains the JSON metadata for
@@ -277,7 +277,7 @@ type ZoneSettingDevelopmentModeListResponseResult struct {
 	TimeRemaining float64 `json:"time_remaining"`
 	// Value of the zone setting.
 	Value ZoneSettingDevelopmentModeListResponseResultValue `json:"value"`
-	JSON  zoneSettingDevelopmentModeListResponseResultJSON
+	JSON  zoneSettingDevelopmentModeListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingDevelopmentModeListResponseResultJSON contains the JSON metadata for

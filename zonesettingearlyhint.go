@@ -63,8 +63,8 @@ type ZoneSettingEarlyHintUpdateResponse struct {
 	// more information.
 	Result ZoneSettingEarlyHintUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingEarlyHintUpdateResponseJSON
+	Success bool                                   `json:"success"`
+	JSON    zoneSettingEarlyHintUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingEarlyHintUpdateResponseJSON contains the JSON metadata for the struct
@@ -83,9 +83,9 @@ func (r *ZoneSettingEarlyHintUpdateResponse) UnmarshalJSON(data []byte) (err err
 }
 
 type ZoneSettingEarlyHintUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingEarlyHintUpdateResponseErrorJSON
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    zoneSettingEarlyHintUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingEarlyHintUpdateResponseErrorJSON contains the JSON metadata for the
@@ -102,9 +102,9 @@ func (r *ZoneSettingEarlyHintUpdateResponseError) UnmarshalJSON(data []byte) (er
 }
 
 type ZoneSettingEarlyHintUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingEarlyHintUpdateResponseMessageJSON
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    zoneSettingEarlyHintUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingEarlyHintUpdateResponseMessageJSON contains the JSON metadata for the
@@ -134,7 +134,7 @@ type ZoneSettingEarlyHintUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingEarlyHintUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingEarlyHintUpdateResponseResultJSON
+	JSON  zoneSettingEarlyHintUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingEarlyHintUpdateResponseResultJSON contains the JSON metadata for the
@@ -185,8 +185,8 @@ type ZoneSettingEarlyHintListResponse struct {
 	// more information.
 	Result ZoneSettingEarlyHintListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingEarlyHintListResponseJSON
+	Success bool                                 `json:"success"`
+	JSON    zoneSettingEarlyHintListResponseJSON `json:"-"`
 }
 
 // zoneSettingEarlyHintListResponseJSON contains the JSON metadata for the struct
@@ -205,9 +205,9 @@ func (r *ZoneSettingEarlyHintListResponse) UnmarshalJSON(data []byte) (err error
 }
 
 type ZoneSettingEarlyHintListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingEarlyHintListResponseErrorJSON
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    zoneSettingEarlyHintListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingEarlyHintListResponseErrorJSON contains the JSON metadata for the
@@ -224,9 +224,9 @@ func (r *ZoneSettingEarlyHintListResponseError) UnmarshalJSON(data []byte) (err 
 }
 
 type ZoneSettingEarlyHintListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingEarlyHintListResponseMessageJSON
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    zoneSettingEarlyHintListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingEarlyHintListResponseMessageJSON contains the JSON metadata for the
@@ -256,7 +256,7 @@ type ZoneSettingEarlyHintListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingEarlyHintListResponseResultValue `json:"value"`
-	JSON  zoneSettingEarlyHintListResponseResultJSON
+	JSON  zoneSettingEarlyHintListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingEarlyHintListResponseResultJSON contains the JSON metadata for the

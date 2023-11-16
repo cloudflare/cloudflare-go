@@ -63,8 +63,8 @@ type ZoneSettingMobileRedirectUpdateResponse struct {
 	// for more information.
 	Result ZoneSettingMobileRedirectUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingMobileRedirectUpdateResponseJSON
+	Success bool                                        `json:"success"`
+	JSON    zoneSettingMobileRedirectUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingMobileRedirectUpdateResponseJSON contains the JSON metadata for the
@@ -83,9 +83,9 @@ func (r *ZoneSettingMobileRedirectUpdateResponse) UnmarshalJSON(data []byte) (er
 }
 
 type ZoneSettingMobileRedirectUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingMobileRedirectUpdateResponseErrorJSON
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    zoneSettingMobileRedirectUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingMobileRedirectUpdateResponseErrorJSON contains the JSON metadata for
@@ -102,9 +102,9 @@ func (r *ZoneSettingMobileRedirectUpdateResponseError) UnmarshalJSON(data []byte
 }
 
 type ZoneSettingMobileRedirectUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingMobileRedirectUpdateResponseMessageJSON
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    zoneSettingMobileRedirectUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingMobileRedirectUpdateResponseMessageJSON contains the JSON metadata
@@ -134,7 +134,7 @@ type ZoneSettingMobileRedirectUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingMobileRedirectUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingMobileRedirectUpdateResponseResultJSON
+	JSON  zoneSettingMobileRedirectUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingMobileRedirectUpdateResponseResultJSON contains the JSON metadata for
@@ -177,8 +177,8 @@ type ZoneSettingMobileRedirectUpdateResponseResultValue struct {
 	Status ZoneSettingMobileRedirectUpdateResponseResultValueStatus `json:"status"`
 	// Whether to drop the current page path and redirect to the mobile subdomain URL
 	// root, or keep the path and redirect to the same page on the mobile subdomain.
-	StripUri bool `json:"strip_uri"`
-	JSON     zoneSettingMobileRedirectUpdateResponseResultValueJSON
+	StripUri bool                                                   `json:"strip_uri"`
+	JSON     zoneSettingMobileRedirectUpdateResponseResultValueJSON `json:"-"`
 }
 
 // zoneSettingMobileRedirectUpdateResponseResultValueJSON contains the JSON
@@ -212,8 +212,8 @@ type ZoneSettingMobileRedirectListResponse struct {
 	// for more information.
 	Result ZoneSettingMobileRedirectListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingMobileRedirectListResponseJSON
+	Success bool                                      `json:"success"`
+	JSON    zoneSettingMobileRedirectListResponseJSON `json:"-"`
 }
 
 // zoneSettingMobileRedirectListResponseJSON contains the JSON metadata for the
@@ -232,9 +232,9 @@ func (r *ZoneSettingMobileRedirectListResponse) UnmarshalJSON(data []byte) (err 
 }
 
 type ZoneSettingMobileRedirectListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingMobileRedirectListResponseErrorJSON
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    zoneSettingMobileRedirectListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingMobileRedirectListResponseErrorJSON contains the JSON metadata for
@@ -251,9 +251,9 @@ func (r *ZoneSettingMobileRedirectListResponseError) UnmarshalJSON(data []byte) 
 }
 
 type ZoneSettingMobileRedirectListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingMobileRedirectListResponseMessageJSON
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    zoneSettingMobileRedirectListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingMobileRedirectListResponseMessageJSON contains the JSON metadata for
@@ -283,7 +283,7 @@ type ZoneSettingMobileRedirectListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingMobileRedirectListResponseResultValue `json:"value"`
-	JSON  zoneSettingMobileRedirectListResponseResultJSON
+	JSON  zoneSettingMobileRedirectListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingMobileRedirectListResponseResultJSON contains the JSON metadata for
@@ -326,8 +326,8 @@ type ZoneSettingMobileRedirectListResponseResultValue struct {
 	Status ZoneSettingMobileRedirectListResponseResultValueStatus `json:"status"`
 	// Whether to drop the current page path and redirect to the mobile subdomain URL
 	// root, or keep the path and redirect to the same page on the mobile subdomain.
-	StripUri bool `json:"strip_uri"`
-	JSON     zoneSettingMobileRedirectListResponseResultValueJSON
+	StripUri bool                                                 `json:"strip_uri"`
+	JSON     zoneSettingMobileRedirectListResponseResultValueJSON `json:"-"`
 }
 
 // zoneSettingMobileRedirectListResponseResultValueJSON contains the JSON metadata

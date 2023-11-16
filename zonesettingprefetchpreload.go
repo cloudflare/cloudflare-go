@@ -57,8 +57,8 @@ type ZoneSettingPrefetchPreloadUpdateResponse struct {
 	// This is limited to Enterprise Zones.
 	Result ZoneSettingPrefetchPreloadUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingPrefetchPreloadUpdateResponseJSON
+	Success bool                                         `json:"success"`
+	JSON    zoneSettingPrefetchPreloadUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingPrefetchPreloadUpdateResponseJSON contains the JSON metadata for the
@@ -77,9 +77,9 @@ func (r *ZoneSettingPrefetchPreloadUpdateResponse) UnmarshalJSON(data []byte) (e
 }
 
 type ZoneSettingPrefetchPreloadUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingPrefetchPreloadUpdateResponseErrorJSON
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    zoneSettingPrefetchPreloadUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingPrefetchPreloadUpdateResponseErrorJSON contains the JSON metadata for
@@ -96,9 +96,9 @@ func (r *ZoneSettingPrefetchPreloadUpdateResponseError) UnmarshalJSON(data []byt
 }
 
 type ZoneSettingPrefetchPreloadUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingPrefetchPreloadUpdateResponseMessageJSON
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    zoneSettingPrefetchPreloadUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingPrefetchPreloadUpdateResponseMessageJSON contains the JSON metadata
@@ -126,7 +126,7 @@ type ZoneSettingPrefetchPreloadUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingPrefetchPreloadUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingPrefetchPreloadUpdateResponseResultJSON
+	JSON  zoneSettingPrefetchPreloadUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingPrefetchPreloadUpdateResponseResultJSON contains the JSON metadata
@@ -175,8 +175,8 @@ type ZoneSettingPrefetchPreloadListResponse struct {
 	// This is limited to Enterprise Zones.
 	Result ZoneSettingPrefetchPreloadListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingPrefetchPreloadListResponseJSON
+	Success bool                                       `json:"success"`
+	JSON    zoneSettingPrefetchPreloadListResponseJSON `json:"-"`
 }
 
 // zoneSettingPrefetchPreloadListResponseJSON contains the JSON metadata for the
@@ -195,9 +195,9 @@ func (r *ZoneSettingPrefetchPreloadListResponse) UnmarshalJSON(data []byte) (err
 }
 
 type ZoneSettingPrefetchPreloadListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingPrefetchPreloadListResponseErrorJSON
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    zoneSettingPrefetchPreloadListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingPrefetchPreloadListResponseErrorJSON contains the JSON metadata for
@@ -214,9 +214,9 @@ func (r *ZoneSettingPrefetchPreloadListResponseError) UnmarshalJSON(data []byte)
 }
 
 type ZoneSettingPrefetchPreloadListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingPrefetchPreloadListResponseMessageJSON
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    zoneSettingPrefetchPreloadListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingPrefetchPreloadListResponseMessageJSON contains the JSON metadata for
@@ -244,7 +244,7 @@ type ZoneSettingPrefetchPreloadListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingPrefetchPreloadListResponseResultValue `json:"value"`
-	JSON  zoneSettingPrefetchPreloadListResponseResultJSON
+	JSON  zoneSettingPrefetchPreloadListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingPrefetchPreloadListResponseResultJSON contains the JSON metadata for

@@ -56,8 +56,8 @@ type ZoneSettingH2PrioritizationUpdateResponse struct {
 	// content delivery when used in conjunction with Workers.
 	Result ZoneSettingH2PrioritizationUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingH2PrioritizationUpdateResponseJSON
+	Success bool                                          `json:"success"`
+	JSON    zoneSettingH2PrioritizationUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingH2PrioritizationUpdateResponseJSON contains the JSON metadata for the
@@ -76,9 +76,9 @@ func (r *ZoneSettingH2PrioritizationUpdateResponse) UnmarshalJSON(data []byte) (
 }
 
 type ZoneSettingH2PrioritizationUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingH2PrioritizationUpdateResponseErrorJSON
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    zoneSettingH2PrioritizationUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingH2PrioritizationUpdateResponseErrorJSON contains the JSON metadata
@@ -95,9 +95,9 @@ func (r *ZoneSettingH2PrioritizationUpdateResponseError) UnmarshalJSON(data []by
 }
 
 type ZoneSettingH2PrioritizationUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingH2PrioritizationUpdateResponseMessageJSON
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    zoneSettingH2PrioritizationUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingH2PrioritizationUpdateResponseMessageJSON contains the JSON metadata
@@ -126,7 +126,7 @@ type ZoneSettingH2PrioritizationUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingH2PrioritizationUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingH2PrioritizationUpdateResponseResultJSON
+	JSON  zoneSettingH2PrioritizationUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingH2PrioritizationUpdateResponseResultJSON contains the JSON metadata
@@ -177,8 +177,8 @@ type ZoneSettingH2PrioritizationListResponse struct {
 	// content delivery when used in conjunction with Workers.
 	Result ZoneSettingH2PrioritizationListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingH2PrioritizationListResponseJSON
+	Success bool                                        `json:"success"`
+	JSON    zoneSettingH2PrioritizationListResponseJSON `json:"-"`
 }
 
 // zoneSettingH2PrioritizationListResponseJSON contains the JSON metadata for the
@@ -197,9 +197,9 @@ func (r *ZoneSettingH2PrioritizationListResponse) UnmarshalJSON(data []byte) (er
 }
 
 type ZoneSettingH2PrioritizationListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingH2PrioritizationListResponseErrorJSON
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    zoneSettingH2PrioritizationListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingH2PrioritizationListResponseErrorJSON contains the JSON metadata for
@@ -216,9 +216,9 @@ func (r *ZoneSettingH2PrioritizationListResponseError) UnmarshalJSON(data []byte
 }
 
 type ZoneSettingH2PrioritizationListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingH2PrioritizationListResponseMessageJSON
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    zoneSettingH2PrioritizationListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingH2PrioritizationListResponseMessageJSON contains the JSON metadata
@@ -247,7 +247,7 @@ type ZoneSettingH2PrioritizationListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingH2PrioritizationListResponseResultValue `json:"value"`
-	JSON  zoneSettingH2PrioritizationListResponseResultJSON
+	JSON  zoneSettingH2PrioritizationListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingH2PrioritizationListResponseResultJSON contains the JSON metadata for

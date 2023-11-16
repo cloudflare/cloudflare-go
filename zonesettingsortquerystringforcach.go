@@ -60,8 +60,8 @@ type ZoneSettingSortQueryStringForCachUpdateResponse struct {
 	// Enterprise Zones.
 	Result ZoneSettingSortQueryStringForCachUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingSortQueryStringForCachUpdateResponseJSON
+	Success bool                                                `json:"success"`
+	JSON    zoneSettingSortQueryStringForCachUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingSortQueryStringForCachUpdateResponseJSON contains the JSON metadata
@@ -80,9 +80,9 @@ func (r *ZoneSettingSortQueryStringForCachUpdateResponse) UnmarshalJSON(data []b
 }
 
 type ZoneSettingSortQueryStringForCachUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingSortQueryStringForCachUpdateResponseErrorJSON
+	Code    int64                                                    `json:"code,required"`
+	Message string                                                   `json:"message,required"`
+	JSON    zoneSettingSortQueryStringForCachUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingSortQueryStringForCachUpdateResponseErrorJSON contains the JSON
@@ -99,9 +99,9 @@ func (r *ZoneSettingSortQueryStringForCachUpdateResponseError) UnmarshalJSON(dat
 }
 
 type ZoneSettingSortQueryStringForCachUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingSortQueryStringForCachUpdateResponseMessageJSON
+	Code    int64                                                      `json:"code,required"`
+	Message string                                                     `json:"message,required"`
+	JSON    zoneSettingSortQueryStringForCachUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingSortQueryStringForCachUpdateResponseMessageJSON contains the JSON
@@ -130,7 +130,7 @@ type ZoneSettingSortQueryStringForCachUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingSortQueryStringForCachUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingSortQueryStringForCachUpdateResponseResultJSON
+	JSON  zoneSettingSortQueryStringForCachUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingSortQueryStringForCachUpdateResponseResultJSON contains the JSON
@@ -180,8 +180,8 @@ type ZoneSettingSortQueryStringForCachListResponse struct {
 	// Enterprise Zones.
 	Result ZoneSettingSortQueryStringForCachListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingSortQueryStringForCachListResponseJSON
+	Success bool                                              `json:"success"`
+	JSON    zoneSettingSortQueryStringForCachListResponseJSON `json:"-"`
 }
 
 // zoneSettingSortQueryStringForCachListResponseJSON contains the JSON metadata for
@@ -200,9 +200,9 @@ func (r *ZoneSettingSortQueryStringForCachListResponse) UnmarshalJSON(data []byt
 }
 
 type ZoneSettingSortQueryStringForCachListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingSortQueryStringForCachListResponseErrorJSON
+	Code    int64                                                  `json:"code,required"`
+	Message string                                                 `json:"message,required"`
+	JSON    zoneSettingSortQueryStringForCachListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingSortQueryStringForCachListResponseErrorJSON contains the JSON
@@ -219,9 +219,9 @@ func (r *ZoneSettingSortQueryStringForCachListResponseError) UnmarshalJSON(data 
 }
 
 type ZoneSettingSortQueryStringForCachListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingSortQueryStringForCachListResponseMessageJSON
+	Code    int64                                                    `json:"code,required"`
+	Message string                                                   `json:"message,required"`
+	JSON    zoneSettingSortQueryStringForCachListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingSortQueryStringForCachListResponseMessageJSON contains the JSON
@@ -250,7 +250,7 @@ type ZoneSettingSortQueryStringForCachListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingSortQueryStringForCachListResponseResultValue `json:"value"`
-	JSON  zoneSettingSortQueryStringForCachListResponseResultJSON
+	JSON  zoneSettingSortQueryStringForCachListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingSortQueryStringForCachListResponseResultJSON contains the JSON

@@ -160,7 +160,7 @@ type ZeroRtt struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the 0-RTT setting.
 	Value ZeroRttValue `json:"value"`
-	JSON  zeroRttJSON
+	JSON  zeroRttJSON  `json:"-"`
 }
 
 // zeroRttJSON contains the JSON metadata for the struct [ZeroRtt]
@@ -222,8 +222,8 @@ type ZoneSettingsCollection struct {
 	Messages []ZoneSettingsCollectionMessage `json:"messages"`
 	Result   []ZoneSettingsCollectionResult  `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingsCollectionJSON
+	Success bool                       `json:"success"`
+	JSON    zoneSettingsCollectionJSON `json:"-"`
 }
 
 // zoneSettingsCollectionJSON contains the JSON metadata for the struct
@@ -242,9 +242,9 @@ func (r *ZoneSettingsCollection) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneSettingsCollectionError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingsCollectionErrorJSON
+	Code    int64                           `json:"code,required"`
+	Message string                          `json:"message,required"`
+	JSON    zoneSettingsCollectionErrorJSON `json:"-"`
 }
 
 // zoneSettingsCollectionErrorJSON contains the JSON metadata for the struct
@@ -261,9 +261,9 @@ func (r *ZoneSettingsCollectionError) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneSettingsCollectionMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingsCollectionMessageJSON
+	Code    int64                             `json:"code,required"`
+	Message string                            `json:"message,required"`
+	JSON    zoneSettingsCollectionMessageJSON `json:"-"`
 }
 
 // zoneSettingsCollectionMessageJSON contains the JSON metadata for the struct
@@ -350,7 +350,7 @@ type ZoneSettingsCollectionResultAdvancedDdos struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting. Notes: Defaults to on for Business+ plans
 	Value ZoneSettingsCollectionResultAdvancedDdosValue `json:"value"`
-	JSON  zoneSettingsCollectionResultAdvancedDdosJSON
+	JSON  zoneSettingsCollectionResultAdvancedDdosJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultAdvancedDdosJSON contains the JSON metadata for the
@@ -409,7 +409,7 @@ type ZoneSettingsCollectionResultAlwaysOnline struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultAlwaysOnlineValue `json:"value"`
-	JSON  zoneSettingsCollectionResultAlwaysOnlineJSON
+	JSON  zoneSettingsCollectionResultAlwaysOnlineJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultAlwaysOnlineJSON contains the JSON metadata for the
@@ -466,7 +466,7 @@ type ZoneSettingsCollectionResultAlwaysUseHTTPs struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultAlwaysUseHTTPsValue `json:"value"`
-	JSON  zoneSettingsCollectionResultAlwaysUseHTTPsJSON
+	JSON  zoneSettingsCollectionResultAlwaysUseHTTPsJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultAlwaysUseHTTPsJSON contains the JSON metadata for
@@ -522,7 +522,7 @@ type ZoneSettingsCollectionResultAutomaticHTTPsRewrites struct {
 	// Value of the zone setting. Notes: Default value depends on the zone's plan
 	// level.
 	Value ZoneSettingsCollectionResultAutomaticHTTPsRewritesValue `json:"value"`
-	JSON  zoneSettingsCollectionResultAutomaticHTTPsRewritesJSON
+	JSON  zoneSettingsCollectionResultAutomaticHTTPsRewritesJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultAutomaticHTTPsRewritesJSON contains the JSON
@@ -580,7 +580,7 @@ type ZoneSettingsCollectionResultBrotli struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultBrotliValue `json:"value"`
-	JSON  zoneSettingsCollectionResultBrotliJSON
+	JSON  zoneSettingsCollectionResultBrotliJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultBrotliJSON contains the JSON metadata for the struct
@@ -639,7 +639,7 @@ type ZoneSettingsCollectionResultBrowserCacheTtl struct {
 	// Value of the zone setting. Notes: Setting a TTL of 0 is equivalent to selecting
 	// `Respect Existing Headers`
 	Value ZoneSettingsCollectionResultBrowserCacheTtlValue `json:"value"`
-	JSON  zoneSettingsCollectionResultBrowserCacheTtlJSON
+	JSON  zoneSettingsCollectionResultBrowserCacheTtlJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultBrowserCacheTtlJSON contains the JSON metadata for
@@ -725,7 +725,7 @@ type ZoneSettingsCollectionResultBrowserCheck struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultBrowserCheckValue `json:"value"`
-	JSON  zoneSettingsCollectionResultBrowserCheckJSON
+	JSON  zoneSettingsCollectionResultBrowserCheckJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultBrowserCheckJSON contains the JSON metadata for the
@@ -784,7 +784,7 @@ type ZoneSettingsCollectionResultCacheLevel struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultCacheLevelValue `json:"value"`
-	JSON  zoneSettingsCollectionResultCacheLevelJSON
+	JSON  zoneSettingsCollectionResultCacheLevelJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultCacheLevelJSON contains the JSON metadata for the
@@ -844,7 +844,7 @@ type ZoneSettingsCollectionResultChallengeTtl struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultChallengeTtlValue `json:"value"`
-	JSON  zoneSettingsCollectionResultChallengeTtlJSON
+	JSON  zoneSettingsCollectionResultChallengeTtlJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultChallengeTtlJSON contains the JSON metadata for the
@@ -911,8 +911,8 @@ type ZoneSettingsCollectionResultCiphers struct {
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
-	Value []string `json:"value"`
-	JSON  zoneSettingsCollectionResultCiphersJSON
+	Value []string                                `json:"value"`
+	JSON  zoneSettingsCollectionResultCiphersJSON `json:"-"`
 }
 
 // zoneSettingsCollectionResultCiphersJSON contains the JSON metadata for the
@@ -959,7 +959,7 @@ type ZoneSettingsCollectionResultCnameFlattening struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the cname flattening setting.
 	Value ZoneSettingsCollectionResultCnameFlatteningValue `json:"value"`
-	JSON  zoneSettingsCollectionResultCnameFlatteningJSON
+	JSON  zoneSettingsCollectionResultCnameFlatteningJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultCnameFlatteningJSON contains the JSON metadata for
@@ -1023,7 +1023,7 @@ type ZoneSettingsCollectionResultDevelopmentMode struct {
 	TimeRemaining float64 `json:"time_remaining"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultDevelopmentModeValue `json:"value"`
-	JSON  zoneSettingsCollectionResultDevelopmentModeJSON
+	JSON  zoneSettingsCollectionResultDevelopmentModeJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultDevelopmentModeJSON contains the JSON metadata for
@@ -1082,7 +1082,7 @@ type ZoneSettingsCollectionResultEarlyHints struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultEarlyHintsValue `json:"value"`
-	JSON  zoneSettingsCollectionResultEarlyHintsJSON
+	JSON  zoneSettingsCollectionResultEarlyHintsJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultEarlyHintsJSON contains the JSON metadata for the
@@ -1139,7 +1139,7 @@ type ZoneSettingsCollectionResultEdgeCacheTtl struct {
 	// Value of the zone setting. Notes: The minimum TTL available depends on the plan
 	// level of the zone. (Enterprise = 30, Business = 1800, Pro = 3600, Free = 7200)
 	Value ZoneSettingsCollectionResultEdgeCacheTtlValue `json:"value"`
-	JSON  zoneSettingsCollectionResultEdgeCacheTtlJSON
+	JSON  zoneSettingsCollectionResultEdgeCacheTtlJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultEdgeCacheTtlJSON contains the JSON metadata for the
@@ -1215,7 +1215,7 @@ type ZoneSettingsCollectionResultEmailObfuscation struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultEmailObfuscationValue `json:"value"`
-	JSON  zoneSettingsCollectionResultEmailObfuscationJSON
+	JSON  zoneSettingsCollectionResultEmailObfuscationJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultEmailObfuscationJSON contains the JSON metadata for
@@ -1272,7 +1272,7 @@ type ZoneSettingsCollectionResultH2Prioritization struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultH2PrioritizationValue `json:"value"`
-	JSON  zoneSettingsCollectionResultH2PrioritizationJSON
+	JSON  zoneSettingsCollectionResultH2PrioritizationJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultH2PrioritizationJSON contains the JSON metadata for
@@ -1334,7 +1334,7 @@ type ZoneSettingsCollectionResultHotlinkProtection struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultHotlinkProtectionValue `json:"value"`
-	JSON  zoneSettingsCollectionResultHotlinkProtectionJSON
+	JSON  zoneSettingsCollectionResultHotlinkProtectionJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultHotlinkProtectionJSON contains the JSON metadata for
@@ -1389,7 +1389,7 @@ type ZoneSettingsCollectionResultHttp2 struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the HTTP2 setting.
 	Value ZoneSettingsCollectionResultHttp2Value `json:"value"`
-	JSON  zoneSettingsCollectionResultHttp2JSON
+	JSON  zoneSettingsCollectionResultHttp2JSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultHttp2JSON contains the JSON metadata for the struct
@@ -1444,7 +1444,7 @@ type ZoneSettingsCollectionResultHttp3 struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the HTTP3 setting.
 	Value ZoneSettingsCollectionResultHttp3Value `json:"value"`
-	JSON  zoneSettingsCollectionResultHttp3JSON
+	JSON  zoneSettingsCollectionResultHttp3JSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultHttp3JSON contains the JSON metadata for the struct
@@ -1502,7 +1502,7 @@ type ZoneSettingsCollectionResultImageResizing struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Whether the feature is enabled, disabled, or enabled in `open proxy` mode.
 	Value ZoneSettingsCollectionResultImageResizingValue `json:"value"`
-	JSON  zoneSettingsCollectionResultImageResizingJSON
+	JSON  zoneSettingsCollectionResultImageResizingJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultImageResizingJSON contains the JSON metadata for the
@@ -1560,7 +1560,7 @@ type ZoneSettingsCollectionResultIPGeolocation struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultIPGeolocationValue `json:"value"`
-	JSON  zoneSettingsCollectionResultIPGeolocationJSON
+	JSON  zoneSettingsCollectionResultIPGeolocationJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultIPGeolocationJSON contains the JSON metadata for the
@@ -1616,7 +1616,7 @@ type ZoneSettingsCollectionResultIpv6 struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultIpv6Value `json:"value"`
-	JSON  zoneSettingsCollectionResultIpv6JSON
+	JSON  zoneSettingsCollectionResultIpv6JSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultIpv6JSON contains the JSON metadata for the struct
@@ -1672,7 +1672,7 @@ type ZoneSettingsCollectionResultMaxUpload struct {
 	// Value of the zone setting. Notes: The size depends on the plan level of the
 	// zone. (Enterprise = 500, Business = 200, Pro = 100, Free = 100)
 	Value ZoneSettingsCollectionResultMaxUploadValue `json:"value"`
-	JSON  zoneSettingsCollectionResultMaxUploadJSON
+	JSON  zoneSettingsCollectionResultMaxUploadJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultMaxUploadJSON contains the JSON metadata for the
@@ -1731,7 +1731,7 @@ type ZoneSettingsCollectionResultMinTlsVersion struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultMinTlsVersionValue `json:"value"`
-	JSON  zoneSettingsCollectionResultMinTlsVersionJSON
+	JSON  zoneSettingsCollectionResultMinTlsVersionJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultMinTlsVersionJSON contains the JSON metadata for the
@@ -1790,7 +1790,7 @@ type ZoneSettingsCollectionResultMinify struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultMinifyValue `json:"value"`
-	JSON  zoneSettingsCollectionResultMinifyJSON
+	JSON  zoneSettingsCollectionResultMinifyJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultMinifyJSON contains the JSON metadata for the struct
@@ -1833,8 +1833,8 @@ type ZoneSettingsCollectionResultMinifyValue struct {
 	// Automatically minify all HTML files for your website.
 	HTML ZoneSettingsCollectionResultMinifyValueHTML `json:"html"`
 	// Automatically minify all JavaScript files for your website.
-	Js   ZoneSettingsCollectionResultMinifyValueJs `json:"js"`
-	JSON zoneSettingsCollectionResultMinifyValueJSON
+	Js   ZoneSettingsCollectionResultMinifyValueJs   `json:"js"`
+	JSON zoneSettingsCollectionResultMinifyValueJSON `json:"-"`
 }
 
 // zoneSettingsCollectionResultMinifyValueJSON contains the JSON metadata for the
@@ -1889,7 +1889,7 @@ type ZoneSettingsCollectionResultMirage struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultMirageValue `json:"value"`
-	JSON  zoneSettingsCollectionResultMirageJSON
+	JSON  zoneSettingsCollectionResultMirageJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultMirageJSON contains the JSON metadata for the struct
@@ -1947,7 +1947,7 @@ type ZoneSettingsCollectionResultMobileRedirect struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultMobileRedirectValue `json:"value"`
-	JSON  zoneSettingsCollectionResultMobileRedirectJSON
+	JSON  zoneSettingsCollectionResultMobileRedirectJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultMobileRedirectJSON contains the JSON metadata for
@@ -1992,8 +1992,8 @@ type ZoneSettingsCollectionResultMobileRedirectValue struct {
 	Status ZoneSettingsCollectionResultMobileRedirectValueStatus `json:"status"`
 	// Whether to drop the current page path and redirect to the mobile subdomain URL
 	// root, or keep the path and redirect to the same page on the mobile subdomain.
-	StripUri bool `json:"strip_uri"`
-	JSON     zoneSettingsCollectionResultMobileRedirectValueJSON
+	StripUri bool                                                `json:"strip_uri"`
+	JSON     zoneSettingsCollectionResultMobileRedirectValueJSON `json:"-"`
 }
 
 // zoneSettingsCollectionResultMobileRedirectValueJSON contains the JSON metadata
@@ -2029,7 +2029,7 @@ type ZoneSettingsCollectionResultNel struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultNelValue `json:"value"`
-	JSON  zoneSettingsCollectionResultNelJSON
+	JSON  zoneSettingsCollectionResultNelJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultNelJSON contains the JSON metadata for the struct
@@ -2067,8 +2067,8 @@ const (
 
 // Value of the zone setting.
 type ZoneSettingsCollectionResultNelValue struct {
-	Enabled bool `json:"enabled"`
-	JSON    zoneSettingsCollectionResultNelValueJSON
+	Enabled bool                                     `json:"enabled"`
+	JSON    zoneSettingsCollectionResultNelValueJSON `json:"-"`
 }
 
 // zoneSettingsCollectionResultNelValueJSON contains the JSON metadata for the
@@ -2095,7 +2095,7 @@ type ZoneSettingsCollectionResultOpportunisticEncryption struct {
 	// Value of the zone setting. Notes: Default value depends on the zone's plan
 	// level.
 	Value ZoneSettingsCollectionResultOpportunisticEncryptionValue `json:"value"`
-	JSON  zoneSettingsCollectionResultOpportunisticEncryptionJSON
+	JSON  zoneSettingsCollectionResultOpportunisticEncryptionJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultOpportunisticEncryptionJSON contains the JSON
@@ -2154,7 +2154,7 @@ type ZoneSettingsCollectionResultOpportunisticOnion struct {
 	// Value of the zone setting. Notes: Default value depends on the zone's plan
 	// level.
 	Value ZoneSettingsCollectionResultOpportunisticOnionValue `json:"value"`
-	JSON  zoneSettingsCollectionResultOpportunisticOnionJSON
+	JSON  zoneSettingsCollectionResultOpportunisticOnionJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultOpportunisticOnionJSON contains the JSON metadata
@@ -2211,7 +2211,7 @@ type ZoneSettingsCollectionResultOrangeToOrange struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultOrangeToOrangeValue `json:"value"`
-	JSON  zoneSettingsCollectionResultOrangeToOrangeJSON
+	JSON  zoneSettingsCollectionResultOrangeToOrangeJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultOrangeToOrangeJSON contains the JSON metadata for
@@ -2268,7 +2268,7 @@ type ZoneSettingsCollectionResultOriginErrorPagePassThru struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultOriginErrorPagePassThruValue `json:"value"`
-	JSON  zoneSettingsCollectionResultOriginErrorPagePassThruJSON
+	JSON  zoneSettingsCollectionResultOriginErrorPagePassThruJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultOriginErrorPagePassThruJSON contains the JSON
@@ -2317,8 +2317,8 @@ type ZoneSettingsCollectionResultOriginMaxHTTPVersion struct {
 	// Identifier of the zone setting.
 	ID ZoneSettingsCollectionResultOriginMaxHTTPVersionID `json:"id,required"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingsCollectionResultOriginMaxHTTPVersionJSON
+	ModifiedOn time.Time                                            `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingsCollectionResultOriginMaxHTTPVersionJSON `json:"-"`
 }
 
 // zoneSettingsCollectionResultOriginMaxHTTPVersionJSON contains the JSON metadata
@@ -2359,7 +2359,7 @@ type ZoneSettingsCollectionResultPolish struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultPolishValue `json:"value"`
-	JSON  zoneSettingsCollectionResultPolishJSON
+	JSON  zoneSettingsCollectionResultPolishJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultPolishJSON contains the JSON metadata for the struct
@@ -2416,7 +2416,7 @@ type ZoneSettingsCollectionResultPrefetchPreload struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultPrefetchPreloadValue `json:"value"`
-	JSON  zoneSettingsCollectionResultPrefetchPreloadJSON
+	JSON  zoneSettingsCollectionResultPrefetchPreloadJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultPrefetchPreloadJSON contains the JSON metadata for
@@ -2474,7 +2474,7 @@ type ZoneSettingsCollectionResultPrivacyPass struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultPrivacyPassValue `json:"value"`
-	JSON  zoneSettingsCollectionResultPrivacyPassJSON
+	JSON  zoneSettingsCollectionResultPrivacyPassJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultPrivacyPassJSON contains the JSON metadata for the
@@ -2528,8 +2528,8 @@ type ZoneSettingsCollectionResultProxyReadTimeout struct {
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting. Notes: Value must be between 1 and 6000
-	Value float64 `json:"value"`
-	JSON  zoneSettingsCollectionResultProxyReadTimeoutJSON
+	Value float64                                          `json:"value"`
+	JSON  zoneSettingsCollectionResultProxyReadTimeoutJSON `json:"-"`
 }
 
 // zoneSettingsCollectionResultProxyReadTimeoutJSON contains the JSON metadata for
@@ -2576,7 +2576,7 @@ type ZoneSettingsCollectionResultPseudoIpv4 struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the Pseudo IPv4 setting.
 	Value ZoneSettingsCollectionResultPseudoIpv4Value `json:"value"`
-	JSON  zoneSettingsCollectionResultPseudoIpv4JSON
+	JSON  zoneSettingsCollectionResultPseudoIpv4JSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultPseudoIpv4JSON contains the JSON metadata for the
@@ -2635,7 +2635,7 @@ type ZoneSettingsCollectionResultResponseBuffering struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultResponseBufferingValue `json:"value"`
-	JSON  zoneSettingsCollectionResultResponseBufferingJSON
+	JSON  zoneSettingsCollectionResultResponseBufferingJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultResponseBufferingJSON contains the JSON metadata for
@@ -2699,7 +2699,7 @@ type ZoneSettingsCollectionResultRocketLoader struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultRocketLoaderValue `json:"value"`
-	JSON  zoneSettingsCollectionResultRocketLoaderJSON
+	JSON  zoneSettingsCollectionResultRocketLoaderJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultRocketLoaderJSON contains the JSON metadata for the
@@ -2755,7 +2755,7 @@ type ZoneSettingsCollectionResultSchemasAutomaticPlatformOptimization struct {
 	// last time this setting was modified.
 	ModifiedOn time.Time                                                             `json:"modified_on,nullable" format:"date-time"`
 	Value      ZoneSettingsCollectionResultSchemasAutomaticPlatformOptimizationValue `json:"value"`
-	JSON       zoneSettingsCollectionResultSchemasAutomaticPlatformOptimizationJSON
+	JSON       zoneSettingsCollectionResultSchemasAutomaticPlatformOptimizationJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultSchemasAutomaticPlatformOptimizationJSON contains
@@ -2810,8 +2810,8 @@ type ZoneSettingsCollectionResultSchemasAutomaticPlatformOptimizationValue struc
 	// Indicates whether or not
 	// [Cloudflare for WordPress plugin](https://wordpress.org/plugins/cloudflare/) is
 	// installed.
-	WpPlugin bool `json:"wp_plugin,required"`
-	JSON     zoneSettingsCollectionResultSchemasAutomaticPlatformOptimizationValueJSON
+	WpPlugin bool                                                                      `json:"wp_plugin,required"`
+	JSON     zoneSettingsCollectionResultSchemasAutomaticPlatformOptimizationValueJSON `json:"-"`
 }
 
 // zoneSettingsCollectionResultSchemasAutomaticPlatformOptimizationValueJSON
@@ -2842,7 +2842,7 @@ type ZoneSettingsCollectionResultSecurityHeader struct {
 	// last time this setting was modified.
 	ModifiedOn time.Time                                       `json:"modified_on,nullable" format:"date-time"`
 	Value      ZoneSettingsCollectionResultSecurityHeaderValue `json:"value"`
-	JSON       zoneSettingsCollectionResultSecurityHeaderJSON
+	JSON       zoneSettingsCollectionResultSecurityHeaderJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultSecurityHeaderJSON contains the JSON metadata for
@@ -2881,7 +2881,7 @@ const (
 type ZoneSettingsCollectionResultSecurityHeaderValue struct {
 	// Strict Transport Security.
 	StrictTransportSecurity ZoneSettingsCollectionResultSecurityHeaderValueStrictTransportSecurity `json:"strict_transport_security"`
-	JSON                    zoneSettingsCollectionResultSecurityHeaderValueJSON
+	JSON                    zoneSettingsCollectionResultSecurityHeaderValueJSON                    `json:"-"`
 }
 
 // zoneSettingsCollectionResultSecurityHeaderValueJSON contains the JSON metadata
@@ -2905,8 +2905,8 @@ type ZoneSettingsCollectionResultSecurityHeaderValueStrictTransportSecurity stru
 	// Max age in seconds of the strict transport security.
 	MaxAge float64 `json:"max_age"`
 	// Whether or not to include 'X-Content-Type-Options: nosniff' header.
-	Nosniff bool `json:"nosniff"`
-	JSON    zoneSettingsCollectionResultSecurityHeaderValueStrictTransportSecurityJSON
+	Nosniff bool                                                                       `json:"nosniff"`
+	JSON    zoneSettingsCollectionResultSecurityHeaderValueStrictTransportSecurityJSON `json:"-"`
 }
 
 // zoneSettingsCollectionResultSecurityHeaderValueStrictTransportSecurityJSON
@@ -2939,7 +2939,7 @@ type ZoneSettingsCollectionResultSecurityLevel struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultSecurityLevelValue `json:"value"`
-	JSON  zoneSettingsCollectionResultSecurityLevelJSON
+	JSON  zoneSettingsCollectionResultSecurityLevelJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultSecurityLevelJSON contains the JSON metadata for the
@@ -3008,7 +3008,7 @@ type ZoneSettingsCollectionResultServerSideExclude struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultServerSideExcludeValue `json:"value"`
-	JSON  zoneSettingsCollectionResultServerSideExcludeJSON
+	JSON  zoneSettingsCollectionResultServerSideExcludeJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultServerSideExcludeJSON contains the JSON metadata for
@@ -3063,7 +3063,7 @@ type ZoneSettingsCollectionResultSha1Support struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultSha1SupportValue `json:"value"`
-	JSON  zoneSettingsCollectionResultSha1SupportJSON
+	JSON  zoneSettingsCollectionResultSha1SupportJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultSha1SupportJSON contains the JSON metadata for the
@@ -3120,7 +3120,7 @@ type ZoneSettingsCollectionResultSortQueryStringForCache struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultSortQueryStringForCacheValue `json:"value"`
-	JSON  zoneSettingsCollectionResultSortQueryStringForCacheJSON
+	JSON  zoneSettingsCollectionResultSortQueryStringForCacheJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultSortQueryStringForCacheJSON contains the JSON
@@ -3191,7 +3191,7 @@ type ZoneSettingsCollectionResultSsl struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting. Notes: Depends on the zone's plan level
 	Value ZoneSettingsCollectionResultSslValue `json:"value"`
-	JSON  zoneSettingsCollectionResultSslJSON
+	JSON  zoneSettingsCollectionResultSslJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultSslJSON contains the JSON metadata for the struct
@@ -3249,8 +3249,8 @@ type ZoneSettingsCollectionResultSslRecommender struct {
 	// ssl-recommender enrollment setting.
 	Enabled bool `json:"enabled"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingsCollectionResultSslRecommenderJSON
+	ModifiedOn time.Time                                      `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingsCollectionResultSslRecommenderJSON `json:"-"`
 }
 
 // zoneSettingsCollectionResultSslRecommenderJSON contains the JSON metadata for
@@ -3297,7 +3297,7 @@ type ZoneSettingsCollectionResultTls1_2Only struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultTls1_2OnlyValue `json:"value"`
-	JSON  zoneSettingsCollectionResultTls1_2OnlyJSON
+	JSON  zoneSettingsCollectionResultTls1_2OnlyJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultTls1_2OnlyJSON contains the JSON metadata for the
@@ -3353,7 +3353,7 @@ type ZoneSettingsCollectionResultTls1_3 struct {
 	// Value of the zone setting. Notes: Default value depends on the zone's plan
 	// level.
 	Value ZoneSettingsCollectionResultTls1_3Value `json:"value"`
-	JSON  zoneSettingsCollectionResultTls1_3JSON
+	JSON  zoneSettingsCollectionResultTls1_3JSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultTls1_3JSON contains the JSON metadata for the struct
@@ -3411,7 +3411,7 @@ type ZoneSettingsCollectionResultTlsClientAuth struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// value of the zone setting.
 	Value ZoneSettingsCollectionResultTlsClientAuthValue `json:"value"`
-	JSON  zoneSettingsCollectionResultTlsClientAuthJSON
+	JSON  zoneSettingsCollectionResultTlsClientAuthJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultTlsClientAuthJSON contains the JSON metadata for the
@@ -3467,7 +3467,7 @@ type ZoneSettingsCollectionResultTrueClientIPHeader struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultTrueClientIPHeaderValue `json:"value"`
-	JSON  zoneSettingsCollectionResultTrueClientIPHeaderJSON
+	JSON  zoneSettingsCollectionResultTrueClientIPHeaderJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultTrueClientIPHeaderJSON contains the JSON metadata
@@ -3531,7 +3531,7 @@ type ZoneSettingsCollectionResultWaf struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultWafValue `json:"value"`
-	JSON  zoneSettingsCollectionResultWafJSON
+	JSON  zoneSettingsCollectionResultWafJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultWafJSON contains the JSON metadata for the struct
@@ -3588,7 +3588,7 @@ type ZoneSettingsCollectionResultWebp struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultWebpValue `json:"value"`
-	JSON  zoneSettingsCollectionResultWebpJSON
+	JSON  zoneSettingsCollectionResultWebpJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultWebpJSON contains the JSON metadata for the struct
@@ -3649,7 +3649,7 @@ type ZoneSettingsCollectionResultWebsockets struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingsCollectionResultWebsocketsValue `json:"value"`
-	JSON  zoneSettingsCollectionResultWebsocketsJSON
+	JSON  zoneSettingsCollectionResultWebsocketsJSON  `json:"-"`
 }
 
 // zoneSettingsCollectionResultWebsocketsJSON contains the JSON metadata for the

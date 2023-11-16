@@ -54,8 +54,8 @@ type ZoneSettingAutomaticHTTPsRewriteUpdateResponse struct {
 	// Enable the Automatic HTTPS Rewrites feature for this zone.
 	Result ZoneSettingAutomaticHTTPsRewriteUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingAutomaticHTTPsRewriteUpdateResponseJSON
+	Success bool                                               `json:"success"`
+	JSON    zoneSettingAutomaticHTTPsRewriteUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingAutomaticHTTPsRewriteUpdateResponseJSON contains the JSON metadata
@@ -74,9 +74,9 @@ func (r *ZoneSettingAutomaticHTTPsRewriteUpdateResponse) UnmarshalJSON(data []by
 }
 
 type ZoneSettingAutomaticHTTPsRewriteUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingAutomaticHTTPsRewriteUpdateResponseErrorJSON
+	Code    int64                                                   `json:"code,required"`
+	Message string                                                  `json:"message,required"`
+	JSON    zoneSettingAutomaticHTTPsRewriteUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingAutomaticHTTPsRewriteUpdateResponseErrorJSON contains the JSON
@@ -93,9 +93,9 @@ func (r *ZoneSettingAutomaticHTTPsRewriteUpdateResponseError) UnmarshalJSON(data
 }
 
 type ZoneSettingAutomaticHTTPsRewriteUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingAutomaticHTTPsRewriteUpdateResponseMessageJSON
+	Code    int64                                                     `json:"code,required"`
+	Message string                                                    `json:"message,required"`
+	JSON    zoneSettingAutomaticHTTPsRewriteUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingAutomaticHTTPsRewriteUpdateResponseMessageJSON contains the JSON
@@ -123,7 +123,7 @@ type ZoneSettingAutomaticHTTPsRewriteUpdateResponseResult struct {
 	// Value of the zone setting. Notes: Default value depends on the zone's plan
 	// level.
 	Value ZoneSettingAutomaticHTTPsRewriteUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingAutomaticHTTPsRewriteUpdateResponseResultJSON
+	JSON  zoneSettingAutomaticHTTPsRewriteUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingAutomaticHTTPsRewriteUpdateResponseResultJSON contains the JSON
@@ -172,8 +172,8 @@ type ZoneSettingAutomaticHTTPsRewriteListResponse struct {
 	// Enable the Automatic HTTPS Rewrites feature for this zone.
 	Result ZoneSettingAutomaticHTTPsRewriteListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingAutomaticHTTPsRewriteListResponseJSON
+	Success bool                                             `json:"success"`
+	JSON    zoneSettingAutomaticHTTPsRewriteListResponseJSON `json:"-"`
 }
 
 // zoneSettingAutomaticHTTPsRewriteListResponseJSON contains the JSON metadata for
@@ -192,9 +192,9 @@ func (r *ZoneSettingAutomaticHTTPsRewriteListResponse) UnmarshalJSON(data []byte
 }
 
 type ZoneSettingAutomaticHTTPsRewriteListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingAutomaticHTTPsRewriteListResponseErrorJSON
+	Code    int64                                                 `json:"code,required"`
+	Message string                                                `json:"message,required"`
+	JSON    zoneSettingAutomaticHTTPsRewriteListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingAutomaticHTTPsRewriteListResponseErrorJSON contains the JSON metadata
@@ -211,9 +211,9 @@ func (r *ZoneSettingAutomaticHTTPsRewriteListResponseError) UnmarshalJSON(data [
 }
 
 type ZoneSettingAutomaticHTTPsRewriteListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingAutomaticHTTPsRewriteListResponseMessageJSON
+	Code    int64                                                   `json:"code,required"`
+	Message string                                                  `json:"message,required"`
+	JSON    zoneSettingAutomaticHTTPsRewriteListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingAutomaticHTTPsRewriteListResponseMessageJSON contains the JSON
@@ -241,7 +241,7 @@ type ZoneSettingAutomaticHTTPsRewriteListResponseResult struct {
 	// Value of the zone setting. Notes: Default value depends on the zone's plan
 	// level.
 	Value ZoneSettingAutomaticHTTPsRewriteListResponseResultValue `json:"value"`
-	JSON  zoneSettingAutomaticHTTPsRewriteListResponseResultJSON
+	JSON  zoneSettingAutomaticHTTPsRewriteListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingAutomaticHTTPsRewriteListResponseResultJSON contains the JSON

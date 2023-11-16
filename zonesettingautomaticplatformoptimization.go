@@ -57,8 +57,8 @@ type ZoneSettingAutomaticPlatformOptimizationUpdateResponse struct {
 	Messages []ZoneSettingAutomaticPlatformOptimizationUpdateResponseMessage `json:"messages"`
 	Result   ZoneSettingAutomaticPlatformOptimizationUpdateResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingAutomaticPlatformOptimizationUpdateResponseJSON
+	Success bool                                                       `json:"success"`
+	JSON    zoneSettingAutomaticPlatformOptimizationUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingAutomaticPlatformOptimizationUpdateResponseJSON contains the JSON
@@ -77,9 +77,9 @@ func (r *ZoneSettingAutomaticPlatformOptimizationUpdateResponse) UnmarshalJSON(d
 }
 
 type ZoneSettingAutomaticPlatformOptimizationUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingAutomaticPlatformOptimizationUpdateResponseErrorJSON
+	Code    int64                                                           `json:"code,required"`
+	Message string                                                          `json:"message,required"`
+	JSON    zoneSettingAutomaticPlatformOptimizationUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingAutomaticPlatformOptimizationUpdateResponseErrorJSON contains the
@@ -97,9 +97,9 @@ func (r *ZoneSettingAutomaticPlatformOptimizationUpdateResponseError) UnmarshalJ
 }
 
 type ZoneSettingAutomaticPlatformOptimizationUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingAutomaticPlatformOptimizationUpdateResponseMessageJSON
+	Code    int64                                                             `json:"code,required"`
+	Message string                                                            `json:"message,required"`
+	JSON    zoneSettingAutomaticPlatformOptimizationUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingAutomaticPlatformOptimizationUpdateResponseMessageJSON contains the
@@ -133,8 +133,8 @@ type ZoneSettingAutomaticPlatformOptimizationUpdateResponseResult struct {
 	// Indicates whether or not
 	// [Cloudflare for WordPress plugin](https://wordpress.org/plugins/cloudflare/) is
 	// installed.
-	WpPlugin bool `json:"wp_plugin,required"`
-	JSON     zoneSettingAutomaticPlatformOptimizationUpdateResponseResultJSON
+	WpPlugin bool                                                             `json:"wp_plugin,required"`
+	JSON     zoneSettingAutomaticPlatformOptimizationUpdateResponseResultJSON `json:"-"`
 }
 
 // zoneSettingAutomaticPlatformOptimizationUpdateResponseResultJSON contains the
@@ -160,8 +160,8 @@ type ZoneSettingAutomaticPlatformOptimizationListResponse struct {
 	Messages []ZoneSettingAutomaticPlatformOptimizationListResponseMessage `json:"messages"`
 	Result   ZoneSettingAutomaticPlatformOptimizationListResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingAutomaticPlatformOptimizationListResponseJSON
+	Success bool                                                     `json:"success"`
+	JSON    zoneSettingAutomaticPlatformOptimizationListResponseJSON `json:"-"`
 }
 
 // zoneSettingAutomaticPlatformOptimizationListResponseJSON contains the JSON
@@ -180,9 +180,9 @@ func (r *ZoneSettingAutomaticPlatformOptimizationListResponse) UnmarshalJSON(dat
 }
 
 type ZoneSettingAutomaticPlatformOptimizationListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingAutomaticPlatformOptimizationListResponseErrorJSON
+	Code    int64                                                         `json:"code,required"`
+	Message string                                                        `json:"message,required"`
+	JSON    zoneSettingAutomaticPlatformOptimizationListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingAutomaticPlatformOptimizationListResponseErrorJSON contains the JSON
@@ -200,9 +200,9 @@ func (r *ZoneSettingAutomaticPlatformOptimizationListResponseError) UnmarshalJSO
 }
 
 type ZoneSettingAutomaticPlatformOptimizationListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingAutomaticPlatformOptimizationListResponseMessageJSON
+	Code    int64                                                           `json:"code,required"`
+	Message string                                                          `json:"message,required"`
+	JSON    zoneSettingAutomaticPlatformOptimizationListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingAutomaticPlatformOptimizationListResponseMessageJSON contains the
@@ -236,8 +236,8 @@ type ZoneSettingAutomaticPlatformOptimizationListResponseResult struct {
 	// Indicates whether or not
 	// [Cloudflare for WordPress plugin](https://wordpress.org/plugins/cloudflare/) is
 	// installed.
-	WpPlugin bool `json:"wp_plugin,required"`
-	JSON     zoneSettingAutomaticPlatformOptimizationListResponseResultJSON
+	WpPlugin bool                                                           `json:"wp_plugin,required"`
+	JSON     zoneSettingAutomaticPlatformOptimizationListResponseResultJSON `json:"-"`
 }
 
 // zoneSettingAutomaticPlatformOptimizationListResponseResultJSON contains the JSON

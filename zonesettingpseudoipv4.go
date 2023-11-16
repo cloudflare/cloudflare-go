@@ -54,8 +54,8 @@ type ZoneSettingPseudoIpv4UpdateResponse struct {
 	// The value set for the Pseudo IPv4 setting.
 	Result ZoneSettingPseudoIpv4UpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingPseudoIpv4UpdateResponseJSON
+	Success bool                                    `json:"success"`
+	JSON    zoneSettingPseudoIpv4UpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingPseudoIpv4UpdateResponseJSON contains the JSON metadata for the
@@ -74,9 +74,9 @@ func (r *ZoneSettingPseudoIpv4UpdateResponse) UnmarshalJSON(data []byte) (err er
 }
 
 type ZoneSettingPseudoIpv4UpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingPseudoIpv4UpdateResponseErrorJSON
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    zoneSettingPseudoIpv4UpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingPseudoIpv4UpdateResponseErrorJSON contains the JSON metadata for the
@@ -93,9 +93,9 @@ func (r *ZoneSettingPseudoIpv4UpdateResponseError) UnmarshalJSON(data []byte) (e
 }
 
 type ZoneSettingPseudoIpv4UpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingPseudoIpv4UpdateResponseMessageJSON
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    zoneSettingPseudoIpv4UpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingPseudoIpv4UpdateResponseMessageJSON contains the JSON metadata for
@@ -122,7 +122,7 @@ type ZoneSettingPseudoIpv4UpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the Pseudo IPv4 setting.
 	Value ZoneSettingPseudoIpv4UpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingPseudoIpv4UpdateResponseResultJSON
+	JSON  zoneSettingPseudoIpv4UpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingPseudoIpv4UpdateResponseResultJSON contains the JSON metadata for the
@@ -171,8 +171,8 @@ type ZoneSettingPseudoIpv4ListResponse struct {
 	// The value set for the Pseudo IPv4 setting.
 	Result ZoneSettingPseudoIpv4ListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingPseudoIpv4ListResponseJSON
+	Success bool                                  `json:"success"`
+	JSON    zoneSettingPseudoIpv4ListResponseJSON `json:"-"`
 }
 
 // zoneSettingPseudoIpv4ListResponseJSON contains the JSON metadata for the struct
@@ -191,9 +191,9 @@ func (r *ZoneSettingPseudoIpv4ListResponse) UnmarshalJSON(data []byte) (err erro
 }
 
 type ZoneSettingPseudoIpv4ListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingPseudoIpv4ListResponseErrorJSON
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    zoneSettingPseudoIpv4ListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingPseudoIpv4ListResponseErrorJSON contains the JSON metadata for the
@@ -210,9 +210,9 @@ func (r *ZoneSettingPseudoIpv4ListResponseError) UnmarshalJSON(data []byte) (err
 }
 
 type ZoneSettingPseudoIpv4ListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingPseudoIpv4ListResponseMessageJSON
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    zoneSettingPseudoIpv4ListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingPseudoIpv4ListResponseMessageJSON contains the JSON metadata for the
@@ -239,7 +239,7 @@ type ZoneSettingPseudoIpv4ListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the Pseudo IPv4 setting.
 	Value ZoneSettingPseudoIpv4ListResponseResultValue `json:"value"`
-	JSON  zoneSettingPseudoIpv4ListResponseResultJSON
+	JSON  zoneSettingPseudoIpv4ListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingPseudoIpv4ListResponseResultJSON contains the JSON metadata for the

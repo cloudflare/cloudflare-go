@@ -72,8 +72,8 @@ type ZoneSettingHotlinkProtectionUpdateResponse struct {
 	// (https://support.cloudflare.com/hc/en-us/articles/200170026).
 	Result ZoneSettingHotlinkProtectionUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingHotlinkProtectionUpdateResponseJSON
+	Success bool                                           `json:"success"`
+	JSON    zoneSettingHotlinkProtectionUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingHotlinkProtectionUpdateResponseJSON contains the JSON metadata for
@@ -92,9 +92,9 @@ func (r *ZoneSettingHotlinkProtectionUpdateResponse) UnmarshalJSON(data []byte) 
 }
 
 type ZoneSettingHotlinkProtectionUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingHotlinkProtectionUpdateResponseErrorJSON
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    zoneSettingHotlinkProtectionUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingHotlinkProtectionUpdateResponseErrorJSON contains the JSON metadata
@@ -111,9 +111,9 @@ func (r *ZoneSettingHotlinkProtectionUpdateResponseError) UnmarshalJSON(data []b
 }
 
 type ZoneSettingHotlinkProtectionUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingHotlinkProtectionUpdateResponseMessageJSON
+	Code    int64                                                 `json:"code,required"`
+	Message string                                                `json:"message,required"`
+	JSON    zoneSettingHotlinkProtectionUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingHotlinkProtectionUpdateResponseMessageJSON contains the JSON metadata
@@ -146,7 +146,7 @@ type ZoneSettingHotlinkProtectionUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingHotlinkProtectionUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingHotlinkProtectionUpdateResponseResultJSON
+	JSON  zoneSettingHotlinkProtectionUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingHotlinkProtectionUpdateResponseResultJSON contains the JSON metadata
@@ -200,8 +200,8 @@ type ZoneSettingHotlinkProtectionListResponse struct {
 	// (https://support.cloudflare.com/hc/en-us/articles/200170026).
 	Result ZoneSettingHotlinkProtectionListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingHotlinkProtectionListResponseJSON
+	Success bool                                         `json:"success"`
+	JSON    zoneSettingHotlinkProtectionListResponseJSON `json:"-"`
 }
 
 // zoneSettingHotlinkProtectionListResponseJSON contains the JSON metadata for the
@@ -220,9 +220,9 @@ func (r *ZoneSettingHotlinkProtectionListResponse) UnmarshalJSON(data []byte) (e
 }
 
 type ZoneSettingHotlinkProtectionListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingHotlinkProtectionListResponseErrorJSON
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    zoneSettingHotlinkProtectionListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingHotlinkProtectionListResponseErrorJSON contains the JSON metadata for
@@ -239,9 +239,9 @@ func (r *ZoneSettingHotlinkProtectionListResponseError) UnmarshalJSON(data []byt
 }
 
 type ZoneSettingHotlinkProtectionListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingHotlinkProtectionListResponseMessageJSON
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    zoneSettingHotlinkProtectionListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingHotlinkProtectionListResponseMessageJSON contains the JSON metadata
@@ -274,7 +274,7 @@ type ZoneSettingHotlinkProtectionListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingHotlinkProtectionListResponseResultValue `json:"value"`
-	JSON  zoneSettingHotlinkProtectionListResponseResultJSON
+	JSON  zoneSettingHotlinkProtectionListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingHotlinkProtectionListResponseResultJSON contains the JSON metadata

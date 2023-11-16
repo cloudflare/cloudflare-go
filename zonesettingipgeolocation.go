@@ -60,8 +60,8 @@ type ZoneSettingIPGeolocationUpdateResponse struct {
 	// (https://support.cloudflare.com/hc/en-us/articles/200168236).
 	Result ZoneSettingIPGeolocationUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingIPGeolocationUpdateResponseJSON
+	Success bool                                       `json:"success"`
+	JSON    zoneSettingIPGeolocationUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingIPGeolocationUpdateResponseJSON contains the JSON metadata for the
@@ -80,9 +80,9 @@ func (r *ZoneSettingIPGeolocationUpdateResponse) UnmarshalJSON(data []byte) (err
 }
 
 type ZoneSettingIPGeolocationUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingIPGeolocationUpdateResponseErrorJSON
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    zoneSettingIPGeolocationUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingIPGeolocationUpdateResponseErrorJSON contains the JSON metadata for
@@ -99,9 +99,9 @@ func (r *ZoneSettingIPGeolocationUpdateResponseError) UnmarshalJSON(data []byte)
 }
 
 type ZoneSettingIPGeolocationUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingIPGeolocationUpdateResponseMessageJSON
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    zoneSettingIPGeolocationUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingIPGeolocationUpdateResponseMessageJSON contains the JSON metadata for
@@ -130,7 +130,7 @@ type ZoneSettingIPGeolocationUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingIPGeolocationUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingIPGeolocationUpdateResponseResultJSON
+	JSON  zoneSettingIPGeolocationUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingIPGeolocationUpdateResponseResultJSON contains the JSON metadata for
@@ -180,8 +180,8 @@ type ZoneSettingIPGeolocationListResponse struct {
 	// (https://support.cloudflare.com/hc/en-us/articles/200168236).
 	Result ZoneSettingIPGeolocationListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingIPGeolocationListResponseJSON
+	Success bool                                     `json:"success"`
+	JSON    zoneSettingIPGeolocationListResponseJSON `json:"-"`
 }
 
 // zoneSettingIPGeolocationListResponseJSON contains the JSON metadata for the
@@ -200,9 +200,9 @@ func (r *ZoneSettingIPGeolocationListResponse) UnmarshalJSON(data []byte) (err e
 }
 
 type ZoneSettingIPGeolocationListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingIPGeolocationListResponseErrorJSON
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    zoneSettingIPGeolocationListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingIPGeolocationListResponseErrorJSON contains the JSON metadata for the
@@ -219,9 +219,9 @@ func (r *ZoneSettingIPGeolocationListResponseError) UnmarshalJSON(data []byte) (
 }
 
 type ZoneSettingIPGeolocationListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingIPGeolocationListResponseMessageJSON
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    zoneSettingIPGeolocationListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingIPGeolocationListResponseMessageJSON contains the JSON metadata for
@@ -250,7 +250,7 @@ type ZoneSettingIPGeolocationListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingIPGeolocationListResponseResultValue `json:"value"`
-	JSON  zoneSettingIPGeolocationListResponseResultJSON
+	JSON  zoneSettingIPGeolocationListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingIPGeolocationListResponseResultJSON contains the JSON metadata for

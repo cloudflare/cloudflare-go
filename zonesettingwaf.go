@@ -81,8 +81,8 @@ type ZoneSettingWafUpdateResponse struct {
 	// (https://support.cloudflare.com/hc/en-us/articles/200172016).
 	Result ZoneSettingWafUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingWafUpdateResponseJSON
+	Success bool                             `json:"success"`
+	JSON    zoneSettingWafUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingWafUpdateResponseJSON contains the JSON metadata for the struct
@@ -101,9 +101,9 @@ func (r *ZoneSettingWafUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneSettingWafUpdateResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingWafUpdateResponseErrorJSON
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    zoneSettingWafUpdateResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingWafUpdateResponseErrorJSON contains the JSON metadata for the struct
@@ -120,9 +120,9 @@ func (r *ZoneSettingWafUpdateResponseError) UnmarshalJSON(data []byte) (err erro
 }
 
 type ZoneSettingWafUpdateResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingWafUpdateResponseMessageJSON
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    zoneSettingWafUpdateResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingWafUpdateResponseMessageJSON contains the JSON metadata for the
@@ -158,7 +158,7 @@ type ZoneSettingWafUpdateResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingWafUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingWafUpdateResponseResultJSON
+	JSON  zoneSettingWafUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingWafUpdateResponseResultJSON contains the JSON metadata for the struct
@@ -215,8 +215,8 @@ type ZoneSettingWafListResponse struct {
 	// (https://support.cloudflare.com/hc/en-us/articles/200172016).
 	Result ZoneSettingWafListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success"`
-	JSON    zoneSettingWafListResponseJSON
+	Success bool                           `json:"success"`
+	JSON    zoneSettingWafListResponseJSON `json:"-"`
 }
 
 // zoneSettingWafListResponseJSON contains the JSON metadata for the struct
@@ -235,9 +235,9 @@ func (r *ZoneSettingWafListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneSettingWafListResponseError struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingWafListResponseErrorJSON
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    zoneSettingWafListResponseErrorJSON `json:"-"`
 }
 
 // zoneSettingWafListResponseErrorJSON contains the JSON metadata for the struct
@@ -254,9 +254,9 @@ func (r *ZoneSettingWafListResponseError) UnmarshalJSON(data []byte) (err error)
 }
 
 type ZoneSettingWafListResponseMessage struct {
-	Code    int64  `json:"code,required"`
-	Message string `json:"message,required"`
-	JSON    zoneSettingWafListResponseMessageJSON
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    zoneSettingWafListResponseMessageJSON `json:"-"`
 }
 
 // zoneSettingWafListResponseMessageJSON contains the JSON metadata for the struct
@@ -292,7 +292,7 @@ type ZoneSettingWafListResponseResult struct {
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting.
 	Value ZoneSettingWafListResponseResultValue `json:"value"`
-	JSON  zoneSettingWafListResponseResultJSON
+	JSON  zoneSettingWafListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingWafListResponseResultJSON contains the JSON metadata for the struct
