@@ -3,13 +3,12 @@
 package option
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/internal/requestconfig"
 	"github.com/tidwall/sjson"
 )
 
@@ -185,13 +184,20 @@ func WithRequestTimeout(dur time.Duration) RequestOption {
 // environment to be the "production" environment. An environment specifies which base URL
 // to use by default.
 func WithEnvironmentProduction() RequestOption {
-	return WithBaseURL("https://api.cloudflare.com/client/v4/")
+	return WithBaseURL("https://api.acme.com/v1/")
+}
+
+// WithEnvironmentEnvironment1 returns a RequestOption that sets the current
+// environment to be the "environment_1" environment. An environment specifies which base URL
+// to use by default.
+func WithEnvironmentEnvironment1() RequestOption {
+	return WithBaseURL("https://sandbox.acme.com/v1/")
 }
 
 // WithAPIKey returns a RequestOption that sets the client setting "api_key".
 func WithAPIKey(value string) RequestOption {
 	return func(r *requestconfig.RequestConfig) error {
 		r.APIKey = value
-		return r.Apply(WithHeader("authorization", fmt.Sprintf("Bearer %s", r.APIKey)))
+		return r.Apply(WithHeader("Authorization", r.APIKey))
 	}
 }

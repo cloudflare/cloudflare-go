@@ -3,7 +3,7 @@
 package cloudflare
 
 import (
-	"github.com/cloudflare/cloudflare-sdk-go/internal/apierror"
+	"github.com/cloudflare/cloudflare-go/internal/apierror"
 )
 
 type Error = apierror.Error

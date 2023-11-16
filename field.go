@@ -1,14 +1,14 @@
 package cloudflare
 
 import (
-	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
+	"github.com/cloudflare/cloudflare-go/internal/param"
 )
 
 // F is a param field helper used to initialize a [param.Field] generic struct.
 // This helps specify null, zero values, and overrides, as well as normal values.
 // You can read more about this in our [README].
 //
-// [README]: https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#readme-request-fields
+// [README]: https://pkg.go.dev/github.com/cloudflare/cloudflare-go#readme-request-fields
 func F[T any](value T) param.Field[T] { return param.Field[T]{Value: value, Present: true} }
 
 // Null is a param field helper which explciitly sends null to the API.
