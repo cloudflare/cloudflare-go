@@ -10,9 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go"
-	"github.com/cloudflare/cloudflare-go/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-sdk-go"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/testutil"
+	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
 func TestContextCancel(t *testing.T) {
@@ -25,11 +25,17 @@ func TestContextCancel(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
+		option.WithAPIKey("my-cloudflare-api-key"),
 	)
 	cancelCtx, cancel := context.WithCancel(context.Background())
 	cancel()
-	res, err := client.Status.Get(cancelCtx)
+	res, err := client.Zones.New(cancelCtx, cloudflare.ZoneNewParams{
+		Account: cloudflare.F(cloudflare.ZoneNewParamsAccount{
+			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		}),
+		Name: cloudflare.F("example.com"),
+		Type: cloudflare.F(cloudflare.ZoneNewParamsTypeFull),
+	})
 	if err == nil || res != nil {
 		t.Error("Expected there to be a cancel error and for the response to be nil")
 	}
@@ -53,7 +59,7 @@ func TestContextCancelDelay(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
+		option.WithAPIKey("my-cloudflare-api-key"),
 		option.WithHTTPClient(&http.Client{Transport: &neverTransport{}}),
 	)
 	cancelCtx, cancel := context.WithCancel(context.Background())
@@ -61,7 +67,13 @@ func TestContextCancelDelay(t *testing.T) {
 		time.Sleep(time.Millisecond * time.Duration(2))
 		cancel()
 	}()
-	res, err := client.Status.Get(cancelCtx)
+	res, err := client.Zones.New(cancelCtx, cloudflare.ZoneNewParams{
+		Account: cloudflare.F(cloudflare.ZoneNewParamsAccount{
+			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		}),
+		Name: cloudflare.F("example.com"),
+		Type: cloudflare.F(cloudflare.ZoneNewParamsTypeFull),
+	})
 	if err == nil || res != nil {
 		t.Error("expected there to be a cancel error and for the response to be nil")
 	}
@@ -86,10 +98,16 @@ func TestContextDeadline(t *testing.T) {
 	go func() {
 		client := cloudflare.NewClient(
 			option.WithBaseURL(baseURL),
-			option.WithAPIKey("My API Key"),
+			option.WithAPIKey("my-cloudflare-api-key"),
 			option.WithHTTPClient(&http.Client{Transport: &neverTransport{}}),
 		)
-		res, err := client.Status.Get(deadlineCtx)
+		res, err := client.Zones.New(deadlineCtx, cloudflare.ZoneNewParams{
+			Account: cloudflare.F(cloudflare.ZoneNewParamsAccount{
+				ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			}),
+			Name: cloudflare.F("example.com"),
+			Type: cloudflare.F(cloudflare.ZoneNewParamsTypeFull),
+		})
 		if err == nil || res != nil {
 			t.Error("expected there to be a deadline error and for the response to be nil")
 		}

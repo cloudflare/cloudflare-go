@@ -12,7 +12,7 @@ import (
 
 	"github.com/tidwall/sjson"
 
-	"github.com/cloudflare/cloudflare-go/internal/param"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 )
 
 var encoders sync.Map // map[encoderEntry]encoderFunc

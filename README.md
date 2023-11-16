@@ -1,22 +1,22 @@
 # Cloudflare Go API Library
 
-<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go"><img src="https://pkg.go.dev/badge/github.com/cloudflare/cloudflare-go.svg" alt="Go Reference"></a>
+<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go"><img src="https://pkg.go.dev/badge/github.com/cloudflare/cloudflare-sdk-go.svg" alt="Go Reference"></a>
 
 The Cloudflare Go library provides convenient access to [the Cloudflare REST
-API](https://docs.cloudflare.com) from applications written in Go.
+API](https://developers.cloudflare.com/api/) from applications written in Go.
 
 ## Installation
 
 ```go
 import (
-	"github.com/cloudflare/cloudflare-go" // imported as cloudflare
+	"github.com/cloudflare/cloudflare-sdk-go" // imported as cloudflare
 )
 ```
 
 Or to pin the version:
 
 ```sh
-go get -u 'github.com/cloudflare/cloudflare-go@v0.0.1'
+go get -u 'github.com/cloudflare/cloudflare-sdk-go@v0.0.1'
 ```
 
 ## Requirements
@@ -25,7 +25,7 @@ This library requires Go 1.18+.
 
 ## Usage
 
-The full API of this library can be found in [api.md](https://www.github.com/cloudflare/cloudflare-go/blob/main/api.md).
+The full API of this library can be found in [api.md](https://www.github.com/cloudflare/cloudflare-sdk-go/blob/main/api.md).
 
 ```go
 package main
@@ -33,20 +33,25 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/cloudflare/cloudflare-go"
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-sdk-go"
+	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
 func main() {
 	client := cloudflare.NewClient(
-		option.WithAPIKey("My API Key"),      // defaults to os.LookupEnv("CLOUDFLARE_API_KEY")
-		option.WithEnvironmentEnvironment1(), // defaults to option.WithEnvironmentProduction()
+		option.WithAPIKey("my-cloudflare-api-key"), // defaults to os.LookupEnv("CLOUDFLARE_API_KEY")
 	)
-	statusGetResponse, err := client.Status.Get(context.TODO())
+	zoneNewResponse, err := client.Zones.New(context.TODO(), cloudflare.ZoneNewParams{
+		Account: cloudflare.F(cloudflare.ZoneNewParamsAccount{
+			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		}),
+		Name: cloudflare.F("example.com"),
+		Type: cloudflare.F(cloudflare.ZoneNewParamsTypeFull),
+	})
 	if err != nil {
 		panic(err.Error())
 	}
-	fmt.Printf("%+v\n", statusGetResponse.Message)
+	fmt.Printf("%+v\n", zoneNewResponse.Result.ID)
 }
 
 ```
@@ -135,7 +140,7 @@ client := cloudflare.NewClient(
 	option.WithHeader("X-Some-Header", "custom_header_info"),
 )
 
-client.Status.Get(context.TODO(), ...,
+client.Zones.New(context.TODO(), ...,
 	// Override the header
 	option.WithHeader("X-Some-Header", "some_other_custom_header_info"),
 	// Add an undocumented field to the request body, using sjson syntax
@@ -143,7 +148,7 @@ client.Status.Get(context.TODO(), ...,
 )
 ```
 
-The full list of request options is [here](https://pkg.go.dev/github.com/cloudflare/cloudflare-go/option).
+The full list of request options is [here](https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go/option).
 
 ### Pagination
 
@@ -172,14 +177,14 @@ When the API returns a non-success status code, we return an error with type
 To handle errors, we recommend that you use the `errors.As` pattern:
 
 ```go
-_, err := client.Status.Get(context.TODO())
+_, err := client.Zones.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 if err != nil {
 	var apierr *cloudflare.Error
 	if errors.As(err, &apierr) {
 		println(string(apierr.DumpRequest(true)))  // Prints the serialized HTTP request
 		println(string(apierr.DumpResponse(true))) // Prints the serialized HTTP response
 	}
-	panic(err.Error()) // GET "/status": 400 Bad Request { ... }
+	panic(err.Error()) // GET "/zones/{identifier}": 400 Bad Request { ... }
 }
 ```
 
@@ -197,8 +202,10 @@ To set a per-retry timeout, use `option.WithRequestTimeout()`.
 // This sets the timeout for the request, including all the retries.
 ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 defer cancel()
-client.Status.Get(
+client.Zones.Update(
 	ctx,
+	"023e105f4ecef8ad9ca31a8372d0c353",
+	cloudflare.ZoneUpdateParams{},
 	// This sets the per-retry timeout
 	option.WithRequestTimeout(20*time.Second),
 )
@@ -219,7 +226,11 @@ client := cloudflare.NewClient(
 )
 
 // Override per-request:
-client.Status.Get(context.TODO(), option.WithMaxRetries(5))
+client.Zones.Get(
+	context.TODO(),
+	"023e105f4ecef8ad9ca31a8372d0c353",
+	option.WithMaxRetries(5),
+)
 ```
 
 ### Middleware
@@ -268,4 +279,4 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/cloudflare/cloudflare-go/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/cloudflare/cloudflare-sdk-go/issues) with questions, bugs, or suggestions.

@@ -7,9 +7,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go"
-	"github.com/cloudflare/cloudflare-go/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-sdk-go"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/testutil"
+	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
 func TestUsage(t *testing.T) {
@@ -22,11 +22,17 @@ func TestUsage(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
+		option.WithAPIKey("my-cloudflare-api-key"),
 	)
-	statusGetResponse, err := client.Status.Get(context.TODO())
+	zoneNewResponse, err := client.Zones.New(context.TODO(), cloudflare.ZoneNewParams{
+		Account: cloudflare.F(cloudflare.ZoneNewParamsAccount{
+			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		}),
+		Name: cloudflare.F("example.com"),
+		Type: cloudflare.F(cloudflare.ZoneNewParamsTypeFull),
+	})
 	if err != nil {
 		t.Error(err)
 	}
-	t.Logf("%+v\n", statusGetResponse.Message)
+	t.Logf("%+v\n", zoneNewResponse.Result.ID)
 }

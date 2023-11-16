@@ -17,10 +17,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/internal"
-	"github.com/cloudflare/cloudflare-go/internal/apierror"
-	"github.com/cloudflare/cloudflare-go/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/internal/apiquery"
+	"github.com/cloudflare/cloudflare-sdk-go/internal"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/apierror"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/apiform"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 )
 
 func getNormalizedOS() string {

@@ -5,17 +5,15 @@ package cloudflare
 import (
 	"os"
 
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
 // Client creates a struct with services and top level methods that help with
 // interacting with the cloudflare API. You should not instantiate this client
 // directly, and instead use the [NewClient] method instead.
 type Client struct {
-	Options  []option.RequestOption
-	Accounts *AccountService
-	Cards    *CardService
-	Status   *StatusService
+	Options []option.RequestOption
+	Zones   *ZoneService
 }
 
 // NewClient generates a new client with the default option read from the
@@ -31,9 +29,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 
 	r = &Client{Options: opts}
 
-	r.Accounts = NewAccountService(opts...)
-	r.Cards = NewCardService(opts...)
-	r.Status = NewStatusService(opts...)
+	r.Zones = NewZoneService(opts...)
 
 	return
 }
