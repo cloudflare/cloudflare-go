@@ -131,6 +131,7 @@ type RequestConfig struct {
 	HTTPClient     *http.Client
 	Middlewares    []middleware
 	APIKey         string
+	Email          string
 	// If ResponseBodyInto not nil, then we will attempt to deserialize into
 	// ResponseBodyInto. If Destination is a []byte, then it will return the body as
 	// is.

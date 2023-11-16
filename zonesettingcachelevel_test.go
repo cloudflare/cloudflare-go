@@ -24,6 +24,7 @@ func TestZoneSettingCacheLevelUpdate(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("my-cloudflare-api-key"),
+		option.WithEmail("dev@cloudflare.com"),
 	)
 	_, err := client.Zones.Settings.CacheLevels.Update(
 		context.TODO(),
@@ -52,6 +53,7 @@ func TestZoneSettingCacheLevelList(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("my-cloudflare-api-key"),
+		option.WithEmail("dev@cloudflare.com"),
 	)
 	_, err := client.Zones.Settings.CacheLevels.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {

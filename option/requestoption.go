@@ -3,7 +3,6 @@
 package option
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"net/url"
@@ -192,6 +191,14 @@ func WithEnvironmentProduction() RequestOption {
 func WithAPIKey(value string) RequestOption {
 	return func(r *requestconfig.RequestConfig) error {
 		r.APIKey = value
-		return r.Apply(WithHeader("authorization", fmt.Sprintf("Bearer %s", r.APIKey)))
+		return r.Apply(WithHeader("X-Auth-Key", r.APIKey))
+	}
+}
+
+// WithEmail returns a RequestOption that sets the client setting "email".
+func WithEmail(value string) RequestOption {
+	return func(r *requestconfig.RequestConfig) error {
+		r.Email = value
+		return r.Apply(WithHeader("x-auth-email", value))
 	}
 }

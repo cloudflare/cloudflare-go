@@ -21,10 +21,11 @@ import (
 // from the environment automatically. You should not instantiate this service
 // directly, and instead use the [NewZoneService] method instead.
 type ZoneService struct {
-	Options    []option.RequestOption
-	Dnssecs    *ZoneDnssecService
-	RateLimits *ZoneRateLimitService
-	Settings   *ZoneSettingService
+	Options       []option.RequestOption
+	LoadBalancers *ZoneLoadBalancerService
+	Dnssecs       *ZoneDnssecService
+	RateLimits    *ZoneRateLimitService
+	Settings      *ZoneSettingService
 }
 
 // NewZoneService generates a new service that applies the given options to each
@@ -33,6 +34,7 @@ type ZoneService struct {
 func NewZoneService(opts ...option.RequestOption) (r *ZoneService) {
 	r = &ZoneService{}
 	r.Options = opts
+	r.LoadBalancers = NewZoneLoadBalancerService(opts...)
 	r.Dnssecs = NewZoneDnssecService(opts...)
 	r.RateLimits = NewZoneRateLimitService(opts...)
 	r.Settings = NewZoneSettingService(opts...)
@@ -158,6 +160,25 @@ type apiResponseSingleIDResultJSON struct {
 func (r *APIResponseSingleIDResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The session_affinity specifies the type of session affinity the load balancer
+// should use unless specified as "none" or ""(default). The supported types are
+// "cookie" and "ip_cookie". "cookie" - On the first request to a proxied load
+// balancer, a cookie is generated, encoding information of which origin the
+// request will be forwarded to. Subsequent requests, by the same client to the
+// same load balancer, will be sent to the origin server the cookie encodes, for
+// the duration of the cookie and as long as the origin server remains healthy. If
+// the cookie has expired or the origin server is unhealthy then a new origin
+// server is calculated and used. "ip_cookie" behaves the same as "cookie" except
+// the initial origin selection is stable and based on the client’s ip address.
+type SessionAffinity string
+
+const (
+	SessionAffinityNone     SessionAffinity = "none"
+	SessionAffinityCookie   SessionAffinity = "cookie"
+	SessionAffinityIPCookie SessionAffinity = "ip_cookie"
+	SessionAffinityEmpty    SessionAffinity = "\"\""
+)
 
 type ZoneNewResponse struct {
 	Errors   []ZoneNewResponseError   `json:"errors"`

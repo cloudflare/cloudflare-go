@@ -14,22 +14,27 @@ import (
 type Client struct {
 	Options []option.RequestOption
 	Zones   *ZoneService
+	AI      *AIService
 }
 
 // NewClient generates a new client with the default option read from the
-// environment (CLOUDFLARE_API_KEY). The option passed in as arguments are applied
-// after these default arguments, and all option will be passed down to the
-// services and requests that this client makes.
+// environment (CLOUDFLARE_API_KEY, CLOUDFLARE_EMAIL). The option passed in as
+// arguments are applied after these default arguments, and all option will be
+// passed down to the services and requests that this client makes.
 func NewClient(opts ...option.RequestOption) (r *Client) {
 	defaults := []option.RequestOption{option.WithEnvironmentProduction()}
 	if o, ok := os.LookupEnv("CLOUDFLARE_API_KEY"); ok {
 		defaults = append(defaults, option.WithAPIKey(o))
+	}
+	if o, ok := os.LookupEnv("CLOUDFLARE_EMAIL"); ok {
+		defaults = append(defaults, option.WithEmail(o))
 	}
 	opts = append(defaults, opts...)
 
 	r = &Client{Options: opts}
 
 	r.Zones = NewZoneService(opts...)
+	r.AI = NewAIService(opts...)
 
 	return
 }
