@@ -3,6 +3,7 @@
 ENHANCEMENTS:
 
 * ip_access_rules: Add ListIPAccessRules() to list IP Access Rules ([#1428](https://github.com/cloudflare/cloudflare-go/issues/1428))
+* load_balancing: add healthy field to LoadBalancerPool ([#1442](https://github.com/cloudflare/cloudflare-go/issues/1442))
 
 BUG FIXES:
 
