@@ -98,7 +98,8 @@ func TestCreateLoadBalancerPool(t *testing.T) {
               "notification_email": "someone@example.com",
               "check_regions": [
                 "WEU"
-              ]
+              ],
+			  "healthy": true
             }
         }`)
 	}
@@ -146,6 +147,7 @@ func TestCreateLoadBalancerPool(t *testing.T) {
 		CheckRegions: []string{
 			"WEU",
 		},
+		Healthy: BoolPtr(true),
 	}
 	request := LoadBalancerPool{
 		Description: "Primary data center - Provider XYZ",
