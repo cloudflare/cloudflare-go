@@ -123,14 +123,14 @@ func TestListIPAccessRules(t *testing.T) {
 	}
 
 	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/firewall/access_rules/rules", handler)
-	want := []IpAccessRule{
+	want := []IPAccessRule{
 		{
 			AllowedModes: []IPAccessRulesModeOption{
-				IpAccessRulesModeWhitelist,
-				IpAccessRulesModeBlock,
-				IpAccessRulesModeChallenge,
-				IpAccessRulesModeJsChallenge,
-				IpAccessRulesModeManagedChallenge,
+				IPAccessRulesModeWhitelist,
+				IPAccessRulesModeBlock,
+				IPAccessRulesModeChallenge,
+				IPAccessRulesModeJsChallenge,
+				IPAccessRulesModeManagedChallenge,
 			},
 			ID: "f2d427378e7542acb295380d352e2ebd",
 			Configuration: IPAccessRuleConfiguration{
@@ -144,11 +144,11 @@ func TestListIPAccessRules(t *testing.T) {
 		},
 		{
 			AllowedModes: []IPAccessRulesModeOption{
-				IpAccessRulesModeWhitelist,
-				IpAccessRulesModeBlock,
-				IpAccessRulesModeChallenge,
-				IpAccessRulesModeJsChallenge,
-				IpAccessRulesModeManagedChallenge,
+				IPAccessRulesModeWhitelist,
+				IPAccessRulesModeBlock,
+				IPAccessRulesModeChallenge,
+				IPAccessRulesModeJsChallenge,
+				IPAccessRulesModeManagedChallenge,
 			},
 			ID: "92f17202ed8bd63d69a66b86a49a8f6b",
 			Configuration: IPAccessRuleConfiguration{
@@ -162,11 +162,11 @@ func TestListIPAccessRules(t *testing.T) {
 		},
 		{
 			AllowedModes: []IPAccessRulesModeOption{
-				IpAccessRulesModeWhitelist,
-				IpAccessRulesModeBlock,
-				IpAccessRulesModeChallenge,
-				IpAccessRulesModeJsChallenge,
-				IpAccessRulesModeManagedChallenge,
+				IPAccessRulesModeWhitelist,
+				IPAccessRulesModeBlock,
+				IPAccessRulesModeChallenge,
+				IPAccessRulesModeJsChallenge,
+				IPAccessRulesModeManagedChallenge,
 			},
 			ID: "4ae338944d6143378c3cf05a7c77d983",
 			Configuration: IPAccessRuleConfiguration{
@@ -180,11 +180,11 @@ func TestListIPAccessRules(t *testing.T) {
 		},
 		{
 			AllowedModes: []IPAccessRulesModeOption{
-				IpAccessRulesModeWhitelist,
-				IpAccessRulesModeBlock,
-				IpAccessRulesModeChallenge,
-				IpAccessRulesModeJsChallenge,
-				IpAccessRulesModeManagedChallenge,
+				IPAccessRulesModeWhitelist,
+				IPAccessRulesModeBlock,
+				IPAccessRulesModeChallenge,
+				IPAccessRulesModeJsChallenge,
+				IPAccessRulesModeManagedChallenge,
 			},
 			ID: "52161eb6af4241bb9d4b32394be72fdf",
 			Configuration: IPAccessRuleConfiguration{
@@ -198,11 +198,11 @@ func TestListIPAccessRules(t *testing.T) {
 		},
 		{
 			AllowedModes: []IPAccessRulesModeOption{
-				IpAccessRulesModeWhitelist,
-				IpAccessRulesModeBlock,
-				IpAccessRulesModeChallenge,
-				IpAccessRulesModeJsChallenge,
-				IpAccessRulesModeManagedChallenge,
+				IPAccessRulesModeWhitelist,
+				IPAccessRulesModeBlock,
+				IPAccessRulesModeChallenge,
+				IPAccessRulesModeJsChallenge,
+				IPAccessRulesModeManagedChallenge,
 			},
 			ID: "cbf4b7a5a2a24e59a03044d6d44ceb09",
 			Configuration: IPAccessRuleConfiguration{
@@ -216,8 +216,8 @@ func TestListIPAccessRules(t *testing.T) {
 		},
 	}
 
-	actual, _, err := client.ListIpAccessRules(context.Background(),
-		ZoneIdentifier("d56084adb405e0b7e32c52321bf07be6"), ListIpAccessRulesParams{})
+	actual, _, err := client.ListIPAccessRules(context.Background(),
+		ZoneIdentifier("d56084adb405e0b7e32c52321bf07be6"), ListIPAccessRulesParams{})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -266,14 +266,14 @@ func TestListIPAccessRulesWithParams(t *testing.T) {
 	}
 
 	mux.HandleFunc("/zones/d56084adb405e0b7e32c52321bf07be6/firewall/access_rules/rules", handler)
-	want := []IpAccessRule{
+	want := []IPAccessRule{
 		{
 			AllowedModes: []IPAccessRulesModeOption{
-				IpAccessRulesModeWhitelist,
-				IpAccessRulesModeBlock,
-				IpAccessRulesModeChallenge,
-				IpAccessRulesModeJsChallenge,
-				IpAccessRulesModeManagedChallenge,
+				IPAccessRulesModeWhitelist,
+				IPAccessRulesModeBlock,
+				IPAccessRulesModeChallenge,
+				IPAccessRulesModeJsChallenge,
+				IPAccessRulesModeManagedChallenge,
 			},
 			ID: "cbf4b7a5a2a24e59a03044d6d44ceb09",
 			Configuration: IPAccessRuleConfiguration{
@@ -287,10 +287,10 @@ func TestListIPAccessRulesWithParams(t *testing.T) {
 		},
 	}
 
-	actual, _, err := client.ListIpAccessRules(context.Background(),
-		ZoneIdentifier("d56084adb405e0b7e32c52321bf07be6"), ListIpAccessRulesParams{
+	actual, _, err := client.ListIPAccessRules(context.Background(),
+		ZoneIdentifier("d56084adb405e0b7e32c52321bf07be6"), ListIPAccessRulesParams{
 			Direction: "asc",
-			Filters: ListIpAccessRulesFilters{
+			Filters: ListIPAccessRulesFilters{
 				Configuration: IPAccessRuleConfiguration{
 					Target: "ip",
 				},
@@ -298,7 +298,7 @@ func TestListIPAccessRulesWithParams(t *testing.T) {
 				Mode:  "manage_challenge",
 				Notes: "This rule is enabled because we like the challenge page.",
 			},
-			Order: IpAccessRulesConfigurationTarget,
+			Order: IPAccessRulesConfigurationTarget,
 			PaginationOptions: PaginationOptions{
 				Page:    1,
 				PerPage: 100,
