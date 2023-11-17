@@ -1,5 +1,9 @@
 ## 0.82.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* ip_access_rules: Add ListIPAccessRules() to list IP Access Rules ([#1428](https://github.com/cloudflare/cloudflare-go/issues/1428))
+
 BUG FIXES:
 
 * load_balancing: Add support for virtual network id in origins ([#1441](https://github.com/cloudflare/cloudflare-go/issues/1441))
