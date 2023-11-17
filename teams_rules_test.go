@@ -53,6 +53,19 @@ func TestTeamsRules(t *testing.T) {
                     "insecure_disable_dnssec_validation": false,
 					"untrusted_cert": {
 						"action": "error"
+					},
+					"dns_resolvers": {
+						"ipv4": [
+							{"ip": "10.0.0.2", "port": 5053},
+							{
+								"ip": "192.168.0.2",
+								"vnet_id": "16fd7a32-11f0-4687-a0bb-7031d241e184",
+								"route_through_private_network": true
+							}
+						],
+						"ipv6": [
+							{"ip": "2460::1"}
+						]
 					}
 				  }
 				},
@@ -84,7 +97,8 @@ func TestTeamsRules(t *testing.T) {
                     "insecure_disable_dnssec_validation": true,
 					"untrusted_cert": {
 						"action": "pass_through"
-					}
+					},
+					"resolve_dns_through_cloudflare": true
 				  }
 				}
 			]
@@ -123,6 +137,30 @@ func TestTeamsRules(t *testing.T) {
 			UntrustedCertSettings: &UntrustedCertSettings{
 				Action: UntrustedCertError,
 			},
+			DnsResolverSettings: &TeamsDnsResolverSettings{
+				V4Resolvers: []TeamsDnsResolverAddressV4{
+					{
+						TeamsDnsResolverAddress{
+							IP:   "10.0.0.2",
+							Port: IntPtr(5053),
+						},
+					},
+					{
+						TeamsDnsResolverAddress{
+							IP:                         "192.168.0.2",
+							VnetID:                     "16fd7a32-11f0-4687-a0bb-7031d241e184",
+							RouteThroughPrivateNetwork: BoolPtr(true),
+						},
+					},
+				},
+				V6Resolvers: []TeamsDnsResolverAddressV6{
+					{
+						TeamsDnsResolverAddress{
+							IP: "2460::1",
+						},
+					},
+				},
+			},
 		},
 		CreatedAt: &createdAt,
 		UpdatedAt: &updatedAt,
@@ -154,6 +192,7 @@ func TestTeamsRules(t *testing.T) {
 				UntrustedCertSettings: &UntrustedCertSettings{
 					Action: UntrustedCertPassthrough,
 				},
+				ResolveDnsThroughCloudflare: BoolPtr(true),
 			},
 			CreatedAt: &createdAt,
 			UpdatedAt: &updatedAt,

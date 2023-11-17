@@ -1,4 +1,44 @@
-## 0.81.0 (Unreleased)
+## 0.82.0 (Unreleased)
+
+BUG FIXES:
+
+* load_balancing: Add support for virtual network id in origins ([#1441](https://github.com/cloudflare/cloudflare-go/issues/1441))
+* per_hostname_tls_setting: use `buildURI` for defining the query parameters when sorting ([#1440](https://github.com/cloudflare/cloudflare-go/issues/1440))
+
+DEPENDENCIES:
+
+* deps: bumps github.com/hashicorp/go-retryablehttp from 0.7.4 to 0.7.5 ([#1438](https://github.com/cloudflare/cloudflare-go/issues/1438))
+* deps: bumps golang.org/x/net from 0.17.0 to 0.18.0 ([#1439](https://github.com/cloudflare/cloudflare-go/issues/1439))
+
+## 0.81.0 (November 8th, 2023)
+
+BREAKING CHANGES:
+
+* devices_policy: `CreateDeviceSettingsPolicy` is updated with method signatures matching the library conventions ([#1433](https://github.com/cloudflare/cloudflare-go/issues/1433))
+* devices_policy: `DeleteDeviceSettingsPolicy` is updated with method signatures matching the library conventions ([#1433](https://github.com/cloudflare/cloudflare-go/issues/1433))
+* devices_policy: `DeviceClientCertificates` is renamed to `DeviceClientCertificates` ([#1433](https://github.com/cloudflare/cloudflare-go/issues/1433))
+* devices_policy: `GetDefaultDeviceSettingsPolicy` is updated with method signatures matching the library conventions ([#1433](https://github.com/cloudflare/cloudflare-go/issues/1433))
+* devices_policy: `GetDeviceClientCertificatesZone` is renamed to `GetDeviceClientCertificates` with updated method signatures ([#1433](https://github.com/cloudflare/cloudflare-go/issues/1433))
+* devices_policy: `GetDeviceClientCertificates` is updated with method signatures matching the library conventions ([#1433](https://github.com/cloudflare/cloudflare-go/issues/1433))
+* devices_policy: `GetDeviceSettingsPolicy` is updated with method signatures matching the library conventions ([#1433](https://github.com/cloudflare/cloudflare-go/issues/1433))
+* devices_policy: `UpdateDefaultDeviceSettingsPolicy` is updated with method signatures matching the library conventions ([#1433](https://github.com/cloudflare/cloudflare-go/issues/1433))
+* devices_policy: `UpdateDeviceClientCertificatesZone` is renamed to `UpdateDeviceClientCertificates` with updated method signatures ([#1433](https://github.com/cloudflare/cloudflare-go/issues/1433))
+* devices_policy: `UpdateDeviceSettingsPolicy` is updated with method signatures matching the library conventions ([#1433](https://github.com/cloudflare/cloudflare-go/issues/1433))
+
+ENHANCEMENTS:
+
+* access_seats: Add UpdateAccessUserSeat() to list IP Access Rules ([#1427](https://github.com/cloudflare/cloudflare-go/issues/1427))
+* access_user: Add GetAccessUserActiveSessions() to get all active sessions for a Access/Zero-Trust user. ([#1427](https://github.com/cloudflare/cloudflare-go/issues/1427))
+* access_user: Add GetAccessUserFailedLogins() to get all failed login attempts for a Access/Zero-Trust user. ([#1427](https://github.com/cloudflare/cloudflare-go/issues/1427))
+* access_user: Add GetAccessUserLastSeenIdentity() to get last seen identity for a Access/Zero-Trust user. ([#1427](https://github.com/cloudflare/cloudflare-go/issues/1427))
+* access_user: Add GetAccessUserSingleActiveSession() to get an active session for a Access/Zero-Trust user. ([#1427](https://github.com/cloudflare/cloudflare-go/issues/1427))
+* access_user: Add ListAccessUsers() to get a list of users for a Access/Zero-Trust account. ([#1427](https://github.com/cloudflare/cloudflare-go/issues/1427))
+* devices_policy: Add support for listing device settings policies ([#1433](https://github.com/cloudflare/cloudflare-go/issues/1433))
+* teams_rules: Add support for resolver policies ([#1436](https://github.com/cloudflare/cloudflare-go/issues/1436))
+
+DEPENDENCIES:
+
+* deps: bumps golang.org/x/time from 0.3.0 to 0.4.0 ([#1434](https://github.com/cloudflare/cloudflare-go/issues/1434))
 
 ## 0.80.0 (October 25th, 2023)
 
@@ -11,7 +51,7 @@ ENHANCEMENTS:
 * access_application: Add support for app launcher customization fields ([#1407](https://github.com/cloudflare/cloudflare-go/issues/1407))
 * api_shield_schema: Add support for Get/Update API Shield Operation Schema Validation Settings ([#1422](https://github.com/cloudflare/cloudflare-go/issues/1422))
 * api_shield_schema: Add support for Get/Update API Shield Schema Validation Settings ([#1418](https://github.com/cloudflare/cloudflare-go/issues/1418))
-* foo: Add support for body_scanning (Enhanced File Detection) in teams account configuration ([#1423](https://github.com/cloudflare/cloudflare-go/issues/1423))
+* teams: Add support for body_scanning (Enhanced File Detection) in teams account configuration ([#1423](https://github.com/cloudflare/cloudflare-go/issues/1423))
 * load_balancing: extend documentation for least_connections steering policy ([#1414](https://github.com/cloudflare/cloudflare-go/issues/1414))
 * teams: Add `non_identity_enabled` boolean in browser isolation settings ([#1424](https://github.com/cloudflare/cloudflare-go/issues/1424))
 

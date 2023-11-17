@@ -46,3 +46,43 @@ rules:
       regex: \".*\"
       replacement: '"github.com/goccy/go-json"'
     severity: WARNING
+  - id: use-pointers-for-booleans
+    languages:
+      - go
+    message: |
+      Booleans should always be represented as pointers in structs with an omitempty marshaling tag (most commonly as JSON). This ensures you can determine unset, false and truthy values.
+    paths:
+      include:
+        - '*.go'
+    patterns:
+      - pattern-regex: "bool"
+      - pattern-not-regex: "\\*bool"
+      - pattern-either:
+        - pattern-inside: |
+            type $STRUCTNAME struct {
+                ...
+            }
+    severity: WARNING
+    metadata:
+      references:
+        - https://github.com/cloudflare/cloudflare-go/blob/master/docs/conventions.md#booleans
+  - id: use-pointers-for-time
+    languages:
+      - go
+    message: |
+      time.Time should always be represented as pointers in structs.
+    paths:
+      include:
+        - '*.go'
+    patterns:
+      - pattern-regex: "time\\.Time"
+      - pattern-not-regex: "\\*time\\.Time"
+      - pattern-either:
+        - pattern-inside: |
+            type $STRUCTNAME struct {
+                ...
+            }
+    severity: WARNING
+    metadata:
+      references:
+        - https://github.com/cloudflare/cloudflare-go/blob/master/docs/conventions.md#timetime

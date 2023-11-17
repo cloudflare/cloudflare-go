@@ -12,8 +12,8 @@ type Enabled struct {
 	Enabled bool `json:"enabled"`
 }
 
-// DeviceClientCertificatesZone identifies if the zero trust zone is configured for an account.
-type DeviceClientCertificatesZone struct {
+// DeviceClientCertificates identifies if the zero trust zone is configured for an account.
+type DeviceClientCertificates struct {
 	Response
 	Result Enabled
 }
@@ -26,6 +26,8 @@ const (
 	proxy          ServiceMode = "proxy"
 	postureOnly    ServiceMode = "posture_only"
 	warpTunnelOnly ServiceMode = "warp_tunnel_only"
+
+	listDeviceSettingsPoliciesDefaultPageSize = 20
 )
 
 type ServiceModeV2 struct {
@@ -67,7 +69,7 @@ type DeleteDeviceSettingsPolicyResponse struct {
 	Result []DeviceSettingsPolicy
 }
 
-type DeviceSettingsPolicyRequest struct {
+type CreateDeviceSettingsPolicyParams struct {
 	DisableAutoFallback *bool          `json:"disable_auto_fallback,omitempty"`
 	CaptivePortal       *int           `json:"captive_portal,omitempty"`
 	AllowModeSwitch     *bool          `json:"allow_mode_switch,omitempty"`
@@ -85,14 +87,73 @@ type DeviceSettingsPolicyRequest struct {
 	Description         *string        `json:"description,omitempty"`
 }
 
+type UpdateDefaultDeviceSettingsPolicyParams struct {
+	DisableAutoFallback *bool          `json:"disable_auto_fallback,omitempty"`
+	CaptivePortal       *int           `json:"captive_portal,omitempty"`
+	AllowModeSwitch     *bool          `json:"allow_mode_switch,omitempty"`
+	SwitchLocked        *bool          `json:"switch_locked,omitempty"`
+	AllowUpdates        *bool          `json:"allow_updates,omitempty"`
+	AutoConnect         *int           `json:"auto_connect,omitempty"`
+	AllowedToLeave      *bool          `json:"allowed_to_leave,omitempty"`
+	SupportURL          *string        `json:"support_url,omitempty"`
+	ServiceModeV2       *ServiceModeV2 `json:"service_mode_v2,omitempty"`
+	Precedence          *int           `json:"precedence,omitempty"`
+	Name                *string        `json:"name,omitempty"`
+	Match               *string        `json:"match,omitempty"`
+	Enabled             *bool          `json:"enabled,omitempty"`
+	ExcludeOfficeIps    *bool          `json:"exclude_office_ips"`
+	Description         *string        `json:"description,omitempty"`
+}
+
+type UpdateDeviceSettingsPolicyParams struct {
+	PolicyID            *string        `json:"-"`
+	DisableAutoFallback *bool          `json:"disable_auto_fallback,omitempty"`
+	CaptivePortal       *int           `json:"captive_portal,omitempty"`
+	AllowModeSwitch     *bool          `json:"allow_mode_switch,omitempty"`
+	SwitchLocked        *bool          `json:"switch_locked,omitempty"`
+	AllowUpdates        *bool          `json:"allow_updates,omitempty"`
+	AutoConnect         *int           `json:"auto_connect,omitempty"`
+	AllowedToLeave      *bool          `json:"allowed_to_leave,omitempty"`
+	SupportURL          *string        `json:"support_url,omitempty"`
+	ServiceModeV2       *ServiceModeV2 `json:"service_mode_v2,omitempty"`
+	Precedence          *int           `json:"precedence,omitempty"`
+	Name                *string        `json:"name,omitempty"`
+	Match               *string        `json:"match,omitempty"`
+	Enabled             *bool          `json:"enabled,omitempty"`
+	ExcludeOfficeIps    *bool          `json:"exclude_office_ips"`
+	Description         *string        `json:"description,omitempty"`
+}
+
+type ListDeviceSettingsPoliciesResponse struct {
+	Response
+	ResultInfo ResultInfo             `json:"result_info"`
+	Result     []DeviceSettingsPolicy `json:"result"`
+}
+
+type UpdateDeviceClientCertificatesParams struct {
+	Enabled *bool `json:"enabled"`
+}
+
+type GetDeviceClientCertificatesParams struct{}
+
+type GetDefaultDeviceSettingsPolicyParams struct{}
+
+type GetDeviceSettingsPolicyParams struct {
+	PolicyID *string `json:"-"`
+}
+
 // UpdateDeviceClientCertificates controls the zero trust zone used to provision client certificates.
 //
 // API reference: https://api.cloudflare.com/#device-client-certificates
-func (api *API) UpdateDeviceClientCertificatesZone(ctx context.Context, zoneID string, enable bool) (DeviceClientCertificatesZone, error) {
-	uri := fmt.Sprintf("/%s/%s/devices/policy/certificates", ZoneRouteRoot, zoneID)
+func (api *API) UpdateDeviceClientCertificates(ctx context.Context, rc *ResourceContainer, params UpdateDeviceClientCertificatesParams) (DeviceClientCertificates, error) {
+	if rc.Level != ZoneRouteLevel {
+		return DeviceClientCertificates{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
 
-	result := DeviceClientCertificatesZone{}
-	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, Enabled{enable})
+	uri := fmt.Sprintf("/%s/%s/devices/policy/certificates", rc.Level, rc.Identifier)
+
+	result := DeviceClientCertificates{Result: Enabled{false}}
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
 	if err != nil {
 		return result, err
 	}
@@ -104,13 +165,18 @@ func (api *API) UpdateDeviceClientCertificatesZone(ctx context.Context, zoneID s
 	return result, err
 }
 
-// GetDeviceClientCertificatesZone controls the zero trust zone used to provision client certificates.
+// GetDeviceClientCertificates controls the zero trust zone used to provision
+// client certificates.
 //
 // API reference: https://api.cloudflare.com/#device-client-certificates
-func (api *API) GetDeviceClientCertificatesZone(ctx context.Context, zoneID string) (DeviceClientCertificatesZone, error) {
-	uri := fmt.Sprintf("/%s/%s/devices/policy/certificates", ZoneRouteRoot, zoneID)
+func (api *API) GetDeviceClientCertificates(ctx context.Context, rc *ResourceContainer, params GetDeviceClientCertificatesParams) (DeviceClientCertificates, error) {
+	if rc.Level != ZoneRouteLevel {
+		return DeviceClientCertificates{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
 
-	result := DeviceClientCertificatesZone{}
+	uri := fmt.Sprintf("/%s/%s/devices/policy/certificates", rc.Level, rc.Identifier)
+
+	result := DeviceClientCertificates{}
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return result, err
@@ -123,116 +189,181 @@ func (api *API) GetDeviceClientCertificatesZone(ctx context.Context, zoneID stri
 	return result, err
 }
 
-// CreateDeviceSettingsPolicy creates a settings policy against devices that match the policy
+// CreateDeviceSettingsPolicy creates a settings policy against devices that
+// match the policy.
 //
 // API reference: https://api.cloudflare.com/#devices-create-device-settings-policy
-func (api *API) CreateDeviceSettingsPolicy(ctx context.Context, accountID string, req DeviceSettingsPolicyRequest) (DeviceSettingsPolicyResponse, error) {
-	uri := fmt.Sprintf("/%s/%s/devices/policy", AccountRouteRoot, accountID)
+func (api *API) CreateDeviceSettingsPolicy(ctx context.Context, rc *ResourceContainer, params CreateDeviceSettingsPolicyParams) (DeviceSettingsPolicy, error) {
+	if rc.Level != AccountRouteLevel {
+		return DeviceSettingsPolicy{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
+
+	uri := fmt.Sprintf("/%s/%s/devices/policy", rc.Level, rc.Identifier)
 
 	result := DeviceSettingsPolicyResponse{}
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, req)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
-		return result, err
+		return DeviceSettingsPolicy{}, err
 	}
 
 	if err := json.Unmarshal(res, &result); err != nil {
-		return result, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return DeviceSettingsPolicy{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
-	return result, err
+	return result.Result, err
 }
 
 // UpdateDefaultDeviceSettingsPolicy updates the default settings policy for an account
 //
 // API reference: https://api.cloudflare.com/#devices-update-default-device-settings-policy
-func (api *API) UpdateDefaultDeviceSettingsPolicy(ctx context.Context, accountID string, req DeviceSettingsPolicyRequest) (DeviceSettingsPolicyResponse, error) {
+func (api *API) UpdateDefaultDeviceSettingsPolicy(ctx context.Context, rc *ResourceContainer, params UpdateDefaultDeviceSettingsPolicyParams) (DeviceSettingsPolicy, error) {
+	if rc.Level != AccountRouteLevel {
+		return DeviceSettingsPolicy{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
+
 	result := DeviceSettingsPolicyResponse{}
-	uri := fmt.Sprintf("/%s/%s/devices/policy", AccountRouteRoot, accountID)
-	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, req)
+	uri := fmt.Sprintf("/%s/%s/devices/policy", rc.Level, rc.Identifier)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
 	if err != nil {
-		return result, err
+		return DeviceSettingsPolicy{}, err
 	}
 
 	if err := json.Unmarshal(res, &result); err != nil {
-		return result, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return DeviceSettingsPolicy{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
-	return result, err
+	return result.Result, err
 }
 
 // UpdateDeviceSettingsPolicy updates a settings policy
 //
 // API reference: https://api.cloudflare.com/#devices-update-device-settings-policy
-func (api *API) UpdateDeviceSettingsPolicy(ctx context.Context, accountID, policyID string, req DeviceSettingsPolicyRequest) (DeviceSettingsPolicyResponse, error) {
-	uri := fmt.Sprintf("/%s/%s/devices/policy/%s", AccountRouteRoot, accountID, policyID)
+func (api *API) UpdateDeviceSettingsPolicy(ctx context.Context, rc *ResourceContainer, params UpdateDeviceSettingsPolicyParams) (DeviceSettingsPolicy, error) {
+	if rc.Level != AccountRouteLevel {
+		return DeviceSettingsPolicy{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
+
+	uri := fmt.Sprintf("/%s/%s/devices/policy/%s", rc.Level, rc.Identifier, *params.PolicyID)
 
 	result := DeviceSettingsPolicyResponse{}
-	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, req)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
 	if err != nil {
-		return result, err
+		return DeviceSettingsPolicy{}, err
 	}
 
 	if err := json.Unmarshal(res, &result); err != nil {
-		return result, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return DeviceSettingsPolicy{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
-	return result, err
+	return result.Result, err
 }
 
 // DeleteDeviceSettingsPolicy deletes a settings policy and returns a list
-// of all of the other policies in the account
+// of all of the other policies in the account.
 //
 // API reference: https://api.cloudflare.com/#devices-delete-device-settings-policy
-func (api *API) DeleteDeviceSettingsPolicy(ctx context.Context, accountID, policyID string) (DeleteDeviceSettingsPolicyResponse, error) {
-	uri := fmt.Sprintf("/%s/%s/devices/policy/%s", AccountRouteRoot, accountID, policyID)
+func (api *API) DeleteDeviceSettingsPolicy(ctx context.Context, rc *ResourceContainer, policyID string) ([]DeviceSettingsPolicy, error) {
+	if rc.Level != AccountRouteLevel {
+		return []DeviceSettingsPolicy{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
+
+	uri := fmt.Sprintf("/%s/%s/devices/policy/%s", rc.Level, rc.Identifier, policyID)
 
 	result := DeleteDeviceSettingsPolicyResponse{}
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
-		return result, err
+		return []DeviceSettingsPolicy{}, err
 	}
 
 	if err := json.Unmarshal(res, &result); err != nil {
-		return result, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return []DeviceSettingsPolicy{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
-	return result, err
+	return result.Result, err
 }
 
-// GetDefaultDeviceSettings gets the default device settings policy
+// GetDefaultDeviceSettings gets the default device settings policy.
 //
 // API reference: https://api.cloudflare.com/#devices-get-default-device-settings-policy
-func (api *API) GetDefaultDeviceSettingsPolicy(ctx context.Context, accountID string) (DeviceSettingsPolicyResponse, error) {
-	uri := fmt.Sprintf("/%s/%s/devices/policy", AccountRouteRoot, accountID)
+func (api *API) GetDefaultDeviceSettingsPolicy(ctx context.Context, rc *ResourceContainer, params GetDefaultDeviceSettingsPolicyParams) (DeviceSettingsPolicy, error) {
+	if rc.Level != AccountRouteLevel {
+		return DeviceSettingsPolicy{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
+
+	uri := fmt.Sprintf("/%s/%s/devices/policy", rc.Level, rc.Identifier)
 
 	result := DeviceSettingsPolicyResponse{}
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return result, err
+		return DeviceSettingsPolicy{}, err
 	}
 
 	if err := json.Unmarshal(res, &result); err != nil {
-		return result, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return DeviceSettingsPolicy{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
-	return result, err
+	return result.Result, err
 }
 
-// GetDefaultDeviceSettings gets the device settings policy by its policyID
+// GetDefaultDeviceSettings gets the device settings policy by its policyID.
 //
 // API reference: https://api.cloudflare.com/#devices-get-device-settings-policy-by-id
-func (api *API) GetDeviceSettingsPolicy(ctx context.Context, accountID, policyID string) (DeviceSettingsPolicyResponse, error) {
-	uri := fmt.Sprintf("/%s/%s/devices/policy/%s", AccountRouteRoot, accountID, policyID)
+func (api *API) GetDeviceSettingsPolicy(ctx context.Context, rc *ResourceContainer, params GetDeviceSettingsPolicyParams) (DeviceSettingsPolicy, error) {
+	if rc.Level != AccountRouteLevel {
+		return DeviceSettingsPolicy{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
+
+	uri := fmt.Sprintf("/%s/%s/devices/policy/%s", rc.Level, rc.Identifier, *params.PolicyID)
 
 	result := DeviceSettingsPolicyResponse{}
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return result, err
+		return DeviceSettingsPolicy{}, err
 	}
 
 	if err := json.Unmarshal(res, &result); err != nil {
-		return result, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return DeviceSettingsPolicy{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
-	return result, err
+	return result.Result, err
+}
+
+type ListDeviceSettingsPoliciesParams struct {
+	ResultInfo
+}
+
+// ListDeviceSettingsPolicies returns all device settings policies for an account
+//
+// API reference: https://api.cloudflare.com/#devices-list-device-settings-policies
+func (api *API) ListDeviceSettingsPolicies(ctx context.Context, rc *ResourceContainer, params ListDeviceSettingsPoliciesParams) ([]DeviceSettingsPolicy, *ResultInfo, error) {
+	autoPaginate := true
+	if params.PerPage >= 1 || params.Page >= 1 {
+		autoPaginate = false
+	}
+
+	if params.PerPage < 1 {
+		params.PerPage = listDeviceSettingsPoliciesDefaultPageSize
+	}
+
+	var policies []DeviceSettingsPolicy
+	var lastResultInfo ResultInfo
+	for {
+		uri := buildURI(fmt.Sprintf("/%s/%s/devices/policies", rc.Level, rc.Identifier), params)
+		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+		if err != nil {
+			return nil, nil, err
+		}
+		var r ListDeviceSettingsPoliciesResponse
+		err = json.Unmarshal(res, &r)
+		if err != nil {
+			return nil, nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		}
+		policies = append(policies, r.Result...)
+		lastResultInfo = r.ResultInfo
+		params.ResultInfo = r.ResultInfo.Next()
+		if params.ResultInfo.Done() || !autoPaginate {
+			break
+		}
+	}
+	return policies, &lastResultInfo, nil
 }
