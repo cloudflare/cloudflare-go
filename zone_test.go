@@ -30,7 +30,7 @@ func TestZoneNewWithOptionalParams(t *testing.T) {
 		Account: cloudflare.F(cloudflare.ZoneNewParamsAccount{
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}),
-		Name: cloudflare.F("example.com"),
+		Name: cloudflare.F("string"),
 		Type: cloudflare.F(cloudflare.ZoneNewParamsTypeFull),
 	})
 	if err != nil {

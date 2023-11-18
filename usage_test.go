@@ -30,7 +30,7 @@ func TestUsage(t *testing.T) {
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}),
 		Name: cloudflare.F("example.com"),
-		Type: cloudflare.F(cloudflare.ZoneNewParamsTypeFull),
+		Type: cloudflare.F(cloudflare.ZoneNewParamsTypePartial),
 	})
 	if err != nil {
 		t.Error(err)
