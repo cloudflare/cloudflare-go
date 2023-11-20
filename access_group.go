@@ -39,6 +39,15 @@ type AccessGroupEmail struct {
 	} `json:"email"`
 }
 
+// AccessGroupEmailList is used for managing access based on the email
+// list. For example, restrict access to users with the email addresses
+// in the email list with the ID `1234567890abcdef1234567890abcdef`.
+type AccessGroupEmailList struct {
+	EmailList struct {
+		ID string `json:"id"`
+	} `json:"email_list"`
+}
+
 // AccessGroupEmailDomain is used for managing access based on an email
 // domain such as `example.com` instead of individual addresses.
 type AccessGroupEmailDomain struct {
