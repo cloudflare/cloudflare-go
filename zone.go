@@ -74,11 +74,91 @@ func (r *ZoneService) List(ctx context.Context, query ZoneListParams, opts ...op
 }
 
 // Deletes an existing zone.
-func (r *ZoneService) Delete(ctx context.Context, identifier string, opts ...option.RequestOption) (res *ZoneAPIResponseSingleID, err error) {
+func (r *ZoneService) Delete(ctx context.Context, identifier string, opts ...option.RequestOption) (res *APIResponseSingleID, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
+}
+
+type APIResponseSingleID struct {
+	Errors   []APIResponseSingleIDError   `json:"errors"`
+	Messages []APIResponseSingleIDMessage `json:"messages"`
+	Result   APIResponseSingleIDResult    `json:"result,nullable"`
+	// Whether the API call was successful
+	Success bool                    `json:"success"`
+	JSON    apiResponseSingleIDJSON `json:"-"`
+}
+
+// apiResponseSingleIDJSON contains the JSON metadata for the struct
+// [APIResponseSingleID]
+type apiResponseSingleIDJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *APIResponseSingleID) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type APIResponseSingleIDError struct {
+	Code    int64                        `json:"code,required"`
+	Message string                       `json:"message,required"`
+	JSON    apiResponseSingleIDErrorJSON `json:"-"`
+}
+
+// apiResponseSingleIDErrorJSON contains the JSON metadata for the struct
+// [APIResponseSingleIDError]
+type apiResponseSingleIDErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *APIResponseSingleIDError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type APIResponseSingleIDMessage struct {
+	Code    int64                          `json:"code,required"`
+	Message string                         `json:"message,required"`
+	JSON    apiResponseSingleIDMessageJSON `json:"-"`
+}
+
+// apiResponseSingleIDMessageJSON contains the JSON metadata for the struct
+// [APIResponseSingleIDMessage]
+type apiResponseSingleIDMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *APIResponseSingleIDMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type APIResponseSingleIDResult struct {
+	// Identifier
+	ID   string                        `json:"id,required"`
+	JSON apiResponseSingleIDResultJSON `json:"-"`
+}
+
+// apiResponseSingleIDResultJSON contains the JSON metadata for the struct
+// [APIResponseSingleIDResult]
+type apiResponseSingleIDResultJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *APIResponseSingleIDResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 // The session_affinity specifies the type of session affinity the load balancer
@@ -99,86 +179,6 @@ const (
 	SessionAffinityIPCookie SessionAffinity = "ip_cookie"
 	SessionAffinityEmpty    SessionAffinity = "\"\""
 )
-
-type ZoneAPIResponseSingleID struct {
-	Errors   []ZoneAPIResponseSingleIDError   `json:"errors"`
-	Messages []ZoneAPIResponseSingleIDMessage `json:"messages"`
-	Result   ZoneAPIResponseSingleIDResult    `json:"result,nullable"`
-	// Whether the API call was successful
-	Success bool                        `json:"success"`
-	JSON    zoneAPIResponseSingleIDJSON `json:"-"`
-}
-
-// zoneAPIResponseSingleIDJSON contains the JSON metadata for the struct
-// [ZoneAPIResponseSingleID]
-type zoneAPIResponseSingleIDJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneAPIResponseSingleID) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZoneAPIResponseSingleIDError struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    zoneAPIResponseSingleIDErrorJSON `json:"-"`
-}
-
-// zoneAPIResponseSingleIDErrorJSON contains the JSON metadata for the struct
-// [ZoneAPIResponseSingleIDError]
-type zoneAPIResponseSingleIDErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneAPIResponseSingleIDError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZoneAPIResponseSingleIDMessage struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    zoneAPIResponseSingleIDMessageJSON `json:"-"`
-}
-
-// zoneAPIResponseSingleIDMessageJSON contains the JSON metadata for the struct
-// [ZoneAPIResponseSingleIDMessage]
-type zoneAPIResponseSingleIDMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneAPIResponseSingleIDMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZoneAPIResponseSingleIDResult struct {
-	// Identifier
-	ID   string                            `json:"id,required"`
-	JSON zoneAPIResponseSingleIDResultJSON `json:"-"`
-}
-
-// zoneAPIResponseSingleIDResultJSON contains the JSON metadata for the struct
-// [ZoneAPIResponseSingleIDResult]
-type zoneAPIResponseSingleIDResultJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneAPIResponseSingleIDResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
 
 type ZoneNewResponse struct {
 	Errors   []ZoneNewResponseError   `json:"errors"`

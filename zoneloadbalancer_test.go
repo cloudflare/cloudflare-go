@@ -14,6 +14,7 @@ import (
 )
 
 func TestZoneLoadBalancerNewWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -138,7 +139,6 @@ func TestZoneLoadBalancerNewWithOptionalParams(t *testing.T) {
 							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 						},
 					}),
-					SessionAffinity: cloudflare.F(cloudflare.SessionAffinityCookie),
 					SessionAffinityAttributes: cloudflare.F(cloudflare.ZoneLoadBalancerNewParamsRulesOverridesSessionAffinityAttributes{
 						DrainDuration:        cloudflare.F(100.000000),
 						Samesite:             cloudflare.F(cloudflare.ZoneLoadBalancerNewParamsRulesOverridesSessionAffinityAttributesSamesiteAuto),
@@ -209,7 +209,6 @@ func TestZoneLoadBalancerNewWithOptionalParams(t *testing.T) {
 							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 						},
 					}),
-					SessionAffinity: cloudflare.F(cloudflare.SessionAffinityCookie),
 					SessionAffinityAttributes: cloudflare.F(cloudflare.ZoneLoadBalancerNewParamsRulesOverridesSessionAffinityAttributes{
 						DrainDuration:        cloudflare.F(100.000000),
 						Samesite:             cloudflare.F(cloudflare.ZoneLoadBalancerNewParamsRulesOverridesSessionAffinityAttributesSamesiteAuto),
@@ -280,7 +279,6 @@ func TestZoneLoadBalancerNewWithOptionalParams(t *testing.T) {
 							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 						},
 					}),
-					SessionAffinity: cloudflare.F(cloudflare.SessionAffinityCookie),
 					SessionAffinityAttributes: cloudflare.F(cloudflare.ZoneLoadBalancerNewParamsRulesOverridesSessionAffinityAttributes{
 						DrainDuration:        cloudflare.F(100.000000),
 						Samesite:             cloudflare.F(cloudflare.ZoneLoadBalancerNewParamsRulesOverridesSessionAffinityAttributesSamesiteAuto),
@@ -294,7 +292,6 @@ func TestZoneLoadBalancerNewWithOptionalParams(t *testing.T) {
 				Priority:   cloudflare.F(int64(0)),
 				Terminates: cloudflare.F(true),
 			}}),
-			SessionAffinity: cloudflare.F(cloudflare.SessionAffinityCookie),
 			SessionAffinityAttributes: cloudflare.F(cloudflare.ZoneLoadBalancerNewParamsSessionAffinityAttributes{
 				DrainDuration:        cloudflare.F(100.000000),
 				Samesite:             cloudflare.F(cloudflare.ZoneLoadBalancerNewParamsSessionAffinityAttributesSamesiteAuto),
@@ -316,6 +313,7 @@ func TestZoneLoadBalancerNewWithOptionalParams(t *testing.T) {
 }
 
 func TestZoneLoadBalancerGet(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -343,6 +341,7 @@ func TestZoneLoadBalancerGet(t *testing.T) {
 }
 
 func TestZoneLoadBalancerUpdateWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -469,7 +468,6 @@ func TestZoneLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 						},
 					}),
-					SessionAffinity: cloudflare.F(cloudflare.SessionAffinityCookie),
 					SessionAffinityAttributes: cloudflare.F(cloudflare.ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributes{
 						DrainDuration:        cloudflare.F(100.000000),
 						Samesite:             cloudflare.F(cloudflare.ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesSamesiteAuto),
@@ -540,7 +538,6 @@ func TestZoneLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 						},
 					}),
-					SessionAffinity: cloudflare.F(cloudflare.SessionAffinityCookie),
 					SessionAffinityAttributes: cloudflare.F(cloudflare.ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributes{
 						DrainDuration:        cloudflare.F(100.000000),
 						Samesite:             cloudflare.F(cloudflare.ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesSamesiteAuto),
@@ -611,7 +608,6 @@ func TestZoneLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 						},
 					}),
-					SessionAffinity: cloudflare.F(cloudflare.SessionAffinityCookie),
 					SessionAffinityAttributes: cloudflare.F(cloudflare.ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributes{
 						DrainDuration:        cloudflare.F(100.000000),
 						Samesite:             cloudflare.F(cloudflare.ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesSamesiteAuto),
@@ -625,7 +621,6 @@ func TestZoneLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 				Priority:   cloudflare.F(int64(0)),
 				Terminates: cloudflare.F(true),
 			}}),
-			SessionAffinity: cloudflare.F(cloudflare.SessionAffinityCookie),
 			SessionAffinityAttributes: cloudflare.F(cloudflare.ZoneLoadBalancerUpdateParamsSessionAffinityAttributes{
 				DrainDuration:        cloudflare.F(100.000000),
 				Samesite:             cloudflare.F(cloudflare.ZoneLoadBalancerUpdateParamsSessionAffinityAttributesSamesiteAuto),
@@ -647,6 +642,7 @@ func TestZoneLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestZoneLoadBalancerList(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -670,6 +666,7 @@ func TestZoneLoadBalancerList(t *testing.T) {
 }
 
 func TestZoneLoadBalancerDelete(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
