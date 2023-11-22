@@ -140,6 +140,11 @@ const (
 				"name": "MY_DATASET",
 				"type": "analytics_engine",
 				"dataset": "my_dataset"
+			},
+			{
+				"name": "MY_DATABASE",
+				"type": "d1",
+				"database_id": "cef5331f-e5c7-4c8a-a415-7908ae45f92a"
 			}
 		],
 		"success": true,

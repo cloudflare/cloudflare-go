@@ -35,7 +35,7 @@ func TestListWorkerBindings(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Equal(t, successResponse, res.Response)
-	assert.Equal(t, 8, len(res.BindingList))
+	assert.Equal(t, 9, len(res.BindingList))
 
 	assert.Equal(t, res.BindingList[0], WorkerBindingListItem{
 		Name: "MY_KV",
@@ -96,7 +96,16 @@ func TestListWorkerBindings(t *testing.T) {
 			Dataset: "my_dataset",
 		},
 	})
+
 	assert.Equal(t, WorkerAnalyticsEngineBindingType, res.BindingList[7].Binding.Type())
+
+	assert.Equal(t, res.BindingList[8], WorkerBindingListItem{
+		Name: "MY_DATABASE",
+		Binding: WorkerD1DatabaseBinding{
+			DatabaseID: "cef5331f-e5c7-4c8a-a415-7908ae45f92a",
+		},
+	})
+	assert.Equal(t, WorkerD1DataseBindingType, res.BindingList[8].Binding.Type())
 }
 
 func ExampleUnsafeBinding() {

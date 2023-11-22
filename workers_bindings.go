@@ -44,6 +44,8 @@ const (
 	WorkerQueueBindingType WorkerBindingType = "queue"
 	// DispatchNamespaceBindingType is the type for WFP namespace bindings.
 	DispatchNamespaceBindingType WorkerBindingType = "dispatch_namespace"
+	// WorkerD1DataseBindingType is for D1 databases.
+	WorkerD1DataseBindingType WorkerBindingType = "d1"
 )
 
 type ListWorkerBindingsParams struct {
@@ -125,7 +127,7 @@ func (b WorkerKvNamespaceBinding) Type() WorkerBindingType {
 
 func (b WorkerKvNamespaceBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
 	if b.NamespaceID == "" {
-		return nil, nil, fmt.Errorf(`NamespaceID for binding "%s" cannot be empty`, bindingName)
+		return nil, nil, fmt.Errorf(`namespace ID for binding "%s" cannot be empty`, bindingName)
 	}
 
 	return workerBindingMeta{
@@ -209,7 +211,7 @@ func (b WorkerPlainTextBinding) Type() WorkerBindingType {
 
 func (b WorkerPlainTextBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
 	if b.Text == "" {
-		return nil, nil, fmt.Errorf(`Text for binding "%s" cannot be empty`, bindingName)
+		return nil, nil, fmt.Errorf(`text for binding "%s" cannot be empty`, bindingName)
 	}
 
 	return workerBindingMeta{
@@ -233,7 +235,7 @@ func (b WorkerSecretTextBinding) Type() WorkerBindingType {
 
 func (b WorkerSecretTextBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
 	if b.Text == "" {
-		return nil, nil, fmt.Errorf(`Text for binding "%s" cannot be empty`, bindingName)
+		return nil, nil, fmt.Errorf(`text for binding "%s" cannot be empty`, bindingName)
 	}
 
 	return workerBindingMeta{
@@ -254,7 +256,7 @@ func (b WorkerServiceBinding) Type() WorkerBindingType {
 
 func (b WorkerServiceBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
 	if b.Service == "" {
-		return nil, nil, fmt.Errorf(`Service for binding "%s" cannot be empty`, bindingName)
+		return nil, nil, fmt.Errorf(`service for binding "%s" cannot be empty`, bindingName)
 	}
 
 	meta := workerBindingMeta{
@@ -304,7 +306,7 @@ func (b WorkerAnalyticsEngineBinding) Type() WorkerBindingType {
 
 func (b WorkerAnalyticsEngineBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
 	if b.Dataset == "" {
-		return nil, nil, fmt.Errorf(`Dataset for binding "%s" cannot be empty`, bindingName)
+		return nil, nil, fmt.Errorf(`dataset for binding "%s" cannot be empty`, bindingName)
 	}
 
 	return workerBindingMeta{
@@ -329,10 +331,10 @@ func (b WorkerQueueBinding) Type() WorkerBindingType {
 
 func (b WorkerQueueBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
 	if b.Binding == "" {
-		return nil, nil, fmt.Errorf(`Binding name for binding "%s" cannot be empty`, bindingName)
+		return nil, nil, fmt.Errorf(`binding name for binding "%s" cannot be empty`, bindingName)
 	}
 	if b.Queue == "" {
-		return nil, nil, fmt.Errorf(`Queue name for binding "%s" cannot be empty`, bindingName)
+		return nil, nil, fmt.Errorf(`queue name for binding "%s" cannot be empty`, bindingName)
 	}
 
 	return workerBindingMeta{
@@ -372,10 +374,10 @@ func (b DispatchNamespaceBinding) Type() WorkerBindingType {
 
 func (b DispatchNamespaceBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
 	if b.Binding == "" {
-		return nil, nil, fmt.Errorf(`Binding name for binding "%s" cannot be empty`, bindingName)
+		return nil, nil, fmt.Errorf(`binding name for binding "%s" cannot be empty`, bindingName)
 	}
 	if b.Namespace == "" {
-		return nil, nil, fmt.Errorf(`Namespace name for binding "%s" cannot be empty`, bindingName)
+		return nil, nil, fmt.Errorf(`namespace name for binding "%s" cannot be empty`, bindingName)
 	}
 
 	meta := workerBindingMeta{
@@ -386,7 +388,7 @@ func (b DispatchNamespaceBinding) serialize(bindingName string) (workerBindingMe
 
 	if b.Outbound != nil {
 		if b.Outbound.Worker.Service == "" {
-			return nil, nil, fmt.Errorf(`Outbound options for binding "%s" must have a service name`, bindingName)
+			return nil, nil, fmt.Errorf(`outbound options for binding "%s" must have a service name`, bindingName)
 		}
 
 		var params []map[string]interface{}
@@ -406,6 +408,28 @@ func (b DispatchNamespaceBinding) serialize(bindingName string) (workerBindingMe
 	}
 
 	return meta, nil, nil
+}
+
+// WorkerD1DatabaseBinding is a binding to a D1 instance.
+type WorkerD1DatabaseBinding struct {
+	DatabaseID string
+}
+
+// Type returns the type of the binding.
+func (b WorkerD1DatabaseBinding) Type() WorkerBindingType {
+	return WorkerD1DataseBindingType
+}
+
+func (b WorkerD1DatabaseBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
+	if b.DatabaseID == "" {
+		return nil, nil, fmt.Errorf(`database ID for binding "%s" cannot be empty`, bindingName)
+	}
+
+	return workerBindingMeta{
+		"name":        bindingName,
+		"type":        b.Type(),
+		"database_id": b.DatabaseID,
+	}, nil, nil
 }
 
 // UnsafeBinding is for experimental or deprecated bindings, and allows specifying any binding type or property.
@@ -432,7 +456,7 @@ func getRandomPartName() string {
 // ListWorkerBindings returns all the bindings for a particular worker.
 func (api *API) ListWorkerBindings(ctx context.Context, rc *ResourceContainer, params ListWorkerBindingsParams) (WorkerBindingListResponse, error) {
 	if params.ScriptName == "" {
-		return WorkerBindingListResponse{}, errors.New("ScriptName is required")
+		return WorkerBindingListResponse{}, errors.New("script name is required")
 	}
 
 	if rc.Level != AccountRouteLevel {
@@ -466,11 +490,11 @@ func (api *API) ListWorkerBindings(ctx context.Context, rc *ResourceContainer, p
 	for _, jsonBinding := range jsonRes.Bindings {
 		name, ok := jsonBinding["name"].(string)
 		if !ok {
-			return r, fmt.Errorf("Binding missing name %v", jsonBinding)
+			return r, fmt.Errorf("binding missing name %v", jsonBinding)
 		}
 		bType, ok := jsonBinding["type"].(string)
 		if !ok {
-			return r, fmt.Errorf("Binding missing type %v", jsonBinding)
+			return r, fmt.Errorf("binding missing type %v", jsonBinding)
 		}
 		bindingListItem := WorkerBindingListItem{
 			Name: name,
@@ -528,6 +552,11 @@ func (api *API) ListWorkerBindings(ctx context.Context, rc *ResourceContainer, p
 			dataset := jsonBinding["dataset"].(string)
 			bindingListItem.Binding = WorkerAnalyticsEngineBinding{
 				Dataset: dataset,
+			}
+		case WorkerD1DataseBindingType:
+			database_id := jsonBinding["database_id"].(string)
+			bindingListItem.Binding = WorkerD1DatabaseBinding{
+				DatabaseID: database_id,
 			}
 		default:
 			bindingListItem.Binding = WorkerInheritBinding{}
