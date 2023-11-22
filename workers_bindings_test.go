@@ -102,7 +102,7 @@ func TestListWorkerBindings(t *testing.T) {
 	assert.Equal(t, res.BindingList[8], WorkerBindingListItem{
 		Name: "MY_DATABASE",
 		Binding: WorkerD1DatabaseBinding{
-			DatabaseId: "cef5331f-e5c7-4c8a-a415-7908ae45f92a",
+			DatabaseID: "cef5331f-e5c7-4c8a-a415-7908ae45f92a",
 		},
 	})
 	assert.Equal(t, WorkerD1DataseBindingType, res.BindingList[8].Binding.Type())
