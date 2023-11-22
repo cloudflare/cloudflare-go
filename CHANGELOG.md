@@ -1,5 +1,9 @@
 ## 0.83.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* worker_bindings: add support for `d1` bindings ([#1446](https://github.com/cloudflare/cloudflare-go/issues/1446))
+
 ## 0.82.0 (November 22nd, 2023)
 
 ENHANCEMENTS:
