@@ -187,8 +187,9 @@ type ServiceBinding struct {
 type UsageModel string
 
 const (
-	Bundled UsageModel = "bundled"
-	Unbound UsageModel = "unbound"
+	Bundled  UsageModel = "bundled"
+	Unbound  UsageModel = "unbound"
+	Standard UsageModel = "standard"
 )
 
 type ListPagesProjectsParams struct {
