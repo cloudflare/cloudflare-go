@@ -44,7 +44,7 @@ const (
 	WorkerQueueBindingType WorkerBindingType = "queue"
 	// DispatchNamespaceBindingType is the type for WFP namespace bindings.
 	DispatchNamespaceBindingType WorkerBindingType = "dispatch_namespace"
-	// WorkerD1DataseBindingType is for D1 databases
+	// WorkerD1DataseBindingType is for D1 databases.
 	WorkerD1DataseBindingType WorkerBindingType = "d1"
 )
 
