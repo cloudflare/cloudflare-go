@@ -1,0 +1,3 @@
+```release-note:worker_bindings
+Adding D1 Bindings
+```
