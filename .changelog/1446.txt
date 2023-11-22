@@ -1,3 +1,3 @@
 ```release-note:enhancement
-worker_bindingsa: add support for `d1` bindings
+worker_bindings: add support for `d1` bindings
 ```
