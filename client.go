@@ -12,11 +12,9 @@ import (
 // interacting with the cloudflare API. You should not instantiate this client
 // directly, and instead use the [NewClient] method instead.
 type Client struct {
-	Options      []option.RequestOption
-	Certificates *CertificateService
-	IPs          *IPService
-	Zones        *ZoneService
-	AI           *AIService
+	Options []option.RequestOption
+	Zones   *ZoneService
+	AI      *AIService
 }
 
 // NewClient generates a new client with the default option read from the
@@ -35,8 +33,6 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 
 	r = &Client{Options: opts}
 
-	r.Certificates = NewCertificateService(opts...)
-	r.IPs = NewIPService(opts...)
 	r.Zones = NewZoneService(opts...)
 	r.AI = NewAIService(opts...)
 
