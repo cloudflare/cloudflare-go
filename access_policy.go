@@ -167,7 +167,7 @@ func (api *API) ListAccessPolicies(ctx context.Context, rc *ResourceContainer, p
 	}
 
 	var accessPolicies []AccessPolicy
-	var r AccessPolicyListResponse
+	var lastResultInfo ResultInfo
 	for {
 		uri := buildURI(baseURL, params)
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
@@ -175,10 +175,12 @@ func (api *API) ListAccessPolicies(ctx context.Context, rc *ResourceContainer, p
 			return []AccessPolicy{}, &ResultInfo{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 		}
 
+		var r AccessPolicyListResponse
 		err = json.Unmarshal(res, &r)
 		if err != nil {
 			return []AccessPolicy{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 		}
+		lastResultInfo = r.ResultInfo
 		accessPolicies = append(accessPolicies, r.Result...)
 		params.ResultInfo = r.ResultInfo.Next()
 		if params.ResultInfo.Done() || !autoPaginate {
@@ -186,7 +188,7 @@ func (api *API) ListAccessPolicies(ctx context.Context, rc *ResourceContainer, p
 		}
 	}
 
-	return accessPolicies, &r.ResultInfo, nil
+	return accessPolicies, &lastResultInfo, nil
 }
 
 // GetAccessPolicy returns a single policy based on the policy ID.
