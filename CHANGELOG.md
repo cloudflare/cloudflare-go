@@ -4,6 +4,10 @@ ENHANCEMENTS:
 
 * worker_bindings: add support for `d1` bindings ([#1446](https://github.com/cloudflare/cloudflare-go/issues/1446))
 
+DEPENDENCIES:
+
+* deps: bumps golang.org/x/time from 0.4.0 to 0.5.0 ([#1449](https://github.com/cloudflare/cloudflare-go/issues/1449))
+
 ## 0.82.0 (November 22nd, 2023)
 
 ENHANCEMENTS:
