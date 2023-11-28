@@ -7,6 +7,7 @@ ENHANCEMENTS:
 
 DEPENDENCIES:
 
+* deps: bumps golang.org/x/net from 0.18.0 to 0.19.0 ([#1452](https://github.com/cloudflare/cloudflare-go/issues/1452))
 * deps: bumps golang.org/x/time from 0.4.0 to 0.5.0 ([#1449](https://github.com/cloudflare/cloudflare-go/issues/1449))
 
 ## 0.82.0 (November 22nd, 2023)
