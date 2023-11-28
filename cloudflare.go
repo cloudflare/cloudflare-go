@@ -459,7 +459,8 @@ type ResultInfo struct {
 // RawResponse keeps the result as JSON form.
 type RawResponse struct {
 	Response
-	Result json.RawMessage `json:"result"`
+	Result     json.RawMessage `json:"result"`
+	ResultInfo *ResultInfo     `json:"result_info,omitempty"`
 }
 
 // Raw makes a HTTP request with user provided params and returns the
