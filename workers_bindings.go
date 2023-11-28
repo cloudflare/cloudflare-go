@@ -428,7 +428,7 @@ func (b WorkerD1DatabaseBinding) serialize(bindingName string) (workerBindingMet
 	return workerBindingMeta{
 		"name":        bindingName,
 		"type":        b.Type(),
-		"database_id": b.DatabaseID,
+		"id": b.DatabaseID,
 	}, nil, nil
 }
 
