@@ -163,9 +163,10 @@ type StreamParameters struct {
 
 // StreamUploadFileParameters are parameters needed for file upload of a video.
 type StreamUploadFileParameters struct {
-	AccountID string
-	VideoID   string
-	FilePath  string
+	AccountID         string
+	VideoID           string
+	FilePath          string
+	ScheduledDeletion *time.Time
 }
 
 // StreamListParameters represents parameters used when listing stream videos.

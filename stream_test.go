@@ -69,7 +69,8 @@ const (
     "nft": {
       "contract": "0x57f1887a8bf19b14fc0d912b9b2acc9af147ea85",
       "token": 5
-    }
+    },
+	"scheduledDeletion": "2014-01-02T02:20:00Z"
   }
 }
 `
@@ -85,6 +86,8 @@ func createTestVideo() StreamVideo {
 	modified, _ := time.Parse(time.RFC3339, "2014-01-02T02:20:00Z")
 	uploadexpiry, _ := time.Parse(time.RFC3339, "2014-01-02T02:20:00Z")
 	uploaded, _ := time.Parse(time.RFC3339, "2014-01-02T02:20:00Z")
+	scheduledDuration, _ := time.Parse(time.RFC3339, "2014-01-02T02:20:00Z")
+
 	return StreamVideo{
 		AllowedOrigins:     []string{"example.com"},
 		Created:            &created,
@@ -130,6 +133,7 @@ func createTestVideo() StreamVideo {
 			Token:    5,
 			Contract: "0x57f1887a8bf19b14fc0d912b9b2acc9af147ea85",
 		},
+		ScheduledDeletion: &scheduledDuration,
 	}
 }
 
@@ -155,6 +159,8 @@ func TestStream_StreamUploadFromURL(t *testing.T) {
 		assert.Equal(t, ErrMissingUploadURL, err)
 	}
 
+	scheduledDuration, _ := time.Parse(time.RFC3339, "2014-01-02T02:20:00Z")
+
 	want := TestVideoStruct
 	input := StreamUploadFromURLParameters{
 		AccountID: testAccountID,
@@ -162,6 +168,7 @@ func TestStream_StreamUploadFromURL(t *testing.T) {
 		Meta: map[string]interface{}{
 			"name": "My First Stream Video",
 		},
+		ScheduledDeletion: &scheduledDuration,
 	}
 
 	out, err := client.StreamUploadFromURL(context.Background(), input)
@@ -192,7 +199,15 @@ func TestStream_UploadVideoFile(t *testing.T) {
 		assert.Equal(t, ErrMissingFilePath, err)
 	}
 
-	input := StreamUploadFileParameters{AccountID: testAccountID, VideoID: testVideoID, FilePath: "stream_test.go"}
+	scheduledDuration, _ := time.Parse(time.RFC3339, "2014-01-02T02:20:00Z")
+
+	input := StreamUploadFileParameters{
+		AccountID:         testAccountID,
+		VideoID:           testVideoID,
+		FilePath:          "stream_test.go",
+		ScheduledDeletion: &scheduledDuration,
+	}
+
 	out, err := client.StreamUploadVideoFile(context.Background(), input)
 
 	want := TestVideoStruct
@@ -228,7 +243,8 @@ func TestStream_CreateVideoDirectURL(t *testing.T) {
       "padding": 0.1,
       "scale": 0.1,
       "position": "center"
-    }
+    },
+	"scheduledDeletion": "2014-01-02T02:20:00Z"
   }
 }
 `)
@@ -248,12 +264,21 @@ func TestStream_CreateVideoDirectURL(t *testing.T) {
 		assert.Equal(t, ErrMissingMaxDuration, err)
 	}
 
-	input := StreamCreateVideoParameters{AccountID: testAccountID, MaxDurationSeconds: 300, Meta: map[string]interface{}{
-		"name": "My First Stream Video",
-	}}
+	scheduledDuration, _ := time.Parse(time.RFC3339, "2014-01-02T02:20:00Z")
+
+	input := StreamCreateVideoParameters{
+		AccountID:          testAccountID,
+		MaxDurationSeconds: 300,
+		Meta: map[string]interface{}{
+			"name": "My First Stream Video",
+		},
+		ScheduledDeletion: &scheduledDuration,
+	}
+
 	out, err := client.StreamCreateVideoDirectURL(context.Background(), input)
 
 	created, _ := time.Parse(time.RFC3339, "2014-01-02T02:20:00Z")
+
 	want := StreamVideoCreate{
 		UploadURL: "www.example.com/samplepath",
 		UID:       "ea95132c15732412d22c1476fa83f27a",
@@ -270,6 +295,7 @@ func TestStream_CreateVideoDirectURL(t *testing.T) {
 			Scale:          0.1,
 			Position:       "center",
 		},
+		ScheduledDeletion: &scheduledDuration,
 	}
 
 	if assert.NoError(t, err) {
@@ -341,7 +367,8 @@ func TestStream_ListVideos(t *testing.T) {
     "nft": {
       "contract": "0x57f1887a8bf19b14fc0d912b9b2acc9af147ea85",
       "token": 5
-    }
+    },
+ 	"scheduledDeletion": "2014-01-02T02:20:00Z"
   }]
 }
 `)
