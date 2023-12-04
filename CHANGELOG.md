@@ -8,6 +8,7 @@ ENHANCEMENTS:
 
 DEPENDENCIES:
 
+* deps: bumps github.com/urfave/cli/v2 from 2.25.7 to 2.26.0 ([#1456](https://github.com/cloudflare/cloudflare-go/issues/1456))
 * deps: bumps golang.org/x/net from 0.18.0 to 0.19.0 ([#1452](https://github.com/cloudflare/cloudflare-go/issues/1452))
 * deps: bumps golang.org/x/time from 0.4.0 to 0.5.0 ([#1449](https://github.com/cloudflare/cloudflare-go/issues/1449))
 
