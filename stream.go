@@ -66,6 +66,7 @@ type StreamVideo struct {
 	Creator               string                   `json:"creator,omitempty"`
 	LiveInput             string                   `json:"liveInput,omitempty"`
 	Uploaded              *time.Time               `json:"uploaded,omitempty"`
+	ScheduledDeletion     *time.Time               `json:"scheduledDeletion,omitempty"`
 	Watermark             StreamVideoWatermark     `json:"watermark,omitempty"`
 	NFT                   StreamVideoNFTParameters `json:"nft,omitempty"`
 }
@@ -124,6 +125,7 @@ type StreamUploadFromURLParameters struct {
 	RequireSignedURLs     bool                    `json:"requireSignedURLs,omitempty"`
 	Watermark             UploadVideoURLWatermark `json:"watermark,omitempty"`
 	Meta                  map[string]interface{}  `json:"meta,omitempty"`
+	ScheduledDeletion     *time.Time              `json:"scheduledDeletion,omitempty"`
 }
 
 // StreamCreateVideoParameters are parameters used when creating a video.
@@ -137,6 +139,7 @@ type StreamCreateVideoParameters struct {
 	RequireSignedURLs     bool                    `json:"requireSignedURLs,omitempty"`
 	Watermark             UploadVideoURLWatermark `json:"watermark,omitempty"`
 	Meta                  map[string]interface{}  `json:"meta,omitempty"`
+	ScheduledDeletion     *time.Time              `json:"scheduledDeletion,omitempty"`
 }
 
 // UploadVideoURLWatermark represents UID of an existing watermark.
@@ -146,9 +149,10 @@ type UploadVideoURLWatermark struct {
 
 // StreamVideoCreate represents parameters returned after creating a video.
 type StreamVideoCreate struct {
-	UploadURL string               `json:"uploadURL,omitempty"`
-	UID       string               `json:"uid,omitempty"`
-	Watermark StreamVideoWatermark `json:"watermark,omitempty"`
+	UploadURL         string               `json:"uploadURL,omitempty"`
+	UID               string               `json:"uid,omitempty"`
+	Watermark         StreamVideoWatermark `json:"watermark,omitempty"`
+	ScheduledDeletion *time.Time           `json:"scheduledDeletion,omitempty"`
 }
 
 // StreamParameters are the basic parameters needed.
@@ -159,9 +163,10 @@ type StreamParameters struct {
 
 // StreamUploadFileParameters are parameters needed for file upload of a video.
 type StreamUploadFileParameters struct {
-	AccountID string
-	VideoID   string
-	FilePath  string
+	AccountID         string
+	VideoID           string
+	FilePath          string
+	ScheduledDeletion *time.Time
 }
 
 // StreamListParameters represents parameters used when listing stream videos.
