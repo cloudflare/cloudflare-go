@@ -3,6 +3,7 @@
 ENHANCEMENTS:
 
 * cloudflare: Add ResultInfo to RawResponse ([#1453](https://github.com/cloudflare/cloudflare-go/issues/1453))
+* devices_policy: add fields for Opt-In Split Tunnel Overlapping IPs feature. ([#1454](https://github.com/cloudflare/cloudflare-go/issues/1454))
 * worker_bindings: Fixing form element name for d1 binding ([#1450](https://github.com/cloudflare/cloudflare-go/issues/1450))
 * worker_bindings: add support for `d1` bindings ([#1446](https://github.com/cloudflare/cloudflare-go/issues/1446))
 
