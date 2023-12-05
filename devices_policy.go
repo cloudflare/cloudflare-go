@@ -57,6 +57,8 @@ type DeviceSettingsPolicy struct {
 	Default             bool              `json:"default"`
 	ExcludeOfficeIps    *bool             `json:"exclude_office_ips"`
 	Description         *string           `json:"description"`
+	LANAllowMinutes     *uint             `json:"lan_allow_minutes"`
+	LANAllowSubnetSize  *uint             `json:"lan_allow_subnet_size"`
 }
 
 type DeviceSettingsPolicyResponse struct {
@@ -85,6 +87,8 @@ type CreateDeviceSettingsPolicyParams struct {
 	Enabled             *bool          `json:"enabled,omitempty"`
 	ExcludeOfficeIps    *bool          `json:"exclude_office_ips"`
 	Description         *string        `json:"description,omitempty"`
+	LANAllowMinutes     *uint          `json:"lan_allow_minutes,omitempty"`
+	LANAllowSubnetSize  *uint          `json:"lan_allow_subnet_size,omitempty"`
 }
 
 type UpdateDefaultDeviceSettingsPolicyParams struct {
@@ -103,6 +107,8 @@ type UpdateDefaultDeviceSettingsPolicyParams struct {
 	Enabled             *bool          `json:"enabled,omitempty"`
 	ExcludeOfficeIps    *bool          `json:"exclude_office_ips"`
 	Description         *string        `json:"description,omitempty"`
+	LANAllowMinutes     *uint          `json:"lan_allow_minutes,omitempty"`
+	LANAllowSubnetSize  *uint          `json:"lan_allow_subnet_size,omitempty"`
 }
 
 type UpdateDeviceSettingsPolicyParams struct {
@@ -122,6 +128,8 @@ type UpdateDeviceSettingsPolicyParams struct {
 	Enabled             *bool          `json:"enabled,omitempty"`
 	ExcludeOfficeIps    *bool          `json:"exclude_office_ips"`
 	Description         *string        `json:"description,omitempty"`
+	LANAllowMinutes     *uint          `json:"lan_allow_minutes,omitempty"`
+	LANAllowSubnetSize  *uint          `json:"lan_allow_subnet_size,omitempty"`
 }
 
 type ListDeviceSettingsPoliciesResponse struct {
