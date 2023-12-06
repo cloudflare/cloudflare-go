@@ -46,7 +46,7 @@ type ListPageShieldConnectionsResponse struct {
 
 // ListPageShieldConnections lists all page shield connections for a zone
 //
-// API documentation: https://api.cloudflare.com/#page-shield-connections-list-page-shield-connections
+// API documentation: https://developers.cloudflare.com/api/operations/page-shield-list-page-shield-connections
 func (api *API) ListPageShieldConnections(ctx context.Context, rc *ResourceContainer, params ListPageShieldConnectionsParams) ([]PageShieldConnection, ResultInfo, error) {
 	path := fmt.Sprintf("/zones/%s/page_shield/connections", rc.Identifier)
 
@@ -68,7 +68,7 @@ func (api *API) ListPageShieldConnections(ctx context.Context, rc *ResourceConta
 
 // GetPageShieldConnection gets a page shield connection for a zone
 //
-// API documentation: https://api.cloudflare.com/#page-shield-connections-get-page-shield-connection
+// API documentation: https://developers.cloudflare.com/api/operations/page-shield-get-a-page-shield-connection
 func (api *API) GetPageShieldConnection(ctx context.Context, rc *ResourceContainer, connectionID string) (*PageShieldConnection, error) {
 	path := fmt.Sprintf("/zones/%s/page_shield/connections/%s", rc.Identifier, connectionID)
 

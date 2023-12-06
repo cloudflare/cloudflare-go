@@ -25,6 +25,8 @@ type PageShieldScript struct {
 }
 
 // ListPageShieldScriptsParams represents a PageShield Script request parameters
+//
+// API reference: https://developers.cloudflare.com/api/operations/page-shield-list-page-shield-scripts#Query-Parameters
 type ListPageShieldScriptsParams struct {
 	Direction           string `json:"direction"`
 	ExcludeCdnCgi       bool   `json:"exclude_cdn_cgi"`
@@ -41,23 +43,29 @@ type ListPageShieldScriptsParams struct {
 	URLs                string `json:"urls"`
 }
 
+// PageShieldScriptResponse represents the response from the PageShield Script API
 type PageShieldScriptsResponse struct {
 	Results []PageShieldScript `json:"result"`
 	Response
 	ResultInfo `json:"result_info"`
 }
 
+// PageShieldScriptResponse represents the response from the PageShield Script API
 type PageShieldScriptResponse struct {
 	Result   PageShieldScript          `json:"result"`
 	Versions []PageShieldScriptVersion `json:"versions"`
 }
 
+// PageShieldScriptVersion represents a Page Shield script version.
 type PageShieldScriptVersion struct {
 	FetchedAt        string `json:"fetched_at"`
 	Hash             string `json:"hash"`
 	JsIntegrityScore int    `json:"js_integrity_score"`
 }
 
+// ListPageShieldScripts returns a list of PageShield Scripts.
+//
+// API reference: https://developers.cloudflare.com/api/operations/page-shield-list-page-shield-scripts
 func (api *API) ListPageShieldScripts(ctx context.Context, rc *ResourceContainer, params ListPageShieldScriptsParams) ([]PageShieldScript, ResultInfo, error) {
 	path := fmt.Sprintf("/zones/%s/page_shield/scripts", rc.Identifier)
 
@@ -77,6 +85,9 @@ func (api *API) ListPageShieldScripts(ctx context.Context, rc *ResourceContainer
 	return psResponse.Results, psResponse.ResultInfo, nil
 }
 
+// GetPageShieldScript returns a PageShield Script.
+//
+// API reference: https://developers.cloudflare.com/api/operations/page-shield-get-a-page-shield-script
 func (api *API) GetPageShieldScript(ctx context.Context, rc *ResourceContainer, scriptID string) (*PageShieldScript, []PageShieldScriptVersion, error) {
 	path := fmt.Sprintf("/zones/%s/page_shield/scripts/%s", rc.Identifier, scriptID)
 
