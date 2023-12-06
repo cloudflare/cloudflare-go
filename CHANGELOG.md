@@ -1,5 +1,9 @@
 ## 0.84.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* access_group: Add support for email lists ([#1445](https://github.com/cloudflare/cloudflare-go/issues/1445))
+
 ## 0.83.0 (December 6th, 2023)
 
 ENHANCEMENTS:
