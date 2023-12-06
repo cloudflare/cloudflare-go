@@ -4,6 +4,10 @@ ENHANCEMENTS:
 
 * access_group: Add support for email lists ([#1445](https://github.com/cloudflare/cloudflare-go/issues/1445))
 
+DEPENDENCIES:
+
+* deps: bumps actions/setup-go from 4 to 5 ([#1460](https://github.com/cloudflare/cloudflare-go/issues/1460))
+
 ## 0.83.0 (December 6th, 2023)
 
 ENHANCEMENTS:
