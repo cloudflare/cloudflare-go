@@ -54,7 +54,7 @@ func TestListPageShieldConnections(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/zones/testzone/page_shield/connections", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/zones/"+testZoneID+"/page_shield/connections", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		response := ListPageShieldConnectionsResponse{
@@ -65,7 +65,7 @@ func TestListPageShieldConnections(t *testing.T) {
 			t.Fatal(err)
 		}
 	})
-	result, _, err := client.ListPageShieldConnections(context.Background(), &ResourceContainer{Identifier: "testzone"}, ListPageShieldConnectionsParams{})
+	result, _, err := client.ListPageShieldConnections(context.Background(), ZoneIdentifier(testZoneID), ListPageShieldConnectionsParams{})
 	assert.NoError(t, err)
 	assert.Equal(t, mockPageShieldConnections, result)
 }
@@ -75,7 +75,7 @@ func TestGetPageShieldConnection(t *testing.T) {
 	defer teardown()
 
 	connectionID := "c9ef84a6bf5e47138c75d95e2f933e8f" //nolint
-	mux.HandleFunc(fmt.Sprintf("/zones/testzone/page_shield/connections/%s", connectionID), func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(fmt.Sprintf("/zones/"+testZoneID+"/page_shield/connections/%s", connectionID), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		response := mockPageShieldConnections[0] // Assuming it's the first mock connection
@@ -84,7 +84,7 @@ func TestGetPageShieldConnection(t *testing.T) {
 			t.Fatal(err)
 		}
 	})
-	result, err := client.GetPageShieldConnection(context.Background(), &ResourceContainer{Identifier: "testzone"}, connectionID)
+	result, err := client.GetPageShieldConnection(context.Background(), ZoneIdentifier(testZoneID), connectionID)
 	assert.NoError(t, err)
 	assert.Equal(t, &mockPageShieldConnections[0], result)
 }

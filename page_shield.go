@@ -8,14 +8,20 @@ import (
 	"github.com/goccy/go-json"
 )
 
-// PageShield represents the page shield object minus any timestamps
+// PageShield represents the page shield object minus any timestamps.
 type PageShield struct {
 	Enabled                        *bool `json:"enabled,omitempty"`
 	UseCloudflareReportingEndpoint *bool `json:"use_cloudflare_reporting_endpoint,omitempty"`
 	UseConnectionURLPath           *bool `json:"use_connection_url_path,omitempty"`
 }
 
-// PageShieldSettings represents the page shield settings for a zone
+type UpdatePageShieldSettingsParams struct {
+	Enabled                        *bool `json:"enabled,omitempty"`
+	UseCloudflareReportingEndpoint *bool `json:"use_cloudflare_reporting_endpoint,omitempty"`
+	UseConnectionURLPath           *bool `json:"use_connection_url_path,omitempty"`
+}
+
+// PageShieldSettings represents the page shield settings for a zone.
 type PageShieldSettings struct {
 	PageShield
 	UpdatedAt string `json:"updated_at"`
@@ -27,10 +33,12 @@ type PageShieldSettingsResponse struct {
 	Response
 }
 
-// GetPageShieldSettings returns the page shield settings for a zone
+type GetPageShieldSettingsParams struct{}
+
+// GetPageShieldSettings returns the page shield settings for a zone.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/page-shield-get-page-shield-settings
-func (api *API) GetPageShieldSettings(ctx context.Context, rc *ResourceContainer) (*PageShieldSettingsResponse, error) {
+func (api *API) GetPageShieldSettings(ctx context.Context, rc *ResourceContainer, params GetPageShieldSettingsParams) (*PageShieldSettingsResponse, error) {
 	uri := fmt.Sprintf("/zones/%s/page_shield", rc.Identifier)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
@@ -47,10 +55,10 @@ func (api *API) GetPageShieldSettings(ctx context.Context, rc *ResourceContainer
 	return &psResponse, nil
 }
 
-// UpdatePageShieldSettings updates the page shield settings for a zone
+// UpdatePageShieldSettings updates the page shield settings for a zone.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/page-shield-update-page-shield-settings
-func (api *API) UpdatePageShieldSettings(ctx context.Context, rc *ResourceContainer, params PageShield) (*PageShieldSettingsResponse, error) {
+func (api *API) UpdatePageShieldSettings(ctx context.Context, rc *ResourceContainer, params UpdatePageShieldSettingsParams) (*PageShieldSettingsResponse, error) {
 	uri := fmt.Sprintf("/zones/%s/page_shield", rc.Identifier)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)

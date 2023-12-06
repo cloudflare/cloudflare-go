@@ -41,7 +41,7 @@ func TestListPageShieldPolicies(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/zones/testzone/page_shield/policies", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/zones/"+testZoneID+"/page_shield/policies", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		response := ListPageShieldPoliciesResponse{
@@ -52,7 +52,7 @@ func TestListPageShieldPolicies(t *testing.T) {
 			t.Fatal(err)
 		}
 	})
-	result, _, err := client.ListPageShieldPolicies(context.Background(), &ResourceContainer{Identifier: "testzone"})
+	result, _, err := client.ListPageShieldPolicies(context.Background(), ZoneIdentifier(testZoneID), ListPageShieldPoliciesParams{})
 	assert.NoError(t, err)
 	assert.Equal(t, mockPageShieldPolicies, result)
 }
@@ -61,7 +61,7 @@ func TestCreatePageShieldPolicy(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/zones/testzone/page_shield/policies", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/zones/"+testZoneID+"/page_shield/policies", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		var params PageShieldPolicy
@@ -74,14 +74,14 @@ func TestCreatePageShieldPolicy(t *testing.T) {
 		}
 	})
 
-	newPolicy := PageShieldPolicy{
+	newPolicy := CreatePageShieldPolicyParams{
 		Action:      "block",
 		Description: "New policy",
 		Enabled:     BoolPtr(true),
 		Expression:  "ends_with(http.request.uri.path, \"/new\")",
 		Value:       "script-src 'self';",
 	}
-	result, err := client.CreatePageShieldPolicy(context.Background(), &ResourceContainer{Identifier: "testzone"}, newPolicy)
+	result, err := client.CreatePageShieldPolicy(context.Background(), ZoneIdentifier(testZoneID), newPolicy)
 	assert.NoError(t, err)
 	assert.Equal(t, "newPolicyID", result.ID)
 }
@@ -91,11 +91,11 @@ func TestDeletePageShieldPolicy(t *testing.T) {
 	defer teardown()
 
 	policyID := "c9ef84a6bf5e47138c75d95e2f933e8f"
-	mux.HandleFunc(fmt.Sprintf("/zones/testzone/page_shield/policies/%s", policyID), func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(fmt.Sprintf("/zones/"+testZoneID+"/page_shield/policies/%s", policyID), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.WriteHeader(http.StatusOK) // Assuming successful deletion returns 200 OK
 	})
-	err := client.DeletePageShieldPolicy(context.Background(), &ResourceContainer{Identifier: "testzone"}, policyID)
+	err := client.DeletePageShieldPolicy(context.Background(), ZoneIdentifier(testZoneID), policyID)
 	assert.NoError(t, err)
 }
 
@@ -104,7 +104,7 @@ func TestGetPageShieldPolicy(t *testing.T) {
 	defer teardown()
 
 	policyID := "c9ef84a6bf5e47138c75d95e2f933e8f"
-	mux.HandleFunc(fmt.Sprintf("/zones/testzone/page_shield/policies/%s", policyID), func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(fmt.Sprintf("/zones/"+testZoneID+"/page_shield/policies/%s", policyID), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		err := json.NewEncoder(w).Encode(mockPageShieldPolicies[0]) // Assuming the first mock policy
@@ -112,7 +112,7 @@ func TestGetPageShieldPolicy(t *testing.T) {
 			t.Fatal(err)
 		}
 	})
-	result, err := client.GetPageShieldPolicy(context.Background(), &ResourceContainer{Identifier: "testzone"}, policyID)
+	result, err := client.GetPageShieldPolicy(context.Background(), ZoneIdentifier(testZoneID), policyID)
 	assert.NoError(t, err)
 	assert.Equal(t, &mockPageShieldPolicies[0], result)
 }
@@ -122,7 +122,7 @@ func TestUpdatePageShieldPolicy(t *testing.T) {
 	defer teardown()
 
 	policyID := "c9ef84a6bf5e47138c75d95e2f933e8f"
-	mux.HandleFunc(fmt.Sprintf("/zones/testzone/page_shield/policies/%s", policyID), func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(fmt.Sprintf("/zones/"+testZoneID+"/page_shield/policies/%s", policyID), func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 
@@ -136,14 +136,15 @@ func TestUpdatePageShieldPolicy(t *testing.T) {
 		}
 	})
 
-	updatedPolicy := PageShieldPolicy{
+	updatedPolicy := UpdatePageShieldPolicyParams{
+		ID:          policyID,
 		Action:      "block",
 		Description: "Updated policy",
 		Enabled:     BoolPtr(false),
 		Expression:  "ends_with(http.request.uri.path, \"/updated\")",
 		Value:       "script-src 'self';",
 	}
-	result, err := client.UpdatePageShieldPolicy(context.Background(), &ResourceContainer{Identifier: "testzone"}, policyID, updatedPolicy)
+	result, err := client.UpdatePageShieldPolicy(context.Background(), ZoneIdentifier(testZoneID), updatedPolicy)
 	assert.NoError(t, err)
 	assert.Equal(t, policyID, result.ID)
 	assert.Equal(t, "Updated policy", result.Description)

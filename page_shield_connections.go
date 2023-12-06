@@ -8,7 +8,7 @@ import (
 	"github.com/goccy/go-json"
 )
 
-// ListPageShieldConnectionsParams represents parameters for a page shield connection request
+// ListPageShieldConnectionsParams represents parameters for a page shield connection request.
 type ListPageShieldConnectionsParams struct {
 	Direction           string `url:"direction"`
 	ExcludeCdnCgi       *bool  `url:"exclude_cdn_cgi,omitempty"`
@@ -24,7 +24,7 @@ type ListPageShieldConnectionsParams struct {
 	URLs                string `url:"urls"`
 }
 
-// PageShieldConnection represents a page shield connection
+// PageShieldConnection represents a page shield connection.
 type PageShieldConnection struct {
 	AddedAt                 string   `json:"added_at"`
 	DomainReportedMalicious *bool    `json:"domain_reported_malicious,omitempty"`
@@ -38,14 +38,14 @@ type PageShieldConnection struct {
 	URLContainsCdnCgiPath   *bool    `json:"url_contains_cdn_cgi_path,omitempty"`
 }
 
-// ListPageShieldConnectionsResponse represents the response from the list page shield connections endpoint
+// ListPageShieldConnectionsResponse represents the response from the list page shield connections endpoint.
 type ListPageShieldConnectionsResponse struct {
 	Result []PageShieldConnection `json:"result"`
 	Response
 	ResultInfo `json:"result_info"`
 }
 
-// ListPageShieldConnections lists all page shield connections for a zone
+// ListPageShieldConnections lists all page shield connections for a zone.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/page-shield-list-page-shield-connections
 func (api *API) ListPageShieldConnections(ctx context.Context, rc *ResourceContainer, params ListPageShieldConnectionsParams) ([]PageShieldConnection, ResultInfo, error) {
@@ -67,7 +67,7 @@ func (api *API) ListPageShieldConnections(ctx context.Context, rc *ResourceConta
 	return psResponse.Result, psResponse.ResultInfo, nil
 }
 
-// GetPageShieldConnection gets a page shield connection for a zone
+// GetPageShieldConnection gets a page shield connection for a zone.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/page-shield-get-a-page-shield-connection
 func (api *API) GetPageShieldConnection(ctx context.Context, rc *ResourceContainer, connectionID string) (*PageShieldConnection, error) {

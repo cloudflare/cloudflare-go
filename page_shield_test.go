@@ -23,7 +23,7 @@ func TestGetPageShieldSettings(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/zones/testzone/page_shield", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/zones/"+testZoneID+"/page_shield", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		response := PageShieldSettingsResponse{
@@ -34,7 +34,8 @@ func TestGetPageShieldSettings(t *testing.T) {
 			t.Fatal(err)
 		}
 	})
-	result, err := client.GetPageShieldSettings(context.Background(), &ResourceContainer{Identifier: "testzone"})
+
+	result, err := client.GetPageShieldSettings(context.Background(), ZoneIdentifier(testZoneID), GetPageShieldSettingsParams{})
 	assert.NoError(t, err)
 	assert.Equal(t, &PageShieldSettingsResponse{PageShield: mockPageShieldSettings}, result)
 }
@@ -43,7 +44,7 @@ func TestUpdatePageShieldSettings(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/zones/testzone/page_shield", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/zones/"+testZoneID+"/page_shield", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 
@@ -63,12 +64,12 @@ func TestUpdatePageShieldSettings(t *testing.T) {
 		}
 	})
 
-	newSettings := PageShield{
+	newSettings := UpdatePageShieldSettingsParams{
 		Enabled:                        BoolPtr(false),
 		UseCloudflareReportingEndpoint: BoolPtr(false),
 		UseConnectionURLPath:           BoolPtr(false),
 	}
-	result, err := client.UpdatePageShieldSettings(context.Background(), &ResourceContainer{Identifier: "testzone"}, newSettings)
+	result, err := client.UpdatePageShieldSettings(context.Background(), ZoneIdentifier(testZoneID), newSettings)
 	assert.NoError(t, err)
 	assert.Equal(t, false, *result.PageShield.Enabled)
 	assert.Equal(t, false, *result.PageShield.UseCloudflareReportingEndpoint)

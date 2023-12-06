@@ -18,14 +18,14 @@ type PageShieldScript struct {
 	Hash                    string   `json:"hash"`
 	Host                    string   `json:"host"`
 	ID                      string   `json:"id"`
-	JsIntegrityScore        int      `json:"js_integrity_score"`
+	JSIntegrityScore        int      `json:"js_integrity_score"`
 	LastSeenAt              string   `json:"last_seen_at"`
 	PageURLs                []string `json:"page_urls"`
 	URL                     string   `json:"url"`
 	URLContainsCdnCgiPath   *bool    `json:"url_contains_cdn_cgi_path,omitempty"`
 }
 
-// ListPageShieldScriptsParams represents a PageShield Script request parameters
+// ListPageShieldScriptsParams represents a PageShield Script request parameters.
 //
 // API reference: https://developers.cloudflare.com/api/operations/page-shield-list-page-shield-scripts#Query-Parameters
 type ListPageShieldScriptsParams struct {
@@ -44,14 +44,14 @@ type ListPageShieldScriptsParams struct {
 	URLs                string `url:"urls"`
 }
 
-// PageShieldScriptsResponse represents the response from the PageShield Script API
+// PageShieldScriptsResponse represents the response from the PageShield Script API.
 type PageShieldScriptsResponse struct {
 	Results []PageShieldScript `json:"result"`
 	Response
 	ResultInfo `json:"result_info"`
 }
 
-// PageShieldScriptResponse represents the response from the PageShield Script API
+// PageShieldScriptResponse represents the response from the PageShield Script API.
 type PageShieldScriptResponse struct {
 	Result   PageShieldScript          `json:"result"`
 	Versions []PageShieldScriptVersion `json:"versions"`
@@ -61,7 +61,7 @@ type PageShieldScriptResponse struct {
 type PageShieldScriptVersion struct {
 	FetchedAt        string `json:"fetched_at"`
 	Hash             string `json:"hash"`
-	JsIntegrityScore int    `json:"js_integrity_score"`
+	JSIntegrityScore int    `json:"js_integrity_score"`
 }
 
 // ListPageShieldScripts returns a list of PageShield Scripts.

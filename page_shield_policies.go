@@ -8,7 +8,7 @@ import (
 	"github.com/goccy/go-json"
 )
 
-// PageShieldPolicy represents a page shield policy
+// PageShieldPolicy represents a page shield policy.
 type PageShieldPolicy struct {
 	Action      string `json:"action"`
 	Description string `json:"description"`
@@ -18,17 +18,37 @@ type PageShieldPolicy struct {
 	Value       string `json:"value"`
 }
 
-// ListPageShieldPoliciesResponse represents the response from the list page shield policies endpoint
+type CreatePageShieldPolicyParams struct {
+	Action      string `json:"action"`
+	Description string `json:"description"`
+	Enabled     *bool  `json:"enabled,omitempty"`
+	Expression  string `json:"expression"`
+	ID          string `json:"id"`
+	Value       string `json:"value"`
+}
+
+type UpdatePageShieldPolicyParams struct {
+	Action      string `json:"action"`
+	Description string `json:"description"`
+	Enabled     *bool  `json:"enabled,omitempty"`
+	Expression  string `json:"expression"`
+	ID          string `json:"id"`
+	Value       string `json:"value"`
+}
+
+// ListPageShieldPoliciesResponse represents the response from the list page shield policies endpoint.
 type ListPageShieldPoliciesResponse struct {
 	Result []PageShieldPolicy `json:"result"`
 	Response
 	ResultInfo `json:"result_info"`
 }
 
-// ListPageShieldPolicies lists all page shield policies for a zone
+type ListPageShieldPoliciesParams struct{}
+
+// ListPageShieldPolicies lists all page shield policies for a zone.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/page-shield-list-page-shield-policies
-func (api *API) ListPageShieldPolicies(ctx context.Context, rc *ResourceContainer) ([]PageShieldPolicy, ResultInfo, error) {
+func (api *API) ListPageShieldPolicies(ctx context.Context, rc *ResourceContainer, params ListPageShieldPoliciesParams) ([]PageShieldPolicy, ResultInfo, error) {
 	path := fmt.Sprintf("/zones/%s/page_shield/policies", rc.Identifier)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, path, nil)
@@ -45,10 +65,10 @@ func (api *API) ListPageShieldPolicies(ctx context.Context, rc *ResourceContaine
 	return psResponse.Result, psResponse.ResultInfo, nil
 }
 
-// CreatePageShieldPolicy creates a page shield policy for a zone
+// CreatePageShieldPolicy creates a page shield policy for a zone.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/page-shield-create-page-shield-policy
-func (api *API) CreatePageShieldPolicy(ctx context.Context, rc *ResourceContainer, params PageShieldPolicy) (*PageShieldPolicy, error) {
+func (api *API) CreatePageShieldPolicy(ctx context.Context, rc *ResourceContainer, params CreatePageShieldPolicyParams) (*PageShieldPolicy, error) {
 	path := fmt.Sprintf("/zones/%s/page_shield/policies", rc.Identifier)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, path, params)
@@ -65,7 +85,7 @@ func (api *API) CreatePageShieldPolicy(ctx context.Context, rc *ResourceContaine
 	return &psResponse, nil
 }
 
-// DeletePageShieldPolicy deletes a page shield policy for a zone
+// DeletePageShieldPolicy deletes a page shield policy for a zone.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/page-shield-delete-page-shield-policy
 func (api *API) DeletePageShieldPolicy(ctx context.Context, rc *ResourceContainer, policyID string) error {
@@ -79,7 +99,7 @@ func (api *API) DeletePageShieldPolicy(ctx context.Context, rc *ResourceContaine
 	return nil
 }
 
-// GetPageShieldPolicy gets a page shield policy for a zone
+// GetPageShieldPolicy gets a page shield policy for a zone.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/page-shield-get-page-shield-policy
 func (api *API) GetPageShieldPolicy(ctx context.Context, rc *ResourceContainer, policyID string) (*PageShieldPolicy, error) {
@@ -99,11 +119,11 @@ func (api *API) GetPageShieldPolicy(ctx context.Context, rc *ResourceContainer, 
 	return &psResponse, nil
 }
 
-// UpdatePageShieldPolicy updates a page shield policy for a zone
+// UpdatePageShieldPolicy updates a page shield policy for a zone.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/page-shield-update-page-shield-policy
-func (api *API) UpdatePageShieldPolicy(ctx context.Context, rc *ResourceContainer, policyID string, params PageShieldPolicy) (*PageShieldPolicy, error) {
-	path := fmt.Sprintf("/zones/%s/page_shield/policies/%s", rc.Identifier, policyID)
+func (api *API) UpdatePageShieldPolicy(ctx context.Context, rc *ResourceContainer, params UpdatePageShieldPolicyParams) (*PageShieldPolicy, error) {
+	path := fmt.Sprintf("/zones/%s/page_shield/policies/%s", rc.Identifier, params.ID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPut, path, params)
 	if err != nil {
