@@ -2,15 +2,14 @@ package cloudflare
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
+	"github.com/goccy/go-json"
 	"net/http"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-// Mock data
 var mockPageShieldScripts = []PageShieldScript{
 	{
 		AddedAt:                 "2021-08-18T10:51:10.09615Z",

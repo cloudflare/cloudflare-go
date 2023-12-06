@@ -2,15 +2,14 @@ package cloudflare
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
+	"github.com/goccy/go-json"
 	"net/http"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-// Mock data for PageShieldPolicies
 var mockPageShieldPolicies = []PageShieldPolicy{
 	{
 		Action:      "allow",
@@ -51,7 +50,6 @@ func TestListPageShieldPolicies(t *testing.T) {
 		json.NewEncoder(w).Encode(response)
 	})
 
-	// Test
 	result, _, err := client.ListPageShieldPolicies(context.Background(), &ResourceContainer{Identifier: "testzone"})
 	assert.NoError(t, err)
 	assert.Equal(t, mockPageShieldPolicies, result)
