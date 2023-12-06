@@ -29,19 +29,19 @@ type PageShieldScript struct {
 //
 // API reference: https://developers.cloudflare.com/api/operations/page-shield-list-page-shield-scripts#Query-Parameters
 type ListPageShieldScriptsParams struct {
-	Direction           string `json:"direction"`
-	ExcludeCdnCgi       *bool  `json:"exclude_cdn_cgi,omitempty"`
-	ExcludeDuplicates   *bool  `json:"exclude_duplicates,omitempty"`
-	ExcludeUrls         string `json:"exclude_urls"`
-	Export              string `json:"export"`
-	Hosts               string `json:"hosts"`
-	OrderBy             string `json:"order_by"`
-	Page                string `json:"page"`
-	PageURL             string `json:"page_url"`
-	PerPage             int    `json:"per_page"`
-	PrioritizeMalicious *bool  `json:"prioritize_malicious,omitempty"`
-	Status              string `json:"status"`
-	URLs                string `json:"urls"`
+	Direction           string `url:"direction"`
+	ExcludeCdnCgi       *bool  `url:"exclude_cdn_cgi,omitempty"`
+	ExcludeDuplicates   *bool  `url:"exclude_duplicates,omitempty"`
+	ExcludeUrls         string `url:"exclude_urls"`
+	Export              string `url:"export"`
+	Hosts               string `url:"hosts"`
+	OrderBy             string `url:"order_by"`
+	Page                string `url:"page"`
+	PageURL             string `url:"page_url"`
+	PerPage             int    `url:"per_page"`
+	PrioritizeMalicious *bool  `url:"prioritize_malicious,omitempty"`
+	Status              string `url:"status"`
+	URLs                string `url:"urls"`
 }
 
 // PageShieldScriptsResponse represents the response from the PageShield Script API
