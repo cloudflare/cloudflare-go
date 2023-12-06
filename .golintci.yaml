@@ -27,3 +27,7 @@ linters:
 
 output:
   format: colored-line-number
+
+linters-settings:
+  goconst:
+    ignore-tests: true
