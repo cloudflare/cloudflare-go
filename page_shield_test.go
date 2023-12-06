@@ -2,19 +2,19 @@ package cloudflare
 
 import (
 	"context"
-	"encoding/json"
 	"net/http"
 	"testing"
 
+	"github.com/goccy/go-json"
 	"github.com/stretchr/testify/assert"
 )
 
 // Mock PageShieldSettings data
 var mockPageShieldSettings = PageShieldSettings{
 	PageShield: PageShield{
-		Enabled:                        true,
-		UseCloudflareReportingEndpoint: true,
-		UseConnectionURLPath:           true,
+		Enabled:                        BoolPtr(true),
+		UseCloudflareReportingEndpoint: BoolPtr(true),
+		UseConnectionURLPath:           BoolPtr(true),
 	},
 	UpdatedAt: "2022-10-12T17:56:52.083582+01:00",
 }
@@ -29,9 +29,11 @@ func TestGetPageShieldSettings(t *testing.T) {
 		response := PageShieldSettingsResponse{
 			PageShield: mockPageShieldSettings,
 		}
-		json.NewEncoder(w).Encode(response)
+		err := json.NewEncoder(w).Encode(response)
+		if err != nil {
+			t.Fatal(err)
+		}
 	})
-
 	result, err := client.GetPageShieldSettings(context.Background(), &ResourceContainer{Identifier: "testzone"})
 	assert.NoError(t, err)
 	assert.Equal(t, &PageShieldSettingsResponse{PageShield: mockPageShieldSettings}, result)
@@ -55,17 +57,20 @@ func TestUpdatePageShieldSettings(t *testing.T) {
 				UpdatedAt:  "2022-10-13T10:00:00.000Z",
 			},
 		}
-		json.NewEncoder(w).Encode(response)
+		err = json.NewEncoder(w).Encode(response)
+		if err != nil {
+			t.Fatal(err)
+		}
 	})
 
 	newSettings := PageShield{
-		Enabled:                        false,
-		UseCloudflareReportingEndpoint: false,
-		UseConnectionURLPath:           false,
+		Enabled:                        BoolPtr(false),
+		UseCloudflareReportingEndpoint: BoolPtr(false),
+		UseConnectionURLPath:           BoolPtr(false),
 	}
 	result, err := client.UpdatePageShieldSettings(context.Background(), &ResourceContainer{Identifier: "testzone"}, newSettings)
 	assert.NoError(t, err)
-	assert.Equal(t, false, result.PageShield.Enabled)
-	assert.Equal(t, false, result.PageShield.UseCloudflareReportingEndpoint)
-	assert.Equal(t, false, result.PageShield.UseConnectionURLPath)
+	assert.Equal(t, false, *result.PageShield.Enabled)
+	assert.Equal(t, false, *result.PageShield.UseCloudflareReportingEndpoint)
+	assert.Equal(t, false, *result.PageShield.UseConnectionURLPath)
 }

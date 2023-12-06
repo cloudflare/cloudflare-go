@@ -3,17 +3,17 @@ package cloudflare
 import (
 	"context"
 	"fmt"
-	"github.com/goccy/go-json"
 	"net/http"
 	"testing"
 
+	"github.com/goccy/go-json"
 	"github.com/stretchr/testify/assert"
 )
 
 var mockPageShieldScripts = []PageShieldScript{
 	{
 		AddedAt:                 "2021-08-18T10:51:10.09615Z",
-		DomainReportedMalicious: false,
+		DomainReportedMalicious: BoolPtr(false),
 		FetchedAt:               "2021-09-02T10:17:54Z",
 		FirstPageURL:            "blog.cloudflare.com/page",
 		FirstSeenAt:             "2021-08-18T10:51:08Z",
@@ -24,7 +24,7 @@ var mockPageShieldScripts = []PageShieldScript{
 		LastSeenAt:              "2021-09-02T09:57:54Z",
 		PageURLs:                []string{"blog.cloudflare.com/page1", "blog.cloudflare.com/page2"},
 		URL:                     "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js",
-		URLContainsCdnCgiPath:   false,
+		URLContainsCdnCgiPath:   BoolPtr(false),
 	},
 }
 
@@ -44,9 +44,11 @@ func TestListPageShieldScripts(t *testing.T) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		response := PageShieldScriptsResponse{Results: mockPageShieldScripts}
-		json.NewEncoder(w).Encode(response)
+		err := json.NewEncoder(w).Encode(response)
+		if err != nil {
+			t.Fatal(err)
+		}
 	})
-
 	result, _, err := client.ListPageShieldScripts(context.Background(), &ResourceContainer{Identifier: "testzone"}, ListPageShieldScriptsParams{})
 	assert.NoError(t, err)
 	assert.Equal(t, mockPageShieldScripts, result)
@@ -64,12 +66,13 @@ func TestGetPageShieldScript(t *testing.T) {
 			Result:   mockPageShieldScripts[0],
 			Versions: mockVersions,
 		}
-		json.NewEncoder(w).Encode(response)
+		err := json.NewEncoder(w).Encode(response)
+		if err != nil {
+			t.Fatal(err)
+		}
 	})
-
 	result, versions, err := client.GetPageShieldScript(context.Background(), &ResourceContainer{Identifier: "testzone"}, scriptID)
 	assert.NoError(t, err)
 	assert.Equal(t, &mockPageShieldScripts[0], result)
 	assert.Equal(t, mockVersions, versions)
-
 }

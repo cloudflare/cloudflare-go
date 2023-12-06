@@ -3,14 +3,15 @@ package cloudflare
 import (
 	"context"
 	"fmt"
-	"github.com/goccy/go-json"
 	"net/http"
+
+	"github.com/goccy/go-json"
 )
 
 // ListPageShieldConnectionsParams represents parameters for a page shield connection request
 type ListPageShieldConnectionsParams struct {
 	Direction           string `json:"direction"`
-	ExcludeCdnCgi       bool   `json:"exclude_cdn_cgi"`
+	ExcludeCdnCgi       *bool  `json:"exclude_cdn_cgi,omitempty"`
 	ExcludeUrls         string `json:"exclude_urls"`
 	Export              string `json:"export"`
 	Hosts               string `json:"hosts"`
@@ -18,7 +19,7 @@ type ListPageShieldConnectionsParams struct {
 	Page                string `json:"page"`
 	PageURL             string `json:"page_url"`
 	PerPage             int    `json:"per_page"`
-	PrioritizeMalicious bool   `json:"prioritize_malicious"`
+	PrioritizeMalicious *bool  `json:"prioritize_malicious,omitempty"`
 	Status              string `json:"status"`
 	URLs                string `json:"urls"`
 }
@@ -26,7 +27,7 @@ type ListPageShieldConnectionsParams struct {
 // PageShieldConnection represents a page shield connection
 type PageShieldConnection struct {
 	AddedAt                 string   `json:"added_at"`
-	DomainReportedMalicious bool     `json:"domain_reported_malicious"`
+	DomainReportedMalicious *bool    `json:"domain_reported_malicious,omitempty"`
 	FirstPageURL            string   `json:"first_page_url"`
 	FirstSeenAt             string   `json:"first_seen_at"`
 	Host                    string   `json:"host"`
@@ -34,7 +35,7 @@ type PageShieldConnection struct {
 	LastSeenAt              string   `json:"last_seen_at"`
 	PageURLs                []string `json:"page_urls"`
 	URL                     string   `json:"url"`
-	URLContainsCdnCgiPath   bool     `json:"url_contains_cdn_cgi_path"`
+	URLContainsCdnCgiPath   *bool    `json:"url_contains_cdn_cgi_path,omitempty"`
 }
 
 // ListPageShieldConnectionsResponse represents the response from the list page shield connections endpoint

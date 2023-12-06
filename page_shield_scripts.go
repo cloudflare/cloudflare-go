@@ -3,14 +3,15 @@ package cloudflare
 import (
 	"context"
 	"fmt"
-	"github.com/goccy/go-json"
 	"net/http"
+
+	"github.com/goccy/go-json"
 )
 
 // PageShieldScript represents a Page Shield script.
 type PageShieldScript struct {
 	AddedAt                 string   `json:"added_at"`
-	DomainReportedMalicious bool     `json:"domain_reported_malicious"`
+	DomainReportedMalicious *bool    `json:"domain_reported_malicious,omitempty"`
 	FetchedAt               string   `json:"fetched_at"`
 	FirstPageURL            string   `json:"first_page_url"`
 	FirstSeenAt             string   `json:"first_seen_at"`
@@ -21,7 +22,7 @@ type PageShieldScript struct {
 	LastSeenAt              string   `json:"last_seen_at"`
 	PageURLs                []string `json:"page_urls"`
 	URL                     string   `json:"url"`
-	URLContainsCdnCgiPath   bool     `json:"url_contains_cdn_cgi_path"`
+	URLContainsCdnCgiPath   *bool    `json:"url_contains_cdn_cgi_path,omitempty"`
 }
 
 // ListPageShieldScriptsParams represents a PageShield Script request parameters
@@ -29,8 +30,8 @@ type PageShieldScript struct {
 // API reference: https://developers.cloudflare.com/api/operations/page-shield-list-page-shield-scripts#Query-Parameters
 type ListPageShieldScriptsParams struct {
 	Direction           string `json:"direction"`
-	ExcludeCdnCgi       bool   `json:"exclude_cdn_cgi"`
-	ExcludeDuplicates   bool   `json:"exclude_duplicates"`
+	ExcludeCdnCgi       *bool  `json:"exclude_cdn_cgi,omitempty"`
+	ExcludeDuplicates   *bool  `json:"exclude_duplicates,omitempty"`
 	ExcludeUrls         string `json:"exclude_urls"`
 	Export              string `json:"export"`
 	Hosts               string `json:"hosts"`
@@ -38,12 +39,12 @@ type ListPageShieldScriptsParams struct {
 	Page                string `json:"page"`
 	PageURL             string `json:"page_url"`
 	PerPage             int    `json:"per_page"`
-	PrioritizeMalicious bool   `json:"prioritize_malicious"`
+	PrioritizeMalicious *bool  `json:"prioritize_malicious,omitempty"`
 	Status              string `json:"status"`
 	URLs                string `json:"urls"`
 }
 
-// PageShieldScriptResponse represents the response from the PageShield Script API
+// PageShieldScriptsResponse represents the response from the PageShield Script API
 type PageShieldScriptsResponse struct {
 	Results []PageShieldScript `json:"result"`
 	Response

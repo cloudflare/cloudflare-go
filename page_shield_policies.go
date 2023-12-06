@@ -3,15 +3,16 @@ package cloudflare
 import (
 	"context"
 	"fmt"
-	"github.com/goccy/go-json"
 	"net/http"
+
+	"github.com/goccy/go-json"
 )
 
 // PageShieldPolicy represents a page shield policy
 type PageShieldPolicy struct {
 	Action      string `json:"action"`
 	Description string `json:"description"`
-	Enabled     bool   `json:"enabled"`
+	Enabled     *bool  `json:"enabled,omitempty"`
 	Expression  string `json:"expression"`
 	ID          string `json:"id"`
 	Value       string `json:"value"`

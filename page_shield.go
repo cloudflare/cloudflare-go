@@ -3,15 +3,16 @@ package cloudflare
 import (
 	"context"
 	"fmt"
-	"github.com/goccy/go-json"
 	"net/http"
+
+	"github.com/goccy/go-json"
 )
 
 // PageShield represents the page shield object minus any timestamps
 type PageShield struct {
-	Enabled                        bool `json:"enabled"`
-	UseCloudflareReportingEndpoint bool `json:"use_cloudflare_reporting_endpoint"`
-	UseConnectionURLPath           bool `json:"use_connection_url_path"`
+	Enabled                        *bool `json:"enabled,omitempty"`
+	UseCloudflareReportingEndpoint *bool `json:"use_cloudflare_reporting_endpoint,omitempty"`
+	UseConnectionURLPath           *bool `json:"use_connection_url_path,omitempty"`
 }
 
 // PageShieldSettings represents the page shield settings for a zone
@@ -20,7 +21,7 @@ type PageShieldSettings struct {
 	UpdatedAt string `json:"updated_at"`
 }
 
-// PageShieldSettingsResponse represents the response from the page shield settings endpoint
+// PageShieldSettingsResponse represents the response from the page shield settings endpoint.
 type PageShieldSettingsResponse struct {
 	PageShield PageShieldSettings `json:"result"`
 	Response
