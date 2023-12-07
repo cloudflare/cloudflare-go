@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// Mock data for PageShieldConnections
+// Mock data for PageShieldConnections.
 var mockPageShieldConnections = []PageShieldConnection{
 	{
 		AddedAt:                 "2021-08-18T10:51:10.09615Z",

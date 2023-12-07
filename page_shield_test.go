@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// Mock PageShieldSettings data
+// Mock PageShieldSettings data.
 var mockPageShieldSettings = PageShieldSettings{
 	PageShield: PageShield{
 		Enabled:                        BoolPtr(true),
