@@ -8,6 +8,7 @@ ENHANCEMENTS:
 DEPENDENCIES:
 
 * deps: bumps actions/setup-go from 4 to 5 ([#1460](https://github.com/cloudflare/cloudflare-go/issues/1460))
+* deps: bumps github/codeql-action from 2 to 3 ([#1462](https://github.com/cloudflare/cloudflare-go/issues/1462))
 
 ## 0.83.0 (December 6th, 2023)
 
