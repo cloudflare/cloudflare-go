@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -40,6 +41,9 @@ func IPs() (IPRanges, error) {
 	resp, err := http.Get(uri) //nolint:gosec
 	if err != nil {
 		return IPRanges{}, fmt.Errorf("HTTP request failed: %w", err)
+	}
+	if resp.StatusCode != http.StatusOK {
+		return IPRanges{}, errors.New("HTTP request failed: status is not HTTP 200")
 	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
