@@ -72,13 +72,16 @@ func getPlatformProperties() map[string]string {
 
 func NewRequestConfig(ctx context.Context, method string, u string, body interface{}, dst interface{}, opts ...func(*RequestConfig) error) (*RequestConfig, error) {
 	var b []byte
+
 	contentType := "application/json"
+	hasSerializationFunc := false
 	if body, ok := body.(json.Marshaler); ok {
 		var err error
 		b, err = body.MarshalJSON()
 		if err != nil {
 			return nil, err
 		}
+		hasSerializationFunc = true
 	}
 	if body, ok := body.(apiform.Marshaler); ok {
 		var err error
@@ -86,10 +89,23 @@ func NewRequestConfig(ctx context.Context, method string, u string, body interfa
 		if err != nil {
 			return nil, err
 		}
+		hasSerializationFunc = true
 	}
 	if body, ok := body.(apiquery.Queryer); ok {
 		u = u + "?" + body.URLQuery().Encode()
+		hasSerializationFunc = true
 	}
+
+	// Fallback to json serialization if none of the serialization functions that we expect
+	// to see is present.
+	if body != nil && !hasSerializationFunc {
+		var err error
+		b, err = json.Marshal(body)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	req, err := http.NewRequestWithContext(ctx, method, u, nil)
 	if err != nil {
 		return nil, err
