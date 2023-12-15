@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestAIMetaLlama2_7bChatFp16WithOptionalParams(t *testing.T) {
+func TestAITextGenerationLlama2_7bChatFp16WithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -27,10 +27,10 @@ func TestAIMetaLlama2_7bChatFp16WithOptionalParams(t *testing.T) {
 		option.WithAPIKey("my-cloudflare-api-key"),
 		option.WithEmail("dev@cloudflare.com"),
 	)
-	_, err := client.AI.Meta.Llama2_7bChatFp16(
+	_, err := client.AI.TextGeneration.Llama2_7bChatFp16(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.AIMetaLlama2_7bChatFp16ParamsVariant0{
+		cloudflare.AITextGenerationLlama2_7bChatFp16ParamsVariant0{
 			Prompt: cloudflare.F("string"),
 			Stream: cloudflare.F(true),
 		},
@@ -44,7 +44,7 @@ func TestAIMetaLlama2_7bChatFp16WithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestAIMetaLlama2_7bChatInt8WithOptionalParams(t *testing.T) {
+func TestAITextGenerationLlama2_7bChatInt8WithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -58,10 +58,10 @@ func TestAIMetaLlama2_7bChatInt8WithOptionalParams(t *testing.T) {
 		option.WithAPIKey("my-cloudflare-api-key"),
 		option.WithEmail("dev@cloudflare.com"),
 	)
-	_, err := client.AI.Meta.Llama2_7bChatInt8(
+	_, err := client.AI.TextGeneration.Llama2_7bChatInt8(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.AIMetaLlama2_7bChatInt8ParamsVariant0{
+		cloudflare.AITextGenerationLlama2_7bChatInt8ParamsVariant0{
 			Prompt: cloudflare.F("string"),
 			Stream: cloudflare.F(true),
 		},
@@ -75,7 +75,7 @@ func TestAIMetaLlama2_7bChatInt8WithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestAIMetaM2m100_1_2bWithOptionalParams(t *testing.T) {
+func TestAITextGenerationMistral7bInstructV0_1WithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -89,13 +89,12 @@ func TestAIMetaM2m100_1_2bWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("my-cloudflare-api-key"),
 		option.WithEmail("dev@cloudflare.com"),
 	)
-	_, err := client.AI.Meta.M2m100_1_2b(
+	_, err := client.AI.TextGeneration.Mistral7bInstructV0_1(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.AIMetaM2m100_1_2bParams{
-			TargetLang: cloudflare.F("string"),
-			Text:       cloudflare.F("string"),
-			SourceLang: cloudflare.F("string"),
+		cloudflare.AITextGenerationMistral7bInstructV0_1ParamsVariant0{
+			Prompt: cloudflare.F("string"),
+			Stream: cloudflare.F(true),
 		},
 	)
 	if err != nil {

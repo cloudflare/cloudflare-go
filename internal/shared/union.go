@@ -4,9 +4,9 @@ package shared
 
 type UnionString string
 
-func (UnionString) ImplementsAIBaaiBgeBaseEnV1_5ParamsText()          {}
-func (UnionString) ImplementsAIBaaiBgeLargeEnV1_5ParamsText()         {}
-func (UnionString) ImplementsAIBaaiBgeSmallEnV1_5ParamsText()         {}
-func (UnionString) ImplementsAIMetaLlama2_7bChatFp16Response()        {}
-func (UnionString) ImplementsAIMetaLlama2_7bChatInt8Response()        {}
-func (UnionString) ImplementsAIMistralMistral7bInstructV0_1Response() {}
+func (UnionString) ImplementsAITextEmbeddingBgeBaseEnV1_5ParamsText()        {}
+func (UnionString) ImplementsAITextEmbeddingBgeLargeEnV1_5ParamsText()       {}
+func (UnionString) ImplementsAITextEmbeddingBgeSmallEnV1_5ParamsText()       {}
+func (UnionString) ImplementsAITextGenerationLlama2_7bChatFp16Response()     {}
+func (UnionString) ImplementsAITextGenerationLlama2_7bChatInt8Response()     {}
+func (UnionString) ImplementsAITextGenerationMistral7bInstructV0_1Response() {}

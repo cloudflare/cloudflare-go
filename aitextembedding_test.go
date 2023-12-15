@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestAIBaaiBgeBaseEnV1_5(t *testing.T) {
+func TestAITextEmbeddingBgeBaseEnV1_5(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -28,11 +28,11 @@ func TestAIBaaiBgeBaseEnV1_5(t *testing.T) {
 		option.WithAPIKey("my-cloudflare-api-key"),
 		option.WithEmail("dev@cloudflare.com"),
 	)
-	_, err := client.AI.Baai.BgeBaseEnV1_5(
+	_, err := client.AI.TextEmbeddings.BgeBaseEnV1_5(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.AIBaaiBgeBaseEnV1_5Params{
-			Text: cloudflare.F[cloudflare.AIBaaiBgeBaseEnV1_5ParamsText](shared.UnionString("string")),
+		cloudflare.AITextEmbeddingBgeBaseEnV1_5Params{
+			Text: cloudflare.F[cloudflare.AITextEmbeddingBgeBaseEnV1_5ParamsText](shared.UnionString("string")),
 		},
 	)
 	if err != nil {
@@ -44,7 +44,7 @@ func TestAIBaaiBgeBaseEnV1_5(t *testing.T) {
 	}
 }
 
-func TestAIBaaiBgeLargeEnV1_5(t *testing.T) {
+func TestAITextEmbeddingBgeLargeEnV1_5(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -58,11 +58,11 @@ func TestAIBaaiBgeLargeEnV1_5(t *testing.T) {
 		option.WithAPIKey("my-cloudflare-api-key"),
 		option.WithEmail("dev@cloudflare.com"),
 	)
-	_, err := client.AI.Baai.BgeLargeEnV1_5(
+	_, err := client.AI.TextEmbeddings.BgeLargeEnV1_5(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.AIBaaiBgeLargeEnV1_5Params{
-			Text: cloudflare.F[cloudflare.AIBaaiBgeLargeEnV1_5ParamsText](shared.UnionString("string")),
+		cloudflare.AITextEmbeddingBgeLargeEnV1_5Params{
+			Text: cloudflare.F[cloudflare.AITextEmbeddingBgeLargeEnV1_5ParamsText](shared.UnionString("string")),
 		},
 	)
 	if err != nil {
@@ -74,7 +74,7 @@ func TestAIBaaiBgeLargeEnV1_5(t *testing.T) {
 	}
 }
 
-func TestAIBaaiBgeSmallEnV1_5(t *testing.T) {
+func TestAITextEmbeddingBgeSmallEnV1_5(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -88,11 +88,11 @@ func TestAIBaaiBgeSmallEnV1_5(t *testing.T) {
 		option.WithAPIKey("my-cloudflare-api-key"),
 		option.WithEmail("dev@cloudflare.com"),
 	)
-	_, err := client.AI.Baai.BgeSmallEnV1_5(
+	_, err := client.AI.TextEmbeddings.BgeSmallEnV1_5(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.AIBaaiBgeSmallEnV1_5Params{
-			Text: cloudflare.F[cloudflare.AIBaaiBgeSmallEnV1_5ParamsText](shared.UnionString("string")),
+		cloudflare.AITextEmbeddingBgeSmallEnV1_5Params{
+			Text: cloudflare.F[cloudflare.AITextEmbeddingBgeSmallEnV1_5ParamsText](shared.UnionString("string")),
 		},
 	)
 	if err != nil {

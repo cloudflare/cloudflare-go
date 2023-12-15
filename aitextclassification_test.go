@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestAIMistralMistral7bInstructV0_1WithOptionalParams(t *testing.T) {
+func TestAITextClassificationDistilbertSst2Int8(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -27,12 +27,11 @@ func TestAIMistralMistral7bInstructV0_1WithOptionalParams(t *testing.T) {
 		option.WithAPIKey("my-cloudflare-api-key"),
 		option.WithEmail("dev@cloudflare.com"),
 	)
-	_, err := client.AI.Mistral.Mistral7bInstructV0_1(
+	_, err := client.AI.TextClassification.DistilbertSst2Int8(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.AIMistralMistral7bInstructV0_1ParamsVariant0{
-			Prompt: cloudflare.F("string"),
-			Stream: cloudflare.F(true),
+		cloudflare.AITextClassificationDistilbertSst2Int8Params{
+			Text: cloudflare.F("string"),
 		},
 	)
 	if err != nil {
