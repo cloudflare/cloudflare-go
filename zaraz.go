@@ -14,11 +14,11 @@ type ZarazConfig = map[string]interface{}
 type UpdateZarazConfigParams = map[string]interface{}
 
 type ZarazConfigRow struct {
-	ID          int64     `json:"id,omitempty"`
-	UserId      string    `json:"usedId,omitempty"`
-	Description string    `json:"description,omitempty"`
-	CreatedAt   time.Time `json:"createdAt,omitempty"`
-	UpdatedAt   time.Time `json:"updatedAt,omitempty"`
+	ID          int64      `json:"id,omitempty"`
+	UserId      string     `json:"usedId,omitempty"`
+	Description string     `json:"description,omitempty"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
 }
 
 type GetZarazConfigHistoryResponse struct {
