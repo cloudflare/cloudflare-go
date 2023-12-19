@@ -66,6 +66,11 @@ func TestTeamsRules(t *testing.T) {
 						"ipv6": [
 							{"ip": "2460::1"}
 						]
+					},
+					"notification_settings": {
+						"enabled": true,
+						"msg": "message",
+						"support_url": "https://hello.com"
 					}
 				  }
 				},
@@ -160,6 +165,11 @@ func TestTeamsRules(t *testing.T) {
 						},
 					},
 				},
+			},
+			NotificationSettings: &TeamsNotificationSettings{
+				Enabled:    BoolPtr(true),
+				Message:    "message",
+				SupportURL: "https://hello.com",
 			},
 		},
 		CreatedAt: &createdAt,
