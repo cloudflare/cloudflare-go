@@ -114,7 +114,6 @@ func TestTeamsRules(t *testing.T) {
 	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 
-	True := true
 	want := []TeamsRule{{
 		ID:            "7559a944-3dd7-41bf-b183-360a814a8c36",
 		Name:          "rule1",
@@ -168,7 +167,7 @@ func TestTeamsRules(t *testing.T) {
 				},
 			},
 			NotificationSettings: &TeamsNotificationSettings{
-				Enabled:    &True,
+				Enabled:    BoolPtr(true),
 				Message:    "message",
 				SupportURL: "https://hello.com",
 			},
