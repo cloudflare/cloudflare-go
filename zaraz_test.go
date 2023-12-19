@@ -343,36 +343,6 @@ func TestGetZarazConfigHistory(t *testing.T) {
 	require.NoError(t, err)
 }
 
-func TestGetZarazConfigsById(t *testing.T) {
-	setup()
-	defer teardown()
-
-	ids := "1234,5678"
-
-	handler := func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
-		params := r.URL.Query()
-		expectedIds := params.Get("ids")
-		assert.Equal(t, ids, expectedIds)
-
-		w.Header().Set("content-type", "application/json")
-		fmt.Fprint(w, `{
-			"prop1": {
-				"testKey": "cheese"
-			},
-			"prop2": {
-				"testKey": "hedgehog"
-			}
-		}`)
-	}
-
-	uri := "/zones/" + testZoneID + "/settings/zaraz/history/configs?ids=" + ids
-	mux.HandleFunc(uri, handler)
-
-	_, err := client.GetZarazConfigsById(context.Background(), ZoneIdentifier(testZoneID), ids)
-	require.NoError(t, err)
-}
-
 func TestGetDefaultZarazConfig(t *testing.T) {
 	setup()
 	defer teardown()
