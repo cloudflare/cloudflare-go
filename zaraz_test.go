@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestFetchZarazConfig(t *testing.T) {
+func TestGetZarazConfig(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -247,3 +247,53 @@ func TestUpdateZarazConfig(t *testing.T) {
 	err := client.UpdateZarazConfig(context.Background(), ZoneIdentifier(testZoneID), payload)
 	require.NoError(t, err)
 }
+
+func TestGetZarazWorkflow(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+
+		w.Header().Set("Content-Type", "text/plain")
+		fmt.Fprint(w, `realtime`)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/settings/zaraz/workflow", handler)
+	want := "realtime"
+
+	actual, err := client.GetZarazWorkflow(context.Background(), ZoneIdentifier(testZoneID))
+
+	require.NoError(t, err)
+
+	assert.Equal(t, want, actual)
+}
+
+func TestUpdateZarazWorkflow(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+
+		w.Header().Set("Content-Type", "text/plain")
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/settings/zaraz/workflow", handler)
+	payload := "realtime"
+
+	err := client.UpdateZarazWorkflow(context.Background(), ZoneIdentifier(testZoneID), payload)
+
+	require.NoError(t, err)
+
+}
+
+func TestPublishZarazConfig(t *testing.T) {}
+
+func TestGetZarazConfigHistory(t *testing.T) {}
+
+func TestGetZarazConfigHistoryDiff(t *testing.T) {}
+
+func TestGetDefaultZarazConfig(t *testing.T) {}
+
+func TestExportZarazConfig(t *testing.T) {}
