@@ -26,7 +26,7 @@ type GetZarazConfigHistoryResponse struct {
 	Count int              `json:"count"`
 }
 
-type GetZarazConfigHistoryDiffResponse = map[string]interface{}
+type GetZarazConfigsByIdResponse = map[string]interface{}
 
 func getEndpointVersion(version string) string {
 	if version == "v2" {
@@ -121,7 +121,7 @@ func (api *API) GetZarazConfigHistory(ctx context.Context, rc *ResourceContainer
 	}
 
 	uri := fmt.Sprintf("/zones/%s/%s/history?limit=%d&offset=%d", rc.Identifier, getEndpointVersion("v1"), limit, offset)
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return GetZarazConfigHistoryResponse{
 			Data:  []ZarazConfigRow{},
@@ -141,24 +141,25 @@ func (api *API) GetZarazConfigHistory(ctx context.Context, rc *ResourceContainer
 	return recordResp, nil
 }
 
-func (api *API) GetZarazConfigHistoryDiff(ctx context.Context, rc *ResourceContainer, limit int64, offset int64, configIds string) (GetZarazConfigHistoryDiffResponse, error) {
+func (api *API) GetZarazConfigsById(ctx context.Context, rc *ResourceContainer, configIds string) (GetZarazConfigsByIdResponse, error) {
 	if rc.Identifier == "" {
-		return GetZarazConfigHistoryDiffResponse{}, ErrMissingZoneID
+		return GetZarazConfigsByIdResponse{}, ErrMissingZoneID
 	}
+	fmt.Printf("\n configIds:: %s \n", configIds)
 
 	uri := fmt.Sprintf("/zones/%s/%s/history/configs?ids=%s", rc.Identifier, getEndpointVersion("v1"), configIds)
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return GetZarazConfigHistoryDiffResponse{}, err
+		return GetZarazConfigsByIdResponse{}, err
 	}
 
-	var recordResp GetZarazConfigHistoryDiffResponse
-	err = json.Unmarshal(res, &recordResp)
+	var apiResp GetZarazConfigsByIdResponse
+	err = json.Unmarshal(res, &apiResp)
 	if err != nil {
-		return GetZarazConfigHistoryDiffResponse{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return GetZarazConfigsByIdResponse{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
-	return recordResp, nil
+	return apiResp, nil
 }
 
 func (api *API) GetDefaultZarazConfig(ctx context.Context, rc *ResourceContainer) (ZarazConfig, error) {
