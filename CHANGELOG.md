@@ -3,6 +3,7 @@
 ENHANCEMENTS:
 
 * access_group: Add support for email lists ([#1445](https://github.com/cloudflare/cloudflare-go/issues/1445))
+* device_posture_rules: add support for Access client fields in device posture integrations ([#1464](https://github.com/cloudflare/cloudflare-go/issues/1464))
 * page_shield: added support for page shield ([#1459](https://github.com/cloudflare/cloudflare-go/issues/1459))
 
 DEPENDENCIES:
