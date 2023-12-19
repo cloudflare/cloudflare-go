@@ -9,6 +9,7 @@ DEPENDENCIES:
 
 * deps: bumps actions/setup-go from 4 to 5 ([#1460](https://github.com/cloudflare/cloudflare-go/issues/1460))
 * deps: bumps github/codeql-action from 2 to 3 ([#1462](https://github.com/cloudflare/cloudflare-go/issues/1462))
+* deps: bumps golang.org/x/crypto from 0.14.0 to 0.17.0 ([#1466](https://github.com/cloudflare/cloudflare-go/issues/1466))
 
 ## 0.83.0 (December 6th, 2023)
 
