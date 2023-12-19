@@ -290,7 +290,6 @@ func TestUpdateZarazWorkflow(t *testing.T) {
 	err := client.UpdateZarazWorkflow(context.Background(), ZoneIdentifier(testZoneID), payload)
 
 	require.NoError(t, err)
-
 }
 
 func TestPublishZarazConfig(t *testing.T) {
@@ -379,5 +378,4 @@ func TestExportZarazConfig(t *testing.T) {
 
 	err := client.ExportZarazConfig(context.Background(), ZoneIdentifier(testZoneID))
 	require.NoError(t, err)
-
 }
