@@ -28,20 +28,12 @@ type GetZarazConfigHistoryResponse struct {
 
 type GetZarazConfigsByIdResponse = map[string]interface{}
 
-func getEndpointVersion(version string) string {
-	if version == "v2" {
-		return "settings/zaraz/v2"
-	} else {
-		return "settings/zaraz"
-	}
-}
-
 func (api *API) GetZarazConfig(ctx context.Context, rc *ResourceContainer) (ZarazConfig, error) {
 	if rc.Identifier == "" {
 		return ZarazConfig{}, ErrMissingZoneID
 	}
 
-	uri := fmt.Sprintf("/zones/%s/%s/config", rc.Identifier, getEndpointVersion("v1"))
+	uri := fmt.Sprintf("/zones/%s/settings/zaraz/config", rc.Identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return ZarazConfig{}, err
@@ -61,7 +53,7 @@ func (api *API) UpdateZarazConfig(ctx context.Context, rc *ResourceContainer, pa
 		return ErrMissingZoneID
 	}
 
-	uri := fmt.Sprintf("/zones/%s/%s/config", rc.Identifier, getEndpointVersion("v1"))
+	uri := fmt.Sprintf("/zones/%s/settings/zaraz/config", rc.Identifier)
 	_, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return err
@@ -75,7 +67,7 @@ func (api *API) GetZarazWorkflow(ctx context.Context, rc *ResourceContainer) (st
 		return "", ErrMissingZoneID
 	}
 
-	uri := fmt.Sprintf("/zones/%s/%s/workflow", rc.Identifier, getEndpointVersion("v1"))
+	uri := fmt.Sprintf("/zones/%s/settings/zaraz/workflow", rc.Identifier)
 	workflow, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return "", err
@@ -89,7 +81,7 @@ func (api *API) UpdateZarazWorkflow(ctx context.Context, rc *ResourceContainer, 
 		return ErrMissingZoneID
 	}
 
-	uri := fmt.Sprintf("/zones/%s/%s/workflow", rc.Identifier, getEndpointVersion("v1"))
+	uri := fmt.Sprintf("/zones/%s/settings/zaraz/workflow", rc.Identifier)
 	_, err := api.makeRequestContext(ctx, http.MethodPut, uri, workflowToUpdate)
 	if err != nil {
 		return err
@@ -103,7 +95,7 @@ func (api *API) PublishZarazConfig(ctx context.Context, rc *ResourceContainer, d
 		return ErrMissingZoneID
 	}
 
-	uri := fmt.Sprintf("/zones/%s/%s/publish", rc.Identifier, getEndpointVersion("v1"))
+	uri := fmt.Sprintf("/zones/%s/settings/zaraz/publish", rc.Identifier)
 	_, err := api.makeRequestContext(ctx, http.MethodPost, uri, description)
 	if err != nil {
 		return err
@@ -120,7 +112,7 @@ func (api *API) GetZarazConfigHistory(ctx context.Context, rc *ResourceContainer
 		}, ErrMissingZoneID
 	}
 
-	uri := fmt.Sprintf("/zones/%s/%s/history?limit=%d&offset=%d", rc.Identifier, getEndpointVersion("v1"), limit, offset)
+	uri := fmt.Sprintf("/zones/%s/settings/zaraz/history?limit=%d&offset=%d", rc.Identifier, limit, offset)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return GetZarazConfigHistoryResponse{
@@ -146,7 +138,7 @@ func (api *API) GetDefaultZarazConfig(ctx context.Context, rc *ResourceContainer
 		return ZarazConfig{}, ErrMissingZoneID
 	}
 
-	uri := fmt.Sprintf("/zones/%s/%s/default", rc.Identifier, getEndpointVersion("v1"))
+	uri := fmt.Sprintf("/zones/%s/settings/zaraz/default", rc.Identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return ZarazConfig{}, err
@@ -166,7 +158,7 @@ func (api *API) ExportZarazConfig(ctx context.Context, rc *ResourceContainer) er
 		return ErrMissingZoneID
 	}
 
-	uri := fmt.Sprintf("/zones/%s/%s/export", rc.Identifier, getEndpointVersion("v1"))
+	uri := fmt.Sprintf("/zones/%s/settings/zaraz/export", rc.Identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return err
