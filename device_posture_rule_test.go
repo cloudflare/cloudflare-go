@@ -228,6 +228,55 @@ func TestDevicePostureIntegrationCreate(t *testing.T) {
 	}
 }
 
+func TestDevicePostureIntegrationTaniumCreate(t *testing.T) {
+	setup()
+	defer teardown()
+
+	id := "480f4f69-1a28-4fdd-9240-1ed29f0ac1db"
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "%s",
+				"interval": "1h",
+				"type": "tanium_s2s",
+				"name": "My Tanium integration",
+				"config": {
+					"api_url":              "https://api_url.example.com",
+					"client_secret":        "test_client_secret",
+					"access_client_id":     "test_access_client_id",
+					"access_client_secret": "test_access_client_secret"
+				}
+			}
+		}`, id)
+	}
+
+	want := DevicePostureIntegration{
+		IntegrationID: id,
+		Name:          "My Tanium integration",
+		Type:          "tanium_s2s",
+		Interval:      "1h",
+		Config: DevicePostureIntegrationConfig{
+			ApiUrl:             "https://api_url.example.com",
+			ClientSecret:       "test_client_secret",
+			AccessClientID:     "test_access_client_id",
+			AccessClientSecret: "test_access_client_secret",
+		},
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/devices/posture/integration", handler)
+
+	actual, err := client.CreateDevicePostureIntegration(context.Background(), testAccountID, want)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
 func TestDevicePostureIntegrationDelete(t *testing.T) {
 	setup()
 	defer teardown()

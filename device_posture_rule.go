@@ -11,12 +11,14 @@ import (
 // DevicePostureIntegrationConfig contains authentication information
 // for a device posture integration.
 type DevicePostureIntegrationConfig struct {
-	ClientID     string `json:"client_id,omitempty"`
-	ClientSecret string `json:"client_secret,omitempty"`
-	AuthUrl      string `json:"auth_url,omitempty"`
-	ApiUrl       string `json:"api_url,omitempty"`
-	ClientKey    string `json:"client_key,omitempty"`
-	CustomerID   string `json:"customer_id,omitempty"`
+	ClientID           string `json:"client_id,omitempty"`
+	ClientSecret       string `json:"client_secret,omitempty"`
+	AuthUrl            string `json:"auth_url,omitempty"`
+	ApiUrl             string `json:"api_url,omitempty"`
+	ClientKey          string `json:"client_key,omitempty"`
+	CustomerID         string `json:"customer_id,omitempty"`
+	AccessClientID     string `json:"access_client_id,omitempty"`
+	AccessClientSecret string `json:"access_client_secret,omitempty"`
 }
 
 // DevicePostureIntegration represents a device posture integration.
