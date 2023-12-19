@@ -17,7 +17,7 @@ type DevicePostureIntegrationConfig struct {
 	ApiUrl             string `json:"api_url,omitempty"`
 	ClientKey          string `json:"client_key,omitempty"`
 	CustomerID         string `json:"customer_id,omitempty"`
-	AccessClientId     string `json:"access_client_id,omitempty"`
+	AccessClientID     string `json:"access_client_id,omitempty"`
 	AccessClientSecret string `json:"access_client_secret,omitempty"`
 }
 

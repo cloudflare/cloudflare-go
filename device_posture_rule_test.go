@@ -263,7 +263,7 @@ func TestDevicePostureIntegrationTaniumCreate(t *testing.T) {
 		Config: DevicePostureIntegrationConfig{
 			ApiUrl:             "https://api_url.example.com",
 			ClientSecret:       "test_client_secret",
-			AccessClientId:     "test_access_client_id",
+			AccessClientID:     "test_access_client_id",
 			AccessClientSecret: "test_access_client_secret",
 		},
 	}
