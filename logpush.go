@@ -12,22 +12,23 @@ import (
 
 // LogpushJob describes a Logpush job.
 type LogpushJob struct {
-	ID                       int                `json:"id,omitempty"`
-	Dataset                  string             `json:"dataset"`
-	Enabled                  bool               `json:"enabled"`
-	Kind                     string             `json:"kind,omitempty"`
-	Name                     string             `json:"name"`
-	LogpullOptions           string             `json:"logpull_options"`
-	DestinationConf          string             `json:"destination_conf"`
-	OwnershipChallenge       string             `json:"ownership_challenge,omitempty"`
-	LastComplete             *time.Time         `json:"last_complete,omitempty"`
-	LastError                *time.Time         `json:"last_error,omitempty"`
-	ErrorMessage             string             `json:"error_message,omitempty"`
-	Frequency                string             `json:"frequency,omitempty"`
-	Filter                   *LogpushJobFilters `json:"filter,omitempty"`
-	MaxUploadBytes           int                `json:"max_upload_bytes,omitempty"`
-	MaxUploadRecords         int                `json:"max_upload_records,omitempty"`
-	MaxUploadIntervalSeconds int                `json:"max_upload_interval_seconds,omitempty"`
+	ID                       int                   `json:"id,omitempty"`
+	Dataset                  string                `json:"dataset"`
+	Enabled                  bool                  `json:"enabled"`
+	Kind                     string                `json:"kind,omitempty"`
+	Name                     string                `json:"name"`
+	LogpullOptions           string                `json:"logpull_options,omitempty"`
+	OutputOptions            *LogpushOutputOptions `json:"output_options,omitempty"`
+	DestinationConf          string                `json:"destination_conf"`
+	OwnershipChallenge       string                `json:"ownership_challenge,omitempty"`
+	LastComplete             *time.Time            `json:"last_complete,omitempty"`
+	LastError                *time.Time            `json:"last_error,omitempty"`
+	ErrorMessage             string                `json:"error_message,omitempty"`
+	Frequency                string                `json:"frequency,omitempty"`
+	Filter                   *LogpushJobFilters    `json:"filter,omitempty"`
+	MaxUploadBytes           int                   `json:"max_upload_bytes,omitempty"`
+	MaxUploadRecords         int                   `json:"max_upload_records,omitempty"`
+	MaxUploadIntervalSeconds int                   `json:"max_upload_interval_seconds,omitempty"`
 }
 
 type LogpushJobFilters struct {
@@ -61,6 +62,21 @@ type LogpushJobFilter struct {
 	Key      string      `json:"key,omitempty"`
 	Operator Operator    `json:"operator,omitempty"`
 	Value    interface{} `json:"value,omitempty"`
+}
+
+type LogpushOutputOptions struct {
+	FieldNames      []string `json:"field_names"`
+	OutputType      string   `json:"output_type,omitempty"`
+	BatchPrefix     string   `json:"batch_prefix,omitempty"`
+	BatchSuffix     string   `json:"batch_suffix,omitempty"`
+	RecordPrefix    string   `json:"record_prefix,omitempty"`
+	RecordSuffix    string   `json:"record_suffix,omitempty"`
+	RecordTemplate  string   `json:"record_template,omitempty"`
+	RecordDelimiter string   `json:"record_delimiter,omitempty"`
+	FieldDelimiter  string   `json:"field_delimiter,omitempty"`
+	TimestampFormat string   `json:"timestamp_format,omitempty"`
+	SampleRate      float64  `json:"sample_rate,omitempty"`
+	CVE202144228    *bool    `json:"CVE-2021-44228,omitempty"`
 }
 
 // LogpushJobsResponse is the API response, containing an array of Logpush Jobs.
@@ -323,19 +339,20 @@ func (filter *LogpushJobFilter) Validate() error {
 }
 
 type CreateLogpushJobParams struct {
-	Dataset                  string             `json:"dataset"`
-	Enabled                  bool               `json:"enabled"`
-	Kind                     string             `json:"kind,omitempty"`
-	Name                     string             `json:"name"`
-	LogpullOptions           string             `json:"logpull_options"`
-	DestinationConf          string             `json:"destination_conf"`
-	OwnershipChallenge       string             `json:"ownership_challenge,omitempty"`
-	ErrorMessage             string             `json:"error_message,omitempty"`
-	Frequency                string             `json:"frequency,omitempty"`
-	Filter                   *LogpushJobFilters `json:"filter,omitempty"`
-	MaxUploadBytes           int                `json:"max_upload_bytes,omitempty"`
-	MaxUploadRecords         int                `json:"max_upload_records,omitempty"`
-	MaxUploadIntervalSeconds int                `json:"max_upload_interval_seconds,omitempty"`
+	Dataset                  string                `json:"dataset"`
+	Enabled                  bool                  `json:"enabled"`
+	Kind                     string                `json:"kind,omitempty"`
+	Name                     string                `json:"name"`
+	LogpullOptions           string                `json:"logpull_options,omitempty"`
+	OutputOptions            *LogpushOutputOptions `json:"output_options,omitempty"`
+	DestinationConf          string                `json:"destination_conf"`
+	OwnershipChallenge       string                `json:"ownership_challenge,omitempty"`
+	ErrorMessage             string                `json:"error_message,omitempty"`
+	Frequency                string                `json:"frequency,omitempty"`
+	Filter                   *LogpushJobFilters    `json:"filter,omitempty"`
+	MaxUploadBytes           int                   `json:"max_upload_bytes,omitempty"`
+	MaxUploadRecords         int                   `json:"max_upload_records,omitempty"`
+	MaxUploadIntervalSeconds int                   `json:"max_upload_interval_seconds,omitempty"`
 }
 
 type ListLogpushJobsParams struct{}
@@ -349,22 +366,23 @@ type GetLogpushFieldsParams struct {
 }
 
 type UpdateLogpushJobParams struct {
-	ID                       int                `json:"-"`
-	Dataset                  string             `json:"dataset"`
-	Enabled                  bool               `json:"enabled"`
-	Kind                     string             `json:"kind,omitempty"`
-	Name                     string             `json:"name"`
-	LogpullOptions           string             `json:"logpull_options"`
-	DestinationConf          string             `json:"destination_conf"`
-	OwnershipChallenge       string             `json:"ownership_challenge,omitempty"`
-	LastComplete             *time.Time         `json:"last_complete,omitempty"`
-	LastError                *time.Time         `json:"last_error,omitempty"`
-	ErrorMessage             string             `json:"error_message,omitempty"`
-	Frequency                string             `json:"frequency,omitempty"`
-	Filter                   *LogpushJobFilters `json:"filter,omitempty"`
-	MaxUploadBytes           int                `json:"max_upload_bytes,omitempty"`
-	MaxUploadRecords         int                `json:"max_upload_records,omitempty"`
-	MaxUploadIntervalSeconds int                `json:"max_upload_interval_seconds,omitempty"`
+	ID                       int                   `json:"-"`
+	Dataset                  string                `json:"dataset"`
+	Enabled                  bool                  `json:"enabled"`
+	Kind                     string                `json:"kind,omitempty"`
+	Name                     string                `json:"name"`
+	LogpullOptions           string                `json:"logpull_options,omitempty"`
+	OutputOptions            *LogpushOutputOptions `json:"output_options,omitempty"`
+	DestinationConf          string                `json:"destination_conf"`
+	OwnershipChallenge       string                `json:"ownership_challenge,omitempty"`
+	LastComplete             *time.Time            `json:"last_complete,omitempty"`
+	LastError                *time.Time            `json:"last_error,omitempty"`
+	ErrorMessage             string                `json:"error_message,omitempty"`
+	Frequency                string                `json:"frequency,omitempty"`
+	Filter                   *LogpushJobFilters    `json:"filter,omitempty"`
+	MaxUploadBytes           int                   `json:"max_upload_bytes,omitempty"`
+	MaxUploadRecords         int                   `json:"max_upload_records,omitempty"`
+	MaxUploadIntervalSeconds int                   `json:"max_upload_interval_seconds,omitempty"`
 }
 
 type ValidateLogpushOwnershipChallengeParams struct {
