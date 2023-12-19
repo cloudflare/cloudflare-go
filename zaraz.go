@@ -28,7 +28,7 @@ type GetZarazConfigHistoryResponse struct {
 
 type GetZarazConfigHistoryDiffResponse = map[string]interface{}
 
-func getEndpointPrefix(version string) string {
+func getEndpointVersion(version string) string {
 	if version == "v2" {
 		return "settings/zaraz/v2"
 	} else {
@@ -41,7 +41,7 @@ func (api *API) GetZarazConfig(ctx context.Context, rc *ResourceContainer) (Zara
 		return ZarazConfig{}, ErrMissingZoneID
 	}
 
-	uri := fmt.Sprintf("/zones/%s/%s/config", rc.Identifier, getEndpointPrefix("v1"))
+	uri := fmt.Sprintf("/zones/%s/%s/config", rc.Identifier, getEndpointVersion("v1"))
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return ZarazConfig{}, err
@@ -61,7 +61,7 @@ func (api *API) UpdateZarazConfig(ctx context.Context, rc *ResourceContainer, pa
 		return ErrMissingZoneID
 	}
 
-	uri := fmt.Sprintf("/zones/%s/settings/zaraz/config", rc.Identifier)
+	uri := fmt.Sprintf("/zones/%s/%s/config", rc.Identifier, getEndpointVersion("v1"))
 	_, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return err
@@ -75,7 +75,7 @@ func (api *API) GetZarazWorkflow(ctx context.Context, rc *ResourceContainer) (st
 		return "", ErrMissingZoneID
 	}
 
-	uri := fmt.Sprintf("/zones/%s/settings/zaraz/workflow", rc.Identifier)
+	uri := fmt.Sprintf("/zones/%s/%s/workflow", rc.Identifier, getEndpointVersion("v1"))
 	workflow, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return "", err
@@ -89,7 +89,7 @@ func (api *API) UpdateZarazWorkflow(ctx context.Context, rc *ResourceContainer, 
 		return ErrMissingZoneID
 	}
 
-	uri := fmt.Sprintf("/zones/%s/settings/zaraz/workflow", rc.Identifier)
+	uri := fmt.Sprintf("/zones/%s/%s/workflow", rc.Identifier, getEndpointVersion("v1"))
 	_, err := api.makeRequestContext(ctx, http.MethodPut, uri, workflowToUpdate)
 	if err != nil {
 		return err
@@ -103,7 +103,7 @@ func (api *API) PublishZarazConfig(ctx context.Context, rc *ResourceContainer, d
 		return ErrMissingZoneID
 	}
 
-	uri := fmt.Sprintf("/zones/%s/settings/zaraz/publish", rc.Identifier)
+	uri := fmt.Sprintf("/zones/%s/%s/publish", rc.Identifier, getEndpointVersion("v1"))
 	_, err := api.makeRequestContext(ctx, http.MethodPost, uri, description)
 	if err != nil {
 		return err
@@ -120,7 +120,7 @@ func (api *API) GetZarazConfigHistory(ctx context.Context, rc *ResourceContainer
 		}, ErrMissingZoneID
 	}
 
-	uri := fmt.Sprintf("/zones/%s/settings/zaraz/history?limit=%d&offset=%d", rc.Identifier, limit, offset)
+	uri := fmt.Sprintf("/zones/%s/%s/history?limit=%d&offset=%d", rc.Identifier, getEndpointVersion("v1"), limit, offset)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
 	if err != nil {
 		return GetZarazConfigHistoryResponse{
@@ -146,7 +146,7 @@ func (api *API) GetZarazConfigHistoryDiff(ctx context.Context, rc *ResourceConta
 		return GetZarazConfigHistoryDiffResponse{}, ErrMissingZoneID
 	}
 
-	uri := fmt.Sprintf("/zones/%s/settings/zaraz/history/configs?ids=%s", rc.Identifier, configIds)
+	uri := fmt.Sprintf("/zones/%s/%s/history/configs?ids=%s", rc.Identifier, getEndpointVersion("v1"), configIds)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
 	if err != nil {
 		return GetZarazConfigHistoryDiffResponse{}, err
@@ -166,7 +166,7 @@ func (api *API) GetDefaultZarazConfig(ctx context.Context, rc *ResourceContainer
 		return ZarazConfig{}, ErrMissingZoneID
 	}
 
-	uri := fmt.Sprintf("/zones/%s/settings/zaraz/default", rc.Identifier)
+	uri := fmt.Sprintf("/zones/%s/%s/default", rc.Identifier, getEndpointVersion("v1"))
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return ZarazConfig{}, err
@@ -186,7 +186,7 @@ func (api *API) ExportZarazConfig(ctx context.Context, rc *ResourceContainer) er
 		return ErrMissingZoneID
 	}
 
-	uri := fmt.Sprintf("/zones/%s/settings/zaraz/export", rc.Identifier)
+	uri := fmt.Sprintf("/zones/%s/%s/export", rc.Identifier, getEndpointVersion("v1"))
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return err
