@@ -1,4 +1,6 @@
-## 0.84.0 (Unreleased)
+## 0.85.0 (Unreleased)
+
+## 0.84.0 (December 20th, 2023)
 
 ENHANCEMENTS:
 
