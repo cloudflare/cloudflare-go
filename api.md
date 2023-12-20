@@ -710,70 +710,116 @@ Methods:
 
 - <code title="post /apiv4/accounts/{account_identifier}/ai/run/{model_name}">client.AI.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIService.Run">Run</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, modelName <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIRunParams">AIRunParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIRunResponse">AIRunResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
-## ImageClassification
+## Model
+
+### ImageClassification
+
+#### Resnet50
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIImageClassificationResnet50Response">AIImageClassificationResnet50Response</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelImageClassificationResnet50RunResponse">AIModelImageClassificationResnet50RunResponse</a>
 
 Methods:
 
-- <code title="post /apiv4/accounts/{account_identifier}/ai/run/@cf/microsoft/resnet-50">client.AI.ImageClassification.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIImageClassificationService.Resnet50">Resnet50</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIImageClassificationResnet50Response">AIImageClassificationResnet50Response</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /apiv4/accounts/{account_identifier}/ai/run/@cf/microsoft/resnet-50">client.AI.Model.ImageClassification.Resnet50.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelImageClassificationResnet50Service.Run">Run</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelImageClassificationResnet50RunResponse">AIModelImageClassificationResnet50RunResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
-## SpeechRecognition
+### SpeechRecognition
+
+#### Whisper
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AISpeechRecognitionWhisperResponse">AISpeechRecognitionWhisperResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelSpeechRecognitionWhisperRunResponse">AIModelSpeechRecognitionWhisperRunResponse</a>
 
 Methods:
 
-- <code title="post /apiv4/accounts/{account_identifier}/ai/run/@cf/openai/whisper">client.AI.SpeechRecognition.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AISpeechRecognitionService.Whisper">Whisper</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AISpeechRecognitionWhisperResponse">AISpeechRecognitionWhisperResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /apiv4/accounts/{account_identifier}/ai/run/@cf/openai/whisper">client.AI.Model.SpeechRecognition.Whisper.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelSpeechRecognitionWhisperService.Run">Run</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelSpeechRecognitionWhisperRunResponse">AIModelSpeechRecognitionWhisperRunResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
-## TextClassification
+### TextClassification
+
+#### DistilbertSst2Int8
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextClassificationDistilbertSst2Int8Response">AITextClassificationDistilbertSst2Int8Response</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextClassificationDistilbertSst2Int8RunResponse">AIModelTextClassificationDistilbertSst2Int8RunResponse</a>
 
 Methods:
 
-- <code title="post /apiv4/accounts/{account_identifier}/ai/run/@cf/huggingface/distilbert-sst-2-int8">client.AI.TextClassification.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextClassificationService.DistilbertSst2Int8">DistilbertSst2Int8</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextClassificationDistilbertSst2Int8Params">AITextClassificationDistilbertSst2Int8Params</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextClassificationDistilbertSst2Int8Response">AITextClassificationDistilbertSst2Int8Response</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /apiv4/accounts/{account_identifier}/ai/run/@cf/huggingface/distilbert-sst-2-int8">client.AI.Model.TextClassification.DistilbertSst2Int8.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextClassificationDistilbertSst2Int8Service.Run">Run</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextClassificationDistilbertSst2Int8RunParams">AIModelTextClassificationDistilbertSst2Int8RunParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextClassificationDistilbertSst2Int8RunResponse">AIModelTextClassificationDistilbertSst2Int8RunResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
-## TextEmbeddings
+### TextEmbeddings
+
+#### BgeSmallEnV1_5
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextEmbeddingBgeBaseEnV1_5Response">AITextEmbeddingBgeBaseEnV1_5Response</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextEmbeddingBgeLargeEnV1_5Response">AITextEmbeddingBgeLargeEnV1_5Response</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextEmbeddingBgeSmallEnV1_5Response">AITextEmbeddingBgeSmallEnV1_5Response</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextEmbeddingBgeSmallEnV1_5RunResponse">AIModelTextEmbeddingBgeSmallEnV1_5RunResponse</a>
 
 Methods:
 
-- <code title="post /apiv4/accounts/{account_identifier}/ai/run/@cf/baai/bge-base-en-v1.5">client.AI.TextEmbeddings.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextEmbeddingService.BgeBaseEnV1_5">BgeBaseEnV1_5</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextEmbeddingBgeBaseEnV1_5Params">AITextEmbeddingBgeBaseEnV1_5Params</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextEmbeddingBgeBaseEnV1_5Response">AITextEmbeddingBgeBaseEnV1_5Response</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="post /apiv4/accounts/{account_identifier}/ai/run/@cf/baai/bge-large-en-v1.5">client.AI.TextEmbeddings.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextEmbeddingService.BgeLargeEnV1_5">BgeLargeEnV1_5</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextEmbeddingBgeLargeEnV1_5Params">AITextEmbeddingBgeLargeEnV1_5Params</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextEmbeddingBgeLargeEnV1_5Response">AITextEmbeddingBgeLargeEnV1_5Response</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="post /apiv4/accounts/{account_identifier}/ai/run/@cf/baai/bge-small-en-v1.5">client.AI.TextEmbeddings.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextEmbeddingService.BgeSmallEnV1_5">BgeSmallEnV1_5</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextEmbeddingBgeSmallEnV1_5Params">AITextEmbeddingBgeSmallEnV1_5Params</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextEmbeddingBgeSmallEnV1_5Response">AITextEmbeddingBgeSmallEnV1_5Response</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /apiv4/accounts/{account_identifier}/ai/run/@cf/baai/bge-small-en-v1.5">client.AI.Model.TextEmbeddings.BgeSmallEnV1_5.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextEmbeddingBgeSmallEnV1_5Service.Run">Run</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextEmbeddingBgeSmallEnV1_5RunParams">AIModelTextEmbeddingBgeSmallEnV1_5RunParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextEmbeddingBgeSmallEnV1_5RunResponse">AIModelTextEmbeddingBgeSmallEnV1_5RunResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
-## TextGeneration
+#### BgeBaseEnV1_5
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextGenerationLlama2_7bChatFp16Response">AITextGenerationLlama2_7bChatFp16Response</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextGenerationLlama2_7bChatInt8Response">AITextGenerationLlama2_7bChatInt8Response</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextGenerationMistral7bInstructV0_1Response">AITextGenerationMistral7bInstructV0_1Response</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextEmbeddingBgeBaseEnV1_5RunResponse">AIModelTextEmbeddingBgeBaseEnV1_5RunResponse</a>
 
 Methods:
 
-- <code title="post /apiv4/accounts/{account_identifier}/ai/run/@cf/meta/llama-2-7b-chat-fp16">client.AI.TextGeneration.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextGenerationService.Llama2_7bChatFp16">Llama2_7bChatFp16</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextGenerationLlama2_7bChatFp16Params">AITextGenerationLlama2_7bChatFp16Params</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextGenerationLlama2_7bChatFp16Response">AITextGenerationLlama2_7bChatFp16Response</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="post /apiv4/accounts/{account_identifier}/ai/run/@cf/meta/llama-2-7b-chat-int8">client.AI.TextGeneration.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextGenerationService.Llama2_7bChatInt8">Llama2_7bChatInt8</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextGenerationLlama2_7bChatInt8Params">AITextGenerationLlama2_7bChatInt8Params</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextGenerationLlama2_7bChatInt8Response">AITextGenerationLlama2_7bChatInt8Response</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="post /apiv4/accounts/{account_identifier}/ai/run/@cf/mistral/mistral-7b-instruct-v0.1">client.AI.TextGeneration.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextGenerationService.Mistral7bInstructV0_1">Mistral7bInstructV0_1</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextGenerationMistral7bInstructV0_1Params">AITextGenerationMistral7bInstructV0_1Params</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITextGenerationMistral7bInstructV0_1Response">AITextGenerationMistral7bInstructV0_1Response</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /apiv4/accounts/{account_identifier}/ai/run/@cf/baai/bge-base-en-v1.5">client.AI.Model.TextEmbeddings.BgeBaseEnV1_5.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextEmbeddingBgeBaseEnV1_5Service.Run">Run</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextEmbeddingBgeBaseEnV1_5RunParams">AIModelTextEmbeddingBgeBaseEnV1_5RunParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextEmbeddingBgeBaseEnV1_5RunResponse">AIModelTextEmbeddingBgeBaseEnV1_5RunResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
-## Translation
+#### BgeLargeEnV1_5
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITranslationM2m100_1_2bResponse">AITranslationM2m100_1_2bResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextEmbeddingBgeLargeEnV1_5RunResponse">AIModelTextEmbeddingBgeLargeEnV1_5RunResponse</a>
 
 Methods:
 
-- <code title="post /apiv4/accounts/{account_identifier}/ai/run/@cf/meta/m2m100-1.2b">client.AI.Translation.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITranslationService.M2m100_1_2b">M2m100_1_2b</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITranslationM2m100_1_2bParams">AITranslationM2m100_1_2bParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AITranslationM2m100_1_2bResponse">AITranslationM2m100_1_2bResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /apiv4/accounts/{account_identifier}/ai/run/@cf/baai/bge-large-en-v1.5">client.AI.Model.TextEmbeddings.BgeLargeEnV1_5.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextEmbeddingBgeLargeEnV1_5Service.Run">Run</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextEmbeddingBgeLargeEnV1_5RunParams">AIModelTextEmbeddingBgeLargeEnV1_5RunParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextEmbeddingBgeLargeEnV1_5RunResponse">AIModelTextEmbeddingBgeLargeEnV1_5RunResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+### TextGeneration
+
+#### Llama2_7bChatInt8
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextGenerationLlama2_7bChatInt8RunResponse">AIModelTextGenerationLlama2_7bChatInt8RunResponse</a>
+
+Methods:
+
+- <code title="post /apiv4/accounts/{account_identifier}/ai/run/@cf/meta/llama-2-7b-chat-int8">client.AI.Model.TextGeneration.Llama2_7bChatInt8.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextGenerationLlama2_7bChatInt8Service.Run">Run</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextGenerationLlama2_7bChatInt8RunParams">AIModelTextGenerationLlama2_7bChatInt8RunParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextGenerationLlama2_7bChatInt8RunResponse">AIModelTextGenerationLlama2_7bChatInt8RunResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+#### Llama2_7bChatFp16
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextGenerationLlama2_7bChatFp16RunResponse">AIModelTextGenerationLlama2_7bChatFp16RunResponse</a>
+
+Methods:
+
+- <code title="post /apiv4/accounts/{account_identifier}/ai/run/@cf/meta/llama-2-7b-chat-fp16">client.AI.Model.TextGeneration.Llama2_7bChatFp16.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextGenerationLlama2_7bChatFp16Service.Run">Run</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextGenerationLlama2_7bChatFp16RunParams">AIModelTextGenerationLlama2_7bChatFp16RunParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextGenerationLlama2_7bChatFp16RunResponse">AIModelTextGenerationLlama2_7bChatFp16RunResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+#### Mistral7bInstructV0_1
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextGenerationMistral7bInstructV0_1RunResponse">AIModelTextGenerationMistral7bInstructV0_1RunResponse</a>
+
+Methods:
+
+- <code title="post /apiv4/accounts/{account_identifier}/ai/run/@cf/mistral/mistral-7b-instruct-v0.1">client.AI.Model.TextGeneration.Mistral7bInstructV0_1.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextGenerationMistral7bInstructV0_1Service.Run">Run</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextGenerationMistral7bInstructV0_1RunParams">AIModelTextGenerationMistral7bInstructV0_1RunParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTextGenerationMistral7bInstructV0_1RunResponse">AIModelTextGenerationMistral7bInstructV0_1RunResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+### Translation
+
+#### M2m100_1_2b
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTranslationM2m100_1_2bRunResponse">AIModelTranslationM2m100_1_2bRunResponse</a>
+
+Methods:
+
+- <code title="post /apiv4/accounts/{account_identifier}/ai/run/@cf/meta/m2m100-1.2b">client.AI.Model.Translation.M2m100_1_2b.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTranslationM2m100_1_2bService.Run">Run</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTranslationM2m100_1_2bRunParams">AIModelTranslationM2m100_1_2bRunParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIModelTranslationM2m100_1_2bRunResponse">AIModelTranslationM2m100_1_2bRunResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>

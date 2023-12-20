@@ -9,11 +9,12 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-sdk-go"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/testutil"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestAIImageClassificationResnet50(t *testing.T) {
+func TestAIModelTextEmbeddingBgeSmallEnV1_5Run(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -27,7 +28,13 @@ func TestAIImageClassificationResnet50(t *testing.T) {
 		option.WithAPIKey("my-cloudflare-api-key"),
 		option.WithEmail("dev@cloudflare.com"),
 	)
-	_, err := client.AI.ImageClassification.Resnet50(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.AI.Model.TextEmbeddings.BgeSmallEnV1_5.Run(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.AIModelTextEmbeddingBgeSmallEnV1_5RunParams{
+			Text: cloudflare.F[cloudflare.AIModelTextEmbeddingBgeSmallEnV1_5RunParamsText](shared.UnionString("string")),
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
