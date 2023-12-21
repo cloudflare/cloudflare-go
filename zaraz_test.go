@@ -19,116 +19,129 @@ func TestGetZarazConfig(t *testing.T) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 
 		w.Header().Set("content-type", "application/json")
+
 		fmt.Fprint(w, `{
-			"dataLayer": true,
-			"debugKey": "cheese",
-			"dlp": [],
-			"historyChange": true,
-			"settings": {
-				"autoInjectScript": true
-			},
-			"tools": {
-				"PBQr": {
-					"blockingTriggers": [],
-					"component": "html",
-					"defaultFields": {},
-					"enabled": true,
-					"mode": {
-					  "cloud": false,
-					  "ignoreSPA": true,
-					  "light": false,
-					  "sample": false,
-					  "segment": {
-						"end": 100,
-						"start": 0
-					  },
-					  "trigger": "pageload"
+			"errors": [],
+			"messages": [],
+			"success": true,
+			"result": {
+					"dataLayer": true,
+					"debugKey": "cheese",
+					"dlp": [],
+					"historyChange": true,
+					"settings": {
+						"autoInjectScript": true
 					},
-					"name": "Custom HTML",
-					"neoEvents": [],
-					"permissions": [
-					  "execute_unsafe_scripts"
-					],
-					"settings": {},
-					"type": "component"
-				  }
-			},
-			"triggers": {
-				"Pageview": {
-					"clientRules": [],
-					"description": "All page loads",
-					"excludeRules": [],
-					"loadRules": [
-					  {
-						"match": "{{ client.__zarazTrack }}",
-						"op": "EQUALS",
-						"value": "Pageview"
-					  }
-					],
-					"name": "Pageview",
-					"system": "pageload"
-				}
-			},
-			"variables": {},
-			"zarazVersion": 44
+					"tools": {
+						"PBQr": {
+							"blockingTriggers": [],
+							"component": "html",
+							"defaultFields": {},
+							"enabled": true,
+							"mode": {
+							  "cloud": false,
+							  "ignoreSPA": true,
+							  "light": false,
+							  "sample": false,
+							  "segment": {
+								"end": 100,
+								"start": 0
+							  },
+							  "trigger": "pageload"
+							},
+							"name": "Custom HTML",
+							"neoEvents": [],
+							"permissions": [
+							  "execute_unsafe_scripts"
+							],
+							"settings": {},
+							"type": "component"
+						  }
+					},
+					"triggers": {
+						"Pageview": {
+							"clientRules": [],
+							"description": "All page loads",
+							"excludeRules": [],
+							"loadRules": [
+							  {
+								"match": "{{ client.__zarazTrack }}",
+								"op": "EQUALS",
+								"value": "Pageview"
+							  }
+							],
+							"name": "Pageview",
+							"system": "pageload"
+						}
+					},
+					"variables": {},
+					"zarazVersion": 44
+			}
 		}`)
 	}
 
-	mux.HandleFunc("/zones/"+testZoneID+"/settings/zaraz/config", handler)
-	want := ZarazConfig{
-		"dataLayer":     true,
-		"debugKey":      "cheese",
-		"dlp":           []interface{}{},
-		"historyChange": true,
-		"settings": map[string]interface{}{
-			"autoInjectScript": true,
-		},
-		"tools": map[string]interface{}{
-			"PBQr": map[string]interface{}{
-				"blockingTriggers": []interface{}{},
-				"component":        "html",
-				"defaultFields":    map[string]interface{}{},
-				"enabled":          true,
-				"mode": map[string]interface{}{
-					"cloud":     false,
-					"ignoreSPA": true,
-					"light":     false,
-					"sample":    false,
-					"segment": map[string]interface{}{
-						"end":   float64(100),
-						"start": float64(0),
+	mux.HandleFunc("/zones/"+testZoneID+"/settings/zaraz/v2/config", handler)
+	expected := ZarazConfigResponse{
+		Result: ZarazConfig{
+			"dataLayer":     true,
+			"debugKey":      "cheese",
+			"dlp":           []interface{}{},
+			"historyChange": true,
+			"settings": map[string]interface{}{
+				"autoInjectScript": true,
+			},
+			"tools": map[string]interface{}{
+				"PBQr": map[string]interface{}{
+					"blockingTriggers": []interface{}{},
+					"component":        "html",
+					"defaultFields":    map[string]interface{}{},
+					"enabled":          true,
+					"mode": map[string]interface{}{
+						"cloud":     false,
+						"ignoreSPA": true,
+						"light":     false,
+						"sample":    false,
+						"segment": map[string]interface{}{
+							"end":   float64(100),
+							"start": float64(0),
+						},
+						"trigger": "pageload",
 					},
-					"trigger": "pageload",
+					"name":        "Custom HTML",
+					"neoEvents":   []interface{}{},
+					"permissions": []interface{}{"execute_unsafe_scripts"},
+					"settings":    map[string]interface{}{},
+					"type":        "component",
 				},
-				"name":        "Custom HTML",
-				"neoEvents":   []interface{}{},
-				"permissions": []interface{}{"execute_unsafe_scripts"},
-				"settings":    map[string]interface{}{},
-				"type":        "component",
 			},
-		},
-		"triggers": map[string]interface{}{
-			"Pageview": map[string]interface{}{
-				"clientRules": []interface{}{},
-				"description": "All page loads",
-				"loadRules": []interface{}{map[string]interface{}{
-					"match": "{{ client.__zarazTrack }}",
-					"op":    "EQUALS",
-					"value": "Pageview",
-				}},
-				"excludeRules": []interface{}{},
-				"name":         "Pageview",
-				"system":       "pageload",
+			"triggers": map[string]interface{}{
+				"Pageview": map[string]interface{}{
+					"clientRules": []interface{}{},
+					"description": "All page loads",
+					"loadRules": []interface{}{map[string]interface{}{
+						"match": "{{ client.__zarazTrack }}",
+						"op":    "EQUALS",
+						"value": "Pageview",
+					}},
+					"excludeRules": []interface{}{},
+					"name":         "Pageview",
+					"system":       "pageload",
+				},
 			},
+			"variables":    map[string]interface{}{},
+			"zarazVersion": float64(44),
 		},
-		"variables":    map[string]interface{}{},
-		"zarazVersion": float64(44),
+		Response: Response{
+			Success:  true,
+			Messages: []ResponseInfo{},
+			Errors:   []ResponseInfo{},
+		},
 	}
 
 	actual, err := client.GetZarazConfig(context.Background(), ZoneIdentifier(testZoneID))
 	require.NoError(t, err)
 
-	assert.Equal(t, want, actual)
+	assert.Equal(t, expected, actual)
 }
 
 func TestUpdateZarazConfig(t *testing.T) {
@@ -140,61 +153,66 @@ func TestUpdateZarazConfig(t *testing.T) {
 
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
-			"dataLayer": true,
-			"debugKey": "cluu08t8nne8gq9g3160",
-			"dlp": [],
-			"historyChange": true,
-			"settings": {
-				"autoInjectScript": true
-			},
-			"tools": {
-				"PBQr": {
-					"blockingTriggers": [],
-					"component": "html",
-					"defaultFields": {},
-					"enabled": false,
-					"mode": {
-					  "cloud": false,
-					  "ignoreSPA": true,
-					  "light": false,
-					  "sample": false,
-					  "segment": {
-						"end": 100,
-						"start": 0
-					  },
-					  "trigger": "pageload"
+			"errors": [],
+			"messages": [],
+			"success": true,
+			"result": {
+					"dataLayer": true,
+					"debugKey": "cheese",
+					"dlp": [],
+					"historyChange": true,
+					"settings": {
+						"autoInjectScript": true
 					},
-					"name": "Custom HTML",
-					"neoEvents": [],
-					"permissions": [
-					  "execute_unsafe_scripts"
-					],
-					"settings": {},
-					"type": "component"
-				  }
-			},
-			"triggers": {
-				"Pageview": {
-					"clientRules": [],
-					"description": "All page loads",
-					"excludeRules": [],
-					"loadRules": [
-					  {
-						"match": "{{ client.__zarazTrack }}",
-						"op": "EQUALS",
-						"value": "Pageview"
-					  }
-					],
-					"name": "Pageview",
-					"system": "pageload"
-				}
-			},
-			"variables": {},
-			"zarazVersion": 44
+					"tools": {
+						"PBQr": {
+							"blockingTriggers": [],
+							"component": "html",
+							"defaultFields": {},
+							"enabled": true,
+							"mode": {
+							  "cloud": false,
+							  "ignoreSPA": true,
+							  "light": false,
+							  "sample": false,
+							  "segment": {
+								"end": 100,
+								"start": 0
+							  },
+							  "trigger": "pageload"
+							},
+							"name": "Custom HTML",
+							"neoEvents": [],
+							"permissions": [
+							  "execute_unsafe_scripts"
+							],
+							"settings": {},
+							"type": "component"
+						  }
+					},
+					"triggers": {
+						"Pageview": {
+							"clientRules": [],
+							"description": "All page loads",
+							"excludeRules": [],
+							"loadRules": [
+							  {
+								"match": "{{ client.__zarazTrack }}",
+								"op": "EQUALS",
+								"value": "Pageview"
+							  }
+							],
+							"name": "Pageview",
+							"system": "pageload"
+						}
+					},
+					"variables": {},
+					"zarazVersion": 44
+			}
 		}`)
 	}
 
-	mux.HandleFunc("/zones/"+testZoneID+"/settings/zaraz/config", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/settings/zaraz/v2/config", handler)
 	payload := ZarazConfig{
 		"dataLayer":     true,
 		"debugKey":      "cluu08t8nne8gq9g3160",
@@ -244,9 +262,68 @@ func TestUpdateZarazConfig(t *testing.T) {
 		"variables":    map[string]interface{}{},
 		"zarazVersion": float64(44),
 	}
+	expected := ZarazConfigResponse{
+		Result: ZarazConfig{
+			"dataLayer":     true,
+			"debugKey":      "cheese",
+			"dlp":           []interface{}{},
+			"historyChange": true,
+			"settings": map[string]interface{}{
+				"autoInjectScript": true,
+			},
+			"tools": map[string]interface{}{
+				"PBQr": map[string]interface{}{
+					"blockingTriggers": []interface{}{},
+					"component":        "html",
+					"defaultFields":    map[string]interface{}{},
+					"enabled":          true,
+					"mode": map[string]interface{}{
+						"cloud":     false,
+						"ignoreSPA": true,
+						"light":     false,
+						"sample":    false,
+						"segment": map[string]interface{}{
+							"end":   float64(100),
+							"start": float64(0),
+						},
+						"trigger": "pageload",
+					},
+					"name":        "Custom HTML",
+					"neoEvents":   []interface{}{},
+					"permissions": []interface{}{"execute_unsafe_scripts"},
+					"settings":    map[string]interface{}{},
+					"type":        "component",
+				},
+			},
+			"triggers": map[string]interface{}{
+				"Pageview": map[string]interface{}{
+					"clientRules": []interface{}{},
+					"description": "All page loads",
+					"loadRules": []interface{}{map[string]interface{}{
+						"match": "{{ client.__zarazTrack }}",
+						"op":    "EQUALS",
+						"value": "Pageview",
+					}},
+					"excludeRules": []interface{}{},
+					"name":         "Pageview",
+					"system":       "pageload",
+				},
+			},
+			"variables":    map[string]interface{}{},
+			"zarazVersion": float64(44),
+		},
+		Response: Response{
+			Success:  true,
+			Messages: []ResponseInfo{},
+			Errors:   []ResponseInfo{},
+		},
+	}
 
-	err := client.UpdateZarazConfig(context.Background(), ZoneIdentifier(testZoneID), payload)
+	actual, err := client.UpdateZarazConfig(context.Background(), ZoneIdentifier(testZoneID), payload)
+
 	require.NoError(t, err)
+
+	assert.Equal(t, expected, actual)
 }
 
 func TestGetZarazWorkflow(t *testing.T) {
@@ -256,12 +333,24 @@ func TestGetZarazWorkflow(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 
-		w.Header().Set("Content-Type", "text/plain")
-		fmt.Fprint(w, `realtime`)
+		w.Header().Set("Content-Type", "application/json")
+		fmt.Fprint(w, `{
+			"errors": [],
+			"messages": [],
+			"success": true,
+			"result": "realtime"
+		}`)
 	}
 
-	mux.HandleFunc("/zones/"+testZoneID+"/settings/zaraz/workflow", handler)
-	want := "realtime"
+	mux.HandleFunc("/zones/"+testZoneID+"/settings/zaraz/v2/workflow", handler)
+	want := ZarazWorkflowResponse{
+		Result: "realtime",
+		Response: Response{
+			Success:  true,
+			Messages: []ResponseInfo{},
+			Errors:   []ResponseInfo{},
+		},
+	}
 
 	actual, err := client.GetZarazWorkflow(context.Background(), ZoneIdentifier(testZoneID))
 
@@ -282,14 +371,30 @@ func TestUpdateZarazWorkflow(t *testing.T) {
 		bodyString := string(body)
 		assert.Equal(t, fmt.Sprintf("\"%s\"", payload), bodyString)
 
-		w.Header().Set("Content-Type", "text/plain")
+		w.Header().Set("Content-Type", "application/json")
+		fmt.Fprint(w, `{
+			"errors": [],
+			"messages": [],
+			"success": true,
+			"result": "realtime"
+		}`)
 	}
 
-	mux.HandleFunc("/zones/"+testZoneID+"/settings/zaraz/workflow", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/settings/zaraz/v2/workflow", handler)
+	want := ZarazWorkflowResponse{
+		Result: "realtime",
+		Response: Response{
+			Success:  true,
+			Messages: []ResponseInfo{},
+			Errors:   []ResponseInfo{},
+		},
+	}
 
-	err := client.UpdateZarazWorkflow(context.Background(), ZoneIdentifier(testZoneID), payload)
+	actual, err := client.UpdateZarazWorkflow(context.Background(), ZoneIdentifier(testZoneID), payload)
 
 	require.NoError(t, err)
+
+	assert.Equal(t, want, actual)
 }
 
 func TestPublishZarazConfig(t *testing.T) {
@@ -303,13 +408,31 @@ func TestPublishZarazConfig(t *testing.T) {
 		body, _ := io.ReadAll(r.Body)
 		bodyString := string(body)
 		assert.Equal(t, fmt.Sprintf("\"%s\"", payload), bodyString)
+
+		w.Header().Set("Content-Type", "application/json")
+		fmt.Fprint(w, `{
+			"errors": [],
+			"messages": [],
+			"success": true,
+			"result": "Config has been published successfully"
+		}`)
 	}
 
-	mux.HandleFunc("/zones/"+testZoneID+"/settings/zaraz/publish", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/settings/zaraz/v2/publish", handler)
+	want := ZarazPublishResponse{
+		Result: "Config has been published successfully",
+		Response: Response{
+			Success:  true,
+			Messages: []ResponseInfo{},
+			Errors:   []ResponseInfo{},
+		},
+	}
 
-	err := client.PublishZarazConfig(context.Background(), ZoneIdentifier(testZoneID), payload)
+	actual, err := client.PublishZarazConfig(context.Background(), ZoneIdentifier(testZoneID), payload)
 
 	require.NoError(t, err)
+
+	assert.Equal(t, want, actual)
 }
 
 func TestGetZarazConfigHistory(t *testing.T) {
@@ -334,11 +457,9 @@ func TestGetZarazConfigHistory(t *testing.T) {
 		}`)
 	}
 
-	mux.HandleFunc("/zones/"+testZoneID+"/settings/zaraz/history", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/settings/zaraz/v2/history", handler)
 
-	limit := int64(1)
-	offset := int64(10)
-	_, err := client.GetZarazConfigHistory(context.Background(), ZoneIdentifier(testZoneID), limit, offset)
+	_, _, err := client.GetZarazConfigHistory(context.Background(), ZoneIdentifier(testZoneID), GetZarazConfigHistoryParams{})
 	require.NoError(t, err)
 }
 
@@ -355,7 +476,7 @@ func TestGetDefaultZarazConfig(t *testing.T) {
 		}`)
 	}
 
-	mux.HandleFunc("/zones/"+testZoneID+"/settings/zaraz/default", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/settings/zaraz/v2/default", handler)
 
 	_, err := client.GetDefaultZarazConfig(context.Background(), ZoneIdentifier(testZoneID))
 	require.NoError(t, err)
@@ -374,7 +495,7 @@ func TestExportZarazConfig(t *testing.T) {
 		}`)
 	}
 
-	mux.HandleFunc("/zones/"+testZoneID+"/settings/zaraz/export", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/settings/zaraz/v2/export", handler)
 
 	err := client.ExportZarazConfig(context.Background(), ZoneIdentifier(testZoneID))
 	require.NoError(t, err)
