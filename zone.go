@@ -21,11 +21,50 @@ import (
 // from the environment automatically. You should not instantiate this service
 // directly, and instead use the [NewZoneService] method instead.
 type ZoneService struct {
-	Options       []option.RequestOption
-	LoadBalancers *ZoneLoadBalancerService
-	Dnssecs       *ZoneDnssecService
-	RateLimits    *ZoneRateLimitService
-	Settings      *ZoneSettingService
+	Options                []option.RequestOption
+	LoadBalancers          *ZoneLoadBalancerService
+	Accesses               *ZoneAccessService
+	DNSAnalytics           *ZoneDNSAnalyticService
+	PurgeCaches            *ZonePurgeCachService
+	Ssls                   *ZoneSslService
+	Subscriptions          *ZoneSubscriptionService
+	Acms                   *ZoneAcmService
+	Analytics              *ZoneAnalyticsService
+	Argos                  *ZoneArgoService
+	AvailablePlans         *ZoneAvailablePlanService
+	AvailableRatePlans     *ZoneAvailableRatePlanService
+	Caches                 *ZoneCachService
+	CertificateAuthorities *ZoneCertificateAuthorityService
+	ClientCertificates     *ZoneClientCertificateService
+	CustomCertificates     *ZoneCustomCertificateService
+	CustomHostnames        *ZoneCustomHostnameService
+	CustomNs               *ZoneCustomNService
+	CustomPages            *ZoneCustomPageService
+	DNSRecords             *ZoneDNSRecordService
+	Dnssecs                *ZoneDnssecService
+	Emails                 *ZoneEmailService
+	Filters                *ZoneFilterService
+	Firewalls              *ZoneFirewallService
+	Healthchecks           *ZoneHealthcheckService
+	KeylessCertificates    *ZoneKeylessCertificateService
+	Logpushes              *ZoneLogpushService
+	Logs                   *ZoneLogService
+	OriginTlsClientAuths   *ZoneOriginTlsClientAuthService
+	Pagerules              *ZonePageruleService
+	Railguns               *ZoneRailgunService
+	RateLimits             *ZoneRateLimitService
+	SecondaryDNS           *ZoneSecondaryDNSService
+	Settings               *ZoneSettingService
+	WaitingRooms           *ZoneWaitingRoomService
+	Web3s                  *ZoneWeb3Service
+	Workers                *ZoneWorkerService
+	ActivationChecks       *ZoneActivationCheckService
+	APIGateways            *ZoneAPIGatewayService
+	ManagedHeaders         *ZoneManagedHeaderService
+	PageShields            *ZonePageShieldService
+	Rulesets               *ZoneRulesetService
+	URLNormalizations      *ZoneURLNormalizationService
+	Spectrums              *ZoneSpectrumService
 }
 
 // NewZoneService generates a new service that applies the given options to each
@@ -35,9 +74,48 @@ func NewZoneService(opts ...option.RequestOption) (r *ZoneService) {
 	r = &ZoneService{}
 	r.Options = opts
 	r.LoadBalancers = NewZoneLoadBalancerService(opts...)
+	r.Accesses = NewZoneAccessService(opts...)
+	r.DNSAnalytics = NewZoneDNSAnalyticService(opts...)
+	r.PurgeCaches = NewZonePurgeCachService(opts...)
+	r.Ssls = NewZoneSslService(opts...)
+	r.Subscriptions = NewZoneSubscriptionService(opts...)
+	r.Acms = NewZoneAcmService(opts...)
+	r.Analytics = NewZoneAnalyticsService(opts...)
+	r.Argos = NewZoneArgoService(opts...)
+	r.AvailablePlans = NewZoneAvailablePlanService(opts...)
+	r.AvailableRatePlans = NewZoneAvailableRatePlanService(opts...)
+	r.Caches = NewZoneCachService(opts...)
+	r.CertificateAuthorities = NewZoneCertificateAuthorityService(opts...)
+	r.ClientCertificates = NewZoneClientCertificateService(opts...)
+	r.CustomCertificates = NewZoneCustomCertificateService(opts...)
+	r.CustomHostnames = NewZoneCustomHostnameService(opts...)
+	r.CustomNs = NewZoneCustomNService(opts...)
+	r.CustomPages = NewZoneCustomPageService(opts...)
+	r.DNSRecords = NewZoneDNSRecordService(opts...)
 	r.Dnssecs = NewZoneDnssecService(opts...)
+	r.Emails = NewZoneEmailService(opts...)
+	r.Filters = NewZoneFilterService(opts...)
+	r.Firewalls = NewZoneFirewallService(opts...)
+	r.Healthchecks = NewZoneHealthcheckService(opts...)
+	r.KeylessCertificates = NewZoneKeylessCertificateService(opts...)
+	r.Logpushes = NewZoneLogpushService(opts...)
+	r.Logs = NewZoneLogService(opts...)
+	r.OriginTlsClientAuths = NewZoneOriginTlsClientAuthService(opts...)
+	r.Pagerules = NewZonePageruleService(opts...)
+	r.Railguns = NewZoneRailgunService(opts...)
 	r.RateLimits = NewZoneRateLimitService(opts...)
+	r.SecondaryDNS = NewZoneSecondaryDNSService(opts...)
 	r.Settings = NewZoneSettingService(opts...)
+	r.WaitingRooms = NewZoneWaitingRoomService(opts...)
+	r.Web3s = NewZoneWeb3Service(opts...)
+	r.Workers = NewZoneWorkerService(opts...)
+	r.ActivationChecks = NewZoneActivationCheckService(opts...)
+	r.APIGateways = NewZoneAPIGatewayService(opts...)
+	r.ManagedHeaders = NewZoneManagedHeaderService(opts...)
+	r.PageShields = NewZonePageShieldService(opts...)
+	r.Rulesets = NewZoneRulesetService(opts...)
+	r.URLNormalizations = NewZoneURLNormalizationService(opts...)
+	r.Spectrums = NewZoneSpectrumService(opts...)
 	return
 }
 

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
@@ -47,6 +48,16 @@ func (r *CertificateService) Get(ctx context.Context, identifier string, opts ..
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("certificates/%s", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return
+}
+
+// List all existing Origin CA certificates for a given zone. Use your Origin CA
+// Key as your User Service Key when calling this endpoint
+// ([see above](#requests)).
+func (r *CertificateService) List(ctx context.Context, query CertificateListParams, opts ...option.RequestOption) (res *SchemasCertificateResponseCollection, err error) {
+	opts = append(r.Options[:], opts...)
+	path := "certificates"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
@@ -145,6 +156,165 @@ type CertificateResponseSingleID9CkVsmTjSuccess bool
 
 const (
 	CertificateResponseSingleID9CkVsmTjSuccessTrue CertificateResponseSingleID9CkVsmTjSuccess = true
+)
+
+type SchemasCertificateResponseCollection struct {
+	Errors     []SchemasCertificateResponseCollectionError    `json:"errors"`
+	Messages   []SchemasCertificateResponseCollectionMessage  `json:"messages"`
+	Result     []SchemasCertificateResponseCollectionResult   `json:"result"`
+	ResultInfo SchemasCertificateResponseCollectionResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success SchemasCertificateResponseCollectionSuccess `json:"success"`
+	JSON    schemasCertificateResponseCollectionJSON    `json:"-"`
+}
+
+// schemasCertificateResponseCollectionJSON contains the JSON metadata for the
+// struct [SchemasCertificateResponseCollection]
+type schemasCertificateResponseCollectionJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SchemasCertificateResponseCollection) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SchemasCertificateResponseCollectionError struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    schemasCertificateResponseCollectionErrorJSON `json:"-"`
+}
+
+// schemasCertificateResponseCollectionErrorJSON contains the JSON metadata for the
+// struct [SchemasCertificateResponseCollectionError]
+type schemasCertificateResponseCollectionErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SchemasCertificateResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SchemasCertificateResponseCollectionMessage struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    schemasCertificateResponseCollectionMessageJSON `json:"-"`
+}
+
+// schemasCertificateResponseCollectionMessageJSON contains the JSON metadata for
+// the struct [SchemasCertificateResponseCollectionMessage]
+type schemasCertificateResponseCollectionMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SchemasCertificateResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SchemasCertificateResponseCollectionResult struct {
+	// The Certificate Signing Request (CSR). Must be newline-encoded.
+	Csr string `json:"csr,required"`
+	// Array of hostnames or wildcard names (e.g., \*.example.com) bound to the
+	// certificate.
+	Hostnames []interface{} `json:"hostnames,required"`
+	// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
+	// or "keyless-certificate" (for Keyless SSL servers).
+	RequestType SchemasCertificateResponseCollectionResultRequestType `json:"request_type,required"`
+	// The number of days for which the certificate should be valid.
+	RequestedValidity SchemasCertificateResponseCollectionResultRequestedValidity `json:"requested_validity,required"`
+	// Identifier
+	ID string `json:"id"`
+	// The Origin CA certificate. Will be newline-encoded.
+	Certificate string `json:"certificate"`
+	// When the certificate will expire.
+	ExpiresOn time.Time                                      `json:"expires_on" format:"date-time"`
+	JSON      schemasCertificateResponseCollectionResultJSON `json:"-"`
+}
+
+// schemasCertificateResponseCollectionResultJSON contains the JSON metadata for
+// the struct [SchemasCertificateResponseCollectionResult]
+type schemasCertificateResponseCollectionResultJSON struct {
+	Csr               apijson.Field
+	Hostnames         apijson.Field
+	RequestType       apijson.Field
+	RequestedValidity apijson.Field
+	ID                apijson.Field
+	Certificate       apijson.Field
+	ExpiresOn         apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *SchemasCertificateResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
+// or "keyless-certificate" (for Keyless SSL servers).
+type SchemasCertificateResponseCollectionResultRequestType string
+
+const (
+	SchemasCertificateResponseCollectionResultRequestTypeOriginRsa          SchemasCertificateResponseCollectionResultRequestType = "origin-rsa"
+	SchemasCertificateResponseCollectionResultRequestTypeOriginEcc          SchemasCertificateResponseCollectionResultRequestType = "origin-ecc"
+	SchemasCertificateResponseCollectionResultRequestTypeKeylessCertificate SchemasCertificateResponseCollectionResultRequestType = "keyless-certificate"
+)
+
+// The number of days for which the certificate should be valid.
+type SchemasCertificateResponseCollectionResultRequestedValidity float64
+
+const (
+	SchemasCertificateResponseCollectionResultRequestedValidity7    SchemasCertificateResponseCollectionResultRequestedValidity = 7
+	SchemasCertificateResponseCollectionResultRequestedValidity30   SchemasCertificateResponseCollectionResultRequestedValidity = 30
+	SchemasCertificateResponseCollectionResultRequestedValidity90   SchemasCertificateResponseCollectionResultRequestedValidity = 90
+	SchemasCertificateResponseCollectionResultRequestedValidity365  SchemasCertificateResponseCollectionResultRequestedValidity = 365
+	SchemasCertificateResponseCollectionResultRequestedValidity730  SchemasCertificateResponseCollectionResultRequestedValidity = 730
+	SchemasCertificateResponseCollectionResultRequestedValidity1095 SchemasCertificateResponseCollectionResultRequestedValidity = 1095
+	SchemasCertificateResponseCollectionResultRequestedValidity5475 SchemasCertificateResponseCollectionResultRequestedValidity = 5475
+)
+
+type SchemasCertificateResponseCollectionResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                            `json:"total_count"`
+	JSON       schemasCertificateResponseCollectionResultInfoJSON `json:"-"`
+}
+
+// schemasCertificateResponseCollectionResultInfoJSON contains the JSON metadata
+// for the struct [SchemasCertificateResponseCollectionResultInfo]
+type schemasCertificateResponseCollectionResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SchemasCertificateResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type SchemasCertificateResponseCollectionSuccess bool
+
+const (
+	SchemasCertificateResponseCollectionSuccessTrue SchemasCertificateResponseCollectionSuccess = true
 )
 
 type SchemasCertificateResponseSingle struct {
@@ -255,3 +425,6 @@ const (
 	CertificateNewParamsRequestedValidity1095 CertificateNewParamsRequestedValidity = 1095
 	CertificateNewParamsRequestedValidity5475 CertificateNewParamsRequestedValidity = 5475
 )
+
+type CertificateListParams struct {
+}

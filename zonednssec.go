@@ -47,6 +47,83 @@ func (r *ZoneDnssecService) Update(ctx context.Context, zoneIdentifier string, b
 	return
 }
 
+// Delete DNSSEC.
+func (r *ZoneDnssecService) Delete(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *DeleteDnssecResponseSingle, err error) {
+	opts = append(r.Options[:], opts...)
+	path := fmt.Sprintf("zones/%s/dnssec", zoneIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
+	return
+}
+
+type DeleteDnssecResponseSingle struct {
+	Errors   []DeleteDnssecResponseSingleError   `json:"errors"`
+	Messages []DeleteDnssecResponseSingleMessage `json:"messages"`
+	Result   string                              `json:"result"`
+	// Whether the API call was successful
+	Success DeleteDnssecResponseSingleSuccess `json:"success"`
+	JSON    deleteDnssecResponseSingleJSON    `json:"-"`
+}
+
+// deleteDnssecResponseSingleJSON contains the JSON metadata for the struct
+// [DeleteDnssecResponseSingle]
+type deleteDnssecResponseSingleJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeleteDnssecResponseSingle) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DeleteDnssecResponseSingleError struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    deleteDnssecResponseSingleErrorJSON `json:"-"`
+}
+
+// deleteDnssecResponseSingleErrorJSON contains the JSON metadata for the struct
+// [DeleteDnssecResponseSingleError]
+type deleteDnssecResponseSingleErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeleteDnssecResponseSingleError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DeleteDnssecResponseSingleMessage struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    deleteDnssecResponseSingleMessageJSON `json:"-"`
+}
+
+// deleteDnssecResponseSingleMessageJSON contains the JSON metadata for the struct
+// [DeleteDnssecResponseSingleMessage]
+type deleteDnssecResponseSingleMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeleteDnssecResponseSingleMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type DeleteDnssecResponseSingleSuccess bool
+
+const (
+	DeleteDnssecResponseSingleSuccessTrue DeleteDnssecResponseSingleSuccess = true
+)
+
 type DnssecSingle struct {
 	Errors   []DnssecSingleError   `json:"errors"`
 	Messages []DnssecSingleMessage `json:"messages"`

@@ -33,6 +33,15 @@ func NewZoneRateLimitService(opts ...option.RequestOption) (r *ZoneRateLimitServ
 	return
 }
 
+// Creates a new rate limit for a zone. Refer to the object definition for a list
+// of required attributes.
+func (r *ZoneRateLimitService) New(ctx context.Context, zoneIdentifier string, body ZoneRateLimitNewParams, opts ...option.RequestOption) (res *RatelimitSingle, err error) {
+	opts = append(r.Options[:], opts...)
+	path := fmt.Sprintf("zones/%s/rate_limits", zoneIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
+	return
+}
+
 // Fetches the details of a rate limit.
 func (r *ZoneRateLimitService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *RatelimitSingle, err error) {
 	opts = append(r.Options[:], opts...)
@@ -41,11 +50,27 @@ func (r *ZoneRateLimitService) Get(ctx context.Context, zoneIdentifier string, i
 	return
 }
 
+// Updates an existing rate limit.
+func (r *ZoneRateLimitService) Update(ctx context.Context, zoneIdentifier string, id string, body ZoneRateLimitUpdateParams, opts ...option.RequestOption) (res *RatelimitSingle, err error) {
+	opts = append(r.Options[:], opts...)
+	path := fmt.Sprintf("zones/%s/rate_limits/%s", zoneIdentifier, id)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
+	return
+}
+
 // Fetches the rate limits for a zone.
 func (r *ZoneRateLimitService) List(ctx context.Context, zoneIdentifier string, query ZoneRateLimitListParams, opts ...option.RequestOption) (res *RatelimitCollection, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/rate_limits", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	return
+}
+
+// Deletes an existing rate limit.
+func (r *ZoneRateLimitService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *ZoneRateLimitDeleteResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	path := fmt.Sprintf("zones/%s/rate_limits/%s", zoneIdentifier, id)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
 
@@ -479,6 +504,109 @@ type RatelimitSingleSuccess bool
 const (
 	RatelimitSingleSuccessTrue RatelimitSingleSuccess = true
 )
+
+type ZoneRateLimitDeleteResponse struct {
+	Errors   []ZoneRateLimitDeleteResponseError   `json:"errors"`
+	Messages []ZoneRateLimitDeleteResponseMessage `json:"messages"`
+	Result   ZoneRateLimitDeleteResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success ZoneRateLimitDeleteResponseSuccess `json:"success"`
+	JSON    zoneRateLimitDeleteResponseJSON    `json:"-"`
+}
+
+// zoneRateLimitDeleteResponseJSON contains the JSON metadata for the struct
+// [ZoneRateLimitDeleteResponse]
+type zoneRateLimitDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneRateLimitDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneRateLimitDeleteResponseError struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    zoneRateLimitDeleteResponseErrorJSON `json:"-"`
+}
+
+// zoneRateLimitDeleteResponseErrorJSON contains the JSON metadata for the struct
+// [ZoneRateLimitDeleteResponseError]
+type zoneRateLimitDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneRateLimitDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneRateLimitDeleteResponseMessage struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    zoneRateLimitDeleteResponseMessageJSON `json:"-"`
+}
+
+// zoneRateLimitDeleteResponseMessageJSON contains the JSON metadata for the struct
+// [ZoneRateLimitDeleteResponseMessage]
+type zoneRateLimitDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneRateLimitDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneRateLimitDeleteResponseResult struct {
+	// The unique identifier of the rate limit.
+	ID   string                                `json:"id"`
+	JSON zoneRateLimitDeleteResponseResultJSON `json:"-"`
+}
+
+// zoneRateLimitDeleteResponseResultJSON contains the JSON metadata for the struct
+// [ZoneRateLimitDeleteResponseResult]
+type zoneRateLimitDeleteResponseResultJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneRateLimitDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneRateLimitDeleteResponseSuccess bool
+
+const (
+	ZoneRateLimitDeleteResponseSuccessTrue ZoneRateLimitDeleteResponseSuccess = true
+)
+
+type ZoneRateLimitNewParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
+}
+
+func (r ZoneRateLimitNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type ZoneRateLimitUpdateParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
+}
+
+func (r ZoneRateLimitUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
 
 type ZoneRateLimitListParams struct {
 	// The page number of paginated results.
