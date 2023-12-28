@@ -11,6 +11,95 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+var expectedConfig ZarazConfig = ZarazConfig{
+	DebugKey:      "cheese",
+	ZarazVersion:  44,
+	DataLayer:     true,
+	Dlp:           []any{},
+	HistoryChange: true,
+	Settings: ConfigSettings{
+		AutoInjectScript: true,
+	},
+	Tools: map[string]Tool{
+		"PBQr": {
+			BlockingTriggers: []string{},
+			Enabled:          true,
+			DefaultFields:    map[string]any{},
+			Name:             "Custom HTML",
+			NeoEvents: []NeoEvent{
+				{
+					ActionType:       "event",
+					BlockingTriggers: []string{},
+					Data: map[string]any{
+						"__zaraz_setting_name": "pageview1",
+						"htmlCode":             "<script>console.log('pageview')</script>",
+					},
+					FiringTriggers: []string{"Pageview"},
+				},
+			},
+			Type:           ToolComponent,
+			DefaultPurpose: "rJJC",
+			Component:      "html",
+			Permissions:    []string{"execute_unsafe_scripts"},
+			Settings:       map[string]any{},
+		},
+	},
+	Triggers: map[string]Trigger{
+		"Pageview": {
+			Name:         "Pageview",
+			Description:  "All page loads",
+			LoadRules:    []TriggerRule{{Match: "{{ client.__zarazTrack }}", Op: "EQUALS", Value: "Pageview"}},
+			ExcludeRules: []TriggerRule{},
+			ClientRules:  []any{},
+			System:       Pageload,
+		},
+		"TFOl": {
+			Name:         "test",
+			Description:  "",
+			LoadRules:    []TriggerRule{{Id: "Kqsc", Match: "test", Op: "CONTAINS", Value: "test"}, {Id: "EDnV", Action: ClickListener, Settings: RuleSettings{Selector: "test", Type: Css}}},
+			ExcludeRules: []TriggerRule{},
+		},
+	},
+	Variables: map[string]Variable{
+		"jwIx": {
+			Name:  "test",
+			Type:  VarString,
+			Value: "sss",
+		},
+		"pAuL": {
+			Name: "test-worker-var",
+			Type: VarWorker,
+			Value: map[string]interface{}{
+				"escapedWorkerName": "worker-var-example",
+				"mutableId":         "m.zpt3q__WyW-61WM2qwgGoBl4Nxg-sfBsaMhu9NayjwU",
+				"workerTag":         "68aba570db9d4ec5b159624e2f7ad8bf",
+			},
+		},
+	},
+	Consent: Consent{
+		Enabled: true,
+		ButtonTextTranslations: ButtonTextTranslations{
+			AcceptAll:        map[string]string{"en": "Accept ALL"},
+			ConfirmMyChoices: map[string]string{"en": "YES!"},
+			RejectAll:        map[string]string{"en": "Reject ALL"},
+		},
+		CompanyEmail:                          "email@example.com",
+		ConsentModalIntroHTMLWithTranslations: map[string]string{"en": "Lorem ipsum dolar set Amet?"},
+		CookieName:                            "zaraz-consent",
+		CustomCSS:                             ".test {\n    color: red;\n}",
+		CustomIntroDisclaimerDismissed:        true,
+		DefaultLanguage:                       "en",
+		HideModal:                             false,
+		PurposesWithTranslations: map[string]PurposeWithTranslations{
+			"rJJC": {
+				Description: map[string]string{"en": "Blah blah"},
+				Name:        map[string]string{"en": "Analytics"},
+				Order:       0,
+			},
+		},
+	},
+}
+
 func TestGetZarazConfig(t *testing.T) {
 	setup()
 	defer teardown()
@@ -25,123 +114,152 @@ func TestGetZarazConfig(t *testing.T) {
 			"messages": [],
 			"success": true,
 			"result": {
-					"dataLayer": true,
-					"debugKey": "cheese",
-					"dlp": [],
-					"historyChange": true,
-					"settings": {
-						"autoInjectScript": true
+				"consent": {
+				  "buttonTextTranslations": {
+					"accept_all": {
+					  "en": "Accept ALL"
 					},
-					"tools": {
-						"PBQr": {
-							"blockingTriggers": [],
-							"component": "html",
-							"defaultFields": {},
-							"enabled": true,
-							"mode": {
-							  "cloud": false,
-							  "ignoreSPA": true,
-							  "light": false,
-							  "sample": false,
-							  "segment": {
-								"end": 100,
-								"start": 0
-							  },
-							  "trigger": "pageload"
-							},
-							"name": "Custom HTML",
-							"neoEvents": [],
-							"permissions": [
-							  "execute_unsafe_scripts"
-							],
-							"settings": {},
-							"type": "component"
-						  }
+					"confirm_my_choices": {
+					  "en": "YES!"
 					},
-					"triggers": {
-						"Pageview": {
-							"clientRules": [],
-							"description": "All page loads",
-							"excludeRules": [],
-							"loadRules": [
-							  {
-								"match": "{{ client.__zarazTrack }}",
-								"op": "EQUALS",
-								"value": "Pageview"
-							  }
-							],
-							"name": "Pageview",
-							"system": "pageload"
+					"reject_all": {
+					  "en": "Reject ALL"
+					}
+				  },
+				  "companyEmail": "email@example.com",
+				  "consentModalIntroHTMLWithTranslations": {
+					"en": "Lorem ipsum dolar set Amet?"
+				  },
+				  "cookieName": "zaraz-consent",
+				  "customCSS": ".test {\n    color: red;\n}",
+				  "customIntroDisclaimerDismissed": true,
+				  "defaultLanguage": "en",
+				  "enabled": true,
+				  "hideModal": false,
+				  "purposesWithTranslations": {
+					"rJJC": {
+					  "description": {
+						"en": "Blah blah"
+					  },
+					  "name": {
+						"en": "Analytics"
+					  },
+					  "order": 0
+					}
+				  }
+				},
+				"dataLayer": true,
+				"debugKey": "cheese",
+				"dlp": [],
+				"historyChange": true,
+				"invalidKey": "cheese",
+				"settings": {
+				  "autoInjectScript": true
+				},
+				"tools": {
+				  "PBQr": {
+					"blockingTriggers": [],
+					"component": "html",
+					"defaultFields": {},
+					"defaultPurpose": "rJJC",
+					"enabled": true,
+					"mode": {
+					  "cloud": false,
+					  "ignoreSPA": true,
+					  "light": false,
+					  "sample": false,
+					  "segment": {
+						"end": 100,
+						"start": 0
+					  },
+					  "trigger": "pageload"
+					},
+					"name": "Custom HTML",
+					"neoEvents": [
+					  {
+						"actionType": "event",
+						"blockingTriggers": [],
+						"data": {
+						  "__zaraz_setting_name": "pageview1",
+						  "htmlCode": "<script>console.log('pageview')</script>"
+						},
+						"firingTriggers": [
+						  "Pageview"
+						]
+					  }
+					],
+					"permissions": [
+					  "execute_unsafe_scripts"
+					],
+					"settings": {},
+					"type": "component"
+				  }
+				},
+				"triggers": {
+				  "Pageview": {
+					"clientRules": [],
+					"description": "All page loads",
+					"excludeRules": [],
+					"loadRules": [
+					  {
+						"match": "{{ client.__zarazTrack }}",
+						"op": "EQUALS",
+						"value": "Pageview"
+					  }
+					],
+					"name": "Pageview",
+					"system": "pageload"
+				  },
+				  "TFOl": {
+					"description": "",
+					"excludeRules": [],
+					"loadRules": [
+					  {
+						"id": "Kqsc",
+						"match": "test",
+						"op": "CONTAINS",
+						"value": "test"
+					  },
+					  {
+						"action": "clickListener",
+						"id": "EDnV",
+						"settings": {
+						  "selector": "test",
+						  "type": "css",
+						  "waitForTags": 0
 						}
-					},
-					"variables": {},
-					"zarazVersion": 44
-			}
+					  }
+					],
+					"name": "test"
+				  }
+				},
+				"variables": {
+				  "jwIx": {
+					"name": "test",
+					"type": "string",
+					"value": "sss"
+				  },
+				  "pAuL": {
+					"name": "test-worker-var",
+					"type": "worker",
+					"value": {
+					  "escapedWorkerName": "worker-var-example",
+					  "mutableId": "m.zpt3q__WyW-61WM2qwgGoBl4Nxg-sfBsaMhu9NayjwU",
+					  "workerTag": "68aba570db9d4ec5b159624e2f7ad8bf"
+					}
+				  }
+				},
+				"zarazVersion": 44
+			  }
 		}`)
 	}
 
 	mux.HandleFunc("/zones/"+testZoneID+"/settings/zaraz/v2/config", handler)
-	expected := ZarazConfigResponse{
-		Result: ZarazConfig{
-			"dataLayer":     true,
-			"debugKey":      "cheese",
-			"dlp":           []interface{}{},
-			"historyChange": true,
-			"settings": map[string]interface{}{
-				"autoInjectScript": true,
-			},
-			"tools": map[string]interface{}{
-				"PBQr": map[string]interface{}{
-					"blockingTriggers": []interface{}{},
-					"component":        "html",
-					"defaultFields":    map[string]interface{}{},
-					"enabled":          true,
-					"mode": map[string]interface{}{
-						"cloud":     false,
-						"ignoreSPA": true,
-						"light":     false,
-						"sample":    false,
-						"segment": map[string]interface{}{
-							"end":   float64(100),
-							"start": float64(0),
-						},
-						"trigger": "pageload",
-					},
-					"name":        "Custom HTML",
-					"neoEvents":   []interface{}{},
-					"permissions": []interface{}{"execute_unsafe_scripts"},
-					"settings":    map[string]interface{}{},
-					"type":        "component",
-				},
-			},
-			"triggers": map[string]interface{}{
-				"Pageview": map[string]interface{}{
-					"clientRules": []interface{}{},
-					"description": "All page loads",
-					"loadRules": []interface{}{map[string]interface{}{
-						"match": "{{ client.__zarazTrack }}",
-						"op":    "EQUALS",
-						"value": "Pageview",
-					}},
-					"excludeRules": []interface{}{},
-					"name":         "Pageview",
-					"system":       "pageload",
-				},
-			},
-			"variables":    map[string]interface{}{},
-			"zarazVersion": float64(44),
-		},
-		Response: Response{
-			Success:  true,
-			Messages: []ResponseInfo{},
-			Errors:   []ResponseInfo{},
-		},
-	}
 
 	actual, err := client.GetZarazConfig(context.Background(), ZoneIdentifier(testZoneID))
 	require.NoError(t, err)
 
-	assert.Equal(t, expected, actual)
+	assert.Equal(t, expectedConfig, actual.Result)
 }
 
 func TestUpdateZarazConfig(t *testing.T) {
@@ -157,173 +275,158 @@ func TestUpdateZarazConfig(t *testing.T) {
 			"messages": [],
 			"success": true,
 			"result": {
-					"dataLayer": true,
-					"debugKey": "cheese",
-					"dlp": [],
-					"historyChange": true,
-					"settings": {
-						"autoInjectScript": true
+				"consent": {
+				  "buttonTextTranslations": {
+					"accept_all": {
+					  "en": "Accept ALL"
 					},
-					"tools": {
-						"PBQr": {
-							"blockingTriggers": [],
-							"component": "html",
-							"defaultFields": {},
-							"enabled": true,
-							"mode": {
-							  "cloud": false,
-							  "ignoreSPA": true,
-							  "light": false,
-							  "sample": false,
-							  "segment": {
-								"end": 100,
-								"start": 0
-							  },
-							  "trigger": "pageload"
-							},
-							"name": "Custom HTML",
-							"neoEvents": [],
-							"permissions": [
-							  "execute_unsafe_scripts"
-							],
-							"settings": {},
-							"type": "component"
-						  }
+					"confirm_my_choices": {
+					  "en": "YES!"
 					},
-					"triggers": {
-						"Pageview": {
-							"clientRules": [],
-							"description": "All page loads",
-							"excludeRules": [],
-							"loadRules": [
-							  {
-								"match": "{{ client.__zarazTrack }}",
-								"op": "EQUALS",
-								"value": "Pageview"
-							  }
-							],
-							"name": "Pageview",
-							"system": "pageload"
+					"reject_all": {
+					  "en": "Reject ALL"
+					}
+				  },
+				  "companyEmail": "email@example.com",
+				  "consentModalIntroHTMLWithTranslations": {
+					"en": "Lorem ipsum dolar set Amet?"
+				  },
+				  "cookieName": "zaraz-consent",
+				  "customCSS": ".test {\n    color: red;\n}",
+				  "customIntroDisclaimerDismissed": true,
+				  "defaultLanguage": "en",
+				  "enabled": true,
+				  "hideModal": false,
+				  "purposesWithTranslations": {
+					"rJJC": {
+					  "description": {
+						"en": "Blah blah"
+					  },
+					  "name": {
+						"en": "Analytics"
+					  },
+					  "order": 0
+					}
+				  }
+				},
+				"dataLayer": true,
+				"debugKey": "butter",
+				"dlp": [],
+				"historyChange": true,
+				"invalidKey": "cheese",
+				"settings": {
+				  "autoInjectScript": true
+				},
+				"tools": {
+				  "PBQr": {
+					"blockingTriggers": [],
+					"component": "html",
+					"defaultFields": {},
+					"defaultPurpose": "rJJC",
+					"enabled": true,
+					"mode": {
+					  "cloud": false,
+					  "ignoreSPA": true,
+					  "light": false,
+					  "sample": false,
+					  "segment": {
+						"end": 100,
+						"start": 0
+					  },
+					  "trigger": "pageload"
+					},
+					"name": "Custom HTML",
+					"neoEvents": [
+					  {
+						"actionType": "event",
+						"blockingTriggers": [],
+						"data": {
+						  "__zaraz_setting_name": "pageview1",
+						  "htmlCode": "<script>console.log('pageview')</script>"
+						},
+						"firingTriggers": [
+						  "Pageview"
+						]
+					  }
+					],
+					"permissions": [
+					  "execute_unsafe_scripts"
+					],
+					"settings": {},
+					"type": "component"
+				  }
+				},
+				"triggers": {
+				  "Pageview": {
+					"clientRules": [],
+					"description": "All page loads",
+					"excludeRules": [],
+					"loadRules": [
+					  {
+						"match": "{{ client.__zarazTrack }}",
+						"op": "EQUALS",
+						"value": "Pageview"
+					  }
+					],
+					"name": "Pageview",
+					"system": "pageload"
+				  },
+				  "TFOl": {
+					"description": "",
+					"excludeRules": [],
+					"loadRules": [
+					  {
+						"id": "Kqsc",
+						"match": "test",
+						"op": "CONTAINS",
+						"value": "test"
+					  },
+					  {
+						"action": "clickListener",
+						"id": "EDnV",
+						"settings": {
+						  "selector": "test",
+						  "type": "css",
+						  "waitForTags": 0
 						}
-					},
-					"variables": {},
-					"zarazVersion": 44
-			}
+					  }
+					],
+					"name": "test"
+				  }
+				},
+				"variables": {
+				  "jwIx": {
+					"name": "test",
+					"type": "string",
+					"value": "sss"
+				  },
+				  "pAuL": {
+					"name": "test-worker-var",
+					"type": "worker",
+					"value": {
+					  "escapedWorkerName": "worker-var-example",
+					  "mutableId": "m.zpt3q__WyW-61WM2qwgGoBl4Nxg-sfBsaMhu9NayjwU",
+					  "workerTag": "68aba570db9d4ec5b159624e2f7ad8bf"
+					}
+				  }
+				},
+				"zarazVersion": 44
+			  }
 		}`)
 	}
 
 	mux.HandleFunc("/zones/"+testZoneID+"/settings/zaraz/v2/config", handler)
-	payload := ZarazConfig{
-		"dataLayer":     true,
-		"debugKey":      "cluu08t8nne8gq9g3160",
-		"dlp":           []interface{}{},
-		"historyChange": true,
-		"settings": map[string]interface{}{
-			"autoInjectScript": true,
-		},
-		"tools": map[string]interface{}{
-			"PBQr": map[string]interface{}{
-				"blockingTriggers": []interface{}{},
-				"component":        "html",
-				"defaultFields":    map[string]interface{}{},
-				"enabled":          true,
-				"mode": map[string]interface{}{
-					"cloud":     false,
-					"ignoreSPA": true,
-					"light":     false,
-					"sample":    false,
-					"segment": map[string]interface{}{
-						"end":   float64(100),
-						"start": float64(0),
-					},
-					"trigger": "pageload",
-				},
-				"name":        "Custom HTML",
-				"neoEvents":   []interface{}{},
-				"permissions": []interface{}{"execute_unsafe_scripts"},
-				"settings":    map[string]interface{}{},
-				"type":        "component",
-			},
-		},
-		"triggers": map[string]interface{}{
-			"Pageview": map[string]interface{}{
-				"clientRules": []interface{}{},
-				"description": "All page loads",
-				"loadRules": []interface{}{map[string]interface{}{
-					"match": "{{ client.__zarazTrack }}",
-					"op":    "EQUALS",
-					"value": "Pageview",
-				}},
-				"excludeRules": []interface{}{},
-				"name":         "Pageview",
-				"system":       "pageload",
-			},
-		},
-		"variables":    map[string]interface{}{},
-		"zarazVersion": float64(44),
-	}
+	payload := expectedConfig
+	payload.DebugKey = "butter" // Updating config
+	modifiedConfig := payload
 	expected := ZarazConfigResponse{
-		Result: ZarazConfig{
-			"dataLayer":     true,
-			"debugKey":      "cheese",
-			"dlp":           []interface{}{},
-			"historyChange": true,
-			"settings": map[string]interface{}{
-				"autoInjectScript": true,
-			},
-			"tools": map[string]interface{}{
-				"PBQr": map[string]interface{}{
-					"blockingTriggers": []interface{}{},
-					"component":        "html",
-					"defaultFields":    map[string]interface{}{},
-					"enabled":          true,
-					"mode": map[string]interface{}{
-						"cloud":     false,
-						"ignoreSPA": true,
-						"light":     false,
-						"sample":    false,
-						"segment": map[string]interface{}{
-							"end":   float64(100),
-							"start": float64(0),
-						},
-						"trigger": "pageload",
-					},
-					"name":        "Custom HTML",
-					"neoEvents":   []interface{}{},
-					"permissions": []interface{}{"execute_unsafe_scripts"},
-					"settings":    map[string]interface{}{},
-					"type":        "component",
-				},
-			},
-			"triggers": map[string]interface{}{
-				"Pageview": map[string]interface{}{
-					"clientRules": []interface{}{},
-					"description": "All page loads",
-					"loadRules": []interface{}{map[string]interface{}{
-						"match": "{{ client.__zarazTrack }}",
-						"op":    "EQUALS",
-						"value": "Pageview",
-					}},
-					"excludeRules": []interface{}{},
-					"name":         "Pageview",
-					"system":       "pageload",
-				},
-			},
-			"variables":    map[string]interface{}{},
-			"zarazVersion": float64(44),
-		},
-		Response: Response{
-			Success:  true,
-			Messages: []ResponseInfo{},
-			Errors:   []ResponseInfo{},
-		},
+		Result: modifiedConfig,
 	}
 
 	actual, err := client.UpdateZarazConfig(context.Background(), ZoneIdentifier(testZoneID), payload)
-
 	require.NoError(t, err)
 
-	assert.Equal(t, expected, actual)
+	assert.Equal(t, expected.Result, actual.Result)
 }
 
 func TestGetZarazWorkflow(t *testing.T) {
@@ -435,7 +538,7 @@ func TestPublishZarazConfig(t *testing.T) {
 	assert.Equal(t, want, actual)
 }
 
-func TestGetZarazConfigHistory(t *testing.T) {
+func TestGetZarazConfigHistoryList(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -459,7 +562,7 @@ func TestGetZarazConfigHistory(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/settings/zaraz/v2/history", handler)
 
-	_, _, err := client.GetZarazConfigHistory(context.Background(), ZoneIdentifier(testZoneID), GetZarazConfigHistoryParams{})
+	_, _, err := client.GetZarazConfigHistoryList(context.Background(), ZoneIdentifier(testZoneID), GetZarazConfigHistoryListParams{})
 	require.NoError(t, err)
 }
 

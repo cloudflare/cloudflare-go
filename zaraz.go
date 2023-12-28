@@ -9,7 +9,176 @@ import (
 	"github.com/goccy/go-json"
 )
 
-type ZarazConfig = map[string]interface{}
+type ZarazConfig struct {
+	DebugKey      string              `json:"debugKey"`
+	Tools         map[string]Tool     `json:"tools"`
+	Triggers      map[string]Trigger  `json:"triggers"`
+	ZarazVersion  int64               `json:"zarazVersion"`
+	Consent       Consent             `json:"consent,omitempty"`
+	DataLayer     bool                `json:"dataLayer,omitempty"`
+	Dlp           []any               `json:"dlp,omitempty"`
+	HistoryChange bool                `json:"historyChange,omitempty"`
+	Settings      ConfigSettings      `json:"settings,omitempty"`
+	Variables     map[string]Variable `json:"variables,omitempty"`
+}
+
+type Worker struct {
+	EscapedWorkerName string `json:"escapedWorkerName"`
+	WorkerTag         string `json:"workerTag"`
+	MutableId         string `json:"mutableId,omitempty"`
+}
+
+type ConfigSettings struct {
+	AutoInjectScript    bool   `json:"autoInjectScript"`
+	InjectIframes       bool   `json:"injectIframes,omitempty"`
+	Ecommerce           bool   `json:"ecommerce,omitempty"`
+	HideQueryParams     bool   `json:"hideQueryParams,omitempty"`
+	HideIpAddress       bool   `json:"hideIPAddress,omitempty"`
+	HideUserAgent       bool   `json:"hideUserAgent,omitempty"`
+	HideExternalReferer bool   `json:"hideExternalReferer,omitempty"`
+	CookieDomain        string `json:"cookieDomain,omitempty"`
+	InitPath            string `json:"initPath,omitempty"`
+	ScriptPath          string `json:"scriptPath,omitempty"`
+	TrackPath           string `json:"trackPath,omitempty"`
+	EventsApiPath       string `json:"eventsApiPath,omitempty"`
+	McRootPath          string `json:"mcRootPath,omitempty"`
+	ContextEnricher     Worker `json:"contextEnricher,omitempty"`
+}
+
+type NeoEvent struct {
+	BlockingTriggers []string       `json:"blockingTriggers"`
+	FiringTriggers   []string       `json:"firingTriggers"`
+	Data             map[string]any `json:"data"`
+	ActionType       string         `json:"actionType,omitempty"`
+}
+
+type ToolType string
+
+const (
+	ToolLibrary   ToolType = "library"
+	ToolComponent ToolType = "component"
+	ToolCustomMc  ToolType = "custom-mc"
+)
+
+type Tool struct {
+	BlockingTriggers []string       `json:"blockingTriggers"`
+	Enabled          bool           `json:"enabled"`
+	DefaultFields    map[string]any `json:"defaultFields"`
+	Name             string         `json:"name"`
+	NeoEvents        []NeoEvent     `json:"neoEvents"`
+	Type             ToolType       `json:"type"`
+	DefaultPurpose   string         `json:"defaultPurpose,omitempty"`
+	Library          string         `json:"library,omitempty"`
+	Component        string         `json:"component,omitempty"`
+	Permissions      []string       `json:"permissions,omitempty"`
+	Settings         map[string]any `json:"settings,omitempty"`
+	Worker           Worker         `json:"worker,omitempty"`
+}
+
+type TriggerSystem string
+
+const Pageload TriggerSystem = "pageload"
+
+type LoadRuleOp string
+
+type RuleType string
+
+const (
+	ClickListener     RuleType = "clickListener"
+	Timer             RuleType = "timer"
+	FormSubmission    RuleType = "formSubmission"
+	VariableMatch     RuleType = "variableMatch"
+	ScrollDepth       RuleType = "scrollDepth"
+	ElementVisibility RuleType = "elementVisibility"
+	ClientEval        RuleType = "clientEval"
+)
+
+type SelectorType string
+
+const (
+	Xpath SelectorType = "xpath"
+	Css   SelectorType = "css"
+)
+
+type RuleSettings struct {
+	Type        SelectorType `json:"type,omitempty"`
+	Selector    string       `json:"selector,omitempty"`
+	WaitForTags int          `json:"waitForTags,omitempty"`
+	Interval    int          `json:"interval,omitempty"`
+	Limit       int          `json:"limit,omitempty"`
+	Validate    bool         `json:"validate,omitempty"`
+	Variable    string       `json:"variable,omitempty"`
+	Match       string       `json:"match,omitempty"`
+	Positions   string       `json:"positions,omitempty"`
+	Op          LoadRuleOp   `json:"op,omitempty"`
+	Value       string       `json:"value,omitempty"`
+}
+
+type TriggerRule struct {
+	Id       string       `json:"id"`
+	Match    string       `json:"match,omitempty"`
+	Op       LoadRuleOp   `json:"op,omitempty"`
+	Value    string       `json:"value,omitempty"`
+	Action   RuleType     `json:"action"`
+	Settings RuleSettings `json:"settings"`
+}
+
+type Trigger struct {
+	Name         string        `json:"name"`
+	Description  string        `json:"description,omitempty"`
+	LoadRules    []TriggerRule `json:"loadRules"`
+	ExcludeRules []TriggerRule `json:"excludeRules"`
+	ClientRules  []any         `json:"clientRules,omitempty"` // what is this?
+	System       TriggerSystem `json:"system,omitempty"`
+}
+
+type VariableType string
+
+const (
+	VarString VariableType = "string"
+	VarSecret VariableType = "secret"
+	VarWorker VariableType = "worker"
+)
+
+type Variable struct {
+	Name  string       `json:"name"`
+	Type  VariableType `json:"type"`
+	Value interface{}  `json:"value"`
+}
+
+type ButtonTextTranslations struct {
+	AcceptAll        map[string]string `json:"accept_all"`
+	RejectAll        map[string]string `json:"reject_all"`
+	ConfirmMyChoices map[string]string `json:"confirm_my_choices"`
+}
+
+type Purpose struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
+type PurposeWithTranslations struct {
+	Name        map[string]string `json:"name"`
+	Description map[string]string `json:"description"`
+	Order       int               `json:"order"`
+}
+
+type Consent struct {
+	Enabled                               bool                               `json:"enabled"`
+	ButtonTextTranslations                ButtonTextTranslations             `json:"buttonTextTranslations,omitempty"`
+	CompanyEmail                          string                             `json:"companyEmail,omitempty"`
+	CompanyName                           string                             `json:"companyName,omitempty"`
+	CompanyStreetAddress                  string                             `json:"companyStreetAddress,omitempty"`
+	ConsentModalIntroHTML                 string                             `json:"consentModalIntroHTML,omitempty"`
+	ConsentModalIntroHTMLWithTranslations map[string]string                  `json:"consentModalIntroHTMLWithTranslations,omitempty"`
+	CookieName                            string                             `json:"cookieName,omitempty"`
+	CustomCSS                             string                             `json:"customCSS,omitempty"`
+	CustomIntroDisclaimerDismissed        bool                               `json:"customIntroDisclaimerDismissed,omitempty"`
+	DefaultLanguage                       string                             `json:"defaultLanguage,omitempty"`
+	HideModal                             bool                               `json:"hideModal,omitempty"`
+	Purposes                              map[string]Purpose                 `json:"purposes,omitempty"`
+	PurposesWithTranslations              map[string]PurposeWithTranslations `json:"purposesWithTranslations,omitempty"`
+}
 
 type ZarazConfigResponse struct {
 	Result ZarazConfig `json:"result"`
@@ -26,9 +195,13 @@ type ZarazPublishResponse struct {
 	Response
 }
 
-type UpdateZarazConfigParams = map[string]interface{}
+type UpdateZarazConfigParams = ZarazConfig
 
-type ZarazConfigRow struct {
+type UpdateZarazWorkflowParams = string
+
+type PublishZarazConfigParams = string
+
+type ZarazHistoryRow struct {
 	ID          int64      `json:"id,omitempty"`
 	UserId      string     `json:"usedId,omitempty"`
 	Description string     `json:"description,omitempty"`
@@ -36,13 +209,13 @@ type ZarazConfigRow struct {
 	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
 }
 
-type GetZarazConfigHistoryResponse struct {
-	Result []ZarazConfigRow `json:"result"`
+type GetZarazConfigHistoryListResponse struct {
+	Result []ZarazHistoryRow `json:"result"`
 	Response
 	ResultInfo `json:"result_info"`
 }
 
-type GetZarazConfigHistoryParams struct {
+type GetZarazConfigHistoryListParams struct {
 	ResultInfo
 }
 
@@ -111,13 +284,13 @@ func (api *API) GetZarazWorkflow(ctx context.Context, rc *ResourceContainer) (Za
 	return response, nil
 }
 
-func (api *API) UpdateZarazWorkflow(ctx context.Context, rc *ResourceContainer, workflowToUpdate string) (ZarazWorkflowResponse, error) {
+func (api *API) UpdateZarazWorkflow(ctx context.Context, rc *ResourceContainer, params UpdateZarazWorkflowParams) (ZarazWorkflowResponse, error) {
 	if rc.Identifier == "" {
 		return ZarazWorkflowResponse{}, ErrMissingZoneID
 	}
 
 	uri := fmt.Sprintf("/zones/%s/settings/zaraz/v2/workflow", rc.Identifier)
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, workflowToUpdate)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return ZarazWorkflowResponse{}, err
 	}
@@ -131,13 +304,13 @@ func (api *API) UpdateZarazWorkflow(ctx context.Context, rc *ResourceContainer, 
 	return response, nil
 }
 
-func (api *API) PublishZarazConfig(ctx context.Context, rc *ResourceContainer, description string) (ZarazPublishResponse, error) {
+func (api *API) PublishZarazConfig(ctx context.Context, rc *ResourceContainer, params PublishZarazConfigParams) (ZarazPublishResponse, error) {
 	if rc.Identifier == "" {
 		return ZarazPublishResponse{}, ErrMissingZoneID
 	}
 
 	uri := fmt.Sprintf("/zones/%s/settings/zaraz/v2/publish", rc.Identifier)
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, description)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
 		return ZarazPublishResponse{}, err
 	}
@@ -151,7 +324,7 @@ func (api *API) PublishZarazConfig(ctx context.Context, rc *ResourceContainer, d
 	return response, nil
 }
 
-func (api *API) GetZarazConfigHistory(ctx context.Context, rc *ResourceContainer, params GetZarazConfigHistoryParams) ([]ZarazConfigRow, *ResultInfo, error) {
+func (api *API) GetZarazConfigHistoryList(ctx context.Context, rc *ResourceContainer, params GetZarazConfigHistoryListParams) ([]ZarazHistoryRow, *ResultInfo, error) {
 	if rc.Identifier == "" {
 		return nil, nil, ErrMissingZoneID
 	}
@@ -169,19 +342,19 @@ func (api *API) GetZarazConfigHistory(ctx context.Context, rc *ResourceContainer
 		params.Page = 1
 	}
 
-	var records []ZarazConfigRow
+	var records []ZarazHistoryRow
 	var lastResultInfo ResultInfo
 
 	for {
 		uri := buildURI(fmt.Sprintf("/zones/%s/settings/zaraz/v2/history", rc.Identifier), params)
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
-			return []ZarazConfigRow{}, &ResultInfo{}, err
+			return []ZarazHistoryRow{}, &ResultInfo{}, err
 		}
-		var listResponse GetZarazConfigHistoryResponse
+		var listResponse GetZarazConfigHistoryListResponse
 		err = json.Unmarshal(res, &listResponse)
 		if err != nil {
-			return []ZarazConfigRow{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+			return []ZarazHistoryRow{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 		}
 		records = append(records, listResponse.Result...)
 		lastResultInfo = listResponse.ResultInfo
