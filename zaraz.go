@@ -15,9 +15,9 @@ type ZarazConfig struct {
 	Triggers      map[string]Trigger  `json:"triggers"`
 	ZarazVersion  int64               `json:"zarazVersion"`
 	Consent       Consent             `json:"consent,omitempty"`
-	DataLayer     bool                `json:"dataLayer,omitempty"`
+	DataLayer     *bool               `json:"dataLayer,omitempty"`
 	Dlp           []any               `json:"dlp,omitempty"`
-	HistoryChange bool                `json:"historyChange,omitempty"`
+	HistoryChange *bool               `json:"historyChange,omitempty"`
 	Settings      ConfigSettings      `json:"settings,omitempty"`
 	Variables     map[string]Variable `json:"variables,omitempty"`
 }
@@ -27,15 +27,14 @@ type Worker struct {
 	WorkerTag         string `json:"workerTag"`
 	MutableId         string `json:"mutableId,omitempty"`
 }
-
 type ConfigSettings struct {
-	AutoInjectScript    bool   `json:"autoInjectScript"`
-	InjectIframes       bool   `json:"injectIframes,omitempty"`
-	Ecommerce           bool   `json:"ecommerce,omitempty"`
-	HideQueryParams     bool   `json:"hideQueryParams,omitempty"`
-	HideIpAddress       bool   `json:"hideIPAddress,omitempty"`
-	HideUserAgent       bool   `json:"hideUserAgent,omitempty"`
-	HideExternalReferer bool   `json:"hideExternalReferer,omitempty"`
+	AutoInjectScript    *bool  `json:"autoInjectScript"`
+	InjectIframes       *bool  `json:"injectIframes,omitempty"`
+	Ecommerce           *bool  `json:"ecommerce,omitempty"`
+	HideQueryParams     *bool  `json:"hideQueryParams,omitempty"`
+	HideIpAddress       *bool  `json:"hideIPAddress,omitempty"`
+	HideUserAgent       *bool  `json:"hideUserAgent,omitempty"`
+	HideExternalReferer *bool  `json:"hideExternalReferer,omitempty"`
 	CookieDomain        string `json:"cookieDomain,omitempty"`
 	InitPath            string `json:"initPath,omitempty"`
 	ScriptPath          string `json:"scriptPath,omitempty"`
@@ -62,7 +61,7 @@ const (
 
 type Tool struct {
 	BlockingTriggers []string       `json:"blockingTriggers"`
-	Enabled          bool           `json:"enabled"`
+	Enabled          *bool          `json:"enabled"`
 	DefaultFields    map[string]any `json:"defaultFields"`
 	Name             string         `json:"name"`
 	NeoEvents        []NeoEvent     `json:"neoEvents"`
@@ -106,7 +105,7 @@ type RuleSettings struct {
 	WaitForTags int          `json:"waitForTags,omitempty"`
 	Interval    int          `json:"interval,omitempty"`
 	Limit       int          `json:"limit,omitempty"`
-	Validate    bool         `json:"validate,omitempty"`
+	Validate    *bool        `json:"validate,omitempty"`
 	Variable    string       `json:"variable,omitempty"`
 	Match       string       `json:"match,omitempty"`
 	Positions   string       `json:"positions,omitempty"`
@@ -164,7 +163,7 @@ type PurposeWithTranslations struct {
 }
 
 type Consent struct {
-	Enabled                               bool                               `json:"enabled"`
+	Enabled                               *bool                              `json:"enabled"`
 	ButtonTextTranslations                ButtonTextTranslations             `json:"buttonTextTranslations,omitempty"`
 	CompanyEmail                          string                             `json:"companyEmail,omitempty"`
 	CompanyName                           string                             `json:"companyName,omitempty"`
@@ -173,9 +172,9 @@ type Consent struct {
 	ConsentModalIntroHTMLWithTranslations map[string]string                  `json:"consentModalIntroHTMLWithTranslations,omitempty"`
 	CookieName                            string                             `json:"cookieName,omitempty"`
 	CustomCSS                             string                             `json:"customCSS,omitempty"`
-	CustomIntroDisclaimerDismissed        bool                               `json:"customIntroDisclaimerDismissed,omitempty"`
+	CustomIntroDisclaimerDismissed        *bool                              `json:"customIntroDisclaimerDismissed,omitempty"`
 	DefaultLanguage                       string                             `json:"defaultLanguage,omitempty"`
-	HideModal                             bool                               `json:"hideModal,omitempty"`
+	HideModal                             *bool                              `json:"hideModal,omitempty"`
 	Purposes                              map[string]Purpose                 `json:"purposes,omitempty"`
 	PurposesWithTranslations              map[string]PurposeWithTranslations `json:"purposesWithTranslations,omitempty"`
 }

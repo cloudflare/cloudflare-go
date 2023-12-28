@@ -12,19 +12,22 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+var trueValue bool = true
+var falseValue bool = false
+
 var expectedConfig ZarazConfig = ZarazConfig{
 	DebugKey:      "cheese",
 	ZarazVersion:  44,
-	DataLayer:     true,
+	DataLayer:     &trueValue,
 	Dlp:           []any{},
-	HistoryChange: true,
+	HistoryChange: &trueValue,
 	Settings: ConfigSettings{
-		AutoInjectScript: true,
+		AutoInjectScript: &trueValue,
 	},
 	Tools: map[string]Tool{
 		"PBQr": {
 			BlockingTriggers: []string{},
-			Enabled:          true,
+			Enabled:          &trueValue,
 			DefaultFields:    map[string]any{},
 			Name:             "Custom HTML",
 			NeoEvents: []NeoEvent{
@@ -78,7 +81,7 @@ var expectedConfig ZarazConfig = ZarazConfig{
 		},
 	},
 	Consent: Consent{
-		Enabled: true,
+		Enabled: &trueValue,
 		ButtonTextTranslations: ButtonTextTranslations{
 			AcceptAll:        map[string]string{"en": "Accept ALL"},
 			ConfirmMyChoices: map[string]string{"en": "YES!"},
@@ -88,9 +91,9 @@ var expectedConfig ZarazConfig = ZarazConfig{
 		ConsentModalIntroHTMLWithTranslations: map[string]string{"en": "Lorem ipsum dolar set Amet?"},
 		CookieName:                            "zaraz-consent",
 		CustomCSS:                             ".test {\n    color: red;\n}",
-		CustomIntroDisclaimerDismissed:        true,
+		CustomIntroDisclaimerDismissed:        &trueValue,
 		DefaultLanguage:                       "en",
-		HideModal:                             false,
+		HideModal:                             &falseValue,
 		PurposesWithTranslations: map[string]PurposeWithTranslations{
 			"rJJC": {
 				Description: map[string]string{"en": "Blah blah"},
