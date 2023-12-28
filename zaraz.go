@@ -202,11 +202,11 @@ type UpdateZarazWorkflowParams = string
 type PublishZarazConfigParams = string
 
 type ZarazHistoryRecord struct {
-	ID          int64     `json:"id,omitempty"`
-	UserId      string    `json:"userId,omitempty"`
-	Description string    `json:"description,omitempty"`
-	CreatedAt   time.Time `json:"createdAt,omitempty"`
-	UpdatedAt   time.Time `json:"updatedAt,omitempty"`
+	ID          int64      `json:"id,omitempty"`
+	UserId      string     `json:"userId,omitempty"`
+	Description string     `json:"description,omitempty"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
 }
 
 type ZarazConfigHistoryListResponse struct {

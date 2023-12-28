@@ -581,17 +581,17 @@ func TestGetZarazConfigHistoryList(t *testing.T) {
 	updatedAt, _ := time.Parse(time.RFC3339, "2023-01-01T05:20:00Z")
 	want := []ZarazHistoryRecord{
 		{
-			CreatedAt:   createdAt,
+			CreatedAt:   &createdAt,
 			Description: "test 1",
 			ID:          1005736,
-			UpdatedAt:   updatedAt,
+			UpdatedAt:   &updatedAt,
 			UserId:      "9ceddf6f117afe04c64716c83468d3a4",
 		},
 		{
-			CreatedAt:   createdAt,
+			CreatedAt:   &createdAt,
 			Description: "test 2",
 			ID:          1005735,
-			UpdatedAt:   updatedAt,
+			UpdatedAt:   &updatedAt,
 			UserId:      "9ceddf6f117afe04c64716c83468d3a4",
 		},
 	}
