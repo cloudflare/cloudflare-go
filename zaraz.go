@@ -201,21 +201,21 @@ type UpdateZarazWorkflowParams = string
 
 type PublishZarazConfigParams = string
 
-type ZarazHistoryRow struct {
-	ID          int64      `json:"id,omitempty"`
-	UserId      string     `json:"usedId,omitempty"`
-	Description string     `json:"description,omitempty"`
-	CreatedAt   *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+type ZarazHistoryRecord struct {
+	ID          int64     `json:"id,omitempty"`
+	UserId      string    `json:"userId,omitempty"`
+	Description string    `json:"description,omitempty"`
+	CreatedAt   time.Time `json:"createdAt,omitempty"`
+	UpdatedAt   time.Time `json:"updatedAt,omitempty"`
 }
 
-type GetZarazConfigHistoryListResponse struct {
-	Result []ZarazHistoryRow `json:"result"`
+type ZarazConfigHistoryListResponse struct {
+	Result []ZarazHistoryRecord `json:"result"`
 	Response
 	ResultInfo `json:"result_info"`
 }
 
-type GetZarazConfigHistoryListParams struct {
+type ListZarazConfigHistoryParams struct {
 	ResultInfo
 }
 
@@ -324,7 +324,7 @@ func (api *API) PublishZarazConfig(ctx context.Context, rc *ResourceContainer, p
 	return response, nil
 }
 
-func (api *API) GetZarazConfigHistoryList(ctx context.Context, rc *ResourceContainer, params GetZarazConfigHistoryListParams) ([]ZarazHistoryRow, *ResultInfo, error) {
+func (api *API) ListZarazConfigHistory(ctx context.Context, rc *ResourceContainer, params ListZarazConfigHistoryParams) ([]ZarazHistoryRecord, *ResultInfo, error) {
 	if rc.Identifier == "" {
 		return nil, nil, ErrMissingZoneID
 	}
@@ -342,19 +342,19 @@ func (api *API) GetZarazConfigHistoryList(ctx context.Context, rc *ResourceConta
 		params.Page = 1
 	}
 
-	var records []ZarazHistoryRow
+	var records []ZarazHistoryRecord
 	var lastResultInfo ResultInfo
 
 	for {
 		uri := buildURI(fmt.Sprintf("/zones/%s/settings/zaraz/v2/history", rc.Identifier), params)
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
-			return []ZarazHistoryRow{}, &ResultInfo{}, err
+			return []ZarazHistoryRecord{}, &ResultInfo{}, err
 		}
-		var listResponse GetZarazConfigHistoryListResponse
+		var listResponse ZarazConfigHistoryListResponse
 		err = json.Unmarshal(res, &listResponse)
 		if err != nil {
-			return []ZarazHistoryRow{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+			return []ZarazHistoryRecord{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 		}
 		records = append(records, listResponse.Result...)
 		lastResultInfo = listResponse.ResultInfo

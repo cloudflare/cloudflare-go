@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -547,23 +548,63 @@ func TestGetZarazConfigHistoryList(t *testing.T) {
 
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
-			"count": 1,
-			"data": [
-				{
-					"createdAt": "2023-12-19T19:24:42.779683Z",
-					"description": "Moving to Preview & Publish workflow",
-					"id": 1005135,
-					"updatedAt": "2023-12-19T19:24:42.779683Z",
-					"userId": "9ceddf6f117afe04c64716c83468d3a4"
-				}
-			]
-		}`)
+			"result": [
+			  {
+				"createdAt": "2023-01-01T05:20:00Z",
+				"description": "test 1",
+				"id": 1005736,
+				"updatedAt": "2023-01-01T05:20:00Z",
+				"userId": "9ceddf6f117afe04c64716c83468d3a4"
+			  },
+			  {
+				"createdAt": "2023-01-01T05:20:00Z",
+				"description": "test 2",
+				"id": 1005735,
+				"updatedAt": "2023-01-01T05:20:00Z",
+				"userId": "9ceddf6f117afe04c64716c83468d3a4"
+			  }
+			],
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result_info": {
+			  "page": 1,
+			  "per_page": 2,
+			  "count": 2,
+			  "total_count": 8
+			}
+		  }`)
 	}
 
 	mux.HandleFunc("/zones/"+testZoneID+"/settings/zaraz/v2/history", handler)
+	createdAt, _ := time.Parse(time.RFC3339, "2023-01-01T05:20:00Z")
+	updatedAt, _ := time.Parse(time.RFC3339, "2023-01-01T05:20:00Z")
+	want := []ZarazHistoryRecord{
+		{
+			CreatedAt:   createdAt,
+			Description: "test 1",
+			ID:          1005736,
+			UpdatedAt:   updatedAt,
+			UserId:      "9ceddf6f117afe04c64716c83468d3a4",
+		},
+		{
+			CreatedAt:   createdAt,
+			Description: "test 2",
+			ID:          1005735,
+			UpdatedAt:   updatedAt,
+			UserId:      "9ceddf6f117afe04c64716c83468d3a4",
+		},
+	}
 
-	_, _, err := client.GetZarazConfigHistoryList(context.Background(), ZoneIdentifier(testZoneID), GetZarazConfigHistoryListParams{})
+	actual, _, err := client.ListZarazConfigHistory(context.Background(), ZoneIdentifier(testZoneID), ListZarazConfigHistoryParams{
+		ResultInfo: ResultInfo{
+			PerPage: 2,
+		},
+	})
+
 	require.NoError(t, err)
+
+	assert.Equal(t, want, actual)
 }
 
 func TestGetDefaultZarazConfig(t *testing.T) {
