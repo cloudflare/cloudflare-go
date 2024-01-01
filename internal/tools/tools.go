@@ -18,7 +18,7 @@ package tools
 //go:generate go install github.com/uudashr/gopkgs/v2/cmd/gopkgs
 //go:generate go install golang.org/x/lint/golint
 //go:generate go install golang.org/x/oauth2
-//go:generate go install golang.org/x/tools/gopls
+//go:generate go install golang.org/x/tools/gopls@latest
 //go:generate go install golang.org/x/tools/cmd/goimports@latest
 
 import (
