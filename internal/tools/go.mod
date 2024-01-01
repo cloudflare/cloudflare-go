@@ -1,6 +1,6 @@
 module github.com/cloudflare/cloudflare-go/internal/tools
 
-go 1.18
+go 1.19
 
 require (
 	github.com/breml/bidichk v0.2.3
@@ -19,6 +19,7 @@ require (
 	github.com/uudashr/gopkgs/v2 v2.1.2
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616
 	golang.org/x/oauth2 v0.0.0-20220822191816-0ebed06d0094
+	golang.org/x/tools v0.13.0
 	golang.org/x/tools/gopls v0.9.4
 )
 
@@ -232,7 +233,6 @@ require (
 	golang.org/x/sys v0.15.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/time v0.0.0-20220224211638-0e9765cccd65 // indirect
-	golang.org/x/tools v0.13.0 // indirect
 	golang.org/x/vuln v0.0.0-20220725105440-4151a5aca1df // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
