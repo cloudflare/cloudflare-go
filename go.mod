@@ -1,6 +1,6 @@
 module github.com/cloudflare/cloudflare-go
 
-go 1.18
+go 1.19
 
 require (
 	github.com/goccy/go-json v0.10.2
@@ -8,7 +8,7 @@ require (
 	github.com/hashicorp/go-retryablehttp v0.7.5
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/stretchr/testify v1.8.4
-	github.com/urfave/cli/v2 v2.26.0
+	github.com/urfave/cli/v2 v2.27.1
 	golang.org/x/net v0.19.0
 	golang.org/x/time v0.5.0
 )

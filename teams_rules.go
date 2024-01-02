@@ -63,6 +63,8 @@ type TeamsRuleSettings struct {
 
 	// Resolver policy settings.
 	DnsResolverSettings *TeamsDnsResolverSettings `json:"dns_resolvers,omitempty"`
+
+	NotificationSettings *TeamsNotificationSettings `json:"notification_settings"`
 }
 
 type TeamsGatewayUntrustedCertAction string
@@ -75,6 +77,12 @@ const (
 
 type UntrustedCertSettings struct {
 	Action TeamsGatewayUntrustedCertAction `json:"action"`
+}
+
+type TeamsNotificationSettings struct {
+	Enabled    *bool  `json:"enabled,omitempty"`
+	Message    string `json:"msg"`
+	SupportURL string `json:"support_url"`
 }
 
 type AuditSSHRuleSettings struct {

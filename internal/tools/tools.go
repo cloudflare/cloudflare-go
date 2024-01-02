@@ -36,7 +36,7 @@ import (
 	_ "github.com/securego/gosec/v2/cmd/gosec"
 	_ "github.com/uudashr/gopkgs/v2/cmd/gopkgs"
 	_ "golang.org/x/lint/golint"
-	_ "golang.org/x/tools/cmd/goimports@latest"
+	_ "golang.org/x/tools/cmd/goimports"
 	_ "golang.org/x/tools/gopls"
 
 	// used for changelog-check tooling

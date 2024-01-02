@@ -1,4 +1,12 @@
-## 0.84.0 (Unreleased)
+## 0.85.0 (Unreleased)
+
+DEPENDENCIES:
+
+* deps: bumps github.com/go-git/go-git/v5 from 5.4.2 to 5.11.0 ([#1470](https://github.com/cloudflare/cloudflare-go/issues/1470))
+* deps: bumps github.com/urfave/cli/v2 from 2.26.0 to 2.27.0 ([#1471](https://github.com/cloudflare/cloudflare-go/issues/1471))
+* deps: bumps github.com/urfave/cli/v2 from 2.27.0 to 2.27.1 ([#1472](https://github.com/cloudflare/cloudflare-go/issues/1472))
+
+## 0.84.0 (December 20th, 2023)
 
 ENHANCEMENTS:
 
