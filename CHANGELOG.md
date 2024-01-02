@@ -1,4 +1,6 @@
-## 0.85.0 (Unreleased)
+## 0.86.0 (Unreleased)
+
+## 0.85.0 (January 3rd, 2024)
 
 DEPENDENCIES:
 
