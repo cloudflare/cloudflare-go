@@ -21,16 +21,16 @@ var expectedConfig ZarazConfig = ZarazConfig{
 	DataLayer:     &trueValue,
 	Dlp:           []any{},
 	HistoryChange: &trueValue,
-	Settings: ConfigSettings{
+	Settings: ZarazConfigSettings{
 		AutoInjectScript: &trueValue,
 	},
-	Tools: map[string]Tool{
+	Tools: map[string]ZarazTool{
 		"PBQr": {
 			BlockingTriggers: []string{},
 			Enabled:          &trueValue,
 			DefaultFields:    map[string]any{},
 			Name:             "Custom HTML",
-			NeoEvents: []NeoEvent{
+			NeoEvents: []ZarazNeoEvent{
 				{
 					ActionType:       "event",
 					BlockingTriggers: []string{},
@@ -41,38 +41,38 @@ var expectedConfig ZarazConfig = ZarazConfig{
 					FiringTriggers: []string{"Pageview"},
 				},
 			},
-			Type:           ToolComponent,
+			Type:           ZarazToolComponent,
 			DefaultPurpose: "rJJC",
 			Component:      "html",
 			Permissions:    []string{"execute_unsafe_scripts"},
 			Settings:       map[string]any{},
 		},
 	},
-	Triggers: map[string]Trigger{
+	Triggers: map[string]ZarazTrigger{
 		"Pageview": {
 			Name:         "Pageview",
 			Description:  "All page loads",
-			LoadRules:    []TriggerRule{{Match: "{{ client.__zarazTrack }}", Op: "EQUALS", Value: "Pageview"}},
-			ExcludeRules: []TriggerRule{},
+			LoadRules:    []ZarazTriggerRule{{Match: "{{ client.__zarazTrack }}", Op: "EQUALS", Value: "Pageview"}},
+			ExcludeRules: []ZarazTriggerRule{},
 			ClientRules:  []any{},
-			System:       Pageload,
+			System:       ZarazPageload,
 		},
 		"TFOl": {
 			Name:         "test",
 			Description:  "",
-			LoadRules:    []TriggerRule{{Id: "Kqsc", Match: "test", Op: "CONTAINS", Value: "test"}, {Id: "EDnV", Action: ClickListener, Settings: RuleSettings{Selector: "test", Type: Css}}},
-			ExcludeRules: []TriggerRule{},
+			LoadRules:    []ZarazTriggerRule{{Id: "Kqsc", Match: "test", Op: "CONTAINS", Value: "test"}, {Id: "EDnV", Action: ZarazClickListener, Settings: ZarazRuleSettings{Selector: "test", Type: ZarazCSS}}},
+			ExcludeRules: []ZarazTriggerRule{},
 		},
 	},
-	Variables: map[string]Variable{
+	Variables: map[string]ZarazVariable{
 		"jwIx": {
 			Name:  "test",
-			Type:  VarString,
+			Type:  ZarazVarString,
 			Value: "sss",
 		},
 		"pAuL": {
 			Name: "test-worker-var",
-			Type: VarWorker,
+			Type: ZarazVarWorker,
 			Value: map[string]interface{}{
 				"escapedWorkerName": "worker-var-example",
 				"mutableId":         "m.zpt3q__WyW-61WM2qwgGoBl4Nxg-sfBsaMhu9NayjwU",
@@ -80,9 +80,9 @@ var expectedConfig ZarazConfig = ZarazConfig{
 			},
 		},
 	},
-	Consent: Consent{
+	Consent: ZarazConsent{
 		Enabled: &trueValue,
-		ButtonTextTranslations: ButtonTextTranslations{
+		ButtonTextTranslations: ZarazButtonTextTranslations{
 			AcceptAll:        map[string]string{"en": "Accept ALL"},
 			ConfirmMyChoices: map[string]string{"en": "YES!"},
 			RejectAll:        map[string]string{"en": "Reject ALL"},
@@ -94,7 +94,7 @@ var expectedConfig ZarazConfig = ZarazConfig{
 		CustomIntroDisclaimerDismissed:        &trueValue,
 		DefaultLanguage:                       "en",
 		HideModal:                             &falseValue,
-		PurposesWithTranslations: map[string]PurposeWithTranslations{
+		PurposesWithTranslations: map[string]ZarazPurposeWithTranslations{
 			"rJJC": {
 				Description: map[string]string{"en": "Blah blah"},
 				Name:        map[string]string{"en": "Analytics"},
@@ -420,9 +420,97 @@ func TestUpdateZarazConfig(t *testing.T) {
 	}
 
 	mux.HandleFunc("/zones/"+testZoneID+"/settings/zaraz/v2/config", handler)
-	payload := expectedConfig
+	payload := UpdateZarazConfigParams{
+		DebugKey:      "cheese",
+		ZarazVersion:  44,
+		DataLayer:     &trueValue,
+		Dlp:           []any{},
+		HistoryChange: &trueValue,
+		Settings: ZarazConfigSettings{
+			AutoInjectScript: &trueValue,
+		},
+		Tools: map[string]ZarazTool{
+			"PBQr": {
+				BlockingTriggers: []string{},
+				Enabled:          &trueValue,
+				DefaultFields:    map[string]any{},
+				Name:             "Custom HTML",
+				NeoEvents: []ZarazNeoEvent{
+					{
+						ActionType:       "event",
+						BlockingTriggers: []string{},
+						Data: map[string]any{
+							"__zaraz_setting_name": "pageview1",
+							"htmlCode":             "<script>console.log('pageview')</script>",
+						},
+						FiringTriggers: []string{"Pageview"},
+					},
+				},
+				Type:           ZarazToolComponent,
+				DefaultPurpose: "rJJC",
+				Component:      "html",
+				Permissions:    []string{"execute_unsafe_scripts"},
+				Settings:       map[string]any{},
+			},
+		},
+		Triggers: map[string]ZarazTrigger{
+			"Pageview": {
+				Name:         "Pageview",
+				Description:  "All page loads",
+				LoadRules:    []ZarazTriggerRule{{Match: "{{ client.__zarazTrack }}", Op: "EQUALS", Value: "Pageview"}},
+				ExcludeRules: []ZarazTriggerRule{},
+				ClientRules:  []any{},
+				System:       ZarazPageload,
+			},
+			"TFOl": {
+				Name:         "test",
+				Description:  "",
+				LoadRules:    []ZarazTriggerRule{{Id: "Kqsc", Match: "test", Op: "CONTAINS", Value: "test"}, {Id: "EDnV", Action: ZarazClickListener, Settings: ZarazRuleSettings{Selector: "test", Type: ZarazCSS}}},
+				ExcludeRules: []ZarazTriggerRule{},
+			},
+		},
+		Variables: map[string]ZarazVariable{
+			"jwIx": {
+				Name:  "test",
+				Type:  ZarazVarString,
+				Value: "sss",
+			},
+			"pAuL": {
+				Name: "test-worker-var",
+				Type: ZarazVarWorker,
+				Value: map[string]interface{}{
+					"escapedWorkerName": "worker-var-example",
+					"mutableId":         "m.zpt3q__WyW-61WM2qwgGoBl4Nxg-sfBsaMhu9NayjwU",
+					"workerTag":         "68aba570db9d4ec5b159624e2f7ad8bf",
+				},
+			},
+		},
+		Consent: ZarazConsent{
+			Enabled: &trueValue,
+			ButtonTextTranslations: ZarazButtonTextTranslations{
+				AcceptAll:        map[string]string{"en": "Accept ALL"},
+				ConfirmMyChoices: map[string]string{"en": "YES!"},
+				RejectAll:        map[string]string{"en": "Reject ALL"},
+			},
+			CompanyEmail:                          "email@example.com",
+			ConsentModalIntroHTMLWithTranslations: map[string]string{"en": "Lorem ipsum dolar set Amet?"},
+			CookieName:                            "zaraz-consent",
+			CustomCSS:                             ".test {\n    color: red;\n}",
+			CustomIntroDisclaimerDismissed:        &trueValue,
+			DefaultLanguage:                       "en",
+			HideModal:                             &falseValue,
+			PurposesWithTranslations: map[string]ZarazPurposeWithTranslations{
+				"rJJC": {
+					Description: map[string]string{"en": "Blah blah"},
+					Name:        map[string]string{"en": "Analytics"},
+					Order:       0,
+				},
+			},
+		},
+	}
 	payload.DebugKey = "butter" // Updating config
-	modifiedConfig := payload
+	modifiedConfig := expectedConfig
+	modifiedConfig.DebugKey = "butter" // Updating config
 	expected := ZarazConfigResponse{
 		Result: modifiedConfig,
 	}
