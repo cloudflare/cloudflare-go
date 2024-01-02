@@ -588,14 +588,14 @@ func TestGetZarazConfigHistoryList(t *testing.T) {
 			Description: "test 1",
 			ID:          1005736,
 			UpdatedAt:   &updatedAt,
-			UserId:      "9ceddf6f117afe04c64716c83468d3a4",
+			UserID:      "9ceddf6f117afe04c64716c83468d3a4",
 		},
 		{
 			CreatedAt:   &createdAt,
 			Description: "test 2",
 			ID:          1005735,
 			UpdatedAt:   &updatedAt,
-			UserId:      "9ceddf6f117afe04c64716c83468d3a4",
+			UserID:      "9ceddf6f117afe04c64716c83468d3a4",
 		},
 	}
 
