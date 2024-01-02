@@ -10,173 +10,173 @@ import (
 )
 
 type ZarazConfig struct {
-	DebugKey      string              `json:"debugKey"`
-	Tools         map[string]Tool     `json:"tools"`
-	Triggers      map[string]Trigger  `json:"triggers"`
-	ZarazVersion  int64               `json:"zarazVersion"`
-	Consent       Consent             `json:"consent,omitempty"`
-	DataLayer     *bool               `json:"dataLayer,omitempty"`
-	Dlp           []any               `json:"dlp,omitempty"`
-	HistoryChange *bool               `json:"historyChange,omitempty"`
-	Settings      ConfigSettings      `json:"settings,omitempty"`
-	Variables     map[string]Variable `json:"variables,omitempty"`
+	DebugKey      string                   `json:"debugKey"`
+	Tools         map[string]ZarazTool     `json:"tools"`
+	Triggers      map[string]ZarazTrigger  `json:"triggers"`
+	ZarazVersion  int64                    `json:"zarazVersion"`
+	Consent       ZarazConsent             `json:"consent,omitempty"`
+	DataLayer     *bool                    `json:"dataLayer,omitempty"`
+	Dlp           []any                    `json:"dlp,omitempty"`
+	HistoryChange *bool                    `json:"historyChange,omitempty"`
+	Settings      ZarazConfigSettings      `json:"settings,omitempty"`
+	Variables     map[string]ZarazVariable `json:"variables,omitempty"`
 }
 
-type Worker struct {
+type ZarazWorker struct {
 	EscapedWorkerName string `json:"escapedWorkerName"`
 	WorkerTag         string `json:"workerTag"`
 	MutableId         string `json:"mutableId,omitempty"`
 }
-type ConfigSettings struct {
-	AutoInjectScript    *bool  `json:"autoInjectScript"`
-	InjectIframes       *bool  `json:"injectIframes,omitempty"`
-	Ecommerce           *bool  `json:"ecommerce,omitempty"`
-	HideQueryParams     *bool  `json:"hideQueryParams,omitempty"`
-	HideIpAddress       *bool  `json:"hideIPAddress,omitempty"`
-	HideUserAgent       *bool  `json:"hideUserAgent,omitempty"`
-	HideExternalReferer *bool  `json:"hideExternalReferer,omitempty"`
-	CookieDomain        string `json:"cookieDomain,omitempty"`
-	InitPath            string `json:"initPath,omitempty"`
-	ScriptPath          string `json:"scriptPath,omitempty"`
-	TrackPath           string `json:"trackPath,omitempty"`
-	EventsApiPath       string `json:"eventsApiPath,omitempty"`
-	McRootPath          string `json:"mcRootPath,omitempty"`
-	ContextEnricher     Worker `json:"contextEnricher,omitempty"`
+type ZarazConfigSettings struct {
+	AutoInjectScript    *bool       `json:"autoInjectScript"`
+	InjectIframes       *bool       `json:"injectIframes,omitempty"`
+	Ecommerce           *bool       `json:"ecommerce,omitempty"`
+	HideQueryParams     *bool       `json:"hideQueryParams,omitempty"`
+	HideIpAddress       *bool       `json:"hideIPAddress,omitempty"`
+	HideUserAgent       *bool       `json:"hideUserAgent,omitempty"`
+	HideExternalReferer *bool       `json:"hideExternalReferer,omitempty"`
+	CookieDomain        string      `json:"cookieDomain,omitempty"`
+	InitPath            string      `json:"initPath,omitempty"`
+	ScriptPath          string      `json:"scriptPath,omitempty"`
+	TrackPath           string      `json:"trackPath,omitempty"`
+	EventsApiPath       string      `json:"eventsApiPath,omitempty"`
+	McRootPath          string      `json:"mcRootPath,omitempty"`
+	ContextEnricher     ZarazWorker `json:"contextEnricher,omitempty"`
 }
 
-type NeoEvent struct {
+type ZarazNeoEvent struct {
 	BlockingTriggers []string       `json:"blockingTriggers"`
 	FiringTriggers   []string       `json:"firingTriggers"`
 	Data             map[string]any `json:"data"`
 	ActionType       string         `json:"actionType,omitempty"`
 }
 
-type ToolType string
+type ZarazToolType string
 
 const (
-	ToolLibrary   ToolType = "library"
-	ToolComponent ToolType = "component"
-	ToolCustomMc  ToolType = "custom-mc"
+	ZarazToolLibrary   ZarazToolType = "library"
+	ZarazToolComponent ZarazToolType = "component"
+	ZarazToolCustomMc  ZarazToolType = "custom-mc"
 )
 
-type Tool struct {
-	BlockingTriggers []string       `json:"blockingTriggers"`
-	Enabled          *bool          `json:"enabled"`
-	DefaultFields    map[string]any `json:"defaultFields"`
-	Name             string         `json:"name"`
-	NeoEvents        []NeoEvent     `json:"neoEvents"`
-	Type             ToolType       `json:"type"`
-	DefaultPurpose   string         `json:"defaultPurpose,omitempty"`
-	Library          string         `json:"library,omitempty"`
-	Component        string         `json:"component,omitempty"`
-	Permissions      []string       `json:"permissions,omitempty"`
-	Settings         map[string]any `json:"settings,omitempty"`
-	Worker           Worker         `json:"worker,omitempty"`
+type ZarazTool struct {
+	BlockingTriggers []string        `json:"blockingTriggers"`
+	Enabled          *bool           `json:"enabled"`
+	DefaultFields    map[string]any  `json:"defaultFields"`
+	Name             string          `json:"name"`
+	NeoEvents        []ZarazNeoEvent `json:"neoEvents"`
+	Type             ZarazToolType   `json:"type"`
+	DefaultPurpose   string          `json:"defaultPurpose,omitempty"`
+	Library          string          `json:"library,omitempty"`
+	Component        string          `json:"component,omitempty"`
+	Permissions      []string        `json:"permissions,omitempty"`
+	Settings         map[string]any  `json:"settings,omitempty"`
+	Worker           ZarazWorker     `json:"worker,omitempty"`
 }
 
-type TriggerSystem string
+type ZarazTriggerSystem string
 
-const Pageload TriggerSystem = "pageload"
+const ZarazPageload ZarazTriggerSystem = "pageload"
 
-type LoadRuleOp string
+type ZarazLoadRuleOp string
 
-type RuleType string
+type ZarazRuleType string
 
 const (
-	ClickListener     RuleType = "clickListener"
-	Timer             RuleType = "timer"
-	FormSubmission    RuleType = "formSubmission"
-	VariableMatch     RuleType = "variableMatch"
-	ScrollDepth       RuleType = "scrollDepth"
-	ElementVisibility RuleType = "elementVisibility"
-	ClientEval        RuleType = "clientEval"
+	ZarazClickListener     ZarazRuleType = "clickListener"
+	ZarazTimer             ZarazRuleType = "timer"
+	ZarazFormSubmission    ZarazRuleType = "formSubmission"
+	ZarazVariableMatch     ZarazRuleType = "variableMatch"
+	ZarazScrollDepth       ZarazRuleType = "scrollDepth"
+	ZarazElementVisibility ZarazRuleType = "elementVisibility"
+	ZarazClientEval        ZarazRuleType = "clientEval"
 )
 
-type SelectorType string
+type ZarazSelectorType string
 
 const (
-	Xpath SelectorType = "xpath"
-	Css   SelectorType = "css"
+	ZarazXPath ZarazSelectorType = "xpath"
+	ZarazCSS   ZarazSelectorType = "css"
 )
 
-type RuleSettings struct {
-	Type        SelectorType `json:"type,omitempty"`
-	Selector    string       `json:"selector,omitempty"`
-	WaitForTags int          `json:"waitForTags,omitempty"`
-	Interval    int          `json:"interval,omitempty"`
-	Limit       int          `json:"limit,omitempty"`
-	Validate    *bool        `json:"validate,omitempty"`
-	Variable    string       `json:"variable,omitempty"`
-	Match       string       `json:"match,omitempty"`
-	Positions   string       `json:"positions,omitempty"`
-	Op          LoadRuleOp   `json:"op,omitempty"`
-	Value       string       `json:"value,omitempty"`
+type ZarazRuleSettings struct {
+	Type        ZarazSelectorType `json:"type,omitempty"`
+	Selector    string            `json:"selector,omitempty"`
+	WaitForTags int               `json:"waitForTags,omitempty"`
+	Interval    int               `json:"interval,omitempty"`
+	Limit       int               `json:"limit,omitempty"`
+	Validate    *bool             `json:"validate,omitempty"`
+	Variable    string            `json:"variable,omitempty"`
+	Match       string            `json:"match,omitempty"`
+	Positions   string            `json:"positions,omitempty"`
+	Op          ZarazLoadRuleOp   `json:"op,omitempty"`
+	Value       string            `json:"value,omitempty"`
 }
 
-type TriggerRule struct {
-	Id       string       `json:"id"`
-	Match    string       `json:"match,omitempty"`
-	Op       LoadRuleOp   `json:"op,omitempty"`
-	Value    string       `json:"value,omitempty"`
-	Action   RuleType     `json:"action"`
-	Settings RuleSettings `json:"settings"`
+type ZarazTriggerRule struct {
+	Id       string            `json:"id"`
+	Match    string            `json:"match,omitempty"`
+	Op       ZarazLoadRuleOp   `json:"op,omitempty"`
+	Value    string            `json:"value,omitempty"`
+	Action   ZarazRuleType     `json:"action"`
+	Settings ZarazRuleSettings `json:"settings"`
 }
 
-type Trigger struct {
-	Name         string        `json:"name"`
-	Description  string        `json:"description,omitempty"`
-	LoadRules    []TriggerRule `json:"loadRules"`
-	ExcludeRules []TriggerRule `json:"excludeRules"`
-	ClientRules  []any         `json:"clientRules,omitempty"` // what is this?
-	System       TriggerSystem `json:"system,omitempty"`
+type ZarazTrigger struct {
+	Name         string             `json:"name"`
+	Description  string             `json:"description,omitempty"`
+	LoadRules    []ZarazTriggerRule `json:"loadRules"`
+	ExcludeRules []ZarazTriggerRule `json:"excludeRules"`
+	ClientRules  []any              `json:"clientRules,omitempty"` // what is this?
+	System       ZarazTriggerSystem `json:"system,omitempty"`
 }
 
-type VariableType string
+type ZarazVariableType string
 
 const (
-	VarString VariableType = "string"
-	VarSecret VariableType = "secret"
-	VarWorker VariableType = "worker"
+	ZarazVarString ZarazVariableType = "string"
+	ZarazVarSecret ZarazVariableType = "secret"
+	ZarazVarWorker ZarazVariableType = "worker"
 )
 
-type Variable struct {
-	Name  string       `json:"name"`
-	Type  VariableType `json:"type"`
-	Value interface{}  `json:"value"`
+type ZarazVariable struct {
+	Name  string            `json:"name"`
+	Type  ZarazVariableType `json:"type"`
+	Value interface{}       `json:"value"`
 }
 
-type ButtonTextTranslations struct {
+type ZarazButtonTextTranslations struct {
 	AcceptAll        map[string]string `json:"accept_all"`
 	RejectAll        map[string]string `json:"reject_all"`
 	ConfirmMyChoices map[string]string `json:"confirm_my_choices"`
 }
 
-type Purpose struct {
+type ZarazPurpose struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 }
 
-type PurposeWithTranslations struct {
+type ZarazPurposeWithTranslations struct {
 	Name        map[string]string `json:"name"`
 	Description map[string]string `json:"description"`
 	Order       int               `json:"order"`
 }
 
-type Consent struct {
-	Enabled                               *bool                              `json:"enabled"`
-	ButtonTextTranslations                ButtonTextTranslations             `json:"buttonTextTranslations,omitempty"`
-	CompanyEmail                          string                             `json:"companyEmail,omitempty"`
-	CompanyName                           string                             `json:"companyName,omitempty"`
-	CompanyStreetAddress                  string                             `json:"companyStreetAddress,omitempty"`
-	ConsentModalIntroHTML                 string                             `json:"consentModalIntroHTML,omitempty"`
-	ConsentModalIntroHTMLWithTranslations map[string]string                  `json:"consentModalIntroHTMLWithTranslations,omitempty"`
-	CookieName                            string                             `json:"cookieName,omitempty"`
-	CustomCSS                             string                             `json:"customCSS,omitempty"`
-	CustomIntroDisclaimerDismissed        *bool                              `json:"customIntroDisclaimerDismissed,omitempty"`
-	DefaultLanguage                       string                             `json:"defaultLanguage,omitempty"`
-	HideModal                             *bool                              `json:"hideModal,omitempty"`
-	Purposes                              map[string]Purpose                 `json:"purposes,omitempty"`
-	PurposesWithTranslations              map[string]PurposeWithTranslations `json:"purposesWithTranslations,omitempty"`
+type ZarazConsent struct {
+	Enabled                               *bool                                   `json:"enabled"`
+	ButtonTextTranslations                ZarazButtonTextTranslations             `json:"buttonTextTranslations,omitempty"`
+	CompanyEmail                          string                                  `json:"companyEmail,omitempty"`
+	CompanyName                           string                                  `json:"companyName,omitempty"`
+	CompanyStreetAddress                  string                                  `json:"companyStreetAddress,omitempty"`
+	ConsentModalIntroHTML                 string                                  `json:"consentModalIntroHTML,omitempty"`
+	ConsentModalIntroHTMLWithTranslations map[string]string                       `json:"consentModalIntroHTMLWithTranslations,omitempty"`
+	CookieName                            string                                  `json:"cookieName,omitempty"`
+	CustomCSS                             string                                  `json:"customCSS,omitempty"`
+	CustomIntroDisclaimerDismissed        *bool                                   `json:"customIntroDisclaimerDismissed,omitempty"`
+	DefaultLanguage                       string                                  `json:"defaultLanguage,omitempty"`
+	HideModal                             *bool                                   `json:"hideModal,omitempty"`
+	Purposes                              map[string]ZarazPurpose                 `json:"purposes,omitempty"`
+	PurposesWithTranslations              map[string]ZarazPurposeWithTranslations `json:"purposesWithTranslations,omitempty"`
 }
 
 type ZarazConfigResponse struct {
@@ -194,11 +194,22 @@ type ZarazPublishResponse struct {
 	Response
 }
 
-type UpdateZarazConfigParams = ZarazConfig
+type UpdateZarazConfigParams struct {
+	DebugKey      string                   `json:"debugKey"`
+	Tools         map[string]ZarazTool     `json:"tools"`
+	Triggers      map[string]ZarazTrigger  `json:"triggers"`
+	ZarazVersion  int64                    `json:"zarazVersion"`
+	Consent       ZarazConsent             `json:"consent,omitempty"`
+	DataLayer     *bool                    `json:"dataLayer,omitempty"`
+	Dlp           []any                    `json:"dlp,omitempty"`
+	HistoryChange *bool                    `json:"historyChange,omitempty"`
+	Settings      ZarazConfigSettings      `json:"settings,omitempty"`
+	Variables     map[string]ZarazVariable `json:"variables,omitempty"`
+}
 
-type UpdateZarazWorkflowParams = string
+type UpdateZarazWorkflowParams struct{}
 
-type PublishZarazConfigParams = string
+type PublishZarazConfigParams struct{}
 
 type ZarazHistoryRecord struct {
 	ID          int64      `json:"id,omitempty"`
