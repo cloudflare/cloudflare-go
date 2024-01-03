@@ -1,5 +1,9 @@
 ## 0.86.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* zaraz: Add support for CRUD APIs ([#1474](https://github.com/cloudflare/cloudflare-go/issues/1474))
+
 ## 0.85.0 (January 3rd, 2024)
 
 DEPENDENCIES:
