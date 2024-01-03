@@ -558,13 +558,15 @@ func TestUpdateZarazWorkflow(t *testing.T) {
 	setup()
 	defer teardown()
 
-	payload := "realtime"
+	payload := UpdateZarazWorkflowParams{
+		Workflow: "realtime",
+	}
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		body, _ := io.ReadAll(r.Body)
 		bodyString := string(body)
-		assert.Equal(t, fmt.Sprintf("\"%s\"", payload), bodyString)
+		assert.Equal(t, fmt.Sprintf("\"%s\"", payload.Workflow), bodyString)
 
 		w.Header().Set("Content-Type", "application/json")
 		fmt.Fprint(w, `{
@@ -596,13 +598,15 @@ func TestPublishZarazConfig(t *testing.T) {
 	setup()
 	defer teardown()
 
-	payload := "test description"
+	payload := PublishZarazConfigParams{
+		Description: "test description",
+	}
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		body, _ := io.ReadAll(r.Body)
 		bodyString := string(body)
-		assert.Equal(t, fmt.Sprintf("\"%s\"", payload), bodyString)
+		assert.Equal(t, fmt.Sprintf("\"%s\"", payload.Description), bodyString)
 
 		w.Header().Set("Content-Type", "application/json")
 		fmt.Fprint(w, `{

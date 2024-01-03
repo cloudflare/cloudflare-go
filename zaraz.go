@@ -207,9 +207,13 @@ type UpdateZarazConfigParams struct {
 	Variables     map[string]ZarazVariable `json:"variables,omitempty"`
 }
 
-type UpdateZarazWorkflowParams struct{}
+type UpdateZarazWorkflowParams struct {
+	Workflow string `json:"workflow"`
+}
 
-type PublishZarazConfigParams struct{}
+type PublishZarazConfigParams struct {
+	Description string `json:"description"`
+}
 
 type ZarazHistoryRecord struct {
 	ID          int64      `json:"id,omitempty"`
@@ -300,7 +304,7 @@ func (api *API) UpdateZarazWorkflow(ctx context.Context, rc *ResourceContainer, 
 	}
 
 	uri := fmt.Sprintf("/zones/%s/settings/zaraz/v2/workflow", rc.Identifier)
-	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params.Workflow)
 	if err != nil {
 		return ZarazWorkflowResponse{}, err
 	}
@@ -320,7 +324,7 @@ func (api *API) PublishZarazConfig(ctx context.Context, rc *ResourceContainer, p
 	}
 
 	uri := fmt.Sprintf("/zones/%s/settings/zaraz/v2/publish", rc.Identifier)
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params.Description)
 	if err != nil {
 		return ZarazPublishResponse{}, err
 	}
