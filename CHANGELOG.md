@@ -4,6 +4,10 @@ ENHANCEMENTS:
 
 * zaraz: Add support for CRUD APIs ([#1474](https://github.com/cloudflare/cloudflare-go/issues/1474))
 
+DEPENDENCIES:
+
+* deps: bumps github.com/cloudflare/circl from 1.3.3 to 1.3.7 ([#1475](https://github.com/cloudflare/cloudflare-go/issues/1475))
+
 ## 0.85.0 (January 3rd, 2024)
 
 DEPENDENCIES:
