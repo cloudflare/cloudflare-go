@@ -2,6 +2,7 @@
 
 ENHANCEMENTS:
 
+* access_application: Add support for default_relay_state in saas apps ([#1477](https://github.com/cloudflare/cloudflare-go/issues/1477))
 * zaraz: Add support for CRUD APIs ([#1474](https://github.com/cloudflare/cloudflare-go/issues/1474))
 
 DEPENDENCIES:
