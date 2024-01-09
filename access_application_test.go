@@ -646,6 +646,7 @@ func TestCreateSaasAccessApplications(t *testing.T) {
 					"consumer_service_url": "https://saas.example.com",
 					"sp_entity_id": "dash.example.com",
 					"name_id_format": "id",
+					"default_relay_state": "https://saas.example.com",
 					"custom_attributes": [
 						{
 							"name": "test1",
@@ -697,6 +698,7 @@ func TestCreateSaasAccessApplications(t *testing.T) {
 			ConsumerServiceUrl: "https://saas.example.com",
 			SPEntityID:         "dash.example.com",
 			NameIDFormat:       "id",
+			DefaultRelayState:  "https://saas.example.com",
 			CustomAttributes: []SAMLAttributeConfig{
 				{
 					Name:       "test1",

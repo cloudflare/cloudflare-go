@@ -112,6 +112,7 @@ type SaasApplication struct {
 	IDPEntityID        string                `json:"idp_entity_id,omitempty"`
 	NameIDFormat       string                `json:"name_id_format,omitempty"`
 	SSOEndpoint        string                `json:"sso_endpoint,omitempty"`
+	DefaultRelayState  string                `json:"default_relay_state,omitempty"`
 	UpdatedAt          *time.Time            `json:"updated_at,omitempty"`
 	CreatedAt          *time.Time            `json:"created_at,omitempty"`
 	CustomAttributes   []SAMLAttributeConfig `json:"custom_attributes,omitempty"`
