@@ -7,6 +7,7 @@ ENHANCEMENTS:
 DEPENDENCIES:
 
 * deps: bumps github.com/cloudflare/circl from 1.3.3 to 1.3.7 ([#1475](https://github.com/cloudflare/cloudflare-go/issues/1475))
+* deps: bumps golang.org/x/net from 0.19.0 to 0.20.0 ([#1476](https://github.com/cloudflare/cloudflare-go/issues/1476))
 
 ## 0.85.0 (January 3rd, 2024)
 
