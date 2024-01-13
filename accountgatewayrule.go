@@ -217,7 +217,7 @@ const (
 	ResponseCollectionVRHfxGdBResultActionOverride     ResponseCollectionVRHfxGdBResultAction = "override"
 	ResponseCollectionVRHfxGdBResultActionL4Override   ResponseCollectionVRHfxGdBResultAction = "l4_override"
 	ResponseCollectionVRHfxGdBResultActionEgress       ResponseCollectionVRHfxGdBResultAction = "egress"
-	ResponseCollectionVRHfxGdBResultActionAuditSsh     ResponseCollectionVRHfxGdBResultAction = "audit_ssh"
+	ResponseCollectionVRHfxGdBResultActionAuditSSH     ResponseCollectionVRHfxGdBResultAction = "audit_ssh"
 )
 
 // The protocol or layer to use.
@@ -238,7 +238,7 @@ type ResponseCollectionVRHfxGdBResultRuleSettings struct {
 	// Set by parent MSP accounts to enable their children to bypass this rule.
 	AllowChildBypass bool `json:"allow_child_bypass"`
 	// Audit ssh action settings
-	AuditSsh ResponseCollectionVRHfxGdBResultRuleSettingsAuditSsh `json:"audit_ssh"`
+	AuditSSH ResponseCollectionVRHfxGdBResultRuleSettingsAuditSSH `json:"audit_ssh"`
 	// Configure how browser isolation behaves.
 	BisoAdminControls ResponseCollectionVRHfxGdBResultRuleSettingsBisoAdminControls `json:"biso_admin_controls"`
 	// Enable the custom block page.
@@ -276,7 +276,7 @@ type ResponseCollectionVRHfxGdBResultRuleSettings struct {
 type responseCollectionVrHfxGdBResultRuleSettingsJSON struct {
 	AddHeaders                      apijson.Field
 	AllowChildBypass                apijson.Field
-	AuditSsh                        apijson.Field
+	AuditSSH                        apijson.Field
 	BisoAdminControls               apijson.Field
 	BlockPageEnabled                apijson.Field
 	BlockReason                     apijson.Field
@@ -299,21 +299,21 @@ func (r *ResponseCollectionVRHfxGdBResultRuleSettings) UnmarshalJSON(data []byte
 }
 
 // Audit ssh action settings
-type ResponseCollectionVRHfxGdBResultRuleSettingsAuditSsh struct {
+type ResponseCollectionVRHfxGdBResultRuleSettingsAuditSSH struct {
 	// Turn on SSH command logging.
 	CommandLogging bool                                                     `json:"command_logging"`
-	JSON           responseCollectionVrHfxGdBResultRuleSettingsAuditSshJSON `json:"-"`
+	JSON           responseCollectionVrHfxGdBResultRuleSettingsAuditSSHJSON `json:"-"`
 }
 
-// responseCollectionVrHfxGdBResultRuleSettingsAuditSshJSON contains the JSON
-// metadata for the struct [ResponseCollectionVRHfxGdBResultRuleSettingsAuditSsh]
-type responseCollectionVrHfxGdBResultRuleSettingsAuditSshJSON struct {
+// responseCollectionVrHfxGdBResultRuleSettingsAuditSSHJSON contains the JSON
+// metadata for the struct [ResponseCollectionVRHfxGdBResultRuleSettingsAuditSSH]
+type responseCollectionVrHfxGdBResultRuleSettingsAuditSSHJSON struct {
 	CommandLogging apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *ResponseCollectionVRHfxGdBResultRuleSettingsAuditSsh) UnmarshalJSON(data []byte) (err error) {
+func (r *ResponseCollectionVRHfxGdBResultRuleSettingsAuditSSH) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -708,7 +708,7 @@ const (
 	SingleResponseH8mJb2ArResultActionOverride     SingleResponseH8mJb2ArResultAction = "override"
 	SingleResponseH8mJb2ArResultActionL4Override   SingleResponseH8mJb2ArResultAction = "l4_override"
 	SingleResponseH8mJb2ArResultActionEgress       SingleResponseH8mJb2ArResultAction = "egress"
-	SingleResponseH8mJb2ArResultActionAuditSsh     SingleResponseH8mJb2ArResultAction = "audit_ssh"
+	SingleResponseH8mJb2ArResultActionAuditSSH     SingleResponseH8mJb2ArResultAction = "audit_ssh"
 )
 
 // The protocol or layer to use.
@@ -729,7 +729,7 @@ type SingleResponseH8mJb2ArResultRuleSettings struct {
 	// Set by parent MSP accounts to enable their children to bypass this rule.
 	AllowChildBypass bool `json:"allow_child_bypass"`
 	// Audit ssh action settings
-	AuditSsh SingleResponseH8mJb2ArResultRuleSettingsAuditSsh `json:"audit_ssh"`
+	AuditSSH SingleResponseH8mJb2ArResultRuleSettingsAuditSSH `json:"audit_ssh"`
 	// Configure how browser isolation behaves.
 	BisoAdminControls SingleResponseH8mJb2ArResultRuleSettingsBisoAdminControls `json:"biso_admin_controls"`
 	// Enable the custom block page.
@@ -767,7 +767,7 @@ type SingleResponseH8mJb2ArResultRuleSettings struct {
 type singleResponseH8mJb2ArResultRuleSettingsJSON struct {
 	AddHeaders                      apijson.Field
 	AllowChildBypass                apijson.Field
-	AuditSsh                        apijson.Field
+	AuditSSH                        apijson.Field
 	BisoAdminControls               apijson.Field
 	BlockPageEnabled                apijson.Field
 	BlockReason                     apijson.Field
@@ -790,21 +790,21 @@ func (r *SingleResponseH8mJb2ArResultRuleSettings) UnmarshalJSON(data []byte) (e
 }
 
 // Audit ssh action settings
-type SingleResponseH8mJb2ArResultRuleSettingsAuditSsh struct {
+type SingleResponseH8mJb2ArResultRuleSettingsAuditSSH struct {
 	// Turn on SSH command logging.
 	CommandLogging bool                                                 `json:"command_logging"`
-	JSON           singleResponseH8mJb2ArResultRuleSettingsAuditSshJSON `json:"-"`
+	JSON           singleResponseH8mJb2ArResultRuleSettingsAuditSSHJSON `json:"-"`
 }
 
-// singleResponseH8mJb2ArResultRuleSettingsAuditSshJSON contains the JSON metadata
-// for the struct [SingleResponseH8mJb2ArResultRuleSettingsAuditSsh]
-type singleResponseH8mJb2ArResultRuleSettingsAuditSshJSON struct {
+// singleResponseH8mJb2ArResultRuleSettingsAuditSSHJSON contains the JSON metadata
+// for the struct [SingleResponseH8mJb2ArResultRuleSettingsAuditSSH]
+type singleResponseH8mJb2ArResultRuleSettingsAuditSSHJSON struct {
 	CommandLogging apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *SingleResponseH8mJb2ArResultRuleSettingsAuditSsh) UnmarshalJSON(data []byte) (err error) {
+func (r *SingleResponseH8mJb2ArResultRuleSettingsAuditSSH) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1079,7 +1079,7 @@ const (
 	AccountGatewayRuleUpdateParamsActionOverride     AccountGatewayRuleUpdateParamsAction = "override"
 	AccountGatewayRuleUpdateParamsActionL4Override   AccountGatewayRuleUpdateParamsAction = "l4_override"
 	AccountGatewayRuleUpdateParamsActionEgress       AccountGatewayRuleUpdateParamsAction = "egress"
-	AccountGatewayRuleUpdateParamsActionAuditSsh     AccountGatewayRuleUpdateParamsAction = "audit_ssh"
+	AccountGatewayRuleUpdateParamsActionAuditSSH     AccountGatewayRuleUpdateParamsAction = "audit_ssh"
 )
 
 // The protocol or layer to use.
@@ -1100,7 +1100,7 @@ type AccountGatewayRuleUpdateParamsRuleSettings struct {
 	// Set by parent MSP accounts to enable their children to bypass this rule.
 	AllowChildBypass param.Field[bool] `json:"allow_child_bypass"`
 	// Audit ssh action settings
-	AuditSsh param.Field[AccountGatewayRuleUpdateParamsRuleSettingsAuditSsh] `json:"audit_ssh"`
+	AuditSSH param.Field[AccountGatewayRuleUpdateParamsRuleSettingsAuditSSH] `json:"audit_ssh"`
 	// Configure how browser isolation behaves.
 	BisoAdminControls param.Field[AccountGatewayRuleUpdateParamsRuleSettingsBisoAdminControls] `json:"biso_admin_controls"`
 	// Enable the custom block page.
@@ -1137,12 +1137,12 @@ func (r AccountGatewayRuleUpdateParamsRuleSettings) MarshalJSON() (data []byte, 
 }
 
 // Audit ssh action settings
-type AccountGatewayRuleUpdateParamsRuleSettingsAuditSsh struct {
+type AccountGatewayRuleUpdateParamsRuleSettingsAuditSSH struct {
 	// Turn on SSH command logging.
 	CommandLogging param.Field[bool] `json:"command_logging"`
 }
 
-func (r AccountGatewayRuleUpdateParamsRuleSettingsAuditSsh) MarshalJSON() (data []byte, err error) {
+func (r AccountGatewayRuleUpdateParamsRuleSettingsAuditSSH) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1331,7 +1331,7 @@ const (
 	AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsActionOverride     AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsAction = "override"
 	AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsActionL4Override   AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsAction = "l4_override"
 	AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsActionEgress       AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsAction = "egress"
-	AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsActionAuditSsh     AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsAction = "audit_ssh"
+	AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsActionAuditSSH     AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsAction = "audit_ssh"
 )
 
 // The protocol or layer to use.
@@ -1352,7 +1352,7 @@ type AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSet
 	// Set by parent MSP accounts to enable their children to bypass this rule.
 	AllowChildBypass param.Field[bool] `json:"allow_child_bypass"`
 	// Audit ssh action settings
-	AuditSsh param.Field[AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsAuditSsh] `json:"audit_ssh"`
+	AuditSSH param.Field[AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsAuditSSH] `json:"audit_ssh"`
 	// Configure how browser isolation behaves.
 	BisoAdminControls param.Field[AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsBisoAdminControls] `json:"biso_admin_controls"`
 	// Enable the custom block page.
@@ -1389,12 +1389,12 @@ func (r AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRule
 }
 
 // Audit ssh action settings
-type AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsAuditSsh struct {
+type AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsAuditSSH struct {
 	// Turn on SSH command logging.
 	CommandLogging param.Field[bool] `json:"command_logging"`
 }
 
-func (r AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsAuditSsh) MarshalJSON() (data []byte, err error) {
+func (r AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsAuditSSH) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

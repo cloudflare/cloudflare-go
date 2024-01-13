@@ -79,7 +79,7 @@ func TestAccountGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 					},
 				}),
 				AllowChildBypass: cloudflare.F(false),
-				AuditSsh: cloudflare.F(cloudflare.AccountGatewayRuleUpdateParamsRuleSettingsAuditSsh{
+				AuditSSH: cloudflare.F(cloudflare.AccountGatewayRuleUpdateParamsRuleSettingsAuditSSH{
 					CommandLogging: cloudflare.F(false),
 				}),
 				BisoAdminControls: cloudflare.F(cloudflare.AccountGatewayRuleUpdateParamsRuleSettingsBisoAdminControls{
@@ -203,7 +203,7 @@ func TestAccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleWithOptio
 					},
 				}),
 				AllowChildBypass: cloudflare.F(false),
-				AuditSsh: cloudflare.F(cloudflare.AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsAuditSsh{
+				AuditSSH: cloudflare.F(cloudflare.AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsAuditSSH{
 					CommandLogging: cloudflare.F(false),
 				}),
 				BisoAdminControls: cloudflare.F(cloudflare.AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsBisoAdminControls{
