@@ -34,7 +34,7 @@ func NewZoneRailgunService(opts ...option.RequestOption) (r *ZoneRailgunService)
 }
 
 // Lists details about a specific Railgun.
-func (r *ZoneRailgunService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *RailgunResponseSingle, err error) {
+func (r *ZoneRailgunService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *ZoneRailgunGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/railguns/%s", zoneIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -42,7 +42,7 @@ func (r *ZoneRailgunService) Get(ctx context.Context, zoneIdentifier string, ide
 }
 
 // Connect or disconnect a Railgun.
-func (r *ZoneRailgunService) Update(ctx context.Context, zoneIdentifier string, identifier string, body ZoneRailgunUpdateParams, opts ...option.RequestOption) (res *RailgunResponseSingle, err error) {
+func (r *ZoneRailgunService) Update(ctx context.Context, zoneIdentifier string, identifier string, body ZoneRailgunUpdateParams, opts ...option.RequestOption) (res *ZoneRailgunUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/railguns/%s", zoneIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
@@ -50,26 +50,165 @@ func (r *ZoneRailgunService) Update(ctx context.Context, zoneIdentifier string, 
 }
 
 // A list of available Railguns the zone can use.
-func (r *ZoneRailgunService) RailgunConnectionsForAZoneListAvailableRailguns(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *SchemasRailgunResponseCollection, err error) {
+func (r *ZoneRailgunService) RailgunConnectionsForAZoneListAvailableRailguns(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ZoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/railguns", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type SchemasRailgunResponseCollection struct {
-	Errors     []SchemasRailgunResponseCollectionError    `json:"errors"`
-	Messages   []SchemasRailgunResponseCollectionMessage  `json:"messages"`
-	Result     []interface{}                              `json:"result"`
-	ResultInfo SchemasRailgunResponseCollectionResultInfo `json:"result_info"`
+type ZoneRailgunGetResponse struct {
+	Errors   []ZoneRailgunGetResponseError   `json:"errors"`
+	Messages []ZoneRailgunGetResponseMessage `json:"messages"`
+	Result   interface{}                     `json:"result"`
 	// Whether the API call was successful
-	Success SchemasRailgunResponseCollectionSuccess `json:"success"`
-	JSON    schemasRailgunResponseCollectionJSON    `json:"-"`
+	Success ZoneRailgunGetResponseSuccess `json:"success"`
+	JSON    zoneRailgunGetResponseJSON    `json:"-"`
 }
 
-// schemasRailgunResponseCollectionJSON contains the JSON metadata for the struct
-// [SchemasRailgunResponseCollection]
-type schemasRailgunResponseCollectionJSON struct {
+// zoneRailgunGetResponseJSON contains the JSON metadata for the struct
+// [ZoneRailgunGetResponse]
+type zoneRailgunGetResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneRailgunGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneRailgunGetResponseError struct {
+	Code    int64                           `json:"code,required"`
+	Message string                          `json:"message,required"`
+	JSON    zoneRailgunGetResponseErrorJSON `json:"-"`
+}
+
+// zoneRailgunGetResponseErrorJSON contains the JSON metadata for the struct
+// [ZoneRailgunGetResponseError]
+type zoneRailgunGetResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneRailgunGetResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneRailgunGetResponseMessage struct {
+	Code    int64                             `json:"code,required"`
+	Message string                            `json:"message,required"`
+	JSON    zoneRailgunGetResponseMessageJSON `json:"-"`
+}
+
+// zoneRailgunGetResponseMessageJSON contains the JSON metadata for the struct
+// [ZoneRailgunGetResponseMessage]
+type zoneRailgunGetResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneRailgunGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneRailgunGetResponseSuccess bool
+
+const (
+	ZoneRailgunGetResponseSuccessTrue ZoneRailgunGetResponseSuccess = true
+)
+
+type ZoneRailgunUpdateResponse struct {
+	Errors   []ZoneRailgunUpdateResponseError   `json:"errors"`
+	Messages []ZoneRailgunUpdateResponseMessage `json:"messages"`
+	Result   interface{}                        `json:"result"`
+	// Whether the API call was successful
+	Success ZoneRailgunUpdateResponseSuccess `json:"success"`
+	JSON    zoneRailgunUpdateResponseJSON    `json:"-"`
+}
+
+// zoneRailgunUpdateResponseJSON contains the JSON metadata for the struct
+// [ZoneRailgunUpdateResponse]
+type zoneRailgunUpdateResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneRailgunUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneRailgunUpdateResponseError struct {
+	Code    int64                              `json:"code,required"`
+	Message string                             `json:"message,required"`
+	JSON    zoneRailgunUpdateResponseErrorJSON `json:"-"`
+}
+
+// zoneRailgunUpdateResponseErrorJSON contains the JSON metadata for the struct
+// [ZoneRailgunUpdateResponseError]
+type zoneRailgunUpdateResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneRailgunUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneRailgunUpdateResponseMessage struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    zoneRailgunUpdateResponseMessageJSON `json:"-"`
+}
+
+// zoneRailgunUpdateResponseMessageJSON contains the JSON metadata for the struct
+// [ZoneRailgunUpdateResponseMessage]
+type zoneRailgunUpdateResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneRailgunUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneRailgunUpdateResponseSuccess bool
+
+const (
+	ZoneRailgunUpdateResponseSuccessTrue ZoneRailgunUpdateResponseSuccess = true
+)
+
+type ZoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponse struct {
+	Errors     []ZoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseError    `json:"errors"`
+	Messages   []ZoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseMessage  `json:"messages"`
+	Result     []interface{}                                                                `json:"result"`
+	ResultInfo ZoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success ZoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseSuccess `json:"success"`
+	JSON    zoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseJSON    `json:"-"`
+}
+
+// zoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseJSON contains
+// the JSON metadata for the struct
+// [ZoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponse]
+type zoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -79,49 +218,51 @@ type schemasRailgunResponseCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasRailgunResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemasRailgunResponseCollectionError struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    schemasRailgunResponseCollectionErrorJSON `json:"-"`
+type ZoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseError struct {
+	Code    int64                                                                       `json:"code,required"`
+	Message string                                                                      `json:"message,required"`
+	JSON    zoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseErrorJSON `json:"-"`
 }
 
-// schemasRailgunResponseCollectionErrorJSON contains the JSON metadata for the
-// struct [SchemasRailgunResponseCollectionError]
-type schemasRailgunResponseCollectionErrorJSON struct {
+// zoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseError]
+type zoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasRailgunResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemasRailgunResponseCollectionMessage struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    schemasRailgunResponseCollectionMessageJSON `json:"-"`
+type ZoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseMessage struct {
+	Code    int64                                                                         `json:"code,required"`
+	Message string                                                                        `json:"message,required"`
+	JSON    zoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseMessageJSON `json:"-"`
 }
 
-// schemasRailgunResponseCollectionMessageJSON contains the JSON metadata for the
-// struct [SchemasRailgunResponseCollectionMessage]
-type schemasRailgunResponseCollectionMessageJSON struct {
+// zoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseMessage]
+type zoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasRailgunResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemasRailgunResponseCollectionResultInfo struct {
+type ZoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -129,13 +270,14 @@ type SchemasRailgunResponseCollectionResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                        `json:"total_count"`
-	JSON       schemasRailgunResponseCollectionResultInfoJSON `json:"-"`
+	TotalCount float64                                                                          `json:"total_count"`
+	JSON       zoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseResultInfoJSON `json:"-"`
 }
 
-// schemasRailgunResponseCollectionResultInfoJSON contains the JSON metadata for
-// the struct [SchemasRailgunResponseCollectionResultInfo]
-type schemasRailgunResponseCollectionResultInfoJSON struct {
+// zoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [ZoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseResultInfo]
+type zoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -144,15 +286,15 @@ type schemasRailgunResponseCollectionResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasRailgunResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type SchemasRailgunResponseCollectionSuccess bool
+type ZoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseSuccess bool
 
 const (
-	SchemasRailgunResponseCollectionSuccessTrue SchemasRailgunResponseCollectionSuccess = true
+	ZoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseSuccessTrue ZoneRailgunRailgunConnectionsForAZoneListAvailableRailgunsResponseSuccess = true
 )
 
 type ZoneRailgunUpdateParams struct {

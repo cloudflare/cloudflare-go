@@ -33,7 +33,7 @@ func NewRadarBgpLeakEventService(opts ...option.RequestOption) (r *RadarBgpLeakE
 	return
 }
 
-// Get the BGP route leak events.
+// Get the BGP route leak events (Beta).
 func (r *RadarBgpLeakEventService) List(ctx context.Context, query RadarBgpLeakEventListParams, opts ...option.RequestOption) (res *RadarBgpLeakEventListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "radar/bgp/leaks/events"
@@ -82,15 +82,17 @@ func (r *RadarBgpLeakEventListResponseResult) UnmarshalJSON(data []byte) (err er
 }
 
 type RadarBgpLeakEventListResponseResultASNInfo struct {
-	ASN     int64                                          `json:"asn,required"`
-	OrgName string                                         `json:"org_name,required"`
-	JSON    radarBgpLeakEventListResponseResultASNInfoJSON `json:"-"`
+	ASN         int64                                          `json:"asn,required"`
+	CountryCode string                                         `json:"country_code,required"`
+	OrgName     string                                         `json:"org_name,required"`
+	JSON        radarBgpLeakEventListResponseResultASNInfoJSON `json:"-"`
 }
 
 // radarBgpLeakEventListResponseResultASNInfoJSON contains the JSON metadata for
 // the struct [RadarBgpLeakEventListResponseResultASNInfo]
 type radarBgpLeakEventListResponseResultASNInfoJSON struct {
 	ASN         apijson.Field
+	CountryCode apijson.Field
 	OrgName     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -102,6 +104,7 @@ func (r *RadarBgpLeakEventListResponseResultASNInfo) UnmarshalJSON(data []byte) 
 
 type RadarBgpLeakEventListResponseResultEvent struct {
 	ID          int64                                        `json:"id,required"`
+	Countries   []string                                     `json:"countries,required"`
 	DetectedTs  string                                       `json:"detected_ts,required"`
 	Finished    bool                                         `json:"finished,required"`
 	LeakASN     int64                                        `json:"leak_asn,required"`
@@ -120,6 +123,7 @@ type RadarBgpLeakEventListResponseResultEvent struct {
 // struct [RadarBgpLeakEventListResponseResultEvent]
 type radarBgpLeakEventListResponseResultEventJSON struct {
 	ID          apijson.Field
+	Countries   apijson.Field
 	DetectedTs  apijson.Field
 	Finished    apijson.Field
 	LeakASN     apijson.Field
@@ -170,10 +174,14 @@ type RadarBgpLeakEventListParams struct {
 	DateRange param.Field[RadarBgpLeakEventListParamsDateRange] `query:"dateRange"`
 	// Start of the date range (inclusive).
 	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
+	// The unique identifier of a event
+	EventID param.Field[int64] `query:"eventId"`
 	// Format results are returned in.
 	Format param.Field[RadarBgpLeakEventListParamsFormat] `query:"format"`
 	// ASN that is causing or affected by a route leak event
 	InvolvedASN param.Field[int64] `query:"involvedAsn"`
+	// Country code of a involved ASN in a route leak event
+	InvolvedCountry param.Field[string] `query:"involvedCountry"`
 	// The leaking AS of a route leak event
 	LeakASN param.Field[int64] `query:"leakAsn"`
 	// Current page number, starting from 1
@@ -201,6 +209,7 @@ type RadarBgpLeakEventListParamsDateRange string
 
 const (
 	RadarBgpLeakEventListParamsDateRange1d         RadarBgpLeakEventListParamsDateRange = "1d"
+	RadarBgpLeakEventListParamsDateRange2d         RadarBgpLeakEventListParamsDateRange = "2d"
 	RadarBgpLeakEventListParamsDateRange7d         RadarBgpLeakEventListParamsDateRange = "7d"
 	RadarBgpLeakEventListParamsDateRange14d        RadarBgpLeakEventListParamsDateRange = "14d"
 	RadarBgpLeakEventListParamsDateRange28d        RadarBgpLeakEventListParamsDateRange = "28d"
@@ -208,6 +217,7 @@ const (
 	RadarBgpLeakEventListParamsDateRange24w        RadarBgpLeakEventListParamsDateRange = "24w"
 	RadarBgpLeakEventListParamsDateRange52w        RadarBgpLeakEventListParamsDateRange = "52w"
 	RadarBgpLeakEventListParamsDateRange1dControl  RadarBgpLeakEventListParamsDateRange = "1dControl"
+	RadarBgpLeakEventListParamsDateRange2dControl  RadarBgpLeakEventListParamsDateRange = "2dControl"
 	RadarBgpLeakEventListParamsDateRange7dControl  RadarBgpLeakEventListParamsDateRange = "7dControl"
 	RadarBgpLeakEventListParamsDateRange14dControl RadarBgpLeakEventListParamsDateRange = "14dControl"
 	RadarBgpLeakEventListParamsDateRange28dControl RadarBgpLeakEventListParamsDateRange = "28dControl"

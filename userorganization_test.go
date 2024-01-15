@@ -24,10 +24,12 @@ func TestUserOrganizationGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Users.Organizations.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.User.Organizations.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -48,10 +50,12 @@ func TestUserOrganizationDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Users.Organizations.Delete(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.User.Organizations.Delete(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -72,10 +76,12 @@ func TestUserOrganizationUserSOrganizationsListOrganizationsWithOptionalParams(t
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Users.Organizations.UserSOrganizationsListOrganizations(context.TODO(), cloudflare.UserOrganizationUserSOrganizationsListOrganizationsParams{
+	_, err := client.User.Organizations.UserSOrganizationsListOrganizations(context.TODO(), cloudflare.UserOrganizationUserSOrganizationsListOrganizationsParams{
 		Direction: cloudflare.F(cloudflare.UserOrganizationUserSOrganizationsListOrganizationsParamsDirectionDesc),
 		Match:     cloudflare.F(cloudflare.UserOrganizationUserSOrganizationsListOrganizationsParamsMatchAny),
 		Name:      cloudflare.F("Cloudflare, Inc."),

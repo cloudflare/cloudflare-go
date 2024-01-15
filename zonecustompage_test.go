@@ -24,13 +24,15 @@ func TestZoneCustomPageGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.CustomPages.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.ZoneCustomPageGetParamsIdentifierBasicChallenge,
+		"023e105f4ecef8ad9ca31a8372d0c353",
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -52,13 +54,15 @@ func TestZoneCustomPageUpdate(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.CustomPages.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.ZoneCustomPageUpdateParamsIdentifierBasicChallenge,
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.ZoneCustomPageUpdateParams{
 			State: cloudflare.F(cloudflare.ZoneCustomPageUpdateParamsStateDefault),
 			URL:   cloudflare.F("http://www.example.com"),
@@ -84,8 +88,10 @@ func TestZoneCustomPageCustomPagesForAZoneListCustomPages(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.CustomPages.CustomPagesForAZoneListCustomPages(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {

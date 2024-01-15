@@ -40,7 +40,7 @@ func (r *AccountLogControlCmbConfigService) Delete(ctx context.Context, accountI
 }
 
 // Gets CMB config.
-func (r *AccountLogControlCmbConfigService) GetAccountsAccountIdentifierLogsControlCmbConfig(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *CmbConfigResponseSingle, err error) {
+func (r *AccountLogControlCmbConfigService) GetAccountsAccountIdentifierLogsControlCmbConfig(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *AccountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -48,99 +48,12 @@ func (r *AccountLogControlCmbConfigService) GetAccountsAccountIdentifierLogsCont
 }
 
 // Updates CMB config.
-func (r *AccountLogControlCmbConfigService) PutAccountsAccountIdentifierLogsControlCmbConfig(ctx context.Context, accountIdentifier string, body AccountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigParams, opts ...option.RequestOption) (res *CmbConfigResponseSingle, err error) {
+func (r *AccountLogControlCmbConfigService) PutAccountsAccountIdentifierLogsControlCmbConfig(ctx context.Context, accountIdentifier string, body AccountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigParams, opts ...option.RequestOption) (res *AccountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
-
-type CmbConfigResponseSingle struct {
-	Errors   []CmbConfigResponseSingleError   `json:"errors"`
-	Messages []CmbConfigResponseSingleMessage `json:"messages"`
-	Result   CmbConfigResponseSingleResult    `json:"result,nullable"`
-	// Whether the API call was successful
-	Success CmbConfigResponseSingleSuccess `json:"success"`
-	JSON    cmbConfigResponseSingleJSON    `json:"-"`
-}
-
-// cmbConfigResponseSingleJSON contains the JSON metadata for the struct
-// [CmbConfigResponseSingle]
-type cmbConfigResponseSingleJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CmbConfigResponseSingle) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CmbConfigResponseSingleError struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    cmbConfigResponseSingleErrorJSON `json:"-"`
-}
-
-// cmbConfigResponseSingleErrorJSON contains the JSON metadata for the struct
-// [CmbConfigResponseSingleError]
-type cmbConfigResponseSingleErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CmbConfigResponseSingleError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CmbConfigResponseSingleMessage struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    cmbConfigResponseSingleMessageJSON `json:"-"`
-}
-
-// cmbConfigResponseSingleMessageJSON contains the JSON metadata for the struct
-// [CmbConfigResponseSingleMessage]
-type cmbConfigResponseSingleMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CmbConfigResponseSingleMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CmbConfigResponseSingleResult struct {
-	// Comma-separated list of regions.
-	Regions string                            `json:"regions"`
-	JSON    cmbConfigResponseSingleResultJSON `json:"-"`
-}
-
-// cmbConfigResponseSingleResultJSON contains the JSON metadata for the struct
-// [CmbConfigResponseSingleResult]
-type cmbConfigResponseSingleResultJSON struct {
-	Regions     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CmbConfigResponseSingleResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type CmbConfigResponseSingleSuccess bool
-
-const (
-	CmbConfigResponseSingleSuccessTrue CmbConfigResponseSingleSuccess = true
-)
 
 type AccountLogControlCmbConfigDeleteResponse struct {
 	Errors   []AccountLogControlCmbConfigDeleteResponseError   `json:"errors"`
@@ -209,6 +122,188 @@ type AccountLogControlCmbConfigDeleteResponseSuccess bool
 
 const (
 	AccountLogControlCmbConfigDeleteResponseSuccessTrue AccountLogControlCmbConfigDeleteResponseSuccess = true
+)
+
+type AccountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponse struct {
+	Errors   []AccountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseError   `json:"errors"`
+	Messages []AccountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseMessage `json:"messages"`
+	Result   AccountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseResult    `json:"result,nullable"`
+	// Whether the API call was successful
+	Success AccountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseSuccess `json:"success"`
+	JSON    accountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseJSON    `json:"-"`
+}
+
+// accountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseJSON
+// contains the JSON metadata for the struct
+// [AccountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponse]
+type accountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseError struct {
+	Code    int64                                                                                       `json:"code,required"`
+	Message string                                                                                      `json:"message,required"`
+	JSON    accountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseErrorJSON `json:"-"`
+}
+
+// accountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseError]
+type accountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseMessage struct {
+	Code    int64                                                                                         `json:"code,required"`
+	Message string                                                                                        `json:"message,required"`
+	JSON    accountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseMessageJSON `json:"-"`
+}
+
+// accountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseMessage]
+type accountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseResult struct {
+	// Comma-separated list of regions.
+	Regions string                                                                                       `json:"regions"`
+	JSON    accountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseResultJSON `json:"-"`
+}
+
+// accountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseResult]
+type accountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseResultJSON struct {
+	Regions     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseSuccess bool
+
+const (
+	AccountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseSuccessTrue AccountLogControlCmbConfigGetAccountsAccountIdentifierLogsControlCmbConfigResponseSuccess = true
+)
+
+type AccountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponse struct {
+	Errors   []AccountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseError   `json:"errors"`
+	Messages []AccountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseMessage `json:"messages"`
+	Result   AccountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseResult    `json:"result,nullable"`
+	// Whether the API call was successful
+	Success AccountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseSuccess `json:"success"`
+	JSON    accountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseJSON    `json:"-"`
+}
+
+// accountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseJSON
+// contains the JSON metadata for the struct
+// [AccountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponse]
+type accountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseError struct {
+	Code    int64                                                                                       `json:"code,required"`
+	Message string                                                                                      `json:"message,required"`
+	JSON    accountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseErrorJSON `json:"-"`
+}
+
+// accountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseError]
+type accountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseMessage struct {
+	Code    int64                                                                                         `json:"code,required"`
+	Message string                                                                                        `json:"message,required"`
+	JSON    accountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseMessageJSON `json:"-"`
+}
+
+// accountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseMessage]
+type accountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseResult struct {
+	// Comma-separated list of regions.
+	Regions string                                                                                       `json:"regions"`
+	JSON    accountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseResultJSON `json:"-"`
+}
+
+// accountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseResult]
+type accountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseResultJSON struct {
+	Regions     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseSuccess bool
+
+const (
+	AccountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseSuccessTrue AccountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigResponseSuccess = true
 )
 
 type AccountLogControlCmbConfigPutAccountsAccountIdentifierLogsControlCmbConfigParams struct {

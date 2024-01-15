@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -37,7 +38,7 @@ func NewUserFirewallAccessRuleRuleService(opts ...option.RequestOption) (r *User
 
 // Updates an IP Access rule defined at the user level. You can only update the
 // rule action (`mode` parameter) and notes.
-func (r *UserFirewallAccessRuleRuleService) Update(ctx context.Context, identifier string, body UserFirewallAccessRuleRuleUpdateParams, opts ...option.RequestOption) (res *RuleSingleResponse, err error) {
+func (r *UserFirewallAccessRuleRuleService) Update(ctx context.Context, identifier string, body UserFirewallAccessRuleRuleUpdateParams, opts ...option.RequestOption) (res *UserFirewallAccessRuleRuleUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("user/firewall/access_rules/rules/%s", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
@@ -47,7 +48,7 @@ func (r *UserFirewallAccessRuleRuleService) Update(ctx context.Context, identifi
 // Deletes an IP Access rule at the user level.
 //
 // Note: Deleting a user-level rule will affect all zones owned by the user.
-func (r *UserFirewallAccessRuleRuleService) Delete(ctx context.Context, identifier string, opts ...option.RequestOption) (res *RuleSingleIDResponse, err error) {
+func (r *UserFirewallAccessRuleRuleService) Delete(ctx context.Context, identifier string, opts ...option.RequestOption) (res *UserFirewallAccessRuleRuleDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("user/firewall/access_rules/rules/%s", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -58,7 +59,7 @@ func (r *UserFirewallAccessRuleRuleService) Delete(ctx context.Context, identifi
 //
 // Note: To create an IP Access rule that applies to a specific zone, refer to the
 // [IP Access rules for a zone](#ip-access-rules-for-a-zone) endpoints.
-func (r *UserFirewallAccessRuleRuleService) IPAccessRulesForAUserNewAnIPAccessRule(ctx context.Context, body UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParams, opts ...option.RequestOption) (res *RuleSingleResponse, err error) {
+func (r *UserFirewallAccessRuleRuleService) IPAccessRulesForAUserNewAnIPAccessRule(ctx context.Context, body UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParams, opts ...option.RequestOption) (res *UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "user/firewall/access_rules/rules"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -67,98 +68,106 @@ func (r *UserFirewallAccessRuleRuleService) IPAccessRulesForAUserNewAnIPAccessRu
 
 // Fetches IP Access rules of the user. You can filter the results using several
 // optional parameters.
-func (r *UserFirewallAccessRuleRuleService) IPAccessRulesForAUserListIPAccessRules(ctx context.Context, query UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesParams, opts ...option.RequestOption) (res *RuleCollectionResponse, err error) {
-	opts = append(r.Options[:], opts...)
+func (r *UserFirewallAccessRuleRuleService) IPAccessRulesForAUserListIPAccessRules(ctx context.Context, query UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesParams, opts ...option.RequestOption) (res *shared.Page[UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "user/firewall/access_rules/rules"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
 }
 
-type RuleCollectionResponse struct {
-	Errors     []RuleCollectionResponseError    `json:"errors"`
-	Messages   []RuleCollectionResponseMessage  `json:"messages"`
-	Result     []RuleCollectionResponseResult   `json:"result"`
-	ResultInfo RuleCollectionResponseResultInfo `json:"result_info"`
+type UserFirewallAccessRuleRuleUpdateResponse struct {
+	Errors   []UserFirewallAccessRuleRuleUpdateResponseError   `json:"errors"`
+	Messages []UserFirewallAccessRuleRuleUpdateResponseMessage `json:"messages"`
+	Result   UserFirewallAccessRuleRuleUpdateResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success RuleCollectionResponseSuccess `json:"success"`
-	JSON    ruleCollectionResponseJSON    `json:"-"`
+	Success UserFirewallAccessRuleRuleUpdateResponseSuccess `json:"success"`
+	JSON    userFirewallAccessRuleRuleUpdateResponseJSON    `json:"-"`
 }
 
-// ruleCollectionResponseJSON contains the JSON metadata for the struct
-// [RuleCollectionResponse]
-type ruleCollectionResponseJSON struct {
+// userFirewallAccessRuleRuleUpdateResponseJSON contains the JSON metadata for the
+// struct [UserFirewallAccessRuleRuleUpdateResponse]
+type userFirewallAccessRuleRuleUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleCollectionResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *UserFirewallAccessRuleRuleUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RuleCollectionResponseError struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    ruleCollectionResponseErrorJSON `json:"-"`
+type UserFirewallAccessRuleRuleUpdateResponseError struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    userFirewallAccessRuleRuleUpdateResponseErrorJSON `json:"-"`
 }
 
-// ruleCollectionResponseErrorJSON contains the JSON metadata for the struct
-// [RuleCollectionResponseError]
-type ruleCollectionResponseErrorJSON struct {
+// userFirewallAccessRuleRuleUpdateResponseErrorJSON contains the JSON metadata for
+// the struct [UserFirewallAccessRuleRuleUpdateResponseError]
+type userFirewallAccessRuleRuleUpdateResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleCollectionResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *UserFirewallAccessRuleRuleUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RuleCollectionResponseMessage struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    ruleCollectionResponseMessageJSON `json:"-"`
+type UserFirewallAccessRuleRuleUpdateResponseMessage struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    userFirewallAccessRuleRuleUpdateResponseMessageJSON `json:"-"`
 }
 
-// ruleCollectionResponseMessageJSON contains the JSON metadata for the struct
-// [RuleCollectionResponseMessage]
-type ruleCollectionResponseMessageJSON struct {
+// userFirewallAccessRuleRuleUpdateResponseMessageJSON contains the JSON metadata
+// for the struct [UserFirewallAccessRuleRuleUpdateResponseMessage]
+type userFirewallAccessRuleRuleUpdateResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleCollectionResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *UserFirewallAccessRuleRuleUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RuleCollectionResponseResult struct {
+type UserFirewallAccessRuleRuleUpdateResponseResult struct {
 	// The unique identifier of the IP Access rule.
 	ID string `json:"id,required"`
 	// The available actions that a rule can apply to a matched request.
-	AllowedModes []RuleCollectionResponseResultAllowedMode `json:"allowed_modes,required"`
+	AllowedModes []UserFirewallAccessRuleRuleUpdateResponseResultAllowedMode `json:"allowed_modes,required"`
 	// The rule configuration.
-	Configuration RuleCollectionResponseResultConfiguration `json:"configuration,required"`
+	Configuration UserFirewallAccessRuleRuleUpdateResponseResultConfiguration `json:"configuration,required"`
 	// The action to apply to a matched request.
-	Mode RuleCollectionResponseResultMode `json:"mode,required"`
+	Mode UserFirewallAccessRuleRuleUpdateResponseResultMode `json:"mode,required"`
 	// The timestamp of when the rule was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// The timestamp of when the rule was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// An informative summary of the rule, typically used as a reminder or explanation.
-	Notes string                           `json:"notes"`
-	JSON  ruleCollectionResponseResultJSON `json:"-"`
+	Notes string                                             `json:"notes"`
+	JSON  userFirewallAccessRuleRuleUpdateResponseResultJSON `json:"-"`
 }
 
-// ruleCollectionResponseResultJSON contains the JSON metadata for the struct
-// [RuleCollectionResponseResult]
-type ruleCollectionResponseResultJSON struct {
+// userFirewallAccessRuleRuleUpdateResponseResultJSON contains the JSON metadata
+// for the struct [UserFirewallAccessRuleRuleUpdateResponseResult]
+type userFirewallAccessRuleRuleUpdateResponseResultJSON struct {
 	ID            apijson.Field
 	AllowedModes  apijson.Field
 	Configuration apijson.Field
@@ -170,266 +179,241 @@ type ruleCollectionResponseResultJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *RuleCollectionResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *UserFirewallAccessRuleRuleUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The action to apply to a matched request.
-type RuleCollectionResponseResultAllowedMode string
+type UserFirewallAccessRuleRuleUpdateResponseResultAllowedMode string
 
 const (
-	RuleCollectionResponseResultAllowedModeBlock            RuleCollectionResponseResultAllowedMode = "block"
-	RuleCollectionResponseResultAllowedModeChallenge        RuleCollectionResponseResultAllowedMode = "challenge"
-	RuleCollectionResponseResultAllowedModeWhitelist        RuleCollectionResponseResultAllowedMode = "whitelist"
-	RuleCollectionResponseResultAllowedModeJsChallenge      RuleCollectionResponseResultAllowedMode = "js_challenge"
-	RuleCollectionResponseResultAllowedModeManagedChallenge RuleCollectionResponseResultAllowedMode = "managed_challenge"
+	UserFirewallAccessRuleRuleUpdateResponseResultAllowedModeBlock            UserFirewallAccessRuleRuleUpdateResponseResultAllowedMode = "block"
+	UserFirewallAccessRuleRuleUpdateResponseResultAllowedModeChallenge        UserFirewallAccessRuleRuleUpdateResponseResultAllowedMode = "challenge"
+	UserFirewallAccessRuleRuleUpdateResponseResultAllowedModeWhitelist        UserFirewallAccessRuleRuleUpdateResponseResultAllowedMode = "whitelist"
+	UserFirewallAccessRuleRuleUpdateResponseResultAllowedModeJsChallenge      UserFirewallAccessRuleRuleUpdateResponseResultAllowedMode = "js_challenge"
+	UserFirewallAccessRuleRuleUpdateResponseResultAllowedModeManagedChallenge UserFirewallAccessRuleRuleUpdateResponseResultAllowedMode = "managed_challenge"
 )
 
 // The rule configuration.
 //
-// Union satisfied by [RuleCollectionResponseResultConfigurationIPConfiguration],
-// [RuleCollectionResponseResultConfigurationIpv6Configuration],
-// [RuleCollectionResponseResultConfigurationCidrConfiguration],
-// [RuleCollectionResponseResultConfigurationASNConfiguration] or
-// [RuleCollectionResponseResultConfigurationCountryConfiguration].
-type RuleCollectionResponseResultConfiguration interface {
-	implementsRuleCollectionResponseResultConfiguration()
+// Union satisfied by
+// [UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTIPConfiguration],
+// [UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTIpv6Configuration],
+// [UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTCidrConfiguration],
+// [UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTASNConfiguration]
+// or
+// [UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTCountryConfiguration].
+type UserFirewallAccessRuleRuleUpdateResponseResultConfiguration interface {
+	implementsUserFirewallAccessRuleRuleUpdateResponseResultConfiguration()
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*RuleCollectionResponseResultConfiguration)(nil)).Elem(), "")
+	apijson.RegisterUnion(reflect.TypeOf((*UserFirewallAccessRuleRuleUpdateResponseResultConfiguration)(nil)).Elem(), "")
 }
 
-type RuleCollectionResponseResultConfigurationIPConfiguration struct {
+type UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTIPConfiguration struct {
 	// The configuration target. You must set the target to `ip` when specifying an IP
 	// address in the rule.
-	Target RuleCollectionResponseResultConfigurationIPConfigurationTarget `json:"target"`
+	Target UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTIPConfigurationTarget `json:"target"`
 	// The IP address to match. This address will be compared to the IP address of
 	// incoming requests.
-	Value string                                                       `json:"value"`
-	JSON  ruleCollectionResponseResultConfigurationIPConfigurationJSON `json:"-"`
+	Value string                                                                                 `json:"value"`
+	JSON  userFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTipConfigurationJSON `json:"-"`
 }
 
-// ruleCollectionResponseResultConfigurationIPConfigurationJSON contains the JSON
-// metadata for the struct
-// [RuleCollectionResponseResultConfigurationIPConfiguration]
-type ruleCollectionResponseResultConfigurationIPConfigurationJSON struct {
+// userFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTipConfigurationJSON
+// contains the JSON metadata for the struct
+// [UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTIPConfiguration]
+type userFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTipConfigurationJSON struct {
 	Target      apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleCollectionResponseResultConfigurationIPConfiguration) UnmarshalJSON(data []byte) (err error) {
+func (r *UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTIPConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r RuleCollectionResponseResultConfigurationIPConfiguration) implementsRuleCollectionResponseResultConfiguration() {
+func (r UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTIPConfiguration) implementsUserFirewallAccessRuleRuleUpdateResponseResultConfiguration() {
 }
 
 // The configuration target. You must set the target to `ip` when specifying an IP
 // address in the rule.
-type RuleCollectionResponseResultConfigurationIPConfigurationTarget string
+type UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTIPConfigurationTarget string
 
 const (
-	RuleCollectionResponseResultConfigurationIPConfigurationTargetIP RuleCollectionResponseResultConfigurationIPConfigurationTarget = "ip"
+	UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTIPConfigurationTargetIP UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTIPConfigurationTarget = "ip"
 )
 
-type RuleCollectionResponseResultConfigurationIpv6Configuration struct {
+type UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTIpv6Configuration struct {
 	// The configuration target. You must set the target to `ip6` when specifying an
 	// IPv6 address in the rule.
-	Target RuleCollectionResponseResultConfigurationIpv6ConfigurationTarget `json:"target"`
+	Target UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTIpv6ConfigurationTarget `json:"target"`
 	// The IPv6 address to match.
-	Value string                                                         `json:"value"`
-	JSON  ruleCollectionResponseResultConfigurationIpv6ConfigurationJSON `json:"-"`
+	Value string                                                                                   `json:"value"`
+	JSON  userFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTIpv6ConfigurationJSON `json:"-"`
 }
 
-// ruleCollectionResponseResultConfigurationIpv6ConfigurationJSON contains the JSON
-// metadata for the struct
-// [RuleCollectionResponseResultConfigurationIpv6Configuration]
-type ruleCollectionResponseResultConfigurationIpv6ConfigurationJSON struct {
+// userFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTIpv6ConfigurationJSON
+// contains the JSON metadata for the struct
+// [UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTIpv6Configuration]
+type userFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTIpv6ConfigurationJSON struct {
 	Target      apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleCollectionResponseResultConfigurationIpv6Configuration) UnmarshalJSON(data []byte) (err error) {
+func (r *UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTIpv6Configuration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r RuleCollectionResponseResultConfigurationIpv6Configuration) implementsRuleCollectionResponseResultConfiguration() {
+func (r UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTIpv6Configuration) implementsUserFirewallAccessRuleRuleUpdateResponseResultConfiguration() {
 }
 
 // The configuration target. You must set the target to `ip6` when specifying an
 // IPv6 address in the rule.
-type RuleCollectionResponseResultConfigurationIpv6ConfigurationTarget string
+type UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTIpv6ConfigurationTarget string
 
 const (
-	RuleCollectionResponseResultConfigurationIpv6ConfigurationTargetIp6 RuleCollectionResponseResultConfigurationIpv6ConfigurationTarget = "ip6"
+	UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTIpv6ConfigurationTargetIp6 UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTIpv6ConfigurationTarget = "ip6"
 )
 
-type RuleCollectionResponseResultConfigurationCidrConfiguration struct {
+type UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTCidrConfiguration struct {
 	// The configuration target. You must set the target to `ip_range` when specifying
 	// an IP address range in the rule.
-	Target RuleCollectionResponseResultConfigurationCidrConfigurationTarget `json:"target"`
+	Target UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTCidrConfigurationTarget `json:"target"`
 	// The IP address range to match. You can only use prefix lengths `/16` and `/24`
 	// for IPv4 ranges, and prefix lengths `/32`, `/48`, and `/64` for IPv6 ranges.
-	Value string                                                         `json:"value"`
-	JSON  ruleCollectionResponseResultConfigurationCidrConfigurationJSON `json:"-"`
+	Value string                                                                                   `json:"value"`
+	JSON  userFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTCidrConfigurationJSON `json:"-"`
 }
 
-// ruleCollectionResponseResultConfigurationCidrConfigurationJSON contains the JSON
-// metadata for the struct
-// [RuleCollectionResponseResultConfigurationCidrConfiguration]
-type ruleCollectionResponseResultConfigurationCidrConfigurationJSON struct {
+// userFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTCidrConfigurationJSON
+// contains the JSON metadata for the struct
+// [UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTCidrConfiguration]
+type userFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTCidrConfigurationJSON struct {
 	Target      apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleCollectionResponseResultConfigurationCidrConfiguration) UnmarshalJSON(data []byte) (err error) {
+func (r *UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTCidrConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r RuleCollectionResponseResultConfigurationCidrConfiguration) implementsRuleCollectionResponseResultConfiguration() {
+func (r UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTCidrConfiguration) implementsUserFirewallAccessRuleRuleUpdateResponseResultConfiguration() {
 }
 
 // The configuration target. You must set the target to `ip_range` when specifying
 // an IP address range in the rule.
-type RuleCollectionResponseResultConfigurationCidrConfigurationTarget string
+type UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTCidrConfigurationTarget string
 
 const (
-	RuleCollectionResponseResultConfigurationCidrConfigurationTargetIPRange RuleCollectionResponseResultConfigurationCidrConfigurationTarget = "ip_range"
+	UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTCidrConfigurationTargetIPRange UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTCidrConfigurationTarget = "ip_range"
 )
 
-type RuleCollectionResponseResultConfigurationASNConfiguration struct {
+type UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTASNConfiguration struct {
 	// The configuration target. You must set the target to `asn` when specifying an
 	// Autonomous System Number (ASN) in the rule.
-	Target RuleCollectionResponseResultConfigurationASNConfigurationTarget `json:"target"`
+	Target UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTASNConfigurationTarget `json:"target"`
 	// The AS number to match.
-	Value string                                                        `json:"value"`
-	JSON  ruleCollectionResponseResultConfigurationASNConfigurationJSON `json:"-"`
+	Value string                                                                                  `json:"value"`
+	JSON  userFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTasnConfigurationJSON `json:"-"`
 }
 
-// ruleCollectionResponseResultConfigurationASNConfigurationJSON contains the JSON
-// metadata for the struct
-// [RuleCollectionResponseResultConfigurationASNConfiguration]
-type ruleCollectionResponseResultConfigurationASNConfigurationJSON struct {
+// userFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTasnConfigurationJSON
+// contains the JSON metadata for the struct
+// [UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTASNConfiguration]
+type userFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTasnConfigurationJSON struct {
 	Target      apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleCollectionResponseResultConfigurationASNConfiguration) UnmarshalJSON(data []byte) (err error) {
+func (r *UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTASNConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r RuleCollectionResponseResultConfigurationASNConfiguration) implementsRuleCollectionResponseResultConfiguration() {
+func (r UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTASNConfiguration) implementsUserFirewallAccessRuleRuleUpdateResponseResultConfiguration() {
 }
 
 // The configuration target. You must set the target to `asn` when specifying an
 // Autonomous System Number (ASN) in the rule.
-type RuleCollectionResponseResultConfigurationASNConfigurationTarget string
+type UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTASNConfigurationTarget string
 
 const (
-	RuleCollectionResponseResultConfigurationASNConfigurationTargetASN RuleCollectionResponseResultConfigurationASNConfigurationTarget = "asn"
+	UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTASNConfigurationTargetASN UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTASNConfigurationTarget = "asn"
 )
 
-type RuleCollectionResponseResultConfigurationCountryConfiguration struct {
+type UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTCountryConfiguration struct {
 	// The configuration target. You must set the target to `country` when specifying a
 	// country code in the rule.
-	Target RuleCollectionResponseResultConfigurationCountryConfigurationTarget `json:"target"`
+	Target UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTCountryConfigurationTarget `json:"target"`
 	// The two-letter ISO-3166-1 alpha-2 code to match. For more information, refer to
 	// [IP Access rules: Parameters](https://developers.cloudflare.com/waf/tools/ip-access-rules/parameters/#country).
-	Value string                                                            `json:"value"`
-	JSON  ruleCollectionResponseResultConfigurationCountryConfigurationJSON `json:"-"`
+	Value string                                                                                      `json:"value"`
+	JSON  userFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTCountryConfigurationJSON `json:"-"`
 }
 
-// ruleCollectionResponseResultConfigurationCountryConfigurationJSON contains the
-// JSON metadata for the struct
-// [RuleCollectionResponseResultConfigurationCountryConfiguration]
-type ruleCollectionResponseResultConfigurationCountryConfigurationJSON struct {
+// userFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTCountryConfigurationJSON
+// contains the JSON metadata for the struct
+// [UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTCountryConfiguration]
+type userFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTCountryConfigurationJSON struct {
 	Target      apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleCollectionResponseResultConfigurationCountryConfiguration) UnmarshalJSON(data []byte) (err error) {
+func (r *UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTCountryConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r RuleCollectionResponseResultConfigurationCountryConfiguration) implementsRuleCollectionResponseResultConfiguration() {
+func (r UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTCountryConfiguration) implementsUserFirewallAccessRuleRuleUpdateResponseResultConfiguration() {
 }
 
 // The configuration target. You must set the target to `country` when specifying a
 // country code in the rule.
-type RuleCollectionResponseResultConfigurationCountryConfigurationTarget string
+type UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTCountryConfigurationTarget string
 
 const (
-	RuleCollectionResponseResultConfigurationCountryConfigurationTargetCountry RuleCollectionResponseResultConfigurationCountryConfigurationTarget = "country"
+	UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTCountryConfigurationTargetCountry UserFirewallAccessRuleRuleUpdateResponseResultConfigurationDZw70ubTCountryConfigurationTarget = "country"
 )
 
 // The action to apply to a matched request.
-type RuleCollectionResponseResultMode string
+type UserFirewallAccessRuleRuleUpdateResponseResultMode string
 
 const (
-	RuleCollectionResponseResultModeBlock            RuleCollectionResponseResultMode = "block"
-	RuleCollectionResponseResultModeChallenge        RuleCollectionResponseResultMode = "challenge"
-	RuleCollectionResponseResultModeWhitelist        RuleCollectionResponseResultMode = "whitelist"
-	RuleCollectionResponseResultModeJsChallenge      RuleCollectionResponseResultMode = "js_challenge"
-	RuleCollectionResponseResultModeManagedChallenge RuleCollectionResponseResultMode = "managed_challenge"
+	UserFirewallAccessRuleRuleUpdateResponseResultModeBlock            UserFirewallAccessRuleRuleUpdateResponseResultMode = "block"
+	UserFirewallAccessRuleRuleUpdateResponseResultModeChallenge        UserFirewallAccessRuleRuleUpdateResponseResultMode = "challenge"
+	UserFirewallAccessRuleRuleUpdateResponseResultModeWhitelist        UserFirewallAccessRuleRuleUpdateResponseResultMode = "whitelist"
+	UserFirewallAccessRuleRuleUpdateResponseResultModeJsChallenge      UserFirewallAccessRuleRuleUpdateResponseResultMode = "js_challenge"
+	UserFirewallAccessRuleRuleUpdateResponseResultModeManagedChallenge UserFirewallAccessRuleRuleUpdateResponseResultMode = "managed_challenge"
 )
-
-type RuleCollectionResponseResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                              `json:"total_count"`
-	JSON       ruleCollectionResponseResultInfoJSON `json:"-"`
-}
-
-// ruleCollectionResponseResultInfoJSON contains the JSON metadata for the struct
-// [RuleCollectionResponseResultInfo]
-type ruleCollectionResponseResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleCollectionResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
 
 // Whether the API call was successful
-type RuleCollectionResponseSuccess bool
+type UserFirewallAccessRuleRuleUpdateResponseSuccess bool
 
 const (
-	RuleCollectionResponseSuccessTrue RuleCollectionResponseSuccess = true
+	UserFirewallAccessRuleRuleUpdateResponseSuccessTrue UserFirewallAccessRuleRuleUpdateResponseSuccess = true
 )
 
-type RuleSingleIDResponse struct {
-	Errors   []RuleSingleIDResponseError   `json:"errors"`
-	Messages []RuleSingleIDResponseMessage `json:"messages"`
-	Result   RuleSingleIDResponseResult    `json:"result"`
+type UserFirewallAccessRuleRuleDeleteResponse struct {
+	Errors   []UserFirewallAccessRuleRuleDeleteResponseError   `json:"errors"`
+	Messages []UserFirewallAccessRuleRuleDeleteResponseMessage `json:"messages"`
+	Result   UserFirewallAccessRuleRuleDeleteResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success RuleSingleIDResponseSuccess `json:"success"`
-	JSON    ruleSingleIDResponseJSON    `json:"-"`
+	Success UserFirewallAccessRuleRuleDeleteResponseSuccess `json:"success"`
+	JSON    userFirewallAccessRuleRuleDeleteResponseJSON    `json:"-"`
 }
 
-// ruleSingleIDResponseJSON contains the JSON metadata for the struct
-// [RuleSingleIDResponse]
-type ruleSingleIDResponseJSON struct {
+// userFirewallAccessRuleRuleDeleteResponseJSON contains the JSON metadata for the
+// struct [UserFirewallAccessRuleRuleDeleteResponse]
+type userFirewallAccessRuleRuleDeleteResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -438,85 +422,86 @@ type ruleSingleIDResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleSingleIDResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *UserFirewallAccessRuleRuleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RuleSingleIDResponseError struct {
-	Code    int64                         `json:"code,required"`
-	Message string                        `json:"message,required"`
-	JSON    ruleSingleIDResponseErrorJSON `json:"-"`
+type UserFirewallAccessRuleRuleDeleteResponseError struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    userFirewallAccessRuleRuleDeleteResponseErrorJSON `json:"-"`
 }
 
-// ruleSingleIDResponseErrorJSON contains the JSON metadata for the struct
-// [RuleSingleIDResponseError]
-type ruleSingleIDResponseErrorJSON struct {
+// userFirewallAccessRuleRuleDeleteResponseErrorJSON contains the JSON metadata for
+// the struct [UserFirewallAccessRuleRuleDeleteResponseError]
+type userFirewallAccessRuleRuleDeleteResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleSingleIDResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *UserFirewallAccessRuleRuleDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RuleSingleIDResponseMessage struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    ruleSingleIDResponseMessageJSON `json:"-"`
+type UserFirewallAccessRuleRuleDeleteResponseMessage struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    userFirewallAccessRuleRuleDeleteResponseMessageJSON `json:"-"`
 }
 
-// ruleSingleIDResponseMessageJSON contains the JSON metadata for the struct
-// [RuleSingleIDResponseMessage]
-type ruleSingleIDResponseMessageJSON struct {
+// userFirewallAccessRuleRuleDeleteResponseMessageJSON contains the JSON metadata
+// for the struct [UserFirewallAccessRuleRuleDeleteResponseMessage]
+type userFirewallAccessRuleRuleDeleteResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleSingleIDResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *UserFirewallAccessRuleRuleDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RuleSingleIDResponseResult struct {
+type UserFirewallAccessRuleRuleDeleteResponseResult struct {
 	// The unique identifier of the IP Access rule.
-	ID   string                         `json:"id"`
-	JSON ruleSingleIDResponseResultJSON `json:"-"`
+	ID   string                                             `json:"id"`
+	JSON userFirewallAccessRuleRuleDeleteResponseResultJSON `json:"-"`
 }
 
-// ruleSingleIDResponseResultJSON contains the JSON metadata for the struct
-// [RuleSingleIDResponseResult]
-type ruleSingleIDResponseResultJSON struct {
+// userFirewallAccessRuleRuleDeleteResponseResultJSON contains the JSON metadata
+// for the struct [UserFirewallAccessRuleRuleDeleteResponseResult]
+type userFirewallAccessRuleRuleDeleteResponseResultJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleSingleIDResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *UserFirewallAccessRuleRuleDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type RuleSingleIDResponseSuccess bool
+type UserFirewallAccessRuleRuleDeleteResponseSuccess bool
 
 const (
-	RuleSingleIDResponseSuccessTrue RuleSingleIDResponseSuccess = true
+	UserFirewallAccessRuleRuleDeleteResponseSuccessTrue UserFirewallAccessRuleRuleDeleteResponseSuccess = true
 )
 
-type RuleSingleResponse struct {
-	Errors   []RuleSingleResponseError   `json:"errors"`
-	Messages []RuleSingleResponseMessage `json:"messages"`
-	Result   RuleSingleResponseResult    `json:"result"`
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponse struct {
+	Errors   []UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseError   `json:"errors"`
+	Messages []UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseMessage `json:"messages"`
+	Result   UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success RuleSingleResponseSuccess `json:"success"`
-	JSON    ruleSingleResponseJSON    `json:"-"`
+	Success UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseSuccess `json:"success"`
+	JSON    userFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseJSON    `json:"-"`
 }
 
-// ruleSingleResponseJSON contains the JSON metadata for the struct
-// [RuleSingleResponse]
-type ruleSingleResponseJSON struct {
+// userFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseJSON
+// contains the JSON metadata for the struct
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponse]
+type userFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -525,69 +510,72 @@ type ruleSingleResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleSingleResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RuleSingleResponseError struct {
-	Code    int64                       `json:"code,required"`
-	Message string                      `json:"message,required"`
-	JSON    ruleSingleResponseErrorJSON `json:"-"`
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseError struct {
+	Code    int64                                                                             `json:"code,required"`
+	Message string                                                                            `json:"message,required"`
+	JSON    userFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseErrorJSON `json:"-"`
 }
 
-// ruleSingleResponseErrorJSON contains the JSON metadata for the struct
-// [RuleSingleResponseError]
-type ruleSingleResponseErrorJSON struct {
+// userFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseErrorJSON
+// contains the JSON metadata for the struct
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseError]
+type userFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleSingleResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RuleSingleResponseMessage struct {
-	Code    int64                         `json:"code,required"`
-	Message string                        `json:"message,required"`
-	JSON    ruleSingleResponseMessageJSON `json:"-"`
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseMessage struct {
+	Code    int64                                                                               `json:"code,required"`
+	Message string                                                                              `json:"message,required"`
+	JSON    userFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseMessageJSON `json:"-"`
 }
 
-// ruleSingleResponseMessageJSON contains the JSON metadata for the struct
-// [RuleSingleResponseMessage]
-type ruleSingleResponseMessageJSON struct {
+// userFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseMessageJSON
+// contains the JSON metadata for the struct
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseMessage]
+type userFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleSingleResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RuleSingleResponseResult struct {
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResult struct {
 	// The unique identifier of the IP Access rule.
 	ID string `json:"id,required"`
 	// The available actions that a rule can apply to a matched request.
-	AllowedModes []RuleSingleResponseResultAllowedMode `json:"allowed_modes,required"`
+	AllowedModes []UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultAllowedMode `json:"allowed_modes,required"`
 	// The rule configuration.
-	Configuration RuleSingleResponseResultConfiguration `json:"configuration,required"`
+	Configuration UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfiguration `json:"configuration,required"`
 	// The action to apply to a matched request.
-	Mode RuleSingleResponseResultMode `json:"mode,required"`
+	Mode UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultMode `json:"mode,required"`
 	// The timestamp of when the rule was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// The timestamp of when the rule was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// An informative summary of the rule, typically used as a reminder or explanation.
-	Notes string                       `json:"notes"`
-	JSON  ruleSingleResponseResultJSON `json:"-"`
+	Notes string                                                                             `json:"notes"`
+	JSON  userFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultJSON `json:"-"`
 }
 
-// ruleSingleResponseResultJSON contains the JSON metadata for the struct
-// [RuleSingleResponseResult]
-type ruleSingleResponseResultJSON struct {
+// userFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultJSON
+// contains the JSON metadata for the struct
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResult]
+type userFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultJSON struct {
 	ID            apijson.Field
 	AllowedModes  apijson.Field
 	Configuration apijson.Field
@@ -599,221 +587,476 @@ type ruleSingleResponseResultJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *RuleSingleResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The action to apply to a matched request.
-type RuleSingleResponseResultAllowedMode string
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultAllowedMode string
 
 const (
-	RuleSingleResponseResultAllowedModeBlock            RuleSingleResponseResultAllowedMode = "block"
-	RuleSingleResponseResultAllowedModeChallenge        RuleSingleResponseResultAllowedMode = "challenge"
-	RuleSingleResponseResultAllowedModeWhitelist        RuleSingleResponseResultAllowedMode = "whitelist"
-	RuleSingleResponseResultAllowedModeJsChallenge      RuleSingleResponseResultAllowedMode = "js_challenge"
-	RuleSingleResponseResultAllowedModeManagedChallenge RuleSingleResponseResultAllowedMode = "managed_challenge"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultAllowedModeBlock            UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultAllowedMode = "block"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultAllowedModeChallenge        UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultAllowedMode = "challenge"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultAllowedModeWhitelist        UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultAllowedMode = "whitelist"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultAllowedModeJsChallenge      UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultAllowedMode = "js_challenge"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultAllowedModeManagedChallenge UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultAllowedMode = "managed_challenge"
 )
 
 // The rule configuration.
 //
-// Union satisfied by [RuleSingleResponseResultConfigurationIPConfiguration],
-// [RuleSingleResponseResultConfigurationIpv6Configuration],
-// [RuleSingleResponseResultConfigurationCidrConfiguration],
-// [RuleSingleResponseResultConfigurationASNConfiguration] or
-// [RuleSingleResponseResultConfigurationCountryConfiguration].
-type RuleSingleResponseResultConfiguration interface {
-	implementsRuleSingleResponseResultConfiguration()
+// Union satisfied by
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTIPConfiguration],
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTIpv6Configuration],
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTCidrConfiguration],
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTASNConfiguration]
+// or
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTCountryConfiguration].
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfiguration interface {
+	implementsUserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfiguration()
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*RuleSingleResponseResultConfiguration)(nil)).Elem(), "")
+	apijson.RegisterUnion(reflect.TypeOf((*UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfiguration)(nil)).Elem(), "")
 }
 
-type RuleSingleResponseResultConfigurationIPConfiguration struct {
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTIPConfiguration struct {
 	// The configuration target. You must set the target to `ip` when specifying an IP
 	// address in the rule.
-	Target RuleSingleResponseResultConfigurationIPConfigurationTarget `json:"target"`
+	Target UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTIPConfigurationTarget `json:"target"`
 	// The IP address to match. This address will be compared to the IP address of
 	// incoming requests.
-	Value string                                                   `json:"value"`
-	JSON  ruleSingleResponseResultConfigurationIPConfigurationJSON `json:"-"`
+	Value string                                                                                                                 `json:"value"`
+	JSON  userFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTipConfigurationJSON `json:"-"`
 }
 
-// ruleSingleResponseResultConfigurationIPConfigurationJSON contains the JSON
-// metadata for the struct [RuleSingleResponseResultConfigurationIPConfiguration]
-type ruleSingleResponseResultConfigurationIPConfigurationJSON struct {
+// userFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTipConfigurationJSON
+// contains the JSON metadata for the struct
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTIPConfiguration]
+type userFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTipConfigurationJSON struct {
 	Target      apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleSingleResponseResultConfigurationIPConfiguration) UnmarshalJSON(data []byte) (err error) {
+func (r *UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTIPConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r RuleSingleResponseResultConfigurationIPConfiguration) implementsRuleSingleResponseResultConfiguration() {
+func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTIPConfiguration) implementsUserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfiguration() {
 }
 
 // The configuration target. You must set the target to `ip` when specifying an IP
 // address in the rule.
-type RuleSingleResponseResultConfigurationIPConfigurationTarget string
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTIPConfigurationTarget string
 
 const (
-	RuleSingleResponseResultConfigurationIPConfigurationTargetIP RuleSingleResponseResultConfigurationIPConfigurationTarget = "ip"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTIPConfigurationTargetIP UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTIPConfigurationTarget = "ip"
 )
 
-type RuleSingleResponseResultConfigurationIpv6Configuration struct {
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTIpv6Configuration struct {
 	// The configuration target. You must set the target to `ip6` when specifying an
 	// IPv6 address in the rule.
-	Target RuleSingleResponseResultConfigurationIpv6ConfigurationTarget `json:"target"`
+	Target UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTIpv6ConfigurationTarget `json:"target"`
 	// The IPv6 address to match.
-	Value string                                                     `json:"value"`
-	JSON  ruleSingleResponseResultConfigurationIpv6ConfigurationJSON `json:"-"`
+	Value string                                                                                                                   `json:"value"`
+	JSON  userFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTIpv6ConfigurationJSON `json:"-"`
 }
 
-// ruleSingleResponseResultConfigurationIpv6ConfigurationJSON contains the JSON
-// metadata for the struct [RuleSingleResponseResultConfigurationIpv6Configuration]
-type ruleSingleResponseResultConfigurationIpv6ConfigurationJSON struct {
+// userFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTIpv6ConfigurationJSON
+// contains the JSON metadata for the struct
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTIpv6Configuration]
+type userFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTIpv6ConfigurationJSON struct {
 	Target      apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleSingleResponseResultConfigurationIpv6Configuration) UnmarshalJSON(data []byte) (err error) {
+func (r *UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTIpv6Configuration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r RuleSingleResponseResultConfigurationIpv6Configuration) implementsRuleSingleResponseResultConfiguration() {
+func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTIpv6Configuration) implementsUserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfiguration() {
 }
 
 // The configuration target. You must set the target to `ip6` when specifying an
 // IPv6 address in the rule.
-type RuleSingleResponseResultConfigurationIpv6ConfigurationTarget string
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTIpv6ConfigurationTarget string
 
 const (
-	RuleSingleResponseResultConfigurationIpv6ConfigurationTargetIp6 RuleSingleResponseResultConfigurationIpv6ConfigurationTarget = "ip6"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTIpv6ConfigurationTargetIp6 UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTIpv6ConfigurationTarget = "ip6"
 )
 
-type RuleSingleResponseResultConfigurationCidrConfiguration struct {
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTCidrConfiguration struct {
 	// The configuration target. You must set the target to `ip_range` when specifying
 	// an IP address range in the rule.
-	Target RuleSingleResponseResultConfigurationCidrConfigurationTarget `json:"target"`
+	Target UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTCidrConfigurationTarget `json:"target"`
 	// The IP address range to match. You can only use prefix lengths `/16` and `/24`
 	// for IPv4 ranges, and prefix lengths `/32`, `/48`, and `/64` for IPv6 ranges.
-	Value string                                                     `json:"value"`
-	JSON  ruleSingleResponseResultConfigurationCidrConfigurationJSON `json:"-"`
+	Value string                                                                                                                   `json:"value"`
+	JSON  userFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTCidrConfigurationJSON `json:"-"`
 }
 
-// ruleSingleResponseResultConfigurationCidrConfigurationJSON contains the JSON
-// metadata for the struct [RuleSingleResponseResultConfigurationCidrConfiguration]
-type ruleSingleResponseResultConfigurationCidrConfigurationJSON struct {
+// userFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTCidrConfigurationJSON
+// contains the JSON metadata for the struct
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTCidrConfiguration]
+type userFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTCidrConfigurationJSON struct {
 	Target      apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleSingleResponseResultConfigurationCidrConfiguration) UnmarshalJSON(data []byte) (err error) {
+func (r *UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTCidrConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r RuleSingleResponseResultConfigurationCidrConfiguration) implementsRuleSingleResponseResultConfiguration() {
+func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTCidrConfiguration) implementsUserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfiguration() {
 }
 
 // The configuration target. You must set the target to `ip_range` when specifying
 // an IP address range in the rule.
-type RuleSingleResponseResultConfigurationCidrConfigurationTarget string
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTCidrConfigurationTarget string
 
 const (
-	RuleSingleResponseResultConfigurationCidrConfigurationTargetIPRange RuleSingleResponseResultConfigurationCidrConfigurationTarget = "ip_range"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTCidrConfigurationTargetIPRange UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTCidrConfigurationTarget = "ip_range"
 )
 
-type RuleSingleResponseResultConfigurationASNConfiguration struct {
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTASNConfiguration struct {
 	// The configuration target. You must set the target to `asn` when specifying an
 	// Autonomous System Number (ASN) in the rule.
-	Target RuleSingleResponseResultConfigurationASNConfigurationTarget `json:"target"`
+	Target UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTASNConfigurationTarget `json:"target"`
 	// The AS number to match.
-	Value string                                                    `json:"value"`
-	JSON  ruleSingleResponseResultConfigurationASNConfigurationJSON `json:"-"`
+	Value string                                                                                                                  `json:"value"`
+	JSON  userFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTasnConfigurationJSON `json:"-"`
 }
 
-// ruleSingleResponseResultConfigurationASNConfigurationJSON contains the JSON
-// metadata for the struct [RuleSingleResponseResultConfigurationASNConfiguration]
-type ruleSingleResponseResultConfigurationASNConfigurationJSON struct {
+// userFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTasnConfigurationJSON
+// contains the JSON metadata for the struct
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTASNConfiguration]
+type userFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTasnConfigurationJSON struct {
 	Target      apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleSingleResponseResultConfigurationASNConfiguration) UnmarshalJSON(data []byte) (err error) {
+func (r *UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTASNConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r RuleSingleResponseResultConfigurationASNConfiguration) implementsRuleSingleResponseResultConfiguration() {
+func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTASNConfiguration) implementsUserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfiguration() {
 }
 
 // The configuration target. You must set the target to `asn` when specifying an
 // Autonomous System Number (ASN) in the rule.
-type RuleSingleResponseResultConfigurationASNConfigurationTarget string
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTASNConfigurationTarget string
 
 const (
-	RuleSingleResponseResultConfigurationASNConfigurationTargetASN RuleSingleResponseResultConfigurationASNConfigurationTarget = "asn"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTASNConfigurationTargetASN UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTASNConfigurationTarget = "asn"
 )
 
-type RuleSingleResponseResultConfigurationCountryConfiguration struct {
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTCountryConfiguration struct {
 	// The configuration target. You must set the target to `country` when specifying a
 	// country code in the rule.
-	Target RuleSingleResponseResultConfigurationCountryConfigurationTarget `json:"target"`
+	Target UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTCountryConfigurationTarget `json:"target"`
 	// The two-letter ISO-3166-1 alpha-2 code to match. For more information, refer to
 	// [IP Access rules: Parameters](https://developers.cloudflare.com/waf/tools/ip-access-rules/parameters/#country).
-	Value string                                                        `json:"value"`
-	JSON  ruleSingleResponseResultConfigurationCountryConfigurationJSON `json:"-"`
+	Value string                                                                                                                      `json:"value"`
+	JSON  userFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTCountryConfigurationJSON `json:"-"`
 }
 
-// ruleSingleResponseResultConfigurationCountryConfigurationJSON contains the JSON
-// metadata for the struct
-// [RuleSingleResponseResultConfigurationCountryConfiguration]
-type ruleSingleResponseResultConfigurationCountryConfigurationJSON struct {
+// userFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTCountryConfigurationJSON
+// contains the JSON metadata for the struct
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTCountryConfiguration]
+type userFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTCountryConfigurationJSON struct {
 	Target      apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleSingleResponseResultConfigurationCountryConfiguration) UnmarshalJSON(data []byte) (err error) {
+func (r *UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTCountryConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r RuleSingleResponseResultConfigurationCountryConfiguration) implementsRuleSingleResponseResultConfiguration() {
+func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTCountryConfiguration) implementsUserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfiguration() {
 }
 
 // The configuration target. You must set the target to `country` when specifying a
 // country code in the rule.
-type RuleSingleResponseResultConfigurationCountryConfigurationTarget string
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTCountryConfigurationTarget string
 
 const (
-	RuleSingleResponseResultConfigurationCountryConfigurationTargetCountry RuleSingleResponseResultConfigurationCountryConfigurationTarget = "country"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTCountryConfigurationTargetCountry UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultConfigurationDZw70ubTCountryConfigurationTarget = "country"
 )
 
 // The action to apply to a matched request.
-type RuleSingleResponseResultMode string
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultMode string
 
 const (
-	RuleSingleResponseResultModeBlock            RuleSingleResponseResultMode = "block"
-	RuleSingleResponseResultModeChallenge        RuleSingleResponseResultMode = "challenge"
-	RuleSingleResponseResultModeWhitelist        RuleSingleResponseResultMode = "whitelist"
-	RuleSingleResponseResultModeJsChallenge      RuleSingleResponseResultMode = "js_challenge"
-	RuleSingleResponseResultModeManagedChallenge RuleSingleResponseResultMode = "managed_challenge"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultModeBlock            UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultMode = "block"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultModeChallenge        UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultMode = "challenge"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultModeWhitelist        UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultMode = "whitelist"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultModeJsChallenge      UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultMode = "js_challenge"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultModeManagedChallenge UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseResultMode = "managed_challenge"
 )
 
 // Whether the API call was successful
-type RuleSingleResponseSuccess bool
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseSuccess bool
 
 const (
-	RuleSingleResponseSuccessTrue RuleSingleResponseSuccess = true
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseSuccessTrue UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleResponseSuccess = true
+)
+
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponse struct {
+	// The unique identifier of the IP Access rule.
+	ID string `json:"id,required"`
+	// The available actions that a rule can apply to a matched request.
+	AllowedModes []UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseAllowedMode `json:"allowed_modes,required"`
+	// The rule configuration.
+	Configuration UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfiguration `json:"configuration,required"`
+	// The action to apply to a matched request.
+	Mode UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseMode `json:"mode,required"`
+	// The timestamp of when the rule was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// The timestamp of when the rule was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// An informative summary of the rule, typically used as a reminder or explanation.
+	Notes string                                                                       `json:"notes"`
+	JSON  userFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseJSON `json:"-"`
+}
+
+// userFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseJSON
+// contains the JSON metadata for the struct
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponse]
+type userFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseJSON struct {
+	ID            apijson.Field
+	AllowedModes  apijson.Field
+	Configuration apijson.Field
+	Mode          apijson.Field
+	CreatedOn     apijson.Field
+	ModifiedOn    apijson.Field
+	Notes         apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The action to apply to a matched request.
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseAllowedMode string
+
+const (
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseAllowedModeBlock            UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseAllowedMode = "block"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseAllowedModeChallenge        UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseAllowedMode = "challenge"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseAllowedModeWhitelist        UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseAllowedMode = "whitelist"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseAllowedModeJsChallenge      UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseAllowedMode = "js_challenge"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseAllowedModeManagedChallenge UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseAllowedMode = "managed_challenge"
+)
+
+// The rule configuration.
+//
+// Union satisfied by
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTIPConfiguration],
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTIpv6Configuration],
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTCidrConfiguration],
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTASNConfiguration]
+// or
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTCountryConfiguration].
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfiguration interface {
+	implementsUserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfiguration()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfiguration)(nil)).Elem(), "")
+}
+
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTIPConfiguration struct {
+	// The configuration target. You must set the target to `ip` when specifying an IP
+	// address in the rule.
+	Target UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTIPConfigurationTarget `json:"target"`
+	// The IP address to match. This address will be compared to the IP address of
+	// incoming requests.
+	Value string                                                                                                           `json:"value"`
+	JSON  userFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTipConfigurationJSON `json:"-"`
+}
+
+// userFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTipConfigurationJSON
+// contains the JSON metadata for the struct
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTIPConfiguration]
+type userFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTipConfigurationJSON struct {
+	Target      apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTIPConfiguration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTIPConfiguration) implementsUserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfiguration() {
+}
+
+// The configuration target. You must set the target to `ip` when specifying an IP
+// address in the rule.
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTIPConfigurationTarget string
+
+const (
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTIPConfigurationTargetIP UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTIPConfigurationTarget = "ip"
+)
+
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTIpv6Configuration struct {
+	// The configuration target. You must set the target to `ip6` when specifying an
+	// IPv6 address in the rule.
+	Target UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTIpv6ConfigurationTarget `json:"target"`
+	// The IPv6 address to match.
+	Value string                                                                                                             `json:"value"`
+	JSON  userFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTIpv6ConfigurationJSON `json:"-"`
+}
+
+// userFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTIpv6ConfigurationJSON
+// contains the JSON metadata for the struct
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTIpv6Configuration]
+type userFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTIpv6ConfigurationJSON struct {
+	Target      apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTIpv6Configuration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTIpv6Configuration) implementsUserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfiguration() {
+}
+
+// The configuration target. You must set the target to `ip6` when specifying an
+// IPv6 address in the rule.
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTIpv6ConfigurationTarget string
+
+const (
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTIpv6ConfigurationTargetIp6 UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTIpv6ConfigurationTarget = "ip6"
+)
+
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTCidrConfiguration struct {
+	// The configuration target. You must set the target to `ip_range` when specifying
+	// an IP address range in the rule.
+	Target UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTCidrConfigurationTarget `json:"target"`
+	// The IP address range to match. You can only use prefix lengths `/16` and `/24`
+	// for IPv4 ranges, and prefix lengths `/32`, `/48`, and `/64` for IPv6 ranges.
+	Value string                                                                                                             `json:"value"`
+	JSON  userFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTCidrConfigurationJSON `json:"-"`
+}
+
+// userFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTCidrConfigurationJSON
+// contains the JSON metadata for the struct
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTCidrConfiguration]
+type userFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTCidrConfigurationJSON struct {
+	Target      apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTCidrConfiguration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTCidrConfiguration) implementsUserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfiguration() {
+}
+
+// The configuration target. You must set the target to `ip_range` when specifying
+// an IP address range in the rule.
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTCidrConfigurationTarget string
+
+const (
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTCidrConfigurationTargetIPRange UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTCidrConfigurationTarget = "ip_range"
+)
+
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTASNConfiguration struct {
+	// The configuration target. You must set the target to `asn` when specifying an
+	// Autonomous System Number (ASN) in the rule.
+	Target UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTASNConfigurationTarget `json:"target"`
+	// The AS number to match.
+	Value string                                                                                                            `json:"value"`
+	JSON  userFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTasnConfigurationJSON `json:"-"`
+}
+
+// userFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTasnConfigurationJSON
+// contains the JSON metadata for the struct
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTASNConfiguration]
+type userFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTasnConfigurationJSON struct {
+	Target      apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTASNConfiguration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTASNConfiguration) implementsUserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfiguration() {
+}
+
+// The configuration target. You must set the target to `asn` when specifying an
+// Autonomous System Number (ASN) in the rule.
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTASNConfigurationTarget string
+
+const (
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTASNConfigurationTargetASN UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTASNConfigurationTarget = "asn"
+)
+
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTCountryConfiguration struct {
+	// The configuration target. You must set the target to `country` when specifying a
+	// country code in the rule.
+	Target UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTCountryConfigurationTarget `json:"target"`
+	// The two-letter ISO-3166-1 alpha-2 code to match. For more information, refer to
+	// [IP Access rules: Parameters](https://developers.cloudflare.com/waf/tools/ip-access-rules/parameters/#country).
+	Value string                                                                                                                `json:"value"`
+	JSON  userFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTCountryConfigurationJSON `json:"-"`
+}
+
+// userFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTCountryConfigurationJSON
+// contains the JSON metadata for the struct
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTCountryConfiguration]
+type userFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTCountryConfigurationJSON struct {
+	Target      apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTCountryConfiguration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTCountryConfiguration) implementsUserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfiguration() {
+}
+
+// The configuration target. You must set the target to `country` when specifying a
+// country code in the rule.
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTCountryConfigurationTarget string
+
+const (
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTCountryConfigurationTargetCountry UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseConfigurationDZw70ubTCountryConfigurationTarget = "country"
+)
+
+// The action to apply to a matched request.
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseMode string
+
+const (
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseModeBlock            UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseMode = "block"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseModeChallenge        UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseMode = "challenge"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseModeWhitelist        UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseMode = "whitelist"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseModeJsChallenge      UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseMode = "js_challenge"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseModeManagedChallenge UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesResponseMode = "managed_challenge"
 )
 
 type UserFirewallAccessRuleRuleUpdateParams struct {
@@ -854,131 +1097,131 @@ func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParams) 
 // The rule configuration.
 //
 // Satisfied by
-// [UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationIPConfiguration],
-// [UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationIpv6Configuration],
-// [UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationCidrConfiguration],
-// [UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationASNConfiguration],
-// [UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationCountryConfiguration].
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTIPConfiguration],
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTIpv6Configuration],
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTCidrConfiguration],
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTASNConfiguration],
+// [UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTCountryConfiguration].
 type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfiguration interface {
 	implementsUserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfiguration()
 }
 
-type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationIPConfiguration struct {
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTIPConfiguration struct {
 	// The configuration target. You must set the target to `ip` when specifying an IP
 	// address in the rule.
-	Target param.Field[UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationIPConfigurationTarget] `json:"target"`
+	Target param.Field[UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTIPConfigurationTarget] `json:"target"`
 	// The IP address to match. This address will be compared to the IP address of
 	// incoming requests.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationIPConfiguration) MarshalJSON() (data []byte, err error) {
+func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTIPConfiguration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationIPConfiguration) implementsUserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfiguration() {
+func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTIPConfiguration) implementsUserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfiguration() {
 }
 
 // The configuration target. You must set the target to `ip` when specifying an IP
 // address in the rule.
-type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationIPConfigurationTarget string
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTIPConfigurationTarget string
 
 const (
-	UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationIPConfigurationTargetIP UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationIPConfigurationTarget = "ip"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTIPConfigurationTargetIP UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTIPConfigurationTarget = "ip"
 )
 
-type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationIpv6Configuration struct {
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTIpv6Configuration struct {
 	// The configuration target. You must set the target to `ip6` when specifying an
 	// IPv6 address in the rule.
-	Target param.Field[UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationIpv6ConfigurationTarget] `json:"target"`
+	Target param.Field[UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTIpv6ConfigurationTarget] `json:"target"`
 	// The IPv6 address to match.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationIpv6Configuration) MarshalJSON() (data []byte, err error) {
+func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTIpv6Configuration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationIpv6Configuration) implementsUserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfiguration() {
+func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTIpv6Configuration) implementsUserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfiguration() {
 }
 
 // The configuration target. You must set the target to `ip6` when specifying an
 // IPv6 address in the rule.
-type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationIpv6ConfigurationTarget string
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTIpv6ConfigurationTarget string
 
 const (
-	UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationIpv6ConfigurationTargetIp6 UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationIpv6ConfigurationTarget = "ip6"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTIpv6ConfigurationTargetIp6 UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTIpv6ConfigurationTarget = "ip6"
 )
 
-type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationCidrConfiguration struct {
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTCidrConfiguration struct {
 	// The configuration target. You must set the target to `ip_range` when specifying
 	// an IP address range in the rule.
-	Target param.Field[UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationCidrConfigurationTarget] `json:"target"`
+	Target param.Field[UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTCidrConfigurationTarget] `json:"target"`
 	// The IP address range to match. You can only use prefix lengths `/16` and `/24`
 	// for IPv4 ranges, and prefix lengths `/32`, `/48`, and `/64` for IPv6 ranges.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationCidrConfiguration) MarshalJSON() (data []byte, err error) {
+func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTCidrConfiguration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationCidrConfiguration) implementsUserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfiguration() {
+func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTCidrConfiguration) implementsUserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfiguration() {
 }
 
 // The configuration target. You must set the target to `ip_range` when specifying
 // an IP address range in the rule.
-type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationCidrConfigurationTarget string
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTCidrConfigurationTarget string
 
 const (
-	UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationCidrConfigurationTargetIPRange UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationCidrConfigurationTarget = "ip_range"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTCidrConfigurationTargetIPRange UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTCidrConfigurationTarget = "ip_range"
 )
 
-type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationASNConfiguration struct {
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTASNConfiguration struct {
 	// The configuration target. You must set the target to `asn` when specifying an
 	// Autonomous System Number (ASN) in the rule.
-	Target param.Field[UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationASNConfigurationTarget] `json:"target"`
+	Target param.Field[UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTASNConfigurationTarget] `json:"target"`
 	// The AS number to match.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationASNConfiguration) MarshalJSON() (data []byte, err error) {
+func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTASNConfiguration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationASNConfiguration) implementsUserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfiguration() {
+func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTASNConfiguration) implementsUserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfiguration() {
 }
 
 // The configuration target. You must set the target to `asn` when specifying an
 // Autonomous System Number (ASN) in the rule.
-type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationASNConfigurationTarget string
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTASNConfigurationTarget string
 
 const (
-	UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationASNConfigurationTargetASN UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationASNConfigurationTarget = "asn"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTASNConfigurationTargetASN UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTASNConfigurationTarget = "asn"
 )
 
-type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationCountryConfiguration struct {
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTCountryConfiguration struct {
 	// The configuration target. You must set the target to `country` when specifying a
 	// country code in the rule.
-	Target param.Field[UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationCountryConfigurationTarget] `json:"target"`
+	Target param.Field[UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTCountryConfigurationTarget] `json:"target"`
 	// The two-letter ISO-3166-1 alpha-2 code to match. For more information, refer to
 	// [IP Access rules: Parameters](https://developers.cloudflare.com/waf/tools/ip-access-rules/parameters/#country).
 	Value param.Field[string] `json:"value"`
 }
 
-func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationCountryConfiguration) MarshalJSON() (data []byte, err error) {
+func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTCountryConfiguration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationCountryConfiguration) implementsUserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfiguration() {
+func (r UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTCountryConfiguration) implementsUserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfiguration() {
 }
 
 // The configuration target. You must set the target to `country` when specifying a
 // country code in the rule.
-type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationCountryConfigurationTarget string
+type UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTCountryConfigurationTarget string
 
 const (
-	UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationCountryConfigurationTargetCountry UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationCountryConfigurationTarget = "country"
+	UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTCountryConfigurationTargetCountry UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTCountryConfigurationTarget = "country"
 )
 
 // The action to apply to a matched request.

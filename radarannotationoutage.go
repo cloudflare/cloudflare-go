@@ -35,7 +35,7 @@ func NewRadarAnnotationOutageService(opts ...option.RequestOption) (r *RadarAnno
 	return
 }
 
-// Get outages annotations
+// Get latest Internet outages and anomalies.
 func (r *RadarAnnotationOutageService) List(ctx context.Context, query RadarAnnotationOutageListParams, opts ...option.RequestOption) (res *RadarAnnotationOutageListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "radar/annotations/outages"
@@ -80,6 +80,7 @@ func (r *RadarAnnotationOutageListResponseResult) UnmarshalJSON(data []byte) (er
 }
 
 type RadarAnnotationOutageListResponseResultAnnotation struct {
+	ID               string                                                              `json:"id,required"`
 	ASNs             []int64                                                             `json:"asns,required"`
 	ASNsDetails      []RadarAnnotationOutageListResponseResultAnnotationsASNsDetail      `json:"asnsDetails,required"`
 	DataSource       string                                                              `json:"dataSource,required"`
@@ -98,6 +99,7 @@ type RadarAnnotationOutageListResponseResultAnnotation struct {
 // radarAnnotationOutageListResponseResultAnnotationJSON contains the JSON metadata
 // for the struct [RadarAnnotationOutageListResponseResultAnnotation]
 type radarAnnotationOutageListResponseResultAnnotationJSON struct {
+	ID               apijson.Field
 	ASNs             apijson.Field
 	ASNsDetails      apijson.Field
 	DataSource       apijson.Field
@@ -119,9 +121,9 @@ func (r *RadarAnnotationOutageListResponseResultAnnotation) UnmarshalJSON(data [
 }
 
 type RadarAnnotationOutageListResponseResultAnnotationsASNsDetail struct {
-	ASN       int64                                                                  `json:"asn,required"`
-	Locations RadarAnnotationOutageListResponseResultAnnotationsASNsDetailsLocations `json:"locations,required"`
+	ASN       string                                                                 `json:"asn,required"`
 	Name      string                                                                 `json:"name,required"`
+	Locations RadarAnnotationOutageListResponseResultAnnotationsASNsDetailsLocations `json:"locations"`
 	JSON      radarAnnotationOutageListResponseResultAnnotationsASNsDetailJSON       `json:"-"`
 }
 
@@ -130,8 +132,8 @@ type RadarAnnotationOutageListResponseResultAnnotationsASNsDetail struct {
 // [RadarAnnotationOutageListResponseResultAnnotationsASNsDetail]
 type radarAnnotationOutageListResponseResultAnnotationsASNsDetailJSON struct {
 	ASN         apijson.Field
-	Locations   apijson.Field
 	Name        apijson.Field
+	Locations   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -141,7 +143,7 @@ func (r *RadarAnnotationOutageListResponseResultAnnotationsASNsDetail) Unmarshal
 }
 
 type RadarAnnotationOutageListResponseResultAnnotationsASNsDetailsLocations struct {
-	ASN  string                                                                     `json:"asn,required"`
+	Code string                                                                     `json:"code,required"`
 	Name string                                                                     `json:"name,required"`
 	JSON radarAnnotationOutageListResponseResultAnnotationsASNsDetailsLocationsJSON `json:"-"`
 }
@@ -150,7 +152,7 @@ type RadarAnnotationOutageListResponseResultAnnotationsASNsDetailsLocations stru
 // contains the JSON metadata for the struct
 // [RadarAnnotationOutageListResponseResultAnnotationsASNsDetailsLocations]
 type radarAnnotationOutageListResponseResultAnnotationsASNsDetailsLocationsJSON struct {
-	ASN         apijson.Field
+	Code        apijson.Field
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -201,6 +203,8 @@ func (r *RadarAnnotationOutageListResponseResultAnnotationsOutage) UnmarshalJSON
 }
 
 type RadarAnnotationOutageListParams struct {
+	// Single ASN as integer.
+	ASN param.Field[int64] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
 	// Shorthand date ranges for the last X days - use when you don't need specific
@@ -212,6 +216,8 @@ type RadarAnnotationOutageListParams struct {
 	Format param.Field[RadarAnnotationOutageListParamsFormat] `query:"format"`
 	// Limit the number of objects in the response.
 	Limit param.Field[int64] `query:"limit"`
+	// Location Alpha2 code.
+	Location param.Field[string] `query:"location"`
 	// Number of objects to skip before grabbing results.
 	Offset param.Field[int64] `query:"offset"`
 }
@@ -231,6 +237,7 @@ type RadarAnnotationOutageListParamsDateRange string
 
 const (
 	RadarAnnotationOutageListParamsDateRange1d         RadarAnnotationOutageListParamsDateRange = "1d"
+	RadarAnnotationOutageListParamsDateRange2d         RadarAnnotationOutageListParamsDateRange = "2d"
 	RadarAnnotationOutageListParamsDateRange7d         RadarAnnotationOutageListParamsDateRange = "7d"
 	RadarAnnotationOutageListParamsDateRange14d        RadarAnnotationOutageListParamsDateRange = "14d"
 	RadarAnnotationOutageListParamsDateRange28d        RadarAnnotationOutageListParamsDateRange = "28d"
@@ -238,6 +245,7 @@ const (
 	RadarAnnotationOutageListParamsDateRange24w        RadarAnnotationOutageListParamsDateRange = "24w"
 	RadarAnnotationOutageListParamsDateRange52w        RadarAnnotationOutageListParamsDateRange = "52w"
 	RadarAnnotationOutageListParamsDateRange1dControl  RadarAnnotationOutageListParamsDateRange = "1dControl"
+	RadarAnnotationOutageListParamsDateRange2dControl  RadarAnnotationOutageListParamsDateRange = "2dControl"
 	RadarAnnotationOutageListParamsDateRange7dControl  RadarAnnotationOutageListParamsDateRange = "7dControl"
 	RadarAnnotationOutageListParamsDateRange14dControl RadarAnnotationOutageListParamsDateRange = "14dControl"
 	RadarAnnotationOutageListParamsDateRange28dControl RadarAnnotationOutageListParamsDateRange = "28dControl"

@@ -32,7 +32,7 @@ func NewAccountStreamWebhookService(opts ...option.RequestOption) (r *AccountStr
 }
 
 // Deletes a webhook.
-func (r *AccountStreamWebhookService) Delete(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *DeletedResponse, err error) {
+func (r *AccountStreamWebhookService) Delete(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *AccountStreamWebhookDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/stream/webhook", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -40,7 +40,7 @@ func (r *AccountStreamWebhookService) Delete(ctx context.Context, accountIdentif
 }
 
 // Creates a webhook notification.
-func (r *AccountStreamWebhookService) StreamWebhookNewWebhooks(ctx context.Context, accountIdentifier string, body AccountStreamWebhookStreamWebhookNewWebhooksParams, opts ...option.RequestOption) (res *WebhookResponseSingle, err error) {
+func (r *AccountStreamWebhookService) StreamWebhookNewWebhooks(ctx context.Context, accountIdentifier string, body AccountStreamWebhookStreamWebhookNewWebhooksParams, opts ...option.RequestOption) (res *AccountStreamWebhookStreamWebhookNewWebhooksResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/stream/webhook", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
@@ -48,25 +48,25 @@ func (r *AccountStreamWebhookService) StreamWebhookNewWebhooks(ctx context.Conte
 }
 
 // Retrieves a list of webhooks.
-func (r *AccountStreamWebhookService) StreamWebhookViewWebhooks(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *WebhookResponseSingle, err error) {
+func (r *AccountStreamWebhookService) StreamWebhookViewWebhooks(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *AccountStreamWebhookStreamWebhookViewWebhooksResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/stream/webhook", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type WebhookResponseSingle struct {
-	Errors   []WebhookResponseSingleError   `json:"errors"`
-	Messages []WebhookResponseSingleMessage `json:"messages"`
-	Result   interface{}                    `json:"result"`
+type AccountStreamWebhookDeleteResponse struct {
+	Errors   []AccountStreamWebhookDeleteResponseError   `json:"errors"`
+	Messages []AccountStreamWebhookDeleteResponseMessage `json:"messages"`
+	Result   string                                      `json:"result"`
 	// Whether the API call was successful
-	Success WebhookResponseSingleSuccess `json:"success"`
-	JSON    webhookResponseSingleJSON    `json:"-"`
+	Success AccountStreamWebhookDeleteResponseSuccess `json:"success"`
+	JSON    accountStreamWebhookDeleteResponseJSON    `json:"-"`
 }
 
-// webhookResponseSingleJSON contains the JSON metadata for the struct
-// [WebhookResponseSingle]
-type webhookResponseSingleJSON struct {
+// accountStreamWebhookDeleteResponseJSON contains the JSON metadata for the struct
+// [AccountStreamWebhookDeleteResponse]
+type accountStreamWebhookDeleteResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -75,53 +75,195 @@ type webhookResponseSingleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WebhookResponseSingle) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamWebhookDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WebhookResponseSingleError struct {
-	Code    int64                          `json:"code,required"`
-	Message string                         `json:"message,required"`
-	JSON    webhookResponseSingleErrorJSON `json:"-"`
+type AccountStreamWebhookDeleteResponseError struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    accountStreamWebhookDeleteResponseErrorJSON `json:"-"`
 }
 
-// webhookResponseSingleErrorJSON contains the JSON metadata for the struct
-// [WebhookResponseSingleError]
-type webhookResponseSingleErrorJSON struct {
+// accountStreamWebhookDeleteResponseErrorJSON contains the JSON metadata for the
+// struct [AccountStreamWebhookDeleteResponseError]
+type accountStreamWebhookDeleteResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WebhookResponseSingleError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamWebhookDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WebhookResponseSingleMessage struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    webhookResponseSingleMessageJSON `json:"-"`
+type AccountStreamWebhookDeleteResponseMessage struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    accountStreamWebhookDeleteResponseMessageJSON `json:"-"`
 }
 
-// webhookResponseSingleMessageJSON contains the JSON metadata for the struct
-// [WebhookResponseSingleMessage]
-type webhookResponseSingleMessageJSON struct {
+// accountStreamWebhookDeleteResponseMessageJSON contains the JSON metadata for the
+// struct [AccountStreamWebhookDeleteResponseMessage]
+type accountStreamWebhookDeleteResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WebhookResponseSingleMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamWebhookDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type WebhookResponseSingleSuccess bool
+type AccountStreamWebhookDeleteResponseSuccess bool
 
 const (
-	WebhookResponseSingleSuccessTrue WebhookResponseSingleSuccess = true
+	AccountStreamWebhookDeleteResponseSuccessTrue AccountStreamWebhookDeleteResponseSuccess = true
+)
+
+type AccountStreamWebhookStreamWebhookNewWebhooksResponse struct {
+	Errors   []AccountStreamWebhookStreamWebhookNewWebhooksResponseError   `json:"errors"`
+	Messages []AccountStreamWebhookStreamWebhookNewWebhooksResponseMessage `json:"messages"`
+	Result   interface{}                                                   `json:"result"`
+	// Whether the API call was successful
+	Success AccountStreamWebhookStreamWebhookNewWebhooksResponseSuccess `json:"success"`
+	JSON    accountStreamWebhookStreamWebhookNewWebhooksResponseJSON    `json:"-"`
+}
+
+// accountStreamWebhookStreamWebhookNewWebhooksResponseJSON contains the JSON
+// metadata for the struct [AccountStreamWebhookStreamWebhookNewWebhooksResponse]
+type accountStreamWebhookStreamWebhookNewWebhooksResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountStreamWebhookStreamWebhookNewWebhooksResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountStreamWebhookStreamWebhookNewWebhooksResponseError struct {
+	Code    int64                                                         `json:"code,required"`
+	Message string                                                        `json:"message,required"`
+	JSON    accountStreamWebhookStreamWebhookNewWebhooksResponseErrorJSON `json:"-"`
+}
+
+// accountStreamWebhookStreamWebhookNewWebhooksResponseErrorJSON contains the JSON
+// metadata for the struct
+// [AccountStreamWebhookStreamWebhookNewWebhooksResponseError]
+type accountStreamWebhookStreamWebhookNewWebhooksResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountStreamWebhookStreamWebhookNewWebhooksResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountStreamWebhookStreamWebhookNewWebhooksResponseMessage struct {
+	Code    int64                                                           `json:"code,required"`
+	Message string                                                          `json:"message,required"`
+	JSON    accountStreamWebhookStreamWebhookNewWebhooksResponseMessageJSON `json:"-"`
+}
+
+// accountStreamWebhookStreamWebhookNewWebhooksResponseMessageJSON contains the
+// JSON metadata for the struct
+// [AccountStreamWebhookStreamWebhookNewWebhooksResponseMessage]
+type accountStreamWebhookStreamWebhookNewWebhooksResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountStreamWebhookStreamWebhookNewWebhooksResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountStreamWebhookStreamWebhookNewWebhooksResponseSuccess bool
+
+const (
+	AccountStreamWebhookStreamWebhookNewWebhooksResponseSuccessTrue AccountStreamWebhookStreamWebhookNewWebhooksResponseSuccess = true
+)
+
+type AccountStreamWebhookStreamWebhookViewWebhooksResponse struct {
+	Errors   []AccountStreamWebhookStreamWebhookViewWebhooksResponseError   `json:"errors"`
+	Messages []AccountStreamWebhookStreamWebhookViewWebhooksResponseMessage `json:"messages"`
+	Result   interface{}                                                    `json:"result"`
+	// Whether the API call was successful
+	Success AccountStreamWebhookStreamWebhookViewWebhooksResponseSuccess `json:"success"`
+	JSON    accountStreamWebhookStreamWebhookViewWebhooksResponseJSON    `json:"-"`
+}
+
+// accountStreamWebhookStreamWebhookViewWebhooksResponseJSON contains the JSON
+// metadata for the struct [AccountStreamWebhookStreamWebhookViewWebhooksResponse]
+type accountStreamWebhookStreamWebhookViewWebhooksResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountStreamWebhookStreamWebhookViewWebhooksResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountStreamWebhookStreamWebhookViewWebhooksResponseError struct {
+	Code    int64                                                          `json:"code,required"`
+	Message string                                                         `json:"message,required"`
+	JSON    accountStreamWebhookStreamWebhookViewWebhooksResponseErrorJSON `json:"-"`
+}
+
+// accountStreamWebhookStreamWebhookViewWebhooksResponseErrorJSON contains the JSON
+// metadata for the struct
+// [AccountStreamWebhookStreamWebhookViewWebhooksResponseError]
+type accountStreamWebhookStreamWebhookViewWebhooksResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountStreamWebhookStreamWebhookViewWebhooksResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountStreamWebhookStreamWebhookViewWebhooksResponseMessage struct {
+	Code    int64                                                            `json:"code,required"`
+	Message string                                                           `json:"message,required"`
+	JSON    accountStreamWebhookStreamWebhookViewWebhooksResponseMessageJSON `json:"-"`
+}
+
+// accountStreamWebhookStreamWebhookViewWebhooksResponseMessageJSON contains the
+// JSON metadata for the struct
+// [AccountStreamWebhookStreamWebhookViewWebhooksResponseMessage]
+type accountStreamWebhookStreamWebhookViewWebhooksResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountStreamWebhookStreamWebhookViewWebhooksResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountStreamWebhookStreamWebhookViewWebhooksResponseSuccess bool
+
+const (
+	AccountStreamWebhookStreamWebhookViewWebhooksResponseSuccessTrue AccountStreamWebhookStreamWebhookViewWebhooksResponseSuccess = true
 )
 
 type AccountStreamWebhookStreamWebhookNewWebhooksParams struct {

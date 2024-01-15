@@ -32,26 +32,26 @@ func NewUserTokenValueService(opts ...option.RequestOption) (r *UserTokenValueSe
 }
 
 // Roll the token secret.
-func (r *UserTokenValueService) UserAPITokensRollToken(ctx context.Context, identifier interface{}, body UserTokenValueUserAPITokensRollTokenParams, opts ...option.RequestOption) (res *ResponseSingleValue, err error) {
+func (r *UserTokenValueService) UserAPITokensRollToken(ctx context.Context, identifier interface{}, body UserTokenValueUserAPITokensRollTokenParams, opts ...option.RequestOption) (res *UserTokenValueUserAPITokensRollTokenResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("user/tokens/%v/value", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
 	return
 }
 
-type ResponseSingleValue struct {
-	Errors   []ResponseSingleValueError   `json:"errors"`
-	Messages []ResponseSingleValueMessage `json:"messages"`
+type UserTokenValueUserAPITokensRollTokenResponse struct {
+	Errors   []UserTokenValueUserAPITokensRollTokenResponseError   `json:"errors"`
+	Messages []UserTokenValueUserAPITokensRollTokenResponseMessage `json:"messages"`
 	// The token value.
 	Result string `json:"result"`
 	// Whether the API call was successful
-	Success ResponseSingleValueSuccess `json:"success"`
-	JSON    responseSingleValueJSON    `json:"-"`
+	Success UserTokenValueUserAPITokensRollTokenResponseSuccess `json:"success"`
+	JSON    userTokenValueUserAPITokensRollTokenResponseJSON    `json:"-"`
 }
 
-// responseSingleValueJSON contains the JSON metadata for the struct
-// [ResponseSingleValue]
-type responseSingleValueJSON struct {
+// userTokenValueUserAPITokensRollTokenResponseJSON contains the JSON metadata for
+// the struct [UserTokenValueUserAPITokensRollTokenResponse]
+type userTokenValueUserAPITokensRollTokenResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -60,53 +60,53 @@ type responseSingleValueJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ResponseSingleValue) UnmarshalJSON(data []byte) (err error) {
+func (r *UserTokenValueUserAPITokensRollTokenResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ResponseSingleValueError struct {
-	Code    int64                        `json:"code,required"`
-	Message string                       `json:"message,required"`
-	JSON    responseSingleValueErrorJSON `json:"-"`
+type UserTokenValueUserAPITokensRollTokenResponseError struct {
+	Code    int64                                                 `json:"code,required"`
+	Message string                                                `json:"message,required"`
+	JSON    userTokenValueUserAPITokensRollTokenResponseErrorJSON `json:"-"`
 }
 
-// responseSingleValueErrorJSON contains the JSON metadata for the struct
-// [ResponseSingleValueError]
-type responseSingleValueErrorJSON struct {
+// userTokenValueUserAPITokensRollTokenResponseErrorJSON contains the JSON metadata
+// for the struct [UserTokenValueUserAPITokensRollTokenResponseError]
+type userTokenValueUserAPITokensRollTokenResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ResponseSingleValueError) UnmarshalJSON(data []byte) (err error) {
+func (r *UserTokenValueUserAPITokensRollTokenResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ResponseSingleValueMessage struct {
-	Code    int64                          `json:"code,required"`
-	Message string                         `json:"message,required"`
-	JSON    responseSingleValueMessageJSON `json:"-"`
+type UserTokenValueUserAPITokensRollTokenResponseMessage struct {
+	Code    int64                                                   `json:"code,required"`
+	Message string                                                  `json:"message,required"`
+	JSON    userTokenValueUserAPITokensRollTokenResponseMessageJSON `json:"-"`
 }
 
-// responseSingleValueMessageJSON contains the JSON metadata for the struct
-// [ResponseSingleValueMessage]
-type responseSingleValueMessageJSON struct {
+// userTokenValueUserAPITokensRollTokenResponseMessageJSON contains the JSON
+// metadata for the struct [UserTokenValueUserAPITokensRollTokenResponseMessage]
+type userTokenValueUserAPITokensRollTokenResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ResponseSingleValueMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *UserTokenValueUserAPITokensRollTokenResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type ResponseSingleValueSuccess bool
+type UserTokenValueUserAPITokensRollTokenResponseSuccess bool
 
 const (
-	ResponseSingleValueSuccessTrue ResponseSingleValueSuccess = true
+	UserTokenValueUserAPITokensRollTokenResponseSuccessTrue UserTokenValueUserAPITokensRollTokenResponseSuccess = true
 )
 
 type UserTokenValueUserAPITokensRollTokenParams struct {

@@ -24,8 +24,10 @@ func TestZoneFirewallWafOverrideGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Firewalls.Wafs.Overrides.Get(
 		context.TODO(),
@@ -52,8 +54,10 @@ func TestZoneFirewallWafOverrideUpdate(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Firewalls.Wafs.Overrides.Update(
 		context.TODO(),
@@ -83,8 +87,10 @@ func TestZoneFirewallWafOverrideDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Firewalls.Wafs.Overrides.Delete(
 		context.TODO(),
@@ -111,8 +117,10 @@ func TestZoneFirewallWafOverrideWafOverridesNewAWafOverride(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Firewalls.Wafs.Overrides.WafOverridesNewAWafOverride(
 		context.TODO(),
@@ -141,8 +149,10 @@ func TestZoneFirewallWafOverrideWafOverridesListWafOverridesWithOptionalParams(t
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Firewalls.Wafs.Overrides.WafOverridesListWafOverrides(
 		context.TODO(),

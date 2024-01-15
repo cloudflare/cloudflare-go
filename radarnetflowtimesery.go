@@ -33,13 +33,8 @@ func NewRadarNetflowTimeseryService(opts ...option.RequestOption) (r *RadarNetfl
 	return
 }
 
-// Get network traffic change over time. Values are normalized using min-max by
-// default, with the minimum set to 0. When asking for multiple time series, you
-// can also get the percentage relative change of the first/main series, with
-// respect to the second/control series - for example, to get the relative change
-// of this week from the previous week, the first series would have a date range of
-// `7d`, the second, a date range of `7dControl`, and the normalization would be
-// set to `PERCENTAGE_CHANGE`.
+// Get network traffic change over time. Visit
+// https://en.wikipedia.org/wiki/NetFlow for more information on NetFlows.
 func (r *RadarNetflowTimeseryService) List(ctx context.Context, query RadarNetflowTimeseryListParams, opts ...option.RequestOption) (res *RadarNetflowTimeseryListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "radar/netflows/timeseries"
@@ -87,9 +82,9 @@ func (r *RadarNetflowTimeseryListResponseResult) UnmarshalJSON(data []byte) (err
 
 type RadarNetflowTimeseryListResponseResultMeta struct {
 	AggInterval    string                                                   `json:"aggInterval,required"`
-	ConfidenceInfo RadarNetflowTimeseryListResponseResultMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      RadarNetflowTimeseryListResponseResultMetaDateRange      `json:"dateRange,required"`
+	DateRange      []RadarNetflowTimeseryListResponseResultMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    time.Time                                                `json:"lastUpdated,required" format:"date-time"`
+	ConfidenceInfo RadarNetflowTimeseryListResponseResultMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           radarNetflowTimeseryListResponseResultMetaJSON           `json:"-"`
 }
 
@@ -97,62 +92,14 @@ type RadarNetflowTimeseryListResponseResultMeta struct {
 // the struct [RadarNetflowTimeseryListResponseResultMeta]
 type radarNetflowTimeseryListResponseResultMetaJSON struct {
 	AggInterval    apijson.Field
-	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
+	ConfidenceInfo apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
 func (r *RadarNetflowTimeseryListResponseResultMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarNetflowTimeseryListResponseResultMetaConfidenceInfo struct {
-	Annotations []RadarNetflowTimeseryListResponseResultMetaConfidenceInfoAnnotation `json:"annotations,required"`
-	Level       int64                                                                `json:"level,required"`
-	JSON        radarNetflowTimeseryListResponseResultMetaConfidenceInfoJSON         `json:"-"`
-}
-
-// radarNetflowTimeseryListResponseResultMetaConfidenceInfoJSON contains the JSON
-// metadata for the struct
-// [RadarNetflowTimeseryListResponseResultMetaConfidenceInfo]
-type radarNetflowTimeseryListResponseResultMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarNetflowTimeseryListResponseResultMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarNetflowTimeseryListResponseResultMetaConfidenceInfoAnnotation struct {
-	DataSource  string                                                                 `json:"dataSource,required"`
-	Description string                                                                 `json:"description,required"`
-	EndTime     time.Time                                                              `json:"endTime,required" format:"date-time"`
-	EventType   string                                                                 `json:"eventType,required"`
-	LinkedURL   string                                                                 `json:"linkedUrl,required"`
-	StartTime   time.Time                                                              `json:"startTime,required" format:"date-time"`
-	JSON        radarNetflowTimeseryListResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// radarNetflowTimeseryListResponseResultMetaConfidenceInfoAnnotationJSON contains
-// the JSON metadata for the struct
-// [RadarNetflowTimeseryListResponseResultMetaConfidenceInfoAnnotation]
-type radarNetflowTimeseryListResponseResultMetaConfidenceInfoAnnotationJSON struct {
-	DataSource  apijson.Field
-	Description apijson.Field
-	EndTime     apijson.Field
-	EventType   apijson.Field
-	LinkedURL   apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarNetflowTimeseryListResponseResultMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -174,6 +121,56 @@ type radarNetflowTimeseryListResponseResultMetaDateRangeJSON struct {
 }
 
 func (r *RadarNetflowTimeseryListResponseResultMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarNetflowTimeseryListResponseResultMetaConfidenceInfo struct {
+	Annotations []RadarNetflowTimeseryListResponseResultMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                                `json:"level"`
+	JSON        radarNetflowTimeseryListResponseResultMetaConfidenceInfoJSON         `json:"-"`
+}
+
+// radarNetflowTimeseryListResponseResultMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct
+// [RadarNetflowTimeseryListResponseResultMetaConfidenceInfo]
+type radarNetflowTimeseryListResponseResultMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarNetflowTimeseryListResponseResultMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarNetflowTimeseryListResponseResultMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                                 `json:"dataSource,required"`
+	Description     string                                                                 `json:"description,required"`
+	EventType       string                                                                 `json:"eventType,required"`
+	IsInstantaneous interface{}                                                            `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                              `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                                 `json:"linkedUrl"`
+	StartTime       time.Time                                                              `json:"startTime" format:"date-time"`
+	JSON            radarNetflowTimeseryListResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// radarNetflowTimeseryListResponseResultMetaConfidenceInfoAnnotationJSON contains
+// the JSON metadata for the struct
+// [RadarNetflowTimeseryListResponseResultMetaConfidenceInfoAnnotation]
+type radarNetflowTimeseryListResponseResultMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *RadarNetflowTimeseryListResponseResultMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -205,7 +202,7 @@ type RadarNetflowTimeseryListParams struct {
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of datetimes to filter the end of a series.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
@@ -253,6 +250,7 @@ type RadarNetflowTimeseryListParamsDateRange string
 
 const (
 	RadarNetflowTimeseryListParamsDateRange1d         RadarNetflowTimeseryListParamsDateRange = "1d"
+	RadarNetflowTimeseryListParamsDateRange2d         RadarNetflowTimeseryListParamsDateRange = "2d"
 	RadarNetflowTimeseryListParamsDateRange7d         RadarNetflowTimeseryListParamsDateRange = "7d"
 	RadarNetflowTimeseryListParamsDateRange14d        RadarNetflowTimeseryListParamsDateRange = "14d"
 	RadarNetflowTimeseryListParamsDateRange28d        RadarNetflowTimeseryListParamsDateRange = "28d"
@@ -260,6 +258,7 @@ const (
 	RadarNetflowTimeseryListParamsDateRange24w        RadarNetflowTimeseryListParamsDateRange = "24w"
 	RadarNetflowTimeseryListParamsDateRange52w        RadarNetflowTimeseryListParamsDateRange = "52w"
 	RadarNetflowTimeseryListParamsDateRange1dControl  RadarNetflowTimeseryListParamsDateRange = "1dControl"
+	RadarNetflowTimeseryListParamsDateRange2dControl  RadarNetflowTimeseryListParamsDateRange = "2dControl"
 	RadarNetflowTimeseryListParamsDateRange7dControl  RadarNetflowTimeseryListParamsDateRange = "7dControl"
 	RadarNetflowTimeseryListParamsDateRange14dControl RadarNetflowTimeseryListParamsDateRange = "14dControl"
 	RadarNetflowTimeseryListParamsDateRange28dControl RadarNetflowTimeseryListParamsDateRange = "28dControl"

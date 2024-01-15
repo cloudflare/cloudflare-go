@@ -24,8 +24,10 @@ func TestZoneOriginTlsClientAuthSettingZoneLevelAuthenticatedOriginPullsGetEnabl
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.OriginTlsClientAuths.Settings.ZoneLevelAuthenticatedOriginPullsGetEnablementSettingForZone(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
@@ -48,8 +50,10 @@ func TestZoneOriginTlsClientAuthSettingZoneLevelAuthenticatedOriginPullsSetEnabl
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.OriginTlsClientAuths.Settings.ZoneLevelAuthenticatedOriginPullsSetEnablementForZone(
 		context.TODO(),

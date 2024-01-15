@@ -24,16 +24,22 @@ func TestAccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeWith
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Streams.Clips.StreamVideoClippingClipVideosGivenAStartAndEndTime(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeParams{
+			ClippedFromVideoUid:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			EndTimeSeconds:        cloudflare.F(int64(0)),
+			StartTimeSeconds:      cloudflare.F(int64(0)),
 			AllowedOrigins:        cloudflare.F([]string{"example.com"}),
 			Creator:               cloudflare.F("creator-id_abcde12345"),
 			MaxDurationSeconds:    cloudflare.F(int64(1)),
+			RequireSignedURLs:     cloudflare.F(true),
 			ThumbnailTimestampPct: cloudflare.F(0.529241),
 			Watermark: cloudflare.F(cloudflare.AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeParamsWatermark{
 				Uid: cloudflare.F("ea95132c15732412d22c1476fa83f27a"),

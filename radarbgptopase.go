@@ -21,7 +21,8 @@ import (
 // this service directly, and instead use the [NewRadarBgpTopAseService] method
 // instead.
 type RadarBgpTopAseService struct {
-	Options []option.RequestOption
+	Options  []option.RequestOption
+	Prefixes *RadarBgpTopAsePrefixService
 }
 
 // NewRadarBgpTopAseService generates a new service that applies the given options
@@ -30,6 +31,7 @@ type RadarBgpTopAseService struct {
 func NewRadarBgpTopAseService(opts ...option.RequestOption) (r *RadarBgpTopAseService) {
 	r = &RadarBgpTopAseService{}
 	r.Options = opts
+	r.Prefixes = NewRadarBgpTopAsePrefixService(opts...)
 	return
 }
 
@@ -81,8 +83,8 @@ func (r *RadarBgpTopAseListResponseResult) UnmarshalJSON(data []byte) (err error
 }
 
 type RadarBgpTopAseListResponseResultMeta struct {
-	DateRange RadarBgpTopAseListResponseResultMetaDateRange `json:"dateRange,required"`
-	JSON      radarBgpTopAseListResponseResultMetaJSON      `json:"-"`
+	DateRange []RadarBgpTopAseListResponseResultMetaDateRange `json:"dateRange,required"`
+	JSON      radarBgpTopAseListResponseResultMetaJSON        `json:"-"`
 }
 
 // radarBgpTopAseListResponseResultMetaJSON contains the JSON metadata for the
@@ -146,7 +148,7 @@ type RadarBgpTopAseListParams struct {
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of datetimes to filter the end of a series.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
@@ -179,6 +181,7 @@ type RadarBgpTopAseListParamsDateRange string
 
 const (
 	RadarBgpTopAseListParamsDateRange1d         RadarBgpTopAseListParamsDateRange = "1d"
+	RadarBgpTopAseListParamsDateRange2d         RadarBgpTopAseListParamsDateRange = "2d"
 	RadarBgpTopAseListParamsDateRange7d         RadarBgpTopAseListParamsDateRange = "7d"
 	RadarBgpTopAseListParamsDateRange14d        RadarBgpTopAseListParamsDateRange = "14d"
 	RadarBgpTopAseListParamsDateRange28d        RadarBgpTopAseListParamsDateRange = "28d"
@@ -186,6 +189,7 @@ const (
 	RadarBgpTopAseListParamsDateRange24w        RadarBgpTopAseListParamsDateRange = "24w"
 	RadarBgpTopAseListParamsDateRange52w        RadarBgpTopAseListParamsDateRange = "52w"
 	RadarBgpTopAseListParamsDateRange1dControl  RadarBgpTopAseListParamsDateRange = "1dControl"
+	RadarBgpTopAseListParamsDateRange2dControl  RadarBgpTopAseListParamsDateRange = "2dControl"
 	RadarBgpTopAseListParamsDateRange7dControl  RadarBgpTopAseListParamsDateRange = "7dControl"
 	RadarBgpTopAseListParamsDateRange14dControl RadarBgpTopAseListParamsDateRange = "14dControl"
 	RadarBgpTopAseListParamsDateRange28dControl RadarBgpTopAseListParamsDateRange = "28dControl"

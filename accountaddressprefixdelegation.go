@@ -33,7 +33,7 @@ func NewAccountAddressPrefixDelegationService(opts ...option.RequestOption) (r *
 }
 
 // Delete an account delegation for a given IP prefix.
-func (r *AccountAddressPrefixDelegationService) Delete(ctx context.Context, accountIdentifier string, prefixIdentifier string, delegationIdentifier string, opts ...option.RequestOption) (res *IDResponseJbqQi2td, err error) {
+func (r *AccountAddressPrefixDelegationService) Delete(ctx context.Context, accountIdentifier string, prefixIdentifier string, delegationIdentifier string, opts ...option.RequestOption) (res *AccountAddressPrefixDelegationDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/delegations/%s", accountIdentifier, prefixIdentifier, delegationIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -41,7 +41,7 @@ func (r *AccountAddressPrefixDelegationService) Delete(ctx context.Context, acco
 }
 
 // Create a new account delegation for a given IP prefix.
-func (r *AccountAddressPrefixDelegationService) IPAddressManagementPrefixDelegationNewPrefixDelegation(ctx context.Context, accountIdentifier string, prefixIdentifier string, body AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationParams, opts ...option.RequestOption) (res *SchemasSingleResponse, err error) {
+func (r *AccountAddressPrefixDelegationService) IPAddressManagementPrefixDelegationNewPrefixDelegation(ctx context.Context, accountIdentifier string, prefixIdentifier string, body AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationParams, opts ...option.RequestOption) (res *AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/delegations", accountIdentifier, prefixIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -49,25 +49,25 @@ func (r *AccountAddressPrefixDelegationService) IPAddressManagementPrefixDelegat
 }
 
 // List all delegations for a given account IP prefix.
-func (r *AccountAddressPrefixDelegationService) IPAddressManagementPrefixDelegationListPrefixDelegations(ctx context.Context, accountIdentifier string, prefixIdentifier string, opts ...option.RequestOption) (res *SchemasResponseCollection, err error) {
+func (r *AccountAddressPrefixDelegationService) IPAddressManagementPrefixDelegationListPrefixDelegations(ctx context.Context, accountIdentifier string, prefixIdentifier string, opts ...option.RequestOption) (res *AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/delegations", accountIdentifier, prefixIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type IDResponseJbqQi2td struct {
-	Errors   []IDResponseJbqQi2tdError   `json:"errors"`
-	Messages []IDResponseJbqQi2tdMessage `json:"messages"`
-	Result   IDResponseJbqQi2tdResult    `json:"result"`
+type AccountAddressPrefixDelegationDeleteResponse struct {
+	Errors   []AccountAddressPrefixDelegationDeleteResponseError   `json:"errors"`
+	Messages []AccountAddressPrefixDelegationDeleteResponseMessage `json:"messages"`
+	Result   AccountAddressPrefixDelegationDeleteResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success IDResponseJbqQi2tdSuccess `json:"success"`
-	JSON    idResponseJbqQi2tdJSON    `json:"-"`
+	Success AccountAddressPrefixDelegationDeleteResponseSuccess `json:"success"`
+	JSON    accountAddressPrefixDelegationDeleteResponseJSON    `json:"-"`
 }
 
-// idResponseJbqQi2tdJSON contains the JSON metadata for the struct
-// [IDResponseJbqQi2td]
-type idResponseJbqQi2tdJSON struct {
+// accountAddressPrefixDelegationDeleteResponseJSON contains the JSON metadata for
+// the struct [AccountAddressPrefixDelegationDeleteResponse]
+type accountAddressPrefixDelegationDeleteResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -76,86 +76,191 @@ type idResponseJbqQi2tdJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IDResponseJbqQi2td) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountAddressPrefixDelegationDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IDResponseJbqQi2tdError struct {
-	Code    int64                       `json:"code,required"`
-	Message string                      `json:"message,required"`
-	JSON    idResponseJbqQi2tdErrorJSON `json:"-"`
+type AccountAddressPrefixDelegationDeleteResponseError struct {
+	Code    int64                                                 `json:"code,required"`
+	Message string                                                `json:"message,required"`
+	JSON    accountAddressPrefixDelegationDeleteResponseErrorJSON `json:"-"`
 }
 
-// idResponseJbqQi2tdErrorJSON contains the JSON metadata for the struct
-// [IDResponseJbqQi2tdError]
-type idResponseJbqQi2tdErrorJSON struct {
+// accountAddressPrefixDelegationDeleteResponseErrorJSON contains the JSON metadata
+// for the struct [AccountAddressPrefixDelegationDeleteResponseError]
+type accountAddressPrefixDelegationDeleteResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IDResponseJbqQi2tdError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountAddressPrefixDelegationDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IDResponseJbqQi2tdMessage struct {
-	Code    int64                         `json:"code,required"`
-	Message string                        `json:"message,required"`
-	JSON    idResponseJbqQi2tdMessageJSON `json:"-"`
+type AccountAddressPrefixDelegationDeleteResponseMessage struct {
+	Code    int64                                                   `json:"code,required"`
+	Message string                                                  `json:"message,required"`
+	JSON    accountAddressPrefixDelegationDeleteResponseMessageJSON `json:"-"`
 }
 
-// idResponseJbqQi2tdMessageJSON contains the JSON metadata for the struct
-// [IDResponseJbqQi2tdMessage]
-type idResponseJbqQi2tdMessageJSON struct {
+// accountAddressPrefixDelegationDeleteResponseMessageJSON contains the JSON
+// metadata for the struct [AccountAddressPrefixDelegationDeleteResponseMessage]
+type accountAddressPrefixDelegationDeleteResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IDResponseJbqQi2tdMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountAddressPrefixDelegationDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IDResponseJbqQi2tdResult struct {
+type AccountAddressPrefixDelegationDeleteResponseResult struct {
 	// Delegation identifier tag.
-	ID   string                       `json:"id"`
-	JSON idResponseJbqQi2tdResultJSON `json:"-"`
+	ID   string                                                 `json:"id"`
+	JSON accountAddressPrefixDelegationDeleteResponseResultJSON `json:"-"`
 }
 
-// idResponseJbqQi2tdResultJSON contains the JSON metadata for the struct
-// [IDResponseJbqQi2tdResult]
-type idResponseJbqQi2tdResultJSON struct {
+// accountAddressPrefixDelegationDeleteResponseResultJSON contains the JSON
+// metadata for the struct [AccountAddressPrefixDelegationDeleteResponseResult]
+type accountAddressPrefixDelegationDeleteResponseResultJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IDResponseJbqQi2tdResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountAddressPrefixDelegationDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type IDResponseJbqQi2tdSuccess bool
+type AccountAddressPrefixDelegationDeleteResponseSuccess bool
 
 const (
-	IDResponseJbqQi2tdSuccessTrue IDResponseJbqQi2tdSuccess = true
+	AccountAddressPrefixDelegationDeleteResponseSuccessTrue AccountAddressPrefixDelegationDeleteResponseSuccess = true
 )
 
-type SchemasResponseCollection struct {
-	Errors     []SchemasResponseCollectionError    `json:"errors"`
-	Messages   []SchemasResponseCollectionMessage  `json:"messages"`
-	Result     []SchemasResponseCollectionResult   `json:"result"`
-	ResultInfo SchemasResponseCollectionResultInfo `json:"result_info"`
+type AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponse struct {
+	Errors   []AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseError   `json:"errors"`
+	Messages []AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseMessage `json:"messages"`
+	Result   AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success SchemasResponseCollectionSuccess `json:"success"`
-	JSON    schemasResponseCollectionJSON    `json:"-"`
+	Success AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseSuccess `json:"success"`
+	JSON    accountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseJSON    `json:"-"`
 }
 
-// schemasResponseCollectionJSON contains the JSON metadata for the struct
-// [SchemasResponseCollection]
-type schemasResponseCollectionJSON struct {
+// accountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseJSON
+// contains the JSON metadata for the struct
+// [AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponse]
+type accountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseError struct {
+	Code    int64                                                                                                 `json:"code,required"`
+	Message string                                                                                                `json:"message,required"`
+	JSON    accountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseErrorJSON `json:"-"`
+}
+
+// accountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseError]
+type accountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseMessage struct {
+	Code    int64                                                                                                   `json:"code,required"`
+	Message string                                                                                                  `json:"message,required"`
+	JSON    accountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseMessageJSON `json:"-"`
+}
+
+// accountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseMessage]
+type accountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseResult struct {
+	// Delegation identifier tag.
+	ID string `json:"id"`
+	// IP Prefix in Classless Inter-Domain Routing format.
+	Cidr      string    `json:"cidr"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Account identifier for the account to which prefix is being delegated.
+	DelegatedAccountID string    `json:"delegated_account_id"`
+	ModifiedAt         time.Time `json:"modified_at" format:"date-time"`
+	// Identifier
+	ParentPrefixID string                                                                                                 `json:"parent_prefix_id"`
+	JSON           accountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseResultJSON `json:"-"`
+}
+
+// accountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseResult]
+type accountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseResultJSON struct {
+	ID                 apijson.Field
+	Cidr               apijson.Field
+	CreatedAt          apijson.Field
+	DelegatedAccountID apijson.Field
+	ModifiedAt         apijson.Field
+	ParentPrefixID     apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseSuccess bool
+
+const (
+	AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseSuccessTrue AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationResponseSuccess = true
+)
+
+type AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponse struct {
+	Errors     []AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseError    `json:"errors"`
+	Messages   []AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseMessage  `json:"messages"`
+	Result     []AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseResult   `json:"result"`
+	ResultInfo AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseSuccess `json:"success"`
+	JSON    accountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseJSON    `json:"-"`
+}
+
+// accountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseJSON
+// contains the JSON metadata for the struct
+// [AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponse]
+type accountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -165,49 +270,51 @@ type schemasResponseCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemasResponseCollectionError struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    schemasResponseCollectionErrorJSON `json:"-"`
+type AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseError struct {
+	Code    int64                                                                                                   `json:"code,required"`
+	Message string                                                                                                  `json:"message,required"`
+	JSON    accountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseErrorJSON `json:"-"`
 }
 
-// schemasResponseCollectionErrorJSON contains the JSON metadata for the struct
-// [SchemasResponseCollectionError]
-type schemasResponseCollectionErrorJSON struct {
+// accountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseError]
+type accountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemasResponseCollectionMessage struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    schemasResponseCollectionMessageJSON `json:"-"`
+type AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseMessage struct {
+	Code    int64                                                                                                     `json:"code,required"`
+	Message string                                                                                                    `json:"message,required"`
+	JSON    accountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseMessageJSON `json:"-"`
 }
 
-// schemasResponseCollectionMessageJSON contains the JSON metadata for the struct
-// [SchemasResponseCollectionMessage]
-type schemasResponseCollectionMessageJSON struct {
+// accountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseMessage]
+type accountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemasResponseCollectionResult struct {
+type AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseResult struct {
 	// Delegation identifier tag.
 	ID string `json:"id"`
 	// IP Prefix in Classless Inter-Domain Routing format.
@@ -217,13 +324,14 @@ type SchemasResponseCollectionResult struct {
 	DelegatedAccountID string    `json:"delegated_account_id"`
 	ModifiedAt         time.Time `json:"modified_at" format:"date-time"`
 	// Identifier
-	ParentPrefixID string                              `json:"parent_prefix_id"`
-	JSON           schemasResponseCollectionResultJSON `json:"-"`
+	ParentPrefixID string                                                                                                   `json:"parent_prefix_id"`
+	JSON           accountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseResultJSON `json:"-"`
 }
 
-// schemasResponseCollectionResultJSON contains the JSON metadata for the struct
-// [SchemasResponseCollectionResult]
-type schemasResponseCollectionResultJSON struct {
+// accountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseResult]
+type accountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseResultJSON struct {
 	ID                 apijson.Field
 	Cidr               apijson.Field
 	CreatedAt          apijson.Field
@@ -234,11 +342,11 @@ type schemasResponseCollectionResultJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *SchemasResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemasResponseCollectionResultInfo struct {
+type AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -246,13 +354,14 @@ type SchemasResponseCollectionResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                 `json:"total_count"`
-	JSON       schemasResponseCollectionResultInfoJSON `json:"-"`
+	TotalCount float64                                                                                                      `json:"total_count"`
+	JSON       accountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseResultInfoJSON `json:"-"`
 }
 
-// schemasResponseCollectionResultInfoJSON contains the JSON metadata for the
-// struct [SchemasResponseCollectionResultInfo]
-type schemasResponseCollectionResultInfoJSON struct {
+// accountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseResultInfo]
+type accountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -261,115 +370,15 @@ type schemasResponseCollectionResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type SchemasResponseCollectionSuccess bool
+type AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseSuccess bool
 
 const (
-	SchemasResponseCollectionSuccessTrue SchemasResponseCollectionSuccess = true
-)
-
-type SchemasSingleResponse struct {
-	Errors   []SchemasSingleResponseError   `json:"errors"`
-	Messages []SchemasSingleResponseMessage `json:"messages"`
-	Result   SchemasSingleResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success SchemasSingleResponseSuccess `json:"success"`
-	JSON    schemasSingleResponseJSON    `json:"-"`
-}
-
-// schemasSingleResponseJSON contains the JSON metadata for the struct
-// [SchemasSingleResponse]
-type schemasSingleResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SchemasSingleResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SchemasSingleResponseError struct {
-	Code    int64                          `json:"code,required"`
-	Message string                         `json:"message,required"`
-	JSON    schemasSingleResponseErrorJSON `json:"-"`
-}
-
-// schemasSingleResponseErrorJSON contains the JSON metadata for the struct
-// [SchemasSingleResponseError]
-type schemasSingleResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SchemasSingleResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SchemasSingleResponseMessage struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    schemasSingleResponseMessageJSON `json:"-"`
-}
-
-// schemasSingleResponseMessageJSON contains the JSON metadata for the struct
-// [SchemasSingleResponseMessage]
-type schemasSingleResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SchemasSingleResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SchemasSingleResponseResult struct {
-	// Delegation identifier tag.
-	ID string `json:"id"`
-	// IP Prefix in Classless Inter-Domain Routing format.
-	Cidr      string    `json:"cidr"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Account identifier for the account to which prefix is being delegated.
-	DelegatedAccountID string    `json:"delegated_account_id"`
-	ModifiedAt         time.Time `json:"modified_at" format:"date-time"`
-	// Identifier
-	ParentPrefixID string                          `json:"parent_prefix_id"`
-	JSON           schemasSingleResponseResultJSON `json:"-"`
-}
-
-// schemasSingleResponseResultJSON contains the JSON metadata for the struct
-// [SchemasSingleResponseResult]
-type schemasSingleResponseResultJSON struct {
-	ID                 apijson.Field
-	Cidr               apijson.Field
-	CreatedAt          apijson.Field
-	DelegatedAccountID apijson.Field
-	ModifiedAt         apijson.Field
-	ParentPrefixID     apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *SchemasSingleResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type SchemasSingleResponseSuccess bool
-
-const (
-	SchemasSingleResponseSuccessTrue SchemasSingleResponseSuccess = true
+	AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseSuccessTrue AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationListPrefixDelegationsResponseSuccess = true
 )
 
 type AccountAddressPrefixDelegationIPAddressManagementPrefixDelegationNewPrefixDelegationParams struct {

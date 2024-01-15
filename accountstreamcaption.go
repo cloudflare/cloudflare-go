@@ -33,7 +33,7 @@ func NewAccountStreamCaptionService(opts ...option.RequestOption) (r *AccountStr
 
 // Uploads the caption or subtitle file to the endpoint for a specific BCP47
 // language. One caption or subtitle file per language is allowed.
-func (r *AccountStreamCaptionService) Update(ctx context.Context, accountIdentifier string, identifier string, language string, body AccountStreamCaptionUpdateParams, opts ...option.RequestOption) (res *LanguageResponseSingle, err error) {
+func (r *AccountStreamCaptionService) Update(ctx context.Context, accountIdentifier string, identifier string, language string, body AccountStreamCaptionUpdateParams, opts ...option.RequestOption) (res *AccountStreamCaptionUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s", accountIdentifier, identifier, language)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
@@ -49,144 +49,25 @@ func (r *AccountStreamCaptionService) Delete(ctx context.Context, accountIdentif
 }
 
 // Lists the available captions or subtitles for a specific video.
-func (r *AccountStreamCaptionService) StreamSubtitlesCaptionsListCaptionsOrSubtitles(ctx context.Context, accountIdentifier string, identifier string, opts ...option.RequestOption) (res *LanguageResponseCollection, err error) {
+func (r *AccountStreamCaptionService) StreamSubtitlesCaptionsListCaptionsOrSubtitles(ctx context.Context, accountIdentifier string, identifier string, opts ...option.RequestOption) (res *AccountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/stream/%s/captions", accountIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type LanguageResponseCollection struct {
-	Errors     []LanguageResponseCollectionError    `json:"errors"`
-	Messages   []LanguageResponseCollectionMessage  `json:"messages"`
-	Result     []LanguageResponseCollectionResult   `json:"result"`
-	ResultInfo LanguageResponseCollectionResultInfo `json:"result_info"`
+type AccountStreamCaptionUpdateResponse struct {
+	Errors   []AccountStreamCaptionUpdateResponseError   `json:"errors"`
+	Messages []AccountStreamCaptionUpdateResponseMessage `json:"messages"`
+	Result   interface{}                                 `json:"result"`
 	// Whether the API call was successful
-	Success LanguageResponseCollectionSuccess `json:"success"`
-	JSON    languageResponseCollectionJSON    `json:"-"`
+	Success AccountStreamCaptionUpdateResponseSuccess `json:"success"`
+	JSON    accountStreamCaptionUpdateResponseJSON    `json:"-"`
 }
 
-// languageResponseCollectionJSON contains the JSON metadata for the struct
-// [LanguageResponseCollection]
-type languageResponseCollectionJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LanguageResponseCollection) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type LanguageResponseCollectionError struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    languageResponseCollectionErrorJSON `json:"-"`
-}
-
-// languageResponseCollectionErrorJSON contains the JSON metadata for the struct
-// [LanguageResponseCollectionError]
-type languageResponseCollectionErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LanguageResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type LanguageResponseCollectionMessage struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    languageResponseCollectionMessageJSON `json:"-"`
-}
-
-// languageResponseCollectionMessageJSON contains the JSON metadata for the struct
-// [LanguageResponseCollectionMessage]
-type languageResponseCollectionMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LanguageResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type LanguageResponseCollectionResult struct {
-	// The language label displayed in the native language to users.
-	Label string `json:"label"`
-	// The language tag in BCP 47 format.
-	Language string                               `json:"language"`
-	JSON     languageResponseCollectionResultJSON `json:"-"`
-}
-
-// languageResponseCollectionResultJSON contains the JSON metadata for the struct
-// [LanguageResponseCollectionResult]
-type languageResponseCollectionResultJSON struct {
-	Label       apijson.Field
-	Language    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LanguageResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type LanguageResponseCollectionResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                  `json:"total_count"`
-	JSON       languageResponseCollectionResultInfoJSON `json:"-"`
-}
-
-// languageResponseCollectionResultInfoJSON contains the JSON metadata for the
-// struct [LanguageResponseCollectionResultInfo]
-type languageResponseCollectionResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LanguageResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type LanguageResponseCollectionSuccess bool
-
-const (
-	LanguageResponseCollectionSuccessTrue LanguageResponseCollectionSuccess = true
-)
-
-type LanguageResponseSingle struct {
-	Errors   []LanguageResponseSingleError   `json:"errors"`
-	Messages []LanguageResponseSingleMessage `json:"messages"`
-	Result   interface{}                     `json:"result"`
-	// Whether the API call was successful
-	Success LanguageResponseSingleSuccess `json:"success"`
-	JSON    languageResponseSingleJSON    `json:"-"`
-}
-
-// languageResponseSingleJSON contains the JSON metadata for the struct
-// [LanguageResponseSingle]
-type languageResponseSingleJSON struct {
+// accountStreamCaptionUpdateResponseJSON contains the JSON metadata for the struct
+// [AccountStreamCaptionUpdateResponse]
+type accountStreamCaptionUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -195,60 +76,59 @@ type languageResponseSingleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LanguageResponseSingle) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamCaptionUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LanguageResponseSingleError struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    languageResponseSingleErrorJSON `json:"-"`
+type AccountStreamCaptionUpdateResponseError struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    accountStreamCaptionUpdateResponseErrorJSON `json:"-"`
 }
 
-// languageResponseSingleErrorJSON contains the JSON metadata for the struct
-// [LanguageResponseSingleError]
-type languageResponseSingleErrorJSON struct {
+// accountStreamCaptionUpdateResponseErrorJSON contains the JSON metadata for the
+// struct [AccountStreamCaptionUpdateResponseError]
+type accountStreamCaptionUpdateResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LanguageResponseSingleError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamCaptionUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LanguageResponseSingleMessage struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    languageResponseSingleMessageJSON `json:"-"`
+type AccountStreamCaptionUpdateResponseMessage struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    accountStreamCaptionUpdateResponseMessageJSON `json:"-"`
 }
 
-// languageResponseSingleMessageJSON contains the JSON metadata for the struct
-// [LanguageResponseSingleMessage]
-type languageResponseSingleMessageJSON struct {
+// accountStreamCaptionUpdateResponseMessageJSON contains the JSON metadata for the
+// struct [AccountStreamCaptionUpdateResponseMessage]
+type accountStreamCaptionUpdateResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LanguageResponseSingleMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamCaptionUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type LanguageResponseSingleSuccess bool
+type AccountStreamCaptionUpdateResponseSuccess bool
 
 const (
-	LanguageResponseSingleSuccessTrue LanguageResponseSingleSuccess = true
+	AccountStreamCaptionUpdateResponseSuccessTrue AccountStreamCaptionUpdateResponseSuccess = true
 )
 
 type AccountStreamCaptionDeleteResponse struct {
-	Errors     []AccountStreamCaptionDeleteResponseError    `json:"errors"`
-	Messages   []AccountStreamCaptionDeleteResponseMessage  `json:"messages"`
-	Result     string                                       `json:"result"`
-	ResultInfo AccountStreamCaptionDeleteResponseResultInfo `json:"result_info"`
+	Errors   []AccountStreamCaptionDeleteResponseError   `json:"errors"`
+	Messages []AccountStreamCaptionDeleteResponseMessage `json:"messages"`
+	Result   string                                      `json:"result"`
 	// Whether the API call was successful
 	Success AccountStreamCaptionDeleteResponseSuccess `json:"success"`
 	JSON    accountStreamCaptionDeleteResponseJSON    `json:"-"`
@@ -260,7 +140,6 @@ type accountStreamCaptionDeleteResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -308,38 +187,105 @@ func (r *AccountStreamCaptionDeleteResponseMessage) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccountStreamCaptionDeleteResponseResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                          `json:"total_count"`
-	JSON       accountStreamCaptionDeleteResponseResultInfoJSON `json:"-"`
-}
-
-// accountStreamCaptionDeleteResponseResultInfoJSON contains the JSON metadata for
-// the struct [AccountStreamCaptionDeleteResponseResultInfo]
-type accountStreamCaptionDeleteResponseResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccountStreamCaptionDeleteResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 // Whether the API call was successful
 type AccountStreamCaptionDeleteResponseSuccess bool
 
 const (
 	AccountStreamCaptionDeleteResponseSuccessTrue AccountStreamCaptionDeleteResponseSuccess = true
+)
+
+type AccountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponse struct {
+	Errors   []AccountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseError   `json:"errors"`
+	Messages []AccountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseMessage `json:"messages"`
+	Result   []AccountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseResult  `json:"result"`
+	// Whether the API call was successful
+	Success AccountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseSuccess `json:"success"`
+	JSON    accountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseJSON    `json:"-"`
+}
+
+// accountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseJSON
+// contains the JSON metadata for the struct
+// [AccountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponse]
+type accountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseError struct {
+	Code    int64                                                                               `json:"code,required"`
+	Message string                                                                              `json:"message,required"`
+	JSON    accountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseErrorJSON `json:"-"`
+}
+
+// accountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseError]
+type accountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseMessage struct {
+	Code    int64                                                                                 `json:"code,required"`
+	Message string                                                                                `json:"message,required"`
+	JSON    accountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseMessageJSON `json:"-"`
+}
+
+// accountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseMessage]
+type accountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseResult struct {
+	// The language label displayed in the native language to users.
+	Label string `json:"label"`
+	// The language tag in BCP 47 format.
+	Language string                                                                               `json:"language"`
+	JSON     accountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseResultJSON `json:"-"`
+}
+
+// accountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseResult]
+type accountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseResultJSON struct {
+	Label       apijson.Field
+	Language    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseSuccess bool
+
+const (
+	AccountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseSuccessTrue AccountStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitlesResponseSuccess = true
 )
 
 type AccountStreamCaptionUpdateParams struct {

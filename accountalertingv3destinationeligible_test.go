@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestAccountAlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibility(t *testing.T) {
+func TestAccountAlertingV3DestinationEligibleList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -24,10 +24,12 @@ func TestAccountAlertingV3DestinationEligibleNotificationMechanismEligibilityGet
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Alerting.V3s.Destinations.Eligibles.NotificationMechanismEligibilityGetDeliveryMechanismEligibility(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Accounts.Alerting.V3.Destinations.Eligible.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

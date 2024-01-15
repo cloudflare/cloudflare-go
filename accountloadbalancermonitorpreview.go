@@ -33,25 +33,26 @@ func NewAccountLoadBalancerMonitorPreviewService(opts ...option.RequestOption) (
 
 // Preview pools using the specified monitor with provided monitor details. The
 // returned preview_id can be used in the preview endpoint to retrieve the results.
-func (r *AccountLoadBalancerMonitorPreviewService) AccountLoadBalancerMonitorsPreviewMonitor(ctx context.Context, accountIdentifier string, identifier interface{}, body AccountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorParams, opts ...option.RequestOption) (res *PreviewResponsePfp0bPtX, err error) {
+func (r *AccountLoadBalancerMonitorPreviewService) AccountLoadBalancerMonitorsPreviewMonitor(ctx context.Context, accountIdentifier string, identifier string, body AccountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorParams, opts ...option.RequestOption) (res *AccountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%v/preview", accountIdentifier, identifier)
+	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s/preview", accountIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
-type PreviewResponsePfp0bPtX struct {
-	Errors   []PreviewResponsePfp0bPtXError   `json:"errors"`
-	Messages []PreviewResponsePfp0bPtXMessage `json:"messages"`
-	Result   PreviewResponsePfp0bPtXResult    `json:"result"`
+type AccountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponse struct {
+	Errors   []AccountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseError   `json:"errors"`
+	Messages []AccountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseMessage `json:"messages"`
+	Result   AccountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success PreviewResponsePfp0bPtXSuccess `json:"success"`
-	JSON    previewResponsePfp0bPtXJSON    `json:"-"`
+	Success AccountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseSuccess `json:"success"`
+	JSON    accountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseJSON    `json:"-"`
 }
 
-// previewResponsePfp0bPtXJSON contains the JSON metadata for the struct
-// [PreviewResponsePfp0bPtX]
-type previewResponsePfp0bPtXJSON struct {
+// accountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseJSON
+// contains the JSON metadata for the struct
+// [AccountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponse]
+type accountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -60,85 +61,97 @@ type previewResponsePfp0bPtXJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PreviewResponsePfp0bPtX) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PreviewResponsePfp0bPtXError struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    previewResponsePfp0bPtXErrorJSON `json:"-"`
+type AccountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseError struct {
+	Code    int64                                                                                       `json:"code,required"`
+	Message string                                                                                      `json:"message,required"`
+	JSON    accountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseErrorJSON `json:"-"`
 }
 
-// previewResponsePfp0bPtXErrorJSON contains the JSON metadata for the struct
-// [PreviewResponsePfp0bPtXError]
-type previewResponsePfp0bPtXErrorJSON struct {
+// accountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseError]
+type accountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PreviewResponsePfp0bPtXError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PreviewResponsePfp0bPtXMessage struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    previewResponsePfp0bPtXMessageJSON `json:"-"`
+type AccountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseMessage struct {
+	Code    int64                                                                                         `json:"code,required"`
+	Message string                                                                                        `json:"message,required"`
+	JSON    accountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseMessageJSON `json:"-"`
 }
 
-// previewResponsePfp0bPtXMessageJSON contains the JSON metadata for the struct
-// [PreviewResponsePfp0bPtXMessage]
-type previewResponsePfp0bPtXMessageJSON struct {
+// accountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseMessage]
+type accountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PreviewResponsePfp0bPtXMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PreviewResponsePfp0bPtXResult struct {
-	Pools     interface{}                       `json:"pools"`
-	PreviewID interface{}                       `json:"preview_id"`
-	JSON      previewResponsePfp0bPtXResultJSON `json:"-"`
+type AccountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseResult struct {
+	// Monitored pool IDs mapped to their respective names.
+	Pools     interface{}                                                                                  `json:"pools"`
+	PreviewID string                                                                                       `json:"preview_id"`
+	JSON      accountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseResultJSON `json:"-"`
 }
 
-// previewResponsePfp0bPtXResultJSON contains the JSON metadata for the struct
-// [PreviewResponsePfp0bPtXResult]
-type previewResponsePfp0bPtXResultJSON struct {
+// accountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseResult]
+type accountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseResultJSON struct {
 	Pools       apijson.Field
 	PreviewID   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PreviewResponsePfp0bPtXResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type PreviewResponsePfp0bPtXSuccess bool
+type AccountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseSuccess bool
 
 const (
-	PreviewResponsePfp0bPtXSuccessTrue PreviewResponsePfp0bPtXSuccess = true
+	AccountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseSuccessTrue AccountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseSuccess = true
 )
 
 type AccountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorParams struct {
-	// The expected HTTP response codes or code ranges of the health check,
-	// comma-separated. This parameter is only valid for HTTP and HTTPS monitors.
-	ExpectedCodes param.Field[string] `json:"expected_codes,required"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
 	AllowInsecure param.Field[bool] `json:"allow_insecure"`
+	// To be marked unhealthy the monitored origin must fail this healthcheck N
+	// consecutive times.
+	ConsecutiveDown param.Field[int64] `json:"consecutive_down"`
+	// To be marked healthy the monitored origin must pass this healthcheck N
+	// consecutive times.
+	ConsecutiveUp param.Field[int64] `json:"consecutive_up"`
+	// Object description.
+	Description param.Field[string] `json:"description"`
 	// A case-insensitive sub-string to look for in the response body. If this string
 	// is not found, the origin will be marked as unhealthy. This parameter is only
 	// valid for HTTP and HTTPS monitors.
 	ExpectedBody param.Field[string] `json:"expected_body"`
+	// The expected HTTP response code or code range of the health check. This
+	// parameter is only valid for HTTP and HTTPS monitors.
+	ExpectedCodes param.Field[string] `json:"expected_codes"`
 	// Follow redirects if returned by the origin. This parameter is only valid for
 	// HTTP and HTTPS monitors.
 	FollowRedirects param.Field[bool] `json:"follow_redirects"`
@@ -146,6 +159,9 @@ type AccountLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorP
 	// a Host header by default. The User-Agent header cannot be overridden. This
 	// parameter is only valid for HTTP and HTTPS monitors.
 	Header param.Field[interface{}] `json:"header"`
+	// The interval between each health check. Shorter intervals may improve failover
+	// time, but will increase load on the origins as we check from multiple locations.
+	Interval param.Field[int64] `json:"interval"`
 	// The method to use for the health check. This defaults to 'GET' for HTTP/HTTPS
 	// based checks and 'connection_established' for TCP based health checks.
 	Method param.Field[string] `json:"method"`

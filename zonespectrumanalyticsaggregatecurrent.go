@@ -36,25 +36,26 @@ func NewZoneSpectrumAnalyticsAggregateCurrentService(opts ...option.RequestOptio
 
 // Retrieves analytics aggregated from the last minute of usage on Spectrum
 // applications underneath a given zone.
-func (r *ZoneSpectrumAnalyticsAggregateCurrentService) SpectrumAggregateAnalyticsGetCurrentAggregatedAnalytics(ctx context.Context, zone string, query ZoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsParams, opts ...option.RequestOption) (res *AnalyticsAggregateResponseCollection, err error) {
+func (r *ZoneSpectrumAnalyticsAggregateCurrentService) SpectrumAggregateAnalyticsGetCurrentAggregatedAnalytics(ctx context.Context, zone string, query ZoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsParams, opts ...option.RequestOption) (res *ZoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/spectrum/analytics/aggregate/current", zone)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
-type AnalyticsAggregateResponseCollection struct {
-	Errors   []AnalyticsAggregateResponseCollectionError   `json:"errors"`
-	Messages []AnalyticsAggregateResponseCollectionMessage `json:"messages"`
-	Result   []interface{}                                 `json:"result"`
+type ZoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsResponse struct {
+	Errors   []ZoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsResponseError   `json:"errors"`
+	Messages []ZoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsResponseMessage `json:"messages"`
+	Result   []interface{}                                                                                                 `json:"result"`
 	// Whether the API call was successful
-	Success AnalyticsAggregateResponseCollectionSuccess `json:"success"`
-	JSON    analyticsAggregateResponseCollectionJSON    `json:"-"`
+	Success ZoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsResponseSuccess `json:"success"`
+	JSON    zoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsResponseJSON    `json:"-"`
 }
 
-// analyticsAggregateResponseCollectionJSON contains the JSON metadata for the
-// struct [AnalyticsAggregateResponseCollection]
-type analyticsAggregateResponseCollectionJSON struct {
+// zoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsResponse]
+type zoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -63,53 +64,55 @@ type analyticsAggregateResponseCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AnalyticsAggregateResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AnalyticsAggregateResponseCollectionError struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    analyticsAggregateResponseCollectionErrorJSON `json:"-"`
+type ZoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsResponseError struct {
+	Code    int64                                                                                                         `json:"code,required"`
+	Message string                                                                                                        `json:"message,required"`
+	JSON    zoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsResponseErrorJSON `json:"-"`
 }
 
-// analyticsAggregateResponseCollectionErrorJSON contains the JSON metadata for the
-// struct [AnalyticsAggregateResponseCollectionError]
-type analyticsAggregateResponseCollectionErrorJSON struct {
+// zoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsResponseError]
+type zoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AnalyticsAggregateResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AnalyticsAggregateResponseCollectionMessage struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    analyticsAggregateResponseCollectionMessageJSON `json:"-"`
+type ZoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsResponseMessage struct {
+	Code    int64                                                                                                           `json:"code,required"`
+	Message string                                                                                                          `json:"message,required"`
+	JSON    zoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsResponseMessageJSON `json:"-"`
 }
 
-// analyticsAggregateResponseCollectionMessageJSON contains the JSON metadata for
-// the struct [AnalyticsAggregateResponseCollectionMessage]
-type analyticsAggregateResponseCollectionMessageJSON struct {
+// zoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsResponseMessage]
+type zoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AnalyticsAggregateResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type AnalyticsAggregateResponseCollectionSuccess bool
+type ZoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsResponseSuccess bool
 
 const (
-	AnalyticsAggregateResponseCollectionSuccessTrue AnalyticsAggregateResponseCollectionSuccess = true
+	ZoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsResponseSuccessTrue ZoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsResponseSuccess = true
 )
 
 type ZoneSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsParams struct {

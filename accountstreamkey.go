@@ -32,7 +32,7 @@ func NewAccountStreamKeyService(opts ...option.RequestOption) (r *AccountStreamK
 }
 
 // Deletes signing keys and revokes all signed URLs generated with the key.
-func (r *AccountStreamKeyService) Delete(ctx context.Context, accountIdentifier string, identifier string, opts ...option.RequestOption) (res *DeletedResponse, err error) {
+func (r *AccountStreamKeyService) Delete(ctx context.Context, accountIdentifier string, identifier string, opts ...option.RequestOption) (res *AccountStreamKeyDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/stream/keys/%s", accountIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -42,7 +42,7 @@ func (r *AccountStreamKeyService) Delete(ctx context.Context, accountIdentifier 
 // Creates an RSA private key in PEM and JWK formats. Key files are only displayed
 // once after creation. Keys are created, used, and deleted independently of
 // videos, and every key can sign any video.
-func (r *AccountStreamKeyService) StreamSigningKeysNewSigningKeys(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *KeyGenerationResponse, err error) {
+func (r *AccountStreamKeyService) StreamSigningKeysNewSigningKeys(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *AccountStreamKeyStreamSigningKeysNewSigningKeysResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/stream/keys", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
@@ -50,78 +50,148 @@ func (r *AccountStreamKeyService) StreamSigningKeysNewSigningKeys(ctx context.Co
 }
 
 // Lists the video ID and creation date and time when a signing key was created.
-func (r *AccountStreamKeyService) StreamSigningKeysListSigningKeys(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *KeyResponseCollection, err error) {
+func (r *AccountStreamKeyService) StreamSigningKeysListSigningKeys(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *AccountStreamKeyStreamSigningKeysListSigningKeysResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/stream/keys", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type KeyGenerationResponse struct {
-	Errors     []KeyGenerationResponseError    `json:"errors"`
-	Messages   []KeyGenerationResponseMessage  `json:"messages"`
-	Result     KeyGenerationResponseResult     `json:"result"`
-	ResultInfo KeyGenerationResponseResultInfo `json:"result_info"`
+type AccountStreamKeyDeleteResponse struct {
+	Errors   []AccountStreamKeyDeleteResponseError   `json:"errors"`
+	Messages []AccountStreamKeyDeleteResponseMessage `json:"messages"`
+	Result   string                                  `json:"result"`
 	// Whether the API call was successful
-	Success KeyGenerationResponseSuccess `json:"success"`
-	JSON    keyGenerationResponseJSON    `json:"-"`
+	Success AccountStreamKeyDeleteResponseSuccess `json:"success"`
+	JSON    accountStreamKeyDeleteResponseJSON    `json:"-"`
 }
 
-// keyGenerationResponseJSON contains the JSON metadata for the struct
-// [KeyGenerationResponse]
-type keyGenerationResponseJSON struct {
+// accountStreamKeyDeleteResponseJSON contains the JSON metadata for the struct
+// [AccountStreamKeyDeleteResponse]
+type accountStreamKeyDeleteResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *KeyGenerationResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamKeyDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type KeyGenerationResponseError struct {
-	Code    int64                          `json:"code,required"`
-	Message string                         `json:"message,required"`
-	JSON    keyGenerationResponseErrorJSON `json:"-"`
+type AccountStreamKeyDeleteResponseError struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    accountStreamKeyDeleteResponseErrorJSON `json:"-"`
 }
 
-// keyGenerationResponseErrorJSON contains the JSON metadata for the struct
-// [KeyGenerationResponseError]
-type keyGenerationResponseErrorJSON struct {
+// accountStreamKeyDeleteResponseErrorJSON contains the JSON metadata for the
+// struct [AccountStreamKeyDeleteResponseError]
+type accountStreamKeyDeleteResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *KeyGenerationResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamKeyDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type KeyGenerationResponseMessage struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    keyGenerationResponseMessageJSON `json:"-"`
+type AccountStreamKeyDeleteResponseMessage struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    accountStreamKeyDeleteResponseMessageJSON `json:"-"`
 }
 
-// keyGenerationResponseMessageJSON contains the JSON metadata for the struct
-// [KeyGenerationResponseMessage]
-type keyGenerationResponseMessageJSON struct {
+// accountStreamKeyDeleteResponseMessageJSON contains the JSON metadata for the
+// struct [AccountStreamKeyDeleteResponseMessage]
+type accountStreamKeyDeleteResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *KeyGenerationResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamKeyDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type KeyGenerationResponseResult struct {
+// Whether the API call was successful
+type AccountStreamKeyDeleteResponseSuccess bool
+
+const (
+	AccountStreamKeyDeleteResponseSuccessTrue AccountStreamKeyDeleteResponseSuccess = true
+)
+
+type AccountStreamKeyStreamSigningKeysNewSigningKeysResponse struct {
+	Errors   []AccountStreamKeyStreamSigningKeysNewSigningKeysResponseError   `json:"errors"`
+	Messages []AccountStreamKeyStreamSigningKeysNewSigningKeysResponseMessage `json:"messages"`
+	Result   AccountStreamKeyStreamSigningKeysNewSigningKeysResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountStreamKeyStreamSigningKeysNewSigningKeysResponseSuccess `json:"success"`
+	JSON    accountStreamKeyStreamSigningKeysNewSigningKeysResponseJSON    `json:"-"`
+}
+
+// accountStreamKeyStreamSigningKeysNewSigningKeysResponseJSON contains the JSON
+// metadata for the struct
+// [AccountStreamKeyStreamSigningKeysNewSigningKeysResponse]
+type accountStreamKeyStreamSigningKeysNewSigningKeysResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountStreamKeyStreamSigningKeysNewSigningKeysResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountStreamKeyStreamSigningKeysNewSigningKeysResponseError struct {
+	Code    int64                                                            `json:"code,required"`
+	Message string                                                           `json:"message,required"`
+	JSON    accountStreamKeyStreamSigningKeysNewSigningKeysResponseErrorJSON `json:"-"`
+}
+
+// accountStreamKeyStreamSigningKeysNewSigningKeysResponseErrorJSON contains the
+// JSON metadata for the struct
+// [AccountStreamKeyStreamSigningKeysNewSigningKeysResponseError]
+type accountStreamKeyStreamSigningKeysNewSigningKeysResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountStreamKeyStreamSigningKeysNewSigningKeysResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountStreamKeyStreamSigningKeysNewSigningKeysResponseMessage struct {
+	Code    int64                                                              `json:"code,required"`
+	Message string                                                             `json:"message,required"`
+	JSON    accountStreamKeyStreamSigningKeysNewSigningKeysResponseMessageJSON `json:"-"`
+}
+
+// accountStreamKeyStreamSigningKeysNewSigningKeysResponseMessageJSON contains the
+// JSON metadata for the struct
+// [AccountStreamKeyStreamSigningKeysNewSigningKeysResponseMessage]
+type accountStreamKeyStreamSigningKeysNewSigningKeysResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountStreamKeyStreamSigningKeysNewSigningKeysResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountStreamKeyStreamSigningKeysNewSigningKeysResponseResult struct {
 	// Identifier
 	ID string `json:"id"`
 	// The date and time a signing key was created.
@@ -129,13 +199,14 @@ type KeyGenerationResponseResult struct {
 	// The signing key in JWK format.
 	Jwk string `json:"jwk"`
 	// The signing key in PEM format.
-	Pem  string                          `json:"pem"`
-	JSON keyGenerationResponseResultJSON `json:"-"`
+	Pem  string                                                            `json:"pem"`
+	JSON accountStreamKeyStreamSigningKeysNewSigningKeysResponseResultJSON `json:"-"`
 }
 
-// keyGenerationResponseResultJSON contains the JSON metadata for the struct
-// [KeyGenerationResponseResult]
-type keyGenerationResponseResultJSON struct {
+// accountStreamKeyStreamSigningKeysNewSigningKeysResponseResultJSON contains the
+// JSON metadata for the struct
+// [AccountStreamKeyStreamSigningKeysNewSigningKeysResponseResult]
+type accountStreamKeyStreamSigningKeysNewSigningKeysResponseResultJSON struct {
 	ID          apijson.Field
 	Created     apijson.Field
 	Jwk         apijson.Field
@@ -144,227 +215,107 @@ type keyGenerationResponseResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *KeyGenerationResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type KeyGenerationResponseResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                             `json:"total_count"`
-	JSON       keyGenerationResponseResultInfoJSON `json:"-"`
-}
-
-// keyGenerationResponseResultInfoJSON contains the JSON metadata for the struct
-// [KeyGenerationResponseResultInfo]
-type keyGenerationResponseResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KeyGenerationResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamKeyStreamSigningKeysNewSigningKeysResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type KeyGenerationResponseSuccess bool
+type AccountStreamKeyStreamSigningKeysNewSigningKeysResponseSuccess bool
 
 const (
-	KeyGenerationResponseSuccessTrue KeyGenerationResponseSuccess = true
+	AccountStreamKeyStreamSigningKeysNewSigningKeysResponseSuccessTrue AccountStreamKeyStreamSigningKeysNewSigningKeysResponseSuccess = true
 )
 
-type KeyResponseCollection struct {
-	Errors     []KeyResponseCollectionError    `json:"errors"`
-	Messages   []KeyResponseCollectionMessage  `json:"messages"`
-	Result     []KeyResponseCollectionResult   `json:"result"`
-	ResultInfo KeyResponseCollectionResultInfo `json:"result_info"`
+type AccountStreamKeyStreamSigningKeysListSigningKeysResponse struct {
+	Errors   []AccountStreamKeyStreamSigningKeysListSigningKeysResponseError   `json:"errors"`
+	Messages []AccountStreamKeyStreamSigningKeysListSigningKeysResponseMessage `json:"messages"`
+	Result   []AccountStreamKeyStreamSigningKeysListSigningKeysResponseResult  `json:"result"`
 	// Whether the API call was successful
-	Success KeyResponseCollectionSuccess `json:"success"`
-	JSON    keyResponseCollectionJSON    `json:"-"`
+	Success AccountStreamKeyStreamSigningKeysListSigningKeysResponseSuccess `json:"success"`
+	JSON    accountStreamKeyStreamSigningKeysListSigningKeysResponseJSON    `json:"-"`
 }
 
-// keyResponseCollectionJSON contains the JSON metadata for the struct
-// [KeyResponseCollection]
-type keyResponseCollectionJSON struct {
+// accountStreamKeyStreamSigningKeysListSigningKeysResponseJSON contains the JSON
+// metadata for the struct
+// [AccountStreamKeyStreamSigningKeysListSigningKeysResponse]
+type accountStreamKeyStreamSigningKeysListSigningKeysResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *KeyResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamKeyStreamSigningKeysListSigningKeysResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type KeyResponseCollectionError struct {
-	Code    int64                          `json:"code,required"`
-	Message string                         `json:"message,required"`
-	JSON    keyResponseCollectionErrorJSON `json:"-"`
+type AccountStreamKeyStreamSigningKeysListSigningKeysResponseError struct {
+	Code    int64                                                             `json:"code,required"`
+	Message string                                                            `json:"message,required"`
+	JSON    accountStreamKeyStreamSigningKeysListSigningKeysResponseErrorJSON `json:"-"`
 }
 
-// keyResponseCollectionErrorJSON contains the JSON metadata for the struct
-// [KeyResponseCollectionError]
-type keyResponseCollectionErrorJSON struct {
+// accountStreamKeyStreamSigningKeysListSigningKeysResponseErrorJSON contains the
+// JSON metadata for the struct
+// [AccountStreamKeyStreamSigningKeysListSigningKeysResponseError]
+type accountStreamKeyStreamSigningKeysListSigningKeysResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *KeyResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamKeyStreamSigningKeysListSigningKeysResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type KeyResponseCollectionMessage struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    keyResponseCollectionMessageJSON `json:"-"`
+type AccountStreamKeyStreamSigningKeysListSigningKeysResponseMessage struct {
+	Code    int64                                                               `json:"code,required"`
+	Message string                                                              `json:"message,required"`
+	JSON    accountStreamKeyStreamSigningKeysListSigningKeysResponseMessageJSON `json:"-"`
 }
 
-// keyResponseCollectionMessageJSON contains the JSON metadata for the struct
-// [KeyResponseCollectionMessage]
-type keyResponseCollectionMessageJSON struct {
+// accountStreamKeyStreamSigningKeysListSigningKeysResponseMessageJSON contains the
+// JSON metadata for the struct
+// [AccountStreamKeyStreamSigningKeysListSigningKeysResponseMessage]
+type accountStreamKeyStreamSigningKeysListSigningKeysResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *KeyResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamKeyStreamSigningKeysListSigningKeysResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type KeyResponseCollectionResult struct {
+type AccountStreamKeyStreamSigningKeysListSigningKeysResponseResult struct {
 	// Identifier
 	ID string `json:"id"`
 	// The date and time a signing key was created.
-	Created time.Time                       `json:"created" format:"date-time"`
-	JSON    keyResponseCollectionResultJSON `json:"-"`
+	Created time.Time                                                          `json:"created" format:"date-time"`
+	JSON    accountStreamKeyStreamSigningKeysListSigningKeysResponseResultJSON `json:"-"`
 }
 
-// keyResponseCollectionResultJSON contains the JSON metadata for the struct
-// [KeyResponseCollectionResult]
-type keyResponseCollectionResultJSON struct {
+// accountStreamKeyStreamSigningKeysListSigningKeysResponseResultJSON contains the
+// JSON metadata for the struct
+// [AccountStreamKeyStreamSigningKeysListSigningKeysResponseResult]
+type accountStreamKeyStreamSigningKeysListSigningKeysResponseResultJSON struct {
 	ID          apijson.Field
 	Created     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *KeyResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type KeyResponseCollectionResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                             `json:"total_count"`
-	JSON       keyResponseCollectionResultInfoJSON `json:"-"`
-}
-
-// keyResponseCollectionResultInfoJSON contains the JSON metadata for the struct
-// [KeyResponseCollectionResultInfo]
-type keyResponseCollectionResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KeyResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamKeyStreamSigningKeysListSigningKeysResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type KeyResponseCollectionSuccess bool
+type AccountStreamKeyStreamSigningKeysListSigningKeysResponseSuccess bool
 
 const (
-	KeyResponseCollectionSuccessTrue KeyResponseCollectionSuccess = true
-)
-
-type DeletedResponse struct {
-	Errors   []DeletedResponseError   `json:"errors"`
-	Messages []DeletedResponseMessage `json:"messages"`
-	Result   string                   `json:"result"`
-	// Whether the API call was successful
-	Success DeletedResponseSuccess `json:"success"`
-	JSON    deletedResponseJSON    `json:"-"`
-}
-
-// deletedResponseJSON contains the JSON metadata for the struct [DeletedResponse]
-type deletedResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeletedResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DeletedResponseError struct {
-	Code    int64                    `json:"code,required"`
-	Message string                   `json:"message,required"`
-	JSON    deletedResponseErrorJSON `json:"-"`
-}
-
-// deletedResponseErrorJSON contains the JSON metadata for the struct
-// [DeletedResponseError]
-type deletedResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeletedResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DeletedResponseMessage struct {
-	Code    int64                      `json:"code,required"`
-	Message string                     `json:"message,required"`
-	JSON    deletedResponseMessageJSON `json:"-"`
-}
-
-// deletedResponseMessageJSON contains the JSON metadata for the struct
-// [DeletedResponseMessage]
-type deletedResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeletedResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type DeletedResponseSuccess bool
-
-const (
-	DeletedResponseSuccessTrue DeletedResponseSuccess = true
+	AccountStreamKeyStreamSigningKeysListSigningKeysResponseSuccessTrue AccountStreamKeyStreamSigningKeysListSigningKeysResponseSuccess = true
 )

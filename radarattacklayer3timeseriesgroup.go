@@ -21,7 +21,14 @@ import (
 // not instantiate this service directly, and instead use the
 // [NewRadarAttackLayer3TimeseriesGroupService] method instead.
 type RadarAttackLayer3TimeseriesGroupService struct {
-	Options []option.RequestOption
+	Options    []option.RequestOption
+	Bitrates   *RadarAttackLayer3TimeseriesGroupBitrateService
+	Durations  *RadarAttackLayer3TimeseriesGroupDurationService
+	Industries *RadarAttackLayer3TimeseriesGroupIndustryService
+	IPVersions *RadarAttackLayer3TimeseriesGroupIPVersionService
+	Protocols  *RadarAttackLayer3TimeseriesGroupProtocolService
+	Vectors    *RadarAttackLayer3TimeseriesGroupVectorService
+	Vertical   *RadarAttackLayer3TimeseriesGroupVerticalService
 }
 
 // NewRadarAttackLayer3TimeseriesGroupService generates a new service that applies
@@ -30,11 +37,18 @@ type RadarAttackLayer3TimeseriesGroupService struct {
 func NewRadarAttackLayer3TimeseriesGroupService(opts ...option.RequestOption) (r *RadarAttackLayer3TimeseriesGroupService) {
 	r = &RadarAttackLayer3TimeseriesGroupService{}
 	r.Options = opts
+	r.Bitrates = NewRadarAttackLayer3TimeseriesGroupBitrateService(opts...)
+	r.Durations = NewRadarAttackLayer3TimeseriesGroupDurationService(opts...)
+	r.Industries = NewRadarAttackLayer3TimeseriesGroupIndustryService(opts...)
+	r.IPVersions = NewRadarAttackLayer3TimeseriesGroupIPVersionService(opts...)
+	r.Protocols = NewRadarAttackLayer3TimeseriesGroupProtocolService(opts...)
+	r.Vectors = NewRadarAttackLayer3TimeseriesGroupVectorService(opts...)
+	r.Vertical = NewRadarAttackLayer3TimeseriesGroupVerticalService(opts...)
 	return
 }
 
-// Get percentage of what type of network protocols are used in layer 3/4 attacks,
-// over time.
+// Get a timeseries of the percentage distribution of network protocols in Layer
+// 3/4 attacks.
 func (r *RadarAttackLayer3TimeseriesGroupService) List(ctx context.Context, query RadarAttackLayer3TimeseriesGroupListParams, opts ...option.RequestOption) (res *RadarAttackLayer3TimeseriesGroupListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer3/timeseries_groups"
@@ -82,9 +96,9 @@ func (r *RadarAttackLayer3TimeseriesGroupListResponseResult) UnmarshalJSON(data 
 
 type RadarAttackLayer3TimeseriesGroupListResponseResultMeta struct {
 	AggInterval    string                                                               `json:"aggInterval,required"`
-	ConfidenceInfo RadarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      RadarAttackLayer3TimeseriesGroupListResponseResultMetaDateRange      `json:"dateRange,required"`
+	DateRange      []RadarAttackLayer3TimeseriesGroupListResponseResultMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    time.Time                                                            `json:"lastUpdated,required" format:"date-time"`
+	ConfidenceInfo RadarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           radarAttackLayer3TimeseriesGroupListResponseResultMetaJSON           `json:"-"`
 }
 
@@ -92,62 +106,14 @@ type RadarAttackLayer3TimeseriesGroupListResponseResultMeta struct {
 // metadata for the struct [RadarAttackLayer3TimeseriesGroupListResponseResultMeta]
 type radarAttackLayer3TimeseriesGroupListResponseResultMetaJSON struct {
 	AggInterval    apijson.Field
-	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
+	ConfidenceInfo apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
 func (r *RadarAttackLayer3TimeseriesGroupListResponseResultMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfo struct {
-	Annotations []RadarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfoAnnotation `json:"annotations,required"`
-	Level       int64                                                                            `json:"level,required"`
-	JSON        radarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfoJSON         `json:"-"`
-}
-
-// radarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfoJSON
-// contains the JSON metadata for the struct
-// [RadarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfo]
-type radarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfoAnnotation struct {
-	DataSource  string                                                                             `json:"dataSource,required"`
-	Description string                                                                             `json:"description,required"`
-	EndTime     time.Time                                                                          `json:"endTime,required" format:"date-time"`
-	EventType   string                                                                             `json:"eventType,required"`
-	LinkedURL   string                                                                             `json:"linkedUrl,required"`
-	StartTime   time.Time                                                                          `json:"startTime,required" format:"date-time"`
-	JSON        radarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// radarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfoAnnotationJSON
-// contains the JSON metadata for the struct
-// [RadarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfoAnnotation]
-type radarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfoAnnotationJSON struct {
-	DataSource  apijson.Field
-	Description apijson.Field
-	EndTime     apijson.Field
-	EventType   apijson.Field
-	LinkedURL   apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -170,6 +136,56 @@ type radarAttackLayer3TimeseriesGroupListResponseResultMetaDateRangeJSON struct 
 }
 
 func (r *RadarAttackLayer3TimeseriesGroupListResponseResultMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfo struct {
+	Annotations []RadarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                                            `json:"level"`
+	JSON        radarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfoJSON         `json:"-"`
+}
+
+// radarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfoJSON
+// contains the JSON metadata for the struct
+// [RadarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfo]
+type radarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                                             `json:"dataSource,required"`
+	Description     string                                                                             `json:"description,required"`
+	EventType       string                                                                             `json:"eventType,required"`
+	IsInstantaneous interface{}                                                                        `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                                          `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                                             `json:"linkedUrl"`
+	StartTime       time.Time                                                                          `json:"startTime" format:"date-time"`
+	JSON            radarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// radarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfoAnnotationJSON
+// contains the JSON metadata for the struct
+// [RadarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfoAnnotation]
+type radarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *RadarAttackLayer3TimeseriesGroupListResponseResultMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -208,7 +224,7 @@ type RadarAttackLayer3TimeseriesGroupListParams struct {
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of datetimes to filter the end of a series.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
@@ -251,6 +267,7 @@ type RadarAttackLayer3TimeseriesGroupListParamsDateRange string
 
 const (
 	RadarAttackLayer3TimeseriesGroupListParamsDateRange1d         RadarAttackLayer3TimeseriesGroupListParamsDateRange = "1d"
+	RadarAttackLayer3TimeseriesGroupListParamsDateRange2d         RadarAttackLayer3TimeseriesGroupListParamsDateRange = "2d"
 	RadarAttackLayer3TimeseriesGroupListParamsDateRange7d         RadarAttackLayer3TimeseriesGroupListParamsDateRange = "7d"
 	RadarAttackLayer3TimeseriesGroupListParamsDateRange14d        RadarAttackLayer3TimeseriesGroupListParamsDateRange = "14d"
 	RadarAttackLayer3TimeseriesGroupListParamsDateRange28d        RadarAttackLayer3TimeseriesGroupListParamsDateRange = "28d"
@@ -258,6 +275,7 @@ const (
 	RadarAttackLayer3TimeseriesGroupListParamsDateRange24w        RadarAttackLayer3TimeseriesGroupListParamsDateRange = "24w"
 	RadarAttackLayer3TimeseriesGroupListParamsDateRange52w        RadarAttackLayer3TimeseriesGroupListParamsDateRange = "52w"
 	RadarAttackLayer3TimeseriesGroupListParamsDateRange1dControl  RadarAttackLayer3TimeseriesGroupListParamsDateRange = "1dControl"
+	RadarAttackLayer3TimeseriesGroupListParamsDateRange2dControl  RadarAttackLayer3TimeseriesGroupListParamsDateRange = "2dControl"
 	RadarAttackLayer3TimeseriesGroupListParamsDateRange7dControl  RadarAttackLayer3TimeseriesGroupListParamsDateRange = "7dControl"
 	RadarAttackLayer3TimeseriesGroupListParamsDateRange14dControl RadarAttackLayer3TimeseriesGroupListParamsDateRange = "14dControl"
 	RadarAttackLayer3TimeseriesGroupListParamsDateRange28dControl RadarAttackLayer3TimeseriesGroupListParamsDateRange = "28dControl"

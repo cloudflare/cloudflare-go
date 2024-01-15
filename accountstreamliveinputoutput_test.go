@@ -24,8 +24,10 @@ func TestAccountStreamLiveInputOutputUpdate(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Streams.LiveInputs.Outputs.Update(
 		context.TODO(),
@@ -56,8 +58,10 @@ func TestAccountStreamLiveInputOutputDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	err := client.Accounts.Streams.LiveInputs.Outputs.Delete(
 		context.TODO(),
@@ -85,15 +89,19 @@ func TestAccountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALi
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Streams.LiveInputs.Outputs.StreamLiveInputsNewANewOutputConnectedToALiveInput(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"66be4bf738797e01e1fca35a7bdecdcd",
 		cloudflare.AccountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputParams{
-			Enabled: cloudflare.F(true),
+			StreamKey: cloudflare.F("uzya-f19y-g2g9-a2ee-51j2"),
+			URL:       cloudflare.F("rtmp://a.rtmp.youtube.com/live2"),
+			Enabled:   cloudflare.F(true),
 		},
 	)
 	if err != nil {
@@ -116,8 +124,10 @@ func TestAccountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWit
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Streams.LiveInputs.Outputs.StreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInput(
 		context.TODO(),

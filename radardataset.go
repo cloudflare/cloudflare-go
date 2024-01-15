@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
@@ -39,8 +38,9 @@ func NewRadarDatasetService(opts ...option.RequestOption) (r *RadarDatasetServic
 // Get the csv content of a given dataset by alias or id. When getting the content
 // by alias the latest dataset is returned, optionally filtered by the latest
 // available at a given date.
-func (r *RadarDatasetService) Get(ctx context.Context, alias string, query RadarDatasetGetParams, opts ...option.RequestOption) (res *RadarDatasetGetResponse, err error) {
+func (r *RadarDatasetService) Get(ctx context.Context, alias string, query RadarDatasetGetParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/csv")}, opts...)
 	path := fmt.Sprintf("radar/datasets/%s", alias)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
@@ -53,8 +53,6 @@ func (r *RadarDatasetService) List(ctx context.Context, query RadarDatasetListPa
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
-
-type RadarDatasetGetResponse = interface{}
 
 type RadarDatasetListResponse struct {
 	Result  RadarDatasetListResponseResult `json:"result,required"`
@@ -121,7 +119,7 @@ func (r *RadarDatasetListResponseResultDataset) UnmarshalJSON(data []byte) (err 
 
 type RadarDatasetGetParams struct {
 	// Filter dataset alias by date
-	Date param.Field[time.Time] `query:"date" format:"date"`
+	Date param.Field[string] `query:"date"`
 }
 
 // URLQuery serializes [RadarDatasetGetParams]'s query parameters as `url.Values`.

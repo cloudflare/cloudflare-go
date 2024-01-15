@@ -37,7 +37,7 @@ func NewAccountPageProjectService(opts ...option.RequestOption) (r *AccountPageP
 }
 
 // Fetch a project by name.
-func (r *AccountPageProjectService) Get(ctx context.Context, accountIdentifier string, projectName string, opts ...option.RequestOption) (res *ProjectResponse, err error) {
+func (r *AccountPageProjectService) Get(ctx context.Context, accountIdentifier string, projectName string, opts ...option.RequestOption) (res *AccountPageProjectGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s", accountIdentifier, projectName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -46,14 +46,14 @@ func (r *AccountPageProjectService) Get(ctx context.Context, accountIdentifier s
 
 // Set new attributes for an existing project. Modify environment variables. To
 // delete an environment variable, set the key to null.
-func (r *AccountPageProjectService) Update(ctx context.Context, accountIdentifier string, projectName string, body AccountPageProjectUpdateParams, opts ...option.RequestOption) (res *NewProjectResponse, err error) {
+func (r *AccountPageProjectService) Update(ctx context.Context, accountIdentifier string, projectName string, body AccountPageProjectUpdateParams, opts ...option.RequestOption) (res *AccountPageProjectUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s", accountIdentifier, projectName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
 	return
 }
 
-// Destroy a project by name.
+// Delete a project by name.
 func (r *AccountPageProjectService) Delete(ctx context.Context, accountIdentifier string, projectName string, opts ...option.RequestOption) (res *AccountPageProjectDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s", accountIdentifier, projectName)
@@ -61,8 +61,8 @@ func (r *AccountPageProjectService) Delete(ctx context.Context, accountIdentifie
 	return
 }
 
-// Make a new project.
-func (r *AccountPageProjectService) PagesProjectNewProject(ctx context.Context, accountIdentifier string, body AccountPageProjectPagesProjectNewProjectParams, opts ...option.RequestOption) (res *NewProjectResponse, err error) {
+// Create a new project.
+func (r *AccountPageProjectService) PagesProjectNewProject(ctx context.Context, accountIdentifier string, body AccountPageProjectPagesProjectNewProjectParams, opts ...option.RequestOption) (res *AccountPageProjectPagesProjectNewProjectResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/pages/projects", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -70,25 +70,25 @@ func (r *AccountPageProjectService) PagesProjectNewProject(ctx context.Context, 
 }
 
 // Fetch a list of all user projects.
-func (r *AccountPageProjectService) PagesProjectGetProjects(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *ProjectsResponse, err error) {
+func (r *AccountPageProjectService) PagesProjectGetProjects(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *AccountPageProjectPagesProjectGetProjectsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/pages/projects", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type NewProjectResponse struct {
-	Errors   []NewProjectResponseError   `json:"errors"`
-	Messages []NewProjectResponseMessage `json:"messages"`
-	Result   interface{}                 `json:"result"`
+type AccountPageProjectGetResponse struct {
+	Errors   []AccountPageProjectGetResponseError   `json:"errors"`
+	Messages []AccountPageProjectGetResponseMessage `json:"messages"`
+	Result   AccountPageProjectGetResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success NewProjectResponseSuccess `json:"success"`
-	JSON    newProjectResponseJSON    `json:"-"`
+	Success AccountPageProjectGetResponseSuccess `json:"success"`
+	JSON    accountPageProjectGetResponseJSON    `json:"-"`
 }
 
-// newProjectResponseJSON contains the JSON metadata for the struct
-// [NewProjectResponse]
-type newProjectResponseJSON struct {
+// accountPageProjectGetResponseJSON contains the JSON metadata for the struct
+// [AccountPageProjectGetResponse]
+type accountPageProjectGetResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -97,144 +97,74 @@ type newProjectResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *NewProjectResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type NewProjectResponseError struct {
-	Code    int64                       `json:"code,required"`
-	Message string                      `json:"message,required"`
-	JSON    newProjectResponseErrorJSON `json:"-"`
+type AccountPageProjectGetResponseError struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    accountPageProjectGetResponseErrorJSON `json:"-"`
 }
 
-// newProjectResponseErrorJSON contains the JSON metadata for the struct
-// [NewProjectResponseError]
-type newProjectResponseErrorJSON struct {
+// accountPageProjectGetResponseErrorJSON contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseError]
+type accountPageProjectGetResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *NewProjectResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type NewProjectResponseMessage struct {
-	Code    int64                         `json:"code,required"`
-	Message string                        `json:"message,required"`
-	JSON    newProjectResponseMessageJSON `json:"-"`
+type AccountPageProjectGetResponseMessage struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    accountPageProjectGetResponseMessageJSON `json:"-"`
 }
 
-// newProjectResponseMessageJSON contains the JSON metadata for the struct
-// [NewProjectResponseMessage]
-type newProjectResponseMessageJSON struct {
+// accountPageProjectGetResponseMessageJSON contains the JSON metadata for the
+// struct [AccountPageProjectGetResponseMessage]
+type accountPageProjectGetResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *NewProjectResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Whether the API call was successful
-type NewProjectResponseSuccess bool
-
-const (
-	NewProjectResponseSuccessTrue NewProjectResponseSuccess = true
-)
-
-type ProjectResponse struct {
-	Errors   []ProjectResponseError   `json:"errors"`
-	Messages []ProjectResponseMessage `json:"messages"`
-	Result   ProjectResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success ProjectResponseSuccess `json:"success"`
-	JSON    projectResponseJSON    `json:"-"`
-}
-
-// projectResponseJSON contains the JSON metadata for the struct [ProjectResponse]
-type projectResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ProjectResponseError struct {
-	Code    int64                    `json:"code,required"`
-	Message string                   `json:"message,required"`
-	JSON    projectResponseErrorJSON `json:"-"`
-}
-
-// projectResponseErrorJSON contains the JSON metadata for the struct
-// [ProjectResponseError]
-type projectResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ProjectResponseMessage struct {
-	Code    int64                      `json:"code,required"`
-	Message string                     `json:"message,required"`
-	JSON    projectResponseMessageJSON `json:"-"`
-}
-
-// projectResponseMessageJSON contains the JSON metadata for the struct
-// [ProjectResponseMessage]
-type projectResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ProjectResponseResult struct {
+type AccountPageProjectGetResponseResult struct {
 	// Id of the project.
 	ID string `json:"id"`
 	// Configs for the project build process.
-	BuildConfig ProjectResponseResultBuildConfig `json:"build_config"`
-	// Most recent deployment to the repo.
-	CanonicalDeployment ProjectResponseResultCanonicalDeployment `json:"canonical_deployment,nullable"`
+	BuildConfig         AccountPageProjectGetResponseResultBuildConfig         `json:"build_config"`
+	CanonicalDeployment AccountPageProjectGetResponseResultCanonicalDeployment `json:"canonical_deployment"`
 	// When the project was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Configs for deployments in a project.
-	DeploymentConfigs ProjectResponseResultDeploymentConfigs `json:"deployment_configs"`
+	DeploymentConfigs AccountPageProjectGetResponseResultDeploymentConfigs `json:"deployment_configs"`
 	// A list of associated custom domains for the project.
-	Domains []interface{} `json:"domains"`
-	// Most recent deployment to the repo.
-	LatestDeployment ProjectResponseResultLatestDeployment `json:"latest_deployment,nullable"`
+	Domains          []interface{}                                       `json:"domains"`
+	LatestDeployment AccountPageProjectGetResponseResultLatestDeployment `json:"latest_deployment"`
 	// Name of the project.
 	Name string `json:"name"`
 	// Production branch of the project. Used to identify production deployments.
 	ProductionBranch string      `json:"production_branch"`
 	Source           interface{} `json:"source"`
 	// The Cloudflare subdomain associated with the project.
-	Subdomain string                    `json:"subdomain"`
-	JSON      projectResponseResultJSON `json:"-"`
+	Subdomain string                                  `json:"subdomain"`
+	JSON      accountPageProjectGetResponseResultJSON `json:"-"`
 }
 
-// projectResponseResultJSON contains the JSON metadata for the struct
-// [ProjectResponseResult]
-type projectResponseResultJSON struct {
+// accountPageProjectGetResponseResultJSON contains the JSON metadata for the
+// struct [AccountPageProjectGetResponseResult]
+type accountPageProjectGetResponseResultJSON struct {
 	ID                  apijson.Field
 	BuildConfig         apijson.Field
 	CanonicalDeployment apijson.Field
@@ -250,12 +180,14 @@ type projectResponseResultJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *ProjectResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Configs for the project build process.
-type ProjectResponseResultBuildConfig struct {
+type AccountPageProjectGetResponseResultBuildConfig struct {
+	// Enable build caching for the project.
+	BuildCaching bool `json:"build_caching,nullable"`
 	// Command used to build project.
 	BuildCommand string `json:"build_command,nullable"`
 	// Output directory of the build.
@@ -265,13 +197,14 @@ type ProjectResponseResultBuildConfig struct {
 	// The classifying tag for analytics.
 	WebAnalyticsTag string `json:"web_analytics_tag,nullable"`
 	// The auth token for analytics.
-	WebAnalyticsToken string                               `json:"web_analytics_token,nullable"`
-	JSON              projectResponseResultBuildConfigJSON `json:"-"`
+	WebAnalyticsToken string                                             `json:"web_analytics_token,nullable"`
+	JSON              accountPageProjectGetResponseResultBuildConfigJSON `json:"-"`
 }
 
-// projectResponseResultBuildConfigJSON contains the JSON metadata for the struct
-// [ProjectResponseResultBuildConfig]
-type projectResponseResultBuildConfigJSON struct {
+// accountPageProjectGetResponseResultBuildConfigJSON contains the JSON metadata
+// for the struct [AccountPageProjectGetResponseResultBuildConfig]
+type accountPageProjectGetResponseResultBuildConfigJSON struct {
+	BuildCaching      apijson.Field
 	BuildCommand      apijson.Field
 	DestinationDir    apijson.Field
 	RootDir           apijson.Field
@@ -281,12 +214,11 @@ type projectResponseResultBuildConfigJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultBuildConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultBuildConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Most recent deployment to the repo.
-type ProjectResponseResultCanonicalDeployment struct {
+type AccountPageProjectGetResponseResultCanonicalDeployment struct {
 	// Id of the deployment.
 	ID string `json:"id"`
 	// A list of alias URLs pointing to this deployment.
@@ -295,7 +227,7 @@ type ProjectResponseResultCanonicalDeployment struct {
 	// When the deployment was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Info about what caused the deployment.
-	DeploymentTrigger ProjectResponseResultCanonicalDeploymentDeploymentTrigger `json:"deployment_trigger"`
+	DeploymentTrigger AccountPageProjectGetResponseResultCanonicalDeploymentDeploymentTrigger `json:"deployment_trigger"`
 	// A dict of env variables to build this deploy.
 	EnvVars interface{} `json:"env_vars"`
 	// Type of deploy.
@@ -313,15 +245,15 @@ type ProjectResponseResultCanonicalDeployment struct {
 	ShortID string      `json:"short_id"`
 	Source  interface{} `json:"source"`
 	// List of past stages.
-	Stages []ProjectResponseResultCanonicalDeploymentStage `json:"stages"`
+	Stages []AccountPageProjectGetResponseResultCanonicalDeploymentStage `json:"stages"`
 	// The live URL to view this deployment.
-	URL  string                                       `json:"url"`
-	JSON projectResponseResultCanonicalDeploymentJSON `json:"-"`
+	URL  string                                                     `json:"url"`
+	JSON accountPageProjectGetResponseResultCanonicalDeploymentJSON `json:"-"`
 }
 
-// projectResponseResultCanonicalDeploymentJSON contains the JSON metadata for the
-// struct [ProjectResponseResultCanonicalDeployment]
-type projectResponseResultCanonicalDeploymentJSON struct {
+// accountPageProjectGetResponseResultCanonicalDeploymentJSON contains the JSON
+// metadata for the struct [AccountPageProjectGetResponseResultCanonicalDeployment]
+type accountPageProjectGetResponseResultCanonicalDeploymentJSON struct {
 	ID                apijson.Field
 	Aliases           apijson.Field
 	BuildConfig       apijson.Field
@@ -342,48 +274,48 @@ type projectResponseResultCanonicalDeploymentJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultCanonicalDeployment) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultCanonicalDeployment) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Info about what caused the deployment.
-type ProjectResponseResultCanonicalDeploymentDeploymentTrigger struct {
+type AccountPageProjectGetResponseResultCanonicalDeploymentDeploymentTrigger struct {
 	// Additional info about the trigger.
-	Metadata ProjectResponseResultCanonicalDeploymentDeploymentTriggerMetadata `json:"metadata"`
+	Metadata AccountPageProjectGetResponseResultCanonicalDeploymentDeploymentTriggerMetadata `json:"metadata"`
 	// What caused the deployment.
-	Type string                                                        `json:"type"`
-	JSON projectResponseResultCanonicalDeploymentDeploymentTriggerJSON `json:"-"`
+	Type string                                                                      `json:"type"`
+	JSON accountPageProjectGetResponseResultCanonicalDeploymentDeploymentTriggerJSON `json:"-"`
 }
 
-// projectResponseResultCanonicalDeploymentDeploymentTriggerJSON contains the JSON
-// metadata for the struct
-// [ProjectResponseResultCanonicalDeploymentDeploymentTrigger]
-type projectResponseResultCanonicalDeploymentDeploymentTriggerJSON struct {
+// accountPageProjectGetResponseResultCanonicalDeploymentDeploymentTriggerJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultCanonicalDeploymentDeploymentTrigger]
+type accountPageProjectGetResponseResultCanonicalDeploymentDeploymentTriggerJSON struct {
 	Metadata    apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultCanonicalDeploymentDeploymentTrigger) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultCanonicalDeploymentDeploymentTrigger) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Additional info about the trigger.
-type ProjectResponseResultCanonicalDeploymentDeploymentTriggerMetadata struct {
+type AccountPageProjectGetResponseResultCanonicalDeploymentDeploymentTriggerMetadata struct {
 	// Where the trigger happened.
 	Branch string `json:"branch"`
 	// Hash of the deployment trigger commit.
 	CommitHash string `json:"commit_hash"`
 	// Message of the deployment trigger commit.
-	CommitMessage string                                                                `json:"commit_message"`
-	JSON          projectResponseResultCanonicalDeploymentDeploymentTriggerMetadataJSON `json:"-"`
+	CommitMessage string                                                                              `json:"commit_message"`
+	JSON          accountPageProjectGetResponseResultCanonicalDeploymentDeploymentTriggerMetadataJSON `json:"-"`
 }
 
-// projectResponseResultCanonicalDeploymentDeploymentTriggerMetadataJSON contains
-// the JSON metadata for the struct
-// [ProjectResponseResultCanonicalDeploymentDeploymentTriggerMetadata]
-type projectResponseResultCanonicalDeploymentDeploymentTriggerMetadataJSON struct {
+// accountPageProjectGetResponseResultCanonicalDeploymentDeploymentTriggerMetadataJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultCanonicalDeploymentDeploymentTriggerMetadata]
+type accountPageProjectGetResponseResultCanonicalDeploymentDeploymentTriggerMetadataJSON struct {
 	Branch        apijson.Field
 	CommitHash    apijson.Field
 	CommitMessage apijson.Field
@@ -391,12 +323,12 @@ type projectResponseResultCanonicalDeploymentDeploymentTriggerMetadataJSON struc
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultCanonicalDeploymentDeploymentTriggerMetadata) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultCanonicalDeploymentDeploymentTriggerMetadata) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The status of the deployment.
-type ProjectResponseResultCanonicalDeploymentStage struct {
+type AccountPageProjectGetResponseResultCanonicalDeploymentStage struct {
 	// When the stage ended.
 	EndedOn time.Time `json:"ended_on,nullable" format:"date-time"`
 	// The current build stage.
@@ -404,13 +336,14 @@ type ProjectResponseResultCanonicalDeploymentStage struct {
 	// When the stage started.
 	StartedOn time.Time `json:"started_on,nullable" format:"date-time"`
 	// State of the current stage.
-	Status string                                            `json:"status"`
-	JSON   projectResponseResultCanonicalDeploymentStageJSON `json:"-"`
+	Status string                                                          `json:"status"`
+	JSON   accountPageProjectGetResponseResultCanonicalDeploymentStageJSON `json:"-"`
 }
 
-// projectResponseResultCanonicalDeploymentStageJSON contains the JSON metadata for
-// the struct [ProjectResponseResultCanonicalDeploymentStage]
-type projectResponseResultCanonicalDeploymentStageJSON struct {
+// accountPageProjectGetResponseResultCanonicalDeploymentStageJSON contains the
+// JSON metadata for the struct
+// [AccountPageProjectGetResponseResultCanonicalDeploymentStage]
+type accountPageProjectGetResponseResultCanonicalDeploymentStageJSON struct {
 	EndedOn     apijson.Field
 	Name        apijson.Field
 	StartedOn   apijson.Field
@@ -419,64 +352,74 @@ type projectResponseResultCanonicalDeploymentStageJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultCanonicalDeploymentStage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultCanonicalDeploymentStage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Configs for deployments in a project.
-type ProjectResponseResultDeploymentConfigs struct {
+type AccountPageProjectGetResponseResultDeploymentConfigs struct {
 	// Configs for preview deploys.
-	Preview ProjectResponseResultDeploymentConfigsPreview `json:"preview"`
+	Preview AccountPageProjectGetResponseResultDeploymentConfigsPreview `json:"preview"`
 	// Configs for production deploys.
-	Production ProjectResponseResultDeploymentConfigsProduction `json:"production"`
-	JSON       projectResponseResultDeploymentConfigsJSON       `json:"-"`
+	Production AccountPageProjectGetResponseResultDeploymentConfigsProduction `json:"production"`
+	JSON       accountPageProjectGetResponseResultDeploymentConfigsJSON       `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsJSON contains the JSON metadata for the
-// struct [ProjectResponseResultDeploymentConfigs]
-type projectResponseResultDeploymentConfigsJSON struct {
+// accountPageProjectGetResponseResultDeploymentConfigsJSON contains the JSON
+// metadata for the struct [AccountPageProjectGetResponseResultDeploymentConfigs]
+type accountPageProjectGetResponseResultDeploymentConfigsJSON struct {
 	Preview     apijson.Field
 	Production  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigs) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Configs for preview deploys.
-type ProjectResponseResultDeploymentConfigsPreview struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsPreview struct {
+	// Constellation bindings used for Pages Functions.
+	AIBindings AccountPageProjectGetResponseResultDeploymentConfigsPreviewAIBindings `json:"ai_bindings,nullable"`
+	// Analytics Engine bindings used for Pages Functions.
+	AnalyticsEngineDatasets AccountPageProjectGetResponseResultDeploymentConfigsPreviewAnalyticsEngineDatasets `json:"analytics_engine_datasets,nullable"`
 	// Compatibility date used for Pages Functions.
 	CompatibilityDate string `json:"compatibility_date"`
 	// Compatibility flags used for Pages Functions.
 	CompatibilityFlags []interface{} `json:"compatibility_flags"`
 	// D1 databases used for Pages Functions.
-	D1Databases ProjectResponseResultDeploymentConfigsPreviewD1Databases `json:"d1_databases,nullable"`
+	D1Databases AccountPageProjectGetResponseResultDeploymentConfigsPreviewD1Databases `json:"d1_databases,nullable"`
 	// Durabble Object namespaces used for Pages Functions.
-	DurableObjectNamespaces ProjectResponseResultDeploymentConfigsPreviewDurableObjectNamespaces `json:"durable_object_namespaces,nullable"`
+	DurableObjectNamespaces AccountPageProjectGetResponseResultDeploymentConfigsPreviewDurableObjectNamespaces `json:"durable_object_namespaces,nullable"`
 	// Environment variables for build configs.
-	EnvVars ProjectResponseResultDeploymentConfigsPreviewEnvVars `json:"env_vars,nullable"`
+	EnvVars AccountPageProjectGetResponseResultDeploymentConfigsPreviewEnvVars `json:"env_vars,nullable"`
 	// KV namespaces used for Pages Functions.
-	KvNamespaces ProjectResponseResultDeploymentConfigsPreviewKvNamespaces `json:"kv_namespaces"`
+	KvNamespaces AccountPageProjectGetResponseResultDeploymentConfigsPreviewKvNamespaces `json:"kv_namespaces"`
+	// Placement setting used for Pages Functions.
+	Placement AccountPageProjectGetResponseResultDeploymentConfigsPreviewPlacement `json:"placement,nullable"`
 	// Queue Producer bindings used for Pages Functions.
-	QueueProducers ProjectResponseResultDeploymentConfigsPreviewQueueProducers `json:"queue_producers,nullable"`
+	QueueProducers AccountPageProjectGetResponseResultDeploymentConfigsPreviewQueueProducers `json:"queue_producers,nullable"`
 	// R2 buckets used for Pages Functions.
-	R2Buckets ProjectResponseResultDeploymentConfigsPreviewR2Buckets `json:"r2_buckets,nullable"`
+	R2Buckets AccountPageProjectGetResponseResultDeploymentConfigsPreviewR2Buckets `json:"r2_buckets,nullable"`
 	// Services used for Pages Functions.
-	ServiceBindings ProjectResponseResultDeploymentConfigsPreviewServiceBindings `json:"service_bindings,nullable"`
-	JSON            projectResponseResultDeploymentConfigsPreviewJSON            `json:"-"`
+	ServiceBindings AccountPageProjectGetResponseResultDeploymentConfigsPreviewServiceBindings `json:"service_bindings,nullable"`
+	JSON            accountPageProjectGetResponseResultDeploymentConfigsPreviewJSON            `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsPreviewJSON contains the JSON metadata for
-// the struct [ProjectResponseResultDeploymentConfigsPreview]
-type projectResponseResultDeploymentConfigsPreviewJSON struct {
+// accountPageProjectGetResponseResultDeploymentConfigsPreviewJSON contains the
+// JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsPreview]
+type accountPageProjectGetResponseResultDeploymentConfigsPreviewJSON struct {
+	AIBindings              apijson.Field
+	AnalyticsEngineDatasets apijson.Field
 	CompatibilityDate       apijson.Field
 	CompatibilityFlags      apijson.Field
 	D1Databases             apijson.Field
 	DurableObjectNamespaces apijson.Field
 	EnvVars                 apijson.Field
 	KvNamespaces            apijson.Field
+	Placement               apijson.Field
 	QueueProducers          apijson.Field
 	R2Buckets               apijson.Field
 	ServiceBindings         apijson.Field
@@ -484,334 +427,445 @@ type projectResponseResultDeploymentConfigsPreviewJSON struct {
 	ExtraFields             map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsPreview) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsPreview) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Constellation bindings used for Pages Functions.
+type AccountPageProjectGetResponseResultDeploymentConfigsPreviewAIBindings struct {
+	// AI binding.
+	AIBinding AccountPageProjectGetResponseResultDeploymentConfigsPreviewAIBindingsAIBinding `json:"AI_BINDING"`
+	JSON      accountPageProjectGetResponseResultDeploymentConfigsPreviewAIBindingsJSON      `json:"-"`
+}
+
+// accountPageProjectGetResponseResultDeploymentConfigsPreviewAIBindingsJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsPreviewAIBindings]
+type accountPageProjectGetResponseResultDeploymentConfigsPreviewAIBindingsJSON struct {
+	AIBinding   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsPreviewAIBindings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// AI binding.
+type AccountPageProjectGetResponseResultDeploymentConfigsPreviewAIBindingsAIBinding struct {
+	ProjectID interface{}                                                                        `json:"project_id"`
+	JSON      accountPageProjectGetResponseResultDeploymentConfigsPreviewAIBindingsAIBindingJSON `json:"-"`
+}
+
+// accountPageProjectGetResponseResultDeploymentConfigsPreviewAIBindingsAIBindingJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsPreviewAIBindingsAIBinding]
+type accountPageProjectGetResponseResultDeploymentConfigsPreviewAIBindingsAIBindingJSON struct {
+	ProjectID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsPreviewAIBindingsAIBinding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Analytics Engine bindings used for Pages Functions.
+type AccountPageProjectGetResponseResultDeploymentConfigsPreviewAnalyticsEngineDatasets struct {
+	// Analytics Engine binding.
+	AnalyticsEngineBinding AccountPageProjectGetResponseResultDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBinding `json:"ANALYTICS_ENGINE_BINDING"`
+	JSON                   accountPageProjectGetResponseResultDeploymentConfigsPreviewAnalyticsEngineDatasetsJSON                   `json:"-"`
+}
+
+// accountPageProjectGetResponseResultDeploymentConfigsPreviewAnalyticsEngineDatasetsJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsPreviewAnalyticsEngineDatasets]
+type accountPageProjectGetResponseResultDeploymentConfigsPreviewAnalyticsEngineDatasetsJSON struct {
+	AnalyticsEngineBinding apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsPreviewAnalyticsEngineDatasets) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Analytics Engine binding.
+type AccountPageProjectGetResponseResultDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBinding struct {
+	// Name of the dataset.
+	Dataset string                                                                                                       `json:"dataset"`
+	JSON    accountPageProjectGetResponseResultDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBindingJSON `json:"-"`
+}
+
+// accountPageProjectGetResponseResultDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBindingJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBinding]
+type accountPageProjectGetResponseResultDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBindingJSON struct {
+	Dataset     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // D1 databases used for Pages Functions.
-type ProjectResponseResultDeploymentConfigsPreviewD1Databases struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsPreviewD1Databases struct {
 	// D1 binding.
-	D1Binding ProjectResponseResultDeploymentConfigsPreviewD1DatabasesD1Binding `json:"D1_BINDING"`
-	JSON      projectResponseResultDeploymentConfigsPreviewD1DatabasesJSON      `json:"-"`
+	D1Binding AccountPageProjectGetResponseResultDeploymentConfigsPreviewD1DatabasesD1Binding `json:"D1_BINDING"`
+	JSON      accountPageProjectGetResponseResultDeploymentConfigsPreviewD1DatabasesJSON      `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsPreviewD1DatabasesJSON contains the JSON
-// metadata for the struct
-// [ProjectResponseResultDeploymentConfigsPreviewD1Databases]
-type projectResponseResultDeploymentConfigsPreviewD1DatabasesJSON struct {
+// accountPageProjectGetResponseResultDeploymentConfigsPreviewD1DatabasesJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsPreviewD1Databases]
+type accountPageProjectGetResponseResultDeploymentConfigsPreviewD1DatabasesJSON struct {
 	D1Binding   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsPreviewD1Databases) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsPreviewD1Databases) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // D1 binding.
-type ProjectResponseResultDeploymentConfigsPreviewD1DatabasesD1Binding struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsPreviewD1DatabasesD1Binding struct {
 	// UUID of the D1 database.
-	ID   string                                                                `json:"id"`
-	JSON projectResponseResultDeploymentConfigsPreviewD1DatabasesD1BindingJSON `json:"-"`
+	ID   string                                                                              `json:"id"`
+	JSON accountPageProjectGetResponseResultDeploymentConfigsPreviewD1DatabasesD1BindingJSON `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsPreviewD1DatabasesD1BindingJSON contains
-// the JSON metadata for the struct
-// [ProjectResponseResultDeploymentConfigsPreviewD1DatabasesD1Binding]
-type projectResponseResultDeploymentConfigsPreviewD1DatabasesD1BindingJSON struct {
+// accountPageProjectGetResponseResultDeploymentConfigsPreviewD1DatabasesD1BindingJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsPreviewD1DatabasesD1Binding]
+type accountPageProjectGetResponseResultDeploymentConfigsPreviewD1DatabasesD1BindingJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsPreviewD1DatabasesD1Binding) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsPreviewD1DatabasesD1Binding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Durabble Object namespaces used for Pages Functions.
-type ProjectResponseResultDeploymentConfigsPreviewDurableObjectNamespaces struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsPreviewDurableObjectNamespaces struct {
 	// Durabble Object binding.
-	DoBinding ProjectResponseResultDeploymentConfigsPreviewDurableObjectNamespacesDoBinding `json:"DO_BINDING"`
-	JSON      projectResponseResultDeploymentConfigsPreviewDurableObjectNamespacesJSON      `json:"-"`
+	DoBinding AccountPageProjectGetResponseResultDeploymentConfigsPreviewDurableObjectNamespacesDoBinding `json:"DO_BINDING"`
+	JSON      accountPageProjectGetResponseResultDeploymentConfigsPreviewDurableObjectNamespacesJSON      `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsPreviewDurableObjectNamespacesJSON
+// accountPageProjectGetResponseResultDeploymentConfigsPreviewDurableObjectNamespacesJSON
 // contains the JSON metadata for the struct
-// [ProjectResponseResultDeploymentConfigsPreviewDurableObjectNamespaces]
-type projectResponseResultDeploymentConfigsPreviewDurableObjectNamespacesJSON struct {
+// [AccountPageProjectGetResponseResultDeploymentConfigsPreviewDurableObjectNamespaces]
+type accountPageProjectGetResponseResultDeploymentConfigsPreviewDurableObjectNamespacesJSON struct {
 	DoBinding   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsPreviewDurableObjectNamespaces) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsPreviewDurableObjectNamespaces) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Durabble Object binding.
-type ProjectResponseResultDeploymentConfigsPreviewDurableObjectNamespacesDoBinding struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsPreviewDurableObjectNamespacesDoBinding struct {
 	// ID of the Durabble Object namespace.
-	NamespaceID string                                                                            `json:"namespace_id"`
-	JSON        projectResponseResultDeploymentConfigsPreviewDurableObjectNamespacesDoBindingJSON `json:"-"`
+	NamespaceID string                                                                                          `json:"namespace_id"`
+	JSON        accountPageProjectGetResponseResultDeploymentConfigsPreviewDurableObjectNamespacesDoBindingJSON `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsPreviewDurableObjectNamespacesDoBindingJSON
+// accountPageProjectGetResponseResultDeploymentConfigsPreviewDurableObjectNamespacesDoBindingJSON
 // contains the JSON metadata for the struct
-// [ProjectResponseResultDeploymentConfigsPreviewDurableObjectNamespacesDoBinding]
-type projectResponseResultDeploymentConfigsPreviewDurableObjectNamespacesDoBindingJSON struct {
+// [AccountPageProjectGetResponseResultDeploymentConfigsPreviewDurableObjectNamespacesDoBinding]
+type accountPageProjectGetResponseResultDeploymentConfigsPreviewDurableObjectNamespacesDoBindingJSON struct {
 	NamespaceID apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsPreviewDurableObjectNamespacesDoBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsPreviewDurableObjectNamespacesDoBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Environment variables for build configs.
-type ProjectResponseResultDeploymentConfigsPreviewEnvVars struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsPreviewEnvVars struct {
 	// Environment variable.
-	EnvironmentVariable ProjectResponseResultDeploymentConfigsPreviewEnvVarsEnvironmentVariable `json:"ENVIRONMENT_VARIABLE"`
-	JSON                projectResponseResultDeploymentConfigsPreviewEnvVarsJSON                `json:"-"`
+	EnvironmentVariable AccountPageProjectGetResponseResultDeploymentConfigsPreviewEnvVarsEnvironmentVariable `json:"ENVIRONMENT_VARIABLE"`
+	JSON                accountPageProjectGetResponseResultDeploymentConfigsPreviewEnvVarsJSON                `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsPreviewEnvVarsJSON contains the JSON
-// metadata for the struct [ProjectResponseResultDeploymentConfigsPreviewEnvVars]
-type projectResponseResultDeploymentConfigsPreviewEnvVarsJSON struct {
+// accountPageProjectGetResponseResultDeploymentConfigsPreviewEnvVarsJSON contains
+// the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsPreviewEnvVars]
+type accountPageProjectGetResponseResultDeploymentConfigsPreviewEnvVarsJSON struct {
 	EnvironmentVariable apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsPreviewEnvVars) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsPreviewEnvVars) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Environment variable.
-type ProjectResponseResultDeploymentConfigsPreviewEnvVarsEnvironmentVariable struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsPreviewEnvVarsEnvironmentVariable struct {
 	// The type of environment variable (plain text or secret)
-	Type ProjectResponseResultDeploymentConfigsPreviewEnvVarsEnvironmentVariableType `json:"type"`
+	Type AccountPageProjectGetResponseResultDeploymentConfigsPreviewEnvVarsEnvironmentVariableType `json:"type"`
 	// Environment variable value.
-	Value string                                                                      `json:"value"`
-	JSON  projectResponseResultDeploymentConfigsPreviewEnvVarsEnvironmentVariableJSON `json:"-"`
+	Value string                                                                                    `json:"value"`
+	JSON  accountPageProjectGetResponseResultDeploymentConfigsPreviewEnvVarsEnvironmentVariableJSON `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsPreviewEnvVarsEnvironmentVariableJSON
+// accountPageProjectGetResponseResultDeploymentConfigsPreviewEnvVarsEnvironmentVariableJSON
 // contains the JSON metadata for the struct
-// [ProjectResponseResultDeploymentConfigsPreviewEnvVarsEnvironmentVariable]
-type projectResponseResultDeploymentConfigsPreviewEnvVarsEnvironmentVariableJSON struct {
+// [AccountPageProjectGetResponseResultDeploymentConfigsPreviewEnvVarsEnvironmentVariable]
+type accountPageProjectGetResponseResultDeploymentConfigsPreviewEnvVarsEnvironmentVariableJSON struct {
 	Type        apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsPreviewEnvVarsEnvironmentVariable) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsPreviewEnvVarsEnvironmentVariable) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of environment variable (plain text or secret)
-type ProjectResponseResultDeploymentConfigsPreviewEnvVarsEnvironmentVariableType string
+type AccountPageProjectGetResponseResultDeploymentConfigsPreviewEnvVarsEnvironmentVariableType string
 
 const (
-	ProjectResponseResultDeploymentConfigsPreviewEnvVarsEnvironmentVariableTypePlainText  ProjectResponseResultDeploymentConfigsPreviewEnvVarsEnvironmentVariableType = "plain_text"
-	ProjectResponseResultDeploymentConfigsPreviewEnvVarsEnvironmentVariableTypeSecretText ProjectResponseResultDeploymentConfigsPreviewEnvVarsEnvironmentVariableType = "secret_text"
+	AccountPageProjectGetResponseResultDeploymentConfigsPreviewEnvVarsEnvironmentVariableTypePlainText  AccountPageProjectGetResponseResultDeploymentConfigsPreviewEnvVarsEnvironmentVariableType = "plain_text"
+	AccountPageProjectGetResponseResultDeploymentConfigsPreviewEnvVarsEnvironmentVariableTypeSecretText AccountPageProjectGetResponseResultDeploymentConfigsPreviewEnvVarsEnvironmentVariableType = "secret_text"
 )
 
 // KV namespaces used for Pages Functions.
-type ProjectResponseResultDeploymentConfigsPreviewKvNamespaces struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsPreviewKvNamespaces struct {
 	// KV binding.
-	KvBinding ProjectResponseResultDeploymentConfigsPreviewKvNamespacesKvBinding `json:"KV_BINDING"`
-	JSON      projectResponseResultDeploymentConfigsPreviewKvNamespacesJSON      `json:"-"`
+	KvBinding AccountPageProjectGetResponseResultDeploymentConfigsPreviewKvNamespacesKvBinding `json:"KV_BINDING"`
+	JSON      accountPageProjectGetResponseResultDeploymentConfigsPreviewKvNamespacesJSON      `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsPreviewKvNamespacesJSON contains the JSON
-// metadata for the struct
-// [ProjectResponseResultDeploymentConfigsPreviewKvNamespaces]
-type projectResponseResultDeploymentConfigsPreviewKvNamespacesJSON struct {
+// accountPageProjectGetResponseResultDeploymentConfigsPreviewKvNamespacesJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsPreviewKvNamespaces]
+type accountPageProjectGetResponseResultDeploymentConfigsPreviewKvNamespacesJSON struct {
 	KvBinding   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsPreviewKvNamespaces) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsPreviewKvNamespaces) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // KV binding.
-type ProjectResponseResultDeploymentConfigsPreviewKvNamespacesKvBinding struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsPreviewKvNamespacesKvBinding struct {
 	// ID of the KV namespace.
-	NamespaceID string                                                                 `json:"namespace_id"`
-	JSON        projectResponseResultDeploymentConfigsPreviewKvNamespacesKvBindingJSON `json:"-"`
+	NamespaceID string                                                                               `json:"namespace_id"`
+	JSON        accountPageProjectGetResponseResultDeploymentConfigsPreviewKvNamespacesKvBindingJSON `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsPreviewKvNamespacesKvBindingJSON contains
-// the JSON metadata for the struct
-// [ProjectResponseResultDeploymentConfigsPreviewKvNamespacesKvBinding]
-type projectResponseResultDeploymentConfigsPreviewKvNamespacesKvBindingJSON struct {
+// accountPageProjectGetResponseResultDeploymentConfigsPreviewKvNamespacesKvBindingJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsPreviewKvNamespacesKvBinding]
+type accountPageProjectGetResponseResultDeploymentConfigsPreviewKvNamespacesKvBindingJSON struct {
 	NamespaceID apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsPreviewKvNamespacesKvBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsPreviewKvNamespacesKvBinding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Placement setting used for Pages Functions.
+type AccountPageProjectGetResponseResultDeploymentConfigsPreviewPlacement struct {
+	// Placement mode.
+	Mode string                                                                   `json:"mode"`
+	JSON accountPageProjectGetResponseResultDeploymentConfigsPreviewPlacementJSON `json:"-"`
+}
+
+// accountPageProjectGetResponseResultDeploymentConfigsPreviewPlacementJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsPreviewPlacement]
+type accountPageProjectGetResponseResultDeploymentConfigsPreviewPlacementJSON struct {
+	Mode        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsPreviewPlacement) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Queue Producer bindings used for Pages Functions.
-type ProjectResponseResultDeploymentConfigsPreviewQueueProducers struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsPreviewQueueProducers struct {
 	// Queue Producer binding.
-	QueueProducerBinding ProjectResponseResultDeploymentConfigsPreviewQueueProducersQueueProducerBinding `json:"QUEUE_PRODUCER_BINDING"`
-	JSON                 projectResponseResultDeploymentConfigsPreviewQueueProducersJSON                 `json:"-"`
+	QueueProducerBinding AccountPageProjectGetResponseResultDeploymentConfigsPreviewQueueProducersQueueProducerBinding `json:"QUEUE_PRODUCER_BINDING"`
+	JSON                 accountPageProjectGetResponseResultDeploymentConfigsPreviewQueueProducersJSON                 `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsPreviewQueueProducersJSON contains the
-// JSON metadata for the struct
-// [ProjectResponseResultDeploymentConfigsPreviewQueueProducers]
-type projectResponseResultDeploymentConfigsPreviewQueueProducersJSON struct {
+// accountPageProjectGetResponseResultDeploymentConfigsPreviewQueueProducersJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsPreviewQueueProducers]
+type accountPageProjectGetResponseResultDeploymentConfigsPreviewQueueProducersJSON struct {
 	QueueProducerBinding apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsPreviewQueueProducers) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsPreviewQueueProducers) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Queue Producer binding.
-type ProjectResponseResultDeploymentConfigsPreviewQueueProducersQueueProducerBinding struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsPreviewQueueProducersQueueProducerBinding struct {
 	// Name of the Queue.
-	Name string                                                                              `json:"name"`
-	JSON projectResponseResultDeploymentConfigsPreviewQueueProducersQueueProducerBindingJSON `json:"-"`
+	Name string                                                                                            `json:"name"`
+	JSON accountPageProjectGetResponseResultDeploymentConfigsPreviewQueueProducersQueueProducerBindingJSON `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsPreviewQueueProducersQueueProducerBindingJSON
+// accountPageProjectGetResponseResultDeploymentConfigsPreviewQueueProducersQueueProducerBindingJSON
 // contains the JSON metadata for the struct
-// [ProjectResponseResultDeploymentConfigsPreviewQueueProducersQueueProducerBinding]
-type projectResponseResultDeploymentConfigsPreviewQueueProducersQueueProducerBindingJSON struct {
+// [AccountPageProjectGetResponseResultDeploymentConfigsPreviewQueueProducersQueueProducerBinding]
+type accountPageProjectGetResponseResultDeploymentConfigsPreviewQueueProducersQueueProducerBindingJSON struct {
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsPreviewQueueProducersQueueProducerBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsPreviewQueueProducersQueueProducerBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // R2 buckets used for Pages Functions.
-type ProjectResponseResultDeploymentConfigsPreviewR2Buckets struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsPreviewR2Buckets struct {
 	// R2 binding.
-	R2Binding ProjectResponseResultDeploymentConfigsPreviewR2BucketsR2Binding `json:"R2_BINDING"`
-	JSON      projectResponseResultDeploymentConfigsPreviewR2BucketsJSON      `json:"-"`
+	R2Binding AccountPageProjectGetResponseResultDeploymentConfigsPreviewR2BucketsR2Binding `json:"R2_BINDING"`
+	JSON      accountPageProjectGetResponseResultDeploymentConfigsPreviewR2BucketsJSON      `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsPreviewR2BucketsJSON contains the JSON
-// metadata for the struct [ProjectResponseResultDeploymentConfigsPreviewR2Buckets]
-type projectResponseResultDeploymentConfigsPreviewR2BucketsJSON struct {
+// accountPageProjectGetResponseResultDeploymentConfigsPreviewR2BucketsJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsPreviewR2Buckets]
+type accountPageProjectGetResponseResultDeploymentConfigsPreviewR2BucketsJSON struct {
 	R2Binding   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsPreviewR2Buckets) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsPreviewR2Buckets) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // R2 binding.
-type ProjectResponseResultDeploymentConfigsPreviewR2BucketsR2Binding struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsPreviewR2BucketsR2Binding struct {
 	// Name of the R2 bucket.
-	Name string                                                              `json:"name"`
-	JSON projectResponseResultDeploymentConfigsPreviewR2BucketsR2BindingJSON `json:"-"`
+	Name string                                                                            `json:"name"`
+	JSON accountPageProjectGetResponseResultDeploymentConfigsPreviewR2BucketsR2BindingJSON `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsPreviewR2BucketsR2BindingJSON contains the
-// JSON metadata for the struct
-// [ProjectResponseResultDeploymentConfigsPreviewR2BucketsR2Binding]
-type projectResponseResultDeploymentConfigsPreviewR2BucketsR2BindingJSON struct {
+// accountPageProjectGetResponseResultDeploymentConfigsPreviewR2BucketsR2BindingJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsPreviewR2BucketsR2Binding]
+type accountPageProjectGetResponseResultDeploymentConfigsPreviewR2BucketsR2BindingJSON struct {
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsPreviewR2BucketsR2Binding) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsPreviewR2BucketsR2Binding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Services used for Pages Functions.
-type ProjectResponseResultDeploymentConfigsPreviewServiceBindings struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsPreviewServiceBindings struct {
 	// Service binding.
-	ServiceBinding ProjectResponseResultDeploymentConfigsPreviewServiceBindingsServiceBinding `json:"SERVICE_BINDING"`
-	JSON           projectResponseResultDeploymentConfigsPreviewServiceBindingsJSON           `json:"-"`
+	ServiceBinding AccountPageProjectGetResponseResultDeploymentConfigsPreviewServiceBindingsServiceBinding `json:"SERVICE_BINDING"`
+	JSON           accountPageProjectGetResponseResultDeploymentConfigsPreviewServiceBindingsJSON           `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsPreviewServiceBindingsJSON contains the
-// JSON metadata for the struct
-// [ProjectResponseResultDeploymentConfigsPreviewServiceBindings]
-type projectResponseResultDeploymentConfigsPreviewServiceBindingsJSON struct {
+// accountPageProjectGetResponseResultDeploymentConfigsPreviewServiceBindingsJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsPreviewServiceBindings]
+type accountPageProjectGetResponseResultDeploymentConfigsPreviewServiceBindingsJSON struct {
 	ServiceBinding apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsPreviewServiceBindings) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsPreviewServiceBindings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Service binding.
-type ProjectResponseResultDeploymentConfigsPreviewServiceBindingsServiceBinding struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsPreviewServiceBindingsServiceBinding struct {
 	// The Service environment.
 	Environment string `json:"environment"`
 	// The Service name.
-	Service string                                                                         `json:"service"`
-	JSON    projectResponseResultDeploymentConfigsPreviewServiceBindingsServiceBindingJSON `json:"-"`
+	Service string                                                                                       `json:"service"`
+	JSON    accountPageProjectGetResponseResultDeploymentConfigsPreviewServiceBindingsServiceBindingJSON `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsPreviewServiceBindingsServiceBindingJSON
+// accountPageProjectGetResponseResultDeploymentConfigsPreviewServiceBindingsServiceBindingJSON
 // contains the JSON metadata for the struct
-// [ProjectResponseResultDeploymentConfigsPreviewServiceBindingsServiceBinding]
-type projectResponseResultDeploymentConfigsPreviewServiceBindingsServiceBindingJSON struct {
+// [AccountPageProjectGetResponseResultDeploymentConfigsPreviewServiceBindingsServiceBinding]
+type accountPageProjectGetResponseResultDeploymentConfigsPreviewServiceBindingsServiceBindingJSON struct {
 	Environment apijson.Field
 	Service     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsPreviewServiceBindingsServiceBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsPreviewServiceBindingsServiceBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Configs for production deploys.
-type ProjectResponseResultDeploymentConfigsProduction struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsProduction struct {
+	// Constellation bindings used for Pages Functions.
+	AIBindings AccountPageProjectGetResponseResultDeploymentConfigsProductionAIBindings `json:"ai_bindings,nullable"`
+	// Analytics Engine bindings used for Pages Functions.
+	AnalyticsEngineDatasets AccountPageProjectGetResponseResultDeploymentConfigsProductionAnalyticsEngineDatasets `json:"analytics_engine_datasets,nullable"`
 	// Compatibility date used for Pages Functions.
 	CompatibilityDate string `json:"compatibility_date"`
 	// Compatibility flags used for Pages Functions.
 	CompatibilityFlags []interface{} `json:"compatibility_flags"`
 	// D1 databases used for Pages Functions.
-	D1Databases ProjectResponseResultDeploymentConfigsProductionD1Databases `json:"d1_databases,nullable"`
+	D1Databases AccountPageProjectGetResponseResultDeploymentConfigsProductionD1Databases `json:"d1_databases,nullable"`
 	// Durabble Object namespaces used for Pages Functions.
-	DurableObjectNamespaces ProjectResponseResultDeploymentConfigsProductionDurableObjectNamespaces `json:"durable_object_namespaces,nullable"`
+	DurableObjectNamespaces AccountPageProjectGetResponseResultDeploymentConfigsProductionDurableObjectNamespaces `json:"durable_object_namespaces,nullable"`
 	// Environment variables for build configs.
-	EnvVars ProjectResponseResultDeploymentConfigsProductionEnvVars `json:"env_vars,nullable"`
+	EnvVars AccountPageProjectGetResponseResultDeploymentConfigsProductionEnvVars `json:"env_vars,nullable"`
 	// KV namespaces used for Pages Functions.
-	KvNamespaces ProjectResponseResultDeploymentConfigsProductionKvNamespaces `json:"kv_namespaces"`
+	KvNamespaces AccountPageProjectGetResponseResultDeploymentConfigsProductionKvNamespaces `json:"kv_namespaces"`
+	// Placement setting used for Pages Functions.
+	Placement AccountPageProjectGetResponseResultDeploymentConfigsProductionPlacement `json:"placement,nullable"`
 	// Queue Producer bindings used for Pages Functions.
-	QueueProducers ProjectResponseResultDeploymentConfigsProductionQueueProducers `json:"queue_producers,nullable"`
+	QueueProducers AccountPageProjectGetResponseResultDeploymentConfigsProductionQueueProducers `json:"queue_producers,nullable"`
 	// R2 buckets used for Pages Functions.
-	R2Buckets ProjectResponseResultDeploymentConfigsProductionR2Buckets `json:"r2_buckets,nullable"`
+	R2Buckets AccountPageProjectGetResponseResultDeploymentConfigsProductionR2Buckets `json:"r2_buckets,nullable"`
 	// Services used for Pages Functions.
-	ServiceBindings ProjectResponseResultDeploymentConfigsProductionServiceBindings `json:"service_bindings,nullable"`
-	JSON            projectResponseResultDeploymentConfigsProductionJSON            `json:"-"`
+	ServiceBindings AccountPageProjectGetResponseResultDeploymentConfigsProductionServiceBindings `json:"service_bindings,nullable"`
+	JSON            accountPageProjectGetResponseResultDeploymentConfigsProductionJSON            `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsProductionJSON contains the JSON metadata
-// for the struct [ProjectResponseResultDeploymentConfigsProduction]
-type projectResponseResultDeploymentConfigsProductionJSON struct {
+// accountPageProjectGetResponseResultDeploymentConfigsProductionJSON contains the
+// JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsProduction]
+type accountPageProjectGetResponseResultDeploymentConfigsProductionJSON struct {
+	AIBindings              apijson.Field
+	AnalyticsEngineDatasets apijson.Field
 	CompatibilityDate       apijson.Field
 	CompatibilityFlags      apijson.Field
 	D1Databases             apijson.Field
 	DurableObjectNamespaces apijson.Field
 	EnvVars                 apijson.Field
 	KvNamespaces            apijson.Field
+	Placement               apijson.Field
 	QueueProducers          apijson.Field
 	R2Buckets               apijson.Field
 	ServiceBindings         apijson.Field
@@ -819,306 +873,404 @@ type projectResponseResultDeploymentConfigsProductionJSON struct {
 	ExtraFields             map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsProduction) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsProduction) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Constellation bindings used for Pages Functions.
+type AccountPageProjectGetResponseResultDeploymentConfigsProductionAIBindings struct {
+	// AI binding.
+	AIBinding AccountPageProjectGetResponseResultDeploymentConfigsProductionAIBindingsAIBinding `json:"AI_BINDING"`
+	JSON      accountPageProjectGetResponseResultDeploymentConfigsProductionAIBindingsJSON      `json:"-"`
+}
+
+// accountPageProjectGetResponseResultDeploymentConfigsProductionAIBindingsJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsProductionAIBindings]
+type accountPageProjectGetResponseResultDeploymentConfigsProductionAIBindingsJSON struct {
+	AIBinding   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsProductionAIBindings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// AI binding.
+type AccountPageProjectGetResponseResultDeploymentConfigsProductionAIBindingsAIBinding struct {
+	ProjectID interface{}                                                                           `json:"project_id"`
+	JSON      accountPageProjectGetResponseResultDeploymentConfigsProductionAIBindingsAIBindingJSON `json:"-"`
+}
+
+// accountPageProjectGetResponseResultDeploymentConfigsProductionAIBindingsAIBindingJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsProductionAIBindingsAIBinding]
+type accountPageProjectGetResponseResultDeploymentConfigsProductionAIBindingsAIBindingJSON struct {
+	ProjectID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsProductionAIBindingsAIBinding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Analytics Engine bindings used for Pages Functions.
+type AccountPageProjectGetResponseResultDeploymentConfigsProductionAnalyticsEngineDatasets struct {
+	// Analytics Engine binding.
+	AnalyticsEngineBinding AccountPageProjectGetResponseResultDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBinding `json:"ANALYTICS_ENGINE_BINDING"`
+	JSON                   accountPageProjectGetResponseResultDeploymentConfigsProductionAnalyticsEngineDatasetsJSON                   `json:"-"`
+}
+
+// accountPageProjectGetResponseResultDeploymentConfigsProductionAnalyticsEngineDatasetsJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsProductionAnalyticsEngineDatasets]
+type accountPageProjectGetResponseResultDeploymentConfigsProductionAnalyticsEngineDatasetsJSON struct {
+	AnalyticsEngineBinding apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsProductionAnalyticsEngineDatasets) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Analytics Engine binding.
+type AccountPageProjectGetResponseResultDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBinding struct {
+	// Name of the dataset.
+	Dataset string                                                                                                          `json:"dataset"`
+	JSON    accountPageProjectGetResponseResultDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBindingJSON `json:"-"`
+}
+
+// accountPageProjectGetResponseResultDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBindingJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBinding]
+type accountPageProjectGetResponseResultDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBindingJSON struct {
+	Dataset     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // D1 databases used for Pages Functions.
-type ProjectResponseResultDeploymentConfigsProductionD1Databases struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsProductionD1Databases struct {
 	// D1 binding.
-	D1Binding ProjectResponseResultDeploymentConfigsProductionD1DatabasesD1Binding `json:"D1_BINDING"`
-	JSON      projectResponseResultDeploymentConfigsProductionD1DatabasesJSON      `json:"-"`
+	D1Binding AccountPageProjectGetResponseResultDeploymentConfigsProductionD1DatabasesD1Binding `json:"D1_BINDING"`
+	JSON      accountPageProjectGetResponseResultDeploymentConfigsProductionD1DatabasesJSON      `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsProductionD1DatabasesJSON contains the
-// JSON metadata for the struct
-// [ProjectResponseResultDeploymentConfigsProductionD1Databases]
-type projectResponseResultDeploymentConfigsProductionD1DatabasesJSON struct {
+// accountPageProjectGetResponseResultDeploymentConfigsProductionD1DatabasesJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsProductionD1Databases]
+type accountPageProjectGetResponseResultDeploymentConfigsProductionD1DatabasesJSON struct {
 	D1Binding   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsProductionD1Databases) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsProductionD1Databases) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // D1 binding.
-type ProjectResponseResultDeploymentConfigsProductionD1DatabasesD1Binding struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsProductionD1DatabasesD1Binding struct {
 	// UUID of the D1 database.
-	ID   string                                                                   `json:"id"`
-	JSON projectResponseResultDeploymentConfigsProductionD1DatabasesD1BindingJSON `json:"-"`
+	ID   string                                                                                 `json:"id"`
+	JSON accountPageProjectGetResponseResultDeploymentConfigsProductionD1DatabasesD1BindingJSON `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsProductionD1DatabasesD1BindingJSON
+// accountPageProjectGetResponseResultDeploymentConfigsProductionD1DatabasesD1BindingJSON
 // contains the JSON metadata for the struct
-// [ProjectResponseResultDeploymentConfigsProductionD1DatabasesD1Binding]
-type projectResponseResultDeploymentConfigsProductionD1DatabasesD1BindingJSON struct {
+// [AccountPageProjectGetResponseResultDeploymentConfigsProductionD1DatabasesD1Binding]
+type accountPageProjectGetResponseResultDeploymentConfigsProductionD1DatabasesD1BindingJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsProductionD1DatabasesD1Binding) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsProductionD1DatabasesD1Binding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Durabble Object namespaces used for Pages Functions.
-type ProjectResponseResultDeploymentConfigsProductionDurableObjectNamespaces struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsProductionDurableObjectNamespaces struct {
 	// Durabble Object binding.
-	DoBinding ProjectResponseResultDeploymentConfigsProductionDurableObjectNamespacesDoBinding `json:"DO_BINDING"`
-	JSON      projectResponseResultDeploymentConfigsProductionDurableObjectNamespacesJSON      `json:"-"`
+	DoBinding AccountPageProjectGetResponseResultDeploymentConfigsProductionDurableObjectNamespacesDoBinding `json:"DO_BINDING"`
+	JSON      accountPageProjectGetResponseResultDeploymentConfigsProductionDurableObjectNamespacesJSON      `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsProductionDurableObjectNamespacesJSON
+// accountPageProjectGetResponseResultDeploymentConfigsProductionDurableObjectNamespacesJSON
 // contains the JSON metadata for the struct
-// [ProjectResponseResultDeploymentConfigsProductionDurableObjectNamespaces]
-type projectResponseResultDeploymentConfigsProductionDurableObjectNamespacesJSON struct {
+// [AccountPageProjectGetResponseResultDeploymentConfigsProductionDurableObjectNamespaces]
+type accountPageProjectGetResponseResultDeploymentConfigsProductionDurableObjectNamespacesJSON struct {
 	DoBinding   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsProductionDurableObjectNamespaces) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsProductionDurableObjectNamespaces) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Durabble Object binding.
-type ProjectResponseResultDeploymentConfigsProductionDurableObjectNamespacesDoBinding struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsProductionDurableObjectNamespacesDoBinding struct {
 	// ID of the Durabble Object namespace.
-	NamespaceID string                                                                               `json:"namespace_id"`
-	JSON        projectResponseResultDeploymentConfigsProductionDurableObjectNamespacesDoBindingJSON `json:"-"`
+	NamespaceID string                                                                                             `json:"namespace_id"`
+	JSON        accountPageProjectGetResponseResultDeploymentConfigsProductionDurableObjectNamespacesDoBindingJSON `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsProductionDurableObjectNamespacesDoBindingJSON
+// accountPageProjectGetResponseResultDeploymentConfigsProductionDurableObjectNamespacesDoBindingJSON
 // contains the JSON metadata for the struct
-// [ProjectResponseResultDeploymentConfigsProductionDurableObjectNamespacesDoBinding]
-type projectResponseResultDeploymentConfigsProductionDurableObjectNamespacesDoBindingJSON struct {
+// [AccountPageProjectGetResponseResultDeploymentConfigsProductionDurableObjectNamespacesDoBinding]
+type accountPageProjectGetResponseResultDeploymentConfigsProductionDurableObjectNamespacesDoBindingJSON struct {
 	NamespaceID apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsProductionDurableObjectNamespacesDoBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsProductionDurableObjectNamespacesDoBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Environment variables for build configs.
-type ProjectResponseResultDeploymentConfigsProductionEnvVars struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsProductionEnvVars struct {
 	// Environment variable.
-	EnvironmentVariable ProjectResponseResultDeploymentConfigsProductionEnvVarsEnvironmentVariable `json:"ENVIRONMENT_VARIABLE"`
-	JSON                projectResponseResultDeploymentConfigsProductionEnvVarsJSON                `json:"-"`
+	EnvironmentVariable AccountPageProjectGetResponseResultDeploymentConfigsProductionEnvVarsEnvironmentVariable `json:"ENVIRONMENT_VARIABLE"`
+	JSON                accountPageProjectGetResponseResultDeploymentConfigsProductionEnvVarsJSON                `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsProductionEnvVarsJSON contains the JSON
-// metadata for the struct
-// [ProjectResponseResultDeploymentConfigsProductionEnvVars]
-type projectResponseResultDeploymentConfigsProductionEnvVarsJSON struct {
+// accountPageProjectGetResponseResultDeploymentConfigsProductionEnvVarsJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsProductionEnvVars]
+type accountPageProjectGetResponseResultDeploymentConfigsProductionEnvVarsJSON struct {
 	EnvironmentVariable apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsProductionEnvVars) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsProductionEnvVars) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Environment variable.
-type ProjectResponseResultDeploymentConfigsProductionEnvVarsEnvironmentVariable struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsProductionEnvVarsEnvironmentVariable struct {
 	// The type of environment variable (plain text or secret)
-	Type ProjectResponseResultDeploymentConfigsProductionEnvVarsEnvironmentVariableType `json:"type"`
+	Type AccountPageProjectGetResponseResultDeploymentConfigsProductionEnvVarsEnvironmentVariableType `json:"type"`
 	// Environment variable value.
-	Value string                                                                         `json:"value"`
-	JSON  projectResponseResultDeploymentConfigsProductionEnvVarsEnvironmentVariableJSON `json:"-"`
+	Value string                                                                                       `json:"value"`
+	JSON  accountPageProjectGetResponseResultDeploymentConfigsProductionEnvVarsEnvironmentVariableJSON `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsProductionEnvVarsEnvironmentVariableJSON
+// accountPageProjectGetResponseResultDeploymentConfigsProductionEnvVarsEnvironmentVariableJSON
 // contains the JSON metadata for the struct
-// [ProjectResponseResultDeploymentConfigsProductionEnvVarsEnvironmentVariable]
-type projectResponseResultDeploymentConfigsProductionEnvVarsEnvironmentVariableJSON struct {
+// [AccountPageProjectGetResponseResultDeploymentConfigsProductionEnvVarsEnvironmentVariable]
+type accountPageProjectGetResponseResultDeploymentConfigsProductionEnvVarsEnvironmentVariableJSON struct {
 	Type        apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsProductionEnvVarsEnvironmentVariable) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsProductionEnvVarsEnvironmentVariable) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of environment variable (plain text or secret)
-type ProjectResponseResultDeploymentConfigsProductionEnvVarsEnvironmentVariableType string
+type AccountPageProjectGetResponseResultDeploymentConfigsProductionEnvVarsEnvironmentVariableType string
 
 const (
-	ProjectResponseResultDeploymentConfigsProductionEnvVarsEnvironmentVariableTypePlainText  ProjectResponseResultDeploymentConfigsProductionEnvVarsEnvironmentVariableType = "plain_text"
-	ProjectResponseResultDeploymentConfigsProductionEnvVarsEnvironmentVariableTypeSecretText ProjectResponseResultDeploymentConfigsProductionEnvVarsEnvironmentVariableType = "secret_text"
+	AccountPageProjectGetResponseResultDeploymentConfigsProductionEnvVarsEnvironmentVariableTypePlainText  AccountPageProjectGetResponseResultDeploymentConfigsProductionEnvVarsEnvironmentVariableType = "plain_text"
+	AccountPageProjectGetResponseResultDeploymentConfigsProductionEnvVarsEnvironmentVariableTypeSecretText AccountPageProjectGetResponseResultDeploymentConfigsProductionEnvVarsEnvironmentVariableType = "secret_text"
 )
 
 // KV namespaces used for Pages Functions.
-type ProjectResponseResultDeploymentConfigsProductionKvNamespaces struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsProductionKvNamespaces struct {
 	// KV binding.
-	KvBinding ProjectResponseResultDeploymentConfigsProductionKvNamespacesKvBinding `json:"KV_BINDING"`
-	JSON      projectResponseResultDeploymentConfigsProductionKvNamespacesJSON      `json:"-"`
+	KvBinding AccountPageProjectGetResponseResultDeploymentConfigsProductionKvNamespacesKvBinding `json:"KV_BINDING"`
+	JSON      accountPageProjectGetResponseResultDeploymentConfigsProductionKvNamespacesJSON      `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsProductionKvNamespacesJSON contains the
-// JSON metadata for the struct
-// [ProjectResponseResultDeploymentConfigsProductionKvNamespaces]
-type projectResponseResultDeploymentConfigsProductionKvNamespacesJSON struct {
+// accountPageProjectGetResponseResultDeploymentConfigsProductionKvNamespacesJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsProductionKvNamespaces]
+type accountPageProjectGetResponseResultDeploymentConfigsProductionKvNamespacesJSON struct {
 	KvBinding   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsProductionKvNamespaces) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsProductionKvNamespaces) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // KV binding.
-type ProjectResponseResultDeploymentConfigsProductionKvNamespacesKvBinding struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsProductionKvNamespacesKvBinding struct {
 	// ID of the KV namespace.
-	NamespaceID string                                                                    `json:"namespace_id"`
-	JSON        projectResponseResultDeploymentConfigsProductionKvNamespacesKvBindingJSON `json:"-"`
+	NamespaceID string                                                                                  `json:"namespace_id"`
+	JSON        accountPageProjectGetResponseResultDeploymentConfigsProductionKvNamespacesKvBindingJSON `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsProductionKvNamespacesKvBindingJSON
+// accountPageProjectGetResponseResultDeploymentConfigsProductionKvNamespacesKvBindingJSON
 // contains the JSON metadata for the struct
-// [ProjectResponseResultDeploymentConfigsProductionKvNamespacesKvBinding]
-type projectResponseResultDeploymentConfigsProductionKvNamespacesKvBindingJSON struct {
+// [AccountPageProjectGetResponseResultDeploymentConfigsProductionKvNamespacesKvBinding]
+type accountPageProjectGetResponseResultDeploymentConfigsProductionKvNamespacesKvBindingJSON struct {
 	NamespaceID apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsProductionKvNamespacesKvBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsProductionKvNamespacesKvBinding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Placement setting used for Pages Functions.
+type AccountPageProjectGetResponseResultDeploymentConfigsProductionPlacement struct {
+	// Placement mode.
+	Mode string                                                                      `json:"mode"`
+	JSON accountPageProjectGetResponseResultDeploymentConfigsProductionPlacementJSON `json:"-"`
+}
+
+// accountPageProjectGetResponseResultDeploymentConfigsProductionPlacementJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsProductionPlacement]
+type accountPageProjectGetResponseResultDeploymentConfigsProductionPlacementJSON struct {
+	Mode        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsProductionPlacement) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Queue Producer bindings used for Pages Functions.
-type ProjectResponseResultDeploymentConfigsProductionQueueProducers struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsProductionQueueProducers struct {
 	// Queue Producer binding.
-	QueueProducerBinding ProjectResponseResultDeploymentConfigsProductionQueueProducersQueueProducerBinding `json:"QUEUE_PRODUCER_BINDING"`
-	JSON                 projectResponseResultDeploymentConfigsProductionQueueProducersJSON                 `json:"-"`
+	QueueProducerBinding AccountPageProjectGetResponseResultDeploymentConfigsProductionQueueProducersQueueProducerBinding `json:"QUEUE_PRODUCER_BINDING"`
+	JSON                 accountPageProjectGetResponseResultDeploymentConfigsProductionQueueProducersJSON                 `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsProductionQueueProducersJSON contains the
-// JSON metadata for the struct
-// [ProjectResponseResultDeploymentConfigsProductionQueueProducers]
-type projectResponseResultDeploymentConfigsProductionQueueProducersJSON struct {
+// accountPageProjectGetResponseResultDeploymentConfigsProductionQueueProducersJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsProductionQueueProducers]
+type accountPageProjectGetResponseResultDeploymentConfigsProductionQueueProducersJSON struct {
 	QueueProducerBinding apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsProductionQueueProducers) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsProductionQueueProducers) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Queue Producer binding.
-type ProjectResponseResultDeploymentConfigsProductionQueueProducersQueueProducerBinding struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsProductionQueueProducersQueueProducerBinding struct {
 	// Name of the Queue.
-	Name string                                                                                 `json:"name"`
-	JSON projectResponseResultDeploymentConfigsProductionQueueProducersQueueProducerBindingJSON `json:"-"`
+	Name string                                                                                               `json:"name"`
+	JSON accountPageProjectGetResponseResultDeploymentConfigsProductionQueueProducersQueueProducerBindingJSON `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsProductionQueueProducersQueueProducerBindingJSON
+// accountPageProjectGetResponseResultDeploymentConfigsProductionQueueProducersQueueProducerBindingJSON
 // contains the JSON metadata for the struct
-// [ProjectResponseResultDeploymentConfigsProductionQueueProducersQueueProducerBinding]
-type projectResponseResultDeploymentConfigsProductionQueueProducersQueueProducerBindingJSON struct {
+// [AccountPageProjectGetResponseResultDeploymentConfigsProductionQueueProducersQueueProducerBinding]
+type accountPageProjectGetResponseResultDeploymentConfigsProductionQueueProducersQueueProducerBindingJSON struct {
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsProductionQueueProducersQueueProducerBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsProductionQueueProducersQueueProducerBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // R2 buckets used for Pages Functions.
-type ProjectResponseResultDeploymentConfigsProductionR2Buckets struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsProductionR2Buckets struct {
 	// R2 binding.
-	R2Binding ProjectResponseResultDeploymentConfigsProductionR2BucketsR2Binding `json:"R2_BINDING"`
-	JSON      projectResponseResultDeploymentConfigsProductionR2BucketsJSON      `json:"-"`
+	R2Binding AccountPageProjectGetResponseResultDeploymentConfigsProductionR2BucketsR2Binding `json:"R2_BINDING"`
+	JSON      accountPageProjectGetResponseResultDeploymentConfigsProductionR2BucketsJSON      `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsProductionR2BucketsJSON contains the JSON
-// metadata for the struct
-// [ProjectResponseResultDeploymentConfigsProductionR2Buckets]
-type projectResponseResultDeploymentConfigsProductionR2BucketsJSON struct {
+// accountPageProjectGetResponseResultDeploymentConfigsProductionR2BucketsJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsProductionR2Buckets]
+type accountPageProjectGetResponseResultDeploymentConfigsProductionR2BucketsJSON struct {
 	R2Binding   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsProductionR2Buckets) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsProductionR2Buckets) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // R2 binding.
-type ProjectResponseResultDeploymentConfigsProductionR2BucketsR2Binding struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsProductionR2BucketsR2Binding struct {
 	// Name of the R2 bucket.
-	Name string                                                                 `json:"name"`
-	JSON projectResponseResultDeploymentConfigsProductionR2BucketsR2BindingJSON `json:"-"`
+	Name string                                                                               `json:"name"`
+	JSON accountPageProjectGetResponseResultDeploymentConfigsProductionR2BucketsR2BindingJSON `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsProductionR2BucketsR2BindingJSON contains
-// the JSON metadata for the struct
-// [ProjectResponseResultDeploymentConfigsProductionR2BucketsR2Binding]
-type projectResponseResultDeploymentConfigsProductionR2BucketsR2BindingJSON struct {
+// accountPageProjectGetResponseResultDeploymentConfigsProductionR2BucketsR2BindingJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsProductionR2BucketsR2Binding]
+type accountPageProjectGetResponseResultDeploymentConfigsProductionR2BucketsR2BindingJSON struct {
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsProductionR2BucketsR2Binding) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsProductionR2BucketsR2Binding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Services used for Pages Functions.
-type ProjectResponseResultDeploymentConfigsProductionServiceBindings struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsProductionServiceBindings struct {
 	// Service binding.
-	ServiceBinding ProjectResponseResultDeploymentConfigsProductionServiceBindingsServiceBinding `json:"SERVICE_BINDING"`
-	JSON           projectResponseResultDeploymentConfigsProductionServiceBindingsJSON           `json:"-"`
+	ServiceBinding AccountPageProjectGetResponseResultDeploymentConfigsProductionServiceBindingsServiceBinding `json:"SERVICE_BINDING"`
+	JSON           accountPageProjectGetResponseResultDeploymentConfigsProductionServiceBindingsJSON           `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsProductionServiceBindingsJSON contains the
-// JSON metadata for the struct
-// [ProjectResponseResultDeploymentConfigsProductionServiceBindings]
-type projectResponseResultDeploymentConfigsProductionServiceBindingsJSON struct {
+// accountPageProjectGetResponseResultDeploymentConfigsProductionServiceBindingsJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultDeploymentConfigsProductionServiceBindings]
+type accountPageProjectGetResponseResultDeploymentConfigsProductionServiceBindingsJSON struct {
 	ServiceBinding apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsProductionServiceBindings) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsProductionServiceBindings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Service binding.
-type ProjectResponseResultDeploymentConfigsProductionServiceBindingsServiceBinding struct {
+type AccountPageProjectGetResponseResultDeploymentConfigsProductionServiceBindingsServiceBinding struct {
 	// The Service environment.
 	Environment string `json:"environment"`
 	// The Service name.
-	Service string                                                                            `json:"service"`
-	JSON    projectResponseResultDeploymentConfigsProductionServiceBindingsServiceBindingJSON `json:"-"`
+	Service string                                                                                          `json:"service"`
+	JSON    accountPageProjectGetResponseResultDeploymentConfigsProductionServiceBindingsServiceBindingJSON `json:"-"`
 }
 
-// projectResponseResultDeploymentConfigsProductionServiceBindingsServiceBindingJSON
+// accountPageProjectGetResponseResultDeploymentConfigsProductionServiceBindingsServiceBindingJSON
 // contains the JSON metadata for the struct
-// [ProjectResponseResultDeploymentConfigsProductionServiceBindingsServiceBinding]
-type projectResponseResultDeploymentConfigsProductionServiceBindingsServiceBindingJSON struct {
+// [AccountPageProjectGetResponseResultDeploymentConfigsProductionServiceBindingsServiceBinding]
+type accountPageProjectGetResponseResultDeploymentConfigsProductionServiceBindingsServiceBindingJSON struct {
 	Environment apijson.Field
 	Service     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultDeploymentConfigsProductionServiceBindingsServiceBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultDeploymentConfigsProductionServiceBindingsServiceBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Most recent deployment to the repo.
-type ProjectResponseResultLatestDeployment struct {
+type AccountPageProjectGetResponseResultLatestDeployment struct {
 	// Id of the deployment.
 	ID string `json:"id"`
 	// A list of alias URLs pointing to this deployment.
@@ -1127,7 +1279,7 @@ type ProjectResponseResultLatestDeployment struct {
 	// When the deployment was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Info about what caused the deployment.
-	DeploymentTrigger ProjectResponseResultLatestDeploymentDeploymentTrigger `json:"deployment_trigger"`
+	DeploymentTrigger AccountPageProjectGetResponseResultLatestDeploymentDeploymentTrigger `json:"deployment_trigger"`
 	// A dict of env variables to build this deploy.
 	EnvVars interface{} `json:"env_vars"`
 	// Type of deploy.
@@ -1145,15 +1297,15 @@ type ProjectResponseResultLatestDeployment struct {
 	ShortID string      `json:"short_id"`
 	Source  interface{} `json:"source"`
 	// List of past stages.
-	Stages []ProjectResponseResultLatestDeploymentStage `json:"stages"`
+	Stages []AccountPageProjectGetResponseResultLatestDeploymentStage `json:"stages"`
 	// The live URL to view this deployment.
-	URL  string                                    `json:"url"`
-	JSON projectResponseResultLatestDeploymentJSON `json:"-"`
+	URL  string                                                  `json:"url"`
+	JSON accountPageProjectGetResponseResultLatestDeploymentJSON `json:"-"`
 }
 
-// projectResponseResultLatestDeploymentJSON contains the JSON metadata for the
-// struct [ProjectResponseResultLatestDeployment]
-type projectResponseResultLatestDeploymentJSON struct {
+// accountPageProjectGetResponseResultLatestDeploymentJSON contains the JSON
+// metadata for the struct [AccountPageProjectGetResponseResultLatestDeployment]
+type accountPageProjectGetResponseResultLatestDeploymentJSON struct {
 	ID                apijson.Field
 	Aliases           apijson.Field
 	BuildConfig       apijson.Field
@@ -1174,47 +1326,48 @@ type projectResponseResultLatestDeploymentJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultLatestDeployment) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultLatestDeployment) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Info about what caused the deployment.
-type ProjectResponseResultLatestDeploymentDeploymentTrigger struct {
+type AccountPageProjectGetResponseResultLatestDeploymentDeploymentTrigger struct {
 	// Additional info about the trigger.
-	Metadata ProjectResponseResultLatestDeploymentDeploymentTriggerMetadata `json:"metadata"`
+	Metadata AccountPageProjectGetResponseResultLatestDeploymentDeploymentTriggerMetadata `json:"metadata"`
 	// What caused the deployment.
-	Type string                                                     `json:"type"`
-	JSON projectResponseResultLatestDeploymentDeploymentTriggerJSON `json:"-"`
+	Type string                                                                   `json:"type"`
+	JSON accountPageProjectGetResponseResultLatestDeploymentDeploymentTriggerJSON `json:"-"`
 }
 
-// projectResponseResultLatestDeploymentDeploymentTriggerJSON contains the JSON
-// metadata for the struct [ProjectResponseResultLatestDeploymentDeploymentTrigger]
-type projectResponseResultLatestDeploymentDeploymentTriggerJSON struct {
+// accountPageProjectGetResponseResultLatestDeploymentDeploymentTriggerJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultLatestDeploymentDeploymentTrigger]
+type accountPageProjectGetResponseResultLatestDeploymentDeploymentTriggerJSON struct {
 	Metadata    apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultLatestDeploymentDeploymentTrigger) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultLatestDeploymentDeploymentTrigger) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Additional info about the trigger.
-type ProjectResponseResultLatestDeploymentDeploymentTriggerMetadata struct {
+type AccountPageProjectGetResponseResultLatestDeploymentDeploymentTriggerMetadata struct {
 	// Where the trigger happened.
 	Branch string `json:"branch"`
 	// Hash of the deployment trigger commit.
 	CommitHash string `json:"commit_hash"`
 	// Message of the deployment trigger commit.
-	CommitMessage string                                                             `json:"commit_message"`
-	JSON          projectResponseResultLatestDeploymentDeploymentTriggerMetadataJSON `json:"-"`
+	CommitMessage string                                                                           `json:"commit_message"`
+	JSON          accountPageProjectGetResponseResultLatestDeploymentDeploymentTriggerMetadataJSON `json:"-"`
 }
 
-// projectResponseResultLatestDeploymentDeploymentTriggerMetadataJSON contains the
-// JSON metadata for the struct
-// [ProjectResponseResultLatestDeploymentDeploymentTriggerMetadata]
-type projectResponseResultLatestDeploymentDeploymentTriggerMetadataJSON struct {
+// accountPageProjectGetResponseResultLatestDeploymentDeploymentTriggerMetadataJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectGetResponseResultLatestDeploymentDeploymentTriggerMetadata]
+type accountPageProjectGetResponseResultLatestDeploymentDeploymentTriggerMetadataJSON struct {
 	Branch        apijson.Field
 	CommitHash    apijson.Field
 	CommitMessage apijson.Field
@@ -1222,12 +1375,12 @@ type projectResponseResultLatestDeploymentDeploymentTriggerMetadataJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultLatestDeploymentDeploymentTriggerMetadata) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultLatestDeploymentDeploymentTriggerMetadata) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The status of the deployment.
-type ProjectResponseResultLatestDeploymentStage struct {
+type AccountPageProjectGetResponseResultLatestDeploymentStage struct {
 	// When the stage ended.
 	EndedOn time.Time `json:"ended_on,nullable" format:"date-time"`
 	// The current build stage.
@@ -1235,13 +1388,14 @@ type ProjectResponseResultLatestDeploymentStage struct {
 	// When the stage started.
 	StartedOn time.Time `json:"started_on,nullable" format:"date-time"`
 	// State of the current stage.
-	Status string                                         `json:"status"`
-	JSON   projectResponseResultLatestDeploymentStageJSON `json:"-"`
+	Status string                                                       `json:"status"`
+	JSON   accountPageProjectGetResponseResultLatestDeploymentStageJSON `json:"-"`
 }
 
-// projectResponseResultLatestDeploymentStageJSON contains the JSON metadata for
-// the struct [ProjectResponseResultLatestDeploymentStage]
-type projectResponseResultLatestDeploymentStageJSON struct {
+// accountPageProjectGetResponseResultLatestDeploymentStageJSON contains the JSON
+// metadata for the struct
+// [AccountPageProjectGetResponseResultLatestDeploymentStage]
+type accountPageProjectGetResponseResultLatestDeploymentStageJSON struct {
 	EndedOn     apijson.Field
 	Name        apijson.Field
 	StartedOn   apijson.Field
@@ -1250,30 +1404,171 @@ type projectResponseResultLatestDeploymentStageJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectResponseResultLatestDeploymentStage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectGetResponseResultLatestDeploymentStage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type ProjectResponseSuccess bool
+type AccountPageProjectGetResponseSuccess bool
 
 const (
-	ProjectResponseSuccessTrue ProjectResponseSuccess = true
+	AccountPageProjectGetResponseSuccessTrue AccountPageProjectGetResponseSuccess = true
 )
 
-type ProjectsResponse struct {
-	Errors     []ProjectsResponseError    `json:"errors"`
-	Messages   []ProjectsResponseMessage  `json:"messages"`
-	Result     []ProjectsResponseResult   `json:"result"`
-	ResultInfo ProjectsResponseResultInfo `json:"result_info"`
+type AccountPageProjectUpdateResponse struct {
+	Errors   []AccountPageProjectUpdateResponseError   `json:"errors"`
+	Messages []AccountPageProjectUpdateResponseMessage `json:"messages"`
+	Result   interface{}                               `json:"result"`
 	// Whether the API call was successful
-	Success ProjectsResponseSuccess `json:"success"`
-	JSON    projectsResponseJSON    `json:"-"`
+	Success AccountPageProjectUpdateResponseSuccess `json:"success"`
+	JSON    accountPageProjectUpdateResponseJSON    `json:"-"`
 }
 
-// projectsResponseJSON contains the JSON metadata for the struct
-// [ProjectsResponse]
-type projectsResponseJSON struct {
+// accountPageProjectUpdateResponseJSON contains the JSON metadata for the struct
+// [AccountPageProjectUpdateResponse]
+type accountPageProjectUpdateResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountPageProjectUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountPageProjectUpdateResponseError struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    accountPageProjectUpdateResponseErrorJSON `json:"-"`
+}
+
+// accountPageProjectUpdateResponseErrorJSON contains the JSON metadata for the
+// struct [AccountPageProjectUpdateResponseError]
+type accountPageProjectUpdateResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountPageProjectUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountPageProjectUpdateResponseMessage struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    accountPageProjectUpdateResponseMessageJSON `json:"-"`
+}
+
+// accountPageProjectUpdateResponseMessageJSON contains the JSON metadata for the
+// struct [AccountPageProjectUpdateResponseMessage]
+type accountPageProjectUpdateResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountPageProjectUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountPageProjectUpdateResponseSuccess bool
+
+const (
+	AccountPageProjectUpdateResponseSuccessTrue AccountPageProjectUpdateResponseSuccess = true
+)
+
+type AccountPageProjectDeleteResponse = interface{}
+
+type AccountPageProjectPagesProjectNewProjectResponse struct {
+	Errors   []AccountPageProjectPagesProjectNewProjectResponseError   `json:"errors"`
+	Messages []AccountPageProjectPagesProjectNewProjectResponseMessage `json:"messages"`
+	Result   interface{}                                               `json:"result"`
+	// Whether the API call was successful
+	Success AccountPageProjectPagesProjectNewProjectResponseSuccess `json:"success"`
+	JSON    accountPageProjectPagesProjectNewProjectResponseJSON    `json:"-"`
+}
+
+// accountPageProjectPagesProjectNewProjectResponseJSON contains the JSON metadata
+// for the struct [AccountPageProjectPagesProjectNewProjectResponse]
+type accountPageProjectPagesProjectNewProjectResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountPageProjectPagesProjectNewProjectResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountPageProjectPagesProjectNewProjectResponseError struct {
+	Code    int64                                                     `json:"code,required"`
+	Message string                                                    `json:"message,required"`
+	JSON    accountPageProjectPagesProjectNewProjectResponseErrorJSON `json:"-"`
+}
+
+// accountPageProjectPagesProjectNewProjectResponseErrorJSON contains the JSON
+// metadata for the struct [AccountPageProjectPagesProjectNewProjectResponseError]
+type accountPageProjectPagesProjectNewProjectResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountPageProjectPagesProjectNewProjectResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountPageProjectPagesProjectNewProjectResponseMessage struct {
+	Code    int64                                                       `json:"code,required"`
+	Message string                                                      `json:"message,required"`
+	JSON    accountPageProjectPagesProjectNewProjectResponseMessageJSON `json:"-"`
+}
+
+// accountPageProjectPagesProjectNewProjectResponseMessageJSON contains the JSON
+// metadata for the struct
+// [AccountPageProjectPagesProjectNewProjectResponseMessage]
+type accountPageProjectPagesProjectNewProjectResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountPageProjectPagesProjectNewProjectResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountPageProjectPagesProjectNewProjectResponseSuccess bool
+
+const (
+	AccountPageProjectPagesProjectNewProjectResponseSuccessTrue AccountPageProjectPagesProjectNewProjectResponseSuccess = true
+)
+
+type AccountPageProjectPagesProjectGetProjectsResponse struct {
+	Errors     []AccountPageProjectPagesProjectGetProjectsResponseError    `json:"errors"`
+	Messages   []AccountPageProjectPagesProjectGetProjectsResponseMessage  `json:"messages"`
+	Result     []AccountPageProjectPagesProjectGetProjectsResponseResult   `json:"result"`
+	ResultInfo AccountPageProjectPagesProjectGetProjectsResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success AccountPageProjectPagesProjectGetProjectsResponseSuccess `json:"success"`
+	JSON    accountPageProjectPagesProjectGetProjectsResponseJSON    `json:"-"`
+}
+
+// accountPageProjectPagesProjectGetProjectsResponseJSON contains the JSON metadata
+// for the struct [AccountPageProjectPagesProjectGetProjectsResponse]
+type accountPageProjectPagesProjectGetProjectsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -1283,49 +1578,50 @@ type projectsResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectPagesProjectGetProjectsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ProjectsResponseError struct {
-	Code    int64                     `json:"code,required"`
-	Message string                    `json:"message,required"`
-	JSON    projectsResponseErrorJSON `json:"-"`
+type AccountPageProjectPagesProjectGetProjectsResponseError struct {
+	Code    int64                                                      `json:"code,required"`
+	Message string                                                     `json:"message,required"`
+	JSON    accountPageProjectPagesProjectGetProjectsResponseErrorJSON `json:"-"`
 }
 
-// projectsResponseErrorJSON contains the JSON metadata for the struct
-// [ProjectsResponseError]
-type projectsResponseErrorJSON struct {
+// accountPageProjectPagesProjectGetProjectsResponseErrorJSON contains the JSON
+// metadata for the struct [AccountPageProjectPagesProjectGetProjectsResponseError]
+type accountPageProjectPagesProjectGetProjectsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectsResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectPagesProjectGetProjectsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ProjectsResponseMessage struct {
-	Code    int64                       `json:"code,required"`
-	Message string                      `json:"message,required"`
-	JSON    projectsResponseMessageJSON `json:"-"`
+type AccountPageProjectPagesProjectGetProjectsResponseMessage struct {
+	Code    int64                                                        `json:"code,required"`
+	Message string                                                       `json:"message,required"`
+	JSON    accountPageProjectPagesProjectGetProjectsResponseMessageJSON `json:"-"`
 }
 
-// projectsResponseMessageJSON contains the JSON metadata for the struct
-// [ProjectsResponseMessage]
-type projectsResponseMessageJSON struct {
+// accountPageProjectPagesProjectGetProjectsResponseMessageJSON contains the JSON
+// metadata for the struct
+// [AccountPageProjectPagesProjectGetProjectsResponseMessage]
+type accountPageProjectPagesProjectGetProjectsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectsResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectPagesProjectGetProjectsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ProjectsResponseResult struct {
+type AccountPageProjectPagesProjectGetProjectsResponseResult struct {
 	// Id of the deployment.
 	ID string `json:"id"`
 	// A list of alias URLs pointing to this deployment.
@@ -1334,7 +1630,7 @@ type ProjectsResponseResult struct {
 	// When the deployment was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Info about what caused the deployment.
-	DeploymentTrigger ProjectsResponseResultDeploymentTrigger `json:"deployment_trigger"`
+	DeploymentTrigger AccountPageProjectPagesProjectGetProjectsResponseResultDeploymentTrigger `json:"deployment_trigger"`
 	// A dict of env variables to build this deploy.
 	EnvVars interface{} `json:"env_vars"`
 	// Type of deploy.
@@ -1352,15 +1648,16 @@ type ProjectsResponseResult struct {
 	ShortID string      `json:"short_id"`
 	Source  interface{} `json:"source"`
 	// List of past stages.
-	Stages []ProjectsResponseResultStage `json:"stages"`
+	Stages []AccountPageProjectPagesProjectGetProjectsResponseResultStage `json:"stages"`
 	// The live URL to view this deployment.
-	URL  string                     `json:"url"`
-	JSON projectsResponseResultJSON `json:"-"`
+	URL  string                                                      `json:"url"`
+	JSON accountPageProjectPagesProjectGetProjectsResponseResultJSON `json:"-"`
 }
 
-// projectsResponseResultJSON contains the JSON metadata for the struct
-// [ProjectsResponseResult]
-type projectsResponseResultJSON struct {
+// accountPageProjectPagesProjectGetProjectsResponseResultJSON contains the JSON
+// metadata for the struct
+// [AccountPageProjectPagesProjectGetProjectsResponseResult]
+type accountPageProjectPagesProjectGetProjectsResponseResultJSON struct {
 	ID                apijson.Field
 	Aliases           apijson.Field
 	BuildConfig       apijson.Field
@@ -1381,46 +1678,48 @@ type projectsResponseResultJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *ProjectsResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectPagesProjectGetProjectsResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Info about what caused the deployment.
-type ProjectsResponseResultDeploymentTrigger struct {
+type AccountPageProjectPagesProjectGetProjectsResponseResultDeploymentTrigger struct {
 	// Additional info about the trigger.
-	Metadata ProjectsResponseResultDeploymentTriggerMetadata `json:"metadata"`
+	Metadata AccountPageProjectPagesProjectGetProjectsResponseResultDeploymentTriggerMetadata `json:"metadata"`
 	// What caused the deployment.
-	Type string                                      `json:"type"`
-	JSON projectsResponseResultDeploymentTriggerJSON `json:"-"`
+	Type string                                                                       `json:"type"`
+	JSON accountPageProjectPagesProjectGetProjectsResponseResultDeploymentTriggerJSON `json:"-"`
 }
 
-// projectsResponseResultDeploymentTriggerJSON contains the JSON metadata for the
-// struct [ProjectsResponseResultDeploymentTrigger]
-type projectsResponseResultDeploymentTriggerJSON struct {
+// accountPageProjectPagesProjectGetProjectsResponseResultDeploymentTriggerJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectPagesProjectGetProjectsResponseResultDeploymentTrigger]
+type accountPageProjectPagesProjectGetProjectsResponseResultDeploymentTriggerJSON struct {
 	Metadata    apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectsResponseResultDeploymentTrigger) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectPagesProjectGetProjectsResponseResultDeploymentTrigger) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Additional info about the trigger.
-type ProjectsResponseResultDeploymentTriggerMetadata struct {
+type AccountPageProjectPagesProjectGetProjectsResponseResultDeploymentTriggerMetadata struct {
 	// Where the trigger happened.
 	Branch string `json:"branch"`
 	// Hash of the deployment trigger commit.
 	CommitHash string `json:"commit_hash"`
 	// Message of the deployment trigger commit.
-	CommitMessage string                                              `json:"commit_message"`
-	JSON          projectsResponseResultDeploymentTriggerMetadataJSON `json:"-"`
+	CommitMessage string                                                                               `json:"commit_message"`
+	JSON          accountPageProjectPagesProjectGetProjectsResponseResultDeploymentTriggerMetadataJSON `json:"-"`
 }
 
-// projectsResponseResultDeploymentTriggerMetadataJSON contains the JSON metadata
-// for the struct [ProjectsResponseResultDeploymentTriggerMetadata]
-type projectsResponseResultDeploymentTriggerMetadataJSON struct {
+// accountPageProjectPagesProjectGetProjectsResponseResultDeploymentTriggerMetadataJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectPagesProjectGetProjectsResponseResultDeploymentTriggerMetadata]
+type accountPageProjectPagesProjectGetProjectsResponseResultDeploymentTriggerMetadataJSON struct {
 	Branch        apijson.Field
 	CommitHash    apijson.Field
 	CommitMessage apijson.Field
@@ -1428,12 +1727,12 @@ type projectsResponseResultDeploymentTriggerMetadataJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ProjectsResponseResultDeploymentTriggerMetadata) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectPagesProjectGetProjectsResponseResultDeploymentTriggerMetadata) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The status of the deployment.
-type ProjectsResponseResultStage struct {
+type AccountPageProjectPagesProjectGetProjectsResponseResultStage struct {
 	// When the stage ended.
 	EndedOn time.Time `json:"ended_on,nullable" format:"date-time"`
 	// The current build stage.
@@ -1441,13 +1740,14 @@ type ProjectsResponseResultStage struct {
 	// When the stage started.
 	StartedOn time.Time `json:"started_on,nullable" format:"date-time"`
 	// State of the current stage.
-	Status string                          `json:"status"`
-	JSON   projectsResponseResultStageJSON `json:"-"`
+	Status string                                                           `json:"status"`
+	JSON   accountPageProjectPagesProjectGetProjectsResponseResultStageJSON `json:"-"`
 }
 
-// projectsResponseResultStageJSON contains the JSON metadata for the struct
-// [ProjectsResponseResultStage]
-type projectsResponseResultStageJSON struct {
+// accountPageProjectPagesProjectGetProjectsResponseResultStageJSON contains the
+// JSON metadata for the struct
+// [AccountPageProjectPagesProjectGetProjectsResponseResultStage]
+type accountPageProjectPagesProjectGetProjectsResponseResultStageJSON struct {
 	EndedOn     apijson.Field
 	Name        apijson.Field
 	StartedOn   apijson.Field
@@ -1456,21 +1756,22 @@ type projectsResponseResultStageJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectsResponseResultStage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectPagesProjectGetProjectsResponseResultStage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ProjectsResponseResultInfo struct {
-	Count      interface{}                    `json:"count"`
-	Page       interface{}                    `json:"page"`
-	PerPage    interface{}                    `json:"per_page"`
-	TotalCount interface{}                    `json:"total_count"`
-	JSON       projectsResponseResultInfoJSON `json:"-"`
+type AccountPageProjectPagesProjectGetProjectsResponseResultInfo struct {
+	Count      interface{}                                                     `json:"count"`
+	Page       interface{}                                                     `json:"page"`
+	PerPage    interface{}                                                     `json:"per_page"`
+	TotalCount interface{}                                                     `json:"total_count"`
+	JSON       accountPageProjectPagesProjectGetProjectsResponseResultInfoJSON `json:"-"`
 }
 
-// projectsResponseResultInfoJSON contains the JSON metadata for the struct
-// [ProjectsResponseResultInfo]
-type projectsResponseResultInfoJSON struct {
+// accountPageProjectPagesProjectGetProjectsResponseResultInfoJSON contains the
+// JSON metadata for the struct
+// [AccountPageProjectPagesProjectGetProjectsResponseResultInfo]
+type accountPageProjectPagesProjectGetProjectsResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -1479,18 +1780,16 @@ type projectsResponseResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectsResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectPagesProjectGetProjectsResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type ProjectsResponseSuccess bool
+type AccountPageProjectPagesProjectGetProjectsResponseSuccess bool
 
 const (
-	ProjectsResponseSuccessTrue ProjectsResponseSuccess = true
+	AccountPageProjectPagesProjectGetProjectsResponseSuccessTrue AccountPageProjectPagesProjectGetProjectsResponseSuccess = true
 )
-
-type AccountPageProjectDeleteResponse = interface{}
 
 type AccountPageProjectUpdateParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
@@ -1502,9 +1801,11 @@ func (r AccountPageProjectUpdateParams) MarshalJSON() (data []byte, err error) {
 
 type AccountPageProjectPagesProjectNewProjectParams struct {
 	// Configs for the project build process.
-	BuildConfig param.Field[AccountPageProjectPagesProjectNewProjectParamsBuildConfig] `json:"build_config"`
+	BuildConfig         param.Field[AccountPageProjectPagesProjectNewProjectParamsBuildConfig]         `json:"build_config"`
+	CanonicalDeployment param.Field[AccountPageProjectPagesProjectNewProjectParamsCanonicalDeployment] `json:"canonical_deployment"`
 	// Configs for deployments in a project.
 	DeploymentConfigs param.Field[AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigs] `json:"deployment_configs"`
+	LatestDeployment  param.Field[AccountPageProjectPagesProjectNewProjectParamsLatestDeployment]  `json:"latest_deployment"`
 	// Name of the project.
 	Name param.Field[string] `json:"name"`
 	// Production branch of the project. Used to identify production deployments.
@@ -1517,6 +1818,8 @@ func (r AccountPageProjectPagesProjectNewProjectParams) MarshalJSON() (data []by
 
 // Configs for the project build process.
 type AccountPageProjectPagesProjectNewProjectParamsBuildConfig struct {
+	// Enable build caching for the project.
+	BuildCaching param.Field[bool] `json:"build_caching"`
 	// Command used to build project.
 	BuildCommand param.Field[string] `json:"build_command"`
 	// Output directory of the build.
@@ -1530,6 +1833,41 @@ type AccountPageProjectPagesProjectNewProjectParamsBuildConfig struct {
 }
 
 func (r AccountPageProjectPagesProjectNewProjectParamsBuildConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccountPageProjectPagesProjectNewProjectParamsCanonicalDeployment struct {
+}
+
+func (r AccountPageProjectPagesProjectNewProjectParamsCanonicalDeployment) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Info about what caused the deployment.
+type AccountPageProjectPagesProjectNewProjectParamsCanonicalDeploymentDeploymentTrigger struct {
+	// Additional info about the trigger.
+	Metadata param.Field[AccountPageProjectPagesProjectNewProjectParamsCanonicalDeploymentDeploymentTriggerMetadata] `json:"metadata"`
+}
+
+func (r AccountPageProjectPagesProjectNewProjectParamsCanonicalDeploymentDeploymentTrigger) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Additional info about the trigger.
+type AccountPageProjectPagesProjectNewProjectParamsCanonicalDeploymentDeploymentTriggerMetadata struct {
+}
+
+func (r AccountPageProjectPagesProjectNewProjectParamsCanonicalDeploymentDeploymentTriggerMetadata) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The status of the deployment.
+type AccountPageProjectPagesProjectNewProjectParamsCanonicalDeploymentStage struct {
+	// The current build stage.
+	Name param.Field[string] `json:"name"`
+}
+
+func (r AccountPageProjectPagesProjectNewProjectParamsCanonicalDeploymentStage) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1547,6 +1885,10 @@ func (r AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigs) Marshal
 
 // Configs for preview deploys.
 type AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreview struct {
+	// Constellation bindings used for Pages Functions.
+	AIBindings param.Field[AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewAIBindings] `json:"ai_bindings"`
+	// Analytics Engine bindings used for Pages Functions.
+	AnalyticsEngineDatasets param.Field[AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewAnalyticsEngineDatasets] `json:"analytics_engine_datasets"`
 	// Compatibility date used for Pages Functions.
 	CompatibilityDate param.Field[string] `json:"compatibility_date"`
 	// Compatibility flags used for Pages Functions.
@@ -1559,6 +1901,8 @@ type AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreview stru
 	EnvVars param.Field[AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewEnvVars] `json:"env_vars"`
 	// KV namespaces used for Pages Functions.
 	KvNamespaces param.Field[AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewKvNamespaces] `json:"kv_namespaces"`
+	// Placement setting used for Pages Functions.
+	Placement param.Field[AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewPlacement] `json:"placement"`
 	// Queue Producer bindings used for Pages Functions.
 	QueueProducers param.Field[AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewQueueProducers] `json:"queue_producers"`
 	// R2 buckets used for Pages Functions.
@@ -1568,6 +1912,45 @@ type AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreview stru
 }
 
 func (r AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreview) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Constellation bindings used for Pages Functions.
+type AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewAIBindings struct {
+	// AI binding.
+	AIBinding param.Field[AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewAIBindingsAIBinding] `json:"AI_BINDING"`
+}
+
+func (r AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewAIBindings) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// AI binding.
+type AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewAIBindingsAIBinding struct {
+	ProjectID param.Field[interface{}] `json:"project_id"`
+}
+
+func (r AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewAIBindingsAIBinding) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Analytics Engine bindings used for Pages Functions.
+type AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewAnalyticsEngineDatasets struct {
+	// Analytics Engine binding.
+	AnalyticsEngineBinding param.Field[AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBinding] `json:"ANALYTICS_ENGINE_BINDING"`
+}
+
+func (r AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewAnalyticsEngineDatasets) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Analytics Engine binding.
+type AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBinding struct {
+	// Name of the dataset.
+	Dataset param.Field[string] `json:"dataset"`
+}
+
+func (r AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBinding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1661,6 +2044,16 @@ func (r AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewKv
 	return apijson.MarshalRoot(r)
 }
 
+// Placement setting used for Pages Functions.
+type AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewPlacement struct {
+	// Placement mode.
+	Mode param.Field[string] `json:"mode"`
+}
+
+func (r AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewPlacement) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // Queue Producer bindings used for Pages Functions.
 type AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewQueueProducers struct {
 	// Queue Producer binding.
@@ -1725,6 +2118,10 @@ func (r AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewSe
 
 // Configs for production deploys.
 type AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProduction struct {
+	// Constellation bindings used for Pages Functions.
+	AIBindings param.Field[AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionAIBindings] `json:"ai_bindings"`
+	// Analytics Engine bindings used for Pages Functions.
+	AnalyticsEngineDatasets param.Field[AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionAnalyticsEngineDatasets] `json:"analytics_engine_datasets"`
 	// Compatibility date used for Pages Functions.
 	CompatibilityDate param.Field[string] `json:"compatibility_date"`
 	// Compatibility flags used for Pages Functions.
@@ -1737,6 +2134,8 @@ type AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProduction s
 	EnvVars param.Field[AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionEnvVars] `json:"env_vars"`
 	// KV namespaces used for Pages Functions.
 	KvNamespaces param.Field[AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionKvNamespaces] `json:"kv_namespaces"`
+	// Placement setting used for Pages Functions.
+	Placement param.Field[AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionPlacement] `json:"placement"`
 	// Queue Producer bindings used for Pages Functions.
 	QueueProducers param.Field[AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionQueueProducers] `json:"queue_producers"`
 	// R2 buckets used for Pages Functions.
@@ -1746,6 +2145,45 @@ type AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProduction s
 }
 
 func (r AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProduction) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Constellation bindings used for Pages Functions.
+type AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionAIBindings struct {
+	// AI binding.
+	AIBinding param.Field[AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionAIBindingsAIBinding] `json:"AI_BINDING"`
+}
+
+func (r AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionAIBindings) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// AI binding.
+type AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionAIBindingsAIBinding struct {
+	ProjectID param.Field[interface{}] `json:"project_id"`
+}
+
+func (r AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionAIBindingsAIBinding) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Analytics Engine bindings used for Pages Functions.
+type AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionAnalyticsEngineDatasets struct {
+	// Analytics Engine binding.
+	AnalyticsEngineBinding param.Field[AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBinding] `json:"ANALYTICS_ENGINE_BINDING"`
+}
+
+func (r AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionAnalyticsEngineDatasets) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Analytics Engine binding.
+type AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBinding struct {
+	// Name of the dataset.
+	Dataset param.Field[string] `json:"dataset"`
+}
+
+func (r AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBinding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1839,6 +2277,16 @@ func (r AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductio
 	return apijson.MarshalRoot(r)
 }
 
+// Placement setting used for Pages Functions.
+type AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionPlacement struct {
+	// Placement mode.
+	Mode param.Field[string] `json:"mode"`
+}
+
+func (r AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionPlacement) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // Queue Producer bindings used for Pages Functions.
 type AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionQueueProducers struct {
 	// Queue Producer binding.
@@ -1898,5 +2346,40 @@ type AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionSe
 }
 
 func (r AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionServiceBindingsServiceBinding) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccountPageProjectPagesProjectNewProjectParamsLatestDeployment struct {
+}
+
+func (r AccountPageProjectPagesProjectNewProjectParamsLatestDeployment) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Info about what caused the deployment.
+type AccountPageProjectPagesProjectNewProjectParamsLatestDeploymentDeploymentTrigger struct {
+	// Additional info about the trigger.
+	Metadata param.Field[AccountPageProjectPagesProjectNewProjectParamsLatestDeploymentDeploymentTriggerMetadata] `json:"metadata"`
+}
+
+func (r AccountPageProjectPagesProjectNewProjectParamsLatestDeploymentDeploymentTrigger) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Additional info about the trigger.
+type AccountPageProjectPagesProjectNewProjectParamsLatestDeploymentDeploymentTriggerMetadata struct {
+}
+
+func (r AccountPageProjectPagesProjectNewProjectParamsLatestDeploymentDeploymentTriggerMetadata) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The status of the deployment.
+type AccountPageProjectPagesProjectNewProjectParamsLatestDeploymentStage struct {
+	// The current build stage.
+	Name param.Field[string] `json:"name"`
+}
+
+func (r AccountPageProjectPagesProjectNewProjectParamsLatestDeploymentStage) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }

@@ -24,25 +24,24 @@ func TestAccountAccessSeatZeroTrustSeatsUpdateAUserSeat(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Accesses.Seats.ZeroTrustSeatsUpdateAUserSeat(
+	_, err := client.Accounts.Access.Seats.ZeroTrustSeatsUpdateAUserSeat(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.AccountAccessSeatZeroTrustSeatsUpdateAUserSeatParams{
 			Body: cloudflare.F([]cloudflare.AccountAccessSeatZeroTrustSeatsUpdateAUserSeatParamsBody{{
 				AccessSeat:  cloudflare.F(false),
 				GatewaySeat: cloudflare.F(false),
-				SeatUid:     cloudflare.F[any](map[string]interface{}{}),
 			}, {
 				AccessSeat:  cloudflare.F(false),
 				GatewaySeat: cloudflare.F(false),
-				SeatUid:     cloudflare.F[any](map[string]interface{}{}),
 			}, {
 				AccessSeat:  cloudflare.F(false),
 				GatewaySeat: cloudflare.F(false),
-				SeatUid:     cloudflare.F[any](map[string]interface{}{}),
 			}}),
 		},
 	)

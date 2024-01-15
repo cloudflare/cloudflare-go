@@ -24,13 +24,15 @@ func TestAccountMemberGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Members.Get(
 		context.TODO(),
 		map[string]interface{}{},
-		map[string]interface{}{},
+		"4536bcfad5faccb111b47003c79917fa",
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -52,15 +54,18 @@ func TestAccountMemberUpdate(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Members.Update(
 		context.TODO(),
 		map[string]interface{}{},
-		map[string]interface{}{},
+		"4536bcfad5faccb111b47003c79917fa",
 		cloudflare.AccountMemberUpdateParams{
 			Roles: cloudflare.F([]cloudflare.AccountMemberUpdateParamsRole{{
+				ID: cloudflare.F("3536bcfad5faccb999b47003c79917fb"),
 				Permissions: cloudflare.F(cloudflare.AccountMemberUpdateParamsRolesPermissions{
 					Analytics: cloudflare.F(cloudflare.AccountMemberUpdateParamsRolesPermissionsAnalytics{
 						Read:  cloudflare.F(true),
@@ -108,10 +113,11 @@ func TestAccountMemberUpdate(t *testing.T) {
 					}),
 					Zones: cloudflare.F(cloudflare.AccountMemberUpdateParamsRolesPermissionsZones{
 						Read:  cloudflare.F(true),
-						Write: cloudflare.F(true),
+						Write: cloudflare.F(false),
 					}),
 				}),
 			}, {
+				ID: cloudflare.F("3536bcfad5faccb999b47003c79917fb"),
 				Permissions: cloudflare.F(cloudflare.AccountMemberUpdateParamsRolesPermissions{
 					Analytics: cloudflare.F(cloudflare.AccountMemberUpdateParamsRolesPermissionsAnalytics{
 						Read:  cloudflare.F(true),
@@ -159,10 +165,11 @@ func TestAccountMemberUpdate(t *testing.T) {
 					}),
 					Zones: cloudflare.F(cloudflare.AccountMemberUpdateParamsRolesPermissionsZones{
 						Read:  cloudflare.F(true),
-						Write: cloudflare.F(true),
+						Write: cloudflare.F(false),
 					}),
 				}),
 			}, {
+				ID: cloudflare.F("3536bcfad5faccb999b47003c79917fb"),
 				Permissions: cloudflare.F(cloudflare.AccountMemberUpdateParamsRolesPermissions{
 					Analytics: cloudflare.F(cloudflare.AccountMemberUpdateParamsRolesPermissionsAnalytics{
 						Read:  cloudflare.F(true),
@@ -210,7 +217,7 @@ func TestAccountMemberUpdate(t *testing.T) {
 					}),
 					Zones: cloudflare.F(cloudflare.AccountMemberUpdateParamsRolesPermissionsZones{
 						Read:  cloudflare.F(true),
-						Write: cloudflare.F(true),
+						Write: cloudflare.F(false),
 					}),
 				}),
 			}}),
@@ -236,13 +243,15 @@ func TestAccountMemberDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Members.Delete(
 		context.TODO(),
 		map[string]interface{}{},
-		map[string]interface{}{},
+		"4536bcfad5faccb111b47003c79917fa",
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -264,8 +273,10 @@ func TestAccountMemberAccountMembersAddMemberWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Members.AccountMembersAddMember(
 		context.TODO(),
@@ -296,8 +307,10 @@ func TestAccountMemberAccountMembersListMembersWithOptionalParams(t *testing.T) 
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Members.AccountMembersListMembers(
 		context.TODO(),

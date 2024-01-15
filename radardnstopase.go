@@ -81,16 +81,16 @@ func (r *RadarDNSTopAseListResponseResult) UnmarshalJSON(data []byte) (err error
 }
 
 type RadarDNSTopAseListResponseResultMeta struct {
-	ConfidenceInfo RadarDNSTopAseListResponseResultMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      RadarDNSTopAseListResponseResultMetaDateRange      `json:"dateRange,required"`
+	DateRange      []RadarDNSTopAseListResponseResultMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo RadarDNSTopAseListResponseResultMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           radarDNSTopAseListResponseResultMetaJSON           `json:"-"`
 }
 
 // radarDNSTopAseListResponseResultMetaJSON contains the JSON metadata for the
 // struct [RadarDNSTopAseListResponseResultMeta]
 type radarDNSTopAseListResponseResultMetaJSON struct {
-	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
+	ConfidenceInfo apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -99,9 +99,30 @@ func (r *RadarDNSTopAseListResponseResultMeta) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type RadarDNSTopAseListResponseResultMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                         `json:"startTime,required" format:"date-time"`
+	JSON      radarDNSTopAseListResponseResultMetaDateRangeJSON `json:"-"`
+}
+
+// radarDNSTopAseListResponseResultMetaDateRangeJSON contains the JSON metadata for
+// the struct [RadarDNSTopAseListResponseResultMetaDateRange]
+type radarDNSTopAseListResponseResultMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarDNSTopAseListResponseResultMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type RadarDNSTopAseListResponseResultMetaConfidenceInfo struct {
-	Annotations []RadarDNSTopAseListResponseResultMetaConfidenceInfoAnnotation `json:"annotations,required"`
-	Level       int64                                                          `json:"level,required"`
+	Annotations []RadarDNSTopAseListResponseResultMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                          `json:"level"`
 	JSON        radarDNSTopAseListResponseResultMetaConfidenceInfoJSON         `json:"-"`
 }
 
@@ -119,47 +140,32 @@ func (r *RadarDNSTopAseListResponseResultMetaConfidenceInfo) UnmarshalJSON(data 
 }
 
 type RadarDNSTopAseListResponseResultMetaConfidenceInfoAnnotation struct {
-	DataSource  string                                                           `json:"dataSource,required"`
-	Description string                                                           `json:"description,required"`
-	EndTime     time.Time                                                        `json:"endTime,required" format:"date-time"`
-	EventType   string                                                           `json:"eventType,required"`
-	StartTime   time.Time                                                        `json:"startTime,required" format:"date-time"`
-	JSON        radarDNSTopAseListResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
+	DataSource      string                                                           `json:"dataSource,required"`
+	Description     string                                                           `json:"description,required"`
+	EventType       string                                                           `json:"eventType,required"`
+	IsInstantaneous interface{}                                                      `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                        `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                           `json:"linkedUrl"`
+	StartTime       time.Time                                                        `json:"startTime" format:"date-time"`
+	JSON            radarDNSTopAseListResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
 // radarDNSTopAseListResponseResultMetaConfidenceInfoAnnotationJSON contains the
 // JSON metadata for the struct
 // [RadarDNSTopAseListResponseResultMetaConfidenceInfoAnnotation]
 type radarDNSTopAseListResponseResultMetaConfidenceInfoAnnotationJSON struct {
-	DataSource  apijson.Field
-	Description apijson.Field
-	EndTime     apijson.Field
-	EventType   apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *RadarDNSTopAseListResponseResultMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarDNSTopAseListResponseResultMetaDateRange struct {
-	EndTime   time.Time                                         `json:"endTime,required" format:"date-time"`
-	StartTime time.Time                                         `json:"startTime,required" format:"date-time"`
-	JSON      radarDNSTopAseListResponseResultMetaDateRangeJSON `json:"-"`
-}
-
-// radarDNSTopAseListResponseResultMetaDateRangeJSON contains the JSON metadata for
-// the struct [RadarDNSTopAseListResponseResultMetaDateRange]
-type radarDNSTopAseListResponseResultMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarDNSTopAseListResponseResultMetaDateRange) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -191,7 +197,7 @@ type RadarDNSTopAseListParams struct {
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of datetimes to filter the end of a series.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
@@ -224,6 +230,7 @@ type RadarDNSTopAseListParamsDateRange string
 
 const (
 	RadarDNSTopAseListParamsDateRange1d         RadarDNSTopAseListParamsDateRange = "1d"
+	RadarDNSTopAseListParamsDateRange2d         RadarDNSTopAseListParamsDateRange = "2d"
 	RadarDNSTopAseListParamsDateRange7d         RadarDNSTopAseListParamsDateRange = "7d"
 	RadarDNSTopAseListParamsDateRange14d        RadarDNSTopAseListParamsDateRange = "14d"
 	RadarDNSTopAseListParamsDateRange28d        RadarDNSTopAseListParamsDateRange = "28d"
@@ -231,6 +238,7 @@ const (
 	RadarDNSTopAseListParamsDateRange24w        RadarDNSTopAseListParamsDateRange = "24w"
 	RadarDNSTopAseListParamsDateRange52w        RadarDNSTopAseListParamsDateRange = "52w"
 	RadarDNSTopAseListParamsDateRange1dControl  RadarDNSTopAseListParamsDateRange = "1dControl"
+	RadarDNSTopAseListParamsDateRange2dControl  RadarDNSTopAseListParamsDateRange = "2dControl"
 	RadarDNSTopAseListParamsDateRange7dControl  RadarDNSTopAseListParamsDateRange = "7dControl"
 	RadarDNSTopAseListParamsDateRange14dControl RadarDNSTopAseListParamsDateRange = "14dControl"
 	RadarDNSTopAseListParamsDateRange28dControl RadarDNSTopAseListParamsDateRange = "28dControl"

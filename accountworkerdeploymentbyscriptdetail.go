@@ -35,29 +35,29 @@ func NewAccountWorkerDeploymentByScriptDetailService(opts ...option.RequestOptio
 }
 
 // Get Deployment Detail
-func (r *AccountWorkerDeploymentByScriptDetailService) Get(ctx context.Context, accountIdentifier string, scriptIdentifier string, deploymentIdentifier string, opts ...option.RequestOption) (res *DeploymentsSingleResponse, err error) {
+func (r *AccountWorkerDeploymentByScriptDetailService) Get(ctx context.Context, accountIdentifier string, scriptIdentifier string, deploymentIdentifier string, opts ...option.RequestOption) (res *AccountWorkerDeploymentByScriptDetailGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/workers/deployments/by-script/%s/detail/%s", accountIdentifier, scriptIdentifier, deploymentIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type DeploymentsSingleResponse struct {
-	ID        string                             `json:"id"`
-	Errors    []DeploymentsSingleResponseError   `json:"errors"`
-	Messages  []DeploymentsSingleResponseMessage `json:"messages"`
-	Metadata  interface{}                        `json:"metadata"`
-	Number    float64                            `json:"number"`
-	Resources interface{}                        `json:"resources"`
-	Result    DeploymentsSingleResponseResult    `json:"result"`
+type AccountWorkerDeploymentByScriptDetailGetResponse struct {
+	ID        string                                                    `json:"id"`
+	Errors    []AccountWorkerDeploymentByScriptDetailGetResponseError   `json:"errors"`
+	Messages  []AccountWorkerDeploymentByScriptDetailGetResponseMessage `json:"messages"`
+	Metadata  interface{}                                               `json:"metadata"`
+	Number    float64                                                   `json:"number"`
+	Resources interface{}                                               `json:"resources"`
+	Result    AccountWorkerDeploymentByScriptDetailGetResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success DeploymentsSingleResponseSuccess `json:"success"`
-	JSON    deploymentsSingleResponseJSON    `json:"-"`
+	Success AccountWorkerDeploymentByScriptDetailGetResponseSuccess `json:"success"`
+	JSON    accountWorkerDeploymentByScriptDetailGetResponseJSON    `json:"-"`
 }
 
-// deploymentsSingleResponseJSON contains the JSON metadata for the struct
-// [DeploymentsSingleResponse]
-type deploymentsSingleResponseJSON struct {
+// accountWorkerDeploymentByScriptDetailGetResponseJSON contains the JSON metadata
+// for the struct [AccountWorkerDeploymentByScriptDetailGetResponse]
+type accountWorkerDeploymentByScriptDetailGetResponseJSON struct {
 	ID          apijson.Field
 	Errors      apijson.Field
 	Messages    apijson.Field
@@ -70,57 +70,60 @@ type deploymentsSingleResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeploymentsSingleResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountWorkerDeploymentByScriptDetailGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DeploymentsSingleResponseError struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    deploymentsSingleResponseErrorJSON `json:"-"`
+type AccountWorkerDeploymentByScriptDetailGetResponseError struct {
+	Code    int64                                                     `json:"code,required"`
+	Message string                                                    `json:"message,required"`
+	JSON    accountWorkerDeploymentByScriptDetailGetResponseErrorJSON `json:"-"`
 }
 
-// deploymentsSingleResponseErrorJSON contains the JSON metadata for the struct
-// [DeploymentsSingleResponseError]
-type deploymentsSingleResponseErrorJSON struct {
+// accountWorkerDeploymentByScriptDetailGetResponseErrorJSON contains the JSON
+// metadata for the struct [AccountWorkerDeploymentByScriptDetailGetResponseError]
+type accountWorkerDeploymentByScriptDetailGetResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeploymentsSingleResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountWorkerDeploymentByScriptDetailGetResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DeploymentsSingleResponseMessage struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    deploymentsSingleResponseMessageJSON `json:"-"`
+type AccountWorkerDeploymentByScriptDetailGetResponseMessage struct {
+	Code    int64                                                       `json:"code,required"`
+	Message string                                                      `json:"message,required"`
+	JSON    accountWorkerDeploymentByScriptDetailGetResponseMessageJSON `json:"-"`
 }
 
-// deploymentsSingleResponseMessageJSON contains the JSON metadata for the struct
-// [DeploymentsSingleResponseMessage]
-type deploymentsSingleResponseMessageJSON struct {
+// accountWorkerDeploymentByScriptDetailGetResponseMessageJSON contains the JSON
+// metadata for the struct
+// [AccountWorkerDeploymentByScriptDetailGetResponseMessage]
+type accountWorkerDeploymentByScriptDetailGetResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeploymentsSingleResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountWorkerDeploymentByScriptDetailGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Union satisfied by [DeploymentsSingleResponseResultObject],
-// [DeploymentsSingleResponseResultObject] or [shared.UnionString].
-type DeploymentsSingleResponseResult interface {
-	ImplementsDeploymentsSingleResponseResult()
+// Union satisfied by
+// [AccountWorkerDeploymentByScriptDetailGetResponseResultUnknown],
+// [AccountWorkerDeploymentByScriptDetailGetResponseResultArray] or
+// [shared.UnionString].
+type AccountWorkerDeploymentByScriptDetailGetResponseResult interface {
+	ImplementsAccountWorkerDeploymentByScriptDetailGetResponseResult()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DeploymentsSingleResponseResult)(nil)).Elem(),
+		reflect.TypeOf((*AccountWorkerDeploymentByScriptDetailGetResponseResult)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter:         gjson.String,
@@ -130,9 +133,14 @@ func init() {
 	)
 }
 
+type AccountWorkerDeploymentByScriptDetailGetResponseResultArray []interface{}
+
+func (r AccountWorkerDeploymentByScriptDetailGetResponseResultArray) ImplementsAccountWorkerDeploymentByScriptDetailGetResponseResult() {
+}
+
 // Whether the API call was successful
-type DeploymentsSingleResponseSuccess bool
+type AccountWorkerDeploymentByScriptDetailGetResponseSuccess bool
 
 const (
-	DeploymentsSingleResponseSuccessTrue DeploymentsSingleResponseSuccess = true
+	AccountWorkerDeploymentByScriptDetailGetResponseSuccessTrue AccountWorkerDeploymentByScriptDetailGetResponseSuccess = true
 )

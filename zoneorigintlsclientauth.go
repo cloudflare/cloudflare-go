@@ -37,7 +37,7 @@ func NewZoneOriginTlsClientAuthService(opts ...option.RequestOption) (r *ZoneOri
 }
 
 // Get Certificate Details
-func (r *ZoneOriginTlsClientAuthService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *CertificateResponseSingle, err error) {
+func (r *ZoneOriginTlsClientAuthService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *ZoneOriginTlsClientAuthGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/%s", zoneIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -45,7 +45,7 @@ func (r *ZoneOriginTlsClientAuthService) Get(ctx context.Context, zoneIdentifier
 }
 
 // Delete Certificate
-func (r *ZoneOriginTlsClientAuthService) Delete(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *CertificateResponseSingle, err error) {
+func (r *ZoneOriginTlsClientAuthService) Delete(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *ZoneOriginTlsClientAuthDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/%s", zoneIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -65,12 +65,150 @@ func (r *ZoneOriginTlsClientAuthService) ZoneLevelAuthenticatedOriginPullsListCe
 // important to keep only one certificate active. Also, make sure to enable
 // zone-level authenticated origin pulls by making a PUT call to settings endpoint
 // to see the uploaded certificate in use.
-func (r *ZoneOriginTlsClientAuthService) ZoneLevelAuthenticatedOriginPullsUploadCertificate(ctx context.Context, zoneIdentifier string, body ZoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateParams, opts ...option.RequestOption) (res *CertificateResponseSingle, err error) {
+func (r *ZoneOriginTlsClientAuthService) ZoneLevelAuthenticatedOriginPullsUploadCertificate(ctx context.Context, zoneIdentifier string, body ZoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateParams, opts ...option.RequestOption) (res *ZoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
+
+type ZoneOriginTlsClientAuthGetResponse struct {
+	Errors   []ZoneOriginTlsClientAuthGetResponseError   `json:"errors"`
+	Messages []ZoneOriginTlsClientAuthGetResponseMessage `json:"messages"`
+	Result   interface{}                                 `json:"result"`
+	// Whether the API call was successful
+	Success ZoneOriginTlsClientAuthGetResponseSuccess `json:"success"`
+	JSON    zoneOriginTlsClientAuthGetResponseJSON    `json:"-"`
+}
+
+// zoneOriginTlsClientAuthGetResponseJSON contains the JSON metadata for the struct
+// [ZoneOriginTlsClientAuthGetResponse]
+type zoneOriginTlsClientAuthGetResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneOriginTlsClientAuthGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneOriginTlsClientAuthGetResponseError struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    zoneOriginTlsClientAuthGetResponseErrorJSON `json:"-"`
+}
+
+// zoneOriginTlsClientAuthGetResponseErrorJSON contains the JSON metadata for the
+// struct [ZoneOriginTlsClientAuthGetResponseError]
+type zoneOriginTlsClientAuthGetResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneOriginTlsClientAuthGetResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneOriginTlsClientAuthGetResponseMessage struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    zoneOriginTlsClientAuthGetResponseMessageJSON `json:"-"`
+}
+
+// zoneOriginTlsClientAuthGetResponseMessageJSON contains the JSON metadata for the
+// struct [ZoneOriginTlsClientAuthGetResponseMessage]
+type zoneOriginTlsClientAuthGetResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneOriginTlsClientAuthGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneOriginTlsClientAuthGetResponseSuccess bool
+
+const (
+	ZoneOriginTlsClientAuthGetResponseSuccessTrue ZoneOriginTlsClientAuthGetResponseSuccess = true
+)
+
+type ZoneOriginTlsClientAuthDeleteResponse struct {
+	Errors   []ZoneOriginTlsClientAuthDeleteResponseError   `json:"errors"`
+	Messages []ZoneOriginTlsClientAuthDeleteResponseMessage `json:"messages"`
+	Result   interface{}                                    `json:"result"`
+	// Whether the API call was successful
+	Success ZoneOriginTlsClientAuthDeleteResponseSuccess `json:"success"`
+	JSON    zoneOriginTlsClientAuthDeleteResponseJSON    `json:"-"`
+}
+
+// zoneOriginTlsClientAuthDeleteResponseJSON contains the JSON metadata for the
+// struct [ZoneOriginTlsClientAuthDeleteResponse]
+type zoneOriginTlsClientAuthDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneOriginTlsClientAuthDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneOriginTlsClientAuthDeleteResponseError struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    zoneOriginTlsClientAuthDeleteResponseErrorJSON `json:"-"`
+}
+
+// zoneOriginTlsClientAuthDeleteResponseErrorJSON contains the JSON metadata for
+// the struct [ZoneOriginTlsClientAuthDeleteResponseError]
+type zoneOriginTlsClientAuthDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneOriginTlsClientAuthDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneOriginTlsClientAuthDeleteResponseMessage struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    zoneOriginTlsClientAuthDeleteResponseMessageJSON `json:"-"`
+}
+
+// zoneOriginTlsClientAuthDeleteResponseMessageJSON contains the JSON metadata for
+// the struct [ZoneOriginTlsClientAuthDeleteResponseMessage]
+type zoneOriginTlsClientAuthDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneOriginTlsClientAuthDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneOriginTlsClientAuthDeleteResponseSuccess bool
+
+const (
+	ZoneOriginTlsClientAuthDeleteResponseSuccessTrue ZoneOriginTlsClientAuthDeleteResponseSuccess = true
+)
 
 type ZoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsListCertificatesResponse struct {
 	Errors     []ZoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsListCertificatesResponseError    `json:"errors"`
@@ -222,6 +360,78 @@ type ZoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsListCertificatesRes
 
 const (
 	ZoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsListCertificatesResponseSuccessTrue ZoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsListCertificatesResponseSuccess = true
+)
+
+type ZoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateResponse struct {
+	Errors   []ZoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateResponseError   `json:"errors"`
+	Messages []ZoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateResponseMessage `json:"messages"`
+	Result   interface{}                                                                                `json:"result"`
+	// Whether the API call was successful
+	Success ZoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateResponseSuccess `json:"success"`
+	JSON    zoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateResponseJSON    `json:"-"`
+}
+
+// zoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateResponse]
+type zoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateResponseError struct {
+	Code    int64                                                                                      `json:"code,required"`
+	Message string                                                                                     `json:"message,required"`
+	JSON    zoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateResponseErrorJSON `json:"-"`
+}
+
+// zoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateResponseError]
+type zoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateResponseMessage struct {
+	Code    int64                                                                                        `json:"code,required"`
+	Message string                                                                                       `json:"message,required"`
+	JSON    zoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateResponseMessageJSON `json:"-"`
+}
+
+// zoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateResponseMessage]
+type zoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateResponseSuccess bool
+
+const (
+	ZoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateResponseSuccessTrue ZoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateResponseSuccess = true
 )
 
 type ZoneOriginTlsClientAuthZoneLevelAuthenticatedOriginPullsUploadCertificateParams struct {

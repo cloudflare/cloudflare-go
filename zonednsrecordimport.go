@@ -40,26 +40,27 @@ func NewZoneDNSRecordImportService(opts ...option.RequestOption) (r *ZoneDNSReco
 // See
 // [the documentation](https://developers.cloudflare.com/dns/manage-dns-records/how-to/import-and-export/ "Import and export records")
 // for more information.
-func (r *ZoneDNSRecordImportService) DNSRecordsForAZoneImportDNSRecords(ctx context.Context, zoneIdentifier string, body ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsParams, opts ...option.RequestOption) (res *DNSResponseImportScan, err error) {
+func (r *ZoneDNSRecordImportService) DNSRecordsForAZoneImportDNSRecords(ctx context.Context, zoneIdentifier string, body ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsParams, opts ...option.RequestOption) (res *ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/dns_records/import", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
-type DNSResponseImportScan struct {
-	Errors   []DNSResponseImportScanError   `json:"errors"`
-	Messages []DNSResponseImportScanMessage `json:"messages"`
-	Result   DNSResponseImportScanResult    `json:"result"`
+type ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponse struct {
+	Errors   []ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseError   `json:"errors"`
+	Messages []ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseMessage `json:"messages"`
+	Result   ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success DNSResponseImportScanSuccess `json:"success"`
-	Timing  DNSResponseImportScanTiming  `json:"timing"`
-	JSON    dnsResponseImportScanJSON    `json:"-"`
+	Success ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseSuccess `json:"success"`
+	Timing  ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseTiming  `json:"timing"`
+	JSON    zoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseJSON    `json:"-"`
 }
 
-// dnsResponseImportScanJSON contains the JSON metadata for the struct
-// [DNSResponseImportScan]
-type dnsResponseImportScanJSON struct {
+// zoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseJSON contains the
+// JSON metadata for the struct
+// [ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponse]
+type zoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -69,89 +70,93 @@ type dnsResponseImportScanJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSResponseImportScan) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DNSResponseImportScanError struct {
-	Code    int64                          `json:"code,required"`
-	Message string                         `json:"message,required"`
-	JSON    dnsResponseImportScanErrorJSON `json:"-"`
+type ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseError struct {
+	Code    int64                                                                  `json:"code,required"`
+	Message string                                                                 `json:"message,required"`
+	JSON    zoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseErrorJSON `json:"-"`
 }
 
-// dnsResponseImportScanErrorJSON contains the JSON metadata for the struct
-// [DNSResponseImportScanError]
-type dnsResponseImportScanErrorJSON struct {
+// zoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseErrorJSON contains
+// the JSON metadata for the struct
+// [ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseError]
+type zoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSResponseImportScanError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DNSResponseImportScanMessage struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    dnsResponseImportScanMessageJSON `json:"-"`
+type ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseMessage struct {
+	Code    int64                                                                    `json:"code,required"`
+	Message string                                                                   `json:"message,required"`
+	JSON    zoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseMessageJSON `json:"-"`
 }
 
-// dnsResponseImportScanMessageJSON contains the JSON metadata for the struct
-// [DNSResponseImportScanMessage]
-type dnsResponseImportScanMessageJSON struct {
+// zoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseMessage]
+type zoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSResponseImportScanMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DNSResponseImportScanResult struct {
+type ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseResult struct {
 	// Number of DNS records added.
 	RecsAdded float64 `json:"recs_added"`
 	// Total number of DNS records parsed.
-	TotalRecordsParsed float64                         `json:"total_records_parsed"`
-	JSON               dnsResponseImportScanResultJSON `json:"-"`
+	TotalRecordsParsed float64                                                                 `json:"total_records_parsed"`
+	JSON               zoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseResultJSON `json:"-"`
 }
 
-// dnsResponseImportScanResultJSON contains the JSON metadata for the struct
-// [DNSResponseImportScanResult]
-type dnsResponseImportScanResultJSON struct {
+// zoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseResultJSON contains
+// the JSON metadata for the struct
+// [ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseResult]
+type zoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseResultJSON struct {
 	RecsAdded          apijson.Field
 	TotalRecordsParsed apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *DNSResponseImportScanResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type DNSResponseImportScanSuccess bool
+type ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseSuccess bool
 
 const (
-	DNSResponseImportScanSuccessTrue DNSResponseImportScanSuccess = true
+	ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseSuccessTrue ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseSuccess = true
 )
 
-type DNSResponseImportScanTiming struct {
+type ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseTiming struct {
 	// When the file parsing ended.
 	EndTime time.Time `json:"end_time" format:"date-time"`
 	// Processing time of the file in seconds.
 	ProcessTime float64 `json:"process_time"`
 	// When the file parsing started.
-	StartTime time.Time                       `json:"start_time" format:"date-time"`
-	JSON      dnsResponseImportScanTimingJSON `json:"-"`
+	StartTime time.Time                                                               `json:"start_time" format:"date-time"`
+	JSON      zoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseTimingJSON `json:"-"`
 }
 
-// dnsResponseImportScanTimingJSON contains the JSON metadata for the struct
-// [DNSResponseImportScanTiming]
-type dnsResponseImportScanTimingJSON struct {
+// zoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseTimingJSON contains
+// the JSON metadata for the struct
+// [ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseTiming]
+type zoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseTimingJSON struct {
 	EndTime     apijson.Field
 	ProcessTime apijson.Field
 	StartTime   apijson.Field
@@ -159,16 +164,21 @@ type dnsResponseImportScanTimingJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSResponseImportScanTiming) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseTiming) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 type ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsParams struct {
-	// BIND config to upload.
+	// BIND config to import.
+	//
+	// **Tip:** When using cURL, a file can be uploaded using
+	// `--form 'file=@bind_config.txt'`.
 	File param.Field[string] `json:"file,required"`
 	// Whether or not proxiable records should receive the performance and security
 	// benefits of Cloudflare.
-	Proxied param.Field[bool] `json:"proxied"`
+	//
+	// The value should be either `true` or `false`.
+	Proxied param.Field[string] `json:"proxied"`
 }
 
 func (r ZoneDNSRecordImportDNSRecordsForAZoneImportDNSRecordsParams) MarshalJSON() (data []byte, err error) {

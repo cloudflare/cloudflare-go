@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -31,9 +32,81 @@ func NewZoneLogpushDatasetFieldService(opts ...option.RequestOption) (r *ZoneLog
 
 // Lists all fields available for a dataset. The response result is an object with
 // key-value pairs, where keys are field names, and values are descriptions.
-func (r *ZoneLogpushDatasetFieldService) GetZonesZoneIdentifierLogpushDatasetsDatasetFields(ctx context.Context, zoneIdentifier string, dataset string, opts ...option.RequestOption) (res *LogpushFieldResponseCollection, err error) {
+func (r *ZoneLogpushDatasetFieldService) GetZonesZoneIdentifierLogpushDatasetsDatasetFields(ctx context.Context, zoneIdentifier string, dataset string, opts ...option.RequestOption) (res *ZoneLogpushDatasetFieldGetZonesZoneIdentifierLogpushDatasetsDatasetFieldsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/logpush/datasets/%s/fields", zoneIdentifier, dataset)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
+
+type ZoneLogpushDatasetFieldGetZonesZoneIdentifierLogpushDatasetsDatasetFieldsResponse struct {
+	Errors   []ZoneLogpushDatasetFieldGetZonesZoneIdentifierLogpushDatasetsDatasetFieldsResponseError   `json:"errors"`
+	Messages []ZoneLogpushDatasetFieldGetZonesZoneIdentifierLogpushDatasetsDatasetFieldsResponseMessage `json:"messages"`
+	Result   interface{}                                                                                `json:"result"`
+	// Whether the API call was successful
+	Success ZoneLogpushDatasetFieldGetZonesZoneIdentifierLogpushDatasetsDatasetFieldsResponseSuccess `json:"success"`
+	JSON    zoneLogpushDatasetFieldGetZonesZoneIdentifierLogpushDatasetsDatasetFieldsResponseJSON    `json:"-"`
+}
+
+// zoneLogpushDatasetFieldGetZonesZoneIdentifierLogpushDatasetsDatasetFieldsResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneLogpushDatasetFieldGetZonesZoneIdentifierLogpushDatasetsDatasetFieldsResponse]
+type zoneLogpushDatasetFieldGetZonesZoneIdentifierLogpushDatasetsDatasetFieldsResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneLogpushDatasetFieldGetZonesZoneIdentifierLogpushDatasetsDatasetFieldsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneLogpushDatasetFieldGetZonesZoneIdentifierLogpushDatasetsDatasetFieldsResponseError struct {
+	Code    int64                                                                                      `json:"code,required"`
+	Message string                                                                                     `json:"message,required"`
+	JSON    zoneLogpushDatasetFieldGetZonesZoneIdentifierLogpushDatasetsDatasetFieldsResponseErrorJSON `json:"-"`
+}
+
+// zoneLogpushDatasetFieldGetZonesZoneIdentifierLogpushDatasetsDatasetFieldsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneLogpushDatasetFieldGetZonesZoneIdentifierLogpushDatasetsDatasetFieldsResponseError]
+type zoneLogpushDatasetFieldGetZonesZoneIdentifierLogpushDatasetsDatasetFieldsResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneLogpushDatasetFieldGetZonesZoneIdentifierLogpushDatasetsDatasetFieldsResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneLogpushDatasetFieldGetZonesZoneIdentifierLogpushDatasetsDatasetFieldsResponseMessage struct {
+	Code    int64                                                                                        `json:"code,required"`
+	Message string                                                                                       `json:"message,required"`
+	JSON    zoneLogpushDatasetFieldGetZonesZoneIdentifierLogpushDatasetsDatasetFieldsResponseMessageJSON `json:"-"`
+}
+
+// zoneLogpushDatasetFieldGetZonesZoneIdentifierLogpushDatasetsDatasetFieldsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneLogpushDatasetFieldGetZonesZoneIdentifierLogpushDatasetsDatasetFieldsResponseMessage]
+type zoneLogpushDatasetFieldGetZonesZoneIdentifierLogpushDatasetsDatasetFieldsResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneLogpushDatasetFieldGetZonesZoneIdentifierLogpushDatasetsDatasetFieldsResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneLogpushDatasetFieldGetZonesZoneIdentifierLogpushDatasetsDatasetFieldsResponseSuccess bool
+
+const (
+	ZoneLogpushDatasetFieldGetZonesZoneIdentifierLogpushDatasetsDatasetFieldsResponseSuccessTrue ZoneLogpushDatasetFieldGetZonesZoneIdentifierLogpushDatasetsDatasetFieldsResponseSuccess = true
+)

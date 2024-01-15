@@ -167,8 +167,8 @@ const (
 type AccountStorageKvNamespaceKeyListParams struct {
 	// Opaque token indicating the position from which to continue when requesting the
 	// next set of records if the amount of list results was limited by the limit
-	// parameter. A valid value for the cursor can be obtained from the cursors object
-	// in the result_info structure.
+	// parameter. A valid value for the cursor can be obtained from the `cursors`
+	// object in the `result_info` structure.
 	Cursor param.Field[string] `query:"cursor"`
 	// The number of keys to return. The cursor attribute may be used to iterate over
 	// the next batch of keys if there are more than the limit.

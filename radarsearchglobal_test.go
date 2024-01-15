@@ -24,10 +24,12 @@ func TestRadarSearchGlobalListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Radars.Searches.Globals.List(context.TODO(), cloudflare.RadarSearchGlobalListParams{
+	_, err := client.Radar.Searches.Globals.List(context.TODO(), cloudflare.RadarSearchGlobalListParams{
 		Query:         cloudflare.F("United"),
 		Exclude:       cloudflare.F([]cloudflare.RadarSearchGlobalListParamsExclude{cloudflare.RadarSearchGlobalListParamsExcludeSpecialEvents, cloudflare.RadarSearchGlobalListParamsExcludeNotebooks, cloudflare.RadarSearchGlobalListParamsExcludeLocations}),
 		Format:        cloudflare.F(cloudflare.RadarSearchGlobalListParamsFormatJson),

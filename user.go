@@ -46,7 +46,7 @@ func NewUserService(opts ...option.RequestOption) (r *UserService) {
 }
 
 // Edit part of your user details.
-func (r *UserService) UserEditUser(ctx context.Context, body UserUserEditUserParams, opts ...option.RequestOption) (res *SingleUserResponse, err error) {
+func (r *UserService) UserEditUser(ctx context.Context, body UserUserEditUserParams, opts ...option.RequestOption) (res *UserUserEditUserResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "user"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
@@ -54,25 +54,25 @@ func (r *UserService) UserEditUser(ctx context.Context, body UserUserEditUserPar
 }
 
 // User Details
-func (r *UserService) UserUserDetails(ctx context.Context, opts ...option.RequestOption) (res *SingleUserResponse, err error) {
+func (r *UserService) UserUserDetails(ctx context.Context, opts ...option.RequestOption) (res *UserUserUserDetailsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "user"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type SingleUserResponse struct {
-	Errors   []SingleUserResponseError   `json:"errors"`
-	Messages []SingleUserResponseMessage `json:"messages"`
-	Result   interface{}                 `json:"result"`
+type UserUserEditUserResponse struct {
+	Errors   []UserUserEditUserResponseError   `json:"errors"`
+	Messages []UserUserEditUserResponseMessage `json:"messages"`
+	Result   interface{}                       `json:"result"`
 	// Whether the API call was successful
-	Success SingleUserResponseSuccess `json:"success"`
-	JSON    singleUserResponseJSON    `json:"-"`
+	Success UserUserEditUserResponseSuccess `json:"success"`
+	JSON    userUserEditUserResponseJSON    `json:"-"`
 }
 
-// singleUserResponseJSON contains the JSON metadata for the struct
-// [SingleUserResponse]
-type singleUserResponseJSON struct {
+// userUserEditUserResponseJSON contains the JSON metadata for the struct
+// [UserUserEditUserResponse]
+type userUserEditUserResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -81,53 +81,122 @@ type singleUserResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SingleUserResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *UserUserEditUserResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SingleUserResponseError struct {
-	Code    int64                       `json:"code,required"`
-	Message string                      `json:"message,required"`
-	JSON    singleUserResponseErrorJSON `json:"-"`
+type UserUserEditUserResponseError struct {
+	Code    int64                             `json:"code,required"`
+	Message string                            `json:"message,required"`
+	JSON    userUserEditUserResponseErrorJSON `json:"-"`
 }
 
-// singleUserResponseErrorJSON contains the JSON metadata for the struct
-// [SingleUserResponseError]
-type singleUserResponseErrorJSON struct {
+// userUserEditUserResponseErrorJSON contains the JSON metadata for the struct
+// [UserUserEditUserResponseError]
+type userUserEditUserResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SingleUserResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *UserUserEditUserResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SingleUserResponseMessage struct {
-	Code    int64                         `json:"code,required"`
-	Message string                        `json:"message,required"`
-	JSON    singleUserResponseMessageJSON `json:"-"`
+type UserUserEditUserResponseMessage struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    userUserEditUserResponseMessageJSON `json:"-"`
 }
 
-// singleUserResponseMessageJSON contains the JSON metadata for the struct
-// [SingleUserResponseMessage]
-type singleUserResponseMessageJSON struct {
+// userUserEditUserResponseMessageJSON contains the JSON metadata for the struct
+// [UserUserEditUserResponseMessage]
+type userUserEditUserResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SingleUserResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *UserUserEditUserResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type SingleUserResponseSuccess bool
+type UserUserEditUserResponseSuccess bool
 
 const (
-	SingleUserResponseSuccessTrue SingleUserResponseSuccess = true
+	UserUserEditUserResponseSuccessTrue UserUserEditUserResponseSuccess = true
+)
+
+type UserUserUserDetailsResponse struct {
+	Errors   []UserUserUserDetailsResponseError   `json:"errors"`
+	Messages []UserUserUserDetailsResponseMessage `json:"messages"`
+	Result   interface{}                          `json:"result"`
+	// Whether the API call was successful
+	Success UserUserUserDetailsResponseSuccess `json:"success"`
+	JSON    userUserUserDetailsResponseJSON    `json:"-"`
+}
+
+// userUserUserDetailsResponseJSON contains the JSON metadata for the struct
+// [UserUserUserDetailsResponse]
+type userUserUserDetailsResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserUserUserDetailsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type UserUserUserDetailsResponseError struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    userUserUserDetailsResponseErrorJSON `json:"-"`
+}
+
+// userUserUserDetailsResponseErrorJSON contains the JSON metadata for the struct
+// [UserUserUserDetailsResponseError]
+type userUserUserDetailsResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserUserUserDetailsResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type UserUserUserDetailsResponseMessage struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    userUserUserDetailsResponseMessageJSON `json:"-"`
+}
+
+// userUserUserDetailsResponseMessageJSON contains the JSON metadata for the struct
+// [UserUserUserDetailsResponseMessage]
+type userUserUserDetailsResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserUserUserDetailsResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type UserUserUserDetailsResponseSuccess bool
+
+const (
+	UserUserUserDetailsResponseSuccessTrue UserUserUserDetailsResponseSuccess = true
 )
 
 type UserUserEditUserParams struct {

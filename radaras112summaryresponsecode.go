@@ -33,7 +33,7 @@ func NewRadarAs112SummaryResponseCodeService(opts ...option.RequestOption) (r *R
 	return
 }
 
-// Percentage distribution of dns requests classified per Response Codes.
+// Percentage distribution of AS112 dns requests classified per Response Codes.
 func (r *RadarAs112SummaryResponseCodeService) List(ctx context.Context, query RadarAs112SummaryResponseCodeListParams, opts ...option.RequestOption) (res *RadarAs112SummaryResponseCodeListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "radar/as112/summary/response_codes"
@@ -61,7 +61,7 @@ func (r *RadarAs112SummaryResponseCodeListResponse) UnmarshalJSON(data []byte) (
 }
 
 type RadarAs112SummaryResponseCodeListResponseResult struct {
-	Meta     interface{}                                             `json:"meta,required"`
+	Meta     RadarAs112SummaryResponseCodeListResponseResultMeta     `json:"meta,required"`
 	Summary0 RadarAs112SummaryResponseCodeListResponseResultSummary0 `json:"summary_0,required"`
 	JSON     radarAs112SummaryResponseCodeListResponseResultJSON     `json:"-"`
 }
@@ -76,6 +76,101 @@ type radarAs112SummaryResponseCodeListResponseResultJSON struct {
 }
 
 func (r *RadarAs112SummaryResponseCodeListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAs112SummaryResponseCodeListResponseResultMeta struct {
+	DateRange      []RadarAs112SummaryResponseCodeListResponseResultMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                                            `json:"lastUpdated,required"`
+	Normalization  string                                                            `json:"normalization,required"`
+	ConfidenceInfo RadarAs112SummaryResponseCodeListResponseResultMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           radarAs112SummaryResponseCodeListResponseResultMetaJSON           `json:"-"`
+}
+
+// radarAs112SummaryResponseCodeListResponseResultMetaJSON contains the JSON
+// metadata for the struct [RadarAs112SummaryResponseCodeListResponseResultMeta]
+type radarAs112SummaryResponseCodeListResponseResultMetaJSON struct {
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	ConfidenceInfo apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RadarAs112SummaryResponseCodeListResponseResultMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAs112SummaryResponseCodeListResponseResultMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                                        `json:"startTime,required" format:"date-time"`
+	JSON      radarAs112SummaryResponseCodeListResponseResultMetaDateRangeJSON `json:"-"`
+}
+
+// radarAs112SummaryResponseCodeListResponseResultMetaDateRangeJSON contains the
+// JSON metadata for the struct
+// [RadarAs112SummaryResponseCodeListResponseResultMetaDateRange]
+type radarAs112SummaryResponseCodeListResponseResultMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarAs112SummaryResponseCodeListResponseResultMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAs112SummaryResponseCodeListResponseResultMetaConfidenceInfo struct {
+	Annotations []RadarAs112SummaryResponseCodeListResponseResultMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                                         `json:"level"`
+	JSON        radarAs112SummaryResponseCodeListResponseResultMetaConfidenceInfoJSON         `json:"-"`
+}
+
+// radarAs112SummaryResponseCodeListResponseResultMetaConfidenceInfoJSON contains
+// the JSON metadata for the struct
+// [RadarAs112SummaryResponseCodeListResponseResultMetaConfidenceInfo]
+type radarAs112SummaryResponseCodeListResponseResultMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarAs112SummaryResponseCodeListResponseResultMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAs112SummaryResponseCodeListResponseResultMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                                          `json:"dataSource,required"`
+	Description     string                                                                          `json:"description,required"`
+	EventType       string                                                                          `json:"eventType,required"`
+	IsInstantaneous interface{}                                                                     `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                                       `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                                          `json:"linkedUrl"`
+	StartTime       time.Time                                                                       `json:"startTime" format:"date-time"`
+	JSON            radarAs112SummaryResponseCodeListResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// radarAs112SummaryResponseCodeListResponseResultMetaConfidenceInfoAnnotationJSON
+// contains the JSON metadata for the struct
+// [RadarAs112SummaryResponseCodeListResponseResultMetaConfidenceInfoAnnotation]
+type radarAs112SummaryResponseCodeListResponseResultMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *RadarAs112SummaryResponseCodeListResponseResultMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -104,7 +199,7 @@ type RadarAs112SummaryResponseCodeListParams struct {
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of datetimes to filter the end of a series.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
@@ -135,6 +230,7 @@ type RadarAs112SummaryResponseCodeListParamsDateRange string
 
 const (
 	RadarAs112SummaryResponseCodeListParamsDateRange1d         RadarAs112SummaryResponseCodeListParamsDateRange = "1d"
+	RadarAs112SummaryResponseCodeListParamsDateRange2d         RadarAs112SummaryResponseCodeListParamsDateRange = "2d"
 	RadarAs112SummaryResponseCodeListParamsDateRange7d         RadarAs112SummaryResponseCodeListParamsDateRange = "7d"
 	RadarAs112SummaryResponseCodeListParamsDateRange14d        RadarAs112SummaryResponseCodeListParamsDateRange = "14d"
 	RadarAs112SummaryResponseCodeListParamsDateRange28d        RadarAs112SummaryResponseCodeListParamsDateRange = "28d"
@@ -142,6 +238,7 @@ const (
 	RadarAs112SummaryResponseCodeListParamsDateRange24w        RadarAs112SummaryResponseCodeListParamsDateRange = "24w"
 	RadarAs112SummaryResponseCodeListParamsDateRange52w        RadarAs112SummaryResponseCodeListParamsDateRange = "52w"
 	RadarAs112SummaryResponseCodeListParamsDateRange1dControl  RadarAs112SummaryResponseCodeListParamsDateRange = "1dControl"
+	RadarAs112SummaryResponseCodeListParamsDateRange2dControl  RadarAs112SummaryResponseCodeListParamsDateRange = "2dControl"
 	RadarAs112SummaryResponseCodeListParamsDateRange7dControl  RadarAs112SummaryResponseCodeListParamsDateRange = "7dControl"
 	RadarAs112SummaryResponseCodeListParamsDateRange14dControl RadarAs112SummaryResponseCodeListParamsDateRange = "14dControl"
 	RadarAs112SummaryResponseCodeListParamsDateRange28dControl RadarAs112SummaryResponseCodeListParamsDateRange = "28dControl"

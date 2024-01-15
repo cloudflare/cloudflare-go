@@ -24,10 +24,12 @@ func TestAccountGatewayRuleGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Gateways.Rules.Get(
+	_, err := client.Accounts.Gateway.Rules.Get(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
@@ -52,17 +54,19 @@ func TestAccountGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Gateways.Rules.Update(
+	_, err := client.Accounts.Gateway.Rules.Update(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.AccountGatewayRuleUpdateParams{
 			Action:        cloudflare.F(cloudflare.AccountGatewayRuleUpdateParamsActionAllow),
 			Name:          cloudflare.F("block bad websites"),
-			Description:   cloudflare.F("Block the bad websites based on host name"),
+			Description:   cloudflare.F("Block bad websites based on their host name."),
 			DevicePosture: cloudflare.F("any(device_posture.checks.passed[*] in {\"1308749e-fcfb-4ebc-b051-fe022b632644\"})"),
 			Enabled:       cloudflare.F(true),
 			Filters:       cloudflare.F([]cloudflare.AccountGatewayRuleUpdateParamsFilter{cloudflare.AccountGatewayRuleUpdateParamsFilterHTTP}),
@@ -96,6 +100,40 @@ func TestAccountGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 					Duration: cloudflare.F("300s"),
 					Enforce:  cloudflare.F(true),
 				}),
+				DNSResolvers: cloudflare.F(cloudflare.AccountGatewayRuleUpdateParamsRuleSettingsDNSResolvers{
+					Ipv4: cloudflare.F([]cloudflare.AccountGatewayRuleUpdateParamsRuleSettingsDNSResolversIpv4{{
+						IP:                         cloudflare.F("2001:DB8::/64"),
+						Port:                       cloudflare.F(int64(5053)),
+						RouteThroughPrivateNetwork: cloudflare.F(true),
+						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+					}, {
+						IP:                         cloudflare.F("2001:DB8::/64"),
+						Port:                       cloudflare.F(int64(5053)),
+						RouteThroughPrivateNetwork: cloudflare.F(true),
+						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+					}, {
+						IP:                         cloudflare.F("2001:DB8::/64"),
+						Port:                       cloudflare.F(int64(5053)),
+						RouteThroughPrivateNetwork: cloudflare.F(true),
+						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+					}}),
+					Ipv6: cloudflare.F([]cloudflare.AccountGatewayRuleUpdateParamsRuleSettingsDNSResolversIpv6{{
+						IP:                         cloudflare.F("2001:DB8::/64"),
+						Port:                       cloudflare.F(int64(5053)),
+						RouteThroughPrivateNetwork: cloudflare.F(true),
+						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+					}, {
+						IP:                         cloudflare.F("2001:DB8::/64"),
+						Port:                       cloudflare.F(int64(5053)),
+						RouteThroughPrivateNetwork: cloudflare.F(true),
+						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+					}, {
+						IP:                         cloudflare.F("2001:DB8::/64"),
+						Port:                       cloudflare.F(int64(5053)),
+						RouteThroughPrivateNetwork: cloudflare.F(true),
+						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+					}}),
+				}),
 				Egress: cloudflare.F(cloudflare.AccountGatewayRuleUpdateParamsRuleSettingsEgress{
 					Ipv4:         cloudflare.F("192.0.2.2"),
 					Ipv4Fallback: cloudflare.F("192.0.2.3"),
@@ -103,15 +141,22 @@ func TestAccountGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 				}),
 				InsecureDisableDnssecValidation: cloudflare.F(false),
 				IPCategories:                    cloudflare.F(true),
+				IPIndicatorFeeds:                cloudflare.F(true),
 				L4override: cloudflare.F(cloudflare.AccountGatewayRuleUpdateParamsRuleSettingsL4override{
 					IP:   cloudflare.F("1.1.1.1"),
 					Port: cloudflare.F(int64(0)),
+				}),
+				NotificationSettings: cloudflare.F(cloudflare.AccountGatewayRuleUpdateParamsRuleSettingsNotificationSettings{
+					Enabled:    cloudflare.F(true),
+					Msg:        cloudflare.F("string"),
+					SupportURL: cloudflare.F("string"),
 				}),
 				OverrideHost: cloudflare.F("example.com"),
 				OverrideIPs:  cloudflare.F([]string{"1.1.1.1", "2.2.2.2"}),
 				PayloadLog: cloudflare.F(cloudflare.AccountGatewayRuleUpdateParamsRuleSettingsPayloadLog{
 					Enabled: cloudflare.F(true),
 				}),
+				ResolveDNSThroughCloudflare: cloudflare.F(true),
 				UntrustedCert: cloudflare.F(cloudflare.AccountGatewayRuleUpdateParamsRuleSettingsUntrustedCert{
 					Action: cloudflare.F(cloudflare.AccountGatewayRuleUpdateParamsRuleSettingsUntrustedCertActionError),
 				}),
@@ -149,10 +194,12 @@ func TestAccountGatewayRuleDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Gateways.Rules.Delete(
+	_, err := client.Accounts.Gateway.Rules.Delete(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
@@ -177,16 +224,18 @@ func TestAccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleWithOptio
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Gateways.Rules.ZeroTrustGatewayRulesNewZeroTrustGatewayRule(
+	_, err := client.Accounts.Gateway.Rules.ZeroTrustGatewayRulesNewZeroTrustGatewayRule(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		cloudflare.AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParams{
 			Action:        cloudflare.F(cloudflare.AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsActionAllow),
 			Name:          cloudflare.F("block bad websites"),
-			Description:   cloudflare.F("Block the bad websites based on host name"),
+			Description:   cloudflare.F("Block bad websites based on their host name."),
 			DevicePosture: cloudflare.F("any(device_posture.checks.passed[*] in {\"1308749e-fcfb-4ebc-b051-fe022b632644\"})"),
 			Enabled:       cloudflare.F(true),
 			Filters:       cloudflare.F([]cloudflare.AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsFilter{cloudflare.AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsFilterHTTP}),
@@ -220,6 +269,40 @@ func TestAccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleWithOptio
 					Duration: cloudflare.F("300s"),
 					Enforce:  cloudflare.F(true),
 				}),
+				DNSResolvers: cloudflare.F(cloudflare.AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsDNSResolvers{
+					Ipv4: cloudflare.F([]cloudflare.AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsDNSResolversIpv4{{
+						IP:                         cloudflare.F("2001:DB8::/64"),
+						Port:                       cloudflare.F(int64(5053)),
+						RouteThroughPrivateNetwork: cloudflare.F(true),
+						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+					}, {
+						IP:                         cloudflare.F("2001:DB8::/64"),
+						Port:                       cloudflare.F(int64(5053)),
+						RouteThroughPrivateNetwork: cloudflare.F(true),
+						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+					}, {
+						IP:                         cloudflare.F("2001:DB8::/64"),
+						Port:                       cloudflare.F(int64(5053)),
+						RouteThroughPrivateNetwork: cloudflare.F(true),
+						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+					}}),
+					Ipv6: cloudflare.F([]cloudflare.AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsDNSResolversIpv6{{
+						IP:                         cloudflare.F("2001:DB8::/64"),
+						Port:                       cloudflare.F(int64(5053)),
+						RouteThroughPrivateNetwork: cloudflare.F(true),
+						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+					}, {
+						IP:                         cloudflare.F("2001:DB8::/64"),
+						Port:                       cloudflare.F(int64(5053)),
+						RouteThroughPrivateNetwork: cloudflare.F(true),
+						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+					}, {
+						IP:                         cloudflare.F("2001:DB8::/64"),
+						Port:                       cloudflare.F(int64(5053)),
+						RouteThroughPrivateNetwork: cloudflare.F(true),
+						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+					}}),
+				}),
 				Egress: cloudflare.F(cloudflare.AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsEgress{
 					Ipv4:         cloudflare.F("192.0.2.2"),
 					Ipv4Fallback: cloudflare.F("192.0.2.3"),
@@ -227,15 +310,22 @@ func TestAccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleWithOptio
 				}),
 				InsecureDisableDnssecValidation: cloudflare.F(false),
 				IPCategories:                    cloudflare.F(true),
+				IPIndicatorFeeds:                cloudflare.F(true),
 				L4override: cloudflare.F(cloudflare.AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsL4override{
 					IP:   cloudflare.F("1.1.1.1"),
 					Port: cloudflare.F(int64(0)),
+				}),
+				NotificationSettings: cloudflare.F(cloudflare.AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsNotificationSettings{
+					Enabled:    cloudflare.F(true),
+					Msg:        cloudflare.F("string"),
+					SupportURL: cloudflare.F("string"),
 				}),
 				OverrideHost: cloudflare.F("example.com"),
 				OverrideIPs:  cloudflare.F([]string{"1.1.1.1", "2.2.2.2"}),
 				PayloadLog: cloudflare.F(cloudflare.AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsPayloadLog{
 					Enabled: cloudflare.F(true),
 				}),
+				ResolveDNSThroughCloudflare: cloudflare.F(true),
 				UntrustedCert: cloudflare.F(cloudflare.AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsUntrustedCert{
 					Action: cloudflare.F(cloudflare.AccountGatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsUntrustedCertActionError),
 				}),
@@ -273,10 +363,12 @@ func TestAccountGatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRules(t *tes
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Gateways.Rules.ZeroTrustGatewayRulesListZeroTrustGatewayRules(context.TODO(), "699d98642c564d2e855e9661899b7252")
+	_, err := client.Accounts.Gateway.Rules.ZeroTrustGatewayRulesListZeroTrustGatewayRules(context.TODO(), "699d98642c564d2e855e9661899b7252")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

@@ -36,7 +36,7 @@ func NewAccountCustomNService(opts ...option.RequestOption) (r *AccountCustomNSe
 }
 
 // Delete Account Custom Nameserver
-func (r *AccountCustomNService) Delete(ctx context.Context, identifier string, nsName string, opts ...option.RequestOption) (res *EmptyResponse, err error) {
+func (r *AccountCustomNService) Delete(ctx context.Context, identifier string, nsName string, opts ...option.RequestOption) (res *AccountCustomNDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/custom_ns/%s", identifier, nsName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -44,7 +44,7 @@ func (r *AccountCustomNService) Delete(ctx context.Context, identifier string, n
 }
 
 // Add Account Custom Nameserver
-func (r *AccountCustomNService) AccountLevelCustomNameserversAddAccountCustomNameserver(ctx context.Context, identifier string, body AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverParams, opts ...option.RequestOption) (res *AcnsResponseSingle, err error) {
+func (r *AccountCustomNService) AccountLevelCustomNameserversAddAccountCustomNameserver(ctx context.Context, identifier string, body AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverParams, opts ...option.RequestOption) (res *AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/custom_ns", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -52,26 +52,26 @@ func (r *AccountCustomNService) AccountLevelCustomNameserversAddAccountCustomNam
 }
 
 // List an account's custom nameservers.
-func (r *AccountCustomNService) AccountLevelCustomNameserversListAccountCustomNameservers(ctx context.Context, identifier string, opts ...option.RequestOption) (res *AcnsResponseCollection, err error) {
+func (r *AccountCustomNService) AccountLevelCustomNameserversListAccountCustomNameservers(ctx context.Context, identifier string, opts ...option.RequestOption) (res *AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/custom_ns", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type AcnsResponseCollection struct {
-	Errors     []AcnsResponseCollectionError    `json:"errors"`
-	Messages   []AcnsResponseCollectionMessage  `json:"messages"`
-	Result     []AcnsResponseCollectionResult   `json:"result"`
-	ResultInfo AcnsResponseCollectionResultInfo `json:"result_info"`
+type AccountCustomNDeleteResponse struct {
+	Errors     []AccountCustomNDeleteResponseError    `json:"errors"`
+	Messages   []AccountCustomNDeleteResponseMessage  `json:"messages"`
+	Result     []interface{}                          `json:"result"`
+	ResultInfo AccountCustomNDeleteResponseResultInfo `json:"result_info"`
 	// Whether the API call was successful
-	Success AcnsResponseCollectionSuccess `json:"success"`
-	JSON    acnsResponseCollectionJSON    `json:"-"`
+	Success AccountCustomNDeleteResponseSuccess `json:"success"`
+	JSON    accountCustomNDeleteResponseJSON    `json:"-"`
 }
 
-// acnsResponseCollectionJSON contains the JSON metadata for the struct
-// [AcnsResponseCollection]
-type acnsResponseCollectionJSON struct {
+// accountCustomNDeleteResponseJSON contains the JSON metadata for the struct
+// [AccountCustomNDeleteResponse]
+type accountCustomNDeleteResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -81,115 +81,49 @@ type acnsResponseCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AcnsResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountCustomNDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AcnsResponseCollectionError struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    acnsResponseCollectionErrorJSON `json:"-"`
+type AccountCustomNDeleteResponseError struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    accountCustomNDeleteResponseErrorJSON `json:"-"`
 }
 
-// acnsResponseCollectionErrorJSON contains the JSON metadata for the struct
-// [AcnsResponseCollectionError]
-type acnsResponseCollectionErrorJSON struct {
+// accountCustomNDeleteResponseErrorJSON contains the JSON metadata for the struct
+// [AccountCustomNDeleteResponseError]
+type accountCustomNDeleteResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AcnsResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountCustomNDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AcnsResponseCollectionMessage struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    acnsResponseCollectionMessageJSON `json:"-"`
+type AccountCustomNDeleteResponseMessage struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    accountCustomNDeleteResponseMessageJSON `json:"-"`
 }
 
-// acnsResponseCollectionMessageJSON contains the JSON metadata for the struct
-// [AcnsResponseCollectionMessage]
-type acnsResponseCollectionMessageJSON struct {
+// accountCustomNDeleteResponseMessageJSON contains the JSON metadata for the
+// struct [AccountCustomNDeleteResponseMessage]
+type accountCustomNDeleteResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AcnsResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountCustomNDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// A single account custom nameserver.
-type AcnsResponseCollectionResult struct {
-	// A and AAAA records associated with the nameserver.
-	DNSRecords []AcnsResponseCollectionResultDNSRecord `json:"dns_records,required"`
-	// The FQDN of the name server.
-	NsName string `json:"ns_name,required" format:"hostname"`
-	// Verification status of the nameserver.
-	Status AcnsResponseCollectionResultStatus `json:"status,required"`
-	// Identifier
-	ZoneTag string                           `json:"zone_tag,required"`
-	JSON    acnsResponseCollectionResultJSON `json:"-"`
-}
-
-// acnsResponseCollectionResultJSON contains the JSON metadata for the struct
-// [AcnsResponseCollectionResult]
-type acnsResponseCollectionResultJSON struct {
-	DNSRecords  apijson.Field
-	NsName      apijson.Field
-	Status      apijson.Field
-	ZoneTag     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AcnsResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AcnsResponseCollectionResultDNSRecord struct {
-	// DNS record type.
-	Type AcnsResponseCollectionResultDNSRecordsType `json:"type"`
-	// DNS record contents (an IPv4 or IPv6 address).
-	Value string                                    `json:"value"`
-	JSON  acnsResponseCollectionResultDNSRecordJSON `json:"-"`
-}
-
-// acnsResponseCollectionResultDNSRecordJSON contains the JSON metadata for the
-// struct [AcnsResponseCollectionResultDNSRecord]
-type acnsResponseCollectionResultDNSRecordJSON struct {
-	Type        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AcnsResponseCollectionResultDNSRecord) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// DNS record type.
-type AcnsResponseCollectionResultDNSRecordsType string
-
-const (
-	AcnsResponseCollectionResultDNSRecordsTypeA    AcnsResponseCollectionResultDNSRecordsType = "A"
-	AcnsResponseCollectionResultDNSRecordsTypeAaaa AcnsResponseCollectionResultDNSRecordsType = "AAAA"
-)
-
-// Verification status of the nameserver.
-type AcnsResponseCollectionResultStatus string
-
-const (
-	AcnsResponseCollectionResultStatusMoved    AcnsResponseCollectionResultStatus = "moved"
-	AcnsResponseCollectionResultStatusPending  AcnsResponseCollectionResultStatus = "pending"
-	AcnsResponseCollectionResultStatusVerified AcnsResponseCollectionResultStatus = "verified"
-)
-
-type AcnsResponseCollectionResultInfo struct {
+type AccountCustomNDeleteResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -197,13 +131,13 @@ type AcnsResponseCollectionResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                              `json:"total_count"`
-	JSON       acnsResponseCollectionResultInfoJSON `json:"-"`
+	TotalCount float64                                    `json:"total_count"`
+	JSON       accountCustomNDeleteResponseResultInfoJSON `json:"-"`
 }
 
-// acnsResponseCollectionResultInfoJSON contains the JSON metadata for the struct
-// [AcnsResponseCollectionResultInfo]
-type acnsResponseCollectionResultInfoJSON struct {
+// accountCustomNDeleteResponseResultInfoJSON contains the JSON metadata for the
+// struct [AccountCustomNDeleteResponseResultInfo]
+type accountCustomNDeleteResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -212,30 +146,31 @@ type acnsResponseCollectionResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AcnsResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountCustomNDeleteResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type AcnsResponseCollectionSuccess bool
+type AccountCustomNDeleteResponseSuccess bool
 
 const (
-	AcnsResponseCollectionSuccessTrue AcnsResponseCollectionSuccess = true
+	AccountCustomNDeleteResponseSuccessTrue AccountCustomNDeleteResponseSuccess = true
 )
 
-type AcnsResponseSingle struct {
-	Errors   []AcnsResponseSingleError   `json:"errors"`
-	Messages []AcnsResponseSingleMessage `json:"messages"`
+type AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponse struct {
+	Errors   []AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseError   `json:"errors"`
+	Messages []AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseMessage `json:"messages"`
 	// A single account custom nameserver.
-	Result AcnsResponseSingleResult `json:"result"`
+	Result AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success AcnsResponseSingleSuccess `json:"success"`
-	JSON    acnsResponseSingleJSON    `json:"-"`
+	Success AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseSuccess `json:"success"`
+	JSON    accountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseJSON    `json:"-"`
 }
 
-// acnsResponseSingleJSON contains the JSON metadata for the struct
-// [AcnsResponseSingle]
-type acnsResponseSingleJSON struct {
+// accountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseJSON
+// contains the JSON metadata for the struct
+// [AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponse]
+type accountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -244,133 +179,142 @@ type acnsResponseSingleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AcnsResponseSingle) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AcnsResponseSingleError struct {
-	Code    int64                       `json:"code,required"`
-	Message string                      `json:"message,required"`
-	JSON    acnsResponseSingleErrorJSON `json:"-"`
+type AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseError struct {
+	Code    int64                                                                                  `json:"code,required"`
+	Message string                                                                                 `json:"message,required"`
+	JSON    accountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseErrorJSON `json:"-"`
 }
 
-// acnsResponseSingleErrorJSON contains the JSON metadata for the struct
-// [AcnsResponseSingleError]
-type acnsResponseSingleErrorJSON struct {
+// accountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseError]
+type accountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AcnsResponseSingleError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AcnsResponseSingleMessage struct {
-	Code    int64                         `json:"code,required"`
-	Message string                        `json:"message,required"`
-	JSON    acnsResponseSingleMessageJSON `json:"-"`
+type AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseMessage struct {
+	Code    int64                                                                                    `json:"code,required"`
+	Message string                                                                                   `json:"message,required"`
+	JSON    accountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseMessageJSON `json:"-"`
 }
 
-// acnsResponseSingleMessageJSON contains the JSON metadata for the struct
-// [AcnsResponseSingleMessage]
-type acnsResponseSingleMessageJSON struct {
+// accountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseMessage]
+type accountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AcnsResponseSingleMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A single account custom nameserver.
-type AcnsResponseSingleResult struct {
+type AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResult struct {
 	// A and AAAA records associated with the nameserver.
-	DNSRecords []AcnsResponseSingleResultDNSRecord `json:"dns_records,required"`
+	DNSRecords []AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResultDNSRecord `json:"dns_records,required"`
 	// The FQDN of the name server.
 	NsName string `json:"ns_name,required" format:"hostname"`
 	// Verification status of the nameserver.
-	Status AcnsResponseSingleResultStatus `json:"status,required"`
+	Status AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResultStatus `json:"status,required"`
 	// Identifier
-	ZoneTag string                       `json:"zone_tag,required"`
-	JSON    acnsResponseSingleResultJSON `json:"-"`
+	ZoneTag string `json:"zone_tag,required"`
+	// The number of the set that this name server belongs to.
+	NsSet float64                                                                                 `json:"ns_set"`
+	JSON  accountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResultJSON `json:"-"`
 }
 
-// acnsResponseSingleResultJSON contains the JSON metadata for the struct
-// [AcnsResponseSingleResult]
-type acnsResponseSingleResultJSON struct {
+// accountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResult]
+type accountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResultJSON struct {
 	DNSRecords  apijson.Field
 	NsName      apijson.Field
 	Status      apijson.Field
 	ZoneTag     apijson.Field
+	NsSet       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AcnsResponseSingleResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AcnsResponseSingleResultDNSRecord struct {
+type AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResultDNSRecord struct {
 	// DNS record type.
-	Type AcnsResponseSingleResultDNSRecordsType `json:"type"`
+	Type AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResultDNSRecordsType `json:"type"`
 	// DNS record contents (an IPv4 or IPv6 address).
-	Value string                                `json:"value"`
-	JSON  acnsResponseSingleResultDNSRecordJSON `json:"-"`
+	Value string                                                                                           `json:"value"`
+	JSON  accountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResultDNSRecordJSON `json:"-"`
 }
 
-// acnsResponseSingleResultDNSRecordJSON contains the JSON metadata for the struct
-// [AcnsResponseSingleResultDNSRecord]
-type acnsResponseSingleResultDNSRecordJSON struct {
+// accountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResultDNSRecordJSON
+// contains the JSON metadata for the struct
+// [AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResultDNSRecord]
+type accountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResultDNSRecordJSON struct {
 	Type        apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AcnsResponseSingleResultDNSRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResultDNSRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // DNS record type.
-type AcnsResponseSingleResultDNSRecordsType string
+type AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResultDNSRecordsType string
 
 const (
-	AcnsResponseSingleResultDNSRecordsTypeA    AcnsResponseSingleResultDNSRecordsType = "A"
-	AcnsResponseSingleResultDNSRecordsTypeAaaa AcnsResponseSingleResultDNSRecordsType = "AAAA"
+	AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResultDNSRecordsTypeA    AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResultDNSRecordsType = "A"
+	AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResultDNSRecordsTypeAaaa AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResultDNSRecordsType = "AAAA"
 )
 
 // Verification status of the nameserver.
-type AcnsResponseSingleResultStatus string
+type AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResultStatus string
 
 const (
-	AcnsResponseSingleResultStatusMoved    AcnsResponseSingleResultStatus = "moved"
-	AcnsResponseSingleResultStatusPending  AcnsResponseSingleResultStatus = "pending"
-	AcnsResponseSingleResultStatusVerified AcnsResponseSingleResultStatus = "verified"
+	AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResultStatusMoved    AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResultStatus = "moved"
+	AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResultStatusPending  AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResultStatus = "pending"
+	AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResultStatusVerified AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseResultStatus = "verified"
 )
 
 // Whether the API call was successful
-type AcnsResponseSingleSuccess bool
+type AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseSuccess bool
 
 const (
-	AcnsResponseSingleSuccessTrue AcnsResponseSingleSuccess = true
+	AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseSuccessTrue AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverResponseSuccess = true
 )
 
-type EmptyResponse struct {
-	Errors     []EmptyResponseError    `json:"errors"`
-	Messages   []EmptyResponseMessage  `json:"messages"`
-	Result     []interface{}           `json:"result"`
-	ResultInfo EmptyResponseResultInfo `json:"result_info"`
+type AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponse struct {
+	Errors     []AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseError    `json:"errors"`
+	Messages   []AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseMessage  `json:"messages"`
+	Result     []AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResult   `json:"result"`
+	ResultInfo AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultInfo `json:"result_info"`
 	// Whether the API call was successful
-	Success EmptyResponseSuccess `json:"success"`
-	JSON    emptyResponseJSON    `json:"-"`
+	Success AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseSuccess `json:"success"`
+	JSON    accountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseJSON    `json:"-"`
 }
 
-// emptyResponseJSON contains the JSON metadata for the struct [EmptyResponse]
-type emptyResponseJSON struct {
+// accountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseJSON
+// contains the JSON metadata for the struct
+// [AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponse]
+type accountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -380,49 +324,122 @@ type emptyResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmptyResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type EmptyResponseError struct {
-	Code    int64                  `json:"code,required"`
-	Message string                 `json:"message,required"`
-	JSON    emptyResponseErrorJSON `json:"-"`
+type AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseError struct {
+	Code    int64                                                                                    `json:"code,required"`
+	Message string                                                                                   `json:"message,required"`
+	JSON    accountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseErrorJSON `json:"-"`
 }
 
-// emptyResponseErrorJSON contains the JSON metadata for the struct
-// [EmptyResponseError]
-type emptyResponseErrorJSON struct {
+// accountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseError]
+type accountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmptyResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type EmptyResponseMessage struct {
-	Code    int64                    `json:"code,required"`
-	Message string                   `json:"message,required"`
-	JSON    emptyResponseMessageJSON `json:"-"`
+type AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseMessage struct {
+	Code    int64                                                                                      `json:"code,required"`
+	Message string                                                                                     `json:"message,required"`
+	JSON    accountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseMessageJSON `json:"-"`
 }
 
-// emptyResponseMessageJSON contains the JSON metadata for the struct
-// [EmptyResponseMessage]
-type emptyResponseMessageJSON struct {
+// accountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseMessage]
+type accountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmptyResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type EmptyResponseResultInfo struct {
+// A single account custom nameserver.
+type AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResult struct {
+	// A and AAAA records associated with the nameserver.
+	DNSRecords []AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultDNSRecord `json:"dns_records,required"`
+	// The FQDN of the name server.
+	NsName string `json:"ns_name,required" format:"hostname"`
+	// Verification status of the nameserver.
+	Status AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultStatus `json:"status,required"`
+	// Identifier
+	ZoneTag string `json:"zone_tag,required"`
+	// The number of the set that this name server belongs to.
+	NsSet float64                                                                                   `json:"ns_set"`
+	JSON  accountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultJSON `json:"-"`
+}
+
+// accountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResult]
+type accountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultJSON struct {
+	DNSRecords  apijson.Field
+	NsName      apijson.Field
+	Status      apijson.Field
+	ZoneTag     apijson.Field
+	NsSet       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultDNSRecord struct {
+	// DNS record type.
+	Type AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultDNSRecordsType `json:"type"`
+	// DNS record contents (an IPv4 or IPv6 address).
+	Value string                                                                                             `json:"value"`
+	JSON  accountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultDNSRecordJSON `json:"-"`
+}
+
+// accountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultDNSRecordJSON
+// contains the JSON metadata for the struct
+// [AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultDNSRecord]
+type accountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultDNSRecordJSON struct {
+	Type        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultDNSRecord) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// DNS record type.
+type AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultDNSRecordsType string
+
+const (
+	AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultDNSRecordsTypeA    AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultDNSRecordsType = "A"
+	AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultDNSRecordsTypeAaaa AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultDNSRecordsType = "AAAA"
+)
+
+// Verification status of the nameserver.
+type AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultStatus string
+
+const (
+	AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultStatusMoved    AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultStatus = "moved"
+	AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultStatusPending  AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultStatus = "pending"
+	AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultStatusVerified AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultStatus = "verified"
+)
+
+type AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -430,13 +447,14 @@ type EmptyResponseResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                     `json:"total_count"`
-	JSON       emptyResponseResultInfoJSON `json:"-"`
+	TotalCount float64                                                                                       `json:"total_count"`
+	JSON       accountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultInfoJSON `json:"-"`
 }
 
-// emptyResponseResultInfoJSON contains the JSON metadata for the struct
-// [EmptyResponseResultInfo]
-type emptyResponseResultInfoJSON struct {
+// accountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultInfo]
+type accountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -445,20 +463,22 @@ type emptyResponseResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmptyResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type EmptyResponseSuccess bool
+type AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseSuccess bool
 
 const (
-	EmptyResponseSuccessTrue EmptyResponseSuccess = true
+	AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseSuccessTrue AccountCustomNAccountLevelCustomNameserversListAccountCustomNameserversResponseSuccess = true
 )
 
 type AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverParams struct {
 	// The FQDN of the name server.
 	NsName param.Field[string] `json:"ns_name,required" format:"hostname"`
+	// The number of the set that this name server belongs to.
+	NsSet param.Field[float64] `json:"ns_set"`
 }
 
 func (r AccountCustomNAccountLevelCustomNameserversAddAccountCustomNameserverParams) MarshalJSON() (data []byte, err error) {

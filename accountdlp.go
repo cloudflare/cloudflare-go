@@ -12,6 +12,7 @@ import (
 // service directly, and instead use the [NewAccountDlpService] method instead.
 type AccountDlpService struct {
 	Options     []option.RequestOption
+	Datasets    *AccountDlpDatasetService
 	Patterns    *AccountDlpPatternService
 	PayloadLogs *AccountDlpPayloadLogService
 	Profiles    *AccountDlpProfileService
@@ -23,6 +24,7 @@ type AccountDlpService struct {
 func NewAccountDlpService(opts ...option.RequestOption) (r *AccountDlpService) {
 	r = &AccountDlpService{}
 	r.Options = opts
+	r.Datasets = NewAccountDlpDatasetService(opts...)
 	r.Patterns = NewAccountDlpPatternService(opts...)
 	r.PayloadLogs = NewAccountDlpPayloadLogService(opts...)
 	r.Profiles = NewAccountDlpProfileService(opts...)

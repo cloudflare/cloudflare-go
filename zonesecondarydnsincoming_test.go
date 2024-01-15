@@ -24,8 +24,10 @@ func TestZoneSecondaryDNSIncomingDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.SecondaryDNS.Incomings.Delete(context.TODO(), "269d8f4853475ca241c4e730be286b20")
 	if err != nil {
@@ -48,8 +50,10 @@ func TestZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfig
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.SecondaryDNS.Incomings.SecondaryDNSSecondaryZoneNewSecondaryZoneConfiguration(
 		context.TODO(),
@@ -80,8 +84,10 @@ func TestZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigura
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.SecondaryDNS.Incomings.SecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetails(context.TODO(), "269d8f4853475ca241c4e730be286b20")
 	if err != nil {
@@ -104,8 +110,10 @@ func TestZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneCon
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.SecondaryDNS.Incomings.SecondaryDNSSecondaryZoneUpdateSecondaryZoneConfiguration(
 		context.TODO(),

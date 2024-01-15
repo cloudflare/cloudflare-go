@@ -6,11 +6,14 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // AccountIntelMiscategorizationService contains methods and other services that
@@ -32,12 +35,103 @@ func NewAccountIntelMiscategorizationService(opts ...option.RequestOption) (r *A
 }
 
 // Create Miscategorization
-func (r *AccountIntelMiscategorizationService) MiscategorizationNewMiscategorization(ctx context.Context, accountIdentifier string, body AccountIntelMiscategorizationMiscategorizationNewMiscategorizationParams, opts ...option.RequestOption) (res *APIResponseSingle, err error) {
+func (r *AccountIntelMiscategorizationService) MiscategorizationNewMiscategorization(ctx context.Context, accountIdentifier string, body AccountIntelMiscategorizationMiscategorizationNewMiscategorizationParams, opts ...option.RequestOption) (res *AccountIntelMiscategorizationMiscategorizationNewMiscategorizationResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/intel/miscategorization", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
+
+type AccountIntelMiscategorizationMiscategorizationNewMiscategorizationResponse struct {
+	Errors   []AccountIntelMiscategorizationMiscategorizationNewMiscategorizationResponseError   `json:"errors"`
+	Messages []AccountIntelMiscategorizationMiscategorizationNewMiscategorizationResponseMessage `json:"messages"`
+	Result   AccountIntelMiscategorizationMiscategorizationNewMiscategorizationResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountIntelMiscategorizationMiscategorizationNewMiscategorizationResponseSuccess `json:"success"`
+	JSON    accountIntelMiscategorizationMiscategorizationNewMiscategorizationResponseJSON    `json:"-"`
+}
+
+// accountIntelMiscategorizationMiscategorizationNewMiscategorizationResponseJSON
+// contains the JSON metadata for the struct
+// [AccountIntelMiscategorizationMiscategorizationNewMiscategorizationResponse]
+type accountIntelMiscategorizationMiscategorizationNewMiscategorizationResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountIntelMiscategorizationMiscategorizationNewMiscategorizationResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountIntelMiscategorizationMiscategorizationNewMiscategorizationResponseError struct {
+	Code    int64                                                                               `json:"code,required"`
+	Message string                                                                              `json:"message,required"`
+	JSON    accountIntelMiscategorizationMiscategorizationNewMiscategorizationResponseErrorJSON `json:"-"`
+}
+
+// accountIntelMiscategorizationMiscategorizationNewMiscategorizationResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountIntelMiscategorizationMiscategorizationNewMiscategorizationResponseError]
+type accountIntelMiscategorizationMiscategorizationNewMiscategorizationResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountIntelMiscategorizationMiscategorizationNewMiscategorizationResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountIntelMiscategorizationMiscategorizationNewMiscategorizationResponseMessage struct {
+	Code    int64                                                                                 `json:"code,required"`
+	Message string                                                                                `json:"message,required"`
+	JSON    accountIntelMiscategorizationMiscategorizationNewMiscategorizationResponseMessageJSON `json:"-"`
+}
+
+// accountIntelMiscategorizationMiscategorizationNewMiscategorizationResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountIntelMiscategorizationMiscategorizationNewMiscategorizationResponseMessage]
+type accountIntelMiscategorizationMiscategorizationNewMiscategorizationResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountIntelMiscategorizationMiscategorizationNewMiscategorizationResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Union satisfied by
+// [AccountIntelMiscategorizationMiscategorizationNewMiscategorizationResponseResultUnknown]
+// or [shared.UnionString].
+type AccountIntelMiscategorizationMiscategorizationNewMiscategorizationResponseResult interface {
+	ImplementsAccountIntelMiscategorizationMiscategorizationNewMiscategorizationResponseResult()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccountIntelMiscategorizationMiscategorizationNewMiscategorizationResponseResult)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.String,
+			DiscriminatorValue: "",
+			Type:               reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Whether the API call was successful
+type AccountIntelMiscategorizationMiscategorizationNewMiscategorizationResponseSuccess bool
+
+const (
+	AccountIntelMiscategorizationMiscategorizationNewMiscategorizationResponseSuccessTrue AccountIntelMiscategorizationMiscategorizationNewMiscategorizationResponseSuccess = true
+)
 
 type AccountIntelMiscategorizationMiscategorizationNewMiscategorizationParams struct {
 	// Content category IDs to add.

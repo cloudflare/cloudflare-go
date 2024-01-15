@@ -31,7 +31,8 @@ func NewAccountStorageKvNamespaceMetadataService(opts ...option.RequestOption) (
 }
 
 // Returns the metadata associated with the given key in the given namespace. Use
-// URL-encoding to use special characters (e.g. :, !, %) in the key name.
+// URL-encoding to use special characters (for example, `:`, `!`, `%`) in the key
+// name.
 func (r *AccountStorageKvNamespaceMetadataService) Get(ctx context.Context, accountIdentifier string, namespaceIdentifier string, keyName string, opts ...option.RequestOption) (res *AccountStorageKvNamespaceMetadataGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/metadata/%s", accountIdentifier, namespaceIdentifier, keyName)

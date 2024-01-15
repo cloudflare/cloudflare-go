@@ -6,7 +6,6 @@ import (
 	"context"
 	"net/http"
 	"net/url"
-	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
@@ -33,7 +32,10 @@ func NewRadarRankingTopService(opts ...option.RequestOption) (r *RadarRankingTop
 	return
 }
 
-// Gets Top Domains Rank globally or by country.
+// Get top or trending domains based on their rank. Popular domains are domains of
+// broad appeal based on how people use the Internet. Trending domains are domains
+// that are generating a surge in interest. For more information on top domains,
+// see https://blog.cloudflare.com/radar-domain-rankings/.
 func (r *RadarRankingTopService) List(ctx context.Context, query RadarRankingTopListParams, opts ...option.RequestOption) (res *RadarRankingTopListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "radar/ranking/top"
@@ -114,29 +116,53 @@ func (r *RadarRankingTopListResponseResultMetaTop0) UnmarshalJSON(data []byte) (
 }
 
 type RadarRankingTopListResponseResultTop0 struct {
-	Categories []string                                  `json:"categories,required"`
-	Domain     string                                    `json:"domain,required"`
-	Rank       int64                                     `json:"rank,required"`
-	JSON       radarRankingTopListResponseResultTop0JSON `json:"-"`
+	Categories []RadarRankingTopListResponseResultTop0Category `json:"categories,required"`
+	Domain     string                                          `json:"domain,required"`
+	Rank       int64                                           `json:"rank,required"`
+	// Only available in TRENDING rankings.
+	PctRankChange float64                                   `json:"pctRankChange"`
+	JSON          radarRankingTopListResponseResultTop0JSON `json:"-"`
 }
 
 // radarRankingTopListResponseResultTop0JSON contains the JSON metadata for the
 // struct [RadarRankingTopListResponseResultTop0]
 type radarRankingTopListResponseResultTop0JSON struct {
-	Categories  apijson.Field
-	Domain      apijson.Field
-	Rank        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Categories    apijson.Field
+	Domain        apijson.Field
+	Rank          apijson.Field
+	PctRankChange apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *RadarRankingTopListResponseResultTop0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type RadarRankingTopListResponseResultTop0Category struct {
+	ID              float64                                           `json:"id,required"`
+	Name            string                                            `json:"name,required"`
+	SuperCategoryID float64                                           `json:"superCategoryId,required"`
+	JSON            radarRankingTopListResponseResultTop0CategoryJSON `json:"-"`
+}
+
+// radarRankingTopListResponseResultTop0CategoryJSON contains the JSON metadata for
+// the struct [RadarRankingTopListResponseResultTop0Category]
+type radarRankingTopListResponseResultTop0CategoryJSON struct {
+	ID              apijson.Field
+	Name            apijson.Field
+	SuperCategoryID apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *RadarRankingTopListResponseResultTop0Category) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type RadarRankingTopListParams struct {
 	// Array of dates to filter the ranking.
-	Date param.Field[[]time.Time] `query:"date" format:"date"`
+	Date param.Field[[]string] `query:"date"`
 	// Format results are returned in.
 	Format param.Field[RadarRankingTopListParamsFormat] `query:"format"`
 	// Limit the number of objects in the response.
@@ -145,6 +171,8 @@ type RadarRankingTopListParams struct {
 	Location param.Field[[]string] `query:"location"`
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
+	// The ranking type.
+	RankingType param.Field[RadarRankingTopListParamsRankingType] `query:"rankingType"`
 }
 
 // URLQuery serializes [RadarRankingTopListParams]'s query parameters as
@@ -162,4 +190,13 @@ type RadarRankingTopListParamsFormat string
 const (
 	RadarRankingTopListParamsFormatJson RadarRankingTopListParamsFormat = "JSON"
 	RadarRankingTopListParamsFormatCsv  RadarRankingTopListParamsFormat = "CSV"
+)
+
+// The ranking type.
+type RadarRankingTopListParamsRankingType string
+
+const (
+	RadarRankingTopListParamsRankingTypePopular        RadarRankingTopListParamsRankingType = "POPULAR"
+	RadarRankingTopListParamsRankingTypeTrendingRise   RadarRankingTopListParamsRankingType = "TRENDING_RISE"
+	RadarRankingTopListParamsRankingTypeTrendingSteady RadarRankingTopListParamsRankingType = "TRENDING_STEADY"
 )

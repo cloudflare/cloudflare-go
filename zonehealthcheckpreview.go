@@ -32,7 +32,7 @@ func NewZoneHealthcheckPreviewService(opts ...option.RequestOption) (r *ZoneHeal
 }
 
 // Fetch a single configured health check preview.
-func (r *ZoneHealthcheckPreviewService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *SingleResponseEwxfoMtB, err error) {
+func (r *ZoneHealthcheckPreviewService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *HealthchecksSingleResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/healthchecks/preview/%s", zoneIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -48,7 +48,7 @@ func (r *ZoneHealthcheckPreviewService) Delete(ctx context.Context, zoneIdentifi
 }
 
 // Create a new preview health check.
-func (r *ZoneHealthcheckPreviewService) HealthChecksNewPreviewHealthCheck(ctx context.Context, zoneIdentifier string, body ZoneHealthcheckPreviewHealthChecksNewPreviewHealthCheckParams, opts ...option.RequestOption) (res *SingleResponseEwxfoMtB, err error) {
+func (r *ZoneHealthcheckPreviewService) HealthChecksNewPreviewHealthCheck(ctx context.Context, zoneIdentifier string, body ZoneHealthcheckPreviewHealthChecksNewPreviewHealthCheckParams, opts ...option.RequestOption) (res *HealthchecksSingleResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/healthchecks/preview", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -118,7 +118,8 @@ func (r *ZoneHealthcheckPreviewDeleteResponseMessage) UnmarshalJSON(data []byte)
 }
 
 type ZoneHealthcheckPreviewDeleteResponseResult struct {
-	ID   interface{}                                    `json:"id"`
+	// Identifier
+	ID   string                                         `json:"id"`
 	JSON zoneHealthcheckPreviewDeleteResponseResultJSON `json:"-"`
 }
 

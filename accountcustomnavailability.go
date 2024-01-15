@@ -31,26 +31,27 @@ func NewAccountCustomNAvailabilityService(opts ...option.RequestOption) (r *Acco
 }
 
 // Get Eligible Zones for Account Custom Nameservers
-func (r *AccountCustomNAvailabilityService) AccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameservers(ctx context.Context, identifier string, opts ...option.RequestOption) (res *AvailabilityResponse, err error) {
+func (r *AccountCustomNAvailabilityService) AccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameservers(ctx context.Context, identifier string, opts ...option.RequestOption) (res *AccountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/custom_ns/availability", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type AvailabilityResponse struct {
-	Errors     []AvailabilityResponseError    `json:"errors"`
-	Messages   []AvailabilityResponseMessage  `json:"messages"`
-	Result     []string                       `json:"result" format:"hostname"`
-	ResultInfo AvailabilityResponseResultInfo `json:"result_info"`
+type AccountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponse struct {
+	Errors     []AccountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseError    `json:"errors"`
+	Messages   []AccountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseMessage  `json:"messages"`
+	Result     []string                                                                                                             `json:"result" format:"hostname"`
+	ResultInfo AccountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseResultInfo `json:"result_info"`
 	// Whether the API call was successful
-	Success AvailabilityResponseSuccess `json:"success"`
-	JSON    availabilityResponseJSON    `json:"-"`
+	Success AccountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseSuccess `json:"success"`
+	JSON    accountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseJSON    `json:"-"`
 }
 
-// availabilityResponseJSON contains the JSON metadata for the struct
-// [AvailabilityResponse]
-type availabilityResponseJSON struct {
+// accountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseJSON
+// contains the JSON metadata for the struct
+// [AccountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponse]
+type accountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -60,49 +61,51 @@ type availabilityResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AvailabilityResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AvailabilityResponseError struct {
-	Code    int64                         `json:"code,required"`
-	Message string                        `json:"message,required"`
-	JSON    availabilityResponseErrorJSON `json:"-"`
+type AccountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseError struct {
+	Code    int64                                                                                                               `json:"code,required"`
+	Message string                                                                                                              `json:"message,required"`
+	JSON    accountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseErrorJSON `json:"-"`
 }
 
-// availabilityResponseErrorJSON contains the JSON metadata for the struct
-// [AvailabilityResponseError]
-type availabilityResponseErrorJSON struct {
+// accountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseError]
+type accountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AvailabilityResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AvailabilityResponseMessage struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    availabilityResponseMessageJSON `json:"-"`
+type AccountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseMessage struct {
+	Code    int64                                                                                                                 `json:"code,required"`
+	Message string                                                                                                                `json:"message,required"`
+	JSON    accountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseMessageJSON `json:"-"`
 }
 
-// availabilityResponseMessageJSON contains the JSON metadata for the struct
-// [AvailabilityResponseMessage]
-type availabilityResponseMessageJSON struct {
+// accountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseMessage]
+type accountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AvailabilityResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AvailabilityResponseResultInfo struct {
+type AccountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -110,13 +113,14 @@ type AvailabilityResponseResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                            `json:"total_count"`
-	JSON       availabilityResponseResultInfoJSON `json:"-"`
+	TotalCount float64                                                                                                                  `json:"total_count"`
+	JSON       accountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseResultInfoJSON `json:"-"`
 }
 
-// availabilityResponseResultInfoJSON contains the JSON metadata for the struct
-// [AvailabilityResponseResultInfo]
-type availabilityResponseResultInfoJSON struct {
+// accountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [AccountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseResultInfo]
+type accountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -125,13 +129,13 @@ type availabilityResponseResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AvailabilityResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type AvailabilityResponseSuccess bool
+type AccountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseSuccess bool
 
 const (
-	AvailabilityResponseSuccessTrue AvailabilityResponseSuccess = true
+	AccountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseSuccessTrue AccountCustomNAvailabilityAccountLevelCustomNameserversGetEligibleZonesForAccountCustomNameserversResponseSuccess = true
 )

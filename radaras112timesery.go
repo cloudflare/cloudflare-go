@@ -21,13 +21,7 @@ import (
 // this service directly, and instead use the [NewRadarAs112TimeseryService] method
 // instead.
 type RadarAs112TimeseryService struct {
-	Options       []option.RequestOption
-	Dnssecs       *RadarAs112TimeseryDnssecService
-	Edns          *RadarAs112TimeseryEdnService
-	IPVersions    *RadarAs112TimeseryIPVersionService
-	Protocols     *RadarAs112TimeseryProtocolService
-	QueryTypes    *RadarAs112TimeseryQueryTypeService
-	ResponseCodes *RadarAs112TimeseryResponseCodeService
+	Options []option.RequestOption
 }
 
 // NewRadarAs112TimeseryService generates a new service that applies the given
@@ -36,12 +30,6 @@ type RadarAs112TimeseryService struct {
 func NewRadarAs112TimeseryService(opts ...option.RequestOption) (r *RadarAs112TimeseryService) {
 	r = &RadarAs112TimeseryService{}
 	r.Options = opts
-	r.Dnssecs = NewRadarAs112TimeseryDnssecService(opts...)
-	r.Edns = NewRadarAs112TimeseryEdnService(opts...)
-	r.IPVersions = NewRadarAs112TimeseryIPVersionService(opts...)
-	r.Protocols = NewRadarAs112TimeseryProtocolService(opts...)
-	r.QueryTypes = NewRadarAs112TimeseryQueryTypeService(opts...)
-	r.ResponseCodes = NewRadarAs112TimeseryResponseCodeService(opts...)
 	return
 }
 
@@ -93,9 +81,9 @@ func (r *RadarAs112TimeseryListResponseResult) UnmarshalJSON(data []byte) (err e
 
 type RadarAs112TimeseryListResponseResultMeta struct {
 	AggInterval    string                                                 `json:"aggInterval,required"`
-	ConfidenceInfo RadarAs112TimeseryListResponseResultMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      RadarAs112TimeseryListResponseResultMetaDateRange      `json:"dateRange,required"`
+	DateRange      []RadarAs112TimeseryListResponseResultMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    time.Time                                              `json:"lastUpdated,required" format:"date-time"`
+	ConfidenceInfo RadarAs112TimeseryListResponseResultMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           radarAs112TimeseryListResponseResultMetaJSON           `json:"-"`
 }
 
@@ -103,61 +91,14 @@ type RadarAs112TimeseryListResponseResultMeta struct {
 // struct [RadarAs112TimeseryListResponseResultMeta]
 type radarAs112TimeseryListResponseResultMetaJSON struct {
 	AggInterval    apijson.Field
-	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
+	ConfidenceInfo apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
 func (r *RadarAs112TimeseryListResponseResultMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarAs112TimeseryListResponseResultMetaConfidenceInfo struct {
-	Annotations []RadarAs112TimeseryListResponseResultMetaConfidenceInfoAnnotation `json:"annotations,required"`
-	Level       int64                                                              `json:"level,required"`
-	JSON        radarAs112TimeseryListResponseResultMetaConfidenceInfoJSON         `json:"-"`
-}
-
-// radarAs112TimeseryListResponseResultMetaConfidenceInfoJSON contains the JSON
-// metadata for the struct [RadarAs112TimeseryListResponseResultMetaConfidenceInfo]
-type radarAs112TimeseryListResponseResultMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarAs112TimeseryListResponseResultMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarAs112TimeseryListResponseResultMetaConfidenceInfoAnnotation struct {
-	DataSource  string                                                               `json:"dataSource,required"`
-	Description string                                                               `json:"description,required"`
-	EndTime     time.Time                                                            `json:"endTime,required" format:"date-time"`
-	EventType   string                                                               `json:"eventType,required"`
-	LinkedURL   string                                                               `json:"linkedUrl,required"`
-	StartTime   time.Time                                                            `json:"startTime,required" format:"date-time"`
-	JSON        radarAs112TimeseryListResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// radarAs112TimeseryListResponseResultMetaConfidenceInfoAnnotationJSON contains
-// the JSON metadata for the struct
-// [RadarAs112TimeseryListResponseResultMetaConfidenceInfoAnnotation]
-type radarAs112TimeseryListResponseResultMetaConfidenceInfoAnnotationJSON struct {
-	DataSource  apijson.Field
-	Description apijson.Field
-	EndTime     apijson.Field
-	EventType   apijson.Field
-	LinkedURL   apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarAs112TimeseryListResponseResultMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -179,6 +120,55 @@ type radarAs112TimeseryListResponseResultMetaDateRangeJSON struct {
 }
 
 func (r *RadarAs112TimeseryListResponseResultMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAs112TimeseryListResponseResultMetaConfidenceInfo struct {
+	Annotations []RadarAs112TimeseryListResponseResultMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                              `json:"level"`
+	JSON        radarAs112TimeseryListResponseResultMetaConfidenceInfoJSON         `json:"-"`
+}
+
+// radarAs112TimeseryListResponseResultMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct [RadarAs112TimeseryListResponseResultMetaConfidenceInfo]
+type radarAs112TimeseryListResponseResultMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarAs112TimeseryListResponseResultMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAs112TimeseryListResponseResultMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                               `json:"dataSource,required"`
+	Description     string                                                               `json:"description,required"`
+	EventType       string                                                               `json:"eventType,required"`
+	IsInstantaneous interface{}                                                          `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                            `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                               `json:"linkedUrl"`
+	StartTime       time.Time                                                            `json:"startTime" format:"date-time"`
+	JSON            radarAs112TimeseryListResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// radarAs112TimeseryListResponseResultMetaConfidenceInfoAnnotationJSON contains
+// the JSON metadata for the struct
+// [RadarAs112TimeseryListResponseResultMetaConfidenceInfoAnnotation]
+type radarAs112TimeseryListResponseResultMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *RadarAs112TimeseryListResponseResultMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -210,7 +200,7 @@ type RadarAs112TimeseryListParams struct {
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of datetimes to filter the end of a series.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
@@ -253,6 +243,7 @@ type RadarAs112TimeseryListParamsDateRange string
 
 const (
 	RadarAs112TimeseryListParamsDateRange1d         RadarAs112TimeseryListParamsDateRange = "1d"
+	RadarAs112TimeseryListParamsDateRange2d         RadarAs112TimeseryListParamsDateRange = "2d"
 	RadarAs112TimeseryListParamsDateRange7d         RadarAs112TimeseryListParamsDateRange = "7d"
 	RadarAs112TimeseryListParamsDateRange14d        RadarAs112TimeseryListParamsDateRange = "14d"
 	RadarAs112TimeseryListParamsDateRange28d        RadarAs112TimeseryListParamsDateRange = "28d"
@@ -260,6 +251,7 @@ const (
 	RadarAs112TimeseryListParamsDateRange24w        RadarAs112TimeseryListParamsDateRange = "24w"
 	RadarAs112TimeseryListParamsDateRange52w        RadarAs112TimeseryListParamsDateRange = "52w"
 	RadarAs112TimeseryListParamsDateRange1dControl  RadarAs112TimeseryListParamsDateRange = "1dControl"
+	RadarAs112TimeseryListParamsDateRange2dControl  RadarAs112TimeseryListParamsDateRange = "2dControl"
 	RadarAs112TimeseryListParamsDateRange7dControl  RadarAs112TimeseryListParamsDateRange = "7dControl"
 	RadarAs112TimeseryListParamsDateRange14dControl RadarAs112TimeseryListParamsDateRange = "14dControl"
 	RadarAs112TimeseryListParamsDateRange28dControl RadarAs112TimeseryListParamsDateRange = "28dControl"

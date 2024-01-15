@@ -25,17 +25,19 @@ func TestRadarAttackLayer7TopAseOriginListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Radars.Attacks.Layer7s.Tops.Ases.Origins.List(context.TODO(), cloudflare.RadarAttackLayer7TopAseOriginListParams{
+	_, err := client.Radar.Attacks.Layer7.Tops.Ases.Origins.List(context.TODO(), cloudflare.RadarAttackLayer7TopAseOriginListParams{
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange: cloudflare.F([]cloudflare.RadarAttackLayer7TopAseOriginListParamsDateRange{cloudflare.RadarAttackLayer7TopAseOriginListParamsDateRange1d, cloudflare.RadarAttackLayer7TopAseOriginListParamsDateRange7d, cloudflare.RadarAttackLayer7TopAseOriginListParamsDateRange14d}),
+		DateRange: cloudflare.F([]cloudflare.RadarAttackLayer7TopAseOriginListParamsDateRange{cloudflare.RadarAttackLayer7TopAseOriginListParamsDateRange1d, cloudflare.RadarAttackLayer7TopAseOriginListParamsDateRange2d, cloudflare.RadarAttackLayer7TopAseOriginListParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		Format:    cloudflare.F(cloudflare.RadarAttackLayer7TopAseOriginListParamsFormatJson),
 		Limit:     cloudflare.F(int64(5)),
-		Location:  cloudflare.F([]string{"US", "US", "US"}),
-		Name:      cloudflare.F([]string{"main_series", "main_series", "main_series"}),
+		Location:  cloudflare.F([]string{"string", "string", "string"}),
+		Name:      cloudflare.F([]string{"string", "string", "string"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

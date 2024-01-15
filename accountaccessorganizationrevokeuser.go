@@ -33,9 +33,9 @@ func NewAccountAccessOrganizationRevokeUserService(opts ...option.RequestOption)
 }
 
 // Revokes a user's access across all applications.
-func (r *AccountAccessOrganizationRevokeUserService) ZeroTrustOrganizationRevokeAllAccessTokensForAUser(ctx context.Context, identifier interface{}, body AccountAccessOrganizationRevokeUserZeroTrustOrganizationRevokeAllAccessTokensForAUserParams, opts ...option.RequestOption) (res *AccountAccessOrganizationRevokeUserZeroTrustOrganizationRevokeAllAccessTokensForAUserResponse, err error) {
+func (r *AccountAccessOrganizationRevokeUserService) ZeroTrustOrganizationRevokeAllAccessTokensForAUser(ctx context.Context, identifier string, body AccountAccessOrganizationRevokeUserZeroTrustOrganizationRevokeAllAccessTokensForAUserParams, opts ...option.RequestOption) (res *AccountAccessOrganizationRevokeUserZeroTrustOrganizationRevokeAllAccessTokensForAUserResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%v/access/organizations/revoke_user", identifier)
+	path := fmt.Sprintf("accounts/%s/access/organizations/revoke_user", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }

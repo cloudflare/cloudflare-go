@@ -31,34 +31,35 @@ func NewAccountDeviceSettingService(opts ...option.RequestOption) (r *AccountDev
 	return
 }
 
-// Describes the current device settings Zero Trust account.
-func (r *AccountDeviceSettingService) ZeroTrustAccountsGetDeviceSettingsForZeroTrustAccount(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *GatewayAccountDeviceSettingsResponse, err error) {
+// Describes the current device settings for a Zero Trust account.
+func (r *AccountDeviceSettingService) ZeroTrustAccountsGetDeviceSettingsForZeroTrustAccount(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *AccountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/devices/settings", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-// Updates the current device settings for Zero Trust account.
-func (r *AccountDeviceSettingService) ZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccount(ctx context.Context, identifier interface{}, body AccountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountParams, opts ...option.RequestOption) (res *GatewayAccountDeviceSettingsResponse, err error) {
+// Updates the current device settings for a Zero Trust account.
+func (r *AccountDeviceSettingService) ZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccount(ctx context.Context, identifier interface{}, body AccountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountParams, opts ...option.RequestOption) (res *AccountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/devices/settings", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
 	return
 }
 
-type GatewayAccountDeviceSettingsResponse struct {
-	Errors   []GatewayAccountDeviceSettingsResponseError   `json:"errors"`
-	Messages []GatewayAccountDeviceSettingsResponseMessage `json:"messages"`
-	Result   GatewayAccountDeviceSettingsResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success GatewayAccountDeviceSettingsResponseSuccess `json:"success"`
-	JSON    gatewayAccountDeviceSettingsResponseJSON    `json:"-"`
+type AccountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponse struct {
+	Errors   []AccountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseError   `json:"errors"`
+	Messages []AccountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseMessage `json:"messages"`
+	Result   AccountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseResult    `json:"result"`
+	// Whether the API call was successful.
+	Success AccountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseSuccess `json:"success"`
+	JSON    accountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseJSON    `json:"-"`
 }
 
-// gatewayAccountDeviceSettingsResponseJSON contains the JSON metadata for the
-// struct [GatewayAccountDeviceSettingsResponse]
-type gatewayAccountDeviceSettingsResponseJSON struct {
+// accountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseJSON
+// contains the JSON metadata for the struct
+// [AccountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponse]
+type accountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -67,74 +68,183 @@ type gatewayAccountDeviceSettingsResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayAccountDeviceSettingsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayAccountDeviceSettingsResponseError struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    gatewayAccountDeviceSettingsResponseErrorJSON `json:"-"`
+type AccountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseError struct {
+	Code    int64                                                                                      `json:"code,required"`
+	Message string                                                                                     `json:"message,required"`
+	JSON    accountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseErrorJSON `json:"-"`
 }
 
-// gatewayAccountDeviceSettingsResponseErrorJSON contains the JSON metadata for the
-// struct [GatewayAccountDeviceSettingsResponseError]
-type gatewayAccountDeviceSettingsResponseErrorJSON struct {
+// accountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseError]
+type accountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayAccountDeviceSettingsResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayAccountDeviceSettingsResponseMessage struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    gatewayAccountDeviceSettingsResponseMessageJSON `json:"-"`
+type AccountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseMessage struct {
+	Code    int64                                                                                        `json:"code,required"`
+	Message string                                                                                       `json:"message,required"`
+	JSON    accountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseMessageJSON `json:"-"`
 }
 
-// gatewayAccountDeviceSettingsResponseMessageJSON contains the JSON metadata for
-// the struct [GatewayAccountDeviceSettingsResponseMessage]
-type gatewayAccountDeviceSettingsResponseMessageJSON struct {
+// accountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseMessage]
+type accountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayAccountDeviceSettingsResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayAccountDeviceSettingsResponseResult struct {
+type AccountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseResult struct {
 	// Enable gateway proxy filtering on TCP.
 	GatewayProxyEnabled bool `json:"gateway_proxy_enabled"`
 	// Enable gateway proxy filtering on UDP.
-	GatewayUdpProxyEnabled bool                                           `json:"gateway_udp_proxy_enabled"`
-	JSON                   gatewayAccountDeviceSettingsResponseResultJSON `json:"-"`
+	GatewayUdpProxyEnabled bool `json:"gateway_udp_proxy_enabled"`
+	// Enable installation of cloudflare managed root certificate.
+	RootCertificateInstallationEnabled bool `json:"root_certificate_installation_enabled"`
+	// Enable using CGNAT virtual IPv4.
+	UseZtVirtualIP bool                                                                                        `json:"use_zt_virtual_ip"`
+	JSON           accountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseResultJSON `json:"-"`
 }
 
-// gatewayAccountDeviceSettingsResponseResultJSON contains the JSON metadata for
-// the struct [GatewayAccountDeviceSettingsResponseResult]
-type gatewayAccountDeviceSettingsResponseResultJSON struct {
-	GatewayProxyEnabled    apijson.Field
-	GatewayUdpProxyEnabled apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+// accountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseResult]
+type accountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseResultJSON struct {
+	GatewayProxyEnabled                apijson.Field
+	GatewayUdpProxyEnabled             apijson.Field
+	RootCertificateInstallationEnabled apijson.Field
+	UseZtVirtualIP                     apijson.Field
+	raw                                string
+	ExtraFields                        map[string]apijson.Field
 }
 
-func (r *GatewayAccountDeviceSettingsResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Whether the API call was successful
-type GatewayAccountDeviceSettingsResponseSuccess bool
+// Whether the API call was successful.
+type AccountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseSuccess bool
 
 const (
-	GatewayAccountDeviceSettingsResponseSuccessTrue GatewayAccountDeviceSettingsResponseSuccess = true
+	AccountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseSuccessTrue AccountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseSuccess = true
+)
+
+type AccountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponse struct {
+	Errors   []AccountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseError   `json:"errors"`
+	Messages []AccountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseMessage `json:"messages"`
+	Result   AccountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseResult    `json:"result"`
+	// Whether the API call was successful.
+	Success AccountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseSuccess `json:"success"`
+	JSON    accountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseJSON    `json:"-"`
+}
+
+// accountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseJSON
+// contains the JSON metadata for the struct
+// [AccountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponse]
+type accountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseError struct {
+	Code    int64                                                                                            `json:"code,required"`
+	Message string                                                                                           `json:"message,required"`
+	JSON    accountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseErrorJSON `json:"-"`
+}
+
+// accountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseError]
+type accountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseMessage struct {
+	Code    int64                                                                                              `json:"code,required"`
+	Message string                                                                                             `json:"message,required"`
+	JSON    accountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseMessageJSON `json:"-"`
+}
+
+// accountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseMessage]
+type accountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseResult struct {
+	// Enable gateway proxy filtering on TCP.
+	GatewayProxyEnabled bool `json:"gateway_proxy_enabled"`
+	// Enable gateway proxy filtering on UDP.
+	GatewayUdpProxyEnabled bool `json:"gateway_udp_proxy_enabled"`
+	// Enable installation of cloudflare managed root certificate.
+	RootCertificateInstallationEnabled bool `json:"root_certificate_installation_enabled"`
+	// Enable using CGNAT virtual IPv4.
+	UseZtVirtualIP bool                                                                                              `json:"use_zt_virtual_ip"`
+	JSON           accountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseResultJSON `json:"-"`
+}
+
+// accountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseResult]
+type accountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseResultJSON struct {
+	GatewayProxyEnabled                apijson.Field
+	GatewayUdpProxyEnabled             apijson.Field
+	RootCertificateInstallationEnabled apijson.Field
+	UseZtVirtualIP                     apijson.Field
+	raw                                string
+	ExtraFields                        map[string]apijson.Field
+}
+
+func (r *AccountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful.
+type AccountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseSuccess bool
+
+const (
+	AccountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseSuccessTrue AccountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseSuccess = true
 )
 
 type AccountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountParams struct {
@@ -142,6 +252,10 @@ type AccountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAcc
 	GatewayProxyEnabled param.Field[bool] `json:"gateway_proxy_enabled"`
 	// Enable gateway proxy filtering on UDP.
 	GatewayUdpProxyEnabled param.Field[bool] `json:"gateway_udp_proxy_enabled"`
+	// Enable installation of cloudflare managed root certificate.
+	RootCertificateInstallationEnabled param.Field[bool] `json:"root_certificate_installation_enabled"`
+	// Enable using CGNAT virtual IPv4.
+	UseZtVirtualIP param.Field[bool] `json:"use_zt_virtual_ip"`
 }
 
 func (r AccountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountParams) MarshalJSON() (data []byte, err error) {

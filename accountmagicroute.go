@@ -33,7 +33,7 @@ func NewAccountMagicRouteService(opts ...option.RequestOption) (r *AccountMagicR
 }
 
 // Get a specific Magic static route.
-func (r *AccountMagicRouteService) Get(ctx context.Context, accountIdentifier string, routeIdentifier string, opts ...option.RequestOption) (res *RouteSingleResponse, err error) {
+func (r *AccountMagicRouteService) Get(ctx context.Context, accountIdentifier string, routeIdentifier string, opts ...option.RequestOption) (res *AccountMagicRouteGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/magic/routes/%s", accountIdentifier, routeIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -42,15 +42,23 @@ func (r *AccountMagicRouteService) Get(ctx context.Context, accountIdentifier st
 
 // Update a specific Magic static route. Use `?validate_only=true` as an optional
 // query parameter to run validation only without persisting changes.
-func (r *AccountMagicRouteService) Update(ctx context.Context, accountIdentifier string, routeIdentifier string, body AccountMagicRouteUpdateParams, opts ...option.RequestOption) (res *RouteModifiedResponse, err error) {
+func (r *AccountMagicRouteService) Update(ctx context.Context, accountIdentifier string, routeIdentifier string, body AccountMagicRouteUpdateParams, opts ...option.RequestOption) (res *AccountMagicRouteUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/magic/routes/%s", accountIdentifier, routeIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
 	return
 }
 
+// Delete multiple Magic static routes.
+func (r *AccountMagicRouteService) Delete(ctx context.Context, accountIdentifier string, body AccountMagicRouteDeleteParams, opts ...option.RequestOption) (res *AccountMagicRouteDeleteResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	path := fmt.Sprintf("accounts/%s/magic/routes", accountIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &res, opts...)
+	return
+}
+
 // Disable and remove a specific Magic static route.
-func (r *AccountMagicRouteService) Delete(ctx context.Context, accountIdentifier string, routeIdentifier string, opts ...option.RequestOption) (res *RouteDeletedResponse, err error) {
+func (r *AccountMagicRouteService) DeleteMany(ctx context.Context, accountIdentifier string, routeIdentifier string, opts ...option.RequestOption) (res *AccountMagicRouteDeleteManyResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/magic/routes/%s", accountIdentifier, routeIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -59,7 +67,7 @@ func (r *AccountMagicRouteService) Delete(ctx context.Context, accountIdentifier
 
 // Creates a new Magic static route. Use `?validate_only=true` as an optional query
 // parameter to run validation only without persisting changes.
-func (r *AccountMagicRouteService) MagicStaticRoutesNewRoutes(ctx context.Context, accountIdentifier string, body AccountMagicRouteMagicStaticRoutesNewRoutesParams, opts ...option.RequestOption) (res *RoutesCollectionResponse, err error) {
+func (r *AccountMagicRouteService) MagicStaticRoutesNewRoutes(ctx context.Context, accountIdentifier string, body AccountMagicRouteMagicStaticRoutesNewRoutesParams, opts ...option.RequestOption) (res *AccountMagicRouteMagicStaticRoutesNewRoutesResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/magic/routes", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -67,7 +75,7 @@ func (r *AccountMagicRouteService) MagicStaticRoutesNewRoutes(ctx context.Contex
 }
 
 // List all Magic static routes.
-func (r *AccountMagicRouteService) MagicStaticRoutesListRoutes(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *RoutesCollectionResponse, err error) {
+func (r *AccountMagicRouteService) MagicStaticRoutesListRoutes(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *AccountMagicRouteMagicStaticRoutesListRoutesResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/magic/routes", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -77,25 +85,25 @@ func (r *AccountMagicRouteService) MagicStaticRoutesListRoutes(ctx context.Conte
 // Update multiple Magic static routes. Use `?validate_only=true` as an optional
 // query parameter to run validation only without persisting changes. Only fields
 // for a route that need to be changed need be provided.
-func (r *AccountMagicRouteService) MagicStaticRoutesUpdateManyRoutes(ctx context.Context, accountIdentifier string, body AccountMagicRouteMagicStaticRoutesUpdateManyRoutesParams, opts ...option.RequestOption) (res *MultipleRouteModifiedResponse, err error) {
+func (r *AccountMagicRouteService) MagicStaticRoutesUpdateManyRoutes(ctx context.Context, accountIdentifier string, body AccountMagicRouteMagicStaticRoutesUpdateManyRoutesParams, opts ...option.RequestOption) (res *AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/magic/routes", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
 	return
 }
 
-type MultipleRouteModifiedResponse struct {
-	Errors   []MultipleRouteModifiedResponseError   `json:"errors"`
-	Messages []MultipleRouteModifiedResponseMessage `json:"messages"`
-	Result   MultipleRouteModifiedResponseResult    `json:"result"`
+type AccountMagicRouteGetResponse struct {
+	Errors   []AccountMagicRouteGetResponseError   `json:"errors"`
+	Messages []AccountMagicRouteGetResponseMessage `json:"messages"`
+	Result   AccountMagicRouteGetResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success MultipleRouteModifiedResponseSuccess `json:"success"`
-	JSON    multipleRouteModifiedResponseJSON    `json:"-"`
+	Success AccountMagicRouteGetResponseSuccess `json:"success"`
+	JSON    accountMagicRouteGetResponseJSON    `json:"-"`
 }
 
-// multipleRouteModifiedResponseJSON contains the JSON metadata for the struct
-// [MultipleRouteModifiedResponse]
-type multipleRouteModifiedResponseJSON struct {
+// accountMagicRouteGetResponseJSON contains the JSON metadata for the struct
+// [AccountMagicRouteGetResponse]
+type accountMagicRouteGetResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -104,326 +112,172 @@ type multipleRouteModifiedResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MultipleRouteModifiedResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMagicRouteGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MultipleRouteModifiedResponseError struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    multipleRouteModifiedResponseErrorJSON `json:"-"`
+type AccountMagicRouteGetResponseError struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    accountMagicRouteGetResponseErrorJSON `json:"-"`
 }
 
-// multipleRouteModifiedResponseErrorJSON contains the JSON metadata for the struct
-// [MultipleRouteModifiedResponseError]
-type multipleRouteModifiedResponseErrorJSON struct {
+// accountMagicRouteGetResponseErrorJSON contains the JSON metadata for the struct
+// [AccountMagicRouteGetResponseError]
+type accountMagicRouteGetResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MultipleRouteModifiedResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMagicRouteGetResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MultipleRouteModifiedResponseMessage struct {
+type AccountMagicRouteGetResponseMessage struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    accountMagicRouteGetResponseMessageJSON `json:"-"`
+}
+
+// accountMagicRouteGetResponseMessageJSON contains the JSON metadata for the
+// struct [AccountMagicRouteGetResponseMessage]
+type accountMagicRouteGetResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMagicRouteGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountMagicRouteGetResponseResult struct {
+	Route interface{}                            `json:"route"`
+	JSON  accountMagicRouteGetResponseResultJSON `json:"-"`
+}
+
+// accountMagicRouteGetResponseResultJSON contains the JSON metadata for the struct
+// [AccountMagicRouteGetResponseResult]
+type accountMagicRouteGetResponseResultJSON struct {
+	Route       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMagicRouteGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountMagicRouteGetResponseSuccess bool
+
+const (
+	AccountMagicRouteGetResponseSuccessTrue AccountMagicRouteGetResponseSuccess = true
+)
+
+type AccountMagicRouteUpdateResponse struct {
+	Errors   []AccountMagicRouteUpdateResponseError   `json:"errors"`
+	Messages []AccountMagicRouteUpdateResponseMessage `json:"messages"`
+	Result   AccountMagicRouteUpdateResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountMagicRouteUpdateResponseSuccess `json:"success"`
+	JSON    accountMagicRouteUpdateResponseJSON    `json:"-"`
+}
+
+// accountMagicRouteUpdateResponseJSON contains the JSON metadata for the struct
+// [AccountMagicRouteUpdateResponse]
+type accountMagicRouteUpdateResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMagicRouteUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountMagicRouteUpdateResponseError struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
-	JSON    multipleRouteModifiedResponseMessageJSON `json:"-"`
+	JSON    accountMagicRouteUpdateResponseErrorJSON `json:"-"`
 }
 
-// multipleRouteModifiedResponseMessageJSON contains the JSON metadata for the
-// struct [MultipleRouteModifiedResponseMessage]
-type multipleRouteModifiedResponseMessageJSON struct {
+// accountMagicRouteUpdateResponseErrorJSON contains the JSON metadata for the
+// struct [AccountMagicRouteUpdateResponseError]
+type accountMagicRouteUpdateResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MultipleRouteModifiedResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMagicRouteUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MultipleRouteModifiedResponseResult struct {
-	Modified       bool                                               `json:"modified"`
-	ModifiedRoutes []MultipleRouteModifiedResponseResultModifiedRoute `json:"modified_routes"`
-	JSON           multipleRouteModifiedResponseResultJSON            `json:"-"`
+type AccountMagicRouteUpdateResponseMessage struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    accountMagicRouteUpdateResponseMessageJSON `json:"-"`
 }
 
-// multipleRouteModifiedResponseResultJSON contains the JSON metadata for the
-// struct [MultipleRouteModifiedResponseResult]
-type multipleRouteModifiedResponseResultJSON struct {
-	Modified       apijson.Field
-	ModifiedRoutes apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *MultipleRouteModifiedResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MultipleRouteModifiedResponseResultModifiedRoute struct {
-	// The next-hop IP Address for the static route.
-	Nexthop string `json:"nexthop,required"`
-	// IP Prefix in Classless Inter-Domain Routing format.
-	Prefix string `json:"prefix,required"`
-	// Priority of the static route.
-	Priority int64 `json:"priority,required"`
-	// Identifier
-	ID string `json:"id"`
-	// When the route was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// An optional human provided description of the static route.
-	Description string `json:"description"`
-	// When the route was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Used only for ECMP routes.
-	Scope MultipleRouteModifiedResponseResultModifiedRoutesScope `json:"scope"`
-	// Optional weight of the ECMP scope - if provided.
-	Weight int64                                                `json:"weight"`
-	JSON   multipleRouteModifiedResponseResultModifiedRouteJSON `json:"-"`
-}
-
-// multipleRouteModifiedResponseResultModifiedRouteJSON contains the JSON metadata
-// for the struct [MultipleRouteModifiedResponseResultModifiedRoute]
-type multipleRouteModifiedResponseResultModifiedRouteJSON struct {
-	Nexthop     apijson.Field
-	Prefix      apijson.Field
-	Priority    apijson.Field
-	ID          apijson.Field
-	CreatedOn   apijson.Field
-	Description apijson.Field
-	ModifiedOn  apijson.Field
-	Scope       apijson.Field
-	Weight      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MultipleRouteModifiedResponseResultModifiedRoute) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Used only for ECMP routes.
-type MultipleRouteModifiedResponseResultModifiedRoutesScope struct {
-	// List of colo names for the ECMP scope.
-	ColoNames []string `json:"colo_names"`
-	// List of colo regions for the ECMP scope.
-	ColoRegions []string                                                   `json:"colo_regions"`
-	JSON        multipleRouteModifiedResponseResultModifiedRoutesScopeJSON `json:"-"`
-}
-
-// multipleRouteModifiedResponseResultModifiedRoutesScopeJSON contains the JSON
-// metadata for the struct [MultipleRouteModifiedResponseResultModifiedRoutesScope]
-type multipleRouteModifiedResponseResultModifiedRoutesScopeJSON struct {
-	ColoNames   apijson.Field
-	ColoRegions apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MultipleRouteModifiedResponseResultModifiedRoutesScope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type MultipleRouteModifiedResponseSuccess bool
-
-const (
-	MultipleRouteModifiedResponseSuccessTrue MultipleRouteModifiedResponseSuccess = true
-)
-
-type RouteDeletedResponse struct {
-	Errors   []RouteDeletedResponseError   `json:"errors"`
-	Messages []RouteDeletedResponseMessage `json:"messages"`
-	Result   RouteDeletedResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success RouteDeletedResponseSuccess `json:"success"`
-	JSON    routeDeletedResponseJSON    `json:"-"`
-}
-
-// routeDeletedResponseJSON contains the JSON metadata for the struct
-// [RouteDeletedResponse]
-type routeDeletedResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RouteDeletedResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RouteDeletedResponseError struct {
-	Code    int64                         `json:"code,required"`
-	Message string                        `json:"message,required"`
-	JSON    routeDeletedResponseErrorJSON `json:"-"`
-}
-
-// routeDeletedResponseErrorJSON contains the JSON metadata for the struct
-// [RouteDeletedResponseError]
-type routeDeletedResponseErrorJSON struct {
+// accountMagicRouteUpdateResponseMessageJSON contains the JSON metadata for the
+// struct [AccountMagicRouteUpdateResponseMessage]
+type accountMagicRouteUpdateResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RouteDeletedResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMagicRouteUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RouteDeletedResponseMessage struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    routeDeletedResponseMessageJSON `json:"-"`
+type AccountMagicRouteUpdateResponseResult struct {
+	Modified      bool                                      `json:"modified"`
+	ModifiedRoute interface{}                               `json:"modified_route"`
+	JSON          accountMagicRouteUpdateResponseResultJSON `json:"-"`
 }
 
-// routeDeletedResponseMessageJSON contains the JSON metadata for the struct
-// [RouteDeletedResponseMessage]
-type routeDeletedResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RouteDeletedResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RouteDeletedResponseResult struct {
-	Deleted      bool                           `json:"deleted"`
-	DeletedRoute interface{}                    `json:"deleted_route"`
-	JSON         routeDeletedResponseResultJSON `json:"-"`
-}
-
-// routeDeletedResponseResultJSON contains the JSON metadata for the struct
-// [RouteDeletedResponseResult]
-type routeDeletedResponseResultJSON struct {
-	Deleted      apijson.Field
-	DeletedRoute apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *RouteDeletedResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type RouteDeletedResponseSuccess bool
-
-const (
-	RouteDeletedResponseSuccessTrue RouteDeletedResponseSuccess = true
-)
-
-type RouteModifiedResponse struct {
-	Errors   []RouteModifiedResponseError   `json:"errors"`
-	Messages []RouteModifiedResponseMessage `json:"messages"`
-	Result   RouteModifiedResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success RouteModifiedResponseSuccess `json:"success"`
-	JSON    routeModifiedResponseJSON    `json:"-"`
-}
-
-// routeModifiedResponseJSON contains the JSON metadata for the struct
-// [RouteModifiedResponse]
-type routeModifiedResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RouteModifiedResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RouteModifiedResponseError struct {
-	Code    int64                          `json:"code,required"`
-	Message string                         `json:"message,required"`
-	JSON    routeModifiedResponseErrorJSON `json:"-"`
-}
-
-// routeModifiedResponseErrorJSON contains the JSON metadata for the struct
-// [RouteModifiedResponseError]
-type routeModifiedResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RouteModifiedResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RouteModifiedResponseMessage struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    routeModifiedResponseMessageJSON `json:"-"`
-}
-
-// routeModifiedResponseMessageJSON contains the JSON metadata for the struct
-// [RouteModifiedResponseMessage]
-type routeModifiedResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RouteModifiedResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RouteModifiedResponseResult struct {
-	Modified      bool                            `json:"modified"`
-	ModifiedRoute interface{}                     `json:"modified_route"`
-	JSON          routeModifiedResponseResultJSON `json:"-"`
-}
-
-// routeModifiedResponseResultJSON contains the JSON metadata for the struct
-// [RouteModifiedResponseResult]
-type routeModifiedResponseResultJSON struct {
+// accountMagicRouteUpdateResponseResultJSON contains the JSON metadata for the
+// struct [AccountMagicRouteUpdateResponseResult]
+type accountMagicRouteUpdateResponseResultJSON struct {
 	Modified      apijson.Field
 	ModifiedRoute apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *RouteModifiedResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMagicRouteUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type RouteModifiedResponseSuccess bool
+type AccountMagicRouteUpdateResponseSuccess bool
 
 const (
-	RouteModifiedResponseSuccessTrue RouteModifiedResponseSuccess = true
+	AccountMagicRouteUpdateResponseSuccessTrue AccountMagicRouteUpdateResponseSuccess = true
 )
 
-type RouteSingleResponse struct {
-	Errors   []RouteSingleResponseError   `json:"errors"`
-	Messages []RouteSingleResponseMessage `json:"messages"`
-	Result   RouteSingleResponseResult    `json:"result"`
+type AccountMagicRouteDeleteResponse struct {
+	Errors   []AccountMagicRouteDeleteResponseError   `json:"errors"`
+	Messages []AccountMagicRouteDeleteResponseMessage `json:"messages"`
+	Result   AccountMagicRouteDeleteResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success RouteSingleResponseSuccess `json:"success"`
-	JSON    routeSingleResponseJSON    `json:"-"`
+	Success AccountMagicRouteDeleteResponseSuccess `json:"success"`
+	JSON    accountMagicRouteDeleteResponseJSON    `json:"-"`
 }
 
-// routeSingleResponseJSON contains the JSON metadata for the struct
-// [RouteSingleResponse]
-type routeSingleResponseJSON struct {
+// accountMagicRouteDeleteResponseJSON contains the JSON metadata for the struct
+// [AccountMagicRouteDeleteResponse]
+type accountMagicRouteDeleteResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -432,84 +286,86 @@ type routeSingleResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RouteSingleResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMagicRouteDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RouteSingleResponseError struct {
-	Code    int64                        `json:"code,required"`
-	Message string                       `json:"message,required"`
-	JSON    routeSingleResponseErrorJSON `json:"-"`
+type AccountMagicRouteDeleteResponseError struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    accountMagicRouteDeleteResponseErrorJSON `json:"-"`
 }
 
-// routeSingleResponseErrorJSON contains the JSON metadata for the struct
-// [RouteSingleResponseError]
-type routeSingleResponseErrorJSON struct {
+// accountMagicRouteDeleteResponseErrorJSON contains the JSON metadata for the
+// struct [AccountMagicRouteDeleteResponseError]
+type accountMagicRouteDeleteResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RouteSingleResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMagicRouteDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RouteSingleResponseMessage struct {
-	Code    int64                          `json:"code,required"`
-	Message string                         `json:"message,required"`
-	JSON    routeSingleResponseMessageJSON `json:"-"`
+type AccountMagicRouteDeleteResponseMessage struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    accountMagicRouteDeleteResponseMessageJSON `json:"-"`
 }
 
-// routeSingleResponseMessageJSON contains the JSON metadata for the struct
-// [RouteSingleResponseMessage]
-type routeSingleResponseMessageJSON struct {
+// accountMagicRouteDeleteResponseMessageJSON contains the JSON metadata for the
+// struct [AccountMagicRouteDeleteResponseMessage]
+type accountMagicRouteDeleteResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RouteSingleResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMagicRouteDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RouteSingleResponseResult struct {
-	Route interface{}                   `json:"route"`
-	JSON  routeSingleResponseResultJSON `json:"-"`
+type AccountMagicRouteDeleteResponseResult struct {
+	Deleted       bool                                      `json:"deleted"`
+	DeletedRoutes interface{}                               `json:"deleted_routes"`
+	JSON          accountMagicRouteDeleteResponseResultJSON `json:"-"`
 }
 
-// routeSingleResponseResultJSON contains the JSON metadata for the struct
-// [RouteSingleResponseResult]
-type routeSingleResponseResultJSON struct {
-	Route       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+// accountMagicRouteDeleteResponseResultJSON contains the JSON metadata for the
+// struct [AccountMagicRouteDeleteResponseResult]
+type accountMagicRouteDeleteResponseResultJSON struct {
+	Deleted       apijson.Field
+	DeletedRoutes apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
-func (r *RouteSingleResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMagicRouteDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type RouteSingleResponseSuccess bool
+type AccountMagicRouteDeleteResponseSuccess bool
 
 const (
-	RouteSingleResponseSuccessTrue RouteSingleResponseSuccess = true
+	AccountMagicRouteDeleteResponseSuccessTrue AccountMagicRouteDeleteResponseSuccess = true
 )
 
-type RoutesCollectionResponse struct {
-	Errors   []RoutesCollectionResponseError   `json:"errors"`
-	Messages []RoutesCollectionResponseMessage `json:"messages"`
-	Result   RoutesCollectionResponseResult    `json:"result"`
+type AccountMagicRouteDeleteManyResponse struct {
+	Errors   []AccountMagicRouteDeleteManyResponseError   `json:"errors"`
+	Messages []AccountMagicRouteDeleteManyResponseMessage `json:"messages"`
+	Result   AccountMagicRouteDeleteManyResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success RoutesCollectionResponseSuccess `json:"success"`
-	JSON    routesCollectionResponseJSON    `json:"-"`
+	Success AccountMagicRouteDeleteManyResponseSuccess `json:"success"`
+	JSON    accountMagicRouteDeleteManyResponseJSON    `json:"-"`
 }
 
-// routesCollectionResponseJSON contains the JSON metadata for the struct
-// [RoutesCollectionResponse]
-type routesCollectionResponseJSON struct {
+// accountMagicRouteDeleteManyResponseJSON contains the JSON metadata for the
+// struct [AccountMagicRouteDeleteManyResponse]
+type accountMagicRouteDeleteManyResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -518,66 +374,157 @@ type routesCollectionResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RoutesCollectionResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMagicRouteDeleteManyResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RoutesCollectionResponseError struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    routesCollectionResponseErrorJSON `json:"-"`
+type AccountMagicRouteDeleteManyResponseError struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    accountMagicRouteDeleteManyResponseErrorJSON `json:"-"`
 }
 
-// routesCollectionResponseErrorJSON contains the JSON metadata for the struct
-// [RoutesCollectionResponseError]
-type routesCollectionResponseErrorJSON struct {
+// accountMagicRouteDeleteManyResponseErrorJSON contains the JSON metadata for the
+// struct [AccountMagicRouteDeleteManyResponseError]
+type accountMagicRouteDeleteManyResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RoutesCollectionResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMagicRouteDeleteManyResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RoutesCollectionResponseMessage struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    routesCollectionResponseMessageJSON `json:"-"`
+type AccountMagicRouteDeleteManyResponseMessage struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    accountMagicRouteDeleteManyResponseMessageJSON `json:"-"`
 }
 
-// routesCollectionResponseMessageJSON contains the JSON metadata for the struct
-// [RoutesCollectionResponseMessage]
-type routesCollectionResponseMessageJSON struct {
+// accountMagicRouteDeleteManyResponseMessageJSON contains the JSON metadata for
+// the struct [AccountMagicRouteDeleteManyResponseMessage]
+type accountMagicRouteDeleteManyResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RoutesCollectionResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMagicRouteDeleteManyResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RoutesCollectionResponseResult struct {
-	Routes []RoutesCollectionResponseResultRoute `json:"routes"`
-	JSON   routesCollectionResponseResultJSON    `json:"-"`
+type AccountMagicRouteDeleteManyResponseResult struct {
+	Deleted      bool                                          `json:"deleted"`
+	DeletedRoute interface{}                                   `json:"deleted_route"`
+	JSON         accountMagicRouteDeleteManyResponseResultJSON `json:"-"`
 }
 
-// routesCollectionResponseResultJSON contains the JSON metadata for the struct
-// [RoutesCollectionResponseResult]
-type routesCollectionResponseResultJSON struct {
+// accountMagicRouteDeleteManyResponseResultJSON contains the JSON metadata for the
+// struct [AccountMagicRouteDeleteManyResponseResult]
+type accountMagicRouteDeleteManyResponseResultJSON struct {
+	Deleted      apijson.Field
+	DeletedRoute apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccountMagicRouteDeleteManyResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountMagicRouteDeleteManyResponseSuccess bool
+
+const (
+	AccountMagicRouteDeleteManyResponseSuccessTrue AccountMagicRouteDeleteManyResponseSuccess = true
+)
+
+type AccountMagicRouteMagicStaticRoutesNewRoutesResponse struct {
+	Errors   []AccountMagicRouteMagicStaticRoutesNewRoutesResponseError   `json:"errors"`
+	Messages []AccountMagicRouteMagicStaticRoutesNewRoutesResponseMessage `json:"messages"`
+	Result   AccountMagicRouteMagicStaticRoutesNewRoutesResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountMagicRouteMagicStaticRoutesNewRoutesResponseSuccess `json:"success"`
+	JSON    accountMagicRouteMagicStaticRoutesNewRoutesResponseJSON    `json:"-"`
+}
+
+// accountMagicRouteMagicStaticRoutesNewRoutesResponseJSON contains the JSON
+// metadata for the struct [AccountMagicRouteMagicStaticRoutesNewRoutesResponse]
+type accountMagicRouteMagicStaticRoutesNewRoutesResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMagicRouteMagicStaticRoutesNewRoutesResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountMagicRouteMagicStaticRoutesNewRoutesResponseError struct {
+	Code    int64                                                        `json:"code,required"`
+	Message string                                                       `json:"message,required"`
+	JSON    accountMagicRouteMagicStaticRoutesNewRoutesResponseErrorJSON `json:"-"`
+}
+
+// accountMagicRouteMagicStaticRoutesNewRoutesResponseErrorJSON contains the JSON
+// metadata for the struct
+// [AccountMagicRouteMagicStaticRoutesNewRoutesResponseError]
+type accountMagicRouteMagicStaticRoutesNewRoutesResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMagicRouteMagicStaticRoutesNewRoutesResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountMagicRouteMagicStaticRoutesNewRoutesResponseMessage struct {
+	Code    int64                                                          `json:"code,required"`
+	Message string                                                         `json:"message,required"`
+	JSON    accountMagicRouteMagicStaticRoutesNewRoutesResponseMessageJSON `json:"-"`
+}
+
+// accountMagicRouteMagicStaticRoutesNewRoutesResponseMessageJSON contains the JSON
+// metadata for the struct
+// [AccountMagicRouteMagicStaticRoutesNewRoutesResponseMessage]
+type accountMagicRouteMagicStaticRoutesNewRoutesResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMagicRouteMagicStaticRoutesNewRoutesResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountMagicRouteMagicStaticRoutesNewRoutesResponseResult struct {
+	Routes []AccountMagicRouteMagicStaticRoutesNewRoutesResponseResultRoute `json:"routes"`
+	JSON   accountMagicRouteMagicStaticRoutesNewRoutesResponseResultJSON    `json:"-"`
+}
+
+// accountMagicRouteMagicStaticRoutesNewRoutesResponseResultJSON contains the JSON
+// metadata for the struct
+// [AccountMagicRouteMagicStaticRoutesNewRoutesResponseResult]
+type accountMagicRouteMagicStaticRoutesNewRoutesResponseResultJSON struct {
 	Routes      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RoutesCollectionResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMagicRouteMagicStaticRoutesNewRoutesResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RoutesCollectionResponseResultRoute struct {
+type AccountMagicRouteMagicStaticRoutesNewRoutesResponseResultRoute struct {
 	// The next-hop IP Address for the static route.
 	Nexthop string `json:"nexthop,required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
@@ -593,15 +540,16 @@ type RoutesCollectionResponseResultRoute struct {
 	// When the route was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Used only for ECMP routes.
-	Scope RoutesCollectionResponseResultRoutesScope `json:"scope"`
+	Scope AccountMagicRouteMagicStaticRoutesNewRoutesResponseResultRoutesScope `json:"scope"`
 	// Optional weight of the ECMP scope - if provided.
-	Weight int64                                   `json:"weight"`
-	JSON   routesCollectionResponseResultRouteJSON `json:"-"`
+	Weight int64                                                              `json:"weight"`
+	JSON   accountMagicRouteMagicStaticRoutesNewRoutesResponseResultRouteJSON `json:"-"`
 }
 
-// routesCollectionResponseResultRouteJSON contains the JSON metadata for the
-// struct [RoutesCollectionResponseResultRoute]
-type routesCollectionResponseResultRouteJSON struct {
+// accountMagicRouteMagicStaticRoutesNewRoutesResponseResultRouteJSON contains the
+// JSON metadata for the struct
+// [AccountMagicRouteMagicStaticRoutesNewRoutesResponseResultRoute]
+type accountMagicRouteMagicStaticRoutesNewRoutesResponseResultRouteJSON struct {
 	Nexthop     apijson.Field
 	Prefix      apijson.Field
 	Priority    apijson.Field
@@ -615,37 +563,351 @@ type routesCollectionResponseResultRouteJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RoutesCollectionResponseResultRoute) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMagicRouteMagicStaticRoutesNewRoutesResponseResultRoute) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Used only for ECMP routes.
-type RoutesCollectionResponseResultRoutesScope struct {
+type AccountMagicRouteMagicStaticRoutesNewRoutesResponseResultRoutesScope struct {
 	// List of colo names for the ECMP scope.
 	ColoNames []string `json:"colo_names"`
 	// List of colo regions for the ECMP scope.
-	ColoRegions []string                                      `json:"colo_regions"`
-	JSON        routesCollectionResponseResultRoutesScopeJSON `json:"-"`
+	ColoRegions []string                                                                 `json:"colo_regions"`
+	JSON        accountMagicRouteMagicStaticRoutesNewRoutesResponseResultRoutesScopeJSON `json:"-"`
 }
 
-// routesCollectionResponseResultRoutesScopeJSON contains the JSON metadata for the
-// struct [RoutesCollectionResponseResultRoutesScope]
-type routesCollectionResponseResultRoutesScopeJSON struct {
+// accountMagicRouteMagicStaticRoutesNewRoutesResponseResultRoutesScopeJSON
+// contains the JSON metadata for the struct
+// [AccountMagicRouteMagicStaticRoutesNewRoutesResponseResultRoutesScope]
+type accountMagicRouteMagicStaticRoutesNewRoutesResponseResultRoutesScopeJSON struct {
 	ColoNames   apijson.Field
 	ColoRegions apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RoutesCollectionResponseResultRoutesScope) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMagicRouteMagicStaticRoutesNewRoutesResponseResultRoutesScope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type RoutesCollectionResponseSuccess bool
+type AccountMagicRouteMagicStaticRoutesNewRoutesResponseSuccess bool
 
 const (
-	RoutesCollectionResponseSuccessTrue RoutesCollectionResponseSuccess = true
+	AccountMagicRouteMagicStaticRoutesNewRoutesResponseSuccessTrue AccountMagicRouteMagicStaticRoutesNewRoutesResponseSuccess = true
+)
+
+type AccountMagicRouteMagicStaticRoutesListRoutesResponse struct {
+	Errors   []AccountMagicRouteMagicStaticRoutesListRoutesResponseError   `json:"errors"`
+	Messages []AccountMagicRouteMagicStaticRoutesListRoutesResponseMessage `json:"messages"`
+	Result   AccountMagicRouteMagicStaticRoutesListRoutesResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountMagicRouteMagicStaticRoutesListRoutesResponseSuccess `json:"success"`
+	JSON    accountMagicRouteMagicStaticRoutesListRoutesResponseJSON    `json:"-"`
+}
+
+// accountMagicRouteMagicStaticRoutesListRoutesResponseJSON contains the JSON
+// metadata for the struct [AccountMagicRouteMagicStaticRoutesListRoutesResponse]
+type accountMagicRouteMagicStaticRoutesListRoutesResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMagicRouteMagicStaticRoutesListRoutesResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountMagicRouteMagicStaticRoutesListRoutesResponseError struct {
+	Code    int64                                                         `json:"code,required"`
+	Message string                                                        `json:"message,required"`
+	JSON    accountMagicRouteMagicStaticRoutesListRoutesResponseErrorJSON `json:"-"`
+}
+
+// accountMagicRouteMagicStaticRoutesListRoutesResponseErrorJSON contains the JSON
+// metadata for the struct
+// [AccountMagicRouteMagicStaticRoutesListRoutesResponseError]
+type accountMagicRouteMagicStaticRoutesListRoutesResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMagicRouteMagicStaticRoutesListRoutesResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountMagicRouteMagicStaticRoutesListRoutesResponseMessage struct {
+	Code    int64                                                           `json:"code,required"`
+	Message string                                                          `json:"message,required"`
+	JSON    accountMagicRouteMagicStaticRoutesListRoutesResponseMessageJSON `json:"-"`
+}
+
+// accountMagicRouteMagicStaticRoutesListRoutesResponseMessageJSON contains the
+// JSON metadata for the struct
+// [AccountMagicRouteMagicStaticRoutesListRoutesResponseMessage]
+type accountMagicRouteMagicStaticRoutesListRoutesResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMagicRouteMagicStaticRoutesListRoutesResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountMagicRouteMagicStaticRoutesListRoutesResponseResult struct {
+	Routes []AccountMagicRouteMagicStaticRoutesListRoutesResponseResultRoute `json:"routes"`
+	JSON   accountMagicRouteMagicStaticRoutesListRoutesResponseResultJSON    `json:"-"`
+}
+
+// accountMagicRouteMagicStaticRoutesListRoutesResponseResultJSON contains the JSON
+// metadata for the struct
+// [AccountMagicRouteMagicStaticRoutesListRoutesResponseResult]
+type accountMagicRouteMagicStaticRoutesListRoutesResponseResultJSON struct {
+	Routes      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMagicRouteMagicStaticRoutesListRoutesResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountMagicRouteMagicStaticRoutesListRoutesResponseResultRoute struct {
+	// The next-hop IP Address for the static route.
+	Nexthop string `json:"nexthop,required"`
+	// IP Prefix in Classless Inter-Domain Routing format.
+	Prefix string `json:"prefix,required"`
+	// Priority of the static route.
+	Priority int64 `json:"priority,required"`
+	// Identifier
+	ID string `json:"id"`
+	// When the route was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// An optional human provided description of the static route.
+	Description string `json:"description"`
+	// When the route was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// Used only for ECMP routes.
+	Scope AccountMagicRouteMagicStaticRoutesListRoutesResponseResultRoutesScope `json:"scope"`
+	// Optional weight of the ECMP scope - if provided.
+	Weight int64                                                               `json:"weight"`
+	JSON   accountMagicRouteMagicStaticRoutesListRoutesResponseResultRouteJSON `json:"-"`
+}
+
+// accountMagicRouteMagicStaticRoutesListRoutesResponseResultRouteJSON contains the
+// JSON metadata for the struct
+// [AccountMagicRouteMagicStaticRoutesListRoutesResponseResultRoute]
+type accountMagicRouteMagicStaticRoutesListRoutesResponseResultRouteJSON struct {
+	Nexthop     apijson.Field
+	Prefix      apijson.Field
+	Priority    apijson.Field
+	ID          apijson.Field
+	CreatedOn   apijson.Field
+	Description apijson.Field
+	ModifiedOn  apijson.Field
+	Scope       apijson.Field
+	Weight      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMagicRouteMagicStaticRoutesListRoutesResponseResultRoute) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Used only for ECMP routes.
+type AccountMagicRouteMagicStaticRoutesListRoutesResponseResultRoutesScope struct {
+	// List of colo names for the ECMP scope.
+	ColoNames []string `json:"colo_names"`
+	// List of colo regions for the ECMP scope.
+	ColoRegions []string                                                                  `json:"colo_regions"`
+	JSON        accountMagicRouteMagicStaticRoutesListRoutesResponseResultRoutesScopeJSON `json:"-"`
+}
+
+// accountMagicRouteMagicStaticRoutesListRoutesResponseResultRoutesScopeJSON
+// contains the JSON metadata for the struct
+// [AccountMagicRouteMagicStaticRoutesListRoutesResponseResultRoutesScope]
+type accountMagicRouteMagicStaticRoutesListRoutesResponseResultRoutesScopeJSON struct {
+	ColoNames   apijson.Field
+	ColoRegions apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMagicRouteMagicStaticRoutesListRoutesResponseResultRoutesScope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountMagicRouteMagicStaticRoutesListRoutesResponseSuccess bool
+
+const (
+	AccountMagicRouteMagicStaticRoutesListRoutesResponseSuccessTrue AccountMagicRouteMagicStaticRoutesListRoutesResponseSuccess = true
+)
+
+type AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponse struct {
+	Errors   []AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseError   `json:"errors"`
+	Messages []AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseMessage `json:"messages"`
+	Result   AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseSuccess `json:"success"`
+	JSON    accountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseJSON    `json:"-"`
+}
+
+// accountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseJSON contains the JSON
+// metadata for the struct
+// [AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponse]
+type accountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseError struct {
+	Code    int64                                                               `json:"code,required"`
+	Message string                                                              `json:"message,required"`
+	JSON    accountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseErrorJSON `json:"-"`
+}
+
+// accountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseErrorJSON contains the
+// JSON metadata for the struct
+// [AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseError]
+type accountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseMessage struct {
+	Code    int64                                                                 `json:"code,required"`
+	Message string                                                                `json:"message,required"`
+	JSON    accountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseMessageJSON `json:"-"`
+}
+
+// accountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseMessageJSON contains
+// the JSON metadata for the struct
+// [AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseMessage]
+type accountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseResult struct {
+	Modified       bool                                                                            `json:"modified"`
+	ModifiedRoutes []AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseResultModifiedRoute `json:"modified_routes"`
+	JSON           accountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseResultJSON            `json:"-"`
+}
+
+// accountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseResultJSON contains
+// the JSON metadata for the struct
+// [AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseResult]
+type accountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseResultJSON struct {
+	Modified       apijson.Field
+	ModifiedRoutes apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseResultModifiedRoute struct {
+	// The next-hop IP Address for the static route.
+	Nexthop string `json:"nexthop,required"`
+	// IP Prefix in Classless Inter-Domain Routing format.
+	Prefix string `json:"prefix,required"`
+	// Priority of the static route.
+	Priority int64 `json:"priority,required"`
+	// Identifier
+	ID string `json:"id"`
+	// When the route was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// An optional human provided description of the static route.
+	Description string `json:"description"`
+	// When the route was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// Used only for ECMP routes.
+	Scope AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseResultModifiedRoutesScope `json:"scope"`
+	// Optional weight of the ECMP scope - if provided.
+	Weight int64                                                                             `json:"weight"`
+	JSON   accountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseResultModifiedRouteJSON `json:"-"`
+}
+
+// accountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseResultModifiedRouteJSON
+// contains the JSON metadata for the struct
+// [AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseResultModifiedRoute]
+type accountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseResultModifiedRouteJSON struct {
+	Nexthop     apijson.Field
+	Prefix      apijson.Field
+	Priority    apijson.Field
+	ID          apijson.Field
+	CreatedOn   apijson.Field
+	Description apijson.Field
+	ModifiedOn  apijson.Field
+	Scope       apijson.Field
+	Weight      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseResultModifiedRoute) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Used only for ECMP routes.
+type AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseResultModifiedRoutesScope struct {
+	// List of colo names for the ECMP scope.
+	ColoNames []string `json:"colo_names"`
+	// List of colo regions for the ECMP scope.
+	ColoRegions []string                                                                                `json:"colo_regions"`
+	JSON        accountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseResultModifiedRoutesScopeJSON `json:"-"`
+}
+
+// accountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseResultModifiedRoutesScopeJSON
+// contains the JSON metadata for the struct
+// [AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseResultModifiedRoutesScope]
+type accountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseResultModifiedRoutesScopeJSON struct {
+	ColoNames   apijson.Field
+	ColoRegions apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseResultModifiedRoutesScope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseSuccess bool
+
+const (
+	AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseSuccessTrue AccountMagicRouteMagicStaticRoutesUpdateManyRoutesResponseSuccess = true
 )
 
 type AccountMagicRouteUpdateParams struct {
@@ -676,6 +938,21 @@ type AccountMagicRouteUpdateParamsScope struct {
 }
 
 func (r AccountMagicRouteUpdateParamsScope) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccountMagicRouteDeleteParams struct {
+	Routes param.Field[[]AccountMagicRouteDeleteParamsRoute] `json:"routes,required"`
+}
+
+func (r AccountMagicRouteDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccountMagicRouteDeleteParamsRoute struct {
+}
+
+func (r AccountMagicRouteDeleteParamsRoute) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

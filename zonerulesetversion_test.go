@@ -24,12 +24,14 @@ func TestZoneRulesetVersionGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Rulesets.Versions.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"9f1839b6152d298aca64c4e906b6d074",
 		"2f2feab2026849078ba485f918791bdc",
 		"1",
 	)
@@ -53,12 +55,14 @@ func TestZoneRulesetVersionDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	err := client.Zones.Rulesets.Versions.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"9f1839b6152d298aca64c4e906b6d074",
 		"2f2feab2026849078ba485f918791bdc",
 		"1",
 	)
@@ -82,12 +86,14 @@ func TestZoneRulesetVersionZoneRulesetsListAZoneRulesetSVersions(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Rulesets.Versions.ZoneRulesetsListAZoneRulesetSVersions(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"9f1839b6152d298aca64c4e906b6d074",
 		"2f2feab2026849078ba485f918791bdc",
 	)
 	if err != nil {

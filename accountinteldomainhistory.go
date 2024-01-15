@@ -35,25 +35,26 @@ func NewAccountIntelDomainHistoryService(opts ...option.RequestOption) (r *Accou
 }
 
 // Get Domain History
-func (r *AccountIntelDomainHistoryService) List(ctx context.Context, accountIdentifier string, query AccountIntelDomainHistoryListParams, opts ...option.RequestOption) (res *DomainHistory, err error) {
+func (r *AccountIntelDomainHistoryService) List(ctx context.Context, accountIdentifier string, query AccountIntelDomainHistoryListParams, opts ...option.RequestOption) (res *AccountIntelDomainHistoryListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/intel/domain-history", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
-type DomainHistory struct {
-	Errors     []DomainHistoryError    `json:"errors"`
-	Messages   []DomainHistoryMessage  `json:"messages"`
-	Result     []DomainHistoryResult   `json:"result"`
-	ResultInfo DomainHistoryResultInfo `json:"result_info"`
+type AccountIntelDomainHistoryListResponse struct {
+	Errors     []AccountIntelDomainHistoryListResponseError    `json:"errors"`
+	Messages   []AccountIntelDomainHistoryListResponseMessage  `json:"messages"`
+	Result     []AccountIntelDomainHistoryListResponseResult   `json:"result"`
+	ResultInfo AccountIntelDomainHistoryListResponseResultInfo `json:"result_info"`
 	// Whether the API call was successful
-	Success DomainHistorySuccess `json:"success"`
-	JSON    domainHistoryJSON    `json:"-"`
+	Success AccountIntelDomainHistoryListResponseSuccess `json:"success"`
+	JSON    accountIntelDomainHistoryListResponseJSON    `json:"-"`
 }
 
-// domainHistoryJSON contains the JSON metadata for the struct [DomainHistory]
-type domainHistoryJSON struct {
+// accountIntelDomainHistoryListResponseJSON contains the JSON metadata for the
+// struct [AccountIntelDomainHistoryListResponse]
+type accountIntelDomainHistoryListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -63,77 +64,78 @@ type domainHistoryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DomainHistory) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountIntelDomainHistoryListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DomainHistoryError struct {
-	Code    int64                  `json:"code,required"`
-	Message string                 `json:"message,required"`
-	JSON    domainHistoryErrorJSON `json:"-"`
+type AccountIntelDomainHistoryListResponseError struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    accountIntelDomainHistoryListResponseErrorJSON `json:"-"`
 }
 
-// domainHistoryErrorJSON contains the JSON metadata for the struct
-// [DomainHistoryError]
-type domainHistoryErrorJSON struct {
+// accountIntelDomainHistoryListResponseErrorJSON contains the JSON metadata for
+// the struct [AccountIntelDomainHistoryListResponseError]
+type accountIntelDomainHistoryListResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DomainHistoryError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountIntelDomainHistoryListResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DomainHistoryMessage struct {
-	Code    int64                    `json:"code,required"`
-	Message string                   `json:"message,required"`
-	JSON    domainHistoryMessageJSON `json:"-"`
+type AccountIntelDomainHistoryListResponseMessage struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    accountIntelDomainHistoryListResponseMessageJSON `json:"-"`
 }
 
-// domainHistoryMessageJSON contains the JSON metadata for the struct
-// [DomainHistoryMessage]
-type domainHistoryMessageJSON struct {
+// accountIntelDomainHistoryListResponseMessageJSON contains the JSON metadata for
+// the struct [AccountIntelDomainHistoryListResponseMessage]
+type accountIntelDomainHistoryListResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DomainHistoryMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountIntelDomainHistoryListResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DomainHistoryResult struct {
-	Categorizations []DomainHistoryResultCategorization `json:"categorizations"`
-	Domain          string                              `json:"domain"`
-	JSON            domainHistoryResultJSON             `json:"-"`
+type AccountIntelDomainHistoryListResponseResult struct {
+	Categorizations []AccountIntelDomainHistoryListResponseResultCategorization `json:"categorizations"`
+	Domain          string                                                      `json:"domain"`
+	JSON            accountIntelDomainHistoryListResponseResultJSON             `json:"-"`
 }
 
-// domainHistoryResultJSON contains the JSON metadata for the struct
-// [DomainHistoryResult]
-type domainHistoryResultJSON struct {
+// accountIntelDomainHistoryListResponseResultJSON contains the JSON metadata for
+// the struct [AccountIntelDomainHistoryListResponseResult]
+type accountIntelDomainHistoryListResponseResultJSON struct {
 	Categorizations apijson.Field
 	Domain          apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *DomainHistoryResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountIntelDomainHistoryListResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DomainHistoryResultCategorization struct {
-	Categories interface{}                           `json:"categories"`
-	End        time.Time                             `json:"end" format:"date"`
-	Start      time.Time                             `json:"start" format:"date"`
-	JSON       domainHistoryResultCategorizationJSON `json:"-"`
+type AccountIntelDomainHistoryListResponseResultCategorization struct {
+	Categories interface{}                                                   `json:"categories"`
+	End        time.Time                                                     `json:"end" format:"date"`
+	Start      time.Time                                                     `json:"start" format:"date"`
+	JSON       accountIntelDomainHistoryListResponseResultCategorizationJSON `json:"-"`
 }
 
-// domainHistoryResultCategorizationJSON contains the JSON metadata for the struct
-// [DomainHistoryResultCategorization]
-type domainHistoryResultCategorizationJSON struct {
+// accountIntelDomainHistoryListResponseResultCategorizationJSON contains the JSON
+// metadata for the struct
+// [AccountIntelDomainHistoryListResponseResultCategorization]
+type accountIntelDomainHistoryListResponseResultCategorizationJSON struct {
 	Categories  apijson.Field
 	End         apijson.Field
 	Start       apijson.Field
@@ -141,11 +143,11 @@ type domainHistoryResultCategorizationJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DomainHistoryResultCategorization) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountIntelDomainHistoryListResponseResultCategorization) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DomainHistoryResultInfo struct {
+type AccountIntelDomainHistoryListResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -153,13 +155,13 @@ type DomainHistoryResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                     `json:"total_count"`
-	JSON       domainHistoryResultInfoJSON `json:"-"`
+	TotalCount float64                                             `json:"total_count"`
+	JSON       accountIntelDomainHistoryListResponseResultInfoJSON `json:"-"`
 }
 
-// domainHistoryResultInfoJSON contains the JSON metadata for the struct
-// [DomainHistoryResultInfo]
-type domainHistoryResultInfoJSON struct {
+// accountIntelDomainHistoryListResponseResultInfoJSON contains the JSON metadata
+// for the struct [AccountIntelDomainHistoryListResponseResultInfo]
+type accountIntelDomainHistoryListResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -168,19 +170,19 @@ type domainHistoryResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DomainHistoryResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountIntelDomainHistoryListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type DomainHistorySuccess bool
+type AccountIntelDomainHistoryListResponseSuccess bool
 
 const (
-	DomainHistorySuccessTrue DomainHistorySuccess = true
+	AccountIntelDomainHistoryListResponseSuccessTrue AccountIntelDomainHistoryListResponseSuccess = true
 )
 
 type AccountIntelDomainHistoryListParams struct {
-	Domain param.Field[string] `query:"domain"`
+	Domain param.Field[interface{}] `query:"domain"`
 }
 
 // URLQuery serializes [AccountIntelDomainHistoryListParams]'s query parameters as

@@ -34,7 +34,7 @@ func NewAccountGatewayListService(opts ...option.RequestOption) (r *AccountGatew
 	return
 }
 
-// Fetch a single Zero Trust List.
+// Fetches a single Zero Trust list.
 func (r *AccountGatewayListService) Get(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *AccountGatewayListGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/gateway/lists/%s", identifier, uuid)
@@ -42,7 +42,7 @@ func (r *AccountGatewayListService) Get(ctx context.Context, identifier interfac
 	return
 }
 
-// Update a configured Zero Trust List.
+// Updates a configured Zero Trust list.
 func (r *AccountGatewayListService) Update(ctx context.Context, identifier interface{}, uuid string, body AccountGatewayListUpdateParams, opts ...option.RequestOption) (res *AccountGatewayListUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/gateway/lists/%s", identifier, uuid)
@@ -50,375 +50,37 @@ func (r *AccountGatewayListService) Update(ctx context.Context, identifier inter
 	return
 }
 
-// Delete a Zero Trust List.
-func (r *AccountGatewayListService) Delete(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *EmptyResponseArJnNcMr, err error) {
+// Deletes a Zero Trust list.
+func (r *AccountGatewayListService) Delete(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *AccountGatewayListDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/gateway/lists/%s", identifier, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
 
-// Create a new Zero Trust List.
-func (r *AccountGatewayListService) ZeroTrustListsNewZeroTrustList(ctx context.Context, identifier interface{}, body AccountGatewayListZeroTrustListsNewZeroTrustListParams, opts ...option.RequestOption) (res *SingleResponseWithListItem, err error) {
+// Appends or removes an item from a configured Zero Trust list.
+func (r *AccountGatewayListService) Patch(ctx context.Context, identifier interface{}, uuid string, body AccountGatewayListPatchParams, opts ...option.RequestOption) (res *AccountGatewayListPatchResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	path := fmt.Sprintf("accounts/%v/gateway/lists/%s", identifier, uuid)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
+	return
+}
+
+// Creates a new Zero Trust list.
+func (r *AccountGatewayListService) ZeroTrustListsNewZeroTrustList(ctx context.Context, identifier interface{}, body AccountGatewayListZeroTrustListsNewZeroTrustListParams, opts ...option.RequestOption) (res *AccountGatewayListZeroTrustListsNewZeroTrustListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/gateway/lists", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
-// List Zero Trust Lists for an account.
-func (r *AccountGatewayListService) ZeroTrustListsListZeroTrustLists(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *ResponseCollection0kL9nhn2, err error) {
+// Fetches all Zero Trust lists for an account.
+func (r *AccountGatewayListService) ZeroTrustListsListZeroTrustLists(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *AccountGatewayListZeroTrustListsListZeroTrustListsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/gateway/lists", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
-
-type EmptyResponseArJnNcMr struct {
-	Errors   []EmptyResponseArJnNcMrError   `json:"errors"`
-	Messages []EmptyResponseArJnNcMrMessage `json:"messages"`
-	Result   interface{}                    `json:"result"`
-	// Whether the API call was successful
-	Success EmptyResponseArJnNcMrSuccess `json:"success"`
-	JSON    emptyResponseArJnNcMrJSON    `json:"-"`
-}
-
-// emptyResponseArJnNcMrJSON contains the JSON metadata for the struct
-// [EmptyResponseArJnNcMr]
-type emptyResponseArJnNcMrJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmptyResponseArJnNcMr) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type EmptyResponseArJnNcMrError struct {
-	Code    int64                          `json:"code,required"`
-	Message string                         `json:"message,required"`
-	JSON    emptyResponseArJnNcMrErrorJSON `json:"-"`
-}
-
-// emptyResponseArJnNcMrErrorJSON contains the JSON metadata for the struct
-// [EmptyResponseArJnNcMrError]
-type emptyResponseArJnNcMrErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmptyResponseArJnNcMrError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type EmptyResponseArJnNcMrMessage struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    emptyResponseArJnNcMrMessageJSON `json:"-"`
-}
-
-// emptyResponseArJnNcMrMessageJSON contains the JSON metadata for the struct
-// [EmptyResponseArJnNcMrMessage]
-type emptyResponseArJnNcMrMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmptyResponseArJnNcMrMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type EmptyResponseArJnNcMrSuccess bool
-
-const (
-	EmptyResponseArJnNcMrSuccessTrue EmptyResponseArJnNcMrSuccess = true
-)
-
-type ResponseCollection0kL9nhn2 struct {
-	Errors     []ResponseCollection0kL9nhn2Error    `json:"errors"`
-	Messages   []ResponseCollection0kL9nhn2Message  `json:"messages"`
-	Result     []ResponseCollection0kL9nhn2Result   `json:"result"`
-	ResultInfo ResponseCollection0kL9nhn2ResultInfo `json:"result_info"`
-	// Whether the API call was successful
-	Success ResponseCollection0kL9nhn2Success `json:"success"`
-	JSON    responseCollection0kL9nhn2JSON    `json:"-"`
-}
-
-// responseCollection0kL9nhn2JSON contains the JSON metadata for the struct
-// [ResponseCollection0kL9nhn2]
-type responseCollection0kL9nhn2JSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ResponseCollection0kL9nhn2) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ResponseCollection0kL9nhn2Error struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    responseCollection0kL9nhn2ErrorJSON `json:"-"`
-}
-
-// responseCollection0kL9nhn2ErrorJSON contains the JSON metadata for the struct
-// [ResponseCollection0kL9nhn2Error]
-type responseCollection0kL9nhn2ErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ResponseCollection0kL9nhn2Error) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ResponseCollection0kL9nhn2Message struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    responseCollection0kL9nhn2MessageJSON `json:"-"`
-}
-
-// responseCollection0kL9nhn2MessageJSON contains the JSON metadata for the struct
-// [ResponseCollection0kL9nhn2Message]
-type responseCollection0kL9nhn2MessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ResponseCollection0kL9nhn2Message) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ResponseCollection0kL9nhn2Result struct {
-	// API Resource UUID tag.
-	ID string `json:"id"`
-	// The number of items in the List.
-	Count     float64   `json:"count"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The description of the List.
-	Description string `json:"description"`
-	// The name of the List.
-	Name string `json:"name"`
-	// The type of List.
-	Type      ResponseCollection0kL9nhn2ResultType `json:"type"`
-	UpdatedAt time.Time                            `json:"updated_at" format:"date-time"`
-	JSON      responseCollection0kL9nhn2ResultJSON `json:"-"`
-}
-
-// responseCollection0kL9nhn2ResultJSON contains the JSON metadata for the struct
-// [ResponseCollection0kL9nhn2Result]
-type responseCollection0kL9nhn2ResultJSON struct {
-	ID          apijson.Field
-	Count       apijson.Field
-	CreatedAt   apijson.Field
-	Description apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ResponseCollection0kL9nhn2Result) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of List.
-type ResponseCollection0kL9nhn2ResultType string
-
-const (
-	ResponseCollection0kL9nhn2ResultTypeSerial ResponseCollection0kL9nhn2ResultType = "SERIAL"
-	ResponseCollection0kL9nhn2ResultTypeURL    ResponseCollection0kL9nhn2ResultType = "URL"
-	ResponseCollection0kL9nhn2ResultTypeDomain ResponseCollection0kL9nhn2ResultType = "DOMAIN"
-	ResponseCollection0kL9nhn2ResultTypeEmail  ResponseCollection0kL9nhn2ResultType = "EMAIL"
-	ResponseCollection0kL9nhn2ResultTypeIP     ResponseCollection0kL9nhn2ResultType = "IP"
-)
-
-type ResponseCollection0kL9nhn2ResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                  `json:"total_count"`
-	JSON       responseCollection0kL9nhn2ResultInfoJSON `json:"-"`
-}
-
-// responseCollection0kL9nhn2ResultInfoJSON contains the JSON metadata for the
-// struct [ResponseCollection0kL9nhn2ResultInfo]
-type responseCollection0kL9nhn2ResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ResponseCollection0kL9nhn2ResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type ResponseCollection0kL9nhn2Success bool
-
-const (
-	ResponseCollection0kL9nhn2SuccessTrue ResponseCollection0kL9nhn2Success = true
-)
-
-type SingleResponseWithListItem struct {
-	Errors   []SingleResponseWithListItemError   `json:"errors"`
-	Messages []SingleResponseWithListItemMessage `json:"messages"`
-	Result   SingleResponseWithListItemResult    `json:"result"`
-	// Whether the API call was successful
-	Success SingleResponseWithListItemSuccess `json:"success"`
-	JSON    singleResponseWithListItemJSON    `json:"-"`
-}
-
-// singleResponseWithListItemJSON contains the JSON metadata for the struct
-// [SingleResponseWithListItem]
-type singleResponseWithListItemJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SingleResponseWithListItem) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SingleResponseWithListItemError struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    singleResponseWithListItemErrorJSON `json:"-"`
-}
-
-// singleResponseWithListItemErrorJSON contains the JSON metadata for the struct
-// [SingleResponseWithListItemError]
-type singleResponseWithListItemErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SingleResponseWithListItemError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SingleResponseWithListItemMessage struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    singleResponseWithListItemMessageJSON `json:"-"`
-}
-
-// singleResponseWithListItemMessageJSON contains the JSON metadata for the struct
-// [SingleResponseWithListItemMessage]
-type singleResponseWithListItemMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SingleResponseWithListItemMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SingleResponseWithListItemResult struct {
-	// API Resource UUID tag.
-	ID        string    `json:"id"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The description of the List.
-	Description string `json:"description"`
-	// The items in the List.
-	Items []SingleResponseWithListItemResultItem `json:"items"`
-	// The name of the List.
-	Name string `json:"name"`
-	// The type of List.
-	Type      SingleResponseWithListItemResultType `json:"type"`
-	UpdatedAt time.Time                            `json:"updated_at" format:"date-time"`
-	JSON      singleResponseWithListItemResultJSON `json:"-"`
-}
-
-// singleResponseWithListItemResultJSON contains the JSON metadata for the struct
-// [SingleResponseWithListItemResult]
-type singleResponseWithListItemResultJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Description apijson.Field
-	Items       apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SingleResponseWithListItemResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SingleResponseWithListItemResultItem struct {
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The value of the item in a List.
-	Value string                                   `json:"value"`
-	JSON  singleResponseWithListItemResultItemJSON `json:"-"`
-}
-
-// singleResponseWithListItemResultItemJSON contains the JSON metadata for the
-// struct [SingleResponseWithListItemResultItem]
-type singleResponseWithListItemResultItemJSON struct {
-	CreatedAt   apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SingleResponseWithListItemResultItem) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of List.
-type SingleResponseWithListItemResultType string
-
-const (
-	SingleResponseWithListItemResultTypeSerial SingleResponseWithListItemResultType = "SERIAL"
-	SingleResponseWithListItemResultTypeURL    SingleResponseWithListItemResultType = "URL"
-	SingleResponseWithListItemResultTypeDomain SingleResponseWithListItemResultType = "DOMAIN"
-	SingleResponseWithListItemResultTypeEmail  SingleResponseWithListItemResultType = "EMAIL"
-	SingleResponseWithListItemResultTypeIP     SingleResponseWithListItemResultType = "IP"
-)
-
-// Whether the API call was successful
-type SingleResponseWithListItemSuccess bool
-
-const (
-	SingleResponseWithListItemSuccessTrue SingleResponseWithListItemSuccess = true
-)
 
 type AccountGatewayListGetResponse struct {
 	Errors   []AccountGatewayListGetResponseError   `json:"errors"`
@@ -485,14 +147,14 @@ func (r *AccountGatewayListGetResponseMessage) UnmarshalJSON(data []byte) (err e
 type AccountGatewayListGetResponseResult struct {
 	// API Resource UUID tag.
 	ID string `json:"id"`
-	// The number of items in the List.
+	// The number of items in the list.
 	Count     float64   `json:"count"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The description of the List.
+	// The description of the list.
 	Description string `json:"description"`
-	// The name of the List.
+	// The name of the list.
 	Name string `json:"name"`
-	// The type of List.
+	// The type of list.
 	Type      AccountGatewayListGetResponseResultType `json:"type"`
 	UpdatedAt time.Time                               `json:"updated_at" format:"date-time"`
 	JSON      accountGatewayListGetResponseResultJSON `json:"-"`
@@ -516,7 +178,7 @@ func (r *AccountGatewayListGetResponseResult) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of List.
+// The type of list.
 type AccountGatewayListGetResponseResultType string
 
 const (
@@ -599,14 +261,14 @@ func (r *AccountGatewayListUpdateResponseMessage) UnmarshalJSON(data []byte) (er
 type AccountGatewayListUpdateResponseResult struct {
 	// API Resource UUID tag.
 	ID string `json:"id"`
-	// The number of items in the List.
+	// The number of items in the list.
 	Count     float64   `json:"count"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The description of the List.
+	// The description of the list.
 	Description string `json:"description"`
-	// The name of the List.
+	// The name of the list.
 	Name string `json:"name"`
-	// The type of List.
+	// The type of list.
 	Type      AccountGatewayListUpdateResponseResultType `json:"type"`
 	UpdatedAt time.Time                                  `json:"updated_at" format:"date-time"`
 	JSON      accountGatewayListUpdateResponseResultJSON `json:"-"`
@@ -630,7 +292,7 @@ func (r *AccountGatewayListUpdateResponseResult) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of List.
+// The type of list.
 type AccountGatewayListUpdateResponseResultType string
 
 const (
@@ -648,10 +310,480 @@ const (
 	AccountGatewayListUpdateResponseSuccessTrue AccountGatewayListUpdateResponseSuccess = true
 )
 
+type AccountGatewayListDeleteResponse struct {
+	Errors   []AccountGatewayListDeleteResponseError   `json:"errors"`
+	Messages []AccountGatewayListDeleteResponseMessage `json:"messages"`
+	Result   interface{}                               `json:"result"`
+	// Whether the API call was successful
+	Success AccountGatewayListDeleteResponseSuccess `json:"success"`
+	JSON    accountGatewayListDeleteResponseJSON    `json:"-"`
+}
+
+// accountGatewayListDeleteResponseJSON contains the JSON metadata for the struct
+// [AccountGatewayListDeleteResponse]
+type accountGatewayListDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayListDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayListDeleteResponseError struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    accountGatewayListDeleteResponseErrorJSON `json:"-"`
+}
+
+// accountGatewayListDeleteResponseErrorJSON contains the JSON metadata for the
+// struct [AccountGatewayListDeleteResponseError]
+type accountGatewayListDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayListDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayListDeleteResponseMessage struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    accountGatewayListDeleteResponseMessageJSON `json:"-"`
+}
+
+// accountGatewayListDeleteResponseMessageJSON contains the JSON metadata for the
+// struct [AccountGatewayListDeleteResponseMessage]
+type accountGatewayListDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayListDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountGatewayListDeleteResponseSuccess bool
+
+const (
+	AccountGatewayListDeleteResponseSuccessTrue AccountGatewayListDeleteResponseSuccess = true
+)
+
+type AccountGatewayListPatchResponse struct {
+	Errors   []AccountGatewayListPatchResponseError   `json:"errors"`
+	Messages []AccountGatewayListPatchResponseMessage `json:"messages"`
+	Result   AccountGatewayListPatchResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountGatewayListPatchResponseSuccess `json:"success"`
+	JSON    accountGatewayListPatchResponseJSON    `json:"-"`
+}
+
+// accountGatewayListPatchResponseJSON contains the JSON metadata for the struct
+// [AccountGatewayListPatchResponse]
+type accountGatewayListPatchResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayListPatchResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayListPatchResponseError struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    accountGatewayListPatchResponseErrorJSON `json:"-"`
+}
+
+// accountGatewayListPatchResponseErrorJSON contains the JSON metadata for the
+// struct [AccountGatewayListPatchResponseError]
+type accountGatewayListPatchResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayListPatchResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayListPatchResponseMessage struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    accountGatewayListPatchResponseMessageJSON `json:"-"`
+}
+
+// accountGatewayListPatchResponseMessageJSON contains the JSON metadata for the
+// struct [AccountGatewayListPatchResponseMessage]
+type accountGatewayListPatchResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayListPatchResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayListPatchResponseResult struct {
+	// API Resource UUID tag.
+	ID string `json:"id"`
+	// The number of items in the list.
+	Count     float64   `json:"count"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The description of the list.
+	Description string `json:"description"`
+	// The name of the list.
+	Name string `json:"name"`
+	// The type of list.
+	Type      AccountGatewayListPatchResponseResultType `json:"type"`
+	UpdatedAt time.Time                                 `json:"updated_at" format:"date-time"`
+	JSON      accountGatewayListPatchResponseResultJSON `json:"-"`
+}
+
+// accountGatewayListPatchResponseResultJSON contains the JSON metadata for the
+// struct [AccountGatewayListPatchResponseResult]
+type accountGatewayListPatchResponseResultJSON struct {
+	ID          apijson.Field
+	Count       apijson.Field
+	CreatedAt   apijson.Field
+	Description apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayListPatchResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of list.
+type AccountGatewayListPatchResponseResultType string
+
+const (
+	AccountGatewayListPatchResponseResultTypeSerial AccountGatewayListPatchResponseResultType = "SERIAL"
+	AccountGatewayListPatchResponseResultTypeURL    AccountGatewayListPatchResponseResultType = "URL"
+	AccountGatewayListPatchResponseResultTypeDomain AccountGatewayListPatchResponseResultType = "DOMAIN"
+	AccountGatewayListPatchResponseResultTypeEmail  AccountGatewayListPatchResponseResultType = "EMAIL"
+	AccountGatewayListPatchResponseResultTypeIP     AccountGatewayListPatchResponseResultType = "IP"
+)
+
+// Whether the API call was successful
+type AccountGatewayListPatchResponseSuccess bool
+
+const (
+	AccountGatewayListPatchResponseSuccessTrue AccountGatewayListPatchResponseSuccess = true
+)
+
+type AccountGatewayListZeroTrustListsNewZeroTrustListResponse struct {
+	Errors   []AccountGatewayListZeroTrustListsNewZeroTrustListResponseError   `json:"errors"`
+	Messages []AccountGatewayListZeroTrustListsNewZeroTrustListResponseMessage `json:"messages"`
+	Result   AccountGatewayListZeroTrustListsNewZeroTrustListResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountGatewayListZeroTrustListsNewZeroTrustListResponseSuccess `json:"success"`
+	JSON    accountGatewayListZeroTrustListsNewZeroTrustListResponseJSON    `json:"-"`
+}
+
+// accountGatewayListZeroTrustListsNewZeroTrustListResponseJSON contains the JSON
+// metadata for the struct
+// [AccountGatewayListZeroTrustListsNewZeroTrustListResponse]
+type accountGatewayListZeroTrustListsNewZeroTrustListResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayListZeroTrustListsNewZeroTrustListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayListZeroTrustListsNewZeroTrustListResponseError struct {
+	Code    int64                                                             `json:"code,required"`
+	Message string                                                            `json:"message,required"`
+	JSON    accountGatewayListZeroTrustListsNewZeroTrustListResponseErrorJSON `json:"-"`
+}
+
+// accountGatewayListZeroTrustListsNewZeroTrustListResponseErrorJSON contains the
+// JSON metadata for the struct
+// [AccountGatewayListZeroTrustListsNewZeroTrustListResponseError]
+type accountGatewayListZeroTrustListsNewZeroTrustListResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayListZeroTrustListsNewZeroTrustListResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayListZeroTrustListsNewZeroTrustListResponseMessage struct {
+	Code    int64                                                               `json:"code,required"`
+	Message string                                                              `json:"message,required"`
+	JSON    accountGatewayListZeroTrustListsNewZeroTrustListResponseMessageJSON `json:"-"`
+}
+
+// accountGatewayListZeroTrustListsNewZeroTrustListResponseMessageJSON contains the
+// JSON metadata for the struct
+// [AccountGatewayListZeroTrustListsNewZeroTrustListResponseMessage]
+type accountGatewayListZeroTrustListsNewZeroTrustListResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayListZeroTrustListsNewZeroTrustListResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayListZeroTrustListsNewZeroTrustListResponseResult struct {
+	// API Resource UUID tag.
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The description of the list.
+	Description string `json:"description"`
+	// The items in the list.
+	Items []AccountGatewayListZeroTrustListsNewZeroTrustListResponseResultItem `json:"items"`
+	// The name of the list.
+	Name string `json:"name"`
+	// The type of list.
+	Type      AccountGatewayListZeroTrustListsNewZeroTrustListResponseResultType `json:"type"`
+	UpdatedAt time.Time                                                          `json:"updated_at" format:"date-time"`
+	JSON      accountGatewayListZeroTrustListsNewZeroTrustListResponseResultJSON `json:"-"`
+}
+
+// accountGatewayListZeroTrustListsNewZeroTrustListResponseResultJSON contains the
+// JSON metadata for the struct
+// [AccountGatewayListZeroTrustListsNewZeroTrustListResponseResult]
+type accountGatewayListZeroTrustListsNewZeroTrustListResponseResultJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Description apijson.Field
+	Items       apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayListZeroTrustListsNewZeroTrustListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayListZeroTrustListsNewZeroTrustListResponseResultItem struct {
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The value of the item in a list.
+	Value string                                                                 `json:"value"`
+	JSON  accountGatewayListZeroTrustListsNewZeroTrustListResponseResultItemJSON `json:"-"`
+}
+
+// accountGatewayListZeroTrustListsNewZeroTrustListResponseResultItemJSON contains
+// the JSON metadata for the struct
+// [AccountGatewayListZeroTrustListsNewZeroTrustListResponseResultItem]
+type accountGatewayListZeroTrustListsNewZeroTrustListResponseResultItemJSON struct {
+	CreatedAt   apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayListZeroTrustListsNewZeroTrustListResponseResultItem) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of list.
+type AccountGatewayListZeroTrustListsNewZeroTrustListResponseResultType string
+
+const (
+	AccountGatewayListZeroTrustListsNewZeroTrustListResponseResultTypeSerial AccountGatewayListZeroTrustListsNewZeroTrustListResponseResultType = "SERIAL"
+	AccountGatewayListZeroTrustListsNewZeroTrustListResponseResultTypeURL    AccountGatewayListZeroTrustListsNewZeroTrustListResponseResultType = "URL"
+	AccountGatewayListZeroTrustListsNewZeroTrustListResponseResultTypeDomain AccountGatewayListZeroTrustListsNewZeroTrustListResponseResultType = "DOMAIN"
+	AccountGatewayListZeroTrustListsNewZeroTrustListResponseResultTypeEmail  AccountGatewayListZeroTrustListsNewZeroTrustListResponseResultType = "EMAIL"
+	AccountGatewayListZeroTrustListsNewZeroTrustListResponseResultTypeIP     AccountGatewayListZeroTrustListsNewZeroTrustListResponseResultType = "IP"
+)
+
+// Whether the API call was successful
+type AccountGatewayListZeroTrustListsNewZeroTrustListResponseSuccess bool
+
+const (
+	AccountGatewayListZeroTrustListsNewZeroTrustListResponseSuccessTrue AccountGatewayListZeroTrustListsNewZeroTrustListResponseSuccess = true
+)
+
+type AccountGatewayListZeroTrustListsListZeroTrustListsResponse struct {
+	Errors     []AccountGatewayListZeroTrustListsListZeroTrustListsResponseError    `json:"errors"`
+	Messages   []AccountGatewayListZeroTrustListsListZeroTrustListsResponseMessage  `json:"messages"`
+	Result     []AccountGatewayListZeroTrustListsListZeroTrustListsResponseResult   `json:"result"`
+	ResultInfo AccountGatewayListZeroTrustListsListZeroTrustListsResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success AccountGatewayListZeroTrustListsListZeroTrustListsResponseSuccess `json:"success"`
+	JSON    accountGatewayListZeroTrustListsListZeroTrustListsResponseJSON    `json:"-"`
+}
+
+// accountGatewayListZeroTrustListsListZeroTrustListsResponseJSON contains the JSON
+// metadata for the struct
+// [AccountGatewayListZeroTrustListsListZeroTrustListsResponse]
+type accountGatewayListZeroTrustListsListZeroTrustListsResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayListZeroTrustListsListZeroTrustListsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayListZeroTrustListsListZeroTrustListsResponseError struct {
+	Code    int64                                                               `json:"code,required"`
+	Message string                                                              `json:"message,required"`
+	JSON    accountGatewayListZeroTrustListsListZeroTrustListsResponseErrorJSON `json:"-"`
+}
+
+// accountGatewayListZeroTrustListsListZeroTrustListsResponseErrorJSON contains the
+// JSON metadata for the struct
+// [AccountGatewayListZeroTrustListsListZeroTrustListsResponseError]
+type accountGatewayListZeroTrustListsListZeroTrustListsResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayListZeroTrustListsListZeroTrustListsResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayListZeroTrustListsListZeroTrustListsResponseMessage struct {
+	Code    int64                                                                 `json:"code,required"`
+	Message string                                                                `json:"message,required"`
+	JSON    accountGatewayListZeroTrustListsListZeroTrustListsResponseMessageJSON `json:"-"`
+}
+
+// accountGatewayListZeroTrustListsListZeroTrustListsResponseMessageJSON contains
+// the JSON metadata for the struct
+// [AccountGatewayListZeroTrustListsListZeroTrustListsResponseMessage]
+type accountGatewayListZeroTrustListsListZeroTrustListsResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayListZeroTrustListsListZeroTrustListsResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayListZeroTrustListsListZeroTrustListsResponseResult struct {
+	// API Resource UUID tag.
+	ID string `json:"id"`
+	// The number of items in the list.
+	Count     float64   `json:"count"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The description of the list.
+	Description string `json:"description"`
+	// The name of the list.
+	Name string `json:"name"`
+	// The type of list.
+	Type      AccountGatewayListZeroTrustListsListZeroTrustListsResponseResultType `json:"type"`
+	UpdatedAt time.Time                                                            `json:"updated_at" format:"date-time"`
+	JSON      accountGatewayListZeroTrustListsListZeroTrustListsResponseResultJSON `json:"-"`
+}
+
+// accountGatewayListZeroTrustListsListZeroTrustListsResponseResultJSON contains
+// the JSON metadata for the struct
+// [AccountGatewayListZeroTrustListsListZeroTrustListsResponseResult]
+type accountGatewayListZeroTrustListsListZeroTrustListsResponseResultJSON struct {
+	ID          apijson.Field
+	Count       apijson.Field
+	CreatedAt   apijson.Field
+	Description apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayListZeroTrustListsListZeroTrustListsResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of list.
+type AccountGatewayListZeroTrustListsListZeroTrustListsResponseResultType string
+
+const (
+	AccountGatewayListZeroTrustListsListZeroTrustListsResponseResultTypeSerial AccountGatewayListZeroTrustListsListZeroTrustListsResponseResultType = "SERIAL"
+	AccountGatewayListZeroTrustListsListZeroTrustListsResponseResultTypeURL    AccountGatewayListZeroTrustListsListZeroTrustListsResponseResultType = "URL"
+	AccountGatewayListZeroTrustListsListZeroTrustListsResponseResultTypeDomain AccountGatewayListZeroTrustListsListZeroTrustListsResponseResultType = "DOMAIN"
+	AccountGatewayListZeroTrustListsListZeroTrustListsResponseResultTypeEmail  AccountGatewayListZeroTrustListsListZeroTrustListsResponseResultType = "EMAIL"
+	AccountGatewayListZeroTrustListsListZeroTrustListsResponseResultTypeIP     AccountGatewayListZeroTrustListsListZeroTrustListsResponseResultType = "IP"
+)
+
+type AccountGatewayListZeroTrustListsListZeroTrustListsResponseResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                                                  `json:"total_count"`
+	JSON       accountGatewayListZeroTrustListsListZeroTrustListsResponseResultInfoJSON `json:"-"`
+}
+
+// accountGatewayListZeroTrustListsListZeroTrustListsResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayListZeroTrustListsListZeroTrustListsResponseResultInfo]
+type accountGatewayListZeroTrustListsListZeroTrustListsResponseResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayListZeroTrustListsListZeroTrustListsResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountGatewayListZeroTrustListsListZeroTrustListsResponseSuccess bool
+
+const (
+	AccountGatewayListZeroTrustListsListZeroTrustListsResponseSuccessTrue AccountGatewayListZeroTrustListsListZeroTrustListsResponseSuccess = true
+)
+
 type AccountGatewayListUpdateParams struct {
-	// The name of the List.
+	// The name of the list.
 	Name param.Field[string] `json:"name,required"`
-	// The description of the List.
+	// The description of the list.
 	Description param.Field[string] `json:"description"`
 }
 
@@ -659,14 +791,34 @@ func (r AccountGatewayListUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+type AccountGatewayListPatchParams struct {
+	// The items in the list.
+	Append param.Field[[]AccountGatewayListPatchParamsAppend] `json:"append"`
+	// A list of the item values you want to remove.
+	Remove param.Field[[]string] `json:"remove"`
+}
+
+func (r AccountGatewayListPatchParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccountGatewayListPatchParamsAppend struct {
+	// The value of the item in a list.
+	Value param.Field[string] `json:"value"`
+}
+
+func (r AccountGatewayListPatchParamsAppend) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type AccountGatewayListZeroTrustListsNewZeroTrustListParams struct {
-	// The name of the List.
+	// The name of the list.
 	Name param.Field[string] `json:"name,required"`
-	// The type of List.
+	// The type of list.
 	Type param.Field[AccountGatewayListZeroTrustListsNewZeroTrustListParamsType] `json:"type,required"`
-	// The description of the List.
+	// The description of the list.
 	Description param.Field[string] `json:"description"`
-	// The items in the List.
+	// The items in the list.
 	Items param.Field[[]AccountGatewayListZeroTrustListsNewZeroTrustListParamsItem] `json:"items"`
 }
 
@@ -674,7 +826,7 @@ func (r AccountGatewayListZeroTrustListsNewZeroTrustListParams) MarshalJSON() (d
 	return apijson.MarshalRoot(r)
 }
 
-// The type of List.
+// The type of list.
 type AccountGatewayListZeroTrustListsNewZeroTrustListParamsType string
 
 const (
@@ -686,7 +838,7 @@ const (
 )
 
 type AccountGatewayListZeroTrustListsNewZeroTrustListParamsItem struct {
-	// The value of the item in a List.
+	// The value of the item in a list.
 	Value param.Field[string] `json:"value"`
 }
 

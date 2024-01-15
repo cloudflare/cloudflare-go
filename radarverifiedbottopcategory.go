@@ -81,16 +81,16 @@ func (r *RadarVerifiedBotTopCategoryListResponseResult) UnmarshalJSON(data []byt
 }
 
 type RadarVerifiedBotTopCategoryListResponseResultMeta struct {
-	ConfidenceInfo RadarVerifiedBotTopCategoryListResponseResultMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      RadarVerifiedBotTopCategoryListResponseResultMetaDateRange      `json:"dateRange,required"`
+	DateRange      []RadarVerifiedBotTopCategoryListResponseResultMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo RadarVerifiedBotTopCategoryListResponseResultMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           radarVerifiedBotTopCategoryListResponseResultMetaJSON           `json:"-"`
 }
 
 // radarVerifiedBotTopCategoryListResponseResultMetaJSON contains the JSON metadata
 // for the struct [RadarVerifiedBotTopCategoryListResponseResultMeta]
 type radarVerifiedBotTopCategoryListResponseResultMetaJSON struct {
-	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
+	ConfidenceInfo apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -99,9 +99,31 @@ func (r *RadarVerifiedBotTopCategoryListResponseResultMeta) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type RadarVerifiedBotTopCategoryListResponseResultMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                                      `json:"startTime,required" format:"date-time"`
+	JSON      radarVerifiedBotTopCategoryListResponseResultMetaDateRangeJSON `json:"-"`
+}
+
+// radarVerifiedBotTopCategoryListResponseResultMetaDateRangeJSON contains the JSON
+// metadata for the struct
+// [RadarVerifiedBotTopCategoryListResponseResultMetaDateRange]
+type radarVerifiedBotTopCategoryListResponseResultMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarVerifiedBotTopCategoryListResponseResultMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type RadarVerifiedBotTopCategoryListResponseResultMetaConfidenceInfo struct {
-	Annotations []RadarVerifiedBotTopCategoryListResponseResultMetaConfidenceInfoAnnotation `json:"annotations,required"`
-	Level       int64                                                                       `json:"level,required"`
+	Annotations []RadarVerifiedBotTopCategoryListResponseResultMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                                       `json:"level"`
 	JSON        radarVerifiedBotTopCategoryListResponseResultMetaConfidenceInfoJSON         `json:"-"`
 }
 
@@ -120,48 +142,32 @@ func (r *RadarVerifiedBotTopCategoryListResponseResultMetaConfidenceInfo) Unmars
 }
 
 type RadarVerifiedBotTopCategoryListResponseResultMetaConfidenceInfoAnnotation struct {
-	DataSource  string                                                                        `json:"dataSource,required"`
-	Description string                                                                        `json:"description,required"`
-	EndTime     time.Time                                                                     `json:"endTime,required" format:"date-time"`
-	EventType   string                                                                        `json:"eventType,required"`
-	StartTime   time.Time                                                                     `json:"startTime,required" format:"date-time"`
-	JSON        radarVerifiedBotTopCategoryListResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
+	DataSource      string                                                                        `json:"dataSource,required"`
+	Description     string                                                                        `json:"description,required"`
+	EventType       string                                                                        `json:"eventType,required"`
+	IsInstantaneous interface{}                                                                   `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                                     `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                                        `json:"linkedUrl"`
+	StartTime       time.Time                                                                     `json:"startTime" format:"date-time"`
+	JSON            radarVerifiedBotTopCategoryListResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
 // radarVerifiedBotTopCategoryListResponseResultMetaConfidenceInfoAnnotationJSON
 // contains the JSON metadata for the struct
 // [RadarVerifiedBotTopCategoryListResponseResultMetaConfidenceInfoAnnotation]
 type radarVerifiedBotTopCategoryListResponseResultMetaConfidenceInfoAnnotationJSON struct {
-	DataSource  apijson.Field
-	Description apijson.Field
-	EndTime     apijson.Field
-	EventType   apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *RadarVerifiedBotTopCategoryListResponseResultMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarVerifiedBotTopCategoryListResponseResultMetaDateRange struct {
-	EndTime   time.Time                                                      `json:"endTime,required" format:"date-time"`
-	StartTime time.Time                                                      `json:"startTime,required" format:"date-time"`
-	JSON      radarVerifiedBotTopCategoryListResponseResultMetaDateRangeJSON `json:"-"`
-}
-
-// radarVerifiedBotTopCategoryListResponseResultMetaDateRangeJSON contains the JSON
-// metadata for the struct
-// [RadarVerifiedBotTopCategoryListResponseResultMetaDateRange]
-type radarVerifiedBotTopCategoryListResponseResultMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarVerifiedBotTopCategoryListResponseResultMetaDateRange) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -189,7 +195,7 @@ type RadarVerifiedBotTopCategoryListParams struct {
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of datetimes to filter the end of a series.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
@@ -222,6 +228,7 @@ type RadarVerifiedBotTopCategoryListParamsDateRange string
 
 const (
 	RadarVerifiedBotTopCategoryListParamsDateRange1d         RadarVerifiedBotTopCategoryListParamsDateRange = "1d"
+	RadarVerifiedBotTopCategoryListParamsDateRange2d         RadarVerifiedBotTopCategoryListParamsDateRange = "2d"
 	RadarVerifiedBotTopCategoryListParamsDateRange7d         RadarVerifiedBotTopCategoryListParamsDateRange = "7d"
 	RadarVerifiedBotTopCategoryListParamsDateRange14d        RadarVerifiedBotTopCategoryListParamsDateRange = "14d"
 	RadarVerifiedBotTopCategoryListParamsDateRange28d        RadarVerifiedBotTopCategoryListParamsDateRange = "28d"
@@ -229,6 +236,7 @@ const (
 	RadarVerifiedBotTopCategoryListParamsDateRange24w        RadarVerifiedBotTopCategoryListParamsDateRange = "24w"
 	RadarVerifiedBotTopCategoryListParamsDateRange52w        RadarVerifiedBotTopCategoryListParamsDateRange = "52w"
 	RadarVerifiedBotTopCategoryListParamsDateRange1dControl  RadarVerifiedBotTopCategoryListParamsDateRange = "1dControl"
+	RadarVerifiedBotTopCategoryListParamsDateRange2dControl  RadarVerifiedBotTopCategoryListParamsDateRange = "2dControl"
 	RadarVerifiedBotTopCategoryListParamsDateRange7dControl  RadarVerifiedBotTopCategoryListParamsDateRange = "7dControl"
 	RadarVerifiedBotTopCategoryListParamsDateRange14dControl RadarVerifiedBotTopCategoryListParamsDateRange = "14dControl"
 	RadarVerifiedBotTopCategoryListParamsDateRange28dControl RadarVerifiedBotTopCategoryListParamsDateRange = "28dControl"

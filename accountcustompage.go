@@ -32,42 +32,181 @@ func NewAccountCustomPageService(opts ...option.RequestOption) (r *AccountCustom
 }
 
 // Fetches the details of a custom page.
-func (r *AccountCustomPageService) Get(ctx context.Context, accountIdentifier string, identifier AccountCustomPageGetParamsIdentifier, opts ...option.RequestOption) (res *CustomPagesResponseSingle, err error) {
+func (r *AccountCustomPageService) Get(ctx context.Context, accountIdentifier string, identifier string, opts ...option.RequestOption) (res *AccountCustomPageGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%s/custom_pages/%v", accountIdentifier, identifier)
+	path := fmt.Sprintf("accounts/%s/custom_pages/%s", accountIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
 // Updates the configuration of an existing custom page.
-func (r *AccountCustomPageService) Update(ctx context.Context, accountIdentifier string, identifier AccountCustomPageUpdateParamsIdentifier, body AccountCustomPageUpdateParams, opts ...option.RequestOption) (res *CustomPagesResponseSingle, err error) {
+func (r *AccountCustomPageService) Update(ctx context.Context, accountIdentifier string, identifier string, body AccountCustomPageUpdateParams, opts ...option.RequestOption) (res *AccountCustomPageUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%s/custom_pages/%v", accountIdentifier, identifier)
+	path := fmt.Sprintf("accounts/%s/custom_pages/%s", accountIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
 	return
 }
 
 // Fetches all the custom pages at the account level.
-func (r *AccountCustomPageService) CustomPagesForAnAccountListCustomPages(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *CustomPagesResponseCollection, err error) {
+func (r *AccountCustomPageService) CustomPagesForAnAccountListCustomPages(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *AccountCustomPageCustomPagesForAnAccountListCustomPagesResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/custom_pages", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type CustomPagesResponseCollection struct {
-	Errors     []CustomPagesResponseCollectionError    `json:"errors"`
-	Messages   []CustomPagesResponseCollectionMessage  `json:"messages"`
-	Result     []interface{}                           `json:"result"`
-	ResultInfo CustomPagesResponseCollectionResultInfo `json:"result_info"`
+type AccountCustomPageGetResponse struct {
+	Errors   []AccountCustomPageGetResponseError   `json:"errors"`
+	Messages []AccountCustomPageGetResponseMessage `json:"messages"`
+	Result   interface{}                           `json:"result"`
 	// Whether the API call was successful
-	Success CustomPagesResponseCollectionSuccess `json:"success"`
-	JSON    customPagesResponseCollectionJSON    `json:"-"`
+	Success AccountCustomPageGetResponseSuccess `json:"success"`
+	JSON    accountCustomPageGetResponseJSON    `json:"-"`
 }
 
-// customPagesResponseCollectionJSON contains the JSON metadata for the struct
-// [CustomPagesResponseCollection]
-type customPagesResponseCollectionJSON struct {
+// accountCustomPageGetResponseJSON contains the JSON metadata for the struct
+// [AccountCustomPageGetResponse]
+type accountCustomPageGetResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountCustomPageGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountCustomPageGetResponseError struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    accountCustomPageGetResponseErrorJSON `json:"-"`
+}
+
+// accountCustomPageGetResponseErrorJSON contains the JSON metadata for the struct
+// [AccountCustomPageGetResponseError]
+type accountCustomPageGetResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountCustomPageGetResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountCustomPageGetResponseMessage struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    accountCustomPageGetResponseMessageJSON `json:"-"`
+}
+
+// accountCustomPageGetResponseMessageJSON contains the JSON metadata for the
+// struct [AccountCustomPageGetResponseMessage]
+type accountCustomPageGetResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountCustomPageGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountCustomPageGetResponseSuccess bool
+
+const (
+	AccountCustomPageGetResponseSuccessTrue AccountCustomPageGetResponseSuccess = true
+)
+
+type AccountCustomPageUpdateResponse struct {
+	Errors   []AccountCustomPageUpdateResponseError   `json:"errors"`
+	Messages []AccountCustomPageUpdateResponseMessage `json:"messages"`
+	Result   interface{}                              `json:"result"`
+	// Whether the API call was successful
+	Success AccountCustomPageUpdateResponseSuccess `json:"success"`
+	JSON    accountCustomPageUpdateResponseJSON    `json:"-"`
+}
+
+// accountCustomPageUpdateResponseJSON contains the JSON metadata for the struct
+// [AccountCustomPageUpdateResponse]
+type accountCustomPageUpdateResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountCustomPageUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountCustomPageUpdateResponseError struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    accountCustomPageUpdateResponseErrorJSON `json:"-"`
+}
+
+// accountCustomPageUpdateResponseErrorJSON contains the JSON metadata for the
+// struct [AccountCustomPageUpdateResponseError]
+type accountCustomPageUpdateResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountCustomPageUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountCustomPageUpdateResponseMessage struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    accountCustomPageUpdateResponseMessageJSON `json:"-"`
+}
+
+// accountCustomPageUpdateResponseMessageJSON contains the JSON metadata for the
+// struct [AccountCustomPageUpdateResponseMessage]
+type accountCustomPageUpdateResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountCustomPageUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountCustomPageUpdateResponseSuccess bool
+
+const (
+	AccountCustomPageUpdateResponseSuccessTrue AccountCustomPageUpdateResponseSuccess = true
+)
+
+type AccountCustomPageCustomPagesForAnAccountListCustomPagesResponse struct {
+	Errors     []AccountCustomPageCustomPagesForAnAccountListCustomPagesResponseError    `json:"errors"`
+	Messages   []AccountCustomPageCustomPagesForAnAccountListCustomPagesResponseMessage  `json:"messages"`
+	Result     []interface{}                                                             `json:"result"`
+	ResultInfo AccountCustomPageCustomPagesForAnAccountListCustomPagesResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success AccountCustomPageCustomPagesForAnAccountListCustomPagesResponseSuccess `json:"success"`
+	JSON    accountCustomPageCustomPagesForAnAccountListCustomPagesResponseJSON    `json:"-"`
+}
+
+// accountCustomPageCustomPagesForAnAccountListCustomPagesResponseJSON contains the
+// JSON metadata for the struct
+// [AccountCustomPageCustomPagesForAnAccountListCustomPagesResponse]
+type accountCustomPageCustomPagesForAnAccountListCustomPagesResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -77,49 +216,51 @@ type customPagesResponseCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CustomPagesResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountCustomPageCustomPagesForAnAccountListCustomPagesResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CustomPagesResponseCollectionError struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    customPagesResponseCollectionErrorJSON `json:"-"`
+type AccountCustomPageCustomPagesForAnAccountListCustomPagesResponseError struct {
+	Code    int64                                                                    `json:"code,required"`
+	Message string                                                                   `json:"message,required"`
+	JSON    accountCustomPageCustomPagesForAnAccountListCustomPagesResponseErrorJSON `json:"-"`
 }
 
-// customPagesResponseCollectionErrorJSON contains the JSON metadata for the struct
-// [CustomPagesResponseCollectionError]
-type customPagesResponseCollectionErrorJSON struct {
+// accountCustomPageCustomPagesForAnAccountListCustomPagesResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountCustomPageCustomPagesForAnAccountListCustomPagesResponseError]
+type accountCustomPageCustomPagesForAnAccountListCustomPagesResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CustomPagesResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountCustomPageCustomPagesForAnAccountListCustomPagesResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CustomPagesResponseCollectionMessage struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    customPagesResponseCollectionMessageJSON `json:"-"`
+type AccountCustomPageCustomPagesForAnAccountListCustomPagesResponseMessage struct {
+	Code    int64                                                                      `json:"code,required"`
+	Message string                                                                     `json:"message,required"`
+	JSON    accountCustomPageCustomPagesForAnAccountListCustomPagesResponseMessageJSON `json:"-"`
 }
 
-// customPagesResponseCollectionMessageJSON contains the JSON metadata for the
-// struct [CustomPagesResponseCollectionMessage]
-type customPagesResponseCollectionMessageJSON struct {
+// accountCustomPageCustomPagesForAnAccountListCustomPagesResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountCustomPageCustomPagesForAnAccountListCustomPagesResponseMessage]
+type accountCustomPageCustomPagesForAnAccountListCustomPagesResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CustomPagesResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountCustomPageCustomPagesForAnAccountListCustomPagesResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CustomPagesResponseCollectionResultInfo struct {
+type AccountCustomPageCustomPagesForAnAccountListCustomPagesResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -127,13 +268,14 @@ type CustomPagesResponseCollectionResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                     `json:"total_count"`
-	JSON       customPagesResponseCollectionResultInfoJSON `json:"-"`
+	TotalCount float64                                                                       `json:"total_count"`
+	JSON       accountCustomPageCustomPagesForAnAccountListCustomPagesResponseResultInfoJSON `json:"-"`
 }
 
-// customPagesResponseCollectionResultInfoJSON contains the JSON metadata for the
-// struct [CustomPagesResponseCollectionResultInfo]
-type customPagesResponseCollectionResultInfoJSON struct {
+// accountCustomPageCustomPagesForAnAccountListCustomPagesResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [AccountCustomPageCustomPagesForAnAccountListCustomPagesResponseResultInfo]
+type accountCustomPageCustomPagesForAnAccountListCustomPagesResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -142,99 +284,15 @@ type customPagesResponseCollectionResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CustomPagesResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountCustomPageCustomPagesForAnAccountListCustomPagesResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type CustomPagesResponseCollectionSuccess bool
+type AccountCustomPageCustomPagesForAnAccountListCustomPagesResponseSuccess bool
 
 const (
-	CustomPagesResponseCollectionSuccessTrue CustomPagesResponseCollectionSuccess = true
-)
-
-type CustomPagesResponseSingle struct {
-	Errors   []CustomPagesResponseSingleError   `json:"errors"`
-	Messages []CustomPagesResponseSingleMessage `json:"messages"`
-	Result   interface{}                        `json:"result"`
-	// Whether the API call was successful
-	Success CustomPagesResponseSingleSuccess `json:"success"`
-	JSON    customPagesResponseSingleJSON    `json:"-"`
-}
-
-// customPagesResponseSingleJSON contains the JSON metadata for the struct
-// [CustomPagesResponseSingle]
-type customPagesResponseSingleJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomPagesResponseSingle) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CustomPagesResponseSingleError struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    customPagesResponseSingleErrorJSON `json:"-"`
-}
-
-// customPagesResponseSingleErrorJSON contains the JSON metadata for the struct
-// [CustomPagesResponseSingleError]
-type customPagesResponseSingleErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomPagesResponseSingleError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CustomPagesResponseSingleMessage struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    customPagesResponseSingleMessageJSON `json:"-"`
-}
-
-// customPagesResponseSingleMessageJSON contains the JSON metadata for the struct
-// [CustomPagesResponseSingleMessage]
-type customPagesResponseSingleMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomPagesResponseSingleMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type CustomPagesResponseSingleSuccess bool
-
-const (
-	CustomPagesResponseSingleSuccessTrue CustomPagesResponseSingleSuccess = true
-)
-
-// The name of the custom page type.
-type AccountCustomPageGetParamsIdentifier string
-
-const (
-	AccountCustomPageGetParamsIdentifierBasicChallenge   AccountCustomPageGetParamsIdentifier = "basic_challenge"
-	AccountCustomPageGetParamsIdentifierManagedChallenge AccountCustomPageGetParamsIdentifier = "managed_challenge"
-	AccountCustomPageGetParamsIdentifierWafBlock         AccountCustomPageGetParamsIdentifier = "waf_block"
-	AccountCustomPageGetParamsIdentifierCountryChallenge AccountCustomPageGetParamsIdentifier = "country_challenge"
-	AccountCustomPageGetParamsIdentifierIPBlock          AccountCustomPageGetParamsIdentifier = "ip_block"
-	AccountCustomPageGetParamsIdentifierUnderAttack      AccountCustomPageGetParamsIdentifier = "under_attack"
-	AccountCustomPageGetParamsIdentifierRatelimitBlock   AccountCustomPageGetParamsIdentifier = "ratelimit_block"
-	AccountCustomPageGetParamsIdentifier500Errors        AccountCustomPageGetParamsIdentifier = "500_errors"
-	AccountCustomPageGetParamsIdentifier1000Errors       AccountCustomPageGetParamsIdentifier = "1000_errors"
+	AccountCustomPageCustomPagesForAnAccountListCustomPagesResponseSuccessTrue AccountCustomPageCustomPagesForAnAccountListCustomPagesResponseSuccess = true
 )
 
 type AccountCustomPageUpdateParams struct {
@@ -247,21 +305,6 @@ type AccountCustomPageUpdateParams struct {
 func (r AccountCustomPageUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-// The name of the custom page type.
-type AccountCustomPageUpdateParamsIdentifier string
-
-const (
-	AccountCustomPageUpdateParamsIdentifierBasicChallenge   AccountCustomPageUpdateParamsIdentifier = "basic_challenge"
-	AccountCustomPageUpdateParamsIdentifierManagedChallenge AccountCustomPageUpdateParamsIdentifier = "managed_challenge"
-	AccountCustomPageUpdateParamsIdentifierWafBlock         AccountCustomPageUpdateParamsIdentifier = "waf_block"
-	AccountCustomPageUpdateParamsIdentifierCountryChallenge AccountCustomPageUpdateParamsIdentifier = "country_challenge"
-	AccountCustomPageUpdateParamsIdentifierIPBlock          AccountCustomPageUpdateParamsIdentifier = "ip_block"
-	AccountCustomPageUpdateParamsIdentifierUnderAttack      AccountCustomPageUpdateParamsIdentifier = "under_attack"
-	AccountCustomPageUpdateParamsIdentifierRatelimitBlock   AccountCustomPageUpdateParamsIdentifier = "ratelimit_block"
-	AccountCustomPageUpdateParamsIdentifier500Errors        AccountCustomPageUpdateParamsIdentifier = "500_errors"
-	AccountCustomPageUpdateParamsIdentifier1000Errors       AccountCustomPageUpdateParamsIdentifier = "1000_errors"
-)
 
 // The custom page state.
 type AccountCustomPageUpdateParamsState string

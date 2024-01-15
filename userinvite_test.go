@@ -24,10 +24,12 @@ func TestUserInviteGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Users.Invites.Get(context.TODO(), "4f5f0c14a2a41d5063dd301b2f829f04")
+	_, err := client.User.Invites.Get(context.TODO(), "4f5f0c14a2a41d5063dd301b2f829f04")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -48,10 +50,12 @@ func TestUserInviteUpdate(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Users.Invites.Update(
+	_, err := client.User.Invites.Update(
 		context.TODO(),
 		"4f5f0c14a2a41d5063dd301b2f829f04",
 		cloudflare.UserInviteUpdateParams{
@@ -78,10 +82,12 @@ func TestUserInviteUserSInvitesListInvitations(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Users.Invites.UserSInvitesListInvitations(context.TODO())
+	_, err := client.User.Invites.UserSInvitesListInvitations(context.TODO())
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

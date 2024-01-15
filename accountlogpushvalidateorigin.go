@@ -32,25 +32,26 @@ func NewAccountLogpushValidateOriginService(opts ...option.RequestOption) (r *Ac
 }
 
 // Validates logpull origin with logpull_options.
-func (r *AccountLogpushValidateOriginService) PostAccountsAccountIdentifierLogpushValidateOrigin(ctx context.Context, accountIdentifier string, body AccountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginParams, opts ...option.RequestOption) (res *ValidateResponse, err error) {
+func (r *AccountLogpushValidateOriginService) PostAccountsAccountIdentifierLogpushValidateOrigin(ctx context.Context, accountIdentifier string, body AccountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginParams, opts ...option.RequestOption) (res *AccountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/logpush/validate/origin", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
-type ValidateResponse struct {
-	Errors   []ValidateResponseError   `json:"errors"`
-	Messages []ValidateResponseMessage `json:"messages"`
-	Result   ValidateResponseResult    `json:"result,nullable"`
+type AccountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponse struct {
+	Errors   []AccountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseError   `json:"errors"`
+	Messages []AccountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseMessage `json:"messages"`
+	Result   AccountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseResult    `json:"result,nullable"`
 	// Whether the API call was successful
-	Success ValidateResponseSuccess `json:"success"`
-	JSON    validateResponseJSON    `json:"-"`
+	Success AccountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseSuccess `json:"success"`
+	JSON    accountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseJSON    `json:"-"`
 }
 
-// validateResponseJSON contains the JSON metadata for the struct
-// [ValidateResponse]
-type validateResponseJSON struct {
+// accountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseJSON
+// contains the JSON metadata for the struct
+// [AccountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponse]
+type accountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -59,72 +60,75 @@ type validateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ValidateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ValidateResponseError struct {
-	Code    int64                     `json:"code,required"`
-	Message string                    `json:"message,required"`
-	JSON    validateResponseErrorJSON `json:"-"`
+type AccountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseError struct {
+	Code    int64                                                                                           `json:"code,required"`
+	Message string                                                                                          `json:"message,required"`
+	JSON    accountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseErrorJSON `json:"-"`
 }
 
-// validateResponseErrorJSON contains the JSON metadata for the struct
-// [ValidateResponseError]
-type validateResponseErrorJSON struct {
+// accountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseError]
+type accountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ValidateResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ValidateResponseMessage struct {
-	Code    int64                       `json:"code,required"`
-	Message string                      `json:"message,required"`
-	JSON    validateResponseMessageJSON `json:"-"`
+type AccountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseMessage struct {
+	Code    int64                                                                                             `json:"code,required"`
+	Message string                                                                                            `json:"message,required"`
+	JSON    accountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseMessageJSON `json:"-"`
 }
 
-// validateResponseMessageJSON contains the JSON metadata for the struct
-// [ValidateResponseMessage]
-type validateResponseMessageJSON struct {
+// accountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseMessage]
+type accountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ValidateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ValidateResponseResult struct {
-	Message string                     `json:"message"`
-	Valid   bool                       `json:"valid"`
-	JSON    validateResponseResultJSON `json:"-"`
+type AccountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseResult struct {
+	Message string                                                                                           `json:"message"`
+	Valid   bool                                                                                             `json:"valid"`
+	JSON    accountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseResultJSON `json:"-"`
 }
 
-// validateResponseResultJSON contains the JSON metadata for the struct
-// [ValidateResponseResult]
-type validateResponseResultJSON struct {
+// accountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseResult]
+type accountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseResultJSON struct {
 	Message     apijson.Field
 	Valid       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ValidateResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type ValidateResponseSuccess bool
+type AccountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseSuccess bool
 
 const (
-	ValidateResponseSuccessTrue ValidateResponseSuccess = true
+	AccountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseSuccessTrue AccountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginResponseSuccess = true
 )
 
 type AccountLogpushValidateOriginPostAccountsAccountIdentifierLogpushValidateOriginParams struct {

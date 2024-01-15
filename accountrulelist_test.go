@@ -24,8 +24,10 @@ func TestAccountRuleListGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Rules.Lists.Get(
 		context.TODO(),
@@ -52,15 +54,17 @@ func TestAccountRuleListUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Rules.Lists.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"2c0fc9fa937b11eaa1b71c4d701ab86e",
 		cloudflare.AccountRuleListUpdateParams{
-			Description: cloudflare.F("This is a note."),
+			Description: cloudflare.F("This is a note"),
 		},
 	)
 	if err != nil {
@@ -83,8 +87,10 @@ func TestAccountRuleListDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Rules.Lists.Delete(
 		context.TODO(),
@@ -111,8 +117,10 @@ func TestAccountRuleListListsNewAListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Rules.Lists.ListsNewAList(
 		context.TODO(),
@@ -120,7 +128,7 @@ func TestAccountRuleListListsNewAListWithOptionalParams(t *testing.T) {
 		cloudflare.AccountRuleListListsNewAListParams{
 			Kind:        cloudflare.F(cloudflare.AccountRuleListListsNewAListParamsKindIP),
 			Name:        cloudflare.F("list1"),
-			Description: cloudflare.F("This is a note."),
+			Description: cloudflare.F("This is a note"),
 		},
 	)
 	if err != nil {
@@ -143,8 +151,10 @@ func TestAccountRuleListListsGetLists(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Rules.Lists.ListsGetLists(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {

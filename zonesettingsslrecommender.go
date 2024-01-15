@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
@@ -55,10 +54,7 @@ func (r *ZoneSettingSslRecommenderService) List(ctx context.Context, zoneIdentif
 type ZoneSettingSslRecommenderUpdateResponse struct {
 	Errors   []ZoneSettingSslRecommenderUpdateResponseError   `json:"errors"`
 	Messages []ZoneSettingSslRecommenderUpdateResponseMessage `json:"messages"`
-	// Enrollment in the SSL/TLS Recommender service which tries to detect and
-	// recommend (by sending periodic emails) the most secure SSL/TLS setting your
-	// origin servers support.
-	Result ZoneSettingSslRecommenderUpdateResponseResult `json:"result"`
+	Result   ZoneSettingSslRecommenderUpdateResponseResult    `json:"result"`
 	// Whether the API call was successful
 	Success bool                                        `json:"success"`
 	JSON    zoneSettingSslRecommenderUpdateResponseJSON `json:"-"`
@@ -117,29 +113,19 @@ func (r *ZoneSettingSslRecommenderUpdateResponseMessage) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Enrollment in the SSL/TLS Recommender service which tries to detect and
-// recommend (by sending periodic emails) the most secure SSL/TLS setting your
-// origin servers support.
 type ZoneSettingSslRecommenderUpdateResponseResult struct {
 	// Enrollment value for SSL/TLS Recommender.
 	ID ZoneSettingSslRecommenderUpdateResponseResultID `json:"id"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingSslRecommenderUpdateResponseResultEditable `json:"editable"`
 	// ssl-recommender enrollment setting.
-	Enabled bool `json:"enabled"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                         `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingSslRecommenderUpdateResponseResultJSON `json:"-"`
+	Enabled bool                                              `json:"enabled"`
+	JSON    zoneSettingSslRecommenderUpdateResponseResultJSON `json:"-"`
 }
 
 // zoneSettingSslRecommenderUpdateResponseResultJSON contains the JSON metadata for
 // the struct [ZoneSettingSslRecommenderUpdateResponseResult]
 type zoneSettingSslRecommenderUpdateResponseResultJSON struct {
 	ID          apijson.Field
-	Editable    apijson.Field
 	Enabled     apijson.Field
-	ModifiedOn  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -155,22 +141,10 @@ const (
 	ZoneSettingSslRecommenderUpdateResponseResultIDSslRecommender ZoneSettingSslRecommenderUpdateResponseResultID = "ssl_recommender"
 )
 
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingSslRecommenderUpdateResponseResultEditable bool
-
-const (
-	ZoneSettingSslRecommenderUpdateResponseResultEditableTrue  ZoneSettingSslRecommenderUpdateResponseResultEditable = true
-	ZoneSettingSslRecommenderUpdateResponseResultEditableFalse ZoneSettingSslRecommenderUpdateResponseResultEditable = false
-)
-
 type ZoneSettingSslRecommenderListResponse struct {
 	Errors   []ZoneSettingSslRecommenderListResponseError   `json:"errors"`
 	Messages []ZoneSettingSslRecommenderListResponseMessage `json:"messages"`
-	// Enrollment in the SSL/TLS Recommender service which tries to detect and
-	// recommend (by sending periodic emails) the most secure SSL/TLS setting your
-	// origin servers support.
-	Result ZoneSettingSslRecommenderListResponseResult `json:"result"`
+	Result   ZoneSettingSslRecommenderListResponseResult    `json:"result"`
 	// Whether the API call was successful
 	Success bool                                      `json:"success"`
 	JSON    zoneSettingSslRecommenderListResponseJSON `json:"-"`
@@ -229,29 +203,19 @@ func (r *ZoneSettingSslRecommenderListResponseMessage) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Enrollment in the SSL/TLS Recommender service which tries to detect and
-// recommend (by sending periodic emails) the most secure SSL/TLS setting your
-// origin servers support.
 type ZoneSettingSslRecommenderListResponseResult struct {
 	// Enrollment value for SSL/TLS Recommender.
 	ID ZoneSettingSslRecommenderListResponseResultID `json:"id"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingSslRecommenderListResponseResultEditable `json:"editable"`
 	// ssl-recommender enrollment setting.
-	Enabled bool `json:"enabled"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                       `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingSslRecommenderListResponseResultJSON `json:"-"`
+	Enabled bool                                            `json:"enabled"`
+	JSON    zoneSettingSslRecommenderListResponseResultJSON `json:"-"`
 }
 
 // zoneSettingSslRecommenderListResponseResultJSON contains the JSON metadata for
 // the struct [ZoneSettingSslRecommenderListResponseResult]
 type zoneSettingSslRecommenderListResponseResultJSON struct {
 	ID          apijson.Field
-	Editable    apijson.Field
 	Enabled     apijson.Field
-	ModifiedOn  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -267,19 +231,7 @@ const (
 	ZoneSettingSslRecommenderListResponseResultIDSslRecommender ZoneSettingSslRecommenderListResponseResultID = "ssl_recommender"
 )
 
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingSslRecommenderListResponseResultEditable bool
-
-const (
-	ZoneSettingSslRecommenderListResponseResultEditableTrue  ZoneSettingSslRecommenderListResponseResultEditable = true
-	ZoneSettingSslRecommenderListResponseResultEditableFalse ZoneSettingSslRecommenderListResponseResultEditable = false
-)
-
 type ZoneSettingSslRecommenderUpdateParams struct {
-	// Enrollment in the SSL/TLS Recommender service which tries to detect and
-	// recommend (by sending periodic emails) the most secure SSL/TLS setting your
-	// origin servers support.
 	Value param.Field[ZoneSettingSslRecommenderUpdateParamsValue] `json:"value,required"`
 }
 
@@ -287,9 +239,6 @@ func (r ZoneSettingSslRecommenderUpdateParams) MarshalJSON() (data []byte, err e
 	return apijson.MarshalRoot(r)
 }
 
-// Enrollment in the SSL/TLS Recommender service which tries to detect and
-// recommend (by sending periodic emails) the most secure SSL/TLS setting your
-// origin servers support.
 type ZoneSettingSslRecommenderUpdateParamsValue struct {
 	// Enrollment value for SSL/TLS Recommender.
 	ID param.Field[ZoneSettingSslRecommenderUpdateParamsValueID] `json:"id"`
@@ -306,13 +255,4 @@ type ZoneSettingSslRecommenderUpdateParamsValueID string
 
 const (
 	ZoneSettingSslRecommenderUpdateParamsValueIDSslRecommender ZoneSettingSslRecommenderUpdateParamsValueID = "ssl_recommender"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingSslRecommenderUpdateParamsValueEditable bool
-
-const (
-	ZoneSettingSslRecommenderUpdateParamsValueEditableTrue  ZoneSettingSslRecommenderUpdateParamsValueEditable = true
-	ZoneSettingSslRecommenderUpdateParamsValueEditableFalse ZoneSettingSslRecommenderUpdateParamsValueEditable = false
 )

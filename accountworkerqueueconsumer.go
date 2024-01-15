@@ -210,8 +210,8 @@ const (
 )
 
 type AccountWorkerQueueConsumerListResponse struct {
-	Errors     interface{}                                      `json:"errors,nullable"`
-	Messages   interface{}                                      `json:"messages,nullable"`
+	Errors     []interface{}                                    `json:"errors,nullable"`
+	Messages   []interface{}                                    `json:"messages,nullable"`
 	Result     []AccountWorkerQueueConsumerListResponseResult   `json:"result"`
 	ResultInfo AccountWorkerQueueConsumerListResponseResultInfo `json:"result_info"`
 	// Whether the API call was successful
@@ -316,7 +316,7 @@ const (
 type AccountWorkerQueueConsumerDeleteResponse struct {
 	Errors     []AccountWorkerQueueConsumerDeleteResponseError    `json:"errors"`
 	Messages   []AccountWorkerQueueConsumerDeleteResponseMessage  `json:"messages"`
-	Result     interface{}                                        `json:"result,nullable"`
+	Result     []interface{}                                      `json:"result,nullable"`
 	ResultInfo AccountWorkerQueueConsumerDeleteResponseResultInfo `json:"result_info"`
 	// Whether the API call was successful
 	Success AccountWorkerQueueConsumerDeleteResponseSuccess `json:"success"`

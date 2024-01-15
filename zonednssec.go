@@ -32,7 +32,7 @@ func NewZoneDnssecService(opts ...option.RequestOption) (r *ZoneDnssecService) {
 }
 
 // Details about DNSSEC status and configuration.
-func (r *ZoneDnssecService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *DnssecSingle, err error) {
+func (r *ZoneDnssecService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ZoneDnssecGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/dnssec", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -40,7 +40,7 @@ func (r *ZoneDnssecService) Get(ctx context.Context, zoneIdentifier string, opts
 }
 
 // Enable or disable DNSSEC.
-func (r *ZoneDnssecService) Update(ctx context.Context, zoneIdentifier string, body ZoneDnssecUpdateParams, opts ...option.RequestOption) (res *DnssecSingle, err error) {
+func (r *ZoneDnssecService) Update(ctx context.Context, zoneIdentifier string, body ZoneDnssecUpdateParams, opts ...option.RequestOption) (res *ZoneDnssecUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/dnssec", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
@@ -48,25 +48,25 @@ func (r *ZoneDnssecService) Update(ctx context.Context, zoneIdentifier string, b
 }
 
 // Delete DNSSEC.
-func (r *ZoneDnssecService) Delete(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *DeleteDnssecResponseSingle, err error) {
+func (r *ZoneDnssecService) Delete(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ZoneDnssecDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/dnssec", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
 
-type DeleteDnssecResponseSingle struct {
-	Errors   []DeleteDnssecResponseSingleError   `json:"errors"`
-	Messages []DeleteDnssecResponseSingleMessage `json:"messages"`
-	Result   string                              `json:"result"`
+type ZoneDnssecGetResponse struct {
+	Errors   []ZoneDnssecGetResponseError   `json:"errors"`
+	Messages []ZoneDnssecGetResponseMessage `json:"messages"`
+	Result   ZoneDnssecGetResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success DeleteDnssecResponseSingleSuccess `json:"success"`
-	JSON    deleteDnssecResponseSingleJSON    `json:"-"`
+	Success ZoneDnssecGetResponseSuccess `json:"success"`
+	JSON    zoneDnssecGetResponseJSON    `json:"-"`
 }
 
-// deleteDnssecResponseSingleJSON contains the JSON metadata for the struct
-// [DeleteDnssecResponseSingle]
-type deleteDnssecResponseSingleJSON struct {
+// zoneDnssecGetResponseJSON contains the JSON metadata for the struct
+// [ZoneDnssecGetResponse]
+type zoneDnssecGetResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -75,117 +75,49 @@ type deleteDnssecResponseSingleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeleteDnssecResponseSingle) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneDnssecGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DeleteDnssecResponseSingleError struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    deleteDnssecResponseSingleErrorJSON `json:"-"`
+type ZoneDnssecGetResponseError struct {
+	Code    int64                          `json:"code,required"`
+	Message string                         `json:"message,required"`
+	JSON    zoneDnssecGetResponseErrorJSON `json:"-"`
 }
 
-// deleteDnssecResponseSingleErrorJSON contains the JSON metadata for the struct
-// [DeleteDnssecResponseSingleError]
-type deleteDnssecResponseSingleErrorJSON struct {
+// zoneDnssecGetResponseErrorJSON contains the JSON metadata for the struct
+// [ZoneDnssecGetResponseError]
+type zoneDnssecGetResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeleteDnssecResponseSingleError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneDnssecGetResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DeleteDnssecResponseSingleMessage struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    deleteDnssecResponseSingleMessageJSON `json:"-"`
+type ZoneDnssecGetResponseMessage struct {
+	Code    int64                            `json:"code,required"`
+	Message string                           `json:"message,required"`
+	JSON    zoneDnssecGetResponseMessageJSON `json:"-"`
 }
 
-// deleteDnssecResponseSingleMessageJSON contains the JSON metadata for the struct
-// [DeleteDnssecResponseSingleMessage]
-type deleteDnssecResponseSingleMessageJSON struct {
+// zoneDnssecGetResponseMessageJSON contains the JSON metadata for the struct
+// [ZoneDnssecGetResponseMessage]
+type zoneDnssecGetResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeleteDnssecResponseSingleMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneDnssecGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Whether the API call was successful
-type DeleteDnssecResponseSingleSuccess bool
-
-const (
-	DeleteDnssecResponseSingleSuccessTrue DeleteDnssecResponseSingleSuccess = true
-)
-
-type DnssecSingle struct {
-	Errors   []DnssecSingleError   `json:"errors"`
-	Messages []DnssecSingleMessage `json:"messages"`
-	Result   DnssecSingleResult    `json:"result"`
-	// Whether the API call was successful
-	Success DnssecSingleSuccess `json:"success"`
-	JSON    dnssecSingleJSON    `json:"-"`
-}
-
-// dnssecSingleJSON contains the JSON metadata for the struct [DnssecSingle]
-type dnssecSingleJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DnssecSingle) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DnssecSingleError struct {
-	Code    int64                 `json:"code,required"`
-	Message string                `json:"message,required"`
-	JSON    dnssecSingleErrorJSON `json:"-"`
-}
-
-// dnssecSingleErrorJSON contains the JSON metadata for the struct
-// [DnssecSingleError]
-type dnssecSingleErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DnssecSingleError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DnssecSingleMessage struct {
-	Code    int64                   `json:"code,required"`
-	Message string                  `json:"message,required"`
-	JSON    dnssecSingleMessageJSON `json:"-"`
-}
-
-// dnssecSingleMessageJSON contains the JSON metadata for the struct
-// [DnssecSingleMessage]
-type dnssecSingleMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DnssecSingleMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DnssecSingleResult struct {
+type ZoneDnssecGetResponseResult struct {
 	// Algorithm key code.
 	Algorithm string `json:"algorithm,nullable"`
 	// Digest hash.
@@ -194,6 +126,23 @@ type DnssecSingleResult struct {
 	DigestAlgorithm string `json:"digest_algorithm,nullable"`
 	// Coded type for digest algorithm.
 	DigestType string `json:"digest_type,nullable"`
+	// If true, multi-signer DNSSEC is enabled on the zone, allowing multiple providers
+	// to serve a DNSSEC-signed zone at the same time. This is required for DNSKEY
+	// records (except those automatically generated by Cloudflare) to be added to the
+	// zone.
+	//
+	// See
+	// [Multi-signer DNSSEC](https://developers.cloudflare.com/dns/dnssec/multi-signer-dnssec/)
+	// for details.
+	DnssecMultiSigner bool `json:"dnssec_multi_signer"`
+	// If true, allows Cloudflare to transfer in a DNSSEC-signed zone including
+	// signatures from an external provider, without requiring Cloudflare to sign any
+	// records on the fly.
+	//
+	// Note that this feature has some limitations. See
+	// [Cloudflare as Secondary](https://developers.cloudflare.com/dns/zone-setups/zone-transfers/cloudflare-as-secondary/setup/#dnssec)
+	// for details.
+	DnssecPresigned bool `json:"dnssec_presigned"`
 	// Full DS record.
 	Ds string `json:"ds,nullable"`
 	// Flag for DNSSEC record.
@@ -207,53 +156,288 @@ type DnssecSingleResult struct {
 	// Public key for DS record.
 	PublicKey string `json:"public_key,nullable"`
 	// Status of DNSSEC, based on user-desired state and presence of necessary records.
-	Status DnssecSingleResultStatus `json:"status"`
-	JSON   dnssecSingleResultJSON   `json:"-"`
+	Status ZoneDnssecGetResponseResultStatus `json:"status"`
+	JSON   zoneDnssecGetResponseResultJSON   `json:"-"`
 }
 
-// dnssecSingleResultJSON contains the JSON metadata for the struct
-// [DnssecSingleResult]
-type dnssecSingleResultJSON struct {
-	Algorithm       apijson.Field
-	Digest          apijson.Field
-	DigestAlgorithm apijson.Field
-	DigestType      apijson.Field
-	Ds              apijson.Field
-	Flags           apijson.Field
-	KeyTag          apijson.Field
-	KeyType         apijson.Field
-	ModifiedOn      apijson.Field
-	PublicKey       apijson.Field
-	Status          apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+// zoneDnssecGetResponseResultJSON contains the JSON metadata for the struct
+// [ZoneDnssecGetResponseResult]
+type zoneDnssecGetResponseResultJSON struct {
+	Algorithm         apijson.Field
+	Digest            apijson.Field
+	DigestAlgorithm   apijson.Field
+	DigestType        apijson.Field
+	DnssecMultiSigner apijson.Field
+	DnssecPresigned   apijson.Field
+	Ds                apijson.Field
+	Flags             apijson.Field
+	KeyTag            apijson.Field
+	KeyType           apijson.Field
+	ModifiedOn        apijson.Field
+	PublicKey         apijson.Field
+	Status            apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
-func (r *DnssecSingleResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneDnssecGetResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Status of DNSSEC, based on user-desired state and presence of necessary records.
-type DnssecSingleResultStatus string
+type ZoneDnssecGetResponseResultStatus string
 
 const (
-	DnssecSingleResultStatusActive          DnssecSingleResultStatus = "active"
-	DnssecSingleResultStatusPending         DnssecSingleResultStatus = "pending"
-	DnssecSingleResultStatusDisabled        DnssecSingleResultStatus = "disabled"
-	DnssecSingleResultStatusPendingDisabled DnssecSingleResultStatus = "pending-disabled"
-	DnssecSingleResultStatusError           DnssecSingleResultStatus = "error"
+	ZoneDnssecGetResponseResultStatusActive          ZoneDnssecGetResponseResultStatus = "active"
+	ZoneDnssecGetResponseResultStatusPending         ZoneDnssecGetResponseResultStatus = "pending"
+	ZoneDnssecGetResponseResultStatusDisabled        ZoneDnssecGetResponseResultStatus = "disabled"
+	ZoneDnssecGetResponseResultStatusPendingDisabled ZoneDnssecGetResponseResultStatus = "pending-disabled"
+	ZoneDnssecGetResponseResultStatusError           ZoneDnssecGetResponseResultStatus = "error"
 )
 
 // Whether the API call was successful
-type DnssecSingleSuccess bool
+type ZoneDnssecGetResponseSuccess bool
 
 const (
-	DnssecSingleSuccessTrue DnssecSingleSuccess = true
+	ZoneDnssecGetResponseSuccessTrue ZoneDnssecGetResponseSuccess = true
+)
+
+type ZoneDnssecUpdateResponse struct {
+	Errors   []ZoneDnssecUpdateResponseError   `json:"errors"`
+	Messages []ZoneDnssecUpdateResponseMessage `json:"messages"`
+	Result   ZoneDnssecUpdateResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success ZoneDnssecUpdateResponseSuccess `json:"success"`
+	JSON    zoneDnssecUpdateResponseJSON    `json:"-"`
+}
+
+// zoneDnssecUpdateResponseJSON contains the JSON metadata for the struct
+// [ZoneDnssecUpdateResponse]
+type zoneDnssecUpdateResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneDnssecUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneDnssecUpdateResponseError struct {
+	Code    int64                             `json:"code,required"`
+	Message string                            `json:"message,required"`
+	JSON    zoneDnssecUpdateResponseErrorJSON `json:"-"`
+}
+
+// zoneDnssecUpdateResponseErrorJSON contains the JSON metadata for the struct
+// [ZoneDnssecUpdateResponseError]
+type zoneDnssecUpdateResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneDnssecUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneDnssecUpdateResponseMessage struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    zoneDnssecUpdateResponseMessageJSON `json:"-"`
+}
+
+// zoneDnssecUpdateResponseMessageJSON contains the JSON metadata for the struct
+// [ZoneDnssecUpdateResponseMessage]
+type zoneDnssecUpdateResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneDnssecUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneDnssecUpdateResponseResult struct {
+	// Algorithm key code.
+	Algorithm string `json:"algorithm,nullable"`
+	// Digest hash.
+	Digest string `json:"digest,nullable"`
+	// Type of digest algorithm.
+	DigestAlgorithm string `json:"digest_algorithm,nullable"`
+	// Coded type for digest algorithm.
+	DigestType string `json:"digest_type,nullable"`
+	// If true, multi-signer DNSSEC is enabled on the zone, allowing multiple providers
+	// to serve a DNSSEC-signed zone at the same time. This is required for DNSKEY
+	// records (except those automatically generated by Cloudflare) to be added to the
+	// zone.
+	//
+	// See
+	// [Multi-signer DNSSEC](https://developers.cloudflare.com/dns/dnssec/multi-signer-dnssec/)
+	// for details.
+	DnssecMultiSigner bool `json:"dnssec_multi_signer"`
+	// If true, allows Cloudflare to transfer in a DNSSEC-signed zone including
+	// signatures from an external provider, without requiring Cloudflare to sign any
+	// records on the fly.
+	//
+	// Note that this feature has some limitations. See
+	// [Cloudflare as Secondary](https://developers.cloudflare.com/dns/zone-setups/zone-transfers/cloudflare-as-secondary/setup/#dnssec)
+	// for details.
+	DnssecPresigned bool `json:"dnssec_presigned"`
+	// Full DS record.
+	Ds string `json:"ds,nullable"`
+	// Flag for DNSSEC record.
+	Flags float64 `json:"flags,nullable"`
+	// Code for key tag.
+	KeyTag float64 `json:"key_tag,nullable"`
+	// Algorithm key type.
+	KeyType string `json:"key_type,nullable"`
+	// When DNSSEC was last modified.
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Public key for DS record.
+	PublicKey string `json:"public_key,nullable"`
+	// Status of DNSSEC, based on user-desired state and presence of necessary records.
+	Status ZoneDnssecUpdateResponseResultStatus `json:"status"`
+	JSON   zoneDnssecUpdateResponseResultJSON   `json:"-"`
+}
+
+// zoneDnssecUpdateResponseResultJSON contains the JSON metadata for the struct
+// [ZoneDnssecUpdateResponseResult]
+type zoneDnssecUpdateResponseResultJSON struct {
+	Algorithm         apijson.Field
+	Digest            apijson.Field
+	DigestAlgorithm   apijson.Field
+	DigestType        apijson.Field
+	DnssecMultiSigner apijson.Field
+	DnssecPresigned   apijson.Field
+	Ds                apijson.Field
+	Flags             apijson.Field
+	KeyTag            apijson.Field
+	KeyType           apijson.Field
+	ModifiedOn        apijson.Field
+	PublicKey         apijson.Field
+	Status            apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *ZoneDnssecUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Status of DNSSEC, based on user-desired state and presence of necessary records.
+type ZoneDnssecUpdateResponseResultStatus string
+
+const (
+	ZoneDnssecUpdateResponseResultStatusActive          ZoneDnssecUpdateResponseResultStatus = "active"
+	ZoneDnssecUpdateResponseResultStatusPending         ZoneDnssecUpdateResponseResultStatus = "pending"
+	ZoneDnssecUpdateResponseResultStatusDisabled        ZoneDnssecUpdateResponseResultStatus = "disabled"
+	ZoneDnssecUpdateResponseResultStatusPendingDisabled ZoneDnssecUpdateResponseResultStatus = "pending-disabled"
+	ZoneDnssecUpdateResponseResultStatusError           ZoneDnssecUpdateResponseResultStatus = "error"
+)
+
+// Whether the API call was successful
+type ZoneDnssecUpdateResponseSuccess bool
+
+const (
+	ZoneDnssecUpdateResponseSuccessTrue ZoneDnssecUpdateResponseSuccess = true
+)
+
+type ZoneDnssecDeleteResponse struct {
+	Errors   []ZoneDnssecDeleteResponseError   `json:"errors"`
+	Messages []ZoneDnssecDeleteResponseMessage `json:"messages"`
+	Result   string                            `json:"result"`
+	// Whether the API call was successful
+	Success ZoneDnssecDeleteResponseSuccess `json:"success"`
+	JSON    zoneDnssecDeleteResponseJSON    `json:"-"`
+}
+
+// zoneDnssecDeleteResponseJSON contains the JSON metadata for the struct
+// [ZoneDnssecDeleteResponse]
+type zoneDnssecDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneDnssecDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneDnssecDeleteResponseError struct {
+	Code    int64                             `json:"code,required"`
+	Message string                            `json:"message,required"`
+	JSON    zoneDnssecDeleteResponseErrorJSON `json:"-"`
+}
+
+// zoneDnssecDeleteResponseErrorJSON contains the JSON metadata for the struct
+// [ZoneDnssecDeleteResponseError]
+type zoneDnssecDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneDnssecDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneDnssecDeleteResponseMessage struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    zoneDnssecDeleteResponseMessageJSON `json:"-"`
+}
+
+// zoneDnssecDeleteResponseMessageJSON contains the JSON metadata for the struct
+// [ZoneDnssecDeleteResponseMessage]
+type zoneDnssecDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneDnssecDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneDnssecDeleteResponseSuccess bool
+
+const (
+	ZoneDnssecDeleteResponseSuccessTrue ZoneDnssecDeleteResponseSuccess = true
 )
 
 type ZoneDnssecUpdateParams struct {
+	// If true, multi-signer DNSSEC is enabled on the zone, allowing multiple providers
+	// to serve a DNSSEC-signed zone at the same time. This is required for DNSKEY
+	// records (except those automatically generated by Cloudflare) to be added to the
+	// zone.
+	//
+	// See
+	// [Multi-signer DNSSEC](https://developers.cloudflare.com/dns/dnssec/multi-signer-dnssec/)
+	// for details.
+	DnssecMultiSigner param.Field[bool] `json:"dnssec_multi_signer"`
+	// If true, allows Cloudflare to transfer in a DNSSEC-signed zone including
+	// signatures from an external provider, without requiring Cloudflare to sign any
+	// records on the fly.
+	//
+	// Note that this feature has some limitations. See
+	// [Cloudflare as Secondary](https://developers.cloudflare.com/dns/zone-setups/zone-transfers/cloudflare-as-secondary/setup/#dnssec)
+	// for details.
+	DnssecPresigned param.Field[bool] `json:"dnssec_presigned"`
 	// Status of DNSSEC, based on user-desired state and presence of necessary records.
-	Status param.Field[ZoneDnssecUpdateParamsStatus] `json:"status,required"`
+	Status param.Field[ZoneDnssecUpdateParamsStatus] `json:"status"`
 }
 
 func (r ZoneDnssecUpdateParams) MarshalJSON() (data []byte, err error) {

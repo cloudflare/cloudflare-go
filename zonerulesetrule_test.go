@@ -24,26 +24,20 @@ func TestZoneRulesetRuleUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Rulesets.Rules.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"9f1839b6152d298aca64c4e906b6d074",
 		"2f2feab2026849078ba485f918791bdc",
 		"3a03d665bac047339bb530ecb439a90d",
 		cloudflare.ZoneRulesetRuleUpdateParams{
-			Action:     cloudflare.F("execute"),
-			Expression: cloudflare.F("ip.src ne 1.1.1.1"),
-			ActionParameters: cloudflare.F[any](map[string]interface{}{
-				"id": "4814384a9e5d4991b9815dcfc25d2f1f",
-			}),
-			Description: cloudflare.F("Execute the OWASP ruleset when the IP address is not 1.1.1.1"),
-			Enabled:     cloudflare.F(true),
-			Logging: cloudflare.F(cloudflare.ZoneRulesetRuleUpdateParamsLogging{
-				Enabled: cloudflare.F(true),
-			}),
-			Ref: cloudflare.F("my_ref"),
+			Position: cloudflare.F[cloudflare.ZoneRulesetRuleUpdateParamsPosition](cloudflare.ZoneRulesetRuleUpdateParamsPositionObject(cloudflare.ZoneRulesetRuleUpdateParamsPositionObject{
+				Before: cloudflare.F("da5e8e506c8e7877fe06cdf4c41add54"),
+			})),
 		},
 	)
 	if err != nil {
@@ -66,12 +60,14 @@ func TestZoneRulesetRuleDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Rulesets.Rules.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"9f1839b6152d298aca64c4e906b6d074",
 		"2f2feab2026849078ba485f918791bdc",
 		"3a03d665bac047339bb530ecb439a90d",
 	)
@@ -95,25 +91,19 @@ func TestZoneRulesetRuleZoneRulesetsNewAZoneRulesetRuleWithOptionalParams(t *tes
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Rulesets.Rules.ZoneRulesetsNewAZoneRulesetRule(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"9f1839b6152d298aca64c4e906b6d074",
 		"2f2feab2026849078ba485f918791bdc",
 		cloudflare.ZoneRulesetRuleZoneRulesetsNewAZoneRulesetRuleParams{
-			Action:     cloudflare.F("execute"),
-			Expression: cloudflare.F("ip.src ne 1.1.1.1"),
-			ActionParameters: cloudflare.F[any](map[string]interface{}{
-				"id": "4814384a9e5d4991b9815dcfc25d2f1f",
-			}),
-			Description: cloudflare.F("Execute the OWASP ruleset when the IP address is not 1.1.1.1"),
-			Enabled:     cloudflare.F(true),
-			Logging: cloudflare.F(cloudflare.ZoneRulesetRuleZoneRulesetsNewAZoneRulesetRuleParamsLogging{
-				Enabled: cloudflare.F(true),
-			}),
-			Ref: cloudflare.F("my_ref"),
+			Position: cloudflare.F[cloudflare.ZoneRulesetRuleZoneRulesetsNewAZoneRulesetRuleParamsPosition](cloudflare.ZoneRulesetRuleZoneRulesetsNewAZoneRulesetRuleParamsPositionObject(cloudflare.ZoneRulesetRuleZoneRulesetsNewAZoneRulesetRuleParamsPositionObject{
+				Before: cloudflare.F("da5e8e506c8e7877fe06cdf4c41add54"),
+			})),
 		},
 	)
 	if err != nil {

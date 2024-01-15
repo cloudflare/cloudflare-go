@@ -31,7 +31,7 @@ func NewOrganizationRoleService(opts ...option.RequestOption) (r *OrganizationRo
 }
 
 // Get information about a specific role for an organization.
-func (r *OrganizationRoleService) Get(ctx context.Context, organizationIdentifier string, identifier string, opts ...option.RequestOption) (res *SingleRoleResponse, err error) {
+func (r *OrganizationRoleService) Get(ctx context.Context, organizationIdentifier string, identifier string, opts ...option.RequestOption) (res *OrganizationRoleGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("organizations/%s/roles/%s", organizationIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -39,26 +39,95 @@ func (r *OrganizationRoleService) Get(ctx context.Context, organizationIdentifie
 }
 
 // Get all available roles for an organization.
-func (r *OrganizationRoleService) OrganizationRolesListRoles(ctx context.Context, organizationIdentifier string, opts ...option.RequestOption) (res *CollectionRoleResponse, err error) {
+func (r *OrganizationRoleService) OrganizationRolesListRoles(ctx context.Context, organizationIdentifier string, opts ...option.RequestOption) (res *OrganizationRoleOrganizationRolesListRolesResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("organizations/%s/roles", organizationIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type CollectionRoleResponse struct {
-	Errors     []CollectionRoleResponseError    `json:"errors"`
-	Messages   []CollectionRoleResponseMessage  `json:"messages"`
-	Result     []CollectionRoleResponseResult   `json:"result"`
-	ResultInfo CollectionRoleResponseResultInfo `json:"result_info"`
+type OrganizationRoleGetResponse struct {
+	Errors   []OrganizationRoleGetResponseError   `json:"errors"`
+	Messages []OrganizationRoleGetResponseMessage `json:"messages"`
+	Result   interface{}                          `json:"result"`
 	// Whether the API call was successful
-	Success CollectionRoleResponseSuccess `json:"success"`
-	JSON    collectionRoleResponseJSON    `json:"-"`
+	Success OrganizationRoleGetResponseSuccess `json:"success"`
+	JSON    organizationRoleGetResponseJSON    `json:"-"`
 }
 
-// collectionRoleResponseJSON contains the JSON metadata for the struct
-// [CollectionRoleResponse]
-type collectionRoleResponseJSON struct {
+// organizationRoleGetResponseJSON contains the JSON metadata for the struct
+// [OrganizationRoleGetResponse]
+type organizationRoleGetResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OrganizationRoleGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type OrganizationRoleGetResponseError struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    organizationRoleGetResponseErrorJSON `json:"-"`
+}
+
+// organizationRoleGetResponseErrorJSON contains the JSON metadata for the struct
+// [OrganizationRoleGetResponseError]
+type organizationRoleGetResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OrganizationRoleGetResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type OrganizationRoleGetResponseMessage struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    organizationRoleGetResponseMessageJSON `json:"-"`
+}
+
+// organizationRoleGetResponseMessageJSON contains the JSON metadata for the struct
+// [OrganizationRoleGetResponseMessage]
+type organizationRoleGetResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OrganizationRoleGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type OrganizationRoleGetResponseSuccess bool
+
+const (
+	OrganizationRoleGetResponseSuccessTrue OrganizationRoleGetResponseSuccess = true
+)
+
+type OrganizationRoleOrganizationRolesListRolesResponse struct {
+	Errors     []OrganizationRoleOrganizationRolesListRolesResponseError    `json:"errors"`
+	Messages   []OrganizationRoleOrganizationRolesListRolesResponseMessage  `json:"messages"`
+	Result     []OrganizationRoleOrganizationRolesListRolesResponseResult   `json:"result"`
+	ResultInfo OrganizationRoleOrganizationRolesListRolesResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success OrganizationRoleOrganizationRolesListRolesResponseSuccess `json:"success"`
+	JSON    organizationRoleOrganizationRolesListRolesResponseJSON    `json:"-"`
+}
+
+// organizationRoleOrganizationRolesListRolesResponseJSON contains the JSON
+// metadata for the struct [OrganizationRoleOrganizationRolesListRolesResponse]
+type organizationRoleOrganizationRolesListRolesResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -68,49 +137,51 @@ type collectionRoleResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CollectionRoleResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *OrganizationRoleOrganizationRolesListRolesResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CollectionRoleResponseError struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    collectionRoleResponseErrorJSON `json:"-"`
+type OrganizationRoleOrganizationRolesListRolesResponseError struct {
+	Code    int64                                                       `json:"code,required"`
+	Message string                                                      `json:"message,required"`
+	JSON    organizationRoleOrganizationRolesListRolesResponseErrorJSON `json:"-"`
 }
 
-// collectionRoleResponseErrorJSON contains the JSON metadata for the struct
-// [CollectionRoleResponseError]
-type collectionRoleResponseErrorJSON struct {
+// organizationRoleOrganizationRolesListRolesResponseErrorJSON contains the JSON
+// metadata for the struct
+// [OrganizationRoleOrganizationRolesListRolesResponseError]
+type organizationRoleOrganizationRolesListRolesResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CollectionRoleResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *OrganizationRoleOrganizationRolesListRolesResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CollectionRoleResponseMessage struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    collectionRoleResponseMessageJSON `json:"-"`
+type OrganizationRoleOrganizationRolesListRolesResponseMessage struct {
+	Code    int64                                                         `json:"code,required"`
+	Message string                                                        `json:"message,required"`
+	JSON    organizationRoleOrganizationRolesListRolesResponseMessageJSON `json:"-"`
 }
 
-// collectionRoleResponseMessageJSON contains the JSON metadata for the struct
-// [CollectionRoleResponseMessage]
-type collectionRoleResponseMessageJSON struct {
+// organizationRoleOrganizationRolesListRolesResponseMessageJSON contains the JSON
+// metadata for the struct
+// [OrganizationRoleOrganizationRolesListRolesResponseMessage]
+type organizationRoleOrganizationRolesListRolesResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CollectionRoleResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *OrganizationRoleOrganizationRolesListRolesResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CollectionRoleResponseResult struct {
+type OrganizationRoleOrganizationRolesListRolesResponseResult struct {
 	// Role identifier tag.
 	ID string `json:"id,required"`
 	// Description of role's permissions.
@@ -118,13 +189,14 @@ type CollectionRoleResponseResult struct {
 	// Role Name.
 	Name string `json:"name,required"`
 	// Access permissions for this User.
-	Permissions []string                         `json:"permissions,required"`
-	JSON        collectionRoleResponseResultJSON `json:"-"`
+	Permissions []string                                                     `json:"permissions,required"`
+	JSON        organizationRoleOrganizationRolesListRolesResponseResultJSON `json:"-"`
 }
 
-// collectionRoleResponseResultJSON contains the JSON metadata for the struct
-// [CollectionRoleResponseResult]
-type collectionRoleResponseResultJSON struct {
+// organizationRoleOrganizationRolesListRolesResponseResultJSON contains the JSON
+// metadata for the struct
+// [OrganizationRoleOrganizationRolesListRolesResponseResult]
+type organizationRoleOrganizationRolesListRolesResponseResultJSON struct {
 	ID          apijson.Field
 	Description apijson.Field
 	Name        apijson.Field
@@ -133,11 +205,11 @@ type collectionRoleResponseResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CollectionRoleResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *OrganizationRoleOrganizationRolesListRolesResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CollectionRoleResponseResultInfo struct {
+type OrganizationRoleOrganizationRolesListRolesResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -145,13 +217,14 @@ type CollectionRoleResponseResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                              `json:"total_count"`
-	JSON       collectionRoleResponseResultInfoJSON `json:"-"`
+	TotalCount float64                                                          `json:"total_count"`
+	JSON       organizationRoleOrganizationRolesListRolesResponseResultInfoJSON `json:"-"`
 }
 
-// collectionRoleResponseResultInfoJSON contains the JSON metadata for the struct
-// [CollectionRoleResponseResultInfo]
-type collectionRoleResponseResultInfoJSON struct {
+// organizationRoleOrganizationRolesListRolesResponseResultInfoJSON contains the
+// JSON metadata for the struct
+// [OrganizationRoleOrganizationRolesListRolesResponseResultInfo]
+type organizationRoleOrganizationRolesListRolesResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -160,82 +233,13 @@ type collectionRoleResponseResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CollectionRoleResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *OrganizationRoleOrganizationRolesListRolesResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type CollectionRoleResponseSuccess bool
+type OrganizationRoleOrganizationRolesListRolesResponseSuccess bool
 
 const (
-	CollectionRoleResponseSuccessTrue CollectionRoleResponseSuccess = true
-)
-
-type SingleRoleResponse struct {
-	Errors   []SingleRoleResponseError   `json:"errors"`
-	Messages []SingleRoleResponseMessage `json:"messages"`
-	Result   interface{}                 `json:"result"`
-	// Whether the API call was successful
-	Success SingleRoleResponseSuccess `json:"success"`
-	JSON    singleRoleResponseJSON    `json:"-"`
-}
-
-// singleRoleResponseJSON contains the JSON metadata for the struct
-// [SingleRoleResponse]
-type singleRoleResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SingleRoleResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SingleRoleResponseError struct {
-	Code    int64                       `json:"code,required"`
-	Message string                      `json:"message,required"`
-	JSON    singleRoleResponseErrorJSON `json:"-"`
-}
-
-// singleRoleResponseErrorJSON contains the JSON metadata for the struct
-// [SingleRoleResponseError]
-type singleRoleResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SingleRoleResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SingleRoleResponseMessage struct {
-	Code    int64                         `json:"code,required"`
-	Message string                        `json:"message,required"`
-	JSON    singleRoleResponseMessageJSON `json:"-"`
-}
-
-// singleRoleResponseMessageJSON contains the JSON metadata for the struct
-// [SingleRoleResponseMessage]
-type singleRoleResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SingleRoleResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type SingleRoleResponseSuccess bool
-
-const (
-	SingleRoleResponseSuccessTrue SingleRoleResponseSuccess = true
+	OrganizationRoleOrganizationRolesListRolesResponseSuccessTrue OrganizationRoleOrganizationRolesListRolesResponseSuccess = true
 )

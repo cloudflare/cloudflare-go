@@ -11,10 +11,12 @@ import (
 // variables from the environment automatically. You should not instantiate this
 // service directly, and instead use the [NewRadarBgpService] method instead.
 type RadarBgpService struct {
-	Options    []option.RequestOption
-	Leaks      *RadarBgpLeakService
-	Timeseries *RadarBgpTimeseryService
-	Tops       *RadarBgpTopService
+	Options       []option.RequestOption
+	Leaks         *RadarBgpLeakService
+	Timeseries    *RadarBgpTimeseryService
+	Tops          *RadarBgpTopService
+	HijacksEvents *RadarBgpHijacksEventService
+	Routes        *RadarBgpRouteService
 }
 
 // NewRadarBgpService generates a new service that applies the given options to
@@ -26,5 +28,7 @@ func NewRadarBgpService(opts ...option.RequestOption) (r *RadarBgpService) {
 	r.Leaks = NewRadarBgpLeakService(opts...)
 	r.Timeseries = NewRadarBgpTimeseryService(opts...)
 	r.Tops = NewRadarBgpTopService(opts...)
+	r.HijacksEvents = NewRadarBgpHijacksEventService(opts...)
+	r.Routes = NewRadarBgpRouteService(opts...)
 	return
 }

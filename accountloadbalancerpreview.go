@@ -6,13 +6,10 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
-	"github.com/tidwall/gjson"
 )
 
 // AccountLoadBalancerPreviewService contains methods and other services that help
@@ -34,25 +31,26 @@ func NewAccountLoadBalancerPreviewService(opts ...option.RequestOption) (r *Acco
 }
 
 // Get the result of a previous preview operation using the provided preview_id.
-func (r *AccountLoadBalancerPreviewService) Get(ctx context.Context, accountIdentifier string, previewID interface{}, opts ...option.RequestOption) (res *PreviewResultResponse, err error) {
+func (r *AccountLoadBalancerPreviewService) Get(ctx context.Context, accountIdentifier string, previewID interface{}, opts ...option.RequestOption) (res *AccountLoadBalancerPreviewGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/load_balancers/preview/%v", accountIdentifier, previewID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type PreviewResultResponse struct {
-	Errors   []PreviewResultResponseError   `json:"errors"`
-	Messages []PreviewResultResponseMessage `json:"messages"`
-	Result   PreviewResultResponseResult    `json:"result,nullable"`
+type AccountLoadBalancerPreviewGetResponse struct {
+	Errors   []AccountLoadBalancerPreviewGetResponseError   `json:"errors"`
+	Messages []AccountLoadBalancerPreviewGetResponseMessage `json:"messages"`
+	// Resulting health data from a preview operation.
+	Result interface{} `json:"result"`
 	// Whether the API call was successful
-	Success PreviewResultResponseSuccess `json:"success"`
-	JSON    previewResultResponseJSON    `json:"-"`
+	Success AccountLoadBalancerPreviewGetResponseSuccess `json:"success"`
+	JSON    accountLoadBalancerPreviewGetResponseJSON    `json:"-"`
 }
 
-// previewResultResponseJSON contains the JSON metadata for the struct
-// [PreviewResultResponse]
-type previewResultResponseJSON struct {
+// accountLoadBalancerPreviewGetResponseJSON contains the JSON metadata for the
+// struct [AccountLoadBalancerPreviewGetResponse]
+type accountLoadBalancerPreviewGetResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -61,68 +59,51 @@ type previewResultResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PreviewResultResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLoadBalancerPreviewGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PreviewResultResponseError struct {
-	Code    int64                          `json:"code,required"`
-	Message string                         `json:"message,required"`
-	JSON    previewResultResponseErrorJSON `json:"-"`
+type AccountLoadBalancerPreviewGetResponseError struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    accountLoadBalancerPreviewGetResponseErrorJSON `json:"-"`
 }
 
-// previewResultResponseErrorJSON contains the JSON metadata for the struct
-// [PreviewResultResponseError]
-type previewResultResponseErrorJSON struct {
+// accountLoadBalancerPreviewGetResponseErrorJSON contains the JSON metadata for
+// the struct [AccountLoadBalancerPreviewGetResponseError]
+type accountLoadBalancerPreviewGetResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PreviewResultResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLoadBalancerPreviewGetResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PreviewResultResponseMessage struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    previewResultResponseMessageJSON `json:"-"`
+type AccountLoadBalancerPreviewGetResponseMessage struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    accountLoadBalancerPreviewGetResponseMessageJSON `json:"-"`
 }
 
-// previewResultResponseMessageJSON contains the JSON metadata for the struct
-// [PreviewResultResponseMessage]
-type previewResultResponseMessageJSON struct {
+// accountLoadBalancerPreviewGetResponseMessageJSON contains the JSON metadata for
+// the struct [AccountLoadBalancerPreviewGetResponseMessage]
+type accountLoadBalancerPreviewGetResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PreviewResultResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLoadBalancerPreviewGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
-}
-
-// Union satisfied by [PreviewResultResponseResultObject] or [shared.UnionString].
-type PreviewResultResponseResult interface {
-	ImplementsPreviewResultResponseResult()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*PreviewResultResponseResult)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter:         gjson.String,
-			DiscriminatorValue: "",
-			Type:               reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 // Whether the API call was successful
-type PreviewResultResponseSuccess bool
+type AccountLoadBalancerPreviewGetResponseSuccess bool
 
 const (
-	PreviewResultResponseSuccessTrue PreviewResultResponseSuccess = true
+	AccountLoadBalancerPreviewGetResponseSuccessTrue AccountLoadBalancerPreviewGetResponseSuccess = true
 )

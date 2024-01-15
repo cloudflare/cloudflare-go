@@ -33,24 +33,25 @@ func NewAccountIntelASNService(opts ...option.RequestOption) (r *AccountIntelASN
 }
 
 // Get ASN Overview
-func (r *AccountIntelASNService) Get(ctx context.Context, accountIdentifier string, asn interface{}, opts ...option.RequestOption) (res *ASNResponse, err error) {
+func (r *AccountIntelASNService) Get(ctx context.Context, accountIdentifier string, asn interface{}, opts ...option.RequestOption) (res *AccountIntelASNGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/intel/asn/%v", accountIdentifier, asn)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type ASNResponse struct {
-	Errors   []ASNResponseError   `json:"errors"`
-	Messages []ASNResponseMessage `json:"messages"`
-	Result   ASNResponseResult    `json:"result"`
+type AccountIntelASNGetResponse struct {
+	Errors   []AccountIntelASNGetResponseError   `json:"errors"`
+	Messages []AccountIntelASNGetResponseMessage `json:"messages"`
+	Result   int64                               `json:"result"`
 	// Whether the API call was successful
-	Success ASNResponseSuccess `json:"success"`
-	JSON    asnResponseJSON    `json:"-"`
+	Success AccountIntelASNGetResponseSuccess `json:"success"`
+	JSON    accountIntelASNGetResponseJSON    `json:"-"`
 }
 
-// asnResponseJSON contains the JSON metadata for the struct [ASNResponse]
-type asnResponseJSON struct {
+// accountIntelASNGetResponseJSON contains the JSON metadata for the struct
+// [AccountIntelASNGetResponse]
+type accountIntelASNGetResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -59,88 +60,51 @@ type asnResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ASNResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountIntelASNGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ASNResponseError struct {
-	Code    int64                `json:"code,required"`
-	Message string               `json:"message,required"`
-	JSON    asnResponseErrorJSON `json:"-"`
+type AccountIntelASNGetResponseError struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    accountIntelASNGetResponseErrorJSON `json:"-"`
 }
 
-// asnResponseErrorJSON contains the JSON metadata for the struct
-// [ASNResponseError]
-type asnResponseErrorJSON struct {
+// accountIntelASNGetResponseErrorJSON contains the JSON metadata for the struct
+// [AccountIntelASNGetResponseError]
+type accountIntelASNGetResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ASNResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountIntelASNGetResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ASNResponseMessage struct {
-	Code    int64                  `json:"code,required"`
-	Message string                 `json:"message,required"`
-	JSON    asnResponseMessageJSON `json:"-"`
+type AccountIntelASNGetResponseMessage struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    accountIntelASNGetResponseMessageJSON `json:"-"`
 }
 
-// asnResponseMessageJSON contains the JSON metadata for the struct
-// [ASNResponseMessage]
-type asnResponseMessageJSON struct {
+// accountIntelASNGetResponseMessageJSON contains the JSON metadata for the struct
+// [AccountIntelASNGetResponseMessage]
+type accountIntelASNGetResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ASNResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountIntelASNGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-type ASNResponseResult struct {
-	ASN         int64    `json:"asn"`
-	Country     string   `json:"country"`
-	Description string   `json:"description"`
-	DomainCount int64    `json:"domain_count"`
-	TopDomains  []string `json:"top_domains"`
-	// Infrastructure type of this ASN.
-	Type ASNResponseResultType `json:"type"`
-	JSON asnResponseResultJSON `json:"-"`
-}
-
-// asnResponseResultJSON contains the JSON metadata for the struct
-// [ASNResponseResult]
-type asnResponseResultJSON struct {
-	ASN         apijson.Field
-	Country     apijson.Field
-	Description apijson.Field
-	DomainCount apijson.Field
-	TopDomains  apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ASNResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Infrastructure type of this ASN.
-type ASNResponseResultType string
-
-const (
-	ASNResponseResultTypeHostingProvider ASNResponseResultType = "hosting_provider"
-	ASNResponseResultTypeIsp             ASNResponseResultType = "isp"
-	ASNResponseResultTypeOrganization    ASNResponseResultType = "organization"
-)
 
 // Whether the API call was successful
-type ASNResponseSuccess bool
+type AccountIntelASNGetResponseSuccess bool
 
 const (
-	ASNResponseSuccessTrue ASNResponseSuccess = true
+	AccountIntelASNGetResponseSuccessTrue AccountIntelASNGetResponseSuccess = true
 )

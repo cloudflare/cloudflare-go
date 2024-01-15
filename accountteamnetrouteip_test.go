@@ -24,10 +24,12 @@ func TestAccountTeamnetRouteIPGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Teamnets.Routes.IPs.Get(
+	_, err := client.Accounts.Teamnet.Routes.IPs.Get(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		"10.1.0.137",

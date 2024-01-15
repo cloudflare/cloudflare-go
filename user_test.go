@@ -24,10 +24,12 @@ func TestUserUserEditUserWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Users.UserEditUser(context.TODO(), cloudflare.UserUserEditUserParams{
+	_, err := client.User.UserEditUser(context.TODO(), cloudflare.UserUserEditUserParams{
 		Country:   cloudflare.F("US"),
 		FirstName: cloudflare.F("John"),
 		LastName:  cloudflare.F("Appleseed"),
@@ -54,10 +56,12 @@ func TestUserUserUserDetails(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Users.UserUserDetails(context.TODO())
+	_, err := client.User.UserUserDetails(context.TODO())
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

@@ -24,8 +24,10 @@ func TestAccountStreamWatermarkGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Streams.Watermarks.Get(
 		context.TODO(),
@@ -52,8 +54,10 @@ func TestAccountStreamWatermarkDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Streams.Watermarks.Delete(
 		context.TODO(),
@@ -69,7 +73,7 @@ func TestAccountStreamWatermarkDelete(t *testing.T) {
 	}
 }
 
-func TestAccountStreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUpload(t *testing.T) {
+func TestAccountStreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -80,14 +84,21 @@ func TestAccountStreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasi
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Streams.Watermarks.StreamWatermarkProfileNewWatermarkProfilesViaBasicUpload(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.AccountStreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadParams{
-			File: cloudflare.F("@/Users/rchen/Downloads/watermark.png"),
+			File:     cloudflare.F("@/Users/rchen/Downloads/watermark.png"),
+			Name:     cloudflare.F("Marketing Videos"),
+			Opacity:  cloudflare.F(0.750000),
+			Padding:  cloudflare.F(0.100000),
+			Position: cloudflare.F("center"),
+			Scale:    cloudflare.F(0.100000),
 		},
 	)
 	if err != nil {
@@ -110,8 +121,10 @@ func TestAccountStreamWatermarkStreamWatermarkProfileListWatermarkProfiles(t *te
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Streams.Watermarks.StreamWatermarkProfileListWatermarkProfiles(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {

@@ -24,8 +24,10 @@ func TestZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsWithOptionalParams(t *test
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Acms.TotalTls.TotalTlsEnableOrDisableTotalTls(
 		context.TODO(),
@@ -55,8 +57,10 @@ func TestZoneAcmTotalTlTotalTlsTotalTlsSettingsDetails(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Acms.TotalTls.TotalTlsTotalTlsSettingsDetails(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {

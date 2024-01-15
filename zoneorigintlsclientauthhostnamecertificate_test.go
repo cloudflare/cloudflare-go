@@ -24,8 +24,10 @@ func TestZoneOriginTlsClientAuthHostnameCertificateGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.OriginTlsClientAuths.Hostnames.Certificates.Get(
 		context.TODO(),
@@ -52,8 +54,10 @@ func TestZoneOriginTlsClientAuthHostnameCertificateDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.OriginTlsClientAuths.Hostnames.Certificates.Delete(
 		context.TODO(),
@@ -80,8 +84,10 @@ func TestZoneOriginTlsClientAuthHostnameCertificatePerHostnameAuthenticatedOrigi
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.OriginTlsClientAuths.Hostnames.Certificates.PerHostnameAuthenticatedOriginPullListCertificates(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
@@ -104,8 +110,10 @@ func TestZoneOriginTlsClientAuthHostnameCertificatePerHostnameAuthenticatedOrigi
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.OriginTlsClientAuths.Hostnames.Certificates.PerHostnameAuthenticatedOriginPullUploadAHostnameClientCertificate(
 		context.TODO(),

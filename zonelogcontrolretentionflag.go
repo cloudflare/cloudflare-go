@@ -32,7 +32,7 @@ func NewZoneLogControlRetentionFlagService(opts ...option.RequestOption) (r *Zon
 }
 
 // Gets log retention flag for Logpull API.
-func (r *ZoneLogControlRetentionFlagService) LogsReceivedGetLogRetentionFlag(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *FlagResponse, err error) {
+func (r *ZoneLogControlRetentionFlagService) LogsReceivedGetLogRetentionFlag(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ZoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/logs/control/retention/flag", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -40,24 +40,26 @@ func (r *ZoneLogControlRetentionFlagService) LogsReceivedGetLogRetentionFlag(ctx
 }
 
 // Updates log retention flag for Logpull API.
-func (r *ZoneLogControlRetentionFlagService) LogsReceivedUpdateLogRetentionFlag(ctx context.Context, zoneIdentifier string, body ZoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagParams, opts ...option.RequestOption) (res *FlagResponse, err error) {
+func (r *ZoneLogControlRetentionFlagService) LogsReceivedUpdateLogRetentionFlag(ctx context.Context, zoneIdentifier string, body ZoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagParams, opts ...option.RequestOption) (res *ZoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/logs/control/retention/flag", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
-type FlagResponse struct {
-	Errors   []FlagResponseError   `json:"errors"`
-	Messages []FlagResponseMessage `json:"messages"`
-	Result   FlagResponseResult    `json:"result"`
+type ZoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponse struct {
+	Errors   []ZoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseError   `json:"errors"`
+	Messages []ZoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseMessage `json:"messages"`
+	Result   ZoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success FlagResponseSuccess `json:"success"`
-	JSON    flagResponseJSON    `json:"-"`
+	Success ZoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseSuccess `json:"success"`
+	JSON    zoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseJSON    `json:"-"`
 }
 
-// flagResponseJSON contains the JSON metadata for the struct [FlagResponse]
-type flagResponseJSON struct {
+// zoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseJSON contains
+// the JSON metadata for the struct
+// [ZoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponse]
+type zoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -66,70 +68,163 @@ type flagResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FlagResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type FlagResponseError struct {
-	Code    int64                 `json:"code,required"`
-	Message string                `json:"message,required"`
-	JSON    flagResponseErrorJSON `json:"-"`
+type ZoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseError struct {
+	Code    int64                                                                       `json:"code,required"`
+	Message string                                                                      `json:"message,required"`
+	JSON    zoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseErrorJSON `json:"-"`
 }
 
-// flagResponseErrorJSON contains the JSON metadata for the struct
-// [FlagResponseError]
-type flagResponseErrorJSON struct {
+// zoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseError]
+type zoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FlagResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type FlagResponseMessage struct {
-	Code    int64                   `json:"code,required"`
-	Message string                  `json:"message,required"`
-	JSON    flagResponseMessageJSON `json:"-"`
+type ZoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseMessage struct {
+	Code    int64                                                                         `json:"code,required"`
+	Message string                                                                        `json:"message,required"`
+	JSON    zoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseMessageJSON `json:"-"`
 }
 
-// flagResponseMessageJSON contains the JSON metadata for the struct
-// [FlagResponseMessage]
-type flagResponseMessageJSON struct {
+// zoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseMessage]
+type zoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FlagResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type FlagResponseResult struct {
-	Flag bool                   `json:"flag"`
-	JSON flagResponseResultJSON `json:"-"`
+type ZoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseResult struct {
+	Flag bool                                                                         `json:"flag"`
+	JSON zoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseResultJSON `json:"-"`
 }
 
-// flagResponseResultJSON contains the JSON metadata for the struct
-// [FlagResponseResult]
-type flagResponseResultJSON struct {
+// zoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseResultJSON
+// contains the JSON metadata for the struct
+// [ZoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseResult]
+type zoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseResultJSON struct {
 	Flag        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FlagResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type FlagResponseSuccess bool
+type ZoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseSuccess bool
 
 const (
-	FlagResponseSuccessTrue FlagResponseSuccess = true
+	ZoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseSuccessTrue ZoneLogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseSuccess = true
+)
+
+type ZoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponse struct {
+	Errors   []ZoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseError   `json:"errors"`
+	Messages []ZoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseMessage `json:"messages"`
+	Result   ZoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success ZoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseSuccess `json:"success"`
+	JSON    zoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseJSON    `json:"-"`
+}
+
+// zoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponse]
+type zoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseError struct {
+	Code    int64                                                                          `json:"code,required"`
+	Message string                                                                         `json:"message,required"`
+	JSON    zoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseErrorJSON `json:"-"`
+}
+
+// zoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseError]
+type zoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseMessage struct {
+	Code    int64                                                                            `json:"code,required"`
+	Message string                                                                           `json:"message,required"`
+	JSON    zoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseMessageJSON `json:"-"`
+}
+
+// zoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseMessage]
+type zoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseResult struct {
+	Flag bool                                                                            `json:"flag"`
+	JSON zoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseResultJSON `json:"-"`
+}
+
+// zoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseResultJSON
+// contains the JSON metadata for the struct
+// [ZoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseResult]
+type zoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseResultJSON struct {
+	Flag        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseSuccess bool
+
+const (
+	ZoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseSuccessTrue ZoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagResponseSuccess = true
 )
 
 type ZoneLogControlRetentionFlagLogsReceivedUpdateLogRetentionFlagParams struct {

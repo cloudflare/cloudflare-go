@@ -34,7 +34,7 @@ func NewAccountTeamnetVirtualNetworkService(opts ...option.RequestOption) (r *Ac
 }
 
 // Updates an existing virtual network.
-func (r *AccountTeamnetVirtualNetworkService) Update(ctx context.Context, accountIdentifier string, vnetID string, body AccountTeamnetVirtualNetworkUpdateParams, opts ...option.RequestOption) (res *VnetResponseSingle, err error) {
+func (r *AccountTeamnetVirtualNetworkService) Update(ctx context.Context, accountIdentifier string, vnetID string, body AccountTeamnetVirtualNetworkUpdateParams, opts ...option.RequestOption) (res *AccountTeamnetVirtualNetworkUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks/%s", accountIdentifier, vnetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
@@ -42,7 +42,7 @@ func (r *AccountTeamnetVirtualNetworkService) Update(ctx context.Context, accoun
 }
 
 // Deletes an existing virtual network.
-func (r *AccountTeamnetVirtualNetworkService) Delete(ctx context.Context, accountIdentifier string, vnetID string, opts ...option.RequestOption) (res *VnetResponseSingle, err error) {
+func (r *AccountTeamnetVirtualNetworkService) Delete(ctx context.Context, accountIdentifier string, vnetID string, opts ...option.RequestOption) (res *AccountTeamnetVirtualNetworkDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks/%s", accountIdentifier, vnetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -50,7 +50,7 @@ func (r *AccountTeamnetVirtualNetworkService) Delete(ctx context.Context, accoun
 }
 
 // Adds a new virtual network to an account.
-func (r *AccountTeamnetVirtualNetworkService) TunnelVirtualNetworkNewAVirtualNetwork(ctx context.Context, accountIdentifier string, body AccountTeamnetVirtualNetworkTunnelVirtualNetworkNewAVirtualNetworkParams, opts ...option.RequestOption) (res *VnetResponseSingle, err error) {
+func (r *AccountTeamnetVirtualNetworkService) TunnelVirtualNetworkNewAVirtualNetwork(ctx context.Context, accountIdentifier string, body AccountTeamnetVirtualNetworkTunnelVirtualNetworkNewAVirtualNetworkParams, opts ...option.RequestOption) (res *AccountTeamnetVirtualNetworkTunnelVirtualNetworkNewAVirtualNetworkResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -58,26 +58,237 @@ func (r *AccountTeamnetVirtualNetworkService) TunnelVirtualNetworkNewAVirtualNet
 }
 
 // Lists and filters virtual networks in an account.
-func (r *AccountTeamnetVirtualNetworkService) TunnelVirtualNetworkListVirtualNetworks(ctx context.Context, accountIdentifier string, query AccountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksParams, opts ...option.RequestOption) (res *VnetResponseCollection, err error) {
+func (r *AccountTeamnetVirtualNetworkService) TunnelVirtualNetworkListVirtualNetworks(ctx context.Context, accountIdentifier string, query AccountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksParams, opts ...option.RequestOption) (res *AccountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
-type VnetResponseCollection struct {
-	Errors     []VnetResponseCollectionError    `json:"errors"`
-	Messages   []VnetResponseCollectionMessage  `json:"messages"`
-	Result     []VnetResponseCollectionResult   `json:"result"`
-	ResultInfo VnetResponseCollectionResultInfo `json:"result_info"`
+type AccountTeamnetVirtualNetworkUpdateResponse struct {
+	Errors   []AccountTeamnetVirtualNetworkUpdateResponseError   `json:"errors"`
+	Messages []AccountTeamnetVirtualNetworkUpdateResponseMessage `json:"messages"`
+	Result   interface{}                                         `json:"result"`
 	// Whether the API call was successful
-	Success VnetResponseCollectionSuccess `json:"success"`
-	JSON    vnetResponseCollectionJSON    `json:"-"`
+	Success AccountTeamnetVirtualNetworkUpdateResponseSuccess `json:"success"`
+	JSON    accountTeamnetVirtualNetworkUpdateResponseJSON    `json:"-"`
 }
 
-// vnetResponseCollectionJSON contains the JSON metadata for the struct
-// [VnetResponseCollection]
-type vnetResponseCollectionJSON struct {
+// accountTeamnetVirtualNetworkUpdateResponseJSON contains the JSON metadata for
+// the struct [AccountTeamnetVirtualNetworkUpdateResponse]
+type accountTeamnetVirtualNetworkUpdateResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTeamnetVirtualNetworkUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountTeamnetVirtualNetworkUpdateResponseError struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    accountTeamnetVirtualNetworkUpdateResponseErrorJSON `json:"-"`
+}
+
+// accountTeamnetVirtualNetworkUpdateResponseErrorJSON contains the JSON metadata
+// for the struct [AccountTeamnetVirtualNetworkUpdateResponseError]
+type accountTeamnetVirtualNetworkUpdateResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTeamnetVirtualNetworkUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountTeamnetVirtualNetworkUpdateResponseMessage struct {
+	Code    int64                                                 `json:"code,required"`
+	Message string                                                `json:"message,required"`
+	JSON    accountTeamnetVirtualNetworkUpdateResponseMessageJSON `json:"-"`
+}
+
+// accountTeamnetVirtualNetworkUpdateResponseMessageJSON contains the JSON metadata
+// for the struct [AccountTeamnetVirtualNetworkUpdateResponseMessage]
+type accountTeamnetVirtualNetworkUpdateResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTeamnetVirtualNetworkUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountTeamnetVirtualNetworkUpdateResponseSuccess bool
+
+const (
+	AccountTeamnetVirtualNetworkUpdateResponseSuccessTrue AccountTeamnetVirtualNetworkUpdateResponseSuccess = true
+)
+
+type AccountTeamnetVirtualNetworkDeleteResponse struct {
+	Errors   []AccountTeamnetVirtualNetworkDeleteResponseError   `json:"errors"`
+	Messages []AccountTeamnetVirtualNetworkDeleteResponseMessage `json:"messages"`
+	Result   interface{}                                         `json:"result"`
+	// Whether the API call was successful
+	Success AccountTeamnetVirtualNetworkDeleteResponseSuccess `json:"success"`
+	JSON    accountTeamnetVirtualNetworkDeleteResponseJSON    `json:"-"`
+}
+
+// accountTeamnetVirtualNetworkDeleteResponseJSON contains the JSON metadata for
+// the struct [AccountTeamnetVirtualNetworkDeleteResponse]
+type accountTeamnetVirtualNetworkDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTeamnetVirtualNetworkDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountTeamnetVirtualNetworkDeleteResponseError struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    accountTeamnetVirtualNetworkDeleteResponseErrorJSON `json:"-"`
+}
+
+// accountTeamnetVirtualNetworkDeleteResponseErrorJSON contains the JSON metadata
+// for the struct [AccountTeamnetVirtualNetworkDeleteResponseError]
+type accountTeamnetVirtualNetworkDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTeamnetVirtualNetworkDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountTeamnetVirtualNetworkDeleteResponseMessage struct {
+	Code    int64                                                 `json:"code,required"`
+	Message string                                                `json:"message,required"`
+	JSON    accountTeamnetVirtualNetworkDeleteResponseMessageJSON `json:"-"`
+}
+
+// accountTeamnetVirtualNetworkDeleteResponseMessageJSON contains the JSON metadata
+// for the struct [AccountTeamnetVirtualNetworkDeleteResponseMessage]
+type accountTeamnetVirtualNetworkDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTeamnetVirtualNetworkDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountTeamnetVirtualNetworkDeleteResponseSuccess bool
+
+const (
+	AccountTeamnetVirtualNetworkDeleteResponseSuccessTrue AccountTeamnetVirtualNetworkDeleteResponseSuccess = true
+)
+
+type AccountTeamnetVirtualNetworkTunnelVirtualNetworkNewAVirtualNetworkResponse struct {
+	Errors   []AccountTeamnetVirtualNetworkTunnelVirtualNetworkNewAVirtualNetworkResponseError   `json:"errors"`
+	Messages []AccountTeamnetVirtualNetworkTunnelVirtualNetworkNewAVirtualNetworkResponseMessage `json:"messages"`
+	Result   interface{}                                                                         `json:"result"`
+	// Whether the API call was successful
+	Success AccountTeamnetVirtualNetworkTunnelVirtualNetworkNewAVirtualNetworkResponseSuccess `json:"success"`
+	JSON    accountTeamnetVirtualNetworkTunnelVirtualNetworkNewAVirtualNetworkResponseJSON    `json:"-"`
+}
+
+// accountTeamnetVirtualNetworkTunnelVirtualNetworkNewAVirtualNetworkResponseJSON
+// contains the JSON metadata for the struct
+// [AccountTeamnetVirtualNetworkTunnelVirtualNetworkNewAVirtualNetworkResponse]
+type accountTeamnetVirtualNetworkTunnelVirtualNetworkNewAVirtualNetworkResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTeamnetVirtualNetworkTunnelVirtualNetworkNewAVirtualNetworkResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountTeamnetVirtualNetworkTunnelVirtualNetworkNewAVirtualNetworkResponseError struct {
+	Code    int64                                                                               `json:"code,required"`
+	Message string                                                                              `json:"message,required"`
+	JSON    accountTeamnetVirtualNetworkTunnelVirtualNetworkNewAVirtualNetworkResponseErrorJSON `json:"-"`
+}
+
+// accountTeamnetVirtualNetworkTunnelVirtualNetworkNewAVirtualNetworkResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountTeamnetVirtualNetworkTunnelVirtualNetworkNewAVirtualNetworkResponseError]
+type accountTeamnetVirtualNetworkTunnelVirtualNetworkNewAVirtualNetworkResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTeamnetVirtualNetworkTunnelVirtualNetworkNewAVirtualNetworkResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountTeamnetVirtualNetworkTunnelVirtualNetworkNewAVirtualNetworkResponseMessage struct {
+	Code    int64                                                                                 `json:"code,required"`
+	Message string                                                                                `json:"message,required"`
+	JSON    accountTeamnetVirtualNetworkTunnelVirtualNetworkNewAVirtualNetworkResponseMessageJSON `json:"-"`
+}
+
+// accountTeamnetVirtualNetworkTunnelVirtualNetworkNewAVirtualNetworkResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountTeamnetVirtualNetworkTunnelVirtualNetworkNewAVirtualNetworkResponseMessage]
+type accountTeamnetVirtualNetworkTunnelVirtualNetworkNewAVirtualNetworkResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTeamnetVirtualNetworkTunnelVirtualNetworkNewAVirtualNetworkResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountTeamnetVirtualNetworkTunnelVirtualNetworkNewAVirtualNetworkResponseSuccess bool
+
+const (
+	AccountTeamnetVirtualNetworkTunnelVirtualNetworkNewAVirtualNetworkResponseSuccessTrue AccountTeamnetVirtualNetworkTunnelVirtualNetworkNewAVirtualNetworkResponseSuccess = true
+)
+
+type AccountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponse struct {
+	Errors     []AccountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseError    `json:"errors"`
+	Messages   []AccountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseMessage  `json:"messages"`
+	Result     []AccountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseResult   `json:"result"`
+	ResultInfo AccountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success AccountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseSuccess `json:"success"`
+	JSON    accountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseJSON    `json:"-"`
+}
+
+// accountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseJSON
+// contains the JSON metadata for the struct
+// [AccountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponse]
+type accountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -87,49 +298,51 @@ type vnetResponseCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *VnetResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type VnetResponseCollectionError struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    vnetResponseCollectionErrorJSON `json:"-"`
+type AccountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseError struct {
+	Code    int64                                                                                `json:"code,required"`
+	Message string                                                                               `json:"message,required"`
+	JSON    accountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseErrorJSON `json:"-"`
 }
 
-// vnetResponseCollectionErrorJSON contains the JSON metadata for the struct
-// [VnetResponseCollectionError]
-type vnetResponseCollectionErrorJSON struct {
+// accountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseError]
+type accountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *VnetResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type VnetResponseCollectionMessage struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    vnetResponseCollectionMessageJSON `json:"-"`
+type AccountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseMessage struct {
+	Code    int64                                                                                  `json:"code,required"`
+	Message string                                                                                 `json:"message,required"`
+	JSON    accountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseMessageJSON `json:"-"`
 }
 
-// vnetResponseCollectionMessageJSON contains the JSON metadata for the struct
-// [VnetResponseCollectionMessage]
-type vnetResponseCollectionMessageJSON struct {
+// accountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseMessage]
+type accountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *VnetResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type VnetResponseCollectionResult struct {
+type AccountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseResult struct {
 	// UUID of the virtual network.
 	ID string `json:"id,required"`
 	// Optional remark describing the virtual network.
@@ -142,13 +355,14 @@ type VnetResponseCollectionResult struct {
 	Name string `json:"name,required"`
 	// Timestamp of when the virtual network was deleted. If `null`, the virtual
 	// network has not been deleted.
-	DeletedAt interface{}                      `json:"deleted_at"`
-	JSON      vnetResponseCollectionResultJSON `json:"-"`
+	DeletedAt interface{}                                                                           `json:"deleted_at"`
+	JSON      accountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseResultJSON `json:"-"`
 }
 
-// vnetResponseCollectionResultJSON contains the JSON metadata for the struct
-// [VnetResponseCollectionResult]
-type vnetResponseCollectionResultJSON struct {
+// accountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseResult]
+type accountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseResultJSON struct {
 	ID               apijson.Field
 	Comment          apijson.Field
 	CreatedAt        apijson.Field
@@ -159,11 +373,11 @@ type vnetResponseCollectionResultJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *VnetResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type VnetResponseCollectionResultInfo struct {
+type AccountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -171,13 +385,14 @@ type VnetResponseCollectionResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                              `json:"total_count"`
-	JSON       vnetResponseCollectionResultInfoJSON `json:"-"`
+	TotalCount float64                                                                                   `json:"total_count"`
+	JSON       accountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseResultInfoJSON `json:"-"`
 }
 
-// vnetResponseCollectionResultInfoJSON contains the JSON metadata for the struct
-// [VnetResponseCollectionResultInfo]
-type vnetResponseCollectionResultInfoJSON struct {
+// accountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [AccountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseResultInfo]
+type accountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -186,84 +401,15 @@ type vnetResponseCollectionResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *VnetResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type VnetResponseCollectionSuccess bool
+type AccountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseSuccess bool
 
 const (
-	VnetResponseCollectionSuccessTrue VnetResponseCollectionSuccess = true
-)
-
-type VnetResponseSingle struct {
-	Errors   []VnetResponseSingleError   `json:"errors"`
-	Messages []VnetResponseSingleMessage `json:"messages"`
-	Result   interface{}                 `json:"result"`
-	// Whether the API call was successful
-	Success VnetResponseSingleSuccess `json:"success"`
-	JSON    vnetResponseSingleJSON    `json:"-"`
-}
-
-// vnetResponseSingleJSON contains the JSON metadata for the struct
-// [VnetResponseSingle]
-type vnetResponseSingleJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VnetResponseSingle) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type VnetResponseSingleError struct {
-	Code    int64                       `json:"code,required"`
-	Message string                      `json:"message,required"`
-	JSON    vnetResponseSingleErrorJSON `json:"-"`
-}
-
-// vnetResponseSingleErrorJSON contains the JSON metadata for the struct
-// [VnetResponseSingleError]
-type vnetResponseSingleErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VnetResponseSingleError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type VnetResponseSingleMessage struct {
-	Code    int64                         `json:"code,required"`
-	Message string                        `json:"message,required"`
-	JSON    vnetResponseSingleMessageJSON `json:"-"`
-}
-
-// vnetResponseSingleMessageJSON contains the JSON metadata for the struct
-// [VnetResponseSingleMessage]
-type vnetResponseSingleMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VnetResponseSingleMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type VnetResponseSingleSuccess bool
-
-const (
-	VnetResponseSingleSuccessTrue VnetResponseSingleSuccess = true
+	AccountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseSuccessTrue AccountTeamnetVirtualNetworkTunnelVirtualNetworkListVirtualNetworksResponseSuccess = true
 )
 
 type AccountTeamnetVirtualNetworkUpdateParams struct {

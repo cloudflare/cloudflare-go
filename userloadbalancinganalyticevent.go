@@ -34,26 +34,27 @@ func NewUserLoadBalancingAnalyticEventService(opts ...option.RequestOption) (r *
 }
 
 // List origin health changes.
-func (r *UserLoadBalancingAnalyticEventService) LoadBalancerHealthcheckEventsListHealthcheckEvents(ctx context.Context, query UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsParams, opts ...option.RequestOption) (res *AnalyticsResponseCollection, err error) {
+func (r *UserLoadBalancingAnalyticEventService) LoadBalancerHealthcheckEventsListHealthcheckEvents(ctx context.Context, query UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsParams, opts ...option.RequestOption) (res *UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "user/load_balancing_analytics/events"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
-type AnalyticsResponseCollection struct {
-	Errors     []AnalyticsResponseCollectionError    `json:"errors"`
-	Messages   []AnalyticsResponseCollectionMessage  `json:"messages"`
-	Result     []AnalyticsResponseCollectionResult   `json:"result"`
-	ResultInfo AnalyticsResponseCollectionResultInfo `json:"result_info"`
+type UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponse struct {
+	Errors     []UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseError    `json:"errors"`
+	Messages   []UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseMessage  `json:"messages"`
+	Result     []UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseResult   `json:"result"`
+	ResultInfo UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseResultInfo `json:"result_info"`
 	// Whether the API call was successful
-	Success AnalyticsResponseCollectionSuccess `json:"success"`
-	JSON    analyticsResponseCollectionJSON    `json:"-"`
+	Success UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseSuccess `json:"success"`
+	JSON    userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseJSON    `json:"-"`
 }
 
-// analyticsResponseCollectionJSON contains the JSON metadata for the struct
-// [AnalyticsResponseCollection]
-type analyticsResponseCollectionJSON struct {
+// userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseJSON
+// contains the JSON metadata for the struct
+// [UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponse]
+type userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -63,59 +64,62 @@ type analyticsResponseCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AnalyticsResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AnalyticsResponseCollectionError struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    analyticsResponseCollectionErrorJSON `json:"-"`
+type UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseError struct {
+	Code    int64                                                                                             `json:"code,required"`
+	Message string                                                                                            `json:"message,required"`
+	JSON    userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseErrorJSON `json:"-"`
 }
 
-// analyticsResponseCollectionErrorJSON contains the JSON metadata for the struct
-// [AnalyticsResponseCollectionError]
-type analyticsResponseCollectionErrorJSON struct {
+// userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseError]
+type userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AnalyticsResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AnalyticsResponseCollectionMessage struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    analyticsResponseCollectionMessageJSON `json:"-"`
+type UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseMessage struct {
+	Code    int64                                                                                               `json:"code,required"`
+	Message string                                                                                              `json:"message,required"`
+	JSON    userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseMessageJSON `json:"-"`
 }
 
-// analyticsResponseCollectionMessageJSON contains the JSON metadata for the struct
-// [AnalyticsResponseCollectionMessage]
-type analyticsResponseCollectionMessageJSON struct {
+// userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseMessage]
+type userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AnalyticsResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AnalyticsResponseCollectionResult struct {
-	ID        int64                                 `json:"id"`
-	Origins   []interface{}                         `json:"origins"`
-	Pool      interface{}                           `json:"pool"`
-	Timestamp time.Time                             `json:"timestamp" format:"date-time"`
-	JSON      analyticsResponseCollectionResultJSON `json:"-"`
+type UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseResult struct {
+	ID        int64                                                                                              `json:"id"`
+	Origins   []interface{}                                                                                      `json:"origins"`
+	Pool      interface{}                                                                                        `json:"pool"`
+	Timestamp time.Time                                                                                          `json:"timestamp" format:"date-time"`
+	JSON      userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseResultJSON `json:"-"`
 }
 
-// analyticsResponseCollectionResultJSON contains the JSON metadata for the struct
-// [AnalyticsResponseCollectionResult]
-type analyticsResponseCollectionResultJSON struct {
+// userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseResultJSON
+// contains the JSON metadata for the struct
+// [UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseResult]
+type userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseResultJSON struct {
 	ID          apijson.Field
 	Origins     apijson.Field
 	Pool        apijson.Field
@@ -124,11 +128,11 @@ type analyticsResponseCollectionResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AnalyticsResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
+func (r *UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AnalyticsResponseCollectionResultInfo struct {
+type UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -136,13 +140,14 @@ type AnalyticsResponseCollectionResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                   `json:"total_count"`
-	JSON       analyticsResponseCollectionResultInfoJSON `json:"-"`
+	TotalCount float64                                                                                                `json:"total_count"`
+	JSON       userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseResultInfoJSON `json:"-"`
 }
 
-// analyticsResponseCollectionResultInfoJSON contains the JSON metadata for the
-// struct [AnalyticsResponseCollectionResultInfo]
-type analyticsResponseCollectionResultInfoJSON struct {
+// userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseResultInfo]
+type userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -151,19 +156,19 @@ type analyticsResponseCollectionResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AnalyticsResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type AnalyticsResponseCollectionSuccess bool
+type UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseSuccess bool
 
 const (
-	AnalyticsResponseCollectionSuccessTrue AnalyticsResponseCollectionSuccess = true
+	UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseSuccessTrue UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseSuccess = true
 )
 
 type UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsParams struct {
-	Identifier param.Field[interface{}] `query:"identifier"`
+	Identifier param.Field[string] `query:"identifier"`
 	// If true, filter events where the origin status is healthy. If false, filter
 	// events where the origin status is unhealthy.
 	OriginHealthy param.Field[bool] `query:"origin_healthy"`

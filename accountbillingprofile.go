@@ -31,25 +31,26 @@ func NewAccountBillingProfileService(opts ...option.RequestOption) (r *AccountBi
 }
 
 // Gets the current billing profile for the account.
-func (r *AccountBillingProfileService) AccountBillingProfileBillingProfileDetails(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *BillingResponseSingle, err error) {
+func (r *AccountBillingProfileService) AccountBillingProfileBillingProfileDetails(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *AccountBillingProfileAccountBillingProfileBillingProfileDetailsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/billing/profile", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type BillingResponseSingle struct {
-	Errors   []BillingResponseSingleError   `json:"errors"`
-	Messages []BillingResponseSingleMessage `json:"messages"`
-	Result   interface{}                    `json:"result"`
+type AccountBillingProfileAccountBillingProfileBillingProfileDetailsResponse struct {
+	Errors   []AccountBillingProfileAccountBillingProfileBillingProfileDetailsResponseError   `json:"errors"`
+	Messages []AccountBillingProfileAccountBillingProfileBillingProfileDetailsResponseMessage `json:"messages"`
+	Result   interface{}                                                                      `json:"result"`
 	// Whether the API call was successful
-	Success BillingResponseSingleSuccess `json:"success"`
-	JSON    billingResponseSingleJSON    `json:"-"`
+	Success AccountBillingProfileAccountBillingProfileBillingProfileDetailsResponseSuccess `json:"success"`
+	JSON    accountBillingProfileAccountBillingProfileBillingProfileDetailsResponseJSON    `json:"-"`
 }
 
-// billingResponseSingleJSON contains the JSON metadata for the struct
-// [BillingResponseSingle]
-type billingResponseSingleJSON struct {
+// accountBillingProfileAccountBillingProfileBillingProfileDetailsResponseJSON
+// contains the JSON metadata for the struct
+// [AccountBillingProfileAccountBillingProfileBillingProfileDetailsResponse]
+type accountBillingProfileAccountBillingProfileBillingProfileDetailsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -58,51 +59,53 @@ type billingResponseSingleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BillingResponseSingle) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountBillingProfileAccountBillingProfileBillingProfileDetailsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type BillingResponseSingleError struct {
-	Code    int64                          `json:"code,required"`
-	Message string                         `json:"message,required"`
-	JSON    billingResponseSingleErrorJSON `json:"-"`
+type AccountBillingProfileAccountBillingProfileBillingProfileDetailsResponseError struct {
+	Code    int64                                                                            `json:"code,required"`
+	Message string                                                                           `json:"message,required"`
+	JSON    accountBillingProfileAccountBillingProfileBillingProfileDetailsResponseErrorJSON `json:"-"`
 }
 
-// billingResponseSingleErrorJSON contains the JSON metadata for the struct
-// [BillingResponseSingleError]
-type billingResponseSingleErrorJSON struct {
+// accountBillingProfileAccountBillingProfileBillingProfileDetailsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountBillingProfileAccountBillingProfileBillingProfileDetailsResponseError]
+type accountBillingProfileAccountBillingProfileBillingProfileDetailsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BillingResponseSingleError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountBillingProfileAccountBillingProfileBillingProfileDetailsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type BillingResponseSingleMessage struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    billingResponseSingleMessageJSON `json:"-"`
+type AccountBillingProfileAccountBillingProfileBillingProfileDetailsResponseMessage struct {
+	Code    int64                                                                              `json:"code,required"`
+	Message string                                                                             `json:"message,required"`
+	JSON    accountBillingProfileAccountBillingProfileBillingProfileDetailsResponseMessageJSON `json:"-"`
 }
 
-// billingResponseSingleMessageJSON contains the JSON metadata for the struct
-// [BillingResponseSingleMessage]
-type billingResponseSingleMessageJSON struct {
+// accountBillingProfileAccountBillingProfileBillingProfileDetailsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountBillingProfileAccountBillingProfileBillingProfileDetailsResponseMessage]
+type accountBillingProfileAccountBillingProfileBillingProfileDetailsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BillingResponseSingleMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountBillingProfileAccountBillingProfileBillingProfileDetailsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type BillingResponseSingleSuccess bool
+type AccountBillingProfileAccountBillingProfileBillingProfileDetailsResponseSuccess bool
 
 const (
-	BillingResponseSingleSuccessTrue BillingResponseSingleSuccess = true
+	AccountBillingProfileAccountBillingProfileBillingProfileDetailsResponseSuccessTrue AccountBillingProfileAccountBillingProfileBillingProfileDetailsResponseSuccess = true
 )

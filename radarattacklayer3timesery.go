@@ -33,13 +33,7 @@ func NewRadarAttackLayer3TimeseryService(opts ...option.RequestOption) (r *Radar
 	return
 }
 
-// Get layer 3/4 attacks change over time. Values are normalized using min-max by
-// default, with the minimum set to 0. When asking for multiple time series, you
-// can also get the percentual relative change of the 1st/main series, with respect
-// to the 2nd/control series - for example, to get the relative change of this week
-// from the previous week, the 1st series would have a date range of 7d, the 2nd, a
-// date range of 7dControl, and the normalization would be set to
-// PERCENTAGE_CHANGE.
+// Get attacks change over time by bytes.
 func (r *RadarAttackLayer3TimeseryService) List(ctx context.Context, query RadarAttackLayer3TimeseryListParams, opts ...option.RequestOption) (res *RadarAttackLayer3TimeseryListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer3/timeseries"
@@ -67,7 +61,7 @@ func (r *RadarAttackLayer3TimeseryListResponse) UnmarshalJSON(data []byte) (err 
 }
 
 type RadarAttackLayer3TimeseryListResponseResult struct {
-	Meta   RadarAttackLayer3TimeseryListResponseResultMeta   `json:"meta,required"`
+	Meta   interface{}                                       `json:"meta,required"`
 	Serie0 RadarAttackLayer3TimeseryListResponseResultSerie0 `json:"serie_0,required"`
 	JSON   radarAttackLayer3TimeseryListResponseResultJSON   `json:"-"`
 }
@@ -85,75 +79,8 @@ func (r *RadarAttackLayer3TimeseryListResponseResult) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAttackLayer3TimeseryListResponseResultMeta struct {
-	AggInterval    string                                                        `json:"aggInterval,required"`
-	ConfidenceInfo RadarAttackLayer3TimeseryListResponseResultMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      RadarAttackLayer3TimeseryListResponseResultMetaDateRange      `json:"dateRange,required"`
-	LastUpdated    time.Time                                                     `json:"lastUpdated,required" format:"date-time"`
-	JSON           radarAttackLayer3TimeseryListResponseResultMetaJSON           `json:"-"`
-}
-
-// radarAttackLayer3TimeseryListResponseResultMetaJSON contains the JSON metadata
-// for the struct [RadarAttackLayer3TimeseryListResponseResultMeta]
-type radarAttackLayer3TimeseryListResponseResultMetaJSON struct {
-	AggInterval    apijson.Field
-	ConfidenceInfo apijson.Field
-	DateRange      apijson.Field
-	LastUpdated    apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *RadarAttackLayer3TimeseryListResponseResultMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarAttackLayer3TimeseryListResponseResultMetaConfidenceInfo struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                                                         `json:"startTime,required" format:"date-time"`
-	JSON      radarAttackLayer3TimeseryListResponseResultMetaConfidenceInfoJSON `json:"-"`
-}
-
-// radarAttackLayer3TimeseryListResponseResultMetaConfidenceInfoJSON contains the
-// JSON metadata for the struct
-// [RadarAttackLayer3TimeseryListResponseResultMetaConfidenceInfo]
-type radarAttackLayer3TimeseryListResponseResultMetaConfidenceInfoJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarAttackLayer3TimeseryListResponseResultMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarAttackLayer3TimeseryListResponseResultMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                                                    `json:"startTime,required" format:"date-time"`
-	JSON      radarAttackLayer3TimeseryListResponseResultMetaDateRangeJSON `json:"-"`
-}
-
-// radarAttackLayer3TimeseryListResponseResultMetaDateRangeJSON contains the JSON
-// metadata for the struct
-// [RadarAttackLayer3TimeseryListResponseResultMetaDateRange]
-type radarAttackLayer3TimeseryListResponseResultMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarAttackLayer3TimeseryListResponseResultMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type RadarAttackLayer3TimeseryListResponseResultSerie0 struct {
-	Timestamps []time.Time                                           `json:"timestamps,required" format:"date-time"`
+	Timestamps []string                                              `json:"timestamps,required"`
 	Values     []string                                              `json:"values,required"`
 	JSON       radarAttackLayer3TimeseryListResponseResultSerie0JSON `json:"-"`
 }
@@ -180,9 +107,7 @@ type RadarAttackLayer3TimeseryListParams struct {
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of L3/4 attack types.
-	Attack param.Field[[]RadarAttackLayer3TimeseryListParamsAttack] `query:"attack"`
-	// Array of datetimes to filter the end of a series.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
@@ -190,17 +115,26 @@ type RadarAttackLayer3TimeseryListParams struct {
 	DateRange param.Field[[]RadarAttackLayer3TimeseryListParamsDateRange] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
+	// Together with the `location` parameter, will apply the filter to origin or
+	// target location.
+	Direction param.Field[RadarAttackLayer3TimeseryListParamsDirection] `query:"direction"`
 	// Format results are returned in.
 	Format param.Field[RadarAttackLayer3TimeseryListParamsFormat] `query:"format"`
+	// Filter for ip version.
+	IPVersion param.Field[[]RadarAttackLayer3TimeseryListParamsIPVersion] `query:"ipVersion"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
+	// Measurement units, eg. bytes.
+	Metric param.Field[RadarAttackLayer3TimeseryListParamsMetric] `query:"metric"`
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Normalization method applied. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
 	Normalization param.Field[RadarAttackLayer3TimeseryListParamsNormalization] `query:"normalization"`
+	// Array of L3/4 attack types.
+	Protocol param.Field[[]RadarAttackLayer3TimeseryListParamsProtocol] `query:"protocol"`
 }
 
 // URLQuery serializes [RadarAttackLayer3TimeseryListParams]'s query parameters as
@@ -224,19 +158,11 @@ const (
 	RadarAttackLayer3TimeseryListParamsAggInterval1w  RadarAttackLayer3TimeseryListParamsAggInterval = "1w"
 )
 
-type RadarAttackLayer3TimeseryListParamsAttack string
-
-const (
-	RadarAttackLayer3TimeseryListParamsAttackUdp  RadarAttackLayer3TimeseryListParamsAttack = "UDP"
-	RadarAttackLayer3TimeseryListParamsAttackTcp  RadarAttackLayer3TimeseryListParamsAttack = "TCP"
-	RadarAttackLayer3TimeseryListParamsAttackIcmp RadarAttackLayer3TimeseryListParamsAttack = "ICMP"
-	RadarAttackLayer3TimeseryListParamsAttackGre  RadarAttackLayer3TimeseryListParamsAttack = "GRE"
-)
-
 type RadarAttackLayer3TimeseryListParamsDateRange string
 
 const (
 	RadarAttackLayer3TimeseryListParamsDateRange1d         RadarAttackLayer3TimeseryListParamsDateRange = "1d"
+	RadarAttackLayer3TimeseryListParamsDateRange2d         RadarAttackLayer3TimeseryListParamsDateRange = "2d"
 	RadarAttackLayer3TimeseryListParamsDateRange7d         RadarAttackLayer3TimeseryListParamsDateRange = "7d"
 	RadarAttackLayer3TimeseryListParamsDateRange14d        RadarAttackLayer3TimeseryListParamsDateRange = "14d"
 	RadarAttackLayer3TimeseryListParamsDateRange28d        RadarAttackLayer3TimeseryListParamsDateRange = "28d"
@@ -244,11 +170,21 @@ const (
 	RadarAttackLayer3TimeseryListParamsDateRange24w        RadarAttackLayer3TimeseryListParamsDateRange = "24w"
 	RadarAttackLayer3TimeseryListParamsDateRange52w        RadarAttackLayer3TimeseryListParamsDateRange = "52w"
 	RadarAttackLayer3TimeseryListParamsDateRange1dControl  RadarAttackLayer3TimeseryListParamsDateRange = "1dControl"
+	RadarAttackLayer3TimeseryListParamsDateRange2dControl  RadarAttackLayer3TimeseryListParamsDateRange = "2dControl"
 	RadarAttackLayer3TimeseryListParamsDateRange7dControl  RadarAttackLayer3TimeseryListParamsDateRange = "7dControl"
 	RadarAttackLayer3TimeseryListParamsDateRange14dControl RadarAttackLayer3TimeseryListParamsDateRange = "14dControl"
 	RadarAttackLayer3TimeseryListParamsDateRange28dControl RadarAttackLayer3TimeseryListParamsDateRange = "28dControl"
 	RadarAttackLayer3TimeseryListParamsDateRange12wControl RadarAttackLayer3TimeseryListParamsDateRange = "12wControl"
 	RadarAttackLayer3TimeseryListParamsDateRange24wControl RadarAttackLayer3TimeseryListParamsDateRange = "24wControl"
+)
+
+// Together with the `location` parameter, will apply the filter to origin or
+// target location.
+type RadarAttackLayer3TimeseryListParamsDirection string
+
+const (
+	RadarAttackLayer3TimeseryListParamsDirectionOrigin RadarAttackLayer3TimeseryListParamsDirection = "ORIGIN"
+	RadarAttackLayer3TimeseryListParamsDirectionTarget RadarAttackLayer3TimeseryListParamsDirection = "TARGET"
 )
 
 // Format results are returned in.
@@ -259,6 +195,21 @@ const (
 	RadarAttackLayer3TimeseryListParamsFormatCsv  RadarAttackLayer3TimeseryListParamsFormat = "CSV"
 )
 
+type RadarAttackLayer3TimeseryListParamsIPVersion string
+
+const (
+	RadarAttackLayer3TimeseryListParamsIPVersionIPv4 RadarAttackLayer3TimeseryListParamsIPVersion = "IPv4"
+	RadarAttackLayer3TimeseryListParamsIPVersionIPv6 RadarAttackLayer3TimeseryListParamsIPVersion = "IPv6"
+)
+
+// Measurement units, eg. bytes.
+type RadarAttackLayer3TimeseryListParamsMetric string
+
+const (
+	RadarAttackLayer3TimeseryListParamsMetricBytes    RadarAttackLayer3TimeseryListParamsMetric = "BYTES"
+	RadarAttackLayer3TimeseryListParamsMetricBytesOld RadarAttackLayer3TimeseryListParamsMetric = "BYTES_OLD"
+)
+
 // Normalization method applied. Refer to
 // [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
 type RadarAttackLayer3TimeseryListParamsNormalization string
@@ -266,4 +217,13 @@ type RadarAttackLayer3TimeseryListParamsNormalization string
 const (
 	RadarAttackLayer3TimeseryListParamsNormalizationPercentageChange RadarAttackLayer3TimeseryListParamsNormalization = "PERCENTAGE_CHANGE"
 	RadarAttackLayer3TimeseryListParamsNormalizationMin0Max          RadarAttackLayer3TimeseryListParamsNormalization = "MIN0_MAX"
+)
+
+type RadarAttackLayer3TimeseryListParamsProtocol string
+
+const (
+	RadarAttackLayer3TimeseryListParamsProtocolUdp  RadarAttackLayer3TimeseryListParamsProtocol = "UDP"
+	RadarAttackLayer3TimeseryListParamsProtocolTcp  RadarAttackLayer3TimeseryListParamsProtocol = "TCP"
+	RadarAttackLayer3TimeseryListParamsProtocolIcmp RadarAttackLayer3TimeseryListParamsProtocol = "ICMP"
+	RadarAttackLayer3TimeseryListParamsProtocolGre  RadarAttackLayer3TimeseryListParamsProtocol = "GRE"
 )

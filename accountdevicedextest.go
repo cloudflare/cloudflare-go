@@ -32,7 +32,7 @@ func NewAccountDeviceDexTestService(opts ...option.RequestOption) (r *AccountDev
 }
 
 // Fetch a single DEX test.
-func (r *AccountDeviceDexTestService) Get(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *DexSingleResponse, err error) {
+func (r *AccountDeviceDexTestService) Get(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *AccountDeviceDexTestGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/devices/dex_tests/%s", identifier, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -40,7 +40,7 @@ func (r *AccountDeviceDexTestService) Get(ctx context.Context, identifier interf
 }
 
 // Update a DEX test.
-func (r *AccountDeviceDexTestService) Update(ctx context.Context, identifier interface{}, uuid string, body AccountDeviceDexTestUpdateParams, opts ...option.RequestOption) (res *DexSingleResponse, err error) {
+func (r *AccountDeviceDexTestService) Update(ctx context.Context, identifier interface{}, uuid string, body AccountDeviceDexTestUpdateParams, opts ...option.RequestOption) (res *AccountDeviceDexTestUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/devices/dex_tests/%s", identifier, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
@@ -49,7 +49,7 @@ func (r *AccountDeviceDexTestService) Update(ctx context.Context, identifier int
 
 // Delete a Device DEX test. Returns the remaining device dex tests for the
 // account.
-func (r *AccountDeviceDexTestService) Delete(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *DexResponseCollection, err error) {
+func (r *AccountDeviceDexTestService) Delete(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *AccountDeviceDexTestDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/devices/dex_tests/%s", identifier, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -57,7 +57,7 @@ func (r *AccountDeviceDexTestService) Delete(ctx context.Context, identifier int
 }
 
 // Create a DEX test.
-func (r *AccountDeviceDexTestService) DeviceDexTestNewDeviceDexTest(ctx context.Context, identifier interface{}, body AccountDeviceDexTestDeviceDexTestNewDeviceDexTestParams, opts ...option.RequestOption) (res *DexSingleResponse, err error) {
+func (r *AccountDeviceDexTestService) DeviceDexTestNewDeviceDexTest(ctx context.Context, identifier interface{}, body AccountDeviceDexTestDeviceDexTestNewDeviceDexTestParams, opts ...option.RequestOption) (res *AccountDeviceDexTestDeviceDexTestNewDeviceDexTestResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/devices/dex_tests", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -65,25 +65,25 @@ func (r *AccountDeviceDexTestService) DeviceDexTestNewDeviceDexTest(ctx context.
 }
 
 // Fetch all DEX tests.
-func (r *AccountDeviceDexTestService) DeviceDexTestDetails(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *DexResponseCollection, err error) {
+func (r *AccountDeviceDexTestService) DeviceDexTestDetails(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *AccountDeviceDexTestDeviceDexTestDetailsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/devices/dex_tests", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type DexResponseCollection struct {
-	Errors   []DexResponseCollectionError   `json:"errors"`
-	Messages []DexResponseCollectionMessage `json:"messages"`
-	Result   []DexResponseCollectionResult  `json:"result"`
-	// Whether the API call was successful
-	Success DexResponseCollectionSuccess `json:"success"`
-	JSON    dexResponseCollectionJSON    `json:"-"`
+type AccountDeviceDexTestGetResponse struct {
+	Errors   []AccountDeviceDexTestGetResponseError   `json:"errors"`
+	Messages []AccountDeviceDexTestGetResponseMessage `json:"messages"`
+	Result   AccountDeviceDexTestGetResponseResult    `json:"result"`
+	// Whether the API call was successful.
+	Success AccountDeviceDexTestGetResponseSuccess `json:"success"`
+	JSON    accountDeviceDexTestGetResponseJSON    `json:"-"`
 }
 
-// dexResponseCollectionJSON contains the JSON metadata for the struct
-// [DexResponseCollection]
-type dexResponseCollectionJSON struct {
+// accountDeviceDexTestGetResponseJSON contains the JSON metadata for the struct
+// [AccountDeviceDexTestGetResponse]
+type accountDeviceDexTestGetResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -92,52 +92,52 @@ type dexResponseCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDeviceDexTestGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexResponseCollectionError struct {
-	Code    int64                          `json:"code,required"`
-	Message string                         `json:"message,required"`
-	JSON    dexResponseCollectionErrorJSON `json:"-"`
+type AccountDeviceDexTestGetResponseError struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    accountDeviceDexTestGetResponseErrorJSON `json:"-"`
 }
 
-// dexResponseCollectionErrorJSON contains the JSON metadata for the struct
-// [DexResponseCollectionError]
-type dexResponseCollectionErrorJSON struct {
+// accountDeviceDexTestGetResponseErrorJSON contains the JSON metadata for the
+// struct [AccountDeviceDexTestGetResponseError]
+type accountDeviceDexTestGetResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDeviceDexTestGetResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexResponseCollectionMessage struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    dexResponseCollectionMessageJSON `json:"-"`
+type AccountDeviceDexTestGetResponseMessage struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    accountDeviceDexTestGetResponseMessageJSON `json:"-"`
 }
 
-// dexResponseCollectionMessageJSON contains the JSON metadata for the struct
-// [DexResponseCollectionMessage]
-type dexResponseCollectionMessageJSON struct {
+// accountDeviceDexTestGetResponseMessageJSON contains the JSON metadata for the
+// struct [AccountDeviceDexTestGetResponseMessage]
+type accountDeviceDexTestGetResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDeviceDexTestGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexResponseCollectionResult struct {
+type AccountDeviceDexTestGetResponseResult struct {
 	// The configuration object which contains the details for the WARP client to
 	// conduct the test.
-	Data DexResponseCollectionResultData `json:"data,required"`
+	Data AccountDeviceDexTestGetResponseResultData `json:"data,required"`
 	// Determines whether or not the test is active.
 	Enabled bool `json:"enabled,required"`
 	// How often the test will run.
@@ -145,13 +145,13 @@ type DexResponseCollectionResult struct {
 	// The name of the DEX test. Must be unique.
 	Name string `json:"name,required"`
 	// Additional details about the test.
-	Description string                          `json:"description"`
-	JSON        dexResponseCollectionResultJSON `json:"-"`
+	Description string                                    `json:"description"`
+	JSON        accountDeviceDexTestGetResponseResultJSON `json:"-"`
 }
 
-// dexResponseCollectionResultJSON contains the JSON metadata for the struct
-// [DexResponseCollectionResult]
-type dexResponseCollectionResultJSON struct {
+// accountDeviceDexTestGetResponseResultJSON contains the JSON metadata for the
+// struct [AccountDeviceDexTestGetResponseResult]
+type accountDeviceDexTestGetResponseResultJSON struct {
 	Data        apijson.Field
 	Enabled     apijson.Field
 	Interval    apijson.Field
@@ -161,25 +161,25 @@ type dexResponseCollectionResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDeviceDexTestGetResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The configuration object which contains the details for the WARP client to
 // conduct the test.
-type DexResponseCollectionResultData struct {
+type AccountDeviceDexTestGetResponseResultData struct {
 	// The desired endpoint to test.
 	Host string `json:"host"`
 	// The type of test.
 	Kind string `json:"kind"`
 	// The HTTP request method type.
-	Method string                              `json:"method"`
-	JSON   dexResponseCollectionResultDataJSON `json:"-"`
+	Method string                                        `json:"method"`
+	JSON   accountDeviceDexTestGetResponseResultDataJSON `json:"-"`
 }
 
-// dexResponseCollectionResultDataJSON contains the JSON metadata for the struct
-// [DexResponseCollectionResultData]
-type dexResponseCollectionResultDataJSON struct {
+// accountDeviceDexTestGetResponseResultDataJSON contains the JSON metadata for the
+// struct [AccountDeviceDexTestGetResponseResultData]
+type accountDeviceDexTestGetResponseResultDataJSON struct {
 	Host        apijson.Field
 	Kind        apijson.Field
 	Method      apijson.Field
@@ -187,29 +187,29 @@ type dexResponseCollectionResultDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexResponseCollectionResultData) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDeviceDexTestGetResponseResultData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Whether the API call was successful
-type DexResponseCollectionSuccess bool
+// Whether the API call was successful.
+type AccountDeviceDexTestGetResponseSuccess bool
 
 const (
-	DexResponseCollectionSuccessTrue DexResponseCollectionSuccess = true
+	AccountDeviceDexTestGetResponseSuccessTrue AccountDeviceDexTestGetResponseSuccess = true
 )
 
-type DexSingleResponse struct {
-	Errors   []DexSingleResponseError   `json:"errors"`
-	Messages []DexSingleResponseMessage `json:"messages"`
-	Result   DexSingleResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success DexSingleResponseSuccess `json:"success"`
-	JSON    dexSingleResponseJSON    `json:"-"`
+type AccountDeviceDexTestUpdateResponse struct {
+	Errors   []AccountDeviceDexTestUpdateResponseError   `json:"errors"`
+	Messages []AccountDeviceDexTestUpdateResponseMessage `json:"messages"`
+	Result   AccountDeviceDexTestUpdateResponseResult    `json:"result"`
+	// Whether the API call was successful.
+	Success AccountDeviceDexTestUpdateResponseSuccess `json:"success"`
+	JSON    accountDeviceDexTestUpdateResponseJSON    `json:"-"`
 }
 
-// dexSingleResponseJSON contains the JSON metadata for the struct
-// [DexSingleResponse]
-type dexSingleResponseJSON struct {
+// accountDeviceDexTestUpdateResponseJSON contains the JSON metadata for the struct
+// [AccountDeviceDexTestUpdateResponse]
+type accountDeviceDexTestUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -218,52 +218,52 @@ type dexSingleResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexSingleResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDeviceDexTestUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexSingleResponseError struct {
-	Code    int64                      `json:"code,required"`
-	Message string                     `json:"message,required"`
-	JSON    dexSingleResponseErrorJSON `json:"-"`
+type AccountDeviceDexTestUpdateResponseError struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    accountDeviceDexTestUpdateResponseErrorJSON `json:"-"`
 }
 
-// dexSingleResponseErrorJSON contains the JSON metadata for the struct
-// [DexSingleResponseError]
-type dexSingleResponseErrorJSON struct {
+// accountDeviceDexTestUpdateResponseErrorJSON contains the JSON metadata for the
+// struct [AccountDeviceDexTestUpdateResponseError]
+type accountDeviceDexTestUpdateResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexSingleResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDeviceDexTestUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexSingleResponseMessage struct {
-	Code    int64                        `json:"code,required"`
-	Message string                       `json:"message,required"`
-	JSON    dexSingleResponseMessageJSON `json:"-"`
+type AccountDeviceDexTestUpdateResponseMessage struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    accountDeviceDexTestUpdateResponseMessageJSON `json:"-"`
 }
 
-// dexSingleResponseMessageJSON contains the JSON metadata for the struct
-// [DexSingleResponseMessage]
-type dexSingleResponseMessageJSON struct {
+// accountDeviceDexTestUpdateResponseMessageJSON contains the JSON metadata for the
+// struct [AccountDeviceDexTestUpdateResponseMessage]
+type accountDeviceDexTestUpdateResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexSingleResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDeviceDexTestUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexSingleResponseResult struct {
+type AccountDeviceDexTestUpdateResponseResult struct {
 	// The configuration object which contains the details for the WARP client to
 	// conduct the test.
-	Data DexSingleResponseResultData `json:"data,required"`
+	Data AccountDeviceDexTestUpdateResponseResultData `json:"data,required"`
 	// Determines whether or not the test is active.
 	Enabled bool `json:"enabled,required"`
 	// How often the test will run.
@@ -271,13 +271,13 @@ type DexSingleResponseResult struct {
 	// The name of the DEX test. Must be unique.
 	Name string `json:"name,required"`
 	// Additional details about the test.
-	Description string                      `json:"description"`
-	JSON        dexSingleResponseResultJSON `json:"-"`
+	Description string                                       `json:"description"`
+	JSON        accountDeviceDexTestUpdateResponseResultJSON `json:"-"`
 }
 
-// dexSingleResponseResultJSON contains the JSON metadata for the struct
-// [DexSingleResponseResult]
-type dexSingleResponseResultJSON struct {
+// accountDeviceDexTestUpdateResponseResultJSON contains the JSON metadata for the
+// struct [AccountDeviceDexTestUpdateResponseResult]
+type accountDeviceDexTestUpdateResponseResultJSON struct {
 	Data        apijson.Field
 	Enabled     apijson.Field
 	Interval    apijson.Field
@@ -287,25 +287,25 @@ type dexSingleResponseResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexSingleResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDeviceDexTestUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The configuration object which contains the details for the WARP client to
 // conduct the test.
-type DexSingleResponseResultData struct {
+type AccountDeviceDexTestUpdateResponseResultData struct {
 	// The desired endpoint to test.
 	Host string `json:"host"`
 	// The type of test.
 	Kind string `json:"kind"`
 	// The HTTP request method type.
-	Method string                          `json:"method"`
-	JSON   dexSingleResponseResultDataJSON `json:"-"`
+	Method string                                           `json:"method"`
+	JSON   accountDeviceDexTestUpdateResponseResultDataJSON `json:"-"`
 }
 
-// dexSingleResponseResultDataJSON contains the JSON metadata for the struct
-// [DexSingleResponseResultData]
-type dexSingleResponseResultDataJSON struct {
+// accountDeviceDexTestUpdateResponseResultDataJSON contains the JSON metadata for
+// the struct [AccountDeviceDexTestUpdateResponseResultData]
+type accountDeviceDexTestUpdateResponseResultDataJSON struct {
 	Host        apijson.Field
 	Kind        apijson.Field
 	Method      apijson.Field
@@ -313,15 +313,400 @@ type dexSingleResponseResultDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexSingleResponseResultData) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDeviceDexTestUpdateResponseResultData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Whether the API call was successful
-type DexSingleResponseSuccess bool
+// Whether the API call was successful.
+type AccountDeviceDexTestUpdateResponseSuccess bool
 
 const (
-	DexSingleResponseSuccessTrue DexSingleResponseSuccess = true
+	AccountDeviceDexTestUpdateResponseSuccessTrue AccountDeviceDexTestUpdateResponseSuccess = true
+)
+
+type AccountDeviceDexTestDeleteResponse struct {
+	Errors   []AccountDeviceDexTestDeleteResponseError   `json:"errors"`
+	Messages []AccountDeviceDexTestDeleteResponseMessage `json:"messages"`
+	Result   []AccountDeviceDexTestDeleteResponseResult  `json:"result"`
+	// Whether the API call was successful.
+	Success AccountDeviceDexTestDeleteResponseSuccess `json:"success"`
+	JSON    accountDeviceDexTestDeleteResponseJSON    `json:"-"`
+}
+
+// accountDeviceDexTestDeleteResponseJSON contains the JSON metadata for the struct
+// [AccountDeviceDexTestDeleteResponse]
+type accountDeviceDexTestDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountDeviceDexTestDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountDeviceDexTestDeleteResponseError struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    accountDeviceDexTestDeleteResponseErrorJSON `json:"-"`
+}
+
+// accountDeviceDexTestDeleteResponseErrorJSON contains the JSON metadata for the
+// struct [AccountDeviceDexTestDeleteResponseError]
+type accountDeviceDexTestDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountDeviceDexTestDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountDeviceDexTestDeleteResponseMessage struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    accountDeviceDexTestDeleteResponseMessageJSON `json:"-"`
+}
+
+// accountDeviceDexTestDeleteResponseMessageJSON contains the JSON metadata for the
+// struct [AccountDeviceDexTestDeleteResponseMessage]
+type accountDeviceDexTestDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountDeviceDexTestDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountDeviceDexTestDeleteResponseResult struct {
+	// The configuration object which contains the details for the WARP client to
+	// conduct the test.
+	Data AccountDeviceDexTestDeleteResponseResultData `json:"data,required"`
+	// Determines whether or not the test is active.
+	Enabled bool `json:"enabled,required"`
+	// How often the test will run.
+	Interval string `json:"interval,required"`
+	// The name of the DEX test. Must be unique.
+	Name string `json:"name,required"`
+	// Additional details about the test.
+	Description string                                       `json:"description"`
+	JSON        accountDeviceDexTestDeleteResponseResultJSON `json:"-"`
+}
+
+// accountDeviceDexTestDeleteResponseResultJSON contains the JSON metadata for the
+// struct [AccountDeviceDexTestDeleteResponseResult]
+type accountDeviceDexTestDeleteResponseResultJSON struct {
+	Data        apijson.Field
+	Enabled     apijson.Field
+	Interval    apijson.Field
+	Name        apijson.Field
+	Description apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountDeviceDexTestDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The configuration object which contains the details for the WARP client to
+// conduct the test.
+type AccountDeviceDexTestDeleteResponseResultData struct {
+	// The desired endpoint to test.
+	Host string `json:"host"`
+	// The type of test.
+	Kind string `json:"kind"`
+	// The HTTP request method type.
+	Method string                                           `json:"method"`
+	JSON   accountDeviceDexTestDeleteResponseResultDataJSON `json:"-"`
+}
+
+// accountDeviceDexTestDeleteResponseResultDataJSON contains the JSON metadata for
+// the struct [AccountDeviceDexTestDeleteResponseResultData]
+type accountDeviceDexTestDeleteResponseResultDataJSON struct {
+	Host        apijson.Field
+	Kind        apijson.Field
+	Method      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountDeviceDexTestDeleteResponseResultData) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful.
+type AccountDeviceDexTestDeleteResponseSuccess bool
+
+const (
+	AccountDeviceDexTestDeleteResponseSuccessTrue AccountDeviceDexTestDeleteResponseSuccess = true
+)
+
+type AccountDeviceDexTestDeviceDexTestNewDeviceDexTestResponse struct {
+	Errors   []AccountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseError   `json:"errors"`
+	Messages []AccountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseMessage `json:"messages"`
+	Result   AccountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseResult    `json:"result"`
+	// Whether the API call was successful.
+	Success AccountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseSuccess `json:"success"`
+	JSON    accountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseJSON    `json:"-"`
+}
+
+// accountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseJSON contains the JSON
+// metadata for the struct
+// [AccountDeviceDexTestDeviceDexTestNewDeviceDexTestResponse]
+type accountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountDeviceDexTestDeviceDexTestNewDeviceDexTestResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseError struct {
+	Code    int64                                                              `json:"code,required"`
+	Message string                                                             `json:"message,required"`
+	JSON    accountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseErrorJSON `json:"-"`
+}
+
+// accountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseErrorJSON contains the
+// JSON metadata for the struct
+// [AccountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseError]
+type accountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseMessage struct {
+	Code    int64                                                                `json:"code,required"`
+	Message string                                                               `json:"message,required"`
+	JSON    accountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseMessageJSON `json:"-"`
+}
+
+// accountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseMessageJSON contains
+// the JSON metadata for the struct
+// [AccountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseMessage]
+type accountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseResult struct {
+	// The configuration object which contains the details for the WARP client to
+	// conduct the test.
+	Data AccountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseResultData `json:"data,required"`
+	// Determines whether or not the test is active.
+	Enabled bool `json:"enabled,required"`
+	// How often the test will run.
+	Interval string `json:"interval,required"`
+	// The name of the DEX test. Must be unique.
+	Name string `json:"name,required"`
+	// Additional details about the test.
+	Description string                                                              `json:"description"`
+	JSON        accountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseResultJSON `json:"-"`
+}
+
+// accountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseResultJSON contains the
+// JSON metadata for the struct
+// [AccountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseResult]
+type accountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseResultJSON struct {
+	Data        apijson.Field
+	Enabled     apijson.Field
+	Interval    apijson.Field
+	Name        apijson.Field
+	Description apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The configuration object which contains the details for the WARP client to
+// conduct the test.
+type AccountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseResultData struct {
+	// The desired endpoint to test.
+	Host string `json:"host"`
+	// The type of test.
+	Kind string `json:"kind"`
+	// The HTTP request method type.
+	Method string                                                                  `json:"method"`
+	JSON   accountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseResultDataJSON `json:"-"`
+}
+
+// accountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseResultDataJSON contains
+// the JSON metadata for the struct
+// [AccountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseResultData]
+type accountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseResultDataJSON struct {
+	Host        apijson.Field
+	Kind        apijson.Field
+	Method      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseResultData) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful.
+type AccountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseSuccess bool
+
+const (
+	AccountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseSuccessTrue AccountDeviceDexTestDeviceDexTestNewDeviceDexTestResponseSuccess = true
+)
+
+type AccountDeviceDexTestDeviceDexTestDetailsResponse struct {
+	Errors   []AccountDeviceDexTestDeviceDexTestDetailsResponseError   `json:"errors"`
+	Messages []AccountDeviceDexTestDeviceDexTestDetailsResponseMessage `json:"messages"`
+	Result   []AccountDeviceDexTestDeviceDexTestDetailsResponseResult  `json:"result"`
+	// Whether the API call was successful.
+	Success AccountDeviceDexTestDeviceDexTestDetailsResponseSuccess `json:"success"`
+	JSON    accountDeviceDexTestDeviceDexTestDetailsResponseJSON    `json:"-"`
+}
+
+// accountDeviceDexTestDeviceDexTestDetailsResponseJSON contains the JSON metadata
+// for the struct [AccountDeviceDexTestDeviceDexTestDetailsResponse]
+type accountDeviceDexTestDeviceDexTestDetailsResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountDeviceDexTestDeviceDexTestDetailsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountDeviceDexTestDeviceDexTestDetailsResponseError struct {
+	Code    int64                                                     `json:"code,required"`
+	Message string                                                    `json:"message,required"`
+	JSON    accountDeviceDexTestDeviceDexTestDetailsResponseErrorJSON `json:"-"`
+}
+
+// accountDeviceDexTestDeviceDexTestDetailsResponseErrorJSON contains the JSON
+// metadata for the struct [AccountDeviceDexTestDeviceDexTestDetailsResponseError]
+type accountDeviceDexTestDeviceDexTestDetailsResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountDeviceDexTestDeviceDexTestDetailsResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountDeviceDexTestDeviceDexTestDetailsResponseMessage struct {
+	Code    int64                                                       `json:"code,required"`
+	Message string                                                      `json:"message,required"`
+	JSON    accountDeviceDexTestDeviceDexTestDetailsResponseMessageJSON `json:"-"`
+}
+
+// accountDeviceDexTestDeviceDexTestDetailsResponseMessageJSON contains the JSON
+// metadata for the struct
+// [AccountDeviceDexTestDeviceDexTestDetailsResponseMessage]
+type accountDeviceDexTestDeviceDexTestDetailsResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountDeviceDexTestDeviceDexTestDetailsResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountDeviceDexTestDeviceDexTestDetailsResponseResult struct {
+	// The configuration object which contains the details for the WARP client to
+	// conduct the test.
+	Data AccountDeviceDexTestDeviceDexTestDetailsResponseResultData `json:"data,required"`
+	// Determines whether or not the test is active.
+	Enabled bool `json:"enabled,required"`
+	// How often the test will run.
+	Interval string `json:"interval,required"`
+	// The name of the DEX test. Must be unique.
+	Name string `json:"name,required"`
+	// Additional details about the test.
+	Description string                                                     `json:"description"`
+	JSON        accountDeviceDexTestDeviceDexTestDetailsResponseResultJSON `json:"-"`
+}
+
+// accountDeviceDexTestDeviceDexTestDetailsResponseResultJSON contains the JSON
+// metadata for the struct [AccountDeviceDexTestDeviceDexTestDetailsResponseResult]
+type accountDeviceDexTestDeviceDexTestDetailsResponseResultJSON struct {
+	Data        apijson.Field
+	Enabled     apijson.Field
+	Interval    apijson.Field
+	Name        apijson.Field
+	Description apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountDeviceDexTestDeviceDexTestDetailsResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The configuration object which contains the details for the WARP client to
+// conduct the test.
+type AccountDeviceDexTestDeviceDexTestDetailsResponseResultData struct {
+	// The desired endpoint to test.
+	Host string `json:"host"`
+	// The type of test.
+	Kind string `json:"kind"`
+	// The HTTP request method type.
+	Method string                                                         `json:"method"`
+	JSON   accountDeviceDexTestDeviceDexTestDetailsResponseResultDataJSON `json:"-"`
+}
+
+// accountDeviceDexTestDeviceDexTestDetailsResponseResultDataJSON contains the JSON
+// metadata for the struct
+// [AccountDeviceDexTestDeviceDexTestDetailsResponseResultData]
+type accountDeviceDexTestDeviceDexTestDetailsResponseResultDataJSON struct {
+	Host        apijson.Field
+	Kind        apijson.Field
+	Method      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountDeviceDexTestDeviceDexTestDetailsResponseResultData) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful.
+type AccountDeviceDexTestDeviceDexTestDetailsResponseSuccess bool
+
+const (
+	AccountDeviceDexTestDeviceDexTestDetailsResponseSuccessTrue AccountDeviceDexTestDeviceDexTestDetailsResponseSuccess = true
 )
 
 type AccountDeviceDexTestUpdateParams struct {

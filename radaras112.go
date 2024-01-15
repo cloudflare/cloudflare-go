@@ -11,10 +11,11 @@ import (
 // variables from the environment automatically. You should not instantiate this
 // service directly, and instead use the [NewRadarAs112Service] method instead.
 type RadarAs112Service struct {
-	Options    []option.RequestOption
-	Summaries  *RadarAs112SummaryService
-	Timeseries *RadarAs112TimeseryService
-	Tops       *RadarAs112TopService
+	Options          []option.RequestOption
+	Summaries        *RadarAs112SummaryService
+	Timeseries       *RadarAs112TimeseryService
+	Tops             *RadarAs112TopService
+	TimeseriesGroups *RadarAs112TimeseriesGroupService
 }
 
 // NewRadarAs112Service generates a new service that applies the given options to
@@ -26,5 +27,6 @@ func NewRadarAs112Service(opts ...option.RequestOption) (r *RadarAs112Service) {
 	r.Summaries = NewRadarAs112SummaryService(opts...)
 	r.Timeseries = NewRadarAs112TimeseryService(opts...)
 	r.Tops = NewRadarAs112TopService(opts...)
+	r.TimeseriesGroups = NewRadarAs112TimeseriesGroupService(opts...)
 	return
 }

@@ -32,25 +32,26 @@ func NewAccountLogpushDatasetFieldService(opts ...option.RequestOption) (r *Acco
 
 // Lists all fields available for a dataset. The response result is an object with
 // key-value pairs, where keys are field names, and values are descriptions.
-func (r *AccountLogpushDatasetFieldService) GetAccountsAccountIdentifierLogpushDatasetsDatasetFields(ctx context.Context, accountIdentifier string, dataset string, opts ...option.RequestOption) (res *LogpushFieldResponseCollection, err error) {
+func (r *AccountLogpushDatasetFieldService) GetAccountsAccountIdentifierLogpushDatasetsDatasetFields(ctx context.Context, accountIdentifier string, dataset string, opts ...option.RequestOption) (res *AccountLogpushDatasetFieldGetAccountsAccountIdentifierLogpushDatasetsDatasetFieldsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/logpush/datasets/%s/fields", accountIdentifier, dataset)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type LogpushFieldResponseCollection struct {
-	Errors   []LogpushFieldResponseCollectionError   `json:"errors"`
-	Messages []LogpushFieldResponseCollectionMessage `json:"messages"`
-	Result   interface{}                             `json:"result"`
+type AccountLogpushDatasetFieldGetAccountsAccountIdentifierLogpushDatasetsDatasetFieldsResponse struct {
+	Errors   []AccountLogpushDatasetFieldGetAccountsAccountIdentifierLogpushDatasetsDatasetFieldsResponseError   `json:"errors"`
+	Messages []AccountLogpushDatasetFieldGetAccountsAccountIdentifierLogpushDatasetsDatasetFieldsResponseMessage `json:"messages"`
+	Result   interface{}                                                                                         `json:"result"`
 	// Whether the API call was successful
-	Success LogpushFieldResponseCollectionSuccess `json:"success"`
-	JSON    logpushFieldResponseCollectionJSON    `json:"-"`
+	Success AccountLogpushDatasetFieldGetAccountsAccountIdentifierLogpushDatasetsDatasetFieldsResponseSuccess `json:"success"`
+	JSON    accountLogpushDatasetFieldGetAccountsAccountIdentifierLogpushDatasetsDatasetFieldsResponseJSON    `json:"-"`
 }
 
-// logpushFieldResponseCollectionJSON contains the JSON metadata for the struct
-// [LogpushFieldResponseCollection]
-type logpushFieldResponseCollectionJSON struct {
+// accountLogpushDatasetFieldGetAccountsAccountIdentifierLogpushDatasetsDatasetFieldsResponseJSON
+// contains the JSON metadata for the struct
+// [AccountLogpushDatasetFieldGetAccountsAccountIdentifierLogpushDatasetsDatasetFieldsResponse]
+type accountLogpushDatasetFieldGetAccountsAccountIdentifierLogpushDatasetsDatasetFieldsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -59,51 +60,53 @@ type logpushFieldResponseCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LogpushFieldResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLogpushDatasetFieldGetAccountsAccountIdentifierLogpushDatasetsDatasetFieldsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LogpushFieldResponseCollectionError struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    logpushFieldResponseCollectionErrorJSON `json:"-"`
+type AccountLogpushDatasetFieldGetAccountsAccountIdentifierLogpushDatasetsDatasetFieldsResponseError struct {
+	Code    int64                                                                                               `json:"code,required"`
+	Message string                                                                                              `json:"message,required"`
+	JSON    accountLogpushDatasetFieldGetAccountsAccountIdentifierLogpushDatasetsDatasetFieldsResponseErrorJSON `json:"-"`
 }
 
-// logpushFieldResponseCollectionErrorJSON contains the JSON metadata for the
-// struct [LogpushFieldResponseCollectionError]
-type logpushFieldResponseCollectionErrorJSON struct {
+// accountLogpushDatasetFieldGetAccountsAccountIdentifierLogpushDatasetsDatasetFieldsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountLogpushDatasetFieldGetAccountsAccountIdentifierLogpushDatasetsDatasetFieldsResponseError]
+type accountLogpushDatasetFieldGetAccountsAccountIdentifierLogpushDatasetsDatasetFieldsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LogpushFieldResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLogpushDatasetFieldGetAccountsAccountIdentifierLogpushDatasetsDatasetFieldsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LogpushFieldResponseCollectionMessage struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    logpushFieldResponseCollectionMessageJSON `json:"-"`
+type AccountLogpushDatasetFieldGetAccountsAccountIdentifierLogpushDatasetsDatasetFieldsResponseMessage struct {
+	Code    int64                                                                                                 `json:"code,required"`
+	Message string                                                                                                `json:"message,required"`
+	JSON    accountLogpushDatasetFieldGetAccountsAccountIdentifierLogpushDatasetsDatasetFieldsResponseMessageJSON `json:"-"`
 }
 
-// logpushFieldResponseCollectionMessageJSON contains the JSON metadata for the
-// struct [LogpushFieldResponseCollectionMessage]
-type logpushFieldResponseCollectionMessageJSON struct {
+// accountLogpushDatasetFieldGetAccountsAccountIdentifierLogpushDatasetsDatasetFieldsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountLogpushDatasetFieldGetAccountsAccountIdentifierLogpushDatasetsDatasetFieldsResponseMessage]
+type accountLogpushDatasetFieldGetAccountsAccountIdentifierLogpushDatasetsDatasetFieldsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LogpushFieldResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLogpushDatasetFieldGetAccountsAccountIdentifierLogpushDatasetsDatasetFieldsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type LogpushFieldResponseCollectionSuccess bool
+type AccountLogpushDatasetFieldGetAccountsAccountIdentifierLogpushDatasetsDatasetFieldsResponseSuccess bool
 
 const (
-	LogpushFieldResponseCollectionSuccessTrue LogpushFieldResponseCollectionSuccess = true
+	AccountLogpushDatasetFieldGetAccountsAccountIdentifierLogpushDatasetsDatasetFieldsResponseSuccessTrue AccountLogpushDatasetFieldGetAccountsAccountIdentifierLogpushDatasetsDatasetFieldsResponseSuccess = true
 )

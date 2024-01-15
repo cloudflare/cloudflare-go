@@ -31,26 +31,27 @@ func NewAccountAccessUserFailedLoginService(opts ...option.RequestOption) (r *Ac
 }
 
 // Get all failed login attempts for a single user.
-func (r *AccountAccessUserFailedLoginService) ZeroTrustUsersGetFailedLogins(ctx context.Context, identifier interface{}, id interface{}, opts ...option.RequestOption) (res *FailedLoginResponse, err error) {
+func (r *AccountAccessUserFailedLoginService) ZeroTrustUsersGetFailedLogins(ctx context.Context, identifier string, id string, opts ...option.RequestOption) (res *AccountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%v/access/users/%v/failed_logins", identifier, id)
+	path := fmt.Sprintf("accounts/%s/access/users/%s/failed_logins", identifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type FailedLoginResponse struct {
-	Errors     []FailedLoginResponseError    `json:"errors"`
-	Messages   []FailedLoginResponseMessage  `json:"messages"`
-	Result     []FailedLoginResponseResult   `json:"result"`
-	ResultInfo FailedLoginResponseResultInfo `json:"result_info"`
+type AccountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponse struct {
+	Errors     []AccountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseError    `json:"errors"`
+	Messages   []AccountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseMessage  `json:"messages"`
+	Result     []AccountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseResult   `json:"result"`
+	ResultInfo AccountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseResultInfo `json:"result_info"`
 	// Whether the API call was successful
-	Success FailedLoginResponseSuccess `json:"success"`
-	JSON    failedLoginResponseJSON    `json:"-"`
+	Success AccountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseSuccess `json:"success"`
+	JSON    accountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseJSON    `json:"-"`
 }
 
-// failedLoginResponseJSON contains the JSON metadata for the struct
-// [FailedLoginResponse]
-type failedLoginResponseJSON struct {
+// accountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseJSON contains
+// the JSON metadata for the struct
+// [AccountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponse]
+type accountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -60,68 +61,71 @@ type failedLoginResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FailedLoginResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type FailedLoginResponseError struct {
-	Code    int64                        `json:"code,required"`
-	Message string                       `json:"message,required"`
-	JSON    failedLoginResponseErrorJSON `json:"-"`
+type AccountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseError struct {
+	Code    int64                                                                      `json:"code,required"`
+	Message string                                                                     `json:"message,required"`
+	JSON    accountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseErrorJSON `json:"-"`
 }
 
-// failedLoginResponseErrorJSON contains the JSON metadata for the struct
-// [FailedLoginResponseError]
-type failedLoginResponseErrorJSON struct {
+// accountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseError]
+type accountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FailedLoginResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type FailedLoginResponseMessage struct {
-	Code    int64                          `json:"code,required"`
-	Message string                         `json:"message,required"`
-	JSON    failedLoginResponseMessageJSON `json:"-"`
+type AccountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseMessage struct {
+	Code    int64                                                                        `json:"code,required"`
+	Message string                                                                       `json:"message,required"`
+	JSON    accountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseMessageJSON `json:"-"`
 }
 
-// failedLoginResponseMessageJSON contains the JSON metadata for the struct
-// [FailedLoginResponseMessage]
-type failedLoginResponseMessageJSON struct {
+// accountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseMessage]
+type accountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FailedLoginResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type FailedLoginResponseResult struct {
-	Expiration int64                         `json:"expiration"`
-	Metadata   interface{}                   `json:"metadata"`
-	JSON       failedLoginResponseResultJSON `json:"-"`
+type AccountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseResult struct {
+	Expiration int64                                                                       `json:"expiration"`
+	Metadata   interface{}                                                                 `json:"metadata"`
+	JSON       accountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseResultJSON `json:"-"`
 }
 
-// failedLoginResponseResultJSON contains the JSON metadata for the struct
-// [FailedLoginResponseResult]
-type failedLoginResponseResultJSON struct {
+// accountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseResult]
+type accountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseResultJSON struct {
 	Expiration  apijson.Field
 	Metadata    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FailedLoginResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type FailedLoginResponseResultInfo struct {
+type AccountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -129,13 +133,14 @@ type FailedLoginResponseResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                           `json:"total_count"`
-	JSON       failedLoginResponseResultInfoJSON `json:"-"`
+	TotalCount float64                                                                         `json:"total_count"`
+	JSON       accountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseResultInfoJSON `json:"-"`
 }
 
-// failedLoginResponseResultInfoJSON contains the JSON metadata for the struct
-// [FailedLoginResponseResultInfo]
-type failedLoginResponseResultInfoJSON struct {
+// accountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [AccountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseResultInfo]
+type accountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -144,13 +149,13 @@ type failedLoginResponseResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FailedLoginResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type FailedLoginResponseSuccess bool
+type AccountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseSuccess bool
 
 const (
-	FailedLoginResponseSuccessTrue FailedLoginResponseSuccess = true
+	AccountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseSuccessTrue AccountAccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseSuccess = true
 )

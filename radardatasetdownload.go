@@ -41,14 +41,16 @@ func (r *RadarDatasetDownloadService) RadarPostDatasetDownload(ctx context.Conte
 }
 
 type RadarDatasetDownloadRadarPostDatasetDownloadResponse struct {
-	Dataset RadarDatasetDownloadRadarPostDatasetDownloadResponseDataset `json:"dataset,required"`
-	JSON    radarDatasetDownloadRadarPostDatasetDownloadResponseJSON    `json:"-"`
+	Result  RadarDatasetDownloadRadarPostDatasetDownloadResponseResult `json:"result,required"`
+	Success bool                                                       `json:"success,required"`
+	JSON    radarDatasetDownloadRadarPostDatasetDownloadResponseJSON   `json:"-"`
 }
 
 // radarDatasetDownloadRadarPostDatasetDownloadResponseJSON contains the JSON
 // metadata for the struct [RadarDatasetDownloadRadarPostDatasetDownloadResponse]
 type radarDatasetDownloadRadarPostDatasetDownloadResponseJSON struct {
-	Dataset     apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -57,21 +59,39 @@ func (r *RadarDatasetDownloadRadarPostDatasetDownloadResponse) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarDatasetDownloadRadarPostDatasetDownloadResponseDataset struct {
-	URL  string                                                          `json:"url,required"`
-	JSON radarDatasetDownloadRadarPostDatasetDownloadResponseDatasetJSON `json:"-"`
+type RadarDatasetDownloadRadarPostDatasetDownloadResponseResult struct {
+	Dataset RadarDatasetDownloadRadarPostDatasetDownloadResponseResultDataset `json:"dataset,required"`
+	JSON    radarDatasetDownloadRadarPostDatasetDownloadResponseResultJSON    `json:"-"`
 }
 
-// radarDatasetDownloadRadarPostDatasetDownloadResponseDatasetJSON contains the
-// JSON metadata for the struct
-// [RadarDatasetDownloadRadarPostDatasetDownloadResponseDataset]
-type radarDatasetDownloadRadarPostDatasetDownloadResponseDatasetJSON struct {
+// radarDatasetDownloadRadarPostDatasetDownloadResponseResultJSON contains the JSON
+// metadata for the struct
+// [RadarDatasetDownloadRadarPostDatasetDownloadResponseResult]
+type radarDatasetDownloadRadarPostDatasetDownloadResponseResultJSON struct {
+	Dataset     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarDatasetDownloadRadarPostDatasetDownloadResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarDatasetDownloadRadarPostDatasetDownloadResponseResultDataset struct {
+	URL  string                                                                `json:"url,required"`
+	JSON radarDatasetDownloadRadarPostDatasetDownloadResponseResultDatasetJSON `json:"-"`
+}
+
+// radarDatasetDownloadRadarPostDatasetDownloadResponseResultDatasetJSON contains
+// the JSON metadata for the struct
+// [RadarDatasetDownloadRadarPostDatasetDownloadResponseResultDataset]
+type radarDatasetDownloadRadarPostDatasetDownloadResponseResultDatasetJSON struct {
 	URL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarDatasetDownloadRadarPostDatasetDownloadResponseDataset) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarDatasetDownloadRadarPostDatasetDownloadResponseResultDataset) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

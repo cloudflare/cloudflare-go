@@ -30,27 +30,28 @@ func NewAccountGatewayCategoryService(opts ...option.RequestOption) (r *AccountG
 	return
 }
 
-// List all Categories.
-func (r *AccountGatewayCategoryService) ZeroTrustGatewayCategoriesListCategories(ctx context.Context, accountID string, opts ...option.RequestOption) (res *CategoriesResponseCollection, err error) {
+// Fetches a list of all categories.
+func (r *AccountGatewayCategoryService) ZeroTrustGatewayCategoriesListCategories(ctx context.Context, accountID string, opts ...option.RequestOption) (res *AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/gateway/categories", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type CategoriesResponseCollection struct {
-	Errors     []CategoriesResponseCollectionError    `json:"errors"`
-	Messages   []CategoriesResponseCollectionMessage  `json:"messages"`
-	Result     []CategoriesResponseCollectionResult   `json:"result"`
-	ResultInfo CategoriesResponseCollectionResultInfo `json:"result_info"`
+type AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponse struct {
+	Errors     []AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseError    `json:"errors"`
+	Messages   []AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseMessage  `json:"messages"`
+	Result     []AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResult   `json:"result"`
+	ResultInfo AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultInfo `json:"result_info"`
 	// Whether the API call was successful
-	Success CategoriesResponseCollectionSuccess `json:"success"`
-	JSON    categoriesResponseCollectionJSON    `json:"-"`
+	Success AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseSuccess `json:"success"`
+	JSON    accountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseJSON    `json:"-"`
 }
 
-// categoriesResponseCollectionJSON contains the JSON metadata for the struct
-// [CategoriesResponseCollection]
-type categoriesResponseCollectionJSON struct {
+// accountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponse]
+type accountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -60,70 +61,73 @@ type categoriesResponseCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CategoriesResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CategoriesResponseCollectionError struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    categoriesResponseCollectionErrorJSON `json:"-"`
+type AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseError struct {
+	Code    int64                                                                           `json:"code,required"`
+	Message string                                                                          `json:"message,required"`
+	JSON    accountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseErrorJSON `json:"-"`
 }
 
-// categoriesResponseCollectionErrorJSON contains the JSON metadata for the struct
-// [CategoriesResponseCollectionError]
-type categoriesResponseCollectionErrorJSON struct {
+// accountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseError]
+type accountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CategoriesResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CategoriesResponseCollectionMessage struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    categoriesResponseCollectionMessageJSON `json:"-"`
+type AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseMessage struct {
+	Code    int64                                                                             `json:"code,required"`
+	Message string                                                                            `json:"message,required"`
+	JSON    accountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseMessageJSON `json:"-"`
 }
 
-// categoriesResponseCollectionMessageJSON contains the JSON metadata for the
-// struct [CategoriesResponseCollectionMessage]
-type categoriesResponseCollectionMessageJSON struct {
+// accountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseMessage]
+type accountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CategoriesResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CategoriesResponseCollectionResult struct {
-	// The identifier for this category. There is only one category per id.
+type AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResult struct {
+	// The identifier for this category. There is only one category per ID.
 	ID int64 `json:"id"`
-	// Whether the category is in beta and subject to change.
+	// True if the category is in beta and subject to change.
 	Beta bool `json:"beta"`
-	// Which account types are allowed to create policies based on this categories.
+	// Which account types are allowed to create policies based on this category.
 	// `blocked` categories are blocked unconditionally for all accounts.
 	// `removalPending` categories can be removed from policies but not added.
 	// `noBlock` categories cannot be blocked.
-	Class CategoriesResponseCollectionResultClass `json:"class"`
+	Class AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultClass `json:"class"`
 	// A short summary of domains in the category.
 	Description string `json:"description"`
 	// The name of the category.
 	Name string `json:"name"`
 	// All subcategories for this category.
-	Subcategories []CategoriesResponseCollectionResultSubcategory `json:"subcategories"`
-	JSON          categoriesResponseCollectionResultJSON          `json:"-"`
+	Subcategories []AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultSubcategory `json:"subcategories"`
+	JSON          accountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultJSON          `json:"-"`
 }
 
-// categoriesResponseCollectionResultJSON contains the JSON metadata for the struct
-// [CategoriesResponseCollectionResult]
-type categoriesResponseCollectionResultJSON struct {
+// accountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResult]
+type accountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultJSON struct {
 	ID            apijson.Field
 	Beta          apijson.Field
 	Class         apijson.Field
@@ -134,44 +138,45 @@ type categoriesResponseCollectionResultJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *CategoriesResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Which account types are allowed to create policies based on this categories.
+// Which account types are allowed to create policies based on this category.
 // `blocked` categories are blocked unconditionally for all accounts.
 // `removalPending` categories can be removed from policies but not added.
 // `noBlock` categories cannot be blocked.
-type CategoriesResponseCollectionResultClass string
+type AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultClass string
 
 const (
-	CategoriesResponseCollectionResultClassFree           CategoriesResponseCollectionResultClass = "free"
-	CategoriesResponseCollectionResultClassPremium        CategoriesResponseCollectionResultClass = "premium"
-	CategoriesResponseCollectionResultClassBlocked        CategoriesResponseCollectionResultClass = "blocked"
-	CategoriesResponseCollectionResultClassRemovalPending CategoriesResponseCollectionResultClass = "removalPending"
-	CategoriesResponseCollectionResultClassNoBlock        CategoriesResponseCollectionResultClass = "noBlock"
+	AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultClassFree           AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultClass = "free"
+	AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultClassPremium        AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultClass = "premium"
+	AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultClassBlocked        AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultClass = "blocked"
+	AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultClassRemovalPending AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultClass = "removalPending"
+	AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultClassNoBlock        AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultClass = "noBlock"
 )
 
-type CategoriesResponseCollectionResultSubcategory struct {
-	// The identifier for this category. There is only one category per id.
+type AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultSubcategory struct {
+	// The identifier for this category. There is only one category per ID.
 	ID int64 `json:"id"`
-	// Whether the category is in beta and subject to change.
+	// True if the category is in beta and subject to change.
 	Beta bool `json:"beta"`
-	// Which account types are allowed to create policies based on this categories.
+	// Which account types are allowed to create policies based on this category.
 	// `blocked` categories are blocked unconditionally for all accounts.
 	// `removalPending` categories can be removed from policies but not added.
 	// `noBlock` categories cannot be blocked.
-	Class CategoriesResponseCollectionResultSubcategoriesClass `json:"class"`
+	Class AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultSubcategoriesClass `json:"class"`
 	// A short summary of domains in the category.
 	Description string `json:"description"`
 	// The name of the category.
-	Name string                                            `json:"name"`
-	JSON categoriesResponseCollectionResultSubcategoryJSON `json:"-"`
+	Name string                                                                                      `json:"name"`
+	JSON accountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultSubcategoryJSON `json:"-"`
 }
 
-// categoriesResponseCollectionResultSubcategoryJSON contains the JSON metadata for
-// the struct [CategoriesResponseCollectionResultSubcategory]
-type categoriesResponseCollectionResultSubcategoryJSON struct {
+// accountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultSubcategoryJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultSubcategory]
+type accountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultSubcategoryJSON struct {
 	ID          apijson.Field
 	Beta        apijson.Field
 	Class       apijson.Field
@@ -181,25 +186,25 @@ type categoriesResponseCollectionResultSubcategoryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CategoriesResponseCollectionResultSubcategory) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultSubcategory) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Which account types are allowed to create policies based on this categories.
+// Which account types are allowed to create policies based on this category.
 // `blocked` categories are blocked unconditionally for all accounts.
 // `removalPending` categories can be removed from policies but not added.
 // `noBlock` categories cannot be blocked.
-type CategoriesResponseCollectionResultSubcategoriesClass string
+type AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultSubcategoriesClass string
 
 const (
-	CategoriesResponseCollectionResultSubcategoriesClassFree           CategoriesResponseCollectionResultSubcategoriesClass = "free"
-	CategoriesResponseCollectionResultSubcategoriesClassPremium        CategoriesResponseCollectionResultSubcategoriesClass = "premium"
-	CategoriesResponseCollectionResultSubcategoriesClassBlocked        CategoriesResponseCollectionResultSubcategoriesClass = "blocked"
-	CategoriesResponseCollectionResultSubcategoriesClassRemovalPending CategoriesResponseCollectionResultSubcategoriesClass = "removalPending"
-	CategoriesResponseCollectionResultSubcategoriesClassNoBlock        CategoriesResponseCollectionResultSubcategoriesClass = "noBlock"
+	AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultSubcategoriesClassFree           AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultSubcategoriesClass = "free"
+	AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultSubcategoriesClassPremium        AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultSubcategoriesClass = "premium"
+	AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultSubcategoriesClassBlocked        AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultSubcategoriesClass = "blocked"
+	AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultSubcategoriesClassRemovalPending AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultSubcategoriesClass = "removalPending"
+	AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultSubcategoriesClassNoBlock        AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultSubcategoriesClass = "noBlock"
 )
 
-type CategoriesResponseCollectionResultInfo struct {
+type AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -207,13 +212,14 @@ type CategoriesResponseCollectionResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                    `json:"total_count"`
-	JSON       categoriesResponseCollectionResultInfoJSON `json:"-"`
+	TotalCount float64                                                                              `json:"total_count"`
+	JSON       accountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultInfoJSON `json:"-"`
 }
 
-// categoriesResponseCollectionResultInfoJSON contains the JSON metadata for the
-// struct [CategoriesResponseCollectionResultInfo]
-type categoriesResponseCollectionResultInfoJSON struct {
+// accountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultInfo]
+type accountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -222,13 +228,13 @@ type categoriesResponseCollectionResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CategoriesResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type CategoriesResponseCollectionSuccess bool
+type AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseSuccess bool
 
 const (
-	CategoriesResponseCollectionSuccessTrue CategoriesResponseCollectionSuccess = true
+	AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseSuccessTrue AccountGatewayCategoryZeroTrustGatewayCategoriesListCategoriesResponseSuccess = true
 )

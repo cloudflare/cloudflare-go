@@ -25,18 +25,20 @@ func TestRadarBgpTimeseryListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Radars.Bgps.Timeseries.List(context.TODO(), cloudflare.RadarBgpTimeseryListParams{
-		AggInterval: cloudflare.F(cloudflare.RadarBgpTimeseryListParamsAggInterval15m),
-		ASN:         cloudflare.F([]string{"15169", "15169", "15169"}),
+	_, err := client.Radar.Bgps.Timeseries.List(context.TODO(), cloudflare.RadarBgpTimeseryListParams{
+		AggInterval: cloudflare.F(cloudflare.RadarBgpTimeseryListParamsAggInterval1h),
+		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:   cloudflare.F([]cloudflare.RadarBgpTimeseryListParamsDateRange{cloudflare.RadarBgpTimeseryListParamsDateRange1d, cloudflare.RadarBgpTimeseryListParamsDateRange7d, cloudflare.RadarBgpTimeseryListParamsDateRange14d}),
+		DateRange:   cloudflare.F([]cloudflare.RadarBgpTimeseryListParamsDateRange{cloudflare.RadarBgpTimeseryListParamsDateRange1d, cloudflare.RadarBgpTimeseryListParamsDateRange2d, cloudflare.RadarBgpTimeseryListParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		Format:      cloudflare.F(cloudflare.RadarBgpTimeseryListParamsFormatJson),
-		Name:        cloudflare.F([]string{"main_series", "main_series", "main_series"}),
-		Prefix:      cloudflare.F("1.1.1.0/24"),
+		Name:        cloudflare.F([]string{"string", "string", "string"}),
+		Prefix:      cloudflare.F([]string{"string", "string", "string"}),
 		UpdateType:  cloudflare.F([]cloudflare.RadarBgpTimeseryListParamsUpdateType{cloudflare.RadarBgpTimeseryListParamsUpdateTypeAnnouncement, cloudflare.RadarBgpTimeseryListParamsUpdateTypeWithdrawal}),
 	})
 	if err != nil {

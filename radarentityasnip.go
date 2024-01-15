@@ -78,32 +78,36 @@ func (r *RadarEntityAsnipListResponseResult) UnmarshalJSON(data []byte) (err err
 }
 
 type RadarEntityAsnipListResponseResultASN struct {
-	Aka            string                                              `json:"aka,required"`
 	ASN            int64                                               `json:"asn,required"`
 	Country        string                                              `json:"country,required"`
 	CountryName    string                                              `json:"countryName,required"`
 	EstimatedUsers RadarEntityAsnipListResponseResultASNEstimatedUsers `json:"estimatedUsers,required"`
 	Name           string                                              `json:"name,required"`
-	NameLong       string                                              `json:"nameLong,required"`
 	OrgName        string                                              `json:"orgName,required"`
 	Related        []RadarEntityAsnipListResponseResultASNRelated      `json:"related,required"`
-	Website        string                                              `json:"website,required"`
-	JSON           radarEntityAsnipListResponseResultASNJSON           `json:"-"`
+	// Regional Internet Registry
+	Source  string `json:"source,required"`
+	Website string `json:"website,required"`
+	Aka     string `json:"aka"`
+	// Deprecated field. Please use 'aka'.
+	NameLong string                                    `json:"nameLong"`
+	JSON     radarEntityAsnipListResponseResultASNJSON `json:"-"`
 }
 
 // radarEntityAsnipListResponseResultASNJSON contains the JSON metadata for the
 // struct [RadarEntityAsnipListResponseResultASN]
 type radarEntityAsnipListResponseResultASNJSON struct {
-	Aka            apijson.Field
 	ASN            apijson.Field
 	Country        apijson.Field
 	CountryName    apijson.Field
 	EstimatedUsers apijson.Field
 	Name           apijson.Field
-	NameLong       apijson.Field
 	OrgName        apijson.Field
 	Related        apijson.Field
+	Source         apijson.Field
 	Website        apijson.Field
+	Aka            apijson.Field
+	NameLong       apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -133,10 +137,10 @@ func (r *RadarEntityAsnipListResponseResultASNEstimatedUsers) UnmarshalJSON(data
 }
 
 type RadarEntityAsnipListResponseResultASNEstimatedUsersLocation struct {
+	LocationAlpha2 string `json:"locationAlpha2,required"`
+	LocationName   string `json:"locationName,required"`
 	// Estimated users per location
-	EstimatedUsers int64                                                           `json:"estimatedUsers,required"`
-	LocationAlpha2 string                                                          `json:"locationAlpha2,required"`
-	LocationName   string                                                          `json:"locationName,required"`
+	EstimatedUsers int64                                                           `json:"estimatedUsers"`
 	JSON           radarEntityAsnipListResponseResultASNEstimatedUsersLocationJSON `json:"-"`
 }
 
@@ -144,9 +148,9 @@ type RadarEntityAsnipListResponseResultASNEstimatedUsersLocation struct {
 // JSON metadata for the struct
 // [RadarEntityAsnipListResponseResultASNEstimatedUsersLocation]
 type radarEntityAsnipListResponseResultASNEstimatedUsersLocationJSON struct {
-	EstimatedUsers apijson.Field
 	LocationAlpha2 apijson.Field
 	LocationName   apijson.Field
+	EstimatedUsers apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -156,9 +160,9 @@ func (r *RadarEntityAsnipListResponseResultASNEstimatedUsersLocation) UnmarshalJ
 }
 
 type RadarEntityAsnipListResponseResultASNRelated struct {
-	Aka  string `json:"aka,required"`
 	ASN  int64  `json:"asn,required"`
 	Name string `json:"name,required"`
+	Aka  string `json:"aka"`
 	// Total estimated users
 	EstimatedUsers int64                                            `json:"estimatedUsers"`
 	JSON           radarEntityAsnipListResponseResultASNRelatedJSON `json:"-"`
@@ -167,9 +171,9 @@ type RadarEntityAsnipListResponseResultASNRelated struct {
 // radarEntityAsnipListResponseResultASNRelatedJSON contains the JSON metadata for
 // the struct [RadarEntityAsnipListResponseResultASNRelated]
 type radarEntityAsnipListResponseResultASNRelatedJSON struct {
-	Aka            apijson.Field
 	ASN            apijson.Field
 	Name           apijson.Field
+	Aka            apijson.Field
 	EstimatedUsers apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field

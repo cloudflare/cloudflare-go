@@ -24,8 +24,10 @@ func TestAccountLoadBalancerPoolGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.LoadBalancers.Pools.Get(
 		context.TODO(),
@@ -52,8 +54,10 @@ func TestAccountLoadBalancerPoolUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.LoadBalancers.Pools.Update(
 		context.TODO(),
@@ -138,8 +142,10 @@ func TestAccountLoadBalancerPoolDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.LoadBalancers.Pools.Delete(
 		context.TODO(),
@@ -166,8 +172,10 @@ func TestAccountLoadBalancerPoolAccountLoadBalancerPoolsNewPoolWithOptionalParam
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.LoadBalancers.Pools.AccountLoadBalancerPoolsNewPool(
 		context.TODO(),
@@ -250,8 +258,10 @@ func TestAccountLoadBalancerPoolAccountLoadBalancerPoolsListPoolsWithOptionalPar
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.LoadBalancers.Pools.AccountLoadBalancerPoolsListPools(
 		context.TODO(),
@@ -280,14 +290,104 @@ func TestAccountLoadBalancerPoolAccountLoadBalancerPoolsPatchPoolsWithOptionalPa
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.LoadBalancers.Pools.AccountLoadBalancerPoolsPatchPools(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.AccountLoadBalancerPoolAccountLoadBalancerPoolsPatchPoolsParams{
 			NotificationEmail: cloudflare.F(cloudflare.AccountLoadBalancerPoolAccountLoadBalancerPoolsPatchPoolsParamsNotificationEmailEmpty),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestAccountLoadBalancerPoolPatchWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIKey("my-cloudflare-api-key"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
+	)
+	_, err := client.Accounts.LoadBalancers.Pools.Patch(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		"17b5962d775c646f3f9725cbc7a53df4",
+		cloudflare.AccountLoadBalancerPoolPatchParams{
+			CheckRegions: cloudflare.F([]cloudflare.AccountLoadBalancerPoolPatchParamsCheckRegion{cloudflare.AccountLoadBalancerPoolPatchParamsCheckRegionWeu, cloudflare.AccountLoadBalancerPoolPatchParamsCheckRegionEnam}),
+			Description:  cloudflare.F("Primary data center - Provider XYZ"),
+			Enabled:      cloudflare.F(false),
+			Latitude:     cloudflare.F(0.000000),
+			LoadShedding: cloudflare.F(cloudflare.AccountLoadBalancerPoolPatchParamsLoadShedding{
+				DefaultPercent: cloudflare.F(0.000000),
+				DefaultPolicy:  cloudflare.F(cloudflare.AccountLoadBalancerPoolPatchParamsLoadSheddingDefaultPolicyRandom),
+				SessionPercent: cloudflare.F(0.000000),
+				SessionPolicy:  cloudflare.F(cloudflare.AccountLoadBalancerPoolPatchParamsLoadSheddingSessionPolicyHash),
+			}),
+			Longitude:         cloudflare.F(0.000000),
+			MinimumOrigins:    cloudflare.F(int64(0)),
+			Monitor:           cloudflare.F[any](map[string]interface{}{}),
+			Name:              cloudflare.F("primary-dc-1"),
+			NotificationEmail: cloudflare.F("someone@example.com,sometwo@example.com"),
+			NotificationFilter: cloudflare.F(cloudflare.AccountLoadBalancerPoolPatchParamsNotificationFilter{
+				Origin: cloudflare.F(cloudflare.AccountLoadBalancerPoolPatchParamsNotificationFilterOrigin{
+					Disable: cloudflare.F(true),
+					Healthy: cloudflare.F(true),
+				}),
+				Pool: cloudflare.F(cloudflare.AccountLoadBalancerPoolPatchParamsNotificationFilterPool{
+					Disable: cloudflare.F(true),
+					Healthy: cloudflare.F(false),
+				}),
+			}),
+			OriginSteering: cloudflare.F(cloudflare.AccountLoadBalancerPoolPatchParamsOriginSteering{
+				Policy: cloudflare.F(cloudflare.AccountLoadBalancerPoolPatchParamsOriginSteeringPolicyRandom),
+			}),
+			Origins: cloudflare.F([]cloudflare.AccountLoadBalancerPoolPatchParamsOrigin{{
+				Address: cloudflare.F("0.0.0.0"),
+				Enabled: cloudflare.F(true),
+				Header: cloudflare.F(cloudflare.AccountLoadBalancerPoolPatchParamsOriginsHeader{
+					Host: cloudflare.F([]string{"example.com", "example.com", "example.com"}),
+				}),
+				Name:             cloudflare.F("app-server-1"),
+				VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
+				Weight:           cloudflare.F(0.600000),
+			}, {
+				Address: cloudflare.F("0.0.0.0"),
+				Enabled: cloudflare.F(true),
+				Header: cloudflare.F(cloudflare.AccountLoadBalancerPoolPatchParamsOriginsHeader{
+					Host: cloudflare.F([]string{"example.com", "example.com", "example.com"}),
+				}),
+				Name:             cloudflare.F("app-server-1"),
+				VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
+				Weight:           cloudflare.F(0.600000),
+			}, {
+				Address: cloudflare.F("0.0.0.0"),
+				Enabled: cloudflare.F(true),
+				Header: cloudflare.F(cloudflare.AccountLoadBalancerPoolPatchParamsOriginsHeader{
+					Host: cloudflare.F([]string{"example.com", "example.com", "example.com"}),
+				}),
+				Name:             cloudflare.F("app-server-1"),
+				VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
+				Weight:           cloudflare.F(0.600000),
+			}}),
 		},
 	)
 	if err != nil {

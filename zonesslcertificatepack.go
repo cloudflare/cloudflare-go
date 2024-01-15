@@ -38,7 +38,7 @@ func NewZoneSslCertificatePackService(opts ...option.RequestOption) (r *ZoneSslC
 }
 
 // For a given zone, get a certificate pack.
-func (r *ZoneSslCertificatePackService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *CertificatePackResponseSingle, err error) {
+func (r *ZoneSslCertificatePackService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *ZoneSslCertificatePackGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", zoneIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -48,7 +48,7 @@ func (r *ZoneSslCertificatePackService) Get(ctx context.Context, zoneIdentifier 
 // For a given zone, restart validation for an advanced certificate pack. This is
 // only a validation operation for a Certificate Pack in a validation_timed_out
 // status.
-func (r *ZoneSslCertificatePackService) Update(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *AdvancedCertificatePackResponseSingleQ8qWa5qi, err error) {
+func (r *ZoneSslCertificatePackService) Update(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *ZoneSslCertificatePackUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", zoneIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &res, opts...)
@@ -56,7 +56,7 @@ func (r *ZoneSslCertificatePackService) Update(ctx context.Context, zoneIdentifi
 }
 
 // For a given zone, delete an advanced certificate pack.
-func (r *ZoneSslCertificatePackService) Delete(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *DeleteAdvancedCertificatePackResponseSingleNs3TjUge, err error) {
+func (r *ZoneSslCertificatePackService) Delete(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *ZoneSslCertificatePackDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", zoneIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -64,25 +64,25 @@ func (r *ZoneSslCertificatePackService) Delete(ctx context.Context, zoneIdentifi
 }
 
 // For a given zone, list all active certificate packs.
-func (r *ZoneSslCertificatePackService) CertificatePacksListCertificatePacks(ctx context.Context, zoneIdentifier string, query ZoneSslCertificatePackCertificatePacksListCertificatePacksParams, opts ...option.RequestOption) (res *CertificatePackResponseCollection, err error) {
+func (r *ZoneSslCertificatePackService) CertificatePacksListCertificatePacks(ctx context.Context, zoneIdentifier string, query ZoneSslCertificatePackCertificatePacksListCertificatePacksParams, opts ...option.RequestOption) (res *ZoneSslCertificatePackCertificatePacksListCertificatePacksResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/ssl/certificate_packs", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
-type AdvancedCertificatePackResponseSingleQ8qWa5qi struct {
-	Errors   []AdvancedCertificatePackResponseSingleQ8qWa5qiError   `json:"errors"`
-	Messages []AdvancedCertificatePackResponseSingleQ8qWa5qiMessage `json:"messages"`
-	Result   AdvancedCertificatePackResponseSingleQ8qWa5qiResult    `json:"result"`
+type ZoneSslCertificatePackGetResponse struct {
+	Errors   []ZoneSslCertificatePackGetResponseError   `json:"errors"`
+	Messages []ZoneSslCertificatePackGetResponseMessage `json:"messages"`
+	Result   interface{}                                `json:"result"`
 	// Whether the API call was successful
-	Success AdvancedCertificatePackResponseSingleQ8qWa5qiSuccess `json:"success"`
-	JSON    advancedCertificatePackResponseSingleQ8qWa5qiJSON    `json:"-"`
+	Success ZoneSslCertificatePackGetResponseSuccess `json:"success"`
+	JSON    zoneSslCertificatePackGetResponseJSON    `json:"-"`
 }
 
-// advancedCertificatePackResponseSingleQ8qWa5qiJSON contains the JSON metadata for
-// the struct [AdvancedCertificatePackResponseSingleQ8qWa5qi]
-type advancedCertificatePackResponseSingleQ8qWa5qiJSON struct {
+// zoneSslCertificatePackGetResponseJSON contains the JSON metadata for the struct
+// [ZoneSslCertificatePackGetResponse]
+type zoneSslCertificatePackGetResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -91,57 +91,124 @@ type advancedCertificatePackResponseSingleQ8qWa5qiJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AdvancedCertificatePackResponseSingleQ8qWa5qi) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSslCertificatePackGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AdvancedCertificatePackResponseSingleQ8qWa5qiError struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    advancedCertificatePackResponseSingleQ8qWa5qiErrorJSON `json:"-"`
+type ZoneSslCertificatePackGetResponseError struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    zoneSslCertificatePackGetResponseErrorJSON `json:"-"`
 }
 
-// advancedCertificatePackResponseSingleQ8qWa5qiErrorJSON contains the JSON
-// metadata for the struct [AdvancedCertificatePackResponseSingleQ8qWa5qiError]
-type advancedCertificatePackResponseSingleQ8qWa5qiErrorJSON struct {
+// zoneSslCertificatePackGetResponseErrorJSON contains the JSON metadata for the
+// struct [ZoneSslCertificatePackGetResponseError]
+type zoneSslCertificatePackGetResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AdvancedCertificatePackResponseSingleQ8qWa5qiError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSslCertificatePackGetResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AdvancedCertificatePackResponseSingleQ8qWa5qiMessage struct {
-	Code    int64                                                    `json:"code,required"`
-	Message string                                                   `json:"message,required"`
-	JSON    advancedCertificatePackResponseSingleQ8qWa5qiMessageJSON `json:"-"`
+type ZoneSslCertificatePackGetResponseMessage struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    zoneSslCertificatePackGetResponseMessageJSON `json:"-"`
 }
 
-// advancedCertificatePackResponseSingleQ8qWa5qiMessageJSON contains the JSON
-// metadata for the struct [AdvancedCertificatePackResponseSingleQ8qWa5qiMessage]
-type advancedCertificatePackResponseSingleQ8qWa5qiMessageJSON struct {
+// zoneSslCertificatePackGetResponseMessageJSON contains the JSON metadata for the
+// struct [ZoneSslCertificatePackGetResponseMessage]
+type zoneSslCertificatePackGetResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AdvancedCertificatePackResponseSingleQ8qWa5qiMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSslCertificatePackGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AdvancedCertificatePackResponseSingleQ8qWa5qiResult struct {
+// Whether the API call was successful
+type ZoneSslCertificatePackGetResponseSuccess bool
+
+const (
+	ZoneSslCertificatePackGetResponseSuccessTrue ZoneSslCertificatePackGetResponseSuccess = true
+)
+
+type ZoneSslCertificatePackUpdateResponse struct {
+	Errors   []ZoneSslCertificatePackUpdateResponseError   `json:"errors"`
+	Messages []ZoneSslCertificatePackUpdateResponseMessage `json:"messages"`
+	Result   ZoneSslCertificatePackUpdateResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success ZoneSslCertificatePackUpdateResponseSuccess `json:"success"`
+	JSON    zoneSslCertificatePackUpdateResponseJSON    `json:"-"`
+}
+
+// zoneSslCertificatePackUpdateResponseJSON contains the JSON metadata for the
+// struct [ZoneSslCertificatePackUpdateResponse]
+type zoneSslCertificatePackUpdateResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSslCertificatePackUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSslCertificatePackUpdateResponseError struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    zoneSslCertificatePackUpdateResponseErrorJSON `json:"-"`
+}
+
+// zoneSslCertificatePackUpdateResponseErrorJSON contains the JSON metadata for the
+// struct [ZoneSslCertificatePackUpdateResponseError]
+type zoneSslCertificatePackUpdateResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSslCertificatePackUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSslCertificatePackUpdateResponseMessage struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    zoneSslCertificatePackUpdateResponseMessageJSON `json:"-"`
+}
+
+// zoneSslCertificatePackUpdateResponseMessageJSON contains the JSON metadata for
+// the struct [ZoneSslCertificatePackUpdateResponseMessage]
+type zoneSslCertificatePackUpdateResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSslCertificatePackUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSslCertificatePackUpdateResponseResult struct {
 	// Identifier
 	ID string `json:"id"`
-	// Certificate Authority selected for the order. Selecting Let's Encrypt will
-	// reduce customization of other fields: validation_method must be 'txt',
-	// validity_days must be 90, cloudflare_branding must be omitted, and hosts must
-	// contain only 2 entries, one for the zone name and one for the subdomain wildcard
-	// of the zone name (e.g. example.com, \*.example.com).
-	CertificateAuthority AdvancedCertificatePackResponseSingleQ8qWa5qiResultCertificateAuthority `json:"certificate_authority"`
+	// Certificate Authority selected for the order. For information on any certificate
+	// authority specific details or restrictions
+	// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
+	CertificateAuthority ZoneSslCertificatePackUpdateResponseResultCertificateAuthority `json:"certificate_authority"`
 	// Whether or not to add Cloudflare Branding for the order. This will add
 	// sni.cloudflaressl.com as the Common Name if set true.
 	CloudflareBranding bool `json:"cloudflare_branding"`
@@ -149,19 +216,19 @@ type AdvancedCertificatePackResponseSingleQ8qWa5qiResult struct {
 	// the zone apex, may not contain more than 50 hosts, and may not be empty.
 	Hosts []string `json:"hosts"`
 	// Status of certificate pack.
-	Status AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatus `json:"status"`
+	Status ZoneSslCertificatePackUpdateResponseResultStatus `json:"status"`
 	// Type of certificate pack.
-	Type AdvancedCertificatePackResponseSingleQ8qWa5qiResultType `json:"type"`
+	Type ZoneSslCertificatePackUpdateResponseResultType `json:"type"`
 	// Validation Method selected for the order.
-	ValidationMethod AdvancedCertificatePackResponseSingleQ8qWa5qiResultValidationMethod `json:"validation_method"`
+	ValidationMethod ZoneSslCertificatePackUpdateResponseResultValidationMethod `json:"validation_method"`
 	// Validity Days selected for the order.
-	ValidityDays AdvancedCertificatePackResponseSingleQ8qWa5qiResultValidityDays `json:"validity_days"`
-	JSON         advancedCertificatePackResponseSingleQ8qWa5qiResultJSON         `json:"-"`
+	ValidityDays ZoneSslCertificatePackUpdateResponseResultValidityDays `json:"validity_days"`
+	JSON         zoneSslCertificatePackUpdateResponseResultJSON         `json:"-"`
 }
 
-// advancedCertificatePackResponseSingleQ8qWa5qiResultJSON contains the JSON
-// metadata for the struct [AdvancedCertificatePackResponseSingleQ8qWa5qiResult]
-type advancedCertificatePackResponseSingleQ8qWa5qiResultJSON struct {
+// zoneSslCertificatePackUpdateResponseResultJSON contains the JSON metadata for
+// the struct [ZoneSslCertificatePackUpdateResponseResult]
+type zoneSslCertificatePackUpdateResponseResultJSON struct {
 	ID                   apijson.Field
 	CertificateAuthority apijson.Field
 	CloudflareBranding   apijson.Field
@@ -174,96 +241,181 @@ type advancedCertificatePackResponseSingleQ8qWa5qiResultJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *AdvancedCertificatePackResponseSingleQ8qWa5qiResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSslCertificatePackUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Certificate Authority selected for the order. Selecting Let's Encrypt will
-// reduce customization of other fields: validation_method must be 'txt',
-// validity_days must be 90, cloudflare_branding must be omitted, and hosts must
-// contain only 2 entries, one for the zone name and one for the subdomain wildcard
-// of the zone name (e.g. example.com, \*.example.com).
-type AdvancedCertificatePackResponseSingleQ8qWa5qiResultCertificateAuthority string
+// Certificate Authority selected for the order. For information on any certificate
+// authority specific details or restrictions
+// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
+type ZoneSslCertificatePackUpdateResponseResultCertificateAuthority string
 
 const (
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultCertificateAuthorityDigicert    AdvancedCertificatePackResponseSingleQ8qWa5qiResultCertificateAuthority = "digicert"
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultCertificateAuthorityGoogle      AdvancedCertificatePackResponseSingleQ8qWa5qiResultCertificateAuthority = "google"
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultCertificateAuthorityLetsEncrypt AdvancedCertificatePackResponseSingleQ8qWa5qiResultCertificateAuthority = "lets_encrypt"
+	ZoneSslCertificatePackUpdateResponseResultCertificateAuthorityGoogle      ZoneSslCertificatePackUpdateResponseResultCertificateAuthority = "google"
+	ZoneSslCertificatePackUpdateResponseResultCertificateAuthorityLetsEncrypt ZoneSslCertificatePackUpdateResponseResultCertificateAuthority = "lets_encrypt"
 )
 
 // Status of certificate pack.
-type AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatus string
+type ZoneSslCertificatePackUpdateResponseResultStatus string
 
 const (
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatusInitializing         AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatus = "initializing"
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatusPendingValidation    AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatus = "pending_validation"
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatusDeleted              AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatus = "deleted"
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatusPendingIssuance      AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatus = "pending_issuance"
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatusPendingDeployment    AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatus = "pending_deployment"
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatusPendingDeletion      AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatus = "pending_deletion"
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatusPendingExpiration    AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatus = "pending_expiration"
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatusExpired              AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatus = "expired"
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatusActive               AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatus = "active"
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatusInitializingTimedOut AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatus = "initializing_timed_out"
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatusValidationTimedOut   AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatus = "validation_timed_out"
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatusIssuanceTimedOut     AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatus = "issuance_timed_out"
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatusDeploymentTimedOut   AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatus = "deployment_timed_out"
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatusDeletionTimedOut     AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatus = "deletion_timed_out"
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatusPendingCleanup       AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatus = "pending_cleanup"
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatusStagingDeployment    AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatus = "staging_deployment"
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatusStagingActive        AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatus = "staging_active"
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatusDeactivating         AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatus = "deactivating"
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatusInactive             AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatus = "inactive"
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatusBackupIssued         AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatus = "backup_issued"
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatusHoldingDeployment    AdvancedCertificatePackResponseSingleQ8qWa5qiResultStatus = "holding_deployment"
+	ZoneSslCertificatePackUpdateResponseResultStatusInitializing         ZoneSslCertificatePackUpdateResponseResultStatus = "initializing"
+	ZoneSslCertificatePackUpdateResponseResultStatusPendingValidation    ZoneSslCertificatePackUpdateResponseResultStatus = "pending_validation"
+	ZoneSslCertificatePackUpdateResponseResultStatusDeleted              ZoneSslCertificatePackUpdateResponseResultStatus = "deleted"
+	ZoneSslCertificatePackUpdateResponseResultStatusPendingIssuance      ZoneSslCertificatePackUpdateResponseResultStatus = "pending_issuance"
+	ZoneSslCertificatePackUpdateResponseResultStatusPendingDeployment    ZoneSslCertificatePackUpdateResponseResultStatus = "pending_deployment"
+	ZoneSslCertificatePackUpdateResponseResultStatusPendingDeletion      ZoneSslCertificatePackUpdateResponseResultStatus = "pending_deletion"
+	ZoneSslCertificatePackUpdateResponseResultStatusPendingExpiration    ZoneSslCertificatePackUpdateResponseResultStatus = "pending_expiration"
+	ZoneSslCertificatePackUpdateResponseResultStatusExpired              ZoneSslCertificatePackUpdateResponseResultStatus = "expired"
+	ZoneSslCertificatePackUpdateResponseResultStatusActive               ZoneSslCertificatePackUpdateResponseResultStatus = "active"
+	ZoneSslCertificatePackUpdateResponseResultStatusInitializingTimedOut ZoneSslCertificatePackUpdateResponseResultStatus = "initializing_timed_out"
+	ZoneSslCertificatePackUpdateResponseResultStatusValidationTimedOut   ZoneSslCertificatePackUpdateResponseResultStatus = "validation_timed_out"
+	ZoneSslCertificatePackUpdateResponseResultStatusIssuanceTimedOut     ZoneSslCertificatePackUpdateResponseResultStatus = "issuance_timed_out"
+	ZoneSslCertificatePackUpdateResponseResultStatusDeploymentTimedOut   ZoneSslCertificatePackUpdateResponseResultStatus = "deployment_timed_out"
+	ZoneSslCertificatePackUpdateResponseResultStatusDeletionTimedOut     ZoneSslCertificatePackUpdateResponseResultStatus = "deletion_timed_out"
+	ZoneSslCertificatePackUpdateResponseResultStatusPendingCleanup       ZoneSslCertificatePackUpdateResponseResultStatus = "pending_cleanup"
+	ZoneSslCertificatePackUpdateResponseResultStatusStagingDeployment    ZoneSslCertificatePackUpdateResponseResultStatus = "staging_deployment"
+	ZoneSslCertificatePackUpdateResponseResultStatusStagingActive        ZoneSslCertificatePackUpdateResponseResultStatus = "staging_active"
+	ZoneSslCertificatePackUpdateResponseResultStatusDeactivating         ZoneSslCertificatePackUpdateResponseResultStatus = "deactivating"
+	ZoneSslCertificatePackUpdateResponseResultStatusInactive             ZoneSslCertificatePackUpdateResponseResultStatus = "inactive"
+	ZoneSslCertificatePackUpdateResponseResultStatusBackupIssued         ZoneSslCertificatePackUpdateResponseResultStatus = "backup_issued"
+	ZoneSslCertificatePackUpdateResponseResultStatusHoldingDeployment    ZoneSslCertificatePackUpdateResponseResultStatus = "holding_deployment"
 )
 
 // Type of certificate pack.
-type AdvancedCertificatePackResponseSingleQ8qWa5qiResultType string
+type ZoneSslCertificatePackUpdateResponseResultType string
 
 const (
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultTypeAdvanced AdvancedCertificatePackResponseSingleQ8qWa5qiResultType = "advanced"
+	ZoneSslCertificatePackUpdateResponseResultTypeAdvanced ZoneSslCertificatePackUpdateResponseResultType = "advanced"
 )
 
 // Validation Method selected for the order.
-type AdvancedCertificatePackResponseSingleQ8qWa5qiResultValidationMethod string
+type ZoneSslCertificatePackUpdateResponseResultValidationMethod string
 
 const (
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultValidationMethodTxt   AdvancedCertificatePackResponseSingleQ8qWa5qiResultValidationMethod = "txt"
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultValidationMethodHTTP  AdvancedCertificatePackResponseSingleQ8qWa5qiResultValidationMethod = "http"
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultValidationMethodEmail AdvancedCertificatePackResponseSingleQ8qWa5qiResultValidationMethod = "email"
+	ZoneSslCertificatePackUpdateResponseResultValidationMethodTxt   ZoneSslCertificatePackUpdateResponseResultValidationMethod = "txt"
+	ZoneSslCertificatePackUpdateResponseResultValidationMethodHTTP  ZoneSslCertificatePackUpdateResponseResultValidationMethod = "http"
+	ZoneSslCertificatePackUpdateResponseResultValidationMethodEmail ZoneSslCertificatePackUpdateResponseResultValidationMethod = "email"
 )
 
 // Validity Days selected for the order.
-type AdvancedCertificatePackResponseSingleQ8qWa5qiResultValidityDays int64
+type ZoneSslCertificatePackUpdateResponseResultValidityDays int64
 
 const (
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultValidityDays14  AdvancedCertificatePackResponseSingleQ8qWa5qiResultValidityDays = 14
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultValidityDays30  AdvancedCertificatePackResponseSingleQ8qWa5qiResultValidityDays = 30
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultValidityDays90  AdvancedCertificatePackResponseSingleQ8qWa5qiResultValidityDays = 90
-	AdvancedCertificatePackResponseSingleQ8qWa5qiResultValidityDays365 AdvancedCertificatePackResponseSingleQ8qWa5qiResultValidityDays = 365
+	ZoneSslCertificatePackUpdateResponseResultValidityDays14  ZoneSslCertificatePackUpdateResponseResultValidityDays = 14
+	ZoneSslCertificatePackUpdateResponseResultValidityDays30  ZoneSslCertificatePackUpdateResponseResultValidityDays = 30
+	ZoneSslCertificatePackUpdateResponseResultValidityDays90  ZoneSslCertificatePackUpdateResponseResultValidityDays = 90
+	ZoneSslCertificatePackUpdateResponseResultValidityDays365 ZoneSslCertificatePackUpdateResponseResultValidityDays = 365
 )
 
 // Whether the API call was successful
-type AdvancedCertificatePackResponseSingleQ8qWa5qiSuccess bool
+type ZoneSslCertificatePackUpdateResponseSuccess bool
 
 const (
-	AdvancedCertificatePackResponseSingleQ8qWa5qiSuccessTrue AdvancedCertificatePackResponseSingleQ8qWa5qiSuccess = true
+	ZoneSslCertificatePackUpdateResponseSuccessTrue ZoneSslCertificatePackUpdateResponseSuccess = true
 )
 
-type CertificatePackResponseCollection struct {
-	Errors     []CertificatePackResponseCollectionError    `json:"errors"`
-	Messages   []CertificatePackResponseCollectionMessage  `json:"messages"`
-	Result     []interface{}                               `json:"result"`
-	ResultInfo CertificatePackResponseCollectionResultInfo `json:"result_info"`
+type ZoneSslCertificatePackDeleteResponse struct {
+	Errors   []ZoneSslCertificatePackDeleteResponseError   `json:"errors"`
+	Messages []ZoneSslCertificatePackDeleteResponseMessage `json:"messages"`
+	Result   ZoneSslCertificatePackDeleteResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success CertificatePackResponseCollectionSuccess `json:"success"`
-	JSON    certificatePackResponseCollectionJSON    `json:"-"`
+	Success ZoneSslCertificatePackDeleteResponseSuccess `json:"success"`
+	JSON    zoneSslCertificatePackDeleteResponseJSON    `json:"-"`
 }
 
-// certificatePackResponseCollectionJSON contains the JSON metadata for the struct
-// [CertificatePackResponseCollection]
-type certificatePackResponseCollectionJSON struct {
+// zoneSslCertificatePackDeleteResponseJSON contains the JSON metadata for the
+// struct [ZoneSslCertificatePackDeleteResponse]
+type zoneSslCertificatePackDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSslCertificatePackDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSslCertificatePackDeleteResponseError struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    zoneSslCertificatePackDeleteResponseErrorJSON `json:"-"`
+}
+
+// zoneSslCertificatePackDeleteResponseErrorJSON contains the JSON metadata for the
+// struct [ZoneSslCertificatePackDeleteResponseError]
+type zoneSslCertificatePackDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSslCertificatePackDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSslCertificatePackDeleteResponseMessage struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    zoneSslCertificatePackDeleteResponseMessageJSON `json:"-"`
+}
+
+// zoneSslCertificatePackDeleteResponseMessageJSON contains the JSON metadata for
+// the struct [ZoneSslCertificatePackDeleteResponseMessage]
+type zoneSslCertificatePackDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSslCertificatePackDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSslCertificatePackDeleteResponseResult struct {
+	// Identifier
+	ID   string                                         `json:"id"`
+	JSON zoneSslCertificatePackDeleteResponseResultJSON `json:"-"`
+}
+
+// zoneSslCertificatePackDeleteResponseResultJSON contains the JSON metadata for
+// the struct [ZoneSslCertificatePackDeleteResponseResult]
+type zoneSslCertificatePackDeleteResponseResultJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSslCertificatePackDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneSslCertificatePackDeleteResponseSuccess bool
+
+const (
+	ZoneSslCertificatePackDeleteResponseSuccessTrue ZoneSslCertificatePackDeleteResponseSuccess = true
+)
+
+type ZoneSslCertificatePackCertificatePacksListCertificatePacksResponse struct {
+	Errors     []ZoneSslCertificatePackCertificatePacksListCertificatePacksResponseError    `json:"errors"`
+	Messages   []ZoneSslCertificatePackCertificatePacksListCertificatePacksResponseMessage  `json:"messages"`
+	Result     []interface{}                                                                `json:"result"`
+	ResultInfo ZoneSslCertificatePackCertificatePacksListCertificatePacksResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success ZoneSslCertificatePackCertificatePacksListCertificatePacksResponseSuccess `json:"success"`
+	JSON    zoneSslCertificatePackCertificatePacksListCertificatePacksResponseJSON    `json:"-"`
+}
+
+// zoneSslCertificatePackCertificatePacksListCertificatePacksResponseJSON contains
+// the JSON metadata for the struct
+// [ZoneSslCertificatePackCertificatePacksListCertificatePacksResponse]
+type zoneSslCertificatePackCertificatePacksListCertificatePacksResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -273,49 +425,51 @@ type certificatePackResponseCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CertificatePackResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSslCertificatePackCertificatePacksListCertificatePacksResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CertificatePackResponseCollectionError struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    certificatePackResponseCollectionErrorJSON `json:"-"`
+type ZoneSslCertificatePackCertificatePacksListCertificatePacksResponseError struct {
+	Code    int64                                                                       `json:"code,required"`
+	Message string                                                                      `json:"message,required"`
+	JSON    zoneSslCertificatePackCertificatePacksListCertificatePacksResponseErrorJSON `json:"-"`
 }
 
-// certificatePackResponseCollectionErrorJSON contains the JSON metadata for the
-// struct [CertificatePackResponseCollectionError]
-type certificatePackResponseCollectionErrorJSON struct {
+// zoneSslCertificatePackCertificatePacksListCertificatePacksResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneSslCertificatePackCertificatePacksListCertificatePacksResponseError]
+type zoneSslCertificatePackCertificatePacksListCertificatePacksResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CertificatePackResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSslCertificatePackCertificatePacksListCertificatePacksResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CertificatePackResponseCollectionMessage struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    certificatePackResponseCollectionMessageJSON `json:"-"`
+type ZoneSslCertificatePackCertificatePacksListCertificatePacksResponseMessage struct {
+	Code    int64                                                                         `json:"code,required"`
+	Message string                                                                        `json:"message,required"`
+	JSON    zoneSslCertificatePackCertificatePacksListCertificatePacksResponseMessageJSON `json:"-"`
 }
 
-// certificatePackResponseCollectionMessageJSON contains the JSON metadata for the
-// struct [CertificatePackResponseCollectionMessage]
-type certificatePackResponseCollectionMessageJSON struct {
+// zoneSslCertificatePackCertificatePacksListCertificatePacksResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneSslCertificatePackCertificatePacksListCertificatePacksResponseMessage]
+type zoneSslCertificatePackCertificatePacksListCertificatePacksResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CertificatePackResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSslCertificatePackCertificatePacksListCertificatePacksResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CertificatePackResponseCollectionResultInfo struct {
+type ZoneSslCertificatePackCertificatePacksListCertificatePacksResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -323,13 +477,14 @@ type CertificatePackResponseCollectionResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                         `json:"total_count"`
-	JSON       certificatePackResponseCollectionResultInfoJSON `json:"-"`
+	TotalCount float64                                                                          `json:"total_count"`
+	JSON       zoneSslCertificatePackCertificatePacksListCertificatePacksResponseResultInfoJSON `json:"-"`
 }
 
-// certificatePackResponseCollectionResultInfoJSON contains the JSON metadata for
-// the struct [CertificatePackResponseCollectionResultInfo]
-type certificatePackResponseCollectionResultInfoJSON struct {
+// zoneSslCertificatePackCertificatePacksListCertificatePacksResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [ZoneSslCertificatePackCertificatePacksListCertificatePacksResponseResultInfo]
+type zoneSslCertificatePackCertificatePacksListCertificatePacksResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -338,174 +493,15 @@ type certificatePackResponseCollectionResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CertificatePackResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSslCertificatePackCertificatePacksListCertificatePacksResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type CertificatePackResponseCollectionSuccess bool
+type ZoneSslCertificatePackCertificatePacksListCertificatePacksResponseSuccess bool
 
 const (
-	CertificatePackResponseCollectionSuccessTrue CertificatePackResponseCollectionSuccess = true
-)
-
-type CertificatePackResponseSingle struct {
-	Errors   []CertificatePackResponseSingleError   `json:"errors"`
-	Messages []CertificatePackResponseSingleMessage `json:"messages"`
-	Result   interface{}                            `json:"result"`
-	// Whether the API call was successful
-	Success CertificatePackResponseSingleSuccess `json:"success"`
-	JSON    certificatePackResponseSingleJSON    `json:"-"`
-}
-
-// certificatePackResponseSingleJSON contains the JSON metadata for the struct
-// [CertificatePackResponseSingle]
-type certificatePackResponseSingleJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificatePackResponseSingle) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CertificatePackResponseSingleError struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    certificatePackResponseSingleErrorJSON `json:"-"`
-}
-
-// certificatePackResponseSingleErrorJSON contains the JSON metadata for the struct
-// [CertificatePackResponseSingleError]
-type certificatePackResponseSingleErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificatePackResponseSingleError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CertificatePackResponseSingleMessage struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    certificatePackResponseSingleMessageJSON `json:"-"`
-}
-
-// certificatePackResponseSingleMessageJSON contains the JSON metadata for the
-// struct [CertificatePackResponseSingleMessage]
-type certificatePackResponseSingleMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificatePackResponseSingleMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type CertificatePackResponseSingleSuccess bool
-
-const (
-	CertificatePackResponseSingleSuccessTrue CertificatePackResponseSingleSuccess = true
-)
-
-type DeleteAdvancedCertificatePackResponseSingleNs3TjUge struct {
-	Errors   []DeleteAdvancedCertificatePackResponseSingleNs3TjUgeError   `json:"errors"`
-	Messages []DeleteAdvancedCertificatePackResponseSingleNs3TjUgeMessage `json:"messages"`
-	Result   DeleteAdvancedCertificatePackResponseSingleNs3TjUgeResult    `json:"result"`
-	// Whether the API call was successful
-	Success DeleteAdvancedCertificatePackResponseSingleNs3TjUgeSuccess `json:"success"`
-	JSON    deleteAdvancedCertificatePackResponseSingleNs3TjUgeJSON    `json:"-"`
-}
-
-// deleteAdvancedCertificatePackResponseSingleNs3TjUgeJSON contains the JSON
-// metadata for the struct [DeleteAdvancedCertificatePackResponseSingleNs3TjUge]
-type deleteAdvancedCertificatePackResponseSingleNs3TjUgeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeleteAdvancedCertificatePackResponseSingleNs3TjUge) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DeleteAdvancedCertificatePackResponseSingleNs3TjUgeError struct {
-	Code    int64                                                        `json:"code,required"`
-	Message string                                                       `json:"message,required"`
-	JSON    deleteAdvancedCertificatePackResponseSingleNs3TjUgeErrorJSON `json:"-"`
-}
-
-// deleteAdvancedCertificatePackResponseSingleNs3TjUgeErrorJSON contains the JSON
-// metadata for the struct
-// [DeleteAdvancedCertificatePackResponseSingleNs3TjUgeError]
-type deleteAdvancedCertificatePackResponseSingleNs3TjUgeErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeleteAdvancedCertificatePackResponseSingleNs3TjUgeError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DeleteAdvancedCertificatePackResponseSingleNs3TjUgeMessage struct {
-	Code    int64                                                          `json:"code,required"`
-	Message string                                                         `json:"message,required"`
-	JSON    deleteAdvancedCertificatePackResponseSingleNs3TjUgeMessageJSON `json:"-"`
-}
-
-// deleteAdvancedCertificatePackResponseSingleNs3TjUgeMessageJSON contains the JSON
-// metadata for the struct
-// [DeleteAdvancedCertificatePackResponseSingleNs3TjUgeMessage]
-type deleteAdvancedCertificatePackResponseSingleNs3TjUgeMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeleteAdvancedCertificatePackResponseSingleNs3TjUgeMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DeleteAdvancedCertificatePackResponseSingleNs3TjUgeResult struct {
-	// Identifier
-	ID   string                                                        `json:"id"`
-	JSON deleteAdvancedCertificatePackResponseSingleNs3TjUgeResultJSON `json:"-"`
-}
-
-// deleteAdvancedCertificatePackResponseSingleNs3TjUgeResultJSON contains the JSON
-// metadata for the struct
-// [DeleteAdvancedCertificatePackResponseSingleNs3TjUgeResult]
-type deleteAdvancedCertificatePackResponseSingleNs3TjUgeResultJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeleteAdvancedCertificatePackResponseSingleNs3TjUgeResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type DeleteAdvancedCertificatePackResponseSingleNs3TjUgeSuccess bool
-
-const (
-	DeleteAdvancedCertificatePackResponseSingleNs3TjUgeSuccessTrue DeleteAdvancedCertificatePackResponseSingleNs3TjUgeSuccess = true
+	ZoneSslCertificatePackCertificatePacksListCertificatePacksResponseSuccessTrue ZoneSslCertificatePackCertificatePacksListCertificatePacksResponseSuccess = true
 )
 
 type ZoneSslCertificatePackCertificatePacksListCertificatePacksParams struct {

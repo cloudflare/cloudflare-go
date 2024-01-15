@@ -35,7 +35,7 @@ func NewAccountMtlsCertificateService(opts ...option.RequestOption) (r *AccountM
 }
 
 // Fetches a single mTLS certificate.
-func (r *AccountMtlsCertificateService) Get(ctx context.Context, accountIdentifier string, identifier string, opts ...option.RequestOption) (res *MtlsManagementCertificateResponseSingle, err error) {
+func (r *AccountMtlsCertificateService) Get(ctx context.Context, accountIdentifier string, identifier string, opts ...option.RequestOption) (res *AccountMtlsCertificateGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/mtls_certificates/%s", accountIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -44,7 +44,7 @@ func (r *AccountMtlsCertificateService) Get(ctx context.Context, accountIdentifi
 
 // Deletes the mTLS certificate unless the certificate is in use by one or more
 // Cloudflare services.
-func (r *AccountMtlsCertificateService) Delete(ctx context.Context, accountIdentifier string, identifier string, opts ...option.RequestOption) (res *MtlsManagementCertificateResponseSingle, err error) {
+func (r *AccountMtlsCertificateService) Delete(ctx context.Context, accountIdentifier string, identifier string, opts ...option.RequestOption) (res *AccountMtlsCertificateDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/mtls_certificates/%s", accountIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -52,7 +52,7 @@ func (r *AccountMtlsCertificateService) Delete(ctx context.Context, accountIdent
 }
 
 // Lists all mTLS certificates.
-func (r *AccountMtlsCertificateService) MTlsCertificateManagementListMTlsCertificates(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *MtlsManagementCertificateResponseCollection, err error) {
+func (r *AccountMtlsCertificateService) MTlsCertificateManagementListMTlsCertificates(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *AccountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/mtls_certificates", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -60,25 +60,25 @@ func (r *AccountMtlsCertificateService) MTlsCertificateManagementListMTlsCertifi
 }
 
 // Upload a certificate that you want to use with mTLS-enabled Cloudflare services.
-func (r *AccountMtlsCertificateService) MTlsCertificateManagementUploadMTlsCertificate(ctx context.Context, accountIdentifier string, body AccountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateParams, opts ...option.RequestOption) (res *CertificateResponseSinglePost, err error) {
+func (r *AccountMtlsCertificateService) MTlsCertificateManagementUploadMTlsCertificate(ctx context.Context, accountIdentifier string, body AccountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateParams, opts ...option.RequestOption) (res *AccountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/mtls_certificates", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
-type CertificateResponseSinglePost struct {
-	Errors   []CertificateResponseSinglePostError   `json:"errors"`
-	Messages []CertificateResponseSinglePostMessage `json:"messages"`
-	Result   CertificateResponseSinglePostResult    `json:"result"`
+type AccountMtlsCertificateGetResponse struct {
+	Errors   []AccountMtlsCertificateGetResponseError   `json:"errors"`
+	Messages []AccountMtlsCertificateGetResponseMessage `json:"messages"`
+	Result   AccountMtlsCertificateGetResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success CertificateResponseSinglePostSuccess `json:"success"`
-	JSON    certificateResponseSinglePostJSON    `json:"-"`
+	Success AccountMtlsCertificateGetResponseSuccess `json:"success"`
+	JSON    accountMtlsCertificateGetResponseJSON    `json:"-"`
 }
 
-// certificateResponseSinglePostJSON contains the JSON metadata for the struct
-// [CertificateResponseSinglePost]
-type certificateResponseSinglePostJSON struct {
+// accountMtlsCertificateGetResponseJSON contains the JSON metadata for the struct
+// [AccountMtlsCertificateGetResponse]
+type accountMtlsCertificateGetResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -87,49 +87,417 @@ type certificateResponseSinglePostJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CertificateResponseSinglePost) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMtlsCertificateGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CertificateResponseSinglePostError struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    certificateResponseSinglePostErrorJSON `json:"-"`
+type AccountMtlsCertificateGetResponseError struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    accountMtlsCertificateGetResponseErrorJSON `json:"-"`
 }
 
-// certificateResponseSinglePostErrorJSON contains the JSON metadata for the struct
-// [CertificateResponseSinglePostError]
-type certificateResponseSinglePostErrorJSON struct {
+// accountMtlsCertificateGetResponseErrorJSON contains the JSON metadata for the
+// struct [AccountMtlsCertificateGetResponseError]
+type accountMtlsCertificateGetResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CertificateResponseSinglePostError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMtlsCertificateGetResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CertificateResponseSinglePostMessage struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    certificateResponseSinglePostMessageJSON `json:"-"`
+type AccountMtlsCertificateGetResponseMessage struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    accountMtlsCertificateGetResponseMessageJSON `json:"-"`
 }
 
-// certificateResponseSinglePostMessageJSON contains the JSON metadata for the
-// struct [CertificateResponseSinglePostMessage]
-type certificateResponseSinglePostMessageJSON struct {
+// accountMtlsCertificateGetResponseMessageJSON contains the JSON metadata for the
+// struct [AccountMtlsCertificateGetResponseMessage]
+type accountMtlsCertificateGetResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CertificateResponseSinglePostMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMtlsCertificateGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CertificateResponseSinglePostResult struct {
+type AccountMtlsCertificateGetResponseResult struct {
+	// Identifier
+	ID string `json:"id"`
+	// Indicates whether the certificate is a CA or leaf certificate.
+	Ca bool `json:"ca"`
+	// The uploaded root CA certificate.
+	Certificates string `json:"certificates"`
+	// When the certificate expires.
+	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	// The certificate authority that issued the certificate.
+	Issuer string `json:"issuer"`
+	// Optional unique name for the certificate. Only used for human readability.
+	Name string `json:"name"`
+	// The certificate serial number.
+	SerialNumber string `json:"serial_number"`
+	// The type of hash used for the certificate.
+	Signature string `json:"signature"`
+	// This is the time the certificate was uploaded.
+	UploadedOn time.Time                                   `json:"uploaded_on" format:"date-time"`
+	JSON       accountMtlsCertificateGetResponseResultJSON `json:"-"`
+}
+
+// accountMtlsCertificateGetResponseResultJSON contains the JSON metadata for the
+// struct [AccountMtlsCertificateGetResponseResult]
+type accountMtlsCertificateGetResponseResultJSON struct {
+	ID           apijson.Field
+	Ca           apijson.Field
+	Certificates apijson.Field
+	ExpiresOn    apijson.Field
+	Issuer       apijson.Field
+	Name         apijson.Field
+	SerialNumber apijson.Field
+	Signature    apijson.Field
+	UploadedOn   apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccountMtlsCertificateGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountMtlsCertificateGetResponseSuccess bool
+
+const (
+	AccountMtlsCertificateGetResponseSuccessTrue AccountMtlsCertificateGetResponseSuccess = true
+)
+
+type AccountMtlsCertificateDeleteResponse struct {
+	Errors   []AccountMtlsCertificateDeleteResponseError   `json:"errors"`
+	Messages []AccountMtlsCertificateDeleteResponseMessage `json:"messages"`
+	Result   AccountMtlsCertificateDeleteResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountMtlsCertificateDeleteResponseSuccess `json:"success"`
+	JSON    accountMtlsCertificateDeleteResponseJSON    `json:"-"`
+}
+
+// accountMtlsCertificateDeleteResponseJSON contains the JSON metadata for the
+// struct [AccountMtlsCertificateDeleteResponse]
+type accountMtlsCertificateDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMtlsCertificateDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountMtlsCertificateDeleteResponseError struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    accountMtlsCertificateDeleteResponseErrorJSON `json:"-"`
+}
+
+// accountMtlsCertificateDeleteResponseErrorJSON contains the JSON metadata for the
+// struct [AccountMtlsCertificateDeleteResponseError]
+type accountMtlsCertificateDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMtlsCertificateDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountMtlsCertificateDeleteResponseMessage struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    accountMtlsCertificateDeleteResponseMessageJSON `json:"-"`
+}
+
+// accountMtlsCertificateDeleteResponseMessageJSON contains the JSON metadata for
+// the struct [AccountMtlsCertificateDeleteResponseMessage]
+type accountMtlsCertificateDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMtlsCertificateDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountMtlsCertificateDeleteResponseResult struct {
+	// Identifier
+	ID string `json:"id"`
+	// Indicates whether the certificate is a CA or leaf certificate.
+	Ca bool `json:"ca"`
+	// The uploaded root CA certificate.
+	Certificates string `json:"certificates"`
+	// When the certificate expires.
+	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	// The certificate authority that issued the certificate.
+	Issuer string `json:"issuer"`
+	// Optional unique name for the certificate. Only used for human readability.
+	Name string `json:"name"`
+	// The certificate serial number.
+	SerialNumber string `json:"serial_number"`
+	// The type of hash used for the certificate.
+	Signature string `json:"signature"`
+	// This is the time the certificate was uploaded.
+	UploadedOn time.Time                                      `json:"uploaded_on" format:"date-time"`
+	JSON       accountMtlsCertificateDeleteResponseResultJSON `json:"-"`
+}
+
+// accountMtlsCertificateDeleteResponseResultJSON contains the JSON metadata for
+// the struct [AccountMtlsCertificateDeleteResponseResult]
+type accountMtlsCertificateDeleteResponseResultJSON struct {
+	ID           apijson.Field
+	Ca           apijson.Field
+	Certificates apijson.Field
+	ExpiresOn    apijson.Field
+	Issuer       apijson.Field
+	Name         apijson.Field
+	SerialNumber apijson.Field
+	Signature    apijson.Field
+	UploadedOn   apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccountMtlsCertificateDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountMtlsCertificateDeleteResponseSuccess bool
+
+const (
+	AccountMtlsCertificateDeleteResponseSuccessTrue AccountMtlsCertificateDeleteResponseSuccess = true
+)
+
+type AccountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponse struct {
+	Errors     []AccountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseError    `json:"errors"`
+	Messages   []AccountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseMessage  `json:"messages"`
+	Result     []AccountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseResult   `json:"result"`
+	ResultInfo AccountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success AccountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseSuccess `json:"success"`
+	JSON    accountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseJSON    `json:"-"`
+}
+
+// accountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseJSON
+// contains the JSON metadata for the struct
+// [AccountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponse]
+type accountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseError struct {
+	Code    int64                                                                                `json:"code,required"`
+	Message string                                                                               `json:"message,required"`
+	JSON    accountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseErrorJSON `json:"-"`
+}
+
+// accountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseError]
+type accountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseMessage struct {
+	Code    int64                                                                                  `json:"code,required"`
+	Message string                                                                                 `json:"message,required"`
+	JSON    accountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseMessageJSON `json:"-"`
+}
+
+// accountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseMessage]
+type accountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseResult struct {
+	// Identifier
+	ID string `json:"id"`
+	// Indicates whether the certificate is a CA or leaf certificate.
+	Ca bool `json:"ca"`
+	// The uploaded root CA certificate.
+	Certificates string `json:"certificates"`
+	// When the certificate expires.
+	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	// The certificate authority that issued the certificate.
+	Issuer string `json:"issuer"`
+	// Optional unique name for the certificate. Only used for human readability.
+	Name string `json:"name"`
+	// The certificate serial number.
+	SerialNumber string `json:"serial_number"`
+	// The type of hash used for the certificate.
+	Signature string `json:"signature"`
+	// This is the time the certificate was uploaded.
+	UploadedOn time.Time                                                                             `json:"uploaded_on" format:"date-time"`
+	JSON       accountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseResultJSON `json:"-"`
+}
+
+// accountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseResult]
+type accountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseResultJSON struct {
+	ID           apijson.Field
+	Ca           apijson.Field
+	Certificates apijson.Field
+	ExpiresOn    apijson.Field
+	Issuer       apijson.Field
+	Name         apijson.Field
+	SerialNumber apijson.Field
+	Signature    apijson.Field
+	UploadedOn   apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseResultInfo struct {
+	Count      interface{}                                                                               `json:"count"`
+	Page       interface{}                                                                               `json:"page"`
+	PerPage    interface{}                                                                               `json:"per_page"`
+	TotalCount interface{}                                                                               `json:"total_count"`
+	TotalPages interface{}                                                                               `json:"total_pages"`
+	JSON       accountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseResultInfoJSON `json:"-"`
+}
+
+// accountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [AccountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseResultInfo]
+type accountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	TotalPages  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseSuccess bool
+
+const (
+	AccountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseSuccessTrue AccountMtlsCertificateMTlsCertificateManagementListMTlsCertificatesResponseSuccess = true
+)
+
+type AccountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponse struct {
+	Errors   []AccountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseError   `json:"errors"`
+	Messages []AccountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseMessage `json:"messages"`
+	Result   AccountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseSuccess `json:"success"`
+	JSON    accountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseJSON    `json:"-"`
+}
+
+// accountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseJSON
+// contains the JSON metadata for the struct
+// [AccountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponse]
+type accountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseError struct {
+	Code    int64                                                                                 `json:"code,required"`
+	Message string                                                                                `json:"message,required"`
+	JSON    accountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseErrorJSON `json:"-"`
+}
+
+// accountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseError]
+type accountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseMessage struct {
+	Code    int64                                                                                   `json:"code,required"`
+	Message string                                                                                  `json:"message,required"`
+	JSON    accountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseMessageJSON `json:"-"`
+}
+
+// accountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseMessage]
+type accountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseResult struct {
 	// Identifier
 	ID string `json:"id"`
 	// Indicates whether the certificate is a CA or leaf certificate.
@@ -149,13 +517,14 @@ type CertificateResponseSinglePostResult struct {
 	// This is the time the certificate was updated.
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	// This is the time the certificate was uploaded.
-	UploadedOn time.Time                               `json:"uploaded_on" format:"date-time"`
-	JSON       certificateResponseSinglePostResultJSON `json:"-"`
+	UploadedOn time.Time                                                                              `json:"uploaded_on" format:"date-time"`
+	JSON       accountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseResultJSON `json:"-"`
 }
 
-// certificateResponseSinglePostResultJSON contains the JSON metadata for the
-// struct [CertificateResponseSinglePostResult]
-type certificateResponseSinglePostResultJSON struct {
+// accountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseResult]
+type accountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseResultJSON struct {
 	ID           apijson.Field
 	Ca           apijson.Field
 	Certificates apijson.Field
@@ -170,264 +539,15 @@ type certificateResponseSinglePostResultJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *CertificateResponseSinglePostResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type CertificateResponseSinglePostSuccess bool
+type AccountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseSuccess bool
 
 const (
-	CertificateResponseSinglePostSuccessTrue CertificateResponseSinglePostSuccess = true
-)
-
-type MtlsManagementCertificateResponseCollection struct {
-	Errors     []MtlsManagementCertificateResponseCollectionError    `json:"errors"`
-	Messages   []MtlsManagementCertificateResponseCollectionMessage  `json:"messages"`
-	Result     []MtlsManagementCertificateResponseCollectionResult   `json:"result"`
-	ResultInfo MtlsManagementCertificateResponseCollectionResultInfo `json:"result_info"`
-	// Whether the API call was successful
-	Success MtlsManagementCertificateResponseCollectionSuccess `json:"success"`
-	JSON    mtlsManagementCertificateResponseCollectionJSON    `json:"-"`
-}
-
-// mtlsManagementCertificateResponseCollectionJSON contains the JSON metadata for
-// the struct [MtlsManagementCertificateResponseCollection]
-type mtlsManagementCertificateResponseCollectionJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MtlsManagementCertificateResponseCollection) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MtlsManagementCertificateResponseCollectionError struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    mtlsManagementCertificateResponseCollectionErrorJSON `json:"-"`
-}
-
-// mtlsManagementCertificateResponseCollectionErrorJSON contains the JSON metadata
-// for the struct [MtlsManagementCertificateResponseCollectionError]
-type mtlsManagementCertificateResponseCollectionErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MtlsManagementCertificateResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MtlsManagementCertificateResponseCollectionMessage struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    mtlsManagementCertificateResponseCollectionMessageJSON `json:"-"`
-}
-
-// mtlsManagementCertificateResponseCollectionMessageJSON contains the JSON
-// metadata for the struct [MtlsManagementCertificateResponseCollectionMessage]
-type mtlsManagementCertificateResponseCollectionMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MtlsManagementCertificateResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MtlsManagementCertificateResponseCollectionResult struct {
-	// Identifier
-	ID string `json:"id"`
-	// Indicates whether the certificate is a CA or leaf certificate.
-	Ca bool `json:"ca"`
-	// The uploaded root CA certificate.
-	Certificates string `json:"certificates"`
-	// When the certificate expires.
-	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
-	// The certificate authority that issued the certificate.
-	Issuer string `json:"issuer"`
-	// Optional unique name for the certificate. Only used for human readability.
-	Name string `json:"name"`
-	// The certificate serial number.
-	SerialNumber string `json:"serial_number"`
-	// The type of hash used for the certificate.
-	Signature string `json:"signature"`
-	// This is the time the certificate was uploaded.
-	UploadedOn time.Time                                             `json:"uploaded_on" format:"date-time"`
-	JSON       mtlsManagementCertificateResponseCollectionResultJSON `json:"-"`
-}
-
-// mtlsManagementCertificateResponseCollectionResultJSON contains the JSON metadata
-// for the struct [MtlsManagementCertificateResponseCollectionResult]
-type mtlsManagementCertificateResponseCollectionResultJSON struct {
-	ID           apijson.Field
-	Ca           apijson.Field
-	Certificates apijson.Field
-	ExpiresOn    apijson.Field
-	Issuer       apijson.Field
-	Name         apijson.Field
-	SerialNumber apijson.Field
-	Signature    apijson.Field
-	UploadedOn   apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *MtlsManagementCertificateResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MtlsManagementCertificateResponseCollectionResultInfo struct {
-	Count      interface{}                                               `json:"count"`
-	Page       interface{}                                               `json:"page"`
-	PerPage    interface{}                                               `json:"per_page"`
-	TotalCount interface{}                                               `json:"total_count"`
-	TotalPages interface{}                                               `json:"total_pages"`
-	JSON       mtlsManagementCertificateResponseCollectionResultInfoJSON `json:"-"`
-}
-
-// mtlsManagementCertificateResponseCollectionResultInfoJSON contains the JSON
-// metadata for the struct [MtlsManagementCertificateResponseCollectionResultInfo]
-type mtlsManagementCertificateResponseCollectionResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	TotalPages  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MtlsManagementCertificateResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type MtlsManagementCertificateResponseCollectionSuccess bool
-
-const (
-	MtlsManagementCertificateResponseCollectionSuccessTrue MtlsManagementCertificateResponseCollectionSuccess = true
-)
-
-type MtlsManagementCertificateResponseSingle struct {
-	Errors   []MtlsManagementCertificateResponseSingleError   `json:"errors"`
-	Messages []MtlsManagementCertificateResponseSingleMessage `json:"messages"`
-	Result   MtlsManagementCertificateResponseSingleResult    `json:"result"`
-	// Whether the API call was successful
-	Success MtlsManagementCertificateResponseSingleSuccess `json:"success"`
-	JSON    mtlsManagementCertificateResponseSingleJSON    `json:"-"`
-}
-
-// mtlsManagementCertificateResponseSingleJSON contains the JSON metadata for the
-// struct [MtlsManagementCertificateResponseSingle]
-type mtlsManagementCertificateResponseSingleJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MtlsManagementCertificateResponseSingle) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MtlsManagementCertificateResponseSingleError struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    mtlsManagementCertificateResponseSingleErrorJSON `json:"-"`
-}
-
-// mtlsManagementCertificateResponseSingleErrorJSON contains the JSON metadata for
-// the struct [MtlsManagementCertificateResponseSingleError]
-type mtlsManagementCertificateResponseSingleErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MtlsManagementCertificateResponseSingleError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MtlsManagementCertificateResponseSingleMessage struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    mtlsManagementCertificateResponseSingleMessageJSON `json:"-"`
-}
-
-// mtlsManagementCertificateResponseSingleMessageJSON contains the JSON metadata
-// for the struct [MtlsManagementCertificateResponseSingleMessage]
-type mtlsManagementCertificateResponseSingleMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MtlsManagementCertificateResponseSingleMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MtlsManagementCertificateResponseSingleResult struct {
-	// Identifier
-	ID string `json:"id"`
-	// Indicates whether the certificate is a CA or leaf certificate.
-	Ca bool `json:"ca"`
-	// The uploaded root CA certificate.
-	Certificates string `json:"certificates"`
-	// When the certificate expires.
-	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
-	// The certificate authority that issued the certificate.
-	Issuer string `json:"issuer"`
-	// Optional unique name for the certificate. Only used for human readability.
-	Name string `json:"name"`
-	// The certificate serial number.
-	SerialNumber string `json:"serial_number"`
-	// The type of hash used for the certificate.
-	Signature string `json:"signature"`
-	// This is the time the certificate was uploaded.
-	UploadedOn time.Time                                         `json:"uploaded_on" format:"date-time"`
-	JSON       mtlsManagementCertificateResponseSingleResultJSON `json:"-"`
-}
-
-// mtlsManagementCertificateResponseSingleResultJSON contains the JSON metadata for
-// the struct [MtlsManagementCertificateResponseSingleResult]
-type mtlsManagementCertificateResponseSingleResultJSON struct {
-	ID           apijson.Field
-	Ca           apijson.Field
-	Certificates apijson.Field
-	ExpiresOn    apijson.Field
-	Issuer       apijson.Field
-	Name         apijson.Field
-	SerialNumber apijson.Field
-	Signature    apijson.Field
-	UploadedOn   apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *MtlsManagementCertificateResponseSingleResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type MtlsManagementCertificateResponseSingleSuccess bool
-
-const (
-	MtlsManagementCertificateResponseSingleSuccessTrue MtlsManagementCertificateResponseSingleSuccess = true
+	AccountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseSuccessTrue AccountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateResponseSuccess = true
 )
 
 type AccountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateParams struct {
@@ -435,10 +555,10 @@ type AccountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateParams 
 	Ca param.Field[bool] `json:"ca,required"`
 	// The uploaded root CA certificate.
 	Certificates param.Field[string] `json:"certificates,required"`
-	// The private key for the certificate
-	PrivateKey param.Field[string] `json:"private_key,required"`
 	// Optional unique name for the certificate. Only used for human readability.
 	Name param.Field[string] `json:"name"`
+	// The private key for the certificate
+	PrivateKey param.Field[string] `json:"private_key"`
 }
 
 func (r AccountMtlsCertificateMTlsCertificateManagementUploadMTlsCertificateParams) MarshalJSON() (data []byte, err error) {

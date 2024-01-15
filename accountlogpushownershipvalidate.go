@@ -32,25 +32,26 @@ func NewAccountLogpushOwnershipValidateService(opts ...option.RequestOption) (r 
 }
 
 // Validates ownership challenge of the destination.
-func (r *AccountLogpushOwnershipValidateService) PostAccountsAccountIdentifierLogpushOwnershipValidate(ctx context.Context, accountIdentifier string, body AccountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateParams, opts ...option.RequestOption) (res *ValidateOwnershipResponse, err error) {
+func (r *AccountLogpushOwnershipValidateService) PostAccountsAccountIdentifierLogpushOwnershipValidate(ctx context.Context, accountIdentifier string, body AccountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateParams, opts ...option.RequestOption) (res *AccountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/logpush/ownership/validate", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
-type ValidateOwnershipResponse struct {
-	Errors   []ValidateOwnershipResponseError   `json:"errors"`
-	Messages []ValidateOwnershipResponseMessage `json:"messages"`
-	Result   ValidateOwnershipResponseResult    `json:"result,nullable"`
+type AccountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponse struct {
+	Errors   []AccountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseError   `json:"errors"`
+	Messages []AccountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseMessage `json:"messages"`
+	Result   AccountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseResult    `json:"result,nullable"`
 	// Whether the API call was successful
-	Success ValidateOwnershipResponseSuccess `json:"success"`
-	JSON    validateOwnershipResponseJSON    `json:"-"`
+	Success AccountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseSuccess `json:"success"`
+	JSON    accountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseJSON    `json:"-"`
 }
 
-// validateOwnershipResponseJSON contains the JSON metadata for the struct
-// [ValidateOwnershipResponse]
-type validateOwnershipResponseJSON struct {
+// accountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseJSON
+// contains the JSON metadata for the struct
+// [AccountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponse]
+type accountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -59,70 +60,73 @@ type validateOwnershipResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ValidateOwnershipResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ValidateOwnershipResponseError struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    validateOwnershipResponseErrorJSON `json:"-"`
+type AccountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseError struct {
+	Code    int64                                                                                                 `json:"code,required"`
+	Message string                                                                                                `json:"message,required"`
+	JSON    accountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseErrorJSON `json:"-"`
 }
 
-// validateOwnershipResponseErrorJSON contains the JSON metadata for the struct
-// [ValidateOwnershipResponseError]
-type validateOwnershipResponseErrorJSON struct {
+// accountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseError]
+type accountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ValidateOwnershipResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ValidateOwnershipResponseMessage struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    validateOwnershipResponseMessageJSON `json:"-"`
+type AccountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseMessage struct {
+	Code    int64                                                                                                   `json:"code,required"`
+	Message string                                                                                                  `json:"message,required"`
+	JSON    accountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseMessageJSON `json:"-"`
 }
 
-// validateOwnershipResponseMessageJSON contains the JSON metadata for the struct
-// [ValidateOwnershipResponseMessage]
-type validateOwnershipResponseMessageJSON struct {
+// accountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseMessage]
+type accountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ValidateOwnershipResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ValidateOwnershipResponseResult struct {
-	Valid bool                                `json:"valid"`
-	JSON  validateOwnershipResponseResultJSON `json:"-"`
+type AccountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseResult struct {
+	Valid bool                                                                                                   `json:"valid"`
+	JSON  accountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseResultJSON `json:"-"`
 }
 
-// validateOwnershipResponseResultJSON contains the JSON metadata for the struct
-// [ValidateOwnershipResponseResult]
-type validateOwnershipResponseResultJSON struct {
+// accountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseResult]
+type accountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseResultJSON struct {
 	Valid       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ValidateOwnershipResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type ValidateOwnershipResponseSuccess bool
+type AccountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseSuccess bool
 
 const (
-	ValidateOwnershipResponseSuccessTrue ValidateOwnershipResponseSuccess = true
+	AccountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseSuccessTrue AccountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateResponseSuccess = true
 )
 
 type AccountLogpushOwnershipValidatePostAccountsAccountIdentifierLogpushOwnershipValidateParams struct {

@@ -15,6 +15,7 @@ type AccountAccessService struct {
 	Options           []option.RequestOption
 	Bookmarks         *AccountAccessBookmarkService
 	Certificates      *AccountAccessCertificateService
+	CustomPages       *AccountAccessCustomPageService
 	Groups            *AccountAccessGroupService
 	IdentityProviders *AccountAccessIdentityProviderService
 	Keys              *AccountAccessKeyService
@@ -22,6 +23,7 @@ type AccountAccessService struct {
 	Organizations     *AccountAccessOrganizationService
 	Seats             *AccountAccessSeatService
 	ServiceTokens     *AccountAccessServiceTokenService
+	Tags              *AccountAccessTagService
 	Users             *AccountAccessUserService
 }
 
@@ -33,6 +35,7 @@ func NewAccountAccessService(opts ...option.RequestOption) (r *AccountAccessServ
 	r.Options = opts
 	r.Bookmarks = NewAccountAccessBookmarkService(opts...)
 	r.Certificates = NewAccountAccessCertificateService(opts...)
+	r.CustomPages = NewAccountAccessCustomPageService(opts...)
 	r.Groups = NewAccountAccessGroupService(opts...)
 	r.IdentityProviders = NewAccountAccessIdentityProviderService(opts...)
 	r.Keys = NewAccountAccessKeyService(opts...)
@@ -40,6 +43,7 @@ func NewAccountAccessService(opts ...option.RequestOption) (r *AccountAccessServ
 	r.Organizations = NewAccountAccessOrganizationService(opts...)
 	r.Seats = NewAccountAccessSeatService(opts...)
 	r.ServiceTokens = NewAccountAccessServiceTokenService(opts...)
+	r.Tags = NewAccountAccessTagService(opts...)
 	r.Users = NewAccountAccessUserService(opts...)
 	return
 }

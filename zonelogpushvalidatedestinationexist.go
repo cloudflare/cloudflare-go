@@ -33,12 +33,102 @@ func NewZoneLogpushValidateDestinationExistService(opts ...option.RequestOption)
 }
 
 // Checks if there is an existing job with a destination.
-func (r *ZoneLogpushValidateDestinationExistService) PostZonesZoneIdentifierLogpushValidateDestinationExists(ctx context.Context, zoneIdentifier string, body ZoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsParams, opts ...option.RequestOption) (res *DestinationExistsResponse, err error) {
+func (r *ZoneLogpushValidateDestinationExistService) PostZonesZoneIdentifierLogpushValidateDestinationExists(ctx context.Context, zoneIdentifier string, body ZoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsParams, opts ...option.RequestOption) (res *ZoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/logpush/validate/destination/exists", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
+
+type ZoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponse struct {
+	Errors   []ZoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseError   `json:"errors"`
+	Messages []ZoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseMessage `json:"messages"`
+	Result   ZoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseResult    `json:"result,nullable"`
+	// Whether the API call was successful
+	Success ZoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseSuccess `json:"success"`
+	JSON    zoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseJSON    `json:"-"`
+}
+
+// zoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponse]
+type zoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseError struct {
+	Code    int64                                                                                                       `json:"code,required"`
+	Message string                                                                                                      `json:"message,required"`
+	JSON    zoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseErrorJSON `json:"-"`
+}
+
+// zoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseError]
+type zoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseMessage struct {
+	Code    int64                                                                                                         `json:"code,required"`
+	Message string                                                                                                        `json:"message,required"`
+	JSON    zoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseMessageJSON `json:"-"`
+}
+
+// zoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseMessage]
+type zoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseResult struct {
+	Exists bool                                                                                                         `json:"exists"`
+	JSON   zoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseResultJSON `json:"-"`
+}
+
+// zoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseResultJSON
+// contains the JSON metadata for the struct
+// [ZoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseResult]
+type zoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseResultJSON struct {
+	Exists      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseSuccess bool
+
+const (
+	ZoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseSuccessTrue ZoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsResponseSuccess = true
+)
 
 type ZoneLogpushValidateDestinationExistPostZonesZoneIdentifierLogpushValidateDestinationExistsParams struct {
 	// Uniquely identifies a resource (such as an s3 bucket) where data will be pushed.

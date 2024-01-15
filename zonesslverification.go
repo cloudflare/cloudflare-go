@@ -37,7 +37,7 @@ func NewZoneSslVerificationService(opts ...option.RequestOption) (r *ZoneSslVeri
 // an immediate validation check on any certificate, and return the updated status.
 // If a validation method is provided, the validation will be immediately attempted
 // using that method.
-func (r *ZoneSslVerificationService) Update(ctx context.Context, zoneIdentifier string, certPackUuid string, body ZoneSslVerificationUpdateParams, opts ...option.RequestOption) (res *SslValidationMethodResponseCollection, err error) {
+func (r *ZoneSslVerificationService) Update(ctx context.Context, zoneIdentifier string, certPackUuid string, body ZoneSslVerificationUpdateParams, opts ...option.RequestOption) (res *ZoneSslVerificationUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/ssl/verification/%s", zoneIdentifier, certPackUuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
@@ -45,25 +45,25 @@ func (r *ZoneSslVerificationService) Update(ctx context.Context, zoneIdentifier 
 }
 
 // Get SSL Verification Info for a Zone.
-func (r *ZoneSslVerificationService) SslVerificationSslVerificationDetails(ctx context.Context, zoneIdentifier string, query ZoneSslVerificationSslVerificationSslVerificationDetailsParams, opts ...option.RequestOption) (res *SslVerificationResponseCollection, err error) {
+func (r *ZoneSslVerificationService) SslVerificationSslVerificationDetails(ctx context.Context, zoneIdentifier string, query ZoneSslVerificationSslVerificationSslVerificationDetailsParams, opts ...option.RequestOption) (res *ZoneSslVerificationSslVerificationSslVerificationDetailsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/ssl/verification", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
-type SslValidationMethodResponseCollection struct {
-	Errors   []SslValidationMethodResponseCollectionError   `json:"errors"`
-	Messages []SslValidationMethodResponseCollectionMessage `json:"messages"`
-	Result   SslValidationMethodResponseCollectionResult    `json:"result"`
+type ZoneSslVerificationUpdateResponse struct {
+	Errors   []ZoneSslVerificationUpdateResponseError   `json:"errors"`
+	Messages []ZoneSslVerificationUpdateResponseMessage `json:"messages"`
+	Result   ZoneSslVerificationUpdateResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success SslValidationMethodResponseCollectionSuccess `json:"success"`
-	JSON    sslValidationMethodResponseCollectionJSON    `json:"-"`
+	Success ZoneSslVerificationUpdateResponseSuccess `json:"success"`
+	JSON    zoneSslVerificationUpdateResponseJSON    `json:"-"`
 }
 
-// sslValidationMethodResponseCollectionJSON contains the JSON metadata for the
-// struct [SslValidationMethodResponseCollection]
-type sslValidationMethodResponseCollectionJSON struct {
+// zoneSslVerificationUpdateResponseJSON contains the JSON metadata for the struct
+// [ZoneSslVerificationUpdateResponse]
+type zoneSslVerificationUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -72,127 +72,129 @@ type sslValidationMethodResponseCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SslValidationMethodResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSslVerificationUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SslValidationMethodResponseCollectionError struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    sslValidationMethodResponseCollectionErrorJSON `json:"-"`
+type ZoneSslVerificationUpdateResponseError struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    zoneSslVerificationUpdateResponseErrorJSON `json:"-"`
 }
 
-// sslValidationMethodResponseCollectionErrorJSON contains the JSON metadata for
-// the struct [SslValidationMethodResponseCollectionError]
-type sslValidationMethodResponseCollectionErrorJSON struct {
+// zoneSslVerificationUpdateResponseErrorJSON contains the JSON metadata for the
+// struct [ZoneSslVerificationUpdateResponseError]
+type zoneSslVerificationUpdateResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SslValidationMethodResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSslVerificationUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SslValidationMethodResponseCollectionMessage struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    sslValidationMethodResponseCollectionMessageJSON `json:"-"`
+type ZoneSslVerificationUpdateResponseMessage struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    zoneSslVerificationUpdateResponseMessageJSON `json:"-"`
 }
 
-// sslValidationMethodResponseCollectionMessageJSON contains the JSON metadata for
-// the struct [SslValidationMethodResponseCollectionMessage]
-type sslValidationMethodResponseCollectionMessageJSON struct {
+// zoneSslVerificationUpdateResponseMessageJSON contains the JSON metadata for the
+// struct [ZoneSslVerificationUpdateResponseMessage]
+type zoneSslVerificationUpdateResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SslValidationMethodResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSslVerificationUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SslValidationMethodResponseCollectionResult struct {
+type ZoneSslVerificationUpdateResponseResult struct {
 	// Result status.
 	Status string `json:"status"`
 	// Desired validation method.
-	ValidationMethod SslValidationMethodResponseCollectionResultValidationMethod `json:"validation_method"`
-	JSON             sslValidationMethodResponseCollectionResultJSON             `json:"-"`
+	ValidationMethod ZoneSslVerificationUpdateResponseResultValidationMethod `json:"validation_method"`
+	JSON             zoneSslVerificationUpdateResponseResultJSON             `json:"-"`
 }
 
-// sslValidationMethodResponseCollectionResultJSON contains the JSON metadata for
-// the struct [SslValidationMethodResponseCollectionResult]
-type sslValidationMethodResponseCollectionResultJSON struct {
+// zoneSslVerificationUpdateResponseResultJSON contains the JSON metadata for the
+// struct [ZoneSslVerificationUpdateResponseResult]
+type zoneSslVerificationUpdateResponseResultJSON struct {
 	Status           apijson.Field
 	ValidationMethod apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *SslValidationMethodResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSslVerificationUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Desired validation method.
-type SslValidationMethodResponseCollectionResultValidationMethod string
+type ZoneSslVerificationUpdateResponseResultValidationMethod string
 
 const (
-	SslValidationMethodResponseCollectionResultValidationMethodHTTP  SslValidationMethodResponseCollectionResultValidationMethod = "http"
-	SslValidationMethodResponseCollectionResultValidationMethodCname SslValidationMethodResponseCollectionResultValidationMethod = "cname"
-	SslValidationMethodResponseCollectionResultValidationMethodTxt   SslValidationMethodResponseCollectionResultValidationMethod = "txt"
-	SslValidationMethodResponseCollectionResultValidationMethodEmail SslValidationMethodResponseCollectionResultValidationMethod = "email"
+	ZoneSslVerificationUpdateResponseResultValidationMethodHTTP  ZoneSslVerificationUpdateResponseResultValidationMethod = "http"
+	ZoneSslVerificationUpdateResponseResultValidationMethodCname ZoneSslVerificationUpdateResponseResultValidationMethod = "cname"
+	ZoneSslVerificationUpdateResponseResultValidationMethodTxt   ZoneSslVerificationUpdateResponseResultValidationMethod = "txt"
+	ZoneSslVerificationUpdateResponseResultValidationMethodEmail ZoneSslVerificationUpdateResponseResultValidationMethod = "email"
 )
 
 // Whether the API call was successful
-type SslValidationMethodResponseCollectionSuccess bool
+type ZoneSslVerificationUpdateResponseSuccess bool
 
 const (
-	SslValidationMethodResponseCollectionSuccessTrue SslValidationMethodResponseCollectionSuccess = true
+	ZoneSslVerificationUpdateResponseSuccessTrue ZoneSslVerificationUpdateResponseSuccess = true
 )
 
-type SslVerificationResponseCollection struct {
-	Result []SslVerificationResponseCollectionResult `json:"result"`
-	JSON   sslVerificationResponseCollectionJSON     `json:"-"`
+type ZoneSslVerificationSslVerificationSslVerificationDetailsResponse struct {
+	Result []ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResult `json:"result"`
+	JSON   zoneSslVerificationSslVerificationSslVerificationDetailsResponseJSON     `json:"-"`
 }
 
-// sslVerificationResponseCollectionJSON contains the JSON metadata for the struct
-// [SslVerificationResponseCollection]
-type sslVerificationResponseCollectionJSON struct {
+// zoneSslVerificationSslVerificationSslVerificationDetailsResponseJSON contains
+// the JSON metadata for the struct
+// [ZoneSslVerificationSslVerificationSslVerificationDetailsResponse]
+type zoneSslVerificationSslVerificationSslVerificationDetailsResponseJSON struct {
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SslVerificationResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSslVerificationSslVerificationSslVerificationDetailsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SslVerificationResponseCollectionResult struct {
+type ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResult struct {
 	// Current status of certificate.
-	CertificateStatus SslVerificationResponseCollectionResultCertificateStatus `json:"certificate_status,required"`
+	CertificateStatus ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultCertificateStatus `json:"certificate_status,required"`
 	// Certificate Authority is manually reviewing the order.
 	BrandCheck bool `json:"brand_check"`
 	// Certificate Pack UUID.
 	CertPackUuid string `json:"cert_pack_uuid"`
 	// Certificate's signature algorithm.
-	Signature SslVerificationResponseCollectionResultSignature `json:"signature"`
+	Signature ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultSignature `json:"signature"`
 	// Validation method in use for a certificate pack order.
-	ValidationMethod SslVerificationResponseCollectionResultValidationMethod `json:"validation_method"`
+	ValidationMethod ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultValidationMethod `json:"validation_method"`
 	// Certificate's required verification information.
-	VerificationInfo SslVerificationResponseCollectionResultVerificationInfo `json:"verification_info"`
+	VerificationInfo ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationInfo `json:"verification_info"`
 	// Status of the required verification information, omitted if verification status
 	// is unknown.
 	VerificationStatus bool `json:"verification_status"`
 	// Method of verification.
-	VerificationType SslVerificationResponseCollectionResultVerificationType `json:"verification_type"`
-	JSON             sslVerificationResponseCollectionResultJSON             `json:"-"`
+	VerificationType ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationType `json:"verification_type"`
+	JSON             zoneSslVerificationSslVerificationSslVerificationDetailsResponseResultJSON             `json:"-"`
 }
 
-// sslVerificationResponseCollectionResultJSON contains the JSON metadata for the
-// struct [SslVerificationResponseCollectionResult]
-type sslVerificationResponseCollectionResultJSON struct {
+// zoneSslVerificationSslVerificationSslVerificationDetailsResponseResultJSON
+// contains the JSON metadata for the struct
+// [ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResult]
+type zoneSslVerificationSslVerificationSslVerificationDetailsResponseResultJSON struct {
 	CertificateStatus  apijson.Field
 	BrandCheck         apijson.Field
 	CertPackUuid       apijson.Field
@@ -205,70 +207,90 @@ type sslVerificationResponseCollectionResultJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *SslVerificationResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Current status of certificate.
-type SslVerificationResponseCollectionResultCertificateStatus string
+type ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultCertificateStatus string
 
 const (
-	SslVerificationResponseCollectionResultCertificateStatusInitializing      SslVerificationResponseCollectionResultCertificateStatus = "initializing"
-	SslVerificationResponseCollectionResultCertificateStatusAuthorizing       SslVerificationResponseCollectionResultCertificateStatus = "authorizing"
-	SslVerificationResponseCollectionResultCertificateStatusActive            SslVerificationResponseCollectionResultCertificateStatus = "active"
-	SslVerificationResponseCollectionResultCertificateStatusExpired           SslVerificationResponseCollectionResultCertificateStatus = "expired"
-	SslVerificationResponseCollectionResultCertificateStatusIssuing           SslVerificationResponseCollectionResultCertificateStatus = "issuing"
-	SslVerificationResponseCollectionResultCertificateStatusTimingOut         SslVerificationResponseCollectionResultCertificateStatus = "timing_out"
-	SslVerificationResponseCollectionResultCertificateStatusPendingDeployment SslVerificationResponseCollectionResultCertificateStatus = "pending_deployment"
+	ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultCertificateStatusInitializing      ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultCertificateStatus = "initializing"
+	ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultCertificateStatusAuthorizing       ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultCertificateStatus = "authorizing"
+	ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultCertificateStatusActive            ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultCertificateStatus = "active"
+	ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultCertificateStatusExpired           ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultCertificateStatus = "expired"
+	ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultCertificateStatusIssuing           ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultCertificateStatus = "issuing"
+	ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultCertificateStatusTimingOut         ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultCertificateStatus = "timing_out"
+	ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultCertificateStatusPendingDeployment ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultCertificateStatus = "pending_deployment"
 )
 
 // Certificate's signature algorithm.
-type SslVerificationResponseCollectionResultSignature string
+type ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultSignature string
 
 const (
-	SslVerificationResponseCollectionResultSignatureEcdsaWithSha256 SslVerificationResponseCollectionResultSignature = "ECDSAWithSHA256"
-	SslVerificationResponseCollectionResultSignatureSha1WithRsa     SslVerificationResponseCollectionResultSignature = "SHA1WithRSA"
-	SslVerificationResponseCollectionResultSignatureSha256WithRsa   SslVerificationResponseCollectionResultSignature = "SHA256WithRSA"
+	ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultSignatureEcdsaWithSha256 ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultSignature = "ECDSAWithSHA256"
+	ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultSignatureSha1WithRsa     ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultSignature = "SHA1WithRSA"
+	ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultSignatureSha256WithRsa   ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultSignature = "SHA256WithRSA"
 )
 
 // Validation method in use for a certificate pack order.
-type SslVerificationResponseCollectionResultValidationMethod string
+type ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultValidationMethod string
 
 const (
-	SslVerificationResponseCollectionResultValidationMethodHTTP  SslVerificationResponseCollectionResultValidationMethod = "http"
-	SslVerificationResponseCollectionResultValidationMethodCname SslVerificationResponseCollectionResultValidationMethod = "cname"
-	SslVerificationResponseCollectionResultValidationMethodTxt   SslVerificationResponseCollectionResultValidationMethod = "txt"
+	ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultValidationMethodHTTP  ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultValidationMethod = "http"
+	ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultValidationMethodCname ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultValidationMethod = "cname"
+	ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultValidationMethodTxt   ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultValidationMethod = "txt"
 )
 
 // Certificate's required verification information.
-type SslVerificationResponseCollectionResultVerificationInfo struct {
+type ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationInfo struct {
 	// Name of CNAME record.
-	RecordName string `json:"record_name" format:"hostname"`
+	RecordName ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationInfoRecordName `json:"record_name"`
 	// Target of CNAME record.
-	RecordTarget string                                                      `json:"record_target" format:"hostname"`
-	JSON         sslVerificationResponseCollectionResultVerificationInfoJSON `json:"-"`
+	RecordTarget ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationInfoRecordTarget `json:"record_target"`
+	JSON         zoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationInfoJSON         `json:"-"`
 }
 
-// sslVerificationResponseCollectionResultVerificationInfoJSON contains the JSON
-// metadata for the struct
-// [SslVerificationResponseCollectionResultVerificationInfo]
-type sslVerificationResponseCollectionResultVerificationInfoJSON struct {
+// zoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationInfoJSON
+// contains the JSON metadata for the struct
+// [ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationInfo]
+type zoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationInfoJSON struct {
 	RecordName   apijson.Field
 	RecordTarget apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *SslVerificationResponseCollectionResultVerificationInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Method of verification.
-type SslVerificationResponseCollectionResultVerificationType string
+// Name of CNAME record.
+type ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationInfoRecordName string
 
 const (
-	SslVerificationResponseCollectionResultVerificationTypeCname   SslVerificationResponseCollectionResultVerificationType = "cname"
-	SslVerificationResponseCollectionResultVerificationTypeMetaTag SslVerificationResponseCollectionResultVerificationType = "meta tag"
+	ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationInfoRecordNameRecordName ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationInfoRecordName = "record_name"
+	ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationInfoRecordNameHTTPURL    ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationInfoRecordName = "http_url"
+	ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationInfoRecordNameCname      ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationInfoRecordName = "cname"
+	ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationInfoRecordNameTxtName    ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationInfoRecordName = "txt_name"
+)
+
+// Target of CNAME record.
+type ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationInfoRecordTarget string
+
+const (
+	ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationInfoRecordTargetRecordValue ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationInfoRecordTarget = "record_value"
+	ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationInfoRecordTargetHTTPBody    ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationInfoRecordTarget = "http_body"
+	ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationInfoRecordTargetCnameTarget ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationInfoRecordTarget = "cname_target"
+	ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationInfoRecordTargetTxtValue    ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationInfoRecordTarget = "txt_value"
+)
+
+// Method of verification.
+type ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationType string
+
+const (
+	ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationTypeCname   ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationType = "cname"
+	ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationTypeMetaTag ZoneSslVerificationSslVerificationSslVerificationDetailsResponseResultVerificationType = "meta tag"
 )
 
 type ZoneSslVerificationUpdateParams struct {

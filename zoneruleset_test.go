@@ -24,12 +24,14 @@ func TestZoneRulesetGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Rulesets.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"9f1839b6152d298aca64c4e906b6d074",
 		"2f2feab2026849078ba485f918791bdc",
 	)
 	if err != nil {
@@ -52,52 +54,73 @@ func TestZoneRulesetUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Rulesets.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"9f1839b6152d298aca64c4e906b6d074",
 		"2f2feab2026849078ba485f918791bdc",
 		cloudflare.ZoneRulesetUpdateParams{
-			Rules: cloudflare.F([]cloudflare.ZoneRulesetUpdateParamsRule{cloudflare.ZoneRulesetUpdateParamsRulesCreateUpdateRule(cloudflare.ZoneRulesetUpdateParamsRulesCreateUpdateRule{
-				Action: cloudflare.F("execute"),
-				ActionParameters: cloudflare.F[any](map[string]interface{}{
-					"id": "4814384a9e5d4991b9815dcfc25d2f1f",
+			ID:          cloudflare.F[any](map[string]interface{}{}),
+			Description: cloudflare.F("My ruleset to execute managed rulesets"),
+			Kind:        cloudflare.F(cloudflare.ZoneRulesetUpdateParamsKindRoot),
+			Name:        cloudflare.F("My ruleset"),
+			Phase:       cloudflare.F(cloudflare.ZoneRulesetUpdateParamsPhaseHTTPRequestFirewallCustom),
+			Rules: cloudflare.F([]cloudflare.ZoneRulesetUpdateParamsRule{cloudflare.ZoneRulesetUpdateParamsRulesOexZd8xKBlockRule(cloudflare.ZoneRulesetUpdateParamsRulesOexZd8xKBlockRule{
+				Action: cloudflare.F(cloudflare.ZoneRulesetUpdateParamsRulesOexZd8xKBlockRuleActionBlock),
+				ActionParameters: cloudflare.F(cloudflare.ZoneRulesetUpdateParamsRulesOexZd8xKBlockRuleActionParameters{
+					Response: cloudflare.F(cloudflare.ZoneRulesetUpdateParamsRulesOexZd8xKBlockRuleActionParametersResponse{
+						Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
+						ContentType: cloudflare.F("application/json"),
+						StatusCode:  cloudflare.F(int64(400)),
+					}),
 				}),
-				Description: cloudflare.F("Execute the OWASP ruleset when the IP address is not 1.1.1.1"),
-				Enabled:     cloudflare.F(true),
+				Description: cloudflare.F[any]("Block when the IP address is not 1.1.1.1"),
+				Enabled:     cloudflare.F[any](map[string]interface{}{}),
 				Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
-				Logging: cloudflare.F(cloudflare.ZoneRulesetUpdateParamsRulesCreateUpdateRuleLogging{
+				ID:          cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
+				Logging: cloudflare.F(cloudflare.ZoneRulesetUpdateParamsRulesOexZd8xKBlockRuleLogging{
 					Enabled: cloudflare.F(true),
 				}),
 				Ref: cloudflare.F("my_ref"),
-			}), cloudflare.ZoneRulesetUpdateParamsRulesCreateUpdateRule(cloudflare.ZoneRulesetUpdateParamsRulesCreateUpdateRule{
-				Action: cloudflare.F("execute"),
-				ActionParameters: cloudflare.F[any](map[string]interface{}{
-					"id": "4814384a9e5d4991b9815dcfc25d2f1f",
+			}), cloudflare.ZoneRulesetUpdateParamsRulesOexZd8xKBlockRule(cloudflare.ZoneRulesetUpdateParamsRulesOexZd8xKBlockRule{
+				Action: cloudflare.F(cloudflare.ZoneRulesetUpdateParamsRulesOexZd8xKBlockRuleActionBlock),
+				ActionParameters: cloudflare.F(cloudflare.ZoneRulesetUpdateParamsRulesOexZd8xKBlockRuleActionParameters{
+					Response: cloudflare.F(cloudflare.ZoneRulesetUpdateParamsRulesOexZd8xKBlockRuleActionParametersResponse{
+						Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
+						ContentType: cloudflare.F("application/json"),
+						StatusCode:  cloudflare.F(int64(400)),
+					}),
 				}),
-				Description: cloudflare.F("Execute the OWASP ruleset when the IP address is not 1.1.1.1"),
-				Enabled:     cloudflare.F(true),
+				Description: cloudflare.F[any]("Block when the IP address is not 1.1.1.1"),
+				Enabled:     cloudflare.F[any](map[string]interface{}{}),
 				Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
-				Logging: cloudflare.F(cloudflare.ZoneRulesetUpdateParamsRulesCreateUpdateRuleLogging{
+				ID:          cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
+				Logging: cloudflare.F(cloudflare.ZoneRulesetUpdateParamsRulesOexZd8xKBlockRuleLogging{
 					Enabled: cloudflare.F(true),
 				}),
 				Ref: cloudflare.F("my_ref"),
-			}), cloudflare.ZoneRulesetUpdateParamsRulesCreateUpdateRule(cloudflare.ZoneRulesetUpdateParamsRulesCreateUpdateRule{
-				Action: cloudflare.F("execute"),
-				ActionParameters: cloudflare.F[any](map[string]interface{}{
-					"id": "4814384a9e5d4991b9815dcfc25d2f1f",
+			}), cloudflare.ZoneRulesetUpdateParamsRulesOexZd8xKBlockRule(cloudflare.ZoneRulesetUpdateParamsRulesOexZd8xKBlockRule{
+				Action: cloudflare.F(cloudflare.ZoneRulesetUpdateParamsRulesOexZd8xKBlockRuleActionBlock),
+				ActionParameters: cloudflare.F(cloudflare.ZoneRulesetUpdateParamsRulesOexZd8xKBlockRuleActionParameters{
+					Response: cloudflare.F(cloudflare.ZoneRulesetUpdateParamsRulesOexZd8xKBlockRuleActionParametersResponse{
+						Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
+						ContentType: cloudflare.F("application/json"),
+						StatusCode:  cloudflare.F(int64(400)),
+					}),
 				}),
-				Description: cloudflare.F("Execute the OWASP ruleset when the IP address is not 1.1.1.1"),
-				Enabled:     cloudflare.F(true),
+				Description: cloudflare.F[any]("Block when the IP address is not 1.1.1.1"),
+				Enabled:     cloudflare.F[any](map[string]interface{}{}),
 				Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
-				Logging: cloudflare.F(cloudflare.ZoneRulesetUpdateParamsRulesCreateUpdateRuleLogging{
+				ID:          cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
+				Logging: cloudflare.F(cloudflare.ZoneRulesetUpdateParamsRulesOexZd8xKBlockRuleLogging{
 					Enabled: cloudflare.F(true),
 				}),
 				Ref: cloudflare.F("my_ref"),
 			})}),
-			Description: cloudflare.F("My ruleset to execute managed rulesets"),
 		},
 	)
 	if err != nil {
@@ -120,12 +143,14 @@ func TestZoneRulesetDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	err := client.Zones.Rulesets.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"9f1839b6152d298aca64c4e906b6d074",
 		"2f2feab2026849078ba485f918791bdc",
 	)
 	if err != nil {
@@ -148,54 +173,72 @@ func TestZoneRulesetZoneRulesetsNewAZoneRulesetWithOptionalParams(t *testing.T) 
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Rulesets.ZoneRulesetsNewAZoneRuleset(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"9f1839b6152d298aca64c4e906b6d074",
 		cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParams{
-			Kind:  cloudflare.F(cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsKindRoot),
-			Name:  cloudflare.F("My ruleset"),
-			Phase: cloudflare.F("http_request_firewall_managed"),
-			Rules: cloudflare.F([]cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRule{cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRulesCreateUpdateRule(cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRulesCreateUpdateRule{
-				Action: cloudflare.F("execute"),
-				ActionParameters: cloudflare.F[any](map[string]interface{}{
-					"id": "4814384a9e5d4991b9815dcfc25d2f1f",
+			ID:          cloudflare.F[any](map[string]interface{}{}),
+			Description: cloudflare.F("My ruleset to execute managed rulesets"),
+			Kind:        cloudflare.F(cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsKindRoot),
+			Name:        cloudflare.F("My ruleset"),
+			Phase:       cloudflare.F(cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsPhaseHTTPRequestFirewallCustom),
+			Rules: cloudflare.F([]cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRule{cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRulesOexZd8xKBlockRule(cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRulesOexZd8xKBlockRule{
+				Action: cloudflare.F(cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRulesOexZd8xKBlockRuleActionBlock),
+				ActionParameters: cloudflare.F(cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRulesOexZd8xKBlockRuleActionParameters{
+					Response: cloudflare.F(cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRulesOexZd8xKBlockRuleActionParametersResponse{
+						Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
+						ContentType: cloudflare.F("application/json"),
+						StatusCode:  cloudflare.F(int64(400)),
+					}),
 				}),
-				Description: cloudflare.F("Execute the OWASP ruleset when the IP address is not 1.1.1.1"),
-				Enabled:     cloudflare.F(true),
+				Description: cloudflare.F[any]("Block when the IP address is not 1.1.1.1"),
+				Enabled:     cloudflare.F[any](map[string]interface{}{}),
 				Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
-				Logging: cloudflare.F(cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRulesCreateUpdateRuleLogging{
+				ID:          cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
+				Logging: cloudflare.F(cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRulesOexZd8xKBlockRuleLogging{
 					Enabled: cloudflare.F(true),
 				}),
 				Ref: cloudflare.F("my_ref"),
-			}), cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRulesCreateUpdateRule(cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRulesCreateUpdateRule{
-				Action: cloudflare.F("execute"),
-				ActionParameters: cloudflare.F[any](map[string]interface{}{
-					"id": "4814384a9e5d4991b9815dcfc25d2f1f",
+			}), cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRulesOexZd8xKBlockRule(cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRulesOexZd8xKBlockRule{
+				Action: cloudflare.F(cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRulesOexZd8xKBlockRuleActionBlock),
+				ActionParameters: cloudflare.F(cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRulesOexZd8xKBlockRuleActionParameters{
+					Response: cloudflare.F(cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRulesOexZd8xKBlockRuleActionParametersResponse{
+						Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
+						ContentType: cloudflare.F("application/json"),
+						StatusCode:  cloudflare.F(int64(400)),
+					}),
 				}),
-				Description: cloudflare.F("Execute the OWASP ruleset when the IP address is not 1.1.1.1"),
-				Enabled:     cloudflare.F(true),
+				Description: cloudflare.F[any]("Block when the IP address is not 1.1.1.1"),
+				Enabled:     cloudflare.F[any](map[string]interface{}{}),
 				Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
-				Logging: cloudflare.F(cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRulesCreateUpdateRuleLogging{
+				ID:          cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
+				Logging: cloudflare.F(cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRulesOexZd8xKBlockRuleLogging{
 					Enabled: cloudflare.F(true),
 				}),
 				Ref: cloudflare.F("my_ref"),
-			}), cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRulesCreateUpdateRule(cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRulesCreateUpdateRule{
-				Action: cloudflare.F("execute"),
-				ActionParameters: cloudflare.F[any](map[string]interface{}{
-					"id": "4814384a9e5d4991b9815dcfc25d2f1f",
+			}), cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRulesOexZd8xKBlockRule(cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRulesOexZd8xKBlockRule{
+				Action: cloudflare.F(cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRulesOexZd8xKBlockRuleActionBlock),
+				ActionParameters: cloudflare.F(cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRulesOexZd8xKBlockRuleActionParameters{
+					Response: cloudflare.F(cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRulesOexZd8xKBlockRuleActionParametersResponse{
+						Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
+						ContentType: cloudflare.F("application/json"),
+						StatusCode:  cloudflare.F(int64(400)),
+					}),
 				}),
-				Description: cloudflare.F("Execute the OWASP ruleset when the IP address is not 1.1.1.1"),
-				Enabled:     cloudflare.F(true),
+				Description: cloudflare.F[any]("Block when the IP address is not 1.1.1.1"),
+				Enabled:     cloudflare.F[any](map[string]interface{}{}),
 				Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
-				Logging: cloudflare.F(cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRulesCreateUpdateRuleLogging{
+				ID:          cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
+				Logging: cloudflare.F(cloudflare.ZoneRulesetZoneRulesetsNewAZoneRulesetParamsRulesOexZd8xKBlockRuleLogging{
 					Enabled: cloudflare.F(true),
 				}),
 				Ref: cloudflare.F("my_ref"),
 			})}),
-			Description: cloudflare.F("My ruleset to execute managed rulesets"),
 		},
 	)
 	if err != nil {
@@ -218,10 +261,12 @@ func TestZoneRulesetZoneRulesetsListZoneRulesets(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Zones.Rulesets.ZoneRulesetsListZoneRulesets(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Zones.Rulesets.ZoneRulesetsListZoneRulesets(context.TODO(), "9f1839b6152d298aca64c4e906b6d074")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

@@ -7,11 +7,15 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 
+	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // ZoneLogReceivedService contains methods and other services that help with
@@ -42,11 +46,29 @@ func NewZoneLogReceivedService(opts ...option.RequestOption) (r *ZoneLogReceived
 // `start=2018-05-20T10:00:00Z&end=2018-05-20T10:01:00Z`, then
 // `start=2018-05-20T10:01:00Z&end=2018-05-20T10:02:00Z` and so on; the overlap
 // will be handled properly.
-func (r *ZoneLogReceivedService) ReceivedGetLogsReceived(ctx context.Context, zoneIdentifier string, query ZoneLogReceivedReceivedGetLogsReceivedParams, opts ...option.RequestOption) (res *Log, err error) {
+func (r *ZoneLogReceivedService) ReceivedGetLogsReceived(ctx context.Context, zoneIdentifier string, query ZoneLogReceivedReceivedGetLogsReceivedParams, opts ...option.RequestOption) (res *ZoneLogReceivedReceivedGetLogsReceivedResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/logs/received", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
+}
+
+// Union satisfied by [shared.UnionString] or
+// [ZoneLogReceivedReceivedGetLogsReceivedResponseUnknown].
+type ZoneLogReceivedReceivedGetLogsReceivedResponse interface {
+	ImplementsZoneLogReceivedReceivedGetLogsReceivedResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZoneLogReceivedReceivedGetLogsReceivedResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.String,
+			DiscriminatorValue: "",
+			Type:               reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 type ZoneLogReceivedReceivedGetLogsReceivedParams struct {

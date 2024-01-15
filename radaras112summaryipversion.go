@@ -33,7 +33,7 @@ func NewRadarAs112SummaryIPVersionService(opts ...option.RequestOption) (r *Rada
 	return
 }
 
-// Percentage distribution of dns requests classified per IP Version.
+// Percentage distribution of DNS queries to AS112 per IP Version.
 func (r *RadarAs112SummaryIPVersionService) List(ctx context.Context, query RadarAs112SummaryIPVersionListParams, opts ...option.RequestOption) (res *RadarAs112SummaryIPVersionListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "radar/as112/summary/ip_version"
@@ -61,7 +61,7 @@ func (r *RadarAs112SummaryIPVersionListResponse) UnmarshalJSON(data []byte) (err
 }
 
 type RadarAs112SummaryIPVersionListResponseResult struct {
-	Meta     interface{}                                          `json:"meta,required"`
+	Meta     RadarAs112SummaryIPVersionListResponseResultMeta     `json:"meta,required"`
 	Summary0 RadarAs112SummaryIPVersionListResponseResultSummary0 `json:"summary_0,required"`
 	JSON     radarAs112SummaryIPVersionListResponseResultJSON     `json:"-"`
 }
@@ -76,6 +76,101 @@ type radarAs112SummaryIPVersionListResponseResultJSON struct {
 }
 
 func (r *RadarAs112SummaryIPVersionListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAs112SummaryIPVersionListResponseResultMeta struct {
+	DateRange      []RadarAs112SummaryIPVersionListResponseResultMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                                         `json:"lastUpdated,required"`
+	Normalization  string                                                         `json:"normalization,required"`
+	ConfidenceInfo RadarAs112SummaryIPVersionListResponseResultMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           radarAs112SummaryIPVersionListResponseResultMetaJSON           `json:"-"`
+}
+
+// radarAs112SummaryIPVersionListResponseResultMetaJSON contains the JSON metadata
+// for the struct [RadarAs112SummaryIPVersionListResponseResultMeta]
+type radarAs112SummaryIPVersionListResponseResultMetaJSON struct {
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	ConfidenceInfo apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RadarAs112SummaryIPVersionListResponseResultMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAs112SummaryIPVersionListResponseResultMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                                     `json:"startTime,required" format:"date-time"`
+	JSON      radarAs112SummaryIPVersionListResponseResultMetaDateRangeJSON `json:"-"`
+}
+
+// radarAs112SummaryIPVersionListResponseResultMetaDateRangeJSON contains the JSON
+// metadata for the struct
+// [RadarAs112SummaryIPVersionListResponseResultMetaDateRange]
+type radarAs112SummaryIPVersionListResponseResultMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarAs112SummaryIPVersionListResponseResultMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAs112SummaryIPVersionListResponseResultMetaConfidenceInfo struct {
+	Annotations []RadarAs112SummaryIPVersionListResponseResultMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                                      `json:"level"`
+	JSON        radarAs112SummaryIPVersionListResponseResultMetaConfidenceInfoJSON         `json:"-"`
+}
+
+// radarAs112SummaryIPVersionListResponseResultMetaConfidenceInfoJSON contains the
+// JSON metadata for the struct
+// [RadarAs112SummaryIPVersionListResponseResultMetaConfidenceInfo]
+type radarAs112SummaryIPVersionListResponseResultMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarAs112SummaryIPVersionListResponseResultMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAs112SummaryIPVersionListResponseResultMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                                       `json:"dataSource,required"`
+	Description     string                                                                       `json:"description,required"`
+	EventType       string                                                                       `json:"eventType,required"`
+	IsInstantaneous interface{}                                                                  `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                                    `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                                       `json:"linkedUrl"`
+	StartTime       time.Time                                                                    `json:"startTime" format:"date-time"`
+	JSON            radarAs112SummaryIPVersionListResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// radarAs112SummaryIPVersionListResponseResultMetaConfidenceInfoAnnotationJSON
+// contains the JSON metadata for the struct
+// [RadarAs112SummaryIPVersionListResponseResultMetaConfidenceInfoAnnotation]
+type radarAs112SummaryIPVersionListResponseResultMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *RadarAs112SummaryIPVersionListResponseResultMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -103,7 +198,7 @@ type RadarAs112SummaryIPVersionListParams struct {
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of datetimes to filter the end of a series.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
@@ -134,6 +229,7 @@ type RadarAs112SummaryIPVersionListParamsDateRange string
 
 const (
 	RadarAs112SummaryIPVersionListParamsDateRange1d         RadarAs112SummaryIPVersionListParamsDateRange = "1d"
+	RadarAs112SummaryIPVersionListParamsDateRange2d         RadarAs112SummaryIPVersionListParamsDateRange = "2d"
 	RadarAs112SummaryIPVersionListParamsDateRange7d         RadarAs112SummaryIPVersionListParamsDateRange = "7d"
 	RadarAs112SummaryIPVersionListParamsDateRange14d        RadarAs112SummaryIPVersionListParamsDateRange = "14d"
 	RadarAs112SummaryIPVersionListParamsDateRange28d        RadarAs112SummaryIPVersionListParamsDateRange = "28d"
@@ -141,6 +237,7 @@ const (
 	RadarAs112SummaryIPVersionListParamsDateRange24w        RadarAs112SummaryIPVersionListParamsDateRange = "24w"
 	RadarAs112SummaryIPVersionListParamsDateRange52w        RadarAs112SummaryIPVersionListParamsDateRange = "52w"
 	RadarAs112SummaryIPVersionListParamsDateRange1dControl  RadarAs112SummaryIPVersionListParamsDateRange = "1dControl"
+	RadarAs112SummaryIPVersionListParamsDateRange2dControl  RadarAs112SummaryIPVersionListParamsDateRange = "2dControl"
 	RadarAs112SummaryIPVersionListParamsDateRange7dControl  RadarAs112SummaryIPVersionListParamsDateRange = "7dControl"
 	RadarAs112SummaryIPVersionListParamsDateRange14dControl RadarAs112SummaryIPVersionListParamsDateRange = "14dControl"
 	RadarAs112SummaryIPVersionListParamsDateRange28dControl RadarAs112SummaryIPVersionListParamsDateRange = "28dControl"

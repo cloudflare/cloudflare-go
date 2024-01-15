@@ -24,10 +24,12 @@ func TestAccountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrust
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Gateways.Loggings.ZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccount(context.TODO(), "699d98642c564d2e855e9661899b7252")
+	_, err := client.Accounts.Gateway.Loggings.ZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccount(context.TODO(), "699d98642c564d2e855e9661899b7252")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -48,10 +50,12 @@ func TestAccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTr
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Gateways.Loggings.ZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccount(
+	_, err := client.Accounts.Gateway.Loggings.ZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccount(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		cloudflare.AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountParams{

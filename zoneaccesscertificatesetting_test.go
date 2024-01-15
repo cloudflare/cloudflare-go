@@ -13,49 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestZoneAccessCertificateSettingUpdate(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
-	)
-	_, err := client.Zones.Accesses.Certificates.Settings.Update(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		cloudflare.ZoneAccessCertificateSettingUpdateParams{
-			Settings: cloudflare.F([]cloudflare.ZoneAccessCertificateSettingUpdateParamsSetting{{
-				ChinaNetwork:                cloudflare.F(false),
-				ClientCertificateForwarding: cloudflare.F(true),
-				Hostname:                    cloudflare.F("admin.example.com"),
-			}, {
-				ChinaNetwork:                cloudflare.F(false),
-				ClientCertificateForwarding: cloudflare.F(true),
-				Hostname:                    cloudflare.F("admin.example.com"),
-			}, {
-				ChinaNetwork:                cloudflare.F(false),
-				ClientCertificateForwarding: cloudflare.F(true),
-				Hostname:                    cloudflare.F("admin.example.com"),
-			}}),
-		},
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
 func TestZoneAccessCertificateSettingList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
@@ -67,8 +24,10 @@ func TestZoneAccessCertificateSettingList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Accesses.Certificates.Settings.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {

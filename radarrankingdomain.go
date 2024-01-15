@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
@@ -34,7 +33,10 @@ func NewRadarRankingDomainService(opts ...option.RequestOption) (r *RadarRanking
 	return
 }
 
-// Gets Domains Rank details.
+// Gets Domains Rank details. Cloudflare provides an ordered rank for the top 100
+// domains, but for the remainder it only provides ranking buckets like top 200
+// thousand, top one million, etc.. These are available through Radar datasets
+// endpoints.
 func (r *RadarRankingDomainService) Get(ctx context.Context, domain string, query RadarRankingDomainGetParams, opts ...option.RequestOption) (res *RadarRankingDomainGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/ranking/domain/%s", domain)
@@ -79,25 +81,47 @@ func (r *RadarRankingDomainGetResponseResult) UnmarshalJSON(data []byte) (err er
 }
 
 type RadarRankingDomainGetResponseResultDetails0 struct {
-	Bucket       string                                                   `json:"bucket,required"`
-	Categories   []string                                                 `json:"categories,required"`
+	Categories   []RadarRankingDomainGetResponseResultDetails0Category    `json:"categories,required"`
 	TopLocations []RadarRankingDomainGetResponseResultDetails0TopLocation `json:"top_locations,required"`
-	Rank         int64                                                    `json:"rank"`
-	JSON         radarRankingDomainGetResponseResultDetails0JSON          `json:"-"`
+	// Only available in POPULAR ranking for the most recent ranking.
+	Bucket string                                          `json:"bucket"`
+	Rank   int64                                           `json:"rank"`
+	JSON   radarRankingDomainGetResponseResultDetails0JSON `json:"-"`
 }
 
 // radarRankingDomainGetResponseResultDetails0JSON contains the JSON metadata for
 // the struct [RadarRankingDomainGetResponseResultDetails0]
 type radarRankingDomainGetResponseResultDetails0JSON struct {
-	Bucket       apijson.Field
 	Categories   apijson.Field
 	TopLocations apijson.Field
+	Bucket       apijson.Field
 	Rank         apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
 func (r *RadarRankingDomainGetResponseResultDetails0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarRankingDomainGetResponseResultDetails0Category struct {
+	ID              float64                                                 `json:"id,required"`
+	Name            string                                                  `json:"name,required"`
+	SuperCategoryID float64                                                 `json:"superCategoryId,required"`
+	JSON            radarRankingDomainGetResponseResultDetails0CategoryJSON `json:"-"`
+}
+
+// radarRankingDomainGetResponseResultDetails0CategoryJSON contains the JSON
+// metadata for the struct [RadarRankingDomainGetResponseResultDetails0Category]
+type radarRankingDomainGetResponseResultDetails0CategoryJSON struct {
+	ID              apijson.Field
+	Name            apijson.Field
+	SuperCategoryID apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *RadarRankingDomainGetResponseResultDetails0Category) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -124,13 +148,15 @@ func (r *RadarRankingDomainGetResponseResultDetails0TopLocation) UnmarshalJSON(d
 
 type RadarRankingDomainGetParams struct {
 	// Array of dates to filter the ranking.
-	Date param.Field[[]time.Time] `query:"date" format:"date"`
+	Date param.Field[[]string] `query:"date"`
 	// Format results are returned in.
 	Format param.Field[RadarRankingDomainGetParamsFormat] `query:"format"`
 	// Limit the number of objects in the response.
 	Limit param.Field[int64] `query:"limit"`
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
+	// The ranking type.
+	RankingType param.Field[RadarRankingDomainGetParamsRankingType] `query:"rankingType"`
 }
 
 // URLQuery serializes [RadarRankingDomainGetParams]'s query parameters as
@@ -148,4 +174,13 @@ type RadarRankingDomainGetParamsFormat string
 const (
 	RadarRankingDomainGetParamsFormatJson RadarRankingDomainGetParamsFormat = "JSON"
 	RadarRankingDomainGetParamsFormatCsv  RadarRankingDomainGetParamsFormat = "CSV"
+)
+
+// The ranking type.
+type RadarRankingDomainGetParamsRankingType string
+
+const (
+	RadarRankingDomainGetParamsRankingTypePopular        RadarRankingDomainGetParamsRankingType = "POPULAR"
+	RadarRankingDomainGetParamsRankingTypeTrendingRise   RadarRankingDomainGetParamsRankingType = "TRENDING_RISE"
+	RadarRankingDomainGetParamsRankingTypeTrendingSteady RadarRankingDomainGetParamsRankingType = "TRENDING_STEADY"
 )

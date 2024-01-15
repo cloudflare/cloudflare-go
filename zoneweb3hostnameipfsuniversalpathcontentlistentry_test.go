@@ -24,8 +24,10 @@ func TestZoneWeb3HostnameIpfsUniversalPathContentListEntryGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Web3s.Hostnames.IpfsUniversalPaths.ContentLists.Entries.Get(
 		context.TODO(),
@@ -53,8 +55,10 @@ func TestZoneWeb3HostnameIpfsUniversalPathContentListEntryUpdateWithOptionalPara
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Web3s.Hostnames.IpfsUniversalPaths.ContentLists.Entries.Update(
 		context.TODO(),
@@ -87,8 +91,10 @@ func TestZoneWeb3HostnameIpfsUniversalPathContentListEntryDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Web3s.Hostnames.IpfsUniversalPaths.ContentLists.Entries.Delete(
 		context.TODO(),
@@ -116,8 +122,10 @@ func TestZoneWeb3HostnameIpfsUniversalPathContentListEntryWeb3HostnameNewIpfsUni
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Web3s.Hostnames.IpfsUniversalPaths.ContentLists.Entries.Web3HostnameNewIpfsUniversalPathGatewayContentListEntry(
 		context.TODO(),
@@ -149,8 +157,10 @@ func TestZoneWeb3HostnameIpfsUniversalPathContentListEntryWeb3HostnameListIpfsUn
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Web3s.Hostnames.IpfsUniversalPaths.ContentLists.Entries.Web3HostnameListIpfsUniversalPathGatewayContentListEntries(
 		context.TODO(),

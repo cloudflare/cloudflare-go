@@ -24,10 +24,12 @@ func TestZonePageShieldScriptGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Zones.PageShields.Scripts.Get(
+	_, err := client.Zones.PageShield.Scripts.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"c9ef84a6bf5e47138c75d95e2f933e8f",
@@ -52,21 +54,24 @@ func TestZonePageShieldScriptPageShieldListPageShieldScriptsWithOptionalParams(t
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Zones.PageShields.Scripts.PageShieldListPageShieldScripts(
+	_, err := client.Zones.PageShield.Scripts.PageShieldListPageShieldScripts(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.ZonePageShieldScriptPageShieldListPageShieldScriptsParams{
 			Direction:           cloudflare.F(cloudflare.ZonePageShieldScriptPageShieldListPageShieldScriptsParamsDirectionAsc),
 			ExcludeCdnCgi:       cloudflare.F(true),
+			ExcludeDuplicates:   cloudflare.F(true),
 			ExcludeURLs:         cloudflare.F("blog.cloudflare.com,www.example"),
 			Export:              cloudflare.F(cloudflare.ZonePageShieldScriptPageShieldListPageShieldScriptsParamsExportCsv),
-			Hosts:               cloudflare.F("blog.cloudflare.com,www.example"),
+			Hosts:               cloudflare.F("blog.cloudflare.com,www.example*,*cloudflare.com"),
 			OrderBy:             cloudflare.F(cloudflare.ZonePageShieldScriptPageShieldListPageShieldScriptsParamsOrderByFirstSeenAt),
-			Page:                cloudflare.F(2.000000),
-			PageURL:             cloudflare.F("example.com/page"),
+			Page:                cloudflare.F("2"),
+			PageURL:             cloudflare.F("example.com/page,*/checkout,example.com/*,*checkout*"),
 			PerPage:             cloudflare.F(100.000000),
 			PrioritizeMalicious: cloudflare.F(true),
 			Status:              cloudflare.F("active,inactive"),

@@ -24,8 +24,10 @@ func TestAccountCustomNVerifyAccountLevelCustomNameserversVerifyAccountCustomNam
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.CustomNs.Verifies.AccountLevelCustomNameserversVerifyAccountCustomNameserverGlueRecords(context.TODO(), "372e67954025e0ba6aaa6d586b9e0b59")
 	if err != nil {

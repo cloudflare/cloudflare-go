@@ -24,8 +24,10 @@ func TestAccountMnmConfigDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Mnms.Configs.Delete(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
 	if err != nil {
@@ -48,8 +50,10 @@ func TestAccountMnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurat
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Mnms.Configs.MagicNetworkMonitoringConfigurationNewAccountConfiguration(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
 	if err != nil {
@@ -72,8 +76,10 @@ func TestAccountMnmConfigMagicNetworkMonitoringConfigurationListAccountConfigura
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Mnms.Configs.MagicNetworkMonitoringConfigurationListAccountConfiguration(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
 	if err != nil {
@@ -96,8 +102,10 @@ func TestAccountMnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigu
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Mnms.Configs.MagicNetworkMonitoringConfigurationUpdateAccountConfigurationFields(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
 	if err != nil {
@@ -120,8 +128,10 @@ func TestAccountMnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccoun
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Mnms.Configs.MagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfiguration(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
 	if err != nil {

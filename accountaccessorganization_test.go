@@ -24,12 +24,14 @@ func TestAccountAccessOrganizationZeroTrustOrganizationNewYourZeroTrustOrganizat
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Accesses.Organizations.ZeroTrustOrganizationNewYourZeroTrustOrganization(
+	_, err := client.Accounts.Access.Organizations.ZeroTrustOrganizationNewYourZeroTrustOrganization(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.AccountAccessOrganizationZeroTrustOrganizationNewYourZeroTrustOrganizationParams{
 			AuthDomain:             cloudflare.F("test.cloudflareaccess.com"),
 			Name:                   cloudflare.F("Widget Corps Internal Applications"),
@@ -42,6 +44,7 @@ func TestAccountAccessOrganizationZeroTrustOrganizationNewYourZeroTrustOrganizat
 				LogoPath:        cloudflare.F("https://example.com/logo.png"),
 				TextColor:       cloudflare.F("#c5ed1b"),
 			}),
+			SessionDuration:                cloudflare.F("24h"),
 			UiReadOnlyToggleReason:         cloudflare.F("Temporarily turn off the UI read only lock to make a change via the UI"),
 			UserSeatExpirationInactiveTime: cloudflare.F("720h"),
 		},
@@ -66,10 +69,12 @@ func TestAccountAccessOrganizationZeroTrustOrganizationGetYourZeroTrustOrganizat
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Accesses.Organizations.ZeroTrustOrganizationGetYourZeroTrustOrganization(context.TODO(), "699d98642c564d2e855e9661899b7252")
+	_, err := client.Accounts.Access.Organizations.ZeroTrustOrganizationGetYourZeroTrustOrganization(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -90,16 +95,22 @@ func TestAccountAccessOrganizationZeroTrustOrganizationUpdateYourZeroTrustOrgani
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Accesses.Organizations.ZeroTrustOrganizationUpdateYourZeroTrustOrganization(
+	_, err := client.Accounts.Access.Organizations.ZeroTrustOrganizationUpdateYourZeroTrustOrganization(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.AccountAccessOrganizationZeroTrustOrganizationUpdateYourZeroTrustOrganizationParams{
 			AuthDomain:             cloudflare.F("test.cloudflareaccess.com"),
 			AutoRedirectToIdentity: cloudflare.F(true),
-			IsUiReadOnly:           cloudflare.F(true),
+			CustomPages: cloudflare.F(cloudflare.AccountAccessOrganizationZeroTrustOrganizationUpdateYourZeroTrustOrganizationParamsCustomPages{
+				Forbidden:      cloudflare.F("699d98642c564d2e855e9661899b7252"),
+				IdentityDenied: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+			}),
+			IsUiReadOnly: cloudflare.F(true),
 			LoginDesign: cloudflare.F(cloudflare.AccountAccessOrganizationZeroTrustOrganizationUpdateYourZeroTrustOrganizationParamsLoginDesign{
 				BackgroundColor: cloudflare.F("#c5ed1b"),
 				FooterText:      cloudflare.F("This is an example description."),
@@ -108,6 +119,7 @@ func TestAccountAccessOrganizationZeroTrustOrganizationUpdateYourZeroTrustOrgani
 				TextColor:       cloudflare.F("#c5ed1b"),
 			}),
 			Name:                           cloudflare.F("Widget Corps Internal Applications"),
+			SessionDuration:                cloudflare.F("24h"),
 			UiReadOnlyToggleReason:         cloudflare.F("Temporarily turn off the UI read only lock to make a change via the UI"),
 			UserSeatExpirationInactiveTime: cloudflare.F("720h"),
 		},

@@ -25,18 +25,20 @@ func TestRadarAs112TimeseryListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Radars.As112s.Timeseries.List(context.TODO(), cloudflare.RadarAs112TimeseryListParams{
-		AggInterval: cloudflare.F(cloudflare.RadarAs112TimeseryListParamsAggInterval15m),
-		ASN:         cloudflare.F([]string{"15169", "15169", "15169"}),
+	_, err := client.Radar.As112.Timeseries.List(context.TODO(), cloudflare.RadarAs112TimeseryListParams{
+		AggInterval: cloudflare.F(cloudflare.RadarAs112TimeseryListParamsAggInterval1h),
+		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:   cloudflare.F([]cloudflare.RadarAs112TimeseryListParamsDateRange{cloudflare.RadarAs112TimeseryListParamsDateRange1d, cloudflare.RadarAs112TimeseryListParamsDateRange7d, cloudflare.RadarAs112TimeseryListParamsDateRange14d}),
+		DateRange:   cloudflare.F([]cloudflare.RadarAs112TimeseryListParamsDateRange{cloudflare.RadarAs112TimeseryListParamsDateRange1d, cloudflare.RadarAs112TimeseryListParamsDateRange2d, cloudflare.RadarAs112TimeseryListParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		Format:      cloudflare.F(cloudflare.RadarAs112TimeseryListParamsFormatJson),
-		Location:    cloudflare.F([]string{"US,CA", "US,CA", "US,CA"}),
-		Name:        cloudflare.F([]string{"main_series", "main_series", "main_series"}),
+		Location:    cloudflare.F([]string{"string", "string", "string"}),
+		Name:        cloudflare.F([]string{"string", "string", "string"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

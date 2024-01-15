@@ -25,20 +25,22 @@ func TestRadarAttackLayer7TimeseryListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Radars.Attacks.Layer7s.Timeseries.List(context.TODO(), cloudflare.RadarAttackLayer7TimeseryListParams{
-		AggInterval:   cloudflare.F(cloudflare.RadarAttackLayer7TimeseryListParamsAggInterval15m),
-		ASN:           cloudflare.F([]string{"15169", "15169", "15169"}),
+	_, err := client.Radar.Attacks.Layer7.Timeseries.List(context.TODO(), cloudflare.RadarAttackLayer7TimeseryListParams{
+		AggInterval:   cloudflare.F(cloudflare.RadarAttackLayer7TimeseryListParamsAggInterval1h),
+		ASN:           cloudflare.F([]string{"string", "string", "string"}),
 		Attack:        cloudflare.F([]cloudflare.RadarAttackLayer7TimeseryListParamsAttack{cloudflare.RadarAttackLayer7TimeseryListParamsAttackDdos, cloudflare.RadarAttackLayer7TimeseryListParamsAttackWaf, cloudflare.RadarAttackLayer7TimeseryListParamsAttackBotManagement}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:     cloudflare.F([]cloudflare.RadarAttackLayer7TimeseryListParamsDateRange{cloudflare.RadarAttackLayer7TimeseryListParamsDateRange1d, cloudflare.RadarAttackLayer7TimeseryListParamsDateRange7d, cloudflare.RadarAttackLayer7TimeseryListParamsDateRange14d}),
+		DateRange:     cloudflare.F([]cloudflare.RadarAttackLayer7TimeseryListParamsDateRange{cloudflare.RadarAttackLayer7TimeseryListParamsDateRange1d, cloudflare.RadarAttackLayer7TimeseryListParamsDateRange2d, cloudflare.RadarAttackLayer7TimeseryListParamsDateRange7d}),
 		DateStart:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		Format:        cloudflare.F(cloudflare.RadarAttackLayer7TimeseryListParamsFormatJson),
-		Location:      cloudflare.F([]string{"US,CA", "US,CA", "US,CA"}),
-		Name:          cloudflare.F([]string{"main_series", "main_series", "main_series"}),
-		Normalization: cloudflare.F(cloudflare.RadarAttackLayer7TimeseryListParamsNormalizationPercentageChange),
+		Location:      cloudflare.F([]string{"string", "string", "string"}),
+		Name:          cloudflare.F([]string{"string", "string", "string"}),
+		Normalization: cloudflare.F(cloudflare.RadarAttackLayer7TimeseryListParamsNormalizationMin0Max),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

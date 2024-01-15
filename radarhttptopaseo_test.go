@@ -25,17 +25,19 @@ func TestRadarHTTPTopAseOGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Radars.HTTPs.Tops.Ases.Os.Get(
+	_, err := client.Radar.HTTP.Tops.Ases.Os.Get(
 		context.TODO(),
 		cloudflare.RadarHTTPTopAseOGetParamsOsWindows,
 		cloudflare.RadarHTTPTopAseOGetParams{
-			ASN:          cloudflare.F([]string{"15169", "15169", "15169"}),
+			ASN:          cloudflare.F([]string{"string", "string", "string"}),
 			BotClass:     cloudflare.F([]cloudflare.RadarHTTPTopAseOGetParamsBotClass{cloudflare.RadarHTTPTopAseOGetParamsBotClassLikelyAutomated, cloudflare.RadarHTTPTopAseOGetParamsBotClassLikelyHuman}),
 			DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-			DateRange:    cloudflare.F([]cloudflare.RadarHTTPTopAseOGetParamsDateRange{cloudflare.RadarHTTPTopAseOGetParamsDateRange1d, cloudflare.RadarHTTPTopAseOGetParamsDateRange7d, cloudflare.RadarHTTPTopAseOGetParamsDateRange14d}),
+			DateRange:    cloudflare.F([]cloudflare.RadarHTTPTopAseOGetParamsDateRange{cloudflare.RadarHTTPTopAseOGetParamsDateRange1d, cloudflare.RadarHTTPTopAseOGetParamsDateRange2d, cloudflare.RadarHTTPTopAseOGetParamsDateRange7d}),
 			DateStart:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 			DeviceType:   cloudflare.F([]cloudflare.RadarHTTPTopAseOGetParamsDeviceType{cloudflare.RadarHTTPTopAseOGetParamsDeviceTypeDesktop, cloudflare.RadarHTTPTopAseOGetParamsDeviceTypeMobile, cloudflare.RadarHTTPTopAseOGetParamsDeviceTypeOther}),
 			Format:       cloudflare.F(cloudflare.RadarHTTPTopAseOGetParamsFormatJson),
@@ -43,8 +45,8 @@ func TestRadarHTTPTopAseOGetWithOptionalParams(t *testing.T) {
 			HTTPVersion:  cloudflare.F([]cloudflare.RadarHTTPTopAseOGetParamsHTTPVersion{cloudflare.RadarHTTPTopAseOGetParamsHTTPVersionHttPv1, cloudflare.RadarHTTPTopAseOGetParamsHTTPVersionHttPv2, cloudflare.RadarHTTPTopAseOGetParamsHTTPVersionHttPv3}),
 			IPVersion:    cloudflare.F([]cloudflare.RadarHTTPTopAseOGetParamsIPVersion{cloudflare.RadarHTTPTopAseOGetParamsIPVersionIPv4, cloudflare.RadarHTTPTopAseOGetParamsIPVersionIPv6}),
 			Limit:        cloudflare.F(int64(5)),
-			Location:     cloudflare.F([]string{"US,CA", "US,CA", "US,CA"}),
-			Name:         cloudflare.F([]string{"main_series", "main_series", "main_series"}),
+			Location:     cloudflare.F([]string{"string", "string", "string"}),
+			Name:         cloudflare.F([]string{"string", "string", "string"}),
 			TlsVersion:   cloudflare.F([]cloudflare.RadarHTTPTopAseOGetParamsTlsVersion{cloudflare.RadarHTTPTopAseOGetParamsTlsVersionTlSv1_0, cloudflare.RadarHTTPTopAseOGetParamsTlsVersionTlSv1_1, cloudflare.RadarHTTPTopAseOGetParamsTlsVersionTlSv1_2}),
 		},
 	)

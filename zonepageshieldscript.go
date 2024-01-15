@@ -34,42 +34,42 @@ func NewZonePageShieldScriptService(opts ...option.RequestOption) (r *ZonePageSh
 }
 
 // Fetches a script detected by Page Shield by script ID.
-func (r *ZonePageShieldScriptService) Get(ctx context.Context, zoneID string, id string, opts ...option.RequestOption) (res *GetZoneScriptResponse, err error) {
+func (r *ZonePageShieldScriptService) Get(ctx context.Context, zoneID string, scriptID string, opts ...option.RequestOption) (res *ZonePageShieldScriptGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("zones/%s/page_shield/scripts/%s", zoneID, id)
+	path := fmt.Sprintf("zones/%s/page_shield/scripts/%s", zoneID, scriptID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
 // Lists all scripts detected by Page Shield.
-func (r *ZonePageShieldScriptService) PageShieldListPageShieldScripts(ctx context.Context, zoneID string, query ZonePageShieldScriptPageShieldListPageShieldScriptsParams, opts ...option.RequestOption) (res *ListZoneScriptsResponse, err error) {
+func (r *ZonePageShieldScriptService) PageShieldListPageShieldScripts(ctx context.Context, zoneID string, query ZonePageShieldScriptPageShieldListPageShieldScriptsParams, opts ...option.RequestOption) (res *ZonePageShieldScriptPageShieldListPageShieldScriptsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/page_shield/scripts", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
-type GetZoneScriptResponse struct {
-	ID                      interface{}                    `json:"id"`
-	AddedAt                 interface{}                    `json:"added_at"`
-	DomainReportedMalicious interface{}                    `json:"domain_reported_malicious"`
-	FetchedAt               interface{}                    `json:"fetched_at"`
-	FirstPageURL            interface{}                    `json:"first_page_url"`
-	FirstSeenAt             interface{}                    `json:"first_seen_at"`
-	Hash                    interface{}                    `json:"hash"`
-	Host                    interface{}                    `json:"host"`
-	JsIntegrityScore        interface{}                    `json:"js_integrity_score"`
-	LastSeenAt              interface{}                    `json:"last_seen_at"`
-	PageURLs                interface{}                    `json:"page_urls"`
-	URL                     interface{}                    `json:"url"`
-	URLContainsCdnCgiPath   interface{}                    `json:"url_contains_cdn_cgi_path"`
-	Versions                []GetZoneScriptResponseVersion `json:"versions,nullable"`
-	JSON                    getZoneScriptResponseJSON      `json:"-"`
+type ZonePageShieldScriptGetResponse struct {
+	ID                      interface{}                              `json:"id"`
+	AddedAt                 interface{}                              `json:"added_at"`
+	DomainReportedMalicious interface{}                              `json:"domain_reported_malicious"`
+	FetchedAt               interface{}                              `json:"fetched_at"`
+	FirstPageURL            interface{}                              `json:"first_page_url"`
+	FirstSeenAt             interface{}                              `json:"first_seen_at"`
+	Hash                    interface{}                              `json:"hash"`
+	Host                    interface{}                              `json:"host"`
+	JsIntegrityScore        interface{}                              `json:"js_integrity_score"`
+	LastSeenAt              interface{}                              `json:"last_seen_at"`
+	PageURLs                interface{}                              `json:"page_urls"`
+	URL                     interface{}                              `json:"url"`
+	URLContainsCdnCgiPath   interface{}                              `json:"url_contains_cdn_cgi_path"`
+	Versions                []ZonePageShieldScriptGetResponseVersion `json:"versions,nullable"`
+	JSON                    zonePageShieldScriptGetResponseJSON      `json:"-"`
 }
 
-// getZoneScriptResponseJSON contains the JSON metadata for the struct
-// [GetZoneScriptResponse]
-type getZoneScriptResponseJSON struct {
+// zonePageShieldScriptGetResponseJSON contains the JSON metadata for the struct
+// [ZonePageShieldScriptGetResponse]
+type zonePageShieldScriptGetResponseJSON struct {
 	ID                      apijson.Field
 	AddedAt                 apijson.Field
 	DomainReportedMalicious apijson.Field
@@ -88,24 +88,24 @@ type getZoneScriptResponseJSON struct {
 	ExtraFields             map[string]apijson.Field
 }
 
-func (r *GetZoneScriptResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonePageShieldScriptGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The version of the analyzed script.
-type GetZoneScriptResponseVersion struct {
+type ZonePageShieldScriptGetResponseVersion struct {
 	// The timestamp of when the script was last fetched.
 	FetchedAt string `json:"fetched_at,nullable"`
 	// The computed hash of the analyzed script.
 	Hash string `json:"hash,nullable"`
 	// The integrity score of the JavaScript content.
-	JsIntegrityScore int64                            `json:"js_integrity_score,nullable"`
-	JSON             getZoneScriptResponseVersionJSON `json:"-"`
+	JsIntegrityScore int64                                      `json:"js_integrity_score,nullable"`
+	JSON             zonePageShieldScriptGetResponseVersionJSON `json:"-"`
 }
 
-// getZoneScriptResponseVersionJSON contains the JSON metadata for the struct
-// [GetZoneScriptResponseVersion]
-type getZoneScriptResponseVersionJSON struct {
+// zonePageShieldScriptGetResponseVersionJSON contains the JSON metadata for the
+// struct [ZonePageShieldScriptGetResponseVersion]
+type zonePageShieldScriptGetResponseVersionJSON struct {
 	FetchedAt        apijson.Field
 	Hash             apijson.Field
 	JsIntegrityScore apijson.Field
@@ -113,23 +113,24 @@ type getZoneScriptResponseVersionJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *GetZoneScriptResponseVersion) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonePageShieldScriptGetResponseVersion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ListZoneScriptsResponse struct {
-	Errors     []ListZoneScriptsResponseError    `json:"errors"`
-	Messages   []ListZoneScriptsResponseMessage  `json:"messages"`
-	Result     []ListZoneScriptsResponseResult   `json:"result"`
-	ResultInfo ListZoneScriptsResponseResultInfo `json:"result_info"`
+type ZonePageShieldScriptPageShieldListPageShieldScriptsResponse struct {
+	Errors     []ZonePageShieldScriptPageShieldListPageShieldScriptsResponseError    `json:"errors"`
+	Messages   []ZonePageShieldScriptPageShieldListPageShieldScriptsResponseMessage  `json:"messages"`
+	Result     []ZonePageShieldScriptPageShieldListPageShieldScriptsResponseResult   `json:"result"`
+	ResultInfo ZonePageShieldScriptPageShieldListPageShieldScriptsResponseResultInfo `json:"result_info"`
 	// Whether the API call was successful
-	Success ListZoneScriptsResponseSuccess `json:"success"`
-	JSON    listZoneScriptsResponseJSON    `json:"-"`
+	Success ZonePageShieldScriptPageShieldListPageShieldScriptsResponseSuccess `json:"success"`
+	JSON    zonePageShieldScriptPageShieldListPageShieldScriptsResponseJSON    `json:"-"`
 }
 
-// listZoneScriptsResponseJSON contains the JSON metadata for the struct
-// [ListZoneScriptsResponse]
-type listZoneScriptsResponseJSON struct {
+// zonePageShieldScriptPageShieldListPageShieldScriptsResponseJSON contains the
+// JSON metadata for the struct
+// [ZonePageShieldScriptPageShieldListPageShieldScriptsResponse]
+type zonePageShieldScriptPageShieldListPageShieldScriptsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -139,68 +140,71 @@ type listZoneScriptsResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ListZoneScriptsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonePageShieldScriptPageShieldListPageShieldScriptsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ListZoneScriptsResponseError struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    listZoneScriptsResponseErrorJSON `json:"-"`
+type ZonePageShieldScriptPageShieldListPageShieldScriptsResponseError struct {
+	Code    int64                                                                `json:"code,required"`
+	Message string                                                               `json:"message,required"`
+	JSON    zonePageShieldScriptPageShieldListPageShieldScriptsResponseErrorJSON `json:"-"`
 }
 
-// listZoneScriptsResponseErrorJSON contains the JSON metadata for the struct
-// [ListZoneScriptsResponseError]
-type listZoneScriptsResponseErrorJSON struct {
+// zonePageShieldScriptPageShieldListPageShieldScriptsResponseErrorJSON contains
+// the JSON metadata for the struct
+// [ZonePageShieldScriptPageShieldListPageShieldScriptsResponseError]
+type zonePageShieldScriptPageShieldListPageShieldScriptsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ListZoneScriptsResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonePageShieldScriptPageShieldListPageShieldScriptsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ListZoneScriptsResponseMessage struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    listZoneScriptsResponseMessageJSON `json:"-"`
+type ZonePageShieldScriptPageShieldListPageShieldScriptsResponseMessage struct {
+	Code    int64                                                                  `json:"code,required"`
+	Message string                                                                 `json:"message,required"`
+	JSON    zonePageShieldScriptPageShieldListPageShieldScriptsResponseMessageJSON `json:"-"`
 }
 
-// listZoneScriptsResponseMessageJSON contains the JSON metadata for the struct
-// [ListZoneScriptsResponseMessage]
-type listZoneScriptsResponseMessageJSON struct {
+// zonePageShieldScriptPageShieldListPageShieldScriptsResponseMessageJSON contains
+// the JSON metadata for the struct
+// [ZonePageShieldScriptPageShieldListPageShieldScriptsResponseMessage]
+type zonePageShieldScriptPageShieldListPageShieldScriptsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ListZoneScriptsResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonePageShieldScriptPageShieldListPageShieldScriptsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ListZoneScriptsResponseResult struct {
-	ID                      interface{}                       `json:"id"`
-	AddedAt                 interface{}                       `json:"added_at"`
-	DomainReportedMalicious interface{}                       `json:"domain_reported_malicious"`
-	FetchedAt               interface{}                       `json:"fetched_at"`
-	FirstPageURL            interface{}                       `json:"first_page_url"`
-	FirstSeenAt             interface{}                       `json:"first_seen_at"`
-	Hash                    interface{}                       `json:"hash"`
-	Host                    interface{}                       `json:"host"`
-	JsIntegrityScore        interface{}                       `json:"js_integrity_score"`
-	LastSeenAt              interface{}                       `json:"last_seen_at"`
-	PageURLs                interface{}                       `json:"page_urls"`
-	URL                     interface{}                       `json:"url"`
-	URLContainsCdnCgiPath   interface{}                       `json:"url_contains_cdn_cgi_path"`
-	JSON                    listZoneScriptsResponseResultJSON `json:"-"`
+type ZonePageShieldScriptPageShieldListPageShieldScriptsResponseResult struct {
+	ID                      interface{}                                                           `json:"id"`
+	AddedAt                 interface{}                                                           `json:"added_at"`
+	DomainReportedMalicious interface{}                                                           `json:"domain_reported_malicious"`
+	FetchedAt               interface{}                                                           `json:"fetched_at"`
+	FirstPageURL            interface{}                                                           `json:"first_page_url"`
+	FirstSeenAt             interface{}                                                           `json:"first_seen_at"`
+	Hash                    interface{}                                                           `json:"hash"`
+	Host                    interface{}                                                           `json:"host"`
+	JsIntegrityScore        interface{}                                                           `json:"js_integrity_score"`
+	LastSeenAt              interface{}                                                           `json:"last_seen_at"`
+	PageURLs                interface{}                                                           `json:"page_urls"`
+	URL                     interface{}                                                           `json:"url"`
+	URLContainsCdnCgiPath   interface{}                                                           `json:"url_contains_cdn_cgi_path"`
+	JSON                    zonePageShieldScriptPageShieldListPageShieldScriptsResponseResultJSON `json:"-"`
 }
 
-// listZoneScriptsResponseResultJSON contains the JSON metadata for the struct
-// [ListZoneScriptsResponseResult]
-type listZoneScriptsResponseResultJSON struct {
+// zonePageShieldScriptPageShieldListPageShieldScriptsResponseResultJSON contains
+// the JSON metadata for the struct
+// [ZonePageShieldScriptPageShieldListPageShieldScriptsResponseResult]
+type zonePageShieldScriptPageShieldListPageShieldScriptsResponseResultJSON struct {
 	ID                      apijson.Field
 	AddedAt                 apijson.Field
 	DomainReportedMalicious apijson.Field
@@ -218,11 +222,11 @@ type listZoneScriptsResponseResultJSON struct {
 	ExtraFields             map[string]apijson.Field
 }
 
-func (r *ListZoneScriptsResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonePageShieldScriptPageShieldListPageShieldScriptsResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ListZoneScriptsResponseResultInfo struct {
+type ZonePageShieldScriptPageShieldListPageShieldScriptsResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -230,13 +234,14 @@ type ListZoneScriptsResponseResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                               `json:"total_count"`
-	JSON       listZoneScriptsResponseResultInfoJSON `json:"-"`
+	TotalCount float64                                                                   `json:"total_count"`
+	JSON       zonePageShieldScriptPageShieldListPageShieldScriptsResponseResultInfoJSON `json:"-"`
 }
 
-// listZoneScriptsResponseResultInfoJSON contains the JSON metadata for the struct
-// [ListZoneScriptsResponseResultInfo]
-type listZoneScriptsResponseResultInfoJSON struct {
+// zonePageShieldScriptPageShieldListPageShieldScriptsResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [ZonePageShieldScriptPageShieldListPageShieldScriptsResponseResultInfo]
+type zonePageShieldScriptPageShieldListPageShieldScriptsResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -245,15 +250,15 @@ type listZoneScriptsResponseResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ListZoneScriptsResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonePageShieldScriptPageShieldListPageShieldScriptsResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type ListZoneScriptsResponseSuccess bool
+type ZonePageShieldScriptPageShieldListPageShieldScriptsResponseSuccess bool
 
 const (
-	ListZoneScriptsResponseSuccessTrue ListZoneScriptsResponseSuccess = true
+	ZonePageShieldScriptPageShieldListPageShieldScriptsResponseSuccessTrue ZonePageShieldScriptPageShieldListPageShieldScriptsResponseSuccess = true
 )
 
 type ZonePageShieldScriptPageShieldListPageShieldScriptsParams struct {
@@ -262,20 +267,40 @@ type ZonePageShieldScriptPageShieldListPageShieldScriptsParams struct {
 	// When true, excludes scripts seen in a `/cdn-cgi` path from the returned scripts.
 	// The default value is true.
 	ExcludeCdnCgi param.Field[bool] `query:"exclude_cdn_cgi"`
-	// Excludes scripts whose URL contains one the URL-encoded URL substrings
-	// (separated by commas) from the returned scripts.
+	// When true, excludes duplicate scripts. We consider a script duplicate of another
+	// if their javascript content matches and they share the same url host and zone
+	// hostname. In such case, we return the most recent script for the URL host and
+	// zone hostname combination.
+	ExcludeDuplicates param.Field[bool] `query:"exclude_duplicates"`
+	// Excludes scripts whose URL contains one of the URL-encoded URLs separated by
+	// commas.
 	ExcludeURLs param.Field[string] `query:"exclude_urls"`
 	// Export the list of scripts as a file. Cannot be used with per_page or page
 	// options.
 	Export param.Field[ZonePageShieldScriptPageShieldListPageShieldScriptsParamsExport] `query:"export"`
-	// Filters the returned scripts by one or more URL-encoded hostname substrings
-	// separated by commas.
+	// Includes scripts that match one or more URL-encoded hostnames separated by
+	// commas.
+	//
+	// Wildcards are supported at the start and end of each hostname to support starts
+	// with, ends with and contains. If no wildcards are used, results will be filtered
+	// by exact match
 	Hosts param.Field[string] `query:"hosts"`
 	// The field used to sort returned scripts.
 	OrderBy param.Field[ZonePageShieldScriptPageShieldListPageShieldScriptsParamsOrderBy] `query:"order_by"`
 	// The current page number of the paginated results.
-	Page param.Field[float64] `query:"page"`
-	// Filters the returned scripts by the page URL where they were last seen.
+	//
+	// We additionally support a special value "all". When "all" is used, the API will
+	// return all the scripts with the applied filters in a single page. Additionally,
+	// when using this value, the API will not return the script versions or
+	// categorisation data for the URL and domain of the scripts. This feature is
+	// best-effort and it may only work for zones with a low number of scripts
+	Page param.Field[string] `query:"page"`
+	// Includes scripts that match one or more page URLs (separated by commas) where
+	// they were last seen
+	//
+	// Wildcards are supported at the start and end of each page URL to support starts
+	// with, ends with and contains. If no wildcards are used, results will be filtered
+	// by exact match
 	PageURL param.Field[string] `query:"page_url"`
 	// The number of results per page.
 	PerPage param.Field[float64] `query:"per_page"`
@@ -285,8 +310,8 @@ type ZonePageShieldScriptPageShieldListPageShieldScriptsParams struct {
 	// Accepted values: `active`, `infrequent`, and `inactive`. The default value is
 	// `active`.
 	Status param.Field[string] `query:"status"`
-	// Filters the returned scripts by one or more URL-encoded URL substrings separated
-	// by commas.
+	// Includes scripts whose URL contain one or more URL-encoded URLs separated by
+	// commas.
 	URLs param.Field[string] `query:"urls"`
 }
 

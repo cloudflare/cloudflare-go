@@ -32,7 +32,7 @@ func NewZoneAcmTotalTlService(opts ...option.RequestOption) (r *ZoneAcmTotalTlSe
 }
 
 // Set Total TLS Settings or disable the feature for a Zone.
-func (r *ZoneAcmTotalTlService) TotalTlsEnableOrDisableTotalTls(ctx context.Context, zoneIdentifier string, body ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsParams, opts ...option.RequestOption) (res *TotalTlsSettingsResponseRJujzw74, err error) {
+func (r *ZoneAcmTotalTlService) TotalTlsEnableOrDisableTotalTls(ctx context.Context, zoneIdentifier string, body ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsParams, opts ...option.RequestOption) (res *ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/acm/total_tls", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -40,25 +40,25 @@ func (r *ZoneAcmTotalTlService) TotalTlsEnableOrDisableTotalTls(ctx context.Cont
 }
 
 // Get Total TLS Settings for a Zone.
-func (r *ZoneAcmTotalTlService) TotalTlsTotalTlsSettingsDetails(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *TotalTlsSettingsResponseRJujzw74, err error) {
+func (r *ZoneAcmTotalTlService) TotalTlsTotalTlsSettingsDetails(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/acm/total_tls", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type TotalTlsSettingsResponseRJujzw74 struct {
-	Errors   []TotalTlsSettingsResponseRJujzw74Error   `json:"errors"`
-	Messages []TotalTlsSettingsResponseRJujzw74Message `json:"messages"`
-	Result   TotalTlsSettingsResponseRJujzw74Result    `json:"result"`
+type ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponse struct {
+	Errors   []ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseError   `json:"errors"`
+	Messages []ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseMessage `json:"messages"`
+	Result   ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success TotalTlsSettingsResponseRJujzw74Success `json:"success"`
-	JSON    totalTlsSettingsResponseRJujzw74JSON    `json:"-"`
+	Success ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseSuccess `json:"success"`
+	JSON    zoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseJSON    `json:"-"`
 }
 
-// totalTlsSettingsResponseRJujzw74JSON contains the JSON metadata for the struct
-// [TotalTlsSettingsResponseRJujzw74]
-type totalTlsSettingsResponseRJujzw74JSON struct {
+// zoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseJSON contains the JSON
+// metadata for the struct [ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponse]
+type zoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -67,62 +67,65 @@ type totalTlsSettingsResponseRJujzw74JSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TotalTlsSettingsResponseRJujzw74) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type TotalTlsSettingsResponseRJujzw74Error struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    totalTlsSettingsResponseRJujzw74ErrorJSON `json:"-"`
+type ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseError struct {
+	Code    int64                                                          `json:"code,required"`
+	Message string                                                         `json:"message,required"`
+	JSON    zoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseErrorJSON `json:"-"`
 }
 
-// totalTlsSettingsResponseRJujzw74ErrorJSON contains the JSON metadata for the
-// struct [TotalTlsSettingsResponseRJujzw74Error]
-type totalTlsSettingsResponseRJujzw74ErrorJSON struct {
+// zoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseErrorJSON contains the JSON
+// metadata for the struct
+// [ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseError]
+type zoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TotalTlsSettingsResponseRJujzw74Error) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type TotalTlsSettingsResponseRJujzw74Message struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    totalTlsSettingsResponseRJujzw74MessageJSON `json:"-"`
+type ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseMessage struct {
+	Code    int64                                                            `json:"code,required"`
+	Message string                                                           `json:"message,required"`
+	JSON    zoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseMessageJSON `json:"-"`
 }
 
-// totalTlsSettingsResponseRJujzw74MessageJSON contains the JSON metadata for the
-// struct [TotalTlsSettingsResponseRJujzw74Message]
-type totalTlsSettingsResponseRJujzw74MessageJSON struct {
+// zoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseMessageJSON contains the
+// JSON metadata for the struct
+// [ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseMessage]
+type zoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TotalTlsSettingsResponseRJujzw74Message) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type TotalTlsSettingsResponseRJujzw74Result struct {
+type ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseResult struct {
 	// The Certificate Authority that Total TLS certificates will be issued through.
-	CertificateAuthority TotalTlsSettingsResponseRJujzw74ResultCertificateAuthority `json:"certificate_authority"`
+	CertificateAuthority ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseResultCertificateAuthority `json:"certificate_authority"`
 	// If enabled, Total TLS will order a hostname specific TLS certificate for any
 	// proxied A, AAAA, or CNAME record in your zone.
 	Enabled bool `json:"enabled"`
 	// The validity period in days for the certificates ordered via Total TLS.
-	ValidityDays TotalTlsSettingsResponseRJujzw74ResultValidityDays `json:"validity_days"`
-	JSON         totalTlsSettingsResponseRJujzw74ResultJSON         `json:"-"`
+	ValidityDays ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseResultValidityDays `json:"validity_days"`
+	JSON         zoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseResultJSON         `json:"-"`
 }
 
-// totalTlsSettingsResponseRJujzw74ResultJSON contains the JSON metadata for the
-// struct [TotalTlsSettingsResponseRJujzw74Result]
-type totalTlsSettingsResponseRJujzw74ResultJSON struct {
+// zoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseResultJSON contains the
+// JSON metadata for the struct
+// [ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseResult]
+type zoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseResultJSON struct {
 	CertificateAuthority apijson.Field
 	Enabled              apijson.Field
 	ValidityDays         apijson.Field
@@ -130,30 +133,142 @@ type totalTlsSettingsResponseRJujzw74ResultJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *TotalTlsSettingsResponseRJujzw74Result) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The Certificate Authority that Total TLS certificates will be issued through.
-type TotalTlsSettingsResponseRJujzw74ResultCertificateAuthority string
+type ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseResultCertificateAuthority string
 
 const (
-	TotalTlsSettingsResponseRJujzw74ResultCertificateAuthorityGoogle      TotalTlsSettingsResponseRJujzw74ResultCertificateAuthority = "google"
-	TotalTlsSettingsResponseRJujzw74ResultCertificateAuthorityLetsEncrypt TotalTlsSettingsResponseRJujzw74ResultCertificateAuthority = "lets_encrypt"
+	ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseResultCertificateAuthorityGoogle      ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseResultCertificateAuthority = "google"
+	ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseResultCertificateAuthorityLetsEncrypt ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseResultCertificateAuthority = "lets_encrypt"
 )
 
 // The validity period in days for the certificates ordered via Total TLS.
-type TotalTlsSettingsResponseRJujzw74ResultValidityDays int64
+type ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseResultValidityDays int64
 
 const (
-	TotalTlsSettingsResponseRJujzw74ResultValidityDays90 TotalTlsSettingsResponseRJujzw74ResultValidityDays = 90
+	ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseResultValidityDays90 ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseResultValidityDays = 90
 )
 
 // Whether the API call was successful
-type TotalTlsSettingsResponseRJujzw74Success bool
+type ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseSuccess bool
 
 const (
-	TotalTlsSettingsResponseRJujzw74SuccessTrue TotalTlsSettingsResponseRJujzw74Success = true
+	ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseSuccessTrue ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsResponseSuccess = true
+)
+
+type ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponse struct {
+	Errors   []ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseError   `json:"errors"`
+	Messages []ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseMessage `json:"messages"`
+	Result   ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseSuccess `json:"success"`
+	JSON    zoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseJSON    `json:"-"`
+}
+
+// zoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseJSON contains the JSON
+// metadata for the struct [ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponse]
+type zoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseError struct {
+	Code    int64                                                          `json:"code,required"`
+	Message string                                                         `json:"message,required"`
+	JSON    zoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseErrorJSON `json:"-"`
+}
+
+// zoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseErrorJSON contains the JSON
+// metadata for the struct
+// [ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseError]
+type zoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseMessage struct {
+	Code    int64                                                            `json:"code,required"`
+	Message string                                                           `json:"message,required"`
+	JSON    zoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseMessageJSON `json:"-"`
+}
+
+// zoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseMessageJSON contains the
+// JSON metadata for the struct
+// [ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseMessage]
+type zoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseResult struct {
+	// The Certificate Authority that Total TLS certificates will be issued through.
+	CertificateAuthority ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseResultCertificateAuthority `json:"certificate_authority"`
+	// If enabled, Total TLS will order a hostname specific TLS certificate for any
+	// proxied A, AAAA, or CNAME record in your zone.
+	Enabled bool `json:"enabled"`
+	// The validity period in days for the certificates ordered via Total TLS.
+	ValidityDays ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseResultValidityDays `json:"validity_days"`
+	JSON         zoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseResultJSON         `json:"-"`
+}
+
+// zoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseResultJSON contains the
+// JSON metadata for the struct
+// [ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseResult]
+type zoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseResultJSON struct {
+	CertificateAuthority apijson.Field
+	Enabled              apijson.Field
+	ValidityDays         apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The Certificate Authority that Total TLS certificates will be issued through.
+type ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseResultCertificateAuthority string
+
+const (
+	ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseResultCertificateAuthorityGoogle      ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseResultCertificateAuthority = "google"
+	ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseResultCertificateAuthorityLetsEncrypt ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseResultCertificateAuthority = "lets_encrypt"
+)
+
+// The validity period in days for the certificates ordered via Total TLS.
+type ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseResultValidityDays int64
+
+const (
+	ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseResultValidityDays90 ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseResultValidityDays = 90
+)
+
+// Whether the API call was successful
+type ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseSuccess bool
+
+const (
+	ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseSuccessTrue ZoneAcmTotalTlTotalTlsTotalTlsSettingsDetailsResponseSuccess = true
 )
 
 type ZoneAcmTotalTlTotalTlsEnableOrDisableTotalTlsParams struct {

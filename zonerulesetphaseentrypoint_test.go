@@ -24,15 +24,15 @@ func TestZoneRulesetPhaseEntrypointTransformRulesListTransformRules(t *testing.T
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Rulesets.Phases.Entrypoints.TransformRulesListTransformRules(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.ZoneRulesetPhaseEntrypointTransformRulesListTransformRulesParams{
-			Phase: cloudflare.F(cloudflare.ZoneRulesetPhaseEntrypointTransformRulesListTransformRulesParamsPhaseHTTPRequestTransform),
-		},
+		"9f1839b6152d298aca64c4e906b6d074",
+		cloudflare.ZoneRulesetPhaseEntrypointTransformRulesListTransformRulesParamsRulesetPhaseHTTPRequestFirewallCustom,
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -54,52 +54,73 @@ func TestZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesWithOptiona
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Rulesets.Phases.Entrypoints.TransformRulesUpdateTransformRules(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"9f1839b6152d298aca64c4e906b6d074",
+		cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesetPhaseHTTPRequestFirewallCustom,
 		cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParams{
-			Phase: cloudflare.F(cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsPhaseHTTPRequestTransform),
-			Rules: cloudflare.F([]cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRule{cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesCreateUpdateRule(cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesCreateUpdateRule{
-				Action: cloudflare.F("execute"),
-				ActionParameters: cloudflare.F[any](map[string]interface{}{
-					"id": "4814384a9e5d4991b9815dcfc25d2f1f",
+			ID:          cloudflare.F[any](map[string]interface{}{}),
+			Description: cloudflare.F("My ruleset to execute managed rulesets"),
+			Kind:        cloudflare.F(cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsKindRoot),
+			Name:        cloudflare.F("My ruleset"),
+			Phase:       cloudflare.F(cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsPhaseHTTPRequestFirewallCustom),
+			Rules: cloudflare.F([]cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRule{cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesOexZd8xKBlockRule(cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesOexZd8xKBlockRule{
+				Action: cloudflare.F(cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesOexZd8xKBlockRuleActionBlock),
+				ActionParameters: cloudflare.F(cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesOexZd8xKBlockRuleActionParameters{
+					Response: cloudflare.F(cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesOexZd8xKBlockRuleActionParametersResponse{
+						Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
+						ContentType: cloudflare.F("application/json"),
+						StatusCode:  cloudflare.F(int64(400)),
+					}),
 				}),
-				Description: cloudflare.F("Execute the OWASP ruleset when the IP address is not 1.1.1.1"),
-				Enabled:     cloudflare.F(true),
+				Description: cloudflare.F[any]("Block when the IP address is not 1.1.1.1"),
+				Enabled:     cloudflare.F[any](map[string]interface{}{}),
 				Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
-				Logging: cloudflare.F(cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesCreateUpdateRuleLogging{
+				ID:          cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
+				Logging: cloudflare.F(cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesOexZd8xKBlockRuleLogging{
 					Enabled: cloudflare.F(true),
 				}),
 				Ref: cloudflare.F("my_ref"),
-			}), cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesCreateUpdateRule(cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesCreateUpdateRule{
-				Action: cloudflare.F("execute"),
-				ActionParameters: cloudflare.F[any](map[string]interface{}{
-					"id": "4814384a9e5d4991b9815dcfc25d2f1f",
+			}), cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesOexZd8xKBlockRule(cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesOexZd8xKBlockRule{
+				Action: cloudflare.F(cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesOexZd8xKBlockRuleActionBlock),
+				ActionParameters: cloudflare.F(cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesOexZd8xKBlockRuleActionParameters{
+					Response: cloudflare.F(cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesOexZd8xKBlockRuleActionParametersResponse{
+						Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
+						ContentType: cloudflare.F("application/json"),
+						StatusCode:  cloudflare.F(int64(400)),
+					}),
 				}),
-				Description: cloudflare.F("Execute the OWASP ruleset when the IP address is not 1.1.1.1"),
-				Enabled:     cloudflare.F(true),
+				Description: cloudflare.F[any]("Block when the IP address is not 1.1.1.1"),
+				Enabled:     cloudflare.F[any](map[string]interface{}{}),
 				Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
-				Logging: cloudflare.F(cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesCreateUpdateRuleLogging{
+				ID:          cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
+				Logging: cloudflare.F(cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesOexZd8xKBlockRuleLogging{
 					Enabled: cloudflare.F(true),
 				}),
 				Ref: cloudflare.F("my_ref"),
-			}), cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesCreateUpdateRule(cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesCreateUpdateRule{
-				Action: cloudflare.F("execute"),
-				ActionParameters: cloudflare.F[any](map[string]interface{}{
-					"id": "4814384a9e5d4991b9815dcfc25d2f1f",
+			}), cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesOexZd8xKBlockRule(cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesOexZd8xKBlockRule{
+				Action: cloudflare.F(cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesOexZd8xKBlockRuleActionBlock),
+				ActionParameters: cloudflare.F(cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesOexZd8xKBlockRuleActionParameters{
+					Response: cloudflare.F(cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesOexZd8xKBlockRuleActionParametersResponse{
+						Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
+						ContentType: cloudflare.F("application/json"),
+						StatusCode:  cloudflare.F(int64(400)),
+					}),
 				}),
-				Description: cloudflare.F("Execute the OWASP ruleset when the IP address is not 1.1.1.1"),
-				Enabled:     cloudflare.F(true),
+				Description: cloudflare.F[any]("Block when the IP address is not 1.1.1.1"),
+				Enabled:     cloudflare.F[any](map[string]interface{}{}),
 				Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
-				Logging: cloudflare.F(cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesCreateUpdateRuleLogging{
+				ID:          cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
+				Logging: cloudflare.F(cloudflare.ZoneRulesetPhaseEntrypointTransformRulesUpdateTransformRulesParamsRulesOexZd8xKBlockRuleLogging{
 					Enabled: cloudflare.F(true),
 				}),
 				Ref: cloudflare.F("my_ref"),
 			})}),
-			Description: cloudflare.F("My ruleset to execute managed rulesets"),
 		},
 	)
 	if err != nil {

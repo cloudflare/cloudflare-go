@@ -25,10 +25,12 @@ func TestUserTokenGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Users.Tokens.Get(context.TODO(), map[string]interface{}{})
+	_, err := client.User.Tokens.Get(context.TODO(), map[string]interface{}{})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -49,10 +51,12 @@ func TestUserTokenUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Users.Tokens.Update(
+	_, err := client.User.Tokens.Update(
 		context.TODO(),
 		map[string]interface{}{},
 		cloudflare.UserTokenUpdateParams{
@@ -110,10 +114,12 @@ func TestUserTokenDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Users.Tokens.Delete(context.TODO(), map[string]interface{}{})
+	_, err := client.User.Tokens.Delete(context.TODO(), map[string]interface{}{})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -134,10 +140,12 @@ func TestUserTokenUserAPITokensNewTokenWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Users.Tokens.UserAPITokensNewToken(context.TODO(), cloudflare.UserTokenUserAPITokensNewTokenParams{
+	_, err := client.User.Tokens.UserAPITokensNewToken(context.TODO(), cloudflare.UserTokenUserAPITokensNewTokenParams{
 		Name: cloudflare.F("readonly token"),
 		Policies: cloudflare.F([]cloudflare.UserTokenUserAPITokensNewTokenParamsPolicy{{
 			Effect:           cloudflare.F(cloudflare.UserTokenUserAPITokensNewTokenParamsPoliciesEffectAllow),
@@ -190,10 +198,12 @@ func TestUserTokenUserAPITokensListTokensWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Users.Tokens.UserAPITokensListTokens(context.TODO(), cloudflare.UserTokenUserAPITokensListTokensParams{
+	_, err := client.User.Tokens.UserAPITokensListTokens(context.TODO(), cloudflare.UserTokenUserAPITokensListTokensParams{
 		Direction: cloudflare.F(cloudflare.UserTokenUserAPITokensListTokensParamsDirectionDesc),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(5.000000),

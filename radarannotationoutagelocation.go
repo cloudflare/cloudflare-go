@@ -33,7 +33,7 @@ func NewRadarAnnotationOutageLocationService(opts ...option.RequestOption) (r *R
 	return
 }
 
-// Get top outages annotations
+// Get the number of outages for locations.
 func (r *RadarAnnotationOutageLocationService) List(ctx context.Context, query RadarAnnotationOutageLocationListParams, opts ...option.RequestOption) (res *RadarAnnotationOutageLocationListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "radar/annotations/outages/locations"
@@ -128,6 +128,7 @@ type RadarAnnotationOutageLocationListParamsDateRange string
 
 const (
 	RadarAnnotationOutageLocationListParamsDateRange1d         RadarAnnotationOutageLocationListParamsDateRange = "1d"
+	RadarAnnotationOutageLocationListParamsDateRange2d         RadarAnnotationOutageLocationListParamsDateRange = "2d"
 	RadarAnnotationOutageLocationListParamsDateRange7d         RadarAnnotationOutageLocationListParamsDateRange = "7d"
 	RadarAnnotationOutageLocationListParamsDateRange14d        RadarAnnotationOutageLocationListParamsDateRange = "14d"
 	RadarAnnotationOutageLocationListParamsDateRange28d        RadarAnnotationOutageLocationListParamsDateRange = "28d"
@@ -135,6 +136,7 @@ const (
 	RadarAnnotationOutageLocationListParamsDateRange24w        RadarAnnotationOutageLocationListParamsDateRange = "24w"
 	RadarAnnotationOutageLocationListParamsDateRange52w        RadarAnnotationOutageLocationListParamsDateRange = "52w"
 	RadarAnnotationOutageLocationListParamsDateRange1dControl  RadarAnnotationOutageLocationListParamsDateRange = "1dControl"
+	RadarAnnotationOutageLocationListParamsDateRange2dControl  RadarAnnotationOutageLocationListParamsDateRange = "2dControl"
 	RadarAnnotationOutageLocationListParamsDateRange7dControl  RadarAnnotationOutageLocationListParamsDateRange = "7dControl"
 	RadarAnnotationOutageLocationListParamsDateRange14dControl RadarAnnotationOutageLocationListParamsDateRange = "14dControl"
 	RadarAnnotationOutageLocationListParamsDateRange28dControl RadarAnnotationOutageLocationListParamsDateRange = "28dControl"

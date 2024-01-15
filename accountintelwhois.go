@@ -35,25 +35,25 @@ func NewAccountIntelWhoisService(opts ...option.RequestOption) (r *AccountIntelW
 }
 
 // Get WHOIS Record
-func (r *AccountIntelWhoisService) WhoisRecordGetWhoisRecord(ctx context.Context, accountIdentifier string, query AccountIntelWhoisWhoisRecordGetWhoisRecordParams, opts ...option.RequestOption) (res *WhoisSingleResponse, err error) {
+func (r *AccountIntelWhoisService) WhoisRecordGetWhoisRecord(ctx context.Context, accountIdentifier string, query AccountIntelWhoisWhoisRecordGetWhoisRecordParams, opts ...option.RequestOption) (res *AccountIntelWhoisWhoisRecordGetWhoisRecordResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/intel/whois", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
-type WhoisSingleResponse struct {
-	Errors   []WhoisSingleResponseError   `json:"errors"`
-	Messages []WhoisSingleResponseMessage `json:"messages"`
-	Result   WhoisSingleResponseResult    `json:"result"`
+type AccountIntelWhoisWhoisRecordGetWhoisRecordResponse struct {
+	Errors   []AccountIntelWhoisWhoisRecordGetWhoisRecordResponseError   `json:"errors"`
+	Messages []AccountIntelWhoisWhoisRecordGetWhoisRecordResponseMessage `json:"messages"`
+	Result   AccountIntelWhoisWhoisRecordGetWhoisRecordResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success WhoisSingleResponseSuccess `json:"success"`
-	JSON    whoisSingleResponseJSON    `json:"-"`
+	Success AccountIntelWhoisWhoisRecordGetWhoisRecordResponseSuccess `json:"success"`
+	JSON    accountIntelWhoisWhoisRecordGetWhoisRecordResponseJSON    `json:"-"`
 }
 
-// whoisSingleResponseJSON contains the JSON metadata for the struct
-// [WhoisSingleResponse]
-type whoisSingleResponseJSON struct {
+// accountIntelWhoisWhoisRecordGetWhoisRecordResponseJSON contains the JSON
+// metadata for the struct [AccountIntelWhoisWhoisRecordGetWhoisRecordResponse]
+type accountIntelWhoisWhoisRecordGetWhoisRecordResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -62,64 +62,67 @@ type whoisSingleResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WhoisSingleResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountIntelWhoisWhoisRecordGetWhoisRecordResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WhoisSingleResponseError struct {
-	Code    int64                        `json:"code,required"`
-	Message string                       `json:"message,required"`
-	JSON    whoisSingleResponseErrorJSON `json:"-"`
+type AccountIntelWhoisWhoisRecordGetWhoisRecordResponseError struct {
+	Code    int64                                                       `json:"code,required"`
+	Message string                                                      `json:"message,required"`
+	JSON    accountIntelWhoisWhoisRecordGetWhoisRecordResponseErrorJSON `json:"-"`
 }
 
-// whoisSingleResponseErrorJSON contains the JSON metadata for the struct
-// [WhoisSingleResponseError]
-type whoisSingleResponseErrorJSON struct {
+// accountIntelWhoisWhoisRecordGetWhoisRecordResponseErrorJSON contains the JSON
+// metadata for the struct
+// [AccountIntelWhoisWhoisRecordGetWhoisRecordResponseError]
+type accountIntelWhoisWhoisRecordGetWhoisRecordResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WhoisSingleResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountIntelWhoisWhoisRecordGetWhoisRecordResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WhoisSingleResponseMessage struct {
-	Code    int64                          `json:"code,required"`
-	Message string                         `json:"message,required"`
-	JSON    whoisSingleResponseMessageJSON `json:"-"`
+type AccountIntelWhoisWhoisRecordGetWhoisRecordResponseMessage struct {
+	Code    int64                                                         `json:"code,required"`
+	Message string                                                        `json:"message,required"`
+	JSON    accountIntelWhoisWhoisRecordGetWhoisRecordResponseMessageJSON `json:"-"`
 }
 
-// whoisSingleResponseMessageJSON contains the JSON metadata for the struct
-// [WhoisSingleResponseMessage]
-type whoisSingleResponseMessageJSON struct {
+// accountIntelWhoisWhoisRecordGetWhoisRecordResponseMessageJSON contains the JSON
+// metadata for the struct
+// [AccountIntelWhoisWhoisRecordGetWhoisRecordResponseMessage]
+type accountIntelWhoisWhoisRecordGetWhoisRecordResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WhoisSingleResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountIntelWhoisWhoisRecordGetWhoisRecordResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WhoisSingleResponseResult struct {
-	CreatedDate       time.Time                     `json:"created_date" format:"date"`
-	Domain            string                        `json:"domain"`
-	Nameservers       []string                      `json:"nameservers"`
-	Registrant        string                        `json:"registrant"`
-	RegistrantCountry string                        `json:"registrant_country"`
-	RegistrantEmail   string                        `json:"registrant_email"`
-	RegistrantOrg     string                        `json:"registrant_org"`
-	Registrar         string                        `json:"registrar"`
-	UpdatedDate       time.Time                     `json:"updated_date" format:"date"`
-	JSON              whoisSingleResponseResultJSON `json:"-"`
+type AccountIntelWhoisWhoisRecordGetWhoisRecordResponseResult struct {
+	CreatedDate       time.Time                                                    `json:"created_date" format:"date"`
+	Domain            string                                                       `json:"domain"`
+	Nameservers       []string                                                     `json:"nameservers"`
+	Registrant        string                                                       `json:"registrant"`
+	RegistrantCountry string                                                       `json:"registrant_country"`
+	RegistrantEmail   string                                                       `json:"registrant_email"`
+	RegistrantOrg     string                                                       `json:"registrant_org"`
+	Registrar         string                                                       `json:"registrar"`
+	UpdatedDate       time.Time                                                    `json:"updated_date" format:"date"`
+	JSON              accountIntelWhoisWhoisRecordGetWhoisRecordResponseResultJSON `json:"-"`
 }
 
-// whoisSingleResponseResultJSON contains the JSON metadata for the struct
-// [WhoisSingleResponseResult]
-type whoisSingleResponseResultJSON struct {
+// accountIntelWhoisWhoisRecordGetWhoisRecordResponseResultJSON contains the JSON
+// metadata for the struct
+// [AccountIntelWhoisWhoisRecordGetWhoisRecordResponseResult]
+type accountIntelWhoisWhoisRecordGetWhoisRecordResponseResultJSON struct {
 	CreatedDate       apijson.Field
 	Domain            apijson.Field
 	Nameservers       apijson.Field
@@ -133,15 +136,15 @@ type whoisSingleResponseResultJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *WhoisSingleResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountIntelWhoisWhoisRecordGetWhoisRecordResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type WhoisSingleResponseSuccess bool
+type AccountIntelWhoisWhoisRecordGetWhoisRecordResponseSuccess bool
 
 const (
-	WhoisSingleResponseSuccessTrue WhoisSingleResponseSuccess = true
+	AccountIntelWhoisWhoisRecordGetWhoisRecordResponseSuccessTrue AccountIntelWhoisWhoisRecordGetWhoisRecordResponseSuccess = true
 )
 
 type AccountIntelWhoisWhoisRecordGetWhoisRecordParams struct {

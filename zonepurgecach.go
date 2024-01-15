@@ -42,7 +42,8 @@ func NewZonePurgeCachService(opts ...option.RequestOption) (r *ZonePurgeCachServ
 //
 // To purge files with custom cache keys, include the headers used to compute the
 // cache key as in the example. If you have a device type or geo in your cache key,
-// you will need to include the CF-Device-Type or CF-IPCountry headers.
+// you will need to include the CF-Device-Type or CF-IPCountry headers. If you have
+// lang in your cache key, you will need to include the Accept-Language header.
 //
 // **NB:** When including the Origin header, be sure to include the **scheme** and
 // **hostname**. The port number can be omitted if it is the default port (80 for
@@ -58,25 +59,25 @@ func NewZonePurgeCachService(opts ...option.RequestOption) (r *ZonePurgeCachServ
 // purge API calls in every 24 hour period. You may purge up to 30 tags, hosts, or
 // prefixes in one API call. This rate limit can be raised for customers who need
 // to purge at higher volume.
-func (r *ZonePurgeCachService) ZonePurge(ctx context.Context, identifier string, body ZonePurgeCachZonePurgeParams, opts ...option.RequestOption) (res *APIResponseSingleIDQZpLXoSu, err error) {
+func (r *ZonePurgeCachService) ZonePurge(ctx context.Context, identifier string, body ZonePurgeCachZonePurgeParams, opts ...option.RequestOption) (res *ZonePurgeCachZonePurgeResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/purge_cache", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
-type APIResponseSingleIDQZpLXoSu struct {
-	Errors   []APIResponseSingleIDQZpLXoSuError   `json:"errors"`
-	Messages []APIResponseSingleIDQZpLXoSuMessage `json:"messages"`
-	Result   APIResponseSingleIDQZpLXoSuResult    `json:"result,nullable"`
+type ZonePurgeCachZonePurgeResponse struct {
+	Errors   []ZonePurgeCachZonePurgeResponseError   `json:"errors"`
+	Messages []ZonePurgeCachZonePurgeResponseMessage `json:"messages"`
+	Result   ZonePurgeCachZonePurgeResponseResult    `json:"result,nullable"`
 	// Whether the API call was successful
-	Success APIResponseSingleIDQZpLXoSuSuccess `json:"success"`
-	JSON    apiResponseSingleIdqZpLXoSuJSON    `json:"-"`
+	Success ZonePurgeCachZonePurgeResponseSuccess `json:"success"`
+	JSON    zonePurgeCachZonePurgeResponseJSON    `json:"-"`
 }
 
-// apiResponseSingleIdqZpLXoSuJSON contains the JSON metadata for the struct
-// [APIResponseSingleIDQZpLXoSu]
-type apiResponseSingleIdqZpLXoSuJSON struct {
+// zonePurgeCachZonePurgeResponseJSON contains the JSON metadata for the struct
+// [ZonePurgeCachZonePurgeResponse]
+type zonePurgeCachZonePurgeResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -85,132 +86,133 @@ type apiResponseSingleIdqZpLXoSuJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *APIResponseSingleIDQZpLXoSu) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonePurgeCachZonePurgeResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type APIResponseSingleIDQZpLXoSuError struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    apiResponseSingleIdqZpLXoSuErrorJSON `json:"-"`
+type ZonePurgeCachZonePurgeResponseError struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    zonePurgeCachZonePurgeResponseErrorJSON `json:"-"`
 }
 
-// apiResponseSingleIdqZpLXoSuErrorJSON contains the JSON metadata for the struct
-// [APIResponseSingleIDQZpLXoSuError]
-type apiResponseSingleIdqZpLXoSuErrorJSON struct {
+// zonePurgeCachZonePurgeResponseErrorJSON contains the JSON metadata for the
+// struct [ZonePurgeCachZonePurgeResponseError]
+type zonePurgeCachZonePurgeResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *APIResponseSingleIDQZpLXoSuError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonePurgeCachZonePurgeResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type APIResponseSingleIDQZpLXoSuMessage struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    apiResponseSingleIdqZpLXoSuMessageJSON `json:"-"`
+type ZonePurgeCachZonePurgeResponseMessage struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    zonePurgeCachZonePurgeResponseMessageJSON `json:"-"`
 }
 
-// apiResponseSingleIdqZpLXoSuMessageJSON contains the JSON metadata for the struct
-// [APIResponseSingleIDQZpLXoSuMessage]
-type apiResponseSingleIdqZpLXoSuMessageJSON struct {
+// zonePurgeCachZonePurgeResponseMessageJSON contains the JSON metadata for the
+// struct [ZonePurgeCachZonePurgeResponseMessage]
+type zonePurgeCachZonePurgeResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *APIResponseSingleIDQZpLXoSuMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonePurgeCachZonePurgeResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type APIResponseSingleIDQZpLXoSuResult struct {
+type ZonePurgeCachZonePurgeResponseResult struct {
 	// Identifier
-	ID   string                                `json:"id,required"`
-	JSON apiResponseSingleIdqZpLXoSuResultJSON `json:"-"`
+	ID   string                                   `json:"id,required"`
+	JSON zonePurgeCachZonePurgeResponseResultJSON `json:"-"`
 }
 
-// apiResponseSingleIdqZpLXoSuResultJSON contains the JSON metadata for the struct
-// [APIResponseSingleIDQZpLXoSuResult]
-type apiResponseSingleIdqZpLXoSuResultJSON struct {
+// zonePurgeCachZonePurgeResponseResultJSON contains the JSON metadata for the
+// struct [ZonePurgeCachZonePurgeResponseResult]
+type zonePurgeCachZonePurgeResponseResultJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *APIResponseSingleIDQZpLXoSuResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonePurgeCachZonePurgeResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type APIResponseSingleIDQZpLXoSuSuccess bool
+type ZonePurgeCachZonePurgeResponseSuccess bool
 
 const (
-	APIResponseSingleIDQZpLXoSuSuccessTrue APIResponseSingleIDQZpLXoSuSuccess = true
+	ZonePurgeCachZonePurgeResponseSuccessTrue ZonePurgeCachZonePurgeResponseSuccess = true
 )
 
 // This interface is a union satisfied by one of the following:
-// [ZonePurgeCachZonePurgeParamsFlex], [ZonePurgeCachZonePurgeParamsEverything],
-// [ZonePurgeCachZonePurgeParamsFiles].
+// [ZonePurgeCachZonePurgeParamsBSSIfzalFlex],
+// [ZonePurgeCachZonePurgeParamsBSSIfzalEverything],
+// [ZonePurgeCachZonePurgeParamsBSSIfzalFiles].
 type ZonePurgeCachZonePurgeParams interface {
 	ImplementsZonePurgeCachZonePurgeParams()
 }
 
-type ZonePurgeCachZonePurgeParamsFlex struct {
+type ZonePurgeCachZonePurgeParamsBSSIfzalFlex struct {
 	Hosts    param.Field[[]string] `json:"hosts"`
 	Prefixes param.Field[[]string] `json:"prefixes"`
 	Tags     param.Field[[]string] `json:"tags"`
 }
 
-func (r ZonePurgeCachZonePurgeParamsFlex) MarshalJSON() (data []byte, err error) {
+func (r ZonePurgeCachZonePurgeParamsBSSIfzalFlex) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (ZonePurgeCachZonePurgeParamsFlex) ImplementsZonePurgeCachZonePurgeParams() {
+func (ZonePurgeCachZonePurgeParamsBSSIfzalFlex) ImplementsZonePurgeCachZonePurgeParams() {
 
 }
 
-type ZonePurgeCachZonePurgeParamsEverything struct {
+type ZonePurgeCachZonePurgeParamsBSSIfzalEverything struct {
 	PurgeEverything param.Field[bool] `json:"purge_everything"`
 }
 
-func (r ZonePurgeCachZonePurgeParamsEverything) MarshalJSON() (data []byte, err error) {
+func (r ZonePurgeCachZonePurgeParamsBSSIfzalEverything) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (ZonePurgeCachZonePurgeParamsEverything) ImplementsZonePurgeCachZonePurgeParams() {
+func (ZonePurgeCachZonePurgeParamsBSSIfzalEverything) ImplementsZonePurgeCachZonePurgeParams() {
 
 }
 
-type ZonePurgeCachZonePurgeParamsFiles struct {
-	Files param.Field[[]ZonePurgeCachZonePurgeParamsFilesFile] `json:"files"`
+type ZonePurgeCachZonePurgeParamsBSSIfzalFiles struct {
+	Files param.Field[[]ZonePurgeCachZonePurgeParamsBssIfzalFilesFile] `json:"files"`
 }
 
-func (r ZonePurgeCachZonePurgeParamsFiles) MarshalJSON() (data []byte, err error) {
+func (r ZonePurgeCachZonePurgeParamsBSSIfzalFiles) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (ZonePurgeCachZonePurgeParamsFiles) ImplementsZonePurgeCachZonePurgeParams() {
+func (ZonePurgeCachZonePurgeParamsBSSIfzalFiles) ImplementsZonePurgeCachZonePurgeParams() {
 
 }
 
 // Satisfied by [shared.UnionString],
-// [ZonePurgeCachZonePurgeParamsFilesFilesURLAndHeaders].
-type ZonePurgeCachZonePurgeParamsFilesFile interface {
-	ImplementsZonePurgeCachZonePurgeParamsFilesFile()
+// [ZonePurgeCachZonePurgeParamsBssIfzalFilesFilesBSSIfzalURLAndHeaders].
+type ZonePurgeCachZonePurgeParamsBssIfzalFilesFile interface {
+	ImplementsZonePurgeCachZonePurgeParamsBssIfzalFilesFile()
 }
 
-type ZonePurgeCachZonePurgeParamsFilesFilesURLAndHeaders struct {
+type ZonePurgeCachZonePurgeParamsBssIfzalFilesFilesBSSIfzalURLAndHeaders struct {
 	Headers param.Field[interface{}] `json:"headers"`
 	URL     param.Field[string]      `json:"url"`
 }
 
-func (r ZonePurgeCachZonePurgeParamsFilesFilesURLAndHeaders) MarshalJSON() (data []byte, err error) {
+func (r ZonePurgeCachZonePurgeParamsBssIfzalFilesFilesBSSIfzalURLAndHeaders) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZonePurgeCachZonePurgeParamsFilesFilesURLAndHeaders) ImplementsZonePurgeCachZonePurgeParamsFilesFile() {
+func (r ZonePurgeCachZonePurgeParamsBssIfzalFilesFilesBSSIfzalURLAndHeaders) ImplementsZonePurgeCachZonePurgeParamsBssIfzalFilesFile() {
 }

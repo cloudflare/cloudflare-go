@@ -7,12 +7,15 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // ZoneAPIGatewayConfigurationService contains methods and other services that help
@@ -34,7 +37,7 @@ func NewZoneAPIGatewayConfigurationService(opts ...option.RequestOption) (r *Zon
 }
 
 // Retrieve information about specific configuration properties
-func (r *ZoneAPIGatewayConfigurationService) APIShieldSettingsGetInformationAboutSpecificConfigurationProperties(ctx context.Context, zoneID string, query ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesParams, opts ...option.RequestOption) (res *SingleResponsePwGei7T9, err error) {
+func (r *ZoneAPIGatewayConfigurationService) APIShieldSettingsGetInformationAboutSpecificConfigurationProperties(ctx context.Context, zoneID string, query ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesParams, opts ...option.RequestOption) (res *ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/api_gateway/configuration", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
@@ -42,25 +45,26 @@ func (r *ZoneAPIGatewayConfigurationService) APIShieldSettingsGetInformationAbou
 }
 
 // Set configuration properties
-func (r *ZoneAPIGatewayConfigurationService) APIShieldSettingsSetConfigurationProperties(ctx context.Context, zoneID string, body ZoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesParams, opts ...option.RequestOption) (res *APIResponseSingle, err error) {
+func (r *ZoneAPIGatewayConfigurationService) APIShieldSettingsSetConfigurationProperties(ctx context.Context, zoneID string, body ZoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesParams, opts ...option.RequestOption) (res *ZoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/api_gateway/configuration", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
 	return
 }
 
-type SingleResponsePwGei7T9 struct {
-	Errors   []SingleResponsePwGei7T9Error   `json:"errors"`
-	Messages []SingleResponsePwGei7T9Message `json:"messages"`
-	Result   SingleResponsePwGei7T9Result    `json:"result"`
+type ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponse struct {
+	Errors   []ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseError   `json:"errors"`
+	Messages []ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseMessage `json:"messages"`
+	Result   ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success SingleResponsePwGei7T9Success `json:"success"`
-	JSON    singleResponsePwGei7T9JSON    `json:"-"`
+	Success bool                                                                                                       `json:"success"`
+	JSON    zoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseJSON `json:"-"`
 }
 
-// singleResponsePwGei7T9JSON contains the JSON metadata for the struct
-// [SingleResponsePwGei7T9]
-type singleResponsePwGei7T9JSON struct {
+// zoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponse]
+type zoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -69,100 +73,181 @@ type singleResponsePwGei7T9JSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SingleResponsePwGei7T9) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SingleResponsePwGei7T9Error struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    singleResponsePwGei7T9ErrorJSON `json:"-"`
+type ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseError struct {
+	Code    int64                                                                                                           `json:"code,required"`
+	Message string                                                                                                          `json:"message,required"`
+	JSON    zoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseErrorJSON `json:"-"`
 }
 
-// singleResponsePwGei7T9ErrorJSON contains the JSON metadata for the struct
-// [SingleResponsePwGei7T9Error]
-type singleResponsePwGei7T9ErrorJSON struct {
+// zoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseError]
+type zoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SingleResponsePwGei7T9Error) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SingleResponsePwGei7T9Message struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    singleResponsePwGei7T9MessageJSON `json:"-"`
+type ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseMessage struct {
+	Code    int64                                                                                                             `json:"code,required"`
+	Message string                                                                                                            `json:"message,required"`
+	JSON    zoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseMessageJSON `json:"-"`
 }
 
-// singleResponsePwGei7T9MessageJSON contains the JSON metadata for the struct
-// [SingleResponsePwGei7T9Message]
-type singleResponsePwGei7T9MessageJSON struct {
+// zoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseMessage]
+type zoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SingleResponsePwGei7T9Message) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SingleResponsePwGei7T9Result struct {
-	AuthIDCharacteristics []SingleResponsePwGei7T9ResultAuthIDCharacteristic `json:"auth_id_characteristics"`
-	JSON                  singleResponsePwGei7T9ResultJSON                   `json:"-"`
+type ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseResult struct {
+	AuthIDCharacteristics []ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseResultAuthIDCharacteristic `json:"auth_id_characteristics"`
+	JSON                  zoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseResultJSON                   `json:"-"`
 }
 
-// singleResponsePwGei7T9ResultJSON contains the JSON metadata for the struct
-// [SingleResponsePwGei7T9Result]
-type singleResponsePwGei7T9ResultJSON struct {
+// zoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseResultJSON
+// contains the JSON metadata for the struct
+// [ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseResult]
+type zoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseResultJSON struct {
 	AuthIDCharacteristics apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *SingleResponsePwGei7T9Result) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SingleResponsePwGei7T9ResultAuthIDCharacteristic struct {
+type ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseResultAuthIDCharacteristic struct {
 	// The name of the characteristic field, i.e., the header or cookie name.
 	Name string `json:"name,required"`
 	// The type of characteristic.
-	Type SingleResponsePwGei7T9ResultAuthIDCharacteristicsType `json:"type,required"`
-	JSON singleResponsePwGei7T9ResultAuthIDCharacteristicJSON  `json:"-"`
+	Type ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseResultAuthIDCharacteristicsType `json:"type,required"`
+	JSON zoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseResultAuthIDCharacteristicJSON  `json:"-"`
 }
 
-// singleResponsePwGei7T9ResultAuthIDCharacteristicJSON contains the JSON metadata
-// for the struct [SingleResponsePwGei7T9ResultAuthIDCharacteristic]
-type singleResponsePwGei7T9ResultAuthIDCharacteristicJSON struct {
+// zoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseResultAuthIDCharacteristicJSON
+// contains the JSON metadata for the struct
+// [ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseResultAuthIDCharacteristic]
+type zoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseResultAuthIDCharacteristicJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SingleResponsePwGei7T9ResultAuthIDCharacteristic) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseResultAuthIDCharacteristic) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of characteristic.
-type SingleResponsePwGei7T9ResultAuthIDCharacteristicsType string
+type ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseResultAuthIDCharacteristicsType string
 
 const (
-	SingleResponsePwGei7T9ResultAuthIDCharacteristicsTypeHeader SingleResponsePwGei7T9ResultAuthIDCharacteristicsType = "header"
-	SingleResponsePwGei7T9ResultAuthIDCharacteristicsTypeCookie SingleResponsePwGei7T9ResultAuthIDCharacteristicsType = "cookie"
+	ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseResultAuthIDCharacteristicsTypeHeader ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseResultAuthIDCharacteristicsType = "header"
+	ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseResultAuthIDCharacteristicsTypeCookie ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesResponseResultAuthIDCharacteristicsType = "cookie"
 )
 
-// Whether the API call was successful
-type SingleResponsePwGei7T9Success bool
+type ZoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesResponse struct {
+	Errors   []ZoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesResponseError   `json:"errors"`
+	Messages []ZoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesResponseMessage `json:"messages"`
+	Result   ZoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success bool                                                                               `json:"success"`
+	JSON    zoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesResponseJSON `json:"-"`
+}
 
-const (
-	SingleResponsePwGei7T9SuccessTrue SingleResponsePwGei7T9Success = true
-)
+// zoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesResponse]
+type zoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesResponseError struct {
+	Code    int64                                                                                   `json:"code,required"`
+	Message string                                                                                  `json:"message,required"`
+	JSON    zoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesResponseErrorJSON `json:"-"`
+}
+
+// zoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesResponseError]
+type zoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesResponseMessage struct {
+	Code    int64                                                                                     `json:"code,required"`
+	Message string                                                                                    `json:"message,required"`
+	JSON    zoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesResponseMessageJSON `json:"-"`
+}
+
+// zoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesResponseMessage]
+type zoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Union satisfied by
+// [ZoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesResponseResultUnknown]
+// or [shared.UnionString].
+type ZoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesResponseResult interface {
+	ImplementsZoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesResponseResult()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZoneAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesResponseResult)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.String,
+			DiscriminatorValue: "",
+			Type:               reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
 
 type ZoneAPIGatewayConfigurationAPIShieldSettingsGetInformationAboutSpecificConfigurationPropertiesParams struct {
 	// Requests information about certain properties.

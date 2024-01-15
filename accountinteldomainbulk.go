@@ -34,26 +34,27 @@ func NewAccountIntelDomainBulkService(opts ...option.RequestOption) (r *AccountI
 }
 
 // Get Multiple Domain Details
-func (r *AccountIntelDomainBulkService) DomainIntelligenceGetMultipleDomainDetails(ctx context.Context, accountIdentifier string, query AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsParams, opts ...option.RequestOption) (res *SchemasCollectionResponse, err error) {
+func (r *AccountIntelDomainBulkService) DomainIntelligenceGetMultipleDomainDetails(ctx context.Context, accountIdentifier string, query AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsParams, opts ...option.RequestOption) (res *AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/intel/domain/bulk", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
-type SchemasCollectionResponse struct {
-	Errors     []SchemasCollectionResponseError    `json:"errors"`
-	Messages   []SchemasCollectionResponseMessage  `json:"messages"`
-	Result     []SchemasCollectionResponseResult   `json:"result"`
-	ResultInfo SchemasCollectionResponseResultInfo `json:"result_info"`
+type AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponse struct {
+	Errors     []AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseError    `json:"errors"`
+	Messages   []AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseMessage  `json:"messages"`
+	Result     []AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResult   `json:"result"`
+	ResultInfo AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultInfo `json:"result_info"`
 	// Whether the API call was successful
-	Success SchemasCollectionResponseSuccess `json:"success"`
-	JSON    schemasCollectionResponseJSON    `json:"-"`
+	Success AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseSuccess `json:"success"`
+	JSON    accountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseJSON    `json:"-"`
 }
 
-// schemasCollectionResponseJSON contains the JSON metadata for the struct
-// [SchemasCollectionResponse]
-type schemasCollectionResponseJSON struct {
+// accountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseJSON
+// contains the JSON metadata for the struct
+// [AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponse]
+type accountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -63,124 +64,181 @@ type schemasCollectionResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasCollectionResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemasCollectionResponseError struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    schemasCollectionResponseErrorJSON `json:"-"`
+type AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseError struct {
+	Code    int64                                                                             `json:"code,required"`
+	Message string                                                                            `json:"message,required"`
+	JSON    accountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseErrorJSON `json:"-"`
 }
 
-// schemasCollectionResponseErrorJSON contains the JSON metadata for the struct
-// [SchemasCollectionResponseError]
-type schemasCollectionResponseErrorJSON struct {
+// accountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseError]
+type accountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasCollectionResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemasCollectionResponseMessage struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    schemasCollectionResponseMessageJSON `json:"-"`
+type AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseMessage struct {
+	Code    int64                                                                               `json:"code,required"`
+	Message string                                                                              `json:"message,required"`
+	JSON    accountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseMessageJSON `json:"-"`
 }
 
-// schemasCollectionResponseMessageJSON contains the JSON metadata for the struct
-// [SchemasCollectionResponseMessage]
-type schemasCollectionResponseMessageJSON struct {
+// accountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseMessage]
+type accountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasCollectionResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemasCollectionResponseResult struct {
+type AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResult struct {
 	// Additional information related to the host name.
-	AdditionalInformation SchemasCollectionResponseResultAdditionalInformation `json:"additional_information"`
+	AdditionalInformation AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultAdditionalInformation `json:"additional_information"`
 	// Application that the hostname belongs to.
-	Application SchemasCollectionResponseResultApplication `json:"application"`
+	Application AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultApplication `json:"application"`
 	// Current content categories.
-	ContentCategories interface{} `json:"content_categories"`
-	Domain            string      `json:"domain"`
+	ContentCategories          interface{}                                                                                              `json:"content_categories"`
+	Domain                     string                                                                                                   `json:"domain"`
+	InheritedContentCategories []AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultInheritedContentCategory `json:"inherited_content_categories"`
+	// Domain from which `inherited_content_categories` and `inherited_risk_types` are
+	// inherited, if applicable.
+	InheritedFrom      string                                                                                            `json:"inherited_from"`
+	InheritedRiskTypes []AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultInheritedRiskType `json:"inherited_risk_types"`
 	// Global Cloudflare 100k ranking for the last 30 days, if available for the
 	// hostname. The top ranked domain is 1, the lowest ranked domain is 100,000.
 	PopularityRank int64 `json:"popularity_rank"`
 	// Hostname risk score, which is a value between 0 (lowest risk) to 1 (highest
 	// risk).
-	RiskScore float64                             `json:"risk_score"`
-	RiskTypes interface{}                         `json:"risk_types"`
-	JSON      schemasCollectionResponseResultJSON `json:"-"`
+	RiskScore float64                                                                            `json:"risk_score"`
+	RiskTypes interface{}                                                                        `json:"risk_types"`
+	JSON      accountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultJSON `json:"-"`
 }
 
-// schemasCollectionResponseResultJSON contains the JSON metadata for the struct
-// [SchemasCollectionResponseResult]
-type schemasCollectionResponseResultJSON struct {
-	AdditionalInformation apijson.Field
-	Application           apijson.Field
-	ContentCategories     apijson.Field
-	Domain                apijson.Field
-	PopularityRank        apijson.Field
-	RiskScore             apijson.Field
-	RiskTypes             apijson.Field
-	raw                   string
-	ExtraFields           map[string]apijson.Field
+// accountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResult]
+type accountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultJSON struct {
+	AdditionalInformation      apijson.Field
+	Application                apijson.Field
+	ContentCategories          apijson.Field
+	Domain                     apijson.Field
+	InheritedContentCategories apijson.Field
+	InheritedFrom              apijson.Field
+	InheritedRiskTypes         apijson.Field
+	PopularityRank             apijson.Field
+	RiskScore                  apijson.Field
+	RiskTypes                  apijson.Field
+	raw                        string
+	ExtraFields                map[string]apijson.Field
 }
 
-func (r *SchemasCollectionResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Additional information related to the host name.
-type SchemasCollectionResponseResultAdditionalInformation struct {
+type AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultAdditionalInformation struct {
 	// Suspected DGA malware family.
-	SuspectedMalwareFamily string                                                   `json:"suspected_malware_family"`
-	JSON                   schemasCollectionResponseResultAdditionalInformationJSON `json:"-"`
+	SuspectedMalwareFamily string                                                                                                  `json:"suspected_malware_family"`
+	JSON                   accountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultAdditionalInformationJSON `json:"-"`
 }
 
-// schemasCollectionResponseResultAdditionalInformationJSON contains the JSON
-// metadata for the struct [SchemasCollectionResponseResultAdditionalInformation]
-type schemasCollectionResponseResultAdditionalInformationJSON struct {
+// accountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultAdditionalInformationJSON
+// contains the JSON metadata for the struct
+// [AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultAdditionalInformation]
+type accountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultAdditionalInformationJSON struct {
 	SuspectedMalwareFamily apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *SchemasCollectionResponseResultAdditionalInformation) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultAdditionalInformation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Application that the hostname belongs to.
-type SchemasCollectionResponseResultApplication struct {
-	ID   int64                                          `json:"id"`
-	Name string                                         `json:"name"`
-	JSON schemasCollectionResponseResultApplicationJSON `json:"-"`
+type AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultApplication struct {
+	ID   int64                                                                                         `json:"id"`
+	Name string                                                                                        `json:"name"`
+	JSON accountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultApplicationJSON `json:"-"`
 }
 
-// schemasCollectionResponseResultApplicationJSON contains the JSON metadata for
-// the struct [SchemasCollectionResponseResultApplication]
-type schemasCollectionResponseResultApplicationJSON struct {
+// accountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultApplicationJSON
+// contains the JSON metadata for the struct
+// [AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultApplication]
+type accountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultApplicationJSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasCollectionResponseResultApplication) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemasCollectionResponseResultInfo struct {
+type AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultInheritedContentCategory struct {
+	ID              int64                                                                                                      `json:"id"`
+	Name            string                                                                                                     `json:"name"`
+	SuperCategoryID int64                                                                                                      `json:"super_category_id"`
+	JSON            accountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultInheritedContentCategoryJSON `json:"-"`
+}
+
+// accountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultInheritedContentCategoryJSON
+// contains the JSON metadata for the struct
+// [AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultInheritedContentCategory]
+type accountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultInheritedContentCategoryJSON struct {
+	ID              apijson.Field
+	Name            apijson.Field
+	SuperCategoryID apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultInheritedContentCategory) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultInheritedRiskType struct {
+	ID              int64                                                                                               `json:"id"`
+	Name            string                                                                                              `json:"name"`
+	SuperCategoryID int64                                                                                               `json:"super_category_id"`
+	JSON            accountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultInheritedRiskTypeJSON `json:"-"`
+}
+
+// accountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultInheritedRiskTypeJSON
+// contains the JSON metadata for the struct
+// [AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultInheritedRiskType]
+type accountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultInheritedRiskTypeJSON struct {
+	ID              apijson.Field
+	Name            apijson.Field
+	SuperCategoryID apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultInheritedRiskType) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -188,13 +246,14 @@ type SchemasCollectionResponseResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                 `json:"total_count"`
-	JSON       schemasCollectionResponseResultInfoJSON `json:"-"`
+	TotalCount float64                                                                                `json:"total_count"`
+	JSON       accountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultInfoJSON `json:"-"`
 }
 
-// schemasCollectionResponseResultInfoJSON contains the JSON metadata for the
-// struct [SchemasCollectionResponseResultInfo]
-type schemasCollectionResponseResultInfoJSON struct {
+// accountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultInfo]
+type accountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -203,15 +262,15 @@ type schemasCollectionResponseResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasCollectionResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type SchemasCollectionResponseSuccess bool
+type AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseSuccess bool
 
 const (
-	SchemasCollectionResponseSuccessTrue SchemasCollectionResponseSuccess = true
+	AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseSuccessTrue AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseSuccess = true
 )
 
 type AccountIntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsParams struct {

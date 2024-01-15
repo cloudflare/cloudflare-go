@@ -31,27 +31,28 @@ func NewAccountGatewayListItemService(opts ...option.RequestOption) (r *AccountG
 	return
 }
 
-// Fetch all items of a single Zero Trust List.
-func (r *AccountGatewayListItemService) ZeroTrustListsZeroTrustListItems(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *ListItemResponseCollection, err error) {
+// Fetches all items in a single Zero Trust list.
+func (r *AccountGatewayListItemService) ZeroTrustListsZeroTrustListItems(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *AccountGatewayListItemZeroTrustListsZeroTrustListItemsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/gateway/lists/%s/items", identifier, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type ListItemResponseCollection struct {
-	Errors     []ListItemResponseCollectionError    `json:"errors"`
-	Messages   []ListItemResponseCollectionMessage  `json:"messages"`
-	Result     [][]ListItemResponseCollectionResult `json:"result"`
-	ResultInfo ListItemResponseCollectionResultInfo `json:"result_info"`
+type AccountGatewayListItemZeroTrustListsZeroTrustListItemsResponse struct {
+	Errors     []AccountGatewayListItemZeroTrustListsZeroTrustListItemsResponseError    `json:"errors"`
+	Messages   []AccountGatewayListItemZeroTrustListsZeroTrustListItemsResponseMessage  `json:"messages"`
+	Result     [][]AccountGatewayListItemZeroTrustListsZeroTrustListItemsResponseResult `json:"result"`
+	ResultInfo AccountGatewayListItemZeroTrustListsZeroTrustListItemsResponseResultInfo `json:"result_info"`
 	// Whether the API call was successful
-	Success ListItemResponseCollectionSuccess `json:"success"`
-	JSON    listItemResponseCollectionJSON    `json:"-"`
+	Success AccountGatewayListItemZeroTrustListsZeroTrustListItemsResponseSuccess `json:"success"`
+	JSON    accountGatewayListItemZeroTrustListsZeroTrustListItemsResponseJSON    `json:"-"`
 }
 
-// listItemResponseCollectionJSON contains the JSON metadata for the struct
-// [ListItemResponseCollection]
-type listItemResponseCollectionJSON struct {
+// accountGatewayListItemZeroTrustListsZeroTrustListItemsResponseJSON contains the
+// JSON metadata for the struct
+// [AccountGatewayListItemZeroTrustListsZeroTrustListItemsResponse]
+type accountGatewayListItemZeroTrustListsZeroTrustListItemsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -61,69 +62,72 @@ type listItemResponseCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ListItemResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGatewayListItemZeroTrustListsZeroTrustListItemsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ListItemResponseCollectionError struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    listItemResponseCollectionErrorJSON `json:"-"`
+type AccountGatewayListItemZeroTrustListsZeroTrustListItemsResponseError struct {
+	Code    int64                                                                   `json:"code,required"`
+	Message string                                                                  `json:"message,required"`
+	JSON    accountGatewayListItemZeroTrustListsZeroTrustListItemsResponseErrorJSON `json:"-"`
 }
 
-// listItemResponseCollectionErrorJSON contains the JSON metadata for the struct
-// [ListItemResponseCollectionError]
-type listItemResponseCollectionErrorJSON struct {
+// accountGatewayListItemZeroTrustListsZeroTrustListItemsResponseErrorJSON contains
+// the JSON metadata for the struct
+// [AccountGatewayListItemZeroTrustListsZeroTrustListItemsResponseError]
+type accountGatewayListItemZeroTrustListsZeroTrustListItemsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ListItemResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGatewayListItemZeroTrustListsZeroTrustListItemsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ListItemResponseCollectionMessage struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    listItemResponseCollectionMessageJSON `json:"-"`
+type AccountGatewayListItemZeroTrustListsZeroTrustListItemsResponseMessage struct {
+	Code    int64                                                                     `json:"code,required"`
+	Message string                                                                    `json:"message,required"`
+	JSON    accountGatewayListItemZeroTrustListsZeroTrustListItemsResponseMessageJSON `json:"-"`
 }
 
-// listItemResponseCollectionMessageJSON contains the JSON metadata for the struct
-// [ListItemResponseCollectionMessage]
-type listItemResponseCollectionMessageJSON struct {
+// accountGatewayListItemZeroTrustListsZeroTrustListItemsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayListItemZeroTrustListsZeroTrustListItemsResponseMessage]
+type accountGatewayListItemZeroTrustListsZeroTrustListItemsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ListItemResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGatewayListItemZeroTrustListsZeroTrustListItemsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ListItemResponseCollectionResult struct {
+type AccountGatewayListItemZeroTrustListsZeroTrustListItemsResponseResult struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The value of the item in a List.
-	Value string                               `json:"value"`
-	JSON  listItemResponseCollectionResultJSON `json:"-"`
+	// The value of the item in a list.
+	Value string                                                                   `json:"value"`
+	JSON  accountGatewayListItemZeroTrustListsZeroTrustListItemsResponseResultJSON `json:"-"`
 }
 
-// listItemResponseCollectionResultJSON contains the JSON metadata for the struct
-// [ListItemResponseCollectionResult]
-type listItemResponseCollectionResultJSON struct {
+// accountGatewayListItemZeroTrustListsZeroTrustListItemsResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayListItemZeroTrustListsZeroTrustListItemsResponseResult]
+type accountGatewayListItemZeroTrustListsZeroTrustListItemsResponseResultJSON struct {
 	CreatedAt   apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ListItemResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGatewayListItemZeroTrustListsZeroTrustListItemsResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ListItemResponseCollectionResultInfo struct {
+type AccountGatewayListItemZeroTrustListsZeroTrustListItemsResponseResultInfo struct {
 	// Total results returned based on your search parameters.
 	Count float64 `json:"count"`
 	// Current page within paginated list of results.
@@ -131,13 +135,14 @@ type ListItemResponseCollectionResultInfo struct {
 	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters.
-	TotalCount float64                                  `json:"total_count"`
-	JSON       listItemResponseCollectionResultInfoJSON `json:"-"`
+	TotalCount float64                                                                      `json:"total_count"`
+	JSON       accountGatewayListItemZeroTrustListsZeroTrustListItemsResponseResultInfoJSON `json:"-"`
 }
 
-// listItemResponseCollectionResultInfoJSON contains the JSON metadata for the
-// struct [ListItemResponseCollectionResultInfo]
-type listItemResponseCollectionResultInfoJSON struct {
+// accountGatewayListItemZeroTrustListsZeroTrustListItemsResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayListItemZeroTrustListsZeroTrustListItemsResponseResultInfo]
+type accountGatewayListItemZeroTrustListsZeroTrustListItemsResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -146,13 +151,13 @@ type listItemResponseCollectionResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ListItemResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGatewayListItemZeroTrustListsZeroTrustListItemsResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type ListItemResponseCollectionSuccess bool
+type AccountGatewayListItemZeroTrustListsZeroTrustListItemsResponseSuccess bool
 
 const (
-	ListItemResponseCollectionSuccessTrue ListItemResponseCollectionSuccess = true
+	AccountGatewayListItemZeroTrustListsZeroTrustListItemsResponseSuccessTrue AccountGatewayListItemZeroTrustListsZeroTrustListItemsResponseSuccess = true
 )

@@ -24,50 +24,52 @@ func TestZoneAccessGroupNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Accesses.Groups.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.ZoneAccessGroupNewParams{
-			Include: cloudflare.F([]cloudflare.ZoneAccessGroupNewParamsInclude{cloudflare.ZoneAccessGroupNewParamsIncludeEmailRule(cloudflare.ZoneAccessGroupNewParamsIncludeEmailRule{
-				Email: cloudflare.F(cloudflare.ZoneAccessGroupNewParamsIncludeEmailRuleEmail{
+			Include: cloudflare.F([]cloudflare.ZoneAccessGroupNewParamsInclude{cloudflare.ZoneAccessGroupNewParamsIncludePajwohLqEmailRule(cloudflare.ZoneAccessGroupNewParamsIncludePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.ZoneAccessGroupNewParamsIncludePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}), cloudflare.ZoneAccessGroupNewParamsIncludeEmailRule(cloudflare.ZoneAccessGroupNewParamsIncludeEmailRule{
-				Email: cloudflare.F(cloudflare.ZoneAccessGroupNewParamsIncludeEmailRuleEmail{
+			}), cloudflare.ZoneAccessGroupNewParamsIncludePajwohLqEmailRule(cloudflare.ZoneAccessGroupNewParamsIncludePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.ZoneAccessGroupNewParamsIncludePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}), cloudflare.ZoneAccessGroupNewParamsIncludeEmailRule(cloudflare.ZoneAccessGroupNewParamsIncludeEmailRule{
-				Email: cloudflare.F(cloudflare.ZoneAccessGroupNewParamsIncludeEmailRuleEmail{
+			}), cloudflare.ZoneAccessGroupNewParamsIncludePajwohLqEmailRule(cloudflare.ZoneAccessGroupNewParamsIncludePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.ZoneAccessGroupNewParamsIncludePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
 			})}),
 			Name: cloudflare.F("Allow devs"),
-			Exclude: cloudflare.F([]cloudflare.ZoneAccessGroupNewParamsExclude{cloudflare.ZoneAccessGroupNewParamsExcludeEmailRule(cloudflare.ZoneAccessGroupNewParamsExcludeEmailRule{
-				Email: cloudflare.F(cloudflare.ZoneAccessGroupNewParamsExcludeEmailRuleEmail{
+			Exclude: cloudflare.F([]cloudflare.ZoneAccessGroupNewParamsExclude{cloudflare.ZoneAccessGroupNewParamsExcludePajwohLqEmailRule(cloudflare.ZoneAccessGroupNewParamsExcludePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.ZoneAccessGroupNewParamsExcludePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}), cloudflare.ZoneAccessGroupNewParamsExcludeEmailRule(cloudflare.ZoneAccessGroupNewParamsExcludeEmailRule{
-				Email: cloudflare.F(cloudflare.ZoneAccessGroupNewParamsExcludeEmailRuleEmail{
+			}), cloudflare.ZoneAccessGroupNewParamsExcludePajwohLqEmailRule(cloudflare.ZoneAccessGroupNewParamsExcludePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.ZoneAccessGroupNewParamsExcludePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}), cloudflare.ZoneAccessGroupNewParamsExcludeEmailRule(cloudflare.ZoneAccessGroupNewParamsExcludeEmailRule{
-				Email: cloudflare.F(cloudflare.ZoneAccessGroupNewParamsExcludeEmailRuleEmail{
+			}), cloudflare.ZoneAccessGroupNewParamsExcludePajwohLqEmailRule(cloudflare.ZoneAccessGroupNewParamsExcludePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.ZoneAccessGroupNewParamsExcludePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
 			})}),
-			Require: cloudflare.F([]cloudflare.ZoneAccessGroupNewParamsRequire{cloudflare.ZoneAccessGroupNewParamsRequireEmailRule(cloudflare.ZoneAccessGroupNewParamsRequireEmailRule{
-				Email: cloudflare.F(cloudflare.ZoneAccessGroupNewParamsRequireEmailRuleEmail{
+			Require: cloudflare.F([]cloudflare.ZoneAccessGroupNewParamsRequire{cloudflare.ZoneAccessGroupNewParamsRequirePajwohLqEmailRule(cloudflare.ZoneAccessGroupNewParamsRequirePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.ZoneAccessGroupNewParamsRequirePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}), cloudflare.ZoneAccessGroupNewParamsRequireEmailRule(cloudflare.ZoneAccessGroupNewParamsRequireEmailRule{
-				Email: cloudflare.F(cloudflare.ZoneAccessGroupNewParamsRequireEmailRuleEmail{
+			}), cloudflare.ZoneAccessGroupNewParamsRequirePajwohLqEmailRule(cloudflare.ZoneAccessGroupNewParamsRequirePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.ZoneAccessGroupNewParamsRequirePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}), cloudflare.ZoneAccessGroupNewParamsRequireEmailRule(cloudflare.ZoneAccessGroupNewParamsRequireEmailRule{
-				Email: cloudflare.F(cloudflare.ZoneAccessGroupNewParamsRequireEmailRuleEmail{
+			}), cloudflare.ZoneAccessGroupNewParamsRequirePajwohLqEmailRule(cloudflare.ZoneAccessGroupNewParamsRequirePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.ZoneAccessGroupNewParamsRequirePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
 			})}),
@@ -93,13 +95,15 @@ func TestZoneAccessGroupGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Accesses.Groups.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		map[string]interface{}{},
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -121,51 +125,53 @@ func TestZoneAccessGroupUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Accesses.Groups.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		map[string]interface{}{},
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.ZoneAccessGroupUpdateParams{
-			Include: cloudflare.F([]cloudflare.ZoneAccessGroupUpdateParamsInclude{cloudflare.ZoneAccessGroupUpdateParamsIncludeEmailRule(cloudflare.ZoneAccessGroupUpdateParamsIncludeEmailRule{
-				Email: cloudflare.F(cloudflare.ZoneAccessGroupUpdateParamsIncludeEmailRuleEmail{
+			Include: cloudflare.F([]cloudflare.ZoneAccessGroupUpdateParamsInclude{cloudflare.ZoneAccessGroupUpdateParamsIncludePajwohLqEmailRule(cloudflare.ZoneAccessGroupUpdateParamsIncludePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.ZoneAccessGroupUpdateParamsIncludePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}), cloudflare.ZoneAccessGroupUpdateParamsIncludeEmailRule(cloudflare.ZoneAccessGroupUpdateParamsIncludeEmailRule{
-				Email: cloudflare.F(cloudflare.ZoneAccessGroupUpdateParamsIncludeEmailRuleEmail{
+			}), cloudflare.ZoneAccessGroupUpdateParamsIncludePajwohLqEmailRule(cloudflare.ZoneAccessGroupUpdateParamsIncludePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.ZoneAccessGroupUpdateParamsIncludePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}), cloudflare.ZoneAccessGroupUpdateParamsIncludeEmailRule(cloudflare.ZoneAccessGroupUpdateParamsIncludeEmailRule{
-				Email: cloudflare.F(cloudflare.ZoneAccessGroupUpdateParamsIncludeEmailRuleEmail{
+			}), cloudflare.ZoneAccessGroupUpdateParamsIncludePajwohLqEmailRule(cloudflare.ZoneAccessGroupUpdateParamsIncludePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.ZoneAccessGroupUpdateParamsIncludePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
 			})}),
 			Name: cloudflare.F("Allow devs"),
-			Exclude: cloudflare.F([]cloudflare.ZoneAccessGroupUpdateParamsExclude{cloudflare.ZoneAccessGroupUpdateParamsExcludeEmailRule(cloudflare.ZoneAccessGroupUpdateParamsExcludeEmailRule{
-				Email: cloudflare.F(cloudflare.ZoneAccessGroupUpdateParamsExcludeEmailRuleEmail{
+			Exclude: cloudflare.F([]cloudflare.ZoneAccessGroupUpdateParamsExclude{cloudflare.ZoneAccessGroupUpdateParamsExcludePajwohLqEmailRule(cloudflare.ZoneAccessGroupUpdateParamsExcludePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.ZoneAccessGroupUpdateParamsExcludePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}), cloudflare.ZoneAccessGroupUpdateParamsExcludeEmailRule(cloudflare.ZoneAccessGroupUpdateParamsExcludeEmailRule{
-				Email: cloudflare.F(cloudflare.ZoneAccessGroupUpdateParamsExcludeEmailRuleEmail{
+			}), cloudflare.ZoneAccessGroupUpdateParamsExcludePajwohLqEmailRule(cloudflare.ZoneAccessGroupUpdateParamsExcludePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.ZoneAccessGroupUpdateParamsExcludePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}), cloudflare.ZoneAccessGroupUpdateParamsExcludeEmailRule(cloudflare.ZoneAccessGroupUpdateParamsExcludeEmailRule{
-				Email: cloudflare.F(cloudflare.ZoneAccessGroupUpdateParamsExcludeEmailRuleEmail{
+			}), cloudflare.ZoneAccessGroupUpdateParamsExcludePajwohLqEmailRule(cloudflare.ZoneAccessGroupUpdateParamsExcludePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.ZoneAccessGroupUpdateParamsExcludePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
 			})}),
-			Require: cloudflare.F([]cloudflare.ZoneAccessGroupUpdateParamsRequire{cloudflare.ZoneAccessGroupUpdateParamsRequireEmailRule(cloudflare.ZoneAccessGroupUpdateParamsRequireEmailRule{
-				Email: cloudflare.F(cloudflare.ZoneAccessGroupUpdateParamsRequireEmailRuleEmail{
+			Require: cloudflare.F([]cloudflare.ZoneAccessGroupUpdateParamsRequire{cloudflare.ZoneAccessGroupUpdateParamsRequirePajwohLqEmailRule(cloudflare.ZoneAccessGroupUpdateParamsRequirePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.ZoneAccessGroupUpdateParamsRequirePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}), cloudflare.ZoneAccessGroupUpdateParamsRequireEmailRule(cloudflare.ZoneAccessGroupUpdateParamsRequireEmailRule{
-				Email: cloudflare.F(cloudflare.ZoneAccessGroupUpdateParamsRequireEmailRuleEmail{
+			}), cloudflare.ZoneAccessGroupUpdateParamsRequirePajwohLqEmailRule(cloudflare.ZoneAccessGroupUpdateParamsRequirePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.ZoneAccessGroupUpdateParamsRequirePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}), cloudflare.ZoneAccessGroupUpdateParamsRequireEmailRule(cloudflare.ZoneAccessGroupUpdateParamsRequireEmailRule{
-				Email: cloudflare.F(cloudflare.ZoneAccessGroupUpdateParamsRequireEmailRuleEmail{
+			}), cloudflare.ZoneAccessGroupUpdateParamsRequirePajwohLqEmailRule(cloudflare.ZoneAccessGroupUpdateParamsRequirePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.ZoneAccessGroupUpdateParamsRequirePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
 			})}),
@@ -191,8 +197,10 @@ func TestZoneAccessGroupList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Accesses.Groups.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
@@ -215,13 +223,15 @@ func TestZoneAccessGroupDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Accesses.Groups.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		map[string]interface{}{},
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

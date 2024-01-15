@@ -13,6 +13,40 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
+func TestAccountAlertingV3DestinationWebhookNewWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIKey("my-cloudflare-api-key"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
+	)
+	_, err := client.Accounts.Alerting.V3.Destinations.Webhooks.New(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.AccountAlertingV3DestinationWebhookNewParams{
+			Name:   cloudflare.F("Slack Webhook"),
+			URL:    cloudflare.F("https://hooks.slack.com/services/Ds3fdBFbV/456464Gdd"),
+			Secret: cloudflare.F("string"),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
 func TestAccountAlertingV3DestinationWebhookGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
@@ -24,13 +58,15 @@ func TestAccountAlertingV3DestinationWebhookGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Alerting.V3s.Destinations.Webhooks.Get(
+	_, err := client.Accounts.Alerting.V3.Destinations.Webhooks.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		"b115d5ec-15c6-41ee-8b76-92c449b5227b",
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -41,7 +77,7 @@ func TestAccountAlertingV3DestinationWebhookGet(t *testing.T) {
 	}
 }
 
-func TestAccountAlertingV3DestinationWebhookUpdateWithOptionalParams(t *testing.T) {
+func TestAccountAlertingV3DestinationWebhookList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -52,19 +88,12 @@ func TestAccountAlertingV3DestinationWebhookUpdateWithOptionalParams(t *testing.
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Alerting.V3s.Destinations.Webhooks.Update(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		cloudflare.AccountAlertingV3DestinationWebhookUpdateParams{
-			Name:   cloudflare.F("Slack Webhook"),
-			URL:    cloudflare.F("https://hooks.slack.com/services/Ds3fdBFbV/456464Gdd"),
-			Secret: cloudflare.F("string"),
-		},
-	)
+	_, err := client.Accounts.Alerting.V3.Destinations.Webhooks.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -85,70 +114,16 @@ func TestAccountAlertingV3DestinationWebhookDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Alerting.V3s.Destinations.Webhooks.Delete(
+	_, err := client.Accounts.Alerting.V3.Destinations.Webhooks.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		"b115d5ec-15c6-41ee-8b76-92c449b5227b",
 	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestAccountAlertingV3DestinationWebhookNotificationWebhooksNewAWebhookWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
-	)
-	_, err := client.Accounts.Alerting.V3s.Destinations.Webhooks.NotificationWebhooksNewAWebhook(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.AccountAlertingV3DestinationWebhookNotificationWebhooksNewAWebhookParams{
-			Name:   cloudflare.F("Slack Webhook"),
-			URL:    cloudflare.F("https://hooks.slack.com/services/Ds3fdBFbV/456464Gdd"),
-			Secret: cloudflare.F("string"),
-		},
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestAccountAlertingV3DestinationWebhookNotificationWebhooksListWebhooks(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
-	)
-	_, err := client.Accounts.Alerting.V3s.Destinations.Webhooks.NotificationWebhooksListWebhooks(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

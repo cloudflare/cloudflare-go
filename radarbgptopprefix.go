@@ -81,8 +81,8 @@ func (r *RadarBgpTopPrefixListResponseResult) UnmarshalJSON(data []byte) (err er
 }
 
 type RadarBgpTopPrefixListResponseResultMeta struct {
-	DateRange RadarBgpTopPrefixListResponseResultMetaDateRange `json:"dateRange,required"`
-	JSON      radarBgpTopPrefixListResponseResultMetaJSON      `json:"-"`
+	DateRange []RadarBgpTopPrefixListResponseResultMetaDateRange `json:"dateRange,required"`
+	JSON      radarBgpTopPrefixListResponseResultMetaJSON        `json:"-"`
 }
 
 // radarBgpTopPrefixListResponseResultMetaJSON contains the JSON metadata for the
@@ -142,7 +142,7 @@ type RadarBgpTopPrefixListParams struct {
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of datetimes to filter the end of a series.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
@@ -173,6 +173,7 @@ type RadarBgpTopPrefixListParamsDateRange string
 
 const (
 	RadarBgpTopPrefixListParamsDateRange1d         RadarBgpTopPrefixListParamsDateRange = "1d"
+	RadarBgpTopPrefixListParamsDateRange2d         RadarBgpTopPrefixListParamsDateRange = "2d"
 	RadarBgpTopPrefixListParamsDateRange7d         RadarBgpTopPrefixListParamsDateRange = "7d"
 	RadarBgpTopPrefixListParamsDateRange14d        RadarBgpTopPrefixListParamsDateRange = "14d"
 	RadarBgpTopPrefixListParamsDateRange28d        RadarBgpTopPrefixListParamsDateRange = "28d"
@@ -180,6 +181,7 @@ const (
 	RadarBgpTopPrefixListParamsDateRange24w        RadarBgpTopPrefixListParamsDateRange = "24w"
 	RadarBgpTopPrefixListParamsDateRange52w        RadarBgpTopPrefixListParamsDateRange = "52w"
 	RadarBgpTopPrefixListParamsDateRange1dControl  RadarBgpTopPrefixListParamsDateRange = "1dControl"
+	RadarBgpTopPrefixListParamsDateRange2dControl  RadarBgpTopPrefixListParamsDateRange = "2dControl"
 	RadarBgpTopPrefixListParamsDateRange7dControl  RadarBgpTopPrefixListParamsDateRange = "7dControl"
 	RadarBgpTopPrefixListParamsDateRange14dControl RadarBgpTopPrefixListParamsDateRange = "14dControl"
 	RadarBgpTopPrefixListParamsDateRange28dControl RadarBgpTopPrefixListParamsDateRange = "28dControl"

@@ -38,39 +38,40 @@ func NewAccountAccessKeyService(opts ...option.RequestOption) (r *AccountAccessK
 }
 
 // Gets the Access key rotation settings for an account.
-func (r *AccountAccessKeyService) AccessKeyConfigurationGetTheAccessKeyConfiguration(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *KeysSingleResponse, err error) {
+func (r *AccountAccessKeyService) AccessKeyConfigurationGetTheAccessKeyConfiguration(ctx context.Context, identifier string, opts ...option.RequestOption) (res *AccountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%v/access/keys", identifier)
+	path := fmt.Sprintf("accounts/%s/access/keys", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
 // Updates the Access key rotation settings for an account.
-func (r *AccountAccessKeyService) AccessKeyConfigurationUpdateTheAccessKeyConfiguration(ctx context.Context, identifier interface{}, body AccountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationParams, opts ...option.RequestOption) (res *KeysSingleResponse, err error) {
+func (r *AccountAccessKeyService) AccessKeyConfigurationUpdateTheAccessKeyConfiguration(ctx context.Context, identifier string, body AccountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationParams, opts ...option.RequestOption) (res *AccountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%v/access/keys", identifier)
+	path := fmt.Sprintf("accounts/%s/access/keys", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
 	return
 }
 
-type KeysSingleResponse struct {
+type AccountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponse struct {
 	// The number of days until the next key rotation.
-	DaysUntilNextRotation float64                   `json:"days_until_next_rotation"`
-	Errors                []KeysSingleResponseError `json:"errors"`
+	DaysUntilNextRotation float64                                                                           `json:"days_until_next_rotation"`
+	Errors                []AccountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseError `json:"errors"`
 	// The number of days between key rotations.
 	KeyRotationIntervalDays float64 `json:"key_rotation_interval_days"`
 	// The timestamp of the previous key rotation.
-	LastKeyRotationAt time.Time                   `json:"last_key_rotation_at" format:"date-time"`
-	Messages          []KeysSingleResponseMessage `json:"messages"`
-	Result            KeysSingleResponseResult    `json:"result,nullable"`
+	LastKeyRotationAt time.Time                                                                           `json:"last_key_rotation_at" format:"date-time"`
+	Messages          []AccountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseMessage `json:"messages"`
+	Result            AccountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success KeysSingleResponseSuccess `json:"success"`
-	JSON    keysSingleResponseJSON    `json:"-"`
+	Success AccountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseSuccess `json:"success"`
+	JSON    accountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseJSON    `json:"-"`
 }
 
-// keysSingleResponseJSON contains the JSON metadata for the struct
-// [KeysSingleResponse]
-type keysSingleResponseJSON struct {
+// accountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseJSON
+// contains the JSON metadata for the struct
+// [AccountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponse]
+type accountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseJSON struct {
 	DaysUntilNextRotation   apijson.Field
 	Errors                  apijson.Field
 	KeyRotationIntervalDays apijson.Field
@@ -82,56 +83,60 @@ type keysSingleResponseJSON struct {
 	ExtraFields             map[string]apijson.Field
 }
 
-func (r *KeysSingleResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type KeysSingleResponseError struct {
-	Code    int64                       `json:"code,required"`
-	Message string                      `json:"message,required"`
-	JSON    keysSingleResponseErrorJSON `json:"-"`
+type AccountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseError struct {
+	Code    int64                                                                               `json:"code,required"`
+	Message string                                                                              `json:"message,required"`
+	JSON    accountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseErrorJSON `json:"-"`
 }
 
-// keysSingleResponseErrorJSON contains the JSON metadata for the struct
-// [KeysSingleResponseError]
-type keysSingleResponseErrorJSON struct {
+// accountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseError]
+type accountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *KeysSingleResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type KeysSingleResponseMessage struct {
-	Code    int64                         `json:"code,required"`
-	Message string                        `json:"message,required"`
-	JSON    keysSingleResponseMessageJSON `json:"-"`
+type AccountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseMessage struct {
+	Code    int64                                                                                 `json:"code,required"`
+	Message string                                                                                `json:"message,required"`
+	JSON    accountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseMessageJSON `json:"-"`
 }
 
-// keysSingleResponseMessageJSON contains the JSON metadata for the struct
-// [KeysSingleResponseMessage]
-type keysSingleResponseMessageJSON struct {
+// accountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseMessage]
+type accountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *KeysSingleResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Union satisfied by [KeysSingleResponseResultObject] or [shared.UnionString].
-type KeysSingleResponseResult interface {
-	ImplementsKeysSingleResponseResult()
+// Union satisfied by
+// [AccountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseResultUnknown]
+// or [shared.UnionString].
+type AccountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseResult interface {
+	ImplementsAccountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseResult()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*KeysSingleResponseResult)(nil)).Elem(),
+		reflect.TypeOf((*AccountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseResult)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter:         gjson.String,
@@ -142,10 +147,110 @@ func init() {
 }
 
 // Whether the API call was successful
-type KeysSingleResponseSuccess bool
+type AccountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseSuccess bool
 
 const (
-	KeysSingleResponseSuccessTrue KeysSingleResponseSuccess = true
+	AccountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseSuccessTrue AccountAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseSuccess = true
+)
+
+type AccountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponse struct {
+	// The number of days until the next key rotation.
+	DaysUntilNextRotation float64                                                                              `json:"days_until_next_rotation"`
+	Errors                []AccountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseError `json:"errors"`
+	// The number of days between key rotations.
+	KeyRotationIntervalDays float64 `json:"key_rotation_interval_days"`
+	// The timestamp of the previous key rotation.
+	LastKeyRotationAt time.Time                                                                              `json:"last_key_rotation_at" format:"date-time"`
+	Messages          []AccountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseMessage `json:"messages"`
+	Result            AccountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseSuccess `json:"success"`
+	JSON    accountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseJSON    `json:"-"`
+}
+
+// accountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseJSON
+// contains the JSON metadata for the struct
+// [AccountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponse]
+type accountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseJSON struct {
+	DaysUntilNextRotation   apijson.Field
+	Errors                  apijson.Field
+	KeyRotationIntervalDays apijson.Field
+	LastKeyRotationAt       apijson.Field
+	Messages                apijson.Field
+	Result                  apijson.Field
+	Success                 apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *AccountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseError struct {
+	Code    int64                                                                                  `json:"code,required"`
+	Message string                                                                                 `json:"message,required"`
+	JSON    accountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseErrorJSON `json:"-"`
+}
+
+// accountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseError]
+type accountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseMessage struct {
+	Code    int64                                                                                    `json:"code,required"`
+	Message string                                                                                   `json:"message,required"`
+	JSON    accountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseMessageJSON `json:"-"`
+}
+
+// accountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseMessage]
+type accountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Union satisfied by
+// [AccountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseResultUnknown]
+// or [shared.UnionString].
+type AccountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseResult interface {
+	ImplementsAccountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseResult()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseResult)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.String,
+			DiscriminatorValue: "",
+			Type:               reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Whether the API call was successful
+type AccountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseSuccess bool
+
+const (
+	AccountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseSuccessTrue AccountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseSuccess = true
 )
 
 type AccountAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationParams struct {

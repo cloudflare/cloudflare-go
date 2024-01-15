@@ -24,10 +24,12 @@ func TestAccountGatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigur
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Gateways.Configurations.ZeroTrustAccountsGetZeroTrustAccountConfiguration(context.TODO(), "699d98642c564d2e855e9661899b7252")
+	_, err := client.Accounts.Gateway.Configurations.ZeroTrustAccountsGetZeroTrustAccountConfiguration(context.TODO(), "699d98642c564d2e855e9661899b7252")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -48,10 +50,12 @@ func TestAccountGatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfig
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Gateways.Configurations.ZeroTrustAccountsPatchZeroTrustAccountConfiguration(
+	_, err := client.Accounts.Gateway.Configurations.ZeroTrustAccountsPatchZeroTrustAccountConfiguration(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		cloudflare.AccountGatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParams{
@@ -79,6 +83,7 @@ func TestAccountGatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfig
 					InspectionMode: cloudflare.F("deep"),
 				}),
 				BrowserIsolation: cloudflare.F(cloudflare.AccountGatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsBrowserIsolation{
+					NonIdentityEnabled:         cloudflare.F(true),
 					URLBrowserIsolationEnabled: cloudflare.F(true),
 				}),
 				CustomCertificate: cloudflare.F(cloudflare.AccountGatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsCustomCertificate{
@@ -87,6 +92,9 @@ func TestAccountGatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfig
 				}),
 				Fips: cloudflare.F(cloudflare.AccountGatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsFips{
 					Tls: cloudflare.F(true),
+				}),
+				ProtocolDetection: cloudflare.F(cloudflare.AccountGatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsProtocolDetection{
+					Enabled: cloudflare.F(true),
 				}),
 				TlsDecrypt: cloudflare.F(cloudflare.AccountGatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsTlsDecrypt{
 					Enabled: cloudflare.F(true),
@@ -114,10 +122,12 @@ func TestAccountGatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfi
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Gateways.Configurations.ZeroTrustAccountsUpdateZeroTrustAccountConfiguration(
+	_, err := client.Accounts.Gateway.Configurations.ZeroTrustAccountsUpdateZeroTrustAccountConfiguration(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		cloudflare.AccountGatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParams{
@@ -145,6 +155,7 @@ func TestAccountGatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfi
 					InspectionMode: cloudflare.F("deep"),
 				}),
 				BrowserIsolation: cloudflare.F(cloudflare.AccountGatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsBrowserIsolation{
+					NonIdentityEnabled:         cloudflare.F(true),
 					URLBrowserIsolationEnabled: cloudflare.F(true),
 				}),
 				CustomCertificate: cloudflare.F(cloudflare.AccountGatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsCustomCertificate{
@@ -153,6 +164,9 @@ func TestAccountGatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfi
 				}),
 				Fips: cloudflare.F(cloudflare.AccountGatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsFips{
 					Tls: cloudflare.F(true),
+				}),
+				ProtocolDetection: cloudflare.F(cloudflare.AccountGatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsProtocolDetection{
+					Enabled: cloudflare.F(true),
 				}),
 				TlsDecrypt: cloudflare.F(cloudflare.AccountGatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsTlsDecrypt{
 					Enabled: cloudflare.F(true),

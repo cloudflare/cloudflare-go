@@ -31,34 +31,35 @@ func NewAccountGatewayLoggingService(opts ...option.RequestOption) (r *AccountGa
 	return
 }
 
-// Describes the current logging settings for Zero Trust account.
-func (r *AccountGatewayLoggingService) ZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccount(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *GatewayAccountLoggingSettingsResponse, err error) {
+// Fetches the current logging settings for Zero Trust account.
+func (r *AccountGatewayLoggingService) ZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccount(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *AccountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/gateway/logging", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-// Updates the current logging settings for the Zero Trust accounty.
-func (r *AccountGatewayLoggingService) ZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccount(ctx context.Context, identifier interface{}, body AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountParams, opts ...option.RequestOption) (res *GatewayAccountLoggingSettingsResponse, err error) {
+// Updates logging settings for the current Zero Trust account.
+func (r *AccountGatewayLoggingService) ZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccount(ctx context.Context, identifier interface{}, body AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountParams, opts ...option.RequestOption) (res *AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/gateway/logging", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
 	return
 }
 
-type GatewayAccountLoggingSettingsResponse struct {
-	Errors   []GatewayAccountLoggingSettingsResponseError   `json:"errors"`
-	Messages []GatewayAccountLoggingSettingsResponseMessage `json:"messages"`
-	Result   GatewayAccountLoggingSettingsResponseResult    `json:"result"`
+type AccountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponse struct {
+	Errors   []AccountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseError   `json:"errors"`
+	Messages []AccountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseMessage `json:"messages"`
+	Result   AccountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success GatewayAccountLoggingSettingsResponseSuccess `json:"success"`
-	JSON    gatewayAccountLoggingSettingsResponseJSON    `json:"-"`
+	Success AccountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseSuccess `json:"success"`
+	JSON    accountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseJSON    `json:"-"`
 }
 
-// gatewayAccountLoggingSettingsResponseJSON contains the JSON metadata for the
-// struct [GatewayAccountLoggingSettingsResponse]
-type gatewayAccountLoggingSettingsResponseJSON struct {
+// accountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponse]
+type accountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -67,85 +68,88 @@ type gatewayAccountLoggingSettingsResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayAccountLoggingSettingsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayAccountLoggingSettingsResponseError struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    gatewayAccountLoggingSettingsResponseErrorJSON `json:"-"`
+type AccountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseError struct {
+	Code    int64                                                                                           `json:"code,required"`
+	Message string                                                                                          `json:"message,required"`
+	JSON    accountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseErrorJSON `json:"-"`
 }
 
-// gatewayAccountLoggingSettingsResponseErrorJSON contains the JSON metadata for
-// the struct [GatewayAccountLoggingSettingsResponseError]
-type gatewayAccountLoggingSettingsResponseErrorJSON struct {
+// accountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseError]
+type accountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayAccountLoggingSettingsResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayAccountLoggingSettingsResponseMessage struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    gatewayAccountLoggingSettingsResponseMessageJSON `json:"-"`
+type AccountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseMessage struct {
+	Code    int64                                                                                             `json:"code,required"`
+	Message string                                                                                            `json:"message,required"`
+	JSON    accountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseMessageJSON `json:"-"`
 }
 
-// gatewayAccountLoggingSettingsResponseMessageJSON contains the JSON metadata for
-// the struct [GatewayAccountLoggingSettingsResponseMessage]
-type gatewayAccountLoggingSettingsResponseMessageJSON struct {
+// accountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseMessage]
+type accountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayAccountLoggingSettingsResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayAccountLoggingSettingsResponseResult struct {
+type AccountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseResult struct {
 	// Redact personally identifiable information from activity logging (PII fields
 	// are: source IP, user email, user ID, device ID, URL, referrer, user agent).
 	RedactPii bool `json:"redact_pii"`
 	// Logging settings by rule type.
-	SettingsByRuleType GatewayAccountLoggingSettingsResponseResultSettingsByRuleType `json:"settings_by_rule_type"`
-	JSON               gatewayAccountLoggingSettingsResponseResultJSON               `json:"-"`
+	SettingsByRuleType AccountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseResultSettingsByRuleType `json:"settings_by_rule_type"`
+	JSON               accountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseResultJSON               `json:"-"`
 }
 
-// gatewayAccountLoggingSettingsResponseResultJSON contains the JSON metadata for
-// the struct [GatewayAccountLoggingSettingsResponseResult]
-type gatewayAccountLoggingSettingsResponseResultJSON struct {
+// accountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseResult]
+type accountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseResultJSON struct {
 	RedactPii          apijson.Field
 	SettingsByRuleType apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *GatewayAccountLoggingSettingsResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Logging settings by rule type.
-type GatewayAccountLoggingSettingsResponseResultSettingsByRuleType struct {
+type AccountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseResultSettingsByRuleType struct {
 	// Logging settings for DNS firewall.
 	DNS interface{} `json:"dns"`
 	// Logging settings for HTTP/HTTPS firewall.
 	HTTP interface{} `json:"http"`
 	// Logging settings for Network firewall.
-	L4   interface{}                                                       `json:"l4"`
-	JSON gatewayAccountLoggingSettingsResponseResultSettingsByRuleTypeJSON `json:"-"`
+	L4   interface{}                                                                                                        `json:"l4"`
+	JSON accountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseResultSettingsByRuleTypeJSON `json:"-"`
 }
 
-// gatewayAccountLoggingSettingsResponseResultSettingsByRuleTypeJSON contains the
-// JSON metadata for the struct
-// [GatewayAccountLoggingSettingsResponseResultSettingsByRuleType]
-type gatewayAccountLoggingSettingsResponseResultSettingsByRuleTypeJSON struct {
+// accountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseResultSettingsByRuleTypeJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseResultSettingsByRuleType]
+type accountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseResultSettingsByRuleTypeJSON struct {
 	DNS         apijson.Field
 	HTTP        apijson.Field
 	L4          apijson.Field
@@ -153,15 +157,136 @@ type gatewayAccountLoggingSettingsResponseResultSettingsByRuleTypeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayAccountLoggingSettingsResponseResultSettingsByRuleType) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseResultSettingsByRuleType) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type GatewayAccountLoggingSettingsResponseSuccess bool
+type AccountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseSuccess bool
 
 const (
-	GatewayAccountLoggingSettingsResponseSuccessTrue GatewayAccountLoggingSettingsResponseSuccess = true
+	AccountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseSuccessTrue AccountGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccountResponseSuccess = true
+)
+
+type AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponse struct {
+	Errors   []AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseError   `json:"errors"`
+	Messages []AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseMessage `json:"messages"`
+	Result   AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseSuccess `json:"success"`
+	JSON    accountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseJSON    `json:"-"`
+}
+
+// accountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponse]
+type accountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseError struct {
+	Code    int64                                                                                              `json:"code,required"`
+	Message string                                                                                             `json:"message,required"`
+	JSON    accountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseErrorJSON `json:"-"`
+}
+
+// accountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseError]
+type accountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseMessage struct {
+	Code    int64                                                                                                `json:"code,required"`
+	Message string                                                                                               `json:"message,required"`
+	JSON    accountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseMessageJSON `json:"-"`
+}
+
+// accountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseMessage]
+type accountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseResult struct {
+	// Redact personally identifiable information from activity logging (PII fields
+	// are: source IP, user email, user ID, device ID, URL, referrer, user agent).
+	RedactPii bool `json:"redact_pii"`
+	// Logging settings by rule type.
+	SettingsByRuleType AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseResultSettingsByRuleType `json:"settings_by_rule_type"`
+	JSON               accountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseResultJSON               `json:"-"`
+}
+
+// accountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseResult]
+type accountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseResultJSON struct {
+	RedactPii          apijson.Field
+	SettingsByRuleType apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Logging settings by rule type.
+type AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseResultSettingsByRuleType struct {
+	// Logging settings for DNS firewall.
+	DNS interface{} `json:"dns"`
+	// Logging settings for HTTP/HTTPS firewall.
+	HTTP interface{} `json:"http"`
+	// Logging settings for Network firewall.
+	L4   interface{}                                                                                                           `json:"l4"`
+	JSON accountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseResultSettingsByRuleTypeJSON `json:"-"`
+}
+
+// accountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseResultSettingsByRuleTypeJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseResultSettingsByRuleType]
+type accountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseResultSettingsByRuleTypeJSON struct {
+	DNS         apijson.Field
+	HTTP        apijson.Field
+	L4          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseResultSettingsByRuleType) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseSuccess bool
+
+const (
+	AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseSuccessTrue AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountResponseSuccess = true
 )
 
 type AccountGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountParams struct {

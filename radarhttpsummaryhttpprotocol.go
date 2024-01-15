@@ -33,7 +33,7 @@ func NewRadarHTTPSummaryHTTPProtocolService(opts ...option.RequestOption) (r *Ra
 	return
 }
 
-// Percentage distribution of traffic per HTTP protocol.
+// Percentage distribution of traffic per HTTP protocol over a given time period.
 func (r *RadarHTTPSummaryHTTPProtocolService) List(ctx context.Context, query RadarHTTPSummaryHTTPProtocolListParams, opts ...option.RequestOption) (res *RadarHTTPSummaryHTTPProtocolListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "radar/http/summary/http_protocol"
@@ -61,7 +61,7 @@ func (r *RadarHTTPSummaryHTTPProtocolListResponse) UnmarshalJSON(data []byte) (e
 }
 
 type RadarHTTPSummaryHTTPProtocolListResponseResult struct {
-	Meta     interface{}                                            `json:"meta,required"`
+	Meta     RadarHTTPSummaryHTTPProtocolListResponseResultMeta     `json:"meta,required"`
 	Summary0 RadarHTTPSummaryHTTPProtocolListResponseResultSummary0 `json:"summary_0,required"`
 	JSON     radarHTTPSummaryHTTPProtocolListResponseResultJSON     `json:"-"`
 }
@@ -76,6 +76,101 @@ type radarHTTPSummaryHTTPProtocolListResponseResultJSON struct {
 }
 
 func (r *RadarHTTPSummaryHTTPProtocolListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarHTTPSummaryHTTPProtocolListResponseResultMeta struct {
+	DateRange      []RadarHTTPSummaryHTTPProtocolListResponseResultMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                                           `json:"lastUpdated,required"`
+	Normalization  string                                                           `json:"normalization,required"`
+	ConfidenceInfo RadarHTTPSummaryHTTPProtocolListResponseResultMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           radarHTTPSummaryHTTPProtocolListResponseResultMetaJSON           `json:"-"`
+}
+
+// radarHTTPSummaryHTTPProtocolListResponseResultMetaJSON contains the JSON
+// metadata for the struct [RadarHTTPSummaryHTTPProtocolListResponseResultMeta]
+type radarHTTPSummaryHTTPProtocolListResponseResultMetaJSON struct {
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	ConfidenceInfo apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RadarHTTPSummaryHTTPProtocolListResponseResultMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarHTTPSummaryHTTPProtocolListResponseResultMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                                       `json:"startTime,required" format:"date-time"`
+	JSON      radarHTTPSummaryHTTPProtocolListResponseResultMetaDateRangeJSON `json:"-"`
+}
+
+// radarHTTPSummaryHTTPProtocolListResponseResultMetaDateRangeJSON contains the
+// JSON metadata for the struct
+// [RadarHTTPSummaryHTTPProtocolListResponseResultMetaDateRange]
+type radarHTTPSummaryHTTPProtocolListResponseResultMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarHTTPSummaryHTTPProtocolListResponseResultMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarHTTPSummaryHTTPProtocolListResponseResultMetaConfidenceInfo struct {
+	Annotations []RadarHTTPSummaryHTTPProtocolListResponseResultMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                                        `json:"level"`
+	JSON        radarHTTPSummaryHTTPProtocolListResponseResultMetaConfidenceInfoJSON         `json:"-"`
+}
+
+// radarHTTPSummaryHTTPProtocolListResponseResultMetaConfidenceInfoJSON contains
+// the JSON metadata for the struct
+// [RadarHTTPSummaryHTTPProtocolListResponseResultMetaConfidenceInfo]
+type radarHTTPSummaryHTTPProtocolListResponseResultMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarHTTPSummaryHTTPProtocolListResponseResultMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarHTTPSummaryHTTPProtocolListResponseResultMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                                         `json:"dataSource,required"`
+	Description     string                                                                         `json:"description,required"`
+	EventType       string                                                                         `json:"eventType,required"`
+	IsInstantaneous interface{}                                                                    `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                                      `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                                         `json:"linkedUrl"`
+	StartTime       time.Time                                                                      `json:"startTime" format:"date-time"`
+	JSON            radarHTTPSummaryHTTPProtocolListResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// radarHTTPSummaryHTTPProtocolListResponseResultMetaConfidenceInfoAnnotationJSON
+// contains the JSON metadata for the struct
+// [RadarHTTPSummaryHTTPProtocolListResponseResultMetaConfidenceInfoAnnotation]
+type radarHTTPSummaryHTTPProtocolListResponseResultMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *RadarHTTPSummaryHTTPProtocolListResponseResultMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -106,7 +201,7 @@ type RadarHTTPSummaryHTTPProtocolListParams struct {
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]RadarHTTPSummaryHTTPProtocolListParamsBotClass] `query:"botClass"`
-	// Array of datetimes to filter the end of a series.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
@@ -154,6 +249,7 @@ type RadarHTTPSummaryHTTPProtocolListParamsDateRange string
 
 const (
 	RadarHTTPSummaryHTTPProtocolListParamsDateRange1d         RadarHTTPSummaryHTTPProtocolListParamsDateRange = "1d"
+	RadarHTTPSummaryHTTPProtocolListParamsDateRange2d         RadarHTTPSummaryHTTPProtocolListParamsDateRange = "2d"
 	RadarHTTPSummaryHTTPProtocolListParamsDateRange7d         RadarHTTPSummaryHTTPProtocolListParamsDateRange = "7d"
 	RadarHTTPSummaryHTTPProtocolListParamsDateRange14d        RadarHTTPSummaryHTTPProtocolListParamsDateRange = "14d"
 	RadarHTTPSummaryHTTPProtocolListParamsDateRange28d        RadarHTTPSummaryHTTPProtocolListParamsDateRange = "28d"
@@ -161,6 +257,7 @@ const (
 	RadarHTTPSummaryHTTPProtocolListParamsDateRange24w        RadarHTTPSummaryHTTPProtocolListParamsDateRange = "24w"
 	RadarHTTPSummaryHTTPProtocolListParamsDateRange52w        RadarHTTPSummaryHTTPProtocolListParamsDateRange = "52w"
 	RadarHTTPSummaryHTTPProtocolListParamsDateRange1dControl  RadarHTTPSummaryHTTPProtocolListParamsDateRange = "1dControl"
+	RadarHTTPSummaryHTTPProtocolListParamsDateRange2dControl  RadarHTTPSummaryHTTPProtocolListParamsDateRange = "2dControl"
 	RadarHTTPSummaryHTTPProtocolListParamsDateRange7dControl  RadarHTTPSummaryHTTPProtocolListParamsDateRange = "7dControl"
 	RadarHTTPSummaryHTTPProtocolListParamsDateRange14dControl RadarHTTPSummaryHTTPProtocolListParamsDateRange = "14dControl"
 	RadarHTTPSummaryHTTPProtocolListParamsDateRange28dControl RadarHTTPSummaryHTTPProtocolListParamsDateRange = "28dControl"
@@ -204,6 +301,7 @@ type RadarHTTPSummaryHTTPProtocolListParamsO string
 const (
 	RadarHTTPSummaryHTTPProtocolListParamsOWindows  RadarHTTPSummaryHTTPProtocolListParamsO = "WINDOWS"
 	RadarHTTPSummaryHTTPProtocolListParamsOMacosx   RadarHTTPSummaryHTTPProtocolListParamsO = "MACOSX"
+	RadarHTTPSummaryHTTPProtocolListParamsOIos      RadarHTTPSummaryHTTPProtocolListParamsO = "IOS"
 	RadarHTTPSummaryHTTPProtocolListParamsOAndroid  RadarHTTPSummaryHTTPProtocolListParamsO = "ANDROID"
 	RadarHTTPSummaryHTTPProtocolListParamsOChromeos RadarHTTPSummaryHTTPProtocolListParamsO = "CHROMEOS"
 	RadarHTTPSummaryHTTPProtocolListParamsOLinux    RadarHTTPSummaryHTTPProtocolListParamsO = "LINUX"

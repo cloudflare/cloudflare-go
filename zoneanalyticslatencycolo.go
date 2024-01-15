@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -30,9 +31,81 @@ func NewZoneAnalyticsLatencyColoService(opts ...option.RequestOption) (r *ZoneAn
 }
 
 // Argo Analytics for a zone at different PoPs
-func (r *ZoneAnalyticsLatencyColoService) ArgoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPs(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *SchemasResponseSingle, err error) {
+func (r *ZoneAnalyticsLatencyColoService) ArgoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPs(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ZoneAnalyticsLatencyColoArgoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/analytics/latency/colos", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
+
+type ZoneAnalyticsLatencyColoArgoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPsResponse struct {
+	Errors   []ZoneAnalyticsLatencyColoArgoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPsResponseError   `json:"errors"`
+	Messages []ZoneAnalyticsLatencyColoArgoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPsResponseMessage `json:"messages"`
+	Result   interface{}                                                                                              `json:"result"`
+	// Whether the API call was successful
+	Success ZoneAnalyticsLatencyColoArgoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPsResponseSuccess `json:"success"`
+	JSON    zoneAnalyticsLatencyColoArgoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPsResponseJSON    `json:"-"`
+}
+
+// zoneAnalyticsLatencyColoArgoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPsResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneAnalyticsLatencyColoArgoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPsResponse]
+type zoneAnalyticsLatencyColoArgoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPsResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneAnalyticsLatencyColoArgoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneAnalyticsLatencyColoArgoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPsResponseError struct {
+	Code    int64                                                                                                    `json:"code,required"`
+	Message string                                                                                                   `json:"message,required"`
+	JSON    zoneAnalyticsLatencyColoArgoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPsResponseErrorJSON `json:"-"`
+}
+
+// zoneAnalyticsLatencyColoArgoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneAnalyticsLatencyColoArgoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPsResponseError]
+type zoneAnalyticsLatencyColoArgoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPsResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneAnalyticsLatencyColoArgoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPsResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneAnalyticsLatencyColoArgoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPsResponseMessage struct {
+	Code    int64                                                                                                      `json:"code,required"`
+	Message string                                                                                                     `json:"message,required"`
+	JSON    zoneAnalyticsLatencyColoArgoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPsResponseMessageJSON `json:"-"`
+}
+
+// zoneAnalyticsLatencyColoArgoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneAnalyticsLatencyColoArgoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPsResponseMessage]
+type zoneAnalyticsLatencyColoArgoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPsResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneAnalyticsLatencyColoArgoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPsResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneAnalyticsLatencyColoArgoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPsResponseSuccess bool
+
+const (
+	ZoneAnalyticsLatencyColoArgoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPsResponseSuccessTrue ZoneAnalyticsLatencyColoArgoAnalyticsForGeolocationArgoAnalyticsForAZoneAtDifferentPoPsResponseSuccess = true
+)

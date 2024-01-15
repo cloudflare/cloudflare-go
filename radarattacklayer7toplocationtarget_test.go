@@ -25,16 +25,18 @@ func TestRadarAttackLayer7TopLocationTargetListWithOptionalParams(t *testing.T) 
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Radars.Attacks.Layer7s.Tops.Locations.Targets.List(context.TODO(), cloudflare.RadarAttackLayer7TopLocationTargetListParams{
+	_, err := client.Radar.Attacks.Layer7.Tops.Locations.Targets.List(context.TODO(), cloudflare.RadarAttackLayer7TopLocationTargetListParams{
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange: cloudflare.F([]cloudflare.RadarAttackLayer7TopLocationTargetListParamsDateRange{cloudflare.RadarAttackLayer7TopLocationTargetListParamsDateRange1d, cloudflare.RadarAttackLayer7TopLocationTargetListParamsDateRange7d, cloudflare.RadarAttackLayer7TopLocationTargetListParamsDateRange14d}),
+		DateRange: cloudflare.F([]cloudflare.RadarAttackLayer7TopLocationTargetListParamsDateRange{cloudflare.RadarAttackLayer7TopLocationTargetListParamsDateRange1d, cloudflare.RadarAttackLayer7TopLocationTargetListParamsDateRange2d, cloudflare.RadarAttackLayer7TopLocationTargetListParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		Format:    cloudflare.F(cloudflare.RadarAttackLayer7TopLocationTargetListParamsFormatJson),
 		Limit:     cloudflare.F(int64(5)),
-		Name:      cloudflare.F([]string{"main_series", "main_series", "main_series"}),
+		Name:      cloudflare.F([]string{"string", "string", "string"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

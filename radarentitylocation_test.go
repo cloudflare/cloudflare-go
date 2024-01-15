@@ -24,10 +24,12 @@ func TestRadarEntityLocationGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Radars.Entities.Locations.Get(
+	_, err := client.Radar.Entities.Locations.Get(
 		context.TODO(),
 		"US",
 		cloudflare.RadarEntityLocationGetParams{
@@ -54,10 +56,12 @@ func TestRadarEntityLocationListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Radars.Entities.Locations.List(context.TODO(), cloudflare.RadarEntityLocationListParams{
+	_, err := client.Radar.Entities.Locations.List(context.TODO(), cloudflare.RadarEntityLocationListParams{
 		Format:   cloudflare.F(cloudflare.RadarEntityLocationListParamsFormatJson),
 		Limit:    cloudflare.F(int64(5)),
 		Location: cloudflare.F("US,CA"),

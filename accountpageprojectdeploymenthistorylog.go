@@ -31,26 +31,27 @@ func NewAccountPageProjectDeploymentHistoryLogService(opts ...option.RequestOpti
 	return
 }
 
-// Fetch deploy logs.
-func (r *AccountPageProjectDeploymentHistoryLogService) PagesDeploymentGetDeploymentLogs(ctx context.Context, accountIdentifier string, projectName string, deploymentIdentifier string, opts ...option.RequestOption) (res *DeploymentResponseLog, err error) {
+// Fetch deployment logs for a project.
+func (r *AccountPageProjectDeploymentHistoryLogService) PagesDeploymentGetDeploymentLogs(ctx context.Context, accountIdentifier string, projectName string, deploymentIdentifier string, opts ...option.RequestOption) (res *AccountPageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s/history/logs", accountIdentifier, projectName, deploymentIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type DeploymentResponseLog struct {
-	Errors   []DeploymentResponseLogError   `json:"errors"`
-	Messages []DeploymentResponseLogMessage `json:"messages"`
-	Result   interface{}                    `json:"result"`
+type AccountPageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponse struct {
+	Errors   []AccountPageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseError   `json:"errors"`
+	Messages []AccountPageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseMessage `json:"messages"`
+	Result   interface{}                                                                             `json:"result"`
 	// Whether the API call was successful
-	Success DeploymentResponseLogSuccess `json:"success"`
-	JSON    deploymentResponseLogJSON    `json:"-"`
+	Success AccountPageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseSuccess `json:"success"`
+	JSON    accountPageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseJSON    `json:"-"`
 }
 
-// deploymentResponseLogJSON contains the JSON metadata for the struct
-// [DeploymentResponseLog]
-type deploymentResponseLogJSON struct {
+// accountPageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponse]
+type accountPageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -59,51 +60,53 @@ type deploymentResponseLogJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeploymentResponseLog) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DeploymentResponseLogError struct {
-	Code    int64                          `json:"code,required"`
-	Message string                         `json:"message,required"`
-	JSON    deploymentResponseLogErrorJSON `json:"-"`
+type AccountPageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseError struct {
+	Code    int64                                                                                   `json:"code,required"`
+	Message string                                                                                  `json:"message,required"`
+	JSON    accountPageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseErrorJSON `json:"-"`
 }
 
-// deploymentResponseLogErrorJSON contains the JSON metadata for the struct
-// [DeploymentResponseLogError]
-type deploymentResponseLogErrorJSON struct {
+// accountPageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseError]
+type accountPageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeploymentResponseLogError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DeploymentResponseLogMessage struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    deploymentResponseLogMessageJSON `json:"-"`
+type AccountPageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseMessage struct {
+	Code    int64                                                                                     `json:"code,required"`
+	Message string                                                                                    `json:"message,required"`
+	JSON    accountPageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseMessageJSON `json:"-"`
 }
 
-// deploymentResponseLogMessageJSON contains the JSON metadata for the struct
-// [DeploymentResponseLogMessage]
-type deploymentResponseLogMessageJSON struct {
+// accountPageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseMessage]
+type accountPageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeploymentResponseLogMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type DeploymentResponseLogSuccess bool
+type AccountPageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseSuccess bool
 
 const (
-	DeploymentResponseLogSuccessTrue DeploymentResponseLogSuccess = true
+	AccountPageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseSuccessTrue AccountPageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseSuccess = true
 )

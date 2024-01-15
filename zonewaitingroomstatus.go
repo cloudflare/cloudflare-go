@@ -48,86 +48,44 @@ func NewZoneWaitingRoomStatusService(opts ...option.RequestOption) (r *ZoneWaiti
 //     currently active on the origin.
 //  5. `max_estimated_time_minutes`: Integer of the maximum estimated time currently
 //     presented to the users.
-func (r *ZoneWaitingRoomStatusService) WaitingRoomGetWaitingRoomStatus(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, opts ...option.RequestOption) (res *StatusResponse, err error) {
+func (r *ZoneWaitingRoomStatusService) WaitingRoomGetWaitingRoomStatus(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, opts ...option.RequestOption) (res *ZoneWaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/status", zoneIdentifier, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type StatusResponse struct {
-	Errors   []StatusResponseError   `json:"errors"`
-	Messages []StatusResponseMessage `json:"messages"`
-	Result   StatusResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success StatusResponseSuccess `json:"success"`
-	JSON    statusResponseJSON    `json:"-"`
+type ZoneWaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponse struct {
+	Result ZoneWaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseResult `json:"result"`
+	JSON   zoneWaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseJSON   `json:"-"`
 }
 
-// statusResponseJSON contains the JSON metadata for the struct [StatusResponse]
-type statusResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
+// zoneWaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseJSON contains the
+// JSON metadata for the struct
+// [ZoneWaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponse]
+type zoneWaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseJSON struct {
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StatusResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneWaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StatusResponseError struct {
-	Code    int64                   `json:"code,required"`
-	Message string                  `json:"message,required"`
-	JSON    statusResponseErrorJSON `json:"-"`
+type ZoneWaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseResult struct {
+	EstimatedQueuedUsers      int64                                                                    `json:"estimated_queued_users"`
+	EstimatedTotalActiveUsers int64                                                                    `json:"estimated_total_active_users"`
+	EventID                   string                                                                   `json:"event_id"`
+	MaxEstimatedTimeMinutes   int64                                                                    `json:"max_estimated_time_minutes"`
+	Status                    ZoneWaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseResultStatus `json:"status"`
+	JSON                      zoneWaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseResultJSON   `json:"-"`
 }
 
-// statusResponseErrorJSON contains the JSON metadata for the struct
-// [StatusResponseError]
-type statusResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StatusResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StatusResponseMessage struct {
-	Code    int64                     `json:"code,required"`
-	Message string                    `json:"message,required"`
-	JSON    statusResponseMessageJSON `json:"-"`
-}
-
-// statusResponseMessageJSON contains the JSON metadata for the struct
-// [StatusResponseMessage]
-type statusResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StatusResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StatusResponseResult struct {
-	EstimatedQueuedUsers      int64                      `json:"estimated_queued_users"`
-	EstimatedTotalActiveUsers int64                      `json:"estimated_total_active_users"`
-	EventID                   string                     `json:"event_id"`
-	MaxEstimatedTimeMinutes   int64                      `json:"max_estimated_time_minutes"`
-	Status                    StatusResponseResultStatus `json:"status"`
-	JSON                      statusResponseResultJSON   `json:"-"`
-}
-
-// statusResponseResultJSON contains the JSON metadata for the struct
-// [StatusResponseResult]
-type statusResponseResultJSON struct {
+// zoneWaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseResultJSON contains
+// the JSON metadata for the struct
+// [ZoneWaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseResult]
+type zoneWaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseResultJSON struct {
 	EstimatedQueuedUsers      apijson.Field
 	EstimatedTotalActiveUsers apijson.Field
 	EventID                   apijson.Field
@@ -137,21 +95,14 @@ type statusResponseResultJSON struct {
 	ExtraFields               map[string]apijson.Field
 }
 
-func (r *StatusResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneWaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StatusResponseResultStatus string
+type ZoneWaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseResultStatus string
 
 const (
-	StatusResponseResultStatusEventPrequeueing StatusResponseResultStatus = "event_prequeueing"
-	StatusResponseResultStatusNotQueueing      StatusResponseResultStatus = "not_queueing"
-	StatusResponseResultStatusQueueing         StatusResponseResultStatus = "queueing"
-)
-
-// Whether the API call was successful
-type StatusResponseSuccess bool
-
-const (
-	StatusResponseSuccessTrue StatusResponseSuccess = true
+	ZoneWaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseResultStatusEventPrequeueing ZoneWaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseResultStatus = "event_prequeueing"
+	ZoneWaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseResultStatusNotQueueing      ZoneWaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseResultStatus = "not_queueing"
+	ZoneWaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseResultStatusQueueing         ZoneWaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseResultStatus = "queueing"
 )

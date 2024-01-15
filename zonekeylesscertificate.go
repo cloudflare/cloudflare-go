@@ -33,7 +33,7 @@ func NewZoneKeylessCertificateService(opts ...option.RequestOption) (r *ZoneKeyl
 }
 
 // Get details for one Keyless SSL configuration.
-func (r *ZoneKeylessCertificateService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *KeylessResponseSingle1Ulr3eBh, err error) {
+func (r *ZoneKeylessCertificateService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *ZoneKeylessCertificateGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/keyless_certificates/%s", zoneIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -42,7 +42,7 @@ func (r *ZoneKeylessCertificateService) Get(ctx context.Context, zoneIdentifier 
 
 // This will update attributes of a Keyless SSL. Consists of one or more of the
 // following: host,name,port.
-func (r *ZoneKeylessCertificateService) Update(ctx context.Context, zoneIdentifier string, identifier string, body ZoneKeylessCertificateUpdateParams, opts ...option.RequestOption) (res *KeylessResponseSingle1Ulr3eBh, err error) {
+func (r *ZoneKeylessCertificateService) Update(ctx context.Context, zoneIdentifier string, identifier string, body ZoneKeylessCertificateUpdateParams, opts ...option.RequestOption) (res *ZoneKeylessCertificateUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/keyless_certificates/%s", zoneIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
@@ -50,7 +50,7 @@ func (r *ZoneKeylessCertificateService) Update(ctx context.Context, zoneIdentifi
 }
 
 // Delete Keyless SSL Configuration
-func (r *ZoneKeylessCertificateService) Delete(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *KeylessResponseSingleIDSi9DlyBw, err error) {
+func (r *ZoneKeylessCertificateService) Delete(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *ZoneKeylessCertificateDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/keyless_certificates/%s", zoneIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -58,7 +58,7 @@ func (r *ZoneKeylessCertificateService) Delete(ctx context.Context, zoneIdentifi
 }
 
 // Create Keyless SSL Configuration
-func (r *ZoneKeylessCertificateService) KeylessSslForAZoneNewKeylessSslConfiguration(ctx context.Context, zoneIdentifier string, body ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationParams, opts ...option.RequestOption) (res *KeylessResponseSingle1Ulr3eBh, err error) {
+func (r *ZoneKeylessCertificateService) KeylessSslForAZoneNewKeylessSslConfiguration(ctx context.Context, zoneIdentifier string, body ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationParams, opts ...option.RequestOption) (res *ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/keyless_certificates", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -66,26 +66,557 @@ func (r *ZoneKeylessCertificateService) KeylessSslForAZoneNewKeylessSslConfigura
 }
 
 // List all Keyless SSL configurations for a given zone.
-func (r *ZoneKeylessCertificateService) KeylessSslForAZoneListKeylessSslConfigurations(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *KeylessResponseCollection, err error) {
+func (r *ZoneKeylessCertificateService) KeylessSslForAZoneListKeylessSslConfigurations(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/keyless_certificates", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type KeylessResponseCollection struct {
-	Errors     []KeylessResponseCollectionError    `json:"errors"`
-	Messages   []KeylessResponseCollectionMessage  `json:"messages"`
-	Result     []KeylessResponseCollectionResult   `json:"result"`
-	ResultInfo KeylessResponseCollectionResultInfo `json:"result_info"`
+type ZoneKeylessCertificateGetResponse struct {
+	Errors   []ZoneKeylessCertificateGetResponseError   `json:"errors"`
+	Messages []ZoneKeylessCertificateGetResponseMessage `json:"messages"`
+	Result   ZoneKeylessCertificateGetResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success KeylessResponseCollectionSuccess `json:"success"`
-	JSON    keylessResponseCollectionJSON    `json:"-"`
+	Success ZoneKeylessCertificateGetResponseSuccess `json:"success"`
+	JSON    zoneKeylessCertificateGetResponseJSON    `json:"-"`
 }
 
-// keylessResponseCollectionJSON contains the JSON metadata for the struct
-// [KeylessResponseCollection]
-type keylessResponseCollectionJSON struct {
+// zoneKeylessCertificateGetResponseJSON contains the JSON metadata for the struct
+// [ZoneKeylessCertificateGetResponse]
+type zoneKeylessCertificateGetResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneKeylessCertificateGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneKeylessCertificateGetResponseError struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    zoneKeylessCertificateGetResponseErrorJSON `json:"-"`
+}
+
+// zoneKeylessCertificateGetResponseErrorJSON contains the JSON metadata for the
+// struct [ZoneKeylessCertificateGetResponseError]
+type zoneKeylessCertificateGetResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneKeylessCertificateGetResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneKeylessCertificateGetResponseMessage struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    zoneKeylessCertificateGetResponseMessageJSON `json:"-"`
+}
+
+// zoneKeylessCertificateGetResponseMessageJSON contains the JSON metadata for the
+// struct [ZoneKeylessCertificateGetResponseMessage]
+type zoneKeylessCertificateGetResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneKeylessCertificateGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneKeylessCertificateGetResponseResult struct {
+	// Keyless certificate identifier tag.
+	ID string `json:"id,required"`
+	// When the Keyless SSL was created.
+	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	// Whether or not the Keyless SSL is on or off.
+	Enabled bool `json:"enabled,required"`
+	// The keyless SSL name.
+	Host string `json:"host,required" format:"hostname"`
+	// When the Keyless SSL was last modified.
+	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// The keyless SSL name.
+	Name string `json:"name,required"`
+	// Available permissions for the Keyless SSL for the current user requesting the
+	// item.
+	Permissions []interface{} `json:"permissions,required"`
+	// The keyless SSL port used to communicate between Cloudflare and the client's
+	// Keyless SSL server.
+	Port float64 `json:"port,required"`
+	// Status of the Keyless SSL.
+	Status ZoneKeylessCertificateGetResponseResultStatus `json:"status,required"`
+	// Configuration for using Keyless SSL through a Cloudflare Tunnel
+	Tunnel ZoneKeylessCertificateGetResponseResultTunnel `json:"tunnel"`
+	JSON   zoneKeylessCertificateGetResponseResultJSON   `json:"-"`
+}
+
+// zoneKeylessCertificateGetResponseResultJSON contains the JSON metadata for the
+// struct [ZoneKeylessCertificateGetResponseResult]
+type zoneKeylessCertificateGetResponseResultJSON struct {
+	ID          apijson.Field
+	CreatedOn   apijson.Field
+	Enabled     apijson.Field
+	Host        apijson.Field
+	ModifiedOn  apijson.Field
+	Name        apijson.Field
+	Permissions apijson.Field
+	Port        apijson.Field
+	Status      apijson.Field
+	Tunnel      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneKeylessCertificateGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Status of the Keyless SSL.
+type ZoneKeylessCertificateGetResponseResultStatus string
+
+const (
+	ZoneKeylessCertificateGetResponseResultStatusActive  ZoneKeylessCertificateGetResponseResultStatus = "active"
+	ZoneKeylessCertificateGetResponseResultStatusDeleted ZoneKeylessCertificateGetResponseResultStatus = "deleted"
+)
+
+// Configuration for using Keyless SSL through a Cloudflare Tunnel
+type ZoneKeylessCertificateGetResponseResultTunnel struct {
+	// Private IP of the Key Server Host
+	PrivateIP string `json:"private_ip,required"`
+	// Cloudflare Tunnel Virtual Network ID
+	VnetID string                                            `json:"vnet_id,required"`
+	JSON   zoneKeylessCertificateGetResponseResultTunnelJSON `json:"-"`
+}
+
+// zoneKeylessCertificateGetResponseResultTunnelJSON contains the JSON metadata for
+// the struct [ZoneKeylessCertificateGetResponseResultTunnel]
+type zoneKeylessCertificateGetResponseResultTunnelJSON struct {
+	PrivateIP   apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneKeylessCertificateGetResponseResultTunnel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneKeylessCertificateGetResponseSuccess bool
+
+const (
+	ZoneKeylessCertificateGetResponseSuccessTrue ZoneKeylessCertificateGetResponseSuccess = true
+)
+
+type ZoneKeylessCertificateUpdateResponse struct {
+	Errors   []ZoneKeylessCertificateUpdateResponseError   `json:"errors"`
+	Messages []ZoneKeylessCertificateUpdateResponseMessage `json:"messages"`
+	Result   ZoneKeylessCertificateUpdateResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success ZoneKeylessCertificateUpdateResponseSuccess `json:"success"`
+	JSON    zoneKeylessCertificateUpdateResponseJSON    `json:"-"`
+}
+
+// zoneKeylessCertificateUpdateResponseJSON contains the JSON metadata for the
+// struct [ZoneKeylessCertificateUpdateResponse]
+type zoneKeylessCertificateUpdateResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneKeylessCertificateUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneKeylessCertificateUpdateResponseError struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    zoneKeylessCertificateUpdateResponseErrorJSON `json:"-"`
+}
+
+// zoneKeylessCertificateUpdateResponseErrorJSON contains the JSON metadata for the
+// struct [ZoneKeylessCertificateUpdateResponseError]
+type zoneKeylessCertificateUpdateResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneKeylessCertificateUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneKeylessCertificateUpdateResponseMessage struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    zoneKeylessCertificateUpdateResponseMessageJSON `json:"-"`
+}
+
+// zoneKeylessCertificateUpdateResponseMessageJSON contains the JSON metadata for
+// the struct [ZoneKeylessCertificateUpdateResponseMessage]
+type zoneKeylessCertificateUpdateResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneKeylessCertificateUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneKeylessCertificateUpdateResponseResult struct {
+	// Keyless certificate identifier tag.
+	ID string `json:"id,required"`
+	// When the Keyless SSL was created.
+	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	// Whether or not the Keyless SSL is on or off.
+	Enabled bool `json:"enabled,required"`
+	// The keyless SSL name.
+	Host string `json:"host,required" format:"hostname"`
+	// When the Keyless SSL was last modified.
+	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// The keyless SSL name.
+	Name string `json:"name,required"`
+	// Available permissions for the Keyless SSL for the current user requesting the
+	// item.
+	Permissions []interface{} `json:"permissions,required"`
+	// The keyless SSL port used to communicate between Cloudflare and the client's
+	// Keyless SSL server.
+	Port float64 `json:"port,required"`
+	// Status of the Keyless SSL.
+	Status ZoneKeylessCertificateUpdateResponseResultStatus `json:"status,required"`
+	// Configuration for using Keyless SSL through a Cloudflare Tunnel
+	Tunnel ZoneKeylessCertificateUpdateResponseResultTunnel `json:"tunnel"`
+	JSON   zoneKeylessCertificateUpdateResponseResultJSON   `json:"-"`
+}
+
+// zoneKeylessCertificateUpdateResponseResultJSON contains the JSON metadata for
+// the struct [ZoneKeylessCertificateUpdateResponseResult]
+type zoneKeylessCertificateUpdateResponseResultJSON struct {
+	ID          apijson.Field
+	CreatedOn   apijson.Field
+	Enabled     apijson.Field
+	Host        apijson.Field
+	ModifiedOn  apijson.Field
+	Name        apijson.Field
+	Permissions apijson.Field
+	Port        apijson.Field
+	Status      apijson.Field
+	Tunnel      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneKeylessCertificateUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Status of the Keyless SSL.
+type ZoneKeylessCertificateUpdateResponseResultStatus string
+
+const (
+	ZoneKeylessCertificateUpdateResponseResultStatusActive  ZoneKeylessCertificateUpdateResponseResultStatus = "active"
+	ZoneKeylessCertificateUpdateResponseResultStatusDeleted ZoneKeylessCertificateUpdateResponseResultStatus = "deleted"
+)
+
+// Configuration for using Keyless SSL through a Cloudflare Tunnel
+type ZoneKeylessCertificateUpdateResponseResultTunnel struct {
+	// Private IP of the Key Server Host
+	PrivateIP string `json:"private_ip,required"`
+	// Cloudflare Tunnel Virtual Network ID
+	VnetID string                                               `json:"vnet_id,required"`
+	JSON   zoneKeylessCertificateUpdateResponseResultTunnelJSON `json:"-"`
+}
+
+// zoneKeylessCertificateUpdateResponseResultTunnelJSON contains the JSON metadata
+// for the struct [ZoneKeylessCertificateUpdateResponseResultTunnel]
+type zoneKeylessCertificateUpdateResponseResultTunnelJSON struct {
+	PrivateIP   apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneKeylessCertificateUpdateResponseResultTunnel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneKeylessCertificateUpdateResponseSuccess bool
+
+const (
+	ZoneKeylessCertificateUpdateResponseSuccessTrue ZoneKeylessCertificateUpdateResponseSuccess = true
+)
+
+type ZoneKeylessCertificateDeleteResponse struct {
+	Errors   []ZoneKeylessCertificateDeleteResponseError   `json:"errors"`
+	Messages []ZoneKeylessCertificateDeleteResponseMessage `json:"messages"`
+	Result   ZoneKeylessCertificateDeleteResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success ZoneKeylessCertificateDeleteResponseSuccess `json:"success"`
+	JSON    zoneKeylessCertificateDeleteResponseJSON    `json:"-"`
+}
+
+// zoneKeylessCertificateDeleteResponseJSON contains the JSON metadata for the
+// struct [ZoneKeylessCertificateDeleteResponse]
+type zoneKeylessCertificateDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneKeylessCertificateDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneKeylessCertificateDeleteResponseError struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    zoneKeylessCertificateDeleteResponseErrorJSON `json:"-"`
+}
+
+// zoneKeylessCertificateDeleteResponseErrorJSON contains the JSON metadata for the
+// struct [ZoneKeylessCertificateDeleteResponseError]
+type zoneKeylessCertificateDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneKeylessCertificateDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneKeylessCertificateDeleteResponseMessage struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    zoneKeylessCertificateDeleteResponseMessageJSON `json:"-"`
+}
+
+// zoneKeylessCertificateDeleteResponseMessageJSON contains the JSON metadata for
+// the struct [ZoneKeylessCertificateDeleteResponseMessage]
+type zoneKeylessCertificateDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneKeylessCertificateDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneKeylessCertificateDeleteResponseResult struct {
+	// Identifier
+	ID   string                                         `json:"id"`
+	JSON zoneKeylessCertificateDeleteResponseResultJSON `json:"-"`
+}
+
+// zoneKeylessCertificateDeleteResponseResultJSON contains the JSON metadata for
+// the struct [ZoneKeylessCertificateDeleteResponseResult]
+type zoneKeylessCertificateDeleteResponseResultJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneKeylessCertificateDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneKeylessCertificateDeleteResponseSuccess bool
+
+const (
+	ZoneKeylessCertificateDeleteResponseSuccessTrue ZoneKeylessCertificateDeleteResponseSuccess = true
+)
+
+type ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponse struct {
+	Errors   []ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseError   `json:"errors"`
+	Messages []ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseMessage `json:"messages"`
+	Result   ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseSuccess `json:"success"`
+	JSON    zoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseJSON    `json:"-"`
+}
+
+// zoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponse]
+type zoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseError struct {
+	Code    int64                                                                               `json:"code,required"`
+	Message string                                                                              `json:"message,required"`
+	JSON    zoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseErrorJSON `json:"-"`
+}
+
+// zoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseError]
+type zoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseMessage struct {
+	Code    int64                                                                                 `json:"code,required"`
+	Message string                                                                                `json:"message,required"`
+	JSON    zoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseMessageJSON `json:"-"`
+}
+
+// zoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseMessage]
+type zoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseResult struct {
+	// Keyless certificate identifier tag.
+	ID string `json:"id,required"`
+	// When the Keyless SSL was created.
+	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	// Whether or not the Keyless SSL is on or off.
+	Enabled bool `json:"enabled,required"`
+	// The keyless SSL name.
+	Host string `json:"host,required" format:"hostname"`
+	// When the Keyless SSL was last modified.
+	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// The keyless SSL name.
+	Name string `json:"name,required"`
+	// Available permissions for the Keyless SSL for the current user requesting the
+	// item.
+	Permissions []interface{} `json:"permissions,required"`
+	// The keyless SSL port used to communicate between Cloudflare and the client's
+	// Keyless SSL server.
+	Port float64 `json:"port,required"`
+	// Status of the Keyless SSL.
+	Status ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseResultStatus `json:"status,required"`
+	// Configuration for using Keyless SSL through a Cloudflare Tunnel
+	Tunnel ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseResultTunnel `json:"tunnel"`
+	JSON   zoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseResultJSON   `json:"-"`
+}
+
+// zoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseResultJSON
+// contains the JSON metadata for the struct
+// [ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseResult]
+type zoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseResultJSON struct {
+	ID          apijson.Field
+	CreatedOn   apijson.Field
+	Enabled     apijson.Field
+	Host        apijson.Field
+	ModifiedOn  apijson.Field
+	Name        apijson.Field
+	Permissions apijson.Field
+	Port        apijson.Field
+	Status      apijson.Field
+	Tunnel      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Status of the Keyless SSL.
+type ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseResultStatus string
+
+const (
+	ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseResultStatusActive  ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseResultStatus = "active"
+	ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseResultStatusDeleted ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseResultStatus = "deleted"
+)
+
+// Configuration for using Keyless SSL through a Cloudflare Tunnel
+type ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseResultTunnel struct {
+	// Private IP of the Key Server Host
+	PrivateIP string `json:"private_ip,required"`
+	// Cloudflare Tunnel Virtual Network ID
+	VnetID string                                                                                     `json:"vnet_id,required"`
+	JSON   zoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseResultTunnelJSON `json:"-"`
+}
+
+// zoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseResultTunnelJSON
+// contains the JSON metadata for the struct
+// [ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseResultTunnel]
+type zoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseResultTunnelJSON struct {
+	PrivateIP   apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseResultTunnel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseSuccess bool
+
+const (
+	ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseSuccessTrue ZoneKeylessCertificateKeylessSslForAZoneNewKeylessSslConfigurationResponseSuccess = true
+)
+
+type ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponse struct {
+	Errors     []ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseError    `json:"errors"`
+	Messages   []ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseMessage  `json:"messages"`
+	Result     []ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseResult   `json:"result"`
+	ResultInfo ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseSuccess `json:"success"`
+	JSON    zoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseJSON    `json:"-"`
+}
+
+// zoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponse]
+type zoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -95,49 +626,51 @@ type keylessResponseCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *KeylessResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type KeylessResponseCollectionError struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    keylessResponseCollectionErrorJSON `json:"-"`
+type ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseError struct {
+	Code    int64                                                                                 `json:"code,required"`
+	Message string                                                                                `json:"message,required"`
+	JSON    zoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseErrorJSON `json:"-"`
 }
 
-// keylessResponseCollectionErrorJSON contains the JSON metadata for the struct
-// [KeylessResponseCollectionError]
-type keylessResponseCollectionErrorJSON struct {
+// zoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseError]
+type zoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *KeylessResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type KeylessResponseCollectionMessage struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    keylessResponseCollectionMessageJSON `json:"-"`
+type ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseMessage struct {
+	Code    int64                                                                                   `json:"code,required"`
+	Message string                                                                                  `json:"message,required"`
+	JSON    zoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseMessageJSON `json:"-"`
 }
 
-// keylessResponseCollectionMessageJSON contains the JSON metadata for the struct
-// [KeylessResponseCollectionMessage]
-type keylessResponseCollectionMessageJSON struct {
+// zoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseMessage]
+type zoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *KeylessResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type KeylessResponseCollectionResult struct {
+type ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseResult struct {
 	// Keyless certificate identifier tag.
 	ID string `json:"id,required"`
 	// When the Keyless SSL was created.
@@ -157,15 +690,16 @@ type KeylessResponseCollectionResult struct {
 	// Keyless SSL server.
 	Port float64 `json:"port,required"`
 	// Status of the Keyless SSL.
-	Status KeylessResponseCollectionResultStatus `json:"status,required"`
+	Status ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseResultStatus `json:"status,required"`
 	// Configuration for using Keyless SSL through a Cloudflare Tunnel
-	Tunnel KeylessResponseCollectionResultTunnel `json:"tunnel"`
-	JSON   keylessResponseCollectionResultJSON   `json:"-"`
+	Tunnel ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseResultTunnel `json:"tunnel"`
+	JSON   zoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseResultJSON   `json:"-"`
 }
 
-// keylessResponseCollectionResultJSON contains the JSON metadata for the struct
-// [KeylessResponseCollectionResult]
-type keylessResponseCollectionResultJSON struct {
+// zoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseResultJSON
+// contains the JSON metadata for the struct
+// [ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseResult]
+type zoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseResultJSON struct {
 	ID          apijson.Field
 	CreatedOn   apijson.Field
 	Enabled     apijson.Field
@@ -180,41 +714,42 @@ type keylessResponseCollectionResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *KeylessResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Status of the Keyless SSL.
-type KeylessResponseCollectionResultStatus string
+type ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseResultStatus string
 
 const (
-	KeylessResponseCollectionResultStatusActive  KeylessResponseCollectionResultStatus = "active"
-	KeylessResponseCollectionResultStatusDeleted KeylessResponseCollectionResultStatus = "deleted"
+	ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseResultStatusActive  ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseResultStatus = "active"
+	ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseResultStatusDeleted ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseResultStatus = "deleted"
 )
 
 // Configuration for using Keyless SSL through a Cloudflare Tunnel
-type KeylessResponseCollectionResultTunnel struct {
+type ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseResultTunnel struct {
 	// Private IP of the Key Server Host
 	PrivateIP string `json:"private_ip,required"`
 	// Cloudflare Tunnel Virtual Network ID
-	VnetID string                                    `json:"vnet_id,required"`
-	JSON   keylessResponseCollectionResultTunnelJSON `json:"-"`
+	VnetID string                                                                                       `json:"vnet_id,required"`
+	JSON   zoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseResultTunnelJSON `json:"-"`
 }
 
-// keylessResponseCollectionResultTunnelJSON contains the JSON metadata for the
-// struct [KeylessResponseCollectionResultTunnel]
-type keylessResponseCollectionResultTunnelJSON struct {
+// zoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseResultTunnelJSON
+// contains the JSON metadata for the struct
+// [ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseResultTunnel]
+type zoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseResultTunnelJSON struct {
 	PrivateIP   apijson.Field
 	VnetID      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *KeylessResponseCollectionResultTunnel) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseResultTunnel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type KeylessResponseCollectionResultInfo struct {
+type ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -222,13 +757,14 @@ type KeylessResponseCollectionResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                 `json:"total_count"`
-	JSON       keylessResponseCollectionResultInfoJSON `json:"-"`
+	TotalCount float64                                                                                    `json:"total_count"`
+	JSON       zoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseResultInfoJSON `json:"-"`
 }
 
-// keylessResponseCollectionResultInfoJSON contains the JSON metadata for the
-// struct [KeylessResponseCollectionResultInfo]
-type keylessResponseCollectionResultInfoJSON struct {
+// zoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseResultInfo]
+type zoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -237,248 +773,15 @@ type keylessResponseCollectionResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *KeylessResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type KeylessResponseCollectionSuccess bool
+type ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseSuccess bool
 
 const (
-	KeylessResponseCollectionSuccessTrue KeylessResponseCollectionSuccess = true
-)
-
-type KeylessResponseSingle1Ulr3eBh struct {
-	Errors   []KeylessResponseSingle1Ulr3eBhError   `json:"errors"`
-	Messages []KeylessResponseSingle1Ulr3eBhMessage `json:"messages"`
-	Result   KeylessResponseSingle1Ulr3eBhResult    `json:"result"`
-	// Whether the API call was successful
-	Success KeylessResponseSingle1Ulr3eBhSuccess `json:"success"`
-	JSON    keylessResponseSingle1Ulr3eBhJSON    `json:"-"`
-}
-
-// keylessResponseSingle1Ulr3eBhJSON contains the JSON metadata for the struct
-// [KeylessResponseSingle1Ulr3eBh]
-type keylessResponseSingle1Ulr3eBhJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KeylessResponseSingle1Ulr3eBh) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type KeylessResponseSingle1Ulr3eBhError struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    keylessResponseSingle1Ulr3eBhErrorJSON `json:"-"`
-}
-
-// keylessResponseSingle1Ulr3eBhErrorJSON contains the JSON metadata for the struct
-// [KeylessResponseSingle1Ulr3eBhError]
-type keylessResponseSingle1Ulr3eBhErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KeylessResponseSingle1Ulr3eBhError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type KeylessResponseSingle1Ulr3eBhMessage struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    keylessResponseSingle1Ulr3eBhMessageJSON `json:"-"`
-}
-
-// keylessResponseSingle1Ulr3eBhMessageJSON contains the JSON metadata for the
-// struct [KeylessResponseSingle1Ulr3eBhMessage]
-type keylessResponseSingle1Ulr3eBhMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KeylessResponseSingle1Ulr3eBhMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type KeylessResponseSingle1Ulr3eBhResult struct {
-	// Keyless certificate identifier tag.
-	ID string `json:"id,required"`
-	// When the Keyless SSL was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// Whether or not the Keyless SSL is on or off.
-	Enabled bool `json:"enabled,required"`
-	// The keyless SSL name.
-	Host string `json:"host,required" format:"hostname"`
-	// When the Keyless SSL was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// The keyless SSL name.
-	Name string `json:"name,required"`
-	// Available permissions for the Keyless SSL for the current user requesting the
-	// item.
-	Permissions []interface{} `json:"permissions,required"`
-	// The keyless SSL port used to communicate between Cloudflare and the client's
-	// Keyless SSL server.
-	Port float64 `json:"port,required"`
-	// Status of the Keyless SSL.
-	Status KeylessResponseSingle1Ulr3eBhResultStatus `json:"status,required"`
-	// Configuration for using Keyless SSL through a Cloudflare Tunnel
-	Tunnel KeylessResponseSingle1Ulr3eBhResultTunnel `json:"tunnel"`
-	JSON   keylessResponseSingle1Ulr3eBhResultJSON   `json:"-"`
-}
-
-// keylessResponseSingle1Ulr3eBhResultJSON contains the JSON metadata for the
-// struct [KeylessResponseSingle1Ulr3eBhResult]
-type keylessResponseSingle1Ulr3eBhResultJSON struct {
-	ID          apijson.Field
-	CreatedOn   apijson.Field
-	Enabled     apijson.Field
-	Host        apijson.Field
-	ModifiedOn  apijson.Field
-	Name        apijson.Field
-	Permissions apijson.Field
-	Port        apijson.Field
-	Status      apijson.Field
-	Tunnel      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KeylessResponseSingle1Ulr3eBhResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Status of the Keyless SSL.
-type KeylessResponseSingle1Ulr3eBhResultStatus string
-
-const (
-	KeylessResponseSingle1Ulr3eBhResultStatusActive  KeylessResponseSingle1Ulr3eBhResultStatus = "active"
-	KeylessResponseSingle1Ulr3eBhResultStatusDeleted KeylessResponseSingle1Ulr3eBhResultStatus = "deleted"
-)
-
-// Configuration for using Keyless SSL through a Cloudflare Tunnel
-type KeylessResponseSingle1Ulr3eBhResultTunnel struct {
-	// Private IP of the Key Server Host
-	PrivateIP string `json:"private_ip,required"`
-	// Cloudflare Tunnel Virtual Network ID
-	VnetID string                                        `json:"vnet_id,required"`
-	JSON   keylessResponseSingle1Ulr3eBhResultTunnelJSON `json:"-"`
-}
-
-// keylessResponseSingle1Ulr3eBhResultTunnelJSON contains the JSON metadata for the
-// struct [KeylessResponseSingle1Ulr3eBhResultTunnel]
-type keylessResponseSingle1Ulr3eBhResultTunnelJSON struct {
-	PrivateIP   apijson.Field
-	VnetID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KeylessResponseSingle1Ulr3eBhResultTunnel) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type KeylessResponseSingle1Ulr3eBhSuccess bool
-
-const (
-	KeylessResponseSingle1Ulr3eBhSuccessTrue KeylessResponseSingle1Ulr3eBhSuccess = true
-)
-
-type KeylessResponseSingleIDSi9DlyBw struct {
-	Errors   []KeylessResponseSingleIDSi9DlyBwError   `json:"errors"`
-	Messages []KeylessResponseSingleIDSi9DlyBwMessage `json:"messages"`
-	Result   KeylessResponseSingleIDSi9DlyBwResult    `json:"result"`
-	// Whether the API call was successful
-	Success KeylessResponseSingleIDSi9DlyBwSuccess `json:"success"`
-	JSON    keylessResponseSingleIDSi9DlyBwJSON    `json:"-"`
-}
-
-// keylessResponseSingleIDSi9DlyBwJSON contains the JSON metadata for the struct
-// [KeylessResponseSingleIDSi9DlyBw]
-type keylessResponseSingleIDSi9DlyBwJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KeylessResponseSingleIDSi9DlyBw) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type KeylessResponseSingleIDSi9DlyBwError struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    keylessResponseSingleIDSi9DlyBwErrorJSON `json:"-"`
-}
-
-// keylessResponseSingleIDSi9DlyBwErrorJSON contains the JSON metadata for the
-// struct [KeylessResponseSingleIDSi9DlyBwError]
-type keylessResponseSingleIDSi9DlyBwErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KeylessResponseSingleIDSi9DlyBwError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type KeylessResponseSingleIDSi9DlyBwMessage struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    keylessResponseSingleIDSi9DlyBwMessageJSON `json:"-"`
-}
-
-// keylessResponseSingleIDSi9DlyBwMessageJSON contains the JSON metadata for the
-// struct [KeylessResponseSingleIDSi9DlyBwMessage]
-type keylessResponseSingleIDSi9DlyBwMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KeylessResponseSingleIDSi9DlyBwMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type KeylessResponseSingleIDSi9DlyBwResult struct {
-	// Identifier
-	ID   string                                    `json:"id"`
-	JSON keylessResponseSingleIDSi9DlyBwResultJSON `json:"-"`
-}
-
-// keylessResponseSingleIDSi9DlyBwResultJSON contains the JSON metadata for the
-// struct [KeylessResponseSingleIDSi9DlyBwResult]
-type keylessResponseSingleIDSi9DlyBwResultJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KeylessResponseSingleIDSi9DlyBwResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type KeylessResponseSingleIDSi9DlyBwSuccess bool
-
-const (
-	KeylessResponseSingleIDSi9DlyBwSuccessTrue KeylessResponseSingleIDSi9DlyBwSuccess = true
+	ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseSuccessTrue ZoneKeylessCertificateKeylessSslForAZoneListKeylessSslConfigurationsResponseSuccess = true
 )
 
 type ZoneKeylessCertificateUpdateParams struct {

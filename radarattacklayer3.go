@@ -13,6 +13,10 @@ import (
 // instead.
 type RadarAttackLayer3Service struct {
 	Options          []option.RequestOption
+	Attacks          *RadarAttackLayer3AttackService
+	Industries       *RadarAttackLayer3IndustryService
+	Locations        *RadarAttackLayer3LocationService
+	Verticals        *RadarAttackLayer3VerticalService
 	Summaries        *RadarAttackLayer3SummaryService
 	Timeseries       *RadarAttackLayer3TimeseryService
 	TimeseriesGroups *RadarAttackLayer3TimeseriesGroupService
@@ -24,6 +28,10 @@ type RadarAttackLayer3Service struct {
 func NewRadarAttackLayer3Service(opts ...option.RequestOption) (r *RadarAttackLayer3Service) {
 	r = &RadarAttackLayer3Service{}
 	r.Options = opts
+	r.Attacks = NewRadarAttackLayer3AttackService(opts...)
+	r.Industries = NewRadarAttackLayer3IndustryService(opts...)
+	r.Locations = NewRadarAttackLayer3LocationService(opts...)
+	r.Verticals = NewRadarAttackLayer3VerticalService(opts...)
 	r.Summaries = NewRadarAttackLayer3SummaryService(opts...)
 	r.Timeseries = NewRadarAttackLayer3TimeseryService(opts...)
 	r.TimeseriesGroups = NewRadarAttackLayer3TimeseriesGroupService(opts...)

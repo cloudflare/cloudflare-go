@@ -24,10 +24,12 @@ func TestAccountTeamnetRouteNetworkUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Teamnets.Routes.Networks.Update(
+	_, err := client.Accounts.Teamnet.Routes.Networks.Update(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		"172.16.0.0%2F16",
@@ -56,15 +58,17 @@ func TestAccountTeamnetRouteNetworkDeleteWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Teamnets.Routes.Networks.Delete(
+	_, err := client.Accounts.Teamnet.Routes.Networks.Delete(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		"172.16.0.0%2F16",
 		cloudflare.AccountTeamnetRouteNetworkDeleteParams{
-			VirtualNetworkID: cloudflare.F[any](map[string]interface{}{}),
+			TunType: cloudflare.F(cloudflare.AccountTeamnetRouteNetworkDeleteParamsTunTypeCfdTunnel),
 		},
 	)
 	if err != nil {

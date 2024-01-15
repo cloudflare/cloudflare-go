@@ -24,8 +24,10 @@ func TestAccountDevicePostureGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Devices.Postures.Get(
 		context.TODO(),
@@ -52,8 +54,10 @@ func TestAccountDevicePostureUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Devices.Postures.Update(
 		context.TODO(),
@@ -64,11 +68,13 @@ func TestAccountDevicePostureUpdateWithOptionalParams(t *testing.T) {
 			Type:        cloudflare.F(cloudflare.AccountDevicePostureUpdateParamsTypeFile),
 			Description: cloudflare.F("The rule for admin serial numbers"),
 			Expiration:  cloudflare.F("1h"),
-			Input: cloudflare.F(cloudflare.AccountDevicePostureUpdateParamsInput{
-				CheckDisks: cloudflare.F([]string{"C", "D", "G"}),
-				ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-				RequireAll: cloudflare.F(true),
-			}),
+			Input: cloudflare.F[cloudflare.AccountDevicePostureUpdateParamsInput](cloudflare.AccountDevicePostureUpdateParamsInputZR7Sv6YhFileInputRequest(cloudflare.AccountDevicePostureUpdateParamsInputZR7Sv6YhFileInputRequest{
+				Exists:          cloudflare.F(true),
+				OperatingSystem: cloudflare.F(cloudflare.AccountDevicePostureUpdateParamsInputZR7Sv6YhFileInputRequestOperatingSystemMac),
+				Path:            cloudflare.F("/bin/cat"),
+				Sha256:          cloudflare.F("https://api.us-2.crowdstrike.com"),
+				Thumbprint:      cloudflare.F("0aabab210bdb998e9cf45da2c9ce352977ab531c681b74cf1e487be1bbe9fe6e"),
+			})),
 			Match: cloudflare.F([]cloudflare.AccountDevicePostureUpdateParamsMatch{{
 				Platform: cloudflare.F(cloudflare.AccountDevicePostureUpdateParamsMatchPlatformWindows),
 			}, {
@@ -99,8 +105,10 @@ func TestAccountDevicePostureDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Devices.Postures.Delete(
 		context.TODO(),
@@ -127,8 +135,10 @@ func TestAccountDevicePostureDevicePostureRulesNewDevicePostureRuleWithOptionalP
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Devices.Postures.DevicePostureRulesNewDevicePostureRule(
 		context.TODO(),
@@ -138,11 +148,13 @@ func TestAccountDevicePostureDevicePostureRulesNewDevicePostureRuleWithOptionalP
 			Type:        cloudflare.F(cloudflare.AccountDevicePostureDevicePostureRulesNewDevicePostureRuleParamsTypeFile),
 			Description: cloudflare.F("The rule for admin serial numbers"),
 			Expiration:  cloudflare.F("1h"),
-			Input: cloudflare.F(cloudflare.AccountDevicePostureDevicePostureRulesNewDevicePostureRuleParamsInput{
-				CheckDisks: cloudflare.F([]string{"C", "D", "G"}),
-				ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-				RequireAll: cloudflare.F(true),
-			}),
+			Input: cloudflare.F[cloudflare.AccountDevicePostureDevicePostureRulesNewDevicePostureRuleParamsInput](cloudflare.AccountDevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputZR7Sv6YhFileInputRequest(cloudflare.AccountDevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputZR7Sv6YhFileInputRequest{
+				Exists:          cloudflare.F(true),
+				OperatingSystem: cloudflare.F(cloudflare.AccountDevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputZR7Sv6YhFileInputRequestOperatingSystemMac),
+				Path:            cloudflare.F("/bin/cat"),
+				Sha256:          cloudflare.F("https://api.us-2.crowdstrike.com"),
+				Thumbprint:      cloudflare.F("0aabab210bdb998e9cf45da2c9ce352977ab531c681b74cf1e487be1bbe9fe6e"),
+			})),
 			Match: cloudflare.F([]cloudflare.AccountDevicePostureDevicePostureRulesNewDevicePostureRuleParamsMatch{{
 				Platform: cloudflare.F(cloudflare.AccountDevicePostureDevicePostureRulesNewDevicePostureRuleParamsMatchPlatformWindows),
 			}, {
@@ -173,8 +185,10 @@ func TestAccountDevicePostureDevicePostureRulesListDevicePostureRules(t *testing
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Devices.Postures.DevicePostureRulesListDevicePostureRules(context.TODO(), "699d98642c564d2e855e9661899b7252")
 	if err != nil {

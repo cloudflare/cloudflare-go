@@ -13,7 +13,7 @@ import (
 // instead.
 type AccountAlertingService struct {
 	Options []option.RequestOption
-	V3s     *AccountAlertingV3Service
+	V3      *AccountAlertingV3Service
 }
 
 // NewAccountAlertingService generates a new service that applies the given options
@@ -22,6 +22,6 @@ type AccountAlertingService struct {
 func NewAccountAlertingService(opts ...option.RequestOption) (r *AccountAlertingService) {
 	r = &AccountAlertingService{}
 	r.Options = opts
-	r.V3s = NewAccountAlertingV3Service(opts...)
+	r.V3 = NewAccountAlertingV3Service(opts...)
 	return
 }

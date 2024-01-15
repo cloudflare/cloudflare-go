@@ -31,26 +31,28 @@ func NewAccountLoadBalancerPoolHealthService(opts ...option.RequestOption) (r *A
 }
 
 // Fetch the latest pool health status for a single pool.
-func (r *AccountLoadBalancerPoolHealthService) AccountLoadBalancerPoolsPoolHealthDetails(ctx context.Context, accountIdentifier string, identifier interface{}, opts ...option.RequestOption) (res *HealthDetail, err error) {
+func (r *AccountLoadBalancerPoolHealthService) AccountLoadBalancerPoolsPoolHealthDetails(ctx context.Context, accountIdentifier string, identifier string, opts ...option.RequestOption) (res *AccountLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%v/health", accountIdentifier, identifier)
+	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s/health", accountIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type HealthDetail struct {
-	Errors   []HealthDetailError   `json:"errors"`
-	Messages []HealthDetailMessage `json:"messages"`
+type AccountLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponse struct {
+	Errors   []AccountLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseError   `json:"errors"`
+	Messages []AccountLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseMessage `json:"messages"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
 	Result interface{} `json:"result"`
 	// Whether the API call was successful
-	Success HealthDetailSuccess `json:"success"`
-	JSON    healthDetailJSON    `json:"-"`
+	Success AccountLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseSuccess `json:"success"`
+	JSON    accountLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseJSON    `json:"-"`
 }
 
-// healthDetailJSON contains the JSON metadata for the struct [HealthDetail]
-type healthDetailJSON struct {
+// accountLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseJSON
+// contains the JSON metadata for the struct
+// [AccountLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponse]
+type accountLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -59,51 +61,53 @@ type healthDetailJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HealthDetail) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type HealthDetailError struct {
-	Code    int64                 `json:"code,required"`
-	Message string                `json:"message,required"`
-	JSON    healthDetailErrorJSON `json:"-"`
+type AccountLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseError struct {
+	Code    int64                                                                                   `json:"code,required"`
+	Message string                                                                                  `json:"message,required"`
+	JSON    accountLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseErrorJSON `json:"-"`
 }
 
-// healthDetailErrorJSON contains the JSON metadata for the struct
-// [HealthDetailError]
-type healthDetailErrorJSON struct {
+// accountLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseError]
+type accountLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HealthDetailError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type HealthDetailMessage struct {
-	Code    int64                   `json:"code,required"`
-	Message string                  `json:"message,required"`
-	JSON    healthDetailMessageJSON `json:"-"`
+type AccountLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseMessage struct {
+	Code    int64                                                                                     `json:"code,required"`
+	Message string                                                                                    `json:"message,required"`
+	JSON    accountLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseMessageJSON `json:"-"`
 }
 
-// healthDetailMessageJSON contains the JSON metadata for the struct
-// [HealthDetailMessage]
-type healthDetailMessageJSON struct {
+// accountLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseMessage]
+type accountLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HealthDetailMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type HealthDetailSuccess bool
+type AccountLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseSuccess bool
 
 const (
-	HealthDetailSuccessTrue HealthDetailSuccess = true
+	AccountLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseSuccessTrue AccountLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseSuccess = true
 )

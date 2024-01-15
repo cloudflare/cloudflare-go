@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -34,7 +35,7 @@ func NewUserOrganizationService(opts ...option.RequestOption) (r *UserOrganizati
 }
 
 // Gets a specific organization the user is associated with.
-func (r *UserOrganizationService) Get(ctx context.Context, identifier string, opts ...option.RequestOption) (res *SingleOrganizationResponse, err error) {
+func (r *UserOrganizationService) Get(ctx context.Context, identifier string, opts ...option.RequestOption) (res *UserOrganizationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("user/organizations/%s", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -50,147 +51,90 @@ func (r *UserOrganizationService) Delete(ctx context.Context, identifier string,
 }
 
 // Lists organizations the user is associated with.
-func (r *UserOrganizationService) UserSOrganizationsListOrganizations(ctx context.Context, query UserOrganizationUserSOrganizationsListOrganizationsParams, opts ...option.RequestOption) (res *CollectionOrganizationResponse, err error) {
-	opts = append(r.Options[:], opts...)
+func (r *UserOrganizationService) UserSOrganizationsListOrganizations(ctx context.Context, query UserOrganizationUserSOrganizationsListOrganizationsParams, opts ...option.RequestOption) (res *shared.Page[UserOrganizationUserSOrganizationsListOrganizationsResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "user/organizations"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
 }
 
-type CollectionOrganizationResponse struct {
-	Errors     []CollectionOrganizationResponseError    `json:"errors"`
-	Messages   []CollectionOrganizationResponseMessage  `json:"messages"`
-	Result     []CollectionOrganizationResponseResult   `json:"result"`
-	ResultInfo CollectionOrganizationResponseResultInfo `json:"result_info"`
+type UserOrganizationGetResponse struct {
+	Errors   []UserOrganizationGetResponseError   `json:"errors"`
+	Messages []UserOrganizationGetResponseMessage `json:"messages"`
+	Result   interface{}                          `json:"result"`
 	// Whether the API call was successful
-	Success CollectionOrganizationResponseSuccess `json:"success"`
-	JSON    collectionOrganizationResponseJSON    `json:"-"`
+	Success UserOrganizationGetResponseSuccess `json:"success"`
+	JSON    userOrganizationGetResponseJSON    `json:"-"`
 }
 
-// collectionOrganizationResponseJSON contains the JSON metadata for the struct
-// [CollectionOrganizationResponse]
-type collectionOrganizationResponseJSON struct {
+// userOrganizationGetResponseJSON contains the JSON metadata for the struct
+// [UserOrganizationGetResponse]
+type userOrganizationGetResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CollectionOrganizationResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *UserOrganizationGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CollectionOrganizationResponseError struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    collectionOrganizationResponseErrorJSON `json:"-"`
+type UserOrganizationGetResponseError struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    userOrganizationGetResponseErrorJSON `json:"-"`
 }
 
-// collectionOrganizationResponseErrorJSON contains the JSON metadata for the
-// struct [CollectionOrganizationResponseError]
-type collectionOrganizationResponseErrorJSON struct {
+// userOrganizationGetResponseErrorJSON contains the JSON metadata for the struct
+// [UserOrganizationGetResponseError]
+type userOrganizationGetResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CollectionOrganizationResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *UserOrganizationGetResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CollectionOrganizationResponseMessage struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    collectionOrganizationResponseMessageJSON `json:"-"`
+type UserOrganizationGetResponseMessage struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    userOrganizationGetResponseMessageJSON `json:"-"`
 }
 
-// collectionOrganizationResponseMessageJSON contains the JSON metadata for the
-// struct [CollectionOrganizationResponseMessage]
-type collectionOrganizationResponseMessageJSON struct {
+// userOrganizationGetResponseMessageJSON contains the JSON metadata for the struct
+// [UserOrganizationGetResponseMessage]
+type userOrganizationGetResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CollectionOrganizationResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CollectionOrganizationResponseResult struct {
-	// Identifier
-	ID string `json:"id"`
-	// Organization name.
-	Name string `json:"name"`
-	// Access permissions for this User.
-	Permissions []string `json:"permissions"`
-	// List of roles that a user has within an organization.
-	Roles []string `json:"roles"`
-	// Whether the user is a member of the organization or has an inivitation pending.
-	Status CollectionOrganizationResponseResultStatus `json:"status"`
-	JSON   collectionOrganizationResponseResultJSON   `json:"-"`
-}
-
-// collectionOrganizationResponseResultJSON contains the JSON metadata for the
-// struct [CollectionOrganizationResponseResult]
-type collectionOrganizationResponseResultJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	Permissions apijson.Field
-	Roles       apijson.Field
-	Status      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CollectionOrganizationResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the user is a member of the organization or has an inivitation pending.
-type CollectionOrganizationResponseResultStatus string
-
-const (
-	CollectionOrganizationResponseResultStatusMember  CollectionOrganizationResponseResultStatus = "member"
-	CollectionOrganizationResponseResultStatusInvited CollectionOrganizationResponseResultStatus = "invited"
-)
-
-type CollectionOrganizationResponseResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                      `json:"total_count"`
-	JSON       collectionOrganizationResponseResultInfoJSON `json:"-"`
-}
-
-// collectionOrganizationResponseResultInfoJSON contains the JSON metadata for the
-// struct [CollectionOrganizationResponseResultInfo]
-type collectionOrganizationResponseResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CollectionOrganizationResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *UserOrganizationGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type CollectionOrganizationResponseSuccess bool
+type UserOrganizationGetResponseSuccess bool
 
 const (
-	CollectionOrganizationResponseSuccessTrue CollectionOrganizationResponseSuccess = true
+	UserOrganizationGetResponseSuccessTrue UserOrganizationGetResponseSuccess = true
 )
 
 type UserOrganizationDeleteResponse struct {
@@ -210,6 +154,45 @@ type userOrganizationDeleteResponseJSON struct {
 func (r *UserOrganizationDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type UserOrganizationUserSOrganizationsListOrganizationsResponse struct {
+	// Identifier
+	ID string `json:"id"`
+	// Organization name.
+	Name string `json:"name"`
+	// Access permissions for this User.
+	Permissions []string `json:"permissions"`
+	// List of roles that a user has within an organization.
+	Roles []string `json:"roles"`
+	// Whether the user is a member of the organization or has an inivitation pending.
+	Status UserOrganizationUserSOrganizationsListOrganizationsResponseStatus `json:"status"`
+	JSON   userOrganizationUserSOrganizationsListOrganizationsResponseJSON   `json:"-"`
+}
+
+// userOrganizationUserSOrganizationsListOrganizationsResponseJSON contains the
+// JSON metadata for the struct
+// [UserOrganizationUserSOrganizationsListOrganizationsResponse]
+type userOrganizationUserSOrganizationsListOrganizationsResponseJSON struct {
+	ID          apijson.Field
+	Name        apijson.Field
+	Permissions apijson.Field
+	Roles       apijson.Field
+	Status      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserOrganizationUserSOrganizationsListOrganizationsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the user is a member of the organization or has an inivitation pending.
+type UserOrganizationUserSOrganizationsListOrganizationsResponseStatus string
+
+const (
+	UserOrganizationUserSOrganizationsListOrganizationsResponseStatusMember  UserOrganizationUserSOrganizationsListOrganizationsResponseStatus = "member"
+	UserOrganizationUserSOrganizationsListOrganizationsResponseStatusInvited UserOrganizationUserSOrganizationsListOrganizationsResponseStatus = "invited"
+)
 
 type UserOrganizationUserSOrganizationsListOrganizationsParams struct {
 	// Direction to order organizations.

@@ -32,26 +32,26 @@ func NewAccountAlertingV3DestinationEligibleService(opts ...option.RequestOption
 }
 
 // Get a list of all delivery mechanism types for which an account is eligible.
-func (r *AccountAlertingV3DestinationEligibleService) NotificationMechanismEligibilityGetDeliveryMechanismEligibility(ctx context.Context, identifier string, opts ...option.RequestOption) (res *EligibilityResponseCollection, err error) {
+func (r *AccountAlertingV3DestinationEligibleService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *AccountAlertingV3DestinationEligibleListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/eligible", identifier)
+	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/eligible", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type EligibilityResponseCollection struct {
-	Errors     []EligibilityResponseCollectionError    `json:"errors"`
-	Messages   []EligibilityResponseCollectionMessage  `json:"messages"`
-	Result     interface{}                             `json:"result"`
-	ResultInfo EligibilityResponseCollectionResultInfo `json:"result_info"`
+type AccountAlertingV3DestinationEligibleListResponse struct {
+	Errors     []AccountAlertingV3DestinationEligibleListResponseError    `json:"errors"`
+	Messages   []AccountAlertingV3DestinationEligibleListResponseMessage  `json:"messages"`
+	Result     interface{}                                                `json:"result"`
+	ResultInfo AccountAlertingV3DestinationEligibleListResponseResultInfo `json:"result_info"`
 	// Whether the API call was successful
-	Success EligibilityResponseCollectionSuccess `json:"success"`
-	JSON    eligibilityResponseCollectionJSON    `json:"-"`
+	Success AccountAlertingV3DestinationEligibleListResponseSuccess `json:"success"`
+	JSON    accountAlertingV3DestinationEligibleListResponseJSON    `json:"-"`
 }
 
-// eligibilityResponseCollectionJSON contains the JSON metadata for the struct
-// [EligibilityResponseCollection]
-type eligibilityResponseCollectionJSON struct {
+// accountAlertingV3DestinationEligibleListResponseJSON contains the JSON metadata
+// for the struct [AccountAlertingV3DestinationEligibleListResponse]
+type accountAlertingV3DestinationEligibleListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -61,49 +61,50 @@ type eligibilityResponseCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EligibilityResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountAlertingV3DestinationEligibleListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type EligibilityResponseCollectionError struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    eligibilityResponseCollectionErrorJSON `json:"-"`
+type AccountAlertingV3DestinationEligibleListResponseError struct {
+	Code    int64                                                     `json:"code,required"`
+	Message string                                                    `json:"message,required"`
+	JSON    accountAlertingV3DestinationEligibleListResponseErrorJSON `json:"-"`
 }
 
-// eligibilityResponseCollectionErrorJSON contains the JSON metadata for the struct
-// [EligibilityResponseCollectionError]
-type eligibilityResponseCollectionErrorJSON struct {
+// accountAlertingV3DestinationEligibleListResponseErrorJSON contains the JSON
+// metadata for the struct [AccountAlertingV3DestinationEligibleListResponseError]
+type accountAlertingV3DestinationEligibleListResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EligibilityResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountAlertingV3DestinationEligibleListResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type EligibilityResponseCollectionMessage struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    eligibilityResponseCollectionMessageJSON `json:"-"`
+type AccountAlertingV3DestinationEligibleListResponseMessage struct {
+	Code    int64                                                       `json:"code,required"`
+	Message string                                                      `json:"message,required"`
+	JSON    accountAlertingV3DestinationEligibleListResponseMessageJSON `json:"-"`
 }
 
-// eligibilityResponseCollectionMessageJSON contains the JSON metadata for the
-// struct [EligibilityResponseCollectionMessage]
-type eligibilityResponseCollectionMessageJSON struct {
+// accountAlertingV3DestinationEligibleListResponseMessageJSON contains the JSON
+// metadata for the struct
+// [AccountAlertingV3DestinationEligibleListResponseMessage]
+type accountAlertingV3DestinationEligibleListResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EligibilityResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountAlertingV3DestinationEligibleListResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type EligibilityResponseCollectionResultInfo struct {
+type AccountAlertingV3DestinationEligibleListResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -111,13 +112,14 @@ type EligibilityResponseCollectionResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                     `json:"total_count"`
-	JSON       eligibilityResponseCollectionResultInfoJSON `json:"-"`
+	TotalCount float64                                                        `json:"total_count"`
+	JSON       accountAlertingV3DestinationEligibleListResponseResultInfoJSON `json:"-"`
 }
 
-// eligibilityResponseCollectionResultInfoJSON contains the JSON metadata for the
-// struct [EligibilityResponseCollectionResultInfo]
-type eligibilityResponseCollectionResultInfoJSON struct {
+// accountAlertingV3DestinationEligibleListResponseResultInfoJSON contains the JSON
+// metadata for the struct
+// [AccountAlertingV3DestinationEligibleListResponseResultInfo]
+type accountAlertingV3DestinationEligibleListResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -126,13 +128,13 @@ type eligibilityResponseCollectionResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EligibilityResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountAlertingV3DestinationEligibleListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type EligibilityResponseCollectionSuccess bool
+type AccountAlertingV3DestinationEligibleListResponseSuccess bool
 
 const (
-	EligibilityResponseCollectionSuccessTrue EligibilityResponseCollectionSuccess = true
+	AccountAlertingV3DestinationEligibleListResponseSuccessTrue AccountAlertingV3DestinationEligibleListResponseSuccess = true
 )

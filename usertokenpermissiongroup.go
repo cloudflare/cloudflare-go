@@ -30,26 +30,27 @@ func NewUserTokenPermissionGroupService(opts ...option.RequestOption) (r *UserTo
 }
 
 // Find all available permission groups.
-func (r *UserTokenPermissionGroupService) PermissionGroupsListPermissionGroups(ctx context.Context, opts ...option.RequestOption) (res *SchemasResponseCollection5gNmnUwj, err error) {
+func (r *UserTokenPermissionGroupService) PermissionGroupsListPermissionGroups(ctx context.Context, opts ...option.RequestOption) (res *UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "user/tokens/permission_groups"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type SchemasResponseCollection5gNmnUwj struct {
-	Errors     []SchemasResponseCollection5gNmnUwjError    `json:"errors"`
-	Messages   []SchemasResponseCollection5gNmnUwjMessage  `json:"messages"`
-	Result     []interface{}                               `json:"result"`
-	ResultInfo SchemasResponseCollection5gNmnUwjResultInfo `json:"result_info"`
+type UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponse struct {
+	Errors     []UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseError    `json:"errors"`
+	Messages   []UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseMessage  `json:"messages"`
+	Result     []interface{}                                                                  `json:"result"`
+	ResultInfo UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseResultInfo `json:"result_info"`
 	// Whether the API call was successful
-	Success SchemasResponseCollection5gNmnUwjSuccess `json:"success"`
-	JSON    schemasResponseCollection5gNmnUwjJSON    `json:"-"`
+	Success UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseSuccess `json:"success"`
+	JSON    userTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseJSON    `json:"-"`
 }
 
-// schemasResponseCollection5gNmnUwjJSON contains the JSON metadata for the struct
-// [SchemasResponseCollection5gNmnUwj]
-type schemasResponseCollection5gNmnUwjJSON struct {
+// userTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseJSON
+// contains the JSON metadata for the struct
+// [UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponse]
+type userTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -59,49 +60,51 @@ type schemasResponseCollection5gNmnUwjJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasResponseCollection5gNmnUwj) UnmarshalJSON(data []byte) (err error) {
+func (r *UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemasResponseCollection5gNmnUwjError struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    schemasResponseCollection5gNmnUwjErrorJSON `json:"-"`
+type UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseError struct {
+	Code    int64                                                                         `json:"code,required"`
+	Message string                                                                        `json:"message,required"`
+	JSON    userTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseErrorJSON `json:"-"`
 }
 
-// schemasResponseCollection5gNmnUwjErrorJSON contains the JSON metadata for the
-// struct [SchemasResponseCollection5gNmnUwjError]
-type schemasResponseCollection5gNmnUwjErrorJSON struct {
+// userTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseError]
+type userTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasResponseCollection5gNmnUwjError) UnmarshalJSON(data []byte) (err error) {
+func (r *UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemasResponseCollection5gNmnUwjMessage struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    schemasResponseCollection5gNmnUwjMessageJSON `json:"-"`
+type UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseMessage struct {
+	Code    int64                                                                           `json:"code,required"`
+	Message string                                                                          `json:"message,required"`
+	JSON    userTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseMessageJSON `json:"-"`
 }
 
-// schemasResponseCollection5gNmnUwjMessageJSON contains the JSON metadata for the
-// struct [SchemasResponseCollection5gNmnUwjMessage]
-type schemasResponseCollection5gNmnUwjMessageJSON struct {
+// userTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseMessage]
+type userTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasResponseCollection5gNmnUwjMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemasResponseCollection5gNmnUwjResultInfo struct {
+type UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -109,13 +112,14 @@ type SchemasResponseCollection5gNmnUwjResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                         `json:"total_count"`
-	JSON       schemasResponseCollection5gNmnUwjResultInfoJSON `json:"-"`
+	TotalCount float64                                                                            `json:"total_count"`
+	JSON       userTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseResultInfoJSON `json:"-"`
 }
 
-// schemasResponseCollection5gNmnUwjResultInfoJSON contains the JSON metadata for
-// the struct [SchemasResponseCollection5gNmnUwjResultInfo]
-type schemasResponseCollection5gNmnUwjResultInfoJSON struct {
+// userTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseResultInfo]
+type userTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -124,13 +128,13 @@ type schemasResponseCollection5gNmnUwjResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasResponseCollection5gNmnUwjResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type SchemasResponseCollection5gNmnUwjSuccess bool
+type UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseSuccess bool
 
 const (
-	SchemasResponseCollection5gNmnUwjSuccessTrue SchemasResponseCollection5gNmnUwjSuccess = true
+	UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseSuccessTrue UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseSuccess = true
 )

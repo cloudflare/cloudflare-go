@@ -32,25 +32,26 @@ func NewAccountLogpushDatasetJobService(opts ...option.RequestOption) (r *Accoun
 }
 
 // Lists Logpush jobs for an account for a dataset.
-func (r *AccountLogpushDatasetJobService) GetAccountsAccountIdentifierLogpushDatasetsDatasetJobs(ctx context.Context, accountIdentifier string, dataset string, opts ...option.RequestOption) (res *LogpushJobResponseCollection, err error) {
+func (r *AccountLogpushDatasetJobService) GetAccountsAccountIdentifierLogpushDatasetsDatasetJobs(ctx context.Context, accountIdentifier string, dataset string, opts ...option.RequestOption) (res *AccountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/logpush/datasets/%s/jobs", accountIdentifier, dataset)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type LogpushJobResponseCollection struct {
-	Errors   []LogpushJobResponseCollectionError   `json:"errors"`
-	Messages []LogpushJobResponseCollectionMessage `json:"messages"`
-	Result   []LogpushJobResponseCollectionResult  `json:"result"`
+type AccountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponse struct {
+	Errors   []AccountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseError   `json:"errors"`
+	Messages []AccountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseMessage `json:"messages"`
+	Result   []AccountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseResult  `json:"result"`
 	// Whether the API call was successful
-	Success LogpushJobResponseCollectionSuccess `json:"success"`
-	JSON    logpushJobResponseCollectionJSON    `json:"-"`
+	Success AccountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseSuccess `json:"success"`
+	JSON    accountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseJSON    `json:"-"`
 }
 
-// logpushJobResponseCollectionJSON contains the JSON metadata for the struct
-// [LogpushJobResponseCollection]
-type logpushJobResponseCollectionJSON struct {
+// accountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseJSON
+// contains the JSON metadata for the struct
+// [AccountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponse]
+type accountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -59,49 +60,51 @@ type logpushJobResponseCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LogpushJobResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LogpushJobResponseCollectionError struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    logpushJobResponseCollectionErrorJSON `json:"-"`
+type AccountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseError struct {
+	Code    int64                                                                                           `json:"code,required"`
+	Message string                                                                                          `json:"message,required"`
+	JSON    accountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseErrorJSON `json:"-"`
 }
 
-// logpushJobResponseCollectionErrorJSON contains the JSON metadata for the struct
-// [LogpushJobResponseCollectionError]
-type logpushJobResponseCollectionErrorJSON struct {
+// accountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseError]
+type accountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LogpushJobResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LogpushJobResponseCollectionMessage struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    logpushJobResponseCollectionMessageJSON `json:"-"`
+type AccountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseMessage struct {
+	Code    int64                                                                                             `json:"code,required"`
+	Message string                                                                                            `json:"message,required"`
+	JSON    accountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseMessageJSON `json:"-"`
 }
 
-// logpushJobResponseCollectionMessageJSON contains the JSON metadata for the
-// struct [LogpushJobResponseCollectionMessage]
-type logpushJobResponseCollectionMessageJSON struct {
+// accountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseMessage]
+type accountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LogpushJobResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LogpushJobResponseCollectionResult struct {
+type AccountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseResult struct {
 	// Unique id of the job.
 	ID int64 `json:"id"`
 	// Name of the dataset.
@@ -120,7 +123,7 @@ type LogpushJobResponseCollectionResult struct {
 	// The frequency at which Cloudflare sends batches of logs to your destination.
 	// Setting frequency to high sends your logs in larger quantities of smaller files.
 	// Setting frequency to low sends logs in smaller quantities of larger files.
-	Frequency LogpushJobResponseCollectionResultFrequency `json:"frequency,nullable"`
+	Frequency AccountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseResultFrequency `json:"frequency,nullable"`
 	// Records the last time for which logs have been successfully pushed. If the last
 	// successful push was for logs range 2018-07-23T10:00:00Z to 2018-07-23T10:01:00Z
 	// then the value of this field will be 2018-07-23T10:01:00Z. If the job has never
@@ -138,13 +141,14 @@ type LogpushJobResponseCollectionResult struct {
 	// Optional human readable job name. Not unique. Cloudflare suggests that you set
 	// this to a meaningful string, like the domain name, to make it easier to identify
 	// your job.
-	Name string                                 `json:"name,nullable"`
-	JSON logpushJobResponseCollectionResultJSON `json:"-"`
+	Name string                                                                                           `json:"name,nullable"`
+	JSON accountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseResultJSON `json:"-"`
 }
 
-// logpushJobResponseCollectionResultJSON contains the JSON metadata for the struct
-// [LogpushJobResponseCollectionResult]
-type logpushJobResponseCollectionResultJSON struct {
+// accountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseResult]
+type accountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseResultJSON struct {
 	ID              apijson.Field
 	Dataset         apijson.Field
 	DestinationConf apijson.Field
@@ -159,23 +163,23 @@ type logpushJobResponseCollectionResultJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *LogpushJobResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The frequency at which Cloudflare sends batches of logs to your destination.
 // Setting frequency to high sends your logs in larger quantities of smaller files.
 // Setting frequency to low sends logs in smaller quantities of larger files.
-type LogpushJobResponseCollectionResultFrequency string
+type AccountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseResultFrequency string
 
 const (
-	LogpushJobResponseCollectionResultFrequencyHigh LogpushJobResponseCollectionResultFrequency = "high"
-	LogpushJobResponseCollectionResultFrequencyLow  LogpushJobResponseCollectionResultFrequency = "low"
+	AccountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseResultFrequencyHigh AccountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseResultFrequency = "high"
+	AccountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseResultFrequencyLow  AccountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseResultFrequency = "low"
 )
 
 // Whether the API call was successful
-type LogpushJobResponseCollectionSuccess bool
+type AccountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseSuccess bool
 
 const (
-	LogpushJobResponseCollectionSuccessTrue LogpushJobResponseCollectionSuccess = true
+	AccountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseSuccessTrue AccountLogpushDatasetJobGetAccountsAccountIdentifierLogpushDatasetsDatasetJobsResponseSuccess = true
 )

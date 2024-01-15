@@ -35,92 +35,90 @@ func NewAccountRuleListBulkOperationService(opts ...option.RequestOption) (r *Ac
 // The `status` property can have one of the following values: `pending`,
 // `running`, `completed`, or `failed`. If the status is `failed`, the `error`
 // property will contain a message describing the error.
-func (r *AccountRuleListBulkOperationService) Get(ctx context.Context, accountIdentifier string, operationID string, opts ...option.RequestOption) (res *BulkOperationResponseCollection, err error) {
+func (r *AccountRuleListBulkOperationService) Get(ctx context.Context, accountIdentifier string, operationID string, opts ...option.RequestOption) (res *AccountRuleListBulkOperationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/rules/lists/bulk_operations/%s", accountIdentifier, operationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type BulkOperationResponseCollection struct {
-	Errors     []BulkOperationResponseCollectionError    `json:"errors"`
-	Messages   []BulkOperationResponseCollectionMessage  `json:"messages"`
-	Result     BulkOperationResponseCollectionResult     `json:"result"`
-	ResultInfo BulkOperationResponseCollectionResultInfo `json:"result_info"`
+type AccountRuleListBulkOperationGetResponse struct {
+	Errors   []AccountRuleListBulkOperationGetResponseError   `json:"errors"`
+	Messages []AccountRuleListBulkOperationGetResponseMessage `json:"messages"`
+	Result   AccountRuleListBulkOperationGetResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success BulkOperationResponseCollectionSuccess `json:"success"`
-	JSON    bulkOperationResponseCollectionJSON    `json:"-"`
+	Success AccountRuleListBulkOperationGetResponseSuccess `json:"success"`
+	JSON    accountRuleListBulkOperationGetResponseJSON    `json:"-"`
 }
 
-// bulkOperationResponseCollectionJSON contains the JSON metadata for the struct
-// [BulkOperationResponseCollection]
-type bulkOperationResponseCollectionJSON struct {
+// accountRuleListBulkOperationGetResponseJSON contains the JSON metadata for the
+// struct [AccountRuleListBulkOperationGetResponse]
+type accountRuleListBulkOperationGetResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BulkOperationResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountRuleListBulkOperationGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type BulkOperationResponseCollectionError struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    bulkOperationResponseCollectionErrorJSON `json:"-"`
+type AccountRuleListBulkOperationGetResponseError struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    accountRuleListBulkOperationGetResponseErrorJSON `json:"-"`
 }
 
-// bulkOperationResponseCollectionErrorJSON contains the JSON metadata for the
-// struct [BulkOperationResponseCollectionError]
-type bulkOperationResponseCollectionErrorJSON struct {
+// accountRuleListBulkOperationGetResponseErrorJSON contains the JSON metadata for
+// the struct [AccountRuleListBulkOperationGetResponseError]
+type accountRuleListBulkOperationGetResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BulkOperationResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountRuleListBulkOperationGetResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type BulkOperationResponseCollectionMessage struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    bulkOperationResponseCollectionMessageJSON `json:"-"`
+type AccountRuleListBulkOperationGetResponseMessage struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    accountRuleListBulkOperationGetResponseMessageJSON `json:"-"`
 }
 
-// bulkOperationResponseCollectionMessageJSON contains the JSON metadata for the
-// struct [BulkOperationResponseCollectionMessage]
-type bulkOperationResponseCollectionMessageJSON struct {
+// accountRuleListBulkOperationGetResponseMessageJSON contains the JSON metadata
+// for the struct [AccountRuleListBulkOperationGetResponseMessage]
+type accountRuleListBulkOperationGetResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BulkOperationResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountRuleListBulkOperationGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type BulkOperationResponseCollectionResult struct {
+type AccountRuleListBulkOperationGetResponseResult struct {
 	// The unique operation ID of the asynchronous action.
 	ID string `json:"id,required"`
 	// The current status of the asynchronous operation.
-	Status BulkOperationResponseCollectionResultStatus `json:"status,required"`
+	Status AccountRuleListBulkOperationGetResponseResultStatus `json:"status,required"`
 	// The RFC 3339 timestamp of when the operation was completed.
 	Completed string `json:"completed"`
 	// A message describing the error when the status is `failed`.
-	Error string                                    `json:"error"`
-	JSON  bulkOperationResponseCollectionResultJSON `json:"-"`
+	Error string                                            `json:"error"`
+	JSON  accountRuleListBulkOperationGetResponseResultJSON `json:"-"`
 }
 
-// bulkOperationResponseCollectionResultJSON contains the JSON metadata for the
-// struct [BulkOperationResponseCollectionResult]
-type bulkOperationResponseCollectionResultJSON struct {
+// accountRuleListBulkOperationGetResponseResultJSON contains the JSON metadata for
+// the struct [AccountRuleListBulkOperationGetResponseResult]
+type accountRuleListBulkOperationGetResponseResultJSON struct {
 	ID          apijson.Field
 	Status      apijson.Field
 	Completed   apijson.Field
@@ -129,50 +127,23 @@ type bulkOperationResponseCollectionResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BulkOperationResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountRuleListBulkOperationGetResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The current status of the asynchronous operation.
-type BulkOperationResponseCollectionResultStatus string
+type AccountRuleListBulkOperationGetResponseResultStatus string
 
 const (
-	BulkOperationResponseCollectionResultStatusPending   BulkOperationResponseCollectionResultStatus = "pending"
-	BulkOperationResponseCollectionResultStatusRunning   BulkOperationResponseCollectionResultStatus = "running"
-	BulkOperationResponseCollectionResultStatusCompleted BulkOperationResponseCollectionResultStatus = "completed"
-	BulkOperationResponseCollectionResultStatusFailed    BulkOperationResponseCollectionResultStatus = "failed"
+	AccountRuleListBulkOperationGetResponseResultStatusPending   AccountRuleListBulkOperationGetResponseResultStatus = "pending"
+	AccountRuleListBulkOperationGetResponseResultStatusRunning   AccountRuleListBulkOperationGetResponseResultStatus = "running"
+	AccountRuleListBulkOperationGetResponseResultStatusCompleted AccountRuleListBulkOperationGetResponseResultStatus = "completed"
+	AccountRuleListBulkOperationGetResponseResultStatusFailed    AccountRuleListBulkOperationGetResponseResultStatus = "failed"
 )
 
-type BulkOperationResponseCollectionResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                       `json:"total_count"`
-	JSON       bulkOperationResponseCollectionResultInfoJSON `json:"-"`
-}
-
-// bulkOperationResponseCollectionResultInfoJSON contains the JSON metadata for the
-// struct [BulkOperationResponseCollectionResultInfo]
-type bulkOperationResponseCollectionResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BulkOperationResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 // Whether the API call was successful
-type BulkOperationResponseCollectionSuccess bool
+type AccountRuleListBulkOperationGetResponseSuccess bool
 
 const (
-	BulkOperationResponseCollectionSuccessTrue BulkOperationResponseCollectionSuccess = true
+	AccountRuleListBulkOperationGetResponseSuccessTrue AccountRuleListBulkOperationGetResponseSuccess = true
 )

@@ -32,7 +32,7 @@ func NewAccountDlpPayloadLogService(opts ...option.RequestOption) (r *AccountDlp
 }
 
 // Gets the current DLP payload log settings for this account.
-func (r *AccountDlpPayloadLogService) DlpPayloadLogSettingsGetSettings(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *GetSettingsResponse, err error) {
+func (r *AccountDlpPayloadLogService) DlpPayloadLogSettingsGetSettings(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *AccountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/dlp/payload_log", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -40,25 +40,26 @@ func (r *AccountDlpPayloadLogService) DlpPayloadLogSettingsGetSettings(ctx conte
 }
 
 // Updates the DLP payload log settings for this account.
-func (r *AccountDlpPayloadLogService) DlpPayloadLogSettingsUpdateSettings(ctx context.Context, accountIdentifier string, body AccountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsParams, opts ...option.RequestOption) (res *UpdateSettingsResponse, err error) {
+func (r *AccountDlpPayloadLogService) DlpPayloadLogSettingsUpdateSettings(ctx context.Context, accountIdentifier string, body AccountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsParams, opts ...option.RequestOption) (res *AccountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/dlp/payload_log", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
 	return
 }
 
-type GetSettingsResponse struct {
-	Errors   []GetSettingsResponseError   `json:"errors"`
-	Messages []GetSettingsResponseMessage `json:"messages"`
-	Result   GetSettingsResponseResult    `json:"result"`
+type AccountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponse struct {
+	Errors   []AccountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseError   `json:"errors"`
+	Messages []AccountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseMessage `json:"messages"`
+	Result   AccountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success GetSettingsResponseSuccess `json:"success"`
-	JSON    getSettingsResponseJSON    `json:"-"`
+	Success AccountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseSuccess `json:"success"`
+	JSON    accountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseJSON    `json:"-"`
 }
 
-// getSettingsResponseJSON contains the JSON metadata for the struct
-// [GetSettingsResponse]
-type getSettingsResponseJSON struct {
+// accountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseJSON contains the
+// JSON metadata for the struct
+// [AccountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponse]
+type accountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -67,84 +68,88 @@ type getSettingsResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GetSettingsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GetSettingsResponseError struct {
-	Code    int64                        `json:"code,required"`
-	Message string                       `json:"message,required"`
-	JSON    getSettingsResponseErrorJSON `json:"-"`
+type AccountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseError struct {
+	Code    int64                                                                 `json:"code,required"`
+	Message string                                                                `json:"message,required"`
+	JSON    accountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseErrorJSON `json:"-"`
 }
 
-// getSettingsResponseErrorJSON contains the JSON metadata for the struct
-// [GetSettingsResponseError]
-type getSettingsResponseErrorJSON struct {
+// accountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseErrorJSON contains
+// the JSON metadata for the struct
+// [AccountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseError]
+type accountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GetSettingsResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GetSettingsResponseMessage struct {
-	Code    int64                          `json:"code,required"`
-	Message string                         `json:"message,required"`
-	JSON    getSettingsResponseMessageJSON `json:"-"`
+type AccountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseMessage struct {
+	Code    int64                                                                   `json:"code,required"`
+	Message string                                                                  `json:"message,required"`
+	JSON    accountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseMessageJSON `json:"-"`
 }
 
-// getSettingsResponseMessageJSON contains the JSON metadata for the struct
-// [GetSettingsResponseMessage]
-type getSettingsResponseMessageJSON struct {
+// accountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseMessageJSON contains
+// the JSON metadata for the struct
+// [AccountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseMessage]
+type accountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GetSettingsResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GetSettingsResponseResult struct {
-	PublicKey string                        `json:"public_key,required,nullable"`
-	JSON      getSettingsResponseResultJSON `json:"-"`
+type AccountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseResult struct {
+	PublicKey string                                                                 `json:"public_key,required,nullable"`
+	JSON      accountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseResultJSON `json:"-"`
 }
 
-// getSettingsResponseResultJSON contains the JSON metadata for the struct
-// [GetSettingsResponseResult]
-type getSettingsResponseResultJSON struct {
+// accountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseResultJSON contains
+// the JSON metadata for the struct
+// [AccountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseResult]
+type accountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseResultJSON struct {
 	PublicKey   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GetSettingsResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type GetSettingsResponseSuccess bool
+type AccountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseSuccess bool
 
 const (
-	GetSettingsResponseSuccessTrue GetSettingsResponseSuccess = true
+	AccountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseSuccessTrue AccountDlpPayloadLogDlpPayloadLogSettingsGetSettingsResponseSuccess = true
 )
 
-type UpdateSettingsResponse struct {
-	Errors   []UpdateSettingsResponseError   `json:"errors"`
-	Messages []UpdateSettingsResponseMessage `json:"messages"`
-	Result   UpdateSettingsResponseResult    `json:"result"`
+type AccountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponse struct {
+	Errors   []AccountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseError   `json:"errors"`
+	Messages []AccountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseMessage `json:"messages"`
+	Result   AccountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success UpdateSettingsResponseSuccess `json:"success"`
-	JSON    updateSettingsResponseJSON    `json:"-"`
+	Success AccountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseSuccess `json:"success"`
+	JSON    accountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseJSON    `json:"-"`
 }
 
-// updateSettingsResponseJSON contains the JSON metadata for the struct
-// [UpdateSettingsResponse]
-type updateSettingsResponseJSON struct {
+// accountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseJSON contains the
+// JSON metadata for the struct
+// [AccountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponse]
+type accountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -153,70 +158,73 @@ type updateSettingsResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UpdateSettingsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type UpdateSettingsResponseError struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    updateSettingsResponseErrorJSON `json:"-"`
+type AccountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseError struct {
+	Code    int64                                                                    `json:"code,required"`
+	Message string                                                                   `json:"message,required"`
+	JSON    accountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseErrorJSON `json:"-"`
 }
 
-// updateSettingsResponseErrorJSON contains the JSON metadata for the struct
-// [UpdateSettingsResponseError]
-type updateSettingsResponseErrorJSON struct {
+// accountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseError]
+type accountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UpdateSettingsResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type UpdateSettingsResponseMessage struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    updateSettingsResponseMessageJSON `json:"-"`
+type AccountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseMessage struct {
+	Code    int64                                                                      `json:"code,required"`
+	Message string                                                                     `json:"message,required"`
+	JSON    accountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseMessageJSON `json:"-"`
 }
 
-// updateSettingsResponseMessageJSON contains the JSON metadata for the struct
-// [UpdateSettingsResponseMessage]
-type updateSettingsResponseMessageJSON struct {
+// accountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseMessage]
+type accountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UpdateSettingsResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type UpdateSettingsResponseResult struct {
-	PublicKey string                           `json:"public_key,required,nullable"`
-	JSON      updateSettingsResponseResultJSON `json:"-"`
+type AccountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseResult struct {
+	PublicKey string                                                                    `json:"public_key,required,nullable"`
+	JSON      accountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseResultJSON `json:"-"`
 }
 
-// updateSettingsResponseResultJSON contains the JSON metadata for the struct
-// [UpdateSettingsResponseResult]
-type updateSettingsResponseResultJSON struct {
+// accountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseResult]
+type accountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseResultJSON struct {
 	PublicKey   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UpdateSettingsResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type UpdateSettingsResponseSuccess bool
+type AccountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseSuccess bool
 
 const (
-	UpdateSettingsResponseSuccessTrue UpdateSettingsResponseSuccess = true
+	AccountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseSuccessTrue AccountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsResponseSuccess = true
 )
 
 type AccountDlpPayloadLogDlpPayloadLogSettingsUpdateSettingsParams struct {

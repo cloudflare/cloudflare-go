@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -34,78 +35,24 @@ func NewUserBillingHistoryService(opts ...option.RequestOption) (r *UserBillingH
 }
 
 // Accesses your billing history object.
-func (r *UserBillingHistoryService) UserBillingHistoryBillingHistoryDetails(ctx context.Context, query UserBillingHistoryUserBillingHistoryBillingHistoryDetailsParams, opts ...option.RequestOption) (res *BillingHistoryCollection, err error) {
-	opts = append(r.Options[:], opts...)
+func (r *UserBillingHistoryService) UserBillingHistoryBillingHistoryDetails(ctx context.Context, query UserBillingHistoryUserBillingHistoryBillingHistoryDetailsParams, opts ...option.RequestOption) (res *shared.Page[UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "user/billing/history"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
 }
 
-type BillingHistoryCollection struct {
-	Errors     []BillingHistoryCollectionError    `json:"errors"`
-	Messages   []BillingHistoryCollectionMessage  `json:"messages"`
-	Result     []BillingHistoryCollectionResult   `json:"result"`
-	ResultInfo BillingHistoryCollectionResultInfo `json:"result_info"`
-	// Whether the API call was successful
-	Success BillingHistoryCollectionSuccess `json:"success"`
-	JSON    billingHistoryCollectionJSON    `json:"-"`
-}
-
-// billingHistoryCollectionJSON contains the JSON metadata for the struct
-// [BillingHistoryCollection]
-type billingHistoryCollectionJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BillingHistoryCollection) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type BillingHistoryCollectionError struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    billingHistoryCollectionErrorJSON `json:"-"`
-}
-
-// billingHistoryCollectionErrorJSON contains the JSON metadata for the struct
-// [BillingHistoryCollectionError]
-type billingHistoryCollectionErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BillingHistoryCollectionError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type BillingHistoryCollectionMessage struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    billingHistoryCollectionMessageJSON `json:"-"`
-}
-
-// billingHistoryCollectionMessageJSON contains the JSON metadata for the struct
-// [BillingHistoryCollectionMessage]
-type billingHistoryCollectionMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BillingHistoryCollectionMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type BillingHistoryCollectionResult struct {
+type UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponse struct {
 	// Billing item identifier tag.
 	ID string `json:"id,required"`
 	// The billing item action.
@@ -119,14 +66,15 @@ type BillingHistoryCollectionResult struct {
 	// When the billing item was created.
 	OccurredAt time.Time `json:"occurred_at,required" format:"date-time"`
 	// The billing item type.
-	Type string                             `json:"type,required"`
-	Zone BillingHistoryCollectionResultZone `json:"zone,required"`
-	JSON billingHistoryCollectionResultJSON `json:"-"`
+	Type string                                                                `json:"type,required"`
+	Zone UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseZone `json:"zone,required"`
+	JSON userBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseJSON `json:"-"`
 }
 
-// billingHistoryCollectionResultJSON contains the JSON metadata for the struct
-// [BillingHistoryCollectionResult]
-type billingHistoryCollectionResultJSON struct {
+// userBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseJSON contains
+// the JSON metadata for the struct
+// [UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponse]
+type userBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseJSON struct {
 	ID          apijson.Field
 	Action      apijson.Field
 	Amount      apijson.Field
@@ -139,60 +87,27 @@ type billingHistoryCollectionResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BillingHistoryCollectionResult) UnmarshalJSON(data []byte) (err error) {
+func (r *UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type BillingHistoryCollectionResultZone struct {
-	Name interface{}                            `json:"name"`
-	JSON billingHistoryCollectionResultZoneJSON `json:"-"`
+type UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseZone struct {
+	Name interface{}                                                               `json:"name"`
+	JSON userBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseZoneJSON `json:"-"`
 }
 
-// billingHistoryCollectionResultZoneJSON contains the JSON metadata for the struct
-// [BillingHistoryCollectionResultZone]
-type billingHistoryCollectionResultZoneJSON struct {
+// userBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseZoneJSON
+// contains the JSON metadata for the struct
+// [UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseZone]
+type userBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseZoneJSON struct {
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BillingHistoryCollectionResultZone) UnmarshalJSON(data []byte) (err error) {
+func (r *UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseZone) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-type BillingHistoryCollectionResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                `json:"total_count"`
-	JSON       billingHistoryCollectionResultInfoJSON `json:"-"`
-}
-
-// billingHistoryCollectionResultInfoJSON contains the JSON metadata for the struct
-// [BillingHistoryCollectionResultInfo]
-type billingHistoryCollectionResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BillingHistoryCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type BillingHistoryCollectionSuccess bool
-
-const (
-	BillingHistoryCollectionSuccessTrue BillingHistoryCollectionSuccess = true
-)
 
 type UserBillingHistoryUserBillingHistoryBillingHistoryDetailsParams struct {
 	// Field to order billing history by.

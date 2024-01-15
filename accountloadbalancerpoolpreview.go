@@ -33,24 +33,125 @@ func NewAccountLoadBalancerPoolPreviewService(opts ...option.RequestOption) (r *
 
 // Preview pool health using provided monitor details. The returned preview_id can
 // be used in the preview endpoint to retrieve the results.
-func (r *AccountLoadBalancerPoolPreviewService) AccountLoadBalancerPoolsPreviewPool(ctx context.Context, accountIdentifier string, identifier interface{}, body AccountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolParams, opts ...option.RequestOption) (res *PreviewResponsePfp0bPtX, err error) {
+func (r *AccountLoadBalancerPoolPreviewService) AccountLoadBalancerPoolsPreviewPool(ctx context.Context, accountIdentifier string, identifier string, body AccountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolParams, opts ...option.RequestOption) (res *AccountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%v/preview", accountIdentifier, identifier)
+	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s/preview", accountIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
+type AccountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponse struct {
+	Errors   []AccountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseError   `json:"errors"`
+	Messages []AccountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseMessage `json:"messages"`
+	Result   AccountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseSuccess `json:"success"`
+	JSON    accountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseJSON    `json:"-"`
+}
+
+// accountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseJSON
+// contains the JSON metadata for the struct
+// [AccountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponse]
+type accountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseError struct {
+	Code    int64                                                                              `json:"code,required"`
+	Message string                                                                             `json:"message,required"`
+	JSON    accountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseErrorJSON `json:"-"`
+}
+
+// accountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseError]
+type accountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseMessage struct {
+	Code    int64                                                                                `json:"code,required"`
+	Message string                                                                               `json:"message,required"`
+	JSON    accountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseMessageJSON `json:"-"`
+}
+
+// accountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseMessage]
+type accountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseResult struct {
+	// Monitored pool IDs mapped to their respective names.
+	Pools     interface{}                                                                         `json:"pools"`
+	PreviewID string                                                                              `json:"preview_id"`
+	JSON      accountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseResultJSON `json:"-"`
+}
+
+// accountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseResult]
+type accountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseResultJSON struct {
+	Pools       apijson.Field
+	PreviewID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseSuccess bool
+
+const (
+	AccountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseSuccessTrue AccountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseSuccess = true
+)
+
 type AccountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolParams struct {
-	// The expected HTTP response codes or code ranges of the health check,
-	// comma-separated. This parameter is only valid for HTTP and HTTPS monitors.
-	ExpectedCodes param.Field[string] `json:"expected_codes,required"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
 	AllowInsecure param.Field[bool] `json:"allow_insecure"`
+	// To be marked unhealthy the monitored origin must fail this healthcheck N
+	// consecutive times.
+	ConsecutiveDown param.Field[int64] `json:"consecutive_down"`
+	// To be marked healthy the monitored origin must pass this healthcheck N
+	// consecutive times.
+	ConsecutiveUp param.Field[int64] `json:"consecutive_up"`
+	// Object description.
+	Description param.Field[string] `json:"description"`
 	// A case-insensitive sub-string to look for in the response body. If this string
 	// is not found, the origin will be marked as unhealthy. This parameter is only
 	// valid for HTTP and HTTPS monitors.
 	ExpectedBody param.Field[string] `json:"expected_body"`
+	// The expected HTTP response code or code range of the health check. This
+	// parameter is only valid for HTTP and HTTPS monitors.
+	ExpectedCodes param.Field[string] `json:"expected_codes"`
 	// Follow redirects if returned by the origin. This parameter is only valid for
 	// HTTP and HTTPS monitors.
 	FollowRedirects param.Field[bool] `json:"follow_redirects"`
@@ -58,6 +159,9 @@ type AccountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolParams str
 	// a Host header by default. The User-Agent header cannot be overridden. This
 	// parameter is only valid for HTTP and HTTPS monitors.
 	Header param.Field[interface{}] `json:"header"`
+	// The interval between each health check. Shorter intervals may improve failover
+	// time, but will increase load on the origins as we check from multiple locations.
+	Interval param.Field[int64] `json:"interval"`
 	// The method to use for the health check. This defaults to 'GET' for HTTP/HTTPS
 	// based checks and 'connection_established' for TCP based health checks.
 	Method param.Field[string] `json:"method"`

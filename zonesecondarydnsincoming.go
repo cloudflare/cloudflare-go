@@ -40,7 +40,7 @@ func (r *ZoneSecondaryDNSIncomingService) Delete(ctx context.Context, zoneIdenti
 }
 
 // Create secondary zone configuration for incoming zone transfers.
-func (r *ZoneSecondaryDNSIncomingService) SecondaryDNSSecondaryZoneNewSecondaryZoneConfiguration(ctx context.Context, zoneIdentifier interface{}, body ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationParams, opts ...option.RequestOption) (res *SingleResponseIncoming, err error) {
+func (r *ZoneSecondaryDNSIncomingService) SecondaryDNSSecondaryZoneNewSecondaryZoneConfiguration(ctx context.Context, zoneIdentifier interface{}, body ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationParams, opts ...option.RequestOption) (res *ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%v/secondary_dns/incoming", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -48,7 +48,7 @@ func (r *ZoneSecondaryDNSIncomingService) SecondaryDNSSecondaryZoneNewSecondaryZ
 }
 
 // Get secondary zone configuration for incoming zone transfers.
-func (r *ZoneSecondaryDNSIncomingService) SecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetails(ctx context.Context, zoneIdentifier interface{}, opts ...option.RequestOption) (res *SingleResponseIncoming, err error) {
+func (r *ZoneSecondaryDNSIncomingService) SecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetails(ctx context.Context, zoneIdentifier interface{}, opts ...option.RequestOption) (res *ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%v/secondary_dns/incoming", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -56,120 +56,12 @@ func (r *ZoneSecondaryDNSIncomingService) SecondaryDNSSecondaryZoneSecondaryZone
 }
 
 // Update secondary zone configuration for incoming zone transfers.
-func (r *ZoneSecondaryDNSIncomingService) SecondaryDNSSecondaryZoneUpdateSecondaryZoneConfiguration(ctx context.Context, zoneIdentifier interface{}, body ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationParams, opts ...option.RequestOption) (res *SingleResponseIncoming, err error) {
+func (r *ZoneSecondaryDNSIncomingService) SecondaryDNSSecondaryZoneUpdateSecondaryZoneConfiguration(ctx context.Context, zoneIdentifier interface{}, body ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationParams, opts ...option.RequestOption) (res *ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%v/secondary_dns/incoming", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
 	return
 }
-
-type SingleResponseIncoming struct {
-	Errors   []SingleResponseIncomingError   `json:"errors"`
-	Messages []SingleResponseIncomingMessage `json:"messages"`
-	Result   SingleResponseIncomingResult    `json:"result"`
-	// Whether the API call was successful
-	Success SingleResponseIncomingSuccess `json:"success"`
-	JSON    singleResponseIncomingJSON    `json:"-"`
-}
-
-// singleResponseIncomingJSON contains the JSON metadata for the struct
-// [SingleResponseIncoming]
-type singleResponseIncomingJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SingleResponseIncoming) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SingleResponseIncomingError struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    singleResponseIncomingErrorJSON `json:"-"`
-}
-
-// singleResponseIncomingErrorJSON contains the JSON metadata for the struct
-// [SingleResponseIncomingError]
-type singleResponseIncomingErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SingleResponseIncomingError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SingleResponseIncomingMessage struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    singleResponseIncomingMessageJSON `json:"-"`
-}
-
-// singleResponseIncomingMessageJSON contains the JSON metadata for the struct
-// [SingleResponseIncomingMessage]
-type singleResponseIncomingMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SingleResponseIncomingMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SingleResponseIncomingResult struct {
-	ID interface{} `json:"id"`
-	// How often should a secondary zone auto refresh regardless of DNS NOTIFY. Not
-	// applicable for primary zones.
-	AutoRefreshSeconds float64 `json:"auto_refresh_seconds"`
-	// The time for a specific event.
-	CheckedTime string `json:"checked_time"`
-	// The time for a specific event.
-	CreatedTime string `json:"created_time"`
-	// The time for a specific event.
-	ModifiedTime string `json:"modified_time"`
-	// Zone name.
-	Name string `json:"name"`
-	// A list of peer tags.
-	Peers []interface{} `json:"peers"`
-	// The serial number of the SOA for the given zone.
-	SoaSerial float64                          `json:"soa_serial"`
-	JSON      singleResponseIncomingResultJSON `json:"-"`
-}
-
-// singleResponseIncomingResultJSON contains the JSON metadata for the struct
-// [SingleResponseIncomingResult]
-type singleResponseIncomingResultJSON struct {
-	ID                 apijson.Field
-	AutoRefreshSeconds apijson.Field
-	CheckedTime        apijson.Field
-	CreatedTime        apijson.Field
-	ModifiedTime       apijson.Field
-	Name               apijson.Field
-	Peers              apijson.Field
-	SoaSerial          apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *SingleResponseIncomingResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type SingleResponseIncomingSuccess bool
-
-const (
-	SingleResponseIncomingSuccessTrue SingleResponseIncomingSuccess = true
-)
 
 type ZoneSecondaryDNSIncomingDeleteResponse struct {
 	Errors   []ZoneSecondaryDNSIncomingDeleteResponseError   `json:"errors"`
@@ -255,6 +147,342 @@ type ZoneSecondaryDNSIncomingDeleteResponseSuccess bool
 
 const (
 	ZoneSecondaryDNSIncomingDeleteResponseSuccessTrue ZoneSecondaryDNSIncomingDeleteResponseSuccess = true
+)
+
+type ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponse struct {
+	Errors   []ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseError   `json:"errors"`
+	Messages []ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseMessage `json:"messages"`
+	Result   ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseSuccess `json:"success"`
+	JSON    zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseJSON    `json:"-"`
+}
+
+// zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponse]
+type zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseError struct {
+	Code    int64                                                                                           `json:"code,required"`
+	Message string                                                                                          `json:"message,required"`
+	JSON    zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseErrorJSON `json:"-"`
+}
+
+// zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseError]
+type zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseMessage struct {
+	Code    int64                                                                                             `json:"code,required"`
+	Message string                                                                                            `json:"message,required"`
+	JSON    zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseMessageJSON `json:"-"`
+}
+
+// zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseMessage]
+type zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseResult struct {
+	ID interface{} `json:"id"`
+	// How often should a secondary zone auto refresh regardless of DNS NOTIFY. Not
+	// applicable for primary zones.
+	AutoRefreshSeconds float64 `json:"auto_refresh_seconds"`
+	// The time for a specific event.
+	CheckedTime string `json:"checked_time"`
+	// The time for a specific event.
+	CreatedTime string `json:"created_time"`
+	// The time for a specific event.
+	ModifiedTime string `json:"modified_time"`
+	// Zone name.
+	Name string `json:"name"`
+	// A list of peer tags.
+	Peers []interface{} `json:"peers"`
+	// The serial number of the SOA for the given zone.
+	SoaSerial float64                                                                                          `json:"soa_serial"`
+	JSON      zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseResultJSON `json:"-"`
+}
+
+// zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseResultJSON
+// contains the JSON metadata for the struct
+// [ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseResult]
+type zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseResultJSON struct {
+	ID                 apijson.Field
+	AutoRefreshSeconds apijson.Field
+	CheckedTime        apijson.Field
+	CreatedTime        apijson.Field
+	ModifiedTime       apijson.Field
+	Name               apijson.Field
+	Peers              apijson.Field
+	SoaSerial          apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseSuccess bool
+
+const (
+	ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseSuccessTrue ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationResponseSuccess = true
+)
+
+type ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponse struct {
+	Errors   []ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseError   `json:"errors"`
+	Messages []ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseMessage `json:"messages"`
+	Result   ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseSuccess `json:"success"`
+	JSON    zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseJSON    `json:"-"`
+}
+
+// zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponse]
+type zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseError struct {
+	Code    int64                                                                                               `json:"code,required"`
+	Message string                                                                                              `json:"message,required"`
+	JSON    zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseErrorJSON `json:"-"`
+}
+
+// zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseError]
+type zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseMessage struct {
+	Code    int64                                                                                                 `json:"code,required"`
+	Message string                                                                                                `json:"message,required"`
+	JSON    zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseMessageJSON `json:"-"`
+}
+
+// zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseMessage]
+type zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseResult struct {
+	ID interface{} `json:"id"`
+	// How often should a secondary zone auto refresh regardless of DNS NOTIFY. Not
+	// applicable for primary zones.
+	AutoRefreshSeconds float64 `json:"auto_refresh_seconds"`
+	// The time for a specific event.
+	CheckedTime string `json:"checked_time"`
+	// The time for a specific event.
+	CreatedTime string `json:"created_time"`
+	// The time for a specific event.
+	ModifiedTime string `json:"modified_time"`
+	// Zone name.
+	Name string `json:"name"`
+	// A list of peer tags.
+	Peers []interface{} `json:"peers"`
+	// The serial number of the SOA for the given zone.
+	SoaSerial float64                                                                                              `json:"soa_serial"`
+	JSON      zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseResultJSON `json:"-"`
+}
+
+// zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseResultJSON
+// contains the JSON metadata for the struct
+// [ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseResult]
+type zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseResultJSON struct {
+	ID                 apijson.Field
+	AutoRefreshSeconds apijson.Field
+	CheckedTime        apijson.Field
+	CreatedTime        apijson.Field
+	ModifiedTime       apijson.Field
+	Name               apijson.Field
+	Peers              apijson.Field
+	SoaSerial          apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseSuccess bool
+
+const (
+	ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseSuccessTrue ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneSecondaryZoneConfigurationDetailsResponseSuccess = true
+)
+
+type ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponse struct {
+	Errors   []ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseError   `json:"errors"`
+	Messages []ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseMessage `json:"messages"`
+	Result   ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseSuccess `json:"success"`
+	JSON    zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseJSON    `json:"-"`
+}
+
+// zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponse]
+type zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseError struct {
+	Code    int64                                                                                              `json:"code,required"`
+	Message string                                                                                             `json:"message,required"`
+	JSON    zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseErrorJSON `json:"-"`
+}
+
+// zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseError]
+type zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseMessage struct {
+	Code    int64                                                                                                `json:"code,required"`
+	Message string                                                                                               `json:"message,required"`
+	JSON    zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseMessageJSON `json:"-"`
+}
+
+// zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseMessage]
+type zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseResult struct {
+	ID interface{} `json:"id"`
+	// How often should a secondary zone auto refresh regardless of DNS NOTIFY. Not
+	// applicable for primary zones.
+	AutoRefreshSeconds float64 `json:"auto_refresh_seconds"`
+	// The time for a specific event.
+	CheckedTime string `json:"checked_time"`
+	// The time for a specific event.
+	CreatedTime string `json:"created_time"`
+	// The time for a specific event.
+	ModifiedTime string `json:"modified_time"`
+	// Zone name.
+	Name string `json:"name"`
+	// A list of peer tags.
+	Peers []interface{} `json:"peers"`
+	// The serial number of the SOA for the given zone.
+	SoaSerial float64                                                                                             `json:"soa_serial"`
+	JSON      zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseResultJSON `json:"-"`
+}
+
+// zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseResultJSON
+// contains the JSON metadata for the struct
+// [ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseResult]
+type zoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseResultJSON struct {
+	ID                 apijson.Field
+	AutoRefreshSeconds apijson.Field
+	CheckedTime        apijson.Field
+	CreatedTime        apijson.Field
+	ModifiedTime       apijson.Field
+	Name               apijson.Field
+	Peers              apijson.Field
+	SoaSerial          apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseSuccess bool
+
+const (
+	ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseSuccessTrue ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneUpdateSecondaryZoneConfigurationResponseSuccess = true
 )
 
 type ZoneSecondaryDNSIncomingSecondaryDNSSecondaryZoneNewSecondaryZoneConfigurationParams struct {

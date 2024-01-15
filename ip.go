@@ -5,8 +5,12 @@ package cloudflare
 import (
 	"context"
 	"net/http"
+	"net/url"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -28,41 +32,21 @@ func NewIPService(opts ...option.RequestOption) (r *IPService) {
 	return
 }
 
-// Get Cloudflare IPs.
-func (r *IPService) List(ctx context.Context, opts ...option.RequestOption) (res *IPListResponse, err error) {
+// Get IPs used on the Cloudflare/JD Cloud network, see
+// https://www.cloudflare.com/ips for Cloudflare IPs or
+// https://developers.cloudflare.com/china-network/reference/infrastructure/ for JD
+// Cloud IPs.
+func (r *IPService) List(ctx context.Context, query IPListParams, opts ...option.RequestOption) (res *IPListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "ips"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
-}
-
-type IP struct {
-	// A digest of the IP data. Useful for determining if the data has changed.
-	Etag string `json:"etag"`
-	// List of Cloudflare IPv4 CIDR addresses.
-	Ipv4Cidrs []string `json:"ipv4_cidrs"`
-	// List of Cloudflare IPv6 CIDR addresses.
-	Ipv6Cidrs []string `json:"ipv6_cidrs"`
-	JSON      ipJSON   `json:"-"`
-}
-
-// ipJSON contains the JSON metadata for the struct [IP]
-type ipJSON struct {
-	Etag        apijson.Field
-	Ipv4Cidrs   apijson.Field
-	Ipv6Cidrs   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IP) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 type IPListResponse struct {
 	Errors   []IPListResponseError   `json:"errors"`
 	Messages []IPListResponseMessage `json:"messages"`
-	Result   IP                      `json:"result"`
+	Result   IPListResponseResult    `json:"result"`
 	// Whether the API call was successful
 	Success IPListResponseSuccess `json:"success"`
 	JSON    ipListResponseJSON    `json:"-"`
@@ -120,9 +104,87 @@ func (r *IPListResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Union satisfied by [IPListResponseResultIh4mwLmwIPs] or
+// [IPListResponseResultIh4mwLmwIPsJdcloud].
+type IPListResponseResult interface {
+	implementsIPListResponseResult()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*IPListResponseResult)(nil)).Elem(), "")
+}
+
+type IPListResponseResultIh4mwLmwIPs struct {
+	// A digest of the IP data. Useful for determining if the data has changed.
+	Etag string `json:"etag"`
+	// List of Cloudflare IPv4 CIDR addresses.
+	Ipv4Cidrs []string `json:"ipv4_cidrs"`
+	// List of Cloudflare IPv6 CIDR addresses.
+	Ipv6Cidrs []string                            `json:"ipv6_cidrs"`
+	JSON      ipListResponseResultIh4mwLmwIPsJSON `json:"-"`
+}
+
+// ipListResponseResultIh4mwLmwIPsJSON contains the JSON metadata for the struct
+// [IPListResponseResultIh4mwLmwIPs]
+type ipListResponseResultIh4mwLmwIPsJSON struct {
+	Etag        apijson.Field
+	Ipv4Cidrs   apijson.Field
+	Ipv6Cidrs   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IPListResponseResultIh4mwLmwIPs) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r IPListResponseResultIh4mwLmwIPs) implementsIPListResponseResult() {}
+
+type IPListResponseResultIh4mwLmwIPsJdcloud struct {
+	// A digest of the IP data. Useful for determining if the data has changed.
+	Etag string `json:"etag"`
+	// List of Cloudflare IPv4 CIDR addresses.
+	Ipv4Cidrs []string `json:"ipv4_cidrs"`
+	// List of Cloudflare IPv6 CIDR addresses.
+	Ipv6Cidrs []string `json:"ipv6_cidrs"`
+	// List IPv4 and IPv6 CIDRs, only populated if `?networks=jdcloud` is used.
+	JdcloudCidrs []string                                   `json:"jdcloud_cidrs"`
+	JSON         ipListResponseResultIh4mwLmwIPsJdcloudJSON `json:"-"`
+}
+
+// ipListResponseResultIh4mwLmwIPsJdcloudJSON contains the JSON metadata for the
+// struct [IPListResponseResultIh4mwLmwIPsJdcloud]
+type ipListResponseResultIh4mwLmwIPsJdcloudJSON struct {
+	Etag         apijson.Field
+	Ipv4Cidrs    apijson.Field
+	Ipv6Cidrs    apijson.Field
+	JdcloudCidrs apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *IPListResponseResultIh4mwLmwIPsJdcloud) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r IPListResponseResultIh4mwLmwIPsJdcloud) implementsIPListResponseResult() {}
+
 // Whether the API call was successful
 type IPListResponseSuccess bool
 
 const (
 	IPListResponseSuccessTrue IPListResponseSuccess = true
 )
+
+type IPListParams struct {
+	// Specified as `jdcloud` to list IPs used by JD Cloud data centers.
+	Networks param.Field[string] `query:"networks"`
+}
+
+// URLQuery serializes [IPListParams]'s query parameters as `url.Values`.
+func (r IPListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}

@@ -24,8 +24,10 @@ func TestZoneSubscriptionZoneSubscriptionNewZoneSubscriptionWithOptionalParams(t
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Subscriptions.ZoneSubscriptionNewZoneSubscription(
 		context.TODO(),
@@ -83,8 +85,10 @@ func TestZoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionWithOptionalParam
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Subscriptions.ZoneSubscriptionUpdateZoneSubscription(
 		context.TODO(),
@@ -142,8 +146,10 @@ func TestZoneSubscriptionZoneSubscriptionZoneSubscriptionDetails(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Subscriptions.ZoneSubscriptionZoneSubscriptionDetails(context.TODO(), "506e3185e9c882d175a2d0cb0093d9f2")
 	if err != nil {

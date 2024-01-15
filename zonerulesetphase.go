@@ -12,13 +12,8 @@ import (
 // this service directly, and instead use the [NewZoneRulesetPhaseService] method
 // instead.
 type ZoneRulesetPhaseService struct {
-	Options                     []option.RequestOption
-	HTTPConfigSettings          *ZoneRulesetPhaseHTTPConfigSettingService
-	HTTPCustomErrors            *ZoneRulesetPhaseHTTPCustomErrorService
-	HTTPRequestCacheSettings    *ZoneRulesetPhaseHTTPRequestCacheSettingService
-	HTTPRequestDynamicRedirects *ZoneRulesetPhaseHTTPRequestDynamicRedirectService
-	HTTPRequestOrigins          *ZoneRulesetPhaseHTTPRequestOriginService
-	Entrypoints                 *ZoneRulesetPhaseEntrypointService
+	Options     []option.RequestOption
+	Entrypoints *ZoneRulesetPhaseEntrypointService
 }
 
 // NewZoneRulesetPhaseService generates a new service that applies the given
@@ -27,11 +22,6 @@ type ZoneRulesetPhaseService struct {
 func NewZoneRulesetPhaseService(opts ...option.RequestOption) (r *ZoneRulesetPhaseService) {
 	r = &ZoneRulesetPhaseService{}
 	r.Options = opts
-	r.HTTPConfigSettings = NewZoneRulesetPhaseHTTPConfigSettingService(opts...)
-	r.HTTPCustomErrors = NewZoneRulesetPhaseHTTPCustomErrorService(opts...)
-	r.HTTPRequestCacheSettings = NewZoneRulesetPhaseHTTPRequestCacheSettingService(opts...)
-	r.HTTPRequestDynamicRedirects = NewZoneRulesetPhaseHTTPRequestDynamicRedirectService(opts...)
-	r.HTTPRequestOrigins = NewZoneRulesetPhaseHTTPRequestOriginService(opts...)
 	r.Entrypoints = NewZoneRulesetPhaseEntrypointService(opts...)
 	return
 }

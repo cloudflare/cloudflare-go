@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -29,9 +30,81 @@ func NewUserBillingProfileService(opts ...option.RequestOption) (r *UserBillingP
 }
 
 // Accesses your billing profile object.
-func (r *UserBillingProfileService) UserBillingProfileBillingProfileDetails(ctx context.Context, opts ...option.RequestOption) (res *BillingResponseSingle, err error) {
+func (r *UserBillingProfileService) UserBillingProfileBillingProfileDetails(ctx context.Context, opts ...option.RequestOption) (res *UserBillingProfileUserBillingProfileBillingProfileDetailsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "user/billing/profile"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
+
+type UserBillingProfileUserBillingProfileBillingProfileDetailsResponse struct {
+	Errors   []UserBillingProfileUserBillingProfileBillingProfileDetailsResponseError   `json:"errors"`
+	Messages []UserBillingProfileUserBillingProfileBillingProfileDetailsResponseMessage `json:"messages"`
+	Result   interface{}                                                                `json:"result"`
+	// Whether the API call was successful
+	Success UserBillingProfileUserBillingProfileBillingProfileDetailsResponseSuccess `json:"success"`
+	JSON    userBillingProfileUserBillingProfileBillingProfileDetailsResponseJSON    `json:"-"`
+}
+
+// userBillingProfileUserBillingProfileBillingProfileDetailsResponseJSON contains
+// the JSON metadata for the struct
+// [UserBillingProfileUserBillingProfileBillingProfileDetailsResponse]
+type userBillingProfileUserBillingProfileBillingProfileDetailsResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserBillingProfileUserBillingProfileBillingProfileDetailsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type UserBillingProfileUserBillingProfileBillingProfileDetailsResponseError struct {
+	Code    int64                                                                      `json:"code,required"`
+	Message string                                                                     `json:"message,required"`
+	JSON    userBillingProfileUserBillingProfileBillingProfileDetailsResponseErrorJSON `json:"-"`
+}
+
+// userBillingProfileUserBillingProfileBillingProfileDetailsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [UserBillingProfileUserBillingProfileBillingProfileDetailsResponseError]
+type userBillingProfileUserBillingProfileBillingProfileDetailsResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserBillingProfileUserBillingProfileBillingProfileDetailsResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type UserBillingProfileUserBillingProfileBillingProfileDetailsResponseMessage struct {
+	Code    int64                                                                        `json:"code,required"`
+	Message string                                                                       `json:"message,required"`
+	JSON    userBillingProfileUserBillingProfileBillingProfileDetailsResponseMessageJSON `json:"-"`
+}
+
+// userBillingProfileUserBillingProfileBillingProfileDetailsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [UserBillingProfileUserBillingProfileBillingProfileDetailsResponseMessage]
+type userBillingProfileUserBillingProfileBillingProfileDetailsResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserBillingProfileUserBillingProfileBillingProfileDetailsResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type UserBillingProfileUserBillingProfileBillingProfileDetailsResponseSuccess bool
+
+const (
+	UserBillingProfileUserBillingProfileBillingProfileDetailsResponseSuccessTrue UserBillingProfileUserBillingProfileBillingProfileDetailsResponseSuccess = true
+)

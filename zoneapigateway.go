@@ -14,8 +14,10 @@ import (
 type ZoneAPIGatewayService struct {
 	Options        []option.RequestOption
 	Configurations *ZoneAPIGatewayConfigurationService
-	Discoveries    *ZoneAPIGatewayDiscoveryService
+	Discovery      *ZoneAPIGatewayDiscoveryService
 	Schemas        *ZoneAPIGatewaySchemaService
+	Settings       *ZoneAPIGatewaySettingService
+	UserSchemas    *ZoneAPIGatewayUserSchemaService
 }
 
 // NewZoneAPIGatewayService generates a new service that applies the given options
@@ -25,7 +27,9 @@ func NewZoneAPIGatewayService(opts ...option.RequestOption) (r *ZoneAPIGatewaySe
 	r = &ZoneAPIGatewayService{}
 	r.Options = opts
 	r.Configurations = NewZoneAPIGatewayConfigurationService(opts...)
-	r.Discoveries = NewZoneAPIGatewayDiscoveryService(opts...)
+	r.Discovery = NewZoneAPIGatewayDiscoveryService(opts...)
 	r.Schemas = NewZoneAPIGatewaySchemaService(opts...)
+	r.Settings = NewZoneAPIGatewaySettingService(opts...)
+	r.UserSchemas = NewZoneAPIGatewayUserSchemaService(opts...)
 	return
 }

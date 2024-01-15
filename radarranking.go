@@ -12,10 +12,10 @@ import (
 // this service directly, and instead use the [NewRadarRankingService] method
 // instead.
 type RadarRankingService struct {
-	Options    []option.RequestOption
-	Domains    *RadarRankingDomainService
-	Timeseries *RadarRankingTimeseryService
-	Tops       *RadarRankingTopService
+	Options          []option.RequestOption
+	Domains          *RadarRankingDomainService
+	TimeseriesGroups *RadarRankingTimeseriesGroupService
+	Tops             *RadarRankingTopService
 }
 
 // NewRadarRankingService generates a new service that applies the given options to
@@ -25,7 +25,7 @@ func NewRadarRankingService(opts ...option.RequestOption) (r *RadarRankingServic
 	r = &RadarRankingService{}
 	r.Options = opts
 	r.Domains = NewRadarRankingDomainService(opts...)
-	r.Timeseries = NewRadarRankingTimeseryService(opts...)
+	r.TimeseriesGroups = NewRadarRankingTimeseriesGroupService(opts...)
 	r.Tops = NewRadarRankingTopService(opts...)
 	return
 }

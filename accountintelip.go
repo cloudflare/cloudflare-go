@@ -37,25 +37,26 @@ func NewAccountIntelIPService(opts ...option.RequestOption) (r *AccountIntelIPSe
 }
 
 // Get IP Overview
-func (r *AccountIntelIPService) IPIntelligenceGetIPOverview(ctx context.Context, accountIdentifier string, query AccountIntelIPIPIntelligenceGetIPOverviewParams, opts ...option.RequestOption) (res *SchemasResponse, err error) {
+func (r *AccountIntelIPService) IPIntelligenceGetIPOverview(ctx context.Context, accountIdentifier string, query AccountIntelIPIPIntelligenceGetIPOverviewParams, opts ...option.RequestOption) (res *AccountIntelIpipIntelligenceGetIPOverviewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/intel/ip", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
-type SchemasResponse struct {
-	Errors     []SchemasResponseError    `json:"errors"`
-	Messages   []SchemasResponseMessage  `json:"messages"`
-	Result     []SchemasResponseResult   `json:"result"`
-	ResultInfo SchemasResponseResultInfo `json:"result_info"`
+type AccountIntelIpipIntelligenceGetIPOverviewResponse struct {
+	Errors     []AccountIntelIpipIntelligenceGetIPOverviewResponseError    `json:"errors"`
+	Messages   []AccountIntelIpipIntelligenceGetIPOverviewResponseMessage  `json:"messages"`
+	Result     []AccountIntelIpipIntelligenceGetIPOverviewResponseResult   `json:"result"`
+	ResultInfo AccountIntelIpipIntelligenceGetIPOverviewResponseResultInfo `json:"result_info"`
 	// Whether the API call was successful
-	Success SchemasResponseSuccess `json:"success"`
-	JSON    schemasResponseJSON    `json:"-"`
+	Success AccountIntelIpipIntelligenceGetIPOverviewResponseSuccess `json:"success"`
+	JSON    accountIntelIpipIntelligenceGetIPOverviewResponseJSON    `json:"-"`
 }
 
-// schemasResponseJSON contains the JSON metadata for the struct [SchemasResponse]
-type schemasResponseJSON struct {
+// accountIntelIpipIntelligenceGetIPOverviewResponseJSON contains the JSON metadata
+// for the struct [AccountIntelIpipIntelligenceGetIPOverviewResponse]
+type accountIntelIpipIntelligenceGetIPOverviewResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -65,60 +66,62 @@ type schemasResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountIntelIpipIntelligenceGetIPOverviewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemasResponseError struct {
-	Code    int64                    `json:"code,required"`
-	Message string                   `json:"message,required"`
-	JSON    schemasResponseErrorJSON `json:"-"`
+type AccountIntelIpipIntelligenceGetIPOverviewResponseError struct {
+	Code    int64                                                      `json:"code,required"`
+	Message string                                                     `json:"message,required"`
+	JSON    accountIntelIpipIntelligenceGetIPOverviewResponseErrorJSON `json:"-"`
 }
 
-// schemasResponseErrorJSON contains the JSON metadata for the struct
-// [SchemasResponseError]
-type schemasResponseErrorJSON struct {
+// accountIntelIpipIntelligenceGetIPOverviewResponseErrorJSON contains the JSON
+// metadata for the struct [AccountIntelIpipIntelligenceGetIPOverviewResponseError]
+type accountIntelIpipIntelligenceGetIPOverviewResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountIntelIpipIntelligenceGetIPOverviewResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemasResponseMessage struct {
-	Code    int64                      `json:"code,required"`
-	Message string                     `json:"message,required"`
-	JSON    schemasResponseMessageJSON `json:"-"`
+type AccountIntelIpipIntelligenceGetIPOverviewResponseMessage struct {
+	Code    int64                                                        `json:"code,required"`
+	Message string                                                       `json:"message,required"`
+	JSON    accountIntelIpipIntelligenceGetIPOverviewResponseMessageJSON `json:"-"`
 }
 
-// schemasResponseMessageJSON contains the JSON metadata for the struct
-// [SchemasResponseMessage]
-type schemasResponseMessageJSON struct {
+// accountIntelIpipIntelligenceGetIPOverviewResponseMessageJSON contains the JSON
+// metadata for the struct
+// [AccountIntelIpipIntelligenceGetIPOverviewResponseMessage]
+type accountIntelIpipIntelligenceGetIPOverviewResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountIntelIpipIntelligenceGetIPOverviewResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemasResponseResult struct {
+type AccountIntelIpipIntelligenceGetIPOverviewResponseResult struct {
 	// Specifies a reference to the autonomous systems (AS) that the IP address belongs
 	// to.
-	BelongsToRef SchemasResponseResultBelongsToRef `json:"belongs_to_ref"`
-	IP           SchemasResponseResultIP           `json:"ip" format:"ipv4"`
-	RiskTypes    interface{}                       `json:"risk_types"`
-	JSON         schemasResponseResultJSON         `json:"-"`
+	BelongsToRef AccountIntelIpipIntelligenceGetIPOverviewResponseResultBelongsToRef `json:"belongs_to_ref"`
+	IP           AccountIntelIpipIntelligenceGetIPOverviewResponseResultIP           `json:"ip" format:"ipv4"`
+	RiskTypes    interface{}                                                         `json:"risk_types"`
+	JSON         accountIntelIpipIntelligenceGetIPOverviewResponseResultJSON         `json:"-"`
 }
 
-// schemasResponseResultJSON contains the JSON metadata for the struct
-// [SchemasResponseResult]
-type schemasResponseResultJSON struct {
+// accountIntelIpipIntelligenceGetIPOverviewResponseResultJSON contains the JSON
+// metadata for the struct
+// [AccountIntelIpipIntelligenceGetIPOverviewResponseResult]
+type accountIntelIpipIntelligenceGetIPOverviewResponseResultJSON struct {
 	BelongsToRef apijson.Field
 	IP           apijson.Field
 	RiskTypes    apijson.Field
@@ -126,25 +129,26 @@ type schemasResponseResultJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *SchemasResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountIntelIpipIntelligenceGetIPOverviewResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Specifies a reference to the autonomous systems (AS) that the IP address belongs
 // to.
-type SchemasResponseResultBelongsToRef struct {
+type AccountIntelIpipIntelligenceGetIPOverviewResponseResultBelongsToRef struct {
 	ID          interface{} `json:"id"`
 	Country     string      `json:"country"`
 	Description string      `json:"description"`
 	// Infrastructure type of this ASN.
-	Type  SchemasResponseResultBelongsToRefType `json:"type"`
-	Value string                                `json:"value"`
-	JSON  schemasResponseResultBelongsToRefJSON `json:"-"`
+	Type  AccountIntelIpipIntelligenceGetIPOverviewResponseResultBelongsToRefType `json:"type"`
+	Value string                                                                  `json:"value"`
+	JSON  accountIntelIpipIntelligenceGetIPOverviewResponseResultBelongsToRefJSON `json:"-"`
 }
 
-// schemasResponseResultBelongsToRefJSON contains the JSON metadata for the struct
-// [SchemasResponseResultBelongsToRef]
-type schemasResponseResultBelongsToRefJSON struct {
+// accountIntelIpipIntelligenceGetIPOverviewResponseResultBelongsToRefJSON contains
+// the JSON metadata for the struct
+// [AccountIntelIpipIntelligenceGetIPOverviewResponseResultBelongsToRef]
+type accountIntelIpipIntelligenceGetIPOverviewResponseResultBelongsToRefJSON struct {
 	ID          apijson.Field
 	Country     apijson.Field
 	Description apijson.Field
@@ -154,27 +158,27 @@ type schemasResponseResultBelongsToRefJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasResponseResultBelongsToRef) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountIntelIpipIntelligenceGetIPOverviewResponseResultBelongsToRef) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Infrastructure type of this ASN.
-type SchemasResponseResultBelongsToRefType string
+type AccountIntelIpipIntelligenceGetIPOverviewResponseResultBelongsToRefType string
 
 const (
-	SchemasResponseResultBelongsToRefTypeHostingProvider SchemasResponseResultBelongsToRefType = "hosting_provider"
-	SchemasResponseResultBelongsToRefTypeIsp             SchemasResponseResultBelongsToRefType = "isp"
-	SchemasResponseResultBelongsToRefTypeOrganization    SchemasResponseResultBelongsToRefType = "organization"
+	AccountIntelIpipIntelligenceGetIPOverviewResponseResultBelongsToRefTypeHostingProvider AccountIntelIpipIntelligenceGetIPOverviewResponseResultBelongsToRefType = "hosting_provider"
+	AccountIntelIpipIntelligenceGetIPOverviewResponseResultBelongsToRefTypeIsp             AccountIntelIpipIntelligenceGetIPOverviewResponseResultBelongsToRefType = "isp"
+	AccountIntelIpipIntelligenceGetIPOverviewResponseResultBelongsToRefTypeOrganization    AccountIntelIpipIntelligenceGetIPOverviewResponseResultBelongsToRefType = "organization"
 )
 
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type SchemasResponseResultIP interface {
-	ImplementsSchemasResponseResultIP()
+type AccountIntelIpipIntelligenceGetIPOverviewResponseResultIP interface {
+	ImplementsAccountIntelIpipIntelligenceGetIPOverviewResponseResultIP()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SchemasResponseResultIP)(nil)).Elem(),
+		reflect.TypeOf((*AccountIntelIpipIntelligenceGetIPOverviewResponseResultIP)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter:         gjson.String,
@@ -189,7 +193,7 @@ func init() {
 	)
 }
 
-type SchemasResponseResultInfo struct {
+type AccountIntelIpipIntelligenceGetIPOverviewResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -197,13 +201,14 @@ type SchemasResponseResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                       `json:"total_count"`
-	JSON       schemasResponseResultInfoJSON `json:"-"`
+	TotalCount float64                                                         `json:"total_count"`
+	JSON       accountIntelIpipIntelligenceGetIPOverviewResponseResultInfoJSON `json:"-"`
 }
 
-// schemasResponseResultInfoJSON contains the JSON metadata for the struct
-// [SchemasResponseResultInfo]
-type schemasResponseResultInfoJSON struct {
+// accountIntelIpipIntelligenceGetIPOverviewResponseResultInfoJSON contains the
+// JSON metadata for the struct
+// [AccountIntelIpipIntelligenceGetIPOverviewResponseResultInfo]
+type accountIntelIpipIntelligenceGetIPOverviewResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -212,15 +217,15 @@ type schemasResponseResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountIntelIpipIntelligenceGetIPOverviewResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type SchemasResponseSuccess bool
+type AccountIntelIpipIntelligenceGetIPOverviewResponseSuccess bool
 
 const (
-	SchemasResponseSuccessTrue SchemasResponseSuccess = true
+	AccountIntelIpipIntelligenceGetIPOverviewResponseSuccessTrue AccountIntelIpipIntelligenceGetIPOverviewResponseSuccess = true
 )
 
 type AccountIntelIPIPIntelligenceGetIPOverviewParams struct {

@@ -31,25 +31,26 @@ func NewAccountMnmRuleAdvertisementService(opts ...option.RequestOption) (r *Acc
 }
 
 // Update advertisement for rule.
-func (r *AccountMnmRuleAdvertisementService) MagicNetworkMonitoringRulesUpdateAdvertisementForRule(ctx context.Context, accountIdentifier interface{}, ruleIdentifier interface{}, opts ...option.RequestOption) (res *MnmRuleAdvertisementSingleResponse, err error) {
+func (r *AccountMnmRuleAdvertisementService) MagicNetworkMonitoringRulesUpdateAdvertisementForRule(ctx context.Context, accountIdentifier interface{}, ruleIdentifier interface{}, opts ...option.RequestOption) (res *AccountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/mnm/rules/%v/advertisement", accountIdentifier, ruleIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &res, opts...)
 	return
 }
 
-type MnmRuleAdvertisementSingleResponse struct {
-	Errors   []MnmRuleAdvertisementSingleResponseError   `json:"errors"`
-	Messages []MnmRuleAdvertisementSingleResponseMessage `json:"messages"`
-	Result   MnmRuleAdvertisementSingleResponseResult    `json:"result,nullable"`
+type AccountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponse struct {
+	Errors   []AccountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseError   `json:"errors"`
+	Messages []AccountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseMessage `json:"messages"`
+	Result   AccountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseResult    `json:"result,nullable"`
 	// Whether the API call was successful
-	Success MnmRuleAdvertisementSingleResponseSuccess `json:"success"`
-	JSON    mnmRuleAdvertisementSingleResponseJSON    `json:"-"`
+	Success AccountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseSuccess `json:"success"`
+	JSON    accountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseJSON    `json:"-"`
 }
 
-// mnmRuleAdvertisementSingleResponseJSON contains the JSON metadata for the struct
-// [MnmRuleAdvertisementSingleResponse]
-type mnmRuleAdvertisementSingleResponseJSON struct {
+// accountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseJSON
+// contains the JSON metadata for the struct
+// [AccountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponse]
+type accountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -58,71 +59,74 @@ type mnmRuleAdvertisementSingleResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MnmRuleAdvertisementSingleResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MnmRuleAdvertisementSingleResponseError struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    mnmRuleAdvertisementSingleResponseErrorJSON `json:"-"`
+type AccountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseError struct {
+	Code    int64                                                                                             `json:"code,required"`
+	Message string                                                                                            `json:"message,required"`
+	JSON    accountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseErrorJSON `json:"-"`
 }
 
-// mnmRuleAdvertisementSingleResponseErrorJSON contains the JSON metadata for the
-// struct [MnmRuleAdvertisementSingleResponseError]
-type mnmRuleAdvertisementSingleResponseErrorJSON struct {
+// accountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseError]
+type accountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MnmRuleAdvertisementSingleResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MnmRuleAdvertisementSingleResponseMessage struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    mnmRuleAdvertisementSingleResponseMessageJSON `json:"-"`
+type AccountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseMessage struct {
+	Code    int64                                                                                               `json:"code,required"`
+	Message string                                                                                              `json:"message,required"`
+	JSON    accountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseMessageJSON `json:"-"`
 }
 
-// mnmRuleAdvertisementSingleResponseMessageJSON contains the JSON metadata for the
-// struct [MnmRuleAdvertisementSingleResponseMessage]
-type mnmRuleAdvertisementSingleResponseMessageJSON struct {
+// accountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseMessage]
+type accountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MnmRuleAdvertisementSingleResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MnmRuleAdvertisementSingleResponseResult struct {
+type AccountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseResult struct {
 	// Toggle on if you would like Cloudflare to automatically advertise the IP
 	// Prefixes within the rule via Magic Transit when the rule is triggered. Only
 	// available for users of Magic Transit.
-	AutomaticAdvertisement bool                                         `json:"automatic_advertisement,required,nullable"`
-	JSON                   mnmRuleAdvertisementSingleResponseResultJSON `json:"-"`
+	AutomaticAdvertisement bool                                                                                               `json:"automatic_advertisement,required,nullable"`
+	JSON                   accountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseResultJSON `json:"-"`
 }
 
-// mnmRuleAdvertisementSingleResponseResultJSON contains the JSON metadata for the
-// struct [MnmRuleAdvertisementSingleResponseResult]
-type mnmRuleAdvertisementSingleResponseResultJSON struct {
+// accountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseResult]
+type accountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseResultJSON struct {
 	AutomaticAdvertisement apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *MnmRuleAdvertisementSingleResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type MnmRuleAdvertisementSingleResponseSuccess bool
+type AccountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseSuccess bool
 
 const (
-	MnmRuleAdvertisementSingleResponseSuccessTrue MnmRuleAdvertisementSingleResponseSuccess = true
+	AccountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseSuccessTrue AccountMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRuleResponseSuccess = true
 )

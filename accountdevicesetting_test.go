@@ -24,8 +24,10 @@ func TestAccountDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccou
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Devices.Settings.ZeroTrustAccountsGetDeviceSettingsForZeroTrustAccount(context.TODO(), "699d98642c564d2e855e9661899b7252")
 	if err != nil {
@@ -48,15 +50,19 @@ func TestAccountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrus
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Devices.Settings.ZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccount(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		cloudflare.AccountDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountParams{
-			GatewayProxyEnabled:    cloudflare.F(true),
-			GatewayUdpProxyEnabled: cloudflare.F(true),
+			GatewayProxyEnabled:                cloudflare.F(true),
+			GatewayUdpProxyEnabled:             cloudflare.F(true),
+			RootCertificateInstallationEnabled: cloudflare.F(true),
+			UseZtVirtualIP:                     cloudflare.F(true),
 		},
 	)
 	if err != nil {

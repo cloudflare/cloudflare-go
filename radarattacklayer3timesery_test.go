@@ -25,20 +25,25 @@ func TestRadarAttackLayer3TimeseryListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Radars.Attacks.Layer3s.Timeseries.List(context.TODO(), cloudflare.RadarAttackLayer3TimeseryListParams{
-		AggInterval:   cloudflare.F(cloudflare.RadarAttackLayer3TimeseryListParamsAggInterval15m),
-		ASN:           cloudflare.F([]string{"15169", "15169", "15169"}),
-		Attack:        cloudflare.F([]cloudflare.RadarAttackLayer3TimeseryListParamsAttack{cloudflare.RadarAttackLayer3TimeseryListParamsAttackUdp, cloudflare.RadarAttackLayer3TimeseryListParamsAttackTcp, cloudflare.RadarAttackLayer3TimeseryListParamsAttackIcmp}),
+	_, err := client.Radar.Attacks.Layer3.Timeseries.List(context.TODO(), cloudflare.RadarAttackLayer3TimeseryListParams{
+		AggInterval:   cloudflare.F(cloudflare.RadarAttackLayer3TimeseryListParamsAggInterval1h),
+		ASN:           cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:     cloudflare.F([]cloudflare.RadarAttackLayer3TimeseryListParamsDateRange{cloudflare.RadarAttackLayer3TimeseryListParamsDateRange1d, cloudflare.RadarAttackLayer3TimeseryListParamsDateRange7d, cloudflare.RadarAttackLayer3TimeseryListParamsDateRange14d}),
+		DateRange:     cloudflare.F([]cloudflare.RadarAttackLayer3TimeseryListParamsDateRange{cloudflare.RadarAttackLayer3TimeseryListParamsDateRange1d, cloudflare.RadarAttackLayer3TimeseryListParamsDateRange2d, cloudflare.RadarAttackLayer3TimeseryListParamsDateRange7d}),
 		DateStart:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		Direction:     cloudflare.F(cloudflare.RadarAttackLayer3TimeseryListParamsDirectionOrigin),
 		Format:        cloudflare.F(cloudflare.RadarAttackLayer3TimeseryListParamsFormatJson),
-		Location:      cloudflare.F([]string{"US,CA", "US,CA", "US,CA"}),
-		Name:          cloudflare.F([]string{"main_series", "main_series", "main_series"}),
-		Normalization: cloudflare.F(cloudflare.RadarAttackLayer3TimeseryListParamsNormalizationPercentageChange),
+		IPVersion:     cloudflare.F([]cloudflare.RadarAttackLayer3TimeseryListParamsIPVersion{cloudflare.RadarAttackLayer3TimeseryListParamsIPVersionIPv4, cloudflare.RadarAttackLayer3TimeseryListParamsIPVersionIPv6}),
+		Location:      cloudflare.F([]string{"string", "string", "string"}),
+		Metric:        cloudflare.F(cloudflare.RadarAttackLayer3TimeseryListParamsMetricBytes),
+		Name:          cloudflare.F([]string{"string", "string", "string"}),
+		Normalization: cloudflare.F(cloudflare.RadarAttackLayer3TimeseryListParamsNormalizationMin0Max),
+		Protocol:      cloudflare.F([]cloudflare.RadarAttackLayer3TimeseryListParamsProtocol{cloudflare.RadarAttackLayer3TimeseryListParamsProtocolUdp, cloudflare.RadarAttackLayer3TimeseryListParamsProtocolTcp, cloudflare.RadarAttackLayer3TimeseryListParamsProtocolIcmp}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

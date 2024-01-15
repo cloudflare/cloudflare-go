@@ -24,10 +24,12 @@ func TestAccountDlpProfileCustomGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Dlps.Profiles.Customs.Get(
+	_, err := client.Accounts.Dlp.Profiles.Customs.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
@@ -52,10 +54,12 @@ func TestAccountDlpProfileCustomUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Dlps.Profiles.Customs.Update(
+	_, err := client.Accounts.Dlp.Profiles.Customs.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
@@ -88,6 +92,13 @@ func TestAccountDlpProfileCustomUpdateWithOptionalParams(t *testing.T) {
 				ProfileID: cloudflare.F[any](map[string]interface{}{}),
 			}}),
 			Name: cloudflare.F("Generic CVV Card Number"),
+			SharedEntries: cloudflare.F([]cloudflare.AccountDlpProfileCustomUpdateParamsSharedEntry{cloudflare.AccountDlpProfileCustomUpdateParamsSharedEntriesDlpSharedEntryUpdatePredefined(cloudflare.AccountDlpProfileCustomUpdateParamsSharedEntriesDlpSharedEntryUpdatePredefined{
+				Enabled: cloudflare.F(true),
+			}), cloudflare.AccountDlpProfileCustomUpdateParamsSharedEntriesDlpSharedEntryUpdatePredefined(cloudflare.AccountDlpProfileCustomUpdateParamsSharedEntriesDlpSharedEntryUpdatePredefined{
+				Enabled: cloudflare.F(true),
+			}), cloudflare.AccountDlpProfileCustomUpdateParamsSharedEntriesDlpSharedEntryUpdatePredefined(cloudflare.AccountDlpProfileCustomUpdateParamsSharedEntriesDlpSharedEntryUpdatePredefined{
+				Enabled: cloudflare.F(true),
+			})}),
 		},
 	)
 	if err != nil {
@@ -110,10 +121,12 @@ func TestAccountDlpProfileCustomDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Dlps.Profiles.Customs.Delete(
+	_, err := client.Accounts.Dlp.Profiles.Customs.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
@@ -138,10 +151,12 @@ func TestAccountDlpProfileCustomDlpProfilesNewCustomProfiles(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Dlps.Profiles.Customs.DlpProfilesNewCustomProfiles(
+	_, err := client.Accounts.Dlp.Profiles.Customs.DlpProfilesNewCustomProfiles(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.AccountDlpProfileCustomDlpProfilesNewCustomProfilesParams{

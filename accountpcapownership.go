@@ -43,7 +43,7 @@ func (r *AccountPcapOwnershipService) Delete(ctx context.Context, accountIdentif
 }
 
 // Adds an AWS or GCP bucket to use with full packet captures.
-func (r *AccountPcapOwnershipService) MagicPcapCollectionAddBucketsForFullPacketCaptures(ctx context.Context, accountIdentifier string, body AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesParams, opts ...option.RequestOption) (res *PcapsOwnershipSingleResponse, err error) {
+func (r *AccountPcapOwnershipService) MagicPcapCollectionAddBucketsForFullPacketCaptures(ctx context.Context, accountIdentifier string, body AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesParams, opts ...option.RequestOption) (res *AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/pcaps/ownership", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -51,26 +51,142 @@ func (r *AccountPcapOwnershipService) MagicPcapCollectionAddBucketsForFullPacket
 }
 
 // List all buckets configured for use with PCAPs API.
-func (r *AccountPcapOwnershipService) MagicPcapCollectionListPcaPsBucketOwnership(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *PcapsOwnershipCollection, err error) {
+func (r *AccountPcapOwnershipService) MagicPcapCollectionListPcaPsBucketOwnership(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/pcaps/ownership", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type PcapsOwnershipCollection struct {
-	Errors     []PcapsOwnershipCollectionError    `json:"errors"`
-	Messages   []PcapsOwnershipCollectionMessage  `json:"messages"`
-	Result     []PcapsOwnershipCollectionResult   `json:"result,nullable"`
-	ResultInfo PcapsOwnershipCollectionResultInfo `json:"result_info"`
+type AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponse struct {
+	Errors   []AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseError   `json:"errors"`
+	Messages []AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseMessage `json:"messages"`
+	Result   AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success PcapsOwnershipCollectionSuccess `json:"success"`
-	JSON    pcapsOwnershipCollectionJSON    `json:"-"`
+	Success AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseSuccess `json:"success"`
+	JSON    accountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseJSON    `json:"-"`
 }
 
-// pcapsOwnershipCollectionJSON contains the JSON metadata for the struct
-// [PcapsOwnershipCollection]
-type pcapsOwnershipCollectionJSON struct {
+// accountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseJSON
+// contains the JSON metadata for the struct
+// [AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponse]
+type accountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseError struct {
+	Code    int64                                                                                   `json:"code,required"`
+	Message string                                                                                  `json:"message,required"`
+	JSON    accountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseErrorJSON `json:"-"`
+}
+
+// accountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseError]
+type accountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseMessage struct {
+	Code    int64                                                                                     `json:"code,required"`
+	Message string                                                                                    `json:"message,required"`
+	JSON    accountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseMessageJSON `json:"-"`
+}
+
+// accountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseMessage]
+type accountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseResult struct {
+	// The bucket ID associated with the packet captures API.
+	ID string `json:"id,required"`
+	// The full URI for the bucket. This field only applies to `full` packet captures.
+	DestinationConf string `json:"destination_conf,required"`
+	// The ownership challenge filename stored in the bucket.
+	Filename string `json:"filename,required"`
+	// The status of the ownership challenge. Can be pending, success or failed.
+	Status AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseResultStatus `json:"status,required"`
+	// The RFC 3339 timestamp when the bucket was added to packet captures API.
+	Submitted string `json:"submitted,required"`
+	// The RFC 3339 timestamp when the bucket was validated.
+	Validated string                                                                                   `json:"validated"`
+	JSON      accountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseResultJSON `json:"-"`
+}
+
+// accountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseResult]
+type accountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseResultJSON struct {
+	ID              apijson.Field
+	DestinationConf apijson.Field
+	Filename        apijson.Field
+	Status          apijson.Field
+	Submitted       apijson.Field
+	Validated       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The status of the ownership challenge. Can be pending, success or failed.
+type AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseResultStatus string
+
+const (
+	AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseResultStatusPending AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseResultStatus = "pending"
+	AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseResultStatusSuccess AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseResultStatus = "success"
+	AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseResultStatusFailed  AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseResultStatus = "failed"
+)
+
+// Whether the API call was successful
+type AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseSuccess bool
+
+const (
+	AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseSuccessTrue AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesResponseSuccess = true
+)
+
+type AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponse struct {
+	Errors     []AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseError    `json:"errors"`
+	Messages   []AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseMessage  `json:"messages"`
+	Result     []AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseResult   `json:"result,nullable"`
+	ResultInfo AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseSuccess `json:"success"`
+	JSON    accountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseJSON    `json:"-"`
+}
+
+// accountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseJSON
+// contains the JSON metadata for the struct
+// [AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponse]
+type accountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -80,49 +196,51 @@ type pcapsOwnershipCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PcapsOwnershipCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PcapsOwnershipCollectionError struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    pcapsOwnershipCollectionErrorJSON `json:"-"`
+type AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseError struct {
+	Code    int64                                                                            `json:"code,required"`
+	Message string                                                                           `json:"message,required"`
+	JSON    accountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseErrorJSON `json:"-"`
 }
 
-// pcapsOwnershipCollectionErrorJSON contains the JSON metadata for the struct
-// [PcapsOwnershipCollectionError]
-type pcapsOwnershipCollectionErrorJSON struct {
+// accountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseError]
+type accountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PcapsOwnershipCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PcapsOwnershipCollectionMessage struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    pcapsOwnershipCollectionMessageJSON `json:"-"`
+type AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseMessage struct {
+	Code    int64                                                                              `json:"code,required"`
+	Message string                                                                             `json:"message,required"`
+	JSON    accountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseMessageJSON `json:"-"`
 }
 
-// pcapsOwnershipCollectionMessageJSON contains the JSON metadata for the struct
-// [PcapsOwnershipCollectionMessage]
-type pcapsOwnershipCollectionMessageJSON struct {
+// accountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseMessage]
+type accountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PcapsOwnershipCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PcapsOwnershipCollectionResult struct {
+type AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseResult struct {
 	// The bucket ID associated with the packet captures API.
 	ID string `json:"id,required"`
 	// The full URI for the bucket. This field only applies to `full` packet captures.
@@ -130,17 +248,18 @@ type PcapsOwnershipCollectionResult struct {
 	// The ownership challenge filename stored in the bucket.
 	Filename string `json:"filename,required"`
 	// The status of the ownership challenge. Can be pending, success or failed.
-	Status PcapsOwnershipCollectionResultStatus `json:"status,required"`
+	Status AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseResultStatus `json:"status,required"`
 	// The RFC 3339 timestamp when the bucket was added to packet captures API.
 	Submitted string `json:"submitted,required"`
 	// The RFC 3339 timestamp when the bucket was validated.
-	Validated string                             `json:"validated"`
-	JSON      pcapsOwnershipCollectionResultJSON `json:"-"`
+	Validated string                                                                            `json:"validated"`
+	JSON      accountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseResultJSON `json:"-"`
 }
 
-// pcapsOwnershipCollectionResultJSON contains the JSON metadata for the struct
-// [PcapsOwnershipCollectionResult]
-type pcapsOwnershipCollectionResultJSON struct {
+// accountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseResult]
+type accountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseResultJSON struct {
 	ID              apijson.Field
 	DestinationConf apijson.Field
 	Filename        apijson.Field
@@ -151,20 +270,20 @@ type pcapsOwnershipCollectionResultJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *PcapsOwnershipCollectionResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The status of the ownership challenge. Can be pending, success or failed.
-type PcapsOwnershipCollectionResultStatus string
+type AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseResultStatus string
 
 const (
-	PcapsOwnershipCollectionResultStatusPending PcapsOwnershipCollectionResultStatus = "pending"
-	PcapsOwnershipCollectionResultStatusSuccess PcapsOwnershipCollectionResultStatus = "success"
-	PcapsOwnershipCollectionResultStatusFailed  PcapsOwnershipCollectionResultStatus = "failed"
+	AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseResultStatusPending AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseResultStatus = "pending"
+	AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseResultStatusSuccess AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseResultStatus = "success"
+	AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseResultStatusFailed  AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseResultStatus = "failed"
 )
 
-type PcapsOwnershipCollectionResultInfo struct {
+type AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -172,13 +291,14 @@ type PcapsOwnershipCollectionResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                `json:"total_count"`
-	JSON       pcapsOwnershipCollectionResultInfoJSON `json:"-"`
+	TotalCount float64                                                                               `json:"total_count"`
+	JSON       accountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseResultInfoJSON `json:"-"`
 }
 
-// pcapsOwnershipCollectionResultInfoJSON contains the JSON metadata for the struct
-// [PcapsOwnershipCollectionResultInfo]
-type pcapsOwnershipCollectionResultInfoJSON struct {
+// accountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseResultInfo]
+type accountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -187,126 +307,15 @@ type pcapsOwnershipCollectionResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PcapsOwnershipCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type PcapsOwnershipCollectionSuccess bool
+type AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseSuccess bool
 
 const (
-	PcapsOwnershipCollectionSuccessTrue PcapsOwnershipCollectionSuccess = true
-)
-
-type PcapsOwnershipSingleResponse struct {
-	Errors   []PcapsOwnershipSingleResponseError   `json:"errors"`
-	Messages []PcapsOwnershipSingleResponseMessage `json:"messages"`
-	Result   PcapsOwnershipSingleResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success PcapsOwnershipSingleResponseSuccess `json:"success"`
-	JSON    pcapsOwnershipSingleResponseJSON    `json:"-"`
-}
-
-// pcapsOwnershipSingleResponseJSON contains the JSON metadata for the struct
-// [PcapsOwnershipSingleResponse]
-type pcapsOwnershipSingleResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PcapsOwnershipSingleResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type PcapsOwnershipSingleResponseError struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    pcapsOwnershipSingleResponseErrorJSON `json:"-"`
-}
-
-// pcapsOwnershipSingleResponseErrorJSON contains the JSON metadata for the struct
-// [PcapsOwnershipSingleResponseError]
-type pcapsOwnershipSingleResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PcapsOwnershipSingleResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type PcapsOwnershipSingleResponseMessage struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    pcapsOwnershipSingleResponseMessageJSON `json:"-"`
-}
-
-// pcapsOwnershipSingleResponseMessageJSON contains the JSON metadata for the
-// struct [PcapsOwnershipSingleResponseMessage]
-type pcapsOwnershipSingleResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PcapsOwnershipSingleResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type PcapsOwnershipSingleResponseResult struct {
-	// The bucket ID associated with the packet captures API.
-	ID string `json:"id,required"`
-	// The full URI for the bucket. This field only applies to `full` packet captures.
-	DestinationConf string `json:"destination_conf,required"`
-	// The ownership challenge filename stored in the bucket.
-	Filename string `json:"filename,required"`
-	// The status of the ownership challenge. Can be pending, success or failed.
-	Status PcapsOwnershipSingleResponseResultStatus `json:"status,required"`
-	// The RFC 3339 timestamp when the bucket was added to packet captures API.
-	Submitted string `json:"submitted,required"`
-	// The RFC 3339 timestamp when the bucket was validated.
-	Validated string                                 `json:"validated"`
-	JSON      pcapsOwnershipSingleResponseResultJSON `json:"-"`
-}
-
-// pcapsOwnershipSingleResponseResultJSON contains the JSON metadata for the struct
-// [PcapsOwnershipSingleResponseResult]
-type pcapsOwnershipSingleResponseResultJSON struct {
-	ID              apijson.Field
-	DestinationConf apijson.Field
-	Filename        apijson.Field
-	Status          apijson.Field
-	Submitted       apijson.Field
-	Validated       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *PcapsOwnershipSingleResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The status of the ownership challenge. Can be pending, success or failed.
-type PcapsOwnershipSingleResponseResultStatus string
-
-const (
-	PcapsOwnershipSingleResponseResultStatusPending PcapsOwnershipSingleResponseResultStatus = "pending"
-	PcapsOwnershipSingleResponseResultStatusSuccess PcapsOwnershipSingleResponseResultStatus = "success"
-	PcapsOwnershipSingleResponseResultStatusFailed  PcapsOwnershipSingleResponseResultStatus = "failed"
-)
-
-// Whether the API call was successful
-type PcapsOwnershipSingleResponseSuccess bool
-
-const (
-	PcapsOwnershipSingleResponseSuccessTrue PcapsOwnershipSingleResponseSuccess = true
+	AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseSuccessTrue AccountPcapOwnershipMagicPcapCollectionListPcaPsBucketOwnershipResponseSuccess = true
 )
 
 type AccountPcapOwnershipMagicPcapCollectionAddBucketsForFullPacketCapturesParams struct {

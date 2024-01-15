@@ -25,17 +25,19 @@ func TestRadarAs112SummaryIPVersionListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Radars.As112s.Summaries.IPVersions.List(context.TODO(), cloudflare.RadarAs112SummaryIPVersionListParams{
-		ASN:       cloudflare.F([]string{"15169", "15169", "15169"}),
+	_, err := client.Radar.As112.Summaries.IPVersions.List(context.TODO(), cloudflare.RadarAs112SummaryIPVersionListParams{
+		ASN:       cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange: cloudflare.F([]cloudflare.RadarAs112SummaryIPVersionListParamsDateRange{cloudflare.RadarAs112SummaryIPVersionListParamsDateRange1d, cloudflare.RadarAs112SummaryIPVersionListParamsDateRange7d, cloudflare.RadarAs112SummaryIPVersionListParamsDateRange14d}),
+		DateRange: cloudflare.F([]cloudflare.RadarAs112SummaryIPVersionListParamsDateRange{cloudflare.RadarAs112SummaryIPVersionListParamsDateRange1d, cloudflare.RadarAs112SummaryIPVersionListParamsDateRange2d, cloudflare.RadarAs112SummaryIPVersionListParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		Format:    cloudflare.F(cloudflare.RadarAs112SummaryIPVersionListParamsFormatJson),
-		Location:  cloudflare.F([]string{"US,CA", "US,CA", "US,CA"}),
-		Name:      cloudflare.F([]string{"main_series", "main_series", "main_series"}),
+		Location:  cloudflare.F([]string{"string", "string", "string"}),
+		Name:      cloudflare.F([]string{"string", "string", "string"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

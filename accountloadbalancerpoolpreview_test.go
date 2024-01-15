@@ -24,17 +24,22 @@ func TestAccountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolWithOp
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.LoadBalancers.Pools.Previews.AccountLoadBalancerPoolsPreviewPool(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"17b5962d775c646f3f9725cbc7a53df4",
 		cloudflare.AccountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolParams{
-			ExpectedCodes:   cloudflare.F("2xx"),
 			AllowInsecure:   cloudflare.F(true),
+			ConsecutiveDown: cloudflare.F(int64(0)),
+			ConsecutiveUp:   cloudflare.F(int64(0)),
+			Description:     cloudflare.F("Login page monitor"),
 			ExpectedBody:    cloudflare.F("alive"),
+			ExpectedCodes:   cloudflare.F("2xx"),
 			FollowRedirects: cloudflare.F(true),
 			Header: cloudflare.F[any](map[string]interface{}{
 				"Host": map[string]interface{}{
@@ -44,6 +49,7 @@ func TestAccountLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolWithOp
 					"0": "abc123",
 				},
 			}),
+			Interval:  cloudflare.F(int64(0)),
 			Method:    cloudflare.F("GET"),
 			Path:      cloudflare.F("/health"),
 			Port:      cloudflare.F(int64(0)),

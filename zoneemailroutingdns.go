@@ -34,26 +34,27 @@ func NewZoneEmailRoutingDNSService(opts ...option.RequestOption) (r *ZoneEmailRo
 }
 
 // Show the DNS records needed to configure your Email Routing zone.
-func (r *ZoneEmailRoutingDNSService) EmailRoutingSettingsEmailRoutingDNSSettings(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *DNSSettingsResponseCollection, err error) {
+func (r *ZoneEmailRoutingDNSService) EmailRoutingSettingsEmailRoutingDNSSettings(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/email/routing/dns", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type DNSSettingsResponseCollection struct {
-	Errors     []DNSSettingsResponseCollectionError    `json:"errors"`
-	Messages   []DNSSettingsResponseCollectionMessage  `json:"messages"`
-	Result     []DNSSettingsResponseCollectionResult   `json:"result"`
-	ResultInfo DNSSettingsResponseCollectionResultInfo `json:"result_info"`
+type ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponse struct {
+	Errors     []ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseError    `json:"errors"`
+	Messages   []ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseMessage  `json:"messages"`
+	Result     []ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResult   `json:"result"`
+	ResultInfo ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultInfo `json:"result_info"`
 	// Whether the API call was successful
-	Success DNSSettingsResponseCollectionSuccess `json:"success"`
-	JSON    dnsSettingsResponseCollectionJSON    `json:"-"`
+	Success ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseSuccess `json:"success"`
+	JSON    zoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseJSON    `json:"-"`
 }
 
-// dnsSettingsResponseCollectionJSON contains the JSON metadata for the struct
-// [DNSSettingsResponseCollection]
-type dnsSettingsResponseCollectionJSON struct {
+// zoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponse]
+type zoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -63,50 +64,52 @@ type dnsSettingsResponseCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSSettingsResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DNSSettingsResponseCollectionError struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    dnsSettingsResponseCollectionErrorJSON `json:"-"`
+type ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseError struct {
+	Code    int64                                                                           `json:"code,required"`
+	Message string                                                                          `json:"message,required"`
+	JSON    zoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseErrorJSON `json:"-"`
 }
 
-// dnsSettingsResponseCollectionErrorJSON contains the JSON metadata for the struct
-// [DNSSettingsResponseCollectionError]
-type dnsSettingsResponseCollectionErrorJSON struct {
+// zoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseError]
+type zoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSSettingsResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DNSSettingsResponseCollectionMessage struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    dnsSettingsResponseCollectionMessageJSON `json:"-"`
+type ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseMessage struct {
+	Code    int64                                                                             `json:"code,required"`
+	Message string                                                                            `json:"message,required"`
+	JSON    zoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseMessageJSON `json:"-"`
 }
 
-// dnsSettingsResponseCollectionMessageJSON contains the JSON metadata for the
-// struct [DNSSettingsResponseCollectionMessage]
-type dnsSettingsResponseCollectionMessageJSON struct {
+// zoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseMessage]
+type zoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSSettingsResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // List of records needed to enable an Email Routing zone.
-type DNSSettingsResponseCollectionResult struct {
+type ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResult struct {
 	// DNS record content.
 	Content string `json:"content"`
 	// DNS record name (or @ for the zone apex).
@@ -116,15 +119,16 @@ type DNSSettingsResponseCollectionResult struct {
 	Priority float64 `json:"priority"`
 	// Time to live, in seconds, of the DNS record. Must be between 60 and 86400, or 1
 	// for 'automatic'.
-	Ttl DNSSettingsResponseCollectionResultTtl `json:"ttl"`
+	Ttl ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultTtl `json:"ttl"`
 	// DNS record type.
-	Type DNSSettingsResponseCollectionResultType `json:"type"`
-	JSON dnsSettingsResponseCollectionResultJSON `json:"-"`
+	Type ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultType `json:"type"`
+	JSON zoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultJSON `json:"-"`
 }
 
-// dnsSettingsResponseCollectionResultJSON contains the JSON metadata for the
-// struct [DNSSettingsResponseCollectionResult]
-type dnsSettingsResponseCollectionResultJSON struct {
+// zoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultJSON
+// contains the JSON metadata for the struct
+// [ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResult]
+type zoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Priority    apijson.Field
@@ -134,7 +138,7 @@ type dnsSettingsResponseCollectionResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSSettingsResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -142,14 +146,14 @@ func (r *DNSSettingsResponseCollectionResult) UnmarshalJSON(data []byte) (err er
 // for 'automatic'.
 //
 // Union satisfied by [shared.UnionFloat] or
-// [DNSSettingsResponseCollectionResultTtlNumber].
-type DNSSettingsResponseCollectionResultTtl interface {
-	ImplementsDNSSettingsResponseCollectionResultTtl()
+// [ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultTtlNumber].
+type ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultTtl interface {
+	ImplementsZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultTtl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSSettingsResponseCollectionResultTtl)(nil)).Elem(),
+		reflect.TypeOf((*ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultTtl)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter:         gjson.Number,
@@ -159,37 +163,37 @@ func init() {
 	)
 }
 
-type DNSSettingsResponseCollectionResultTtlNumber float64
+type ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultTtlNumber float64
 
 const (
-	DNSSettingsResponseCollectionResultTtlNumber1 DNSSettingsResponseCollectionResultTtlNumber = 1
+	ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultTtlNumber1 ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultTtlNumber = 1
 )
 
 // DNS record type.
-type DNSSettingsResponseCollectionResultType string
+type ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultType string
 
 const (
-	DNSSettingsResponseCollectionResultTypeA      DNSSettingsResponseCollectionResultType = "A"
-	DNSSettingsResponseCollectionResultTypeAaaa   DNSSettingsResponseCollectionResultType = "AAAA"
-	DNSSettingsResponseCollectionResultTypeCname  DNSSettingsResponseCollectionResultType = "CNAME"
-	DNSSettingsResponseCollectionResultTypeHTTPs  DNSSettingsResponseCollectionResultType = "HTTPS"
-	DNSSettingsResponseCollectionResultTypeTxt    DNSSettingsResponseCollectionResultType = "TXT"
-	DNSSettingsResponseCollectionResultTypeSrv    DNSSettingsResponseCollectionResultType = "SRV"
-	DNSSettingsResponseCollectionResultTypeLoc    DNSSettingsResponseCollectionResultType = "LOC"
-	DNSSettingsResponseCollectionResultTypeMx     DNSSettingsResponseCollectionResultType = "MX"
-	DNSSettingsResponseCollectionResultTypeNs     DNSSettingsResponseCollectionResultType = "NS"
-	DNSSettingsResponseCollectionResultTypeCert   DNSSettingsResponseCollectionResultType = "CERT"
-	DNSSettingsResponseCollectionResultTypeDnskey DNSSettingsResponseCollectionResultType = "DNSKEY"
-	DNSSettingsResponseCollectionResultTypeDs     DNSSettingsResponseCollectionResultType = "DS"
-	DNSSettingsResponseCollectionResultTypeNaptr  DNSSettingsResponseCollectionResultType = "NAPTR"
-	DNSSettingsResponseCollectionResultTypeSmimea DNSSettingsResponseCollectionResultType = "SMIMEA"
-	DNSSettingsResponseCollectionResultTypeSshfp  DNSSettingsResponseCollectionResultType = "SSHFP"
-	DNSSettingsResponseCollectionResultTypeSvcb   DNSSettingsResponseCollectionResultType = "SVCB"
-	DNSSettingsResponseCollectionResultTypeTlsa   DNSSettingsResponseCollectionResultType = "TLSA"
-	DNSSettingsResponseCollectionResultTypeUri    DNSSettingsResponseCollectionResultType = "URI"
+	ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultTypeA      ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultType = "A"
+	ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultTypeAaaa   ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultType = "AAAA"
+	ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultTypeCname  ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultType = "CNAME"
+	ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultTypeHTTPs  ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultType = "HTTPS"
+	ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultTypeTxt    ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultType = "TXT"
+	ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultTypeSrv    ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultType = "SRV"
+	ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultTypeLoc    ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultType = "LOC"
+	ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultTypeMx     ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultType = "MX"
+	ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultTypeNs     ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultType = "NS"
+	ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultTypeCert   ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultType = "CERT"
+	ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultTypeDnskey ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultType = "DNSKEY"
+	ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultTypeDs     ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultType = "DS"
+	ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultTypeNaptr  ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultType = "NAPTR"
+	ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultTypeSmimea ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultType = "SMIMEA"
+	ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultTypeSshfp  ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultType = "SSHFP"
+	ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultTypeSvcb   ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultType = "SVCB"
+	ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultTypeTlsa   ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultType = "TLSA"
+	ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultTypeUri    ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultType = "URI"
 )
 
-type DNSSettingsResponseCollectionResultInfo struct {
+type ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -197,13 +201,14 @@ type DNSSettingsResponseCollectionResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                     `json:"total_count"`
-	JSON       dnsSettingsResponseCollectionResultInfoJSON `json:"-"`
+	TotalCount float64                                                                              `json:"total_count"`
+	JSON       zoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultInfoJSON `json:"-"`
 }
 
-// dnsSettingsResponseCollectionResultInfoJSON contains the JSON metadata for the
-// struct [DNSSettingsResponseCollectionResultInfo]
-type dnsSettingsResponseCollectionResultInfoJSON struct {
+// zoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultInfo]
+type zoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -212,13 +217,13 @@ type dnsSettingsResponseCollectionResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSSettingsResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type DNSSettingsResponseCollectionSuccess bool
+type ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseSuccess bool
 
 const (
-	DNSSettingsResponseCollectionSuccessTrue DNSSettingsResponseCollectionSuccess = true
+	ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseSuccessTrue ZoneEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseSuccess = true
 )

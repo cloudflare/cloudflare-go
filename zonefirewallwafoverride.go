@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -37,7 +38,7 @@ func NewZoneFirewallWafOverrideService(opts ...option.RequestOption) (r *ZoneFir
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *ZoneFirewallWafOverrideService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *OverrideResponseSingle, err error) {
+func (r *ZoneFirewallWafOverrideService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *ZoneFirewallWafOverrideGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/firewall/waf/overrides/%s", zoneIdentifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -48,7 +49,7 @@ func (r *ZoneFirewallWafOverrideService) Get(ctx context.Context, zoneIdentifier
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *ZoneFirewallWafOverrideService) Update(ctx context.Context, zoneIdentifier string, id string, body ZoneFirewallWafOverrideUpdateParams, opts ...option.RequestOption) (res *OverrideResponseSingle, err error) {
+func (r *ZoneFirewallWafOverrideService) Update(ctx context.Context, zoneIdentifier string, id string, body ZoneFirewallWafOverrideUpdateParams, opts ...option.RequestOption) (res *ZoneFirewallWafOverrideUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/firewall/waf/overrides/%s", zoneIdentifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
@@ -70,7 +71,7 @@ func (r *ZoneFirewallWafOverrideService) Delete(ctx context.Context, zoneIdentif
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *ZoneFirewallWafOverrideService) WafOverridesNewAWafOverride(ctx context.Context, zoneIdentifier string, body ZoneFirewallWafOverrideWafOverridesNewAWafOverrideParams, opts ...option.RequestOption) (res *OverrideResponseSingle, err error) {
+func (r *ZoneFirewallWafOverrideService) WafOverridesNewAWafOverride(ctx context.Context, zoneIdentifier string, body ZoneFirewallWafOverrideWafOverridesNewAWafOverrideParams, opts ...option.RequestOption) (res *ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/firewall/waf/overrides", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -81,78 +82,86 @@ func (r *ZoneFirewallWafOverrideService) WafOverridesNewAWafOverride(ctx context
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *ZoneFirewallWafOverrideService) WafOverridesListWafOverrides(ctx context.Context, zoneIdentifier string, query ZoneFirewallWafOverrideWafOverridesListWafOverridesParams, opts ...option.RequestOption) (res *OverrideResponseCollection, err error) {
-	opts = append(r.Options[:], opts...)
+func (r *ZoneFirewallWafOverrideService) WafOverridesListWafOverrides(ctx context.Context, zoneIdentifier string, query ZoneFirewallWafOverrideWafOverridesListWafOverridesParams, opts ...option.RequestOption) (res *shared.Page[ZoneFirewallWafOverrideWafOverridesListWafOverridesResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("zones/%s/firewall/waf/overrides", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
 }
 
-type OverrideResponseCollection struct {
-	Errors     []OverrideResponseCollectionError    `json:"errors"`
-	Messages   []OverrideResponseCollectionMessage  `json:"messages"`
-	Result     []OverrideResponseCollectionResult   `json:"result"`
-	ResultInfo OverrideResponseCollectionResultInfo `json:"result_info"`
+type ZoneFirewallWafOverrideGetResponse struct {
+	Errors   []ZoneFirewallWafOverrideGetResponseError   `json:"errors"`
+	Messages []ZoneFirewallWafOverrideGetResponseMessage `json:"messages"`
+	Result   ZoneFirewallWafOverrideGetResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success OverrideResponseCollectionSuccess `json:"success"`
-	JSON    overrideResponseCollectionJSON    `json:"-"`
+	Success ZoneFirewallWafOverrideGetResponseSuccess `json:"success"`
+	JSON    zoneFirewallWafOverrideGetResponseJSON    `json:"-"`
 }
 
-// overrideResponseCollectionJSON contains the JSON metadata for the struct
-// [OverrideResponseCollection]
-type overrideResponseCollectionJSON struct {
+// zoneFirewallWafOverrideGetResponseJSON contains the JSON metadata for the struct
+// [ZoneFirewallWafOverrideGetResponse]
+type zoneFirewallWafOverrideGetResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OverrideResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneFirewallWafOverrideGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type OverrideResponseCollectionError struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    overrideResponseCollectionErrorJSON `json:"-"`
+type ZoneFirewallWafOverrideGetResponseError struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    zoneFirewallWafOverrideGetResponseErrorJSON `json:"-"`
 }
 
-// overrideResponseCollectionErrorJSON contains the JSON metadata for the struct
-// [OverrideResponseCollectionError]
-type overrideResponseCollectionErrorJSON struct {
+// zoneFirewallWafOverrideGetResponseErrorJSON contains the JSON metadata for the
+// struct [ZoneFirewallWafOverrideGetResponseError]
+type zoneFirewallWafOverrideGetResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OverrideResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneFirewallWafOverrideGetResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type OverrideResponseCollectionMessage struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    overrideResponseCollectionMessageJSON `json:"-"`
+type ZoneFirewallWafOverrideGetResponseMessage struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    zoneFirewallWafOverrideGetResponseMessageJSON `json:"-"`
 }
 
-// overrideResponseCollectionMessageJSON contains the JSON metadata for the struct
-// [OverrideResponseCollectionMessage]
-type overrideResponseCollectionMessageJSON struct {
+// zoneFirewallWafOverrideGetResponseMessageJSON contains the JSON metadata for the
+// struct [ZoneFirewallWafOverrideGetResponseMessage]
+type zoneFirewallWafOverrideGetResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OverrideResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneFirewallWafOverrideGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type OverrideResponseCollectionResult struct {
+type ZoneFirewallWafOverrideGetResponseResult struct {
 	// The unique identifier of the WAF override.
 	ID string `json:"id"`
 	// An informative summary of the current URI-based WAF override.
@@ -171,7 +180,7 @@ type OverrideResponseCollectionResult struct {
 	Priority float64 `json:"priority"`
 	// Specifies that, when a WAF rule matches, its configured action will be replaced
 	// by the action configured in this object.
-	RewriteAction OverrideResponseCollectionResultRewriteAction `json:"rewrite_action"`
+	RewriteAction ZoneFirewallWafOverrideGetResponseResultRewriteAction `json:"rewrite_action"`
 	// An object that allows you to override the action of specific WAF rules. Each key
 	// of this object must be the ID of a WAF rule, and each value must be a valid WAF
 	// action. Unless you are disabling a rule, ensure that you also enable the rule
@@ -181,13 +190,13 @@ type OverrideResponseCollectionResult struct {
 	// The URLs to include in the current WAF override. You can use wildcards. Each
 	// entered URL will be escaped before use, which means you can only use simple
 	// wildcard patterns.
-	URLs []string                             `json:"urls"`
-	JSON overrideResponseCollectionResultJSON `json:"-"`
+	URLs []string                                     `json:"urls"`
+	JSON zoneFirewallWafOverrideGetResponseResultJSON `json:"-"`
 }
 
-// overrideResponseCollectionResultJSON contains the JSON metadata for the struct
-// [OverrideResponseCollectionResult]
-type overrideResponseCollectionResultJSON struct {
+// zoneFirewallWafOverrideGetResponseResultJSON contains the JSON metadata for the
+// struct [ZoneFirewallWafOverrideGetResponseResult]
+type zoneFirewallWafOverrideGetResponseResultJSON struct {
 	ID            apijson.Field
 	Description   apijson.Field
 	Groups        apijson.Field
@@ -200,26 +209,26 @@ type overrideResponseCollectionResultJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *OverrideResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneFirewallWafOverrideGetResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Specifies that, when a WAF rule matches, its configured action will be replaced
 // by the action configured in this object.
-type OverrideResponseCollectionResultRewriteAction struct {
+type ZoneFirewallWafOverrideGetResponseResultRewriteAction struct {
 	// The WAF rule action to apply.
-	Block     OverrideResponseCollectionResultRewriteActionBlock `json:"block"`
-	Challenge interface{}                                        `json:"challenge"`
-	Default   interface{}                                        `json:"default"`
+	Block     ZoneFirewallWafOverrideGetResponseResultRewriteActionBlock `json:"block"`
+	Challenge interface{}                                                `json:"challenge"`
+	Default   interface{}                                                `json:"default"`
 	// The WAF rule action to apply.
-	Disable  OverrideResponseCollectionResultRewriteActionDisable `json:"disable"`
-	Simulate interface{}                                          `json:"simulate"`
-	JSON     overrideResponseCollectionResultRewriteActionJSON    `json:"-"`
+	Disable  ZoneFirewallWafOverrideGetResponseResultRewriteActionDisable `json:"disable"`
+	Simulate interface{}                                                  `json:"simulate"`
+	JSON     zoneFirewallWafOverrideGetResponseResultRewriteActionJSON    `json:"-"`
 }
 
-// overrideResponseCollectionResultRewriteActionJSON contains the JSON metadata for
-// the struct [OverrideResponseCollectionResultRewriteAction]
-type overrideResponseCollectionResultRewriteActionJSON struct {
+// zoneFirewallWafOverrideGetResponseResultRewriteActionJSON contains the JSON
+// metadata for the struct [ZoneFirewallWafOverrideGetResponseResultRewriteAction]
+type zoneFirewallWafOverrideGetResponseResultRewriteActionJSON struct {
 	Block       apijson.Field
 	Challenge   apijson.Field
 	Default     apijson.Field
@@ -229,78 +238,51 @@ type overrideResponseCollectionResultRewriteActionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OverrideResponseCollectionResultRewriteAction) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneFirewallWafOverrideGetResponseResultRewriteAction) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The WAF rule action to apply.
-type OverrideResponseCollectionResultRewriteActionBlock string
+type ZoneFirewallWafOverrideGetResponseResultRewriteActionBlock string
 
 const (
-	OverrideResponseCollectionResultRewriteActionBlockChallenge OverrideResponseCollectionResultRewriteActionBlock = "challenge"
-	OverrideResponseCollectionResultRewriteActionBlockBlock     OverrideResponseCollectionResultRewriteActionBlock = "block"
-	OverrideResponseCollectionResultRewriteActionBlockSimulate  OverrideResponseCollectionResultRewriteActionBlock = "simulate"
-	OverrideResponseCollectionResultRewriteActionBlockDisable   OverrideResponseCollectionResultRewriteActionBlock = "disable"
-	OverrideResponseCollectionResultRewriteActionBlockDefault   OverrideResponseCollectionResultRewriteActionBlock = "default"
+	ZoneFirewallWafOverrideGetResponseResultRewriteActionBlockChallenge ZoneFirewallWafOverrideGetResponseResultRewriteActionBlock = "challenge"
+	ZoneFirewallWafOverrideGetResponseResultRewriteActionBlockBlock     ZoneFirewallWafOverrideGetResponseResultRewriteActionBlock = "block"
+	ZoneFirewallWafOverrideGetResponseResultRewriteActionBlockSimulate  ZoneFirewallWafOverrideGetResponseResultRewriteActionBlock = "simulate"
+	ZoneFirewallWafOverrideGetResponseResultRewriteActionBlockDisable   ZoneFirewallWafOverrideGetResponseResultRewriteActionBlock = "disable"
+	ZoneFirewallWafOverrideGetResponseResultRewriteActionBlockDefault   ZoneFirewallWafOverrideGetResponseResultRewriteActionBlock = "default"
 )
 
 // The WAF rule action to apply.
-type OverrideResponseCollectionResultRewriteActionDisable string
+type ZoneFirewallWafOverrideGetResponseResultRewriteActionDisable string
 
 const (
-	OverrideResponseCollectionResultRewriteActionDisableChallenge OverrideResponseCollectionResultRewriteActionDisable = "challenge"
-	OverrideResponseCollectionResultRewriteActionDisableBlock     OverrideResponseCollectionResultRewriteActionDisable = "block"
-	OverrideResponseCollectionResultRewriteActionDisableSimulate  OverrideResponseCollectionResultRewriteActionDisable = "simulate"
-	OverrideResponseCollectionResultRewriteActionDisableDisable   OverrideResponseCollectionResultRewriteActionDisable = "disable"
-	OverrideResponseCollectionResultRewriteActionDisableDefault   OverrideResponseCollectionResultRewriteActionDisable = "default"
+	ZoneFirewallWafOverrideGetResponseResultRewriteActionDisableChallenge ZoneFirewallWafOverrideGetResponseResultRewriteActionDisable = "challenge"
+	ZoneFirewallWafOverrideGetResponseResultRewriteActionDisableBlock     ZoneFirewallWafOverrideGetResponseResultRewriteActionDisable = "block"
+	ZoneFirewallWafOverrideGetResponseResultRewriteActionDisableSimulate  ZoneFirewallWafOverrideGetResponseResultRewriteActionDisable = "simulate"
+	ZoneFirewallWafOverrideGetResponseResultRewriteActionDisableDisable   ZoneFirewallWafOverrideGetResponseResultRewriteActionDisable = "disable"
+	ZoneFirewallWafOverrideGetResponseResultRewriteActionDisableDefault   ZoneFirewallWafOverrideGetResponseResultRewriteActionDisable = "default"
 )
-
-type OverrideResponseCollectionResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                  `json:"total_count"`
-	JSON       overrideResponseCollectionResultInfoJSON `json:"-"`
-}
-
-// overrideResponseCollectionResultInfoJSON contains the JSON metadata for the
-// struct [OverrideResponseCollectionResultInfo]
-type overrideResponseCollectionResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OverrideResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
 
 // Whether the API call was successful
-type OverrideResponseCollectionSuccess bool
+type ZoneFirewallWafOverrideGetResponseSuccess bool
 
 const (
-	OverrideResponseCollectionSuccessTrue OverrideResponseCollectionSuccess = true
+	ZoneFirewallWafOverrideGetResponseSuccessTrue ZoneFirewallWafOverrideGetResponseSuccess = true
 )
 
-type OverrideResponseSingle struct {
-	Errors   []OverrideResponseSingleError   `json:"errors"`
-	Messages []OverrideResponseSingleMessage `json:"messages"`
-	Result   OverrideResponseSingleResult    `json:"result"`
+type ZoneFirewallWafOverrideUpdateResponse struct {
+	Errors   []ZoneFirewallWafOverrideUpdateResponseError   `json:"errors"`
+	Messages []ZoneFirewallWafOverrideUpdateResponseMessage `json:"messages"`
+	Result   ZoneFirewallWafOverrideUpdateResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success OverrideResponseSingleSuccess `json:"success"`
-	JSON    overrideResponseSingleJSON    `json:"-"`
+	Success ZoneFirewallWafOverrideUpdateResponseSuccess `json:"success"`
+	JSON    zoneFirewallWafOverrideUpdateResponseJSON    `json:"-"`
 }
 
-// overrideResponseSingleJSON contains the JSON metadata for the struct
-// [OverrideResponseSingle]
-type overrideResponseSingleJSON struct {
+// zoneFirewallWafOverrideUpdateResponseJSON contains the JSON metadata for the
+// struct [ZoneFirewallWafOverrideUpdateResponse]
+type zoneFirewallWafOverrideUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -309,49 +291,49 @@ type overrideResponseSingleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OverrideResponseSingle) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneFirewallWafOverrideUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type OverrideResponseSingleError struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    overrideResponseSingleErrorJSON `json:"-"`
+type ZoneFirewallWafOverrideUpdateResponseError struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    zoneFirewallWafOverrideUpdateResponseErrorJSON `json:"-"`
 }
 
-// overrideResponseSingleErrorJSON contains the JSON metadata for the struct
-// [OverrideResponseSingleError]
-type overrideResponseSingleErrorJSON struct {
+// zoneFirewallWafOverrideUpdateResponseErrorJSON contains the JSON metadata for
+// the struct [ZoneFirewallWafOverrideUpdateResponseError]
+type zoneFirewallWafOverrideUpdateResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OverrideResponseSingleError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneFirewallWafOverrideUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type OverrideResponseSingleMessage struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    overrideResponseSingleMessageJSON `json:"-"`
+type ZoneFirewallWafOverrideUpdateResponseMessage struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    zoneFirewallWafOverrideUpdateResponseMessageJSON `json:"-"`
 }
 
-// overrideResponseSingleMessageJSON contains the JSON metadata for the struct
-// [OverrideResponseSingleMessage]
-type overrideResponseSingleMessageJSON struct {
+// zoneFirewallWafOverrideUpdateResponseMessageJSON contains the JSON metadata for
+// the struct [ZoneFirewallWafOverrideUpdateResponseMessage]
+type zoneFirewallWafOverrideUpdateResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OverrideResponseSingleMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneFirewallWafOverrideUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type OverrideResponseSingleResult struct {
+type ZoneFirewallWafOverrideUpdateResponseResult struct {
 	// The unique identifier of the WAF override.
 	ID string `json:"id"`
 	// An informative summary of the current URI-based WAF override.
@@ -370,7 +352,7 @@ type OverrideResponseSingleResult struct {
 	Priority float64 `json:"priority"`
 	// Specifies that, when a WAF rule matches, its configured action will be replaced
 	// by the action configured in this object.
-	RewriteAction OverrideResponseSingleResultRewriteAction `json:"rewrite_action"`
+	RewriteAction ZoneFirewallWafOverrideUpdateResponseResultRewriteAction `json:"rewrite_action"`
 	// An object that allows you to override the action of specific WAF rules. Each key
 	// of this object must be the ID of a WAF rule, and each value must be a valid WAF
 	// action. Unless you are disabling a rule, ensure that you also enable the rule
@@ -380,13 +362,13 @@ type OverrideResponseSingleResult struct {
 	// The URLs to include in the current WAF override. You can use wildcards. Each
 	// entered URL will be escaped before use, which means you can only use simple
 	// wildcard patterns.
-	URLs []string                         `json:"urls"`
-	JSON overrideResponseSingleResultJSON `json:"-"`
+	URLs []string                                        `json:"urls"`
+	JSON zoneFirewallWafOverrideUpdateResponseResultJSON `json:"-"`
 }
 
-// overrideResponseSingleResultJSON contains the JSON metadata for the struct
-// [OverrideResponseSingleResult]
-type overrideResponseSingleResultJSON struct {
+// zoneFirewallWafOverrideUpdateResponseResultJSON contains the JSON metadata for
+// the struct [ZoneFirewallWafOverrideUpdateResponseResult]
+type zoneFirewallWafOverrideUpdateResponseResultJSON struct {
 	ID            apijson.Field
 	Description   apijson.Field
 	Groups        apijson.Field
@@ -399,26 +381,27 @@ type overrideResponseSingleResultJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *OverrideResponseSingleResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneFirewallWafOverrideUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Specifies that, when a WAF rule matches, its configured action will be replaced
 // by the action configured in this object.
-type OverrideResponseSingleResultRewriteAction struct {
+type ZoneFirewallWafOverrideUpdateResponseResultRewriteAction struct {
 	// The WAF rule action to apply.
-	Block     OverrideResponseSingleResultRewriteActionBlock `json:"block"`
-	Challenge interface{}                                    `json:"challenge"`
-	Default   interface{}                                    `json:"default"`
+	Block     ZoneFirewallWafOverrideUpdateResponseResultRewriteActionBlock `json:"block"`
+	Challenge interface{}                                                   `json:"challenge"`
+	Default   interface{}                                                   `json:"default"`
 	// The WAF rule action to apply.
-	Disable  OverrideResponseSingleResultRewriteActionDisable `json:"disable"`
-	Simulate interface{}                                      `json:"simulate"`
-	JSON     overrideResponseSingleResultRewriteActionJSON    `json:"-"`
+	Disable  ZoneFirewallWafOverrideUpdateResponseResultRewriteActionDisable `json:"disable"`
+	Simulate interface{}                                                     `json:"simulate"`
+	JSON     zoneFirewallWafOverrideUpdateResponseResultRewriteActionJSON    `json:"-"`
 }
 
-// overrideResponseSingleResultRewriteActionJSON contains the JSON metadata for the
-// struct [OverrideResponseSingleResultRewriteAction]
-type overrideResponseSingleResultRewriteActionJSON struct {
+// zoneFirewallWafOverrideUpdateResponseResultRewriteActionJSON contains the JSON
+// metadata for the struct
+// [ZoneFirewallWafOverrideUpdateResponseResultRewriteAction]
+type zoneFirewallWafOverrideUpdateResponseResultRewriteActionJSON struct {
 	Block       apijson.Field
 	Challenge   apijson.Field
 	Default     apijson.Field
@@ -428,37 +411,37 @@ type overrideResponseSingleResultRewriteActionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OverrideResponseSingleResultRewriteAction) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneFirewallWafOverrideUpdateResponseResultRewriteAction) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The WAF rule action to apply.
-type OverrideResponseSingleResultRewriteActionBlock string
+type ZoneFirewallWafOverrideUpdateResponseResultRewriteActionBlock string
 
 const (
-	OverrideResponseSingleResultRewriteActionBlockChallenge OverrideResponseSingleResultRewriteActionBlock = "challenge"
-	OverrideResponseSingleResultRewriteActionBlockBlock     OverrideResponseSingleResultRewriteActionBlock = "block"
-	OverrideResponseSingleResultRewriteActionBlockSimulate  OverrideResponseSingleResultRewriteActionBlock = "simulate"
-	OverrideResponseSingleResultRewriteActionBlockDisable   OverrideResponseSingleResultRewriteActionBlock = "disable"
-	OverrideResponseSingleResultRewriteActionBlockDefault   OverrideResponseSingleResultRewriteActionBlock = "default"
+	ZoneFirewallWafOverrideUpdateResponseResultRewriteActionBlockChallenge ZoneFirewallWafOverrideUpdateResponseResultRewriteActionBlock = "challenge"
+	ZoneFirewallWafOverrideUpdateResponseResultRewriteActionBlockBlock     ZoneFirewallWafOverrideUpdateResponseResultRewriteActionBlock = "block"
+	ZoneFirewallWafOverrideUpdateResponseResultRewriteActionBlockSimulate  ZoneFirewallWafOverrideUpdateResponseResultRewriteActionBlock = "simulate"
+	ZoneFirewallWafOverrideUpdateResponseResultRewriteActionBlockDisable   ZoneFirewallWafOverrideUpdateResponseResultRewriteActionBlock = "disable"
+	ZoneFirewallWafOverrideUpdateResponseResultRewriteActionBlockDefault   ZoneFirewallWafOverrideUpdateResponseResultRewriteActionBlock = "default"
 )
 
 // The WAF rule action to apply.
-type OverrideResponseSingleResultRewriteActionDisable string
+type ZoneFirewallWafOverrideUpdateResponseResultRewriteActionDisable string
 
 const (
-	OverrideResponseSingleResultRewriteActionDisableChallenge OverrideResponseSingleResultRewriteActionDisable = "challenge"
-	OverrideResponseSingleResultRewriteActionDisableBlock     OverrideResponseSingleResultRewriteActionDisable = "block"
-	OverrideResponseSingleResultRewriteActionDisableSimulate  OverrideResponseSingleResultRewriteActionDisable = "simulate"
-	OverrideResponseSingleResultRewriteActionDisableDisable   OverrideResponseSingleResultRewriteActionDisable = "disable"
-	OverrideResponseSingleResultRewriteActionDisableDefault   OverrideResponseSingleResultRewriteActionDisable = "default"
+	ZoneFirewallWafOverrideUpdateResponseResultRewriteActionDisableChallenge ZoneFirewallWafOverrideUpdateResponseResultRewriteActionDisable = "challenge"
+	ZoneFirewallWafOverrideUpdateResponseResultRewriteActionDisableBlock     ZoneFirewallWafOverrideUpdateResponseResultRewriteActionDisable = "block"
+	ZoneFirewallWafOverrideUpdateResponseResultRewriteActionDisableSimulate  ZoneFirewallWafOverrideUpdateResponseResultRewriteActionDisable = "simulate"
+	ZoneFirewallWafOverrideUpdateResponseResultRewriteActionDisableDisable   ZoneFirewallWafOverrideUpdateResponseResultRewriteActionDisable = "disable"
+	ZoneFirewallWafOverrideUpdateResponseResultRewriteActionDisableDefault   ZoneFirewallWafOverrideUpdateResponseResultRewriteActionDisable = "default"
 )
 
 // Whether the API call was successful
-type OverrideResponseSingleSuccess bool
+type ZoneFirewallWafOverrideUpdateResponseSuccess bool
 
 const (
-	OverrideResponseSingleSuccessTrue OverrideResponseSingleSuccess = true
+	ZoneFirewallWafOverrideUpdateResponseSuccessTrue ZoneFirewallWafOverrideUpdateResponseSuccess = true
 )
 
 type ZoneFirewallWafOverrideDeleteResponse struct {
@@ -495,6 +478,288 @@ type zoneFirewallWafOverrideDeleteResponseResultJSON struct {
 func (r *ZoneFirewallWafOverrideDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponse struct {
+	Errors   []ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseError   `json:"errors"`
+	Messages []ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseMessage `json:"messages"`
+	Result   ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseSuccess `json:"success"`
+	JSON    zoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseJSON    `json:"-"`
+}
+
+// zoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseJSON contains the JSON
+// metadata for the struct
+// [ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponse]
+type zoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseError struct {
+	Code    int64                                                               `json:"code,required"`
+	Message string                                                              `json:"message,required"`
+	JSON    zoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseErrorJSON `json:"-"`
+}
+
+// zoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseErrorJSON contains the
+// JSON metadata for the struct
+// [ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseError]
+type zoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseMessage struct {
+	Code    int64                                                                 `json:"code,required"`
+	Message string                                                                `json:"message,required"`
+	JSON    zoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseMessageJSON `json:"-"`
+}
+
+// zoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseMessageJSON contains
+// the JSON metadata for the struct
+// [ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseMessage]
+type zoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResult struct {
+	// The unique identifier of the WAF override.
+	ID string `json:"id"`
+	// An informative summary of the current URI-based WAF override.
+	Description string `json:"description,nullable"`
+	// An object that allows you to enable or disable WAF rule groups for the current
+	// WAF override. Each key of this object must be the ID of a WAF rule group, and
+	// each value must be a valid WAF action (usually `default` or `disable`). When
+	// creating a new URI-based WAF override, you must provide a `groups` object or a
+	// `rules` object.
+	Groups interface{} `json:"groups"`
+	// When true, indicates that the WAF package is currently paused.
+	Paused bool `json:"paused"`
+	// The relative priority of the current URI-based WAF override when multiple
+	// overrides match a single URL. A lower number indicates higher priority. Higher
+	// priority overrides may overwrite values set by lower priority overrides.
+	Priority float64 `json:"priority"`
+	// Specifies that, when a WAF rule matches, its configured action will be replaced
+	// by the action configured in this object.
+	RewriteAction ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteAction `json:"rewrite_action"`
+	// An object that allows you to override the action of specific WAF rules. Each key
+	// of this object must be the ID of a WAF rule, and each value must be a valid WAF
+	// action. Unless you are disabling a rule, ensure that you also enable the rule
+	// group that this WAF rule belongs to. When creating a new URI-based WAF override,
+	// you must provide a `groups` object or a `rules` object.
+	Rules interface{} `json:"rules"`
+	// The URLs to include in the current WAF override. You can use wildcards. Each
+	// entered URL will be escaped before use, which means you can only use simple
+	// wildcard patterns.
+	URLs []string                                                             `json:"urls"`
+	JSON zoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultJSON `json:"-"`
+}
+
+// zoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultJSON contains
+// the JSON metadata for the struct
+// [ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResult]
+type zoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultJSON struct {
+	ID            apijson.Field
+	Description   apijson.Field
+	Groups        apijson.Field
+	Paused        apijson.Field
+	Priority      apijson.Field
+	RewriteAction apijson.Field
+	Rules         apijson.Field
+	URLs          apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Specifies that, when a WAF rule matches, its configured action will be replaced
+// by the action configured in this object.
+type ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteAction struct {
+	// The WAF rule action to apply.
+	Block     ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteActionBlock `json:"block"`
+	Challenge interface{}                                                                        `json:"challenge"`
+	Default   interface{}                                                                        `json:"default"`
+	// The WAF rule action to apply.
+	Disable  ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteActionDisable `json:"disable"`
+	Simulate interface{}                                                                          `json:"simulate"`
+	JSON     zoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteActionJSON    `json:"-"`
+}
+
+// zoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteActionJSON
+// contains the JSON metadata for the struct
+// [ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteAction]
+type zoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteActionJSON struct {
+	Block       apijson.Field
+	Challenge   apijson.Field
+	Default     apijson.Field
+	Disable     apijson.Field
+	Simulate    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteAction) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The WAF rule action to apply.
+type ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteActionBlock string
+
+const (
+	ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteActionBlockChallenge ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteActionBlock = "challenge"
+	ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteActionBlockBlock     ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteActionBlock = "block"
+	ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteActionBlockSimulate  ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteActionBlock = "simulate"
+	ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteActionBlockDisable   ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteActionBlock = "disable"
+	ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteActionBlockDefault   ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteActionBlock = "default"
+)
+
+// The WAF rule action to apply.
+type ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteActionDisable string
+
+const (
+	ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteActionDisableChallenge ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteActionDisable = "challenge"
+	ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteActionDisableBlock     ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteActionDisable = "block"
+	ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteActionDisableSimulate  ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteActionDisable = "simulate"
+	ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteActionDisableDisable   ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteActionDisable = "disable"
+	ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteActionDisableDefault   ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseResultRewriteActionDisable = "default"
+)
+
+// Whether the API call was successful
+type ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseSuccess bool
+
+const (
+	ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseSuccessTrue ZoneFirewallWafOverrideWafOverridesNewAWafOverrideResponseSuccess = true
+)
+
+type ZoneFirewallWafOverrideWafOverridesListWafOverridesResponse struct {
+	// The unique identifier of the WAF override.
+	ID string `json:"id"`
+	// An informative summary of the current URI-based WAF override.
+	Description string `json:"description,nullable"`
+	// An object that allows you to enable or disable WAF rule groups for the current
+	// WAF override. Each key of this object must be the ID of a WAF rule group, and
+	// each value must be a valid WAF action (usually `default` or `disable`). When
+	// creating a new URI-based WAF override, you must provide a `groups` object or a
+	// `rules` object.
+	Groups interface{} `json:"groups"`
+	// When true, indicates that the WAF package is currently paused.
+	Paused bool `json:"paused"`
+	// The relative priority of the current URI-based WAF override when multiple
+	// overrides match a single URL. A lower number indicates higher priority. Higher
+	// priority overrides may overwrite values set by lower priority overrides.
+	Priority float64 `json:"priority"`
+	// Specifies that, when a WAF rule matches, its configured action will be replaced
+	// by the action configured in this object.
+	RewriteAction ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteAction `json:"rewrite_action"`
+	// An object that allows you to override the action of specific WAF rules. Each key
+	// of this object must be the ID of a WAF rule, and each value must be a valid WAF
+	// action. Unless you are disabling a rule, ensure that you also enable the rule
+	// group that this WAF rule belongs to. When creating a new URI-based WAF override,
+	// you must provide a `groups` object or a `rules` object.
+	Rules interface{} `json:"rules"`
+	// The URLs to include in the current WAF override. You can use wildcards. Each
+	// entered URL will be escaped before use, which means you can only use simple
+	// wildcard patterns.
+	URLs []string                                                        `json:"urls"`
+	JSON zoneFirewallWafOverrideWafOverridesListWafOverridesResponseJSON `json:"-"`
+}
+
+// zoneFirewallWafOverrideWafOverridesListWafOverridesResponseJSON contains the
+// JSON metadata for the struct
+// [ZoneFirewallWafOverrideWafOverridesListWafOverridesResponse]
+type zoneFirewallWafOverrideWafOverridesListWafOverridesResponseJSON struct {
+	ID            apijson.Field
+	Description   apijson.Field
+	Groups        apijson.Field
+	Paused        apijson.Field
+	Priority      apijson.Field
+	RewriteAction apijson.Field
+	Rules         apijson.Field
+	URLs          apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ZoneFirewallWafOverrideWafOverridesListWafOverridesResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Specifies that, when a WAF rule matches, its configured action will be replaced
+// by the action configured in this object.
+type ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteAction struct {
+	// The WAF rule action to apply.
+	Block     ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteActionBlock `json:"block"`
+	Challenge interface{}                                                                   `json:"challenge"`
+	Default   interface{}                                                                   `json:"default"`
+	// The WAF rule action to apply.
+	Disable  ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteActionDisable `json:"disable"`
+	Simulate interface{}                                                                     `json:"simulate"`
+	JSON     zoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteActionJSON    `json:"-"`
+}
+
+// zoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteActionJSON
+// contains the JSON metadata for the struct
+// [ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteAction]
+type zoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteActionJSON struct {
+	Block       apijson.Field
+	Challenge   apijson.Field
+	Default     apijson.Field
+	Disable     apijson.Field
+	Simulate    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteAction) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The WAF rule action to apply.
+type ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteActionBlock string
+
+const (
+	ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteActionBlockChallenge ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteActionBlock = "challenge"
+	ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteActionBlockBlock     ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteActionBlock = "block"
+	ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteActionBlockSimulate  ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteActionBlock = "simulate"
+	ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteActionBlockDisable   ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteActionBlock = "disable"
+	ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteActionBlockDefault   ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteActionBlock = "default"
+)
+
+// The WAF rule action to apply.
+type ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteActionDisable string
+
+const (
+	ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteActionDisableChallenge ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteActionDisable = "challenge"
+	ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteActionDisableBlock     ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteActionDisable = "block"
+	ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteActionDisableSimulate  ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteActionDisable = "simulate"
+	ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteActionDisableDisable   ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteActionDisable = "disable"
+	ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteActionDisableDefault   ZoneFirewallWafOverrideWafOverridesListWafOverridesResponseRewriteActionDisable = "default"
+)
 
 type ZoneFirewallWafOverrideUpdateParams struct {
 	Body param.Field[interface{}] `json:"body,required"`

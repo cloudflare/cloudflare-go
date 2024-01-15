@@ -7,12 +7,16 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 	"time"
 
+	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // ZoneSpectrumAnalyticsEventBytimeService contains methods and other services that
@@ -34,12 +38,103 @@ func NewZoneSpectrumAnalyticsEventBytimeService(opts ...option.RequestOption) (r
 }
 
 // Retrieves a list of aggregate metrics grouped by time interval.
-func (r *ZoneSpectrumAnalyticsEventBytimeService) SpectrumAnalyticsByTimeGetAnalyticsByTime(ctx context.Context, zone string, query ZoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParams, opts ...option.RequestOption) (res *APIResponseSingle, err error) {
+func (r *ZoneSpectrumAnalyticsEventBytimeService) SpectrumAnalyticsByTimeGetAnalyticsByTime(ctx context.Context, zone string, query ZoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParams, opts ...option.RequestOption) (res *ZoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/spectrum/analytics/events/bytime", zone)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
+
+type ZoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponse struct {
+	Errors   []ZoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseError   `json:"errors"`
+	Messages []ZoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseMessage `json:"messages"`
+	Result   ZoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseResult    `json:"result,nullable"`
+	// Whether the API call was successful
+	Success ZoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseSuccess `json:"success"`
+	JSON    zoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseJSON    `json:"-"`
+}
+
+// zoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponse]
+type zoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseError struct {
+	Code    int64                                                                                      `json:"code,required"`
+	Message string                                                                                     `json:"message,required"`
+	JSON    zoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseErrorJSON `json:"-"`
+}
+
+// zoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseError]
+type zoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseMessage struct {
+	Code    int64                                                                                        `json:"code,required"`
+	Message string                                                                                       `json:"message,required"`
+	JSON    zoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseMessageJSON `json:"-"`
+}
+
+// zoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseMessage]
+type zoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Union satisfied by
+// [ZoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseResultUnknown]
+// or [shared.UnionString].
+type ZoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseResult interface {
+	ImplementsZoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseResult()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseResult)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.String,
+			DiscriminatorValue: "",
+			Type:               reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Whether the API call was successful
+type ZoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseSuccess bool
+
+const (
+	ZoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseSuccessTrue ZoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseSuccess = true
+)
 
 type ZoneSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParams struct {
 	// Can be used to break down the data by given attributes. Options are:

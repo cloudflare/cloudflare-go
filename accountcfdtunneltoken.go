@@ -31,25 +31,26 @@ func NewAccountCfdTunnelTokenService(opts ...option.RequestOption) (r *AccountCf
 }
 
 // Gets the token used to associate cloudflared with a specific tunnel.
-func (r *AccountCfdTunnelTokenService) CloudflareTunnelGetACloudflareTunnelToken(ctx context.Context, accountIdentifier string, tunnelID string, opts ...option.RequestOption) (res *TunnelResponseToken, err error) {
+func (r *AccountCfdTunnelTokenService) CloudflareTunnelGetACloudflareTunnelToken(ctx context.Context, accountIdentifier string, tunnelID string, opts ...option.RequestOption) (res *AccountCfdTunnelTokenCloudflareTunnelGetACloudflareTunnelTokenResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/token", accountIdentifier, tunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type TunnelResponseToken struct {
-	Errors   []TunnelResponseTokenError   `json:"errors"`
-	Messages []TunnelResponseTokenMessage `json:"messages"`
-	Result   string                       `json:"result"`
+type AccountCfdTunnelTokenCloudflareTunnelGetACloudflareTunnelTokenResponse struct {
+	Errors   []AccountCfdTunnelTokenCloudflareTunnelGetACloudflareTunnelTokenResponseError   `json:"errors"`
+	Messages []AccountCfdTunnelTokenCloudflareTunnelGetACloudflareTunnelTokenResponseMessage `json:"messages"`
+	Result   string                                                                          `json:"result"`
 	// Whether the API call was successful
-	Success TunnelResponseTokenSuccess `json:"success"`
-	JSON    tunnelResponseTokenJSON    `json:"-"`
+	Success AccountCfdTunnelTokenCloudflareTunnelGetACloudflareTunnelTokenResponseSuccess `json:"success"`
+	JSON    accountCfdTunnelTokenCloudflareTunnelGetACloudflareTunnelTokenResponseJSON    `json:"-"`
 }
 
-// tunnelResponseTokenJSON contains the JSON metadata for the struct
-// [TunnelResponseToken]
-type tunnelResponseTokenJSON struct {
+// accountCfdTunnelTokenCloudflareTunnelGetACloudflareTunnelTokenResponseJSON
+// contains the JSON metadata for the struct
+// [AccountCfdTunnelTokenCloudflareTunnelGetACloudflareTunnelTokenResponse]
+type accountCfdTunnelTokenCloudflareTunnelGetACloudflareTunnelTokenResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -58,51 +59,53 @@ type tunnelResponseTokenJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TunnelResponseToken) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountCfdTunnelTokenCloudflareTunnelGetACloudflareTunnelTokenResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type TunnelResponseTokenError struct {
-	Code    int64                        `json:"code,required"`
-	Message string                       `json:"message,required"`
-	JSON    tunnelResponseTokenErrorJSON `json:"-"`
+type AccountCfdTunnelTokenCloudflareTunnelGetACloudflareTunnelTokenResponseError struct {
+	Code    int64                                                                           `json:"code,required"`
+	Message string                                                                          `json:"message,required"`
+	JSON    accountCfdTunnelTokenCloudflareTunnelGetACloudflareTunnelTokenResponseErrorJSON `json:"-"`
 }
 
-// tunnelResponseTokenErrorJSON contains the JSON metadata for the struct
-// [TunnelResponseTokenError]
-type tunnelResponseTokenErrorJSON struct {
+// accountCfdTunnelTokenCloudflareTunnelGetACloudflareTunnelTokenResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountCfdTunnelTokenCloudflareTunnelGetACloudflareTunnelTokenResponseError]
+type accountCfdTunnelTokenCloudflareTunnelGetACloudflareTunnelTokenResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TunnelResponseTokenError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountCfdTunnelTokenCloudflareTunnelGetACloudflareTunnelTokenResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type TunnelResponseTokenMessage struct {
-	Code    int64                          `json:"code,required"`
-	Message string                         `json:"message,required"`
-	JSON    tunnelResponseTokenMessageJSON `json:"-"`
+type AccountCfdTunnelTokenCloudflareTunnelGetACloudflareTunnelTokenResponseMessage struct {
+	Code    int64                                                                             `json:"code,required"`
+	Message string                                                                            `json:"message,required"`
+	JSON    accountCfdTunnelTokenCloudflareTunnelGetACloudflareTunnelTokenResponseMessageJSON `json:"-"`
 }
 
-// tunnelResponseTokenMessageJSON contains the JSON metadata for the struct
-// [TunnelResponseTokenMessage]
-type tunnelResponseTokenMessageJSON struct {
+// accountCfdTunnelTokenCloudflareTunnelGetACloudflareTunnelTokenResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountCfdTunnelTokenCloudflareTunnelGetACloudflareTunnelTokenResponseMessage]
+type accountCfdTunnelTokenCloudflareTunnelGetACloudflareTunnelTokenResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TunnelResponseTokenMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountCfdTunnelTokenCloudflareTunnelGetACloudflareTunnelTokenResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type TunnelResponseTokenSuccess bool
+type AccountCfdTunnelTokenCloudflareTunnelGetACloudflareTunnelTokenResponseSuccess bool
 
 const (
-	TunnelResponseTokenSuccessTrue TunnelResponseTokenSuccess = true
+	AccountCfdTunnelTokenCloudflareTunnelGetACloudflareTunnelTokenResponseSuccessTrue AccountCfdTunnelTokenCloudflareTunnelGetACloudflareTunnelTokenResponseSuccess = true
 )

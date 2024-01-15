@@ -33,7 +33,7 @@ func NewRadarAs112SummaryEdnService(opts ...option.RequestOption) (r *RadarAs112
 	return
 }
 
-// Percentage distribution of dns requests classified per EDNS.
+// Percentage distribution of DNS queries, to AS112, by EDNS support.
 func (r *RadarAs112SummaryEdnService) List(ctx context.Context, query RadarAs112SummaryEdnListParams, opts ...option.RequestOption) (res *RadarAs112SummaryEdnListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "radar/as112/summary/edns"
@@ -61,7 +61,7 @@ func (r *RadarAs112SummaryEdnListResponse) UnmarshalJSON(data []byte) (err error
 }
 
 type RadarAs112SummaryEdnListResponseResult struct {
-	Meta     interface{}                                    `json:"meta,required"`
+	Meta     RadarAs112SummaryEdnListResponseResultMeta     `json:"meta,required"`
 	Summary0 RadarAs112SummaryEdnListResponseResultSummary0 `json:"summary_0,required"`
 	JSON     radarAs112SummaryEdnListResponseResultJSON     `json:"-"`
 }
@@ -76,6 +76,100 @@ type radarAs112SummaryEdnListResponseResultJSON struct {
 }
 
 func (r *RadarAs112SummaryEdnListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAs112SummaryEdnListResponseResultMeta struct {
+	DateRange      []RadarAs112SummaryEdnListResponseResultMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                                   `json:"lastUpdated,required"`
+	Normalization  string                                                   `json:"normalization,required"`
+	ConfidenceInfo RadarAs112SummaryEdnListResponseResultMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           radarAs112SummaryEdnListResponseResultMetaJSON           `json:"-"`
+}
+
+// radarAs112SummaryEdnListResponseResultMetaJSON contains the JSON metadata for
+// the struct [RadarAs112SummaryEdnListResponseResultMeta]
+type radarAs112SummaryEdnListResponseResultMetaJSON struct {
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	ConfidenceInfo apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RadarAs112SummaryEdnListResponseResultMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAs112SummaryEdnListResponseResultMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                               `json:"startTime,required" format:"date-time"`
+	JSON      radarAs112SummaryEdnListResponseResultMetaDateRangeJSON `json:"-"`
+}
+
+// radarAs112SummaryEdnListResponseResultMetaDateRangeJSON contains the JSON
+// metadata for the struct [RadarAs112SummaryEdnListResponseResultMetaDateRange]
+type radarAs112SummaryEdnListResponseResultMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarAs112SummaryEdnListResponseResultMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAs112SummaryEdnListResponseResultMetaConfidenceInfo struct {
+	Annotations []RadarAs112SummaryEdnListResponseResultMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                                `json:"level"`
+	JSON        radarAs112SummaryEdnListResponseResultMetaConfidenceInfoJSON         `json:"-"`
+}
+
+// radarAs112SummaryEdnListResponseResultMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct
+// [RadarAs112SummaryEdnListResponseResultMetaConfidenceInfo]
+type radarAs112SummaryEdnListResponseResultMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarAs112SummaryEdnListResponseResultMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAs112SummaryEdnListResponseResultMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                                 `json:"dataSource,required"`
+	Description     string                                                                 `json:"description,required"`
+	EventType       string                                                                 `json:"eventType,required"`
+	IsInstantaneous interface{}                                                            `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                              `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                                 `json:"linkedUrl"`
+	StartTime       time.Time                                                              `json:"startTime" format:"date-time"`
+	JSON            radarAs112SummaryEdnListResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// radarAs112SummaryEdnListResponseResultMetaConfidenceInfoAnnotationJSON contains
+// the JSON metadata for the struct
+// [RadarAs112SummaryEdnListResponseResultMetaConfidenceInfoAnnotation]
+type radarAs112SummaryEdnListResponseResultMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *RadarAs112SummaryEdnListResponseResultMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -103,7 +197,7 @@ type RadarAs112SummaryEdnListParams struct {
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of datetimes to filter the end of a series.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
@@ -134,6 +228,7 @@ type RadarAs112SummaryEdnListParamsDateRange string
 
 const (
 	RadarAs112SummaryEdnListParamsDateRange1d         RadarAs112SummaryEdnListParamsDateRange = "1d"
+	RadarAs112SummaryEdnListParamsDateRange2d         RadarAs112SummaryEdnListParamsDateRange = "2d"
 	RadarAs112SummaryEdnListParamsDateRange7d         RadarAs112SummaryEdnListParamsDateRange = "7d"
 	RadarAs112SummaryEdnListParamsDateRange14d        RadarAs112SummaryEdnListParamsDateRange = "14d"
 	RadarAs112SummaryEdnListParamsDateRange28d        RadarAs112SummaryEdnListParamsDateRange = "28d"
@@ -141,6 +236,7 @@ const (
 	RadarAs112SummaryEdnListParamsDateRange24w        RadarAs112SummaryEdnListParamsDateRange = "24w"
 	RadarAs112SummaryEdnListParamsDateRange52w        RadarAs112SummaryEdnListParamsDateRange = "52w"
 	RadarAs112SummaryEdnListParamsDateRange1dControl  RadarAs112SummaryEdnListParamsDateRange = "1dControl"
+	RadarAs112SummaryEdnListParamsDateRange2dControl  RadarAs112SummaryEdnListParamsDateRange = "2dControl"
 	RadarAs112SummaryEdnListParamsDateRange7dControl  RadarAs112SummaryEdnListParamsDateRange = "7dControl"
 	RadarAs112SummaryEdnListParamsDateRange14dControl RadarAs112SummaryEdnListParamsDateRange = "14dControl"
 	RadarAs112SummaryEdnListParamsDateRange28dControl RadarAs112SummaryEdnListParamsDateRange = "28dControl"

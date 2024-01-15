@@ -33,7 +33,7 @@ func NewRadarAs112SummaryQueryTypeService(opts ...option.RequestOption) (r *Rada
 	return
 }
 
-// Percentage distribution of dns requests classified per Query Type.
+// Percentage distribution of DNS queries to AS112 by Query Type.
 func (r *RadarAs112SummaryQueryTypeService) List(ctx context.Context, query RadarAs112SummaryQueryTypeListParams, opts ...option.RequestOption) (res *RadarAs112SummaryQueryTypeListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "radar/as112/summary/query_type"
@@ -61,7 +61,7 @@ func (r *RadarAs112SummaryQueryTypeListResponse) UnmarshalJSON(data []byte) (err
 }
 
 type RadarAs112SummaryQueryTypeListResponseResult struct {
-	Meta     interface{}                                          `json:"meta,required"`
+	Meta     RadarAs112SummaryQueryTypeListResponseResultMeta     `json:"meta,required"`
 	Summary0 RadarAs112SummaryQueryTypeListResponseResultSummary0 `json:"summary_0,required"`
 	JSON     radarAs112SummaryQueryTypeListResponseResultJSON     `json:"-"`
 }
@@ -76,6 +76,101 @@ type radarAs112SummaryQueryTypeListResponseResultJSON struct {
 }
 
 func (r *RadarAs112SummaryQueryTypeListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAs112SummaryQueryTypeListResponseResultMeta struct {
+	DateRange      []RadarAs112SummaryQueryTypeListResponseResultMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                                         `json:"lastUpdated,required"`
+	Normalization  string                                                         `json:"normalization,required"`
+	ConfidenceInfo RadarAs112SummaryQueryTypeListResponseResultMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           radarAs112SummaryQueryTypeListResponseResultMetaJSON           `json:"-"`
+}
+
+// radarAs112SummaryQueryTypeListResponseResultMetaJSON contains the JSON metadata
+// for the struct [RadarAs112SummaryQueryTypeListResponseResultMeta]
+type radarAs112SummaryQueryTypeListResponseResultMetaJSON struct {
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	ConfidenceInfo apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RadarAs112SummaryQueryTypeListResponseResultMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAs112SummaryQueryTypeListResponseResultMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                                     `json:"startTime,required" format:"date-time"`
+	JSON      radarAs112SummaryQueryTypeListResponseResultMetaDateRangeJSON `json:"-"`
+}
+
+// radarAs112SummaryQueryTypeListResponseResultMetaDateRangeJSON contains the JSON
+// metadata for the struct
+// [RadarAs112SummaryQueryTypeListResponseResultMetaDateRange]
+type radarAs112SummaryQueryTypeListResponseResultMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarAs112SummaryQueryTypeListResponseResultMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAs112SummaryQueryTypeListResponseResultMetaConfidenceInfo struct {
+	Annotations []RadarAs112SummaryQueryTypeListResponseResultMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                                      `json:"level"`
+	JSON        radarAs112SummaryQueryTypeListResponseResultMetaConfidenceInfoJSON         `json:"-"`
+}
+
+// radarAs112SummaryQueryTypeListResponseResultMetaConfidenceInfoJSON contains the
+// JSON metadata for the struct
+// [RadarAs112SummaryQueryTypeListResponseResultMetaConfidenceInfo]
+type radarAs112SummaryQueryTypeListResponseResultMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarAs112SummaryQueryTypeListResponseResultMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAs112SummaryQueryTypeListResponseResultMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                                       `json:"dataSource,required"`
+	Description     string                                                                       `json:"description,required"`
+	EventType       string                                                                       `json:"eventType,required"`
+	IsInstantaneous interface{}                                                                  `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                                    `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                                       `json:"linkedUrl"`
+	StartTime       time.Time                                                                    `json:"startTime" format:"date-time"`
+	JSON            radarAs112SummaryQueryTypeListResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// radarAs112SummaryQueryTypeListResponseResultMetaConfidenceInfoAnnotationJSON
+// contains the JSON metadata for the struct
+// [RadarAs112SummaryQueryTypeListResponseResultMetaConfidenceInfoAnnotation]
+type radarAs112SummaryQueryTypeListResponseResultMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *RadarAs112SummaryQueryTypeListResponseResultMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -109,7 +204,7 @@ type RadarAs112SummaryQueryTypeListParams struct {
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of datetimes to filter the end of a series.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
@@ -140,6 +235,7 @@ type RadarAs112SummaryQueryTypeListParamsDateRange string
 
 const (
 	RadarAs112SummaryQueryTypeListParamsDateRange1d         RadarAs112SummaryQueryTypeListParamsDateRange = "1d"
+	RadarAs112SummaryQueryTypeListParamsDateRange2d         RadarAs112SummaryQueryTypeListParamsDateRange = "2d"
 	RadarAs112SummaryQueryTypeListParamsDateRange7d         RadarAs112SummaryQueryTypeListParamsDateRange = "7d"
 	RadarAs112SummaryQueryTypeListParamsDateRange14d        RadarAs112SummaryQueryTypeListParamsDateRange = "14d"
 	RadarAs112SummaryQueryTypeListParamsDateRange28d        RadarAs112SummaryQueryTypeListParamsDateRange = "28d"
@@ -147,6 +243,7 @@ const (
 	RadarAs112SummaryQueryTypeListParamsDateRange24w        RadarAs112SummaryQueryTypeListParamsDateRange = "24w"
 	RadarAs112SummaryQueryTypeListParamsDateRange52w        RadarAs112SummaryQueryTypeListParamsDateRange = "52w"
 	RadarAs112SummaryQueryTypeListParamsDateRange1dControl  RadarAs112SummaryQueryTypeListParamsDateRange = "1dControl"
+	RadarAs112SummaryQueryTypeListParamsDateRange2dControl  RadarAs112SummaryQueryTypeListParamsDateRange = "2dControl"
 	RadarAs112SummaryQueryTypeListParamsDateRange7dControl  RadarAs112SummaryQueryTypeListParamsDateRange = "7dControl"
 	RadarAs112SummaryQueryTypeListParamsDateRange14dControl RadarAs112SummaryQueryTypeListParamsDateRange = "14dControl"
 	RadarAs112SummaryQueryTypeListParamsDateRange28dControl RadarAs112SummaryQueryTypeListParamsDateRange = "28dControl"

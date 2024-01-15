@@ -38,15 +38,15 @@ func NewAccountPageProjectDeploymentService(opts ...option.RequestOption) (r *Ac
 	return
 }
 
-// Fetch a deployment.
-func (r *AccountPageProjectDeploymentService) Get(ctx context.Context, accountIdentifier string, projectName string, deploymentIdentifier string, opts ...option.RequestOption) (res *DeploymentResponseDetail, err error) {
+// Fetch information about a deployment.
+func (r *AccountPageProjectDeploymentService) Get(ctx context.Context, accountIdentifier string, projectName string, deploymentIdentifier string, opts ...option.RequestOption) (res *AccountPageProjectDeploymentGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s", accountIdentifier, projectName, deploymentIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-// Destroy a deployment.
+// Delete a deployment.
 func (r *AccountPageProjectDeploymentService) Delete(ctx context.Context, accountIdentifier string, projectName string, deploymentIdentifier string, opts ...option.RequestOption) (res *AccountPageProjectDeploymentDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s", accountIdentifier, projectName, deploymentIdentifier)
@@ -54,36 +54,456 @@ func (r *AccountPageProjectDeploymentService) Delete(ctx context.Context, accoun
 	return
 }
 
-// Start a new deployment from production. The repo/account must have been
-// authorized through the Pages UI dash before.
-func (r *AccountPageProjectDeploymentService) PagesDeploymentNewDeployment(ctx context.Context, accountIdentifier string, projectName string, body AccountPageProjectDeploymentPagesDeploymentNewDeploymentParams, opts ...option.RequestOption) (res *DeploymentNewDeployment, err error) {
+// Start a new deployment from production. The repository and account must have
+// already been authorized on the Cloudflare Pages dashboard.
+func (r *AccountPageProjectDeploymentService) PagesDeploymentNewDeployment(ctx context.Context, accountIdentifier string, projectName string, body AccountPageProjectDeploymentPagesDeploymentNewDeploymentParams, opts ...option.RequestOption) (res *AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments", accountIdentifier, projectName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
-// Fetch a list of deployments from a project.
-func (r *AccountPageProjectDeploymentService) PagesDeploymentGetDeployments(ctx context.Context, accountIdentifier string, projectName string, opts ...option.RequestOption) (res *DeploymentListResponse, err error) {
+// Fetch a list of project deployments.
+func (r *AccountPageProjectDeploymentService) PagesDeploymentGetDeployments(ctx context.Context, accountIdentifier string, projectName string, opts ...option.RequestOption) (res *AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments", accountIdentifier, projectName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type DeploymentListResponse struct {
-	Errors     []DeploymentListResponseError    `json:"errors"`
-	Messages   []DeploymentListResponseMessage  `json:"messages"`
-	Result     []DeploymentListResponseResult   `json:"result"`
-	ResultInfo DeploymentListResponseResultInfo `json:"result_info"`
+type AccountPageProjectDeploymentGetResponse struct {
+	Errors   []AccountPageProjectDeploymentGetResponseError   `json:"errors"`
+	Messages []AccountPageProjectDeploymentGetResponseMessage `json:"messages"`
+	Result   AccountPageProjectDeploymentGetResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success DeploymentListResponseSuccess `json:"success"`
-	JSON    deploymentListResponseJSON    `json:"-"`
+	Success AccountPageProjectDeploymentGetResponseSuccess `json:"success"`
+	JSON    accountPageProjectDeploymentGetResponseJSON    `json:"-"`
 }
 
-// deploymentListResponseJSON contains the JSON metadata for the struct
-// [DeploymentListResponse]
-type deploymentListResponseJSON struct {
+// accountPageProjectDeploymentGetResponseJSON contains the JSON metadata for the
+// struct [AccountPageProjectDeploymentGetResponse]
+type accountPageProjectDeploymentGetResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountPageProjectDeploymentGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountPageProjectDeploymentGetResponseError struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    accountPageProjectDeploymentGetResponseErrorJSON `json:"-"`
+}
+
+// accountPageProjectDeploymentGetResponseErrorJSON contains the JSON metadata for
+// the struct [AccountPageProjectDeploymentGetResponseError]
+type accountPageProjectDeploymentGetResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountPageProjectDeploymentGetResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountPageProjectDeploymentGetResponseMessage struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    accountPageProjectDeploymentGetResponseMessageJSON `json:"-"`
+}
+
+// accountPageProjectDeploymentGetResponseMessageJSON contains the JSON metadata
+// for the struct [AccountPageProjectDeploymentGetResponseMessage]
+type accountPageProjectDeploymentGetResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountPageProjectDeploymentGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountPageProjectDeploymentGetResponseResult struct {
+	// Id of the deployment.
+	ID string `json:"id"`
+	// A list of alias URLs pointing to this deployment.
+	Aliases     []interface{} `json:"aliases,nullable"`
+	BuildConfig interface{}   `json:"build_config"`
+	// When the deployment was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// Info about what caused the deployment.
+	DeploymentTrigger AccountPageProjectDeploymentGetResponseResultDeploymentTrigger `json:"deployment_trigger"`
+	// A dict of env variables to build this deploy.
+	EnvVars interface{} `json:"env_vars"`
+	// Type of deploy.
+	Environment string `json:"environment"`
+	// If the deployment has been skipped.
+	IsSkipped   bool        `json:"is_skipped"`
+	LatestStage interface{} `json:"latest_stage"`
+	// When the deployment was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// Id of the project.
+	ProjectID string `json:"project_id"`
+	// Name of the project.
+	ProjectName string `json:"project_name"`
+	// Short Id (8 character) of the deployment.
+	ShortID string      `json:"short_id"`
+	Source  interface{} `json:"source"`
+	// List of past stages.
+	Stages []AccountPageProjectDeploymentGetResponseResultStage `json:"stages"`
+	// The live URL to view this deployment.
+	URL  string                                            `json:"url"`
+	JSON accountPageProjectDeploymentGetResponseResultJSON `json:"-"`
+}
+
+// accountPageProjectDeploymentGetResponseResultJSON contains the JSON metadata for
+// the struct [AccountPageProjectDeploymentGetResponseResult]
+type accountPageProjectDeploymentGetResponseResultJSON struct {
+	ID                apijson.Field
+	Aliases           apijson.Field
+	BuildConfig       apijson.Field
+	CreatedOn         apijson.Field
+	DeploymentTrigger apijson.Field
+	EnvVars           apijson.Field
+	Environment       apijson.Field
+	IsSkipped         apijson.Field
+	LatestStage       apijson.Field
+	ModifiedOn        apijson.Field
+	ProjectID         apijson.Field
+	ProjectName       apijson.Field
+	ShortID           apijson.Field
+	Source            apijson.Field
+	Stages            apijson.Field
+	URL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *AccountPageProjectDeploymentGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Info about what caused the deployment.
+type AccountPageProjectDeploymentGetResponseResultDeploymentTrigger struct {
+	// Additional info about the trigger.
+	Metadata AccountPageProjectDeploymentGetResponseResultDeploymentTriggerMetadata `json:"metadata"`
+	// What caused the deployment.
+	Type string                                                             `json:"type"`
+	JSON accountPageProjectDeploymentGetResponseResultDeploymentTriggerJSON `json:"-"`
+}
+
+// accountPageProjectDeploymentGetResponseResultDeploymentTriggerJSON contains the
+// JSON metadata for the struct
+// [AccountPageProjectDeploymentGetResponseResultDeploymentTrigger]
+type accountPageProjectDeploymentGetResponseResultDeploymentTriggerJSON struct {
+	Metadata    apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountPageProjectDeploymentGetResponseResultDeploymentTrigger) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Additional info about the trigger.
+type AccountPageProjectDeploymentGetResponseResultDeploymentTriggerMetadata struct {
+	// Where the trigger happened.
+	Branch string `json:"branch"`
+	// Hash of the deployment trigger commit.
+	CommitHash string `json:"commit_hash"`
+	// Message of the deployment trigger commit.
+	CommitMessage string                                                                     `json:"commit_message"`
+	JSON          accountPageProjectDeploymentGetResponseResultDeploymentTriggerMetadataJSON `json:"-"`
+}
+
+// accountPageProjectDeploymentGetResponseResultDeploymentTriggerMetadataJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectDeploymentGetResponseResultDeploymentTriggerMetadata]
+type accountPageProjectDeploymentGetResponseResultDeploymentTriggerMetadataJSON struct {
+	Branch        apijson.Field
+	CommitHash    apijson.Field
+	CommitMessage apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AccountPageProjectDeploymentGetResponseResultDeploymentTriggerMetadata) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The status of the deployment.
+type AccountPageProjectDeploymentGetResponseResultStage struct {
+	// When the stage ended.
+	EndedOn time.Time `json:"ended_on,nullable" format:"date-time"`
+	// The current build stage.
+	Name string `json:"name"`
+	// When the stage started.
+	StartedOn time.Time `json:"started_on,nullable" format:"date-time"`
+	// State of the current stage.
+	Status string                                                 `json:"status"`
+	JSON   accountPageProjectDeploymentGetResponseResultStageJSON `json:"-"`
+}
+
+// accountPageProjectDeploymentGetResponseResultStageJSON contains the JSON
+// metadata for the struct [AccountPageProjectDeploymentGetResponseResultStage]
+type accountPageProjectDeploymentGetResponseResultStageJSON struct {
+	EndedOn     apijson.Field
+	Name        apijson.Field
+	StartedOn   apijson.Field
+	Status      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountPageProjectDeploymentGetResponseResultStage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountPageProjectDeploymentGetResponseSuccess bool
+
+const (
+	AccountPageProjectDeploymentGetResponseSuccessTrue AccountPageProjectDeploymentGetResponseSuccess = true
+)
+
+type AccountPageProjectDeploymentDeleteResponse = interface{}
+
+type AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponse struct {
+	Errors   []AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseError   `json:"errors"`
+	Messages []AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseMessage `json:"messages"`
+	Result   AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseSuccess `json:"success"`
+	JSON    accountPageProjectDeploymentPagesDeploymentNewDeploymentResponseJSON    `json:"-"`
+}
+
+// accountPageProjectDeploymentPagesDeploymentNewDeploymentResponseJSON contains
+// the JSON metadata for the struct
+// [AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponse]
+type accountPageProjectDeploymentPagesDeploymentNewDeploymentResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseError struct {
+	Code    int64                                                                     `json:"code,required"`
+	Message string                                                                    `json:"message,required"`
+	JSON    accountPageProjectDeploymentPagesDeploymentNewDeploymentResponseErrorJSON `json:"-"`
+}
+
+// accountPageProjectDeploymentPagesDeploymentNewDeploymentResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseError]
+type accountPageProjectDeploymentPagesDeploymentNewDeploymentResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseMessage struct {
+	Code    int64                                                                       `json:"code,required"`
+	Message string                                                                      `json:"message,required"`
+	JSON    accountPageProjectDeploymentPagesDeploymentNewDeploymentResponseMessageJSON `json:"-"`
+}
+
+// accountPageProjectDeploymentPagesDeploymentNewDeploymentResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseMessage]
+type accountPageProjectDeploymentPagesDeploymentNewDeploymentResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResult struct {
+	// Id of the deployment.
+	ID string `json:"id"`
+	// A list of alias URLs pointing to this deployment.
+	Aliases     []interface{} `json:"aliases,nullable"`
+	BuildConfig interface{}   `json:"build_config"`
+	// When the deployment was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// Info about what caused the deployment.
+	DeploymentTrigger AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResultDeploymentTrigger `json:"deployment_trigger"`
+	// A dict of env variables to build this deploy.
+	EnvVars interface{} `json:"env_vars"`
+	// Type of deploy.
+	Environment string `json:"environment"`
+	// If the deployment has been skipped.
+	IsSkipped   bool        `json:"is_skipped"`
+	LatestStage interface{} `json:"latest_stage"`
+	// When the deployment was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// Id of the project.
+	ProjectID string `json:"project_id"`
+	// Name of the project.
+	ProjectName string `json:"project_name"`
+	// Short Id (8 character) of the deployment.
+	ShortID string      `json:"short_id"`
+	Source  interface{} `json:"source"`
+	// List of past stages.
+	Stages []AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResultStage `json:"stages"`
+	// The live URL to view this deployment.
+	URL  string                                                                     `json:"url"`
+	JSON accountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResultJSON `json:"-"`
+}
+
+// accountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResult]
+type accountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResultJSON struct {
+	ID                apijson.Field
+	Aliases           apijson.Field
+	BuildConfig       apijson.Field
+	CreatedOn         apijson.Field
+	DeploymentTrigger apijson.Field
+	EnvVars           apijson.Field
+	Environment       apijson.Field
+	IsSkipped         apijson.Field
+	LatestStage       apijson.Field
+	ModifiedOn        apijson.Field
+	ProjectID         apijson.Field
+	ProjectName       apijson.Field
+	ShortID           apijson.Field
+	Source            apijson.Field
+	Stages            apijson.Field
+	URL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Info about what caused the deployment.
+type AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResultDeploymentTrigger struct {
+	// Additional info about the trigger.
+	Metadata AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResultDeploymentTriggerMetadata `json:"metadata"`
+	// What caused the deployment.
+	Type string                                                                                      `json:"type"`
+	JSON accountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResultDeploymentTriggerJSON `json:"-"`
+}
+
+// accountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResultDeploymentTriggerJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResultDeploymentTrigger]
+type accountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResultDeploymentTriggerJSON struct {
+	Metadata    apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResultDeploymentTrigger) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Additional info about the trigger.
+type AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResultDeploymentTriggerMetadata struct {
+	// Where the trigger happened.
+	Branch string `json:"branch"`
+	// Hash of the deployment trigger commit.
+	CommitHash string `json:"commit_hash"`
+	// Message of the deployment trigger commit.
+	CommitMessage string                                                                                              `json:"commit_message"`
+	JSON          accountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResultDeploymentTriggerMetadataJSON `json:"-"`
+}
+
+// accountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResultDeploymentTriggerMetadataJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResultDeploymentTriggerMetadata]
+type accountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResultDeploymentTriggerMetadataJSON struct {
+	Branch        apijson.Field
+	CommitHash    apijson.Field
+	CommitMessage apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResultDeploymentTriggerMetadata) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The status of the deployment.
+type AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResultStage struct {
+	// When the stage ended.
+	EndedOn time.Time `json:"ended_on,nullable" format:"date-time"`
+	// The current build stage.
+	Name string `json:"name"`
+	// When the stage started.
+	StartedOn time.Time `json:"started_on,nullable" format:"date-time"`
+	// State of the current stage.
+	Status string                                                                          `json:"status"`
+	JSON   accountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResultStageJSON `json:"-"`
+}
+
+// accountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResultStageJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResultStage]
+type accountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResultStageJSON struct {
+	EndedOn     apijson.Field
+	Name        apijson.Field
+	StartedOn   apijson.Field
+	Status      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseResultStage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseSuccess bool
+
+const (
+	AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseSuccessTrue AccountPageProjectDeploymentPagesDeploymentNewDeploymentResponseSuccess = true
+)
+
+type AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponse struct {
+	Errors     []AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseError    `json:"errors"`
+	Messages   []AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseMessage  `json:"messages"`
+	Result     []AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResult   `json:"result"`
+	ResultInfo AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseSuccess `json:"success"`
+	JSON    accountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseJSON    `json:"-"`
+}
+
+// accountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseJSON contains
+// the JSON metadata for the struct
+// [AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponse]
+type accountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -93,49 +513,51 @@ type deploymentListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeploymentListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DeploymentListResponseError struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    deploymentListResponseErrorJSON `json:"-"`
+type AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseError struct {
+	Code    int64                                                                      `json:"code,required"`
+	Message string                                                                     `json:"message,required"`
+	JSON    accountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseErrorJSON `json:"-"`
 }
 
-// deploymentListResponseErrorJSON contains the JSON metadata for the struct
-// [DeploymentListResponseError]
-type deploymentListResponseErrorJSON struct {
+// accountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseError]
+type accountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeploymentListResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DeploymentListResponseMessage struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    deploymentListResponseMessageJSON `json:"-"`
+type AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseMessage struct {
+	Code    int64                                                                        `json:"code,required"`
+	Message string                                                                       `json:"message,required"`
+	JSON    accountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseMessageJSON `json:"-"`
 }
 
-// deploymentListResponseMessageJSON contains the JSON metadata for the struct
-// [DeploymentListResponseMessage]
-type deploymentListResponseMessageJSON struct {
+// accountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseMessage]
+type accountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeploymentListResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DeploymentListResponseResult struct {
+type AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResult struct {
 	// Id of the deployment.
 	ID string `json:"id"`
 	// A list of alias URLs pointing to this deployment.
@@ -144,7 +566,7 @@ type DeploymentListResponseResult struct {
 	// When the deployment was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Info about what caused the deployment.
-	DeploymentTrigger DeploymentListResponseResultDeploymentTrigger `json:"deployment_trigger"`
+	DeploymentTrigger AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultDeploymentTrigger `json:"deployment_trigger"`
 	// A dict of env variables to build this deploy.
 	EnvVars interface{} `json:"env_vars"`
 	// Type of deploy.
@@ -162,15 +584,16 @@ type DeploymentListResponseResult struct {
 	ShortID string      `json:"short_id"`
 	Source  interface{} `json:"source"`
 	// List of past stages.
-	Stages []DeploymentListResponseResultStage `json:"stages"`
+	Stages []AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultStage `json:"stages"`
 	// The live URL to view this deployment.
-	URL  string                           `json:"url"`
-	JSON deploymentListResponseResultJSON `json:"-"`
+	URL  string                                                                      `json:"url"`
+	JSON accountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultJSON `json:"-"`
 }
 
-// deploymentListResponseResultJSON contains the JSON metadata for the struct
-// [DeploymentListResponseResult]
-type deploymentListResponseResultJSON struct {
+// accountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResult]
+type accountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultJSON struct {
 	ID                apijson.Field
 	Aliases           apijson.Field
 	BuildConfig       apijson.Field
@@ -191,46 +614,48 @@ type deploymentListResponseResultJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *DeploymentListResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Info about what caused the deployment.
-type DeploymentListResponseResultDeploymentTrigger struct {
+type AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultDeploymentTrigger struct {
 	// Additional info about the trigger.
-	Metadata DeploymentListResponseResultDeploymentTriggerMetadata `json:"metadata"`
+	Metadata AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultDeploymentTriggerMetadata `json:"metadata"`
 	// What caused the deployment.
-	Type string                                            `json:"type"`
-	JSON deploymentListResponseResultDeploymentTriggerJSON `json:"-"`
+	Type string                                                                                       `json:"type"`
+	JSON accountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultDeploymentTriggerJSON `json:"-"`
 }
 
-// deploymentListResponseResultDeploymentTriggerJSON contains the JSON metadata for
-// the struct [DeploymentListResponseResultDeploymentTrigger]
-type deploymentListResponseResultDeploymentTriggerJSON struct {
+// accountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultDeploymentTriggerJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultDeploymentTrigger]
+type accountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultDeploymentTriggerJSON struct {
 	Metadata    apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeploymentListResponseResultDeploymentTrigger) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultDeploymentTrigger) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Additional info about the trigger.
-type DeploymentListResponseResultDeploymentTriggerMetadata struct {
+type AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultDeploymentTriggerMetadata struct {
 	// Where the trigger happened.
 	Branch string `json:"branch"`
 	// Hash of the deployment trigger commit.
 	CommitHash string `json:"commit_hash"`
 	// Message of the deployment trigger commit.
-	CommitMessage string                                                    `json:"commit_message"`
-	JSON          deploymentListResponseResultDeploymentTriggerMetadataJSON `json:"-"`
+	CommitMessage string                                                                                               `json:"commit_message"`
+	JSON          accountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultDeploymentTriggerMetadataJSON `json:"-"`
 }
 
-// deploymentListResponseResultDeploymentTriggerMetadataJSON contains the JSON
-// metadata for the struct [DeploymentListResponseResultDeploymentTriggerMetadata]
-type deploymentListResponseResultDeploymentTriggerMetadataJSON struct {
+// accountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultDeploymentTriggerMetadataJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultDeploymentTriggerMetadata]
+type accountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultDeploymentTriggerMetadataJSON struct {
 	Branch        apijson.Field
 	CommitHash    apijson.Field
 	CommitMessage apijson.Field
@@ -238,12 +663,12 @@ type deploymentListResponseResultDeploymentTriggerMetadataJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *DeploymentListResponseResultDeploymentTriggerMetadata) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultDeploymentTriggerMetadata) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The status of the deployment.
-type DeploymentListResponseResultStage struct {
+type AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultStage struct {
 	// When the stage ended.
 	EndedOn time.Time `json:"ended_on,nullable" format:"date-time"`
 	// The current build stage.
@@ -251,13 +676,14 @@ type DeploymentListResponseResultStage struct {
 	// When the stage started.
 	StartedOn time.Time `json:"started_on,nullable" format:"date-time"`
 	// State of the current stage.
-	Status string                                `json:"status"`
-	JSON   deploymentListResponseResultStageJSON `json:"-"`
+	Status string                                                                           `json:"status"`
+	JSON   accountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultStageJSON `json:"-"`
 }
 
-// deploymentListResponseResultStageJSON contains the JSON metadata for the struct
-// [DeploymentListResponseResultStage]
-type deploymentListResponseResultStageJSON struct {
+// accountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultStageJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultStage]
+type accountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultStageJSON struct {
 	EndedOn     apijson.Field
 	Name        apijson.Field
 	StartedOn   apijson.Field
@@ -266,21 +692,22 @@ type deploymentListResponseResultStageJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeploymentListResponseResultStage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultStage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DeploymentListResponseResultInfo struct {
-	Count      interface{}                          `json:"count"`
-	Page       interface{}                          `json:"page"`
-	PerPage    interface{}                          `json:"per_page"`
-	TotalCount interface{}                          `json:"total_count"`
-	JSON       deploymentListResponseResultInfoJSON `json:"-"`
+type AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultInfo struct {
+	Count      interface{}                                                                     `json:"count"`
+	Page       interface{}                                                                     `json:"page"`
+	PerPage    interface{}                                                                     `json:"per_page"`
+	TotalCount interface{}                                                                     `json:"total_count"`
+	JSON       accountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultInfoJSON `json:"-"`
 }
 
-// deploymentListResponseResultInfoJSON contains the JSON metadata for the struct
-// [DeploymentListResponseResultInfo]
-type deploymentListResponseResultInfoJSON struct {
+// accountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultInfo]
+type accountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -289,430 +716,19 @@ type deploymentListResponseResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeploymentListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type DeploymentListResponseSuccess bool
+type AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseSuccess bool
 
 const (
-	DeploymentListResponseSuccessTrue DeploymentListResponseSuccess = true
+	AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseSuccessTrue AccountPageProjectDeploymentPagesDeploymentGetDeploymentsResponseSuccess = true
 )
-
-type DeploymentNewDeployment struct {
-	Errors   []DeploymentNewDeploymentError   `json:"errors"`
-	Messages []DeploymentNewDeploymentMessage `json:"messages"`
-	Result   DeploymentNewDeploymentResult    `json:"result"`
-	// Whether the API call was successful
-	Success DeploymentNewDeploymentSuccess `json:"success"`
-	JSON    deploymentNewDeploymentJSON    `json:"-"`
-}
-
-// deploymentNewDeploymentJSON contains the JSON metadata for the struct
-// [DeploymentNewDeployment]
-type deploymentNewDeploymentJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeploymentNewDeployment) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DeploymentNewDeploymentError struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    deploymentNewDeploymentErrorJSON `json:"-"`
-}
-
-// deploymentNewDeploymentErrorJSON contains the JSON metadata for the struct
-// [DeploymentNewDeploymentError]
-type deploymentNewDeploymentErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeploymentNewDeploymentError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DeploymentNewDeploymentMessage struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    deploymentNewDeploymentMessageJSON `json:"-"`
-}
-
-// deploymentNewDeploymentMessageJSON contains the JSON metadata for the struct
-// [DeploymentNewDeploymentMessage]
-type deploymentNewDeploymentMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeploymentNewDeploymentMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DeploymentNewDeploymentResult struct {
-	// Id of the deployment.
-	ID string `json:"id"`
-	// A list of alias URLs pointing to this deployment.
-	Aliases     []interface{} `json:"aliases,nullable"`
-	BuildConfig interface{}   `json:"build_config"`
-	// When the deployment was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Info about what caused the deployment.
-	DeploymentTrigger DeploymentNewDeploymentResultDeploymentTrigger `json:"deployment_trigger"`
-	// A dict of env variables to build this deploy.
-	EnvVars interface{} `json:"env_vars"`
-	// Type of deploy.
-	Environment string `json:"environment"`
-	// If the deployment has been skipped.
-	IsSkipped   bool        `json:"is_skipped"`
-	LatestStage interface{} `json:"latest_stage"`
-	// When the deployment was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Id of the project.
-	ProjectID string `json:"project_id"`
-	// Name of the project.
-	ProjectName string `json:"project_name"`
-	// Short Id (8 character) of the deployment.
-	ShortID string      `json:"short_id"`
-	Source  interface{} `json:"source"`
-	// List of past stages.
-	Stages []DeploymentNewDeploymentResultStage `json:"stages"`
-	// The live URL to view this deployment.
-	URL  string                            `json:"url"`
-	JSON deploymentNewDeploymentResultJSON `json:"-"`
-}
-
-// deploymentNewDeploymentResultJSON contains the JSON metadata for the struct
-// [DeploymentNewDeploymentResult]
-type deploymentNewDeploymentResultJSON struct {
-	ID                apijson.Field
-	Aliases           apijson.Field
-	BuildConfig       apijson.Field
-	CreatedOn         apijson.Field
-	DeploymentTrigger apijson.Field
-	EnvVars           apijson.Field
-	Environment       apijson.Field
-	IsSkipped         apijson.Field
-	LatestStage       apijson.Field
-	ModifiedOn        apijson.Field
-	ProjectID         apijson.Field
-	ProjectName       apijson.Field
-	ShortID           apijson.Field
-	Source            apijson.Field
-	Stages            apijson.Field
-	URL               apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *DeploymentNewDeploymentResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Info about what caused the deployment.
-type DeploymentNewDeploymentResultDeploymentTrigger struct {
-	// Additional info about the trigger.
-	Metadata DeploymentNewDeploymentResultDeploymentTriggerMetadata `json:"metadata"`
-	// What caused the deployment.
-	Type string                                             `json:"type"`
-	JSON deploymentNewDeploymentResultDeploymentTriggerJSON `json:"-"`
-}
-
-// deploymentNewDeploymentResultDeploymentTriggerJSON contains the JSON metadata
-// for the struct [DeploymentNewDeploymentResultDeploymentTrigger]
-type deploymentNewDeploymentResultDeploymentTriggerJSON struct {
-	Metadata    apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeploymentNewDeploymentResultDeploymentTrigger) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Additional info about the trigger.
-type DeploymentNewDeploymentResultDeploymentTriggerMetadata struct {
-	// Where the trigger happened.
-	Branch string `json:"branch"`
-	// Hash of the deployment trigger commit.
-	CommitHash string `json:"commit_hash"`
-	// Message of the deployment trigger commit.
-	CommitMessage string                                                     `json:"commit_message"`
-	JSON          deploymentNewDeploymentResultDeploymentTriggerMetadataJSON `json:"-"`
-}
-
-// deploymentNewDeploymentResultDeploymentTriggerMetadataJSON contains the JSON
-// metadata for the struct [DeploymentNewDeploymentResultDeploymentTriggerMetadata]
-type deploymentNewDeploymentResultDeploymentTriggerMetadataJSON struct {
-	Branch        apijson.Field
-	CommitHash    apijson.Field
-	CommitMessage apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *DeploymentNewDeploymentResultDeploymentTriggerMetadata) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The status of the deployment.
-type DeploymentNewDeploymentResultStage struct {
-	// When the stage ended.
-	EndedOn time.Time `json:"ended_on,nullable" format:"date-time"`
-	// The current build stage.
-	Name string `json:"name"`
-	// When the stage started.
-	StartedOn time.Time `json:"started_on,nullable" format:"date-time"`
-	// State of the current stage.
-	Status string                                 `json:"status"`
-	JSON   deploymentNewDeploymentResultStageJSON `json:"-"`
-}
-
-// deploymentNewDeploymentResultStageJSON contains the JSON metadata for the struct
-// [DeploymentNewDeploymentResultStage]
-type deploymentNewDeploymentResultStageJSON struct {
-	EndedOn     apijson.Field
-	Name        apijson.Field
-	StartedOn   apijson.Field
-	Status      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeploymentNewDeploymentResultStage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type DeploymentNewDeploymentSuccess bool
-
-const (
-	DeploymentNewDeploymentSuccessTrue DeploymentNewDeploymentSuccess = true
-)
-
-type DeploymentResponseDetail struct {
-	Errors   []DeploymentResponseDetailError   `json:"errors"`
-	Messages []DeploymentResponseDetailMessage `json:"messages"`
-	Result   DeploymentResponseDetailResult    `json:"result"`
-	// Whether the API call was successful
-	Success DeploymentResponseDetailSuccess `json:"success"`
-	JSON    deploymentResponseDetailJSON    `json:"-"`
-}
-
-// deploymentResponseDetailJSON contains the JSON metadata for the struct
-// [DeploymentResponseDetail]
-type deploymentResponseDetailJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeploymentResponseDetail) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DeploymentResponseDetailError struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    deploymentResponseDetailErrorJSON `json:"-"`
-}
-
-// deploymentResponseDetailErrorJSON contains the JSON metadata for the struct
-// [DeploymentResponseDetailError]
-type deploymentResponseDetailErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeploymentResponseDetailError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DeploymentResponseDetailMessage struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    deploymentResponseDetailMessageJSON `json:"-"`
-}
-
-// deploymentResponseDetailMessageJSON contains the JSON metadata for the struct
-// [DeploymentResponseDetailMessage]
-type deploymentResponseDetailMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeploymentResponseDetailMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DeploymentResponseDetailResult struct {
-	// Id of the deployment.
-	ID string `json:"id"`
-	// A list of alias URLs pointing to this deployment.
-	Aliases     []interface{} `json:"aliases,nullable"`
-	BuildConfig interface{}   `json:"build_config"`
-	// When the deployment was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Info about what caused the deployment.
-	DeploymentTrigger DeploymentResponseDetailResultDeploymentTrigger `json:"deployment_trigger"`
-	// A dict of env variables to build this deploy.
-	EnvVars interface{} `json:"env_vars"`
-	// Type of deploy.
-	Environment string `json:"environment"`
-	// If the deployment has been skipped.
-	IsSkipped   bool        `json:"is_skipped"`
-	LatestStage interface{} `json:"latest_stage"`
-	// When the deployment was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Id of the project.
-	ProjectID string `json:"project_id"`
-	// Name of the project.
-	ProjectName string `json:"project_name"`
-	// Short Id (8 character) of the deployment.
-	ShortID string      `json:"short_id"`
-	Source  interface{} `json:"source"`
-	// List of past stages.
-	Stages []DeploymentResponseDetailResultStage `json:"stages"`
-	// The live URL to view this deployment.
-	URL  string                             `json:"url"`
-	JSON deploymentResponseDetailResultJSON `json:"-"`
-}
-
-// deploymentResponseDetailResultJSON contains the JSON metadata for the struct
-// [DeploymentResponseDetailResult]
-type deploymentResponseDetailResultJSON struct {
-	ID                apijson.Field
-	Aliases           apijson.Field
-	BuildConfig       apijson.Field
-	CreatedOn         apijson.Field
-	DeploymentTrigger apijson.Field
-	EnvVars           apijson.Field
-	Environment       apijson.Field
-	IsSkipped         apijson.Field
-	LatestStage       apijson.Field
-	ModifiedOn        apijson.Field
-	ProjectID         apijson.Field
-	ProjectName       apijson.Field
-	ShortID           apijson.Field
-	Source            apijson.Field
-	Stages            apijson.Field
-	URL               apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *DeploymentResponseDetailResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Info about what caused the deployment.
-type DeploymentResponseDetailResultDeploymentTrigger struct {
-	// Additional info about the trigger.
-	Metadata DeploymentResponseDetailResultDeploymentTriggerMetadata `json:"metadata"`
-	// What caused the deployment.
-	Type string                                              `json:"type"`
-	JSON deploymentResponseDetailResultDeploymentTriggerJSON `json:"-"`
-}
-
-// deploymentResponseDetailResultDeploymentTriggerJSON contains the JSON metadata
-// for the struct [DeploymentResponseDetailResultDeploymentTrigger]
-type deploymentResponseDetailResultDeploymentTriggerJSON struct {
-	Metadata    apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeploymentResponseDetailResultDeploymentTrigger) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Additional info about the trigger.
-type DeploymentResponseDetailResultDeploymentTriggerMetadata struct {
-	// Where the trigger happened.
-	Branch string `json:"branch"`
-	// Hash of the deployment trigger commit.
-	CommitHash string `json:"commit_hash"`
-	// Message of the deployment trigger commit.
-	CommitMessage string                                                      `json:"commit_message"`
-	JSON          deploymentResponseDetailResultDeploymentTriggerMetadataJSON `json:"-"`
-}
-
-// deploymentResponseDetailResultDeploymentTriggerMetadataJSON contains the JSON
-// metadata for the struct
-// [DeploymentResponseDetailResultDeploymentTriggerMetadata]
-type deploymentResponseDetailResultDeploymentTriggerMetadataJSON struct {
-	Branch        apijson.Field
-	CommitHash    apijson.Field
-	CommitMessage apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *DeploymentResponseDetailResultDeploymentTriggerMetadata) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The status of the deployment.
-type DeploymentResponseDetailResultStage struct {
-	// When the stage ended.
-	EndedOn time.Time `json:"ended_on,nullable" format:"date-time"`
-	// The current build stage.
-	Name string `json:"name"`
-	// When the stage started.
-	StartedOn time.Time `json:"started_on,nullable" format:"date-time"`
-	// State of the current stage.
-	Status string                                  `json:"status"`
-	JSON   deploymentResponseDetailResultStageJSON `json:"-"`
-}
-
-// deploymentResponseDetailResultStageJSON contains the JSON metadata for the
-// struct [DeploymentResponseDetailResultStage]
-type deploymentResponseDetailResultStageJSON struct {
-	EndedOn     apijson.Field
-	Name        apijson.Field
-	StartedOn   apijson.Field
-	Status      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeploymentResponseDetailResultStage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type DeploymentResponseDetailSuccess bool
-
-const (
-	DeploymentResponseDetailSuccessTrue DeploymentResponseDetailSuccess = true
-)
-
-type AccountPageProjectDeploymentDeleteResponse = interface{}
 
 type AccountPageProjectDeploymentPagesDeploymentNewDeploymentParams struct {
-	// The branch to build the new deployment from. The HEAD of the branch will be
+	// The branch to build the new deployment from. The `HEAD` of the branch will be
 	// used. If omitted, the production branch will be used by default.
 	Branch param.Field[string] `json:"branch"`
 }

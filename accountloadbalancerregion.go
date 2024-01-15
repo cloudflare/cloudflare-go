@@ -34,7 +34,7 @@ func NewAccountLoadBalancerRegionService(opts ...option.RequestOption) (r *Accou
 }
 
 // Get a single region mapping.
-func (r *AccountLoadBalancerRegionService) Get(ctx context.Context, accountIdentifier string, regionCode AccountLoadBalancerRegionGetParamsRegionCode, opts ...option.RequestOption) (res *RegionSingleResponse, err error) {
+func (r *AccountLoadBalancerRegionService) Get(ctx context.Context, accountIdentifier string, regionCode AccountLoadBalancerRegionGetParamsRegionCode, opts ...option.RequestOption) (res *AccountLoadBalancerRegionGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/load_balancers/regions/%v", accountIdentifier, regionCode)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -42,95 +42,26 @@ func (r *AccountLoadBalancerRegionService) Get(ctx context.Context, accountIdent
 }
 
 // List all region mappings.
-func (r *AccountLoadBalancerRegionService) LoadBalancerRegionsListRegions(ctx context.Context, accountIdentifier string, query AccountLoadBalancerRegionLoadBalancerRegionsListRegionsParams, opts ...option.RequestOption) (res *RegionResponseCollection, err error) {
+func (r *AccountLoadBalancerRegionService) LoadBalancerRegionsListRegions(ctx context.Context, accountIdentifier string, query AccountLoadBalancerRegionLoadBalancerRegionsListRegionsParams, opts ...option.RequestOption) (res *AccountLoadBalancerRegionLoadBalancerRegionsListRegionsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/load_balancers/regions", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
-type RegionResponseCollection struct {
-	Errors   []RegionResponseCollectionError   `json:"errors"`
-	Messages []RegionResponseCollectionMessage `json:"messages"`
-	Result   interface{}                       `json:"result"`
-	// Whether the API call was successful
-	Success RegionResponseCollectionSuccess `json:"success"`
-	JSON    regionResponseCollectionJSON    `json:"-"`
-}
-
-// regionResponseCollectionJSON contains the JSON metadata for the struct
-// [RegionResponseCollection]
-type regionResponseCollectionJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RegionResponseCollection) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RegionResponseCollectionError struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    regionResponseCollectionErrorJSON `json:"-"`
-}
-
-// regionResponseCollectionErrorJSON contains the JSON metadata for the struct
-// [RegionResponseCollectionError]
-type regionResponseCollectionErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RegionResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RegionResponseCollectionMessage struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    regionResponseCollectionMessageJSON `json:"-"`
-}
-
-// regionResponseCollectionMessageJSON contains the JSON metadata for the struct
-// [RegionResponseCollectionMessage]
-type regionResponseCollectionMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RegionResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type RegionResponseCollectionSuccess bool
-
-const (
-	RegionResponseCollectionSuccessTrue RegionResponseCollectionSuccess = true
-)
-
-type RegionSingleResponse struct {
-	Errors   []RegionSingleResponseError   `json:"errors"`
-	Messages []RegionSingleResponseMessage `json:"messages"`
+type AccountLoadBalancerRegionGetResponse struct {
+	Errors   []AccountLoadBalancerRegionGetResponseError   `json:"errors"`
+	Messages []AccountLoadBalancerRegionGetResponseMessage `json:"messages"`
 	// A list of countries and subdivisions mapped to a region.
 	Result interface{} `json:"result"`
 	// Whether the API call was successful
-	Success RegionSingleResponseSuccess `json:"success"`
-	JSON    regionSingleResponseJSON    `json:"-"`
+	Success AccountLoadBalancerRegionGetResponseSuccess `json:"success"`
+	JSON    accountLoadBalancerRegionGetResponseJSON    `json:"-"`
 }
 
-// regionSingleResponseJSON contains the JSON metadata for the struct
-// [RegionSingleResponse]
-type regionSingleResponseJSON struct {
+// accountLoadBalancerRegionGetResponseJSON contains the JSON metadata for the
+// struct [AccountLoadBalancerRegionGetResponse]
+type accountLoadBalancerRegionGetResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -139,53 +70,125 @@ type regionSingleResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RegionSingleResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLoadBalancerRegionGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RegionSingleResponseError struct {
-	Code    int64                         `json:"code,required"`
-	Message string                        `json:"message,required"`
-	JSON    regionSingleResponseErrorJSON `json:"-"`
+type AccountLoadBalancerRegionGetResponseError struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    accountLoadBalancerRegionGetResponseErrorJSON `json:"-"`
 }
 
-// regionSingleResponseErrorJSON contains the JSON metadata for the struct
-// [RegionSingleResponseError]
-type regionSingleResponseErrorJSON struct {
+// accountLoadBalancerRegionGetResponseErrorJSON contains the JSON metadata for the
+// struct [AccountLoadBalancerRegionGetResponseError]
+type accountLoadBalancerRegionGetResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RegionSingleResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLoadBalancerRegionGetResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RegionSingleResponseMessage struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    regionSingleResponseMessageJSON `json:"-"`
+type AccountLoadBalancerRegionGetResponseMessage struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    accountLoadBalancerRegionGetResponseMessageJSON `json:"-"`
 }
 
-// regionSingleResponseMessageJSON contains the JSON metadata for the struct
-// [RegionSingleResponseMessage]
-type regionSingleResponseMessageJSON struct {
+// accountLoadBalancerRegionGetResponseMessageJSON contains the JSON metadata for
+// the struct [AccountLoadBalancerRegionGetResponseMessage]
+type accountLoadBalancerRegionGetResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RegionSingleResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLoadBalancerRegionGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type RegionSingleResponseSuccess bool
+type AccountLoadBalancerRegionGetResponseSuccess bool
 
 const (
-	RegionSingleResponseSuccessTrue RegionSingleResponseSuccess = true
+	AccountLoadBalancerRegionGetResponseSuccessTrue AccountLoadBalancerRegionGetResponseSuccess = true
+)
+
+type AccountLoadBalancerRegionLoadBalancerRegionsListRegionsResponse struct {
+	Errors   []AccountLoadBalancerRegionLoadBalancerRegionsListRegionsResponseError   `json:"errors"`
+	Messages []AccountLoadBalancerRegionLoadBalancerRegionsListRegionsResponseMessage `json:"messages"`
+	Result   interface{}                                                              `json:"result"`
+	// Whether the API call was successful
+	Success AccountLoadBalancerRegionLoadBalancerRegionsListRegionsResponseSuccess `json:"success"`
+	JSON    accountLoadBalancerRegionLoadBalancerRegionsListRegionsResponseJSON    `json:"-"`
+}
+
+// accountLoadBalancerRegionLoadBalancerRegionsListRegionsResponseJSON contains the
+// JSON metadata for the struct
+// [AccountLoadBalancerRegionLoadBalancerRegionsListRegionsResponse]
+type accountLoadBalancerRegionLoadBalancerRegionsListRegionsResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountLoadBalancerRegionLoadBalancerRegionsListRegionsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountLoadBalancerRegionLoadBalancerRegionsListRegionsResponseError struct {
+	Code    int64                                                                    `json:"code,required"`
+	Message string                                                                   `json:"message,required"`
+	JSON    accountLoadBalancerRegionLoadBalancerRegionsListRegionsResponseErrorJSON `json:"-"`
+}
+
+// accountLoadBalancerRegionLoadBalancerRegionsListRegionsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountLoadBalancerRegionLoadBalancerRegionsListRegionsResponseError]
+type accountLoadBalancerRegionLoadBalancerRegionsListRegionsResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountLoadBalancerRegionLoadBalancerRegionsListRegionsResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountLoadBalancerRegionLoadBalancerRegionsListRegionsResponseMessage struct {
+	Code    int64                                                                      `json:"code,required"`
+	Message string                                                                     `json:"message,required"`
+	JSON    accountLoadBalancerRegionLoadBalancerRegionsListRegionsResponseMessageJSON `json:"-"`
+}
+
+// accountLoadBalancerRegionLoadBalancerRegionsListRegionsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountLoadBalancerRegionLoadBalancerRegionsListRegionsResponseMessage]
+type accountLoadBalancerRegionLoadBalancerRegionsListRegionsResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountLoadBalancerRegionLoadBalancerRegionsListRegionsResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountLoadBalancerRegionLoadBalancerRegionsListRegionsResponseSuccess bool
+
+const (
+	AccountLoadBalancerRegionLoadBalancerRegionsListRegionsResponseSuccessTrue AccountLoadBalancerRegionLoadBalancerRegionsListRegionsResponseSuccess = true
 )
 
 // A list of Cloudflare regions. WNAM: Western North America, ENAM: Eastern North

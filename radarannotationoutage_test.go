@@ -25,15 +25,19 @@ func TestRadarAnnotationOutageListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Radars.Annotations.Outages.List(context.TODO(), cloudflare.RadarAnnotationOutageListParams{
+	_, err := client.Radar.Annotations.Outages.List(context.TODO(), cloudflare.RadarAnnotationOutageListParams{
+		ASN:       cloudflare.F(int64(174)),
 		DateEnd:   cloudflare.F(time.Now()),
-		DateRange: cloudflare.F(cloudflare.RadarAnnotationOutageListParamsDateRange1d),
+		DateRange: cloudflare.F(cloudflare.RadarAnnotationOutageListParamsDateRange7d),
 		DateStart: cloudflare.F(time.Now()),
 		Format:    cloudflare.F(cloudflare.RadarAnnotationOutageListParamsFormatJson),
 		Limit:     cloudflare.F(int64(5)),
+		Location:  cloudflare.F("US"),
 		Offset:    cloudflare.F(int64(0)),
 	})
 	if err != nil {

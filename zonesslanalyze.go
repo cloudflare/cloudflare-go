@@ -33,25 +33,26 @@ func NewZoneSslAnalyzeService(opts ...option.RequestOption) (r *ZoneSslAnalyzeSe
 
 // Returns the set of hostnames, the signature algorithm, and the expiration date
 // of the certificate.
-func (r *ZoneSslAnalyzeService) AnalyzeCertificateAnalyzeCertificate(ctx context.Context, identifier string, body ZoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateParams, opts ...option.RequestOption) (res *CertificateAnalyzeResponse, err error) {
+func (r *ZoneSslAnalyzeService) AnalyzeCertificateAnalyzeCertificate(ctx context.Context, identifier string, body ZoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateParams, opts ...option.RequestOption) (res *ZoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/ssl/analyze", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
-type CertificateAnalyzeResponse struct {
-	Errors   []CertificateAnalyzeResponseError   `json:"errors"`
-	Messages []CertificateAnalyzeResponseMessage `json:"messages"`
-	Result   interface{}                         `json:"result"`
+type ZoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateResponse struct {
+	Errors   []ZoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseError   `json:"errors"`
+	Messages []ZoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseMessage `json:"messages"`
+	Result   interface{}                                                         `json:"result"`
 	// Whether the API call was successful
-	Success CertificateAnalyzeResponseSuccess `json:"success"`
-	JSON    certificateAnalyzeResponseJSON    `json:"-"`
+	Success ZoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseSuccess `json:"success"`
+	JSON    zoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseJSON    `json:"-"`
 }
 
-// certificateAnalyzeResponseJSON contains the JSON metadata for the struct
-// [CertificateAnalyzeResponse]
-type certificateAnalyzeResponseJSON struct {
+// zoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseJSON contains the JSON
+// metadata for the struct
+// [ZoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateResponse]
+type zoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -60,53 +61,55 @@ type certificateAnalyzeResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CertificateAnalyzeResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CertificateAnalyzeResponseError struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    certificateAnalyzeResponseErrorJSON `json:"-"`
+type ZoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseError struct {
+	Code    int64                                                               `json:"code,required"`
+	Message string                                                              `json:"message,required"`
+	JSON    zoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseErrorJSON `json:"-"`
 }
 
-// certificateAnalyzeResponseErrorJSON contains the JSON metadata for the struct
-// [CertificateAnalyzeResponseError]
-type certificateAnalyzeResponseErrorJSON struct {
+// zoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseErrorJSON contains the
+// JSON metadata for the struct
+// [ZoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseError]
+type zoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CertificateAnalyzeResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CertificateAnalyzeResponseMessage struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    certificateAnalyzeResponseMessageJSON `json:"-"`
+type ZoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseMessage struct {
+	Code    int64                                                                 `json:"code,required"`
+	Message string                                                                `json:"message,required"`
+	JSON    zoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseMessageJSON `json:"-"`
 }
 
-// certificateAnalyzeResponseMessageJSON contains the JSON metadata for the struct
-// [CertificateAnalyzeResponseMessage]
-type certificateAnalyzeResponseMessageJSON struct {
+// zoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseMessageJSON contains
+// the JSON metadata for the struct
+// [ZoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseMessage]
+type zoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CertificateAnalyzeResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type CertificateAnalyzeResponseSuccess bool
+type ZoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseSuccess bool
 
 const (
-	CertificateAnalyzeResponseSuccessTrue CertificateAnalyzeResponseSuccess = true
+	ZoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseSuccessTrue ZoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseSuccess = true
 )
 
 type ZoneSslAnalyzeAnalyzeCertificateAnalyzeCertificateParams struct {

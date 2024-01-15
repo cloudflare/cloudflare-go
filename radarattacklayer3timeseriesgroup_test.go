@@ -25,18 +25,20 @@ func TestRadarAttackLayer3TimeseriesGroupListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Radars.Attacks.Layer3s.TimeseriesGroups.List(context.TODO(), cloudflare.RadarAttackLayer3TimeseriesGroupListParams{
-		AggInterval: cloudflare.F(cloudflare.RadarAttackLayer3TimeseriesGroupListParamsAggInterval15m),
-		ASN:         cloudflare.F([]string{"15169", "15169", "15169"}),
+	_, err := client.Radar.Attacks.Layer3.TimeseriesGroups.List(context.TODO(), cloudflare.RadarAttackLayer3TimeseriesGroupListParams{
+		AggInterval: cloudflare.F(cloudflare.RadarAttackLayer3TimeseriesGroupListParamsAggInterval1h),
+		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:   cloudflare.F([]cloudflare.RadarAttackLayer3TimeseriesGroupListParamsDateRange{cloudflare.RadarAttackLayer3TimeseriesGroupListParamsDateRange1d, cloudflare.RadarAttackLayer3TimeseriesGroupListParamsDateRange7d, cloudflare.RadarAttackLayer3TimeseriesGroupListParamsDateRange14d}),
+		DateRange:   cloudflare.F([]cloudflare.RadarAttackLayer3TimeseriesGroupListParamsDateRange{cloudflare.RadarAttackLayer3TimeseriesGroupListParamsDateRange1d, cloudflare.RadarAttackLayer3TimeseriesGroupListParamsDateRange2d, cloudflare.RadarAttackLayer3TimeseriesGroupListParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		Format:      cloudflare.F(cloudflare.RadarAttackLayer3TimeseriesGroupListParamsFormatJson),
-		Location:    cloudflare.F([]string{"US,CA", "US,CA", "US,CA"}),
-		Name:        cloudflare.F([]string{"main_series", "main_series", "main_series"}),
+		Location:    cloudflare.F([]string{"string", "string", "string"}),
+		Name:        cloudflare.F([]string{"string", "string", "string"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -34,25 +34,26 @@ func NewAccountBrandProtectionURLInfoService(opts ...option.RequestOption) (r *A
 }
 
 // Get results for a URL scan
-func (r *AccountBrandProtectionURLInfoService) PhishingURLInformationGetResultsForAURLScan(ctx context.Context, accountIdentifier string, query AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAURLScanParams, opts ...option.RequestOption) (res *PhishingURLInfoSingleResponse, err error) {
+func (r *AccountBrandProtectionURLInfoService) PhishingURLInformationGetResultsForAURLScan(ctx context.Context, accountIdentifier string, query AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAURLScanParams, opts ...option.RequestOption) (res *AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/brand-protection/url-info", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
-type PhishingURLInfoSingleResponse struct {
-	Errors   []PhishingURLInfoSingleResponseError   `json:"errors"`
-	Messages []PhishingURLInfoSingleResponseMessage `json:"messages"`
-	Result   PhishingURLInfoSingleResponseResult    `json:"result"`
+type AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponse struct {
+	Errors   []AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseError   `json:"errors"`
+	Messages []AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseMessage `json:"messages"`
+	Result   AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success PhishingURLInfoSingleResponseSuccess `json:"success"`
-	JSON    phishingURLInfoSingleResponseJSON    `json:"-"`
+	Success AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseSuccess `json:"success"`
+	JSON    accountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseJSON    `json:"-"`
 }
 
-// phishingURLInfoSingleResponseJSON contains the JSON metadata for the struct
-// [PhishingURLInfoSingleResponse]
-type phishingURLInfoSingleResponseJSON struct {
+// accountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseJSON
+// contains the JSON metadata for the struct
+// [AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponse]
+type accountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -61,70 +62,73 @@ type phishingURLInfoSingleResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PhishingURLInfoSingleResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PhishingURLInfoSingleResponseError struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    phishingURLInfoSingleResponseErrorJSON `json:"-"`
+type AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseError struct {
+	Code    int64                                                                                     `json:"code,required"`
+	Message string                                                                                    `json:"message,required"`
+	JSON    accountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseErrorJSON `json:"-"`
 }
 
-// phishingURLInfoSingleResponseErrorJSON contains the JSON metadata for the struct
-// [PhishingURLInfoSingleResponseError]
-type phishingURLInfoSingleResponseErrorJSON struct {
+// accountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseError]
+type accountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PhishingURLInfoSingleResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PhishingURLInfoSingleResponseMessage struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    phishingURLInfoSingleResponseMessageJSON `json:"-"`
+type AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseMessage struct {
+	Code    int64                                                                                       `json:"code,required"`
+	Message string                                                                                      `json:"message,required"`
+	JSON    accountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseMessageJSON `json:"-"`
 }
 
-// phishingURLInfoSingleResponseMessageJSON contains the JSON metadata for the
-// struct [PhishingURLInfoSingleResponseMessage]
-type phishingURLInfoSingleResponseMessageJSON struct {
+// accountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseMessage]
+type accountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PhishingURLInfoSingleResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PhishingURLInfoSingleResponseResult struct {
+type AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResult struct {
 	// List of categorizations applied to this submission.
-	Categorizations []PhishingURLInfoSingleResponseResultCategorization `json:"categorizations"`
+	Categorizations []AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultCategorization `json:"categorizations"`
 	// List of model results for completed scans.
-	ModelResults []PhishingURLInfoSingleResponseResultModelResult `json:"model_results"`
+	ModelResults []AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultModelResult `json:"model_results"`
 	// List of signatures that matched against site content found when crawling the
 	// URL.
-	RuleMatches []PhishingURLInfoSingleResponseResultRuleMatch `json:"rule_matches"`
+	RuleMatches []AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultRuleMatch `json:"rule_matches"`
 	// Status of the most recent scan found.
-	ScanStatus PhishingURLInfoSingleResponseResultScanStatus `json:"scan_status"`
+	ScanStatus AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultScanStatus `json:"scan_status"`
 	// For internal use.
 	ScreenshotDownloadSignature string `json:"screenshot_download_signature"`
 	// For internal use.
 	ScreenshotPath string `json:"screenshot_path"`
 	// URL that was submitted.
-	URL  string                                  `json:"url"`
-	JSON phishingURLInfoSingleResponseResultJSON `json:"-"`
+	URL  string                                                                                     `json:"url"`
+	JSON accountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultJSON `json:"-"`
 }
 
-// phishingURLInfoSingleResponseResultJSON contains the JSON metadata for the
-// struct [PhishingURLInfoSingleResponseResult]
-type phishingURLInfoSingleResponseResultJSON struct {
+// accountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResult]
+type accountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultJSON struct {
 	Categorizations             apijson.Field
 	ModelResults                apijson.Field
 	RuleMatches                 apijson.Field
@@ -136,53 +140,55 @@ type phishingURLInfoSingleResponseResultJSON struct {
 	ExtraFields                 map[string]apijson.Field
 }
 
-func (r *PhishingURLInfoSingleResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PhishingURLInfoSingleResponseResultCategorization struct {
+type AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultCategorization struct {
 	// Name of the category applied.
 	Category string `json:"category"`
 	// Result of human review for this categorization.
-	VerificationStatus string                                                `json:"verification_status"`
-	JSON               phishingURLInfoSingleResponseResultCategorizationJSON `json:"-"`
+	VerificationStatus string                                                                                                   `json:"verification_status"`
+	JSON               accountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultCategorizationJSON `json:"-"`
 }
 
-// phishingURLInfoSingleResponseResultCategorizationJSON contains the JSON metadata
-// for the struct [PhishingURLInfoSingleResponseResultCategorization]
-type phishingURLInfoSingleResponseResultCategorizationJSON struct {
+// accountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultCategorizationJSON
+// contains the JSON metadata for the struct
+// [AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultCategorization]
+type accountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultCategorizationJSON struct {
 	Category           apijson.Field
 	VerificationStatus apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *PhishingURLInfoSingleResponseResultCategorization) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultCategorization) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PhishingURLInfoSingleResponseResultModelResult struct {
+type AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultModelResult struct {
 	// Name of the model.
 	ModelName string `json:"model_name"`
 	// Score output by the model for this submission.
-	ModelScore float64                                            `json:"model_score"`
-	JSON       phishingURLInfoSingleResponseResultModelResultJSON `json:"-"`
+	ModelScore float64                                                                                               `json:"model_score"`
+	JSON       accountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultModelResultJSON `json:"-"`
 }
 
-// phishingURLInfoSingleResponseResultModelResultJSON contains the JSON metadata
-// for the struct [PhishingURLInfoSingleResponseResultModelResult]
-type phishingURLInfoSingleResponseResultModelResultJSON struct {
+// accountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultModelResultJSON
+// contains the JSON metadata for the struct
+// [AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultModelResult]
+type accountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultModelResultJSON struct {
 	ModelName   apijson.Field
 	ModelScore  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PhishingURLInfoSingleResponseResultModelResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultModelResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PhishingURLInfoSingleResponseResultRuleMatch struct {
+type AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultRuleMatch struct {
 	// For internal use.
 	Banning bool `json:"banning"`
 	// For internal use.
@@ -190,13 +196,14 @@ type PhishingURLInfoSingleResponseResultRuleMatch struct {
 	// Description of the signature that matched.
 	Description string `json:"description"`
 	// Name of the signature that matched.
-	Name string                                           `json:"name"`
-	JSON phishingURLInfoSingleResponseResultRuleMatchJSON `json:"-"`
+	Name string                                                                                              `json:"name"`
+	JSON accountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultRuleMatchJSON `json:"-"`
 }
 
-// phishingURLInfoSingleResponseResultRuleMatchJSON contains the JSON metadata for
-// the struct [PhishingURLInfoSingleResponseResultRuleMatch]
-type phishingURLInfoSingleResponseResultRuleMatchJSON struct {
+// accountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultRuleMatchJSON
+// contains the JSON metadata for the struct
+// [AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultRuleMatch]
+type accountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultRuleMatchJSON struct {
 	Banning     apijson.Field
 	Blocking    apijson.Field
 	Description apijson.Field
@@ -205,12 +212,12 @@ type phishingURLInfoSingleResponseResultRuleMatchJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PhishingURLInfoSingleResponseResultRuleMatch) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultRuleMatch) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Status of the most recent scan found.
-type PhishingURLInfoSingleResponseResultScanStatus struct {
+type AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultScanStatus struct {
 	// Timestamp of when the submission was processed.
 	LastProcessed string `json:"last_processed"`
 	// For internal use.
@@ -218,13 +225,14 @@ type PhishingURLInfoSingleResponseResultScanStatus struct {
 	// Status code that the crawler received when loading the submitted URL.
 	StatusCode int64 `json:"status_code"`
 	// ID of the most recent submission.
-	SubmissionID int64                                             `json:"submission_id"`
-	JSON         phishingURLInfoSingleResponseResultScanStatusJSON `json:"-"`
+	SubmissionID int64                                                                                                `json:"submission_id"`
+	JSON         accountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultScanStatusJSON `json:"-"`
 }
 
-// phishingURLInfoSingleResponseResultScanStatusJSON contains the JSON metadata for
-// the struct [PhishingURLInfoSingleResponseResultScanStatus]
-type phishingURLInfoSingleResponseResultScanStatusJSON struct {
+// accountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultScanStatusJSON
+// contains the JSON metadata for the struct
+// [AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultScanStatus]
+type accountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultScanStatusJSON struct {
 	LastProcessed apijson.Field
 	ScanComplete  apijson.Field
 	StatusCode    apijson.Field
@@ -233,15 +241,15 @@ type phishingURLInfoSingleResponseResultScanStatusJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *PhishingURLInfoSingleResponseResultScanStatus) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseResultScanStatus) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type PhishingURLInfoSingleResponseSuccess bool
+type AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseSuccess bool
 
 const (
-	PhishingURLInfoSingleResponseSuccessTrue PhishingURLInfoSingleResponseSuccess = true
+	AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseSuccessTrue AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanResponseSuccess = true
 )
 
 type AccountBrandProtectionURLInfoPhishingURLInformationGetResultsForAURLScanParams struct {

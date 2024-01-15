@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -38,153 +39,475 @@ func NewAccountTeamnetRouteService(opts ...option.RequestOption) (r *AccountTeam
 	return
 }
 
-// Lists and filters private network routes in an account.
-func (r *AccountTeamnetRouteService) TunnelRouteListTunnelRoutes(ctx context.Context, accountIdentifier string, query AccountTeamnetRouteTunnelRouteListTunnelRoutesParams, opts ...option.RequestOption) (res *AccountTeamnetRouteTunnelRouteListTunnelRoutesResponse, err error) {
+// Routes a private network through a Cloudflare Tunnel.
+func (r *AccountTeamnetRouteService) New(ctx context.Context, accountIdentifier string, body AccountTeamnetRouteNewParams, opts ...option.RequestOption) (res *AccountTeamnetRouteNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/teamnet/routes", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
-type AccountTeamnetRouteTunnelRouteListTunnelRoutesResponse struct {
-	Errors     []AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseError    `json:"errors"`
-	Messages   []AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseMessage  `json:"messages"`
-	Result     []AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseResult   `json:"result"`
-	ResultInfo AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseResultInfo `json:"result_info"`
+// Updates an existing private network route in an account. The fields that are
+// meant to be updated should be provided in the body of the request.
+func (r *AccountTeamnetRouteService) Update(ctx context.Context, accountIdentifier string, routeID string, body AccountTeamnetRouteUpdateParams, opts ...option.RequestOption) (res *AccountTeamnetRouteUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	path := fmt.Sprintf("accounts/%s/teamnet/routes/%s", accountIdentifier, routeID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
+	return
+}
+
+// Deletes a private network route from an account.
+func (r *AccountTeamnetRouteService) Delete(ctx context.Context, accountIdentifier string, routeID string, opts ...option.RequestOption) (res *AccountTeamnetRouteDeleteResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	path := fmt.Sprintf("accounts/%s/teamnet/routes/%s", accountIdentifier, routeID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
+	return
+}
+
+// Lists and filters private network routes in an account.
+func (r *AccountTeamnetRouteService) TunnelRouteListTunnelRoutes(ctx context.Context, accountIdentifier string, query AccountTeamnetRouteTunnelRouteListTunnelRoutesParams, opts ...option.RequestOption) (res *shared.Page[AccountTeamnetRouteTunnelRouteListTunnelRoutesResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	path := fmt.Sprintf("accounts/%s/teamnet/routes", accountIdentifier)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+type AccountTeamnetRouteNewResponse struct {
+	Errors   []AccountTeamnetRouteNewResponseError   `json:"errors"`
+	Messages []AccountTeamnetRouteNewResponseMessage `json:"messages"`
+	Result   AccountTeamnetRouteNewResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseSuccess `json:"success"`
-	JSON    accountTeamnetRouteTunnelRouteListTunnelRoutesResponseJSON    `json:"-"`
+	Success AccountTeamnetRouteNewResponseSuccess `json:"success"`
+	JSON    accountTeamnetRouteNewResponseJSON    `json:"-"`
+}
+
+// accountTeamnetRouteNewResponseJSON contains the JSON metadata for the struct
+// [AccountTeamnetRouteNewResponse]
+type accountTeamnetRouteNewResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTeamnetRouteNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountTeamnetRouteNewResponseError struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    accountTeamnetRouteNewResponseErrorJSON `json:"-"`
+}
+
+// accountTeamnetRouteNewResponseErrorJSON contains the JSON metadata for the
+// struct [AccountTeamnetRouteNewResponseError]
+type accountTeamnetRouteNewResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTeamnetRouteNewResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountTeamnetRouteNewResponseMessage struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    accountTeamnetRouteNewResponseMessageJSON `json:"-"`
+}
+
+// accountTeamnetRouteNewResponseMessageJSON contains the JSON metadata for the
+// struct [AccountTeamnetRouteNewResponseMessage]
+type accountTeamnetRouteNewResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTeamnetRouteNewResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountTeamnetRouteNewResponseResult struct {
+	// UUID of the route.
+	ID string `json:"id"`
+	// Optional remark describing the route.
+	Comment string `json:"comment"`
+	// Timestamp of when the route was created.
+	CreatedAt interface{} `json:"created_at"`
+	// Timestamp of when the route was deleted. If `null`, the route has not been
+	// deleted.
+	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
+	Network string `json:"network"`
+	// UUID of the Cloudflare Tunnel serving the route.
+	TunnelID interface{} `json:"tunnel_id"`
+	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
+	// are configured, the route is assigned to the default virtual network of the
+	// account.
+	VirtualNetworkID interface{}                              `json:"virtual_network_id"`
+	JSON             accountTeamnetRouteNewResponseResultJSON `json:"-"`
+}
+
+// accountTeamnetRouteNewResponseResultJSON contains the JSON metadata for the
+// struct [AccountTeamnetRouteNewResponseResult]
+type accountTeamnetRouteNewResponseResultJSON struct {
+	ID               apijson.Field
+	Comment          apijson.Field
+	CreatedAt        apijson.Field
+	DeletedAt        apijson.Field
+	Network          apijson.Field
+	TunnelID         apijson.Field
+	VirtualNetworkID apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccountTeamnetRouteNewResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountTeamnetRouteNewResponseSuccess bool
+
+const (
+	AccountTeamnetRouteNewResponseSuccessTrue AccountTeamnetRouteNewResponseSuccess = true
+)
+
+type AccountTeamnetRouteUpdateResponse struct {
+	Errors   []AccountTeamnetRouteUpdateResponseError   `json:"errors"`
+	Messages []AccountTeamnetRouteUpdateResponseMessage `json:"messages"`
+	Result   AccountTeamnetRouteUpdateResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountTeamnetRouteUpdateResponseSuccess `json:"success"`
+	JSON    accountTeamnetRouteUpdateResponseJSON    `json:"-"`
+}
+
+// accountTeamnetRouteUpdateResponseJSON contains the JSON metadata for the struct
+// [AccountTeamnetRouteUpdateResponse]
+type accountTeamnetRouteUpdateResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTeamnetRouteUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountTeamnetRouteUpdateResponseError struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    accountTeamnetRouteUpdateResponseErrorJSON `json:"-"`
+}
+
+// accountTeamnetRouteUpdateResponseErrorJSON contains the JSON metadata for the
+// struct [AccountTeamnetRouteUpdateResponseError]
+type accountTeamnetRouteUpdateResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTeamnetRouteUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountTeamnetRouteUpdateResponseMessage struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    accountTeamnetRouteUpdateResponseMessageJSON `json:"-"`
+}
+
+// accountTeamnetRouteUpdateResponseMessageJSON contains the JSON metadata for the
+// struct [AccountTeamnetRouteUpdateResponseMessage]
+type accountTeamnetRouteUpdateResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTeamnetRouteUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountTeamnetRouteUpdateResponseResult struct {
+	// UUID of the route.
+	ID string `json:"id"`
+	// Optional remark describing the route.
+	Comment string `json:"comment"`
+	// Timestamp of when the route was created.
+	CreatedAt interface{} `json:"created_at"`
+	// Timestamp of when the route was deleted. If `null`, the route has not been
+	// deleted.
+	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
+	Network string `json:"network"`
+	// UUID of the Cloudflare Tunnel serving the route.
+	TunnelID interface{} `json:"tunnel_id"`
+	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
+	// are configured, the route is assigned to the default virtual network of the
+	// account.
+	VirtualNetworkID interface{}                                 `json:"virtual_network_id"`
+	JSON             accountTeamnetRouteUpdateResponseResultJSON `json:"-"`
+}
+
+// accountTeamnetRouteUpdateResponseResultJSON contains the JSON metadata for the
+// struct [AccountTeamnetRouteUpdateResponseResult]
+type accountTeamnetRouteUpdateResponseResultJSON struct {
+	ID               apijson.Field
+	Comment          apijson.Field
+	CreatedAt        apijson.Field
+	DeletedAt        apijson.Field
+	Network          apijson.Field
+	TunnelID         apijson.Field
+	VirtualNetworkID apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccountTeamnetRouteUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountTeamnetRouteUpdateResponseSuccess bool
+
+const (
+	AccountTeamnetRouteUpdateResponseSuccessTrue AccountTeamnetRouteUpdateResponseSuccess = true
+)
+
+type AccountTeamnetRouteDeleteResponse struct {
+	Errors   []AccountTeamnetRouteDeleteResponseError   `json:"errors"`
+	Messages []AccountTeamnetRouteDeleteResponseMessage `json:"messages"`
+	Result   AccountTeamnetRouteDeleteResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountTeamnetRouteDeleteResponseSuccess `json:"success"`
+	JSON    accountTeamnetRouteDeleteResponseJSON    `json:"-"`
+}
+
+// accountTeamnetRouteDeleteResponseJSON contains the JSON metadata for the struct
+// [AccountTeamnetRouteDeleteResponse]
+type accountTeamnetRouteDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTeamnetRouteDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountTeamnetRouteDeleteResponseError struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    accountTeamnetRouteDeleteResponseErrorJSON `json:"-"`
+}
+
+// accountTeamnetRouteDeleteResponseErrorJSON contains the JSON metadata for the
+// struct [AccountTeamnetRouteDeleteResponseError]
+type accountTeamnetRouteDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTeamnetRouteDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountTeamnetRouteDeleteResponseMessage struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    accountTeamnetRouteDeleteResponseMessageJSON `json:"-"`
+}
+
+// accountTeamnetRouteDeleteResponseMessageJSON contains the JSON metadata for the
+// struct [AccountTeamnetRouteDeleteResponseMessage]
+type accountTeamnetRouteDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTeamnetRouteDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountTeamnetRouteDeleteResponseResult struct {
+	// UUID of the route.
+	ID string `json:"id"`
+	// Optional remark describing the route.
+	Comment string `json:"comment"`
+	// Timestamp of when the route was created.
+	CreatedAt interface{} `json:"created_at"`
+	// Timestamp of when the route was deleted. If `null`, the route has not been
+	// deleted.
+	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
+	Network string `json:"network"`
+	// UUID of the Cloudflare Tunnel serving the route.
+	TunnelID interface{} `json:"tunnel_id"`
+	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
+	// are configured, the route is assigned to the default virtual network of the
+	// account.
+	VirtualNetworkID interface{}                                 `json:"virtual_network_id"`
+	JSON             accountTeamnetRouteDeleteResponseResultJSON `json:"-"`
+}
+
+// accountTeamnetRouteDeleteResponseResultJSON contains the JSON metadata for the
+// struct [AccountTeamnetRouteDeleteResponseResult]
+type accountTeamnetRouteDeleteResponseResultJSON struct {
+	ID               apijson.Field
+	Comment          apijson.Field
+	CreatedAt        apijson.Field
+	DeletedAt        apijson.Field
+	Network          apijson.Field
+	TunnelID         apijson.Field
+	VirtualNetworkID apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccountTeamnetRouteDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountTeamnetRouteDeleteResponseSuccess bool
+
+const (
+	AccountTeamnetRouteDeleteResponseSuccessTrue AccountTeamnetRouteDeleteResponseSuccess = true
+)
+
+type AccountTeamnetRouteTunnelRouteListTunnelRoutesResponse struct {
+	// UUID of the route.
+	ID string `json:"id"`
+	// Optional remark describing the route.
+	Comment string `json:"comment"`
+	// Timestamp of when the route was created.
+	CreatedAt interface{} `json:"created_at"`
+	// Timestamp of when the route was deleted. If `null`, the route has not been
+	// deleted.
+	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
+	Network string `json:"network"`
+	// The type of tunnel.
+	TunType AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseTunType `json:"tun_type"`
+	// UUID of the Cloudflare Tunnel serving the route.
+	TunnelID interface{} `json:"tunnel_id"`
+	// The user-friendly name of the Cloudflare Tunnel serving the route.
+	TunnelName interface{} `json:"tunnel_name"`
+	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
+	// are configured, the route is assigned to the default virtual network of the
+	// account.
+	VirtualNetworkID interface{} `json:"virtual_network_id"`
+	// A user-friendly name for the virtual network.
+	VirtualNetworkName string                                                     `json:"virtual_network_name"`
+	JSON               accountTeamnetRouteTunnelRouteListTunnelRoutesResponseJSON `json:"-"`
 }
 
 // accountTeamnetRouteTunnelRouteListTunnelRoutesResponseJSON contains the JSON
 // metadata for the struct [AccountTeamnetRouteTunnelRouteListTunnelRoutesResponse]
 type accountTeamnetRouteTunnelRouteListTunnelRoutesResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                 apijson.Field
+	Comment            apijson.Field
+	CreatedAt          apijson.Field
+	DeletedAt          apijson.Field
+	Network            apijson.Field
+	TunType            apijson.Field
+	TunnelID           apijson.Field
+	TunnelName         apijson.Field
+	VirtualNetworkID   apijson.Field
+	VirtualNetworkName apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *AccountTeamnetRouteTunnelRouteListTunnelRoutesResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseError struct {
-	Code    int64                                                           `json:"code,required"`
-	Message string                                                          `json:"message,required"`
-	JSON    accountTeamnetRouteTunnelRouteListTunnelRoutesResponseErrorJSON `json:"-"`
-}
+// The type of tunnel.
+type AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseTunType string
 
-// accountTeamnetRouteTunnelRouteListTunnelRoutesResponseErrorJSON contains the
-// JSON metadata for the struct
-// [AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseError]
-type accountTeamnetRouteTunnelRouteListTunnelRoutesResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
+const (
+	AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseTunTypeCfdTunnel     AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseTunType = "cfd_tunnel"
+	AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseTunTypeWarpConnector AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseTunType = "warp_connector"
+	AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseTunTypeIPSec         AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseTunType = "ip_sec"
+	AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseTunTypeGre           AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseTunType = "gre"
+	AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseTunTypeCni           AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseTunType = "cni"
+)
 
-func (r *AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseMessage struct {
-	Code    int64                                                             `json:"code,required"`
-	Message string                                                            `json:"message,required"`
-	JSON    accountTeamnetRouteTunnelRouteListTunnelRoutesResponseMessageJSON `json:"-"`
-}
-
-// accountTeamnetRouteTunnelRouteListTunnelRoutesResponseMessageJSON contains the
-// JSON metadata for the struct
-// [AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseMessage]
-type accountTeamnetRouteTunnelRouteListTunnelRoutesResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseResult struct {
-	// Optional remark describing the route.
-	Comment string `json:"comment,required"`
-	// Timestamp of when the route was created.
-	CreatedAt interface{} `json:"created_at,required"`
+type AccountTeamnetRouteNewParams struct {
 	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
-	Network string `json:"network,required"`
-	// UUID of the Cloudflare Tunnel serving the route.
-	TunnelID interface{} `json:"tunnel_id,required"`
-	// Timestamp of when the route was deleted. If `null`, the route has not been
-	// deleted.
-	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
-	// The user-friendly name of the Cloudflare Tunnel serving the route.
-	TunnelName interface{} `json:"tunnel_name"`
+	IPNetwork param.Field[string] `json:"ip_network,required"`
+	// Optional remark describing the route.
+	Comment param.Field[string] `json:"comment"`
 	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
 	// are configured, the route is assigned to the default virtual network of the
 	// account.
-	VirtualNetworkID interface{}                                                      `json:"virtual_network_id"`
-	JSON             accountTeamnetRouteTunnelRouteListTunnelRoutesResponseResultJSON `json:"-"`
+	VirtualNetworkID param.Field[interface{}] `json:"virtual_network_id"`
 }
 
-// accountTeamnetRouteTunnelRouteListTunnelRoutesResponseResultJSON contains the
-// JSON metadata for the struct
-// [AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseResult]
-type accountTeamnetRouteTunnelRouteListTunnelRoutesResponseResultJSON struct {
-	Comment          apijson.Field
-	CreatedAt        apijson.Field
-	Network          apijson.Field
-	TunnelID         apijson.Field
-	DeletedAt        apijson.Field
-	TunnelName       apijson.Field
-	VirtualNetworkID apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+func (r AccountTeamnetRouteNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+type AccountTeamnetRouteUpdateParams struct {
+	// Optional remark describing the route.
+	Comment param.Field[string] `json:"comment"`
+	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
+	Network param.Field[string] `json:"network"`
+	// The type of tunnel.
+	TunType param.Field[AccountTeamnetRouteUpdateParamsTunType] `json:"tun_type"`
+	// UUID of the Cloudflare Tunnel serving the route.
+	TunnelID param.Field[interface{}] `json:"tunnel_id"`
+	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
+	// are configured, the route is assigned to the default virtual network of the
+	// account.
+	VirtualNetworkID param.Field[interface{}] `json:"virtual_network_id"`
 }
 
-type AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                              `json:"total_count"`
-	JSON       accountTeamnetRouteTunnelRouteListTunnelRoutesResponseResultInfoJSON `json:"-"`
+func (r AccountTeamnetRouteUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-// accountTeamnetRouteTunnelRouteListTunnelRoutesResponseResultInfoJSON contains
-// the JSON metadata for the struct
-// [AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseResultInfo]
-type accountTeamnetRouteTunnelRouteListTunnelRoutesResponseResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseSuccess bool
+// The type of tunnel.
+type AccountTeamnetRouteUpdateParamsTunType string
 
 const (
-	AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseSuccessTrue AccountTeamnetRouteTunnelRouteListTunnelRoutesResponseSuccess = true
+	AccountTeamnetRouteUpdateParamsTunTypeCfdTunnel     AccountTeamnetRouteUpdateParamsTunType = "cfd_tunnel"
+	AccountTeamnetRouteUpdateParamsTunTypeWarpConnector AccountTeamnetRouteUpdateParamsTunType = "warp_connector"
+	AccountTeamnetRouteUpdateParamsTunTypeIPSec         AccountTeamnetRouteUpdateParamsTunType = "ip_sec"
+	AccountTeamnetRouteUpdateParamsTunTypeGre           AccountTeamnetRouteUpdateParamsTunType = "gre"
+	AccountTeamnetRouteUpdateParamsTunTypeCni           AccountTeamnetRouteUpdateParamsTunType = "cni"
 )
 
 type AccountTeamnetRouteTunnelRouteListTunnelRoutesParams struct {
@@ -204,6 +527,8 @@ type AccountTeamnetRouteTunnelRouteListTunnelRoutesParams struct {
 	Page param.Field[float64] `query:"page"`
 	// Number of results to display.
 	PerPage param.Field[float64] `query:"per_page"`
+	// The types of tunnels to filter separated by a comma.
+	TunTypes param.Field[string] `query:"tun_types"`
 	// UUID of the Cloudflare Tunnel serving the route.
 	TunnelID param.Field[interface{}] `query:"tunnel_id"`
 	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks

@@ -24,13 +24,15 @@ func TestZoneRulesetPhaseEntrypointVersionGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Rulesets.Phases.Entrypoints.Versions.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		"http_request_firewall_managed",
+		"9f1839b6152d298aca64c4e906b6d074",
+		cloudflare.ZoneRulesetPhaseEntrypointVersionGetParamsRulesetPhaseHTTPRequestFirewallCustom,
 		"1",
 	)
 	if err != nil {
@@ -53,13 +55,15 @@ func TestZoneRulesetPhaseEntrypointVersionZoneRulesetsListAZoneEntryPointRuleset
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Rulesets.Phases.Entrypoints.Versions.ZoneRulesetsListAZoneEntryPointRulesetSVersions(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		"http_request_firewall_managed",
+		"9f1839b6152d298aca64c4e906b6d074",
+		cloudflare.ZoneRulesetPhaseEntrypointVersionZoneRulesetsListAZoneEntryPointRulesetSVersionsParamsRulesetPhaseHTTPRequestFirewallCustom,
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

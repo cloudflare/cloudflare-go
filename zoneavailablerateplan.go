@@ -31,26 +31,27 @@ func NewZoneAvailableRatePlanService(opts ...option.RequestOption) (r *ZoneAvail
 }
 
 // Lists all rate plans the zone can subscribe to.
-func (r *ZoneAvailableRatePlanService) ZoneRatePlanListAvailableRatePlans(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *PlanResponseCollection, err error) {
+func (r *ZoneAvailableRatePlanService) ZoneRatePlanListAvailableRatePlans(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/available_rate_plans", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type PlanResponseCollection struct {
-	Errors     []PlanResponseCollectionError    `json:"errors"`
-	Messages   []PlanResponseCollectionMessage  `json:"messages"`
-	Result     []PlanResponseCollectionResult   `json:"result"`
-	ResultInfo PlanResponseCollectionResultInfo `json:"result_info"`
+type ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponse struct {
+	Errors     []ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseError    `json:"errors"`
+	Messages   []ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseMessage  `json:"messages"`
+	Result     []ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResult   `json:"result"`
+	ResultInfo ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultInfo `json:"result_info"`
 	// Whether the API call was successful
-	Success PlanResponseCollectionSuccess `json:"success"`
-	JSON    planResponseCollectionJSON    `json:"-"`
+	Success ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseSuccess `json:"success"`
+	JSON    zoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseJSON    `json:"-"`
 }
 
-// planResponseCollectionJSON contains the JSON metadata for the struct
-// [PlanResponseCollection]
-type planResponseCollectionJSON struct {
+// zoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseJSON contains the
+// JSON metadata for the struct
+// [ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponse]
+type zoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -60,67 +61,70 @@ type planResponseCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PlanResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PlanResponseCollectionError struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    planResponseCollectionErrorJSON `json:"-"`
+type ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseError struct {
+	Code    int64                                                                    `json:"code,required"`
+	Message string                                                                   `json:"message,required"`
+	JSON    zoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseErrorJSON `json:"-"`
 }
 
-// planResponseCollectionErrorJSON contains the JSON metadata for the struct
-// [PlanResponseCollectionError]
-type planResponseCollectionErrorJSON struct {
+// zoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseError]
+type zoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PlanResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PlanResponseCollectionMessage struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    planResponseCollectionMessageJSON `json:"-"`
+type ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseMessage struct {
+	Code    int64                                                                      `json:"code,required"`
+	Message string                                                                     `json:"message,required"`
+	JSON    zoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseMessageJSON `json:"-"`
 }
 
-// planResponseCollectionMessageJSON contains the JSON metadata for the struct
-// [PlanResponseCollectionMessage]
-type planResponseCollectionMessageJSON struct {
+// zoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseMessage]
+type zoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PlanResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PlanResponseCollectionResult struct {
+type ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResult struct {
 	// Plan identifier tag.
 	ID string `json:"id"`
 	// Array of available components values for the plan.
-	Components []PlanResponseCollectionResultComponent `json:"components"`
+	Components []ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultComponent `json:"components"`
 	// The monetary unit in which pricing information is displayed.
 	Currency string `json:"currency"`
 	// The duration of the plan subscription.
 	Duration float64 `json:"duration"`
 	// The frequency at which you will be billed for this plan.
-	Frequency PlanResponseCollectionResultFrequency `json:"frequency"`
+	Frequency ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultFrequency `json:"frequency"`
 	// The plan name.
-	Name string                           `json:"name"`
-	JSON planResponseCollectionResultJSON `json:"-"`
+	Name string                                                                    `json:"name"`
+	JSON zoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultJSON `json:"-"`
 }
 
-// planResponseCollectionResultJSON contains the JSON metadata for the struct
-// [PlanResponseCollectionResult]
-type planResponseCollectionResultJSON struct {
+// zoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultJSON
+// contains the JSON metadata for the struct
+// [ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResult]
+type zoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultJSON struct {
 	ID          apijson.Field
 	Components  apijson.Field
 	Currency    apijson.Field
@@ -131,23 +135,24 @@ type planResponseCollectionResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PlanResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PlanResponseCollectionResultComponent struct {
+type ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultComponent struct {
 	// The default amount allocated.
 	Default float64 `json:"default"`
 	// The unique component.
-	Name PlanResponseCollectionResultComponentsName `json:"name"`
+	Name ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultComponentsName `json:"name"`
 	// The unit price of the addon.
-	UnitPrice float64                                   `json:"unit_price"`
-	JSON      planResponseCollectionResultComponentJSON `json:"-"`
+	UnitPrice float64                                                                            `json:"unit_price"`
+	JSON      zoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultComponentJSON `json:"-"`
 }
 
-// planResponseCollectionResultComponentJSON contains the JSON metadata for the
-// struct [PlanResponseCollectionResultComponent]
-type planResponseCollectionResultComponentJSON struct {
+// zoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultComponentJSON
+// contains the JSON metadata for the struct
+// [ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultComponent]
+type zoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultComponentJSON struct {
 	Default     apijson.Field
 	Name        apijson.Field
 	UnitPrice   apijson.Field
@@ -155,31 +160,31 @@ type planResponseCollectionResultComponentJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PlanResponseCollectionResultComponent) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultComponent) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The unique component.
-type PlanResponseCollectionResultComponentsName string
+type ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultComponentsName string
 
 const (
-	PlanResponseCollectionResultComponentsNameZones                       PlanResponseCollectionResultComponentsName = "zones"
-	PlanResponseCollectionResultComponentsNamePageRules                   PlanResponseCollectionResultComponentsName = "page_rules"
-	PlanResponseCollectionResultComponentsNameDedicatedCertificates       PlanResponseCollectionResultComponentsName = "dedicated_certificates"
-	PlanResponseCollectionResultComponentsNameDedicatedCertificatesCustom PlanResponseCollectionResultComponentsName = "dedicated_certificates_custom"
+	ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultComponentsNameZones                       ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultComponentsName = "zones"
+	ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultComponentsNamePageRules                   ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultComponentsName = "page_rules"
+	ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultComponentsNameDedicatedCertificates       ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultComponentsName = "dedicated_certificates"
+	ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultComponentsNameDedicatedCertificatesCustom ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultComponentsName = "dedicated_certificates_custom"
 )
 
 // The frequency at which you will be billed for this plan.
-type PlanResponseCollectionResultFrequency string
+type ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultFrequency string
 
 const (
-	PlanResponseCollectionResultFrequencyWeekly    PlanResponseCollectionResultFrequency = "weekly"
-	PlanResponseCollectionResultFrequencyMonthly   PlanResponseCollectionResultFrequency = "monthly"
-	PlanResponseCollectionResultFrequencyQuarterly PlanResponseCollectionResultFrequency = "quarterly"
-	PlanResponseCollectionResultFrequencyYearly    PlanResponseCollectionResultFrequency = "yearly"
+	ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultFrequencyWeekly    ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultFrequency = "weekly"
+	ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultFrequencyMonthly   ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultFrequency = "monthly"
+	ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultFrequencyQuarterly ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultFrequency = "quarterly"
+	ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultFrequencyYearly    ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultFrequency = "yearly"
 )
 
-type PlanResponseCollectionResultInfo struct {
+type ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -187,13 +192,14 @@ type PlanResponseCollectionResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                              `json:"total_count"`
-	JSON       planResponseCollectionResultInfoJSON `json:"-"`
+	TotalCount float64                                                                       `json:"total_count"`
+	JSON       zoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultInfoJSON `json:"-"`
 }
 
-// planResponseCollectionResultInfoJSON contains the JSON metadata for the struct
-// [PlanResponseCollectionResultInfo]
-type planResponseCollectionResultInfoJSON struct {
+// zoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultInfo]
+type zoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -202,13 +208,13 @@ type planResponseCollectionResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PlanResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type PlanResponseCollectionSuccess bool
+type ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseSuccess bool
 
 const (
-	PlanResponseCollectionSuccessTrue PlanResponseCollectionSuccess = true
+	ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseSuccessTrue ZoneAvailableRatePlanZoneRatePlanListAvailableRatePlansResponseSuccess = true
 )

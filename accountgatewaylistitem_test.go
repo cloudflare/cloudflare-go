@@ -24,10 +24,12 @@ func TestAccountGatewayListItemZeroTrustListsZeroTrustListItems(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Gateways.Lists.Items.ZeroTrustListsZeroTrustListItems(
+	_, err := client.Accounts.Gateway.Lists.Items.ZeroTrustListsZeroTrustListItems(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",

@@ -33,7 +33,7 @@ func NewZoneAccessServiceTokenService(opts ...option.RequestOption) (r *ZoneAcce
 }
 
 // Updates a configured service token.
-func (r *ZoneAccessServiceTokenService) Update(ctx context.Context, identifier string, uuid string, body ZoneAccessServiceTokenUpdateParams, opts ...option.RequestOption) (res *ServiceTokensSingleResponse, err error) {
+func (r *ZoneAccessServiceTokenService) Update(ctx context.Context, identifier string, uuid string, body ZoneAccessServiceTokenUpdateParams, opts ...option.RequestOption) (res *ZoneAccessServiceTokenUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/access/service_tokens/%s", identifier, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
@@ -41,7 +41,7 @@ func (r *ZoneAccessServiceTokenService) Update(ctx context.Context, identifier s
 }
 
 // Deletes a service token.
-func (r *ZoneAccessServiceTokenService) Delete(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *ServiceTokensSingleResponse, err error) {
+func (r *ZoneAccessServiceTokenService) Delete(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *ZoneAccessServiceTokenDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/access/service_tokens/%s", identifier, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -51,7 +51,7 @@ func (r *ZoneAccessServiceTokenService) Delete(ctx context.Context, identifier s
 // Generates a new service token. **Note:** This is the only time you can get the
 // Client Secret. If you lose the Client Secret, you will have to create a new
 // service token.
-func (r *ZoneAccessServiceTokenService) ZoneLevelAccessServiceTokensNewAServiceToken(ctx context.Context, identifier string, body ZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenParams, opts ...option.RequestOption) (res *CreateResponse, err error) {
+func (r *ZoneAccessServiceTokenService) ZoneLevelAccessServiceTokensNewAServiceToken(ctx context.Context, identifier string, body ZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenParams, opts ...option.RequestOption) (res *ZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/access/service_tokens", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -65,6 +65,323 @@ func (r *ZoneAccessServiceTokenService) ZoneLevelAccessServiceTokensListServiceT
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
+
+type ZoneAccessServiceTokenUpdateResponse struct {
+	Errors   []ZoneAccessServiceTokenUpdateResponseError   `json:"errors"`
+	Messages []ZoneAccessServiceTokenUpdateResponseMessage `json:"messages"`
+	Result   ZoneAccessServiceTokenUpdateResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success ZoneAccessServiceTokenUpdateResponseSuccess `json:"success"`
+	JSON    zoneAccessServiceTokenUpdateResponseJSON    `json:"-"`
+}
+
+// zoneAccessServiceTokenUpdateResponseJSON contains the JSON metadata for the
+// struct [ZoneAccessServiceTokenUpdateResponse]
+type zoneAccessServiceTokenUpdateResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneAccessServiceTokenUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneAccessServiceTokenUpdateResponseError struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    zoneAccessServiceTokenUpdateResponseErrorJSON `json:"-"`
+}
+
+// zoneAccessServiceTokenUpdateResponseErrorJSON contains the JSON metadata for the
+// struct [ZoneAccessServiceTokenUpdateResponseError]
+type zoneAccessServiceTokenUpdateResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneAccessServiceTokenUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneAccessServiceTokenUpdateResponseMessage struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    zoneAccessServiceTokenUpdateResponseMessageJSON `json:"-"`
+}
+
+// zoneAccessServiceTokenUpdateResponseMessageJSON contains the JSON metadata for
+// the struct [ZoneAccessServiceTokenUpdateResponseMessage]
+type zoneAccessServiceTokenUpdateResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneAccessServiceTokenUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneAccessServiceTokenUpdateResponseResult struct {
+	// The ID of the service token.
+	ID interface{} `json:"id"`
+	// The Client ID for the service token. Access will check for this value in the
+	// `CF-Access-Client-ID` request header.
+	ClientID  string    `json:"client_id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The duration for how long the service token will be valid. Must be in the format
+	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
+	// default is 1 year in hours (8760h).
+	Duration string `json:"duration"`
+	// The name of the service token.
+	Name      string                                         `json:"name"`
+	UpdatedAt time.Time                                      `json:"updated_at" format:"date-time"`
+	JSON      zoneAccessServiceTokenUpdateResponseResultJSON `json:"-"`
+}
+
+// zoneAccessServiceTokenUpdateResponseResultJSON contains the JSON metadata for
+// the struct [ZoneAccessServiceTokenUpdateResponseResult]
+type zoneAccessServiceTokenUpdateResponseResultJSON struct {
+	ID          apijson.Field
+	ClientID    apijson.Field
+	CreatedAt   apijson.Field
+	Duration    apijson.Field
+	Name        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneAccessServiceTokenUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneAccessServiceTokenUpdateResponseSuccess bool
+
+const (
+	ZoneAccessServiceTokenUpdateResponseSuccessTrue ZoneAccessServiceTokenUpdateResponseSuccess = true
+)
+
+type ZoneAccessServiceTokenDeleteResponse struct {
+	Errors   []ZoneAccessServiceTokenDeleteResponseError   `json:"errors"`
+	Messages []ZoneAccessServiceTokenDeleteResponseMessage `json:"messages"`
+	Result   ZoneAccessServiceTokenDeleteResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success ZoneAccessServiceTokenDeleteResponseSuccess `json:"success"`
+	JSON    zoneAccessServiceTokenDeleteResponseJSON    `json:"-"`
+}
+
+// zoneAccessServiceTokenDeleteResponseJSON contains the JSON metadata for the
+// struct [ZoneAccessServiceTokenDeleteResponse]
+type zoneAccessServiceTokenDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneAccessServiceTokenDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneAccessServiceTokenDeleteResponseError struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    zoneAccessServiceTokenDeleteResponseErrorJSON `json:"-"`
+}
+
+// zoneAccessServiceTokenDeleteResponseErrorJSON contains the JSON metadata for the
+// struct [ZoneAccessServiceTokenDeleteResponseError]
+type zoneAccessServiceTokenDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneAccessServiceTokenDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneAccessServiceTokenDeleteResponseMessage struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    zoneAccessServiceTokenDeleteResponseMessageJSON `json:"-"`
+}
+
+// zoneAccessServiceTokenDeleteResponseMessageJSON contains the JSON metadata for
+// the struct [ZoneAccessServiceTokenDeleteResponseMessage]
+type zoneAccessServiceTokenDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneAccessServiceTokenDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneAccessServiceTokenDeleteResponseResult struct {
+	// The ID of the service token.
+	ID interface{} `json:"id"`
+	// The Client ID for the service token. Access will check for this value in the
+	// `CF-Access-Client-ID` request header.
+	ClientID  string    `json:"client_id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The duration for how long the service token will be valid. Must be in the format
+	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
+	// default is 1 year in hours (8760h).
+	Duration string `json:"duration"`
+	// The name of the service token.
+	Name      string                                         `json:"name"`
+	UpdatedAt time.Time                                      `json:"updated_at" format:"date-time"`
+	JSON      zoneAccessServiceTokenDeleteResponseResultJSON `json:"-"`
+}
+
+// zoneAccessServiceTokenDeleteResponseResultJSON contains the JSON metadata for
+// the struct [ZoneAccessServiceTokenDeleteResponseResult]
+type zoneAccessServiceTokenDeleteResponseResultJSON struct {
+	ID          apijson.Field
+	ClientID    apijson.Field
+	CreatedAt   apijson.Field
+	Duration    apijson.Field
+	Name        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneAccessServiceTokenDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneAccessServiceTokenDeleteResponseSuccess bool
+
+const (
+	ZoneAccessServiceTokenDeleteResponseSuccessTrue ZoneAccessServiceTokenDeleteResponseSuccess = true
+)
+
+type ZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponse struct {
+	Errors   []ZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseError   `json:"errors"`
+	Messages []ZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseMessage `json:"messages"`
+	Result   ZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success ZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseSuccess `json:"success"`
+	JSON    zoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseJSON    `json:"-"`
+}
+
+// zoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponse]
+type zoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseError struct {
+	Code    int64                                                                               `json:"code,required"`
+	Message string                                                                              `json:"message,required"`
+	JSON    zoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseErrorJSON `json:"-"`
+}
+
+// zoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseError]
+type zoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseMessage struct {
+	Code    int64                                                                                 `json:"code,required"`
+	Message string                                                                                `json:"message,required"`
+	JSON    zoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseMessageJSON `json:"-"`
+}
+
+// zoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseMessage]
+type zoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseResult struct {
+	// The ID of the service token.
+	ID interface{} `json:"id"`
+	// The Client ID for the service token. Access will check for this value in the
+	// `CF-Access-Client-ID` request header.
+	ClientID string `json:"client_id"`
+	// The Client Secret for the service token. Access will check for this value in the
+	// `CF-Access-Client-Secret` request header.
+	ClientSecret string    `json:"client_secret"`
+	CreatedAt    time.Time `json:"created_at" format:"date-time"`
+	// The duration for how long the service token will be valid. Must be in the format
+	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
+	// default is 1 year in hours (8760h).
+	Duration string `json:"duration"`
+	// The name of the service token.
+	Name      string                                                                               `json:"name"`
+	UpdatedAt time.Time                                                                            `json:"updated_at" format:"date-time"`
+	JSON      zoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseResultJSON `json:"-"`
+}
+
+// zoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseResultJSON
+// contains the JSON metadata for the struct
+// [ZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseResult]
+type zoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseResultJSON struct {
+	ID           apijson.Field
+	ClientID     apijson.Field
+	ClientSecret apijson.Field
+	CreatedAt    apijson.Field
+	Duration     apijson.Field
+	Name         apijson.Field
+	UpdatedAt    apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *ZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseSuccess bool
+
+const (
+	ZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseSuccessTrue ZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenResponseSuccess = true
+)
 
 type ZoneAccessServiceTokenZoneLevelAccessServiceTokensListServiceTokensResponse struct {
 	Errors     []ZoneAccessServiceTokenZoneLevelAccessServiceTokensListServiceTokensResponseError    `json:"errors"`
@@ -140,6 +457,10 @@ type ZoneAccessServiceTokenZoneLevelAccessServiceTokensListServiceTokensResponse
 	// `CF-Access-Client-ID` request header.
 	ClientID  string    `json:"client_id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The duration for how long the service token will be valid. Must be in the format
+	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
+	// default is 1 year in hours (8760h).
+	Duration string `json:"duration"`
 	// The name of the service token.
 	Name      string                                                                                `json:"name"`
 	UpdatedAt time.Time                                                                             `json:"updated_at" format:"date-time"`
@@ -153,6 +474,7 @@ type zoneAccessServiceTokenZoneLevelAccessServiceTokensListServiceTokensResponse
 	ID          apijson.Field
 	ClientID    apijson.Field
 	CreatedAt   apijson.Field
+	Duration    apijson.Field
 	Name        apijson.Field
 	UpdatedAt   apijson.Field
 	raw         string
@@ -199,6 +521,10 @@ const (
 )
 
 type ZoneAccessServiceTokenUpdateParams struct {
+	// The duration for how long the service token will be valid. Must be in the format
+	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
+	// default is 1 year in hours (8760h).
+	Duration param.Field[string] `json:"duration"`
 	// The name of the service token.
 	Name param.Field[string] `json:"name"`
 }
@@ -210,6 +536,10 @@ func (r ZoneAccessServiceTokenUpdateParams) MarshalJSON() (data []byte, err erro
 type ZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenParams struct {
 	// The name of the service token.
 	Name param.Field[string] `json:"name,required"`
+	// The duration for how long the service token will be valid. Must be in the format
+	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
+	// default is 1 year in hours (8760h).
+	Duration param.Field[string] `json:"duration"`
 }
 
 func (r ZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenParams) MarshalJSON() (data []byte, err error) {

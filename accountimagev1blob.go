@@ -6,13 +6,9 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
-	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
-	"github.com/tidwall/gjson"
 )
 
 // AccountImageV1BlobService contains methods and other services that help with
@@ -35,26 +31,10 @@ func NewAccountImageV1BlobService(opts ...option.RequestOption) (r *AccountImage
 
 // Fetch base image. For most images this will be the originally uploaded file. For
 // larger images it can be a near-lossless version of the original.
-func (r *AccountImageV1BlobService) CloudflareImagesBaseImage(ctx context.Context, accountIdentifier string, identifier string, opts ...option.RequestOption) (res *ImageResponseBlob, err error) {
+func (r *AccountImageV1BlobService) CloudflareImagesBaseImage(ctx context.Context, accountIdentifier string, identifier string, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "image/*")}, opts...)
 	path := fmt.Sprintf("accounts/%s/images/v1/%s/blob", accountIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
-}
-
-// Union satisfied by [shared.UnionString] or [ImageResponseBlobObject].
-type ImageResponseBlob interface {
-	ImplementsImageResponseBlob()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ImageResponseBlob)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter:         gjson.String,
-			DiscriminatorValue: "",
-			Type:               reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }

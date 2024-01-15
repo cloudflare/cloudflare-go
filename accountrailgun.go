@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -37,7 +38,7 @@ func NewAccountRailgunService(opts ...option.RequestOption) (r *AccountRailgunSe
 }
 
 // Railgun details
-func (r *AccountRailgunService) Get(ctx context.Context, accountIdentifier string, identifier string, opts ...option.RequestOption) (res *RailgunResponseSingle, err error) {
+func (r *AccountRailgunService) Get(ctx context.Context, accountIdentifier string, identifier string, opts ...option.RequestOption) (res *AccountRailgunGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/railguns/%s", accountIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -45,7 +46,7 @@ func (r *AccountRailgunService) Get(ctx context.Context, accountIdentifier strin
 }
 
 // Update a Railgun.
-func (r *AccountRailgunService) Update(ctx context.Context, accountIdentifier string, identifier string, body AccountRailgunUpdateParams, opts ...option.RequestOption) (res *RailgunResponseSingle, err error) {
+func (r *AccountRailgunService) Update(ctx context.Context, accountIdentifier string, identifier string, body AccountRailgunUpdateParams, opts ...option.RequestOption) (res *AccountRailgunUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/railguns/%s", accountIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
@@ -54,7 +55,7 @@ func (r *AccountRailgunService) Update(ctx context.Context, accountIdentifier st
 
 // Disable and delete a Railgun. This will immediately disable the Railgun for any
 // connected zones.
-func (r *AccountRailgunService) Delete(ctx context.Context, accountIdentifier string, identifier string, opts ...option.RequestOption) (res *RailgunResponseSingleID, err error) {
+func (r *AccountRailgunService) Delete(ctx context.Context, accountIdentifier string, identifier string, opts ...option.RequestOption) (res *AccountRailgunDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/railguns/%s", accountIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -62,7 +63,7 @@ func (r *AccountRailgunService) Delete(ctx context.Context, accountIdentifier st
 }
 
 // Create Railgun
-func (r *AccountRailgunService) AccountRailgunsNewRailgun(ctx context.Context, accountIdentifier string, body AccountRailgunAccountRailgunsNewRailgunParams, opts ...option.RequestOption) (res *RailgunResponseSingle, err error) {
+func (r *AccountRailgunService) AccountRailgunsNewRailgun(ctx context.Context, accountIdentifier string, body AccountRailgunAccountRailgunsNewRailgunParams, opts ...option.RequestOption) (res *AccountRailgunAccountRailgunsNewRailgunResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/railguns", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -70,78 +71,318 @@ func (r *AccountRailgunService) AccountRailgunsNewRailgun(ctx context.Context, a
 }
 
 // List, search, sort and filter your Railguns.
-func (r *AccountRailgunService) AccountRailgunsListRailguns(ctx context.Context, accountIdentifier string, query AccountRailgunAccountRailgunsListRailgunsParams, opts ...option.RequestOption) (res *RailgunResponseCollection, err error) {
-	opts = append(r.Options[:], opts...)
+func (r *AccountRailgunService) AccountRailgunsListRailguns(ctx context.Context, accountIdentifier string, query AccountRailgunAccountRailgunsListRailgunsParams, opts ...option.RequestOption) (res *shared.Page[AccountRailgunAccountRailgunsListRailgunsResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/railguns", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
 }
 
-type RailgunResponseCollection struct {
-	Errors     []RailgunResponseCollectionError    `json:"errors"`
-	Messages   []RailgunResponseCollectionMessage  `json:"messages"`
-	Result     []RailgunResponseCollectionResult   `json:"result"`
-	ResultInfo RailgunResponseCollectionResultInfo `json:"result_info"`
+type AccountRailgunGetResponse struct {
+	Errors   []AccountRailgunGetResponseError   `json:"errors"`
+	Messages []AccountRailgunGetResponseMessage `json:"messages"`
+	Result   interface{}                        `json:"result"`
 	// Whether the API call was successful
-	Success RailgunResponseCollectionSuccess `json:"success"`
-	JSON    railgunResponseCollectionJSON    `json:"-"`
+	Success AccountRailgunGetResponseSuccess `json:"success"`
+	JSON    accountRailgunGetResponseJSON    `json:"-"`
 }
 
-// railgunResponseCollectionJSON contains the JSON metadata for the struct
-// [RailgunResponseCollection]
-type railgunResponseCollectionJSON struct {
+// accountRailgunGetResponseJSON contains the JSON metadata for the struct
+// [AccountRailgunGetResponse]
+type accountRailgunGetResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RailgunResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountRailgunGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RailgunResponseCollectionError struct {
+type AccountRailgunGetResponseError struct {
 	Code    int64                              `json:"code,required"`
 	Message string                             `json:"message,required"`
-	JSON    railgunResponseCollectionErrorJSON `json:"-"`
+	JSON    accountRailgunGetResponseErrorJSON `json:"-"`
 }
 
-// railgunResponseCollectionErrorJSON contains the JSON metadata for the struct
-// [RailgunResponseCollectionError]
-type railgunResponseCollectionErrorJSON struct {
+// accountRailgunGetResponseErrorJSON contains the JSON metadata for the struct
+// [AccountRailgunGetResponseError]
+type accountRailgunGetResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RailgunResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountRailgunGetResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RailgunResponseCollectionMessage struct {
+type AccountRailgunGetResponseMessage struct {
 	Code    int64                                `json:"code,required"`
 	Message string                               `json:"message,required"`
-	JSON    railgunResponseCollectionMessageJSON `json:"-"`
+	JSON    accountRailgunGetResponseMessageJSON `json:"-"`
 }
 
-// railgunResponseCollectionMessageJSON contains the JSON metadata for the struct
-// [RailgunResponseCollectionMessage]
-type railgunResponseCollectionMessageJSON struct {
+// accountRailgunGetResponseMessageJSON contains the JSON metadata for the struct
+// [AccountRailgunGetResponseMessage]
+type accountRailgunGetResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RailgunResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountRailgunGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RailgunResponseCollectionResult struct {
+// Whether the API call was successful
+type AccountRailgunGetResponseSuccess bool
+
+const (
+	AccountRailgunGetResponseSuccessTrue AccountRailgunGetResponseSuccess = true
+)
+
+type AccountRailgunUpdateResponse struct {
+	Errors   []AccountRailgunUpdateResponseError   `json:"errors"`
+	Messages []AccountRailgunUpdateResponseMessage `json:"messages"`
+	Result   interface{}                           `json:"result"`
+	// Whether the API call was successful
+	Success AccountRailgunUpdateResponseSuccess `json:"success"`
+	JSON    accountRailgunUpdateResponseJSON    `json:"-"`
+}
+
+// accountRailgunUpdateResponseJSON contains the JSON metadata for the struct
+// [AccountRailgunUpdateResponse]
+type accountRailgunUpdateResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRailgunUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountRailgunUpdateResponseError struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    accountRailgunUpdateResponseErrorJSON `json:"-"`
+}
+
+// accountRailgunUpdateResponseErrorJSON contains the JSON metadata for the struct
+// [AccountRailgunUpdateResponseError]
+type accountRailgunUpdateResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRailgunUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountRailgunUpdateResponseMessage struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    accountRailgunUpdateResponseMessageJSON `json:"-"`
+}
+
+// accountRailgunUpdateResponseMessageJSON contains the JSON metadata for the
+// struct [AccountRailgunUpdateResponseMessage]
+type accountRailgunUpdateResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRailgunUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountRailgunUpdateResponseSuccess bool
+
+const (
+	AccountRailgunUpdateResponseSuccessTrue AccountRailgunUpdateResponseSuccess = true
+)
+
+type AccountRailgunDeleteResponse struct {
+	Errors   []AccountRailgunDeleteResponseError   `json:"errors"`
+	Messages []AccountRailgunDeleteResponseMessage `json:"messages"`
+	Result   AccountRailgunDeleteResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountRailgunDeleteResponseSuccess `json:"success"`
+	JSON    accountRailgunDeleteResponseJSON    `json:"-"`
+}
+
+// accountRailgunDeleteResponseJSON contains the JSON metadata for the struct
+// [AccountRailgunDeleteResponse]
+type accountRailgunDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRailgunDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountRailgunDeleteResponseError struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    accountRailgunDeleteResponseErrorJSON `json:"-"`
+}
+
+// accountRailgunDeleteResponseErrorJSON contains the JSON metadata for the struct
+// [AccountRailgunDeleteResponseError]
+type accountRailgunDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRailgunDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountRailgunDeleteResponseMessage struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    accountRailgunDeleteResponseMessageJSON `json:"-"`
+}
+
+// accountRailgunDeleteResponseMessageJSON contains the JSON metadata for the
+// struct [AccountRailgunDeleteResponseMessage]
+type accountRailgunDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRailgunDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountRailgunDeleteResponseResult struct {
+	// Railgun identifier tag.
+	ID   string                                 `json:"id"`
+	JSON accountRailgunDeleteResponseResultJSON `json:"-"`
+}
+
+// accountRailgunDeleteResponseResultJSON contains the JSON metadata for the struct
+// [AccountRailgunDeleteResponseResult]
+type accountRailgunDeleteResponseResultJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRailgunDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountRailgunDeleteResponseSuccess bool
+
+const (
+	AccountRailgunDeleteResponseSuccessTrue AccountRailgunDeleteResponseSuccess = true
+)
+
+type AccountRailgunAccountRailgunsNewRailgunResponse struct {
+	Errors   []AccountRailgunAccountRailgunsNewRailgunResponseError   `json:"errors"`
+	Messages []AccountRailgunAccountRailgunsNewRailgunResponseMessage `json:"messages"`
+	Result   interface{}                                              `json:"result"`
+	// Whether the API call was successful
+	Success AccountRailgunAccountRailgunsNewRailgunResponseSuccess `json:"success"`
+	JSON    accountRailgunAccountRailgunsNewRailgunResponseJSON    `json:"-"`
+}
+
+// accountRailgunAccountRailgunsNewRailgunResponseJSON contains the JSON metadata
+// for the struct [AccountRailgunAccountRailgunsNewRailgunResponse]
+type accountRailgunAccountRailgunsNewRailgunResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRailgunAccountRailgunsNewRailgunResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountRailgunAccountRailgunsNewRailgunResponseError struct {
+	Code    int64                                                    `json:"code,required"`
+	Message string                                                   `json:"message,required"`
+	JSON    accountRailgunAccountRailgunsNewRailgunResponseErrorJSON `json:"-"`
+}
+
+// accountRailgunAccountRailgunsNewRailgunResponseErrorJSON contains the JSON
+// metadata for the struct [AccountRailgunAccountRailgunsNewRailgunResponseError]
+type accountRailgunAccountRailgunsNewRailgunResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRailgunAccountRailgunsNewRailgunResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountRailgunAccountRailgunsNewRailgunResponseMessage struct {
+	Code    int64                                                      `json:"code,required"`
+	Message string                                                     `json:"message,required"`
+	JSON    accountRailgunAccountRailgunsNewRailgunResponseMessageJSON `json:"-"`
+}
+
+// accountRailgunAccountRailgunsNewRailgunResponseMessageJSON contains the JSON
+// metadata for the struct [AccountRailgunAccountRailgunsNewRailgunResponseMessage]
+type accountRailgunAccountRailgunsNewRailgunResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRailgunAccountRailgunsNewRailgunResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountRailgunAccountRailgunsNewRailgunResponseSuccess bool
+
+const (
+	AccountRailgunAccountRailgunsNewRailgunResponseSuccessTrue AccountRailgunAccountRailgunsNewRailgunResponseSuccess = true
+)
+
+type AccountRailgunAccountRailgunsListRailgunsResponse struct {
 	// Railgun identifier tag.
 	ID string `json:"id,required"`
 	// When the Railgun was activated.
@@ -160,20 +401,20 @@ type RailgunResponseCollectionResult struct {
 	// The revision of the Railgun receiver.
 	Revision string `json:"revision,required"`
 	// Status of the Railgun.
-	Status RailgunResponseCollectionResultStatus `json:"status,required"`
+	Status AccountRailgunAccountRailgunsListRailgunsResponseStatus `json:"status,required"`
 	// The version of the Railgun receiver.
 	Version string `json:"version,required"`
 	// The number of zones using this Railgun.
 	ZonesConnected float64 `json:"zones_connected,required"`
 	// Defined when the Railgun version is out of date from the latest release from
 	// Cloudflare.
-	UpgradeInfo RailgunResponseCollectionResultUpgradeInfo `json:"upgrade_info"`
-	JSON        railgunResponseCollectionResultJSON        `json:"-"`
+	UpgradeInfo AccountRailgunAccountRailgunsListRailgunsResponseUpgradeInfo `json:"upgrade_info"`
+	JSON        accountRailgunAccountRailgunsListRailgunsResponseJSON        `json:"-"`
 }
 
-// railgunResponseCollectionResultJSON contains the JSON metadata for the struct
-// [RailgunResponseCollectionResult]
-type railgunResponseCollectionResultJSON struct {
+// accountRailgunAccountRailgunsListRailgunsResponseJSON contains the JSON metadata
+// for the struct [AccountRailgunAccountRailgunsListRailgunsResponse]
+type accountRailgunAccountRailgunsListRailgunsResponseJSON struct {
 	ID             apijson.Field
 	ActivatedOn    apijson.Field
 	ActivationKey  apijson.Field
@@ -191,230 +432,41 @@ type railgunResponseCollectionResultJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *RailgunResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountRailgunAccountRailgunsListRailgunsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Status of the Railgun.
-type RailgunResponseCollectionResultStatus string
+type AccountRailgunAccountRailgunsListRailgunsResponseStatus string
 
 const (
-	RailgunResponseCollectionResultStatusInitializing RailgunResponseCollectionResultStatus = "initializing"
-	RailgunResponseCollectionResultStatusActive       RailgunResponseCollectionResultStatus = "active"
+	AccountRailgunAccountRailgunsListRailgunsResponseStatusInitializing AccountRailgunAccountRailgunsListRailgunsResponseStatus = "initializing"
+	AccountRailgunAccountRailgunsListRailgunsResponseStatusActive       AccountRailgunAccountRailgunsListRailgunsResponseStatus = "active"
 )
 
 // Defined when the Railgun version is out of date from the latest release from
 // Cloudflare.
-type RailgunResponseCollectionResultUpgradeInfo struct {
+type AccountRailgunAccountRailgunsListRailgunsResponseUpgradeInfo struct {
 	// An HTTP link to download the latest Railgun binary.
 	DownloadLink string `json:"download_link"`
 	// Latest version of the Railgun receiver available to install.
-	LatestVersion string                                         `json:"latest_version"`
-	JSON          railgunResponseCollectionResultUpgradeInfoJSON `json:"-"`
+	LatestVersion string                                                           `json:"latest_version"`
+	JSON          accountRailgunAccountRailgunsListRailgunsResponseUpgradeInfoJSON `json:"-"`
 }
 
-// railgunResponseCollectionResultUpgradeInfoJSON contains the JSON metadata for
-// the struct [RailgunResponseCollectionResultUpgradeInfo]
-type railgunResponseCollectionResultUpgradeInfoJSON struct {
+// accountRailgunAccountRailgunsListRailgunsResponseUpgradeInfoJSON contains the
+// JSON metadata for the struct
+// [AccountRailgunAccountRailgunsListRailgunsResponseUpgradeInfo]
+type accountRailgunAccountRailgunsListRailgunsResponseUpgradeInfoJSON struct {
 	DownloadLink  apijson.Field
 	LatestVersion apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *RailgunResponseCollectionResultUpgradeInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountRailgunAccountRailgunsListRailgunsResponseUpgradeInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-type RailgunResponseCollectionResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                 `json:"total_count"`
-	JSON       railgunResponseCollectionResultInfoJSON `json:"-"`
-}
-
-// railgunResponseCollectionResultInfoJSON contains the JSON metadata for the
-// struct [RailgunResponseCollectionResultInfo]
-type railgunResponseCollectionResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RailgunResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type RailgunResponseCollectionSuccess bool
-
-const (
-	RailgunResponseCollectionSuccessTrue RailgunResponseCollectionSuccess = true
-)
-
-type RailgunResponseSingle struct {
-	Errors   []RailgunResponseSingleError   `json:"errors"`
-	Messages []RailgunResponseSingleMessage `json:"messages"`
-	Result   interface{}                    `json:"result"`
-	// Whether the API call was successful
-	Success RailgunResponseSingleSuccess `json:"success"`
-	JSON    railgunResponseSingleJSON    `json:"-"`
-}
-
-// railgunResponseSingleJSON contains the JSON metadata for the struct
-// [RailgunResponseSingle]
-type railgunResponseSingleJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RailgunResponseSingle) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RailgunResponseSingleError struct {
-	Code    int64                          `json:"code,required"`
-	Message string                         `json:"message,required"`
-	JSON    railgunResponseSingleErrorJSON `json:"-"`
-}
-
-// railgunResponseSingleErrorJSON contains the JSON metadata for the struct
-// [RailgunResponseSingleError]
-type railgunResponseSingleErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RailgunResponseSingleError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RailgunResponseSingleMessage struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    railgunResponseSingleMessageJSON `json:"-"`
-}
-
-// railgunResponseSingleMessageJSON contains the JSON metadata for the struct
-// [RailgunResponseSingleMessage]
-type railgunResponseSingleMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RailgunResponseSingleMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type RailgunResponseSingleSuccess bool
-
-const (
-	RailgunResponseSingleSuccessTrue RailgunResponseSingleSuccess = true
-)
-
-type RailgunResponseSingleID struct {
-	Errors   []RailgunResponseSingleIDError   `json:"errors"`
-	Messages []RailgunResponseSingleIDMessage `json:"messages"`
-	Result   RailgunResponseSingleIDResult    `json:"result"`
-	// Whether the API call was successful
-	Success RailgunResponseSingleIDSuccess `json:"success"`
-	JSON    railgunResponseSingleIDJSON    `json:"-"`
-}
-
-// railgunResponseSingleIDJSON contains the JSON metadata for the struct
-// [RailgunResponseSingleID]
-type railgunResponseSingleIDJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RailgunResponseSingleID) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RailgunResponseSingleIDError struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    railgunResponseSingleIDErrorJSON `json:"-"`
-}
-
-// railgunResponseSingleIDErrorJSON contains the JSON metadata for the struct
-// [RailgunResponseSingleIDError]
-type railgunResponseSingleIDErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RailgunResponseSingleIDError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RailgunResponseSingleIDMessage struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    railgunResponseSingleIDMessageJSON `json:"-"`
-}
-
-// railgunResponseSingleIDMessageJSON contains the JSON metadata for the struct
-// [RailgunResponseSingleIDMessage]
-type railgunResponseSingleIDMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RailgunResponseSingleIDMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RailgunResponseSingleIDResult struct {
-	// Railgun identifier tag.
-	ID   string                            `json:"id"`
-	JSON railgunResponseSingleIDResultJSON `json:"-"`
-}
-
-// railgunResponseSingleIDResultJSON contains the JSON metadata for the struct
-// [RailgunResponseSingleIDResult]
-type railgunResponseSingleIDResultJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RailgunResponseSingleIDResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type RailgunResponseSingleIDSuccess bool
-
-const (
-	RailgunResponseSingleIDSuccessTrue RailgunResponseSingleIDSuccess = true
-)
 
 type AccountRailgunUpdateParams struct {
 	// Flag to determine if the Railgun is accepting connections.

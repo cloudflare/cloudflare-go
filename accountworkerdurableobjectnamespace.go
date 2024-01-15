@@ -33,7 +33,7 @@ func NewAccountWorkerDurableObjectNamespaceService(opts ...option.RequestOption)
 	return
 }
 
-// Returns the namespaces owned by an account.
+// Returns the Durable Object namespaces owned by an account.
 func (r *AccountWorkerDurableObjectNamespaceService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *AccountWorkerDurableObjectNamespaceListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/workers/durable_objects/namespaces", accountIdentifier)

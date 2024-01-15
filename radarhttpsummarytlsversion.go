@@ -33,7 +33,8 @@ func NewRadarHTTPSummaryTlsVersionService(opts ...option.RequestOption) (r *Rada
 	return
 }
 
-// Percentage distribution of traffic per TLS protocol version.
+// Percentage distribution of traffic per TLS protocol version, over a given time
+// period.
 func (r *RadarHTTPSummaryTlsVersionService) List(ctx context.Context, query RadarHTTPSummaryTlsVersionListParams, opts ...option.RequestOption) (res *RadarHTTPSummaryTlsVersionListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "radar/http/summary/tls_version"
@@ -61,7 +62,7 @@ func (r *RadarHTTPSummaryTlsVersionListResponse) UnmarshalJSON(data []byte) (err
 }
 
 type RadarHTTPSummaryTlsVersionListResponseResult struct {
-	Meta     interface{}                                          `json:"meta,required"`
+	Meta     RadarHTTPSummaryTlsVersionListResponseResultMeta     `json:"meta,required"`
 	Summary0 RadarHTTPSummaryTlsVersionListResponseResultSummary0 `json:"summary_0,required"`
 	JSON     radarHTTPSummaryTlsVersionListResponseResultJSON     `json:"-"`
 }
@@ -76,6 +77,101 @@ type radarHTTPSummaryTlsVersionListResponseResultJSON struct {
 }
 
 func (r *RadarHTTPSummaryTlsVersionListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarHTTPSummaryTlsVersionListResponseResultMeta struct {
+	DateRange      []RadarHTTPSummaryTlsVersionListResponseResultMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                                         `json:"lastUpdated,required"`
+	Normalization  string                                                         `json:"normalization,required"`
+	ConfidenceInfo RadarHTTPSummaryTlsVersionListResponseResultMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           radarHTTPSummaryTlsVersionListResponseResultMetaJSON           `json:"-"`
+}
+
+// radarHTTPSummaryTlsVersionListResponseResultMetaJSON contains the JSON metadata
+// for the struct [RadarHTTPSummaryTlsVersionListResponseResultMeta]
+type radarHTTPSummaryTlsVersionListResponseResultMetaJSON struct {
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	ConfidenceInfo apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RadarHTTPSummaryTlsVersionListResponseResultMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarHTTPSummaryTlsVersionListResponseResultMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                                     `json:"startTime,required" format:"date-time"`
+	JSON      radarHTTPSummaryTlsVersionListResponseResultMetaDateRangeJSON `json:"-"`
+}
+
+// radarHTTPSummaryTlsVersionListResponseResultMetaDateRangeJSON contains the JSON
+// metadata for the struct
+// [RadarHTTPSummaryTlsVersionListResponseResultMetaDateRange]
+type radarHTTPSummaryTlsVersionListResponseResultMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarHTTPSummaryTlsVersionListResponseResultMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarHTTPSummaryTlsVersionListResponseResultMetaConfidenceInfo struct {
+	Annotations []RadarHTTPSummaryTlsVersionListResponseResultMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                                      `json:"level"`
+	JSON        radarHTTPSummaryTlsVersionListResponseResultMetaConfidenceInfoJSON         `json:"-"`
+}
+
+// radarHTTPSummaryTlsVersionListResponseResultMetaConfidenceInfoJSON contains the
+// JSON metadata for the struct
+// [RadarHTTPSummaryTlsVersionListResponseResultMetaConfidenceInfo]
+type radarHTTPSummaryTlsVersionListResponseResultMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarHTTPSummaryTlsVersionListResponseResultMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarHTTPSummaryTlsVersionListResponseResultMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                                       `json:"dataSource,required"`
+	Description     string                                                                       `json:"description,required"`
+	EventType       string                                                                       `json:"eventType,required"`
+	IsInstantaneous interface{}                                                                  `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                                    `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                                       `json:"linkedUrl"`
+	StartTime       time.Time                                                                    `json:"startTime" format:"date-time"`
+	JSON            radarHTTPSummaryTlsVersionListResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// radarHTTPSummaryTlsVersionListResponseResultMetaConfidenceInfoAnnotationJSON
+// contains the JSON metadata for the struct
+// [RadarHTTPSummaryTlsVersionListResponseResultMetaConfidenceInfoAnnotation]
+type radarHTTPSummaryTlsVersionListResponseResultMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *RadarHTTPSummaryTlsVersionListResponseResultMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -112,7 +208,7 @@ type RadarHTTPSummaryTlsVersionListParams struct {
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]RadarHTTPSummaryTlsVersionListParamsBotClass] `query:"botClass"`
-	// Array of datetimes to filter the end of a series.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
@@ -160,6 +256,7 @@ type RadarHTTPSummaryTlsVersionListParamsDateRange string
 
 const (
 	RadarHTTPSummaryTlsVersionListParamsDateRange1d         RadarHTTPSummaryTlsVersionListParamsDateRange = "1d"
+	RadarHTTPSummaryTlsVersionListParamsDateRange2d         RadarHTTPSummaryTlsVersionListParamsDateRange = "2d"
 	RadarHTTPSummaryTlsVersionListParamsDateRange7d         RadarHTTPSummaryTlsVersionListParamsDateRange = "7d"
 	RadarHTTPSummaryTlsVersionListParamsDateRange14d        RadarHTTPSummaryTlsVersionListParamsDateRange = "14d"
 	RadarHTTPSummaryTlsVersionListParamsDateRange28d        RadarHTTPSummaryTlsVersionListParamsDateRange = "28d"
@@ -167,6 +264,7 @@ const (
 	RadarHTTPSummaryTlsVersionListParamsDateRange24w        RadarHTTPSummaryTlsVersionListParamsDateRange = "24w"
 	RadarHTTPSummaryTlsVersionListParamsDateRange52w        RadarHTTPSummaryTlsVersionListParamsDateRange = "52w"
 	RadarHTTPSummaryTlsVersionListParamsDateRange1dControl  RadarHTTPSummaryTlsVersionListParamsDateRange = "1dControl"
+	RadarHTTPSummaryTlsVersionListParamsDateRange2dControl  RadarHTTPSummaryTlsVersionListParamsDateRange = "2dControl"
 	RadarHTTPSummaryTlsVersionListParamsDateRange7dControl  RadarHTTPSummaryTlsVersionListParamsDateRange = "7dControl"
 	RadarHTTPSummaryTlsVersionListParamsDateRange14dControl RadarHTTPSummaryTlsVersionListParamsDateRange = "14dControl"
 	RadarHTTPSummaryTlsVersionListParamsDateRange28dControl RadarHTTPSummaryTlsVersionListParamsDateRange = "28dControl"
@@ -217,6 +315,7 @@ type RadarHTTPSummaryTlsVersionListParamsO string
 const (
 	RadarHTTPSummaryTlsVersionListParamsOWindows  RadarHTTPSummaryTlsVersionListParamsO = "WINDOWS"
 	RadarHTTPSummaryTlsVersionListParamsOMacosx   RadarHTTPSummaryTlsVersionListParamsO = "MACOSX"
+	RadarHTTPSummaryTlsVersionListParamsOIos      RadarHTTPSummaryTlsVersionListParamsO = "IOS"
 	RadarHTTPSummaryTlsVersionListParamsOAndroid  RadarHTTPSummaryTlsVersionListParamsO = "ANDROID"
 	RadarHTTPSummaryTlsVersionListParamsOChromeos RadarHTTPSummaryTlsVersionListParamsO = "CHROMEOS"
 	RadarHTTPSummaryTlsVersionListParamsOLinux    RadarHTTPSummaryTlsVersionListParamsO = "LINUX"

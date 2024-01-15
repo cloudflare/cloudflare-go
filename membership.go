@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -34,7 +35,7 @@ func NewMembershipService(opts ...option.RequestOption) (r *MembershipService) {
 }
 
 // Get a specific membership.
-func (r *MembershipService) Get(ctx context.Context, identifier string, opts ...option.RequestOption) (res *SingleMembershipResponse, err error) {
+func (r *MembershipService) Get(ctx context.Context, identifier string, opts ...option.RequestOption) (res *MembershipGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("memberships/%s", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -42,7 +43,7 @@ func (r *MembershipService) Get(ctx context.Context, identifier string, opts ...
 }
 
 // Accept or reject this account invitation.
-func (r *MembershipService) Update(ctx context.Context, identifier string, body MembershipUpdateParams, opts ...option.RequestOption) (res *SingleMembershipResponse, err error) {
+func (r *MembershipService) Update(ctx context.Context, identifier string, body MembershipUpdateParams, opts ...option.RequestOption) (res *MembershipUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("memberships/%s", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
@@ -58,489 +59,104 @@ func (r *MembershipService) Delete(ctx context.Context, identifier string, opts 
 }
 
 // List memberships of accounts the user can access.
-func (r *MembershipService) UserSAccountMembershipsListMemberships(ctx context.Context, query MembershipUserSAccountMembershipsListMembershipsParams, opts ...option.RequestOption) (res *CollectionMembershipResponse, err error) {
-	opts = append(r.Options[:], opts...)
+func (r *MembershipService) UserSAccountMembershipsListMemberships(ctx context.Context, query MembershipUserSAccountMembershipsListMembershipsParams, opts ...option.RequestOption) (res *shared.Page[MembershipUserSAccountMembershipsListMembershipsResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "memberships"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
 }
 
-type CollectionMembershipResponse struct {
-	Errors     []CollectionMembershipResponseError    `json:"errors"`
-	Messages   []CollectionMembershipResponseMessage  `json:"messages"`
-	Result     []CollectionMembershipResponseResult   `json:"result"`
-	ResultInfo CollectionMembershipResponseResultInfo `json:"result_info"`
+type MembershipGetResponse struct {
+	Errors   []MembershipGetResponseError   `json:"errors"`
+	Messages []MembershipGetResponseMessage `json:"messages"`
+	Result   interface{}                    `json:"result"`
 	// Whether the API call was successful
-	Success CollectionMembershipResponseSuccess `json:"success"`
-	JSON    collectionMembershipResponseJSON    `json:"-"`
+	Success MembershipGetResponseSuccess `json:"success"`
+	JSON    membershipGetResponseJSON    `json:"-"`
 }
 
-// collectionMembershipResponseJSON contains the JSON metadata for the struct
-// [CollectionMembershipResponse]
-type collectionMembershipResponseJSON struct {
+// membershipGetResponseJSON contains the JSON metadata for the struct
+// [MembershipGetResponse]
+type membershipGetResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CollectionMembershipResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *MembershipGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CollectionMembershipResponseError struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    collectionMembershipResponseErrorJSON `json:"-"`
+type MembershipGetResponseError struct {
+	Code    int64                          `json:"code,required"`
+	Message string                         `json:"message,required"`
+	JSON    membershipGetResponseErrorJSON `json:"-"`
 }
 
-// collectionMembershipResponseErrorJSON contains the JSON metadata for the struct
-// [CollectionMembershipResponseError]
-type collectionMembershipResponseErrorJSON struct {
+// membershipGetResponseErrorJSON contains the JSON metadata for the struct
+// [MembershipGetResponseError]
+type membershipGetResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CollectionMembershipResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *MembershipGetResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CollectionMembershipResponseMessage struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    collectionMembershipResponseMessageJSON `json:"-"`
+type MembershipGetResponseMessage struct {
+	Code    int64                            `json:"code,required"`
+	Message string                           `json:"message,required"`
+	JSON    membershipGetResponseMessageJSON `json:"-"`
 }
 
-// collectionMembershipResponseMessageJSON contains the JSON metadata for the
-// struct [CollectionMembershipResponseMessage]
-type collectionMembershipResponseMessageJSON struct {
+// membershipGetResponseMessageJSON contains the JSON metadata for the struct
+// [MembershipGetResponseMessage]
+type membershipGetResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CollectionMembershipResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CollectionMembershipResponseResult struct {
-	// Membership identifier tag.
-	ID      string                                    `json:"id"`
-	Account CollectionMembershipResponseResultAccount `json:"account"`
-	// Enterprise only. Indicates whether or not API access is enabled specifically for
-	// this user on a given account.
-	APIAccessEnabled bool `json:"api_access_enabled,nullable"`
-	// The unique activation code for the account membership.
-	Code        string                                        `json:"code"`
-	Permissions CollectionMembershipResponseResultPermissions `json:"permissions"`
-	// List of role names for the user at the account.
-	Roles []string `json:"roles"`
-	// Status of this membership.
-	Status CollectionMembershipResponseResultStatus `json:"status"`
-	JSON   collectionMembershipResponseResultJSON   `json:"-"`
-}
-
-// collectionMembershipResponseResultJSON contains the JSON metadata for the struct
-// [CollectionMembershipResponseResult]
-type collectionMembershipResponseResultJSON struct {
-	ID               apijson.Field
-	Account          apijson.Field
-	APIAccessEnabled apijson.Field
-	Code             apijson.Field
-	Permissions      apijson.Field
-	Roles            apijson.Field
-	Status           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *CollectionMembershipResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CollectionMembershipResponseResultAccount struct {
-	// Identifier
-	ID string `json:"id,required"`
-	// Account name
-	Name string `json:"name,required"`
-	// Timestamp for the creation of the account
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Account settings
-	Settings CollectionMembershipResponseResultAccountSettings `json:"settings"`
-	JSON     collectionMembershipResponseResultAccountJSON     `json:"-"`
-}
-
-// collectionMembershipResponseResultAccountJSON contains the JSON metadata for the
-// struct [CollectionMembershipResponseResultAccount]
-type collectionMembershipResponseResultAccountJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	CreatedOn   apijson.Field
-	Settings    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CollectionMembershipResponseResultAccount) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Account settings
-type CollectionMembershipResponseResultAccountSettings struct {
-	// Indicates whether membership in this account requires that Two-Factor
-	// Authentication is enabled
-	EnforceTwofactor bool `json:"enforce_twofactor"`
-	// Indicates whether new zones should use the account-level custom nameservers by
-	// default
-	UseAccountCustomNsByDefault bool                                                  `json:"use_account_custom_ns_by_default"`
-	JSON                        collectionMembershipResponseResultAccountSettingsJSON `json:"-"`
-}
-
-// collectionMembershipResponseResultAccountSettingsJSON contains the JSON metadata
-// for the struct [CollectionMembershipResponseResultAccountSettings]
-type collectionMembershipResponseResultAccountSettingsJSON struct {
-	EnforceTwofactor            apijson.Field
-	UseAccountCustomNsByDefault apijson.Field
-	raw                         string
-	ExtraFields                 map[string]apijson.Field
-}
-
-func (r *CollectionMembershipResponseResultAccountSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CollectionMembershipResponseResultPermissions struct {
-	Analytics    CollectionMembershipResponseResultPermissionsAnalytics    `json:"analytics"`
-	Billing      CollectionMembershipResponseResultPermissionsBilling      `json:"billing"`
-	CachePurge   CollectionMembershipResponseResultPermissionsCachePurge   `json:"cache_purge"`
-	DNS          CollectionMembershipResponseResultPermissionsDNS          `json:"dns"`
-	DNSRecords   CollectionMembershipResponseResultPermissionsDNSRecords   `json:"dns_records"`
-	Lb           CollectionMembershipResponseResultPermissionsLb           `json:"lb"`
-	Logs         CollectionMembershipResponseResultPermissionsLogs         `json:"logs"`
-	Organization CollectionMembershipResponseResultPermissionsOrganization `json:"organization"`
-	Ssl          CollectionMembershipResponseResultPermissionsSsl          `json:"ssl"`
-	Waf          CollectionMembershipResponseResultPermissionsWaf          `json:"waf"`
-	ZoneSettings CollectionMembershipResponseResultPermissionsZoneSettings `json:"zone_settings"`
-	Zones        CollectionMembershipResponseResultPermissionsZones        `json:"zones"`
-	JSON         collectionMembershipResponseResultPermissionsJSON         `json:"-"`
-}
-
-// collectionMembershipResponseResultPermissionsJSON contains the JSON metadata for
-// the struct [CollectionMembershipResponseResultPermissions]
-type collectionMembershipResponseResultPermissionsJSON struct {
-	Analytics    apijson.Field
-	Billing      apijson.Field
-	CachePurge   apijson.Field
-	DNS          apijson.Field
-	DNSRecords   apijson.Field
-	Lb           apijson.Field
-	Logs         apijson.Field
-	Organization apijson.Field
-	Ssl          apijson.Field
-	Waf          apijson.Field
-	ZoneSettings apijson.Field
-	Zones        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *CollectionMembershipResponseResultPermissions) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CollectionMembershipResponseResultPermissionsAnalytics struct {
-	Read  bool                                                       `json:"read"`
-	Write bool                                                       `json:"write"`
-	JSON  collectionMembershipResponseResultPermissionsAnalyticsJSON `json:"-"`
-}
-
-// collectionMembershipResponseResultPermissionsAnalyticsJSON contains the JSON
-// metadata for the struct [CollectionMembershipResponseResultPermissionsAnalytics]
-type collectionMembershipResponseResultPermissionsAnalyticsJSON struct {
-	Read        apijson.Field
-	Write       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CollectionMembershipResponseResultPermissionsAnalytics) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CollectionMembershipResponseResultPermissionsBilling struct {
-	Read  bool                                                     `json:"read"`
-	Write bool                                                     `json:"write"`
-	JSON  collectionMembershipResponseResultPermissionsBillingJSON `json:"-"`
-}
-
-// collectionMembershipResponseResultPermissionsBillingJSON contains the JSON
-// metadata for the struct [CollectionMembershipResponseResultPermissionsBilling]
-type collectionMembershipResponseResultPermissionsBillingJSON struct {
-	Read        apijson.Field
-	Write       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CollectionMembershipResponseResultPermissionsBilling) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CollectionMembershipResponseResultPermissionsCachePurge struct {
-	Read  bool                                                        `json:"read"`
-	Write bool                                                        `json:"write"`
-	JSON  collectionMembershipResponseResultPermissionsCachePurgeJSON `json:"-"`
-}
-
-// collectionMembershipResponseResultPermissionsCachePurgeJSON contains the JSON
-// metadata for the struct
-// [CollectionMembershipResponseResultPermissionsCachePurge]
-type collectionMembershipResponseResultPermissionsCachePurgeJSON struct {
-	Read        apijson.Field
-	Write       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CollectionMembershipResponseResultPermissionsCachePurge) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CollectionMembershipResponseResultPermissionsDNS struct {
-	Read  bool                                                 `json:"read"`
-	Write bool                                                 `json:"write"`
-	JSON  collectionMembershipResponseResultPermissionsDNSJSON `json:"-"`
-}
-
-// collectionMembershipResponseResultPermissionsDNSJSON contains the JSON metadata
-// for the struct [CollectionMembershipResponseResultPermissionsDNS]
-type collectionMembershipResponseResultPermissionsDNSJSON struct {
-	Read        apijson.Field
-	Write       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CollectionMembershipResponseResultPermissionsDNS) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CollectionMembershipResponseResultPermissionsDNSRecords struct {
-	Read  bool                                                        `json:"read"`
-	Write bool                                                        `json:"write"`
-	JSON  collectionMembershipResponseResultPermissionsDNSRecordsJSON `json:"-"`
-}
-
-// collectionMembershipResponseResultPermissionsDNSRecordsJSON contains the JSON
-// metadata for the struct
-// [CollectionMembershipResponseResultPermissionsDNSRecords]
-type collectionMembershipResponseResultPermissionsDNSRecordsJSON struct {
-	Read        apijson.Field
-	Write       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CollectionMembershipResponseResultPermissionsDNSRecords) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CollectionMembershipResponseResultPermissionsLb struct {
-	Read  bool                                                `json:"read"`
-	Write bool                                                `json:"write"`
-	JSON  collectionMembershipResponseResultPermissionsLbJSON `json:"-"`
-}
-
-// collectionMembershipResponseResultPermissionsLbJSON contains the JSON metadata
-// for the struct [CollectionMembershipResponseResultPermissionsLb]
-type collectionMembershipResponseResultPermissionsLbJSON struct {
-	Read        apijson.Field
-	Write       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CollectionMembershipResponseResultPermissionsLb) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CollectionMembershipResponseResultPermissionsLogs struct {
-	Read  bool                                                  `json:"read"`
-	Write bool                                                  `json:"write"`
-	JSON  collectionMembershipResponseResultPermissionsLogsJSON `json:"-"`
-}
-
-// collectionMembershipResponseResultPermissionsLogsJSON contains the JSON metadata
-// for the struct [CollectionMembershipResponseResultPermissionsLogs]
-type collectionMembershipResponseResultPermissionsLogsJSON struct {
-	Read        apijson.Field
-	Write       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CollectionMembershipResponseResultPermissionsLogs) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CollectionMembershipResponseResultPermissionsOrganization struct {
-	Read  bool                                                          `json:"read"`
-	Write bool                                                          `json:"write"`
-	JSON  collectionMembershipResponseResultPermissionsOrganizationJSON `json:"-"`
-}
-
-// collectionMembershipResponseResultPermissionsOrganizationJSON contains the JSON
-// metadata for the struct
-// [CollectionMembershipResponseResultPermissionsOrganization]
-type collectionMembershipResponseResultPermissionsOrganizationJSON struct {
-	Read        apijson.Field
-	Write       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CollectionMembershipResponseResultPermissionsOrganization) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CollectionMembershipResponseResultPermissionsSsl struct {
-	Read  bool                                                 `json:"read"`
-	Write bool                                                 `json:"write"`
-	JSON  collectionMembershipResponseResultPermissionsSslJSON `json:"-"`
-}
-
-// collectionMembershipResponseResultPermissionsSslJSON contains the JSON metadata
-// for the struct [CollectionMembershipResponseResultPermissionsSsl]
-type collectionMembershipResponseResultPermissionsSslJSON struct {
-	Read        apijson.Field
-	Write       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CollectionMembershipResponseResultPermissionsSsl) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CollectionMembershipResponseResultPermissionsWaf struct {
-	Read  bool                                                 `json:"read"`
-	Write bool                                                 `json:"write"`
-	JSON  collectionMembershipResponseResultPermissionsWafJSON `json:"-"`
-}
-
-// collectionMembershipResponseResultPermissionsWafJSON contains the JSON metadata
-// for the struct [CollectionMembershipResponseResultPermissionsWaf]
-type collectionMembershipResponseResultPermissionsWafJSON struct {
-	Read        apijson.Field
-	Write       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CollectionMembershipResponseResultPermissionsWaf) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CollectionMembershipResponseResultPermissionsZoneSettings struct {
-	Read  bool                                                          `json:"read"`
-	Write bool                                                          `json:"write"`
-	JSON  collectionMembershipResponseResultPermissionsZoneSettingsJSON `json:"-"`
-}
-
-// collectionMembershipResponseResultPermissionsZoneSettingsJSON contains the JSON
-// metadata for the struct
-// [CollectionMembershipResponseResultPermissionsZoneSettings]
-type collectionMembershipResponseResultPermissionsZoneSettingsJSON struct {
-	Read        apijson.Field
-	Write       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CollectionMembershipResponseResultPermissionsZoneSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CollectionMembershipResponseResultPermissionsZones struct {
-	Read  bool                                                   `json:"read"`
-	Write bool                                                   `json:"write"`
-	JSON  collectionMembershipResponseResultPermissionsZonesJSON `json:"-"`
-}
-
-// collectionMembershipResponseResultPermissionsZonesJSON contains the JSON
-// metadata for the struct [CollectionMembershipResponseResultPermissionsZones]
-type collectionMembershipResponseResultPermissionsZonesJSON struct {
-	Read        apijson.Field
-	Write       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CollectionMembershipResponseResultPermissionsZones) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Status of this membership.
-type CollectionMembershipResponseResultStatus string
-
-const (
-	CollectionMembershipResponseResultStatusAccepted CollectionMembershipResponseResultStatus = "accepted"
-	CollectionMembershipResponseResultStatusPending  CollectionMembershipResponseResultStatus = "pending"
-	CollectionMembershipResponseResultStatusRejected CollectionMembershipResponseResultStatus = "rejected"
-)
-
-type CollectionMembershipResponseResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                    `json:"total_count"`
-	JSON       collectionMembershipResponseResultInfoJSON `json:"-"`
-}
-
-// collectionMembershipResponseResultInfoJSON contains the JSON metadata for the
-// struct [CollectionMembershipResponseResultInfo]
-type collectionMembershipResponseResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CollectionMembershipResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *MembershipGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type CollectionMembershipResponseSuccess bool
+type MembershipGetResponseSuccess bool
 
 const (
-	CollectionMembershipResponseSuccessTrue CollectionMembershipResponseSuccess = true
+	MembershipGetResponseSuccessTrue MembershipGetResponseSuccess = true
 )
 
-type SingleMembershipResponse struct {
-	Errors   []SingleMembershipResponseError   `json:"errors"`
-	Messages []SingleMembershipResponseMessage `json:"messages"`
+type MembershipUpdateResponse struct {
+	Errors   []MembershipUpdateResponseError   `json:"errors"`
+	Messages []MembershipUpdateResponseMessage `json:"messages"`
 	Result   interface{}                       `json:"result"`
 	// Whether the API call was successful
-	Success SingleMembershipResponseSuccess `json:"success"`
-	JSON    singleMembershipResponseJSON    `json:"-"`
+	Success MembershipUpdateResponseSuccess `json:"success"`
+	JSON    membershipUpdateResponseJSON    `json:"-"`
 }
 
-// singleMembershipResponseJSON contains the JSON metadata for the struct
-// [SingleMembershipResponse]
-type singleMembershipResponseJSON struct {
+// membershipUpdateResponseJSON contains the JSON metadata for the struct
+// [MembershipUpdateResponse]
+type membershipUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -549,53 +165,53 @@ type singleMembershipResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SingleMembershipResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *MembershipUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SingleMembershipResponseError struct {
+type MembershipUpdateResponseError struct {
 	Code    int64                             `json:"code,required"`
 	Message string                            `json:"message,required"`
-	JSON    singleMembershipResponseErrorJSON `json:"-"`
+	JSON    membershipUpdateResponseErrorJSON `json:"-"`
 }
 
-// singleMembershipResponseErrorJSON contains the JSON metadata for the struct
-// [SingleMembershipResponseError]
-type singleMembershipResponseErrorJSON struct {
+// membershipUpdateResponseErrorJSON contains the JSON metadata for the struct
+// [MembershipUpdateResponseError]
+type membershipUpdateResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SingleMembershipResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *MembershipUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SingleMembershipResponseMessage struct {
+type MembershipUpdateResponseMessage struct {
 	Code    int64                               `json:"code,required"`
 	Message string                              `json:"message,required"`
-	JSON    singleMembershipResponseMessageJSON `json:"-"`
+	JSON    membershipUpdateResponseMessageJSON `json:"-"`
 }
 
-// singleMembershipResponseMessageJSON contains the JSON metadata for the struct
-// [SingleMembershipResponseMessage]
-type singleMembershipResponseMessageJSON struct {
+// membershipUpdateResponseMessageJSON contains the JSON metadata for the struct
+// [MembershipUpdateResponseMessage]
+type membershipUpdateResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SingleMembershipResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *MembershipUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type SingleMembershipResponseSuccess bool
+type MembershipUpdateResponseSuccess bool
 
 const (
-	SingleMembershipResponseSuccessTrue SingleMembershipResponseSuccess = true
+	MembershipUpdateResponseSuccessTrue MembershipUpdateResponseSuccess = true
 )
 
 type MembershipDeleteResponse struct {
@@ -683,6 +299,414 @@ type MembershipDeleteResponseSuccess bool
 
 const (
 	MembershipDeleteResponseSuccessTrue MembershipDeleteResponseSuccess = true
+)
+
+type MembershipUserSAccountMembershipsListMembershipsResponse struct {
+	// Membership identifier tag.
+	ID      string                                                          `json:"id"`
+	Account MembershipUserSAccountMembershipsListMembershipsResponseAccount `json:"account"`
+	// Enterprise only. Indicates whether or not API access is enabled specifically for
+	// this user on a given account.
+	APIAccessEnabled bool `json:"api_access_enabled,nullable"`
+	// The unique activation code for the account membership.
+	Code        string                                                              `json:"code"`
+	Permissions MembershipUserSAccountMembershipsListMembershipsResponsePermissions `json:"permissions"`
+	// List of role names for the user at the account.
+	Roles []string `json:"roles"`
+	// Status of this membership.
+	Status MembershipUserSAccountMembershipsListMembershipsResponseStatus `json:"status"`
+	JSON   membershipUserSAccountMembershipsListMembershipsResponseJSON   `json:"-"`
+}
+
+// membershipUserSAccountMembershipsListMembershipsResponseJSON contains the JSON
+// metadata for the struct
+// [MembershipUserSAccountMembershipsListMembershipsResponse]
+type membershipUserSAccountMembershipsListMembershipsResponseJSON struct {
+	ID               apijson.Field
+	Account          apijson.Field
+	APIAccessEnabled apijson.Field
+	Code             apijson.Field
+	Permissions      apijson.Field
+	Roles            apijson.Field
+	Status           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *MembershipUserSAccountMembershipsListMembershipsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MembershipUserSAccountMembershipsListMembershipsResponseAccount struct {
+	// Identifier
+	ID string `json:"id,required"`
+	// Account name
+	Name string `json:"name,required"`
+	// Timestamp for the creation of the account
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// Account settings
+	Settings MembershipUserSAccountMembershipsListMembershipsResponseAccountSettings `json:"settings"`
+	JSON     membershipUserSAccountMembershipsListMembershipsResponseAccountJSON     `json:"-"`
+}
+
+// membershipUserSAccountMembershipsListMembershipsResponseAccountJSON contains the
+// JSON metadata for the struct
+// [MembershipUserSAccountMembershipsListMembershipsResponseAccount]
+type membershipUserSAccountMembershipsListMembershipsResponseAccountJSON struct {
+	ID          apijson.Field
+	Name        apijson.Field
+	CreatedOn   apijson.Field
+	Settings    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MembershipUserSAccountMembershipsListMembershipsResponseAccount) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Account settings
+type MembershipUserSAccountMembershipsListMembershipsResponseAccountSettings struct {
+	// Specifies the default nameservers to be used for new zones added to this
+	// account.
+	//
+	// - `cloudflare.standard` for Cloudflare-branded nameservers
+	// - `custom.account` for account custom nameservers
+	// - `custom.tenant` for tenant custom nameservers
+	//
+	// See
+	// [Custom Nameservers](https://developers.cloudflare.com/dns/additional-options/custom-nameservers/)
+	// for more information.
+	DefaultNameservers MembershipUserSAccountMembershipsListMembershipsResponseAccountSettingsDefaultNameservers `json:"default_nameservers"`
+	// Indicates whether membership in this account requires that Two-Factor
+	// Authentication is enabled
+	EnforceTwofactor bool `json:"enforce_twofactor"`
+	// Indicates whether new zones should use the account-level custom nameservers by
+	// default
+	UseAccountCustomNsByDefault bool                                                                        `json:"use_account_custom_ns_by_default"`
+	JSON                        membershipUserSAccountMembershipsListMembershipsResponseAccountSettingsJSON `json:"-"`
+}
+
+// membershipUserSAccountMembershipsListMembershipsResponseAccountSettingsJSON
+// contains the JSON metadata for the struct
+// [MembershipUserSAccountMembershipsListMembershipsResponseAccountSettings]
+type membershipUserSAccountMembershipsListMembershipsResponseAccountSettingsJSON struct {
+	DefaultNameservers          apijson.Field
+	EnforceTwofactor            apijson.Field
+	UseAccountCustomNsByDefault apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
+}
+
+func (r *MembershipUserSAccountMembershipsListMembershipsResponseAccountSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Specifies the default nameservers to be used for new zones added to this
+// account.
+//
+// - `cloudflare.standard` for Cloudflare-branded nameservers
+// - `custom.account` for account custom nameservers
+// - `custom.tenant` for tenant custom nameservers
+//
+// See
+// [Custom Nameservers](https://developers.cloudflare.com/dns/additional-options/custom-nameservers/)
+// for more information.
+type MembershipUserSAccountMembershipsListMembershipsResponseAccountSettingsDefaultNameservers string
+
+const (
+	MembershipUserSAccountMembershipsListMembershipsResponseAccountSettingsDefaultNameserversCloudflareStandard MembershipUserSAccountMembershipsListMembershipsResponseAccountSettingsDefaultNameservers = "cloudflare.standard"
+	MembershipUserSAccountMembershipsListMembershipsResponseAccountSettingsDefaultNameserversCustomAccount      MembershipUserSAccountMembershipsListMembershipsResponseAccountSettingsDefaultNameservers = "custom.account"
+	MembershipUserSAccountMembershipsListMembershipsResponseAccountSettingsDefaultNameserversCustomTenant       MembershipUserSAccountMembershipsListMembershipsResponseAccountSettingsDefaultNameservers = "custom.tenant"
+)
+
+type MembershipUserSAccountMembershipsListMembershipsResponsePermissions struct {
+	Analytics    MembershipUserSAccountMembershipsListMembershipsResponsePermissionsAnalytics    `json:"analytics"`
+	Billing      MembershipUserSAccountMembershipsListMembershipsResponsePermissionsBilling      `json:"billing"`
+	CachePurge   MembershipUserSAccountMembershipsListMembershipsResponsePermissionsCachePurge   `json:"cache_purge"`
+	DNS          MembershipUserSAccountMembershipsListMembershipsResponsePermissionsDNS          `json:"dns"`
+	DNSRecords   MembershipUserSAccountMembershipsListMembershipsResponsePermissionsDNSRecords   `json:"dns_records"`
+	Lb           MembershipUserSAccountMembershipsListMembershipsResponsePermissionsLb           `json:"lb"`
+	Logs         MembershipUserSAccountMembershipsListMembershipsResponsePermissionsLogs         `json:"logs"`
+	Organization MembershipUserSAccountMembershipsListMembershipsResponsePermissionsOrganization `json:"organization"`
+	Ssl          MembershipUserSAccountMembershipsListMembershipsResponsePermissionsSsl          `json:"ssl"`
+	Waf          MembershipUserSAccountMembershipsListMembershipsResponsePermissionsWaf          `json:"waf"`
+	ZoneSettings MembershipUserSAccountMembershipsListMembershipsResponsePermissionsZoneSettings `json:"zone_settings"`
+	Zones        MembershipUserSAccountMembershipsListMembershipsResponsePermissionsZones        `json:"zones"`
+	JSON         membershipUserSAccountMembershipsListMembershipsResponsePermissionsJSON         `json:"-"`
+}
+
+// membershipUserSAccountMembershipsListMembershipsResponsePermissionsJSON contains
+// the JSON metadata for the struct
+// [MembershipUserSAccountMembershipsListMembershipsResponsePermissions]
+type membershipUserSAccountMembershipsListMembershipsResponsePermissionsJSON struct {
+	Analytics    apijson.Field
+	Billing      apijson.Field
+	CachePurge   apijson.Field
+	DNS          apijson.Field
+	DNSRecords   apijson.Field
+	Lb           apijson.Field
+	Logs         apijson.Field
+	Organization apijson.Field
+	Ssl          apijson.Field
+	Waf          apijson.Field
+	ZoneSettings apijson.Field
+	Zones        apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *MembershipUserSAccountMembershipsListMembershipsResponsePermissions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MembershipUserSAccountMembershipsListMembershipsResponsePermissionsAnalytics struct {
+	Read  bool                                                                             `json:"read"`
+	Write bool                                                                             `json:"write"`
+	JSON  membershipUserSAccountMembershipsListMembershipsResponsePermissionsAnalyticsJSON `json:"-"`
+}
+
+// membershipUserSAccountMembershipsListMembershipsResponsePermissionsAnalyticsJSON
+// contains the JSON metadata for the struct
+// [MembershipUserSAccountMembershipsListMembershipsResponsePermissionsAnalytics]
+type membershipUserSAccountMembershipsListMembershipsResponsePermissionsAnalyticsJSON struct {
+	Read        apijson.Field
+	Write       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MembershipUserSAccountMembershipsListMembershipsResponsePermissionsAnalytics) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MembershipUserSAccountMembershipsListMembershipsResponsePermissionsBilling struct {
+	Read  bool                                                                           `json:"read"`
+	Write bool                                                                           `json:"write"`
+	JSON  membershipUserSAccountMembershipsListMembershipsResponsePermissionsBillingJSON `json:"-"`
+}
+
+// membershipUserSAccountMembershipsListMembershipsResponsePermissionsBillingJSON
+// contains the JSON metadata for the struct
+// [MembershipUserSAccountMembershipsListMembershipsResponsePermissionsBilling]
+type membershipUserSAccountMembershipsListMembershipsResponsePermissionsBillingJSON struct {
+	Read        apijson.Field
+	Write       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MembershipUserSAccountMembershipsListMembershipsResponsePermissionsBilling) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MembershipUserSAccountMembershipsListMembershipsResponsePermissionsCachePurge struct {
+	Read  bool                                                                              `json:"read"`
+	Write bool                                                                              `json:"write"`
+	JSON  membershipUserSAccountMembershipsListMembershipsResponsePermissionsCachePurgeJSON `json:"-"`
+}
+
+// membershipUserSAccountMembershipsListMembershipsResponsePermissionsCachePurgeJSON
+// contains the JSON metadata for the struct
+// [MembershipUserSAccountMembershipsListMembershipsResponsePermissionsCachePurge]
+type membershipUserSAccountMembershipsListMembershipsResponsePermissionsCachePurgeJSON struct {
+	Read        apijson.Field
+	Write       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MembershipUserSAccountMembershipsListMembershipsResponsePermissionsCachePurge) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MembershipUserSAccountMembershipsListMembershipsResponsePermissionsDNS struct {
+	Read  bool                                                                       `json:"read"`
+	Write bool                                                                       `json:"write"`
+	JSON  membershipUserSAccountMembershipsListMembershipsResponsePermissionsDNSJSON `json:"-"`
+}
+
+// membershipUserSAccountMembershipsListMembershipsResponsePermissionsDNSJSON
+// contains the JSON metadata for the struct
+// [MembershipUserSAccountMembershipsListMembershipsResponsePermissionsDNS]
+type membershipUserSAccountMembershipsListMembershipsResponsePermissionsDNSJSON struct {
+	Read        apijson.Field
+	Write       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MembershipUserSAccountMembershipsListMembershipsResponsePermissionsDNS) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MembershipUserSAccountMembershipsListMembershipsResponsePermissionsDNSRecords struct {
+	Read  bool                                                                              `json:"read"`
+	Write bool                                                                              `json:"write"`
+	JSON  membershipUserSAccountMembershipsListMembershipsResponsePermissionsDNSRecordsJSON `json:"-"`
+}
+
+// membershipUserSAccountMembershipsListMembershipsResponsePermissionsDNSRecordsJSON
+// contains the JSON metadata for the struct
+// [MembershipUserSAccountMembershipsListMembershipsResponsePermissionsDNSRecords]
+type membershipUserSAccountMembershipsListMembershipsResponsePermissionsDNSRecordsJSON struct {
+	Read        apijson.Field
+	Write       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MembershipUserSAccountMembershipsListMembershipsResponsePermissionsDNSRecords) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MembershipUserSAccountMembershipsListMembershipsResponsePermissionsLb struct {
+	Read  bool                                                                      `json:"read"`
+	Write bool                                                                      `json:"write"`
+	JSON  membershipUserSAccountMembershipsListMembershipsResponsePermissionsLbJSON `json:"-"`
+}
+
+// membershipUserSAccountMembershipsListMembershipsResponsePermissionsLbJSON
+// contains the JSON metadata for the struct
+// [MembershipUserSAccountMembershipsListMembershipsResponsePermissionsLb]
+type membershipUserSAccountMembershipsListMembershipsResponsePermissionsLbJSON struct {
+	Read        apijson.Field
+	Write       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MembershipUserSAccountMembershipsListMembershipsResponsePermissionsLb) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MembershipUserSAccountMembershipsListMembershipsResponsePermissionsLogs struct {
+	Read  bool                                                                        `json:"read"`
+	Write bool                                                                        `json:"write"`
+	JSON  membershipUserSAccountMembershipsListMembershipsResponsePermissionsLogsJSON `json:"-"`
+}
+
+// membershipUserSAccountMembershipsListMembershipsResponsePermissionsLogsJSON
+// contains the JSON metadata for the struct
+// [MembershipUserSAccountMembershipsListMembershipsResponsePermissionsLogs]
+type membershipUserSAccountMembershipsListMembershipsResponsePermissionsLogsJSON struct {
+	Read        apijson.Field
+	Write       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MembershipUserSAccountMembershipsListMembershipsResponsePermissionsLogs) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MembershipUserSAccountMembershipsListMembershipsResponsePermissionsOrganization struct {
+	Read  bool                                                                                `json:"read"`
+	Write bool                                                                                `json:"write"`
+	JSON  membershipUserSAccountMembershipsListMembershipsResponsePermissionsOrganizationJSON `json:"-"`
+}
+
+// membershipUserSAccountMembershipsListMembershipsResponsePermissionsOrganizationJSON
+// contains the JSON metadata for the struct
+// [MembershipUserSAccountMembershipsListMembershipsResponsePermissionsOrganization]
+type membershipUserSAccountMembershipsListMembershipsResponsePermissionsOrganizationJSON struct {
+	Read        apijson.Field
+	Write       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MembershipUserSAccountMembershipsListMembershipsResponsePermissionsOrganization) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MembershipUserSAccountMembershipsListMembershipsResponsePermissionsSsl struct {
+	Read  bool                                                                       `json:"read"`
+	Write bool                                                                       `json:"write"`
+	JSON  membershipUserSAccountMembershipsListMembershipsResponsePermissionsSslJSON `json:"-"`
+}
+
+// membershipUserSAccountMembershipsListMembershipsResponsePermissionsSslJSON
+// contains the JSON metadata for the struct
+// [MembershipUserSAccountMembershipsListMembershipsResponsePermissionsSsl]
+type membershipUserSAccountMembershipsListMembershipsResponsePermissionsSslJSON struct {
+	Read        apijson.Field
+	Write       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MembershipUserSAccountMembershipsListMembershipsResponsePermissionsSsl) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MembershipUserSAccountMembershipsListMembershipsResponsePermissionsWaf struct {
+	Read  bool                                                                       `json:"read"`
+	Write bool                                                                       `json:"write"`
+	JSON  membershipUserSAccountMembershipsListMembershipsResponsePermissionsWafJSON `json:"-"`
+}
+
+// membershipUserSAccountMembershipsListMembershipsResponsePermissionsWafJSON
+// contains the JSON metadata for the struct
+// [MembershipUserSAccountMembershipsListMembershipsResponsePermissionsWaf]
+type membershipUserSAccountMembershipsListMembershipsResponsePermissionsWafJSON struct {
+	Read        apijson.Field
+	Write       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MembershipUserSAccountMembershipsListMembershipsResponsePermissionsWaf) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MembershipUserSAccountMembershipsListMembershipsResponsePermissionsZoneSettings struct {
+	Read  bool                                                                                `json:"read"`
+	Write bool                                                                                `json:"write"`
+	JSON  membershipUserSAccountMembershipsListMembershipsResponsePermissionsZoneSettingsJSON `json:"-"`
+}
+
+// membershipUserSAccountMembershipsListMembershipsResponsePermissionsZoneSettingsJSON
+// contains the JSON metadata for the struct
+// [MembershipUserSAccountMembershipsListMembershipsResponsePermissionsZoneSettings]
+type membershipUserSAccountMembershipsListMembershipsResponsePermissionsZoneSettingsJSON struct {
+	Read        apijson.Field
+	Write       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MembershipUserSAccountMembershipsListMembershipsResponsePermissionsZoneSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MembershipUserSAccountMembershipsListMembershipsResponsePermissionsZones struct {
+	Read  bool                                                                         `json:"read"`
+	Write bool                                                                         `json:"write"`
+	JSON  membershipUserSAccountMembershipsListMembershipsResponsePermissionsZonesJSON `json:"-"`
+}
+
+// membershipUserSAccountMembershipsListMembershipsResponsePermissionsZonesJSON
+// contains the JSON metadata for the struct
+// [MembershipUserSAccountMembershipsListMembershipsResponsePermissionsZones]
+type membershipUserSAccountMembershipsListMembershipsResponsePermissionsZonesJSON struct {
+	Read        apijson.Field
+	Write       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MembershipUserSAccountMembershipsListMembershipsResponsePermissionsZones) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Status of this membership.
+type MembershipUserSAccountMembershipsListMembershipsResponseStatus string
+
+const (
+	MembershipUserSAccountMembershipsListMembershipsResponseStatusAccepted MembershipUserSAccountMembershipsListMembershipsResponseStatus = "accepted"
+	MembershipUserSAccountMembershipsListMembershipsResponseStatusPending  MembershipUserSAccountMembershipsListMembershipsResponseStatus = "pending"
+	MembershipUserSAccountMembershipsListMembershipsResponseStatusRejected MembershipUserSAccountMembershipsListMembershipsResponseStatus = "rejected"
 )
 
 type MembershipUpdateParams struct {

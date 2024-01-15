@@ -19,15 +19,16 @@ import (
 // this service directly, and instead use the [NewAccountGatewayService] method
 // instead.
 type AccountGatewayService struct {
-	Options        []option.RequestOption
-	Categories     *AccountGatewayCategoryService
-	AppTypes       *AccountGatewayAppTypeService
-	Configurations *AccountGatewayConfigurationService
-	Lists          *AccountGatewayListService
-	Locations      *AccountGatewayLocationService
-	Loggings       *AccountGatewayLoggingService
-	ProxyEndpoints *AccountGatewayProxyEndpointService
-	Rules          *AccountGatewayRuleService
+	Options          []option.RequestOption
+	AuditSSHSettings *AccountGatewayAuditSSHSettingService
+	Categories       *AccountGatewayCategoryService
+	AppTypes         *AccountGatewayAppTypeService
+	Configurations   *AccountGatewayConfigurationService
+	Lists            *AccountGatewayListService
+	Locations        *AccountGatewayLocationService
+	Loggings         *AccountGatewayLoggingService
+	ProxyEndpoints   *AccountGatewayProxyEndpointService
+	Rules            *AccountGatewayRuleService
 }
 
 // NewAccountGatewayService generates a new service that applies the given options
@@ -36,6 +37,7 @@ type AccountGatewayService struct {
 func NewAccountGatewayService(opts ...option.RequestOption) (r *AccountGatewayService) {
 	r = &AccountGatewayService{}
 	r.Options = opts
+	r.AuditSSHSettings = NewAccountGatewayAuditSSHSettingService(opts...)
 	r.Categories = NewAccountGatewayCategoryService(opts...)
 	r.AppTypes = NewAccountGatewayAppTypeService(opts...)
 	r.Configurations = NewAccountGatewayConfigurationService(opts...)
@@ -47,33 +49,35 @@ func NewAccountGatewayService(opts ...option.RequestOption) (r *AccountGatewaySe
 	return
 }
 
-// Create Zero Trust account with existing cloudflare account.
-func (r *AccountGatewayService) ZeroTrustAccountsNewZeroTrustAccount(ctx context.Context, identifier interface{}, body AccountGatewayZeroTrustAccountsNewZeroTrustAccountParams, opts ...option.RequestOption) (res *GatewayAccount, err error) {
+// Creates a Zero Trust account with an existing Cloudflare account.
+func (r *AccountGatewayService) ZeroTrustAccountsNewZeroTrustAccount(ctx context.Context, identifier interface{}, body AccountGatewayZeroTrustAccountsNewZeroTrustAccountParams, opts ...option.RequestOption) (res *AccountGatewayZeroTrustAccountsNewZeroTrustAccountResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/gateway", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
-// Get Zero Trust account information.
-func (r *AccountGatewayService) ZeroTrustAccountsGetZeroTrustAccountInformation(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *GatewayAccount, err error) {
+// Gets information about the current Zero Trust account.
+func (r *AccountGatewayService) ZeroTrustAccountsGetZeroTrustAccountInformation(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *AccountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/gateway", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type GatewayAccount struct {
-	Errors   []GatewayAccountError   `json:"errors"`
-	Messages []GatewayAccountMessage `json:"messages"`
-	Result   GatewayAccountResult    `json:"result"`
+type AccountGatewayZeroTrustAccountsNewZeroTrustAccountResponse struct {
+	Errors   []AccountGatewayZeroTrustAccountsNewZeroTrustAccountResponseError   `json:"errors"`
+	Messages []AccountGatewayZeroTrustAccountsNewZeroTrustAccountResponseMessage `json:"messages"`
+	Result   AccountGatewayZeroTrustAccountsNewZeroTrustAccountResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success GatewayAccountSuccess `json:"success"`
-	JSON    gatewayAccountJSON    `json:"-"`
+	Success AccountGatewayZeroTrustAccountsNewZeroTrustAccountResponseSuccess `json:"success"`
+	JSON    accountGatewayZeroTrustAccountsNewZeroTrustAccountResponseJSON    `json:"-"`
 }
 
-// gatewayAccountJSON contains the JSON metadata for the struct [GatewayAccount]
-type gatewayAccountJSON struct {
+// accountGatewayZeroTrustAccountsNewZeroTrustAccountResponseJSON contains the JSON
+// metadata for the struct
+// [AccountGatewayZeroTrustAccountsNewZeroTrustAccountResponse]
+type accountGatewayZeroTrustAccountsNewZeroTrustAccountResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -82,61 +86,64 @@ type gatewayAccountJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayAccount) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGatewayZeroTrustAccountsNewZeroTrustAccountResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayAccountError struct {
-	Code    int64                   `json:"code,required"`
-	Message string                  `json:"message,required"`
-	JSON    gatewayAccountErrorJSON `json:"-"`
+type AccountGatewayZeroTrustAccountsNewZeroTrustAccountResponseError struct {
+	Code    int64                                                               `json:"code,required"`
+	Message string                                                              `json:"message,required"`
+	JSON    accountGatewayZeroTrustAccountsNewZeroTrustAccountResponseErrorJSON `json:"-"`
 }
 
-// gatewayAccountErrorJSON contains the JSON metadata for the struct
-// [GatewayAccountError]
-type gatewayAccountErrorJSON struct {
+// accountGatewayZeroTrustAccountsNewZeroTrustAccountResponseErrorJSON contains the
+// JSON metadata for the struct
+// [AccountGatewayZeroTrustAccountsNewZeroTrustAccountResponseError]
+type accountGatewayZeroTrustAccountsNewZeroTrustAccountResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayAccountError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGatewayZeroTrustAccountsNewZeroTrustAccountResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayAccountMessage struct {
-	Code    int64                     `json:"code,required"`
-	Message string                    `json:"message,required"`
-	JSON    gatewayAccountMessageJSON `json:"-"`
+type AccountGatewayZeroTrustAccountsNewZeroTrustAccountResponseMessage struct {
+	Code    int64                                                                 `json:"code,required"`
+	Message string                                                                `json:"message,required"`
+	JSON    accountGatewayZeroTrustAccountsNewZeroTrustAccountResponseMessageJSON `json:"-"`
 }
 
-// gatewayAccountMessageJSON contains the JSON metadata for the struct
-// [GatewayAccountMessage]
-type gatewayAccountMessageJSON struct {
+// accountGatewayZeroTrustAccountsNewZeroTrustAccountResponseMessageJSON contains
+// the JSON metadata for the struct
+// [AccountGatewayZeroTrustAccountsNewZeroTrustAccountResponseMessage]
+type accountGatewayZeroTrustAccountsNewZeroTrustAccountResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayAccountMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGatewayZeroTrustAccountsNewZeroTrustAccountResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayAccountResult struct {
-	// Cloudflare account ID
+type AccountGatewayZeroTrustAccountsNewZeroTrustAccountResponseResult struct {
+	// Cloudflare account ID.
 	ID string `json:"id"`
-	// Gateway internal id.
+	// Gateway internal ID.
 	GatewayTag string `json:"gateway_tag"`
-	// The name of provider. Usually cloudflare.
-	ProviderName string                   `json:"provider_name"`
-	JSON         gatewayAccountResultJSON `json:"-"`
+	// The name of the provider. Usually Cloudflare.
+	ProviderName string                                                               `json:"provider_name"`
+	JSON         accountGatewayZeroTrustAccountsNewZeroTrustAccountResponseResultJSON `json:"-"`
 }
 
-// gatewayAccountResultJSON contains the JSON metadata for the struct
-// [GatewayAccountResult]
-type gatewayAccountResultJSON struct {
+// accountGatewayZeroTrustAccountsNewZeroTrustAccountResponseResultJSON contains
+// the JSON metadata for the struct
+// [AccountGatewayZeroTrustAccountsNewZeroTrustAccountResponseResult]
+type accountGatewayZeroTrustAccountsNewZeroTrustAccountResponseResultJSON struct {
 	ID           apijson.Field
 	GatewayTag   apijson.Field
 	ProviderName apijson.Field
@@ -144,19 +151,116 @@ type gatewayAccountResultJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *GatewayAccountResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGatewayZeroTrustAccountsNewZeroTrustAccountResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type GatewayAccountSuccess bool
+type AccountGatewayZeroTrustAccountsNewZeroTrustAccountResponseSuccess bool
 
 const (
-	GatewayAccountSuccessTrue GatewayAccountSuccess = true
+	AccountGatewayZeroTrustAccountsNewZeroTrustAccountResponseSuccessTrue AccountGatewayZeroTrustAccountsNewZeroTrustAccountResponseSuccess = true
+)
+
+type AccountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponse struct {
+	Errors   []AccountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseError   `json:"errors"`
+	Messages []AccountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseMessage `json:"messages"`
+	Result   AccountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseSuccess `json:"success"`
+	JSON    accountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseJSON    `json:"-"`
+}
+
+// accountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponse]
+type accountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseError struct {
+	Code    int64                                                                          `json:"code,required"`
+	Message string                                                                         `json:"message,required"`
+	JSON    accountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseErrorJSON `json:"-"`
+}
+
+// accountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseError]
+type accountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseMessage struct {
+	Code    int64                                                                            `json:"code,required"`
+	Message string                                                                           `json:"message,required"`
+	JSON    accountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseMessageJSON `json:"-"`
+}
+
+// accountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseMessage]
+type accountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseResult struct {
+	// Cloudflare account ID.
+	ID string `json:"id"`
+	// Gateway internal ID.
+	GatewayTag string `json:"gateway_tag"`
+	// The name of the provider. Usually Cloudflare.
+	ProviderName string                                                                          `json:"provider_name"`
+	JSON         accountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseResultJSON `json:"-"`
+}
+
+// accountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseResult]
+type accountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseResultJSON struct {
+	ID           apijson.Field
+	GatewayTag   apijson.Field
+	ProviderName apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseSuccess bool
+
+const (
+	AccountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseSuccessTrue AccountGatewayZeroTrustAccountsGetZeroTrustAccountInformationResponseSuccess = true
 )
 
 type AccountGatewayZeroTrustAccountsNewZeroTrustAccountParams struct {
-	// Cloudflare account ID
+	// Cloudflare account ID.
 	AccountID param.Field[string] `json:"account_id,required"`
 }
 

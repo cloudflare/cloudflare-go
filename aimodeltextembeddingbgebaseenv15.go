@@ -67,7 +67,12 @@ func (r AIModelTextEmbeddingBgeBaseEnV1_5RunParams) MarshalJSON() (data []byte, 
 }
 
 // Satisfied by [shared.UnionString],
-// [AIModelTextEmbeddingBgeBaseEnV1_5RunParamsTextObject].
+// [AIModelTextEmbeddingBgeBaseEnV1_5RunParamsTextArray].
 type AIModelTextEmbeddingBgeBaseEnV1_5RunParamsText interface {
 	ImplementsAIModelTextEmbeddingBgeBaseEnV1_5RunParamsText()
+}
+
+type AIModelTextEmbeddingBgeBaseEnV1_5RunParamsTextArray []string
+
+func (r AIModelTextEmbeddingBgeBaseEnV1_5RunParamsTextArray) ImplementsAIModelTextEmbeddingBgeBaseEnV1_5RunParamsText() {
 }

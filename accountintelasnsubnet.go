@@ -31,7 +31,7 @@ func NewAccountIntelASNSubnetService(opts ...option.RequestOption) (r *AccountIn
 }
 
 // Get ASN Subnets
-func (r *AccountIntelASNSubnetService) List(ctx context.Context, accountIdentifier string, asn interface{}, opts ...option.RequestOption) (res *AccountIntelASNSubnetListResponse, err error) {
+func (r *AccountIntelASNSubnetService) List(ctx context.Context, accountIdentifier string, asn int64, opts ...option.RequestOption) (res *AccountIntelASNSubnetListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/intel/asn/%v/subnets", accountIdentifier, asn)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)

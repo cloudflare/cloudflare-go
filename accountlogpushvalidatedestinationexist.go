@@ -33,25 +33,26 @@ func NewAccountLogpushValidateDestinationExistService(opts ...option.RequestOpti
 }
 
 // Checks if there is an existing job with a destination.
-func (r *AccountLogpushValidateDestinationExistService) DeleteAccountsAccountIdentifierLogpushValidateDestinationExists(ctx context.Context, accountIdentifier string, body AccountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsParams, opts ...option.RequestOption) (res *DestinationExistsResponse, err error) {
+func (r *AccountLogpushValidateDestinationExistService) DeleteAccountsAccountIdentifierLogpushValidateDestinationExists(ctx context.Context, accountIdentifier string, body AccountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsParams, opts ...option.RequestOption) (res *AccountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/logpush/validate/destination/exists", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
-type DestinationExistsResponse struct {
-	Errors   []DestinationExistsResponseError   `json:"errors"`
-	Messages []DestinationExistsResponseMessage `json:"messages"`
-	Result   DestinationExistsResponseResult    `json:"result,nullable"`
+type AccountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponse struct {
+	Errors   []AccountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseError   `json:"errors"`
+	Messages []AccountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseMessage `json:"messages"`
+	Result   AccountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseResult    `json:"result,nullable"`
 	// Whether the API call was successful
-	Success DestinationExistsResponseSuccess `json:"success"`
-	JSON    destinationExistsResponseJSON    `json:"-"`
+	Success AccountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseSuccess `json:"success"`
+	JSON    accountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseJSON    `json:"-"`
 }
 
-// destinationExistsResponseJSON contains the JSON metadata for the struct
-// [DestinationExistsResponse]
-type destinationExistsResponseJSON struct {
+// accountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseJSON
+// contains the JSON metadata for the struct
+// [AccountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponse]
+type accountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -60,70 +61,73 @@ type destinationExistsResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DestinationExistsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DestinationExistsResponseError struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    destinationExistsResponseErrorJSON `json:"-"`
+type AccountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseError struct {
+	Code    int64                                                                                                                  `json:"code,required"`
+	Message string                                                                                                                 `json:"message,required"`
+	JSON    accountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseErrorJSON `json:"-"`
 }
 
-// destinationExistsResponseErrorJSON contains the JSON metadata for the struct
-// [DestinationExistsResponseError]
-type destinationExistsResponseErrorJSON struct {
+// accountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseError]
+type accountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DestinationExistsResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DestinationExistsResponseMessage struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    destinationExistsResponseMessageJSON `json:"-"`
+type AccountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseMessage struct {
+	Code    int64                                                                                                                    `json:"code,required"`
+	Message string                                                                                                                   `json:"message,required"`
+	JSON    accountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseMessageJSON `json:"-"`
 }
 
-// destinationExistsResponseMessageJSON contains the JSON metadata for the struct
-// [DestinationExistsResponseMessage]
-type destinationExistsResponseMessageJSON struct {
+// accountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseMessage]
+type accountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DestinationExistsResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DestinationExistsResponseResult struct {
-	Exists bool                                `json:"exists"`
-	JSON   destinationExistsResponseResultJSON `json:"-"`
+type AccountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseResult struct {
+	Exists bool                                                                                                                    `json:"exists"`
+	JSON   accountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseResultJSON `json:"-"`
 }
 
-// destinationExistsResponseResultJSON contains the JSON metadata for the struct
-// [DestinationExistsResponseResult]
-type destinationExistsResponseResultJSON struct {
+// accountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseResult]
+type accountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseResultJSON struct {
 	Exists      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DestinationExistsResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type DestinationExistsResponseSuccess bool
+type AccountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseSuccess bool
 
 const (
-	DestinationExistsResponseSuccessTrue DestinationExistsResponseSuccess = true
+	AccountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseSuccessTrue AccountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsResponseSuccess = true
 )
 
 type AccountLogpushValidateDestinationExistDeleteAccountsAccountIdentifierLogpushValidateDestinationExistsParams struct {

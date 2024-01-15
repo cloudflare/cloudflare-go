@@ -24,13 +24,15 @@ func TestAccountAccessUserFailedLoginZeroTrustUsersGetFailedLogins(t *testing.T)
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Accesses.Users.FailedLogins.ZeroTrustUsersGetFailedLogins(
+	_, err := client.Accounts.Access.Users.FailedLogins.ZeroTrustUsersGetFailedLogins(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
-		"f3b12456-80dd-4e89-9f5f-ba3dfff12365",
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

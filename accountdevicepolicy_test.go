@@ -24,8 +24,10 @@ func TestAccountDevicePolicyGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Devices.Policies.Get(
 		context.TODO(),
@@ -52,8 +54,10 @@ func TestAccountDevicePolicyUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Devices.Policies.Update(
 		context.TODO(),
@@ -100,8 +104,10 @@ func TestAccountDevicePolicyDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Devices.Policies.Delete(
 		context.TODO(),
@@ -128,8 +134,10 @@ func TestAccountDevicePolicyDevicesNewDeviceSettingsPolicyWithOptionalParams(t *
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Devices.Policies.DevicesNewDeviceSettingsPolicy(
 		context.TODO(),
@@ -147,6 +155,8 @@ func TestAccountDevicePolicyDevicesNewDeviceSettingsPolicyWithOptionalParams(t *
 			DisableAutoFallback: cloudflare.F(true),
 			Enabled:             cloudflare.F(true),
 			ExcludeOfficeIPs:    cloudflare.F(true),
+			LanAllowMinutes:     cloudflare.F(30.000000),
+			LanAllowSubnetSize:  cloudflare.F(24.000000),
 			ServiceModeV2: cloudflare.F(cloudflare.AccountDevicePolicyDevicesNewDeviceSettingsPolicyParamsServiceModeV2{
 				Mode: cloudflare.F("proxy"),
 				Port: cloudflare.F(3000.000000),
@@ -175,8 +185,10 @@ func TestAccountDevicePolicyDevicesGetDefaultDeviceSettingsPolicy(t *testing.T) 
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Devices.Policies.DevicesGetDefaultDeviceSettingsPolicy(context.TODO(), "699d98642c564d2e855e9661899b7252")
 	if err != nil {
@@ -199,8 +211,10 @@ func TestAccountDevicePolicyDevicesListDeviceSettingsPolicies(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Devices.Policies.DevicesListDeviceSettingsPolicies(context.TODO(), "699d98642c564d2e855e9661899b7252")
 	if err != nil {
@@ -223,8 +237,10 @@ func TestAccountDevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyWithOptional
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Devices.Policies.DevicesUpdateDefaultDeviceSettingsPolicy(
 		context.TODO(),

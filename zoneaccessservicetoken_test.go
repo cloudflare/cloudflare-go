@@ -24,15 +24,18 @@ func TestZoneAccessServiceTokenUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Accesses.ServiceTokens.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.ZoneAccessServiceTokenUpdateParams{
-			Name: cloudflare.F("CI/CD token"),
+			Duration: cloudflare.F("60m"),
+			Name:     cloudflare.F("CI/CD token"),
 		},
 	)
 	if err != nil {
@@ -55,8 +58,10 @@ func TestZoneAccessServiceTokenDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Accesses.ServiceTokens.Delete(
 		context.TODO(),
@@ -72,7 +77,7 @@ func TestZoneAccessServiceTokenDelete(t *testing.T) {
 	}
 }
 
-func TestZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceToken(t *testing.T) {
+func TestZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -83,14 +88,17 @@ func TestZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceToken(t *t
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Accesses.ServiceTokens.ZoneLevelAccessServiceTokensNewAServiceToken(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.ZoneAccessServiceTokenZoneLevelAccessServiceTokensNewAServiceTokenParams{
-			Name: cloudflare.F("CI/CD token"),
+			Name:     cloudflare.F("CI/CD token"),
+			Duration: cloudflare.F("60m"),
 		},
 	)
 	if err != nil {
@@ -113,8 +121,10 @@ func TestZoneAccessServiceTokenZoneLevelAccessServiceTokensListServiceTokens(t *
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Accesses.ServiceTokens.ZoneLevelAccessServiceTokensListServiceTokens(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {

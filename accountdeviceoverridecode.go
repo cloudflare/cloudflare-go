@@ -30,28 +30,29 @@ func NewAccountDeviceOverrideCodeService(opts ...option.RequestOption) (r *Accou
 	return
 }
 
-// Fetch one-time use admin override code for a device. This relies on the Admin
-// Override setting being enabled in your device configuration.
-func (r *AccountDeviceOverrideCodeService) DevicesListAdminOverrideCodeForDevice(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *OverrideCodesResponse, err error) {
+// Fetches a one-time use admin override code for a device. This relies on the
+// **Admin Override** setting being enabled in your device configuration.
+func (r *AccountDeviceOverrideCodeService) DevicesListAdminOverrideCodeForDevice(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/devices/%s/override_codes", identifier, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type OverrideCodesResponse struct {
-	Errors     []OverrideCodesResponseError    `json:"errors"`
-	Messages   []OverrideCodesResponseMessage  `json:"messages"`
-	Result     OverrideCodesResponseResult     `json:"result"`
-	ResultInfo OverrideCodesResponseResultInfo `json:"result_info"`
-	// Whether the API call was successful
-	Success OverrideCodesResponseSuccess `json:"success"`
-	JSON    overrideCodesResponseJSON    `json:"-"`
+type AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponse struct {
+	Errors     []AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseError    `json:"errors"`
+	Messages   []AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseMessage  `json:"messages"`
+	Result     AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseResult     `json:"result"`
+	ResultInfo AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful.
+	Success AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseSuccess `json:"success"`
+	JSON    accountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseJSON    `json:"-"`
 }
 
-// overrideCodesResponseJSON contains the JSON metadata for the struct
-// [OverrideCodesResponse]
-type overrideCodesResponseJSON struct {
+// accountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseJSON
+// contains the JSON metadata for the struct
+// [AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponse]
+type accountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -61,66 +62,69 @@ type overrideCodesResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OverrideCodesResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type OverrideCodesResponseError struct {
-	Code    int64                          `json:"code,required"`
-	Message string                         `json:"message,required"`
-	JSON    overrideCodesResponseErrorJSON `json:"-"`
+type AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseError struct {
+	Code    int64                                                                           `json:"code,required"`
+	Message string                                                                          `json:"message,required"`
+	JSON    accountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseErrorJSON `json:"-"`
 }
 
-// overrideCodesResponseErrorJSON contains the JSON metadata for the struct
-// [OverrideCodesResponseError]
-type overrideCodesResponseErrorJSON struct {
+// accountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseError]
+type accountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OverrideCodesResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type OverrideCodesResponseMessage struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    overrideCodesResponseMessageJSON `json:"-"`
+type AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseMessage struct {
+	Code    int64                                                                             `json:"code,required"`
+	Message string                                                                            `json:"message,required"`
+	JSON    accountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseMessageJSON `json:"-"`
 }
 
-// overrideCodesResponseMessageJSON contains the JSON metadata for the struct
-// [OverrideCodesResponseMessage]
-type overrideCodesResponseMessageJSON struct {
+// accountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseMessage]
+type accountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OverrideCodesResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type OverrideCodesResponseResult struct {
-	DisableForTime OverrideCodesResponseResultDisableForTime `json:"disable_for_time"`
-	JSON           overrideCodesResponseResultJSON           `json:"-"`
+type AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseResult struct {
+	DisableForTime AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseResultDisableForTime `json:"disable_for_time"`
+	JSON           accountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseResultJSON           `json:"-"`
 }
 
-// overrideCodesResponseResultJSON contains the JSON metadata for the struct
-// [OverrideCodesResponseResult]
-type overrideCodesResponseResultJSON struct {
+// accountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseResult]
+type accountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseResultJSON struct {
 	DisableForTime apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *OverrideCodesResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type OverrideCodesResponseResultDisableForTime struct {
+type AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseResultDisableForTime struct {
 	// Override code that is valid for 1 hour.
 	_1 interface{} `json:"1"`
 	// Override code that is valid for 12 hour2.
@@ -130,13 +134,14 @@ type OverrideCodesResponseResultDisableForTime struct {
 	// Override code that is valid for 3 hours.
 	_3 interface{} `json:"3"`
 	// Override code that is valid for 6 hours.
-	_6   interface{}                                   `json:"6"`
-	JSON overrideCodesResponseResultDisableForTimeJSON `json:"-"`
+	_6   interface{}                                                                                    `json:"6"`
+	JSON accountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseResultDisableForTimeJSON `json:"-"`
 }
 
-// overrideCodesResponseResultDisableForTimeJSON contains the JSON metadata for the
-// struct [OverrideCodesResponseResultDisableForTime]
-type overrideCodesResponseResultDisableForTimeJSON struct {
+// accountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseResultDisableForTimeJSON
+// contains the JSON metadata for the struct
+// [AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseResultDisableForTime]
+type accountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseResultDisableForTimeJSON struct {
 	_1          apijson.Field
 	_12         apijson.Field
 	_24         apijson.Field
@@ -146,11 +151,11 @@ type overrideCodesResponseResultDisableForTimeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OverrideCodesResponseResultDisableForTime) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseResultDisableForTime) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type OverrideCodesResponseResultInfo struct {
+type AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -158,13 +163,14 @@ type OverrideCodesResponseResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                             `json:"total_count"`
-	JSON       overrideCodesResponseResultInfoJSON `json:"-"`
+	TotalCount float64                                                                              `json:"total_count"`
+	JSON       accountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseResultInfoJSON `json:"-"`
 }
 
-// overrideCodesResponseResultInfoJSON contains the JSON metadata for the struct
-// [OverrideCodesResponseResultInfo]
-type overrideCodesResponseResultInfoJSON struct {
+// accountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseResultInfo]
+type accountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -173,13 +179,13 @@ type overrideCodesResponseResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OverrideCodesResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Whether the API call was successful
-type OverrideCodesResponseSuccess bool
+// Whether the API call was successful.
+type AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseSuccess bool
 
 const (
-	OverrideCodesResponseSuccessTrue OverrideCodesResponseSuccess = true
+	AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseSuccessTrue AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseSuccess = true
 )

@@ -33,8 +33,8 @@ func NewRadarNetflowTopAseService(opts ...option.RequestOption) (r *RadarNetflow
 	return
 }
 
-// Get the top autonomous systems (AS) by network traffic. Values are a percentage
-// out of the total network traffic.
+// Get the top autonomous systems (AS) by network traffic (NetFlows) over a given
+// time period. Visit https://en.wikipedia.org/wiki/NetFlow for more information.
 func (r *RadarNetflowTopAseService) List(ctx context.Context, query RadarNetflowTopAseListParams, opts ...option.RequestOption) (res *RadarNetflowTopAseListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "radar/netflows/top/ases"
@@ -104,7 +104,7 @@ type RadarNetflowTopAseListParams struct {
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of datetimes to filter the end of a series.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
@@ -137,6 +137,7 @@ type RadarNetflowTopAseListParamsDateRange string
 
 const (
 	RadarNetflowTopAseListParamsDateRange1d         RadarNetflowTopAseListParamsDateRange = "1d"
+	RadarNetflowTopAseListParamsDateRange2d         RadarNetflowTopAseListParamsDateRange = "2d"
 	RadarNetflowTopAseListParamsDateRange7d         RadarNetflowTopAseListParamsDateRange = "7d"
 	RadarNetflowTopAseListParamsDateRange14d        RadarNetflowTopAseListParamsDateRange = "14d"
 	RadarNetflowTopAseListParamsDateRange28d        RadarNetflowTopAseListParamsDateRange = "28d"
@@ -144,6 +145,7 @@ const (
 	RadarNetflowTopAseListParamsDateRange24w        RadarNetflowTopAseListParamsDateRange = "24w"
 	RadarNetflowTopAseListParamsDateRange52w        RadarNetflowTopAseListParamsDateRange = "52w"
 	RadarNetflowTopAseListParamsDateRange1dControl  RadarNetflowTopAseListParamsDateRange = "1dControl"
+	RadarNetflowTopAseListParamsDateRange2dControl  RadarNetflowTopAseListParamsDateRange = "2dControl"
 	RadarNetflowTopAseListParamsDateRange7dControl  RadarNetflowTopAseListParamsDateRange = "7dControl"
 	RadarNetflowTopAseListParamsDateRange14dControl RadarNetflowTopAseListParamsDateRange = "14dControl"
 	RadarNetflowTopAseListParamsDateRange28dControl RadarNetflowTopAseListParamsDateRange = "28dControl"

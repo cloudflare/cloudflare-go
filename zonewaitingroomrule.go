@@ -33,7 +33,7 @@ func NewZoneWaitingRoomRuleService(opts ...option.RequestOption) (r *ZoneWaiting
 }
 
 // Patches a rule for a waiting room.
-func (r *ZoneWaitingRoomRuleService) Update(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, ruleID string, body ZoneWaitingRoomRuleUpdateParams, opts ...option.RequestOption) (res *RulesResponseCollection, err error) {
+func (r *ZoneWaitingRoomRuleService) Update(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, ruleID string, body ZoneWaitingRoomRuleUpdateParams, opts ...option.RequestOption) (res *ZoneWaitingRoomRuleUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/rules/%s", zoneIdentifier, waitingRoomID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
@@ -41,7 +41,7 @@ func (r *ZoneWaitingRoomRuleService) Update(ctx context.Context, zoneIdentifier 
 }
 
 // Deletes a rule for a waiting room.
-func (r *ZoneWaitingRoomRuleService) Delete(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, ruleID string, opts ...option.RequestOption) (res *RulesResponseCollection, err error) {
+func (r *ZoneWaitingRoomRuleService) Delete(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, ruleID string, opts ...option.RequestOption) (res *ZoneWaitingRoomRuleDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/rules/%s", zoneIdentifier, waitingRoomID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -50,7 +50,7 @@ func (r *ZoneWaitingRoomRuleService) Delete(ctx context.Context, zoneIdentifier 
 
 // Only available for the Waiting Room Advanced subscription. Creates a rule for a
 // waiting room.
-func (r *ZoneWaitingRoomRuleService) WaitingRoomNewWaitingRoomRule(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, body ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleParams, opts ...option.RequestOption) (res *RulesResponseCollection, err error) {
+func (r *ZoneWaitingRoomRuleService) WaitingRoomNewWaitingRoomRule(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, body ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleParams, opts ...option.RequestOption) (res *ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/rules", zoneIdentifier, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -58,7 +58,7 @@ func (r *ZoneWaitingRoomRuleService) WaitingRoomNewWaitingRoomRule(ctx context.C
 }
 
 // Lists rules for a waiting room.
-func (r *ZoneWaitingRoomRuleService) WaitingRoomListWaitingRoomRules(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, opts ...option.RequestOption) (res *RulesResponseCollection, err error) {
+func (r *ZoneWaitingRoomRuleService) WaitingRoomListWaitingRoomRules(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, opts ...option.RequestOption) (res *ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/rules", zoneIdentifier, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -67,26 +67,26 @@ func (r *ZoneWaitingRoomRuleService) WaitingRoomListWaitingRoomRules(ctx context
 
 // Only available for the Waiting Room Advanced subscription. Replaces all rules
 // for a waiting room.
-func (r *ZoneWaitingRoomRuleService) WaitingRoomReplaceWaitingRoomRules(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, body ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesParams, opts ...option.RequestOption) (res *RulesResponseCollection, err error) {
+func (r *ZoneWaitingRoomRuleService) WaitingRoomReplaceWaitingRoomRules(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, body ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesParams, opts ...option.RequestOption) (res *ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/rules", zoneIdentifier, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
 	return
 }
 
-type RulesResponseCollection struct {
-	Errors     []RulesResponseCollectionError    `json:"errors"`
-	Messages   []RulesResponseCollectionMessage  `json:"messages"`
-	Result     []RulesResponseCollectionResult   `json:"result"`
-	ResultInfo RulesResponseCollectionResultInfo `json:"result_info"`
+type ZoneWaitingRoomRuleUpdateResponse struct {
+	Errors     []ZoneWaitingRoomRuleUpdateResponseError    `json:"errors"`
+	Messages   []ZoneWaitingRoomRuleUpdateResponseMessage  `json:"messages"`
+	Result     []ZoneWaitingRoomRuleUpdateResponseResult   `json:"result"`
+	ResultInfo ZoneWaitingRoomRuleUpdateResponseResultInfo `json:"result_info"`
 	// Whether the API call was successful
-	Success RulesResponseCollectionSuccess `json:"success"`
-	JSON    rulesResponseCollectionJSON    `json:"-"`
+	Success ZoneWaitingRoomRuleUpdateResponseSuccess `json:"success"`
+	JSON    zoneWaitingRoomRuleUpdateResponseJSON    `json:"-"`
 }
 
-// rulesResponseCollectionJSON contains the JSON metadata for the struct
-// [RulesResponseCollection]
-type rulesResponseCollectionJSON struct {
+// zoneWaitingRoomRuleUpdateResponseJSON contains the JSON metadata for the struct
+// [ZoneWaitingRoomRuleUpdateResponse]
+type zoneWaitingRoomRuleUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -96,53 +96,53 @@ type rulesResponseCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RulesResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneWaitingRoomRuleUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RulesResponseCollectionError struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    rulesResponseCollectionErrorJSON `json:"-"`
+type ZoneWaitingRoomRuleUpdateResponseError struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    zoneWaitingRoomRuleUpdateResponseErrorJSON `json:"-"`
 }
 
-// rulesResponseCollectionErrorJSON contains the JSON metadata for the struct
-// [RulesResponseCollectionError]
-type rulesResponseCollectionErrorJSON struct {
+// zoneWaitingRoomRuleUpdateResponseErrorJSON contains the JSON metadata for the
+// struct [ZoneWaitingRoomRuleUpdateResponseError]
+type zoneWaitingRoomRuleUpdateResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RulesResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneWaitingRoomRuleUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RulesResponseCollectionMessage struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    rulesResponseCollectionMessageJSON `json:"-"`
+type ZoneWaitingRoomRuleUpdateResponseMessage struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    zoneWaitingRoomRuleUpdateResponseMessageJSON `json:"-"`
 }
 
-// rulesResponseCollectionMessageJSON contains the JSON metadata for the struct
-// [RulesResponseCollectionMessage]
-type rulesResponseCollectionMessageJSON struct {
+// zoneWaitingRoomRuleUpdateResponseMessageJSON contains the JSON metadata for the
+// struct [ZoneWaitingRoomRuleUpdateResponseMessage]
+type zoneWaitingRoomRuleUpdateResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RulesResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneWaitingRoomRuleUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RulesResponseCollectionResult struct {
+type ZoneWaitingRoomRuleUpdateResponseResult struct {
 	// The ID of the rule.
 	ID string `json:"id"`
 	// The action to take when the expression matches.
-	Action RulesResponseCollectionResultAction `json:"action"`
+	Action ZoneWaitingRoomRuleUpdateResponseResultAction `json:"action"`
 	// The description of the rule.
 	Description string `json:"description"`
 	// When set to true, the rule is enabled.
@@ -151,13 +151,13 @@ type RulesResponseCollectionResult struct {
 	Expression  string    `json:"expression"`
 	LastUpdated time.Time `json:"last_updated" format:"date-time"`
 	// The version of the rule.
-	Version string                            `json:"version"`
-	JSON    rulesResponseCollectionResultJSON `json:"-"`
+	Version string                                      `json:"version"`
+	JSON    zoneWaitingRoomRuleUpdateResponseResultJSON `json:"-"`
 }
 
-// rulesResponseCollectionResultJSON contains the JSON metadata for the struct
-// [RulesResponseCollectionResult]
-type rulesResponseCollectionResultJSON struct {
+// zoneWaitingRoomRuleUpdateResponseResultJSON contains the JSON metadata for the
+// struct [ZoneWaitingRoomRuleUpdateResponseResult]
+type zoneWaitingRoomRuleUpdateResponseResultJSON struct {
 	ID          apijson.Field
 	Action      apijson.Field
 	Description apijson.Field
@@ -169,18 +169,18 @@ type rulesResponseCollectionResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RulesResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneWaitingRoomRuleUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The action to take when the expression matches.
-type RulesResponseCollectionResultAction string
+type ZoneWaitingRoomRuleUpdateResponseResultAction string
 
 const (
-	RulesResponseCollectionResultActionBypassWaitingRoom RulesResponseCollectionResultAction = "bypass_waiting_room"
+	ZoneWaitingRoomRuleUpdateResponseResultActionBypassWaitingRoom ZoneWaitingRoomRuleUpdateResponseResultAction = "bypass_waiting_room"
 )
 
-type RulesResponseCollectionResultInfo struct {
+type ZoneWaitingRoomRuleUpdateResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -188,13 +188,13 @@ type RulesResponseCollectionResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                               `json:"total_count"`
-	JSON       rulesResponseCollectionResultInfoJSON `json:"-"`
+	TotalCount float64                                         `json:"total_count"`
+	JSON       zoneWaitingRoomRuleUpdateResponseResultInfoJSON `json:"-"`
 }
 
-// rulesResponseCollectionResultInfoJSON contains the JSON metadata for the struct
-// [RulesResponseCollectionResultInfo]
-type rulesResponseCollectionResultInfoJSON struct {
+// zoneWaitingRoomRuleUpdateResponseResultInfoJSON contains the JSON metadata for
+// the struct [ZoneWaitingRoomRuleUpdateResponseResultInfo]
+type zoneWaitingRoomRuleUpdateResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -203,15 +203,590 @@ type rulesResponseCollectionResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RulesResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneWaitingRoomRuleUpdateResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type RulesResponseCollectionSuccess bool
+type ZoneWaitingRoomRuleUpdateResponseSuccess bool
 
 const (
-	RulesResponseCollectionSuccessTrue RulesResponseCollectionSuccess = true
+	ZoneWaitingRoomRuleUpdateResponseSuccessTrue ZoneWaitingRoomRuleUpdateResponseSuccess = true
+)
+
+type ZoneWaitingRoomRuleDeleteResponse struct {
+	Errors     []ZoneWaitingRoomRuleDeleteResponseError    `json:"errors"`
+	Messages   []ZoneWaitingRoomRuleDeleteResponseMessage  `json:"messages"`
+	Result     []ZoneWaitingRoomRuleDeleteResponseResult   `json:"result"`
+	ResultInfo ZoneWaitingRoomRuleDeleteResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success ZoneWaitingRoomRuleDeleteResponseSuccess `json:"success"`
+	JSON    zoneWaitingRoomRuleDeleteResponseJSON    `json:"-"`
+}
+
+// zoneWaitingRoomRuleDeleteResponseJSON contains the JSON metadata for the struct
+// [ZoneWaitingRoomRuleDeleteResponse]
+type zoneWaitingRoomRuleDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWaitingRoomRuleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneWaitingRoomRuleDeleteResponseError struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    zoneWaitingRoomRuleDeleteResponseErrorJSON `json:"-"`
+}
+
+// zoneWaitingRoomRuleDeleteResponseErrorJSON contains the JSON metadata for the
+// struct [ZoneWaitingRoomRuleDeleteResponseError]
+type zoneWaitingRoomRuleDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWaitingRoomRuleDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneWaitingRoomRuleDeleteResponseMessage struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    zoneWaitingRoomRuleDeleteResponseMessageJSON `json:"-"`
+}
+
+// zoneWaitingRoomRuleDeleteResponseMessageJSON contains the JSON metadata for the
+// struct [ZoneWaitingRoomRuleDeleteResponseMessage]
+type zoneWaitingRoomRuleDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWaitingRoomRuleDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneWaitingRoomRuleDeleteResponseResult struct {
+	// The ID of the rule.
+	ID string `json:"id"`
+	// The action to take when the expression matches.
+	Action ZoneWaitingRoomRuleDeleteResponseResultAction `json:"action"`
+	// The description of the rule.
+	Description string `json:"description"`
+	// When set to true, the rule is enabled.
+	Enabled bool `json:"enabled"`
+	// Criteria defining when there is a match for the current rule.
+	Expression  string    `json:"expression"`
+	LastUpdated time.Time `json:"last_updated" format:"date-time"`
+	// The version of the rule.
+	Version string                                      `json:"version"`
+	JSON    zoneWaitingRoomRuleDeleteResponseResultJSON `json:"-"`
+}
+
+// zoneWaitingRoomRuleDeleteResponseResultJSON contains the JSON metadata for the
+// struct [ZoneWaitingRoomRuleDeleteResponseResult]
+type zoneWaitingRoomRuleDeleteResponseResultJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Description apijson.Field
+	Enabled     apijson.Field
+	Expression  apijson.Field
+	LastUpdated apijson.Field
+	Version     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWaitingRoomRuleDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The action to take when the expression matches.
+type ZoneWaitingRoomRuleDeleteResponseResultAction string
+
+const (
+	ZoneWaitingRoomRuleDeleteResponseResultActionBypassWaitingRoom ZoneWaitingRoomRuleDeleteResponseResultAction = "bypass_waiting_room"
+)
+
+type ZoneWaitingRoomRuleDeleteResponseResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                         `json:"total_count"`
+	JSON       zoneWaitingRoomRuleDeleteResponseResultInfoJSON `json:"-"`
+}
+
+// zoneWaitingRoomRuleDeleteResponseResultInfoJSON contains the JSON metadata for
+// the struct [ZoneWaitingRoomRuleDeleteResponseResultInfo]
+type zoneWaitingRoomRuleDeleteResponseResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWaitingRoomRuleDeleteResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneWaitingRoomRuleDeleteResponseSuccess bool
+
+const (
+	ZoneWaitingRoomRuleDeleteResponseSuccessTrue ZoneWaitingRoomRuleDeleteResponseSuccess = true
+)
+
+type ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponse struct {
+	Errors     []ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseError    `json:"errors"`
+	Messages   []ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseMessage  `json:"messages"`
+	Result     []ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseResult   `json:"result"`
+	ResultInfo ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseSuccess `json:"success"`
+	JSON    zoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseJSON    `json:"-"`
+}
+
+// zoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseJSON contains the JSON
+// metadata for the struct
+// [ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponse]
+type zoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseError struct {
+	Code    int64                                                             `json:"code,required"`
+	Message string                                                            `json:"message,required"`
+	JSON    zoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseErrorJSON `json:"-"`
+}
+
+// zoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseErrorJSON contains the
+// JSON metadata for the struct
+// [ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseError]
+type zoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseMessage struct {
+	Code    int64                                                               `json:"code,required"`
+	Message string                                                              `json:"message,required"`
+	JSON    zoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseMessageJSON `json:"-"`
+}
+
+// zoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseMessageJSON contains the
+// JSON metadata for the struct
+// [ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseMessage]
+type zoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseResult struct {
+	// The ID of the rule.
+	ID string `json:"id"`
+	// The action to take when the expression matches.
+	Action ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseResultAction `json:"action"`
+	// The description of the rule.
+	Description string `json:"description"`
+	// When set to true, the rule is enabled.
+	Enabled bool `json:"enabled"`
+	// Criteria defining when there is a match for the current rule.
+	Expression  string    `json:"expression"`
+	LastUpdated time.Time `json:"last_updated" format:"date-time"`
+	// The version of the rule.
+	Version string                                                             `json:"version"`
+	JSON    zoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseResultJSON `json:"-"`
+}
+
+// zoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseResultJSON contains the
+// JSON metadata for the struct
+// [ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseResult]
+type zoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseResultJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Description apijson.Field
+	Enabled     apijson.Field
+	Expression  apijson.Field
+	LastUpdated apijson.Field
+	Version     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The action to take when the expression matches.
+type ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseResultAction string
+
+const (
+	ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseResultActionBypassWaitingRoom ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseResultAction = "bypass_waiting_room"
+)
+
+type ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                                                `json:"total_count"`
+	JSON       zoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseResultInfoJSON `json:"-"`
+}
+
+// zoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseResultInfoJSON contains
+// the JSON metadata for the struct
+// [ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseResultInfo]
+type zoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseSuccess bool
+
+const (
+	ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseSuccessTrue ZoneWaitingRoomRuleWaitingRoomNewWaitingRoomRuleResponseSuccess = true
+)
+
+type ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponse struct {
+	Errors     []ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseError    `json:"errors"`
+	Messages   []ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseMessage  `json:"messages"`
+	Result     []ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseResult   `json:"result"`
+	ResultInfo ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseSuccess `json:"success"`
+	JSON    zoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseJSON    `json:"-"`
+}
+
+// zoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseJSON contains the JSON
+// metadata for the struct
+// [ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponse]
+type zoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseError struct {
+	Code    int64                                                               `json:"code,required"`
+	Message string                                                              `json:"message,required"`
+	JSON    zoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseErrorJSON `json:"-"`
+}
+
+// zoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseErrorJSON contains the
+// JSON metadata for the struct
+// [ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseError]
+type zoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseMessage struct {
+	Code    int64                                                                 `json:"code,required"`
+	Message string                                                                `json:"message,required"`
+	JSON    zoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseMessageJSON `json:"-"`
+}
+
+// zoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseMessageJSON contains
+// the JSON metadata for the struct
+// [ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseMessage]
+type zoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseResult struct {
+	// The ID of the rule.
+	ID string `json:"id"`
+	// The action to take when the expression matches.
+	Action ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseResultAction `json:"action"`
+	// The description of the rule.
+	Description string `json:"description"`
+	// When set to true, the rule is enabled.
+	Enabled bool `json:"enabled"`
+	// Criteria defining when there is a match for the current rule.
+	Expression  string    `json:"expression"`
+	LastUpdated time.Time `json:"last_updated" format:"date-time"`
+	// The version of the rule.
+	Version string                                                               `json:"version"`
+	JSON    zoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseResultJSON `json:"-"`
+}
+
+// zoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseResultJSON contains
+// the JSON metadata for the struct
+// [ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseResult]
+type zoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseResultJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Description apijson.Field
+	Enabled     apijson.Field
+	Expression  apijson.Field
+	LastUpdated apijson.Field
+	Version     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The action to take when the expression matches.
+type ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseResultAction string
+
+const (
+	ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseResultActionBypassWaitingRoom ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseResultAction = "bypass_waiting_room"
+)
+
+type ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                                                  `json:"total_count"`
+	JSON       zoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseResultInfoJSON `json:"-"`
+}
+
+// zoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseResultInfo]
+type zoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseSuccess bool
+
+const (
+	ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseSuccessTrue ZoneWaitingRoomRuleWaitingRoomListWaitingRoomRulesResponseSuccess = true
+)
+
+type ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponse struct {
+	Errors     []ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseError    `json:"errors"`
+	Messages   []ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseMessage  `json:"messages"`
+	Result     []ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseResult   `json:"result"`
+	ResultInfo ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseSuccess `json:"success"`
+	JSON    zoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseJSON    `json:"-"`
+}
+
+// zoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseJSON contains the
+// JSON metadata for the struct
+// [ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponse]
+type zoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseError struct {
+	Code    int64                                                                  `json:"code,required"`
+	Message string                                                                 `json:"message,required"`
+	JSON    zoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseErrorJSON `json:"-"`
+}
+
+// zoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseErrorJSON contains
+// the JSON metadata for the struct
+// [ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseError]
+type zoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseMessage struct {
+	Code    int64                                                                    `json:"code,required"`
+	Message string                                                                   `json:"message,required"`
+	JSON    zoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseMessageJSON `json:"-"`
+}
+
+// zoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseMessage]
+type zoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseResult struct {
+	// The ID of the rule.
+	ID string `json:"id"`
+	// The action to take when the expression matches.
+	Action ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseResultAction `json:"action"`
+	// The description of the rule.
+	Description string `json:"description"`
+	// When set to true, the rule is enabled.
+	Enabled bool `json:"enabled"`
+	// Criteria defining when there is a match for the current rule.
+	Expression  string    `json:"expression"`
+	LastUpdated time.Time `json:"last_updated" format:"date-time"`
+	// The version of the rule.
+	Version string                                                                  `json:"version"`
+	JSON    zoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseResultJSON `json:"-"`
+}
+
+// zoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseResultJSON contains
+// the JSON metadata for the struct
+// [ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseResult]
+type zoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseResultJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Description apijson.Field
+	Enabled     apijson.Field
+	Expression  apijson.Field
+	LastUpdated apijson.Field
+	Version     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The action to take when the expression matches.
+type ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseResultAction string
+
+const (
+	ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseResultActionBypassWaitingRoom ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseResultAction = "bypass_waiting_room"
+)
+
+type ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                                                     `json:"total_count"`
+	JSON       zoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseResultInfoJSON `json:"-"`
+}
+
+// zoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseResultInfo]
+type zoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseSuccess bool
+
+const (
+	ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseSuccessTrue ZoneWaitingRoomRuleWaitingRoomReplaceWaitingRoomRulesResponseSuccess = true
 )
 
 type ZoneWaitingRoomRuleUpdateParams struct {

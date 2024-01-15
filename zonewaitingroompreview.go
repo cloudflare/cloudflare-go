@@ -67,98 +67,49 @@ func NewZoneWaitingRoomPreviewService(opts ...option.RequestOption) (r *ZoneWait
 // For example, you can make a request to
 // `http://waitingrooms.dev/preview/<uuid>?waitTime=50` to configure the estimated
 // wait time as 50 minutes.
-func (r *ZoneWaitingRoomPreviewService) WaitingRoomNewACustomWaitingRoomPagePreview(ctx context.Context, zoneIdentifier string, body ZoneWaitingRoomPreviewWaitingRoomNewACustomWaitingRoomPagePreviewParams, opts ...option.RequestOption) (res *PreviewResponse, err error) {
+func (r *ZoneWaitingRoomPreviewService) WaitingRoomNewACustomWaitingRoomPagePreview(ctx context.Context, zoneIdentifier string, body ZoneWaitingRoomPreviewWaitingRoomNewACustomWaitingRoomPagePreviewParams, opts ...option.RequestOption) (res *ZoneWaitingRoomPreviewWaitingRoomNewACustomWaitingRoomPagePreviewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/waiting_rooms/preview", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
-type PreviewResponse struct {
-	Errors   []PreviewResponseError   `json:"errors"`
-	Messages []PreviewResponseMessage `json:"messages"`
-	Result   PreviewResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success PreviewResponseSuccess `json:"success"`
-	JSON    previewResponseJSON    `json:"-"`
+type ZoneWaitingRoomPreviewWaitingRoomNewACustomWaitingRoomPagePreviewResponse struct {
+	Result ZoneWaitingRoomPreviewWaitingRoomNewACustomWaitingRoomPagePreviewResponseResult `json:"result"`
+	JSON   zoneWaitingRoomPreviewWaitingRoomNewACustomWaitingRoomPagePreviewResponseJSON   `json:"-"`
 }
 
-// previewResponseJSON contains the JSON metadata for the struct [PreviewResponse]
-type previewResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
+// zoneWaitingRoomPreviewWaitingRoomNewACustomWaitingRoomPagePreviewResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneWaitingRoomPreviewWaitingRoomNewACustomWaitingRoomPagePreviewResponse]
+type zoneWaitingRoomPreviewWaitingRoomNewACustomWaitingRoomPagePreviewResponseJSON struct {
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PreviewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneWaitingRoomPreviewWaitingRoomNewACustomWaitingRoomPagePreviewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PreviewResponseError struct {
-	Code    int64                    `json:"code,required"`
-	Message string                   `json:"message,required"`
-	JSON    previewResponseErrorJSON `json:"-"`
-}
-
-// previewResponseErrorJSON contains the JSON metadata for the struct
-// [PreviewResponseError]
-type previewResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PreviewResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type PreviewResponseMessage struct {
-	Code    int64                      `json:"code,required"`
-	Message string                     `json:"message,required"`
-	JSON    previewResponseMessageJSON `json:"-"`
-}
-
-// previewResponseMessageJSON contains the JSON metadata for the struct
-// [PreviewResponseMessage]
-type previewResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PreviewResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type PreviewResponseResult struct {
+type ZoneWaitingRoomPreviewWaitingRoomNewACustomWaitingRoomPagePreviewResponseResult struct {
 	// URL where the custom waiting room page can temporarily be previewed.
-	PreviewURL string                    `json:"preview_url"`
-	JSON       previewResponseResultJSON `json:"-"`
+	PreviewURL string                                                                              `json:"preview_url"`
+	JSON       zoneWaitingRoomPreviewWaitingRoomNewACustomWaitingRoomPagePreviewResponseResultJSON `json:"-"`
 }
 
-// previewResponseResultJSON contains the JSON metadata for the struct
-// [PreviewResponseResult]
-type previewResponseResultJSON struct {
+// zoneWaitingRoomPreviewWaitingRoomNewACustomWaitingRoomPagePreviewResponseResultJSON
+// contains the JSON metadata for the struct
+// [ZoneWaitingRoomPreviewWaitingRoomNewACustomWaitingRoomPagePreviewResponseResult]
+type zoneWaitingRoomPreviewWaitingRoomNewACustomWaitingRoomPagePreviewResponseResultJSON struct {
 	PreviewURL  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PreviewResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneWaitingRoomPreviewWaitingRoomNewACustomWaitingRoomPagePreviewResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type PreviewResponseSuccess bool
-
-const (
-	PreviewResponseSuccessTrue PreviewResponseSuccess = true
-)
 
 type ZoneWaitingRoomPreviewWaitingRoomNewACustomWaitingRoomPagePreviewParams struct {
 	// Only available for the Waiting Room Advanced subscription. This is a template

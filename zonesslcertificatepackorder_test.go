@@ -24,14 +24,16 @@ func TestZoneSslCertificatePackOrderCertificatePacksOrderAdvancedCertificateMana
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Ssls.CertificatePacks.Orders.CertificatePacksOrderAdvancedCertificateManagerCertificatePack(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.ZoneSslCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParams{
-			CertificateAuthority: cloudflare.F(cloudflare.ZoneSslCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsCertificateAuthorityDigicert),
+			CertificateAuthority: cloudflare.F(cloudflare.ZoneSslCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsCertificateAuthorityLetsEncrypt),
 			Hosts:                cloudflare.F([]string{"example.com", "*.example.com", "www.example.com"}),
 			Type:                 cloudflare.F(cloudflare.ZoneSslCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsTypeAdvanced),
 			ValidationMethod:     cloudflare.F(cloudflare.ZoneSslCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsValidationMethodTxt),

@@ -21,8 +21,9 @@ import (
 // this service directly, and instead use the [NewRadarEntityASNService] method
 // instead.
 type RadarEntityASNService struct {
-	Options []option.RequestOption
-	IPs     *RadarEntityASNIPService
+	Options       []option.RequestOption
+	IPs           *RadarEntityASNIPService
+	Relationships *RadarEntityASNRelationshipService
 }
 
 // NewRadarEntityASNService generates a new service that applies the given options
@@ -32,6 +33,7 @@ func NewRadarEntityASNService(opts ...option.RequestOption) (r *RadarEntityASNSe
 	r = &RadarEntityASNService{}
 	r.Options = opts
 	r.IPs = NewRadarEntityASNIPService(opts...)
+	r.Relationships = NewRadarEntityASNRelationshipService(opts...)
 	return
 }
 
@@ -91,34 +93,38 @@ func (r *RadarEntityASNGetResponseResult) UnmarshalJSON(data []byte) (err error)
 }
 
 type RadarEntityASNGetResponseResultASN struct {
-	Aka             string                                           `json:"aka,required"`
 	ASN             int64                                            `json:"asn,required"`
 	ConfidenceLevel int64                                            `json:"confidenceLevel,required"`
 	Country         string                                           `json:"country,required"`
 	CountryName     string                                           `json:"countryName,required"`
 	EstimatedUsers  RadarEntityASNGetResponseResultASNEstimatedUsers `json:"estimatedUsers,required"`
 	Name            string                                           `json:"name,required"`
-	NameLong        string                                           `json:"nameLong,required"`
 	OrgName         string                                           `json:"orgName,required"`
 	Related         []RadarEntityASNGetResponseResultASNRelated      `json:"related,required"`
-	Website         string                                           `json:"website,required"`
-	JSON            radarEntityASNGetResponseResultASNJSON           `json:"-"`
+	// Regional Internet Registry
+	Source  string `json:"source,required"`
+	Website string `json:"website,required"`
+	Aka     string `json:"aka"`
+	// Deprecated field. Please use 'aka'.
+	NameLong string                                 `json:"nameLong"`
+	JSON     radarEntityASNGetResponseResultASNJSON `json:"-"`
 }
 
 // radarEntityASNGetResponseResultASNJSON contains the JSON metadata for the struct
 // [RadarEntityASNGetResponseResultASN]
 type radarEntityASNGetResponseResultASNJSON struct {
-	Aka             apijson.Field
 	ASN             apijson.Field
 	ConfidenceLevel apijson.Field
 	Country         apijson.Field
 	CountryName     apijson.Field
 	EstimatedUsers  apijson.Field
 	Name            apijson.Field
-	NameLong        apijson.Field
 	OrgName         apijson.Field
 	Related         apijson.Field
+	Source          apijson.Field
 	Website         apijson.Field
+	Aka             apijson.Field
+	NameLong        apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -148,10 +154,10 @@ func (r *RadarEntityASNGetResponseResultASNEstimatedUsers) UnmarshalJSON(data []
 }
 
 type RadarEntityASNGetResponseResultASNEstimatedUsersLocation struct {
+	LocationAlpha2 string `json:"locationAlpha2,required"`
+	LocationName   string `json:"locationName,required"`
 	// Estimated users per location
-	EstimatedUsers int64                                                        `json:"estimatedUsers,required"`
-	LocationAlpha2 string                                                       `json:"locationAlpha2,required"`
-	LocationName   string                                                       `json:"locationName,required"`
+	EstimatedUsers int64                                                        `json:"estimatedUsers"`
 	JSON           radarEntityASNGetResponseResultASNEstimatedUsersLocationJSON `json:"-"`
 }
 
@@ -159,9 +165,9 @@ type RadarEntityASNGetResponseResultASNEstimatedUsersLocation struct {
 // metadata for the struct
 // [RadarEntityASNGetResponseResultASNEstimatedUsersLocation]
 type radarEntityASNGetResponseResultASNEstimatedUsersLocationJSON struct {
-	EstimatedUsers apijson.Field
 	LocationAlpha2 apijson.Field
 	LocationName   apijson.Field
+	EstimatedUsers apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -171,9 +177,9 @@ func (r *RadarEntityASNGetResponseResultASNEstimatedUsersLocation) UnmarshalJSON
 }
 
 type RadarEntityASNGetResponseResultASNRelated struct {
-	Aka  string `json:"aka,required"`
 	ASN  int64  `json:"asn,required"`
 	Name string `json:"name,required"`
+	Aka  string `json:"aka"`
 	// Total estimated users
 	EstimatedUsers int64                                         `json:"estimatedUsers"`
 	JSON           radarEntityASNGetResponseResultASNRelatedJSON `json:"-"`
@@ -182,9 +188,9 @@ type RadarEntityASNGetResponseResultASNRelated struct {
 // radarEntityASNGetResponseResultASNRelatedJSON contains the JSON metadata for the
 // struct [RadarEntityASNGetResponseResultASNRelated]
 type radarEntityASNGetResponseResultASNRelatedJSON struct {
-	Aka            apijson.Field
 	ASN            apijson.Field
 	Name           apijson.Field
+	Aka            apijson.Field
 	EstimatedUsers apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
@@ -231,25 +237,26 @@ func (r *RadarEntityASNListResponseResult) UnmarshalJSON(data []byte) (err error
 }
 
 type RadarEntityASNListResponseResultASN struct {
-	Aka         string                                  `json:"aka,required"`
-	ASN         int64                                   `json:"asn,required"`
-	Country     string                                  `json:"country,required"`
-	CountryName string                                  `json:"countryName,required"`
-	Name        string                                  `json:"name,required"`
-	NameLong    string                                  `json:"nameLong,required"`
-	OrgName     string                                  `json:"orgName,required"`
-	Website     string                                  `json:"website,required"`
-	JSON        radarEntityASNListResponseResultASNJSON `json:"-"`
+	ASN         int64  `json:"asn,required"`
+	Country     string `json:"country,required"`
+	CountryName string `json:"countryName,required"`
+	Name        string `json:"name,required"`
+	Aka         string `json:"aka"`
+	// Deprecated field. Please use 'aka'.
+	NameLong string                                  `json:"nameLong"`
+	OrgName  string                                  `json:"orgName"`
+	Website  string                                  `json:"website"`
+	JSON     radarEntityASNListResponseResultASNJSON `json:"-"`
 }
 
 // radarEntityASNListResponseResultASNJSON contains the JSON metadata for the
 // struct [RadarEntityASNListResponseResultASN]
 type radarEntityASNListResponseResultASNJSON struct {
-	Aka         apijson.Field
 	ASN         apijson.Field
 	Country     apijson.Field
 	CountryName apijson.Field
 	Name        apijson.Field
+	Aka         apijson.Field
 	NameLong    apijson.Field
 	OrgName     apijson.Field
 	Website     apijson.Field
@@ -290,8 +297,12 @@ type RadarEntityASNListParams struct {
 	Format param.Field[RadarEntityASNListParamsFormat] `query:"format"`
 	// Limit the number of objects in the response.
 	Limit param.Field[int64] `query:"limit"`
+	// Location Alpha2 to filter results.
+	Location param.Field[string] `query:"location"`
 	// Number of objects to skip before grabbing results.
 	Offset param.Field[int64] `query:"offset"`
+	// Order asn list.
+	OrderBy param.Field[RadarEntityASNListParamsOrderBy] `query:"orderBy"`
 }
 
 // URLQuery serializes [RadarEntityASNListParams]'s query parameters as
@@ -309,4 +320,12 @@ type RadarEntityASNListParamsFormat string
 const (
 	RadarEntityASNListParamsFormatJson RadarEntityASNListParamsFormat = "JSON"
 	RadarEntityASNListParamsFormatCsv  RadarEntityASNListParamsFormat = "CSV"
+)
+
+// Order asn list.
+type RadarEntityASNListParamsOrderBy string
+
+const (
+	RadarEntityASNListParamsOrderByASN        RadarEntityASNListParamsOrderBy = "ASN"
+	RadarEntityASNListParamsOrderByPopulation RadarEntityASNListParamsOrderBy = "POPULATION"
 )

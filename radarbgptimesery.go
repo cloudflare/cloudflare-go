@@ -83,9 +83,9 @@ func (r *RadarBgpTimeseryListResponseResult) UnmarshalJSON(data []byte) (err err
 
 type RadarBgpTimeseryListResponseResultMeta struct {
 	AggInterval    string                                               `json:"aggInterval,required"`
-	ConfidenceInfo RadarBgpTimeseryListResponseResultMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      RadarBgpTimeseryListResponseResultMetaDateRange      `json:"dateRange,required"`
+	DateRange      []RadarBgpTimeseryListResponseResultMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    time.Time                                            `json:"lastUpdated,required" format:"date-time"`
+	ConfidenceInfo RadarBgpTimeseryListResponseResultMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           radarBgpTimeseryListResponseResultMetaJSON           `json:"-"`
 }
 
@@ -93,61 +93,14 @@ type RadarBgpTimeseryListResponseResultMeta struct {
 // struct [RadarBgpTimeseryListResponseResultMeta]
 type radarBgpTimeseryListResponseResultMetaJSON struct {
 	AggInterval    apijson.Field
-	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
+	ConfidenceInfo apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
 func (r *RadarBgpTimeseryListResponseResultMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarBgpTimeseryListResponseResultMetaConfidenceInfo struct {
-	Annotations []RadarBgpTimeseryListResponseResultMetaConfidenceInfoAnnotation `json:"annotations,required"`
-	Level       int64                                                            `json:"level,required"`
-	JSON        radarBgpTimeseryListResponseResultMetaConfidenceInfoJSON         `json:"-"`
-}
-
-// radarBgpTimeseryListResponseResultMetaConfidenceInfoJSON contains the JSON
-// metadata for the struct [RadarBgpTimeseryListResponseResultMetaConfidenceInfo]
-type radarBgpTimeseryListResponseResultMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarBgpTimeseryListResponseResultMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarBgpTimeseryListResponseResultMetaConfidenceInfoAnnotation struct {
-	DataSource  string                                                             `json:"dataSource,required"`
-	Description string                                                             `json:"description,required"`
-	EndTime     time.Time                                                          `json:"endTime,required" format:"date-time"`
-	EventType   string                                                             `json:"eventType,required"`
-	LinkedURL   string                                                             `json:"linkedUrl,required"`
-	StartTime   time.Time                                                          `json:"startTime,required" format:"date-time"`
-	JSON        radarBgpTimeseryListResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// radarBgpTimeseryListResponseResultMetaConfidenceInfoAnnotationJSON contains the
-// JSON metadata for the struct
-// [RadarBgpTimeseryListResponseResultMetaConfidenceInfoAnnotation]
-type radarBgpTimeseryListResponseResultMetaConfidenceInfoAnnotationJSON struct {
-	DataSource  apijson.Field
-	Description apijson.Field
-	EndTime     apijson.Field
-	EventType   apijson.Field
-	LinkedURL   apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarBgpTimeseryListResponseResultMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -169,6 +122,55 @@ type radarBgpTimeseryListResponseResultMetaDateRangeJSON struct {
 }
 
 func (r *RadarBgpTimeseryListResponseResultMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarBgpTimeseryListResponseResultMetaConfidenceInfo struct {
+	Annotations []RadarBgpTimeseryListResponseResultMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                            `json:"level"`
+	JSON        radarBgpTimeseryListResponseResultMetaConfidenceInfoJSON         `json:"-"`
+}
+
+// radarBgpTimeseryListResponseResultMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct [RadarBgpTimeseryListResponseResultMetaConfidenceInfo]
+type radarBgpTimeseryListResponseResultMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarBgpTimeseryListResponseResultMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarBgpTimeseryListResponseResultMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                             `json:"dataSource,required"`
+	Description     string                                                             `json:"description,required"`
+	EventType       string                                                             `json:"eventType,required"`
+	IsInstantaneous interface{}                                                        `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                          `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                             `json:"linkedUrl"`
+	StartTime       time.Time                                                          `json:"startTime" format:"date-time"`
+	JSON            radarBgpTimeseryListResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// radarBgpTimeseryListResponseResultMetaConfidenceInfoAnnotationJSON contains the
+// JSON metadata for the struct
+// [RadarBgpTimeseryListResponseResultMetaConfidenceInfoAnnotation]
+type radarBgpTimeseryListResponseResultMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *RadarBgpTimeseryListResponseResultMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -200,7 +202,7 @@ type RadarBgpTimeseryListParams struct {
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of datetimes to filter the end of a series.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
@@ -212,8 +214,8 @@ type RadarBgpTimeseryListParams struct {
 	Format param.Field[RadarBgpTimeseryListParamsFormat] `query:"format"`
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
-	// Network prefix, IPv4 or IPv6.
-	Prefix param.Field[string] `query:"prefix"`
+	// Array of BGP network prefixes.
+	Prefix param.Field[[]string] `query:"prefix"`
 	// Array of BGP update types.
 	UpdateType param.Field[[]RadarBgpTimeseryListParamsUpdateType] `query:"updateType"`
 }
@@ -243,6 +245,7 @@ type RadarBgpTimeseryListParamsDateRange string
 
 const (
 	RadarBgpTimeseryListParamsDateRange1d         RadarBgpTimeseryListParamsDateRange = "1d"
+	RadarBgpTimeseryListParamsDateRange2d         RadarBgpTimeseryListParamsDateRange = "2d"
 	RadarBgpTimeseryListParamsDateRange7d         RadarBgpTimeseryListParamsDateRange = "7d"
 	RadarBgpTimeseryListParamsDateRange14d        RadarBgpTimeseryListParamsDateRange = "14d"
 	RadarBgpTimeseryListParamsDateRange28d        RadarBgpTimeseryListParamsDateRange = "28d"
@@ -250,6 +253,7 @@ const (
 	RadarBgpTimeseryListParamsDateRange24w        RadarBgpTimeseryListParamsDateRange = "24w"
 	RadarBgpTimeseryListParamsDateRange52w        RadarBgpTimeseryListParamsDateRange = "52w"
 	RadarBgpTimeseryListParamsDateRange1dControl  RadarBgpTimeseryListParamsDateRange = "1dControl"
+	RadarBgpTimeseryListParamsDateRange2dControl  RadarBgpTimeseryListParamsDateRange = "2dControl"
 	RadarBgpTimeseryListParamsDateRange7dControl  RadarBgpTimeseryListParamsDateRange = "7dControl"
 	RadarBgpTimeseryListParamsDateRange14dControl RadarBgpTimeseryListParamsDateRange = "14dControl"
 	RadarBgpTimeseryListParamsDateRange28dControl RadarBgpTimeseryListParamsDateRange = "28dControl"

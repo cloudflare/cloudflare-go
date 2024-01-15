@@ -6,8 +6,11 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"net/url"
+	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
@@ -41,7 +44,12 @@ func (r *AccountTeamnetRouteNetworkService) Update(ctx context.Context, accountI
 }
 
 // Deletes a private network route from an account. The CIDR in
-// `ip_network_encoded` must be written in URL-encoded format.
+// `ip_network_encoded` must be written in URL-encoded format. If no
+// virtual_network_id is provided it will delete the route from the default vnet.
+// If no tun_type is provided it will fetch the type from the tunnel_id or if that
+// is missing it will assume Cloudflare Tunnel as default. If tunnel_id is provided
+// it will delete the route from that tunnel, otherwise it will delete the route
+// based on the vnet and tun_type.
 func (r *AccountTeamnetRouteNetworkService) Delete(ctx context.Context, accountIdentifier string, ipNetworkEncoded string, body AccountTeamnetRouteNetworkDeleteParams, opts ...option.RequestOption) (res *AccountTeamnetRouteNetworkDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/teamnet/routes/network/%s", accountIdentifier, ipNetworkEncoded)
@@ -52,7 +60,7 @@ func (r *AccountTeamnetRouteNetworkService) Delete(ctx context.Context, accountI
 type AccountTeamnetRouteNetworkUpdateResponse struct {
 	Errors   []AccountTeamnetRouteNetworkUpdateResponseError   `json:"errors"`
 	Messages []AccountTeamnetRouteNetworkUpdateResponseMessage `json:"messages"`
-	Result   interface{}                                       `json:"result"`
+	Result   AccountTeamnetRouteNetworkUpdateResponseResult    `json:"result"`
 	// Whether the API call was successful
 	Success AccountTeamnetRouteNetworkUpdateResponseSuccess `json:"success"`
 	JSON    accountTeamnetRouteNetworkUpdateResponseJSON    `json:"-"`
@@ -111,6 +119,45 @@ func (r *AccountTeamnetRouteNetworkUpdateResponseMessage) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type AccountTeamnetRouteNetworkUpdateResponseResult struct {
+	// UUID of the route.
+	ID string `json:"id"`
+	// Optional remark describing the route.
+	Comment string `json:"comment"`
+	// Timestamp of when the route was created.
+	CreatedAt interface{} `json:"created_at"`
+	// Timestamp of when the route was deleted. If `null`, the route has not been
+	// deleted.
+	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
+	Network string `json:"network"`
+	// UUID of the Cloudflare Tunnel serving the route.
+	TunnelID interface{} `json:"tunnel_id"`
+	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
+	// are configured, the route is assigned to the default virtual network of the
+	// account.
+	VirtualNetworkID interface{}                                        `json:"virtual_network_id"`
+	JSON             accountTeamnetRouteNetworkUpdateResponseResultJSON `json:"-"`
+}
+
+// accountTeamnetRouteNetworkUpdateResponseResultJSON contains the JSON metadata
+// for the struct [AccountTeamnetRouteNetworkUpdateResponseResult]
+type accountTeamnetRouteNetworkUpdateResponseResultJSON struct {
+	ID               apijson.Field
+	Comment          apijson.Field
+	CreatedAt        apijson.Field
+	DeletedAt        apijson.Field
+	Network          apijson.Field
+	TunnelID         apijson.Field
+	VirtualNetworkID apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccountTeamnetRouteNetworkUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 // Whether the API call was successful
 type AccountTeamnetRouteNetworkUpdateResponseSuccess bool
 
@@ -121,7 +168,7 @@ const (
 type AccountTeamnetRouteNetworkDeleteResponse struct {
 	Errors   []AccountTeamnetRouteNetworkDeleteResponseError   `json:"errors"`
 	Messages []AccountTeamnetRouteNetworkDeleteResponseMessage `json:"messages"`
-	Result   interface{}                                       `json:"result"`
+	Result   AccountTeamnetRouteNetworkDeleteResponseResult    `json:"result"`
 	// Whether the API call was successful
 	Success AccountTeamnetRouteNetworkDeleteResponseSuccess `json:"success"`
 	JSON    accountTeamnetRouteNetworkDeleteResponseJSON    `json:"-"`
@@ -180,6 +227,45 @@ func (r *AccountTeamnetRouteNetworkDeleteResponseMessage) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type AccountTeamnetRouteNetworkDeleteResponseResult struct {
+	// UUID of the route.
+	ID string `json:"id"`
+	// Optional remark describing the route.
+	Comment string `json:"comment"`
+	// Timestamp of when the route was created.
+	CreatedAt interface{} `json:"created_at"`
+	// Timestamp of when the route was deleted. If `null`, the route has not been
+	// deleted.
+	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
+	Network string `json:"network"`
+	// UUID of the Cloudflare Tunnel serving the route.
+	TunnelID interface{} `json:"tunnel_id"`
+	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
+	// are configured, the route is assigned to the default virtual network of the
+	// account.
+	VirtualNetworkID interface{}                                        `json:"virtual_network_id"`
+	JSON             accountTeamnetRouteNetworkDeleteResponseResultJSON `json:"-"`
+}
+
+// accountTeamnetRouteNetworkDeleteResponseResultJSON contains the JSON metadata
+// for the struct [AccountTeamnetRouteNetworkDeleteResponseResult]
+type accountTeamnetRouteNetworkDeleteResponseResultJSON struct {
+	ID               apijson.Field
+	Comment          apijson.Field
+	CreatedAt        apijson.Field
+	DeletedAt        apijson.Field
+	Network          apijson.Field
+	TunnelID         apijson.Field
+	VirtualNetworkID apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccountTeamnetRouteNetworkDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 // Whether the API call was successful
 type AccountTeamnetRouteNetworkDeleteResponseSuccess bool
 
@@ -201,12 +287,26 @@ func (r AccountTeamnetRouteNetworkUpdateParams) MarshalJSON() (data []byte, err 
 }
 
 type AccountTeamnetRouteNetworkDeleteParams struct {
-	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
-	// are configured, the route is assigned to the default virtual network of the
-	// account.
-	VirtualNetworkID param.Field[interface{}] `json:"virtual_network_id"`
+	// The type of tunnel.
+	TunType param.Field[AccountTeamnetRouteNetworkDeleteParamsTunType] `query:"tun_type"`
 }
 
-func (r AccountTeamnetRouteNetworkDeleteParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+// URLQuery serializes [AccountTeamnetRouteNetworkDeleteParams]'s query parameters
+// as `url.Values`.
+func (r AccountTeamnetRouteNetworkDeleteParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }
+
+// The type of tunnel.
+type AccountTeamnetRouteNetworkDeleteParamsTunType string
+
+const (
+	AccountTeamnetRouteNetworkDeleteParamsTunTypeCfdTunnel     AccountTeamnetRouteNetworkDeleteParamsTunType = "cfd_tunnel"
+	AccountTeamnetRouteNetworkDeleteParamsTunTypeWarpConnector AccountTeamnetRouteNetworkDeleteParamsTunType = "warp_connector"
+	AccountTeamnetRouteNetworkDeleteParamsTunTypeIPSec         AccountTeamnetRouteNetworkDeleteParamsTunType = "ip_sec"
+	AccountTeamnetRouteNetworkDeleteParamsTunTypeGre           AccountTeamnetRouteNetworkDeleteParamsTunType = "gre"
+	AccountTeamnetRouteNetworkDeleteParamsTunTypeCni           AccountTeamnetRouteNetworkDeleteParamsTunType = "cni"
+)

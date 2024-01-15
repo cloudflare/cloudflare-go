@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
@@ -18,7 +19,8 @@ import (
 // instantiate this service directly, and instead use the
 // [NewZoneAPIGatewayDiscoveryService] method instead.
 type ZoneAPIGatewayDiscoveryService struct {
-	Options []option.RequestOption
+	Options    []option.RequestOption
+	Operations *ZoneAPIGatewayDiscoveryOperationService
 }
 
 // NewZoneAPIGatewayDiscoveryService generates a new service that applies the given
@@ -27,29 +29,32 @@ type ZoneAPIGatewayDiscoveryService struct {
 func NewZoneAPIGatewayDiscoveryService(opts ...option.RequestOption) (r *ZoneAPIGatewayDiscoveryService) {
 	r = &ZoneAPIGatewayDiscoveryService{}
 	r.Options = opts
+	r.Operations = NewZoneAPIGatewayDiscoveryOperationService(opts...)
 	return
 }
 
-// Retrieve the most up to date view of API Discovery on a zone.
-func (r *ZoneAPIGatewayDiscoveryService) APIShieldEndpointManagementGetAPIDiscoveryResultsForAZone(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SchemaResponseDiscovery, err error) {
+// Retrieve the most up to date view of discovered operations, rendered as OpenAPI
+// schemas
+func (r *ZoneAPIGatewayDiscoveryService) APIShieldEndpointManagementGetAPIDiscoveryResultsForAZone(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *ZoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/api_gateway/discovery", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type SchemaResponseDiscovery struct {
-	Errors   []SchemaResponseDiscoveryError   `json:"errors"`
-	Messages []SchemaResponseDiscoveryMessage `json:"messages"`
-	Result   SchemaResponseDiscoveryResult    `json:"result"`
+type ZoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponse struct {
+	Errors   []ZoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponseError   `json:"errors"`
+	Messages []ZoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponseMessage `json:"messages"`
+	Result   ZoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success SchemaResponseDiscoverySuccess `json:"success"`
-	JSON    schemaResponseDiscoveryJSON    `json:"-"`
+	Success bool                                                                                         `json:"success"`
+	JSON    zoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponseJSON `json:"-"`
 }
 
-// schemaResponseDiscoveryJSON contains the JSON metadata for the struct
-// [SchemaResponseDiscovery]
-type schemaResponseDiscoveryJSON struct {
+// zoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponse]
+type zoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -58,70 +63,66 @@ type schemaResponseDiscoveryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemaResponseDiscovery) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemaResponseDiscoveryError struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    schemaResponseDiscoveryErrorJSON `json:"-"`
+type ZoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponseError struct {
+	Code    int64                                                                                             `json:"code,required"`
+	Message string                                                                                            `json:"message,required"`
+	JSON    zoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponseErrorJSON `json:"-"`
 }
 
-// schemaResponseDiscoveryErrorJSON contains the JSON metadata for the struct
-// [SchemaResponseDiscoveryError]
-type schemaResponseDiscoveryErrorJSON struct {
+// zoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponseError]
+type zoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemaResponseDiscoveryError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemaResponseDiscoveryMessage struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    schemaResponseDiscoveryMessageJSON `json:"-"`
+type ZoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponseMessage struct {
+	Code    int64                                                                                               `json:"code,required"`
+	Message string                                                                                              `json:"message,required"`
+	JSON    zoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponseMessageJSON `json:"-"`
 }
 
-// schemaResponseDiscoveryMessageJSON contains the JSON metadata for the struct
-// [SchemaResponseDiscoveryMessage]
-type schemaResponseDiscoveryMessageJSON struct {
+// zoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponseMessage]
+type zoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemaResponseDiscoveryMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemaResponseDiscoveryResult struct {
-	Schemas   []interface{}                     `json:"schemas"`
-	Timestamp string                            `json:"timestamp"`
-	JSON      schemaResponseDiscoveryResultJSON `json:"-"`
+type ZoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponseResult struct {
+	Schemas   []interface{}                                                                                      `json:"schemas"`
+	Timestamp time.Time                                                                                          `json:"timestamp" format:"date-time"`
+	JSON      zoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponseResultJSON `json:"-"`
 }
 
-// schemaResponseDiscoveryResultJSON contains the JSON metadata for the struct
-// [SchemaResponseDiscoveryResult]
-type schemaResponseDiscoveryResultJSON struct {
+// zoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponseResultJSON
+// contains the JSON metadata for the struct
+// [ZoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponseResult]
+type zoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponseResultJSON struct {
 	Schemas     apijson.Field
 	Timestamp   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemaResponseDiscoveryResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAPIGatewayDiscoveryAPIShieldEndpointManagementGetAPIDiscoveryResultsForAZoneResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type SchemaResponseDiscoverySuccess bool
-
-const (
-	SchemaResponseDiscoverySuccessTrue SchemaResponseDiscoverySuccess = true
-)

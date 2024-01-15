@@ -33,15 +33,15 @@ func NewAccountWorkerDomainService(opts ...option.RequestOption) (r *AccountWork
 	return
 }
 
-// Gets a Worker Domain.
-func (r *AccountWorkerDomainService) Get(ctx context.Context, accountIdentifier interface{}, domainIdentifier interface{}, opts ...option.RequestOption) (res *DomainResponseSingle9PyIq1Vp, err error) {
+// Gets a Worker domain.
+func (r *AccountWorkerDomainService) Get(ctx context.Context, accountIdentifier interface{}, domainIdentifier interface{}, opts ...option.RequestOption) (res *AccountWorkerDomainGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/workers/domains/%v", accountIdentifier, domainIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-// Detaches a worker from a zone and hostname.
+// Detaches a Worker from a zone and hostname.
 func (r *AccountWorkerDomainService) Delete(ctx context.Context, accountIdentifier interface{}, domainIdentifier interface{}, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
@@ -50,34 +50,34 @@ func (r *AccountWorkerDomainService) Delete(ctx context.Context, accountIdentifi
 	return
 }
 
-// Attaches a worker to a zone and hostname.
-func (r *AccountWorkerDomainService) WorkerDomainAttachToDomain(ctx context.Context, accountIdentifier interface{}, body AccountWorkerDomainWorkerDomainAttachToDomainParams, opts ...option.RequestOption) (res *DomainResponseSingle9PyIq1Vp, err error) {
+// Attaches a Worker to a zone and hostname.
+func (r *AccountWorkerDomainService) WorkerDomainAttachToDomain(ctx context.Context, accountIdentifier interface{}, body AccountWorkerDomainWorkerDomainAttachToDomainParams, opts ...option.RequestOption) (res *AccountWorkerDomainWorkerDomainAttachToDomainResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/workers/domains", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
 	return
 }
 
-// Lists all Worker Domains.
-func (r *AccountWorkerDomainService) WorkerDomainListDomains(ctx context.Context, accountIdentifier interface{}, query AccountWorkerDomainWorkerDomainListDomainsParams, opts ...option.RequestOption) (res *DomainResponseCollection1E2A3hYu, err error) {
+// Lists all Worker Domains for an account.
+func (r *AccountWorkerDomainService) WorkerDomainListDomains(ctx context.Context, accountIdentifier interface{}, query AccountWorkerDomainWorkerDomainListDomainsParams, opts ...option.RequestOption) (res *AccountWorkerDomainWorkerDomainListDomainsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/workers/domains", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
-type DomainResponseCollection1E2A3hYu struct {
-	Errors   []DomainResponseCollection1E2A3hYuError   `json:"errors"`
-	Messages []DomainResponseCollection1E2A3hYuMessage `json:"messages"`
-	Result   []DomainResponseCollection1E2A3hYuResult  `json:"result"`
+type AccountWorkerDomainGetResponse struct {
+	Errors   []AccountWorkerDomainGetResponseError   `json:"errors"`
+	Messages []AccountWorkerDomainGetResponseMessage `json:"messages"`
+	Result   AccountWorkerDomainGetResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success DomainResponseCollection1E2A3hYuSuccess `json:"success"`
-	JSON    domainResponseCollection1E2A3hYuJSON    `json:"-"`
+	Success AccountWorkerDomainGetResponseSuccess `json:"success"`
+	JSON    accountWorkerDomainGetResponseJSON    `json:"-"`
 }
 
-// domainResponseCollection1E2A3hYuJSON contains the JSON metadata for the struct
-// [DomainResponseCollection1E2A3hYu]
-type domainResponseCollection1E2A3hYuJSON struct {
+// accountWorkerDomainGetResponseJSON contains the JSON metadata for the struct
+// [AccountWorkerDomainGetResponse]
+type accountWorkerDomainGetResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -86,151 +86,49 @@ type domainResponseCollection1E2A3hYuJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DomainResponseCollection1E2A3hYu) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountWorkerDomainGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DomainResponseCollection1E2A3hYuError struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    domainResponseCollection1E2A3hYuErrorJSON `json:"-"`
-}
-
-// domainResponseCollection1E2A3hYuErrorJSON contains the JSON metadata for the
-// struct [DomainResponseCollection1E2A3hYuError]
-type domainResponseCollection1E2A3hYuErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainResponseCollection1E2A3hYuError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DomainResponseCollection1E2A3hYuMessage struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    domainResponseCollection1E2A3hYuMessageJSON `json:"-"`
-}
-
-// domainResponseCollection1E2A3hYuMessageJSON contains the JSON metadata for the
-// struct [DomainResponseCollection1E2A3hYuMessage]
-type domainResponseCollection1E2A3hYuMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainResponseCollection1E2A3hYuMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DomainResponseCollection1E2A3hYuResult struct {
-	// Identifer of the Worker Domain.
-	ID interface{} `json:"id"`
-	// Worker environment associated with the zone and hostname.
-	Environment string `json:"environment"`
-	// Hostname of the Worker Domain.
-	Hostname string `json:"hostname"`
-	// Worker service associated with the zone and hostname.
-	Service string `json:"service"`
-	// Identifier of the zone.
-	ZoneID interface{} `json:"zone_id"`
-	// Name of the zone.
-	ZoneName string                                     `json:"zone_name"`
-	JSON     domainResponseCollection1E2A3hYuResultJSON `json:"-"`
-}
-
-// domainResponseCollection1E2A3hYuResultJSON contains the JSON metadata for the
-// struct [DomainResponseCollection1E2A3hYuResult]
-type domainResponseCollection1E2A3hYuResultJSON struct {
-	ID          apijson.Field
-	Environment apijson.Field
-	Hostname    apijson.Field
-	Service     apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainResponseCollection1E2A3hYuResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type DomainResponseCollection1E2A3hYuSuccess bool
-
-const (
-	DomainResponseCollection1E2A3hYuSuccessTrue DomainResponseCollection1E2A3hYuSuccess = true
-)
-
-type DomainResponseSingle9PyIq1Vp struct {
-	Errors   []DomainResponseSingle9PyIq1VpError   `json:"errors"`
-	Messages []DomainResponseSingle9PyIq1VpMessage `json:"messages"`
-	Result   DomainResponseSingle9PyIq1VpResult    `json:"result"`
-	// Whether the API call was successful
-	Success DomainResponseSingle9PyIq1VpSuccess `json:"success"`
-	JSON    domainResponseSingle9PyIq1VpJSON    `json:"-"`
-}
-
-// domainResponseSingle9PyIq1VpJSON contains the JSON metadata for the struct
-// [DomainResponseSingle9PyIq1Vp]
-type domainResponseSingle9PyIq1VpJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainResponseSingle9PyIq1Vp) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DomainResponseSingle9PyIq1VpError struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    domainResponseSingle9PyIq1VpErrorJSON `json:"-"`
-}
-
-// domainResponseSingle9PyIq1VpErrorJSON contains the JSON metadata for the struct
-// [DomainResponseSingle9PyIq1VpError]
-type domainResponseSingle9PyIq1VpErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainResponseSingle9PyIq1VpError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DomainResponseSingle9PyIq1VpMessage struct {
+type AccountWorkerDomainGetResponseError struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
-	JSON    domainResponseSingle9PyIq1VpMessageJSON `json:"-"`
+	JSON    accountWorkerDomainGetResponseErrorJSON `json:"-"`
 }
 
-// domainResponseSingle9PyIq1VpMessageJSON contains the JSON metadata for the
-// struct [DomainResponseSingle9PyIq1VpMessage]
-type domainResponseSingle9PyIq1VpMessageJSON struct {
+// accountWorkerDomainGetResponseErrorJSON contains the JSON metadata for the
+// struct [AccountWorkerDomainGetResponseError]
+type accountWorkerDomainGetResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DomainResponseSingle9PyIq1VpMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountWorkerDomainGetResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DomainResponseSingle9PyIq1VpResult struct {
+type AccountWorkerDomainGetResponseMessage struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    accountWorkerDomainGetResponseMessageJSON `json:"-"`
+}
+
+// accountWorkerDomainGetResponseMessageJSON contains the JSON metadata for the
+// struct [AccountWorkerDomainGetResponseMessage]
+type accountWorkerDomainGetResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountWorkerDomainGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountWorkerDomainGetResponseResult struct {
 	// Identifer of the Worker Domain.
 	ID interface{} `json:"id"`
 	// Worker environment associated with the zone and hostname.
@@ -242,13 +140,13 @@ type DomainResponseSingle9PyIq1VpResult struct {
 	// Identifier of the zone.
 	ZoneID interface{} `json:"zone_id"`
 	// Name of the zone.
-	ZoneName string                                 `json:"zone_name"`
-	JSON     domainResponseSingle9PyIq1VpResultJSON `json:"-"`
+	ZoneName string                                   `json:"zone_name"`
+	JSON     accountWorkerDomainGetResponseResultJSON `json:"-"`
 }
 
-// domainResponseSingle9PyIq1VpResultJSON contains the JSON metadata for the struct
-// [DomainResponseSingle9PyIq1VpResult]
-type domainResponseSingle9PyIq1VpResultJSON struct {
+// accountWorkerDomainGetResponseResultJSON contains the JSON metadata for the
+// struct [AccountWorkerDomainGetResponseResult]
+type accountWorkerDomainGetResponseResultJSON struct {
 	ID          apijson.Field
 	Environment apijson.Field
 	Hostname    apijson.Field
@@ -259,15 +157,225 @@ type domainResponseSingle9PyIq1VpResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DomainResponseSingle9PyIq1VpResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountWorkerDomainGetResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type DomainResponseSingle9PyIq1VpSuccess bool
+type AccountWorkerDomainGetResponseSuccess bool
 
 const (
-	DomainResponseSingle9PyIq1VpSuccessTrue DomainResponseSingle9PyIq1VpSuccess = true
+	AccountWorkerDomainGetResponseSuccessTrue AccountWorkerDomainGetResponseSuccess = true
+)
+
+type AccountWorkerDomainWorkerDomainAttachToDomainResponse struct {
+	Errors   []AccountWorkerDomainWorkerDomainAttachToDomainResponseError   `json:"errors"`
+	Messages []AccountWorkerDomainWorkerDomainAttachToDomainResponseMessage `json:"messages"`
+	Result   AccountWorkerDomainWorkerDomainAttachToDomainResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountWorkerDomainWorkerDomainAttachToDomainResponseSuccess `json:"success"`
+	JSON    accountWorkerDomainWorkerDomainAttachToDomainResponseJSON    `json:"-"`
+}
+
+// accountWorkerDomainWorkerDomainAttachToDomainResponseJSON contains the JSON
+// metadata for the struct [AccountWorkerDomainWorkerDomainAttachToDomainResponse]
+type accountWorkerDomainWorkerDomainAttachToDomainResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountWorkerDomainWorkerDomainAttachToDomainResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountWorkerDomainWorkerDomainAttachToDomainResponseError struct {
+	Code    int64                                                          `json:"code,required"`
+	Message string                                                         `json:"message,required"`
+	JSON    accountWorkerDomainWorkerDomainAttachToDomainResponseErrorJSON `json:"-"`
+}
+
+// accountWorkerDomainWorkerDomainAttachToDomainResponseErrorJSON contains the JSON
+// metadata for the struct
+// [AccountWorkerDomainWorkerDomainAttachToDomainResponseError]
+type accountWorkerDomainWorkerDomainAttachToDomainResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountWorkerDomainWorkerDomainAttachToDomainResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountWorkerDomainWorkerDomainAttachToDomainResponseMessage struct {
+	Code    int64                                                            `json:"code,required"`
+	Message string                                                           `json:"message,required"`
+	JSON    accountWorkerDomainWorkerDomainAttachToDomainResponseMessageJSON `json:"-"`
+}
+
+// accountWorkerDomainWorkerDomainAttachToDomainResponseMessageJSON contains the
+// JSON metadata for the struct
+// [AccountWorkerDomainWorkerDomainAttachToDomainResponseMessage]
+type accountWorkerDomainWorkerDomainAttachToDomainResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountWorkerDomainWorkerDomainAttachToDomainResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountWorkerDomainWorkerDomainAttachToDomainResponseResult struct {
+	// Identifer of the Worker Domain.
+	ID interface{} `json:"id"`
+	// Worker environment associated with the zone and hostname.
+	Environment string `json:"environment"`
+	// Hostname of the Worker Domain.
+	Hostname string `json:"hostname"`
+	// Worker service associated with the zone and hostname.
+	Service string `json:"service"`
+	// Identifier of the zone.
+	ZoneID interface{} `json:"zone_id"`
+	// Name of the zone.
+	ZoneName string                                                          `json:"zone_name"`
+	JSON     accountWorkerDomainWorkerDomainAttachToDomainResponseResultJSON `json:"-"`
+}
+
+// accountWorkerDomainWorkerDomainAttachToDomainResponseResultJSON contains the
+// JSON metadata for the struct
+// [AccountWorkerDomainWorkerDomainAttachToDomainResponseResult]
+type accountWorkerDomainWorkerDomainAttachToDomainResponseResultJSON struct {
+	ID          apijson.Field
+	Environment apijson.Field
+	Hostname    apijson.Field
+	Service     apijson.Field
+	ZoneID      apijson.Field
+	ZoneName    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountWorkerDomainWorkerDomainAttachToDomainResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountWorkerDomainWorkerDomainAttachToDomainResponseSuccess bool
+
+const (
+	AccountWorkerDomainWorkerDomainAttachToDomainResponseSuccessTrue AccountWorkerDomainWorkerDomainAttachToDomainResponseSuccess = true
+)
+
+type AccountWorkerDomainWorkerDomainListDomainsResponse struct {
+	Errors   []AccountWorkerDomainWorkerDomainListDomainsResponseError   `json:"errors"`
+	Messages []AccountWorkerDomainWorkerDomainListDomainsResponseMessage `json:"messages"`
+	Result   []AccountWorkerDomainWorkerDomainListDomainsResponseResult  `json:"result"`
+	// Whether the API call was successful
+	Success AccountWorkerDomainWorkerDomainListDomainsResponseSuccess `json:"success"`
+	JSON    accountWorkerDomainWorkerDomainListDomainsResponseJSON    `json:"-"`
+}
+
+// accountWorkerDomainWorkerDomainListDomainsResponseJSON contains the JSON
+// metadata for the struct [AccountWorkerDomainWorkerDomainListDomainsResponse]
+type accountWorkerDomainWorkerDomainListDomainsResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountWorkerDomainWorkerDomainListDomainsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountWorkerDomainWorkerDomainListDomainsResponseError struct {
+	Code    int64                                                       `json:"code,required"`
+	Message string                                                      `json:"message,required"`
+	JSON    accountWorkerDomainWorkerDomainListDomainsResponseErrorJSON `json:"-"`
+}
+
+// accountWorkerDomainWorkerDomainListDomainsResponseErrorJSON contains the JSON
+// metadata for the struct
+// [AccountWorkerDomainWorkerDomainListDomainsResponseError]
+type accountWorkerDomainWorkerDomainListDomainsResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountWorkerDomainWorkerDomainListDomainsResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountWorkerDomainWorkerDomainListDomainsResponseMessage struct {
+	Code    int64                                                         `json:"code,required"`
+	Message string                                                        `json:"message,required"`
+	JSON    accountWorkerDomainWorkerDomainListDomainsResponseMessageJSON `json:"-"`
+}
+
+// accountWorkerDomainWorkerDomainListDomainsResponseMessageJSON contains the JSON
+// metadata for the struct
+// [AccountWorkerDomainWorkerDomainListDomainsResponseMessage]
+type accountWorkerDomainWorkerDomainListDomainsResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountWorkerDomainWorkerDomainListDomainsResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountWorkerDomainWorkerDomainListDomainsResponseResult struct {
+	// Identifer of the Worker Domain.
+	ID interface{} `json:"id"`
+	// Worker environment associated with the zone and hostname.
+	Environment string `json:"environment"`
+	// Hostname of the Worker Domain.
+	Hostname string `json:"hostname"`
+	// Worker service associated with the zone and hostname.
+	Service string `json:"service"`
+	// Identifier of the zone.
+	ZoneID interface{} `json:"zone_id"`
+	// Name of the zone.
+	ZoneName string                                                       `json:"zone_name"`
+	JSON     accountWorkerDomainWorkerDomainListDomainsResponseResultJSON `json:"-"`
+}
+
+// accountWorkerDomainWorkerDomainListDomainsResponseResultJSON contains the JSON
+// metadata for the struct
+// [AccountWorkerDomainWorkerDomainListDomainsResponseResult]
+type accountWorkerDomainWorkerDomainListDomainsResponseResultJSON struct {
+	ID          apijson.Field
+	Environment apijson.Field
+	Hostname    apijson.Field
+	Service     apijson.Field
+	ZoneID      apijson.Field
+	ZoneName    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountWorkerDomainWorkerDomainListDomainsResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountWorkerDomainWorkerDomainListDomainsResponseSuccess bool
+
+const (
+	AccountWorkerDomainWorkerDomainListDomainsResponseSuccessTrue AccountWorkerDomainWorkerDomainListDomainsResponseSuccess = true
 )
 
 type AccountWorkerDomainWorkerDomainAttachToDomainParams struct {

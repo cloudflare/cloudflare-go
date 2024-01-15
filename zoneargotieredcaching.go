@@ -32,7 +32,7 @@ func NewZoneArgoTieredCachingService(opts ...option.RequestOption) (r *ZoneArgoT
 }
 
 // Get Tiered Caching setting
-func (r *ZoneArgoTieredCachingService) TieredCachingGetTieredCachingSetting(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *SchemasResponseSingle, err error) {
+func (r *ZoneArgoTieredCachingService) TieredCachingGetTieredCachingSetting(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ZoneArgoTieredCachingTieredCachingGetTieredCachingSettingResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/argo/tiered_caching", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -40,12 +40,156 @@ func (r *ZoneArgoTieredCachingService) TieredCachingGetTieredCachingSetting(ctx 
 }
 
 // Updates enablement of Tiered Caching
-func (r *ZoneArgoTieredCachingService) TieredCachingPatchTieredCachingSetting(ctx context.Context, zoneIdentifier string, body ZoneArgoTieredCachingTieredCachingPatchTieredCachingSettingParams, opts ...option.RequestOption) (res *SchemasResponseSingle, err error) {
+func (r *ZoneArgoTieredCachingService) TieredCachingPatchTieredCachingSetting(ctx context.Context, zoneIdentifier string, body ZoneArgoTieredCachingTieredCachingPatchTieredCachingSettingParams, opts ...option.RequestOption) (res *ZoneArgoTieredCachingTieredCachingPatchTieredCachingSettingResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/argo/tiered_caching", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
 	return
 }
+
+type ZoneArgoTieredCachingTieredCachingGetTieredCachingSettingResponse struct {
+	Errors   []ZoneArgoTieredCachingTieredCachingGetTieredCachingSettingResponseError   `json:"errors"`
+	Messages []ZoneArgoTieredCachingTieredCachingGetTieredCachingSettingResponseMessage `json:"messages"`
+	Result   interface{}                                                                `json:"result"`
+	// Whether the API call was successful
+	Success ZoneArgoTieredCachingTieredCachingGetTieredCachingSettingResponseSuccess `json:"success"`
+	JSON    zoneArgoTieredCachingTieredCachingGetTieredCachingSettingResponseJSON    `json:"-"`
+}
+
+// zoneArgoTieredCachingTieredCachingGetTieredCachingSettingResponseJSON contains
+// the JSON metadata for the struct
+// [ZoneArgoTieredCachingTieredCachingGetTieredCachingSettingResponse]
+type zoneArgoTieredCachingTieredCachingGetTieredCachingSettingResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneArgoTieredCachingTieredCachingGetTieredCachingSettingResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneArgoTieredCachingTieredCachingGetTieredCachingSettingResponseError struct {
+	Code    int64                                                                      `json:"code,required"`
+	Message string                                                                     `json:"message,required"`
+	JSON    zoneArgoTieredCachingTieredCachingGetTieredCachingSettingResponseErrorJSON `json:"-"`
+}
+
+// zoneArgoTieredCachingTieredCachingGetTieredCachingSettingResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneArgoTieredCachingTieredCachingGetTieredCachingSettingResponseError]
+type zoneArgoTieredCachingTieredCachingGetTieredCachingSettingResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneArgoTieredCachingTieredCachingGetTieredCachingSettingResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneArgoTieredCachingTieredCachingGetTieredCachingSettingResponseMessage struct {
+	Code    int64                                                                        `json:"code,required"`
+	Message string                                                                       `json:"message,required"`
+	JSON    zoneArgoTieredCachingTieredCachingGetTieredCachingSettingResponseMessageJSON `json:"-"`
+}
+
+// zoneArgoTieredCachingTieredCachingGetTieredCachingSettingResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneArgoTieredCachingTieredCachingGetTieredCachingSettingResponseMessage]
+type zoneArgoTieredCachingTieredCachingGetTieredCachingSettingResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneArgoTieredCachingTieredCachingGetTieredCachingSettingResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneArgoTieredCachingTieredCachingGetTieredCachingSettingResponseSuccess bool
+
+const (
+	ZoneArgoTieredCachingTieredCachingGetTieredCachingSettingResponseSuccessTrue ZoneArgoTieredCachingTieredCachingGetTieredCachingSettingResponseSuccess = true
+)
+
+type ZoneArgoTieredCachingTieredCachingPatchTieredCachingSettingResponse struct {
+	Errors   []ZoneArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseError   `json:"errors"`
+	Messages []ZoneArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseMessage `json:"messages"`
+	Result   interface{}                                                                  `json:"result"`
+	// Whether the API call was successful
+	Success ZoneArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseSuccess `json:"success"`
+	JSON    zoneArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseJSON    `json:"-"`
+}
+
+// zoneArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseJSON contains
+// the JSON metadata for the struct
+// [ZoneArgoTieredCachingTieredCachingPatchTieredCachingSettingResponse]
+type zoneArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneArgoTieredCachingTieredCachingPatchTieredCachingSettingResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseError struct {
+	Code    int64                                                                        `json:"code,required"`
+	Message string                                                                       `json:"message,required"`
+	JSON    zoneArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseErrorJSON `json:"-"`
+}
+
+// zoneArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseError]
+type zoneArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseMessage struct {
+	Code    int64                                                                          `json:"code,required"`
+	Message string                                                                         `json:"message,required"`
+	JSON    zoneArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseMessageJSON `json:"-"`
+}
+
+// zoneArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseMessage]
+type zoneArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseSuccess bool
+
+const (
+	ZoneArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseSuccessTrue ZoneArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseSuccess = true
+)
 
 type ZoneArgoTieredCachingTieredCachingPatchTieredCachingSettingParams struct {
 	// Enables Tiered Caching.

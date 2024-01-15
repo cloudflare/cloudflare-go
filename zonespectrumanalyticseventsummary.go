@@ -7,12 +7,16 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 	"time"
 
+	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // ZoneSpectrumAnalyticsEventSummaryService contains methods and other services
@@ -34,12 +38,103 @@ func NewZoneSpectrumAnalyticsEventSummaryService(opts ...option.RequestOption) (
 }
 
 // Retrieves a list of summarised aggregate metrics over a given time period.
-func (r *ZoneSpectrumAnalyticsEventSummaryService) SpectrumAnalyticsSummaryGetAnalyticsSummary(ctx context.Context, zone string, query ZoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParams, opts ...option.RequestOption) (res *APIResponseSingle, err error) {
+func (r *ZoneSpectrumAnalyticsEventSummaryService) SpectrumAnalyticsSummaryGetAnalyticsSummary(ctx context.Context, zone string, query ZoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParams, opts ...option.RequestOption) (res *ZoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/spectrum/analytics/events/summary", zone)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
+
+type ZoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponse struct {
+	Errors   []ZoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseError   `json:"errors"`
+	Messages []ZoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseMessage `json:"messages"`
+	Result   ZoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseResult    `json:"result,nullable"`
+	// Whether the API call was successful
+	Success ZoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseSuccess `json:"success"`
+	JSON    zoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseJSON    `json:"-"`
+}
+
+// zoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponse]
+type zoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseError struct {
+	Code    int64                                                                                         `json:"code,required"`
+	Message string                                                                                        `json:"message,required"`
+	JSON    zoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseErrorJSON `json:"-"`
+}
+
+// zoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseError]
+type zoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseMessage struct {
+	Code    int64                                                                                           `json:"code,required"`
+	Message string                                                                                          `json:"message,required"`
+	JSON    zoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseMessageJSON `json:"-"`
+}
+
+// zoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseMessage]
+type zoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Union satisfied by
+// [ZoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseResultUnknown]
+// or [shared.UnionString].
+type ZoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseResult interface {
+	ImplementsZoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseResult()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseResult)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.String,
+			DiscriminatorValue: "",
+			Type:               reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Whether the API call was successful
+type ZoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseSuccess bool
+
+const (
+	ZoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseSuccessTrue ZoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseSuccess = true
+)
 
 type ZoneSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParams struct {
 	// Can be used to break down the data by given attributes. Options are:

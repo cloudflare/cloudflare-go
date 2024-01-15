@@ -24,10 +24,12 @@ func TestAccountAccessUserZeroTrustUsersGetUsers(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Accesses.Users.ZeroTrustUsersGetUsers(context.TODO(), "699d98642c564d2e855e9661899b7252")
+	_, err := client.Accounts.Access.Users.ZeroTrustUsersGetUsers(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

@@ -32,7 +32,7 @@ func NewAccountStreamLiveInputOutputService(opts ...option.RequestOption) (r *Ac
 }
 
 // Updates the state of an output.
-func (r *AccountStreamLiveInputOutputService) Update(ctx context.Context, accountIdentifier string, liveInputIdentifier string, outputIdentifier string, body AccountStreamLiveInputOutputUpdateParams, opts ...option.RequestOption) (res *OutputResponseSingle, err error) {
+func (r *AccountStreamLiveInputOutputService) Update(ctx context.Context, accountIdentifier string, liveInputIdentifier string, outputIdentifier string, body AccountStreamLiveInputOutputUpdateParams, opts ...option.RequestOption) (res *AccountStreamLiveInputOutputUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s/outputs/%s", accountIdentifier, liveInputIdentifier, outputIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
@@ -51,7 +51,7 @@ func (r *AccountStreamLiveInputOutputService) Delete(ctx context.Context, accoun
 // Creates a new output that can be used to simulcast or restream live video to
 // other RTMP or SRT destinations. Outputs are always linked to a specific live
 // input — one live input can have many outputs.
-func (r *AccountStreamLiveInputOutputService) StreamLiveInputsNewANewOutputConnectedToALiveInput(ctx context.Context, accountIdentifier string, liveInputIdentifier string, body AccountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputParams, opts ...option.RequestOption) (res *OutputResponseSingle, err error) {
+func (r *AccountStreamLiveInputOutputService) StreamLiveInputsNewANewOutputConnectedToALiveInput(ctx context.Context, accountIdentifier string, liveInputIdentifier string, body AccountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputParams, opts ...option.RequestOption) (res *AccountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s/outputs", accountIdentifier, liveInputIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -59,78 +59,76 @@ func (r *AccountStreamLiveInputOutputService) StreamLiveInputsNewANewOutputConne
 }
 
 // Retrieves all outputs associated with a specified live input.
-func (r *AccountStreamLiveInputOutputService) StreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInput(ctx context.Context, accountIdentifier string, liveInputIdentifier string, opts ...option.RequestOption) (res *OutputResponseCollection, err error) {
+func (r *AccountStreamLiveInputOutputService) StreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInput(ctx context.Context, accountIdentifier string, liveInputIdentifier string, opts ...option.RequestOption) (res *AccountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s/outputs", accountIdentifier, liveInputIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type OutputResponseCollection struct {
-	Errors     []OutputResponseCollectionError    `json:"errors"`
-	Messages   []OutputResponseCollectionMessage  `json:"messages"`
-	Result     []OutputResponseCollectionResult   `json:"result"`
-	ResultInfo OutputResponseCollectionResultInfo `json:"result_info"`
+type AccountStreamLiveInputOutputUpdateResponse struct {
+	Errors   []AccountStreamLiveInputOutputUpdateResponseError   `json:"errors"`
+	Messages []AccountStreamLiveInputOutputUpdateResponseMessage `json:"messages"`
+	Result   AccountStreamLiveInputOutputUpdateResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success OutputResponseCollectionSuccess `json:"success"`
-	JSON    outputResponseCollectionJSON    `json:"-"`
+	Success AccountStreamLiveInputOutputUpdateResponseSuccess `json:"success"`
+	JSON    accountStreamLiveInputOutputUpdateResponseJSON    `json:"-"`
 }
 
-// outputResponseCollectionJSON contains the JSON metadata for the struct
-// [OutputResponseCollection]
-type outputResponseCollectionJSON struct {
+// accountStreamLiveInputOutputUpdateResponseJSON contains the JSON metadata for
+// the struct [AccountStreamLiveInputOutputUpdateResponse]
+type accountStreamLiveInputOutputUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OutputResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamLiveInputOutputUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type OutputResponseCollectionError struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    outputResponseCollectionErrorJSON `json:"-"`
+type AccountStreamLiveInputOutputUpdateResponseError struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    accountStreamLiveInputOutputUpdateResponseErrorJSON `json:"-"`
 }
 
-// outputResponseCollectionErrorJSON contains the JSON metadata for the struct
-// [OutputResponseCollectionError]
-type outputResponseCollectionErrorJSON struct {
+// accountStreamLiveInputOutputUpdateResponseErrorJSON contains the JSON metadata
+// for the struct [AccountStreamLiveInputOutputUpdateResponseError]
+type accountStreamLiveInputOutputUpdateResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OutputResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamLiveInputOutputUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type OutputResponseCollectionMessage struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    outputResponseCollectionMessageJSON `json:"-"`
+type AccountStreamLiveInputOutputUpdateResponseMessage struct {
+	Code    int64                                                 `json:"code,required"`
+	Message string                                                `json:"message,required"`
+	JSON    accountStreamLiveInputOutputUpdateResponseMessageJSON `json:"-"`
 }
 
-// outputResponseCollectionMessageJSON contains the JSON metadata for the struct
-// [OutputResponseCollectionMessage]
-type outputResponseCollectionMessageJSON struct {
+// accountStreamLiveInputOutputUpdateResponseMessageJSON contains the JSON metadata
+// for the struct [AccountStreamLiveInputOutputUpdateResponseMessage]
+type accountStreamLiveInputOutputUpdateResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OutputResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamLiveInputOutputUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type OutputResponseCollectionResult struct {
+type AccountStreamLiveInputOutputUpdateResponseResult struct {
 	// When enabled, live video streamed to the associated live input will be sent to
 	// the output URL. When disabled, live video will not be sent to the output URL,
 	// even when streaming to the associated live input. Use this to control precisely
@@ -142,13 +140,13 @@ type OutputResponseCollectionResult struct {
 	// A unique identifier for the output.
 	Uid string `json:"uid"`
 	// The URL an output uses to restream.
-	URL  string                             `json:"url"`
-	JSON outputResponseCollectionResultJSON `json:"-"`
+	URL  string                                               `json:"url"`
+	JSON accountStreamLiveInputOutputUpdateResponseResultJSON `json:"-"`
 }
 
-// outputResponseCollectionResultJSON contains the JSON metadata for the struct
-// [OutputResponseCollectionResult]
-type outputResponseCollectionResultJSON struct {
+// accountStreamLiveInputOutputUpdateResponseResultJSON contains the JSON metadata
+// for the struct [AccountStreamLiveInputOutputUpdateResponseResult]
+type accountStreamLiveInputOutputUpdateResponseResultJSON struct {
 	Enabled     apijson.Field
 	StreamKey   apijson.Field
 	Uid         apijson.Field
@@ -157,56 +155,30 @@ type outputResponseCollectionResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OutputResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type OutputResponseCollectionResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                `json:"total_count"`
-	JSON       outputResponseCollectionResultInfoJSON `json:"-"`
-}
-
-// outputResponseCollectionResultInfoJSON contains the JSON metadata for the struct
-// [OutputResponseCollectionResultInfo]
-type outputResponseCollectionResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OutputResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamLiveInputOutputUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type OutputResponseCollectionSuccess bool
+type AccountStreamLiveInputOutputUpdateResponseSuccess bool
 
 const (
-	OutputResponseCollectionSuccessTrue OutputResponseCollectionSuccess = true
+	AccountStreamLiveInputOutputUpdateResponseSuccessTrue AccountStreamLiveInputOutputUpdateResponseSuccess = true
 )
 
-type OutputResponseSingle struct {
-	Errors   []OutputResponseSingleError   `json:"errors"`
-	Messages []OutputResponseSingleMessage `json:"messages"`
-	Result   OutputResponseSingleResult    `json:"result"`
+type AccountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponse struct {
+	Errors   []AccountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseError   `json:"errors"`
+	Messages []AccountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseMessage `json:"messages"`
+	Result   AccountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success OutputResponseSingleSuccess `json:"success"`
-	JSON    outputResponseSingleJSON    `json:"-"`
+	Success AccountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseSuccess `json:"success"`
+	JSON    accountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseJSON    `json:"-"`
 }
 
-// outputResponseSingleJSON contains the JSON metadata for the struct
-// [OutputResponseSingle]
-type outputResponseSingleJSON struct {
+// accountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseJSON
+// contains the JSON metadata for the struct
+// [AccountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponse]
+type accountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -215,49 +187,51 @@ type outputResponseSingleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OutputResponseSingle) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type OutputResponseSingleError struct {
-	Code    int64                         `json:"code,required"`
-	Message string                        `json:"message,required"`
-	JSON    outputResponseSingleErrorJSON `json:"-"`
+type AccountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseError struct {
+	Code    int64                                                                                           `json:"code,required"`
+	Message string                                                                                          `json:"message,required"`
+	JSON    accountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseErrorJSON `json:"-"`
 }
 
-// outputResponseSingleErrorJSON contains the JSON metadata for the struct
-// [OutputResponseSingleError]
-type outputResponseSingleErrorJSON struct {
+// accountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseError]
+type accountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OutputResponseSingleError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type OutputResponseSingleMessage struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    outputResponseSingleMessageJSON `json:"-"`
+type AccountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseMessage struct {
+	Code    int64                                                                                             `json:"code,required"`
+	Message string                                                                                            `json:"message,required"`
+	JSON    accountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseMessageJSON `json:"-"`
 }
 
-// outputResponseSingleMessageJSON contains the JSON metadata for the struct
-// [OutputResponseSingleMessage]
-type outputResponseSingleMessageJSON struct {
+// accountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseMessage]
+type accountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OutputResponseSingleMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type OutputResponseSingleResult struct {
+type AccountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseResult struct {
 	// When enabled, live video streamed to the associated live input will be sent to
 	// the output URL. When disabled, live video will not be sent to the output URL,
 	// even when streaming to the associated live input. Use this to control precisely
@@ -269,13 +243,14 @@ type OutputResponseSingleResult struct {
 	// A unique identifier for the output.
 	Uid string `json:"uid"`
 	// The URL an output uses to restream.
-	URL  string                         `json:"url"`
-	JSON outputResponseSingleResultJSON `json:"-"`
+	URL  string                                                                                           `json:"url"`
+	JSON accountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseResultJSON `json:"-"`
 }
 
-// outputResponseSingleResultJSON contains the JSON metadata for the struct
-// [OutputResponseSingleResult]
-type outputResponseSingleResultJSON struct {
+// accountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseResult]
+type accountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseResultJSON struct {
 	Enabled     apijson.Field
 	StreamKey   apijson.Field
 	Uid         apijson.Field
@@ -284,15 +259,119 @@ type outputResponseSingleResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OutputResponseSingleResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type OutputResponseSingleSuccess bool
+type AccountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseSuccess bool
 
 const (
-	OutputResponseSingleSuccessTrue OutputResponseSingleSuccess = true
+	AccountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseSuccessTrue AccountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputResponseSuccess = true
+)
+
+type AccountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponse struct {
+	Errors   []AccountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseError   `json:"errors"`
+	Messages []AccountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseMessage `json:"messages"`
+	Result   []AccountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseResult  `json:"result"`
+	// Whether the API call was successful
+	Success AccountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseSuccess `json:"success"`
+	JSON    accountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseJSON    `json:"-"`
+}
+
+// accountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseJSON
+// contains the JSON metadata for the struct
+// [AccountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponse]
+type accountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseError struct {
+	Code    int64                                                                                                        `json:"code,required"`
+	Message string                                                                                                       `json:"message,required"`
+	JSON    accountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseErrorJSON `json:"-"`
+}
+
+// accountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseError]
+type accountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseMessage struct {
+	Code    int64                                                                                                          `json:"code,required"`
+	Message string                                                                                                         `json:"message,required"`
+	JSON    accountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseMessageJSON `json:"-"`
+}
+
+// accountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseMessage]
+type accountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseResult struct {
+	// When enabled, live video streamed to the associated live input will be sent to
+	// the output URL. When disabled, live video will not be sent to the output URL,
+	// even when streaming to the associated live input. Use this to control precisely
+	// when you start and stop simulcasting to specific destinations like YouTube and
+	// Twitch.
+	Enabled bool `json:"enabled"`
+	// The streamKey used to authenticate against an output's target.
+	StreamKey string `json:"streamKey"`
+	// A unique identifier for the output.
+	Uid string `json:"uid"`
+	// The URL an output uses to restream.
+	URL  string                                                                                                        `json:"url"`
+	JSON accountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseResultJSON `json:"-"`
+}
+
+// accountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseResult]
+type accountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseResultJSON struct {
+	Enabled     apijson.Field
+	StreamKey   apijson.Field
+	Uid         apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseSuccess bool
+
+const (
+	AccountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseSuccessTrue AccountStreamLiveInputOutputStreamLiveInputsListAllOutputsAssociatedWithASpecifiedLiveInputResponseSuccess = true
 )
 
 type AccountStreamLiveInputOutputUpdateParams struct {
@@ -309,6 +388,10 @@ func (r AccountStreamLiveInputOutputUpdateParams) MarshalJSON() (data []byte, er
 }
 
 type AccountStreamLiveInputOutputStreamLiveInputsNewANewOutputConnectedToALiveInputParams struct {
+	// The streamKey used to authenticate against an output's target.
+	StreamKey param.Field[string] `json:"streamKey,required"`
+	// The URL an output uses to restream.
+	URL param.Field[string] `json:"url,required"`
 	// When enabled, live video streamed to the associated live input will be sent to
 	// the output URL. When disabled, live video will not be sent to the output URL,
 	// even when streaming to the associated live input. Use this to control precisely

@@ -36,11 +36,10 @@ func NewZoneDNSRecordExportService(opts ...option.RequestOption) (r *ZoneDNSReco
 // See
 // [the documentation](https://developers.cloudflare.com/dns/manage-dns-records/how-to/import-and-export/ "Import and export records")
 // for more information.
-func (r *ZoneDNSRecordExportService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ZoneDNSRecordExportListResponse, err error) {
+func (r *ZoneDNSRecordExportService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/plain")}, opts...)
 	path := fmt.Sprintf("zones/%s/dns_records/export", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
-
-type ZoneDNSRecordExportListResponse = interface{}

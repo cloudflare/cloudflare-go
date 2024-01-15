@@ -31,25 +31,25 @@ func NewUserTokenVerifyService(opts ...option.RequestOption) (r *UserTokenVerify
 }
 
 // Test whether a token works.
-func (r *UserTokenVerifyService) UserAPITokensVerifyToken(ctx context.Context, opts ...option.RequestOption) (res *ResponseSingleSegment, err error) {
+func (r *UserTokenVerifyService) UserAPITokensVerifyToken(ctx context.Context, opts ...option.RequestOption) (res *UserTokenVerifyUserAPITokensVerifyTokenResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "user/tokens/verify"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type ResponseSingleSegment struct {
-	Errors   []ResponseSingleSegmentError   `json:"errors"`
-	Messages []ResponseSingleSegmentMessage `json:"messages"`
-	Result   ResponseSingleSegmentResult    `json:"result"`
+type UserTokenVerifyUserAPITokensVerifyTokenResponse struct {
+	Errors   []UserTokenVerifyUserAPITokensVerifyTokenResponseError   `json:"errors"`
+	Messages []UserTokenVerifyUserAPITokensVerifyTokenResponseMessage `json:"messages"`
+	Result   UserTokenVerifyUserAPITokensVerifyTokenResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success ResponseSingleSegmentSuccess `json:"success"`
-	JSON    responseSingleSegmentJSON    `json:"-"`
+	Success UserTokenVerifyUserAPITokensVerifyTokenResponseSuccess `json:"success"`
+	JSON    userTokenVerifyUserAPITokensVerifyTokenResponseJSON    `json:"-"`
 }
 
-// responseSingleSegmentJSON contains the JSON metadata for the struct
-// [ResponseSingleSegment]
-type responseSingleSegmentJSON struct {
+// userTokenVerifyUserAPITokensVerifyTokenResponseJSON contains the JSON metadata
+// for the struct [UserTokenVerifyUserAPITokensVerifyTokenResponse]
+type userTokenVerifyUserAPITokensVerifyTokenResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -58,64 +58,64 @@ type responseSingleSegmentJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ResponseSingleSegment) UnmarshalJSON(data []byte) (err error) {
+func (r *UserTokenVerifyUserAPITokensVerifyTokenResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ResponseSingleSegmentError struct {
-	Code    int64                          `json:"code,required"`
-	Message string                         `json:"message,required"`
-	JSON    responseSingleSegmentErrorJSON `json:"-"`
+type UserTokenVerifyUserAPITokensVerifyTokenResponseError struct {
+	Code    int64                                                    `json:"code,required"`
+	Message string                                                   `json:"message,required"`
+	JSON    userTokenVerifyUserAPITokensVerifyTokenResponseErrorJSON `json:"-"`
 }
 
-// responseSingleSegmentErrorJSON contains the JSON metadata for the struct
-// [ResponseSingleSegmentError]
-type responseSingleSegmentErrorJSON struct {
+// userTokenVerifyUserAPITokensVerifyTokenResponseErrorJSON contains the JSON
+// metadata for the struct [UserTokenVerifyUserAPITokensVerifyTokenResponseError]
+type userTokenVerifyUserAPITokensVerifyTokenResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ResponseSingleSegmentError) UnmarshalJSON(data []byte) (err error) {
+func (r *UserTokenVerifyUserAPITokensVerifyTokenResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ResponseSingleSegmentMessage struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    responseSingleSegmentMessageJSON `json:"-"`
+type UserTokenVerifyUserAPITokensVerifyTokenResponseMessage struct {
+	Code    int64                                                      `json:"code,required"`
+	Message string                                                     `json:"message,required"`
+	JSON    userTokenVerifyUserAPITokensVerifyTokenResponseMessageJSON `json:"-"`
 }
 
-// responseSingleSegmentMessageJSON contains the JSON metadata for the struct
-// [ResponseSingleSegmentMessage]
-type responseSingleSegmentMessageJSON struct {
+// userTokenVerifyUserAPITokensVerifyTokenResponseMessageJSON contains the JSON
+// metadata for the struct [UserTokenVerifyUserAPITokensVerifyTokenResponseMessage]
+type userTokenVerifyUserAPITokensVerifyTokenResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ResponseSingleSegmentMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *UserTokenVerifyUserAPITokensVerifyTokenResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ResponseSingleSegmentResult struct {
+type UserTokenVerifyUserAPITokensVerifyTokenResponseResult struct {
 	// Token identifier tag.
 	ID string `json:"id,required"`
 	// Status of the token.
-	Status ResponseSingleSegmentResultStatus `json:"status,required"`
+	Status UserTokenVerifyUserAPITokensVerifyTokenResponseResultStatus `json:"status,required"`
 	// The expiration time on or after which the JWT MUST NOT be accepted for
 	// processing.
 	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
 	// The time before which the token MUST NOT be accepted for processing.
-	NotBefore time.Time                       `json:"not_before" format:"date-time"`
-	JSON      responseSingleSegmentResultJSON `json:"-"`
+	NotBefore time.Time                                                 `json:"not_before" format:"date-time"`
+	JSON      userTokenVerifyUserAPITokensVerifyTokenResponseResultJSON `json:"-"`
 }
 
-// responseSingleSegmentResultJSON contains the JSON metadata for the struct
-// [ResponseSingleSegmentResult]
-type responseSingleSegmentResultJSON struct {
+// userTokenVerifyUserAPITokensVerifyTokenResponseResultJSON contains the JSON
+// metadata for the struct [UserTokenVerifyUserAPITokensVerifyTokenResponseResult]
+type userTokenVerifyUserAPITokensVerifyTokenResponseResultJSON struct {
 	ID          apijson.Field
 	Status      apijson.Field
 	ExpiresOn   apijson.Field
@@ -124,22 +124,22 @@ type responseSingleSegmentResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ResponseSingleSegmentResult) UnmarshalJSON(data []byte) (err error) {
+func (r *UserTokenVerifyUserAPITokensVerifyTokenResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Status of the token.
-type ResponseSingleSegmentResultStatus string
+type UserTokenVerifyUserAPITokensVerifyTokenResponseResultStatus string
 
 const (
-	ResponseSingleSegmentResultStatusActive   ResponseSingleSegmentResultStatus = "active"
-	ResponseSingleSegmentResultStatusDisabled ResponseSingleSegmentResultStatus = "disabled"
-	ResponseSingleSegmentResultStatusExpired  ResponseSingleSegmentResultStatus = "expired"
+	UserTokenVerifyUserAPITokensVerifyTokenResponseResultStatusActive   UserTokenVerifyUserAPITokensVerifyTokenResponseResultStatus = "active"
+	UserTokenVerifyUserAPITokensVerifyTokenResponseResultStatusDisabled UserTokenVerifyUserAPITokensVerifyTokenResponseResultStatus = "disabled"
+	UserTokenVerifyUserAPITokensVerifyTokenResponseResultStatusExpired  UserTokenVerifyUserAPITokensVerifyTokenResponseResultStatus = "expired"
 )
 
 // Whether the API call was successful
-type ResponseSingleSegmentSuccess bool
+type UserTokenVerifyUserAPITokensVerifyTokenResponseSuccess bool
 
 const (
-	ResponseSingleSegmentSuccessTrue ResponseSingleSegmentSuccess = true
+	UserTokenVerifyUserAPITokensVerifyTokenResponseSuccessTrue UserTokenVerifyUserAPITokensVerifyTokenResponseSuccess = true
 )

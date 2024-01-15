@@ -35,25 +35,26 @@ func NewAccountDlpPatternValidateService(opts ...option.RequestOption) (r *Accou
 // regular expression is too complex or can match an unbounded-length string. Your
 // regex will be rejected if it uses the Kleene Star -- be sure to bound the
 // maximum number of characters that can be matched.
-func (r *AccountDlpPatternValidateService) DlpPatternValidationValidatePattern(ctx context.Context, accountIdentifier string, body AccountDlpPatternValidateDlpPatternValidationValidatePatternParams, opts ...option.RequestOption) (res *ValidateResponseLbtsZt0d, err error) {
+func (r *AccountDlpPatternValidateService) DlpPatternValidationValidatePattern(ctx context.Context, accountIdentifier string, body AccountDlpPatternValidateDlpPatternValidationValidatePatternParams, opts ...option.RequestOption) (res *AccountDlpPatternValidateDlpPatternValidationValidatePatternResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/dlp/patterns/validate", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
-type ValidateResponseLbtsZt0d struct {
-	Errors   []ValidateResponseLbtsZt0dError   `json:"errors"`
-	Messages []ValidateResponseLbtsZt0dMessage `json:"messages"`
-	Result   ValidateResponseLbtsZt0dResult    `json:"result"`
+type AccountDlpPatternValidateDlpPatternValidationValidatePatternResponse struct {
+	Errors   []AccountDlpPatternValidateDlpPatternValidationValidatePatternResponseError   `json:"errors"`
+	Messages []AccountDlpPatternValidateDlpPatternValidationValidatePatternResponseMessage `json:"messages"`
+	Result   AccountDlpPatternValidateDlpPatternValidationValidatePatternResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success ValidateResponseLbtsZt0dSuccess `json:"success"`
-	JSON    validateResponseLbtsZt0dJSON    `json:"-"`
+	Success AccountDlpPatternValidateDlpPatternValidationValidatePatternResponseSuccess `json:"success"`
+	JSON    accountDlpPatternValidateDlpPatternValidationValidatePatternResponseJSON    `json:"-"`
 }
 
-// validateResponseLbtsZt0dJSON contains the JSON metadata for the struct
-// [ValidateResponseLbtsZt0d]
-type validateResponseLbtsZt0dJSON struct {
+// accountDlpPatternValidateDlpPatternValidationValidatePatternResponseJSON
+// contains the JSON metadata for the struct
+// [AccountDlpPatternValidateDlpPatternValidationValidatePatternResponse]
+type accountDlpPatternValidateDlpPatternValidationValidatePatternResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -62,70 +63,73 @@ type validateResponseLbtsZt0dJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ValidateResponseLbtsZt0d) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDlpPatternValidateDlpPatternValidationValidatePatternResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ValidateResponseLbtsZt0dError struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    validateResponseLbtsZt0dErrorJSON `json:"-"`
+type AccountDlpPatternValidateDlpPatternValidationValidatePatternResponseError struct {
+	Code    int64                                                                         `json:"code,required"`
+	Message string                                                                        `json:"message,required"`
+	JSON    accountDlpPatternValidateDlpPatternValidationValidatePatternResponseErrorJSON `json:"-"`
 }
 
-// validateResponseLbtsZt0dErrorJSON contains the JSON metadata for the struct
-// [ValidateResponseLbtsZt0dError]
-type validateResponseLbtsZt0dErrorJSON struct {
+// accountDlpPatternValidateDlpPatternValidationValidatePatternResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountDlpPatternValidateDlpPatternValidationValidatePatternResponseError]
+type accountDlpPatternValidateDlpPatternValidationValidatePatternResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ValidateResponseLbtsZt0dError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDlpPatternValidateDlpPatternValidationValidatePatternResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ValidateResponseLbtsZt0dMessage struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    validateResponseLbtsZt0dMessageJSON `json:"-"`
+type AccountDlpPatternValidateDlpPatternValidationValidatePatternResponseMessage struct {
+	Code    int64                                                                           `json:"code,required"`
+	Message string                                                                          `json:"message,required"`
+	JSON    accountDlpPatternValidateDlpPatternValidationValidatePatternResponseMessageJSON `json:"-"`
 }
 
-// validateResponseLbtsZt0dMessageJSON contains the JSON metadata for the struct
-// [ValidateResponseLbtsZt0dMessage]
-type validateResponseLbtsZt0dMessageJSON struct {
+// accountDlpPatternValidateDlpPatternValidationValidatePatternResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountDlpPatternValidateDlpPatternValidationValidatePatternResponseMessage]
+type accountDlpPatternValidateDlpPatternValidationValidatePatternResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ValidateResponseLbtsZt0dMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDlpPatternValidateDlpPatternValidationValidatePatternResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ValidateResponseLbtsZt0dResult struct {
-	Valid bool                               `json:"valid"`
-	JSON  validateResponseLbtsZt0dResultJSON `json:"-"`
+type AccountDlpPatternValidateDlpPatternValidationValidatePatternResponseResult struct {
+	Valid bool                                                                           `json:"valid"`
+	JSON  accountDlpPatternValidateDlpPatternValidationValidatePatternResponseResultJSON `json:"-"`
 }
 
-// validateResponseLbtsZt0dResultJSON contains the JSON metadata for the struct
-// [ValidateResponseLbtsZt0dResult]
-type validateResponseLbtsZt0dResultJSON struct {
+// accountDlpPatternValidateDlpPatternValidationValidatePatternResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountDlpPatternValidateDlpPatternValidationValidatePatternResponseResult]
+type accountDlpPatternValidateDlpPatternValidationValidatePatternResponseResultJSON struct {
 	Valid       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ValidateResponseLbtsZt0dResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDlpPatternValidateDlpPatternValidationValidatePatternResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type ValidateResponseLbtsZt0dSuccess bool
+type AccountDlpPatternValidateDlpPatternValidationValidatePatternResponseSuccess bool
 
 const (
-	ValidateResponseLbtsZt0dSuccessTrue ValidateResponseLbtsZt0dSuccess = true
+	AccountDlpPatternValidateDlpPatternValidationValidatePatternResponseSuccessTrue AccountDlpPatternValidateDlpPatternValidationValidatePatternResponseSuccess = true
 )
 
 type AccountDlpPatternValidateDlpPatternValidationValidatePatternParams struct {

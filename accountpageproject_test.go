@@ -24,8 +24,10 @@ func TestAccountPageProjectGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Pages.Projects.Get(
 		context.TODO(),
@@ -52,8 +54,10 @@ func TestAccountPageProjectUpdate(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Pages.Projects.Update(
 		context.TODO(),
@@ -102,8 +106,10 @@ func TestAccountPageProjectDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Pages.Projects.Delete(
 		context.TODO(),
@@ -130,22 +136,36 @@ func TestAccountPageProjectPagesProjectNewProjectWithOptionalParams(t *testing.T
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Pages.Projects.PagesProjectNewProject(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.AccountPageProjectPagesProjectNewProjectParams{
 			BuildConfig: cloudflare.F(cloudflare.AccountPageProjectPagesProjectNewProjectParamsBuildConfig{
+				BuildCaching:      cloudflare.F(true),
 				BuildCommand:      cloudflare.F("npm run build"),
 				DestinationDir:    cloudflare.F("build"),
 				RootDir:           cloudflare.F("/"),
 				WebAnalyticsTag:   cloudflare.F("cee1c73f6e4743d0b5e6bb1a0bcaabcc"),
 				WebAnalyticsToken: cloudflare.F("021e1057c18547eca7b79f2516f06o7x"),
 			}),
+			CanonicalDeployment: cloudflare.F(cloudflare.AccountPageProjectPagesProjectNewProjectParamsCanonicalDeployment{}),
 			DeploymentConfigs: cloudflare.F(cloudflare.AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigs{
 				Preview: cloudflare.F(cloudflare.AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreview{
+					AIBindings: cloudflare.F(cloudflare.AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewAIBindings{
+						AIBinding: cloudflare.F(cloudflare.AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewAIBindingsAIBinding{
+							ProjectID: cloudflare.F[any](map[string]interface{}{}),
+						}),
+					}),
+					AnalyticsEngineDatasets: cloudflare.F(cloudflare.AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewAnalyticsEngineDatasets{
+						AnalyticsEngineBinding: cloudflare.F(cloudflare.AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBinding{
+							Dataset: cloudflare.F("api_analytics"),
+						}),
+					}),
 					CompatibilityDate:  cloudflare.F("2022-01-01"),
 					CompatibilityFlags: cloudflare.F([]interface{}{"url_standard"}),
 					D1Databases: cloudflare.F(cloudflare.AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewD1Databases{
@@ -169,6 +189,9 @@ func TestAccountPageProjectPagesProjectNewProjectWithOptionalParams(t *testing.T
 							NamespaceID: cloudflare.F("5eb63bbbe01eeed093cb22bb8f5acdc3"),
 						}),
 					}),
+					Placement: cloudflare.F(cloudflare.AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewPlacement{
+						Mode: cloudflare.F("smart"),
+					}),
 					QueueProducers: cloudflare.F(cloudflare.AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewQueueProducers{
 						QueueProducerBinding: cloudflare.F(cloudflare.AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsPreviewQueueProducersQueueProducerBinding{
 							Name: cloudflare.F("some-queue"),
@@ -187,6 +210,16 @@ func TestAccountPageProjectPagesProjectNewProjectWithOptionalParams(t *testing.T
 					}),
 				}),
 				Production: cloudflare.F(cloudflare.AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProduction{
+					AIBindings: cloudflare.F(cloudflare.AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionAIBindings{
+						AIBinding: cloudflare.F(cloudflare.AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionAIBindingsAIBinding{
+							ProjectID: cloudflare.F[any](map[string]interface{}{}),
+						}),
+					}),
+					AnalyticsEngineDatasets: cloudflare.F(cloudflare.AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionAnalyticsEngineDatasets{
+						AnalyticsEngineBinding: cloudflare.F(cloudflare.AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBinding{
+							Dataset: cloudflare.F("api_analytics"),
+						}),
+					}),
 					CompatibilityDate:  cloudflare.F("2022-01-01"),
 					CompatibilityFlags: cloudflare.F([]interface{}{"url_standard"}),
 					D1Databases: cloudflare.F(cloudflare.AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionD1Databases{
@@ -210,6 +243,9 @@ func TestAccountPageProjectPagesProjectNewProjectWithOptionalParams(t *testing.T
 							NamespaceID: cloudflare.F("5eb63bbbe01eeed093cb22bb8f5acdc3"),
 						}),
 					}),
+					Placement: cloudflare.F(cloudflare.AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionPlacement{
+						Mode: cloudflare.F("smart"),
+					}),
 					QueueProducers: cloudflare.F(cloudflare.AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionQueueProducers{
 						QueueProducerBinding: cloudflare.F(cloudflare.AccountPageProjectPagesProjectNewProjectParamsDeploymentConfigsProductionQueueProducersQueueProducerBinding{
 							Name: cloudflare.F("some-queue"),
@@ -228,6 +264,7 @@ func TestAccountPageProjectPagesProjectNewProjectWithOptionalParams(t *testing.T
 					}),
 				}),
 			}),
+			LatestDeployment: cloudflare.F(cloudflare.AccountPageProjectPagesProjectNewProjectParamsLatestDeployment{}),
 			Name:             cloudflare.F("NextJS Blog"),
 			ProductionBranch: cloudflare.F("main"),
 		},
@@ -252,8 +289,10 @@ func TestAccountPageProjectPagesProjectGetProjects(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Pages.Projects.PagesProjectGetProjects(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {

@@ -32,7 +32,7 @@ func NewZoneSubscriptionService(opts ...option.RequestOption) (r *ZoneSubscripti
 }
 
 // Create a zone subscription, either plan or add-ons.
-func (r *ZoneSubscriptionService) ZoneSubscriptionNewZoneSubscription(ctx context.Context, identifier string, body ZoneSubscriptionZoneSubscriptionNewZoneSubscriptionParams, opts ...option.RequestOption) (res *ZoneSubscriptionResponseSingle, err error) {
+func (r *ZoneSubscriptionService) ZoneSubscriptionNewZoneSubscription(ctx context.Context, identifier string, body ZoneSubscriptionZoneSubscriptionNewZoneSubscriptionParams, opts ...option.RequestOption) (res *ZoneSubscriptionZoneSubscriptionNewZoneSubscriptionResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/subscription", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -40,7 +40,7 @@ func (r *ZoneSubscriptionService) ZoneSubscriptionNewZoneSubscription(ctx contex
 }
 
 // Updates zone subscriptions, either plan or add-ons.
-func (r *ZoneSubscriptionService) ZoneSubscriptionUpdateZoneSubscription(ctx context.Context, identifier string, body ZoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionParams, opts ...option.RequestOption) (res *ZoneSubscriptionResponseSingle, err error) {
+func (r *ZoneSubscriptionService) ZoneSubscriptionUpdateZoneSubscription(ctx context.Context, identifier string, body ZoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionParams, opts ...option.RequestOption) (res *ZoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/subscription", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
@@ -48,25 +48,26 @@ func (r *ZoneSubscriptionService) ZoneSubscriptionUpdateZoneSubscription(ctx con
 }
 
 // Lists zone subscription details.
-func (r *ZoneSubscriptionService) ZoneSubscriptionZoneSubscriptionDetails(ctx context.Context, identifier string, opts ...option.RequestOption) (res *ZoneSubscriptionResponseSingle, err error) {
+func (r *ZoneSubscriptionService) ZoneSubscriptionZoneSubscriptionDetails(ctx context.Context, identifier string, opts ...option.RequestOption) (res *ZoneSubscriptionZoneSubscriptionZoneSubscriptionDetailsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/subscription", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type ZoneSubscriptionResponseSingle struct {
-	Errors   []ZoneSubscriptionResponseSingleError   `json:"errors"`
-	Messages []ZoneSubscriptionResponseSingleMessage `json:"messages"`
-	Result   interface{}                             `json:"result"`
+type ZoneSubscriptionZoneSubscriptionNewZoneSubscriptionResponse struct {
+	Errors   []ZoneSubscriptionZoneSubscriptionNewZoneSubscriptionResponseError   `json:"errors"`
+	Messages []ZoneSubscriptionZoneSubscriptionNewZoneSubscriptionResponseMessage `json:"messages"`
+	Result   interface{}                                                          `json:"result"`
 	// Whether the API call was successful
-	Success ZoneSubscriptionResponseSingleSuccess `json:"success"`
-	JSON    zoneSubscriptionResponseSingleJSON    `json:"-"`
+	Success ZoneSubscriptionZoneSubscriptionNewZoneSubscriptionResponseSuccess `json:"success"`
+	JSON    zoneSubscriptionZoneSubscriptionNewZoneSubscriptionResponseJSON    `json:"-"`
 }
 
-// zoneSubscriptionResponseSingleJSON contains the JSON metadata for the struct
-// [ZoneSubscriptionResponseSingle]
-type zoneSubscriptionResponseSingleJSON struct {
+// zoneSubscriptionZoneSubscriptionNewZoneSubscriptionResponseJSON contains the
+// JSON metadata for the struct
+// [ZoneSubscriptionZoneSubscriptionNewZoneSubscriptionResponse]
+type zoneSubscriptionZoneSubscriptionNewZoneSubscriptionResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -75,53 +76,199 @@ type zoneSubscriptionResponseSingleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSubscriptionResponseSingle) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSubscriptionZoneSubscriptionNewZoneSubscriptionResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneSubscriptionResponseSingleError struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    zoneSubscriptionResponseSingleErrorJSON `json:"-"`
+type ZoneSubscriptionZoneSubscriptionNewZoneSubscriptionResponseError struct {
+	Code    int64                                                                `json:"code,required"`
+	Message string                                                               `json:"message,required"`
+	JSON    zoneSubscriptionZoneSubscriptionNewZoneSubscriptionResponseErrorJSON `json:"-"`
 }
 
-// zoneSubscriptionResponseSingleErrorJSON contains the JSON metadata for the
-// struct [ZoneSubscriptionResponseSingleError]
-type zoneSubscriptionResponseSingleErrorJSON struct {
+// zoneSubscriptionZoneSubscriptionNewZoneSubscriptionResponseErrorJSON contains
+// the JSON metadata for the struct
+// [ZoneSubscriptionZoneSubscriptionNewZoneSubscriptionResponseError]
+type zoneSubscriptionZoneSubscriptionNewZoneSubscriptionResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSubscriptionResponseSingleError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSubscriptionZoneSubscriptionNewZoneSubscriptionResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneSubscriptionResponseSingleMessage struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    zoneSubscriptionResponseSingleMessageJSON `json:"-"`
+type ZoneSubscriptionZoneSubscriptionNewZoneSubscriptionResponseMessage struct {
+	Code    int64                                                                  `json:"code,required"`
+	Message string                                                                 `json:"message,required"`
+	JSON    zoneSubscriptionZoneSubscriptionNewZoneSubscriptionResponseMessageJSON `json:"-"`
 }
 
-// zoneSubscriptionResponseSingleMessageJSON contains the JSON metadata for the
-// struct [ZoneSubscriptionResponseSingleMessage]
-type zoneSubscriptionResponseSingleMessageJSON struct {
+// zoneSubscriptionZoneSubscriptionNewZoneSubscriptionResponseMessageJSON contains
+// the JSON metadata for the struct
+// [ZoneSubscriptionZoneSubscriptionNewZoneSubscriptionResponseMessage]
+type zoneSubscriptionZoneSubscriptionNewZoneSubscriptionResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSubscriptionResponseSingleMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSubscriptionZoneSubscriptionNewZoneSubscriptionResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type ZoneSubscriptionResponseSingleSuccess bool
+type ZoneSubscriptionZoneSubscriptionNewZoneSubscriptionResponseSuccess bool
 
 const (
-	ZoneSubscriptionResponseSingleSuccessTrue ZoneSubscriptionResponseSingleSuccess = true
+	ZoneSubscriptionZoneSubscriptionNewZoneSubscriptionResponseSuccessTrue ZoneSubscriptionZoneSubscriptionNewZoneSubscriptionResponseSuccess = true
+)
+
+type ZoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionResponse struct {
+	Errors   []ZoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionResponseError   `json:"errors"`
+	Messages []ZoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionResponseMessage `json:"messages"`
+	Result   interface{}                                                             `json:"result"`
+	// Whether the API call was successful
+	Success ZoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionResponseSuccess `json:"success"`
+	JSON    zoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionResponseJSON    `json:"-"`
+}
+
+// zoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionResponseJSON contains the
+// JSON metadata for the struct
+// [ZoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionResponse]
+type zoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionResponseError struct {
+	Code    int64                                                                   `json:"code,required"`
+	Message string                                                                  `json:"message,required"`
+	JSON    zoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionResponseErrorJSON `json:"-"`
+}
+
+// zoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionResponseErrorJSON contains
+// the JSON metadata for the struct
+// [ZoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionResponseError]
+type zoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionResponseMessage struct {
+	Code    int64                                                                     `json:"code,required"`
+	Message string                                                                    `json:"message,required"`
+	JSON    zoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionResponseMessageJSON `json:"-"`
+}
+
+// zoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionResponseMessage]
+type zoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionResponseSuccess bool
+
+const (
+	ZoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionResponseSuccessTrue ZoneSubscriptionZoneSubscriptionUpdateZoneSubscriptionResponseSuccess = true
+)
+
+type ZoneSubscriptionZoneSubscriptionZoneSubscriptionDetailsResponse struct {
+	Errors   []ZoneSubscriptionZoneSubscriptionZoneSubscriptionDetailsResponseError   `json:"errors"`
+	Messages []ZoneSubscriptionZoneSubscriptionZoneSubscriptionDetailsResponseMessage `json:"messages"`
+	Result   interface{}                                                              `json:"result"`
+	// Whether the API call was successful
+	Success ZoneSubscriptionZoneSubscriptionZoneSubscriptionDetailsResponseSuccess `json:"success"`
+	JSON    zoneSubscriptionZoneSubscriptionZoneSubscriptionDetailsResponseJSON    `json:"-"`
+}
+
+// zoneSubscriptionZoneSubscriptionZoneSubscriptionDetailsResponseJSON contains the
+// JSON metadata for the struct
+// [ZoneSubscriptionZoneSubscriptionZoneSubscriptionDetailsResponse]
+type zoneSubscriptionZoneSubscriptionZoneSubscriptionDetailsResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSubscriptionZoneSubscriptionZoneSubscriptionDetailsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSubscriptionZoneSubscriptionZoneSubscriptionDetailsResponseError struct {
+	Code    int64                                                                    `json:"code,required"`
+	Message string                                                                   `json:"message,required"`
+	JSON    zoneSubscriptionZoneSubscriptionZoneSubscriptionDetailsResponseErrorJSON `json:"-"`
+}
+
+// zoneSubscriptionZoneSubscriptionZoneSubscriptionDetailsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneSubscriptionZoneSubscriptionZoneSubscriptionDetailsResponseError]
+type zoneSubscriptionZoneSubscriptionZoneSubscriptionDetailsResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSubscriptionZoneSubscriptionZoneSubscriptionDetailsResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSubscriptionZoneSubscriptionZoneSubscriptionDetailsResponseMessage struct {
+	Code    int64                                                                      `json:"code,required"`
+	Message string                                                                     `json:"message,required"`
+	JSON    zoneSubscriptionZoneSubscriptionZoneSubscriptionDetailsResponseMessageJSON `json:"-"`
+}
+
+// zoneSubscriptionZoneSubscriptionZoneSubscriptionDetailsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneSubscriptionZoneSubscriptionZoneSubscriptionDetailsResponseMessage]
+type zoneSubscriptionZoneSubscriptionZoneSubscriptionDetailsResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSubscriptionZoneSubscriptionZoneSubscriptionDetailsResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneSubscriptionZoneSubscriptionZoneSubscriptionDetailsResponseSuccess bool
+
+const (
+	ZoneSubscriptionZoneSubscriptionZoneSubscriptionDetailsResponseSuccessTrue ZoneSubscriptionZoneSubscriptionZoneSubscriptionDetailsResponseSuccess = true
 )
 
 type ZoneSubscriptionZoneSubscriptionNewZoneSubscriptionParams struct {

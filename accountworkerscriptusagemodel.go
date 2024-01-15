@@ -32,7 +32,7 @@ func NewAccountWorkerScriptUsageModelService(opts ...option.RequestOption) (r *A
 }
 
 // Fetches the Usage Model for a given Worker.
-func (r *AccountWorkerScriptUsageModelService) WorkerScriptFetchUsageModel(ctx context.Context, accountIdentifier string, scriptName string, opts ...option.RequestOption) (res *UsageModelResponse, err error) {
+func (r *AccountWorkerScriptUsageModelService) WorkerScriptFetchUsageModel(ctx context.Context, accountIdentifier string, scriptName string, opts ...option.RequestOption) (res *AccountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/usage-model", accountIdentifier, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -41,25 +41,26 @@ func (r *AccountWorkerScriptUsageModelService) WorkerScriptFetchUsageModel(ctx c
 
 // Updates the Usage Model for a given Worker. Requires a Workers Paid
 // subscription.
-func (r *AccountWorkerScriptUsageModelService) WorkerScriptUpdateUsageModel(ctx context.Context, accountIdentifier string, scriptName string, body AccountWorkerScriptUsageModelWorkerScriptUpdateUsageModelParams, opts ...option.RequestOption) (res *UsageModelResponse, err error) {
+func (r *AccountWorkerScriptUsageModelService) WorkerScriptUpdateUsageModel(ctx context.Context, accountIdentifier string, scriptName string, body AccountWorkerScriptUsageModelWorkerScriptUpdateUsageModelParams, opts ...option.RequestOption) (res *AccountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/usage-model", accountIdentifier, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
 	return
 }
 
-type UsageModelResponse struct {
-	Errors   []UsageModelResponseError   `json:"errors"`
-	Messages []UsageModelResponseMessage `json:"messages"`
-	Result   UsageModelResponseResult    `json:"result"`
+type AccountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponse struct {
+	Errors   []AccountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseError   `json:"errors"`
+	Messages []AccountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseMessage `json:"messages"`
+	Result   AccountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success UsageModelResponseSuccess `json:"success"`
-	JSON    usageModelResponseJSON    `json:"-"`
+	Success AccountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseSuccess `json:"success"`
+	JSON    accountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseJSON    `json:"-"`
 }
 
-// usageModelResponseJSON contains the JSON metadata for the struct
-// [UsageModelResponse]
-type usageModelResponseJSON struct {
+// accountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseJSON contains
+// the JSON metadata for the struct
+// [AccountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponse]
+type accountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -68,70 +69,163 @@ type usageModelResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UsageModelResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type UsageModelResponseError struct {
-	Code    int64                       `json:"code,required"`
-	Message string                      `json:"message,required"`
-	JSON    usageModelResponseErrorJSON `json:"-"`
+type AccountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseError struct {
+	Code    int64                                                                     `json:"code,required"`
+	Message string                                                                    `json:"message,required"`
+	JSON    accountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseErrorJSON `json:"-"`
 }
 
-// usageModelResponseErrorJSON contains the JSON metadata for the struct
-// [UsageModelResponseError]
-type usageModelResponseErrorJSON struct {
+// accountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseError]
+type accountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UsageModelResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type UsageModelResponseMessage struct {
-	Code    int64                         `json:"code,required"`
-	Message string                        `json:"message,required"`
-	JSON    usageModelResponseMessageJSON `json:"-"`
+type AccountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseMessage struct {
+	Code    int64                                                                       `json:"code,required"`
+	Message string                                                                      `json:"message,required"`
+	JSON    accountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseMessageJSON `json:"-"`
 }
 
-// usageModelResponseMessageJSON contains the JSON metadata for the struct
-// [UsageModelResponseMessage]
-type usageModelResponseMessageJSON struct {
+// accountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseMessage]
+type accountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UsageModelResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type UsageModelResponseResult struct {
-	UsageModel interface{}                  `json:"usage_model"`
-	JSON       usageModelResponseResultJSON `json:"-"`
+type AccountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseResult struct {
+	UsageModel interface{}                                                                `json:"usage_model"`
+	JSON       accountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseResultJSON `json:"-"`
 }
 
-// usageModelResponseResultJSON contains the JSON metadata for the struct
-// [UsageModelResponseResult]
-type usageModelResponseResultJSON struct {
+// accountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseResult]
+type accountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseResultJSON struct {
 	UsageModel  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UsageModelResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type UsageModelResponseSuccess bool
+type AccountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseSuccess bool
 
 const (
-	UsageModelResponseSuccessTrue UsageModelResponseSuccess = true
+	AccountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseSuccessTrue AccountWorkerScriptUsageModelWorkerScriptFetchUsageModelResponseSuccess = true
+)
+
+type AccountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponse struct {
+	Errors   []AccountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseError   `json:"errors"`
+	Messages []AccountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseMessage `json:"messages"`
+	Result   AccountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseSuccess `json:"success"`
+	JSON    accountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseJSON    `json:"-"`
+}
+
+// accountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseJSON contains
+// the JSON metadata for the struct
+// [AccountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponse]
+type accountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseError struct {
+	Code    int64                                                                      `json:"code,required"`
+	Message string                                                                     `json:"message,required"`
+	JSON    accountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseErrorJSON `json:"-"`
+}
+
+// accountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseError]
+type accountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseMessage struct {
+	Code    int64                                                                        `json:"code,required"`
+	Message string                                                                       `json:"message,required"`
+	JSON    accountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseMessageJSON `json:"-"`
+}
+
+// accountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseMessage]
+type accountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseResult struct {
+	UsageModel interface{}                                                                 `json:"usage_model"`
+	JSON       accountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseResultJSON `json:"-"`
+}
+
+// accountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseResult]
+type accountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseResultJSON struct {
+	UsageModel  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseSuccess bool
+
+const (
+	AccountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseSuccessTrue AccountWorkerScriptUsageModelWorkerScriptUpdateUsageModelResponseSuccess = true
 )
 
 type AccountWorkerScriptUsageModelWorkerScriptUpdateUsageModelParams struct {

@@ -31,34 +31,35 @@ func NewAccountWorkerAccountSettingService(opts ...option.RequestOption) (r *Acc
 	return
 }
 
-// Creates Worker Account Settings for an account.
-func (r *AccountWorkerAccountSettingService) WorkerAccountSettingsNewWorkerAccountSettings(ctx context.Context, accountIdentifier string, body AccountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsParams, opts ...option.RequestOption) (res *AccountSettingsResponse, err error) {
+// Creates Worker account settings for an account.
+func (r *AccountWorkerAccountSettingService) WorkerAccountSettingsNewWorkerAccountSettings(ctx context.Context, accountIdentifier string, body AccountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsParams, opts ...option.RequestOption) (res *AccountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/workers/account-settings", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
 	return
 }
 
-// Fetches Worker Account Settings for an account.
-func (r *AccountWorkerAccountSettingService) WorkerAccountSettingsFetchWorkerAccountSettings(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *AccountSettingsResponse, err error) {
+// Fetches Worker account settings for an account.
+func (r *AccountWorkerAccountSettingService) WorkerAccountSettingsFetchWorkerAccountSettings(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *AccountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/workers/account-settings", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type AccountSettingsResponse struct {
-	Errors   []AccountSettingsResponseError   `json:"errors"`
-	Messages []AccountSettingsResponseMessage `json:"messages"`
-	Result   AccountSettingsResponseResult    `json:"result"`
+type AccountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponse struct {
+	Errors   []AccountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseError   `json:"errors"`
+	Messages []AccountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseMessage `json:"messages"`
+	Result   AccountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success AccountSettingsResponseSuccess `json:"success"`
-	JSON    accountSettingsResponseJSON    `json:"-"`
+	Success AccountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseSuccess `json:"success"`
+	JSON    accountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseJSON    `json:"-"`
 }
 
-// accountSettingsResponseJSON contains the JSON metadata for the struct
-// [AccountSettingsResponse]
-type accountSettingsResponseJSON struct {
+// accountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseJSON
+// contains the JSON metadata for the struct
+// [AccountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponse]
+type accountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -67,72 +68,167 @@ type accountSettingsResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccountSettingsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccountSettingsResponseError struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    accountSettingsResponseErrorJSON `json:"-"`
+type AccountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseError struct {
+	Code    int64                                                                                     `json:"code,required"`
+	Message string                                                                                    `json:"message,required"`
+	JSON    accountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseErrorJSON `json:"-"`
 }
 
-// accountSettingsResponseErrorJSON contains the JSON metadata for the struct
-// [AccountSettingsResponseError]
-type accountSettingsResponseErrorJSON struct {
+// accountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseError]
+type accountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccountSettingsResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccountSettingsResponseMessage struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    accountSettingsResponseMessageJSON `json:"-"`
+type AccountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseMessage struct {
+	Code    int64                                                                                       `json:"code,required"`
+	Message string                                                                                      `json:"message,required"`
+	JSON    accountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseMessageJSON `json:"-"`
 }
 
-// accountSettingsResponseMessageJSON contains the JSON metadata for the struct
-// [AccountSettingsResponseMessage]
-type accountSettingsResponseMessageJSON struct {
+// accountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseMessage]
+type accountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccountSettingsResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccountSettingsResponseResult struct {
-	DefaultUsageModel interface{}                       `json:"default_usage_model"`
-	GreenCompute      interface{}                       `json:"green_compute"`
-	JSON              accountSettingsResponseResultJSON `json:"-"`
+type AccountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseResult struct {
+	DefaultUsageModel interface{}                                                                                `json:"default_usage_model"`
+	GreenCompute      interface{}                                                                                `json:"green_compute"`
+	JSON              accountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseResultJSON `json:"-"`
 }
 
-// accountSettingsResponseResultJSON contains the JSON metadata for the struct
-// [AccountSettingsResponseResult]
-type accountSettingsResponseResultJSON struct {
+// accountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseResult]
+type accountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseResultJSON struct {
 	DefaultUsageModel apijson.Field
 	GreenCompute      apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *AccountSettingsResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type AccountSettingsResponseSuccess bool
+type AccountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseSuccess bool
 
 const (
-	AccountSettingsResponseSuccessTrue AccountSettingsResponseSuccess = true
+	AccountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseSuccessTrue AccountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseSuccess = true
+)
+
+type AccountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponse struct {
+	Errors   []AccountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseError   `json:"errors"`
+	Messages []AccountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseMessage `json:"messages"`
+	Result   AccountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseSuccess `json:"success"`
+	JSON    accountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseJSON    `json:"-"`
+}
+
+// accountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseJSON
+// contains the JSON metadata for the struct
+// [AccountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponse]
+type accountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseError struct {
+	Code    int64                                                                                       `json:"code,required"`
+	Message string                                                                                      `json:"message,required"`
+	JSON    accountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseErrorJSON `json:"-"`
+}
+
+// accountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseError]
+type accountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseMessage struct {
+	Code    int64                                                                                         `json:"code,required"`
+	Message string                                                                                        `json:"message,required"`
+	JSON    accountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseMessageJSON `json:"-"`
+}
+
+// accountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseMessage]
+type accountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseResult struct {
+	DefaultUsageModel interface{}                                                                                  `json:"default_usage_model"`
+	GreenCompute      interface{}                                                                                  `json:"green_compute"`
+	JSON              accountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseResultJSON `json:"-"`
+}
+
+// accountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseResult]
+type accountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseResultJSON struct {
+	DefaultUsageModel apijson.Field
+	GreenCompute      apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *AccountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseSuccess bool
+
+const (
+	AccountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseSuccessTrue AccountWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseSuccess = true
 )
 
 type AccountWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsParams struct {

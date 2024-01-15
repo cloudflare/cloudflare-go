@@ -36,27 +36,28 @@ func NewAccountWorkerDeploymentByScriptService(opts ...option.RequestOption) (r 
 }
 
 // List Deployments
-func (r *AccountWorkerDeploymentByScriptService) WorkerDeploymentsListDeployments(ctx context.Context, accountIdentifier string, scriptIdentifier string, opts ...option.RequestOption) (res *DeploymentsListResponse, err error) {
+func (r *AccountWorkerDeploymentByScriptService) WorkerDeploymentsListDeployments(ctx context.Context, accountIdentifier string, scriptIdentifier string, opts ...option.RequestOption) (res *AccountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/workers/deployments/by-script/%s", accountIdentifier, scriptIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type DeploymentsListResponse struct {
-	Errors   []DeploymentsListResponseError   `json:"errors"`
-	Items    []interface{}                    `json:"items"`
-	Latest   interface{}                      `json:"latest"`
-	Messages []DeploymentsListResponseMessage `json:"messages"`
-	Result   DeploymentsListResponseResult    `json:"result"`
+type AccountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponse struct {
+	Errors   []AccountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseError   `json:"errors"`
+	Items    []interface{}                                                                    `json:"items"`
+	Latest   interface{}                                                                      `json:"latest"`
+	Messages []AccountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseMessage `json:"messages"`
+	Result   AccountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success DeploymentsListResponseSuccess `json:"success"`
-	JSON    deploymentsListResponseJSON    `json:"-"`
+	Success AccountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseSuccess `json:"success"`
+	JSON    accountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseJSON    `json:"-"`
 }
 
-// deploymentsListResponseJSON contains the JSON metadata for the struct
-// [DeploymentsListResponse]
-type deploymentsListResponseJSON struct {
+// accountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseJSON
+// contains the JSON metadata for the struct
+// [AccountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponse]
+type accountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseJSON struct {
 	Errors      apijson.Field
 	Items       apijson.Field
 	Latest      apijson.Field
@@ -67,57 +68,61 @@ type deploymentsListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeploymentsListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DeploymentsListResponseError struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    deploymentsListResponseErrorJSON `json:"-"`
+type AccountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseError struct {
+	Code    int64                                                                            `json:"code,required"`
+	Message string                                                                           `json:"message,required"`
+	JSON    accountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseErrorJSON `json:"-"`
 }
 
-// deploymentsListResponseErrorJSON contains the JSON metadata for the struct
-// [DeploymentsListResponseError]
-type deploymentsListResponseErrorJSON struct {
+// accountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseError]
+type accountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeploymentsListResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DeploymentsListResponseMessage struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    deploymentsListResponseMessageJSON `json:"-"`
+type AccountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseMessage struct {
+	Code    int64                                                                              `json:"code,required"`
+	Message string                                                                             `json:"message,required"`
+	JSON    accountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseMessageJSON `json:"-"`
 }
 
-// deploymentsListResponseMessageJSON contains the JSON metadata for the struct
-// [DeploymentsListResponseMessage]
-type deploymentsListResponseMessageJSON struct {
+// accountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseMessage]
+type accountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeploymentsListResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Union satisfied by [DeploymentsListResponseResultObject],
-// [DeploymentsListResponseResultObject] or [shared.UnionString].
-type DeploymentsListResponseResult interface {
-	ImplementsDeploymentsListResponseResult()
+// Union satisfied by
+// [AccountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseResultUnknown],
+// [AccountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseResultArray]
+// or [shared.UnionString].
+type AccountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseResult interface {
+	ImplementsAccountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseResult()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DeploymentsListResponseResult)(nil)).Elem(),
+		reflect.TypeOf((*AccountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseResult)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter:         gjson.String,
@@ -127,9 +132,14 @@ func init() {
 	)
 }
 
+type AccountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseResultArray []interface{}
+
+func (r AccountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseResultArray) ImplementsAccountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseResult() {
+}
+
 // Whether the API call was successful
-type DeploymentsListResponseSuccess bool
+type AccountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseSuccess bool
 
 const (
-	DeploymentsListResponseSuccessTrue DeploymentsListResponseSuccess = true
+	AccountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseSuccessTrue AccountWorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseSuccess = true
 )

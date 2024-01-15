@@ -95,16 +95,18 @@ func (r *RadarHTTPTopLocationListResponseResult) UnmarshalJSON(data []byte) (err
 }
 
 type RadarHTTPTopLocationListResponseResultMeta struct {
-	ConfidenceInfo RadarHTTPTopLocationListResponseResultMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      RadarHTTPTopLocationListResponseResultMetaDateRange      `json:"dateRange,required"`
+	DateRange      []RadarHTTPTopLocationListResponseResultMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                                   `json:"lastUpdated,required"`
+	ConfidenceInfo RadarHTTPTopLocationListResponseResultMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           radarHTTPTopLocationListResponseResultMetaJSON           `json:"-"`
 }
 
 // radarHTTPTopLocationListResponseResultMetaJSON contains the JSON metadata for
 // the struct [RadarHTTPTopLocationListResponseResultMeta]
 type radarHTTPTopLocationListResponseResultMetaJSON struct {
-	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	ConfidenceInfo apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -113,9 +115,30 @@ func (r *RadarHTTPTopLocationListResponseResultMeta) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type RadarHTTPTopLocationListResponseResultMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                               `json:"startTime,required" format:"date-time"`
+	JSON      radarHTTPTopLocationListResponseResultMetaDateRangeJSON `json:"-"`
+}
+
+// radarHTTPTopLocationListResponseResultMetaDateRangeJSON contains the JSON
+// metadata for the struct [RadarHTTPTopLocationListResponseResultMetaDateRange]
+type radarHTTPTopLocationListResponseResultMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarHTTPTopLocationListResponseResultMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type RadarHTTPTopLocationListResponseResultMetaConfidenceInfo struct {
-	Annotations []RadarHTTPTopLocationListResponseResultMetaConfidenceInfoAnnotation `json:"annotations,required"`
-	Level       int64                                                                `json:"level,required"`
+	Annotations []RadarHTTPTopLocationListResponseResultMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                                `json:"level"`
 	JSON        radarHTTPTopLocationListResponseResultMetaConfidenceInfoJSON         `json:"-"`
 }
 
@@ -134,47 +157,32 @@ func (r *RadarHTTPTopLocationListResponseResultMetaConfidenceInfo) UnmarshalJSON
 }
 
 type RadarHTTPTopLocationListResponseResultMetaConfidenceInfoAnnotation struct {
-	DataSource  string                                                                 `json:"dataSource,required"`
-	Description string                                                                 `json:"description,required"`
-	EndTime     time.Time                                                              `json:"endTime,required" format:"date-time"`
-	EventType   string                                                                 `json:"eventType,required"`
-	StartTime   time.Time                                                              `json:"startTime,required" format:"date-time"`
-	JSON        radarHTTPTopLocationListResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
+	DataSource      string                                                                 `json:"dataSource,required"`
+	Description     string                                                                 `json:"description,required"`
+	EventType       string                                                                 `json:"eventType,required"`
+	IsInstantaneous interface{}                                                            `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                              `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                                 `json:"linkedUrl"`
+	StartTime       time.Time                                                              `json:"startTime" format:"date-time"`
+	JSON            radarHTTPTopLocationListResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
 // radarHTTPTopLocationListResponseResultMetaConfidenceInfoAnnotationJSON contains
 // the JSON metadata for the struct
 // [RadarHTTPTopLocationListResponseResultMetaConfidenceInfoAnnotation]
 type radarHTTPTopLocationListResponseResultMetaConfidenceInfoAnnotationJSON struct {
-	DataSource  apijson.Field
-	Description apijson.Field
-	EndTime     apijson.Field
-	EventType   apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *RadarHTTPTopLocationListResponseResultMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarHTTPTopLocationListResponseResultMetaDateRange struct {
-	EndTime   time.Time                                               `json:"endTime,required" format:"date-time"`
-	StartTime time.Time                                               `json:"startTime,required" format:"date-time"`
-	JSON      radarHTTPTopLocationListResponseResultMetaDateRangeJSON `json:"-"`
-}
-
-// radarHTTPTopLocationListResponseResultMetaDateRangeJSON contains the JSON
-// metadata for the struct [RadarHTTPTopLocationListResponseResultMetaDateRange]
-type radarHTTPTopLocationListResponseResultMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarHTTPTopLocationListResponseResultMetaDateRange) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -207,7 +215,7 @@ type RadarHTTPTopLocationListParams struct {
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]RadarHTTPTopLocationListParamsBotClass] `query:"botClass"`
-	// Array of datetimes to filter the end of a series.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
@@ -259,6 +267,7 @@ type RadarHTTPTopLocationListParamsDateRange string
 
 const (
 	RadarHTTPTopLocationListParamsDateRange1d         RadarHTTPTopLocationListParamsDateRange = "1d"
+	RadarHTTPTopLocationListParamsDateRange2d         RadarHTTPTopLocationListParamsDateRange = "2d"
 	RadarHTTPTopLocationListParamsDateRange7d         RadarHTTPTopLocationListParamsDateRange = "7d"
 	RadarHTTPTopLocationListParamsDateRange14d        RadarHTTPTopLocationListParamsDateRange = "14d"
 	RadarHTTPTopLocationListParamsDateRange28d        RadarHTTPTopLocationListParamsDateRange = "28d"
@@ -266,6 +275,7 @@ const (
 	RadarHTTPTopLocationListParamsDateRange24w        RadarHTTPTopLocationListParamsDateRange = "24w"
 	RadarHTTPTopLocationListParamsDateRange52w        RadarHTTPTopLocationListParamsDateRange = "52w"
 	RadarHTTPTopLocationListParamsDateRange1dControl  RadarHTTPTopLocationListParamsDateRange = "1dControl"
+	RadarHTTPTopLocationListParamsDateRange2dControl  RadarHTTPTopLocationListParamsDateRange = "2dControl"
 	RadarHTTPTopLocationListParamsDateRange7dControl  RadarHTTPTopLocationListParamsDateRange = "7dControl"
 	RadarHTTPTopLocationListParamsDateRange14dControl RadarHTTPTopLocationListParamsDateRange = "14dControl"
 	RadarHTTPTopLocationListParamsDateRange28dControl RadarHTTPTopLocationListParamsDateRange = "28dControl"
@@ -316,6 +326,7 @@ type RadarHTTPTopLocationListParamsO string
 const (
 	RadarHTTPTopLocationListParamsOWindows  RadarHTTPTopLocationListParamsO = "WINDOWS"
 	RadarHTTPTopLocationListParamsOMacosx   RadarHTTPTopLocationListParamsO = "MACOSX"
+	RadarHTTPTopLocationListParamsOIos      RadarHTTPTopLocationListParamsO = "IOS"
 	RadarHTTPTopLocationListParamsOAndroid  RadarHTTPTopLocationListParamsO = "ANDROID"
 	RadarHTTPTopLocationListParamsOChromeos RadarHTTPTopLocationListParamsO = "CHROMEOS"
 	RadarHTTPTopLocationListParamsOLinux    RadarHTTPTopLocationListParamsO = "LINUX"

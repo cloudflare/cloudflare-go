@@ -24,13 +24,15 @@ func TestOrganizationMemberGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Organizations.Members.Get(
 		context.TODO(),
 		"01a7362d577a6c3019a474fd6f485823",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"4536bcfad5faccb111b47003c79917fa",
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -52,8 +54,10 @@ func TestOrganizationMemberUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Organizations.Members.Update(
 		context.TODO(),
@@ -83,8 +87,10 @@ func TestOrganizationMemberDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Organizations.Members.Delete(
 		context.TODO(),
@@ -111,8 +117,10 @@ func TestOrganizationMemberOrganizationMembersListMembers(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Organizations.Members.OrganizationMembersListMembers(context.TODO(), "01a7362d577a6c3019a474fd6f485823")
 	if err != nil {

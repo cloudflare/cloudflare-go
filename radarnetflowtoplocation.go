@@ -33,8 +33,8 @@ func NewRadarNetflowTopLocationService(opts ...option.RequestOption) (r *RadarNe
 	return
 }
 
-// Get the top locations by network traffic. Values are a percentage out of the
-// total network traffic.
+// Get the top locations by network traffic (NetFlows) over a given time period.
+// Visit https://en.wikipedia.org/wiki/NetFlow for more information.
 func (r *RadarNetflowTopLocationService) List(ctx context.Context, query RadarNetflowTopLocationListParams, opts ...option.RequestOption) (res *RadarNetflowTopLocationListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "radar/netflows/top/locations"
@@ -104,7 +104,7 @@ type RadarNetflowTopLocationListParams struct {
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of datetimes to filter the end of a series.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
@@ -137,6 +137,7 @@ type RadarNetflowTopLocationListParamsDateRange string
 
 const (
 	RadarNetflowTopLocationListParamsDateRange1d         RadarNetflowTopLocationListParamsDateRange = "1d"
+	RadarNetflowTopLocationListParamsDateRange2d         RadarNetflowTopLocationListParamsDateRange = "2d"
 	RadarNetflowTopLocationListParamsDateRange7d         RadarNetflowTopLocationListParamsDateRange = "7d"
 	RadarNetflowTopLocationListParamsDateRange14d        RadarNetflowTopLocationListParamsDateRange = "14d"
 	RadarNetflowTopLocationListParamsDateRange28d        RadarNetflowTopLocationListParamsDateRange = "28d"
@@ -144,6 +145,7 @@ const (
 	RadarNetflowTopLocationListParamsDateRange24w        RadarNetflowTopLocationListParamsDateRange = "24w"
 	RadarNetflowTopLocationListParamsDateRange52w        RadarNetflowTopLocationListParamsDateRange = "52w"
 	RadarNetflowTopLocationListParamsDateRange1dControl  RadarNetflowTopLocationListParamsDateRange = "1dControl"
+	RadarNetflowTopLocationListParamsDateRange2dControl  RadarNetflowTopLocationListParamsDateRange = "2dControl"
 	RadarNetflowTopLocationListParamsDateRange7dControl  RadarNetflowTopLocationListParamsDateRange = "7dControl"
 	RadarNetflowTopLocationListParamsDateRange14dControl RadarNetflowTopLocationListParamsDateRange = "14dControl"
 	RadarNetflowTopLocationListParamsDateRange28dControl RadarNetflowTopLocationListParamsDateRange = "28dControl"

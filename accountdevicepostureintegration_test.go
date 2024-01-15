@@ -24,8 +24,10 @@ func TestAccountDevicePostureIntegrationGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Devices.Postures.Integrations.Get(
 		context.TODO(),
@@ -52,15 +54,17 @@ func TestAccountDevicePostureIntegrationUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Devices.Postures.Integrations.Update(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.AccountDevicePostureIntegrationUpdateParams{
-			Config: cloudflare.F[cloudflare.AccountDevicePostureIntegrationUpdateParamsConfig](cloudflare.AccountDevicePostureIntegrationUpdateParamsConfigWorkspaceOneConfigRequest(cloudflare.AccountDevicePostureIntegrationUpdateParamsConfigWorkspaceOneConfigRequest{
+			Config: cloudflare.F[cloudflare.AccountDevicePostureIntegrationUpdateParamsConfig](cloudflare.AccountDevicePostureIntegrationUpdateParamsConfigZR7Sv6YhWorkspaceOneConfigRequest(cloudflare.AccountDevicePostureIntegrationUpdateParamsConfigZR7Sv6YhWorkspaceOneConfigRequest{
 				APIURL:       cloudflare.F("https://as123.awmdm.com/API"),
 				AuthURL:      cloudflare.F("https://na.uemauth.vmwservices.com/connect/token"),
 				ClientID:     cloudflare.F("example client id"),
@@ -91,8 +95,10 @@ func TestAccountDevicePostureIntegrationDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Devices.Postures.Integrations.Delete(
 		context.TODO(),
@@ -108,7 +114,7 @@ func TestAccountDevicePostureIntegrationDelete(t *testing.T) {
 	}
 }
 
-func TestAccountDevicePostureIntegrationDevicePostureIntegrationsNewDevicePostureIntegration(t *testing.T) {
+func TestAccountDevicePostureIntegrationDevicePostureIntegrationsNewDevicePostureIntegrationWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -119,14 +125,16 @@ func TestAccountDevicePostureIntegrationDevicePostureIntegrationsNewDevicePostur
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Devices.Postures.Integrations.DevicePostureIntegrationsNewDevicePostureIntegration(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		cloudflare.AccountDevicePostureIntegrationDevicePostureIntegrationsNewDevicePostureIntegrationParams{
-			Config: cloudflare.F[cloudflare.AccountDevicePostureIntegrationDevicePostureIntegrationsNewDevicePostureIntegrationParamsConfig](cloudflare.AccountDevicePostureIntegrationDevicePostureIntegrationsNewDevicePostureIntegrationParamsConfigWorkspaceOneConfigRequest(cloudflare.AccountDevicePostureIntegrationDevicePostureIntegrationsNewDevicePostureIntegrationParamsConfigWorkspaceOneConfigRequest{
+			Config: cloudflare.F[cloudflare.AccountDevicePostureIntegrationDevicePostureIntegrationsNewDevicePostureIntegrationParamsConfig](cloudflare.AccountDevicePostureIntegrationDevicePostureIntegrationsNewDevicePostureIntegrationParamsConfigZR7Sv6YhWorkspaceOneConfigRequest(cloudflare.AccountDevicePostureIntegrationDevicePostureIntegrationsNewDevicePostureIntegrationParamsConfigZR7Sv6YhWorkspaceOneConfigRequest{
 				APIURL:       cloudflare.F("https://as123.awmdm.com/API"),
 				AuthURL:      cloudflare.F("https://na.uemauth.vmwservices.com/connect/token"),
 				ClientID:     cloudflare.F("example client id"),
@@ -157,8 +165,10 @@ func TestAccountDevicePostureIntegrationDevicePostureIntegrationsListDevicePostu
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Devices.Postures.Integrations.DevicePostureIntegrationsListDevicePostureIntegrations(context.TODO(), "699d98642c564d2e855e9661899b7252")
 	if err != nil {

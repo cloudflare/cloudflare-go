@@ -25,11 +25,13 @@ func TestUserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthch
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Users.LoadBalancingAnalytics.Events.LoadBalancerHealthcheckEventsListHealthcheckEvents(context.TODO(), cloudflare.UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsParams{
-		Identifier:    cloudflare.F[any]("17b5962d775c646f3f9725cbc7a53df4"),
+	_, err := client.User.LoadBalancingAnalytics.Events.LoadBalancerHealthcheckEventsListHealthcheckEvents(context.TODO(), cloudflare.UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsParams{
+		Identifier:    cloudflare.F("17b5962d775c646f3f9725cbc7a53df4"),
 		OriginHealthy: cloudflare.F(true),
 		OriginName:    cloudflare.F("primary-dc-1"),
 		PoolHealthy:   cloudflare.F(true),

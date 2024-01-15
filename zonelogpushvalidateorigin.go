@@ -32,12 +32,104 @@ func NewZoneLogpushValidateOriginService(opts ...option.RequestOption) (r *ZoneL
 }
 
 // Validates logpull origin with logpull_options.
-func (r *ZoneLogpushValidateOriginService) PostZonesZoneIdentifierLogpushValidateOrigin(ctx context.Context, zoneIdentifier string, body ZoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginParams, opts ...option.RequestOption) (res *ValidateResponse, err error) {
+func (r *ZoneLogpushValidateOriginService) PostZonesZoneIdentifierLogpushValidateOrigin(ctx context.Context, zoneIdentifier string, body ZoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginParams, opts ...option.RequestOption) (res *ZoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/logpush/validate/origin", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
+
+type ZoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponse struct {
+	Errors   []ZoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseError   `json:"errors"`
+	Messages []ZoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseMessage `json:"messages"`
+	Result   ZoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseResult    `json:"result,nullable"`
+	// Whether the API call was successful
+	Success ZoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseSuccess `json:"success"`
+	JSON    zoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseJSON    `json:"-"`
+}
+
+// zoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponse]
+type zoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseError struct {
+	Code    int64                                                                                  `json:"code,required"`
+	Message string                                                                                 `json:"message,required"`
+	JSON    zoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseErrorJSON `json:"-"`
+}
+
+// zoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseError]
+type zoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseMessage struct {
+	Code    int64                                                                                    `json:"code,required"`
+	Message string                                                                                   `json:"message,required"`
+	JSON    zoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseMessageJSON `json:"-"`
+}
+
+// zoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseMessage]
+type zoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseResult struct {
+	Message string                                                                                  `json:"message"`
+	Valid   bool                                                                                    `json:"valid"`
+	JSON    zoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseResultJSON `json:"-"`
+}
+
+// zoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseResultJSON
+// contains the JSON metadata for the struct
+// [ZoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseResult]
+type zoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseResultJSON struct {
+	Message     apijson.Field
+	Valid       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseSuccess bool
+
+const (
+	ZoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseSuccessTrue ZoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginResponseSuccess = true
+)
 
 type ZoneLogpushValidateOriginPostZonesZoneIdentifierLogpushValidateOriginParams struct {
 	// Configuration string. It specifies things like requested fields and timestamp

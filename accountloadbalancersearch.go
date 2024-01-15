@@ -205,10 +205,8 @@ const (
 )
 
 type AccountLoadBalancerSearchListParams struct {
-	// Requested page within paginated list of results.
-	Page param.Field[float64] `query:"page"`
-	// Maximum number of results requested.
-	PerPage      param.Field[float64]                                         `query:"per_page"`
+	Page         param.Field[interface{}]                                     `query:"page"`
+	PerPage      param.Field[interface{}]                                     `query:"per_page"`
 	SearchParams param.Field[AccountLoadBalancerSearchListParamsSearchParams] `query:"search_params"`
 }
 

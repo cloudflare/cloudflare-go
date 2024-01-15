@@ -34,26 +34,26 @@ func NewAccountAccessSeatService(opts ...option.RequestOption) (r *AccountAccess
 
 // Removes a user from a Zero Trust seat when both `access_seat` and `gateway_seat`
 // are set to false.
-func (r *AccountAccessSeatService) ZeroTrustSeatsUpdateAUserSeat(ctx context.Context, identifier interface{}, body AccountAccessSeatZeroTrustSeatsUpdateAUserSeatParams, opts ...option.RequestOption) (res *SeatsResponseCollection, err error) {
+func (r *AccountAccessSeatService) ZeroTrustSeatsUpdateAUserSeat(ctx context.Context, identifier string, body AccountAccessSeatZeroTrustSeatsUpdateAUserSeatParams, opts ...option.RequestOption) (res *AccountAccessSeatZeroTrustSeatsUpdateAUserSeatResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%v/access/seats", identifier)
+	path := fmt.Sprintf("accounts/%s/access/seats", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
 	return
 }
 
-type SeatsResponseCollection struct {
-	Errors     []SeatsResponseCollectionError    `json:"errors"`
-	Messages   []SeatsResponseCollectionMessage  `json:"messages"`
-	Result     []SeatsResponseCollectionResult   `json:"result"`
-	ResultInfo SeatsResponseCollectionResultInfo `json:"result_info"`
+type AccountAccessSeatZeroTrustSeatsUpdateAUserSeatResponse struct {
+	Errors     []AccountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseError    `json:"errors"`
+	Messages   []AccountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseMessage  `json:"messages"`
+	Result     []AccountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseResult   `json:"result"`
+	ResultInfo AccountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseResultInfo `json:"result_info"`
 	// Whether the API call was successful
-	Success SeatsResponseCollectionSuccess `json:"success"`
-	JSON    seatsResponseCollectionJSON    `json:"-"`
+	Success AccountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseSuccess `json:"success"`
+	JSON    accountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseJSON    `json:"-"`
 }
 
-// seatsResponseCollectionJSON contains the JSON metadata for the struct
-// [SeatsResponseCollection]
-type seatsResponseCollectionJSON struct {
+// accountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseJSON contains the JSON
+// metadata for the struct [AccountAccessSeatZeroTrustSeatsUpdateAUserSeatResponse]
+type accountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -63,63 +63,66 @@ type seatsResponseCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SeatsResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountAccessSeatZeroTrustSeatsUpdateAUserSeatResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SeatsResponseCollectionError struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    seatsResponseCollectionErrorJSON `json:"-"`
+type AccountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseError struct {
+	Code    int64                                                           `json:"code,required"`
+	Message string                                                          `json:"message,required"`
+	JSON    accountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseErrorJSON `json:"-"`
 }
 
-// seatsResponseCollectionErrorJSON contains the JSON metadata for the struct
-// [SeatsResponseCollectionError]
-type seatsResponseCollectionErrorJSON struct {
+// accountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseErrorJSON contains the
+// JSON metadata for the struct
+// [AccountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseError]
+type accountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SeatsResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SeatsResponseCollectionMessage struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    seatsResponseCollectionMessageJSON `json:"-"`
+type AccountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseMessage struct {
+	Code    int64                                                             `json:"code,required"`
+	Message string                                                            `json:"message,required"`
+	JSON    accountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseMessageJSON `json:"-"`
 }
 
-// seatsResponseCollectionMessageJSON contains the JSON metadata for the struct
-// [SeatsResponseCollectionMessage]
-type seatsResponseCollectionMessageJSON struct {
+// accountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseMessageJSON contains the
+// JSON metadata for the struct
+// [AccountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseMessage]
+type accountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SeatsResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SeatsResponseCollectionResult struct {
+type AccountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseResult struct {
 	// True if the seat is part of Access.
 	AccessSeat bool      `json:"access_seat"`
 	CreatedAt  time.Time `json:"created_at" format:"date-time"`
 	// True if the seat is part of Gateway.
 	GatewaySeat bool `json:"gateway_seat"`
-	// The unique API identifier for the Zero Trust seat.
-	SeatUid   interface{}                       `json:"seat_uid"`
-	UpdatedAt time.Time                         `json:"updated_at" format:"date-time"`
-	JSON      seatsResponseCollectionResultJSON `json:"-"`
+	// Identifier
+	SeatUid   string                                                           `json:"seat_uid"`
+	UpdatedAt time.Time                                                        `json:"updated_at" format:"date-time"`
+	JSON      accountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseResultJSON `json:"-"`
 }
 
-// seatsResponseCollectionResultJSON contains the JSON metadata for the struct
-// [SeatsResponseCollectionResult]
-type seatsResponseCollectionResultJSON struct {
+// accountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseResultJSON contains the
+// JSON metadata for the struct
+// [AccountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseResult]
+type accountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseResultJSON struct {
 	AccessSeat  apijson.Field
 	CreatedAt   apijson.Field
 	GatewaySeat apijson.Field
@@ -129,11 +132,11 @@ type seatsResponseCollectionResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SeatsResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SeatsResponseCollectionResultInfo struct {
+type AccountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -141,13 +144,14 @@ type SeatsResponseCollectionResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                               `json:"total_count"`
-	JSON       seatsResponseCollectionResultInfoJSON `json:"-"`
+	TotalCount float64                                                              `json:"total_count"`
+	JSON       accountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseResultInfoJSON `json:"-"`
 }
 
-// seatsResponseCollectionResultInfoJSON contains the JSON metadata for the struct
-// [SeatsResponseCollectionResultInfo]
-type seatsResponseCollectionResultInfoJSON struct {
+// accountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseResultInfoJSON contains
+// the JSON metadata for the struct
+// [AccountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseResultInfo]
+type accountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -156,15 +160,15 @@ type seatsResponseCollectionResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SeatsResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type SeatsResponseCollectionSuccess bool
+type AccountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseSuccess bool
 
 const (
-	SeatsResponseCollectionSuccessTrue SeatsResponseCollectionSuccess = true
+	AccountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseSuccessTrue AccountAccessSeatZeroTrustSeatsUpdateAUserSeatResponseSuccess = true
 )
 
 type AccountAccessSeatZeroTrustSeatsUpdateAUserSeatParams struct {
@@ -180,8 +184,6 @@ type AccountAccessSeatZeroTrustSeatsUpdateAUserSeatParamsBody struct {
 	AccessSeat param.Field[bool] `json:"access_seat,required"`
 	// True if the seat is part of Gateway.
 	GatewaySeat param.Field[bool] `json:"gateway_seat,required"`
-	// The unique API identifier for the Zero Trust seat.
-	SeatUid param.Field[interface{}] `json:"seat_uid,required"`
 }
 
 func (r AccountAccessSeatZeroTrustSeatsUpdateAUserSeatParamsBody) MarshalJSON() (data []byte, err error) {

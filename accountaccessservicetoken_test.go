@@ -24,15 +24,18 @@ func TestAccountAccessServiceTokenUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Accesses.ServiceTokens.Update(
+	_, err := client.Accounts.Access.ServiceTokens.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.AccountAccessServiceTokenUpdateParams{
-			Name: cloudflare.F("CI/CD token"),
+			Duration: cloudflare.F("60m"),
+			Name:     cloudflare.F("CI/CD token"),
 		},
 	)
 	if err != nil {
@@ -55,10 +58,12 @@ func TestAccountAccessServiceTokenDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Accesses.ServiceTokens.Delete(
+	_, err := client.Accounts.Access.ServiceTokens.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
@@ -72,7 +77,7 @@ func TestAccountAccessServiceTokenDelete(t *testing.T) {
 	}
 }
 
-func TestAccountAccessServiceTokenAccessServiceTokensNewAServiceToken(t *testing.T) {
+func TestAccountAccessServiceTokenAccessServiceTokensNewAServiceTokenWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -83,14 +88,17 @@ func TestAccountAccessServiceTokenAccessServiceTokensNewAServiceToken(t *testing
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Accesses.ServiceTokens.AccessServiceTokensNewAServiceToken(
+	_, err := client.Accounts.Access.ServiceTokens.AccessServiceTokensNewAServiceToken(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.AccountAccessServiceTokenAccessServiceTokensNewAServiceTokenParams{
-			Name: cloudflare.F("CI/CD token"),
+			Name:     cloudflare.F("CI/CD token"),
+			Duration: cloudflare.F("60m"),
 		},
 	)
 	if err != nil {
@@ -113,10 +121,12 @@ func TestAccountAccessServiceTokenAccessServiceTokensListServiceTokens(t *testin
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Accesses.ServiceTokens.AccessServiceTokensListServiceTokens(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Accounts.Access.ServiceTokens.AccessServiceTokensListServiceTokens(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

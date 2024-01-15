@@ -33,78 +33,79 @@ func NewAccountStreamClipService(opts ...option.RequestOption) (r *AccountStream
 }
 
 // Clips a video based on the specified start and end times provided in seconds.
-func (r *AccountStreamClipService) StreamVideoClippingClipVideosGivenAStartAndEndTime(ctx context.Context, accountIdentifier string, body AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeParams, opts ...option.RequestOption) (res *ClipResponseSingle, err error) {
+func (r *AccountStreamClipService) StreamVideoClippingClipVideosGivenAStartAndEndTime(ctx context.Context, accountIdentifier string, body AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeParams, opts ...option.RequestOption) (res *AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/stream/clip", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
-type ClipResponseSingle struct {
-	Errors     []ClipResponseSingleError    `json:"errors"`
-	Messages   []ClipResponseSingleMessage  `json:"messages"`
-	Result     ClipResponseSingleResult     `json:"result"`
-	ResultInfo ClipResponseSingleResultInfo `json:"result_info"`
+type AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponse struct {
+	Errors   []AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseError   `json:"errors"`
+	Messages []AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseMessage `json:"messages"`
+	Result   AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success ClipResponseSingleSuccess `json:"success"`
-	JSON    clipResponseSingleJSON    `json:"-"`
+	Success AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseSuccess `json:"success"`
+	JSON    accountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseJSON    `json:"-"`
 }
 
-// clipResponseSingleJSON contains the JSON metadata for the struct
-// [ClipResponseSingle]
-type clipResponseSingleJSON struct {
+// accountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseJSON
+// contains the JSON metadata for the struct
+// [AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponse]
+type accountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ClipResponseSingle) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ClipResponseSingleError struct {
-	Code    int64                       `json:"code,required"`
-	Message string                      `json:"message,required"`
-	JSON    clipResponseSingleErrorJSON `json:"-"`
+type AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseError struct {
+	Code    int64                                                                                `json:"code,required"`
+	Message string                                                                               `json:"message,required"`
+	JSON    accountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseErrorJSON `json:"-"`
 }
 
-// clipResponseSingleErrorJSON contains the JSON metadata for the struct
-// [ClipResponseSingleError]
-type clipResponseSingleErrorJSON struct {
+// accountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseError]
+type accountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ClipResponseSingleError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ClipResponseSingleMessage struct {
-	Code    int64                         `json:"code,required"`
-	Message string                        `json:"message,required"`
-	JSON    clipResponseSingleMessageJSON `json:"-"`
+type AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseMessage struct {
+	Code    int64                                                                                  `json:"code,required"`
+	Message string                                                                                 `json:"message,required"`
+	JSON    accountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseMessageJSON `json:"-"`
 }
 
-// clipResponseSingleMessageJSON contains the JSON metadata for the struct
-// [ClipResponseSingleMessage]
-type clipResponseSingleMessageJSON struct {
+// accountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseMessage]
+type accountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ClipResponseSingleMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ClipResponseSingleResult struct {
+type AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResult struct {
 	// Lists the origins allowed to display the video. Enter allowed origin domains in
 	// an array and use `*` for wildcard subdomains. Empty arrays allow the video to be
 	// viewed on any origin.
@@ -126,8 +127,8 @@ type ClipResponseSingleResult struct {
 	// managing videos.
 	Meta interface{} `json:"meta"`
 	// The date and time the live input was last modified.
-	Modified time.Time                        `json:"modified" format:"date-time"`
-	Playback ClipResponseSingleResultPlayback `json:"playback"`
+	Modified time.Time                                                                                 `json:"modified" format:"date-time"`
+	Playback AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultPlayback `json:"playback"`
 	// The video's preview page URI. This field is omitted until encoding is complete.
 	Preview string `json:"preview" format:"uri"`
 	// Indicates whether the video can be a accessed using the UID. When set to `true`,
@@ -135,20 +136,21 @@ type ClipResponseSingleResult struct {
 	RequireSignedURLs bool `json:"requireSignedURLs"`
 	// Specifies the start time for the video clip in seconds.
 	StartTimeSeconds int64 `json:"startTimeSeconds"`
-	// Specifies the processing status of the video.
-	Status ClipResponseSingleResultStatus `json:"status"`
+	// Specifies the processing status for all quality levels for a video.
+	Status AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultStatus `json:"status"`
 	// The timestamp for a thumbnail image calculated as a percentage value of the
 	// video's duration. To convert from a second-wise timestamp to a percentage,
 	// divide the desired timestamp by the total duration of the video. If this value
 	// is not set, the default thumbnail image is taken from 0s of the video.
-	ThumbnailTimestampPct float64                           `json:"thumbnailTimestampPct"`
-	Watermark             ClipResponseSingleResultWatermark `json:"watermark"`
-	JSON                  clipResponseSingleResultJSON      `json:"-"`
+	ThumbnailTimestampPct float64                                                                                    `json:"thumbnailTimestampPct"`
+	Watermark             AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultWatermark `json:"watermark"`
+	JSON                  accountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultJSON      `json:"-"`
 }
 
-// clipResponseSingleResultJSON contains the JSON metadata for the struct
-// [ClipResponseSingleResult]
-type clipResponseSingleResultJSON struct {
+// accountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResult]
+type accountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultJSON struct {
 	AllowedOrigins        apijson.Field
 	ClippedFromVideoUid   apijson.Field
 	Created               apijson.Field
@@ -168,96 +170,77 @@ type clipResponseSingleResultJSON struct {
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *ClipResponseSingleResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ClipResponseSingleResultPlayback struct {
+type AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultPlayback struct {
 	// DASH Media Presentation Description for the video.
 	Dash string `json:"dash"`
 	// The HLS manifest for the video.
-	Hls  string                               `json:"hls"`
-	JSON clipResponseSingleResultPlaybackJSON `json:"-"`
+	Hls  string                                                                                        `json:"hls"`
+	JSON accountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultPlaybackJSON `json:"-"`
 }
 
-// clipResponseSingleResultPlaybackJSON contains the JSON metadata for the struct
-// [ClipResponseSingleResultPlayback]
-type clipResponseSingleResultPlaybackJSON struct {
+// accountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultPlaybackJSON
+// contains the JSON metadata for the struct
+// [AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultPlayback]
+type accountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultPlaybackJSON struct {
 	Dash        apijson.Field
 	Hls         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ClipResponseSingleResultPlayback) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultPlayback) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Specifies the processing status of the video.
-type ClipResponseSingleResultStatus string
+// Specifies the processing status for all quality levels for a video.
+type AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultStatus string
 
 const (
-	ClipResponseSingleResultStatusPendingupload ClipResponseSingleResultStatus = "pendingupload"
-	ClipResponseSingleResultStatusDownloading   ClipResponseSingleResultStatus = "downloading"
-	ClipResponseSingleResultStatusQueued        ClipResponseSingleResultStatus = "queued"
-	ClipResponseSingleResultStatusInprogress    ClipResponseSingleResultStatus = "inprogress"
-	ClipResponseSingleResultStatusReady         ClipResponseSingleResultStatus = "ready"
-	ClipResponseSingleResultStatusError         ClipResponseSingleResultStatus = "error"
+	AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultStatusPendingupload AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultStatus = "pendingupload"
+	AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultStatusDownloading   AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultStatus = "downloading"
+	AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultStatusQueued        AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultStatus = "queued"
+	AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultStatusInprogress    AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultStatus = "inprogress"
+	AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultStatusReady         AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultStatus = "ready"
+	AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultStatusError         AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultStatus = "error"
 )
 
-type ClipResponseSingleResultWatermark struct {
+type AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultWatermark struct {
 	// The unique identifier for the watermark profile.
-	Uid  string                                `json:"uid"`
-	JSON clipResponseSingleResultWatermarkJSON `json:"-"`
+	Uid  string                                                                                         `json:"uid"`
+	JSON accountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultWatermarkJSON `json:"-"`
 }
 
-// clipResponseSingleResultWatermarkJSON contains the JSON metadata for the struct
-// [ClipResponseSingleResultWatermark]
-type clipResponseSingleResultWatermarkJSON struct {
+// accountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultWatermarkJSON
+// contains the JSON metadata for the struct
+// [AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultWatermark]
+type accountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultWatermarkJSON struct {
 	Uid         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ClipResponseSingleResultWatermark) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ClipResponseSingleResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                          `json:"total_count"`
-	JSON       clipResponseSingleResultInfoJSON `json:"-"`
-}
-
-// clipResponseSingleResultInfoJSON contains the JSON metadata for the struct
-// [ClipResponseSingleResultInfo]
-type clipResponseSingleResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ClipResponseSingleResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseResultWatermark) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type ClipResponseSingleSuccess bool
+type AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseSuccess bool
 
 const (
-	ClipResponseSingleSuccessTrue ClipResponseSingleSuccess = true
+	AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseSuccessTrue AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeResponseSuccess = true
 )
 
 type AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeParams struct {
+	// The unique video identifier (UID).
+	ClippedFromVideoUid param.Field[string] `json:"clippedFromVideoUID,required"`
+	// Specifies the end time for the video clip in seconds.
+	EndTimeSeconds param.Field[int64] `json:"endTimeSeconds,required"`
+	// Specifies the start time for the video clip in seconds.
+	StartTimeSeconds param.Field[int64] `json:"startTimeSeconds,required"`
 	// Lists the origins allowed to display the video. Enter allowed origin domains in
 	// an array and use `*` for wildcard subdomains. Empty arrays allow the video to be
 	// viewed on any origin.
@@ -269,6 +252,9 @@ type AccountStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeParams s
 	// duration will fail during processing. A value of `-1` means the value is
 	// unknown.
 	MaxDurationSeconds param.Field[int64] `json:"maxDurationSeconds"`
+	// Indicates whether the video can be a accessed using the UID. When set to `true`,
+	// a signed token must be generated with a signing key to view the video.
+	RequireSignedURLs param.Field[bool] `json:"requireSignedURLs"`
 	// The timestamp for a thumbnail image calculated as a percentage value of the
 	// video's duration. To convert from a second-wise timestamp to a percentage,
 	// divide the desired timestamp by the total duration of the video. If this value

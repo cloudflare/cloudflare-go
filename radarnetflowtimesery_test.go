@@ -25,19 +25,21 @@ func TestRadarNetflowTimeseryListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Radars.Netflows.Timeseries.List(context.TODO(), cloudflare.RadarNetflowTimeseryListParams{
-		AggInterval:   cloudflare.F(cloudflare.RadarNetflowTimeseryListParamsAggInterval15m),
-		ASN:           cloudflare.F([]string{"15169", "15169", "15169"}),
+	_, err := client.Radar.Netflows.Timeseries.List(context.TODO(), cloudflare.RadarNetflowTimeseryListParams{
+		AggInterval:   cloudflare.F(cloudflare.RadarNetflowTimeseryListParamsAggInterval1h),
+		ASN:           cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:     cloudflare.F([]cloudflare.RadarNetflowTimeseryListParamsDateRange{cloudflare.RadarNetflowTimeseryListParamsDateRange1d, cloudflare.RadarNetflowTimeseryListParamsDateRange7d, cloudflare.RadarNetflowTimeseryListParamsDateRange14d}),
+		DateRange:     cloudflare.F([]cloudflare.RadarNetflowTimeseryListParamsDateRange{cloudflare.RadarNetflowTimeseryListParamsDateRange1d, cloudflare.RadarNetflowTimeseryListParamsDateRange2d, cloudflare.RadarNetflowTimeseryListParamsDateRange7d}),
 		DateStart:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		Format:        cloudflare.F(cloudflare.RadarNetflowTimeseryListParamsFormatJson),
-		Location:      cloudflare.F([]string{"US,CA", "US,CA", "US,CA"}),
-		Name:          cloudflare.F([]string{"main_series", "main_series", "main_series"}),
-		Normalization: cloudflare.F(cloudflare.RadarNetflowTimeseryListParamsNormalizationPercentageChange),
+		Location:      cloudflare.F([]string{"string", "string", "string"}),
+		Name:          cloudflare.F([]string{"string", "string", "string"}),
+		Normalization: cloudflare.F(cloudflare.RadarNetflowTimeseryListParamsNormalizationMin0Max),
 		Product:       cloudflare.F([]cloudflare.RadarNetflowTimeseryListParamsProduct{cloudflare.RadarNetflowTimeseryListParamsProductHTTP, cloudflare.RadarNetflowTimeseryListParamsProductAll}),
 	})
 	if err != nil {

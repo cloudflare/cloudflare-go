@@ -7,7 +7,6 @@ import (
 	"errors"
 	"os"
 	"testing"
-	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/testutil"
@@ -25,14 +24,16 @@ func TestRadarDatasetGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Radars.Datasets.Get(
+	_, err := client.Radar.Datasets.Get(
 		context.TODO(),
 		"ranking_top_1000",
 		cloudflare.RadarDatasetGetParams{
-			Date: cloudflare.F(time.Now()),
+			Date: cloudflare.F("string"),
 		},
 	)
 	if err != nil {
@@ -55,10 +56,12 @@ func TestRadarDatasetListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Radars.Datasets.List(context.TODO(), cloudflare.RadarDatasetListParams{
+	_, err := client.Radar.Datasets.List(context.TODO(), cloudflare.RadarDatasetListParams{
 		DatasetType: cloudflare.F(cloudflare.RadarDatasetListParamsDatasetTypeRankingBucket),
 		Format:      cloudflare.F(cloudflare.RadarDatasetListParamsFormatJson),
 		Limit:       cloudflare.F(int64(5)),

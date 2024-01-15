@@ -39,25 +39,26 @@ func NewAccountImageV2DirectUploadService(opts ...option.RequestOption) (r *Acco
 // image itself has been uploaded, send an image details request
 // (accounts/:account_identifier/images/v1/:identifier), and check that the
 // `draft: true` property is not present.
-func (r *AccountImageV2DirectUploadService) CloudflareImagesNewAuthenticatedDirectUploadURLV2(ctx context.Context, accountIdentifier string, body AccountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadURLV2Params, opts ...option.RequestOption) (res *DirectUploadResponseV2, err error) {
+func (r *AccountImageV2DirectUploadService) CloudflareImagesNewAuthenticatedDirectUploadURLV2(ctx context.Context, accountIdentifier string, body AccountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadURLV2Params, opts ...option.RequestOption) (res *AccountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2Response, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/images/v2/direct_upload", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
-type DirectUploadResponseV2 struct {
-	Errors   []DirectUploadResponseV2Error   `json:"errors"`
-	Messages []DirectUploadResponseV2Message `json:"messages"`
-	Result   DirectUploadResponseV2Result    `json:"result"`
+type AccountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2Response struct {
+	Errors   []AccountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseError   `json:"errors"`
+	Messages []AccountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseMessage `json:"messages"`
+	Result   AccountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success DirectUploadResponseV2Success `json:"success"`
-	JSON    directUploadResponseV2JSON    `json:"-"`
+	Success AccountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseSuccess `json:"success"`
+	JSON    accountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseJSON    `json:"-"`
 }
 
-// directUploadResponseV2JSON contains the JSON metadata for the struct
-// [DirectUploadResponseV2]
-type directUploadResponseV2JSON struct {
+// accountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseJSON
+// contains the JSON metadata for the struct
+// [AccountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2Response]
+type accountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -66,75 +67,78 @@ type directUploadResponseV2JSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DirectUploadResponseV2) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2Response) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DirectUploadResponseV2Error struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    directUploadResponseV2ErrorJSON `json:"-"`
+type AccountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseError struct {
+	Code    int64                                                                                        `json:"code,required"`
+	Message string                                                                                       `json:"message,required"`
+	JSON    accountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseErrorJSON `json:"-"`
 }
 
-// directUploadResponseV2ErrorJSON contains the JSON metadata for the struct
-// [DirectUploadResponseV2Error]
-type directUploadResponseV2ErrorJSON struct {
+// accountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseError]
+type accountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DirectUploadResponseV2Error) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DirectUploadResponseV2Message struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    directUploadResponseV2MessageJSON `json:"-"`
+type AccountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseMessage struct {
+	Code    int64                                                                                          `json:"code,required"`
+	Message string                                                                                         `json:"message,required"`
+	JSON    accountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseMessageJSON `json:"-"`
 }
 
-// directUploadResponseV2MessageJSON contains the JSON metadata for the struct
-// [DirectUploadResponseV2Message]
-type directUploadResponseV2MessageJSON struct {
+// accountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseMessage]
+type accountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DirectUploadResponseV2Message) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DirectUploadResponseV2Result struct {
+type AccountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseResult struct {
 	// Image unique identifier.
 	ID string `json:"id"`
 	// The URL the unauthenticated upload can be performed to using a single HTTP POST
 	// (multipart/form-data) request.
-	UploadURL string                           `json:"uploadURL"`
-	JSON      directUploadResponseV2ResultJSON `json:"-"`
+	UploadURL string                                                                                        `json:"uploadURL"`
+	JSON      accountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseResultJSON `json:"-"`
 }
 
-// directUploadResponseV2ResultJSON contains the JSON metadata for the struct
-// [DirectUploadResponseV2Result]
-type directUploadResponseV2ResultJSON struct {
+// accountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseResult]
+type accountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseResultJSON struct {
 	ID          apijson.Field
 	UploadURL   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DirectUploadResponseV2Result) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type DirectUploadResponseV2Success bool
+type AccountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseSuccess bool
 
 const (
-	DirectUploadResponseV2SuccessTrue DirectUploadResponseV2Success = true
+	AccountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseSuccessTrue AccountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadUrlv2ResponseSuccess = true
 )
 
 type AccountImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadURLV2Params struct {

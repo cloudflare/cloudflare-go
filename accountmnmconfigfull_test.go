@@ -24,8 +24,10 @@ func TestAccountMnmConfigFullMagicNetworkMonitoringConfigurationListRulesAndAcco
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Mnms.Configs.Fulls.MagicNetworkMonitoringConfigurationListRulesAndAccountConfiguration(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
 	if err != nil {

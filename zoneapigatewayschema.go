@@ -34,25 +34,26 @@ func NewZoneAPIGatewaySchemaService(opts ...option.RequestOption) (r *ZoneAPIGat
 }
 
 // Retrieve operations and features as OpenAPI schemas
-func (r *ZoneAPIGatewaySchemaService) APIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemas(ctx context.Context, zoneID string, query ZoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasParams, opts ...option.RequestOption) (res *SchemaResponseWithThreshold, err error) {
+func (r *ZoneAPIGatewaySchemaService) APIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemas(ctx context.Context, zoneID string, query ZoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasParams, opts ...option.RequestOption) (res *ZoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/api_gateway/schemas", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
-type SchemaResponseWithThreshold struct {
-	Errors   []SchemaResponseWithThresholdError   `json:"errors"`
-	Messages []SchemaResponseWithThresholdMessage `json:"messages"`
-	Result   SchemaResponseWithThresholdResult    `json:"result"`
+type ZoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponse struct {
+	Errors   []ZoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponseError   `json:"errors"`
+	Messages []ZoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponseMessage `json:"messages"`
+	Result   ZoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success SchemaResponseWithThresholdSuccess `json:"success"`
-	JSON    schemaResponseWithThresholdJSON    `json:"-"`
+	Success bool                                                                                                `json:"success"`
+	JSON    zoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponseJSON `json:"-"`
 }
 
-// schemaResponseWithThresholdJSON contains the JSON metadata for the struct
-// [SchemaResponseWithThreshold]
-type schemaResponseWithThresholdJSON struct {
+// zoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponse]
+type zoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -61,73 +62,69 @@ type schemaResponseWithThresholdJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemaResponseWithThreshold) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemaResponseWithThresholdError struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    schemaResponseWithThresholdErrorJSON `json:"-"`
+type ZoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponseError struct {
+	Code    int64                                                                                                    `json:"code,required"`
+	Message string                                                                                                   `json:"message,required"`
+	JSON    zoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponseErrorJSON `json:"-"`
 }
 
-// schemaResponseWithThresholdErrorJSON contains the JSON metadata for the struct
-// [SchemaResponseWithThresholdError]
-type schemaResponseWithThresholdErrorJSON struct {
+// zoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponseError]
+type zoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemaResponseWithThresholdError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemaResponseWithThresholdMessage struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    schemaResponseWithThresholdMessageJSON `json:"-"`
+type ZoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponseMessage struct {
+	Code    int64                                                                                                      `json:"code,required"`
+	Message string                                                                                                     `json:"message,required"`
+	JSON    zoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponseMessageJSON `json:"-"`
 }
 
-// schemaResponseWithThresholdMessageJSON contains the JSON metadata for the struct
-// [SchemaResponseWithThresholdMessage]
-type schemaResponseWithThresholdMessageJSON struct {
+// zoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponseMessage]
+type zoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemaResponseWithThresholdMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemaResponseWithThresholdResult struct {
-	Schemas   []interface{}                         `json:"schemas"`
-	Timestamp string                                `json:"timestamp"`
-	JSON      schemaResponseWithThresholdResultJSON `json:"-"`
+type ZoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponseResult struct {
+	Schemas   []interface{}                                                                                             `json:"schemas"`
+	Timestamp string                                                                                                    `json:"timestamp"`
+	JSON      zoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponseResultJSON `json:"-"`
 }
 
-// schemaResponseWithThresholdResultJSON contains the JSON metadata for the struct
-// [SchemaResponseWithThresholdResult]
-type schemaResponseWithThresholdResultJSON struct {
+// zoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponseResultJSON
+// contains the JSON metadata for the struct
+// [ZoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponseResult]
+type zoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponseResultJSON struct {
 	Schemas     apijson.Field
 	Timestamp   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemaResponseWithThresholdResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type SchemaResponseWithThresholdSuccess bool
-
-const (
-	SchemaResponseWithThresholdSuccessTrue SchemaResponseWithThresholdSuccess = true
-)
 
 type ZoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasParams struct {
 	// Add feature(s) to the results. The feature name that is given here corresponds
@@ -153,4 +150,5 @@ type ZoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOp
 const (
 	ZoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasParamsFeatureThresholds       ZoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasParamsFeature = "thresholds"
 	ZoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasParamsFeatureParameterSchemas ZoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasParamsFeature = "parameter_schemas"
+	ZoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasParamsFeatureSchemaInfo       ZoneAPIGatewaySchemaAPIShieldEndpointManagementGetOperationsAndFeaturesAsOpenAPISchemasParamsFeature = "schema_info"
 )

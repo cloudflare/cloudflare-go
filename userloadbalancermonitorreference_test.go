@@ -24,10 +24,12 @@ func TestUserLoadBalancerMonitorReferenceLoadBalancerMonitorsListMonitorReferenc
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Users.LoadBalancers.Monitors.References.LoadBalancerMonitorsListMonitorReferences(context.TODO(), "f1aba936b94213e5b8dca0c0dbf1f9cc")
+	_, err := client.User.LoadBalancers.Monitors.References.LoadBalancerMonitorsListMonitorReferences(context.TODO(), "f1aba936b94213e5b8dca0c0dbf1f9cc")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

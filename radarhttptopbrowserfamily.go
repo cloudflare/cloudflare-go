@@ -81,16 +81,18 @@ func (r *RadarHTTPTopBrowserFamilyListResponseResult) UnmarshalJSON(data []byte)
 }
 
 type RadarHTTPTopBrowserFamilyListResponseResultMeta struct {
-	ConfidenceInfo RadarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      RadarHTTPTopBrowserFamilyListResponseResultMetaDateRange      `json:"dateRange,required"`
+	DateRange      []RadarHTTPTopBrowserFamilyListResponseResultMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                                        `json:"lastUpdated,required"`
+	ConfidenceInfo RadarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           radarHTTPTopBrowserFamilyListResponseResultMetaJSON           `json:"-"`
 }
 
 // radarHTTPTopBrowserFamilyListResponseResultMetaJSON contains the JSON metadata
 // for the struct [RadarHTTPTopBrowserFamilyListResponseResultMeta]
 type radarHTTPTopBrowserFamilyListResponseResultMetaJSON struct {
-	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	ConfidenceInfo apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -99,54 +101,10 @@ func (r *RadarHTTPTopBrowserFamilyListResponseResultMeta) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfo struct {
-	Annotations []RadarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfoAnnotation `json:"annotations,required"`
-	Level       int64                                                                     `json:"level,required"`
-	JSON        radarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfoJSON         `json:"-"`
-}
-
-// radarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfoJSON contains the
-// JSON metadata for the struct
-// [RadarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfo]
-type radarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfoAnnotation struct {
-	DataSource  string                                                                      `json:"dataSource,required"`
-	Description string                                                                      `json:"description,required"`
-	EndTime     time.Time                                                                   `json:"endTime,required" format:"date-time"`
-	EventType   string                                                                      `json:"eventType,required"`
-	StartTime   time.Time                                                                   `json:"startTime,required" format:"date-time"`
-	JSON        radarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// radarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfoAnnotationJSON
-// contains the JSON metadata for the struct
-// [RadarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfoAnnotation]
-type radarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfoAnnotationJSON struct {
-	DataSource  apijson.Field
-	Description apijson.Field
-	EndTime     apijson.Field
-	EventType   apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type RadarHTTPTopBrowserFamilyListResponseResultMetaDateRange struct {
-	EndTime   time.Time                                                    `json:"endTime,required" format:"date-time"`
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
 	StartTime time.Time                                                    `json:"startTime,required" format:"date-time"`
 	JSON      radarHTTPTopBrowserFamilyListResponseResultMetaDateRangeJSON `json:"-"`
 }
@@ -165,16 +123,66 @@ func (r *RadarHTTPTopBrowserFamilyListResponseResultMetaDateRange) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type RadarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfo struct {
+	Annotations []RadarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                                     `json:"level"`
+	JSON        radarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfoJSON         `json:"-"`
+}
+
+// radarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfoJSON contains the
+// JSON metadata for the struct
+// [RadarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfo]
+type radarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                                      `json:"dataSource,required"`
+	Description     string                                                                      `json:"description,required"`
+	EventType       string                                                                      `json:"eventType,required"`
+	IsInstantaneous interface{}                                                                 `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                                   `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                                      `json:"linkedUrl"`
+	StartTime       time.Time                                                                   `json:"startTime" format:"date-time"`
+	JSON            radarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// radarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfoAnnotationJSON
+// contains the JSON metadata for the struct
+// [RadarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfoAnnotation]
+type radarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *RadarHTTPTopBrowserFamilyListResponseResultMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type RadarHTTPTopBrowserFamilyListResponseResultTop0 struct {
-	BrowserName string                                              `json:"<browser name>,required"`
-	Value       string                                              `json:"value,required"`
-	JSON        radarHTTPTopBrowserFamilyListResponseResultTop0JSON `json:"-"`
+	Name  string                                              `json:"name,required"`
+	Value string                                              `json:"value,required"`
+	JSON  radarHTTPTopBrowserFamilyListResponseResultTop0JSON `json:"-"`
 }
 
 // radarHTTPTopBrowserFamilyListResponseResultTop0JSON contains the JSON metadata
 // for the struct [RadarHTTPTopBrowserFamilyListResponseResultTop0]
 type radarHTTPTopBrowserFamilyListResponseResultTop0JSON struct {
-	BrowserName apijson.Field
+	Name        apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -192,7 +200,7 @@ type RadarHTTPTopBrowserFamilyListParams struct {
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]RadarHTTPTopBrowserFamilyListParamsBotClass] `query:"botClass"`
-	// Array of datetimes to filter the end of a series.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
@@ -244,6 +252,7 @@ type RadarHTTPTopBrowserFamilyListParamsDateRange string
 
 const (
 	RadarHTTPTopBrowserFamilyListParamsDateRange1d         RadarHTTPTopBrowserFamilyListParamsDateRange = "1d"
+	RadarHTTPTopBrowserFamilyListParamsDateRange2d         RadarHTTPTopBrowserFamilyListParamsDateRange = "2d"
 	RadarHTTPTopBrowserFamilyListParamsDateRange7d         RadarHTTPTopBrowserFamilyListParamsDateRange = "7d"
 	RadarHTTPTopBrowserFamilyListParamsDateRange14d        RadarHTTPTopBrowserFamilyListParamsDateRange = "14d"
 	RadarHTTPTopBrowserFamilyListParamsDateRange28d        RadarHTTPTopBrowserFamilyListParamsDateRange = "28d"
@@ -251,6 +260,7 @@ const (
 	RadarHTTPTopBrowserFamilyListParamsDateRange24w        RadarHTTPTopBrowserFamilyListParamsDateRange = "24w"
 	RadarHTTPTopBrowserFamilyListParamsDateRange52w        RadarHTTPTopBrowserFamilyListParamsDateRange = "52w"
 	RadarHTTPTopBrowserFamilyListParamsDateRange1dControl  RadarHTTPTopBrowserFamilyListParamsDateRange = "1dControl"
+	RadarHTTPTopBrowserFamilyListParamsDateRange2dControl  RadarHTTPTopBrowserFamilyListParamsDateRange = "2dControl"
 	RadarHTTPTopBrowserFamilyListParamsDateRange7dControl  RadarHTTPTopBrowserFamilyListParamsDateRange = "7dControl"
 	RadarHTTPTopBrowserFamilyListParamsDateRange14dControl RadarHTTPTopBrowserFamilyListParamsDateRange = "14dControl"
 	RadarHTTPTopBrowserFamilyListParamsDateRange28dControl RadarHTTPTopBrowserFamilyListParamsDateRange = "28dControl"
@@ -301,6 +311,7 @@ type RadarHTTPTopBrowserFamilyListParamsO string
 const (
 	RadarHTTPTopBrowserFamilyListParamsOWindows  RadarHTTPTopBrowserFamilyListParamsO = "WINDOWS"
 	RadarHTTPTopBrowserFamilyListParamsOMacosx   RadarHTTPTopBrowserFamilyListParamsO = "MACOSX"
+	RadarHTTPTopBrowserFamilyListParamsOIos      RadarHTTPTopBrowserFamilyListParamsO = "IOS"
 	RadarHTTPTopBrowserFamilyListParamsOAndroid  RadarHTTPTopBrowserFamilyListParamsO = "ANDROID"
 	RadarHTTPTopBrowserFamilyListParamsOChromeos RadarHTTPTopBrowserFamilyListParamsO = "CHROMEOS"
 	RadarHTTPTopBrowserFamilyListParamsOLinux    RadarHTTPTopBrowserFamilyListParamsO = "LINUX"

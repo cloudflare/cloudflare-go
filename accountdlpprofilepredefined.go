@@ -32,7 +32,7 @@ func NewAccountDlpProfilePredefinedService(opts ...option.RequestOption) (r *Acc
 }
 
 // Fetches a predefined DLP profile.
-func (r *AccountDlpProfilePredefinedService) Get(ctx context.Context, accountIdentifier string, profileID string, opts ...option.RequestOption) (res *PredefinedProfileResponse, err error) {
+func (r *AccountDlpProfilePredefinedService) Get(ctx context.Context, accountIdentifier string, profileID string, opts ...option.RequestOption) (res *AccountDlpProfilePredefinedGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/predefined/%s", accountIdentifier, profileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -40,30 +40,92 @@ func (r *AccountDlpProfilePredefinedService) Get(ctx context.Context, accountIde
 }
 
 // Updates a DLP predefined profile. Only supports enabling/disabling entries.
-func (r *AccountDlpProfilePredefinedService) Update(ctx context.Context, accountIdentifier string, profileID string, body AccountDlpProfilePredefinedUpdateParams, opts ...option.RequestOption) (res *PredefinedProfile, err error) {
+func (r *AccountDlpProfilePredefinedService) Update(ctx context.Context, accountIdentifier string, profileID string, body AccountDlpProfilePredefinedUpdateParams, opts ...option.RequestOption) (res *AccountDlpProfilePredefinedUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/predefined/%s", accountIdentifier, profileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
 	return
 }
 
-type PredefinedProfile struct {
+type AccountDlpProfilePredefinedGetResponse struct {
+	Errors   []AccountDlpProfilePredefinedGetResponseError   `json:"errors"`
+	Messages []AccountDlpProfilePredefinedGetResponseMessage `json:"messages"`
+	Result   AccountDlpProfilePredefinedGetResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountDlpProfilePredefinedGetResponseSuccess `json:"success"`
+	JSON    accountDlpProfilePredefinedGetResponseJSON    `json:"-"`
+}
+
+// accountDlpProfilePredefinedGetResponseJSON contains the JSON metadata for the
+// struct [AccountDlpProfilePredefinedGetResponse]
+type accountDlpProfilePredefinedGetResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountDlpProfilePredefinedGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountDlpProfilePredefinedGetResponseError struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    accountDlpProfilePredefinedGetResponseErrorJSON `json:"-"`
+}
+
+// accountDlpProfilePredefinedGetResponseErrorJSON contains the JSON metadata for
+// the struct [AccountDlpProfilePredefinedGetResponseError]
+type accountDlpProfilePredefinedGetResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountDlpProfilePredefinedGetResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountDlpProfilePredefinedGetResponseMessage struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    accountDlpProfilePredefinedGetResponseMessageJSON `json:"-"`
+}
+
+// accountDlpProfilePredefinedGetResponseMessageJSON contains the JSON metadata for
+// the struct [AccountDlpProfilePredefinedGetResponseMessage]
+type accountDlpProfilePredefinedGetResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountDlpProfilePredefinedGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountDlpProfilePredefinedGetResponseResult struct {
 	// UUID
 	ID string `json:"id"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount float64 `json:"allowed_match_count"`
 	// The entries for this profile.
-	Entries []PredefinedProfileEntry `json:"entries"`
+	Entries []AccountDlpProfilePredefinedGetResponseResultEntry `json:"entries"`
 	// The name of the profile.
 	Name string `json:"name"`
 	// The type of the profile.
-	Type PredefinedProfileType `json:"type"`
-	JSON predefinedProfileJSON `json:"-"`
+	Type AccountDlpProfilePredefinedGetResponseResultType `json:"type"`
+	JSON accountDlpProfilePredefinedGetResponseResultJSON `json:"-"`
 }
 
-// predefinedProfileJSON contains the JSON metadata for the struct
-// [PredefinedProfile]
-type predefinedProfileJSON struct {
+// accountDlpProfilePredefinedGetResponseResultJSON contains the JSON metadata for
+// the struct [AccountDlpProfilePredefinedGetResponseResult]
+type accountDlpProfilePredefinedGetResponseResultJSON struct {
 	ID                apijson.Field
 	AllowedMatchCount apijson.Field
 	Entries           apijson.Field
@@ -73,16 +135,12 @@ type predefinedProfileJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *PredefinedProfile) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDlpProfilePredefinedGetResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r PredefinedProfile) implementsEitherProfileResponseSNgAtLbhResult() {}
-
-func (r PredefinedProfile) implementsProfilesResponseCollectionResult() {}
-
 // A predefined entry that matches a profile
-type PredefinedProfileEntry struct {
+type AccountDlpProfilePredefinedGetResponseResultEntry struct {
 	// UUID
 	ID string `json:"id"`
 	// Whether the entry is enabled or not.
@@ -90,13 +148,13 @@ type PredefinedProfileEntry struct {
 	// The name of the entry.
 	Name string `json:"name"`
 	// ID of the parent profile
-	ProfileID interface{}                `json:"profile_id"`
-	JSON      predefinedProfileEntryJSON `json:"-"`
+	ProfileID interface{}                                           `json:"profile_id"`
+	JSON      accountDlpProfilePredefinedGetResponseResultEntryJSON `json:"-"`
 }
 
-// predefinedProfileEntryJSON contains the JSON metadata for the struct
-// [PredefinedProfileEntry]
-type predefinedProfileEntryJSON struct {
+// accountDlpProfilePredefinedGetResponseResultEntryJSON contains the JSON metadata
+// for the struct [AccountDlpProfilePredefinedGetResponseResultEntry]
+type accountDlpProfilePredefinedGetResponseResultEntryJSON struct {
 	ID          apijson.Field
 	Enabled     apijson.Field
 	Name        apijson.Field
@@ -105,84 +163,87 @@ type predefinedProfileEntryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PredefinedProfileEntry) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountDlpProfilePredefinedGetResponseResultEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of the profile.
-type PredefinedProfileType string
+type AccountDlpProfilePredefinedGetResponseResultType string
 
 const (
-	PredefinedProfileTypePredefined PredefinedProfileType = "predefined"
+	AccountDlpProfilePredefinedGetResponseResultTypePredefined AccountDlpProfilePredefinedGetResponseResultType = "predefined"
 )
 
-type PredefinedProfileResponse struct {
-	Errors   []PredefinedProfileResponseError   `json:"errors"`
-	Messages []PredefinedProfileResponseMessage `json:"messages"`
-	Result   PredefinedProfile                  `json:"result"`
-	// Whether the API call was successful
-	Success PredefinedProfileResponseSuccess `json:"success"`
-	JSON    predefinedProfileResponseJSON    `json:"-"`
-}
-
-// predefinedProfileResponseJSON contains the JSON metadata for the struct
-// [PredefinedProfileResponse]
-type predefinedProfileResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PredefinedProfileResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type PredefinedProfileResponseError struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    predefinedProfileResponseErrorJSON `json:"-"`
-}
-
-// predefinedProfileResponseErrorJSON contains the JSON metadata for the struct
-// [PredefinedProfileResponseError]
-type predefinedProfileResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PredefinedProfileResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type PredefinedProfileResponseMessage struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    predefinedProfileResponseMessageJSON `json:"-"`
-}
-
-// predefinedProfileResponseMessageJSON contains the JSON metadata for the struct
-// [PredefinedProfileResponseMessage]
-type predefinedProfileResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PredefinedProfileResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 // Whether the API call was successful
-type PredefinedProfileResponseSuccess bool
+type AccountDlpProfilePredefinedGetResponseSuccess bool
 
 const (
-	PredefinedProfileResponseSuccessTrue PredefinedProfileResponseSuccess = true
+	AccountDlpProfilePredefinedGetResponseSuccessTrue AccountDlpProfilePredefinedGetResponseSuccess = true
+)
+
+type AccountDlpProfilePredefinedUpdateResponse struct {
+	// UUID
+	ID string `json:"id"`
+	// Related DLP policies will trigger when the match count exceeds the number set.
+	AllowedMatchCount float64 `json:"allowed_match_count"`
+	// The entries for this profile.
+	Entries []AccountDlpProfilePredefinedUpdateResponseEntry `json:"entries"`
+	// The name of the profile.
+	Name string `json:"name"`
+	// The type of the profile.
+	Type AccountDlpProfilePredefinedUpdateResponseType `json:"type"`
+	JSON accountDlpProfilePredefinedUpdateResponseJSON `json:"-"`
+}
+
+// accountDlpProfilePredefinedUpdateResponseJSON contains the JSON metadata for the
+// struct [AccountDlpProfilePredefinedUpdateResponse]
+type accountDlpProfilePredefinedUpdateResponseJSON struct {
+	ID                apijson.Field
+	AllowedMatchCount apijson.Field
+	Entries           apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *AccountDlpProfilePredefinedUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A predefined entry that matches a profile
+type AccountDlpProfilePredefinedUpdateResponseEntry struct {
+	// UUID
+	ID string `json:"id"`
+	// Whether the entry is enabled or not.
+	Enabled bool `json:"enabled"`
+	// The name of the entry.
+	Name string `json:"name"`
+	// ID of the parent profile
+	ProfileID interface{}                                        `json:"profile_id"`
+	JSON      accountDlpProfilePredefinedUpdateResponseEntryJSON `json:"-"`
+}
+
+// accountDlpProfilePredefinedUpdateResponseEntryJSON contains the JSON metadata
+// for the struct [AccountDlpProfilePredefinedUpdateResponseEntry]
+type accountDlpProfilePredefinedUpdateResponseEntryJSON struct {
+	ID          apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	ProfileID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountDlpProfilePredefinedUpdateResponseEntry) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of the profile.
+type AccountDlpProfilePredefinedUpdateResponseType string
+
+const (
+	AccountDlpProfilePredefinedUpdateResponseTypePredefined AccountDlpProfilePredefinedUpdateResponseType = "predefined"
 )
 
 type AccountDlpProfilePredefinedUpdateParams struct {
@@ -197,7 +258,7 @@ func (r AccountDlpProfilePredefinedUpdateParams) MarshalJSON() (data []byte, err
 }
 
 type AccountDlpProfilePredefinedUpdateParamsEntry struct {
-	// Wheter the entry is enabled or not.
+	// Whether the entry is enabled or not.
 	Enabled param.Field[bool] `json:"enabled"`
 }
 

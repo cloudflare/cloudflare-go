@@ -101,8 +101,9 @@ func (r *ZoneWorkerScriptBindingListResponseMessage) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Union satisfied by [ZoneWorkerScriptBindingListResponseResultKvNamespaceBinding]
-// or [ZoneWorkerScriptBindingListResponseResultWasmModuleBinding].
+// Union satisfied by
+// [ZoneWorkerScriptBindingListResponseResultAvYbsl2uKvNamespaceBinding] or
+// [ZoneWorkerScriptBindingListResponseResultAvYbsl2uWasmModuleBinding].
 type ZoneWorkerScriptBindingListResponseResult interface {
 	implementsZoneWorkerScriptBindingListResponseResult()
 }
@@ -111,20 +112,20 @@ func init() {
 	apijson.RegisterUnion(reflect.TypeOf((*ZoneWorkerScriptBindingListResponseResult)(nil)).Elem(), "")
 }
 
-type ZoneWorkerScriptBindingListResponseResultKvNamespaceBinding struct {
+type ZoneWorkerScriptBindingListResponseResultAvYbsl2uKvNamespaceBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id,required"`
 	// The class of resource that the binding provides.
-	Type ZoneWorkerScriptBindingListResponseResultKvNamespaceBindingType `json:"type,required"`
-	JSON zoneWorkerScriptBindingListResponseResultKvNamespaceBindingJSON `json:"-"`
+	Type ZoneWorkerScriptBindingListResponseResultAvYbsl2uKvNamespaceBindingType `json:"type,required"`
+	JSON zoneWorkerScriptBindingListResponseResultAvYbsl2uKvNamespaceBindingJSON `json:"-"`
 }
 
-// zoneWorkerScriptBindingListResponseResultKvNamespaceBindingJSON contains the
-// JSON metadata for the struct
-// [ZoneWorkerScriptBindingListResponseResultKvNamespaceBinding]
-type zoneWorkerScriptBindingListResponseResultKvNamespaceBindingJSON struct {
+// zoneWorkerScriptBindingListResponseResultAvYbsl2uKvNamespaceBindingJSON contains
+// the JSON metadata for the struct
+// [ZoneWorkerScriptBindingListResponseResultAvYbsl2uKvNamespaceBinding]
+type zoneWorkerScriptBindingListResponseResultAvYbsl2uKvNamespaceBindingJSON struct {
 	Name        apijson.Field
 	NamespaceID apijson.Field
 	Type        apijson.Field
@@ -132,50 +133,50 @@ type zoneWorkerScriptBindingListResponseResultKvNamespaceBindingJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneWorkerScriptBindingListResponseResultKvNamespaceBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneWorkerScriptBindingListResponseResultAvYbsl2uKvNamespaceBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ZoneWorkerScriptBindingListResponseResultKvNamespaceBinding) implementsZoneWorkerScriptBindingListResponseResult() {
+func (r ZoneWorkerScriptBindingListResponseResultAvYbsl2uKvNamespaceBinding) implementsZoneWorkerScriptBindingListResponseResult() {
 }
 
 // The class of resource that the binding provides.
-type ZoneWorkerScriptBindingListResponseResultKvNamespaceBindingType string
+type ZoneWorkerScriptBindingListResponseResultAvYbsl2uKvNamespaceBindingType string
 
 const (
-	ZoneWorkerScriptBindingListResponseResultKvNamespaceBindingTypeKvNamespace ZoneWorkerScriptBindingListResponseResultKvNamespaceBindingType = "kv_namespace"
+	ZoneWorkerScriptBindingListResponseResultAvYbsl2uKvNamespaceBindingTypeKvNamespace ZoneWorkerScriptBindingListResponseResultAvYbsl2uKvNamespaceBindingType = "kv_namespace"
 )
 
-type ZoneWorkerScriptBindingListResponseResultWasmModuleBinding struct {
+type ZoneWorkerScriptBindingListResponseResultAvYbsl2uWasmModuleBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The class of resource that the binding provides.
-	Type ZoneWorkerScriptBindingListResponseResultWasmModuleBindingType `json:"type,required"`
-	JSON zoneWorkerScriptBindingListResponseResultWasmModuleBindingJSON `json:"-"`
+	Type ZoneWorkerScriptBindingListResponseResultAvYbsl2uWasmModuleBindingType `json:"type,required"`
+	JSON zoneWorkerScriptBindingListResponseResultAvYbsl2uWasmModuleBindingJSON `json:"-"`
 }
 
-// zoneWorkerScriptBindingListResponseResultWasmModuleBindingJSON contains the JSON
-// metadata for the struct
-// [ZoneWorkerScriptBindingListResponseResultWasmModuleBinding]
-type zoneWorkerScriptBindingListResponseResultWasmModuleBindingJSON struct {
+// zoneWorkerScriptBindingListResponseResultAvYbsl2uWasmModuleBindingJSON contains
+// the JSON metadata for the struct
+// [ZoneWorkerScriptBindingListResponseResultAvYbsl2uWasmModuleBinding]
+type zoneWorkerScriptBindingListResponseResultAvYbsl2uWasmModuleBindingJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneWorkerScriptBindingListResponseResultWasmModuleBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneWorkerScriptBindingListResponseResultAvYbsl2uWasmModuleBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ZoneWorkerScriptBindingListResponseResultWasmModuleBinding) implementsZoneWorkerScriptBindingListResponseResult() {
+func (r ZoneWorkerScriptBindingListResponseResultAvYbsl2uWasmModuleBinding) implementsZoneWorkerScriptBindingListResponseResult() {
 }
 
 // The class of resource that the binding provides.
-type ZoneWorkerScriptBindingListResponseResultWasmModuleBindingType string
+type ZoneWorkerScriptBindingListResponseResultAvYbsl2uWasmModuleBindingType string
 
 const (
-	ZoneWorkerScriptBindingListResponseResultWasmModuleBindingTypeWasmModule ZoneWorkerScriptBindingListResponseResultWasmModuleBindingType = "wasm_module"
+	ZoneWorkerScriptBindingListResponseResultAvYbsl2uWasmModuleBindingTypeWasmModule ZoneWorkerScriptBindingListResponseResultAvYbsl2uWasmModuleBindingType = "wasm_module"
 )
 
 // Whether the API call was successful

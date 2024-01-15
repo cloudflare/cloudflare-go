@@ -30,10 +30,10 @@ func NewAccountPcapDownloadService(opts ...option.RequestOption) (r *AccountPcap
 }
 
 // Download PCAP information into a file. Response is a binary PCAP file.
-func (r *AccountPcapDownloadService) List(ctx context.Context, accountIdentifier string, identifier string, opts ...option.RequestOption) (err error) {
+func (r *AccountPcapDownloadService) List(ctx context.Context, accountIdentifier string, identifier string, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = append(r.Options[:], opts...)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/vnd.tcpdump.pcap")}, opts...)
 	path := fmt.Sprintf("accounts/%s/pcaps/%s/download", accountIdentifier, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, nil, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }

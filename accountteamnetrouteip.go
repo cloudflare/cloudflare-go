@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
@@ -44,7 +45,7 @@ func (r *AccountTeamnetRouteIPService) Get(ctx context.Context, accountIdentifie
 type AccountTeamnetRouteIPGetResponse struct {
 	Errors   []AccountTeamnetRouteIPGetResponseError   `json:"errors"`
 	Messages []AccountTeamnetRouteIPGetResponseMessage `json:"messages"`
-	Result   interface{}                               `json:"result"`
+	Result   AccountTeamnetRouteIPGetResponseResult    `json:"result"`
 	// Whether the API call was successful
 	Success AccountTeamnetRouteIPGetResponseSuccess `json:"success"`
 	JSON    accountTeamnetRouteIPGetResponseJSON    `json:"-"`
@@ -102,6 +103,65 @@ type accountTeamnetRouteIPGetResponseMessageJSON struct {
 func (r *AccountTeamnetRouteIPGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type AccountTeamnetRouteIPGetResponseResult struct {
+	// UUID of the route.
+	ID string `json:"id"`
+	// Optional remark describing the route.
+	Comment string `json:"comment"`
+	// Timestamp of when the route was created.
+	CreatedAt interface{} `json:"created_at"`
+	// Timestamp of when the route was deleted. If `null`, the route has not been
+	// deleted.
+	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
+	Network string `json:"network"`
+	// The type of tunnel.
+	TunType AccountTeamnetRouteIPGetResponseResultTunType `json:"tun_type"`
+	// UUID of the Cloudflare Tunnel serving the route.
+	TunnelID interface{} `json:"tunnel_id"`
+	// The user-friendly name of the Cloudflare Tunnel serving the route.
+	TunnelName interface{} `json:"tunnel_name"`
+	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
+	// are configured, the route is assigned to the default virtual network of the
+	// account.
+	VirtualNetworkID interface{} `json:"virtual_network_id"`
+	// A user-friendly name for the virtual network.
+	VirtualNetworkName string                                     `json:"virtual_network_name"`
+	JSON               accountTeamnetRouteIPGetResponseResultJSON `json:"-"`
+}
+
+// accountTeamnetRouteIPGetResponseResultJSON contains the JSON metadata for the
+// struct [AccountTeamnetRouteIPGetResponseResult]
+type accountTeamnetRouteIPGetResponseResultJSON struct {
+	ID                 apijson.Field
+	Comment            apijson.Field
+	CreatedAt          apijson.Field
+	DeletedAt          apijson.Field
+	Network            apijson.Field
+	TunType            apijson.Field
+	TunnelID           apijson.Field
+	TunnelName         apijson.Field
+	VirtualNetworkID   apijson.Field
+	VirtualNetworkName apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *AccountTeamnetRouteIPGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of tunnel.
+type AccountTeamnetRouteIPGetResponseResultTunType string
+
+const (
+	AccountTeamnetRouteIPGetResponseResultTunTypeCfdTunnel     AccountTeamnetRouteIPGetResponseResultTunType = "cfd_tunnel"
+	AccountTeamnetRouteIPGetResponseResultTunTypeWarpConnector AccountTeamnetRouteIPGetResponseResultTunType = "warp_connector"
+	AccountTeamnetRouteIPGetResponseResultTunTypeIPSec         AccountTeamnetRouteIPGetResponseResultTunType = "ip_sec"
+	AccountTeamnetRouteIPGetResponseResultTunTypeGre           AccountTeamnetRouteIPGetResponseResultTunType = "gre"
+	AccountTeamnetRouteIPGetResponseResultTunTypeCni           AccountTeamnetRouteIPGetResponseResultTunType = "cni"
+)
 
 // Whether the API call was successful
 type AccountTeamnetRouteIPGetResponseSuccess bool

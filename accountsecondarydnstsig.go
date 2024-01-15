@@ -32,7 +32,7 @@ func NewAccountSecondaryDNSTsigService(opts ...option.RequestOption) (r *Account
 }
 
 // Get TSIG.
-func (r *AccountSecondaryDNSTsigService) Get(ctx context.Context, accountIdentifier interface{}, identifier interface{}, opts ...option.RequestOption) (res *SingleResponseWdx0OxVv, err error) {
+func (r *AccountSecondaryDNSTsigService) Get(ctx context.Context, accountIdentifier interface{}, identifier interface{}, opts ...option.RequestOption) (res *AccountSecondaryDNSTsigGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs/%v", accountIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -40,7 +40,7 @@ func (r *AccountSecondaryDNSTsigService) Get(ctx context.Context, accountIdentif
 }
 
 // Modify TSIG.
-func (r *AccountSecondaryDNSTsigService) Update(ctx context.Context, accountIdentifier interface{}, identifier interface{}, body AccountSecondaryDNSTsigUpdateParams, opts ...option.RequestOption) (res *SingleResponseWdx0OxVv, err error) {
+func (r *AccountSecondaryDNSTsigService) Update(ctx context.Context, accountIdentifier interface{}, identifier interface{}, body AccountSecondaryDNSTsigUpdateParams, opts ...option.RequestOption) (res *AccountSecondaryDNSTsigUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs/%v", accountIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
@@ -48,7 +48,7 @@ func (r *AccountSecondaryDNSTsigService) Update(ctx context.Context, accountIden
 }
 
 // Delete TSIG.
-func (r *AccountSecondaryDNSTsigService) Delete(ctx context.Context, accountIdentifier interface{}, identifier interface{}, opts ...option.RequestOption) (res *SchemasIDResponse, err error) {
+func (r *AccountSecondaryDNSTsigService) Delete(ctx context.Context, accountIdentifier interface{}, identifier interface{}, opts ...option.RequestOption) (res *AccountSecondaryDNSTsigDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs/%v", accountIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -56,7 +56,7 @@ func (r *AccountSecondaryDNSTsigService) Delete(ctx context.Context, accountIden
 }
 
 // Create TSIG.
-func (r *AccountSecondaryDNSTsigService) SecondaryDNSTsigNewTsig(ctx context.Context, accountIdentifier interface{}, body AccountSecondaryDNSTsigSecondaryDNSTsigNewTsigParams, opts ...option.RequestOption) (res *SingleResponseWdx0OxVv, err error) {
+func (r *AccountSecondaryDNSTsigService) SecondaryDNSTsigNewTsig(ctx context.Context, accountIdentifier interface{}, body AccountSecondaryDNSTsigSecondaryDNSTsigNewTsigParams, opts ...option.RequestOption) (res *AccountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -64,26 +64,401 @@ func (r *AccountSecondaryDNSTsigService) SecondaryDNSTsigNewTsig(ctx context.Con
 }
 
 // List TSIGs.
-func (r *AccountSecondaryDNSTsigService) SecondaryDNSTsigListTsiGs(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *ResponseCollectionLevvNosb, err error) {
+func (r *AccountSecondaryDNSTsigService) SecondaryDNSTsigListTsiGs(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *AccountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type ResponseCollectionLevvNosb struct {
-	Errors     []ResponseCollectionLevvNosbError    `json:"errors"`
-	Messages   []ResponseCollectionLevvNosbMessage  `json:"messages"`
-	Result     []ResponseCollectionLevvNosbResult   `json:"result"`
-	ResultInfo ResponseCollectionLevvNosbResultInfo `json:"result_info"`
+type AccountSecondaryDNSTsigGetResponse struct {
+	Errors   []AccountSecondaryDNSTsigGetResponseError   `json:"errors"`
+	Messages []AccountSecondaryDNSTsigGetResponseMessage `json:"messages"`
+	Result   AccountSecondaryDNSTsigGetResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success ResponseCollectionLevvNosbSuccess `json:"success"`
-	JSON    responseCollectionLevvNosbJSON    `json:"-"`
+	Success AccountSecondaryDNSTsigGetResponseSuccess `json:"success"`
+	JSON    accountSecondaryDNSTsigGetResponseJSON    `json:"-"`
 }
 
-// responseCollectionLevvNosbJSON contains the JSON metadata for the struct
-// [ResponseCollectionLevvNosb]
-type responseCollectionLevvNosbJSON struct {
+// accountSecondaryDNSTsigGetResponseJSON contains the JSON metadata for the struct
+// [AccountSecondaryDNSTsigGetResponse]
+type accountSecondaryDNSTsigGetResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountSecondaryDNSTsigGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountSecondaryDNSTsigGetResponseError struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    accountSecondaryDNSTsigGetResponseErrorJSON `json:"-"`
+}
+
+// accountSecondaryDNSTsigGetResponseErrorJSON contains the JSON metadata for the
+// struct [AccountSecondaryDNSTsigGetResponseError]
+type accountSecondaryDNSTsigGetResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountSecondaryDNSTsigGetResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountSecondaryDNSTsigGetResponseMessage struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    accountSecondaryDNSTsigGetResponseMessageJSON `json:"-"`
+}
+
+// accountSecondaryDNSTsigGetResponseMessageJSON contains the JSON metadata for the
+// struct [AccountSecondaryDNSTsigGetResponseMessage]
+type accountSecondaryDNSTsigGetResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountSecondaryDNSTsigGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountSecondaryDNSTsigGetResponseResult struct {
+	ID interface{} `json:"id,required"`
+	// TSIG algorithm.
+	Algo string `json:"algo,required"`
+	// TSIG key name.
+	Name string `json:"name,required"`
+	// TSIG secret.
+	Secret string                                       `json:"secret,required"`
+	JSON   accountSecondaryDNSTsigGetResponseResultJSON `json:"-"`
+}
+
+// accountSecondaryDNSTsigGetResponseResultJSON contains the JSON metadata for the
+// struct [AccountSecondaryDNSTsigGetResponseResult]
+type accountSecondaryDNSTsigGetResponseResultJSON struct {
+	ID          apijson.Field
+	Algo        apijson.Field
+	Name        apijson.Field
+	Secret      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountSecondaryDNSTsigGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountSecondaryDNSTsigGetResponseSuccess bool
+
+const (
+	AccountSecondaryDNSTsigGetResponseSuccessTrue AccountSecondaryDNSTsigGetResponseSuccess = true
+)
+
+type AccountSecondaryDNSTsigUpdateResponse struct {
+	Errors   []AccountSecondaryDNSTsigUpdateResponseError   `json:"errors"`
+	Messages []AccountSecondaryDNSTsigUpdateResponseMessage `json:"messages"`
+	Result   AccountSecondaryDNSTsigUpdateResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountSecondaryDNSTsigUpdateResponseSuccess `json:"success"`
+	JSON    accountSecondaryDNSTsigUpdateResponseJSON    `json:"-"`
+}
+
+// accountSecondaryDNSTsigUpdateResponseJSON contains the JSON metadata for the
+// struct [AccountSecondaryDNSTsigUpdateResponse]
+type accountSecondaryDNSTsigUpdateResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountSecondaryDNSTsigUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountSecondaryDNSTsigUpdateResponseError struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    accountSecondaryDNSTsigUpdateResponseErrorJSON `json:"-"`
+}
+
+// accountSecondaryDNSTsigUpdateResponseErrorJSON contains the JSON metadata for
+// the struct [AccountSecondaryDNSTsigUpdateResponseError]
+type accountSecondaryDNSTsigUpdateResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountSecondaryDNSTsigUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountSecondaryDNSTsigUpdateResponseMessage struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    accountSecondaryDNSTsigUpdateResponseMessageJSON `json:"-"`
+}
+
+// accountSecondaryDNSTsigUpdateResponseMessageJSON contains the JSON metadata for
+// the struct [AccountSecondaryDNSTsigUpdateResponseMessage]
+type accountSecondaryDNSTsigUpdateResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountSecondaryDNSTsigUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountSecondaryDNSTsigUpdateResponseResult struct {
+	ID interface{} `json:"id,required"`
+	// TSIG algorithm.
+	Algo string `json:"algo,required"`
+	// TSIG key name.
+	Name string `json:"name,required"`
+	// TSIG secret.
+	Secret string                                          `json:"secret,required"`
+	JSON   accountSecondaryDNSTsigUpdateResponseResultJSON `json:"-"`
+}
+
+// accountSecondaryDNSTsigUpdateResponseResultJSON contains the JSON metadata for
+// the struct [AccountSecondaryDNSTsigUpdateResponseResult]
+type accountSecondaryDNSTsigUpdateResponseResultJSON struct {
+	ID          apijson.Field
+	Algo        apijson.Field
+	Name        apijson.Field
+	Secret      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountSecondaryDNSTsigUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountSecondaryDNSTsigUpdateResponseSuccess bool
+
+const (
+	AccountSecondaryDNSTsigUpdateResponseSuccessTrue AccountSecondaryDNSTsigUpdateResponseSuccess = true
+)
+
+type AccountSecondaryDNSTsigDeleteResponse struct {
+	Errors   []AccountSecondaryDNSTsigDeleteResponseError   `json:"errors"`
+	Messages []AccountSecondaryDNSTsigDeleteResponseMessage `json:"messages"`
+	Result   AccountSecondaryDNSTsigDeleteResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountSecondaryDNSTsigDeleteResponseSuccess `json:"success"`
+	JSON    accountSecondaryDNSTsigDeleteResponseJSON    `json:"-"`
+}
+
+// accountSecondaryDNSTsigDeleteResponseJSON contains the JSON metadata for the
+// struct [AccountSecondaryDNSTsigDeleteResponse]
+type accountSecondaryDNSTsigDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountSecondaryDNSTsigDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountSecondaryDNSTsigDeleteResponseError struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    accountSecondaryDNSTsigDeleteResponseErrorJSON `json:"-"`
+}
+
+// accountSecondaryDNSTsigDeleteResponseErrorJSON contains the JSON metadata for
+// the struct [AccountSecondaryDNSTsigDeleteResponseError]
+type accountSecondaryDNSTsigDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountSecondaryDNSTsigDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountSecondaryDNSTsigDeleteResponseMessage struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    accountSecondaryDNSTsigDeleteResponseMessageJSON `json:"-"`
+}
+
+// accountSecondaryDNSTsigDeleteResponseMessageJSON contains the JSON metadata for
+// the struct [AccountSecondaryDNSTsigDeleteResponseMessage]
+type accountSecondaryDNSTsigDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountSecondaryDNSTsigDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountSecondaryDNSTsigDeleteResponseResult struct {
+	ID   interface{}                                     `json:"id"`
+	JSON accountSecondaryDNSTsigDeleteResponseResultJSON `json:"-"`
+}
+
+// accountSecondaryDNSTsigDeleteResponseResultJSON contains the JSON metadata for
+// the struct [AccountSecondaryDNSTsigDeleteResponseResult]
+type accountSecondaryDNSTsigDeleteResponseResultJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountSecondaryDNSTsigDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountSecondaryDNSTsigDeleteResponseSuccess bool
+
+const (
+	AccountSecondaryDNSTsigDeleteResponseSuccessTrue AccountSecondaryDNSTsigDeleteResponseSuccess = true
+)
+
+type AccountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponse struct {
+	Errors   []AccountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseError   `json:"errors"`
+	Messages []AccountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseMessage `json:"messages"`
+	Result   AccountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseSuccess `json:"success"`
+	JSON    accountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseJSON    `json:"-"`
+}
+
+// accountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseJSON contains the JSON
+// metadata for the struct [AccountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponse]
+type accountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseError struct {
+	Code    int64                                                           `json:"code,required"`
+	Message string                                                          `json:"message,required"`
+	JSON    accountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseErrorJSON `json:"-"`
+}
+
+// accountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseErrorJSON contains the
+// JSON metadata for the struct
+// [AccountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseError]
+type accountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseMessage struct {
+	Code    int64                                                             `json:"code,required"`
+	Message string                                                            `json:"message,required"`
+	JSON    accountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseMessageJSON `json:"-"`
+}
+
+// accountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseMessageJSON contains the
+// JSON metadata for the struct
+// [AccountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseMessage]
+type accountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseResult struct {
+	ID interface{} `json:"id,required"`
+	// TSIG algorithm.
+	Algo string `json:"algo,required"`
+	// TSIG key name.
+	Name string `json:"name,required"`
+	// TSIG secret.
+	Secret string                                                           `json:"secret,required"`
+	JSON   accountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseResultJSON `json:"-"`
+}
+
+// accountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseResultJSON contains the
+// JSON metadata for the struct
+// [AccountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseResult]
+type accountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseResultJSON struct {
+	ID          apijson.Field
+	Algo        apijson.Field
+	Name        apijson.Field
+	Secret      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseSuccess bool
+
+const (
+	AccountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseSuccessTrue AccountSecondaryDNSTsigSecondaryDNSTsigNewTsigResponseSuccess = true
+)
+
+type AccountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponse struct {
+	Errors     []AccountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseError    `json:"errors"`
+	Messages   []AccountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseMessage  `json:"messages"`
+	Result     []AccountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseResult   `json:"result"`
+	ResultInfo AccountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success AccountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseSuccess `json:"success"`
+	JSON    accountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseJSON    `json:"-"`
+}
+
+// accountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseJSON contains the JSON
+// metadata for the struct
+// [AccountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponse]
+type accountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -93,62 +468,65 @@ type responseCollectionLevvNosbJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ResponseCollectionLevvNosb) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ResponseCollectionLevvNosbError struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    responseCollectionLevvNosbErrorJSON `json:"-"`
+type AccountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseError struct {
+	Code    int64                                                             `json:"code,required"`
+	Message string                                                            `json:"message,required"`
+	JSON    accountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseErrorJSON `json:"-"`
 }
 
-// responseCollectionLevvNosbErrorJSON contains the JSON metadata for the struct
-// [ResponseCollectionLevvNosbError]
-type responseCollectionLevvNosbErrorJSON struct {
+// accountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseErrorJSON contains the
+// JSON metadata for the struct
+// [AccountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseError]
+type accountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ResponseCollectionLevvNosbError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ResponseCollectionLevvNosbMessage struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    responseCollectionLevvNosbMessageJSON `json:"-"`
+type AccountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseMessage struct {
+	Code    int64                                                               `json:"code,required"`
+	Message string                                                              `json:"message,required"`
+	JSON    accountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseMessageJSON `json:"-"`
 }
 
-// responseCollectionLevvNosbMessageJSON contains the JSON metadata for the struct
-// [ResponseCollectionLevvNosbMessage]
-type responseCollectionLevvNosbMessageJSON struct {
+// accountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseMessageJSON contains the
+// JSON metadata for the struct
+// [AccountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseMessage]
+type accountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ResponseCollectionLevvNosbMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ResponseCollectionLevvNosbResult struct {
+type AccountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseResult struct {
 	ID interface{} `json:"id,required"`
 	// TSIG algorithm.
 	Algo string `json:"algo,required"`
 	// TSIG key name.
 	Name string `json:"name,required"`
 	// TSIG secret.
-	Secret string                               `json:"secret,required"`
-	JSON   responseCollectionLevvNosbResultJSON `json:"-"`
+	Secret string                                                             `json:"secret,required"`
+	JSON   accountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseResultJSON `json:"-"`
 }
 
-// responseCollectionLevvNosbResultJSON contains the JSON metadata for the struct
-// [ResponseCollectionLevvNosbResult]
-type responseCollectionLevvNosbResultJSON struct {
+// accountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseResultJSON contains the
+// JSON metadata for the struct
+// [AccountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseResult]
+type accountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseResultJSON struct {
 	ID          apijson.Field
 	Algo        apijson.Field
 	Name        apijson.Field
@@ -157,11 +535,11 @@ type responseCollectionLevvNosbResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ResponseCollectionLevvNosbResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ResponseCollectionLevvNosbResultInfo struct {
+type AccountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -169,13 +547,14 @@ type ResponseCollectionLevvNosbResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                  `json:"total_count"`
-	JSON       responseCollectionLevvNosbResultInfoJSON `json:"-"`
+	TotalCount float64                                                                `json:"total_count"`
+	JSON       accountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseResultInfoJSON `json:"-"`
 }
 
-// responseCollectionLevvNosbResultInfoJSON contains the JSON metadata for the
-// struct [ResponseCollectionLevvNosbResultInfo]
-type responseCollectionLevvNosbResultInfoJSON struct {
+// accountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseResultInfoJSON contains
+// the JSON metadata for the struct
+// [AccountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseResultInfo]
+type accountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -184,196 +563,15 @@ type responseCollectionLevvNosbResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ResponseCollectionLevvNosbResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type ResponseCollectionLevvNosbSuccess bool
+type AccountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseSuccess bool
 
 const (
-	ResponseCollectionLevvNosbSuccessTrue ResponseCollectionLevvNosbSuccess = true
-)
-
-type SchemasIDResponse struct {
-	Errors   []SchemasIDResponseError   `json:"errors"`
-	Messages []SchemasIDResponseMessage `json:"messages"`
-	Result   SchemasIDResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success SchemasIDResponseSuccess `json:"success"`
-	JSON    schemasIDResponseJSON    `json:"-"`
-}
-
-// schemasIDResponseJSON contains the JSON metadata for the struct
-// [SchemasIDResponse]
-type schemasIDResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SchemasIDResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SchemasIDResponseError struct {
-	Code    int64                      `json:"code,required"`
-	Message string                     `json:"message,required"`
-	JSON    schemasIDResponseErrorJSON `json:"-"`
-}
-
-// schemasIDResponseErrorJSON contains the JSON metadata for the struct
-// [SchemasIDResponseError]
-type schemasIDResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SchemasIDResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SchemasIDResponseMessage struct {
-	Code    int64                        `json:"code,required"`
-	Message string                       `json:"message,required"`
-	JSON    schemasIDResponseMessageJSON `json:"-"`
-}
-
-// schemasIDResponseMessageJSON contains the JSON metadata for the struct
-// [SchemasIDResponseMessage]
-type schemasIDResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SchemasIDResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SchemasIDResponseResult struct {
-	ID   interface{}                 `json:"id"`
-	JSON schemasIDResponseResultJSON `json:"-"`
-}
-
-// schemasIDResponseResultJSON contains the JSON metadata for the struct
-// [SchemasIDResponseResult]
-type schemasIDResponseResultJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SchemasIDResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type SchemasIDResponseSuccess bool
-
-const (
-	SchemasIDResponseSuccessTrue SchemasIDResponseSuccess = true
-)
-
-type SingleResponseWdx0OxVv struct {
-	Errors   []SingleResponseWdx0OxVvError   `json:"errors"`
-	Messages []SingleResponseWdx0OxVvMessage `json:"messages"`
-	Result   SingleResponseWdx0OxVvResult    `json:"result"`
-	// Whether the API call was successful
-	Success SingleResponseWdx0OxVvSuccess `json:"success"`
-	JSON    singleResponseWdx0OxVvJSON    `json:"-"`
-}
-
-// singleResponseWdx0OxVvJSON contains the JSON metadata for the struct
-// [SingleResponseWdx0OxVv]
-type singleResponseWdx0OxVvJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SingleResponseWdx0OxVv) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SingleResponseWdx0OxVvError struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    singleResponseWdx0OxVvErrorJSON `json:"-"`
-}
-
-// singleResponseWdx0OxVvErrorJSON contains the JSON metadata for the struct
-// [SingleResponseWdx0OxVvError]
-type singleResponseWdx0OxVvErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SingleResponseWdx0OxVvError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SingleResponseWdx0OxVvMessage struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    singleResponseWdx0OxVvMessageJSON `json:"-"`
-}
-
-// singleResponseWdx0OxVvMessageJSON contains the JSON metadata for the struct
-// [SingleResponseWdx0OxVvMessage]
-type singleResponseWdx0OxVvMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SingleResponseWdx0OxVvMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SingleResponseWdx0OxVvResult struct {
-	ID interface{} `json:"id,required"`
-	// TSIG algorithm.
-	Algo string `json:"algo,required"`
-	// TSIG key name.
-	Name string `json:"name,required"`
-	// TSIG secret.
-	Secret string                           `json:"secret,required"`
-	JSON   singleResponseWdx0OxVvResultJSON `json:"-"`
-}
-
-// singleResponseWdx0OxVvResultJSON contains the JSON metadata for the struct
-// [SingleResponseWdx0OxVvResult]
-type singleResponseWdx0OxVvResultJSON struct {
-	ID          apijson.Field
-	Algo        apijson.Field
-	Name        apijson.Field
-	Secret      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SingleResponseWdx0OxVvResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type SingleResponseWdx0OxVvSuccess bool
-
-const (
-	SingleResponseWdx0OxVvSuccessTrue SingleResponseWdx0OxVvSuccess = true
+	AccountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseSuccessTrue AccountSecondaryDNSTsigSecondaryDNSTsigListTsiGsResponseSuccess = true
 )
 
 type AccountSecondaryDNSTsigUpdateParams struct {

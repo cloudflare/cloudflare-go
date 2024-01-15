@@ -32,26 +32,27 @@ func NewZonePageruleSettingService(opts ...option.RequestOption) (r *ZonePagerul
 
 // Returns a list of settings (and their details) that Page Rules can apply to
 // matching requests.
-func (r *ZonePageruleSettingService) AvailablePageRulesSettingsListAvailablePageRulesSettings(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *PageruleSettingsResponseCollection, err error) {
+func (r *ZonePageruleSettingService) AvailablePageRulesSettingsListAvailablePageRulesSettings(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ZonePageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/pagerules/settings", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type PageruleSettingsResponseCollection struct {
-	Errors   []PageruleSettingsResponseCollectionError   `json:"errors"`
-	Messages []PageruleSettingsResponseCollectionMessage `json:"messages"`
+type ZonePageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponse struct {
+	Errors   []ZonePageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseError   `json:"errors"`
+	Messages []ZonePageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseMessage `json:"messages"`
 	// Settings available for the zone.
 	Result []interface{} `json:"result"`
 	// Whether the API call was successful
-	Success PageruleSettingsResponseCollectionSuccess `json:"success"`
-	JSON    pageruleSettingsResponseCollectionJSON    `json:"-"`
+	Success ZonePageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseSuccess `json:"success"`
+	JSON    zonePageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseJSON    `json:"-"`
 }
 
-// pageruleSettingsResponseCollectionJSON contains the JSON metadata for the struct
-// [PageruleSettingsResponseCollection]
-type pageruleSettingsResponseCollectionJSON struct {
+// zonePageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseJSON
+// contains the JSON metadata for the struct
+// [ZonePageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponse]
+type zonePageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -60,51 +61,53 @@ type pageruleSettingsResponseCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageruleSettingsResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonePageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PageruleSettingsResponseCollectionError struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    pageruleSettingsResponseCollectionErrorJSON `json:"-"`
+type ZonePageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseError struct {
+	Code    int64                                                                                        `json:"code,required"`
+	Message string                                                                                       `json:"message,required"`
+	JSON    zonePageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseErrorJSON `json:"-"`
 }
 
-// pageruleSettingsResponseCollectionErrorJSON contains the JSON metadata for the
-// struct [PageruleSettingsResponseCollectionError]
-type pageruleSettingsResponseCollectionErrorJSON struct {
+// zonePageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZonePageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseError]
+type zonePageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageruleSettingsResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonePageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PageruleSettingsResponseCollectionMessage struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    pageruleSettingsResponseCollectionMessageJSON `json:"-"`
+type ZonePageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseMessage struct {
+	Code    int64                                                                                          `json:"code,required"`
+	Message string                                                                                         `json:"message,required"`
+	JSON    zonePageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseMessageJSON `json:"-"`
 }
 
-// pageruleSettingsResponseCollectionMessageJSON contains the JSON metadata for the
-// struct [PageruleSettingsResponseCollectionMessage]
-type pageruleSettingsResponseCollectionMessageJSON struct {
+// zonePageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZonePageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseMessage]
+type zonePageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageruleSettingsResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonePageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type PageruleSettingsResponseCollectionSuccess bool
+type ZonePageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseSuccess bool
 
 const (
-	PageruleSettingsResponseCollectionSuccessTrue PageruleSettingsResponseCollectionSuccess = true
+	ZonePageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseSuccessTrue ZonePageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseSuccess = true
 )

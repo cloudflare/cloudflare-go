@@ -32,26 +32,27 @@ func NewZoneSecondaryDNSOutgoingDisableService(opts ...option.RequestOption) (r 
 
 // Disable outgoing zone transfers for primary zone and clears IXFR backlog of
 // primary zone.
-func (r *ZoneSecondaryDNSOutgoingDisableService) SecondaryDNSPrimaryZoneDisableOutgoingZoneTransfers(ctx context.Context, zoneIdentifier interface{}, opts ...option.RequestOption) (res *DisableTransferResponse, err error) {
+func (r *ZoneSecondaryDNSOutgoingDisableService) SecondaryDNSPrimaryZoneDisableOutgoingZoneTransfers(ctx context.Context, zoneIdentifier interface{}, opts ...option.RequestOption) (res *ZoneSecondaryDNSOutgoingDisableSecondaryDNSPrimaryZoneDisableOutgoingZoneTransfersResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing/disable", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
 	return
 }
 
-type DisableTransferResponse struct {
-	Errors   []DisableTransferResponseError   `json:"errors"`
-	Messages []DisableTransferResponseMessage `json:"messages"`
+type ZoneSecondaryDNSOutgoingDisableSecondaryDNSPrimaryZoneDisableOutgoingZoneTransfersResponse struct {
+	Errors   []ZoneSecondaryDNSOutgoingDisableSecondaryDNSPrimaryZoneDisableOutgoingZoneTransfersResponseError   `json:"errors"`
+	Messages []ZoneSecondaryDNSOutgoingDisableSecondaryDNSPrimaryZoneDisableOutgoingZoneTransfersResponseMessage `json:"messages"`
 	// The zone transfer status of a primary zone
 	Result string `json:"result"`
 	// Whether the API call was successful
-	Success DisableTransferResponseSuccess `json:"success"`
-	JSON    disableTransferResponseJSON    `json:"-"`
+	Success ZoneSecondaryDNSOutgoingDisableSecondaryDNSPrimaryZoneDisableOutgoingZoneTransfersResponseSuccess `json:"success"`
+	JSON    zoneSecondaryDNSOutgoingDisableSecondaryDNSPrimaryZoneDisableOutgoingZoneTransfersResponseJSON    `json:"-"`
 }
 
-// disableTransferResponseJSON contains the JSON metadata for the struct
-// [DisableTransferResponse]
-type disableTransferResponseJSON struct {
+// zoneSecondaryDNSOutgoingDisableSecondaryDNSPrimaryZoneDisableOutgoingZoneTransfersResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneSecondaryDNSOutgoingDisableSecondaryDNSPrimaryZoneDisableOutgoingZoneTransfersResponse]
+type zoneSecondaryDNSOutgoingDisableSecondaryDNSPrimaryZoneDisableOutgoingZoneTransfersResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -60,51 +61,53 @@ type disableTransferResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DisableTransferResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSecondaryDNSOutgoingDisableSecondaryDNSPrimaryZoneDisableOutgoingZoneTransfersResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DisableTransferResponseError struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    disableTransferResponseErrorJSON `json:"-"`
+type ZoneSecondaryDNSOutgoingDisableSecondaryDNSPrimaryZoneDisableOutgoingZoneTransfersResponseError struct {
+	Code    int64                                                                                               `json:"code,required"`
+	Message string                                                                                              `json:"message,required"`
+	JSON    zoneSecondaryDNSOutgoingDisableSecondaryDNSPrimaryZoneDisableOutgoingZoneTransfersResponseErrorJSON `json:"-"`
 }
 
-// disableTransferResponseErrorJSON contains the JSON metadata for the struct
-// [DisableTransferResponseError]
-type disableTransferResponseErrorJSON struct {
+// zoneSecondaryDNSOutgoingDisableSecondaryDNSPrimaryZoneDisableOutgoingZoneTransfersResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneSecondaryDNSOutgoingDisableSecondaryDNSPrimaryZoneDisableOutgoingZoneTransfersResponseError]
+type zoneSecondaryDNSOutgoingDisableSecondaryDNSPrimaryZoneDisableOutgoingZoneTransfersResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DisableTransferResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSecondaryDNSOutgoingDisableSecondaryDNSPrimaryZoneDisableOutgoingZoneTransfersResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DisableTransferResponseMessage struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    disableTransferResponseMessageJSON `json:"-"`
+type ZoneSecondaryDNSOutgoingDisableSecondaryDNSPrimaryZoneDisableOutgoingZoneTransfersResponseMessage struct {
+	Code    int64                                                                                                 `json:"code,required"`
+	Message string                                                                                                `json:"message,required"`
+	JSON    zoneSecondaryDNSOutgoingDisableSecondaryDNSPrimaryZoneDisableOutgoingZoneTransfersResponseMessageJSON `json:"-"`
 }
 
-// disableTransferResponseMessageJSON contains the JSON metadata for the struct
-// [DisableTransferResponseMessage]
-type disableTransferResponseMessageJSON struct {
+// zoneSecondaryDNSOutgoingDisableSecondaryDNSPrimaryZoneDisableOutgoingZoneTransfersResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneSecondaryDNSOutgoingDisableSecondaryDNSPrimaryZoneDisableOutgoingZoneTransfersResponseMessage]
+type zoneSecondaryDNSOutgoingDisableSecondaryDNSPrimaryZoneDisableOutgoingZoneTransfersResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DisableTransferResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSecondaryDNSOutgoingDisableSecondaryDNSPrimaryZoneDisableOutgoingZoneTransfersResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type DisableTransferResponseSuccess bool
+type ZoneSecondaryDNSOutgoingDisableSecondaryDNSPrimaryZoneDisableOutgoingZoneTransfersResponseSuccess bool
 
 const (
-	DisableTransferResponseSuccessTrue DisableTransferResponseSuccess = true
+	ZoneSecondaryDNSOutgoingDisableSecondaryDNSPrimaryZoneDisableOutgoingZoneTransfersResponseSuccessTrue ZoneSecondaryDNSOutgoingDisableSecondaryDNSPrimaryZoneDisableOutgoingZoneTransfersResponseSuccess = true
 )

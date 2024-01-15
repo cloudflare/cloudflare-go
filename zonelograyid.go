@@ -38,21 +38,21 @@ func NewZoneLogRayidService(opts ...option.RequestOption) (r *ZoneLogRayidServic
 
 // The `/rayids` api route allows lookups by specific rayid. The rayids route will
 // return zero, one, or more records (ray ids are not unique).
-func (r *ZoneLogRayidService) Get(ctx context.Context, zoneIdentifier string, rayIdentifier string, query ZoneLogRayidGetParams, opts ...option.RequestOption) (res *Log, err error) {
+func (r *ZoneLogRayidService) Get(ctx context.Context, zoneIdentifier string, rayIdentifier string, query ZoneLogRayidGetParams, opts ...option.RequestOption) (res *ZoneLogRayidGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/logs/rayids/%s", zoneIdentifier, rayIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
-// Union satisfied by [shared.UnionString] or [LogObject].
-type Log interface {
-	ImplementsLog()
+// Union satisfied by [shared.UnionString] or [ZoneLogRayidGetResponseUnknown].
+type ZoneLogRayidGetResponse interface {
+	ImplementsZoneLogRayidGetResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*Log)(nil)).Elem(),
+		reflect.TypeOf((*ZoneLogRayidGetResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter:         gjson.String,

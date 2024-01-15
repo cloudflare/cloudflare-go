@@ -32,59 +32,430 @@ func NewAccountGatewayProxyEndpointService(opts ...option.RequestOption) (r *Acc
 	return
 }
 
-// List Zero Trust Gateway Proxy Endpoints for an account.
-func (r *AccountGatewayProxyEndpointService) Get(ctx context.Context, identifier interface{}, uuid interface{}, opts ...option.RequestOption) (res *ProxyEndpointsSingleResponse, err error) {
+// Fetches all Zero Trust Gateway proxy endpoints for an account.
+func (r *AccountGatewayProxyEndpointService) Get(ctx context.Context, identifier interface{}, uuid interface{}, opts ...option.RequestOption) (res *AccountGatewayProxyEndpointGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/gateway/proxy_endpoints/%v", identifier, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-// Update a new Zero Trust Gateway Proxy Endpoint.
-func (r *AccountGatewayProxyEndpointService) Update(ctx context.Context, identifier interface{}, uuid interface{}, body AccountGatewayProxyEndpointUpdateParams, opts ...option.RequestOption) (res *ProxyEndpointsSingleResponse, err error) {
+// Updates a configured Zero Trust Gateway proxy endpoint.
+func (r *AccountGatewayProxyEndpointService) Update(ctx context.Context, identifier interface{}, uuid interface{}, body AccountGatewayProxyEndpointUpdateParams, opts ...option.RequestOption) (res *AccountGatewayProxyEndpointUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/gateway/proxy_endpoints/%v", identifier, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
 	return
 }
 
-// Delete a Zero Trust Gateway Proxy Endpoint.
-func (r *AccountGatewayProxyEndpointService) Delete(ctx context.Context, identifier interface{}, uuid interface{}, opts ...option.RequestOption) (res *EmptyResponseArJnNcMr, err error) {
+// Deletes a configured Zero Trust Gateway proxy endpoint.
+func (r *AccountGatewayProxyEndpointService) Delete(ctx context.Context, identifier interface{}, uuid interface{}, opts ...option.RequestOption) (res *AccountGatewayProxyEndpointDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/gateway/proxy_endpoints/%v", identifier, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
 
-// Create a new Zero Trust Gateway Proxy Endpoint.
-func (r *AccountGatewayProxyEndpointService) ZeroTrustGatewayProxyEndpointsNewProxyEndpoint(ctx context.Context, identifier interface{}, body AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointParams, opts ...option.RequestOption) (res *ProxyEndpointsSingleResponse, err error) {
+// Creates a new Zero Trust Gateway proxy endpoint.
+func (r *AccountGatewayProxyEndpointService) ZeroTrustGatewayProxyEndpointsNewProxyEndpoint(ctx context.Context, identifier interface{}, body AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointParams, opts ...option.RequestOption) (res *AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/gateway/proxy_endpoints", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
-// Fetch a single Zero Trust Gateway Proxy Endpoint.
-func (r *AccountGatewayProxyEndpointService) ZeroTrustGatewayProxyEndpointsListProxyEndpoints(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *ProxyEndpointsResponseCollection, err error) {
+// Fetches a single Zero Trust Gateway proxy endpoint.
+func (r *AccountGatewayProxyEndpointService) ZeroTrustGatewayProxyEndpointsListProxyEndpoints(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/gateway/proxy_endpoints", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type ProxyEndpointsResponseCollection struct {
-	Errors     []ProxyEndpointsResponseCollectionError    `json:"errors"`
-	Messages   []ProxyEndpointsResponseCollectionMessage  `json:"messages"`
-	Result     []ProxyEndpointsResponseCollectionResult   `json:"result"`
-	ResultInfo ProxyEndpointsResponseCollectionResultInfo `json:"result_info"`
+type AccountGatewayProxyEndpointGetResponse struct {
+	Errors   []AccountGatewayProxyEndpointGetResponseError   `json:"errors"`
+	Messages []AccountGatewayProxyEndpointGetResponseMessage `json:"messages"`
+	Result   AccountGatewayProxyEndpointGetResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success ProxyEndpointsResponseCollectionSuccess `json:"success"`
-	JSON    proxyEndpointsResponseCollectionJSON    `json:"-"`
+	Success AccountGatewayProxyEndpointGetResponseSuccess `json:"success"`
+	JSON    accountGatewayProxyEndpointGetResponseJSON    `json:"-"`
 }
 
-// proxyEndpointsResponseCollectionJSON contains the JSON metadata for the struct
-// [ProxyEndpointsResponseCollection]
-type proxyEndpointsResponseCollectionJSON struct {
+// accountGatewayProxyEndpointGetResponseJSON contains the JSON metadata for the
+// struct [AccountGatewayProxyEndpointGetResponse]
+type accountGatewayProxyEndpointGetResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayProxyEndpointGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayProxyEndpointGetResponseError struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    accountGatewayProxyEndpointGetResponseErrorJSON `json:"-"`
+}
+
+// accountGatewayProxyEndpointGetResponseErrorJSON contains the JSON metadata for
+// the struct [AccountGatewayProxyEndpointGetResponseError]
+type accountGatewayProxyEndpointGetResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayProxyEndpointGetResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayProxyEndpointGetResponseMessage struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    accountGatewayProxyEndpointGetResponseMessageJSON `json:"-"`
+}
+
+// accountGatewayProxyEndpointGetResponseMessageJSON contains the JSON metadata for
+// the struct [AccountGatewayProxyEndpointGetResponseMessage]
+type accountGatewayProxyEndpointGetResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayProxyEndpointGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayProxyEndpointGetResponseResult struct {
+	ID        interface{} `json:"id"`
+	CreatedAt time.Time   `json:"created_at" format:"date-time"`
+	// A list of CIDRs to restrict ingress connections.
+	IPs []string `json:"ips"`
+	// The name of the proxy endpoint.
+	Name string `json:"name"`
+	// The subdomain to be used as the destination in the proxy client.
+	Subdomain string                                           `json:"subdomain"`
+	UpdatedAt time.Time                                        `json:"updated_at" format:"date-time"`
+	JSON      accountGatewayProxyEndpointGetResponseResultJSON `json:"-"`
+}
+
+// accountGatewayProxyEndpointGetResponseResultJSON contains the JSON metadata for
+// the struct [AccountGatewayProxyEndpointGetResponseResult]
+type accountGatewayProxyEndpointGetResponseResultJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	IPs         apijson.Field
+	Name        apijson.Field
+	Subdomain   apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayProxyEndpointGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountGatewayProxyEndpointGetResponseSuccess bool
+
+const (
+	AccountGatewayProxyEndpointGetResponseSuccessTrue AccountGatewayProxyEndpointGetResponseSuccess = true
+)
+
+type AccountGatewayProxyEndpointUpdateResponse struct {
+	Errors   []AccountGatewayProxyEndpointUpdateResponseError   `json:"errors"`
+	Messages []AccountGatewayProxyEndpointUpdateResponseMessage `json:"messages"`
+	Result   AccountGatewayProxyEndpointUpdateResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountGatewayProxyEndpointUpdateResponseSuccess `json:"success"`
+	JSON    accountGatewayProxyEndpointUpdateResponseJSON    `json:"-"`
+}
+
+// accountGatewayProxyEndpointUpdateResponseJSON contains the JSON metadata for the
+// struct [AccountGatewayProxyEndpointUpdateResponse]
+type accountGatewayProxyEndpointUpdateResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayProxyEndpointUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayProxyEndpointUpdateResponseError struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    accountGatewayProxyEndpointUpdateResponseErrorJSON `json:"-"`
+}
+
+// accountGatewayProxyEndpointUpdateResponseErrorJSON contains the JSON metadata
+// for the struct [AccountGatewayProxyEndpointUpdateResponseError]
+type accountGatewayProxyEndpointUpdateResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayProxyEndpointUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayProxyEndpointUpdateResponseMessage struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    accountGatewayProxyEndpointUpdateResponseMessageJSON `json:"-"`
+}
+
+// accountGatewayProxyEndpointUpdateResponseMessageJSON contains the JSON metadata
+// for the struct [AccountGatewayProxyEndpointUpdateResponseMessage]
+type accountGatewayProxyEndpointUpdateResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayProxyEndpointUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayProxyEndpointUpdateResponseResult struct {
+	ID        interface{} `json:"id"`
+	CreatedAt time.Time   `json:"created_at" format:"date-time"`
+	// A list of CIDRs to restrict ingress connections.
+	IPs []string `json:"ips"`
+	// The name of the proxy endpoint.
+	Name string `json:"name"`
+	// The subdomain to be used as the destination in the proxy client.
+	Subdomain string                                              `json:"subdomain"`
+	UpdatedAt time.Time                                           `json:"updated_at" format:"date-time"`
+	JSON      accountGatewayProxyEndpointUpdateResponseResultJSON `json:"-"`
+}
+
+// accountGatewayProxyEndpointUpdateResponseResultJSON contains the JSON metadata
+// for the struct [AccountGatewayProxyEndpointUpdateResponseResult]
+type accountGatewayProxyEndpointUpdateResponseResultJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	IPs         apijson.Field
+	Name        apijson.Field
+	Subdomain   apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayProxyEndpointUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountGatewayProxyEndpointUpdateResponseSuccess bool
+
+const (
+	AccountGatewayProxyEndpointUpdateResponseSuccessTrue AccountGatewayProxyEndpointUpdateResponseSuccess = true
+)
+
+type AccountGatewayProxyEndpointDeleteResponse struct {
+	Errors   []AccountGatewayProxyEndpointDeleteResponseError   `json:"errors"`
+	Messages []AccountGatewayProxyEndpointDeleteResponseMessage `json:"messages"`
+	Result   interface{}                                        `json:"result"`
+	// Whether the API call was successful
+	Success AccountGatewayProxyEndpointDeleteResponseSuccess `json:"success"`
+	JSON    accountGatewayProxyEndpointDeleteResponseJSON    `json:"-"`
+}
+
+// accountGatewayProxyEndpointDeleteResponseJSON contains the JSON metadata for the
+// struct [AccountGatewayProxyEndpointDeleteResponse]
+type accountGatewayProxyEndpointDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayProxyEndpointDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayProxyEndpointDeleteResponseError struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    accountGatewayProxyEndpointDeleteResponseErrorJSON `json:"-"`
+}
+
+// accountGatewayProxyEndpointDeleteResponseErrorJSON contains the JSON metadata
+// for the struct [AccountGatewayProxyEndpointDeleteResponseError]
+type accountGatewayProxyEndpointDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayProxyEndpointDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayProxyEndpointDeleteResponseMessage struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    accountGatewayProxyEndpointDeleteResponseMessageJSON `json:"-"`
+}
+
+// accountGatewayProxyEndpointDeleteResponseMessageJSON contains the JSON metadata
+// for the struct [AccountGatewayProxyEndpointDeleteResponseMessage]
+type accountGatewayProxyEndpointDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayProxyEndpointDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountGatewayProxyEndpointDeleteResponseSuccess bool
+
+const (
+	AccountGatewayProxyEndpointDeleteResponseSuccessTrue AccountGatewayProxyEndpointDeleteResponseSuccess = true
+)
+
+type AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponse struct {
+	Errors   []AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseError   `json:"errors"`
+	Messages []AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseMessage `json:"messages"`
+	Result   AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseSuccess `json:"success"`
+	JSON    accountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseJSON    `json:"-"`
+}
+
+// accountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponse]
+type accountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseError struct {
+	Code    int64                                                                                      `json:"code,required"`
+	Message string                                                                                     `json:"message,required"`
+	JSON    accountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseErrorJSON `json:"-"`
+}
+
+// accountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseError]
+type accountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseMessage struct {
+	Code    int64                                                                                        `json:"code,required"`
+	Message string                                                                                       `json:"message,required"`
+	JSON    accountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseMessageJSON `json:"-"`
+}
+
+// accountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseMessage]
+type accountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseResult struct {
+	ID        interface{} `json:"id"`
+	CreatedAt time.Time   `json:"created_at" format:"date-time"`
+	// A list of CIDRs to restrict ingress connections.
+	IPs []string `json:"ips"`
+	// The name of the proxy endpoint.
+	Name string `json:"name"`
+	// The subdomain to be used as the destination in the proxy client.
+	Subdomain string                                                                                      `json:"subdomain"`
+	UpdatedAt time.Time                                                                                   `json:"updated_at" format:"date-time"`
+	JSON      accountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseResultJSON `json:"-"`
+}
+
+// accountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseResult]
+type accountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseResultJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	IPs         apijson.Field
+	Name        apijson.Field
+	Subdomain   apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseSuccess bool
+
+const (
+	AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseSuccessTrue AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointResponseSuccess = true
+)
+
+type AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponse struct {
+	Errors     []AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseError    `json:"errors"`
+	Messages   []AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseMessage  `json:"messages"`
+	Result     []AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseResult   `json:"result"`
+	ResultInfo AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseSuccess `json:"success"`
+	JSON    accountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseJSON    `json:"-"`
+}
+
+// accountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponse]
+type accountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -94,64 +465,67 @@ type proxyEndpointsResponseCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProxyEndpointsResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ProxyEndpointsResponseCollectionError struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    proxyEndpointsResponseCollectionErrorJSON `json:"-"`
+type AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseError struct {
+	Code    int64                                                                                        `json:"code,required"`
+	Message string                                                                                       `json:"message,required"`
+	JSON    accountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseErrorJSON `json:"-"`
 }
 
-// proxyEndpointsResponseCollectionErrorJSON contains the JSON metadata for the
-// struct [ProxyEndpointsResponseCollectionError]
-type proxyEndpointsResponseCollectionErrorJSON struct {
+// accountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseError]
+type accountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProxyEndpointsResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ProxyEndpointsResponseCollectionMessage struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    proxyEndpointsResponseCollectionMessageJSON `json:"-"`
+type AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseMessage struct {
+	Code    int64                                                                                          `json:"code,required"`
+	Message string                                                                                         `json:"message,required"`
+	JSON    accountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseMessageJSON `json:"-"`
 }
 
-// proxyEndpointsResponseCollectionMessageJSON contains the JSON metadata for the
-// struct [ProxyEndpointsResponseCollectionMessage]
-type proxyEndpointsResponseCollectionMessageJSON struct {
+// accountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseMessage]
+type accountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProxyEndpointsResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ProxyEndpointsResponseCollectionResult struct {
+type AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseResult struct {
 	ID        interface{} `json:"id"`
 	CreatedAt time.Time   `json:"created_at" format:"date-time"`
 	// A list of CIDRs to restrict ingress connections.
 	IPs []string `json:"ips"`
-	// The name of the Proxy Endpoint.
+	// The name of the proxy endpoint.
 	Name string `json:"name"`
 	// The subdomain to be used as the destination in the proxy client.
-	Subdomain string                                     `json:"subdomain"`
-	UpdatedAt time.Time                                  `json:"updated_at" format:"date-time"`
-	JSON      proxyEndpointsResponseCollectionResultJSON `json:"-"`
+	Subdomain string                                                                                        `json:"subdomain"`
+	UpdatedAt time.Time                                                                                     `json:"updated_at" format:"date-time"`
+	JSON      accountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseResultJSON `json:"-"`
 }
 
-// proxyEndpointsResponseCollectionResultJSON contains the JSON metadata for the
-// struct [ProxyEndpointsResponseCollectionResult]
-type proxyEndpointsResponseCollectionResultJSON struct {
+// accountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseResult]
+type accountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseResultJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	IPs         apijson.Field
@@ -162,11 +536,11 @@ type proxyEndpointsResponseCollectionResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProxyEndpointsResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ProxyEndpointsResponseCollectionResultInfo struct {
+type AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -174,13 +548,14 @@ type ProxyEndpointsResponseCollectionResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                        `json:"total_count"`
-	JSON       proxyEndpointsResponseCollectionResultInfoJSON `json:"-"`
+	TotalCount float64                                                                                           `json:"total_count"`
+	JSON       accountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseResultInfoJSON `json:"-"`
 }
 
-// proxyEndpointsResponseCollectionResultInfoJSON contains the JSON metadata for
-// the struct [ProxyEndpointsResponseCollectionResultInfo]
-type proxyEndpointsResponseCollectionResultInfoJSON struct {
+// accountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseResultInfo]
+type accountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -189,120 +564,21 @@ type proxyEndpointsResponseCollectionResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProxyEndpointsResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type ProxyEndpointsResponseCollectionSuccess bool
+type AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseSuccess bool
 
 const (
-	ProxyEndpointsResponseCollectionSuccessTrue ProxyEndpointsResponseCollectionSuccess = true
-)
-
-type ProxyEndpointsSingleResponse struct {
-	Errors   []ProxyEndpointsSingleResponseError   `json:"errors"`
-	Messages []ProxyEndpointsSingleResponseMessage `json:"messages"`
-	Result   ProxyEndpointsSingleResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success ProxyEndpointsSingleResponseSuccess `json:"success"`
-	JSON    proxyEndpointsSingleResponseJSON    `json:"-"`
-}
-
-// proxyEndpointsSingleResponseJSON contains the JSON metadata for the struct
-// [ProxyEndpointsSingleResponse]
-type proxyEndpointsSingleResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProxyEndpointsSingleResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ProxyEndpointsSingleResponseError struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    proxyEndpointsSingleResponseErrorJSON `json:"-"`
-}
-
-// proxyEndpointsSingleResponseErrorJSON contains the JSON metadata for the struct
-// [ProxyEndpointsSingleResponseError]
-type proxyEndpointsSingleResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProxyEndpointsSingleResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ProxyEndpointsSingleResponseMessage struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    proxyEndpointsSingleResponseMessageJSON `json:"-"`
-}
-
-// proxyEndpointsSingleResponseMessageJSON contains the JSON metadata for the
-// struct [ProxyEndpointsSingleResponseMessage]
-type proxyEndpointsSingleResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProxyEndpointsSingleResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ProxyEndpointsSingleResponseResult struct {
-	ID        interface{} `json:"id"`
-	CreatedAt time.Time   `json:"created_at" format:"date-time"`
-	// A list of CIDRs to restrict ingress connections.
-	IPs []string `json:"ips"`
-	// The name of the Proxy Endpoint.
-	Name string `json:"name"`
-	// The subdomain to be used as the destination in the proxy client.
-	Subdomain string                                 `json:"subdomain"`
-	UpdatedAt time.Time                              `json:"updated_at" format:"date-time"`
-	JSON      proxyEndpointsSingleResponseResultJSON `json:"-"`
-}
-
-// proxyEndpointsSingleResponseResultJSON contains the JSON metadata for the struct
-// [ProxyEndpointsSingleResponseResult]
-type proxyEndpointsSingleResponseResultJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	IPs         apijson.Field
-	Name        apijson.Field
-	Subdomain   apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProxyEndpointsSingleResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type ProxyEndpointsSingleResponseSuccess bool
-
-const (
-	ProxyEndpointsSingleResponseSuccessTrue ProxyEndpointsSingleResponseSuccess = true
+	AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseSuccessTrue AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsListProxyEndpointsResponseSuccess = true
 )
 
 type AccountGatewayProxyEndpointUpdateParams struct {
 	// A list of CIDRs to restrict ingress connections.
 	IPs param.Field[[]string] `json:"ips"`
-	// The name of the Proxy Endpoint.
+	// The name of the proxy endpoint.
 	Name param.Field[string] `json:"name"`
 	// The subdomain to be used as the destination in the proxy client.
 	Subdomain param.Field[string] `json:"subdomain"`
@@ -315,7 +591,7 @@ func (r AccountGatewayProxyEndpointUpdateParams) MarshalJSON() (data []byte, err
 type AccountGatewayProxyEndpointZeroTrustGatewayProxyEndpointsNewProxyEndpointParams struct {
 	// A list of CIDRs to restrict ingress connections.
 	IPs param.Field[[]string] `json:"ips,required"`
-	// The name of the Proxy Endpoint.
+	// The name of the proxy endpoint.
 	Name param.Field[string] `json:"name,required"`
 	// The subdomain to be used as the destination in the proxy client.
 	Subdomain param.Field[string] `json:"subdomain"`

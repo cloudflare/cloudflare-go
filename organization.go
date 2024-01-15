@@ -40,7 +40,7 @@ func NewOrganizationService(opts ...option.RequestOption) (r *OrganizationServic
 }
 
 // Get information about a specific organization that you are a member of.
-func (r *OrganizationService) Get(ctx context.Context, identifier string, opts ...option.RequestOption) (res *SingleOrganizationResponse, err error) {
+func (r *OrganizationService) Get(ctx context.Context, identifier string, opts ...option.RequestOption) (res *OrganizationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("organizations/%s", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -48,25 +48,25 @@ func (r *OrganizationService) Get(ctx context.Context, identifier string, opts .
 }
 
 // Update an existing Organization.
-func (r *OrganizationService) Update(ctx context.Context, identifier string, body OrganizationUpdateParams, opts ...option.RequestOption) (res *SingleOrganizationResponse, err error) {
+func (r *OrganizationService) Update(ctx context.Context, identifier string, body OrganizationUpdateParams, opts ...option.RequestOption) (res *OrganizationUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("organizations/%s", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
 	return
 }
 
-type SingleOrganizationResponse struct {
-	Errors   []SingleOrganizationResponseError   `json:"errors"`
-	Messages []SingleOrganizationResponseMessage `json:"messages"`
-	Result   interface{}                         `json:"result"`
+type OrganizationGetResponse struct {
+	Errors   []OrganizationGetResponseError   `json:"errors"`
+	Messages []OrganizationGetResponseMessage `json:"messages"`
+	Result   interface{}                      `json:"result"`
 	// Whether the API call was successful
-	Success SingleOrganizationResponseSuccess `json:"success"`
-	JSON    singleOrganizationResponseJSON    `json:"-"`
+	Success OrganizationGetResponseSuccess `json:"success"`
+	JSON    organizationGetResponseJSON    `json:"-"`
 }
 
-// singleOrganizationResponseJSON contains the JSON metadata for the struct
-// [SingleOrganizationResponse]
-type singleOrganizationResponseJSON struct {
+// organizationGetResponseJSON contains the JSON metadata for the struct
+// [OrganizationGetResponse]
+type organizationGetResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -75,53 +75,122 @@ type singleOrganizationResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SingleOrganizationResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *OrganizationGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SingleOrganizationResponseError struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    singleOrganizationResponseErrorJSON `json:"-"`
+type OrganizationGetResponseError struct {
+	Code    int64                            `json:"code,required"`
+	Message string                           `json:"message,required"`
+	JSON    organizationGetResponseErrorJSON `json:"-"`
 }
 
-// singleOrganizationResponseErrorJSON contains the JSON metadata for the struct
-// [SingleOrganizationResponseError]
-type singleOrganizationResponseErrorJSON struct {
+// organizationGetResponseErrorJSON contains the JSON metadata for the struct
+// [OrganizationGetResponseError]
+type organizationGetResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SingleOrganizationResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *OrganizationGetResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SingleOrganizationResponseMessage struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    singleOrganizationResponseMessageJSON `json:"-"`
+type OrganizationGetResponseMessage struct {
+	Code    int64                              `json:"code,required"`
+	Message string                             `json:"message,required"`
+	JSON    organizationGetResponseMessageJSON `json:"-"`
 }
 
-// singleOrganizationResponseMessageJSON contains the JSON metadata for the struct
-// [SingleOrganizationResponseMessage]
-type singleOrganizationResponseMessageJSON struct {
+// organizationGetResponseMessageJSON contains the JSON metadata for the struct
+// [OrganizationGetResponseMessage]
+type organizationGetResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SingleOrganizationResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *OrganizationGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type SingleOrganizationResponseSuccess bool
+type OrganizationGetResponseSuccess bool
 
 const (
-	SingleOrganizationResponseSuccessTrue SingleOrganizationResponseSuccess = true
+	OrganizationGetResponseSuccessTrue OrganizationGetResponseSuccess = true
+)
+
+type OrganizationUpdateResponse struct {
+	Errors   []OrganizationUpdateResponseError   `json:"errors"`
+	Messages []OrganizationUpdateResponseMessage `json:"messages"`
+	Result   interface{}                         `json:"result"`
+	// Whether the API call was successful
+	Success OrganizationUpdateResponseSuccess `json:"success"`
+	JSON    organizationUpdateResponseJSON    `json:"-"`
+}
+
+// organizationUpdateResponseJSON contains the JSON metadata for the struct
+// [OrganizationUpdateResponse]
+type organizationUpdateResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OrganizationUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type OrganizationUpdateResponseError struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    organizationUpdateResponseErrorJSON `json:"-"`
+}
+
+// organizationUpdateResponseErrorJSON contains the JSON metadata for the struct
+// [OrganizationUpdateResponseError]
+type organizationUpdateResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OrganizationUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type OrganizationUpdateResponseMessage struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    organizationUpdateResponseMessageJSON `json:"-"`
+}
+
+// organizationUpdateResponseMessageJSON contains the JSON metadata for the struct
+// [OrganizationUpdateResponseMessage]
+type organizationUpdateResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OrganizationUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type OrganizationUpdateResponseSuccess bool
+
+const (
+	OrganizationUpdateResponseSuccessTrue OrganizationUpdateResponseSuccess = true
 )
 
 type OrganizationUpdateParams struct {

@@ -12,10 +12,10 @@ import (
 // not instantiate this service directly, and instead use the
 // [NewAccountAlertingV3DestinationService] method instead.
 type AccountAlertingV3DestinationService struct {
-	Options     []option.RequestOption
-	Eligibles   *AccountAlertingV3DestinationEligibleService
-	Pagerduties *AccountAlertingV3DestinationPagerdutyService
-	Webhooks    *AccountAlertingV3DestinationWebhookService
+	Options   []option.RequestOption
+	Eligible  *AccountAlertingV3DestinationEligibleService
+	Pagerduty *AccountAlertingV3DestinationPagerdutyService
+	Webhooks  *AccountAlertingV3DestinationWebhookService
 }
 
 // NewAccountAlertingV3DestinationService generates a new service that applies the
@@ -24,8 +24,8 @@ type AccountAlertingV3DestinationService struct {
 func NewAccountAlertingV3DestinationService(opts ...option.RequestOption) (r *AccountAlertingV3DestinationService) {
 	r = &AccountAlertingV3DestinationService{}
 	r.Options = opts
-	r.Eligibles = NewAccountAlertingV3DestinationEligibleService(opts...)
-	r.Pagerduties = NewAccountAlertingV3DestinationPagerdutyService(opts...)
+	r.Eligible = NewAccountAlertingV3DestinationEligibleService(opts...)
+	r.Pagerduty = NewAccountAlertingV3DestinationPagerdutyService(opts...)
 	r.Webhooks = NewAccountAlertingV3DestinationWebhookService(opts...)
 	return
 }

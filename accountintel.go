@@ -17,9 +17,11 @@ type AccountIntelService struct {
 	DNS                *AccountIntelDNSService
 	Domains            *AccountIntelDomainService
 	DomainHistories    *AccountIntelDomainHistoryService
+	IndicatorFeeds     *AccountIntelIndicatorFeedService
 	IPs                *AccountIntelIPService
 	IPLists            *AccountIntelIPListService
 	Miscategorizations *AccountIntelMiscategorizationService
+	Sinkholes          *AccountIntelSinkholeService
 	Whois              *AccountIntelWhoisService
 }
 
@@ -33,9 +35,11 @@ func NewAccountIntelService(opts ...option.RequestOption) (r *AccountIntelServic
 	r.DNS = NewAccountIntelDNSService(opts...)
 	r.Domains = NewAccountIntelDomainService(opts...)
 	r.DomainHistories = NewAccountIntelDomainHistoryService(opts...)
+	r.IndicatorFeeds = NewAccountIntelIndicatorFeedService(opts...)
 	r.IPs = NewAccountIntelIPService(opts...)
 	r.IPLists = NewAccountIntelIPListService(opts...)
 	r.Miscategorizations = NewAccountIntelMiscategorizationService(opts...)
+	r.Sinkholes = NewAccountIntelSinkholeService(opts...)
 	r.Whois = NewAccountIntelWhoisService(opts...)
 	return
 }

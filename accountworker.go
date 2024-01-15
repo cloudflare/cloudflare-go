@@ -20,6 +20,8 @@ type AccountWorkerService struct {
 	Queues          *AccountWorkerQueueService
 	Scripts         *AccountWorkerScriptService
 	Subdomains      *AccountWorkerSubdomainService
+	Dispatch        *AccountWorkerDispatchService
+	Services        *AccountWorkerServiceService
 }
 
 // NewAccountWorkerService generates a new service that applies the given options
@@ -35,5 +37,7 @@ func NewAccountWorkerService(opts ...option.RequestOption) (r *AccountWorkerServ
 	r.Queues = NewAccountWorkerQueueService(opts...)
 	r.Scripts = NewAccountWorkerScriptService(opts...)
 	r.Subdomains = NewAccountWorkerSubdomainService(opts...)
+	r.Dispatch = NewAccountWorkerDispatchService(opts...)
+	r.Services = NewAccountWorkerServiceService(opts...)
 	return
 }

@@ -24,10 +24,12 @@ func TestAccountAccessServiceTokenRotateAccessServiceTokensRotateAServiceToken(t
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Accesses.ServiceTokens.Rotates.AccessServiceTokensRotateAServiceToken(
+	_, err := client.Accounts.Access.ServiceTokens.Rotates.AccessServiceTokensRotateAServiceToken(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",

@@ -24,8 +24,10 @@ func TestAccountRuleListItemGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Rules.Lists.Items.Get(
 		context.TODO(),
@@ -53,8 +55,10 @@ func TestAccountRuleListItemDeleteWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Rules.Lists.Items.Delete(
 		context.TODO(),
@@ -86,8 +90,10 @@ func TestAccountRuleListItemListsNewListItems(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Rules.Lists.Items.ListsNewListItems(
 		context.TODO(),
@@ -95,8 +101,12 @@ func TestAccountRuleListItemListsNewListItems(t *testing.T) {
 		"2c0fc9fa937b11eaa1b71c4d701ab86e",
 		cloudflare.AccountRuleListItemListsNewListItemsParams{
 			Body: cloudflare.F([]cloudflare.AccountRuleListItemListsNewListItemsParamsBody{{
+				ASN:     cloudflare.F(int64(5567)),
 				Comment: cloudflare.F("Private IP address"),
-				IP:      cloudflare.F("10.0.0.1"),
+				Hostname: cloudflare.F(cloudflare.AccountRuleListItemListsNewListItemsParamsBodyHostname{
+					URLHostname: cloudflare.F("example.com"),
+				}),
+				IP: cloudflare.F("10.0.0.1"),
 				Redirect: cloudflare.F(cloudflare.AccountRuleListItemListsNewListItemsParamsBodyRedirect{
 					IncludeSubdomains:   cloudflare.F(true),
 					PreservePathSuffix:  cloudflare.F(true),
@@ -107,8 +117,12 @@ func TestAccountRuleListItemListsNewListItems(t *testing.T) {
 					TargetURL:           cloudflare.F("https://archlinux.org/"),
 				}),
 			}, {
+				ASN:     cloudflare.F(int64(5567)),
 				Comment: cloudflare.F("Private IP address"),
-				IP:      cloudflare.F("10.0.0.1"),
+				Hostname: cloudflare.F(cloudflare.AccountRuleListItemListsNewListItemsParamsBodyHostname{
+					URLHostname: cloudflare.F("example.com"),
+				}),
+				IP: cloudflare.F("10.0.0.1"),
 				Redirect: cloudflare.F(cloudflare.AccountRuleListItemListsNewListItemsParamsBodyRedirect{
 					IncludeSubdomains:   cloudflare.F(true),
 					PreservePathSuffix:  cloudflare.F(true),
@@ -119,8 +133,12 @@ func TestAccountRuleListItemListsNewListItems(t *testing.T) {
 					TargetURL:           cloudflare.F("https://archlinux.org/"),
 				}),
 			}, {
+				ASN:     cloudflare.F(int64(5567)),
 				Comment: cloudflare.F("Private IP address"),
-				IP:      cloudflare.F("10.0.0.1"),
+				Hostname: cloudflare.F(cloudflare.AccountRuleListItemListsNewListItemsParamsBodyHostname{
+					URLHostname: cloudflare.F("example.com"),
+				}),
+				IP: cloudflare.F("10.0.0.1"),
 				Redirect: cloudflare.F(cloudflare.AccountRuleListItemListsNewListItemsParamsBodyRedirect{
 					IncludeSubdomains:   cloudflare.F(true),
 					PreservePathSuffix:  cloudflare.F(true),
@@ -153,15 +171,19 @@ func TestAccountRuleListItemListsGetListItemsWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Rules.Lists.Items.ListsGetListItems(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"2c0fc9fa937b11eaa1b71c4d701ab86e",
 		cloudflare.AccountRuleListItemListsGetListItemsParams{
-			Cursor: cloudflare.F("zzz"),
+			Cursor:  cloudflare.F("zzz"),
+			PerPage: cloudflare.F(int64(1)),
+			Search:  cloudflare.F("1.1.1."),
 		},
 	)
 	if err != nil {
@@ -184,8 +206,10 @@ func TestAccountRuleListItemListsUpdateAllListItems(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Rules.Lists.Items.ListsUpdateAllListItems(
 		context.TODO(),
@@ -193,8 +217,12 @@ func TestAccountRuleListItemListsUpdateAllListItems(t *testing.T) {
 		"2c0fc9fa937b11eaa1b71c4d701ab86e",
 		cloudflare.AccountRuleListItemListsUpdateAllListItemsParams{
 			Body: cloudflare.F([]cloudflare.AccountRuleListItemListsUpdateAllListItemsParamsBody{{
+				ASN:     cloudflare.F(int64(5567)),
 				Comment: cloudflare.F("Private IP address"),
-				IP:      cloudflare.F("10.0.0.1"),
+				Hostname: cloudflare.F(cloudflare.AccountRuleListItemListsUpdateAllListItemsParamsBodyHostname{
+					URLHostname: cloudflare.F("example.com"),
+				}),
+				IP: cloudflare.F("10.0.0.1"),
 				Redirect: cloudflare.F(cloudflare.AccountRuleListItemListsUpdateAllListItemsParamsBodyRedirect{
 					IncludeSubdomains:   cloudflare.F(true),
 					PreservePathSuffix:  cloudflare.F(true),
@@ -205,8 +233,12 @@ func TestAccountRuleListItemListsUpdateAllListItems(t *testing.T) {
 					TargetURL:           cloudflare.F("https://archlinux.org/"),
 				}),
 			}, {
+				ASN:     cloudflare.F(int64(5567)),
 				Comment: cloudflare.F("Private IP address"),
-				IP:      cloudflare.F("10.0.0.1"),
+				Hostname: cloudflare.F(cloudflare.AccountRuleListItemListsUpdateAllListItemsParamsBodyHostname{
+					URLHostname: cloudflare.F("example.com"),
+				}),
+				IP: cloudflare.F("10.0.0.1"),
 				Redirect: cloudflare.F(cloudflare.AccountRuleListItemListsUpdateAllListItemsParamsBodyRedirect{
 					IncludeSubdomains:   cloudflare.F(true),
 					PreservePathSuffix:  cloudflare.F(true),
@@ -217,8 +249,12 @@ func TestAccountRuleListItemListsUpdateAllListItems(t *testing.T) {
 					TargetURL:           cloudflare.F("https://archlinux.org/"),
 				}),
 			}, {
+				ASN:     cloudflare.F(int64(5567)),
 				Comment: cloudflare.F("Private IP address"),
-				IP:      cloudflare.F("10.0.0.1"),
+				Hostname: cloudflare.F(cloudflare.AccountRuleListItemListsUpdateAllListItemsParamsBodyHostname{
+					URLHostname: cloudflare.F("example.com"),
+				}),
+				IP: cloudflare.F("10.0.0.1"),
 				Redirect: cloudflare.F(cloudflare.AccountRuleListItemListsUpdateAllListItemsParamsBodyRedirect{
 					IncludeSubdomains:   cloudflare.F(true),
 					PreservePathSuffix:  cloudflare.F(true),

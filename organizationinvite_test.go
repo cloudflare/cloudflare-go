@@ -24,8 +24,10 @@ func TestOrganizationInviteGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Organizations.Invites.Get(
 		context.TODO(),
@@ -52,8 +54,10 @@ func TestOrganizationInviteUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Organizations.Invites.Update(
 		context.TODO(),
@@ -83,8 +87,10 @@ func TestOrganizationInviteDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Organizations.Invites.Delete(
 		context.TODO(),
@@ -111,16 +117,22 @@ func TestOrganizationInviteOrganizationInvitesNewInvitationWithOptionalParams(t 
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Organizations.Invites.OrganizationInvitesNewInvitation(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.OrganizationInviteOrganizationInvitesNewInvitationParams{
 			InvitedMemberEmail: cloudflare.F("user@example.com"),
-			Roles:              cloudflare.F([]cloudflare.OrganizationInviteOrganizationInvitesNewInvitationParamsRole{{}, {}}),
-			AutoAccept:         cloudflare.F(true),
+			Roles: cloudflare.F([]cloudflare.OrganizationInviteOrganizationInvitesNewInvitationParamsRole{{
+				ID: cloudflare.F("5a7805061c76ada191ed06f989cc3dac"),
+			}, {
+				ID: cloudflare.F("9a7806061c88ada191ed06f989cc3dac"),
+			}}),
+			AutoAccept: cloudflare.F(true),
 		},
 	)
 	if err != nil {
@@ -143,8 +155,10 @@ func TestOrganizationInviteOrganizationInvitesListInvitations(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Organizations.Invites.OrganizationInvitesListInvitations(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {

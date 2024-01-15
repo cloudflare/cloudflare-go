@@ -12,10 +12,9 @@ import (
 // this service directly, and instead use the [NewAccountAlertingV3Service] method
 // instead.
 type AccountAlertingV3Service struct {
-	Options      []option.RequestOption
-	Destinations *AccountAlertingV3DestinationService
-	Histories    *AccountAlertingV3HistoryService
-	Policies     *AccountAlertingV3PolicyService
+	Options         []option.RequestOption
+	AvailableAlerts *AccountAlertingV3AvailableAlertService
+	Destinations    *AccountAlertingV3DestinationService
 }
 
 // NewAccountAlertingV3Service generates a new service that applies the given
@@ -24,8 +23,7 @@ type AccountAlertingV3Service struct {
 func NewAccountAlertingV3Service(opts ...option.RequestOption) (r *AccountAlertingV3Service) {
 	r = &AccountAlertingV3Service{}
 	r.Options = opts
+	r.AvailableAlerts = NewAccountAlertingV3AvailableAlertService(opts...)
 	r.Destinations = NewAccountAlertingV3DestinationService(opts...)
-	r.Histories = NewAccountAlertingV3HistoryService(opts...)
-	r.Policies = NewAccountAlertingV3PolicyService(opts...)
 	return
 }

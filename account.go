@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -27,24 +28,24 @@ type AccountService struct {
 	CfdTunnels       *AccountCfdTunnelService
 	CustomPages      *AccountCustomPageService
 	Diagnostics      *AccountDiagnosticService
-	Dlps             *AccountDlpService
+	Dlp              *AccountDlpService
 	DNSFirewalls     *AccountDNSFirewallService
 	Emails           *AccountEmailService
 	Firewalls        *AccountFirewallService
 	Images           *AccountImageService
-	Intels           *AccountIntelService
+	Intel            *AccountIntelService
 	LoadBalancers    *AccountLoadBalancerService
 	Logpushes        *AccountLogpushService
 	Logs             *AccountLogService
-	Magics           *AccountMagicService
+	Magic            *AccountMagicService
 	Members          *AccountMemberService
 	Mnms             *AccountMnmService
 	MtlsCertificates *AccountMtlsCertificateService
 	Pages            *AccountPageService
 	Pcaps            *AccountPcapService
-	R2s              *AccountR2Service
+	R2               *AccountR2Service
 	Railguns         *AccountRailgunService
-	Registrars       *AccountRegistrarService
+	Registrar        *AccountRegistrarService
 	RequestTracers   *AccountRequestTracerService
 	Roles            *AccountRoleService
 	Rules            *AccountRuleService
@@ -52,15 +53,27 @@ type AccountService struct {
 	Storages         *AccountStorageService
 	Streams          *AccountStreamService
 	Subscriptions    *AccountSubscriptionService
-	Teamnets         *AccountTeamnetService
+	Teamnet          *AccountTeamnetService
 	Tunnels          *AccountTunnelService
 	Workers          *AccountWorkerService
-	Gateways         *AccountGatewayService
+	Gateway          *AccountGatewayService
 	Rulesets         *AccountRulesetService
-	Accesses         *AccountAccessService
+	Access           *AccountAccessService
 	Alerting         *AccountAlertingService
 	CustomNs         *AccountCustomNService
 	Devices          *AccountDeviceService
+	Addressing       *AccountAddressingService
+	AI               *AccountAIService
+	Challenges       *AccountChallengeService
+	D1               *AccountD1Service
+	Dex              *AccountDexService
+	Hyperdrive       *AccountHyperdriveService
+	PagesProjects    *AccountPagesProjectService
+	Rum              *AccountRumService
+	VectorizeIndexes *AccountVectorizeIndexService
+	WarpConnector    *AccountWarpConnectorService
+	Zerotrust        *AccountZerotrustService
+	Urlscanner       *AccountUrlscannerService
 }
 
 // NewAccountService generates a new service that applies the given options to each
@@ -75,24 +88,24 @@ func NewAccountService(opts ...option.RequestOption) (r *AccountService) {
 	r.CfdTunnels = NewAccountCfdTunnelService(opts...)
 	r.CustomPages = NewAccountCustomPageService(opts...)
 	r.Diagnostics = NewAccountDiagnosticService(opts...)
-	r.Dlps = NewAccountDlpService(opts...)
+	r.Dlp = NewAccountDlpService(opts...)
 	r.DNSFirewalls = NewAccountDNSFirewallService(opts...)
 	r.Emails = NewAccountEmailService(opts...)
 	r.Firewalls = NewAccountFirewallService(opts...)
 	r.Images = NewAccountImageService(opts...)
-	r.Intels = NewAccountIntelService(opts...)
+	r.Intel = NewAccountIntelService(opts...)
 	r.LoadBalancers = NewAccountLoadBalancerService(opts...)
 	r.Logpushes = NewAccountLogpushService(opts...)
 	r.Logs = NewAccountLogService(opts...)
-	r.Magics = NewAccountMagicService(opts...)
+	r.Magic = NewAccountMagicService(opts...)
 	r.Members = NewAccountMemberService(opts...)
 	r.Mnms = NewAccountMnmService(opts...)
 	r.MtlsCertificates = NewAccountMtlsCertificateService(opts...)
 	r.Pages = NewAccountPageService(opts...)
 	r.Pcaps = NewAccountPcapService(opts...)
-	r.R2s = NewAccountR2Service(opts...)
+	r.R2 = NewAccountR2Service(opts...)
 	r.Railguns = NewAccountRailgunService(opts...)
-	r.Registrars = NewAccountRegistrarService(opts...)
+	r.Registrar = NewAccountRegistrarService(opts...)
 	r.RequestTracers = NewAccountRequestTracerService(opts...)
 	r.Roles = NewAccountRoleService(opts...)
 	r.Rules = NewAccountRuleService(opts...)
@@ -100,20 +113,32 @@ func NewAccountService(opts ...option.RequestOption) (r *AccountService) {
 	r.Storages = NewAccountStorageService(opts...)
 	r.Streams = NewAccountStreamService(opts...)
 	r.Subscriptions = NewAccountSubscriptionService(opts...)
-	r.Teamnets = NewAccountTeamnetService(opts...)
+	r.Teamnet = NewAccountTeamnetService(opts...)
 	r.Tunnels = NewAccountTunnelService(opts...)
 	r.Workers = NewAccountWorkerService(opts...)
-	r.Gateways = NewAccountGatewayService(opts...)
+	r.Gateway = NewAccountGatewayService(opts...)
 	r.Rulesets = NewAccountRulesetService(opts...)
-	r.Accesses = NewAccountAccessService(opts...)
+	r.Access = NewAccountAccessService(opts...)
 	r.Alerting = NewAccountAlertingService(opts...)
 	r.CustomNs = NewAccountCustomNService(opts...)
 	r.Devices = NewAccountDeviceService(opts...)
+	r.Addressing = NewAccountAddressingService(opts...)
+	r.AI = NewAccountAIService(opts...)
+	r.Challenges = NewAccountChallengeService(opts...)
+	r.D1 = NewAccountD1Service(opts...)
+	r.Dex = NewAccountDexService(opts...)
+	r.Hyperdrive = NewAccountHyperdriveService(opts...)
+	r.PagesProjects = NewAccountPagesProjectService(opts...)
+	r.Rum = NewAccountRumService(opts...)
+	r.VectorizeIndexes = NewAccountVectorizeIndexService(opts...)
+	r.WarpConnector = NewAccountWarpConnectorService(opts...)
+	r.Zerotrust = NewAccountZerotrustService(opts...)
+	r.Urlscanner = NewAccountUrlscannerService(opts...)
 	return
 }
 
 // Get information about a specific account that you are a member of.
-func (r *AccountService) Get(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *ResponseSingle, err error) {
+func (r *AccountService) Get(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *AccountGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -121,7 +146,7 @@ func (r *AccountService) Get(ctx context.Context, identifier interface{}, opts .
 }
 
 // Update an existing account.
-func (r *AccountService) Update(ctx context.Context, identifier interface{}, body AccountUpdateParams, opts ...option.RequestOption) (res *ResponseSingle, err error) {
+func (r *AccountService) Update(ctx context.Context, identifier interface{}, body AccountUpdateParams, opts ...option.RequestOption) (res *AccountUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
@@ -129,122 +154,35 @@ func (r *AccountService) Update(ctx context.Context, identifier interface{}, bod
 }
 
 // List all accounts you have ownership or verified access to.
-func (r *AccountService) AccountsListAccounts(ctx context.Context, query AccountAccountsListAccountsParams, opts ...option.RequestOption) (res *ResponseCollectionYgt6DzoC, err error) {
-	opts = append(r.Options[:], opts...)
+func (r *AccountService) AccountsListAccounts(ctx context.Context, query AccountAccountsListAccountsParams, opts ...option.RequestOption) (res *shared.Page[AccountAccountsListAccountsResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "accounts"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
 }
 
-type ResponseCollectionYgt6DzoC struct {
-	Errors     []ResponseCollectionYgt6DzoCError    `json:"errors"`
-	Messages   []ResponseCollectionYgt6DzoCMessage  `json:"messages"`
-	Result     []interface{}                        `json:"result"`
-	ResultInfo ResponseCollectionYgt6DzoCResultInfo `json:"result_info"`
+type AccountGetResponse struct {
+	Errors   []AccountGetResponseError   `json:"errors"`
+	Messages []AccountGetResponseMessage `json:"messages"`
+	Result   interface{}                 `json:"result"`
 	// Whether the API call was successful
-	Success ResponseCollectionYgt6DzoCSuccess `json:"success"`
-	JSON    responseCollectionYgt6DzoCJSON    `json:"-"`
+	Success AccountGetResponseSuccess `json:"success"`
+	JSON    accountGetResponseJSON    `json:"-"`
 }
 
-// responseCollectionYgt6DzoCJSON contains the JSON metadata for the struct
-// [ResponseCollectionYgt6DzoC]
-type responseCollectionYgt6DzoCJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ResponseCollectionYgt6DzoC) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ResponseCollectionYgt6DzoCError struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    responseCollectionYgt6DzoCErrorJSON `json:"-"`
-}
-
-// responseCollectionYgt6DzoCErrorJSON contains the JSON metadata for the struct
-// [ResponseCollectionYgt6DzoCError]
-type responseCollectionYgt6DzoCErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ResponseCollectionYgt6DzoCError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ResponseCollectionYgt6DzoCMessage struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    responseCollectionYgt6DzoCMessageJSON `json:"-"`
-}
-
-// responseCollectionYgt6DzoCMessageJSON contains the JSON metadata for the struct
-// [ResponseCollectionYgt6DzoCMessage]
-type responseCollectionYgt6DzoCMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ResponseCollectionYgt6DzoCMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ResponseCollectionYgt6DzoCResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                  `json:"total_count"`
-	JSON       responseCollectionYgt6DzoCResultInfoJSON `json:"-"`
-}
-
-// responseCollectionYgt6DzoCResultInfoJSON contains the JSON metadata for the
-// struct [ResponseCollectionYgt6DzoCResultInfo]
-type responseCollectionYgt6DzoCResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ResponseCollectionYgt6DzoCResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type ResponseCollectionYgt6DzoCSuccess bool
-
-const (
-	ResponseCollectionYgt6DzoCSuccessTrue ResponseCollectionYgt6DzoCSuccess = true
-)
-
-type ResponseSingle struct {
-	Errors   []ResponseSingleError   `json:"errors"`
-	Messages []ResponseSingleMessage `json:"messages"`
-	Result   interface{}             `json:"result"`
-	// Whether the API call was successful
-	Success ResponseSingleSuccess `json:"success"`
-	JSON    responseSingleJSON    `json:"-"`
-}
-
-// responseSingleJSON contains the JSON metadata for the struct [ResponseSingle]
-type responseSingleJSON struct {
+// accountGetResponseJSON contains the JSON metadata for the struct
+// [AccountGetResponse]
+type accountGetResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -253,54 +191,125 @@ type responseSingleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ResponseSingle) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ResponseSingleError struct {
-	Code    int64                   `json:"code,required"`
-	Message string                  `json:"message,required"`
-	JSON    responseSingleErrorJSON `json:"-"`
+type AccountGetResponseError struct {
+	Code    int64                       `json:"code,required"`
+	Message string                      `json:"message,required"`
+	JSON    accountGetResponseErrorJSON `json:"-"`
 }
 
-// responseSingleErrorJSON contains the JSON metadata for the struct
-// [ResponseSingleError]
-type responseSingleErrorJSON struct {
+// accountGetResponseErrorJSON contains the JSON metadata for the struct
+// [AccountGetResponseError]
+type accountGetResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ResponseSingleError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGetResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ResponseSingleMessage struct {
-	Code    int64                     `json:"code,required"`
-	Message string                    `json:"message,required"`
-	JSON    responseSingleMessageJSON `json:"-"`
+type AccountGetResponseMessage struct {
+	Code    int64                         `json:"code,required"`
+	Message string                        `json:"message,required"`
+	JSON    accountGetResponseMessageJSON `json:"-"`
 }
 
-// responseSingleMessageJSON contains the JSON metadata for the struct
-// [ResponseSingleMessage]
-type responseSingleMessageJSON struct {
+// accountGetResponseMessageJSON contains the JSON metadata for the struct
+// [AccountGetResponseMessage]
+type accountGetResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ResponseSingleMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type ResponseSingleSuccess bool
+type AccountGetResponseSuccess bool
 
 const (
-	ResponseSingleSuccessTrue ResponseSingleSuccess = true
+	AccountGetResponseSuccessTrue AccountGetResponseSuccess = true
 )
+
+type AccountUpdateResponse struct {
+	Errors   []AccountUpdateResponseError   `json:"errors"`
+	Messages []AccountUpdateResponseMessage `json:"messages"`
+	Result   interface{}                    `json:"result"`
+	// Whether the API call was successful
+	Success AccountUpdateResponseSuccess `json:"success"`
+	JSON    accountUpdateResponseJSON    `json:"-"`
+}
+
+// accountUpdateResponseJSON contains the JSON metadata for the struct
+// [AccountUpdateResponse]
+type accountUpdateResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountUpdateResponseError struct {
+	Code    int64                          `json:"code,required"`
+	Message string                         `json:"message,required"`
+	JSON    accountUpdateResponseErrorJSON `json:"-"`
+}
+
+// accountUpdateResponseErrorJSON contains the JSON metadata for the struct
+// [AccountUpdateResponseError]
+type accountUpdateResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountUpdateResponseMessage struct {
+	Code    int64                            `json:"code,required"`
+	Message string                           `json:"message,required"`
+	JSON    accountUpdateResponseMessageJSON `json:"-"`
+}
+
+// accountUpdateResponseMessageJSON contains the JSON metadata for the struct
+// [AccountUpdateResponseMessage]
+type accountUpdateResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountUpdateResponseSuccess bool
+
+const (
+	AccountUpdateResponseSuccessTrue AccountUpdateResponseSuccess = true
+)
+
+type AccountAccountsListAccountsResponse = interface{}
 
 type AccountUpdateParams struct {
 	// Account name
@@ -315,6 +324,17 @@ func (r AccountUpdateParams) MarshalJSON() (data []byte, err error) {
 
 // Account settings
 type AccountUpdateParamsSettings struct {
+	// Specifies the default nameservers to be used for new zones added to this
+	// account.
+	//
+	// - `cloudflare.standard` for Cloudflare-branded nameservers
+	// - `custom.account` for account custom nameservers
+	// - `custom.tenant` for tenant custom nameservers
+	//
+	// See
+	// [Custom Nameservers](https://developers.cloudflare.com/dns/additional-options/custom-nameservers/)
+	// for more information.
+	DefaultNameservers param.Field[AccountUpdateParamsSettingsDefaultNameservers] `json:"default_nameservers"`
 	// Indicates whether membership in this account requires that Two-Factor
 	// Authentication is enabled
 	EnforceTwofactor param.Field[bool] `json:"enforce_twofactor"`
@@ -326,6 +346,24 @@ type AccountUpdateParamsSettings struct {
 func (r AccountUpdateParamsSettings) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// Specifies the default nameservers to be used for new zones added to this
+// account.
+//
+// - `cloudflare.standard` for Cloudflare-branded nameservers
+// - `custom.account` for account custom nameservers
+// - `custom.tenant` for tenant custom nameservers
+//
+// See
+// [Custom Nameservers](https://developers.cloudflare.com/dns/additional-options/custom-nameservers/)
+// for more information.
+type AccountUpdateParamsSettingsDefaultNameservers string
+
+const (
+	AccountUpdateParamsSettingsDefaultNameserversCloudflareStandard AccountUpdateParamsSettingsDefaultNameservers = "cloudflare.standard"
+	AccountUpdateParamsSettingsDefaultNameserversCustomAccount      AccountUpdateParamsSettingsDefaultNameservers = "custom.account"
+	AccountUpdateParamsSettingsDefaultNameserversCustomTenant       AccountUpdateParamsSettingsDefaultNameservers = "custom.tenant"
+)
 
 type AccountAccountsListAccountsParams struct {
 	// Direction to order results.

@@ -14,6 +14,7 @@ import (
 type RadarEntityService struct {
 	Options   []option.RequestOption
 	ASNs      *RadarEntityASNService
+	IPs       *RadarEntityIPService
 	Locations *RadarEntityLocationService
 }
 
@@ -24,6 +25,7 @@ func NewRadarEntityService(opts ...option.RequestOption) (r *RadarEntityService)
 	r = &RadarEntityService{}
 	r.Options = opts
 	r.ASNs = NewRadarEntityASNService(opts...)
+	r.IPs = NewRadarEntityIPService(opts...)
 	r.Locations = NewRadarEntityLocationService(opts...)
 	return
 }

@@ -11,10 +11,8 @@ import (
 // variables from the environment automatically. You should not instantiate this
 // service directly, and instead use the [NewRadarEmailService] method instead.
 type RadarEmailService struct {
-	Options    []option.RequestOption
-	Summaries  *RadarEmailSummaryService
-	Timeseries *RadarEmailTimeseryService
-	Tops       *RadarEmailTopService
+	Options  []option.RequestOption
+	Security *RadarEmailSecurityService
 }
 
 // NewRadarEmailService generates a new service that applies the given options to
@@ -23,8 +21,6 @@ type RadarEmailService struct {
 func NewRadarEmailService(opts ...option.RequestOption) (r *RadarEmailService) {
 	r = &RadarEmailService{}
 	r.Options = opts
-	r.Summaries = NewRadarEmailSummaryService(opts...)
-	r.Timeseries = NewRadarEmailTimeseryService(opts...)
-	r.Tops = NewRadarEmailTopService(opts...)
+	r.Security = NewRadarEmailSecurityService(opts...)
 	return
 }

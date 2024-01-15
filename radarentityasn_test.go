@@ -24,10 +24,12 @@ func TestRadarEntityASNGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Radars.Entities.ASNs.Get(
+	_, err := client.Radar.Entities.ASNs.Get(
 		context.TODO(),
 		int64(3),
 		cloudflare.RadarEntityASNGetParams{
@@ -54,14 +56,18 @@ func TestRadarEntityASNListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Radars.Entities.ASNs.List(context.TODO(), cloudflare.RadarEntityASNListParams{
-		ASN:    cloudflare.F("174,7922"),
-		Format: cloudflare.F(cloudflare.RadarEntityASNListParamsFormatJson),
-		Limit:  cloudflare.F(int64(5)),
-		Offset: cloudflare.F(int64(0)),
+	_, err := client.Radar.Entities.ASNs.List(context.TODO(), cloudflare.RadarEntityASNListParams{
+		ASN:      cloudflare.F("174,7922"),
+		Format:   cloudflare.F(cloudflare.RadarEntityASNListParamsFormatJson),
+		Limit:    cloudflare.F(int64(5)),
+		Location: cloudflare.F("US"),
+		Offset:   cloudflare.F(int64(0)),
+		OrderBy:  cloudflare.F(cloudflare.RadarEntityASNListParamsOrderByASN),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

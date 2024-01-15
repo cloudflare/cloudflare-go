@@ -31,27 +31,28 @@ func NewAccountLoadBalancerPoolReferenceService(opts ...option.RequestOption) (r
 }
 
 // Get the list of resources that reference the provided pool.
-func (r *AccountLoadBalancerPoolReferenceService) AccountLoadBalancerPoolsListPoolReferences(ctx context.Context, accountIdentifier string, identifier interface{}, opts ...option.RequestOption) (res *SchemasReferencesResponse, err error) {
+func (r *AccountLoadBalancerPoolReferenceService) AccountLoadBalancerPoolsListPoolReferences(ctx context.Context, accountIdentifier string, identifier string, opts ...option.RequestOption) (res *AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%v/references", accountIdentifier, identifier)
+	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s/references", accountIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type SchemasReferencesResponse struct {
-	Errors   []SchemasReferencesResponseError   `json:"errors"`
-	Messages []SchemasReferencesResponseMessage `json:"messages"`
+type AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponse struct {
+	Errors   []AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseError   `json:"errors"`
+	Messages []AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseMessage `json:"messages"`
 	// List of resources that reference a given pool.
-	Result     []SchemasReferencesResponseResult   `json:"result"`
-	ResultInfo SchemasReferencesResponseResultInfo `json:"result_info"`
+	Result     []AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseResult   `json:"result"`
+	ResultInfo AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseResultInfo `json:"result_info"`
 	// Whether the API call was successful
-	Success SchemasReferencesResponseSuccess `json:"success"`
-	JSON    schemasReferencesResponseJSON    `json:"-"`
+	Success AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseSuccess `json:"success"`
+	JSON    accountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseJSON    `json:"-"`
 }
 
-// schemasReferencesResponseJSON contains the JSON metadata for the struct
-// [SchemasReferencesResponse]
-type schemasReferencesResponseJSON struct {
+// accountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseJSON
+// contains the JSON metadata for the struct
+// [AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponse]
+type accountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -61,59 +62,62 @@ type schemasReferencesResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasReferencesResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemasReferencesResponseError struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    schemasReferencesResponseErrorJSON `json:"-"`
+type AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseError struct {
+	Code    int64                                                                                       `json:"code,required"`
+	Message string                                                                                      `json:"message,required"`
+	JSON    accountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseErrorJSON `json:"-"`
 }
 
-// schemasReferencesResponseErrorJSON contains the JSON metadata for the struct
-// [SchemasReferencesResponseError]
-type schemasReferencesResponseErrorJSON struct {
+// accountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseError]
+type accountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasReferencesResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemasReferencesResponseMessage struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    schemasReferencesResponseMessageJSON `json:"-"`
+type AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseMessage struct {
+	Code    int64                                                                                         `json:"code,required"`
+	Message string                                                                                        `json:"message,required"`
+	JSON    accountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseMessageJSON `json:"-"`
 }
 
-// schemasReferencesResponseMessageJSON contains the JSON metadata for the struct
-// [SchemasReferencesResponseMessage]
-type schemasReferencesResponseMessageJSON struct {
+// accountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseMessage]
+type accountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasReferencesResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemasReferencesResponseResult struct {
-	ReferenceType SchemasReferencesResponseResultReferenceType `json:"reference_type"`
-	ResourceID    string                                       `json:"resource_id"`
-	ResourceName  string                                       `json:"resource_name"`
-	ResourceType  string                                       `json:"resource_type"`
-	JSON          schemasReferencesResponseResultJSON          `json:"-"`
+type AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseResult struct {
+	ReferenceType AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseResultReferenceType `json:"reference_type"`
+	ResourceID    string                                                                                                `json:"resource_id"`
+	ResourceName  string                                                                                                `json:"resource_name"`
+	ResourceType  string                                                                                                `json:"resource_type"`
+	JSON          accountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseResultJSON          `json:"-"`
 }
 
-// schemasReferencesResponseResultJSON contains the JSON metadata for the struct
-// [SchemasReferencesResponseResult]
-type schemasReferencesResponseResultJSON struct {
+// accountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseResult]
+type accountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseResultJSON struct {
 	ReferenceType apijson.Field
 	ResourceID    apijson.Field
 	ResourceName  apijson.Field
@@ -122,19 +126,19 @@ type schemasReferencesResponseResultJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *SchemasReferencesResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemasReferencesResponseResultReferenceType string
+type AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseResultReferenceType string
 
 const (
-	SchemasReferencesResponseResultReferenceTypeStar     SchemasReferencesResponseResultReferenceType = "*"
-	SchemasReferencesResponseResultReferenceTypeReferral SchemasReferencesResponseResultReferenceType = "referral"
-	SchemasReferencesResponseResultReferenceTypeReferrer SchemasReferencesResponseResultReferenceType = "referrer"
+	AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseResultReferenceTypeStar     AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseResultReferenceType = "*"
+	AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseResultReferenceTypeReferral AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseResultReferenceType = "referral"
+	AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseResultReferenceTypeReferrer AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseResultReferenceType = "referrer"
 )
 
-type SchemasReferencesResponseResultInfo struct {
+type AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -142,13 +146,14 @@ type SchemasReferencesResponseResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                 `json:"total_count"`
-	JSON       schemasReferencesResponseResultInfoJSON `json:"-"`
+	TotalCount float64                                                                                          `json:"total_count"`
+	JSON       accountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseResultInfoJSON `json:"-"`
 }
 
-// schemasReferencesResponseResultInfoJSON contains the JSON metadata for the
-// struct [SchemasReferencesResponseResultInfo]
-type schemasReferencesResponseResultInfoJSON struct {
+// accountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseResultInfo]
+type accountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -157,13 +162,13 @@ type schemasReferencesResponseResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasReferencesResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type SchemasReferencesResponseSuccess bool
+type AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseSuccess bool
 
 const (
-	SchemasReferencesResponseSuccessTrue SchemasReferencesResponseSuccess = true
+	AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseSuccessTrue AccountLoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseSuccess = true
 )

@@ -24,13 +24,15 @@ func TestAccountAccessGroupGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Accesses.Groups.Get(
+	_, err := client.Accounts.Access.Groups.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		map[string]interface{}{},
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -52,51 +54,54 @@ func TestAccountAccessGroupUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Accesses.Groups.Update(
+	_, err := client.Accounts.Access.Groups.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		map[string]interface{}{},
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.AccountAccessGroupUpdateParams{
-			Include: cloudflare.F([]cloudflare.AccountAccessGroupUpdateParamsInclude{cloudflare.AccountAccessGroupUpdateParamsIncludeEmailRule(cloudflare.AccountAccessGroupUpdateParamsIncludeEmailRule{
-				Email: cloudflare.F(cloudflare.AccountAccessGroupUpdateParamsIncludeEmailRuleEmail{
+			Include: cloudflare.F([]cloudflare.AccountAccessGroupUpdateParamsInclude{cloudflare.AccountAccessGroupUpdateParamsIncludePajwohLqEmailRule(cloudflare.AccountAccessGroupUpdateParamsIncludePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.AccountAccessGroupUpdateParamsIncludePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}), cloudflare.AccountAccessGroupUpdateParamsIncludeEmailRule(cloudflare.AccountAccessGroupUpdateParamsIncludeEmailRule{
-				Email: cloudflare.F(cloudflare.AccountAccessGroupUpdateParamsIncludeEmailRuleEmail{
+			}), cloudflare.AccountAccessGroupUpdateParamsIncludePajwohLqEmailRule(cloudflare.AccountAccessGroupUpdateParamsIncludePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.AccountAccessGroupUpdateParamsIncludePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}), cloudflare.AccountAccessGroupUpdateParamsIncludeEmailRule(cloudflare.AccountAccessGroupUpdateParamsIncludeEmailRule{
-				Email: cloudflare.F(cloudflare.AccountAccessGroupUpdateParamsIncludeEmailRuleEmail{
+			}), cloudflare.AccountAccessGroupUpdateParamsIncludePajwohLqEmailRule(cloudflare.AccountAccessGroupUpdateParamsIncludePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.AccountAccessGroupUpdateParamsIncludePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
 			})}),
 			Name: cloudflare.F("Allow devs"),
-			Exclude: cloudflare.F([]cloudflare.AccountAccessGroupUpdateParamsExclude{cloudflare.AccountAccessGroupUpdateParamsExcludeEmailRule(cloudflare.AccountAccessGroupUpdateParamsExcludeEmailRule{
-				Email: cloudflare.F(cloudflare.AccountAccessGroupUpdateParamsExcludeEmailRuleEmail{
+			Exclude: cloudflare.F([]cloudflare.AccountAccessGroupUpdateParamsExclude{cloudflare.AccountAccessGroupUpdateParamsExcludePajwohLqEmailRule(cloudflare.AccountAccessGroupUpdateParamsExcludePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.AccountAccessGroupUpdateParamsExcludePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}), cloudflare.AccountAccessGroupUpdateParamsExcludeEmailRule(cloudflare.AccountAccessGroupUpdateParamsExcludeEmailRule{
-				Email: cloudflare.F(cloudflare.AccountAccessGroupUpdateParamsExcludeEmailRuleEmail{
+			}), cloudflare.AccountAccessGroupUpdateParamsExcludePajwohLqEmailRule(cloudflare.AccountAccessGroupUpdateParamsExcludePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.AccountAccessGroupUpdateParamsExcludePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}), cloudflare.AccountAccessGroupUpdateParamsExcludeEmailRule(cloudflare.AccountAccessGroupUpdateParamsExcludeEmailRule{
-				Email: cloudflare.F(cloudflare.AccountAccessGroupUpdateParamsExcludeEmailRuleEmail{
+			}), cloudflare.AccountAccessGroupUpdateParamsExcludePajwohLqEmailRule(cloudflare.AccountAccessGroupUpdateParamsExcludePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.AccountAccessGroupUpdateParamsExcludePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
 			})}),
-			Require: cloudflare.F([]cloudflare.AccountAccessGroupUpdateParamsRequire{cloudflare.AccountAccessGroupUpdateParamsRequireEmailRule(cloudflare.AccountAccessGroupUpdateParamsRequireEmailRule{
-				Email: cloudflare.F(cloudflare.AccountAccessGroupUpdateParamsRequireEmailRuleEmail{
+			IsDefault: cloudflare.F(true),
+			Require: cloudflare.F([]cloudflare.AccountAccessGroupUpdateParamsRequire{cloudflare.AccountAccessGroupUpdateParamsRequirePajwohLqEmailRule(cloudflare.AccountAccessGroupUpdateParamsRequirePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.AccountAccessGroupUpdateParamsRequirePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}), cloudflare.AccountAccessGroupUpdateParamsRequireEmailRule(cloudflare.AccountAccessGroupUpdateParamsRequireEmailRule{
-				Email: cloudflare.F(cloudflare.AccountAccessGroupUpdateParamsRequireEmailRuleEmail{
+			}), cloudflare.AccountAccessGroupUpdateParamsRequirePajwohLqEmailRule(cloudflare.AccountAccessGroupUpdateParamsRequirePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.AccountAccessGroupUpdateParamsRequirePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}), cloudflare.AccountAccessGroupUpdateParamsRequireEmailRule(cloudflare.AccountAccessGroupUpdateParamsRequireEmailRule{
-				Email: cloudflare.F(cloudflare.AccountAccessGroupUpdateParamsRequireEmailRuleEmail{
+			}), cloudflare.AccountAccessGroupUpdateParamsRequirePajwohLqEmailRule(cloudflare.AccountAccessGroupUpdateParamsRequirePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.AccountAccessGroupUpdateParamsRequirePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
 			})}),
@@ -122,13 +127,15 @@ func TestAccountAccessGroupDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Accesses.Groups.Delete(
+	_, err := client.Accounts.Access.Groups.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		map[string]interface{}{},
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -150,50 +157,53 @@ func TestAccountAccessGroupAccessGroupsNewAnAccessGroupWithOptionalParams(t *tes
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Accesses.Groups.AccessGroupsNewAnAccessGroup(
+	_, err := client.Accounts.Access.Groups.AccessGroupsNewAnAccessGroup(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParams{
-			Include: cloudflare.F([]cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsInclude{cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsIncludeEmailRule(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsIncludeEmailRule{
-				Email: cloudflare.F(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsIncludeEmailRuleEmail{
+			Include: cloudflare.F([]cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsInclude{cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsIncludePajwohLqEmailRule(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsIncludePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsIncludePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}), cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsIncludeEmailRule(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsIncludeEmailRule{
-				Email: cloudflare.F(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsIncludeEmailRuleEmail{
+			}), cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsIncludePajwohLqEmailRule(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsIncludePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsIncludePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}), cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsIncludeEmailRule(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsIncludeEmailRule{
-				Email: cloudflare.F(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsIncludeEmailRuleEmail{
+			}), cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsIncludePajwohLqEmailRule(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsIncludePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsIncludePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
 			})}),
 			Name: cloudflare.F("Allow devs"),
-			Exclude: cloudflare.F([]cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsExclude{cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsExcludeEmailRule(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsExcludeEmailRule{
-				Email: cloudflare.F(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsExcludeEmailRuleEmail{
+			Exclude: cloudflare.F([]cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsExclude{cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsExcludePajwohLqEmailRule(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsExcludePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsExcludePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}), cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsExcludeEmailRule(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsExcludeEmailRule{
-				Email: cloudflare.F(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsExcludeEmailRuleEmail{
+			}), cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsExcludePajwohLqEmailRule(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsExcludePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsExcludePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}), cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsExcludeEmailRule(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsExcludeEmailRule{
-				Email: cloudflare.F(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsExcludeEmailRuleEmail{
+			}), cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsExcludePajwohLqEmailRule(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsExcludePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsExcludePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
 			})}),
-			Require: cloudflare.F([]cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsRequire{cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsRequireEmailRule(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsRequireEmailRule{
-				Email: cloudflare.F(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsRequireEmailRuleEmail{
+			IsDefault: cloudflare.F(true),
+			Require: cloudflare.F([]cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsRequire{cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsRequirePajwohLqEmailRule(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsRequirePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsRequirePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}), cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsRequireEmailRule(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsRequireEmailRule{
-				Email: cloudflare.F(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsRequireEmailRuleEmail{
+			}), cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsRequirePajwohLqEmailRule(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsRequirePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsRequirePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}), cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsRequireEmailRule(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsRequireEmailRule{
-				Email: cloudflare.F(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsRequireEmailRuleEmail{
+			}), cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsRequirePajwohLqEmailRule(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsRequirePajwohLqEmailRule{
+				Email: cloudflare.F(cloudflare.AccountAccessGroupAccessGroupsNewAnAccessGroupParamsRequirePajwohLqEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
 				}),
 			})}),
@@ -219,10 +229,12 @@ func TestAccountAccessGroupAccessGroupsListAccessGroups(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Accesses.Groups.AccessGroupsListAccessGroups(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Accounts.Access.Groups.AccessGroupsListAccessGroups(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

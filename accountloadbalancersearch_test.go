@@ -24,15 +24,17 @@ func TestAccountLoadBalancerSearchListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.LoadBalancers.Searches.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.AccountLoadBalancerSearchListParams{
-			Page:    cloudflare.F(1.000000),
-			PerPage: cloudflare.F(20.000000),
+			Page:    cloudflare.F[any](map[string]interface{}{}),
+			PerPage: cloudflare.F[any](map[string]interface{}{}),
 			SearchParams: cloudflare.F(cloudflare.AccountLoadBalancerSearchListParamsSearchParams{
 				Query:      cloudflare.F("primary"),
 				References: cloudflare.F(cloudflare.AccountLoadBalancerSearchListParamsSearchParamsReferencesStar),

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -30,9 +31,82 @@ func NewZoneSecondaryDNSOutgoingStatusService(opts ...option.RequestOption) (r *
 }
 
 // Get primary zone transfer status.
-func (r *ZoneSecondaryDNSOutgoingStatusService) SecondaryDNSPrimaryZoneGetOutgoingZoneTransferStatus(ctx context.Context, zoneIdentifier interface{}, opts ...option.RequestOption) (res *EnableTransferResponse, err error) {
+func (r *ZoneSecondaryDNSOutgoingStatusService) SecondaryDNSPrimaryZoneGetOutgoingZoneTransferStatus(ctx context.Context, zoneIdentifier interface{}, opts ...option.RequestOption) (res *ZoneSecondaryDNSOutgoingStatusSecondaryDNSPrimaryZoneGetOutgoingZoneTransferStatusResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing/status", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
+
+type ZoneSecondaryDNSOutgoingStatusSecondaryDNSPrimaryZoneGetOutgoingZoneTransferStatusResponse struct {
+	Errors   []ZoneSecondaryDNSOutgoingStatusSecondaryDNSPrimaryZoneGetOutgoingZoneTransferStatusResponseError   `json:"errors"`
+	Messages []ZoneSecondaryDNSOutgoingStatusSecondaryDNSPrimaryZoneGetOutgoingZoneTransferStatusResponseMessage `json:"messages"`
+	// The zone transfer status of a primary zone
+	Result string `json:"result"`
+	// Whether the API call was successful
+	Success ZoneSecondaryDNSOutgoingStatusSecondaryDNSPrimaryZoneGetOutgoingZoneTransferStatusResponseSuccess `json:"success"`
+	JSON    zoneSecondaryDNSOutgoingStatusSecondaryDNSPrimaryZoneGetOutgoingZoneTransferStatusResponseJSON    `json:"-"`
+}
+
+// zoneSecondaryDNSOutgoingStatusSecondaryDNSPrimaryZoneGetOutgoingZoneTransferStatusResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneSecondaryDNSOutgoingStatusSecondaryDNSPrimaryZoneGetOutgoingZoneTransferStatusResponse]
+type zoneSecondaryDNSOutgoingStatusSecondaryDNSPrimaryZoneGetOutgoingZoneTransferStatusResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSecondaryDNSOutgoingStatusSecondaryDNSPrimaryZoneGetOutgoingZoneTransferStatusResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSecondaryDNSOutgoingStatusSecondaryDNSPrimaryZoneGetOutgoingZoneTransferStatusResponseError struct {
+	Code    int64                                                                                               `json:"code,required"`
+	Message string                                                                                              `json:"message,required"`
+	JSON    zoneSecondaryDNSOutgoingStatusSecondaryDNSPrimaryZoneGetOutgoingZoneTransferStatusResponseErrorJSON `json:"-"`
+}
+
+// zoneSecondaryDNSOutgoingStatusSecondaryDNSPrimaryZoneGetOutgoingZoneTransferStatusResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneSecondaryDNSOutgoingStatusSecondaryDNSPrimaryZoneGetOutgoingZoneTransferStatusResponseError]
+type zoneSecondaryDNSOutgoingStatusSecondaryDNSPrimaryZoneGetOutgoingZoneTransferStatusResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSecondaryDNSOutgoingStatusSecondaryDNSPrimaryZoneGetOutgoingZoneTransferStatusResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSecondaryDNSOutgoingStatusSecondaryDNSPrimaryZoneGetOutgoingZoneTransferStatusResponseMessage struct {
+	Code    int64                                                                                                 `json:"code,required"`
+	Message string                                                                                                `json:"message,required"`
+	JSON    zoneSecondaryDNSOutgoingStatusSecondaryDNSPrimaryZoneGetOutgoingZoneTransferStatusResponseMessageJSON `json:"-"`
+}
+
+// zoneSecondaryDNSOutgoingStatusSecondaryDNSPrimaryZoneGetOutgoingZoneTransferStatusResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneSecondaryDNSOutgoingStatusSecondaryDNSPrimaryZoneGetOutgoingZoneTransferStatusResponseMessage]
+type zoneSecondaryDNSOutgoingStatusSecondaryDNSPrimaryZoneGetOutgoingZoneTransferStatusResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSecondaryDNSOutgoingStatusSecondaryDNSPrimaryZoneGetOutgoingZoneTransferStatusResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneSecondaryDNSOutgoingStatusSecondaryDNSPrimaryZoneGetOutgoingZoneTransferStatusResponseSuccess bool
+
+const (
+	ZoneSecondaryDNSOutgoingStatusSecondaryDNSPrimaryZoneGetOutgoingZoneTransferStatusResponseSuccessTrue ZoneSecondaryDNSOutgoingStatusSecondaryDNSPrimaryZoneGetOutgoingZoneTransferStatusResponseSuccess = true
+)

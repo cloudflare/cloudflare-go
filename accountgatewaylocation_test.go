@@ -24,10 +24,12 @@ func TestAccountGatewayLocationGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Gateways.Locations.Get(
+	_, err := client.Accounts.Gateway.Locations.Get(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		"ed35569b41ce4d1facfe683550f54086",
@@ -52,10 +54,12 @@ func TestAccountGatewayLocationUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Gateways.Locations.Update(
+	_, err := client.Accounts.Gateway.Locations.Update(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		"ed35569b41ce4d1facfe683550f54086",
@@ -63,7 +67,13 @@ func TestAccountGatewayLocationUpdateWithOptionalParams(t *testing.T) {
 			Name:          cloudflare.F("Austin Office Location"),
 			ClientDefault: cloudflare.F(false),
 			EcsSupport:    cloudflare.F(false),
-			Networks:      cloudflare.F([]string{"192.0.2.1/32", "192.0.2.1/32", "192.0.2.1/32"}),
+			Networks: cloudflare.F([]cloudflare.AccountGatewayLocationUpdateParamsNetwork{{
+				Network: cloudflare.F("192.0.2.1/32"),
+			}, {
+				Network: cloudflare.F("192.0.2.1/32"),
+			}, {
+				Network: cloudflare.F("192.0.2.1/32"),
+			}}),
 		},
 	)
 	if err != nil {
@@ -86,10 +96,12 @@ func TestAccountGatewayLocationDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Gateways.Locations.Delete(
+	_, err := client.Accounts.Gateway.Locations.Delete(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		"ed35569b41ce4d1facfe683550f54086",
@@ -114,17 +126,25 @@ func TestAccountGatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocat
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Gateways.Locations.ZeroTrustGatewayLocationsNewZeroTrustGatewayLocation(
+	_, err := client.Accounts.Gateway.Locations.ZeroTrustGatewayLocationsNewZeroTrustGatewayLocation(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		cloudflare.AccountGatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationParams{
 			Name:          cloudflare.F("Austin Office Location"),
 			ClientDefault: cloudflare.F(false),
 			EcsSupport:    cloudflare.F(false),
-			Networks:      cloudflare.F([]string{"192.0.2.1/32", "192.0.2.1/32", "192.0.2.1/32"}),
+			Networks: cloudflare.F([]cloudflare.AccountGatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationParamsNetwork{{
+				Network: cloudflare.F("192.0.2.1/32"),
+			}, {
+				Network: cloudflare.F("192.0.2.1/32"),
+			}, {
+				Network: cloudflare.F("192.0.2.1/32"),
+			}}),
 		},
 	)
 	if err != nil {
@@ -147,10 +167,12 @@ func TestAccountGatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLoca
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Gateways.Locations.ZeroTrustGatewayLocationsListZeroTrustGatewayLocations(context.TODO(), "699d98642c564d2e855e9661899b7252")
+	_, err := client.Accounts.Gateway.Locations.ZeroTrustGatewayLocationsListZeroTrustGatewayLocations(context.TODO(), "699d98642c564d2e855e9661899b7252")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

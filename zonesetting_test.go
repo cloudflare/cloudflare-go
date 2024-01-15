@@ -24,8 +24,10 @@ func TestZoneSettingList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Settings.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
@@ -48,22 +50,24 @@ func TestZoneSettingEdit(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Settings.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.ZoneSettingEditParams{
-			Items: cloudflare.F([]cloudflare.ZoneSettingEditParamsItem{cloudflare.ZoneSettingEditParamsItemsAlwaysOnline(cloudflare.ZoneSettingEditParamsItemsAlwaysOnline{
-				ID:    cloudflare.F(cloudflare.ZoneSettingEditParamsItemsAlwaysOnlineIDAlwaysOnline),
-				Value: cloudflare.F(cloudflare.ZoneSettingEditParamsItemsAlwaysOnlineValueOn),
-			}), cloudflare.ZoneSettingEditParamsItemsBrowserCacheTtl(cloudflare.ZoneSettingEditParamsItemsBrowserCacheTtl{
-				ID:    cloudflare.F(cloudflare.ZoneSettingEditParamsItemsBrowserCacheTtlIDBrowserCacheTtl),
-				Value: cloudflare.F(cloudflare.ZoneSettingEditParamsItemsBrowserCacheTtlValue18000),
-			}), cloudflare.ZoneSettingEditParamsItemsIPGeolocation(cloudflare.ZoneSettingEditParamsItemsIPGeolocation{
-				ID:    cloudflare.F(cloudflare.ZoneSettingEditParamsItemsIPGeolocationIDIPGeolocation),
-				Value: cloudflare.F(cloudflare.ZoneSettingEditParamsItemsIPGeolocationValueOff),
+			Items: cloudflare.F([]cloudflare.ZoneSettingEditParamsItem{cloudflare.ZoneSettingEditParamsItemsZonesAlwaysOnline(cloudflare.ZoneSettingEditParamsItemsZonesAlwaysOnline{
+				ID:    cloudflare.F(cloudflare.ZoneSettingEditParamsItemsZonesAlwaysOnlineIDAlwaysOnline),
+				Value: cloudflare.F(cloudflare.ZoneSettingEditParamsItemsZonesAlwaysOnlineValueOn),
+			}), cloudflare.ZoneSettingEditParamsItemsZonesBrowserCacheTtl(cloudflare.ZoneSettingEditParamsItemsZonesBrowserCacheTtl{
+				ID:    cloudflare.F(cloudflare.ZoneSettingEditParamsItemsZonesBrowserCacheTtlIDBrowserCacheTtl),
+				Value: cloudflare.F(cloudflare.ZoneSettingEditParamsItemsZonesBrowserCacheTtlValue18000),
+			}), cloudflare.ZoneSettingEditParamsItemsZonesIPGeolocation(cloudflare.ZoneSettingEditParamsItemsZonesIPGeolocation{
+				ID:    cloudflare.F(cloudflare.ZoneSettingEditParamsItemsZonesIPGeolocationIDIPGeolocation),
+				Value: cloudflare.F(cloudflare.ZoneSettingEditParamsItemsZonesIPGeolocationValueOff),
 			})}),
 		},
 	)

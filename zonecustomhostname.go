@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -37,7 +38,7 @@ func NewZoneCustomHostnameService(opts ...option.RequestOption) (r *ZoneCustomHo
 }
 
 // Custom Hostname Details
-func (r *ZoneCustomHostnameService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *CustomHostnameResponseSingle4Byp7wot, err error) {
+func (r *ZoneCustomHostnameService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *ZoneCustomHostnameGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/custom_hostnames/%s", zoneIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -48,7 +49,7 @@ func (r *ZoneCustomHostnameService) Get(ctx context.Context, zoneIdentifier stri
 // matches existing config, used to indicate that hostname should pass domain
 // control validation (DCV). Can also be used to change validation type, e.g., from
 // 'http' to 'email'.
-func (r *ZoneCustomHostnameService) Update(ctx context.Context, zoneIdentifier string, identifier string, body ZoneCustomHostnameUpdateParams, opts ...option.RequestOption) (res *CustomHostnameResponseSingle4Byp7wot, err error) {
+func (r *ZoneCustomHostnameService) Update(ctx context.Context, zoneIdentifier string, identifier string, body ZoneCustomHostnameUpdateParams, opts ...option.RequestOption) (res *ZoneCustomHostnameUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/custom_hostnames/%s", zoneIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
@@ -70,7 +71,7 @@ func (r *ZoneCustomHostnameService) Delete(ctx context.Context, zoneIdentifier s
 // plus hostmaster, postmaster, webmaster, admin, administrator. If http is used
 // and the domain is not already pointing to the Managed CNAME host, the PATCH
 // method must be used once it is (to complete validation).
-func (r *ZoneCustomHostnameService) CustomHostnameForAZoneNewCustomHostname(ctx context.Context, zoneIdentifier string, body ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameParams, opts ...option.RequestOption) (res *CustomHostnameResponseSingle4Byp7wot, err error) {
+func (r *ZoneCustomHostnameService) CustomHostnameForAZoneNewCustomHostname(ctx context.Context, zoneIdentifier string, body ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameParams, opts ...option.RequestOption) (res *ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/custom_hostnames", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -78,84 +79,92 @@ func (r *ZoneCustomHostnameService) CustomHostnameForAZoneNewCustomHostname(ctx 
 }
 
 // List, search, sort, and filter all of your custom hostnames.
-func (r *ZoneCustomHostnameService) CustomHostnameForAZoneListCustomHostnames(ctx context.Context, zoneIdentifier string, query ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesParams, opts ...option.RequestOption) (res *CustomHostnameResponseCollection, err error) {
-	opts = append(r.Options[:], opts...)
+func (r *ZoneCustomHostnameService) CustomHostnameForAZoneListCustomHostnames(ctx context.Context, zoneIdentifier string, query ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesParams, opts ...option.RequestOption) (res *shared.Page[ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("zones/%s/custom_hostnames", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
 }
 
-type CustomHostnameResponseCollection struct {
-	Errors     []CustomHostnameResponseCollectionError    `json:"errors"`
-	Messages   []CustomHostnameResponseCollectionMessage  `json:"messages"`
-	Result     []CustomHostnameResponseCollectionResult   `json:"result"`
-	ResultInfo CustomHostnameResponseCollectionResultInfo `json:"result_info"`
+type ZoneCustomHostnameGetResponse struct {
+	Errors   []ZoneCustomHostnameGetResponseError   `json:"errors"`
+	Messages []ZoneCustomHostnameGetResponseMessage `json:"messages"`
+	Result   ZoneCustomHostnameGetResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success CustomHostnameResponseCollectionSuccess `json:"success"`
-	JSON    customHostnameResponseCollectionJSON    `json:"-"`
+	Success ZoneCustomHostnameGetResponseSuccess `json:"success"`
+	JSON    zoneCustomHostnameGetResponseJSON    `json:"-"`
 }
 
-// customHostnameResponseCollectionJSON contains the JSON metadata for the struct
-// [CustomHostnameResponseCollection]
-type customHostnameResponseCollectionJSON struct {
+// zoneCustomHostnameGetResponseJSON contains the JSON metadata for the struct
+// [ZoneCustomHostnameGetResponse]
+type zoneCustomHostnameGetResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CustomHostnameResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneCustomHostnameGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CustomHostnameResponseCollectionError struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    customHostnameResponseCollectionErrorJSON `json:"-"`
+type ZoneCustomHostnameGetResponseError struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    zoneCustomHostnameGetResponseErrorJSON `json:"-"`
 }
 
-// customHostnameResponseCollectionErrorJSON contains the JSON metadata for the
-// struct [CustomHostnameResponseCollectionError]
-type customHostnameResponseCollectionErrorJSON struct {
+// zoneCustomHostnameGetResponseErrorJSON contains the JSON metadata for the struct
+// [ZoneCustomHostnameGetResponseError]
+type zoneCustomHostnameGetResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CustomHostnameResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneCustomHostnameGetResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CustomHostnameResponseCollectionMessage struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    customHostnameResponseCollectionMessageJSON `json:"-"`
+type ZoneCustomHostnameGetResponseMessage struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    zoneCustomHostnameGetResponseMessageJSON `json:"-"`
 }
 
-// customHostnameResponseCollectionMessageJSON contains the JSON metadata for the
-// struct [CustomHostnameResponseCollectionMessage]
-type customHostnameResponseCollectionMessageJSON struct {
+// zoneCustomHostnameGetResponseMessageJSON contains the JSON metadata for the
+// struct [ZoneCustomHostnameGetResponseMessage]
+type zoneCustomHostnameGetResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CustomHostnameResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneCustomHostnameGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CustomHostnameResponseCollectionResult struct {
+type ZoneCustomHostnameGetResponseResult struct {
 	// Identifier
 	ID string `json:"id"`
 	// This is the time the hostname was created.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// These are per-hostname (customer) settings.
-	CustomMetadata CustomHostnameResponseCollectionResultCustomMetadata `json:"custom_metadata"`
+	CustomMetadata ZoneCustomHostnameGetResponseResultCustomMetadata `json:"custom_metadata"`
 	// a valid hostname that’s been added to your DNS zone as an A, AAAA, or CNAME
 	// record.
 	CustomOriginServer string `json:"custom_origin_server"`
@@ -168,22 +177,22 @@ type CustomHostnameResponseCollectionResult struct {
 	// The custom hostname that will point to your hostname via CNAME.
 	Hostname string `json:"hostname"`
 	// This is a record which can be placed to activate a hostname.
-	OwnershipVerification CustomHostnameResponseCollectionResultOwnershipVerification `json:"ownership_verification"`
+	OwnershipVerification ZoneCustomHostnameGetResponseResultOwnershipVerification `json:"ownership_verification"`
 	// This presents the token to be served by the given http url to activate a
 	// hostname.
-	OwnershipVerificationHTTP CustomHostnameResponseCollectionResultOwnershipVerificationHTTP `json:"ownership_verification_http"`
+	OwnershipVerificationHTTP ZoneCustomHostnameGetResponseResultOwnershipVerificationHTTP `json:"ownership_verification_http"`
 	// SSL properties for the custom hostname.
-	Ssl CustomHostnameResponseCollectionResultSsl `json:"ssl"`
+	Ssl ZoneCustomHostnameGetResponseResultSsl `json:"ssl"`
 	// Status of the hostname's activation.
-	Status CustomHostnameResponseCollectionResultStatus `json:"status"`
+	Status ZoneCustomHostnameGetResponseResultStatus `json:"status"`
 	// These are errors that were encountered while trying to activate a hostname.
-	VerificationErrors []interface{}                              `json:"verification_errors"`
-	JSON               customHostnameResponseCollectionResultJSON `json:"-"`
+	VerificationErrors []interface{}                           `json:"verification_errors"`
+	JSON               zoneCustomHostnameGetResponseResultJSON `json:"-"`
 }
 
-// customHostnameResponseCollectionResultJSON contains the JSON metadata for the
-// struct [CustomHostnameResponseCollectionResult]
-type customHostnameResponseCollectionResultJSON struct {
+// zoneCustomHostnameGetResponseResultJSON contains the JSON metadata for the
+// struct [ZoneCustomHostnameGetResponseResult]
+type zoneCustomHostnameGetResponseResultJSON struct {
 	ID                        apijson.Field
 	CreatedAt                 apijson.Field
 	CustomMetadata            apijson.Field
@@ -199,44 +208,44 @@ type customHostnameResponseCollectionResultJSON struct {
 	ExtraFields               map[string]apijson.Field
 }
 
-func (r *CustomHostnameResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneCustomHostnameGetResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // These are per-hostname (customer) settings.
-type CustomHostnameResponseCollectionResultCustomMetadata struct {
+type ZoneCustomHostnameGetResponseResultCustomMetadata struct {
 	// Unique metadata for this hostname.
-	Key  string                                                   `json:"key"`
-	JSON customHostnameResponseCollectionResultCustomMetadataJSON `json:"-"`
+	Key  string                                                `json:"key"`
+	JSON zoneCustomHostnameGetResponseResultCustomMetadataJSON `json:"-"`
 }
 
-// customHostnameResponseCollectionResultCustomMetadataJSON contains the JSON
-// metadata for the struct [CustomHostnameResponseCollectionResultCustomMetadata]
-type customHostnameResponseCollectionResultCustomMetadataJSON struct {
+// zoneCustomHostnameGetResponseResultCustomMetadataJSON contains the JSON metadata
+// for the struct [ZoneCustomHostnameGetResponseResultCustomMetadata]
+type zoneCustomHostnameGetResponseResultCustomMetadataJSON struct {
 	Key         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CustomHostnameResponseCollectionResultCustomMetadata) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneCustomHostnameGetResponseResultCustomMetadata) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // This is a record which can be placed to activate a hostname.
-type CustomHostnameResponseCollectionResultOwnershipVerification struct {
+type ZoneCustomHostnameGetResponseResultOwnershipVerification struct {
 	// DNS Name for record.
 	Name string `json:"name"`
 	// DNS Record type.
-	Type CustomHostnameResponseCollectionResultOwnershipVerificationType `json:"type"`
+	Type ZoneCustomHostnameGetResponseResultOwnershipVerificationType `json:"type"`
 	// Content for the record.
-	Value string                                                          `json:"value"`
-	JSON  customHostnameResponseCollectionResultOwnershipVerificationJSON `json:"-"`
+	Value string                                                       `json:"value"`
+	JSON  zoneCustomHostnameGetResponseResultOwnershipVerificationJSON `json:"-"`
 }
 
-// customHostnameResponseCollectionResultOwnershipVerificationJSON contains the
-// JSON metadata for the struct
-// [CustomHostnameResponseCollectionResultOwnershipVerification]
-type customHostnameResponseCollectionResultOwnershipVerificationJSON struct {
+// zoneCustomHostnameGetResponseResultOwnershipVerificationJSON contains the JSON
+// metadata for the struct
+// [ZoneCustomHostnameGetResponseResultOwnershipVerification]
+type zoneCustomHostnameGetResponseResultOwnershipVerificationJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	Value       apijson.Field
@@ -244,53 +253,53 @@ type customHostnameResponseCollectionResultOwnershipVerificationJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CustomHostnameResponseCollectionResultOwnershipVerification) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneCustomHostnameGetResponseResultOwnershipVerification) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // DNS Record type.
-type CustomHostnameResponseCollectionResultOwnershipVerificationType string
+type ZoneCustomHostnameGetResponseResultOwnershipVerificationType string
 
 const (
-	CustomHostnameResponseCollectionResultOwnershipVerificationTypeTxt CustomHostnameResponseCollectionResultOwnershipVerificationType = "txt"
+	ZoneCustomHostnameGetResponseResultOwnershipVerificationTypeTxt ZoneCustomHostnameGetResponseResultOwnershipVerificationType = "txt"
 )
 
 // This presents the token to be served by the given http url to activate a
 // hostname.
-type CustomHostnameResponseCollectionResultOwnershipVerificationHTTP struct {
+type ZoneCustomHostnameGetResponseResultOwnershipVerificationHTTP struct {
 	// Token to be served.
 	HTTPBody string `json:"http_body"`
 	// The HTTP URL that will be checked during custom hostname verification and where
 	// the customer should host the token.
-	HTTPURL string                                                              `json:"http_url"`
-	JSON    customHostnameResponseCollectionResultOwnershipVerificationHTTPJSON `json:"-"`
+	HTTPURL string                                                           `json:"http_url"`
+	JSON    zoneCustomHostnameGetResponseResultOwnershipVerificationHTTPJSON `json:"-"`
 }
 
-// customHostnameResponseCollectionResultOwnershipVerificationHTTPJSON contains the
+// zoneCustomHostnameGetResponseResultOwnershipVerificationHTTPJSON contains the
 // JSON metadata for the struct
-// [CustomHostnameResponseCollectionResultOwnershipVerificationHTTP]
-type customHostnameResponseCollectionResultOwnershipVerificationHTTPJSON struct {
+// [ZoneCustomHostnameGetResponseResultOwnershipVerificationHTTP]
+type zoneCustomHostnameGetResponseResultOwnershipVerificationHTTPJSON struct {
 	HTTPBody    apijson.Field
 	HTTPURL     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CustomHostnameResponseCollectionResultOwnershipVerificationHTTP) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneCustomHostnameGetResponseResultOwnershipVerificationHTTP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // SSL properties for the custom hostname.
-type CustomHostnameResponseCollectionResultSsl struct {
+type ZoneCustomHostnameGetResponseResultSsl struct {
 	// Custom hostname SSL identifier tag.
 	ID string `json:"id"`
 	// A ubiquitous bundle has the highest probability of being verified everywhere,
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
-	BundleMethod CustomHostnameResponseCollectionResultSslBundleMethod `json:"bundle_method"`
+	BundleMethod ZoneCustomHostnameGetResponseResultSslBundleMethod `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
-	CertificateAuthority CustomHostnameResponseCollectionResultSslCertificateAuthority `json:"certificate_authority"`
+	CertificateAuthority ZoneCustomHostnameGetResponseResultSslCertificateAuthority `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate string `json:"custom_certificate"`
 	// The identifier for the Custom CSR that was used.
@@ -304,32 +313,32 @@ type CustomHostnameResponseCollectionResultSsl struct {
 	// The issuer on a custom uploaded certificate.
 	Issuer string `json:"issuer"`
 	// Domain control validation (DCV) method used for this hostname.
-	Method CustomHostnameResponseCollectionResultSslMethod `json:"method"`
+	Method ZoneCustomHostnameGetResponseResultSslMethod `json:"method"`
 	// The serial number on a custom uploaded certificate.
 	SerialNumber string `json:"serial_number"`
 	// SSL specific settings.
-	Settings CustomHostnameResponseCollectionResultSslSettings `json:"settings"`
+	Settings ZoneCustomHostnameGetResponseResultSslSettings `json:"settings"`
 	// The signature on a custom uploaded certificate.
 	Signature string `json:"signature"`
 	// Status of the hostname's SSL certificates.
-	Status CustomHostnameResponseCollectionResultSslStatus `json:"status"`
+	Status ZoneCustomHostnameGetResponseResultSslStatus `json:"status"`
 	// Level of validation to be used for this hostname. Domain validation (dv) must be
 	// used.
-	Type CustomHostnameResponseCollectionResultSslType `json:"type"`
+	Type ZoneCustomHostnameGetResponseResultSslType `json:"type"`
 	// The time the custom certificate was uploaded.
 	UploadedOn time.Time `json:"uploaded_on" format:"date-time"`
 	// Domain validation errors that have been received by the certificate authority
 	// (CA).
-	ValidationErrors  []CustomHostnameResponseCollectionResultSslValidationError  `json:"validation_errors"`
-	ValidationRecords []CustomHostnameResponseCollectionResultSslValidationRecord `json:"validation_records"`
+	ValidationErrors  []ZoneCustomHostnameGetResponseResultSslValidationError  `json:"validation_errors"`
+	ValidationRecords []ZoneCustomHostnameGetResponseResultSslValidationRecord `json:"validation_records"`
 	// Indicates whether the certificate covers a wildcard.
-	Wildcard bool                                          `json:"wildcard"`
-	JSON     customHostnameResponseCollectionResultSslJSON `json:"-"`
+	Wildcard bool                                       `json:"wildcard"`
+	JSON     zoneCustomHostnameGetResponseResultSslJSON `json:"-"`
 }
 
-// customHostnameResponseCollectionResultSslJSON contains the JSON metadata for the
-// struct [CustomHostnameResponseCollectionResultSsl]
-type customHostnameResponseCollectionResultSslJSON struct {
+// zoneCustomHostnameGetResponseResultSslJSON contains the JSON metadata for the
+// struct [ZoneCustomHostnameGetResponseResultSsl]
+type zoneCustomHostnameGetResponseResultSslJSON struct {
 	ID                   apijson.Field
 	BundleMethod         apijson.Field
 	CertificateAuthority apijson.Field
@@ -353,7 +362,7 @@ type customHostnameResponseCollectionResultSslJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *CustomHostnameResponseCollectionResultSsl) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneCustomHostnameGetResponseResultSsl) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -361,51 +370,51 @@ func (r *CustomHostnameResponseCollectionResultSsl) UnmarshalJSON(data []byte) (
 // even by clients using outdated or unusual trust stores. An optimal bundle uses
 // the shortest chain and newest intermediates. And the force bundle verifies the
 // chain, but does not otherwise modify it.
-type CustomHostnameResponseCollectionResultSslBundleMethod string
+type ZoneCustomHostnameGetResponseResultSslBundleMethod string
 
 const (
-	CustomHostnameResponseCollectionResultSslBundleMethodUbiquitous CustomHostnameResponseCollectionResultSslBundleMethod = "ubiquitous"
-	CustomHostnameResponseCollectionResultSslBundleMethodOptimal    CustomHostnameResponseCollectionResultSslBundleMethod = "optimal"
-	CustomHostnameResponseCollectionResultSslBundleMethodForce      CustomHostnameResponseCollectionResultSslBundleMethod = "force"
+	ZoneCustomHostnameGetResponseResultSslBundleMethodUbiquitous ZoneCustomHostnameGetResponseResultSslBundleMethod = "ubiquitous"
+	ZoneCustomHostnameGetResponseResultSslBundleMethodOptimal    ZoneCustomHostnameGetResponseResultSslBundleMethod = "optimal"
+	ZoneCustomHostnameGetResponseResultSslBundleMethodForce      ZoneCustomHostnameGetResponseResultSslBundleMethod = "force"
 )
 
 // The Certificate Authority that will issue the certificate
-type CustomHostnameResponseCollectionResultSslCertificateAuthority string
+type ZoneCustomHostnameGetResponseResultSslCertificateAuthority string
 
 const (
-	CustomHostnameResponseCollectionResultSslCertificateAuthorityDigicert    CustomHostnameResponseCollectionResultSslCertificateAuthority = "digicert"
-	CustomHostnameResponseCollectionResultSslCertificateAuthorityGoogle      CustomHostnameResponseCollectionResultSslCertificateAuthority = "google"
-	CustomHostnameResponseCollectionResultSslCertificateAuthorityLetsEncrypt CustomHostnameResponseCollectionResultSslCertificateAuthority = "lets_encrypt"
+	ZoneCustomHostnameGetResponseResultSslCertificateAuthorityDigicert    ZoneCustomHostnameGetResponseResultSslCertificateAuthority = "digicert"
+	ZoneCustomHostnameGetResponseResultSslCertificateAuthorityGoogle      ZoneCustomHostnameGetResponseResultSslCertificateAuthority = "google"
+	ZoneCustomHostnameGetResponseResultSslCertificateAuthorityLetsEncrypt ZoneCustomHostnameGetResponseResultSslCertificateAuthority = "lets_encrypt"
 )
 
 // Domain control validation (DCV) method used for this hostname.
-type CustomHostnameResponseCollectionResultSslMethod string
+type ZoneCustomHostnameGetResponseResultSslMethod string
 
 const (
-	CustomHostnameResponseCollectionResultSslMethodHTTP  CustomHostnameResponseCollectionResultSslMethod = "http"
-	CustomHostnameResponseCollectionResultSslMethodTxt   CustomHostnameResponseCollectionResultSslMethod = "txt"
-	CustomHostnameResponseCollectionResultSslMethodEmail CustomHostnameResponseCollectionResultSslMethod = "email"
+	ZoneCustomHostnameGetResponseResultSslMethodHTTP  ZoneCustomHostnameGetResponseResultSslMethod = "http"
+	ZoneCustomHostnameGetResponseResultSslMethodTxt   ZoneCustomHostnameGetResponseResultSslMethod = "txt"
+	ZoneCustomHostnameGetResponseResultSslMethodEmail ZoneCustomHostnameGetResponseResultSslMethod = "email"
 )
 
 // SSL specific settings.
-type CustomHostnameResponseCollectionResultSslSettings struct {
+type ZoneCustomHostnameGetResponseResultSslSettings struct {
 	// An allowlist of ciphers for TLS termination. These ciphers must be in the
 	// BoringSSL format.
 	Ciphers []string `json:"ciphers"`
 	// Whether or not Early Hints is enabled.
-	EarlyHints CustomHostnameResponseCollectionResultSslSettingsEarlyHints `json:"early_hints"`
+	EarlyHints ZoneCustomHostnameGetResponseResultSslSettingsEarlyHints `json:"early_hints"`
 	// Whether or not HTTP2 is enabled.
-	Http2 CustomHostnameResponseCollectionResultSslSettingsHttp2 `json:"http2"`
+	Http2 ZoneCustomHostnameGetResponseResultSslSettingsHttp2 `json:"http2"`
 	// The minimum TLS version supported.
-	MinTlsVersion CustomHostnameResponseCollectionResultSslSettingsMinTlsVersion `json:"min_tls_version"`
+	MinTlsVersion ZoneCustomHostnameGetResponseResultSslSettingsMinTlsVersion `json:"min_tls_version"`
 	// Whether or not TLS 1.3 is enabled.
-	Tls1_3 CustomHostnameResponseCollectionResultSslSettingsTls1_3 `json:"tls_1_3"`
-	JSON   customHostnameResponseCollectionResultSslSettingsJSON   `json:"-"`
+	Tls1_3 ZoneCustomHostnameGetResponseResultSslSettingsTls1_3 `json:"tls_1_3"`
+	JSON   zoneCustomHostnameGetResponseResultSslSettingsJSON   `json:"-"`
 }
 
-// customHostnameResponseCollectionResultSslSettingsJSON contains the JSON metadata
-// for the struct [CustomHostnameResponseCollectionResultSslSettings]
-type customHostnameResponseCollectionResultSslSettingsJSON struct {
+// zoneCustomHostnameGetResponseResultSslSettingsJSON contains the JSON metadata
+// for the struct [ZoneCustomHostnameGetResponseResultSslSettings]
+type zoneCustomHostnameGetResponseResultSslSettingsJSON struct {
 	Ciphers       apijson.Field
 	EarlyHints    apijson.Field
 	Http2         apijson.Field
@@ -415,100 +424,583 @@ type customHostnameResponseCollectionResultSslSettingsJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *CustomHostnameResponseCollectionResultSslSettings) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneCustomHostnameGetResponseResultSslSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether or not Early Hints is enabled.
-type CustomHostnameResponseCollectionResultSslSettingsEarlyHints string
+type ZoneCustomHostnameGetResponseResultSslSettingsEarlyHints string
 
 const (
-	CustomHostnameResponseCollectionResultSslSettingsEarlyHintsOn  CustomHostnameResponseCollectionResultSslSettingsEarlyHints = "on"
-	CustomHostnameResponseCollectionResultSslSettingsEarlyHintsOff CustomHostnameResponseCollectionResultSslSettingsEarlyHints = "off"
+	ZoneCustomHostnameGetResponseResultSslSettingsEarlyHintsOn  ZoneCustomHostnameGetResponseResultSslSettingsEarlyHints = "on"
+	ZoneCustomHostnameGetResponseResultSslSettingsEarlyHintsOff ZoneCustomHostnameGetResponseResultSslSettingsEarlyHints = "off"
 )
 
 // Whether or not HTTP2 is enabled.
-type CustomHostnameResponseCollectionResultSslSettingsHttp2 string
+type ZoneCustomHostnameGetResponseResultSslSettingsHttp2 string
 
 const (
-	CustomHostnameResponseCollectionResultSslSettingsHttp2On  CustomHostnameResponseCollectionResultSslSettingsHttp2 = "on"
-	CustomHostnameResponseCollectionResultSslSettingsHttp2Off CustomHostnameResponseCollectionResultSslSettingsHttp2 = "off"
+	ZoneCustomHostnameGetResponseResultSslSettingsHttp2On  ZoneCustomHostnameGetResponseResultSslSettingsHttp2 = "on"
+	ZoneCustomHostnameGetResponseResultSslSettingsHttp2Off ZoneCustomHostnameGetResponseResultSslSettingsHttp2 = "off"
 )
 
 // The minimum TLS version supported.
-type CustomHostnameResponseCollectionResultSslSettingsMinTlsVersion string
+type ZoneCustomHostnameGetResponseResultSslSettingsMinTlsVersion string
 
 const (
-	CustomHostnameResponseCollectionResultSslSettingsMinTlsVersion1_0 CustomHostnameResponseCollectionResultSslSettingsMinTlsVersion = "1.0"
-	CustomHostnameResponseCollectionResultSslSettingsMinTlsVersion1_1 CustomHostnameResponseCollectionResultSslSettingsMinTlsVersion = "1.1"
-	CustomHostnameResponseCollectionResultSslSettingsMinTlsVersion1_2 CustomHostnameResponseCollectionResultSslSettingsMinTlsVersion = "1.2"
-	CustomHostnameResponseCollectionResultSslSettingsMinTlsVersion1_3 CustomHostnameResponseCollectionResultSslSettingsMinTlsVersion = "1.3"
+	ZoneCustomHostnameGetResponseResultSslSettingsMinTlsVersion1_0 ZoneCustomHostnameGetResponseResultSslSettingsMinTlsVersion = "1.0"
+	ZoneCustomHostnameGetResponseResultSslSettingsMinTlsVersion1_1 ZoneCustomHostnameGetResponseResultSslSettingsMinTlsVersion = "1.1"
+	ZoneCustomHostnameGetResponseResultSslSettingsMinTlsVersion1_2 ZoneCustomHostnameGetResponseResultSslSettingsMinTlsVersion = "1.2"
+	ZoneCustomHostnameGetResponseResultSslSettingsMinTlsVersion1_3 ZoneCustomHostnameGetResponseResultSslSettingsMinTlsVersion = "1.3"
 )
 
 // Whether or not TLS 1.3 is enabled.
-type CustomHostnameResponseCollectionResultSslSettingsTls1_3 string
+type ZoneCustomHostnameGetResponseResultSslSettingsTls1_3 string
 
 const (
-	CustomHostnameResponseCollectionResultSslSettingsTls1_3On  CustomHostnameResponseCollectionResultSslSettingsTls1_3 = "on"
-	CustomHostnameResponseCollectionResultSslSettingsTls1_3Off CustomHostnameResponseCollectionResultSslSettingsTls1_3 = "off"
+	ZoneCustomHostnameGetResponseResultSslSettingsTls1_3On  ZoneCustomHostnameGetResponseResultSslSettingsTls1_3 = "on"
+	ZoneCustomHostnameGetResponseResultSslSettingsTls1_3Off ZoneCustomHostnameGetResponseResultSslSettingsTls1_3 = "off"
 )
 
 // Status of the hostname's SSL certificates.
-type CustomHostnameResponseCollectionResultSslStatus string
+type ZoneCustomHostnameGetResponseResultSslStatus string
 
 const (
-	CustomHostnameResponseCollectionResultSslStatusInitializing         CustomHostnameResponseCollectionResultSslStatus = "initializing"
-	CustomHostnameResponseCollectionResultSslStatusPendingValidation    CustomHostnameResponseCollectionResultSslStatus = "pending_validation"
-	CustomHostnameResponseCollectionResultSslStatusDeleted              CustomHostnameResponseCollectionResultSslStatus = "deleted"
-	CustomHostnameResponseCollectionResultSslStatusPendingIssuance      CustomHostnameResponseCollectionResultSslStatus = "pending_issuance"
-	CustomHostnameResponseCollectionResultSslStatusPendingDeployment    CustomHostnameResponseCollectionResultSslStatus = "pending_deployment"
-	CustomHostnameResponseCollectionResultSslStatusPendingDeletion      CustomHostnameResponseCollectionResultSslStatus = "pending_deletion"
-	CustomHostnameResponseCollectionResultSslStatusPendingExpiration    CustomHostnameResponseCollectionResultSslStatus = "pending_expiration"
-	CustomHostnameResponseCollectionResultSslStatusExpired              CustomHostnameResponseCollectionResultSslStatus = "expired"
-	CustomHostnameResponseCollectionResultSslStatusActive               CustomHostnameResponseCollectionResultSslStatus = "active"
-	CustomHostnameResponseCollectionResultSslStatusInitializingTimedOut CustomHostnameResponseCollectionResultSslStatus = "initializing_timed_out"
-	CustomHostnameResponseCollectionResultSslStatusValidationTimedOut   CustomHostnameResponseCollectionResultSslStatus = "validation_timed_out"
-	CustomHostnameResponseCollectionResultSslStatusIssuanceTimedOut     CustomHostnameResponseCollectionResultSslStatus = "issuance_timed_out"
-	CustomHostnameResponseCollectionResultSslStatusDeploymentTimedOut   CustomHostnameResponseCollectionResultSslStatus = "deployment_timed_out"
-	CustomHostnameResponseCollectionResultSslStatusDeletionTimedOut     CustomHostnameResponseCollectionResultSslStatus = "deletion_timed_out"
-	CustomHostnameResponseCollectionResultSslStatusPendingCleanup       CustomHostnameResponseCollectionResultSslStatus = "pending_cleanup"
-	CustomHostnameResponseCollectionResultSslStatusStagingDeployment    CustomHostnameResponseCollectionResultSslStatus = "staging_deployment"
-	CustomHostnameResponseCollectionResultSslStatusStagingActive        CustomHostnameResponseCollectionResultSslStatus = "staging_active"
-	CustomHostnameResponseCollectionResultSslStatusDeactivating         CustomHostnameResponseCollectionResultSslStatus = "deactivating"
-	CustomHostnameResponseCollectionResultSslStatusInactive             CustomHostnameResponseCollectionResultSslStatus = "inactive"
-	CustomHostnameResponseCollectionResultSslStatusBackupIssued         CustomHostnameResponseCollectionResultSslStatus = "backup_issued"
-	CustomHostnameResponseCollectionResultSslStatusHoldingDeployment    CustomHostnameResponseCollectionResultSslStatus = "holding_deployment"
+	ZoneCustomHostnameGetResponseResultSslStatusInitializing         ZoneCustomHostnameGetResponseResultSslStatus = "initializing"
+	ZoneCustomHostnameGetResponseResultSslStatusPendingValidation    ZoneCustomHostnameGetResponseResultSslStatus = "pending_validation"
+	ZoneCustomHostnameGetResponseResultSslStatusDeleted              ZoneCustomHostnameGetResponseResultSslStatus = "deleted"
+	ZoneCustomHostnameGetResponseResultSslStatusPendingIssuance      ZoneCustomHostnameGetResponseResultSslStatus = "pending_issuance"
+	ZoneCustomHostnameGetResponseResultSslStatusPendingDeployment    ZoneCustomHostnameGetResponseResultSslStatus = "pending_deployment"
+	ZoneCustomHostnameGetResponseResultSslStatusPendingDeletion      ZoneCustomHostnameGetResponseResultSslStatus = "pending_deletion"
+	ZoneCustomHostnameGetResponseResultSslStatusPendingExpiration    ZoneCustomHostnameGetResponseResultSslStatus = "pending_expiration"
+	ZoneCustomHostnameGetResponseResultSslStatusExpired              ZoneCustomHostnameGetResponseResultSslStatus = "expired"
+	ZoneCustomHostnameGetResponseResultSslStatusActive               ZoneCustomHostnameGetResponseResultSslStatus = "active"
+	ZoneCustomHostnameGetResponseResultSslStatusInitializingTimedOut ZoneCustomHostnameGetResponseResultSslStatus = "initializing_timed_out"
+	ZoneCustomHostnameGetResponseResultSslStatusValidationTimedOut   ZoneCustomHostnameGetResponseResultSslStatus = "validation_timed_out"
+	ZoneCustomHostnameGetResponseResultSslStatusIssuanceTimedOut     ZoneCustomHostnameGetResponseResultSslStatus = "issuance_timed_out"
+	ZoneCustomHostnameGetResponseResultSslStatusDeploymentTimedOut   ZoneCustomHostnameGetResponseResultSslStatus = "deployment_timed_out"
+	ZoneCustomHostnameGetResponseResultSslStatusDeletionTimedOut     ZoneCustomHostnameGetResponseResultSslStatus = "deletion_timed_out"
+	ZoneCustomHostnameGetResponseResultSslStatusPendingCleanup       ZoneCustomHostnameGetResponseResultSslStatus = "pending_cleanup"
+	ZoneCustomHostnameGetResponseResultSslStatusStagingDeployment    ZoneCustomHostnameGetResponseResultSslStatus = "staging_deployment"
+	ZoneCustomHostnameGetResponseResultSslStatusStagingActive        ZoneCustomHostnameGetResponseResultSslStatus = "staging_active"
+	ZoneCustomHostnameGetResponseResultSslStatusDeactivating         ZoneCustomHostnameGetResponseResultSslStatus = "deactivating"
+	ZoneCustomHostnameGetResponseResultSslStatusInactive             ZoneCustomHostnameGetResponseResultSslStatus = "inactive"
+	ZoneCustomHostnameGetResponseResultSslStatusBackupIssued         ZoneCustomHostnameGetResponseResultSslStatus = "backup_issued"
+	ZoneCustomHostnameGetResponseResultSslStatusHoldingDeployment    ZoneCustomHostnameGetResponseResultSslStatus = "holding_deployment"
 )
 
 // Level of validation to be used for this hostname. Domain validation (dv) must be
 // used.
-type CustomHostnameResponseCollectionResultSslType string
+type ZoneCustomHostnameGetResponseResultSslType string
 
 const (
-	CustomHostnameResponseCollectionResultSslTypeDv CustomHostnameResponseCollectionResultSslType = "dv"
+	ZoneCustomHostnameGetResponseResultSslTypeDv ZoneCustomHostnameGetResponseResultSslType = "dv"
 )
 
-type CustomHostnameResponseCollectionResultSslValidationError struct {
+type ZoneCustomHostnameGetResponseResultSslValidationError struct {
 	// A domain validation error.
-	Message string                                                       `json:"message"`
-	JSON    customHostnameResponseCollectionResultSslValidationErrorJSON `json:"-"`
+	Message string                                                    `json:"message"`
+	JSON    zoneCustomHostnameGetResponseResultSslValidationErrorJSON `json:"-"`
 }
 
-// customHostnameResponseCollectionResultSslValidationErrorJSON contains the JSON
-// metadata for the struct
-// [CustomHostnameResponseCollectionResultSslValidationError]
-type customHostnameResponseCollectionResultSslValidationErrorJSON struct {
+// zoneCustomHostnameGetResponseResultSslValidationErrorJSON contains the JSON
+// metadata for the struct [ZoneCustomHostnameGetResponseResultSslValidationError]
+type zoneCustomHostnameGetResponseResultSslValidationErrorJSON struct {
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CustomHostnameResponseCollectionResultSslValidationError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneCustomHostnameGetResponseResultSslValidationError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Certificate's required validation record.
-type CustomHostnameResponseCollectionResultSslValidationRecord struct {
+type ZoneCustomHostnameGetResponseResultSslValidationRecord struct {
+	// The set of email addresses that the certificate authority (CA) will use to
+	// complete domain validation.
+	Emails []interface{} `json:"emails"`
+	// The content that the certificate authority (CA) will expect to find at the
+	// http_url during the domain validation.
+	HTTPBody string `json:"http_body"`
+	// The url that will be checked during domain validation.
+	HTTPURL string `json:"http_url"`
+	// The hostname that the certificate authority (CA) will check for a TXT record
+	// during domain validation .
+	TxtName string `json:"txt_name"`
+	// The TXT record that the certificate authority (CA) will check during domain
+	// validation.
+	TxtValue string                                                     `json:"txt_value"`
+	JSON     zoneCustomHostnameGetResponseResultSslValidationRecordJSON `json:"-"`
+}
+
+// zoneCustomHostnameGetResponseResultSslValidationRecordJSON contains the JSON
+// metadata for the struct [ZoneCustomHostnameGetResponseResultSslValidationRecord]
+type zoneCustomHostnameGetResponseResultSslValidationRecordJSON struct {
+	Emails      apijson.Field
+	HTTPBody    apijson.Field
+	HTTPURL     apijson.Field
+	TxtName     apijson.Field
+	TxtValue    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameGetResponseResultSslValidationRecord) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Status of the hostname's activation.
+type ZoneCustomHostnameGetResponseResultStatus string
+
+const (
+	ZoneCustomHostnameGetResponseResultStatusActive             ZoneCustomHostnameGetResponseResultStatus = "active"
+	ZoneCustomHostnameGetResponseResultStatusPending            ZoneCustomHostnameGetResponseResultStatus = "pending"
+	ZoneCustomHostnameGetResponseResultStatusActiveRedeploying  ZoneCustomHostnameGetResponseResultStatus = "active_redeploying"
+	ZoneCustomHostnameGetResponseResultStatusMoved              ZoneCustomHostnameGetResponseResultStatus = "moved"
+	ZoneCustomHostnameGetResponseResultStatusPendingDeletion    ZoneCustomHostnameGetResponseResultStatus = "pending_deletion"
+	ZoneCustomHostnameGetResponseResultStatusDeleted            ZoneCustomHostnameGetResponseResultStatus = "deleted"
+	ZoneCustomHostnameGetResponseResultStatusPendingBlocked     ZoneCustomHostnameGetResponseResultStatus = "pending_blocked"
+	ZoneCustomHostnameGetResponseResultStatusPendingMigration   ZoneCustomHostnameGetResponseResultStatus = "pending_migration"
+	ZoneCustomHostnameGetResponseResultStatusPendingProvisioned ZoneCustomHostnameGetResponseResultStatus = "pending_provisioned"
+	ZoneCustomHostnameGetResponseResultStatusTestPending        ZoneCustomHostnameGetResponseResultStatus = "test_pending"
+	ZoneCustomHostnameGetResponseResultStatusTestActive         ZoneCustomHostnameGetResponseResultStatus = "test_active"
+	ZoneCustomHostnameGetResponseResultStatusTestActiveApex     ZoneCustomHostnameGetResponseResultStatus = "test_active_apex"
+	ZoneCustomHostnameGetResponseResultStatusTestBlocked        ZoneCustomHostnameGetResponseResultStatus = "test_blocked"
+	ZoneCustomHostnameGetResponseResultStatusTestFailed         ZoneCustomHostnameGetResponseResultStatus = "test_failed"
+	ZoneCustomHostnameGetResponseResultStatusProvisioned        ZoneCustomHostnameGetResponseResultStatus = "provisioned"
+	ZoneCustomHostnameGetResponseResultStatusBlocked            ZoneCustomHostnameGetResponseResultStatus = "blocked"
+)
+
+// Whether the API call was successful
+type ZoneCustomHostnameGetResponseSuccess bool
+
+const (
+	ZoneCustomHostnameGetResponseSuccessTrue ZoneCustomHostnameGetResponseSuccess = true
+)
+
+type ZoneCustomHostnameUpdateResponse struct {
+	Errors   []ZoneCustomHostnameUpdateResponseError   `json:"errors"`
+	Messages []ZoneCustomHostnameUpdateResponseMessage `json:"messages"`
+	Result   ZoneCustomHostnameUpdateResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success ZoneCustomHostnameUpdateResponseSuccess `json:"success"`
+	JSON    zoneCustomHostnameUpdateResponseJSON    `json:"-"`
+}
+
+// zoneCustomHostnameUpdateResponseJSON contains the JSON metadata for the struct
+// [ZoneCustomHostnameUpdateResponse]
+type zoneCustomHostnameUpdateResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneCustomHostnameUpdateResponseError struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    zoneCustomHostnameUpdateResponseErrorJSON `json:"-"`
+}
+
+// zoneCustomHostnameUpdateResponseErrorJSON contains the JSON metadata for the
+// struct [ZoneCustomHostnameUpdateResponseError]
+type zoneCustomHostnameUpdateResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneCustomHostnameUpdateResponseMessage struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    zoneCustomHostnameUpdateResponseMessageJSON `json:"-"`
+}
+
+// zoneCustomHostnameUpdateResponseMessageJSON contains the JSON metadata for the
+// struct [ZoneCustomHostnameUpdateResponseMessage]
+type zoneCustomHostnameUpdateResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneCustomHostnameUpdateResponseResult struct {
+	// Identifier
+	ID string `json:"id"`
+	// This is the time the hostname was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// These are per-hostname (customer) settings.
+	CustomMetadata ZoneCustomHostnameUpdateResponseResultCustomMetadata `json:"custom_metadata"`
+	// a valid hostname that’s been added to your DNS zone as an A, AAAA, or CNAME
+	// record.
+	CustomOriginServer string `json:"custom_origin_server"`
+	// A hostname that will be sent to your custom origin server as SNI for TLS
+	// handshake. This can be a valid subdomain of the zone or custom origin server
+	// name or the string ':request_host_header:' which will cause the host header in
+	// the request to be used as SNI. Not configurable with default/fallback origin
+	// server.
+	CustomOriginSni string `json:"custom_origin_sni"`
+	// The custom hostname that will point to your hostname via CNAME.
+	Hostname string `json:"hostname"`
+	// This is a record which can be placed to activate a hostname.
+	OwnershipVerification ZoneCustomHostnameUpdateResponseResultOwnershipVerification `json:"ownership_verification"`
+	// This presents the token to be served by the given http url to activate a
+	// hostname.
+	OwnershipVerificationHTTP ZoneCustomHostnameUpdateResponseResultOwnershipVerificationHTTP `json:"ownership_verification_http"`
+	// SSL properties for the custom hostname.
+	Ssl ZoneCustomHostnameUpdateResponseResultSsl `json:"ssl"`
+	// Status of the hostname's activation.
+	Status ZoneCustomHostnameUpdateResponseResultStatus `json:"status"`
+	// These are errors that were encountered while trying to activate a hostname.
+	VerificationErrors []interface{}                              `json:"verification_errors"`
+	JSON               zoneCustomHostnameUpdateResponseResultJSON `json:"-"`
+}
+
+// zoneCustomHostnameUpdateResponseResultJSON contains the JSON metadata for the
+// struct [ZoneCustomHostnameUpdateResponseResult]
+type zoneCustomHostnameUpdateResponseResultJSON struct {
+	ID                        apijson.Field
+	CreatedAt                 apijson.Field
+	CustomMetadata            apijson.Field
+	CustomOriginServer        apijson.Field
+	CustomOriginSni           apijson.Field
+	Hostname                  apijson.Field
+	OwnershipVerification     apijson.Field
+	OwnershipVerificationHTTP apijson.Field
+	Ssl                       apijson.Field
+	Status                    apijson.Field
+	VerificationErrors        apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// These are per-hostname (customer) settings.
+type ZoneCustomHostnameUpdateResponseResultCustomMetadata struct {
+	// Unique metadata for this hostname.
+	Key  string                                                   `json:"key"`
+	JSON zoneCustomHostnameUpdateResponseResultCustomMetadataJSON `json:"-"`
+}
+
+// zoneCustomHostnameUpdateResponseResultCustomMetadataJSON contains the JSON
+// metadata for the struct [ZoneCustomHostnameUpdateResponseResultCustomMetadata]
+type zoneCustomHostnameUpdateResponseResultCustomMetadataJSON struct {
+	Key         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameUpdateResponseResultCustomMetadata) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// This is a record which can be placed to activate a hostname.
+type ZoneCustomHostnameUpdateResponseResultOwnershipVerification struct {
+	// DNS Name for record.
+	Name string `json:"name"`
+	// DNS Record type.
+	Type ZoneCustomHostnameUpdateResponseResultOwnershipVerificationType `json:"type"`
+	// Content for the record.
+	Value string                                                          `json:"value"`
+	JSON  zoneCustomHostnameUpdateResponseResultOwnershipVerificationJSON `json:"-"`
+}
+
+// zoneCustomHostnameUpdateResponseResultOwnershipVerificationJSON contains the
+// JSON metadata for the struct
+// [ZoneCustomHostnameUpdateResponseResultOwnershipVerification]
+type zoneCustomHostnameUpdateResponseResultOwnershipVerificationJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameUpdateResponseResultOwnershipVerification) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// DNS Record type.
+type ZoneCustomHostnameUpdateResponseResultOwnershipVerificationType string
+
+const (
+	ZoneCustomHostnameUpdateResponseResultOwnershipVerificationTypeTxt ZoneCustomHostnameUpdateResponseResultOwnershipVerificationType = "txt"
+)
+
+// This presents the token to be served by the given http url to activate a
+// hostname.
+type ZoneCustomHostnameUpdateResponseResultOwnershipVerificationHTTP struct {
+	// Token to be served.
+	HTTPBody string `json:"http_body"`
+	// The HTTP URL that will be checked during custom hostname verification and where
+	// the customer should host the token.
+	HTTPURL string                                                              `json:"http_url"`
+	JSON    zoneCustomHostnameUpdateResponseResultOwnershipVerificationHTTPJSON `json:"-"`
+}
+
+// zoneCustomHostnameUpdateResponseResultOwnershipVerificationHTTPJSON contains the
+// JSON metadata for the struct
+// [ZoneCustomHostnameUpdateResponseResultOwnershipVerificationHTTP]
+type zoneCustomHostnameUpdateResponseResultOwnershipVerificationHTTPJSON struct {
+	HTTPBody    apijson.Field
+	HTTPURL     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameUpdateResponseResultOwnershipVerificationHTTP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// SSL properties for the custom hostname.
+type ZoneCustomHostnameUpdateResponseResultSsl struct {
+	// Custom hostname SSL identifier tag.
+	ID string `json:"id"`
+	// A ubiquitous bundle has the highest probability of being verified everywhere,
+	// even by clients using outdated or unusual trust stores. An optimal bundle uses
+	// the shortest chain and newest intermediates. And the force bundle verifies the
+	// chain, but does not otherwise modify it.
+	BundleMethod ZoneCustomHostnameUpdateResponseResultSslBundleMethod `json:"bundle_method"`
+	// The Certificate Authority that will issue the certificate
+	CertificateAuthority ZoneCustomHostnameUpdateResponseResultSslCertificateAuthority `json:"certificate_authority"`
+	// If a custom uploaded certificate is used.
+	CustomCertificate string `json:"custom_certificate"`
+	// The identifier for the Custom CSR that was used.
+	CustomCsrID string `json:"custom_csr_id"`
+	// The key for a custom uploaded certificate.
+	CustomKey string `json:"custom_key"`
+	// The time the custom certificate expires on.
+	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	// A list of Hostnames on a custom uploaded certificate.
+	Hosts []interface{} `json:"hosts"`
+	// The issuer on a custom uploaded certificate.
+	Issuer string `json:"issuer"`
+	// Domain control validation (DCV) method used for this hostname.
+	Method ZoneCustomHostnameUpdateResponseResultSslMethod `json:"method"`
+	// The serial number on a custom uploaded certificate.
+	SerialNumber string `json:"serial_number"`
+	// SSL specific settings.
+	Settings ZoneCustomHostnameUpdateResponseResultSslSettings `json:"settings"`
+	// The signature on a custom uploaded certificate.
+	Signature string `json:"signature"`
+	// Status of the hostname's SSL certificates.
+	Status ZoneCustomHostnameUpdateResponseResultSslStatus `json:"status"`
+	// Level of validation to be used for this hostname. Domain validation (dv) must be
+	// used.
+	Type ZoneCustomHostnameUpdateResponseResultSslType `json:"type"`
+	// The time the custom certificate was uploaded.
+	UploadedOn time.Time `json:"uploaded_on" format:"date-time"`
+	// Domain validation errors that have been received by the certificate authority
+	// (CA).
+	ValidationErrors  []ZoneCustomHostnameUpdateResponseResultSslValidationError  `json:"validation_errors"`
+	ValidationRecords []ZoneCustomHostnameUpdateResponseResultSslValidationRecord `json:"validation_records"`
+	// Indicates whether the certificate covers a wildcard.
+	Wildcard bool                                          `json:"wildcard"`
+	JSON     zoneCustomHostnameUpdateResponseResultSslJSON `json:"-"`
+}
+
+// zoneCustomHostnameUpdateResponseResultSslJSON contains the JSON metadata for the
+// struct [ZoneCustomHostnameUpdateResponseResultSsl]
+type zoneCustomHostnameUpdateResponseResultSslJSON struct {
+	ID                   apijson.Field
+	BundleMethod         apijson.Field
+	CertificateAuthority apijson.Field
+	CustomCertificate    apijson.Field
+	CustomCsrID          apijson.Field
+	CustomKey            apijson.Field
+	ExpiresOn            apijson.Field
+	Hosts                apijson.Field
+	Issuer               apijson.Field
+	Method               apijson.Field
+	SerialNumber         apijson.Field
+	Settings             apijson.Field
+	Signature            apijson.Field
+	Status               apijson.Field
+	Type                 apijson.Field
+	UploadedOn           apijson.Field
+	ValidationErrors     apijson.Field
+	ValidationRecords    apijson.Field
+	Wildcard             apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameUpdateResponseResultSsl) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A ubiquitous bundle has the highest probability of being verified everywhere,
+// even by clients using outdated or unusual trust stores. An optimal bundle uses
+// the shortest chain and newest intermediates. And the force bundle verifies the
+// chain, but does not otherwise modify it.
+type ZoneCustomHostnameUpdateResponseResultSslBundleMethod string
+
+const (
+	ZoneCustomHostnameUpdateResponseResultSslBundleMethodUbiquitous ZoneCustomHostnameUpdateResponseResultSslBundleMethod = "ubiquitous"
+	ZoneCustomHostnameUpdateResponseResultSslBundleMethodOptimal    ZoneCustomHostnameUpdateResponseResultSslBundleMethod = "optimal"
+	ZoneCustomHostnameUpdateResponseResultSslBundleMethodForce      ZoneCustomHostnameUpdateResponseResultSslBundleMethod = "force"
+)
+
+// The Certificate Authority that will issue the certificate
+type ZoneCustomHostnameUpdateResponseResultSslCertificateAuthority string
+
+const (
+	ZoneCustomHostnameUpdateResponseResultSslCertificateAuthorityDigicert    ZoneCustomHostnameUpdateResponseResultSslCertificateAuthority = "digicert"
+	ZoneCustomHostnameUpdateResponseResultSslCertificateAuthorityGoogle      ZoneCustomHostnameUpdateResponseResultSslCertificateAuthority = "google"
+	ZoneCustomHostnameUpdateResponseResultSslCertificateAuthorityLetsEncrypt ZoneCustomHostnameUpdateResponseResultSslCertificateAuthority = "lets_encrypt"
+)
+
+// Domain control validation (DCV) method used for this hostname.
+type ZoneCustomHostnameUpdateResponseResultSslMethod string
+
+const (
+	ZoneCustomHostnameUpdateResponseResultSslMethodHTTP  ZoneCustomHostnameUpdateResponseResultSslMethod = "http"
+	ZoneCustomHostnameUpdateResponseResultSslMethodTxt   ZoneCustomHostnameUpdateResponseResultSslMethod = "txt"
+	ZoneCustomHostnameUpdateResponseResultSslMethodEmail ZoneCustomHostnameUpdateResponseResultSslMethod = "email"
+)
+
+// SSL specific settings.
+type ZoneCustomHostnameUpdateResponseResultSslSettings struct {
+	// An allowlist of ciphers for TLS termination. These ciphers must be in the
+	// BoringSSL format.
+	Ciphers []string `json:"ciphers"`
+	// Whether or not Early Hints is enabled.
+	EarlyHints ZoneCustomHostnameUpdateResponseResultSslSettingsEarlyHints `json:"early_hints"`
+	// Whether or not HTTP2 is enabled.
+	Http2 ZoneCustomHostnameUpdateResponseResultSslSettingsHttp2 `json:"http2"`
+	// The minimum TLS version supported.
+	MinTlsVersion ZoneCustomHostnameUpdateResponseResultSslSettingsMinTlsVersion `json:"min_tls_version"`
+	// Whether or not TLS 1.3 is enabled.
+	Tls1_3 ZoneCustomHostnameUpdateResponseResultSslSettingsTls1_3 `json:"tls_1_3"`
+	JSON   zoneCustomHostnameUpdateResponseResultSslSettingsJSON   `json:"-"`
+}
+
+// zoneCustomHostnameUpdateResponseResultSslSettingsJSON contains the JSON metadata
+// for the struct [ZoneCustomHostnameUpdateResponseResultSslSettings]
+type zoneCustomHostnameUpdateResponseResultSslSettingsJSON struct {
+	Ciphers       apijson.Field
+	EarlyHints    apijson.Field
+	Http2         apijson.Field
+	MinTlsVersion apijson.Field
+	Tls1_3        apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameUpdateResponseResultSslSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether or not Early Hints is enabled.
+type ZoneCustomHostnameUpdateResponseResultSslSettingsEarlyHints string
+
+const (
+	ZoneCustomHostnameUpdateResponseResultSslSettingsEarlyHintsOn  ZoneCustomHostnameUpdateResponseResultSslSettingsEarlyHints = "on"
+	ZoneCustomHostnameUpdateResponseResultSslSettingsEarlyHintsOff ZoneCustomHostnameUpdateResponseResultSslSettingsEarlyHints = "off"
+)
+
+// Whether or not HTTP2 is enabled.
+type ZoneCustomHostnameUpdateResponseResultSslSettingsHttp2 string
+
+const (
+	ZoneCustomHostnameUpdateResponseResultSslSettingsHttp2On  ZoneCustomHostnameUpdateResponseResultSslSettingsHttp2 = "on"
+	ZoneCustomHostnameUpdateResponseResultSslSettingsHttp2Off ZoneCustomHostnameUpdateResponseResultSslSettingsHttp2 = "off"
+)
+
+// The minimum TLS version supported.
+type ZoneCustomHostnameUpdateResponseResultSslSettingsMinTlsVersion string
+
+const (
+	ZoneCustomHostnameUpdateResponseResultSslSettingsMinTlsVersion1_0 ZoneCustomHostnameUpdateResponseResultSslSettingsMinTlsVersion = "1.0"
+	ZoneCustomHostnameUpdateResponseResultSslSettingsMinTlsVersion1_1 ZoneCustomHostnameUpdateResponseResultSslSettingsMinTlsVersion = "1.1"
+	ZoneCustomHostnameUpdateResponseResultSslSettingsMinTlsVersion1_2 ZoneCustomHostnameUpdateResponseResultSslSettingsMinTlsVersion = "1.2"
+	ZoneCustomHostnameUpdateResponseResultSslSettingsMinTlsVersion1_3 ZoneCustomHostnameUpdateResponseResultSslSettingsMinTlsVersion = "1.3"
+)
+
+// Whether or not TLS 1.3 is enabled.
+type ZoneCustomHostnameUpdateResponseResultSslSettingsTls1_3 string
+
+const (
+	ZoneCustomHostnameUpdateResponseResultSslSettingsTls1_3On  ZoneCustomHostnameUpdateResponseResultSslSettingsTls1_3 = "on"
+	ZoneCustomHostnameUpdateResponseResultSslSettingsTls1_3Off ZoneCustomHostnameUpdateResponseResultSslSettingsTls1_3 = "off"
+)
+
+// Status of the hostname's SSL certificates.
+type ZoneCustomHostnameUpdateResponseResultSslStatus string
+
+const (
+	ZoneCustomHostnameUpdateResponseResultSslStatusInitializing         ZoneCustomHostnameUpdateResponseResultSslStatus = "initializing"
+	ZoneCustomHostnameUpdateResponseResultSslStatusPendingValidation    ZoneCustomHostnameUpdateResponseResultSslStatus = "pending_validation"
+	ZoneCustomHostnameUpdateResponseResultSslStatusDeleted              ZoneCustomHostnameUpdateResponseResultSslStatus = "deleted"
+	ZoneCustomHostnameUpdateResponseResultSslStatusPendingIssuance      ZoneCustomHostnameUpdateResponseResultSslStatus = "pending_issuance"
+	ZoneCustomHostnameUpdateResponseResultSslStatusPendingDeployment    ZoneCustomHostnameUpdateResponseResultSslStatus = "pending_deployment"
+	ZoneCustomHostnameUpdateResponseResultSslStatusPendingDeletion      ZoneCustomHostnameUpdateResponseResultSslStatus = "pending_deletion"
+	ZoneCustomHostnameUpdateResponseResultSslStatusPendingExpiration    ZoneCustomHostnameUpdateResponseResultSslStatus = "pending_expiration"
+	ZoneCustomHostnameUpdateResponseResultSslStatusExpired              ZoneCustomHostnameUpdateResponseResultSslStatus = "expired"
+	ZoneCustomHostnameUpdateResponseResultSslStatusActive               ZoneCustomHostnameUpdateResponseResultSslStatus = "active"
+	ZoneCustomHostnameUpdateResponseResultSslStatusInitializingTimedOut ZoneCustomHostnameUpdateResponseResultSslStatus = "initializing_timed_out"
+	ZoneCustomHostnameUpdateResponseResultSslStatusValidationTimedOut   ZoneCustomHostnameUpdateResponseResultSslStatus = "validation_timed_out"
+	ZoneCustomHostnameUpdateResponseResultSslStatusIssuanceTimedOut     ZoneCustomHostnameUpdateResponseResultSslStatus = "issuance_timed_out"
+	ZoneCustomHostnameUpdateResponseResultSslStatusDeploymentTimedOut   ZoneCustomHostnameUpdateResponseResultSslStatus = "deployment_timed_out"
+	ZoneCustomHostnameUpdateResponseResultSslStatusDeletionTimedOut     ZoneCustomHostnameUpdateResponseResultSslStatus = "deletion_timed_out"
+	ZoneCustomHostnameUpdateResponseResultSslStatusPendingCleanup       ZoneCustomHostnameUpdateResponseResultSslStatus = "pending_cleanup"
+	ZoneCustomHostnameUpdateResponseResultSslStatusStagingDeployment    ZoneCustomHostnameUpdateResponseResultSslStatus = "staging_deployment"
+	ZoneCustomHostnameUpdateResponseResultSslStatusStagingActive        ZoneCustomHostnameUpdateResponseResultSslStatus = "staging_active"
+	ZoneCustomHostnameUpdateResponseResultSslStatusDeactivating         ZoneCustomHostnameUpdateResponseResultSslStatus = "deactivating"
+	ZoneCustomHostnameUpdateResponseResultSslStatusInactive             ZoneCustomHostnameUpdateResponseResultSslStatus = "inactive"
+	ZoneCustomHostnameUpdateResponseResultSslStatusBackupIssued         ZoneCustomHostnameUpdateResponseResultSslStatus = "backup_issued"
+	ZoneCustomHostnameUpdateResponseResultSslStatusHoldingDeployment    ZoneCustomHostnameUpdateResponseResultSslStatus = "holding_deployment"
+)
+
+// Level of validation to be used for this hostname. Domain validation (dv) must be
+// used.
+type ZoneCustomHostnameUpdateResponseResultSslType string
+
+const (
+	ZoneCustomHostnameUpdateResponseResultSslTypeDv ZoneCustomHostnameUpdateResponseResultSslType = "dv"
+)
+
+type ZoneCustomHostnameUpdateResponseResultSslValidationError struct {
+	// A domain validation error.
+	Message string                                                       `json:"message"`
+	JSON    zoneCustomHostnameUpdateResponseResultSslValidationErrorJSON `json:"-"`
+}
+
+// zoneCustomHostnameUpdateResponseResultSslValidationErrorJSON contains the JSON
+// metadata for the struct
+// [ZoneCustomHostnameUpdateResponseResultSslValidationError]
+type zoneCustomHostnameUpdateResponseResultSslValidationErrorJSON struct {
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameUpdateResponseResultSslValidationError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Certificate's required validation record.
+type ZoneCustomHostnameUpdateResponseResultSslValidationRecord struct {
 	// The set of email addresses that the certificate authority (CA) will use to
 	// complete domain validation.
 	Emails []interface{} `json:"emails"`
@@ -523,13 +1015,13 @@ type CustomHostnameResponseCollectionResultSslValidationRecord struct {
 	// The TXT record that the certificate authority (CA) will check during domain
 	// validation.
 	TxtValue string                                                        `json:"txt_value"`
-	JSON     customHostnameResponseCollectionResultSslValidationRecordJSON `json:"-"`
+	JSON     zoneCustomHostnameUpdateResponseResultSslValidationRecordJSON `json:"-"`
 }
 
-// customHostnameResponseCollectionResultSslValidationRecordJSON contains the JSON
+// zoneCustomHostnameUpdateResponseResultSslValidationRecordJSON contains the JSON
 // metadata for the struct
-// [CustomHostnameResponseCollectionResultSslValidationRecord]
-type customHostnameResponseCollectionResultSslValidationRecordJSON struct {
+// [ZoneCustomHostnameUpdateResponseResultSslValidationRecord]
+type zoneCustomHostnameUpdateResponseResultSslValidationRecordJSON struct {
 	Emails      apijson.Field
 	HTTPBody    apijson.Field
 	HTTPURL     apijson.Field
@@ -539,550 +1031,37 @@ type customHostnameResponseCollectionResultSslValidationRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CustomHostnameResponseCollectionResultSslValidationRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneCustomHostnameUpdateResponseResultSslValidationRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Status of the hostname's activation.
-type CustomHostnameResponseCollectionResultStatus string
+type ZoneCustomHostnameUpdateResponseResultStatus string
 
 const (
-	CustomHostnameResponseCollectionResultStatusActive             CustomHostnameResponseCollectionResultStatus = "active"
-	CustomHostnameResponseCollectionResultStatusPending            CustomHostnameResponseCollectionResultStatus = "pending"
-	CustomHostnameResponseCollectionResultStatusActiveRedeploying  CustomHostnameResponseCollectionResultStatus = "active_redeploying"
-	CustomHostnameResponseCollectionResultStatusMoved              CustomHostnameResponseCollectionResultStatus = "moved"
-	CustomHostnameResponseCollectionResultStatusPendingDeletion    CustomHostnameResponseCollectionResultStatus = "pending_deletion"
-	CustomHostnameResponseCollectionResultStatusDeleted            CustomHostnameResponseCollectionResultStatus = "deleted"
-	CustomHostnameResponseCollectionResultStatusPendingBlocked     CustomHostnameResponseCollectionResultStatus = "pending_blocked"
-	CustomHostnameResponseCollectionResultStatusPendingMigration   CustomHostnameResponseCollectionResultStatus = "pending_migration"
-	CustomHostnameResponseCollectionResultStatusPendingProvisioned CustomHostnameResponseCollectionResultStatus = "pending_provisioned"
-	CustomHostnameResponseCollectionResultStatusTestPending        CustomHostnameResponseCollectionResultStatus = "test_pending"
-	CustomHostnameResponseCollectionResultStatusTestActive         CustomHostnameResponseCollectionResultStatus = "test_active"
-	CustomHostnameResponseCollectionResultStatusTestActiveApex     CustomHostnameResponseCollectionResultStatus = "test_active_apex"
-	CustomHostnameResponseCollectionResultStatusTestBlocked        CustomHostnameResponseCollectionResultStatus = "test_blocked"
-	CustomHostnameResponseCollectionResultStatusTestFailed         CustomHostnameResponseCollectionResultStatus = "test_failed"
-	CustomHostnameResponseCollectionResultStatusProvisioned        CustomHostnameResponseCollectionResultStatus = "provisioned"
-	CustomHostnameResponseCollectionResultStatusBlocked            CustomHostnameResponseCollectionResultStatus = "blocked"
-)
-
-type CustomHostnameResponseCollectionResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                        `json:"total_count"`
-	JSON       customHostnameResponseCollectionResultInfoJSON `json:"-"`
-}
-
-// customHostnameResponseCollectionResultInfoJSON contains the JSON metadata for
-// the struct [CustomHostnameResponseCollectionResultInfo]
-type customHostnameResponseCollectionResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type CustomHostnameResponseCollectionSuccess bool
-
-const (
-	CustomHostnameResponseCollectionSuccessTrue CustomHostnameResponseCollectionSuccess = true
-)
-
-type CustomHostnameResponseSingle4Byp7wot struct {
-	Errors   []CustomHostnameResponseSingle4Byp7wotError   `json:"errors"`
-	Messages []CustomHostnameResponseSingle4Byp7wotMessage `json:"messages"`
-	Result   CustomHostnameResponseSingle4Byp7wotResult    `json:"result"`
-	// Whether the API call was successful
-	Success CustomHostnameResponseSingle4Byp7wotSuccess `json:"success"`
-	JSON    customHostnameResponseSingle4Byp7wotJSON    `json:"-"`
-}
-
-// customHostnameResponseSingle4Byp7wotJSON contains the JSON metadata for the
-// struct [CustomHostnameResponseSingle4Byp7wot]
-type customHostnameResponseSingle4Byp7wotJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameResponseSingle4Byp7wot) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CustomHostnameResponseSingle4Byp7wotError struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    customHostnameResponseSingle4Byp7wotErrorJSON `json:"-"`
-}
-
-// customHostnameResponseSingle4Byp7wotErrorJSON contains the JSON metadata for the
-// struct [CustomHostnameResponseSingle4Byp7wotError]
-type customHostnameResponseSingle4Byp7wotErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameResponseSingle4Byp7wotError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CustomHostnameResponseSingle4Byp7wotMessage struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    customHostnameResponseSingle4Byp7wotMessageJSON `json:"-"`
-}
-
-// customHostnameResponseSingle4Byp7wotMessageJSON contains the JSON metadata for
-// the struct [CustomHostnameResponseSingle4Byp7wotMessage]
-type customHostnameResponseSingle4Byp7wotMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameResponseSingle4Byp7wotMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CustomHostnameResponseSingle4Byp7wotResult struct {
-	// Identifier
-	ID string `json:"id"`
-	// This is the time the hostname was created.
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// These are per-hostname (customer) settings.
-	CustomMetadata CustomHostnameResponseSingle4Byp7wotResultCustomMetadata `json:"custom_metadata"`
-	// a valid hostname that’s been added to your DNS zone as an A, AAAA, or CNAME
-	// record.
-	CustomOriginServer string `json:"custom_origin_server"`
-	// A hostname that will be sent to your custom origin server as SNI for TLS
-	// handshake. This can be a valid subdomain of the zone or custom origin server
-	// name or the string ':request_host_header:' which will cause the host header in
-	// the request to be used as SNI. Not configurable with default/fallback origin
-	// server.
-	CustomOriginSni string `json:"custom_origin_sni"`
-	// The custom hostname that will point to your hostname via CNAME.
-	Hostname string `json:"hostname"`
-	// This is a record which can be placed to activate a hostname.
-	OwnershipVerification CustomHostnameResponseSingle4Byp7wotResultOwnershipVerification `json:"ownership_verification"`
-	// This presents the token to be served by the given http url to activate a
-	// hostname.
-	OwnershipVerificationHTTP CustomHostnameResponseSingle4Byp7wotResultOwnershipVerificationHTTP `json:"ownership_verification_http"`
-	// SSL properties for the custom hostname.
-	Ssl CustomHostnameResponseSingle4Byp7wotResultSsl `json:"ssl"`
-	// Status of the hostname's activation.
-	Status CustomHostnameResponseSingle4Byp7wotResultStatus `json:"status"`
-	// These are errors that were encountered while trying to activate a hostname.
-	VerificationErrors []interface{}                                  `json:"verification_errors"`
-	JSON               customHostnameResponseSingle4Byp7wotResultJSON `json:"-"`
-}
-
-// customHostnameResponseSingle4Byp7wotResultJSON contains the JSON metadata for
-// the struct [CustomHostnameResponseSingle4Byp7wotResult]
-type customHostnameResponseSingle4Byp7wotResultJSON struct {
-	ID                        apijson.Field
-	CreatedAt                 apijson.Field
-	CustomMetadata            apijson.Field
-	CustomOriginServer        apijson.Field
-	CustomOriginSni           apijson.Field
-	Hostname                  apijson.Field
-	OwnershipVerification     apijson.Field
-	OwnershipVerificationHTTP apijson.Field
-	Ssl                       apijson.Field
-	Status                    apijson.Field
-	VerificationErrors        apijson.Field
-	raw                       string
-	ExtraFields               map[string]apijson.Field
-}
-
-func (r *CustomHostnameResponseSingle4Byp7wotResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// These are per-hostname (customer) settings.
-type CustomHostnameResponseSingle4Byp7wotResultCustomMetadata struct {
-	// Unique metadata for this hostname.
-	Key  string                                                       `json:"key"`
-	JSON customHostnameResponseSingle4Byp7wotResultCustomMetadataJSON `json:"-"`
-}
-
-// customHostnameResponseSingle4Byp7wotResultCustomMetadataJSON contains the JSON
-// metadata for the struct
-// [CustomHostnameResponseSingle4Byp7wotResultCustomMetadata]
-type customHostnameResponseSingle4Byp7wotResultCustomMetadataJSON struct {
-	Key         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameResponseSingle4Byp7wotResultCustomMetadata) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// This is a record which can be placed to activate a hostname.
-type CustomHostnameResponseSingle4Byp7wotResultOwnershipVerification struct {
-	// DNS Name for record.
-	Name string `json:"name"`
-	// DNS Record type.
-	Type CustomHostnameResponseSingle4Byp7wotResultOwnershipVerificationType `json:"type"`
-	// Content for the record.
-	Value string                                                              `json:"value"`
-	JSON  customHostnameResponseSingle4Byp7wotResultOwnershipVerificationJSON `json:"-"`
-}
-
-// customHostnameResponseSingle4Byp7wotResultOwnershipVerificationJSON contains the
-// JSON metadata for the struct
-// [CustomHostnameResponseSingle4Byp7wotResultOwnershipVerification]
-type customHostnameResponseSingle4Byp7wotResultOwnershipVerificationJSON struct {
-	Name        apijson.Field
-	Type        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameResponseSingle4Byp7wotResultOwnershipVerification) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// DNS Record type.
-type CustomHostnameResponseSingle4Byp7wotResultOwnershipVerificationType string
-
-const (
-	CustomHostnameResponseSingle4Byp7wotResultOwnershipVerificationTypeTxt CustomHostnameResponseSingle4Byp7wotResultOwnershipVerificationType = "txt"
-)
-
-// This presents the token to be served by the given http url to activate a
-// hostname.
-type CustomHostnameResponseSingle4Byp7wotResultOwnershipVerificationHTTP struct {
-	// Token to be served.
-	HTTPBody string `json:"http_body"`
-	// The HTTP URL that will be checked during custom hostname verification and where
-	// the customer should host the token.
-	HTTPURL string                                                                  `json:"http_url"`
-	JSON    customHostnameResponseSingle4Byp7wotResultOwnershipVerificationHTTPJSON `json:"-"`
-}
-
-// customHostnameResponseSingle4Byp7wotResultOwnershipVerificationHTTPJSON contains
-// the JSON metadata for the struct
-// [CustomHostnameResponseSingle4Byp7wotResultOwnershipVerificationHTTP]
-type customHostnameResponseSingle4Byp7wotResultOwnershipVerificationHTTPJSON struct {
-	HTTPBody    apijson.Field
-	HTTPURL     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameResponseSingle4Byp7wotResultOwnershipVerificationHTTP) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// SSL properties for the custom hostname.
-type CustomHostnameResponseSingle4Byp7wotResultSsl struct {
-	// Custom hostname SSL identifier tag.
-	ID string `json:"id"`
-	// A ubiquitous bundle has the highest probability of being verified everywhere,
-	// even by clients using outdated or unusual trust stores. An optimal bundle uses
-	// the shortest chain and newest intermediates. And the force bundle verifies the
-	// chain, but does not otherwise modify it.
-	BundleMethod CustomHostnameResponseSingle4Byp7wotResultSslBundleMethod `json:"bundle_method"`
-	// The Certificate Authority that will issue the certificate
-	CertificateAuthority CustomHostnameResponseSingle4Byp7wotResultSslCertificateAuthority `json:"certificate_authority"`
-	// If a custom uploaded certificate is used.
-	CustomCertificate string `json:"custom_certificate"`
-	// The identifier for the Custom CSR that was used.
-	CustomCsrID string `json:"custom_csr_id"`
-	// The key for a custom uploaded certificate.
-	CustomKey string `json:"custom_key"`
-	// The time the custom certificate expires on.
-	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
-	// A list of Hostnames on a custom uploaded certificate.
-	Hosts []interface{} `json:"hosts"`
-	// The issuer on a custom uploaded certificate.
-	Issuer string `json:"issuer"`
-	// Domain control validation (DCV) method used for this hostname.
-	Method CustomHostnameResponseSingle4Byp7wotResultSslMethod `json:"method"`
-	// The serial number on a custom uploaded certificate.
-	SerialNumber string `json:"serial_number"`
-	// SSL specific settings.
-	Settings CustomHostnameResponseSingle4Byp7wotResultSslSettings `json:"settings"`
-	// The signature on a custom uploaded certificate.
-	Signature string `json:"signature"`
-	// Status of the hostname's SSL certificates.
-	Status CustomHostnameResponseSingle4Byp7wotResultSslStatus `json:"status"`
-	// Level of validation to be used for this hostname. Domain validation (dv) must be
-	// used.
-	Type CustomHostnameResponseSingle4Byp7wotResultSslType `json:"type"`
-	// The time the custom certificate was uploaded.
-	UploadedOn time.Time `json:"uploaded_on" format:"date-time"`
-	// Domain validation errors that have been received by the certificate authority
-	// (CA).
-	ValidationErrors  []CustomHostnameResponseSingle4Byp7wotResultSslValidationError  `json:"validation_errors"`
-	ValidationRecords []CustomHostnameResponseSingle4Byp7wotResultSslValidationRecord `json:"validation_records"`
-	// Indicates whether the certificate covers a wildcard.
-	Wildcard bool                                              `json:"wildcard"`
-	JSON     customHostnameResponseSingle4Byp7wotResultSslJSON `json:"-"`
-}
-
-// customHostnameResponseSingle4Byp7wotResultSslJSON contains the JSON metadata for
-// the struct [CustomHostnameResponseSingle4Byp7wotResultSsl]
-type customHostnameResponseSingle4Byp7wotResultSslJSON struct {
-	ID                   apijson.Field
-	BundleMethod         apijson.Field
-	CertificateAuthority apijson.Field
-	CustomCertificate    apijson.Field
-	CustomCsrID          apijson.Field
-	CustomKey            apijson.Field
-	ExpiresOn            apijson.Field
-	Hosts                apijson.Field
-	Issuer               apijson.Field
-	Method               apijson.Field
-	SerialNumber         apijson.Field
-	Settings             apijson.Field
-	Signature            apijson.Field
-	Status               apijson.Field
-	Type                 apijson.Field
-	UploadedOn           apijson.Field
-	ValidationErrors     apijson.Field
-	ValidationRecords    apijson.Field
-	Wildcard             apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *CustomHostnameResponseSingle4Byp7wotResultSsl) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// A ubiquitous bundle has the highest probability of being verified everywhere,
-// even by clients using outdated or unusual trust stores. An optimal bundle uses
-// the shortest chain and newest intermediates. And the force bundle verifies the
-// chain, but does not otherwise modify it.
-type CustomHostnameResponseSingle4Byp7wotResultSslBundleMethod string
-
-const (
-	CustomHostnameResponseSingle4Byp7wotResultSslBundleMethodUbiquitous CustomHostnameResponseSingle4Byp7wotResultSslBundleMethod = "ubiquitous"
-	CustomHostnameResponseSingle4Byp7wotResultSslBundleMethodOptimal    CustomHostnameResponseSingle4Byp7wotResultSslBundleMethod = "optimal"
-	CustomHostnameResponseSingle4Byp7wotResultSslBundleMethodForce      CustomHostnameResponseSingle4Byp7wotResultSslBundleMethod = "force"
-)
-
-// The Certificate Authority that will issue the certificate
-type CustomHostnameResponseSingle4Byp7wotResultSslCertificateAuthority string
-
-const (
-	CustomHostnameResponseSingle4Byp7wotResultSslCertificateAuthorityDigicert    CustomHostnameResponseSingle4Byp7wotResultSslCertificateAuthority = "digicert"
-	CustomHostnameResponseSingle4Byp7wotResultSslCertificateAuthorityGoogle      CustomHostnameResponseSingle4Byp7wotResultSslCertificateAuthority = "google"
-	CustomHostnameResponseSingle4Byp7wotResultSslCertificateAuthorityLetsEncrypt CustomHostnameResponseSingle4Byp7wotResultSslCertificateAuthority = "lets_encrypt"
-)
-
-// Domain control validation (DCV) method used for this hostname.
-type CustomHostnameResponseSingle4Byp7wotResultSslMethod string
-
-const (
-	CustomHostnameResponseSingle4Byp7wotResultSslMethodHTTP  CustomHostnameResponseSingle4Byp7wotResultSslMethod = "http"
-	CustomHostnameResponseSingle4Byp7wotResultSslMethodTxt   CustomHostnameResponseSingle4Byp7wotResultSslMethod = "txt"
-	CustomHostnameResponseSingle4Byp7wotResultSslMethodEmail CustomHostnameResponseSingle4Byp7wotResultSslMethod = "email"
-)
-
-// SSL specific settings.
-type CustomHostnameResponseSingle4Byp7wotResultSslSettings struct {
-	// An allowlist of ciphers for TLS termination. These ciphers must be in the
-	// BoringSSL format.
-	Ciphers []string `json:"ciphers"`
-	// Whether or not Early Hints is enabled.
-	EarlyHints CustomHostnameResponseSingle4Byp7wotResultSslSettingsEarlyHints `json:"early_hints"`
-	// Whether or not HTTP2 is enabled.
-	Http2 CustomHostnameResponseSingle4Byp7wotResultSslSettingsHttp2 `json:"http2"`
-	// The minimum TLS version supported.
-	MinTlsVersion CustomHostnameResponseSingle4Byp7wotResultSslSettingsMinTlsVersion `json:"min_tls_version"`
-	// Whether or not TLS 1.3 is enabled.
-	Tls1_3 CustomHostnameResponseSingle4Byp7wotResultSslSettingsTls1_3 `json:"tls_1_3"`
-	JSON   customHostnameResponseSingle4Byp7wotResultSslSettingsJSON   `json:"-"`
-}
-
-// customHostnameResponseSingle4Byp7wotResultSslSettingsJSON contains the JSON
-// metadata for the struct [CustomHostnameResponseSingle4Byp7wotResultSslSettings]
-type customHostnameResponseSingle4Byp7wotResultSslSettingsJSON struct {
-	Ciphers       apijson.Field
-	EarlyHints    apijson.Field
-	Http2         apijson.Field
-	MinTlsVersion apijson.Field
-	Tls1_3        apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *CustomHostnameResponseSingle4Byp7wotResultSslSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether or not Early Hints is enabled.
-type CustomHostnameResponseSingle4Byp7wotResultSslSettingsEarlyHints string
-
-const (
-	CustomHostnameResponseSingle4Byp7wotResultSslSettingsEarlyHintsOn  CustomHostnameResponseSingle4Byp7wotResultSslSettingsEarlyHints = "on"
-	CustomHostnameResponseSingle4Byp7wotResultSslSettingsEarlyHintsOff CustomHostnameResponseSingle4Byp7wotResultSslSettingsEarlyHints = "off"
-)
-
-// Whether or not HTTP2 is enabled.
-type CustomHostnameResponseSingle4Byp7wotResultSslSettingsHttp2 string
-
-const (
-	CustomHostnameResponseSingle4Byp7wotResultSslSettingsHttp2On  CustomHostnameResponseSingle4Byp7wotResultSslSettingsHttp2 = "on"
-	CustomHostnameResponseSingle4Byp7wotResultSslSettingsHttp2Off CustomHostnameResponseSingle4Byp7wotResultSslSettingsHttp2 = "off"
-)
-
-// The minimum TLS version supported.
-type CustomHostnameResponseSingle4Byp7wotResultSslSettingsMinTlsVersion string
-
-const (
-	CustomHostnameResponseSingle4Byp7wotResultSslSettingsMinTlsVersion1_0 CustomHostnameResponseSingle4Byp7wotResultSslSettingsMinTlsVersion = "1.0"
-	CustomHostnameResponseSingle4Byp7wotResultSslSettingsMinTlsVersion1_1 CustomHostnameResponseSingle4Byp7wotResultSslSettingsMinTlsVersion = "1.1"
-	CustomHostnameResponseSingle4Byp7wotResultSslSettingsMinTlsVersion1_2 CustomHostnameResponseSingle4Byp7wotResultSslSettingsMinTlsVersion = "1.2"
-	CustomHostnameResponseSingle4Byp7wotResultSslSettingsMinTlsVersion1_3 CustomHostnameResponseSingle4Byp7wotResultSslSettingsMinTlsVersion = "1.3"
-)
-
-// Whether or not TLS 1.3 is enabled.
-type CustomHostnameResponseSingle4Byp7wotResultSslSettingsTls1_3 string
-
-const (
-	CustomHostnameResponseSingle4Byp7wotResultSslSettingsTls1_3On  CustomHostnameResponseSingle4Byp7wotResultSslSettingsTls1_3 = "on"
-	CustomHostnameResponseSingle4Byp7wotResultSslSettingsTls1_3Off CustomHostnameResponseSingle4Byp7wotResultSslSettingsTls1_3 = "off"
-)
-
-// Status of the hostname's SSL certificates.
-type CustomHostnameResponseSingle4Byp7wotResultSslStatus string
-
-const (
-	CustomHostnameResponseSingle4Byp7wotResultSslStatusInitializing         CustomHostnameResponseSingle4Byp7wotResultSslStatus = "initializing"
-	CustomHostnameResponseSingle4Byp7wotResultSslStatusPendingValidation    CustomHostnameResponseSingle4Byp7wotResultSslStatus = "pending_validation"
-	CustomHostnameResponseSingle4Byp7wotResultSslStatusDeleted              CustomHostnameResponseSingle4Byp7wotResultSslStatus = "deleted"
-	CustomHostnameResponseSingle4Byp7wotResultSslStatusPendingIssuance      CustomHostnameResponseSingle4Byp7wotResultSslStatus = "pending_issuance"
-	CustomHostnameResponseSingle4Byp7wotResultSslStatusPendingDeployment    CustomHostnameResponseSingle4Byp7wotResultSslStatus = "pending_deployment"
-	CustomHostnameResponseSingle4Byp7wotResultSslStatusPendingDeletion      CustomHostnameResponseSingle4Byp7wotResultSslStatus = "pending_deletion"
-	CustomHostnameResponseSingle4Byp7wotResultSslStatusPendingExpiration    CustomHostnameResponseSingle4Byp7wotResultSslStatus = "pending_expiration"
-	CustomHostnameResponseSingle4Byp7wotResultSslStatusExpired              CustomHostnameResponseSingle4Byp7wotResultSslStatus = "expired"
-	CustomHostnameResponseSingle4Byp7wotResultSslStatusActive               CustomHostnameResponseSingle4Byp7wotResultSslStatus = "active"
-	CustomHostnameResponseSingle4Byp7wotResultSslStatusInitializingTimedOut CustomHostnameResponseSingle4Byp7wotResultSslStatus = "initializing_timed_out"
-	CustomHostnameResponseSingle4Byp7wotResultSslStatusValidationTimedOut   CustomHostnameResponseSingle4Byp7wotResultSslStatus = "validation_timed_out"
-	CustomHostnameResponseSingle4Byp7wotResultSslStatusIssuanceTimedOut     CustomHostnameResponseSingle4Byp7wotResultSslStatus = "issuance_timed_out"
-	CustomHostnameResponseSingle4Byp7wotResultSslStatusDeploymentTimedOut   CustomHostnameResponseSingle4Byp7wotResultSslStatus = "deployment_timed_out"
-	CustomHostnameResponseSingle4Byp7wotResultSslStatusDeletionTimedOut     CustomHostnameResponseSingle4Byp7wotResultSslStatus = "deletion_timed_out"
-	CustomHostnameResponseSingle4Byp7wotResultSslStatusPendingCleanup       CustomHostnameResponseSingle4Byp7wotResultSslStatus = "pending_cleanup"
-	CustomHostnameResponseSingle4Byp7wotResultSslStatusStagingDeployment    CustomHostnameResponseSingle4Byp7wotResultSslStatus = "staging_deployment"
-	CustomHostnameResponseSingle4Byp7wotResultSslStatusStagingActive        CustomHostnameResponseSingle4Byp7wotResultSslStatus = "staging_active"
-	CustomHostnameResponseSingle4Byp7wotResultSslStatusDeactivating         CustomHostnameResponseSingle4Byp7wotResultSslStatus = "deactivating"
-	CustomHostnameResponseSingle4Byp7wotResultSslStatusInactive             CustomHostnameResponseSingle4Byp7wotResultSslStatus = "inactive"
-	CustomHostnameResponseSingle4Byp7wotResultSslStatusBackupIssued         CustomHostnameResponseSingle4Byp7wotResultSslStatus = "backup_issued"
-	CustomHostnameResponseSingle4Byp7wotResultSslStatusHoldingDeployment    CustomHostnameResponseSingle4Byp7wotResultSslStatus = "holding_deployment"
-)
-
-// Level of validation to be used for this hostname. Domain validation (dv) must be
-// used.
-type CustomHostnameResponseSingle4Byp7wotResultSslType string
-
-const (
-	CustomHostnameResponseSingle4Byp7wotResultSslTypeDv CustomHostnameResponseSingle4Byp7wotResultSslType = "dv"
-)
-
-type CustomHostnameResponseSingle4Byp7wotResultSslValidationError struct {
-	// A domain validation error.
-	Message string                                                           `json:"message"`
-	JSON    customHostnameResponseSingle4Byp7wotResultSslValidationErrorJSON `json:"-"`
-}
-
-// customHostnameResponseSingle4Byp7wotResultSslValidationErrorJSON contains the
-// JSON metadata for the struct
-// [CustomHostnameResponseSingle4Byp7wotResultSslValidationError]
-type customHostnameResponseSingle4Byp7wotResultSslValidationErrorJSON struct {
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameResponseSingle4Byp7wotResultSslValidationError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Certificate's required validation record.
-type CustomHostnameResponseSingle4Byp7wotResultSslValidationRecord struct {
-	// The set of email addresses that the certificate authority (CA) will use to
-	// complete domain validation.
-	Emails []interface{} `json:"emails"`
-	// The content that the certificate authority (CA) will expect to find at the
-	// http_url during the domain validation.
-	HTTPBody string `json:"http_body"`
-	// The url that will be checked during domain validation.
-	HTTPURL string `json:"http_url"`
-	// The hostname that the certificate authority (CA) will check for a TXT record
-	// during domain validation .
-	TxtName string `json:"txt_name"`
-	// The TXT record that the certificate authority (CA) will check during domain
-	// validation.
-	TxtValue string                                                            `json:"txt_value"`
-	JSON     customHostnameResponseSingle4Byp7wotResultSslValidationRecordJSON `json:"-"`
-}
-
-// customHostnameResponseSingle4Byp7wotResultSslValidationRecordJSON contains the
-// JSON metadata for the struct
-// [CustomHostnameResponseSingle4Byp7wotResultSslValidationRecord]
-type customHostnameResponseSingle4Byp7wotResultSslValidationRecordJSON struct {
-	Emails      apijson.Field
-	HTTPBody    apijson.Field
-	HTTPURL     apijson.Field
-	TxtName     apijson.Field
-	TxtValue    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameResponseSingle4Byp7wotResultSslValidationRecord) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Status of the hostname's activation.
-type CustomHostnameResponseSingle4Byp7wotResultStatus string
-
-const (
-	CustomHostnameResponseSingle4Byp7wotResultStatusActive             CustomHostnameResponseSingle4Byp7wotResultStatus = "active"
-	CustomHostnameResponseSingle4Byp7wotResultStatusPending            CustomHostnameResponseSingle4Byp7wotResultStatus = "pending"
-	CustomHostnameResponseSingle4Byp7wotResultStatusActiveRedeploying  CustomHostnameResponseSingle4Byp7wotResultStatus = "active_redeploying"
-	CustomHostnameResponseSingle4Byp7wotResultStatusMoved              CustomHostnameResponseSingle4Byp7wotResultStatus = "moved"
-	CustomHostnameResponseSingle4Byp7wotResultStatusPendingDeletion    CustomHostnameResponseSingle4Byp7wotResultStatus = "pending_deletion"
-	CustomHostnameResponseSingle4Byp7wotResultStatusDeleted            CustomHostnameResponseSingle4Byp7wotResultStatus = "deleted"
-	CustomHostnameResponseSingle4Byp7wotResultStatusPendingBlocked     CustomHostnameResponseSingle4Byp7wotResultStatus = "pending_blocked"
-	CustomHostnameResponseSingle4Byp7wotResultStatusPendingMigration   CustomHostnameResponseSingle4Byp7wotResultStatus = "pending_migration"
-	CustomHostnameResponseSingle4Byp7wotResultStatusPendingProvisioned CustomHostnameResponseSingle4Byp7wotResultStatus = "pending_provisioned"
-	CustomHostnameResponseSingle4Byp7wotResultStatusTestPending        CustomHostnameResponseSingle4Byp7wotResultStatus = "test_pending"
-	CustomHostnameResponseSingle4Byp7wotResultStatusTestActive         CustomHostnameResponseSingle4Byp7wotResultStatus = "test_active"
-	CustomHostnameResponseSingle4Byp7wotResultStatusTestActiveApex     CustomHostnameResponseSingle4Byp7wotResultStatus = "test_active_apex"
-	CustomHostnameResponseSingle4Byp7wotResultStatusTestBlocked        CustomHostnameResponseSingle4Byp7wotResultStatus = "test_blocked"
-	CustomHostnameResponseSingle4Byp7wotResultStatusTestFailed         CustomHostnameResponseSingle4Byp7wotResultStatus = "test_failed"
-	CustomHostnameResponseSingle4Byp7wotResultStatusProvisioned        CustomHostnameResponseSingle4Byp7wotResultStatus = "provisioned"
-	CustomHostnameResponseSingle4Byp7wotResultStatusBlocked            CustomHostnameResponseSingle4Byp7wotResultStatus = "blocked"
+	ZoneCustomHostnameUpdateResponseResultStatusActive             ZoneCustomHostnameUpdateResponseResultStatus = "active"
+	ZoneCustomHostnameUpdateResponseResultStatusPending            ZoneCustomHostnameUpdateResponseResultStatus = "pending"
+	ZoneCustomHostnameUpdateResponseResultStatusActiveRedeploying  ZoneCustomHostnameUpdateResponseResultStatus = "active_redeploying"
+	ZoneCustomHostnameUpdateResponseResultStatusMoved              ZoneCustomHostnameUpdateResponseResultStatus = "moved"
+	ZoneCustomHostnameUpdateResponseResultStatusPendingDeletion    ZoneCustomHostnameUpdateResponseResultStatus = "pending_deletion"
+	ZoneCustomHostnameUpdateResponseResultStatusDeleted            ZoneCustomHostnameUpdateResponseResultStatus = "deleted"
+	ZoneCustomHostnameUpdateResponseResultStatusPendingBlocked     ZoneCustomHostnameUpdateResponseResultStatus = "pending_blocked"
+	ZoneCustomHostnameUpdateResponseResultStatusPendingMigration   ZoneCustomHostnameUpdateResponseResultStatus = "pending_migration"
+	ZoneCustomHostnameUpdateResponseResultStatusPendingProvisioned ZoneCustomHostnameUpdateResponseResultStatus = "pending_provisioned"
+	ZoneCustomHostnameUpdateResponseResultStatusTestPending        ZoneCustomHostnameUpdateResponseResultStatus = "test_pending"
+	ZoneCustomHostnameUpdateResponseResultStatusTestActive         ZoneCustomHostnameUpdateResponseResultStatus = "test_active"
+	ZoneCustomHostnameUpdateResponseResultStatusTestActiveApex     ZoneCustomHostnameUpdateResponseResultStatus = "test_active_apex"
+	ZoneCustomHostnameUpdateResponseResultStatusTestBlocked        ZoneCustomHostnameUpdateResponseResultStatus = "test_blocked"
+	ZoneCustomHostnameUpdateResponseResultStatusTestFailed         ZoneCustomHostnameUpdateResponseResultStatus = "test_failed"
+	ZoneCustomHostnameUpdateResponseResultStatusProvisioned        ZoneCustomHostnameUpdateResponseResultStatus = "provisioned"
+	ZoneCustomHostnameUpdateResponseResultStatusBlocked            ZoneCustomHostnameUpdateResponseResultStatus = "blocked"
 )
 
 // Whether the API call was successful
-type CustomHostnameResponseSingle4Byp7wotSuccess bool
+type ZoneCustomHostnameUpdateResponseSuccess bool
 
 const (
-	CustomHostnameResponseSingle4Byp7wotSuccessTrue CustomHostnameResponseSingle4Byp7wotSuccess = true
+	ZoneCustomHostnameUpdateResponseSuccessTrue ZoneCustomHostnameUpdateResponseSuccess = true
 )
 
 type ZoneCustomHostnameDeleteResponse struct {
@@ -1102,6 +1081,918 @@ type zoneCustomHostnameDeleteResponseJSON struct {
 func (r *ZoneCustomHostnameDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponse struct {
+	Errors   []ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseError   `json:"errors"`
+	Messages []ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseMessage `json:"messages"`
+	Result   ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseSuccess `json:"success"`
+	JSON    zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseJSON    `json:"-"`
+}
+
+// zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseJSON contains
+// the JSON metadata for the struct
+// [ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponse]
+type zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseError struct {
+	Code    int64                                                                      `json:"code,required"`
+	Message string                                                                     `json:"message,required"`
+	JSON    zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseErrorJSON `json:"-"`
+}
+
+// zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseError]
+type zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseMessage struct {
+	Code    int64                                                                        `json:"code,required"`
+	Message string                                                                       `json:"message,required"`
+	JSON    zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseMessageJSON `json:"-"`
+}
+
+// zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseMessage]
+type zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResult struct {
+	// Identifier
+	ID string `json:"id"`
+	// This is the time the hostname was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// These are per-hostname (customer) settings.
+	CustomMetadata ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultCustomMetadata `json:"custom_metadata"`
+	// a valid hostname that’s been added to your DNS zone as an A, AAAA, or CNAME
+	// record.
+	CustomOriginServer string `json:"custom_origin_server"`
+	// A hostname that will be sent to your custom origin server as SNI for TLS
+	// handshake. This can be a valid subdomain of the zone or custom origin server
+	// name or the string ':request_host_header:' which will cause the host header in
+	// the request to be used as SNI. Not configurable with default/fallback origin
+	// server.
+	CustomOriginSni string `json:"custom_origin_sni"`
+	// The custom hostname that will point to your hostname via CNAME.
+	Hostname string `json:"hostname"`
+	// This is a record which can be placed to activate a hostname.
+	OwnershipVerification ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultOwnershipVerification `json:"ownership_verification"`
+	// This presents the token to be served by the given http url to activate a
+	// hostname.
+	OwnershipVerificationHTTP ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultOwnershipVerificationHTTP `json:"ownership_verification_http"`
+	// SSL properties for the custom hostname.
+	Ssl ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSsl `json:"ssl"`
+	// Status of the hostname's activation.
+	Status ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatus `json:"status"`
+	// These are errors that were encountered while trying to activate a hostname.
+	VerificationErrors []interface{}                                                               `json:"verification_errors"`
+	JSON               zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultJSON `json:"-"`
+}
+
+// zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResult]
+type zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultJSON struct {
+	ID                        apijson.Field
+	CreatedAt                 apijson.Field
+	CustomMetadata            apijson.Field
+	CustomOriginServer        apijson.Field
+	CustomOriginSni           apijson.Field
+	Hostname                  apijson.Field
+	OwnershipVerification     apijson.Field
+	OwnershipVerificationHTTP apijson.Field
+	Ssl                       apijson.Field
+	Status                    apijson.Field
+	VerificationErrors        apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// These are per-hostname (customer) settings.
+type ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultCustomMetadata struct {
+	// Unique metadata for this hostname.
+	Key  string                                                                                    `json:"key"`
+	JSON zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultCustomMetadataJSON `json:"-"`
+}
+
+// zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultCustomMetadataJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultCustomMetadata]
+type zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultCustomMetadataJSON struct {
+	Key         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultCustomMetadata) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// This is a record which can be placed to activate a hostname.
+type ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultOwnershipVerification struct {
+	// DNS Name for record.
+	Name string `json:"name"`
+	// DNS Record type.
+	Type ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultOwnershipVerificationType `json:"type"`
+	// Content for the record.
+	Value string                                                                                           `json:"value"`
+	JSON  zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultOwnershipVerificationJSON `json:"-"`
+}
+
+// zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultOwnershipVerificationJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultOwnershipVerification]
+type zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultOwnershipVerificationJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultOwnershipVerification) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// DNS Record type.
+type ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultOwnershipVerificationType string
+
+const (
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultOwnershipVerificationTypeTxt ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultOwnershipVerificationType = "txt"
+)
+
+// This presents the token to be served by the given http url to activate a
+// hostname.
+type ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultOwnershipVerificationHTTP struct {
+	// Token to be served.
+	HTTPBody string `json:"http_body"`
+	// The HTTP URL that will be checked during custom hostname verification and where
+	// the customer should host the token.
+	HTTPURL string                                                                                               `json:"http_url"`
+	JSON    zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultOwnershipVerificationHTTPJSON `json:"-"`
+}
+
+// zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultOwnershipVerificationHTTPJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultOwnershipVerificationHTTP]
+type zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultOwnershipVerificationHTTPJSON struct {
+	HTTPBody    apijson.Field
+	HTTPURL     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultOwnershipVerificationHTTP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// SSL properties for the custom hostname.
+type ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSsl struct {
+	// Custom hostname SSL identifier tag.
+	ID string `json:"id"`
+	// A ubiquitous bundle has the highest probability of being verified everywhere,
+	// even by clients using outdated or unusual trust stores. An optimal bundle uses
+	// the shortest chain and newest intermediates. And the force bundle verifies the
+	// chain, but does not otherwise modify it.
+	BundleMethod ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslBundleMethod `json:"bundle_method"`
+	// The Certificate Authority that will issue the certificate
+	CertificateAuthority ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslCertificateAuthority `json:"certificate_authority"`
+	// If a custom uploaded certificate is used.
+	CustomCertificate string `json:"custom_certificate"`
+	// The identifier for the Custom CSR that was used.
+	CustomCsrID string `json:"custom_csr_id"`
+	// The key for a custom uploaded certificate.
+	CustomKey string `json:"custom_key"`
+	// The time the custom certificate expires on.
+	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	// A list of Hostnames on a custom uploaded certificate.
+	Hosts []interface{} `json:"hosts"`
+	// The issuer on a custom uploaded certificate.
+	Issuer string `json:"issuer"`
+	// Domain control validation (DCV) method used for this hostname.
+	Method ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslMethod `json:"method"`
+	// The serial number on a custom uploaded certificate.
+	SerialNumber string `json:"serial_number"`
+	// SSL specific settings.
+	Settings ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettings `json:"settings"`
+	// The signature on a custom uploaded certificate.
+	Signature string `json:"signature"`
+	// Status of the hostname's SSL certificates.
+	Status ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatus `json:"status"`
+	// Level of validation to be used for this hostname. Domain validation (dv) must be
+	// used.
+	Type ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslType `json:"type"`
+	// The time the custom certificate was uploaded.
+	UploadedOn time.Time `json:"uploaded_on" format:"date-time"`
+	// Domain validation errors that have been received by the certificate authority
+	// (CA).
+	ValidationErrors  []ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslValidationError  `json:"validation_errors"`
+	ValidationRecords []ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslValidationRecord `json:"validation_records"`
+	// Indicates whether the certificate covers a wildcard.
+	Wildcard bool                                                                           `json:"wildcard"`
+	JSON     zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslJSON `json:"-"`
+}
+
+// zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSsl]
+type zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslJSON struct {
+	ID                   apijson.Field
+	BundleMethod         apijson.Field
+	CertificateAuthority apijson.Field
+	CustomCertificate    apijson.Field
+	CustomCsrID          apijson.Field
+	CustomKey            apijson.Field
+	ExpiresOn            apijson.Field
+	Hosts                apijson.Field
+	Issuer               apijson.Field
+	Method               apijson.Field
+	SerialNumber         apijson.Field
+	Settings             apijson.Field
+	Signature            apijson.Field
+	Status               apijson.Field
+	Type                 apijson.Field
+	UploadedOn           apijson.Field
+	ValidationErrors     apijson.Field
+	ValidationRecords    apijson.Field
+	Wildcard             apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSsl) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A ubiquitous bundle has the highest probability of being verified everywhere,
+// even by clients using outdated or unusual trust stores. An optimal bundle uses
+// the shortest chain and newest intermediates. And the force bundle verifies the
+// chain, but does not otherwise modify it.
+type ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslBundleMethod string
+
+const (
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslBundleMethodUbiquitous ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslBundleMethod = "ubiquitous"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslBundleMethodOptimal    ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslBundleMethod = "optimal"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslBundleMethodForce      ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslBundleMethod = "force"
+)
+
+// The Certificate Authority that will issue the certificate
+type ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslCertificateAuthority string
+
+const (
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslCertificateAuthorityDigicert    ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslCertificateAuthority = "digicert"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslCertificateAuthorityGoogle      ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslCertificateAuthority = "google"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslCertificateAuthorityLetsEncrypt ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslCertificateAuthority = "lets_encrypt"
+)
+
+// Domain control validation (DCV) method used for this hostname.
+type ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslMethod string
+
+const (
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslMethodHTTP  ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslMethod = "http"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslMethodTxt   ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslMethod = "txt"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslMethodEmail ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslMethod = "email"
+)
+
+// SSL specific settings.
+type ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettings struct {
+	// An allowlist of ciphers for TLS termination. These ciphers must be in the
+	// BoringSSL format.
+	Ciphers []string `json:"ciphers"`
+	// Whether or not Early Hints is enabled.
+	EarlyHints ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsEarlyHints `json:"early_hints"`
+	// Whether or not HTTP2 is enabled.
+	Http2 ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsHttp2 `json:"http2"`
+	// The minimum TLS version supported.
+	MinTlsVersion ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsMinTlsVersion `json:"min_tls_version"`
+	// Whether or not TLS 1.3 is enabled.
+	Tls1_3 ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsTls1_3 `json:"tls_1_3"`
+	JSON   zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsJSON   `json:"-"`
+}
+
+// zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettings]
+type zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsJSON struct {
+	Ciphers       apijson.Field
+	EarlyHints    apijson.Field
+	Http2         apijson.Field
+	MinTlsVersion apijson.Field
+	Tls1_3        apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether or not Early Hints is enabled.
+type ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsEarlyHints string
+
+const (
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsEarlyHintsOn  ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsEarlyHints = "on"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsEarlyHintsOff ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsEarlyHints = "off"
+)
+
+// Whether or not HTTP2 is enabled.
+type ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsHttp2 string
+
+const (
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsHttp2On  ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsHttp2 = "on"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsHttp2Off ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsHttp2 = "off"
+)
+
+// The minimum TLS version supported.
+type ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsMinTlsVersion string
+
+const (
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsMinTlsVersion1_0 ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsMinTlsVersion = "1.0"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsMinTlsVersion1_1 ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsMinTlsVersion = "1.1"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsMinTlsVersion1_2 ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsMinTlsVersion = "1.2"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsMinTlsVersion1_3 ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsMinTlsVersion = "1.3"
+)
+
+// Whether or not TLS 1.3 is enabled.
+type ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsTls1_3 string
+
+const (
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsTls1_3On  ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsTls1_3 = "on"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsTls1_3Off ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslSettingsTls1_3 = "off"
+)
+
+// Status of the hostname's SSL certificates.
+type ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatus string
+
+const (
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatusInitializing         ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatus = "initializing"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatusPendingValidation    ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatus = "pending_validation"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatusDeleted              ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatus = "deleted"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatusPendingIssuance      ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatus = "pending_issuance"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatusPendingDeployment    ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatus = "pending_deployment"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatusPendingDeletion      ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatus = "pending_deletion"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatusPendingExpiration    ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatus = "pending_expiration"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatusExpired              ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatus = "expired"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatusActive               ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatus = "active"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatusInitializingTimedOut ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatus = "initializing_timed_out"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatusValidationTimedOut   ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatus = "validation_timed_out"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatusIssuanceTimedOut     ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatus = "issuance_timed_out"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatusDeploymentTimedOut   ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatus = "deployment_timed_out"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatusDeletionTimedOut     ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatus = "deletion_timed_out"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatusPendingCleanup       ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatus = "pending_cleanup"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatusStagingDeployment    ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatus = "staging_deployment"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatusStagingActive        ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatus = "staging_active"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatusDeactivating         ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatus = "deactivating"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatusInactive             ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatus = "inactive"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatusBackupIssued         ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatus = "backup_issued"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatusHoldingDeployment    ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslStatus = "holding_deployment"
+)
+
+// Level of validation to be used for this hostname. Domain validation (dv) must be
+// used.
+type ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslType string
+
+const (
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslTypeDv ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslType = "dv"
+)
+
+type ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslValidationError struct {
+	// A domain validation error.
+	Message string                                                                                        `json:"message"`
+	JSON    zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslValidationErrorJSON `json:"-"`
+}
+
+// zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslValidationErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslValidationError]
+type zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslValidationErrorJSON struct {
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslValidationError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Certificate's required validation record.
+type ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslValidationRecord struct {
+	// The set of email addresses that the certificate authority (CA) will use to
+	// complete domain validation.
+	Emails []interface{} `json:"emails"`
+	// The content that the certificate authority (CA) will expect to find at the
+	// http_url during the domain validation.
+	HTTPBody string `json:"http_body"`
+	// The url that will be checked during domain validation.
+	HTTPURL string `json:"http_url"`
+	// The hostname that the certificate authority (CA) will check for a TXT record
+	// during domain validation .
+	TxtName string `json:"txt_name"`
+	// The TXT record that the certificate authority (CA) will check during domain
+	// validation.
+	TxtValue string                                                                                         `json:"txt_value"`
+	JSON     zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslValidationRecordJSON `json:"-"`
+}
+
+// zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslValidationRecordJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslValidationRecord]
+type zoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslValidationRecordJSON struct {
+	Emails      apijson.Field
+	HTTPBody    apijson.Field
+	HTTPURL     apijson.Field
+	TxtName     apijson.Field
+	TxtValue    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultSslValidationRecord) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Status of the hostname's activation.
+type ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatus string
+
+const (
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatusActive             ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatus = "active"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatusPending            ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatus = "pending"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatusActiveRedeploying  ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatus = "active_redeploying"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatusMoved              ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatus = "moved"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatusPendingDeletion    ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatus = "pending_deletion"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatusDeleted            ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatus = "deleted"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatusPendingBlocked     ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatus = "pending_blocked"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatusPendingMigration   ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatus = "pending_migration"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatusPendingProvisioned ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatus = "pending_provisioned"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatusTestPending        ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatus = "test_pending"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatusTestActive         ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatus = "test_active"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatusTestActiveApex     ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatus = "test_active_apex"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatusTestBlocked        ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatus = "test_blocked"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatusTestFailed         ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatus = "test_failed"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatusProvisioned        ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatus = "provisioned"
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatusBlocked            ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseResultStatus = "blocked"
+)
+
+// Whether the API call was successful
+type ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseSuccess bool
+
+const (
+	ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseSuccessTrue ZoneCustomHostnameCustomHostnameForAZoneNewCustomHostnameResponseSuccess = true
+)
+
+type ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponse struct {
+	// Identifier
+	ID string `json:"id"`
+	// This is the time the hostname was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// These are per-hostname (customer) settings.
+	CustomMetadata ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseCustomMetadata `json:"custom_metadata"`
+	// a valid hostname that’s been added to your DNS zone as an A, AAAA, or CNAME
+	// record.
+	CustomOriginServer string `json:"custom_origin_server"`
+	// A hostname that will be sent to your custom origin server as SNI for TLS
+	// handshake. This can be a valid subdomain of the zone or custom origin server
+	// name or the string ':request_host_header:' which will cause the host header in
+	// the request to be used as SNI. Not configurable with default/fallback origin
+	// server.
+	CustomOriginSni string `json:"custom_origin_sni"`
+	// The custom hostname that will point to your hostname via CNAME.
+	Hostname string `json:"hostname"`
+	// This is a record which can be placed to activate a hostname.
+	OwnershipVerification ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseOwnershipVerification `json:"ownership_verification"`
+	// This presents the token to be served by the given http url to activate a
+	// hostname.
+	OwnershipVerificationHTTP ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseOwnershipVerificationHTTP `json:"ownership_verification_http"`
+	// SSL properties for the custom hostname.
+	Ssl ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSsl `json:"ssl"`
+	// Status of the hostname's activation.
+	Status ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatus `json:"status"`
+	// These are errors that were encountered while trying to activate a hostname.
+	VerificationErrors []interface{}                                                           `json:"verification_errors"`
+	JSON               zoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseJSON `json:"-"`
+}
+
+// zoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseJSON contains
+// the JSON metadata for the struct
+// [ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponse]
+type zoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseJSON struct {
+	ID                        apijson.Field
+	CreatedAt                 apijson.Field
+	CustomMetadata            apijson.Field
+	CustomOriginServer        apijson.Field
+	CustomOriginSni           apijson.Field
+	Hostname                  apijson.Field
+	OwnershipVerification     apijson.Field
+	OwnershipVerificationHTTP apijson.Field
+	Ssl                       apijson.Field
+	Status                    apijson.Field
+	VerificationErrors        apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// These are per-hostname (customer) settings.
+type ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseCustomMetadata struct {
+	// Unique metadata for this hostname.
+	Key  string                                                                                `json:"key"`
+	JSON zoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseCustomMetadataJSON `json:"-"`
+}
+
+// zoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseCustomMetadataJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseCustomMetadata]
+type zoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseCustomMetadataJSON struct {
+	Key         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseCustomMetadata) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// This is a record which can be placed to activate a hostname.
+type ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseOwnershipVerification struct {
+	// DNS Name for record.
+	Name string `json:"name"`
+	// DNS Record type.
+	Type ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseOwnershipVerificationType `json:"type"`
+	// Content for the record.
+	Value string                                                                                       `json:"value"`
+	JSON  zoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseOwnershipVerificationJSON `json:"-"`
+}
+
+// zoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseOwnershipVerificationJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseOwnershipVerification]
+type zoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseOwnershipVerificationJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseOwnershipVerification) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// DNS Record type.
+type ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseOwnershipVerificationType string
+
+const (
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseOwnershipVerificationTypeTxt ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseOwnershipVerificationType = "txt"
+)
+
+// This presents the token to be served by the given http url to activate a
+// hostname.
+type ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseOwnershipVerificationHTTP struct {
+	// Token to be served.
+	HTTPBody string `json:"http_body"`
+	// The HTTP URL that will be checked during custom hostname verification and where
+	// the customer should host the token.
+	HTTPURL string                                                                                           `json:"http_url"`
+	JSON    zoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseOwnershipVerificationHTTPJSON `json:"-"`
+}
+
+// zoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseOwnershipVerificationHTTPJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseOwnershipVerificationHTTP]
+type zoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseOwnershipVerificationHTTPJSON struct {
+	HTTPBody    apijson.Field
+	HTTPURL     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseOwnershipVerificationHTTP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// SSL properties for the custom hostname.
+type ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSsl struct {
+	// Custom hostname SSL identifier tag.
+	ID string `json:"id"`
+	// A ubiquitous bundle has the highest probability of being verified everywhere,
+	// even by clients using outdated or unusual trust stores. An optimal bundle uses
+	// the shortest chain and newest intermediates. And the force bundle verifies the
+	// chain, but does not otherwise modify it.
+	BundleMethod ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslBundleMethod `json:"bundle_method"`
+	// The Certificate Authority that will issue the certificate
+	CertificateAuthority ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslCertificateAuthority `json:"certificate_authority"`
+	// If a custom uploaded certificate is used.
+	CustomCertificate string `json:"custom_certificate"`
+	// The identifier for the Custom CSR that was used.
+	CustomCsrID string `json:"custom_csr_id"`
+	// The key for a custom uploaded certificate.
+	CustomKey string `json:"custom_key"`
+	// The time the custom certificate expires on.
+	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	// A list of Hostnames on a custom uploaded certificate.
+	Hosts []interface{} `json:"hosts"`
+	// The issuer on a custom uploaded certificate.
+	Issuer string `json:"issuer"`
+	// Domain control validation (DCV) method used for this hostname.
+	Method ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslMethod `json:"method"`
+	// The serial number on a custom uploaded certificate.
+	SerialNumber string `json:"serial_number"`
+	// SSL specific settings.
+	Settings ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettings `json:"settings"`
+	// The signature on a custom uploaded certificate.
+	Signature string `json:"signature"`
+	// Status of the hostname's SSL certificates.
+	Status ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatus `json:"status"`
+	// Level of validation to be used for this hostname. Domain validation (dv) must be
+	// used.
+	Type ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslType `json:"type"`
+	// The time the custom certificate was uploaded.
+	UploadedOn time.Time `json:"uploaded_on" format:"date-time"`
+	// Domain validation errors that have been received by the certificate authority
+	// (CA).
+	ValidationErrors  []ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslValidationError  `json:"validation_errors"`
+	ValidationRecords []ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslValidationRecord `json:"validation_records"`
+	// Indicates whether the certificate covers a wildcard.
+	Wildcard bool                                                                       `json:"wildcard"`
+	JSON     zoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslJSON `json:"-"`
+}
+
+// zoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSsl]
+type zoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslJSON struct {
+	ID                   apijson.Field
+	BundleMethod         apijson.Field
+	CertificateAuthority apijson.Field
+	CustomCertificate    apijson.Field
+	CustomCsrID          apijson.Field
+	CustomKey            apijson.Field
+	ExpiresOn            apijson.Field
+	Hosts                apijson.Field
+	Issuer               apijson.Field
+	Method               apijson.Field
+	SerialNumber         apijson.Field
+	Settings             apijson.Field
+	Signature            apijson.Field
+	Status               apijson.Field
+	Type                 apijson.Field
+	UploadedOn           apijson.Field
+	ValidationErrors     apijson.Field
+	ValidationRecords    apijson.Field
+	Wildcard             apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSsl) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A ubiquitous bundle has the highest probability of being verified everywhere,
+// even by clients using outdated or unusual trust stores. An optimal bundle uses
+// the shortest chain and newest intermediates. And the force bundle verifies the
+// chain, but does not otherwise modify it.
+type ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslBundleMethod string
+
+const (
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslBundleMethodUbiquitous ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslBundleMethod = "ubiquitous"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslBundleMethodOptimal    ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslBundleMethod = "optimal"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslBundleMethodForce      ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslBundleMethod = "force"
+)
+
+// The Certificate Authority that will issue the certificate
+type ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslCertificateAuthority string
+
+const (
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslCertificateAuthorityDigicert    ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslCertificateAuthority = "digicert"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslCertificateAuthorityGoogle      ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslCertificateAuthority = "google"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslCertificateAuthorityLetsEncrypt ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslCertificateAuthority = "lets_encrypt"
+)
+
+// Domain control validation (DCV) method used for this hostname.
+type ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslMethod string
+
+const (
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslMethodHTTP  ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslMethod = "http"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslMethodTxt   ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslMethod = "txt"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslMethodEmail ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslMethod = "email"
+)
+
+// SSL specific settings.
+type ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettings struct {
+	// An allowlist of ciphers for TLS termination. These ciphers must be in the
+	// BoringSSL format.
+	Ciphers []string `json:"ciphers"`
+	// Whether or not Early Hints is enabled.
+	EarlyHints ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsEarlyHints `json:"early_hints"`
+	// Whether or not HTTP2 is enabled.
+	Http2 ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsHttp2 `json:"http2"`
+	// The minimum TLS version supported.
+	MinTlsVersion ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsMinTlsVersion `json:"min_tls_version"`
+	// Whether or not TLS 1.3 is enabled.
+	Tls1_3 ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsTls1_3 `json:"tls_1_3"`
+	JSON   zoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsJSON   `json:"-"`
+}
+
+// zoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettings]
+type zoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsJSON struct {
+	Ciphers       apijson.Field
+	EarlyHints    apijson.Field
+	Http2         apijson.Field
+	MinTlsVersion apijson.Field
+	Tls1_3        apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether or not Early Hints is enabled.
+type ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsEarlyHints string
+
+const (
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsEarlyHintsOn  ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsEarlyHints = "on"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsEarlyHintsOff ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsEarlyHints = "off"
+)
+
+// Whether or not HTTP2 is enabled.
+type ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsHttp2 string
+
+const (
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsHttp2On  ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsHttp2 = "on"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsHttp2Off ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsHttp2 = "off"
+)
+
+// The minimum TLS version supported.
+type ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsMinTlsVersion string
+
+const (
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsMinTlsVersion1_0 ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsMinTlsVersion = "1.0"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsMinTlsVersion1_1 ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsMinTlsVersion = "1.1"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsMinTlsVersion1_2 ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsMinTlsVersion = "1.2"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsMinTlsVersion1_3 ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsMinTlsVersion = "1.3"
+)
+
+// Whether or not TLS 1.3 is enabled.
+type ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsTls1_3 string
+
+const (
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsTls1_3On  ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsTls1_3 = "on"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsTls1_3Off ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslSettingsTls1_3 = "off"
+)
+
+// Status of the hostname's SSL certificates.
+type ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatus string
+
+const (
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatusInitializing         ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatus = "initializing"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatusPendingValidation    ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatus = "pending_validation"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatusDeleted              ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatus = "deleted"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatusPendingIssuance      ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatus = "pending_issuance"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatusPendingDeployment    ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatus = "pending_deployment"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatusPendingDeletion      ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatus = "pending_deletion"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatusPendingExpiration    ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatus = "pending_expiration"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatusExpired              ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatus = "expired"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatusActive               ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatus = "active"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatusInitializingTimedOut ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatus = "initializing_timed_out"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatusValidationTimedOut   ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatus = "validation_timed_out"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatusIssuanceTimedOut     ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatus = "issuance_timed_out"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatusDeploymentTimedOut   ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatus = "deployment_timed_out"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatusDeletionTimedOut     ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatus = "deletion_timed_out"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatusPendingCleanup       ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatus = "pending_cleanup"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatusStagingDeployment    ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatus = "staging_deployment"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatusStagingActive        ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatus = "staging_active"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatusDeactivating         ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatus = "deactivating"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatusInactive             ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatus = "inactive"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatusBackupIssued         ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatus = "backup_issued"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatusHoldingDeployment    ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslStatus = "holding_deployment"
+)
+
+// Level of validation to be used for this hostname. Domain validation (dv) must be
+// used.
+type ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslType string
+
+const (
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslTypeDv ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslType = "dv"
+)
+
+type ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslValidationError struct {
+	// A domain validation error.
+	Message string                                                                                    `json:"message"`
+	JSON    zoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslValidationErrorJSON `json:"-"`
+}
+
+// zoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslValidationErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslValidationError]
+type zoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslValidationErrorJSON struct {
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslValidationError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Certificate's required validation record.
+type ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslValidationRecord struct {
+	// The set of email addresses that the certificate authority (CA) will use to
+	// complete domain validation.
+	Emails []interface{} `json:"emails"`
+	// The content that the certificate authority (CA) will expect to find at the
+	// http_url during the domain validation.
+	HTTPBody string `json:"http_body"`
+	// The url that will be checked during domain validation.
+	HTTPURL string `json:"http_url"`
+	// The hostname that the certificate authority (CA) will check for a TXT record
+	// during domain validation .
+	TxtName string `json:"txt_name"`
+	// The TXT record that the certificate authority (CA) will check during domain
+	// validation.
+	TxtValue string                                                                                     `json:"txt_value"`
+	JSON     zoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslValidationRecordJSON `json:"-"`
+}
+
+// zoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslValidationRecordJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslValidationRecord]
+type zoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslValidationRecordJSON struct {
+	Emails      apijson.Field
+	HTTPBody    apijson.Field
+	HTTPURL     apijson.Field
+	TxtName     apijson.Field
+	TxtValue    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseSslValidationRecord) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Status of the hostname's activation.
+type ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatus string
+
+const (
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatusActive             ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatus = "active"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatusPending            ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatus = "pending"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatusActiveRedeploying  ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatus = "active_redeploying"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatusMoved              ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatus = "moved"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatusPendingDeletion    ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatus = "pending_deletion"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatusDeleted            ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatus = "deleted"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatusPendingBlocked     ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatus = "pending_blocked"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatusPendingMigration   ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatus = "pending_migration"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatusPendingProvisioned ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatus = "pending_provisioned"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatusTestPending        ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatus = "test_pending"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatusTestActive         ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatus = "test_active"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatusTestActiveApex     ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatus = "test_active_apex"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatusTestBlocked        ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatus = "test_blocked"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatusTestFailed         ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatus = "test_failed"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatusProvisioned        ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatus = "provisioned"
+	ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatusBlocked            ZoneCustomHostnameCustomHostnameForAZoneListCustomHostnamesResponseStatus = "blocked"
+)
 
 type ZoneCustomHostnameUpdateParams struct {
 	// These are per-hostname (customer) settings.

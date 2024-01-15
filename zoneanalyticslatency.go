@@ -36,25 +36,26 @@ func NewZoneAnalyticsLatencyService(opts ...option.RequestOption) (r *ZoneAnalyt
 }
 
 // Argo Analytics for a zone
-func (r *ZoneAnalyticsLatencyService) ArgoAnalyticsForZoneArgoAnalyticsForAZone(ctx context.Context, zoneIdentifier string, query ZoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneParams, opts ...option.RequestOption) (res *SchemasResponseSingle, err error) {
+func (r *ZoneAnalyticsLatencyService) ArgoAnalyticsForZoneArgoAnalyticsForAZone(ctx context.Context, zoneIdentifier string, query ZoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneParams, opts ...option.RequestOption) (res *ZoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/analytics/latency", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
-type SchemasResponseSingle struct {
-	Errors   []SchemasResponseSingleError   `json:"errors"`
-	Messages []SchemasResponseSingleMessage `json:"messages"`
-	Result   interface{}                    `json:"result"`
+type ZoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneResponse struct {
+	Errors   []ZoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneResponseError   `json:"errors"`
+	Messages []ZoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneResponseMessage `json:"messages"`
+	Result   interface{}                                                                    `json:"result"`
 	// Whether the API call was successful
-	Success SchemasResponseSingleSuccess `json:"success"`
-	JSON    schemasResponseSingleJSON    `json:"-"`
+	Success ZoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneResponseSuccess `json:"success"`
+	JSON    zoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneResponseJSON    `json:"-"`
 }
 
-// schemasResponseSingleJSON contains the JSON metadata for the struct
-// [SchemasResponseSingle]
-type schemasResponseSingleJSON struct {
+// zoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneResponse]
+type zoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -63,53 +64,55 @@ type schemasResponseSingleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasResponseSingle) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemasResponseSingleError struct {
-	Code    int64                          `json:"code,required"`
-	Message string                         `json:"message,required"`
-	JSON    schemasResponseSingleErrorJSON `json:"-"`
+type ZoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneResponseError struct {
+	Code    int64                                                                          `json:"code,required"`
+	Message string                                                                         `json:"message,required"`
+	JSON    zoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneResponseErrorJSON `json:"-"`
 }
 
-// schemasResponseSingleErrorJSON contains the JSON metadata for the struct
-// [SchemasResponseSingleError]
-type schemasResponseSingleErrorJSON struct {
+// zoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneResponseError]
+type zoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasResponseSingleError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemasResponseSingleMessage struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    schemasResponseSingleMessageJSON `json:"-"`
+type ZoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneResponseMessage struct {
+	Code    int64                                                                            `json:"code,required"`
+	Message string                                                                           `json:"message,required"`
+	JSON    zoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneResponseMessageJSON `json:"-"`
 }
 
-// schemasResponseSingleMessageJSON contains the JSON metadata for the struct
-// [SchemasResponseSingleMessage]
-type schemasResponseSingleMessageJSON struct {
+// zoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneResponseMessage]
+type zoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasResponseSingleMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type SchemasResponseSingleSuccess bool
+type ZoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneResponseSuccess bool
 
 const (
-	SchemasResponseSingleSuccessTrue SchemasResponseSingleSuccess = true
+	ZoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneResponseSuccessTrue ZoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneResponseSuccess = true
 )
 
 type ZoneAnalyticsLatencyArgoAnalyticsForZoneArgoAnalyticsForAZoneParams struct {

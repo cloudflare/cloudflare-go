@@ -22,6 +22,7 @@ type ZonePageShieldService struct {
 	Options     []option.RequestOption
 	Connections *ZonePageShieldConnectionService
 	Scripts     *ZonePageShieldScriptService
+	Policies    *ZonePageShieldPolicyService
 }
 
 // NewZonePageShieldService generates a new service that applies the given options
@@ -32,6 +33,7 @@ func NewZonePageShieldService(opts ...option.RequestOption) (r *ZonePageShieldSe
 	r.Options = opts
 	r.Connections = NewZonePageShieldConnectionService(opts...)
 	r.Scripts = NewZonePageShieldScriptService(opts...)
+	r.Policies = NewZonePageShieldPolicyService(opts...)
 	return
 }
 

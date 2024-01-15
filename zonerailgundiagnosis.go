@@ -31,25 +31,26 @@ func NewZoneRailgunDiagnosisService(opts ...option.RequestOption) (r *ZoneRailgu
 }
 
 // Tests the Railgun connection to the zone.
-func (r *ZoneRailgunDiagnosisService) RailgunConnectionsForAZoneTestRailgunConnection(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *TestConnectionResponse, err error) {
+func (r *ZoneRailgunDiagnosisService) RailgunConnectionsForAZoneTestRailgunConnection(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *ZoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/railguns/%s/diagnose", zoneIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type TestConnectionResponse struct {
-	Errors   []TestConnectionResponseError   `json:"errors"`
-	Messages []TestConnectionResponseMessage `json:"messages"`
-	Result   TestConnectionResponseResult    `json:"result"`
+type ZoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponse struct {
+	Errors   []ZoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseError   `json:"errors"`
+	Messages []ZoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseMessage `json:"messages"`
+	Result   ZoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success TestConnectionResponseSuccess `json:"success"`
-	JSON    testConnectionResponseJSON    `json:"-"`
+	Success ZoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseSuccess `json:"success"`
+	JSON    zoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseJSON    `json:"-"`
 }
 
-// testConnectionResponseJSON contains the JSON metadata for the struct
-// [TestConnectionResponse]
-type testConnectionResponseJSON struct {
+// zoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponse]
+type zoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -58,49 +59,51 @@ type testConnectionResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TestConnectionResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type TestConnectionResponseError struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    testConnectionResponseErrorJSON `json:"-"`
+type ZoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseError struct {
+	Code    int64                                                                                `json:"code,required"`
+	Message string                                                                               `json:"message,required"`
+	JSON    zoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseErrorJSON `json:"-"`
 }
 
-// testConnectionResponseErrorJSON contains the JSON metadata for the struct
-// [TestConnectionResponseError]
-type testConnectionResponseErrorJSON struct {
+// zoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseError]
+type zoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TestConnectionResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type TestConnectionResponseMessage struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    testConnectionResponseMessageJSON `json:"-"`
+type ZoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseMessage struct {
+	Code    int64                                                                                  `json:"code,required"`
+	Message string                                                                                 `json:"message,required"`
+	JSON    zoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseMessageJSON `json:"-"`
 }
 
-// testConnectionResponseMessageJSON contains the JSON metadata for the struct
-// [TestConnectionResponseMessage]
-type testConnectionResponseMessageJSON struct {
+// zoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseMessage]
+type zoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TestConnectionResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type TestConnectionResponseResult struct {
+type ZoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseResult struct {
 	// Hash version of body.
 	BodyHash string `json:"body_hash"`
 	// Size of the body in bytes.
@@ -122,7 +125,7 @@ type TestConnectionResponseResult struct {
 	// The HTTP status response code.
 	HTTPStatus float64 `json:"http_status"`
 	// HTTP Method used to test the connection.
-	Method TestConnectionResponseResultMethod `json:"method"`
+	Method ZoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseResultMethod `json:"method"`
 	// What headers are missing.
 	MissingHeaders string `json:"missing_headers"`
 	// Protocol used to test the connection.
@@ -132,13 +135,14 @@ type TestConnectionResponseResult struct {
 	// HTTP Status code.
 	ResponseStatus string `json:"response_status"`
 	// Url of the domain you can compare the connection to.
-	URL  string                           `json:"url"`
-	JSON testConnectionResponseResultJSON `json:"-"`
+	URL  string                                                                                `json:"url"`
+	JSON zoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseResultJSON `json:"-"`
 }
 
-// testConnectionResponseResultJSON contains the JSON metadata for the struct
-// [TestConnectionResponseResult]
-type testConnectionResponseResultJSON struct {
+// zoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseResultJSON
+// contains the JSON metadata for the struct
+// [ZoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseResult]
+type zoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseResultJSON struct {
 	BodyHash        apijson.Field
 	BodySize        apijson.Field
 	CfCacheStatus   apijson.Field
@@ -159,21 +163,21 @@ type testConnectionResponseResultJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *TestConnectionResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // HTTP Method used to test the connection.
-type TestConnectionResponseResultMethod string
+type ZoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseResultMethod string
 
 const (
-	TestConnectionResponseResultMethodGet  TestConnectionResponseResultMethod = "GET"
-	TestConnectionResponseResultMethodPost TestConnectionResponseResultMethod = "POST"
+	ZoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseResultMethodGet  ZoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseResultMethod = "GET"
+	ZoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseResultMethodPost ZoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseResultMethod = "POST"
 )
 
 // Whether the API call was successful
-type TestConnectionResponseSuccess bool
+type ZoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseSuccess bool
 
 const (
-	TestConnectionResponseSuccessTrue TestConnectionResponseSuccess = true
+	ZoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseSuccessTrue ZoneRailgunDiagnosisRailgunConnectionsForAZoneTestRailgunConnectionResponseSuccess = true
 )

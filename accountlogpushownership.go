@@ -34,25 +34,26 @@ func NewAccountLogpushOwnershipService(opts ...option.RequestOption) (r *Account
 }
 
 // Gets a new ownership challenge sent to your destination.
-func (r *AccountLogpushOwnershipService) PostAccountsAccountIdentifierLogpushOwnership(ctx context.Context, accountIdentifier string, body AccountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipParams, opts ...option.RequestOption) (res *GetOwnershipResponse, err error) {
+func (r *AccountLogpushOwnershipService) PostAccountsAccountIdentifierLogpushOwnership(ctx context.Context, accountIdentifier string, body AccountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipParams, opts ...option.RequestOption) (res *AccountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/logpush/ownership", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
-type GetOwnershipResponse struct {
-	Errors   []GetOwnershipResponseError   `json:"errors"`
-	Messages []GetOwnershipResponseMessage `json:"messages"`
-	Result   GetOwnershipResponseResult    `json:"result,nullable"`
+type AccountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponse struct {
+	Errors   []AccountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseError   `json:"errors"`
+	Messages []AccountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseMessage `json:"messages"`
+	Result   AccountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseResult    `json:"result,nullable"`
 	// Whether the API call was successful
-	Success GetOwnershipResponseSuccess `json:"success"`
-	JSON    getOwnershipResponseJSON    `json:"-"`
+	Success AccountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseSuccess `json:"success"`
+	JSON    accountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseJSON    `json:"-"`
 }
 
-// getOwnershipResponseJSON contains the JSON metadata for the struct
-// [GetOwnershipResponse]
-type getOwnershipResponseJSON struct {
+// accountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseJSON
+// contains the JSON metadata for the struct
+// [AccountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponse]
+type accountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -61,58 +62,61 @@ type getOwnershipResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GetOwnershipResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GetOwnershipResponseError struct {
-	Code    int64                         `json:"code,required"`
-	Message string                        `json:"message,required"`
-	JSON    getOwnershipResponseErrorJSON `json:"-"`
+type AccountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseError struct {
+	Code    int64                                                                                 `json:"code,required"`
+	Message string                                                                                `json:"message,required"`
+	JSON    accountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseErrorJSON `json:"-"`
 }
 
-// getOwnershipResponseErrorJSON contains the JSON metadata for the struct
-// [GetOwnershipResponseError]
-type getOwnershipResponseErrorJSON struct {
+// accountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseError]
+type accountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GetOwnershipResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GetOwnershipResponseMessage struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    getOwnershipResponseMessageJSON `json:"-"`
+type AccountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseMessage struct {
+	Code    int64                                                                                   `json:"code,required"`
+	Message string                                                                                  `json:"message,required"`
+	JSON    accountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseMessageJSON `json:"-"`
 }
 
-// getOwnershipResponseMessageJSON contains the JSON metadata for the struct
-// [GetOwnershipResponseMessage]
-type getOwnershipResponseMessageJSON struct {
+// accountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseMessage]
+type accountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GetOwnershipResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GetOwnershipResponseResult struct {
-	Filename string                         `json:"filename"`
-	Message  string                         `json:"message"`
-	Valid    bool                           `json:"valid"`
-	JSON     getOwnershipResponseResultJSON `json:"-"`
+type AccountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseResult struct {
+	Filename string                                                                                 `json:"filename"`
+	Message  string                                                                                 `json:"message"`
+	Valid    bool                                                                                   `json:"valid"`
+	JSON     accountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseResultJSON `json:"-"`
 }
 
-// getOwnershipResponseResultJSON contains the JSON metadata for the struct
-// [GetOwnershipResponseResult]
-type getOwnershipResponseResultJSON struct {
+// accountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseResult]
+type accountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseResultJSON struct {
 	Filename    apijson.Field
 	Message     apijson.Field
 	Valid       apijson.Field
@@ -120,15 +124,15 @@ type getOwnershipResponseResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GetOwnershipResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type GetOwnershipResponseSuccess bool
+type AccountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseSuccess bool
 
 const (
-	GetOwnershipResponseSuccessTrue GetOwnershipResponseSuccess = true
+	AccountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseSuccessTrue AccountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipResponseSuccess = true
 )
 
 type AccountLogpushOwnershipPostAccountsAccountIdentifierLogpushOwnershipParams struct {

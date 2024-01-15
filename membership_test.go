@@ -24,8 +24,10 @@ func TestMembershipGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Memberships.Get(context.TODO(), "4536bcfad5faccb111b47003c79917fa")
 	if err != nil {
@@ -48,8 +50,10 @@ func TestMembershipUpdate(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Memberships.Update(
 		context.TODO(),
@@ -78,8 +82,10 @@ func TestMembershipDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Memberships.Delete(context.TODO(), "4536bcfad5faccb111b47003c79917fa")
 	if err != nil {
@@ -102,8 +108,10 @@ func TestMembershipUserSAccountMembershipsListMembershipsWithOptionalParams(t *t
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Memberships.UserSAccountMembershipsListMemberships(context.TODO(), cloudflare.MembershipUserSAccountMembershipsListMembershipsParams{
 		Account: cloudflare.F(cloudflare.MembershipUserSAccountMembershipsListMembershipsParamsAccount{

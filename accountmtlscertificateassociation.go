@@ -31,26 +31,27 @@ func NewAccountMtlsCertificateAssociationService(opts ...option.RequestOption) (
 }
 
 // Lists all active associations between the certificate and Cloudflare services.
-func (r *AccountMtlsCertificateAssociationService) MTlsCertificateManagementListMTlsCertificateAssociations(ctx context.Context, accountIdentifier string, identifier string, opts ...option.RequestOption) (res *AssociationResponseCollection, err error) {
+func (r *AccountMtlsCertificateAssociationService) MTlsCertificateManagementListMTlsCertificateAssociations(ctx context.Context, accountIdentifier string, identifier string, opts ...option.RequestOption) (res *AccountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/mtls_certificates/%s/associations", accountIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type AssociationResponseCollection struct {
-	Errors     []AssociationResponseCollectionError    `json:"errors"`
-	Messages   []AssociationResponseCollectionMessage  `json:"messages"`
-	Result     []AssociationResponseCollectionResult   `json:"result"`
-	ResultInfo AssociationResponseCollectionResultInfo `json:"result_info"`
+type AccountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponse struct {
+	Errors     []AccountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseError    `json:"errors"`
+	Messages   []AccountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseMessage  `json:"messages"`
+	Result     []AccountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseResult   `json:"result"`
+	ResultInfo AccountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseResultInfo `json:"result_info"`
 	// Whether the API call was successful
-	Success AssociationResponseCollectionSuccess `json:"success"`
-	JSON    associationResponseCollectionJSON    `json:"-"`
+	Success AccountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseSuccess `json:"success"`
+	JSON    accountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseJSON    `json:"-"`
 }
 
-// associationResponseCollectionJSON contains the JSON metadata for the struct
-// [AssociationResponseCollection]
-type associationResponseCollectionJSON struct {
+// accountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseJSON
+// contains the JSON metadata for the struct
+// [AccountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponse]
+type accountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -60,70 +61,73 @@ type associationResponseCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AssociationResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AssociationResponseCollectionError struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    associationResponseCollectionErrorJSON `json:"-"`
+type AccountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseError struct {
+	Code    int64                                                                                                      `json:"code,required"`
+	Message string                                                                                                     `json:"message,required"`
+	JSON    accountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseErrorJSON `json:"-"`
 }
 
-// associationResponseCollectionErrorJSON contains the JSON metadata for the struct
-// [AssociationResponseCollectionError]
-type associationResponseCollectionErrorJSON struct {
+// accountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseError]
+type accountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AssociationResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AssociationResponseCollectionMessage struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    associationResponseCollectionMessageJSON `json:"-"`
+type AccountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseMessage struct {
+	Code    int64                                                                                                        `json:"code,required"`
+	Message string                                                                                                       `json:"message,required"`
+	JSON    accountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseMessageJSON `json:"-"`
 }
 
-// associationResponseCollectionMessageJSON contains the JSON metadata for the
-// struct [AssociationResponseCollectionMessage]
-type associationResponseCollectionMessageJSON struct {
+// accountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseMessage]
+type accountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AssociationResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AssociationResponseCollectionResult struct {
+type AccountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseResult struct {
 	// The service using the certificate.
 	Service string `json:"service"`
 	// Certificate deployment status for the given service.
-	Status string                                  `json:"status"`
-	JSON   associationResponseCollectionResultJSON `json:"-"`
+	Status string                                                                                                      `json:"status"`
+	JSON   accountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseResultJSON `json:"-"`
 }
 
-// associationResponseCollectionResultJSON contains the JSON metadata for the
-// struct [AssociationResponseCollectionResult]
-type associationResponseCollectionResultJSON struct {
+// accountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseResult]
+type accountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseResultJSON struct {
 	Service     apijson.Field
 	Status      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AssociationResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AssociationResponseCollectionResultInfo struct {
+type AccountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -131,13 +135,14 @@ type AssociationResponseCollectionResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                     `json:"total_count"`
-	JSON       associationResponseCollectionResultInfoJSON `json:"-"`
+	TotalCount float64                                                                                                         `json:"total_count"`
+	JSON       accountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseResultInfoJSON `json:"-"`
 }
 
-// associationResponseCollectionResultInfoJSON contains the JSON metadata for the
-// struct [AssociationResponseCollectionResultInfo]
-type associationResponseCollectionResultInfoJSON struct {
+// accountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [AccountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseResultInfo]
+type accountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -146,13 +151,13 @@ type associationResponseCollectionResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AssociationResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type AssociationResponseCollectionSuccess bool
+type AccountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseSuccess bool
 
 const (
-	AssociationResponseCollectionSuccessTrue AssociationResponseCollectionSuccess = true
+	AccountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseSuccessTrue AccountMtlsCertificateAssociationMTlsCertificateManagementListMTlsCertificateAssociationsResponseSuccess = true
 )

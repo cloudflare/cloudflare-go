@@ -11,21 +11,23 @@ import (
 // from the environment automatically. You should not instantiate this service
 // directly, and instead use the [NewRadarService] method instead.
 type RadarService struct {
-	Options       []option.RequestOption
-	Annotations   *RadarAnnotationService
-	As112s        *RadarAs112Service
-	Attacks       *RadarAttackService
-	Bgps          *RadarBgpService
-	Datasets      *RadarDatasetService
-	DNS           *RadarDNSService
-	Emails        *RadarEmailService
-	Entities      *RadarEntityService
-	HTTPs         *RadarHTTPService
-	Netflows      *RadarNetflowService
-	Rankings      *RadarRankingService
-	Searches      *RadarSearchService
-	Specialevents *RadarSpecialeventService
-	VerifiedBots  *RadarVerifiedBotService
+	Options              []option.RequestOption
+	As112                *RadarAs112Service
+	Quality              *RadarQualityService
+	TrafficAnomalies     *RadarTrafficAnomalyService
+	Annotations          *RadarAnnotationService
+	Attacks              *RadarAttackService
+	Bgps                 *RadarBgpService
+	Datasets             *RadarDatasetService
+	DNS                  *RadarDNSService
+	Email                *RadarEmailService
+	Entities             *RadarEntityService
+	HTTP                 *RadarHTTPService
+	Netflows             *RadarNetflowService
+	Ranking              *RadarRankingService
+	Searches             *RadarSearchService
+	VerifiedBots         *RadarVerifiedBotService
+	ConnectionTamperings *RadarConnectionTamperingService
 }
 
 // NewRadarService generates a new service that applies the given options to each
@@ -34,19 +36,21 @@ type RadarService struct {
 func NewRadarService(opts ...option.RequestOption) (r *RadarService) {
 	r = &RadarService{}
 	r.Options = opts
+	r.As112 = NewRadarAs112Service(opts...)
+	r.Quality = NewRadarQualityService(opts...)
+	r.TrafficAnomalies = NewRadarTrafficAnomalyService(opts...)
 	r.Annotations = NewRadarAnnotationService(opts...)
-	r.As112s = NewRadarAs112Service(opts...)
 	r.Attacks = NewRadarAttackService(opts...)
 	r.Bgps = NewRadarBgpService(opts...)
 	r.Datasets = NewRadarDatasetService(opts...)
 	r.DNS = NewRadarDNSService(opts...)
-	r.Emails = NewRadarEmailService(opts...)
+	r.Email = NewRadarEmailService(opts...)
 	r.Entities = NewRadarEntityService(opts...)
-	r.HTTPs = NewRadarHTTPService(opts...)
+	r.HTTP = NewRadarHTTPService(opts...)
 	r.Netflows = NewRadarNetflowService(opts...)
-	r.Rankings = NewRadarRankingService(opts...)
+	r.Ranking = NewRadarRankingService(opts...)
 	r.Searches = NewRadarSearchService(opts...)
-	r.Specialevents = NewRadarSpecialeventService(opts...)
 	r.VerifiedBots = NewRadarVerifiedBotService(opts...)
+	r.ConnectionTamperings = NewRadarConnectionTamperingService(opts...)
 	return
 }

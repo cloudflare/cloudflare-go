@@ -25,20 +25,23 @@ func TestRadarAttackLayer7TopAttackListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Radars.Attacks.Layer7s.Tops.Attacks.List(context.TODO(), cloudflare.RadarAttackLayer7TopAttackListParams{
+	_, err := client.Radar.Attacks.Layer7.Tops.Attacks.List(context.TODO(), cloudflare.RadarAttackLayer7TopAttackListParams{
+		ASN:              cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:          cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:        cloudflare.F([]cloudflare.RadarAttackLayer7TopAttackListParamsDateRange{cloudflare.RadarAttackLayer7TopAttackListParamsDateRange1d, cloudflare.RadarAttackLayer7TopAttackListParamsDateRange7d, cloudflare.RadarAttackLayer7TopAttackListParamsDateRange14d}),
+		DateRange:        cloudflare.F([]cloudflare.RadarAttackLayer7TopAttackListParamsDateRange{cloudflare.RadarAttackLayer7TopAttackListParamsDateRange1d, cloudflare.RadarAttackLayer7TopAttackListParamsDateRange2d, cloudflare.RadarAttackLayer7TopAttackListParamsDateRange7d}),
 		DateStart:        cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		Format:           cloudflare.F(cloudflare.RadarAttackLayer7TopAttackListParamsFormatJson),
 		Limit:            cloudflare.F(int64(5)),
 		LimitDirection:   cloudflare.F(cloudflare.RadarAttackLayer7TopAttackListParamsLimitDirectionOrigin),
 		LimitPerLocation: cloudflare.F(int64(10)),
-		Location:         cloudflare.F([]string{"US,CA", "US,CA", "US,CA"}),
-		Magnitude:        cloudflare.F(cloudflare.RadarAttackLayer7TopAttackListParamsMagnitudeAffectedZones),
-		Name:             cloudflare.F([]string{"main_series", "main_series", "main_series"}),
+		Location:         cloudflare.F([]string{"string", "string", "string"}),
+		Magnitude:        cloudflare.F(cloudflare.RadarAttackLayer7TopAttackListParamsMagnitudeMitigatedRequests),
+		Name:             cloudflare.F([]string{"string", "string", "string"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

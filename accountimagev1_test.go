@@ -24,8 +24,10 @@ func TestAccountImageV1Get(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Images.V1s.Get(
 		context.TODO(),
@@ -52,8 +54,10 @@ func TestAccountImageV1UpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Images.V1s.Update(
 		context.TODO(),
@@ -84,8 +88,10 @@ func TestAccountImageV1Delete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Images.V1s.Delete(
 		context.TODO(),
@@ -112,8 +118,10 @@ func TestAccountImageV1CloudflareImagesListImagesWithOptionalParams(t *testing.T
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Images.V1s.CloudflareImagesListImages(
 		context.TODO(),
@@ -132,7 +140,7 @@ func TestAccountImageV1CloudflareImagesListImagesWithOptionalParams(t *testing.T
 	}
 }
 
-func TestAccountImageV1CloudflareImagesUploadAnImageViaURLWithOptionalParams(t *testing.T) {
+func TestAccountImageV1CloudflareImagesUploadAnImageViaURL(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -143,16 +151,16 @@ func TestAccountImageV1CloudflareImagesUploadAnImageViaURLWithOptionalParams(t *
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Images.V1s.CloudflareImagesUploadAnImageViaURL(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.AccountImageV1CloudflareImagesUploadAnImageViaURLParams{
-			URL:               cloudflare.F("https://example.com/path/to/logo.png"),
-			Metadata:          cloudflare.F[any](map[string]interface{}{}),
-			RequireSignedURLs: cloudflare.F(true),
+		cloudflare.AccountImageV1CloudflareImagesUploadAnImageViaURLParamsImagesImageUploadViaFile{
+			File: cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {

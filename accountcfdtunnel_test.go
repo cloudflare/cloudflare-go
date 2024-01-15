@@ -25,8 +25,10 @@ func TestAccountCfdTunnelGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.CfdTunnels.Get(
 		context.TODO(),
@@ -53,8 +55,10 @@ func TestAccountCfdTunnelUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.CfdTunnels.Update(
 		context.TODO(),
@@ -85,8 +89,10 @@ func TestAccountCfdTunnelDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.CfdTunnels.Delete(
 		context.TODO(),
@@ -116,16 +122,18 @@ func TestAccountCfdTunnelCloudflareTunnelNewACloudflareTunnelWithOptionalParams(
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.CfdTunnels.CloudflareTunnelNewACloudflareTunnel(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		cloudflare.AccountCfdTunnelCloudflareTunnelNewACloudflareTunnelParams{
 			Name:         cloudflare.F("blog"),
-			TunnelSecret: cloudflare.F("AQIDBAUGBwgBAgMEBQYHCAECAwQFBgcIAQIDBAUGBwg="),
 			ConfigSrc:    cloudflare.F(cloudflare.AccountCfdTunnelCloudflareTunnelNewACloudflareTunnelParamsConfigSrcCloudflare),
+			TunnelSecret: cloudflare.F("AQIDBAUGBwgBAgMEBQYHCAECAwQFBgcIAQIDBAUGBwg="),
 		},
 	)
 	if err != nil {
@@ -148,18 +156,24 @@ func TestAccountCfdTunnelCloudflareTunnelListCloudflareTunnelsWithOptionalParams
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.CfdTunnels.CloudflareTunnelListCloudflareTunnels(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		cloudflare.AccountCfdTunnelCloudflareTunnelListCloudflareTunnelsParams{
-			ExistedAt:  cloudflare.F(time.Now()),
-			IsDeleted:  cloudflare.F(true),
-			Page:       cloudflare.F(1.000000),
-			PerPage:    cloudflare.F(1.000000),
-			TunnelName: cloudflare.F("blog"),
+			ExcludePrefix: cloudflare.F("vpc1-"),
+			ExistedAt:     cloudflare.F(time.Now()),
+			IncludePrefix: cloudflare.F("vpc1-"),
+			IsDeleted:     cloudflare.F(true),
+			Name:          cloudflare.F("blog"),
+			Page:          cloudflare.F(1.000000),
+			PerPage:       cloudflare.F(1.000000),
+			WasActiveAt:   cloudflare.F(time.Now()),
+			WasInactiveAt: cloudflare.F(time.Now()),
 		},
 	)
 	if err != nil {

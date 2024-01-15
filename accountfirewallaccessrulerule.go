@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -34,7 +35,7 @@ func NewAccountFirewallAccessRuleRuleService(opts ...option.RequestOption) (r *A
 }
 
 // Fetches the details of an IP Access rule defined at the account level.
-func (r *AccountFirewallAccessRuleRuleService) Get(ctx context.Context, accountIdentifier interface{}, identifier interface{}, opts ...option.RequestOption) (res *ResponseSingle, err error) {
+func (r *AccountFirewallAccessRuleRuleService) Get(ctx context.Context, accountIdentifier interface{}, identifier interface{}, opts ...option.RequestOption) (res *AccountFirewallAccessRuleRuleGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/firewall/access_rules/rules/%v", accountIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -44,7 +45,7 @@ func (r *AccountFirewallAccessRuleRuleService) Get(ctx context.Context, accountI
 // Updates an IP Access rule defined at the account level.
 //
 // Note: This operation will affect all zones in the account.
-func (r *AccountFirewallAccessRuleRuleService) Update(ctx context.Context, accountIdentifier interface{}, identifier interface{}, body AccountFirewallAccessRuleRuleUpdateParams, opts ...option.RequestOption) (res *ResponseSingle, err error) {
+func (r *AccountFirewallAccessRuleRuleService) Update(ctx context.Context, accountIdentifier interface{}, identifier interface{}, body AccountFirewallAccessRuleRuleUpdateParams, opts ...option.RequestOption) (res *AccountFirewallAccessRuleRuleUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/firewall/access_rules/rules/%v", accountIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
@@ -54,7 +55,7 @@ func (r *AccountFirewallAccessRuleRuleService) Update(ctx context.Context, accou
 // Deletes an existing IP Access rule defined at the account level.
 //
 // Note: This operation will affect all zones in the account.
-func (r *AccountFirewallAccessRuleRuleService) Delete(ctx context.Context, accountIdentifier interface{}, identifier interface{}, opts ...option.RequestOption) (res *APIResponseSingleIDKYar7dC1, err error) {
+func (r *AccountFirewallAccessRuleRuleService) Delete(ctx context.Context, accountIdentifier interface{}, identifier interface{}, opts ...option.RequestOption) (res *AccountFirewallAccessRuleRuleDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/firewall/access_rules/rules/%v", accountIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -66,7 +67,7 @@ func (r *AccountFirewallAccessRuleRuleService) Delete(ctx context.Context, accou
 //
 // Note: To create an IP Access rule that applies to a single zone, refer to the
 // [IP Access rules for a zone](#ip-access-rules-for-a-zone) endpoints.
-func (r *AccountFirewallAccessRuleRuleService) IPAccessRulesForAnAccountNewAnIPAccessRule(ctx context.Context, accountIdentifier interface{}, body AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParams, opts ...option.RequestOption) (res *ResponseSingle, err error) {
+func (r *AccountFirewallAccessRuleRuleService) IPAccessRulesForAnAccountNewAnIPAccessRule(ctx context.Context, accountIdentifier interface{}, body AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParams, opts ...option.RequestOption) (res *AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%v/firewall/access_rules/rules", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -75,25 +76,35 @@ func (r *AccountFirewallAccessRuleRuleService) IPAccessRulesForAnAccountNewAnIPA
 
 // Fetches IP Access rules of an account. These rules apply to all the zones in the
 // account. You can filter the results using several optional parameters.
-func (r *AccountFirewallAccessRuleRuleService) IPAccessRulesForAnAccountListIPAccessRules(ctx context.Context, accountIdentifier interface{}, query AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountListIPAccessRulesParams, opts ...option.RequestOption) (res *ResponseCollectionYgt6DzoC, err error) {
-	opts = append(r.Options[:], opts...)
+func (r *AccountFirewallAccessRuleRuleService) IPAccessRulesForAnAccountListIPAccessRules(ctx context.Context, accountIdentifier interface{}, query AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountListIPAccessRulesParams, opts ...option.RequestOption) (res *shared.Page[AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountListIPAccessRulesResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%v/firewall/access_rules/rules", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
 }
 
-type APIResponseSingleIDKYar7dC1 struct {
-	Errors   []APIResponseSingleIDKYar7dC1Error   `json:"errors"`
-	Messages []APIResponseSingleIDKYar7dC1Message `json:"messages"`
-	Result   APIResponseSingleIDKYar7dC1Result    `json:"result,nullable"`
+type AccountFirewallAccessRuleRuleGetResponse struct {
+	Errors   []AccountFirewallAccessRuleRuleGetResponseError   `json:"errors"`
+	Messages []AccountFirewallAccessRuleRuleGetResponseMessage `json:"messages"`
+	Result   interface{}                                       `json:"result"`
 	// Whether the API call was successful
-	Success APIResponseSingleIDKYar7dC1Success `json:"success"`
-	JSON    apiResponseSingleIdkYar7dC1JSON    `json:"-"`
+	Success AccountFirewallAccessRuleRuleGetResponseSuccess `json:"success"`
+	JSON    accountFirewallAccessRuleRuleGetResponseJSON    `json:"-"`
 }
 
-// apiResponseSingleIdkYar7dC1JSON contains the JSON metadata for the struct
-// [APIResponseSingleIDKYar7dC1]
-type apiResponseSingleIdkYar7dC1JSON struct {
+// accountFirewallAccessRuleRuleGetResponseJSON contains the JSON metadata for the
+// struct [AccountFirewallAccessRuleRuleGetResponse]
+type accountFirewallAccessRuleRuleGetResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -102,72 +113,284 @@ type apiResponseSingleIdkYar7dC1JSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *APIResponseSingleIDKYar7dC1) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountFirewallAccessRuleRuleGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type APIResponseSingleIDKYar7dC1Error struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    apiResponseSingleIdkYar7dC1ErrorJSON `json:"-"`
+type AccountFirewallAccessRuleRuleGetResponseError struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    accountFirewallAccessRuleRuleGetResponseErrorJSON `json:"-"`
 }
 
-// apiResponseSingleIdkYar7dC1ErrorJSON contains the JSON metadata for the struct
-// [APIResponseSingleIDKYar7dC1Error]
-type apiResponseSingleIdkYar7dC1ErrorJSON struct {
+// accountFirewallAccessRuleRuleGetResponseErrorJSON contains the JSON metadata for
+// the struct [AccountFirewallAccessRuleRuleGetResponseError]
+type accountFirewallAccessRuleRuleGetResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *APIResponseSingleIDKYar7dC1Error) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountFirewallAccessRuleRuleGetResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type APIResponseSingleIDKYar7dC1Message struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    apiResponseSingleIdkYar7dC1MessageJSON `json:"-"`
+type AccountFirewallAccessRuleRuleGetResponseMessage struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    accountFirewallAccessRuleRuleGetResponseMessageJSON `json:"-"`
 }
 
-// apiResponseSingleIdkYar7dC1MessageJSON contains the JSON metadata for the struct
-// [APIResponseSingleIDKYar7dC1Message]
-type apiResponseSingleIdkYar7dC1MessageJSON struct {
+// accountFirewallAccessRuleRuleGetResponseMessageJSON contains the JSON metadata
+// for the struct [AccountFirewallAccessRuleRuleGetResponseMessage]
+type accountFirewallAccessRuleRuleGetResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *APIResponseSingleIDKYar7dC1Message) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountFirewallAccessRuleRuleGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type APIResponseSingleIDKYar7dC1Result struct {
+// Whether the API call was successful
+type AccountFirewallAccessRuleRuleGetResponseSuccess bool
+
+const (
+	AccountFirewallAccessRuleRuleGetResponseSuccessTrue AccountFirewallAccessRuleRuleGetResponseSuccess = true
+)
+
+type AccountFirewallAccessRuleRuleUpdateResponse struct {
+	Errors   []AccountFirewallAccessRuleRuleUpdateResponseError   `json:"errors"`
+	Messages []AccountFirewallAccessRuleRuleUpdateResponseMessage `json:"messages"`
+	Result   interface{}                                          `json:"result"`
+	// Whether the API call was successful
+	Success AccountFirewallAccessRuleRuleUpdateResponseSuccess `json:"success"`
+	JSON    accountFirewallAccessRuleRuleUpdateResponseJSON    `json:"-"`
+}
+
+// accountFirewallAccessRuleRuleUpdateResponseJSON contains the JSON metadata for
+// the struct [AccountFirewallAccessRuleRuleUpdateResponse]
+type accountFirewallAccessRuleRuleUpdateResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountFirewallAccessRuleRuleUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountFirewallAccessRuleRuleUpdateResponseError struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    accountFirewallAccessRuleRuleUpdateResponseErrorJSON `json:"-"`
+}
+
+// accountFirewallAccessRuleRuleUpdateResponseErrorJSON contains the JSON metadata
+// for the struct [AccountFirewallAccessRuleRuleUpdateResponseError]
+type accountFirewallAccessRuleRuleUpdateResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountFirewallAccessRuleRuleUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountFirewallAccessRuleRuleUpdateResponseMessage struct {
+	Code    int64                                                  `json:"code,required"`
+	Message string                                                 `json:"message,required"`
+	JSON    accountFirewallAccessRuleRuleUpdateResponseMessageJSON `json:"-"`
+}
+
+// accountFirewallAccessRuleRuleUpdateResponseMessageJSON contains the JSON
+// metadata for the struct [AccountFirewallAccessRuleRuleUpdateResponseMessage]
+type accountFirewallAccessRuleRuleUpdateResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountFirewallAccessRuleRuleUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountFirewallAccessRuleRuleUpdateResponseSuccess bool
+
+const (
+	AccountFirewallAccessRuleRuleUpdateResponseSuccessTrue AccountFirewallAccessRuleRuleUpdateResponseSuccess = true
+)
+
+type AccountFirewallAccessRuleRuleDeleteResponse struct {
+	Errors   []AccountFirewallAccessRuleRuleDeleteResponseError   `json:"errors"`
+	Messages []AccountFirewallAccessRuleRuleDeleteResponseMessage `json:"messages"`
+	Result   AccountFirewallAccessRuleRuleDeleteResponseResult    `json:"result,nullable"`
+	// Whether the API call was successful
+	Success AccountFirewallAccessRuleRuleDeleteResponseSuccess `json:"success"`
+	JSON    accountFirewallAccessRuleRuleDeleteResponseJSON    `json:"-"`
+}
+
+// accountFirewallAccessRuleRuleDeleteResponseJSON contains the JSON metadata for
+// the struct [AccountFirewallAccessRuleRuleDeleteResponse]
+type accountFirewallAccessRuleRuleDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountFirewallAccessRuleRuleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountFirewallAccessRuleRuleDeleteResponseError struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    accountFirewallAccessRuleRuleDeleteResponseErrorJSON `json:"-"`
+}
+
+// accountFirewallAccessRuleRuleDeleteResponseErrorJSON contains the JSON metadata
+// for the struct [AccountFirewallAccessRuleRuleDeleteResponseError]
+type accountFirewallAccessRuleRuleDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountFirewallAccessRuleRuleDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountFirewallAccessRuleRuleDeleteResponseMessage struct {
+	Code    int64                                                  `json:"code,required"`
+	Message string                                                 `json:"message,required"`
+	JSON    accountFirewallAccessRuleRuleDeleteResponseMessageJSON `json:"-"`
+}
+
+// accountFirewallAccessRuleRuleDeleteResponseMessageJSON contains the JSON
+// metadata for the struct [AccountFirewallAccessRuleRuleDeleteResponseMessage]
+type accountFirewallAccessRuleRuleDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountFirewallAccessRuleRuleDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountFirewallAccessRuleRuleDeleteResponseResult struct {
 	// Identifier
-	ID   string                                `json:"id,required"`
-	JSON apiResponseSingleIdkYar7dC1ResultJSON `json:"-"`
+	ID   string                                                `json:"id,required"`
+	JSON accountFirewallAccessRuleRuleDeleteResponseResultJSON `json:"-"`
 }
 
-// apiResponseSingleIdkYar7dC1ResultJSON contains the JSON metadata for the struct
-// [APIResponseSingleIDKYar7dC1Result]
-type apiResponseSingleIdkYar7dC1ResultJSON struct {
+// accountFirewallAccessRuleRuleDeleteResponseResultJSON contains the JSON metadata
+// for the struct [AccountFirewallAccessRuleRuleDeleteResponseResult]
+type accountFirewallAccessRuleRuleDeleteResponseResultJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *APIResponseSingleIDKYar7dC1Result) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountFirewallAccessRuleRuleDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type APIResponseSingleIDKYar7dC1Success bool
+type AccountFirewallAccessRuleRuleDeleteResponseSuccess bool
 
 const (
-	APIResponseSingleIDKYar7dC1SuccessTrue APIResponseSingleIDKYar7dC1Success = true
+	AccountFirewallAccessRuleRuleDeleteResponseSuccessTrue AccountFirewallAccessRuleRuleDeleteResponseSuccess = true
 )
+
+type AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleResponse struct {
+	Errors   []AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleResponseError   `json:"errors"`
+	Messages []AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleResponseMessage `json:"messages"`
+	Result   interface{}                                                                              `json:"result"`
+	// Whether the API call was successful
+	Success AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleResponseSuccess `json:"success"`
+	JSON    accountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleResponseJSON    `json:"-"`
+}
+
+// accountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleResponseJSON
+// contains the JSON metadata for the struct
+// [AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleResponse]
+type accountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleResponseError struct {
+	Code    int64                                                                                    `json:"code,required"`
+	Message string                                                                                   `json:"message,required"`
+	JSON    accountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleResponseErrorJSON `json:"-"`
+}
+
+// accountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleResponseError]
+type accountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleResponseMessage struct {
+	Code    int64                                                                                      `json:"code,required"`
+	Message string                                                                                     `json:"message,required"`
+	JSON    accountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleResponseMessageJSON `json:"-"`
+}
+
+// accountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleResponseMessage]
+type accountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleResponseSuccess bool
+
+const (
+	AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleResponseSuccessTrue AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleResponseSuccess = true
+)
+
+type AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountListIPAccessRulesResponse = interface{}
 
 type AccountFirewallAccessRuleRuleUpdateParams struct {
 	// The rule configuration.
@@ -185,131 +408,131 @@ func (r AccountFirewallAccessRuleRuleUpdateParams) MarshalJSON() (data []byte, e
 // The rule configuration.
 //
 // Satisfied by
-// [AccountFirewallAccessRuleRuleUpdateParamsConfigurationIPConfiguration],
-// [AccountFirewallAccessRuleRuleUpdateParamsConfigurationIpv6Configuration],
-// [AccountFirewallAccessRuleRuleUpdateParamsConfigurationCidrConfiguration],
-// [AccountFirewallAccessRuleRuleUpdateParamsConfigurationASNConfiguration],
-// [AccountFirewallAccessRuleRuleUpdateParamsConfigurationCountryConfiguration].
+// [AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTIPConfiguration],
+// [AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTIpv6Configuration],
+// [AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTCidrConfiguration],
+// [AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTASNConfiguration],
+// [AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTCountryConfiguration].
 type AccountFirewallAccessRuleRuleUpdateParamsConfiguration interface {
 	implementsAccountFirewallAccessRuleRuleUpdateParamsConfiguration()
 }
 
-type AccountFirewallAccessRuleRuleUpdateParamsConfigurationIPConfiguration struct {
+type AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTIPConfiguration struct {
 	// The configuration target. You must set the target to `ip` when specifying an IP
 	// address in the rule.
-	Target param.Field[AccountFirewallAccessRuleRuleUpdateParamsConfigurationIPConfigurationTarget] `json:"target"`
+	Target param.Field[AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTIPConfigurationTarget] `json:"target"`
 	// The IP address to match. This address will be compared to the IP address of
 	// incoming requests.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r AccountFirewallAccessRuleRuleUpdateParamsConfigurationIPConfiguration) MarshalJSON() (data []byte, err error) {
+func (r AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTIPConfiguration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccountFirewallAccessRuleRuleUpdateParamsConfigurationIPConfiguration) implementsAccountFirewallAccessRuleRuleUpdateParamsConfiguration() {
+func (r AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTIPConfiguration) implementsAccountFirewallAccessRuleRuleUpdateParamsConfiguration() {
 }
 
 // The configuration target. You must set the target to `ip` when specifying an IP
 // address in the rule.
-type AccountFirewallAccessRuleRuleUpdateParamsConfigurationIPConfigurationTarget string
+type AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTIPConfigurationTarget string
 
 const (
-	AccountFirewallAccessRuleRuleUpdateParamsConfigurationIPConfigurationTargetIP AccountFirewallAccessRuleRuleUpdateParamsConfigurationIPConfigurationTarget = "ip"
+	AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTIPConfigurationTargetIP AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTIPConfigurationTarget = "ip"
 )
 
-type AccountFirewallAccessRuleRuleUpdateParamsConfigurationIpv6Configuration struct {
+type AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTIpv6Configuration struct {
 	// The configuration target. You must set the target to `ip6` when specifying an
 	// IPv6 address in the rule.
-	Target param.Field[AccountFirewallAccessRuleRuleUpdateParamsConfigurationIpv6ConfigurationTarget] `json:"target"`
+	Target param.Field[AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTIpv6ConfigurationTarget] `json:"target"`
 	// The IPv6 address to match.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r AccountFirewallAccessRuleRuleUpdateParamsConfigurationIpv6Configuration) MarshalJSON() (data []byte, err error) {
+func (r AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTIpv6Configuration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccountFirewallAccessRuleRuleUpdateParamsConfigurationIpv6Configuration) implementsAccountFirewallAccessRuleRuleUpdateParamsConfiguration() {
+func (r AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTIpv6Configuration) implementsAccountFirewallAccessRuleRuleUpdateParamsConfiguration() {
 }
 
 // The configuration target. You must set the target to `ip6` when specifying an
 // IPv6 address in the rule.
-type AccountFirewallAccessRuleRuleUpdateParamsConfigurationIpv6ConfigurationTarget string
+type AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTIpv6ConfigurationTarget string
 
 const (
-	AccountFirewallAccessRuleRuleUpdateParamsConfigurationIpv6ConfigurationTargetIp6 AccountFirewallAccessRuleRuleUpdateParamsConfigurationIpv6ConfigurationTarget = "ip6"
+	AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTIpv6ConfigurationTargetIp6 AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTIpv6ConfigurationTarget = "ip6"
 )
 
-type AccountFirewallAccessRuleRuleUpdateParamsConfigurationCidrConfiguration struct {
+type AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTCidrConfiguration struct {
 	// The configuration target. You must set the target to `ip_range` when specifying
 	// an IP address range in the rule.
-	Target param.Field[AccountFirewallAccessRuleRuleUpdateParamsConfigurationCidrConfigurationTarget] `json:"target"`
+	Target param.Field[AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTCidrConfigurationTarget] `json:"target"`
 	// The IP address range to match. You can only use prefix lengths `/16` and `/24`
 	// for IPv4 ranges, and prefix lengths `/32`, `/48`, and `/64` for IPv6 ranges.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r AccountFirewallAccessRuleRuleUpdateParamsConfigurationCidrConfiguration) MarshalJSON() (data []byte, err error) {
+func (r AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTCidrConfiguration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccountFirewallAccessRuleRuleUpdateParamsConfigurationCidrConfiguration) implementsAccountFirewallAccessRuleRuleUpdateParamsConfiguration() {
+func (r AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTCidrConfiguration) implementsAccountFirewallAccessRuleRuleUpdateParamsConfiguration() {
 }
 
 // The configuration target. You must set the target to `ip_range` when specifying
 // an IP address range in the rule.
-type AccountFirewallAccessRuleRuleUpdateParamsConfigurationCidrConfigurationTarget string
+type AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTCidrConfigurationTarget string
 
 const (
-	AccountFirewallAccessRuleRuleUpdateParamsConfigurationCidrConfigurationTargetIPRange AccountFirewallAccessRuleRuleUpdateParamsConfigurationCidrConfigurationTarget = "ip_range"
+	AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTCidrConfigurationTargetIPRange AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTCidrConfigurationTarget = "ip_range"
 )
 
-type AccountFirewallAccessRuleRuleUpdateParamsConfigurationASNConfiguration struct {
+type AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTASNConfiguration struct {
 	// The configuration target. You must set the target to `asn` when specifying an
 	// Autonomous System Number (ASN) in the rule.
-	Target param.Field[AccountFirewallAccessRuleRuleUpdateParamsConfigurationASNConfigurationTarget] `json:"target"`
+	Target param.Field[AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTASNConfigurationTarget] `json:"target"`
 	// The AS number to match.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r AccountFirewallAccessRuleRuleUpdateParamsConfigurationASNConfiguration) MarshalJSON() (data []byte, err error) {
+func (r AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTASNConfiguration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccountFirewallAccessRuleRuleUpdateParamsConfigurationASNConfiguration) implementsAccountFirewallAccessRuleRuleUpdateParamsConfiguration() {
+func (r AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTASNConfiguration) implementsAccountFirewallAccessRuleRuleUpdateParamsConfiguration() {
 }
 
 // The configuration target. You must set the target to `asn` when specifying an
 // Autonomous System Number (ASN) in the rule.
-type AccountFirewallAccessRuleRuleUpdateParamsConfigurationASNConfigurationTarget string
+type AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTASNConfigurationTarget string
 
 const (
-	AccountFirewallAccessRuleRuleUpdateParamsConfigurationASNConfigurationTargetASN AccountFirewallAccessRuleRuleUpdateParamsConfigurationASNConfigurationTarget = "asn"
+	AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTASNConfigurationTargetASN AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTASNConfigurationTarget = "asn"
 )
 
-type AccountFirewallAccessRuleRuleUpdateParamsConfigurationCountryConfiguration struct {
+type AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTCountryConfiguration struct {
 	// The configuration target. You must set the target to `country` when specifying a
 	// country code in the rule.
-	Target param.Field[AccountFirewallAccessRuleRuleUpdateParamsConfigurationCountryConfigurationTarget] `json:"target"`
+	Target param.Field[AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTCountryConfigurationTarget] `json:"target"`
 	// The two-letter ISO-3166-1 alpha-2 code to match. For more information, refer to
 	// [IP Access rules: Parameters](https://developers.cloudflare.com/waf/tools/ip-access-rules/parameters/#country).
 	Value param.Field[string] `json:"value"`
 }
 
-func (r AccountFirewallAccessRuleRuleUpdateParamsConfigurationCountryConfiguration) MarshalJSON() (data []byte, err error) {
+func (r AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTCountryConfiguration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccountFirewallAccessRuleRuleUpdateParamsConfigurationCountryConfiguration) implementsAccountFirewallAccessRuleRuleUpdateParamsConfiguration() {
+func (r AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTCountryConfiguration) implementsAccountFirewallAccessRuleRuleUpdateParamsConfiguration() {
 }
 
 // The configuration target. You must set the target to `country` when specifying a
 // country code in the rule.
-type AccountFirewallAccessRuleRuleUpdateParamsConfigurationCountryConfigurationTarget string
+type AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTCountryConfigurationTarget string
 
 const (
-	AccountFirewallAccessRuleRuleUpdateParamsConfigurationCountryConfigurationTargetCountry AccountFirewallAccessRuleRuleUpdateParamsConfigurationCountryConfigurationTarget = "country"
+	AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTCountryConfigurationTargetCountry AccountFirewallAccessRuleRuleUpdateParamsConfigurationDZw70ubTCountryConfigurationTarget = "country"
 )
 
 // The action to apply to a matched request.
@@ -339,131 +562,131 @@ func (r AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleP
 // The rule configuration.
 //
 // Satisfied by
-// [AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationIPConfiguration],
-// [AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationIpv6Configuration],
-// [AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationCidrConfiguration],
-// [AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationASNConfiguration],
-// [AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationCountryConfiguration].
+// [AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTIPConfiguration],
+// [AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTIpv6Configuration],
+// [AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTCidrConfiguration],
+// [AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTASNConfiguration],
+// [AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTCountryConfiguration].
 type AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfiguration interface {
 	implementsAccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfiguration()
 }
 
-type AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationIPConfiguration struct {
+type AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTIPConfiguration struct {
 	// The configuration target. You must set the target to `ip` when specifying an IP
 	// address in the rule.
-	Target param.Field[AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationIPConfigurationTarget] `json:"target"`
+	Target param.Field[AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTIPConfigurationTarget] `json:"target"`
 	// The IP address to match. This address will be compared to the IP address of
 	// incoming requests.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationIPConfiguration) MarshalJSON() (data []byte, err error) {
+func (r AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTIPConfiguration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationIPConfiguration) implementsAccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfiguration() {
+func (r AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTIPConfiguration) implementsAccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfiguration() {
 }
 
 // The configuration target. You must set the target to `ip` when specifying an IP
 // address in the rule.
-type AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationIPConfigurationTarget string
+type AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTIPConfigurationTarget string
 
 const (
-	AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationIPConfigurationTargetIP AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationIPConfigurationTarget = "ip"
+	AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTIPConfigurationTargetIP AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTIPConfigurationTarget = "ip"
 )
 
-type AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationIpv6Configuration struct {
+type AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTIpv6Configuration struct {
 	// The configuration target. You must set the target to `ip6` when specifying an
 	// IPv6 address in the rule.
-	Target param.Field[AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationIpv6ConfigurationTarget] `json:"target"`
+	Target param.Field[AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTIpv6ConfigurationTarget] `json:"target"`
 	// The IPv6 address to match.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationIpv6Configuration) MarshalJSON() (data []byte, err error) {
+func (r AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTIpv6Configuration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationIpv6Configuration) implementsAccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfiguration() {
+func (r AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTIpv6Configuration) implementsAccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfiguration() {
 }
 
 // The configuration target. You must set the target to `ip6` when specifying an
 // IPv6 address in the rule.
-type AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationIpv6ConfigurationTarget string
+type AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTIpv6ConfigurationTarget string
 
 const (
-	AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationIpv6ConfigurationTargetIp6 AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationIpv6ConfigurationTarget = "ip6"
+	AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTIpv6ConfigurationTargetIp6 AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTIpv6ConfigurationTarget = "ip6"
 )
 
-type AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationCidrConfiguration struct {
+type AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTCidrConfiguration struct {
 	// The configuration target. You must set the target to `ip_range` when specifying
 	// an IP address range in the rule.
-	Target param.Field[AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationCidrConfigurationTarget] `json:"target"`
+	Target param.Field[AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTCidrConfigurationTarget] `json:"target"`
 	// The IP address range to match. You can only use prefix lengths `/16` and `/24`
 	// for IPv4 ranges, and prefix lengths `/32`, `/48`, and `/64` for IPv6 ranges.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationCidrConfiguration) MarshalJSON() (data []byte, err error) {
+func (r AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTCidrConfiguration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationCidrConfiguration) implementsAccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfiguration() {
+func (r AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTCidrConfiguration) implementsAccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfiguration() {
 }
 
 // The configuration target. You must set the target to `ip_range` when specifying
 // an IP address range in the rule.
-type AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationCidrConfigurationTarget string
+type AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTCidrConfigurationTarget string
 
 const (
-	AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationCidrConfigurationTargetIPRange AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationCidrConfigurationTarget = "ip_range"
+	AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTCidrConfigurationTargetIPRange AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTCidrConfigurationTarget = "ip_range"
 )
 
-type AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationASNConfiguration struct {
+type AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTASNConfiguration struct {
 	// The configuration target. You must set the target to `asn` when specifying an
 	// Autonomous System Number (ASN) in the rule.
-	Target param.Field[AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationASNConfigurationTarget] `json:"target"`
+	Target param.Field[AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTASNConfigurationTarget] `json:"target"`
 	// The AS number to match.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationASNConfiguration) MarshalJSON() (data []byte, err error) {
+func (r AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTASNConfiguration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationASNConfiguration) implementsAccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfiguration() {
+func (r AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTASNConfiguration) implementsAccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfiguration() {
 }
 
 // The configuration target. You must set the target to `asn` when specifying an
 // Autonomous System Number (ASN) in the rule.
-type AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationASNConfigurationTarget string
+type AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTASNConfigurationTarget string
 
 const (
-	AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationASNConfigurationTargetASN AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationASNConfigurationTarget = "asn"
+	AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTASNConfigurationTargetASN AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTASNConfigurationTarget = "asn"
 )
 
-type AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationCountryConfiguration struct {
+type AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTCountryConfiguration struct {
 	// The configuration target. You must set the target to `country` when specifying a
 	// country code in the rule.
-	Target param.Field[AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationCountryConfigurationTarget] `json:"target"`
+	Target param.Field[AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTCountryConfigurationTarget] `json:"target"`
 	// The two-letter ISO-3166-1 alpha-2 code to match. For more information, refer to
 	// [IP Access rules: Parameters](https://developers.cloudflare.com/waf/tools/ip-access-rules/parameters/#country).
 	Value param.Field[string] `json:"value"`
 }
 
-func (r AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationCountryConfiguration) MarshalJSON() (data []byte, err error) {
+func (r AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTCountryConfiguration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationCountryConfiguration) implementsAccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfiguration() {
+func (r AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTCountryConfiguration) implementsAccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfiguration() {
 }
 
 // The configuration target. You must set the target to `country` when specifying a
 // country code in the rule.
-type AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationCountryConfigurationTarget string
+type AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTCountryConfigurationTarget string
 
 const (
-	AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationCountryConfigurationTargetCountry AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationCountryConfigurationTarget = "country"
+	AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTCountryConfigurationTargetCountry AccountFirewallAccessRuleRuleIPAccessRulesForAnAccountNewAnIPAccessRuleParamsConfigurationDZw70ubTCountryConfigurationTarget = "country"
 )
 
 // The action to apply to a matched request.

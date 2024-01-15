@@ -42,7 +42,7 @@ func (r *ZoneWorkerScriptService) List(ctx context.Context, zoneIdentifier strin
 	return
 }
 
-// Delete your worker. This call has no response body on a successful delete.
+// Delete your Worker. This call has no response body on a successful delete.
 func (r *ZoneWorkerScriptService) Delete(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
@@ -52,25 +52,26 @@ func (r *ZoneWorkerScriptService) Delete(ctx context.Context, zoneIdentifier str
 }
 
 // Upload a worker, or a new version of a worker.
-func (r *ZoneWorkerScriptService) WorkerScriptDeprecatedUploadWorker(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ScriptResponseSingle, err error) {
+func (r *ZoneWorkerScriptService) WorkerScriptDeprecatedUploadWorker(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ZoneWorkerScriptWorkerScriptDeprecatedUploadWorkerResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/workers/script", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &res, opts...)
 	return
 }
 
-type ScriptResponseSingle struct {
-	Errors   []ScriptResponseSingleError   `json:"errors"`
-	Messages []ScriptResponseSingleMessage `json:"messages"`
-	Result   interface{}                   `json:"result"`
+type ZoneWorkerScriptWorkerScriptDeprecatedUploadWorkerResponse struct {
+	Errors   []ZoneWorkerScriptWorkerScriptDeprecatedUploadWorkerResponseError   `json:"errors"`
+	Messages []ZoneWorkerScriptWorkerScriptDeprecatedUploadWorkerResponseMessage `json:"messages"`
+	Result   interface{}                                                         `json:"result"`
 	// Whether the API call was successful
-	Success ScriptResponseSingleSuccess `json:"success"`
-	JSON    scriptResponseSingleJSON    `json:"-"`
+	Success ZoneWorkerScriptWorkerScriptDeprecatedUploadWorkerResponseSuccess `json:"success"`
+	JSON    zoneWorkerScriptWorkerScriptDeprecatedUploadWorkerResponseJSON    `json:"-"`
 }
 
-// scriptResponseSingleJSON contains the JSON metadata for the struct
-// [ScriptResponseSingle]
-type scriptResponseSingleJSON struct {
+// zoneWorkerScriptWorkerScriptDeprecatedUploadWorkerResponseJSON contains the JSON
+// metadata for the struct
+// [ZoneWorkerScriptWorkerScriptDeprecatedUploadWorkerResponse]
+type zoneWorkerScriptWorkerScriptDeprecatedUploadWorkerResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -79,51 +80,53 @@ type scriptResponseSingleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptResponseSingle) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneWorkerScriptWorkerScriptDeprecatedUploadWorkerResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ScriptResponseSingleError struct {
-	Code    int64                         `json:"code,required"`
-	Message string                        `json:"message,required"`
-	JSON    scriptResponseSingleErrorJSON `json:"-"`
+type ZoneWorkerScriptWorkerScriptDeprecatedUploadWorkerResponseError struct {
+	Code    int64                                                               `json:"code,required"`
+	Message string                                                              `json:"message,required"`
+	JSON    zoneWorkerScriptWorkerScriptDeprecatedUploadWorkerResponseErrorJSON `json:"-"`
 }
 
-// scriptResponseSingleErrorJSON contains the JSON metadata for the struct
-// [ScriptResponseSingleError]
-type scriptResponseSingleErrorJSON struct {
+// zoneWorkerScriptWorkerScriptDeprecatedUploadWorkerResponseErrorJSON contains the
+// JSON metadata for the struct
+// [ZoneWorkerScriptWorkerScriptDeprecatedUploadWorkerResponseError]
+type zoneWorkerScriptWorkerScriptDeprecatedUploadWorkerResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptResponseSingleError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneWorkerScriptWorkerScriptDeprecatedUploadWorkerResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ScriptResponseSingleMessage struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    scriptResponseSingleMessageJSON `json:"-"`
+type ZoneWorkerScriptWorkerScriptDeprecatedUploadWorkerResponseMessage struct {
+	Code    int64                                                                 `json:"code,required"`
+	Message string                                                                `json:"message,required"`
+	JSON    zoneWorkerScriptWorkerScriptDeprecatedUploadWorkerResponseMessageJSON `json:"-"`
 }
 
-// scriptResponseSingleMessageJSON contains the JSON metadata for the struct
-// [ScriptResponseSingleMessage]
-type scriptResponseSingleMessageJSON struct {
+// zoneWorkerScriptWorkerScriptDeprecatedUploadWorkerResponseMessageJSON contains
+// the JSON metadata for the struct
+// [ZoneWorkerScriptWorkerScriptDeprecatedUploadWorkerResponseMessage]
+type zoneWorkerScriptWorkerScriptDeprecatedUploadWorkerResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptResponseSingleMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneWorkerScriptWorkerScriptDeprecatedUploadWorkerResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type ScriptResponseSingleSuccess bool
+type ZoneWorkerScriptWorkerScriptDeprecatedUploadWorkerResponseSuccess bool
 
 const (
-	ScriptResponseSingleSuccessTrue ScriptResponseSingleSuccess = true
+	ZoneWorkerScriptWorkerScriptDeprecatedUploadWorkerResponseSuccessTrue ZoneWorkerScriptWorkerScriptDeprecatedUploadWorkerResponseSuccess = true
 )

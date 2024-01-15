@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -37,7 +38,7 @@ func NewZoneCustomCertificateService(opts ...option.RequestOption) (r *ZoneCusto
 }
 
 // SSL Configuration Details
-func (r *ZoneCustomCertificateService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *CertificateResponseSingle, err error) {
+func (r *ZoneCustomCertificateService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *ZoneCustomCertificateGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/custom_certificates/%s", zoneIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -47,7 +48,7 @@ func (r *ZoneCustomCertificateService) Get(ctx context.Context, zoneIdentifier s
 // Upload a new private key and/or PEM/CRT for the SSL certificate. Note: PATCHing
 // a configuration for sni_custom certificates will result in a new resource id
 // being returned, and the previous one being deleted.
-func (r *ZoneCustomCertificateService) Update(ctx context.Context, zoneIdentifier string, identifier string, body ZoneCustomCertificateUpdateParams, opts ...option.RequestOption) (res *CertificateResponseSingle, err error) {
+func (r *ZoneCustomCertificateService) Update(ctx context.Context, zoneIdentifier string, identifier string, body ZoneCustomCertificateUpdateParams, opts ...option.RequestOption) (res *ZoneCustomCertificateUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/custom_certificates/%s", zoneIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
@@ -55,7 +56,7 @@ func (r *ZoneCustomCertificateService) Update(ctx context.Context, zoneIdentifie
 }
 
 // Remove a SSL certificate from a zone.
-func (r *ZoneCustomCertificateService) Delete(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *CertificateResponseIDOnlyTMCaIs8i, err error) {
+func (r *ZoneCustomCertificateService) Delete(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *ZoneCustomCertificateDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/custom_certificates/%s", zoneIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -63,7 +64,7 @@ func (r *ZoneCustomCertificateService) Delete(ctx context.Context, zoneIdentifie
 }
 
 // Upload a new SSL certificate for a zone.
-func (r *ZoneCustomCertificateService) CustomSslForAZoneNewSslConfiguration(ctx context.Context, zoneIdentifier string, body ZoneCustomCertificateCustomSslForAZoneNewSslConfigurationParams, opts ...option.RequestOption) (res *CertificateResponseSingle, err error) {
+func (r *ZoneCustomCertificateService) CustomSslForAZoneNewSslConfiguration(ctx context.Context, zoneIdentifier string, body ZoneCustomCertificateCustomSslForAZoneNewSslConfigurationParams, opts ...option.RequestOption) (res *ZoneCustomCertificateCustomSslForAZoneNewSslConfigurationResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/custom_certificates", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -73,85 +74,328 @@ func (r *ZoneCustomCertificateService) CustomSslForAZoneNewSslConfiguration(ctx 
 // List, search, and filter all of your custom SSL certificates. The higher
 // priority will break ties across overlapping 'legacy_custom' certificates, but
 // 'legacy_custom' certificates will always supercede 'sni_custom' certificates.
-func (r *ZoneCustomCertificateService) CustomSslForAZoneListSslConfigurations(ctx context.Context, zoneIdentifier string, query ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsParams, opts ...option.RequestOption) (res *CertificateResponseCollection, err error) {
-	opts = append(r.Options[:], opts...)
+func (r *ZoneCustomCertificateService) CustomSslForAZoneListSslConfigurations(ctx context.Context, zoneIdentifier string, query ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsParams, opts ...option.RequestOption) (res *shared.Page[ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("zones/%s/custom_certificates", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
 }
 
-type CertificateResponseCollection struct {
-	Errors     []CertificateResponseCollectionError    `json:"errors"`
-	Messages   []CertificateResponseCollectionMessage  `json:"messages"`
-	Result     []CertificateResponseCollectionResult   `json:"result"`
-	ResultInfo CertificateResponseCollectionResultInfo `json:"result_info"`
+type ZoneCustomCertificateGetResponse struct {
+	Errors   []ZoneCustomCertificateGetResponseError   `json:"errors"`
+	Messages []ZoneCustomCertificateGetResponseMessage `json:"messages"`
+	Result   interface{}                               `json:"result"`
 	// Whether the API call was successful
-	Success CertificateResponseCollectionSuccess `json:"success"`
-	JSON    certificateResponseCollectionJSON    `json:"-"`
+	Success ZoneCustomCertificateGetResponseSuccess `json:"success"`
+	JSON    zoneCustomCertificateGetResponseJSON    `json:"-"`
 }
 
-// certificateResponseCollectionJSON contains the JSON metadata for the struct
-// [CertificateResponseCollection]
-type certificateResponseCollectionJSON struct {
+// zoneCustomCertificateGetResponseJSON contains the JSON metadata for the struct
+// [ZoneCustomCertificateGetResponse]
+type zoneCustomCertificateGetResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CertificateResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneCustomCertificateGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CertificateResponseCollectionError struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    certificateResponseCollectionErrorJSON `json:"-"`
+type ZoneCustomCertificateGetResponseError struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    zoneCustomCertificateGetResponseErrorJSON `json:"-"`
 }
 
-// certificateResponseCollectionErrorJSON contains the JSON metadata for the struct
-// [CertificateResponseCollectionError]
-type certificateResponseCollectionErrorJSON struct {
+// zoneCustomCertificateGetResponseErrorJSON contains the JSON metadata for the
+// struct [ZoneCustomCertificateGetResponseError]
+type zoneCustomCertificateGetResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CertificateResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneCustomCertificateGetResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CertificateResponseCollectionMessage struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    certificateResponseCollectionMessageJSON `json:"-"`
+type ZoneCustomCertificateGetResponseMessage struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    zoneCustomCertificateGetResponseMessageJSON `json:"-"`
 }
 
-// certificateResponseCollectionMessageJSON contains the JSON metadata for the
-// struct [CertificateResponseCollectionMessage]
-type certificateResponseCollectionMessageJSON struct {
+// zoneCustomCertificateGetResponseMessageJSON contains the JSON metadata for the
+// struct [ZoneCustomCertificateGetResponseMessage]
+type zoneCustomCertificateGetResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CertificateResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneCustomCertificateGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CertificateResponseCollectionResult struct {
+// Whether the API call was successful
+type ZoneCustomCertificateGetResponseSuccess bool
+
+const (
+	ZoneCustomCertificateGetResponseSuccessTrue ZoneCustomCertificateGetResponseSuccess = true
+)
+
+type ZoneCustomCertificateUpdateResponse struct {
+	Errors   []ZoneCustomCertificateUpdateResponseError   `json:"errors"`
+	Messages []ZoneCustomCertificateUpdateResponseMessage `json:"messages"`
+	Result   interface{}                                  `json:"result"`
+	// Whether the API call was successful
+	Success ZoneCustomCertificateUpdateResponseSuccess `json:"success"`
+	JSON    zoneCustomCertificateUpdateResponseJSON    `json:"-"`
+}
+
+// zoneCustomCertificateUpdateResponseJSON contains the JSON metadata for the
+// struct [ZoneCustomCertificateUpdateResponse]
+type zoneCustomCertificateUpdateResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomCertificateUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneCustomCertificateUpdateResponseError struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    zoneCustomCertificateUpdateResponseErrorJSON `json:"-"`
+}
+
+// zoneCustomCertificateUpdateResponseErrorJSON contains the JSON metadata for the
+// struct [ZoneCustomCertificateUpdateResponseError]
+type zoneCustomCertificateUpdateResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomCertificateUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneCustomCertificateUpdateResponseMessage struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    zoneCustomCertificateUpdateResponseMessageJSON `json:"-"`
+}
+
+// zoneCustomCertificateUpdateResponseMessageJSON contains the JSON metadata for
+// the struct [ZoneCustomCertificateUpdateResponseMessage]
+type zoneCustomCertificateUpdateResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomCertificateUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneCustomCertificateUpdateResponseSuccess bool
+
+const (
+	ZoneCustomCertificateUpdateResponseSuccessTrue ZoneCustomCertificateUpdateResponseSuccess = true
+)
+
+type ZoneCustomCertificateDeleteResponse struct {
+	Errors   []ZoneCustomCertificateDeleteResponseError   `json:"errors"`
+	Messages []ZoneCustomCertificateDeleteResponseMessage `json:"messages"`
+	Result   ZoneCustomCertificateDeleteResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success ZoneCustomCertificateDeleteResponseSuccess `json:"success"`
+	JSON    zoneCustomCertificateDeleteResponseJSON    `json:"-"`
+}
+
+// zoneCustomCertificateDeleteResponseJSON contains the JSON metadata for the
+// struct [ZoneCustomCertificateDeleteResponse]
+type zoneCustomCertificateDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomCertificateDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneCustomCertificateDeleteResponseError struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    zoneCustomCertificateDeleteResponseErrorJSON `json:"-"`
+}
+
+// zoneCustomCertificateDeleteResponseErrorJSON contains the JSON metadata for the
+// struct [ZoneCustomCertificateDeleteResponseError]
+type zoneCustomCertificateDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomCertificateDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneCustomCertificateDeleteResponseMessage struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    zoneCustomCertificateDeleteResponseMessageJSON `json:"-"`
+}
+
+// zoneCustomCertificateDeleteResponseMessageJSON contains the JSON metadata for
+// the struct [ZoneCustomCertificateDeleteResponseMessage]
+type zoneCustomCertificateDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomCertificateDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneCustomCertificateDeleteResponseResult struct {
+	// Identifier
+	ID   string                                        `json:"id"`
+	JSON zoneCustomCertificateDeleteResponseResultJSON `json:"-"`
+}
+
+// zoneCustomCertificateDeleteResponseResultJSON contains the JSON metadata for the
+// struct [ZoneCustomCertificateDeleteResponseResult]
+type zoneCustomCertificateDeleteResponseResultJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomCertificateDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneCustomCertificateDeleteResponseSuccess bool
+
+const (
+	ZoneCustomCertificateDeleteResponseSuccessTrue ZoneCustomCertificateDeleteResponseSuccess = true
+)
+
+type ZoneCustomCertificateCustomSslForAZoneNewSslConfigurationResponse struct {
+	Errors   []ZoneCustomCertificateCustomSslForAZoneNewSslConfigurationResponseError   `json:"errors"`
+	Messages []ZoneCustomCertificateCustomSslForAZoneNewSslConfigurationResponseMessage `json:"messages"`
+	Result   interface{}                                                                `json:"result"`
+	// Whether the API call was successful
+	Success ZoneCustomCertificateCustomSslForAZoneNewSslConfigurationResponseSuccess `json:"success"`
+	JSON    zoneCustomCertificateCustomSslForAZoneNewSslConfigurationResponseJSON    `json:"-"`
+}
+
+// zoneCustomCertificateCustomSslForAZoneNewSslConfigurationResponseJSON contains
+// the JSON metadata for the struct
+// [ZoneCustomCertificateCustomSslForAZoneNewSslConfigurationResponse]
+type zoneCustomCertificateCustomSslForAZoneNewSslConfigurationResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomCertificateCustomSslForAZoneNewSslConfigurationResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneCustomCertificateCustomSslForAZoneNewSslConfigurationResponseError struct {
+	Code    int64                                                                      `json:"code,required"`
+	Message string                                                                     `json:"message,required"`
+	JSON    zoneCustomCertificateCustomSslForAZoneNewSslConfigurationResponseErrorJSON `json:"-"`
+}
+
+// zoneCustomCertificateCustomSslForAZoneNewSslConfigurationResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomCertificateCustomSslForAZoneNewSslConfigurationResponseError]
+type zoneCustomCertificateCustomSslForAZoneNewSslConfigurationResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomCertificateCustomSslForAZoneNewSslConfigurationResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneCustomCertificateCustomSslForAZoneNewSslConfigurationResponseMessage struct {
+	Code    int64                                                                        `json:"code,required"`
+	Message string                                                                       `json:"message,required"`
+	JSON    zoneCustomCertificateCustomSslForAZoneNewSslConfigurationResponseMessageJSON `json:"-"`
+}
+
+// zoneCustomCertificateCustomSslForAZoneNewSslConfigurationResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomCertificateCustomSslForAZoneNewSslConfigurationResponseMessage]
+type zoneCustomCertificateCustomSslForAZoneNewSslConfigurationResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomCertificateCustomSslForAZoneNewSslConfigurationResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneCustomCertificateCustomSslForAZoneNewSslConfigurationResponseSuccess bool
+
+const (
+	ZoneCustomCertificateCustomSslForAZoneNewSslConfigurationResponseSuccessTrue ZoneCustomCertificateCustomSslForAZoneNewSslConfigurationResponseSuccess = true
+)
+
+type ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// A ubiquitous bundle has the highest probability of being verified everywhere,
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
-	BundleMethod CertificateResponseCollectionResultBundleMethod `json:"bundle_method,required"`
+	BundleMethod ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseBundleMethod `json:"bundle_method,required"`
 	// When the certificate from the authority expires.
 	ExpiresOn time.Time `json:"expires_on,required" format:"date-time"`
 	Hosts     []string  `json:"hosts,required"`
@@ -167,7 +411,7 @@ type CertificateResponseCollectionResult struct {
 	// The type of hash used for the certificate.
 	Signature string `json:"signature,required"`
 	// Status of the zone's custom SSL.
-	Status CertificateResponseCollectionResultStatus `json:"status,required"`
+	Status ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseStatus `json:"status,required"`
 	// When the certificate was uploaded to Cloudflare.
 	UploadedOn time.Time `json:"uploaded_on,required" format:"date-time"`
 	// Identifier
@@ -179,8 +423,8 @@ type CertificateResponseCollectionResult struct {
 	// only to U.S. data centers, only to E.U. data centers, or only to highest
 	// security data centers. Default distribution is to all Cloudflare datacenters,
 	// for optimal performance.
-	GeoRestrictions CertificateResponseCollectionResultGeoRestrictions `json:"geo_restrictions"`
-	KeylessServer   CertificateResponseCollectionResultKeylessServer   `json:"keyless_server"`
+	GeoRestrictions ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseGeoRestrictions `json:"geo_restrictions"`
+	KeylessServer   ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseKeylessServer   `json:"keyless_server"`
 	// Specify the policy that determines the region where your private key will be
 	// held locally. HTTPS connections to any excluded data center will still be fully
 	// encrypted, but will incur some latency while Keyless SSL is used to complete the
@@ -190,13 +434,14 @@ type CertificateResponseCollectionResult struct {
 	// can be chosen, such as 'country: IN', as well as 'region: EU' which refers to
 	// the EU region. If there are too few data centers satisfying the policy, it will
 	// be rejected.
-	Policy string                                  `json:"policy"`
-	JSON   certificateResponseCollectionResultJSON `json:"-"`
+	Policy string                                                                  `json:"policy"`
+	JSON   zoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseJSON `json:"-"`
 }
 
-// certificateResponseCollectionResultJSON contains the JSON metadata for the
-// struct [CertificateResponseCollectionResult]
-type certificateResponseCollectionResultJSON struct {
+// zoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseJSON contains
+// the JSON metadata for the struct
+// [ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponse]
+type zoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseJSON struct {
 	ID              apijson.Field
 	BundleMethod    apijson.Field
 	ExpiresOn       apijson.Field
@@ -215,7 +460,7 @@ type certificateResponseCollectionResultJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *CertificateResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -223,23 +468,23 @@ func (r *CertificateResponseCollectionResult) UnmarshalJSON(data []byte) (err er
 // even by clients using outdated or unusual trust stores. An optimal bundle uses
 // the shortest chain and newest intermediates. And the force bundle verifies the
 // chain, but does not otherwise modify it.
-type CertificateResponseCollectionResultBundleMethod string
+type ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseBundleMethod string
 
 const (
-	CertificateResponseCollectionResultBundleMethodUbiquitous CertificateResponseCollectionResultBundleMethod = "ubiquitous"
-	CertificateResponseCollectionResultBundleMethodOptimal    CertificateResponseCollectionResultBundleMethod = "optimal"
-	CertificateResponseCollectionResultBundleMethodForce      CertificateResponseCollectionResultBundleMethod = "force"
+	ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseBundleMethodUbiquitous ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseBundleMethod = "ubiquitous"
+	ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseBundleMethodOptimal    ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseBundleMethod = "optimal"
+	ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseBundleMethodForce      ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseBundleMethod = "force"
 )
 
 // Status of the zone's custom SSL.
-type CertificateResponseCollectionResultStatus string
+type ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseStatus string
 
 const (
-	CertificateResponseCollectionResultStatusActive       CertificateResponseCollectionResultStatus = "active"
-	CertificateResponseCollectionResultStatusExpired      CertificateResponseCollectionResultStatus = "expired"
-	CertificateResponseCollectionResultStatusDeleted      CertificateResponseCollectionResultStatus = "deleted"
-	CertificateResponseCollectionResultStatusPending      CertificateResponseCollectionResultStatus = "pending"
-	CertificateResponseCollectionResultStatusInitializing CertificateResponseCollectionResultStatus = "initializing"
+	ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseStatusActive       ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseStatus = "active"
+	ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseStatusExpired      ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseStatus = "expired"
+	ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseStatusDeleted      ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseStatus = "deleted"
+	ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseStatusPending      ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseStatus = "pending"
+	ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseStatusInitializing ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseStatus = "initializing"
 )
 
 // Specify the region where your private key can be held locally for optimal TLS
@@ -249,32 +494,33 @@ const (
 // only to U.S. data centers, only to E.U. data centers, or only to highest
 // security data centers. Default distribution is to all Cloudflare datacenters,
 // for optimal performance.
-type CertificateResponseCollectionResultGeoRestrictions struct {
-	Label CertificateResponseCollectionResultGeoRestrictionsLabel `json:"label"`
-	JSON  certificateResponseCollectionResultGeoRestrictionsJSON  `json:"-"`
+type ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseGeoRestrictions struct {
+	Label ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseGeoRestrictionsLabel `json:"label"`
+	JSON  zoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseGeoRestrictionsJSON  `json:"-"`
 }
 
-// certificateResponseCollectionResultGeoRestrictionsJSON contains the JSON
-// metadata for the struct [CertificateResponseCollectionResultGeoRestrictions]
-type certificateResponseCollectionResultGeoRestrictionsJSON struct {
+// zoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseGeoRestrictionsJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseGeoRestrictions]
+type zoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseGeoRestrictionsJSON struct {
 	Label       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CertificateResponseCollectionResultGeoRestrictions) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseGeoRestrictions) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CertificateResponseCollectionResultGeoRestrictionsLabel string
+type ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseGeoRestrictionsLabel string
 
 const (
-	CertificateResponseCollectionResultGeoRestrictionsLabelUs              CertificateResponseCollectionResultGeoRestrictionsLabel = "us"
-	CertificateResponseCollectionResultGeoRestrictionsLabelEu              CertificateResponseCollectionResultGeoRestrictionsLabel = "eu"
-	CertificateResponseCollectionResultGeoRestrictionsLabelHighestSecurity CertificateResponseCollectionResultGeoRestrictionsLabel = "highest_security"
+	ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseGeoRestrictionsLabelUs              ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseGeoRestrictionsLabel = "us"
+	ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseGeoRestrictionsLabelEu              ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseGeoRestrictionsLabel = "eu"
+	ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseGeoRestrictionsLabelHighestSecurity ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseGeoRestrictionsLabel = "highest_security"
 )
 
-type CertificateResponseCollectionResultKeylessServer struct {
+type ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseKeylessServer struct {
 	// Keyless certificate identifier tag.
 	ID string `json:"id,required"`
 	// When the Keyless SSL was created.
@@ -294,15 +540,16 @@ type CertificateResponseCollectionResultKeylessServer struct {
 	// Keyless SSL server.
 	Port float64 `json:"port,required"`
 	// Status of the Keyless SSL.
-	Status CertificateResponseCollectionResultKeylessServerStatus `json:"status,required"`
+	Status ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseKeylessServerStatus `json:"status,required"`
 	// Configuration for using Keyless SSL through a Cloudflare Tunnel
-	Tunnel CertificateResponseCollectionResultKeylessServerTunnel `json:"tunnel"`
-	JSON   certificateResponseCollectionResultKeylessServerJSON   `json:"-"`
+	Tunnel ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseKeylessServerTunnel `json:"tunnel"`
+	JSON   zoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseKeylessServerJSON   `json:"-"`
 }
 
-// certificateResponseCollectionResultKeylessServerJSON contains the JSON metadata
-// for the struct [CertificateResponseCollectionResultKeylessServer]
-type certificateResponseCollectionResultKeylessServerJSON struct {
+// zoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseKeylessServerJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseKeylessServer]
+type zoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseKeylessServerJSON struct {
 	ID          apijson.Field
 	CreatedOn   apijson.Field
 	Enabled     apijson.Field
@@ -317,229 +564,40 @@ type certificateResponseCollectionResultKeylessServerJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CertificateResponseCollectionResultKeylessServer) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseKeylessServer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Status of the Keyless SSL.
-type CertificateResponseCollectionResultKeylessServerStatus string
+type ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseKeylessServerStatus string
 
 const (
-	CertificateResponseCollectionResultKeylessServerStatusActive  CertificateResponseCollectionResultKeylessServerStatus = "active"
-	CertificateResponseCollectionResultKeylessServerStatusDeleted CertificateResponseCollectionResultKeylessServerStatus = "deleted"
+	ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseKeylessServerStatusActive  ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseKeylessServerStatus = "active"
+	ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseKeylessServerStatusDeleted ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseKeylessServerStatus = "deleted"
 )
 
 // Configuration for using Keyless SSL through a Cloudflare Tunnel
-type CertificateResponseCollectionResultKeylessServerTunnel struct {
+type ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseKeylessServerTunnel struct {
 	// Private IP of the Key Server Host
 	PrivateIP string `json:"private_ip,required"`
 	// Cloudflare Tunnel Virtual Network ID
-	VnetID string                                                     `json:"vnet_id,required"`
-	JSON   certificateResponseCollectionResultKeylessServerTunnelJSON `json:"-"`
+	VnetID string                                                                                     `json:"vnet_id,required"`
+	JSON   zoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseKeylessServerTunnelJSON `json:"-"`
 }
 
-// certificateResponseCollectionResultKeylessServerTunnelJSON contains the JSON
-// metadata for the struct [CertificateResponseCollectionResultKeylessServerTunnel]
-type certificateResponseCollectionResultKeylessServerTunnelJSON struct {
+// zoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseKeylessServerTunnelJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseKeylessServerTunnel]
+type zoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseKeylessServerTunnelJSON struct {
 	PrivateIP   apijson.Field
 	VnetID      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CertificateResponseCollectionResultKeylessServerTunnel) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneCustomCertificateCustomSslForAZoneListSslConfigurationsResponseKeylessServerTunnel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-type CertificateResponseCollectionResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                     `json:"total_count"`
-	JSON       certificateResponseCollectionResultInfoJSON `json:"-"`
-}
-
-// certificateResponseCollectionResultInfoJSON contains the JSON metadata for the
-// struct [CertificateResponseCollectionResultInfo]
-type certificateResponseCollectionResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificateResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type CertificateResponseCollectionSuccess bool
-
-const (
-	CertificateResponseCollectionSuccessTrue CertificateResponseCollectionSuccess = true
-)
-
-type CertificateResponseIDOnlyTMCaIs8i struct {
-	Errors   []CertificateResponseIDOnlyTMCaIs8iError   `json:"errors"`
-	Messages []CertificateResponseIDOnlyTMCaIs8iMessage `json:"messages"`
-	Result   CertificateResponseIDOnlyTMCaIs8iResult    `json:"result"`
-	// Whether the API call was successful
-	Success CertificateResponseIDOnlyTMCaIs8iSuccess `json:"success"`
-	JSON    certificateResponseIDOnlyTmCaIs8iJSON    `json:"-"`
-}
-
-// certificateResponseIDOnlyTmCaIs8iJSON contains the JSON metadata for the struct
-// [CertificateResponseIDOnlyTMCaIs8i]
-type certificateResponseIDOnlyTmCaIs8iJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificateResponseIDOnlyTMCaIs8i) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CertificateResponseIDOnlyTMCaIs8iError struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    certificateResponseIDOnlyTmCaIs8iErrorJSON `json:"-"`
-}
-
-// certificateResponseIDOnlyTmCaIs8iErrorJSON contains the JSON metadata for the
-// struct [CertificateResponseIDOnlyTMCaIs8iError]
-type certificateResponseIDOnlyTmCaIs8iErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificateResponseIDOnlyTMCaIs8iError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CertificateResponseIDOnlyTMCaIs8iMessage struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    certificateResponseIDOnlyTmCaIs8iMessageJSON `json:"-"`
-}
-
-// certificateResponseIDOnlyTmCaIs8iMessageJSON contains the JSON metadata for the
-// struct [CertificateResponseIDOnlyTMCaIs8iMessage]
-type certificateResponseIDOnlyTmCaIs8iMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificateResponseIDOnlyTMCaIs8iMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CertificateResponseIDOnlyTMCaIs8iResult struct {
-	// Identifier
-	ID   string                                      `json:"id"`
-	JSON certificateResponseIDOnlyTmCaIs8iResultJSON `json:"-"`
-}
-
-// certificateResponseIDOnlyTmCaIs8iResultJSON contains the JSON metadata for the
-// struct [CertificateResponseIDOnlyTMCaIs8iResult]
-type certificateResponseIDOnlyTmCaIs8iResultJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificateResponseIDOnlyTMCaIs8iResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type CertificateResponseIDOnlyTMCaIs8iSuccess bool
-
-const (
-	CertificateResponseIDOnlyTMCaIs8iSuccessTrue CertificateResponseIDOnlyTMCaIs8iSuccess = true
-)
-
-type CertificateResponseSingle struct {
-	Errors   []CertificateResponseSingleError   `json:"errors"`
-	Messages []CertificateResponseSingleMessage `json:"messages"`
-	Result   interface{}                        `json:"result"`
-	// Whether the API call was successful
-	Success CertificateResponseSingleSuccess `json:"success"`
-	JSON    certificateResponseSingleJSON    `json:"-"`
-}
-
-// certificateResponseSingleJSON contains the JSON metadata for the struct
-// [CertificateResponseSingle]
-type certificateResponseSingleJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificateResponseSingle) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CertificateResponseSingleError struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    certificateResponseSingleErrorJSON `json:"-"`
-}
-
-// certificateResponseSingleErrorJSON contains the JSON metadata for the struct
-// [CertificateResponseSingleError]
-type certificateResponseSingleErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificateResponseSingleError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CertificateResponseSingleMessage struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    certificateResponseSingleMessageJSON `json:"-"`
-}
-
-// certificateResponseSingleMessageJSON contains the JSON metadata for the struct
-// [CertificateResponseSingleMessage]
-type certificateResponseSingleMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificateResponseSingleMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type CertificateResponseSingleSuccess bool
-
-const (
-	CertificateResponseSingleSuccessTrue CertificateResponseSingleSuccess = true
-)
 
 type ZoneCustomCertificateUpdateParams struct {
 	// A ubiquitous bundle has the highest probability of being verified everywhere,

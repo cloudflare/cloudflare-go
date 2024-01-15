@@ -24,10 +24,12 @@ func TestUserFirewallAccessRuleRuleUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Users.Firewalls.AccessRules.Rules.Update(
+	_, err := client.User.Firewalls.AccessRules.Rules.Update(
 		context.TODO(),
 		"92f17202ed8bd63d69a66b86a49a8f6b",
 		cloudflare.UserFirewallAccessRuleRuleUpdateParams{
@@ -55,10 +57,12 @@ func TestUserFirewallAccessRuleRuleDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Users.Firewalls.AccessRules.Rules.Delete(context.TODO(), "92f17202ed8bd63d69a66b86a49a8f6b")
+	_, err := client.User.Firewalls.AccessRules.Rules.Delete(context.TODO(), "92f17202ed8bd63d69a66b86a49a8f6b")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -79,12 +83,14 @@ func TestUserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleWithOpt
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Users.Firewalls.AccessRules.Rules.IPAccessRulesForAUserNewAnIPAccessRule(context.TODO(), cloudflare.UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParams{
-		Configuration: cloudflare.F[cloudflare.UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfiguration](cloudflare.UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationIPConfiguration(cloudflare.UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationIPConfiguration{
-			Target: cloudflare.F(cloudflare.UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationIPConfigurationTargetIP),
+	_, err := client.User.Firewalls.AccessRules.Rules.IPAccessRulesForAUserNewAnIPAccessRule(context.TODO(), cloudflare.UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParams{
+		Configuration: cloudflare.F[cloudflare.UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfiguration](cloudflare.UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTIPConfiguration(cloudflare.UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTIPConfiguration{
+			Target: cloudflare.F(cloudflare.UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsConfigurationDZw70ubTIPConfigurationTargetIP),
 			Value:  cloudflare.F("198.51.100.4"),
 		})),
 		Mode:  cloudflare.F(cloudflare.UserFirewallAccessRuleRuleIPAccessRulesForAUserNewAnIPAccessRuleParamsModeChallenge),
@@ -110,10 +116,12 @@ func TestUserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesWithOpt
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Users.Firewalls.AccessRules.Rules.IPAccessRulesForAUserListIPAccessRules(context.TODO(), cloudflare.UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesParams{
+	_, err := client.User.Firewalls.AccessRules.Rules.IPAccessRulesForAUserListIPAccessRules(context.TODO(), cloudflare.UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesParams{
 		Direction: cloudflare.F(cloudflare.UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesParamsDirectionDesc),
 		EgsPagination: cloudflare.F(cloudflare.UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesParamsEgsPagination{
 			Json: cloudflare.F(cloudflare.UserFirewallAccessRuleRuleIPAccessRulesForAUserListIPAccessRulesParamsEgsPaginationJson{

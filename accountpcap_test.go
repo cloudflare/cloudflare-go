@@ -24,8 +24,10 @@ func TestAccountPcapGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Pcaps.Get(
 		context.TODO(),
@@ -52,18 +54,20 @@ func TestAccountPcapMagicPcapCollectionNewPcapRequestWithOptionalParams(t *testi
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Pcaps.MagicPcapCollectionNewPcapRequest(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.AccountPcapMagicPcapCollectionNewPcapRequestParamsPcapsRequestSimple{
+		cloudflare.AccountPcapMagicPcapCollectionNewPcapRequestParamsJF8Dd6b2PcapsRequestSimple{
 			PacketLimit: cloudflare.F(10000.000000),
-			System:      cloudflare.F(cloudflare.AccountPcapMagicPcapCollectionNewPcapRequestParamsPcapsRequestSimpleSystemMagicTransit),
+			System:      cloudflare.F(cloudflare.AccountPcapMagicPcapCollectionNewPcapRequestParamsJf8Dd6b2PcapsRequestSimpleSystemMagicTransit),
 			TimeLimit:   cloudflare.F(300.000000),
-			Type:        cloudflare.F(cloudflare.AccountPcapMagicPcapCollectionNewPcapRequestParamsPcapsRequestSimpleTypeSimple),
-			FilterV1: cloudflare.F(cloudflare.AccountPcapMagicPcapCollectionNewPcapRequestParamsPcapsRequestSimpleFilterV1{
+			Type:        cloudflare.F(cloudflare.AccountPcapMagicPcapCollectionNewPcapRequestParamsJf8Dd6b2PcapsRequestSimpleTypeSimple),
+			FilterV1: cloudflare.F(cloudflare.AccountPcapMagicPcapCollectionNewPcapRequestParamsJf8Dd6b2PcapsRequestSimpleFilterV1{
 				DestinationAddress: cloudflare.F("1.2.3.4"),
 				DestinationPort:    cloudflare.F(80.000000),
 				Protocol:           cloudflare.F(6.000000),
@@ -92,8 +96,10 @@ func TestAccountPcapMagicPcapCollectionListPacketCaptureRequests(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.Pcaps.MagicPcapCollectionListPacketCaptureRequests(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {

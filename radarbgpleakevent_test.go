@@ -25,20 +25,24 @@ func TestRadarBgpLeakEventListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Radars.Bgps.Leaks.Events.List(context.TODO(), cloudflare.RadarBgpLeakEventListParams{
-		DateEnd:     cloudflare.F(time.Now()),
-		DateRange:   cloudflare.F(cloudflare.RadarBgpLeakEventListParamsDateRange1d),
-		DateStart:   cloudflare.F(time.Now()),
-		Format:      cloudflare.F(cloudflare.RadarBgpLeakEventListParamsFormatJson),
-		InvolvedASN: cloudflare.F(int64(0)),
-		LeakASN:     cloudflare.F(int64(0)),
-		Page:        cloudflare.F(int64(0)),
-		PerPage:     cloudflare.F(int64(0)),
-		SortBy:      cloudflare.F(cloudflare.RadarBgpLeakEventListParamsSortByID),
-		SortOrder:   cloudflare.F(cloudflare.RadarBgpLeakEventListParamsSortOrderAsc),
+	_, err := client.Radar.Bgps.Leaks.Events.List(context.TODO(), cloudflare.RadarBgpLeakEventListParams{
+		DateEnd:         cloudflare.F(time.Now()),
+		DateRange:       cloudflare.F(cloudflare.RadarBgpLeakEventListParamsDateRange7d),
+		DateStart:       cloudflare.F(time.Now()),
+		EventID:         cloudflare.F(int64(0)),
+		Format:          cloudflare.F(cloudflare.RadarBgpLeakEventListParamsFormatJson),
+		InvolvedASN:     cloudflare.F(int64(0)),
+		InvolvedCountry: cloudflare.F("string"),
+		LeakASN:         cloudflare.F(int64(0)),
+		Page:            cloudflare.F(int64(0)),
+		PerPage:         cloudflare.F(int64(0)),
+		SortBy:          cloudflare.F(cloudflare.RadarBgpLeakEventListParamsSortByTime),
+		SortOrder:       cloudflare.F(cloudflare.RadarBgpLeakEventListParamsSortOrderDesc),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -24,10 +24,12 @@ func TestUserBillingHistoryUserBillingHistoryBillingHistoryDetailsWithOptionalPa
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Users.Billings.Histories.UserBillingHistoryBillingHistoryDetails(context.TODO(), cloudflare.UserBillingHistoryUserBillingHistoryBillingHistoryDetailsParams{
+	_, err := client.User.Billings.Histories.UserBillingHistoryBillingHistoryDetails(context.TODO(), cloudflare.UserBillingHistoryUserBillingHistoryBillingHistoryDetailsParams{
 		Order:   cloudflare.F(cloudflare.UserBillingHistoryUserBillingHistoryBillingHistoryDetailsParamsOrderOccuredAt),
 		Page:    cloudflare.F(1.000000),
 		PerPage: cloudflare.F(5.000000),

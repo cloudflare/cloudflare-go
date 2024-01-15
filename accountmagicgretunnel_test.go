@@ -24,10 +24,12 @@ func TestAccountMagicGreTunnelGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Magics.GreTunnels.Get(
+	_, err := client.Accounts.Magic.GreTunnels.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
@@ -52,10 +54,12 @@ func TestAccountMagicGreTunnelUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Magics.GreTunnels.Update(
+	_, err := client.Accounts.Magic.GreTunnels.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
@@ -66,10 +70,11 @@ func TestAccountMagicGreTunnelUpdateWithOptionalParams(t *testing.T) {
 			Name:                  cloudflare.F("GRE_1"),
 			Description:           cloudflare.F("Tunnel for ISP X"),
 			HealthCheck: cloudflare.F(cloudflare.AccountMagicGreTunnelUpdateParamsHealthCheck{
-				Enabled: cloudflare.F(true),
-				Rate:    cloudflare.F(cloudflare.AccountMagicGreTunnelUpdateParamsHealthCheckRateLow),
-				Target:  cloudflare.F("203.0.113.1"),
-				Type:    cloudflare.F(cloudflare.AccountMagicGreTunnelUpdateParamsHealthCheckTypeRequest),
+				Direction: cloudflare.F(cloudflare.AccountMagicGreTunnelUpdateParamsHealthCheckDirectionBidirectional),
+				Enabled:   cloudflare.F(true),
+				Rate:      cloudflare.F(cloudflare.AccountMagicGreTunnelUpdateParamsHealthCheckRateLow),
+				Target:    cloudflare.F("203.0.113.1"),
+				Type:      cloudflare.F(cloudflare.AccountMagicGreTunnelUpdateParamsHealthCheckTypeRequest),
 			}),
 			Mtu: cloudflare.F(int64(0)),
 			Ttl: cloudflare.F(int64(0)),
@@ -95,10 +100,12 @@ func TestAccountMagicGreTunnelDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Magics.GreTunnels.Delete(
+	_, err := client.Accounts.Magic.GreTunnels.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
@@ -123,10 +130,12 @@ func TestAccountMagicGreTunnelMagicGreTunnelsNewGreTunnels(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Magics.GreTunnels.MagicGreTunnelsNewGreTunnels(
+	_, err := client.Accounts.Magic.GreTunnels.MagicGreTunnelsNewGreTunnels(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.AccountMagicGreTunnelMagicGreTunnelsNewGreTunnelsParams{
@@ -153,10 +162,12 @@ func TestAccountMagicGreTunnelMagicGreTunnelsListGreTunnels(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Magics.GreTunnels.MagicGreTunnelsListGreTunnels(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Accounts.Magic.GreTunnels.MagicGreTunnelsListGreTunnels(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -177,10 +188,12 @@ func TestAccountMagicGreTunnelMagicGreTunnelsUpdateMultipleGreTunnels(t *testing
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Accounts.Magics.GreTunnels.MagicGreTunnelsUpdateMultipleGreTunnels(
+	_, err := client.Accounts.Magic.GreTunnels.MagicGreTunnelsUpdateMultipleGreTunnels(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.AccountMagicGreTunnelMagicGreTunnelsUpdateMultipleGreTunnelsParams{

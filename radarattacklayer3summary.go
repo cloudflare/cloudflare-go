@@ -21,7 +21,12 @@ import (
 // instantiate this service directly, and instead use the
 // [NewRadarAttackLayer3SummaryService] method instead.
 type RadarAttackLayer3SummaryService struct {
-	Options []option.RequestOption
+	Options    []option.RequestOption
+	Bitrate    *RadarAttackLayer3SummaryBitrateService
+	Durations  *RadarAttackLayer3SummaryDurationService
+	IPVersions *RadarAttackLayer3SummaryIPVersionService
+	Protocols  *RadarAttackLayer3SummaryProtocolService
+	Vectors    *RadarAttackLayer3SummaryVectorService
 }
 
 // NewRadarAttackLayer3SummaryService generates a new service that applies the
@@ -30,10 +35,16 @@ type RadarAttackLayer3SummaryService struct {
 func NewRadarAttackLayer3SummaryService(opts ...option.RequestOption) (r *RadarAttackLayer3SummaryService) {
 	r = &RadarAttackLayer3SummaryService{}
 	r.Options = opts
+	r.Bitrate = NewRadarAttackLayer3SummaryBitrateService(opts...)
+	r.Durations = NewRadarAttackLayer3SummaryDurationService(opts...)
+	r.IPVersions = NewRadarAttackLayer3SummaryIPVersionService(opts...)
+	r.Protocols = NewRadarAttackLayer3SummaryProtocolService(opts...)
+	r.Vectors = NewRadarAttackLayer3SummaryVectorService(opts...)
 	return
 }
 
-// Percentage distribution of network protocols in layer 3/4 attacks.
+// Percentage distribution of network protocols in layer 3/4 attacks over a given
+// time period.
 func (r *RadarAttackLayer3SummaryService) List(ctx context.Context, query RadarAttackLayer3SummaryListParams, opts ...option.RequestOption) (res *RadarAttackLayer3SummaryListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer3/summary"
@@ -80,69 +91,21 @@ func (r *RadarAttackLayer3SummaryListResponseResult) UnmarshalJSON(data []byte) 
 }
 
 type RadarAttackLayer3SummaryListResponseResultMeta struct {
-	ConfidenceInfo RadarAttackLayer3SummaryListResponseResultMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      RadarAttackLayer3SummaryListResponseResultMetaDateRange      `json:"dateRange,required"`
+	DateRange      []RadarAttackLayer3SummaryListResponseResultMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo RadarAttackLayer3SummaryListResponseResultMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           radarAttackLayer3SummaryListResponseResultMetaJSON           `json:"-"`
 }
 
 // radarAttackLayer3SummaryListResponseResultMetaJSON contains the JSON metadata
 // for the struct [RadarAttackLayer3SummaryListResponseResultMeta]
 type radarAttackLayer3SummaryListResponseResultMetaJSON struct {
-	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
+	ConfidenceInfo apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
 func (r *RadarAttackLayer3SummaryListResponseResultMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarAttackLayer3SummaryListResponseResultMetaConfidenceInfo struct {
-	Annotations []RadarAttackLayer3SummaryListResponseResultMetaConfidenceInfoAnnotation `json:"annotations,required"`
-	Level       int64                                                                    `json:"level,required"`
-	JSON        radarAttackLayer3SummaryListResponseResultMetaConfidenceInfoJSON         `json:"-"`
-}
-
-// radarAttackLayer3SummaryListResponseResultMetaConfidenceInfoJSON contains the
-// JSON metadata for the struct
-// [RadarAttackLayer3SummaryListResponseResultMetaConfidenceInfo]
-type radarAttackLayer3SummaryListResponseResultMetaConfidenceInfoJSON struct {
-	Annotations apijson.Field
-	Level       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarAttackLayer3SummaryListResponseResultMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarAttackLayer3SummaryListResponseResultMetaConfidenceInfoAnnotation struct {
-	DataSource  string                                                                     `json:"dataSource,required"`
-	Description string                                                                     `json:"description,required"`
-	EndTime     time.Time                                                                  `json:"endTime,required" format:"date-time"`
-	EventType   string                                                                     `json:"eventType,required"`
-	LinkedURL   string                                                                     `json:"linkedUrl,required"`
-	StartTime   time.Time                                                                  `json:"startTime,required" format:"date-time"`
-	JSON        radarAttackLayer3SummaryListResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// radarAttackLayer3SummaryListResponseResultMetaConfidenceInfoAnnotationJSON
-// contains the JSON metadata for the struct
-// [RadarAttackLayer3SummaryListResponseResultMetaConfidenceInfoAnnotation]
-type radarAttackLayer3SummaryListResponseResultMetaConfidenceInfoAnnotationJSON struct {
-	DataSource  apijson.Field
-	Description apijson.Field
-	EndTime     apijson.Field
-	EventType   apijson.Field
-	LinkedURL   apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarAttackLayer3SummaryListResponseResultMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -165,6 +128,56 @@ type radarAttackLayer3SummaryListResponseResultMetaDateRangeJSON struct {
 }
 
 func (r *RadarAttackLayer3SummaryListResponseResultMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAttackLayer3SummaryListResponseResultMetaConfidenceInfo struct {
+	Annotations []RadarAttackLayer3SummaryListResponseResultMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                                    `json:"level"`
+	JSON        radarAttackLayer3SummaryListResponseResultMetaConfidenceInfoJSON         `json:"-"`
+}
+
+// radarAttackLayer3SummaryListResponseResultMetaConfidenceInfoJSON contains the
+// JSON metadata for the struct
+// [RadarAttackLayer3SummaryListResponseResultMetaConfidenceInfo]
+type radarAttackLayer3SummaryListResponseResultMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarAttackLayer3SummaryListResponseResultMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAttackLayer3SummaryListResponseResultMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                                     `json:"dataSource,required"`
+	Description     string                                                                     `json:"description,required"`
+	EventType       string                                                                     `json:"eventType,required"`
+	IsInstantaneous interface{}                                                                `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                                  `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                                     `json:"linkedUrl"`
+	StartTime       time.Time                                                                  `json:"startTime" format:"date-time"`
+	JSON            radarAttackLayer3SummaryListResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// radarAttackLayer3SummaryListResponseResultMetaConfidenceInfoAnnotationJSON
+// contains the JSON metadata for the struct
+// [RadarAttackLayer3SummaryListResponseResultMetaConfidenceInfoAnnotation]
+type radarAttackLayer3SummaryListResponseResultMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *RadarAttackLayer3SummaryListResponseResultMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -196,7 +209,7 @@ type RadarAttackLayer3SummaryListParams struct {
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of datetimes to filter the end of a series.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
@@ -227,6 +240,7 @@ type RadarAttackLayer3SummaryListParamsDateRange string
 
 const (
 	RadarAttackLayer3SummaryListParamsDateRange1d         RadarAttackLayer3SummaryListParamsDateRange = "1d"
+	RadarAttackLayer3SummaryListParamsDateRange2d         RadarAttackLayer3SummaryListParamsDateRange = "2d"
 	RadarAttackLayer3SummaryListParamsDateRange7d         RadarAttackLayer3SummaryListParamsDateRange = "7d"
 	RadarAttackLayer3SummaryListParamsDateRange14d        RadarAttackLayer3SummaryListParamsDateRange = "14d"
 	RadarAttackLayer3SummaryListParamsDateRange28d        RadarAttackLayer3SummaryListParamsDateRange = "28d"
@@ -234,6 +248,7 @@ const (
 	RadarAttackLayer3SummaryListParamsDateRange24w        RadarAttackLayer3SummaryListParamsDateRange = "24w"
 	RadarAttackLayer3SummaryListParamsDateRange52w        RadarAttackLayer3SummaryListParamsDateRange = "52w"
 	RadarAttackLayer3SummaryListParamsDateRange1dControl  RadarAttackLayer3SummaryListParamsDateRange = "1dControl"
+	RadarAttackLayer3SummaryListParamsDateRange2dControl  RadarAttackLayer3SummaryListParamsDateRange = "2dControl"
 	RadarAttackLayer3SummaryListParamsDateRange7dControl  RadarAttackLayer3SummaryListParamsDateRange = "7dControl"
 	RadarAttackLayer3SummaryListParamsDateRange14dControl RadarAttackLayer3SummaryListParamsDateRange = "14dControl"
 	RadarAttackLayer3SummaryListParamsDateRange28dControl RadarAttackLayer3SummaryListParamsDateRange = "28dControl"

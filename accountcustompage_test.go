@@ -24,13 +24,15 @@ func TestAccountCustomPageGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.CustomPages.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.AccountCustomPageGetParamsIdentifierBasicChallenge,
+		"023e105f4ecef8ad9ca31a8372d0c353",
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -52,13 +54,15 @@ func TestAccountCustomPageUpdate(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.CustomPages.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.AccountCustomPageUpdateParamsIdentifierBasicChallenge,
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.AccountCustomPageUpdateParams{
 			State: cloudflare.F(cloudflare.AccountCustomPageUpdateParamsStateDefault),
 			URL:   cloudflare.F("http://www.example.com"),
@@ -84,8 +88,10 @@ func TestAccountCustomPageCustomPagesForAnAccountListCustomPages(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Accounts.CustomPages.CustomPagesForAnAccountListCustomPages(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {

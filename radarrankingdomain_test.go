@@ -7,7 +7,6 @@ import (
 	"errors"
 	"os"
 	"testing"
-	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/testutil"
@@ -25,17 +24,20 @@ func TestRadarRankingDomainGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
-	_, err := client.Radars.Rankings.Domains.Get(
+	_, err := client.Radar.Ranking.Domains.Get(
 		context.TODO(),
 		"google.com",
 		cloudflare.RadarRankingDomainGetParams{
-			Date:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-			Format: cloudflare.F(cloudflare.RadarRankingDomainGetParamsFormatJson),
-			Limit:  cloudflare.F(int64(5)),
-			Name:   cloudflare.F([]string{"main_series", "main_series", "main_series"}),
+			Date:        cloudflare.F([]string{"string", "string", "string"}),
+			Format:      cloudflare.F(cloudflare.RadarRankingDomainGetParamsFormatJson),
+			Limit:       cloudflare.F(int64(5)),
+			Name:        cloudflare.F([]string{"string", "string", "string"}),
+			RankingType: cloudflare.F(cloudflare.RadarRankingDomainGetParamsRankingTypePopular),
 		},
 	)
 	if err != nil {

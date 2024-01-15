@@ -35,7 +35,7 @@ func NewZoneWeb3HostnameService(opts ...option.RequestOption) (r *ZoneWeb3Hostna
 }
 
 // Web3 Hostname Details
-func (r *ZoneWeb3HostnameService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *Web3HostnameSingleResponse, err error) {
+func (r *ZoneWeb3HostnameService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *ZoneWeb3HostnameGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s", zoneIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -43,7 +43,7 @@ func (r *ZoneWeb3HostnameService) Get(ctx context.Context, zoneIdentifier string
 }
 
 // Edit Web3 Hostname
-func (r *ZoneWeb3HostnameService) Update(ctx context.Context, zoneIdentifier string, identifier string, body ZoneWeb3HostnameUpdateParams, opts ...option.RequestOption) (res *Web3HostnameSingleResponse, err error) {
+func (r *ZoneWeb3HostnameService) Update(ctx context.Context, zoneIdentifier string, identifier string, body ZoneWeb3HostnameUpdateParams, opts ...option.RequestOption) (res *ZoneWeb3HostnameUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s", zoneIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
@@ -51,7 +51,7 @@ func (r *ZoneWeb3HostnameService) Update(ctx context.Context, zoneIdentifier str
 }
 
 // Delete Web3 Hostname
-func (r *ZoneWeb3HostnameService) Delete(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *APIResponseSingleIDKYar7dC1, err error) {
+func (r *ZoneWeb3HostnameService) Delete(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *ZoneWeb3HostnameDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s", zoneIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -59,7 +59,7 @@ func (r *ZoneWeb3HostnameService) Delete(ctx context.Context, zoneIdentifier str
 }
 
 // Create Web3 Hostname
-func (r *ZoneWeb3HostnameService) Web3HostnameNewWeb3Hostname(ctx context.Context, zoneIdentifier string, body ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameParams, opts ...option.RequestOption) (res *Web3HostnameSingleResponse, err error) {
+func (r *ZoneWeb3HostnameService) Web3HostnameNewWeb3Hostname(ctx context.Context, zoneIdentifier string, body ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameParams, opts ...option.RequestOption) (res *ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/web3/hostnames", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -74,18 +74,18 @@ func (r *ZoneWeb3HostnameService) Web3HostnameListWeb3Hostnames(ctx context.Cont
 	return
 }
 
-type Web3HostnameSingleResponse struct {
-	Errors   []Web3HostnameSingleResponseError   `json:"errors"`
-	Messages []Web3HostnameSingleResponseMessage `json:"messages"`
-	Result   Web3HostnameSingleResponseResult    `json:"result"`
+type ZoneWeb3HostnameGetResponse struct {
+	Errors   []ZoneWeb3HostnameGetResponseError   `json:"errors"`
+	Messages []ZoneWeb3HostnameGetResponseMessage `json:"messages"`
+	Result   ZoneWeb3HostnameGetResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success Web3HostnameSingleResponseSuccess `json:"success"`
-	JSON    web3HostnameSingleResponseJSON    `json:"-"`
+	Success ZoneWeb3HostnameGetResponseSuccess `json:"success"`
+	JSON    zoneWeb3HostnameGetResponseJSON    `json:"-"`
 }
 
-// web3HostnameSingleResponseJSON contains the JSON metadata for the struct
-// [Web3HostnameSingleResponse]
-type web3HostnameSingleResponseJSON struct {
+// zoneWeb3HostnameGetResponseJSON contains the JSON metadata for the struct
+// [ZoneWeb3HostnameGetResponse]
+type zoneWeb3HostnameGetResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -94,49 +94,49 @@ type web3HostnameSingleResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *Web3HostnameSingleResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneWeb3HostnameGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type Web3HostnameSingleResponseError struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    web3HostnameSingleResponseErrorJSON `json:"-"`
+type ZoneWeb3HostnameGetResponseError struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    zoneWeb3HostnameGetResponseErrorJSON `json:"-"`
 }
 
-// web3HostnameSingleResponseErrorJSON contains the JSON metadata for the struct
-// [Web3HostnameSingleResponseError]
-type web3HostnameSingleResponseErrorJSON struct {
+// zoneWeb3HostnameGetResponseErrorJSON contains the JSON metadata for the struct
+// [ZoneWeb3HostnameGetResponseError]
+type zoneWeb3HostnameGetResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *Web3HostnameSingleResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneWeb3HostnameGetResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type Web3HostnameSingleResponseMessage struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    web3HostnameSingleResponseMessageJSON `json:"-"`
+type ZoneWeb3HostnameGetResponseMessage struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    zoneWeb3HostnameGetResponseMessageJSON `json:"-"`
 }
 
-// web3HostnameSingleResponseMessageJSON contains the JSON metadata for the struct
-// [Web3HostnameSingleResponseMessage]
-type web3HostnameSingleResponseMessageJSON struct {
+// zoneWeb3HostnameGetResponseMessageJSON contains the JSON metadata for the struct
+// [ZoneWeb3HostnameGetResponseMessage]
+type zoneWeb3HostnameGetResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *Web3HostnameSingleResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneWeb3HostnameGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type Web3HostnameSingleResponseResult struct {
+type ZoneWeb3HostnameGetResponseResult struct {
 	// Identifier
 	ID        string    `json:"id"`
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
@@ -148,15 +148,15 @@ type Web3HostnameSingleResponseResult struct {
 	// The hostname that will point to the target gateway via CNAME.
 	Name string `json:"name"`
 	// Status of the hostname's activation.
-	Status Web3HostnameSingleResponseResultStatus `json:"status"`
+	Status ZoneWeb3HostnameGetResponseResultStatus `json:"status"`
 	// Target gateway of the hostname.
-	Target Web3HostnameSingleResponseResultTarget `json:"target"`
-	JSON   web3HostnameSingleResponseResultJSON   `json:"-"`
+	Target ZoneWeb3HostnameGetResponseResultTarget `json:"target"`
+	JSON   zoneWeb3HostnameGetResponseResultJSON   `json:"-"`
 }
 
-// web3HostnameSingleResponseResultJSON contains the JSON metadata for the struct
-// [Web3HostnameSingleResponseResult]
-type web3HostnameSingleResponseResultJSON struct {
+// zoneWeb3HostnameGetResponseResultJSON contains the JSON metadata for the struct
+// [ZoneWeb3HostnameGetResponseResult]
+type zoneWeb3HostnameGetResponseResultJSON struct {
 	ID          apijson.Field
 	CreatedOn   apijson.Field
 	Description apijson.Field
@@ -169,35 +169,377 @@ type web3HostnameSingleResponseResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *Web3HostnameSingleResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneWeb3HostnameGetResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Status of the hostname's activation.
-type Web3HostnameSingleResponseResultStatus string
+type ZoneWeb3HostnameGetResponseResultStatus string
 
 const (
-	Web3HostnameSingleResponseResultStatusActive   Web3HostnameSingleResponseResultStatus = "active"
-	Web3HostnameSingleResponseResultStatusPending  Web3HostnameSingleResponseResultStatus = "pending"
-	Web3HostnameSingleResponseResultStatusDeleting Web3HostnameSingleResponseResultStatus = "deleting"
-	Web3HostnameSingleResponseResultStatusError    Web3HostnameSingleResponseResultStatus = "error"
+	ZoneWeb3HostnameGetResponseResultStatusActive   ZoneWeb3HostnameGetResponseResultStatus = "active"
+	ZoneWeb3HostnameGetResponseResultStatusPending  ZoneWeb3HostnameGetResponseResultStatus = "pending"
+	ZoneWeb3HostnameGetResponseResultStatusDeleting ZoneWeb3HostnameGetResponseResultStatus = "deleting"
+	ZoneWeb3HostnameGetResponseResultStatusError    ZoneWeb3HostnameGetResponseResultStatus = "error"
 )
 
 // Target gateway of the hostname.
-type Web3HostnameSingleResponseResultTarget string
+type ZoneWeb3HostnameGetResponseResultTarget string
 
 const (
-	Web3HostnameSingleResponseResultTargetEthereum          Web3HostnameSingleResponseResultTarget = "ethereum"
-	Web3HostnameSingleResponseResultTargetIpfs              Web3HostnameSingleResponseResultTarget = "ipfs"
-	Web3HostnameSingleResponseResultTargetIpfsUniversalPath Web3HostnameSingleResponseResultTarget = "ipfs_universal_path"
-	Web3HostnameSingleResponseResultTargetPolygon           Web3HostnameSingleResponseResultTarget = "polygon"
+	ZoneWeb3HostnameGetResponseResultTargetEthereum          ZoneWeb3HostnameGetResponseResultTarget = "ethereum"
+	ZoneWeb3HostnameGetResponseResultTargetIpfs              ZoneWeb3HostnameGetResponseResultTarget = "ipfs"
+	ZoneWeb3HostnameGetResponseResultTargetIpfsUniversalPath ZoneWeb3HostnameGetResponseResultTarget = "ipfs_universal_path"
+	ZoneWeb3HostnameGetResponseResultTargetPolygon           ZoneWeb3HostnameGetResponseResultTarget = "polygon"
 )
 
 // Whether the API call was successful
-type Web3HostnameSingleResponseSuccess bool
+type ZoneWeb3HostnameGetResponseSuccess bool
 
 const (
-	Web3HostnameSingleResponseSuccessTrue Web3HostnameSingleResponseSuccess = true
+	ZoneWeb3HostnameGetResponseSuccessTrue ZoneWeb3HostnameGetResponseSuccess = true
+)
+
+type ZoneWeb3HostnameUpdateResponse struct {
+	Errors   []ZoneWeb3HostnameUpdateResponseError   `json:"errors"`
+	Messages []ZoneWeb3HostnameUpdateResponseMessage `json:"messages"`
+	Result   ZoneWeb3HostnameUpdateResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success ZoneWeb3HostnameUpdateResponseSuccess `json:"success"`
+	JSON    zoneWeb3HostnameUpdateResponseJSON    `json:"-"`
+}
+
+// zoneWeb3HostnameUpdateResponseJSON contains the JSON metadata for the struct
+// [ZoneWeb3HostnameUpdateResponse]
+type zoneWeb3HostnameUpdateResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWeb3HostnameUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneWeb3HostnameUpdateResponseError struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    zoneWeb3HostnameUpdateResponseErrorJSON `json:"-"`
+}
+
+// zoneWeb3HostnameUpdateResponseErrorJSON contains the JSON metadata for the
+// struct [ZoneWeb3HostnameUpdateResponseError]
+type zoneWeb3HostnameUpdateResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWeb3HostnameUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneWeb3HostnameUpdateResponseMessage struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    zoneWeb3HostnameUpdateResponseMessageJSON `json:"-"`
+}
+
+// zoneWeb3HostnameUpdateResponseMessageJSON contains the JSON metadata for the
+// struct [ZoneWeb3HostnameUpdateResponseMessage]
+type zoneWeb3HostnameUpdateResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWeb3HostnameUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneWeb3HostnameUpdateResponseResult struct {
+	// Identifier
+	ID        string    `json:"id"`
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// An optional description of the hostname.
+	Description string `json:"description"`
+	// DNSLink value used if the target is ipfs.
+	Dnslink    string    `json:"dnslink"`
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// The hostname that will point to the target gateway via CNAME.
+	Name string `json:"name"`
+	// Status of the hostname's activation.
+	Status ZoneWeb3HostnameUpdateResponseResultStatus `json:"status"`
+	// Target gateway of the hostname.
+	Target ZoneWeb3HostnameUpdateResponseResultTarget `json:"target"`
+	JSON   zoneWeb3HostnameUpdateResponseResultJSON   `json:"-"`
+}
+
+// zoneWeb3HostnameUpdateResponseResultJSON contains the JSON metadata for the
+// struct [ZoneWeb3HostnameUpdateResponseResult]
+type zoneWeb3HostnameUpdateResponseResultJSON struct {
+	ID          apijson.Field
+	CreatedOn   apijson.Field
+	Description apijson.Field
+	Dnslink     apijson.Field
+	ModifiedOn  apijson.Field
+	Name        apijson.Field
+	Status      apijson.Field
+	Target      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWeb3HostnameUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Status of the hostname's activation.
+type ZoneWeb3HostnameUpdateResponseResultStatus string
+
+const (
+	ZoneWeb3HostnameUpdateResponseResultStatusActive   ZoneWeb3HostnameUpdateResponseResultStatus = "active"
+	ZoneWeb3HostnameUpdateResponseResultStatusPending  ZoneWeb3HostnameUpdateResponseResultStatus = "pending"
+	ZoneWeb3HostnameUpdateResponseResultStatusDeleting ZoneWeb3HostnameUpdateResponseResultStatus = "deleting"
+	ZoneWeb3HostnameUpdateResponseResultStatusError    ZoneWeb3HostnameUpdateResponseResultStatus = "error"
+)
+
+// Target gateway of the hostname.
+type ZoneWeb3HostnameUpdateResponseResultTarget string
+
+const (
+	ZoneWeb3HostnameUpdateResponseResultTargetEthereum          ZoneWeb3HostnameUpdateResponseResultTarget = "ethereum"
+	ZoneWeb3HostnameUpdateResponseResultTargetIpfs              ZoneWeb3HostnameUpdateResponseResultTarget = "ipfs"
+	ZoneWeb3HostnameUpdateResponseResultTargetIpfsUniversalPath ZoneWeb3HostnameUpdateResponseResultTarget = "ipfs_universal_path"
+	ZoneWeb3HostnameUpdateResponseResultTargetPolygon           ZoneWeb3HostnameUpdateResponseResultTarget = "polygon"
+)
+
+// Whether the API call was successful
+type ZoneWeb3HostnameUpdateResponseSuccess bool
+
+const (
+	ZoneWeb3HostnameUpdateResponseSuccessTrue ZoneWeb3HostnameUpdateResponseSuccess = true
+)
+
+type ZoneWeb3HostnameDeleteResponse struct {
+	Errors   []ZoneWeb3HostnameDeleteResponseError   `json:"errors"`
+	Messages []ZoneWeb3HostnameDeleteResponseMessage `json:"messages"`
+	Result   ZoneWeb3HostnameDeleteResponseResult    `json:"result,nullable"`
+	// Whether the API call was successful
+	Success ZoneWeb3HostnameDeleteResponseSuccess `json:"success"`
+	JSON    zoneWeb3HostnameDeleteResponseJSON    `json:"-"`
+}
+
+// zoneWeb3HostnameDeleteResponseJSON contains the JSON metadata for the struct
+// [ZoneWeb3HostnameDeleteResponse]
+type zoneWeb3HostnameDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWeb3HostnameDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneWeb3HostnameDeleteResponseError struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    zoneWeb3HostnameDeleteResponseErrorJSON `json:"-"`
+}
+
+// zoneWeb3HostnameDeleteResponseErrorJSON contains the JSON metadata for the
+// struct [ZoneWeb3HostnameDeleteResponseError]
+type zoneWeb3HostnameDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWeb3HostnameDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneWeb3HostnameDeleteResponseMessage struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    zoneWeb3HostnameDeleteResponseMessageJSON `json:"-"`
+}
+
+// zoneWeb3HostnameDeleteResponseMessageJSON contains the JSON metadata for the
+// struct [ZoneWeb3HostnameDeleteResponseMessage]
+type zoneWeb3HostnameDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWeb3HostnameDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneWeb3HostnameDeleteResponseResult struct {
+	// Identifier
+	ID   string                                   `json:"id,required"`
+	JSON zoneWeb3HostnameDeleteResponseResultJSON `json:"-"`
+}
+
+// zoneWeb3HostnameDeleteResponseResultJSON contains the JSON metadata for the
+// struct [ZoneWeb3HostnameDeleteResponseResult]
+type zoneWeb3HostnameDeleteResponseResultJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWeb3HostnameDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneWeb3HostnameDeleteResponseSuccess bool
+
+const (
+	ZoneWeb3HostnameDeleteResponseSuccessTrue ZoneWeb3HostnameDeleteResponseSuccess = true
+)
+
+type ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponse struct {
+	Errors   []ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseError   `json:"errors"`
+	Messages []ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseMessage `json:"messages"`
+	Result   ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseSuccess `json:"success"`
+	JSON    zoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseJSON    `json:"-"`
+}
+
+// zoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseJSON contains the JSON
+// metadata for the struct [ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponse]
+type zoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseError struct {
+	Code    int64                                                        `json:"code,required"`
+	Message string                                                       `json:"message,required"`
+	JSON    zoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseErrorJSON `json:"-"`
+}
+
+// zoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseErrorJSON contains the JSON
+// metadata for the struct
+// [ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseError]
+type zoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseMessage struct {
+	Code    int64                                                          `json:"code,required"`
+	Message string                                                         `json:"message,required"`
+	JSON    zoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseMessageJSON `json:"-"`
+}
+
+// zoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseMessageJSON contains the JSON
+// metadata for the struct
+// [ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseMessage]
+type zoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseResult struct {
+	// Identifier
+	ID        string    `json:"id"`
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// An optional description of the hostname.
+	Description string `json:"description"`
+	// DNSLink value used if the target is ipfs.
+	Dnslink    string    `json:"dnslink"`
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// The hostname that will point to the target gateway via CNAME.
+	Name string `json:"name"`
+	// Status of the hostname's activation.
+	Status ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseResultStatus `json:"status"`
+	// Target gateway of the hostname.
+	Target ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseResultTarget `json:"target"`
+	JSON   zoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseResultJSON   `json:"-"`
+}
+
+// zoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseResultJSON contains the JSON
+// metadata for the struct
+// [ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseResult]
+type zoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseResultJSON struct {
+	ID          apijson.Field
+	CreatedOn   apijson.Field
+	Description apijson.Field
+	Dnslink     apijson.Field
+	ModifiedOn  apijson.Field
+	Name        apijson.Field
+	Status      apijson.Field
+	Target      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Status of the hostname's activation.
+type ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseResultStatus string
+
+const (
+	ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseResultStatusActive   ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseResultStatus = "active"
+	ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseResultStatusPending  ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseResultStatus = "pending"
+	ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseResultStatusDeleting ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseResultStatus = "deleting"
+	ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseResultStatusError    ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseResultStatus = "error"
+)
+
+// Target gateway of the hostname.
+type ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseResultTarget string
+
+const (
+	ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseResultTargetEthereum          ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseResultTarget = "ethereum"
+	ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseResultTargetIpfs              ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseResultTarget = "ipfs"
+	ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseResultTargetIpfsUniversalPath ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseResultTarget = "ipfs_universal_path"
+	ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseResultTargetPolygon           ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseResultTarget = "polygon"
+)
+
+// Whether the API call was successful
+type ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseSuccess bool
+
+const (
+	ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseSuccessTrue ZoneWeb3HostnameWeb3HostnameNewWeb3HostnameResponseSuccess = true
 )
 
 type ZoneWeb3HostnameWeb3HostnameListWeb3HostnamesResponse struct {

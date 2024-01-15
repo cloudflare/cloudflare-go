@@ -34,7 +34,7 @@ func NewRadarAs112TopLocationDnssecService(opts ...option.RequestOption) (r *Rad
 	return
 }
 
-// Get the locations, by AS112 queries, of DNSSEC validations.
+// Get the top locations by DNS queries DNSSEC support to AS112.
 func (r *RadarAs112TopLocationDnssecService) Get(ctx context.Context, dnssec RadarAs112TopLocationDnssecGetParamsDnssec, query RadarAs112TopLocationDnssecGetParams, opts ...option.RequestOption) (res *RadarAs112TopLocationDnssecGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/as112/top/locations/dnssec/%v", dnssec)
@@ -81,16 +81,18 @@ func (r *RadarAs112TopLocationDnssecGetResponseResult) UnmarshalJSON(data []byte
 }
 
 type RadarAs112TopLocationDnssecGetResponseResultMeta struct {
-	ConfidenceInfo RadarAs112TopLocationDnssecGetResponseResultMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      RadarAs112TopLocationDnssecGetResponseResultMetaDateRange      `json:"dateRange,required"`
+	DateRange      []RadarAs112TopLocationDnssecGetResponseResultMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                                         `json:"lastUpdated,required"`
+	ConfidenceInfo RadarAs112TopLocationDnssecGetResponseResultMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           radarAs112TopLocationDnssecGetResponseResultMetaJSON           `json:"-"`
 }
 
 // radarAs112TopLocationDnssecGetResponseResultMetaJSON contains the JSON metadata
 // for the struct [RadarAs112TopLocationDnssecGetResponseResultMeta]
 type radarAs112TopLocationDnssecGetResponseResultMetaJSON struct {
-	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	ConfidenceInfo apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -99,9 +101,31 @@ func (r *RadarAs112TopLocationDnssecGetResponseResultMeta) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type RadarAs112TopLocationDnssecGetResponseResultMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                                     `json:"startTime,required" format:"date-time"`
+	JSON      radarAs112TopLocationDnssecGetResponseResultMetaDateRangeJSON `json:"-"`
+}
+
+// radarAs112TopLocationDnssecGetResponseResultMetaDateRangeJSON contains the JSON
+// metadata for the struct
+// [RadarAs112TopLocationDnssecGetResponseResultMetaDateRange]
+type radarAs112TopLocationDnssecGetResponseResultMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarAs112TopLocationDnssecGetResponseResultMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type RadarAs112TopLocationDnssecGetResponseResultMetaConfidenceInfo struct {
-	Annotations []RadarAs112TopLocationDnssecGetResponseResultMetaConfidenceInfoAnnotation `json:"annotations,required"`
-	Level       int64                                                                      `json:"level,required"`
+	Annotations []RadarAs112TopLocationDnssecGetResponseResultMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                                      `json:"level"`
 	JSON        radarAs112TopLocationDnssecGetResponseResultMetaConfidenceInfoJSON         `json:"-"`
 }
 
@@ -120,48 +144,32 @@ func (r *RadarAs112TopLocationDnssecGetResponseResultMetaConfidenceInfo) Unmarsh
 }
 
 type RadarAs112TopLocationDnssecGetResponseResultMetaConfidenceInfoAnnotation struct {
-	DataSource  string                                                                       `json:"dataSource,required"`
-	Description string                                                                       `json:"description,required"`
-	EndTime     time.Time                                                                    `json:"endTime,required" format:"date-time"`
-	EventType   string                                                                       `json:"eventType,required"`
-	StartTime   time.Time                                                                    `json:"startTime,required" format:"date-time"`
-	JSON        radarAs112TopLocationDnssecGetResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
+	DataSource      string                                                                       `json:"dataSource,required"`
+	Description     string                                                                       `json:"description,required"`
+	EventType       string                                                                       `json:"eventType,required"`
+	IsInstantaneous interface{}                                                                  `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                                    `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                                       `json:"linkedUrl"`
+	StartTime       time.Time                                                                    `json:"startTime" format:"date-time"`
+	JSON            radarAs112TopLocationDnssecGetResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
 // radarAs112TopLocationDnssecGetResponseResultMetaConfidenceInfoAnnotationJSON
 // contains the JSON metadata for the struct
 // [RadarAs112TopLocationDnssecGetResponseResultMetaConfidenceInfoAnnotation]
 type radarAs112TopLocationDnssecGetResponseResultMetaConfidenceInfoAnnotationJSON struct {
-	DataSource  apijson.Field
-	Description apijson.Field
-	EndTime     apijson.Field
-	EventType   apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *RadarAs112TopLocationDnssecGetResponseResultMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarAs112TopLocationDnssecGetResponseResultMetaDateRange struct {
-	EndTime   time.Time                                                     `json:"endTime,required" format:"date-time"`
-	StartTime time.Time                                                     `json:"startTime,required" format:"date-time"`
-	JSON      radarAs112TopLocationDnssecGetResponseResultMetaDateRangeJSON `json:"-"`
-}
-
-// radarAs112TopLocationDnssecGetResponseResultMetaDateRangeJSON contains the JSON
-// metadata for the struct
-// [RadarAs112TopLocationDnssecGetResponseResultMetaDateRange]
-type radarAs112TopLocationDnssecGetResponseResultMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarAs112TopLocationDnssecGetResponseResultMetaDateRange) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -191,7 +199,7 @@ type RadarAs112TopLocationDnssecGetParams struct {
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of datetimes to filter the end of a series.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
@@ -220,6 +228,7 @@ func (r RadarAs112TopLocationDnssecGetParams) URLQuery() (v url.Values) {
 	})
 }
 
+// DNSSEC.
 type RadarAs112TopLocationDnssecGetParamsDnssec string
 
 const (
@@ -231,6 +240,7 @@ type RadarAs112TopLocationDnssecGetParamsDateRange string
 
 const (
 	RadarAs112TopLocationDnssecGetParamsDateRange1d         RadarAs112TopLocationDnssecGetParamsDateRange = "1d"
+	RadarAs112TopLocationDnssecGetParamsDateRange2d         RadarAs112TopLocationDnssecGetParamsDateRange = "2d"
 	RadarAs112TopLocationDnssecGetParamsDateRange7d         RadarAs112TopLocationDnssecGetParamsDateRange = "7d"
 	RadarAs112TopLocationDnssecGetParamsDateRange14d        RadarAs112TopLocationDnssecGetParamsDateRange = "14d"
 	RadarAs112TopLocationDnssecGetParamsDateRange28d        RadarAs112TopLocationDnssecGetParamsDateRange = "28d"
@@ -238,6 +248,7 @@ const (
 	RadarAs112TopLocationDnssecGetParamsDateRange24w        RadarAs112TopLocationDnssecGetParamsDateRange = "24w"
 	RadarAs112TopLocationDnssecGetParamsDateRange52w        RadarAs112TopLocationDnssecGetParamsDateRange = "52w"
 	RadarAs112TopLocationDnssecGetParamsDateRange1dControl  RadarAs112TopLocationDnssecGetParamsDateRange = "1dControl"
+	RadarAs112TopLocationDnssecGetParamsDateRange2dControl  RadarAs112TopLocationDnssecGetParamsDateRange = "2dControl"
 	RadarAs112TopLocationDnssecGetParamsDateRange7dControl  RadarAs112TopLocationDnssecGetParamsDateRange = "7dControl"
 	RadarAs112TopLocationDnssecGetParamsDateRange14dControl RadarAs112TopLocationDnssecGetParamsDateRange = "14dControl"
 	RadarAs112TopLocationDnssecGetParamsDateRange28dControl RadarAs112TopLocationDnssecGetParamsDateRange = "28dControl"

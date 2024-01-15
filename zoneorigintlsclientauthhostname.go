@@ -35,7 +35,7 @@ func NewZoneOriginTlsClientAuthHostnameService(opts ...option.RequestOption) (r 
 }
 
 // Get the Hostname Status for Client Authentication
-func (r *ZoneOriginTlsClientAuthHostnameService) Get(ctx context.Context, zoneIdentifier string, hostname string, opts ...option.RequestOption) (res *HostnameAopSingleResponse, err error) {
+func (r *ZoneOriginTlsClientAuthHostnameService) Get(ctx context.Context, zoneIdentifier string, hostname string, opts ...option.RequestOption) (res *ZoneOriginTlsClientAuthHostnameGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/%s", zoneIdentifier, hostname)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -47,26 +47,181 @@ func (r *ZoneOriginTlsClientAuthHostnameService) Get(ctx context.Context, zoneId
 // even if activated at the zone level. 100 maximum associations on a single
 // certificate are allowed. Note: Use a null value for parameter _enabled_ to
 // invalidate the association.
-func (r *ZoneOriginTlsClientAuthHostnameService) PerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthentication(ctx context.Context, zoneIdentifier string, body ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationParams, opts ...option.RequestOption) (res *HostnameAopResponseCollection, err error) {
+func (r *ZoneOriginTlsClientAuthHostnameService) PerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthentication(ctx context.Context, zoneIdentifier string, body ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationParams, opts ...option.RequestOption) (res *ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
 	return
 }
 
-type HostnameAopResponseCollection struct {
-	Errors     []HostnameAopResponseCollectionError    `json:"errors"`
-	Messages   []HostnameAopResponseCollectionMessage  `json:"messages"`
-	Result     []HostnameAopResponseCollectionResult   `json:"result"`
-	ResultInfo HostnameAopResponseCollectionResultInfo `json:"result_info"`
+type ZoneOriginTlsClientAuthHostnameGetResponse struct {
+	Errors   []ZoneOriginTlsClientAuthHostnameGetResponseError   `json:"errors"`
+	Messages []ZoneOriginTlsClientAuthHostnameGetResponseMessage `json:"messages"`
+	Result   ZoneOriginTlsClientAuthHostnameGetResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success HostnameAopResponseCollectionSuccess `json:"success"`
-	JSON    hostnameAopResponseCollectionJSON    `json:"-"`
+	Success ZoneOriginTlsClientAuthHostnameGetResponseSuccess `json:"success"`
+	JSON    zoneOriginTlsClientAuthHostnameGetResponseJSON    `json:"-"`
 }
 
-// hostnameAopResponseCollectionJSON contains the JSON metadata for the struct
-// [HostnameAopResponseCollection]
-type hostnameAopResponseCollectionJSON struct {
+// zoneOriginTlsClientAuthHostnameGetResponseJSON contains the JSON metadata for
+// the struct [ZoneOriginTlsClientAuthHostnameGetResponse]
+type zoneOriginTlsClientAuthHostnameGetResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneOriginTlsClientAuthHostnameGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneOriginTlsClientAuthHostnameGetResponseError struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    zoneOriginTlsClientAuthHostnameGetResponseErrorJSON `json:"-"`
+}
+
+// zoneOriginTlsClientAuthHostnameGetResponseErrorJSON contains the JSON metadata
+// for the struct [ZoneOriginTlsClientAuthHostnameGetResponseError]
+type zoneOriginTlsClientAuthHostnameGetResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneOriginTlsClientAuthHostnameGetResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneOriginTlsClientAuthHostnameGetResponseMessage struct {
+	Code    int64                                                 `json:"code,required"`
+	Message string                                                `json:"message,required"`
+	JSON    zoneOriginTlsClientAuthHostnameGetResponseMessageJSON `json:"-"`
+}
+
+// zoneOriginTlsClientAuthHostnameGetResponseMessageJSON contains the JSON metadata
+// for the struct [ZoneOriginTlsClientAuthHostnameGetResponseMessage]
+type zoneOriginTlsClientAuthHostnameGetResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneOriginTlsClientAuthHostnameGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneOriginTlsClientAuthHostnameGetResponseResult struct {
+	// Identifier
+	CertID string `json:"cert_id"`
+	// Status of the certificate or the association.
+	CertStatus ZoneOriginTlsClientAuthHostnameGetResponseResultCertStatus `json:"cert_status"`
+	// The time when the certificate was updated.
+	CertUpdatedAt time.Time `json:"cert_updated_at" format:"date-time"`
+	// The time when the certificate was uploaded.
+	CertUploadedOn time.Time `json:"cert_uploaded_on" format:"date-time"`
+	// The hostname certificate.
+	Certificate string `json:"certificate"`
+	// The time when the certificate was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Indicates whether hostname-level authenticated origin pulls is enabled. A null
+	// value voids the association.
+	Enabled bool `json:"enabled,nullable"`
+	// The date when the certificate expires.
+	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	// The hostname on the origin for which the client certificate uploaded will be
+	// used.
+	Hostname string `json:"hostname"`
+	// The certificate authority that issued the certificate.
+	Issuer string `json:"issuer"`
+	// The serial number on the uploaded certificate.
+	SerialNumber string `json:"serial_number"`
+	// The type of hash used for the certificate.
+	Signature string `json:"signature"`
+	// Status of the certificate or the association.
+	Status ZoneOriginTlsClientAuthHostnameGetResponseResultStatus `json:"status"`
+	// The time when the certificate was updated.
+	UpdatedAt time.Time                                            `json:"updated_at" format:"date-time"`
+	JSON      zoneOriginTlsClientAuthHostnameGetResponseResultJSON `json:"-"`
+}
+
+// zoneOriginTlsClientAuthHostnameGetResponseResultJSON contains the JSON metadata
+// for the struct [ZoneOriginTlsClientAuthHostnameGetResponseResult]
+type zoneOriginTlsClientAuthHostnameGetResponseResultJSON struct {
+	CertID         apijson.Field
+	CertStatus     apijson.Field
+	CertUpdatedAt  apijson.Field
+	CertUploadedOn apijson.Field
+	Certificate    apijson.Field
+	CreatedAt      apijson.Field
+	Enabled        apijson.Field
+	ExpiresOn      apijson.Field
+	Hostname       apijson.Field
+	Issuer         apijson.Field
+	SerialNumber   apijson.Field
+	Signature      apijson.Field
+	Status         apijson.Field
+	UpdatedAt      apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *ZoneOriginTlsClientAuthHostnameGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Status of the certificate or the association.
+type ZoneOriginTlsClientAuthHostnameGetResponseResultCertStatus string
+
+const (
+	ZoneOriginTlsClientAuthHostnameGetResponseResultCertStatusInitializing       ZoneOriginTlsClientAuthHostnameGetResponseResultCertStatus = "initializing"
+	ZoneOriginTlsClientAuthHostnameGetResponseResultCertStatusPendingDeployment  ZoneOriginTlsClientAuthHostnameGetResponseResultCertStatus = "pending_deployment"
+	ZoneOriginTlsClientAuthHostnameGetResponseResultCertStatusPendingDeletion    ZoneOriginTlsClientAuthHostnameGetResponseResultCertStatus = "pending_deletion"
+	ZoneOriginTlsClientAuthHostnameGetResponseResultCertStatusActive             ZoneOriginTlsClientAuthHostnameGetResponseResultCertStatus = "active"
+	ZoneOriginTlsClientAuthHostnameGetResponseResultCertStatusDeleted            ZoneOriginTlsClientAuthHostnameGetResponseResultCertStatus = "deleted"
+	ZoneOriginTlsClientAuthHostnameGetResponseResultCertStatusDeploymentTimedOut ZoneOriginTlsClientAuthHostnameGetResponseResultCertStatus = "deployment_timed_out"
+	ZoneOriginTlsClientAuthHostnameGetResponseResultCertStatusDeletionTimedOut   ZoneOriginTlsClientAuthHostnameGetResponseResultCertStatus = "deletion_timed_out"
+)
+
+// Status of the certificate or the association.
+type ZoneOriginTlsClientAuthHostnameGetResponseResultStatus string
+
+const (
+	ZoneOriginTlsClientAuthHostnameGetResponseResultStatusInitializing       ZoneOriginTlsClientAuthHostnameGetResponseResultStatus = "initializing"
+	ZoneOriginTlsClientAuthHostnameGetResponseResultStatusPendingDeployment  ZoneOriginTlsClientAuthHostnameGetResponseResultStatus = "pending_deployment"
+	ZoneOriginTlsClientAuthHostnameGetResponseResultStatusPendingDeletion    ZoneOriginTlsClientAuthHostnameGetResponseResultStatus = "pending_deletion"
+	ZoneOriginTlsClientAuthHostnameGetResponseResultStatusActive             ZoneOriginTlsClientAuthHostnameGetResponseResultStatus = "active"
+	ZoneOriginTlsClientAuthHostnameGetResponseResultStatusDeleted            ZoneOriginTlsClientAuthHostnameGetResponseResultStatus = "deleted"
+	ZoneOriginTlsClientAuthHostnameGetResponseResultStatusDeploymentTimedOut ZoneOriginTlsClientAuthHostnameGetResponseResultStatus = "deployment_timed_out"
+	ZoneOriginTlsClientAuthHostnameGetResponseResultStatusDeletionTimedOut   ZoneOriginTlsClientAuthHostnameGetResponseResultStatus = "deletion_timed_out"
+)
+
+// Whether the API call was successful
+type ZoneOriginTlsClientAuthHostnameGetResponseSuccess bool
+
+const (
+	ZoneOriginTlsClientAuthHostnameGetResponseSuccessTrue ZoneOriginTlsClientAuthHostnameGetResponseSuccess = true
+)
+
+type ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponse struct {
+	Errors     []ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseError    `json:"errors"`
+	Messages   []ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseMessage  `json:"messages"`
+	Result     []ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResult   `json:"result"`
+	ResultInfo ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseSuccess `json:"success"`
+	JSON    zoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseJSON    `json:"-"`
+}
+
+// zoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponse]
+type zoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -76,53 +231,55 @@ type hostnameAopResponseCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HostnameAopResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type HostnameAopResponseCollectionError struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    hostnameAopResponseCollectionErrorJSON `json:"-"`
+type ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseError struct {
+	Code    int64                                                                                                                             `json:"code,required"`
+	Message string                                                                                                                            `json:"message,required"`
+	JSON    zoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseErrorJSON `json:"-"`
 }
 
-// hostnameAopResponseCollectionErrorJSON contains the JSON metadata for the struct
-// [HostnameAopResponseCollectionError]
-type hostnameAopResponseCollectionErrorJSON struct {
+// zoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseError]
+type zoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HostnameAopResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type HostnameAopResponseCollectionMessage struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    hostnameAopResponseCollectionMessageJSON `json:"-"`
+type ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseMessage struct {
+	Code    int64                                                                                                                               `json:"code,required"`
+	Message string                                                                                                                              `json:"message,required"`
+	JSON    zoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseMessageJSON `json:"-"`
 }
 
-// hostnameAopResponseCollectionMessageJSON contains the JSON metadata for the
-// struct [HostnameAopResponseCollectionMessage]
-type hostnameAopResponseCollectionMessageJSON struct {
+// zoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseMessage]
+type zoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HostnameAopResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type HostnameAopResponseCollectionResult struct {
+type ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResult struct {
 	// Identifier
 	CertID string `json:"cert_id"`
 	// Status of the certificate or the association.
-	CertStatus HostnameAopResponseCollectionResultCertStatus `json:"cert_status"`
+	CertStatus ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultCertStatus `json:"cert_status"`
 	// The time when the certificate was updated.
 	CertUpdatedAt time.Time `json:"cert_updated_at" format:"date-time"`
 	// The time when the certificate was uploaded.
@@ -146,15 +303,16 @@ type HostnameAopResponseCollectionResult struct {
 	// The type of hash used for the certificate.
 	Signature string `json:"signature"`
 	// Status of the certificate or the association.
-	Status HostnameAopResponseCollectionResultStatus `json:"status"`
+	Status ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultStatus `json:"status"`
 	// The time when the certificate was updated.
-	UpdatedAt time.Time                               `json:"updated_at" format:"date-time"`
-	JSON      hostnameAopResponseCollectionResultJSON `json:"-"`
+	UpdatedAt time.Time                                                                                                                          `json:"updated_at" format:"date-time"`
+	JSON      zoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultJSON `json:"-"`
 }
 
-// hostnameAopResponseCollectionResultJSON contains the JSON metadata for the
-// struct [HostnameAopResponseCollectionResult]
-type hostnameAopResponseCollectionResultJSON struct {
+// zoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultJSON
+// contains the JSON metadata for the struct
+// [ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResult]
+type zoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultJSON struct {
 	CertID         apijson.Field
 	CertStatus     apijson.Field
 	CertUpdatedAt  apijson.Field
@@ -173,37 +331,37 @@ type hostnameAopResponseCollectionResultJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *HostnameAopResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Status of the certificate or the association.
-type HostnameAopResponseCollectionResultCertStatus string
+type ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultCertStatus string
 
 const (
-	HostnameAopResponseCollectionResultCertStatusInitializing       HostnameAopResponseCollectionResultCertStatus = "initializing"
-	HostnameAopResponseCollectionResultCertStatusPendingDeployment  HostnameAopResponseCollectionResultCertStatus = "pending_deployment"
-	HostnameAopResponseCollectionResultCertStatusPendingDeletion    HostnameAopResponseCollectionResultCertStatus = "pending_deletion"
-	HostnameAopResponseCollectionResultCertStatusActive             HostnameAopResponseCollectionResultCertStatus = "active"
-	HostnameAopResponseCollectionResultCertStatusDeleted            HostnameAopResponseCollectionResultCertStatus = "deleted"
-	HostnameAopResponseCollectionResultCertStatusDeploymentTimedOut HostnameAopResponseCollectionResultCertStatus = "deployment_timed_out"
-	HostnameAopResponseCollectionResultCertStatusDeletionTimedOut   HostnameAopResponseCollectionResultCertStatus = "deletion_timed_out"
+	ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultCertStatusInitializing       ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultCertStatus = "initializing"
+	ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultCertStatusPendingDeployment  ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultCertStatus = "pending_deployment"
+	ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultCertStatusPendingDeletion    ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultCertStatus = "pending_deletion"
+	ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultCertStatusActive             ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultCertStatus = "active"
+	ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultCertStatusDeleted            ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultCertStatus = "deleted"
+	ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultCertStatusDeploymentTimedOut ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultCertStatus = "deployment_timed_out"
+	ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultCertStatusDeletionTimedOut   ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultCertStatus = "deletion_timed_out"
 )
 
 // Status of the certificate or the association.
-type HostnameAopResponseCollectionResultStatus string
+type ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultStatus string
 
 const (
-	HostnameAopResponseCollectionResultStatusInitializing       HostnameAopResponseCollectionResultStatus = "initializing"
-	HostnameAopResponseCollectionResultStatusPendingDeployment  HostnameAopResponseCollectionResultStatus = "pending_deployment"
-	HostnameAopResponseCollectionResultStatusPendingDeletion    HostnameAopResponseCollectionResultStatus = "pending_deletion"
-	HostnameAopResponseCollectionResultStatusActive             HostnameAopResponseCollectionResultStatus = "active"
-	HostnameAopResponseCollectionResultStatusDeleted            HostnameAopResponseCollectionResultStatus = "deleted"
-	HostnameAopResponseCollectionResultStatusDeploymentTimedOut HostnameAopResponseCollectionResultStatus = "deployment_timed_out"
-	HostnameAopResponseCollectionResultStatusDeletionTimedOut   HostnameAopResponseCollectionResultStatus = "deletion_timed_out"
+	ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultStatusInitializing       ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultStatus = "initializing"
+	ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultStatusPendingDeployment  ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultStatus = "pending_deployment"
+	ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultStatusPendingDeletion    ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultStatus = "pending_deletion"
+	ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultStatusActive             ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultStatus = "active"
+	ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultStatusDeleted            ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultStatus = "deleted"
+	ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultStatusDeploymentTimedOut ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultStatus = "deployment_timed_out"
+	ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultStatusDeletionTimedOut   ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultStatus = "deletion_timed_out"
 )
 
-type HostnameAopResponseCollectionResultInfo struct {
+type ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -211,13 +369,14 @@ type HostnameAopResponseCollectionResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                     `json:"total_count"`
-	JSON       hostnameAopResponseCollectionResultInfoJSON `json:"-"`
+	TotalCount float64                                                                                                                                `json:"total_count"`
+	JSON       zoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultInfoJSON `json:"-"`
 }
 
-// hostnameAopResponseCollectionResultInfoJSON contains the JSON metadata for the
-// struct [HostnameAopResponseCollectionResultInfo]
-type hostnameAopResponseCollectionResultInfoJSON struct {
+// zoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultInfo]
+type zoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -226,169 +385,15 @@ type hostnameAopResponseCollectionResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HostnameAopResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type HostnameAopResponseCollectionSuccess bool
+type ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseSuccess bool
 
 const (
-	HostnameAopResponseCollectionSuccessTrue HostnameAopResponseCollectionSuccess = true
-)
-
-type HostnameAopSingleResponse struct {
-	Errors   []HostnameAopSingleResponseError   `json:"errors"`
-	Messages []HostnameAopSingleResponseMessage `json:"messages"`
-	Result   HostnameAopSingleResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success HostnameAopSingleResponseSuccess `json:"success"`
-	JSON    hostnameAopSingleResponseJSON    `json:"-"`
-}
-
-// hostnameAopSingleResponseJSON contains the JSON metadata for the struct
-// [HostnameAopSingleResponse]
-type hostnameAopSingleResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameAopSingleResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type HostnameAopSingleResponseError struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    hostnameAopSingleResponseErrorJSON `json:"-"`
-}
-
-// hostnameAopSingleResponseErrorJSON contains the JSON metadata for the struct
-// [HostnameAopSingleResponseError]
-type hostnameAopSingleResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameAopSingleResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type HostnameAopSingleResponseMessage struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    hostnameAopSingleResponseMessageJSON `json:"-"`
-}
-
-// hostnameAopSingleResponseMessageJSON contains the JSON metadata for the struct
-// [HostnameAopSingleResponseMessage]
-type hostnameAopSingleResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameAopSingleResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type HostnameAopSingleResponseResult struct {
-	// Identifier
-	CertID string `json:"cert_id"`
-	// Status of the certificate or the association.
-	CertStatus HostnameAopSingleResponseResultCertStatus `json:"cert_status"`
-	// The time when the certificate was updated.
-	CertUpdatedAt time.Time `json:"cert_updated_at" format:"date-time"`
-	// The time when the certificate was uploaded.
-	CertUploadedOn time.Time `json:"cert_uploaded_on" format:"date-time"`
-	// The hostname certificate.
-	Certificate string `json:"certificate"`
-	// The time when the certificate was created.
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Indicates whether hostname-level authenticated origin pulls is enabled. A null
-	// value voids the association.
-	Enabled bool `json:"enabled,nullable"`
-	// The date when the certificate expires.
-	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
-	// The hostname on the origin for which the client certificate uploaded will be
-	// used.
-	Hostname string `json:"hostname"`
-	// The certificate authority that issued the certificate.
-	Issuer string `json:"issuer"`
-	// The serial number on the uploaded certificate.
-	SerialNumber string `json:"serial_number"`
-	// The type of hash used for the certificate.
-	Signature string `json:"signature"`
-	// Status of the certificate or the association.
-	Status HostnameAopSingleResponseResultStatus `json:"status"`
-	// The time when the certificate was updated.
-	UpdatedAt time.Time                           `json:"updated_at" format:"date-time"`
-	JSON      hostnameAopSingleResponseResultJSON `json:"-"`
-}
-
-// hostnameAopSingleResponseResultJSON contains the JSON metadata for the struct
-// [HostnameAopSingleResponseResult]
-type hostnameAopSingleResponseResultJSON struct {
-	CertID         apijson.Field
-	CertStatus     apijson.Field
-	CertUpdatedAt  apijson.Field
-	CertUploadedOn apijson.Field
-	Certificate    apijson.Field
-	CreatedAt      apijson.Field
-	Enabled        apijson.Field
-	ExpiresOn      apijson.Field
-	Hostname       apijson.Field
-	Issuer         apijson.Field
-	SerialNumber   apijson.Field
-	Signature      apijson.Field
-	Status         apijson.Field
-	UpdatedAt      apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *HostnameAopSingleResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Status of the certificate or the association.
-type HostnameAopSingleResponseResultCertStatus string
-
-const (
-	HostnameAopSingleResponseResultCertStatusInitializing       HostnameAopSingleResponseResultCertStatus = "initializing"
-	HostnameAopSingleResponseResultCertStatusPendingDeployment  HostnameAopSingleResponseResultCertStatus = "pending_deployment"
-	HostnameAopSingleResponseResultCertStatusPendingDeletion    HostnameAopSingleResponseResultCertStatus = "pending_deletion"
-	HostnameAopSingleResponseResultCertStatusActive             HostnameAopSingleResponseResultCertStatus = "active"
-	HostnameAopSingleResponseResultCertStatusDeleted            HostnameAopSingleResponseResultCertStatus = "deleted"
-	HostnameAopSingleResponseResultCertStatusDeploymentTimedOut HostnameAopSingleResponseResultCertStatus = "deployment_timed_out"
-	HostnameAopSingleResponseResultCertStatusDeletionTimedOut   HostnameAopSingleResponseResultCertStatus = "deletion_timed_out"
-)
-
-// Status of the certificate or the association.
-type HostnameAopSingleResponseResultStatus string
-
-const (
-	HostnameAopSingleResponseResultStatusInitializing       HostnameAopSingleResponseResultStatus = "initializing"
-	HostnameAopSingleResponseResultStatusPendingDeployment  HostnameAopSingleResponseResultStatus = "pending_deployment"
-	HostnameAopSingleResponseResultStatusPendingDeletion    HostnameAopSingleResponseResultStatus = "pending_deletion"
-	HostnameAopSingleResponseResultStatusActive             HostnameAopSingleResponseResultStatus = "active"
-	HostnameAopSingleResponseResultStatusDeleted            HostnameAopSingleResponseResultStatus = "deleted"
-	HostnameAopSingleResponseResultStatusDeploymentTimedOut HostnameAopSingleResponseResultStatus = "deployment_timed_out"
-	HostnameAopSingleResponseResultStatusDeletionTimedOut   HostnameAopSingleResponseResultStatus = "deletion_timed_out"
-)
-
-// Whether the API call was successful
-type HostnameAopSingleResponseSuccess bool
-
-const (
-	HostnameAopSingleResponseSuccessTrue HostnameAopSingleResponseSuccess = true
+	ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseSuccessTrue ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationResponseSuccess = true
 )
 
 type ZoneOriginTlsClientAuthHostnamePerHostnameAuthenticatedOriginPullEnableOrDisableAHostnameForClientAuthenticationParams struct {

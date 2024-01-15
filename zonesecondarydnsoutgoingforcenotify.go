@@ -32,27 +32,28 @@ func NewZoneSecondaryDNSOutgoingForceNotifyService(opts ...option.RequestOption)
 }
 
 // Notifies the secondary nameserver(s) and clears IXFR backlog of primary zone.
-func (r *ZoneSecondaryDNSOutgoingForceNotifyService) SecondaryDNSPrimaryZoneForceDNSNotify(ctx context.Context, zoneIdentifier interface{}, opts ...option.RequestOption) (res *SchemasForceResponse, err error) {
+func (r *ZoneSecondaryDNSOutgoingForceNotifyService) SecondaryDNSPrimaryZoneForceDNSNotify(ctx context.Context, zoneIdentifier interface{}, opts ...option.RequestOption) (res *ZoneSecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing/force_notify", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
 	return
 }
 
-type SchemasForceResponse struct {
-	Errors   []SchemasForceResponseError   `json:"errors"`
-	Messages []SchemasForceResponseMessage `json:"messages"`
+type ZoneSecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponse struct {
+	Errors   []ZoneSecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseError   `json:"errors"`
+	Messages []ZoneSecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseMessage `json:"messages"`
 	// When force_notify query parameter is set to true, the response is a simple
 	// string
 	Result string `json:"result"`
 	// Whether the API call was successful
-	Success SchemasForceResponseSuccess `json:"success"`
-	JSON    schemasForceResponseJSON    `json:"-"`
+	Success ZoneSecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseSuccess `json:"success"`
+	JSON    zoneSecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseJSON    `json:"-"`
 }
 
-// schemasForceResponseJSON contains the JSON metadata for the struct
-// [SchemasForceResponse]
-type schemasForceResponseJSON struct {
+// zoneSecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneSecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponse]
+type zoneSecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -61,51 +62,53 @@ type schemasForceResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasForceResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemasForceResponseError struct {
-	Code    int64                         `json:"code,required"`
-	Message string                        `json:"message,required"`
-	JSON    schemasForceResponseErrorJSON `json:"-"`
+type ZoneSecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseError struct {
+	Code    int64                                                                                     `json:"code,required"`
+	Message string                                                                                    `json:"message,required"`
+	JSON    zoneSecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseErrorJSON `json:"-"`
 }
 
-// schemasForceResponseErrorJSON contains the JSON metadata for the struct
-// [SchemasForceResponseError]
-type schemasForceResponseErrorJSON struct {
+// zoneSecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneSecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseError]
+type zoneSecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasForceResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SchemasForceResponseMessage struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    schemasForceResponseMessageJSON `json:"-"`
+type ZoneSecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseMessage struct {
+	Code    int64                                                                                       `json:"code,required"`
+	Message string                                                                                      `json:"message,required"`
+	JSON    zoneSecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseMessageJSON `json:"-"`
 }
 
-// schemasForceResponseMessageJSON contains the JSON metadata for the struct
-// [SchemasForceResponseMessage]
-type schemasForceResponseMessageJSON struct {
+// zoneSecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneSecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseMessage]
+type zoneSecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SchemasForceResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type SchemasForceResponseSuccess bool
+type ZoneSecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseSuccess bool
 
 const (
-	SchemasForceResponseSuccessTrue SchemasForceResponseSuccess = true
+	ZoneSecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseSuccessTrue ZoneSecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseSuccess = true
 )

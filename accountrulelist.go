@@ -36,7 +36,7 @@ func NewAccountRuleListService(opts ...option.RequestOption) (r *AccountRuleList
 }
 
 // Fetches the details of a list.
-func (r *AccountRuleListService) Get(ctx context.Context, accountIdentifier string, listID string, opts ...option.RequestOption) (res *ListResponseCollection, err error) {
+func (r *AccountRuleListService) Get(ctx context.Context, accountIdentifier string, listID string, opts ...option.RequestOption) (res *AccountRuleListGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/rules/lists/%s", accountIdentifier, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -44,7 +44,7 @@ func (r *AccountRuleListService) Get(ctx context.Context, accountIdentifier stri
 }
 
 // Updates the description of a list.
-func (r *AccountRuleListService) Update(ctx context.Context, accountIdentifier string, listID string, body AccountRuleListUpdateParams, opts ...option.RequestOption) (res *ListResponseCollection, err error) {
+func (r *AccountRuleListService) Update(ctx context.Context, accountIdentifier string, listID string, body AccountRuleListUpdateParams, opts ...option.RequestOption) (res *AccountRuleListUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/rules/lists/%s", accountIdentifier, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
@@ -52,7 +52,7 @@ func (r *AccountRuleListService) Update(ctx context.Context, accountIdentifier s
 }
 
 // Deletes a specific list and all its items.
-func (r *AccountRuleListService) Delete(ctx context.Context, accountIdentifier string, listID string, opts ...option.RequestOption) (res *ListDeleteResponseCollection, err error) {
+func (r *AccountRuleListService) Delete(ctx context.Context, accountIdentifier string, listID string, opts ...option.RequestOption) (res *AccountRuleListDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/rules/lists/%s", accountIdentifier, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -60,7 +60,7 @@ func (r *AccountRuleListService) Delete(ctx context.Context, accountIdentifier s
 }
 
 // Creates a new list of the specified type.
-func (r *AccountRuleListService) ListsNewAList(ctx context.Context, accountIdentifier string, body AccountRuleListListsNewAListParams, opts ...option.RequestOption) (res *ListResponseCollection, err error) {
+func (r *AccountRuleListService) ListsNewAList(ctx context.Context, accountIdentifier string, body AccountRuleListListsNewAListParams, opts ...option.RequestOption) (res *AccountRuleListListsNewAListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/rules/lists", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -75,187 +75,69 @@ func (r *AccountRuleListService) ListsGetLists(ctx context.Context, accountIdent
 	return
 }
 
-type ListDeleteResponseCollection struct {
-	Errors     []ListDeleteResponseCollectionError    `json:"errors"`
-	Messages   []ListDeleteResponseCollectionMessage  `json:"messages"`
-	Result     ListDeleteResponseCollectionResult     `json:"result"`
-	ResultInfo ListDeleteResponseCollectionResultInfo `json:"result_info"`
+type AccountRuleListGetResponse struct {
+	Errors   []AccountRuleListGetResponseError   `json:"errors"`
+	Messages []AccountRuleListGetResponseMessage `json:"messages"`
+	Result   AccountRuleListGetResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success ListDeleteResponseCollectionSuccess `json:"success"`
-	JSON    listDeleteResponseCollectionJSON    `json:"-"`
+	Success AccountRuleListGetResponseSuccess `json:"success"`
+	JSON    accountRuleListGetResponseJSON    `json:"-"`
 }
 
-// listDeleteResponseCollectionJSON contains the JSON metadata for the struct
-// [ListDeleteResponseCollection]
-type listDeleteResponseCollectionJSON struct {
+// accountRuleListGetResponseJSON contains the JSON metadata for the struct
+// [AccountRuleListGetResponse]
+type accountRuleListGetResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ListDeleteResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountRuleListGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ListDeleteResponseCollectionError struct {
+type AccountRuleListGetResponseError struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    accountRuleListGetResponseErrorJSON `json:"-"`
+}
+
+// accountRuleListGetResponseErrorJSON contains the JSON metadata for the struct
+// [AccountRuleListGetResponseError]
+type accountRuleListGetResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRuleListGetResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountRuleListGetResponseMessage struct {
 	Code    int64                                 `json:"code,required"`
 	Message string                                `json:"message,required"`
-	JSON    listDeleteResponseCollectionErrorJSON `json:"-"`
+	JSON    accountRuleListGetResponseMessageJSON `json:"-"`
 }
 
-// listDeleteResponseCollectionErrorJSON contains the JSON metadata for the struct
-// [ListDeleteResponseCollectionError]
-type listDeleteResponseCollectionErrorJSON struct {
+// accountRuleListGetResponseMessageJSON contains the JSON metadata for the struct
+// [AccountRuleListGetResponseMessage]
+type accountRuleListGetResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ListDeleteResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountRuleListGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ListDeleteResponseCollectionMessage struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    listDeleteResponseCollectionMessageJSON `json:"-"`
-}
-
-// listDeleteResponseCollectionMessageJSON contains the JSON metadata for the
-// struct [ListDeleteResponseCollectionMessage]
-type listDeleteResponseCollectionMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListDeleteResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ListDeleteResponseCollectionResult struct {
-	// The unique ID of the item in the List.
-	ID   string                                 `json:"id"`
-	JSON listDeleteResponseCollectionResultJSON `json:"-"`
-}
-
-// listDeleteResponseCollectionResultJSON contains the JSON metadata for the struct
-// [ListDeleteResponseCollectionResult]
-type listDeleteResponseCollectionResultJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListDeleteResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ListDeleteResponseCollectionResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                    `json:"total_count"`
-	JSON       listDeleteResponseCollectionResultInfoJSON `json:"-"`
-}
-
-// listDeleteResponseCollectionResultInfoJSON contains the JSON metadata for the
-// struct [ListDeleteResponseCollectionResultInfo]
-type listDeleteResponseCollectionResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListDeleteResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type ListDeleteResponseCollectionSuccess bool
-
-const (
-	ListDeleteResponseCollectionSuccessTrue ListDeleteResponseCollectionSuccess = true
-)
-
-type ListResponseCollection struct {
-	Errors     []ListResponseCollectionError    `json:"errors"`
-	Messages   []ListResponseCollectionMessage  `json:"messages"`
-	Result     ListResponseCollectionResult     `json:"result"`
-	ResultInfo ListResponseCollectionResultInfo `json:"result_info"`
-	// Whether the API call was successful
-	Success ListResponseCollectionSuccess `json:"success"`
-	JSON    listResponseCollectionJSON    `json:"-"`
-}
-
-// listResponseCollectionJSON contains the JSON metadata for the struct
-// [ListResponseCollection]
-type listResponseCollectionJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListResponseCollection) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ListResponseCollectionError struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    listResponseCollectionErrorJSON `json:"-"`
-}
-
-// listResponseCollectionErrorJSON contains the JSON metadata for the struct
-// [ListResponseCollectionError]
-type listResponseCollectionErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ListResponseCollectionMessage struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    listResponseCollectionMessageJSON `json:"-"`
-}
-
-// listResponseCollectionMessageJSON contains the JSON metadata for the struct
-// [ListResponseCollectionMessage]
-type listResponseCollectionMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ListResponseCollectionResult struct {
+type AccountRuleListGetResponseResult struct {
 	// The unique ID of the list.
 	ID string `json:"id"`
 	// The RFC 3339 timestamp of when the list was created.
@@ -263,8 +145,8 @@ type ListResponseCollectionResult struct {
 	// An informative summary of the list.
 	Description string `json:"description"`
 	// The type of the list. Each type supports specific list items (IP addresses,
-	// hostnames or redirects).
-	Kind ListResponseCollectionResultKind `json:"kind"`
+	// ASNs, hostnames or redirects).
+	Kind AccountRuleListGetResponseResultKind `json:"kind"`
 	// The RFC 3339 timestamp of when the list was last modified.
 	ModifiedOn string `json:"modified_on"`
 	// An informative name for the list. Use this name in filter and rule expressions.
@@ -272,13 +154,13 @@ type ListResponseCollectionResult struct {
 	// The number of items in the list.
 	NumItems float64 `json:"num_items"`
 	// The number of [filters](#filters) referencing the list.
-	NumReferencingFilters float64                          `json:"num_referencing_filters"`
-	JSON                  listResponseCollectionResultJSON `json:"-"`
+	NumReferencingFilters float64                              `json:"num_referencing_filters"`
+	JSON                  accountRuleListGetResponseResultJSON `json:"-"`
 }
 
-// listResponseCollectionResultJSON contains the JSON metadata for the struct
-// [ListResponseCollectionResult]
-type listResponseCollectionResultJSON struct {
+// accountRuleListGetResponseResultJSON contains the JSON metadata for the struct
+// [AccountRuleListGetResponseResult]
+type accountRuleListGetResponseResultJSON struct {
 	ID                    apijson.Field
 	CreatedOn             apijson.Field
 	Description           apijson.Field
@@ -291,59 +173,359 @@ type listResponseCollectionResultJSON struct {
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *ListResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountRuleListGetResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of the list. Each type supports specific list items (IP addresses,
-// hostnames or redirects).
-type ListResponseCollectionResultKind string
+// ASNs, hostnames or redirects).
+type AccountRuleListGetResponseResultKind string
 
 const (
-	ListResponseCollectionResultKindIP       ListResponseCollectionResultKind = "ip"
-	ListResponseCollectionResultKindRedirect ListResponseCollectionResultKind = "redirect"
-	ListResponseCollectionResultKindHostname ListResponseCollectionResultKind = "hostname"
+	AccountRuleListGetResponseResultKindIP       AccountRuleListGetResponseResultKind = "ip"
+	AccountRuleListGetResponseResultKindRedirect AccountRuleListGetResponseResultKind = "redirect"
+	AccountRuleListGetResponseResultKindHostname AccountRuleListGetResponseResultKind = "hostname"
+	AccountRuleListGetResponseResultKindASN      AccountRuleListGetResponseResultKind = "asn"
 )
 
-type ListResponseCollectionResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                              `json:"total_count"`
-	JSON       listResponseCollectionResultInfoJSON `json:"-"`
+// Whether the API call was successful
+type AccountRuleListGetResponseSuccess bool
+
+const (
+	AccountRuleListGetResponseSuccessTrue AccountRuleListGetResponseSuccess = true
+)
+
+type AccountRuleListUpdateResponse struct {
+	Errors   []AccountRuleListUpdateResponseError   `json:"errors"`
+	Messages []AccountRuleListUpdateResponseMessage `json:"messages"`
+	Result   AccountRuleListUpdateResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountRuleListUpdateResponseSuccess `json:"success"`
+	JSON    accountRuleListUpdateResponseJSON    `json:"-"`
 }
 
-// listResponseCollectionResultInfoJSON contains the JSON metadata for the struct
-// [ListResponseCollectionResultInfo]
-type listResponseCollectionResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
+// accountRuleListUpdateResponseJSON contains the JSON metadata for the struct
+// [AccountRuleListUpdateResponse]
+type accountRuleListUpdateResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ListResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountRuleListUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountRuleListUpdateResponseError struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    accountRuleListUpdateResponseErrorJSON `json:"-"`
+}
+
+// accountRuleListUpdateResponseErrorJSON contains the JSON metadata for the struct
+// [AccountRuleListUpdateResponseError]
+type accountRuleListUpdateResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRuleListUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountRuleListUpdateResponseMessage struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    accountRuleListUpdateResponseMessageJSON `json:"-"`
+}
+
+// accountRuleListUpdateResponseMessageJSON contains the JSON metadata for the
+// struct [AccountRuleListUpdateResponseMessage]
+type accountRuleListUpdateResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRuleListUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountRuleListUpdateResponseResult struct {
+	// The unique ID of the list.
+	ID string `json:"id"`
+	// The RFC 3339 timestamp of when the list was created.
+	CreatedOn string `json:"created_on"`
+	// An informative summary of the list.
+	Description string `json:"description"`
+	// The type of the list. Each type supports specific list items (IP addresses,
+	// ASNs, hostnames or redirects).
+	Kind AccountRuleListUpdateResponseResultKind `json:"kind"`
+	// The RFC 3339 timestamp of when the list was last modified.
+	ModifiedOn string `json:"modified_on"`
+	// An informative name for the list. Use this name in filter and rule expressions.
+	Name string `json:"name"`
+	// The number of items in the list.
+	NumItems float64 `json:"num_items"`
+	// The number of [filters](#filters) referencing the list.
+	NumReferencingFilters float64                                 `json:"num_referencing_filters"`
+	JSON                  accountRuleListUpdateResponseResultJSON `json:"-"`
+}
+
+// accountRuleListUpdateResponseResultJSON contains the JSON metadata for the
+// struct [AccountRuleListUpdateResponseResult]
+type accountRuleListUpdateResponseResultJSON struct {
+	ID                    apijson.Field
+	CreatedOn             apijson.Field
+	Description           apijson.Field
+	Kind                  apijson.Field
+	ModifiedOn            apijson.Field
+	Name                  apijson.Field
+	NumItems              apijson.Field
+	NumReferencingFilters apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *AccountRuleListUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of the list. Each type supports specific list items (IP addresses,
+// ASNs, hostnames or redirects).
+type AccountRuleListUpdateResponseResultKind string
+
+const (
+	AccountRuleListUpdateResponseResultKindIP       AccountRuleListUpdateResponseResultKind = "ip"
+	AccountRuleListUpdateResponseResultKindRedirect AccountRuleListUpdateResponseResultKind = "redirect"
+	AccountRuleListUpdateResponseResultKindHostname AccountRuleListUpdateResponseResultKind = "hostname"
+	AccountRuleListUpdateResponseResultKindASN      AccountRuleListUpdateResponseResultKind = "asn"
+)
+
+// Whether the API call was successful
+type AccountRuleListUpdateResponseSuccess bool
+
+const (
+	AccountRuleListUpdateResponseSuccessTrue AccountRuleListUpdateResponseSuccess = true
+)
+
+type AccountRuleListDeleteResponse struct {
+	Errors   []AccountRuleListDeleteResponseError   `json:"errors"`
+	Messages []AccountRuleListDeleteResponseMessage `json:"messages"`
+	Result   AccountRuleListDeleteResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountRuleListDeleteResponseSuccess `json:"success"`
+	JSON    accountRuleListDeleteResponseJSON    `json:"-"`
+}
+
+// accountRuleListDeleteResponseJSON contains the JSON metadata for the struct
+// [AccountRuleListDeleteResponse]
+type accountRuleListDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRuleListDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountRuleListDeleteResponseError struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    accountRuleListDeleteResponseErrorJSON `json:"-"`
+}
+
+// accountRuleListDeleteResponseErrorJSON contains the JSON metadata for the struct
+// [AccountRuleListDeleteResponseError]
+type accountRuleListDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRuleListDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountRuleListDeleteResponseMessage struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    accountRuleListDeleteResponseMessageJSON `json:"-"`
+}
+
+// accountRuleListDeleteResponseMessageJSON contains the JSON metadata for the
+// struct [AccountRuleListDeleteResponseMessage]
+type accountRuleListDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRuleListDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountRuleListDeleteResponseResult struct {
+	// The unique ID of the item in the List.
+	ID   string                                  `json:"id"`
+	JSON accountRuleListDeleteResponseResultJSON `json:"-"`
+}
+
+// accountRuleListDeleteResponseResultJSON contains the JSON metadata for the
+// struct [AccountRuleListDeleteResponseResult]
+type accountRuleListDeleteResponseResultJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRuleListDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type ListResponseCollectionSuccess bool
+type AccountRuleListDeleteResponseSuccess bool
 
 const (
-	ListResponseCollectionSuccessTrue ListResponseCollectionSuccess = true
+	AccountRuleListDeleteResponseSuccessTrue AccountRuleListDeleteResponseSuccess = true
+)
+
+type AccountRuleListListsNewAListResponse struct {
+	Errors   []AccountRuleListListsNewAListResponseError   `json:"errors"`
+	Messages []AccountRuleListListsNewAListResponseMessage `json:"messages"`
+	Result   AccountRuleListListsNewAListResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccountRuleListListsNewAListResponseSuccess `json:"success"`
+	JSON    accountRuleListListsNewAListResponseJSON    `json:"-"`
+}
+
+// accountRuleListListsNewAListResponseJSON contains the JSON metadata for the
+// struct [AccountRuleListListsNewAListResponse]
+type accountRuleListListsNewAListResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRuleListListsNewAListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountRuleListListsNewAListResponseError struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    accountRuleListListsNewAListResponseErrorJSON `json:"-"`
+}
+
+// accountRuleListListsNewAListResponseErrorJSON contains the JSON metadata for the
+// struct [AccountRuleListListsNewAListResponseError]
+type accountRuleListListsNewAListResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRuleListListsNewAListResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountRuleListListsNewAListResponseMessage struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    accountRuleListListsNewAListResponseMessageJSON `json:"-"`
+}
+
+// accountRuleListListsNewAListResponseMessageJSON contains the JSON metadata for
+// the struct [AccountRuleListListsNewAListResponseMessage]
+type accountRuleListListsNewAListResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRuleListListsNewAListResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountRuleListListsNewAListResponseResult struct {
+	// The unique ID of the list.
+	ID string `json:"id"`
+	// The RFC 3339 timestamp of when the list was created.
+	CreatedOn string `json:"created_on"`
+	// An informative summary of the list.
+	Description string `json:"description"`
+	// The type of the list. Each type supports specific list items (IP addresses,
+	// ASNs, hostnames or redirects).
+	Kind AccountRuleListListsNewAListResponseResultKind `json:"kind"`
+	// The RFC 3339 timestamp of when the list was last modified.
+	ModifiedOn string `json:"modified_on"`
+	// An informative name for the list. Use this name in filter and rule expressions.
+	Name string `json:"name"`
+	// The number of items in the list.
+	NumItems float64 `json:"num_items"`
+	// The number of [filters](#filters) referencing the list.
+	NumReferencingFilters float64                                        `json:"num_referencing_filters"`
+	JSON                  accountRuleListListsNewAListResponseResultJSON `json:"-"`
+}
+
+// accountRuleListListsNewAListResponseResultJSON contains the JSON metadata for
+// the struct [AccountRuleListListsNewAListResponseResult]
+type accountRuleListListsNewAListResponseResultJSON struct {
+	ID                    apijson.Field
+	CreatedOn             apijson.Field
+	Description           apijson.Field
+	Kind                  apijson.Field
+	ModifiedOn            apijson.Field
+	Name                  apijson.Field
+	NumItems              apijson.Field
+	NumReferencingFilters apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *AccountRuleListListsNewAListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of the list. Each type supports specific list items (IP addresses,
+// ASNs, hostnames or redirects).
+type AccountRuleListListsNewAListResponseResultKind string
+
+const (
+	AccountRuleListListsNewAListResponseResultKindIP       AccountRuleListListsNewAListResponseResultKind = "ip"
+	AccountRuleListListsNewAListResponseResultKindRedirect AccountRuleListListsNewAListResponseResultKind = "redirect"
+	AccountRuleListListsNewAListResponseResultKindHostname AccountRuleListListsNewAListResponseResultKind = "hostname"
+	AccountRuleListListsNewAListResponseResultKindASN      AccountRuleListListsNewAListResponseResultKind = "asn"
+)
+
+// Whether the API call was successful
+type AccountRuleListListsNewAListResponseSuccess bool
+
+const (
+	AccountRuleListListsNewAListResponseSuccessTrue AccountRuleListListsNewAListResponseSuccess = true
 )
 
 type AccountRuleListListsGetListsResponse struct {
-	Errors     []AccountRuleListListsGetListsResponseError    `json:"errors"`
-	Messages   []AccountRuleListListsGetListsResponseMessage  `json:"messages"`
-	Result     []AccountRuleListListsGetListsResponseResult   `json:"result"`
-	ResultInfo AccountRuleListListsGetListsResponseResultInfo `json:"result_info"`
+	Errors   []AccountRuleListListsGetListsResponseError   `json:"errors"`
+	Messages []AccountRuleListListsGetListsResponseMessage `json:"messages"`
+	Result   []AccountRuleListListsGetListsResponseResult  `json:"result"`
 	// Whether the API call was successful
 	Success AccountRuleListListsGetListsResponseSuccess `json:"success"`
 	JSON    accountRuleListListsGetListsResponseJSON    `json:"-"`
@@ -355,7 +537,6 @@ type accountRuleListListsGetListsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -411,7 +592,7 @@ type AccountRuleListListsGetListsResponseResult struct {
 	// An informative summary of the list.
 	Description string `json:"description"`
 	// The type of the list. Each type supports specific list items (IP addresses,
-	// hostnames or redirects).
+	// ASNs, hostnames or redirects).
 	Kind AccountRuleListListsGetListsResponseResultKind `json:"kind"`
 	// The RFC 3339 timestamp of when the list was last modified.
 	ModifiedOn string `json:"modified_on"`
@@ -444,41 +625,15 @@ func (r *AccountRuleListListsGetListsResponseResult) UnmarshalJSON(data []byte) 
 }
 
 // The type of the list. Each type supports specific list items (IP addresses,
-// hostnames or redirects).
+// ASNs, hostnames or redirects).
 type AccountRuleListListsGetListsResponseResultKind string
 
 const (
 	AccountRuleListListsGetListsResponseResultKindIP       AccountRuleListListsGetListsResponseResultKind = "ip"
 	AccountRuleListListsGetListsResponseResultKindRedirect AccountRuleListListsGetListsResponseResultKind = "redirect"
 	AccountRuleListListsGetListsResponseResultKindHostname AccountRuleListListsGetListsResponseResultKind = "hostname"
+	AccountRuleListListsGetListsResponseResultKindASN      AccountRuleListListsGetListsResponseResultKind = "asn"
 )
-
-type AccountRuleListListsGetListsResponseResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                            `json:"total_count"`
-	JSON       accountRuleListListsGetListsResponseResultInfoJSON `json:"-"`
-}
-
-// accountRuleListListsGetListsResponseResultInfoJSON contains the JSON metadata
-// for the struct [AccountRuleListListsGetListsResponseResultInfo]
-type accountRuleListListsGetListsResponseResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccountRuleListListsGetListsResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
 
 // Whether the API call was successful
 type AccountRuleListListsGetListsResponseSuccess bool
@@ -498,7 +653,7 @@ func (r AccountRuleListUpdateParams) MarshalJSON() (data []byte, err error) {
 
 type AccountRuleListListsNewAListParams struct {
 	// The type of the list. Each type supports specific list items (IP addresses,
-	// hostnames or redirects).
+	// ASNs, hostnames or redirects).
 	Kind param.Field[AccountRuleListListsNewAListParamsKind] `json:"kind,required"`
 	// An informative name for the list. Use this name in filter and rule expressions.
 	Name param.Field[string] `json:"name,required"`
@@ -511,11 +666,12 @@ func (r AccountRuleListListsNewAListParams) MarshalJSON() (data []byte, err erro
 }
 
 // The type of the list. Each type supports specific list items (IP addresses,
-// hostnames or redirects).
+// ASNs, hostnames or redirects).
 type AccountRuleListListsNewAListParamsKind string
 
 const (
 	AccountRuleListListsNewAListParamsKindIP       AccountRuleListListsNewAListParamsKind = "ip"
 	AccountRuleListListsNewAListParamsKindRedirect AccountRuleListListsNewAListParamsKind = "redirect"
 	AccountRuleListListsNewAListParamsKindHostname AccountRuleListListsNewAListParamsKind = "hostname"
+	AccountRuleListListsNewAListParamsKindASN      AccountRuleListListsNewAListParamsKind = "asn"
 )

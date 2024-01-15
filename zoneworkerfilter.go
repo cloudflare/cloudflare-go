@@ -32,7 +32,7 @@ func NewZoneWorkerFilterService(opts ...option.RequestOption) (r *ZoneWorkerFilt
 }
 
 // Update Filter
-func (r *ZoneWorkerFilterService) Update(ctx context.Context, zoneID string, filterID string, body ZoneWorkerFilterUpdateParams, opts ...option.RequestOption) (res *FilterResponseSingle, err error) {
+func (r *ZoneWorkerFilterService) Update(ctx context.Context, zoneID string, filterID string, body ZoneWorkerFilterUpdateParams, opts ...option.RequestOption) (res *ZoneWorkerFilterUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/workers/filters/%s", zoneID, filterID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
@@ -40,7 +40,7 @@ func (r *ZoneWorkerFilterService) Update(ctx context.Context, zoneID string, fil
 }
 
 // Delete Filter
-func (r *ZoneWorkerFilterService) Delete(ctx context.Context, zoneID string, filterID string, opts ...option.RequestOption) (res *APIResponseSingleIDKYar7dC1, err error) {
+func (r *ZoneWorkerFilterService) Delete(ctx context.Context, zoneID string, filterID string, opts ...option.RequestOption) (res *ZoneWorkerFilterDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/workers/filters/%s", zoneID, filterID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -48,7 +48,7 @@ func (r *ZoneWorkerFilterService) Delete(ctx context.Context, zoneID string, fil
 }
 
 // Create Filter
-func (r *ZoneWorkerFilterService) WorkerFiltersDeprecatedNewFilter(ctx context.Context, zoneID string, body ZoneWorkerFilterWorkerFiltersDeprecatedNewFilterParams, opts ...option.RequestOption) (res *APIResponseSingleIDKYar7dC1, err error) {
+func (r *ZoneWorkerFilterService) WorkerFiltersDeprecatedNewFilter(ctx context.Context, zoneID string, body ZoneWorkerFilterWorkerFiltersDeprecatedNewFilterParams, opts ...option.RequestOption) (res *ZoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/workers/filters", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -56,25 +56,25 @@ func (r *ZoneWorkerFilterService) WorkerFiltersDeprecatedNewFilter(ctx context.C
 }
 
 // List Filters
-func (r *ZoneWorkerFilterService) WorkerFiltersDeprecatedListFilters(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *FilterResponseCollection, err error) {
+func (r *ZoneWorkerFilterService) WorkerFiltersDeprecatedListFilters(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *ZoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/workers/filters", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type FilterResponseCollection struct {
-	Errors   []FilterResponseCollectionError   `json:"errors"`
-	Messages []FilterResponseCollectionMessage `json:"messages"`
-	Result   []FilterResponseCollectionResult  `json:"result"`
+type ZoneWorkerFilterUpdateResponse struct {
+	Errors   []ZoneWorkerFilterUpdateResponseError   `json:"errors"`
+	Messages []ZoneWorkerFilterUpdateResponseMessage `json:"messages"`
+	Result   ZoneWorkerFilterUpdateResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success FilterResponseCollectionSuccess `json:"success"`
-	JSON    filterResponseCollectionJSON    `json:"-"`
+	Success ZoneWorkerFilterUpdateResponseSuccess `json:"success"`
+	JSON    zoneWorkerFilterUpdateResponseJSON    `json:"-"`
 }
 
-// filterResponseCollectionJSON contains the JSON metadata for the struct
-// [FilterResponseCollection]
-type filterResponseCollectionJSON struct {
+// zoneWorkerFilterUpdateResponseJSON contains the JSON metadata for the struct
+// [ZoneWorkerFilterUpdateResponse]
+type zoneWorkerFilterUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -83,59 +83,59 @@ type filterResponseCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FilterResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneWorkerFilterUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type FilterResponseCollectionError struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    filterResponseCollectionErrorJSON `json:"-"`
+type ZoneWorkerFilterUpdateResponseError struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    zoneWorkerFilterUpdateResponseErrorJSON `json:"-"`
 }
 
-// filterResponseCollectionErrorJSON contains the JSON metadata for the struct
-// [FilterResponseCollectionError]
-type filterResponseCollectionErrorJSON struct {
+// zoneWorkerFilterUpdateResponseErrorJSON contains the JSON metadata for the
+// struct [ZoneWorkerFilterUpdateResponseError]
+type zoneWorkerFilterUpdateResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FilterResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneWorkerFilterUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type FilterResponseCollectionMessage struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    filterResponseCollectionMessageJSON `json:"-"`
+type ZoneWorkerFilterUpdateResponseMessage struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    zoneWorkerFilterUpdateResponseMessageJSON `json:"-"`
 }
 
-// filterResponseCollectionMessageJSON contains the JSON metadata for the struct
-// [FilterResponseCollectionMessage]
-type filterResponseCollectionMessageJSON struct {
+// zoneWorkerFilterUpdateResponseMessageJSON contains the JSON metadata for the
+// struct [ZoneWorkerFilterUpdateResponseMessage]
+type zoneWorkerFilterUpdateResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FilterResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneWorkerFilterUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type FilterResponseCollectionResult struct {
+type ZoneWorkerFilterUpdateResponseResult struct {
 	// Identifier
-	ID      string                             `json:"id,required"`
-	Enabled bool                               `json:"enabled,required"`
-	Pattern string                             `json:"pattern,required"`
-	JSON    filterResponseCollectionResultJSON `json:"-"`
+	ID      string                                   `json:"id,required"`
+	Enabled bool                                     `json:"enabled,required"`
+	Pattern string                                   `json:"pattern,required"`
+	JSON    zoneWorkerFilterUpdateResponseResultJSON `json:"-"`
 }
 
-// filterResponseCollectionResultJSON contains the JSON metadata for the struct
-// [FilterResponseCollectionResult]
-type filterResponseCollectionResultJSON struct {
+// zoneWorkerFilterUpdateResponseResultJSON contains the JSON metadata for the
+// struct [ZoneWorkerFilterUpdateResponseResult]
+type zoneWorkerFilterUpdateResponseResultJSON struct {
 	ID          apijson.Field
 	Enabled     apijson.Field
 	Pattern     apijson.Field
@@ -143,29 +143,29 @@ type filterResponseCollectionResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FilterResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneWorkerFilterUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type FilterResponseCollectionSuccess bool
+type ZoneWorkerFilterUpdateResponseSuccess bool
 
 const (
-	FilterResponseCollectionSuccessTrue FilterResponseCollectionSuccess = true
+	ZoneWorkerFilterUpdateResponseSuccessTrue ZoneWorkerFilterUpdateResponseSuccess = true
 )
 
-type FilterResponseSingle struct {
-	Errors   []FilterResponseSingleError   `json:"errors"`
-	Messages []FilterResponseSingleMessage `json:"messages"`
-	Result   FilterResponseSingleResult    `json:"result"`
+type ZoneWorkerFilterDeleteResponse struct {
+	Errors   []ZoneWorkerFilterDeleteResponseError   `json:"errors"`
+	Messages []ZoneWorkerFilterDeleteResponseMessage `json:"messages"`
+	Result   ZoneWorkerFilterDeleteResponseResult    `json:"result,nullable"`
 	// Whether the API call was successful
-	Success FilterResponseSingleSuccess `json:"success"`
-	JSON    filterResponseSingleJSON    `json:"-"`
+	Success ZoneWorkerFilterDeleteResponseSuccess `json:"success"`
+	JSON    zoneWorkerFilterDeleteResponseJSON    `json:"-"`
 }
 
-// filterResponseSingleJSON contains the JSON metadata for the struct
-// [FilterResponseSingle]
-type filterResponseSingleJSON struct {
+// zoneWorkerFilterDeleteResponseJSON contains the JSON metadata for the struct
+// [ZoneWorkerFilterDeleteResponse]
+type zoneWorkerFilterDeleteResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -174,59 +174,241 @@ type filterResponseSingleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FilterResponseSingle) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneWorkerFilterDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type FilterResponseSingleError struct {
-	Code    int64                         `json:"code,required"`
-	Message string                        `json:"message,required"`
-	JSON    filterResponseSingleErrorJSON `json:"-"`
+type ZoneWorkerFilterDeleteResponseError struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    zoneWorkerFilterDeleteResponseErrorJSON `json:"-"`
 }
 
-// filterResponseSingleErrorJSON contains the JSON metadata for the struct
-// [FilterResponseSingleError]
-type filterResponseSingleErrorJSON struct {
+// zoneWorkerFilterDeleteResponseErrorJSON contains the JSON metadata for the
+// struct [ZoneWorkerFilterDeleteResponseError]
+type zoneWorkerFilterDeleteResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FilterResponseSingleError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneWorkerFilterDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type FilterResponseSingleMessage struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    filterResponseSingleMessageJSON `json:"-"`
+type ZoneWorkerFilterDeleteResponseMessage struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    zoneWorkerFilterDeleteResponseMessageJSON `json:"-"`
 }
 
-// filterResponseSingleMessageJSON contains the JSON metadata for the struct
-// [FilterResponseSingleMessage]
-type filterResponseSingleMessageJSON struct {
+// zoneWorkerFilterDeleteResponseMessageJSON contains the JSON metadata for the
+// struct [ZoneWorkerFilterDeleteResponseMessage]
+type zoneWorkerFilterDeleteResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FilterResponseSingleMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneWorkerFilterDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type FilterResponseSingleResult struct {
+type ZoneWorkerFilterDeleteResponseResult struct {
 	// Identifier
-	ID      string                         `json:"id,required"`
-	Enabled bool                           `json:"enabled,required"`
-	Pattern string                         `json:"pattern,required"`
-	JSON    filterResponseSingleResultJSON `json:"-"`
+	ID   string                                   `json:"id,required"`
+	JSON zoneWorkerFilterDeleteResponseResultJSON `json:"-"`
 }
 
-// filterResponseSingleResultJSON contains the JSON metadata for the struct
-// [FilterResponseSingleResult]
-type filterResponseSingleResultJSON struct {
+// zoneWorkerFilterDeleteResponseResultJSON contains the JSON metadata for the
+// struct [ZoneWorkerFilterDeleteResponseResult]
+type zoneWorkerFilterDeleteResponseResultJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWorkerFilterDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneWorkerFilterDeleteResponseSuccess bool
+
+const (
+	ZoneWorkerFilterDeleteResponseSuccessTrue ZoneWorkerFilterDeleteResponseSuccess = true
+)
+
+type ZoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponse struct {
+	Errors   []ZoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseError   `json:"errors"`
+	Messages []ZoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseMessage `json:"messages"`
+	Result   ZoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseResult    `json:"result,nullable"`
+	// Whether the API call was successful
+	Success ZoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseSuccess `json:"success"`
+	JSON    zoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseJSON    `json:"-"`
+}
+
+// zoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseJSON contains the JSON
+// metadata for the struct
+// [ZoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponse]
+type zoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseError struct {
+	Code    int64                                                             `json:"code,required"`
+	Message string                                                            `json:"message,required"`
+	JSON    zoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseErrorJSON `json:"-"`
+}
+
+// zoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseErrorJSON contains the
+// JSON metadata for the struct
+// [ZoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseError]
+type zoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseMessage struct {
+	Code    int64                                                               `json:"code,required"`
+	Message string                                                              `json:"message,required"`
+	JSON    zoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseMessageJSON `json:"-"`
+}
+
+// zoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseMessageJSON contains the
+// JSON metadata for the struct
+// [ZoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseMessage]
+type zoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseResult struct {
+	// Identifier
+	ID   string                                                             `json:"id,required"`
+	JSON zoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseResultJSON `json:"-"`
+}
+
+// zoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseResultJSON contains the
+// JSON metadata for the struct
+// [ZoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseResult]
+type zoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseResultJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseSuccess bool
+
+const (
+	ZoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseSuccessTrue ZoneWorkerFilterWorkerFiltersDeprecatedNewFilterResponseSuccess = true
+)
+
+type ZoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponse struct {
+	Errors   []ZoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseError   `json:"errors"`
+	Messages []ZoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseMessage `json:"messages"`
+	Result   []ZoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseResult  `json:"result"`
+	// Whether the API call was successful
+	Success ZoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseSuccess `json:"success"`
+	JSON    zoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseJSON    `json:"-"`
+}
+
+// zoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseJSON contains the JSON
+// metadata for the struct
+// [ZoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponse]
+type zoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseError struct {
+	Code    int64                                                               `json:"code,required"`
+	Message string                                                              `json:"message,required"`
+	JSON    zoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseErrorJSON `json:"-"`
+}
+
+// zoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseErrorJSON contains the
+// JSON metadata for the struct
+// [ZoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseError]
+type zoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseMessage struct {
+	Code    int64                                                                 `json:"code,required"`
+	Message string                                                                `json:"message,required"`
+	JSON    zoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseMessageJSON `json:"-"`
+}
+
+// zoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseMessageJSON contains
+// the JSON metadata for the struct
+// [ZoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseMessage]
+type zoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseResult struct {
+	// Identifier
+	ID      string                                                               `json:"id,required"`
+	Enabled bool                                                                 `json:"enabled,required"`
+	Pattern string                                                               `json:"pattern,required"`
+	JSON    zoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseResultJSON `json:"-"`
+}
+
+// zoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseResultJSON contains
+// the JSON metadata for the struct
+// [ZoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseResult]
+type zoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseResultJSON struct {
 	ID          apijson.Field
 	Enabled     apijson.Field
 	Pattern     apijson.Field
@@ -234,15 +416,15 @@ type filterResponseSingleResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FilterResponseSingleResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type FilterResponseSingleSuccess bool
+type ZoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseSuccess bool
 
 const (
-	FilterResponseSingleSuccessTrue FilterResponseSingleSuccess = true
+	ZoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseSuccessTrue ZoneWorkerFilterWorkerFiltersDeprecatedListFiltersResponseSuccess = true
 )
 
 type ZoneWorkerFilterUpdateParams struct {

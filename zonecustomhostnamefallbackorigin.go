@@ -32,7 +32,7 @@ func NewZoneCustomHostnameFallbackOriginService(opts ...option.RequestOption) (r
 }
 
 // Delete Fallback Origin for Custom Hostnames
-func (r *ZoneCustomHostnameFallbackOriginService) Delete(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *FallbackOriginResponse, err error) {
+func (r *ZoneCustomHostnameFallbackOriginService) Delete(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ZoneCustomHostnameFallbackOriginDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -40,7 +40,7 @@ func (r *ZoneCustomHostnameFallbackOriginService) Delete(ctx context.Context, zo
 }
 
 // Get Fallback Origin for Custom Hostnames
-func (r *ZoneCustomHostnameFallbackOriginService) CustomHostnameFallbackOriginForAZoneGetFallbackOriginForCustomHostnames(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *FallbackOriginResponse, err error) {
+func (r *ZoneCustomHostnameFallbackOriginService) CustomHostnameFallbackOriginForAZoneGetFallbackOriginForCustomHostnames(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneGetFallbackOriginForCustomHostnamesResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -48,25 +48,25 @@ func (r *ZoneCustomHostnameFallbackOriginService) CustomHostnameFallbackOriginFo
 }
 
 // Update Fallback Origin for Custom Hostnames
-func (r *ZoneCustomHostnameFallbackOriginService) CustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnames(ctx context.Context, zoneIdentifier string, body ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesParams, opts ...option.RequestOption) (res *FallbackOriginResponse, err error) {
+func (r *ZoneCustomHostnameFallbackOriginService) CustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnames(ctx context.Context, zoneIdentifier string, body ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesParams, opts ...option.RequestOption) (res *ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
 	return
 }
 
-type FallbackOriginResponse struct {
-	Errors   []FallbackOriginResponseError   `json:"errors"`
-	Messages []FallbackOriginResponseMessage `json:"messages"`
-	Result   interface{}                     `json:"result"`
+type ZoneCustomHostnameFallbackOriginDeleteResponse struct {
+	Errors   []ZoneCustomHostnameFallbackOriginDeleteResponseError   `json:"errors"`
+	Messages []ZoneCustomHostnameFallbackOriginDeleteResponseMessage `json:"messages"`
+	Result   interface{}                                             `json:"result"`
 	// Whether the API call was successful
-	Success FallbackOriginResponseSuccess `json:"success"`
-	JSON    fallbackOriginResponseJSON    `json:"-"`
+	Success ZoneCustomHostnameFallbackOriginDeleteResponseSuccess `json:"success"`
+	JSON    zoneCustomHostnameFallbackOriginDeleteResponseJSON    `json:"-"`
 }
 
-// fallbackOriginResponseJSON contains the JSON metadata for the struct
-// [FallbackOriginResponse]
-type fallbackOriginResponseJSON struct {
+// zoneCustomHostnameFallbackOriginDeleteResponseJSON contains the JSON metadata
+// for the struct [ZoneCustomHostnameFallbackOriginDeleteResponse]
+type zoneCustomHostnameFallbackOriginDeleteResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -75,53 +75,197 @@ type fallbackOriginResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FallbackOriginResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneCustomHostnameFallbackOriginDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type FallbackOriginResponseError struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    fallbackOriginResponseErrorJSON `json:"-"`
+type ZoneCustomHostnameFallbackOriginDeleteResponseError struct {
+	Code    int64                                                   `json:"code,required"`
+	Message string                                                  `json:"message,required"`
+	JSON    zoneCustomHostnameFallbackOriginDeleteResponseErrorJSON `json:"-"`
 }
 
-// fallbackOriginResponseErrorJSON contains the JSON metadata for the struct
-// [FallbackOriginResponseError]
-type fallbackOriginResponseErrorJSON struct {
+// zoneCustomHostnameFallbackOriginDeleteResponseErrorJSON contains the JSON
+// metadata for the struct [ZoneCustomHostnameFallbackOriginDeleteResponseError]
+type zoneCustomHostnameFallbackOriginDeleteResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FallbackOriginResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneCustomHostnameFallbackOriginDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type FallbackOriginResponseMessage struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    fallbackOriginResponseMessageJSON `json:"-"`
+type ZoneCustomHostnameFallbackOriginDeleteResponseMessage struct {
+	Code    int64                                                     `json:"code,required"`
+	Message string                                                    `json:"message,required"`
+	JSON    zoneCustomHostnameFallbackOriginDeleteResponseMessageJSON `json:"-"`
 }
 
-// fallbackOriginResponseMessageJSON contains the JSON metadata for the struct
-// [FallbackOriginResponseMessage]
-type fallbackOriginResponseMessageJSON struct {
+// zoneCustomHostnameFallbackOriginDeleteResponseMessageJSON contains the JSON
+// metadata for the struct [ZoneCustomHostnameFallbackOriginDeleteResponseMessage]
+type zoneCustomHostnameFallbackOriginDeleteResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FallbackOriginResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneCustomHostnameFallbackOriginDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type FallbackOriginResponseSuccess bool
+type ZoneCustomHostnameFallbackOriginDeleteResponseSuccess bool
 
 const (
-	FallbackOriginResponseSuccessTrue FallbackOriginResponseSuccess = true
+	ZoneCustomHostnameFallbackOriginDeleteResponseSuccessTrue ZoneCustomHostnameFallbackOriginDeleteResponseSuccess = true
+)
+
+type ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneGetFallbackOriginForCustomHostnamesResponse struct {
+	Errors   []ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneGetFallbackOriginForCustomHostnamesResponseError   `json:"errors"`
+	Messages []ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneGetFallbackOriginForCustomHostnamesResponseMessage `json:"messages"`
+	Result   interface{}                                                                                                              `json:"result"`
+	// Whether the API call was successful
+	Success ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneGetFallbackOriginForCustomHostnamesResponseSuccess `json:"success"`
+	JSON    zoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneGetFallbackOriginForCustomHostnamesResponseJSON    `json:"-"`
+}
+
+// zoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneGetFallbackOriginForCustomHostnamesResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneGetFallbackOriginForCustomHostnamesResponse]
+type zoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneGetFallbackOriginForCustomHostnamesResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneGetFallbackOriginForCustomHostnamesResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneGetFallbackOriginForCustomHostnamesResponseError struct {
+	Code    int64                                                                                                                    `json:"code,required"`
+	Message string                                                                                                                   `json:"message,required"`
+	JSON    zoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneGetFallbackOriginForCustomHostnamesResponseErrorJSON `json:"-"`
+}
+
+// zoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneGetFallbackOriginForCustomHostnamesResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneGetFallbackOriginForCustomHostnamesResponseError]
+type zoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneGetFallbackOriginForCustomHostnamesResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneGetFallbackOriginForCustomHostnamesResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneGetFallbackOriginForCustomHostnamesResponseMessage struct {
+	Code    int64                                                                                                                      `json:"code,required"`
+	Message string                                                                                                                     `json:"message,required"`
+	JSON    zoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneGetFallbackOriginForCustomHostnamesResponseMessageJSON `json:"-"`
+}
+
+// zoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneGetFallbackOriginForCustomHostnamesResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneGetFallbackOriginForCustomHostnamesResponseMessage]
+type zoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneGetFallbackOriginForCustomHostnamesResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneGetFallbackOriginForCustomHostnamesResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneGetFallbackOriginForCustomHostnamesResponseSuccess bool
+
+const (
+	ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneGetFallbackOriginForCustomHostnamesResponseSuccessTrue ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneGetFallbackOriginForCustomHostnamesResponseSuccess = true
+)
+
+type ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesResponse struct {
+	Errors   []ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesResponseError   `json:"errors"`
+	Messages []ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesResponseMessage `json:"messages"`
+	Result   interface{}                                                                                                                 `json:"result"`
+	// Whether the API call was successful
+	Success ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesResponseSuccess `json:"success"`
+	JSON    zoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesResponseJSON    `json:"-"`
+}
+
+// zoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesResponseJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesResponse]
+type zoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesResponseError struct {
+	Code    int64                                                                                                                       `json:"code,required"`
+	Message string                                                                                                                      `json:"message,required"`
+	JSON    zoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesResponseErrorJSON `json:"-"`
+}
+
+// zoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesResponseErrorJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesResponseError]
+type zoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesResponseMessage struct {
+	Code    int64                                                                                                                         `json:"code,required"`
+	Message string                                                                                                                        `json:"message,required"`
+	JSON    zoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesResponseMessageJSON `json:"-"`
+}
+
+// zoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesResponseMessage]
+type zoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesResponseSuccess bool
+
+const (
+	ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesResponseSuccessTrue ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesResponseSuccess = true
 )
 
 type ZoneCustomHostnameFallbackOriginCustomHostnameFallbackOriginForAZoneUpdateFallbackOriginForCustomHostnamesParams struct {

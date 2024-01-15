@@ -25,8 +25,10 @@ func TestContextCancel(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	cancelCtx, cancel := context.WithCancel(context.Background())
 	cancel()
@@ -60,8 +62,10 @@ func TestContextCancelDelay(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 		option.WithHTTPClient(&http.Client{Transport: &neverTransport{}}),
 	)
 	cancelCtx, cancel := context.WithCancel(context.Background())
@@ -100,8 +104,10 @@ func TestContextDeadline(t *testing.T) {
 	go func() {
 		client := cloudflare.NewClient(
 			option.WithBaseURL(baseURL),
+			option.WithAPIEmail("dev@cloudflare.com"),
 			option.WithAPIKey("my-cloudflare-api-key"),
-			option.WithEmail("dev@cloudflare.com"),
+			option.WithAPIToken("my-cloudflare-api-token"),
+			option.WithUserServiceKey("my-cloudflare-user-service-key"),
 			option.WithHTTPClient(&http.Client{Transport: &neverTransport{}}),
 		)
 		res, err := client.Zones.New(deadlineCtx, cloudflare.ZoneNewParams{

@@ -33,25 +33,26 @@ func NewAccountStreamDirectUploadService(opts ...option.RequestOption) (r *Accou
 }
 
 // Creates a direct upload that allows video uploads without an API key.
-func (r *AccountStreamDirectUploadService) StreamVideosUploadVideosViaDirectUploadURLs(ctx context.Context, accountIdentifier string, params AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsParams, opts ...option.RequestOption) (res *DirectUploadResponse, err error) {
+func (r *AccountStreamDirectUploadService) StreamVideosUploadVideosViaDirectUploadURLs(ctx context.Context, accountIdentifier string, params AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsParams, opts ...option.RequestOption) (res *AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/stream/direct_upload", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
 	return
 }
 
-type DirectUploadResponse struct {
-	Errors   []DirectUploadResponseError   `json:"errors"`
-	Messages []DirectUploadResponseMessage `json:"messages"`
-	Result   DirectUploadResponseResult    `json:"result"`
+type AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponse struct {
+	Errors   []AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseError   `json:"errors"`
+	Messages []AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseMessage `json:"messages"`
+	Result   AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success DirectUploadResponseSuccess `json:"success"`
-	JSON    directUploadResponseJSON    `json:"-"`
+	Success AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseSuccess `json:"success"`
+	JSON    accountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseJSON    `json:"-"`
 }
 
-// directUploadResponseJSON contains the JSON metadata for the struct
-// [DirectUploadResponse]
-type directUploadResponseJSON struct {
+// accountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseJSON
+// contains the JSON metadata for the struct
+// [AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponse]
+type accountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -60,73 +61,81 @@ type directUploadResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DirectUploadResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DirectUploadResponseError struct {
-	Code    int64                         `json:"code,required"`
-	Message string                        `json:"message,required"`
-	JSON    directUploadResponseErrorJSON `json:"-"`
+type AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseError struct {
+	Code    int64                                                                                 `json:"code,required"`
+	Message string                                                                                `json:"message,required"`
+	JSON    accountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseErrorJSON `json:"-"`
 }
 
-// directUploadResponseErrorJSON contains the JSON metadata for the struct
-// [DirectUploadResponseError]
-type directUploadResponseErrorJSON struct {
+// accountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseError]
+type accountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DirectUploadResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DirectUploadResponseMessage struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    directUploadResponseMessageJSON `json:"-"`
+type AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseMessage struct {
+	Code    int64                                                                                   `json:"code,required"`
+	Message string                                                                                  `json:"message,required"`
+	JSON    accountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseMessageJSON `json:"-"`
 }
 
-// directUploadResponseMessageJSON contains the JSON metadata for the struct
-// [DirectUploadResponseMessage]
-type directUploadResponseMessageJSON struct {
+// accountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseMessage]
+type accountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DirectUploadResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DirectUploadResponseResult struct {
+type AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseResult struct {
+	// Indicates the date and time at which the video will be deleted. Omit the field
+	// to indicate no change, or include with a `null` value to remove an existing
+	// scheduled deletion. If specified, must be at least 30 days from upload time.
+	ScheduledDeletion time.Time `json:"scheduledDeletion" format:"date-time"`
 	// A Cloudflare-generated unique identifier for a media item.
 	Uid string `json:"uid"`
 	// The URL an unauthenticated upload can use for a single
 	// `HTTP POST multipart/form-data` request.
-	UploadURL string                              `json:"uploadURL"`
-	Watermark DirectUploadResponseResultWatermark `json:"watermark"`
-	JSON      directUploadResponseResultJSON      `json:"-"`
+	UploadURL string                                                                                      `json:"uploadURL"`
+	Watermark AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseResultWatermark `json:"watermark"`
+	JSON      accountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseResultJSON      `json:"-"`
 }
 
-// directUploadResponseResultJSON contains the JSON metadata for the struct
-// [DirectUploadResponseResult]
-type directUploadResponseResultJSON struct {
-	Uid         apijson.Field
-	UploadURL   apijson.Field
-	Watermark   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+// accountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseResult]
+type accountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseResultJSON struct {
+	ScheduledDeletion apijson.Field
+	Uid               apijson.Field
+	UploadURL         apijson.Field
+	Watermark         apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
-func (r *DirectUploadResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DirectUploadResponseResultWatermark struct {
+type AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseResultWatermark struct {
 	// The date and a time a watermark profile was created.
 	Created time.Time `json:"created" format:"date-time"`
 	// The source URL for a downloaded image. If the watermark profile was created via
@@ -158,13 +167,14 @@ type DirectUploadResponseResultWatermark struct {
 	// The unique identifier for a watermark profile.
 	Uid string `json:"uid"`
 	// The width of the image in pixels.
-	Width int64                                   `json:"width"`
-	JSON  directUploadResponseResultWatermarkJSON `json:"-"`
+	Width int64                                                                                           `json:"width"`
+	JSON  accountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseResultWatermarkJSON `json:"-"`
 }
 
-// directUploadResponseResultWatermarkJSON contains the JSON metadata for the
-// struct [DirectUploadResponseResultWatermark]
-type directUploadResponseResultWatermarkJSON struct {
+// accountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseResultWatermarkJSON
+// contains the JSON metadata for the struct
+// [AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseResultWatermark]
+type accountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseResultWatermarkJSON struct {
 	Created        apijson.Field
 	DownloadedFrom apijson.Field
 	Height         apijson.Field
@@ -180,15 +190,15 @@ type directUploadResponseResultWatermarkJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *DirectUploadResponseResultWatermark) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseResultWatermark) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type DirectUploadResponseSuccess bool
+type AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseSuccess bool
 
 const (
-	DirectUploadResponseSuccessTrue DirectUploadResponseSuccess = true
+	AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseSuccessTrue AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsResponseSuccess = true
 )
 
 type AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsParams struct {
@@ -205,6 +215,16 @@ type AccountStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsParams 
 	Creator param.Field[string] `json:"creator"`
 	// The date and time after upload when videos will not be accepted.
 	Expiry param.Field[time.Time] `json:"expiry" format:"date-time"`
+	// A user modifiable key-value store used to reference other systems of record for
+	// managing videos.
+	Meta param.Field[interface{}] `json:"meta"`
+	// Indicates whether the video can be a accessed using the UID. When set to `true`,
+	// a signed token must be generated with a signing key to view the video.
+	RequireSignedURLs param.Field[bool] `json:"requireSignedURLs"`
+	// Indicates the date and time at which the video will be deleted. Omit the field
+	// to indicate no change, or include with a `null` value to remove an existing
+	// scheduled deletion. If specified, must be at least 30 days from upload time.
+	ScheduledDeletion param.Field[time.Time] `json:"scheduledDeletion" format:"date-time"`
 	// The timestamp for a thumbnail image calculated as a percentage value of the
 	// video's duration. To convert from a second-wise timestamp to a percentage,
 	// divide the desired timestamp by the total duration of the video. If this value

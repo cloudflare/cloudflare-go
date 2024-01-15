@@ -24,14 +24,16 @@ func TestZoneFirewallWafPackageGroupGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Firewalls.Wafs.Packages.Groups.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"a25a9a7e9c00afc1fb2e0245519d725b",
-		"de677e5818985db1285d0e80225f06e5",
+		"a25a9a7e9c00afc1fb2e0245519d725b",
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -53,14 +55,16 @@ func TestZoneFirewallWafPackageGroupUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Firewalls.Wafs.Packages.Groups.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"a25a9a7e9c00afc1fb2e0245519d725b",
-		"de677e5818985db1285d0e80225f06e5",
+		"a25a9a7e9c00afc1fb2e0245519d725b",
 		cloudflare.ZoneFirewallWafPackageGroupUpdateParams{
 			Mode: cloudflare.F(cloudflare.ZoneFirewallWafPackageGroupUpdateParamsModeOn),
 		},
@@ -85,8 +89,10 @@ func TestZoneFirewallWafPackageGroupWafRuleGroupsListWafRuleGroupsWithOptionalPa
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Firewalls.Wafs.Packages.Groups.WafRuleGroupsListWafRuleGroups(
 		context.TODO(),

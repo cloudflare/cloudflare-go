@@ -24,8 +24,10 @@ func TestZoneFirewallAccessRuleRuleUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Firewalls.AccessRules.Rules.Update(
 		context.TODO(),
@@ -56,8 +58,10 @@ func TestZoneFirewallAccessRuleRuleDeleteWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Firewalls.AccessRules.Rules.Delete(
 		context.TODO(),
@@ -87,15 +91,17 @@ func TestZoneFirewallAccessRuleRuleIPAccessRulesForAZoneNewAnIPAccessRuleWithOpt
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Firewalls.AccessRules.Rules.IPAccessRulesForAZoneNewAnIPAccessRule(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.ZoneFirewallAccessRuleRuleIPAccessRulesForAZoneNewAnIPAccessRuleParams{
-			Configuration: cloudflare.F[cloudflare.ZoneFirewallAccessRuleRuleIPAccessRulesForAZoneNewAnIPAccessRuleParamsConfiguration](cloudflare.ZoneFirewallAccessRuleRuleIPAccessRulesForAZoneNewAnIPAccessRuleParamsConfigurationIPConfiguration(cloudflare.ZoneFirewallAccessRuleRuleIPAccessRulesForAZoneNewAnIPAccessRuleParamsConfigurationIPConfiguration{
-				Target: cloudflare.F(cloudflare.ZoneFirewallAccessRuleRuleIPAccessRulesForAZoneNewAnIPAccessRuleParamsConfigurationIPConfigurationTargetIP),
+			Configuration: cloudflare.F[cloudflare.ZoneFirewallAccessRuleRuleIPAccessRulesForAZoneNewAnIPAccessRuleParamsConfiguration](cloudflare.ZoneFirewallAccessRuleRuleIPAccessRulesForAZoneNewAnIPAccessRuleParamsConfigurationDZw70ubTIPConfiguration(cloudflare.ZoneFirewallAccessRuleRuleIPAccessRulesForAZoneNewAnIPAccessRuleParamsConfigurationDZw70ubTIPConfiguration{
+				Target: cloudflare.F(cloudflare.ZoneFirewallAccessRuleRuleIPAccessRulesForAZoneNewAnIPAccessRuleParamsConfigurationDZw70ubTIPConfigurationTargetIP),
 				Value:  cloudflare.F("198.51.100.4"),
 			})),
 			Mode:  cloudflare.F(cloudflare.ZoneFirewallAccessRuleRuleIPAccessRulesForAZoneNewAnIPAccessRuleParamsModeChallenge),
@@ -122,8 +128,10 @@ func TestZoneFirewallAccessRuleRuleIPAccessRulesForAZoneListIPAccessRulesWithOpt
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("my-cloudflare-api-token"),
+		option.WithUserServiceKey("my-cloudflare-user-service-key"),
 	)
 	_, err := client.Zones.Firewalls.AccessRules.Rules.IPAccessRulesForAZoneListIPAccessRules(
 		context.TODO(),

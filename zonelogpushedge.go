@@ -32,7 +32,7 @@ func NewZoneLogpushEdgeService(opts ...option.RequestOption) (r *ZoneLogpushEdge
 }
 
 // Lists Instant Logs jobs for a zone.
-func (r *ZoneLogpushEdgeService) GetZonesZoneIdentifierLogpushEdgeJobs(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *InstantLogsJobResponseCollection, err error) {
+func (r *ZoneLogpushEdgeService) GetZonesZoneIdentifierLogpushEdgeJobs(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ZoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/logpush/edge", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -40,25 +40,26 @@ func (r *ZoneLogpushEdgeService) GetZonesZoneIdentifierLogpushEdgeJobs(ctx conte
 }
 
 // Creates a new Instant Logs job for a zone.
-func (r *ZoneLogpushEdgeService) PostZonesZoneIdentifierLogpushEdgeJobs(ctx context.Context, zoneIdentifier string, body ZoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsParams, opts ...option.RequestOption) (res *InstantLogsJobResponseSingle, err error) {
+func (r *ZoneLogpushEdgeService) PostZonesZoneIdentifierLogpushEdgeJobs(ctx context.Context, zoneIdentifier string, body ZoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsParams, opts ...option.RequestOption) (res *ZoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/logpush/edge", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
-type InstantLogsJobResponseCollection struct {
-	Errors   []InstantLogsJobResponseCollectionError   `json:"errors"`
-	Messages []InstantLogsJobResponseCollectionMessage `json:"messages"`
-	Result   []InstantLogsJobResponseCollectionResult  `json:"result"`
+type ZoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponse struct {
+	Errors   []ZoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseError   `json:"errors"`
+	Messages []ZoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseMessage `json:"messages"`
+	Result   []ZoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseResult  `json:"result"`
 	// Whether the API call was successful
-	Success InstantLogsJobResponseCollectionSuccess `json:"success"`
-	JSON    instantLogsJobResponseCollectionJSON    `json:"-"`
+	Success ZoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseSuccess `json:"success"`
+	JSON    zoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseJSON    `json:"-"`
 }
 
-// instantLogsJobResponseCollectionJSON contains the JSON metadata for the struct
-// [InstantLogsJobResponseCollection]
-type instantLogsJobResponseCollectionJSON struct {
+// zoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseJSON contains the
+// JSON metadata for the struct
+// [ZoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponse]
+type zoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -67,49 +68,51 @@ type instantLogsJobResponseCollectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *InstantLogsJobResponseCollection) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type InstantLogsJobResponseCollectionError struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    instantLogsJobResponseCollectionErrorJSON `json:"-"`
+type ZoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseError struct {
+	Code    int64                                                                 `json:"code,required"`
+	Message string                                                                `json:"message,required"`
+	JSON    zoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseErrorJSON `json:"-"`
 }
 
-// instantLogsJobResponseCollectionErrorJSON contains the JSON metadata for the
-// struct [InstantLogsJobResponseCollectionError]
-type instantLogsJobResponseCollectionErrorJSON struct {
+// zoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseErrorJSON contains
+// the JSON metadata for the struct
+// [ZoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseError]
+type zoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *InstantLogsJobResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type InstantLogsJobResponseCollectionMessage struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    instantLogsJobResponseCollectionMessageJSON `json:"-"`
+type ZoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseMessage struct {
+	Code    int64                                                                   `json:"code,required"`
+	Message string                                                                  `json:"message,required"`
+	JSON    zoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseMessageJSON `json:"-"`
 }
 
-// instantLogsJobResponseCollectionMessageJSON contains the JSON metadata for the
-// struct [InstantLogsJobResponseCollectionMessage]
-type instantLogsJobResponseCollectionMessageJSON struct {
+// zoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseMessageJSON contains
+// the JSON metadata for the struct
+// [ZoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseMessage]
+type zoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *InstantLogsJobResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type InstantLogsJobResponseCollectionResult struct {
+type ZoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseResult struct {
 	// Unique WebSocket address that will receive messages from Cloudflare’s edge.
 	DestinationConf string `json:"destination_conf" format:"uri"`
 	// Comma-separated list of fields.
@@ -120,13 +123,14 @@ type InstantLogsJobResponseCollectionResult struct {
 	// "sample": 1 is 100% of records "sample": 10 is 10% and so on.
 	Sample int64 `json:"sample"`
 	// Unique session id of the job.
-	SessionID string                                     `json:"session_id"`
-	JSON      instantLogsJobResponseCollectionResultJSON `json:"-"`
+	SessionID string                                                                 `json:"session_id"`
+	JSON      zoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseResultJSON `json:"-"`
 }
 
-// instantLogsJobResponseCollectionResultJSON contains the JSON metadata for the
-// struct [InstantLogsJobResponseCollectionResult]
-type instantLogsJobResponseCollectionResultJSON struct {
+// zoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseResultJSON contains
+// the JSON metadata for the struct
+// [ZoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseResult]
+type zoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseResultJSON struct {
 	DestinationConf apijson.Field
 	Fields          apijson.Field
 	Filter          apijson.Field
@@ -136,29 +140,30 @@ type instantLogsJobResponseCollectionResultJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *InstantLogsJobResponseCollectionResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type InstantLogsJobResponseCollectionSuccess bool
+type ZoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseSuccess bool
 
 const (
-	InstantLogsJobResponseCollectionSuccessTrue InstantLogsJobResponseCollectionSuccess = true
+	ZoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseSuccessTrue ZoneLogpushEdgeGetZonesZoneIdentifierLogpushEdgeJobsResponseSuccess = true
 )
 
-type InstantLogsJobResponseSingle struct {
-	Errors   []InstantLogsJobResponseSingleError   `json:"errors"`
-	Messages []InstantLogsJobResponseSingleMessage `json:"messages"`
-	Result   InstantLogsJobResponseSingleResult    `json:"result,nullable"`
+type ZoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponse struct {
+	Errors   []ZoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseError   `json:"errors"`
+	Messages []ZoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseMessage `json:"messages"`
+	Result   ZoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseResult    `json:"result,nullable"`
 	// Whether the API call was successful
-	Success InstantLogsJobResponseSingleSuccess `json:"success"`
-	JSON    instantLogsJobResponseSingleJSON    `json:"-"`
+	Success ZoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseSuccess `json:"success"`
+	JSON    zoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseJSON    `json:"-"`
 }
 
-// instantLogsJobResponseSingleJSON contains the JSON metadata for the struct
-// [InstantLogsJobResponseSingle]
-type instantLogsJobResponseSingleJSON struct {
+// zoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseJSON contains the
+// JSON metadata for the struct
+// [ZoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponse]
+type zoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -167,49 +172,51 @@ type instantLogsJobResponseSingleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *InstantLogsJobResponseSingle) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type InstantLogsJobResponseSingleError struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    instantLogsJobResponseSingleErrorJSON `json:"-"`
+type ZoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseError struct {
+	Code    int64                                                                  `json:"code,required"`
+	Message string                                                                 `json:"message,required"`
+	JSON    zoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseErrorJSON `json:"-"`
 }
 
-// instantLogsJobResponseSingleErrorJSON contains the JSON metadata for the struct
-// [InstantLogsJobResponseSingleError]
-type instantLogsJobResponseSingleErrorJSON struct {
+// zoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseErrorJSON contains
+// the JSON metadata for the struct
+// [ZoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseError]
+type zoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *InstantLogsJobResponseSingleError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type InstantLogsJobResponseSingleMessage struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    instantLogsJobResponseSingleMessageJSON `json:"-"`
+type ZoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseMessage struct {
+	Code    int64                                                                    `json:"code,required"`
+	Message string                                                                   `json:"message,required"`
+	JSON    zoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseMessageJSON `json:"-"`
 }
 
-// instantLogsJobResponseSingleMessageJSON contains the JSON metadata for the
-// struct [InstantLogsJobResponseSingleMessage]
-type instantLogsJobResponseSingleMessageJSON struct {
+// zoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseMessageJSON
+// contains the JSON metadata for the struct
+// [ZoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseMessage]
+type zoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *InstantLogsJobResponseSingleMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type InstantLogsJobResponseSingleResult struct {
+type ZoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseResult struct {
 	// Unique WebSocket address that will receive messages from Cloudflare’s edge.
 	DestinationConf string `json:"destination_conf" format:"uri"`
 	// Comma-separated list of fields.
@@ -220,13 +227,14 @@ type InstantLogsJobResponseSingleResult struct {
 	// "sample": 1 is 100% of records "sample": 10 is 10% and so on.
 	Sample int64 `json:"sample"`
 	// Unique session id of the job.
-	SessionID string                                 `json:"session_id"`
-	JSON      instantLogsJobResponseSingleResultJSON `json:"-"`
+	SessionID string                                                                  `json:"session_id"`
+	JSON      zoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseResultJSON `json:"-"`
 }
 
-// instantLogsJobResponseSingleResultJSON contains the JSON metadata for the struct
-// [InstantLogsJobResponseSingleResult]
-type instantLogsJobResponseSingleResultJSON struct {
+// zoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseResultJSON contains
+// the JSON metadata for the struct
+// [ZoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseResult]
+type zoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseResultJSON struct {
 	DestinationConf apijson.Field
 	Fields          apijson.Field
 	Filter          apijson.Field
@@ -236,15 +244,15 @@ type instantLogsJobResponseSingleResultJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *InstantLogsJobResponseSingleResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type InstantLogsJobResponseSingleSuccess bool
+type ZoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseSuccess bool
 
 const (
-	InstantLogsJobResponseSingleSuccessTrue InstantLogsJobResponseSingleSuccess = true
+	ZoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseSuccessTrue ZoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsResponseSuccess = true
 )
 
 type ZoneLogpushEdgePostZonesZoneIdentifierLogpushEdgeJobsParams struct {

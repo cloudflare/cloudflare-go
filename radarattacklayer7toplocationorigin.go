@@ -64,6 +64,7 @@ func (r *RadarAttackLayer7TopLocationOriginListResponse) UnmarshalJSON(data []by
 }
 
 type RadarAttackLayer7TopLocationOriginListResponseResult struct {
+	Meta RadarAttackLayer7TopLocationOriginListResponseResultMeta   `json:"meta,required"`
 	Top0 []RadarAttackLayer7TopLocationOriginListResponseResultTop0 `json:"top_0,required"`
 	JSON radarAttackLayer7TopLocationOriginListResponseResultJSON   `json:"-"`
 }
@@ -71,6 +72,7 @@ type RadarAttackLayer7TopLocationOriginListResponseResult struct {
 // radarAttackLayer7TopLocationOriginListResponseResultJSON contains the JSON
 // metadata for the struct [RadarAttackLayer7TopLocationOriginListResponseResult]
 type radarAttackLayer7TopLocationOriginListResponseResultJSON struct {
+	Meta        apijson.Field
 	Top0        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -80,10 +82,104 @@ func (r *RadarAttackLayer7TopLocationOriginListResponseResult) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type RadarAttackLayer7TopLocationOriginListResponseResultMeta struct {
+	DateRange      []RadarAttackLayer7TopLocationOriginListResponseResultMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                                                 `json:"lastUpdated,required"`
+	ConfidenceInfo RadarAttackLayer7TopLocationOriginListResponseResultMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           radarAttackLayer7TopLocationOriginListResponseResultMetaJSON           `json:"-"`
+}
+
+// radarAttackLayer7TopLocationOriginListResponseResultMetaJSON contains the JSON
+// metadata for the struct
+// [RadarAttackLayer7TopLocationOriginListResponseResultMeta]
+type radarAttackLayer7TopLocationOriginListResponseResultMetaJSON struct {
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	ConfidenceInfo apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RadarAttackLayer7TopLocationOriginListResponseResultMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAttackLayer7TopLocationOriginListResponseResultMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                                             `json:"startTime,required" format:"date-time"`
+	JSON      radarAttackLayer7TopLocationOriginListResponseResultMetaDateRangeJSON `json:"-"`
+}
+
+// radarAttackLayer7TopLocationOriginListResponseResultMetaDateRangeJSON contains
+// the JSON metadata for the struct
+// [RadarAttackLayer7TopLocationOriginListResponseResultMetaDateRange]
+type radarAttackLayer7TopLocationOriginListResponseResultMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarAttackLayer7TopLocationOriginListResponseResultMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAttackLayer7TopLocationOriginListResponseResultMetaConfidenceInfo struct {
+	Annotations []RadarAttackLayer7TopLocationOriginListResponseResultMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                                              `json:"level"`
+	JSON        radarAttackLayer7TopLocationOriginListResponseResultMetaConfidenceInfoJSON         `json:"-"`
+}
+
+// radarAttackLayer7TopLocationOriginListResponseResultMetaConfidenceInfoJSON
+// contains the JSON metadata for the struct
+// [RadarAttackLayer7TopLocationOriginListResponseResultMetaConfidenceInfo]
+type radarAttackLayer7TopLocationOriginListResponseResultMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarAttackLayer7TopLocationOriginListResponseResultMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAttackLayer7TopLocationOriginListResponseResultMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                                               `json:"dataSource,required"`
+	Description     string                                                                               `json:"description,required"`
+	EventType       string                                                                               `json:"eventType,required"`
+	IsInstantaneous interface{}                                                                          `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                                            `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                                               `json:"linkedUrl"`
+	StartTime       time.Time                                                                            `json:"startTime" format:"date-time"`
+	JSON            radarAttackLayer7TopLocationOriginListResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// radarAttackLayer7TopLocationOriginListResponseResultMetaConfidenceInfoAnnotationJSON
+// contains the JSON metadata for the struct
+// [RadarAttackLayer7TopLocationOriginListResponseResultMetaConfidenceInfoAnnotation]
+type radarAttackLayer7TopLocationOriginListResponseResultMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *RadarAttackLayer7TopLocationOriginListResponseResultMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type RadarAttackLayer7TopLocationOriginListResponseResultTop0 struct {
 	OriginCountryAlpha2 string                                                       `json:"originCountryAlpha2,required"`
 	OriginCountryName   string                                                       `json:"originCountryName,required"`
-	Rank                int64                                                        `json:"rank,required"`
+	Rank                float64                                                      `json:"rank,required"`
 	Value               string                                                       `json:"value,required"`
 	JSON                radarAttackLayer7TopLocationOriginListResponseResultTop0JSON `json:"-"`
 }
@@ -109,7 +205,7 @@ type RadarAttackLayer7TopLocationOriginListParams struct {
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of datetimes to filter the end of a series.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
@@ -138,6 +234,7 @@ type RadarAttackLayer7TopLocationOriginListParamsDateRange string
 
 const (
 	RadarAttackLayer7TopLocationOriginListParamsDateRange1d         RadarAttackLayer7TopLocationOriginListParamsDateRange = "1d"
+	RadarAttackLayer7TopLocationOriginListParamsDateRange2d         RadarAttackLayer7TopLocationOriginListParamsDateRange = "2d"
 	RadarAttackLayer7TopLocationOriginListParamsDateRange7d         RadarAttackLayer7TopLocationOriginListParamsDateRange = "7d"
 	RadarAttackLayer7TopLocationOriginListParamsDateRange14d        RadarAttackLayer7TopLocationOriginListParamsDateRange = "14d"
 	RadarAttackLayer7TopLocationOriginListParamsDateRange28d        RadarAttackLayer7TopLocationOriginListParamsDateRange = "28d"
@@ -145,6 +242,7 @@ const (
 	RadarAttackLayer7TopLocationOriginListParamsDateRange24w        RadarAttackLayer7TopLocationOriginListParamsDateRange = "24w"
 	RadarAttackLayer7TopLocationOriginListParamsDateRange52w        RadarAttackLayer7TopLocationOriginListParamsDateRange = "52w"
 	RadarAttackLayer7TopLocationOriginListParamsDateRange1dControl  RadarAttackLayer7TopLocationOriginListParamsDateRange = "1dControl"
+	RadarAttackLayer7TopLocationOriginListParamsDateRange2dControl  RadarAttackLayer7TopLocationOriginListParamsDateRange = "2dControl"
 	RadarAttackLayer7TopLocationOriginListParamsDateRange7dControl  RadarAttackLayer7TopLocationOriginListParamsDateRange = "7dControl"
 	RadarAttackLayer7TopLocationOriginListParamsDateRange14dControl RadarAttackLayer7TopLocationOriginListParamsDateRange = "14dControl"
 	RadarAttackLayer7TopLocationOriginListParamsDateRange28dControl RadarAttackLayer7TopLocationOriginListParamsDateRange = "28dControl"
