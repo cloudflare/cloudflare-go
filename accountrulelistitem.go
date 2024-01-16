@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
@@ -89,7 +90,9 @@ func (r *AccountRuleListItemService) ListsUpdateAllListItems(ctx context.Context
 type AccountRuleListItemGetResponse struct {
 	Errors   []AccountRuleListItemGetResponseError   `json:"errors"`
 	Messages []AccountRuleListItemGetResponseMessage `json:"messages"`
-	Result   AccountRuleListItemGetResponseResult    `json:"result"`
+	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
+	// maximum of /64.
+	Result AccountRuleListItemGetResponseResult `json:"result"`
 	// Whether the API call was successful
 	Success AccountRuleListItemGetResponseSuccess `json:"success"`
 	JSON    accountRuleListItemGetResponseJSON    `json:"-"`
@@ -148,7 +151,24 @@ func (r *AccountRuleListItemGetResponseMessage) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccountRuleListItemGetResponseResult struct {
+// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
+// maximum of /64.
+//
+// Union satisfied by [AccountRuleListItemGetResponseResultPeciSksBItemIP],
+// [AccountRuleListItemGetResponseResultPeciSksBItemRedirect],
+// [AccountRuleListItemGetResponseResultPeciSksBItemHostname] or
+// [AccountRuleListItemGetResponseResultPeciSksBItemASN].
+type AccountRuleListItemGetResponseResult interface {
+	implementsAccountRuleListItemGetResponseResult()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*AccountRuleListItemGetResponseResult)(nil)).Elem(), "")
+}
+
+// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
+// maximum of /64.
+type AccountRuleListItemGetResponseResultPeciSksBItemIP struct {
 	// The unique ID of the list.
 	ID string `json:"id"`
 	// A non-negative 32 bit integer
@@ -159,20 +179,20 @@ type AccountRuleListItemGetResponseResult struct {
 	CreatedOn string `json:"created_on"`
 	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
 	// 0 to 9, wildcards (\*), and the hyphen (-).
-	Hostname AccountRuleListItemGetResponseResultHostname `json:"hostname"`
+	Hostname AccountRuleListItemGetResponseResultPeciSksBItemIPHostname `json:"hostname"`
 	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
 	// maximum of /64.
 	IP string `json:"ip"`
 	// The RFC 3339 timestamp of when the item was last modified.
 	ModifiedOn string `json:"modified_on"`
 	// The definition of the redirect.
-	Redirect AccountRuleListItemGetResponseResultRedirect `json:"redirect"`
-	JSON     accountRuleListItemGetResponseResultJSON     `json:"-"`
+	Redirect AccountRuleListItemGetResponseResultPeciSksBItemIPRedirect `json:"redirect"`
+	JSON     accountRuleListItemGetResponseResultPeciSksBItemIPJSON     `json:"-"`
 }
 
-// accountRuleListItemGetResponseResultJSON contains the JSON metadata for the
-// struct [AccountRuleListItemGetResponseResult]
-type accountRuleListItemGetResponseResultJSON struct {
+// accountRuleListItemGetResponseResultPeciSksBItemIPJSON contains the JSON
+// metadata for the struct [AccountRuleListItemGetResponseResultPeciSksBItemIP]
+type accountRuleListItemGetResponseResultPeciSksBItemIPJSON struct {
 	ID          apijson.Field
 	ASN         apijson.Field
 	Comment     apijson.Field
@@ -185,44 +205,49 @@ type accountRuleListItemGetResponseResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccountRuleListItemGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountRuleListItemGetResponseResultPeciSksBItemIP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccountRuleListItemGetResponseResultPeciSksBItemIP) implementsAccountRuleListItemGetResponseResult() {
 }
 
 // Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
 // 0 to 9, wildcards (\*), and the hyphen (-).
-type AccountRuleListItemGetResponseResultHostname struct {
-	URLHostname string                                           `json:"url_hostname,required"`
-	JSON        accountRuleListItemGetResponseResultHostnameJSON `json:"-"`
+type AccountRuleListItemGetResponseResultPeciSksBItemIPHostname struct {
+	URLHostname string                                                         `json:"url_hostname,required"`
+	JSON        accountRuleListItemGetResponseResultPeciSksBItemIPHostnameJSON `json:"-"`
 }
 
-// accountRuleListItemGetResponseResultHostnameJSON contains the JSON metadata for
-// the struct [AccountRuleListItemGetResponseResultHostname]
-type accountRuleListItemGetResponseResultHostnameJSON struct {
+// accountRuleListItemGetResponseResultPeciSksBItemIPHostnameJSON contains the JSON
+// metadata for the struct
+// [AccountRuleListItemGetResponseResultPeciSksBItemIPHostname]
+type accountRuleListItemGetResponseResultPeciSksBItemIPHostnameJSON struct {
 	URLHostname apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccountRuleListItemGetResponseResultHostname) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountRuleListItemGetResponseResultPeciSksBItemIPHostname) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The definition of the redirect.
-type AccountRuleListItemGetResponseResultRedirect struct {
-	SourceURL           string                                                 `json:"source_url,required"`
-	TargetURL           string                                                 `json:"target_url,required"`
-	IncludeSubdomains   bool                                                   `json:"include_subdomains"`
-	PreservePathSuffix  bool                                                   `json:"preserve_path_suffix"`
-	PreserveQueryString bool                                                   `json:"preserve_query_string"`
-	StatusCode          AccountRuleListItemGetResponseResultRedirectStatusCode `json:"status_code"`
-	SubpathMatching     bool                                                   `json:"subpath_matching"`
-	JSON                accountRuleListItemGetResponseResultRedirectJSON       `json:"-"`
+type AccountRuleListItemGetResponseResultPeciSksBItemIPRedirect struct {
+	SourceURL           string                                                               `json:"source_url,required"`
+	TargetURL           string                                                               `json:"target_url,required"`
+	IncludeSubdomains   bool                                                                 `json:"include_subdomains"`
+	PreservePathSuffix  bool                                                                 `json:"preserve_path_suffix"`
+	PreserveQueryString bool                                                                 `json:"preserve_query_string"`
+	StatusCode          AccountRuleListItemGetResponseResultPeciSksBItemIPRedirectStatusCode `json:"status_code"`
+	SubpathMatching     bool                                                                 `json:"subpath_matching"`
+	JSON                accountRuleListItemGetResponseResultPeciSksBItemIPRedirectJSON       `json:"-"`
 }
 
-// accountRuleListItemGetResponseResultRedirectJSON contains the JSON metadata for
-// the struct [AccountRuleListItemGetResponseResultRedirect]
-type accountRuleListItemGetResponseResultRedirectJSON struct {
+// accountRuleListItemGetResponseResultPeciSksBItemIPRedirectJSON contains the JSON
+// metadata for the struct
+// [AccountRuleListItemGetResponseResultPeciSksBItemIPRedirect]
+type accountRuleListItemGetResponseResultPeciSksBItemIPRedirectJSON struct {
 	SourceURL           apijson.Field
 	TargetURL           apijson.Field
 	IncludeSubdomains   apijson.Field
@@ -234,17 +259,335 @@ type accountRuleListItemGetResponseResultRedirectJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *AccountRuleListItemGetResponseResultRedirect) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountRuleListItemGetResponseResultPeciSksBItemIPRedirect) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccountRuleListItemGetResponseResultRedirectStatusCode int64
+type AccountRuleListItemGetResponseResultPeciSksBItemIPRedirectStatusCode int64
 
 const (
-	AccountRuleListItemGetResponseResultRedirectStatusCode301 AccountRuleListItemGetResponseResultRedirectStatusCode = 301
-	AccountRuleListItemGetResponseResultRedirectStatusCode302 AccountRuleListItemGetResponseResultRedirectStatusCode = 302
-	AccountRuleListItemGetResponseResultRedirectStatusCode307 AccountRuleListItemGetResponseResultRedirectStatusCode = 307
-	AccountRuleListItemGetResponseResultRedirectStatusCode308 AccountRuleListItemGetResponseResultRedirectStatusCode = 308
+	AccountRuleListItemGetResponseResultPeciSksBItemIPRedirectStatusCode301 AccountRuleListItemGetResponseResultPeciSksBItemIPRedirectStatusCode = 301
+	AccountRuleListItemGetResponseResultPeciSksBItemIPRedirectStatusCode302 AccountRuleListItemGetResponseResultPeciSksBItemIPRedirectStatusCode = 302
+	AccountRuleListItemGetResponseResultPeciSksBItemIPRedirectStatusCode307 AccountRuleListItemGetResponseResultPeciSksBItemIPRedirectStatusCode = 307
+	AccountRuleListItemGetResponseResultPeciSksBItemIPRedirectStatusCode308 AccountRuleListItemGetResponseResultPeciSksBItemIPRedirectStatusCode = 308
+)
+
+// The definition of the redirect.
+type AccountRuleListItemGetResponseResultPeciSksBItemRedirect struct {
+	// The unique ID of the list.
+	ID string `json:"id"`
+	// A non-negative 32 bit integer
+	ASN int64 `json:"asn"`
+	// An informative summary of the list item.
+	Comment string `json:"comment"`
+	// The RFC 3339 timestamp of when the item was created.
+	CreatedOn string `json:"created_on"`
+	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+	// 0 to 9, wildcards (\*), and the hyphen (-).
+	Hostname AccountRuleListItemGetResponseResultPeciSksBItemRedirectHostname `json:"hostname"`
+	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
+	// maximum of /64.
+	IP string `json:"ip"`
+	// The RFC 3339 timestamp of when the item was last modified.
+	ModifiedOn string `json:"modified_on"`
+	// The definition of the redirect.
+	Redirect AccountRuleListItemGetResponseResultPeciSksBItemRedirectRedirect `json:"redirect"`
+	JSON     accountRuleListItemGetResponseResultPeciSksBItemRedirectJSON     `json:"-"`
+}
+
+// accountRuleListItemGetResponseResultPeciSksBItemRedirectJSON contains the JSON
+// metadata for the struct
+// [AccountRuleListItemGetResponseResultPeciSksBItemRedirect]
+type accountRuleListItemGetResponseResultPeciSksBItemRedirectJSON struct {
+	ID          apijson.Field
+	ASN         apijson.Field
+	Comment     apijson.Field
+	CreatedOn   apijson.Field
+	Hostname    apijson.Field
+	IP          apijson.Field
+	ModifiedOn  apijson.Field
+	Redirect    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRuleListItemGetResponseResultPeciSksBItemRedirect) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccountRuleListItemGetResponseResultPeciSksBItemRedirect) implementsAccountRuleListItemGetResponseResult() {
+}
+
+// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+// 0 to 9, wildcards (\*), and the hyphen (-).
+type AccountRuleListItemGetResponseResultPeciSksBItemRedirectHostname struct {
+	URLHostname string                                                               `json:"url_hostname,required"`
+	JSON        accountRuleListItemGetResponseResultPeciSksBItemRedirectHostnameJSON `json:"-"`
+}
+
+// accountRuleListItemGetResponseResultPeciSksBItemRedirectHostnameJSON contains
+// the JSON metadata for the struct
+// [AccountRuleListItemGetResponseResultPeciSksBItemRedirectHostname]
+type accountRuleListItemGetResponseResultPeciSksBItemRedirectHostnameJSON struct {
+	URLHostname apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRuleListItemGetResponseResultPeciSksBItemRedirectHostname) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The definition of the redirect.
+type AccountRuleListItemGetResponseResultPeciSksBItemRedirectRedirect struct {
+	SourceURL           string                                                                     `json:"source_url,required"`
+	TargetURL           string                                                                     `json:"target_url,required"`
+	IncludeSubdomains   bool                                                                       `json:"include_subdomains"`
+	PreservePathSuffix  bool                                                                       `json:"preserve_path_suffix"`
+	PreserveQueryString bool                                                                       `json:"preserve_query_string"`
+	StatusCode          AccountRuleListItemGetResponseResultPeciSksBItemRedirectRedirectStatusCode `json:"status_code"`
+	SubpathMatching     bool                                                                       `json:"subpath_matching"`
+	JSON                accountRuleListItemGetResponseResultPeciSksBItemRedirectRedirectJSON       `json:"-"`
+}
+
+// accountRuleListItemGetResponseResultPeciSksBItemRedirectRedirectJSON contains
+// the JSON metadata for the struct
+// [AccountRuleListItemGetResponseResultPeciSksBItemRedirectRedirect]
+type accountRuleListItemGetResponseResultPeciSksBItemRedirectRedirectJSON struct {
+	SourceURL           apijson.Field
+	TargetURL           apijson.Field
+	IncludeSubdomains   apijson.Field
+	PreservePathSuffix  apijson.Field
+	PreserveQueryString apijson.Field
+	StatusCode          apijson.Field
+	SubpathMatching     apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *AccountRuleListItemGetResponseResultPeciSksBItemRedirectRedirect) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountRuleListItemGetResponseResultPeciSksBItemRedirectRedirectStatusCode int64
+
+const (
+	AccountRuleListItemGetResponseResultPeciSksBItemRedirectRedirectStatusCode301 AccountRuleListItemGetResponseResultPeciSksBItemRedirectRedirectStatusCode = 301
+	AccountRuleListItemGetResponseResultPeciSksBItemRedirectRedirectStatusCode302 AccountRuleListItemGetResponseResultPeciSksBItemRedirectRedirectStatusCode = 302
+	AccountRuleListItemGetResponseResultPeciSksBItemRedirectRedirectStatusCode307 AccountRuleListItemGetResponseResultPeciSksBItemRedirectRedirectStatusCode = 307
+	AccountRuleListItemGetResponseResultPeciSksBItemRedirectRedirectStatusCode308 AccountRuleListItemGetResponseResultPeciSksBItemRedirectRedirectStatusCode = 308
+)
+
+// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+// 0 to 9, wildcards (\*), and the hyphen (-).
+type AccountRuleListItemGetResponseResultPeciSksBItemHostname struct {
+	// The unique ID of the list.
+	ID string `json:"id"`
+	// A non-negative 32 bit integer
+	ASN int64 `json:"asn"`
+	// An informative summary of the list item.
+	Comment string `json:"comment"`
+	// The RFC 3339 timestamp of when the item was created.
+	CreatedOn string `json:"created_on"`
+	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+	// 0 to 9, wildcards (\*), and the hyphen (-).
+	Hostname AccountRuleListItemGetResponseResultPeciSksBItemHostnameHostname `json:"hostname"`
+	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
+	// maximum of /64.
+	IP string `json:"ip"`
+	// The RFC 3339 timestamp of when the item was last modified.
+	ModifiedOn string `json:"modified_on"`
+	// The definition of the redirect.
+	Redirect AccountRuleListItemGetResponseResultPeciSksBItemHostnameRedirect `json:"redirect"`
+	JSON     accountRuleListItemGetResponseResultPeciSksBItemHostnameJSON     `json:"-"`
+}
+
+// accountRuleListItemGetResponseResultPeciSksBItemHostnameJSON contains the JSON
+// metadata for the struct
+// [AccountRuleListItemGetResponseResultPeciSksBItemHostname]
+type accountRuleListItemGetResponseResultPeciSksBItemHostnameJSON struct {
+	ID          apijson.Field
+	ASN         apijson.Field
+	Comment     apijson.Field
+	CreatedOn   apijson.Field
+	Hostname    apijson.Field
+	IP          apijson.Field
+	ModifiedOn  apijson.Field
+	Redirect    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRuleListItemGetResponseResultPeciSksBItemHostname) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccountRuleListItemGetResponseResultPeciSksBItemHostname) implementsAccountRuleListItemGetResponseResult() {
+}
+
+// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+// 0 to 9, wildcards (\*), and the hyphen (-).
+type AccountRuleListItemGetResponseResultPeciSksBItemHostnameHostname struct {
+	URLHostname string                                                               `json:"url_hostname,required"`
+	JSON        accountRuleListItemGetResponseResultPeciSksBItemHostnameHostnameJSON `json:"-"`
+}
+
+// accountRuleListItemGetResponseResultPeciSksBItemHostnameHostnameJSON contains
+// the JSON metadata for the struct
+// [AccountRuleListItemGetResponseResultPeciSksBItemHostnameHostname]
+type accountRuleListItemGetResponseResultPeciSksBItemHostnameHostnameJSON struct {
+	URLHostname apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRuleListItemGetResponseResultPeciSksBItemHostnameHostname) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The definition of the redirect.
+type AccountRuleListItemGetResponseResultPeciSksBItemHostnameRedirect struct {
+	SourceURL           string                                                                     `json:"source_url,required"`
+	TargetURL           string                                                                     `json:"target_url,required"`
+	IncludeSubdomains   bool                                                                       `json:"include_subdomains"`
+	PreservePathSuffix  bool                                                                       `json:"preserve_path_suffix"`
+	PreserveQueryString bool                                                                       `json:"preserve_query_string"`
+	StatusCode          AccountRuleListItemGetResponseResultPeciSksBItemHostnameRedirectStatusCode `json:"status_code"`
+	SubpathMatching     bool                                                                       `json:"subpath_matching"`
+	JSON                accountRuleListItemGetResponseResultPeciSksBItemHostnameRedirectJSON       `json:"-"`
+}
+
+// accountRuleListItemGetResponseResultPeciSksBItemHostnameRedirectJSON contains
+// the JSON metadata for the struct
+// [AccountRuleListItemGetResponseResultPeciSksBItemHostnameRedirect]
+type accountRuleListItemGetResponseResultPeciSksBItemHostnameRedirectJSON struct {
+	SourceURL           apijson.Field
+	TargetURL           apijson.Field
+	IncludeSubdomains   apijson.Field
+	PreservePathSuffix  apijson.Field
+	PreserveQueryString apijson.Field
+	StatusCode          apijson.Field
+	SubpathMatching     apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *AccountRuleListItemGetResponseResultPeciSksBItemHostnameRedirect) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountRuleListItemGetResponseResultPeciSksBItemHostnameRedirectStatusCode int64
+
+const (
+	AccountRuleListItemGetResponseResultPeciSksBItemHostnameRedirectStatusCode301 AccountRuleListItemGetResponseResultPeciSksBItemHostnameRedirectStatusCode = 301
+	AccountRuleListItemGetResponseResultPeciSksBItemHostnameRedirectStatusCode302 AccountRuleListItemGetResponseResultPeciSksBItemHostnameRedirectStatusCode = 302
+	AccountRuleListItemGetResponseResultPeciSksBItemHostnameRedirectStatusCode307 AccountRuleListItemGetResponseResultPeciSksBItemHostnameRedirectStatusCode = 307
+	AccountRuleListItemGetResponseResultPeciSksBItemHostnameRedirectStatusCode308 AccountRuleListItemGetResponseResultPeciSksBItemHostnameRedirectStatusCode = 308
+)
+
+// A non-negative 32 bit integer
+type AccountRuleListItemGetResponseResultPeciSksBItemASN struct {
+	// The unique ID of the list.
+	ID string `json:"id"`
+	// A non-negative 32 bit integer
+	ASN int64 `json:"asn"`
+	// An informative summary of the list item.
+	Comment string `json:"comment"`
+	// The RFC 3339 timestamp of when the item was created.
+	CreatedOn string `json:"created_on"`
+	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+	// 0 to 9, wildcards (\*), and the hyphen (-).
+	Hostname AccountRuleListItemGetResponseResultPeciSksBItemASNHostname `json:"hostname"`
+	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
+	// maximum of /64.
+	IP string `json:"ip"`
+	// The RFC 3339 timestamp of when the item was last modified.
+	ModifiedOn string `json:"modified_on"`
+	// The definition of the redirect.
+	Redirect AccountRuleListItemGetResponseResultPeciSksBItemASNRedirect `json:"redirect"`
+	JSON     accountRuleListItemGetResponseResultPeciSksBItemASNJSON     `json:"-"`
+}
+
+// accountRuleListItemGetResponseResultPeciSksBItemASNJSON contains the JSON
+// metadata for the struct [AccountRuleListItemGetResponseResultPeciSksBItemASN]
+type accountRuleListItemGetResponseResultPeciSksBItemASNJSON struct {
+	ID          apijson.Field
+	ASN         apijson.Field
+	Comment     apijson.Field
+	CreatedOn   apijson.Field
+	Hostname    apijson.Field
+	IP          apijson.Field
+	ModifiedOn  apijson.Field
+	Redirect    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRuleListItemGetResponseResultPeciSksBItemASN) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccountRuleListItemGetResponseResultPeciSksBItemASN) implementsAccountRuleListItemGetResponseResult() {
+}
+
+// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+// 0 to 9, wildcards (\*), and the hyphen (-).
+type AccountRuleListItemGetResponseResultPeciSksBItemASNHostname struct {
+	URLHostname string                                                          `json:"url_hostname,required"`
+	JSON        accountRuleListItemGetResponseResultPeciSksBItemASNHostnameJSON `json:"-"`
+}
+
+// accountRuleListItemGetResponseResultPeciSksBItemASNHostnameJSON contains the
+// JSON metadata for the struct
+// [AccountRuleListItemGetResponseResultPeciSksBItemASNHostname]
+type accountRuleListItemGetResponseResultPeciSksBItemASNHostnameJSON struct {
+	URLHostname apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRuleListItemGetResponseResultPeciSksBItemASNHostname) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The definition of the redirect.
+type AccountRuleListItemGetResponseResultPeciSksBItemASNRedirect struct {
+	SourceURL           string                                                                `json:"source_url,required"`
+	TargetURL           string                                                                `json:"target_url,required"`
+	IncludeSubdomains   bool                                                                  `json:"include_subdomains"`
+	PreservePathSuffix  bool                                                                  `json:"preserve_path_suffix"`
+	PreserveQueryString bool                                                                  `json:"preserve_query_string"`
+	StatusCode          AccountRuleListItemGetResponseResultPeciSksBItemASNRedirectStatusCode `json:"status_code"`
+	SubpathMatching     bool                                                                  `json:"subpath_matching"`
+	JSON                accountRuleListItemGetResponseResultPeciSksBItemASNRedirectJSON       `json:"-"`
+}
+
+// accountRuleListItemGetResponseResultPeciSksBItemASNRedirectJSON contains the
+// JSON metadata for the struct
+// [AccountRuleListItemGetResponseResultPeciSksBItemASNRedirect]
+type accountRuleListItemGetResponseResultPeciSksBItemASNRedirectJSON struct {
+	SourceURL           apijson.Field
+	TargetURL           apijson.Field
+	IncludeSubdomains   apijson.Field
+	PreservePathSuffix  apijson.Field
+	PreserveQueryString apijson.Field
+	StatusCode          apijson.Field
+	SubpathMatching     apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *AccountRuleListItemGetResponseResultPeciSksBItemASNRedirect) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountRuleListItemGetResponseResultPeciSksBItemASNRedirectStatusCode int64
+
+const (
+	AccountRuleListItemGetResponseResultPeciSksBItemASNRedirectStatusCode301 AccountRuleListItemGetResponseResultPeciSksBItemASNRedirectStatusCode = 301
+	AccountRuleListItemGetResponseResultPeciSksBItemASNRedirectStatusCode302 AccountRuleListItemGetResponseResultPeciSksBItemASNRedirectStatusCode = 302
+	AccountRuleListItemGetResponseResultPeciSksBItemASNRedirectStatusCode307 AccountRuleListItemGetResponseResultPeciSksBItemASNRedirectStatusCode = 307
+	AccountRuleListItemGetResponseResultPeciSksBItemASNRedirectStatusCode308 AccountRuleListItemGetResponseResultPeciSksBItemASNRedirectStatusCode = 308
 )
 
 // Whether the API call was successful
@@ -492,7 +835,25 @@ func (r *AccountRuleListItemListsGetListItemsResponseMessage) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccountRuleListItemListsGetListItemsResponseResult struct {
+// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
+// maximum of /64.
+//
+// Union satisfied by
+// [AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemIP],
+// [AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirect],
+// [AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostname] or
+// [AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemASN].
+type AccountRuleListItemListsGetListItemsResponseResult interface {
+	implementsAccountRuleListItemListsGetListItemsResponseResult()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*AccountRuleListItemListsGetListItemsResponseResult)(nil)).Elem(), "")
+}
+
+// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
+// maximum of /64.
+type AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemIP struct {
 	// The unique ID of the list.
 	ID string `json:"id"`
 	// A non-negative 32 bit integer
@@ -503,20 +864,21 @@ type AccountRuleListItemListsGetListItemsResponseResult struct {
 	CreatedOn string `json:"created_on"`
 	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
 	// 0 to 9, wildcards (\*), and the hyphen (-).
-	Hostname AccountRuleListItemListsGetListItemsResponseResultHostname `json:"hostname"`
+	Hostname AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemIPHostname `json:"hostname"`
 	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
 	// maximum of /64.
 	IP string `json:"ip"`
 	// The RFC 3339 timestamp of when the item was last modified.
 	ModifiedOn string `json:"modified_on"`
 	// The definition of the redirect.
-	Redirect AccountRuleListItemListsGetListItemsResponseResultRedirect `json:"redirect"`
-	JSON     accountRuleListItemListsGetListItemsResponseResultJSON     `json:"-"`
+	Redirect AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemIPRedirect `json:"redirect"`
+	JSON     accountRuleListItemListsGetListItemsResponseResultPeciSksBItemIPJSON     `json:"-"`
 }
 
-// accountRuleListItemListsGetListItemsResponseResultJSON contains the JSON
-// metadata for the struct [AccountRuleListItemListsGetListItemsResponseResult]
-type accountRuleListItemListsGetListItemsResponseResultJSON struct {
+// accountRuleListItemListsGetListItemsResponseResultPeciSksBItemIPJSON contains
+// the JSON metadata for the struct
+// [AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemIP]
+type accountRuleListItemListsGetListItemsResponseResultPeciSksBItemIPJSON struct {
 	ID          apijson.Field
 	ASN         apijson.Field
 	Comment     apijson.Field
@@ -529,46 +891,49 @@ type accountRuleListItemListsGetListItemsResponseResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccountRuleListItemListsGetListItemsResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemIP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemIP) implementsAccountRuleListItemListsGetListItemsResponseResult() {
 }
 
 // Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
 // 0 to 9, wildcards (\*), and the hyphen (-).
-type AccountRuleListItemListsGetListItemsResponseResultHostname struct {
-	URLHostname string                                                         `json:"url_hostname,required"`
-	JSON        accountRuleListItemListsGetListItemsResponseResultHostnameJSON `json:"-"`
+type AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemIPHostname struct {
+	URLHostname string                                                                       `json:"url_hostname,required"`
+	JSON        accountRuleListItemListsGetListItemsResponseResultPeciSksBItemIPHostnameJSON `json:"-"`
 }
 
-// accountRuleListItemListsGetListItemsResponseResultHostnameJSON contains the JSON
-// metadata for the struct
-// [AccountRuleListItemListsGetListItemsResponseResultHostname]
-type accountRuleListItemListsGetListItemsResponseResultHostnameJSON struct {
+// accountRuleListItemListsGetListItemsResponseResultPeciSksBItemIPHostnameJSON
+// contains the JSON metadata for the struct
+// [AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemIPHostname]
+type accountRuleListItemListsGetListItemsResponseResultPeciSksBItemIPHostnameJSON struct {
 	URLHostname apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccountRuleListItemListsGetListItemsResponseResultHostname) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemIPHostname) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The definition of the redirect.
-type AccountRuleListItemListsGetListItemsResponseResultRedirect struct {
-	SourceURL           string                                                               `json:"source_url,required"`
-	TargetURL           string                                                               `json:"target_url,required"`
-	IncludeSubdomains   bool                                                                 `json:"include_subdomains"`
-	PreservePathSuffix  bool                                                                 `json:"preserve_path_suffix"`
-	PreserveQueryString bool                                                                 `json:"preserve_query_string"`
-	StatusCode          AccountRuleListItemListsGetListItemsResponseResultRedirectStatusCode `json:"status_code"`
-	SubpathMatching     bool                                                                 `json:"subpath_matching"`
-	JSON                accountRuleListItemListsGetListItemsResponseResultRedirectJSON       `json:"-"`
+type AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemIPRedirect struct {
+	SourceURL           string                                                                             `json:"source_url,required"`
+	TargetURL           string                                                                             `json:"target_url,required"`
+	IncludeSubdomains   bool                                                                               `json:"include_subdomains"`
+	PreservePathSuffix  bool                                                                               `json:"preserve_path_suffix"`
+	PreserveQueryString bool                                                                               `json:"preserve_query_string"`
+	StatusCode          AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemIPRedirectStatusCode `json:"status_code"`
+	SubpathMatching     bool                                                                               `json:"subpath_matching"`
+	JSON                accountRuleListItemListsGetListItemsResponseResultPeciSksBItemIPRedirectJSON       `json:"-"`
 }
 
-// accountRuleListItemListsGetListItemsResponseResultRedirectJSON contains the JSON
-// metadata for the struct
-// [AccountRuleListItemListsGetListItemsResponseResultRedirect]
-type accountRuleListItemListsGetListItemsResponseResultRedirectJSON struct {
+// accountRuleListItemListsGetListItemsResponseResultPeciSksBItemIPRedirectJSON
+// contains the JSON metadata for the struct
+// [AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemIPRedirect]
+type accountRuleListItemListsGetListItemsResponseResultPeciSksBItemIPRedirectJSON struct {
 	SourceURL           apijson.Field
 	TargetURL           apijson.Field
 	IncludeSubdomains   apijson.Field
@@ -580,17 +945,336 @@ type accountRuleListItemListsGetListItemsResponseResultRedirectJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *AccountRuleListItemListsGetListItemsResponseResultRedirect) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemIPRedirect) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccountRuleListItemListsGetListItemsResponseResultRedirectStatusCode int64
+type AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemIPRedirectStatusCode int64
 
 const (
-	AccountRuleListItemListsGetListItemsResponseResultRedirectStatusCode301 AccountRuleListItemListsGetListItemsResponseResultRedirectStatusCode = 301
-	AccountRuleListItemListsGetListItemsResponseResultRedirectStatusCode302 AccountRuleListItemListsGetListItemsResponseResultRedirectStatusCode = 302
-	AccountRuleListItemListsGetListItemsResponseResultRedirectStatusCode307 AccountRuleListItemListsGetListItemsResponseResultRedirectStatusCode = 307
-	AccountRuleListItemListsGetListItemsResponseResultRedirectStatusCode308 AccountRuleListItemListsGetListItemsResponseResultRedirectStatusCode = 308
+	AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemIPRedirectStatusCode301 AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemIPRedirectStatusCode = 301
+	AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemIPRedirectStatusCode302 AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemIPRedirectStatusCode = 302
+	AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemIPRedirectStatusCode307 AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemIPRedirectStatusCode = 307
+	AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemIPRedirectStatusCode308 AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemIPRedirectStatusCode = 308
+)
+
+// The definition of the redirect.
+type AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirect struct {
+	// The unique ID of the list.
+	ID string `json:"id"`
+	// A non-negative 32 bit integer
+	ASN int64 `json:"asn"`
+	// An informative summary of the list item.
+	Comment string `json:"comment"`
+	// The RFC 3339 timestamp of when the item was created.
+	CreatedOn string `json:"created_on"`
+	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+	// 0 to 9, wildcards (\*), and the hyphen (-).
+	Hostname AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirectHostname `json:"hostname"`
+	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
+	// maximum of /64.
+	IP string `json:"ip"`
+	// The RFC 3339 timestamp of when the item was last modified.
+	ModifiedOn string `json:"modified_on"`
+	// The definition of the redirect.
+	Redirect AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirectRedirect `json:"redirect"`
+	JSON     accountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirectJSON     `json:"-"`
+}
+
+// accountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirectJSON
+// contains the JSON metadata for the struct
+// [AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirect]
+type accountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirectJSON struct {
+	ID          apijson.Field
+	ASN         apijson.Field
+	Comment     apijson.Field
+	CreatedOn   apijson.Field
+	Hostname    apijson.Field
+	IP          apijson.Field
+	ModifiedOn  apijson.Field
+	Redirect    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirect) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirect) implementsAccountRuleListItemListsGetListItemsResponseResult() {
+}
+
+// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+// 0 to 9, wildcards (\*), and the hyphen (-).
+type AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirectHostname struct {
+	URLHostname string                                                                             `json:"url_hostname,required"`
+	JSON        accountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirectHostnameJSON `json:"-"`
+}
+
+// accountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirectHostnameJSON
+// contains the JSON metadata for the struct
+// [AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirectHostname]
+type accountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirectHostnameJSON struct {
+	URLHostname apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirectHostname) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The definition of the redirect.
+type AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirectRedirect struct {
+	SourceURL           string                                                                                   `json:"source_url,required"`
+	TargetURL           string                                                                                   `json:"target_url,required"`
+	IncludeSubdomains   bool                                                                                     `json:"include_subdomains"`
+	PreservePathSuffix  bool                                                                                     `json:"preserve_path_suffix"`
+	PreserveQueryString bool                                                                                     `json:"preserve_query_string"`
+	StatusCode          AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirectRedirectStatusCode `json:"status_code"`
+	SubpathMatching     bool                                                                                     `json:"subpath_matching"`
+	JSON                accountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirectRedirectJSON       `json:"-"`
+}
+
+// accountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirectRedirectJSON
+// contains the JSON metadata for the struct
+// [AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirectRedirect]
+type accountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirectRedirectJSON struct {
+	SourceURL           apijson.Field
+	TargetURL           apijson.Field
+	IncludeSubdomains   apijson.Field
+	PreservePathSuffix  apijson.Field
+	PreserveQueryString apijson.Field
+	StatusCode          apijson.Field
+	SubpathMatching     apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirectRedirect) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirectRedirectStatusCode int64
+
+const (
+	AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirectRedirectStatusCode301 AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirectRedirectStatusCode = 301
+	AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirectRedirectStatusCode302 AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirectRedirectStatusCode = 302
+	AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirectRedirectStatusCode307 AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirectRedirectStatusCode = 307
+	AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirectRedirectStatusCode308 AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemRedirectRedirectStatusCode = 308
+)
+
+// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+// 0 to 9, wildcards (\*), and the hyphen (-).
+type AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostname struct {
+	// The unique ID of the list.
+	ID string `json:"id"`
+	// A non-negative 32 bit integer
+	ASN int64 `json:"asn"`
+	// An informative summary of the list item.
+	Comment string `json:"comment"`
+	// The RFC 3339 timestamp of when the item was created.
+	CreatedOn string `json:"created_on"`
+	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+	// 0 to 9, wildcards (\*), and the hyphen (-).
+	Hostname AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostnameHostname `json:"hostname"`
+	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
+	// maximum of /64.
+	IP string `json:"ip"`
+	// The RFC 3339 timestamp of when the item was last modified.
+	ModifiedOn string `json:"modified_on"`
+	// The definition of the redirect.
+	Redirect AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostnameRedirect `json:"redirect"`
+	JSON     accountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostnameJSON     `json:"-"`
+}
+
+// accountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostnameJSON
+// contains the JSON metadata for the struct
+// [AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostname]
+type accountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostnameJSON struct {
+	ID          apijson.Field
+	ASN         apijson.Field
+	Comment     apijson.Field
+	CreatedOn   apijson.Field
+	Hostname    apijson.Field
+	IP          apijson.Field
+	ModifiedOn  apijson.Field
+	Redirect    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostname) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostname) implementsAccountRuleListItemListsGetListItemsResponseResult() {
+}
+
+// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+// 0 to 9, wildcards (\*), and the hyphen (-).
+type AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostnameHostname struct {
+	URLHostname string                                                                             `json:"url_hostname,required"`
+	JSON        accountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostnameHostnameJSON `json:"-"`
+}
+
+// accountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostnameHostnameJSON
+// contains the JSON metadata for the struct
+// [AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostnameHostname]
+type accountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostnameHostnameJSON struct {
+	URLHostname apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostnameHostname) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The definition of the redirect.
+type AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostnameRedirect struct {
+	SourceURL           string                                                                                   `json:"source_url,required"`
+	TargetURL           string                                                                                   `json:"target_url,required"`
+	IncludeSubdomains   bool                                                                                     `json:"include_subdomains"`
+	PreservePathSuffix  bool                                                                                     `json:"preserve_path_suffix"`
+	PreserveQueryString bool                                                                                     `json:"preserve_query_string"`
+	StatusCode          AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostnameRedirectStatusCode `json:"status_code"`
+	SubpathMatching     bool                                                                                     `json:"subpath_matching"`
+	JSON                accountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostnameRedirectJSON       `json:"-"`
+}
+
+// accountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostnameRedirectJSON
+// contains the JSON metadata for the struct
+// [AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostnameRedirect]
+type accountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostnameRedirectJSON struct {
+	SourceURL           apijson.Field
+	TargetURL           apijson.Field
+	IncludeSubdomains   apijson.Field
+	PreservePathSuffix  apijson.Field
+	PreserveQueryString apijson.Field
+	StatusCode          apijson.Field
+	SubpathMatching     apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostnameRedirect) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostnameRedirectStatusCode int64
+
+const (
+	AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostnameRedirectStatusCode301 AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostnameRedirectStatusCode = 301
+	AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostnameRedirectStatusCode302 AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostnameRedirectStatusCode = 302
+	AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostnameRedirectStatusCode307 AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostnameRedirectStatusCode = 307
+	AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostnameRedirectStatusCode308 AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemHostnameRedirectStatusCode = 308
+)
+
+// A non-negative 32 bit integer
+type AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemASN struct {
+	// The unique ID of the list.
+	ID string `json:"id"`
+	// A non-negative 32 bit integer
+	ASN int64 `json:"asn"`
+	// An informative summary of the list item.
+	Comment string `json:"comment"`
+	// The RFC 3339 timestamp of when the item was created.
+	CreatedOn string `json:"created_on"`
+	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+	// 0 to 9, wildcards (\*), and the hyphen (-).
+	Hostname AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemASNHostname `json:"hostname"`
+	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
+	// maximum of /64.
+	IP string `json:"ip"`
+	// The RFC 3339 timestamp of when the item was last modified.
+	ModifiedOn string `json:"modified_on"`
+	// The definition of the redirect.
+	Redirect AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemASNRedirect `json:"redirect"`
+	JSON     accountRuleListItemListsGetListItemsResponseResultPeciSksBItemASNJSON     `json:"-"`
+}
+
+// accountRuleListItemListsGetListItemsResponseResultPeciSksBItemASNJSON contains
+// the JSON metadata for the struct
+// [AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemASN]
+type accountRuleListItemListsGetListItemsResponseResultPeciSksBItemASNJSON struct {
+	ID          apijson.Field
+	ASN         apijson.Field
+	Comment     apijson.Field
+	CreatedOn   apijson.Field
+	Hostname    apijson.Field
+	IP          apijson.Field
+	ModifiedOn  apijson.Field
+	Redirect    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemASN) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemASN) implementsAccountRuleListItemListsGetListItemsResponseResult() {
+}
+
+// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+// 0 to 9, wildcards (\*), and the hyphen (-).
+type AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemASNHostname struct {
+	URLHostname string                                                                        `json:"url_hostname,required"`
+	JSON        accountRuleListItemListsGetListItemsResponseResultPeciSksBItemASNHostnameJSON `json:"-"`
+}
+
+// accountRuleListItemListsGetListItemsResponseResultPeciSksBItemASNHostnameJSON
+// contains the JSON metadata for the struct
+// [AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemASNHostname]
+type accountRuleListItemListsGetListItemsResponseResultPeciSksBItemASNHostnameJSON struct {
+	URLHostname apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemASNHostname) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The definition of the redirect.
+type AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemASNRedirect struct {
+	SourceURL           string                                                                              `json:"source_url,required"`
+	TargetURL           string                                                                              `json:"target_url,required"`
+	IncludeSubdomains   bool                                                                                `json:"include_subdomains"`
+	PreservePathSuffix  bool                                                                                `json:"preserve_path_suffix"`
+	PreserveQueryString bool                                                                                `json:"preserve_query_string"`
+	StatusCode          AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemASNRedirectStatusCode `json:"status_code"`
+	SubpathMatching     bool                                                                                `json:"subpath_matching"`
+	JSON                accountRuleListItemListsGetListItemsResponseResultPeciSksBItemASNRedirectJSON       `json:"-"`
+}
+
+// accountRuleListItemListsGetListItemsResponseResultPeciSksBItemASNRedirectJSON
+// contains the JSON metadata for the struct
+// [AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemASNRedirect]
+type accountRuleListItemListsGetListItemsResponseResultPeciSksBItemASNRedirectJSON struct {
+	SourceURL           apijson.Field
+	TargetURL           apijson.Field
+	IncludeSubdomains   apijson.Field
+	PreservePathSuffix  apijson.Field
+	PreserveQueryString apijson.Field
+	StatusCode          apijson.Field
+	SubpathMatching     apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemASNRedirect) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemASNRedirectStatusCode int64
+
+const (
+	AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemASNRedirectStatusCode301 AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemASNRedirectStatusCode = 301
+	AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemASNRedirectStatusCode302 AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemASNRedirectStatusCode = 302
+	AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemASNRedirectStatusCode307 AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemASNRedirectStatusCode = 307
+	AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemASNRedirectStatusCode308 AccountRuleListItemListsGetListItemsResponseResultPeciSksBItemASNRedirectStatusCode = 308
 )
 
 type AccountRuleListItemListsGetListItemsResponseResultInfo struct {
