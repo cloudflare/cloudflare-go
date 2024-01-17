@@ -1,0 +1,3 @@
+```release-note:bug
+UpdateAccessUserSeat: fix parameters not being an array. This caused an error when updating a user's seat
+```
