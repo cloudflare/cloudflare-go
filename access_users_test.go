@@ -13,18 +13,33 @@ var (
 	testAccessUserID        = "access-user-id"
 	testAccessUserSessionID = "access-user-session-id"
 
-	expectedListAccessUserResult = AccessUser{
-		AccessSeat:          BoolPtr(false),
-		ActiveDeviceCount:   2,
-		CreatedAt:           "2014-01-01T05:20:00.12345Z",
-		Email:               "jdoe@example.com",
-		GatewaySeat:         BoolPtr(false),
-		ID:                  "f3b12456-80dd-4e89-9f5f-ba3dfff12365",
-		LastSuccessfulLogin: "2020-07-01T05:20:00Z",
-		Name:                "Jane Doe",
-		SeatUID:             "",
-		UID:                 "",
-		UpdatedAt:           "2014-01-01T05:20:00.12345Z",
+	expectedListAccessUserResult = []AccessUser{
+		{
+			AccessSeat:          BoolPtr(false),
+			ActiveDeviceCount:   2,
+			CreatedAt:           "2014-01-01T05:20:00.12345Z",
+			Email:               "jdoe@example.com",
+			GatewaySeat:         BoolPtr(false),
+			ID:                  "f3b12456-80dd-4e89-9f5f-ba3dfff12365",
+			LastSuccessfulLogin: "2020-07-01T05:20:00Z",
+			Name:                "Jane Doe",
+			SeatUID:             "",
+			UID:                 "",
+			UpdatedAt:           "2014-01-01T05:20:00.12345Z",
+		},
+		{
+			AccessSeat:          BoolPtr(true),
+			ActiveDeviceCount:   2,
+			CreatedAt:           "2024-01-01T05:20:00.12345Z",
+			Email:               "jhondoe@example.com",
+			GatewaySeat:         BoolPtr(true),
+			ID:                  "c3b12456-80dd-4e89-9f5f-ba3dfff12367",
+			LastSuccessfulLogin: "2020-07-01T05:20:00Z",
+			Name:                "Jhon Doe",
+			SeatUID:             "",
+			UID:                 "",
+			UpdatedAt:           "2014-01-01T05:20:00.12345Z",
+		},
 	}
 
 	expectedGetAccessUserActiveSessionsResult = AccessUserActiveSessionResult{
@@ -217,41 +232,68 @@ func TestListAccessUsers(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
+		userList, err := json.Marshal(expectedListAccessUserResult)
+		assert.NoError(t, err, "Error marshaling expectedListAccessUserResult")
+
 		fmt.Fprintf(w, `{
 			"errors": [],
 			"messages": [],
-			"result": [
-			  {
-				"access_seat": false,
-				"active_device_count": 2,
-				"created_at": "2014-01-01T05:20:00.12345Z",
-				"email": "jdoe@example.com",
-				"gateway_seat": false,
-				"id": "f3b12456-80dd-4e89-9f5f-ba3dfff12365",
-				"last_successful_login": "2020-07-01T05:20:00Z",
-				"name": "Jane Doe",
-				"seat_uid": null,
-				"uid": null,
-				"updated_at": "2014-01-01T05:20:00.12345Z"
-			  }
-			],
+			"result": %s,
 			"success": true,
 			"result_info": {
-			  "count": 1,
+			  "count": 2,
 			  "page": 1,
 			  "per_page": 100,
-			  "total_count": 1
+			  "total_count": 2
 			}
-		  }
-		`)
+		  }`, string(userList))
 	}
-
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/users", handler)
 
 	actual, _, err := client.ListAccessUsers(context.Background(), testAccountRC, AccessUserParams{})
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, []AccessUser{expectedListAccessUserResult}, actual)
+		assert.Equal(t, expectedListAccessUserResult, actual)
+	}
+}
+
+func TestListAccessUsersWithPaggination(t *testing.T) {
+	setup()
+	defer teardown()
+	// page 1 of 2
+	page := 1
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+
+		userList, err := json.Marshal(expectedListAccessUserResult)
+		assert.NoError(t, err, "Error marshaling expectedListAccessUserResult")
+
+		fmt.Fprintf(w, `{
+			"errors": [],
+			"messages": [],
+			"result": %s,
+			"success": true,
+			"result_info": {
+			  "count": 2,
+			  "page": %d,
+			  "per_page": 2,
+			  "total_count": 4
+			}
+		  }`, string(userList), page)
+		// increment page for the next call
+		page++
+	}
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/users", handler)
+
+	actual, _, err := client.ListAccessUsers(context.Background(), testAccountRC, AccessUserParams{})
+	expected := []AccessUser{}
+	// two pages of the same expectedResult
+	expected = append(expected, expectedListAccessUserResult...)
+	expected = append(expected, expectedListAccessUserResult...)
+	if assert.NoError(t, err) {
+		assert.Equal(t, expected, actual)
 	}
 }
 
