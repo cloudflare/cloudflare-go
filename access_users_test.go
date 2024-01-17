@@ -257,7 +257,7 @@ func TestListAccessUsers(t *testing.T) {
 	}
 }
 
-func TestListAccessUsersWithPaggination(t *testing.T) {
+func TestListAccessUsersWithPagination(t *testing.T) {
 	setup()
 	defer teardown()
 	// page 1 of 2
