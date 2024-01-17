@@ -35,7 +35,7 @@ type UpdateAccessUserSeatResponse struct {
 	ResultInfo `json:"result_info"`
 }
 
-// UpdateAccessUserSeat updates a Access User Seat.
+// UpdateAccessUserSeat updates a single Access User Seat.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/zero-trust-seats-update-a-user-seat
 func (api *API) UpdateAccessUserSeat(ctx context.Context, rc *ResourceContainer, params UpdateAccessUserSeatParams) ([]AccessUpdateAccessUserSeatResult, error) {
@@ -53,7 +53,8 @@ func (api *API) UpdateAccessUserSeat(ctx context.Context, rc *ResourceContainer,
 		rc.Identifier,
 	)
 
-	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
+	// this requests expects an array of params, but this method only accepts a single param
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, []UpdateAccessUserSeatParams{params})
 	if err != nil {
 		return []AccessUpdateAccessUserSeatResult{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}

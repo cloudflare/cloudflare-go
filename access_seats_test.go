@@ -2,6 +2,7 @@ package cloudflare
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"testing"
@@ -34,6 +35,14 @@ func TestUpdateAccessUserSeat(t *testing.T) {
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
+
+		req := []UpdateAccessUserSeatParams{}
+
+		// Try to decode the request body into the struct.
+		err := json.NewDecoder(r.Body).Decode(&req)
+		assert.NoError(t, err, "Failed to decode request body into UpdateAccessUserSeatParams")
+		assert.Equal(t, len(req), 1, "Expected 1 seat to be updated, got %d", len(req))
+
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprintf(w, `{
 			"errors": [],
