@@ -201,17 +201,75 @@ func shouldRetry(req *http.Request, res *http.Response) bool {
 		res.StatusCode >= http.StatusInternalServerError
 }
 
-func retryDelay(res *http.Response, retryCount int) time.Duration {
-	maxDelay := 8 * time.Second
-	delay := time.Duration(0.5 * float64(time.Second) * math.Pow(2, float64(retryCount)))
-	if res != nil {
-		if parsed, err := strconv.ParseInt(res.Header.Get("Retry-After"), 10, 64); err == nil {
-			delay = time.Duration(parsed) * time.Second
+func parseRetryAfterHeader(resp *http.Response) (time.Duration, bool) {
+	if resp == nil {
+		return 0, false
+	}
+
+	type retryData struct {
+		header string
+		units  time.Duration
+
+		// custom is used when the regular algorithm failed and is optional.
+		// the returned duration is used verbatim (units is not applied).
+		custom func(string) (time.Duration, bool)
+	}
+
+	nop := func(string) (time.Duration, bool) { return 0, false }
+
+	// the headers are listed in order of preference
+	retries := []retryData{
+		{
+			header: "Retry-After-Ms",
+			units:  time.Millisecond,
+			custom: nop,
+		},
+		{
+			header: "Retry-After",
+			units:  time.Second,
+
+			// retry-after values are expressed in either number of
+			// seconds or an HTTP-date indicating when to try again
+			custom: func(ra string) (time.Duration, bool) {
+				t, err := time.Parse(time.RFC1123, ra)
+				if err != nil {
+					return 0, false
+				}
+				return time.Until(t), true
+			},
+		},
+	}
+
+	for _, retry := range retries {
+		v := resp.Header.Get(retry.header)
+		if v == "" {
+			continue
+		}
+		if retryAfter, err := strconv.ParseFloat(v, 64); err == nil {
+			return time.Duration(retryAfter * float64(retry.units)), true
+		}
+		if d, ok := retry.custom(v); ok {
+			return d, true
 		}
 	}
+
+	return 0, false
+}
+
+func retryDelay(res *http.Response, retryCount int) time.Duration {
+	// If the API asks us to wait a certain amount of time (and it's a reasonable amount),
+	// just do what it says.
+
+	if retryAfterDelay, ok := parseRetryAfterHeader(res); ok && 0 <= retryAfterDelay && retryAfterDelay < time.Minute {
+		return retryAfterDelay
+	}
+
+	maxDelay := 8 * time.Second
+	delay := time.Duration(0.5 * float64(time.Second) * math.Pow(2, float64(retryCount)))
 	if delay > maxDelay {
 		delay = maxDelay
 	}
+
 	jitter := rand.Int63n(int64(delay / 4))
 	delay -= time.Duration(jitter)
 	return delay
