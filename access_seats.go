@@ -67,3 +67,38 @@ func (api *API) UpdateAccessUserSeat(ctx context.Context, rc *ResourceContainer,
 
 	return updateAccessUserSeatResponse.Result, nil
 }
+
+// UpdateAccessUsersSeats updates many Access User Seats.
+//
+// API documentation: https://developers.cloudflare.com/api/operations/zero-trust-seats-update-a-user-seat
+func (api *API) UpdateAccessUsersSeats(ctx context.Context, rc *ResourceContainer, params []UpdateAccessUserSeatParams) ([]AccessUpdateAccessUserSeatResult, error) {
+	if rc.Level != AccountRouteLevel {
+		return []AccessUpdateAccessUserSeatResult{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
+	}
+
+	for _, param := range params {
+		if param.SeatUID == "" {
+			return []AccessUpdateAccessUserSeatResult{}, errMissingAccessSeatUID
+		}
+	}
+
+	uri := fmt.Sprintf(
+		"/%s/%s/access/seats",
+		rc.Level,
+		rc.Identifier,
+	)
+
+	// this requests expects an array of params, but this method only accepts a single param
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
+	if err != nil {
+		return []AccessUpdateAccessUserSeatResult{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
+	}
+
+	var updateAccessUserSeatResponse UpdateAccessUserSeatResponse
+	err = json.Unmarshal(res, &updateAccessUserSeatResponse)
+	if err != nil {
+		return []AccessUpdateAccessUserSeatResult{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+
+	return updateAccessUserSeatResponse.Result, nil
+}
