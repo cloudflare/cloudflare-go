@@ -1,5 +1,9 @@
 ## 0.87.0 (Unreleased)
 
+DEPENDENCIES:
+
+* deps: bumps actions/cache from 3 to 4 ([#1483](https://github.com/cloudflare/cloudflare-go/issues/1483))
+
 ## 0.86.0 (January 17, 2024)
 
 ENHANCEMENTS:
