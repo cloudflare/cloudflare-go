@@ -225,7 +225,7 @@ func main() {
 				},
 				{
 					Name:    "certs",
-					Aliases: []string{"c"},
+					Aliases: []string{"ct"},
 					Action:  zoneCerts,
 					Usage:   "Custom SSL certificates for a zone",
 				},
