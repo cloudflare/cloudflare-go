@@ -82,27 +82,27 @@ func (r *RadarAttackLayer3TimeseriesGroupBitrateListResponseResult) UnmarshalJSO
 }
 
 type RadarAttackLayer3TimeseriesGroupBitrateListResponseResultSerie0 struct {
-	_1GbpsTo10Gbps   []string                                                            `json:"_1_GBPS_TO_10_GBPS,required"`
-	_10GbpsTo100Gbps []string                                                            `json:"_10_GBPS_TO_100_GBPS,required"`
-	_500MbpsTo1Gbps  []string                                                            `json:"_500_MBPS_TO_1_GBPS,required"`
-	Over100Gbps      []string                                                            `json:"OVER_100_GBPS,required"`
-	Timestamps       []string                                                            `json:"timestamps,required"`
-	Under500Mbps     []string                                                            `json:"UNDER_500_MBPS,required"`
-	JSON             radarAttackLayer3TimeseriesGroupBitrateListResponseResultSerie0JSON `json:"-"`
+	Number1GbpsTo10Gbps   []string                                                            `json:"_1_GBPS_TO_10_GBPS,required"`
+	Number10GbpsTo100Gbps []string                                                            `json:"_10_GBPS_TO_100_GBPS,required"`
+	Number500MbpsTo1Gbps  []string                                                            `json:"_500_MBPS_TO_1_GBPS,required"`
+	Over100Gbps           []string                                                            `json:"OVER_100_GBPS,required"`
+	Timestamps            []string                                                            `json:"timestamps,required"`
+	Under500Mbps          []string                                                            `json:"UNDER_500_MBPS,required"`
+	JSON                  radarAttackLayer3TimeseriesGroupBitrateListResponseResultSerie0JSON `json:"-"`
 }
 
 // radarAttackLayer3TimeseriesGroupBitrateListResponseResultSerie0JSON contains the
 // JSON metadata for the struct
 // [RadarAttackLayer3TimeseriesGroupBitrateListResponseResultSerie0]
 type radarAttackLayer3TimeseriesGroupBitrateListResponseResultSerie0JSON struct {
-	_1GbpsTo10Gbps   apijson.Field
-	_10GbpsTo100Gbps apijson.Field
-	_500MbpsTo1Gbps  apijson.Field
-	Over100Gbps      apijson.Field
-	Timestamps       apijson.Field
-	Under500Mbps     apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	Number1GbpsTo10Gbps   apijson.Field
+	Number10GbpsTo100Gbps apijson.Field
+	Number500MbpsTo1Gbps  apijson.Field
+	Over100Gbps           apijson.Field
+	Timestamps            apijson.Field
+	Under500Mbps          apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
 }
 
 func (r *RadarAttackLayer3TimeseriesGroupBitrateListResponseResultSerie0) UnmarshalJSON(data []byte) (err error) {

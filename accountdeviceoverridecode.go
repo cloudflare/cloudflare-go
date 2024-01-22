@@ -126,27 +126,27 @@ func (r *AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseR
 
 type AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseResultDisableForTime struct {
 	// Override code that is valid for 1 hour.
-	_1 interface{} `json:"1"`
+	Number1 interface{} `json:"1"`
 	// Override code that is valid for 12 hour2.
-	_12 interface{} `json:"12"`
+	Number12 interface{} `json:"12"`
 	// Override code that is valid for 24 hour.2.
-	_24 interface{} `json:"24"`
+	Number24 interface{} `json:"24"`
 	// Override code that is valid for 3 hours.
-	_3 interface{} `json:"3"`
+	Number3 interface{} `json:"3"`
 	// Override code that is valid for 6 hours.
-	_6   interface{}                                                                                    `json:"6"`
-	JSON accountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseResultDisableForTimeJSON `json:"-"`
+	Number6 interface{}                                                                                    `json:"6"`
+	JSON    accountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseResultDisableForTimeJSON `json:"-"`
 }
 
 // accountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseResultDisableForTimeJSON
 // contains the JSON metadata for the struct
 // [AccountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseResultDisableForTime]
 type accountDeviceOverrideCodeDevicesListAdminOverrideCodeForDeviceResponseResultDisableForTimeJSON struct {
-	_1          apijson.Field
-	_12         apijson.Field
-	_24         apijson.Field
-	_3          apijson.Field
-	_6          apijson.Field
+	Number1     apijson.Field
+	Number12    apijson.Field
+	Number24    apijson.Field
+	Number3     apijson.Field
+	Number6     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

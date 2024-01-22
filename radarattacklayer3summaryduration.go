@@ -175,27 +175,27 @@ func (r *RadarAttackLayer3SummaryDurationListResponseResultMetaConfidenceInfoAnn
 }
 
 type RadarAttackLayer3SummaryDurationListResponseResultSummary0 struct {
-	_1HourTo3Hours  string                                                         `json:"_1_HOUR_TO_3_HOURS,required"`
-	_10MinsTo20Mins string                                                         `json:"_10_MINS_TO_20_MINS,required"`
-	_20MinsTo40Mins string                                                         `json:"_20_MINS_TO_40_MINS,required"`
-	_40MinsTo1Hour  string                                                         `json:"_40_MINS_TO_1_HOUR,required"`
-	Over3Hours      string                                                         `json:"OVER_3_HOURS,required"`
-	Under10Mins     string                                                         `json:"UNDER_10_MINS,required"`
-	JSON            radarAttackLayer3SummaryDurationListResponseResultSummary0JSON `json:"-"`
+	Number1HourTo3Hours  string                                                         `json:"_1_HOUR_TO_3_HOURS,required"`
+	Number10MinsTo20Mins string                                                         `json:"_10_MINS_TO_20_MINS,required"`
+	Number20MinsTo40Mins string                                                         `json:"_20_MINS_TO_40_MINS,required"`
+	Number40MinsTo1Hour  string                                                         `json:"_40_MINS_TO_1_HOUR,required"`
+	Over3Hours           string                                                         `json:"OVER_3_HOURS,required"`
+	Under10Mins          string                                                         `json:"UNDER_10_MINS,required"`
+	JSON                 radarAttackLayer3SummaryDurationListResponseResultSummary0JSON `json:"-"`
 }
 
 // radarAttackLayer3SummaryDurationListResponseResultSummary0JSON contains the JSON
 // metadata for the struct
 // [RadarAttackLayer3SummaryDurationListResponseResultSummary0]
 type radarAttackLayer3SummaryDurationListResponseResultSummary0JSON struct {
-	_1HourTo3Hours  apijson.Field
-	_10MinsTo20Mins apijson.Field
-	_20MinsTo40Mins apijson.Field
-	_40MinsTo1Hour  apijson.Field
-	Over3Hours      apijson.Field
-	Under10Mins     apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	Number1HourTo3Hours  apijson.Field
+	Number10MinsTo20Mins apijson.Field
+	Number20MinsTo40Mins apijson.Field
+	Number40MinsTo1Hour  apijson.Field
+	Over3Hours           apijson.Field
+	Under10Mins          apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
 }
 
 func (r *RadarAttackLayer3SummaryDurationListResponseResultSummary0) UnmarshalJSON(data []byte) (err error) {

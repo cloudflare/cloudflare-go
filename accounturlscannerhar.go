@@ -176,42 +176,42 @@ func (r *AccountUrlscannerHarGetResponseResultHarLogCreator) UnmarshalJSON(data 
 }
 
 type AccountUrlscannerHarGetResponseResultHarLogEntry struct {
-	_InitialPriority string                                                     `json:"_initialPriority,required"`
-	_InitiatorType   string                                                     `json:"_initiator_type,required"`
-	_Priority        string                                                     `json:"_priority,required"`
-	_RequestID       string                                                     `json:"_requestId,required"`
-	_RequestTime     float64                                                    `json:"_requestTime,required"`
-	_ResourceType    string                                                     `json:"_resourceType,required"`
-	Cache            interface{}                                                `json:"cache,required"`
-	Connection       string                                                     `json:"connection,required"`
-	Pageref          string                                                     `json:"pageref,required"`
-	Request          AccountUrlscannerHarGetResponseResultHarLogEntriesRequest  `json:"request,required"`
-	Response         AccountUrlscannerHarGetResponseResultHarLogEntriesResponse `json:"response,required"`
-	ServerIPAddress  string                                                     `json:"serverIPAddress,required"`
-	StartedDateTime  string                                                     `json:"startedDateTime,required"`
-	Time             float64                                                    `json:"time,required"`
-	JSON             accountUrlscannerHarGetResponseResultHarLogEntryJSON       `json:"-"`
+	InitialPriority string                                                     `json:"_initialPriority,required"`
+	InitiatorType   string                                                     `json:"_initiator_type,required"`
+	Priority        string                                                     `json:"_priority,required"`
+	RequestID       string                                                     `json:"_requestId,required"`
+	RequestTime     float64                                                    `json:"_requestTime,required"`
+	ResourceType    string                                                     `json:"_resourceType,required"`
+	Cache           interface{}                                                `json:"cache,required"`
+	Connection      string                                                     `json:"connection,required"`
+	Pageref         string                                                     `json:"pageref,required"`
+	Request         AccountUrlscannerHarGetResponseResultHarLogEntriesRequest  `json:"request,required"`
+	Response        AccountUrlscannerHarGetResponseResultHarLogEntriesResponse `json:"response,required"`
+	ServerIPAddress string                                                     `json:"serverIPAddress,required"`
+	StartedDateTime string                                                     `json:"startedDateTime,required"`
+	Time            float64                                                    `json:"time,required"`
+	JSON            accountUrlscannerHarGetResponseResultHarLogEntryJSON       `json:"-"`
 }
 
 // accountUrlscannerHarGetResponseResultHarLogEntryJSON contains the JSON metadata
 // for the struct [AccountUrlscannerHarGetResponseResultHarLogEntry]
 type accountUrlscannerHarGetResponseResultHarLogEntryJSON struct {
-	_InitialPriority apijson.Field
-	_InitiatorType   apijson.Field
-	_Priority        apijson.Field
-	_RequestID       apijson.Field
-	_RequestTime     apijson.Field
-	_ResourceType    apijson.Field
-	Cache            apijson.Field
-	Connection       apijson.Field
-	Pageref          apijson.Field
-	Request          apijson.Field
-	Response         apijson.Field
-	ServerIPAddress  apijson.Field
-	StartedDateTime  apijson.Field
-	Time             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	InitialPriority apijson.Field
+	InitiatorType   apijson.Field
+	Priority        apijson.Field
+	RequestID       apijson.Field
+	RequestTime     apijson.Field
+	ResourceType    apijson.Field
+	Cache           apijson.Field
+	Connection      apijson.Field
+	Pageref         apijson.Field
+	Request         apijson.Field
+	Response        apijson.Field
+	ServerIPAddress apijson.Field
+	StartedDateTime apijson.Field
+	Time            apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *AccountUrlscannerHarGetResponseResultHarLogEntry) UnmarshalJSON(data []byte) (err error) {
@@ -267,33 +267,33 @@ func (r *AccountUrlscannerHarGetResponseResultHarLogEntriesRequestHeader) Unmars
 }
 
 type AccountUrlscannerHarGetResponseResultHarLogEntriesResponse struct {
-	_TransferSize float64                                                            `json:"_transferSize,required"`
-	BodySize      float64                                                            `json:"bodySize,required"`
-	Content       AccountUrlscannerHarGetResponseResultHarLogEntriesResponseContent  `json:"content,required"`
-	Headers       []AccountUrlscannerHarGetResponseResultHarLogEntriesResponseHeader `json:"headers,required"`
-	HeadersSize   float64                                                            `json:"headersSize,required"`
-	HTTPVersion   string                                                             `json:"httpVersion,required"`
-	RedirectURL   string                                                             `json:"redirectURL,required"`
-	Status        float64                                                            `json:"status,required"`
-	StatusText    string                                                             `json:"statusText,required"`
-	JSON          accountUrlscannerHarGetResponseResultHarLogEntriesResponseJSON     `json:"-"`
+	TransferSize float64                                                            `json:"_transferSize,required"`
+	BodySize     float64                                                            `json:"bodySize,required"`
+	Content      AccountUrlscannerHarGetResponseResultHarLogEntriesResponseContent  `json:"content,required"`
+	Headers      []AccountUrlscannerHarGetResponseResultHarLogEntriesResponseHeader `json:"headers,required"`
+	HeadersSize  float64                                                            `json:"headersSize,required"`
+	HTTPVersion  string                                                             `json:"httpVersion,required"`
+	RedirectURL  string                                                             `json:"redirectURL,required"`
+	Status       float64                                                            `json:"status,required"`
+	StatusText   string                                                             `json:"statusText,required"`
+	JSON         accountUrlscannerHarGetResponseResultHarLogEntriesResponseJSON     `json:"-"`
 }
 
 // accountUrlscannerHarGetResponseResultHarLogEntriesResponseJSON contains the JSON
 // metadata for the struct
 // [AccountUrlscannerHarGetResponseResultHarLogEntriesResponse]
 type accountUrlscannerHarGetResponseResultHarLogEntriesResponseJSON struct {
-	_TransferSize apijson.Field
-	BodySize      apijson.Field
-	Content       apijson.Field
-	Headers       apijson.Field
-	HeadersSize   apijson.Field
-	HTTPVersion   apijson.Field
-	RedirectURL   apijson.Field
-	Status        apijson.Field
-	StatusText    apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	TransferSize apijson.Field
+	BodySize     apijson.Field
+	Content      apijson.Field
+	Headers      apijson.Field
+	HeadersSize  apijson.Field
+	HTTPVersion  apijson.Field
+	RedirectURL  apijson.Field
+	Status       apijson.Field
+	StatusText   apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *AccountUrlscannerHarGetResponseResultHarLogEntriesResponse) UnmarshalJSON(data []byte) (err error) {
