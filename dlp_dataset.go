@@ -34,7 +34,7 @@ type DLPDataset struct {
 	Uploads     []DLPDatasetUpload `json:"uploads"`
 }
 
-type DLPDatasetListParams struct{}
+type ListDLPDatasetsParams struct{}
 
 type DLPDatasetListResponse struct {
 	Result []DLPDataset `json:"result"`
@@ -44,7 +44,7 @@ type DLPDatasetListResponse struct {
 // ListDLPDatasets returns all the DLP datasets associated with an account.
 //
 // API reference: https://developers.cloudflare.com/api/operations/dlp-datasets-read-all
-func (api *API) ListDLPDatasets(ctx context.Context, rc *ResourceContainer, params DLPDatasetListParams) ([]DLPDataset, error) {
+func (api *API) ListDLPDatasets(ctx context.Context, rc *ResourceContainer, params ListDLPDatasetsParams) ([]DLPDataset, error) {
 	if rc.Identifier == "" {
 		return nil, nil
 	}
@@ -98,46 +98,46 @@ func (api *API) GetDLPDataset(ctx context.Context, rc *ResourceContainer, datase
 	return dlpDatasetGetResponse.Result, nil
 }
 
-type DLPDatasetCreateParams struct {
+type CreateDLPDatasetParams struct {
 	Description string `json:"description,omitempty"`
 	Name        string `json:"name"`
 	Secret      *bool  `json:"secret,omitempty"`
 }
 
-type DLPDatasetCreateResult struct {
+type CreateDLPDatasetResult struct {
 	MaxCells int        `json:"max_cells"`
 	Secret   string     `json:"secret"`
 	Version  int        `json:"version"`
 	Dataset  DLPDataset `json:"dataset"`
 }
 
-type DLPDatasetCreateResponse struct {
-	Result DLPDatasetCreateResult `json:"result"`
+type CreateDLPDatasetResponse struct {
+	Result CreateDLPDatasetResult `json:"result"`
 	Response
 }
 
 // CreateDLPDataset creates a DLP dataset.
 //
 // API reference: https://developers.cloudflare.com/api/operations/dlp-datasets-create
-func (api *API) CreateDLPDataset(ctx context.Context, rc *ResourceContainer, params DLPDatasetCreateParams) (DLPDatasetCreateResult, error) {
+func (api *API) CreateDLPDataset(ctx context.Context, rc *ResourceContainer, params CreateDLPDatasetParams) (CreateDLPDatasetResult, error) {
 	if rc.Identifier == "" {
-		return DLPDatasetCreateResult{}, nil
+		return CreateDLPDatasetResult{}, nil
 	}
 
 	uri := buildURI(fmt.Sprintf("/%s/%s/dlp/datasets", rc.Level, rc.Identifier), nil)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
-		return DLPDatasetCreateResult{}, err
+		return CreateDLPDatasetResult{}, err
 	}
 
-	var dlpDatasetCreateResponse DLPDatasetCreateResponse
-	err = json.Unmarshal(res, &dlpDatasetCreateResponse)
+	var CreateDLPDatasetResponse CreateDLPDatasetResponse
+	err = json.Unmarshal(res, &CreateDLPDatasetResponse)
 	if err != nil {
-		return DLPDatasetCreateResult{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return CreateDLPDatasetResult{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
-	return dlpDatasetCreateResponse.Result, nil
+	return CreateDLPDatasetResponse.Result, nil
 }
 
 // DeleteDLPDataset deletes a DLP dataset.
@@ -157,13 +157,13 @@ func (api *API) DeleteDLPDataset(ctx context.Context, rc *ResourceContainer, dat
 	return err
 }
 
-type DLPDatasetUpdateParams struct {
+type UpdateDLPDatasetParams struct {
 	DatasetID   string
 	Description *string `json:"description,omitempty"` // nil to leave descrption as-is
 	Name        *string `json:"name,omitempty"`        // nil to leave name as-is
 }
 
-type DLPDatasetUpdateResponse struct {
+type UpdateDLPDatasetResponse struct {
 	Result DLPDataset `json:"result"`
 	Response
 }
@@ -171,7 +171,7 @@ type DLPDatasetUpdateResponse struct {
 // UpdateDLPDataset updates the details of a DLP dataset.
 //
 // API reference: https://developers.cloudflare.com/api/operations/dlp-datasets-update
-func (api *API) UpdateDLPDataset(ctx context.Context, rc *ResourceContainer, params DLPDatasetUpdateParams) (DLPDataset, error) {
+func (api *API) UpdateDLPDataset(ctx context.Context, rc *ResourceContainer, params UpdateDLPDatasetParams) (DLPDataset, error) {
 	if rc.Identifier == "" {
 		return DLPDataset{}, nil
 	}
@@ -187,61 +187,64 @@ func (api *API) UpdateDLPDataset(ctx context.Context, rc *ResourceContainer, par
 		return DLPDataset{}, err
 	}
 
-	var dlpDatasetUpdateResponse DLPDatasetUpdateResponse
-	err = json.Unmarshal(res, &dlpDatasetUpdateResponse)
+	var updateDLPDatasetResponse UpdateDLPDatasetResponse
+	err = json.Unmarshal(res, &updateDLPDatasetResponse)
 	if err != nil {
 		return DLPDataset{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
-	return dlpDatasetUpdateResponse.Result, nil
+	return updateDLPDatasetResponse.Result, nil
 }
 
-type DLPDatasetCreateUploadResult struct {
+type CreateDLPDatasetUploadResult struct {
 	MaxCells int    `json:"max_cells"`
 	Secret   string `json:"secret"`
 	Version  int    `json:"version"`
 }
 
-type DLPDatasetCreateUploadResponse struct {
-	Result DLPDatasetCreateUploadResult `json:"result"`
+type CreateDLPDatasetUploadResponse struct {
+	Result CreateDLPDatasetUploadResult `json:"result"`
 	Response
+}
+type CreateDLPDatasetUploadParams struct {
+	DatasetID string
 }
 
 // CreateDLPDatasetUpload creates a new upload version for the specified DLP dataset.
 //
 // API reference: https://developers.cloudflare.com/api/operations/dlp-datasets-create-version
-func (api *API) CreateDLPDatasetUpload(ctx context.Context, rc *ResourceContainer, datasetID string) (DLPDatasetCreateUploadResult, error) {
+func (api *API) CreateDLPDatasetUpload(ctx context.Context, rc *ResourceContainer, params CreateDLPDatasetUploadParams) (CreateDLPDatasetUploadResult, error) {
 	if rc.Identifier == "" {
-		return DLPDatasetCreateUploadResult{}, nil
+		return CreateDLPDatasetUploadResult{}, nil
 	}
 
-	if datasetID == "" {
-		return DLPDatasetCreateUploadResult{}, ErrMissingDatasetID
+	if params.DatasetID == "" {
+		return CreateDLPDatasetUploadResult{}, ErrMissingDatasetID
 	}
 
-	uri := buildURI(fmt.Sprintf("/%s/%s/dlp/datasets/%s/upload", rc.Level, rc.Identifier, datasetID), nil)
+	uri := buildURI(fmt.Sprintf("/%s/%s/dlp/datasets/%s/upload", rc.Level, rc.Identifier, params.DatasetID), nil)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
 	if err != nil {
-		return DLPDatasetCreateUploadResult{}, err
+		return CreateDLPDatasetUploadResult{}, err
 	}
 
-	var dlpDatasetCreateUploadResponse DLPDatasetCreateUploadResponse
+	var dlpDatasetCreateUploadResponse CreateDLPDatasetUploadResponse
 	err = json.Unmarshal(res, &dlpDatasetCreateUploadResponse)
 	if err != nil {
-		return DLPDatasetCreateUploadResult{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return CreateDLPDatasetUploadResult{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return dlpDatasetCreateUploadResponse.Result, nil
 }
 
-type DLPDatasetUploadVersionParams struct {
+type UploadDLPDatasetVersionParams struct {
 	DatasetID string
 	Version   int
 	Body      interface{}
 }
 
-type DLPDatasetUploadVersionResponse struct {
+type UploadDLPDatasetVersionResponse struct {
 	Result DLPDataset `json:"result"`
 	Response
 }
@@ -249,7 +252,7 @@ type DLPDatasetUploadVersionResponse struct {
 // UploadDLPDatasetVersion uploads a new version of the specified DLP dataset.
 //
 // API reference: https://developers.cloudflare.com/api/operations/dlp-datasets-upload-version
-func (api *API) UploadDLPDatasetVersion(ctx context.Context, rc *ResourceContainer, params DLPDatasetUploadVersionParams) (DLPDataset, error) {
+func (api *API) UploadDLPDatasetVersion(ctx context.Context, rc *ResourceContainer, params UploadDLPDatasetVersionParams) (DLPDataset, error) {
 	if rc.Identifier == "" {
 		return DLPDataset{}, nil
 	}
@@ -265,7 +268,7 @@ func (api *API) UploadDLPDatasetVersion(ctx context.Context, rc *ResourceContain
 		return DLPDataset{}, err
 	}
 
-	var dlpDatasetUploadVersionResponse DLPDatasetUploadVersionResponse
+	var dlpDatasetUploadVersionResponse UploadDLPDatasetVersionResponse
 	err = json.Unmarshal(res, &dlpDatasetUploadVersionResponse)
 	if err != nil {
 		return DLPDataset{}, fmt.Errorf("%s: %w", errUnmarshalError, err)

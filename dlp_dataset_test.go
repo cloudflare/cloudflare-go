@@ -72,7 +72,7 @@ func TestListDLPDatasets(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/dlp/datasets", handler)
 
-	actual, err := client.ListDLPDatasets(context.Background(), AccountIdentifier(testAccountID), DLPDatasetListParams{})
+	actual, err := client.ListDLPDatasets(context.Background(), AccountIdentifier(testAccountID), ListDLPDatasetsParams{})
 	require.NoError(t, err)
 	require.Equal(t, want, actual)
 }
@@ -145,7 +145,7 @@ func TestCreateDLPDataset(t *testing.T) {
 		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 
-		var reqBody DLPDatasetCreateParams
+		var reqBody CreateDLPDatasetParams
 		err := json.NewDecoder(r.Body).Decode(&reqBody)
 		require.Nil(t, err)
 
@@ -182,7 +182,7 @@ func TestCreateDLPDataset(t *testing.T) {
 	updatedAt, _ := time.Parse(time.RFC3339, "2019-08-24T14:15:22Z")
 
 	secret := true
-	want := DLPDatasetCreateResult{
+	want := CreateDLPDatasetResult{
 		MaxCells: 0,
 		Secret:   "1234",
 		Version:  0,
@@ -207,7 +207,7 @@ func TestCreateDLPDataset(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/dlp/datasets", handler)
 
-	actual, err := client.CreateDLPDataset(context.Background(), AccountIdentifier(testAccountID), DLPDatasetCreateParams{Description: "string", Name: "string", Secret: &secret})
+	actual, err := client.CreateDLPDataset(context.Background(), AccountIdentifier(testAccountID), CreateDLPDatasetParams{Description: "string", Name: "string", Secret: &secret})
 	require.NoError(t, err)
 	require.Equal(t, want, actual)
 }
@@ -241,7 +241,7 @@ func TestUpdateDLPDataset(t *testing.T) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 
-		var reqBody DLPDatasetUpdateParams
+		var reqBody UpdateDLPDatasetParams
 		err := json.NewDecoder(r.Body).Decode(&reqBody)
 		require.Nil(t, err)
 
@@ -308,7 +308,7 @@ func TestUpdateDLPDataset(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/dlp/datasets/497f6eca-6276-4993-bfeb-53cbbbba6f08", handler)
 
 	description := "new_desc"
-	actual, err := client.UpdateDLPDataset(context.Background(), AccountIdentifier(testAccountID), DLPDatasetUpdateParams{Description: &description, Name: nil, DatasetID: "497f6eca-6276-4993-bfeb-53cbbbba6f08"})
+	actual, err := client.UpdateDLPDataset(context.Background(), AccountIdentifier(testAccountID), UpdateDLPDatasetParams{Description: &description, Name: nil, DatasetID: "497f6eca-6276-4993-bfeb-53cbbbba6f08"})
 	require.NoError(t, err)
 	require.Equal(t, want, actual)
 }
@@ -333,7 +333,7 @@ func TestCreateDLPDatasetUpload(t *testing.T) {
 		}`)
 	}
 
-	want := DLPDatasetCreateUploadResult{
+	want := CreateDLPDatasetUploadResult{
 		MaxCells: 0,
 		Secret:   "1234",
 		Version:  1,
@@ -341,7 +341,7 @@ func TestCreateDLPDatasetUpload(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/dlp/datasets/497f6eca-6276-4993-bfeb-53cbbbba6f08/upload", handler)
 
-	actual, err := client.CreateDLPDatasetUpload(context.Background(), AccountIdentifier(testAccountID), "497f6eca-6276-4993-bfeb-53cbbbba6f08")
+	actual, err := client.CreateDLPDatasetUpload(context.Background(), AccountIdentifier(testAccountID), CreateDLPDatasetUploadParams{DatasetID: "497f6eca-6276-4993-bfeb-53cbbbba6f08"})
 	require.NoError(t, err)
 	require.Equal(t, want, actual)
 }
@@ -416,7 +416,7 @@ func TestUploadDLPDatasetVersion(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/dlp/datasets/497f6eca-6276-4993-bfeb-53cbbbba6f08/upload/1", handler)
 
-	actual, err := client.UploadDLPDatasetVersion(context.Background(), AccountIdentifier(testAccountID), DLPDatasetUploadVersionParams{DatasetID: "497f6eca-6276-4993-bfeb-53cbbbba6f08", Version: 1, Body: []byte{1, 2, 3, 4}})
+	actual, err := client.UploadDLPDatasetVersion(context.Background(), AccountIdentifier(testAccountID), UploadDLPDatasetVersionParams{DatasetID: "497f6eca-6276-4993-bfeb-53cbbbba6f08", Version: 1, Body: []byte{1, 2, 3, 4}})
 	require.NoError(t, err)
 	require.Equal(t, want, actual)
 }
