@@ -1,5 +1,17 @@
 ## 0.87.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* dlp: add support for EDM and CWL datasets ([#1485](https://github.com/cloudflare/cloudflare-go/issues/1485))
+
+BUG FIXES:
+
+* flarectl: alias zone certs to "ct" instead of duplicating the "c" alias ([#1484](https://github.com/cloudflare/cloudflare-go/issues/1484))
+
+DEPENDENCIES:
+
+* deps: bumps actions/cache from 3 to 4 ([#1483](https://github.com/cloudflare/cloudflare-go/issues/1483))
+
 ## 0.86.0 (January 17, 2024)
 
 ENHANCEMENTS:
